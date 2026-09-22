@@ -217,7 +217,7 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
 
       <Grid container spacing={3.5}>
         {/* Left Column: Tiers & Mathematical Proofs */}
-        <Grid item xs={12} md={7}>
+        <Grid size={{ xs: 12, md: 7 }}>
           <Typography variant="h5" sx={{ fontWeight: 800, mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
             <CalculateIcon sx={{ color: '#B8860B' }} /> Mathematical Derivation & Tier Formulations
           </Typography>
@@ -273,7 +273,7 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
         </Grid>
 
         {/* Right Column: Parameters & Interactive Simulator */}
-        <Grid item xs={12} md={5}>
+        <Grid size={{ xs: 12, md: 5 }}>
           {/* Metrics Table */}
           <Paper sx={{ p: 3, border: '1px solid #EAECF0', mb: 3.5, bgcolor: '#FFFFFF' }}>
             <Typography variant="h6" sx={{ fontWeight: 800, mb: 2, color: '#101828' }}>
