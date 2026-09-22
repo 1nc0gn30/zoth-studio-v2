@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import GoldenZLogo3D from './GoldenZLogo3D';
 
 const navItems = [
   { label: 'Ecosystem', path: '/' },
@@ -35,13 +35,7 @@ export default function Navbar() {
           
           {/* Brand Logo */}
           <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, textDecoration: 'none', color: '#101828' }}>
-            <Box
-              component="img"
-              src="/favicon.png"
-              alt="Golden Z Emblem"
-              sx={{ width: 34, height: 34, borderRadius: 1.5, boxShadow: '0 2px 8px rgba(212, 175, 55, 0.3)' }}
-              onError={(e) => { e.target.style.display = 'none'; }}
-            />
+            <GoldenZLogo3D size={38} />
             <Typography variant="h6" sx={{ fontWeight: 800, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: 1 }}>
               ZOTH STUDIO <Chip label="v2.0" size="small" sx={{ background: '#FEF9E7', color: '#B8860B', border: '1px solid #F0E1A8', fontWeight: 700 }} />
             </Typography>

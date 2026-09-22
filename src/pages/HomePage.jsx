@@ -7,6 +7,7 @@ import HubIcon from '@mui/icons-material/Hub';
 import MemoryIcon from '@mui/icons-material/Memory';
 import ShieldIcon from '@mui/icons-material/Shield';
 import EcosystemCanvas from '../components/EcosystemCanvas';
+import GoldenZLogo3D from '../components/GoldenZLogo3D';
 import { microTools } from '../data/toolsData';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -26,6 +27,9 @@ export default function HomePage() {
       
       {/* Hero Section */}
       <Box sx={{ textAlign: 'center', mb: 6 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+          <GoldenZLogo3D size={64} />
+        </Box>
         <Chip
           icon={<TerminalIcon sx={{ color: '#B8860B !important' }} />}
           label="SOVEREIGN AGENT OS & 28 MICRO-REPO ECOSYSTEM"
