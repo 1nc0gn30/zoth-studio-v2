@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * Zoth Studio CLI v2.0 — Sovereign Agent OS & 28 Micro-Repo Manager
- * NullAI Tech • Sovereign Zero-Telemetry Architecture
+ * Zoth Studio CLI v2.0 — Sovereign Agent OS & Curated Micro-Repo Manager
+ * 1nc0gn30 • Sovereign Zero-Telemetry Architecture
  */
 
 import fs from 'fs';
@@ -17,34 +17,30 @@ const CYAN = '\x1b[36m';
 const GRAY = '\x1b[90m';
 
 const microTools = [
-  { id: 'aeo-graph-engine', name: 'AEO Graph Engine', repo: 'aeo-graph-engine', category: 'AI & Knowledge', url: 'https://github.com/NullAITech/aeo-graph-engine.git' },
-  { id: 'audiocipher-stego-engine', name: 'AudioCipher Stego Engine', repo: 'audiocipher-stego-engine', category: 'Security & Steganography', url: 'https://github.com/NullAITech/audiocipher-stego-engine.git' },
-  { id: 'azoth-local-agent', name: 'AZOTH Local Archon Agent', repo: 'azoth-local-agent', category: 'Swarm & Core', url: 'https://github.com/NullAITech/azoth-local-agent.git' },
-  { id: 'badge3d-coin-generator', name: '3D Badge & Coin Generator', repo: 'badge3d-coin-generator', category: 'Media & 3D', url: 'https://github.com/NullAITech/badge3d-coin-generator.git' },
-  { id: 'certpath-roadmap-studio', name: 'CertPath Roadmap Studio', repo: 'certpath-roadmap-studio', category: 'Developer Tools', url: 'https://github.com/NullAITech/certpath-roadmap-studio.git' },
-  { id: 'cron-rhythm-studio', name: 'CronRhythm Studio', repo: 'cron-rhythm-studio', category: 'Automation', url: 'https://github.com/NullAITech/cron-rhythm-studio.git' },
-  { id: 'cwv-speed-engine', name: 'CWV Speed Engine', repo: 'cwv-speed-engine', category: 'Performance', url: 'https://github.com/NullAITech/cwv-speed-engine.git' },
-  { id: 'cyber-turtle-studio', name: 'CyberTurtle Graphic Studio', repo: 'cyber-turtle-studio', category: 'Media & 3D', url: 'https://github.com/NullAITech/cyber-turtle-studio.git' },
-  { id: 'datamosh-glitch-studio', name: 'Datamosh Glitch Studio', repo: 'datamosh-glitch-studio', category: 'Media & 3D', url: 'https://github.com/NullAITech/datamosh-glitch-studio.git' },
-  { id: 'deepsearch-research-agent', name: 'DeepSearch Research Agent', repo: 'deepsearch-research-agent', category: 'AI & Knowledge', url: 'https://github.com/NullAITech/deepsearch-research-agent.git' },
-  { id: 'envguard-secrets-vault', name: 'EnvGuard Secrets Vault', repo: 'envguard-secrets-vault', category: 'Security & Recon', url: 'https://github.com/NullAITech/envguard-secrets-vault.git' },
-  { id: 'hexstrike-arsenal', name: 'HexStrike Security Arsenal', repo: 'hexstrike-arsenal', category: 'Security & Recon', url: 'https://github.com/NullAITech/hexstrike-arsenal.git' },
-  { id: 'jwt-inspector-guard', name: 'JWT Inspector Guard', repo: 'jwt-inspector-guard', category: 'Security & Recon', url: 'https://github.com/NullAITech/jwt-inspector-guard.git' },
-  { id: 'neuro-memory-daemon', name: 'Neuro Memory Daemon', repo: 'neuro-memory-daemon', category: 'Swarm & Core', url: 'https://github.com/NullAITech/neuro-memory-daemon.git' },
-  { id: 'nexus-3d-scene-studio', name: 'Nexus 3D Scene Studio', repo: 'nexus-3d-scene-studio', category: 'Media & 3D', url: 'https://github.com/NullAITech/nexus-3d-scene-studio.git' },
-  { id: 'og-canvas-forge', name: 'OG Canvas Forge', repo: 'og-canvas-forge', category: 'Developer Tools', url: 'https://github.com/NullAITech/og-canvas-forge.git' },
-  { id: 'omnipost-social-engine', name: 'OmniPost Social Engine', repo: 'omnipost-social-engine', category: 'Automation', url: 'https://github.com/NullAITech/omnipost-social-engine.git' },
-  { id: 'payload-entropy-studio', name: 'Payload Entropy Studio', repo: 'payload-entropy-studio', category: 'Security & Recon', url: 'https://github.com/NullAITech/payload-entropy-studio.git' },
-  { id: 'polyglot-framework-exporter', name: 'Polyglot Framework Exporter', repo: 'polyglot-framework-exporter', category: 'Autonomous Web', url: 'https://github.com/NullAITech/polyglot-framework-exporter.git' },
-  { id: 'promptmaster-studio', name: 'PromptMaster Studio', repo: 'promptmaster-studio', category: 'AI & Knowledge', url: 'https://github.com/NullAITech/promptmaster-studio.git' },
-  { id: 'pwa-manifest-builder', name: 'PWA Manifest Builder', repo: 'pwa-manifest-builder', category: 'Developer Tools', url: 'https://github.com/NullAITech/pwa-manifest-builder.git' },
-  { id: 'regex-droid-builder', name: 'Regex Droid Builder', repo: 'regex-droid-builder', category: 'Developer Tools', url: 'https://github.com/NullAITech/regex-droid-builder.git' },
-  { id: 'schema-illustrator-studio', name: 'Schema Illustrator Studio', repo: 'schema-illustrator-studio', category: 'Developer Tools', url: 'https://github.com/NullAITech/schema-illustrator-studio.git' },
-  { id: 'sovereign-agent-bridge', name: 'Sovereign Agent Signal Bridge', repo: 'sovereign-agent-bridge', category: 'Swarm & Core', url: 'https://github.com/NullAITech/sovereign-agent-bridge.git' },
-  { id: 'subsweep-lead-scanner', name: 'SubSweep Lead Scanner', repo: 'subsweep-lead-scanner', category: 'Automation', url: 'https://github.com/NullAITech/subsweep-lead-scanner.git' },
-  { id: 'vector-search-engine', name: 'Vector Search Engine', repo: 'vector-search-engine', category: 'Swarm & Core', url: 'https://github.com/NullAITech/vector-search-engine.git' },
-  { id: 'vision-gesture-control', name: 'Vision Gesture Control', repo: 'vision-gesture-control', category: 'Media & 3D', url: 'https://github.com/NullAITech/vision-gesture-control.git' },
-  { id: 'wcag-contrast-guard', name: 'WCAG Contrast Guard', repo: 'wcag-contrast-guard', category: 'Developer Tools', url: 'https://github.com/NullAITech/wcag-contrast-guard.git' }
+  { id: 'azoth-local-agent', name: 'AZOTH Local Archon Agent', repo: 'azoth-local-agent', category: 'Swarm & Core', url: 'https://github.com/1nc0gn30/azoth-local-agent.git' },
+  { id: 'sovereign-agent-bridge', name: 'Sovereign Agent Signal Bridge', repo: 'sovereign-agent-bridge', category: 'Swarm & Core', url: 'https://github.com/1nc0gn30/sovereign-agent-bridge.git' },
+  { id: 'neuro-memory-daemon', name: 'Neuro Memory Daemon', repo: 'neuro-memory-daemon', category: 'Swarm & Core', url: 'https://github.com/1nc0gn30/neuro-memory-daemon.git' },
+  { id: 'vector-search-engine', name: 'Vector Search Engine', repo: 'vector-search-engine', category: 'Swarm & Core', url: 'https://github.com/1nc0gn30/vector-search-engine.git' },
+  { id: 'deepsearch-research-agent', name: 'DeepSearch Research Agent', repo: 'deepsearch-research-agent', category: 'AI & Knowledge', url: 'https://github.com/1nc0gn30/deepsearch-research-agent.git' },
+  { id: 'promptmaster-studio', name: 'PromptMaster Studio', repo: 'promptmaster-studio', category: 'AI & Knowledge', url: 'https://github.com/1nc0gn30/promptmaster-studio.git' },
+  { id: 'hexstrike-arsenal', name: 'HexStrike Security Arsenal', repo: 'hexstrike-arsenal', category: 'Security & Recon', url: 'https://github.com/1nc0gn30/hexstrike-arsenal.git' },
+  { id: 'envguard-secrets-vault', name: 'EnvGuard Secrets Vault', repo: 'envguard-secrets-vault', category: 'Security & Recon', url: 'https://github.com/1nc0gn30/envguard-secrets-vault.git' },
+  { id: 'jwt-inspector-guard', name: 'JWT Inspector Guard', repo: 'jwt-inspector-guard', category: 'Security & Recon', url: 'https://github.com/1nc0gn30/jwt-inspector-guard.git' },
+  { id: 'payload-entropy-studio', name: 'Payload Entropy Studio', repo: 'payload-entropy-studio', category: 'Security & Recon', url: 'https://github.com/1nc0gn30/payload-entropy-studio.git' },
+  { id: 'web-security-guard', name: 'Web Security Guard', repo: 'web-security-guard', category: 'Security & Recon', url: 'https://github.com/1nc0gn30/web-security-guard.git' },
+  { id: 'audiocipher-stego-engine', name: 'AudioCipher Stego Engine', repo: 'audiocipher-stego-engine', category: 'Security & Steganography', url: 'https://github.com/1nc0gn30/audiocipher-stego-engine.git' },
+  { id: 'polyglot-framework-exporter', name: 'Polyglot Framework Exporter', repo: 'polyglot-framework-exporter', category: 'Autonomous Web', url: 'https://github.com/1nc0gn30/polyglot-framework-exporter.git' },
+  { id: 'aeo-graph-engine', name: 'AEO Graph Engine', repo: 'aeo-graph-engine', category: 'Autonomous Web', url: 'https://github.com/1nc0gn30/aeo-graph-engine.git' },
+  { id: 'cwv-speed-engine', name: 'CWV Speed Engine', repo: 'cwv-speed-engine', category: 'Autonomous Web', url: 'https://github.com/1nc0gn30/cwv-speed-engine.git' },
+  { id: 'nexus-3d-scene-studio', name: 'Nexus 3D Scene Studio', repo: 'nexus-3d-scene-studio', category: 'Media & 3D', url: 'https://github.com/1nc0gn30/nexus-3d-scene-studio.git' },
+  { id: 'badge3d-coin-generator', name: '3D Badge & Coin Generator', repo: 'badge3d-coin-generator', category: 'Media & 3D', url: 'https://github.com/1nc0gn30/badge3d-coin-generator.git' },
+  { id: 'cyber-turtle-studio', name: 'CyberTurtle Graphic Studio', repo: 'cyber-turtle-studio', category: 'Media & 3D', url: 'https://github.com/1nc0gn30/cyber-turtle-studio.git' },
+  { id: 'datamosh-glitch-studio', name: 'Datamosh Glitch Studio', repo: 'datamosh-glitch-studio', category: 'Media & 3D', url: 'https://github.com/1nc0gn30/datamosh-glitch-studio.git' },
+  { id: 'vision-gesture-control', name: 'Vision Gesture Control', repo: 'vision-gesture-control', category: 'Media & 3D', url: 'https://github.com/1nc0gn30/vision-gesture-control.git' },
+  { id: 'ufo-sacred-geometry', name: 'UFO Sacred Geometry', repo: 'ufo-sacred-geometry', category: 'Media & 3D', url: 'https://github.com/1nc0gn30/ufo-sacred-geometry.git' },
+  { id: 'subsweep-lead-scanner', name: 'SubSweep Lead Scanner', repo: 'subsweep-lead-scanner', category: 'Automation', url: 'https://github.com/1nc0gn30/subsweep-lead-scanner.git' },
+  { id: 'omnipost-social-engine', name: 'OmniPost Social Engine', repo: 'omnipost-social-engine', category: 'Automation', url: 'https://github.com/1nc0gn30/omnipost-social-engine.git' },
+  { id: 'cron-rhythm-studio', name: 'CronRhythm Studio', repo: 'cron-rhythm-studio', category: 'Automation', url: 'https://github.com/1nc0gn30/cron-rhythm-studio.git' }
 ];
 
 function printBanner() {
@@ -56,7 +52,7 @@ ${GOLD}${BOLD}
    ███╔╝  ██║   ██║   ██║   ██╔══██║    ╚════██║   ██║   ██║   ██║██║  ██║██║ ██║██║╚██╗██║╚════██║
   ███████╗╚██████╔╝   ██║   ██║  ██║    ███████║   ██║   ╚██████╔╝██████╔╝██████║██║ ╚████║███████║
   ╚══════╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝    ╚══════╝   ╚═╝    ╚═════╝ ╚═════╝ ╚═════╝╚═╝  ╚═══╝╚══════╝
-${RESET}  ${BOLD}Zoth Studio v2.0 CLI${RESET} • Sovereign AI Agent OS & 28 Micro-Repo Ecosystem
+${RESET}  ${BOLD}Zoth Studio v2.0 CLI${RESET} • Sovereign AI Agent OS & 1nc0gn30 Ecosystem
 `);
 }
 
@@ -93,7 +89,7 @@ function handlePull(toolName) {
 
   if (!tool) {
     console.log(`\x1b[31m✖ Unknown tool repo: "${toolName}"${RESET}`);
-    console.log(`Run ${CYAN}npx zoth list${RESET} to see all 28 available repositories.`);
+    console.log(`Run ${CYAN}npx zoth list${RESET} to see all curated 1nc0gn30 repositories.`);
     process.exit(1);
   }
 
@@ -116,10 +112,10 @@ function handlePull(toolName) {
 
 function handleList() {
   printBanner();
-  console.log(`${GOLD}${BOLD}Catalog of 28 Sovereign Micro-Repositories:${RESET}\n`);
+  console.log(`${GOLD}${BOLD}Catalog of Curated 1nc0gn30 Micro-Repositories:${RESET}\n`);
   microTools.forEach((tool, idx) => {
     console.log(` ${GRAY}${String(idx + 1).padStart(2, ' ')}.${RESET} ${BOLD}${tool.name}${RESET} (${CYAN}${tool.repo}${RESET})`);
-    console.log(`     Category: ${tool.category} | URL: ${tool.url}`);
+    console.log(`     Category: ${tool.category} | GitHub: ${tool.url}`);
     console.log(`     Pull: ${GOLD}npx zoth pull ${tool.repo}${RESET}\n`);
   });
 }
@@ -165,8 +161,8 @@ switch (command) {
     printBanner();
     console.log(`${BOLD}Available Zoth CLI Commands:${RESET}`);
     console.log(`  ${GOLD}npx zoth init${RESET}           Initialize sovereign workspace structure`);
-    console.log(`  ${GOLD}npx zoth pull <repo>${RESET}    Pull any of the 28 micro-tool repos`);
-    console.log(`  ${GOLD}npx zoth list${RESET}           List all 28 standalone micro-tool repos`);
+    console.log(`  ${GOLD}npx zoth pull <repo>${RESET}    Pull any of the curated 1nc0gn30 tool repos`);
+    console.log(`  ${GOLD}npx zoth list${RESET}           List all curated 1nc0gn30 tool repos`);
     console.log(`  ${GOLD}npx zoth swarm${RESET}          Display live 21-agent swarm status & IPC mesh`);
     break;
 }
