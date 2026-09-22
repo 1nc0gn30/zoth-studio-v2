@@ -4,6 +4,7 @@ import {
   TableContainer, TableHead, TableRow, Stack
 } from '@mui/material';
 import SwarmCanvasVisualizer from '../components/SwarmCanvasVisualizer';
+import SwarmTaskDispatcher from '../components/SwarmTaskDispatcher';
 import { pantheonAgents, pantheonCadres } from '../data/pantheon';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -39,6 +40,8 @@ export default function SwarmPage() {
           />
         ))}
       </Stack>
+
+      <SwarmTaskDispatcher />
 
       <SwarmCanvasVisualizer />
 
