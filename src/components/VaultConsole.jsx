@@ -88,7 +88,7 @@ export default function VaultConsole() {
       </Box>
 
       <Grid container spacing={2.5} sx={{ mb: 3 }}>
-        <Grid item xs={12} sm={6}>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <TextField
             fullWidth
             label="Secret Key Identifier"
@@ -98,7 +98,7 @@ export default function VaultConsole() {
             size="small"
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <TextField
             fullWidth
             label="Master Passphrase"
@@ -109,7 +109,7 @@ export default function VaultConsole() {
             size="small"
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <TextField
             fullWidth
             label="Raw Secret Value / Token Payload"

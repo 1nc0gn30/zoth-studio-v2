@@ -83,7 +83,7 @@ export default function SwarmTaskDispatcher() {
           const isDone = idx < activeStep || progress === 100;
           const isCurrent = idx === activeStep && running;
           return (
-            <Grid item xs={12} key={step.agent}>
+            <Grid size={{ xs: 12 }} key={step.agent}>
               <Card
                 sx={{
                   border: isCurrent ? '1.5px solid #D4AF37' : '1px solid #EAECF0',

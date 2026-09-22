@@ -36,7 +36,7 @@ export default function HexStrikePage() {
 
       <Grid container spacing={2.5}>
         {securityTools.map((tool) => (
-          <Grid item xs={12} sm={6} md={4} key={tool.id}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={tool.id}>
             <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', border: '1px solid #EAECF0', borderRadius: 2 }}>
               <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>

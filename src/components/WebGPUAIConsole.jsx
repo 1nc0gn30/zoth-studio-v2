@@ -54,8 +54,8 @@ export default function WebGPUAIConsole() {
 
       {/* Benchmarks Grid */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} sm={4}>
-          <Card sx={{ bg: '#F9FAFB', border: '1px solid #EAECF0' }}>
+        <Grid size={{ xs: 12, sm: 4 }}>
+          <Card sx={{ bgcolor: '#F9FAFB', border: '1px solid #EAECF0' }}>
             <CardContent sx={{ py: 2 }}>
               <Typography variant="body2" color="text.secondary">Hardware Device Adapter</Typography>
               <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#101828', mt: 0.5, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
@@ -64,8 +64,8 @@ export default function WebGPUAIConsole() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={4}>
-          <Card sx={{ bg: '#F9FAFB', border: '1px solid #EAECF0' }}>
+        <Grid size={{ xs: 12, sm: 4 }}>
+          <Card sx={{ bgcolor: '#F9FAFB', border: '1px solid #EAECF0' }}>
             <CardContent sx={{ py: 2 }}>
               <Typography variant="body2" color="text.secondary">Compute Throughput</Typography>
               <Typography variant="h5" sx={{ fontWeight: 800, color: '#B8860B', mt: 0.5 }}>
@@ -74,8 +74,8 @@ export default function WebGPUAIConsole() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={4}>
-          <Card sx={{ bg: '#F9FAFB', border: '1px solid #EAECF0' }}>
+        <Grid size={{ xs: 12, sm: 4 }}>
+          <Card sx={{ bgcolor: '#F9FAFB', border: '1px solid #EAECF0' }}>
             <CardContent sx={{ py: 2 }}>
               <Typography variant="body2" color="text.secondary">WGSL Shader Latency</Typography>
               <Typography variant="h5" sx={{ fontWeight: 800, color: '#12B76A', mt: 0.5 }}>

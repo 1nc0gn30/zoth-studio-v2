@@ -100,7 +100,7 @@ export default function Navbar() {
             {navItems.map((item) => (
               <ListItem key={item.label} disablePadding>
                 <ListItemButton component={RouterLink} to={item.path} selected={location.pathname === item.path}>
-                  <ListItemText primary={item.label} primaryTypographyProps={{ fontWeight: 600 }} />
+                  <Typography variant="body1" sx={{ fontWeight: 600, color: location.pathname === item.path ? '#B8860B' : '#101828' }}>{item.label}</Typography>
                 </ListItemButton>
               </ListItem>
             ))}
