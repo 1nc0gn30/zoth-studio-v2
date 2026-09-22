@@ -156,6 +156,11 @@ function triggerCompile() {
   return (
     <Container maxWidth="lg" sx={{ py: 6 }}>
       
+      {/* Section Header Banner */}
+      <Box sx={{ mb: 4, borderRadius: 2, overflow: 'hidden', border: '1px solid #EAECF0', boxShadow: '0 4px 16px rgba(0,0,0,0.08)' }}>
+        <Box component="img" src="/assets/banners/webgen.jpg" alt="WebGen Layout Foundry Banner" sx={{ width: '100%', height: 200, objectFit: 'cover', display: 'block' }} />
+      </Box>
+
       {/* Header Section */}
       <Box sx={{ mb: 4 }}>
         <Chip
