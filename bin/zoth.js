@@ -206,8 +206,19 @@ async function handleUp() {
     console.log(`${GRAY}○ ollama${RESET} is not answering on 127.0.0.1:11434`);
   }
 
+  // Spawn persistent UI server if not already running on port 3000
+  const isUiUp = await fetch('http://127.0.0.1:3000/').then(() => true).catch(() => false);
+  if (!isUiUp) {
+    const viteBin = path.join(root, 'node_modules', 'vite', 'bin', 'vite.js');
+    const started = spawnDaemon('ui', process.execPath, [viteBin, '--port', '3000', '--host'], root);
+    pids.ui = started;
+    console.log(`${GREEN}✔ UI Server${RESET} pid ${started.pid}  log ${path.relative(root, started.log)}`);
+  } else {
+    console.log(`${GREEN}✔ UI Server${RESET} already listening on http://127.0.0.1:3000/`);
+  }
+
   writePids(pids);
-  console.log(`\n${BOLD}UI${RESET}  ${CYAN}npm run dev${RESET}  →  http://127.0.0.1:3000/`);
+  console.log(`\n${BOLD}UI${RESET}  ${CYAN}http://127.0.0.1:3000/${RESET}`);
   console.log(`${GRAY}Give the daemons a second, then run npm run zoth -- doctor.${RESET}`);
 }
 
@@ -266,7 +277,7 @@ if (command === 'doctor' || command === 'status') {
   await handleDoctor();
 } else if (command === 'pull') {
   await handlePull(args.includes('--all') ? null : args[1], { all: args.includes('--all') });
-} else if (command === 'up') {
+} else if (command === 'up' || command === 'serve' || command === 'start') {
   await handleUp();
 } else if (command === 'down') {
   handleDown();
