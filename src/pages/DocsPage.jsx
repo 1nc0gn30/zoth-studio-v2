@@ -541,13 +541,38 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}</pre>
             </Paper>
 
             <Paper id="sec-math" sx={{ p: { xs: 2.5, md: 4 }, border: '1px solid #EAECF0', borderRadius: 3 }}>
-              <Chip label="MATH ACADEMY" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700, mb: 1.5 }} />
+              <Chip label="MATH ACADEMY & DEDICATED DOC PAGES" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700, mb: 1.5 }} />
               <Typography variant="h5" sx={{ fontWeight: 750, mb: 1 }}>
-                8. Six Math Pillars
+                8. Six Math Pillars Technical Reference
               </Typography>
               <Typography variant="body1" color="text.secondary" sx={{ mb: 2.5 }}>
-                Carried from the legacy math workstation: linear algebra, calculus, information theory, Hessian curvature, Lyapunov stability, and neuromorphic STDP. Switch the tier to move from analogy to the engineering formula.
+                Six engineering math pillars: Linear Algebra, Multivariable Calculus, Shannon Probability, Hessian Curvature, Lyapunov Phase Dynamics, and Neuromorphic STDP. Click any pillar to access its dedicated derivation page and interactive simulator.
               </Typography>
+              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 3 }}>
+                {[
+                  { id: 'linear', name: 'Pillar I: Linear Algebra' },
+                  { id: 'calculus', name: 'Pillar II: Calculus' },
+                  { id: 'probability', name: 'Pillar III: Probability' },
+                  { id: 'hessian', name: 'Pillar IV: Hessian' },
+                  { id: 'lyapunov', name: 'Pillar V: Lyapunov' },
+                  { id: 'stdp', name: 'Pillar VI: STDP' },
+                ].map((p) => (
+                  <Chip
+                    key={p.id}
+                    label={p.name}
+                    clickable
+                    component="a"
+                    href={`/docs/math/${p.id}`}
+                    sx={{
+                      fontWeight: 700,
+                      bgcolor: '#FEF9E7',
+                      color: '#8A6A09',
+                      border: '1px solid #F0E1A8',
+                      '&:hover': { bgcolor: '#B8860B', color: '#FFFFFF' }
+                    }}
+                  />
+                ))}
+              </Box>
               <MathPillarsGrid />
             </Paper>
 

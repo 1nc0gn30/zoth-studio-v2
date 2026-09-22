@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Chip, Grid, Paper, Typography, Button, Stack } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { mathPillars, mathTiers } from '../data/mathPillars';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -118,6 +120,17 @@ export default function MathPillarsGrid({ variant = 'full' }) {
                 {pillar.tiers[teaser ? 'Intermediate' : tier]}
               </Box>
 
+              <Button
+                component={RouterLink}
+                to={`/docs/math/${pillar.id}`}
+                variant="outlined"
+                color="primary"
+                size="small"
+                endIcon={<ArrowForwardIcon fontSize="small" />}
+                sx={{ mt: 'auto', alignSelf: 'flex-start', fontWeight: 700 }}
+              >
+                Read Math Doc
+              </Button>
             </Paper>
           </Grid>
         ))}

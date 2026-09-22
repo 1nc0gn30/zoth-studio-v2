@@ -13,6 +13,7 @@ import ZothOSPage from './pages/ZothOSPage';
 import MemoryPage from './pages/MemoryPage';
 import DocsPage from './pages/DocsPage';
 import AdytumPage from './pages/AdytumPage';
+import MathPillarDetailPage from './pages/MathPillarDetailPage';
 
 export default function App() {
   return (
@@ -31,6 +32,8 @@ export default function App() {
           <Route path="/hexstrike" element={<HexStrikePage />} />
           <Route path="/zoth-os" element={<ZothOSPage />} />
           <Route path="/docs" element={<DocsPage />} />
+          <Route path="/docs/math/:pillarId" element={<MathPillarDetailPage />} />
+          <Route path="/docs/math" element={<MathPillarDetailPage />} />
         </Routes>
       </Box>
       <Box component="footer" sx={{ py: 3, px: 2, borderTop: '1px solid #EAECF0', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1.25, color: '#667085', fontSize: '0.88rem' }}>
