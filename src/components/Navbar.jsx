@@ -5,6 +5,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import GoldenZLogo3D from './GoldenZLogo3D';
 
 const navItems = [
