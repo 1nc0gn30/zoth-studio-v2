@@ -38,7 +38,7 @@ export default function Navbar() {
           {/* Brand Logo */}
           <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, textDecoration: 'none', color: '#101828' }}>
             <GoldenZLogo3D size={40} />
-            <Typography sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontSize: '1.7rem', lineHeight: 1, letterSpacing: '0.03em', display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography component="div" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontSize: '1.7rem', lineHeight: 1, letterSpacing: '0.03em', display: 'flex', alignItems: 'center', gap: 1 }}>
               Zoth Studio <Chip label="v2" size="small" sx={{ background: '#FEF9E7', color: '#B8860B', border: '1px solid #F0E1A8', fontWeight: 700, fontFamily: 'Inter, sans-serif' }} />
             </Typography>
           </Box>
