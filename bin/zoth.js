@@ -1,168 +1,283 @@
 #!/usr/bin/env node
-
 /**
- * Zoth Studio CLI v2.0 — Sovereign Agent OS & Curated Micro-Repo Manager
- * 1nc0gn30 • Sovereign Zero-Telemetry Architecture
+ * Zoth CLI. Ships with this repo.
+ *   npm run zoth -- <command>
+ * Pulls published Zoth tools and starts the
+ * memory daemon and signal bridge from those checkouts.
  */
 
-import fs from 'fs';
-import path from 'path';
-import { execSync } from 'child_process';
+import { spawn } from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { microTools } from '../src/data/toolsData.js';
+import { pantheonAgents } from '../src/data/pantheon.js';
+import { probeStatus } from '../server/studio-api.mjs';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const stateDir = path.join(root, '.zoth');
+const pidFile = path.join(stateDir, 'pids.json');
 
 const GOLD = '\x1b[38;2;212;175;55m';
 const BOLD = '\x1b[1m';
 const RESET = '\x1b[0m';
 const GREEN = '\x1b[32m';
+const RED = '\x1b[31m';
 const CYAN = '\x1b[36m';
 const GRAY = '\x1b[90m';
 
-const microTools = [
-  { id: 'azoth-local-agent', name: 'AZOTH Local Archon Agent', repo: 'azoth-local-agent', category: 'Swarm & Core', url: 'https://github.com/1nc0gn30/azoth-local-agent.git' },
-  { id: 'sovereign-agent-bridge', name: 'Sovereign Agent Signal Bridge', repo: 'sovereign-agent-bridge', category: 'Swarm & Core', url: 'https://github.com/1nc0gn30/sovereign-agent-bridge.git' },
-  { id: 'neuro-memory-daemon', name: 'Neuro Memory Daemon', repo: 'neuro-memory-daemon', category: 'Swarm & Core', url: 'https://github.com/1nc0gn30/neuro-memory-daemon.git' },
-  { id: 'vector-search-engine', name: 'Vector Search Engine', repo: 'vector-search-engine', category: 'Swarm & Core', url: 'https://github.com/1nc0gn30/vector-search-engine.git' },
-  { id: 'deepsearch-research-agent', name: 'DeepSearch Research Agent', repo: 'deepsearch-research-agent', category: 'AI & Knowledge', url: 'https://github.com/1nc0gn30/deepsearch-research-agent.git' },
-  { id: 'promptmaster-studio', name: 'PromptMaster Studio', repo: 'promptmaster-studio', category: 'AI & Knowledge', url: 'https://github.com/1nc0gn30/promptmaster-studio.git' },
-  { id: 'hexstrike-arsenal', name: 'HexStrike Security Arsenal', repo: 'hexstrike-arsenal', category: 'Security & Recon', url: 'https://github.com/1nc0gn30/hexstrike-arsenal.git' },
-  { id: 'envguard-secrets-vault', name: 'EnvGuard Secrets Vault', repo: 'envguard-secrets-vault', category: 'Security & Recon', url: 'https://github.com/1nc0gn30/envguard-secrets-vault.git' },
-  { id: 'jwt-inspector-guard', name: 'JWT Inspector Guard', repo: 'jwt-inspector-guard', category: 'Security & Recon', url: 'https://github.com/1nc0gn30/jwt-inspector-guard.git' },
-  { id: 'payload-entropy-studio', name: 'Payload Entropy Studio', repo: 'payload-entropy-studio', category: 'Security & Recon', url: 'https://github.com/1nc0gn30/payload-entropy-studio.git' },
-  { id: 'web-security-guard', name: 'Web Security Guard', repo: 'web-security-guard', category: 'Security & Recon', url: 'https://github.com/1nc0gn30/web-security-guard.git' },
-  { id: 'audiocipher-stego-engine', name: 'AudioCipher Stego Engine', repo: 'audiocipher-stego-engine', category: 'Security & Steganography', url: 'https://github.com/1nc0gn30/audiocipher-stego-engine.git' },
-  { id: 'polyglot-framework-exporter', name: 'Polyglot Framework Exporter', repo: 'polyglot-framework-exporter', category: 'Autonomous Web', url: 'https://github.com/1nc0gn30/polyglot-framework-exporter.git' },
-  { id: 'aeo-graph-engine', name: 'AEO Graph Engine', repo: 'aeo-graph-engine', category: 'Autonomous Web', url: 'https://github.com/1nc0gn30/aeo-graph-engine.git' },
-  { id: 'cwv-speed-engine', name: 'CWV Speed Engine', repo: 'cwv-speed-engine', category: 'Autonomous Web', url: 'https://github.com/1nc0gn30/cwv-speed-engine.git' },
-  { id: 'nexus-3d-scene-studio', name: 'Nexus 3D Scene Studio', repo: 'nexus-3d-scene-studio', category: 'Media & 3D', url: 'https://github.com/1nc0gn30/nexus-3d-scene-studio.git' },
-  { id: 'badge3d-coin-generator', name: '3D Badge & Coin Generator', repo: 'badge3d-coin-generator', category: 'Media & 3D', url: 'https://github.com/1nc0gn30/badge3d-coin-generator.git' },
-  { id: 'cyber-turtle-studio', name: 'CyberTurtle Graphic Studio', repo: 'cyber-turtle-studio', category: 'Media & 3D', url: 'https://github.com/1nc0gn30/cyber-turtle-studio.git' },
-  { id: 'datamosh-glitch-studio', name: 'Datamosh Glitch Studio', repo: 'datamosh-glitch-studio', category: 'Media & 3D', url: 'https://github.com/1nc0gn30/datamosh-glitch-studio.git' },
-  { id: 'vision-gesture-control', name: 'Vision Gesture Control', repo: 'vision-gesture-control', category: 'Media & 3D', url: 'https://github.com/1nc0gn30/vision-gesture-control.git' },
-  { id: 'ufo-sacred-geometry', name: 'UFO Sacred Geometry', repo: 'ufo-sacred-geometry', category: 'Media & 3D', url: 'https://github.com/1nc0gn30/ufo-sacred-geometry.git' },
-  { id: 'subsweep-lead-scanner', name: 'SubSweep Lead Scanner', repo: 'subsweep-lead-scanner', category: 'Automation', url: 'https://github.com/1nc0gn30/subsweep-lead-scanner.git' },
-  { id: 'omnipost-social-engine', name: 'OmniPost Social Engine', repo: 'omnipost-social-engine', category: 'Automation', url: 'https://github.com/1nc0gn30/omnipost-social-engine.git' },
-  { id: 'cron-rhythm-studio', name: 'CronRhythm Studio', repo: 'cron-rhythm-studio', category: 'Automation', url: 'https://github.com/1nc0gn30/cron-rhythm-studio.git' }
-];
-
-function printBanner() {
-  console.log(`
-${GOLD}${BOLD}
-  ███████╗ ██████╗ ████████╗██╗  ██╗    ███████╗████████╗██╗   ██╗██████╗ ██╗ ██╗███╗   ██╗███████╗
-  ╚══███╔╝██╔═══██╗╚══██╔══╝██║  ██║    ██╔════╝╚══██╔══╝██║   ██║██╔══██╗██║ ██║████╗  ██║██╔════╝
-    ███╔╝ ██║   ██║   ██║   ███████║    ███████╗   ██║   ██║   ██║██║  ██║██║ ██║██╔██╗ ██║███████╗
-   ███╔╝  ██║   ██║   ██║   ██╔══██║    ╚════██║   ██║   ██║   ██║██║  ██║██║ ██║██║╚██╗██║╚════██║
-  ███████╗╚██████╔╝   ██║   ██║  ██║    ███████║   ██║   ╚██████╔╝██████╔╝██████║██║ ╚████║███████║
-  ╚══════╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝    ╚══════╝   ╚═╝    ╚═════╝ ╚═════╝ ╚═════╝╚═╝  ╚═══╝╚══════╝
-${RESET}  ${BOLD}Zoth Studio v2.0 CLI${RESET} • Sovereign AI Agent OS & 1nc0gn30 Ecosystem
-`);
+function banner() {
+  console.log(`\n${GOLD}${BOLD}Zoth CLI${RESET}  studio root ${GRAY}${root}${RESET}\n`);
 }
 
-function handleInit() {
-  printBanner();
-  console.log(`${GREEN}✔ Initializing Zoth Studio sovereign workspace...${RESET}`);
+function toolDir(repo) {
+  const candidates = [
+    path.join(process.cwd(), 'tools', repo),
+    path.join(root, 'tools', repo),
+    path.join(root, '..', 'zoth-tools', repo),
+    path.join(root, '..', repo),
+  ];
+  return candidates.find((dir) => fs.existsSync(dir) && fs.statSync(dir).isDirectory()) || null;
+}
 
-  const targetDirs = ['tools', 'swarm', 'vault', 'memory'];
-  targetDirs.forEach((dir) => {
-    const fullPath = path.join(process.cwd(), dir);
-    if (!fs.existsSync(fullPath)) {
-      fs.mkdirSync(fullPath, { recursive: true });
-      console.log(`${GRAY}  + Created directory: ./${dir}/${RESET}`);
-    }
+function run(command, args, options = {}) {
+  return new Promise((resolve) => {
+    const child = spawn(command, args, { stdio: 'inherit', ...options });
+    child.on('exit', (code) => resolve(code ?? 1));
+    child.on('error', () => resolve(1));
   });
-
-  console.log(`\n${GOLD}✔ Workspace Ready!${RESET}`);
-  console.log(`  To pull a micro-tool: ${CYAN}npx zoth pull <tool-name>${RESET}`);
-  console.log(`  To list all tools:   ${CYAN}npx zoth list${RESET}`);
-  console.log(`  To view swarm stats: ${CYAN}npx zoth swarm${RESET}`);
 }
 
-function handlePull(toolName) {
-  printBanner();
-  if (!toolName) {
-    console.log(`${GOLD}Usage: npx zoth pull <tool-repo-name>${RESET}`);
-    console.log(`Example: npx zoth pull hexstrike-arsenal`);
-    process.exit(1);
+function readPids() {
+  try {
+    return JSON.parse(fs.readFileSync(pidFile, 'utf8'));
+  } catch {
+    return {};
+  }
+}
+
+function writePids(pids) {
+  fs.mkdirSync(stateDir, { recursive: true });
+  fs.writeFileSync(pidFile, JSON.stringify(pids, null, 2));
+}
+
+function alive(pid) {
+  if (!pid) return false;
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function handleDoctor() {
+  banner();
+  const status = await probeStatus();
+  const rows = Object.values(status.services);
+  for (const service of rows) {
+    const mark = service.up ? `${GREEN}up${RESET}` : `${RED}down${RESET}`;
+    const extra = service.models ? `  local models: ${service.models.length}` : '';
+    console.log(`  ${mark}  ${service.name.padEnd(24)} 127.0.0.1:${service.port}${extra}`);
+  }
+  console.log(`  ${status.kvm ? GREEN + 'yes' : RED + 'no'}${RESET}  /dev/kvm`);
+  console.log(`\n${BOLD}Published tool checkouts${RESET}`);
+  for (const tool of microTools) {
+    const dir = toolDir(tool.repo);
+    const where = dir ? path.relative(root, dir) : 'not checked out';
+    const pub = tool.published ? '' : ` ${GRAY}(no GitHub repo)${RESET}`;
+    console.log(`  ${dir ? GREEN + '●' : GRAY + '○'}${RESET} ${tool.repo.padEnd(32)} ${where}${pub}`);
+  }
+  console.log(`\n${GRAY}Roster on disk: ${pantheonAgents.length} named pantheon roles. That list is not a live process table.${RESET}`);
+}
+
+async function handlePull(name, { all = false } = {}) {
+  banner();
+  const selected = all
+    ? microTools.filter((tool) => tool.published)
+    : microTools.filter((tool) => tool.repo === name || tool.id === name);
+  if (!all && selected.length === 0) {
+    const known = microTools.find((tool) => tool.repo === name || tool.id === name);
+    if (known && !known.published) {
+      console.log(`${RED}✖ ${known.repo} is in the catalog but is not a published repository.${RESET}`);
+    } else {
+      console.log(`${RED}✖ Unknown tool "${name || ''}".${RESET} Run ${CYAN}npm run zoth -- list${RESET}`);
+    }
+    process.exitCode = 1;
+    return;
   }
 
-  const tool = microTools.find(
-    (t) => t.repo === toolName || t.id === toolName || t.name.toLowerCase().includes(toolName.toLowerCase())
-  );
-
-  if (!tool) {
-    console.log(`\x1b[31m✖ Unknown tool repo: "${toolName}"${RESET}`);
-    console.log(`Run ${CYAN}npx zoth list${RESET} to see all curated 1nc0gn30 repositories.`);
-    process.exit(1);
-  }
-
-  console.log(`${GOLD}⚡ Pulling micro-repo:${RESET} ${tool.name} (${tool.repo})`);
-  const destDir = path.join(process.cwd(), 'tools', tool.repo);
-
-  if (fs.existsSync(destDir)) {
-    console.log(`${GREEN}✔ Tool already present at ./${path.relative(process.cwd(), destDir)}${RESET}`);
-  } else {
-    console.log(`${CYAN}  Cloning ${tool.url} into ./tools/${tool.repo}...${RESET}`);
-    try {
-      execSync(`git clone ${tool.url} "${destDir}"`, { stdio: 'inherit' });
-      console.log(`${GREEN}✔ Successfully pulled ${tool.name}!${RESET}`);
-    } catch (e) {
-      console.log(`${GRAY}Note: Local repository path backup available at ~/.../${tool.repo}${RESET}`);
-      console.log(`${GREEN}✔ Tool registered in ./tools/${tool.repo}${RESET}`);
+  let failed = 0;
+  for (const tool of selected) {
+    const dest = path.join(root, 'tools', tool.repo);
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    if (fs.existsSync(path.join(dest, '.git'))) {
+      console.log(`${CYAN}updating${RESET} ${tool.repo}`);
+      const code = await run('git', ['-C', dest, 'pull', '--ff-only'], {});
+      if (code !== 0) failed += 1;
+      continue;
+    }
+    if (fs.existsSync(dest)) {
+      console.log(`${RED}✖ ${dest} exists and is not a git checkout. Refusing to overwrite it.${RESET}`);
+      failed += 1;
+      continue;
+    }
+    console.log(`${CYAN}cloning${RESET} ${tool.repo}`);
+    const code = await run('git', ['clone', '--depth', '1', `${tool.github}.git`, dest]);
+    if (code !== 0) {
+      failed += 1;
+      fs.rmSync(dest, { recursive: true, force: true });
     }
   }
+  if (failed) {
+    console.log(`\n${RED}✖ ${failed} pull${failed === 1 ? '' : 's'} failed.${RESET}`);
+    process.exitCode = 1;
+  } else {
+    console.log(`\n${GREEN}✔ Pull finished.${RESET}`);
+  }
+}
+
+function spawnDaemon(id, command, args, cwd) {
+  const logPath = path.join(stateDir, `${id}.log`);
+  fs.mkdirSync(stateDir, { recursive: true });
+  const log = fs.openSync(logPath, 'a');
+  const child = spawn(command, args, {
+    cwd,
+    detached: true,
+    stdio: ['ignore', log, log],
+    env: { ...process.env, PYTHONPATH: 'src' },
+  });
+  child.unref();
+  fs.closeSync(log);
+  return { pid: child.pid, log: logPath };
+}
+
+async function handleUp() {
+  banner();
+  const before = await probeStatus();
+  const pids = readPids();
+
+  const memoryDir = toolDir('neuro-memory-daemon');
+  const bridgeDir = toolDir('sovereign-agent-bridge');
+
+  if (!before.services.memory.up) {
+    if (!memoryDir) {
+      console.log(`${RED}✖ neuro-memory-daemon is not checked out.${RESET} Run ${CYAN}npm run zoth -- pull neuro-memory-daemon${RESET}`);
+    } else {
+      const started = spawnDaemon(
+        'memory',
+        'python3',
+        ['-m', 'neuro_memory_daemon', 'serve', '-H', '127.0.0.1', '-p', '8788'],
+        memoryDir
+      );
+      pids.memory = started;
+      console.log(`${GREEN}✔ memory${RESET} pid ${started.pid}  log ${path.relative(root, started.log)}`);
+    }
+  } else {
+    console.log(`${GREEN}✔ memory${RESET} already listening on 127.0.0.1:8788`);
+  }
+
+  if (!before.services.bridge.up) {
+    if (!bridgeDir) {
+      console.log(`${RED}✖ sovereign-agent-bridge is not checked out.${RESET} Run ${CYAN}npm run zoth -- pull sovereign-agent-bridge${RESET}`);
+    } else {
+      const started = spawnDaemon(
+        'bridge',
+        'python3',
+        ['-m', 'sovereign_agent_bridge', 'serve', '--host', '127.0.0.1', '--port', '8789'],
+        bridgeDir
+      );
+      pids.bridge = started;
+      console.log(`${GREEN}✔ bridge${RESET} pid ${started.pid}  log ${path.relative(root, started.log)}`);
+    }
+  } else {
+    console.log(`${GREEN}✔ bridge${RESET} already listening on 127.0.0.1:8789`);
+  }
+
+  if (before.services.vault.up) {
+    console.log(`${GREEN}✔ vault${RESET} already listening on 127.0.0.1:8787`);
+  } else {
+    console.log(`${GRAY}○ vault${RESET} is not running. This repo does not ship the vault binary. Start zoth-vault-daemon --port 8787 yourself if you have it.`);
+  }
+
+  if (before.services.ollama.up) {
+    console.log(`${GREEN}✔ ollama${RESET} ${before.services.ollama.models.length} local model${before.services.ollama.models.length === 1 ? '' : 's'}`);
+  } else {
+    console.log(`${GRAY}○ ollama${RESET} is not answering on 127.0.0.1:11434`);
+  }
+
+  writePids(pids);
+  console.log(`\n${BOLD}UI${RESET}  ${CYAN}npm run dev${RESET}  →  http://127.0.0.1:3000/`);
+  console.log(`${GRAY}Give the daemons a second, then run npm run zoth -- doctor.${RESET}`);
+}
+
+function handleDown() {
+  banner();
+  const pids = readPids();
+  for (const [name, record] of Object.entries(pids)) {
+    if (!record?.pid) continue;
+    if (!alive(record.pid)) {
+      console.log(`${GRAY}○ ${name} pid ${record.pid} is already gone${RESET}`);
+      continue;
+    }
+    process.kill(record.pid, 'SIGTERM');
+    console.log(`${GREEN}✔ stopped ${name}${RESET} pid ${record.pid}`);
+  }
+  writePids({});
 }
 
 function handleList() {
-  printBanner();
-  console.log(`${GOLD}${BOLD}Catalog of Curated 1nc0gn30 Micro-Repositories:${RESET}\n`);
-  microTools.forEach((tool, idx) => {
-    console.log(` ${GRAY}${String(idx + 1).padStart(2, ' ')}.${RESET} ${BOLD}${tool.name}${RESET} (${CYAN}${tool.repo}${RESET})`);
-    console.log(`     Category: ${tool.category} | GitHub: ${tool.url}`);
-    console.log(`     Pull: ${GOLD}npx zoth pull ${tool.repo}${RESET}\n`);
+  banner();
+  microTools.forEach((tool, index) => {
+    const dir = toolDir(tool.repo);
+    const mark = dir ? `${GREEN}local${RESET}` : `${GRAY}absent${RESET}`;
+    const source = tool.published ? `${GREEN}published${RESET}` : `${RED}not published${RESET}`;
+    console.log(`${String(index + 1).padStart(2, ' ')}. ${BOLD}${tool.name}${RESET}  ${CYAN}${tool.repo}${RESET}  v${tool.version}`);
+    console.log(`    ${mark}  ${source}`);
   });
 }
 
 function handleSwarm() {
-  printBanner();
-  console.log(`${GOLD}${BOLD}21 Pantheon Swarm Agent Status:${RESET}\n`);
-  const agents = [
-    { id: 'AZOTH', role: 'Archon Orchestrator', status: 'ACTIVE', load: '45%' },
-    { id: 'HERMES', role: 'Subagent Dispatcher', status: 'ACTIVE', load: '62%' },
-    { id: 'GROK', role: 'Dialectic Synthesizer', status: 'STANDBY', load: '12%' },
-    { id: 'OLLAMA', role: 'Local WASM/GGUF Runner', status: 'ACTIVE', load: '78%' },
-    { id: 'HEXSTRIKE', role: 'Penetration Auditor', status: 'ACTIVE', load: '35%' },
-    { id: 'WEBGEN', role: 'Autonomous Layout Engine', status: 'ACTIVE', load: '55%' },
-  ];
-  agents.forEach((a) => {
-    console.log(`  ● ${BOLD}${a.id.padEnd(12, ' ')}${RESET} | ${a.role.padEnd(26, ' ')} | Status: ${GREEN}${a.status}${RESET} | Workload: ${a.load}`);
-  });
-  console.log(`\n  ${GRAY}IPC Mesh Latency: 0.18 ms | Memory Daemon: 127.0.0.1:8788/v1/memory${RESET}`);
+  banner();
+  console.log(`${BOLD}Documented pantheon roster (${pantheonAgents.length})${RESET}`);
+  console.log(`${GRAY}Names and roles from the legacy agent index. No load or task counts are invented here.${RESET}\n`);
+  for (const agent of pantheonAgents) {
+    console.log(`  ${GOLD}${agent.id.padEnd(16)}${RESET} ${agent.cadre.padEnd(12)} ${agent.role}`);
+  }
 }
 
-// CLI Command Router
+function handleHelp() {
+  banner();
+  console.log(`${BOLD}Commands${RESET}`);
+  console.log(`  ${GOLD}npm run zoth -- doctor${RESET}          Probe loopback services and local checkouts`);
+  console.log(`  ${GOLD}npm run zoth -- list${RESET}            Catalog, with published GitHub URLs`);
+  console.log(`  ${GOLD}npm run zoth -- pull <repo>${RESET}     Clone or fast-forward one published tool into ./tools`);
+  console.log(`  ${GOLD}npm run zoth -- pull --all${RESET}      Clone every published tool`);
+  console.log(`  ${GOLD}npm run zoth -- up${RESET}              Start memory (:8788) and bridge (:8789) if checked out`);
+  console.log(`  ${GOLD}npm run zoth -- down${RESET}            Stop processes this CLI started`);
+  console.log(`  ${GOLD}npm run zoth -- swarm${RESET}           Print the pantheon roster`);
+  console.log(`  ${GOLD}npm run dev${RESET}                     Studio UI on http://127.0.0.1:3000/`);
+}
+
 const args = process.argv.slice(2);
 const command = args[0] || 'help';
 
-switch (command) {
-  case 'init':
-    handleInit();
-    break;
-  case 'pull':
-    handlePull(args[1]);
-    break;
-  case 'list':
-  case 'tools':
-    handleList();
-    break;
-  case 'swarm':
-  case 'status':
-    handleSwarm();
-    break;
-  case 'help':
-  default:
-    printBanner();
-    console.log(`${BOLD}Available Zoth CLI Commands:${RESET}`);
-    console.log(`  ${GOLD}npx zoth init${RESET}           Initialize sovereign workspace structure`);
-    console.log(`  ${GOLD}npx zoth pull <repo>${RESET}    Pull any of the curated 1nc0gn30 tool repos`);
-    console.log(`  ${GOLD}npx zoth list${RESET}           List all curated 1nc0gn30 tool repos`);
-    console.log(`  ${GOLD}npx zoth swarm${RESET}          Display live 21-agent swarm status & IPC mesh`);
-    break;
+if (command === 'doctor' || command === 'status') {
+  await handleDoctor();
+} else if (command === 'pull') {
+  await handlePull(args.includes('--all') ? null : args[1], { all: args.includes('--all') });
+} else if (command === 'up') {
+  await handleUp();
+} else if (command === 'down') {
+  handleDown();
+} else if (command === 'list' || command === 'tools') {
+  handleList();
+} else if (command === 'swarm') {
+  handleSwarm();
+} else if (command === 'init') {
+  fs.mkdirSync(path.join(root, 'tools'), { recursive: true });
+  fs.mkdirSync(stateDir, { recursive: true });
+  console.log(`${GREEN}✔ ./tools and ./.zoth are ready.${RESET} Next: ${CYAN}npm run zoth -- pull --all${RESET}`);
+} else {
+  handleHelp();
 }

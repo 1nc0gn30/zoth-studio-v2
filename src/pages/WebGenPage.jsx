@@ -156,11 +156,6 @@ function triggerCompile() {
   return (
     <Container maxWidth="lg" sx={{ py: 6 }}>
       
-      {/* Section Header Banner */}
-      <Box sx={{ mb: 4, borderRadius: 2, overflow: 'hidden', border: '1px solid #EAECF0', boxShadow: '0 4px 16px rgba(0,0,0,0.08)' }}>
-        <Box component="img" src="/assets/banners/webgen.jpg" alt="WebGen Layout Foundry Banner" sx={{ width: '100%', height: 200, objectFit: 'cover', display: 'block' }} />
-      </Box>
-
       {/* Header Section */}
       <Box sx={{ mb: 4 }}>
         <Chip
@@ -180,62 +175,15 @@ function triggerCompile() {
           Autonomous WebGen Foundry
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 800 }}>
-          Multi-framework layout compiler, component spec matrix, dynamic HTML/JSX code generator, and instant exporter engine.
+          A browser template. Picking a layout fills the code panel from strings in this page. It does not call a model and it does not time a compile.
         </Typography>
       </Box>
-
-      {/* Top Metrics Row */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 2.5, border: '1px solid #EAECF0', borderRadius: 3, height: '100%' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-              <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600 }}>Active Templates</Typography>
-              <Chip label="FOUNDRY" size="small" sx={{ backgroundColor: '#FEF9E7', color: '#B8860B', border: '1px solid #F0E1A8', fontWeight: 700, fontSize: '0.7rem' }} />
-            </Box>
-            <Typography variant="h4" sx={{ fontWeight: 800, color: '#101828' }}>24 Specs</Typography>
-            <Typography variant="caption" color="text.secondary">Responsive UI Components</Typography>
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 2.5, border: '1px solid #EAECF0', borderRadius: 3, height: '100%' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-              <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600 }}>Target Runtimes</Typography>
-              <Chip label="4 TARGETS" size="small" sx={{ backgroundColor: '#F0F9FF', color: '#0284C7', fontWeight: 700, fontSize: '0.7rem' }} />
-            </Box>
-            <Typography variant="h4" sx={{ fontWeight: 800, color: '#101828' }}>React / Astro / Vue</Typography>
-            <Typography variant="caption" color="text.secondary">+ Pure HTML5/MUI Support</Typography>
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 2.5, border: '1px solid #EAECF0', borderRadius: 3, height: '100%' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-              <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600 }}>Compile Speed</Typography>
-              <Chip label="OPTIMAL" size="small" sx={{ backgroundColor: '#ECFDF3', color: '#12B76A', fontWeight: 700, fontSize: '0.7rem' }} />
-            </Box>
-            <Typography variant="h4" sx={{ fontWeight: 800, color: '#101828' }}>&lt; 38ms</Typography>
-            <Typography variant="caption" color="text.secondary">Vite 8 Rolldown Compiler</Typography>
-          </Paper>
-        </Grid>
-
-        <Grid item xs={12} sm={6} md={3}>
-          <Paper sx={{ p: 2.5, border: '1px solid #EAECF0', borderRadius: 3, height: '100%' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-              <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600 }}>Validation Status</Typography>
-              <Chip label="VERIFIED" size="small" sx={{ backgroundColor: '#ECFDF3', color: '#12B76A', fontWeight: 700, fontSize: '0.7rem' }} />
-            </Box>
-            <Typography variant="h4" sx={{ fontWeight: 800, color: '#12B76A' }}>100% Valid</Typography>
-            <Typography variant="caption" color="text.secondary">Zero Syntax Errors</Typography>
-          </Paper>
-        </Grid>
-      </Grid>
 
       {/* Main Foundry Workspace Grid */}
       <Grid container spacing={4}>
         
         {/* Left Column: Interactive Layout Sandbox & Code Console (xs=12, md=8) */}
-        <Grid item xs={12} md={8}>
+        <Grid size={{ xs: 12, md: 8 }}>
           
           {/* Interactive Control Paper */}
           <Paper sx={{ p: 3.5, border: '1px solid #EAECF0', borderRadius: 3, mb: 4, backgroundColor: '#FFFFFF' }}>
@@ -339,7 +287,7 @@ function triggerCompile() {
                 backgroundColor: '#1D2939',
                 display: 'flex',
                 alignItems: 'center',
-                justify: 'space-between',
+                justifyContent: 'space-between',
                 borderBottom: '1px solid #344054'
               }}
             >
@@ -349,7 +297,7 @@ function triggerCompile() {
                   <Box sx={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#FFBD2E' }} />
                   <Box sx={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#27C93F' }} />
                 </Box>
-                <Typography variant="subtitle2" sx={{ color: '#FDD663', fontFamily: 'monospace', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography variant="subtitle2" sx={{ color: '#FDD663', fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
                   <TerminalIcon sx={{ fontSize: '1rem', color: '#B8860B' }} />
                   [WEBGEN COMPILER CONSOLE • TARGET: {selectedFramework.toUpperCase()}]
                 </Typography>
@@ -371,7 +319,7 @@ function triggerCompile() {
                   minHeight: 40,
                   '& .MuiTab-root': {
                     color: '#9AA0A6',
-                    fontFamily: 'monospace',
+                    fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace',
                     fontSize: '0.8rem',
                     minHeight: 40,
                     textTransform: 'none',
@@ -388,7 +336,7 @@ function triggerCompile() {
 
             {/* Tab 0: Generated Code View */}
             {activeTab === 0 && (
-              <Box sx={{ p: 3, fontFamily: 'monospace', fontSize: '0.85rem', minHeight: 280, maxHeight: 420, overflowY: 'auto' }}>
+              <Box sx={{ p: 3, fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace', fontSize: '0.85rem', minHeight: 280, maxHeight: 420, overflowY: 'auto' }}>
                 <pre style={{ margin: 0, color: '#F8FAFC', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
                   {codeSamples[selectedFramework]}
                 </pre>
@@ -397,17 +345,13 @@ function triggerCompile() {
 
             {/* Tab 1: AST JSON */}
             {activeTab === 1 && (
-              <Box sx={{ p: 3, fontFamily: 'monospace', fontSize: '0.85rem', minHeight: 280, maxHeight: 420, overflowY: 'auto' }}>
+              <Box sx={{ p: 3, fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace', fontSize: '0.85rem', minHeight: 280, maxHeight: 420, overflowY: 'auto' }}>
                 <pre style={{ margin: 0, color: '#38BDF8', whiteSpace: 'pre-wrap' }}>
 {JSON.stringify(
   {
+    note: 'This object is the selection on this page. It is not an AST and it has no build hash.',
     template: selectedTemplate,
-    framework: selectedFramework,
-    status: 'COMPILED_VALIDATED',
-    astNodes: 42,
-    components: ['Header', 'MetricCardGrid', 'TerminalConsoleDrawer', 'ActionButtonGroup'],
-    compiler: 'Vite 8 Rolldown AST Engine',
-    hash: '0x' + Math.random().toString(16).substring(2, 10).toUpperCase()
+    framework: selectedFramework
   },
   null,
   2
@@ -418,12 +362,9 @@ function triggerCompile() {
 
             {/* Tab 2: Compiler Build Logs */}
             {activeTab === 2 && (
-              <Box sx={{ p: 3, fontFamily: 'monospace', fontSize: '0.85rem', minHeight: 280 }}>
-                <div style={{ color: '#81C995', marginBottom: 6 }}>[0.00ms] Initialized WebGen Compiler v2.4</div>
-                <div style={{ color: '#9AA0A6', marginBottom: 6 }}>[8.12ms] Parsed template layout: "{selectedTemplate}"</div>
-                <div style={{ color: '#9AA0A6', marginBottom: 6 }}>[14.40ms] Transpiling to target runtime "{selectedFramework}"</div>
-                <div style={{ color: '#9AA0A6', marginBottom: 6 }}>[22.80ms] Injected Tailwind utility classes and golden theme tokens</div>
-                <div style={{ color: '#81C995' }}>✔ [34.10ms] Build completed with 0 errors and 0 warnings. Ready for export!</div>
+              <Box sx={{ p: 3, fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace', fontSize: '0.85rem', minHeight: 280 }}>
+                <div style={{ color: '#FDD663' }}>No compiler ran.</div>
+                <div style={{ color: '#9AA0A6', marginTop: 8 }}>The code tab is a template string for {selectedTemplate} / {selectedFramework}.</div>
               </Box>
             )}
 
@@ -432,7 +373,7 @@ function triggerCompile() {
         </Grid>
 
         {/* Right Column: Exporter Cards & Spec Library (xs=12, md=4) */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, height: '100%' }}>
             
             {/* Card 1: Supported Framework Exporters */}
@@ -443,7 +384,7 @@ function triggerCompile() {
                 borderRadius: 3,
                 display: 'flex',
                 flexDirection: 'column',
-                justify: 'space-between',
+                justifyContent: 'space-between',
                 transition: 'all 0.2s ease-in-out',
                 '&:hover': {
                   borderColor: '#F0E1A8',
@@ -483,7 +424,7 @@ function triggerCompile() {
                         borderRadius: 2,
                         cursor: 'pointer',
                         display: 'flex',
-                        justify: 'space-between',
+                        justifyContent: 'space-between',
                         alignItems: 'center'
                       }}
                     >
@@ -501,7 +442,7 @@ function triggerCompile() {
                         borderRadius: 2,
                         cursor: 'pointer',
                         display: 'flex',
-                        justify: 'space-between',
+                        justifyContent: 'space-between',
                         alignItems: 'center'
                       }}
                     >
@@ -519,7 +460,7 @@ function triggerCompile() {
                         borderRadius: 2,
                         cursor: 'pointer',
                         display: 'flex',
-                        justify: 'space-between',
+                        justifyContent: 'space-between',
                         alignItems: 'center'
                       }}
                     >
@@ -537,7 +478,7 @@ function triggerCompile() {
                         borderRadius: 2,
                         cursor: 'pointer',
                         display: 'flex',
-                        justify: 'space-between',
+                        justifyContent: 'space-between',
                         alignItems: 'center'
                       }}
                     >
@@ -568,7 +509,7 @@ function triggerCompile() {
                 borderRadius: 3,
                 display: 'flex',
                 flexDirection: 'column',
-                justify: 'space-between',
+                justifyContent: 'space-between',
                 transition: 'all 0.2s ease-in-out',
                 '&:hover': {
                   borderColor: '#F0E1A8',

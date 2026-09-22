@@ -133,7 +133,7 @@ export default function GoldenZLogo3D({ size = 42, interactive = true }) {
         height: size,
         display: 'inline-flex',
         alignItems: 'center',
-        justify: 'center',
+        justifyContent: 'center',
         position: 'relative',
         cursor: interactive ? 'pointer' : 'default',
         filter: 'drop-shadow(0 2px 8px rgba(212, 175, 55, 0.35))'

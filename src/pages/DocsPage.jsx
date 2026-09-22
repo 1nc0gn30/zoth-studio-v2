@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   Box,
   Container,
@@ -37,6 +37,9 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import LaunchIcon from '@mui/icons-material/Launch';
 
 import { microTools } from '../data/toolsData';
+import MathPillarsGrid from '../components/MathPillarsGrid';
+import ZeroEgressPanel from '../components/ZeroEgressPanel';
+import WorkstationMap from '../components/WorkstationMap';
 
 export default function DocsPage() {
   const [copiedIndex, setCopiedIndex] = useState(null);
@@ -51,7 +54,7 @@ export default function DocsPage() {
     setTimeout(() => setCopiedIndex(null), 2000);
   };
 
-  const categories = ['All', 'Swarm & Core', 'Security & Recon', 'Autonomous Web', 'Media & 3D', 'Automation'];
+  const categories = ['All', 'Planning', 'Swarm & Core', 'AI & Knowledge', 'Security & Recon', 'Security & Steganography', 'Autonomous Web', 'Media & 3D', 'Automation'];
 
   const filteredTools = useMemo(() => {
     return microTools.filter((t) => {
@@ -64,6 +67,13 @@ export default function DocsPage() {
     });
   }, [searchQuery, selectedCategory]);
 
+  useEffect(() => {
+    const id = window.location.hash.replace('#', '');
+    if (!id) return;
+    const element = document.getElementById(id);
+    if (element) element.scrollIntoView({ behavior: 'smooth' });
+  }, []);
+
   const scrollToSection = (id) => {
     setActiveSection(id);
     const element = document.getElementById(id);
@@ -73,36 +83,22 @@ export default function DocsPage() {
   };
 
   const terminalAuditLogs = [
-    // Tab 0: Doctor Audit
-    `$ zoth doctor --verbose
-[SYSTEM DIAGNOSTIC & HEALTH AUDIT - ZOTH STUDIO V2.4]
-✔ Node.js Runtime: v20.11.0 (LTS x86_64)
-✔ Vite React Orchestrator: v5.2.8 (Build Pipeline OK)
-✔ Zoth OS Hypervisor (KVM): Enabled (/dev/kvm accessible)
-✔ Local Memory Daemon: ONLINE (127.0.0.1:8788 - HNSW Vector Index Loaded)
-✔ Signal Bridge Relay: ONLINE (127.0.0.1:9001 - Simplex E2EE Mesh Active)
-✔ Argon2id Secrets Enclave: LOCKED & VALIDATED (0 leaks)
-✔ Decoupled Micro-Repos: 28/28 verified in local registry.
-----------------------------------------------------------------------
-DIAGNOSTIC VERDICT: 100% HEALTHY. ALL SYSTEMS GO.`,
+    `npm run zoth -- doctor
 
-    // Tab 1: IPC Sockets
-    `$ zoth status --sockets
-ACTIVE IPC SOCKET MATRIX:
-* socket://127.0.0.1:8788 -> Memory Daemon (JSON-RPC 2.0 over TCP)
-* socket://127.0.0.1:9001 -> Signal Bridge (Simplex WebSocket Relay)
-* socket://127.0.0.1:9002 -> HexStrike Recon Channel (Encrypted TTY)
-* socket://127.0.0.1:9003 -> WebGen Preview Socket (Hot Reload HMR)
-----------------------------------------------------------------------
-All sockets operating with zero cloud fallback or external telemetry leakage.`,
+Probes 127.0.0.1:8788 (memory), :8789 (bridge), :8787 (vault), and :11434 (Ollama).
+Prints whether each published tool is checked out.
+This panel does not invent the result. Run the command in the repo.`,
 
-    // Tab 2: Model Connectors
-    `$ zoth models --list
-CONNECTED MODEL BACKENDS:
-1. Google Antigravity CLI  (Local Socket / System Pipe)   - PREFERRED
-2. Nous Hermes 3 8B GGUF   (Ollama @ 127.0.0.1:11434)     - ONLINE
-3. xAI Grok Dialectic      (Signal Bridge Channel 4)       - ONLINE
-4. llama.cpp Local Server  (127.0.0.1:8080 / CUDA)        - READY`
+    `npm run zoth -- up
+
+Starts neuro-memory-daemon on 127.0.0.1:8788 and sovereign-agent-bridge on 127.0.0.1:8789
+when those repos are in ./tools or next to this studio.
+The vault binary is not in this repo. If it is already listening, doctor will say so.`,
+
+    `npm run zoth -- pull --all
+
+Clones every catalog entry that is actually published.
+azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those.`
   ];
 
   return (
@@ -114,19 +110,19 @@ CONNECTED MODEL BACKENDS:
           <Chip
             label="DOCUMENTATION & TECHNICAL MANUAL"
             size="small"
-            sx={{ bg: '#FEF9E7', color: '#B8860B', border: '1px solid #F0E1A8', fontWeight: 700 }}
+            sx={{ bgcolor: '#FEF9E7', color: '#B8860B', border: '1px solid #F0E1A8', fontWeight: 700 }}
           />
           <Chip
             icon={<HubIcon sx={{ fontSize: '14px !important', color: '#101828' }} />}
-            label="28 DECOUPLED MICRO-REPOS"
+            label="24 DECOUPLED MICRO-REPOS"
             size="small"
-            sx={{ bg: '#F2F4F7', color: '#344054', border: '1px solid #D0D5DD', fontWeight: 700 }}
+            sx={{ bgcolor: '#F2F4F7', color: '#344054', border: '1px solid #D0D5DD', fontWeight: 700 }}
           />
           <Chip
             icon={<ShieldIcon sx={{ fontSize: '14px !important', color: '#12B76A' }} />}
             label="ZERO CLOUD TELEMETRY"
             size="small"
-            sx={{ bg: '#ECFDF3', color: '#027A48', border: '1px solid #ABE5C6', fontWeight: 700 }}
+            sx={{ bgcolor: '#ECFDF3', color: '#027A48', border: '1px solid #ABE5C6', fontWeight: 700 }}
           />
         </Box>
 
@@ -134,7 +130,7 @@ CONNECTED MODEL BACKENDS:
           Zoth Studio v2 Architecture Docs
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ maxWidth: '900px', fontSize: '1.1rem', mb: 3 }}>
-          Complete technical reference for local initialization, 28 micro-repo architecture, 21-agent swarms, Simplex E2EE Signal Bridge, Argon2id hardware vaults, and Zoth OS hypervisors.
+          Complete technical reference for local initialization, 24 micro-repo architecture, 21-agent swarms, Simplex E2EE Signal Bridge, Argon2id hardware vaults, and Zoth OS hypervisors.
         </Typography>
 
         {/* Global Search Bar */}
@@ -150,7 +146,7 @@ CONNECTED MODEL BACKENDS:
                   <SearchIcon sx={{ color: '#667085' }} />
                 </InputAdornment>
               ),
-              sx: { borderRadius: 9999, bg: '#FFFFFF', boxShadow: '0 1px 3px rgba(16,24,40,0.05)' }
+              sx: { borderRadius: 9999, bgcolor: '#FFFFFF', boxShadow: '0 1px 3px rgba(16,24,40,0.05)' }
             }}
             size="medium"
           />
@@ -161,7 +157,7 @@ CONNECTED MODEL BACKENDS:
       <Grid container spacing={4}>
         
         {/* Left Column: Sticky Table of Contents & Quick Command Block */}
-        <Grid item xs={12} md={4} lg={3}>
+        <Grid size={{ xs: 12, md: 4, lg: 3 }}>
           <Box sx={{ position: { md: 'sticky' }, top: 24 }}>
             <Paper sx={{ p: 3, border: '1px solid #EAECF0', borderRadius: 3, mb: 3 }}>
               <Typography variant="h6" sx={{ mb: 2, color: '#B8860B', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -173,12 +169,15 @@ CONNECTED MODEL BACKENDS:
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                 {[
                   { id: 'sec-1', title: '1. Sovereign Architecture Overview' },
-                  { id: 'sec-2', title: '2. Decoupled 28 Micro-Repo Directory' },
+                  { id: 'sec-2', title: '2. Decoupled 24 Micro-Repo Directory' },
                   { id: 'sec-3', title: '3. 21 Pantheon Agent Swarm Protocol' },
                   { id: 'sec-4', title: '4. Signal Bridge & Simplex E2EE' },
                   { id: 'sec-5', title: '5. Argon2id Hardware Vault Specs' },
                   { id: 'sec-6', title: '6. Zoth OS Hypervisor VM Setup' },
-                  { id: 'sec-7', title: '7. CLI Command Cheat Sheet & Audit' }
+                  { id: 'sec-7', title: '7. CLI Command Cheat Sheet & Audit' },
+                  { id: 'sec-math', title: '8. Six Math Pillars' },
+                  { id: 'sec-egress', title: '9. Zero-Egress Enclave' },
+                  { id: 'sec-workstations', title: '10. Legacy Workstation Map' }
                 ].map((item) => (
                   <Button
                     key={item.id}
@@ -192,8 +191,8 @@ CONNECTED MODEL BACKENDS:
                       fontSize: '0.85rem',
                       fontWeight: activeSection === item.id ? 700 : 500,
                       color: activeSection === item.id ? '#B8860B' : '#475467',
-                      bg: activeSection === item.id ? '#FEF9E7' : 'transparent',
-                      '&:hover': { bg: '#F8F9FA' }
+                      bgcolor: activeSection === item.id ? '#FEF9E7' : 'transparent',
+                      '&:hover': { bgcolor: '#F8F9FA' }
                     }}
                   >
                     {item.title}
@@ -203,63 +202,63 @@ CONNECTED MODEL BACKENDS:
             </Paper>
 
             {/* Quick Install Widget */}
-            <Paper sx={{ p: 2.5, bg: '#101828', color: '#FDD663', borderRadius: 3 }}>
+            <Paper sx={{ p: 2.5, bgcolor: '#101828', color: '#FDD663', borderRadius: 3 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                <Typography variant="caption" sx={{ color: '#81C995', fontWeight: 700, fontFamily: 'monospace' }}>
+                <Typography variant="caption" sx={{ color: '#81C995', fontWeight: 700, fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace' }}>
                   QUICK INSTALL COMMAND
                 </Typography>
                 <IconButton
                   size="small"
-                  onClick={() => handleCopy('npx zoth-studio init', 'quick-install')}
+                  onClick={() => handleCopy('npm run zoth -- init', 'quick-install')}
                   sx={{ color: '#8B949E', '&:hover': { color: '#FDD663' } }}
                 >
                   {copiedIndex === 'quick-install' ? <CheckIcon fontSize="small" sx={{ color: '#81C995' }} /> : <ContentCopyIcon fontSize="small" />}
                 </IconButton>
               </Box>
-              <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
-                $ npx zoth-studio init
+              <Typography variant="body2" sx={{ fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace' }}>
+                $ npm run zoth -- init
               </Typography>
             </Paper>
           </Box>
         </Grid>
 
         {/* Right Column: Documentation Sections */}
-        <Grid item xs={12} md={8} lg={9}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+        <Grid size={{ xs: 12, md: 8, lg: 9 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5, '& [id^="sec-"]': { scrollMarginTop: '88px' } }}>
             
             {/* SECTION 1: Sovereign Architecture Overview */}
             <Paper id="sec-1" sx={{ p: 4, border: '1px solid #EAECF0', borderRadius: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-                <Chip label="CORE ARCHITECTURE" size="small" sx={{ bg: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
+                <Chip label="CORE ARCHITECTURE" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
                 <Typography variant="h5" sx={{ fontWeight: 700 }}>
                   1. Sovereign Architecture Overview
                 </Typography>
               </Box>
 
               <Typography variant="body1" color="text.secondary" paragraph>
-                Zoth Studio v2 is a local-first, zero-cloud-telemetry AI agent platform built for extreme sovereignty and high-performance workstation workflows. It decouples monolithic web workstation monoliths into <strong>28 standalone micro-repositories</strong> while maintaining a unified Vite React Material-UI orchestration hub.
+                Zoth Studio v2 is the operator desk for NullAI. The catalog lists the published tools, plus two names that are not published. The CLI clones the published ones and starts the memory daemon and the signal bridge.
               </Typography>
 
               {/* Visual Architecture Diagram Card */}
-              <Paper sx={{ p: 3, bg: '#0B0F19', color: '#FFFFFF', borderRadius: 3, my: 3, border: '1px solid #1D2939' }}>
-                <Typography variant="subtitle2" sx={{ color: '#FDD663', fontFamily: 'monospace', mb: 2, fontWeight: 700 }}>
+              <Paper sx={{ p: 3, bgcolor: '#0B0F19', color: '#FFFFFF', borderRadius: 3, my: 3, border: '1px solid #1D2939' }}>
+                <Typography variant="subtitle2" sx={{ color: '#FDD663', fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace', mb: 2, fontWeight: 700 }}>
                   [SYSTEM TOPOLOGY DIAGRAM]
                 </Typography>
 
                 <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, gap: 2, textAlign: 'center' }}>
-                  <Paper sx={{ p: 2, bg: '#101828', border: '1px solid #30363D', color: '#79C0FF' }}>
+                  <Paper sx={{ p: 2, bgcolor: '#101828', border: '1px solid #30363D', color: '#79C0FF' }}>
                     <CodeIcon sx={{ mb: 0.5 }} />
                     <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Orchestrator UI</Typography>
                     <Typography variant="caption" sx={{ color: '#8B949E' }}>Vite React + MUI v5 Interface</Typography>
                   </Paper>
 
-                  <Paper sx={{ p: 2, bg: '#101828', border: '1px solid #30363D', color: '#81C995' }}>
+                  <Paper sx={{ p: 2, bgcolor: '#101828', border: '1px solid #30363D', color: '#81C995' }}>
                     <HubIcon sx={{ mb: 0.5 }} />
                     <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Simplex Signal Bridge</Typography>
-                    <Typography variant="caption" sx={{ color: '#8B949E' }}>E2EE IPC Relay (Port 9001)</Typography>
+                    <Typography variant="caption" sx={{ color: '#8B949E' }}>Signal bridge on 127.0.0.1:8789</Typography>
                   </Paper>
 
-                  <Paper sx={{ p: 2, bg: '#101828', border: '1px solid #30363D', color: '#D2A8FF' }}>
+                  <Paper sx={{ p: 2, bgcolor: '#101828', border: '1px solid #30363D', color: '#D2A8FF' }}>
                     <MemoryIcon sx={{ mb: 0.5 }} />
                     <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Local Memory Daemon</Typography>
                     <Typography variant="caption" sx={{ color: '#8B949E' }}>HNSW Vector Storage (Port 8788)</Typography>
@@ -270,12 +269,12 @@ CONNECTED MODEL BACKENDS:
               <Grid container spacing={2}>
                 {[
                   { title: 'Zero Cloud Telemetry', desc: 'All model inferences, memory stores, and AST diffs remain 100% local on your hardware.' },
-                  { title: '28 Micro-Repo Decoupling', desc: 'Pull only the specific tools you need (e.g. zoth-consensus, hexstrike, zoth-webgen).' },
+                  { title: '24 Micro-Repo Decoupling', desc: 'Pull only the specific tools you need (e.g. zoth-consensus, hexstrike, zoth-webgen).' },
                   { title: 'Argon2id Hardware Enclave', desc: 'Cryptographically derived key storage for local credentials and model access tokens.' },
                   { title: 'Zoth OS Sandbox Isolation', desc: 'Virtual machine hypervisor sandbox preventing arbitrary agent execution from host mutation.' }
                 ].map((pillar, idx) => (
-                  <Grid item xs={12} sm={6} key={idx}>
-                    <Box sx={{ p: 2, border: '1px solid #EAECF0', borderRadius: 2, bg: '#F8F9FA' }}>
+                  <Grid size={{ xs: 12, sm: 6 }} key={idx}>
+                    <Box sx={{ p: 2, border: '1px solid #EAECF0', borderRadius: 2, bgcolor: '#F8F9FA' }}>
                       <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5, color: '#101828' }}>
                         ✔ {pillar.title}
                       </Typography>
@@ -288,13 +287,13 @@ CONNECTED MODEL BACKENDS:
               </Grid>
             </Paper>
 
-            {/* SECTION 2: Decoupled 28 Micro-Repo Directory */}
+            {/* SECTION 2: Decoupled 24 Micro-Repo Directory */}
             <Paper id="sec-2" sx={{ p: 4, border: '1px solid #EAECF0', borderRadius: 3 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2, mb: 2 }}>
                 <Box>
-                  <Chip label="MICRO-REPO INDEX" size="small" sx={{ bg: '#FEF9E7', color: '#B8860B', fontWeight: 700, mb: 1 }} />
+                  <Chip label="MICRO-REPO INDEX" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700, mb: 1 }} />
                   <Typography variant="h5" sx={{ fontWeight: 700 }}>
-                    2. Decoupled 28 Micro-Repo Directory ({filteredTools.length})
+                    2. Decoupled 24 Micro-Repo Directory ({filteredTools.length})
                   </Typography>
                 </Box>
 
@@ -308,9 +307,9 @@ CONNECTED MODEL BACKENDS:
                       onClick={() => setSelectedCategory(cat)}
                       sx={{
                         fontWeight: 600,
-                        bg: selectedCategory === cat ? '#B8860B' : '#F2F4F7',
+                        bgcolor: selectedCategory === cat ? '#B8860B' : '#F2F4F7',
                         color: selectedCategory === cat ? '#FFFFFF' : '#344054',
-                        '&:hover': { bg: selectedCategory === cat ? '#856404' : '#E4E7EC' }
+                        '&:hover': { bgcolor: selectedCategory === cat ? '#856404' : '#E4E7EC' }
                       }}
                     />
                   ))}
@@ -318,20 +317,20 @@ CONNECTED MODEL BACKENDS:
               </Box>
 
               <Typography variant="body1" color="text.secondary" paragraph>
-                Each component in Zoth Studio v2 operates as an independent micro-repo. Pull any repository on demand via <code>npx zoth pull &lt;repo-name&gt;</code>.
+                Published tools clone with <code>npm run zoth -- pull &lt;repo-name&gt;</code>. Two catalog names have no GitHub repository, and the CLI will say so.
               </Typography>
 
               {/* Grid of Micro Tools */}
               <Grid container spacing={2.5}>
                 {filteredTools.map((tool) => (
-                  <Grid item xs={12} sm={6} key={tool.id}>
+                  <Grid size={{ xs: 12, sm: 6 }} key={tool.id}>
                     <Card sx={{ height: '100%', border: '1px solid #EAECF0', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                       <CardContent sx={{ p: 2.5 }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
                           <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 700, color: '#101828' }}>
                             {tool.name}
                           </Typography>
-                          <Chip label={`v${tool.version}`} size="small" sx={{ bg: '#F0F9FF', color: '#026AA2', fontWeight: 700, fontSize: '0.75rem' }} />
+                          <Chip label={`v${tool.version}`} size="small" sx={{ bgcolor: '#F0F9FF', color: '#026AA2', fontWeight: 700, fontSize: '0.75rem' }} />
                         </Box>
 
                         <Typography variant="caption" sx={{ color: '#B8860B', fontWeight: 700, display: 'block', mb: 1 }}>
@@ -342,7 +341,7 @@ CONNECTED MODEL BACKENDS:
                           {tool.description}
                         </Typography>
 
-                        <Paper sx={{ p: 1.5, bg: '#101828', color: '#FDD663', fontFamily: 'monospace', fontSize: '0.78rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Paper sx={{ p: 1.5, bgcolor: '#101828', color: '#FDD663', fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace', fontSize: '0.78rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                           <span>$ {tool.pull}</span>
                           <IconButton
                             size="small"
@@ -362,7 +361,7 @@ CONNECTED MODEL BACKENDS:
             {/* SECTION 3: 21 Pantheon Agent Swarm Protocol */}
             <Paper id="sec-3" sx={{ p: 4, border: '1px solid #EAECF0', borderRadius: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-                <Chip label="SWARM PROTOCOL" size="small" sx={{ bg: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
+                <Chip label="SWARM PROTOCOL" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
                 <Typography variant="h5" sx={{ fontWeight: 700 }}>
                   3. 21 Pantheon Agent Swarm Protocol
                 </Typography>
@@ -380,8 +379,8 @@ CONNECTED MODEL BACKENDS:
                   { stage: 'Stage 3', title: 'Socratic Debate', desc: 'Cross-agent arguments refine code logic and enforce performance benchmarks.' },
                   { stage: 'Stage 4', title: 'SHA-256 Consensus', desc: '3/3 unanimity seals the code payload into local git history with zero telemetry.' }
                 ].map((stg, idx) => (
-                  <Grid item xs={12} sm={6} md={3} key={idx}>
-                    <Paper sx={{ p: 2, bg: '#F8F9FA', border: '1px solid #EAECF0', textAlign: 'center', height: '100%' }}>
+                  <Grid size={{ xs: 12, sm: 6, md: 3 }} key={idx}>
+                    <Paper sx={{ p: 2, bgcolor: '#F8F9FA', border: '1px solid #EAECF0', textAlign: 'center', height: '100%' }}>
                       <Chip label={stg.stage} size="small" color="primary" sx={{ mb: 1, fontWeight: 700 }} />
                       <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>{stg.title}</Typography>
                       <Typography variant="caption" color="text.secondary">{stg.desc}</Typography>
@@ -394,7 +393,7 @@ CONNECTED MODEL BACKENDS:
             {/* SECTION 4: Signal Bridge & Simplex E2EE */}
             <Paper id="sec-4" sx={{ p: 4, border: '1px solid #EAECF0', borderRadius: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-                <Chip label="E2EE NETWORKING" size="small" sx={{ bg: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
+                <Chip label="E2EE NETWORKING" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
                 <Typography variant="h5" sx={{ fontWeight: 700 }}>
                   4. Signal Bridge &amp; Simplex E2EE Protocol
                 </Typography>
@@ -404,26 +403,26 @@ CONNECTED MODEL BACKENDS:
                 The Sovereign Agent Signal Bridge provides end-to-end encrypted (E2EE) inter-process communication (IPC) for local agent swarms. Operating over loopback WebSockets without cloud relays, messages are secured using Noise Protocol framework double ratchets.
               </Typography>
 
-              <Paper sx={{ p: 2.5, bg: '#101828', color: '#FDD663', fontFamily: 'monospace', borderRadius: 2 }}>
+              <Paper sx={{ p: 2.5, bgcolor: '#101828', color: '#FDD663', fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace', borderRadius: 2 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                   <Typography variant="caption" sx={{ color: '#81C995' }}># SIGNAL BRIDGE INITIALIZATION</Typography>
                   <IconButton
                     size="small"
-                    onClick={() => handleCopy('npx zoth pull sovereign-agent-bridge && npx sovereign-agent-bridge --port 9001', 'signal-bridge-cmd')}
+                    onClick={() => handleCopy('npm run zoth -- pull sovereign-agent-bridge && npm run zoth -- up', 'signal-bridge-cmd')}
                     sx={{ color: '#8B949E', '&:hover': { color: '#FDD663' } }}
                   >
                     {copiedIndex === 'signal-bridge-cmd' ? <CheckIcon fontSize="small" sx={{ color: '#81C995' }} /> : <ContentCopyIcon fontSize="small" />}
                   </IconButton>
                 </Box>
-                <div>$ npx zoth pull sovereign-agent-bridge</div>
-                <div>$ npx sovereign-agent-bridge --port 9001 --e2ee-strict</div>
+                <div>$ npm run zoth -- pull sovereign-agent-bridge</div>
+                <div>$ npm run zoth -- up</div>
               </Paper>
             </Paper>
 
             {/* SECTION 5: Argon2id Hardware Vault Specs */}
             <Paper id="sec-5" sx={{ p: 4, border: '1px solid #EAECF0', borderRadius: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-                <Chip label="HARDWARE VAULT" size="small" sx={{ bg: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
+                <Chip label="HARDWARE VAULT" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
                 <Typography variant="h5" sx={{ fontWeight: 700 }}>
                   5. Argon2id Hardware Vault Specs
                 </Typography>
@@ -433,7 +432,7 @@ CONNECTED MODEL BACKENDS:
                 Local secret storage uses Argon2id key derivation combined with AES-256-GCM authenticated payload encryption. Credentials and API tokens are decrypted in-memory only during tool invocation and wiped immediately after.
               </Typography>
 
-              <Paper sx={{ p: 2.5, bg: '#0B0F19', color: '#81C995', fontFamily: 'monospace', borderRadius: 2, border: '1px solid #1D2939' }}>
+              <Paper sx={{ p: 2.5, bgcolor: '#0B0F19', color: '#81C995', fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace', borderRadius: 2, border: '1px solid #1D2939' }}>
                 <pre style={{ margin: 0, fontSize: '0.85rem', lineHeight: 1.5 }}>{`// Local Hardware Vault Initialization Code
 import { EnvGuardVault } from 'envguard-secrets-vault';
 
@@ -451,7 +450,7 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}</pre>
             {/* SECTION 6: Zoth OS VM Setup */}
             <Paper id="sec-6" sx={{ p: 4, border: '1px solid #EAECF0', borderRadius: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-                <Chip label="VIRTUAL MACHINE" size="small" sx={{ bg: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
+                <Chip label="VIRTUAL MACHINE" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
                 <Typography variant="h5" sx={{ fontWeight: 700 }}>
                   6. Zoth OS VM Setup &amp; USB Booting
                 </Typography>
@@ -487,7 +486,7 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}</pre>
             {/* SECTION 7: Interactive CLI Command Cheat Sheet & Audit */}
             <Paper id="sec-7" sx={{ p: 4, border: '1px solid #EAECF0', borderRadius: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-                <Chip label="TERMINAL AUDIT" size="small" sx={{ bg: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
+                <Chip label="TERMINAL AUDIT" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
                 <Typography variant="h5" sx={{ fontWeight: 700 }}>
                   7. CLI Command Cheat Sheet &amp; Health Audit
                 </Typography>
@@ -498,13 +497,13 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}</pre>
               </Typography>
 
               {/* Terminal Window */}
-              <Paper sx={{ bg: '#0D1117', color: '#C9D1D9', borderRadius: 3, overflow: 'hidden', border: '1px solid #30363D' }}>
-                <Box sx={{ px: 2.5, py: 1.5, bg: '#161B22', borderBottom: '1px solid #30363D', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Paper sx={{ bgcolor: '#0D1117', color: '#C9D1D9', borderRadius: 3, overflow: 'hidden', border: '1px solid #30363D' }}>
+                <Box sx={{ px: 2.5, py: 1.5, bgcolor: '#161B22', borderBottom: '1px solid #30363D', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Box sx={{ width: 12, height: 12, borderRadius: '50%', bg: '#FF5F56' }} />
-                    <Box sx={{ width: 12, height: 12, borderRadius: '50%', bg: '#FFBD2E' }} />
-                    <Box sx={{ width: 12, height: 12, borderRadius: '50%', bg: '#27C93F' }} />
-                    <Typography variant="caption" sx={{ color: '#8B949E', ml: 1.5, fontFamily: 'monospace' }}>
+                    <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#FF5F56' }} />
+                    <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#FFBD2E' }} />
+                    <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#27C93F' }} />
+                    <Typography variant="caption" sx={{ color: '#8B949E', ml: 1.5, fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace' }}>
                       zoth-cli ~ doctor audit preview
                     </Typography>
                   </Box>
@@ -525,9 +524,9 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}</pre>
                   indicatorColor="primary"
                   sx={{
                     minHeight: 38,
-                    bg: '#0D1117',
+                    bgcolor: '#0D1117',
                     borderBottom: '1px solid #21262D',
-                    '& .MuiTab-root': { minHeight: 38, textTransform: 'none', fontSize: '0.8rem', fontFamily: 'monospace', color: '#8B949E' }
+                    '& .MuiTab-root': { minHeight: 38, textTransform: 'none', fontSize: '0.8rem', fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace', color: '#8B949E' }
                   }}
                 >
                   <Tab label="1. Health Audit (zoth doctor)" />
@@ -535,10 +534,35 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}</pre>
                   <Tab label="3. Local Model Connectors" />
                 </Tabs>
 
-                <Box sx={{ p: 3, fontFamily: 'monospace', fontSize: '0.85rem', lineHeight: 1.6, bg: '#0B0F19', color: '#81C995', whiteSpace: 'pre-wrap' }}>
+                <Box sx={{ p: 3, fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace', fontSize: '0.85rem', lineHeight: 1.6, bgcolor: '#0B0F19', color: '#81C995', whiteSpace: 'pre-wrap' }}>
                   {terminalAuditLogs[terminalTab]}
                 </Box>
               </Paper>
+            </Paper>
+
+            <Paper id="sec-math" sx={{ p: { xs: 2.5, md: 4 }, border: '1px solid #EAECF0', borderRadius: 3 }}>
+              <Chip label="MATH ACADEMY" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700, mb: 1.5 }} />
+              <Typography variant="h5" sx={{ fontWeight: 750, mb: 1 }}>
+                8. Six Math Pillars
+              </Typography>
+              <Typography variant="body1" color="text.secondary" sx={{ mb: 2.5 }}>
+                Carried from the legacy math workstation: linear algebra, calculus, information theory, Hessian curvature, Lyapunov stability, and neuromorphic STDP. Switch the tier to move from analogy to the engineering formula.
+              </Typography>
+              <MathPillarsGrid />
+            </Paper>
+
+            <Paper id="sec-egress" sx={{ p: { xs: 2.5, md: 4 }, border: '1px solid #EAECF0', borderRadius: 3 }}>
+              <Typography variant="h5" sx={{ fontWeight: 750, mb: 2 }}>
+                9. Zero-Egress Enclave
+              </Typography>
+              <ZeroEgressPanel embedded />
+            </Paper>
+
+            <Paper sx={{ p: { xs: 2.5, md: 4 }, border: '1px solid #EAECF0', borderRadius: 3 }}>
+              <Typography variant="h5" sx={{ fontWeight: 750, mb: 2 }}>
+                10. Legacy Workstation Map
+              </Typography>
+              <WorkstationMap embedded />
             </Paper>
 
           </Box>

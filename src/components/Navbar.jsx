@@ -4,15 +4,16 @@ import {
   List, ListItem, ListItemButton, ListItemText, Divider
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import GitHubIcon from '@mui/icons-material/GitHub';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import GoldenZLogo3D from './GoldenZLogo3D';
 
+
 const navItems = [
   { label: 'Ecosystem', path: '/' },
+  { label: 'Adytum', path: '/adytum' },
   { label: '21 Swarm', path: '/swarm' },
   { label: 'Bridges', path: '/bridges' },
-  { label: '28 Tools', path: '/tools' },
+  { label: 'Tools', path: '/tools' },
   { label: 'Memory', path: '/memory' },
   { label: 'Consensus', path: '/consensus' },
   { label: 'WebGen', path: '/webgen' },
@@ -36,14 +37,14 @@ export default function Navbar() {
           
           {/* Brand Logo */}
           <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, textDecoration: 'none', color: '#101828' }}>
-            <GoldenZLogo3D size={38} />
-            <Typography variant="h6" sx={{ fontWeight: 800, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: 1 }}>
-              ZOTH STUDIO <Chip label="v2.0" size="small" sx={{ background: '#FEF9E7', color: '#B8860B', border: '1px solid #F0E1A8', fontWeight: 700 }} />
+            <GoldenZLogo3D size={40} />
+            <Typography sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontSize: '1.7rem', lineHeight: 1, letterSpacing: '0.03em', display: 'flex', alignItems: 'center', gap: 1 }}>
+              Zoth Studio <Chip label="v2" size="small" sx={{ background: '#FEF9E7', color: '#B8860B', border: '1px solid #F0E1A8', fontWeight: 700, fontFamily: 'Inter, sans-serif' }} />
             </Typography>
           </Box>
 
           {/* Desktop Navigation Items */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1 }}>
+          <Box sx={{ display: { xs: 'none', lg: 'flex' }, alignItems: 'center', gap: 0.5, overflow: 'hidden' }}>
             {navItems.map((item) => {
               const active = location.pathname === item.path;
               return (
@@ -56,8 +57,9 @@ export default function Navbar() {
                     fontWeight: active ? 700 : 500,
                     borderBottom: active ? '2px solid #D4AF37' : '2px solid transparent',
                     borderRadius: 0,
-                    px: 1.5,
+                    px: 1.15,
                     py: 1,
+                    transition: 'color 0.2s ease, border-color 0.2s ease',
                     '&:hover': { color: '#B8860B', background: 'transparent' }
                   }}
                 >
@@ -72,14 +74,15 @@ export default function Navbar() {
             <Button
               variant="contained"
               color="primary"
-              href="https://github.com/NullAITech/zoth-studio"
+              href="https://nullai.tech"
               target="_blank"
-              startIcon={<GitHubIcon />}
+              rel="noopener noreferrer"
+              startIcon={<Box component="img" src="/brand/ghostbyte-dark.png" alt="" sx={{ height: 22, width: 'auto' }} />}
               sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
             >
-              GitHub Repo
+              NullAI
             </Button>
-            <IconButton color="inherit" onClick={handleDrawerToggle} sx={{ display: { md: 'none' }, color: '#101828' }}>
+            <IconButton color="inherit" onClick={handleDrawerToggle} sx={{ display: { lg: 'none' }, color: '#101828' }}>
               <MenuIcon />
             </IconButton>
           </Box>
@@ -87,7 +90,7 @@ export default function Navbar() {
       </Container>
 
       {/* Mobile Drawer */}
-      <Drawer variant="temporary" open={mobileOpen} onClose={handleDrawerToggle} ModalProps={{ keepMounted: true }} sx={{ display: { xs: 'block', md: 'none' } }}>
+      <Drawer variant="temporary" open={mobileOpen} onClose={handleDrawerToggle} ModalProps={{ keepMounted: true }} sx={{ display: { xs: 'block', lg: 'none' } }}>
         <Box onClick={handleDrawerToggle} sx={{ width: 260, p: 2 }}>
           <Typography variant="h6" sx={{ fontWeight: 800, mb: 2, color: '#B8860B' }}>
             ZOTH STUDIO v2

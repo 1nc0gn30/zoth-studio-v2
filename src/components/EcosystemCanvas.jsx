@@ -122,13 +122,13 @@ export default function EcosystemCanvas() {
   }, []);
 
   return (
-    <Paper sx={{ p: 2, border: '1px solid #EAECF0', mb: 5, overflow: 'hidden', bg: '#FAFAFA' }}>
+    <Paper sx={{ p: 2, border: '1px solid #EAECF0', mb: 5, overflow: 'hidden', bgcolor: '#FAFAFA' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, px: 1 }}>
         <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#B8860B', letterSpacing: '0.05em' }}>
           ✨ ZOTH SOVEREIGN ECOSYSTEM — GOLDEN ARCHITECTURE CANVAS
         </Typography>
         <Typography variant="caption" sx={{ color: '#667085', fontWeight: 600 }}>
-          28 REPOS • 21 SWARM AGENTS • ZERO TELEMETRY
+          ROSTER MAP • NOT LIVE TELEMETRY
         </Typography>
       </Box>
       <Box sx={{ width: '100%', height: 260, borderRadius: 1.5, overflow: 'hidden' }}>

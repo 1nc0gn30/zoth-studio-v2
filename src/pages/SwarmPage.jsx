@@ -1,135 +1,67 @@
 import React, { useState } from 'react';
 import {
-  Box, Container, Typography, Grid, Card, CardContent, Chip, Button,
-  Paper, Table, TableBody, TableCell, TableHead, TableRow, LinearProgress
+  Box, Container, Typography, Chip, Paper, Table, TableBody, TableCell,
+  TableContainer, TableHead, TableRow, Stack
 } from '@mui/material';
-import HubIcon from '@mui/icons-material/Hub';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import SwarmCanvasVisualizer from '../components/SwarmCanvasVisualizer';
+import { pantheonAgents, pantheonCadres } from '../data/pantheon';
 
-const liveAgents = [
-  { id: 'AZOTH', role: 'Archon Orchestrator', model: 'Google Antigravity / Pro', status: 'ACTIVE', tasks: 142, load: 45, repo: 'azoth-local-agent' },
-  { id: 'HERMES', role: 'Subagent Dispatcher', model: 'Nous Hermes 3 (Local)', status: 'ACTIVE', tasks: 88, load: 62, repo: 'hermes-agent' },
-  { id: 'GROK', role: 'Dialectic Synthesizer', model: 'xAI Grok Beta', status: 'STANDBY', tasks: 34, load: 12, repo: 'zoth-consensus' },
-  { id: 'OLLAMA', role: 'Local WASM/GGUF Runner', model: 'Ollama Llama 3 8B', status: 'ACTIVE', tasks: 92, load: 78, repo: 'zoth-vos-sandbox' },
-  { id: 'HEXSTRIKE', role: 'Penetration Auditor', model: 'CyberSec Specialist', status: 'ACTIVE', tasks: 28, load: 35, repo: 'hexstrike-arsenal' },
-  { id: 'WEBGEN', role: 'Autonomous Layout Engine', model: 'Vite/React Builder', status: 'ACTIVE', tasks: 115, load: 55, repo: 'polyglot-framework-exporter' },
-  { id: 'NEURO-MEM', role: 'STDP Biomorphic Memory', model: 'HNSW Vector Engine', status: 'ACTIVE', tasks: 210, load: 85, repo: 'neuro-memory-daemon' },
-  { id: 'SIGNAL-BRG', role: 'E2EE WebSocket Bridge', model: 'Simplex Mesh Protocol', status: 'ACTIVE', tasks: 340, load: 40, repo: 'sovereign-agent-bridge' },
-];
+const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 export default function SwarmPage() {
-  const [dispatchStatus, setDispatchStatus] = useState({});
-
-  const handleDispatch = (id) => {
-    setDispatchStatus((prev) => ({ ...prev, [id]: 'DISPATCHED' }));
-    setTimeout(() => {
-      setDispatchStatus((prev) => ({ ...prev, [id]: 'COMPLETED' }));
-    }, 1500);
-  };
+  const [cadre, setCadre] = useState('All');
+  const visible = pantheonAgents.filter((agent) => cadre === 'All' || agent.cadre === cadre);
 
   return (
     <Container maxWidth="lg" sx={{ py: 6 }}>
-      
-      {/* Section Header Banner */}
-      <Box sx={{ mb: 4, borderRadius: 2, overflow: 'hidden', border: '1px solid #EAECF0', boxShadow: '0 4px 16px rgba(0,0,0,0.08)' }}>
-        <Box component="img" src="/assets/banners/swarm.jpg" alt="Swarm Network Banner" sx={{ width: '100%', height: 200, objectFit: 'cover', display: 'block' }} />
-      </Box>
+      <Chip label="ROSTER, NOT TELEMETRY" size="small" sx={{ bgcolor: '#FEF9E7', color: '#8A6A09', fontWeight: 700, mb: 1.5 }} />
+      <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1 }}>
+        Pantheon roster
+      </Typography>
+      <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 760, mb: 3 }}>
+        These {pantheonAgents.length} names and roles come from the legacy agent index. This page does not invent workloads, and it does not mark anyone active unless a process says so. Heartbeats show up on the bridge page when 127.0.0.1:8789 is answering.
+      </Typography>
 
-      {/* Header */}
-      <Box sx={{ mb: 4 }}>
-        <Chip
-          icon={<HubIcon sx={{ color: '#B8860B !important' }} />}
-          label="21 PANTHEON AGENT SWARM CONTROL PLANE"
-          size="small"
-          sx={{ bg: '#FEF9E7', color: '#B8860B', border: '1px solid #F0E1A8', fontWeight: 700, mb: 1, px: 1 }}
-        />
-        <Typography variant="h3" sx={{ mb: 1 }}>
-          Autonomous Agent Swarm Workstation
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Monitor and dispatch multi-agent consensus, IPC task channels, and zero-telemetry subagent workers in real-time.
-        </Typography>
-      </Box>
+      <Stack direction="row" spacing={1} useFlexGap sx={{ mb: 3, flexWrap: 'wrap' }}>
+        {pantheonCadres.map((name) => (
+          <Chip
+            key={name}
+            label={name === 'All' ? `All ${pantheonAgents.length}` : name}
+            clickable
+            onClick={() => setCadre(name)}
+            sx={{
+              fontWeight: 700,
+              bgcolor: cadre === name ? '#B8860B' : '#F2F4F7',
+              color: cadre === name ? '#FFFFFF' : '#344054',
+              border: '1px solid',
+              borderColor: cadre === name ? '#D4AF37' : 'transparent',
+            }}
+          />
+        ))}
+      </Stack>
 
-      {/* Real-time Interactive Canvas Visualizer */}
       <SwarmCanvasVisualizer />
 
-      {/* Operational Metrics Grid */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={4}>
-          <Paper sx={{ p: 3, border: '1px solid #EAECF0' }}>
-            <Typography variant="body2" color="text.secondary">Total Swarm Agents</Typography>
-            <Typography variant="h4" sx={{ fontWeight: 800, color: '#101828' }}>21 Active</Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper sx={{ p: 3, border: '1px solid #EAECF0' }}>
-            <Typography variant="body2" color="text.secondary">Completed Swarm Work Orders</Typography>
-            <Typography variant="h4" sx={{ fontWeight: 800, color: '#B8860B' }}>1,049 Tasks</Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Paper sx={{ p: 3, border: '1px solid #EAECF0' }}>
-            <Typography variant="body2" color="text.secondary">IPC Signal Mesh Latency</Typography>
-            <Typography variant="h4" sx={{ fontWeight: 800, color: '#12B76A' }}>0.18 ms</Typography>
-          </Paper>
-        </Grid>
-      </Grid>
-
-      {/* Live Agent Work Order Table */}
-      <Paper sx={{ border: '1px solid #EAECF0', overflow: 'hidden' }}>
+      <TableContainer component={Paper} sx={{ border: '1px solid #EAECF0' }}>
         <Table>
-          <TableHead sx={{ bg: '#F9FAFB' }}>
+          <TableHead sx={{ bgcolor: '#F9FAFB' }}>
             <TableRow>
-              <TableCell sx={{ fontWeight: 700 }}>Agent ID</TableCell>
-              <TableCell sx={{ fontWeight: 700 }}>Swarm Role</TableCell>
-              <TableCell sx={{ fontWeight: 700 }}>Engine Model</TableCell>
-              <TableCell sx={{ fontWeight: 700 }}>Micro-Repo</TableCell>
-              <TableCell sx={{ fontWeight: 700 }}>Work Load</TableCell>
-              <TableCell sx={{ fontWeight: 700 }}>Status</TableCell>
-              <TableCell sx={{ fontWeight: 700 }}>Action</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Role</TableCell>
+              <TableCell>Cadre</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {liveAgents.map((agent) => (
+            {visible.map((agent) => (
               <TableRow key={agent.id} hover>
-                <TableCell sx={{ fontWeight: 700, color: '#B8860B', fontFamily: 'monospace' }}>{agent.id}</TableCell>
+                <TableCell sx={{ fontFamily: mono, fontWeight: 700, color: '#8A6A09' }}>{agent.id}</TableCell>
                 <TableCell>{agent.role}</TableCell>
-                <TableCell>{agent.model}</TableCell>
-                <TableCell sx={{ fontFamily: 'monospace', color: '#475467', fontSize: '0.8rem' }}>{agent.repo}</TableCell>
-                <TableCell sx={{ width: 140 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <LinearProgress variant="determinate" value={agent.load} sx={{ flexGrow: 1, height: 6, borderRadius: 1, bg: '#F2F4F7', '& .MuiLinearProgress-bar': { bg: '#B8860B' } }} />
-                    <Typography variant="caption" sx={{ fontWeight: 600 }}>{agent.load}%</Typography>
-                  </Box>
-                </TableCell>
-                <TableCell>
-                  <Chip
-                    label={agent.status}
-                    size="small"
-                    color={agent.status === 'ACTIVE' ? 'success' : 'default'}
-                    variant={agent.status === 'ACTIVE' ? 'filled' : 'outlined'}
-                  />
-                </TableCell>
-                <TableCell>
-                  <Button
-                    size="small"
-                    variant={dispatchStatus[agent.id] === 'COMPLETED' ? 'contained' : 'outlined'}
-                    color={dispatchStatus[agent.id] === 'COMPLETED' ? 'success' : 'primary'}
-                    startIcon={dispatchStatus[agent.id] === 'COMPLETED' ? <CheckCircleIcon /> : <PlayArrowIcon />}
-                    onClick={() => handleDispatch(agent.id)}
-                  >
-                    {dispatchStatus[agent.id] || 'Dispatch'}
-                  </Button>
-                </TableCell>
+                <TableCell>{agent.cadre}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      </Paper>
-
+      </TableContainer>
     </Container>
   );
 }

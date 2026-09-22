@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
+import { pantheonAgents } from '../data/pantheon';
 
 export default function SwarmCanvasVisualizer() {
   const canvasRef = useRef(null);
@@ -13,12 +14,7 @@ export default function SwarmCanvasVisualizer() {
     const width = (canvas.width = canvas.parentElement.clientWidth || 800);
     const height = (canvas.height = 320);
 
-    // Create 21 Pantheon Agent Nodes
-    const agentRoles = [
-      'AZOTH', 'HERMES', 'GROK', 'OLLAMA', 'HEXSTRIKE', 'WEBGEN', 'MEMORY',
-      'CONSENSUS', 'BRIDGE', 'AEO', 'DATAMOSH', 'ENVGUARD', 'PROMPTMASTER',
-      'SUBSET', 'VECTOR', 'RECON', 'SECURITY', 'SYNAPSE', 'TURTLE', 'PWA', 'JWT'
-    ];
+    const agentRoles = pantheonAgents.map((agent) => agent.id);
 
     const nodes = agentRoles.map((role, i) => {
       const angle = (i / agentRoles.length) * Math.PI * 2;
@@ -139,10 +135,10 @@ export default function SwarmCanvasVisualizer() {
     <Paper sx={{ p: 2, border: '1px solid #EAECF0', mb: 4, overflow: 'hidden', position: 'relative' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, px: 1 }}>
         <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#B8860B', letterSpacing: '0.05em' }}>
-          ⚡ REAL-TIME 21 PANTHEON AGENT IPC TOPOLOGY MESH
+          PANTHEON ROSTER MAP
         </Typography>
-        <Typography variant="caption" sx={{ color: '#12B76A', fontWeight: 700, fontFamily: 'monospace' }}>
-          ● LIVE IPC SIGNAL BUS (0.18ms)
+        <Typography variant="caption" sx={{ color: '#667085', fontWeight: 700, fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace' }}>
+          Diagram of names. Not a live bus.
         </Typography>
       </Box>
       <Box sx={{ width: '100%', height: 320, background: '#FAFAFA', borderRadius: 1.5, overflow: 'hidden' }}>

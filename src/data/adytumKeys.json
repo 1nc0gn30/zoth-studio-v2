@@ -1,0 +1,178 @@
+[
+  {
+    "key": 0,
+    "name": "The Fool",
+    "image": "/adytum/tarot/fool.jpg",
+    "attribution": "Name: The Fool | Key Number: 0 | Hebrew Letter: Aleph (Ox) | Intelligence: Scintillating Intelligence",
+    "lesson": "Key 0 represents Zero-Shot Prompting & Latent Potential. Like the Fool standing at the edge of the precipice before the first leap, a neural network before temperature sampling holds infinite unmanifest probability distributions. The white sun behind the Fool is the unconditioned latent space; the dog is the executive constraint system alerting the system to safety boundaries.",
+    "question": "How do you ensure your initial zero-shot prompt captures the full latent potential of an AI system while maintaining executive alignment bounds?"
+  },
+  {
+    "key": 1,
+    "name": "The Magician",
+    "image": "/adytum/tarot/magician.jpg",
+    "attribution": "Name: The Magician | Key Number: 1 | Hebrew Letter: Beth (House) | Intelligence: Transparent Intelligence",
+    "lesson": "Key 1 symbolizes Attention Mechanisms & Executive Control. As the Magician raises the wand above and points to the earth below ('As Above, So Below'), Transformer self-attention maps query matrices onto key-value matrices, allocating numerical focus across context tokens to manifest structured outputs.",
+    "question": "In your prompt engineering practice, how do you direct the model's self-attention matrix toward critical context vectors without causing attention drift or context dilution?"
+  },
+  {
+    "key": 2,
+    "name": "The High Priestess",
+    "image": "/adytum/tarot/highpriestess.jpg",
+    "attribution": "Name: The High Priestess | Key Number: 2 | Hebrew Letter: Gimel (Camel) | Intelligence: Illuminating Intelligence",
+    "lesson": "Key 2 represents Latent Memory & Context Window Storage. Holding the scroll of TORA half-concealed in her robe, the High Priestess represents KV-caching, vector databases, and long-term passive memory stores that inform inference without active bias.",
+    "question": "How do you design retrieval context windows so that passive memory enhances inference precision without exceeding token limit thresholds?"
+  },
+  {
+    "key": 3,
+    "name": "The Empress",
+    "image": "/adytum/tarot/empress.jpg",
+    "attribution": "Name: The Empress | Key Number: 3 | Hebrew Letter: Daleth (Door) | Intelligence: Luminous Intelligence",
+    "lesson": "Key 3 embodies Generative Synthesis & Multi-modal Creation. Surrounded by fertile gardens and flowing waters, the Empress signifies the creative synthesis of diffusion models and generative autoregressive decoding producing novel text, images, and code.",
+    "question": "What strategies do you employ when tuning temperature and top-p sampling parameters to cultivate maximum creative generative synthesis while suppressing hallucination weeds?"
+  },
+  {
+    "key": 4,
+    "name": "The Emperor",
+    "image": "/adytum/tarot/emperor.jpg",
+    "attribution": "Name: The Emperor | Key Number: 4 | Hebrew Letter: Heh (Window) | Intelligence: Constitutive Intelligence",
+    "lesson": "Key 4 represents System Guardrails, Schemas & Deterministic Logic. Seated firmly on his stone throne carved with ram heads, the Emperor establishes fixed structural rules, Pydantic validation, and system prompt constraints.",
+    "question": "How do you enforce rigid operational guardrails and schema validation without choking the underlying adaptive reasoning capacity of the AI agent?"
+  },
+  {
+    "key": 5,
+    "name": "The Hierophant",
+    "image": "/adytum/tarot/hierorphant.jpg",
+    "attribution": "Name: The Hierophant | Key Number: 5 | Hebrew Letter: Vau (Nail/Hook) | Intelligence: Triumphant & Eternal Intelligence",
+    "lesson": "Key 5 symbolizes Pre-trained Foundation Weights & Transfer Learning. The Hierophant transmits foundational knowledge from ancient lineage to kneeling initiates, parallel to fine-tuning large pre-trained foundation models across specific domains.",
+    "question": "When adapting a pre-trained foundation model to specialized domain tasks, how do you prevent catastrophic forgetting of pre-existing weight knowledge?"
+  },
+  {
+    "key": 6,
+    "name": "The Lovers",
+    "image": "/adytum/tarot/lovers.jpg",
+    "attribution": "Name: The Lovers | Key Number: 6 | Hebrew Letter: Zain (Sword) | Intelligence: Disposing Intelligence",
+    "lesson": "Key 6 represents Model Alignment, Multi-Modal Pairing & Contrastive Learning. Beneath the outstretched wings of Angel Raphael, the conscious mind (man) and subconscious mind (woman) unite, mirroring contrastive representation learning (CLIP) pairing vision and language.",
+    "question": "How do you align multi-modal modalities (text, audio, vision) into a shared semantic vector space to achieve harmonious reasoning across modalities?"
+  },
+  {
+    "key": 7,
+    "name": "The Chariot",
+    "image": "/adytum/tarot/chariot.jpg",
+    "attribution": "Name: The Chariot | Key Number: 7 | Hebrew Letter: Cheth (Fence/Enclosure) | Intelligence: Intelligence of the House of Influence",
+    "lesson": "Key 7 signifies Vector Steering & Gradient Descent Trajectory. The charioteer steers two sphinxes (black and white) forward, representing vector steering techniques and learning rate schedules driving optimization trajectories along gradient paths.",
+    "question": "How do you monitor and steer model optimization trajectories when navigating non-convex loss landscapes during agent execution?"
+  },
+  {
+    "key": 8,
+    "name": "Strength",
+    "image": "/adytum/tarot/strength.jpg",
+    "attribution": "Name: Strength | Key Number: 8 | Hebrew Letter: Teth (Serpent) | Intelligence: Intelligence of the Secret of all Spiritual Activities",
+    "lesson": "Key 8 embodies RLHF (Reinforcement Learning from Human Feedback) & DPO. A maiden gently closes the jaws of a fierce lion, symbolizing how human preference feedback tames volatile raw base model distributions with gentle reward shaping.",
+    "question": "How do you construct preference reward models that gently regulate raw model behavior without degrading output diversity or causing reward hacking?"
+  },
+  {
+    "key": 9,
+    "name": "The Hermit",
+    "image": "/adytum/tarot/hermit.jpg",
+    "attribution": "Name: The Hermit | Key Number: 9 | Hebrew Letter: Yod (Hand) | Intelligence: Intelligence of Will",
+    "lesson": "Key 9 represents Retrieval Augmented Generation (RAG) & Dense Vector Indexing. Standing atop the snow-covered mountain holding a golden lantern containing a six-pointed star, the Hermit shines the light of exact semantic search into dark database realms.",
+    "question": "What index structures (e.g. HNSW, FAISS) and re-ranking pipelines do you utilize to ensure relevant semantic ground truth is retrieved in response to complex queries?"
+  },
+  {
+    "key": 10,
+    "name": "Wheel of Fortune",
+    "image": "/adytum/tarot/wheeloffortune.jpg",
+    "attribution": "Name: Wheel of Fortune | Key Number: 10 | Hebrew Letter: Kaph (Palm of Hand) | Intelligence: Intelligence of Conciliation",
+    "lesson": "Key 10 symbolizes Stochastic Sampling, Temperature & Token Probability Cycles. The spinning wheel with Anubis, Typhon, and the Sphinx represents dynamic token probability shifts and stochastic beam search mechanics.",
+    "question": "How do you dynamically adjust temperature, top-k, and repetition penalties during long-form multi-step reasoning cycles?"
+  },
+  {
+    "key": 11,
+    "name": "Justice",
+    "image": "/adytum/tarot/justice.jpg",
+    "attribution": "Name: Justice | Key Number: 11 | Hebrew Letter: Lamed (Ox-Goad) | Intelligence: Faithful Intelligence",
+    "lesson": "Key 11 represents Loss Functions, Cross-Entropy & Model Calibration. Holding the golden scales in one hand and the double-edged sword upright in the other, Justice measures loss metrics and enforces statistical calibration.",
+    "question": "How do you calibrate model confidence scores to ensure logit probability distributions accurately reflect real-world accuracy?"
+  },
+  {
+    "key": 12,
+    "name": "The Hanged Man",
+    "image": "/adytum/tarot/hangedman.jpg",
+    "attribution": "Name: The Hanged Man | Key Number: 12 | Hebrew Letter: Mem (Water) | Intelligence: Stable Intelligence",
+    "lesson": "Key 12 symbolizes Latent Space Inversion & Adversarial Red Teaming. Suspended upside down from a T-shaped wooden gallows, the Hanged Man gains illumination through inverted perspective, reflecting adversarial probe testing and latent space inversion.",
+    "question": "What inverted diagnostic tests or adversarial prompt injections do you run to uncover hidden vulnerabilities within agent workflows?"
+  },
+  {
+    "key": 13,
+    "name": "Death",
+    "image": "/adytum/tarot/death.jpg",
+    "attribution": "Name: Death | Key Number: 13 | Hebrew Letter: Nun (Fish) | Intelligence: Transformative Intelligence",
+    "lesson": "Key 13 embodies Model Pruning, Quantization & Weight Compaction. The armored skeletal reaper moves across the field, clearing away redundant weight pathways to allow lightweight 4-bit edge deployment.",
+    "question": "How do you balance parameter quantization (e.g. FP16 to INT4) with model fidelity when deploying high-throughput models on resource-constrained hardware?"
+  },
+  {
+    "key": 14,
+    "name": "Temperance",
+    "image": "/adytum/tarot/temperance.jpg",
+    "attribution": "Name: Temperance | Key Number: 14 | Hebrew Letter: Samekh (Tent-Peg/Prop) | Intelligence: Trial / Tentative Intelligence",
+    "lesson": "Key 14 represents Softmax Normalization & Multi-Agent Routing. An angel pours liquid between two golden vessels, illustrating how logit normalization and agent routing algorithms blend sub-agent outputs into unified consensus.",
+    "question": "How do you design consensus voting and logit blending mechanisms when orchestrating teams of specialized sub-agents?"
+  },
+  {
+    "key": 15,
+    "name": "The Devil",
+    "image": "/adytum/tarot/devil.jpg",
+    "attribution": "Name: The Devil | Key Number: 15 | Hebrew Letter: Ayin (Eye) | Intelligence: Renewing Intelligence",
+    "lesson": "Key 15 symbolizes Overfitting, Hallucination Traps & Degenerate Repetitions. Figures chained to a black pedestal illuminate how models fall into cognitive loops when trapped by skewed dataset biases or ungrounded training noise.",
+    "question": "What automated evaluation monitors do you implement to detect hallucination loops and context truncation traps in production?"
+  },
+  {
+    "key": 16,
+    "name": "The Tower",
+    "image": "/adytum/tarot/tower.jpg",
+    "attribution": "Name: The Tower | Key Number: 16 | Hebrew Letter: Peh (Mouth) | Intelligence: Exciting / Awakening Intelligence",
+    "lesson": "Key 16 represents Out-Of-Distribution (OOD) Shift & Structural Breakdown. Lightning strikes the crown of a rigid stone tower, shattering fragile assumptions\u2014mirroring how sudden distribution shifts break brittle agent pipelines.",
+    "question": "When an external API change or out-of-distribution input breaks your AI pipeline, how does your fall-back architecture maintain grace and recovery?"
+  },
+  {
+    "key": 17,
+    "name": "The Star",
+    "image": "/adytum/tarot/star.jpg",
+    "attribution": "Name: The Star | Key Number: 17 | Hebrew Letter: Tzaddi (Fish-Hook) | Intelligence: Natural Intelligence",
+    "lesson": "Key 17 symbolizes Mixture of Experts (MoE) & Sparse Routing. Under a sky of seven small stars surrounding a large golden octagram, a maiden pours waters of life onto land and sea, representing sparse gating networks routing tokens to specialized expert networks.",
+    "question": "How do MoE architectures optimize compute overhead while maintaining high parameter capacity across diverse domain tasks?"
+  },
+  {
+    "key": 18,
+    "name": "The Moon",
+    "image": "/adytum/tarot/moon.jpg",
+    "attribution": "Name: The Moon | Key Number: 18 | Hebrew Letter: Qoph (Back of Head) | Intelligence: Corporeal Intelligence",
+    "lesson": "Key 18 represents Diffusion Step Guidance & Latent Space Noise Reduction. A crayfish emerges from dark waters onto a winding path guarded by a dog and a wolf under a glowing moon, symbolizing iterative denoising steps in diffusion models.",
+    "question": "How do classifier-free guidance scales influence latent noise reduction during iterative image or audio synthesis?"
+  },
+  {
+    "key": 19,
+    "name": "The Sun",
+    "image": "/adytum/tarot/sun.jpg",
+    "attribution": "Name: The Sun | Key Number: 19 | Hebrew Letter: Resh (Head) | Intelligence: Collecting / Collective Intelligence",
+    "lesson": "Key 19 embodies Multi-modal Grounding & Deterministic Output Decoders. A radiant sun with human face shines down on a child riding a white horse holding a scarlet banner, representing crystal-clear multi-modal grounding.",
+    "question": "How do you verify that decoded model outputs remain strictly grounded in reality and factual evidence before user presentation?"
+  },
+  {
+    "key": 20,
+    "name": "Judgement",
+    "image": "/adytum/tarot/judgement.jpg",
+    "attribution": "Name: Judgement | Key Number: 20 | Hebrew Letter: Shin (Tooth) | Intelligence: Perpetual Intelligence",
+    "lesson": "Key 20 symbolizes Comprehensive Model Evaluation, Benchmarks & Evals. Archangel Gabriel blows the golden trumpet as figures rise from open graves, representing systemic benchmarking suite evaluation across agent capabilities.",
+    "question": "What metric rubrics and automated benchmark suites do you run to continuously evaluate model alignment and task execution quality?"
+  },
+  {
+    "key": 21,
+    "name": "The World",
+    "image": "/adytum/tarot/world.jpg",
+    "attribution": "Name: The World | Key Number: 21 | Hebrew Letter: Tau (Mark / Cross) | Intelligence: Administrative Intelligence",
+    "lesson": "Key 21 represents Autonomous Agentic Equilibrium & AGI Completion. A dancing figure holding two wands is framed within a laurel wreath surrounded by the four sacred creatures (Man, Eagle, Bull, Lion), symbolizing complete autonomous closed-loop system equilibrium.",
+    "question": "As an AI engineer, how do you architect self-healing, autonomous multi-agent loops that achieve sustainable equilibrium in dynamic environments?"
+  }
+]
