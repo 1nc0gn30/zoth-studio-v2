@@ -242,10 +242,10 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 6 }}>
+    <Container maxWidth="xl" sx={{ py: { xs: 3, md: 5 }, px: { xs: 2, md: 4 } }}>
       
       {/* Navigation Breadcrumbs */}
-      <Breadcrumbs sx={{ mb: 3 }}>
+      <Breadcrumbs sx={{ mb: 2.5 }}>
         <Link component={RouterLink} to="/" color="inherit" underline="hover">Home</Link>
         <Link component={RouterLink} to="/docs" color="inherit" underline="hover">Documentation</Link>
         <Typography color="text.primary" sx={{ fontWeight: 700 }}>Pillar {pillar.numeral}: {pillar.title}</Typography>
@@ -261,7 +261,7 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
           borderLeft: `6px solid ${pillar.accent}`,
           bgcolor: '#FFFFFF',
           borderRadius: 3,
-          boxShadow: '0 4px 20px rgba(16,24,40,0.04)'
+          boxShadow: '0 4px 20px rgba(16,24,40,0.03)'
         }}
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2 }}>
@@ -270,10 +270,10 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
               <Chip label={`PILLAR ${pillar.numeral}`} size="small" sx={{ bgcolor: '#FEF9E7', color: '#8A6A09', fontWeight: 800, border: '1px solid #F0E1A8' }} />
               <Chip label="CLOSED-FORM PROOF" size="small" sx={{ bgcolor: '#ECFDF3', color: '#027A48', fontWeight: 800 }} />
             </Box>
-            <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1, color: '#101828' }}>
+            <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1, color: '#101828', fontSize: { xs: '2rem', sm: '2.8rem', md: '3.2rem' } }}>
               {pillar.title}
             </Typography>
-            <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 500, maxWidth: 720 }}>
+            <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 500, maxWidth: 850, fontSize: { xs: '1rem', md: '1.15rem' } }}>
               {pillar.subtitle}
             </Typography>
           </Box>
@@ -301,8 +301,8 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
           </Stack>
         </Box>
 
-        {/* Quick Horizontal Selector Bar for All 6 Pillars */}
-        <Divider sx={{ my: 3 }} />
+        {/* Pillar Switcher Chips Bar */}
+        <Divider sx={{ my: 2.5 }} />
         <Typography variant="caption" sx={{ fontWeight: 800, color: '#475467', mb: 1.5, display: 'block', letterSpacing: '0.04em' }}>
           EXPLORE ALL SIX MATHEMATICAL PILLARS
         </Typography>
@@ -319,6 +319,7 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
                 color: p.id === pillar.id ? '#FFFFFF' : '#475467',
                 border: '1px solid',
                 borderColor: p.id === pillar.id ? '#D4AF37' : '#EAECF0',
+                px: 0.5,
                 '&:hover': { bgcolor: p.id === pillar.id ? '#8A6A09' : '#FEF9E7' }
               }}
             />
@@ -326,230 +327,236 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
         </Box>
       </Paper>
 
-      {/* Main Grid: Proofs & Code (Left) vs System Metrics & Simulator (Right) */}
-      <Grid container spacing={3.5}>
-        
-        {/* LEFT COLUMN: Derivation Tiers & Code */}
-        <Grid size={{ xs: 12, md: 7 }}>
-          
-          {/* Section 1: Tier Formulations Card */}
-          <Card sx={{ border: '1px solid #EAECF0', borderRadius: 3, mb: 3.5, bgcolor: '#FFFFFF' }}>
-            <CardContent sx={{ p: 3 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <FunctionsIcon sx={{ color: '#B8860B' }} />
-                  <Typography variant="h6" sx={{ fontWeight: 800, color: '#101828' }}>
-                    Mathematical Derivation &amp; Tier Formulations
-                  </Typography>
-                </Box>
-
-                <Tooltip title="Copy Selected Formula">
-                  <IconButton size="small" onClick={handleCopyFormulaText} sx={{ color: copiedFormula ? '#12B76A' : '#667085' }}>
-                    {copiedFormula ? <CheckIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
-                  </IconButton>
-                </Tooltip>
-              </Box>
-
-              {/* Tier Tabs (Beginner / Intermediate / Advanced) */}
-              <Tabs
-                value={activeTierTab}
-                onChange={(e, val) => setActiveTierTab(val)}
-                sx={{
-                  mb: 2.5,
-                  minHeight: 40,
-                  borderBottom: '1px solid #EAECF0',
-                  '& .MuiTab-root': {
-                    minHeight: 40,
-                    fontWeight: 700,
-                    fontSize: '0.85rem',
-                    textTransform: 'none',
-                    color: '#667085',
-                    '&.Mui-selected': { color: '#B8860B' }
-                  },
-                  '& .MuiTabs-indicator': { bgcolor: '#B8860B' }
-                }}
-              >
-                <Tab label="1. Beginner (Intuition)" />
-                <Tab label="2. Intermediate (Closed-Form)" />
-                <Tab label="3. Advanced (Tensor Equation)" />
-              </Tabs>
-
-              {/* Active Tier Math Formula Display Box */}
-              <Box
-                sx={{
-                  p: 2.5,
-                  bgcolor: '#0B0F19',
-                  color: '#F5E6AB',
-                  fontFamily: mono,
-                  fontSize: '0.92rem',
-                  borderRadius: 2,
-                  lineHeight: 1.65,
-                  whiteSpace: 'pre-wrap',
-                  overflowX: 'auto',
-                  border: '1px solid #1D2939',
-                  boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.4)'
-                }}
-              >
-                <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 1, fontFamily: mono, fontWeight: 700 }}>
-                  {activeTierTab === 0 ? '// CONCEPTUAL INTUITION' : activeTierTab === 1 ? '// CLOSED-FORM ENGINEERING FORMULA' : '// HIGH-DIMENSIONAL TENSOR EQUATION'}
-                </Typography>
-                {pillar.tiers[['Beginner', 'Intermediate', 'Advanced'][activeTierTab]]}
-              </Box>
-
-              <Alert severity="info" icon={<FunctionsIcon fontSize="inherit" />} sx={{ mt: 2.5, borderRadius: 2, bgcolor: '#FEF9E7', color: '#8A6A09', border: '1px solid #F0E1A8', '& .MuiAlert-icon': { color: '#B8860B' } }}>
-                <Typography variant="caption" sx={{ fontWeight: 600 }}>
-                  Formulas carried directly from the Zoth Studio Math Workstation. All tier definitions represent exact runtime behavior in local daemons.
-                </Typography>
-              </Alert>
-            </CardContent>
-          </Card>
-
-          {/* Section 2: Production Code Implementation Card */}
-          <Card sx={{ border: '1px solid #EAECF0', borderRadius: 3, bgcolor: '#FFFFFF' }}>
-            <CardContent sx={{ p: 3 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <CodeIcon sx={{ color: '#B8860B' }} />
-                  <Typography variant="h6" sx={{ fontWeight: 800, color: '#101828' }}>
-                    Production Implementation Code
-                  </Typography>
-                </Box>
-                <Tooltip title="Copy Implementation Code">
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    startIcon={copiedCode ? <CheckIcon sx={{ color: '#12B76A' }} /> : <ContentCopyIcon />}
-                    onClick={handleCopyCodeText}
-                    sx={{ borderColor: '#EAECF0', color: '#475467', fontWeight: 700 }}
-                  >
-                    {copiedCode ? 'Copied Code!' : 'Copy Code'}
-                  </Button>
-                </Tooltip>
-              </Box>
-
-              <Paper sx={{ p: 2.5, bgcolor: '#0F172A', color: '#E2E8F0', borderRadius: 2, fontFamily: mono, fontSize: '0.84rem', border: '1px solid #1E293B' }}>
-                <pre style={{ margin: 0, overflowX: 'auto', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-                  {codeExamples[pillar.id]}
-                </pre>
-              </Paper>
-            </CardContent>
-          </Card>
-
-        </Grid>
-
-        {/* RIGHT COLUMN: Operational Metrics Table & Interactive Simulator */}
-        <Grid size={{ xs: 12, md: 5 }}>
-          
-          {/* Section 3: System Metrics Table */}
-          <Card sx={{ border: '1px solid #EAECF0', borderRadius: 3, mb: 3.5, bgcolor: '#FFFFFF' }}>
-            <CardContent sx={{ p: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                <SpeedIcon sx={{ color: '#B8860B' }} />
-                <Typography variant="h6" sx={{ fontWeight: 800, color: '#101828' }}>
-                  System Operational Metrics
-                </Typography>
-              </Box>
-
-              <TableContainer component={Paper} elevation={0} sx={{ border: '1px solid #EAECF0', borderRadius: 2 }}>
-                <Table size="small">
-                  <TableHead sx={{ bgcolor: '#F8FAFC' }}>
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: 800, color: '#475467' }}>Metric Name</TableCell>
-                      <TableCell align="right" sx={{ fontWeight: 800, color: '#475467' }}>Value</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {pillar.metrics.map(([label, val]) => (
-                      <TableRow key={label} hover>
-                        <TableCell sx={{ fontSize: '0.82rem', fontWeight: 600, color: '#344054' }}>{label}</TableCell>
-                        <TableCell align="right" sx={{ fontFamily: mono, fontWeight: 700, color: '#8A6A09', fontSize: '0.82rem' }}>
-                          {val}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </CardContent>
-          </Card>
-
-          {/* Section 4: Interactive Math Simulator Card */}
-          <Card sx={{ border: '1px solid #EAECF0', borderRadius: 3, bgcolor: '#FFFFFF' }}>
-            <CardContent sx={{ p: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                <TuneIcon sx={{ color: '#B8860B' }} />
-                <Typography variant="h6" sx={{ fontWeight: 800, color: '#101828' }}>
-                  Interactive Math Simulator
-                </Typography>
-              </Box>
-
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
-                Adjust system parameters to compute live closed-form output values in real-time.
+      {/* SECTION 1: Mathematical Proofs & Tier Formulations (Full Width - Spacious & Un-squished) */}
+      <Card sx={{ border: '1px solid #EAECF0', borderRadius: 3, mb: 4, bgcolor: '#FFFFFF', boxShadow: '0 4px 16px rgba(16,24,40,0.03)' }}>
+        <CardContent sx={{ p: { xs: 2.5, md: 4 } }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <FunctionsIcon sx={{ color: '#B8860B', fontSize: '1.6rem' }} />
+              <Typography variant="h5" sx={{ fontWeight: 800, color: '#101828', fontSize: { xs: '1.25rem', md: '1.5rem' } }}>
+                Mathematical Derivation &amp; Tier Formulations
               </Typography>
+            </Box>
 
-              {/* Slider 1 */}
-              <Box sx={{ mb: 3 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 700, color: '#344054' }}>
-                    Control Input Slider
-                  </Typography>
-                  <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, color: '#B8860B' }}>
-                    {param1}
+            <Tooltip title="Copy Selected Formula">
+              <IconButton size="small" onClick={handleCopyFormulaText} sx={{ color: copiedFormula ? '#12B76A' : '#667085' }}>
+                {copiedFormula ? <CheckIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
+              </IconButton>
+            </Tooltip>
+          </Box>
+
+          {/* Tier Tabs (Beginner / Intermediate / Advanced) */}
+          <Tabs
+            value={activeTierTab}
+            onChange={(e, val) => setActiveTierTab(val)}
+            sx={{
+              mb: 3,
+              minHeight: 44,
+              borderBottom: '1px solid #EAECF0',
+              '& .MuiTab-root': {
+                minHeight: 44,
+                fontWeight: 700,
+                fontSize: '0.9rem',
+                textTransform: 'none',
+                color: '#667085',
+                '&.Mui-selected': { color: '#B8860B' }
+              },
+              '& .MuiTabs-indicator': { bgcolor: '#B8860B', height: 3 }
+            }}
+          >
+            <Tab label="1. Beginner (Intuition)" />
+            <Tab label="2. Intermediate (Closed-Form)" />
+            <Tab label="3. Advanced (Tensor Equation)" />
+          </Tabs>
+
+          {/* Active Tier Math Formula Display Box (Full Width, Wide, Readable) */}
+          <Box
+            sx={{
+              p: { xs: 2.5, md: 3.5 },
+              bgcolor: '#0B0F19',
+              color: '#F5E6AB',
+              fontFamily: mono,
+              fontSize: { xs: '0.9rem', md: '1.05rem' },
+              borderRadius: 2.5,
+              lineHeight: 1.8,
+              whiteSpace: 'pre-wrap',
+              overflowX: 'auto',
+              border: '1px solid #1D2939',
+              boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.5)'
+            }}
+          >
+            <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 1.5, fontFamily: mono, fontWeight: 800, letterSpacing: '0.05em' }}>
+              {activeTierTab === 0 ? '// CONCEPTUAL INTUITION' : activeTierTab === 1 ? '// CLOSED-FORM ENGINEERING FORMULA' : '// HIGH-DIMENSIONAL TENSOR EQUATION'}
+            </Typography>
+            {pillar.tiers[['Beginner', 'Intermediate', 'Advanced'][activeTierTab]]}
+          </Box>
+
+          <Alert severity="info" icon={<FunctionsIcon fontSize="inherit" />} sx={{ mt: 3, borderRadius: 2, bgcolor: '#FEF9E7', color: '#8A6A09', border: '1px solid #F0E1A8', '& .MuiAlert-icon': { color: '#B8860B' } }}>
+            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+              Formulas carried directly from Zoth Studio Math Workstation. Tier definitions represent exact closed-form execution parameters in local daemons.
+            </Typography>
+          </Alert>
+        </CardContent>
+      </Card>
+
+      {/* SECTION 2: Balanced 6/6 Grid for Interactive Simulator & Operational Metrics */}
+      <Grid container spacing={4} sx={{ mb: 4 }}>
+        
+        {/* Left 6/12: Interactive Formula Simulator */}
+        <Grid size={{ xs: 12, md: 6 }}>
+          <Card sx={{ height: '100%', border: '1px solid #EAECF0', borderRadius: 3, bgcolor: '#FFFFFF', boxShadow: '0 4px 16px rgba(16,24,40,0.03)' }}>
+            <CardContent sx={{ p: { xs: 2.5, md: 3.5 }, display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
+              <Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
+                  <TuneIcon sx={{ color: '#B8860B', fontSize: '1.4rem' }} />
+                  <Typography variant="h6" sx={{ fontWeight: 800, color: '#101828' }}>
+                    Interactive Math Simulator
                   </Typography>
                 </Box>
-                <Slider
-                  value={param1}
-                  min={0.01}
-                  max={2.0}
-                  step={0.05}
-                  onChange={(e, val) => setParam1(val)}
-                  sx={{ color: '#B8860B' }}
-                />
-                <Typography variant="caption" color="text.secondary" sx={{ fontFamily: mono, display: 'block', mt: 0.5 }}>
-                  {sim.title1}: {sim.val1}
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                  Adjust system inputs to calculate closed-form outputs in real-time.
                 </Typography>
-              </Box>
 
-              {/* Slider 2 */}
-              <Box sx={{ mb: 3 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 700, color: '#344054' }}>
-                    Dimension / Interval Slider
-                  </Typography>
-                  <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, color: '#B8860B' }}>
-                    {param2}
+                {/* Slider 1 */}
+                <Box sx={{ mb: 3.5 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#344054' }}>
+                      Control Input Slider
+                    </Typography>
+                    <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: '#B8860B' }}>
+                      {param1}
+                    </Typography>
+                  </Box>
+                  <Slider
+                    value={param1}
+                    min={0.01}
+                    max={2.0}
+                    step={0.05}
+                    onChange={(e, val) => setParam1(val)}
+                    sx={{ color: '#B8860B', height: 6 }}
+                  />
+                  <Typography variant="caption" color="text.secondary" sx={{ fontFamily: mono, display: 'block', mt: 0.5, fontWeight: 600 }}>
+                    {sim.title1}: <Box component="span" sx={{ color: '#8A6A09' }}>{sim.val1}</Box>
                   </Typography>
                 </Box>
-                <Slider
-                  value={param2}
-                  min={16}
-                  max={256}
-                  step={8}
-                  onChange={(e, val) => setParam2(val)}
-                  sx={{ color: '#B8860B' }}
-                />
-                <Typography variant="caption" color="text.secondary" sx={{ fontFamily: mono, display: 'block', mt: 0.5 }}>
-                  {sim.title2}: {sim.val2}
-                </Typography>
+
+                {/* Slider 2 */}
+                <Box sx={{ mb: 3.5 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#344054' }}>
+                      Dimension / Interval Slider
+                    </Typography>
+                    <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: '#B8860B' }}>
+                      {param2}
+                    </Typography>
+                  </Box>
+                  <Slider
+                    value={param2}
+                    min={16}
+                    max={256}
+                    step={8}
+                    onChange={(e, val) => setParam2(val)}
+                    sx={{ color: '#B8860B', height: 6 }}
+                  />
+                  <Typography variant="caption" color="text.secondary" sx={{ fontFamily: mono, display: 'block', mt: 0.5, fontWeight: 600 }}>
+                    {sim.title2}: <Box component="span" sx={{ color: '#8A6A09' }}>{sim.val2}</Box>
+                  </Typography>
+                </Box>
               </Box>
 
               {/* Output Display Card */}
               <Paper sx={{ p: 2.5, bgcolor: '#0B0F19', color: '#10B981', borderRadius: 2, fontFamily: mono, border: '1px solid #1D2939' }}>
-                <Typography variant="caption" sx={{ color: '#D4AF37', display: 'block', mb: 0.5, fontWeight: 800 }}>
+                <Typography variant="caption" sx={{ color: '#D4AF37', display: 'block', mb: 0.5, fontWeight: 800, letterSpacing: '0.04em' }}>
                   SIMULATED CLOSED-FORM OUTPUT
                 </Typography>
                 <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#10B981', fontFamily: mono, mb: 1 }}>
                   {sim.resultTitle}: {sim.resultVal}
                 </Typography>
-                <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', lineHeight: 1.4 }}>
+                <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', lineHeight: 1.5 }}>
                   {sim.desc}
                 </Typography>
               </Paper>
             </CardContent>
           </Card>
-
         </Grid>
+
+        {/* Right 6/12: System Operational Metrics Table */}
+        <Grid size={{ xs: 12, md: 6 }}>
+          <Card sx={{ height: '100%', border: '1px solid #EAECF0', borderRadius: 3, bgcolor: '#FFFFFF', boxShadow: '0 4px 16px rgba(16,24,40,0.03)' }}>
+            <CardContent sx={{ p: { xs: 2.5, md: 3.5 }, display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
+              <Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
+                  <SpeedIcon sx={{ color: '#B8860B', fontSize: '1.4rem' }} />
+                  <Typography variant="h6" sx={{ fontWeight: 800, color: '#101828' }}>
+                    System Operational Metrics
+                  </Typography>
+                </Box>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                  Recorded execution targets across studio micro-services and local daemons.
+                </Typography>
+
+                <TableContainer component={Paper} elevation={0} sx={{ border: '1px solid #EAECF0', borderRadius: 2 }}>
+                  <Table>
+                    <TableHead sx={{ bgcolor: '#F8FAFC' }}>
+                      <TableRow>
+                        <TableCell sx={{ fontWeight: 800, color: '#475467', py: 1.5 }}>Metric Identifier</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: 800, color: '#475467', py: 1.5 }}>Value Target</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {pillar.metrics.map(([label, val]) => (
+                        <TableRow key={label} hover>
+                          <TableCell sx={{ fontSize: '0.88rem', fontWeight: 600, color: '#344054', py: 1.75 }}>{label}</TableCell>
+                          <TableCell align="right" sx={{ fontFamily: mono, fontWeight: 800, color: '#8A6A09', fontSize: '0.88rem', py: 1.75 }}>
+                            {val}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Box>
+
+              <Box sx={{ mt: 3, p: 2, bgcolor: '#F8FAFC', borderRadius: 2, border: '1px solid #EAECF0' }}>
+                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', fontWeight: 600 }}>
+                  ⚡ All metric constraints are validated during local swarm consensus evaluation.
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+
       </Grid>
+
+      {/* SECTION 3: Production Code Implementation (Full Width - Wide & Un-squished) */}
+      <Card sx={{ border: '1px solid #EAECF0', borderRadius: 3, bgcolor: '#FFFFFF', boxShadow: '0 4px 16px rgba(16,24,40,0.03)' }}>
+        <CardContent sx={{ p: { xs: 2.5, md: 4 } }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1.5 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <CodeIcon sx={{ color: '#B8860B', fontSize: '1.6rem' }} />
+              <Typography variant="h5" sx={{ fontWeight: 800, color: '#101828', fontSize: { xs: '1.25rem', md: '1.5rem' } }}>
+                Production Implementation Code
+              </Typography>
+            </Box>
+            <Button
+              size="small"
+              variant="outlined"
+              startIcon={copiedCode ? <CheckIcon sx={{ color: '#12B76A' }} /> : <ContentCopyIcon />}
+              onClick={handleCopyCodeText}
+              sx={{ borderColor: '#EAECF0', color: '#475467', fontWeight: 700, py: 0.8, px: 2 }}
+            >
+              {copiedCode ? 'Copied Code!' : 'Copy Code'}
+            </Button>
+          </Box>
+
+          <Paper sx={{ p: { xs: 2.5, md: 3.5 }, bgcolor: '#0F172A', color: '#E2E8F0', borderRadius: 2.5, fontFamily: mono, fontSize: '0.88rem', border: '1px solid #1E293B', boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.5)' }}>
+            <pre style={{ margin: 0, overflowX: 'auto', whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.65 }}>
+              {codeExamples[pillar.id]}
+            </pre>
+          </Paper>
+        </CardContent>
+      </Card>
+
     </Container>
   );
 }
