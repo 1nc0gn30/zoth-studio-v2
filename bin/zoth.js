@@ -209,8 +209,9 @@ async function handleUp() {
   // Spawn persistent UI server if not already running on port 3000
   const isUiUp = await fetch('http://127.0.0.1:3000/').then(() => true).catch(() => false);
   if (!isUiUp) {
+    const runner = path.join(root, 'server', 'daemon-runner.mjs');
     const viteBin = path.join(root, 'node_modules', 'vite', 'bin', 'vite.js');
-    const started = spawnDaemon('ui', process.execPath, [viteBin, '--port', '3000', '--host'], root);
+    const started = spawnDaemon('ui', process.execPath, [runner, process.execPath, viteBin, '--port', '3000', '--host'], root);
     pids.ui = started;
     console.log(`${GREEN}✔ UI Server${RESET} pid ${started.pid}  log ${path.relative(root, started.log)}`);
   } else {

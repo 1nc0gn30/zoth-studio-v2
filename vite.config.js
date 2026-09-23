@@ -15,6 +15,18 @@ export default defineConfig({
       },
     },
   ],
+  optimizeDeps: {
+    holdUntilCrawlEnd: true,
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      '@mui/material',
+      '@mui/icons-material',
+      '@emotion/react',
+      '@emotion/styled',
+    ],
+  },
   server: {
     host: '127.0.0.1',
     port: 3000,

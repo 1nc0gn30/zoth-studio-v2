@@ -1,9 +1,9 @@
 /** 21 named nodes from the legacy pantheon roster (public/agents/index.html). */
 export const pantheonAgents = [
   { id: 'AZOTH', role: 'Sovereign Alchemist & Prime Architect', cadre: 'Architects', img: '/pets/azoth-neon.jpg' },
-  { id: 'ANTIGRAVITY', role: 'Lead Architect & Quantum Synthesis', cadre: 'Architects', img: '/mascot/antigravity.jpg' },
-  { id: 'GROK', role: 'Cosmic Reasoner & AST Arbiter', cadre: 'Architects', img: '/mascot/grok.jpg' },
-  { id: 'HERMES', role: 'Tool-Calling Executor & Release Hardener', cadre: 'Architects', img: '/mascot/hermes.jpg' },
+  { id: 'NEXUS', role: 'Lead Architect & Quantum Synthesis', cadre: 'Architects', img: '/mascot/antigravity.jpg' },
+  { id: 'VIGIL', role: 'Cosmic Reasoner & AST Arbiter', cadre: 'Architects', img: '/mascot/grok.jpg' },
+  { id: 'MERCURY', role: 'Tool-Calling Executor & Release Hardener', cadre: 'Architects', img: '/mascot/hermes.jpg' },
   { id: 'GHOSTBYTE', role: 'Zero-Knowledge Vault Sentinel', cadre: 'Architects', img: '/pets/ghostbyte-neon.jpg' },
   { id: 'ATHENA', role: 'AEO Knowledge Architect', cadre: 'Architects', img: '/pets/athena-neon.jpg' },
   { id: 'CHRONOS', role: 'Temporal DAG Sequencer & Git Navigator', cadre: 'Code', img: '/pets/chronos-neon.jpg' },

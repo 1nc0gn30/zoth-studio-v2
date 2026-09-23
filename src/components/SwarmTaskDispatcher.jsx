@@ -17,10 +17,10 @@ export default function SwarmTaskDispatcher() {
 
   const steps = [
     { agent: 'AZOTH', action: 'Decomposing task into 4 parallel micro-work orders...', status: 'DONE' },
-    { agent: 'HERMES', action: 'Dispatching work orders to 21 Pantheon subagent nodes...', status: 'IN_PROGRESS' },
+    { agent: 'MERCURY', action: 'Dispatching work orders to 21 Pantheon subagent nodes...', status: 'IN_PROGRESS' },
     { agent: 'NEURO-MEM', action: 'Recalling HNSW vector embeddings from 127.0.0.1:8788...', status: 'PENDING' },
     { agent: 'HEXSTRIKE', action: 'Auditing payload entropy & checking OWASP zero-egress security...', status: 'PENDING' },
-    { agent: 'GROK / CONSENSUS', action: 'Synthesizing tri-agent Socratic debate & generating SHA-256 seal...', status: 'PENDING' },
+    { agent: 'VIGIL / CONSENSUS', action: 'Synthesizing tri-agent Socratic debate & generating SHA-256 seal...', status: 'PENDING' },
   ];
 
   const handleRunSwarm = () => {
@@ -103,7 +103,7 @@ export default function SwarmTaskDispatcher() {
                       size="small"
                       sx={{
                         bgcolor: isDone ? (isDark ? 'rgba(52,211,153,0.16)' : '#ECFDF3') : isCurrent ? (isDark ? 'rgba(217,119,6,0.16)' : '#FEF3C7') : theme.palette.background.paper,
-                                                color: isDone ? (isDark ? '#34D399' : '#12B76A') : isCurrent ? (isDark ? '#F59E0B' : '#D97706') : theme.palette.text.secondary,
+                        color: isDone ? (isDark ? '#34D399' : '#12B76A') : isCurrent ? (isDark ? '#F59E0B' : '#D97706') : theme.palette.text.secondary,
                         fontWeight: 700,
                         fontFamily: 'monospace'
                       }}

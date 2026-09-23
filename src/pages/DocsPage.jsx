@@ -385,7 +385,7 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
               {/* 4-Stage Dialectic Flow Card */}
               <Grid container spacing={2} sx={{ my: 2 }}>
                 {[
-                  { stage: 'Stage 1', title: 'Parallel Proposals', desc: 'Antigravity, Grok, and Hermes generate competing implementation proposals.' },
+                  { stage: 'Stage 1', title: 'Parallel Proposals', desc: 'Nexus, Vigil, and Mercury generate competing implementation proposals.' },
                   { stage: 'Stage 2', title: 'AST Diff Inspection', desc: 'Deep syntax tree diffing detects breaking changes, type mismatches, and edge cases.' },
                   { stage: 'Stage 3', title: 'Socratic Debate', desc: 'Cross-agent arguments refine code logic and enforce performance benchmarks.' },
                   { stage: 'Stage 4', title: 'SHA-256 Consensus', desc: '3/3 unanimity seals the code payload into local git history with zero telemetry.' }
