@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import {
   AppBar, Toolbar, Typography, Button, Box, Container, Chip, IconButton, Drawer,
-  List, ListItem, ListItemButton, ListItemText, Divider
+  List, ListItem, ListItemButton, ListItemText, Divider, useTheme
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import GoldenZLogo3D from './GoldenZLogo3D';
 
@@ -22,24 +24,35 @@ const navItems = [
   { label: 'Docs', path: '/docs' },
 ];
 
-export default function Navbar() {
+export default function Navbar({ mode, onToggleTheme }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const theme = useTheme();
+  const dark = theme.palette.mode === 'dark';
+
+  const appBarBg = dark ? 'rgba(11, 11, 18, 0.9)' : 'rgba(255, 255, 255, 0.95)';
+  const borderColor = theme.palette.divider;
+  const brandColor = dark ? '#F5E6AB' : '#101828';
+  const navIdle = dark ? '#A6A8B4' : '#475467';
+  const navActive = dark ? '#D4AF37' : '#B8860B';
+  const chipBg = dark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
+  const chipColor = dark ? '#F5E6AB' : '#B8860B';
+  const chipBorder = dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8';
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
   return (
-    <AppBar position="sticky" elevation={0} sx={{ background: 'rgba(255, 255, 255, 0.95)', backdropFilter: 'blur(16px)', borderBottom: '1px solid #EAECF0' }}>
+    <AppBar position="sticky" elevation={0} sx={{ background: appBarBg, backdropFilter: 'blur(16px)', borderBottom: `1px solid ${borderColor}` }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ justifyContent: 'space-between', height: 70 }}>
-          
+
           {/* Brand Logo */}
-          <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, textDecoration: 'none', color: '#101828' }}>
+          <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.5, textDecoration: 'none', color: brandColor }}>
             <GoldenZLogo3D size={40} />
             <Typography component="div" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontSize: '1.7rem', lineHeight: 1, letterSpacing: '0.03em', display: 'flex', alignItems: 'center', gap: 1 }}>
-              Zoth Studio <Chip label="v2" size="small" sx={{ background: '#FEF9E7', color: '#B8860B', border: '1px solid #F0E1A8', fontWeight: 700, fontFamily: 'Inter, sans-serif' }} />
+              Zoth Studio <Chip label="v2" size="small" sx={{ background: chipBg, color: chipColor, border: `1px solid ${chipBorder}`, fontWeight: 700, fontFamily: 'Inter, sans-serif' }} />
             </Typography>
           </Box>
 
@@ -53,14 +66,14 @@ export default function Navbar() {
                   component={RouterLink}
                   to={item.path}
                   sx={{
-                    color: active ? '#B8860B' : '#475467',
+                    color: active ? navActive : navIdle,
                     fontWeight: active ? 700 : 500,
                     borderBottom: active ? '2px solid #D4AF37' : '2px solid transparent',
                     borderRadius: 0,
                     px: 1.15,
                     py: 1,
                     transition: 'color 0.2s ease, border-color 0.2s ease',
-                    '&:hover': { color: '#B8860B', background: 'transparent' }
+                    '&:hover': { color: navActive, background: 'transparent' }
                   }}
                 >
                   {item.label}
@@ -82,7 +95,20 @@ export default function Navbar() {
             >
               NullAI
             </Button>
-            <IconButton color="inherit" onClick={handleDrawerToggle} sx={{ display: { lg: 'none' }, color: '#101828' }}>
+            <IconButton
+              aria-label={dark ? 'Switch to light theme' : 'Switch to dark theme'}
+              title={dark ? 'Switch to light theme' : 'Switch to dark theme'}
+              onClick={onToggleTheme}
+              sx={{
+                color: dark ? '#F5E6AB' : '#101828',
+                border: `1px solid ${borderColor}`,
+                background: dark ? 'rgba(212,175,55,0.08)' : 'transparent',
+                '&:hover': { color: '#D4AF37', borderColor: '#D4AF37', background: dark ? 'rgba(212,175,55,0.16)' : 'rgba(212,175,55,0.08)' },
+              }}
+            >
+              {dark ? <LightModeIcon /> : <DarkModeIcon />}
+            </IconButton>
+            <IconButton color="inherit" onClick={handleDrawerToggle} sx={{ display: { lg: 'none' }, color: brandColor }}>
               <MenuIcon />
             </IconButton>
           </Box>
@@ -91,8 +117,8 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       <Drawer variant="temporary" open={mobileOpen} onClose={handleDrawerToggle} ModalProps={{ keepMounted: true }} sx={{ display: { xs: 'block', lg: 'none' } }}>
-        <Box onClick={handleDrawerToggle} sx={{ width: 260, p: 2 }}>
-          <Typography variant="h6" sx={{ fontWeight: 800, mb: 2, color: '#B8860B' }}>
+        <Box onClick={handleDrawerToggle} sx={{ width: 260, p: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, mb: 2, color: navActive }}>
             ZOTH STUDIO v2
           </Typography>
           <Divider sx={{ mb: 2 }} />
@@ -100,7 +126,7 @@ export default function Navbar() {
             {navItems.map((item) => (
               <ListItem key={item.label} disablePadding>
                 <ListItemButton component={RouterLink} to={item.path} selected={location.pathname === item.path}>
-                  <Typography variant="body1" sx={{ fontWeight: 600, color: location.pathname === item.path ? '#B8860B' : '#101828' }}>{item.label}</Typography>
+                  <Typography variant="body1" sx={{ fontWeight: 600, color: location.pathname === item.path ? navActive : theme.palette.text.primary }}>{item.label}</Typography>
                 </ListItemButton>
               </ListItem>
             ))}

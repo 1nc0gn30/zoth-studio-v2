@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { Box, ThemeProvider, CssBaseline, useTheme } from '@mui/material';
+import { theme as lightTheme, darkTheme } from './theme';
 import Navbar from './components/Navbar';
+import SovereignMascots from './components/SovereignMascots';
 import HomePage from './pages/HomePage';
 import SwarmPage from './pages/SwarmPage';
 import BridgesPage from './pages/BridgesPage';
@@ -14,18 +16,58 @@ import MemoryPage from './pages/MemoryPage';
 import DocsPage from './pages/DocsPage';
 import AdytumPage from './pages/AdytumPage';
 import MathPillarDetailPage from './pages/MathPillarDetailPage';
+import RealToolWorkspacePage from './pages/RealToolWorkspacePage';
 
-export default function App() {
+const STORAGE_KEY = 'zoth-studio-theme';
+
+function getInitialMode() {
+  try {
+    const saved = window.localStorage.getItem(STORAGE_KEY);
+    if (saved === 'light' || saved === 'dark') return saved;
+  } catch (e) {
+    /* ignore */
+  }
+  if (typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return 'dark';
+  }
+  return 'light';
+}
+
+function AppShell({ mode, onToggleTheme }) {
+  const theme = useTheme();
+  const dark = theme.palette.mode === 'dark';
+
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#FFFFFF' }}>
-      <Navbar />
-      <Box component="main" sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', '& > .MuiContainer-root': { flex: 1, width: '100%' } }}>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: theme.palette.background.default,
+        color: theme.palette.text.primary,
+        position: 'relative',
+        zIndex: 2,
+      }}
+    >
+      <Navbar mode={mode} onToggleTheme={onToggleTheme} />
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'relative',
+          zIndex: 2,
+          '& > .MuiContainer-root': { flex: 1, width: '100%' },
+        }}
+      >
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/adytum" element={<AdytumPage />} />
           <Route path="/swarm" element={<SwarmPage />} />
           <Route path="/bridges" element={<BridgesPage />} />
           <Route path="/tools" element={<ToolsPage />} />
+          <Route path="/tools/:toolId" element={<RealToolWorkspacePage />} />
           <Route path="/memory" element={<MemoryPage />} />
           <Route path="/consensus" element={<ConsensusPage />} />
           <Route path="/webgen" element={<WebGenPage />} />
@@ -36,13 +78,61 @@ export default function App() {
           <Route path="/docs/math" element={<MathPillarDetailPage />} />
         </Routes>
       </Box>
-      <Box component="footer" sx={{ py: 3, px: 2, borderTop: '1px solid #EAECF0', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1.25, color: '#667085', fontSize: '0.88rem' }}>
-        <Box component="span" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontSize: '1.25rem', color: '#101828' }}>Zoth Studio</Box>
-        <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75 }}>
-          <Box component="img" src="/brand/ghostbyte-dark.png" alt="" sx={{ height: 22, width: 'auto' }} />
-          NullAI
+      <Box
+        component="footer"
+        sx={{
+          py: 3,
+          px: 2,
+          borderTop: `1px solid ${theme.palette.divider}`,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 1.25,
+          color: theme.palette.text.secondary,
+          fontSize: '0.88rem',
+          position: 'relative',
+          zIndex: 2,
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1.25 }}>
+          <Box
+            component="span"
+            sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontSize: '1.25rem', color: dark ? '#F5E6AB' : '#101828' }}
+          >
+            Zoth Studio
+          </Box>
+          <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75 }}>
+            <Box component="img" src="/brand/ghostbyte-dark.png" alt="" sx={{ height: 22, width: 'auto' }} />
+            NullAI
+          </Box>
         </Box>
+        <SovereignMascots />
       </Box>
     </Box>
+  );
+}
+
+export default function App() {
+  const [mode, setMode] = useState(getInitialMode);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, mode);
+    } catch (e) {
+      /* ignore */
+    }
+  }, [mode]);
+
+  const activeTheme = useMemo(() => (mode === 'dark' ? darkTheme : lightTheme), [mode]);
+
+  const handleToggleTheme = () => {
+    setMode((m) => (m === 'dark' ? 'light' : 'dark'));
+  };
+
+  return (
+    <ThemeProvider theme={activeTheme}>
+      <CssBaseline />
+      <AppShell mode={mode} onToggleTheme={handleToggleTheme} />
+    </ThemeProvider>
   );
 }

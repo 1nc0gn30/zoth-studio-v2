@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Box, Container, Typography, Grid, Card, CardContent, CardActions,
   Chip, Button, TextField, InputAdornment, MenuItem, Select, FormControl, InputLabel,
-  Paper, Dialog, DialogTitle, DialogContent, DialogActions, Alert
+  Paper
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import GitHubIcon from '@mui/icons-material/GitHub';
@@ -12,19 +12,17 @@ import LockIcon from '@mui/icons-material/Lock';
 import FlashOnIcon from '@mui/icons-material/FlashOn';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import LaunchIcon from '@mui/icons-material/Launch';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import SecurityIcon from '@mui/icons-material/Security';
 import { Link as RouterLink } from 'react-router-dom';
 import { microTools } from '../data/toolsData';
-import WebGPUAIConsole from '../components/WebGPUAIConsole';
-import VaultConsole from '../components/VaultConsole';
 
+const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const categories = ['All', 'Planning', 'Swarm & Core', 'AI & Knowledge', 'Security & Recon', 'Security & Steganography', 'Autonomous Web', 'Media & 3D', 'Automation'];
 
 export default function ToolsPage() {
   const [search, setSearch] = useState('');
   const [selectedCat, setSelectedCat] = useState('All');
   const [copiedId, setCopiedId] = useState(null);
-  const [activeWebGpuModal, setActiveWebGpuModal] = useState(null);
 
   const handleCopy = (pullCmd, id) => {
     navigator.clipboard.writeText(pullCmd);
@@ -42,27 +40,28 @@ export default function ToolsPage() {
   });
 
   return (
-    <Container maxWidth="lg" sx={{ py: 6 }}>
+    <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6 }}>
       
       {/* Page Header */}
       <Box sx={{ mb: 4 }}>
         <Chip
           icon={<TerminalIcon sx={{ color: '#B8860B !important' }} />}
-          label="NULLAI TOOL CATALOG & WORKSTATIONS"
+          label="NULLAI TOOL CATALOG & WEBGPU WORKSTATIONS"
           size="small"
-          sx={{ bgcolor: '#FEF9E7', color: '#B8860B', border: '1px solid #F0E1A8', fontWeight: 700, mb: 1.5, px: 1 }}
+          sx={{ bgcolor: '#FEF9E7', color: '#B8860B', border: '1px solid #F0E1A8', fontWeight: 800, mb: 1.5, px: 1 }}
         />
-        <Typography variant="h3" sx={{ mb: 1, fontWeight: 800 }}>
-          Tool Nexus Sovereign Repositories
+        <Typography variant="h3" sx={{ mb: 1, fontWeight: 800, letterSpacing: '-0.03em' }}>
+          Tool Nexus <span className="text-gradient-gold">Sovereign Repositories</span>
         </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 820 }}>
-          WebGPU-enabled tools run instantly in your browser below. For daemon-backed or deep local CLI tools, pull the repo or flash <strong>Zoth OS</strong> for zero-configuration out-of-the-box execution.
+        <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 840, lineHeight: 1.65, fontSize: '1.05rem' }}>
+          Click any WebGPU tool below to open its <span className="text-highlight-gold">Real Working In-Browser Tool Workspace</span>. For CLI or daemon-backed tools, copy the checkout command or run <span className="text-highlight-dark">Zoth OS</span> for zero-configuration out-of-the-box execution.
         </Typography>
       </Box>
 
       {/* Zoth OS Funnel Banner */}
       <Paper
         elevation={0}
+        className="breathe-card"
         sx={{
           p: 3.5,
           mb: 5,
@@ -76,18 +75,18 @@ export default function ToolsPage() {
         }}
       >
         <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
-          <Box sx={{ maxWidth: 720 }}>
+          <Box sx={{ maxWidth: 740 }}>
             <Chip
               icon={<RocketLaunchIcon sx={{ color: '#FDD663 !important' }} />}
-              label="ZERO-HASSIEN INSTANT VM / USB OS"
+              label="SOVEREIGN BARE-METAL DISTRIBUTION"
               size="small"
               sx={{ bgcolor: '#1E293B', color: '#FDD663', border: '1px solid #D4AF3766', fontWeight: 800, mb: 1.5 }}
             />
             <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: '#FFFFFF' }}>
-              Want all 24 micro-tools preinstalled ready to use?
+              Want all 25 micro-tools preinstalled ready to use?
             </Typography>
             <Typography variant="body2" sx={{ color: '#94A3B8', lineHeight: 1.6 }}>
-              Download the <strong>Zoth OS ISO</strong> image. Flash to a USB drive or boot inside QEMU / KVM to get all 24 tools, local daemons, and 10 Ollama models preconfigured out of the box with zero manual dependencies!
+              Download the <strong>Zoth OS ISO</strong> image. Flash to USB or boot inside QEMU / KVM to run all 25 tools, local daemons, and 10 Ollama models with zero manual dependencies!
             </Typography>
           </Box>
           <Button
@@ -97,6 +96,7 @@ export default function ToolsPage() {
             color="primary"
             size="large"
             endIcon={<LaunchIcon />}
+            className="pulse-glow-btn"
             sx={{ px: 3.5, py: 1.4, fontWeight: 800, borderRadius: 9999 }}
           >
             Get Zoth OS ISO
@@ -143,7 +143,7 @@ export default function ToolsPage() {
       {/* Tools Counter */}
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
         Showing <strong>{filtered.length}</strong> of <strong>{microTools.length}</strong> micro-tool repositories (
-        <Box component="span" sx={{ color: '#B8860B', fontWeight: 700 }}>
+        <Box component="span" sx={{ color: '#B8860B', fontWeight: 800 }}>
           {microTools.filter((t) => t.executionType === 'webgpu').length} WebGPU In-Browser
         </Box>{' '}
         | {microTools.filter((t) => t.executionType === 'local_cli').length} Local CLI / Zoth OS)
@@ -163,13 +163,12 @@ export default function ToolsPage() {
                   justifyContent: 'space-between',
                   border: isWebGPU ? '1.5px solid #D4AF37' : '1px solid #EAECF0',
                   bgcolor: isWebGPU ? '#FFFFFF' : '#FAFAFA',
-                  opacity: isWebGPU ? 1.0 : 0.92,
-                  transition: 'all 0.2s ease-in-out',
+                  transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                   position: 'relative',
                   '&:hover': {
                     borderColor: '#D4AF37',
-                    boxShadow: isWebGPU ? '0 10px 28px rgba(212, 175, 55, 0.25)' : '0 6px 18px rgba(16,24,40,0.08)',
-                    transform: 'translateY(-2px)'
+                    boxShadow: isWebGPU ? '0 12px 32px rgba(212, 175, 55, 0.28)' : '0 8px 22px rgba(16,24,40,0.1)',
+                    transform: 'translateY(-3px)'
                   }
                 }}
               >
@@ -179,30 +178,35 @@ export default function ToolsPage() {
                     {isWebGPU ? (
                       <Chip
                         icon={<FlashOnIcon sx={{ color: '#B8860B !important', fontSize: '14px !important' }} />}
-                        label="WebGPU (In-Browser)"
+                        label="⚡ WebGPU (In-Browser)"
                         size="small"
                         sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 800, fontSize: '0.72rem', border: '1px solid #F0E1A8' }}
                       />
                     ) : (
                       <Chip
                         icon={<LockIcon sx={{ color: '#64748B !important', fontSize: '13px !important' }} />}
-                        label="Requires Local CLI / Zoth OS"
+                        label="Requires CLI / Zoth OS"
                         size="small"
                         sx={{ bgcolor: '#F1F5F9', color: '#475467', fontWeight: 700, fontSize: '0.72rem', border: '1px solid #E2E8F0' }}
                       />
                     )}
-                    <Chip label={`v${tool.version}`} size="small" variant="outlined" sx={{ color: '#667085', fontSize: '0.72rem', fontFamily: 'monospace' }} />
+                    <Chip label={`v${tool.version}`} size="small" variant="outlined" sx={{ color: '#667085', fontSize: '0.72rem', fontFamily: mono }} />
                   </Box>
 
-                  <Typography variant="h6" sx={{ color: '#101828', mb: 1, fontWeight: 800 }}>
+                  <Typography
+                    variant="h6"
+                    component={RouterLink}
+                    to={`/tools/${tool.id}`}
+                    sx={{ color: '#101828', mb: 1, fontWeight: 800, textDecoration: 'none', display: 'block', '&:hover': { color: '#B8860B' } }}
+                  >
                     {tool.name}
                   </Typography>
 
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2, minHeight: 44, fontSize: '0.86rem', lineHeight: 1.5 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2, minHeight: 44, fontSize: '0.86rem', lineHeight: 1.55 }}>
                     {tool.description}
                   </Typography>
 
-                  <Box sx={{ bgcolor: isWebGPU ? '#101828' : '#F8FAFC', p: 1.25, borderRadius: 1.5, border: isWebGPU ? '1px solid #1D2939' : '1px dashed #EAECF0', fontFamily: 'monospace', fontSize: '0.78rem', color: isWebGPU ? '#F5E6AB' : '#B8860B', wordBreak: 'break-all' }}>
+                  <Box sx={{ bgcolor: isWebGPU ? '#101828' : '#F8FAFC', p: 1.25, borderRadius: 1.5, border: isWebGPU ? '1px solid #1D2939' : '1px dashed #EAECF0', fontFamily: mono, fontSize: '0.78rem', color: isWebGPU ? '#F5E6AB' : '#B8860B', wordBreak: 'break-all' }}>
                     $ {tool.pull}
                   </Box>
                 </CardContent>
@@ -214,11 +218,12 @@ export default function ToolsPage() {
                       size="small"
                       variant="contained"
                       color="primary"
+                      component={RouterLink}
+                      to={`/tools/${tool.id}`}
                       startIcon={<FlashOnIcon />}
-                      onClick={() => setActiveWebGpuModal(tool)}
                       sx={{ fontWeight: 800, py: 0.9 }}
                     >
-                      Run In-Browser Tool
+                      Open WebGPU Tool Workspace
                     </Button>
                   ) : (
                     <>
@@ -228,7 +233,7 @@ export default function ToolsPage() {
                         color="primary"
                         startIcon={<ContentCopyIcon />}
                         onClick={() => handleCopy(tool.pull, tool.id)}
-                        sx={{ fontWeight: 700 }}
+                        sx={{ fontWeight: 750 }}
                       >
                         {copiedId === tool.id ? 'Copied!' : 'Copy CLI'}
                       </Button>
@@ -240,8 +245,8 @@ export default function ToolsPage() {
                         target="_blank"
                         rel="noopener noreferrer"
                         startIcon={<GitHubIcon />}
-                        disabled={!tool.published}
-                        sx={{ bgcolor: '#334155', color: '#FFFFFF', fontWeight: 700, '&:hover': { bgcolor: '#0F172A' } }}
+                        disabled={!tool.published || tool.localOnly}
+                        sx={{ bgcolor: '#334155', color: '#FFFFFF', fontWeight: 750, '&:hover': { bgcolor: '#0F172A' } }}
                       >
                         Repo
                       </Button>
@@ -253,48 +258,6 @@ export default function ToolsPage() {
           );
         })}
       </Grid>
-
-      {/* WebGPU Interactive Tool Runner Dialog Modal */}
-      <Dialog
-        open={Boolean(activeWebGpuModal)}
-        onClose={() => setActiveWebGpuModal(null)}
-        maxWidth="md"
-        fullWidth
-      >
-        {activeWebGpuModal && (
-          <>
-            <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', bgcolor: '#101828', color: '#FFFFFF' }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <FlashOnIcon sx={{ color: '#D4AF37' }} />
-                <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                  {activeWebGpuModal.name} — WebGPU In-Browser Engine
-                </Typography>
-              </Box>
-              <Chip label="IN-BROWSER EXECUTABLE" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 800 }} />
-            </DialogTitle>
-            <DialogContent sx={{ py: 3, bgcolor: '#FAFAFA' }}>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                {activeWebGpuModal.description} Version recorded in local catalog: {activeWebGpuModal.version}.
-              </Typography>
-
-              {activeWebGpuModal.id === 'payload-entropy-studio' || activeWebGpuModal.id === 'jwt-inspector-guard' ? (
-                <VaultConsole />
-              ) : (
-                <WebGPUAIConsole />
-              )}
-            </DialogContent>
-            <DialogActions sx={{ px: 3, py: 2, borderTop: '1px solid #EAECF0' }}>
-              <Button onClick={() => setActiveWebGpuModal(null)} variant="outlined">
-                Close Runner
-              </Button>
-              <Button component={RouterLink} to="/zoth-os" variant="contained" color="primary" startIcon={<RocketLaunchIcon />}>
-                Get Full Zoth OS Suite
-              </Button>
-            </DialogActions>
-          </>
-        )}
-      </Dialog>
-
     </Container>
   );
 }
