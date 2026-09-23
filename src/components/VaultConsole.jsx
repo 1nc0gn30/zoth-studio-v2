@@ -3,6 +3,7 @@ import {
   Box, Paper, Typography, TextField, Button, Grid, Chip, LinearProgress,
   IconButton, Tooltip, Alert
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import SecurityIcon from '@mui/icons-material/Security';
 import KeyIcon from '@mui/icons-material/Key';
 import LockIcon from '@mui/icons-material/Lock';
@@ -13,6 +14,10 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 export default function VaultConsole() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const goldText = isDark ? '#F5E6AB' : '#8A6A09';
   const [secretName, setSecretName] = useState('OPENAI_API_KEY');
   const [secretValue, setSecretValue] = useState('sk-proj-7a98f7e21a0098bc19d45e6f3128765c');
   const [passphrase, setPassphrase] = useState('zoth-zero-cloud-master-key');
@@ -69,11 +74,11 @@ export default function VaultConsole() {
   };
 
   return (
-    <Paper sx={{ p: 3, border: '1px solid #EAECF0', mb: 4, bgcolor: '#FFFFFF' }}>
+    <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, mb: 4, bgcolor: theme.palette.background.paper }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Box sx={{ width: 40, height: 40, borderRadius: 1.5, bgcolor: '#FEF3F2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <SecurityIcon sx={{ color: '#B42318' }} />
+          <Box sx={{ width: 40, height: 40, borderRadius: 1.5, bgcolor: isDark ? 'rgba(212,175,55,0.14)' : '#FEF3F2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <SecurityIcon sx={{ color: isDark ? '#F5E6AB' : '#B42318' }} />
           </Box>
           <Box>
             <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.2 }}>
@@ -84,7 +89,7 @@ export default function VaultConsole() {
             </Typography>
           </Box>
         </Box>
-        <Chip label="LOCAL VAULT DAEMON :8787" size="small" sx={{ bgcolor: '#ECFDF3', color: '#027A48', fontWeight: 700 }} />
+        <Chip label="LOCAL VAULT DAEMON :8787" size="small" sx={{ bgcolor: isDark ? 'rgba(52,211,153,0.16)' : '#ECFDF3', color: isDark ? '#34D399' : '#027A48', fontWeight: 700 }} />
       </Box>
 
       <Grid container spacing={2.5} sx={{ mb: 3 }}>
@@ -124,10 +129,10 @@ export default function VaultConsole() {
       </Grid>
 
       {/* Real-time Entropy Auditor Bar */}
-      <Box sx={{ p: 2, bgcolor: '#FAFAFA', borderRadius: 1.5, border: '1px solid #F2F4F7', mb: 3 }}>
+      <Box sx={{ p: 2, bgcolor: theme.palette.background.paper, borderRadius: 1.5, border: `1px solid ${theme.palette.divider}`, mb: 3 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
           <Typography variant="body2" sx={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
-            <KeyIcon fontSize="small" sx={{ color: '#8A6A09' }} /> Payload Shannon Entropy Analysis
+            <KeyIcon fontSize="small" sx={{ color: goldText }} /> Payload Shannon Entropy Analysis
           </Typography>
           <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, color: entropy >= 4.0 ? '#12B76A' : '#D97706' }}>
             {entropy.toFixed(3)} bits/char ({entropyPercent}% randomness)
@@ -139,8 +144,8 @@ export default function VaultConsole() {
           sx={{
             height: 8,
             borderRadius: 1,
-            bgcolor: '#EAECF0',
-            '& .MuiLinearProgress-bar': {
+            bgcolor: theme.palette.divider,
+                        '& .MuiLinearProgress-bar': {
               bgcolor: entropy >= 4.5 ? '#12B76A' : entropy >= 3.0 ? '#F79009' : '#D92D20'
             }
           }}
@@ -180,9 +185,9 @@ export default function VaultConsole() {
 
       {/* Derived Key & Ciphertext JSON Output */}
       {encryptedPayload && (
-        <Box sx={{ bgcolor: '#101828', color: '#E6F4EA', p: 2.5, borderRadius: 1.5, fontFamily: mono, fontSize: '0.82rem' }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, pb: 1, borderBottom: '1px solid #1F2937' }}>
-            <Typography variant="subtitle2" sx={{ fontFamily: mono, color: '#D4AF37', fontWeight: 700 }}>
+        <Box sx={{ bgcolor: isDark ? '#0B0B12' : '#101828', color: '#E6F4EA', p: 2.5, borderRadius: 1.5, fontFamily: mono, fontSize: '0.82rem' }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, pb: 1, borderBottom: `1px solid ${isDark ? '#2A2A38' : '#1F2937'}` }}>
+                    <Typography variant="subtitle2" sx={{ fontFamily: mono, color: gold, fontWeight: 700 }}>
               Encrypted Vault Sealed Payload (AES-256-GCM)
             </Typography>
             <Tooltip title={copied ? 'Copied!' : 'Copy Sealed JSON'}>

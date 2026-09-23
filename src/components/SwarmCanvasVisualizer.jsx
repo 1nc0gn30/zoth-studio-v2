@@ -1,8 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { pantheonAgents } from '../data/pantheon';
 
 export default function SwarmCanvasVisualizer() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const gold = isDark ? '#D4AF37' : '#B8860B';
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -38,11 +42,15 @@ export default function SwarmCanvasVisualizer() {
       speed: 0.005 + Math.random() * 0.01
     }));
 
+    const gridColor = isDark ? 'rgba(38, 38, 47, 0.6)' : 'rgba(234, 236, 240, 0.4)';
+    const nodeFill = isDark ? '#EDEFF2' : '#101828';
+    const labelColor = isDark ? '#A6A8B4' : '#475467';
+
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
       // Background Grid Pattern
-      ctx.strokeStyle = 'rgba(234, 236, 240, 0.4)';
+      ctx.strokeStyle = gridColor;
       ctx.lineWidth = 1;
       for (let x = 0; x < width; x += 40) {
         ctx.beginPath();
@@ -106,8 +114,8 @@ export default function SwarmCanvasVisualizer() {
         if (node.y < 30 || node.y > height - 30) node.vy *= -1;
 
         // Node Glow
-        ctx.fillStyle = node.isCore ? '#B8860B' : '#101828';
-        ctx.strokeStyle = node.isCore ? '#D4AF37' : '#B8860B';
+        ctx.fillStyle = node.isCore ? gold : nodeFill;
+        ctx.strokeStyle = node.isCore ? '#D4AF37' : gold;
         ctx.lineWidth = node.isCore ? 2.5 : 1.5;
 
         ctx.beginPath();
@@ -117,7 +125,7 @@ export default function SwarmCanvasVisualizer() {
 
         // Node Label
         ctx.font = node.isCore ? 'bold 11px Inter, sans-serif' : '10px Inter, sans-serif';
-        ctx.fillStyle = node.isCore ? '#B8860B' : '#475467';
+        ctx.fillStyle = node.isCore ? gold : labelColor;
         ctx.fillText(node.id, node.x + 10, node.y + 3);
       });
 
@@ -129,19 +137,19 @@ export default function SwarmCanvasVisualizer() {
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [theme, isDark, gold]);
 
   return (
-    <Paper sx={{ p: 2, border: '1px solid #EAECF0', mb: 4, overflow: 'hidden', position: 'relative' }}>
+    <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, mb: 4, overflow: 'hidden', position: 'relative' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, px: 1 }}>
-        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#B8860B', letterSpacing: '0.05em' }}>
+        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: gold, letterSpacing: '0.05em' }}>
           PANTHEON ROSTER MAP
         </Typography>
-        <Typography variant="caption" sx={{ color: '#667085', fontWeight: 700, fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace' }}>
+        <Typography variant="caption" sx={{ color: theme.palette.text.secondary, fontWeight: 700, fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace' }}>
           Diagram of names. Not a live bus.
         </Typography>
       </Box>
-      <Box sx={{ width: '100%', height: 320, background: '#FAFAFA', borderRadius: 1.5, overflow: 'hidden' }}>
+      <Box sx={{ width: '100%', height: 320, background: theme.palette.background.paper, borderRadius: 1.5, overflow: 'hidden' }}>
         <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />
       </Box>
     </Paper>

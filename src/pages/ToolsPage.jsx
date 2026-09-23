@@ -4,6 +4,7 @@ import {
   Chip, Button, TextField, InputAdornment, MenuItem, Select, FormControl, InputLabel,
   Paper
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -13,6 +14,7 @@ import FlashOnIcon from '@mui/icons-material/FlashOn';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import LaunchIcon from '@mui/icons-material/Launch';
 import SecurityIcon from '@mui/icons-material/Security';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Link as RouterLink } from 'react-router-dom';
 import { microTools } from '../data/toolsData';
 
@@ -20,9 +22,27 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const categories = ['All', 'Planning', 'Swarm & Core', 'AI & Knowledge', 'Security & Recon', 'Security & Steganography', 'Autonomous Web', 'Media & 3D', 'Automation'];
 
 export default function ToolsPage() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
   const [search, setSearch] = useState('');
   const [selectedCat, setSelectedCat] = useState('All');
   const [copiedId, setCopiedId] = useState(null);
+  const [expanded, setExpanded] = useState(() => new Set());
+
+  const gold = {
+    accent: isDark ? '#D4AF37' : '#B8860B',
+    soft: isDark ? '#F5E6AB' : '#8A6A09',
+    wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
+  };
+
+  const toggleExpand = (id) => {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   const handleCopy = (pullCmd, id) => {
     navigator.clipboard.writeText(pullCmd);
@@ -41,16 +61,32 @@ export default function ToolsPage() {
 
   return (
     <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6 }}>
-      
-      {/* Page Header */}
-      <Box sx={{ mb: 4 }}>
+      {/* Page Header with gold top-edge glow (ToolsPage signature) */}
+      <Box sx={{ position: 'relative', mb: 4, pt: 1 }}>
+        <Box
+          aria-hidden="true"
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 3,
+            borderRadius: 2,
+            background: isDark
+              ? 'linear-gradient(90deg, transparent, rgba(212,175,55,0.9) 20%, #D4AF37 50%, rgba(212,175,55,0.9) 80%, transparent)'
+              : 'linear-gradient(90deg, transparent, rgba(184,134,11,0.7) 20%, #B8860B 50%, rgba(184,134,11,0.7) 80%, transparent)',
+            boxShadow: isDark
+              ? '0 0 18px 2px rgba(212,175,55,0.45)'
+              : '0 0 12px 1px rgba(184,134,11,0.35)',
+          }}
+        />
         <Chip
-          icon={<TerminalIcon sx={{ color: '#B8860B !important' }} />}
+          icon={<TerminalIcon sx={{ color: `${gold.accent} !important` }} />}
           label="NULLAI TOOL CATALOG & WEBGPU WORKSTATIONS"
           size="small"
-          sx={{ bgcolor: '#FEF9E7', color: '#B8860B', border: '1px solid #F0E1A8', fontWeight: 800, mb: 1.5, px: 1 }}
+          sx={{ bgcolor: gold.wash, color: gold.accent, border: `1px solid ${isDark ? 'rgba(212,175,55,0.42)' : '#F0E1A8'}`, fontWeight: 800, mb: 1.5, px: 1 }}
         />
-        <Typography variant="h3" sx={{ mb: 1, fontWeight: 800, letterSpacing: '-0.03em' }}>
+        <Typography variant="h3" sx={{ mb: 1, fontWeight: 800, letterSpacing: '-0.03em', color: theme.palette.text.primary }}>
           Tool Nexus <span className="text-gradient-gold">Sovereign Repositories</span>
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 840, lineHeight: 1.65, fontSize: '1.05rem' }}>
@@ -67,11 +103,13 @@ export default function ToolsPage() {
           mb: 5,
           border: '1px solid #D4AF3744',
           borderRadius: 3,
-          bgcolor: '#101828',
+          bgcolor: isDark ? '#0B0B12' : '#101828',
           color: '#FFFFFF',
           position: 'relative',
           overflow: 'hidden',
-          boxShadow: '0 8px 24px rgba(16,24,40,0.15)'
+          boxShadow: isDark
+            ? '0 8px 24px rgba(0,0,0,0.5)'
+            : '0 8px 24px rgba(16,24,40,0.15)'
         }}
       >
         <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
@@ -80,7 +118,7 @@ export default function ToolsPage() {
               icon={<RocketLaunchIcon sx={{ color: '#FDD663 !important' }} />}
               label="SOVEREIGN BARE-METAL DISTRIBUTION"
               size="small"
-              sx={{ bgcolor: '#1E293B', color: '#FDD663', border: '1px solid #D4AF3766', fontWeight: 800, mb: 1.5 }}
+              sx={{ bgcolor: isDark ? 'rgba(30,41,59,0.6)' : '#1E293B', color: '#FDD663', border: '1px solid #D4AF3766', fontWeight: 800, mb: 1.5 }}
             />
             <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: '#FFFFFF' }}>
               Want all 25 micro-tools preinstalled ready to use?
@@ -115,7 +153,7 @@ export default function ToolsPage() {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon sx={{ color: '#B8860B' }} />
+                  <SearchIcon sx={{ color: gold.accent }} />
                 </InputAdornment>
               ),
             }}
@@ -143,7 +181,7 @@ export default function ToolsPage() {
       {/* Tools Counter */}
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
         Showing <strong>{filtered.length}</strong> of <strong>{microTools.length}</strong> micro-tool repositories (
-        <Box component="span" sx={{ color: '#B8860B', fontWeight: 800 }}>
+        <Box component="span" sx={{ color: gold.accent, fontWeight: 800 }}>
           {microTools.filter((t) => t.executionType === 'webgpu').length} WebGPU In-Browser
         </Box>{' '}
         | {microTools.filter((t) => t.executionType === 'local_cli').length} Local CLI / Zoth OS)
@@ -153,6 +191,7 @@ export default function ToolsPage() {
       <Grid container spacing={3}>
         {filtered.map((tool) => {
           const isWebGPU = tool.executionType === 'webgpu';
+          const isExpanded = expanded.has(tool.id);
           return (
             <Grid size={{ xs: 12, sm: 6, md: 4 }} key={tool.id}>
               <Card
@@ -161,13 +200,17 @@ export default function ToolsPage() {
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
-                  border: isWebGPU ? '1.5px solid #D4AF37' : '1px solid #EAECF0',
-                  bgcolor: isWebGPU ? '#FFFFFF' : '#FAFAFA',
+                  border: isWebGPU ? '1.5px solid #D4AF37' : `1px solid ${theme.palette.divider}`,
+                  bgcolor: theme.palette.background.paper,
                   transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                   position: 'relative',
                   '&:hover': {
-                    borderColor: '#D4AF37',
-                    boxShadow: isWebGPU ? '0 12px 32px rgba(212, 175, 55, 0.28)' : '0 8px 22px rgba(16,24,40,0.1)',
+                    borderColor: gold.accent,
+                    boxShadow: isWebGPU
+                      ? '0 12px 32px rgba(212, 175, 55, 0.28)'
+                      : isDark
+                        ? '0 8px 22px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,175,55,0.25), 0 0 20px -4px rgba(212,175,55,0.18)'
+                        : '0 8px 22px rgba(16,24,40,0.1)',
                     transform: 'translateY(-3px)'
                   }
                 }}
@@ -177,41 +220,62 @@ export default function ToolsPage() {
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 0.5 }}>
                     {isWebGPU ? (
                       <Chip
-                        icon={<FlashOnIcon sx={{ color: '#B8860B !important', fontSize: '14px !important' }} />}
+                        icon={<FlashOnIcon sx={{ color: `${gold.accent} !important`, fontSize: '14px !important' }} />}
                         label="⚡ WebGPU (In-Browser)"
                         size="small"
-                        sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 800, fontSize: '0.72rem', border: '1px solid #F0E1A8' }}
+                        sx={{ bgcolor: gold.wash, color: gold.accent, fontWeight: 800, fontSize: '0.72rem', border: `1px solid ${isDark ? 'rgba(212,175,55,0.42)' : '#F0E1A8'}` }}
                       />
                     ) : (
                       <Chip
-                        icon={<LockIcon sx={{ color: '#64748B !important', fontSize: '13px !important' }} />}
+                        icon={<LockIcon sx={{ color: `${theme.palette.text.secondary} !important`, fontSize: '13px !important' }} />}
                         label="Requires CLI / Zoth OS"
                         size="small"
-                        sx={{ bgcolor: '#F1F5F9', color: '#475467', fontWeight: 700, fontSize: '0.72rem', border: '1px solid #E2E8F0' }}
+                        sx={{ bgcolor: isDark ? 'rgba(148,163,184,0.12)' : '#F1F5F9', color: theme.palette.text.secondary, fontWeight: 700, fontSize: '0.72rem', border: `1px solid ${theme.palette.divider}` }}
                       />
                     )}
-                    <Chip label={`v${tool.version}`} size="small" variant="outlined" sx={{ color: '#667085', fontSize: '0.72rem', fontFamily: mono }} />
+                    <Chip label={`v${tool.version}`} size="small" variant="outlined" sx={{ color: theme.palette.text.secondary, fontSize: '0.72rem', fontFamily: mono }} />
                   </Box>
 
                   <Typography
                     variant="h6"
                     component={RouterLink}
                     to={`/tools/${tool.id}`}
-                    sx={{ color: '#101828', mb: 1, fontWeight: 800, textDecoration: 'none', display: 'block', '&:hover': { color: '#B8860B' } }}
+                    sx={{ color: theme.palette.text.primary, mb: 1, fontWeight: 800, textDecoration: 'none', display: 'block', '&:hover': { color: gold.accent } }}
                   >
                     {tool.name}
                   </Typography>
 
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2, minHeight: 44, fontSize: '0.86rem', lineHeight: 1.55 }}>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{
+                      mb: 1,
+                      fontSize: '0.86rem',
+                      lineHeight: 1.55,
+                      display: '-webkit-box',
+                      WebkitLineClamp: isExpanded ? 'unset' : 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                    }}
+                  >
                     {tool.description}
                   </Typography>
 
-                  <Box sx={{ bgcolor: isWebGPU ? '#101828' : '#F8FAFC', p: 1.25, borderRadius: 1.5, border: isWebGPU ? '1px solid #1D2939' : '1px dashed #EAECF0', fontFamily: mono, fontSize: '0.78rem', color: isWebGPU ? '#F5E6AB' : '#B8860B', wordBreak: 'break-all' }}>
+                  <Button
+                    size="small"
+                    onClick={() => toggleExpand(tool.id)}
+                    endIcon={<ExpandMoreIcon sx={{ transform: isExpanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease' }} />}
+                    sx={{ color: gold.accent, fontWeight: 750, fontSize: '0.78rem', textTransform: 'none', p: 0, minHeight: 0, mb: 1.5, '&:hover': { backgroundColor: 'transparent', color: gold.soft } }}
+                  >
+                    {isExpanded ? 'Show less' : 'Read more'}
+                  </Button>
+
+                  <Box sx={{ bgcolor: isWebGPU ? (isDark ? '#0B0B12' : '#101828') : (isDark ? 'rgba(148,163,184,0.08)' : '#F8FAFC'), p: 1.25, borderRadius: 1.5, border: isWebGPU ? '1px solid #1D2939' : `1px dashed ${theme.palette.divider}`, fontFamily: mono, fontSize: '0.78rem', color: isWebGPU ? '#F5E6AB' : gold.accent, wordBreak: 'break-all' }}>
                     $ {tool.pull}
                   </Box>
                 </CardContent>
 
-                <CardActions sx={{ px: 2, pb: 2, pt: 1.5, justifyContent: 'space-between', borderTop: '1px solid #EAECF0', bgcolor: isWebGPU ? '#FEF9E733' : 'transparent' }}>
+                <CardActions sx={{ px: 2, pb: 2, pt: 1.5, justifyContent: 'space-between', borderTop: `1px solid ${theme.palette.divider}`, bgcolor: isWebGPU ? (isDark ? 'rgba(212,175,55,0.08)' : '#FEF9E733') : 'transparent' }}>
                   {isWebGPU ? (
                     <Button
                       fullWidth
@@ -246,7 +310,7 @@ export default function ToolsPage() {
                         rel="noopener noreferrer"
                         startIcon={<GitHubIcon />}
                         disabled={!tool.published || tool.localOnly}
-                        sx={{ bgcolor: '#334155', color: '#FFFFFF', fontWeight: 750, '&:hover': { bgcolor: '#0F172A' } }}
+                        sx={{ bgcolor: isDark ? '#1E293B' : '#334155', color: '#FFFFFF', fontWeight: 750, '&:hover': { bgcolor: isDark ? '#0F172A' : '#0F172A' } }}
                       >
                         Repo
                       </Button>

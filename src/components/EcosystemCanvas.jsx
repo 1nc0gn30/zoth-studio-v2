@@ -1,7 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 export default function EcosystemCanvas() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const gold = isDark ? '#D4AF37' : '#B8860B';
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -15,11 +19,14 @@ export default function EcosystemCanvas() {
 
     let angle = 0;
 
+    const gridColor = isDark ? 'rgba(38, 38, 47, 0.6)' : 'rgba(234, 236, 240, 0.5)';
+    const satelliteFill = isDark ? '#0B0B12' : '#FFFFFF';
+
     const render = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Clean White Grid Pattern
-      ctx.strokeStyle = 'rgba(234, 236, 240, 0.5)';
+      // Clean Grid Pattern
+      ctx.strokeStyle = gridColor;
       ctx.lineWidth = 1;
       for (let x = 0; x < width; x += 30) {
         ctx.beginPath();
@@ -55,7 +62,7 @@ export default function EcosystemCanvas() {
       ctx.stroke();
 
       // Golden Z Emblem Path
-      ctx.strokeStyle = '#B8860B';
+      ctx.strokeStyle = gold;
       ctx.fillStyle = '#D4AF37';
       ctx.lineWidth = 4;
 
@@ -102,8 +109,8 @@ export default function EcosystemCanvas() {
         ctx.stroke();
 
         // Node Circle
-        ctx.fillStyle = '#FFFFFF';
-        ctx.strokeStyle = '#B8860B';
+        ctx.fillStyle = satelliteFill;
+        ctx.strokeStyle = gold;
         ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.arc(sx, sy, 6, 0, Math.PI * 2);
@@ -119,15 +126,15 @@ export default function EcosystemCanvas() {
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [theme, isDark, gold]);
 
   return (
-    <Paper sx={{ p: 2, border: '1px solid #EAECF0', mb: 5, overflow: 'hidden', bgcolor: '#FAFAFA' }}>
+    <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, mb: 5, overflow: 'hidden', bgcolor: theme.palette.background.paper }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, px: 1 }}>
-        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#B8860B', letterSpacing: '0.05em' }}>
+        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: gold, letterSpacing: '0.05em' }}>
           ✨ ZOTH SOVEREIGN ECOSYSTEM — GOLDEN ARCHITECTURE CANVAS
         </Typography>
-        <Typography variant="caption" sx={{ color: '#667085', fontWeight: 600 }}>
+        <Typography variant="caption" sx={{ color: theme.palette.text.secondary, fontWeight: 600 }}>
           ROSTER MAP • NOT LIVE TELEMETRY
         </Typography>
       </Box>

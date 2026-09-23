@@ -5,6 +5,7 @@ import {
   Breadcrumbs, Link, Card, CardContent, Tabs, Tab, Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow, Tooltip, IconButton, Alert
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CalculateIcon from '@mui/icons-material/Calculate';
@@ -20,6 +21,16 @@ import { mathPillars } from '../data/mathPillars';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 export default function MathPillarDetailPage() {
+  const theme = useTheme();
+  const dark = theme.palette.mode === 'dark';
+  const gold = dark ? '#D4AF37' : '#B8860B';
+  const goldLight = dark ? '#F5E6AB' : '#8A6A09';
+  const goldBg = dark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
+  const surface = theme.palette.background.paper;
+  const textPrimary = theme.palette.text.primary;
+  const textSecondary = theme.palette.text.secondary;
+  const divider = theme.palette.divider;
+
   const { pillarId } = useParams();
   const navigate = useNavigate();
 
@@ -251,26 +262,40 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
         <Typography color="text.primary" sx={{ fontWeight: 700 }}>Pillar {pillar.numeral}: {pillar.title}</Typography>
       </Breadcrumbs>
 
-      {/* Header Hero Card */}
+      {/* Header Hero Card — gold glow behind equation header */}
       <Paper
         elevation={0}
         sx={{
           p: { xs: 3, md: 4 },
           mb: 4,
-          border: '1px solid #EAECF0',
+          border: `1px solid ${divider}`,
           borderLeft: `6px solid ${pillar.accent}`,
-          bgcolor: '#FFFFFF',
+          bgcolor: surface,
           borderRadius: 3,
-          boxShadow: '0 4px 20px rgba(16,24,40,0.03)'
+          boxShadow: dark
+            ? '0 4px 20px rgba(0,0,0,0.35), 0 0 40px -12px rgba(212,175,55,0.25)'
+            : '0 4px 20px rgba(16,24,40,0.03), 0 0 30px -14px rgba(212,175,55,0.3)',
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2 }}>
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
+            background: dark
+              ? 'radial-gradient(ellipse 60% 100% at 50% 0%, rgba(212,175,55,0.16) 0%, transparent 70%)'
+              : 'radial-gradient(ellipse 60% 100% at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 70%)',
+          }}
+        />
+        <Box sx={{ position: 'relative', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2 }}>
           <Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
-              <Chip label={`PILLAR ${pillar.numeral}`} size="small" sx={{ bgcolor: '#FEF9E7', color: '#8A6A09', fontWeight: 800, border: '1px solid #F0E1A8' }} />
-              <Chip label="CLOSED-FORM PROOF" size="small" sx={{ bgcolor: '#ECFDF3', color: '#027A48', fontWeight: 800 }} />
+              <Chip label={`PILLAR ${pillar.numeral}`} size="small" sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 800, border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}` }} />
+              <Chip label="CLOSED-FORM PROOF" size="small" sx={{ bgcolor: dark ? 'rgba(52,211,153,0.16)' : '#ECFDF3', color: dark ? '#34D399' : '#027A48', fontWeight: 800 }} />
             </Box>
-            <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1, color: '#101828', fontSize: { xs: '2rem', sm: '2.8rem', md: '3.2rem' } }}>
+            <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1, color: textPrimary, fontSize: { xs: '2rem', sm: '2.8rem', md: '3.2rem' } }}>
               {pillar.title}
             </Typography>
             <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 500, maxWidth: 850, fontSize: { xs: '1rem', md: '1.15rem' } }}>
@@ -285,7 +310,7 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
               color="inherit"
               startIcon={<ArrowBackIcon />}
               onClick={() => navigate(`/docs/math/${prevPillar.id}`)}
-              sx={{ fontWeight: 700, borderColor: '#EAECF0' }}
+              sx={{ fontWeight: 700, borderColor: divider }}
             >
               Prev ({prevPillar.numeral})
             </Button>
@@ -303,7 +328,7 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
 
         {/* Pillar Switcher Chips Bar */}
         <Divider sx={{ my: 2.5 }} />
-        <Typography variant="caption" sx={{ fontWeight: 800, color: '#475467', mb: 1.5, display: 'block', letterSpacing: '0.04em' }}>
+        <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1.5, display: 'block', letterSpacing: '0.04em' }}>
           EXPLORE ALL SIX MATHEMATICAL PILLARS
         </Typography>
         <Box sx={{ display: 'flex', gap: 1, overflowX: 'auto', pb: 0.5 }}>
@@ -315,12 +340,12 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
               onClick={() => navigate(`/docs/math/${p.id}`)}
               sx={{
                 fontWeight: 700,
-                bgcolor: p.id === pillar.id ? '#B8860B' : '#F8FAFC',
-                color: p.id === pillar.id ? '#FFFFFF' : '#475467',
+                bgcolor: p.id === pillar.id ? gold : (dark ? '#14141D' : '#F8FAFC'),
+                color: p.id === pillar.id ? '#FFFFFF' : textSecondary,
                 border: '1px solid',
-                borderColor: p.id === pillar.id ? '#D4AF37' : '#EAECF0',
+                borderColor: p.id === pillar.id ? gold : divider,
                 px: 0.5,
-                '&:hover': { bgcolor: p.id === pillar.id ? '#8A6A09' : '#FEF9E7' }
+                '&:hover': { bgcolor: p.id === pillar.id ? goldLight : goldBg }
               }}
             />
           ))}
@@ -328,18 +353,18 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
       </Paper>
 
       {/* SECTION 1: Mathematical Proofs & Tier Formulations (Full Width - Spacious & Un-squished) */}
-      <Card sx={{ border: '1px solid #EAECF0', borderRadius: 3, mb: 4, bgcolor: '#FFFFFF', boxShadow: '0 4px 16px rgba(16,24,40,0.03)' }}>
+      <Card sx={{ border: `1px solid ${divider}`, borderRadius: 3, mb: 4, bgcolor: surface, boxShadow: dark ? '0 4px 16px rgba(0,0,0,0.35)' : '0 4px 16px rgba(16,24,40,0.03)' }}>
         <CardContent sx={{ p: { xs: 2.5, md: 4 } }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <FunctionsIcon sx={{ color: '#B8860B', fontSize: '1.6rem' }} />
-              <Typography variant="h5" sx={{ fontWeight: 800, color: '#101828', fontSize: { xs: '1.25rem', md: '1.5rem' } }}>
+              <FunctionsIcon sx={{ color: gold, fontSize: '1.6rem' }} />
+              <Typography variant="h5" sx={{ fontWeight: 800, color: textPrimary, fontSize: { xs: '1.25rem', md: '1.5rem' } }}>
                 Mathematical Derivation &amp; Tier Formulations
               </Typography>
             </Box>
 
             <Tooltip title="Copy Selected Formula">
-              <IconButton size="small" onClick={handleCopyFormulaText} sx={{ color: copiedFormula ? '#12B76A' : '#667085' }}>
+              <IconButton size="small" onClick={handleCopyFormulaText} sx={{ color: copiedFormula ? (dark ? '#34D399' : '#12B76A') : textSecondary }}>
                 {copiedFormula ? <CheckIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
               </IconButton>
             </Tooltip>
@@ -352,16 +377,16 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
             sx={{
               mb: 3,
               minHeight: 44,
-              borderBottom: '1px solid #EAECF0',
+              borderBottom: `1px solid ${divider}`,
               '& .MuiTab-root': {
                 minHeight: 44,
                 fontWeight: 700,
                 fontSize: '0.9rem',
                 textTransform: 'none',
-                color: '#667085',
-                '&.Mui-selected': { color: '#B8860B' }
+                color: textSecondary,
+                '&.Mui-selected': { color: gold }
               },
-              '& .MuiTabs-indicator': { bgcolor: '#B8860B', height: 3 }
+              '& .MuiTabs-indicator': { bgcolor: gold, height: 3 }
             }}
           >
             <Tab label="1. Beginner (Intuition)" />
@@ -369,7 +394,7 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
             <Tab label="3. Advanced (Tensor Equation)" />
           </Tabs>
 
-          {/* Active Tier Math Formula Display Box (Full Width, Wide, Readable) */}
+          {/* Active Tier Math Formula Display Box (Full Width, Wide, Readable) — gold-tinted formula card */}
           <Box
             sx={{
               p: { xs: 2.5, md: 3.5 },
@@ -382,7 +407,8 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
               whiteSpace: 'pre-wrap',
               overflowX: 'auto',
               border: '1px solid #1D2939',
-              boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.5)'
+              borderLeft: `4px solid ${gold}`,
+              boxShadow: dark ? 'inset 0 2px 8px rgba(0,0,0,0.5), 0 0 24px -10px rgba(212,175,55,0.3)' : 'inset 0 2px 8px rgba(0,0,0,0.5)'
             }}
           >
             <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 1.5, fontFamily: mono, fontWeight: 800, letterSpacing: '0.05em' }}>
@@ -391,7 +417,7 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
             {pillar.tiers[['Beginner', 'Intermediate', 'Advanced'][activeTierTab]]}
           </Box>
 
-          <Alert severity="info" icon={<FunctionsIcon fontSize="inherit" />} sx={{ mt: 3, borderRadius: 2, bgcolor: '#FEF9E7', color: '#8A6A09', border: '1px solid #F0E1A8', '& .MuiAlert-icon': { color: '#B8860B' } }}>
+          <Alert severity="info" icon={<FunctionsIcon fontSize="inherit" />} sx={{ mt: 3, borderRadius: 2, bgcolor: goldBg, color: goldLight, border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`, '& .MuiAlert-icon': { color: gold } }}>
             <Typography variant="body2" sx={{ fontWeight: 600 }}>
               Formulas carried directly from Zoth Studio Math Workstation. Tier definitions represent exact closed-form execution parameters in local daemons.
             </Typography>
@@ -404,12 +430,12 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
         
         {/* Left 6/12: Interactive Formula Simulator */}
         <Grid size={{ xs: 12, md: 6 }}>
-          <Card sx={{ height: '100%', border: '1px solid #EAECF0', borderRadius: 3, bgcolor: '#FFFFFF', boxShadow: '0 4px 16px rgba(16,24,40,0.03)' }}>
+          <Card sx={{ height: '100%', border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface, boxShadow: dark ? '0 4px 16px rgba(0,0,0,0.35)' : '0 4px 16px rgba(16,24,40,0.03)' }}>
             <CardContent sx={{ p: { xs: 2.5, md: 3.5 }, display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
               <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
-                  <TuneIcon sx={{ color: '#B8860B', fontSize: '1.4rem' }} />
-                  <Typography variant="h6" sx={{ fontWeight: 800, color: '#101828' }}>
+                  <TuneIcon sx={{ color: gold, fontSize: '1.4rem' }} />
+                  <Typography variant="h6" sx={{ fontWeight: 800, color: textPrimary }}>
                     Interactive Math Simulator
                   </Typography>
                 </Box>
@@ -420,10 +446,10 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
                 {/* Slider 1 */}
                 <Box sx={{ mb: 3.5 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#344054' }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: textSecondary }}>
                       Control Input Slider
                     </Typography>
-                    <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: '#B8860B' }}>
+                    <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: gold }}>
                       {param1}
                     </Typography>
                   </Box>
@@ -433,20 +459,20 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
                     max={2.0}
                     step={0.05}
                     onChange={(e, val) => setParam1(val)}
-                    sx={{ color: '#B8860B', height: 6 }}
+                    sx={{ color: gold, height: 6 }}
                   />
                   <Typography variant="caption" color="text.secondary" sx={{ fontFamily: mono, display: 'block', mt: 0.5, fontWeight: 600 }}>
-                    {sim.title1}: <Box component="span" sx={{ color: '#8A6A09' }}>{sim.val1}</Box>
+                    {sim.title1}: <Box component="span" sx={{ color: goldLight }}>{sim.val1}</Box>
                   </Typography>
                 </Box>
 
                 {/* Slider 2 */}
                 <Box sx={{ mb: 3.5 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#344054' }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: textSecondary }}>
                       Dimension / Interval Slider
                     </Typography>
-                    <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: '#B8860B' }}>
+                    <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: gold }}>
                       {param2}
                     </Typography>
                   </Box>
@@ -456,17 +482,17 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
                     max={256}
                     step={8}
                     onChange={(e, val) => setParam2(val)}
-                    sx={{ color: '#B8860B', height: 6 }}
+                    sx={{ color: gold, height: 6 }}
                   />
                   <Typography variant="caption" color="text.secondary" sx={{ fontFamily: mono, display: 'block', mt: 0.5, fontWeight: 600 }}>
-                    {sim.title2}: <Box component="span" sx={{ color: '#8A6A09' }}>{sim.val2}</Box>
+                    {sim.title2}: <Box component="span" sx={{ color: goldLight }}>{sim.val2}</Box>
                   </Typography>
                 </Box>
               </Box>
 
               {/* Output Display Card */}
-              <Paper sx={{ p: 2.5, bgcolor: '#0B0F19', color: '#10B981', borderRadius: 2, fontFamily: mono, border: '1px solid #1D2939' }}>
-                <Typography variant="caption" sx={{ color: '#D4AF37', display: 'block', mb: 0.5, fontWeight: 800, letterSpacing: '0.04em' }}>
+              <Paper sx={{ p: 2.5, bgcolor: '#0B0F19', color: '#10B981', borderRadius: 2, fontFamily: mono, border: '1px solid #1D2939', borderLeft: `4px solid ${gold}` }}>
+                <Typography variant="caption" sx={{ color: gold, display: 'block', mb: 0.5, fontWeight: 800, letterSpacing: '0.04em' }}>
                   SIMULATED CLOSED-FORM OUTPUT
                 </Typography>
                 <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#10B981', fontFamily: mono, mb: 1 }}>
@@ -482,12 +508,12 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
 
         {/* Right 6/12: System Operational Metrics Table */}
         <Grid size={{ xs: 12, md: 6 }}>
-          <Card sx={{ height: '100%', border: '1px solid #EAECF0', borderRadius: 3, bgcolor: '#FFFFFF', boxShadow: '0 4px 16px rgba(16,24,40,0.03)' }}>
+          <Card sx={{ height: '100%', border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface, boxShadow: dark ? '0 4px 16px rgba(0,0,0,0.35)' : '0 4px 16px rgba(16,24,40,0.03)' }}>
             <CardContent sx={{ p: { xs: 2.5, md: 3.5 }, display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
               <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
-                  <SpeedIcon sx={{ color: '#B8860B', fontSize: '1.4rem' }} />
-                  <Typography variant="h6" sx={{ fontWeight: 800, color: '#101828' }}>
+                  <SpeedIcon sx={{ color: gold, fontSize: '1.4rem' }} />
+                  <Typography variant="h6" sx={{ fontWeight: 800, color: textPrimary }}>
                     System Operational Metrics
                   </Typography>
                 </Box>
@@ -495,19 +521,19 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
                   Recorded execution targets across studio micro-services and local daemons.
                 </Typography>
 
-                <TableContainer component={Paper} elevation={0} sx={{ border: '1px solid #EAECF0', borderRadius: 2 }}>
+                <TableContainer component={Paper} elevation={0} sx={{ border: `1px solid ${divider}`, borderRadius: 2, bgcolor: surface }}>
                   <Table>
-                    <TableHead sx={{ bgcolor: '#F8FAFC' }}>
+                    <TableHead sx={{ bgcolor: dark ? '#14141D' : '#F8FAFC' }}>
                       <TableRow>
-                        <TableCell sx={{ fontWeight: 800, color: '#475467', py: 1.5 }}>Metric Identifier</TableCell>
-                        <TableCell align="right" sx={{ fontWeight: 800, color: '#475467', py: 1.5 }}>Value Target</TableCell>
+                        <TableCell sx={{ fontWeight: 800, color: textSecondary, py: 1.5 }}>Metric Identifier</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: 800, color: textSecondary, py: 1.5 }}>Value Target</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {pillar.metrics.map(([label, val]) => (
                         <TableRow key={label} hover>
-                          <TableCell sx={{ fontSize: '0.88rem', fontWeight: 600, color: '#344054', py: 1.75 }}>{label}</TableCell>
-                          <TableCell align="right" sx={{ fontFamily: mono, fontWeight: 800, color: '#8A6A09', fontSize: '0.88rem', py: 1.75 }}>
+                          <TableCell sx={{ fontSize: '0.88rem', fontWeight: 600, color: textSecondary, py: 1.75 }}>{label}</TableCell>
+                          <TableCell align="right" sx={{ fontFamily: mono, fontWeight: 800, color: goldLight, fontSize: '0.88rem', py: 1.75 }}>
                             {val}
                           </TableCell>
                         </TableRow>
@@ -517,7 +543,7 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
                 </TableContainer>
               </Box>
 
-              <Box sx={{ mt: 3, p: 2, bgcolor: '#F8FAFC', borderRadius: 2, border: '1px solid #EAECF0' }}>
+              <Box sx={{ mt: 3, p: 2, bgcolor: dark ? '#14141D' : '#F8FAFC', borderRadius: 2, border: `1px solid ${divider}` }}>
                 <Typography variant="caption" color="text.secondary" sx={{ display: 'block', fontWeight: 600 }}>
                   ⚡ All metric constraints are validated during local swarm consensus evaluation.
                 </Typography>
@@ -529,27 +555,27 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
       </Grid>
 
       {/* SECTION 3: Production Code Implementation (Full Width - Wide & Un-squished) */}
-      <Card sx={{ border: '1px solid #EAECF0', borderRadius: 3, bgcolor: '#FFFFFF', boxShadow: '0 4px 16px rgba(16,24,40,0.03)' }}>
+      <Card sx={{ border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface, boxShadow: dark ? '0 4px 16px rgba(0,0,0,0.35)' : '0 4px 16px rgba(16,24,40,0.03)' }}>
         <CardContent sx={{ p: { xs: 2.5, md: 4 } }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1.5 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <CodeIcon sx={{ color: '#B8860B', fontSize: '1.6rem' }} />
-              <Typography variant="h5" sx={{ fontWeight: 800, color: '#101828', fontSize: { xs: '1.25rem', md: '1.5rem' } }}>
+              <CodeIcon sx={{ color: gold, fontSize: '1.6rem' }} />
+              <Typography variant="h5" sx={{ fontWeight: 800, color: textPrimary, fontSize: { xs: '1.25rem', md: '1.5rem' } }}>
                 Production Implementation Code
               </Typography>
             </Box>
             <Button
               size="small"
               variant="outlined"
-              startIcon={copiedCode ? <CheckIcon sx={{ color: '#12B76A' }} /> : <ContentCopyIcon />}
+              startIcon={copiedCode ? <CheckIcon sx={{ color: dark ? '#34D399' : '#12B76A' }} /> : <ContentCopyIcon />}
               onClick={handleCopyCodeText}
-              sx={{ borderColor: '#EAECF0', color: '#475467', fontWeight: 700, py: 0.8, px: 2 }}
+              sx={{ borderColor: divider, color: textSecondary, fontWeight: 700, py: 0.8, px: 2 }}
             >
               {copiedCode ? 'Copied Code!' : 'Copy Code'}
             </Button>
           </Box>
 
-          <Paper sx={{ p: { xs: 2.5, md: 3.5 }, bgcolor: '#0F172A', color: '#E2E8F0', borderRadius: 2.5, fontFamily: mono, fontSize: '0.88rem', border: '1px solid #1E293B', boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.5)' }}>
+          <Paper sx={{ p: { xs: 2.5, md: 3.5 }, bgcolor: '#0F172A', color: '#E2E8F0', borderRadius: 2.5, fontFamily: mono, fontSize: '0.88rem', border: '1px solid #1E293B', borderLeft: `4px solid ${gold}`, boxShadow: dark ? 'inset 0 2px 8px rgba(0,0,0,0.5), 0 0 24px -10px rgba(212,175,55,0.3)' : 'inset 0 2px 8px rgba(0,0,0,0.5)' }}>
             <pre style={{ margin: 0, overflowX: 'auto', whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.65 }}>
               {codeExamples[pillar.id]}
             </pre>

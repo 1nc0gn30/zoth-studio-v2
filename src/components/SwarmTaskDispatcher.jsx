@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import { Box, Paper, Typography, TextField, Button, Grid, Chip, LinearProgress, Card, CardContent } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import HubIcon from '@mui/icons-material/Hub';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 export default function SwarmTaskDispatcher() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const goldSoft = isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
   const [prompt, setPrompt] = useState('Build high-throughput E2EE WebSocket proxy with biomorphic memory recall');
   const [running, setRunning] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -39,10 +44,10 @@ export default function SwarmTaskDispatcher() {
   };
 
   return (
-    <Paper sx={{ p: 3, border: '1px solid #EAECF0', mb: 5, bgcolor: '#FFFFFF' }}>
+    <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, mb: 5, bgcolor: theme.palette.background.paper }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-        <Box sx={{ width: 38, height: 38, borderRadius: 1.5, bgcolor: '#FEF9E7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <HubIcon sx={{ color: '#B8860B' }} />
+        <Box sx={{ width: 38, height: 38, borderRadius: 1.5, bgcolor: goldSoft, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <HubIcon sx={{ color: gold }} />
         </Box>
         <Box>
           <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.2 }}>
@@ -75,7 +80,7 @@ export default function SwarmTaskDispatcher() {
         </Button>
       </Box>
 
-      {running && <LinearProgress variant="determinate" value={progress} sx={{ mb: 3, height: 6, borderRadius: 1, '& .MuiLinearProgress-bar': { bgcolor: '#B8860B' } }} />}
+      {running && <LinearProgress variant="determinate" value={progress} sx={{ mb: 3, height: 6, borderRadius: 1, '& .MuiLinearProgress-bar': { bgcolor: gold } }} />}
 
       {/* Step Execution Grid */}
       <Grid container spacing={2}>
@@ -86,8 +91,8 @@ export default function SwarmTaskDispatcher() {
             <Grid size={{ xs: 12 }} key={step.agent}>
               <Card
                 sx={{
-                  border: isCurrent ? '1.5px solid #D4AF37' : '1px solid #EAECF0',
-                  bgcolor: isCurrent ? '#FEF9E7' : isDone ? '#FAFAFA' : '#FFFFFF',
+                  border: isCurrent ? `1.5px solid ${gold}` : `1px solid ${theme.palette.divider}`,
+                  bgcolor: isCurrent ? goldSoft : isDone ? theme.palette.background.paper : theme.palette.background.paper,
                   transition: 'all 0.2s ease-in-out'
                 }}
               >
@@ -97,17 +102,17 @@ export default function SwarmTaskDispatcher() {
                       label={step.agent}
                       size="small"
                       sx={{
-                        bgcolor: isDone ? '#ECFDF3' : isCurrent ? '#FEF3C7' : '#F2F4F7',
-                        color: isDone ? '#12B76A' : isCurrent ? '#D97706' : '#667085',
+                        bgcolor: isDone ? (isDark ? 'rgba(52,211,153,0.16)' : '#ECFDF3') : isCurrent ? (isDark ? 'rgba(217,119,6,0.16)' : '#FEF3C7') : theme.palette.background.paper,
+                                                color: isDone ? (isDark ? '#34D399' : '#12B76A') : isCurrent ? (isDark ? '#F59E0B' : '#D97706') : theme.palette.text.secondary,
                         fontWeight: 700,
                         fontFamily: 'monospace'
                       }}
                     />
-                    <Typography variant="body2" sx={{ fontWeight: isCurrent ? 700 : 500, color: '#101828' }}>
+                    <Typography variant="body2" sx={{ fontWeight: isCurrent ? 700 : 500, color: theme.palette.text.primary }}>
                       {step.action}
                     </Typography>
                   </Box>
-                  <Typography variant="caption" sx={{ fontWeight: 700, color: isDone ? '#12B76A' : isCurrent ? '#D97706' : '#98A2B3', fontFamily: 'monospace' }}>
+                  <Typography variant="caption" sx={{ fontWeight: 700, color: isDone ? '#12B76A' : isCurrent ? '#D97706' : theme.palette.text.secondary, fontFamily: 'monospace' }}>
                     {isDone ? '✔ DONE' : isCurrent ? '⚡ RUNNING' : 'WAITING'}
                   </Typography>
                 </CardContent>

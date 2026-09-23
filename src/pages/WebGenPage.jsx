@@ -24,6 +24,14 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 export default function WebGenPage() {
   const theme = useTheme();
+  const dark = theme.palette.mode === 'dark';
+  const gold = dark ? '#D4AF37' : '#B8860B';
+  const goldLight = dark ? '#F5E6AB' : '#8A6A09';
+  const goldBg = dark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
+  const surface = theme.palette.background.paper;
+  const textPrimary = theme.palette.text.primary;
+  const textSecondary = theme.palette.text.secondary;
+  const divider = theme.palette.divider;
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const [selectedTemplate, setSelectedTemplate] = useState('Sovereign SaaS Dashboard');
@@ -168,7 +176,7 @@ function triggerCompile() {
     >
       <Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
-          <Chip label="LIVE SIMULATED UI CANVAS" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 800, fontSize: '0.7rem' }} />
+          <Chip label="LIVE SIMULATED UI CANVAS" size="small" sx={{ bgcolor: goldBg, color: gold, fontWeight: 800, fontSize: '0.7rem' }} />
           <Typography variant="caption" sx={{ fontFamily: mono, color: '#12B76A' }}>● 60 FPS RENDER</Typography>
         </Box>
 
@@ -217,17 +225,27 @@ function triggerCompile() {
   return (
     <Container maxWidth="xl" sx={{ py: { xs: 3, md: 6 }, pb: { xs: 10, md: 6 } }}>
       
-      {/* Header Section */}
-      <Box sx={{ mb: { xs: 2.5, md: 4 } }}>
+      {/* Header Section — gold radial glow behind header */}
+      <Box
+        sx={{
+          mb: { xs: 2.5, md: 4 },
+          position: 'relative',
+          borderRadius: 3,
+          p: { xs: 2, md: 3 },
+          background: dark
+            ? 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.16) 0%, transparent 70%)'
+            : 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 70%)',
+        }}
+      >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 1 }}>
           <Chip
-            icon={<AutoAwesomeIcon sx={{ color: '#B8860B !important' }} />}
+            icon={<AutoAwesomeIcon sx={{ color: `${gold} !important` }} />}
             label="AUTONOMOUS SITE FOUNDRY"
             size="small"
             sx={{
-              backgroundColor: '#FEF9E7',
-              color: '#B8860B',
-              border: '1px solid #F0E1A8',
+              backgroundColor: goldBg,
+              color: gold,
+              border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`,
               fontWeight: 700,
               px: 1
             }}
@@ -241,7 +259,7 @@ function triggerCompile() {
           )}
         </Box>
         
-        <Typography variant="h3" sx={{ mb: 1, fontWeight: 800, color: '#101828', fontSize: { xs: '2.2rem', sm: '3rem', md: '3.4rem' } }}>
+        <Typography variant="h3" sx={{ mb: 1, fontWeight: 800, color: textPrimary, fontSize: { xs: '2.2rem', sm: '3rem', md: '3.4rem' } }}>
           Autonomous WebGen Foundry
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 800, fontSize: { xs: '0.95rem', md: '1.05rem' } }}>
@@ -282,7 +300,7 @@ function triggerCompile() {
                 borderRadius: 2,
                 '&.Mui-selected': {
                   color: '#FFFFFF',
-                  bgcolor: '#B8860B',
+                  bgcolor: gold,
                   boxShadow: '0 2px 8px rgba(184, 134, 11, 0.4)'
                 }
               },
@@ -304,18 +322,18 @@ function triggerCompile() {
         {(!isMobile || mobileSection === 'prompt' || mobileSection === 'code' || mobileSection === 'preview') && (
           <Grid size={{ xs: 12, md: 8 }}>
             
-            {/* 1. Prompt & Spec Configuration Sandbox */}
+            {/* 1. Prompt & Spec Configuration Sandbox — gold-tinted generator card */}
             {(!isMobile || mobileSection === 'prompt') && (
-              <Paper sx={{ p: { xs: 2.5, sm: 3.5 }, border: '1px solid #EAECF0', borderRadius: 3, mb: 4, backgroundColor: '#FFFFFF' }}>
-                <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.5, display: 'flex', alignItems: 'center', gap: 1, color: '#101828' }}>
-                  <AutoAwesomeIcon sx={{ color: '#B8860B' }} /> Interactive Component Layout Sandbox
+              <Paper sx={{ p: { xs: 2.5, sm: 3.5 }, border: `1px solid ${divider}`, borderRadius: 3, mb: 4, backgroundColor: surface, borderLeft: `4px solid ${gold}`, boxShadow: dark ? '0 0 24px -10px rgba(212,175,55,0.2)' : 'none' }}>
+                <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.5, display: 'flex', alignItems: 'center', gap: 1, color: textPrimary }}>
+                  <AutoAwesomeIcon sx={{ color: gold }} /> Interactive Component Layout Sandbox
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
                   Choose a starter layout template or customize the natural language spec prompt.
                 </Typography>
 
                 {/* Starter Templates */}
-                <Typography variant="caption" sx={{ fontWeight: 800, color: '#475467', mb: 1, display: 'block', letterSpacing: '0.04em' }}>
+                <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1, display: 'block', letterSpacing: '0.04em' }}>
                   STARTER SPEC TEMPLATES
                 </Typography>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
@@ -328,13 +346,13 @@ function triggerCompile() {
                         setPromptText(`Build a sleek ${tpl.name.toLowerCase()} component layout with modern styling.`);
                       }}
                       sx={{
-                        borderColor: selectedTemplate === tpl.name ? '#D4AF37' : '#EAECF0',
-                        backgroundColor: selectedTemplate === tpl.name ? '#FEF9E7' : '#F8FAFC',
-                        color: selectedTemplate === tpl.name ? '#B8860B' : '#475467',
+                        borderColor: selectedTemplate === tpl.name ? gold : divider,
+                        backgroundColor: selectedTemplate === tpl.name ? goldBg : (dark ? '#14141D' : '#F8FAFC'),
+                        color: selectedTemplate === tpl.name ? gold : textSecondary,
                         fontWeight: 700,
                         cursor: 'pointer',
                         border: '1px solid',
-                        '&:hover': { backgroundColor: '#FEF9E7', borderColor: '#D4AF37' }
+                        '&:hover': { backgroundColor: goldBg, borderColor: gold }
                       }}
                     />
                   ))}
@@ -352,7 +370,7 @@ function triggerCompile() {
                 />
 
                 {/* Target Exporter Framework Selector */}
-                <Typography variant="caption" sx={{ fontWeight: 800, color: '#475467', mb: 1, display: 'block', letterSpacing: '0.04em' }}>
+                <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1, display: 'block', letterSpacing: '0.04em' }}>
                   TARGET RUNTIME EXPORTER
                 </Typography>
                 <RadioGroup
@@ -361,10 +379,10 @@ function triggerCompile() {
                   onChange={(e) => setSelectedFramework(e.target.value)}
                   sx={{ mb: 3 }}
                 >
-                  <FormControlLabel value="react-tailwind" control={<Radio sx={{ color: '#B8860B', '&.Mui-checked': { color: '#B8860B' } }} />} label="React + Tailwind" />
-                  <FormControlLabel value="astro" control={<Radio sx={{ color: '#B8860B', '&.Mui-checked': { color: '#B8860B' } }} />} label="Astro MPA" />
-                  <FormControlLabel value="vue" control={<Radio sx={{ color: '#B8860B', '&.Mui-checked': { color: '#B8860B' } }} />} label="Vue 3" />
-                  <FormControlLabel value="html-mui" control={<Radio sx={{ color: '#B8860B', '&.Mui-checked': { color: '#B8860B' } }} />} label="HTML5 / MUI" />
+                  <FormControlLabel value="react-tailwind" control={<Radio sx={{ color: gold, '&.Mui-checked': { color: gold } }} />} label="React + Tailwind" />
+                  <FormControlLabel value="astro" control={<Radio sx={{ color: gold, '&.Mui-checked': { color: gold } }} />} label="Astro MPA" />
+                  <FormControlLabel value="vue" control={<Radio sx={{ color: gold, '&.Mui-checked': { color: gold } }} />} label="Vue 3" />
+                  <FormControlLabel value="html-mui" control={<Radio sx={{ color: gold, '&.Mui-checked': { color: gold } }} />} label="HTML5 / MUI" />
                 </RadioGroup>
 
                 {/* Desktop Action Buttons */}
@@ -383,7 +401,7 @@ function triggerCompile() {
                     variant="outlined"
                     startIcon={<ContentCopyIcon />}
                     onClick={handleCopyCode}
-                    sx={{ borderColor: '#EAECF0', color: '#475467', py: 1.2, fontWeight: 700 }}
+                    sx={{ borderColor: divider, color: textSecondary, py: 1.2, fontWeight: 700 }}
                   >
                     {copied ? 'Copied Code!' : 'Copy Code'}
                   </Button>
@@ -391,7 +409,7 @@ function triggerCompile() {
 
                 {isCompiling && (
                   <Box sx={{ mt: 2.5 }}>
-                    <LinearProgress sx={{ height: 6, borderRadius: 3, '& .MuiLinearProgress-bar': { backgroundColor: '#B8860B' } }} />
+                    <LinearProgress sx={{ height: 6, borderRadius: 3, '& .MuiLinearProgress-bar': { backgroundColor: gold } }} />
                   </Box>
                 )}
               </Paper>
@@ -399,7 +417,7 @@ function triggerCompile() {
 
             {/* 2. Device Viewport Frame Controller & Live Preview / Code Console Window */}
             {(!isMobile || mobileSection === 'code' || mobileSection === 'preview') && (
-              <Paper sx={{ border: '1px solid #EAECF0', borderRadius: 3, overflow: 'hidden', backgroundColor: '#101828', boxShadow: '0 12px 32px rgba(16,24,40,0.12)' }}>
+              <Paper sx={{ border: `1px solid ${divider}`, borderRadius: 3, overflow: 'hidden', backgroundColor: '#101828', boxShadow: '0 12px 32px rgba(16,24,40,0.12)' }}>
                 
                 {/* Console Top Control Bar */}
                 <Box
@@ -463,7 +481,7 @@ function triggerCompile() {
                         textTransform: 'none',
                         '&.Mui-selected': { color: '#FDD663', fontWeight: 700 }
                       },
-                      '& .MuiTabs-indicator': { backgroundColor: '#B8860B' }
+                      '& .MuiTabs-indicator': { backgroundColor: gold }
                     }}
                   >
                     <Tab icon={<CodeIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Generated Code" />
@@ -548,10 +566,10 @@ function triggerCompile() {
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, height: '100%' }}>
               
               {/* Exporter Runtimes */}
-              <Card sx={{ border: '1px solid #EAECF0', borderRadius: 3, bgcolor: '#FFFFFF' }}>
+              <Card sx={{ border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface }}>
                 <CardContent sx={{ p: 3 }}>
-                  <Chip label="TARGET RUNTIMES" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', border: '1px solid #F0E1A8', fontWeight: 700, fontSize: '0.75rem', mb: 1.5 }} />
-                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: '#101828' }}>
+                  <Chip label="TARGET RUNTIMES" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`, fontWeight: 700, fontSize: '0.75rem', mb: 1.5 }} />
+                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: textPrimary }}>
                     Supported Exporters
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
@@ -571,8 +589,8 @@ function triggerCompile() {
                         onClick={() => setSelectedFramework(exp.id)}
                         sx={{
                           p: 1.5,
-                          border: selectedFramework === exp.id ? '1.5px solid #D4AF37' : '1px solid #EAECF0',
-                          bgcolor: selectedFramework === exp.id ? '#FEF9E7' : '#F9FAFB',
+                          border: selectedFramework === exp.id ? `1.5px solid ${gold}` : `1px solid ${divider}`,
+                          bgcolor: selectedFramework === exp.id ? goldBg : (dark ? '#14141D' : '#F9FAFB'),
                           borderRadius: 2,
                           cursor: 'pointer',
                           display: 'flex',
@@ -580,7 +598,7 @@ function triggerCompile() {
                           alignItems: 'center'
                         }}
                       >
-                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#101828', fontSize: '0.85rem' }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: textPrimary, fontSize: '0.85rem' }}>
                           {exp.name}
                         </Typography>
                         <Chip
@@ -590,8 +608,8 @@ function triggerCompile() {
                             height: 20,
                             fontSize: '0.65rem',
                             fontWeight: 800,
-                            bgcolor: selectedFramework === exp.id ? '#B8860B' : '#EAECF0',
-                            color: selectedFramework === exp.id ? '#FFFFFF' : '#475467'
+                            bgcolor: selectedFramework === exp.id ? gold : (dark ? '#26262F' : '#EAECF0'),
+                            color: selectedFramework === exp.id ? '#FFFFFF' : textSecondary
                           }}
                         />
                       </Paper>
@@ -612,10 +630,10 @@ function triggerCompile() {
               </Card>
 
               {/* Spec Registry */}
-              <Card sx={{ border: '1px solid #EAECF0', borderRadius: 3, bgcolor: '#FFFFFF' }}>
+              <Card sx={{ border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface }}>
                 <CardContent sx={{ p: 3 }}>
-                  <Chip label="SPEC MATRIX" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', border: '1px solid #F0E1A8', fontWeight: 700, fontSize: '0.75rem', mb: 1.5 }} />
-                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: '#101828' }}>
+                  <Chip label="SPEC MATRIX" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`, fontWeight: 700, fontSize: '0.75rem', mb: 1.5 }} />
+                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: textPrimary }}>
                     Component Spec Registry
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
@@ -632,18 +650,18 @@ function triggerCompile() {
                         }}
                         sx={{
                           p: 1.5,
-                          border: selectedTemplate === t.name ? '1px solid #D4AF37' : '1px solid #EAECF0',
+                          border: selectedTemplate === t.name ? `1px solid ${gold}` : `1px solid ${divider}`,
                           borderRadius: 2,
-                          bgcolor: selectedTemplate === t.name ? '#FEF9E7' : '#FFFFFF',
+                          bgcolor: selectedTemplate === t.name ? goldBg : surface,
                           cursor: 'pointer',
-                          '&:hover': { bgcolor: '#FEF9E7' }
+                          '&:hover': { bgcolor: goldBg }
                         }}
                       >
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
-                          <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#101828' }}>
+                          <Typography variant="subtitle2" sx={{ fontWeight: 700, color: textPrimary }}>
                             {t.name}
                           </Typography>
-                          <Chip label="SPEC" size="small" sx={{ fontSize: '0.65rem', height: 18, bgcolor: '#F0F9FF', color: '#0284C7', fontWeight: 700 }} />
+                          <Chip label="SPEC" size="small" sx={{ fontSize: '0.65rem', height: 18, bgcolor: dark ? 'rgba(56,189,248,0.16)' : '#F0F9FF', color: dark ? '#38BDF8' : '#0284C7', fontWeight: 700 }} />
                         </Box>
                         <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
                           {t.desc}

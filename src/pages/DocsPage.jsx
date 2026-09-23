@@ -20,6 +20,7 @@ import {
   AccordionSummary,
   AccordionDetails
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import SearchIcon from '@mui/icons-material/Search';
@@ -42,6 +43,16 @@ import ZeroEgressPanel from '../components/ZeroEgressPanel';
 import WorkstationMap from '../components/WorkstationMap';
 
 export default function DocsPage() {
+  const theme = useTheme();
+  const dark = theme.palette.mode === 'dark';
+  const gold = dark ? '#D4AF37' : '#B8860B';
+  const goldLight = dark ? '#F5E6AB' : '#8A6A09';
+  const goldBg = dark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
+  const surface = theme.palette.background.paper;
+  const textPrimary = theme.palette.text.primary;
+  const textSecondary = theme.palette.text.secondary;
+  const divider = theme.palette.divider;
+
   const [copiedIndex, setCopiedIndex] = useState(null);
   const [activeSection, setActiveSection] = useState('sec-1');
   const [searchQuery, setSearchQuery] = useState('');
@@ -110,19 +121,19 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
           <Chip
             label="DOCUMENTATION & TECHNICAL MANUAL"
             size="small"
-            sx={{ bgcolor: '#FEF9E7', color: '#B8860B', border: '1px solid #F0E1A8', fontWeight: 700 }}
+            sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`, fontWeight: 700 }}
           />
           <Chip
-            icon={<HubIcon sx={{ fontSize: '14px !important', color: '#101828' }} />}
+            icon={<HubIcon sx={{ fontSize: '14px !important', color: textPrimary }} />}
             label="24 DECOUPLED MICRO-REPOS"
             size="small"
-            sx={{ bgcolor: '#F2F4F7', color: '#344054', border: '1px solid #D0D5DD', fontWeight: 700 }}
+            sx={{ bgcolor: dark ? '#1A1A24' : '#F2F4F7', color: textSecondary, border: `1px solid ${divider}`, fontWeight: 700 }}
           />
           <Chip
-            icon={<ShieldIcon sx={{ fontSize: '14px !important', color: '#12B76A' }} />}
+            icon={<ShieldIcon sx={{ fontSize: '14px !important', color: dark ? '#34D399' : '#12B76A' }} />}
             label="ZERO CLOUD TELEMETRY"
             size="small"
-            sx={{ bgcolor: '#ECFDF3', color: '#027A48', border: '1px solid #ABE5C6', fontWeight: 700 }}
+            sx={{ bgcolor: dark ? 'rgba(52,211,153,0.16)' : '#ECFDF3', color: dark ? '#34D399' : '#027A48', border: `1px solid ${dark ? 'rgba(52,211,153,0.4)' : '#ABE5C6'}`, fontWeight: 700 }}
           />
         </Box>
 
@@ -143,10 +154,10 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <SearchIcon sx={{ color: '#667085' }} />
+                  <SearchIcon sx={{ color: textSecondary }} />
                 </InputAdornment>
               ),
-              sx: { borderRadius: 9999, bgcolor: '#FFFFFF', boxShadow: '0 1px 3px rgba(16,24,40,0.05)' }
+              sx: { borderRadius: 9999, bgcolor: surface, boxShadow: dark ? '0 1px 3px rgba(0,0,0,0.35)' : '0 1px 3px rgba(16,24,40,0.05)' }
             }}
             size="medium"
           />
@@ -159,8 +170,8 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
         {/* Left Column: Sticky Table of Contents & Quick Command Block */}
         <Grid size={{ xs: 12, md: 4, lg: 3 }}>
           <Box sx={{ position: { md: 'sticky' }, top: 24 }}>
-            <Paper sx={{ p: 3, border: '1px solid #EAECF0', borderRadius: 3, mb: 3 }}>
-              <Typography variant="h6" sx={{ mb: 2, color: '#B8860B', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Paper sx={{ p: 3, border: `1px solid ${divider}`, borderRadius: 3, mb: 3, borderLeft: `4px solid ${gold}`, bgcolor: surface }}>
+              <Typography variant="h6" sx={{ mb: 2, color: gold, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
                 <MenuBookIcon fontSize="small" />
                 Table of Contents
               </Typography>
@@ -190,9 +201,9 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
                       borderRadius: 2,
                       fontSize: '0.85rem',
                       fontWeight: activeSection === item.id ? 700 : 500,
-                      color: activeSection === item.id ? '#B8860B' : '#475467',
-                      bgcolor: activeSection === item.id ? '#FEF9E7' : 'transparent',
-                      '&:hover': { bgcolor: '#F8F9FA' }
+                      color: activeSection === item.id ? gold : textSecondary,
+                      bgcolor: activeSection === item.id ? goldBg : 'transparent',
+                      '&:hover': { bgcolor: dark ? '#1A1A24' : '#F8F9FA' }
                     }}
                   >
                     {item.title}
@@ -202,7 +213,7 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
             </Paper>
 
             {/* Quick Install Widget */}
-            <Paper sx={{ p: 2.5, bgcolor: '#101828', color: '#FDD663', borderRadius: 3 }}>
+            <Paper sx={{ p: 2.5, bgcolor: '#101828', color: '#FDD663', borderRadius: 3, borderLeft: `4px solid ${gold}` }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
                 <Typography variant="caption" sx={{ color: '#81C995', fontWeight: 700, fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace' }}>
                   QUICK INSTALL COMMAND
@@ -227,9 +238,9 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5, '& [id^="sec-"]': { scrollMarginTop: '88px' } }}>
             
             {/* SECTION 1: Sovereign Architecture Overview */}
-            <Paper id="sec-1" sx={{ p: 4, border: '1px solid #EAECF0', borderRadius: 3 }}>
+            <Paper id="sec-1" sx={{ p: 4, border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-                <Chip label="CORE ARCHITECTURE" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
+                <Chip label="CORE ARCHITECTURE" size="small" sx={{ bgcolor: goldBg, color: gold, fontWeight: 700 }} />
                 <Typography variant="h5" sx={{ fontWeight: 700 }}>
                   1. Sovereign Architecture Overview
                 </Typography>
@@ -240,7 +251,7 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
               </Typography>
 
               {/* Visual Architecture Diagram Card */}
-              <Paper sx={{ p: 3, bgcolor: '#0B0F19', color: '#FFFFFF', borderRadius: 3, my: 3, border: '1px solid #1D2939' }}>
+              <Paper sx={{ p: 3, bgcolor: '#0B0F19', color: '#FFFFFF', borderRadius: 3, my: 3, border: '1px solid #1D2939', borderLeft: `4px solid ${gold}` }}>
                 <Typography variant="subtitle2" sx={{ color: '#FDD663', fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace', mb: 2, fontWeight: 700 }}>
                   [SYSTEM TOPOLOGY DIAGRAM]
                 </Typography>
@@ -274,8 +285,8 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
                   { title: 'Zoth OS Sandbox Isolation', desc: 'Virtual machine hypervisor sandbox preventing arbitrary agent execution from host mutation.' }
                 ].map((pillar, idx) => (
                   <Grid size={{ xs: 12, sm: 6 }} key={idx}>
-                    <Box sx={{ p: 2, border: '1px solid #EAECF0', borderRadius: 2, bgcolor: '#F8F9FA' }}>
-                      <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5, color: '#101828' }}>
+                    <Box sx={{ p: 2, border: `1px solid ${divider}`, borderRadius: 2, bgcolor: dark ? '#14141D' : '#F8F9FA' }}>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5, color: textPrimary }}>
                         ✔ {pillar.title}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
@@ -288,10 +299,10 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
             </Paper>
 
             {/* SECTION 2: Decoupled 24 Micro-Repo Directory */}
-            <Paper id="sec-2" sx={{ p: 4, border: '1px solid #EAECF0', borderRadius: 3 }}>
+            <Paper id="sec-2" sx={{ p: 4, border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2, mb: 2 }}>
                 <Box>
-                  <Chip label="MICRO-REPO INDEX" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700, mb: 1 }} />
+                  <Chip label="MICRO-REPO INDEX" size="small" sx={{ bgcolor: goldBg, color: gold, fontWeight: 700, mb: 1 }} />
                   <Typography variant="h5" sx={{ fontWeight: 700 }}>
                     2. Decoupled 24 Micro-Repo Directory ({filteredTools.length})
                   </Typography>
@@ -307,9 +318,9 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
                       onClick={() => setSelectedCategory(cat)}
                       sx={{
                         fontWeight: 600,
-                        bgcolor: selectedCategory === cat ? '#B8860B' : '#F2F4F7',
-                        color: selectedCategory === cat ? '#FFFFFF' : '#344054',
-                        '&:hover': { bgcolor: selectedCategory === cat ? '#856404' : '#E4E7EC' }
+                        bgcolor: selectedCategory === cat ? gold : (dark ? '#1A1A24' : '#F2F4F7'),
+                        color: selectedCategory === cat ? '#FFFFFF' : textSecondary,
+                        '&:hover': { bgcolor: selectedCategory === cat ? (dark ? '#B8860B' : '#856404') : (dark ? '#22222E' : '#E4E7EC') }
                       }}
                     />
                   ))}
@@ -324,16 +335,16 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
               <Grid container spacing={2.5}>
                 {filteredTools.map((tool) => (
                   <Grid size={{ xs: 12, sm: 6 }} key={tool.id}>
-                    <Card sx={{ height: '100%', border: '1px solid #EAECF0', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <Card sx={{ height: '100%', border: `1px solid ${divider}`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', bgcolor: surface }}>
                       <CardContent sx={{ p: 2.5 }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
-                          <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 700, color: '#101828' }}>
+                          <Typography variant="h6" sx={{ fontSize: '1rem', fontWeight: 700, color: textPrimary }}>
                             {tool.name}
                           </Typography>
-                          <Chip label={`v${tool.version}`} size="small" sx={{ bgcolor: '#F0F9FF', color: '#026AA2', fontWeight: 700, fontSize: '0.75rem' }} />
+                          <Chip label={`v${tool.version}`} size="small" sx={{ bgcolor: dark ? 'rgba(56,189,248,0.16)' : '#F0F9FF', color: dark ? '#38BDF8' : '#026AA2', fontWeight: 700, fontSize: '0.75rem' }} />
                         </Box>
 
-                        <Typography variant="caption" sx={{ color: '#B8860B', fontWeight: 700, display: 'block', mb: 1 }}>
+                        <Typography variant="caption" sx={{ color: gold, fontWeight: 700, display: 'block', mb: 1 }}>
                           {tool.category} • {tool.repo}
                         </Typography>
 
@@ -341,7 +352,7 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
                           {tool.description}
                         </Typography>
 
-                        <Paper sx={{ p: 1.5, bgcolor: '#101828', color: '#FDD663', fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace', fontSize: '0.78rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Paper sx={{ p: 1.5, bgcolor: '#101828', color: '#FDD663', fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace', fontSize: '0.78rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderLeft: `3px solid ${gold}` }}>
                           <span>$ {tool.pull}</span>
                           <IconButton
                             size="small"
@@ -359,9 +370,9 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
             </Paper>
 
             {/* SECTION 3: 21 Pantheon Agent Swarm Protocol */}
-            <Paper id="sec-3" sx={{ p: 4, border: '1px solid #EAECF0', borderRadius: 3 }}>
+            <Paper id="sec-3" sx={{ p: 4, border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-                <Chip label="SWARM PROTOCOL" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
+                <Chip label="SWARM PROTOCOL" size="small" sx={{ bgcolor: goldBg, color: gold, fontWeight: 700 }} />
                 <Typography variant="h5" sx={{ fontWeight: 700 }}>
                   3. 21 Pantheon Agent Swarm Protocol
                 </Typography>
@@ -380,7 +391,7 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
                   { stage: 'Stage 4', title: 'SHA-256 Consensus', desc: '3/3 unanimity seals the code payload into local git history with zero telemetry.' }
                 ].map((stg, idx) => (
                   <Grid size={{ xs: 12, sm: 6, md: 3 }} key={idx}>
-                    <Paper sx={{ p: 2, bgcolor: '#F8F9FA', border: '1px solid #EAECF0', textAlign: 'center', height: '100%' }}>
+                    <Paper sx={{ p: 2, bgcolor: dark ? '#14141D' : '#F8F9FA', border: `1px solid ${divider}`, textAlign: 'center', height: '100%' }}>
                       <Chip label={stg.stage} size="small" color="primary" sx={{ mb: 1, fontWeight: 700 }} />
                       <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>{stg.title}</Typography>
                       <Typography variant="caption" color="text.secondary">{stg.desc}</Typography>
@@ -391,9 +402,9 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
             </Paper>
 
             {/* SECTION 4: Signal Bridge & Simplex E2EE */}
-            <Paper id="sec-4" sx={{ p: 4, border: '1px solid #EAECF0', borderRadius: 3 }}>
+            <Paper id="sec-4" sx={{ p: 4, border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-                <Chip label="E2EE NETWORKING" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
+                <Chip label="E2EE NETWORKING" size="small" sx={{ bgcolor: goldBg, color: gold, fontWeight: 700 }} />
                 <Typography variant="h5" sx={{ fontWeight: 700 }}>
                   4. Signal Bridge &amp; Simplex E2EE Protocol
                 </Typography>
@@ -403,7 +414,7 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
                 The Sovereign Agent Signal Bridge provides end-to-end encrypted (E2EE) inter-process communication (IPC) for local agent swarms. Operating over loopback WebSockets without cloud relays, messages are secured using Noise Protocol framework double ratchets.
               </Typography>
 
-              <Paper sx={{ p: 2.5, bgcolor: '#101828', color: '#FDD663', fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace', borderRadius: 2 }}>
+              <Paper sx={{ p: 2.5, bgcolor: '#101828', color: '#FDD663', fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace', borderRadius: 2, borderLeft: `4px solid ${gold}` }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                   <Typography variant="caption" sx={{ color: '#81C995' }}># SIGNAL BRIDGE INITIALIZATION</Typography>
                   <IconButton
@@ -420,9 +431,9 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
             </Paper>
 
             {/* SECTION 5: Argon2id Hardware Vault Specs */}
-            <Paper id="sec-5" sx={{ p: 4, border: '1px solid #EAECF0', borderRadius: 3 }}>
+            <Paper id="sec-5" sx={{ p: 4, border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-                <Chip label="HARDWARE VAULT" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
+                <Chip label="HARDWARE VAULT" size="small" sx={{ bgcolor: goldBg, color: gold, fontWeight: 700 }} />
                 <Typography variant="h5" sx={{ fontWeight: 700 }}>
                   5. Argon2id Hardware Vault Specs
                 </Typography>
@@ -432,7 +443,7 @@ azoth-local-agent and hexstrike-arsenal are not published. The CLI refuses those
                 Local secret storage uses Argon2id key derivation combined with AES-256-GCM authenticated payload encryption. Credentials and API tokens are decrypted in-memory only during tool invocation and wiped immediately after.
               </Typography>
 
-              <Paper sx={{ p: 2.5, bgcolor: '#0B0F19', color: '#81C995', fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace', borderRadius: 2, border: '1px solid #1D2939' }}>
+              <Paper sx={{ p: 2.5, bgcolor: '#0B0F19', color: '#81C995', fontFamily: '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace', borderRadius: 2, border: '1px solid #1D2939', borderLeft: `4px solid ${gold}` }}>
                 <pre style={{ margin: 0, fontSize: '0.85rem', lineHeight: 1.5 }}>{`// Local Hardware Vault Initialization Code
 import { EnvGuardVault } from 'envguard-secrets-vault';
 
@@ -448,9 +459,9 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}</pre>
             </Paper>
 
             {/* SECTION 6: Zoth OS VM Setup */}
-            <Paper id="sec-6" sx={{ p: 4, border: '1px solid #EAECF0', borderRadius: 3 }}>
+            <Paper id="sec-6" sx={{ p: 4, border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-                <Chip label="VIRTUAL MACHINE" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
+                <Chip label="VIRTUAL MACHINE" size="small" sx={{ bgcolor: goldBg, color: gold, fontWeight: 700 }} />
                 <Typography variant="h5" sx={{ fontWeight: 700 }}>
                   6. Zoth OS VM Setup &amp; USB Booting
                 </Typography>
@@ -460,7 +471,7 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}</pre>
                 Zoth OS can be booted from a physical USB drive for full hardware isolation or run inside QEMU/KVM virtual machine instances.
               </Typography>
 
-              <Accordion sx={{ border: '1px solid #EAECF0', borderRadius: '8px !important', mb: 1, '&:before': { display: 'none' } }}>
+              <Accordion sx={{ border: `1px solid ${divider}`, borderRadius: '8px !important', mb: 1, '&:before': { display: 'none' }, bgcolor: surface }}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>QEMU / KVM Hypervisor Quick Start</Typography>
                 </AccordionSummary>
@@ -471,7 +482,7 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}</pre>
                 </AccordionDetails>
               </Accordion>
 
-              <Accordion sx={{ border: '1px solid #EAECF0', borderRadius: '8px !important', '&:before': { display: 'none' } }}>
+              <Accordion sx={{ border: `1px solid ${divider}`, borderRadius: '8px !important', '&:before': { display: 'none' }, bgcolor: surface }}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>Local Memory Daemon API RPC Reference</Typography>
                 </AccordionSummary>
@@ -484,9 +495,9 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}</pre>
             </Paper>
 
             {/* SECTION 7: Interactive CLI Command Cheat Sheet & Audit */}
-            <Paper id="sec-7" sx={{ p: 4, border: '1px solid #EAECF0', borderRadius: 3 }}>
+            <Paper id="sec-7" sx={{ p: 4, border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-                <Chip label="TERMINAL AUDIT" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700 }} />
+                <Chip label="TERMINAL AUDIT" size="small" sx={{ bgcolor: goldBg, color: gold, fontWeight: 700 }} />
                 <Typography variant="h5" sx={{ fontWeight: 700 }}>
                   7. CLI Command Cheat Sheet &amp; Health Audit
                 </Typography>
@@ -497,7 +508,7 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}</pre>
               </Typography>
 
               {/* Terminal Window */}
-              <Paper sx={{ bgcolor: '#0D1117', color: '#C9D1D9', borderRadius: 3, overflow: 'hidden', border: '1px solid #30363D' }}>
+              <Paper sx={{ bgcolor: '#0D1117', color: '#C9D1D9', borderRadius: 3, overflow: 'hidden', border: '1px solid #30363D', borderLeft: `4px solid ${gold}` }}>
                 <Box sx={{ px: 2.5, py: 1.5, bgcolor: '#161B22', borderBottom: '1px solid #30363D', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#FF5F56' }} />
@@ -540,8 +551,8 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}</pre>
               </Paper>
             </Paper>
 
-            <Paper id="sec-math" sx={{ p: { xs: 2.5, md: 4 }, border: '1px solid #EAECF0', borderRadius: 3 }}>
-              <Chip label="MATH ACADEMY & DEDICATED DOC PAGES" size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700, mb: 1.5 }} />
+            <Paper id="sec-math" sx={{ p: { xs: 2.5, md: 4 }, border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface }}>
+              <Chip label="MATH ACADEMY & DEDICATED DOC PAGES" size="small" sx={{ bgcolor: goldBg, color: gold, fontWeight: 700, mb: 1.5 }} />
               <Typography variant="h5" sx={{ fontWeight: 750, mb: 1 }}>
                 8. Six Math Pillars Technical Reference
               </Typography>
@@ -565,10 +576,10 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}</pre>
                     href={`/docs/math/${p.id}`}
                     sx={{
                       fontWeight: 700,
-                      bgcolor: '#FEF9E7',
-                      color: '#8A6A09',
-                      border: '1px solid #F0E1A8',
-                      '&:hover': { bgcolor: '#B8860B', color: '#FFFFFF' }
+                      bgcolor: goldBg,
+                      color: goldLight,
+                      border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`,
+                      '&:hover': { bgcolor: gold, color: '#FFFFFF' }
                     }}
                   />
                 ))}
@@ -576,14 +587,14 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}</pre>
               <MathPillarsGrid />
             </Paper>
 
-            <Paper id="sec-egress" sx={{ p: { xs: 2.5, md: 4 }, border: '1px solid #EAECF0', borderRadius: 3 }}>
+            <Paper id="sec-egress" sx={{ p: { xs: 2.5, md: 4 }, border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface }}>
               <Typography variant="h5" sx={{ fontWeight: 750, mb: 2 }}>
                 9. Zero-Egress Enclave
               </Typography>
               <ZeroEgressPanel embedded />
             </Paper>
 
-            <Paper sx={{ p: { xs: 2.5, md: 4 }, border: '1px solid #EAECF0', borderRadius: 3 }}>
+            <Paper sx={{ p: { xs: 2.5, md: 4 }, border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface }}>
               <Typography variant="h5" sx={{ fontWeight: 750, mb: 2 }}>
                 10. Legacy Workstation Map
               </Typography>

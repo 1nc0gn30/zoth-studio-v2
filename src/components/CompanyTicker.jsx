@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Paper, Typography, Chip, Tooltip } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 // Real SVG Logos for Industry AI Engines & Frameworks
 const SvgLogos = {
@@ -172,24 +173,29 @@ const partners = [
 ];
 
 export default function CompanyTicker() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const goldSoft = isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
+  const goldBorder = isDark ? 'rgba(212,175,55,0.42)' : '#F0E1A8';
   return (
     <Paper
       elevation={0}
       sx={{
         py: 2.5,
         px: 3,
-        border: '1px solid #EAECF0',
+        border: `1px solid ${theme.palette.divider}`,
         borderRadius: 2,
-        bgcolor: '#FAFAFA',
+        bgcolor: theme.palette.background.paper,
         mb: 6,
         overflow: 'hidden'
       }}
     >
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
-        <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#101828', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Typography variant="subtitle2" sx={{ fontWeight: 800, color: theme.palette.text.primary, letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: 1 }}>
           ⚡ POWERED BY INDUSTRY-LEADING AI ENGINES, AGENT FRAMEWORKS &amp; COMPUTE
         </Typography>
-        <Chip label={`${partners.length} INTEGRATED AI &amp; DEV PARTNERS`} size="small" sx={{ bgcolor: '#FEF9E7', color: '#B8860B', fontWeight: 700, fontSize: '0.75rem', border: '1px solid #F0E1A8' }} />
+        <Chip label={`${partners.length} INTEGRATED AI &amp; DEV PARTNERS`} size="small" sx={{ bgcolor: goldSoft, color: gold, fontWeight: 700, fontSize: '0.75rem', border: `1px solid ${goldBorder}` }} />
       </Box>
 
       {/* Clickable Partners Carousel Grid */}
@@ -201,7 +207,7 @@ export default function CompanyTicker() {
           py: 1,
           px: 0.5,
           '&::-webkit-scrollbar': { height: 6 },
-          '&::-webkit-scrollbar-thumb': { bgcolor: '#D4AF37', borderRadius: 3 }
+          '&::-webkit-scrollbar-thumb': { bgcolor: gold, borderRadius: 3 }
         }}
       >
         {partners.map((p) => (
@@ -218,14 +224,14 @@ export default function CompanyTicker() {
                 px: 2,
                 py: 1.2,
                 borderRadius: 2,
-                border: '1px solid #EAECF0',
-                bgcolor: '#FFFFFF',
+                border: `1px solid ${theme.palette.divider}`,
+                bgcolor: theme.palette.background.paper,
                 textDecoration: 'none',
-                color: '#101828',
+                color: theme.palette.text.primary,
                 transition: 'all 0.2s ease-in-out',
                 flexShrink: 0,
                 '&:hover': {
-                  borderColor: p.color || '#D4AF37',
+                  borderColor: p.color || gold,
                   boxShadow: `0 4px 14px ${p.color}33`,
                   transform: 'translateY(-2px)'
                 }
@@ -236,8 +242,8 @@ export default function CompanyTicker() {
                   width: 32,
                   height: 32,
                   borderRadius: 1.5,
-                  bgcolor: '#F8FAFC',
-                  border: '1px solid #F1F5F9',
+                  bgcolor: isDark ? 'rgba(212,175,55,0.10)' : '#F8FAFC',
+                  border: `1px solid ${isDark ? 'rgba(212,175,55,0.20)' : '#F1F5F9'}`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -247,10 +253,10 @@ export default function CompanyTicker() {
                 {SvgLogos[p.logoKey]}
               </Box>
               <Box>
-                <Typography variant="subtitle2" sx={{ fontWeight: 800, fontSize: '0.85rem', lineHeight: 1.2, color: '#101828' }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 800, fontSize: '0.85rem', lineHeight: 1.2, color: theme.palette.text.primary }}>
                   {p.name}
                 </Typography>
-                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem', display: 'block', color: '#64748B' }}>
+                <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.7rem', display: 'block', color: theme.palette.text.secondary }}>
                   {p.category}
                 </Typography>
               </Box>

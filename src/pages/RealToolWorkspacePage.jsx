@@ -4,6 +4,7 @@ import {
   Box, Container, Typography, Paper, Chip, Button, Grid, Stack, TextField,
   Divider, Card, CardContent, Tabs, Tab, Alert, IconButton, Slider, LinearProgress
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import FlashOnIcon from '@mui/icons-material/FlashOn';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -19,12 +20,30 @@ import { microTools } from '../data/toolsData';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 /* ==========================================================================
+   THEME-AWARE COLOR HELPERS
+   ========================================================================== */
+const gold = (t) => (t.palette.mode === 'dark' ? '#D4AF37' : '#B8860B');
+const goldSoft = (t) => (t.palette.mode === 'dark' ? '#F5E6AB' : '#8A6A09');
+const goldBg = (t) => (t.palette.mode === 'dark' ? 'rgba(212,175,55,0.16)' : '#FEF9E7');
+const goldBorder = (t) => (t.palette.mode === 'dark' ? 'rgba(212,175,55,0.42)' : '#F5E6AB');
+const darkPanel = (t) => (t.palette.mode === 'dark' ? '#0B0B12' : '#0F172A');
+const darkPanelBorder = (t) => (t.palette.mode === 'dark' ? '#2A2A38' : '#1E293B');
+const successBg = (t) => (t.palette.mode === 'dark' ? 'rgba(18,183,106,0.16)' : '#ECFDF3');
+const successFg = (t) => (t.palette.mode === 'dark' ? '#34D399' : '#027A48');
+const errorBg = (t) => (t.palette.mode === 'dark' ? 'rgba(244,63,94,0.16)' : '#FEF3F2');
+const errorFg = (t) => (t.palette.mode === 'dark' ? '#F87171' : '#B42318');
+const chipNeutralBg = (t) => (t.palette.mode === 'dark' ? '#1A1A24' : '#F2F4F7');
+const chipNeutralFg = (t) => (t.palette.mode === 'dark' ? '#EDEFF2' : '#101828');
+const tabsBg = (t) => (t.palette.mode === 'dark' ? '#12121A' : '#F9FAFB');
+
+/* ==========================================================================
    TOOL 1: JWT Inspector Guard (Real Live JWT Decoder & Security Validator)
    ========================================================================== */
 function JwtInspectorTool() {
-  const sampleAdmin = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6b3RoLXNvdnJlaWduLXVzZXIiLCJuYW1lIjoiQXpvdGggQ29tbWFuZGVyIiwiaWF0IjoxNzg5OTkwMDAwLCJleHAiOjE4OTEwMDAwMDAsInJvbGUiOiJhZG1pbiIsInRlbmFudCI6Im51bGxhaS1sb2NhbCJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
-  const sampleUser = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyLTEwOSIsIm5hbWUiOiJTYW5kYm94IFVzZXIiLCJyb2xlIjoidXNlciIsImlhdCI6MTc4OTk5MDAwMH0.signature';
-  const sampleNone = 'eyJhbGciOiJub25lIiwidHlwZSI6IkpXVCJ9.eyJzdWIiOiJ1bmF1dGhlbnRpY2F0ZWQiLCJyb2xlIjoiZ3Vlc3QifQ.';
+  const theme = useTheme();
+  const sampleAdmin = 'eyJhbG...sw5c';
+  const sampleUser = 'eyJhbG...ture';
+  const sampleNone = 'eyJhbG...QifQ.';
 
   const [token, setToken] = useState(sampleAdmin);
   const [copied, setCopied] = useState(false);
@@ -64,27 +83,27 @@ function JwtInspectorTool() {
         value={token}
         onChange={(e) => setToken(e.target.value)}
         placeholder="Paste JWT token (header.payload.signature)..."
-        sx={{ mb: 3, bgcolor: '#FFFFFF', fontFamily: mono }}
+        sx={{ mb: 3, bgcolor: theme.palette.background.paper, fontFamily: mono }}
       />
 
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 6 }}>
-          <Paper sx={{ p: 3, border: '1px solid #EAECF0', borderRadius: 2, height: '100%' }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#B8860B', mb: 1.5 }}>
+          <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, height: '100%', bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold(theme), mb: 1.5 }}>
               Decoded Header (Algorithm &amp; Token Type)
             </Typography>
-            <Paper sx={{ p: 2, bgcolor: '#0F172A', color: '#F5E6AB', fontFamily: mono, fontSize: '0.85rem', whiteSpace: 'pre-wrap', borderRadius: 1.5 }}>
+            <Paper sx={{ p: 2, bgcolor: darkPanel(theme), color: '#F5E6AB', fontFamily: mono, fontSize: '0.85rem', whiteSpace: 'pre-wrap', borderRadius: 1.5, border: `1px solid ${darkPanelBorder(theme)}` }}>
               {isValid ? JSON.stringify(header, null, 2) : '// Invalid JWT Header Format'}
             </Paper>
           </Paper>
         </Grid>
 
         <Grid size={{ xs: 12, md: 6 }}>
-          <Paper sx={{ p: 3, border: '1px solid #EAECF0', borderRadius: 2, height: '100%' }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#B8860B', mb: 1.5 }}>
+          <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, height: '100%', bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold(theme), mb: 1.5 }}>
               Decoded Payload Claims
             </Typography>
-            <Paper sx={{ p: 2, bgcolor: '#0F172A', color: '#F8FAFC', fontFamily: mono, fontSize: '0.85rem', whiteSpace: 'pre-wrap', borderRadius: 1.5 }}>
+            <Paper sx={{ p: 2, bgcolor: darkPanel(theme), color: '#F8FAFC', fontFamily: mono, fontSize: '0.85rem', whiteSpace: 'pre-wrap', borderRadius: 1.5, border: `1px solid ${darkPanelBorder(theme)}` }}>
               {isValid ? JSON.stringify(payload, null, 2) : '// Invalid JWT Payload Format'}
             </Paper>
           </Paper>
@@ -92,14 +111,14 @@ function JwtInspectorTool() {
       </Grid>
 
       {isValid && (
-        <Box sx={{ mt: 3, p: 3, bgcolor: '#FEF9E7', border: '1px solid #F5E6AB', borderRadius: 2 }}>
-          <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#8A6A09', mb: 1.5 }}>
+        <Box sx={{ mt: 3, p: 3, bgcolor: goldBg(theme), border: `1px solid ${goldBorder(theme)}`, borderRadius: 2 }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 800, color: goldSoft(theme), mb: 1.5 }}>
             Security Audit &amp; Claims Matrix
           </Typography>
           <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
-            <Chip label={`Algorithm: ${header.alg || 'none'}`} size="small" sx={{ bgcolor: header.alg === 'none' ? '#FEF3F2' : '#FFFFFF', color: header.alg === 'none' ? '#B42318' : '#101828', fontWeight: 800 }} />
-            <Chip label={signature ? 'Signature Verified Structure' : 'UNSIGNED TOKEN (VULNERABILITY)'} size="small" sx={{ bgcolor: signature ? '#ECFDF3' : '#FEF3F2', color: signature ? '#027A48' : '#B42318', fontWeight: 800 }} />
-            <Chip label={`Claims Count: ${Object.keys(payload).length}`} size="small" sx={{ bgcolor: '#FFFFFF', fontWeight: 750, color: '#8A6A09' }} />
+            <Chip label={`Algorithm: ${header.alg || 'none'}`} size="small" sx={{ bgcolor: header.alg === 'none' ? errorBg(theme) : theme.palette.background.paper, color: header.alg === 'none' ? errorFg(theme) : theme.palette.text.primary, fontWeight: 800 }} />
+            <Chip label={signature ? 'Signature Verified Structure' : 'UNSIGNED TOKEN (VULNERABILITY)'} size="small" sx={{ bgcolor: signature ? successBg(theme) : errorBg(theme), color: signature ? successFg(theme) : errorFg(theme), fontWeight: 800 }} />
+            <Chip label={`Claims Count: ${Object.keys(payload).length}`} size="small" sx={{ bgcolor: theme.palette.background.paper, fontWeight: 750, color: goldSoft(theme) }} />
           </Box>
         </Box>
       )}
@@ -111,6 +130,7 @@ function JwtInspectorTool() {
    TOOL 2: Payload Entropy Studio (Real Shannon Entropy & Byte Frequency Visualizer)
    ========================================================================== */
 function PayloadEntropyTool() {
+  const theme = useTheme();
   const [text, setText] = useState('function executePayload(buffer) { return crypto.subtle.digest("SHA-256", buffer); }');
 
   const bytes = new TextEncoder().encode(text || '');
@@ -144,22 +164,22 @@ function PayloadEntropyTool() {
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Paste source code, binary string, or web payload..."
-        sx={{ mb: 3, bgcolor: '#FFFFFF', fontFamily: mono }}
+        sx={{ mb: 3, bgcolor: theme.palette.background.paper, fontFamily: mono }}
       />
 
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 5 }}>
-          <Paper sx={{ p: 3, border: '1px solid #EAECF0', borderRadius: 2, height: '100%', bgcolor: '#FCFCFD' }}>
+          <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, height: '100%', bgcolor: theme.palette.background.paper }}>
             <Typography className="section-kicker">Calculated Metric</Typography>
-            <Typography variant="h3" sx={{ fontWeight: 800, color: '#101828', mb: 1 }}>
+            <Typography variant="h3" sx={{ fontWeight: 800, color: theme.palette.text.primary, mb: 1 }}>
               {entropy.toFixed(3)} <Typography component="span" variant="body1" color="text.secondary">bits/byte</Typography>
             </Typography>
             <Chip
               label={`Risk Assessment: ${risk}`}
               size="small"
               sx={{
-                bgcolor: entropy > 7.2 ? '#FEF3F2' : entropy > 5.5 ? '#FEF9E7' : '#ECFDF3',
-                color: entropy > 7.2 ? '#B42318' : entropy > 5.5 ? '#8A6A09' : '#027A48',
+                bgcolor: entropy > 7.2 ? errorBg(theme) : entropy > 5.5 ? goldBg(theme) : successBg(theme),
+                color: entropy > 7.2 ? errorFg(theme) : entropy > 5.5 ? goldSoft(theme) : successFg(theme),
                 fontWeight: 800,
                 mt: 1.5,
                 p: 0.5
@@ -169,25 +189,25 @@ function PayloadEntropyTool() {
         </Grid>
 
         <Grid size={{ xs: 12, md: 7 }}>
-          <Paper sx={{ p: 3, border: '1px solid #EAECF0', borderRadius: 2, height: '100%' }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#8A6A09', mb: 2 }}>
+          <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, height: '100%', bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: goldSoft(theme), mb: 2 }}>
               Byte Composition Breakdown
             </Typography>
-            
+
             <Box sx={{ mb: 2 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', mb: 0.5 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', mb: 0.5, color: theme.palette.text.primary }}>
                 <span>Printable ASCII Bytes (32-126):</span>
                 <strong>{printableCount} ({bytes.length ? Math.round((printableCount / bytes.length) * 100) : 0}%)</strong>
               </Box>
-              <LinearProgress variant="determinate" value={bytes.length ? (printableCount / bytes.length) * 100 : 0} sx={{ height: 8, borderRadius: 1, bgcolor: '#EAECF0', '& .MuiLinearProgress-bar': { bgcolor: '#B8860B' } }} />
+              <LinearProgress variant="determinate" value={bytes.length ? (printableCount / bytes.length) * 100 : 0} sx={{ height: 8, borderRadius: 1, bgcolor: theme.palette.divider, '& .MuiLinearProgress-bar': { bgcolor: gold(theme) } }} />
             </Box>
 
             <Box>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', mb: 0.5 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', mb: 0.5, color: theme.palette.text.primary }}>
                 <span>Non-Printable / Control Bytes:</span>
                 <strong>{nonPrintableCount} ({bytes.length ? Math.round((nonPrintableCount / bytes.length) * 100) : 0}%)</strong>
               </Box>
-              <LinearProgress variant="determinate" value={bytes.length ? (nonPrintableCount / bytes.length) * 100 : 0} sx={{ height: 8, borderRadius: 1, bgcolor: '#EAECF0', '& .MuiLinearProgress-bar': { bgcolor: '#101828' } }} />
+              <LinearProgress variant="determinate" value={bytes.length ? (nonPrintableCount / bytes.length) * 100 : 0} sx={{ height: 8, borderRadius: 1, bgcolor: theme.palette.divider, '& .MuiLinearProgress-bar': { bgcolor: theme.palette.text.primary } }} />
             </Box>
           </Paper>
         </Grid>
@@ -200,6 +220,7 @@ function PayloadEntropyTool() {
    TOOL 3: Polyglot Framework Exporter (Real React -> Vue 3, Svelte 5, Solid.js Transpiler)
    ========================================================================== */
 function PolyglotFrameworkTool() {
+  const theme = useTheme();
   const [jsx, setJsx] = useState('<button onClick={() => alert("Zoth Studio")}>Click Me</button>');
   const [tab, setTab] = useState(0);
   const [copied, setCopied] = useState(false);
@@ -240,16 +261,16 @@ export function App() {
         minRows={3}
         value={jsx}
         onChange={(e) => setJsx(e.target.value)}
-        sx={{ mb: 3, bgcolor: '#FFFFFF', fontFamily: mono }}
+        sx={{ mb: 3, bgcolor: theme.palette.background.paper, fontFamily: mono }}
       />
 
-      <Paper sx={{ border: '1px solid #EAECF0', borderRadius: 2, overflow: 'hidden' }}>
-        <Tabs value={tab} onChange={(e, val) => setTab(val)} sx={{ bgcolor: '#F9FAFB', borderBottom: '1px solid #EAECF0' }}>
+      <Paper sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 2, overflow: 'hidden', bgcolor: theme.palette.background.paper }}>
+        <Tabs value={tab} onChange={(e, val) => setTab(val)} sx={{ bgcolor: tabsBg(theme), borderBottom: `1px solid ${theme.palette.divider}` }}>
           <Tab label="Vue 3 (Composition API)" sx={{ fontWeight: 750 }} />
           <Tab label="Svelte 5 ($state)" sx={{ fontWeight: 750 }} />
           <Tab label="Solid.js (Signals)" sx={{ fontWeight: 750 }} />
         </Tabs>
-        <Box sx={{ p: 3, bgcolor: '#0F172A', position: 'relative' }}>
+        <Box sx={{ p: 3, bgcolor: darkPanel(theme), position: 'relative' }}>
           <Button
             size="small"
             variant="contained"
@@ -298,9 +319,10 @@ function useAnimationLoop(fn) {
 }
 
 function ControlPanel({ title, children }) {
+  const theme = useTheme();
   return (
-    <Paper sx={{ p: 3, border: '1px solid #EAECF0', borderRadius: 2, height: '100%' }}>
-      <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#8A6A09', mb: 2 }}>
+    <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, height: '100%', bgcolor: theme.palette.background.paper }}>
+      <Typography variant="subtitle2" sx={{ fontWeight: 800, color: goldSoft(theme), mb: 2 }}>
         {title}
       </Typography>
       {children}
@@ -332,6 +354,7 @@ function shade(hex, amt) {
    TOOL 4A: UFO Sacred Geometry — animated Flower of Life (7 ring sacred geometry)
    ========================================================================== */
 function SacredGeometryTool() {
+  const theme = useTheme();
   const canvasRef = useRef(null);
   const [color, setColor] = useState('#B8860B');
   const [speed, setSpeed] = useState(1.2);
@@ -348,7 +371,7 @@ function SacredGeometryTool() {
     const cx = W / 2, cy = H / 2;
 
     ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = '#0F172A';
+    ctx.fillStyle = darkPanel(theme);
     ctx.fillRect(0, 0, W, H);
 
     const pulse = 1 + 0.03 * Math.sin(t * 2);
@@ -413,30 +436,30 @@ function SacredGeometryTool() {
     <Box sx={{ mt: 1 }}>
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 7 }}>
-          <Paper sx={{ p: 2, bgcolor: '#0F172A', borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
             <canvas ref={canvasRef} width={520} height={360} style={{ width: '100%', maxHeight: 360, borderRadius: 8 }} />
           </Paper>
-          <Typography variant="caption" sx={{ color: '#475467', mt: 1, display: 'block', textAlign: 'center' }}>
+          <Typography variant="caption" sx={{ color: theme.palette.text.secondary, mt: 1, display: 'block', textAlign: 'center' }}>
             Flower of Life · 7 overlapping rings (6 petals + center) · animated
           </Typography>
         </Grid>
         <Grid size={{ xs: 12, md: 5 }}>
           <ControlPanel title="Geometry Controls">
             <Box sx={{ mb: 2.5 }}>
-              <Typography variant="caption" sx={{ fontWeight: 750, color: '#475467', mb: 1, display: 'block' }}>
+              <Typography variant="caption" sx={{ fontWeight: 750, color: theme.palette.text.secondary, mb: 1, display: 'block' }}>
                 Rotation Speed
               </Typography>
               <Slider size="small" min={0} max={4} step={0.1} value={speed} onChange={(e, v) => setSpeed(v)} />
             </Box>
             <Box sx={{ mb: 2.5 }}>
-              <Chip label={spokes ? 'Show Harmonic Rays' : 'Reveal Harmonic Rays'} size="small" onClick={() => setSpokes(!spokes)} clickable sx={{ fontWeight: 750, bgcolor: spokes ? '#B8860B' : '#F2F4F7', color: spokes ? '#FFF' : '#101828' }} />
+              <Chip label={spokes ? 'Show Harmonic Rays' : 'Reveal Harmonic Rays'} size="small" onClick={() => setSpokes(!spokes)} clickable sx={{ fontWeight: 750, bgcolor: spokes ? gold(theme) : chipNeutralBg(theme), color: spokes ? '#FFF' : chipNeutralFg(theme) }} />
             </Box>
-            <Typography variant="caption" sx={{ fontWeight: 750, color: '#475467', mb: 1, display: 'block' }}>
+            <Typography variant="caption" sx={{ fontWeight: 750, color: theme.palette.text.secondary, mb: 1, display: 'block' }}>
               Golden Ratio Hue
             </Typography>
             <Stack direction="row" spacing={1}>
               {palettes.map((c) => (
-                <Box key={c} onClick={() => setColor(c)} sx={{ width: 30, height: 30, borderRadius: '50%', bgcolor: c, cursor: 'pointer', border: color === c ? '3px solid #101828' : '1px solid #EAECF0' }} />
+                <Box key={c} onClick={() => setColor(c)} sx={{ width: 30, height: 30, borderRadius: '50%', bgcolor: c, cursor: 'pointer', border: color === c ? `3px solid ${theme.palette.text.primary}` : `1px solid ${theme.palette.divider}` }} />
               ))}
             </Stack>
           </ControlPanel>
@@ -450,6 +473,7 @@ function SacredGeometryTool() {
    TOOL 4B: 3D Badge & Coin Generator — editable inscription metallic medallion
    ========================================================================== */
 function CoinGeneratorTool() {
+  const theme = useTheme();
   const canvasRef = useRef(null);
   const [text, setText] = useState('ZOTH');
   const [rim, setRim] = useState(26);
@@ -471,7 +495,7 @@ function CoinGeneratorTool() {
     const baseCol = metals[metal];
 
     ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = '#0F172A';
+    ctx.fillStyle = darkPanel(theme);
     ctx.fillRect(0, 0, W, H);
 
     // Floor shadow
@@ -579,33 +603,33 @@ function CoinGeneratorTool() {
     <Box sx={{ mt: 1 }}>
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 7 }}>
-          <Paper sx={{ p: 2, bgcolor: '#0F172A', borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
             <canvas ref={canvasRef} width={520} height={360} style={{ width: '100%', maxHeight: 360, borderRadius: 8 }} />
           </Paper>
-          <Typography variant="caption" sx={{ color: '#475467', mt: 1, display: 'block', textAlign: 'center' }}>
+          <Typography variant="caption" sx={{ color: theme.palette.text.secondary, mt: 1, display: 'block', textAlign: 'center' }}>
             Metallic medallion · editable inscription + rim depth + alloy
           </Typography>
         </Grid>
         <Grid size={{ xs: 12, md: 5 }}>
           <ControlPanel title="Coin &amp; Medallion">
             <Box sx={{ mb: 2.5 }}>
-              <Typography variant="caption" sx={{ fontWeight: 750, color: '#475467', mb: 1, display: 'block' }}>
+              <Typography variant="caption" sx={{ fontWeight: 750, color: theme.palette.text.secondary, mb: 1, display: 'block' }}>
                 Coin Inscription Text
               </Typography>
-              <TextField fullWidth size="small" value={text} onChange={(e) => setText(e.target.value)} sx={{ bgcolor: '#FFFFFF' }} />
+              <TextField fullWidth size="small" value={text} onChange={(e) => setText(e.target.value)} sx={{ bgcolor: theme.palette.background.paper }} />
             </Box>
             <Box sx={{ mb: 2.5 }}>
-              <Typography variant="caption" sx={{ fontWeight: 750, color: '#475467', mb: 1, display: 'block' }}>
+              <Typography variant="caption" sx={{ fontWeight: 750, color: theme.palette.text.secondary, mb: 1, display: 'block' }}>
                 Rim / Thickness ({rim}px)
               </Typography>
               <Slider size="small" min={10} max={56} value={rim} onChange={(e, v) => setRim(v)} />
             </Box>
-            <Typography variant="caption" sx={{ fontWeight: 750, color: '#475467', mb: 1, display: 'block' }}>
+            <Typography variant="caption" sx={{ fontWeight: 750, color: theme.palette.text.secondary, mb: 1, display: 'block' }}>
               Metal Alloy
             </Typography>
             <Stack direction="row" spacing={1}>
               {metals.map((c, i) => (
-                <Box key={c} onClick={() => setMetal(i)} sx={{ width: 30, height: 30, borderRadius: '50%', bgcolor: c, cursor: 'pointer', border: metal === i ? '3px solid #101828' : '1px solid #EAECF0' }} />
+                <Box key={c} onClick={() => setMetal(i)} sx={{ width: 30, height: 30, borderRadius: '50%', bgcolor: c, cursor: 'pointer', border: metal === i ? `3px solid ${theme.palette.text.primary}` : `1px solid ${theme.palette.divider}` }} />
               ))}
             </Stack>
           </ControlPanel>
@@ -619,6 +643,7 @@ function CoinGeneratorTool() {
    TOOL 4C: Nexus 3D Scene Studio — draggable wireframe cube with size control
    ========================================================================== */
 function Nexus3DTool() {
+  const theme = useTheme();
   const canvasRef = useRef(null);
   const [size, setSize] = useState(90);
   const [ghostFrame, setGhostFrame] = useState(2);
@@ -636,7 +661,7 @@ function Nexus3DTool() {
     const cx = W / 2, cy = H / 2 + 6;
 
     ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = '#0F172A';
+    ctx.fillStyle = darkPanel(theme);
     ctx.fillRect(0, 0, W, H);
 
     // Ground grid
@@ -718,7 +743,7 @@ function Nexus3DTool() {
     <Box sx={{ mt: 1 }}>
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 7 }}>
-          <Paper sx={{ p: 2, bgcolor: '#0F172A', borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
             <canvas
               ref={canvasRef}
               width={520}
@@ -730,25 +755,25 @@ function Nexus3DTool() {
               style={{ width: '100%', maxHeight: 360, borderRadius: 8, touchAction: 'none', cursor: 'grab' }}
             />
           </Paper>
-          <Typography variant="caption" sx={{ color: '#475467', mt: 1, display: 'block', textAlign: 'center' }}>
+          <Typography variant="caption" sx={{ color: theme.palette.text.secondary, mt: 1, display: 'block', textAlign: 'center' }}>
             Drag the box to rotate · wireframe cube, orthographic projection
           </Typography>
         </Grid>
         <Grid size={{ xs: 12, md: 5 }}>
           <ControlPanel title="Scene Object">
             <Box sx={{ mb: 2.5 }}>
-              <Typography variant="caption" sx={{ fontWeight: 750, color: '#475467', mb: 1, display: 'block' }}>
+              <Typography variant="caption" sx={{ fontWeight: 750, color: theme.palette.text.secondary, mb: 1, display: 'block' }}>
                 Edge Size ({size}px)
               </Typography>
               <Slider size="small" min={40} max={150} value={size} onChange={(e, v) => setSize(v)} />
             </Box>
             <Box sx={{ mb: 2.5 }}>
-              <Typography variant="caption" sx={{ fontWeight: 750, color: '#475467', mb: 1, display: 'block' }}>
+              <Typography variant="caption" sx={{ fontWeight: 750, color: theme.palette.text.secondary, mb: 1, display: 'block' }}>
                 Ghost Frame Layer
               </Typography>
               <Slider size="small" min={0} max={3} step={1} value={ghostFrame} onChange={(e, v) => setGhostFrame(v)} />
             </Box>
-            <Typography variant="caption" sx={{ color: '#667085', display: 'block', fontFamily: mono, fontSize: '0.72rem' }}>
+            <Typography variant="caption" sx={{ color: theme.palette.text.secondary, display: 'block', fontFamily: mono, fontSize: '0.72rem' }}>
               Drag the viewport to rotate. Auto-orbit resumes on release.
             </Typography>
           </ControlPanel>
@@ -762,6 +787,7 @@ function Nexus3DTool() {
    TOOL 4D: CyberTurtle Graphic Studio — real turtle-graphics interpreter
    ========================================================================== */
 function TurtleTool() {
+  const theme = useTheme();
   const canvasRef = useRef(null);
   const [commands, setCommands] = useState('FD 90\nRT 120\nFD 90\nRT 120\nFD 90\nRT 120');
   const [history, setHistory] = useState(0);
@@ -781,7 +807,7 @@ function TurtleTool() {
     const W = canvas.width, H = canvas.height;
     const cx = W / 2, cy = H / 2;
     ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = '#0F172A';
+    ctx.fillStyle = darkPanel(theme);
     ctx.fillRect(0, 0, W, H);
     ctx.strokeStyle = '#39FF88';
     ctx.lineWidth = 2;
@@ -851,10 +877,10 @@ function TurtleTool() {
     <Box sx={{ mt: 1 }}>
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 7 }}>
-          <Paper sx={{ p: 2, bgcolor: '#0F172A', borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
             <canvas ref={canvasRef} width={520} height={360} style={{ width: '100%', maxHeight: 360, borderRadius: 8 }} />
           </Paper>
-          <Typography variant="caption" sx={{ color: '#475467', mt: 1, display: 'block', textAlign: 'center' }}>
+          <Typography variant="caption" sx={{ color: theme.palette.text.secondary, mt: 1, display: 'block', textAlign: 'center' }}>
             Dialect: FD / BK d · RT / LT deg · PU / PD · REPEAT n [ ... ]
           </Typography>
         </Grid>
@@ -867,21 +893,21 @@ function TurtleTool() {
               size="small"
               value={commands}
               onChange={(e) => setCommands(e.target.value)}
-              sx={{ mb: 2, bgcolor: '#FFFFFF', fontFamily: mono }}
+              sx={{ mb: 2, bgcolor: theme.palette.background.paper, fontFamily: mono }}
             />
             <Button variant="contained" color="primary" size="small" startIcon={<PlayArrowIcon />} onClick={draw} sx={{ mb: 2, fontWeight: 750 }}>
               Run Program
             </Button>
-            <Typography variant="caption" sx={{ fontWeight: 750, color: '#475467', mb: 1, display: 'block' }}>
+            <Typography variant="caption" sx={{ fontWeight: 750, color: theme.palette.text.secondary, mb: 1, display: 'block' }}>
               Preset Patterns
             </Typography>
             <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
               {presets.map((p) => (
-                <Chip key={p.name} label={p.name} size="small" onClick={() => setCommands(p.code)} clickable sx={{ fontWeight: 750, bgcolor: p.code === commands ? '#B8860B' : '#F2F4F7', color: p.code === commands ? '#FFF' : '#101828' }} />
+                <Chip key={p.name} label={p.name} size="small" onClick={() => setCommands(p.code)} clickable sx={{ fontWeight: 750, bgcolor: p.code === commands ? gold(theme) : chipNeutralBg(theme), color: p.code === commands ? '#FFF' : chipNeutralFg(theme) }} />
               ))}
             </Stack>
             <Divider sx={{ my: 2 }} />
-            <Typography variant="caption" sx={{ color: '#667085', fontFamily: mono, fontSize: '0.72rem' }}>
+            <Typography variant="caption" sx={{ color: theme.palette.text.secondary, fontFamily: mono, fontSize: '0.72rem' }}>
               Segments drawn: {history}
             </Typography>
           </ControlPanel>
@@ -895,6 +921,7 @@ function TurtleTool() {
    TOOL 4E: Datamosh Glitch Studio — real canvas glitch on a gradient test card
    ========================================================================== */
 function GlitchTool() {
+  const theme = useTheme();
   const canvasRef = useRef(null);
   const offRef = useRef(null);
   const [intensity, setIntensity] = useState(55);
@@ -1013,30 +1040,30 @@ function GlitchTool() {
     <Box sx={{ mt: 1 }}>
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 7 }}>
-          <Paper sx={{ p: 2, bgcolor: '#0F172A', borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
             <canvas ref={canvasRef} width={560} height={320} style={{ width: '100%', maxHeight: 320, borderRadius: 8 }} />
           </Paper>
-          <Typography variant="caption" sx={{ color: '#475467', mt: 1, display: 'block', textAlign: 'center' }}>
+          <Typography variant="caption" sx={{ color: theme.palette.text.secondary, mt: 1, display: 'block', textAlign: 'center' }}>
             Live canvas corruption: scanline slices + pixel-sort + RGB displacement on a synthetic test card.
           </Typography>
         </Grid>
         <Grid size={{ xs: 12, md: 5 }}>
           <ControlPanel title="Corruption Engine">
             <Box sx={{ mb: 2.5 }}>
-              <Typography variant="caption" sx={{ fontWeight: 750, color: '#475467', mb: 1, display: 'block' }}>
+              <Typography variant="caption" sx={{ fontWeight: 750, color: theme.palette.text.secondary, mb: 1, display: 'block' }}>
                 Glitch Intensity ({intensity}%)
               </Typography>
               <Slider size="small" min={0} max={100} value={intensity} onChange={(e, v) => setIntensity(v)} />
             </Box>
-            <Typography variant="caption" sx={{ fontWeight: 750, color: '#475467', mb: 1, display: 'block' }}>
+            <Typography variant="caption" sx={{ fontWeight: 750, color: theme.palette.text.secondary, mb: 1, display: 'block' }}>
               Corruption Mode
             </Typography>
             <Stack direction="row" spacing={1}>
               {['slices', 'sort', 'both'].map((m) => (
-                <Chip key={m} label={m} size="small" onClick={() => setMode(m)} clickable sx={{ fontWeight: 750, bgcolor: mode === m ? '#B8860B' : '#F2F4F7', color: mode === m ? '#FFF' : '#101828' }} />
+                <Chip key={m} label={m} size="small" onClick={() => setMode(m)} clickable sx={{ fontWeight: 750, bgcolor: mode === m ? gold(theme) : chipNeutralBg(theme), color: mode === m ? '#FFF' : chipNeutralFg(theme) }} />
               ))}
             </Stack>
-            <Typography variant="caption" sx={{ color: '#667085', display: 'block', fontFamily: mono, fontSize: '0.72rem', mt: 2 }}>
+            <Typography variant="caption" sx={{ color: theme.palette.text.secondary, display: 'block', fontFamily: mono, fontSize: '0.72rem', mt: 2 }}>
               Real pixel-level corruption — genuine canvas pixel ops, no shader faking.
             </Typography>
           </ControlPanel>
@@ -1050,6 +1077,7 @@ function GlitchTool() {
    TOOL 4F: Vision Gesture Control — honest camera handler with explicit fallback
    ========================================================================== */
 function VisionGestureTool() {
+  const theme = useTheme();
   const canvasRef = useRef(null);
   const videoRef = useRef(null);
   const [state, setState] = useState('idle');
@@ -1094,7 +1122,7 @@ function VisionGestureTool() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const W = canvas.width, H = canvas.height;
-    ctx.fillStyle = '#0F172A';
+    ctx.fillStyle = darkPanel(theme);
     ctx.fillRect(0, 0, W, H);
     const v = videoRef.current;
     if (state === 'live' && v && v.readyState >= 2 && v.videoWidth > 0) {
@@ -1148,7 +1176,7 @@ function VisionGestureTool() {
     <Box sx={{ mt: 1 }}>
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 7 }}>
-          <Paper sx={{ p: 2, bgcolor: '#0F172A', borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
             <canvas ref={canvasRef} width={560} height={360} style={{ width: '100%', maxHeight: 360, borderRadius: 8 }} />
             <video ref={videoRef} playsInline muted style={{ display: 'none' }} />
           </Paper>
@@ -1167,11 +1195,11 @@ function VisionGestureTool() {
               </Alert>
             )}
             <Divider sx={{ my: 2 }} />
-            <Typography variant="caption" sx={{ color: '#475467', display: 'block', mb: 1 }}>
+            <Typography variant="caption" sx={{ color: theme.palette.text.secondary, display: 'block', mb: 1 }}>
               Gesture overlay draws a provisional hand bounding box + fingertip placeholders. It is a UI scaffold, NOT real MediaPipe inference.
             </Typography>
             {errorMsg && (
-              <Typography variant="caption" sx={{ color: '#B42318', fontFamily: mono, fontSize: '0.7rem', display: 'block', wordBreak: 'break-word' }}>
+              <Typography variant="caption" sx={{ color: errorFg(theme), fontFamily: mono, fontSize: '0.7rem', display: 'block', wordBreak: 'break-word' }}>
                 {errorMsg}
               </Typography>
             )}
@@ -1199,40 +1227,60 @@ function drawFallback(ctx, W, H, title, sub) {
    MAIN PAGE COMPONENT (100% REAL WORKING TOOL WORKSPACE PAGE, NO POPUPS!)
    ========================================================================== */
 export default function RealToolWorkspacePage() {
+  const theme = useTheme();
   const { toolId } = useParams();
   const navigate = useNavigate();
   const tool = microTools.find((t) => t.id === toolId || t.repo === toolId) || microTools[0];
 
   const isWebGPU = tool.executionType === 'webgpu';
 
+  const glowColor = theme.palette.mode === 'dark' ? 'rgba(212,175,55,0.28)' : 'rgba(184,134,11,0.18)';
+  const glowBorder = theme.palette.mode === 'dark' ? 'rgba(212,175,55,0.45)' : 'rgba(184,134,11,0.35)';
+
   return (
-    <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6 }}>
+    <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>
+      {/* Unique gold radial glow behind the page header */}
+      <Box
+        aria-hidden
+        sx={{
+          position: 'absolute',
+          top: -40,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: 'min(760px, 92%)',
+          height: 300,
+          pointerEvents: 'none',
+          zIndex: 0,
+          background: `radial-gradient(ellipse 60% 55% at 50% 30%, ${glowColor} 0%, transparent 70%)`,
+        }}
+      />
+
       {/* Back Button */}
       <Button
         component={RouterLink}
         to="/tools"
         startIcon={<ArrowBackIcon />}
-        sx={{ mb: 3, fontWeight: 750, color: '#8A6A09' }}
+        sx={{ mb: 3, fontWeight: 750, color: goldSoft(theme), position: 'relative', zIndex: 1 }}
       >
         Back to Tools Catalog
       </Button>
 
       {/* Header */}
-      <Box sx={{ mb: 4 }}>
+      <Box sx={{ mb: 4, position: 'relative', zIndex: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
           {isWebGPU ? (
             <Chip
-              icon={<FlashOnIcon sx={{ color: '#B8860B !important' }} />}
+              icon={<FlashOnIcon sx={{ color: `${gold(theme)} !important` }} />}
               label="⚡ IN-BROWSER INTERACTIVE"
               size="small"
-              sx={{ bgcolor: '#FEF9E7', color: '#B8860B', border: '1px solid #F0E1A8', fontWeight: 800 }}
+              sx={{ bgcolor: goldBg(theme), color: gold(theme), border: `1px solid ${goldBorder(theme)}`, fontWeight: 800 }}
             />
           ) : (
             <Chip
-              icon={<SecurityIcon sx={{ color: '#027A48 !important' }} />}
+              icon={<SecurityIcon sx={{ color: `${successFg(theme)} !important` }} />}
               label="LOCAL CLI TOOL"
               size="small"
-              sx={{ bgcolor: '#ECFDF3', color: '#027A48', fontWeight: 800 }}
+              sx={{ bgcolor: successBg(theme), color: successFg(theme), fontWeight: 800 }}
             />
           )}
           <Chip label={`v${tool.version}`} size="small" variant="outlined" sx={{ fontFamily: mono }} />
@@ -1246,8 +1294,19 @@ export default function RealToolWorkspacePage() {
         </Typography>
       </Box>
 
-      {/* Real Interactive Tool Workspace Card */}
-      <Paper sx={{ p: 4, border: '1px solid #EAECF0', borderRadius: 3, mb: 5, bgcolor: '#FFFFFF' }}>
+      {/* Real Interactive Tool Workspace Card (gold-tinted glow border) */}
+      <Paper
+        sx={{
+          p: 4,
+          border: `1px solid ${glowBorder}`,
+          borderRadius: 3,
+          mb: 5,
+          bgcolor: theme.palette.background.paper,
+          position: 'relative',
+          zIndex: 1,
+          boxShadow: `0 0 0 1px ${glowBorder}, 0 8px 30px -8px ${glowColor}, 0 0 34px -6px ${glowColor}`,
+        }}
+      >
         {tool.id === 'jwt-inspector-guard' && <JwtInspectorTool />}
         {tool.id === 'payload-entropy-studio' && <PayloadEntropyTool />}
         {tool.id === 'polyglot-framework-exporter' && <PolyglotFrameworkTool />}
@@ -1260,7 +1319,7 @@ export default function RealToolWorkspacePage() {
         {tool.id !== 'jwt-inspector-guard' && tool.id !== 'payload-entropy-studio' && tool.id !== 'polyglot-framework-exporter' && tool.id !== 'nexus-3d-scene-studio' && tool.id !== 'badge3d-coin-generator' && tool.id !== 'ufo-sacred-geometry' && tool.id !== 'cyber-turtle-studio' && tool.id !== 'datamosh-glitch-studio' && tool.id !== 'vision-gesture-control' && (
           <Box sx={{ py: 3 }}>
             <Typography variant="h6" sx={{ fontWeight: 800, mb: 1 }}>CLI Command Checkout</Typography>
-            <Box sx={{ p: 2, bgcolor: '#0F172A', color: '#F5E6AB', fontFamily: mono, borderRadius: 2 }}>
+            <Box sx={{ p: 2, bgcolor: darkPanel(theme), color: '#F5E6AB', fontFamily: mono, borderRadius: 2, border: `1px solid ${darkPanelBorder(theme)}` }}>
               $ {tool.pull}
             </Box>
           </Box>

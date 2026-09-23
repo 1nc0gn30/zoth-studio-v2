@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Chip, Grid, Paper, Typography, Button, Stack } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { mathPillars, mathTiers } from '../data/mathPillars';
@@ -7,6 +8,12 @@ import { mathPillars, mathTiers } from '../data/mathPillars';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 export default function MathPillarsGrid({ variant = 'full' }) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const goldSoft = isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
+  const goldText = isDark ? '#F5E6AB' : '#8A6A09';
+  const goldBorder = isDark ? 'rgba(212,175,55,0.42)' : '#F0E1A8';
   const [tier, setTier] = useState('Intermediate');
   const [speakingId, setSpeakingId] = useState(null);
   const [copiedId, setCopiedId] = useState(null);
@@ -48,11 +55,11 @@ export default function MathPillarsGrid({ variant = 'full' }) {
               onClick={() => setTier(name)}
               sx={{
                 fontWeight: 700,
-                bgcolor: tier === name ? '#B8860B' : '#F2F4F7',
-                color: tier === name ? '#FFFFFF' : '#344054',
+                bgcolor: tier === name ? gold : theme.palette.background.paper,
+                color: tier === name ? '#FFFFFF' : theme.palette.text.primary,
                 border: '1px solid',
-                borderColor: tier === name ? '#D4AF37' : '#EAECF0',
-                '&:hover': { borderColor: '#D4AF37' },
+                borderColor: tier === name ? gold : theme.palette.divider,
+                '&:hover': { borderColor: gold },
               }}
             />
           ))}
@@ -69,7 +76,7 @@ export default function MathPillarsGrid({ variant = 'full' }) {
               sx={{
                 p: 2.5,
                 height: '100%',
-                border: '1px solid #EAECF0',
+                border: `1px solid ${theme.palette.divider}`,
                 borderTop: `4px solid ${pillar.accent}`,
                 display: 'flex',
                 flexDirection: 'column',
@@ -80,7 +87,7 @@ export default function MathPillarsGrid({ variant = 'full' }) {
                 <Chip
                   label={`Pillar ${pillar.numeral}`}
                   size="small"
-                  sx={{ bgcolor: '#FEF9E7', color: '#8A6A09', fontWeight: 700, border: '1px solid #F0E1A8' }}
+                  sx={{ bgcolor: goldSoft, color: goldText, fontWeight: 700, border: `1px solid ${goldBorder}` }}
                 />
                 {!teaser && (
                   <Stack direction="row" spacing={0.5}>
@@ -105,14 +112,14 @@ export default function MathPillarsGrid({ variant = 'full' }) {
                   px: 1.5,
                   py: 1.25,
                   borderRadius: 1.5,
-                  bgcolor: '#101828',
+                  bgcolor: isDark ? '#0B0B12' : '#101828',
                   color: '#F5E6AB',
                   fontFamily: mono,
                   fontSize: '0.8rem',
                   lineHeight: 1.55,
-                  border: '1px solid #1D2939',
+                  border: `1px solid ${isDark ? '#2A2A38' : '#1D2939'}`,
                   '&:hover': {
-                    borderColor: '#D4AF37',
+                    borderColor: gold,
                     boxShadow: '0 0 0 3px rgba(212, 175, 55, 0.18)',
                   },
                 }}
