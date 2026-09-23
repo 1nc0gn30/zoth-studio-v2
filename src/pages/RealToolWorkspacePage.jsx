@@ -318,6 +318,28 @@ function useAnimationLoop(fn) {
   }, []);
 }
 
+/* -- Responsive canvas: fills its container, keeps internal resolution in sync -- */
+function useResponsiveCanvas(canvasRef, aspectRatio = 4 / 3) {
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const parent = canvas.parentElement;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const resize = () => {
+      const w = parent.clientWidth || 600;
+      const h = w / aspectRatio;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+    };
+    resize();
+    const ro = new ResizeObserver(resize);
+    ro.observe(parent);
+    return () => ro.disconnect();
+  }, [canvasRef, aspectRatio]);
+}
+
 function ControlPanel({ title, children }) {
   const theme = useTheme();
   return (
@@ -359,7 +381,9 @@ function SacredGeometryTool() {
   const [color, setColor] = useState('#B8860B');
   const [speed, setSpeed] = useState(1.2);
   const [spokes, setSpokes] = useState(false);
-  const timeRef = useRef(0);
+    const timeRef = useRef(0);
+
+  useResponsiveCanvas(canvasRef, 520 / 360);
 
   useAnimationLoop(() => {
     const canvas = canvasRef.current;
@@ -436,12 +460,14 @@ function SacredGeometryTool() {
     <Box sx={{ mt: 1 }}>
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 7 }}>
-          <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
-            <canvas ref={canvasRef} width={520} height={360} style={{ width: '100%', maxHeight: 360, borderRadius: 8 }} />
-          </Paper>
-          <Typography variant="caption" sx={{ color: theme.palette.text.secondary, mt: 1, display: 'block', textAlign: 'center' }}>
-            Flower of Life · 7 overlapping rings (6 petals + center) · animated
-          </Typography>
+          <Box sx={{ width: '100%' }}>
+            <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <canvas ref={canvasRef} style={{ display: 'block', width: '100%', borderRadius: 8 }} />
+            </Paper>
+            <Typography variant="caption" sx={{ color: theme.palette.text.secondary, mt: 1, display: 'block', textAlign: 'center', width: '100%' }}>
+              Flower of Life · 7 overlapping rings (6 petals + center) · animated
+            </Typography>
+          </Box>
         </Grid>
         <Grid size={{ xs: 12, md: 5 }}>
           <ControlPanel title="Geometry Controls">
@@ -480,6 +506,8 @@ function CoinGeneratorTool() {
   const [metal, setMetal] = useState(0);
   const timeRef = useRef(0);
 
+  useResponsiveCanvas(canvasRef, 520 / 360);
+
   const metals = ['#D4AF37', '#C0C0C0', '#B87333'];
 
   useAnimationLoop(() => {
@@ -491,7 +519,7 @@ function CoinGeneratorTool() {
     const W = canvas.width, H = canvas.height;
     const cx = W / 2, cy = H / 2;
     const R = Math.min(W, H) * 0.42;
-    const rimW = rim;
+    const rimW = Math.min(rim, Math.max(0, R - 40));
     const baseCol = metals[metal];
 
     ctx.clearRect(0, 0, W, H);
@@ -603,12 +631,14 @@ function CoinGeneratorTool() {
     <Box sx={{ mt: 1 }}>
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 7 }}>
-          <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
-            <canvas ref={canvasRef} width={520} height={360} style={{ width: '100%', maxHeight: 360, borderRadius: 8 }} />
-          </Paper>
-          <Typography variant="caption" sx={{ color: theme.palette.text.secondary, mt: 1, display: 'block', textAlign: 'center' }}>
-            Metallic medallion · editable inscription + rim depth + alloy
-          </Typography>
+          <Box sx={{ width: '100%' }}>
+            <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <canvas ref={canvasRef} style={{ display: 'block', width: '100%', borderRadius: 8 }} />
+            </Paper>
+            <Typography variant="caption" sx={{ color: theme.palette.text.secondary, mt: 1, display: 'block', textAlign: 'center', width: '100%' }}>
+              Metallic medallion · editable inscription + rim depth + alloy
+            </Typography>
+          </Box>
         </Grid>
         <Grid size={{ xs: 12, md: 5 }}>
           <ControlPanel title="Coin &amp; Medallion">
@@ -650,6 +680,8 @@ function Nexus3DTool() {
   const rot = useRef({ rx: 0.6, ry: 0.9 });
   const auto = useRef(true);
   const drag = useRef(null);
+
+  useResponsiveCanvas(canvasRef, 520 / 360);
 
   useAnimationLoop(() => {
     const canvas = canvasRef.current;
@@ -743,21 +775,21 @@ function Nexus3DTool() {
     <Box sx={{ mt: 1 }}>
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 7 }}>
-          <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
-            <canvas
-              ref={canvasRef}
-              width={520}
-              height={360}
-              onPointerDown={onDown}
-              onPointerMove={onMove}
-              onPointerUp={onUp}
-              onPointerLeave={onUp}
-              style={{ width: '100%', maxHeight: 360, borderRadius: 8, touchAction: 'none', cursor: 'grab' }}
-            />
-          </Paper>
-          <Typography variant="caption" sx={{ color: theme.palette.text.secondary, mt: 1, display: 'block', textAlign: 'center' }}>
-            Drag the box to rotate · wireframe cube, orthographic projection
-          </Typography>
+          <Box sx={{ width: '100%' }}>
+            <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <canvas
+                ref={canvasRef}
+                onPointerDown={onDown}
+                onPointerMove={onMove}
+                onPointerUp={onUp}
+                onPointerLeave={onUp}
+                style={{ display: 'block', width: '100%', borderRadius: 8, touchAction: 'none', cursor: 'grab' }}
+              />
+            </Paper>
+            <Typography variant="caption" sx={{ color: theme.palette.text.secondary, mt: 1, display: 'block', textAlign: 'center', width: '100%' }}>
+              Drag the box to rotate · wireframe cube, orthographic projection
+            </Typography>
+          </Box>
         </Grid>
         <Grid size={{ xs: 12, md: 5 }}>
           <ControlPanel title="Scene Object">
@@ -792,6 +824,8 @@ function TurtleTool() {
   const [commands, setCommands] = useState('FD 90\nRT 120\nFD 90\nRT 120\nFD 90\nRT 120');
   const [history, setHistory] = useState(0);
   const timeRef = useRef(0);
+
+  useResponsiveCanvas(canvasRef, 520 / 360);
 
   const presets = [
     { name: 'Triangle', code: 'FD 120\nRT 120\nFD 120\nRT 120\nFD 120' },
@@ -877,12 +911,14 @@ function TurtleTool() {
     <Box sx={{ mt: 1 }}>
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 7 }}>
-          <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
-            <canvas ref={canvasRef} width={520} height={360} style={{ width: '100%', maxHeight: 360, borderRadius: 8 }} />
-          </Paper>
-          <Typography variant="caption" sx={{ color: theme.palette.text.secondary, mt: 1, display: 'block', textAlign: 'center' }}>
-            Dialect: FD / BK d · RT / LT deg · PU / PD · REPEAT n [ ... ]
-          </Typography>
+          <Box sx={{ width: '100%' }}>
+            <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <canvas ref={canvasRef} style={{ display: 'block', width: '100%', borderRadius: 8 }} />
+            </Paper>
+            <Typography variant="caption" sx={{ color: theme.palette.text.secondary, mt: 1, display: 'block', textAlign: 'center', width: '100%' }}>
+              Dialect: FD / BK d · RT / LT deg · PU / PD · REPEAT n [ ... ]
+            </Typography>
+          </Box>
         </Grid>
         <Grid size={{ xs: 12, md: 5 }}>
           <ControlPanel title="Turtle Program">
@@ -927,6 +963,8 @@ function GlitchTool() {
   const [intensity, setIntensity] = useState(55);
   const [mode, setMode] = useState('slices');
   const timeRef = useRef(0);
+
+  useResponsiveCanvas(canvasRef, 560 / 320);
 
   const makeCard = () => {
     const cv = document.createElement('canvas');
@@ -1040,12 +1078,14 @@ function GlitchTool() {
     <Box sx={{ mt: 1 }}>
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 7 }}>
-          <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
-            <canvas ref={canvasRef} width={560} height={320} style={{ width: '100%', maxHeight: 320, borderRadius: 8 }} />
-          </Paper>
-          <Typography variant="caption" sx={{ color: theme.palette.text.secondary, mt: 1, display: 'block', textAlign: 'center' }}>
-            Live canvas corruption: scanline slices + pixel-sort + RGB displacement on a synthetic test card.
-          </Typography>
+          <Box sx={{ width: '100%' }}>
+            <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <canvas ref={canvasRef} style={{ display: 'block', width: '100%', borderRadius: 8 }} />
+            </Paper>
+            <Typography variant="caption" sx={{ color: theme.palette.text.secondary, mt: 1, display: 'block', textAlign: 'center', width: '100%' }}>
+              Live canvas corruption: scanline slices + pixel-sort + RGB displacement on a synthetic test card.
+            </Typography>
+          </Box>
         </Grid>
         <Grid size={{ xs: 12, md: 5 }}>
           <ControlPanel title="Corruption Engine">
@@ -1083,6 +1123,8 @@ function VisionGestureTool() {
   const [state, setState] = useState('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const streamRef = useRef(null);
+
+  useResponsiveCanvas(canvasRef, 560 / 360);
 
   useEffect(() => {
     let cancelled = false;
@@ -1177,7 +1219,7 @@ function VisionGestureTool() {
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 7 }}>
           <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
-            <canvas ref={canvasRef} width={560} height={360} style={{ width: '100%', maxHeight: 360, borderRadius: 8 }} />
+            <canvas ref={canvasRef} style={{ display: 'block', width: '100%', borderRadius: 8 }} />
             <video ref={videoRef} playsInline muted style={{ display: 'none' }} />
           </Paper>
         </Grid>
