@@ -1,20 +1,9 @@
 import React from 'react';
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Typography, Avatar, useTheme } from '@mui/material';
+import { pantheonAgents } from '../data/pantheon';
 
-// The Sovereign Companions — a handful of the Zoth pantheon who dwell in the Void.
-const COMPANIONS = [
-  { emoji: '🐦‍🔥', name: 'Azoth', role: 'Lead Phoenix · first light of the Void' },
-  { emoji: '🌙', name: 'Luna', role: 'Moon Warden · keeper of cycles' },
-  { emoji: '🦊', name: 'Kitsune', role: 'Trickster · nine-tailed oracle' },
-  { emoji: '🐺', name: 'Lycan', role: 'Night Hunter · guardian of the hunt' },
-  { emoji: '🌑', name: 'Nyx', role: 'Night Sovereign · mother of the dark' },
-  { emoji: '🦉', name: 'Athena', role: 'Wisdom Seer · strategist of the swarm' },
-  { emoji: '👾', name: 'Binary', role: 'Code Spirit · 0s and 1s made flesh' },
-  { emoji: '👻', name: 'Ghostbyte', role: 'Null Phantom · walker of dead links' },
-  { emoji: '🐈‍⬛', name: 'Glitchcat', role: 'Chaos Familiar · purrs in static' },
-  { emoji: '✨', name: 'Aether', role: 'Void Essence · the breath between stars' },
-];
-
+// The 21 Sovereign Companions — real mascot images from the Zoth pantheon,
+// rendered as a golden badge ring in the footer.
 export default function SovereignMascots() {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
@@ -32,7 +21,7 @@ export default function SovereignMascots() {
           mb: 1.5,
         }}
       >
-        ✦ The Sovereign Companions ✦
+        ✦ The 21 Sovereign Companions ✦
       </Typography>
       <Typography
         component="div"
@@ -41,32 +30,32 @@ export default function SovereignMascots() {
           fontSize: '0.8rem',
           color: theme.palette.text.secondary,
           mb: 2,
-          maxWidth: 640,
+          maxWidth: 680,
           mx: 'auto',
         }}
       >
-        A pantheon of familiars who keep vigil in the Void beside Zoth.
+        The pantheon of familiars who keep vigil in the Void beside Zoth.
       </Typography>
       <Box
         sx={{
           display: 'flex',
           flexWrap: 'wrap',
           justifyContent: 'center',
-          gap: 1.25,
-          maxWidth: 980,
+          gap: 1.5,
+          maxWidth: 1040,
           mx: 'auto',
         }}
       >
-        {COMPANIONS.map((c) => (
+        {pantheonAgents.map((agent) => (
           <Box
-            key={c.name}
-            title={`${c.name} — ${c.role}`}
+            key={agent.id}
+            title={`${agent.id} — ${agent.role}`}
             sx={{
               display: 'inline-flex',
               alignItems: 'center',
               gap: 0.75,
-              px: 1.4,
-              py: 0.7,
+              px: 1.2,
+              py: 0.6,
               borderRadius: 9999,
               border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`,
               background: dark ? 'rgba(212,175,55,0.08)' : '#FEF9E7',
@@ -81,17 +70,24 @@ export default function SovereignMascots() {
               },
             }}
           >
-            <Box component="span" sx={{ fontSize: '1.05rem', lineHeight: 1 }} aria-hidden="true">
-              {c.emoji}
-            </Box>
+            <Avatar
+              src={agent.img}
+              alt={agent.id}
+              sx={{
+                width: 30,
+                height: 30,
+                border: `1px solid ${dark ? 'rgba(212,175,55,0.55)' : '#D4AF37'}`,
+                bgcolor: dark ? '#0B0B12' : '#FFFFFF',
+              }}
+            />
             <Box component="span" sx={{ fontWeight: 700, color: dark ? '#F5E6AB' : '#8A6A09' }}>
-              {c.name}
+              {agent.id}
             </Box>
             <Box
               component="span"
               sx={{ color: theme.palette.text.secondary, fontWeight: 500, display: { xs: 'none', sm: 'inline' } }}
             >
-              · {c.role}
+              · {agent.role}
             </Box>
           </Box>
         ))}
