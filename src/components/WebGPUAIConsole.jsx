@@ -367,11 +367,16 @@ export default function WebGPUAIConsole() {
 
           {/* Metrics Footer */}
           {generationMeta && (
-            <Box sx={{ display: 'flex', gap: 2, mt: 1.5, flexWrap: 'wrap', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', gap: 1.5, mt: 1.5, flexWrap: 'wrap', alignItems: 'center' }}>
+              <Chip
+                label={`Engine: ${generationMeta.adapter}`}
+                size="small"
+                sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, bgcolor: 'rgba(212,175,55,0.15)', color: gold }}
+              />
               <Chip
                 label={`Model: ${generationMeta.model}`}
                 size="small"
-                sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 750, bgcolor: 'rgba(212,175,55,0.1)', color: gold }}
+                sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 750, bgcolor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)', color: isDark ? '#E5E7EB' : '#374151' }}
               />
               <Chip
                 label={`Throughput: ${generationMeta.throughput}`}
