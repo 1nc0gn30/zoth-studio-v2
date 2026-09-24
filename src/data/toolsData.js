@@ -88,7 +88,7 @@ export const microTools = [
     id: 'hexstrike-arsenal',
     published: true,
     name: 'HexStrike Security Arsenal',
-    repo: 'hexstrike-arsenal',
+    repo: 'NullAI-HexStrike-AI-Terminal',
     category: 'Security & Recon',
     executionType: 'local_cli',
     github: 'https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal',

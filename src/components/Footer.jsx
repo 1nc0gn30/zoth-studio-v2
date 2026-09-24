@@ -33,13 +33,15 @@ export default function Footer() {
   ];
 
   const toolsAndRepos = [
-    { label: 'Micro-Tools Registry (28)', to: '/tools' },
+    { label: 'Micro-Tools Registry (29)', to: '/tools' },
     { label: 'Zoth Studio v2 Repo', href: 'https://github.com/NullAITech/zoth-studio-v2', external: true },
     { label: 'NullAI Tech GitHub Org', href: 'https://github.com/NullAITech', external: true },
-    { label: 'Memory Daemon Repo', href: 'https://github.com/NullAITech/zoth-memory-daemon', external: true },
-    { label: 'Adytum Alchemist Repo', href: 'https://github.com/NullAITech/zoth-adytum', external: true },
-    { label: 'HexStrike Security Repo', href: 'https://github.com/NullAITech/zoth-hexstrike', external: true },
-    { label: 'WebGen Foundry Repo', href: 'https://github.com/NullAITech/zoth-webgen', external: true },
+    { label: 'Neuro-Memory Daemon Repo', href: 'https://github.com/NullAITech/neuro-memory-daemon', external: true },
+    { label: 'Adytum Alchemist Repo', href: 'https://github.com/NullAITech/adytum-alchemist-ai-workflow', external: true },
+    { label: 'HexStrike AI Terminal Repo', href: 'https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal', external: true },
+    { label: 'Polyglot Exporter Repo', href: 'https://github.com/NullAITech/polyglot-framework-exporter', external: true },
+    { label: 'Zoth OS Daemon Repo', href: 'https://github.com/NullAITech/zoth-os', external: true },
+    { label: 'Netlify Ghost Hub Repo', href: 'https://github.com/NullAITech/Netlify-Ghost-Hub', external: true },
     { label: 'Enclave Bridges', to: '/bridges' },
   ];
 
