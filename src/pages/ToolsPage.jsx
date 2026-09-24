@@ -96,17 +96,17 @@ export default function ToolsPage() {
           />
           {isBackendConnected ? (
             <Chip
-              icon={<DnsIcon sx={{ color: '#10B981 !important' }} />}
+              icon={<DnsIcon sx={{ color: isDark ? '#34D399 !important' : '#027A48 !important' }} />}
               label="127.0.0.1 BACKEND CONNECTED · ALL 25 TOOLS RUNNING LIVE"
               size="small"
-              sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5', color: '#10B981', border: '1px solid rgba(16,185,129,0.3)', fontWeight: 800 }}
+              sx={{ bgcolor: isDark ? 'rgba(52,211,153,0.14)' : '#ECFDF3', color: isDark ? '#34D399' : '#027A48', border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`, fontWeight: 800 }}
             />
           ) : (
             <Chip
-              icon={<DnsIcon sx={{ color: '#F59E0B !important' }} />}
+              icon={<DnsIcon sx={{ color: isDark ? '#F59E0B !important' : '#92400E !important' }} />}
               label="CLOUD STATIC MODE · IN-BROWSER WEBGPU READY · CLI TOOLS REQUIRE LOCAL DAEMON"
               size="small"
-              sx={{ bgcolor: isDark ? 'rgba(245,158,11,0.12)' : '#FFFBEB', color: '#F59E0B', border: '1px solid rgba(245,158,11,0.3)', fontWeight: 800 }}
+              sx={{ bgcolor: isDark ? 'rgba(245,158,11,0.14)' : '#FFFBEB', color: isDark ? '#F59E0B' : '#92400E', border: `1px solid ${isDark ? 'rgba(245,158,11,0.3)' : '#FCD34D'}`, fontWeight: 800 }}
             />
           )}
         </Box>
@@ -139,29 +139,35 @@ export default function ToolsPage() {
         sx={{
           p: 3.5,
           mb: 5,
-          border: '1px solid #D4AF3744',
+          border: `1px solid ${isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.35)'}`,
           borderRadius: 3,
-          bgcolor: isDark ? '#0B0B12' : '#101828',
-          color: '#FFFFFF',
+          bgcolor: isDark ? '#0B0B12' : '#F8FAFC',
+          color: theme.palette.text.primary,
           position: 'relative',
           overflow: 'hidden',
           boxShadow: isDark
-            ? '0 8px 24px rgba(0,0,0,0.5)'
-            : '0 8px 24px rgba(16,24,40,0.15)'
+            ? '0 8px 24px rgba(0,0,0,0.5), 0 0 16px -4px rgba(212,175,55,0.2)'
+            : '0 8px 24px rgba(16,24,40,0.06), 0 0 16px -4px rgba(184,134,11,0.15)',
         }}
       >
         <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
           <Box sx={{ maxWidth: 740 }}>
             <Chip
-              icon={<RocketLaunchIcon sx={{ color: '#FDD663 !important' }} />}
+              icon={<RocketLaunchIcon sx={{ color: isDark ? '#FDD663 !important' : '#B8860B !important' }} />}
               label="SOVEREIGN BARE-METAL DISTRIBUTION"
               size="small"
-              sx={{ bgcolor: isDark ? 'rgba(30,41,59,0.6)' : '#1E293B', color: '#FDD663', border: '1px solid #D4AF3766', fontWeight: 800, mb: 1.5 }}
+              sx={{
+                bgcolor: isDark ? 'rgba(30,41,59,0.6)' : gold.wash,
+                color: isDark ? '#FDD663' : '#8A6A09',
+                border: `1px solid ${isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.35)'}`,
+                fontWeight: 800,
+                mb: 1.5
+              }}
             />
-            <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: '#FFFFFF' }}>
+            <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: theme.palette.text.primary }}>
               Want all 25 micro-tools preinstalled ready to use?
             </Typography>
-            <Typography variant="body2" sx={{ color: '#94A3B8', lineHeight: 1.6 }}>
+            <Typography variant="body2" sx={{ color: theme.palette.text.secondary, lineHeight: 1.6 }}>
               Download the <strong>Zoth OS ISO</strong> image. Flash to USB or boot inside QEMU / KVM to run all 25 tools, local daemons, and 10 Ollama models with zero manual dependencies!
             </Typography>
           </Box>
@@ -209,12 +215,12 @@ export default function ToolsPage() {
           sx={{
             fontWeight: 800,
             bgcolor: execFilter === 'all' ? gold.accent : theme.palette.background.paper,
-            color: execFilter === 'all' ? '#101828' : theme.palette.text.primary,
+            color: execFilter === 'all' ? (isDark ? '#08080B' : '#0F172A') : theme.palette.text.primary,
             border: `1px solid ${execFilter === 'all' ? gold.accent : theme.palette.divider}`,
           }}
         />
         <Chip
-          icon={<FlashOnIcon sx={{ fontSize: '16px !important', color: execFilter === 'webgpu' ? '#101828 !important' : `${gold.accent} !important` }} />}
+          icon={<FlashOnIcon sx={{ fontSize: '16px !important', color: execFilter === 'webgpu' ? (isDark ? '#08080B !important' : '#0F172A !important') : `${gold.accent} !important` }} />}
           label={`In-Browser WebGPU (${microTools.filter((t) => t.executionType === 'webgpu').length})`}
           clickable
           onClick={() => setExecFilter('webgpu')}
@@ -222,12 +228,12 @@ export default function ToolsPage() {
           sx={{
             fontWeight: 800,
             bgcolor: execFilter === 'webgpu' ? gold.accent : theme.palette.background.paper,
-            color: execFilter === 'webgpu' ? '#101828' : theme.palette.text.primary,
+            color: execFilter === 'webgpu' ? (isDark ? '#08080B' : '#0F172A') : theme.palette.text.primary,
             border: `1px solid ${execFilter === 'webgpu' ? gold.accent : theme.palette.divider}`,
           }}
         />
         <Chip
-          icon={<TerminalIcon sx={{ fontSize: '16px !important', color: execFilter === 'local_cli' ? '#101828 !important' : `${gold.accent} !important` }} />}
+          icon={<TerminalIcon sx={{ fontSize: '16px !important', color: execFilter === 'local_cli' ? (isDark ? '#08080B !important' : '#0F172A !important') : `${gold.accent} !important` }} />}
           label={`Local CLI Enclave (${microTools.filter((t) => t.executionType === 'local_cli').length})`}
           clickable
           onClick={() => setExecFilter('local_cli')}
@@ -235,7 +241,7 @@ export default function ToolsPage() {
           sx={{
             fontWeight: 800,
             bgcolor: execFilter === 'local_cli' ? gold.accent : theme.palette.background.paper,
-            color: execFilter === 'local_cli' ? '#101828' : theme.palette.text.primary,
+            color: execFilter === 'local_cli' ? (isDark ? '#08080B' : '#0F172A') : theme.palette.text.primary,
             border: `1px solid ${execFilter === 'local_cli' ? gold.accent : theme.palette.divider}`,
           }}
         />
@@ -254,7 +260,7 @@ export default function ToolsPage() {
               sx={{
                 fontWeight: 750,
                 bgcolor: active ? gold.accent : theme.palette.background.paper,
-                color: active ? '#101828' : theme.palette.text.primary,
+                color: active ? (isDark ? '#08080B' : '#0F172A') : theme.palette.text.primary,
                 border: '1px solid',
                 borderColor: active ? gold.accent : theme.palette.divider,
               }}
@@ -285,17 +291,17 @@ export default function ToolsPage() {
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
-                  border: isWebGPU ? '1.5px solid #D4AF37' : `1px solid ${theme.palette.divider}`,
+                  border: isWebGPU ? (isDark ? '1.5px solid #D4AF37' : '1.5px solid #B8860B') : `1px solid ${theme.palette.divider}`,
                   bgcolor: theme.palette.background.paper,
                   transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                   position: 'relative',
                   '&:hover': {
                     borderColor: gold.accent,
                     boxShadow: isWebGPU
-                      ? '0 12px 32px rgba(212, 175, 55, 0.28)'
+                      ? (isDark ? '0 12px 32px rgba(212, 175, 55, 0.32)' : '0 12px 32px rgba(184, 134, 11, 0.22)')
                       : isDark
                         ? '0 8px 22px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,175,55,0.25), 0 0 20px -4px rgba(212,175,55,0.18)'
-                        : '0 8px 22px rgba(16,24,40,0.1)',
+                        : '0 8px 22px rgba(16,24,40,0.08), 0 0 16px -4px rgba(184,134,11,0.15)',
                     transform: 'translateY(-3px)'
                   }
                 }}
@@ -308,7 +314,7 @@ export default function ToolsPage() {
                         icon={<FlashOnIcon sx={{ color: `${gold.accent} !important`, fontSize: '14px !important' }} />}
                         label="⚡ WebGPU (In-Browser)"
                         size="small"
-                        sx={{ bgcolor: gold.wash, color: gold.accent, fontWeight: 800, fontSize: '0.72rem', border: `1px solid ${isDark ? 'rgba(212,175,55,0.42)' : '#F0E1A8'}` }}
+                        sx={{ bgcolor: gold.wash, color: gold.accent, fontWeight: 800, fontSize: '0.72rem', border: `1px solid ${isDark ? 'rgba(212,175,55,0.42)' : 'rgba(184,134,11,0.35)'}` }}
                       />
                     ) : (
                       <Chip
@@ -318,7 +324,7 @@ export default function ToolsPage() {
                         sx={{ bgcolor: isDark ? 'rgba(148,163,184,0.12)' : '#F1F5F9', color: theme.palette.text.secondary, fontWeight: 700, fontSize: '0.72rem', border: `1px solid ${theme.palette.divider}` }}
                       />
                     )}
-                    <Chip label={`v${tool.version}`} size="small" variant="outlined" sx={{ color: theme.palette.text.secondary, fontSize: '0.72rem', fontFamily: mono }} />
+                    <Chip label={`v${tool.version}`} size="small" variant="outlined" sx={{ color: theme.palette.text.secondary, fontSize: '0.72rem', fontFamily: mono, borderColor: theme.palette.divider }} />
                   </Box>
 
                   <Typography
@@ -355,12 +361,24 @@ export default function ToolsPage() {
                     {isExpanded ? 'Show less' : 'Read more'}
                   </Button>
 
-                  <Box sx={{ bgcolor: isWebGPU ? (isDark ? '#0B0B12' : '#101828') : (isDark ? 'rgba(148,163,184,0.08)' : '#F8FAFC'), p: 1.25, borderRadius: 1.5, border: isWebGPU ? '1px solid #1D2939' : `1px dashed ${theme.palette.divider}`, fontFamily: mono, fontSize: '0.78rem', color: isWebGPU ? '#F5E6AB' : gold.accent, wordBreak: 'break-all' }}>
-                    $ {tool.pull}
+                  <Box sx={{
+                    bgcolor: isDark ? '#0B0B12' : (isWebGPU ? '#FEF9E7' : '#F8FAFC'),
+                    p: 1.25,
+                    borderRadius: 1.5,
+                    border: isDark
+                      ? (isWebGPU ? '1px solid rgba(212,175,55,0.4)' : '1px dashed rgba(255,255,255,0.18)')
+                      : (isWebGPU ? '1px solid rgba(184,134,11,0.35)' : `1px dashed ${theme.palette.divider}`),
+                    fontFamily: mono,
+                    fontSize: '0.78rem',
+                    color: isDark ? (isWebGPU ? '#F5E6AB' : '#EDEFF2') : (isWebGPU ? '#8A6A09' : '#1E293B'),
+                    wordBreak: 'break-all'
+                  }}>
+                    <Box component="span" sx={{ color: gold.accent, fontWeight: 800, mr: 0.75 }}>$</Box>
+                    {tool.pull}
                   </Box>
                 </CardContent>
 
-                <CardActions sx={{ px: 2, pb: 2, pt: 1.5, flexDirection: 'column', gap: 1, borderTop: `1px solid ${theme.palette.divider}`, bgcolor: isDark ? 'rgba(212,175,55,0.04)' : '#FEF9E722' }}>
+                <CardActions sx={{ px: 2, pb: 2, pt: 1.5, flexDirection: 'column', gap: 1, borderTop: `1px solid ${theme.palette.divider}`, bgcolor: isDark ? 'rgba(212,175,55,0.04)' : 'rgba(184,134,11,0.03)' }}>
                   <Button
                     fullWidth
                     size="small"
@@ -380,7 +398,7 @@ export default function ToolsPage() {
                       variant="text"
                       startIcon={<ContentCopyIcon sx={{ fontSize: '14px !important' }} />}
                       onClick={() => handleCopy(tool.pull, tool.id)}
-                      sx={{ fontWeight: 700, fontSize: '0.75rem', py: 0.4, color: gold.accent }}
+                      sx={{ fontWeight: 750, fontSize: '0.75rem', py: 0.4, color: gold.accent }}
                     >
                       {copiedId === tool.id ? 'Copied!' : 'Copy CLI'}
                     </Button>
@@ -392,7 +410,7 @@ export default function ToolsPage() {
                         target="_blank"
                         rel="noopener noreferrer"
                         startIcon={<GitHubIcon sx={{ fontSize: '14px !important' }} />}
-                        sx={{ fontWeight: 700, fontSize: '0.75rem', py: 0.4, color: isDark ? '#9CA3AF' : '#6B7280', flexShrink: 0 }}
+                        sx={{ fontWeight: 700, fontSize: '0.75rem', py: 0.4, color: isDark ? '#9CA3AF' : '#475467', flexShrink: 0 }}
                       >
                         Repo
                       </Button>

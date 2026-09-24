@@ -254,7 +254,7 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
               sx={{
                 fontFamily: monoFont,
                 fontSize: '0.75rem',
-                color: gold.soft,
+                color: '#F5E6AB',
                 bgcolor: 'rgba(212,175,55,0.12)',
                 border: '1px solid rgba(212,175,55,0.3)',
                 px: 1.5,
@@ -273,8 +273,8 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                 fontFamily: monoFont,
                 fontSize: '0.75rem',
                 fontWeight: 750,
-                bgcolor: copied ? '#059669' : gold.accent,
-                color: '#08080B',
+                bgcolor: copied ? '#059669' : '#D4AF37',
+                color: copied ? '#FFFFFF' : '#08080B',
                 px: 1.8,
                 py: 0.4,
                 '&:hover': { bgcolor: copied ? '#047857' : '#E5C158' },
@@ -313,13 +313,13 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                   px: 1.75,
                   py: 0.5,
                   borderRadius: 2,
-                  color: isSelected ? gold.soft : '#94A3B8',
+                  color: isSelected ? '#F5E6AB' : '#94A3B8',
                   bgcolor: isSelected ? 'rgba(212,175,55,0.18)' : 'transparent',
                   border: '1px solid',
-                  borderColor: isSelected ? gold.accent : 'rgba(148,163,184,0.15)',
+                  borderColor: isSelected ? '#D4AF37' : 'rgba(148,163,184,0.15)',
                   '&:hover': {
                     bgcolor: 'rgba(212,175,55,0.1)',
-                    borderColor: gold.accent,
+                    borderColor: '#D4AF37',
                   },
                 }}
               >
@@ -376,7 +376,7 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             if (line.type === 'command') {
               return (
                 <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5, flexWrap: 'wrap' }}>
-                  <Typography component="span" sx={{ fontFamily: monoFont, color: gold.accent, fontWeight: 800 }}>
+                  <Typography component="span" sx={{ fontFamily: monoFont, color: '#D4AF37', fontWeight: 800 }}>
                     user@zoth-metal:~$
                   </Typography>
                   <Typography component="span" sx={{ fontFamily: monoFont, color: '#FFFFFF', fontWeight: 800 }}>
@@ -388,7 +388,7 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                       display: 'inline-block',
                       width: '8px',
                       height: '15px',
-                      bgcolor: gold.accent,
+                      bgcolor: '#D4AF37',
                       ml: 0.5,
                       animation: 'blinkCursor 1s step-start infinite',
                       '@keyframes blinkCursor': {
@@ -422,7 +422,7 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             }
             if (line.type === 'gold') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, color: gold.soft, fontWeight: 750, mt: 0.5 }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#F5E6AB', fontWeight: 750, mt: 0.5 }}>
                   {line.text}
                 </Typography>
               );
@@ -720,7 +720,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                 bgcolor: isSelected
                   ? isDark ? 'rgba(212,175,55,0.18)' : '#FEF9E7'
                   : isDark ? '#0B0B12' : '#F8FAFC',
-                color: isSelected ? gold.soft : theme => theme.palette.text.secondary,
+                color: isSelected ? (isDark ? gold.soft : gold.accent) : 'text.secondary',
                 border: '1px solid',
                 borderColor: isSelected ? gold.accent : isDark ? '#26262F' : '#EAECF0',
                 boxShadow: isSelected
@@ -786,7 +786,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                 {activePillar.icon}
               </Box>
               <Box>
-                <Typography sx={{ fontFamily: monoFont, fontSize: '0.72rem', color: gold.soft, fontWeight: 800, letterSpacing: '0.12em' }}>
+                <Typography sx={{ fontFamily: monoFont, fontSize: '0.72rem', color: isDark ? gold.soft : gold.accent, fontWeight: 800, letterSpacing: '0.12em' }}>
                   PILLAR {activePillar.indexLabel} // {activePillar.badge}
                 </Typography>
                 <Typography variant="h4" sx={{ fontWeight: 800, color: isDark ? '#EDEFF2' : '#101828', letterSpacing: '-0.02em' }}>
@@ -802,13 +802,13 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                 fontWeight: 800,
                 fontSize: '0.72rem',
                 bgcolor: isDark ? 'rgba(212,175,55,0.15)' : '#FEF9E7',
-                color: gold.soft,
+                color: isDark ? gold.soft : gold.accent,
                 border: `1px solid ${gold.accent}`,
               }}
             />
           </Box>
 
-          <Typography variant="subtitle1" sx={{ color: gold.soft, fontWeight: 650, mb: 1.5, fontSize: '1.05rem' }}>
+          <Typography variant="subtitle1" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 700, mb: 1.5, fontSize: '1.05rem' }}>
             {activePillar.subtitle}
           </Typography>
           <Typography variant="body1" sx={{ color: isDark ? '#A6A8B4' : '#475467', lineHeight: 1.7, maxWidth: 900 }}>
@@ -818,7 +818,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
 
         {/* Live Metrics Grid (4 Boxes) */}
         <Box sx={{ mb: 4, position: 'relative', zIndex: 1 }}>
-          <Typography sx={{ fontFamily: monoFont, fontSize: '0.74rem', fontWeight: 800, color: gold.soft, letterSpacing: '0.1em', mb: 1.5 }}>
+          <Typography sx={{ fontFamily: monoFont, fontSize: '0.74rem', fontWeight: 800, color: isDark ? gold.soft : gold.accent, letterSpacing: '0.1em', mb: 1.5 }}>
             LIVE ARCHITECTURAL METRICS
           </Typography>
           <Grid container spacing={2}>
@@ -842,7 +842,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                   <Typography variant="caption" sx={{ fontFamily: monoFont, color: isDark ? '#94A3B8' : '#64748B', fontWeight: 700, display: 'block', mb: 0.5 }}>
                     {metric.label}
                   </Typography>
-                  <Typography variant="h6" sx={{ fontFamily: monoFont, fontWeight: 800, color: gold.soft, mb: 0.5, fontSize: { xs: '1rem', md: '1.15rem' } }}>
+                  <Typography variant="h6" sx={{ fontFamily: monoFont, fontWeight: 800, color: isDark ? gold.soft : gold.accent, mb: 0.5, fontSize: { xs: '1rem', md: '1.15rem' } }}>
                     {metric.value}
                   </Typography>
                   <Typography variant="body2" sx={{ fontSize: '0.78rem', color: isDark ? '#64748B' : '#98A2B3' }}>
@@ -867,7 +867,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                 height: '100%',
               }}
             >
-              <Typography sx={{ fontFamily: monoFont, fontSize: '0.74rem', fontWeight: 800, color: gold.soft, letterSpacing: '0.1em', mb: 1.5 }}>
+              <Typography sx={{ fontFamily: monoFont, fontSize: '0.74rem', fontWeight: 800, color: isDark ? gold.soft : gold.accent, letterSpacing: '0.1em', mb: 1.5 }}>
                 ARCHITECTURAL GUARANTEES &amp; INVARIANTS
               </Typography>
               <Stack spacing={1.2}>
@@ -894,7 +894,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                 height: '100%',
               }}
             >
-              <Typography sx={{ fontFamily: monoFont, fontSize: '0.74rem', fontWeight: 800, color: gold.soft, letterSpacing: '0.1em', mb: 1.5 }}>
+              <Typography sx={{ fontFamily: monoFont, fontSize: '0.74rem', fontWeight: 800, color: isDark ? gold.soft : gold.accent, letterSpacing: '0.1em', mb: 1.5 }}>
                 RUNTIME SPECIFICATIONS
               </Typography>
               <Stack spacing={1.2}>
@@ -903,7 +903,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                     <Typography sx={{ fontFamily: monoFont, fontSize: '0.74rem', color: isDark ? '#94A3B8' : '#64748B' }}>
                       {spec.label}
                     </Typography>
-                    <Typography sx={{ fontFamily: monoFont, fontSize: '0.78rem', fontWeight: 750, color: gold.soft }}>
+                    <Typography sx={{ fontFamily: monoFont, fontSize: '0.78rem', fontWeight: 750, color: isDark ? gold.soft : gold.accent }}>
                       {spec.value}
                     </Typography>
                   </Box>
@@ -940,12 +940,16 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                 py: 1.1,
                 fontWeight: 800,
                 letterSpacing: '0.02em',
-                bgcolor: gold.accent,
-                color: '#08080B',
-                boxShadow: '0 4px 18px rgba(212,175,55,0.35)',
+                bgcolor: isDark ? '#D4AF37' : '#B8860B',
+                color: isDark ? '#08080B' : '#FFFFFF',
+                boxShadow: isDark
+                  ? '0 4px 18px rgba(212,175,55,0.35)'
+                  : '0 4px 18px rgba(184,134,11,0.25)',
                 '&:hover': {
-                  bgcolor: '#E5C158',
-                  boxShadow: '0 6px 24px rgba(212,175,55,0.5)',
+                  bgcolor: isDark ? '#E5C158' : '#9A7209',
+                  boxShadow: isDark
+                    ? '0 6px 24px rgba(212,175,55,0.5)'
+                    : '0 6px 24px rgba(184,134,11,0.4)',
                 },
               }}
             >
@@ -962,8 +966,8 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                 px: 2.8,
                 py: 1.1,
                 fontWeight: 750,
-                borderColor: isDark ? 'rgba(212,175,55,0.4)' : '#D4AF37',
-                color: gold.soft,
+                borderColor: isDark ? 'rgba(212,175,55,0.4)' : '#B8860B',
+                color: isDark ? gold.soft : gold.accent,
                 '&:hover': {
                   borderColor: gold.accent,
                   bgcolor: gold.wash,
@@ -1045,7 +1049,7 @@ export default function HomePage() {
         <Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, mb: 2 }}>
             <Box component="img" src="/brand/ghostbyte-dark.png" alt="" sx={{ height: 28, width: 'auto' }} />
-            <Typography sx={{ fontFamily: mono, letterSpacing: '0.22em', fontSize: '0.75rem', color: gold.soft, fontWeight: 800 }}>
+            <Typography sx={{ fontFamily: mono, letterSpacing: '0.22em', fontSize: '0.75rem', color: isDark ? gold.soft : gold.accent, fontWeight: 800 }}>
               NULLAI TECH • LOCAL AI WORKSTATION ENGINE
             </Typography>
           </Box>
@@ -1077,7 +1081,7 @@ export default function HomePage() {
             <Button component={RouterLink} to="/tools" variant="outlined" color="primary" size="large" sx={{ px: 3, py: 1.2, fontWeight: 750 }}>
               Explore 25 Micro-Tools
             </Button>
-            <Button component={RouterLink} to="/zoth-os" variant="text" sx={{ color: gold.soft, fontWeight: 800, px: 2 }}>
+            <Button component={RouterLink} to="/zoth-os" variant="text" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2 }}>
               Zoth OS ISO →
             </Button>
           </Box>
@@ -1246,16 +1250,27 @@ export default function HomePage() {
               <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, transition: 'all 0.25s ease', '&:hover': { borderColor: gold.accent, transform: 'translateY(-3px)' } }}>
                 <CardContent sx={{ flex: 1 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-                    <Chip label={`v${tool.version}`} size="small" sx={{ bgcolor: gold.wash, color: gold.soft, fontWeight: 750 }} />
+                    <Chip label={`v${tool.version}`} size="small" sx={{ bgcolor: gold.wash, color: isDark ? gold.soft : gold.accent, fontWeight: 750 }} />
                     {tool.executionType === 'webgpu' && (
-                      <Chip label="⚡ WEBGPU" size="small" sx={{ bgcolor: isDark ? '#0B0B12' : '#0F172A', color: '#F5E6AB', fontWeight: 750, fontSize: '0.68rem', fontFamily: mono }} />
+                      <Chip
+                        label="⚡ WEBGPU"
+                        size="small"
+                        sx={{
+                          bgcolor: isDark ? 'rgba(56,189,248,0.14)' : '#E0F2FE',
+                          color: isDark ? '#38BDF8' : '#0369A1',
+                          fontWeight: 750,
+                          fontSize: '0.68rem',
+                          fontFamily: mono,
+                          border: `1px solid ${isDark ? 'rgba(56,189,248,0.3)' : '#BAE6FD'}`,
+                        }}
+                      />
                     )}
                   </Box>
                   <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: theme.palette.text.primary }}>{tool.name}</Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>{tool.description}</Typography>
                 </CardContent>
                 <CardActions sx={{ px: 2, pb: 2, pt: 1.5, justifyContent: 'space-between', borderTop: `1px solid ${theme.palette.divider}` }}>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: gold.soft, fontWeight: 600 }}>{tool.repo}</Typography>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? gold.soft : gold.accent, fontWeight: 600 }}>{tool.repo}</Typography>
                   {tool.executionType === 'webgpu' ? (
                     <Button size="small" variant="contained" color="primary" component={RouterLink} to={`/tools/${tool.id}`} startIcon={<FlashOnIcon />}>
                       Open Tool

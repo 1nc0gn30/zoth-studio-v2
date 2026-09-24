@@ -540,7 +540,7 @@ ${oracleResult.faq.a}`;
                   gap: 0.8,
                 }}
               >
-                <TerminalIcon sx={{ fontSize: 16, color: '#F472B6' }} />
+                <TerminalIcon sx={{ fontSize: 16, color: isDark ? '#F472B6' : '#BE185D' }} />
                 ASK LUCY ORACLE // SEARCH & TERMINAL CONSOLE
               </Typography>
               <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
@@ -554,25 +554,25 @@ ${oracleResult.faq.a}`;
               label="CODEC 141.12"
               size="small"
               sx={{
-                bgcolor: 'rgba(244,114,182,0.12)',
-                color: '#F472B6',
+                bgcolor: isDark ? 'rgba(244,114,182,0.12)' : '#FDF2F8',
+                color: isDark ? '#F472B6' : '#BE185D',
                 fontFamily: mono,
                 fontWeight: 750,
                 fontSize: '0.72rem',
-                border: '1px solid rgba(244,114,182,0.3)',
+                border: `1px solid ${isDark ? 'rgba(244,114,182,0.3)' : '#FBCFE8'}`,
               }}
             />
             <Chip
-              icon={<BoltIcon sx={{ fontSize: 14, color: '#34D399 !important' }} />}
+              icon={<BoltIcon sx={{ fontSize: 14, color: `${isDark ? '#34D399' : '#027A48'} !important` }} />}
               label="ZERO-EGRESS: VERIFIED"
               size="small"
               sx={{
                 bgcolor: isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF5',
-                color: '#34D399',
+                color: isDark ? '#34D399' : '#027A48',
                 fontFamily: mono,
                 fontWeight: 750,
                 fontSize: '0.72rem',
-                border: '1px solid rgba(52,211,153,0.3)',
+                border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`,
               }}
             />
           </Stack>
@@ -702,7 +702,7 @@ ${oracleResult.faq.a}`;
               p: { xs: 2.5, md: 3 },
               borderRadius: 2.5,
               bgcolor: isDark ? '#0B0B14' : '#FEF9E7',
-              border: `1px solid ${isDark ? '#F472B6' : '#F5E6AB'}`,
+              border: `1.5px solid ${isDark ? '#F472B6' : '#E5C768'}`,
               boxShadow: isDark
                 ? '0 0 24px rgba(244,114,182,0.18), inset 0 0 16px rgba(0,0,0,0.5)'
                 : '0 4px 16px rgba(184,134,11,0.08)',
@@ -722,25 +722,26 @@ ${oracleResult.faq.a}`;
                     height: 52,
                     borderRadius: '50%',
                     objectFit: 'cover',
-                    border: '2px solid #F472B6',
-                    boxShadow: '0 0 16px rgba(244,114,182,0.5)',
+                    border: `2px solid ${isDark ? '#F472B6' : '#BE185D'}`,
+                    boxShadow: isDark ? '0 0 16px rgba(244,114,182,0.5)' : '0 2px 8px rgba(190,24,93,0.2)',
                   }}
                 />
                 <Box>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-                    <Typography variant="overline" sx={{ color: '#F472B6', fontWeight: 800, letterSpacing: '0.12em', lineHeight: 1.2 }}>
+                    <Typography variant="overline" sx={{ color: isDark ? '#F472B6' : '#BE185D', fontWeight: 800, letterSpacing: '0.12em', lineHeight: 1.2 }}>
                       LUCY // SOVEREIGN NETRUNNER ORACLE
                     </Typography>
                     <Chip
-                      icon={<CheckCircleIcon sx={{ fontSize: 13, color: '#34D399 !important' }} />}
+                      icon={<CheckCircleIcon sx={{ fontSize: 13, color: `${isDark ? '#34D399' : '#027A48'} !important` }} />}
                       label={`CONFIDENCE: ${oracleResult.confidence}`}
                       size="small"
                       sx={{
-                        bgcolor: 'rgba(52,211,153,0.15)',
-                        color: '#34D399',
+                        bgcolor: isDark ? 'rgba(52,211,153,0.15)' : '#ECFDF5',
+                        color: isDark ? '#34D399' : '#027A48',
                         fontFamily: mono,
                         fontWeight: 800,
                         fontSize: '0.7rem',
+                        border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`,
                       }}
                     />
                   </Box>
@@ -756,7 +757,7 @@ ${oracleResult.faq.a}`;
                     size="small"
                     onClick={handleCopyTransmission}
                     sx={{
-                      color: copiedResponse ? '#34D399' : gold.accent,
+                      color: copiedResponse ? (isDark ? '#34D399' : '#027A48') : gold.accent,
                       border: `1px solid ${gold.border}`,
                       borderRadius: 1.5,
                       p: 0.8,
@@ -770,8 +771,8 @@ ${oracleResult.faq.a}`;
                   variant="outlined"
                   onClick={() => jumpToFaq(oracleResult.faq.id)}
                   sx={{
-                    borderColor: gold.border,
-                    color: gold.soft,
+                    borderColor: isDark ? gold.border : gold.accent,
+                    color: isDark ? gold.soft : gold.accent,
                     fontFamily: mono,
                     fontSize: '0.74rem',
                     fontWeight: 750,
@@ -789,7 +790,7 @@ ${oracleResult.faq.a}`;
                 p: 2,
                 borderRadius: 2,
                 bgcolor: isDark ? 'rgba(0,0,0,0.6)' : '#FFFFFF',
-                border: `1px solid ${isDark ? 'rgba(244,114,182,0.25)' : '#E5E7EB'}`,
+                border: `1px solid ${isDark ? 'rgba(244,114,182,0.25)' : '#E5C768'}`,
               }}
             >
               <Typography
@@ -820,7 +821,7 @@ ${oracleResult.faq.a}`;
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <AutoAwesomeIcon sx={{ color: gold.accent, fontSize: 18 }} />
-                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 750, color: gold.soft, textTransform: 'uppercase' }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 750, color: isDark ? gold.soft : gold.accent, textTransform: 'uppercase' }}>
                   Direct Jump Targets:
                 </Typography>
               </Box>
@@ -897,7 +898,7 @@ ${oracleResult.faq.a}`;
                   fontWeight: 750,
                   fontSize: '0.8rem',
                   bgcolor: active ? gold.accent : theme.palette.background.paper,
-                  color: active ? '#08080B' : theme.palette.text.primary,
+                  color: active ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
                   border: '1px solid',
                   borderColor: active ? gold.accent : theme.palette.divider,
                   transition: 'all 0.18s ease',
@@ -961,7 +962,7 @@ ${oracleResult.faq.a}`;
                   border: isExpanded ? `1.5px solid ${gold.accent}` : `1px solid ${theme.palette.divider}`,
                   bgcolor: theme.palette.background.paper,
                   borderRadius: '12px !important',
-                  boxShadow: isExpanded && isDark ? '0 4px 22px rgba(212,175,55,0.14)' : 'none',
+                  boxShadow: isExpanded ? (isDark ? '0 4px 22px rgba(212,175,55,0.14)' : '0 4px 20px rgba(184,134,11,0.1)') : 'none',
                   transition: 'border-color 0.2s, box-shadow 0.2s',
                   '&:before': { display: 'none' },
                 }}
@@ -990,7 +991,8 @@ ${oracleResult.faq.a}`;
                         fontWeight: 800,
                         fontSize: '0.7rem',
                         bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#F3F4F6',
-                        color: gold.soft,
+                        color: isDark ? gold.soft : gold.accent,
+                        border: `1px solid ${isDark ? 'transparent' : '#E5E7EB'}`,
                       }}
                     />
                     <Typography variant="subtitle1" sx={{ fontWeight: 750, color: theme.palette.text.primary, fontSize: '0.98rem' }}>
@@ -1008,7 +1010,7 @@ ${oracleResult.faq.a}`;
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5 }}>
                     <Button
                       size="small"
-                      startIcon={<PsychologyIcon sx={{ color: '#F472B6' }} />}
+                      startIcon={<PsychologyIcon sx={{ color: isDark ? '#F472B6' : '#BE185D' }} />}
                       onClick={() => handleQuickPrompt(faq.q)}
                       sx={{
                         fontFamily: mono,
@@ -1032,8 +1034,8 @@ ${oracleResult.faq.a}`;
                             fontFamily: mono,
                             fontSize: '0.72rem',
                             fontWeight: 700,
-                            borderColor: gold.border,
-                            color: gold.soft,
+                            borderColor: isDark ? gold.border : gold.accent,
+                            color: isDark ? gold.soft : gold.accent,
                             py: 0.3,
                             px: 1.5,
                           }}
@@ -1060,7 +1062,7 @@ ${oracleResult.faq.a}`;
           p: { xs: 3, md: 4 },
           borderRadius: 3,
           bgcolor: isDark ? 'rgba(212,175,55,0.05)' : '#FEF9E7',
-          border: `1px solid ${gold.border}`,
+          border: `1px solid ${isDark ? gold.border : '#E5C768'}`,
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -1071,7 +1073,7 @@ ${oracleResult.faq.a}`;
         <Box sx={{ minWidth: 260, flex: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
             <PsychologyIcon sx={{ color: gold.accent }} />
-            <Typography variant="subtitle1" sx={{ fontWeight: 800, color: gold.soft }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 800, color: isDark ? gold.soft : gold.accent }}>
               Need deeper answers? Consult the Lucy Netrunner Oracle
             </Typography>
           </Box>

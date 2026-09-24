@@ -596,7 +596,7 @@ export default function ConsensusPage() {
 
         <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 1.5 }}>
           <Chip
-            icon={<ShieldIcon sx={{ fontSize: '1rem !important', color: up ? '#34D399' : gold.accent }} />}
+            icon={<ShieldIcon sx={{ fontSize: '1rem !important', color: up ? (isDark ? '#34D399' : '#059669') : gold.accent }} />}
             label={up ? 'SIGNAL BRIDGE LINKED' : 'ZERO-EGRESS SIMULATION READY'}
             size="small"
             sx={{
@@ -674,7 +674,7 @@ export default function ConsensusPage() {
                           fontSize: '0.7rem',
                           fontWeight: 800,
                           bgcolor: isSelected ? gold.accent : (isDark ? 'rgba(212,175,55,0.12)' : '#F2F4F7'),
-                          color: isSelected ? '#08080B' : gold.soft,
+                          color: isSelected ? (isDark ? '#08080B' : '#FFFFFF') : gold.soft,
                         }}
                       />
                       <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: gold.accent, fontWeight: 800 }}>
@@ -760,7 +760,7 @@ export default function ConsensusPage() {
                   <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
                     Draco (Arbitrator)
                   </Typography>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#38BDF8', fontWeight: 700 }}>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#38BDF8' : '#0284C7', fontWeight: 700 }}>
                     SYNTHESIS & QUORUM VERDICT
                   </Typography>
                 </Box>
@@ -804,8 +804,8 @@ export default function ConsensusPage() {
                   fontFamily: mono,
                   fontWeight: 800,
                   bgcolor: isDark ? '#0D0D14' : '#F1F5F9',
-                  color: isSimulationMode ? gold.soft : '#34D399',
-                  border: `1px solid ${isSimulationMode ? gold.accent : '#34D399'}`,
+                  color: isSimulationMode ? gold.soft : (isDark ? '#34D399' : '#027A48'),
+                  border: `1px solid ${isSimulationMode ? gold.accent : (isDark ? '#34D399' : '#059669')}`,
                 }}
               />
               <Button
@@ -850,7 +850,7 @@ export default function ConsensusPage() {
                 startIcon={<PlayArrowIcon />}
                 sx={{
                   bgcolor: gold.accent,
-                  color: '#08080B',
+                  color: isDark ? '#08080B' : '#FFFFFF',
                   fontWeight: 800,
                   px: 3.5,
                   py: 1.2,
@@ -940,7 +940,7 @@ export default function ConsensusPage() {
                   <Chip
                     label="ZERO EXTERNAL EGRESS"
                     size="small"
-                    sx={{ fontFamily: mono, fontWeight: 800, bgcolor: gold.accent, color: '#08080B', fontSize: '0.68rem' }}
+                    sx={{ fontFamily: mono, fontWeight: 800, bgcolor: gold.accent, color: isDark ? '#08080B' : '#FFFFFF', fontSize: '0.68rem' }}
                   />
                 </Box>
               </Alert>
@@ -982,7 +982,7 @@ export default function ConsensusPage() {
                   <Chip
                     label={`ROUND ${roundObj.round}`}
                     size="small"
-                    sx={{ fontFamily: mono, fontWeight: 800, bgcolor: gold.accent, color: '#08080B' }}
+                    sx={{ fontFamily: mono, fontWeight: 800, bgcolor: gold.accent, color: isDark ? '#08080B' : '#FFFFFF' }}
                   />
                   <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
                     {roundObj.title}
@@ -993,7 +993,7 @@ export default function ConsensusPage() {
                   {roundObj.turns.map((turn, tIdx) => {
                     const isProponent = turn.speaker === 'AZOTH';
                     const isSkeptic = turn.speaker === 'KAI';
-                    const speakerColor = isProponent ? gold.accent : isSkeptic ? (isDark ? '#F87171' : '#DC2626') : '#38BDF8';
+                    const speakerColor = isProponent ? gold.accent : isSkeptic ? (isDark ? '#F87171' : '#DC2626') : (isDark ? '#38BDF8' : '#0284C7');
                     const stanceBg = isProponent
                       ? (isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7')
                       : isSkeptic
@@ -1044,7 +1044,7 @@ export default function ConsensusPage() {
                         </Typography>
 
                         <Box sx={{ p: 1, bgcolor: isDark ? '#08080B' : '#F1F5F9', borderRadius: 1.2, border: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}` }}>
-                          <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', color: isDark ? '#94A3B8' : '#475467' }}>
+                          <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', color: isDark ? '#94A3B8' : '#334155' }}>
                             [TELEMETRY PROOF]: {turn.metric}
                           </Typography>
                         </Box>
@@ -1137,7 +1137,7 @@ export default function ConsensusPage() {
               <Box sx={{ p: 2, bgcolor: gold.darkPaper, borderRadius: 2, border: `1px solid ${isDark ? 'rgba(212,175,55,0.18)' : theme.palette.divider}`, mb: 2 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.8 }}>
                   <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: 'text.secondary' }}>BFT Quorum Threshold:</Typography>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: '#34D399' }}>66.7% (Supermajority)</Typography>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: isDark ? '#34D399' : '#059669' }}>66.7% (Supermajority)</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.8 }}>
                   <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: 'text.secondary' }}>Fault Tolerance Margin:</Typography>
@@ -1145,7 +1145,7 @@ export default function ConsensusPage() {
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: 'text.secondary' }}>Skeptic Entropy Reduction:</Typography>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: '#38BDF8' }}>-1.84 nats (Converged)</Typography>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: isDark ? '#38BDF8' : '#0284C7' }}>-1.84 nats (Converged)</Typography>
                 </Box>
               </Box>
 
@@ -1208,14 +1208,14 @@ export default function ConsensusPage() {
                   </Typography>
                 </Box>
                 <Chip
-                  icon={<CheckCircleIcon sx={{ fontSize: '1rem !important', color: '#08080B' }} />}
+                  icon={<CheckCircleIcon sx={{ fontSize: '1rem !important', color: isDark ? '#08080B' : '#FFFFFF' }} />}
                   label={verdict ? 'QUORUM RATIFIED' : 'AWAITING RUN'}
                   size="small"
                   sx={{
                     fontFamily: mono,
                     fontWeight: 800,
                     bgcolor: verdict ? gold.accent : (isDark ? 'rgba(255,255,255,0.1)' : '#F1F5F9'),
-                    color: verdict ? '#08080B' : 'text.secondary',
+                    color: verdict ? (isDark ? '#08080B' : '#FFFFFF') : 'text.secondary',
                   }}
                 />
               </Box>
@@ -1245,7 +1245,7 @@ export default function ConsensusPage() {
                       </Box>
                       <Tooltip title={copiedHash ? 'Hash Copied!' : 'Copy SHA-256'}>
                         <IconButton size="small" onClick={copySha256} sx={{ color: gold.accent }}>
-                          {copiedHash ? <CheckCircleIcon sx={{ fontSize: '1rem', color: '#34D399' }} /> : <ContentCopyIcon sx={{ fontSize: '1rem' }} />}
+                          {copiedHash ? <CheckCircleIcon sx={{ fontSize: '1rem', color: isDark ? '#34D399' : '#059669' }} /> : <ContentCopyIcon sx={{ fontSize: '1rem' }} />}
                         </IconButton>
                       </Tooltip>
                     </Box>
@@ -1253,13 +1253,13 @@ export default function ConsensusPage() {
                       sx={{
                         fontFamily: mono,
                         fontSize: '0.74rem',
-                        color: gold.accent,
+                        color: isDark ? gold.accent : '#854D0E',
                         wordBreak: 'break-all',
                         lineHeight: 1.4,
                         bgcolor: isDark ? 'rgba(212,175,55,0.06)' : '#FFFFFF',
                         p: 1,
                         borderRadius: 1,
-                        border: '1px solid rgba(212,175,55,0.15)',
+                        border: isDark ? '1px solid rgba(212,175,55,0.15)' : '1px solid #E2CE82',
                       }}
                     >
                       {verdictSha256 || 'Awaiting debate completion for hash calculation...'}
@@ -1295,7 +1295,7 @@ export default function ConsensusPage() {
                 startIcon={<DownloadIcon />}
                 sx={{
                   bgcolor: gold.accent,
-                  color: '#08080B',
+                  color: isDark ? '#08080B' : '#FFFFFF',
                   fontWeight: 800,
                   py: 1.4,
                   fontSize: '0.95rem',

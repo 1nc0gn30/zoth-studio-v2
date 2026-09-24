@@ -33,6 +33,20 @@ const CADRE_COLORS = {
   Swarm: '#34D399',
 };
 
+const getCadreColor = (cadreName, isDark) => {
+  if (isDark) {
+    return CADRE_COLORS[cadreName] || '#D4AF37';
+  }
+  const LIGHT_CADRE_COLORS = {
+    Architects: '#B8860B',
+    Code: '#0284C7',
+    Security: '#DC2626',
+    Creative: '#7C3AED',
+    Swarm: '#059669',
+  };
+  return LIGHT_CADRE_COLORS[cadreName] || '#B8860B';
+};
+
 const CADRE_METRICS_INIT = {
   Architects: { latency: 0.24, min: 0.18, max: 0.35, sent: 24, received: 24, socket: 'ipc:///run/zoth/architects.sock', status: 'ONLINE' },
   Code: { latency: 0.31, min: 0.22, max: 0.44, sent: 24, received: 24, socket: 'ipc:///run/zoth/code-ast.sock', status: 'ONLINE' },
@@ -279,7 +293,7 @@ export default function SwarmPage() {
         {pantheonCadres.filter((name) => name !== 'All').map((name) => {
           const count = pantheonAgents.filter((agent) => agent.cadre === name).length;
           const active = cadre === name;
-          const color = CADRE_COLORS[name];
+          const color = getCadreColor(name, isDark);
           return (
             <Box
               key={name}
@@ -378,7 +392,7 @@ export default function SwarmPage() {
                   fontFamily: mono,
                   fontWeight: 800,
                   bgcolor: isDark ? '#0D0D14' : '#F1F5F9',
-                  color: gold.accent,
+                  color: goldSoft,
                   border: `1px solid ${goldBorder}`,
                 }}
               />
@@ -389,7 +403,7 @@ export default function SwarmPage() {
                   fontFamily: mono,
                   fontWeight: 800,
                   bgcolor: isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF3',
-                  color: '#34D399',
+                  color: isDark ? '#34D399' : '#059669',
                   border: '1px solid rgba(52,211,153,0.3)',
                 }}
               />
@@ -440,7 +454,7 @@ export default function SwarmPage() {
             />
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, position: 'relative', zIndex: 1 }}>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: gold.accent, fontWeight: 700 }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: '#F5E6AB', fontWeight: 700 }}>
                 ● LOOPBACK SIMPLEX EKG: 21 / 21 THREADS SYNCED
               </Typography>
               <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#94A3B8' }}>
@@ -470,7 +484,7 @@ export default function SwarmPage() {
             </Box>
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1, position: 'relative', zIndex: 1 }}>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#64748B' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8' }}>
                 DAEMON PID: 18420 · IPC_SOCKET: /run/user/1000/zoth-swarm.sock
               </Typography>
               <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#34D399', fontWeight: 800 }}>
@@ -572,7 +586,7 @@ export default function SwarmPage() {
                 startIcon={<BoltIcon />}
                 sx={{
                   bgcolor: gold,
-                  color: '#08080B',
+                  color: isDark ? '#08080B' : '#FFFFFF',
                   fontWeight: 800,
                   px: 2.5,
                   boxShadow: `0 0 16px -2px ${gold}`,
@@ -588,7 +602,7 @@ export default function SwarmPage() {
           <Grid container spacing={2} sx={{ mb: 3 }}>
             {['Architects', 'Code', 'Security', 'Creative', 'Swarm'].map((name) => {
               const metrics = cadreMetrics[name];
-              const color = CADRE_COLORS[name];
+              const color = getCadreColor(name, isDark);
               const isPinging = pingingCadre === name || pingingCadre === 'ALL';
               const agentCount = pantheonAgents.filter((a) => a.cadre === name).length;
 
@@ -629,10 +643,10 @@ export default function SwarmPage() {
 
                       {/* Measured Latency Metric */}
                       <Box sx={{ my: 1.5, textAlign: 'center', p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#050508' : '#FFFFFF', border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}` }}>
-                        <Typography sx={{ fontFamily: mono, fontSize: '1.6rem', fontWeight: 900, color: isPinging ? '#34D399' : color, lineHeight: 1 }}>
+                        <Typography sx={{ fontFamily: mono, fontSize: '1.6rem', fontWeight: 900, color: isPinging ? (isDark ? '#34D399' : '#059669') : color, lineHeight: 1 }}>
                           {metrics.latency.toFixed(2)} ms
                         </Typography>
-                        <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#94A3B8', mt: 0.5, display: 'block' }}>
+                        <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.68rem', color: isDark ? '#94A3B8' : '#64748B', mt: 0.5, display: 'block' }}>
                           MIN: {metrics.min.toFixed(2)}ms · MAX: {metrics.max.toFixed(2)}ms
                         </Typography>
                       </Box>
@@ -641,7 +655,7 @@ export default function SwarmPage() {
                       <Box sx={{ mb: 1.5 }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.4 }}>
                           <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary' }}>Packet Loss:</Typography>
-                          <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 800, color: '#34D399' }}>0.00% Zero-Drop</Typography>
+                          <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 800, color: isDark ? '#34D399' : '#059669' }}>0.00% Zero-Drop</Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                           <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary' }}>Sent / Recv:</Typography>
@@ -678,8 +692,8 @@ export default function SwarmPage() {
           <Box sx={{ p: 2, bgcolor: isDark ? '#050508' : '#0F172A', borderRadius: 2, border: '1px solid', borderColor: isDark ? 'rgba(212,175,55,0.2)' : '#1E293B' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.2 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <TerminalIcon sx={{ fontSize: '1rem', color: gold }} />
-                <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: goldSoft }}>
+                <TerminalIcon sx={{ fontSize: '1rem', color: '#D4AF37' }} />
+                <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: '#F5E6AB' }}>
                   SWARM LOOPBACK AUDIT LOG (LOCAL IPC SIMPLEX STREAM)
                 </Typography>
               </Box>
@@ -694,10 +708,10 @@ export default function SwarmPage() {
               {pingLogs.map((log) => (
                 <Typography key={log.id} sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#94A3B8', lineHeight: 1.4 }}>
                   <span style={{ color: '#64748B' }}>[{log.time}]</span>{' '}
-                  <span style={{ color: CADRE_COLORS[log.cadre] || gold, fontWeight: 700 }}>PING {log.cadre}</span>{' '}
+                  <span style={{ color: getCadreColor(log.cadre, true), fontWeight: 700 }}>PING {log.cadre}</span>{' '}
                   <span style={{ color: '#64748B' }}>-&gt; {log.socket}:</span>{' '}
                   <span style={{ color: '#34D399', fontWeight: 700 }}>rtt={log.rtt}</span>{' '}
-                  <span style={{ color: goldSoft }}>status={log.status}</span>
+                  <span style={{ color: '#F5E6AB' }}>status={log.status}</span>
                 </Typography>
               ))}
             </Box>
@@ -719,7 +733,7 @@ export default function SwarmPage() {
                 fontWeight: 750,
                 px: 1,
                 bgcolor: cadre === name ? gold : voidBg,
-                color: cadre === name ? '#08080B' : theme.palette.text.primary,
+                color: cadre === name ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
                 border: '1.5px solid',
                 borderColor: cadre === name ? gold : (isDark ? 'rgba(212,175,55,0.22)' : theme.palette.divider),
                 '&:hover': {
@@ -813,10 +827,10 @@ export default function SwarmPage() {
                     label={agent.cadre}
                     size="small"
                     sx={{
-                      bgcolor: isDark ? 'rgba(212,175,55,0.14)' : '#F2F4F7',
-                      color: goldSoft,
-                      border: isDark ? '1px solid rgba(212,175,55,0.42)' : '1px solid #EAECF0',
-                      fontWeight: 700,
+                      bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#F1F5F9',
+                      color: getCadreColor(agent.cadre, isDark),
+                      border: `1px solid ${isDark ? 'rgba(255,255,255,0.12)' : '#E2E8F0'}`,
+                      fontWeight: 800,
                     }}
                   />
                 </Card>

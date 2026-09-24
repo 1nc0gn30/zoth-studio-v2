@@ -46,9 +46,9 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const gold = (t) => (t.palette.mode === 'dark' ? '#D4AF37' : '#B8860B');
 const goldSoft = (t) => (t.palette.mode === 'dark' ? '#F5E6AB' : '#8A6A09');
 const goldBg = (t) => (t.palette.mode === 'dark' ? 'rgba(212,175,55,0.16)' : '#FEF9E7');
-const goldBorder = (t) => (t.palette.mode === 'dark' ? 'rgba(212,175,55,0.42)' : '#F5E6AB');
+const goldBorder = (t) => (t.palette.mode === 'dark' ? 'rgba(212,175,55,0.42)' : 'rgba(184,134,11,0.35)');
 const darkPanel = (t) => (t.palette.mode === 'dark' ? '#0B0B12' : '#0F172A');
-const darkPanelBorder = (t) => (t.palette.mode === 'dark' ? '#2A2A38' : '#1E293B');
+const darkPanelBorder = (t) => (t.palette.mode === 'dark' ? 'rgba(212,175,55,0.3)' : '#334155');
 const successBg = (t) => (t.palette.mode === 'dark' ? 'rgba(18,183,106,0.16)' : '#ECFDF3');
 const successFg = (t) => (t.palette.mode === 'dark' ? '#34D399' : '#027A48');
 const errorBg = (t) => (t.palette.mode === 'dark' ? 'rgba(244,63,94,0.16)' : '#FEF3F2');
@@ -144,9 +144,36 @@ function JwtInspectorTool() {
             Security Audit &amp; Claims Matrix
           </Typography>
           <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
-            <Chip label={`Algorithm: ${header.alg || 'none'}`} size="small" sx={{ bgcolor: header.alg === 'none' ? errorBg(theme) : theme.palette.background.paper, color: header.alg === 'none' ? errorFg(theme) : theme.palette.text.primary, fontWeight: 800 }} />
-            <Chip label={signature ? 'Signature present — not verified' : 'UNSIGNED TOKEN'} size="small" sx={{ bgcolor: signature ? goldBg(theme) : errorBg(theme), color: signature ? goldSoft(theme) : errorFg(theme), fontWeight: 800 }} />
-            <Chip label={`Claims Count: ${Object.keys(payload).length}`} size="small" sx={{ bgcolor: theme.palette.background.paper, fontWeight: 750, color: goldSoft(theme) }} />
+            <Chip
+              label={`Algorithm: ${header.alg || 'none'}`}
+              size="small"
+              sx={{
+                bgcolor: header.alg === 'none' ? errorBg(theme) : theme.palette.background.paper,
+                color: header.alg === 'none' ? errorFg(theme) : theme.palette.text.primary,
+                border: `1px solid ${header.alg === 'none' ? errorFg(theme) : theme.palette.divider}`,
+                fontWeight: 800
+              }}
+            />
+            <Chip
+              label={signature ? 'Signature present — not verified' : 'UNSIGNED TOKEN'}
+              size="small"
+              sx={{
+                bgcolor: signature ? (theme.palette.mode === 'dark' ? 'rgba(212,175,55,0.22)' : '#FFF8E1') : errorBg(theme),
+                color: signature ? (theme.palette.mode === 'dark' ? '#F5E6AB' : '#8A6A09') : errorFg(theme),
+                border: `1px solid ${signature ? goldBorder(theme) : errorFg(theme)}`,
+                fontWeight: 800
+              }}
+            />
+            <Chip
+              label={`Claims Count: ${Object.keys(payload).length}`}
+              size="small"
+              sx={{
+                bgcolor: theme.palette.background.paper,
+                border: `1px solid ${theme.palette.divider}`,
+                fontWeight: 750,
+                color: goldSoft(theme)
+              }}
+            />
           </Box>
         </Box>
       )}
@@ -555,7 +582,19 @@ function SacredGeometryTool() {
               <Slider size="small" min={0} max={4} step={0.1} value={speed} onChange={(e, v) => setSpeed(v)} />
             </Box>
             <Box sx={{ mb: 2.5 }}>
-              <Chip label={spokes ? 'Show Harmonic Rays' : 'Reveal Harmonic Rays'} size="small" onClick={() => setSpokes(!spokes)} clickable sx={{ fontWeight: 750, bgcolor: spokes ? gold(theme) : chipNeutralBg(theme), color: spokes ? '#FFF' : chipNeutralFg(theme) }} />
+              <Chip
+                label={spokes ? 'Show Harmonic Rays' : 'Reveal Harmonic Rays'}
+                size="small"
+                onClick={() => setSpokes(!spokes)}
+                clickable
+                sx={{
+                  fontWeight: 750,
+                  bgcolor: spokes ? gold(theme) : chipNeutralBg(theme),
+                  color: spokes ? (theme.palette.mode === 'dark' ? '#08080B' : '#0F172A') : chipNeutralFg(theme),
+                  border: '1px solid',
+                  borderColor: spokes ? gold(theme) : theme.palette.divider
+                }}
+              />
             </Box>
             <Typography variant="caption" sx={{ fontWeight: 750, color: theme.palette.text.secondary, mb: 1, display: 'block' }}>
               Golden Ratio Hue
@@ -1042,7 +1081,20 @@ function TurtleTool() {
             </Typography>
             <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
               {presets.map((p) => (
-                <Chip key={p.name} label={p.name} size="small" onClick={() => setCommands(p.code)} clickable sx={{ fontWeight: 750, bgcolor: p.code === commands ? gold(theme) : chipNeutralBg(theme), color: p.code === commands ? '#FFF' : chipNeutralFg(theme) }} />
+                <Chip
+                  key={p.name}
+                  label={p.name}
+                  size="small"
+                  onClick={() => setCommands(p.code)}
+                  clickable
+                  sx={{
+                    fontWeight: 750,
+                    bgcolor: p.code === commands ? gold(theme) : chipNeutralBg(theme),
+                    color: p.code === commands ? (theme.palette.mode === 'dark' ? '#08080B' : '#0F172A') : chipNeutralFg(theme),
+                    border: '1px solid',
+                    borderColor: p.code === commands ? gold(theme) : theme.palette.divider
+                  }}
+                />
               ))}
             </Stack>
             <Divider sx={{ my: 2 }} />
@@ -1213,7 +1265,20 @@ function GlitchTool() {
             </Typography>
             <Stack direction="row" spacing={1}>
               {['slices', 'sort', 'both'].map((m) => (
-                <Chip key={m} label={m} size="small" onClick={() => setMode(m)} clickable sx={{ fontWeight: 750, bgcolor: mode === m ? gold(theme) : chipNeutralBg(theme), color: mode === m ? '#FFF' : chipNeutralFg(theme) }} />
+                <Chip
+                  key={m}
+                  label={m}
+                  size="small"
+                  onClick={() => setMode(m)}
+                  clickable
+                  sx={{
+                    fontWeight: 750,
+                    bgcolor: mode === m ? gold(theme) : chipNeutralBg(theme),
+                    color: mode === m ? (theme.palette.mode === 'dark' ? '#08080B' : '#0F172A') : chipNeutralFg(theme),
+                    border: '1px solid',
+                    borderColor: mode === m ? gold(theme) : theme.palette.divider
+                  }}
+                />
               ))}
             </Stack>
             <Typography variant="caption" sx={{ color: theme.palette.text.secondary, display: 'block', fontFamily: mono, fontSize: '0.72rem', mt: 2 }}>
@@ -1455,10 +1520,10 @@ export default function RealToolWorkspacePage() {
               icon={<FlashOnIcon sx={{ color: `${successFg(theme)} !important` }} />}
               label={isBackendConnected ? "⚡ SOVEREIGN ENCLAVE (LOCAL BACKEND ACTIVE)" : "⚡ LOCAL CLI ENCLAVE"}
               size="small"
-              sx={{ bgcolor: successBg(theme), color: successFg(theme), fontWeight: 800 }}
+              sx={{ bgcolor: successBg(theme), color: successFg(theme), border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`, fontWeight: 800 }}
             />
           )}
-          <Chip label={`v${tool.version}`} size="small" variant="outlined" sx={{ fontFamily: mono }} />
+          <Chip label={`v${tool.version}`} size="small" variant="outlined" sx={{ fontFamily: mono, borderColor: theme.palette.divider }} />
         </Box>
 
         <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1.5 }}>
@@ -1493,7 +1558,18 @@ export default function RealToolWorkspacePage() {
           <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
             Install <Box component="span" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>Zoth Studio</Box> to check this repo out and run it with the local daemons, or boot <Box component="span" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>Zoth OS</Box> and every tool is already on the disk.
           </Typography>
-          <Box sx={{ mt: 1.25, p: 1.25, borderRadius: 1.5, bgcolor: darkPanel(theme), color: '#F5E6AB', fontFamily: mono, fontSize: '0.78rem', wordBreak: 'break-all' }}>
+          <Box sx={{
+            mt: 1.25,
+            p: 1.25,
+            borderRadius: 1.5,
+            bgcolor: theme.palette.mode === 'dark' ? '#0B0B12' : '#F8FAFC',
+            border: theme.palette.mode === 'dark' ? '1px solid rgba(212,175,55,0.35)' : '1px solid #CBD5E1',
+            color: theme.palette.mode === 'dark' ? '#F5E6AB' : '#0F172A',
+            fontFamily: mono,
+            fontSize: '0.78rem',
+            wordBreak: 'break-all'
+          }}>
+            <Box component="span" sx={{ color: gold(theme), fontWeight: 800, mr: 0.75 }}>$</Box>
             npm install -g zoth-studio && zoth pull {tool.repo}
           </Box>
         </Box>
@@ -1580,10 +1656,11 @@ export default function RealToolWorkspacePage() {
               }}
             >
               <Box sx={{ minWidth: 0 }}>
-                <Typography variant="caption" sx={{ color: goldSoft(theme), fontWeight: 750, display: 'block', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ color: theme.palette.mode === 'dark' ? '#F5E6AB' : '#FCD34D', fontWeight: 750, display: 'block', mb: 0.5 }}>
                   START LOCAL DAEMON (RUN IN TERMINAL):
                 </Typography>
                 <Typography sx={{ fontFamily: mono, fontSize: '0.86rem', color: '#FFFFFF', wordBreak: 'break-all' }}>
+                  <Box component="span" sx={{ color: theme.palette.mode === 'dark' ? '#D4AF37' : '#38BDF8', fontWeight: 800, mr: 0.75 }}>$</Box>
                   node bin/zoth.js up
                 </Typography>
               </Box>
@@ -1592,7 +1669,7 @@ export default function RealToolWorkspacePage() {
                 variant="outlined"
                 startIcon={<ContentCopyIcon />}
                 onClick={() => navigator.clipboard.writeText('node bin/zoth.js up')}
-                sx={{ borderColor: gold(theme), color: gold(theme), flexShrink: 0, fontWeight: 750 }}
+                sx={{ borderColor: theme.palette.mode === 'dark' ? gold(theme) : 'rgba(255,255,255,0.4)', color: theme.palette.mode === 'dark' ? gold(theme) : '#FFFFFF', flexShrink: 0, fontWeight: 750, '&:hover': { borderColor: '#FFFFFF', bgcolor: 'rgba(255,255,255,0.08)' } }}
               >
                 Copy
               </Button>
@@ -1622,7 +1699,16 @@ export default function RealToolWorkspacePage() {
             {requiresLocalDaemon && !isBackendConnected && bypassSimulated && (
               <Alert
                 severity="warning"
-                sx={{ mb: 3.5, borderRadius: 2, bgcolor: 'rgba(217,119,6,0.12)', border: '1px solid rgba(217,119,6,0.3)', color: '#F59E0B' }}
+                sx={{
+                  mb: 3.5,
+                  borderRadius: 2,
+                  bgcolor: theme.palette.mode === 'dark' ? 'rgba(217,119,6,0.14)' : '#FFFBEB',
+                  border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(217,119,6,0.35)' : '#FCD34D'}`,
+                  color: theme.palette.mode === 'dark' ? '#F59E0B' : '#92400E',
+                  '& .MuiAlert-icon': {
+                    color: theme.palette.mode === 'dark' ? '#F59E0B' : '#B45309'
+                  }
+                }}
                 action={
                   <Button size="small" color="inherit" onClick={() => setBypassSimulated(false)} sx={{ fontWeight: 750 }}>
                     Re-lock Tool

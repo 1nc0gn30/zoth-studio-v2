@@ -310,16 +310,20 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
               color="inherit"
               startIcon={<ArrowBackIcon />}
               onClick={() => navigate(`/docs/math/${prevPillar.id}`)}
-              sx={{ fontWeight: 700, borderColor: divider }}
+              sx={{ fontWeight: 700, borderColor: divider, color: textPrimary }}
             >
               Prev ({prevPillar.numeral})
             </Button>
             <Button
               variant="contained"
-              color="primary"
               endIcon={<ArrowForwardIcon />}
               onClick={() => navigate(`/docs/math/${nextPillar.id}`)}
-              sx={{ fontWeight: 700 }}
+              sx={{
+                fontWeight: 700,
+                bgcolor: gold,
+                color: dark ? '#08080B' : '#FFFFFF',
+                '&:hover': { bgcolor: dark ? goldLight : '#9A7209' }
+              }}
             >
               Next ({nextPillar.numeral})
             </Button>
@@ -341,11 +345,11 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
               sx={{
                 fontWeight: 700,
                 bgcolor: p.id === pillar.id ? gold : (dark ? '#14141D' : '#F8FAFC'),
-                color: p.id === pillar.id ? '#FFFFFF' : textSecondary,
+                color: p.id === pillar.id ? (dark ? '#08080B' : '#FFFFFF') : textPrimary,
                 border: '1px solid',
                 borderColor: p.id === pillar.id ? gold : divider,
                 px: 0.5,
-                '&:hover': { bgcolor: p.id === pillar.id ? goldLight : goldBg }
+                '&:hover': { bgcolor: p.id === pillar.id ? (dark ? goldLight : '#9A7209') : (dark ? 'rgba(212,175,55,0.1)' : '#FEF9E7') }
               }}
             />
           ))}
@@ -387,7 +391,7 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
                 fontSize: '0.9rem',
                 textTransform: 'none',
                 color: textSecondary,
-                '&.Mui-selected': { color: gold }
+                '&.Mui-selected': { color: dark ? gold : '#8A6A09' }
               },
               '& .MuiTabs-indicator': { bgcolor: gold, height: 3 }
             }}
@@ -401,27 +405,40 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
           <Box
             sx={{
               p: { xs: 2.5, md: 3.5 },
-              bgcolor: '#0B0F19',
-              color: '#F5E6AB',
+              bgcolor: dark ? '#0B0F19' : '#F8FAFC',
+              color: dark ? '#F5E6AB' : '#0F172A',
               fontFamily: mono,
               fontSize: { xs: '0.9rem', md: '1.05rem' },
               borderRadius: 2.5,
               lineHeight: 1.8,
               whiteSpace: 'pre-wrap',
               overflowX: 'auto',
-              border: '1px solid #1D2939',
+              border: `1px solid ${dark ? '#1D2939' : '#E2E8F0'}`,
               borderLeft: `4px solid ${gold}`,
-              boxShadow: dark ? 'inset 0 2px 8px rgba(0,0,0,0.5), 0 0 24px -10px rgba(212,175,55,0.3)' : 'inset 0 2px 8px rgba(0,0,0,0.5)'
+              boxShadow: dark
+                ? 'inset 0 2px 8px rgba(0,0,0,0.5), 0 0 24px -10px rgba(212,175,55,0.3)'
+                : '0 2px 8px rgba(16,24,40,0.04), inset 0 1px 2px rgba(0,0,0,0.02)'
             }}
           >
-            <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 1.5, fontFamily: mono, fontWeight: 800, letterSpacing: '0.05em' }}>
+            <Typography variant="caption" sx={{ color: dark ? '#94A3B8' : '#475467', display: 'block', mb: 1.5, fontFamily: mono, fontWeight: 800, letterSpacing: '0.05em' }}>
               {activeTierTab === 0 ? '// CONCEPTUAL INTUITION' : activeTierTab === 1 ? '// CLOSED-FORM ENGINEERING FORMULA' : '// HIGH-DIMENSIONAL TENSOR EQUATION'}
             </Typography>
             {pillar.tiers[['Beginner', 'Intermediate', 'Advanced'][activeTierTab]]}
           </Box>
 
-          <Alert severity="info" icon={<FunctionsIcon fontSize="inherit" />} sx={{ mt: 3, borderRadius: 2, bgcolor: goldBg, color: goldLight, border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`, '& .MuiAlert-icon': { color: gold } }}>
-            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+          <Alert
+            severity="info"
+            icon={<FunctionsIcon fontSize="inherit" />}
+            sx={{
+              mt: 3,
+              borderRadius: 2,
+              bgcolor: goldBg,
+              color: dark ? goldLight : '#715106',
+              border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`,
+              '& .MuiAlert-icon': { color: gold }
+            }}
+          >
+            <Typography variant="body2" sx={{ fontWeight: 600, color: dark ? goldLight : '#715106' }}>
               Formulas carried directly from Zoth Studio Math Workstation. Tier definitions represent exact closed-form execution parameters in local daemons.
             </Typography>
           </Alert>
@@ -465,7 +482,7 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
                     sx={{ color: gold, height: 6 }}
                   />
                   <Typography variant="caption" color="text.secondary" sx={{ fontFamily: mono, display: 'block', mt: 0.5, fontWeight: 600 }}>
-                    {sim.title1}: <Box component="span" sx={{ color: goldLight }}>{sim.val1}</Box>
+                    {sim.title1}: <Box component="span" sx={{ color: dark ? goldLight : '#8A6A09', fontWeight: 700 }}>{sim.val1}</Box>
                   </Typography>
                 </Box>
 
@@ -488,20 +505,31 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
                     sx={{ color: gold, height: 6 }}
                   />
                   <Typography variant="caption" color="text.secondary" sx={{ fontFamily: mono, display: 'block', mt: 0.5, fontWeight: 600 }}>
-                    {sim.title2}: <Box component="span" sx={{ color: goldLight }}>{sim.val2}</Box>
+                    {sim.title2}: <Box component="span" sx={{ color: dark ? goldLight : '#8A6A09', fontWeight: 700 }}>{sim.val2}</Box>
                   </Typography>
                 </Box>
               </Box>
 
               {/* Output Display Card */}
-              <Paper sx={{ p: 2.5, bgcolor: '#0B0F19', color: '#10B981', borderRadius: 2, fontFamily: mono, border: '1px solid #1D2939', borderLeft: `4px solid ${gold}` }}>
-                <Typography variant="caption" sx={{ color: gold, display: 'block', mb: 0.5, fontWeight: 800, letterSpacing: '0.04em' }}>
+              <Paper
+                sx={{
+                  p: 2.5,
+                  bgcolor: dark ? '#0B0F19' : '#F0FDF4',
+                  color: dark ? '#10B981' : '#065F46',
+                  borderRadius: 2,
+                  fontFamily: mono,
+                  border: `1px solid ${dark ? '#1D2939' : '#BBF7D0'}`,
+                  borderLeft: `4px solid ${gold}`,
+                  boxShadow: dark ? 'inset 0 2px 8px rgba(0,0,0,0.5)' : '0 1px 3px rgba(16,24,40,0.03)'
+                }}
+              >
+                <Typography variant="caption" sx={{ color: dark ? gold : '#854D0E', display: 'block', mb: 0.5, fontWeight: 800, letterSpacing: '0.04em' }}>
                   SIMULATED CLOSED-FORM OUTPUT
                 </Typography>
-                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#10B981', fontFamily: mono, mb: 1 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: dark ? '#10B981' : '#047857', fontFamily: mono, mb: 1 }}>
                   {sim.resultTitle}: {sim.resultVal}
                 </Typography>
-                <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', lineHeight: 1.5 }}>
+                <Typography variant="caption" sx={{ color: dark ? '#94A3B8' : '#334155', display: 'block', lineHeight: 1.5, fontWeight: 500 }}>
                   {sim.desc}
                 </Typography>
               </Paper>
@@ -528,15 +556,15 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
                   <Table>
                     <TableHead sx={{ bgcolor: dark ? '#14141D' : '#F8FAFC' }}>
                       <TableRow>
-                        <TableCell sx={{ fontWeight: 800, color: textSecondary, py: 1.5 }}>Metric Identifier</TableCell>
-                        <TableCell align="right" sx={{ fontWeight: 800, color: textSecondary, py: 1.5 }}>Value Target</TableCell>
+                        <TableCell sx={{ fontWeight: 800, color: textPrimary, py: 1.5 }}>Metric Identifier</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: 800, color: textPrimary, py: 1.5 }}>Value Target</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {pillar.metrics.map(([label, val]) => (
                         <TableRow key={label} hover>
-                          <TableCell sx={{ fontSize: '0.88rem', fontWeight: 600, color: textSecondary, py: 1.75 }}>{label}</TableCell>
-                          <TableCell align="right" sx={{ fontFamily: mono, fontWeight: 800, color: goldLight, fontSize: '0.88rem', py: 1.75 }}>
+                          <TableCell sx={{ fontSize: '0.88rem', fontWeight: 600, color: textPrimary, py: 1.75 }}>{label}</TableCell>
+                          <TableCell align="right" sx={{ fontFamily: mono, fontWeight: 800, color: dark ? goldLight : '#8A6A09', fontSize: '0.88rem', py: 1.75 }}>
                             {val}
                           </TableCell>
                         </TableRow>
@@ -547,7 +575,7 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
               </Box>
 
               <Box sx={{ mt: 3, p: 2, bgcolor: dark ? '#14141D' : '#F8FAFC', borderRadius: 2, border: `1px solid ${divider}` }}>
-                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', fontWeight: 600 }}>
+                <Typography variant="caption" sx={{ color: textSecondary, display: 'block', fontWeight: 600 }}>
                   ⚡ All metric constraints are validated during local swarm consensus evaluation.
                 </Typography>
               </Box>
@@ -572,13 +600,25 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
               variant="outlined"
               startIcon={copiedCode ? <CheckIcon sx={{ color: dark ? '#34D399' : '#12B76A' }} /> : <ContentCopyIcon />}
               onClick={handleCopyCodeText}
-              sx={{ borderColor: divider, color: textSecondary, fontWeight: 700, py: 0.8, px: 2 }}
+              sx={{ borderColor: divider, color: textPrimary, fontWeight: 700, py: 0.8, px: 2 }}
             >
               {copiedCode ? 'Copied Code!' : 'Copy Code'}
             </Button>
           </Box>
 
-          <Paper sx={{ p: { xs: 2.5, md: 3.5 }, bgcolor: '#0F172A', color: '#E2E8F0', borderRadius: 2.5, fontFamily: mono, fontSize: '0.88rem', border: '1px solid #1E293B', borderLeft: `4px solid ${gold}`, boxShadow: dark ? 'inset 0 2px 8px rgba(0,0,0,0.5), 0 0 24px -10px rgba(212,175,55,0.3)' : 'inset 0 2px 8px rgba(0,0,0,0.5)' }}>
+          <Paper
+            sx={{
+              p: { xs: 2.5, md: 3.5 },
+              bgcolor: dark ? '#0F172A' : '#0B0F19',
+              color: dark ? '#E2E8F0' : '#F8FAFC',
+              borderRadius: 2.5,
+              fontFamily: mono,
+              fontSize: '0.88rem',
+              border: `1px solid ${dark ? '#1E293B' : '#334155'}`,
+              borderLeft: `4px solid ${gold}`,
+              boxShadow: dark ? 'inset 0 2px 8px rgba(0,0,0,0.5), 0 0 24px -10px rgba(212,175,55,0.3)' : '0 4px 12px rgba(15,23,42,0.08)'
+            }}
+          >
             <pre style={{ margin: 0, overflowX: 'auto', whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.65 }}>
               {codeExamples[pillar.id]}
             </pre>

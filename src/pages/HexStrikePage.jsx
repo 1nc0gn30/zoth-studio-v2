@@ -237,15 +237,15 @@ export default function HexStrikePage() {
 
   // Strict gold-on-void styling tokens
   const gold = {
-    accent: '#D4AF37',
+    accent: isDark ? '#D4AF37' : '#B8860B',
     soft: isDark ? '#F5E6AB' : '#8A6A09',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-    border: 'rgba(212,175,55,0.28)',
-    glow: 'rgba(212,175,55,0.40)',
-    emerald: '#10B981',
-    emeraldSoft: '#34D399',
-    emeraldWash: 'rgba(16,185,129,0.12)',
-    void: '#08080B',
+    border: isDark ? 'rgba(212,175,55,0.28)' : '#E2CE82',
+    glow: isDark ? 'rgba(212,175,55,0.40)' : 'rgba(184,134,11,0.22)',
+    emerald: isDark ? '#10B981' : '#059669',
+    emeraldSoft: isDark ? '#34D399' : '#059669',
+    emeraldWash: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF3',
+    void: isDark ? '#08080B' : '#FFFFFF',
     surface: isDark ? '#0E0E14' : '#FFFFFF',
     surfaceSubtle: isDark ? '#12121B' : '#F9FAFB'
   };
@@ -642,10 +642,10 @@ export default function HexStrikePage() {
               onClick={handleExportSignedCveReport}
               sx={{
                 bgcolor: gold.accent,
-                color: '#08080B',
+                color: isDark ? '#08080B' : '#FFFFFF',
                 fontWeight: 800,
                 boxShadow: `0 4px 14px ${gold.glow}`,
-                '&:hover': { bgcolor: '#F5E6AB' }
+                '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#9A7209' }
               }}
             >
               Export Signed CVE Audit Report
@@ -944,12 +944,12 @@ export default function HexStrikePage() {
               onClick={handleRunPortScan}
               disabled={isScanningPorts}
               sx={{
-                bgcolor: isScanningPorts ? 'rgba(212,175,55,0.4)' : gold.accent,
-                color: '#08080B',
+                bgcolor: isScanningPorts ? (isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.4)') : gold.accent,
+                color: isDark ? '#08080B' : '#FFFFFF',
                 fontFamily: mono,
                 fontWeight: 850,
                 boxShadow: `0 4px 16px ${gold.glow}`,
-                '&:hover': { bgcolor: '#F5E6AB' }
+                '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#9A7209' }
               }}
             >
               {isScanningPorts ? `Scanning... (${scannedPortCount}/64)` : 'Run Attack Surface Scan'}
@@ -1065,7 +1065,7 @@ export default function HexStrikePage() {
                           fontFamily: mono,
                           fontWeight: 800,
                           fontSize: '0.68rem',
-                          color: isKeyDaemon ? gold.soft : theme.palette.text.primary,
+                          color: isKeyDaemon ? (isDark ? gold.soft : '#8A6A09') : theme.palette.text.primary,
                           lineHeight: 1
                         }}
                       >
@@ -1218,7 +1218,7 @@ export default function HexStrikePage() {
             <Chip
               label="sentinel@hexstrike:~$ [LOOPBACK ENCLAVE]"
               size="small"
-              sx={{ fontFamily: mono, bgcolor: '#08080B', color: gold.soft, border: `1px solid ${gold.border}`, fontWeight: 750 }}
+              sx={{ fontFamily: mono, bgcolor: isDark ? '#08080B' : '#0F172A', color: isDark ? gold.soft : '#F5E6AB', border: `1px solid ${gold.border}`, fontWeight: 750 }}
             />
           </Box>
 
@@ -1227,9 +1227,11 @@ export default function HexStrikePage() {
             sx={{
               borderRadius: 3,
               overflow: 'hidden',
-              bgcolor: '#08080B',
+              bgcolor: isDark ? '#08080B' : '#0B0F19',
               border: `1px solid ${gold.border}`,
-              boxShadow: '0 18px 40px rgba(0,0,0,0.8), 0 0 28px rgba(212,175,55,0.15)'
+              boxShadow: isDark
+                ? '0 18px 40px rgba(0,0,0,0.8), 0 0 28px rgba(212,175,55,0.15)'
+                : '0 12px 32px rgba(0,0,0,0.14), 0 0 20px rgba(184,134,11,0.10)'
             }}
           >
             {/* Terminal Window Header */}
@@ -1237,7 +1239,7 @@ export default function HexStrikePage() {
               sx={{
                 px: 2,
                 py: 1.2,
-                bgcolor: '#0E0E16',
+                bgcolor: isDark ? '#0E0E16' : '#111827',
                 borderBottom: `1px solid ${gold.border}`,
                 display: 'flex',
                 alignItems: 'center',
@@ -1261,8 +1263,8 @@ export default function HexStrikePage() {
                   fontSize: '0.65rem',
                   fontFamily: mono,
                   fontWeight: 800,
-                  bgcolor: gold.emeraldWash,
-                  color: gold.emeraldSoft
+                  bgcolor: 'rgba(16,185,129,0.15)',
+                  color: '#34D399'
                 }}
               />
             </Box>
@@ -1272,7 +1274,7 @@ export default function HexStrikePage() {
               sx={{
                 px: 2,
                 py: 1,
-                bgcolor: '#0B0B12',
+                bgcolor: isDark ? '#0B0B12' : '#0F172A',
                 borderBottom: '1px solid rgba(255,255,255,0.06)',
                 display: 'flex',
                 alignItems: 'center',
@@ -1294,12 +1296,12 @@ export default function HexStrikePage() {
                     fontWeight: 750,
                     fontSize: '0.72rem',
                     bgcolor: 'rgba(212,175,55,0.12)',
-                    color: gold.soft,
+                    color: '#F5E6AB',
                     border: '1px solid rgba(212,175,55,0.3)',
                     cursor: 'pointer',
                     '&:hover': {
                       bgcolor: 'rgba(212,175,55,0.25)',
-                      borderColor: gold.accent
+                      borderColor: '#D4AF37'
                     }
                   }}
                 />
@@ -1324,21 +1326,21 @@ export default function HexStrikePage() {
               {terminalHistory.map((item, idx) => {
                 if (item.type === 'cmd') {
                   return (
-                    <Box key={idx} sx={{ color: gold.accent, fontWeight: 750, my: 0.5 }}>
+                    <Box key={idx} sx={{ color: isDark ? gold.accent : '#FBBF24', fontWeight: 750, my: 0.5 }}>
                       {item.text}
                     </Box>
                   );
                 }
                 if (item.type === 'emerald') {
                   return (
-                    <Box key={idx} sx={{ color: gold.emeraldSoft, fontWeight: 750, my: 0.25 }}>
+                    <Box key={idx} sx={{ color: '#34D399', fontWeight: 750, my: 0.25 }}>
                       {item.text}
                     </Box>
                   );
                 }
                 if (item.type === 'gold') {
                   return (
-                    <Box key={idx} sx={{ color: gold.soft, my: 0.25 }}>
+                    <Box key={idx} sx={{ color: isDark ? gold.soft : '#FDE047', my: 0.25 }}>
                       {item.text}
                     </Box>
                   );
@@ -1362,7 +1364,7 @@ export default function HexStrikePage() {
             <Box
               sx={{
                 p: 1.5,
-                bgcolor: '#0E0E16',
+                bgcolor: isDark ? '#0E0E16' : '#111827',
                 borderTop: `1px solid ${gold.border}`,
                 display: 'flex',
                 alignItems: 'center',
@@ -1374,7 +1376,7 @@ export default function HexStrikePage() {
                   fontFamily: mono,
                   fontWeight: 850,
                   fontSize: '0.85rem',
-                  color: gold.emeraldSoft,
+                  color: '#34D399',
                   whiteSpace: 'nowrap'
                 }}
               >
@@ -1402,7 +1404,7 @@ export default function HexStrikePage() {
               <IconButton
                 size="small"
                 onClick={() => executeCommand(commandInput)}
-                sx={{ color: gold.accent, '&:hover': { bgcolor: gold.wash } }}
+                sx={{ color: isDark ? gold.accent : '#FBBF24', '&:hover': { bgcolor: 'rgba(212,175,55,0.2)' } }}
               >
                 <PlayArrowIcon fontSize="small" />
               </IconButton>
@@ -1450,12 +1452,12 @@ export default function HexStrikePage() {
             onClick={handleExportSignedCveReport}
             sx={{
               bgcolor: gold.accent,
-              color: '#08080B',
+              color: isDark ? '#08080B' : '#FFFFFF',
               fontWeight: 850,
               fontFamily: mono,
               px: 3,
               boxShadow: `0 4px 18px ${gold.glow}`,
-              '&:hover': { bgcolor: '#F5E6AB' }
+              '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#9A7209' }
             }}
           >
             Export Signed CVE Audit Report (.json)
@@ -1555,11 +1557,11 @@ export default function HexStrikePage() {
                           startIcon={<RocketLaunchIcon sx={{ fontSize: '0.9rem !important' }} />}
                           sx={{
                             bgcolor: gold.accent,
-                            color: '#08080B',
+                            color: isDark ? '#08080B' : '#FFFFFF',
                             fontWeight: 800,
                             fontFamily: mono,
                             fontSize: '0.76rem',
-                            '&:hover': { bgcolor: '#F5E6AB' }
+                            '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#9A7209' }
                           }}
                         >
                           Launch Tool
@@ -1605,7 +1607,7 @@ export default function HexStrikePage() {
           severity="success"
           icon={<CheckCircleIcon sx={{ color: gold.emeraldSoft }} />}
           sx={{
-            bgcolor: '#08080B',
+            bgcolor: isDark ? '#08080B' : '#0F172A',
             color: '#F5E6AB',
             border: `1px solid ${gold.accent}`,
             boxShadow: `0 8px 24px ${gold.glow}`,

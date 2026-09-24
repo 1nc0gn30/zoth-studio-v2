@@ -716,7 +716,7 @@ export default function MemoryPage() {
       const midY = h / 2;
 
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = '#08080B';
+      ctx.fillStyle = isDark ? '#08080B' : '#F1F5F9';
       ctx.fillRect(0, 0, w, h);
 
       if (isMuted) {
@@ -770,7 +770,7 @@ export default function MemoryPage() {
 
     render();
     return () => cancelAnimationFrame(animId);
-  }, [isMuted, volume, carrierFreq]);
+  }, [isMuted, volume, carrierFreq, isDark]);
 
   /* ==========================================================================
      CANVAS 1: WHITESPACE CYBERSPACE CONSTELLATION VISUALIZER
@@ -933,10 +933,10 @@ export default function MemoryPage() {
     const cy = H / 2;
 
     ctx.clearRect(0, 0, W, H);
-    ctx.fillStyle = isDark ? '#08080B' : '#0F172A';
+    ctx.fillStyle = isDark ? '#08080B' : '#F8FAFC';
     ctx.fillRect(0, 0, W, H);
 
-    ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.3)';
+    ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.15)';
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(30, cy);
@@ -946,7 +946,7 @@ export default function MemoryPage() {
     ctx.stroke();
 
     ctx.font = '10px "JetBrains Mono"';
-    ctx.fillStyle = '#94A3B8';
+    ctx.fillStyle = isDark ? '#94A3B8' : '#475467';
     ctx.fillText('–Δt (Post before Pre: LTD)', 40, cy - 8);
     ctx.fillText('+Δt (Pre before Post: LTP)', W - 180, cy - 8);
     ctx.fillText('+Δw', cx + 8, 30);
@@ -955,7 +955,7 @@ export default function MemoryPage() {
     const scaleX = (W / 2 - 40) / 60;
     const scaleY = (H / 2 - 30);
 
-    ctx.strokeStyle = '#F472B6';
+    ctx.strokeStyle = isDark ? '#F472B6' : '#DB2777';
     ctx.lineWidth = 2.5;
     ctx.beginPath();
     for (let dt = -60; dt < 0; dt += 0.5) {
@@ -967,7 +967,7 @@ export default function MemoryPage() {
     }
     ctx.stroke();
 
-    ctx.strokeStyle = '#34D399';
+    ctx.strokeStyle = isDark ? '#34D399' : '#059669';
     ctx.lineWidth = 2.5;
     ctx.beginPath();
     for (let dt = 0; dt <= 60; dt += 0.5) {
@@ -986,16 +986,16 @@ export default function MemoryPage() {
     const testPx = cx + testDt * scaleX;
     const testPy = cy - testDw * scaleY;
 
-    ctx.fillStyle = '#D4AF37';
+    ctx.fillStyle = isDark ? '#D4AF37' : '#B8860B';
     ctx.beginPath();
     ctx.arc(testPx, testPy, 5, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = '#FFFFFF';
+    ctx.strokeStyle = isDark ? '#FFFFFF' : '#08080B';
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
     ctx.font = 'bold 11px "JetBrains Mono"';
-    ctx.fillStyle = '#F5E6AB';
+    ctx.fillStyle = isDark ? '#F5E6AB' : '#8A6A09';
     ctx.fillText(`Δt=${testDt}ms, Δw=${testDw.toFixed(3)}`, testPx + 8, testPy - 8);
   }, [stdpParams, isDark]);
 
@@ -1308,10 +1308,10 @@ export default function MemoryPage() {
           sx={{
             p: 2,
             mb: 3,
-            border: `1px solid ${isMuted ? 'rgba(212,175,55,0.25)' : '#D4AF37'}`,
+            border: `1px solid ${isMuted ? (isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider) : gold.accent}`,
             borderRadius: 2,
-            bgcolor: '#08080B',
-            boxShadow: isMuted ? 'none' : '0 0 20px rgba(212,175,55,0.15)',
+            bgcolor: isDark ? '#08080B' : theme.palette.background.paper,
+            boxShadow: isMuted ? 'none' : (isDark ? '0 0 20px rgba(212,175,55,0.15)' : '0 4px 16px rgba(184,134,11,0.12)'),
           }}
         >
           <Grid container spacing={2} alignItems="center">
@@ -1325,12 +1325,12 @@ export default function MemoryPage() {
                   onClick={handleToggleMute}
                   sx={{
                     bgcolor: isMuted ? 'transparent' : gold.accent,
-                    color: isMuted ? theme.palette.text.secondary : '#08080B',
-                    borderColor: isMuted ? 'rgba(212,175,55,0.4)' : gold.accent,
+                    color: isMuted ? theme.palette.text.secondary : (isDark ? '#08080B' : '#FFFFFF'),
+                    borderColor: isMuted ? (isDark ? 'rgba(212,175,55,0.4)' : theme.palette.divider) : gold.accent,
                     fontWeight: 800,
                     whiteSpace: 'nowrap',
                     '&:hover': {
-                      bgcolor: isMuted ? 'rgba(212,175,55,0.1)' : gold.accent,
+                      bgcolor: isMuted ? (isDark ? 'rgba(212,175,55,0.1)' : '#FEF9E7') : gold.accent,
                     },
                   }}
                 >
@@ -1338,10 +1338,10 @@ export default function MemoryPage() {
                 </Button>
 
                 <Box>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#D4AF37', fontWeight: 800, display: 'block' }}>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, display: 'block' }}>
                     COGNITIVE CARRIER
                   </Typography>
-                  <Typography variant="caption" sx={{ color: isMuted ? 'text.secondary' : '#00F0FF', fontFamily: mono, fontSize: '0.72rem' }}>
+                  <Typography variant="caption" sx={{ color: isMuted ? 'text.secondary' : (isDark ? '#00F0FF' : '#0284C7'), fontFamily: mono, fontSize: '0.72rem', fontWeight: 600 }}>
                     {isMuted ? 'Sound Default: Muted' : `${carrierFreq}Hz Resonant Wave`}
                   </Typography>
                 </Box>
@@ -1360,9 +1360,9 @@ export default function MemoryPage() {
                     fontFamily: mono,
                     fontWeight: 750,
                     fontSize: '0.75rem',
-                    bgcolor: carrierFreq === 432 ? gold.accent : 'rgba(255,255,255,0.05)',
-                    color: carrierFreq === 432 ? '#08080B' : '#E2E8F0',
-                    border: `1px solid ${carrierFreq === 432 ? gold.accent : 'rgba(212,175,55,0.2)'}`,
+                    bgcolor: carrierFreq === 432 ? gold.accent : (isDark ? 'rgba(255,255,255,0.05)' : '#F1F5F9'),
+                    color: carrierFreq === 432 ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
+                    border: `1px solid ${carrierFreq === 432 ? gold.accent : (isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider)}`,
                   }}
                 />
                 <Chip
@@ -1374,13 +1374,13 @@ export default function MemoryPage() {
                     fontFamily: mono,
                     fontWeight: 750,
                     fontSize: '0.75rem',
-                    bgcolor: carrierFreq === 528 ? '#00F0FF' : 'rgba(255,255,255,0.05)',
-                    color: carrierFreq === 528 ? '#08080B' : '#E2E8F0',
-                    border: `1px solid ${carrierFreq === 528 ? '#00F0FF' : 'rgba(0,240,255,0.2)'}`,
+                    bgcolor: carrierFreq === 528 ? (isDark ? '#00F0FF' : '#0284C7') : (isDark ? 'rgba(255,255,255,0.05)' : '#F1F5F9'),
+                    color: carrierFreq === 528 ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
+                    border: `1px solid ${carrierFreq === 528 ? (isDark ? '#00F0FF' : '#0284C7') : (isDark ? 'rgba(0,240,255,0.2)' : theme.palette.divider)}`,
                   }}
                 />
                 <Tooltip title={carrierFreq === 432 ? "432Hz Alpha: Promotes mental balance, calm focus, and sovereign stillness." : "528Hz Theta: The transformation frequency; deep netrunner drift and rapid synaptic plasticity."}>
-                  <GraphicEqIcon sx={{ color: '#D4AF37', fontSize: '1.2rem', cursor: 'pointer' }} />
+                  <GraphicEqIcon sx={{ color: gold.accent, fontSize: '1.2rem', cursor: 'pointer' }} />
                 </Tooltip>
               </Box>
             </Grid>
@@ -1411,7 +1411,7 @@ export default function MemoryPage() {
 
             {/* Live Carrier Oscilloscope Canvas */}
             <Grid xs={12} md={2.5}>
-              <Box sx={{ borderRadius: 1.5, overflow: 'hidden', border: '1px solid rgba(212,175,55,0.25)', height: 36 }}>
+              <Box sx={{ borderRadius: 1.5, overflow: 'hidden', border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider}`, height: 36 }}>
                 <canvas ref={carrierCanvasRef} width={180} height={36} style={{ width: '100%', height: '100%', display: 'block' }} />
               </Box>
             </Grid>
@@ -1449,7 +1449,7 @@ export default function MemoryPage() {
             <Grid container spacing={3}>
               {/* Left Column: Cyberspace Canvas Constellation & Codec */}
               <Grid xs={12} lg={8}>
-                <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: '#08080B', mb: 2.5 }}>
+                <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: isDark ? '#08080B' : theme.palette.background.paper, mb: 2.5 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
                     <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                       {['All', 'Kernel', 'Lucy Oracle', 'Consensus', 'Security', 'Vault', 'Pantheon'].map((c) => (
@@ -1461,14 +1461,14 @@ export default function MemoryPage() {
                           onClick={() => setActiveCluster(c)}
                           sx={{
                             fontWeight: 750,
-                            bgcolor: activeCluster === c ? (clusterColors[c] || '#D4AF37') : 'transparent',
-                            color: activeCluster === c ? '#08080B' : theme.palette.text.primary,
-                            border: `1px solid ${theme.palette.divider}`,
+                            bgcolor: activeCluster === c ? (clusterColors[c] || gold.accent) : (isDark ? 'transparent' : '#F1F5F9'),
+                            color: activeCluster === c ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
+                            border: `1px solid ${activeCluster === c ? (clusterColors[c] || gold.accent) : theme.palette.divider}`,
                           }}
                         />
                       ))}
                     </Box>
-                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#00F0FF', fontWeight: 700 }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#00F0FF' : '#0284C7', fontWeight: 700 }}>
                       ◈ WHITESPACE: {filteredMemories.length} NODES
                     </Typography>
                   </Box>
@@ -1491,9 +1491,9 @@ export default function MemoryPage() {
                 <Paper
                   sx={{
                     p: 2.5,
-                    border: '1px solid rgba(212,175,55,0.3)',
+                    border: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : theme.palette.divider}`,
                     borderRadius: 2,
-                    bgcolor: '#08080B',
+                    bgcolor: isDark ? '#08080B' : theme.palette.background.paper,
                     mb: 2.5,
                   }}
                 >
@@ -1507,7 +1507,7 @@ export default function MemoryPage() {
                     <Chip
                       label={`Pseudo-Embedding: (${previewCoords.x}, ${previewCoords.y}, ${previewCoords.z})`}
                       size="small"
-                      sx={{ bgcolor: 'rgba(212,175,55,0.12)', color: gold.soft, fontFamily: mono, fontSize: '0.72rem' }}
+                      sx={{ bgcolor: gold.wash, color: gold.soft, fontFamily: mono, fontSize: '0.72rem' }}
                     />
                   </Box>
 
@@ -1529,9 +1529,9 @@ export default function MemoryPage() {
                               onClick={() => setEpisodicAuthor(author.id)}
                               sx={{
                                 fontWeight: 750,
-                                bgcolor: isSelected ? author.color : 'rgba(255,255,255,0.04)',
-                                color: isSelected ? '#08080B' : '#E2E8F0',
-                                border: `1px solid ${isSelected ? author.color : 'rgba(255,255,255,0.1)'}`,
+                                bgcolor: isSelected ? author.color : (isDark ? 'rgba(255,255,255,0.04)' : '#F1F5F9'),
+                                color: isSelected ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
+                                border: `1px solid ${isSelected ? author.color : (isDark ? 'rgba(255,255,255,0.1)' : theme.palette.divider)}`,
                               }}
                             />
                           );
@@ -1552,9 +1552,9 @@ export default function MemoryPage() {
                         '& .MuiInputBase-root': {
                           fontFamily: mono,
                           fontSize: '0.85rem',
-                          bgcolor: '#05070E',
-                          color: '#F8FAFC',
-                          border: '1px solid rgba(212,175,55,0.2)',
+                          bgcolor: isDark ? '#05070E' : '#F8FAFC',
+                          color: theme.palette.text.primary,
+                          border: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider}`,
                         },
                       }}
                     />
@@ -1565,7 +1565,7 @@ export default function MemoryPage() {
                         <Chip
                           label={`Initial STDP Weight: w = ${previewWeight.toFixed(3)}`}
                           size="small"
-                          sx={{ bgcolor: 'rgba(52,211,153,0.12)', color: '#34D399', fontFamily: mono, fontWeight: 750 }}
+                          sx={{ bgcolor: 'rgba(52,211,153,0.12)', color: isDark ? '#34D399' : '#059669', fontFamily: mono, fontWeight: 750 }}
                         />
                         <Chip
                           label={`Cluster: ${currentAuthorSpec.cluster}`}
@@ -1581,11 +1581,11 @@ export default function MemoryPage() {
                         startIcon={<AddCircleOutlineIcon />}
                         sx={{
                           bgcolor: gold.accent,
-                          color: '#08080B',
+                          color: isDark ? '#08080B' : '#FFFFFF',
                           fontWeight: 800,
                           px: 2.5,
-                          '&:hover': { bgcolor: gold.accent },
-                          '&.Mui-disabled': { bgcolor: 'rgba(212,175,55,0.2)', color: '#666' },
+                          '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' },
+                          '&.Mui-disabled': { bgcolor: isDark ? 'rgba(212,175,55,0.2)' : '#E2E8F0', color: isDark ? '#666' : '#94A3B8' },
                         }}
                       >
                         Encode & Prepend Node
@@ -1595,7 +1595,7 @@ export default function MemoryPage() {
                 </Paper>
 
                 {/* Lucy Codec Terminal */}
-                <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: '#08080B' }}>
+                <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: isDark ? '#08080B' : theme.palette.background.paper }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <TerminalIcon sx={{ color: '#F472B6', fontSize: '1.2rem' }} />
@@ -1603,7 +1603,7 @@ export default function MemoryPage() {
                         LUCY ORACLE TRANSMISSION // CODEC 141.12
                       </Typography>
                     </Box>
-                    <Chip label="Zero Egress Enclave" size="small" sx={{ bgcolor: 'rgba(0,240,255,0.1)', color: '#00F0FF', fontWeight: 700 }} />
+                    <Chip label="Zero Egress Enclave" size="small" sx={{ bgcolor: 'rgba(0,240,255,0.1)', color: isDark ? '#00F0FF' : '#0284C7', fontWeight: 700 }} />
                   </Box>
 
                   <Paper sx={{ p: 2, bgcolor: '#050508', color: '#F5E6AB', fontFamily: mono, fontSize: '0.82rem', height: 140, overflowY: 'auto', mb: 2, borderRadius: 1.5, border: '1px solid rgba(244,114,182,0.25)' }}>
@@ -1626,14 +1626,20 @@ export default function MemoryPage() {
                       onChange={(e) => setUserPrompt(e.target.value)}
                       onKeyDown={(e) => { if (e.key === 'Enter') handleConsultLucy(); }}
                       sx={{
-                        '& .MuiInputBase-root': { fontFamily: mono, fontSize: '0.85rem', bgcolor: '#0A0C14', color: '#F8FAFC' },
+                        '& .MuiInputBase-root': {
+                          fontFamily: mono,
+                          fontSize: '0.85rem',
+                          bgcolor: isDark ? '#0A0C14' : '#F8FAFC',
+                          color: theme.palette.text.primary,
+                          border: `1px solid ${isDark ? 'rgba(244,114,182,0.25)' : theme.palette.divider}`
+                        },
                       }}
                     />
                     <Button
                       variant="contained"
                       onClick={handleConsultLucy}
                       endIcon={<SendIcon />}
-                      sx={{ bgcolor: '#F472B6', color: '#08080B', fontWeight: 800, px: 2.5, '&:hover': { bgcolor: '#F472B6' } }}
+                      sx={{ bgcolor: '#F472B6', color: '#08080B', fontWeight: 800, px: 2.5, '&:hover': { bgcolor: isDark ? '#F687B3' : '#EC4899' } }}
                     >
                       Transmit
                     </Button>
@@ -1644,7 +1650,7 @@ export default function MemoryPage() {
               {/* Right Column: Selected Node Inspector & Cyberware Specs */}
               <Grid xs={12} lg={4}>
                 <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, mb: 3 }}>
-                  <Typography variant="overline" sx={{ color: '#D4AF37', fontWeight: 800, letterSpacing: '0.12em' }}>
+                  <Typography variant="overline" sx={{ color: gold.accent, fontWeight: 800, letterSpacing: '0.12em' }}>
                     VECTOR NODE INSPECTOR
                   </Typography>
                   <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5 }}>
@@ -1656,12 +1662,20 @@ export default function MemoryPage() {
                       <Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5, fontSize: '0.85rem' }}>
                           <span>Synaptic Weight (w)</span>
-                          <strong style={{ color: '#D4AF37' }}>{selectedMemory.weight.toFixed(3)}</strong>
+                          <strong style={{ color: gold.accent }}>{selectedMemory.weight.toFixed(3)}</strong>
                         </Box>
                         <LinearProgress variant="determinate" value={selectedMemory.weight * 100} sx={{ height: 8, borderRadius: 1 }} />
                       </Box>
 
-                      <Paper sx={{ p: 2, bgcolor: '#08080B', color: '#F8FAFC', fontFamily: mono, fontSize: '0.85rem', borderRadius: 1.5, border: '1px solid rgba(212,175,55,0.2)' }}>
+                      <Paper sx={{
+                        p: 2,
+                        bgcolor: isDark ? '#08080B' : '#F8FAFC',
+                        color: theme.palette.text.primary,
+                        fontFamily: mono,
+                        fontSize: '0.85rem',
+                        borderRadius: 1.5,
+                        border: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider}`
+                      }}>
                         {selectedMemory.text}
                       </Paper>
 
@@ -1680,7 +1694,7 @@ export default function MemoryPage() {
                         variant="contained"
                         startIcon={<AutoFixHighIcon />}
                         onClick={handleConsultLucy}
-                        sx={{ bgcolor: gold.accent, color: '#08080B', fontWeight: 800, '&:hover': { bgcolor: gold.accent } }}
+                        sx={{ bgcolor: gold.accent, color: isDark ? '#08080B' : '#FFFFFF', fontWeight: 800, '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' } }}
                       >
                         Consult Lucy on Vector
                       </Button>
@@ -1690,7 +1704,7 @@ export default function MemoryPage() {
 
                 {/* Netrunner Cyberdeck Specs */}
                 <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
-                  <Typography variant="overline" sx={{ color: '#00F0FF', fontWeight: 800, letterSpacing: '0.12em' }}>
+                  <Typography variant="overline" sx={{ color: isDark ? '#00F0FF' : '#0284C7', fontWeight: 800, letterSpacing: '0.12em' }}>
                     NETRUNNER SPECS
                   </Typography>
                   <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 2 }}>
@@ -1708,7 +1722,7 @@ export default function MemoryPage() {
                     </Box>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                       <span style={{ color: theme.palette.text.secondary }}>Carrier Frequency:</span>
-                      <strong style={{ color: '#D4AF37' }}>{carrierFreq}Hz ({carrierFreq === 432 ? 'Alpha' : 'Theta'})</strong>
+                      <strong style={{ color: gold.accent }}>{carrierFreq}Hz ({carrierFreq === 432 ? 'Alpha' : 'Theta'})</strong>
                     </Box>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                       <span style={{ color: theme.palette.text.secondary }}>Buffer Retention:</span>
@@ -1716,7 +1730,7 @@ export default function MemoryPage() {
                     </Box>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                       <span style={{ color: theme.palette.text.secondary }}>Neural Sync:</span>
-                      <strong style={{ color: '#34D399' }}>99.8% Nominal</strong>
+                      <strong style={{ color: isDark ? '#34D399' : '#059669' }}>99.8% Nominal</strong>
                     </Box>
                   </Stack>
                 </Paper>
@@ -1742,7 +1756,7 @@ export default function MemoryPage() {
                     <canvas ref={stdpCanvasRef} width={620} height={320} style={{ width: '100%', height: 'auto', display: 'block' }} />
                   </Box>
 
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#D4AF37', display: 'block', textAlign: 'center' }}>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, display: 'block', textAlign: 'center' }}>
                     Δw = A₊ · e^(-Δt/τ₊) (Δt &gt; 0) ··· Δw = -A₋ · e^(Δt/τ₋) (Δt &lt; 0)
                   </Typography>
                 </Paper>
@@ -1750,7 +1764,7 @@ export default function MemoryPage() {
 
               <Grid xs={12} lg={5}>
                 <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: '#D4AF37' }}>Synaptic Parameters</Typography>
+                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: gold.accent }}>Synaptic Parameters</Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
                     Tune decay constants and stimulation impulse timing.
                   </Typography>
@@ -1819,7 +1833,7 @@ export default function MemoryPage() {
                       );
                       transmitLucy(`Simulated global synaptic spike with Δt = ${stdpParams.testDt}ms. Active vectors reinforced.`);
                     }}
-                    sx={{ bgcolor: gold.accent, color: '#08080B', fontWeight: 800 }}
+                    sx={{ bgcolor: gold.accent, color: isDark ? '#08080B' : '#FFFFFF', fontWeight: 800, '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' } }}
                   >
                     Simulate Synaptic Spike
                   </Button>
@@ -1859,8 +1873,8 @@ export default function MemoryPage() {
                         onClick={() => setEpisodicAuthor(author.id)}
                         sx={{
                           fontWeight: 750,
-                          bgcolor: episodicAuthor === author.id ? author.color : 'transparent',
-                          color: episodicAuthor === author.id ? '#08080B' : theme.palette.text.primary,
+                          bgcolor: episodicAuthor === author.id ? author.color : (isDark ? 'transparent' : '#F1F5F9'),
+                          color: episodicAuthor === author.id ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
                           border: `1px solid ${episodicAuthor === author.id ? author.color : theme.palette.divider}`,
                         }}
                       />
@@ -1875,20 +1889,29 @@ export default function MemoryPage() {
                   placeholder="Enter memory observation or architectural contract..."
                   value={episodicSnippet}
                   onChange={(e) => setEpisodicSnippet(e.target.value)}
-                  sx={{ bgcolor: '#08080B', fontFamily: mono }}
+                  sx={{
+                    '& .MuiInputBase-root': {
+                      fontFamily: mono,
+                      fontSize: '0.85rem',
+                      bgcolor: isDark ? '#08080B' : '#F8FAFC',
+                      color: theme.palette.text.primary,
+                      border: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider}`,
+                      borderRadius: 1.5,
+                    },
+                  }}
                 />
 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5 }}>
                   <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap' }}>
-                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#00F0FF' }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#00F0FF' : '#0284C7', fontWeight: 700 }}>
                       Coordinates: [x: {previewCoords.x}, y: {previewCoords.y}, z: {previewCoords.z}]
                     </Typography>
-                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#34D399' }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#34D399' : '#059669', fontWeight: 700 }}>
                       STDP Weight: {previewWeight.toFixed(3)}
                     </Typography>
                   </Box>
 
-                  <Button type="submit" variant="contained" disabled={!episodicSnippet.trim()} sx={{ bgcolor: gold.accent, color: '#08080B', fontWeight: 800 }}>
+                  <Button type="submit" variant="contained" disabled={!episodicSnippet.trim()} sx={{ bgcolor: gold.accent, color: isDark ? '#08080B' : '#FFFFFF', fontWeight: 800, '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' } }}>
                     Encode Episodic Vector
                   </Button>
                 </Box>
@@ -1907,7 +1930,7 @@ export default function MemoryPage() {
                     variant="outlined"
                     startIcon={<DownloadIcon />}
                     onClick={() => setIsExportDialogOpen(true)}
-                    sx={{ borderColor: gold.accent, color: gold.accent, fontWeight: 750 }}
+                    sx={{ borderColor: gold.accent, color: gold.accent, fontWeight: 750, '&:hover': { bgcolor: gold.wash } }}
                   >
                     Export Snapshot
                   </Button>
@@ -1918,19 +1941,25 @@ export default function MemoryPage() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon fontSize="small" /></InputAdornment> }}
-                  sx={{ width: 280 }}
+                  sx={{
+                    width: 280,
+                    '& .MuiInputBase-root': {
+                      bgcolor: isDark ? '#08080B' : '#F8FAFC',
+                      color: theme.palette.text.primary,
+                    }
+                  }}
                 />
               </Box>
 
               <Table size="small">
                 <TableHead sx={{ bgcolor: isDark ? 'rgba(212,175,55,0.06)' : '#F8FAFC' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 800 }}>Vector ID</TableCell>
-                    <TableCell sx={{ fontWeight: 800 }}>Memory Payload</TableCell>
-                    <TableCell sx={{ fontWeight: 800 }}>Cluster</TableCell>
-                    <TableCell sx={{ fontWeight: 800 }}>Spatial Coord</TableCell>
-                    <TableCell sx={{ fontWeight: 800 }}>Synaptic Weight</TableCell>
-                    <TableCell sx={{ fontWeight: 800 }}>Author</TableCell>
+                    <TableCell sx={{ fontWeight: 800, color: theme.palette.text.primary }}>Vector ID</TableCell>
+                    <TableCell sx={{ fontWeight: 800, color: theme.palette.text.primary }}>Memory Payload</TableCell>
+                    <TableCell sx={{ fontWeight: 800, color: theme.palette.text.primary }}>Cluster</TableCell>
+                    <TableCell sx={{ fontWeight: 800, color: theme.palette.text.primary }}>Spatial Coord</TableCell>
+                    <TableCell sx={{ fontWeight: 800, color: theme.palette.text.primary }}>Synaptic Weight</TableCell>
+                    <TableCell sx={{ fontWeight: 800, color: theme.palette.text.primary }}>Author</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -1939,11 +1968,11 @@ export default function MemoryPage() {
                       <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700, color: clusterColors[row.cluster] }}>
                         {row.id}
                       </TableCell>
-                      <TableCell sx={{ fontWeight: 500 }}>{row.text}</TableCell>
+                      <TableCell sx={{ fontWeight: 500, color: theme.palette.text.primary }}>{row.text}</TableCell>
                       <TableCell>
                         <Chip label={row.cluster} size="small" sx={{ bgcolor: clusterColors[row.cluster] + '22', color: clusterColors[row.cluster], fontWeight: 750 }} />
                       </TableCell>
-                      <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', color: gold.soft }}>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', color: isDark ? gold.soft : '#8A6A09', fontWeight: 600 }}>
                         ({row.x}, {row.y}, {row.z})
                       </TableCell>
                       <TableCell>
@@ -1968,7 +1997,7 @@ export default function MemoryPage() {
           <Box>
             <Grid container spacing={3}>
               <Grid xs={12} md={8}>
-                <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: '#08080B', mb: 2 }}>
+                <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: isDark ? '#08080B' : theme.palette.background.paper, mb: 2 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <ViewInArIcon sx={{ color: '#F472B6' }} />
@@ -1977,7 +2006,7 @@ export default function MemoryPage() {
                       </Typography>
                     </Box>
                     <Box sx={{ display: 'flex', gap: 1 }}>
-                      <Chip label="Zero-Egress Air-Gapped" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399', fontWeight: 750 }} />
+                      <Chip label="Zero-Egress Air-Gapped" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: isDark ? '#34D399' : '#059669', fontWeight: 750 }} />
                       <Chip label="Interactive 3D Orbit" size="small" sx={{ bgcolor: 'rgba(244,114,182,0.15)', color: '#F472B6', fontWeight: 750 }} />
                     </Box>
                   </Box>
@@ -1990,8 +2019,8 @@ export default function MemoryPage() {
                       height: 440,
                       borderRadius: 2,
                       overflow: 'hidden',
-                      border: '1px solid rgba(0,240,255,0.4)',
-                      bgcolor: '#08080B',
+                      border: `1px solid ${isDark ? 'rgba(0,240,255,0.4)' : theme.palette.divider}`,
+                      bgcolor: isDark ? '#08080B' : '#0B0F19',
                       cursor: 'grab',
                       '&:active': { cursor: 'grabbing' },
                     }}
@@ -2043,15 +2072,15 @@ export default function MemoryPage() {
                       <Typography variant="caption">Zero packet interception</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Chip label="STDP Regulator" size="small" sx={{ bgcolor: 'rgba(212,175,55,0.15)', color: '#D4AF37', fontWeight: 700 }} />
+                      <Chip label="STDP Regulator" size="small" sx={{ bgcolor: 'rgba(212,175,55,0.15)', color: gold.accent, fontWeight: 700 }} />
                       <Typography variant="caption">Logarithmic half-life decay</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Chip label="Zero-Egress Guard" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399', fontWeight: 700 }} />
+                      <Chip label="Zero-Egress Guard" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: isDark ? '#34D399' : '#059669', fontWeight: 700 }} />
                       <Typography variant="caption">Strict loopback containment</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Chip label="Cognitive Waves" size="small" sx={{ bgcolor: 'rgba(0,240,255,0.15)', color: '#00F0FF', fontWeight: 700 }} />
+                      <Chip label="Cognitive Waves" size="small" sx={{ bgcolor: 'rgba(0,240,255,0.15)', color: isDark ? '#00F0FF' : '#0284C7', fontWeight: 700 }} />
                       <Typography variant="caption">432Hz Alpha / 528Hz Theta</Typography>
                     </Box>
                   </Stack>
@@ -2084,14 +2113,14 @@ export default function MemoryPage() {
         fullWidth
         PaperProps={{
           sx: {
-            bgcolor: '#08080B',
-            border: '1px solid rgba(212,175,55,0.4)',
+            bgcolor: isDark ? '#08080B' : theme.palette.background.paper,
+            border: `1px solid ${isDark ? 'rgba(212,175,55,0.4)' : theme.palette.divider}`,
             borderRadius: 2,
-            boxShadow: '0 0 30px rgba(0,0,0,0.9)',
+            boxShadow: isDark ? '0 0 30px rgba(0,0,0,0.9)' : '0 10px 40px rgba(16,24,40,0.15)',
           },
         }}
       >
-        <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(212,175,55,0.2)' }}>
+        <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider}` }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <DownloadIcon sx={{ color: gold.accent }} />
             <Typography variant="h6" sx={{ fontWeight: 800, color: gold.accent, fontFamily: mono }}>
@@ -2109,41 +2138,41 @@ export default function MemoryPage() {
           </Typography>
 
           <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
-            <Chip label={`${memories.length} Vector Nodes`} size="small" sx={{ bgcolor: 'rgba(212,175,55,0.15)', color: gold.accent, fontFamily: mono, fontWeight: 750 }} />
-            <Chip label={`Carrier: ${carrierFreq}Hz`} size="small" sx={{ bgcolor: 'rgba(0,240,255,0.15)', color: '#00F0FF', fontFamily: mono, fontWeight: 750 }} />
-            <Chip label="Air-Gapped Zero-Egress Verified" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399', fontFamily: mono, fontWeight: 750 }} />
+            <Chip label={`${memories.length} Vector Nodes`} size="small" sx={{ bgcolor: gold.wash, color: gold.accent, fontFamily: mono, fontWeight: 750 }} />
+            <Chip label={`Carrier: ${carrierFreq}Hz`} size="small" sx={{ bgcolor: 'rgba(0,240,255,0.15)', color: isDark ? '#00F0FF' : '#0284C7', fontFamily: mono, fontWeight: 750 }} />
+            <Chip label="Air-Gapped Zero-Egress Verified" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: isDark ? '#34D399' : '#059669', fontFamily: mono, fontWeight: 750 }} />
           </Box>
 
           <Paper
             sx={{
               p: 2,
-              bgcolor: '#040407',
-              border: '1px solid rgba(212,175,55,0.2)',
+              bgcolor: isDark ? '#040407' : '#F8FAFC',
+              border: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider}`,
               borderRadius: 1.5,
               maxHeight: 380,
               overflowY: 'auto',
             }}
           >
-            <pre style={{ margin: 0, fontFamily: mono, fontSize: '0.78rem', color: '#F5E6AB' }}>
+            <pre style={{ margin: 0, fontFamily: mono, fontSize: '0.78rem', color: isDark ? '#F5E6AB' : '#0F172A' }}>
               {neuralSnapshot ? JSON.stringify(neuralSnapshot, null, 2) : 'Generating snapshot...'}
             </pre>
           </Paper>
 
           {copyFeedback && (
-            <Alert severity="success" sx={{ mt: 2, bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399', border: '1px solid #34D399' }}>
+            <Alert severity="success" sx={{ mt: 2, bgcolor: 'rgba(52,211,153,0.15)', color: isDark ? '#34D399' : '#059669', border: `1px solid ${isDark ? '#34D399' : '#059669'}` }}>
               Lucy Neural Snapshot copied to clipboard!
             </Alert>
           )}
         </DialogContent>
 
-        <DialogActions sx={{ p: 2.5, borderTop: '1px solid rgba(212,175,55,0.2)' }}>
+        <DialogActions sx={{ p: 2.5, borderTop: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider}` }}>
           <Button
             variant="outlined"
             startIcon={copyFeedback ? <CheckIcon /> : <ContentCopyIcon />}
             onClick={handleCopySnapshotToClipboard}
             sx={{
-              borderColor: 'rgba(212,175,55,0.5)',
-              color: gold.soft,
+              borderColor: isDark ? 'rgba(212,175,55,0.5)' : theme.palette.divider,
+              color: isDark ? gold.soft : '#8A6A09',
               fontWeight: 750,
               '&:hover': { borderColor: gold.accent },
             }}
@@ -2156,9 +2185,9 @@ export default function MemoryPage() {
             onClick={handleDownloadSnapshotFile}
             sx={{
               bgcolor: gold.accent,
-              color: '#08080B',
+              color: isDark ? '#08080B' : '#FFFFFF',
               fontWeight: 800,
-              '&:hover': { bgcolor: gold.accent },
+              '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' },
             }}
           >
             Download Snapshot (.json)

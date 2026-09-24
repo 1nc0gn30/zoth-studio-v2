@@ -125,7 +125,7 @@ function AgentComposerWorkstation() {
                   sx={{
                     p: 2,
                     border: '1px solid',
-                    borderColor: node.status === 'Completed' ? 'rgba(52,211,153,0.5)' : node.status === 'In Progress' ? '#D4AF37' : theme.palette.divider,
+                    borderColor: node.status === 'Completed' ? (isDark ? 'rgba(52,211,153,0.5)' : '#A7F3D0') : node.status === 'In Progress' ? (isDark ? '#D4AF37' : '#B8860B') : theme.palette.divider,
                     bgcolor: isDark ? '#0F121C' : '#F8FAFC',
                     display: 'flex',
                     alignItems: 'center',
@@ -134,7 +134,7 @@ function AgentComposerWorkstation() {
                   }}
                 >
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                    <Chip label={`0${index + 1}`} size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: isDark ? 'rgba(212,175,55,0.18)' : '#FEF9E7', color: '#D4AF37' }} />
+                    <Chip label={`0${index + 1}`} size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: isDark ? 'rgba(212,175,55,0.18)' : '#FEF9E7', color: isDark ? '#D4AF37' : '#8A6A09', border: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : '#F5E6AB'}` }} />
                     <Box>
                       <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>{node.name}</Typography>
                       <Typography variant="caption" color="text.secondary">Assigned Agent: <strong>{node.agent}</strong> · {node.role}</Typography>
@@ -146,7 +146,8 @@ function AgentComposerWorkstation() {
                     sx={{
                       fontWeight: 750,
                       bgcolor: node.status === 'Completed' ? (isDark ? 'rgba(52,211,153,0.15)' : '#ECFDF3') : node.status === 'In Progress' ? (isDark ? 'rgba(212,175,55,0.2)' : '#FEF9E7') : (isDark ? '#1E293B' : '#F1F5F9'),
-                      color: node.status === 'Completed' ? '#34D399' : node.status === 'In Progress' ? '#D4AF37' : theme.palette.text.secondary,
+                      color: node.status === 'Completed' ? (isDark ? '#34D399' : '#047857') : node.status === 'In Progress' ? (isDark ? '#D4AF37' : '#8A6A09') : theme.palette.text.secondary,
+                      border: `1px solid ${node.status === 'Completed' ? (isDark ? 'rgba(52,211,153,0.3)' : 'rgba(5,150,105,0.3)') : node.status === 'In Progress' ? (isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.3)') : 'transparent'}`,
                     }}
                   />
                 </Paper>
@@ -184,10 +185,10 @@ function AgentComposerWorkstation() {
 
         <Grid xs={12} md={5}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1, color: '#D4AF37' }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1, color: isDark ? '#D4AF37' : '#8A6A09' }}>
               Autonomous Execution Log
             </Typography>
-            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: '#38BDF8', fontFamily: mono, fontSize: '0.8rem', height: 320, overflowY: 'auto', borderRadius: 1.5, border: '1px solid rgba(212,175,55,0.2)' }}>
+            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: '#38BDF8', fontFamily: mono, fontSize: '0.8rem', height: 320, overflowY: 'auto', borderRadius: 1.5, border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #1E293B' }}>
               {execLog.map((log, i) => (
                 <Box key={i} sx={{ mb: 0.75, lineHeight: 1.45 }}>{log}</Box>
               ))}
@@ -243,21 +244,21 @@ function BrandWorkstation() {
 
             <Grid container spacing={2}>
               <Grid xs={6} sm={4}>
-                <Paper sx={{ p: 2.5, textAlign: 'center', bgcolor: isDark ? '#0B0B12' : '#F8FAFC', border: '1px solid rgba(212,175,55,0.3)', borderRadius: 2 }}>
+                <Paper sx={{ p: 2.5, textAlign: 'center', bgcolor: isDark ? '#0B0B12' : '#F8FAFC', border: isDark ? '1px solid rgba(212,175,55,0.3)' : '1px solid #EAECF0', borderRadius: 2 }}>
                   <Box component="img" src="/brand/ghostbyte-dark.png" alt="Ghostbyte Seal" sx={{ width: 64, height: 64, objectFit: 'contain', mb: 1.5, mx: 'auto' }} />
                   <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>GhostByte</Typography>
                   <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>Primary Brand Seal</Typography>
                 </Paper>
               </Grid>
               <Grid xs={6} sm={4}>
-                <Paper sx={{ p: 2.5, textAlign: 'center', bgcolor: isDark ? '#0B0B12' : '#F8FAFC', border: '1px solid rgba(212,175,55,0.3)', borderRadius: 2 }}>
+                <Paper sx={{ p: 2.5, textAlign: 'center', bgcolor: isDark ? '#0B0B12' : '#F8FAFC', border: isDark ? '1px solid rgba(212,175,55,0.3)' : '1px solid #EAECF0', borderRadius: 2 }}>
                   <Box component="img" src="/mascot/antigravity.jpg" alt="Antigravity Mascot" sx={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', mb: 1.5, mx: 'auto' }} />
                   <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>Antigravity</Typography>
                   <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>Architect Mascot</Typography>
                 </Paper>
               </Grid>
               <Grid xs={6} sm={4}>
-                <Paper sx={{ p: 2.5, textAlign: 'center', bgcolor: isDark ? '#0B0B12' : '#F8FAFC', border: '1px solid rgba(212,175,55,0.3)', borderRadius: 2 }}>
+                <Paper sx={{ p: 2.5, textAlign: 'center', bgcolor: isDark ? '#0B0B12' : '#F8FAFC', border: isDark ? '1px solid rgba(212,175,55,0.3)' : '1px solid #EAECF0', borderRadius: 2 }}>
                   <Box component="img" src="/assets/lucy.png" alt="Lucy Netrunner" sx={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', mb: 1.5, mx: 'auto', border: '2px solid #F472B6' }} />
                   <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>Lucy Oracle</Typography>
                   <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>Netrunner Sigil</Typography>
@@ -287,11 +288,11 @@ function BrandWorkstation() {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     cursor: 'pointer',
-                    '&:hover': { borderColor: '#D4AF37' },
+                    '&:hover': { borderColor: isDark ? '#D4AF37' : '#B8860B' },
                   }}
                 >
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                    <Box sx={{ width: 28, height: 28, borderRadius: 1, bgcolor: token.hex, border: '1px solid rgba(255,255,255,0.2)' }} />
+                    <Box sx={{ width: 28, height: 28, borderRadius: 1, bgcolor: token.hex, border: isDark ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0,0,0,0.12)' }} />
                     <Box>
                       <Typography variant="body2" sx={{ fontWeight: 750 }}>{token.name}</Typography>
                       <Typography variant="caption" color="text.secondary">{token.role}</Typography>
@@ -300,7 +301,13 @@ function BrandWorkstation() {
                   <Chip
                     label={copiedColor === token.hex ? 'Copied!' : token.hex}
                     size="small"
-                    sx={{ fontFamily: mono, fontWeight: 750, bgcolor: copiedColor === token.hex ? 'rgba(52,211,153,0.2)' : 'transparent' }}
+                    sx={{
+                      fontFamily: mono,
+                      fontWeight: 750,
+                      bgcolor: copiedColor === token.hex ? (isDark ? 'rgba(52,211,153,0.2)' : '#ECFDF3') : (isDark ? '#14141E' : '#F3F4F6'),
+                      color: copiedColor === token.hex ? (isDark ? '#34D399' : '#047857') : theme.palette.text.primary,
+                      border: `1px solid ${copiedColor === token.hex ? (isDark ? 'rgba(52,211,153,0.4)' : '#A7F3D0') : theme.palette.divider}`,
+                    }}
                   />
                 </Box>
               ))}
@@ -331,7 +338,7 @@ function CyberpunkHudWorkstation() {
     const render = () => {
       frame++;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = isDark ? '#08080B' : '#0B0F19';
+      ctx.fillStyle = isDark ? '#08080B' : '#0A0F1D';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       const cx = canvas.width / 2;
@@ -398,9 +405,9 @@ function CyberpunkHudWorkstation() {
     <Box>
       <Grid container spacing={3}>
         <Grid xs={12} md={7}>
-          <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: isDark ? '#08080B' : '#0B0F19', textAlign: 'center' }}>
+          <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: isDark ? '#08080B' : '#0A0F1D', textAlign: 'center' }}>
             <canvas ref={canvasRef} width={500} height={340} style={{ width: '100%', maxWidth: 500, height: 'auto', display: 'block', margin: '0 auto' }} />
-            <Typography variant="caption" sx={{ color: '#00F0FF', fontFamily: mono, display: 'block', mt: 1 }}>
+            <Typography variant="caption" sx={{ color: isDark ? '#00F0FF' : '#38BDF8', fontFamily: mono, display: 'block', mt: 1 }}>
               ACTIVE SCANNER // 360° SWARM RADAR · ZERO-EGRESS HOST ENCLAVE
             </Typography>
           </Paper>
@@ -408,7 +415,7 @@ function CyberpunkHudWorkstation() {
 
         <Grid xs={12} md={5}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: '#D4AF37' }}>HUD Cockpit Telemetry</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: isDark ? '#D4AF37' : '#8A6A09' }}>HUD Cockpit Telemetry</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Real-time hardware sensors and loopback telemetry streams.
             </Typography>
@@ -439,8 +446,8 @@ function CyberpunkHudWorkstation() {
               </Box>
 
               <Divider sx={{ my: 1 }} />
-              <Paper sx={{ p: 2, bgcolor: isDark ? '#0E131F' : '#F1F5F9', border: '1px solid rgba(0,240,255,0.2)' }}>
-                <Typography variant="caption" sx={{ fontFamily: mono, color: '#00F0FF', fontWeight: 700 }}>
+              <Paper sx={{ p: 2, bgcolor: isDark ? '#0E131F' : '#F0F9FF', border: `1px solid ${isDark ? 'rgba(0,240,255,0.2)' : 'rgba(2,132,199,0.3)'}` }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#00F0FF' : '#0284C7', fontWeight: 700 }}>
                   LOCK-ON TARGET: LUCY ORACLE CORE (141.12 MHZ)
                 </Typography>
                 <Typography variant="body2" sx={{ mt: 0.5, fontSize: '0.85rem' }}>
@@ -506,7 +513,7 @@ pub fn verify_sovereignty(cfg: &EnclaveConfig) -> Result<(), &'static str> {
       <Grid container spacing={3}>
         <Grid xs={12} md={3}>
           <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: '#D4AF37' }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#8A6A09' }}>
               Project Explorer
             </Typography>
             <Stack spacing={1}>
@@ -521,9 +528,9 @@ pub fn verify_sovereignty(cfg: &EnclaveConfig) -> Result<(), &'static str> {
                     fontSize: '0.8rem',
                     cursor: 'pointer',
                     bgcolor: activeFile === file ? (isDark ? 'rgba(212,175,55,0.18)' : '#FEF9E7') : 'transparent',
-                    color: activeFile === file ? '#D4AF37' : theme.palette.text.primary,
+                    color: activeFile === file ? (isDark ? '#D4AF37' : '#8A6A09') : theme.palette.text.primary,
                     border: '1px solid',
-                    borderColor: activeFile === file ? '#D4AF37' : 'transparent',
+                    borderColor: activeFile === file ? (isDark ? '#D4AF37' : '#B8860B') : 'transparent',
                   }}
                 >
                   {file}
@@ -535,14 +542,23 @@ pub fn verify_sovereignty(cfg: &EnclaveConfig) -> Result<(), &'static str> {
             <Typography variant="caption" sx={{ fontWeight: 750, color: 'text.secondary', display: 'block', mb: 0.5 }}>
               Linter & Invariant Engine
             </Typography>
-            <Chip label={lintStatus} size="small" sx={{ bgcolor: isDark ? 'rgba(52,211,153,0.15)' : '#ECFDF3', color: '#34D399', fontWeight: 800 }} />
+            <Chip
+              label={lintStatus}
+              size="small"
+              sx={{
+                bgcolor: isDark ? 'rgba(52,211,153,0.15)' : '#ECFDF3',
+                color: isDark ? '#34D399' : '#047857',
+                border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : 'rgba(5,150,105,0.25)'}`,
+                fontWeight: 800,
+              }}
+            />
           </Paper>
         </Grid>
 
         <Grid xs={12} md={9}>
-          <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: isDark ? '#08080B' : '#0F172A' }}>
+          <Paper sx={{ p: 2, border: `1px solid ${isDark ? theme.palette.divider : '#1E293B'}`, borderRadius: 2, bgcolor: isDark ? '#08080B' : '#0F172A' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, px: 1 }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#F5E6AB' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#F5E6AB' : '#FDE68A' }}>
                 {activeFile} · UTF-8 · Sovereign Enclave
               </Typography>
               <Button size="small" variant="outlined" color="primary" onClick={() => setLintStatus('Audit complete · 0 warnings')}>
@@ -559,7 +575,7 @@ pub fn verify_sovereignty(cfg: &EnclaveConfig) -> Result<(), &'static str> {
                 '& .MuiInputBase-root': {
                   fontFamily: mono,
                   fontSize: '0.85rem',
-                  color: isDark ? '#F8FAFC' : '#E2E8F0',
+                  color: isDark ? '#F8FAFC' : '#F1F5F9',
                   bgcolor: 'transparent',
                 },
               }}
@@ -598,8 +614,9 @@ function ModelsWorkstation() {
                 label={ollamaUp ? 'Ollama Online :11434' : 'Ollama Offline (Standalone Mode)'}
                 size="small"
                 sx={{
-                  bgcolor: ollamaUp ? 'rgba(52,211,153,0.15)' : 'rgba(212,175,55,0.15)',
-                  color: ollamaUp ? '#34D399' : '#D4AF37',
+                  bgcolor: ollamaUp ? (isDark ? 'rgba(52,211,153,0.15)' : '#ECFDF3') : (isDark ? 'rgba(212,175,55,0.15)' : '#FEF9E7'),
+                  color: ollamaUp ? (isDark ? '#34D399' : '#047857') : (isDark ? '#D4AF37' : '#8A6A09'),
+                  border: `1px solid ${ollamaUp ? (isDark ? 'rgba(52,211,153,0.3)' : 'rgba(5,150,105,0.25)') : (isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)')}`,
                   fontWeight: 800,
                 }}
               />
@@ -644,8 +661,8 @@ function ModelsWorkstation() {
               <Slider defaultValue={0.9} min={0.1} max={1} step={0.05} valueLabelDisplay="auto" />
             </Box>
 
-            <Paper sx={{ p: 2, bgcolor: isDark ? '#0A0E18' : '#F8FAFC', border: '1px solid rgba(212,175,55,0.3)', borderRadius: 1.5 }}>
-              <Typography variant="subtitle2" sx={{ color: '#D4AF37', fontWeight: 800, mb: 0.5 }}>Zero-Cloud Invariant</Typography>
+            <Paper sx={{ p: 2, bgcolor: isDark ? '#0A0E18' : '#F8FAFC', border: isDark ? '1px solid rgba(212,175,55,0.3)' : '1px solid #EAECF0', borderRadius: 1.5 }}>
+              <Typography variant="subtitle2" sx={{ color: isDark ? '#D4AF37' : '#8A6A09', fontWeight: 800, mb: 0.5 }}>Zero-Cloud Invariant</Typography>
               <Typography variant="caption" color="text.secondary">
                 All weights execute strictly via loopback memory buffers. Prompt tokens never exit the machine.
               </Typography>
@@ -722,10 +739,10 @@ function ChronicleWorkstation() {
                   onClick={() => setFilter(t)}
                   sx={{
                     fontWeight: 750,
-                    bgcolor: filter === t ? '#D4AF37' : 'transparent',
+                    bgcolor: filter === t ? (isDark ? '#D4AF37' : '#B8860B') : 'transparent',
                     color: filter === t ? '#101828' : theme.palette.text.primary,
                     border: '1px solid',
-                    borderColor: filter === t ? '#D4AF37' : theme.palette.divider,
+                    borderColor: filter === t ? (isDark ? '#D4AF37' : '#B8860B') : theme.palette.divider,
                   }}
                 />
               ))}
@@ -738,7 +755,7 @@ function ChronicleWorkstation() {
                   sx={{
                     p: 2,
                     border: '1px solid',
-                    borderColor: item.status === 'Shipped' ? 'rgba(52,211,153,0.3)' : item.status === 'Active Sprint' ? 'rgba(212,175,55,0.4)' : theme.palette.divider,
+                    borderColor: item.status === 'Shipped' ? (isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0') : item.status === 'Active Sprint' ? (isDark ? 'rgba(212,175,55,0.4)' : '#FDE68A') : theme.palette.divider,
                     bgcolor: isDark ? '#0C0F17' : '#F8FAFC',
                     borderRadius: 2,
                   }}
@@ -753,8 +770,9 @@ function ChronicleWorkstation() {
                       size="small"
                       sx={{
                         fontWeight: 800,
-                        bgcolor: item.status === 'Shipped' ? 'rgba(52,211,153,0.18)' : item.status === 'Active Sprint' ? 'rgba(212,175,55,0.18)' : 'rgba(148,163,184,0.18)',
-                        color: item.status === 'Shipped' ? '#34D399' : item.status === 'Active Sprint' ? '#D4AF37' : '#94A3B8',
+                        bgcolor: item.status === 'Shipped' ? (isDark ? 'rgba(52,211,153,0.18)' : '#ECFDF3') : item.status === 'Active Sprint' ? (isDark ? 'rgba(212,175,55,0.18)' : '#FEF9E7') : (isDark ? 'rgba(148,163,184,0.18)' : '#F1F5F9'),
+                        color: item.status === 'Shipped' ? (isDark ? '#34D399' : '#047857') : item.status === 'Active Sprint' ? (isDark ? '#D4AF37' : '#8A6A09') : theme.palette.text.secondary,
+                        border: `1px solid ${item.status === 'Shipped' ? (isDark ? 'rgba(52,211,153,0.3)' : 'rgba(5,150,105,0.3)') : item.status === 'Active Sprint' ? (isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)') : 'transparent'}`,
                       }}
                     />
                   </Box>
@@ -769,7 +787,7 @@ function ChronicleWorkstation() {
                           borderRadius: 1,
                           bgcolor: isDark ? '#1E293B' : '#E2E8F0',
                           '& .MuiLinearProgress-bar': {
-                            bgcolor: item.progress === 100 ? '#34D399' : '#D4AF37',
+                            bgcolor: item.progress === 100 ? (isDark ? '#34D399' : '#059669') : (isDark ? '#D4AF37' : '#B8860B'),
                           },
                         }}
                       />
@@ -789,28 +807,28 @@ function ChronicleWorkstation() {
 
         <Grid xs={12} md={4}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: '#D4AF37' }}>Chronicle Invariants</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#8A6A09' }}>Chronicle Invariants</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Every deliverable complies with zero-cloud execution and reproducible offline cryptographic guarantees.
             </Typography>
 
             <Stack spacing={2}>
-              <Paper sx={{ p: 1.5, bgcolor: isDark ? '#08080B' : '#F1F5F9', border: '1px solid rgba(212,175,55,0.2)', borderRadius: 1.5 }}>
-                <Typography variant="caption" sx={{ fontWeight: 800, color: '#D4AF37', display: 'block' }}>Zero-Egress Standard</Typography>
+              <Paper sx={{ p: 1.5, bgcolor: isDark ? '#08080B' : '#F1F5F9', border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #EAECF0', borderRadius: 1.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 800, color: isDark ? '#D4AF37' : '#8A6A09', display: 'block' }}>Zero-Egress Standard</Typography>
                 <Typography variant="body2" sx={{ fontSize: '0.82rem', mt: 0.5 }}>
                   100% of pipeline stages run in loopback space (127.0.0.1). No network telemetry permitted.
                 </Typography>
               </Paper>
 
-              <Paper sx={{ p: 1.5, bgcolor: isDark ? '#08080B' : '#F1F5F9', border: '1px solid rgba(52,211,153,0.2)', borderRadius: 1.5 }}>
-                <Typography variant="caption" sx={{ fontWeight: 800, color: '#34D399', display: 'block' }}>Reproducible Artifacts</Typography>
+              <Paper sx={{ p: 1.5, bgcolor: isDark ? '#08080B' : '#F1F5F9', border: isDark ? '1px solid rgba(52,211,153,0.2)' : '1px solid rgba(5,150,105,0.2)', borderRadius: 1.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 800, color: isDark ? '#34D399' : '#047857', display: 'block' }}>Reproducible Artifacts</Typography>
                 <Typography variant="body2" sx={{ fontSize: '0.82rem', mt: 0.5 }}>
                   Deterministic build hashes verified across all local tool builds without cloud CI.
                 </Typography>
               </Paper>
 
-              <Paper sx={{ p: 1.5, bgcolor: isDark ? '#08080B' : '#F1F5F9', border: '1px solid rgba(96,165,250,0.2)', borderRadius: 1.5 }}>
-                <Typography variant="caption" sx={{ fontWeight: 800, color: '#60A5FA', display: 'block' }}>Byzantine AST Quorum</Typography>
+              <Paper sx={{ p: 1.5, bgcolor: isDark ? '#08080B' : '#F1F5F9', border: isDark ? '1px solid rgba(96,165,250,0.2)' : '1px solid rgba(37,99,235,0.2)', borderRadius: 1.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 800, color: isDark ? '#60A5FA' : '#1D4ED8', display: 'block' }}>Byzantine AST Quorum</Typography>
                 <Typography variant="body2" sx={{ fontSize: '0.82rem', mt: 0.5 }}>
                   3-agent agreement threshold required before code AST is executed in the runtime.
                 </Typography>
@@ -890,12 +908,31 @@ function ConnectorsWorkstation() {
                 >
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, flexWrap: 'wrap', gap: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                      <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#34D399', boxShadow: '0 0 8px #34D399' }} />
+                      <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: isDark ? '#34D399' : '#059669', boxShadow: isDark ? '0 0 8px #34D399' : '0 0 6px rgba(5,150,105,0.4)' }} />
                       <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>{c.name}</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                      <Chip label={`Latency: ${c.latency}`} size="small" sx={{ fontFamily: mono, fontWeight: 750, bgcolor: 'rgba(52,211,153,0.14)', color: '#34D399' }} />
-                      <Chip label={c.status} size="small" sx={{ fontWeight: 800, bgcolor: isDark ? 'rgba(212,175,55,0.18)' : '#FEF9E7', color: '#D4AF37' }} />
+                      <Chip
+                        label={`Latency: ${c.latency}`}
+                        size="small"
+                        sx={{
+                          fontFamily: mono,
+                          fontWeight: 750,
+                          bgcolor: isDark ? 'rgba(52,211,153,0.14)' : '#ECFDF3',
+                          color: isDark ? '#34D399' : '#047857',
+                          border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : 'rgba(5,150,105,0.25)'}`,
+                        }}
+                      />
+                      <Chip
+                        label={c.status}
+                        size="small"
+                        sx={{
+                          fontWeight: 800,
+                          bgcolor: isDark ? 'rgba(212,175,55,0.18)' : '#FEF9E7',
+                          color: isDark ? '#D4AF37' : '#8A6A09',
+                          border: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)'}`,
+                        }}
+                      />
                     </Box>
                   </Box>
 
@@ -916,12 +953,12 @@ function ConnectorsWorkstation() {
 
         <Grid xs={12} md={4}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: '#D4AF37' }}>Connector Schema Sandbox</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#8A6A09' }}>Connector Schema Sandbox</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Inspect live Model Context Protocol (MCP) capabilities format:
             </Typography>
 
-            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: '#38BDF8', fontFamily: mono, fontSize: '0.78rem', borderRadius: 1.5, border: '1px solid rgba(212,175,55,0.2)', whiteSpace: 'pre-wrap' }}>
+            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: '#38BDF8', fontFamily: mono, fontSize: '0.78rem', borderRadius: 1.5, border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #1E293B', whiteSpace: 'pre-wrap' }}>
 {`{
   "jsonrpc": "2.0",
   "result": {
@@ -1057,8 +1094,9 @@ $$\\Delta w = A_+ e^{-\\Delta t / \\tau_+}$$
                 label={critiqueStatus}
                 size="small"
                 sx={{
-                  bgcolor: critiqueStatus === 'Multi-Agent Consensus Reached' ? 'rgba(52,211,153,0.18)' : 'transparent',
-                  color: critiqueStatus === 'Multi-Agent Consensus Reached' ? '#34D399' : theme.palette.text.secondary,
+                  bgcolor: critiqueStatus === 'Multi-Agent Consensus Reached' ? (isDark ? 'rgba(52,211,153,0.18)' : '#ECFDF3') : 'transparent',
+                  color: critiqueStatus === 'Multi-Agent Consensus Reached' ? (isDark ? '#34D399' : '#047857') : theme.palette.text.secondary,
+                  border: `1px solid ${critiqueStatus === 'Multi-Agent Consensus Reached' ? (isDark ? 'rgba(52,211,153,0.3)' : 'rgba(5,150,105,0.25)') : 'transparent'}`,
                   fontWeight: 800,
                 }}
               />
@@ -1068,7 +1106,7 @@ $$\\Delta w = A_+ e^{-\\Delta t / \\tau_+}$$
 
         <Grid xs={12} md={5}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: '#D4AF37' }}>Autonomous Critique Deck</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#8A6A09' }}>Autonomous Critique Deck</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Select an agent to inspect their formal critique of the active specification.
             </Typography>
@@ -1082,21 +1120,30 @@ $$\\Delta w = A_+ e^{-\\Delta t / \\tau_+}$$
                   onClick={() => setActiveReviewer(ag)}
                   sx={{
                     fontWeight: 800,
-                    bgcolor: activeReviewer === ag ? '#D4AF37' : 'transparent',
+                    bgcolor: activeReviewer === ag ? (isDark ? '#D4AF37' : '#B8860B') : 'transparent',
                     color: activeReviewer === ag ? '#101828' : theme.palette.text.primary,
                     border: '1px solid',
-                    borderColor: activeReviewer === ag ? '#D4AF37' : theme.palette.divider,
+                    borderColor: activeReviewer === ag ? (isDark ? '#D4AF37' : '#B8860B') : theme.palette.divider,
                   }}
                 />
               ))}
             </Box>
 
-            <Paper sx={{ p: 2, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: '1px solid rgba(212,175,55,0.3)', borderRadius: 2, mb: 2 }}>
+            <Paper sx={{ p: 2, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: isDark ? '1px solid rgba(212,175,55,0.3)' : '1px solid #EAECF0', borderRadius: 2, mb: 2 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
                 <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>{activeReviewer} Evaluation</Typography>
-                <Chip label={`Integrity: ${reviews[activeReviewer].score}`} size="small" sx={{ bgcolor: 'rgba(52,211,153,0.2)', color: '#34D399', fontWeight: 800 }} />
+                <Chip
+                  label={`Integrity: ${reviews[activeReviewer].score}`}
+                  size="small"
+                  sx={{
+                    bgcolor: isDark ? 'rgba(52,211,153,0.2)' : '#ECFDF3',
+                    color: isDark ? '#34D399' : '#047857',
+                    border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : 'rgba(5,150,105,0.25)'}`,
+                    fontWeight: 800,
+                  }}
+                />
               </Box>
-              <Typography variant="caption" sx={{ color: '#D4AF37', fontWeight: 750, display: 'block', mb: 1 }}>
+              <Typography variant="caption" sx={{ color: isDark ? '#D4AF37' : '#8A6A09', fontWeight: 750, display: 'block', mb: 1 }}>
                 Status: {reviews[activeReviewer].status}
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2, fontSize: '0.85rem' }}>
@@ -1107,7 +1154,7 @@ $$\\Delta w = A_+ e^{-\\Delta t / \\tau_+}$$
               <Stack spacing={0.75}>
                 {reviews[activeReviewer].checklist.map((c, i) => (
                   <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 1, fontSize: '0.8rem' }}>
-                    <CheckCircleIcon sx={{ fontSize: '0.9rem', color: '#34D399' }} />
+                    <CheckCircleIcon sx={{ fontSize: '0.9rem', color: isDark ? '#34D399' : '#059669' }} />
                     <span>{c}</span>
                   </Box>
                 ))}
@@ -1177,7 +1224,7 @@ function EdgeForgeWorkstation() {
                       p: 2,
                       cursor: 'pointer',
                       border: '1px solid',
-                      borderColor: target === t.id ? '#D4AF37' : theme.palette.divider,
+                      borderColor: target === t.id ? (isDark ? '#D4AF37' : '#B8860B') : theme.palette.divider,
                       bgcolor: target === t.id ? (isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7') : 'transparent',
                       borderRadius: 1.5,
                     }}
@@ -1219,17 +1266,17 @@ function EdgeForgeWorkstation() {
 
         <Grid xs={12} md={5}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1, color: '#D4AF37' }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1, color: isDark ? '#D4AF37' : '#B8860B' }}>
               Compiler Build Pipeline Output
             </Typography>
-            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: '#34D399', fontFamily: mono, fontSize: '0.8rem', height: 320, overflowY: 'auto', borderRadius: 1.5, border: '1px solid rgba(52,211,153,0.2)' }}>
+            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: isDark ? '#34D399' : '#4ADE80', fontFamily: mono, fontSize: '0.8rem', height: 320, overflowY: 'auto', borderRadius: 1.5, border: isDark ? '1px solid rgba(52,211,153,0.2)' : '1px solid #334155' }}>
               {buildLogs.map((l, i) => (
                 <Box key={i} sx={{ mb: 0.75, lineHeight: 1.45 }}>{l}</Box>
               ))}
             </Paper>
 
-            <Paper sx={{ p: 1.5, mt: 2, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: '1px solid rgba(212,175,55,0.2)', borderRadius: 1.5 }}>
-              <Typography variant="caption" sx={{ fontWeight: 800, color: '#D4AF37', display: 'block' }}>Zero-Egress Embed Guarantee</Typography>
+            <Paper sx={{ p: 1.5, mt: 2, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #E2E8F0', borderRadius: 1.5 }}>
+              <Typography variant="caption" sx={{ fontWeight: 800, color: isDark ? '#D4AF37' : '#B8860B', display: 'block' }}>Zero-Egress Embed Guarantee</Typography>
               <Typography variant="body2" sx={{ fontSize: '0.8rem' }}>
                 All generated binaries bundle the loopback HTTP micro-daemon and contain zero telemetry sockets.
               </Typography>
@@ -1289,7 +1336,7 @@ function Web3HubWorkstation() {
               <Typography variant="caption" sx={{ fontWeight: 750, color: 'text.secondary', display: 'block', mb: 0.5 }}>
                 Public Key (Ed25519)
               </Typography>
-              <Paper sx={{ p: 1.5, fontFamily: mono, fontSize: '0.85rem', bgcolor: isDark ? '#08080B' : '#F1F5F9', border: '1px solid rgba(212,175,55,0.2)', wordBreak: 'break-all' }}>
+              <Paper sx={{ p: 1.5, fontFamily: mono, fontSize: '0.85rem', bgcolor: isDark ? '#08080B' : '#F8FAFC', border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #E2E8F0', wordBreak: 'break-all' }}>
                 {pubKey}
               </Paper>
             </Box>
@@ -1298,7 +1345,7 @@ function Web3HubWorkstation() {
               <Typography variant="caption" sx={{ fontWeight: 750, color: 'text.secondary', display: 'block', mb: 0.5 }}>
                 Private Key Seed (Air-Gapped In-Memory)
               </Typography>
-              <Paper sx={{ p: 1.5, fontFamily: mono, fontSize: '0.85rem', bgcolor: isDark ? '#08080B' : '#F1F5F9', border: '1px solid rgba(244,63,94,0.2)', color: '#F87171', wordBreak: 'break-all' }}>
+              <Paper sx={{ p: 1.5, fontFamily: mono, fontSize: '0.85rem', bgcolor: isDark ? '#08080B' : '#FEF2F2', border: isDark ? '1px solid rgba(244,63,94,0.2)' : '1px solid #FECACA', color: isDark ? '#F87171' : '#B91C1C', wordBreak: 'break-all' }}>
                 {privKey}
               </Paper>
             </Box>
@@ -1326,10 +1373,10 @@ function Web3HubWorkstation() {
 
             {txSignature && (
               <Box sx={{ mt: 2 }}>
-                <Typography variant="caption" sx={{ fontWeight: 750, color: '#34D399', display: 'block', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 750, color: isDark ? '#34D399' : '#047857', display: 'block', mb: 0.5 }}>
                   Cryptographic Signature:
                 </Typography>
-                <Paper sx={{ p: 1.5, fontFamily: mono, fontSize: '0.8rem', bgcolor: isDark ? '#08080B' : '#F1F5F9', color: '#34D399', wordBreak: 'break-all' }}>
+                <Paper sx={{ p: 1.5, fontFamily: mono, fontSize: '0.8rem', bgcolor: isDark ? '#08080B' : '#ECFDF5', color: isDark ? '#34D399' : '#047857', border: isDark ? '1px solid rgba(52,211,153,0.2)' : '1px solid #A7F3D0', wordBreak: 'break-all' }}>
                   {txSignature}
                 </Paper>
               </Box>
@@ -1339,30 +1386,30 @@ function Web3HubWorkstation() {
 
         <Grid xs={12} md={5}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: '#D4AF37' }}>Solana Localnet Tracker</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#B8860B' }}>Solana Localnet Tracker</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Monitors loopback RPC cluster 127.0.0.1:8899 without external internet calls.
             </Typography>
 
             <Stack spacing={2}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', borderRadius: 1.5 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
                 <Typography variant="body2" color="text.secondary">Cluster Node</Typography>
                 <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 750 }}>127.0.0.1:8899</Typography>
               </Box>
 
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', borderRadius: 1.5 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
                 <Typography variant="body2" color="text.secondary">Current Slot Height</Typography>
-                <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 750, color: '#34D399' }}>291,842,109</Typography>
+                <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 750, color: isDark ? '#34D399' : '#047857' }}>291,842,109</Typography>
               </Box>
 
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', borderRadius: 1.5 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
                 <Typography variant="body2" color="text.secondary">Estimated Local TPS</Typography>
-                <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 750, color: '#D4AF37' }}>2,840 tx/s</Typography>
+                <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 750, color: isDark ? '#D4AF37' : '#B8860B' }}>2,840 tx/s</Typography>
               </Box>
 
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', borderRadius: 1.5 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
                 <Typography variant="body2" color="text.secondary">Air-Gapped Mode</Typography>
-                <Chip label="ACTIVE (Zero-Egress)" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.18)', color: '#34D399', fontWeight: 800 }} />
+                <Chip label="ACTIVE (Zero-Egress)" size="small" sx={{ bgcolor: isDark ? 'rgba(52,211,153,0.18)' : '#ECFDF5', color: isDark ? '#34D399' : '#047857', fontWeight: 800, border: isDark ? 'none' : '1px solid #A7F3D0' }} />
               </Box>
             </Stack>
           </Paper>
@@ -1450,16 +1497,16 @@ Zero-Egress: Guaranteed`,
                   onClick={() => setSelectedSchema(key)}
                   sx={{
                     fontWeight: 750,
-                    bgcolor: selectedSchema === key ? '#D4AF37' : 'transparent',
-                    color: selectedSchema === key ? '#101828' : theme.palette.text.primary,
+                    bgcolor: selectedSchema === key ? (isDark ? '#D4AF37' : '#B8860B') : 'transparent',
+                    color: selectedSchema === key ? (isDark ? '#101828' : '#FFFFFF') : theme.palette.text.primary,
                     border: '1px solid',
-                    borderColor: selectedSchema === key ? '#D4AF37' : theme.palette.divider,
+                    borderColor: selectedSchema === key ? (isDark ? '#D4AF37' : '#B8860B') : theme.palette.divider,
                   }}
                 />
               ))}
             </Box>
 
-            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: '#F5E6AB', fontFamily: mono, fontSize: '0.85rem', borderRadius: 1.5, border: '1px solid rgba(212,175,55,0.2)', whiteSpace: 'pre-wrap', minHeight: 220 }}>
+            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: isDark ? '#F5E6AB' : '#FEF3C7', fontFamily: mono, fontSize: '0.85rem', borderRadius: 1.5, border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #334155', whiteSpace: 'pre-wrap', minHeight: 220 }}>
               {schemas[selectedSchema]}
             </Paper>
           </Paper>
@@ -1467,25 +1514,25 @@ Zero-Egress: Guaranteed`,
 
         <Grid xs={12} md={5}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: '#D4AF37' }}>Autonomous Crawler Readiness</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#B8860B' }}>Autonomous Crawler Readiness</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Zoth Studio exposes machine-readable endpoints optimized for LLM scrapers, Perplexity, and MCP agents.
             </Typography>
 
             <Stack spacing={2}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', borderRadius: 1.5 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
                 <Typography variant="body2">LLM Context File</Typography>
                 <Chip label="/llms.txt" size="small" component={RouterLink} to="/llms.txt" clickable sx={{ fontFamily: mono, fontWeight: 700 }} />
               </Box>
 
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', borderRadius: 1.5 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
                 <Typography variant="body2">Complete Corpus</Typography>
                 <Chip label="/llms-full.txt" size="small" component={RouterLink} to="/llms-full.txt" clickable sx={{ fontFamily: mono, fontWeight: 700 }} />
               </Box>
 
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', borderRadius: 1.5 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
                 <Typography variant="body2">Machine Ontology</Typography>
-                <Chip label="/ax" size="small" component={RouterLink} to="/ax" clickable sx={{ fontFamily: mono, fontWeight: 700, color: '#D4AF37' }} />
+                <Chip label="/ax" size="small" component={RouterLink} to="/ax" clickable sx={{ fontFamily: mono, fontWeight: 700, color: isDark ? '#D4AF37' : '#B8860B' }} />
               </Box>
             </Stack>
           </Paper>
@@ -1569,21 +1616,21 @@ function ToolBenchWorkstation() {
 
         <Grid xs={12} md={5}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: '#D4AF37' }}>Tool Bench Diagnostic Suite</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#B8860B' }}>Tool Bench Diagnostic Suite</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Simulates autonomous agent calling contracts and verifies deterministic schema enforcement.
             </Typography>
 
             <Stack spacing={2}>
-              <Paper sx={{ p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: '1px solid rgba(212,175,55,0.2)', borderRadius: 1.5 }}>
-                <Typography variant="caption" sx={{ fontWeight: 800, color: '#D4AF37' }}>Zero-Egress Contract Verification</Typography>
+              <Paper sx={{ p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #E2E8F0', borderRadius: 1.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 800, color: isDark ? '#D4AF37' : '#B8860B' }}>Zero-Egress Contract Verification</Typography>
                 <Typography variant="body2" sx={{ fontSize: '0.8rem', mt: 0.5 }}>
                   Rejects any payload containing external URI destinations or unencrypted secrets.
                 </Typography>
               </Paper>
 
-              <Paper sx={{ p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: '1px solid rgba(52,211,153,0.2)', borderRadius: 1.5 }}>
-                <Typography variant="caption" sx={{ fontWeight: 800, color: '#34D399' }}>Schema Contract Engine</Typography>
+              <Paper sx={{ p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: isDark ? '1px solid rgba(52,211,153,0.2)' : '1px solid #A7F3D0', borderRadius: 1.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 800, color: isDark ? '#34D399' : '#047857' }}>Schema Contract Engine</Typography>
                 <Typography variant="body2" sx={{ fontSize: '0.8rem', mt: 0.5 }}>
                   Enforces JSON Schema Draft-07 validation directly in-browser prior to execution.
                 </Typography>
@@ -1760,12 +1807,12 @@ function HubWorkstationConsole({ station }) {
       <Paper
         sx={{
           p: { xs: 3, md: 5 },
-          border: '1px solid rgba(212,175,55,0.4)',
+          border: isDark ? '1px solid rgba(212,175,55,0.4)' : '1px solid rgba(184,134,11,0.3)',
           borderRadius: 3,
           bgcolor: isDark ? '#0B0D15' : '#FFFFFF',
           background: isDark
             ? 'linear-gradient(135deg, rgba(212,175,55,0.08) 0%, rgba(8,8,11,0.95) 100%)'
-            : 'linear-gradient(135deg, rgba(212,175,55,0.06) 0%, #FFFFFF 100%)',
+            : 'linear-gradient(135deg, rgba(184,134,11,0.06) 0%, #FFFFFF 100%)',
           mb: 4,
           position: 'relative',
           overflow: 'hidden',
@@ -1773,8 +1820,8 @@ function HubWorkstationConsole({ station }) {
       >
         <Box sx={{ position: 'relative', zIndex: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
-            <Chip label={hub.badge} size="small" sx={{ bgcolor: 'rgba(212,175,55,0.2)', color: '#D4AF37', fontWeight: 800 }} />
-            <Chip label="Core Hub Component" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399', fontWeight: 800 }} />
+            <Chip label={hub.badge} size="small" sx={{ bgcolor: isDark ? 'rgba(212,175,55,0.2)' : '#FEF9E7', color: isDark ? '#D4AF37' : '#B8860B', fontWeight: 800, border: isDark ? 'none' : '1px solid #FDE68A' }} />
+            <Chip label="Core Hub Component" size="small" sx={{ bgcolor: isDark ? 'rgba(52,211,153,0.15)' : '#ECFDF5', color: isDark ? '#34D399' : '#047857', fontWeight: 800, border: isDark ? 'none' : '1px solid #A7F3D0' }} />
           </Box>
 
           <Typography variant="h4" sx={{ fontWeight: 800, mb: 1.5, fontFamily: '"Celtic Garamond", Georgia, serif' }}>
@@ -1788,9 +1835,9 @@ function HubWorkstationConsole({ station }) {
           <Grid container spacing={2} sx={{ mb: 4, maxWidth: 840 }}>
             {hub.stats.map((s, i) => (
               <Grid xs={12} sm={4} key={i}>
-                <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#F8FAFC', border: '1px solid rgba(212,175,55,0.2)', borderRadius: 2 }}>
+                <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#F8FAFC', border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #E2E8F0', borderRadius: 2 }}>
                   <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>{s.label}</Typography>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 800, fontFamily: mono, color: '#D4AF37' }}>{s.val}</Typography>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 800, fontFamily: mono, color: isDark ? '#D4AF37' : '#B8860B' }}>{s.val}</Typography>
                 </Paper>
               </Grid>
             ))}
@@ -1803,12 +1850,12 @@ function HubWorkstationConsole({ station }) {
               startIcon={<RocketLaunchIcon />}
               onClick={() => navigate(hub.target)}
               sx={{
-                bgcolor: '#D4AF37',
-                color: '#101828',
+                bgcolor: isDark ? '#D4AF37' : '#B8860B',
+                color: isDark ? '#101828' : '#FFFFFF',
                 fontWeight: 800,
                 px: 4,
                 py: 1.5,
-                '&:hover': { bgcolor: '#F5E6AB' },
+                '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#996515' },
               }}
             >
               Enter Full Enclave Hub
@@ -1886,10 +1933,10 @@ function UniversalEnclaveConsole({ station }) {
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, mb: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
               <Typography variant="h6" sx={{ fontWeight: 800 }}>Enclave Interactive Shell</Typography>
-              <Chip label={`Latency: ${pingLatency}`} size="small" sx={{ fontFamily: mono, fontWeight: 750, bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399' }} />
+              <Chip label={`Latency: ${pingLatency}`} size="small" sx={{ fontFamily: mono, fontWeight: 750, bgcolor: isDark ? 'rgba(52,211,153,0.15)' : '#ECFDF5', color: isDark ? '#34D399' : '#047857', border: isDark ? 'none' : '1px solid #A7F3D0' }} />
             </Box>
 
-            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: '#F5E6AB', fontFamily: mono, fontSize: '0.82rem', height: 260, overflowY: 'auto', borderRadius: 1.5, border: '1px solid rgba(212,175,55,0.25)', mb: 2 }}>
+            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: isDark ? '#F5E6AB' : '#FEF3C7', fontFamily: mono, fontSize: '0.82rem', height: 260, overflowY: 'auto', borderRadius: 1.5, border: isDark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #334155', mb: 2 }}>
               {history.map((line, idx) => (
                 <Box key={idx} sx={{ mb: 0.5, whiteSpace: 'pre-wrap', lineHeight: 1.45 }}>{line}</Box>
               ))}
@@ -1918,7 +1965,7 @@ function UniversalEnclaveConsole({ station }) {
 
         <Grid xs={12} md={5}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: '#D4AF37' }}>Workstation Diagnostics</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#B8860B' }}>Workstation Diagnostics</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
               Hardware security telemetry and enclave operational invariants.
             </Typography>
@@ -1927,7 +1974,7 @@ function UniversalEnclaveConsole({ station }) {
               <Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5, fontSize: '0.85rem' }}>
                   <span>Hardware Shannon Entropy</span>
-                  <strong style={{ fontFamily: mono, color: '#34D399' }}>{entropyScore} / 8.000</strong>
+                  <strong style={{ fontFamily: mono, color: isDark ? '#34D399' : '#047857' }}>{entropyScore} / 8.000</strong>
                 </Box>
                 <LinearProgress variant="determinate" value={98} color="success" sx={{ height: 6, borderRadius: 1 }} />
               </Box>
@@ -1935,14 +1982,14 @@ function UniversalEnclaveConsole({ station }) {
               <Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5, fontSize: '0.85rem' }}>
                   <span>Zero-Egress Firewall Rule</span>
-                  <strong style={{ fontFamily: mono, color: '#D4AF37' }}>100% BLOCKED</strong>
+                  <strong style={{ fontFamily: mono, color: isDark ? '#D4AF37' : '#B8860B' }}>100% BLOCKED</strong>
                 </Box>
                 <LinearProgress variant="determinate" value={100} color="primary" sx={{ height: 6, borderRadius: 1 }} />
               </Box>
 
               <Divider sx={{ my: 1 }} />
               <Typography variant="caption" sx={{ fontWeight: 750, color: 'text.secondary' }}>Specification Manifest</Typography>
-              <Paper sx={{ p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: '1px solid rgba(212,175,55,0.2)', borderRadius: 1 }}>
+              <Paper sx={{ p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #E2E8F0', borderRadius: 1 }}>
                 <Typography variant="caption" sx={{ fontFamily: mono, display: 'block' }}>ID: {station.id}</Typography>
                 <Typography variant="caption" sx={{ fontFamily: mono, display: 'block' }}>Classification: {station.band}</Typography>
                 <Typography variant="caption" sx={{ fontFamily: mono, display: 'block' }}>Zero-Egress: Invariant Enforced</Typography>
@@ -1975,6 +2022,7 @@ export default function WorkstationDetailPage() {
   const gold = {
     accent: isDark ? '#D4AF37' : '#B8860B',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
+    border: isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)',
   };
 
   // Check if station has an app hub
@@ -2030,7 +2078,7 @@ export default function WorkstationDetailPage() {
           Back to Workstations
         </Button>
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          <Chip label="v2 Native Studio Workstation" size="small" sx={{ bgcolor: gold.wash, color: gold.accent, fontWeight: 800 }} />
+          <Chip label="v2 Native Studio Workstation" size="small" sx={{ bgcolor: gold.wash, color: gold.accent, fontWeight: 800, border: `1px solid ${gold.border}` }} />
           {classicUp && (
             <Button
               size="small"
@@ -2049,7 +2097,7 @@ export default function WorkstationDetailPage() {
 
       {/* Workstation Header */}
       <Box sx={{ mb: 4 }}>
-        <Chip label={station.band} size="small" sx={{ mb: 1, fontWeight: 750 }} />
+        <Chip label={station.band} size="small" sx={{ mb: 1, fontWeight: 750, bgcolor: gold.wash, color: gold.accent, border: `1px solid ${gold.border}` }} />
         <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', mb: 1 }}>
           {station.name}
         </Typography>

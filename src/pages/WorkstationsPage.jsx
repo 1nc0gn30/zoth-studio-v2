@@ -45,59 +45,88 @@ const ORDERED_BANDS = [
 const BAND_CONFIG = {
   'Build': {
     color: '#F59E0B',
+    lightColor: '#B45309',
     wash: 'rgba(245, 158, 11, 0.14)',
+    lightWash: '#FFFBEB',
     border: 'rgba(245, 158, 11, 0.35)',
+    lightBorder: '#FCD34D',
     icon: CodeIcon,
     description: 'Autonomous compilation pipelines, code foundries & WebContainer sandboxes',
     svgPos: { x: 460, y: 75 },
   },
   'Observe': {
     color: '#38BDF8',
+    lightColor: '#0284C7',
     wash: 'rgba(56, 189, 248, 0.14)',
+    lightWash: '#F0F9FF',
     border: 'rgba(56, 189, 248, 0.35)',
+    lightBorder: '#BAE6FD',
     icon: VisibilityIcon,
     description: 'Telemetry arrays, horizon chronicles & mathematical theory academy',
     svgPos: { x: 740, y: 145 },
   },
   'Swarm & Consensus': {
     color: '#34D399',
+    lightColor: '#059669',
     wash: 'rgba(52, 211, 153, 0.14)',
+    lightWash: '#ECFDF5',
     border: 'rgba(52, 211, 153, 0.35)',
+    lightBorder: '#A7F3D0',
     icon: HubIcon,
     description: '3-agent Byzantine AST synthesis, signal bridges & swarm radars',
     svgPos: { x: 740, y: 335 },
   },
   'Security': {
     color: '#F87171',
+    lightColor: '#DC2626',
     wash: 'rgba(248, 113, 113, 0.14)',
+    lightWash: '#FEF2F2',
     border: 'rgba(248, 113, 113, 0.35)',
+    lightBorder: '#FECACA',
     icon: SecurityIcon,
     description: 'Shannon entropy monitors, threat simulation & air-gapped web3 bridges',
     svgPos: { x: 460, y: 405 },
   },
   'Spatial': {
     color: '#C084FC',
+    lightColor: '#7E22CE',
     wash: 'rgba(192, 132, 252, 0.14)',
+    lightWash: '#FAF5FF',
     border: 'rgba(192, 132, 252, 0.35)',
+    lightBorder: '#E9D5FF',
     icon: LayersIcon,
     description: 'Nexus 3D Omniverse viewports, spatial engines & visual linkages',
     svgPos: { x: 180, y: 335 },
   },
   'Studio': {
     color: '#EC4899',
+    lightColor: '#BE185D',
     wash: 'rgba(236, 72, 153, 0.14)',
+    lightWash: '#FDF2F8',
     border: 'rgba(236, 72, 153, 0.35)',
+    lightBorder: '#FBCFE8',
     icon: PaletteIcon,
     description: 'Sovereign netrunner memory hubs, design tokens & alchemical seals',
     svgPos: { x: 180, y: 145 },
   },
 };
 
+function getBandConfig(bandName, isDark) {
+  const base = BAND_CONFIG[bandName];
+  if (!base) return null;
+  return {
+    ...base,
+    color: isDark ? base.color : base.lightColor,
+    wash: isDark ? base.wash : base.lightWash,
+    border: isDark ? base.border : base.lightBorder,
+  };
+}
+
 function WorkstationCard({ item, classicUp, isDark, gold }) {
-  const bandCfg = BAND_CONFIG[item.band] || {
+  const bandCfg = getBandConfig(item.band, isDark) || {
     color: gold.accent,
     wash: gold.wash,
-    border: gold.accent,
+    border: gold.border,
     icon: ComputerIcon
   };
   const BandIconComponent = bandCfg.icon;
@@ -112,6 +141,7 @@ function WorkstationCard({ item, classicUp, isDark, gold }) {
         border: '1px solid',
         borderColor: isDark ? '#26262F' : '#EAECF0',
         bgcolor: isDark ? '#0B0B12' : '#FFFFFF',
+        boxShadow: isDark ? 'none' : '0 1px 3px rgba(16, 24, 40, 0.05)',
         transition: 'transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease',
         '&:hover': {
           borderColor: gold.accent,
@@ -141,7 +171,7 @@ function WorkstationCard({ item, classicUp, isDark, gold }) {
           />
           <Chip
             size="small"
-            icon={<VerifiedUserIcon sx={{ fontSize: '0.8rem !important', color: '#34D399 !important' }} />}
+            icon={<VerifiedUserIcon sx={{ fontSize: '0.8rem !important', color: `${isDark ? '#34D399' : '#047857'} !important` }} />}
             label="Zero-Egress Invariant Verified"
             sx={{
               height: 24,
@@ -149,8 +179,8 @@ function WorkstationCard({ item, classicUp, isDark, gold }) {
               fontWeight: 750,
               fontFamily: mono,
               bgcolor: isDark ? 'rgba(52, 211, 153, 0.1)' : '#ECFDF3',
-              color: '#34D399',
-              border: '1px solid rgba(52, 211, 153, 0.3)',
+              color: isDark ? '#34D399' : '#047857',
+              border: `1px solid ${isDark ? 'rgba(52, 211, 153, 0.3)' : 'rgba(4, 120, 87, 0.3)'}`,
             }}
           />
         </Box>
@@ -175,7 +205,7 @@ function WorkstationCard({ item, classicUp, isDark, gold }) {
             <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.7rem', color: gold.accent, fontWeight: 700 }}>
               ID:
             </Typography>
-            <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#9CA3AF' : '#4B5563', bgcolor: isDark ? '#14141E' : '#F3F4F6', px: 0.8, py: 0.2, borderRadius: 1 }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#9CA3AF' : '#374151', bgcolor: isDark ? '#14141E' : '#F3F4F6', px: 0.8, py: 0.2, borderRadius: 1, border: `1px solid ${isDark ? '#26262F' : '#E5E7EB'}` }}>
               {item.id}
             </Typography>
           </Box>
@@ -184,7 +214,7 @@ function WorkstationCard({ item, classicUp, isDark, gold }) {
             sx={{
               fontFamily: mono,
               fontSize: '0.74rem',
-              color: isDark ? '#6B7280' : '#6B7280',
+              color: isDark ? '#9CA3AF' : '#4B5563',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
@@ -375,9 +405,9 @@ export default function WorkstationsPage() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  bgcolor: 'rgba(56,189,248,0.12)',
-                  border: '1px solid rgba(56,189,248,0.3)',
-                  color: '#38BDF8',
+                  bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF',
+                  border: `1px solid ${isDark ? 'rgba(56,189,248,0.3)' : '#BAE6FD'}`,
+                  color: isDark ? '#38BDF8' : '#0284C7',
                   flexShrink: 0,
                 }}
               >
@@ -405,16 +435,16 @@ export default function WorkstationsPage() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  bgcolor: 'rgba(52,211,153,0.12)',
-                  border: '1px solid rgba(52,211,153,0.3)',
-                  color: '#34D399',
+                  bgcolor: isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF5',
+                  border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`,
+                  color: isDark ? '#34D399' : '#047857',
                   flexShrink: 0,
                 }}
               >
                 <CloudOffIcon sx={{ fontSize: '1.35rem' }} />
               </Box>
               <Box>
-                <Typography variant="subtitle1" sx={{ fontFamily: mono, fontWeight: 800, color: '#34D399', lineHeight: 1.2 }}>
+                <Typography variant="subtitle1" sx={{ fontFamily: mono, fontWeight: 800, color: isDark ? '#34D399' : '#047857', lineHeight: 1.2 }}>
                   100% Loopback
                 </Typography>
                 <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', fontSize: '0.78rem' }}>
@@ -432,7 +462,7 @@ export default function WorkstationsPage() {
                 px: 1.5,
                 borderRadius: 2,
                 border: '1px solid',
-                borderColor: classicUp ? 'rgba(52,211,153,0.35)' : (isDark ? '#26262F' : '#EAECF0'),
+                borderColor: classicUp ? (isDark ? 'rgba(52,211,153,0.35)' : '#A7F3D0') : (isDark ? '#26262F' : '#EAECF0'),
                 bgcolor: classicUp
                   ? (isDark ? 'rgba(52,211,153,0.08)' : '#ECFDF3')
                   : (isDark ? 'rgba(255,255,255,0.02)' : '#F9FAFB'),
@@ -448,13 +478,13 @@ export default function WorkstationsPage() {
                     width: 10,
                     height: 10,
                     borderRadius: '50%',
-                    bgcolor: classicUp ? '#34D399' : '#6B7280',
-                    boxShadow: classicUp ? '0 0 8px #34D399' : 'none',
+                    bgcolor: classicUp ? (isDark ? '#34D399' : '#059669') : '#6B7280',
+                    boxShadow: classicUp ? (isDark ? '0 0 8px #34D399' : '0 0 6px rgba(5,150,105,0.4)') : 'none',
                     flexShrink: 0,
                   }}
                 />
                 <Box>
-                  <Typography variant="caption" sx={{ fontWeight: 800, display: 'block', color: classicUp ? '#34D399' : 'text.primary', lineHeight: 1.2 }}>
+                  <Typography variant="caption" sx={{ fontWeight: 800, display: 'block', color: classicUp ? (isDark ? '#34D399' : '#047857') : 'text.primary', lineHeight: 1.2 }}>
                     {classicUp ? 'Legacy Server Online · :8088' : 'Legacy Server Offline'}
                   </Typography>
                   <Typography variant="caption" sx={{ fontSize: '0.68rem', color: 'text.secondary', fontFamily: mono }}>
@@ -470,9 +500,9 @@ export default function WorkstationsPage() {
                   fontSize: '0.65rem',
                   fontWeight: 800,
                   fontFamily: mono,
-                  bgcolor: classicUp ? 'rgba(52,211,153,0.2)' : (isDark ? 'rgba(255,255,255,0.06)' : '#E5E7EB'),
-                  color: classicUp ? '#34D399' : 'text.secondary',
-                  border: `1px solid ${classicUp ? 'rgba(52,211,153,0.4)' : (isDark ? '#374151' : '#D1D5DB')}`,
+                  bgcolor: classicUp ? (isDark ? 'rgba(52,211,153,0.2)' : '#D1FAE5') : (isDark ? 'rgba(255,255,255,0.06)' : '#E5E7EB'),
+                  color: classicUp ? (isDark ? '#34D399' : '#047857') : 'text.secondary',
+                  border: `1px solid ${classicUp ? (isDark ? 'rgba(52,211,153,0.4)' : '#6EE7B7') : (isDark ? '#374151' : '#D1D5DB')}`,
                 }}
               />
             </Box>
@@ -605,7 +635,7 @@ export default function WorkstationsPage() {
         {ORDERED_BANDS.map((item) => {
           const active = item === band;
           const count = bandCounts[item] || 0;
-          const cfg = BAND_CONFIG[item];
+          const cfg = getBandConfig(item, isDark);
           const IconComp = cfg.icon;
 
           return (
@@ -775,7 +805,7 @@ export default function WorkstationsPage() {
 
                 {/* Connecting Links from Core to the 6 Band Hubs */}
                 {ORDERED_BANDS.map((bName) => {
-                  const cfg = BAND_CONFIG[bName];
+                  const cfg = getBandConfig(bName, isDark);
                   const active = band === 'All' || band === bName;
                   const isCurrent = band === bName;
 
@@ -786,7 +816,7 @@ export default function WorkstationsPage() {
                         y1="240"
                         x2={cfg.svgPos.x}
                         y2={cfg.svgPos.y}
-                        stroke={isCurrent ? cfg.color : (active ? 'rgba(212,175,55,0.3)' : 'rgba(100,100,120,0.15)')}
+                        stroke={isCurrent ? cfg.color : (active ? 'rgba(212,175,55,0.3)' : (isDark ? 'rgba(100,100,120,0.2)' : 'rgba(180,185,195,0.4)'))}
                         strokeWidth={isCurrent ? 3 : (active ? 1.75 : 1)}
                         strokeDasharray={isCurrent ? 'none' : '4 4'}
                         opacity={active ? 1 : 0.4}
@@ -845,7 +875,7 @@ export default function WorkstationsPage() {
                     x="460"
                     y="244"
                     textAnchor="middle"
-                    fill="#34D399"
+                    fill={isDark ? '#34D399' : '#047857'}
                     fontSize="8.5"
                     fontWeight="700"
                     fontFamily={mono}
@@ -867,7 +897,7 @@ export default function WorkstationsPage() {
 
                 {/* 6 Cadre Hub Nodes with Satellites */}
                 {ORDERED_BANDS.map((bName) => {
-                  const cfg = BAND_CONFIG[bName];
+                  const cfg = getBandConfig(bName, isDark);
                   const count = bandCounts[bName] || 0;
                   const active = band === 'All' || band === bName;
                   const isCurrent = band === bName;
@@ -951,7 +981,7 @@ export default function WorkstationsPage() {
                           cy={hy}
                           r="28"
                           fill={isDark ? '#0B0B12' : '#FFFFFF'}
-                          stroke={isCurrent ? cfg.color : (active ? gold.accent : '#4B5563')}
+                          stroke={isCurrent ? cfg.color : (active ? gold.accent : (isDark ? '#4B5563' : '#9CA3AF'))}
                           strokeWidth={isCurrent ? 3 : 2}
                         />
 
@@ -1014,7 +1044,7 @@ export default function WorkstationsPage() {
                 sx={{
                   fontFamily: mono,
                   fontWeight: 750,
-                  bgcolor: band === 'All' ? gold.accent : 'transparent',
+                  bgcolor: band === 'All' ? gold.accent : (isDark ? 'transparent' : '#FFFFFF'),
                   color: band === 'All' ? '#101828' : 'text.primary',
                   border: '1px solid',
                   borderColor: band === 'All' ? gold.accent : (isDark ? '#374151' : '#D1D5DB'),
@@ -1030,7 +1060,7 @@ export default function WorkstationsPage() {
                   sx={{
                     fontFamily: mono,
                     fontWeight: 750,
-                    bgcolor: band === bName ? gold.accent : 'transparent',
+                    bgcolor: band === bName ? gold.accent : (isDark ? 'transparent' : '#FFFFFF'),
                     color: band === bName ? '#101828' : 'text.primary',
                     border: '1px solid',
                     borderColor: band === bName ? gold.accent : (isDark ? '#374151' : '#D1D5DB'),
@@ -1045,7 +1075,7 @@ export default function WorkstationsPage() {
             {ORDERED_BANDS.map((bName) => {
               const bItems = groupedByBand[bName] || [];
               if (band !== 'All' && band !== bName) return null;
-              const cfg = BAND_CONFIG[bName];
+              const cfg = getBandConfig(bName, isDark);
               const IconComponent = cfg.icon;
 
               return (
@@ -1058,6 +1088,7 @@ export default function WorkstationsPage() {
                     bgcolor: isDark ? '#08080B' : '#FFFFFF',
                     border: '1px solid',
                     borderColor: isDark ? '#26262F' : '#EAECF0',
+                    boxShadow: isDark ? 'none' : '0 1px 3px rgba(16, 24, 40, 0.05)',
                   }}
                 >
                   {/* Cadre Header */}
@@ -1098,7 +1129,7 @@ export default function WorkstationsPage() {
                           />
                           <Chip
                             size="small"
-                            icon={<VerifiedUserIcon sx={{ fontSize: '0.75rem !important', color: '#34D399 !important' }} />}
+                            icon={<VerifiedUserIcon sx={{ fontSize: '0.75rem !important', color: `${isDark ? '#34D399' : '#047857'} !important` }} />}
                             label="Zero-Egress Invariant Verified"
                             sx={{
                               height: 22,
@@ -1106,8 +1137,8 @@ export default function WorkstationsPage() {
                               fontSize: '0.68rem',
                               fontWeight: 700,
                               bgcolor: isDark ? 'rgba(52,211,153,0.1)' : '#ECFDF3',
-                              color: '#34D399',
-                              border: '1px solid rgba(52,211,153,0.3)',
+                              color: isDark ? '#34D399' : '#047857',
+                              border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : 'rgba(4,120,87,0.3)'}`,
                             }}
                           />
                         </Box>

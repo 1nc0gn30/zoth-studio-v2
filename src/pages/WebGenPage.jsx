@@ -1530,12 +1530,14 @@ function getAstTreeData(templateName, frameworkId) {
 export default function WebGenPage() {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
-  const gold = '#D4AF37';
-  const goldLight = '#F5E6AB';
-  const goldBg = 'rgba(212,175,55,0.12)';
-  const surface = '#0D0E15';
-  const cardBg = '#121420';
-  const divider = 'rgba(212,175,55,0.2)';
+  const gold = dark ? '#D4AF37' : '#B8860B';
+  const goldLight = dark ? '#F5E6AB' : '#8A6A09';
+  const goldBg = dark ? 'rgba(212,175,55,0.12)' : '#FEF9E7';
+  const surface = theme.palette.background.paper;
+  const cardBg = dark ? '#121420' : '#F8FAFC';
+  const textPrimary = theme.palette.text.primary;
+  const textSecondary = theme.palette.text.secondary;
+  const divider = theme.palette.divider;
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   // State
@@ -1662,30 +1664,30 @@ export default function WebGenPage() {
     switch (selectedTemplate) {
       case 'Cyberpunk Portfolio':
         return (
-          <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: '#08080B', color: '#E2E8F0', fontFamily: mono }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 2, mb: 3, borderBottom: '1px solid rgba(212,175,55,0.3)' }}>
+          <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: dark ? '#08080B' : '#F8FAFC', color: textPrimary, fontFamily: mono }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 2, mb: 3, borderBottom: `1px solid ${divider}` }}>
               <Box>
-                <Typography variant="caption" sx={{ color: gold, fontWeight: 800 }}>// OPERATIVE MATRIX //</Typography>
-                <Typography variant="h5" sx={{ fontWeight: 900, color: '#FFFFFF', letterSpacing: '-0.02em' }}>NEO.SOVEREIGN_</Typography>
+                <Typography variant="caption" sx={{ color: dark ? gold : '#8A6A09', fontWeight: 800 }}>// OPERATIVE MATRIX //</Typography>
+                <Typography variant="h5" sx={{ fontWeight: 900, color: textPrimary, letterSpacing: '-0.02em' }}>NEO.SOVEREIGN_</Typography>
               </Box>
-              <Chip label="ONLINE // 3.8ms" size="small" sx={{ bgcolor: 'rgba(16,185,129,0.15)', color: '#10B981', border: '1px solid rgba(16,185,129,0.3)', fontFamily: mono, fontWeight: 700 }} />
+              <Chip label="ONLINE // 3.8ms" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', border: dark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0', fontFamily: mono, fontWeight: 700 }} />
             </Box>
-            <Paper sx={{ p: 2, bgcolor: '#10121A', border: '1px solid rgba(212,175,55,0.2)', borderRadius: 2, mb: 2.5 }}>
-              <Typography variant="caption" sx={{ color: gold, display: 'block', mb: 1 }}>root@sovereign:~$ cat deployments.matrix</Typography>
-              <Typography variant="body2" sx={{ color: '#94A3B8', fontSize: '0.8rem', mb: 0.5 }}>● AZOTH-OS: Autonomous Neural OS (Zero-Egress)</Typography>
-              <Typography variant="body2" sx={{ color: '#94A3B8', fontSize: '0.8rem' }}>● HEXSTRIKE: Cryptographic AST Shield</Typography>
+            <Paper sx={{ p: 2, bgcolor: dark ? '#10121A' : surface, border: `1px solid ${divider}`, borderRadius: 2, mb: 2.5 }}>
+              <Typography variant="caption" sx={{ color: dark ? gold : '#8A6A09', display: 'block', mb: 1 }}>root@sovereign:~$ cat deployments.matrix</Typography>
+              <Typography variant="body2" sx={{ color: textSecondary, fontSize: '0.8rem', mb: 0.5 }}>● AZOTH-OS: Autonomous Neural OS (Zero-Egress)</Typography>
+              <Typography variant="body2" sx={{ color: textSecondary, fontSize: '0.8rem' }}>● HEXSTRIKE: Cryptographic AST Shield</Typography>
             </Paper>
             <Grid container spacing={2}>
               <Grid xs={12} sm={6}>
-                <Box sx={{ p: 2, bgcolor: '#121420', border: '1px solid rgba(212,175,55,0.2)', borderRadius: 2 }}>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#FFF' }}>AZOTH-OS 2.0</Typography>
-                  <Typography variant="caption" sx={{ color: '#94A3B8' }}>Micro-kernel WASM runtime.</Typography>
+                <Box sx={{ p: 2, bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: textPrimary }}>AZOTH-OS 2.0</Typography>
+                  <Typography variant="caption" sx={{ color: textSecondary }}>Micro-kernel WASM runtime.</Typography>
                 </Box>
               </Grid>
               <Grid xs={12} sm={6}>
-                <Box sx={{ p: 2, bgcolor: '#121420', border: '1px solid rgba(212,175,55,0.2)', borderRadius: 2 }}>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#FFF' }}>NEURO-DAEMON</Typography>
-                  <Typography variant="caption" sx={{ color: '#94A3B8' }}>Local vectorized memory on :8788.</Typography>
+                <Box sx={{ p: 2, bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: textPrimary }}>NEURO-DAEMON</Typography>
+                  <Typography variant="caption" sx={{ color: textSecondary }}>Local vectorized memory on :8788.</Typography>
                 </Box>
               </Grid>
             </Grid>
@@ -1694,75 +1696,75 @@ export default function WebGenPage() {
 
       case 'AI Swarm Console':
         return (
-          <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: '#08080B', color: '#F8FAFC' }}>
+          <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: dark ? '#08080B' : '#F8FAFC', color: textPrimary }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5 }}>
-              <Chip label="TRI-AGENT CONSENSUS ACTIVE" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${divider}`, fontWeight: 800, fontFamily: mono }} />
-              <Typography variant="caption" sx={{ color: '#10B981', fontFamily: mono, fontWeight: 700 }}>● 3 NODES SYNCED</Typography>
+              <Chip label="TRI-AGENT CONSENSUS ACTIVE" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono }} />
+              <Typography variant="caption" sx={{ color: dark ? '#10B981' : '#059669', fontFamily: mono, fontWeight: 700 }}>● 3 NODES SYNCED</Typography>
             </Box>
             <Grid container spacing={1.5} sx={{ mb: 2.5 }}>
               {[
-                { name: 'Planner Alpha', status: 'RUNNING', job: 'Task Routing', color: '#10B981' },
-                { name: 'Coder Omega', status: 'SYNTHESIZING', job: 'AST Generation', color: '#D4AF37' },
-                { name: 'Auditor Sigma', status: 'VERIFYING', job: 'Zero-Egress Seal', color: '#38BDF8' }
+                { name: 'Planner Alpha', status: 'RUNNING', job: 'Task Routing', color: dark ? '#10B981' : '#059669' },
+                { name: 'Coder Omega', status: 'SYNTHESIZING', job: 'AST Generation', color: dark ? '#D4AF37' : '#B8860B' },
+                { name: 'Auditor Sigma', status: 'VERIFYING', job: 'Zero-Egress Seal', color: dark ? '#38BDF8' : '#0284C7' }
               ].map((ag, i) => (
                 <Grid key={i} xs={12} sm={4}>
-                  <Box sx={{ p: 1.5, bgcolor: '#121420', border: '1px solid rgba(212,175,55,0.2)', borderRadius: 2 }}>
+                  <Box sx={{ p: 1.5, bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                      <Typography variant="caption" sx={{ fontWeight: 800, color: '#FFF' }}>{ag.name}</Typography>
+                      <Typography variant="caption" sx={{ fontWeight: 800, color: textPrimary }}>{ag.name}</Typography>
                       <span style={{ fontSize: '0.65rem', color: ag.color, fontWeight: 800, fontFamily: 'monospace' }}>{ag.status}</span>
                     </Box>
-                    <Typography variant="caption" sx={{ color: '#94A3B8', fontSize: '0.72rem' }}>{ag.job}</Typography>
+                    <Typography variant="caption" sx={{ color: textSecondary, fontSize: '0.72rem' }}>{ag.job}</Typography>
                   </Box>
                 </Grid>
               ))}
             </Grid>
-            <Paper sx={{ p: 2, bgcolor: '#0D0E16', border: '1px solid rgba(212,175,55,0.15)', borderRadius: 2, fontFamily: mono, fontSize: '0.75rem' }}>
-              <div style={{ color: '#10B981' }}>✔ Planner Alpha dispatched task: Synthesize 142 AST nodes.</div>
-              <div style={{ color: '#94A3B8', marginTop: 4 }}>✔ Coder Omega sealed AST with hash 0x8F4A...3B21 (Zero egress).</div>
+            <Paper sx={{ p: 2, bgcolor: dark ? '#0D0E16' : '#F1F5F9', border: `1px solid ${divider}`, borderRadius: 2, fontFamily: mono, fontSize: '0.75rem' }}>
+              <div style={{ color: dark ? '#10B981' : '#047857' }}>✔ Planner Alpha dispatched task: Synthesize 142 AST nodes.</div>
+              <div style={{ color: textSecondary, marginTop: 4 }}>✔ Coder Omega sealed AST with hash 0x8F4A...3B21 (Zero egress).</div>
             </Paper>
           </Box>
         );
 
       case 'Documentation Hub':
         return (
-          <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: '#08080B', color: '#F8FAFC' }}>
+          <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: dark ? '#08080B' : '#F8FAFC', color: textPrimary }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-              <Chip label="API REFERENCE & CONTRACTS" size="small" sx={{ bgcolor: goldBg, color: gold, fontWeight: 800, fontFamily: mono }} />
-              <Typography variant="caption" sx={{ color: gold, fontFamily: mono }}>v2.4 LOCAL WASM</Typography>
+              <Chip label="API REFERENCE & CONTRACTS" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono }} />
+              <Typography variant="caption" sx={{ color: dark ? gold : '#8A6A09', fontFamily: mono }}>v2.4 LOCAL WASM</Typography>
             </Box>
-            <Paper sx={{ p: 2, bgcolor: '#121420', border: '1px solid rgba(212,175,55,0.2)', borderRadius: 2, mb: 2 }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#FFF', mb: 1 }}>POST /v2/ast/compile</Typography>
-              <Box sx={{ p: 1.5, bgcolor: '#08080B', borderRadius: 1.5, fontFamily: mono, fontSize: '0.75rem', color: goldLight }}>
+            <Paper sx={{ p: 2, bgcolor: dark ? '#121420' : surface, border: `1px solid ${divider}`, borderRadius: 2, mb: 2 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 800, color: textPrimary, mb: 1 }}>POST /v2/ast/compile</Typography>
+              <Box sx={{ p: 1.5, bgcolor: dark ? '#08080B' : '#F1F5F9', border: `1px solid ${divider}`, borderRadius: 1.5, fontFamily: mono, fontSize: '0.75rem', color: dark ? goldLight : '#8A6A09' }}>
                 curl -X POST http://127.0.0.1:8788/v2/ast/compile -d '&#123;"template":"sovereign"&#125;'
               </Box>
             </Paper>
             <Box sx={{ display: 'flex', gap: 1 }}>
-              <Chip label="200 OK" size="small" sx={{ bgcolor: 'rgba(16,185,129,0.15)', color: '#10B981', fontWeight: 800, fontSize: '0.7rem' }} />
-              <Chip label="0 EGRESS PACKETS" size="small" sx={{ bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8', fontWeight: 800, fontSize: '0.7rem' }} />
+              <Chip label="200 OK" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', border: dark ? 'none' : '1px solid #A7F3D0', fontWeight: 800, fontSize: '0.7rem' }} />
+              <Chip label="0 EGRESS PACKETS" size="small" sx={{ bgcolor: dark ? 'rgba(56,189,248,0.15)' : '#E0F2FE', color: dark ? '#38BDF8' : '#0369A1', border: dark ? 'none' : '1px solid #BAE6FD', fontWeight: 800, fontSize: '0.7rem' }} />
             </Box>
           </Box>
         );
 
       case 'Solana Web3 Mint Deck':
         return (
-          <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: '#08080B', color: '#F8FAFC', textAlign: 'center' }}>
+          <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: dark ? '#08080B' : '#F8FAFC', color: textPrimary, textAlign: 'center' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-              <Chip label="SOLANA CANDY MACHINE v3" size="small" sx={{ bgcolor: goldBg, color: gold, fontWeight: 800, fontFamily: mono }} />
-              <Typography variant="caption" sx={{ color: '#10B981', fontFamily: mono }}>🟢 PHANTOM CONNECTED</Typography>
+              <Chip label="SOLANA CANDY MACHINE v3" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono }} />
+              <Typography variant="caption" sx={{ color: dark ? '#10B981' : '#059669', fontFamily: mono, fontWeight: 700 }}>🟢 PHANTOM CONNECTED</Typography>
             </Box>
-            <Paper sx={{ p: 3, bgcolor: '#121420', border: '1px solid rgba(212,175,55,0.3)', borderRadius: 3, mb: 2 }}>
-              <Typography variant="h4" sx={{ fontWeight: 900, color: '#FFF', fontFamily: mono, mb: 0.5 }}>1.25 SOL</Typography>
-              <Typography variant="caption" sx={{ color: '#94A3B8', fontFamily: mono, display: 'block', mb: 2 }}>
+            <Paper sx={{ p: 3, bgcolor: dark ? '#121420' : surface, border: `1px solid ${divider}`, borderRadius: 3, mb: 2 }}>
+              <Typography variant="h4" sx={{ fontWeight: 900, color: textPrimary, fontFamily: mono, mb: 0.5 }}>1.25 SOL</Typography>
+              <Typography variant="caption" sx={{ color: textSecondary, fontFamily: mono, display: 'block', mb: 2 }}>
                 3,412 / 5,000 Minted (68.2%)
               </Typography>
-              <Box sx={{ width: '100%', bgcolor: '#08080B', height: 8, borderRadius: 4, overflow: 'hidden', mb: 2 }}>
+              <Box sx={{ width: '100%', bgcolor: dark ? '#08080B' : '#E2E8F0', height: 8, borderRadius: 4, overflow: 'hidden', mb: 2 }}>
                 <Box sx={{ width: '68.2%', height: '100%', bgcolor: gold }} />
               </Box>
-              <Button fullWidth variant="contained" sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800 }}>
+              <Button fullWidth variant="contained" sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontWeight: 800, '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}>
                 Mint Sovereign NFT
               </Button>
             </Paper>
-            <Typography variant="caption" sx={{ color: '#64748B', fontFamily: mono, fontSize: '0.7rem' }}>
+            <Typography variant="caption" sx={{ color: textSecondary, fontFamily: mono, fontSize: '0.7rem' }}>
               Verified Contract: SoV19d8...88aF • Zero Royalty Egress
             </Typography>
           </Box>
@@ -1770,10 +1772,10 @@ export default function WebGenPage() {
 
       case 'Biomorphic Neuro Shop':
         return (
-          <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: '#08080B', color: '#F8FAFC' }}>
+          <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: dark ? '#08080B' : '#F8FAFC', color: textPrimary }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-              <Chip label="NEURAL MESH STORE" size="small" sx={{ bgcolor: goldBg, color: gold, fontWeight: 800, fontFamily: mono }} />
-              <Typography variant="caption" sx={{ color: '#10B981', fontFamily: mono }}>● 98.6% SYNC</Typography>
+              <Chip label="NEURAL MESH STORE" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono }} />
+              <Typography variant="caption" sx={{ color: dark ? '#10B981' : '#059669', fontFamily: mono, fontWeight: 700 }}>● 98.6% SYNC</Typography>
             </Box>
             <Grid container spacing={1.5}>
               {[
@@ -1781,10 +1783,10 @@ export default function WebGenPage() {
                 { name: 'Dopamine Synapse Stabilizer', price: '0.85 GOLD', sync: '97.8%' }
               ].map((p, i) => (
                 <Grid key={i} xs={12} sm={6}>
-                  <Box sx={{ p: 2, bgcolor: '#121420', border: '1px solid rgba(212,175,55,0.2)', borderRadius: 2 }}>
+                  <Box sx={{ p: 2, bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                      <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#FFF' }}>{p.name}</Typography>
-                      <span style={{ fontSize: '0.65rem', color: '#10B981', fontWeight: 800 }}>{p.sync}</span>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 800, color: textPrimary }}>{p.name}</Typography>
+                      <span style={{ fontSize: '0.65rem', color: dark ? '#10B981' : '#059669', fontWeight: 800 }}>{p.sync}</span>
                     </Box>
                     <Typography variant="h6" sx={{ color: gold, fontWeight: 900, fontFamily: mono, mt: 1 }}>{p.price}</Typography>
                   </Box>
@@ -1796,38 +1798,38 @@ export default function WebGenPage() {
 
       default: // Sovereign SaaS Dashboard
         return (
-          <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: '#08080B', color: '#F8FAFC' }}>
+          <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: dark ? '#08080B' : '#F8FAFC', color: textPrimary }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
-              <Chip label="LIVE SIMULATED UI CANVAS" size="small" sx={{ bgcolor: goldBg, color: gold, fontWeight: 800, fontSize: '0.7rem' }} />
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981' }}>● 60 FPS LOCAL RENDER</Typography>
+              <Chip label="LIVE SIMULATED UI CANVAS" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontSize: '0.7rem' }} />
+              <Typography variant="caption" sx={{ fontFamily: mono, color: dark ? '#10B981' : '#059669', fontWeight: 700 }}>● 60 FPS LOCAL RENDER</Typography>
             </Box>
 
-            <Paper sx={{ p: 2.5, bgcolor: '#121420', border: '1px solid rgba(212,175,55,0.25)', borderRadius: 2, mb: 2.5 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#FFFFFF', mb: 0.5 }}>
+            <Paper sx={{ p: 2.5, bgcolor: dark ? '#121420' : surface, border: `1px solid ${divider}`, borderRadius: 2, mb: 2.5 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: textPrimary, mb: 0.5 }}>
                 {selectedTemplate}
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.82rem' }}>
+              <Typography variant="body2" sx={{ color: textSecondary, fontSize: '0.82rem' }}>
                 Target Runtime: <Box component="span" sx={{ color: gold, fontFamily: mono, fontWeight: 700 }}>{selectedFramework.toUpperCase()}</Box>
               </Typography>
             </Paper>
 
             <Grid container spacing={2}>
               <Grid xs={12} sm={4}>
-                <Box sx={{ p: 2, bgcolor: '#161824', borderRadius: 2, border: '1px solid rgba(212,175,55,0.2)' }}>
-                  <Typography variant="caption" sx={{ color: '#94A3B8' }}>NODE LATENCY</Typography>
+                <Box sx={{ p: 2, bgcolor: dark ? '#161824' : '#FFFFFF', borderRadius: 2, border: `1px solid ${divider}` }}>
+                  <Typography variant="caption" sx={{ color: textSecondary }}>NODE LATENCY</Typography>
                   <Typography variant="h5" sx={{ fontWeight: 800, color: gold }}>12.4ms</Typography>
                 </Box>
               </Grid>
               <Grid xs={12} sm={4}>
-                <Box sx={{ p: 2, bgcolor: '#161824', borderRadius: 2, border: '1px solid rgba(212,175,55,0.2)' }}>
-                  <Typography variant="caption" sx={{ color: '#94A3B8' }}>SEAL HASH</Typography>
-                  <Typography variant="subtitle1" sx={{ fontFamily: mono, fontWeight: 700, color: '#10B981', textOverflow: 'ellipsis', overflow: 'hidden' }}>0x8F4A...3B21</Typography>
+                <Box sx={{ p: 2, bgcolor: dark ? '#161824' : '#FFFFFF', borderRadius: 2, border: `1px solid ${divider}` }}>
+                  <Typography variant="caption" sx={{ color: textSecondary }}>SEAL HASH</Typography>
+                  <Typography variant="subtitle1" sx={{ fontFamily: mono, fontWeight: 700, color: dark ? '#10B981' : '#059669', textOverflow: 'ellipsis', overflow: 'hidden' }}>0x8F4A...3B21</Typography>
                 </Box>
               </Grid>
               <Grid xs={12} sm={4}>
-                <Box sx={{ p: 2, bgcolor: '#161824', borderRadius: 2, border: '1px solid rgba(212,175,55,0.2)' }}>
-                  <Typography variant="caption" sx={{ color: '#94A3B8' }}>SWARM STATUS</Typography>
-                  <Typography variant="h5" sx={{ fontWeight: 800, color: '#38BDF8' }}>Active (6/6)</Typography>
+                <Box sx={{ p: 2, bgcolor: dark ? '#161824' : '#FFFFFF', borderRadius: 2, border: `1px solid ${divider}` }}>
+                  <Typography variant="caption" sx={{ color: textSecondary }}>SWARM STATUS</Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 800, color: dark ? '#38BDF8' : '#0284C7' }}>Active (6/6)</Typography>
                 </Box>
               </Grid>
             </Grid>
@@ -1852,8 +1854,8 @@ export default function WebGenPage() {
           sx={{
             p: 1.2,
             px: 1.6,
-            bgcolor: isSelected ? 'rgba(212,175,55,0.18)' : '#10121A',
-            border: isSelected ? `1.5px solid ${gold}` : '1px solid rgba(255,255,255,0.08)',
+            bgcolor: isSelected ? (dark ? 'rgba(212,175,55,0.18)' : '#FEF9E7') : (dark ? '#10121A' : '#FFFFFF'),
+            border: isSelected ? `1.5px solid ${gold}` : `1px solid ${divider}`,
             borderRadius: 2,
             display: 'flex',
             alignItems: 'center',
@@ -1862,7 +1864,7 @@ export default function WebGenPage() {
             transition: 'all 0.15s ease',
             '&:hover': {
               borderColor: gold,
-              bgcolor: 'rgba(212,175,55,0.08)'
+              bgcolor: dark ? 'rgba(212,175,55,0.08)' : '#FEF9E7'
             }
           }}
         >
@@ -1874,7 +1876,7 @@ export default function WebGenPage() {
                   e.stopPropagation();
                   toggleNodeExpand(node.id);
                 }}
-                sx={{ p: 0.2, color: '#94A3B8' }}
+                sx={{ p: 0.2, color: textSecondary }}
               >
                 {isExpanded ? <ExpandMoreIcon fontSize="small" /> : <ChevronRightIcon fontSize="small" />}
               </IconButton>
@@ -1902,7 +1904,7 @@ export default function WebGenPage() {
                 fontFamily: mono,
                 fontWeight: 700,
                 fontSize: '0.8rem',
-                color: isSelected ? goldLight : '#F8FAFC',
+                color: isSelected ? (dark ? goldLight : '#8A6A09') : textPrimary,
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
                 whiteSpace: 'nowrap'
@@ -1913,14 +1915,14 @@ export default function WebGenPage() {
           </Box>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.7rem' }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, fontSize: '0.7rem' }}>
               line {node.line}
             </Typography>
             {hasChildren && (
               <Chip
                 label={`${node.children.length} subnodes`}
                 size="small"
-                sx={{ bgcolor: '#1E293B', color: '#94A3B8', fontSize: '0.62rem', height: 18, fontFamily: mono }}
+                sx={{ bgcolor: dark ? '#1E293B' : '#E2E8F0', color: textSecondary, fontSize: '0.62rem', height: 18, fontFamily: mono }}
               />
             )}
           </Box>
@@ -1968,14 +1970,20 @@ export default function WebGenPage() {
           <Chip
             label="ZERO CLOUD EGRESS"
             size="small"
-            sx={{ bgcolor: '#121420', color: '#10B981', border: '1px solid rgba(16,185,129,0.3)', fontWeight: 800, fontFamily: mono }}
+            sx={{
+              bgcolor: dark ? '#121420' : '#ECFDF5',
+              color: dark ? '#10B981' : '#059669',
+              border: dark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0',
+              fontWeight: 800,
+              fontFamily: mono
+            }}
           />
         </Box>
         
-        <Typography variant="h3" sx={{ mb: 1, fontWeight: 900, color: '#FFFFFF', fontSize: { xs: '2.2rem', sm: '3rem', md: '3.4rem' }, letterSpacing: '-0.02em' }}>
+        <Typography variant="h3" sx={{ mb: 1, fontWeight: 900, color: textPrimary, fontSize: { xs: '2.2rem', sm: '3rem', md: '3.4rem' }, letterSpacing: '-0.02em' }}>
           Autonomous WebGen Foundry
         </Typography>
-        <Typography variant="body1" sx={{ color: '#94A3B8', maxWidth: 880, fontSize: { xs: '0.95rem', md: '1.05rem' } }}>
+        <Typography variant="body1" sx={{ color: textSecondary, maxWidth: 880, fontSize: { xs: '0.95rem', md: '1.05rem' } }}>
           High-performance sovereign component foundry. Select layout spec templates, preview live responsive UI in device frames, inspect deterministic AST token trees, and export polyglot code or standalone zero-dependency bundles.
         </Typography>
       </Box>
@@ -1987,7 +1995,7 @@ export default function WebGenPage() {
           sx={{
             p: 1,
             mb: 3,
-            bgcolor: '#10121A',
+            bgcolor: dark ? '#10121A' : surface,
             borderRadius: 3,
             border: `1px solid ${gold}`,
             position: 'sticky',
@@ -2003,7 +2011,7 @@ export default function WebGenPage() {
               minHeight: 42,
               '& .MuiTab-root': {
                 minHeight: 42,
-                color: '#94A3B8',
+                color: textSecondary,
                 fontWeight: 700,
                 fontSize: '0.78rem',
                 textTransform: 'none',
@@ -2011,7 +2019,7 @@ export default function WebGenPage() {
                 px: 1,
                 borderRadius: 2,
                 '&.Mui-selected': {
-                  color: '#08080B',
+                  color: dark ? '#08080B' : '#FFFFFF',
                   bgcolor: gold,
                   fontWeight: 800
                 }
@@ -2038,15 +2046,15 @@ export default function WebGenPage() {
             mb: 5,
             backgroundColor: surface,
             borderLeft: `4px solid ${gold}`,
-            boxShadow: '0 0 28px -8px rgba(212,175,55,0.22)'
+            boxShadow: dark ? '0 0 28px -8px rgba(212,175,55,0.22)' : '0 4px 20px -4px rgba(184,134,11,0.12)'
           }}
         >
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2, mb: 1 }}>
             <Box>
-              <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, display: 'flex', alignItems: 'center', gap: 1.2, color: '#FFFFFF' }}>
+              <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, display: 'flex', alignItems: 'center', gap: 1.2, color: textPrimary }}>
                 <AutoAwesomeIcon sx={{ color: gold }} /> Interactive Component Layout Sandbox
               </Typography>
-              <Typography variant="body2" sx={{ color: '#94A3B8' }}>
+              <Typography variant="body2" sx={{ color: textSecondary }}>
                 Select a sovereign starter layout preset, calibrate the prompt specification, and choose the target runtime engine.
               </Typography>
             </Box>
@@ -2057,10 +2065,10 @@ export default function WebGenPage() {
             />
           </Box>
 
-          <Divider sx={{ my: 2.5, borderColor: 'rgba(255,255,255,0.06)' }} />
+          <Divider sx={{ my: 2.5, borderColor: divider }} />
 
                 {/* Starter Templates (6 Presets) */}
-                <Typography variant="caption" sx={{ fontWeight: 800, color: '#94A3B8', mb: 1.2, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
+                <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1.2, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
                   STARTER SPEC TEMPLATES ({TEMPLATES.length} PRESETS)
                 </Typography>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
@@ -2070,13 +2078,13 @@ export default function WebGenPage() {
                     return (
                       <Chip
                         key={tpl.id}
-                        icon={<IconComp sx={{ fontSize: '1rem', color: isSelected ? `${gold} !important` : '#94A3B8 !important' }} />}
+                        icon={<IconComp sx={{ fontSize: '1rem', color: isSelected ? `${gold} !important` : `${textSecondary} !important` }} />}
                         label={tpl.name}
                         onClick={() => handleSelectTemplate(tpl)}
                         sx={{
-                          borderColor: isSelected ? gold : 'rgba(255,255,255,0.1)',
-                          backgroundColor: isSelected ? goldBg : '#121420',
-                          color: isSelected ? goldLight : '#94A3B8',
+                          borderColor: isSelected ? gold : divider,
+                          backgroundColor: isSelected ? goldBg : (dark ? '#121420' : '#F1F5F9'),
+                          color: isSelected ? (dark ? goldLight : '#8A6A09') : textSecondary,
                           fontWeight: 700,
                           cursor: 'pointer',
                           border: '1px solid',
@@ -2098,19 +2106,19 @@ export default function WebGenPage() {
                   sx={{
                     mb: 3,
                     '& .MuiOutlinedInput-root': {
-                      bgcolor: '#10121A',
-                      color: '#FFF',
+                      bgcolor: dark ? '#10121A' : '#FFFFFF',
+                      color: textPrimary,
                       '& fieldset': { borderColor: divider },
                       '&:hover fieldset': { borderColor: gold },
                       '&.Mui-focused fieldset': { borderColor: gold }
                     },
-                    '& .MuiInputLabel-root': { color: '#94A3B8' },
+                    '& .MuiInputLabel-root': { color: textSecondary },
                     '& .MuiInputLabel-root.Mui-focused': { color: gold }
                   }}
                 />
 
                 {/* Target Exporter Framework Selector (5 Frameworks) */}
-                <Typography variant="caption" sx={{ fontWeight: 800, color: '#94A3B8', mb: 1, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
+                <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
                   TARGET RUNTIME EXPORTER (5 POLYGLOT ENGINES)
                 </Typography>
                 <RadioGroup
@@ -2126,8 +2134,8 @@ export default function WebGenPage() {
                       control={<Radio sx={{ color: gold, '&.Mui-checked': { color: gold } }} />}
                       label={
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
-                          <span style={{ fontSize: '0.86rem', fontWeight: 700, color: selectedFramework === f.id ? '#FFF' : '#94A3B8' }}>{f.name}</span>
-                          <Chip label={f.badge} size="small" sx={{ height: 18, fontSize: '0.6rem', bgcolor: selectedFramework === f.id ? goldBg : '#1A1C2A', color: selectedFramework === f.id ? gold : '#64748B', fontFamily: mono }} />
+                          <span style={{ fontSize: '0.86rem', fontWeight: 700, color: selectedFramework === f.id ? textPrimary : textSecondary }}>{f.name}</span>
+                          <Chip label={f.badge} size="small" sx={{ height: 18, fontSize: '0.6rem', bgcolor: selectedFramework === f.id ? goldBg : (dark ? '#1A1C2A' : '#F1F5F9'), color: selectedFramework === f.id ? gold : textSecondary, fontFamily: mono }} />
                         </Box>
                       }
                       sx={{ mr: 2, mb: 1 }}
@@ -2144,11 +2152,11 @@ export default function WebGenPage() {
                     disabled={isCompiling}
                     sx={{
                       bgcolor: gold,
-                      color: '#08080B',
+                      color: dark ? '#08080B' : '#FFFFFF',
                       px: 3.5,
                       py: 1.2,
                       fontWeight: 800,
-                      '&:hover': { bgcolor: goldLight }
+                      '&:hover': { bgcolor: dark ? goldLight : '#9A7008' }
                     }}
                   >
                     {isCompiling ? 'Compiling Spec...' : 'Generate Component Spec'}
@@ -2158,7 +2166,7 @@ export default function WebGenPage() {
                     variant="outlined"
                     startIcon={<ContentCopyIcon />}
                     onClick={handleCopyCode}
-                    sx={{ borderColor: divider, color: goldLight, py: 1.2, fontWeight: 700, '&:hover': { borderColor: gold, bgcolor: goldBg } }}
+                    sx={{ borderColor: divider, color: dark ? goldLight : '#8A6A09', py: 1.2, fontWeight: 700, '&:hover': { borderColor: gold, bgcolor: goldBg } }}
                   >
                     {copied ? 'Copied Code!' : 'Copy Code'}
                   </Button>
@@ -2167,7 +2175,7 @@ export default function WebGenPage() {
                     variant="outlined"
                     startIcon={<FileDownloadIcon />}
                     onClick={handleExportBundle}
-                    sx={{ borderColor: gold, color: gold, py: 1.2, fontWeight: 800, bgcolor: goldBg, '&:hover': { bgcolor: 'rgba(212,175,55,0.25)' } }}
+                    sx={{ borderColor: gold, color: gold, py: 1.2, fontWeight: 800, bgcolor: goldBg, '&:hover': { bgcolor: dark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.18)' } }}
                   >
                     Export Standalone HTML Bundle
                   </Button>
@@ -2176,7 +2184,7 @@ export default function WebGenPage() {
                     variant="contained"
                     startIcon={<CloudDoneIcon />}
                     onClick={handleDeployModalOpen}
-                    sx={{ bgcolor: '#121420', border: `1px solid ${divider}`, color: '#FFF', py: 1.2, fontWeight: 700, '&:hover': { borderColor: gold } }}
+                    sx={{ bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, color: textPrimary, py: 1.2, fontWeight: 700, '&:hover': { borderColor: gold } }}
                   >
                     Deploy Bundle
                   </Button>
@@ -2192,18 +2200,18 @@ export default function WebGenPage() {
 
             {/* 2. Device Viewport Frame Controller & Live Preview / Code Console Window */}
             {(!isMobile || mobileSection === 'code' || mobileSection === 'preview') && (
-              <Paper sx={{ border: `1px solid ${divider}`, borderRadius: 3, overflow: 'hidden', backgroundColor: '#10121A', boxShadow: '0 12px 32px rgba(0,0,0,0.5)' }}>
+              <Paper sx={{ border: `1px solid ${divider}`, borderRadius: 3, overflow: 'hidden', backgroundColor: dark ? '#10121A' : surface, boxShadow: dark ? '0 12px 32px rgba(0,0,0,0.5)' : '0 12px 32px rgba(0,0,0,0.06)' }}>
                 
                 {/* Console Top Control Bar */}
                 <Box
                   sx={{
                     px: { xs: 2, sm: 3 },
                     py: 1.5,
-                    backgroundColor: '#161926',
+                    backgroundColor: dark ? '#161926' : '#F1F5F9',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    borderBottom: '1px solid rgba(255,255,255,0.08)',
+                    borderBottom: `1px solid ${divider}`,
                     flexWrap: 'wrap',
                     gap: 1
                   }}
@@ -2214,7 +2222,7 @@ export default function WebGenPage() {
                       <Box sx={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#FFBD2E' }} />
                       <Box sx={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#27C93F' }} />
                     </Box>
-                    <Typography variant="subtitle2" sx={{ color: goldLight, fontFamily: mono, fontWeight: 800, fontSize: '0.82rem' }}>
+                    <Typography variant="subtitle2" sx={{ color: dark ? goldLight : '#8A6A09', fontFamily: mono, fontWeight: 800, fontSize: '0.82rem' }}>
                       FOUNDRY CONSOLE • {FRAMEWORKS.find(f => f.id === selectedFramework)?.name.toUpperCase()}
                     </Typography>
                   </Box>
@@ -2225,7 +2233,7 @@ export default function WebGenPage() {
                     value={deviceFrame}
                     exclusive
                     onChange={(e, val) => val && setDeviceFrame(val)}
-                    sx={{ bgcolor: '#0D0E15', border: '1px solid rgba(212,175,55,0.3)', '& .MuiToggleButton-root': { color: '#94A3B8', px: 1.2, py: 0.5, '&.Mui-selected': { color: gold, bgcolor: 'rgba(212,175,55,0.15)' } } }}
+                    sx={{ bgcolor: dark ? '#0D0E15' : '#FFFFFF', border: `1px solid ${divider}`, '& .MuiToggleButton-root': { color: textSecondary, px: 1.2, py: 0.5, '&.Mui-selected': { color: gold, bgcolor: goldBg } } }}
                   >
                     <ToggleButton value="mobile" aria-label="mobile viewport">
                       <Tooltip title="Mobile Viewport (375px)"><SmartphoneIcon fontSize="small" /></Tooltip>
@@ -2240,7 +2248,7 @@ export default function WebGenPage() {
                 </Box>
 
                 {/* Console Tabs */}
-                <Box sx={{ borderBottom: '1px solid rgba(255,255,255,0.08)', backgroundColor: '#10121A' }}>
+                <Box sx={{ borderBottom: `1px solid ${divider}`, backgroundColor: dark ? '#10121A' : surface }}>
                   <Tabs
                     value={activeTab}
                     onChange={(e, v) => setActiveTab(v)}
@@ -2249,7 +2257,7 @@ export default function WebGenPage() {
                     sx={{
                       minHeight: 44,
                       '& .MuiTab-root': {
-                        color: '#94A3B8',
+                        color: textSecondary,
                         fontFamily: mono,
                         fontSize: '0.82rem',
                         minHeight: 44,
@@ -2270,13 +2278,13 @@ export default function WebGenPage() {
                 {activeTab === 0 && (
                   <Box sx={{ position: 'relative' }}>
                     <Box sx={{ position: 'absolute', top: 12, right: 16, zIndex: 2, display: 'flex', gap: 1 }}>
-                      <Chip label={`${currentCode.split('\n').length} LINES`} size="small" sx={{ bgcolor: '#1E293B', color: '#94A3B8', fontFamily: mono, fontSize: '0.7rem' }} />
-                      <Button size="small" variant="contained" startIcon={<ContentCopyIcon />} onClick={handleCopyCode} sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, py: 0.2, fontSize: '0.72rem' }}>
+                      <Chip label={`${currentCode.split('\n').length} LINES`} size="small" sx={{ bgcolor: dark ? '#1E293B' : '#E2E8F0', color: textSecondary, fontFamily: mono, fontSize: '0.7rem' }} />
+                      <Button size="small" variant="contained" startIcon={<ContentCopyIcon />} onClick={handleCopyCode} sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontWeight: 800, py: 0.2, fontSize: '0.72rem', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}>
                         {copied ? 'Copied' : 'Copy'}
                       </Button>
                     </Box>
-                    <Box sx={{ p: { xs: 2, sm: 3 }, fontFamily: mono, fontSize: '0.84rem', minHeight: 320, maxHeight: 520, overflowY: 'auto', bgcolor: '#08080B' }}>
-                      <pre style={{ margin: 0, color: '#F8FAFC', whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.6 }}>
+                    <Box sx={{ p: { xs: 2, sm: 3 }, fontFamily: mono, fontSize: '0.84rem', minHeight: 320, maxHeight: 520, overflowY: 'auto', bgcolor: dark ? '#08080B' : '#F8FAFC' }}>
+                      <pre style={{ margin: 0, color: dark ? '#F8FAFC' : '#0F172A', whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.6 }}>
                         {currentCode}
                       </pre>
                     </Box>
@@ -2290,7 +2298,7 @@ export default function WebGenPage() {
                       p: { xs: 1.5, sm: 3 },
                       display: 'flex',
                       justifyContent: 'center',
-                      bgcolor: '#030508',
+                      bgcolor: dark ? '#030508' : '#F1F5F9',
                       minHeight: 380
                     }}
                   >
@@ -2299,19 +2307,19 @@ export default function WebGenPage() {
                         width: deviceFrame === 'mobile' ? '375px' : deviceFrame === 'tablet' ? '768px' : '100%',
                         maxWidth: '100%',
                         transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                        border: deviceFrame !== 'desktop' ? `3px solid ${divider}` : 'none',
+                        border: deviceFrame !== 'desktop' ? `3px solid ${dark ? '#334155' : '#CBD5E1'}` : 'none',
                         borderRadius: deviceFrame === 'mobile' ? 5 : deviceFrame === 'tablet' ? 4 : 0,
                         overflow: 'hidden',
-                        boxShadow: deviceFrame !== 'desktop' ? '0 16px 40px rgba(0,0,0,0.8)' : 'none',
-                        bgcolor: '#08080B'
+                        boxShadow: deviceFrame !== 'desktop' ? (dark ? '0 16px 40px rgba(0,0,0,0.8)' : '0 16px 40px rgba(0,0,0,0.12)') : 'none',
+                        bgcolor: dark ? '#08080B' : surface
                       }}
                     >
                       {/* Device Top Bezel (if mobile or tablet) */}
                       {deviceFrame === 'mobile' && (
-                        <Box sx={{ bgcolor: '#121420', py: 0.8, px: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                          <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.65rem' }}>9:41</Typography>
-                          <Box sx={{ width: 60, height: 8, bgcolor: '#08080B', borderRadius: 4 }} />
-                          <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981', fontSize: '0.65rem' }}>5G 100%</Typography>
+                        <Box sx={{ bgcolor: dark ? '#121420' : '#E2E8F0', py: 0.8, px: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid ${divider}` }}>
+                          <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, fontSize: '0.65rem' }}>9:41</Typography>
+                          <Box sx={{ width: 60, height: 8, bgcolor: dark ? '#08080B' : '#CBD5E1', borderRadius: 4 }} />
+                          <Typography variant="caption" sx={{ fontFamily: mono, color: dark ? '#10B981' : '#059669', fontSize: '0.65rem' }}>5G 100%</Typography>
                         </Box>
                       )}
 
@@ -2319,15 +2327,15 @@ export default function WebGenPage() {
                       {renderTemplateLivePreview()}
 
                       {/* Device Footer Actions */}
-                      <Box sx={{ p: 2, bgcolor: '#0D0E15', borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
-                        <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.72rem' }}>
+                      <Box sx={{ p: 2, bgcolor: dark ? '#0D0E15' : '#F8FAFC', borderTop: `1px solid ${divider}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, fontSize: '0.72rem' }}>
                           Viewport: {deviceFrame.toUpperCase()} • Zero Cloud Egress
                         </Typography>
                         <Box sx={{ display: 'flex', gap: 1 }}>
                           <Button size="small" variant="outlined" onClick={handleExportBundle} sx={{ color: gold, borderColor: gold, fontSize: '0.7rem', fontWeight: 800 }}>
                             Export Bundle
                           </Button>
-                          <Button size="small" variant="contained" onClick={handleDeployModalOpen} sx={{ bgcolor: gold, color: '#08080B', fontSize: '0.7rem', fontWeight: 800 }}>
+                          <Button size="small" variant="contained" onClick={handleDeployModalOpen} sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontSize: '0.7rem', fontWeight: 800, '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}>
                             Deploy
                           </Button>
                         </Box>
@@ -2338,14 +2346,14 @@ export default function WebGenPage() {
 
                 {/* Tab Content 2: AST Diff & Inspector Tab */}
                 {activeTab === 2 && (
-                  <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: '#090B12', minHeight: 380 }}>
+                  <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: dark ? '#090B12' : '#F8FAFC', minHeight: 380 }}>
                     
                     {/* AST Node Count Metrics Header */}
-                    <Box sx={{ p: 2, mb: 2.5, bgcolor: '#10121A', border: `1px solid ${divider}`, borderRadius: 2 }}>
+                    <Box sx={{ p: 2, mb: 2.5, bgcolor: dark ? '#10121A' : surface, border: `1px solid ${divider}`, borderRadius: 2 }}>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                           <Chip label="AST DETERMINISTIC METRICS" size="small" sx={{ bgcolor: goldBg, color: gold, fontWeight: 800, fontFamily: mono }} />
-                          <Chip label="100% WASM PURITY" size="small" sx={{ bgcolor: 'rgba(16,185,129,0.15)', color: '#10B981', fontWeight: 800, fontFamily: mono }} />
+                          <Chip label="100% WASM PURITY" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', border: dark ? 'none' : '1px solid #A7F3D0', fontWeight: 800, fontFamily: mono }} />
                         </Box>
 
                         {/* Mode Switcher: Tree vs Diff */}
@@ -2354,7 +2362,7 @@ export default function WebGenPage() {
                           value={astMode}
                           exclusive
                           onChange={(e, v) => v && setAstMode(v)}
-                          sx={{ bgcolor: '#08080B', border: '1px solid rgba(212,175,55,0.3)', '& .MuiToggleButton-root': { color: '#94A3B8', px: 1.5, py: 0.3, fontSize: '0.75rem', fontFamily: mono, '&.Mui-selected': { color: gold, bgcolor: goldBg } } }}
+                          sx={{ bgcolor: dark ? '#08080B' : '#FFFFFF', border: `1px solid ${divider}`, '& .MuiToggleButton-root': { color: textSecondary, px: 1.5, py: 0.3, fontSize: '0.75rem', fontFamily: mono, '&.Mui-selected': { color: gold, bgcolor: goldBg } } }}
                         >
                           <ToggleButton value="tree">Tree Inspector</ToggleButton>
                           <ToggleButton value="diff">Diff Optimizer</ToggleButton>
@@ -2364,15 +2372,15 @@ export default function WebGenPage() {
                       {/* Metrics Counter Bar */}
                       <Grid container spacing={1.5}>
                         {[
-                          { label: 'Total AST Nodes', count: 142, color: '#FFFFFF' },
+                          { label: 'Total AST Nodes', count: 142, color: textPrimary },
                           { label: 'Root & Declarations', count: 2, color: '#A855F7' },
                           { label: 'JSX Elements', count: 38, color: '#38BDF8' },
                           { label: 'Tailwind Utility Tokens', count: 84, color: '#10B981' },
                           { label: 'Reactive Hooks', count: 18, color: '#F59E0B' }
                         ].map((m, i) => (
                           <Grid key={i} xs={6} sm={2.4}>
-                            <Box sx={{ p: 1, bgcolor: '#141622', borderRadius: 1.5, border: '1px solid rgba(255,255,255,0.06)' }}>
-                              <Typography variant="caption" sx={{ color: '#94A3B8', fontSize: '0.65rem', display: 'block', textTransform: 'uppercase', fontFamily: mono }}>{m.label}</Typography>
+                            <Box sx={{ p: 1, bgcolor: dark ? '#141622' : '#FFFFFF', borderRadius: 1.5, border: `1px solid ${divider}` }}>
+                              <Typography variant="caption" sx={{ color: textSecondary, fontSize: '0.65rem', display: 'block', textTransform: 'uppercase', fontFamily: mono }}>{m.label}</Typography>
                               <Typography variant="subtitle1" sx={{ fontWeight: 900, color: m.color, fontFamily: mono }}>{m.count}</Typography>
                             </Box>
                           </Grid>
@@ -2392,17 +2400,17 @@ export default function WebGenPage() {
                               value={astSearch}
                               onChange={(e) => setAstSearch(e.target.value)}
                               InputProps={{
-                                startAdornment: <InputAdornment position="start"><SearchIcon sx={{ color: '#94A3B8', fontSize: '1rem' }} /></InputAdornment>
+                                startAdornment: <InputAdornment position="start"><SearchIcon sx={{ color: textSecondary, fontSize: '1rem' }} /></InputAdornment>
                               }}
                               sx={{
                                 flex: 1,
                                 minWidth: 160,
                                 '& .MuiOutlinedInput-root': {
-                                  bgcolor: '#10121A',
-                                  color: '#FFF',
+                                  bgcolor: dark ? '#10121A' : '#FFFFFF',
+                                  color: textPrimary,
                                   fontSize: '0.8rem',
                                   fontFamily: mono,
-                                  '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' }
+                                  '& fieldset': { borderColor: divider }
                                 }
                               }}
                             />
@@ -2414,12 +2422,13 @@ export default function WebGenPage() {
                                   size="small"
                                   onClick={() => setAstCategory(cat)}
                                   sx={{
-                                    bgcolor: astCategory === cat ? gold : '#141622',
-                                    color: astCategory === cat ? '#08080B' : '#94A3B8',
+                                    bgcolor: astCategory === cat ? gold : (dark ? '#141622' : '#FFFFFF'),
+                                    color: astCategory === cat ? (dark ? '#08080B' : '#FFFFFF') : textSecondary,
                                     fontWeight: 700,
                                     fontSize: '0.7rem',
                                     fontFamily: mono,
-                                    cursor: 'pointer'
+                                    cursor: 'pointer',
+                                    border: `1px solid ${astCategory === cat ? gold : divider}`
                                   }}
                                 />
                               ))}
@@ -2434,19 +2443,19 @@ export default function WebGenPage() {
 
                         {/* Tree Right Side: Detailed Node Inspector */}
                         <Grid xs={12} lg={5}>
-                          <Paper sx={{ p: 2.5, bgcolor: '#10121A', border: `1px solid ${divider}`, borderRadius: 2, minHeight: 340 }}>
+                          <Paper sx={{ p: 2.5, bgcolor: dark ? '#10121A' : surface, border: `1px solid ${divider}`, borderRadius: 2, minHeight: 340 }}>
                             <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold, mb: 1.5, fontFamily: mono, display: 'flex', alignItems: 'center', gap: 1 }}>
                               <LayersIcon sx={{ fontSize: '1rem' }} /> AST Node Inspector
                             </Typography>
 
                             {selectedAstNode ? (
                               <Box sx={{ fontFamily: mono, fontSize: '0.78rem' }}>
-                                <Box sx={{ mb: 2, pb: 1.5, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                                <Box sx={{ mb: 2, pb: 1.5, borderBottom: `1px solid ${divider}` }}>
                                   <Chip label={selectedAstNode.type} size="small" sx={{ bgcolor: `${selectedAstNode.color}22`, color: selectedAstNode.color, fontWeight: 800, mb: 1 }} />
-                                  <Typography variant="body2" sx={{ fontWeight: 800, color: '#FFF', wordBreak: 'break-all' }}>
+                                  <Typography variant="body2" sx={{ fontWeight: 800, color: textPrimary, wordBreak: 'break-all' }}>
                                     {selectedAstNode.label}
                                   </Typography>
-                                  <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mt: 0.5 }}>
+                                  <Typography variant="caption" sx={{ color: textSecondary, display: 'block', mt: 0.5 }}>
                                     {selectedAstNode.desc}
                                   </Typography>
                                 </Box>
@@ -2454,19 +2463,19 @@ export default function WebGenPage() {
                                 <Typography variant="caption" sx={{ color: gold, fontWeight: 800, display: 'block', mb: 1 }}>
                                   NODE ATTRIBUTES (CRYPTOGRAPHIC AST)
                                 </Typography>
-                                <Paper sx={{ p: 1.5, bgcolor: '#08080B', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 1.5, color: '#38BDF8', mb: 2 }}>
+                                <Paper sx={{ p: 1.5, bgcolor: dark ? '#08080B' : '#F1F5F9', border: `1px solid ${divider}`, borderRadius: 1.5, color: dark ? '#38BDF8' : '#0284C7', mb: 2 }}>
                                   <pre style={{ margin: 0, fontSize: '0.72rem', whiteSpace: 'pre-wrap' }}>
                                     {JSON.stringify(selectedAstNode.attrs, null, 2)}
                                   </pre>
                                 </Paper>
 
-                                <Box sx={{ display: 'flex', justifyContent: 'space-between', color: '#64748B', fontSize: '0.7rem' }}>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between', color: textSecondary, fontSize: '0.7rem' }}>
                                   <span>Location: line {selectedAstNode.line}</span>
                                   <span>Deterministic: 100%</span>
                                 </Box>
                               </Box>
                             ) : (
-                              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 260, color: '#64748B', textAlign: 'center' }}>
+                              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: 260, color: textSecondary, textAlign: 'center' }}>
                                 <AccountTreeIcon sx={{ fontSize: '2.4rem', mb: 1, opacity: 0.4 }} />
                                 <Typography variant="caption" sx={{ fontFamily: mono }}>
                                   Select any AST node from the tree to inspect tokens, attributes, and cryptographic seal details.
@@ -2478,28 +2487,28 @@ export default function WebGenPage() {
                       </Grid>
                     ) : (
                       /* Diff Optimizer View */
-                      <Paper sx={{ p: 2.5, bgcolor: '#10121A', border: `1px solid ${divider}`, borderRadius: 2 }}>
+                      <Paper sx={{ p: 2.5, bgcolor: dark ? '#10121A' : surface, border: `1px solid ${divider}`, borderRadius: 2 }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                          <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#FFF', fontFamily: mono }}>
+                          <Typography variant="subtitle2" sx={{ fontWeight: 800, color: textPrimary, fontFamily: mono }}>
                             AST OPTIMIZATION DIFF COMPARISON
                           </Typography>
-                          <Chip label="-34.7% AST REDUCTION" size="small" sx={{ bgcolor: 'rgba(16,185,129,0.15)', color: '#10B981', fontWeight: 800, fontFamily: mono }} />
+                          <Chip label="-34.7% AST REDUCTION" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', border: dark ? 'none' : '1px solid #A7F3D0', fontWeight: 800, fontFamily: mono }} />
                         </Box>
 
                         <Box sx={{ spaceY: 1, fontFamily: mono, fontSize: '0.78rem' }}>
-                          <Box sx={{ p: 1.2, mb: 1, bgcolor: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: 1.5, color: '#10B981' }}>
+                          <Box sx={{ p: 1.2, mb: 1, bgcolor: dark ? 'rgba(16,185,129,0.08)' : '#ECFDF5', border: dark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0', borderRadius: 1.5, color: dark ? '#10B981' : '#047857' }}>
                             + [OPTIMIZED] Inlined 48 Tailwind tokens into static zero-runtime CSS spec.
                           </Box>
-                          <Box sx={{ p: 1.2, mb: 1, bgcolor: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: 1.5, color: '#10B981' }}>
+                          <Box sx={{ p: 1.2, mb: 1, bgcolor: dark ? 'rgba(16,185,129,0.08)' : '#ECFDF5', border: dark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0', borderRadius: 1.5, color: dark ? '#10B981' : '#047857' }}>
                             + [OPTIMIZED] Hoisted 12 static DOM subtrees (Zero re-renders on state change).
                           </Box>
-                          <Box sx={{ p: 1.2, mb: 1, bgcolor: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 1.5, color: '#F87171' }}>
+                          <Box sx={{ p: 1.2, mb: 1, bgcolor: dark ? 'rgba(239,68,68,0.08)' : '#FEF2F2', border: dark ? '1px solid rgba(239,68,68,0.3)' : '1px solid #FECACA', borderRadius: 1.5, color: dark ? '#F87171' : '#B91C1C' }}>
                             - [PRUNED] 18 redundant wrapper &lt;div&gt; nodes eliminated during WASM compilation.
                           </Box>
-                          <Box sx={{ p: 1.2, mb: 1, bgcolor: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 1.5, color: '#F87171' }}>
+                          <Box sx={{ p: 1.2, mb: 1, bgcolor: dark ? 'rgba(239,68,68,0.08)' : '#FEF2F2', border: dark ? '1px solid rgba(239,68,68,0.3)' : '1px solid #FECACA', borderRadius: 1.5, color: dark ? '#F87171' : '#B91C1C' }}>
                             - [PRUNED] External client hydration polyfills stripped (0 bytes egress).
                           </Box>
-                          <Box sx={{ p: 1.2, bgcolor: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.3)', borderRadius: 1.5, color: '#FBBF24' }}>
+                          <Box sx={{ p: 1.2, bgcolor: dark ? 'rgba(245,158,11,0.08)' : '#FFFBEB', border: dark ? '1px solid rgba(245,158,11,0.3)' : '1px solid #FDE68A', borderRadius: 1.5, color: dark ? '#FBBF24' : '#B45309' }}>
                             ~ [MUTATED] Flattened reactive hook dependency matrix for instant micro-bundle execution.
                           </Box>
                         </Box>
@@ -2511,12 +2520,12 @@ export default function WebGenPage() {
 
                 {/* Tab Content 3: Compiler Logs */}
                 {activeTab === 3 && (
-                  <Box sx={{ p: 3, fontFamily: mono, fontSize: '0.85rem', minHeight: 320, bgcolor: '#08080B' }}>
-                    <div style={{ color: '#10B981', fontWeight: 700 }}>✔ Local WASM WebGen compiler v2.4 initialized.</div>
-                    <div style={{ color: '#94A3B8', marginTop: 8 }}>Target Template: {selectedTemplate}</div>
-                    <div style={{ color: '#94A3B8', marginTop: 4 }}>Target Framework: {FRAMEWORKS.find(f => f.id === selectedFramework)?.name}</div>
-                    <div style={{ color: '#94A3B8', marginTop: 4 }}>Local AST Seal: 0x8F4A92B10476C128 • 0 egress calls logged.</div>
-                    <div style={{ color: gold, marginTop: 12, fontWeight: 700 }}>✔ All 142 AST nodes successfully verified and ready for deployment.</div>
+                  <Box sx={{ p: 3, fontFamily: mono, fontSize: '0.85rem', minHeight: 320, bgcolor: dark ? '#08080B' : '#F8FAFC' }}>
+                    <div style={{ color: dark ? '#10B981' : '#059669', fontWeight: 700 }}>✔ Local WASM WebGen compiler v2.4 initialized.</div>
+                    <div style={{ color: textSecondary, marginTop: 8 }}>Target Template: {selectedTemplate}</div>
+                    <div style={{ color: textSecondary, marginTop: 4 }}>Target Framework: {FRAMEWORKS.find(f => f.id === selectedFramework)?.name}</div>
+                    <div style={{ color: textSecondary, marginTop: 4 }}>Local AST Seal: 0x8F4A92B10476C128 • 0 egress calls logged.</div>
+                    <div style={{ color: dark ? gold : '#8A6A09', marginTop: 12, fontWeight: 700 }}>✔ All 142 AST nodes successfully verified and ready for deployment.</div>
                   </Box>
                 )}
 
@@ -2533,12 +2542,12 @@ export default function WebGenPage() {
               <CardContent sx={{ p: { xs: 2.5, sm: 3.5 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
                   <Chip label="TARGET RUNTIMES (5 ENGINES)" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontSize: '0.72rem', fontFamily: mono }} />
-                  <Chip label="STAGE 03 // EXPORTERS" size="small" sx={{ bgcolor: 'rgba(255,255,255,0.06)', color: '#94A3B8', fontFamily: mono, fontSize: '0.68rem' }} />
+                  <Chip label="STAGE 03 // EXPORTERS" size="small" sx={{ bgcolor: dark ? 'rgba(255,255,255,0.06)' : '#F1F5F9', color: textSecondary, fontFamily: mono, fontSize: '0.68rem' }} />
                 </Box>
-                <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: '#FFFFFF' }}>
+                <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: textPrimary }}>
                   Polyglot Exporters
                 </Typography>
-                  <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2 }}>
+                  <Typography variant="body2" sx={{ color: textSecondary, mb: 2 }}>
                     Pick your framework to compile realistic, optimized code in real-time.
                   </Typography>
 
@@ -2550,8 +2559,8 @@ export default function WebGenPage() {
                         onClick={() => setSelectedFramework(exp.id)}
                         sx={{
                           p: 1.5,
-                          border: selectedFramework === exp.id ? `1.5px solid ${gold}` : '1px solid rgba(255,255,255,0.08)',
-                          bgcolor: selectedFramework === exp.id ? goldBg : '#121420',
+                          border: selectedFramework === exp.id ? `1.5px solid ${gold}` : `1px solid ${divider}`,
+                          bgcolor: selectedFramework === exp.id ? goldBg : (dark ? '#121420' : '#FFFFFF'),
                           borderRadius: 2,
                           cursor: 'pointer',
                           display: 'flex',
@@ -2562,10 +2571,10 @@ export default function WebGenPage() {
                         }}
                       >
                         <Box>
-                          <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#FFFFFF', fontSize: '0.85rem' }}>
+                          <Typography variant="subtitle2" sx={{ fontWeight: 700, color: textPrimary, fontSize: '0.85rem' }}>
                             {exp.name}
                           </Typography>
-                          <Typography variant="caption" sx={{ color: '#64748B', fontFamily: mono, fontSize: '0.68rem' }}>
+                          <Typography variant="caption" sx={{ color: textSecondary, fontFamily: mono, fontSize: '0.68rem' }}>
                             {exp.badge}
                           </Typography>
                         </Box>
@@ -2577,8 +2586,8 @@ export default function WebGenPage() {
                             fontSize: '0.65rem',
                             fontWeight: 800,
                             fontFamily: mono,
-                            bgcolor: selectedFramework === exp.id ? gold : '#1E202E',
-                            color: selectedFramework === exp.id ? '#08080B' : '#94A3B8'
+                            bgcolor: selectedFramework === exp.id ? gold : (dark ? '#1E202E' : '#F1F5F9'),
+                            color: selectedFramework === exp.id ? (dark ? '#08080B' : '#FFFFFF') : textSecondary
                           }}
                         />
                       </Paper>
@@ -2590,7 +2599,7 @@ export default function WebGenPage() {
                     variant="contained"
                     startIcon={<DownloadIcon />}
                     onClick={handleExportBundle}
-                    sx={{ mt: 3, py: 1.3, borderRadius: 2, fontWeight: 800, bgcolor: gold, color: '#08080B', '&:hover': { bgcolor: goldLight } }}
+                    sx={{ mt: 3, py: 1.3, borderRadius: 2, fontWeight: 800, bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
                   >
                     Export Standalone HTML Bundle
                   </Button>
@@ -2604,12 +2613,12 @@ export default function WebGenPage() {
                 <CardContent sx={{ p: { xs: 2.5, sm: 3.5 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
                     <Chip label="SPEC MATRIX (6 PRESETS)" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontSize: '0.72rem', fontFamily: mono }} />
-                    <Chip label="STAGE 04 // REGISTRY" size="small" sx={{ bgcolor: 'rgba(255,255,255,0.06)', color: '#94A3B8', fontFamily: mono, fontSize: '0.68rem' }} />
+                    <Chip label="STAGE 04 // REGISTRY" size="small" sx={{ bgcolor: dark ? 'rgba(255,255,255,0.06)' : '#F1F5F9', color: textSecondary, fontFamily: mono, fontSize: '0.68rem' }} />
                   </Box>
-                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: '#FFFFFF' }}>
+                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: textPrimary }}>
                     Component Spec Registry
                   </Typography>
-                  <Typography variant="body2" sx={{ color: '#94A3B8', mb: 3 }}>
+                  <Typography variant="body2" sx={{ color: textSecondary, mb: 3 }}>
                     Pre-compiled sovereign layout specs for instant project insertion, tested against zero-egress sandboxes.
                   </Typography>
 
@@ -2623,9 +2632,9 @@ export default function WebGenPage() {
                           onClick={() => handleSelectTemplate(t)}
                           sx={{
                             p: 1.8,
-                            border: isSelected ? `1.5px solid ${gold}` : '1px solid rgba(255,255,255,0.08)',
+                            border: isSelected ? `1.5px solid ${gold}` : `1px solid ${divider}`,
                             borderRadius: 2,
-                            bgcolor: isSelected ? goldBg : '#121420',
+                            bgcolor: isSelected ? goldBg : (dark ? '#121420' : '#FFFFFF'),
                             cursor: 'pointer',
                             transition: 'all 0.15s ease',
                             '&:hover': { bgcolor: goldBg, borderColor: gold }
@@ -2633,14 +2642,14 @@ export default function WebGenPage() {
                         >
                           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                              <IconC sx={{ fontSize: '1.05rem', color: isSelected ? gold : '#94A3B8' }} />
-                              <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#FFFFFF', fontSize: '0.88rem' }}>
+                              <IconC sx={{ fontSize: '1.05rem', color: isSelected ? gold : textSecondary }} />
+                              <Typography variant="subtitle2" sx={{ fontWeight: 700, color: textPrimary, fontSize: '0.88rem' }}>
                                 {t.name}
                               </Typography>
                             </Box>
-                            <Chip label={t.tag} size="small" sx={{ fontSize: '0.65rem', height: 20, bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8', fontWeight: 800, fontFamily: mono }} />
+                            <Chip label={t.tag} size="small" sx={{ fontSize: '0.65rem', height: 20, bgcolor: dark ? 'rgba(56,189,248,0.15)' : '#E0F2FE', color: dark ? '#38BDF8' : '#0369A1', fontWeight: 800, fontFamily: mono }} />
                           </Box>
-                          <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', fontSize: '0.76rem', lineHeight: 1.4 }}>
+                          <Typography variant="caption" sx={{ color: textSecondary, display: 'block', fontSize: '0.76rem', lineHeight: 1.4 }}>
                             {t.desc}
                           </Typography>
                         </Box>
@@ -2664,8 +2673,9 @@ export default function WebGenPage() {
             left: 0,
             right: 0,
             p: 2,
-            bgcolor: '#10121A',
-            borderTop: `1px solid ${gold}`,
+            bgcolor: dark ? '#10121A' : surface,
+            borderTop: `1px solid ${divider}`,
+            boxShadow: '0 -4px 16px rgba(0,0,0,0.12)',
             zIndex: 1000,
             display: 'flex',
             gap: 1.5
@@ -2677,7 +2687,7 @@ export default function WebGenPage() {
             startIcon={isCompiling ? <CheckCircleIcon /> : <RocketLaunchIcon />}
             onClick={handleCompile}
             disabled={isCompiling}
-            sx={{ py: 1.2, fontWeight: 800, borderRadius: 2, bgcolor: gold, color: '#08080B' }}
+            sx={{ py: 1.2, fontWeight: 800, borderRadius: 2, bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
           >
             {isCompiling ? 'Compiling...' : 'Generate Spec'}
           </Button>
@@ -2699,42 +2709,42 @@ export default function WebGenPage() {
         fullWidth
         PaperProps={{
           sx: {
-            bgcolor: '#10121A',
+            bgcolor: dark ? '#10121A' : surface,
             border: `1px solid ${gold}`,
             borderRadius: 3,
-            color: '#FFFFFF'
+            color: textPrimary
           }
         }}
       >
-        <DialogTitle sx={{ fontFamily: mono, fontWeight: 800, borderBottom: '1px solid rgba(255,255,255,0.08)', color: gold, display: 'flex', alignItems: 'center', gap: 1 }}>
+        <DialogTitle sx={{ fontFamily: mono, fontWeight: 800, borderBottom: `1px solid ${divider}`, color: gold, display: 'flex', alignItems: 'center', gap: 1 }}>
           <CloudDoneIcon /> Sovereign Deploy Pipeline
         </DialogTitle>
         <DialogContent sx={{ py: 3 }}>
-          <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2 }}>
-            Deploying <strong style={{ color: '#FFF' }}>{selectedTemplate}</strong> to the local zero-egress sandbox runtime.
+          <Typography variant="body2" sx={{ color: textSecondary, mb: 2 }}>
+            Deploying <strong style={{ color: textPrimary }}>{selectedTemplate}</strong> to the local zero-egress sandbox runtime.
           </Typography>
 
           <Stack spacing={1.5} sx={{ fontFamily: mono, fontSize: '0.8rem' }}>
-            <Box sx={{ p: 1.5, bgcolor: '#141624', borderRadius: 2, border: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box sx={{ p: 1.5, bgcolor: dark ? '#141624' : '#F8FAFC', borderRadius: 2, border: `1px solid ${divider}`, color: textPrimary, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span>1. Sealing WASM AST Nodes (142 nodes)</span>
-              {deployStep >= 1 ? <CheckIcon sx={{ color: '#10B981', fontSize: '1rem' }} /> : <LinearProgress sx={{ width: 40 }} />}
+              {deployStep >= 1 ? <CheckIcon sx={{ color: dark ? '#10B981' : '#059669', fontSize: '1rem' }} /> : <LinearProgress sx={{ width: 40 }} />}
             </Box>
-            <Box sx={{ p: 1.5, bgcolor: '#141624', borderRadius: 2, border: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box sx={{ p: 1.5, bgcolor: dark ? '#141624' : '#F8FAFC', borderRadius: 2, border: `1px solid ${divider}`, color: textPrimary, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span>2. Zero Cloud Egress Audit (0 Bytes out)</span>
-              {deployStep >= 2 ? <CheckIcon sx={{ color: '#10B981', fontSize: '1rem' }} /> : deployStep === 1 ? <LinearProgress sx={{ width: 40 }} /> : <span style={{ color: '#64748B' }}>Queued</span>}
+              {deployStep >= 2 ? <CheckIcon sx={{ color: dark ? '#10B981' : '#059669', fontSize: '1rem' }} /> : deployStep === 1 ? <LinearProgress sx={{ width: 40 }} /> : <span style={{ color: textSecondary }}>Queued</span>}
             </Box>
-            <Box sx={{ p: 1.5, bgcolor: '#141624', borderRadius: 2, border: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box sx={{ p: 1.5, bgcolor: dark ? '#141624' : '#F8FAFC', borderRadius: 2, border: `1px solid ${divider}`, color: textPrimary, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span>3. Inlining Gold Theme Tokens (#D4AF37)</span>
-              {deployStep >= 3 ? <CheckIcon sx={{ color: '#10B981', fontSize: '1rem' }} /> : deployStep === 2 ? <LinearProgress sx={{ width: 40 }} /> : <span style={{ color: '#64748B' }}>Queued</span>}
+              {deployStep >= 3 ? <CheckIcon sx={{ color: dark ? '#10B981' : '#059669', fontSize: '1rem' }} /> : deployStep === 2 ? <LinearProgress sx={{ width: 40 }} /> : <span style={{ color: textSecondary }}>Queued</span>}
             </Box>
-            <Box sx={{ p: 1.5, bgcolor: '#141624', borderRadius: 2, border: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box sx={{ p: 1.5, bgcolor: dark ? '#141624' : '#F8FAFC', borderRadius: 2, border: `1px solid ${divider}`, color: textPrimary, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span>4. Target: http://127.0.0.1:8788/sovereign-bundle</span>
-              {deployStep >= 4 ? <Chip label="DEPLOYED" size="small" sx={{ bgcolor: 'rgba(16,185,129,0.2)', color: '#10B981', fontWeight: 800, fontSize: '0.65rem' }} /> : <span style={{ color: '#64748B' }}>Pending</span>}
+              {deployStep >= 4 ? <Chip label="DEPLOYED" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.2)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', border: dark ? 'none' : '1px solid #A7F3D0', fontWeight: 800, fontSize: '0.65rem' }} /> : <span style={{ color: textSecondary }}>Pending</span>}
             </Box>
           </Stack>
         </DialogContent>
-        <DialogActions sx={{ p: 2.5, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-          <Button onClick={() => setDeployOpen(false)} sx={{ color: '#94A3B8' }}>Close</Button>
+        <DialogActions sx={{ p: 2.5, borderTop: `1px solid ${divider}` }}>
+          <Button onClick={() => setDeployOpen(false)} sx={{ color: textSecondary }}>Close</Button>
           <Button
             variant="contained"
             onClick={() => {
@@ -2742,7 +2752,7 @@ export default function WebGenPage() {
               setSnackbarMessage('Sovereign Bundle Deployed to Local Edge Sandbox!');
               setSnackbarOpen(true);
             }}
-            sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800 }}
+            sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontWeight: 800, '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
           >
             Launch Sandbox
           </Button>
@@ -2760,11 +2770,12 @@ export default function WebGenPage() {
           onClose={() => setSnackbarOpen(false)}
           severity="success"
           sx={{
-            bgcolor: '#121420',
-            color: '#FFFFFF',
+            bgcolor: dark ? '#121420' : '#FFFFFF',
+            color: textPrimary,
             border: `1px solid ${gold}`,
             fontFamily: mono,
             fontSize: '0.8rem',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
             '& .MuiAlert-icon': { color: gold }
           }}
         >

@@ -152,9 +152,9 @@ function CodeSnippet({ title, code, language = 'bash' }) {
 export default function DocsPage() {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
-  const gold = '#D4AF37';
-  const goldLight = '#F5E6AB';
-  const goldBg = 'rgba(212,175,55,0.14)';
+  const gold = dark ? '#D4AF37' : '#B8860B';
+  const goldLight = dark ? '#F5E6AB' : '#8A6A09';
+  const goldBg = dark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
   const voidDark = '#08080B';
   const surface = dark ? '#0E1017' : '#FFFFFF';
   const textPrimary = dark ? '#F3F4F6' : '#101828';
@@ -368,13 +368,13 @@ Runs local invariant verification before staging tools.`
               sx={{
                 bgcolor: goldBg,
                 color: gold,
-                border: `1px solid rgba(212,175,55,0.4)`,
+                border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`,
                 fontWeight: 700,
                 letterSpacing: '0.05em'
               }}
             />
             <Chip
-              icon={<HubIcon sx={{ fontSize: '14px !important', color: textPrimary }} />}
+              icon={<HubIcon sx={{ fontSize: '14px !important', color: `${textSecondary} !important` }} />}
               label="37 WORKSTATIONS & 25 TOOLS"
               size="small"
               sx={{
@@ -385,24 +385,24 @@ Runs local invariant verification before staging tools.`
               }}
             />
             <Chip
-              icon={<CloudDoneIcon sx={{ fontSize: '14px !important', color: '#38BDF8' }} />}
+              icon={<CloudDoneIcon sx={{ fontSize: '14px !important', color: `${dark ? '#38BDF8' : '#0284C7'} !important` }} />}
               label="NETLIFY 83 PRERENDERED ROUTES"
               size="small"
               sx={{
-                bgcolor: 'rgba(56,189,248,0.12)',
-                color: '#38BDF8',
-                border: '1px solid rgba(56,189,248,0.3)',
+                bgcolor: dark ? 'rgba(56,189,248,0.12)' : '#E0F2FE',
+                color: dark ? '#38BDF8' : '#0284C7',
+                border: `1px solid ${dark ? 'rgba(56,189,248,0.3)' : '#BAE6FD'}`,
                 fontWeight: 700
               }}
             />
             <Chip
-              icon={<ShieldIcon sx={{ fontSize: '14px !important', color: '#34D399' }} />}
+              icon={<ShieldIcon sx={{ fontSize: '14px !important', color: `${dark ? '#34D399' : '#027A48'} !important` }} />}
               label="ZERO-EGRESS INVARIANTS"
               size="small"
               sx={{
-                bgcolor: 'rgba(52,211,153,0.14)',
-                color: '#34D399',
-                border: '1px solid rgba(52,211,153,0.3)',
+                bgcolor: dark ? 'rgba(52,211,153,0.14)' : '#ECFDF5',
+                color: dark ? '#34D399' : '#027A48',
+                border: `1px solid ${dark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`,
                 fontWeight: 700
               }}
             />
@@ -440,8 +440,8 @@ Runs local invariant verification before staging tools.`
               p: 2,
               borderRadius: 3,
               bgcolor: dark ? '#0E1017' : '#FFFFFF',
-              border: `1px solid rgba(212,175,55,0.25)`,
-              boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
+              border: `1px solid ${dark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.25)'}`,
+              boxShadow: dark ? '0 4px 20px rgba(0,0,0,0.25)' : '0 2px 10px rgba(16,24,40,0.06)',
               mb: 3
             }}
           >
@@ -477,7 +477,7 @@ Runs local invariant verification before staging tools.`
                       key={tf.label}
                       icon={React.cloneElement(tf.icon, {
                         sx: {
-                          color: isSelected ? `${voidDark} !important` : `${gold} !important`,
+                          color: isSelected ? `${dark ? voidDark : '#FFFFFF'} !important` : `${gold} !important`,
                           fontSize: '16px !important'
                         }
                       })}
@@ -489,10 +489,10 @@ Runs local invariant verification before staging tools.`
                         fontSize: '0.82rem',
                         transition: 'all 0.2s ease',
                         bgcolor: isSelected ? gold : dark ? 'rgba(212,175,55,0.08)' : '#F2F4F7',
-                        color: isSelected ? voidDark : textPrimary,
-                        border: `1px solid ${isSelected ? gold : 'rgba(212,175,55,0.25)'}`,
+                        color: isSelected ? (dark ? voidDark : '#FFFFFF') : textPrimary,
+                        border: `1px solid ${isSelected ? gold : dark ? 'rgba(212,175,55,0.25)' : '#EAECF0'}`,
                         '&:hover': {
-                          bgcolor: isSelected ? '#E5C048' : 'rgba(212,175,55,0.2)',
+                          bgcolor: isSelected ? (dark ? '#E5C048' : '#9A7209') : dark ? 'rgba(212,175,55,0.2)' : '#E4E7EC',
                           borderColor: gold
                         }
                       }}
@@ -513,9 +513,9 @@ Runs local invariant verification before staging tools.`
                   justifyContent: 'space-between'
                 }}
               >
-                <Typography variant="caption" sx={{ color: goldLight }}>
+                <Typography variant="caption" sx={{ color: textSecondary }}>
                   Showing <strong>{visibleSections.length}</strong> sections matching topic:{' '}
-                  <span style={{ color: gold, fontWeight: 700 }}>{selectedTopic}</span>
+                  <Box component="span" sx={{ color: gold, fontWeight: 700 }}>{selectedTopic}</Box>
                 </Typography>
                 <Button
                   size="small"
@@ -551,7 +551,7 @@ Runs local invariant verification before staging tools.`
                   borderRadius: 9999,
                   bgcolor: dark ? '#0E1017' : '#FFFFFF',
                   color: textPrimary,
-                  border: `1px solid rgba(212,175,55,0.25)`,
+                  border: `1px solid ${dark ? 'rgba(212,175,55,0.25)' : '#D0D5DD'}`,
                   '&:hover': { borderColor: gold },
                   '&.Mui-focused': { borderColor: gold }
                 }
@@ -569,12 +569,12 @@ Runs local invariant verification before staging tools.`
               <Paper
                 sx={{
                   p: 3,
-                  border: `1px solid rgba(212,175,55,0.25)`,
+                  border: `1px solid ${dark ? 'rgba(212,175,55,0.25)' : '#EAECF0'}`,
                   borderRadius: 3,
                   mb: 3,
                   borderLeft: `4px solid ${gold}`,
                   bgcolor: surface,
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.3)'
+                  boxShadow: dark ? '0 4px 20px rgba(0,0,0,0.3)' : '0 2px 8px rgba(16,24,40,0.06)'
                 }}
               >
                 <Typography
@@ -610,7 +610,7 @@ Runs local invariant verification before staging tools.`
                         bgcolor: activeSection === item.id ? goldBg : 'transparent',
                         border:
                           activeSection === item.id
-                            ? '1px solid rgba(212,175,55,0.3)'
+                            ? `1px solid ${dark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.3)'}`
                             : '1px solid transparent',
                         '&:hover': {
                           bgcolor: dark ? 'rgba(212,175,55,0.1)' : '#F8F9FA',
@@ -629,9 +629,9 @@ Runs local invariant verification before staging tools.`
                 sx={{
                   p: 2.5,
                   bgcolor: '#08080B',
-                  color: goldLight,
+                  color: '#F5E6AB',
                   borderRadius: 3,
-                  border: '1px solid rgba(212,175,55,0.3)',
+                  border: `1px solid ${dark ? 'rgba(212,175,55,0.3)' : 'rgba(212,175,55,0.2)'}`,
                   borderLeft: `4px solid ${gold}`
                 }}
               >
@@ -656,7 +656,7 @@ Runs local invariant verification before staging tools.`
                   <IconButton
                     size="small"
                     onClick={() => handleCopy('npm run zoth -- init', 'quick-install')}
-                    sx={{ color: gold, '&:hover': { color: '#FFFFFF' } }}
+                    sx={{ color: '#D4AF37', '&:hover': { color: '#FFFFFF' } }}
                   >
                     {copiedIndex === 'quick-install' ? (
                       <CheckIcon fontSize="small" sx={{ color: '#34D399' }} />
@@ -723,18 +723,19 @@ Runs local invariant verification before staging tools.`
                   <Paper
                     sx={{
                       p: 3,
-                      bgcolor: '#08080B',
-                      color: '#FFFFFF',
+                      bgcolor: dark ? '#08080B' : '#F8FAFC',
+                      color: dark ? '#FFFFFF' : '#101828',
                       borderRadius: 3,
                       my: 3,
-                      border: '1px solid rgba(212,175,55,0.25)',
-                      borderLeft: `4px solid ${gold}`
+                      border: `1px solid ${dark ? 'rgba(212,175,55,0.25)' : '#EAECF0'}`,
+                      borderLeft: `4px solid ${gold}`,
+                      boxShadow: dark ? 'none' : '0 1px 3px rgba(16,24,40,0.05)',
                     }}
                   >
                     <Typography
                       variant="subtitle2"
                       sx={{
-                        color: goldLight,
+                        color: gold,
                         fontFamily: '"JetBrains Mono", monospace',
                         mb: 2,
                         fontWeight: 700
@@ -751,107 +752,32 @@ Runs local invariant verification before staging tools.`
                         textAlign: 'center'
                       }}
                     >
-                      <Paper
-                        sx={{
-                          p: 2,
-                          bgcolor: '#0E1017',
-                          border: '1px solid rgba(212,175,55,0.2)',
-                          color: '#79C0FF'
-                        }}
-                      >
-                        <CodeIcon sx={{ mb: 0.5, color: gold }} />
-                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: textPrimary }}>
-                          37 Workstations
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: textSecondary }}>
-                          DAG Composer, IDE &amp; Foundry
-                        </Typography>
-                      </Paper>
-
-                      <Paper
-                        sx={{
-                          p: 2,
-                          bgcolor: '#0E1017',
-                          border: '1px solid rgba(212,175,55,0.2)',
-                          color: '#00F0FF'
-                        }}
-                      >
-                        <MemoryIcon sx={{ mb: 0.5, color: '#00F0FF' }} />
-                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: textPrimary }}>
-                          Lucy Netrunner Oracle
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: textSecondary }}>
-                          STDP Synaptic Plasticity (:8788)
-                        </Typography>
-                      </Paper>
-
-                      <Paper
-                        sx={{
-                          p: 2,
-                          bgcolor: '#0E1017',
-                          border: '1px solid rgba(212,175,55,0.2)',
-                          color: '#C084FC'
-                        }}
-                      >
-                        <GavelIcon sx={{ mb: 0.5, color: '#C084FC' }} />
-                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: textPrimary }}>
-                          3-Agent Byzantine
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: textSecondary }}>
-                          Triadic AST Socratic Debate
-                        </Typography>
-                      </Paper>
-
-                      <Paper
-                        sx={{
-                          p: 2,
-                          bgcolor: '#0E1017',
-                          border: '1px solid rgba(212,175,55,0.2)',
-                          color: '#34D399'
-                        }}
-                      >
-                        <ShieldIcon sx={{ mb: 0.5, color: '#34D399' }} />
-                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: textPrimary }}>
-                          Zero-Egress Invariants
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: textSecondary }}>
-                          Shannon Entropy &amp; Loopback
-                        </Typography>
-                      </Paper>
-
-                      <Paper
-                        sx={{
-                          p: 2,
-                          bgcolor: '#0E1017',
-                          border: '1px solid rgba(212,175,55,0.2)',
-                          color: '#F59E0B'
-                        }}
-                      >
-                        <LockIcon sx={{ mb: 0.5, color: '#F59E0B' }} />
-                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: textPrimary }}>
-                          Adytum Sanctum
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: textSecondary }}>
-                          22 Keys &amp; 5-Min Incubation
-                        </Typography>
-                      </Paper>
-
-                      <Paper
-                        sx={{
-                          p: 2,
-                          bgcolor: '#0E1017',
-                          border: '1px solid rgba(212,175,55,0.2)',
-                          color: '#38BDF8'
-                        }}
-                      >
-                        <CloudDoneIcon sx={{ mb: 0.5, color: '#38BDF8' }} />
-                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: textPrimary }}>
-                          Netlify Edge AEO
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: textSecondary }}>
-                          83 Prerendered Static Routes
-                        </Typography>
-                      </Paper>
+                      {[
+                        { icon: <CodeIcon sx={{ mb: 0.5, color: dark ? '#79C0FF' : '#0969DA' }} />, title: '37 Workstations', desc: 'DAG Composer, IDE & Foundry' },
+                        { icon: <MemoryIcon sx={{ mb: 0.5, color: dark ? '#00F0FF' : '#0891B2' }} />, title: 'Lucy Netrunner Oracle', desc: 'STDP Synaptic Plasticity (:8788)' },
+                        { icon: <GavelIcon sx={{ mb: 0.5, color: dark ? '#C084FC' : '#7C3AED' }} />, title: '3-Agent Byzantine', desc: 'Triadic AST Socratic Debate' },
+                        { icon: <ShieldIcon sx={{ mb: 0.5, color: dark ? '#34D399' : '#059669' }} />, title: 'Zero-Egress Invariants', desc: 'Shannon Entropy & Loopback' },
+                        { icon: <LockIcon sx={{ mb: 0.5, color: dark ? '#F59E0B' : '#D97706' }} />, title: 'Adytum Sanctum', desc: '22 Keys & 5-Min Incubation' },
+                        { icon: <CloudDoneIcon sx={{ mb: 0.5, color: dark ? '#38BDF8' : '#0284C7' }} />, title: 'Netlify Edge AEO', desc: '83 Prerendered Static Routes' },
+                      ].map((item, i) => (
+                        <Paper
+                          key={i}
+                          sx={{
+                            p: 2,
+                            bgcolor: dark ? '#0E1017' : '#FFFFFF',
+                            border: `1px solid ${dark ? 'rgba(212,175,55,0.2)' : '#EAECF0'}`,
+                            boxShadow: dark ? 'none' : '0 1px 2px rgba(16,24,40,0.05)',
+                          }}
+                        >
+                          {item.icon}
+                          <Typography variant="subtitle2" sx={{ fontWeight: 700, color: textPrimary }}>
+                            {item.title}
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: textSecondary }}>
+                            {item.desc}
+                          </Typography>
+                        </Paper>
+                      ))}
                     </Box>
                   </Paper>
 
@@ -917,12 +843,12 @@ npm run dev`}
                                 : dark
                                 ? 'rgba(212,175,55,0.08)'
                                 : '#F2F4F7',
-                            color: selectedToolCategory === cat ? voidDark : textSecondary,
+                            color: selectedToolCategory === cat ? (dark ? voidDark : '#FFFFFF') : textSecondary,
                             border: `1px solid ${
-                              selectedToolCategory === cat ? gold : 'rgba(212,175,55,0.2)'
+                              selectedToolCategory === cat ? gold : dark ? 'rgba(212,175,55,0.2)' : '#EAECF0'
                             }`,
                             '&:hover': {
-                              bgcolor: selectedToolCategory === cat ? '#E5C048' : 'rgba(212,175,55,0.2)'
+                              bgcolor: selectedToolCategory === cat ? (dark ? '#E5C048' : '#9A7209') : dark ? 'rgba(212,175,55,0.2)' : '#E4E7EC'
                             }
                           }}
                         />
@@ -942,11 +868,12 @@ npm run dev`}
                         <Card
                           sx={{
                             height: '100%',
-                            border: `1px solid rgba(212,175,55,0.2)`,
+                            border: `1px solid ${dark ? 'rgba(212,175,55,0.2)' : '#EAECF0'}`,
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'space-between',
                             bgcolor: surface,
+                            boxShadow: dark ? 'none' : '0 1px 3px rgba(16,24,40,0.05)',
                             '&:hover': { borderColor: gold }
                           }}
                         >
@@ -969,8 +896,8 @@ npm run dev`}
                                 label={`v${tool.version}`}
                                 size="small"
                                 sx={{
-                                  bgcolor: 'rgba(56,189,248,0.12)',
-                                  color: '#38BDF8',
+                                  bgcolor: dark ? 'rgba(56,189,248,0.12)' : '#E0F2FE',
+                                  color: dark ? '#38BDF8' : '#0284C7',
                                   fontWeight: 700,
                                   fontSize: '0.75rem'
                                 }}
@@ -996,20 +923,20 @@ npm run dev`}
                               sx={{
                                 p: 1.2,
                                 bgcolor: '#08080B',
-                                color: goldLight,
+                                color: '#F5E6AB',
                                 fontFamily: '"JetBrains Mono", monospace',
                                 fontSize: '0.78rem',
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
-                                borderLeft: `3px solid ${gold}`
+                                borderLeft: '3px solid #D4AF37'
                               }}
                             >
                               <span>$ {tool.pull}</span>
                               <IconButton
                                 size="small"
                                 onClick={() => handleCopy(tool.pull, tool.id)}
-                                sx={{ color: gold, p: 0.5, '&:hover': { color: '#FFFFFF' } }}
+                                sx={{ color: '#D4AF37', p: 0.5, '&:hover': { color: '#FFFFFF' } }}
                               >
                                 {copiedIndex === tool.id ? (
                                   <CheckIcon fontSize="small" sx={{ color: '#34D399' }} />
@@ -1082,7 +1009,7 @@ npm run dev`}
                           sx={{
                             p: 2,
                             bgcolor: dark ? '#0E1017' : '#F8F9FA',
-                            border: `1px solid rgba(212,175,55,0.2)`,
+                            border: `1px solid ${dark ? 'rgba(212,175,55,0.2)' : '#EAECF0'}`,
                             textAlign: 'center',
                             height: '100%'
                           }}
@@ -1095,7 +1022,7 @@ npm run dev`}
                               fontWeight: 700,
                               bgcolor: goldBg,
                               color: gold,
-                              border: '1px solid rgba(212,175,55,0.3)'
+                              border: `1px solid ${dark ? 'rgba(212,175,55,0.3)' : '#F0E1A8'}`
                             }}
                           />
                           <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5, color: textPrimary }}>
@@ -1367,18 +1294,19 @@ console.log("Byzantine Consensus Verdict:", verdict.sealed ? "UNANIMOUS APPROVAL
                         <Paper
                           sx={{
                             p: 2,
-                            bgcolor: '#08080B',
-                            border: '1px solid rgba(56,189,248,0.25)',
-                            borderRadius: 2
+                            bgcolor: dark ? '#08080B' : '#F0F9FF',
+                            border: `1px solid ${dark ? 'rgba(56,189,248,0.25)' : '#BAE6FD'}`,
+                            borderRadius: 2,
+                            boxShadow: dark ? 'none' : '0 1px 2px rgba(16,24,40,0.04)',
                           }}
                         >
                           <Typography
                             variant="subtitle2"
-                            sx={{ color: '#38BDF8', fontFamily: '"JetBrains Mono", monospace', fontWeight: 700 }}
+                            sx={{ color: dark ? '#38BDF8' : '#0284C7', fontFamily: '"JetBrains Mono", monospace', fontWeight: 700 }}
                           >
                             {item.ep}
                           </Typography>
-                          <Typography variant="caption" sx={{ color: textSecondary }}>
+                          <Typography variant="caption" sx={{ color: dark ? '#94A3B8' : '#334155' }}>
                             {item.desc}
                           </Typography>
                         </Paper>
@@ -1601,9 +1529,9 @@ npm run preview`}
                         sx={{
                           fontWeight: 700,
                           bgcolor: goldBg,
-                          color: goldLight,
-                          border: `1px solid rgba(212,175,55,0.4)`,
-                          '&:hover': { bgcolor: gold, color: voidDark }
+                          color: gold,
+                          border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`,
+                          '&:hover': { bgcolor: gold, color: dark ? voidDark : '#FFFFFF' }
                         }}
                       />
                     ))}

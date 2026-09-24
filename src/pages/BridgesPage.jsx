@@ -958,7 +958,7 @@ export default function BridgesPage() {
           sx={{
             mb: 4,
             p: { xs: 2, md: 3 },
-            bgcolor: isDark ? '#08080B' : '#0F172A',
+            bgcolor: isDark ? '#08080B' : '#FFFFFF',
             border: `1px solid ${gold.border}`,
             borderRadius: 3,
             boxShadow: gold.glow,
@@ -975,7 +975,7 @@ export default function BridgesPage() {
               gap: 2,
               mb: 2,
               pb: 1.5,
-              borderBottom: '1px solid rgba(212,175,55,0.15)',
+              borderBottom: isDark ? '1px solid rgba(212,175,55,0.15)' : '1px solid #EAECF0',
             }}
           >
             <Box>
@@ -1008,10 +1008,11 @@ export default function BridgesPage() {
                   sx={{
                     height: 20,
                     fontSize: '0.65rem',
-                    bgcolor: 'rgba(212,175,55,0.12)',
-                    color: gold.accent,
+                    bgcolor: isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7',
+                    color: isDark ? gold.accent : '#8A6A09',
                     fontFamily: mono,
-                    fontWeight: 700,
+                    fontWeight: 750,
+                    border: isDark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #F5E6AB',
                   }}
                 />
               </Stack>
@@ -1023,28 +1024,28 @@ export default function BridgesPage() {
             {/* Mesh Telemetry Counters */}
             <Stack direction="row" spacing={2} sx={{ fontFamily: mono, fontSize: '0.78rem' }}>
               <Box sx={{ textAlign: 'right' }}>
-                <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', display: 'block' }}>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
                   PACKETS DISPATCHED
                 </Typography>
-                <Typography variant="body2" sx={{ fontWeight: 800, color: '#F8FAFC' }}>
+                <Typography variant="body2" sx={{ fontWeight: 800, color: 'text.primary' }}>
                   {totalDispatched}
                 </Typography>
               </Box>
-              <Divider orientation="vertical" flexItem sx={{ borderColor: 'rgba(212,175,55,0.2)' }} />
+              <Divider orientation="vertical" flexItem sx={{ borderColor: isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider }} />
               <Box sx={{ textAlign: 'right' }}>
-                <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', display: 'block' }}>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
                   HOPS TRAVERSED
                 </Typography>
-                <Typography variant="body2" sx={{ fontWeight: 800, color: gold.accent }}>
+                <Typography variant="body2" sx={{ fontWeight: 800, color: gold.soft }}>
                   {totalHopsTraversed}
                 </Typography>
               </Box>
-              <Divider orientation="vertical" flexItem sx={{ borderColor: 'rgba(212,175,55,0.2)' }} />
+              <Divider orientation="vertical" flexItem sx={{ borderColor: isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider }} />
               <Box sx={{ textAlign: 'right' }}>
-                <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.5)', display: 'block' }}>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
                   LAST ROUTE LATENCY
                 </Typography>
-                <Typography variant="body2" sx={{ fontWeight: 800, color: '#38BDF8' }}>
+                <Typography variant="body2" sx={{ fontWeight: 800, color: isDark ? '#38BDF8' : '#0284C7' }}>
                   {lastLatency}
                 </Typography>
               </Box>
@@ -1344,7 +1345,7 @@ export default function BridgesPage() {
                       <text
                         textAnchor="middle"
                         y="11"
-                        fill={gold.soft}
+                        fill="#F5E6AB"
                         fontSize="7.5"
                         fontFamily={mono}
                         fontWeight="700"
@@ -1354,7 +1355,7 @@ export default function BridgesPage() {
                       <text
                         textAnchor="middle"
                         y="20"
-                        fill="rgba(255,255,255,0.5)"
+                        fill="rgba(255,255,255,0.75)"
                         fontSize="6.5"
                         fontFamily={mono}
                       >
@@ -1425,10 +1426,10 @@ export default function BridgesPage() {
                       px: 1.5,
                       borderRadius: 2,
                       bgcolor: isSelected ? gold.accent : 'transparent',
-                      color: isSelected ? '#08080B' : gold.soft,
+                      color: isSelected ? (isDark ? '#08080B' : '#FFFFFF') : (isDark ? gold.soft : '#8A6A09'),
                       borderColor: gold.border,
                       '&:hover': {
-                        bgcolor: isSelected ? '#E5C04A' : gold.wash,
+                        bgcolor: isSelected ? (isDark ? '#E5C04A' : '#9A7209') : gold.wash,
                         borderColor: gold.accent,
                       },
                     }}
@@ -1495,8 +1496,11 @@ export default function BridgesPage() {
                       fontSize: '0.74rem',
                       fontWeight: 800,
                       bgcolor: originNode === node.id ? gold.accent : 'transparent',
-                      color: originNode === node.id ? '#08080B' : 'text.primary',
-                      borderColor: 'rgba(212,175,55,0.25)',
+                      color: originNode === node.id ? (isDark ? '#08080B' : '#FFFFFF') : 'text.primary',
+                      borderColor: originNode === node.id ? gold.accent : (isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider),
+                      '&:hover': {
+                        bgcolor: originNode === node.id ? (isDark ? '#E5C04A' : '#9A7209') : gold.wash,
+                      },
                     }}
                   >
                     {node.glyph} {node.name}
@@ -1518,9 +1522,12 @@ export default function BridgesPage() {
                     fontFamily: mono,
                     fontSize: '0.74rem',
                     fontWeight: 800,
-                    bgcolor: targetNode === 'Broadcast' ? '#38BDF8' : 'transparent',
-                    color: targetNode === 'Broadcast' ? '#08080B' : '#38BDF8',
-                    borderColor: 'rgba(56,189,248,0.4)',
+                    bgcolor: targetNode === 'Broadcast' ? (isDark ? '#38BDF8' : '#0284C7') : 'transparent',
+                    color: targetNode === 'Broadcast' ? (isDark ? '#08080B' : '#FFFFFF') : (isDark ? '#38BDF8' : '#0284C7'),
+                    borderColor: isDark ? 'rgba(56,189,248,0.4)' : '#0284C7',
+                    '&:hover': {
+                      bgcolor: targetNode === 'Broadcast' ? (isDark ? '#7DD3FC' : '#0369A1') : (isDark ? 'rgba(56,189,248,0.1)' : '#F0F9FF'),
+                    },
                   }}
                 >
                   BROADCAST (ALL)
@@ -1536,8 +1543,11 @@ export default function BridgesPage() {
                       fontSize: '0.74rem',
                       fontWeight: 800,
                       bgcolor: targetNode === node.id ? gold.accent : 'transparent',
-                      color: targetNode === node.id ? '#08080B' : 'text.primary',
-                      borderColor: 'rgba(212,175,55,0.25)',
+                      color: targetNode === node.id ? (isDark ? '#08080B' : '#FFFFFF') : 'text.primary',
+                      borderColor: targetNode === node.id ? gold.accent : (isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider),
+                      '&:hover': {
+                        bgcolor: targetNode === node.id ? (isDark ? '#E5C04A' : '#9A7209') : gold.wash,
+                      },
                     }}
                   >
                     {node.name}
@@ -1574,19 +1584,19 @@ export default function BridgesPage() {
                 type="submit"
                 variant="contained"
                 disabled={isRouting || !message.trim()}
-                startIcon={<SendIcon sx={{ color: '#08080B' }} />}
+                startIcon={<SendIcon sx={{ color: isDark ? '#08080B' : '#FFFFFF' }} />}
                 sx={{
                   px: 4,
                   py: 1.2,
                   bgcolor: gold.accent,
-                  color: '#08080B',
+                  color: isDark ? '#08080B' : '#FFFFFF',
                   fontWeight: 900,
                   fontSize: '0.9rem',
                   fontFamily: mono,
                   letterSpacing: '0.04em',
                   boxShadow: gold.glow,
                   '&:hover': {
-                    bgcolor: '#E5C04A',
+                    bgcolor: isDark ? '#E5C04A' : '#9A7209',
                   },
                 }}
               >
@@ -1600,8 +1610,12 @@ export default function BridgesPage() {
                 sx={{
                   fontFamily: mono,
                   fontSize: '0.78rem',
-                  color: gold.soft,
+                  color: isDark ? gold.soft : '#8A6A09',
                   borderColor: gold.border,
+                  '&:hover': {
+                    borderColor: gold.accent,
+                    bgcolor: gold.wash,
+                  },
                 }}
               >
                 RESET PAYLOAD
@@ -1644,8 +1658,12 @@ export default function BridgesPage() {
                   fontSize: '0.72rem',
                   fontWeight: 800,
                   bgcolor: ledgerTab === 'envelope' ? gold.accent : 'transparent',
-                  color: ledgerTab === 'envelope' ? '#08080B' : gold.soft,
+                  color: ledgerTab === 'envelope' ? (isDark ? '#08080B' : '#FFFFFF') : (isDark ? gold.soft : '#8A6A09'),
                   borderColor: gold.border,
+                  '&:hover': {
+                    bgcolor: ledgerTab === 'envelope' ? (isDark ? '#E5C04A' : '#9A7209') : gold.wash,
+                    borderColor: gold.accent,
+                  },
                 }}
               >
                 HMAC-SHA256 ENVELOPE
@@ -1659,8 +1677,12 @@ export default function BridgesPage() {
                   fontSize: '0.72rem',
                   fontWeight: 800,
                   bgcolor: ledgerTab === 'telemetry' ? gold.accent : 'transparent',
-                  color: ledgerTab === 'telemetry' ? '#08080B' : gold.soft,
+                  color: ledgerTab === 'telemetry' ? (isDark ? '#08080B' : '#FFFFFF') : (isDark ? gold.soft : '#8A6A09'),
                   borderColor: gold.border,
+                  '&:hover': {
+                    bgcolor: ledgerTab === 'telemetry' ? (isDark ? '#E5C04A' : '#9A7209') : gold.wash,
+                    borderColor: gold.accent,
+                  },
                 }}
               >
                 HOP TELEMETRY LOG
@@ -1674,8 +1696,12 @@ export default function BridgesPage() {
                   fontSize: '0.72rem',
                   fontWeight: 800,
                   bgcolor: ledgerTab === 'raw' ? gold.accent : 'transparent',
-                  color: ledgerTab === 'raw' ? '#08080B' : gold.soft,
+                  color: ledgerTab === 'raw' ? (isDark ? '#08080B' : '#FFFFFF') : (isDark ? gold.soft : '#8A6A09'),
                   borderColor: gold.border,
+                  '&:hover': {
+                    bgcolor: ledgerTab === 'raw' ? (isDark ? '#E5C04A' : '#9A7209') : gold.wash,
+                    borderColor: gold.accent,
+                  },
                 }}
               >
                 DAEMON OUTPUT
@@ -1725,12 +1751,12 @@ export default function BridgesPage() {
 
             {ledgerTab === 'telemetry' && (
               <Box>
-                <Typography variant="caption" sx={{ color: gold.accent, fontWeight: 800, mb: 1.5, display: 'block' }}>
+                <Typography variant="caption" sx={{ color: '#F5E6AB', fontWeight: 800, mb: 1.5, display: 'block' }}>
                   RECENT SOVEREIGN MESH PACKET HISTORY (ZERO-EGRESS AIR-GAPPED IPC):
                 </Typography>
                 <Box component="table" sx={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.78rem' }}>
                   <thead>
-                    <tr style={{ borderBottom: '1px solid rgba(212,175,55,0.3)', color: gold.soft }}>
+                    <tr style={{ borderBottom: '1px solid rgba(212,175,55,0.3)', color: '#F5E6AB' }}>
                       <th style={{ textAlign: 'left', padding: '6px 8px' }}>SEQ</th>
                       <th style={{ textAlign: 'left', padding: '6px 8px' }}>TIME</th>
                       <th style={{ textAlign: 'left', padding: '6px 8px' }}>CHANNEL</th>
@@ -1744,7 +1770,7 @@ export default function BridgesPage() {
                   <tbody>
                     {recentPackets.map((pkt) => (
                       <tr key={pkt.seq} style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                        <td style={{ padding: '6px 8px', color: gold.accent, fontWeight: 700 }}>#{pkt.seq}</td>
+                        <td style={{ padding: '6px 8px', color: '#D4AF37', fontWeight: 700 }}>#{pkt.seq}</td>
                         <td style={{ padding: '6px 8px', color: 'rgba(255,255,255,0.6)' }}>{pkt.time}</td>
                         <td style={{ padding: '6px 8px' }}>{pkt.channel}</td>
                         <td style={{ padding: '6px 8px', color: '#38BDF8' }}>
@@ -1754,7 +1780,7 @@ export default function BridgesPage() {
                         <td style={{ padding: '6px 8px', textAlign: 'right', color: '#10B981', fontWeight: 700 }}>
                           {pkt.latency}
                         </td>
-                        <td style={{ padding: '6px 8px', color: gold.soft }}>{pkt.digest}</td>
+                        <td style={{ padding: '6px 8px', color: '#F5E6AB' }}>{pkt.digest}</td>
                         <td style={{ padding: '6px 8px', textAlign: 'center', color: '#10B981' }}>ZERO_OK</td>
                       </tr>
                     ))}

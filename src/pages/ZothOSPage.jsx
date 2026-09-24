@@ -43,6 +43,8 @@ const isoCmd = 'sudo dd if=zothos-1.0-amd64.iso of=/dev/sdX status=progress bs=4
 
 // Circular Radial Dial Component
 function RadialResourceDial({ value, max = 100, label, subtext, metricText, statusBadge, accentColor, glowColor }) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
   const radius = 48;
   const circumference = 2 * Math.PI * radius;
   const percentage = Math.min(100, Math.max(0, (value / max) * 100));
@@ -58,7 +60,7 @@ function RadialResourceDial({ value, max = 100, label, subtext, metricText, stat
             cy="65"
             r={radius}
             fill="transparent"
-            stroke="rgba(212, 175, 55, 0.12)"
+            stroke={isDark ? 'rgba(212, 175, 55, 0.12)' : '#E2E8F0'}
             strokeWidth="9"
           />
           {/* Active progress arc */}
@@ -67,14 +69,14 @@ function RadialResourceDial({ value, max = 100, label, subtext, metricText, stat
             cy="65"
             r={radius}
             fill="transparent"
-            stroke={accentColor || '#D4AF37'}
+            stroke={accentColor || (isDark ? '#D4AF37' : '#B8860B')}
             strokeWidth="9"
             strokeDasharray={circumference}
             strokeDashoffset={strokeDashoffset}
             strokeLinecap="round"
             style={{
               transition: 'stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-              filter: `drop-shadow(0 0 6px ${glowColor || 'rgba(212, 175, 55, 0.5)'})`,
+              filter: `drop-shadow(0 0 6px ${glowColor || (isDark ? 'rgba(212, 175, 55, 0.5)' : 'rgba(184, 134, 11, 0.25)')})`,
             }}
           />
         </svg>
@@ -99,7 +101,7 @@ function RadialResourceDial({ value, max = 100, label, subtext, metricText, stat
               fontFamily: mono,
               fontSize: '1.25rem',
               fontWeight: 800,
-              color: '#FFFFFF',
+              color: isDark ? '#FFFFFF' : '#101828',
               letterSpacing: '-0.02em',
               lineHeight: 1,
             }}
@@ -111,7 +113,7 @@ function RadialResourceDial({ value, max = 100, label, subtext, metricText, stat
             sx={{
               fontFamily: mono,
               fontSize: '0.65rem',
-              color: '#D4AF37',
+              color: isDark ? '#D4AF37' : '#8A6A09',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
               mt: 0.5,
@@ -132,9 +134,9 @@ function RadialResourceDial({ value, max = 100, label, subtext, metricText, stat
             fontSize: '0.68rem',
             fontFamily: mono,
             fontWeight: 800,
-            bgcolor: 'rgba(212, 175, 55, 0.12)',
-            color: '#F5E6AB',
-            border: '1px solid rgba(212, 175, 55, 0.35)',
+            bgcolor: isDark ? 'rgba(212, 175, 55, 0.12)' : '#FEF9E7',
+            color: isDark ? '#F5E6AB' : '#8A6A09',
+            border: `1px solid ${isDark ? 'rgba(212, 175, 55, 0.35)' : '#E2CE82'}`,
             mt: 0.5,
             mb: 0.8,
           }}
@@ -142,7 +144,7 @@ function RadialResourceDial({ value, max = 100, label, subtext, metricText, stat
       )}
 
       {subtext && (
-        <Typography variant="caption" sx={{ color: '#94A3B8', fontSize: '0.78rem', lineHeight: 1.4, maxWidth: 220 }}>
+        <Typography variant="caption" sx={{ color: isDark ? '#94A3B8' : '#475467', fontSize: '0.78rem', lineHeight: 1.4, maxWidth: 220 }}>
           {subtext}
         </Typography>
       )}
@@ -199,7 +201,7 @@ export default function ZothOSPage() {
     accent: isDark ? '#D4AF37' : '#B8860B',
     soft: isDark ? '#F5E6AB' : '#8A6A09',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-    border: isDark ? 'rgba(212,175,55,0.32)' : '#F0E1A8',
+    border: isDark ? 'rgba(212,175,55,0.32)' : '#E2CE82',
   };
 
   // Scroll to bottom when terminal updates
@@ -644,8 +646,8 @@ export default function ZothOSPage() {
                   label="Core Load"
                   statusBadge={cpuConfigs[cpuPreset].label}
                   subtext={cpuConfigs[cpuPreset].freq}
-                  accentColor="#D4AF37"
-                  glowColor="rgba(212, 175, 55, 0.45)"
+                  accentColor={isDark ? '#D4AF37' : '#B8860B'}
+                  glowColor={isDark ? 'rgba(212, 175, 55, 0.45)' : 'rgba(184, 134, 11, 0.25)'}
                 />
 
                 <Box sx={{ mt: 2, pt: 1.5, borderTop: `1px solid ${theme.palette.divider}`, width: '100%', textAlign: 'center' }}>
@@ -665,7 +667,7 @@ export default function ZothOSPage() {
                           fontSize: '0.72rem',
                           fontWeight: 800,
                           bgcolor: cpuPreset === k ? gold.accent : gold.wash,
-                          color: cpuPreset === k ? '#08080B' : gold.soft,
+                          color: cpuPreset === k ? (isDark ? '#08080B' : '#FFFFFF') : gold.soft,
                           border: `1px solid ${cpuPreset === k ? gold.accent : gold.border}`,
                         }}
                       />
@@ -706,8 +708,8 @@ export default function ZothOSPage() {
                   label="Active In-Use"
                   statusBadge={`${ramAllocation} MB ALLOCATED`}
                   subtext="Zero-Leak Enclave Buffer with AES-256 Encrypted Swap"
-                  accentColor="#38BDF8"
-                  glowColor="rgba(56, 189, 248, 0.45)"
+                  accentColor={isDark ? '#38BDF8' : '#0284C7'}
+                  glowColor={isDark ? 'rgba(56, 189, 248, 0.45)' : 'rgba(2, 132, 199, 0.25)'}
                 />
 
                 <Box sx={{ mt: 2, pt: 1.5, borderTop: `1px solid ${theme.palette.divider}`, width: '100%', textAlign: 'center' }}>
@@ -729,9 +731,9 @@ export default function ZothOSPage() {
                           fontFamily: mono,
                           fontSize: '0.72rem',
                           fontWeight: 800,
-                          bgcolor: ramAllocation === sz ? '#38BDF8' : gold.wash,
-                          color: ramAllocation === sz ? '#08080B' : gold.soft,
-                          border: `1px solid ${ramAllocation === sz ? '#38BDF8' : gold.border}`,
+                          bgcolor: ramAllocation === sz ? (isDark ? '#38BDF8' : '#0284C7') : gold.wash,
+                          color: ramAllocation === sz ? '#FFFFFF' : gold.soft,
+                          border: `1px solid ${ramAllocation === sz ? (isDark ? '#38BDF8' : '#0284C7') : gold.border}`,
                         }}
                       />
                     ))}
@@ -758,7 +760,7 @@ export default function ZothOSPage() {
                 }}
               >
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%', mb: 1 }}>
-                  <LockIcon sx={{ color: '#34D399', fontSize: 20 }} />
+                  <LockIcon sx={{ color: isDark ? '#34D399' : '#059669', fontSize: 20 }} />
                   <Typography variant="subtitle2" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
                     Zero-Egress Kernel Module
                   </Typography>
@@ -771,8 +773,8 @@ export default function ZothOSPage() {
                   label="Loopback Locked"
                   statusBadge="AIR-GAP STRICT"
                   subtext="All Outbound SYN dropped. Interfaces isolated to lo & kvm-br0"
-                  accentColor="#34D399"
-                  glowColor="rgba(52, 211, 153, 0.45)"
+                  accentColor={isDark ? '#34D399' : '#059669'}
+                  glowColor={isDark ? 'rgba(52, 211, 153, 0.45)' : 'rgba(5, 150, 105, 0.25)'}
                 />
 
                 <Box sx={{ mt: 2, pt: 1.5, borderTop: `1px solid ${theme.palette.divider}`, width: '100%', textAlign: 'center' }}>
@@ -789,11 +791,11 @@ export default function ZothOSPage() {
                       fontFamily: mono,
                       fontSize: '0.72rem',
                       fontWeight: 800,
-                      color: '#34D399',
-                      borderColor: 'rgba(52, 211, 153, 0.4)',
+                      color: isDark ? '#34D399' : '#027A48',
+                      borderColor: isDark ? 'rgba(52, 211, 153, 0.4)' : '#A6F4C5',
                       '&:hover': {
-                        borderColor: '#34D399',
-                        bgcolor: 'rgba(52, 211, 153, 0.1)',
+                        borderColor: isDark ? '#34D399' : '#059669',
+                        bgcolor: isDark ? 'rgba(52, 211, 153, 0.1)' : '#ECFDF3',
                       },
                     }}
                   >
@@ -845,8 +847,8 @@ export default function ZothOSPage() {
             onClick={() => terminalInputRef.current?.focus()}
             sx={{
               borderRadius: 2.5,
-              border: `1px solid ${isDark ? 'rgba(212,175,55,0.38)' : '#D4AF37'}`,
-              bgcolor: '#08080B',
+              border: `1px solid ${isDark ? 'rgba(212,175,55,0.38)' : 'rgba(184,134,11,0.35)'}`,
+              bgcolor: isDark ? '#08080B' : '#0B0F19',
               overflow: 'hidden',
               boxShadow: isDark
                 ? '0 0 0 1px rgba(212,175,55,0.18), 0 12px 32px -4px rgba(0,0,0,0.9), 0 0 24px -4px rgba(212,175,55,0.22)'
@@ -858,7 +860,7 @@ export default function ZothOSPage() {
               sx={{
                 px: 2,
                 py: 1.2,
-                bgcolor: '#0D0D14',
+                bgcolor: isDark ? '#0D0D14' : '#111827',
                 borderBottom: '1px solid rgba(212, 175, 55, 0.2)',
                 display: 'flex',
                 alignItems: 'center',
@@ -904,7 +906,7 @@ export default function ZothOSPage() {
               sx={{
                 px: 2,
                 py: 1,
-                bgcolor: '#0A0A10',
+                bgcolor: isDark ? '#0A0A10' : '#0F172A',
                 borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
                 display: 'flex',
                 alignItems: 'center',
@@ -1187,8 +1189,8 @@ export default function ZothOSPage() {
         <Grid container spacing={3}>
           <Grid xs={12} md={6}>
             <Paper sx={{ p: 3, bgcolor: isDark ? '#0B0B12' : '#0F172A', color: '#F8FAFC', borderRadius: 2, border: `1px solid ${isDark ? '#2A2A38' : '#1E293B'}`, height: '100%' }}>
-              <Typography className="section-kicker" sx={{ color: '#F5E6AB' }}>QEMU / KVM Virtual Machine Launcher</Typography>
-              <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2 }}>
+              <Typography className="section-kicker" sx={{ color: isDark ? '#F5E6AB' : '#FDE047' }}>QEMU / KVM Virtual Machine Launcher</Typography>
+              <Typography variant="body2" sx={{ color: isDark ? '#94A3B8' : '#CBD5E1', mb: 2 }}>
                 Run Zoth OS inside a hardware-accelerated local sandbox:
               </Typography>
               <Box sx={{ p: 2, bgcolor: '#020617', borderRadius: 1.5, fontFamily: mono, fontSize: '0.85rem', color: '#F5E6AB', mb: 2, wordBreak: 'break-all', border: '1px solid rgba(212, 175, 55, 0.2)' }}>
@@ -1212,8 +1214,8 @@ export default function ZothOSPage() {
 
           <Grid xs={12} md={6}>
             <Paper sx={{ p: 3, bgcolor: isDark ? '#0B0B12' : '#0F172A', color: '#F8FAFC', borderRadius: 2, border: `1px solid ${isDark ? '#2A2A38' : '#1E293B'}`, height: '100%' }}>
-              <Typography className="section-kicker" sx={{ color: '#F5E6AB' }}>Flash Bare Metal USB ISO</Typography>
-              <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2 }}>
+              <Typography className="section-kicker" sx={{ color: isDark ? '#F5E6AB' : '#FDE047' }}>Flash Bare Metal USB ISO</Typography>
+              <Typography variant="body2" sx={{ color: isDark ? '#94A3B8' : '#CBD5E1', mb: 2 }}>
                 Flash the bootable ISO directly to a USB drive:
               </Typography>
               <Box sx={{ p: 2, bgcolor: '#020617', borderRadius: 1.5, fontFamily: mono, fontSize: '0.85rem', color: '#F5E6AB', mb: 2, wordBreak: 'break-all', border: '1px solid rgba(212, 175, 55, 0.2)' }}>
@@ -1245,9 +1247,9 @@ export default function ZothOSPage() {
         fullWidth
         PaperProps={{
           sx: {
-            bgcolor: '#08080B',
+            bgcolor: isDark ? '#08080B' : '#0F172A',
             color: '#EDEFF2',
-            border: '1px solid rgba(212, 175, 55, 0.4)',
+            border: `1px solid ${isDark ? 'rgba(212, 175, 55, 0.4)' : '#E2CE82'}`,
             boxShadow: '0 0 35px rgba(212, 175, 55, 0.25)',
             borderRadius: 2.5,
           },
@@ -1280,7 +1282,7 @@ export default function ZothOSPage() {
             <Chip label="GRUB2-EFI SECUREBOOT" size="small" sx={{ bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8', fontWeight: 800, fontFamily: mono }} />
           </Box>
 
-          <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2 }}>
+          <Typography variant="body2" sx={{ color: isDark ? '#94A3B8' : '#CBD5E1', mb: 2 }}>
             This cryptographic manifest links the bare-metal bootloader to isolated enclave invariants. The checksums below match verified Zoth OS v2 ISO and QEMU images.
           </Typography>
 
@@ -1315,7 +1317,7 @@ export default function ZothOSPage() {
             }}
             sx={{
               borderColor: 'rgba(212, 175, 55, 0.4)',
-              color: '#F5E6AB',
+              color: isDark ? '#F5E6AB' : '#FDE047',
               fontWeight: 700,
               '&:hover': { borderColor: '#D4AF37', bgcolor: 'rgba(212, 175, 55, 0.1)' },
             }}

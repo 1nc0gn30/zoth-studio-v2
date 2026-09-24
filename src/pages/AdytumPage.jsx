@@ -1116,7 +1116,7 @@ export function AdytumEngine({ embedded = false }) {
                     boxShadow: dark ? 'none' : '0 2px 8px rgba(16,24,40,0.04)',
                   }}
                 >
-                  <Chip label="STEP 1" size="small" sx={{ bgcolor: gold, color: '#101828', fontWeight: 800, mb: 1 }} />
+                  <Chip label="STEP 1" size="small" sx={{ bgcolor: dark ? '#D4AF37' : '#B8860B', color: dark ? '#101828' : '#FFFFFF', fontWeight: 800, mb: 1 }} />
                   <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? goldLight : '#101828', mb: 0.5 }}>
                     Select / Draw Tarot Key
                   </Typography>
@@ -1137,7 +1137,7 @@ export function AdytumEngine({ embedded = false }) {
                     boxShadow: dark ? 'none' : '0 2px 8px rgba(16,24,40,0.04)',
                   }}
                 >
-                  <Chip label="STEP 2" size="small" sx={{ bgcolor: gold, color: '#101828', fontWeight: 800, mb: 1 }} />
+                  <Chip label="STEP 2" size="small" sx={{ bgcolor: dark ? '#D4AF37' : '#B8860B', color: dark ? '#101828' : '#FFFFFF', fontWeight: 800, mb: 1 }} />
                   <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? goldLight : '#101828', mb: 0.5 }}>
                     Formulate Intention
                   </Typography>
@@ -1158,7 +1158,7 @@ export function AdytumEngine({ embedded = false }) {
                     boxShadow: dark ? 'none' : '0 2px 8px rgba(16,24,40,0.04)',
                   }}
                 >
-                  <Chip label="STEP 3" size="small" sx={{ bgcolor: gold, color: '#101828', fontWeight: 800, mb: 1 }} />
+                  <Chip label="STEP 3" size="small" sx={{ bgcolor: dark ? '#D4AF37' : '#B8860B', color: dark ? '#101828' : '#FFFFFF', fontWeight: 800, mb: 1 }} />
                   <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? goldLight : '#101828', mb: 0.5 }}>
                     5-Minute Incubation Window
                   </Typography>
@@ -1179,7 +1179,7 @@ export function AdytumEngine({ embedded = false }) {
                     boxShadow: dark ? 'none' : '0 2px 8px rgba(16,24,40,0.04)',
                   }}
                 >
-                  <Chip label="STEP 4" size="small" sx={{ bgcolor: gold, color: '#101828', fontWeight: 800, mb: 1 }} />
+                  <Chip label="STEP 4" size="small" sx={{ bgcolor: dark ? '#D4AF37' : '#B8860B', color: dark ? '#101828' : '#FFFFFF', fontWeight: 800, mb: 1 }} />
                   <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? goldLight : '#101828', mb: 0.5 }}>
                     Oracle Evaluation &amp; Gate Seal
                   </Typography>
@@ -1337,7 +1337,7 @@ export function AdytumEngine({ embedded = false }) {
                         top: 6,
                         left: 6,
                         bgcolor: 'rgba(8,8,11,0.9)',
-                        color: gold,
+                        color: '#F5E6AB',
                         px: 1,
                         py: 0.25,
                         borderRadius: 0.5,
@@ -1353,7 +1353,7 @@ export function AdytumEngine({ embedded = false }) {
                       {isUnlocked ? (
                         <Chip label="SEALED" size="small" sx={{ height: 20, fontSize: '0.65rem', fontWeight: 800, bgcolor: 'rgba(52,211,153,0.9)', color: '#101828' }} />
                       ) : isCurrent ? (
-                        <Chip label="ACTIVE" size="small" sx={{ height: 20, fontSize: '0.65rem', fontWeight: 800, bgcolor: gold, color: '#101828' }} />
+                        <Chip label="ACTIVE" size="small" sx={{ height: 20, fontSize: '0.65rem', fontWeight: 800, bgcolor: dark ? '#D4AF37' : '#B8860B', color: dark ? '#101828' : '#FFFFFF' }} />
                       ) : null}
                     </Box>
                   </Box>
@@ -1412,7 +1412,7 @@ export function AdytumEngine({ embedded = false }) {
                           top: 4,
                           left: 4,
                           bgcolor: 'rgba(8,8,11,0.9)',
-                          color: gold,
+                          color: '#F5E6AB',
                           px: 0.8,
                           py: 0.2,
                           borderRadius: 0.5,
@@ -1470,13 +1470,13 @@ export function AdytumEngine({ embedded = false }) {
                   fontFamily: mono,
                   fontWeight: 750,
                   fontSize: '0.74rem',
-                  bgcolor: isCurrent ? gold : isUnlocked ? (dark ? 'rgba(52,211,153,0.16)' : '#ECFDF3') : (dark ? '#1A1A24' : '#F1F5F9'),
-                  color: isCurrent ? '#101828' : isUnlocked ? (dark ? '#34D399' : '#027A48') : textSecondary,
+                  bgcolor: isCurrent ? (dark ? '#D4AF37' : '#B8860B') : isUnlocked ? (dark ? 'rgba(52,211,153,0.16)' : '#ECFDF3') : (dark ? '#1A1A24' : '#F1F5F9'),
+                  color: isCurrent ? (dark ? '#101828' : '#FFFFFF') : isUnlocked ? (dark ? '#34D399' : '#027A48') : textSecondary,
                   border: '1px solid',
-                  borderColor: isCurrent ? gold : isUnlocked ? (dark ? 'rgba(52,211,153,0.4)' : '#A6F4C5') : divider,
+                  borderColor: isCurrent ? (dark ? '#D4AF37' : '#B8860B') : isUnlocked ? (dark ? 'rgba(52,211,153,0.4)' : '#A6F4C5') : divider,
                   opacity: isSelectable ? 1 : 0.45,
                   '&:hover': {
-                    bgcolor: isCurrent ? '#E5C158' : isUnlocked ? (dark ? 'rgba(52,211,153,0.25)' : '#D1FADF') : (dark ? '#262635' : '#E2E8F0'),
+                    bgcolor: isCurrent ? (dark ? '#E5C158' : '#9A7209') : isUnlocked ? (dark ? 'rgba(52,211,153,0.25)' : '#D1FADF') : (dark ? '#262635' : '#E2E8F0'),
                   },
                 }}
               />
@@ -1681,7 +1681,7 @@ export function AdytumEngine({ embedded = false }) {
                   color: '#101828',
                   fontWeight: 800,
                   '&:hover': { bgcolor: '#E5C158' },
-                  '&.Mui-disabled': { bgcolor: dark ? 'rgba(212,175,55,0.2)' : 'rgba(0,0,0,0.12)', color: dark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.26)' },
+                  '&.Mui-disabled': { bgcolor: dark ? 'rgba(212,175,55,0.2)' : 'rgba(0,0,0,0.08)', color: dark ? 'rgba(255,255,255,0.4)' : 'rgba(16,24,40,0.38)' },
                 }}
               >
                 {plan.startedAt ? (incubated ? 'Incubation Fulfilled' : 'Incubating Intention...') : 'Start 5-Minute Incubation'}
@@ -1740,17 +1740,23 @@ export function AdytumEngine({ embedded = false }) {
                     bgcolor: surface,
                     '& fieldset': { borderColor: dark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.3)' },
                   },
+                  '& select': {
+                    bgcolor: surface,
+                    color: textPrimary,
+                  },
                 }}
                 disabled={!models.length}
               >
                 {models.length > 0 ? (
                   models.map((name) => (
-                    <option key={name} value={name}>
+                    <option key={name} value={name} style={{ backgroundColor: dark ? '#0B0B12' : '#FFFFFF', color: dark ? '#EDEFF2' : '#101828' }}>
                       Local Ollama: {name}
                     </option>
                   ))
                 ) : (
-                  <option value="">Zero-Egress Hermetic Evaluator (In-Browser)</option>
+                  <option value="" style={{ backgroundColor: dark ? '#0B0B12' : '#FFFFFF', color: dark ? '#EDEFF2' : '#101828' }}>
+                    Zero-Egress Hermetic Evaluator (In-Browser)
+                  </option>
                 )}
               </TextField>
 
@@ -1764,7 +1770,7 @@ export function AdytumEngine({ embedded = false }) {
                   color: '#101828',
                   fontWeight: 800,
                   '&:hover': { bgcolor: '#E5C158' },
-                  '&.Mui-disabled': { bgcolor: dark ? 'rgba(212,175,55,0.2)' : 'rgba(0,0,0,0.12)', color: dark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.26)' },
+                  '&.Mui-disabled': { bgcolor: dark ? 'rgba(212,175,55,0.2)' : 'rgba(0,0,0,0.08)', color: dark ? 'rgba(255,255,255,0.4)' : 'rgba(16,24,40,0.38)' },
                 }}
               >
                 {busy
@@ -1783,7 +1789,7 @@ export function AdytumEngine({ embedded = false }) {
                   borderColor: dark ? gold : '#B8860B',
                   color: dark ? gold : '#8A6A09',
                   '&:hover': { borderColor: goldLight, bgcolor: goldBg },
-                  '&.Mui-disabled': { borderColor: dark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)', color: dark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.26)' },
+                  '&.Mui-disabled': { borderColor: dark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)', color: dark ? 'rgba(255,255,255,0.3)' : 'rgba(16,24,40,0.35)' },
                 }}
               >
                 {plan.current === 21 && entry.gate ? 'Rite Completed' : 'Proceed to Next Key →'}

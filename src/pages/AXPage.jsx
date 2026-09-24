@@ -403,7 +403,7 @@ export default function AXPage() {
     accent: isDark ? '#D4AF37' : '#B8860B',
     soft: isDark ? '#F5E6AB' : '#8A6A09',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-    border: isDark ? 'rgba(212,175,55,0.35)' : '#F0E1A8',
+    border: isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.25)',
   };
 
   const axSpec = {
@@ -487,7 +487,7 @@ export default function AXPage() {
             sx={{ bgcolor: gold.wash, color: gold.accent, border: `1px solid ${gold.border}`, fontWeight: 800, px: 1 }}
           />
           <Chip label="SCHEMA: https://schema.org/SoftwareApplication" size="small" variant="outlined" sx={{ fontFamily: mono, fontSize: '0.72rem' }} />
-          <Chip label="OWASP ZERO-EGRESS RATIFIED" size="small" sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5', color: '#10B981', fontWeight: 800, border: '1px solid rgba(16,185,129,0.3)' }} />
+          <Chip label="OWASP ZERO-EGRESS RATIFIED" size="small" sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5', color: isDark ? '#10B981' : '#047857', fontWeight: 800, border: isDark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0' }} />
         </Box>
         <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontWeight: 800, mb: 1.5, letterSpacing: '-0.02em' }}>
           Agent Experience Directory &amp; Machine Discovery
@@ -580,7 +580,7 @@ export default function AXPage() {
         <Chip
           label="CORS: Access-Control-Allow-Origin: *"
           size="small"
-          sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.1)' : '#ECFDF5', color: '#10B981', fontWeight: 800, fontFamily: mono }}
+          sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.1)' : '#ECFDF5', color: isDark ? '#10B981' : '#047857', fontWeight: 800, fontFamily: mono, border: isDark ? 'none' : '1px solid #A7F3D0' }}
         />
       </Paper>
 
@@ -623,10 +623,10 @@ export default function AXPage() {
           </Box>
 
           <Chip
-            icon={<SecurityIcon sx={{ color: '#10B981 !important' }} />}
+            icon={<SecurityIcon sx={{ color: `${isDark ? '#10B981' : '#047857'} !important` }} />}
             label="Zero-Egress Gateway Active"
             size="small"
-            sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.1)' : '#ECFDF5', color: '#10B981', fontWeight: 700 }}
+            sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.1)' : '#ECFDF5', color: isDark ? '#10B981' : '#047857', fontWeight: 700, border: isDark ? 'none' : '1px solid #A7F3D0' }}
           />
         </Box>
 
@@ -645,9 +645,9 @@ export default function AXPage() {
                 onChange={(e) => setSelectedAgent(e.target.value)}
                 sx={{
                   fontFamily: mono,
-                  bgcolor: isDark ? '#0D0E15' : '#F8FAFC',
+                  bgcolor: isDark ? '#0D0E15' : '#FFFFFF',
                   '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: gold.border,
+                    borderColor: isDark ? gold.border : 'rgba(0,0,0,0.2)',
                   },
                 }}
               >
@@ -676,9 +676,9 @@ export default function AXPage() {
                 onChange={(e) => setSelectedEndpoint(e.target.value)}
                 sx={{
                   fontFamily: mono,
-                  bgcolor: isDark ? '#0D0E15' : '#F8FAFC',
+                  bgcolor: isDark ? '#0D0E15' : '#FFFFFF',
                   '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: gold.border,
+                    borderColor: isDark ? gold.border : 'rgba(0,0,0,0.2)',
                   },
                 }}
               >
@@ -720,7 +720,7 @@ export default function AXPage() {
           sx={{
             p: 2.5,
             borderRadius: 2.5,
-            border: `1px solid ${isDark ? '#1E2230' : '#E2E8F0'}`,
+            border: `1px solid ${isDark ? '#1E2230' : theme.palette.divider}`,
             bgcolor: isDark ? '#040406' : '#F8FAFC',
           }}
         >
@@ -732,11 +732,11 @@ export default function AXPage() {
                 size="small"
                 sx={{
                   bgcolor: isDark ? 'rgba(16,185,129,0.18)' : '#ECFDF5',
-                  color: '#10B981',
+                  color: isDark ? '#10B981' : '#047857',
                   fontFamily: mono,
                   fontWeight: 900,
                   fontSize: '0.75rem',
-                  border: '1px solid rgba(16,185,129,0.4)',
+                  border: isDark ? '1px solid rgba(16,185,129,0.4)' : '1px solid #A7F3D0',
                 }}
               />
               <Chip
@@ -744,10 +744,11 @@ export default function AXPage() {
                 size="small"
                 sx={{
                   bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF',
-                  color: '#0284C7',
+                  color: isDark ? '#38BDF8' : '#0284C7',
                   fontFamily: mono,
                   fontWeight: 800,
                   fontSize: '0.72rem',
+                  border: isDark ? 'none' : '1px solid #BAE6FD',
                 }}
               />
               <Chip
@@ -767,8 +768,9 @@ export default function AXPage() {
                 sx={{
                   fontFamily: mono,
                   fontSize: '0.7rem',
-                  bgcolor: isDark ? '#13151F' : '#E2E8F0',
+                  bgcolor: isDark ? '#13151F' : '#F1F5F9',
                   color: theme.palette.text.secondary,
+                  border: `1px solid ${theme.palette.divider}`,
                 }}
               />
             </Box>
@@ -811,7 +813,7 @@ export default function AXPage() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  bgcolor: isDark ? 'rgba(212,175,55,0.2)' : '#F5E6AB',
+                  bgcolor: isDark ? 'rgba(212,175,55,0.2)' : '#FEF3C7',
                   color: gold.accent,
                   border: `2px solid ${gold.accent}`,
                   flexShrink: 0
@@ -830,10 +832,11 @@ export default function AXPage() {
                     sx={{
                       height: 20,
                       bgcolor: isDark ? 'rgba(16,185,129,0.2)' : '#D1FAE5',
-                      color: '#059669',
+                      color: isDark ? '#34D399' : '#047857',
                       fontFamily: mono,
                       fontSize: '0.65rem',
                       fontWeight: 800,
+                      border: isDark ? 'none' : '1px solid #A7F3D0',
                     }}
                   />
                 </Box>
@@ -848,12 +851,49 @@ export default function AXPage() {
             </Typography>
           </Box>
 
+          {/* Quick Terminal Curl Command Snippet */}
+          <Paper
+            sx={{
+              p: 1.5,
+              mb: 2,
+              bgcolor: isDark ? '#0A0D15' : '#0F172A',
+              color: '#E2E8F0',
+              fontFamily: mono,
+              fontSize: '0.78rem',
+              borderRadius: 1.5,
+              border: isDark ? '1px solid #1E2230' : '1px solid #334155',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 1,
+              overflowX: 'auto',
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+              <TerminalIcon sx={{ fontSize: '1rem', color: gold.accent }} />
+              <span style={{ color: '#94A3B8' }}>$</span>
+              <span style={{ color: isDark ? '#34D399' : '#4ADE80', fontWeight: 750 }}>curl</span>
+              <span>-s -H &quot;User-Agent: {selectedAgent}&quot; http://127.0.0.1:3000{selectedEndpoint}</span>
+            </Box>
+            <Tooltip title="Copy curl command">
+              <IconButton
+                size="small"
+                onClick={() => {
+                  navigator.clipboard.writeText(`curl -s -H "User-Agent: ${selectedAgent}" http://127.0.0.1:3000${selectedEndpoint}`);
+                }}
+                sx={{ color: '#94A3B8', '&:hover': { color: '#FFFFFF' } }}
+              >
+                <ContentCopyIcon sx={{ fontSize: '0.85rem' }} />
+              </IconButton>
+            </Tooltip>
+          </Paper>
+
           {/* Simulated HTTP Response Headers breakdown */}
           <Paper
             sx={{
               p: 1.5,
               mb: 2,
-              bgcolor: isDark ? '#08080B' : '#1E293B',
+              bgcolor: isDark ? '#08080B' : '#0F172A',
               color: '#94A3B8',
               fontFamily: mono,
               fontSize: '0.74rem',
@@ -864,10 +904,10 @@ export default function AXPage() {
             <div>HTTP/1.1 200 OK</div>
             <div>Date: Thu, 24 Sep 2026 04:26:42 GMT</div>
             <div>Server: Zoth-Zero-Egress-Enclave/2.0 (Linux x86_64 air-gapped)</div>
-            <div style={{ color: '#10B981', fontWeight: 700 }}>Access-Control-Allow-Origin: *</div>
+            <div style={{ color: isDark ? '#10B981' : '#34D399', fontWeight: 700 }}>Access-Control-Allow-Origin: *</div>
             <div>Content-Type: {currentEndpointData.mime}</div>
             <div>Content-Length: {currentEndpointData.sizeBytes} bytes</div>
-            <div style={{ color: gold.accent }}>X-Agent-User-Agent: {selectedAgent}</div>
+            <div style={{ color: isDark ? '#D4AF37' : '#FCD34D' }}>X-Agent-User-Agent: {selectedAgent}</div>
             <div style={{ color: '#38BDF8' }}>X-Zero-Egress-Status: verified-zero-telemetry</div>
           </Paper>
 
@@ -876,12 +916,12 @@ export default function AXPage() {
             sx={{
               p: 2.5,
               bgcolor: isDark ? '#08080B' : '#0F172A',
-              color: '#38BDF8',
+              color: isDark ? '#38BDF8' : '#7DD3FC',
               fontFamily: mono,
               fontSize: '0.82rem',
               whiteSpace: 'pre-wrap',
               borderRadius: 2,
-              border: `1px solid ${isDark ? '#1E2230' : '#1E293B'}`,
+              border: `1px solid ${isDark ? '#1E2230' : '#334155'}`,
               maxHeight: 420,
               overflowY: 'auto',
             }}
@@ -953,8 +993,8 @@ export default function AXPage() {
             sx={{
               fontFamily: mono,
               '& .MuiOutlinedInput-root': {
-                bgcolor: isDark ? '#0D0E15' : '#F8FAFC',
-                '& fieldset': { borderColor: gold.border },
+                bgcolor: isDark ? '#0D0E15' : '#FFFFFF',
+                '& fieldset': { borderColor: isDark ? gold.border : 'rgba(0,0,0,0.2)' },
               },
             }}
           />
@@ -977,9 +1017,9 @@ export default function AXPage() {
                   fontFamily: mono,
                   fontSize: '0.72rem',
                   cursor: 'pointer',
-                  bgcolor: agentTask === preset.task ? gold.wash : (isDark ? '#141622' : '#F1F5F9'),
-                  color: agentTask === preset.task ? gold.accent : theme.palette.text.secondary,
-                  border: `1px solid ${agentTask === preset.task ? gold.accent : (isDark ? '#262A3B' : '#E2E8F0')}`,
+                  bgcolor: agentTask === preset.task ? gold.wash : (isDark ? '#141622' : '#F8FAFC'),
+                  color: agentTask === preset.task ? gold.accent : (isDark ? '#94A3B8' : '#334155'),
+                  border: `1px solid ${agentTask === preset.task ? gold.accent : (isDark ? '#262A3B' : '#CBD5E1')}`,
                   '&:hover': {
                     bgcolor: gold.wash,
                     color: gold.accent,
@@ -1013,7 +1053,7 @@ export default function AXPage() {
           sx={{
             p: 2.5,
             borderRadius: 2.5,
-            border: `1px solid ${isDark ? '#1E2230' : '#E2E8F0'}`,
+            border: `1px solid ${isDark ? '#1E2230' : theme.palette.divider}`,
             bgcolor: isDark ? '#040406' : '#F8FAFC',
           }}
         >
@@ -1034,12 +1074,12 @@ export default function AXPage() {
                 label={`~${Math.ceil(synthesizedPrompt.length / 4)} tokens`}
                 size="small"
                 variant="outlined"
-                sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: gold.border }}
+                sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: gold.border, color: gold.accent }}
               />
               <Chip
                 label="Invariants: OWASP Air-Gapped Strict"
                 size="small"
-                sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.1)' : '#ECFDF5', color: '#10B981', fontWeight: 700, fontSize: '0.72rem' }}
+                sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.1)' : '#ECFDF5', color: isDark ? '#10B981' : '#047857', fontWeight: 700, fontSize: '0.72rem', border: isDark ? 'none' : '1px solid #A7F3D0' }}
               />
             </Box>
 
@@ -1059,12 +1099,12 @@ export default function AXPage() {
             sx={{
               p: 2.5,
               bgcolor: isDark ? '#08080B' : '#0F172A',
-              color: '#38BDF8',
+              color: isDark ? '#38BDF8' : '#7DD3FC',
               fontFamily: mono,
               fontSize: '0.82rem',
               whiteSpace: 'pre-wrap',
               borderRadius: 2,
-              border: `1px solid ${isDark ? '#1E2230' : '#1E293B'}`,
+              border: `1px solid ${isDark ? '#1E2230' : '#334155'}`,
               maxHeight: 480,
               overflowY: 'auto',
             }}
@@ -1083,19 +1123,19 @@ export default function AXPage() {
               <Typography variant="h6" sx={{ fontWeight: 800, color: gold.accent }}>
                 Machine-Readable Ontology Manifest
               </Typography>
-              <Chip label="Valid Schema.org" size="small" sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5', color: '#10B981', fontWeight: 800 }} />
+              <Chip label="Valid Schema.org" size="small" sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5', color: isDark ? '#10B981' : '#047857', fontWeight: 800, border: isDark ? 'none' : '1px solid #A7F3D0' }} />
             </Box>
 
             <Paper
               sx={{
                 p: 2.5,
                 bgcolor: isDark ? '#08080B' : '#0F172A',
-                color: '#38BDF8',
+                color: isDark ? '#38BDF8' : '#7DD3FC',
                 fontFamily: mono,
                 fontSize: '0.82rem',
                 whiteSpace: 'pre-wrap',
                 borderRadius: 2,
-                border: `1px solid ${isDark ? '#1E2230' : '#1E293B'}`,
+                border: `1px solid ${isDark ? '#1E2230' : '#334155'}`,
                 maxHeight: 520,
                 overflowY: 'auto',
               }}
@@ -1118,18 +1158,18 @@ export default function AXPage() {
               </Typography>
 
               <Table size="small">
-                <TableHead sx={{ bgcolor: isDark ? 'rgba(212,175,55,0.06)' : '#F8FAFC' }}>
+                <TableHead sx={{ bgcolor: isDark ? 'rgba(212,175,55,0.06)' : '#F1F5F9' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 800 }}>Service</TableCell>
-                    <TableCell sx={{ fontWeight: 800 }}>Loopback Bind</TableCell>
-                    <TableCell sx={{ fontWeight: 800 }}>Enclave Guarantee</TableCell>
+                    <TableCell sx={{ fontWeight: 800, color: theme.palette.text.primary }}>Service</TableCell>
+                    <TableCell sx={{ fontWeight: 800, color: theme.palette.text.primary }}>Loopback Bind</TableCell>
+                    <TableCell sx={{ fontWeight: 800, color: theme.palette.text.primary }}>Enclave Guarantee</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {enclaveBinds.map((item) => (
                     <TableRow key={item.service}>
                       <TableCell sx={{ fontWeight: 700 }}>{item.service}</TableCell>
-                      <TableCell sx={{ fontFamily: mono, color: gold.accent, fontSize: '0.8rem' }}>{item.bind}</TableCell>
+                      <TableCell sx={{ fontFamily: mono, color: gold.accent, fontWeight: 750, fontSize: '0.8rem' }}>{item.bind}</TableCell>
                       <TableCell sx={{ fontSize: '0.8rem', color: 'text.secondary' }}>{item.note}</TableCell>
                     </TableRow>
                   ))}
