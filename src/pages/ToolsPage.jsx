@@ -422,6 +422,100 @@ export default function ToolsPage() {
           );
         })}
       </Grid>
+
+      {/* SOVEREIGN TOOLS SUITE INSTALLATION FUNNEL */}
+      <Paper
+        sx={{
+          mt: 6,
+          p: { xs: 3, md: 4.5 },
+          borderRadius: 3,
+          border: `1px solid ${isDark ? 'rgba(212,175,55,0.45)' : 'rgba(184,134,11,0.35)'}`,
+          bgcolor: isDark ? '#0B0B12' : '#0F172A',
+          color: '#FFFFFF',
+          boxShadow: isDark ? '0 12px 40px rgba(0,0,0,0.6)' : '0 12px 32px rgba(0,0,0,0.15)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 1.5 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <RocketLaunchIcon sx={{ color: gold.accent, fontSize: '1.8rem' }} />
+            <Box>
+              <Typography variant="h5" sx={{ fontWeight: 800, color: '#FFFFFF' }}>
+                Need the Complete Air-Gapped Sovereign Suite?
+              </Typography>
+              <Typography variant="body2" sx={{ color: '#94A3B8' }}>
+                Clone Zoth Studio v2 to run all 29 tools offline with local models, or boot Zoth OS for bare-metal security parity.
+              </Typography>
+            </Box>
+          </Box>
+          <Chip
+            label="100% ZERO-EGRESS AIR-GAPPED"
+            size="small"
+            sx={{ bgcolor: gold.wash, color: gold.accent, border: `1px solid ${gold.accent}`, fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
+          />
+        </Box>
+
+        <Grid container spacing={3} sx={{ mt: 1 }}>
+          <Grid xs={12} md={6}>
+            <Box sx={{ p: 2.5, height: '100%', bgcolor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 2, display: 'flex', flexDirection: 'column' }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: gold.soft, mb: 0.5 }}>
+                Option 1: Clone Zoth Studio v2 (Workstation Cockpit)
+              </Typography>
+              <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2, flexGrow: 1, fontSize: '0.85rem' }}>
+                Includes all 29 micro-tools, local WebGPU inference, STDP memory vector daemon, and Byzantine agent consensus.
+              </Typography>
+              <Box sx={{ p: 1.2, mb: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: '#38BDF8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  git clone https://github.com/NullAITech/zoth-studio-v2.git
+                </Typography>
+                <IconButton size="small" onClick={() => handleCopy('git clone https://github.com/NullAITech/zoth-studio-v2.git', 'studio-funnel')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
+                  <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                </IconButton>
+              </Box>
+              <Button
+                component="a"
+                href="https://github.com/NullAITech/zoth-studio-v2"
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="contained"
+                sx={{ bgcolor: gold.accent, color: '#08080B', fontWeight: 800, '&:hover': { bgcolor: gold.soft } }}
+              >
+                {copiedId === 'studio-funnel' ? 'Command Copied!' : 'View Zoth Studio v2 Repo ↗'}
+              </Button>
+            </Box>
+          </Grid>
+
+          <Grid xs={12} md={6}>
+            <Box sx={{ p: 2.5, height: '100%', bgcolor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 2, display: 'flex', flexDirection: 'column' }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#34D399', mb: 0.5 }}>
+                Option 2: Boot Sovereign Zoth OS (Bare-Metal ISO)
+              </Typography>
+              <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2, flexGrow: 1, fontSize: '0.85rem' }}>
+                Alchemical Linux operating system based on KDE Plasma 6 with Kali/Parrot security arsenal and Tor Ghostmode.
+              </Typography>
+              <Box sx={{ p: 1.2, mb: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: '#34D399', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  https://github.com/NullAITech/zoth-os
+                </Typography>
+                <IconButton size="small" onClick={() => handleCopy('https://github.com/NullAITech/zoth-os', 'os-funnel')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
+                  <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                </IconButton>
+              </Box>
+              <Button
+                component="a"
+                href="https://github.com/NullAITech/zoth-os"
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="outlined"
+                sx={{ borderColor: '#34D399', color: '#34D399', fontWeight: 800, '&:hover': { bgcolor: 'rgba(52,211,153,0.1)' } }}
+              >
+                {copiedId === 'os-funnel' ? 'Link Copied!' : 'Explore & Install Zoth OS ↗'}
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
+      </Paper>
     </Container>
   );
 }

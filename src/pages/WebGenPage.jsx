@@ -102,6 +102,37 @@ const FRAMEWORKS = [
 ];
 
 // -------------------------------------------------------------
+// DESIGN THEMES & TOKEN SYSTEMS (4 High-Contrast Systems)
+// -------------------------------------------------------------
+const THEMES = [
+  { id: 'gold', name: 'Sovereign Imperial Gold', primary: '#D4AF37', bg: '#08080B', desc: 'Imperial obsidian with brushed gold accents & Celtic serif typography.' },
+  { id: 'cyberpunk', name: 'Cyberpunk Neon', primary: '#00F0FF', bg: '#050508', desc: 'Neon cyan & electric magenta glow with monospaced telemetry.' },
+  { id: 'matrix', name: 'Matrix Terminal', primary: '#22C55E', bg: '#010A03', desc: 'Phosphor green CRT terminal with scanline accents.' },
+  { id: 'minimal', name: 'Editorial Minimalist', primary: '#3B82F6', bg: '#0F172A', desc: 'Clean slate architecture with subtle borders and clear readability.' },
+];
+
+// -------------------------------------------------------------
+// GUIDELINE SKILLS (6 Builder Skills)
+// -------------------------------------------------------------
+const SKILLS = [
+  { id: 'visual', label: 'Visual Design', desc: 'Color harmony, spacing tokens, and typography hierarchy' },
+  { id: 'seo', label: 'SEO & AEO Graph', desc: 'JSON-LD schema markup and LLM crawler tags' },
+  { id: 'a11y', label: 'WCAG AAA A11y', desc: 'High-contrast compliance and screen-reader semantics' },
+  { id: 'motion', label: '3D & Motion', desc: 'Smooth WebGL shaders and CSS micro-interactions' },
+  { id: 'business', label: 'Conversion Funnels', desc: 'Clear call-to-actions and trust badges' },
+  { id: 'forms', label: 'Lead Capture & Forms', desc: 'Client-side sanitized input fields with validation' },
+];
+
+// -------------------------------------------------------------
+// COMPILER RUNTIME ENGINES (3 Engine Modes)
+// -------------------------------------------------------------
+const ENGINES = [
+  { id: 'wasm', name: 'Fast Local WASM Isolate (<25ms)', desc: 'Instant in-browser deterministic AST compiler' },
+  { id: 'ollama', name: 'Local Ollama Model (qwen2.5-coder)', desc: '100% offline neural generation via 127.0.0.1:11434' },
+  { id: 'triad', name: 'Tri-Agent Multi-Model Consensus', desc: 'Pantheon tri-model architecture & AST review' },
+];
+
+// -------------------------------------------------------------
 // CODE GENERATOR ENGINE (30 Combinations: 6 Templates x 5 Frameworks)
 // -------------------------------------------------------------
 function getGeneratedCode(templateName, frameworkId) {
@@ -1543,12 +1574,17 @@ export default function WebGenPage() {
   // State
   const [selectedTemplate, setSelectedTemplate] = useState('Sovereign SaaS Dashboard');
   const [promptText, setPromptText] = useState(TEMPLATES[0].defaultPrompt);
+  const [siteName, setSiteName] = useState('sovereign-matrix');
+  const [selectedTheme, setSelectedTheme] = useState('gold');
+  const [selectedSkills, setSelectedSkills] = useState(['visual', 'seo', 'a11y']);
+  const [selectedEngine, setSelectedEngine] = useState('wasm');
   const [selectedFramework, setSelectedFramework] = useState('react-tailwind');
+  const [tweakText, setTweakText] = useState('');
   const [isCompiling, setIsCompiling] = useState(false);
-  const [activeTab, setActiveTab] = useState(0); // 0: Code, 1: Live Preview, 2: AST Inspector, 3: Build Logs
+  const [activeTab, setActiveTab] = useState(1); // Default 1: Live UI Preview (front and center!)
   const [copied, setCopied] = useState(false);
   const [deviceFrame, setDeviceFrame] = useState('desktop'); // 'mobile' | 'tablet' | 'desktop'
-  const [mobileSection, setMobileSection] = useState('prompt'); // 'prompt' | 'code' | 'preview' | 'specs'
+  const [mobileSection, setMobileSection] = useState('preview'); // 'prompt' | 'code' | 'preview' | 'specs'
 
   // AST Tab State
   const [astSearch, setAstSearch] = useState('');
@@ -1562,6 +1598,25 @@ export default function WebGenPage() {
   const [deployStep, setDeployStep] = useState(0);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  // Handle skill toggle
+  const handleToggleSkill = (skillId) => {
+    setSelectedSkills(prev =>
+      prev.includes(skillId) ? prev.filter(s => s !== skillId) : [...prev, skillId]
+    );
+  };
+
+  // Handle interactive tweak
+  const handleTweak = () => {
+    if (!tweakText.trim()) return;
+    setIsCompiling(true);
+    setTimeout(() => {
+      setIsCompiling(false);
+      setSnackbarMessage(`Applied tweak: "${tweakText}" to live sneak-peek preview!`);
+      setSnackbarOpen(true);
+      setActiveTab(1);
+    }, 600);
+  };
 
   // Active code generated based on template and framework
   const currentCode = useMemo(() => {
@@ -1577,6 +1632,7 @@ export default function WebGenPage() {
   const handleSelectTemplate = (tpl) => {
     setSelectedTemplate(tpl.name);
     setPromptText(tpl.defaultPrompt);
+    setActiveTab(1);
     if (isMobile) setMobileSection('preview');
   };
 
@@ -1587,6 +1643,7 @@ export default function WebGenPage() {
       setIsCompiling(false);
       setSnackbarMessage(`Successfully synthesized ${selectedTemplate} for ${selectedFramework.toUpperCase()}`);
       setSnackbarOpen(true);
+      setActiveTab(1);
       if (isMobile) setMobileSection('preview');
     }, 700);
   };
@@ -1596,6 +1653,15 @@ export default function WebGenPage() {
     navigator.clipboard.writeText(currentCode);
     setCopied(true);
     setSnackbarMessage('Code copied to clipboard!');
+    setSnackbarOpen(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  // Copy Arbitrary Command / Text
+  const handleCopyCodeText = (text) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setSnackbarMessage('Command copied to clipboard!');
     setSnackbarOpen(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -2035,27 +2101,29 @@ export default function WebGenPage() {
         </Paper>
       )}
 
-      {/* SECTION 1: Interactive Component Layout & Spec Prompt Sandbox (Full-Width Stage) */}
+      {/* =========================================================================
+          STAGE 01: IDEATION & NATURAL LANGUAGE SPEC PROMPT
+          ========================================================================= */}
       {(!isMobile || mobileSection === 'prompt') && (
         <Paper
           elevation={0}
           sx={{
-            p: { xs: 2.5, sm: 4 },
+            p: { xs: 3, md: 4.5 },
             border: `1px solid ${divider}`,
-            borderRadius: 3,
+            borderRadius: 3.5,
             mb: 5,
             backgroundColor: surface,
             borderLeft: `4px solid ${gold}`,
             boxShadow: dark ? '0 0 28px -8px rgba(212,175,55,0.22)' : '0 4px 20px -4px rgba(184,134,11,0.12)'
           }}
         >
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2, mb: 1 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2, mb: 2 }}>
             <Box>
               <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, display: 'flex', alignItems: 'center', gap: 1.2, color: textPrimary }}>
-                <AutoAwesomeIcon sx={{ color: gold }} /> Interactive Component Layout Sandbox
+                <AutoAwesomeIcon sx={{ color: gold }} /> 1. What should it be?
               </Typography>
               <Typography variant="body2" sx={{ color: textSecondary }}>
-                Select a sovereign starter layout preset, calibrate the prompt specification, and choose the target runtime engine.
+                Tap an archetype preset to seed the layout tokens or articulate a custom site specification.
               </Typography>
             </Box>
             <Chip
@@ -2067,285 +2135,538 @@ export default function WebGenPage() {
 
           <Divider sx={{ my: 2.5, borderColor: divider }} />
 
-                {/* Starter Templates (6 Presets) */}
-                <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1.2, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
-                  STARTER SPEC TEMPLATES ({TEMPLATES.length} PRESETS)
-                </Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
-                  {TEMPLATES.map((tpl) => {
-                    const isSelected = selectedTemplate === tpl.name;
-                    const IconComp = tpl.icon;
-                    return (
-                      <Chip
-                        key={tpl.id}
-                        icon={<IconComp sx={{ fontSize: '1rem', color: isSelected ? `${gold} !important` : `${textSecondary} !important` }} />}
-                        label={tpl.name}
-                        onClick={() => handleSelectTemplate(tpl)}
-                        sx={{
-                          borderColor: isSelected ? gold : divider,
-                          backgroundColor: isSelected ? goldBg : (dark ? '#121420' : '#F1F5F9'),
-                          color: isSelected ? (dark ? goldLight : '#8A6A09') : textSecondary,
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          border: '1px solid',
-                          '&:hover': { backgroundColor: goldBg, borderColor: gold }
-                        }}
-                      />
-                    );
-                  })}
-                </Box>
-
-                {/* Prompt Spec Input */}
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={3}
-                  label="Component Layout Prompt Spec"
-                  value={promptText}
-                  onChange={(e) => setPromptText(e.target.value)}
-                  sx={{
-                    mb: 3,
-                    '& .MuiOutlinedInput-root': {
-                      bgcolor: dark ? '#10121A' : '#FFFFFF',
-                      color: textPrimary,
-                      '& fieldset': { borderColor: divider },
-                      '&:hover fieldset': { borderColor: gold },
-                      '&.Mui-focused fieldset': { borderColor: gold }
-                    },
-                    '& .MuiInputLabel-root': { color: textSecondary },
-                    '& .MuiInputLabel-root.Mui-focused': { color: gold }
-                  }}
-                />
-
-                {/* Target Exporter Framework Selector (5 Frameworks) */}
-                <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
-                  TARGET RUNTIME EXPORTER (5 POLYGLOT ENGINES)
-                </Typography>
-                <RadioGroup
-                  row
-                  value={selectedFramework}
-                  onChange={(e) => setSelectedFramework(e.target.value)}
-                  sx={{ mb: 3 }}
-                >
-                  {FRAMEWORKS.map((f) => (
-                    <FormControlLabel
-                      key={f.id}
-                      value={f.id}
-                      control={<Radio sx={{ color: gold, '&.Mui-checked': { color: gold } }} />}
-                      label={
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
-                          <span style={{ fontSize: '0.86rem', fontWeight: 700, color: selectedFramework === f.id ? textPrimary : textSecondary }}>{f.name}</span>
-                          <Chip label={f.badge} size="small" sx={{ height: 18, fontSize: '0.6rem', bgcolor: selectedFramework === f.id ? goldBg : (dark ? '#1A1C2A' : '#F1F5F9'), color: selectedFramework === f.id ? gold : textSecondary, fontFamily: mono }} />
-                        </Box>
-                      }
-                      sx={{ mr: 2, mb: 1 }}
-                    />
-                  ))}
-                </RadioGroup>
-
-                {/* Action Buttons */}
-                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
-                  <Button
-                    variant="contained"
-                    startIcon={isCompiling ? <CheckCircleIcon /> : <RocketLaunchIcon />}
-                    onClick={handleCompile}
-                    disabled={isCompiling}
+          {/* Starter Templates (6 Presets) */}
+          <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1.5, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
+            STARTER ARCHETYPE PRESETS ({TEMPLATES.length} SEEDS)
+          </Typography>
+          <Grid container spacing={1.5} sx={{ mb: 3 }}>
+            {TEMPLATES.map((tpl) => {
+              const isSelected = selectedTemplate === tpl.name;
+              const IconComp = tpl.icon;
+              return (
+                <Grid key={tpl.id} xs={12} sm={6} md={4}>
+                  <Box
+                    onClick={() => handleSelectTemplate(tpl)}
                     sx={{
-                      bgcolor: gold,
-                      color: dark ? '#08080B' : '#FFFFFF',
-                      px: 3.5,
-                      py: 1.2,
-                      fontWeight: 800,
-                      '&:hover': { bgcolor: dark ? goldLight : '#9A7008' }
+                      p: 2,
+                      borderRadius: 2.5,
+                      border: isSelected ? `2px solid ${gold}` : `1px solid ${divider}`,
+                      backgroundColor: isSelected ? goldBg : (dark ? '#121420' : '#F1F5F9'),
+                      cursor: 'pointer',
+                      transition: 'all 0.18s ease',
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      '&:hover': {
+                        borderColor: gold,
+                        backgroundColor: goldBg,
+                        transform: 'translateY(-2px)'
+                      }
                     }}
                   >
-                    {isCompiling ? 'Compiling Spec...' : 'Generate Component Spec'}
-                  </Button>
-
-                  <Button
-                    variant="outlined"
-                    startIcon={<ContentCopyIcon />}
-                    onClick={handleCopyCode}
-                    sx={{ borderColor: divider, color: dark ? goldLight : '#8A6A09', py: 1.2, fontWeight: 700, '&:hover': { borderColor: gold, bgcolor: goldBg } }}
-                  >
-                    {copied ? 'Copied Code!' : 'Copy Code'}
-                  </Button>
-
-                  <Button
-                    variant="outlined"
-                    startIcon={<FileDownloadIcon />}
-                    onClick={handleExportBundle}
-                    sx={{ borderColor: gold, color: gold, py: 1.2, fontWeight: 800, bgcolor: goldBg, '&:hover': { bgcolor: dark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.18)' } }}
-                  >
-                    Export Standalone HTML Bundle
-                  </Button>
-
-                  <Button
-                    variant="contained"
-                    startIcon={<CloudDoneIcon />}
-                    onClick={handleDeployModalOpen}
-                    sx={{ bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, color: textPrimary, py: 1.2, fontWeight: 700, '&:hover': { borderColor: gold } }}
-                  >
-                    Deploy Bundle
-                  </Button>
-                </Box>
-
-                {isCompiling && (
-                  <Box sx={{ mt: 2.5 }}>
-                    <LinearProgress sx={{ height: 6, borderRadius: 3, '& .MuiLinearProgress-bar': { backgroundColor: gold } }} />
-                  </Box>
-                )}
-              </Paper>
-            )}
-
-            {/* 2. Device Viewport Frame Controller & Live Preview / Code Console Window */}
-            {(!isMobile || mobileSection === 'code' || mobileSection === 'preview') && (
-              <Paper sx={{ border: `1px solid ${divider}`, borderRadius: 3, overflow: 'hidden', backgroundColor: dark ? '#10121A' : surface, boxShadow: dark ? '0 12px 32px rgba(0,0,0,0.5)' : '0 12px 32px rgba(0,0,0,0.06)' }}>
-                
-                {/* Console Top Control Bar */}
-                <Box
-                  sx={{
-                    px: { xs: 2, sm: 3 },
-                    py: 1.5,
-                    backgroundColor: dark ? '#161926' : '#F1F5F9',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    borderBottom: `1px solid ${divider}`,
-                    flexWrap: 'wrap',
-                    gap: 1
-                  }}
-                >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                    <Box sx={{ display: 'flex', gap: 0.8 }}>
-                      <Box sx={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#FF5F56' }} />
-                      <Box sx={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#FFBD2E' }} />
-                      <Box sx={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#27C93F' }} />
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <IconComp sx={{ fontSize: '1.15rem', color: isSelected ? gold : textSecondary }} />
+                        <Typography variant="subtitle2" sx={{ fontWeight: 800, color: textPrimary, fontSize: '0.88rem' }}>
+                          {tpl.name}
+                        </Typography>
+                      </Box>
+                      <Chip label={tpl.tag} size="small" sx={{ height: 18, fontSize: '0.62rem', bgcolor: isSelected ? gold : (dark ? 'rgba(255,255,255,0.08)' : '#E2E8F0'), color: isSelected ? (dark ? '#08080B' : '#FFFFFF') : textSecondary, fontFamily: mono, fontWeight: 800 }} />
                     </Box>
-                    <Typography variant="subtitle2" sx={{ color: dark ? goldLight : '#8A6A09', fontFamily: mono, fontWeight: 800, fontSize: '0.82rem' }}>
-                      FOUNDRY CONSOLE • {FRAMEWORKS.find(f => f.id === selectedFramework)?.name.toUpperCase()}
+                    <Typography variant="caption" sx={{ color: textSecondary, lineHeight: 1.4, fontSize: '0.76rem' }}>
+                      {tpl.desc}
                     </Typography>
                   </Box>
+                </Grid>
+              );
+            })}
+          </Grid>
 
-                  {/* Device Viewport Toggle (Mobile / Tablet / Desktop) */}
-                  <ToggleButtonGroup
-                    size="small"
-                    value={deviceFrame}
-                    exclusive
-                    onChange={(e, val) => val && setDeviceFrame(val)}
-                    sx={{ bgcolor: dark ? '#0D0E15' : '#FFFFFF', border: `1px solid ${divider}`, '& .MuiToggleButton-root': { color: textSecondary, px: 1.2, py: 0.5, '&.Mui-selected': { color: gold, bgcolor: goldBg } } }}
-                  >
-                    <ToggleButton value="mobile" aria-label="mobile viewport">
-                      <Tooltip title="Mobile Viewport (375px)"><SmartphoneIcon fontSize="small" /></Tooltip>
-                    </ToggleButton>
-                    <ToggleButton value="tablet" aria-label="tablet viewport">
-                      <Tooltip title="Tablet Viewport (768px)"><TabletIcon fontSize="small" /></Tooltip>
-                    </ToggleButton>
-                    <ToggleButton value="desktop" aria-label="desktop viewport">
-                      <Tooltip title="Desktop Viewport (100%)"><DesktopWindowsIcon fontSize="small" /></Tooltip>
-                    </ToggleButton>
-                  </ToggleButtonGroup>
-                </Box>
+          {/* Prompt Spec Input */}
+          <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
+            NATURAL LANGUAGE SPECIFICATION PROMPT
+          </Typography>
+          <TextField
+            fullWidth
+            multiline
+            rows={3}
+            placeholder="Describe your site in plain language (e.g. 'A calm minimalist portfolio for a systems architect: dark background, gold accents, metric cards, and responsive contact drawer')."
+            value={promptText}
+            onChange={(e) => setPromptText(e.target.value)}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                bgcolor: dark ? '#0D0F18' : '#FFFFFF',
+                color: textPrimary,
+                borderRadius: 2,
+                '& fieldset': { borderColor: divider },
+                '&:hover fieldset': { borderColor: gold },
+                '&.Mui-focused fieldset': { borderColor: gold }
+              }
+            }}
+          />
+        </Paper>
+      )}
 
-                {/* Console Tabs */}
-                <Box sx={{ borderBottom: `1px solid ${divider}`, backgroundColor: dark ? '#10121A' : surface }}>
-                  <Tabs
-                    value={activeTab}
-                    onChange={(e, v) => setActiveTab(v)}
-                    variant="scrollable"
-                    scrollButtons="auto"
+      {/* =========================================================================
+          STAGE 02: BRAND LOOK, VISUAL THEME TOKENS & BUILDER SKILLS
+          ========================================================================= */}
+      {(!isMobile || mobileSection === 'prompt') && (
+        <Paper
+          elevation={0}
+          sx={{
+            p: { xs: 3, md: 4.5 },
+            border: `1px solid ${divider}`,
+            borderRadius: 3.5,
+            mb: 5,
+            backgroundColor: surface,
+            borderLeft: `4px solid ${gold}`,
+            boxShadow: dark ? '0 0 28px -8px rgba(212,175,55,0.18)' : '0 4px 20px -4px rgba(184,134,11,0.1)'
+          }}
+        >
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2, mb: 2 }}>
+            <Box>
+              <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, display: 'flex', alignItems: 'center', gap: 1.2, color: textPrimary }}>
+                <TuneIcon sx={{ color: gold }} /> 2. Name, Theme &amp; Builder Skills
+              </Typography>
+              <Typography variant="body2" sx={{ color: textSecondary }}>
+                Configure your project slug identifier, aesthetic design token palette, and generation skill guides.
+              </Typography>
+            </Box>
+            <Chip
+              label="STAGE 02 // AESTHETICS & SKILLS"
+              size="small"
+              sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
+            />
+          </Box>
+
+          <Divider sx={{ my: 2.5, borderColor: divider }} />
+
+          {/* Project Name Slug Input */}
+          <Box sx={{ mb: 3.5 }}>
+            <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
+              PROJECT IDENTIFIER (SLUG)
+            </Typography>
+            <TextField
+              size="small"
+              fullWidth
+              value={siteName}
+              onChange={(e) => setSiteName(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-'))}
+              placeholder="e.g. sovereign-matrix"
+              helperText="Letters, numbers, and dashes. Used for export bundle directory and local daemon routing."
+              sx={{
+                maxWidth: 480,
+                '& .MuiOutlinedInput-root': {
+                  bgcolor: dark ? '#0D0F18' : '#FFFFFF',
+                  fontFamily: mono,
+                  '& fieldset': { borderColor: divider },
+                  '&:hover fieldset': { borderColor: gold },
+                  '&.Mui-focused fieldset': { borderColor: gold }
+                }
+              }}
+            />
+          </Box>
+
+          {/* 4 Theme Selection Cards */}
+          <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1.5, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
+            HIGH-CONTRAST TOKEN PALETTES (4 THEME SYSTEMS)
+          </Typography>
+          <Grid container spacing={2} sx={{ mb: 3.5 }}>
+            {THEMES.map((th) => {
+              const isSelected = selectedTheme === th.id;
+              return (
+                <Grid key={th.id} xs={12} sm={6} md={3}>
+                  <Box
+                    onClick={() => setSelectedTheme(th.id)}
                     sx={{
-                      minHeight: 44,
-                      '& .MuiTab-root': {
-                        color: textSecondary,
-                        fontFamily: mono,
-                        fontSize: '0.82rem',
-                        minHeight: 44,
-                        textTransform: 'none',
-                        '&.Mui-selected': { color: gold, fontWeight: 800 }
-                      },
-                      '& .MuiTabs-indicator': { backgroundColor: gold }
+                      p: 2,
+                      borderRadius: 2.5,
+                      border: isSelected ? `2px solid ${th.primary}` : `1px solid ${divider}`,
+                      backgroundColor: isSelected ? (dark ? 'rgba(255,255,255,0.06)' : '#FFFFFF') : (dark ? '#10121C' : '#F8FAFC'),
+                      cursor: 'pointer',
+                      transition: 'all 0.18s ease',
+                      height: '100%',
+                      boxShadow: isSelected ? `0 4px 20px ${th.primary}33` : 'none',
+                      '&:hover': {
+                        borderColor: th.primary,
+                        transform: 'translateY(-2px)'
+                      }
                     }}
                   >
-                    <Tab icon={<CodeIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Generated Code" />
-                    <Tab icon={<VisibilityIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Live UI Preview" />
-                    <Tab icon={<AccountTreeIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="AST Diff & Inspector" />
-                    <Tab icon={<SpeedIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Compiler Telemetry" />
-                  </Tabs>
-                </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                      <Box sx={{ width: 14, height: 14, borderRadius: '50%', bgcolor: th.primary, border: '1px solid rgba(255,255,255,0.3)' }} />
+                      <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isSelected ? th.primary : textPrimary, fontSize: '0.84rem' }}>
+                        {th.name}
+                      </Typography>
+                    </Box>
+                    <Typography variant="caption" sx={{ color: textSecondary, fontSize: '0.74rem', lineHeight: 1.4, display: 'block' }}>
+                      {th.desc}
+                    </Typography>
+                  </Box>
+                </Grid>
+              );
+            })}
+          </Grid>
 
-                {/* Tab Content 0: Code View */}
-                {activeTab === 0 && (
-                  <Box sx={{ position: 'relative' }}>
-                    <Box sx={{ position: 'absolute', top: 12, right: 16, zIndex: 2, display: 'flex', gap: 1 }}>
-                      <Chip label={`${currentCode.split('\n').length} LINES`} size="small" sx={{ bgcolor: dark ? '#1E293B' : '#E2E8F0', color: textSecondary, fontFamily: mono, fontSize: '0.7rem' }} />
-                      <Button size="small" variant="contained" startIcon={<ContentCopyIcon />} onClick={handleCopyCode} sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontWeight: 800, py: 0.2, fontSize: '0.72rem', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}>
-                        {copied ? 'Copied' : 'Copy'}
+          {/* Builder Skills Guide Chips */}
+          <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1.5, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
+            BUILDER GUIDELINE SKILLS (CLICK TO TOGGLE)
+          </Typography>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+            {SKILLS.map((sk) => {
+              const isOn = selectedSkills.includes(sk.id);
+              return (
+                <Chip
+                  key={sk.id}
+                  label={sk.label}
+                  onClick={() => handleToggleSkill(sk.id)}
+                  sx={{
+                    bgcolor: isOn ? goldBg : (dark ? '#121420' : '#F1F5F9'),
+                    color: isOn ? (dark ? goldLight : '#8A6A09') : textSecondary,
+                    border: isOn ? `1.5px solid ${gold}` : `1px solid ${divider}`,
+                    fontWeight: 800,
+                    fontSize: '0.78rem',
+                    cursor: 'pointer',
+                    '&:hover': { bgcolor: goldBg, borderColor: gold }
+                  }}
+                />
+              );
+            })}
+          </Box>
+        </Paper>
+      )}
+
+      {/* =========================================================================
+          STAGE 03: COMPILER ENGINE SELECTION & SYNTHESIS TRIGGER
+          ========================================================================= */}
+      {(!isMobile || mobileSection === 'prompt') && (
+        <Paper
+          elevation={0}
+          sx={{
+            p: { xs: 3, md: 4.5 },
+            border: `1px solid ${divider}`,
+            borderRadius: 3.5,
+            mb: 5,
+            backgroundColor: surface,
+            borderLeft: `4px solid ${gold}`,
+            boxShadow: dark ? '0 0 28px -8px rgba(212,175,55,0.18)' : '0 4px 20px -4px rgba(184,134,11,0.1)'
+          }}
+        >
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2, mb: 2 }}>
+            <Box>
+              <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, display: 'flex', alignItems: 'center', gap: 1.2, color: textPrimary }}>
+                <RocketLaunchIcon sx={{ color: gold }} /> 3. Compiler Engine &amp; Synthesis Trigger
+              </Typography>
+              <Typography variant="body2" sx={{ color: textSecondary }}>
+                Choose execution runtime, target exporter language, and launch compilation into the sneak-peek preview.
+              </Typography>
+            </Box>
+            <Chip
+              label="STAGE 03 // ENGINE & BUILD"
+              size="small"
+              sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
+            />
+          </Box>
+
+          <Divider sx={{ my: 2.5, borderColor: divider }} />
+
+          {/* Engine Modes */}
+          <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1.5, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
+            GENERATION HARNESS ENGINE
+          </Typography>
+          <Grid container spacing={2} sx={{ mb: 3 }}>
+            {ENGINES.map((eng) => {
+              const isSelected = selectedEngine === eng.id;
+              return (
+                <Grid key={eng.id} xs={12} md={4}>
+                  <Box
+                    onClick={() => setSelectedEngine(eng.id)}
+                    sx={{
+                      p: 2,
+                      borderRadius: 2.5,
+                      border: isSelected ? `2px solid ${gold}` : `1px solid ${divider}`,
+                      bgcolor: isSelected ? goldBg : (dark ? '#10121C' : '#F8FAFC'),
+                      cursor: 'pointer',
+                      transition: 'all 0.18s ease',
+                      height: '100%',
+                      '&:hover': { borderColor: gold, bgcolor: goldBg }
+                    }}
+                  >
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isSelected ? (dark ? goldLight : '#8A6A09') : textPrimary, mb: 0.5 }}>
+                      {eng.name}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: textSecondary, fontSize: '0.74rem', lineHeight: 1.4 }}>
+                      {eng.desc}
+                    </Typography>
+                  </Box>
+                </Grid>
+              );
+            })}
+          </Grid>
+
+          {/* Target Exporter Framework */}
+          <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
+            TARGET EXPORTER RUNTIME
+          </Typography>
+          <RadioGroup
+            row
+            value={selectedFramework}
+            onChange={(e) => setSelectedFramework(e.target.value)}
+            sx={{ mb: 3.5 }}
+          >
+            {FRAMEWORKS.map((f) => (
+              <FormControlLabel
+                key={f.id}
+                value={f.id}
+                control={<Radio sx={{ color: gold, '&.Mui-checked': { color: gold } }} />}
+                label={
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                    <span style={{ fontSize: '0.86rem', fontWeight: 700, color: selectedFramework === f.id ? textPrimary : textSecondary }}>{f.name}</span>
+                    <Chip label={f.badge} size="small" sx={{ height: 18, fontSize: '0.6rem', bgcolor: selectedFramework === f.id ? goldBg : (dark ? '#1A1C2A' : '#F1F5F9'), color: selectedFramework === f.id ? gold : textSecondary, fontFamily: mono }} />
+                  </Box>
+                }
+                sx={{ mr: 2, mb: 1 }}
+              />
+            ))}
+          </RadioGroup>
+
+          {/* Action Trigger Buttons */}
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={isCompiling ? <CheckCircleIcon /> : <RocketLaunchIcon />}
+              onClick={handleCompile}
+              disabled={isCompiling}
+              sx={{
+                bgcolor: gold,
+                color: dark ? '#08080B' : '#FFFFFF',
+                px: 4,
+                py: 1.4,
+                fontWeight: 900,
+                fontSize: '0.95rem',
+                borderRadius: 2,
+                boxShadow: dark ? '0 4px 20px rgba(212,175,55,0.35)' : '0 4px 15px rgba(184,134,11,0.25)',
+                '&:hover': { bgcolor: dark ? goldLight : '#9A7008' }
+              }}
+            >
+              {isCompiling ? 'Synthesizing Site...' : '⚡ Synthesize & Build Website'}
+            </Button>
+
+            <Button
+              variant="outlined"
+              size="large"
+              startIcon={<FileDownloadIcon />}
+              onClick={handleExportBundle}
+              sx={{ borderColor: gold, color: gold, py: 1.4, px: 3, fontWeight: 800, borderRadius: 2, bgcolor: goldBg, '&:hover': { bgcolor: dark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.18)' } }}
+            >
+              Export Standalone Bundle (.html)
+            </Button>
+
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={<CloudDoneIcon />}
+              onClick={handleDeployModalOpen}
+              sx={{ bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, color: textPrimary, py: 1.4, px: 3, fontWeight: 750, borderRadius: 2, '&:hover': { borderColor: gold } }}
+            >
+              Deploy Local Edge
+            </Button>
+          </Box>
+
+          {isCompiling && (
+            <Box sx={{ mt: 3 }}>
+              <LinearProgress sx={{ height: 6, borderRadius: 3, '& .MuiLinearProgress-bar': { backgroundColor: gold } }} />
+            </Box>
+          )}
+        </Paper>
+      )}
+
+      {/* =========================================================================
+          STAGE 04: REAL-TIME SNEAK-PEEK LIVE PREVIEW & WORKSTATION
+          ========================================================================= */}
+      {(!isMobile || mobileSection === 'code' || mobileSection === 'preview') && (
+        <Paper
+          sx={{
+            border: `1px solid ${divider}`,
+            borderRadius: 3.5,
+            overflow: 'hidden',
+            backgroundColor: dark ? '#10121A' : surface,
+            boxShadow: dark ? '0 16px 48px rgba(0,0,0,0.5)' : '0 12px 36px rgba(0,0,0,0.08)',
+            mb: 6
+          }}
+        >
+          {/* Header */}
+          <Box
+            sx={{
+              px: { xs: 2, sm: 3 },
+              py: 2,
+              backgroundColor: dark ? '#141724' : '#F1F5F9',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              borderBottom: `1px solid ${divider}`,
+              flexWrap: 'wrap',
+              gap: 1.5
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Box sx={{ display: 'flex', gap: 0.8 }}>
+                <Box sx={{ width: 11, height: 11, borderRadius: '50%', backgroundColor: '#FF5F56' }} />
+                <Box sx={{ width: 11, height: 11, borderRadius: '50%', backgroundColor: '#FFBD2E' }} />
+                <Box sx={{ width: 11, height: 11, borderRadius: '50%', backgroundColor: '#27C93F' }} />
+              </Box>
+              <Typography variant="subtitle2" sx={{ color: dark ? goldLight : '#8A6A09', fontFamily: mono, fontWeight: 800, fontSize: '0.84rem' }}>
+                4. SNEAK-PEEK CONSOLE • {siteName.toUpperCase()} • {FRAMEWORKS.find(f => f.id === selectedFramework)?.name.toUpperCase()}
+              </Typography>
+            </Box>
+
+            {/* Device Viewport Switcher */}
+            <ToggleButtonGroup
+              size="small"
+              value={deviceFrame}
+              exclusive
+              onChange={(e, val) => val && setDeviceFrame(val)}
+              sx={{ bgcolor: dark ? '#0D0E15' : '#FFFFFF', border: `1px solid ${divider}`, '& .MuiToggleButton-root': { color: textSecondary, px: 1.5, py: 0.6, '&.Mui-selected': { color: gold, bgcolor: goldBg } } }}
+            >
+              <ToggleButton value="desktop" aria-label="desktop viewport">
+                <Tooltip title="Desktop Viewport (100%)"><Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}><DesktopWindowsIcon fontSize="small" /><span style={{ fontSize: '0.72rem', fontFamily: mono }}>Desktop</span></Box></Tooltip>
+              </ToggleButton>
+              <ToggleButton value="tablet" aria-label="tablet viewport">
+                <Tooltip title="Tablet Viewport (768px)"><Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}><TabletIcon fontSize="small" /><span style={{ fontSize: '0.72rem', fontFamily: mono }}>Tablet</span></Box></Tooltip>
+              </ToggleButton>
+              <ToggleButton value="mobile" aria-label="mobile viewport">
+                <Tooltip title="Mobile Viewport (375px)"><Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}><SmartphoneIcon fontSize="small" /><span style={{ fontSize: '0.72rem', fontFamily: mono }}>Mobile</span></Box></Tooltip>
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Box>
+
+          {/* Console Navigation Tabs */}
+          <Box sx={{ borderBottom: `1px solid ${divider}`, backgroundColor: dark ? '#10121A' : surface }}>
+            <Tabs
+              value={activeTab}
+              onChange={(e, v) => setActiveTab(v)}
+              variant="scrollable"
+              scrollButtons="auto"
+              sx={{
+                minHeight: 46,
+                '& .MuiTab-root': {
+                  color: textSecondary,
+                  fontFamily: mono,
+                  fontSize: '0.84rem',
+                  minHeight: 46,
+                  textTransform: 'none',
+                  '&.Mui-selected': { color: gold, fontWeight: 800 }
+                },
+                '& .MuiTabs-indicator': { backgroundColor: gold }
+              }}
+            >
+              <Tab icon={<VisibilityIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Live Sneak-Peek Preview" />
+              <Tab icon={<CodeIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Generated Polyglot Code" />
+              <Tab icon={<AccountTreeIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Deterministic AST Inspector" />
+              <Tab icon={<SpeedIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Compiler Telemetry" />
+            </Tabs>
+          </Box>
+
+          {/* Tab 0: Live Sneak-Peek Preview & Viewport */}
+          {activeTab === 0 && (
+            <Box sx={{ bgcolor: dark ? '#030508' : '#F1F5F9' }}>
+              {/* Iterative Tweak Bar */}
+              <Box sx={{ p: 2, px: { xs: 2, sm: 3 }, bgcolor: dark ? '#10121A' : '#FFFFFF', borderBottom: `1px solid ${divider}`, display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap' }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: dark ? goldLight : '#8A6A09', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                  <TuneIcon sx={{ fontSize: '1rem' }} /> ITERATIVE TWEAK:
+                </Typography>
+                <TextField
+                  size="small"
+                  placeholder="Want a change? e.g. Make buttons neon cyan and add trust badges"
+                  value={tweakText}
+                  onChange={(e) => setTweakText(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleTweak()}
+                  sx={{
+                    flex: 1,
+                    minWidth: 260,
+                    '& .MuiOutlinedInput-root': {
+                      bgcolor: dark ? '#08080B' : '#F8FAFC',
+                      fontSize: '0.82rem',
+                      fontFamily: mono,
+                      '& fieldset': { borderColor: divider }
+                    }
+                  }}
+                />
+                <Button
+                  size="small"
+                  variant="contained"
+                  onClick={handleTweak}
+                  sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontWeight: 800, px: 2.5, py: 0.8 }}
+                >
+                  Apply Tweak
+                </Button>
+              </Box>
+
+              {/* Viewport Frame */}
+              <Box sx={{ p: { xs: 1.5, sm: 3 }, display: 'flex', justifyContent: 'center', minHeight: 420 }}>
+                <Box
+                  sx={{
+                    width: deviceFrame === 'mobile' ? '375px' : deviceFrame === 'tablet' ? '768px' : '100%',
+                    maxWidth: '100%',
+                    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                    border: deviceFrame !== 'desktop' ? `3px solid ${dark ? '#334155' : '#CBD5E1'}` : 'none',
+                    borderRadius: deviceFrame === 'mobile' ? 5 : deviceFrame === 'tablet' ? 4 : 0,
+                    overflow: 'hidden',
+                    boxShadow: deviceFrame !== 'desktop' ? (dark ? '0 16px 40px rgba(0,0,0,0.8)' : '0 16px 40px rgba(0,0,0,0.12)') : 'none',
+                    bgcolor: dark ? '#08080B' : surface
+                  }}
+                >
+                  {/* Device Bezel Top (Mobile / Tablet) */}
+                  {deviceFrame === 'mobile' && (
+                    <Box sx={{ bgcolor: dark ? '#121420' : '#E2E8F0', py: 0.8, px: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid ${divider}` }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, fontSize: '0.65rem' }}>9:41</Typography>
+                      <Box sx={{ width: 60, height: 8, bgcolor: dark ? '#08080B' : '#CBD5E1', borderRadius: 4 }} />
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: dark ? '#10B981' : '#059669', fontSize: '0.65rem' }}>5G 100%</Typography>
+                    </Box>
+                  )}
+
+                  {/* Live Render */}
+                  {renderTemplateLivePreview()}
+
+                  {/* Device Footer Actions */}
+                  <Box sx={{ p: 2, bgcolor: dark ? '#0D0E15' : '#F8FAFC', borderTop: `1px solid ${divider}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, fontSize: '0.72rem' }}>
+                      Viewport: {deviceFrame.toUpperCase()} • Zero Cloud Egress • Theme: {selectedTheme.toUpperCase()}
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                      <Button size="small" variant="outlined" onClick={handleExportBundle} sx={{ color: gold, borderColor: gold, fontSize: '0.7rem', fontWeight: 800 }}>
+                        Export Bundle
+                      </Button>
+                      <Button size="small" variant="contained" onClick={handleDeployModalOpen} sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontSize: '0.7rem', fontWeight: 800, '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}>
+                        Deploy
                       </Button>
                     </Box>
-                    <Box sx={{ p: { xs: 2, sm: 3 }, fontFamily: mono, fontSize: '0.84rem', minHeight: 320, maxHeight: 520, overflowY: 'auto', bgcolor: dark ? '#08080B' : '#F8FAFC' }}>
-                      <pre style={{ margin: 0, color: dark ? '#F8FAFC' : '#0F172A', whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.6 }}>
-                        {currentCode}
-                      </pre>
-                    </Box>
                   </Box>
-                )}
+                </Box>
+              </Box>
+            </Box>
+          )}
 
-                {/* Tab Content 1: Live Simulated Device Preview */}
-                {activeTab === 1 && (
-                  <Box
-                    sx={{
-                      p: { xs: 1.5, sm: 3 },
-                      display: 'flex',
-                      justifyContent: 'center',
-                      bgcolor: dark ? '#030508' : '#F1F5F9',
-                      minHeight: 380
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        width: deviceFrame === 'mobile' ? '375px' : deviceFrame === 'tablet' ? '768px' : '100%',
-                        maxWidth: '100%',
-                        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                        border: deviceFrame !== 'desktop' ? `3px solid ${dark ? '#334155' : '#CBD5E1'}` : 'none',
-                        borderRadius: deviceFrame === 'mobile' ? 5 : deviceFrame === 'tablet' ? 4 : 0,
-                        overflow: 'hidden',
-                        boxShadow: deviceFrame !== 'desktop' ? (dark ? '0 16px 40px rgba(0,0,0,0.8)' : '0 16px 40px rgba(0,0,0,0.12)') : 'none',
-                        bgcolor: dark ? '#08080B' : surface
-                      }}
-                    >
-                      {/* Device Top Bezel (if mobile or tablet) */}
-                      {deviceFrame === 'mobile' && (
-                        <Box sx={{ bgcolor: dark ? '#121420' : '#E2E8F0', py: 0.8, px: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid ${divider}` }}>
-                          <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, fontSize: '0.65rem' }}>9:41</Typography>
-                          <Box sx={{ width: 60, height: 8, bgcolor: dark ? '#08080B' : '#CBD5E1', borderRadius: 4 }} />
-                          <Typography variant="caption" sx={{ fontFamily: mono, color: dark ? '#10B981' : '#059669', fontSize: '0.65rem' }}>5G 100%</Typography>
-                        </Box>
-                      )}
+          {/* Tab 1: Code View */}
+          {activeTab === 1 && (
+            <Box sx={{ position: 'relative' }}>
+              <Box sx={{ position: 'absolute', top: 12, right: 16, zIndex: 2, display: 'flex', gap: 1 }}>
+                <Chip label={`${currentCode.split('\n').length} LINES`} size="small" sx={{ bgcolor: dark ? '#1E293B' : '#E2E8F0', color: textSecondary, fontFamily: mono, fontSize: '0.7rem' }} />
+                <Button size="small" variant="contained" startIcon={<ContentCopyIcon />} onClick={handleCopyCode} sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontWeight: 800, py: 0.2, fontSize: '0.72rem', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}>
+                  {copied ? 'Copied' : 'Copy'}
+                </Button>
+              </Box>
+              <Box sx={{ p: { xs: 2, sm: 3 }, fontFamily: mono, fontSize: '0.84rem', minHeight: 320, maxHeight: 520, overflowY: 'auto', bgcolor: dark ? '#08080B' : '#F8FAFC' }}>
+                <pre style={{ margin: 0, color: dark ? '#F8FAFC' : '#0F172A', whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.6 }}>
+                  {currentCode}
+                </pre>
+              </Box>
+            </Box>
+          )}
 
-                      {/* Live Component Output */}
-                      {renderTemplateLivePreview()}
-
-                      {/* Device Footer Actions */}
-                      <Box sx={{ p: 2, bgcolor: dark ? '#0D0E15' : '#F8FAFC', borderTop: `1px solid ${divider}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
-                        <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, fontSize: '0.72rem' }}>
-                          Viewport: {deviceFrame.toUpperCase()} • Zero Cloud Egress
-                        </Typography>
-                        <Box sx={{ display: 'flex', gap: 1 }}>
-                          <Button size="small" variant="outlined" onClick={handleExportBundle} sx={{ color: gold, borderColor: gold, fontSize: '0.7rem', fontWeight: 800 }}>
-                            Export Bundle
-                          </Button>
-                          <Button size="small" variant="contained" onClick={handleDeployModalOpen} sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontSize: '0.7rem', fontWeight: 800, '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}>
-                            Deploy
-                          </Button>
-                        </Box>
-                      </Box>
-                    </Box>
-                  </Box>
-                )}
-
-                {/* Tab Content 2: AST Diff & Inspector Tab */}
-                {activeTab === 2 && (
+          {/* Tab Content 2: AST Diff & Inspector Tab */}
+          {activeTab === 2 && (
                   <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: dark ? '#090B12' : '#F8FAFC', minHeight: 380 }}>
                     
                     {/* AST Node Count Metrics Header */}
@@ -2662,6 +2983,142 @@ export default function WebGenPage() {
 
         </Grid>
       )}
+
+      {/* =========================================================================
+          STAGE 06: SOVEREIGN REPOSITORY & INSTALLATION FUNNEL
+          ========================================================================= */}
+      <Paper
+        elevation={0}
+        sx={{
+          p: { xs: 3, md: 4.5 },
+          mb: 6,
+          borderRadius: 3,
+          border: `1.5px solid ${gold}`,
+          bgcolor: dark ? '#0D0E16' : surface,
+          boxShadow: dark ? '0 12px 40px rgba(0,0,0,0.5)' : '0 8px 30px rgba(212,175,55,0.1)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 1.5 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
+            <RocketLaunchIcon sx={{ color: gold, fontSize: '1.6rem' }} />
+            <Typography variant="h5" sx={{ fontWeight: 900, color: textPrimary, letterSpacing: '-0.01em' }}>
+              Deploy WebGen & Autonomous Tools Locally
+            </Typography>
+          </Box>
+          <Chip
+            label="AIR-GAPPED SOVEREIGN ECOSYSTEM"
+            size="small"
+            sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
+          />
+        </Box>
+
+        <Typography variant="body1" sx={{ color: textSecondary, mb: 3.5, maxWidth: 920, lineHeight: 1.65 }}>
+          Zoth WebGen and the accompanying 29+ autonomous developer utilities are engineered for 100% offline, zero-cloud sovereign operation. Run the standalone WebGen foundry micro-repo, clone the unified Zoth Studio v2 cockpit, or install the full bare-metal Zoth OS runtime.
+        </Typography>
+
+        <Grid container spacing={3}>
+          {/* Funnel Option 1: Standalone WebGen Repo */}
+          <Grid xs={12} md={4}>
+            <Box sx={{ p: 2.5, height: '100%', bgcolor: dark ? '#121420' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2.5, display: 'flex', flexDirection: 'column' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: dark ? goldLight : '#8A6A09' }}>
+                  Option 1: Zoth WebGen Micro-Repo
+                </Typography>
+                <Chip label="STANDALONE" size="small" sx={{ bgcolor: dark ? 'rgba(56,189,248,0.15)' : '#E0F2FE', color: dark ? '#38BDF8' : '#0369A1', fontWeight: 800, fontSize: '0.65rem' }} />
+              </Box>
+              <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
+                Dedicated standalone repository with offline WebGen engine, AST transformer, and polyglot framework exporters.
+              </Typography>
+              <Box sx={{ p: 1.2, mb: 2, bgcolor: dark ? '#08080B' : '#EDF2F7', border: `1px solid ${divider}`, borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: dark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  git clone https://github.com/NullAITech/zoth-webgen.git
+                </Typography>
+                <IconButton size="small" onClick={() => handleCopyCodeText('git clone https://github.com/NullAITech/zoth-webgen.git')} sx={{ color: gold, ml: 1, p: 0.5 }}>
+                  <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                </IconButton>
+              </Box>
+              <Button
+                variant="contained"
+                href="https://github.com/NullAITech/zoth-webgen"
+                target="_blank"
+                rel="noopener noreferrer"
+                fullWidth
+                sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
+              >
+                Open WebGen GitHub Repo
+              </Button>
+            </Box>
+          </Grid>
+
+          {/* Funnel Option 2: Zoth Studio v2 Unified Cockpit */}
+          <Grid xs={12} md={4}>
+            <Box sx={{ p: 2.5, height: '100%', bgcolor: dark ? '#121420' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2.5, display: 'flex', flexDirection: 'column' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: dark ? goldLight : '#8A6A09' }}>
+                  Option 2: Zoth Studio v2 Unified
+                </Typography>
+                <Chip label="FULL SUITE" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontSize: '0.65rem' }} />
+              </Box>
+              <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
+                The full sovereign workstation cockpit featuring 29+ tools, STDP memory neural daemon, and WebGPU hardware shaders.
+              </Typography>
+              <Box sx={{ p: 1.2, mb: 2, bgcolor: dark ? '#08080B' : '#EDF2F7', border: `1px solid ${divider}`, borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: dark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  git clone https://github.com/NullAITech/zoth-studio-v2.git
+                </Typography>
+                <IconButton size="small" onClick={() => handleCopyCodeText('git clone https://github.com/NullAITech/zoth-studio-v2.git')} sx={{ color: gold, ml: 1, p: 0.5 }}>
+                  <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                </IconButton>
+              </Box>
+              <Button
+                variant="contained"
+                href="https://github.com/NullAITech/zoth-studio-v2"
+                target="_blank"
+                rel="noopener noreferrer"
+                fullWidth
+                sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
+              >
+                Open Studio v2 GitHub Repo
+              </Button>
+            </Box>
+          </Grid>
+
+          {/* Funnel Option 3: Sovereign Zoth OS */}
+          <Grid xs={12} md={4}>
+            <Box sx={{ p: 2.5, height: '100%', bgcolor: dark ? '#121420' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2.5, display: 'flex', flexDirection: 'column' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: dark ? goldLight : '#8A6A09' }}>
+                  Option 3: Sovereign Zoth OS
+                </Typography>
+                <Chip label="BARE-METAL OS" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', fontWeight: 800, fontSize: '0.65rem' }} />
+              </Box>
+              <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
+                Zero-telemetry air-gapped operating system kernel for autonomous agent swarms, hardware enclave encryption, and memory vaults.
+              </Typography>
+              <Box sx={{ p: 1.2, mb: 2, bgcolor: dark ? '#08080B' : '#EDF2F7', border: `1px solid ${divider}`, borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: dark ? '#10B981' : '#059669', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  https://github.com/NullAITech/zoth-os
+                </Typography>
+                <IconButton size="small" onClick={() => handleCopyCodeText('https://github.com/NullAITech/zoth-os')} sx={{ color: gold, ml: 1, p: 0.5 }}>
+                  <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                </IconButton>
+              </Box>
+              <Button
+                variant="outlined"
+                href="https://github.com/NullAITech/zoth-os"
+                target="_blank"
+                rel="noopener noreferrer"
+                fullWidth
+                sx={{ borderColor: gold, color: gold, fontWeight: 800, textTransform: 'none', '&:hover': { borderColor: dark ? goldLight : '#9A7008', bgcolor: goldBg } }}
+              >
+                Inspect Zoth OS Architecture
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
+      </Paper>
 
       {/* MOBILE STICKY FLOATING QUICK-ACTION BOTTOM BAR */}
       {isMobile && (

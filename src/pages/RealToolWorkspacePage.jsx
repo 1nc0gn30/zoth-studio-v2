@@ -1470,9 +1470,13 @@ export default function RealToolWorkspacePage() {
   const { status } = useStudioStatus();
   const isBackendConnected = Boolean(status?.services);
   const requiresLocalDaemon = tool.executionType === 'local_cli' || Boolean(tool.localOnly);
-  const [bypassSimulated, setBypassSimulated] = useState(false);
-
   const isWebGPU = tool.executionType === 'webgpu';
+  const [copiedCmd, setCopiedCmd] = useState('');
+  const handleCopyCmd = (text) => {
+    navigator.clipboard.writeText(text);
+    setCopiedCmd(text);
+    setTimeout(() => setCopiedCmd(''), 2500);
+  };
 
   const glowColor = theme.palette.mode === 'dark' ? 'rgba(212,175,55,0.28)' : 'rgba(184,134,11,0.18)';
   const glowBorder = theme.palette.mode === 'dark' ? 'rgba(212,175,55,0.45)' : 'rgba(184,134,11,0.35)';
@@ -1746,6 +1750,120 @@ export default function RealToolWorkspacePage() {
             {tool.id === 'cron-rhythm-studio' && <CronRhythmTool />}
           </>
         )}
+      </Paper>
+
+      {/* SOVEREIGN INSTALLATION & DEPLOYMENT FUNNEL */}
+      <Paper
+        sx={{
+          p: { xs: 3, md: 4 },
+          borderRadius: 3,
+          border: `1px solid ${goldBorder(theme)}`,
+          bgcolor: darkPanel(theme),
+          boxShadow: `0 8px 32px rgba(0,0,0,0.35)`,
+          position: 'relative',
+          overflow: 'hidden',
+          mb: 4
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 1.5 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
+            <RocketLaunchIcon sx={{ color: gold(theme) }} />
+            <Typography variant="h6" sx={{ fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.01em' }}>
+              Run {tool.name} in Your Sovereign Local Enclave
+            </Typography>
+          </Box>
+          <Chip
+            label="AIR-GAPPED SOVEREIGN ENVIRONMENT"
+            size="small"
+            sx={{ bgcolor: goldBg(theme), color: gold(theme), border: `1px solid ${goldBorder(theme)}`, fontWeight: 800, fontFamily: mono, fontSize: '0.7rem' }}
+          />
+        </Box>
+
+        <Typography variant="body2" sx={{ color: '#94A3B8', mb: 3, maxWidth: 840, lineHeight: 1.65 }}>
+          Every tool in the Zoth Studio suite is engineered for zero external telemetry. Run this tool offline on your workstation, orchestrate it via local CLI, or deploy it bare-metal within the sovereign Zoth OS terminal.
+        </Typography>
+
+        <Grid container spacing={2.5}>
+          {/* Option A: Zoth Studio v2 */}
+          <Grid xs={12} md={6}>
+            <Box sx={{ p: 2.5, height: '100%', bgcolor: 'rgba(255,255,255,0.03)', border: `1px solid rgba(255,255,255,0.1)`, borderRadius: 2, display: 'flex', flexDirection: 'column' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: goldSoft(theme) }}>
+                  Option 1: Clone Zoth Studio v2 Repo
+                </Typography>
+                <Chip label="LOCAL-FIRST SUITE" size="small" sx={{ bgcolor: 'rgba(212,175,55,0.15)', color: gold(theme), fontWeight: 750, fontSize: '0.65rem' }} />
+              </Box>
+              <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
+                Full workstation cockpit with 29+ interactive micro-tools, STDP neural memory daemon, and WebGPU accelerators.
+              </Typography>
+              <Box sx={{ p: 1.2, mb: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: '#38BDF8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  git clone https://github.com/NullAITech/zoth-studio-v2.git
+                </Typography>
+                <IconButton size="small" onClick={() => handleCopyCmd('git clone https://github.com/NullAITech/zoth-studio-v2.git')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
+                  <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                </IconButton>
+              </Box>
+              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                <Button
+                  component="a"
+                  href="https://github.com/NullAITech/zoth-studio-v2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="contained"
+                  fullWidth
+                  sx={{ bgcolor: gold(theme), color: '#08080B', fontWeight: 800, fontSize: '0.8rem', '&:hover': { bgcolor: goldSoft(theme) } }}
+                >
+                  View Zoth Studio v2 Repo ↗
+                </Button>
+                {tool.pull && (
+                  <Button
+                    variant="outlined"
+                    fullWidth
+                    onClick={() => handleCopyCmd(tool.pull)}
+                    sx={{ borderColor: goldBorder(theme), color: gold(theme), fontSize: '0.78rem', fontWeight: 750, mt: 1 }}
+                  >
+                    {copiedCmd === tool.pull ? 'Copied Pull Command!' : `Copy: ${tool.pull}`}
+                  </Button>
+                )}
+              </Box>
+            </Box>
+          </Grid>
+
+          {/* Option B: Zoth OS */}
+          <Grid xs={12} md={6}>
+            <Box sx={{ p: 2.5, height: '100%', bgcolor: 'rgba(255,255,255,0.03)', border: `1px solid rgba(255,255,255,0.1)`, borderRadius: 2, display: 'flex', flexDirection: 'column' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#34D399' }}>
+                  Option 2: Install Sovereign Zoth OS
+                </Typography>
+                <Chip label="FULL OS ISO" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399', fontWeight: 750, fontSize: '0.65rem' }} />
+              </Box>
+              <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
+                Complete alchemical intelligence operating system with Kali/Parrot tool parity, local Ollama models, and Tor Ghostmode.
+              </Typography>
+              <Box sx={{ p: 1.2, mb: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: '#34D399', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  https://github.com/NullAITech/zoth-os
+                </Typography>
+                <IconButton size="small" onClick={() => handleCopyCmd('https://github.com/NullAITech/zoth-os')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
+                  <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                </IconButton>
+              </Box>
+              <Button
+                component="a"
+                href="https://github.com/NullAITech/zoth-os"
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="outlined"
+                fullWidth
+                sx={{ borderColor: '#34D399', color: '#34D399', fontWeight: 800, fontSize: '0.8rem', '&:hover': { bgcolor: 'rgba(52,211,153,0.1)' } }}
+              >
+                Explore &amp; Install Zoth OS ↗
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
       </Paper>
     </Container>
   );

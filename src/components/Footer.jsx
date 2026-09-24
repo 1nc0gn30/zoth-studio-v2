@@ -40,6 +40,7 @@ export default function Footer() {
     { label: 'Adytum Alchemist Repo', href: 'https://github.com/NullAITech/adytum-alchemist-ai-workflow', external: true },
     { label: 'HexStrike AI Terminal Repo', href: 'https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal', external: true },
     { label: 'Polyglot Exporter Repo', href: 'https://github.com/NullAITech/polyglot-framework-exporter', external: true },
+    { label: 'WebGen Autonomous Foundry', href: 'https://github.com/NullAITech/zoth-webgen', external: true },
     { label: 'Zoth OS Daemon Repo', href: 'https://github.com/NullAITech/zoth-os', external: true },
     { label: 'Netlify Ghost Hub Repo', href: 'https://github.com/NullAITech/Netlify-Ghost-Hub', external: true },
     { label: 'Enclave Bridges', to: '/bridges' },
