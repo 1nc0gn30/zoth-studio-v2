@@ -3,7 +3,6 @@ import { Routes, Route } from 'react-router-dom';
 import { Box, ThemeProvider, CssBaseline, useTheme } from '@mui/material';
 import { theme as lightTheme, darkTheme } from './theme';
 import Navbar from './components/Navbar';
-import SovereignMascots from './components/SovereignMascots';
 import HomePage from './pages/HomePage';
 import SwarmPage from './pages/SwarmPage';
 import BridgesPage from './pages/BridgesPage';
@@ -23,6 +22,7 @@ import TemplatesPage from './pages/TemplatesPage';
 import FaqsPage from './pages/FaqsPage';
 import AXPage from './pages/AXPage';
 import SEO from './components/SEO';
+import Footer from './components/Footer';
 
 const STORAGE_KEY = 'zoth-studio-theme';
 
@@ -92,36 +92,7 @@ function AppShell({ mode, onToggleTheme }) {
           <Route path="/ax" element={<AXPage />} />
         </Routes>
       </Box>
-      <Box
-        component="footer"
-        sx={{
-          py: 3,
-          px: 2,
-          borderTop: `1px solid ${theme.palette.divider}`,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 1.25,
-          color: theme.palette.text.secondary,
-          fontSize: '0.88rem',
-          position: 'relative',
-          zIndex: 2,
-        }}
-      >
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1.25 }}>
-          <Box
-            component="span"
-            sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontSize: '1.25rem', color: dark ? '#F5E6AB' : '#101828' }}
-          >
-            Zoth Studio
-          </Box>
-          <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75 }}>
-            <Box component="img" src="/brand/ghostbyte-dark.png" alt="" sx={{ height: 22, width: 'auto' }} />
-            NullAI
-          </Box>
-        </Box>
-        <SovereignMascots />
-      </Box>
+      <Footer />
     </Box>
   );
 }

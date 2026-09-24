@@ -32,6 +32,7 @@ import HubIcon from '@mui/icons-material/Hub';
 import MathPillarsGrid from '../components/MathPillarsGrid';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
+import Netrunner3DWorld from '../components/Netrunner3DWorld';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -1472,19 +1473,17 @@ export default function MemoryPage() {
                     </Typography>
                   </Box>
 
-                  <Box sx={{ position: 'relative', width: '100%', borderRadius: 2, overflow: 'hidden', border: '1px solid rgba(212,175,55,0.2)' }}>
-                    <canvas
-                      ref={canvasRef}
-                      width={740}
-                      height={440}
-                      onClick={handleCanvasClick}
-                      style={{ width: '100%', height: 'auto', display: 'block', cursor: 'crosshair' }}
+                  <Box sx={{ position: 'relative', width: '100%', borderRadius: 2, overflow: 'hidden' }}>
+                    <Netrunner3DWorld
+                      memories={filteredMemories}
+                      selectedMemory={selectedMemory}
+                      onSelectMemory={(m) => {
+                        setSelectedMemory(m);
+                        playSynapticPulse(m.weight);
+                      }}
+                      isDark={isDark}
+                      height={460}
                     />
-                    <Box sx={{ position: 'absolute', bottom: 10, left: 14, pointerEvents: 'none' }}>
-                      <Typography variant="caption" sx={{ color: '#94A3B8', fontFamily: mono, fontSize: '0.72rem' }}>
-                        Click any node to inspect memory vector · Gentle orbital rotation active
-                      </Typography>
-                    </Box>
                   </Box>
                 </Paper>
 

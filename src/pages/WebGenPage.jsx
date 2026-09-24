@@ -2027,22 +2027,37 @@ export default function WebGenPage() {
         </Paper>
       )}
 
-      {/* Main Foundry Workspace Layout */}
-      <Grid container spacing={{ xs: 2.5, md: 4 }}>
-        
-        {/* LEFT / MAIN COLUMN: Controls, Code & Live Device Preview */}
-        {(!isMobile || mobileSection === 'prompt' || mobileSection === 'code' || mobileSection === 'preview') && (
-          <Grid xs={12} md={8}>
-            
-            {/* 1. Prompt & Spec Configuration Sandbox */}
-            {(!isMobile || mobileSection === 'prompt') && (
-              <Paper sx={{ p: { xs: 2.5, sm: 3.5 }, border: `1px solid ${divider}`, borderRadius: 3, mb: 4, backgroundColor: surface, borderLeft: `4px solid ${gold}`, boxShadow: '0 0 24px -10px rgba(212,175,55,0.2)' }}>
-                <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.5, display: 'flex', alignItems: 'center', gap: 1, color: '#FFFFFF' }}>
-                  <AutoAwesomeIcon sx={{ color: gold }} /> Interactive Component Layout Sandbox
-                </Typography>
-                <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2.5 }}>
-                  Choose a sovereign starter layout preset or customize the natural language spec prompt.
-                </Typography>
+      {/* SECTION 1: Interactive Component Layout & Spec Prompt Sandbox (Full-Width Stage) */}
+      {(!isMobile || mobileSection === 'prompt') && (
+        <Paper
+          elevation={0}
+          sx={{
+            p: { xs: 2.5, sm: 4 },
+            border: `1px solid ${divider}`,
+            borderRadius: 3,
+            mb: 5,
+            backgroundColor: surface,
+            borderLeft: `4px solid ${gold}`,
+            boxShadow: '0 0 28px -8px rgba(212,175,55,0.22)'
+          }}
+        >
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2, mb: 1 }}>
+            <Box>
+              <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, display: 'flex', alignItems: 'center', gap: 1.2, color: '#FFFFFF' }}>
+                <AutoAwesomeIcon sx={{ color: gold }} /> Interactive Component Layout Sandbox
+              </Typography>
+              <Typography variant="body2" sx={{ color: '#94A3B8' }}>
+                Select a sovereign starter layout preset, calibrate the prompt specification, and choose the target runtime engine.
+              </Typography>
+            </Box>
+            <Chip
+              label="STAGE 01 // SPEC FOUNDRY"
+              size="small"
+              sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
+            />
+          </Box>
+
+          <Divider sx={{ my: 2.5, borderColor: 'rgba(255,255,255,0.06)' }} />
 
                 {/* Starter Templates (6 Presets) */}
                 <Typography variant="caption" sx={{ fontWeight: 800, color: '#94A3B8', mb: 1.2, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
@@ -2508,21 +2523,21 @@ export default function WebGenPage() {
               </Paper>
             )}
 
-          </Grid>
-        )}
-
-        {/* RIGHT / SECONDARY COLUMN: Target Exporters & Spec Registry Matrix */}
-        {(!isMobile || mobileSection === 'specs') && (
-          <Grid xs={12} md={4}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, height: '100%' }}>
-              
-              {/* Exporter Runtimes */}
-              <Card sx={{ border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface }}>
-                <CardContent sx={{ p: 3 }}>
-                  <Chip label="TARGET RUNTIMES (5 ENGINES)" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontSize: '0.72rem', mb: 1.5, fontFamily: mono }} />
-                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: '#FFFFFF' }}>
-                    Polyglot Exporters
-                  </Typography>
+      {/* SECTION 3: Polyglot Exporter Runtimes & Component Spec Registry Matrix (Spacious 2-Column Grid) */}
+      {(!isMobile || mobileSection === 'specs') && (
+        <Grid container spacing={{ xs: 3, md: 4 }} sx={{ mb: 6 }}>
+          
+          {/* Left Column: Polyglot Exporters */}
+          <Grid xs={12} md={6}>
+            <Card sx={{ border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface, height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <CardContent sx={{ p: { xs: 2.5, sm: 3.5 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                  <Chip label="TARGET RUNTIMES (5 ENGINES)" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontSize: '0.72rem', fontFamily: mono }} />
+                  <Chip label="STAGE 03 // EXPORTERS" size="small" sx={{ bgcolor: 'rgba(255,255,255,0.06)', color: '#94A3B8', fontFamily: mono, fontSize: '0.68rem' }} />
+                </Box>
+                <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: '#FFFFFF' }}>
+                  Polyglot Exporters
+                </Typography>
                   <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2 }}>
                     Pick your framework to compile realistic, optimized code in real-time.
                   </Typography>
@@ -2575,25 +2590,30 @@ export default function WebGenPage() {
                     variant="contained"
                     startIcon={<DownloadIcon />}
                     onClick={handleExportBundle}
-                    sx={{ mt: 3, borderRadius: 2, fontWeight: 800, bgcolor: gold, color: '#08080B', '&:hover': { bgcolor: goldLight } }}
+                    sx={{ mt: 3, py: 1.3, borderRadius: 2, fontWeight: 800, bgcolor: gold, color: '#08080B', '&:hover': { bgcolor: goldLight } }}
                   >
                     Export Standalone HTML Bundle
                   </Button>
                 </CardContent>
               </Card>
+            </Grid>
 
-              {/* Spec Registry Matrix (6 Templates) */}
-              <Card sx={{ border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface }}>
-                <CardContent sx={{ p: 3 }}>
-                  <Chip label="SPEC MATRIX (6 PRESETS)" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontSize: '0.72rem', mb: 1.5, fontFamily: mono }} />
+            {/* Right Column: Spec Registry Matrix */}
+            <Grid xs={12} md={6}>
+              <Card sx={{ border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                <CardContent sx={{ p: { xs: 2.5, sm: 3.5 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                    <Chip label="SPEC MATRIX (6 PRESETS)" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontSize: '0.72rem', fontFamily: mono }} />
+                    <Chip label="STAGE 04 // REGISTRY" size="small" sx={{ bgcolor: 'rgba(255,255,255,0.06)', color: '#94A3B8', fontFamily: mono, fontSize: '0.68rem' }} />
+                  </Box>
                   <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: '#FFFFFF' }}>
                     Component Spec Registry
                   </Typography>
-                  <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2 }}>
-                    Pre-compiled sovereign layout specs for instant project insertion.
+                  <Typography variant="body2" sx={{ color: '#94A3B8', mb: 3 }}>
+                    Pre-compiled sovereign layout specs for instant project insertion, tested against zero-egress sandboxes.
                   </Typography>
 
-                  <Stack spacing={1.5}>
+                  <Stack spacing={1.5} sx={{ flexGrow: 1 }}>
                     {TEMPLATES.map((t) => {
                       const isSelected = selectedTemplate === t.name;
                       const IconC = t.icon;
@@ -2602,7 +2622,7 @@ export default function WebGenPage() {
                           key={t.id}
                           onClick={() => handleSelectTemplate(t)}
                           sx={{
-                            p: 1.5,
+                            p: 1.8,
                             border: isSelected ? `1.5px solid ${gold}` : '1px solid rgba(255,255,255,0.08)',
                             borderRadius: 2,
                             bgcolor: isSelected ? goldBg : '#121420',
@@ -2613,14 +2633,14 @@ export default function WebGenPage() {
                         >
                           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                              <IconC sx={{ fontSize: '1rem', color: isSelected ? gold : '#94A3B8' }} />
-                              <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#FFFFFF', fontSize: '0.85rem' }}>
+                              <IconC sx={{ fontSize: '1.05rem', color: isSelected ? gold : '#94A3B8' }} />
+                              <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#FFFFFF', fontSize: '0.88rem' }}>
                                 {t.name}
                               </Typography>
                             </Box>
-                            <Chip label={t.tag} size="small" sx={{ fontSize: '0.62rem', height: 18, bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8', fontWeight: 800, fontFamily: mono }} />
+                            <Chip label={t.tag} size="small" sx={{ fontSize: '0.65rem', height: 20, bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8', fontWeight: 800, fontFamily: mono }} />
                           </Box>
-                          <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', fontSize: '0.75rem', lineHeight: 1.4 }}>
+                          <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', fontSize: '0.76rem', lineHeight: 1.4 }}>
                             {t.desc}
                           </Typography>
                         </Box>
@@ -2629,12 +2649,10 @@ export default function WebGenPage() {
                   </Stack>
                 </CardContent>
               </Card>
+            </Grid>
 
-            </Box>
-          </Grid>
-        )}
-
-      </Grid>
+        </Grid>
+      )}
 
       {/* MOBILE STICKY FLOATING QUICK-ACTION BOTTOM BAR */}
       {isMobile && (
