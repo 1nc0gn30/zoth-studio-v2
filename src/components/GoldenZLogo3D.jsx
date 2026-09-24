@@ -1,6 +1,25 @@
 import React, { useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
 
+// 21 pantheon seats. Inner ring is the three cores, then the working cadres.
+const ORBITS = [
+  { count: 3, rx: 0.5, ry: 0.2, tilt: 0.15, speed: 0.55, phase: 0 },
+  { count: 6, rx: 0.72, ry: 0.3, tilt: -0.35, speed: -0.38, phase: 0.4 },
+  { count: 12, rx: 0.96, ry: 0.42, tilt: 0.7, speed: 0.24, phase: 1.1 },
+];
+
+function strokeZ(ctx, arm, rise, width) {
+  ctx.lineWidth = width;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(-arm, -rise);
+  ctx.lineTo(arm, -rise);
+  ctx.lineTo(-arm, rise);
+  ctx.lineTo(arm, rise);
+  ctx.stroke();
+}
+
 export default function GoldenZLogo3D({ size = 42, interactive = true }) {
   const canvasRef = useRef(null);
 
@@ -8,120 +27,125 @@ export default function GoldenZLogo3D({ size = 42, interactive = true }) {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let animationFrameId;
+    let frame = 0;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(size * dpr);
+    canvas.height = Math.round(size * dpr);
+    ctx.scale(dpr, dpr);
 
-    const width = (canvas.width = size * 2);
-    const height = (canvas.height = size * 2);
     let angle = 0;
-    let targetSpeed = 0.02;
-    let currentSpeed = 0.02;
+    let targetSpeed = 0.012;
+    let currentSpeed = 0.012;
+    const hero = size >= 120;
+    // 40px nav cannot resolve 21 dots. Three rings, nodes only when there is room.
+    const showNodes = size >= 96;
+    const nodeScale = hero ? 1 : 0.72;
 
-    const handleMouseEnter = () => {
-      if (interactive) targetSpeed = 0.08;
-    };
-    const handleMouseLeave = () => {
-      if (interactive) targetSpeed = 0.02;
-    };
-
+    const onEnter = () => { if (interactive) targetSpeed = 0.045; };
+    const onLeave = () => { if (interactive) targetSpeed = 0.012; };
     const parent = canvas.parentElement;
     if (parent && interactive) {
-      parent.addEventListener('mouseenter', handleMouseEnter);
-      parent.addEventListener('mouseleave', handleMouseLeave);
+      parent.addEventListener('mouseenter', onEnter);
+      parent.addEventListener('mouseleave', onLeave);
     }
 
     const render = () => {
-      ctx.clearRect(0, 0, width, height);
-
-      currentSpeed += (targetSpeed - currentSpeed) * 0.1;
+      ctx.clearRect(0, 0, size, size);
+      currentSpeed += (targetSpeed - currentSpeed) * 0.08;
       angle += currentSpeed;
 
-      const cx = width / 2;
-      const cy = height / 2;
-      const r = size * 0.75;
+      const cx = size / 2;
+      const cy = size / 2;
+      const r = size * 0.46;
 
-      // Outer Astrolabe Ring
       ctx.save();
       ctx.translate(cx, cy);
 
-      // Orbital Metallic Ring 1
-      ctx.strokeStyle = 'rgba(212, 175, 55, 0.4)';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.ellipse(0, 0, r * 0.9, r * 0.35, angle, 0, Math.PI * 2);
-      ctx.stroke();
-
-      // Orbital Metallic Ring 2
-      ctx.strokeStyle = 'rgba(184, 134, 11, 0.5)';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.ellipse(0, 0, r * 0.75, r * 0.28, -angle * 1.2, 0, Math.PI * 2);
-      ctx.stroke();
-
-      // 3D Extruded Golden Z Emblem
-      const scaleX = Math.cos(angle * 0.8) * 0.25 + 0.75;
-
-      ctx.scale(scaleX, 1);
-
-      // Gold Gradient
-      const grad = ctx.createLinearGradient(-r * 0.5, -r * 0.5, r * 0.5, r * 0.5);
-      grad.addColorStop(0, '#FFE57F');
-      grad.addColorStop(0.3, '#D4AF37');
-      grad.addColorStop(0.7, '#B8860B');
-      grad.addColorStop(1, '#785A00');
-
-      // Shadow / Extrusion Offset
-      ctx.strokeStyle = '#4A3700';
-      ctx.lineWidth = 5;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-
-      ctx.beginPath();
-      ctx.moveTo(-r * 0.45 + 2, -r * 0.45 + 2);
-      ctx.lineTo(r * 0.45 + 2, -r * 0.45 + 2);
-      ctx.lineTo(-r * 0.45 + 2, r * 0.45 + 2);
-      ctx.lineTo(r * 0.45 + 2, r * 0.45 + 2);
-      ctx.stroke();
-
-      // Front Metallic Golden Z
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = 4.5;
-      ctx.beginPath();
-      ctx.moveTo(-r * 0.45, -r * 0.45);
-      ctx.lineTo(r * 0.45, -r * 0.45);
-      ctx.lineTo(-r * 0.45, r * 0.45);
-      ctx.lineTo(r * 0.45, r * 0.45);
-      ctx.stroke();
-
-      // Glowing Vertex Points
-      const nodes = [
-        { x: -r * 0.45, y: -r * 0.45 },
-        { x: r * 0.45, y: -r * 0.45 },
-        { x: -r * 0.45, y: r * 0.45 },
-        { x: r * 0.45, y: r * 0.45 },
-      ];
-
-      nodes.forEach((n) => {
-        ctx.fillStyle = '#FFE57F';
-        ctx.shadowColor = '#D4AF37';
-        ctx.shadowBlur = 6;
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, 2.5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.shadowBlur = 0;
+      // Rings sit behind the Z. Draw back half, then the emblem, then the front half.
+      const rings = ORBITS.map((orbit, i) => {
+        const nodes = [];
+        for (let n = 0; n < orbit.count; n += 1) {
+          const t = orbit.phase + angle * orbit.speed + (n / orbit.count) * Math.PI * 2;
+          const x = Math.cos(t) * r * orbit.rx;
+          const y = Math.sin(t) * r * orbit.ry;
+          const depth = Math.sin(t);
+          nodes.push({ x, y, depth, core: i === 0 });
+        }
+        return { orbit, nodes };
       });
 
+      const drawRing = (ring, front) => {
+        const { orbit, nodes } = ring;
+        ctx.save();
+        ctx.rotate(orbit.tilt);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, r * orbit.rx, r * orbit.ry, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = front ? 'rgba(212,175,55,0.55)' : 'rgba(212,175,55,0.22)';
+        ctx.lineWidth = hero ? 1.4 : 1;
+        ctx.stroke();
+        if (showNodes) {
+          nodes
+            .filter((node) => (front ? node.depth >= 0 : node.depth < 0))
+            .forEach((node) => {
+              const radius = (node.core ? 3.4 : 2.2) * nodeScale * (0.75 + node.depth * 0.35);
+              ctx.beginPath();
+              ctx.arc(node.x, node.y, Math.max(1.1, radius), 0, Math.PI * 2);
+              ctx.fillStyle = node.depth > 0.35 ? '#FFE57F' : '#D4AF37';
+              ctx.shadowColor = '#D4AF37';
+              ctx.shadowBlur = hero ? 8 : 0;
+              ctx.fill();
+              ctx.shadowBlur = 0;
+            });
+        }
+        ctx.restore();
+      };
+
+      rings.forEach((ring) => drawRing(ring, false));
+
+      // Thick extruded Z. The bar width scales with the canvas so the nav mark stays a Z.
+      const arm = r * 0.42;
+      const rise = r * 0.46;
+      const bar = Math.max(3.5, size * 0.055);
+      const depth = Math.max(2, bar * 0.45);
+      const turn = Math.cos(angle * 0.7) * 0.12 + 0.9;
+
+      ctx.save();
+      ctx.scale(turn, 1);
+      for (let i = depth; i >= 1; i -= 1) {
+        ctx.strokeStyle = i === 1 ? '#4A3700' : `rgba(74,55,0,${0.35 + (depth - i) / depth * 0.4})`;
+        strokeZ(ctx, arm, rise, bar);
+        ctx.translate(0.7, 0.7);
+      }
+      const grad = ctx.createLinearGradient(-arm, -rise, arm, rise);
+      grad.addColorStop(0, '#FFF1B8');
+      grad.addColorStop(0.35, '#F0D060');
+      grad.addColorStop(0.7, '#B8860B');
+      grad.addColorStop(1, '#6E5200');
+      ctx.strokeStyle = grad;
+      ctx.shadowColor = 'rgba(212,175,55,0.55)';
+      ctx.shadowBlur = hero ? 16 : 4;
+      strokeZ(ctx, arm, rise, bar);
+      ctx.shadowBlur = 0;
+      // Specular along the top bar so the stroke reads as metal, not a flat line.
+      ctx.strokeStyle = 'rgba(255,245,200,0.85)';
+      ctx.lineWidth = Math.max(1, bar * 0.18);
+      ctx.beginPath();
+      ctx.moveTo(-arm, -rise - bar * 0.28);
+      ctx.lineTo(arm, -rise - bar * 0.28);
+      ctx.stroke();
       ctx.restore();
 
-      animationFrameId = requestAnimationFrame(render);
+      rings.forEach((ring) => drawRing(ring, true));
+      ctx.restore();
+      frame = requestAnimationFrame(render);
     };
 
     render();
-
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      cancelAnimationFrame(frame);
       if (parent && interactive) {
-        parent.removeEventListener('mouseenter', handleMouseEnter);
-        parent.removeEventListener('mouseleave', handleMouseLeave);
+        parent.removeEventListener('mouseenter', onEnter);
+        parent.removeEventListener('mouseleave', onLeave);
       }
     };
   }, [size, interactive]);
@@ -136,17 +160,10 @@ export default function GoldenZLogo3D({ size = 42, interactive = true }) {
         justifyContent: 'center',
         position: 'relative',
         cursor: interactive ? 'pointer' : 'default',
-        filter: 'drop-shadow(0 2px 8px rgba(212, 175, 55, 0.35))'
+        filter: 'drop-shadow(0 4px 14px rgba(212, 175, 55, 0.35))',
       }}
     >
-      <canvas
-        ref={canvasRef}
-        style={{
-          width: size,
-          height: size,
-          display: 'block'
-        }}
-      />
+      <canvas ref={canvasRef} style={{ width: size, height: size, display: 'block' }} />
     </Box>
   );
 }

@@ -1,0 +1,32 @@
+# Zoth Studio v2 Robots Policy
+User-agent: *
+Allow: /
+Disallow: /api/studio/bridge/send
+Disallow: /api/studio/adytum
+
+# AI Answer Engines & LLM Web Crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+Sitemap: https://zoth.nullai.tech/sitemap.xml

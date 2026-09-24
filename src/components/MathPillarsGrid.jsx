@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Chip, Grid, Paper, Typography, Button, Stack } from '@mui/material';
+import { Box, Chip, Unstable_Grid2 as Grid, Paper, Typography, Button, Stack } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -71,7 +71,7 @@ export default function MathPillarsGrid({ variant = 'full' }) {
 
       <Grid container spacing={2.5}>
         {mathPillars.map((pillar) => (
-          <Grid size={{ xs: 12, sm: 6, lg: 4 }} key={pillar.id}>
+          <Grid xs={12} sm={6} lg={4} key={pillar.id}>
             <Paper
               sx={{
                 p: 2.5,

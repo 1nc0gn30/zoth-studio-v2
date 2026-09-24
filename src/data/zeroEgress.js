@@ -16,7 +16,7 @@ export const zeroEgressInvariants = [
 
 /**
  * Loopback enclave binds documented in the legacy architecture notes
- * and the v2 workstation pages. Nothing here is a public listener.
+ * and the Zoth Studio workstation pages. Nothing here is a public listener.
  */
 export const enclaveBinds = [
   { service: 'Public hub (static)', bind: '127.0.0.1:8088', note: 'Showcase only. No operator secrets.' },

@@ -1,6 +1,37 @@
-node_modules
-dist
+node_modules/
+dist/
+dist-*/
 .DS_Store
 *.log
 tools/
 .zoth/
+
+# Old original site backend and build artifacts
+backend/
+target/
+*.target
+*.pyc
+__pycache__/
+.pytest_cache/
+
+# Local state & environment
+.env
+.env.*
+!.env.example
+*.local
+*.pem
+*.key
+*.cert
+id_rsa*
+*.secret
+credentials.json
+
+# Cache & scratch
+coverage/
+.turbo/
+.cache/
+scratch/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

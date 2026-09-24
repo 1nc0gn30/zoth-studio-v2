@@ -17,6 +17,12 @@ import DocsPage from './pages/DocsPage';
 import AdytumPage from './pages/AdytumPage';
 import MathPillarDetailPage from './pages/MathPillarDetailPage';
 import RealToolWorkspacePage from './pages/RealToolWorkspacePage';
+import WorkstationsPage from './pages/WorkstationsPage';
+import WorkstationDetailPage from './pages/WorkstationDetailPage';
+import TemplatesPage from './pages/TemplatesPage';
+import FaqsPage from './pages/FaqsPage';
+import AXPage from './pages/AXPage';
+import SEO from './components/SEO';
 
 const STORAGE_KEY = 'zoth-studio-theme';
 
@@ -49,6 +55,7 @@ function AppShell({ mode, onToggleTheme }) {
         zIndex: 2,
       }}
     >
+      <SEO />
       <Navbar mode={mode} onToggleTheme={onToggleTheme} />
       <Box
         component="main"
@@ -58,7 +65,9 @@ function AppShell({ mode, onToggleTheme }) {
           flexDirection: 'column',
           position: 'relative',
           zIndex: 2,
-          '& > .MuiContainer-root': { flex: 1, width: '100%' },
+          minWidth: 0,
+          overflowX: 'clip',
+          '& > .MuiContainer-root': { flex: 1, width: '100%', minWidth: 0 },
         }}
       >
         <Routes>
@@ -67,6 +76,9 @@ function AppShell({ mode, onToggleTheme }) {
           <Route path="/swarm" element={<SwarmPage />} />
           <Route path="/bridges" element={<BridgesPage />} />
           <Route path="/tools" element={<ToolsPage />} />
+          <Route path="/workstations" element={<WorkstationsPage />} />
+          <Route path="/workstations/:workstationId" element={<WorkstationDetailPage />} />
+          <Route path="/templates" element={<TemplatesPage />} />
           <Route path="/tools/:toolId" element={<RealToolWorkspacePage />} />
           <Route path="/memory" element={<MemoryPage />} />
           <Route path="/consensus" element={<ConsensusPage />} />
@@ -76,6 +88,8 @@ function AppShell({ mode, onToggleTheme }) {
           <Route path="/docs" element={<DocsPage />} />
           <Route path="/docs/math/:pillarId" element={<MathPillarDetailPage />} />
           <Route path="/docs/math" element={<MathPillarDetailPage />} />
+          <Route path="/faqs" element={<FaqsPage />} />
+          <Route path="/ax" element={<AXPage />} />
         </Routes>
       </Box>
       <Box

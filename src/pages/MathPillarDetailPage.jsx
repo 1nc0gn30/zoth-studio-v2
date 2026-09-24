@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
-  Box, Container, Typography, Paper, Chip, Button, Grid, Stack, Slider, Divider,
+  Box, Container, Typography, Paper, Chip, Button, Unstable_Grid2 as Grid, Stack, Slider, Divider,
   Breadcrumbs, Link, Card, CardContent, Tabs, Tab, Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow, Tooltip, IconButton, Alert
 } from '@mui/material';
@@ -374,6 +374,9 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
           <Tabs
             value={activeTierTab}
             onChange={(e, val) => setActiveTierTab(val)}
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
             sx={{
               mb: 3,
               minHeight: 44,
@@ -429,7 +432,7 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
       <Grid container spacing={4} sx={{ mb: 4 }}>
         
         {/* Left 6/12: Interactive Formula Simulator */}
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid xs={12} md={6}>
           <Card sx={{ height: '100%', border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface, boxShadow: dark ? '0 4px 16px rgba(0,0,0,0.35)' : '0 4px 16px rgba(16,24,40,0.03)' }}>
             <CardContent sx={{ p: { xs: 2.5, md: 3.5 }, display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
               <Box>
@@ -507,7 +510,7 @@ def apply_stdp_rule(pre_spike_time, post_spike_time, A_plus=0.85, A_minus=0.45, 
         </Grid>
 
         {/* Right 6/12: System Operational Metrics Table */}
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid xs={12} md={6}>
           <Card sx={{ height: '100%', border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface, boxShadow: dark ? '0 4px 16px rgba(0,0,0,0.35)' : '0 4px 16px rgba(16,24,40,0.03)' }}>
             <CardContent sx={{ p: { xs: 2.5, md: 3.5 }, display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
               <Box>

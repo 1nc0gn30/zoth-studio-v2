@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Chip, Grid, Paper, Typography } from '@mui/material';
+import { Box, Chip, Unstable_Grid2 as Grid, Paper, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import { legacyWorkstations } from '../data/zeroEgress';
@@ -28,11 +28,11 @@ export default function WorkstationMap({ embedded = false }) {
         </>
       )}
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5, maxWidth: 760 }}>
-        Each card is a page from <Box component="span" sx={{ fontFamily: mono, color: goldText }}>public/studio</Box>. The link is where that job lives in v2.
+        Each card is a page from <Box component="span" sx={{ fontFamily: mono, color: goldText }}>public/studio</Box>. The link is where that job lives in Zoth Studio.
       </Typography>
       <Grid container spacing={2}>
         {legacyWorkstations.map((station) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={station.file}>
+          <Grid xs={12} sm={6} md={4} key={station.file}>
             <Paper
               component={RouterLink}
               to={station.to}

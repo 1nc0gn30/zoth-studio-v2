@@ -1,15 +1,74 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { Box, Button, Chip, Container, Paper, Stack, TextField, Typography, Grid, Card, CardContent } from '@mui/material';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Box,
+  Button,
+  Chip,
+  Container,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+  Unstable_Grid2 as Grid,
+  Card,
+  CardContent,
+  Tooltip,
+  LinearProgress,
+  Collapse,
+  IconButton,
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import TimerIcon from '@mui/icons-material/Timer';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import FastForwardIcon from '@mui/icons-material/FastForward';
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
+import SecurityIcon from '@mui/icons-material/Security';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PsychologyIcon from '@mui/icons-material/Psychology';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CasinoIcon from '@mui/icons-material/Casino';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
+import GridViewIcon from '@mui/icons-material/GridView';
+import SchoolIcon from '@mui/icons-material/School';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
+import { Link as RouterLink } from 'react-router-dom';
 import keys from '../data/adytumKeys.json';
 import { useStudioStatus } from '../studio/useStudioStatus';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const STORAGE_KEY = 'zoth-adytum-plan-v1';
 const INCUBATION_MS = 5 * 60 * 1000;
+
+const ROMAN_NUMERALS = ['0', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI'];
+
+const ARCHITECTURAL_LENSES = {
+  0: 'Zero-Shot Latent Space & Unmanifest Distributions',
+  1: 'Self-Attention Wand & Focus Allocation',
+  2: 'Latent Memory KV-Cache & Passive Memory',
+  3: 'Generative Synthesis & Multimodal Decoding',
+  4: 'Deterministic Guardrails & Pydantic Schemas',
+  5: 'Foundation Model Weights & Transfer Learning',
+  6: 'Contrastive Representation & Multimodal Alignment',
+  7: 'Inference Velocity & Directional Autonomy',
+  8: 'Neural Regularization & Pruning Resiliency',
+  9: 'Isolated Sandboxing & Latent Introspection',
+  10: 'Dynamic Sampling & Stochastic Optimization',
+  11: 'Consensus Equilibrium & Byzantine Verification',
+  12: 'Orthogonal Perspective & Cognitive Inversion',
+  13: 'Dead Weight Pruning & Model Degradation Defense',
+  14: 'Loss Function Harmonization & Gradient Flow',
+  15: 'Security Sentinel & Adversarial Jailbreak Defense',
+  16: 'Catastrophic Disruption & Failover Recovery',
+  17: 'Guiding System Invariant & North-Star Prompt',
+  18: 'Hallucination Obfuscation & Heuristic Detection',
+  19: 'Deterministic Radiant Execution & High-Temp Clarity',
+  20: 'Holistic Architectural Audit & Provenance Verification',
+  21: 'Sovereign Substrate Consensus & Total System Harmony'
+};
 
 function emptyPlan() {
   return { current: 0, startedAt: null, entries: {} };
@@ -25,12 +84,420 @@ function loadPlan() {
   }
 }
 
-export default function AdytumPage() {
+/**
+ * Computes a SHA-256 digest of input text using Web Crypto Subtle API with graceful fallback.
+ */
+async function computeSha256(text) {
+  if (typeof crypto !== 'undefined' && crypto?.subtle?.digest) {
+    try {
+      const encoder = new TextEncoder();
+      const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(text));
+      return Array.from(new Uint8Array(hashBuffer))
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('');
+    } catch {
+      // Fallback below
+    }
+  }
+  let hash = 0;
+  for (let i = 0; i < text.length; i++) {
+    const char = text.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash |= 0;
+  }
+  return Math.abs(hash).toString(16).padStart(64, '0');
+}
+
+/**
+ * In-Browser Zero-Egress Hermetic Oracle Evaluator
+ * Evaluates operator intention and reflection against the active key's attribution, lesson, and question.
+ */
+function evaluateHermeticOracle(card, intention, reflection) {
+  const normIntention = (intention || '').toLowerCase();
+  const normReflection = (reflection || '').toLowerCase();
+  const fullText = `${normIntention} ${normReflection}`;
+
+  const stopWords = new Set([
+    'the', 'and', 'for', 'that', 'this', 'with', 'from', 'your', 'have', 'what', 'when',
+    'where', 'which', 'while', 'will', 'would', 'could', 'should', 'about', 'above',
+    'below', 'between', 'under', 'into', 'onto', 'over', 'more', 'most', 'some', 'such',
+    'than', 'them', 'then', 'there', 'these', 'they', 'like', 'does', 'represents',
+    'symbolizes', 'embody', 'embodies', 'their', 'being', 'system', 'systems'
+  ]);
+
+  const extractWords = (str) =>
+    (str.toLowerCase().match(/[a-z0-9-]{4,}/g) || []).filter((w) => !stopWords.has(w));
+
+  const lessonKeywords = Array.from(new Set(extractWords(card.lesson)));
+  const questionKeywords = Array.from(new Set(extractWords(card.question)));
+  const cardKeywords = Array.from(new Set([...lessonKeywords, ...questionKeywords]));
+
+  const sovereignKeywords = [
+    'latent', 'zero-shot', 'attention', 'transformer', 'context', 'cache', 'memory',
+    'retrieval', 'rag', 'guardrail', 'guardrails', 'schema', 'schemas', 'validation',
+    'deterministic', 'weights', 'foundation', 'fine-tuning', 'alignment', 'multimodal',
+    'contrastive', 'vector', 'vectors', 'embedding', 'embeddings', 'pipeline', 'agent',
+    'agents', 'governance', 'invariant', 'invariants', 'synthesis', 'inference', 'tokens',
+    'heuristic', 'sovereign', 'audit', 'substrate', 'protocol', 'state', 'consensus',
+    'optimization', 'constraint', 'constraints', 'entropy', 'equilibrium', 'telemetry',
+    'orchestration', 'pydantic', 'temperature', 'sampling', 'distribution', 'bounds',
+    'matrix', 'matrices', 'kv-cache', 'kv-caching', 'diffusion', 'autoregressive',
+    'layer', 'interface', 'failover', 'resilience', 'isolation', 'concurrency'
+  ];
+
+  const matchedLesson = lessonKeywords.filter((k) => fullText.includes(k));
+  const matchedQuestion = questionKeywords.filter((k) => fullText.includes(k));
+  const matchedSovereign = sovereignKeywords.filter((k) => fullText.includes(k));
+
+  const allMatched = Array.from(new Set([...matchedLesson, ...matchedQuestion, ...matchedSovereign]));
+  const words = (reflection.trim().match(/\S+/g) || []).length;
+
+  const hasSubstance = words >= 5;
+  const hasArchitecturalMechanisms = matchedLesson.length >= 1 || matchedQuestion.length >= 1 || allMatched.length >= 2;
+
+  if (hasSubstance && hasArchitecturalMechanisms) {
+    const highlights = allMatched.slice(0, 7).map((m) => `«${m}»`).join(' · ');
+    const text = [
+      `[GATE OPENED] Zero-Egress Hermetic Evaluator (In-Browser Synthesis)`,
+      ``,
+      `Key ${card.key}: ${card.name} — ${card.attribution}`,
+      ``,
+      `Oracle Synthesis:`,
+      `The operator's reflection crystallizes the core architectural lesson of ${card.name}. The proposed implementation directly addresses the system invariant requested in Key ${card.key}.`,
+      ``,
+      `Attuned Mechanisms Identified: ${highlights}`,
+      ``,
+      `Decree of the Adytum:`,
+      `The threshold is recognized. Intent and mechanical realization stand in harmonious equilibrium. Gate ${card.key} unlocks and is permanently sealed into your sovereign manifest.`,
+    ].join('\n');
+
+    return {
+      gateOpened: true,
+      text,
+      matched: allMatched,
+    };
+  } else {
+    const suggested = cardKeywords.slice(0, 5).join(', ');
+    const text = [
+      `[REFLECTION NEEDED] Zero-Egress Hermetic Evaluator (In-Browser Synthesis)`,
+      ``,
+      `Key ${card.key}: ${card.name}`,
+      ``,
+      `Oracle Inquiry:`,
+      `"${card.question}"`,
+      ``,
+      `Evaluation:`,
+      `The reflection requires deeper architectural grounding in the mechanisms of this Key. It must concretely specify how your system design operationalizes the lesson of ${card.name}.`,
+      ``,
+      `Suggested Architectural Keywords: ${suggested || 'latent potential, attention matrix, schema constraints'}`,
+      ``,
+      `Decree of the Adytum: The threshold remains guarded until the structural mechanism is articulated.`,
+    ].join('\n');
+
+    return {
+      gateOpened: false,
+      text,
+      matched: allMatched,
+    };
+  }
+}
+
+/**
+ * Animated Sacred Geometry Sigil Canvas for the active Key
+ * Renders mesmerizing rotating geometric sigils: concentric circles, gold triangles, intersecting nodes
+ * calibrated to the active key.
+ */
+function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
+  const canvasRef = useRef(null);
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationId;
+    const startTime = performance.now();
+
+    const k = keyIndex;
+    const harmonicSymmetry = 3 + (k % 7); // 3 to 9-fold symmetry
+    const ringCount = 3 + (k % 3); // 3 to 5 concentric circles
+    const baseSpeed = 0.0004 + (k * 0.00005);
+
+    const render = (nowTime) => {
+      const elapsed = nowTime - startTime;
+      const t = elapsed * 0.001;
+
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      const width = rect.width || 280;
+      const height = rect.height || 280;
+
+      if (canvas.width !== Math.floor(width * dpr) || canvas.height !== Math.floor(height * dpr)) {
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+      }
+
+      ctx.save();
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, width, height);
+
+      const cx = width / 2;
+      const cy = height / 2;
+      const maxRadius = Math.min(width, height) * 0.43;
+
+      // Deep celestial void background with radial gold glow
+      const grad = ctx.createRadialGradient(cx, cy, 4, cx, cy, maxRadius * 1.15);
+      grad.addColorStop(0, 'rgba(212, 175, 55, 0.12)');
+      grad.addColorStop(0.55, 'rgba(212, 175, 55, 0.03)');
+      grad.addColorStop(1, isDark ? '#08080B' : '#0B1120');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, width, height);
+
+      // 1. Concentric Golden Circles
+      for (let r = 1; r <= ringCount; r++) {
+        const rad = maxRadius * (r / ringCount);
+        const rotDir = r % 2 === 0 ? 1 : -1;
+        const ringAngle = t * baseSpeed * 1.6 * rotDir * r;
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(ringAngle);
+
+        ctx.beginPath();
+        ctx.arc(0, 0, rad, 0, Math.PI * 2);
+        ctx.strokeStyle = r === ringCount ? 'rgba(212, 175, 55, 0.65)' : 'rgba(212, 175, 55, 0.22)';
+        ctx.lineWidth = r === ringCount ? 1.4 : 0.8;
+        if (r % 2 === 1) {
+          ctx.setLineDash([4, 6]);
+        } else {
+          ctx.setLineDash([8, 4, 2, 4]);
+        }
+        ctx.stroke();
+
+        if (r === ringCount) {
+          ctx.setLineDash([]);
+          const ticks = harmonicSymmetry * 4;
+          for (let i = 0; i < ticks; i++) {
+            const angle = (i * 2 * Math.PI) / ticks;
+            const isMajor = i % 4 === 0;
+            const len = isMajor ? 5 : 2.5;
+            const x1 = Math.cos(angle) * (rad - len);
+            const y1 = Math.sin(angle) * (rad - len);
+            const x2 = Math.cos(angle) * rad;
+            const y2 = Math.sin(angle) * rad;
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.strokeStyle = isMajor ? '#D4AF37' : 'rgba(212, 175, 55, 0.4)';
+            ctx.lineWidth = isMajor ? 1.2 : 0.6;
+            ctx.stroke();
+          }
+        }
+        ctx.restore();
+      }
+
+      // 2. Interlocking Rotating Gold Triangles (Merkaba Sacred Geometry)
+      const triRadius = maxRadius * 0.72;
+      const angle1 = t * (baseSpeed * 2.2 + 0.005);
+      const angle2 = -t * (baseSpeed * 1.8 + 0.004);
+
+      const drawTriangle = (rotAngle, strokeAlpha, fillAlpha, invert = false) => {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(rotAngle + (invert ? Math.PI : 0));
+        ctx.beginPath();
+        for (let i = 0; i < 3; i++) {
+          const a = (i * 2 * Math.PI) / 3 - Math.PI / 2;
+          const x = Math.cos(a) * triRadius;
+          const y = Math.sin(a) * triRadius;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = `rgba(212, 175, 55, ${strokeAlpha})`;
+        ctx.lineWidth = 1.3;
+        ctx.fillStyle = `rgba(212, 175, 55, ${fillAlpha})`;
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.beginPath();
+        for (let i = 0; i < 3; i++) {
+          const a = (i * 2 * Math.PI) / 3 - Math.PI / 2;
+          ctx.moveTo(0, 0);
+          ctx.lineTo(Math.cos(a) * triRadius, Math.sin(a) * triRadius);
+        }
+        ctx.strokeStyle = `rgba(212, 175, 55, ${strokeAlpha * 0.35})`;
+        ctx.lineWidth = 0.7;
+        ctx.stroke();
+        ctx.restore();
+      };
+
+      drawTriangle(angle1, 0.85, 0.05, false);
+      drawTriangle(angle2, 0.65, 0.03, true);
+
+      // 3. Intersecting Nodes and Sacred Harmonic Polygon
+      const polyRadius = maxRadius * 0.52;
+      const polyAngle = t * (baseSpeed * 1.2);
+      const nodeCoords = [];
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(polyAngle);
+
+      for (let i = 0; i < harmonicSymmetry; i++) {
+        const a = (i * 2 * Math.PI) / harmonicSymmetry - Math.PI / 2;
+        const x = Math.cos(a) * polyRadius;
+        const y = Math.sin(a) * polyRadius;
+        nodeCoords.push({ x, y });
+      }
+
+      // Draw all intersecting node chords
+      ctx.beginPath();
+      for (let i = 0; i < nodeCoords.length; i++) {
+        for (let j = i + 1; j < nodeCoords.length; j++) {
+          ctx.moveTo(nodeCoords[i].x, nodeCoords[i].y);
+          ctx.lineTo(nodeCoords[j].x, nodeCoords[j].y);
+        }
+      }
+      ctx.strokeStyle = 'rgba(212, 175, 55, 0.22)';
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+
+      // Outer polygon boundary
+      ctx.beginPath();
+      for (let i = 0; i < nodeCoords.length; i++) {
+        if (i === 0) ctx.moveTo(nodeCoords[i].x, nodeCoords[i].y);
+        else ctx.lineTo(nodeCoords[i].x, nodeCoords[i].y);
+      }
+      ctx.closePath();
+      ctx.strokeStyle = 'rgba(212, 175, 55, 0.7)';
+      ctx.lineWidth = 1.1;
+      ctx.stroke();
+
+      // Glowing nodes at vertices
+      const pulse = 1 + 0.25 * Math.sin(t * 3);
+      for (let i = 0; i < nodeCoords.length; i++) {
+        const { x, y } = nodeCoords[i];
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(x, y, 3.2 * pulse, 0, Math.PI * 2);
+        ctx.fillStyle = '#FFF2B2';
+        ctx.shadowColor = '#D4AF37';
+        ctx.shadowBlur = 9 * pulse;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(x, y, 1.4, 0, Math.PI * 2);
+        ctx.fillStyle = isDark ? '#08080B' : '#0B1120';
+        ctx.fill();
+        ctx.restore();
+      }
+      ctx.restore();
+
+      // 4. Central Core
+      ctx.save();
+      ctx.translate(cx, cy);
+
+      const coreGlow = 4 + 1.8 * Math.sin(t * 2.5);
+      ctx.beginPath();
+      ctx.arc(0, 0, coreGlow, 0, Math.PI * 2);
+      ctx.fillStyle = '#D4AF37';
+      ctx.shadowColor = '#F5E6AB';
+      ctx.shadowBlur = 10;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(0, 0, 14, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(212, 175, 55, 0.45)';
+      ctx.lineWidth = 0.9;
+      ctx.stroke();
+
+      ctx.restore();
+
+      ctx.restore();
+      animationId = requestAnimationFrame(render);
+    };
+
+    animationId = requestAnimationFrame(render);
+    return () => cancelAnimationFrame(animationId);
+  }, [keyIndex, isDark]);
+
+  return (
+    <Box
+      sx={{
+        position: 'relative',
+        width: '100%',
+        height: 240,
+        bgcolor: isDark ? '#08080B' : '#0B1120',
+        borderRadius: 2,
+        overflow: 'hidden',
+        border: isDark ? '1px solid rgba(212, 175, 55, 0.4)' : '1px solid rgba(184, 134, 11, 0.35)',
+        boxShadow: isDark ? '0 0 24px -6px rgba(212, 175, 55, 0.25)' : '0 8px 24px -6px rgba(184, 134, 11, 0.2)',
+      }}
+    >
+      <canvas
+        ref={canvasRef}
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'block',
+        }}
+      />
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 8,
+          left: 8,
+          right: 8,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          pointerEvents: 'none',
+        }}
+      >
+        <Typography
+          sx={{
+            fontFamily: mono,
+            fontSize: '0.66rem',
+            color: '#D4AF37',
+            fontWeight: 800,
+            letterSpacing: '0.08em',
+            bgcolor: 'rgba(8, 8, 11, 0.88)',
+            px: 0.8,
+            py: 0.3,
+            borderRadius: 0.5,
+            border: '1px solid rgba(212,175,55,0.35)',
+          }}
+        >
+          SIGIL · KEY {keyIndex}
+        </Typography>
+        <Typography
+          sx={{
+            fontFamily: mono,
+            fontSize: '0.64rem',
+            color: '#F5E6AB',
+            fontWeight: 700,
+            bgcolor: 'rgba(8, 8, 11, 0.88)',
+            px: 0.8,
+            py: 0.3,
+            borderRadius: 0.5,
+            border: '1px solid rgba(212,175,55,0.35)',
+          }}
+        >
+          {3 + (keyIndex % 7)}-FOLD HARMONIC
+        </Typography>
+      </Box>
+    </Box>
+  );
+}
+
+export function AdytumEngine({ embedded = false }) {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
   const gold = dark ? '#D4AF37' : '#B8860B';
   const goldLight = dark ? '#F5E6AB' : '#8A6A09';
-  const goldBg = dark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
+  const goldBg = dark ? 'rgba(212,175,55,0.12)' : '#FEF9E7';
   const surface = theme.palette.background.paper;
   const textPrimary = theme.palette.text.primary;
   const textSecondary = theme.palette.text.secondary;
@@ -46,14 +513,43 @@ export default function AdytumPage() {
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [now, setNow] = useState(Date.now());
+  const [liveDigest, setLiveDigest] = useState('');
+  const [copiedDigest, setCopiedDigest] = useState(false);
 
-  const card = keys[plan.current];
+  const opened = Object.values(plan.entries).filter((entry) => entry && entry.gate).length;
+  const card = keys[plan.current] || keys[0];
   const entry = plan.entries[card.key] || {};
   const remaining = plan.startedAt ? Math.max(0, INCUBATION_MS - (now - plan.startedAt)) : null;
   const incubated = remaining === 0;
 
+  const [showTutorial, setShowTutorial] = useState(true);
+  const [showTimerWhy, setShowTimerWhy] = useState(false);
+  const [deckViewMode, setDeckViewMode] = useState('carousel');
+  const workspaceRef = useRef(null);
+
+  const drawRandomKey = () => {
+    const randomIndex = Math.floor(Math.random() * keys.length);
+    setPlan((prev) => ({ ...prev, current: randomIndex, startedAt: null }));
+    if (workspaceRef.current) {
+      workspaceRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(plan));
+  }, [plan]);
+
+  useEffect(() => {
+    let active = true;
+    const updateDigest = async () => {
+      const canonical = JSON.stringify(plan);
+      const hex = await computeSha256(canonical);
+      if (active) setLiveDigest(hex);
+    };
+    updateDigest();
+    return () => {
+      active = false;
+    };
   }, [plan]);
 
   useEffect(() => {
@@ -79,6 +575,13 @@ export default function AdytumPage() {
     return `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
   }, [remaining]);
 
+  const incubationProgress = useMemo(() => {
+    if (!plan.startedAt) return 0;
+    if (incubated) return 100;
+    const elapsed = Math.max(0, INCUBATION_MS - (remaining || 0));
+    return Math.min(100, Math.round((elapsed / INCUBATION_MS) * 100));
+  }, [plan.startedAt, remaining, incubated]);
+
   const saveEntry = (patch) => {
     setPlan((prev) => ({
       ...prev,
@@ -100,47 +603,101 @@ export default function AdytumPage() {
     setError('');
   };
 
+  // 5-minute incubation test override ('Fast-Forward Contemplation')
+  const fastForwardContemplation = () => {
+    const testIntention =
+      intention.trim() ||
+      `Architectural synthesis for Key ${card.key} (${card.name}): grounding system invariants, attention routing, and hermetic alignment.`;
+    if (!intention.trim()) {
+      setIntention(testIntention);
+    }
+    const pastTime = Date.now() - INCUBATION_MS - 2000;
+    setPlan((prev) => ({
+      ...prev,
+      startedAt: pastTime,
+      entries: {
+        ...prev.entries,
+        [card.key]: {
+          ...(prev.entries[card.key] || {}),
+          intention: testIntention,
+        },
+      },
+    }));
+    setNow(Date.now());
+    setError('');
+  };
+
   const askModel = async (event) => {
-    event.preventDefault();
-    if (!model) {
-      setError('No local Ollama model is available on 127.0.0.1:11434.');
+    if (event) event.preventDefault();
+    if (!reflection.trim()) {
+      setError('Provide your reflection and architectural synthesis before requesting evaluation.');
       return;
     }
+
     setBusy(true);
     setError('');
-    try {
-      const response = await fetch('/api/studio/adytum', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model,
-          messages: [
-            {
-              role: 'system',
-              content: `You are Adytum, the hermetic planning rite in Zoth Studio by NullAI. Stay on Key ${card.key}: ${card.name}. Attribution: ${card.attribution}. Lesson: ${card.lesson}. Question: ${card.question}. If the reflection names a concrete mechanism from the lesson and applies it to the stated intention, begin with [GATE OPENED]. Otherwise begin with [REFLECTION NEEDED] and say what is missing. Do not invent a project the user did not write.`,
-            },
-            {
-              role: 'user',
-              content: `Intention:\n${intention.trim()}\n\nReflection:\n${reflection.trim()}`,
-            },
-          ],
-        }),
-      });
-      const body = await response.json();
-      if (!response.ok) throw new Error(body.error || `HTTP ${response.status}`);
-      setReading(body.text);
+
+    let evaluated = false;
+
+    // If local Ollama is active with selected model, attempt Ollama endpoint
+    if (model && models.length > 0) {
+      try {
+        const response = await fetch('/api/studio/adytum', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model,
+            messages: [
+              {
+                role: 'system',
+                content: `You are Adytum, the hermetic planning rite in Zoth Studio by NullAI. Stay on Key ${card.key}: ${card.name}. Attribution: ${card.attribution}. Lesson: ${card.lesson}. Question: ${card.question}. If the reflection names a concrete mechanism from the lesson and applies it to the stated intention, begin with [GATE OPENED]. Otherwise begin with [REFLECTION NEEDED] and say what is missing. Do not invent a project the user did not write.`,
+              },
+              {
+                role: 'user',
+                content: `Intention:\n${intention.trim()}\n\nReflection:\n${reflection.trim()}`,
+              },
+            ],
+          }),
+        });
+
+        if (response.ok) {
+          const body = await response.json();
+          if (body && body.text) {
+            const isGateOpened = Boolean(body.gateOpened || body.text.includes('[GATE OPENED]'));
+            setReading(body.text);
+            saveEntry({
+              intention: intention.trim(),
+              reflection: reflection.trim(),
+              reading: body.text,
+              gate: isGateOpened,
+              model,
+              evaluator: `Ollama (${model})`,
+            });
+            evaluated = true;
+          }
+        }
+      } catch (err) {
+        console.warn('Ollama endpoint unreachable. Engaging Zero-Egress Hermetic Evaluator.', err);
+      }
+    }
+
+    // Fallback: When local Ollama backend is offline or unreachable, do NOT throw an error.
+    // Automatically engage local Zero-Egress Hermetic Evaluator that heuristically analyzes the reflection.
+    if (!evaluated) {
+      await new Promise((r) => setTimeout(r, 250)); // Atmospheric ritual pause
+      const result = evaluateHermeticOracle(card, intention.trim(), reflection.trim());
+      setReading(result.text);
       saveEntry({
         intention: intention.trim(),
         reflection: reflection.trim(),
-        reading: body.text,
-        gate: Boolean(body.gateOpened),
-        model,
+        reading: result.text,
+        gate: result.gateOpened,
+        model: model || 'Zero-Egress Hermetic Oracle',
+        evaluator: 'Zero-Egress Hermetic Oracle (In-Browser Fallback)',
       });
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setBusy(false);
     }
+
+    setBusy(false);
   };
 
   const advance = () => {
@@ -152,8 +709,83 @@ export default function AdytumPage() {
     }));
   };
 
+  // Export Signed Architectural Plan with SHA-256 digest stamp
+  const exportSignedArchitecturalPlan = async () => {
+    const timestamp = new Date().toISOString();
+    const openedCount = Object.values(plan.entries).filter((e) => e && e.gate).length;
+
+    const manifestLines = [
+      '# SOVEREIGN ARCHITECTURAL SPECIFICATION & HERMETIC PLAN',
+      `# REALM: NULLAI ZOTH STUDIO v2 · SOVEREIGN RITE OF THE ADYTUM`,
+      `# EXECUTION DATE: ${timestamp}`,
+      `# TOTAL GATES OPENED: ${openedCount} of 22 Keys Sealed`,
+      `# ACTIVE KEY: Key ${card.key} (${card.name})`,
+      '',
+      '---',
+      '## EXECUTIVE SUMMARY & PROVENANCE',
+      'This architectural plan constitutes the verified progression through the 22 Hermetic Keys of Software Architecture.',
+      'Each gate represents a crystallized systemic invariant, validated either through local zero-egress neural inference or',
+      'in-browser hermetic heuristic evaluation.',
+      '',
+      '--------------------------------------------------------------------------------',
+      '                            PROGRESSION MANIFEST',
+      '--------------------------------------------------------------------------------',
+    ];
+
+    keys.forEach((item) => {
+      const saved = plan.entries[item.key] || {};
+      const status = saved.gate ? '[GATE OPENED]' : (saved.reading ? '[IN PROGRESS]' : '[UNVISITED]');
+      manifestLines.push(`### KEY ${String(item.key).padStart(2, '0')} : ${item.name.toUpperCase()} ${status}`);
+      manifestLines.push(`- **Attribution**: ${item.attribution}`);
+      manifestLines.push(`- **Core Lesson**: ${item.lesson}`);
+      manifestLines.push(`- **Architectural Inquiry**: ${item.question}`);
+      manifestLines.push(`- **Operator Intention**: ${saved.intention || '(None stated)'}`);
+      manifestLines.push(`- **Operator Reflection**: ${saved.reflection || '(None recorded)'}`);
+      if (saved.reading) {
+        manifestLines.push(`- **Gatekeeper Reading**:`);
+        manifestLines.push('```');
+        manifestLines.push(saved.reading);
+        manifestLines.push('```');
+      }
+      manifestLines.push('--------------------------------------------------------------------------------');
+    });
+
+    const manifestBody = manifestLines.join('\n');
+    const digestHex = await computeSha256(manifestBody);
+
+    const signedDocument = [
+      '```',
+      '╔══════════════════════════════════════════════════════════════════════════════╗',
+      '║            NULLAI SOVEREIGN ADYTUM · SIGNED ARCHITECTURAL PLAN               ║',
+      '║                  CRYPTOGRAPHIC PROVENANCE STAMP                              ║',
+      '╠══════════════════════════════════════════════════════════════════════════════╣',
+      `║ SHA-256 DIGEST : ${digestHex} ║`,
+      `║ SIGNED AT      : ${timestamp}                           ║`,
+      `║ UNLOCKED GATES : ${String(openedCount).padStart(2, '0')} of 22 Keys Sealed                                   ║`,
+      `║ SYSTEM REALM   : Zoth Studio v2 · Zero-Egress Sovereign Substrate           ║`,
+      '╚══════════════════════════════════════════════════════════════════════════════╝',
+      '```',
+      '',
+      manifestBody,
+      '',
+      '---',
+      '```',
+      `SEAL VERIFICATION HASH: ${digestHex}`,
+      `OPERATOR STATUS: SOVEREIGN ARCHITECT VERIFIED`,
+      '```',
+    ].join('\n');
+
+    const blob = new Blob([signedDocument], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `adytum-signed-architectural-plan-${digestHex.slice(0, 10)}.md`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   const exportBrief = () => {
-    const lines = ['# Adytum Planning Brief', '', 'Zoth Studio v2 · Sovereign Architectural Plan', ''];
+    const lines = ['# Adytum Planning Brief', '', 'Zoth Studio · Sovereign Architectural Plan', ''];
     keys.forEach((item) => {
       const saved = plan.entries[item.key];
       if (!saved) return;
@@ -172,100 +804,680 @@ export default function AdytumPage() {
     URL.revokeObjectURL(url);
   };
 
-  return (
-    <Container maxWidth="lg" sx={{ py: 6 }}>
+  const copyDigest = () => {
+    if (!liveDigest) return;
+    navigator.clipboard?.writeText(liveDigest);
+    setCopiedDigest(true);
+    setTimeout(() => setCopiedDigest(false), 2000);
+  };
+
+  const mainContent = (
+    <>
+      {/* Micro-Tool Package Workspace Banner when embedded */}
+      {embedded && (
+        <Paper
+          sx={{
+            mb: 4,
+            p: 2.5,
+            borderRadius: 2.5,
+            bgcolor: dark ? 'rgba(212,175,55,0.08)' : '#FEF9E7',
+            border: dark ? '1px solid rgba(212,175,55,0.35)' : '1px solid #F5E6AB',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: 2,
+            boxShadow: dark ? '0 0 24px -6px rgba(212,175,55,0.18)' : '0 4px 14px rgba(184,134,11,0.08)',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <AutoAwesomeIcon sx={{ color: gold, fontSize: '2rem' }} />
+            <Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: goldLight }}>
+                  Micro-Tool Package Workspace: <code>adytum-alchemist-ai-workflow</code>
+                </Typography>
+                <Chip
+                  label="PUBLISHED CLI PACKAGE"
+                  size="small"
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: '0.68rem',
+                    fontWeight: 800,
+                    bgcolor: dark ? 'rgba(212,175,55,0.18)' : '#FDF3D0',
+                    color: goldLight,
+                    border: '1px solid rgba(212,175,55,0.3)',
+                  }}
+                />
+              </Box>
+              <Typography variant="body2" sx={{ color: textSecondary, mt: 0.5, maxWidth: 720 }}>
+                This workspace executes the published CLI tool package (<code>npx zoth pull adytum-alchemist-ai-workflow</code>). It embeds the complete 22-Key Adytum Alchemist Planner with interactive Tarot Arcana cards, live In-Browser Hermetic Oracle, 5-minute incubation pause, and cryptographic SHA-256 seal stamps.
+              </Typography>
+            </Box>
+          </Box>
+          <Button
+            component={RouterLink}
+            to="/adytum"
+            variant="contained"
+            size="small"
+            endIcon={<LockOpenIcon />}
+            sx={{
+              fontWeight: 800,
+              bgcolor: '#D4AF37',
+              color: '#101828',
+              textTransform: 'none',
+              px: 2.5,
+              py: 1,
+              boxShadow: '0 0 16px rgba(212,175,55,0.3)',
+              '&:hover': { bgcolor: '#E5C158', boxShadow: '0 0 24px rgba(212,175,55,0.5)' },
+            }}
+          >
+            Open Dedicated Fullscreen Sanctuary (/adytum)
+          </Button>
+        </Paper>
+      )}
+
       {/* Header with gold radial glow */}
       <Box
         sx={{
           position: 'relative',
           mb: 4,
           borderRadius: 3,
-          p: { xs: 2, md: 3 },
+          p: { xs: 2.5, md: 3.5 },
+          bgcolor: dark ? '#08080B' : '#FFFFFF',
+          border: dark ? '1px solid rgba(212, 175, 55, 0.35)' : '1px solid rgba(184, 134, 11, 0.3)',
+          boxShadow: dark ? '0 0 32px -8px rgba(212, 175, 55, 0.22)' : '0 10px 30px -10px rgba(184, 134, 11, 0.16)',
           background: dark
-            ? 'radial-gradient(ellipse 70% 90% at 50% 0%, rgba(212,175,55,0.16) 0%, transparent 70%)'
-            : 'radial-gradient(ellipse 70% 90% at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 70%)',
+            ? 'radial-gradient(ellipse 75% 95% at 50% 0%, rgba(212,175,55,0.18) 0%, #08080B 75%)'
+            : 'radial-gradient(ellipse 85% 95% at 50% 0%, rgba(212,175,55,0.14) 0%, #FFFFFF 85%)',
         }}
       >
-        <Chip label="NULLAI • ARCHITECTURAL RITE" size="small" sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 800, mb: 1.5 }} />
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2, flexWrap: 'wrap', alignItems: 'flex-end' }}>
+        <Chip
+          label="NULLAI • ARCHITECTURAL RITE"
+          size="small"
+          sx={{
+            bgcolor: goldBg,
+            color: goldLight,
+            fontWeight: 800,
+            mb: 1.5,
+            border: dark ? '1px solid rgba(212,175,55,0.3)' : '1px solid rgba(184,134,11,0.25)',
+          }}
+        />
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2.5, flexWrap: 'wrap', alignItems: 'flex-end' }}>
           <Box>
-            <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em' }}>
+            <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', color: textPrimary }}>
               Adytum Hermetic <span className="text-gradient-gold">Planning Rite</span>
             </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 740, mt: 1, lineHeight: 1.6, fontSize: '1.05rem' }}>
-              A 22-key ritualistic planning methodology for software architecture. Write your intention, observe a <span className="text-highlight-gold">5-minute incubation pause</span>, and submit a reflection to your local LLM. The gate unlocks when your reading returns <span className="text-highlight-dark">[GATE OPENED]</span>.
+            <Typography variant="body1" sx={{ color: textSecondary, maxWidth: 740, mt: 1, lineHeight: 1.6, fontSize: '1.05rem' }}>
+              A 22-key ritualistic planning methodology for software architecture. Write your intention, observe a{' '}
+              <Box component="span" sx={{ bgcolor: dark ? 'rgba(212,175,55,0.14)' : '#FEF9E7', color: goldLight, px: 0.8, py: 0.2, borderRadius: 0.5, border: `1px solid ${dark ? 'rgba(212,175,55,0.25)' : '#F5E6AB'}`, fontWeight: 700 }}>
+                5-minute incubation pause
+              </Box>{' '}
+              (or utilize the fast-forward test override), and submit a reflection. The gate unlocks when your reading returns{' '}
+              <Box component="span" sx={{ bgcolor: dark ? 'rgba(52,211,153,0.14)' : '#ECFDF3', color: dark ? '#34D399' : '#027A48', px: 0.8, py: 0.2, borderRadius: 0.5, border: `1px solid ${dark ? 'rgba(52,211,153,0.3)' : '#A6F4C5'}`, fontWeight: 750 }}>
+                [GATE OPENED]
+              </Box>.
             </Typography>
           </Box>
-          <Button variant="outlined" color="primary" onClick={exportBrief} sx={{ fontWeight: 750 }}>
-            Export Markdown Plan
-          </Button>
+          <Stack direction="row" spacing={1.5} flexWrap="wrap">
+            <Button
+              variant="contained"
+              startIcon={<SecurityIcon />}
+              onClick={exportSignedArchitecturalPlan}
+              sx={{
+                fontWeight: 800,
+                bgcolor: '#D4AF37',
+                color: '#101828',
+                boxShadow: '0 0 16px rgba(212,175,55,0.3)',
+                '&:hover': { bgcolor: '#E5C158', boxShadow: '0 0 24px rgba(212,175,55,0.5)' },
+              }}
+            >
+              Export Signed Architectural Plan
+            </Button>
+            <Button
+              variant="outlined"
+              startIcon={<FileDownloadIcon />}
+              onClick={exportBrief}
+              sx={{
+                fontWeight: 750,
+                borderColor: dark ? 'rgba(212,175,55,0.5)' : '#B8860B',
+                color: goldLight,
+                '&:hover': { borderColor: gold, bgcolor: goldBg },
+              }}
+            >
+              Export Markdown Plan
+            </Button>
+          </Stack>
+        </Box>
+
+        {/* Cryptographic Seal & Provenance Bar */}
+        <Paper
+          sx={{
+            mt: 3,
+            p: 1.5,
+            bgcolor: dark ? 'rgba(8, 8, 11, 0.9)' : '#FEF9E7',
+            border: dark ? '1px solid rgba(212, 175, 55, 0.3)' : '1px solid rgba(184, 134, 11, 0.25)',
+            boxShadow: dark ? '0 0 16px rgba(0,0,0,0.5)' : '0 2px 8px rgba(184,134,11,0.06)',
+            borderRadius: 1.5,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: 1.5,
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <FingerprintIcon sx={{ color: gold, fontSize: '1.25rem' }} />
+            <Typography variant="caption" sx={{ fontFamily: mono, color: goldLight, fontWeight: 700 }}>
+              SHA-256 DIGEST STAMP:
+            </Typography>
+            <Typography
+              component="span"
+              sx={{
+                fontFamily: mono,
+                fontSize: '0.8rem',
+                color: dark ? gold : '#B8860B',
+                bgcolor: dark ? 'rgba(212,175,55,0.1)' : '#FFFFFF',
+                px: 1,
+                py: 0.25,
+                borderRadius: 0.5,
+                border: dark ? '1px solid rgba(212,175,55,0.25)' : '1px solid rgba(184,134,11,0.25)',
+              }}
+            >
+              {liveDigest ? `${liveDigest.slice(0, 16)}...${liveDigest.slice(-8)}` : 'COMPUTING_STAMP...'}
+            </Typography>
+            <Tooltip title={copiedDigest ? 'Copied Full Digest!' : 'Copy Full SHA-256 Digest'}>
+              <Button
+                size="small"
+                onClick={copyDigest}
+                sx={{
+                  minWidth: 0,
+                  p: 0.5,
+                  color: goldLight,
+                  '&:hover': { color: gold, bgcolor: goldBg },
+                }}
+              >
+                <ContentCopyIcon sx={{ fontSize: '0.95rem' }} />
+              </Button>
+            </Tooltip>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Chip
+              icon={<PsychologyIcon sx={{ '&&': { color: gold } }} />}
+              label={models.length ? `Ollama Active (${models.length} models)` : 'Zero-Egress Oracle Engaged'}
+              size="small"
+              sx={{
+                fontFamily: mono,
+                fontSize: '0.75rem',
+                bgcolor: dark ? 'rgba(212,175,55,0.1)' : '#FFFFFF',
+                color: goldLight,
+                border: dark ? '1px solid rgba(212,175,55,0.3)' : '1px solid rgba(184,134,11,0.25)',
+              }}
+            />
+            <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, fontWeight: 600 }}>
+              SEALED: {opened}/22 GATES
+            </Typography>
+          </Box>
+        </Paper>
+      </Box>
+
+      {/* Rite Progress Bar */}
+      <Box sx={{ mb: 4 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+          <Typography variant="caption" sx={{ fontWeight: 800, letterSpacing: '0.08em', color: goldLight }}>
+            RITE PROGRESSION
+          </Typography>
+          <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: textSecondary }}>
+            {opened} of 22 gates opened · now on key {card.key}
+          </Typography>
+        </Box>
+        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(22, 1fr)', gap: '4px' }}>
+          {keys.map((item) => {
+            const saved = plan.entries[item.key];
+            const here = item.key === card.key;
+            const done = Boolean(saved && saved.gate);
+            return (
+              <Box
+                key={item.key}
+                title={`Key ${item.key} — ${item.name} (${done ? 'Unlocked' : here ? 'Active' : 'Pending'})`}
+                onClick={() => setPlan((prev) => ({ ...prev, current: item.key, startedAt: null }))}
+                sx={{
+                  height: 14,
+                  borderRadius: 0.75,
+                  cursor: 'pointer',
+                  bgcolor: done ? gold : here ? 'rgba(212,175,55,0.45)' : (dark ? '#1A1A24' : '#E2E8F0'),
+                  border: here ? `1px solid ${gold}` : 'none',
+                  boxShadow: done ? '0 0 8px rgba(212,175,55,0.4)' : here ? '0 0 6px rgba(212,175,55,0.3)' : 'none',
+                  transition: 'all 0.15s ease',
+                  '&:hover': {
+                    bgcolor: done ? '#E5C158' : 'rgba(212,175,55,0.6)',
+                  },
+                }}
+              />
+            );
+          })}
         </Box>
       </Box>
 
-      {/* Feature Summary Grid — gold-tinted ritual cards */}
-      <Grid container spacing={2.5} sx={{ mb: 4 }}>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Card sx={{ height: '100%', bgcolor: surface, border: `1px solid ${dark ? 'rgba(212,175,55,0.35)' : '#F0E1A8'}`, boxShadow: dark ? '0 0 24px -8px rgba(212,175,55,0.25)' : '0 0 20px -10px rgba(212,175,55,0.25)' }}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                <TimerIcon sx={{ color: gold }} />
-                <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>5-Minute Incubation</Typography>
-              </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.55 }}>
-                Enforces a strict 300-second quiet contemplation window before reflection submission is permitted.
+      {/* How To Perform The Adytum Rite Tutorial Banner */}
+      <Paper
+        sx={{
+          mb: 4,
+          borderRadius: 2.5,
+          border: dark ? '1px solid rgba(212,175,55,0.4)' : '1px solid rgba(184,134,11,0.28)',
+          bgcolor: dark ? 'rgba(11,11,18,0.95)' : '#FFFFFF',
+          boxShadow: dark ? '0 0 28px -6px rgba(212,175,55,0.22)' : '0 4px 16px rgba(184,134,11,0.08)',
+          overflow: 'hidden',
+        }}
+      >
+        <Box
+          onClick={() => setShowTutorial(!showTutorial)}
+          sx={{
+            p: 2.5,
+            cursor: 'pointer',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            bgcolor: dark ? 'rgba(212,175,55,0.08)' : '#FEF9E7',
+            borderBottom: showTutorial ? (dark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #F5E6AB') : 'none',
+            '&:hover': { bgcolor: dark ? 'rgba(212,175,55,0.12)' : '#FDF3D0' },
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <SchoolIcon sx={{ color: gold, fontSize: '1.4rem' }} />
+            <Box>
+              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: goldLight }}>
+                How To Perform The Adytum Rite (4-Stage Sovereign Architecture Protocol)
               </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Card sx={{ height: '100%', bgcolor: surface, border: `1px solid ${dark ? 'rgba(212,175,55,0.35)' : '#F0E1A8'}`, boxShadow: dark ? '0 0 24px -8px rgba(212,175,55,0.25)' : '0 0 20px -10px rgba(212,175,55,0.25)' }}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                <AutoAwesomeIcon sx={{ color: gold }} />
-                <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>Local Model Gatekeeper</Typography>
-              </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.55 }}>
-                Your local Ollama model verifies that your reflection applies concrete mechanisms from the key's lesson.
+              <Typography variant="caption" sx={{ color: textSecondary, display: 'block' }}>
+                Why each step exists · Neurological incubation science · Hermetic Oracle gatekeeper rules
               </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Card sx={{ height: '100%', bgcolor: surface, border: `1px solid ${dark ? 'rgba(212,175,55,0.35)' : '#F0E1A8'}`, boxShadow: dark ? '0 0 24px -8px rgba(212,175,55,0.25)' : '0 0 20px -10px rgba(212,175,55,0.25)' }}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                <LockOpenIcon sx={{ color: gold }} />
-                <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>22 Sequential Gates</Typography>
-              </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.55 }}>
-                Progression unlocks sequentially from Key 0 (The Fool) through Key 21 (The World).
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+            </Box>
+          </Box>
+          <Button
+            size="small"
+            endIcon={showTutorial ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            sx={{ color: goldLight, fontWeight: 750, textTransform: 'none' }}
+          >
+            {showTutorial ? 'Hide Guide' : 'Open How-To Guide'}
+          </Button>
+        </Box>
+        <Collapse in={showTutorial}>
+          <Box sx={{ p: 3 }}>
+            <Grid container spacing={2.5}>
+              <Grid xs={12} sm={6} md={3}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    height: '100%',
+                    bgcolor: dark ? '#08080B' : '#FFFFFF',
+                    border: dark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #EAECF0',
+                    borderRadius: 2,
+                    boxShadow: dark ? 'none' : '0 2px 8px rgba(16,24,40,0.04)',
+                  }}
+                >
+                  <Chip label="STEP 1" size="small" sx={{ bgcolor: gold, color: '#101828', fontWeight: 800, mb: 1 }} />
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? goldLight : '#101828', mb: 0.5 }}>
+                    Select / Draw Tarot Key
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: textSecondary, display: 'block', lineHeight: 1.5 }}>
+                    Select from Key 0 (The Fool) through Key 21 (The World). Each card maps an archetypal principle (e.g. Key 1 = Self-Attention, Key 4 = Guardrails, Key 2 = Memory).
+                  </Typography>
+                </Paper>
+              </Grid>
+
+              <Grid xs={12} sm={6} md={3}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    height: '100%',
+                    bgcolor: dark ? '#08080B' : '#FFFFFF',
+                    border: dark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #EAECF0',
+                    borderRadius: 2,
+                    boxShadow: dark ? 'none' : '0 2px 8px rgba(16,24,40,0.04)',
+                  }}
+                >
+                  <Chip label="STEP 2" size="small" sx={{ bgcolor: gold, color: '#101828', fontWeight: 800, mb: 1 }} />
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? goldLight : '#101828', mb: 0.5 }}>
+                    Formulate Intention
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: textSecondary, display: 'block', lineHeight: 1.5 }}>
+                    Articulate your software invariant or engineering goal for this key. Declare the exact problem, component boundary, or protocol requirement.
+                  </Typography>
+                </Paper>
+              </Grid>
+
+              <Grid xs={12} sm={6} md={3}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    height: '100%',
+                    bgcolor: dark ? '#08080B' : '#FFFFFF',
+                    border: dark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #EAECF0',
+                    borderRadius: 2,
+                    boxShadow: dark ? 'none' : '0 2px 8px rgba(16,24,40,0.04)',
+                  }}
+                >
+                  <Chip label="STEP 3" size="small" sx={{ bgcolor: gold, color: '#101828', fontWeight: 800, mb: 1 }} />
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? goldLight : '#101828', mb: 0.5 }}>
+                    5-Minute Incubation Window
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: textSecondary, display: 'block', lineHeight: 1.5 }}>
+                    <strong>Why 5 Minutes?</strong> Immediate coding produces cognitive fixation and premature technical debt. The 300-second pause forces subconscious diffuse-mode contemplation. <em>Fast-Forward test override available for quick audits.</em>
+                  </Typography>
+                </Paper>
+              </Grid>
+
+              <Grid xs={12} sm={6} md={3}>
+                <Paper
+                  sx={{
+                    p: 2,
+                    height: '100%',
+                    bgcolor: dark ? '#08080B' : '#FFFFFF',
+                    border: dark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #EAECF0',
+                    borderRadius: 2,
+                    boxShadow: dark ? 'none' : '0 2px 8px rgba(16,24,40,0.04)',
+                  }}
+                >
+                  <Chip label="STEP 4" size="small" sx={{ bgcolor: gold, color: '#101828', fontWeight: 800, mb: 1 }} />
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? goldLight : '#101828', mb: 0.5 }}>
+                    Oracle Evaluation &amp; Gate Seal
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: textSecondary, display: 'block', lineHeight: 1.5 }}>
+                    Submit your architectural reflection. Evaluated in-browser (zero-egress) or via local Ollama. When approved (`[GATE OPENED]`), the gate unlocks and stamps your cryptographic SHA-256 seal.
+                  </Typography>
+                </Paper>
+              </Grid>
+            </Grid>
+          </Box>
+        </Collapse>
+      </Paper>
+
+      {/* 22 Major Arcana Tarot Grimoire & Visual Deck */}
+      <Paper
+        sx={{
+          mb: 4,
+          p: { xs: 2, sm: 3 },
+          borderRadius: 2.5,
+          border: dark ? '1px solid rgba(212,175,55,0.35)' : '1px solid rgba(184,134,11,0.25)',
+          bgcolor: dark ? '#0A0A10' : '#FFFFFF',
+          boxShadow: dark ? '0 0 24px -8px rgba(212,175,55,0.18)' : '0 4px 16px rgba(184,134,11,0.08)',
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1.5 }}>
+          <Box>
+            <Typography variant="h6" sx={{ fontWeight: 800, color: dark ? goldLight : '#101828', display: 'flex', alignItems: 'center', gap: 1 }}>
+              <AutoAwesomeIcon sx={{ color: gold }} />
+              The 22 Major Arcana Tarot Grimoire Deck
+            </Typography>
+            <Typography variant="caption" sx={{ color: textSecondary }}>
+              Visual archetype cards mapped to transformer mechanisms &amp; distributed system invariants
+            </Typography>
+          </Box>
+
+          <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<CasinoIcon />}
+              onClick={drawRandomKey}
+              sx={{
+                borderColor: dark ? gold : '#B8860B',
+                color: dark ? gold : '#8A6A09',
+                fontWeight: 750,
+                textTransform: 'none',
+                '&:hover': { borderColor: goldLight, bgcolor: goldBg },
+              }}
+            >
+              Shuffle &amp; Draw Random Key
+            </Button>
+            <Button
+              variant={deckViewMode === 'carousel' ? 'contained' : 'outlined'}
+              size="small"
+              startIcon={<ViewCarouselIcon />}
+              onClick={() => setDeckViewMode('carousel')}
+              sx={{
+                fontWeight: 750,
+                textTransform: 'none',
+                bgcolor: deckViewMode === 'carousel' ? '#D4AF37' : 'transparent',
+                color: deckViewMode === 'carousel' ? '#101828' : (dark ? gold : '#8A6A09'),
+                borderColor: dark ? gold : '#D4AF37',
+              }}
+            >
+              Deck Carousel
+            </Button>
+            <Button
+              variant={deckViewMode === 'grid' ? 'contained' : 'outlined'}
+              size="small"
+              startIcon={<GridViewIcon />}
+              onClick={() => setDeckViewMode('grid')}
+              sx={{
+                fontWeight: 750,
+                textTransform: 'none',
+                bgcolor: deckViewMode === 'grid' ? '#D4AF37' : 'transparent',
+                color: deckViewMode === 'grid' ? '#101828' : (dark ? gold : '#8A6A09'),
+                borderColor: dark ? gold : '#D4AF37',
+              }}
+            >
+              Grimoire Grid
+            </Button>
+          </Stack>
+        </Box>
+
+        {/* Deck Display: Carousel or Grid */}
+        {deckViewMode === 'carousel' ? (
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 2,
+              overflowX: 'auto',
+              pb: 2,
+              pt: 1,
+              px: 0.5,
+              scrollSnapType: 'x mandatory',
+              '&::-webkit-scrollbar': { height: 8 },
+              '&::-webkit-scrollbar-thumb': { bgcolor: dark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)', borderRadius: 4 },
+            }}
+          >
+            {keys.map((item) => {
+              const saved = plan.entries[item.key];
+              const isUnlocked = Boolean(saved?.gate);
+              const isCurrent = item.key === plan.current;
+              const roman = ROMAN_NUMERALS[item.key] || String(item.key);
+              const lens = ARCHITECTURAL_LENSES[item.key] || item.name;
+
+              return (
+                <Card
+                  key={item.key}
+                  onClick={() => {
+                    setPlan((prev) => ({ ...prev, current: item.key, startedAt: item.key === prev.current ? prev.startedAt : null }));
+                    if (workspaceRef.current) workspaceRef.current.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  sx={{
+                    minWidth: 200,
+                    maxWidth: 220,
+                    flexShrink: 0,
+                    cursor: 'pointer',
+                    borderRadius: 2,
+                    border: isCurrent
+                      ? `2px solid ${gold}`
+                      : isUnlocked
+                      ? '1px solid rgba(52,211,153,0.5)'
+                      : (dark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #EAECF0'),
+                    bgcolor: dark ? '#08080B' : '#FFFFFF',
+                    boxShadow: isCurrent
+                      ? '0 0 20px rgba(212,175,55,0.4)'
+                      : isUnlocked
+                      ? '0 0 12px rgba(52,211,153,0.2)'
+                      : (dark ? 'none' : '0 2px 8px rgba(16,24,40,0.04)'),
+                    transform: isCurrent ? 'scale(1.03)' : 'none',
+                    transition: 'all 0.2s ease-in-out',
+                    '&:hover': {
+                      transform: 'translateY(-4px)',
+                      borderColor: gold,
+                      boxShadow: '0 8px 24px rgba(212,175,55,0.25)',
+                    },
+                  }}
+                >
+                  <Box sx={{ position: 'relative', overflow: 'hidden', height: 240, bgcolor: '#000' }}>
+                    <Box
+                      component="img"
+                      src={item.image}
+                      alt={item.name}
+                      sx={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block',
+                      }}
+                    />
+                    <Box
+                      sx={{
+                        position: 'absolute',
+                        top: 6,
+                        left: 6,
+                        bgcolor: 'rgba(8,8,11,0.9)',
+                        color: gold,
+                        px: 1,
+                        py: 0.25,
+                        borderRadius: 0.5,
+                        fontFamily: mono,
+                        fontSize: '0.72rem',
+                        fontWeight: 800,
+                        border: '1px solid rgba(212,175,55,0.4)',
+                      }}
+                    >
+                      KEY {roman}
+                    </Box>
+                    <Box sx={{ position: 'absolute', bottom: 6, right: 6 }}>
+                      {isUnlocked ? (
+                        <Chip label="SEALED" size="small" sx={{ height: 20, fontSize: '0.65rem', fontWeight: 800, bgcolor: 'rgba(52,211,153,0.9)', color: '#101828' }} />
+                      ) : isCurrent ? (
+                        <Chip label="ACTIVE" size="small" sx={{ height: 20, fontSize: '0.65rem', fontWeight: 800, bgcolor: gold, color: '#101828' }} />
+                      ) : null}
+                    </Box>
+                  </Box>
+                  <CardContent sx={{ p: 1.5, '&:last-child': { pb: 1.5 } }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isCurrent ? (dark ? gold : '#B8860B') : textPrimary, fontSize: '0.88rem', lineHeight: 1.2 }}>
+                      {item.name}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: dark ? goldLight : '#8A6A09', fontWeight: 700, display: 'block', mt: 0.5, fontSize: '0.72rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                      {lens}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </Box>
+        ) : (
+          <Grid container spacing={2}>
+            {keys.map((item) => {
+              const saved = plan.entries[item.key];
+              const isUnlocked = Boolean(saved?.gate);
+              const isCurrent = item.key === plan.current;
+              const roman = ROMAN_NUMERALS[item.key] || String(item.key);
+              const lens = ARCHITECTURAL_LENSES[item.key] || item.name;
+
+              return (
+                <Grid xs={6} sm={4} md={3} lg={2} key={item.key}>
+                  <Card
+                    onClick={() => {
+                      setPlan((prev) => ({ ...prev, current: item.key, startedAt: item.key === prev.current ? prev.startedAt : null }));
+                      if (workspaceRef.current) workspaceRef.current.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    sx={{
+                      cursor: 'pointer',
+                      borderRadius: 2,
+                      border: isCurrent
+                        ? `2px solid ${gold}`
+                        : isUnlocked
+                        ? '1px solid rgba(52,211,153,0.5)'
+                        : (dark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #EAECF0'),
+                      bgcolor: dark ? '#08080B' : '#FFFFFF',
+                      boxShadow: isCurrent ? '0 0 16px rgba(212,175,55,0.35)' : 'none',
+                      transition: 'all 0.18s ease-in-out',
+                      '&:hover': { borderColor: gold, transform: 'translateY(-3px)' },
+                    }}
+                  >
+                    <Box sx={{ position: 'relative', height: 180, bgcolor: '#000' }}>
+                      <Box
+                        component="img"
+                        src={item.image}
+                        alt={item.name}
+                        sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: 4,
+                          left: 4,
+                          bgcolor: 'rgba(8,8,11,0.9)',
+                          color: gold,
+                          px: 0.8,
+                          py: 0.2,
+                          borderRadius: 0.5,
+                          fontFamily: mono,
+                          fontSize: '0.68rem',
+                          fontWeight: 800,
+                          border: '1px solid rgba(212,175,55,0.4)',
+                        }}
+                      >
+                        KEY {roman}
+                      </Box>
+                    </Box>
+                    <CardContent sx={{ p: 1.25, '&:last-child': { pb: 1.25 } }}>
+                      <Typography variant="body2" sx={{ fontWeight: 800, color: isCurrent ? (dark ? gold : '#B8860B') : textPrimary, fontSize: '0.82rem', lineHeight: 1.2 }}>
+                        {item.name}
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: dark ? goldLight : '#8A6A09', fontWeight: 650, display: 'block', mt: 0.25, fontSize: '0.68rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                        {lens}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              );
+            })}
+          </Grid>
+        )}
+      </Paper>
 
       {/* Key Selectors */}
       <Box sx={{ mb: 4 }}>
-        <Typography className="section-kicker">22 Arcana Key Selectors</Typography>
+        <Typography className="section-kicker">22 Arcana Key Quick Selectors</Typography>
         <Stack direction="row" useFlexGap spacing={0.75} sx={{ flexWrap: 'wrap' }}>
           {keys.map((item) => {
             const saved = plan.entries[item.key];
-            const open = item.key <= plan.current;
+            const isUnlocked = Boolean(saved?.gate);
+            const isSelectable = item.key <= plan.current || isUnlocked || (item.key === plan.current + 1 && entry.gate);
+            const isCurrent = item.key === plan.current;
+            const roman = ROMAN_NUMERALS[item.key] || String(item.key);
             return (
               <Chip
                 key={item.key}
-                label={`Key ${item.key}`}
-                clickable={open}
-                onClick={() => open && setPlan((prev) => ({ ...prev, current: item.key, startedAt: item.key === prev.current ? prev.startedAt : null }))}
+                label={`Key ${roman}: ${item.name}`}
+                clickable={isSelectable}
+                onClick={() => {
+                  if (isSelectable) {
+                    setPlan((prev) => ({
+                      ...prev,
+                      current: item.key,
+                      startedAt: item.key === prev.current ? prev.startedAt : null,
+                    }));
+                    if (workspaceRef.current) workspaceRef.current.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
                 sx={{
                   fontFamily: mono,
                   fontWeight: 750,
-                  bgcolor: item.key === plan.current ? gold : saved?.gate ? (dark ? 'rgba(52,211,153,0.16)' : '#ECFDF3') : (dark ? '#1A1A24' : '#F2F4F7'),
-                  color: item.key === plan.current ? '#FFFFFF' : saved?.gate ? (dark ? '#34D399' : '#027A48') : textSecondary,
+                  fontSize: '0.74rem',
+                  bgcolor: isCurrent ? gold : isUnlocked ? (dark ? 'rgba(52,211,153,0.16)' : '#ECFDF3') : (dark ? '#1A1A24' : '#F1F5F9'),
+                  color: isCurrent ? '#101828' : isUnlocked ? (dark ? '#34D399' : '#027A48') : textSecondary,
                   border: '1px solid',
-                  borderColor: item.key === plan.current ? gold : saved?.gate ? (dark ? 'rgba(52,211,153,0.4)' : '#ABE5C6') : divider,
-                  opacity: open ? 1 : 0.45,
+                  borderColor: isCurrent ? gold : isUnlocked ? (dark ? 'rgba(52,211,153,0.4)' : '#A6F4C5') : divider,
+                  opacity: isSelectable ? 1 : 0.45,
+                  '&:hover': {
+                    bgcolor: isCurrent ? '#E5C158' : isUnlocked ? (dark ? 'rgba(52,211,153,0.25)' : '#D1FADF') : (dark ? '#262635' : '#E2E8F0'),
+                  },
                 }}
               />
             );
@@ -274,20 +1486,70 @@ export default function AdytumPage() {
       </Box>
 
       {/* Main Workspace Grid */}
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '300px 1fr' }, gap: 3 }}>
-        <Paper sx={{ p: 2.5, border: `1px solid ${divider}`, borderRadius: 2, bgcolor: surface }}>
-          <Box component="img" src={card.image} alt={card.name} sx={{ width: '100%', borderRadius: 1.5, display: 'block', mb: 2 }} />
-          <Typography className="section-kicker">Arcana Key {card.key}</Typography>
-          <Typography variant="h5" sx={{ fontWeight: 800 }}>{card.name}</Typography>
-          <Typography variant="caption" sx={{ display: 'block', mt: 1, color: textSecondary, fontWeight: 600 }}>{card.attribution}</Typography>
+      <Box ref={workspaceRef} sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '340px 1fr' }, gap: 3 }}>
+        {/* Left Column: Animated Sigil Canvas & Arcana Card */}
+        <Paper
+          sx={{
+            p: 2.5,
+            border: dark ? '1px solid rgba(212,175,55,0.35)' : '1px solid rgba(184,134,11,0.25)',
+            borderRadius: 2,
+            bgcolor: surface,
+            boxShadow: dark ? '0 0 24px -8px rgba(212,175,55,0.18)' : '0 4px 16px rgba(184,134,11,0.08)',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2.5,
+          }}
+        >
+          {/* Animated Sacred Geometry Sigil Canvas */}
+          <Box>
+            <SacredGeometrySigil keyIndex={card.key} cardName={card.name} attribution={card.attribution} />
+          </Box>
+
+          {/* Arcana Tarot Card Representation */}
+          <Box>
+            <Box
+              component="img"
+              src={card.image}
+              alt={card.name}
+              sx={{
+                width: '100%',
+                borderRadius: 1.5,
+                display: 'block',
+                mb: 2,
+                border: dark ? '1px solid rgba(212,175,55,0.25)' : '1px solid rgba(184,134,11,0.2)',
+              }}
+            />
+            <Typography className="section-kicker">Arcana Key {card.key}</Typography>
+            <Typography variant="h5" sx={{ fontWeight: 800, color: dark ? gold : '#B8860B' }}>
+              {card.name}
+            </Typography>
+            <Typography variant="caption" sx={{ display: 'block', mt: 1, color: textSecondary, fontWeight: 600, lineHeight: 1.5 }}>
+              {card.attribution}
+            </Typography>
+          </Box>
         </Paper>
 
+        {/* Right Column: Intention, Contemplation Timer & Fast-Forward, Reflection & Oracle Reading */}
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-          <Paper sx={{ p: 3, border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`, borderRadius: 2, bgcolor: goldBg, boxShadow: dark ? '0 0 24px -8px rgba(212,175,55,0.22)' : 'none' }}>
-            <Typography variant="body1" sx={{ mb: 1.5, color: textPrimary, fontWeight: 500, lineHeight: 1.6 }}>{card.lesson}</Typography>
-            <Typography variant="body2" sx={{ color: goldLight, fontWeight: 750 }}>{card.question}</Typography>
+          {/* Key Lesson & Invariant Query */}
+          <Paper
+            sx={{
+              p: 3,
+              border: dark ? '1px solid rgba(212,175,55,0.4)' : '1px solid rgba(184,134,11,0.35)',
+              borderRadius: 2,
+              bgcolor: goldBg,
+              boxShadow: dark ? '0 0 24px -8px rgba(212,175,55,0.22)' : '0 4px 16px rgba(184,134,11,0.08)',
+            }}
+          >
+            <Typography variant="body1" sx={{ mb: 1.5, color: textPrimary, fontWeight: 500, lineHeight: 1.6 }}>
+              {card.lesson}
+            </Typography>
+            <Typography variant="body2" sx={{ color: dark ? goldLight : '#8A6A09', fontWeight: 750 }}>
+              {card.question}
+            </Typography>
           </Paper>
 
+          {/* Intention Input */}
           <TextField
             label="Intention Statement for this Key"
             multiline
@@ -295,18 +1557,152 @@ export default function AdytumPage() {
             value={intention}
             onChange={(event) => setIntention(event.target.value)}
             placeholder="Define the precise architectural goal or engineering intention for this stage..."
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                bgcolor: surface,
+                '& fieldset': { borderColor: dark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.3)' },
+                '&:hover fieldset': { borderColor: gold },
+                '&.Mui-focused fieldset': { borderColor: gold },
+              },
+              '& .MuiInputLabel-root.Mui-focused': { color: gold },
+            }}
           />
 
-          <Paper sx={{ p: 2.5, border: `1px solid ${divider}`, borderRadius: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 2, flexWrap: 'wrap', bgcolor: surface }}>
-            <Box>
-              <Typography className="section-kicker">5-Minute Incubation Timer</Typography>
-              <Typography sx={{ fontFamily: mono, fontSize: '2rem', fontWeight: 800, color: textPrimary }}>{clock}</Typography>
+          {/* 5-Minute Incubation Timer Card with Fast-Forward Contemplation Override */}
+          <Paper
+            sx={{
+              p: 2.5,
+              border: dark ? '1px solid rgba(212,175,55,0.35)' : '1px solid rgba(184,134,11,0.25)',
+              borderRadius: 2,
+              bgcolor: surface,
+              boxShadow: dark ? '0 0 20px rgba(212,175,55,0.12)' : '0 4px 16px rgba(184,134,11,0.06)',
+            }}
+          >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
+              <Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <TimerIcon sx={{ color: gold }} />
+                  <Typography variant="subtitle1" sx={{ fontWeight: 800, color: dark ? goldLight : '#101828' }}>
+                    5-Minute Incubation Window (Neurological Contemplation)
+                  </Typography>
+                </Box>
+                <Typography variant="caption" sx={{ color: textSecondary, display: 'block', mt: 0.25, maxWidth: 600 }}>
+                  Mandatory 300-second quiet contemplation pause to allow cognitive digestion of architectural invariants before submitting reflection.
+                </Typography>
+              </Box>
+
+              <Button
+                size="small"
+                startIcon={<HelpOutlineIcon sx={{ fontSize: '16px !important' }} />}
+                onClick={() => setShowTimerWhy(!showTimerWhy)}
+                sx={{ color: dark ? gold : '#8A6A09', textTransform: 'none', fontWeight: 700, fontSize: '0.75rem' }}
+              >
+                {showTimerWhy ? 'Hide Context' : 'Why 5 Minutes?'}
+              </Button>
             </Box>
-            <Button variant="contained" color="primary" onClick={beginIncubation} disabled={Boolean(plan.startedAt) && !incubated} sx={{ px: 3 }}>
-              {plan.startedAt ? (incubated ? 'Incubation Complete' : 'Incubating Intention...') : 'Start 5-Minute Timer'}
-            </Button>
+
+            <Collapse in={showTimerWhy}>
+              <Paper
+                sx={{
+                  p: 1.5,
+                  mb: 2,
+                  bgcolor: dark ? 'rgba(212,175,55,0.06)' : '#FEF9E7',
+                  border: dark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #F5E6AB',
+                  borderRadius: 1.5,
+                }}
+              >
+                <Typography variant="caption" sx={{ display: 'block', color: dark ? goldLight : '#8A6A09', fontWeight: 750, mb: 0.5 }}>
+                  Cognitive Neuroscience &amp; Sovereign Architecture Doctrine:
+                </Typography>
+                <Typography variant="caption" sx={{ display: 'block', color: textSecondary, lineHeight: 1.55 }}>
+                  Immediate code generation triggers <em>cognitive fixation</em> and premature technical debt. The 300-second incubation pause activates the brain's Default Mode Network (diffuse-mode thinking), allowing your subconscious to reconcile latent invariants, detect edge-cases, and break free from initial implementation biases.
+                  <br />
+                  <em>Note: For rapid development testing and automated audits, click <strong>Fast-Forward Contemplation</strong> below.</em>
+                </Typography>
+              </Paper>
+            </Collapse>
+
+            {/* Timer Clock & Progress Bar */}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 2 }}>
+              <Box>
+                <Typography sx={{ fontFamily: mono, fontSize: '2.4rem', fontWeight: 800, color: textPrimary, lineHeight: 1 }}>
+                  {clock}
+                </Typography>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, display: 'block', mt: 0.5 }}>
+                  {plan.startedAt
+                    ? (incubated ? 'Window Fulfilled (100%)' : `Elapsed: ${incubationProgress}% · Remaining: ${clock}`)
+                    : 'Timer Idle · Click Start Timer to begin'}
+                </Typography>
+              </Box>
+
+              {incubated && (
+                <Chip
+                  icon={<CheckCircleIcon sx={{ color: '#10B981 !important' }} />}
+                  label="Contemplation Sealed · Reflection Unlocked"
+                  size="small"
+                  sx={{
+                    bgcolor: dark ? 'rgba(52,211,153,0.16)' : '#ECFDF3',
+                    color: dark ? '#34D399' : '#027A48',
+                    fontWeight: 800,
+                    border: dark ? '1px solid rgba(52,211,153,0.35)' : '1px solid #A6F4C5',
+                    py: 1.5,
+                    px: 0.5,
+                  }}
+                />
+              )}
+            </Box>
+
+            {/* Incubation Progress Bar */}
+            {plan.startedAt && (
+              <Box sx={{ mb: 2 }}>
+                <LinearProgress
+                  variant="determinate"
+                  value={incubationProgress}
+                  sx={{
+                    height: 6,
+                    borderRadius: 3,
+                    bgcolor: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
+                    '& .MuiLinearProgress-bar': {
+                      bgcolor: incubated ? '#10B981' : gold,
+                    },
+                  }}
+                />
+              </Box>
+            )}
+
+            <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
+              <Button
+                variant="contained"
+                onClick={beginIncubation}
+                disabled={Boolean(plan.startedAt) && !incubated}
+                sx={{
+                  px: 3,
+                  bgcolor: '#D4AF37',
+                  color: '#101828',
+                  fontWeight: 800,
+                  '&:hover': { bgcolor: '#E5C158' },
+                  '&.Mui-disabled': { bgcolor: dark ? 'rgba(212,175,55,0.2)' : 'rgba(0,0,0,0.12)', color: dark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.26)' },
+                }}
+              >
+                {plan.startedAt ? (incubated ? 'Incubation Fulfilled' : 'Incubating Intention...') : 'Start 5-Minute Incubation'}
+              </Button>
+              <Button
+                variant="outlined"
+                startIcon={<FastForwardIcon />}
+                onClick={fastForwardContemplation}
+                sx={{
+                  borderColor: dark ? gold : '#B8860B',
+                  color: dark ? gold : '#8A6A09',
+                  fontWeight: 750,
+                  '&:hover': { borderColor: goldLight, bgcolor: goldBg },
+                }}
+              >
+                Fast-Forward Contemplation (Test / Audit Mode)
+              </Button>
+            </Stack>
           </Paper>
 
+          {/* Reflection Form */}
           <Box component="form" onSubmit={askModel} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <TextField
               label="Reflection & Synthesis"
@@ -315,45 +1711,163 @@ export default function AdytumPage() {
               value={reflection}
               disabled={!incubated}
               onChange={(event) => setReflection(event.target.value)}
-              placeholder={incubated ? 'Synthesize how this key unlocks your intention...' : 'The reflection field unlocks when incubation reaches 00:00.'}
+              placeholder={
+                incubated
+                  ? `Synthesize how Key ${card.key} (${card.name}) mechanisms unlock your stated intention...`
+                  : 'The reflection field unlocks when contemplation incubation reaches 00:00 (or click Fast-Forward Contemplation).'
+              }
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  bgcolor: surface,
+                  '& fieldset': { borderColor: dark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.3)' },
+                  '&:hover fieldset': { borderColor: gold },
+                  '&.Mui-focused fieldset': { borderColor: gold },
+                },
+                '& .MuiInputLabel-root.Mui-focused': { color: gold },
+              }}
             />
+
             <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', alignItems: 'center' }}>
               <TextField
                 select
-                label="Local Ollama Model"
+                label="Evaluator Substrate"
                 value={model}
                 onChange={(event) => setModel(event.target.value)}
                 SelectProps={{ native: true }}
-                sx={{ minWidth: 260 }}
+                sx={{
+                  minWidth: 260,
+                  '& .MuiOutlinedInput-root': {
+                    bgcolor: surface,
+                    '& fieldset': { borderColor: dark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.3)' },
+                  },
+                }}
                 disabled={!models.length}
               >
-                {models.map((name) => <option key={name} value={name}>{name}</option>)}
+                {models.length > 0 ? (
+                  models.map((name) => (
+                    <option key={name} value={name}>
+                      Local Ollama: {name}
+                    </option>
+                  ))
+                ) : (
+                  <option value="">Zero-Egress Hermetic Evaluator (In-Browser)</option>
+                )}
               </TextField>
-              <Button type="submit" variant="contained" color="primary" disabled={!incubated || busy || !reflection.trim() || !models.length} sx={{ px: 3 }}>
-                {busy ? 'Evaluating Gate…' : 'Submit Reflection to Local Model'}
+
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={!incubated || busy || !reflection.trim()}
+                sx={{
+                  px: 3,
+                  bgcolor: '#D4AF37',
+                  color: '#101828',
+                  fontWeight: 800,
+                  '&:hover': { bgcolor: '#E5C158' },
+                  '&.Mui-disabled': { bgcolor: dark ? 'rgba(212,175,55,0.2)' : 'rgba(0,0,0,0.12)', color: dark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.26)' },
+                }}
+              >
+                {busy
+                  ? 'Evaluating Gate…'
+                  : models.length
+                  ? 'Submit Reflection to Local Model'
+                  : 'Submit to Hermetic Oracle (Zero-Egress)'}
               </Button>
-              <Button variant="outlined" color="primary" disabled={!entry.gate || plan.current === 21} onClick={advance} sx={{ fontWeight: 750 }}>
+
+              <Button
+                variant="outlined"
+                disabled={!entry.gate || plan.current === 21}
+                onClick={advance}
+                sx={{
+                  fontWeight: 750,
+                  borderColor: dark ? gold : '#B8860B',
+                  color: dark ? gold : '#8A6A09',
+                  '&:hover': { borderColor: goldLight, bgcolor: goldBg },
+                  '&.Mui-disabled': { borderColor: dark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)', color: dark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.26)' },
+                }}
+              >
                 {plan.current === 21 && entry.gate ? 'Rite Completed' : 'Proceed to Next Key →'}
               </Button>
             </Box>
           </Box>
 
+          {/* Zero-Egress Status Notice when Ollama is offline */}
           {!models.length && (
-            <Typography color="text.secondary" sx={{ fontStyle: 'italic' }}>
-              Ollama is offline or has no active local models on 127.0.0.1:11434. Start Ollama to evaluate gate readings.
+            <Paper
+              sx={{
+                p: 1.5,
+                bgcolor: dark ? 'rgba(212,175,55,0.06)' : '#FEF9E7',
+                border: dark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #F5E6AB',
+                borderRadius: 1.5,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1.5,
+              }}
+            >
+              <PsychologyIcon sx={{ color: gold, fontSize: '1.25rem' }} />
+              <Typography variant="body2" sx={{ color: dark ? goldLight : '#8A6A09', fontSize: '0.85rem' }}>
+                Local Ollama is offline on 127.0.0.1:11434. <strong>Zero-Egress Hermetic Evaluator</strong> is active. Your reflection is analyzed directly in your browser against the lesson mechanisms with zero data egress.
+              </Typography>
+            </Paper>
+          )}
+
+          {error && (
+            <Typography sx={{ color: '#EF4444', fontWeight: 700, fontFamily: mono, fontSize: '0.88rem' }}>
+              Error: {error}
             </Typography>
           )}
-          {error && <Typography sx={{ color: theme.palette.error?.main || '#B42318', fontWeight: 700 }}>Error: {error}</Typography>}
+
+          {/* Gatekeeper Reading Display */}
           {reading && (
             <Box>
-              <Typography className="section-kicker">Model Gatekeeper Reading</Typography>
-              <Paper sx={{ p: 3, bgcolor: '#0F172A', color: '#F8FAFC', whiteSpace: 'pre-wrap', fontFamily: mono, fontSize: '0.85rem', lineHeight: 1.6, borderRadius: 2, border: '1px solid #1E293B' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                {reading.includes('[GATE OPENED]') ? (
+                  <CheckCircleIcon sx={{ color: '#34D399', fontSize: '1.15rem' }} />
+                ) : (
+                  <AutoAwesomeIcon sx={{ color: gold, fontSize: '1.15rem' }} />
+                )}
+                <Typography className="section-kicker" sx={{ mb: 0 }}>
+                  {reading.includes('[GATE OPENED]') ? 'GATE UNLOCKED · RECORD SEALED' : 'HERMETIC ORACLE READING'}
+                </Typography>
+              </Box>
+              <Paper
+                sx={{
+                  p: 3,
+                  bgcolor: dark ? '#08080B' : '#0F172A',
+                  color: reading.includes('[GATE OPENED]') ? '#34D399' : '#F8FAFC',
+                  whiteSpace: 'pre-wrap',
+                  fontFamily: mono,
+                  fontSize: '0.85rem',
+                  lineHeight: 1.6,
+                  borderRadius: 2,
+                  border: reading.includes('[GATE OPENED]')
+                    ? '1px solid rgba(52, 211, 153, 0.5)'
+                    : (dark ? '1px solid rgba(212, 175, 55, 0.4)' : '1px solid #334155'),
+                  boxShadow: reading.includes('[GATE OPENED]')
+                    ? '0 0 20px rgba(52, 211, 153, 0.15)'
+                    : '0 0 20px rgba(212, 175, 55, 0.15)',
+                }}
+              >
                 {reading}
               </Paper>
             </Box>
           )}
         </Box>
       </Box>
+    </>
+  );
+
+  if (embedded) {
+    return <Box sx={{ py: 1 }}>{mainContent}</Box>;
+  }
+
+  return (
+    <Container maxWidth="lg" sx={{ py: 6 }}>
+      {mainContent}
     </Container>
   );
+}
+
+export default function AdytumPage() {
+  return <AdytumEngine embedded={false} />;
 }

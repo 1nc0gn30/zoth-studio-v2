@@ -204,6 +204,7 @@ export default function CompanyTicker() {
           display: 'flex',
           gap: 2,
           overflowX: 'auto',
+          maxWidth: '100%',
           py: 1,
           px: 0.5,
           '&::-webkit-scrollbar': { height: 6 },

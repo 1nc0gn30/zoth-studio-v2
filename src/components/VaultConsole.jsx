@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Box, Paper, Typography, TextField, Button, Grid, Chip, LinearProgress,
+  Box, Paper, Typography, TextField, Button, Unstable_Grid2 as Grid, Chip, LinearProgress,
   IconButton, Tooltip, Alert
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -74,17 +74,26 @@ export default function VaultConsole() {
   };
 
   return (
-    <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, mb: 4, bgcolor: theme.palette.background.paper }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+    <Paper
+      sx={{
+        p: 3,
+        border: isDark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #EAECF0',
+        mb: 4,
+        bgcolor: theme.palette.background.paper,
+        boxShadow: isDark ? '0 0 24px -8px rgba(212,175,55,0.14)' : '0 2px 10px rgba(16,24,40,0.05)',
+        borderRadius: 2.5,
+      }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Box sx={{ width: 40, height: 40, borderRadius: 1.5, bgcolor: isDark ? 'rgba(212,175,55,0.14)' : '#FEF3F2', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <SecurityIcon sx={{ color: isDark ? '#F5E6AB' : '#B42318' }} />
+          <Box sx={{ width: 40, height: 40, borderRadius: 1.5, bgcolor: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <SecurityIcon sx={{ color: isDark ? '#F5E6AB' : '#B8860B' }} />
           </Box>
           <Box>
-            <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.2 }}>
-              Zero-Cloud Hardware Vault & Entropy Auditor
+            <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.2, color: theme.palette.text.primary }}>
+              Zero-Cloud Hardware Vault &amp; Entropy Auditor
             </Typography>
-            <Typography variant="caption" color="text.secondary">
+            <Typography variant="caption" color="text.secondary" sx={{ display: 'block', maxWidth: 520 }}>
               Derive Argon2id encryption keys and audit payload entropy locally on 127.0.0.1:8787
             </Typography>
           </Box>
@@ -93,7 +102,7 @@ export default function VaultConsole() {
       </Box>
 
       <Grid container spacing={2.5} sx={{ mb: 3 }}>
-        <Grid size={{ xs: 12, sm: 6 }}>
+        <Grid xs={12} sm={6}>
           <TextField
             fullWidth
             label="Secret Key Identifier"
@@ -103,7 +112,7 @@ export default function VaultConsole() {
             size="small"
           />
         </Grid>
-        <Grid size={{ xs: 12, sm: 6 }}>
+        <Grid xs={12} sm={6}>
           <TextField
             fullWidth
             label="Master Passphrase"
@@ -114,7 +123,7 @@ export default function VaultConsole() {
             size="small"
           />
         </Grid>
-        <Grid size={{ xs: 12 }}>
+        <Grid xs={12}>
           <TextField
             fullWidth
             label="Raw Secret Value / Token Payload"
@@ -129,12 +138,12 @@ export default function VaultConsole() {
       </Grid>
 
       {/* Real-time Entropy Auditor Bar */}
-      <Box sx={{ p: 2, bgcolor: theme.palette.background.paper, borderRadius: 1.5, border: `1px solid ${theme.palette.divider}`, mb: 3 }}>
+      <Box sx={{ p: 2, bgcolor: isDark ? 'rgba(212,175,55,0.04)' : '#F8FAFC', borderRadius: 1.5, border: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : '#EAECF0'}`, mb: 3 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-          <Typography variant="body2" sx={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Typography variant="body2" sx={{ fontWeight: 750, display: 'flex', alignItems: 'center', gap: 1, color: isDark ? '#F5E6AB' : '#101828' }}>
             <KeyIcon fontSize="small" sx={{ color: goldText }} /> Payload Shannon Entropy Analysis
           </Typography>
-          <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, color: entropy >= 4.0 ? '#12B76A' : '#D97706' }}>
+          <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 750, color: entropy >= 4.0 ? (isDark ? '#34D399' : '#027A48') : (isDark ? '#FBBF24' : '#B45309') }}>
             {entropy.toFixed(3)} bits/char ({entropyPercent}% randomness)
           </Typography>
         </Box>
@@ -144,8 +153,8 @@ export default function VaultConsole() {
           sx={{
             height: 8,
             borderRadius: 1,
-            bgcolor: theme.palette.divider,
-                        '& .MuiLinearProgress-bar': {
+            bgcolor: isDark ? 'rgba(255,255,255,0.08)' : '#EAECF0',
+            '& .MuiLinearProgress-bar': {
               bgcolor: entropy >= 4.5 ? '#12B76A' : entropy >= 3.0 ? '#F79009' : '#D92D20'
             }
           }}
@@ -158,25 +167,36 @@ export default function VaultConsole() {
       </Box>
 
       {/* Action Buttons */}
-      <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+      <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
         <Button
           variant="contained"
-          color="primary"
           startIcon={<LockIcon />}
           onClick={handleEncrypt}
           disabled={!secretValue || !passphrase}
-          sx={{ px: 3 }}
+          sx={{
+            px: 3,
+            bgcolor: isDark ? '#D4AF37' : '#B8860B',
+            color: '#101828',
+            fontWeight: 800,
+            '&:hover': { bgcolor: '#E5C158' },
+            '&.Mui-disabled': { bgcolor: isDark ? 'rgba(212,175,55,0.2)' : 'rgba(0,0,0,0.12)', color: isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.26)' }
+          }}
         >
-          Encrypt & Derivate Key
+          Encrypt &amp; Derive Key
         </Button>
         <Button
           variant="outlined"
-          color="inherit"
           startIcon={<RefreshIcon />}
           onClick={() => {
             setSecretName('VAULT_TOKEN_' + Math.floor(Math.random() * 1000));
             const randBytes = Array.from({ length: 32 }, () => Math.floor(Math.random() * 256).toString(16).padStart(2, '0')).join('');
             setSecretValue(`zk_live_${randBytes}`);
+          }}
+          sx={{
+            borderColor: isDark ? 'rgba(212,175,55,0.5)' : '#B8860B',
+            color: isDark ? '#F5E6AB' : '#8A6A09',
+            fontWeight: 750,
+            '&:hover': { borderColor: isDark ? '#D4AF37' : '#B8860B', bgcolor: isDark ? 'rgba(212,175,55,0.08)' : '#FEF9E7' }
           }}
         >
           Generate High-Entropy Token
@@ -185,9 +205,9 @@ export default function VaultConsole() {
 
       {/* Derived Key & Ciphertext JSON Output */}
       {encryptedPayload && (
-        <Box sx={{ bgcolor: isDark ? '#0B0B12' : '#101828', color: '#E6F4EA', p: 2.5, borderRadius: 1.5, fontFamily: mono, fontSize: '0.82rem' }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, pb: 1, borderBottom: `1px solid ${isDark ? '#2A2A38' : '#1F2937'}` }}>
-                    <Typography variant="subtitle2" sx={{ fontFamily: mono, color: gold, fontWeight: 700 }}>
+        <Box sx={{ bgcolor: isDark ? '#08080B' : '#0F172A', color: '#E6F4EA', p: 2.5, borderRadius: 1.5, fontFamily: mono, fontSize: '0.82rem', border: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : '#1E293B'}` }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, pb: 1, borderBottom: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : '#1F2937'}` }}>
+            <Typography variant="subtitle2" sx={{ fontFamily: mono, color: isDark ? '#D4AF37' : '#F5E6AB', fontWeight: 800 }}>
               Encrypted Vault Sealed Payload (AES-256-GCM)
             </Typography>
             <Tooltip title={copied ? 'Copied!' : 'Copy Sealed JSON'}>
@@ -196,11 +216,11 @@ export default function VaultConsole() {
               </IconButton>
             </Tooltip>
           </Box>
-          <pre style={{ margin: 0, overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+          <pre style={{ margin: 0, overflowX: 'auto', whiteSpace: 'pre-wrap', color: '#A7F3D0' }}>
             {JSON.stringify(encryptedPayload, null, 2)}
           </pre>
           {derivedKey && (
-            <Typography variant="caption" sx={{ color: '#98A2B3', mt: 1.5, display: 'block', fontFamily: mono }}>
+            <Typography variant="caption" sx={{ color: isDark ? '#F5E6AB' : '#94A3B8', mt: 1.5, display: 'block', fontFamily: mono, fontWeight: 700 }}>
               Argon2id Master Derived Key: {derivedKey}
             </Typography>
           )}

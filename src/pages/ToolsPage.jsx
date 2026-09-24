@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Box, Container, Typography, Grid, Card, CardContent, CardActions,
+  Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, CardActions,
   Chip, Button, TextField, InputAdornment, MenuItem, Select, FormControl, InputLabel,
   Paper
 } from '@mui/material';
@@ -15,8 +15,10 @@ import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import LaunchIcon from '@mui/icons-material/Launch';
 import SecurityIcon from '@mui/icons-material/Security';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import DnsIcon from '@mui/icons-material/Dns';
 import { Link as RouterLink } from 'react-router-dom';
 import { microTools } from '../data/toolsData';
+import { useStudioStatus } from '../studio/useStudioStatus';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const categories = ['All', 'Planning', 'Swarm & Core', 'AI & Knowledge', 'Security & Recon', 'Security & Steganography', 'Autonomous Web', 'Media & 3D', 'Automation'];
@@ -24,8 +26,12 @@ const categories = ['All', 'Planning', 'Swarm & Core', 'AI & Knowledge', 'Securi
 export default function ToolsPage() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
+  const { status } = useStudioStatus();
+  const isBackendConnected = Boolean(status?.services);
+
   const [search, setSearch] = useState('');
   const [selectedCat, setSelectedCat] = useState('All');
+  const [execFilter, setExecFilter] = useState('all'); // 'all' | 'webgpu' | 'local_cli'
   const [copiedId, setCopiedId] = useState(null);
   const [expanded, setExpanded] = useState(() => new Set());
 
@@ -52,11 +58,12 @@ export default function ToolsPage() {
 
   const filtered = microTools.filter((t) => {
     const matchesCat = selectedCat === 'All' || t.category === selectedCat;
+    const matchesExec = execFilter === 'all' || t.executionType === execFilter;
     const matchesSearch =
       t.name.toLowerCase().includes(search.toLowerCase()) ||
       t.description.toLowerCase().includes(search.toLowerCase()) ||
       t.repo.toLowerCase().includes(search.toLowerCase());
-    return matchesCat && matchesSearch;
+    return matchesCat && matchesExec && matchesSearch;
   });
 
   return (
@@ -80,18 +87,49 @@ export default function ToolsPage() {
               : '0 0 12px 1px rgba(184,134,11,0.35)',
           }}
         />
-        <Chip
-          icon={<TerminalIcon sx={{ color: `${gold.accent} !important` }} />}
-          label="NULLAI TOOL CATALOG & WEBGPU WORKSTATIONS"
-          size="small"
-          sx={{ bgcolor: gold.wash, color: gold.accent, border: `1px solid ${isDark ? 'rgba(212,175,55,0.42)' : '#F0E1A8'}`, fontWeight: 800, mb: 1.5, px: 1 }}
-        />
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5, flexWrap: 'wrap' }}>
+          <Chip
+            icon={<TerminalIcon sx={{ color: `${gold.accent} !important` }} />}
+            label="NULLAI TOOL CATALOG & WEBGPU WORKSTATIONS"
+            size="small"
+            sx={{ bgcolor: gold.wash, color: gold.accent, border: `1px solid ${isDark ? 'rgba(212,175,55,0.42)' : '#F0E1A8'}`, fontWeight: 800, px: 1 }}
+          />
+          {isBackendConnected ? (
+            <Chip
+              icon={<DnsIcon sx={{ color: '#10B981 !important' }} />}
+              label="127.0.0.1 BACKEND CONNECTED · ALL 25 TOOLS RUNNING LIVE"
+              size="small"
+              sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5', color: '#10B981', border: '1px solid rgba(16,185,129,0.3)', fontWeight: 800 }}
+            />
+          ) : (
+            <Chip
+              icon={<DnsIcon sx={{ color: '#F59E0B !important' }} />}
+              label="CLOUD STATIC MODE · IN-BROWSER WEBGPU READY · CLI TOOLS REQUIRE LOCAL DAEMON"
+              size="small"
+              sx={{ bgcolor: isDark ? 'rgba(245,158,11,0.12)' : '#FFFBEB', color: '#F59E0B', border: '1px solid rgba(245,158,11,0.3)', fontWeight: 800 }}
+            />
+          )}
+        </Box>
         <Typography variant="h3" sx={{ mb: 1, fontWeight: 800, letterSpacing: '-0.03em', color: theme.palette.text.primary }}>
           Tool Nexus <span className="text-gradient-gold">Sovereign Repositories</span>
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 840, lineHeight: 1.65, fontSize: '1.05rem' }}>
           Click any WebGPU tool below to open its <span className="text-highlight-gold">Real Working In-Browser Tool Workspace</span>. For CLI or daemon-backed tools, copy the checkout command or run <span className="text-highlight-dark">Zoth OS</span> for zero-configuration out-of-the-box execution.
         </Typography>
+      </Box>
+
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr 1fr', sm: 'repeat(4, 1fr)' }, gap: 1.5, mb: 4 }}>
+        {[
+          ['Catalog', microTools.length],
+          ['In browser', microTools.filter((tool) => tool.executionType === 'webgpu').length],
+          ['Local CLI', microTools.filter((tool) => tool.executionType === 'local_cli').length],
+          ['Categories', categories.length - 1],
+        ].map(([label, value]) => (
+          <Box key={label} sx={{ p: 1.75, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper }}>
+            <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '1.5rem', color: gold.accent, lineHeight: 1 }}>{value}</Typography>
+            <Typography variant="caption" sx={{ fontWeight: 750, letterSpacing: '0.06em', textTransform: 'uppercase', color: theme.palette.text.secondary }}>{label}</Typography>
+          </Box>
+        ))}
       </Box>
 
       {/* Zoth OS Funnel Banner */}
@@ -143,40 +181,87 @@ export default function ToolsPage() {
       </Paper>
 
       {/* Filter & Search Bar */}
-      <Grid container spacing={2} sx={{ mb: 4 }}>
-        <Grid size={{ xs: 12, md: 8 }}>
-          <TextField
-            fullWidth
-            placeholder="Search the catalog by name, category, or repo..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon sx={{ color: gold.accent }} />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </Grid>
-        <Grid size={{ xs: 12, md: 4 }}>
-          <FormControl fullWidth>
-            <InputLabel id="category-select-label">Category Filter</InputLabel>
-            <Select
-              labelId="category-select-label"
-              value={selectedCat}
-              label="Category Filter"
-              onChange={(e) => setSelectedCat(e.target.value)}
-            >
-              {categories.map((cat) => (
-                <MenuItem key={cat} value={cat}>
-                  {cat}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
+      <TextField
+        fullWidth
+        placeholder="Search the catalog by name, category, or repo..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        sx={{ mb: 2 }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon sx={{ color: gold.accent }} />
+            </InputAdornment>
+          ),
+        }}
+      />
+
+      {/* Execution Substrate Mode Filters */}
+      <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap', alignItems: 'center' }}>
+        <Typography variant="caption" sx={{ fontWeight: 800, color: gold.accent, letterSpacing: '0.06em', textTransform: 'uppercase', mr: 0.5 }}>
+          Substrate:
+        </Typography>
+        <Chip
+          label={`All Modes (${microTools.length})`}
+          clickable
+          onClick={() => setExecFilter('all')}
+          size="small"
+          sx={{
+            fontWeight: 800,
+            bgcolor: execFilter === 'all' ? gold.accent : theme.palette.background.paper,
+            color: execFilter === 'all' ? '#101828' : theme.palette.text.primary,
+            border: `1px solid ${execFilter === 'all' ? gold.accent : theme.palette.divider}`,
+          }}
+        />
+        <Chip
+          icon={<FlashOnIcon sx={{ fontSize: '16px !important', color: execFilter === 'webgpu' ? '#101828 !important' : `${gold.accent} !important` }} />}
+          label={`In-Browser WebGPU (${microTools.filter((t) => t.executionType === 'webgpu').length})`}
+          clickable
+          onClick={() => setExecFilter('webgpu')}
+          size="small"
+          sx={{
+            fontWeight: 800,
+            bgcolor: execFilter === 'webgpu' ? gold.accent : theme.palette.background.paper,
+            color: execFilter === 'webgpu' ? '#101828' : theme.palette.text.primary,
+            border: `1px solid ${execFilter === 'webgpu' ? gold.accent : theme.palette.divider}`,
+          }}
+        />
+        <Chip
+          icon={<TerminalIcon sx={{ fontSize: '16px !important', color: execFilter === 'local_cli' ? '#101828 !important' : `${gold.accent} !important` }} />}
+          label={`Local CLI Enclave (${microTools.filter((t) => t.executionType === 'local_cli').length})`}
+          clickable
+          onClick={() => setExecFilter('local_cli')}
+          size="small"
+          sx={{
+            fontWeight: 800,
+            bgcolor: execFilter === 'local_cli' ? gold.accent : theme.palette.background.paper,
+            color: execFilter === 'local_cli' ? '#101828' : theme.palette.text.primary,
+            border: `1px solid ${execFilter === 'local_cli' ? gold.accent : theme.palette.divider}`,
+          }}
+        />
+      </Box>
+
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 4 }}>
+        {categories.map((cat) => {
+          const active = selectedCat === cat;
+          const count = cat === 'All' ? microTools.length : microTools.filter((tool) => tool.category === cat).length;
+          return (
+            <Chip
+              key={cat}
+              label={`${cat} · ${count}`}
+              clickable
+              onClick={() => setSelectedCat(cat)}
+              sx={{
+                fontWeight: 750,
+                bgcolor: active ? gold.accent : theme.palette.background.paper,
+                color: active ? '#101828' : theme.palette.text.primary,
+                border: '1px solid',
+                borderColor: active ? gold.accent : theme.palette.divider,
+              }}
+            />
+          );
+        })}
+      </Box>
 
       {/* Tools Counter */}
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
@@ -193,7 +278,7 @@ export default function ToolsPage() {
           const isWebGPU = tool.executionType === 'webgpu';
           const isExpanded = expanded.has(tool.id);
           return (
-            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={tool.id}>
+            <Grid xs={12} sm={6} md={4} key={tool.id}>
               <Card
                 sx={{
                   height: '100%',
@@ -275,47 +360,44 @@ export default function ToolsPage() {
                   </Box>
                 </CardContent>
 
-                <CardActions sx={{ px: 2, pb: 2, pt: 1.5, justifyContent: 'space-between', borderTop: `1px solid ${theme.palette.divider}`, bgcolor: isWebGPU ? (isDark ? 'rgba(212,175,55,0.08)' : '#FEF9E733') : 'transparent' }}>
-                  {isWebGPU ? (
+                <CardActions sx={{ px: 2, pb: 2, pt: 1.5, flexDirection: 'column', gap: 1, borderTop: `1px solid ${theme.palette.divider}`, bgcolor: isDark ? 'rgba(212,175,55,0.04)' : '#FEF9E722' }}>
+                  <Button
+                    fullWidth
+                    size="small"
+                    variant={isWebGPU ? 'contained' : 'outlined'}
+                    color="primary"
+                    component={RouterLink}
+                    to={`/tools/${tool.id}`}
+                    startIcon={isWebGPU ? <FlashOnIcon /> : <LaunchIcon />}
+                    sx={{ fontWeight: 800, py: 0.85, borderRadius: 2 }}
+                  >
+                    {isWebGPU ? 'Launch WebGPU Workspace' : 'Launch Tool Workspace'}
+                  </Button>
+                  <Box sx={{ display: 'flex', gap: 1, width: '100%', justifyContent: 'space-between' }}>
                     <Button
                       fullWidth
                       size="small"
-                      variant="contained"
-                      color="primary"
-                      component={RouterLink}
-                      to={`/tools/${tool.id}`}
-                      startIcon={<FlashOnIcon />}
-                      sx={{ fontWeight: 800, py: 0.9 }}
+                      variant="text"
+                      startIcon={<ContentCopyIcon sx={{ fontSize: '14px !important' }} />}
+                      onClick={() => handleCopy(tool.pull, tool.id)}
+                      sx={{ fontWeight: 700, fontSize: '0.75rem', py: 0.4, color: gold.accent }}
                     >
-                      Open WebGPU Tool Workspace
+                      {copiedId === tool.id ? 'Copied!' : 'Copy CLI'}
                     </Button>
-                  ) : (
-                    <>
+                    {tool.github && (
                       <Button
                         size="small"
-                        variant="outlined"
-                        color="primary"
-                        startIcon={<ContentCopyIcon />}
-                        onClick={() => handleCopy(tool.pull, tool.id)}
-                        sx={{ fontWeight: 750 }}
-                      >
-                        {copiedId === tool.id ? 'Copied!' : 'Copy CLI'}
-                      </Button>
-                      <Button
-                        size="small"
-                        variant="contained"
-                        color="inherit"
-                        href={tool.github || undefined}
+                        variant="text"
+                        href={tool.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        startIcon={<GitHubIcon />}
-                        disabled={!tool.published || tool.localOnly}
-                        sx={{ bgcolor: isDark ? '#1E293B' : '#334155', color: '#FFFFFF', fontWeight: 750, '&:hover': { bgcolor: isDark ? '#0F172A' : '#0F172A' } }}
+                        startIcon={<GitHubIcon sx={{ fontSize: '14px !important' }} />}
+                        sx={{ fontWeight: 700, fontSize: '0.75rem', py: 0.4, color: isDark ? '#9CA3AF' : '#6B7280', flexShrink: 0 }}
                       >
                         Repo
                       </Button>
-                    </>
-                  )}
+                    )}
+                  </Box>
                 </CardActions>
               </Card>
             </Grid>

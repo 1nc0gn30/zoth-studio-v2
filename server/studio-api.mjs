@@ -49,12 +49,28 @@ function localModels(tags) {
     .filter((name) => name && !/cloud/i.test(name));
 }
 
+function probeClassic() {
+  return new Promise((resolve) => {
+    const req = http.request(
+      { hostname: '127.0.0.1', port: 8088, path: '/studio/index.html', method: 'GET', timeout: 900 },
+      (res) => {
+        res.resume();
+        resolve(res.statusCode > 0 && res.statusCode < 400);
+      }
+    );
+    req.on('error', () => resolve(false));
+    req.on('timeout', () => { req.destroy(); resolve(false); });
+    req.end();
+  });
+}
+
 export async function probeStatus() {
-  const [memory, bridge, vault, ollama] = await Promise.all([
+  const [memory, bridge, vault, ollama, classic] = await Promise.all([
     requestJson(8788, '/health'),
     requestJson(8789, '/api/health'),
     requestJson(8787, '/health'),
     requestJson(11434, '/api/tags'),
+    probeClassic(),
   ]);
 
   return {
@@ -84,6 +100,11 @@ export async function probeStatus() {
         port: 11434,
         up: ollama.up,
         models: ollama.up ? localModels(ollama.json) : [],
+      },
+      classic: {
+        name: 'Classic studio',
+        port: 8088,
+        up: classic,
       },
     },
   };

@@ -2,8 +2,9 @@
 /**
  * Zoth CLI. Ships with this repo.
  *   npm run zoth -- <command>
- * Pulls published Zoth tools and starts the
- * memory daemon and signal bridge from those checkouts.
+ * Starts the memory daemon, signal bridge, and vault
+ * from backend/ in this repo. Pulls published tools
+ * into ./tools on request.
  */
 
 import { spawn } from 'node:child_process';
@@ -32,6 +33,7 @@ function banner() {
 
 function toolDir(repo) {
   const candidates = [
+    path.join(root, 'backend', repo),
     path.join(process.cwd(), 'tools', repo),
     path.join(root, 'tools', repo),
     path.join(root, '..', 'zoth-tools', repo),
@@ -197,7 +199,35 @@ async function handleUp() {
   if (before.services.vault.up) {
     console.log(`${GREEN}✔ vault${RESET} already listening on 127.0.0.1:8787`);
   } else {
-    console.log(`${GRAY}○ vault${RESET} is not running. This repo does not ship the vault binary. Start zoth-vault-daemon --port 8787 yourself if you have it.`);
+    const vaultDir = path.join(root, 'backend', 'vault-daemon');
+    const vaultBin = path.join(vaultDir, 'target', 'release', 'zoth-vault-daemon');
+    if (!fs.existsSync(vaultBin)) {
+      console.log(`${CYAN}building vault${RESET} (cargo build --release, first run only)`);
+      const built = await run('cargo', ['build', '--release'], { cwd: vaultDir });
+      if (built !== 0) {
+        console.log(`${RED}✖ vault build failed.${RESET} ${GRAY}cargo is required. Source is in backend/vault-daemon.${RESET}`);
+      }
+    }
+    if (fs.existsSync(vaultBin)) {
+      const dataDir = path.join(stateDir, 'vault-data');
+      fs.mkdirSync(dataDir, { recursive: true });
+      const started = spawnDaemon('vault', vaultBin, ['--port', '8787', '--data-dir', dataDir, '--bind', '127.0.0.1'], vaultDir);
+      pids.vault = started;
+      console.log(`${GREEN}✔ vault${RESET} pid ${started.pid}  log ${path.relative(root, started.log)}`);
+    }
+  }
+
+  const classicRoot = process.env.ZOTH_CLASSIC_ROOT
+    || path.join(root, '..', 'zoth-studio', 'core-app', 'public');
+  const classicUp = await fetch('http://127.0.0.1:8088/studio/index.html').then((res) => res.ok).catch(() => false);
+  if (classicUp) {
+    console.log(`${GREEN}✔ classic studio${RESET} already listening on http://127.0.0.1:8088/`);
+  } else if (!fs.existsSync(classicRoot)) {
+    console.log(`${GRAY}○ classic studio${RESET} source not found at ${classicRoot}`);
+  } else {
+    const started = spawnDaemon('classic', process.execPath, [path.join(root, 'server', 'classic-server.mjs')], root);
+    pids.classic = started;
+    console.log(`${GREEN}✔ classic studio${RESET} pid ${started.pid}  http://127.0.0.1:8088/`);
   }
 
   if (before.services.ollama.up) {
@@ -265,7 +295,7 @@ function handleHelp() {
   console.log(`  ${GOLD}npm run zoth -- list${RESET}            Catalog, with published GitHub URLs`);
   console.log(`  ${GOLD}npm run zoth -- pull <repo>${RESET}     Clone or fast-forward one published tool into ./tools`);
   console.log(`  ${GOLD}npm run zoth -- pull --all${RESET}      Clone every published tool`);
-  console.log(`  ${GOLD}npm run zoth -- up${RESET}              Start memory (:8788) and bridge (:8789) if checked out`);
+  console.log(`  ${GOLD}npm run zoth -- up${RESET}              Start memory (:8788), bridge (:8789), and vault (:8787) from backend/`);
   console.log(`  ${GOLD}npm run zoth -- down${RESET}            Stop processes this CLI started`);
   console.log(`  ${GOLD}npm run zoth -- swarm${RESET}           Print the pantheon roster`);
   console.log(`  ${GOLD}npm run dev${RESET}                     Studio UI on http://127.0.0.1:3000/`);

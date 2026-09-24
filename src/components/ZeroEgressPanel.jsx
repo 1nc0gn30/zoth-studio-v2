@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Chip, Grid, Paper, Typography, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Box, Chip, Unstable_Grid2 as Grid, Paper, Typography, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import ShieldIcon from '@mui/icons-material/Shield';
 import { zeroEgressInvariants } from '../data/zeroEgress';
@@ -37,7 +37,7 @@ export default function ZeroEgressPanel({ embedded = false }) {
       </Typography>
 
       <Grid container spacing={2.5}>
-        <Grid size={{ xs: 12, md: 5 }}>
+        <Grid xs={12} md={5}>
           <Paper sx={{ p: 2.5, height: '100%', border: `1px solid ${theme.palette.divider}` }}>
             <Typography variant="overline" sx={{ color: gold, fontWeight: 750, letterSpacing: '0.08em' }}>
               Verified invariants
@@ -52,7 +52,7 @@ export default function ZeroEgressPanel({ embedded = false }) {
             </Box>
           </Paper>
         </Grid>
-        <Grid size={{ xs: 12, md: 7 }}>
+        <Grid xs={12} md={7}>
           <Paper sx={{ border: `1px solid ${theme.palette.divider}`, overflow: 'hidden', height: '100%' }}>
             <Table size="small">
               <TableHead>

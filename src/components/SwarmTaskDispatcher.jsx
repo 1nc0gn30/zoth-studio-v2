@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Paper, Typography, TextField, Button, Grid, Chip, LinearProgress, Card, CardContent } from '@mui/material';
+import { Box, Paper, Typography, TextField, Button, Unstable_Grid2 as Grid, Chip, LinearProgress, Card, CardContent } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import HubIcon from '@mui/icons-material/Hub';
@@ -88,7 +88,7 @@ export default function SwarmTaskDispatcher() {
           const isDone = idx < activeStep || progress === 100;
           const isCurrent = idx === activeStep && running;
           return (
-            <Grid size={{ xs: 12 }} key={step.agent}>
+            <Grid xs={12} key={step.agent}>
               <Card
                 sx={{
                   border: isCurrent ? `1.5px solid ${gold}` : `1px solid ${theme.palette.divider}`,

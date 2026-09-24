@@ -1,0 +1,40 @@
+# Zoth Studio v2 — LLM & Autonomous Agent Profile
+
+> Entity: Zoth Studio (NullAI Tech)
+> System Type: Zero-Egress Air-Gapped Sovereign AI Agent Studio
+> Canonical URL: https://zoth.nullai.tech
+> Repository: https://github.com/1nc0gn30/zoth-studio
+
+## Core Identity & Mission
+Zoth Studio v2 is an air-gapped, zero-egress development studio designed for orchestrating autonomous AI agent pantheons, local LLMs, and biomorphic synaptic memory matrices. All prompts, secrets, and weights execute strictly on local loopback enclaves with zero cloud telemetry or data leakage.
+
+## Architecture & Enclave Binds
+- Loopback UI: http://127.0.0.1:3000 (React 18 + MUI v5 SPA)
+- Neuro Memory Daemon: http://127.0.0.1:8788 (Spike-Timing-Dependent Plasticity STDP + SQLite HNSW vectors)
+- Sovereign Agent Bridge: http://127.0.0.1:8789 (21-agent inter-process bus & packet pinger)
+- Hardware Vault: http://127.0.0.1:8787 (Argon2id key derivation & XChaCha20-Poly1305 encryption)
+- Local Model Foundry: http://127.0.0.1:11434 (Ollama / llama.cpp local inference)
+
+## Lucy Netrunner Oracle & Whitespace Cyberspace
+- Guardian: Lucy (Lucyna Kushinada), Deep-Dive Netrunner
+- Channel: Codec 141.12 // Deep Net Breach
+- Function: Guides the 21-agent pantheon through the Whitespace Cyberspace memory stratum.
+- Memory Law: Spike-Timing-Dependent Plasticity (STDP) adjusts synaptic weights (dw = A+ * exp(-dt/tau)). Frequent queries reinforce memories; stale vectors decay logarithmically.
+
+## 37 Studio Workstations & 25 Tools
+- Build: Agent Composer (DAG builder), AX Powerhouse, IDE Code Foundry, Edge Forge, Tool Bench, WebGen.
+- Security: HexStrike CVE matrix, Web3 Sovereign Solana Bridge, SubSweep lead scanner, Adytum Key Sanctum.
+- Swarm & Consensus: 3-Agent Byzantine Triangulation (Socratic AST debate), Swarm NOC, Cockpit radar, Signal Bridge.
+- Spatial & 3D: Nexus 3D Omniverse, 3D Badge & Coin generator, Sacred Geometry engine, Vision Link.
+- Observe: Chronicle roadmap, AI Model Foundry, Connectors ecosystem, Notes Reviewer.
+
+## Zero-Egress Invariants
+1. No external HTTP(S) requests or tracking SDKs.
+2. No eval() or new Function() code injection.
+3. No cookie, localStorage, or session leakage outside localhost.
+4. Cryptographic operations execute via local Rust and Python daemons.
+
+## Contact & Governance
+- Maintainer: NullAI Tech / 1nc0gn30
+- License: Sovereign Developer License (Zero-Egress Guaranteed)
+- Documentation: https://zoth.nullai.tech/docs

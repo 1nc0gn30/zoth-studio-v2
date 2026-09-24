@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
-  Box, Container, Typography, Paper, Chip, Button, Grid, Stack, TextField,
+  Box, Container, Typography, Paper, Chip, Button, Unstable_Grid2 as Grid, Stack, TextField,
   Divider, Card, CardContent, Tabs, Tab, Alert, IconButton, Slider, LinearProgress
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -15,7 +15,28 @@ import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import CodeIcon from '@mui/icons-material/Code';
 import SecurityIcon from '@mui/icons-material/Security';
 import MemoryIcon from '@mui/icons-material/Memory';
+import DnsIcon from '@mui/icons-material/Dns';
 import { microTools } from '../data/toolsData';
+import ZothAIAssistant from '../components/ZothAIAssistant';
+import { useStudioStatus } from '../studio/useStudioStatus';
+import {
+  AdytumPlannerTool,
+  AzothArchonTool,
+  SovereignBridgeTool,
+  NeuroMemoryTool,
+  VectorSearchTool,
+  DeepSearchResearchTool,
+  PromptMasterTool,
+  HexStrikeTool,
+  EnvGuardVaultTool,
+  WebSecurityGuardTool,
+  AudioCipherStegoTool,
+  AeoGraphEngineTool,
+  CwvSpeedEngineTool,
+  SubSweepTool,
+  OmniPostSocialTool,
+  CronRhythmTool
+} from '../components/tools/EnclaveToolsSuite';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -39,11 +60,18 @@ const tabsBg = (t) => (t.palette.mode === 'dark' ? '#12121A' : '#F9FAFB');
 /* ==========================================================================
    TOOL 1: JWT Inspector Guard (Real Live JWT Decoder & Security Validator)
    ========================================================================== */
+function b64urlDecode(part) {
+  const pad = part.replace(/-/g, '+').replace(/_/g, '/');
+  const padded = pad + '='.repeat((4 - (pad.length % 4)) % 4);
+  return JSON.parse(atob(padded));
+}
+
 function JwtInspectorTool() {
   const theme = useTheme();
-  const sampleAdmin = 'eyJhbG...sw5c';
-  const sampleUser = 'eyJhbG...ture';
-  const sampleNone = 'eyJhbG...QifQ.';
+  // Real base64url JWTs. Signature is present but NOT cryptographically verified — the chip says so.
+  const sampleAdmin = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhem90aCIsInJvbGUiOiJhZG1pbiIsImlzcyI6InpvdGgtc3R1ZGlvIiwiZXhwIjoxODkzNDU2MDAwLCJzY29wZSI6WyJ2YXVsdCIsInN3YXJtIl19.c2lnbmF0dXJlLW5vdC12ZXJpZmllZC1oZXJl';
+  const sampleUser = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJrYWkiLCJyb2xlIjoicmVhZGVyIiwiaXNzIjoiem90aC1zdHVkaW8iLCJleHAiOjE4OTM0NTYwMDB9.c2lnbmF0dXJlLW5vdC12ZXJpZmllZC1oZXJl';
+  const sampleNone = 'eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiJhbm9uIiwicm9sZSI6Im5vbmUiLCJpc3MiOiJ6b3RoLXN0dWRpbyJ9.';
 
   const [token, setToken] = useState(sampleAdmin);
   const [copied, setCopied] = useState(false);
@@ -56,8 +84,8 @@ function JwtInspectorTool() {
   try {
     const parts = token.trim().split('.');
     if (parts.length >= 2) {
-      header = JSON.parse(atob(parts[0]));
-      payload = JSON.parse(atob(parts[1]));
+      header = b64urlDecode(parts[0]);
+      payload = b64urlDecode(parts[1]);
       signature = parts[2] || '';
       isValid = true;
     }
@@ -87,7 +115,7 @@ function JwtInspectorTool() {
       />
 
       <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid xs={12} md={6}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, height: '100%', bgcolor: theme.palette.background.paper }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold(theme), mb: 1.5 }}>
               Decoded Header (Algorithm &amp; Token Type)
@@ -98,7 +126,7 @@ function JwtInspectorTool() {
           </Paper>
         </Grid>
 
-        <Grid size={{ xs: 12, md: 6 }}>
+        <Grid xs={12} md={6}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, height: '100%', bgcolor: theme.palette.background.paper }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold(theme), mb: 1.5 }}>
               Decoded Payload Claims
@@ -117,11 +145,21 @@ function JwtInspectorTool() {
           </Typography>
           <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
             <Chip label={`Algorithm: ${header.alg || 'none'}`} size="small" sx={{ bgcolor: header.alg === 'none' ? errorBg(theme) : theme.palette.background.paper, color: header.alg === 'none' ? errorFg(theme) : theme.palette.text.primary, fontWeight: 800 }} />
-            <Chip label={signature ? 'Signature Verified Structure' : 'UNSIGNED TOKEN (VULNERABILITY)'} size="small" sx={{ bgcolor: signature ? successBg(theme) : errorBg(theme), color: signature ? successFg(theme) : errorFg(theme), fontWeight: 800 }} />
+            <Chip label={signature ? 'Signature present — not verified' : 'UNSIGNED TOKEN'} size="small" sx={{ bgcolor: signature ? goldBg(theme) : errorBg(theme), color: signature ? goldSoft(theme) : errorFg(theme), fontWeight: 800 }} />
             <Chip label={`Claims Count: ${Object.keys(payload).length}`} size="small" sx={{ bgcolor: theme.palette.background.paper, fontWeight: 750, color: goldSoft(theme) }} />
           </Box>
         </Box>
       )}
+
+      <ZothAIAssistant
+        toolName="JWT Inspector"
+        actions={[
+          { name: 'setToken', desc: 'Set the JWT token to decode', fn: (v) => setToken(String(v)) },
+          { name: 'loadAdmin', desc: 'Load the admin sample token', fn: () => setToken(sampleAdmin) },
+          { name: 'loadUser', desc: 'Load the user sample token', fn: () => setToken(sampleUser) },
+          { name: 'loadUnsigned', desc: 'Load the unsigned (vulnerable) sample token', fn: () => setToken(sampleNone) },
+        ]}
+      />
     </Box>
   );
 }
@@ -168,7 +206,7 @@ function PayloadEntropyTool() {
       />
 
       <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 5 }}>
+        <Grid xs={12} md={5}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, height: '100%', bgcolor: theme.palette.background.paper }}>
             <Typography className="section-kicker">Calculated Metric</Typography>
             <Typography variant="h3" sx={{ fontWeight: 800, color: theme.palette.text.primary, mb: 1 }}>
@@ -188,7 +226,7 @@ function PayloadEntropyTool() {
           </Paper>
         </Grid>
 
-        <Grid size={{ xs: 12, md: 7 }}>
+        <Grid xs={12} md={7}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, height: '100%', bgcolor: theme.palette.background.paper }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, color: goldSoft(theme), mb: 2 }}>
               Byte Composition Breakdown
@@ -210,51 +248,76 @@ function PayloadEntropyTool() {
               <LinearProgress variant="determinate" value={bytes.length ? (nonPrintableCount / bytes.length) * 100 : 0} sx={{ height: 8, borderRadius: 1, bgcolor: theme.palette.divider, '& .MuiLinearProgress-bar': { bgcolor: theme.palette.text.primary } }} />
             </Box>
           </Paper>
-        </Grid>
-      </Grid>
-    </Box>
-  );
+                  </Grid>
+                </Grid>
+
+                <ZothAIAssistant
+                  toolName="Payload Entropy"
+                  actions={[
+                    { name: 'setText', desc: 'Set the payload text to analyze', fn: (v) => setText(String(v)) },
+                    { name: 'loadSample', desc: 'Load the sample code payload', fn: () => setText('function executePayload(buffer) { return crypto.subtle.digest("SHA-256", buffer); }') },
+                  ]}
+                />
+              </Box>
+            );
+          }
+
+          /* ==========================================================================
+             TOOL 3: Polyglot Framework Exporter (Real React -> Vue 3, Svelte 5, Solid.js Transpiler)
+             ========================================================================== */
+function translateJsx(src, target) {
+  // Honest, limited translator. Converts the attributes it understands and
+  // leaves a comment where it does not invent a conversion.
+  let out = src;
+  const notes = [];
+  const className = [...src.matchAll(/className=\{([^}]+)\}|className="([^"]+)"/g)];
+  out = out.replace(/className="([^"]+)"/g, (_, v) => target === 'vue' ? `:class="'${v}'"` : target === 'svelte' ? `class="${v}"` : `class="${v}"`);
+  out = out.replace(/className=\{([^}]+)\}/g, (_, v) => {
+    if (target === 'vue') return `:class="${v.trim()}"`;
+    if (target === 'svelte') return `class={${v.trim()}}`;
+    return `class={${v.trim()}}`;
+  });
+  out = out.replace(/onClick=\{([^}]+)\}/g, (_, v) => {
+    const expr = v.trim();
+    if (target === 'vue') return `@click="${expr.replace(/^\(\)\s*=>\s*/, '')}"`;
+    if (target === 'svelte') return `on:click={${expr}}`;
+    return `onClick={${expr}}`;
+  });
+  out = out.replace(/htmlFor=/g, target === 'vue' ? 'for=' : 'for=');
+  if (/useState|useEffect|useMemo/.test(src)) {
+    notes.push(target === 'vue'
+      ? 'React hooks are not translated. Replace useState with ref() yourself.'
+      : target === 'svelte'
+        ? 'React hooks are not translated. Replace useState with a let binding.'
+        : 'React hooks are not translated. Replace useState with createSignal().');
+  }
+  if (!className.length && !/onClick=/.test(src) && !notes.length) {
+    notes.push('No className/onClick/hooks found. Markup is passed through with framework event syntax only where matched.');
+  }
+  return { code: out, notes };
 }
 
-/* ==========================================================================
-   TOOL 3: Polyglot Framework Exporter (Real React -> Vue 3, Svelte 5, Solid.js Transpiler)
-   ========================================================================== */
 function PolyglotFrameworkTool() {
   const theme = useTheme();
-  const [jsx, setJsx] = useState('<button onClick={() => alert("Zoth Studio")}>Click Me</button>');
+  const [jsx, setJsx] = useState('<button className="seal" onClick={() => alert("Zoth Studio")}>Click Me</button>');
   const [tab, setTab] = useState(0);
   const [copied, setCopied] = useState(false);
-
-  const vueCode = `<script setup>
-import { ref } from 'vue';
-const handleClick = () => alert('Zoth Studio');
-</script>
-<template>
-  ${jsx}
-</template>`;
-
-  const svelteCode = `<script>
-  function handleClick() {
-    alert('Zoth Studio');
-  }
-</script>
-
-${jsx}`;
-
-  const solidCode = `import { createSignal } from 'solid-js';
-
-export function App() {
-  return (
-    ${jsx}
-  );
-}`;
-
-  const outputs = [vueCode, svelteCode, solidCode];
-  const activeCode = outputs[tab];
+  const targets = ['vue', 'svelte', 'solid'];
+  const target = targets[tab];
+  const translated = translateJsx(jsx, target);
+  const wrapped = {
+    vue: `<script setup>\n// Translated from JSX. ${translated.notes[0] || 'className -> :class, onClick -> @click.'}\n</script>\n<template>\n  ${translated.code}\n</template>`,
+    svelte: `<script>\n  // Translated from JSX. ${translated.notes[0] || 'className -> class, onClick -> on:click.'}\n</script>\n\n${translated.code}`,
+    solid: `// Translated from JSX. ${translated.notes[0] || 'Solid keeps JSX; className -> class.'}\nexport function App() {\n  return (\n    ${translated.code}\n  );\n}`,
+  };
+  const activeCode = wrapped[target];
 
   return (
     <Box sx={{ mt: 1 }}>
-      <Typography className="section-kicker">React / JSX Component Source Code Input</Typography>
+      <Typography className="section-kicker">React / JSX source</Typography>
+      <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1.5 }}>
+        Translates className, onClick, and htmlFor. It does not pretend to be a full compiler — unmatched React hooks are called out in the output comment.
+      </Typography>
       <TextField
         fullWidth
         multiline
@@ -265,10 +328,10 @@ export function App() {
       />
 
       <Paper sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 2, overflow: 'hidden', bgcolor: theme.palette.background.paper }}>
-        <Tabs value={tab} onChange={(e, val) => setTab(val)} sx={{ bgcolor: tabsBg(theme), borderBottom: `1px solid ${theme.palette.divider}` }}>
-          <Tab label="Vue 3 (Composition API)" sx={{ fontWeight: 750 }} />
-          <Tab label="Svelte 5 ($state)" sx={{ fontWeight: 750 }} />
-          <Tab label="Solid.js (Signals)" sx={{ fontWeight: 750 }} />
+        <Tabs value={tab} onChange={(e, val) => setTab(val)} variant="scrollable" scrollButtons="auto" allowScrollButtonsMobile sx={{ bgcolor: tabsBg(theme), borderBottom: `1px solid ${theme.palette.divider}` }}>
+          <Tab label="Vue 3" sx={{ fontWeight: 750 }} />
+          <Tab label="Svelte" sx={{ fontWeight: 750 }} />
+          <Tab label="Solid.js" sx={{ fontWeight: 750 }} />
         </Tabs>
         <Box sx={{ p: 3, bgcolor: darkPanel(theme), position: 'relative' }}>
           <Button
@@ -283,13 +346,23 @@ export function App() {
             }}
             sx={{ position: 'absolute', top: 16, right: 16, zIndex: 2, fontWeight: 750 }}
           >
-            {copied ? 'Copied' : 'Copy Framework Code'}
+            {copied ? 'Copied' : 'Copy'}
           </Button>
-          <Paper sx={{ p: 2, bgcolor: 'transparent', color: '#F8FAFC', fontFamily: mono, fontSize: '0.85rem', whiteSpace: 'pre-wrap', boxShadow: 'none' }}>
+          <Paper sx={{ p: 2, pr: 12, bgcolor: 'transparent', color: '#F8FAFC', fontFamily: mono, fontSize: '0.85rem', whiteSpace: 'pre-wrap', boxShadow: 'none' }}>
             {activeCode}
           </Paper>
         </Box>
       </Paper>
+
+      <ZothAIAssistant
+        toolName="Polyglot Exporter"
+        actions={[
+          { name: 'setJsx', desc: 'Set the JSX component source code', fn: (v) => setJsx(String(v)) },
+          { name: 'switchVue', desc: 'Show the Vue 3 output tab', fn: () => setTab(0) },
+          { name: 'switchSvelte', desc: 'Show the Svelte output tab', fn: () => setTab(1) },
+          { name: 'switchSolid', desc: 'Show the Solid.js output tab', fn: () => setTab(2) },
+        ]}
+      />
     </Box>
   );
 }
@@ -326,11 +399,15 @@ function useResponsiveCanvas(canvasRef, aspectRatio = 4 / 3) {
     const parent = canvas.parentElement;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const resize = () => {
-      const w = parent.clientWidth || 600;
+      // Let CSS width:100% size the canvas to its grid cell; measure the rendered
+      // width and set internal resolution to match (crisp on any DPR).
+      canvas.style.width = '100%';
+      canvas.style.height = 'auto';
+      const rect = canvas.getBoundingClientRect();
+      const w = rect.width || parent.clientWidth || 600;
       const h = w / aspectRatio;
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
-      canvas.style.width = `${w}px`;
       canvas.style.height = `${h}px`;
     };
     resize();
@@ -459,8 +536,8 @@ function SacredGeometryTool() {
   return (
     <Box sx={{ mt: 1 }}>
       <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 7 }}>
-          <Box sx={{ width: '100%' }}>
+        <Grid xs={12} md={7}>
+          <Box sx={{ width: '100%', flex: '1 1 auto', minWidth: 0 }}>
             <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
               <canvas ref={canvasRef} style={{ display: 'block', width: '100%', borderRadius: 8 }} />
             </Paper>
@@ -469,7 +546,7 @@ function SacredGeometryTool() {
             </Typography>
           </Box>
         </Grid>
-        <Grid size={{ xs: 12, md: 5 }}>
+        <Grid xs={12} md={5}>
           <ControlPanel title="Geometry Controls">
             <Box sx={{ mb: 2.5 }}>
               <Typography variant="caption" sx={{ fontWeight: 750, color: theme.palette.text.secondary, mb: 1, display: 'block' }}>
@@ -488,17 +565,26 @@ function SacredGeometryTool() {
                 <Box key={c} onClick={() => setColor(c)} sx={{ width: 30, height: 30, borderRadius: '50%', bgcolor: c, cursor: 'pointer', border: color === c ? `3px solid ${theme.palette.text.primary}` : `1px solid ${theme.palette.divider}` }} />
               ))}
             </Stack>
-          </ControlPanel>
-        </Grid>
-      </Grid>
-    </Box>
-  );
-}
+                      </ControlPanel>
+                    </Grid>
+                  </Grid>
 
-/* ==========================================================================
-   TOOL 4B: 3D Badge & Coin Generator — editable inscription metallic medallion
-   ========================================================================== */
-function CoinGeneratorTool() {
+                  <ZothAIAssistant
+                    toolName="Sacred Geometry"
+                    actions={[
+                      { name: 'setColor', desc: 'Set the geometry hue color (hex)', fn: (v) => setColor(String(v)) },
+                      { name: 'setSpeed', desc: 'Set the rotation speed (0-4)', fn: (v) => setSpeed(Number(v)) },
+                      { name: 'toggleSpokes', desc: 'Toggle the harmonic rays on or off', fn: () => setSpokes((s) => !s) },
+                    ]}
+                  />
+                </Box>
+              );
+            }
+
+            /* ==========================================================================
+               TOOL 4B: 3D Badge & Coin Generator — editable inscription metallic medallion
+               ========================================================================== */
+            function CoinGeneratorTool() {
   const theme = useTheme();
   const canvasRef = useRef(null);
   const [text, setText] = useState('ZOTH');
@@ -630,8 +716,8 @@ function CoinGeneratorTool() {
   return (
     <Box sx={{ mt: 1 }}>
       <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 7 }}>
-          <Box sx={{ width: '100%' }}>
+        <Grid xs={12} md={7}>
+          <Box sx={{ width: '100%', flex: '1 1 auto', minWidth: 0 }}>
             <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
               <canvas ref={canvasRef} style={{ display: 'block', width: '100%', borderRadius: 8 }} />
             </Paper>
@@ -640,7 +726,7 @@ function CoinGeneratorTool() {
             </Typography>
           </Box>
         </Grid>
-        <Grid size={{ xs: 12, md: 5 }}>
+        <Grid xs={12} md={5}>
           <ControlPanel title="Coin &amp; Medallion">
             <Box sx={{ mb: 2.5 }}>
               <Typography variant="caption" sx={{ fontWeight: 750, color: theme.palette.text.secondary, mb: 1, display: 'block' }}>
@@ -665,6 +751,15 @@ function CoinGeneratorTool() {
           </ControlPanel>
         </Grid>
       </Grid>
+
+      <ZothAIAssistant
+        toolName="Coin Generator"
+        actions={[
+          { name: 'setText', desc: 'Set the coin inscription text', fn: (v) => setText(String(v)) },
+          { name: 'setRim', desc: 'Set the rim thickness in px (10-56)', fn: (v) => setRim(Number(v)) },
+          { name: 'setMetal', desc: 'Set the metal alloy index (0 gold, 1 silver, 2 bronze)', fn: (v) => setMetal(Number(v)) },
+        ]}
+      />
     </Box>
   );
 }
@@ -774,8 +869,8 @@ function Nexus3DTool() {
   return (
     <Box sx={{ mt: 1 }}>
       <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 7 }}>
-          <Box sx={{ width: '100%' }}>
+        <Grid xs={12} md={7}>
+          <Box sx={{ width: '100%', flex: '1 1 auto', minWidth: 0 }}>
             <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
               <canvas
                 ref={canvasRef}
@@ -791,7 +886,7 @@ function Nexus3DTool() {
             </Typography>
           </Box>
         </Grid>
-        <Grid size={{ xs: 12, md: 5 }}>
+        <Grid xs={12} md={5}>
           <ControlPanel title="Scene Object">
             <Box sx={{ mb: 2.5 }}>
               <Typography variant="caption" sx={{ fontWeight: 750, color: theme.palette.text.secondary, mb: 1, display: 'block' }}>
@@ -811,6 +906,14 @@ function Nexus3DTool() {
           </ControlPanel>
         </Grid>
       </Grid>
+
+      <ZothAIAssistant
+        toolName="Nexus 3D"
+        actions={[
+          { name: 'setSize', desc: 'Set the cube edge size in px (40-150)', fn: (v) => setSize(Number(v)) },
+          { name: 'setGhostFrame', desc: 'Set the ghost frame layer (0-3)', fn: (v) => setGhostFrame(Number(v)) },
+        ]}
+      />
     </Box>
   );
 }
@@ -910,8 +1013,8 @@ function TurtleTool() {
   return (
     <Box sx={{ mt: 1 }}>
       <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 7 }}>
-          <Box sx={{ width: '100%' }}>
+        <Grid xs={12} md={7}>
+          <Box sx={{ width: '100%', flex: '1 1 auto', minWidth: 0 }}>
             <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
               <canvas ref={canvasRef} style={{ display: 'block', width: '100%', borderRadius: 8 }} />
             </Paper>
@@ -920,7 +1023,7 @@ function TurtleTool() {
             </Typography>
           </Box>
         </Grid>
-        <Grid size={{ xs: 12, md: 5 }}>
+        <Grid xs={12} md={5}>
           <ControlPanel title="Turtle Program">
             <TextField
               fullWidth
@@ -949,6 +1052,16 @@ function TurtleTool() {
           </ControlPanel>
         </Grid>
       </Grid>
+
+      <ZothAIAssistant
+        toolName="CyberTurtle"
+        actions={[
+          { name: 'setCommands', desc: 'Set the turtle program commands', fn: (v) => setCommands(String(v)) },
+          { name: 'runProgram', desc: 'Run the current turtle program', fn: () => draw() },
+          { name: 'loadTriangle', desc: 'Load the triangle preset', fn: () => setCommands('FD 120\nRT 120\nFD 120\nRT 120\nFD 120') },
+          { name: 'loadStar', desc: 'Load the star preset', fn: () => setCommands('PU FD 70 PD\nREPEAT 5 [ FD 110 RT 144 ]') },
+        ]}
+      />
     </Box>
   );
 }
@@ -1077,8 +1190,8 @@ function GlitchTool() {
   return (
     <Box sx={{ mt: 1 }}>
       <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 7 }}>
-          <Box sx={{ width: '100%' }}>
+        <Grid xs={12} md={7}>
+          <Box sx={{ width: '100%', flex: '1 1 auto', minWidth: 0 }}>
             <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
               <canvas ref={canvasRef} style={{ display: 'block', width: '100%', borderRadius: 8 }} />
             </Paper>
@@ -1087,7 +1200,7 @@ function GlitchTool() {
             </Typography>
           </Box>
         </Grid>
-        <Grid size={{ xs: 12, md: 5 }}>
+        <Grid xs={12} md={5}>
           <ControlPanel title="Corruption Engine">
             <Box sx={{ mb: 2.5 }}>
               <Typography variant="caption" sx={{ fontWeight: 750, color: theme.palette.text.secondary, mb: 1, display: 'block' }}>
@@ -1109,6 +1222,14 @@ function GlitchTool() {
           </ControlPanel>
         </Grid>
       </Grid>
+
+      <ZothAIAssistant
+        toolName="Datamosh Glitch"
+        actions={[
+          { name: 'setIntensity', desc: 'Set the glitch intensity percent (0-100)', fn: (v) => setIntensity(Number(v)) },
+          { name: 'setMode', desc: 'Set the corruption mode (slices, sort, or both)', fn: (v) => setMode(String(v)) },
+        ]}
+      />
     </Box>
   );
 }
@@ -1217,13 +1338,13 @@ function VisionGestureTool() {
   return (
     <Box sx={{ mt: 1 }}>
       <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 7 }}>
+        <Grid xs={12} md={7}>
           <Paper sx={{ p: 2, bgcolor: darkPanel(theme), borderRadius: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', border: `1px solid ${darkPanelBorder(theme)}` }}>
             <canvas ref={canvasRef} style={{ display: 'block', width: '100%', borderRadius: 8 }} />
             <video ref={videoRef} playsInline muted style={{ display: 'none' }} />
           </Paper>
         </Grid>
-        <Grid size={{ xs: 12, md: 5 }}>
+        <Grid xs={12} md={5}>
           <ControlPanel title="Camera Status">
             {state === 'live' && (
               <Alert severity="success" sx={{ fontWeight: 750 }}>Camera streaming — drawing live frames.</Alert>
@@ -1248,6 +1369,13 @@ function VisionGestureTool() {
           </ControlPanel>
         </Grid>
       </Grid>
+
+      <ZothAIAssistant
+        toolName="Vision Gesture"
+        actions={[
+          { name: 'requestCamera', desc: 'Request camera access to start the live feed', fn: () => window.location.reload() },
+        ]}
+      />
     </Box>
   );
 }
@@ -1273,6 +1401,11 @@ export default function RealToolWorkspacePage() {
   const { toolId } = useParams();
   const navigate = useNavigate();
   const tool = microTools.find((t) => t.id === toolId || t.repo === toolId) || microTools[0];
+
+  const { status } = useStudioStatus();
+  const isBackendConnected = Boolean(status?.services);
+  const requiresLocalDaemon = tool.executionType === 'local_cli' || Boolean(tool.localOnly);
+  const [bypassSimulated, setBypassSimulated] = useState(false);
 
   const isWebGPU = tool.executionType === 'webgpu';
 
@@ -1319,8 +1452,8 @@ export default function RealToolWorkspacePage() {
             />
           ) : (
             <Chip
-              icon={<SecurityIcon sx={{ color: `${successFg(theme)} !important` }} />}
-              label="LOCAL CLI TOOL"
+              icon={<FlashOnIcon sx={{ color: `${successFg(theme)} !important` }} />}
+              label={isBackendConnected ? "⚡ SOVEREIGN ENCLAVE (LOCAL BACKEND ACTIVE)" : "⚡ LOCAL CLI ENCLAVE"}
               size="small"
               sx={{ bgcolor: successBg(theme), color: successFg(theme), fontWeight: 800 }}
             />
@@ -1336,6 +1469,44 @@ export default function RealToolWorkspacePage() {
         </Typography>
       </Box>
 
+      <Paper
+        elevation={0}
+        sx={{
+          p: { xs: 2, md: 2.5 },
+          mb: 3,
+          borderRadius: 2.5,
+          border: `1px solid ${goldBorder(theme)}`,
+          bgcolor: theme.palette.mode === 'dark' ? 'rgba(212,175,55,0.06)' : '#FEF9E7',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 2,
+          flexWrap: 'wrap',
+          position: 'relative',
+          zIndex: 1,
+        }}
+      >
+        <Box sx={{ minWidth: 0, flex: '1 1 280px' }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 800, color: goldSoft(theme), mb: 0.5 }}>
+            {isWebGPU ? 'In-Browser WebGPU & WebGL Enclave.' : 'Dedicated Sovereign Workspace Running in Zoth Studio v2.'}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
+            Install <Box component="span" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>Zoth Studio</Box> to check this repo out and run it with the local daemons, or boot <Box component="span" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>Zoth OS</Box> and every tool is already on the disk.
+          </Typography>
+          <Box sx={{ mt: 1.25, p: 1.25, borderRadius: 1.5, bgcolor: darkPanel(theme), color: '#F5E6AB', fontFamily: mono, fontSize: '0.78rem', wordBreak: 'break-all' }}>
+            npm install -g zoth-studio && zoth pull {tool.repo}
+          </Box>
+        </Box>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ flexShrink: 0 }}>
+          <Button component={RouterLink} to="/docs" variant="outlined" color="primary" size="small" sx={{ fontWeight: 800 }}>
+            Install Zoth Studio
+          </Button>
+          <Button component={RouterLink} to="/zoth-os" variant="contained" color="primary" size="small" sx={{ fontWeight: 800 }}>
+            Get Zoth OS
+          </Button>
+        </Stack>
+      </Paper>
+
       {/* Real Interactive Tool Workspace Card (gold-tinted glow border) */}
       <Paper
         sx={{
@@ -1349,22 +1520,133 @@ export default function RealToolWorkspacePage() {
           boxShadow: `0 0 0 1px ${glowBorder}, 0 8px 30px -8px ${glowColor}, 0 0 34px -6px ${glowColor}`,
         }}
       >
-        {tool.id === 'jwt-inspector-guard' && <JwtInspectorTool />}
-        {tool.id === 'payload-entropy-studio' && <PayloadEntropyTool />}
-        {tool.id === 'polyglot-framework-exporter' && <PolyglotFrameworkTool />}
-        {tool.id === 'nexus-3d-scene-studio' && <Nexus3DTool />}
-        {tool.id === 'badge3d-coin-generator' && <CoinGeneratorTool />}
-        {tool.id === 'ufo-sacred-geometry' && <SacredGeometryTool />}
-        {tool.id === 'cyber-turtle-studio' && <TurtleTool />}
-        {tool.id === 'datamosh-glitch-studio' && <GlitchTool />}
-        {tool.id === 'vision-gesture-control' && <VisionGestureTool />}
-        {tool.id !== 'jwt-inspector-guard' && tool.id !== 'payload-entropy-studio' && tool.id !== 'polyglot-framework-exporter' && tool.id !== 'nexus-3d-scene-studio' && tool.id !== 'badge3d-coin-generator' && tool.id !== 'ufo-sacred-geometry' && tool.id !== 'cyber-turtle-studio' && tool.id !== 'datamosh-glitch-studio' && tool.id !== 'vision-gesture-control' && (
-          <Box sx={{ py: 3 }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1 }}>CLI Command Checkout</Typography>
-            <Box sx={{ p: 2, bgcolor: darkPanel(theme), color: '#F5E6AB', fontFamily: mono, borderRadius: 2, border: `1px solid ${darkPanelBorder(theme)}` }}>
-              $ {tool.pull}
+        {requiresLocalDaemon && !isBackendConnected && !bypassSimulated ? (
+          <Box sx={{ py: 5, px: 2, textAlign: 'center', maxWidth: 660, mx: 'auto' }}>
+            <Box
+              sx={{
+                width: 72,
+                height: 72,
+                borderRadius: '50%',
+                bgcolor: 'rgba(212,175,55,0.12)',
+                border: `1px solid ${goldBorder(theme)}`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mx: 'auto',
+                mb: 2.5,
+              }}
+            >
+              <DnsIcon sx={{ fontSize: 36, color: gold(theme) }} />
             </Box>
+
+            <Chip
+              label="LOCAL DAEMON REQUIRED · ZERO-EGRESS HARDWARE LOOPBACK"
+              size="small"
+              sx={{ bgcolor: goldBg(theme), color: gold(theme), border: `1px solid ${goldBorder(theme)}`, fontWeight: 800, mb: 2, px: 1 }}
+            />
+
+            <Typography variant="h4" sx={{ fontWeight: 800, mb: 1.5, letterSpacing: '-0.02em' }}>
+              Local Backend Daemon Required
+            </Typography>
+
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 3.5, lineHeight: 1.65 }}>
+              <strong>{tool.name}</strong> executes directly against your sovereign local loopback environment (<code style={{ color: gold(theme) }}>127.0.0.1:11434</code> for Ollama, <code style={{ color: gold(theme) }}>:8788</code> for STDP memory, and <code style={{ color: gold(theme) }}>:8787</code> for BYOK secret vault). Zero-egress invariants prevent cloud web browsers from accessing raw system daemons without a local bridge.
+            </Typography>
+
+            <Paper
+              sx={{
+                p: 2,
+                mb: 3.5,
+                bgcolor: darkPanel(theme),
+                border: `1px solid ${darkPanelBorder(theme)}`,
+                borderRadius: 2,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 1.5,
+                textAlign: 'left',
+              }}
+            >
+              <Box sx={{ minWidth: 0 }}>
+                <Typography variant="caption" sx={{ color: goldSoft(theme), fontWeight: 750, display: 'block', mb: 0.5 }}>
+                  START LOCAL DAEMON (RUN IN TERMINAL):
+                </Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.86rem', color: '#FFFFFF', wordBreak: 'break-all' }}>
+                  node bin/zoth.js up
+                </Typography>
+              </Box>
+              <Button
+                size="small"
+                variant="outlined"
+                startIcon={<ContentCopyIcon />}
+                onClick={() => navigator.clipboard.writeText('node bin/zoth.js up')}
+                sx={{ borderColor: gold(theme), color: gold(theme), flexShrink: 0, fontWeight: 750 }}
+              >
+                Copy
+              </Button>
+            </Paper>
+
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center">
+              <Button
+                variant="contained"
+                color="primary"
+                component={RouterLink}
+                to="/docs"
+                sx={{ fontWeight: 800, px: 3 }}
+              >
+                Local Daemon Setup Guide
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={() => setBypassSimulated(true)}
+                sx={{ fontWeight: 750, borderColor: gold(theme), color: gold(theme), px: 2.5 }}
+              >
+                Enable Offline Simulated Mode
+              </Button>
+            </Stack>
           </Box>
+        ) : (
+          <>
+            {requiresLocalDaemon && !isBackendConnected && bypassSimulated && (
+              <Alert
+                severity="warning"
+                sx={{ mb: 3.5, borderRadius: 2, bgcolor: 'rgba(217,119,6,0.12)', border: '1px solid rgba(217,119,6,0.3)', color: '#F59E0B' }}
+                action={
+                  <Button size="small" color="inherit" onClick={() => setBypassSimulated(false)} sx={{ fontWeight: 750 }}>
+                    Re-lock Tool
+                  </Button>
+                }
+              >
+                <strong>Offline Simulated Mode Active:</strong> Local hardware daemon is offline. Operations run in-browser against local state mocks without network egress.
+              </Alert>
+            )}
+
+            {tool.id === 'jwt-inspector-guard' && <JwtInspectorTool />}
+            {tool.id === 'payload-entropy-studio' && <PayloadEntropyTool />}
+            {tool.id === 'polyglot-framework-exporter' && <PolyglotFrameworkTool />}
+            {tool.id === 'nexus-3d-scene-studio' && <Nexus3DTool />}
+            {tool.id === 'badge3d-coin-generator' && <CoinGeneratorTool />}
+            {tool.id === 'ufo-sacred-geometry' && <SacredGeometryTool />}
+            {tool.id === 'cyber-turtle-studio' && <TurtleTool />}
+            {tool.id === 'datamosh-glitch-studio' && <GlitchTool />}
+            {tool.id === 'vision-gesture-control' && <VisionGestureTool />}
+            {tool.id === 'adytum-alchemist-ai-workflow' && <AdytumPlannerTool />}
+            {tool.id === 'azoth-local-agent' && <AzothArchonTool />}
+            {tool.id === 'sovereign-agent-bridge' && <SovereignBridgeTool />}
+            {tool.id === 'neuro-memory-daemon' && <NeuroMemoryTool />}
+            {tool.id === 'vector-search-engine' && <VectorSearchTool />}
+            {tool.id === 'deepsearch-research-agent' && <DeepSearchResearchTool />}
+            {tool.id === 'promptmaster-studio' && <PromptMasterTool />}
+            {tool.id === 'hexstrike-arsenal' && <HexStrikeTool />}
+            {tool.id === 'envguard-secrets-vault' && <EnvGuardVaultTool />}
+            {tool.id === 'web-security-guard' && <WebSecurityGuardTool />}
+            {tool.id === 'audiocipher-stego-engine' && <AudioCipherStegoTool />}
+            {tool.id === 'aeo-graph-engine' && <AeoGraphEngineTool />}
+            {tool.id === 'cwv-speed-engine' && <CwvSpeedEngineTool />}
+            {tool.id === 'subsweep-lead-scanner' && <SubSweepTool />}
+            {tool.id === 'omnipost-social-engine' && <OmniPostSocialTool />}
+            {tool.id === 'cron-rhythm-studio' && <CronRhythmTool />}
+          </>
         )}
       </Paper>
     </Container>

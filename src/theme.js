@@ -126,16 +126,18 @@ export const theme = createTheme({
           '0%, 100%': { borderColor: 'rgba(212, 175, 55, 0.35)', boxShadow: '0 4px 16px rgba(212, 175, 55, 0.12)' },
           '50%': { borderColor: 'rgba(212, 175, 55, 0.85)', boxShadow: '0 8px 28px rgba(212, 175, 55, 0.28)' },
         },
-        '.MuiGrid-container': {
+        '.MuiGrid-container, .MuiGrid2-container': {
           width: '100%',
           alignItems: 'stretch',
         },
-        '.MuiGrid-container > .MuiGrid-root:has(> .MuiCard-root), .MuiGrid-container > .MuiGrid-root:has(> .MuiPaper-root)': {
+        '.MuiGrid-container > .MuiGrid-root:has(> .MuiCard-root), .MuiGrid-container > .MuiGrid-root:has(> .MuiPaper-root), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiCard-root), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiPaper-root)': {
           display: 'flex',
+          minWidth: 0,
         },
-        '.MuiGrid-container > .MuiGrid-root > .MuiCard-root, .MuiGrid-container > .MuiGrid-root > .MuiPaper-root': {
+        '.MuiGrid-container > .MuiGrid-root > .MuiCard-root, .MuiGrid-container > .MuiGrid-root > .MuiPaper-root, .MuiGrid2-container > .MuiGrid2-root > .MuiCard-root, .MuiGrid2-container > .MuiGrid2-root > .MuiPaper-root': {
           flex: '1 1 auto',
           width: '100%',
+          minWidth: 0,
           height: '100%',
         },
         'code, kbd, samp, pre': {
@@ -399,16 +401,18 @@ export const darkTheme = createTheme({
           '0%, 100%': { borderColor: 'rgba(212, 175, 55, 0.35)', boxShadow: '0 4px 16px rgba(212, 175, 55, 0.12)' },
           '50%': { borderColor: 'rgba(212, 175, 55, 0.85)', boxShadow: '0 8px 28px rgba(212, 175, 55, 0.28)' },
         },
-        '.MuiGrid-container': {
+        '.MuiGrid-container, .MuiGrid2-container': {
           width: '100%',
           alignItems: 'stretch',
         },
-        '.MuiGrid-container > .MuiGrid-root:has(> .MuiCard-root), .MuiGrid-container > .MuiGrid-root:has(> .MuiPaper-root)': {
+        '.MuiGrid-container > .MuiGrid-root:has(> .MuiCard-root), .MuiGrid-container > .MuiGrid-root:has(> .MuiPaper-root), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiCard-root), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiPaper-root)': {
           display: 'flex',
+          minWidth: 0,
         },
-        '.MuiGrid-container > .MuiGrid-root > .MuiCard-root, .MuiGrid-container > .MuiGrid-root > .MuiPaper-root': {
+        '.MuiGrid-container > .MuiGrid-root > .MuiCard-root, .MuiGrid-container > .MuiGrid-root > .MuiPaper-root, .MuiGrid2-container > .MuiGrid2-root > .MuiCard-root, .MuiGrid2-container > .MuiGrid2-root > .MuiPaper-root': {
           flex: '1 1 auto',
           width: '100%',
+          minWidth: 0,
           height: '100%',
         },
         'code, kbd, samp, pre': {

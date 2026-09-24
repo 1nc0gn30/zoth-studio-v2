@@ -41,7 +41,7 @@ export default function SovereignMascots() {
           display: 'flex',
           flexWrap: 'wrap',
           justifyContent: 'center',
-          gap: 1.5,
+          gap: 1,
           maxWidth: 1040,
           mx: 'auto',
         }}
@@ -53,9 +53,9 @@ export default function SovereignMascots() {
             sx={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: 0.75,
-              px: 1.2,
-              py: 0.6,
+              justifyContent: 'center',
+              width: 44,
+              height: 44,
               borderRadius: 9999,
               border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`,
               background: dark ? 'rgba(212,175,55,0.08)' : '#FEF9E7',
@@ -80,15 +80,6 @@ export default function SovereignMascots() {
                 bgcolor: dark ? '#0B0B12' : '#FFFFFF',
               }}
             />
-            <Box component="span" sx={{ fontWeight: 700, color: dark ? '#F5E6AB' : '#8A6A09' }}>
-              {agent.id}
-            </Box>
-            <Box
-              component="span"
-              sx={{ color: theme.palette.text.secondary, fontWeight: 500, display: { xs: 'none', sm: 'inline' } }}
-            >
-              · {agent.role}
-            </Box>
           </Box>
         ))}
       </Box>
