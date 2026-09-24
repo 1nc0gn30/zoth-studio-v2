@@ -1498,6 +1498,18 @@ export default function RealToolWorkspacePage() {
           </Box>
         </Box>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ flexShrink: 0 }}>
+          {tool.github && (
+            <Button
+              href={tool.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="outlined"
+              size="small"
+              sx={{ fontWeight: 800, borderColor: gold(theme), color: gold(theme), '&:hover': { bgcolor: goldBg(theme) } }}
+            >
+              GitHub Repo ↗
+            </Button>
+          )}
           <Button component={RouterLink} to="/docs" variant="outlined" color="primary" size="small" sx={{ fontWeight: 800 }}>
             Install Zoth Studio
           </Button>

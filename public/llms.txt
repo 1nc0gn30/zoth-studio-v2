@@ -3,7 +3,7 @@
 > Entity: Zoth Studio (NullAI Tech)
 > System Type: Zero-Egress Air-Gapped Sovereign AI Agent Studio
 > Canonical URL: https://zoth.nullai.tech
-> Repository: https://github.com/1nc0gn30/zoth-studio
+> Repository: https://github.com/NullAITech/zoth-studio-v2
 
 ## Core Identity & Mission
 Zoth Studio v2 is an air-gapped, zero-egress development studio designed for orchestrating autonomous AI agent pantheons, local LLMs, and biomorphic synaptic memory matrices. All prompts, secrets, and weights execute strictly on local loopback enclaves with zero cloud telemetry or data leakage.
@@ -35,6 +35,6 @@ Zoth Studio v2 is an air-gapped, zero-egress development studio designed for orc
 4. Cryptographic operations execute via local Rust and Python daemons.
 
 ## Contact & Governance
-- Maintainer: NullAI Tech / 1nc0gn30
+- Maintainer: NullAI Tech
 - License: Sovereign Developer License (Zero-Egress Guaranteed)
 - Documentation: https://zoth.nullai.tech/docs

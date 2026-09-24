@@ -86,7 +86,7 @@ Zoth Studio v2 is an air-gapped, zero-egress development studio designed for orc
 4. Cryptographic operations execute via local Rust and Python daemons.
 
 ## Contact & Governance
-- Maintainer: NullAI Tech / 1nc0gn30
+- Maintainer: NullAI Tech
 - License: Sovereign Developer License (Zero-Egress Guaranteed)
 - Documentation: https://zoth.nullai.tech/docs`
   },

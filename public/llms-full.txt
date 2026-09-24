@@ -191,7 +191,7 @@ SECTION 8: CONTACT & REPOSITORY
 ================================================================================
 
 Canonical URL: https://zoth.nullai.tech
-Codebase: https://github.com/1nc0gn30/zoth-studio
+Codebase: https://github.com/NullAITech/zoth-studio-v2
 Contact: NullAI Tech (team@nullai.tech / https://nullai.tech)
 Author: 1nc0gn30
 EOF

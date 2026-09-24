@@ -247,6 +247,30 @@
     <priority>0.75</priority>
   </url>
   <url>
+    <loc>https://zoth.nullai.tech/tools/certpath-roadmap-studio</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/tools/pwa-manifest-builder</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/tools/regex-droid-builder</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/tools/schema-illustrator-studio</loc>
+    <lastmod>2026-09-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://zoth.nullai.tech/workstations/3d-editor</loc>
     <lastmod>2026-09-24</lastmod>
     <changefreq>weekly</changefreq>
