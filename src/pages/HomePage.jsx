@@ -422,9 +422,9 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                   px: 2,
                   py: 0.6,
                   borderRadius: 2.5,
-                  color: isSelected ? '#F5E6AB' : '#94A3B8',
+                  color: isSelected ? (isDark ? '#F5E6AB' : '#FCD34D') : (isDark ? '#94A3B8' : '#CBD5E1'),
                   bgcolor: isSelected
-                    ? isDark ? 'rgba(212,175,55,0.22)' : '#FEF9E7'
+                    ? isDark ? 'rgba(212,175,55,0.22)' : 'rgba(212,175,55,0.25)'
                     : 'transparent',
                   border: '1px solid',
                   borderColor: isSelected ? '#D4AF37' : isDark ? 'rgba(148,163,184,0.12)' : 'rgba(255,255,255,0.08)',
@@ -437,7 +437,7 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                   transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
                   position: 'relative',
                   '&:hover': {
-                    bgcolor: isSelected ? (isDark ? 'rgba(212,175,55,0.22)' : '#FEF9E7') : isDark ? 'rgba(212,175,55,0.08)' : 'rgba(212,175,55,0.04)',
+                    bgcolor: isSelected ? (isDark ? 'rgba(212,175,55,0.25)' : 'rgba(212,175,55,0.3)') : isDark ? 'rgba(212,175,55,0.08)' : 'rgba(255,255,255,0.06)',
                     borderColor: '#D4AF37',
                   },
                   '&:active': {
