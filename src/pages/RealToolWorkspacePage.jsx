@@ -1472,6 +1472,7 @@ export default function RealToolWorkspacePage() {
   const requiresLocalDaemon = tool.executionType === 'local_cli' || Boolean(tool.localOnly);
   const isWebGPU = tool.executionType === 'webgpu';
   const [copiedCmd, setCopiedCmd] = useState('');
+  const [bypassSimulated, setBypassSimulated] = useState(false);
   const handleCopyCmd = (text) => {
     navigator.clipboard.writeText(text);
     setCopiedCmd(text);
