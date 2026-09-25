@@ -1,0 +1,30 @@
+{
+  "name": "Zoth Studio v2",
+  "short_name": "Zoth Studio",
+  "description": "Air-gapped, zero-egress sovereign development studio for autonomous AI agent pantheons, local LLMs, Lucy Netrunner Oracle, and biomorphic STDP memory matrices.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#08080B",
+  "background_color": "#08080B",
+  "categories": [
+    "developer",
+    "productivity",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "/brand/ghostbyte-dark.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/brand/ghostbyte.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

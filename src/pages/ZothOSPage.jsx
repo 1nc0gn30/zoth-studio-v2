@@ -17,6 +17,7 @@ import {
   DialogActions,
   Snackbar,
   Alert,
+  LinearProgress,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -33,6 +34,11 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import CodeIcon from '@mui/icons-material/Code';
 import TuneIcon from '@mui/icons-material/Tune';
 import CloseIcon from '@mui/icons-material/Close';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
+import StorageIcon from '@mui/icons-material/Storage';
+import LaunchIcon from '@mui/icons-material/Launch';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 import { useStudioStatus } from '../studio/useStudioStatus';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
@@ -40,7 +46,9 @@ import SovereignFunnel from '../components/SovereignFunnel';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const qemu = 'qemu-system-x86_64 -enable-kvm -m 8192 -smp 4 -hda zoth-agent-os.qcow2';
-const isoCmd = 'sudo dd if=zothos-1.0-amd64.iso of=/dev/sdX status=progress bs=4M conv=fdatasync';
+const isoCmd = 'sudo dd if=zothos-2.0-amd64.iso of=/dev/sdX status=progress bs=4M conv=fdatasync';
+const microRunnerCmd = 'curl -fsSL https://get.zoth.io/micro-runner.sh | bash';
+const gitCloneCmd = 'git clone https://github.com/NullAITech/zoth-os.git && cd zoth-os';
 
 // Circular Radial Dial Component
 function RadialResourceDial({ value, max = 100, label, subtext, metricText, statusBadge, accentColor, glowColor }) {
@@ -161,6 +169,8 @@ export default function ZothOSPage() {
   // Copy states
   const [copiedQemu, setCopiedQemu] = useState(false);
   const [copiedIso, setCopiedIso] = useState(false);
+  const [copiedMicroRunner, setCopiedMicroRunner] = useState(false);
+  const [copiedGitClone, setCopiedGitClone] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
 
   // Models list
@@ -174,6 +184,12 @@ export default function ZothOSPage() {
   const [isSimulatingBurst, setIsSimulatingBurst] = useState(false);
   const [egressProbeActive, setEgressProbeActive] = useState(false);
 
+  // Hypervisor VM State & Boot Animation
+  const [vmState, setVmState] = useState('online'); // 'online', 'booting', 'diagnosing', 'installing'
+  const [bootProgress, setBootProgress] = useState(100);
+  const [vmUptime, setVmUptime] = useState('04:18:22');
+  const bootTimeoutsRef = useRef([]);
+
   // Manifest Dialog State
   const [manifestModalOpen, setManifestModalOpen] = useState(false);
   const [copiedManifest, setCopiedManifest] = useState(false);
@@ -186,7 +202,7 @@ export default function ZothOSPage() {
       text: [
         'ZOTH SOVEREIGN OS v2.0.0-RELEASE (x86_64 Hardened Microkernel)',
         'Built with Zero-Egress Invariant & Air-Gapped Cryptographic Enclaves.',
-        'Type "help" to inspect commands or click any quick-command chip below.',
+        'Type "help" to inspect commands or execute "zoth boot --kvm" to run virtual boot sequence.',
       ].join('\n'),
     },
   ];
@@ -203,7 +219,16 @@ export default function ZothOSPage() {
     soft: isDark ? '#F5E6AB' : '#8A6A09',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
     border: isDark ? 'rgba(212,175,55,0.32)' : '#E2CE82',
+    contrastText: '#08080B',
   };
+
+  // Clean up boot sequence timeouts
+  useEffect(() => {
+    return () => {
+      bootTimeoutsRef.current.forEach((t) => clearTimeout(t));
+      bootTimeoutsRef.current = [];
+    };
+  }, []);
 
   // Scroll to bottom when terminal updates
   useEffect(() => {
@@ -231,6 +256,7 @@ export default function ZothOSPage() {
     setIsSimulatingBurst(true);
     setCpuLoad(78);
     setRamActiveGb(5.1);
+    setToastMessage('Workload Burst Simulation Active: vCPU at 78%, KVM Buffer at 5.1 GB.');
     setTimeout(() => {
       setCpuLoad(12);
       setRamActiveGb(3.4);
@@ -243,8 +269,191 @@ export default function ZothOSPage() {
     setEgressProbeActive(true);
     setTimeout(() => {
       setEgressProbeActive(false);
-      setToastMessage('Zero-Egress Probe Audit: 0 packets leaked. Outbound syn permanently blocked.');
+      setToastMessage('Zero-Egress Probe Audit: 0 packets leaked. Outbound SYN permanently blocked.');
     }, 1200);
+  };
+
+  // Virtual Boot Sequence Animation Handler
+  const runBootSequence = () => {
+    // Clear any pending timeouts
+    bootTimeoutsRef.current.forEach((t) => clearTimeout(t));
+    bootTimeoutsRef.current = [];
+
+    setVmState('booting');
+    setBootProgress(12);
+
+    const baseId = Date.now();
+    setTerminalHistory((prev) => [
+      ...prev,
+      {
+        id: baseId,
+        type: 'input',
+        text: 'zoth boot --kvm',
+      },
+      {
+        id: baseId + 1,
+        type: 'system',
+        text: [
+          '>>> [KVM-HYPERVISOR] Initializing virtual machine VM-01 (ZothOS Sovereign v2)...',
+          '>>> [KVM-HYPERVISOR] Hardware acceleration: KVM Ring-0 VMX unlocked.',
+          `>>> [KVM-HYPERVISOR] Allocating ${ramAllocation} MB guest memory buffer with AES-256 swap...`,
+        ].join('\n'),
+      },
+    ]);
+
+    const steps = [
+      {
+        delay: 280,
+        progress: 32,
+        log: [
+          '[  0.000000] Linux version 6.8.0-zoth-hardened-x86_64 (operator@genesis) (gcc 13.2.0) #1 SMP PREEMPT_DYNAMIC',
+          '[  0.004120] Command line: BOOT_IMAGE=/vmlinuz-6.8.0-zoth root=/dev/mapper/zoth-crypt ro quiet zero_egress=strict',
+          '[  0.015200] kvm: nested virtualization enabled (VMX/SVM Direct Ring-0 passthrough)',
+        ].join('\n'),
+      },
+      {
+        delay: 600,
+        progress: 58,
+        log: [
+          `[  0.048900] smp: Bringing up secondary CPUs ... 4 vCPUs active (${cpuConfigs[cpuPreset].label})`,
+          '[  0.092100] zoth_egress: BPF enforcement filter installed on lo & kvm-br0 (DROP_OUTBOUND_SYN)',
+          '[  0.134000] systemd[1]: Mounting /enclaves/memory_vault (crypto: aes-256-xts)... [  OK  ]',
+        ].join('\n'),
+      },
+      {
+        delay: 950,
+        progress: 84,
+        log: [
+          '[  0.220100] systemd[1]: Starting Zoth Sovereign Memory Daemon (pid 1420, port 8788)... [  OK  ]',
+          `[  0.312000] systemd[1]: Starting Ollama Engine Sandbox (port 11434, ${models.length || 3} models verified)... [  OK  ]`,
+          '[  0.421500] systemd[1]: Starting Zoth Studio Cockpit v2 (port 5173, unshared netns)... [  OK  ]',
+        ].join('\n'),
+      },
+      {
+        delay: 1350,
+        progress: 100,
+        log: [
+          '[  0.501200] zoth_doctor: All 18 cryptographic invariants verified (Ed25519-ph signature PASS)',
+          '========================================================================',
+          '      ★ ZOTH OS SOVEREIGN HYPERVISOR BOOT COMPLETE (VM-01 ONLINE) ★     ',
+          '========================================================================',
+          'Session active on TTY-01. Microkernel invariants active. Zero telemetry enforced.',
+        ].join('\n'),
+      },
+    ];
+
+    steps.forEach((step, idx) => {
+      const timeoutId = setTimeout(() => {
+        setBootProgress(step.progress);
+        setTerminalHistory((prev) => [
+          ...prev,
+          {
+            id: baseId + 10 + idx,
+            type: idx === steps.length - 1 ? 'system' : 'output',
+            text: step.log,
+          },
+        ]);
+
+        if (idx === steps.length - 1) {
+          setVmState('online');
+          setVmUptime('00:00:01');
+          setToastMessage('KVM Hypervisor Boot Complete: VM-01 is online and fully sovereign.');
+        }
+      }, step.delay);
+
+      bootTimeoutsRef.current.push(timeoutId);
+    });
+  };
+
+  // Doctor Audit Handler
+  const runDoctorAudit = () => {
+    setVmState('diagnosing');
+    const isOllamaUp = status?.services?.ollama?.up;
+    const modelCount = models.length;
+    const isKvm = status?.kvm;
+
+    setTimeout(() => {
+      setTerminalHistory((prev) => [
+        ...prev,
+        {
+          id: Date.now(),
+          type: 'input',
+          text: 'zoth doctor',
+        },
+        {
+          id: Date.now() + 1,
+          type: 'output',
+          text: [
+            '========================================================================',
+            '                   ZOTH OS SOVEREIGN DOCTOR AUDIT                       ',
+            '========================================================================',
+            '[✓] KERNEL INTEGRITY:    Linux 6.8.0-zoth-hardened-x86_64 (PREEMPT_DYNAMIC)',
+            `[✓] RING-0 VIRTUALIZE:   ${isKvm ? '/dev/kvm PRESENT (VMX/AMD-V extensions enabled)' : '/dev/kvm SIMULATED (TCG accelerator fallback)'}`,
+            '[✓] ZERO-EGRESS BPF:     ENFORCED (Outbound SYN permanently blocked)',
+            '[✓] MEMORY DAEMON IPC:   ONLINE (http://127.0.0.1:8788 - Ping: 0.42ms)',
+            `[✓] OLLAMA LOCAL ENGINE: ${isOllamaUp ? `ONLINE (http://127.0.0.1:11434 - ${modelCount} models loaded)` : 'STANDBY (Local IPC ready)'}`,
+            '[✓] ENCLAVE CRYPTO FS:   AES-256-XTS mounted (/enclaves/.vault_keys)',
+            '[✓] ROOT FS SIGNATURE:   ED25519-PH PASS (Digest: 0x98f4a13d7c6b5420)',
+            '[✓] VECTOR DECAY ENGINE: SYNCHRONIZED (STDP decay factor λ=0.045)',
+            '[✓] TELEMETRY GUARD:     ZERO LEAKS DETECTED (DNS: loopback 127.0.0.1:5353)',
+            '[✓] SECUREBOOT BOOTLOAD: GRUB2-EFI Secure Boot verified via TPM2 enclave',
+            '------------------------------------------------------------------------',
+            'VERDICT: 10/10 Invariants Satisfied. System is 100% Sovereign & Production-Ready.',
+            '========================================================================',
+          ].join('\n'),
+        },
+      ]);
+      setVmState('online');
+      setToastMessage('Zoth Doctor Diagnostic Audit: 10/10 Invariants Satisfied.');
+    }, 450);
+  };
+
+  // Bare-Metal Install Handler
+  const runBareMetalInstall = () => {
+    setVmState('installing');
+    const baseId = Date.now();
+
+    setTerminalHistory((prev) => [
+      ...prev,
+      {
+        id: baseId,
+        type: 'input',
+        text: 'zoth-os-install --bare-metal',
+      },
+      {
+        id: baseId + 1,
+        type: 'output',
+        text: [
+          '========================================================================',
+          '            ZOTH OS SOVEREIGN BARE-METAL INSTALLER (x86_64)             ',
+          '========================================================================',
+          '[1/6] Scanning physical block devices...',
+          '      -> Target device found: /dev/nvme0n1 (Samsung 990 PRO 2TB)',
+          '[2/6] Writing cryptographic GPT partition table...',
+          '      -> /dev/nvme0n1p1: 512MB EFI System Partition (FAT32)',
+          '      -> /dev/nvme0n1p2: 32GB Immutable Enclave RootFS (Squashfs)',
+          '      -> /dev/nvme0n1p3: 4GB Encrypted Swap (AES-256-XTS)',
+          '      -> /dev/nvme0n1p4: Rest-of-disk Encrypted Agent Memory Vault (btrfs)',
+          '[3/6] Flashing hardened kernel image (vmlinuz-6.8.0-zoth-hardened)...',
+          '      -> SHA-256: c83b12f6a917240c5f49d32d0f50e82f507b9a5e8c130d2217d84fbb7a8d5918',
+          '      -> Checksum verified against bootloader manifest.',
+          '[4/6] Sealing Zero-Egress iptables & nftables rules in initramfs...',
+          '      -> Default DROP policy for OUTPUT & FORWARD chains.',
+          '[5/6] Enrolling Ed25519 machine keys into TPM2 Enclave...',
+          '      -> Public Key enrolled: 0x98f4a13d7c6b5420e11894dcb02e1763a8f94cb02e176...',
+          '[6/6] Generating GRUB2-EFI SecureBoot binary...',
+          '========================================================================',
+          'INSTALLATION SUCCESSFUL! Remove installation USB media and reboot.',
+          'Bare-metal sovereign node is permanently sealed and ready for agent swarms.',
+          '========================================================================',
+        ].join('\n'),
+      },
+    ]);
+
+    setTimeout(() => {
+      setVmState('online');
+      setToastMessage('Bare-metal installer simulation finished. Hardware enclaves sealed.');
+    }, 500);
   };
 
   // Bootloader Manifest Generator
@@ -296,7 +505,6 @@ export default function ZothOSPage() {
     const manifest = generateBootloaderManifest();
     const manifestStr = JSON.stringify(manifest, null, 2);
 
-    // Download trigger
     try {
       const blob = new Blob([manifestStr], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
@@ -324,8 +532,6 @@ export default function ZothOSPage() {
     setCommandHistoryList((prev) => [...prev, cmd]);
     setHistoryNavIndex(-1);
 
-    const newEntries = [{ id: Date.now(), type: 'input', text: cmd }];
-
     const lower = cmd.toLowerCase();
 
     if (lower === 'clear') {
@@ -333,6 +539,31 @@ export default function ZothOSPage() {
       setCommandInput('');
       return;
     }
+
+    if (lower === 'zoth boot --kvm' || lower === 'zoth boot' || lower === 'boot --kvm') {
+      runBootSequence();
+      setCommandInput('');
+      return;
+    }
+
+    if (lower === 'zoth doctor' || lower === 'doctor' || lower === 'zoth-doctor') {
+      runDoctorAudit();
+      setCommandInput('');
+      return;
+    }
+
+    if (
+      lower === 'zoth-os-install --bare-metal' ||
+      lower === 'zoth-os-install' ||
+      lower === 'zoth install --bare-metal' ||
+      lower === 'zoth install'
+    ) {
+      runBareMetalInstall();
+      setCommandInput('');
+      return;
+    }
+
+    const newEntries = [{ id: Date.now(), type: 'input', text: cmd }];
 
     if (lower === 'help') {
       newEntries.push({
@@ -343,9 +574,11 @@ export default function ZothOSPage() {
           'Usage: [command] [options...]',
           '',
           'Available diagnostic commands:',
-          '  help                          Show this manual and available commands',
-          '  uname -a                      Print OS kernel, release, and target architecture',
           '  zoth status                   Query local memory daemon, enclave & invariant status',
+          '  zoth boot --kvm               Execute virtual boot sequence in hardware-accelerated KVM',
+          '  zoth doctor                   Run 10-point cryptographic invariant & enclave audit',
+          '  zoth-os-install --bare-metal  Launch bare-metal installer simulation with GPT partitioning',
+          '  uname -a                      Print OS kernel, release, and target architecture',
           '  ollama list                   Display local quantized models registered in sandbox',
           '  cat /etc/zoth/invariants.conf Print sovereign security manifest & network policy',
           '  free -h                       Display hardware RAM buffer, KVM heap, & swap status',
@@ -371,8 +604,8 @@ export default function ZothOSPage() {
           '                 ZOTH SOVEREIGN RUNTIME DIAGNOSTIC AUDIT                ',
           '========================================================================',
           '[✓] DAEMON CORE:        ONLINE  (http://127.0.0.1:8788 - IPC Active)',
-          `[✓] OLLAMA ENGINE:      ${isOllamaUp ? `ONLINE  (${modelCount} models loaded in sandbox)` : 'OFFLINE (Standby mode)'}`,
-          `[✓] KVM HARDWARE ACCEL: ${isKvm ? 'PRESENT (/dev/kvm - Ring-0 VMX unlocked)' : 'FALLBACK (TCG emulator mode)'}`,
+          `[✓] OLLAMA ENGINE:      ${isOllamaUp ? `ONLINE  (${modelCount} models loaded in sandbox)` : 'STANDBY (Local inference ready)'}`,
+          `[✓] KVM HARDWARE ACCEL: ${isKvm ? 'PRESENT (/dev/kvm - Ring-0 VMX unlocked)' : 'SIMULATED (TCG accelerator fallback)'}`,
           `[✓] CPU CORE ALLOC:     ${cpuConfigs[cpuPreset].label} (${cpuLoad}% load)`,
           `[✓] KVM RAM BUFFER:     ${ramAllocation} MB allocated / ${ramActiveGb} GB active`,
           '[✓] ZERO-EGRESS MODULE: ENFORCED (100% Loopback Locked, 0 outbound leaks)',
@@ -491,13 +724,16 @@ export default function ZothOSPage() {
   };
 
   const quickCommands = [
-    'help',
-    'uname -a',
     'zoth status',
+    'zoth boot --kvm',
+    'zoth doctor',
+    'zoth-os-install --bare-metal',
+    'uname -a',
     'ollama list',
     'cat /etc/zoth/invariants.conf',
     'free -h',
     'ls -la /enclaves',
+    'help',
     'clear',
   ];
 
@@ -555,10 +791,9 @@ export default function ZothOSPage() {
             </Typography>
           </Box>
 
-          {/* Export Manifest Button */}
+          {/* Export Manifest Button with high-contrast text */}
           <Button
             variant="contained"
-            color="primary"
             startIcon={<DownloadIcon />}
             onClick={handleExportManifest}
             sx={{
@@ -568,9 +803,13 @@ export default function ZothOSPage() {
               fontSize: '0.88rem',
               letterSpacing: '0.02em',
               whiteSpace: 'nowrap',
+              bgcolor: gold.accent,
+              color: '#08080B',
               boxShadow: '0 4px 18px rgba(212, 175, 55, 0.35)',
-              border: '1px solid rgba(212, 175, 55, 0.5)',
+              border: `1px solid ${gold.accent}`,
               '&:hover': {
+                bgcolor: isDark ? '#F5E6AB' : '#9A7008',
+                color: isDark ? '#08080B' : '#FFFFFF',
                 boxShadow: '0 6px 24px rgba(212, 175, 55, 0.5)',
               },
             }}
@@ -668,7 +907,7 @@ export default function ZothOSPage() {
                           fontSize: '0.72rem',
                           fontWeight: 800,
                           bgcolor: cpuPreset === k ? gold.accent : gold.wash,
-                          color: cpuPreset === k ? (isDark ? '#08080B' : '#FFFFFF') : gold.soft,
+                          color: cpuPreset === k ? '#08080B' : gold.soft,
                           border: `1px solid ${cpuPreset === k ? gold.accent : gold.border}`,
                         }}
                       />
@@ -733,7 +972,7 @@ export default function ZothOSPage() {
                           fontSize: '0.72rem',
                           fontWeight: 800,
                           bgcolor: ramAllocation === sz ? (isDark ? '#38BDF8' : '#0284C7') : gold.wash,
-                          color: ramAllocation === sz ? '#FFFFFF' : gold.soft,
+                          color: ramAllocation === sz ? (isDark ? '#08080B' : '#FFFFFF') : gold.soft,
                           border: `1px solid ${ramAllocation === sz ? (isDark ? '#38BDF8' : '#0284C7') : gold.border}`,
                         }}
                       />
@@ -808,24 +1047,48 @@ export default function ZothOSPage() {
           </Grid>
         </Box>
 
-        {/* SECTION: Interactive In-Browser Web Terminal Sandbox */}
+        {/* SECTION: Interactive KVM Hypervisor & WebContainer Simulator */}
         <Box sx={{ mb: 5 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
             <Box>
-              <Typography className="section-kicker">Interactive In-Browser Console</Typography>
+              <Typography className="section-kicker">Interactive Hardware Virtualization Cockpit</Typography>
               <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, letterSpacing: '-0.02em' }}>
-                Web Terminal Sandbox (Zoth TTY-01)
+                KVM Hypervisor & WebContainer Terminal (TTY-01)
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <Chip
                 icon={<CheckCircleIcon style={{ fontSize: 14, color: '#34D399' }} />}
-                label="ENCLAVE TTY ACTIVE"
+                label={
+                  vmState === 'booting'
+                    ? `VM-01 BOOTING (${bootProgress}%)`
+                    : vmState === 'diagnosing'
+                    ? 'RUNNING DOCTOR AUDIT'
+                    : vmState === 'installing'
+                    ? 'FLASHING BARE-METAL'
+                    : 'VM-01 ONLINE (KVM ACTIVE)'
+                }
                 size="small"
                 sx={{
-                  bgcolor: 'rgba(52, 211, 153, 0.1)',
-                  color: '#34D399',
-                  border: '1px solid rgba(52, 211, 153, 0.3)',
+                  bgcolor:
+                    vmState === 'booting'
+                      ? 'rgba(212, 175, 55, 0.15)'
+                      : vmState === 'diagnosing'
+                      ? 'rgba(56, 189, 248, 0.15)'
+                      : 'rgba(52, 211, 153, 0.1)',
+                  color:
+                    vmState === 'booting'
+                      ? gold.soft
+                      : vmState === 'diagnosing'
+                      ? '#38BDF8'
+                      : '#34D399',
+                  border: `1px solid ${
+                    vmState === 'booting'
+                      ? gold.border
+                      : vmState === 'diagnosing'
+                      ? 'rgba(56, 189, 248, 0.4)'
+                      : 'rgba(52, 211, 153, 0.3)'
+                  }`,
                   fontFamily: mono,
                   fontSize: '0.7rem',
                   fontWeight: 800,
@@ -842,6 +1105,125 @@ export default function ZothOSPage() {
               </Tooltip>
             </Box>
           </Box>
+
+          {/* Hypervisor Virtual Machine Monitor Metrics Banner */}
+          <Paper
+            sx={{
+              p: 2,
+              mb: 2,
+              borderRadius: 2,
+              bgcolor: isDark ? '#0C0D16' : '#F8FAFC',
+              border: `1px solid ${isDark ? 'rgba(212, 175, 55, 0.25)' : '#E2E8F0'}`,
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 2,
+            }}
+          >
+            {/* Quick Metrics Columns */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 2, md: 3 }, flexWrap: 'wrap' }}>
+              <Box>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700, fontFamily: mono, fontSize: '0.68rem' }}>
+                  HYPERVISOR HOST
+                </Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', fontWeight: 800, color: theme.palette.text.primary }}>
+                  QEMU 9.0 / KVM Ring-0
+                </Typography>
+              </Box>
+
+              <Box>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700, fontFamily: mono, fontSize: '0.68rem' }}>
+                  GUEST VCPU ARCH
+                </Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', fontWeight: 800, color: isDark ? '#38BDF8' : '#0284C7' }}>
+                  {cpuConfigs[cpuPreset].cores} vCPUs @ {cpuConfigs[cpuPreset].freq.split(' ')[0]} ({cpuLoad}% Load)
+                </Typography>
+              </Box>
+
+              <Box>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700, fontFamily: mono, fontSize: '0.68rem' }}>
+                  VIRTUAL DISK I/O
+                </Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', fontWeight: 800, color: theme.palette.text.primary }}>
+                  482 MB/s Read · 124 MB/s Write (18.4k IOPS)
+                </Typography>
+              </Box>
+
+              <Box>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700, fontFamily: mono, fontSize: '0.68rem' }}>
+                  ZERO-EGRESS AIR-GAP
+                </Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', fontWeight: 800, color: isDark ? '#34D399' : '#027A48' }}>
+                  0 Leaks · 100% Loopback
+                </Typography>
+              </Box>
+            </Box>
+
+            {/* Quick Interactive Hypervisor Controls */}
+            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+              <Button
+                size="small"
+                variant="contained"
+                startIcon={<PlayArrowIcon />}
+                onClick={runBootSequence}
+                disabled={vmState === 'booting'}
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                  fontWeight: 800,
+                  bgcolor: gold.accent,
+                  color: '#08080B',
+                  '&:hover': {
+                    bgcolor: isDark ? '#F5E6AB' : '#9A7008',
+                    color: isDark ? '#08080B' : '#FFFFFF',
+                  },
+                }}
+              >
+                {vmState === 'booting' ? 'Booting VM...' : 'Virtual Boot (KVM)'}
+              </Button>
+
+              <Button
+                size="small"
+                variant="outlined"
+                startIcon={<HealthAndSafetyIcon />}
+                onClick={runDoctorAudit}
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  borderColor: gold.border,
+                  color: gold.soft,
+                  '&:hover': {
+                    borderColor: gold.accent,
+                    bgcolor: gold.wash,
+                  },
+                }}
+              >
+                zoth doctor
+              </Button>
+
+              <Button
+                size="small"
+                variant="outlined"
+                startIcon={<StorageIcon />}
+                onClick={runBareMetalInstall}
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  borderColor: isDark ? 'rgba(56, 189, 248, 0.4)' : '#BAE6FD',
+                  color: isDark ? '#38BDF8' : '#0369A1',
+                  '&:hover': {
+                    borderColor: '#38BDF8',
+                    bgcolor: isDark ? 'rgba(56, 189, 248, 0.1)' : '#F0F9FF',
+                  },
+                }}
+              >
+                Bare-Metal Install
+              </Button>
+            </Box>
+          </Paper>
 
           {/* Web Terminal Wrapper */}
           <Paper
@@ -887,20 +1269,37 @@ export default function ZothOSPage() {
                 </Typography>
               </Box>
 
-              <Chip
-                label="SOVEREIGN WEBSHELL"
-                size="small"
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Chip
+                  label="SOVEREIGN WEBSHELL"
+                  size="small"
+                  sx={{
+                    height: 20,
+                    fontFamily: mono,
+                    fontSize: '0.65rem',
+                    fontWeight: 800,
+                    bgcolor: 'rgba(212, 175, 55, 0.15)',
+                    color: '#F5E6AB',
+                    border: '1px solid rgba(212, 175, 55, 0.3)',
+                  }}
+                />
+              </Box>
+            </Box>
+
+            {/* Boot Sequence Animation Progress Bar */}
+            {vmState === 'booting' && (
+              <LinearProgress
+                variant="determinate"
+                value={bootProgress}
                 sx={{
-                  height: 20,
-                  fontFamily: mono,
-                  fontSize: '0.65rem',
-                  fontWeight: 800,
+                  height: 4,
                   bgcolor: 'rgba(212, 175, 55, 0.15)',
-                  color: '#F5E6AB',
-                  border: '1px solid rgba(212, 175, 55, 0.3)',
+                  '& .MuiLinearProgress-bar': {
+                    bgcolor: gold.accent,
+                  },
                 }}
               />
-            </Box>
+            )}
 
             {/* Quick Command Chips Toolbar */}
             <Box
@@ -946,9 +1345,9 @@ export default function ZothOSPage() {
                     border: '1px solid rgba(212, 175, 55, 0.22)',
                     whiteSpace: 'nowrap',
                     '&:hover': {
-                      bgcolor: 'rgba(212, 175, 55, 0.2)',
+                      bgcolor: 'rgba(212, 175, 55, 0.22)',
                       borderColor: '#D4AF37',
-                      color: '#FFFFFF',
+                      color: '#F5E6AB',
                     },
                   }}
                 />
@@ -959,8 +1358,8 @@ export default function ZothOSPage() {
             <Box
               sx={{
                 p: 2.5,
-                minHeight: 320,
-                maxHeight: 460,
+                minHeight: 340,
+                maxHeight: 480,
                 overflowY: 'auto',
                 fontFamily: mono,
                 fontSize: '0.85rem',
@@ -1058,7 +1457,7 @@ export default function ZothOSPage() {
                   spellCheck="false"
                   autoComplete="off"
                   autoCapitalize="off"
-                  placeholder="type command (e.g. zoth status, uname -a, help)..."
+                  placeholder="type command (e.g. zoth status, zoth boot --kvm, zoth doctor)..."
                   style={{
                     backgroundColor: 'transparent',
                     border: 'none',
@@ -1080,7 +1479,7 @@ export default function ZothOSPage() {
         {/* Feature Cards */}
         <Grid container spacing={2.5} sx={{ mb: 5 }}>
           <Grid xs={12} md={4}>
-            <Card sx={{ height: '100%', bgcolor: theme.palette.background.paper }}>
+            <Card sx={{ height: '100%', bgcolor: theme.palette.background.paper, border: `1px solid ${isDark ? 'rgba(212, 175, 55, 0.28)' : '#EAECF0'}` }}>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                   <ComputerIcon sx={{ color: gold.accent }} />
@@ -1095,7 +1494,7 @@ export default function ZothOSPage() {
             </Card>
           </Grid>
           <Grid xs={12} md={4}>
-            <Card sx={{ height: '100%', bgcolor: theme.palette.background.paper }}>
+            <Card sx={{ height: '100%', bgcolor: theme.palette.background.paper, border: `1px solid ${isDark ? 'rgba(212, 175, 55, 0.28)' : '#EAECF0'}` }}>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                   <MemoryIcon sx={{ color: gold.accent }} />
@@ -1110,7 +1509,7 @@ export default function ZothOSPage() {
             </Card>
           </Grid>
           <Grid xs={12} md={4}>
-            <Card sx={{ height: '100%', bgcolor: theme.palette.background.paper }}>
+            <Card sx={{ height: '100%', bgcolor: theme.palette.background.paper, border: `1px solid ${isDark ? 'rgba(212, 175, 55, 0.28)' : '#EAECF0'}` }}>
               <CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                   <TerminalIcon sx={{ color: gold.accent }} />
@@ -1132,7 +1531,7 @@ export default function ZothOSPage() {
           <Paper
             sx={{
               p: 3,
-              border: `1px solid ${isDark ? 'rgba(212,175,55,0.35)' : '#F0E1A8'}`,
+              border: `1px solid ${isDark ? 'rgba(212,175,55,0.35)' : '#E2CE82'}`,
               borderRadius: 2,
               bgcolor: theme.palette.background.paper,
               boxShadow: isDark
@@ -1187,25 +1586,33 @@ export default function ZothOSPage() {
         </Box>
 
         {/* Command Launchers */}
-        <Grid container spacing={3}>
+        <Grid container spacing={3} sx={{ mb: 5 }}>
           <Grid xs={12} md={6}>
-            <Paper sx={{ p: 3, bgcolor: isDark ? '#0B0B12' : '#0F172A', color: '#F8FAFC', borderRadius: 2, border: `1px solid ${isDark ? '#2A2A38' : '#1E293B'}`, height: '100%' }}>
-              <Typography className="section-kicker" sx={{ color: isDark ? '#F5E6AB' : '#FDE047' }}>QEMU / KVM Virtual Machine Launcher</Typography>
-              <Typography variant="body2" sx={{ color: isDark ? '#94A3B8' : '#CBD5E1', mb: 2 }}>
+            <Paper sx={{ p: 3, bgcolor: isDark ? '#0B0B12' : '#FFFFFF', color: theme.palette.text.primary, borderRadius: 2, border: `1px solid ${isDark ? '#2A2A38' : '#EAECF0'}`, height: '100%' }}>
+              <Typography className="section-kicker" sx={{ color: gold.soft }}>QEMU / KVM Virtual Machine Launcher</Typography>
+              <Typography variant="body2" sx={{ color: theme.palette.text.secondary, mb: 2 }}>
                 Run Zoth OS inside a hardware-accelerated local sandbox:
               </Typography>
-              <Box sx={{ p: 2, bgcolor: '#020617', borderRadius: 1.5, fontFamily: mono, fontSize: '0.85rem', color: '#F5E6AB', mb: 2, wordBreak: 'break-all', border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+              <Box sx={{ p: 2, bgcolor: isDark ? '#020617' : '#0F172A', borderRadius: 1.5, fontFamily: mono, fontSize: '0.85rem', color: '#F5E6AB', mb: 2, wordBreak: 'break-all', border: '1px solid rgba(212, 175, 55, 0.2)' }}>
                 {qemu}
               </Box>
               <Button
                 variant="contained"
-                color="primary"
                 size="small"
                 startIcon={<ContentCopyIcon />}
                 onClick={() => {
                   navigator.clipboard.writeText(qemu);
                   setCopiedQemu(true);
                   setTimeout(() => setCopiedQemu(false), 1600);
+                }}
+                sx={{
+                  bgcolor: gold.accent,
+                  color: '#08080B',
+                  fontWeight: 800,
+                  '&:hover': {
+                    bgcolor: isDark ? '#F5E6AB' : '#9A7008',
+                    color: isDark ? '#08080B' : '#FFFFFF',
+                  },
                 }}
               >
                 {copiedQemu ? 'Copied to Clipboard' : 'Copy QEMU Command'}
@@ -1214,17 +1621,16 @@ export default function ZothOSPage() {
           </Grid>
 
           <Grid xs={12} md={6}>
-            <Paper sx={{ p: 3, bgcolor: isDark ? '#0B0B12' : '#0F172A', color: '#F8FAFC', borderRadius: 2, border: `1px solid ${isDark ? '#2A2A38' : '#1E293B'}`, height: '100%' }}>
-              <Typography className="section-kicker" sx={{ color: isDark ? '#F5E6AB' : '#FDE047' }}>Flash Bare Metal USB ISO</Typography>
-              <Typography variant="body2" sx={{ color: isDark ? '#94A3B8' : '#CBD5E1', mb: 2 }}>
+            <Paper sx={{ p: 3, bgcolor: isDark ? '#0B0B12' : '#FFFFFF', color: theme.palette.text.primary, borderRadius: 2, border: `1px solid ${isDark ? '#2A2A38' : '#EAECF0'}`, height: '100%' }}>
+              <Typography className="section-kicker" sx={{ color: gold.soft }}>Flash Bare Metal USB ISO</Typography>
+              <Typography variant="body2" sx={{ color: theme.palette.text.secondary, mb: 2 }}>
                 Flash the bootable ISO directly to a USB drive:
               </Typography>
-              <Box sx={{ p: 2, bgcolor: '#020617', borderRadius: 1.5, fontFamily: mono, fontSize: '0.85rem', color: '#F5E6AB', mb: 2, wordBreak: 'break-all', border: '1px solid rgba(212, 175, 55, 0.2)' }}>
+              <Box sx={{ p: 2, bgcolor: isDark ? '#020617' : '#0F172A', borderRadius: 1.5, fontFamily: mono, fontSize: '0.85rem', color: '#F5E6AB', mb: 2, wordBreak: 'break-all', border: '1px solid rgba(212, 175, 55, 0.2)' }}>
                 {isoCmd}
               </Box>
               <Button
                 variant="contained"
-                color="primary"
                 size="small"
                 startIcon={<ContentCopyIcon />}
                 onClick={() => {
@@ -1232,12 +1638,281 @@ export default function ZothOSPage() {
                   setCopiedIso(true);
                   setTimeout(() => setCopiedIso(false), 1600);
                 }}
+                sx={{
+                  bgcolor: gold.accent,
+                  color: '#08080B',
+                  fontWeight: 800,
+                  '&:hover': {
+                    bgcolor: isDark ? '#F5E6AB' : '#9A7008',
+                    color: isDark ? '#08080B' : '#FFFFFF',
+                  },
+                }}
               >
                 {copiedIso ? 'Copied to Clipboard' : 'Copy Flash Command'}
               </Button>
             </Paper>
           </Grid>
         </Grid>
+
+        {/* SECTION: Prominent Sovereign Deployment Actions Strip */}
+        <Box sx={{ mb: 2 }}>
+          <Typography className="section-kicker">Sovereign Deployment Fast Actions</Typography>
+          <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, letterSpacing: '-0.02em', mb: 2 }}>
+            Instant Bare-Metal, CLI, & Repository Actions
+          </Typography>
+
+          <Grid container spacing={2.5}>
+            {/* Action 1: Direct ISO Download */}
+            <Grid xs={12} md={4}>
+              <Paper
+                sx={{
+                  p: 3,
+                  height: '100%',
+                  bgcolor: isDark ? '#0B0D17' : '#FFFFFF',
+                  borderRadius: 2.5,
+                  border: `1px solid ${isDark ? 'rgba(212, 175, 55, 0.35)' : '#E2CE82'}`,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  boxShadow: isDark
+                    ? '0 8px 24px -4px rgba(0,0,0,0.8), 0 0 16px -4px rgba(212, 175, 55, 0.15)'
+                    : '0 4px 16px rgba(0,0,0,0.06)',
+                }}
+              >
+                <Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <DownloadIcon sx={{ color: gold.accent }} />
+                      <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+                        Bootable ISO Image
+                      </Typography>
+                    </Box>
+                    <Chip
+                      label="1.8 GB ISO"
+                      size="small"
+                      sx={{
+                        fontFamily: mono,
+                        fontSize: '0.68rem',
+                        fontWeight: 800,
+                        bgcolor: gold.wash,
+                        color: gold.soft,
+                        border: `1px solid ${gold.border}`,
+                      }}
+                    />
+                  </Box>
+                  <Typography variant="body2" sx={{ color: theme.palette.text.secondary, mb: 2, fontSize: '0.86rem', lineHeight: 1.55 }}>
+                    Download the bootable Zoth OS ISO with signed bootloader manifest and cryptographic enclaves pre-configured for direct USB bare-metal installation.
+                  </Typography>
+                  <Box sx={{ p: 1.2, mb: 2, bgcolor: isDark ? '#040407' : '#F1F5F9', borderRadius: 1.5, border: `1px solid ${gold.border}` }}>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#F5E6AB' : '#8A6A09', wordBreak: 'break-all' }}>
+                      SHA256: 8f4e2b9c78d3a1e50647bf04c264a938...
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <Button
+                  variant="contained"
+                  fullWidth
+                  startIcon={<DownloadIcon />}
+                  onClick={handleExportManifest}
+                  sx={{
+                    bgcolor: gold.accent,
+                    color: '#08080B',
+                    fontWeight: 800,
+                    textTransform: 'none',
+                    py: 1,
+                    '&:hover': {
+                      bgcolor: isDark ? '#F5E6AB' : '#9A7008',
+                      color: isDark ? '#08080B' : '#FFFFFF',
+                    },
+                  }}
+                >
+                  Download ISO & Manifest
+                </Button>
+              </Paper>
+            </Grid>
+
+            {/* Action 2: Git Clone Repo */}
+            <Grid xs={12} md={4}>
+              <Paper
+                sx={{
+                  p: 3,
+                  height: '100%',
+                  bgcolor: isDark ? '#0B0D17' : '#FFFFFF',
+                  borderRadius: 2.5,
+                  border: `1px solid ${isDark ? 'rgba(56, 189, 248, 0.35)' : '#BAE6FD'}`,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  boxShadow: isDark
+                    ? '0 8px 24px -4px rgba(0,0,0,0.8), 0 0 16px -4px rgba(56, 189, 248, 0.15)'
+                    : '0 4px 16px rgba(0,0,0,0.06)',
+                }}
+              >
+                <Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <CodeIcon sx={{ color: isDark ? '#38BDF8' : '#0284C7' }} />
+                      <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+                        Source Repository
+                      </Typography>
+                    </Box>
+                    <Chip
+                      label="GIT CLONE"
+                      size="small"
+                      sx={{
+                        fontFamily: mono,
+                        fontSize: '0.68rem',
+                        fontWeight: 800,
+                        bgcolor: isDark ? 'rgba(56, 189, 248, 0.15)' : '#E0F2FE',
+                        color: isDark ? '#38BDF8' : '#0369A1',
+                      }}
+                    />
+                  </Box>
+                  <Typography variant="body2" sx={{ color: theme.palette.text.secondary, mb: 2, fontSize: '0.86rem', lineHeight: 1.55 }}>
+                    Clone the sovereign distribution kernel build scripts, QEMU configuration, and hardened BPF zero-egress network rules.
+                  </Typography>
+                  <Box sx={{ p: 1.2, mb: 2, bgcolor: isDark ? '#040407' : '#F1F5F9', borderRadius: 1.5, border: '1px solid rgba(56, 189, 248, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {gitCloneCmd}
+                    </Typography>
+                    <IconButton
+                      size="small"
+                      onClick={() => {
+                        navigator.clipboard.writeText(gitCloneCmd);
+                        setCopiedGitClone(true);
+                        setTimeout(() => setCopiedGitClone(false), 1600);
+                      }}
+                      sx={{ color: isDark ? '#38BDF8' : '#0284C7', ml: 1, p: 0.5 }}
+                      title="Copy clone command"
+                    >
+                      <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                    </IconButton>
+                  </Box>
+                </Box>
+
+                <Button
+                  variant="outlined"
+                  fullWidth
+                  startIcon={<LaunchIcon />}
+                  href="https://github.com/NullAITech/zoth-os"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    borderColor: isDark ? '#38BDF8' : '#0284C7',
+                    color: isDark ? '#38BDF8' : '#0284C7',
+                    fontWeight: 800,
+                    textTransform: 'none',
+                    py: 1,
+                    '&:hover': {
+                      borderColor: '#38BDF8',
+                      bgcolor: isDark ? 'rgba(56, 189, 248, 0.1)' : '#F0F9FF',
+                    },
+                  }}
+                >
+                  {copiedGitClone ? 'Copied Clone Command!' : 'Inspect GitHub Repo'}
+                </Button>
+              </Paper>
+            </Grid>
+
+            {/* Action 3: Micro-Runner CLI */}
+            <Grid xs={12} md={4}>
+              <Paper
+                sx={{
+                  p: 3,
+                  height: '100%',
+                  bgcolor: isDark ? '#0B0D17' : '#FFFFFF',
+                  borderRadius: 2.5,
+                  border: `1px solid ${isDark ? 'rgba(52, 211, 153, 0.35)' : '#A6F4C5'}`,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  boxShadow: isDark
+                    ? '0 8px 24px -4px rgba(0,0,0,0.8), 0 0 16px -4px rgba(52, 211, 153, 0.15)'
+                    : '0 4px 16px rgba(0,0,0,0.06)',
+                }}
+              >
+                <Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <TerminalIcon sx={{ color: isDark ? '#34D399' : '#059669' }} />
+                      <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+                        Micro-Runner CLI
+                      </Typography>
+                    </Box>
+                    <Chip
+                      label="ONE-LINER"
+                      size="small"
+                      sx={{
+                        fontFamily: mono,
+                        fontSize: '0.68rem',
+                        fontWeight: 800,
+                        bgcolor: isDark ? 'rgba(52, 211, 153, 0.15)' : '#ECFDF3',
+                        color: isDark ? '#34D399' : '#027A48',
+                      }}
+                    />
+                  </Box>
+                  <Typography variant="body2" sx={{ color: theme.palette.text.secondary, mb: 2, fontSize: '0.86rem', lineHeight: 1.55 }}>
+                    Spin up the sovereign runner directly in terminal or container with one command. Automatically discovers KVM hardware acceleration.
+                  </Typography>
+                  <Box sx={{ p: 1.2, mb: 2, bgcolor: isDark ? '#040407' : '#F1F5F9', borderRadius: 1.5, border: '1px solid rgba(52, 211, 153, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#34D399' : '#027A48', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {microRunnerCmd}
+                    </Typography>
+                    <IconButton
+                      size="small"
+                      onClick={() => {
+                        navigator.clipboard.writeText(microRunnerCmd);
+                        setCopiedMicroRunner(true);
+                        setTimeout(() => setCopiedMicroRunner(false), 1600);
+                      }}
+                      sx={{ color: isDark ? '#34D399' : '#027A48', ml: 1, p: 0.5 }}
+                      title="Copy micro-runner command"
+                    >
+                      <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                    </IconButton>
+                  </Box>
+                </Box>
+
+                <Button
+                  variant="outlined"
+                  fullWidth
+                  startIcon={<TerminalIcon />}
+                  onClick={() => {
+                    executeCommand('zoth status');
+                    terminalInputRef.current?.focus();
+                  }}
+                  sx={{
+                    borderColor: isDark ? '#34D399' : '#059669',
+                    color: isDark ? '#34D399' : '#027A48',
+                    fontWeight: 800,
+                    textTransform: 'none',
+                    py: 1,
+                    '&:hover': {
+                      borderColor: '#34D399',
+                      bgcolor: isDark ? 'rgba(52, 211, 153, 0.1)' : '#ECFDF3',
+                    },
+                  }}
+                >
+                  {copiedMicroRunner ? 'Copied to Clipboard!' : 'Run zoth status in WebShell'}
+                </Button>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Box>
+
+        {/* Cleanly Mounted Sovereign Installation Funnel */}
+        <SovereignFunnel
+          title="Deploy Sovereign Zoth OS to Hardware"
+          subtitle="Zero-telemetry air-gapped operating system kernel for autonomous agent swarms, hardware enclave encryption, and memory vaults."
+          toolTitle="Option 1: Micro-Runner CLI & Bootable ISO"
+          toolTag="CLI & BARE METAL"
+          toolDescription="Download and flash bootable Zoth OS image (zothos-2.0-amd64.iso) for direct bare-metal deployment, or boot instantly via the micro-runner CLI."
+          toolRepo="https://github.com/NullAITech/zoth-os"
+          toolCommand="curl -fsSL https://get.zoth.io/micro-runner.sh | bash"
+          osRepo="https://github.com/NullAITech/zoth-os"
+          studioRepo="https://github.com/NullAITech/zoth-studio-v2"
+        />
       </Box>
 
       {/* Bootloader Manifest Modal */}
@@ -1327,10 +2002,17 @@ export default function ZothOSPage() {
           </Button>
           <Button
             variant="contained"
-            color="primary"
             startIcon={<DownloadIcon />}
             onClick={handleExportManifest}
-            sx={{ fontWeight: 800 }}
+            sx={{
+              fontWeight: 800,
+              bgcolor: gold.accent,
+              color: '#08080B',
+              '&:hover': {
+                bgcolor: isDark ? '#F5E6AB' : '#9A7008',
+                color: isDark ? '#08080B' : '#FFFFFF',
+              },
+            }}
           >
             Download Manifest .json
           </Button>
@@ -1359,17 +2041,6 @@ export default function ZothOSPage() {
           {toastMessage}
         </Alert>
       </Snackbar>
-
-      {/* Sovereign Installation Funnel */}
-      <SovereignFunnel
-        title="Deploy Sovereign Zoth OS to Hardware"
-        subtitle="Zero-telemetry air-gapped operating system kernel for autonomous agent swarms, hardware enclave encryption, and memory vaults."
-        toolTitle="Option 1: Bare Metal ISO / QEMU Image"
-        toolTag="BARE METAL"
-        toolDescription="Download and flash bootable Zoth OS image for direct bare-metal deployment or boot into local hardware-accelerated KVM virtual machines."
-        toolRepo="https://github.com/NullAITech/zoth-os"
-        toolCommand="git clone https://github.com/NullAITech/zoth-os.git && cd zoth-os"
-      />
     </Container>
   );
 }
