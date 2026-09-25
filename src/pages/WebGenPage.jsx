@@ -92,14 +92,15 @@ const TEMPLATES = [
 ];
 
 // -------------------------------------------------------------
-// FRAMEWORKS (5 Exporter Engines)
+// FRAMEWORKS (6 Exporter Engines)
 // -------------------------------------------------------------
 const FRAMEWORKS = [
-  { id: 'react-tailwind', name: 'React + Tailwind', badge: 'REACT 19', status: 'ACTIVE' },
-  { id: 'astro', name: 'Astro 4.0 MPA', badge: 'ASTRO 4', status: 'READY' },
-  { id: 'svelte', name: 'Svelte 5 Runes', badge: 'SVELTE 5', status: 'READY' },
-  { id: 'vue', name: 'Vue 3 Composition', badge: 'VUE 3.4', status: 'READY' },
-  { id: 'html', name: 'Zero-JS Clean HTML', badge: 'PURE HTML5', status: 'READY' }
+  { id: 'react-tailwind', name: 'React + Tailwind', badge: 'REACT 19', ext: 'jsx', status: 'ACTIVE' },
+  { id: 'vue', name: 'Vue 3 Composition', badge: 'VUE 3.4', ext: 'vue', status: 'READY' },
+  { id: 'svelte', name: 'Svelte 5 Runes', badge: 'SVELTE 5', ext: 'svelte', status: 'READY' },
+  { id: 'solid', name: 'Solid.js Primitives', badge: 'SOLID 1.8', ext: 'tsx', status: 'READY' },
+  { id: 'astro', name: 'Astro 4.0 MPA', badge: 'ASTRO 4', ext: 'astro', status: 'READY' },
+  { id: 'html', name: 'Zero-JS Clean HTML', badge: 'PURE HTML5', ext: 'html', status: 'READY' }
 ];
 
 // -------------------------------------------------------------
@@ -373,6 +374,63 @@ function refreshMetrics() {
 }
 </script>`;
       }
+      if (frameworkId === 'solid') {
+        return `import { createSignal } from 'solid-js';
+
+export default function SovereignDashboard() {
+  const [latency, setLatency] = createSignal('12.4ms');
+  const [isAuditing, setIsAuditing] = createSignal(false);
+
+  const triggerAudit = () => {
+    setIsAuditing(true);
+    setTimeout(() => {
+      setLatency('11.8ms');
+      setIsAuditing(false);
+    }, 500);
+  };
+
+  return (
+    <div class="min-h-screen bg-[#08080B] text-slate-100 p-6 md:p-10 font-sans">
+      <header class="flex flex-col md:flex-row justify-between items-start md:items-center pb-6 mb-8 border-b border-[#D4AF37]/20 gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30 rounded-full text-xs font-mono font-bold">
+            <span class="w-2 h-2 rounded-full bg-[#10B981] animate-ping" />
+            SOLID.JS 1.8 • FINE-GRAINED REACTIVITY
+          </div>
+          <h1 class="text-3xl md:text-4xl font-extrabold text-white mt-2">Sovereign SaaS Dashboard</h1>
+          <p class="text-slate-400 text-sm mt-1">Zero virtual DOM overhead, pure reactive signal graphs, zero egress.</p>
+        </div>
+        <button onClick={triggerAudit} class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#08080B] font-bold text-sm shadow-lg">
+          {isAuditing() ? 'Running Diagnostics...' : 'Deploy Bundle'}
+        </button>
+      </header>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+        <div class="bg-[#12131C] border border-[#D4AF37]/20 rounded-2xl p-5">
+          <span class="text-xs font-mono text-slate-400 uppercase">CLUSTER LATENCY</span>
+          <div class="text-2xl font-black text-white font-mono mt-2">{latency()}</div>
+          <span class="text-xs font-semibold text-[#10B981] mt-1 inline-block">● Optimal</span>
+        </div>
+        <div class="bg-[#12131C] border border-[#D4AF37]/20 rounded-2xl p-5">
+          <span class="text-xs font-mono text-slate-400 uppercase">AST SEAL HASH</span>
+          <div class="text-2xl font-black text-white font-mono mt-2">0x8F4A...3B21</div>
+          <span class="text-xs font-semibold text-[#10B981] mt-1 inline-block">● Verified</span>
+        </div>
+        <div class="bg-[#12131C] border border-[#D4AF37]/20 rounded-2xl p-5">
+          <span class="text-xs font-mono text-slate-400 uppercase">SWARM NODES</span>
+          <div class="text-2xl font-black text-white font-mono mt-2">6 / 6 Online</div>
+          <span class="text-xs font-semibold text-[#10B981] mt-1 inline-block">● 100% Health</span>
+        </div>
+        <div class="bg-[#12131C] border border-[#D4AF37]/20 rounded-2xl p-5">
+          <span class="text-xs font-mono text-slate-400 uppercase">ZERO-EGRESS</span>
+          <div class="text-2xl font-black text-white font-mono mt-2">0 Bytes Out</div>
+          <span class="text-xs font-semibold text-[#10B981] mt-1 inline-block">● Air-Gapped</span>
+        </div>
+      </div>
+    </div>
+  );
+}`;
+      }
       return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -589,6 +647,35 @@ const projects = ref([
 ]);
 </script>`;
       }
+      if (frameworkId === 'solid') {
+        return `import { createSignal, For } from 'solid-js';
+
+export default function CyberpunkPortfolio() {
+  const [projects] = createSignal([
+    { name: 'AZOTH-OS 2.0', tag: 'CORE RUNTIME', desc: 'Zero-cloud micro-kernel with local tensor pipeline.' },
+    { name: 'NEURO-DAEMON', tag: 'SYNAPTIC DB', desc: 'Vectorized memory daemon running on 8788/v1.' },
+    { name: 'HEXSTRIKE ARSENAL', tag: 'SECURITY', desc: 'High-entropy AST validation shield guarding against cloud egress.' }
+  ]);
+
+  return (
+    <div class="min-h-screen bg-[#08080B] text-slate-200 p-8 font-mono">
+      <header class="border-b border-[#D4AF37]/40 pb-4 mb-8">
+        <span class="text-xs text-[#D4AF37] font-black uppercase">// SOLID.JS SIGNAL DECK [ONLINE]</span>
+        <h1 class="text-4xl font-black text-white mt-1">NEO.SOVEREIGN_</h1>
+      </header>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <For each={projects()}>{(proj) => (
+          <div class="bg-[#12131C] border border-[#D4AF37]/20 p-5 rounded-xl hover:border-[#D4AF37] transition">
+            <span class="text-[10px] text-[#D4AF37] bg-[#D4AF37]/10 px-2 py-0.5 rounded border border-[#D4AF37]/30 font-bold">{proj.tag}</span>
+            <h3 class="font-bold text-white text-lg mt-2">{proj.name}</h3>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">{proj.desc}</p>
+          </div>
+        )}</For>
+      </div>
+    </div>
+  );
+}`;
+      }
       return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -761,6 +848,42 @@ import { ref } from 'vue';
 const agents = ref(['Planner Alpha', 'Coder Omega', 'Auditor Sigma']);
 </script>`;
       }
+      if (frameworkId === 'solid') {
+        return `import { createSignal, For } from 'solid-js';
+
+export default function AiSwarmConsole() {
+  const [agents] = createSignal([
+    { id: '1', name: 'Azoth', role: 'Input Normalizer & Security', status: 'Synchronized', color: '#10B981' },
+    { id: '2', name: 'Chronos', role: '3-Way Byzantine Triangulation', status: 'Synthesizing', color: '#D4AF37' },
+    { id: '3', name: 'Lycan', role: 'Shannon Entropy & Zero-Egress Guard', status: 'Standby', color: '#38BDF8' }
+  ]);
+
+  return (
+    <div class="min-h-screen bg-[#08080B] text-slate-100 p-8 font-mono">
+      <div class="border-b border-[#D4AF37]/30 pb-4 mb-8 flex justify-between items-center">
+        <div>
+          <span class="text-xs text-[#D4AF37] tracking-widest font-black">// SOLID.JS SWARM DISPATCHER //</span>
+          <h1 class="text-3xl font-black text-white mt-1">TRI-AGENT CONSENSUS</h1>
+        </div>
+        <span class="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs rounded font-bold">QUORUM 2/3</span>
+      </div>
+      <div class="space-y-4">
+        <For each={agents()}>{(ag) => (
+          <div class="p-4 bg-[#12131C] border border-[#D4AF37]/20 rounded-xl flex justify-between items-center">
+            <div>
+              <h3 class="font-bold text-white text-base">{ag.name}</h3>
+              <p class="text-xs text-slate-400">{ag.role}</p>
+            </div>
+            <span class="text-xs font-bold px-2.5 py-1 rounded" style={{ color: ag.color, "background-color": ag.color + "22", border: "1px solid " + ag.color + "44" }}>
+              {ag.status}
+            </span>
+          </div>
+        )}</For>
+      </div>
+    </div>
+  );
+}`;
+      }
       return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -914,6 +1037,34 @@ const docs = [
   </div>
 </template>`;
       }
+      if (frameworkId === 'solid') {
+        return `import { createSignal } from 'solid-js';
+
+export default function DocumentationHub() {
+  const [activeDoc, setActiveDoc] = createSignal('ast-engine');
+
+  return (
+    <div class="min-h-screen bg-[#08080B] text-slate-100 flex font-sans">
+      <aside class="w-64 border-r border-[#D4AF37]/20 p-6 space-y-2">
+        <div class="text-xs font-mono text-[#D4AF37] font-bold mb-4">API SPECS // SOLID.JS</div>
+        <button onClick={() => setActiveDoc('ast-engine')} class="w-full text-left px-3 py-2 rounded text-sm font-semibold hover:bg-[#D4AF37]/10">
+          AST Compiler Engine
+        </button>
+        <button onClick={() => setActiveDoc('zero-egress')} class="w-full text-left px-3 py-2 rounded text-sm font-semibold hover:bg-[#D4AF37]/10">
+          Zero-Egress Security
+        </button>
+      </aside>
+      <main class="flex-1 p-8">
+        <h1 class="text-3xl font-black text-white">Sovereign API Reference</h1>
+        <p class="text-slate-400 text-sm mt-2">Active Spec: {activeDoc()}</p>
+        <div class="mt-6 p-4 bg-[#12131C] border border-[#D4AF37]/30 rounded-xl font-mono text-xs text-emerald-400">
+          POST /v2/ast/compile • Deterministic WASM Invariant Verified
+        </div>
+      </main>
+    </div>
+  );
+}`;
+      }
       return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1058,6 +1209,30 @@ const solPrice = "1.25 SOL";
   </div>
 </template>`;
       }
+      if (frameworkId === 'solid') {
+        return `import { createSignal } from 'solid-js';
+
+export default function SolanaMintDeck() {
+  const [mintCount, setMintCount] = createSignal(1);
+  const pricePerSol = 0.85;
+
+  return (
+    <div class="min-h-screen bg-[#08080B] text-slate-100 p-8 flex items-center justify-center font-sans">
+      <div class="max-w-md w-full bg-[#12131C] border border-[#D4AF37]/30 rounded-2xl p-6 shadow-2xl">
+        <span class="text-xs font-mono text-[#D4AF37] font-bold">SOLANA NON-CUSTODIAL // SOLID.JS</span>
+        <h2 class="text-2xl font-black text-white mt-1">Sovereign Genesis Mint</h2>
+        <div class="my-6 p-4 bg-[#08080B] rounded-xl border border-slate-800 flex justify-between items-center">
+          <span class="text-sm text-slate-400">Total Price</span>
+          <span class="text-xl font-bold font-mono text-[#D4AF37]">{(mintCount() * pricePerSol).toFixed(2)} SOL</span>
+        </div>
+        <button class="w-full py-3 bg-[#D4AF37] text-[#08080B] rounded-xl font-black text-sm hover:brightness-110">
+          Connect Phantom & Mint
+        </button>
+      </div>
+    </div>
+  );
+}`;
+      }
       return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1196,6 +1371,38 @@ const items = [
     </div>
   </div>
 </template>`;
+      }
+      if (frameworkId === 'solid') {
+        return `import { createSignal, For } from 'solid-js';
+
+export default function BiomorphicNeuroShop() {
+  const [synapses] = createSignal([
+    { title: 'Cortical Neural Interface v3', band: 'Theta 7.83Hz', price: '2.40 GOLD' },
+    { title: 'Biomorphic Vector Mesh', band: 'Gamma 40Hz', price: '0.80 GOLD' },
+    { title: 'Lucy Oracle Latent Key', band: 'Delta 3.5Hz', price: '1.20 GOLD' }
+  ]);
+
+  return (
+    <div class="min-h-screen bg-[#08080B] text-slate-100 p-8 font-sans">
+      <header class="border-b border-[#D4AF37]/30 pb-4 mb-8">
+        <span class="text-xs font-mono text-[#D4AF37] font-bold">// BIOMORPHIC NEURO SHOP • SOLID.JS //</span>
+        <h1 class="text-3xl font-black text-white mt-1">Synaptic Weight Artifacts</h1>
+      </header>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <For each={synapses()}>{(item) => (
+          <div class="bg-[#12131C] border border-[#D4AF37]/20 p-6 rounded-2xl">
+            <span class="text-xs font-mono text-cyan-400">{item.band}</span>
+            <h3 class="text-lg font-bold text-white mt-2">{item.title}</h3>
+            <div class="text-xl font-mono text-[#D4AF37] font-black mt-4">{item.price}</div>
+            <button class="w-full mt-4 py-2 bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30 rounded-xl font-bold text-xs hover:bg-[#D4AF37] hover:text-[#08080B] transition">
+              Attune Synapse
+            </button>
+          </div>
+        )}</For>
+      </div>
+    </div>
+  );
+}`;
       }
       return `<!DOCTYPE html>
 <html lang="en">
@@ -1667,6 +1874,32 @@ export default function WebGenPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  // Download Selected Framework Code File
+  const handleDownloadCode = () => {
+    const fw = FRAMEWORKS.find((f) => f.id === selectedFramework) || FRAMEWORKS[0];
+    const extensionMap = {
+      'react-tailwind': 'jsx',
+      'vue': 'vue',
+      'svelte': 'svelte',
+      'solid': 'tsx',
+      'astro': 'astro',
+      'html': 'html',
+    };
+    const ext = extensionMap[selectedFramework] || fw.ext || 'txt';
+    const filename = `${siteName || 'sovereign-component'}.${ext}`;
+    const blob = new Blob([currentCode], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    setSnackbarMessage(`Downloaded ${filename} (${fw.name} source component)`);
+    setSnackbarOpen(true);
+  };
+
   // Export Standalone HTML Bundle
   const handleExportBundle = () => {
     const htmlBundle = generateStandaloneHtml(selectedTemplate);
@@ -1821,7 +2054,7 @@ export default function WebGenPage() {
               <Box sx={{ width: '100%', bgcolor: dark ? '#08080B' : '#E2E8F0', height: 8, borderRadius: 4, overflow: 'hidden', mb: 2 }}>
                 <Box sx={{ width: '68.2%', height: '100%', bgcolor: gold }} />
               </Box>
-              <Button fullWidth variant="contained" sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontWeight: 800, '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}>
+              <Button fullWidth variant="contained" sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}>
                 Mint Sovereign NFT
               </Button>
             </Paper>
@@ -2083,7 +2316,7 @@ export default function WebGenPage() {
                 px: 1,
                 borderRadius: 2,
                 '&.Mui-selected': {
-                  color: dark ? '#08080B' : '#FFFFFF',
+                  color: '#08080B',
                   bgcolor: gold,
                   fontWeight: 800
                 }
@@ -2100,7 +2333,7 @@ export default function WebGenPage() {
       )}
 
       {/* =========================================================================
-          STAGE 01: IDEATION & NATURAL LANGUAGE SPEC PROMPT
+          STAGE 01: SPEC PROMPT FOUNDRY & STARTER ARCHETYPES
           ========================================================================= */}
       {(!isMobile || mobileSection === 'prompt') && (
         <Paper
@@ -2118,14 +2351,14 @@ export default function WebGenPage() {
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2, mb: 2 }}>
             <Box>
               <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, display: 'flex', alignItems: 'center', gap: 1.2, color: textPrimary }}>
-                <AutoAwesomeIcon sx={{ color: gold }} /> 1. What should it be?
+                <AutoAwesomeIcon sx={{ color: gold }} /> 1. Spec Prompt Foundry &amp; Starter Archetypes
               </Typography>
               <Typography variant="body2" sx={{ color: textSecondary }}>
                 Tap an archetype preset to seed the layout tokens or articulate a custom site specification.
               </Typography>
             </Box>
             <Chip
-              label="STAGE 01 // SPEC FOUNDRY"
+              label="STAGE 01 // SPEC PROMPT FOUNDRY"
               size="small"
               sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
             />
@@ -2170,7 +2403,7 @@ export default function WebGenPage() {
                           {tpl.name}
                         </Typography>
                       </Box>
-                      <Chip label={tpl.tag} size="small" sx={{ height: 18, fontSize: '0.62rem', bgcolor: isSelected ? gold : (dark ? 'rgba(255,255,255,0.08)' : '#E2E8F0'), color: isSelected ? (dark ? '#08080B' : '#FFFFFF') : textSecondary, fontFamily: mono, fontWeight: 800 }} />
+                      <Chip label={tpl.tag} size="small" sx={{ height: 18, fontSize: '0.62rem', bgcolor: isSelected ? gold : (dark ? 'rgba(255,255,255,0.08)' : '#E2E8F0'), color: isSelected ? '#08080B' : textSecondary, fontFamily: mono, fontWeight: 800 }} />
                     </Box>
                     <Typography variant="caption" sx={{ color: textSecondary, lineHeight: 1.4, fontSize: '0.76rem' }}>
                       {tpl.desc}
@@ -2225,14 +2458,14 @@ export default function WebGenPage() {
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2, mb: 2 }}>
             <Box>
               <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, display: 'flex', alignItems: 'center', gap: 1.2, color: textPrimary }}>
-                <TuneIcon sx={{ color: gold }} /> 2. Name, Theme &amp; Builder Skills
+                <TuneIcon sx={{ color: gold }} /> 2. Design System Tokens, Slug &amp; Skills
               </Typography>
               <Typography variant="body2" sx={{ color: textSecondary }}>
                 Configure your project slug identifier, aesthetic design token palette, and generation skill guides.
               </Typography>
             </Box>
             <Chip
-              label="STAGE 02 // AESTHETICS & SKILLS"
+              label="STAGE 02 // DESIGN SYSTEM TOKENS"
               size="small"
               sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
             />
@@ -2335,7 +2568,7 @@ export default function WebGenPage() {
       )}
 
       {/* =========================================================================
-          STAGE 03: COMPILER ENGINE SELECTION & SYNTHESIS TRIGGER
+          STAGE 03: LAYOUT BLUEPRINT & SYNTHESIS ENGINE
           ========================================================================= */}
       {(!isMobile || mobileSection === 'prompt') && (
         <Paper
@@ -2353,14 +2586,14 @@ export default function WebGenPage() {
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2, mb: 2 }}>
             <Box>
               <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, display: 'flex', alignItems: 'center', gap: 1.2, color: textPrimary }}>
-                <RocketLaunchIcon sx={{ color: gold }} /> 3. Compiler Engine &amp; Synthesis Trigger
+                <RocketLaunchIcon sx={{ color: gold }} /> 3. Layout Blueprint &amp; Synthesis Engine
               </Typography>
               <Typography variant="body2" sx={{ color: textSecondary }}>
                 Choose execution runtime, target exporter language, and launch compilation into the sneak-peek preview.
               </Typography>
             </Box>
             <Chip
-              label="STAGE 03 // ENGINE & BUILD"
+              label="STAGE 03 // LAYOUT BLUEPRINT"
               size="small"
               sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
             />
@@ -2438,7 +2671,7 @@ export default function WebGenPage() {
               disabled={isCompiling}
               sx={{
                 bgcolor: gold,
-                color: dark ? '#08080B' : '#FFFFFF',
+                color: '#08080B',
                 px: 4,
                 py: 1.4,
                 fontWeight: 900,
@@ -2515,7 +2748,7 @@ export default function WebGenPage() {
                 <Box sx={{ width: 11, height: 11, borderRadius: '50%', backgroundColor: '#27C93F' }} />
               </Box>
               <Typography variant="subtitle2" sx={{ color: dark ? goldLight : '#8A6A09', fontFamily: mono, fontWeight: 800, fontSize: '0.84rem' }}>
-                4. SNEAK-PEEK CONSOLE • {siteName.toUpperCase()} • {FRAMEWORKS.find(f => f.id === selectedFramework)?.name.toUpperCase()}
+                4. LIVE SANDBOX &amp; SNEAK-PEEK CONSOLE • {siteName.toUpperCase()} • {FRAMEWORKS.find(f => f.id === selectedFramework)?.name.toUpperCase()}
               </Typography>
             </Box>
 
@@ -2559,7 +2792,7 @@ export default function WebGenPage() {
                 '& .MuiTabs-indicator': { backgroundColor: gold }
               }}
             >
-              <Tab icon={<VisibilityIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Live Sneak-Peek Preview" />
+              <Tab icon={<VisibilityIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Live Sandbox &amp; Sneak-Peek" />
               <Tab icon={<CodeIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Generated Polyglot Code" />
               <Tab icon={<AccountTreeIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Deterministic AST Inspector" />
               <Tab icon={<SpeedIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Compiler Telemetry" />
@@ -2595,7 +2828,7 @@ export default function WebGenPage() {
                   size="small"
                   variant="contained"
                   onClick={handleTweak}
-                  sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontWeight: 800, px: 2.5, py: 0.8 }}
+                  sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, px: 2.5, py: 0.8, '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
                 >
                   Apply Tweak
                 </Button>
@@ -2636,7 +2869,7 @@ export default function WebGenPage() {
                       <Button size="small" variant="outlined" onClick={handleExportBundle} sx={{ color: gold, borderColor: gold, fontSize: '0.7rem', fontWeight: 800 }}>
                         Export Bundle
                       </Button>
-                      <Button size="small" variant="contained" onClick={handleDeployModalOpen} sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontSize: '0.7rem', fontWeight: 800, '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}>
+                      <Button size="small" variant="contained" onClick={handleDeployModalOpen} sx={{ bgcolor: gold, color: '#08080B', fontSize: '0.7rem', fontWeight: 800, '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}>
                         Deploy
                       </Button>
                     </Box>
@@ -2651,8 +2884,11 @@ export default function WebGenPage() {
             <Box sx={{ position: 'relative' }}>
               <Box sx={{ position: 'absolute', top: 12, right: 16, zIndex: 2, display: 'flex', gap: 1 }}>
                 <Chip label={`${currentCode.split('\n').length} LINES`} size="small" sx={{ bgcolor: dark ? '#1E293B' : '#E2E8F0', color: textSecondary, fontFamily: mono, fontSize: '0.7rem' }} />
-                <Button size="small" variant="contained" startIcon={<ContentCopyIcon />} onClick={handleCopyCode} sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontWeight: 800, py: 0.2, fontSize: '0.72rem', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}>
+                <Button size="small" variant="contained" startIcon={<ContentCopyIcon />} onClick={handleCopyCode} sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, py: 0.2, fontSize: '0.72rem', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}>
                   {copied ? 'Copied' : 'Copy'}
+                </Button>
+                <Button size="small" variant="outlined" startIcon={<DownloadIcon />} onClick={handleDownloadCode} sx={{ borderColor: gold, color: gold, bgcolor: goldBg, fontWeight: 800, py: 0.2, fontSize: '0.72rem', '&:hover': { bgcolor: dark ? 'rgba(212,175,55,0.2)' : 'rgba(184,134,11,0.15)' } }}>
+                  Download
                 </Button>
               </Box>
               <Box sx={{ p: { xs: 2, sm: 3 }, fontFamily: mono, fontSize: '0.84rem', minHeight: 320, maxHeight: 520, overflowY: 'auto', bgcolor: dark ? '#08080B' : '#F8FAFC' }}>
@@ -2740,7 +2976,7 @@ export default function WebGenPage() {
                                   onClick={() => setAstCategory(cat)}
                                   sx={{
                                     bgcolor: astCategory === cat ? gold : (dark ? '#141622' : '#FFFFFF'),
-                                    color: astCategory === cat ? (dark ? '#08080B' : '#FFFFFF') : textSecondary,
+                                    color: astCategory === cat ? '#08080B' : textSecondary,
                                     fontWeight: 700,
                                     fontSize: '0.7rem',
                                     fontFamily: mono,
@@ -2858,8 +3094,8 @@ export default function WebGenPage() {
             <Card sx={{ border: `1px solid ${divider}`, borderRadius: 3, bgcolor: surface, height: '100%', display: 'flex', flexDirection: 'column' }}>
               <CardContent sx={{ p: { xs: 2.5, sm: 3.5 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-                  <Chip label="TARGET RUNTIMES (5 ENGINES)" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontSize: '0.72rem', fontFamily: mono }} />
-                  <Chip label="STAGE 03 // EXPORTERS" size="small" sx={{ bgcolor: dark ? 'rgba(255,255,255,0.06)' : '#F1F5F9', color: textSecondary, fontFamily: mono, fontSize: '0.68rem' }} />
+                  <Chip label="TARGET RUNTIMES (6 ENGINES)" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontSize: '0.72rem', fontFamily: mono }} />
+                  <Chip label="STAGE 05 // POLYGLOT EXPORT" size="small" sx={{ bgcolor: dark ? 'rgba(255,255,255,0.06)' : '#F1F5F9', color: textSecondary, fontFamily: mono, fontSize: '0.68rem' }} />
                 </Box>
                 <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: textPrimary }}>
                   Polyglot Exporters
@@ -2904,22 +3140,33 @@ export default function WebGenPage() {
                             fontWeight: 800,
                             fontFamily: mono,
                             bgcolor: selectedFramework === exp.id ? gold : (dark ? '#1E202E' : '#F1F5F9'),
-                            color: selectedFramework === exp.id ? (dark ? '#08080B' : '#FFFFFF') : textSecondary
+                            color: selectedFramework === exp.id ? '#08080B' : textSecondary
                           }}
                         />
                       </Paper>
                     ))}
                   </Stack>
 
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    startIcon={<DownloadIcon />}
-                    onClick={handleExportBundle}
-                    sx={{ mt: 3, py: 1.3, borderRadius: 2, fontWeight: 800, bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
-                  >
-                    Export Standalone HTML Bundle
-                  </Button>
+                  <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ mt: 3 }}>
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      startIcon={<DownloadIcon />}
+                      onClick={handleDownloadCode}
+                      sx={{ py: 1.3, borderRadius: 2, fontWeight: 800, bgcolor: gold, color: '#08080B', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
+                    >
+                      Download File (.{FRAMEWORKS.find(f => f.id === selectedFramework)?.ext || 'jsx'})
+                    </Button>
+                    <Button
+                      fullWidth
+                      variant="outlined"
+                      startIcon={<DownloadIcon />}
+                      onClick={handleExportBundle}
+                      sx={{ py: 1.3, borderRadius: 2, fontWeight: 800, borderColor: gold, color: gold, '&:hover': { borderColor: dark ? goldLight : '#9A7008', bgcolor: goldBg } }}
+                    >
+                      Export Standalone HTML
+                    </Button>
+                  </Stack>
                 </CardContent>
               </Card>
             </Grid>
@@ -2930,7 +3177,7 @@ export default function WebGenPage() {
                 <CardContent sx={{ p: { xs: 2.5, sm: 3.5 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
                     <Chip label="SPEC MATRIX (6 PRESETS)" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontSize: '0.72rem', fontFamily: mono }} />
-                    <Chip label="STAGE 04 // REGISTRY" size="small" sx={{ bgcolor: dark ? 'rgba(255,255,255,0.06)' : '#F1F5F9', color: textSecondary, fontFamily: mono, fontSize: '0.68rem' }} />
+                    <Chip label="STAGE 05 // SPEC REGISTRY" size="small" sx={{ bgcolor: dark ? 'rgba(255,255,255,0.06)' : '#F1F5F9', color: textSecondary, fontFamily: mono, fontSize: '0.68rem' }} />
                   </Box>
                   <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: textPrimary }}>
                     Component Spec Registry
@@ -3041,7 +3288,7 @@ export default function WebGenPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 fullWidth
-                sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
+                sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
               >
                 Open WebGen GitHub Repo
               </Button>
@@ -3074,43 +3321,55 @@ export default function WebGenPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 fullWidth
-                sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
+                sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
               >
                 Open Studio v2 GitHub Repo
               </Button>
             </Box>
           </Grid>
 
-          {/* Funnel Option 3: Sovereign Zoth OS */}
+          {/* Funnel Option 3: Sovereign Zoth OS Bare-Metal ISO */}
           <Grid xs={12} md={4}>
             <Box sx={{ p: 2.5, height: '100%', bgcolor: dark ? '#121420' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2.5, display: 'flex', flexDirection: 'column' }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
                 <Typography variant="subtitle1" sx={{ fontWeight: 800, color: dark ? goldLight : '#8A6A09' }}>
                   Option 3: Sovereign Zoth OS
                 </Typography>
-                <Chip label="BARE-METAL OS" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', fontWeight: 800, fontSize: '0.65rem' }} />
+                <Chip label="BARE-METAL ISO" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', fontWeight: 800, fontSize: '0.65rem' }} />
               </Box>
               <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
-                Zero-telemetry air-gapped operating system kernel for autonomous agent swarms, hardware enclave encryption, and memory vaults.
+                Zero-telemetry air-gapped bootable OS ISO for autonomous agent swarms, hardware enclave encryption, and memory vaults.
               </Typography>
               <Box sx={{ p: 1.2, mb: 2, bgcolor: dark ? '#08080B' : '#EDF2F7', border: `1px solid ${divider}`, borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: dark ? '#10B981' : '#059669', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  https://github.com/NullAITech/zoth-os
+                  curl -LO https://.../zoth-os-baremetal.iso
                 </Typography>
-                <IconButton size="small" onClick={() => handleCopyCodeText('https://github.com/NullAITech/zoth-os')} sx={{ color: gold, ml: 1, p: 0.5 }}>
+                <IconButton size="small" onClick={() => handleCopyCodeText('curl -LO https://github.com/NullAITech/zoth-os/releases/download/v2.0/zoth-os-baremetal.iso')} sx={{ color: gold, ml: 1, p: 0.5 }}>
                   <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
                 </IconButton>
               </Box>
-              <Button
-                variant="outlined"
-                href="https://github.com/NullAITech/zoth-os"
-                target="_blank"
-                rel="noopener noreferrer"
-                fullWidth
-                sx={{ borderColor: gold, color: gold, fontWeight: 800, textTransform: 'none', '&:hover': { borderColor: dark ? goldLight : '#9A7008', bgcolor: goldBg } }}
-              >
-                Inspect Zoth OS Architecture
-              </Button>
+              <Stack spacing={1}>
+                <Button
+                  variant="contained"
+                  href="https://github.com/NullAITech/zoth-os/releases/tag/v2.0"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  fullWidth
+                  sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
+                >
+                  Download Bare-Metal ISO (v2.0)
+                </Button>
+                <Button
+                  variant="outlined"
+                  href="https://github.com/NullAITech/zoth-os"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  fullWidth
+                  sx={{ borderColor: gold, color: gold, fontWeight: 800, textTransform: 'none', '&:hover': { borderColor: dark ? goldLight : '#9A7008', bgcolor: goldBg } }}
+                >
+                  Inspect OS Architecture
+                </Button>
+              </Stack>
             </Box>
           </Grid>
         </Grid>
@@ -3140,7 +3399,7 @@ export default function WebGenPage() {
             startIcon={isCompiling ? <CheckCircleIcon /> : <RocketLaunchIcon />}
             onClick={handleCompile}
             disabled={isCompiling}
-            sx={{ py: 1.2, fontWeight: 800, borderRadius: 2, bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
+            sx={{ py: 1.2, fontWeight: 800, borderRadius: 2, bgcolor: gold, color: '#08080B', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
           >
             {isCompiling ? 'Compiling...' : 'Generate Spec'}
           </Button>
@@ -3205,7 +3464,7 @@ export default function WebGenPage() {
               setSnackbarMessage('Sovereign Bundle Deployed to Local Edge Sandbox!');
               setSnackbarOpen(true);
             }}
-            sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontWeight: 800, '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
+            sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
           >
             Launch Sandbox
           </Button>

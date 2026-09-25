@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
   Box, Container, Typography, Chip, Paper, Button, TextField, Unstable_Grid2 as Grid,
-  Card, CardContent, Slider, LinearProgress, Tooltip, IconButton, Stack, Divider, Alert
+  Card, CardContent, Slider, LinearProgress, Tooltip, IconButton, Stack, Divider, Alert,
+  Switch, FormControlLabel
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import GavelIcon from '@mui/icons-material/Gavel';
@@ -18,6 +19,8 @@ import ReplayIcon from '@mui/icons-material/Replay';
 import PsychologyIcon from '@mui/icons-material/Psychology';
 import BoltIcon from '@mui/icons-material/Bolt';
 import LockIcon from '@mui/icons-material/Lock';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import HubIcon from '@mui/icons-material/Hub';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import SovereignFunnel from '../components/SovereignFunnel';
@@ -359,6 +362,217 @@ export default function ConsensusPage() {
   const [exportedStatus, setExportedStatus] = useState(false);
   const [rawResult, setRawResult] = useState(null);
 
+  // Interactive Byzantine Fault Tolerance Simulator State
+  const [isMaliciousInjected, setIsMaliciousInjected] = useState(false);
+  const [bftPhase, setBftPhase] = useState(0); // 0: Idle, 1: Pre-Prepare, 2: Prepare, 3: Commit, 4: Decided
+  const [bftAutoPlaying, setBftAutoPlaying] = useState(false);
+  const bftCanvasRef = useRef(null);
+
+  // Auto-play timer for BFT rounds
+  useEffect(() => {
+    if (!bftAutoPlaying) return;
+    if (bftPhase >= 4) {
+      setBftAutoPlaying(false);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setBftPhase((prev) => Math.min(4, prev + 1));
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, [bftAutoPlaying, bftPhase]);
+
+  // Canvas renderer for Byzantine Triangulation
+  useEffect(() => {
+    const canvas = bftCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width;
+    const H = canvas.height;
+    const cx = W / 2;
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = isDark ? '#08080B' : '#F8FAFC';
+    ctx.fillRect(0, 0, W, H);
+
+    // Subtle background mesh
+    ctx.strokeStyle = isDark ? 'rgba(212,175,55,0.06)' : 'rgba(0,0,0,0.04)';
+    ctx.lineWidth = 1;
+    for (let x = 20; x <= W - 20; x += 40) {
+      ctx.beginPath();
+      ctx.moveTo(x, 15);
+      ctx.lineTo(x, H - 15);
+      ctx.stroke();
+    }
+    for (let y = 15; y <= H - 15; y += 35) {
+      ctx.beginPath();
+      ctx.moveTo(20, y);
+      ctx.lineTo(W - 20, y);
+      ctx.stroke();
+    }
+
+    // 4 Node Positions
+    const nodes = [
+      { id: 1, name: 'Azoth', role: 'Leader (Proponent)', x: cx, y: 55, color: '#D4AF37' },
+      { id: 2, name: 'Kai', role: 'Skeptic (Auditor)', x: cx - 185, y: 265, color: isDark ? '#F87171' : '#DC2626' },
+      { id: 3, name: 'Draco', role: 'Arbitrator (Judge)', x: cx + 185, y: 265, color: isDark ? '#38BDF8' : '#0284C7' },
+      {
+        id: 4,
+        name: isMaliciousInjected ? 'Adversary (Byzantine)' : 'Lycan (Validator)',
+        role: isMaliciousInjected ? 'Equivocating AST Poisoner' : 'Honest Validator',
+        x: cx,
+        y: 175,
+        color: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669')
+      }
+    ];
+
+    // Triangulation Rays & Packets
+    const edges = [
+      [0, 1], [1, 2], [2, 0], // Outer Triangle
+      [0, 3], [1, 3], [2, 3]  // Inner Spokes to Node 4
+    ];
+
+    // If Phase >= 3 and Malicious Injected: Draw BFT Quorum Shield over Honest Nodes (0, 1, 2)
+    if (bftPhase >= 3 && isMaliciousInjected) {
+      ctx.fillStyle = isDark ? 'rgba(52,211,153,0.09)' : 'rgba(5,150,105,0.08)';
+      ctx.beginPath();
+      ctx.moveTo(nodes[0].x, nodes[0].y);
+      ctx.lineTo(nodes[1].x, nodes[1].y);
+      ctx.lineTo(nodes[2].x, nodes[2].y);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.strokeStyle = isDark ? '#34D399' : '#059669';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Quarantined perimeter around Malicious Node 4
+      ctx.strokeStyle = '#EF4444';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.arc(nodes[3].x, nodes[3].y, 38, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.font = '700 9.5px "JetBrains Mono"';
+      ctx.fillStyle = '#EF4444';
+      ctx.fillText('[EQUIVOCATION ISOLATED]', nodes[3].x - 66, nodes[3].y + 48);
+    } else if (bftPhase >= 3 && !isMaliciousInjected) {
+      // Unanimous 4-node harmonious mesh
+      ctx.fillStyle = isDark ? 'rgba(212,175,55,0.08)' : 'rgba(184,134,11,0.06)';
+      ctx.beginPath();
+      ctx.moveTo(nodes[0].x, nodes[0].y);
+      ctx.lineTo(nodes[1].x, nodes[1].y);
+      ctx.lineTo(nodes[2].x, nodes[2].y);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.strokeStyle = isDark ? '#D4AF37' : '#B8860B';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+    }
+
+    // Render Edges
+    edges.forEach(([i, j]) => {
+      const n1 = nodes[i];
+      const n2 = nodes[j];
+      const isAdversaryEdge = i === 3 || j === 3;
+
+      ctx.beginPath();
+      ctx.moveTo(n1.x, n1.y);
+      ctx.lineTo(n2.x, n2.y);
+
+      if (bftPhase === 0) {
+        ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.1)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      } else if (bftPhase === 1) {
+        // Pre-prepare broadcast from Leader (0)
+        if (i === 0 || j === 0) {
+          ctx.strokeStyle = isDark ? '#D4AF37' : '#B8860B';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        } else {
+          ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      } else if (bftPhase === 2) {
+        // Prepare cross-validation
+        if (isAdversaryEdge && isMaliciousInjected) {
+          ctx.strokeStyle = 'rgba(239,68,68,0.7)';
+          ctx.lineWidth = 2;
+          ctx.setLineDash([4, 4]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        } else {
+          ctx.strokeStyle = isDark ? '#38BDF8' : '#0284C7';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
+      } else {
+        // Commit & Decided
+        if (isAdversaryEdge && isMaliciousInjected) {
+          ctx.strokeStyle = 'rgba(239,68,68,0.35)';
+          ctx.lineWidth = 1;
+          ctx.setLineDash([3, 3]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        } else {
+          ctx.strokeStyle = isDark ? '#34D399' : '#059669';
+          ctx.lineWidth = 2.5;
+          ctx.stroke();
+        }
+      }
+    });
+
+    // Render Nodes
+    nodes.forEach((node, idx) => {
+      const isMalicious = idx === 3 && isMaliciousInjected;
+
+      // Outer glow
+      ctx.shadowColor = isMalicious ? '#EF4444' : (isDark ? node.color : '#08080B');
+      ctx.shadowBlur = bftPhase > 0 ? 12 : 4;
+
+      ctx.fillStyle = isDark ? '#0D0D14' : '#FFFFFF';
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, 22, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = isMalicious ? '#EF4444' : (isDark ? node.color : (idx === 0 ? '#B8860B' : node.color));
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      // Node label
+      ctx.font = 'bold 11px "JetBrains Mono"';
+      ctx.fillStyle = isDark ? '#F8FAFC' : '#08080B';
+      ctx.textAlign = 'center';
+      ctx.fillText(node.name, node.x, idx === 0 ? node.y - 30 : node.y + 36);
+
+      ctx.font = '700 9px "JetBrains Mono"';
+      ctx.fillStyle = isMalicious ? '#EF4444' : (isDark ? '#94A3B8' : '#475467');
+      ctx.fillText(node.role, node.x, idx === 0 ? node.y - 18 : node.y + 48);
+
+      // Inner icon or glyph
+      ctx.font = 'bold 12px "JetBrains Mono"';
+      ctx.fillStyle = isMalicious ? '#EF4444' : (isDark ? node.color : '#08080B');
+      const phaseSymbols = ['N' + (idx + 1), 'PRE', 'PRP', 'CMT', isMalicious ? 'ERR' : 'OK'];
+      ctx.fillText(phaseSymbols[bftPhase], node.x, node.y + 4);
+    });
+
+    // Telemetry stamp in bottom-left
+    ctx.textAlign = 'left';
+    ctx.font = '700 10px "JetBrains Mono"';
+    ctx.fillStyle = isDark ? '#D4AF37' : '#8A6A09';
+    const phaseNames = ['PHASE 0: IDLE / STANDBY', 'PHASE 1: PRE-PREPARE (LEADER PROPOSAL)', 'PHASE 2: PREPARE (MERKLE CROSS-VALIDATION)', 'PHASE 3: COMMIT (2/3+ QUORUM LOCK)', 'PHASE 4: DECIDED (SHA-256 RATIFIED)'];
+    ctx.fillText(phaseNames[bftPhase], 25, H - 20);
+
+    ctx.textAlign = 'right';
+    ctx.fillStyle = isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669');
+    ctx.fillText(isMaliciousInjected ? '3/4 HONEST NODES (75.0% > 66.7% BFT QUORUM)' : '4/4 HONEST NODES (100% UNANIMOUS QUORUM)', W - 25, H - 20);
+  }, [bftPhase, isMaliciousInjected, isDark]);
+
   // Update simulation mode if bridge status shifts
   useEffect(() => {
     if (!up) {
@@ -675,7 +889,7 @@ export default function ConsensusPage() {
                           fontSize: '0.7rem',
                           fontWeight: 800,
                           bgcolor: isSelected ? gold.accent : (isDark ? 'rgba(212,175,55,0.12)' : '#F2F4F7'),
-                          color: isSelected ? (isDark ? '#08080B' : '#FFFFFF') : gold.soft,
+                          color: isSelected ? '#08080B' : gold.soft,
                         }}
                       />
                       <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: gold.accent, fontWeight: 800 }}>
@@ -774,6 +988,287 @@ export default function ConsensusPage() {
         </Grid>
       </Grid>
 
+      {/* ==========================================================================
+         INTERACTIVE BYZANTINE TRIANGULATION & MALICIOUS INJECTION SIMULATOR (TASK 2)
+         ========================================================================== */}
+      <Box sx={{ mb: 4.5 }}>
+        <Paper
+          sx={{
+            p: { xs: 2.5, md: 3.5 },
+            border: `1.5px solid ${gold.border}`,
+            borderRadius: 3,
+            bgcolor: gold.voidBg,
+            boxShadow: isDark
+              ? '0 0 32px -6px rgba(212,175,55,0.25)'
+              : '0 8px 24px -4px rgba(184,134,11,0.12)',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          {/* Section Header & Interactive Controls */}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2, mb: 2.5 }}>
+            <Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                <HubIcon sx={{ color: gold.accent, fontSize: '1.3rem' }} />
+                <Typography className="section-kicker" sx={{ mb: 0 }}>
+                  Byzantine Triangulation Engine
+                </Typography>
+              </Box>
+              <Typography variant="h5" sx={{ fontWeight: 800 }}>
+                Interactive Byzantine Triangulation Simulator (3f + 1 ≥ 4 Quorum)
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, maxWidth: 760, fontSize: '0.88rem' }}>
+                Simulate PBFT/Socratic consensus state transitions across partitioned network topology. Toggle active malicious traitor node injection to verify the 2/3 supermajority Byzantine fault tolerance guarantee in real-time.
+              </Typography>
+            </Box>
+
+            {/* Live Controls: Malicious Injection Switch & Round Stepper */}
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, alignItems: { xs: 'flex-start', md: 'flex-end' } }}>
+              {/* Malicious Node Injection Toggle */}
+              <Box
+                sx={{
+                  p: 1,
+                  px: 1.5,
+                  borderRadius: 2,
+                  bgcolor: isMaliciousInjected ? (isDark ? 'rgba(239,68,68,0.15)' : '#FEF2F2') : (isDark ? '#0D0D14' : '#F1F5F9'),
+                  border: `1.5px solid ${isMaliciousInjected ? '#EF4444' : gold.border}`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.5,
+                  transition: 'all 0.25s ease',
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                  <WarningAmberIcon sx={{ color: isMaliciousInjected ? '#EF4444' : 'text.secondary', fontSize: '1.2rem' }} />
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: isMaliciousInjected ? '#EF4444' : theme.palette.text.primary }}>
+                    MALICIOUS NODE INJECTION:
+                  </Typography>
+                </Box>
+                <Switch
+                  checked={isMaliciousInjected}
+                  onChange={(e) => {
+                    setIsMaliciousInjected(e.target.checked);
+                    if (bftPhase === 0) setBftPhase(1);
+                  }}
+                  color="error"
+                  size="small"
+                />
+                <Chip
+                  label={isMaliciousInjected ? 'TRAITOR ACTIVE (f = 1)' : 'BENIGN (f = 0)'}
+                  size="small"
+                  sx={{
+                    fontFamily: mono,
+                    fontWeight: 800,
+                    fontSize: '0.68rem',
+                    bgcolor: isMaliciousInjected ? '#EF4444' : (isDark ? 'rgba(52,211,153,0.15)' : '#DCFCE7'),
+                    color: isMaliciousInjected ? '#FFFFFF' : (isDark ? '#34D399' : '#059669'),
+                  }}
+                />
+              </Box>
+
+              {/* Protocol Trigger Buttons */}
+              <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+                <Button
+                  variant="contained"
+                  size="small"
+                  startIcon={<PlayArrowIcon />}
+                  disabled={bftAutoPlaying}
+                  onClick={() => {
+                    setBftPhase(1);
+                    setBftAutoPlaying(true);
+                  }}
+                  sx={{
+                    bgcolor: gold.accent,
+                    color: '#08080B',
+                    fontWeight: 800,
+                    fontSize: '0.78rem',
+                    boxShadow: `0 0 14px -2px ${gold.accent}`,
+                    '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' },
+                  }}
+                >
+                  {bftAutoPlaying ? 'Protocol Advancing…' : '▶ Run Consensus Protocol'}
+                </Button>
+
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => setBftPhase((prev) => (prev + 1) % 5)}
+                  sx={{
+                    borderColor: gold.border,
+                    color: gold.soft,
+                    fontWeight: 750,
+                    fontSize: '0.78rem',
+                    '&:hover': { borderColor: gold.accent, bgcolor: gold.wash },
+                  }}
+                >
+                  ⏭ Step Phase ({bftPhase}/4)
+                </Button>
+
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    setBftPhase(0);
+                    setBftAutoPlaying(false);
+                  }}
+                  sx={{ color: 'text.secondary' }}
+                  title="Reset Consensus State"
+                >
+                  <ReplayIcon fontSize="small" />
+                </IconButton>
+              </Stack>
+            </Box>
+          </Box>
+
+          {/* Dynamic BFT Status Alert Banner */}
+          <Alert
+            severity={isMaliciousInjected ? 'warning' : 'success'}
+            icon={isMaliciousInjected ? <WarningAmberIcon sx={{ color: '#EF4444' }} /> : <ShieldIcon sx={{ color: isDark ? '#34D399' : '#059669' }} />}
+            sx={{
+              mb: 3,
+              bgcolor: isMaliciousInjected ? (isDark ? 'rgba(239,68,68,0.12)' : '#FEF2F2') : (isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF5'),
+              border: `1px solid ${isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669')}`,
+              borderRadius: 2,
+            }}
+          >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5 }}>
+              <Typography variant="body2" sx={{ fontWeight: 650, color: theme.palette.text.primary, lineHeight: 1.55 }}>
+                {isMaliciousInjected ? (
+                  <>
+                    <strong>Byzantine Traitor Injected:</strong> Node 4 is broadcasting equivocal conflicting AST mutations. BFT Quorum: <strong>3 of 4 honest nodes (75.0%)</strong> exceed the 66.7% threshold ($3f+1 \ge 4$). The poisoned payload is quarantined and consensus <strong>STILL SUCCEEDS</strong>!
+                  </>
+                ) : (
+                  <>
+                    <strong>Nominal Quorum Active:</strong> All 4 validator nodes operating in deterministic Merkle-trie synchrony. Unanimous <strong>100.0% consensus agreement</strong> achieved across all shards.
+                  </>
+                )}
+              </Typography>
+              <Chip
+                label={isMaliciousInjected ? '75.0% BFT QUORUM (TOLERATED)' : '100% UNANIMOUS QUORUM'}
+                size="small"
+                sx={{
+                  fontFamily: mono,
+                  fontWeight: 800,
+                  bgcolor: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669'),
+                  color: '#FFFFFF',
+                  fontSize: '0.7rem',
+                }}
+              />
+            </Box>
+          </Alert>
+
+          {/* Triangulation Visualizer Canvas */}
+          <Box
+            sx={{
+              borderRadius: 2.5,
+              overflow: 'hidden',
+              border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider}`,
+              bgcolor: isDark ? '#08080B' : '#F8FAFC',
+              mb: 3,
+              position: 'relative',
+            }}
+          >
+            <canvas ref={bftCanvasRef} width={680} height={320} style={{ width: '100%', height: 'auto', display: 'block' }} />
+          </Box>
+
+          {/* 4 Node Status Cards Grid */}
+          <Grid container spacing={2}>
+            {/* Node 1: Azoth */}
+            <Grid xs={12} sm={6} md={3}>
+              <Paper sx={{ p: 2, borderRadius: 2, bgcolor: gold.darkPaper, border: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider}`, height: '100%' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold.accent }}>
+                    Node 1: Azoth
+                  </Typography>
+                  <Chip
+                    label={bftPhase === 0 ? 'IDLE' : bftPhase === 1 ? 'PROPOSING' : 'COMMITTED'}
+                    size="small"
+                    sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.65rem', bgcolor: gold.accent, color: '#08080B' }}
+                  />
+                </Box>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 0.5, fontFamily: mono }}>
+                  ROLE: Leader / Proponent
+                </Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#F5E6AB' : '#8A6A09' }}>
+                  Vote: 0x7A3F…C120 [VALID]
+                </Typography>
+              </Paper>
+            </Grid>
+
+            {/* Node 2: Kai */}
+            <Grid xs={12} sm={6} md={3}>
+              <Paper sx={{ p: 2, borderRadius: 2, bgcolor: gold.darkPaper, border: `1px solid ${isDark ? 'rgba(248,113,113,0.25)' : theme.palette.divider}`, height: '100%' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? '#F87171' : '#DC2626' }}>
+                    Node 2: Kai
+                  </Typography>
+                  <Chip
+                    label={bftPhase < 2 ? 'IDLE' : bftPhase === 2 ? 'AUDITING' : 'COMMITTED'}
+                    size="small"
+                    sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.65rem', bgcolor: bftPhase >= 2 ? (isDark ? 'rgba(52,211,153,0.2)' : '#DCFCE7') : (isDark ? 'rgba(255,255,255,0.08)' : '#F1F5F9'), color: bftPhase >= 2 ? (isDark ? '#34D399' : '#059669') : 'text.disabled' }}
+                  />
+                </Box>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 0.5, fontFamily: mono }}>
+                  ROLE: Skeptic / Auditor
+                </Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#F87171' : '#DC2626' }}>
+                  Merkle: Verified (No Drift)
+                </Typography>
+              </Paper>
+            </Grid>
+
+            {/* Node 3: Draco */}
+            <Grid xs={12} sm={6} md={3}>
+              <Paper sx={{ p: 2, borderRadius: 2, bgcolor: gold.darkPaper, border: `1px solid ${isDark ? 'rgba(56,189,248,0.25)' : theme.palette.divider}`, height: '100%' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? '#38BDF8' : '#0284C7' }}>
+                    Node 3: Draco
+                  </Typography>
+                  <Chip
+                    label={bftPhase < 3 ? 'IDLE' : 'RATIFIED'}
+                    size="small"
+                    sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.65rem', bgcolor: bftPhase >= 3 ? (isDark ? 'rgba(56,189,248,0.2)' : '#E0F2FE') : (isDark ? 'rgba(255,255,255,0.08)' : '#F1F5F9'), color: bftPhase >= 3 ? (isDark ? '#38BDF8' : '#0284C7') : 'text.disabled' }}
+                  />
+                </Box>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 0.5, fontFamily: mono }}>
+                  ROLE: Arbitrator / Judge
+                </Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#38BDF8' : '#0284C7' }}>
+                  Bayesian Seal: Ready
+                </Typography>
+              </Paper>
+            </Grid>
+
+            {/* Node 4: Lycan / Adversary */}
+            <Grid xs={12} sm={6} md={3}>
+              <Paper sx={{ p: 2, borderRadius: 2, bgcolor: gold.darkPaper, border: `1.5px solid ${isMaliciousInjected ? '#EF4444' : (isDark ? 'rgba(52,211,153,0.25)' : theme.palette.divider)}`, height: '100%' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669') }}>
+                    {isMaliciousInjected ? 'Node 4: Adversary' : 'Node 4: Lycan'}
+                  </Typography>
+                  <Chip
+                    label={isMaliciousInjected ? 'EQUIVOCATING' : bftPhase >= 3 ? 'COMMITTED' : 'READY'}
+                    size="small"
+                    sx={{
+                      fontFamily: mono,
+                      fontWeight: 800,
+                      fontSize: '0.65rem',
+                      bgcolor: isMaliciousInjected ? '#EF4444' : (isDark ? 'rgba(52,211,153,0.2)' : '#DCFCE7'),
+                      color: isMaliciousInjected ? '#FFFFFF' : (isDark ? '#34D399' : '#059669'),
+                    }}
+                  />
+                </Box>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 0.5, fontFamily: mono }}>
+                  {isMaliciousInjected ? 'STATUS: Byzantine Traitor' : 'ROLE: Sentinel Validator'}
+                </Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669') }}>
+                  {isMaliciousInjected ? '0xDEAD…BEEF [ERR_POISON]' : 'Vote: 0x7A3F…C120 [VALID]'}
+                </Typography>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Box>
+
       {/* Proposal Submission & Simulation Controls */}
       <Box sx={{ mb: 4.5, position: 'relative' }}>
         <Paper
@@ -851,7 +1346,7 @@ export default function ConsensusPage() {
                 startIcon={<PlayArrowIcon />}
                 sx={{
                   bgcolor: gold.accent,
-                  color: isDark ? '#08080B' : '#FFFFFF',
+                  color: '#08080B',
                   fontWeight: 800,
                   px: 3.5,
                   py: 1.2,
@@ -941,7 +1436,7 @@ export default function ConsensusPage() {
                   <Chip
                     label="ZERO EXTERNAL EGRESS"
                     size="small"
-                    sx={{ fontFamily: mono, fontWeight: 800, bgcolor: gold.accent, color: isDark ? '#08080B' : '#FFFFFF', fontSize: '0.68rem' }}
+                    sx={{ fontFamily: mono, fontWeight: 800, bgcolor: gold.accent, color: '#08080B', fontSize: '0.68rem' }}
                   />
                 </Box>
               </Alert>
@@ -983,7 +1478,7 @@ export default function ConsensusPage() {
                   <Chip
                     label={`ROUND ${roundObj.round}`}
                     size="small"
-                    sx={{ fontFamily: mono, fontWeight: 800, bgcolor: gold.accent, color: isDark ? '#08080B' : '#FFFFFF' }}
+                    sx={{ fontFamily: mono, fontWeight: 800, bgcolor: gold.accent, color: '#08080B' }}
                   />
                   <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
                     {roundObj.title}
@@ -1209,14 +1704,14 @@ export default function ConsensusPage() {
                   </Typography>
                 </Box>
                 <Chip
-                  icon={<CheckCircleIcon sx={{ fontSize: '1rem !important', color: verdict ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.secondary }} />}
+                  icon={<CheckCircleIcon sx={{ fontSize: '1rem !important', color: verdict ? '#08080B' : theme.palette.text.secondary }} />}
                   label={verdict ? 'QUORUM RATIFIED' : 'AWAITING RUN'}
                   size="small"
                   sx={{
                     fontFamily: mono,
                     fontWeight: 800,
                     bgcolor: verdict ? gold.accent : (isDark ? 'rgba(255,255,255,0.1)' : '#F1F5F9'),
-                    color: verdict ? (isDark ? '#08080B' : '#FFFFFF') : 'text.secondary',
+                    color: verdict ? '#08080B' : 'text.secondary',
                   }}
                 />
               </Box>
@@ -1296,7 +1791,7 @@ export default function ConsensusPage() {
                 startIcon={<DownloadIcon />}
                 sx={{
                   bgcolor: gold.accent,
-                  color: isDark ? '#08080B' : '#FFFFFF',
+                  color: '#08080B',
                   fontWeight: 800,
                   py: 1.4,
                   fontSize: '0.95rem',

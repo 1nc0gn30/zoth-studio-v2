@@ -41,6 +41,7 @@ import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import { workstations } from '../data/workstations';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import ZothAIAssistant from '../components/ZothAIAssistant';
+import SovereignFunnel from '../components/SovereignFunnel';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const CLASSIC = 'http://127.0.0.1:8088';
@@ -1498,7 +1499,7 @@ Zero-Egress: Guaranteed`,
                   sx={{
                     fontWeight: 750,
                     bgcolor: selectedSchema === key ? (isDark ? '#D4AF37' : '#B8860B') : 'transparent',
-                    color: selectedSchema === key ? (isDark ? '#101828' : '#FFFFFF') : theme.palette.text.primary,
+                    color: selectedSchema === key ? '#101828' : theme.palette.text.primary,
                     border: '1px solid',
                     borderColor: selectedSchema === key ? (isDark ? '#D4AF37' : '#B8860B') : theme.palette.divider,
                   }}
@@ -1851,7 +1852,7 @@ function HubWorkstationConsole({ station }) {
               onClick={() => navigate(hub.target)}
               sx={{
                 bgcolor: isDark ? '#D4AF37' : '#B8860B',
-                color: isDark ? '#101828' : '#FFFFFF',
+                color: '#101828',
                 fontWeight: 800,
                 px: 4,
                 py: 1.5,
@@ -2025,6 +2026,37 @@ export default function WorkstationDetailPage() {
     border: isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)',
   };
 
+  const [copiedCmd, setCopiedCmd] = useState('');
+  const [telemetry, setTelemetry] = useState({
+    latency: '0.24ms',
+    throughput: '2.4 MB/s',
+    entropy: '7.991',
+    loopbackPackets: 18420,
+    egressDrop: '100% (0 B egress)',
+    status: 'AIR-GAPPED // OPTIMAL',
+  });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTelemetry((prev) => ({
+        ...prev,
+        latency: `${(0.18 + Math.random() * 0.12).toFixed(2)}ms`,
+        throughput: `${(2.1 + Math.random() * 0.7).toFixed(1)} MB/s`,
+        entropy: (7.986 + Math.random() * 0.011).toFixed(3),
+        loopbackPackets: prev.loopbackPackets + Math.floor(Math.random() * 9 + 3),
+      }));
+    }, 2200);
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleCopyCmd = (cmd, id) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(cmd);
+      setCopiedCmd(id);
+      setTimeout(() => setCopiedCmd(''), 2000);
+    }
+  };
+
   // Check if station has an app hub
   const hubLinkedStations = [
     'hexstrike', 'consensus', 'fusion-arena', 'netrunner-memory', 'bus-monitor',
@@ -2078,7 +2110,7 @@ export default function WorkstationDetailPage() {
           Back to Workstations
         </Button>
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          <Chip label="v2 Native Studio Workstation" size="small" sx={{ bgcolor: gold.wash, color: gold.accent, fontWeight: 800, border: `1px solid ${gold.border}` }} />
+          <Chip label="v2 Native Studio Workstation" size="small" sx={{ bgcolor: gold.wash, color: isDark ? '#D4AF37' : '#8A6A09', fontWeight: 800, border: `1px solid ${gold.border}` }} />
           {classicUp && (
             <Button
               size="small"
@@ -2097,17 +2129,205 @@ export default function WorkstationDetailPage() {
 
       {/* Workstation Header */}
       <Box sx={{ mb: 4 }}>
-        <Chip label={station.band} size="small" sx={{ mb: 1, fontWeight: 750, bgcolor: gold.wash, color: gold.accent, border: `1px solid ${gold.border}` }} />
-        <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', mb: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 1.5 }}>
+          <Chip
+            label={station.band}
+            size="small"
+            sx={{ fontWeight: 800, bgcolor: gold.wash, color: isDark ? '#D4AF37' : '#8A6A09', border: `1px solid ${gold.border}` }}
+          />
+          {/* Air-gap status badge */}
+          <Chip
+            icon={<RadioButtonCheckedIcon sx={{ fontSize: '0.9rem', color: isDark ? '#34D399 !important' : '#059669 !important' }} />}
+            label="AIR-GAP: VERIFIED (0 BYTES EGRESS)"
+            size="small"
+            sx={{
+              bgcolor: isDark ? 'rgba(52,211,153,0.14)' : '#ECFDF5',
+              color: isDark ? '#34D399' : '#047857',
+              border: isDark ? '1px solid rgba(52,211,153,0.35)' : '1px solid #A7F3D0',
+              fontWeight: 800,
+              fontFamily: mono,
+              letterSpacing: '0.04em',
+            }}
+          />
+          <Chip
+            label="STRICT LOOPBACK :8788"
+            size="small"
+            sx={{
+              bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF',
+              color: isDark ? '#38BDF8' : '#0284C7',
+              border: isDark ? '1px solid rgba(56,189,248,0.3)' : '1px solid #BAE6FD',
+              fontWeight: 750,
+              fontFamily: mono,
+            }}
+          />
+        </Box>
+
+        <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontWeight: 800, color: theme.palette.text.primary, mb: 1.5, letterSpacing: '-0.01em' }}>
           {station.name}
         </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 840, lineHeight: 1.6 }}>
-          Zero-egress sovereign workstation integrated into Zoth Studio v2. Fully responsive, theme-aware, and decoupled from external server dependencies.
+
+        <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 880, lineHeight: 1.65, mb: 3 }}>
+          Zero-egress sovereign workstation integrated into Zoth Studio v2. Operating strictly within local host enclaves with verified hardware TRNG entropy, loopback inter-process messaging, and deterministic zero-telemetry execution.
         </Typography>
+
+        {/* One-Click CLI Execution & Control Bar */}
+        <Paper
+          sx={{
+            p: 2,
+            mb: 3,
+            bgcolor: isDark ? '#0A0D16' : '#F8FAFC',
+            border: isDark ? '1px solid rgba(212,175,55,0.3)' : '1px solid #E2E8F0',
+            borderRadius: 2.5,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 2,
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <TerminalIcon sx={{ color: isDark ? '#D4AF37' : '#8A6A09', fontSize: '1.25rem' }} />
+              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: isDark ? '#F5E6AB' : '#8A6A09', letterSpacing: '0.04em' }}>
+                ONE-CLICK CLI EXECUTION:
+              </Typography>
+            </Box>
+
+            {/* zoth open <id> */}
+            <Chip
+              icon={copiedCmd === 'open' ? <CheckIcon sx={{ fontSize: '0.95rem', color: '#101828 !important' }} /> : <ContentCopyIcon sx={{ fontSize: '0.9rem', color: isDark ? '#D4AF37 !important' : '#8A6A09 !important' }} />}
+              label={`zoth open ${station.id}`}
+              onClick={() => handleCopyCmd(`zoth open ${station.id}`, 'open')}
+              clickable
+              sx={{
+                fontFamily: mono,
+                fontWeight: 800,
+                fontSize: '0.78rem',
+                bgcolor: copiedCmd === 'open' ? (isDark ? '#D4AF37' : '#B8860B') : (isDark ? '#121624' : '#FFFFFF'),
+                color: copiedCmd === 'open' ? '#101828' : (isDark ? '#F8FAFC' : '#101828'),
+                border: isDark ? '1px solid rgba(212,175,55,0.35)' : '1px solid #CBD5E1',
+                '&:hover': {
+                  bgcolor: isDark ? 'rgba(212,175,55,0.2)' : '#FEF9E7',
+                  borderColor: isDark ? '#D4AF37' : '#B8860B',
+                },
+              }}
+            />
+
+            {/* zoth run <id> */}
+            <Chip
+              icon={copiedCmd === 'run' ? <CheckIcon sx={{ fontSize: '0.95rem', color: '#101828 !important' }} /> : <PlayArrowIcon sx={{ fontSize: '0.95rem', color: isDark ? '#34D399 !important' : '#059669 !important' }} />}
+              label={`zoth run ${station.id} --air-gap`}
+              onClick={() => handleCopyCmd(`zoth run ${station.id} --air-gap`, 'run')}
+              clickable
+              sx={{
+                fontFamily: mono,
+                fontWeight: 800,
+                fontSize: '0.78rem',
+                bgcolor: copiedCmd === 'run' ? (isDark ? '#34D399' : '#059669') : (isDark ? '#121624' : '#FFFFFF'),
+                color: copiedCmd === 'run' ? '#101828' : (isDark ? '#F8FAFC' : '#101828'),
+                border: isDark ? '1px solid rgba(52,211,153,0.35)' : '1px solid #CBD5E1',
+                '&:hover': {
+                  bgcolor: isDark ? 'rgba(52,211,153,0.2)' : '#ECFDF5',
+                  borderColor: isDark ? '#34D399' : '#059669',
+                },
+              }}
+            />
+          </Box>
+
+          <Typography variant="caption" sx={{ fontFamily: mono, color: theme.palette.text.secondary }}>
+            {copiedCmd ? '✓ Copied command to clipboard' : 'Click chip to copy terminal command'}
+          </Typography>
+        </Paper>
+
+        {/* Live Telemetry Stream Simulator Ribbon */}
+        <Paper
+          sx={{
+            p: 2,
+            mb: 4,
+            bgcolor: isDark ? '#08080B' : '#FFFFFF',
+            border: isDark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #E2E8F0',
+            borderRadius: 2.5,
+            boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.5)' : '0 2px 10px rgba(0,0,0,0.04)',
+          }}
+        >
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <SpeedIcon sx={{ fontSize: '1.1rem', color: isDark ? '#D4AF37' : '#8A6A09' }} />
+              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: isDark ? '#D4AF37' : '#8A6A09', letterSpacing: '0.06em' }}>
+                LIVE TELEMETRY STREAM SIMULATOR
+              </Typography>
+            </Box>
+            <Chip
+              label={telemetry.status}
+              size="small"
+              sx={{
+                height: 20,
+                fontSize: '0.65rem',
+                fontFamily: mono,
+                fontWeight: 800,
+                bgcolor: isDark ? 'rgba(52,211,153,0.15)' : '#ECFDF5',
+                color: isDark ? '#34D399' : '#047857',
+                border: isDark ? '1px solid rgba(52,211,153,0.3)' : '1px solid #A7F3D0',
+              }}
+            />
+          </Box>
+
+          <Grid container spacing={1.5}>
+            {[
+              { label: 'Host Loopback', value: '127.0.0.1:8788', highlight: false },
+              { label: 'IPC Latency', value: telemetry.latency, highlight: true, color: isDark ? '#34D399' : '#047857' },
+              { label: 'Local Throughput', value: telemetry.throughput, highlight: false },
+              { label: 'Hardware TRNG Entropy', value: `${telemetry.entropy} / 8.0`, highlight: true, color: isDark ? '#D4AF37' : '#8A6A09' },
+              { label: 'Packets Routed', value: `${telemetry.loopbackPackets.toLocaleString()} pkts`, highlight: false },
+              { label: 'Egress Firewall', value: telemetry.egressDrop, highlight: true, color: isDark ? '#38BDF8' : '#0284C7' },
+            ].map((stat, i) => (
+              <Grid xs={6} sm={4} md={2} key={i}>
+                <Box
+                  sx={{
+                    p: 1.2,
+                    borderRadius: 1.5,
+                    bgcolor: isDark ? '#0F121C' : '#F8FAFC',
+                    border: `1px solid ${theme.palette.divider}`,
+                  }}
+                >
+                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block', fontSize: '0.68rem', fontFamily: mono, textTransform: 'uppercase' }}>
+                    {stat.label}
+                  </Typography>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{
+                      fontFamily: mono,
+                      fontWeight: 800,
+                      fontSize: '0.8rem',
+                      color: stat.color || theme.palette.text.primary,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {stat.value}
+                  </Typography>
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+        </Paper>
       </Box>
 
       {/* Main Workstation Workspace */}
       {renderWorkstationBody()}
+
+      {/* Sovereign Installation Funnel */}
+      <SovereignFunnel
+        title={`Deploy ${station.name} Locally`}
+        subtitle={`Run this sovereign capability locally with complete zero-telemetry air-gap guarantees. Install standalone via the Zoth CLI, spin up within the unified Studio cockpit, or boot into bare-metal Zoth OS.`}
+        toolTitle={`Standalone ${station.name}`}
+        toolTag={station.band?.toUpperCase() || "WORKSTATION"}
+        toolDescription={`Air-gapped micro-enclave runtime for ${station.name} (${station.id}). Binds strictly to loopback 127.0.0.1 with zero cloud egress sockets.`}
+        toolRepo="https://github.com/NullAITech/zoth-studio-v2"
+        toolCommand={`zoth open ${station.id}`}
+        sx={{ mt: 6 }}
+      />
     </Container>
   );
 }

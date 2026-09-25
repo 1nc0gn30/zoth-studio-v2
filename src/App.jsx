@@ -15,6 +15,7 @@ import MemoryPage from './pages/MemoryPage';
 import DocsPage from './pages/DocsPage';
 import AdytumPage from './pages/AdytumPage';
 import MathPillarDetailPage from './pages/MathPillarDetailPage';
+import MathPillarsPage from './pages/MathPillarsPage';
 import RealToolWorkspacePage from './pages/RealToolWorkspacePage';
 import WorkstationsPage from './pages/WorkstationsPage';
 import WorkstationDetailPage from './pages/WorkstationDetailPage';
@@ -87,7 +88,7 @@ function AppShell({ mode, onToggleTheme }) {
           <Route path="/zoth-os" element={<ZothOSPage />} />
           <Route path="/docs" element={<DocsPage />} />
           <Route path="/docs/math/:pillarId" element={<MathPillarDetailPage />} />
-          <Route path="/docs/math" element={<MathPillarDetailPage />} />
+          <Route path="/docs/math" element={<MathPillarsPage />} />
           <Route path="/faqs" element={<FaqsPage />} />
           <Route path="/ax" element={<AXPage />} />
         </Routes>

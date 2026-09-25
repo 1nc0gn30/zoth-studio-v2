@@ -287,7 +287,7 @@ export default function MemoryPage() {
     { time: '23:14:08', speaker: 'SYSTEM // ENCLAVE', text: 'Whitespace neural canvas initialized. 10 memory nodes anchored.' },
   ]);
 
-  // STDP Lab State
+  // STDP Lab State & Firing Telemetry
   const [stdpParams, setStdpParams] = useState({
     aPlus: 1.0,
     aMinus: 0.85,
@@ -295,6 +295,43 @@ export default function MemoryPage() {
     tauMinus: 20,
     testDt: 5,
   });
+  const [lastSpikeFeedback, setLastSpikeFeedback] = useState(null);
+  const [exportFeedback, setExportFeedback] = useState(false);
+
+  // Deepened interactive synapse firing handler with immediate visual & acoustic feedback
+  const handleFireSynapticSpike = (customDt = null) => {
+    const dt = customDt !== null ? customDt : stdpParams.testDt;
+    if (customDt !== null) {
+      setStdpParams((prev) => ({ ...prev, testDt: customDt }));
+    }
+    const isLtp = dt >= 0;
+    const computedDw = isLtp
+      ? stdpParams.aPlus * Math.exp(-dt / stdpParams.tauPlus)
+      : -stdpParams.aMinus * Math.exp(dt / stdpParams.tauMinus);
+
+    const deltaApplied = Number((computedDw * 0.05).toFixed(4));
+
+    setMemories((prev) =>
+      prev.map((m) => ({
+        ...m,
+        weight: Math.min(1.0, Math.max(0.1, Number((m.weight + deltaApplied).toFixed(3)))),
+      }))
+    );
+
+    const feedback = {
+      type: isLtp ? 'LTP' : 'LTD',
+      dt,
+      dw: Number(computedDw.toFixed(4)),
+      deltaApplied,
+      timestamp: Date.now(),
+      description: isLtp
+        ? `LTP Synaptic Potentiation: Δt = +${dt}ms → Δw = +${computedDw.toFixed(3)}. Forward connections reinforced (+${deltaApplied}w).`
+        : `LTD Synaptic Depression: Δt = ${dt}ms → Δw = ${computedDw.toFixed(3)}. Retrograde timing triggered synaptic pruning (${deltaApplied}w).`,
+    };
+    setLastSpikeFeedback(feedback);
+    playSynapticPulse(Math.min(1.0, Math.max(0.1, 0.5 + computedDw * 0.2)));
+    transmitLucy(`Synaptic pulse simulated [${feedback.type}]: Δt=${dt}ms, Δw=${computedDw.toFixed(3)}. Active memory weights updated.`);
+  };
 
   /* ==========================================================================
      HOUSE RULE #1: WEB AUDIO API COGNITIVE CARRIER TONE GENERATOR
@@ -937,8 +974,25 @@ export default function MemoryPage() {
     ctx.fillStyle = isDark ? '#08080B' : '#F8FAFC';
     ctx.fillRect(0, 0, W, H);
 
-    ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.15)';
+    // Subtle background grid
+    ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
     ctx.lineWidth = 1;
+    for (let x = 30; x <= W - 30; x += 40) {
+      ctx.beginPath();
+      ctx.moveTo(x, 20);
+      ctx.lineTo(x, H - 20);
+      ctx.stroke();
+    }
+    for (let y = 20; y <= H - 20; y += 35) {
+      ctx.beginPath();
+      ctx.moveTo(30, y);
+      ctx.lineTo(W - 30, y);
+      ctx.stroke();
+    }
+
+    // Main axes
+    ctx.strokeStyle = isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.3)';
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(30, cy);
     ctx.lineTo(W - 30, cy);
@@ -946,20 +1000,52 @@ export default function MemoryPage() {
     ctx.lineTo(cx, H - 20);
     ctx.stroke();
 
-    ctx.font = '10px "JetBrains Mono"';
-    ctx.fillStyle = isDark ? '#94A3B8' : '#475467';
-    ctx.fillText('–Δt (Post before Pre: LTD)', 40, cy - 8);
-    ctx.fillText('+Δt (Pre before Post: LTP)', W - 180, cy - 8);
-    ctx.fillText('+Δw', cx + 8, 30);
-    ctx.fillText('–Δw', cx + 8, H - 25);
+    // Labels
+    ctx.font = '700 10.5px "JetBrains Mono"';
+    ctx.fillStyle = isDark ? '#F472B6' : '#C2185B';
+    ctx.fillText('–Δt (Post before Pre: LTD)', 38, cy - 10);
+    ctx.fillStyle = isDark ? '#34D399' : '#047857';
+    ctx.fillText('+Δt (Pre before Post: LTP)', W - 195, cy - 10);
+    ctx.fillStyle = isDark ? '#D4AF37' : '#8A6A09';
+    ctx.fillText('+Δw (Potentiation)', cx + 8, 32);
+    ctx.fillText('–Δw (Depression)', cx + 8, H - 22);
 
     const scaleX = (W / 2 - 40) / 60;
     const scaleY = (H / 2 - 30);
 
+    // LTD Shaded Region (Post-before-pre)
+    ctx.fillStyle = isDark ? 'rgba(244,114,182,0.10)' : 'rgba(219,39,119,0.07)';
+    ctx.beginPath();
+    ctx.moveTo(cx + (-60) * scaleX, cy);
+    for (let dt = -60; dt <= 0; dt += 0.5) {
+      const dw = -stdpParams.aMinus * Math.exp(dt / stdpParams.tauMinus);
+      const px = cx + dt * scaleX;
+      const py = cy - dw * scaleY;
+      ctx.lineTo(px, py);
+    }
+    ctx.lineTo(cx, cy);
+    ctx.closePath();
+    ctx.fill();
+
+    // LTP Shaded Region (Pre-before-post)
+    ctx.fillStyle = isDark ? 'rgba(52,211,153,0.12)' : 'rgba(5,150,105,0.08)';
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    for (let dt = 0; dt <= 60; dt += 0.5) {
+      const dw = stdpParams.aPlus * Math.exp(-dt / stdpParams.tauPlus);
+      const px = cx + dt * scaleX;
+      const py = cy - dw * scaleY;
+      ctx.lineTo(px, py);
+    }
+    ctx.lineTo(cx + 60 * scaleX, cy);
+    ctx.closePath();
+    ctx.fill();
+
+    // Draw LTD Curve
     ctx.strokeStyle = isDark ? '#F472B6' : '#DB2777';
     ctx.lineWidth = 2.5;
     ctx.beginPath();
-    for (let dt = -60; dt < 0; dt += 0.5) {
+    for (let dt = -60; dt <= 0; dt += 0.5) {
       const dw = -stdpParams.aMinus * Math.exp(dt / stdpParams.tauMinus);
       const px = cx + dt * scaleX;
       const py = cy - dw * scaleY;
@@ -968,6 +1054,7 @@ export default function MemoryPage() {
     }
     ctx.stroke();
 
+    // Draw LTP Curve
     ctx.strokeStyle = isDark ? '#34D399' : '#059669';
     ctx.lineWidth = 2.5;
     ctx.beginPath();
@@ -980,6 +1067,7 @@ export default function MemoryPage() {
     }
     ctx.stroke();
 
+    // Compute Active Test Point
     const testDt = stdpParams.testDt;
     const testDw = testDt >= 0
       ? stdpParams.aPlus * Math.exp(-testDt / stdpParams.tauPlus)
@@ -987,18 +1075,49 @@ export default function MemoryPage() {
     const testPx = cx + testDt * scaleX;
     const testPy = cy - testDw * scaleY;
 
-    ctx.fillStyle = isDark ? '#D4AF37' : '#B8860B';
+    // Dashed guide lines to point
+    ctx.strokeStyle = isDark ? 'rgba(212,175,55,0.45)' : 'rgba(184,134,11,0.4)';
+    ctx.setLineDash([3, 3]);
+    ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.arc(testPx, testPy, 5, 0, Math.PI * 2);
+    ctx.moveTo(testPx, cy);
+    ctx.lineTo(testPx, testPy);
+    ctx.lineTo(cx, testPy);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Glowing halo around active point
+    const isLtp = testDt >= 0;
+    const pointColor = isLtp ? (isDark ? '#34D399' : '#059669') : (isDark ? '#F472B6' : '#DB2777');
+
+    ctx.fillStyle = pointColor;
+    ctx.shadowColor = pointColor;
+    ctx.shadowBlur = 10;
+    ctx.beginPath();
+    ctx.arc(testPx, testPy, 6, 0, Math.PI * 2);
     ctx.fill();
-    ctx.strokeStyle = isDark ? '#FFFFFF' : '#08080B';
-    ctx.lineWidth = 1.5;
+    ctx.shadowBlur = 0;
+
+    ctx.strokeStyle = isDark ? '#08080B' : '#FFFFFF';
+    ctx.lineWidth = 2;
     ctx.stroke();
 
+    // If last spike fired recently, draw shockwave ripple
+    if (lastSpikeFeedback && (Date.now() - lastSpikeFeedback.timestamp < 3500)) {
+      ctx.strokeStyle = isLtp ? 'rgba(52,211,153,0.7)' : 'rgba(244,114,182,0.7)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(testPx, testPy, 14, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Coordinate telemetry tag
     ctx.font = 'bold 11px "JetBrains Mono"';
-    ctx.fillStyle = isDark ? '#F5E6AB' : '#8A6A09';
-    ctx.fillText(`Δt=${testDt}ms, Δw=${testDw.toFixed(3)}`, testPx + 8, testPy - 8);
-  }, [stdpParams, isDark]);
+    ctx.fillStyle = isDark ? '#F5E6AB' : '#101828';
+    const tagX = testPx > W - 140 ? testPx - 130 : testPx + 10;
+    const tagY = testPy < 40 ? testPy + 20 : testPy - 10;
+    ctx.fillText(`Δt=${testDt}ms, Δw=${testDw >= 0 ? '+' : ''}${testDw.toFixed(3)}`, tagX, tagY);
+  }, [stdpParams, isDark, lastSpikeFeedback]);
 
   /* ==========================================================================
      CANVAS 3: ZERO-EGRESS INTERACTIVE 3D HOLOGRAPHIC CHAMBER (Offline Lucy)
@@ -1325,7 +1444,7 @@ export default function MemoryPage() {
                 onClick={handleToggleMute}
                 sx={{
                   bgcolor: isMuted ? 'transparent' : gold.accent,
-                  color: isMuted ? theme.palette.text.secondary : (isDark ? '#08080B' : '#FFFFFF'),
+                  color: isMuted ? theme.palette.text.secondary : '#08080B',
                   borderColor: isMuted ? (isDark ? 'rgba(212,175,55,0.4)' : theme.palette.divider) : gold.accent,
                   fontWeight: 800,
                   whiteSpace: 'nowrap',
@@ -1364,7 +1483,7 @@ export default function MemoryPage() {
                   fontWeight: 750,
                   fontSize: '0.75rem',
                   bgcolor: carrierFreq === 432 ? gold.accent : (isDark ? 'rgba(255,255,255,0.05)' : '#F1F5F9'),
-                  color: carrierFreq === 432 ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
+                  color: carrierFreq === 432 ? '#08080B' : theme.palette.text.primary,
                   border: `1px solid ${carrierFreq === 432 ? gold.accent : (isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider)}`,
                 }}
               />
@@ -1482,7 +1601,7 @@ export default function MemoryPage() {
                           sx={{
                             fontWeight: 750,
                             bgcolor: activeCluster === c ? (clusterColors[c] || gold.accent) : (isDark ? 'transparent' : '#F1F5F9'),
-                            color: activeCluster === c ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
+                            color: activeCluster === c ? '#08080B' : theme.palette.text.primary,
                             border: `1px solid ${activeCluster === c ? (clusterColors[c] || gold.accent) : theme.palette.divider}`,
                           }}
                         />
@@ -1550,7 +1669,7 @@ export default function MemoryPage() {
                               sx={{
                                 fontWeight: 750,
                                 bgcolor: isSelected ? author.color : (isDark ? 'rgba(255,255,255,0.04)' : '#F1F5F9'),
-                                color: isSelected ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
+                                color: isSelected ? '#08080B' : theme.palette.text.primary,
                                 border: `1px solid ${isSelected ? author.color : (isDark ? 'rgba(255,255,255,0.1)' : theme.palette.divider)}`,
                               }}
                             />
@@ -1601,7 +1720,7 @@ export default function MemoryPage() {
                         startIcon={<AddCircleOutlineIcon />}
                         sx={{
                           bgcolor: gold.accent,
-                          color: isDark ? '#08080B' : '#FFFFFF',
+                          color: '#08080B',
                           fontWeight: 800,
                           px: 2.5,
                           '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' },
@@ -1714,7 +1833,7 @@ export default function MemoryPage() {
                         variant="contained"
                         startIcon={<AutoFixHighIcon />}
                         onClick={handleConsultLucy}
-                        sx={{ bgcolor: gold.accent, color: isDark ? '#08080B' : '#FFFFFF', fontWeight: 800, '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' } }}
+                        sx={{ bgcolor: gold.accent, color: '#08080B', fontWeight: 800, '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' } }}
                       >
                         Consult Lucy on Vector
                       </Button>
@@ -1760,102 +1879,335 @@ export default function MemoryPage() {
         )}
 
         {/* ==========================================================================
-           TAB 1: STDP SYNAPTIC LAB
+           TAB 1: STDP SYNAPTIC LAB (DEEPENED INTERACTIVE BIOMORPHIC ENGINE)
            ========================================================================== */}
         {activeTab === 1 && (
           <Box>
+            {/* Live Synaptic Spike Feedback Banner */}
+            {lastSpikeFeedback && (
+              <Alert
+                severity={lastSpikeFeedback.type === 'LTP' ? 'success' : 'warning'}
+                icon={lastSpikeFeedback.type === 'LTP' ? <AutoFixHighIcon sx={{ color: isDark ? '#34D399' : '#059669' }} /> : <TuneIcon sx={{ color: isDark ? '#F472B6' : '#DB2777' }} />}
+                sx={{
+                  mb: 3,
+                  bgcolor: lastSpikeFeedback.type === 'LTP' ? (isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF5') : (isDark ? 'rgba(244,114,182,0.12)' : '#FFF1F2'),
+                  border: `1px solid ${lastSpikeFeedback.type === 'LTP' ? (isDark ? '#34D399' : '#059669') : (isDark ? '#F472B6' : '#DB2777')}`,
+                  color: theme.palette.text.primary,
+                  borderRadius: 2,
+                }}
+              >
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+                  <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700 }}>
+                    ⚡ {lastSpikeFeedback.description}
+                  </Typography>
+                  <Chip
+                    label={`AVERAGE WEIGHT: ${(memories.reduce((a, b) => a + b.weight, 0) / memories.length).toFixed(3)}w`}
+                    size="small"
+                    sx={{
+                      fontFamily: mono,
+                      fontWeight: 800,
+                      bgcolor: lastSpikeFeedback.type === 'LTP' ? (isDark ? '#34D399' : '#059669') : (isDark ? '#F472B6' : '#DB2777'),
+                      color: '#08080B',
+                    }}
+                  />
+                </Box>
+              </Alert>
+            )}
+
+            {/* Dual STDP Mathematical Pillars (Equations with Light/Dark Theme Contrast) */}
+            <Grid container spacing={2.5} sx={{ mb: 3 }}>
+              {/* Pillar 1: Long-Term Potentiation (LTP) */}
+              <Grid xs={12} md={6}>
+                <Paper
+                  sx={{
+                    p: 2.5,
+                    borderRadius: 2.5,
+                    bgcolor: isDark ? '#08080B' : '#F8FAFC',
+                    border: `1.5px solid ${stdpParams.testDt >= 0 ? (isDark ? '#34D399' : '#059669') : (isDark ? 'rgba(52,211,153,0.25)' : '#D1FAE5')}`,
+                    boxShadow: stdpParams.testDt >= 0 ? (isDark ? '0 0 18px rgba(52,211,153,0.25)' : '0 2px 10px rgba(5,150,105,0.15)') : 'none',
+                    transition: 'all 0.25s ease',
+                  }}
+                >
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.2 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <PsychologyIcon sx={{ color: isDark ? '#34D399' : '#059669' }} />
+                      <Typography variant="subtitle1" sx={{ fontWeight: 800, color: isDark ? '#34D399' : '#047857' }}>
+                        Long-Term Potentiation (LTP)
+                      </Typography>
+                    </Box>
+                    <Chip
+                      label={stdpParams.testDt >= 0 ? 'ACTIVE ZONE (Δt > 0)' : 'INACTIVE'}
+                      size="small"
+                      sx={{
+                        fontFamily: mono,
+                        fontSize: '0.68rem',
+                        fontWeight: 800,
+                        bgcolor: stdpParams.testDt >= 0 ? (isDark ? 'rgba(52,211,153,0.2)' : '#D1FAE5') : (isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0'),
+                        color: stdpParams.testDt >= 0 ? (isDark ? '#34D399' : '#047857') : 'text.disabled',
+                      }}
+                    />
+                  </Box>
+                  <Box sx={{ p: 1.2, mb: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#040508' : '#FFFFFF', border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}` }}>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.86rem', fontWeight: 800, color: isDark ? '#34D399' : '#047857', textAlign: 'center' }}>
+                      Δw = A₊ · e^(–Δt / τ₊)
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem', lineHeight: 1.5 }}>
+                    <strong>Causal Spike Timing:</strong> Pre-synaptic neuron spikes <em>before</em> post-synaptic neuron within the critical temporal window ($\Delta t &gt; 0$), triggering calcium influx and synaptic conductance reinforcement.
+                  </Typography>
+                </Paper>
+              </Grid>
+
+              {/* Pillar 2: Long-Term Depression (LTD) */}
+              <Grid xs={12} md={6}>
+                <Paper
+                  sx={{
+                    p: 2.5,
+                    borderRadius: 2.5,
+                    bgcolor: isDark ? '#08080B' : '#F8FAFC',
+                    border: `1.5px solid ${stdpParams.testDt < 0 ? (isDark ? '#F472B6' : '#DB2777') : (isDark ? 'rgba(244,114,182,0.25)' : '#FCE7F3')}`,
+                    boxShadow: stdpParams.testDt < 0 ? (isDark ? '0 0 18px rgba(244,114,182,0.25)' : '0 2px 10px rgba(219,39,119,0.15)') : 'none',
+                    transition: 'all 0.25s ease',
+                  }}
+                >
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.2 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <ScienceIcon sx={{ color: isDark ? '#F472B6' : '#DB2777' }} />
+                      <Typography variant="subtitle1" sx={{ fontWeight: 800, color: isDark ? '#F472B6' : '#BE185D' }}>
+                        Long-Term Depression (LTD)
+                      </Typography>
+                    </Box>
+                    <Chip
+                      label={stdpParams.testDt < 0 ? 'ACTIVE ZONE (Δt < 0)' : 'INACTIVE'}
+                      size="small"
+                      sx={{
+                        fontFamily: mono,
+                        fontSize: '0.68rem',
+                        fontWeight: 800,
+                        bgcolor: stdpParams.testDt < 0 ? (isDark ? 'rgba(244,114,182,0.2)' : '#FCE7F3') : (isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0'),
+                        color: stdpParams.testDt < 0 ? (isDark ? '#F472B6' : '#BE185D') : 'text.disabled',
+                      }}
+                    />
+                  </Box>
+                  <Box sx={{ p: 1.2, mb: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#040508' : '#FFFFFF', border: `1px solid ${isDark ? 'rgba(244,114,182,0.3)' : '#FBCFE8'}` }}>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.86rem', fontWeight: 800, color: isDark ? '#F472B6' : '#BE185D', textAlign: 'center' }}>
+                      Δw = –A₋ · e^(+Δt / τ₋)
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem', lineHeight: 1.5 }}>
+                    <strong>Anti-Causal Spike Timing:</strong> Post-synaptic neuron spikes <em>before</em> pre-synaptic neuron ($\Delta t &lt; 0$), inducing sub-threshold biological decay and pruning uninformative connections.
+                  </Typography>
+                </Paper>
+              </Grid>
+            </Grid>
+
+            {/* Main Interactive STDP Curve Visualizer & Synaptic Controller */}
             <Grid container spacing={3}>
               <Grid xs={12} lg={7}>
-                <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, mb: 3 }}>
-                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 1 }}>Biomorphic Synaptic Plasticity Curve</Typography>
+                <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2.5, bgcolor: theme.palette.background.paper, mb: 3 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, flexWrap: 'wrap', gap: 1 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 800 }}>Biomorphic Synaptic Plasticity Curve</Typography>
+                    <Chip
+                      label={stdpParams.testDt >= 0 ? `LTP REINFORCEMENT: +${(stdpParams.aPlus * Math.exp(-stdpParams.testDt / stdpParams.tauPlus)).toFixed(3)}Δw` : `LTD PRUNING: -${(stdpParams.aMinus * Math.exp(stdpParams.testDt / stdpParams.tauMinus)).toFixed(3)}Δw`}
+                      size="small"
+                      sx={{
+                        fontFamily: mono,
+                        fontWeight: 800,
+                        bgcolor: stdpParams.testDt >= 0 ? (isDark ? 'rgba(52,211,153,0.15)' : '#DCFCE7') : (isDark ? 'rgba(244,114,182,0.15)' : '#FFE4E6'),
+                        color: stdpParams.testDt >= 0 ? (isDark ? '#34D399' : '#059669') : (isDark ? '#F472B6' : '#DB2777'),
+                      }}
+                    />
+                  </Box>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
-                    Real-time visualizer of the Spike-Timing-Dependent Plasticity (STDP) function. Pre-before-post spikes induce Long-Term Potentiation (LTP), while post-before-pre induces Long-Term Depression (LTD).
+                    Interactive visualizer of the biomorphic STDP function. Drag the Δt delta slider below to explore the exponential potentiation vs depression phases.
                   </Typography>
 
-                  <Box sx={{ borderRadius: 2, overflow: 'hidden', border: '1px solid rgba(212,175,55,0.25)', mb: 2 }}>
+                  <Box sx={{ borderRadius: 2, overflow: 'hidden', border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider}`, mb: 2 }}>
                     <canvas ref={stdpCanvasRef} width={620} height={320} style={{ width: '100%', height: 'auto', display: 'block' }} />
                   </Box>
 
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, display: 'block', textAlign: 'center' }}>
-                    Δw = A₊ · e^(-Δt/τ₊) (Δt &gt; 0) ··· Δw = -A₋ · e^(Δt/τ₋) (Δt &lt; 0)
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, display: 'block', textAlign: 'center', fontWeight: 700 }}>
+                    Δw = A₊ · e^(–Δt/τ₊) (Δt ≥ 0) ··· Δw = –A₋ · e^(Δt/τ₋) (Δt &lt; 0)
                   </Typography>
                 </Paper>
               </Grid>
 
               <Grid xs={12} lg={5}>
-                <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: gold.accent }}>Synaptic Parameters</Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                    Tune decay constants and stimulation impulse timing.
+                <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2.5, bgcolor: theme.palette.background.paper, height: '100%' }}>
+                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: gold.accent }}>
+                    Synaptic Parameters & Spike Firing
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
+                    Tune biomorphic decay parameters, simulate synaptic firing, and inspect weight distribution shifts.
                   </Typography>
 
-                  <Box sx={{ mb: 2.5 }}>
-                    <Typography variant="caption" sx={{ fontWeight: 750, mb: 0.5, display: 'block' }}>
-                      Potentiation Amplitude A₊ ({stdpParams.aPlus})
-                    </Typography>
-                    <Slider
-                      min={0.2}
-                      max={2.0}
-                      step={0.05}
-                      value={stdpParams.aPlus}
-                      onChange={(e, v) => setStdpParams({ ...stdpParams, aPlus: v })}
-                    />
-                  </Box>
-
-                  <Box sx={{ mb: 2.5 }}>
-                    <Typography variant="caption" sx={{ fontWeight: 750, mb: 0.5, display: 'block' }}>
-                      Depression Amplitude A₋ ({stdpParams.aMinus})
-                    </Typography>
-                    <Slider
-                      min={0.2}
-                      max={2.0}
-                      step={0.05}
-                      value={stdpParams.aMinus}
-                      onChange={(e, v) => setStdpParams({ ...stdpParams, aMinus: v })}
-                    />
-                  </Box>
-
-                  <Box sx={{ mb: 2.5 }}>
-                    <Typography variant="caption" sx={{ fontWeight: 750, mb: 0.5, display: 'block' }}>
-                      Time Constant τ₊ / τ₋ ({stdpParams.tauPlus} ms)
-                    </Typography>
-                    <Slider
-                      min={5}
-                      max={50}
-                      step={1}
-                      value={stdpParams.tauPlus}
-                      onChange={(e, v) => setStdpParams({ ...stdpParams, tauPlus: v, tauMinus: v })}
-                    />
-                  </Box>
-
-                  <Box sx={{ mb: 3 }}>
-                    <Typography variant="caption" sx={{ fontWeight: 750, mb: 0.5, display: 'block' }}>
-                      Test Spike Timing Δt ({stdpParams.testDt} ms)
-                    </Typography>
+                  {/* STDP Time-Difference Delta Slider (HOUSE RULE #1 / TASK 1 DEEPENING) */}
+                  <Box sx={{ p: 2, mb: 2.5, bgcolor: isDark ? '#08080B' : '#F8FAFC', borderRadius: 2, border: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider}` }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                      <Typography variant="caption" sx={{ fontWeight: 800, fontFamily: mono, color: gold.accent }}>
+                        TEST SPIKE TIMING Δt
+                      </Typography>
+                      <Chip
+                        label={`${stdpParams.testDt > 0 ? '+' : ''}${stdpParams.testDt} ms (${stdpParams.testDt >= 0 ? 'LTP' : 'LTD'})`}
+                        size="small"
+                        sx={{
+                          fontFamily: mono,
+                          fontWeight: 800,
+                          fontSize: '0.72rem',
+                          bgcolor: stdpParams.testDt >= 0 ? (isDark ? 'rgba(52,211,153,0.18)' : '#DCFCE7') : (isDark ? 'rgba(244,114,182,0.18)' : '#FFE4E6'),
+                          color: stdpParams.testDt >= 0 ? (isDark ? '#34D399' : '#059669') : (isDark ? '#F472B6' : '#DB2777'),
+                        }}
+                      />
+                    </Box>
                     <Slider
                       min={-40}
                       max={40}
                       step={1}
                       value={stdpParams.testDt}
                       onChange={(e, v) => setStdpParams({ ...stdpParams, testDt: v })}
+                      sx={{
+                        color: stdpParams.testDt >= 0 ? (isDark ? '#34D399' : '#059669') : (isDark ? '#F472B6' : '#DB2777'),
+                        '& .MuiSlider-thumb': {
+                          boxShadow: `0 0 10px ${stdpParams.testDt >= 0 ? '#34D399' : '#F472B6'}`,
+                        },
+                      }}
+                    />
+                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontSize: '0.72rem', mt: 0.5 }}>
+                      {stdpParams.testDt >= 0
+                        ? `Pre-synaptic fires ${stdpParams.testDt}ms before post-synaptic → Positive potentiation.`
+                        : `Post-synaptic fires ${Math.abs(stdpParams.testDt)}ms before pre-synaptic → Anti-causal depression.`}
+                    </Typography>
+                  </Box>
+
+                  {/* Amplitude & Time Constants */}
+                  <Box sx={{ mb: 2 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                      <Typography variant="caption" sx={{ fontWeight: 750 }}>
+                        Potentiation Amplitude A₊
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 750, color: isDark ? '#34D399' : '#059669' }}>
+                        {stdpParams.aPlus.toFixed(2)}
+                      </Typography>
+                    </Box>
+                    <Slider
+                      min={0.2}
+                      max={2.0}
+                      step={0.05}
+                      value={stdpParams.aPlus}
+                      onChange={(e, v) => setStdpParams({ ...stdpParams, aPlus: v })}
+                      sx={{ color: isDark ? '#34D399' : '#059669' }}
                     />
                   </Box>
 
+                  <Box sx={{ mb: 2 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                      <Typography variant="caption" sx={{ fontWeight: 750 }}>
+                        Depression Amplitude A₋
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 750, color: isDark ? '#F472B6' : '#DB2777' }}>
+                        {stdpParams.aMinus.toFixed(2)}
+                      </Typography>
+                    </Box>
+                    <Slider
+                      min={0.2}
+                      max={2.0}
+                      step={0.05}
+                      value={stdpParams.aMinus}
+                      onChange={(e, v) => setStdpParams({ ...stdpParams, aMinus: v })}
+                      sx={{ color: isDark ? '#F472B6' : '#DB2777' }}
+                    />
+                  </Box>
+
+                  <Box sx={{ mb: 2.5 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                      <Typography variant="caption" sx={{ fontWeight: 750 }}>
+                        Time Constant τ₊ / τ₋ (Half-life)
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 750, color: gold.accent }}>
+                        {stdpParams.tauPlus} ms
+                      </Typography>
+                    </Box>
+                    <Slider
+                      min={5}
+                      max={50}
+                      step={1}
+                      value={stdpParams.tauPlus}
+                      onChange={(e, v) => setStdpParams({ ...stdpParams, tauPlus: v, tauMinus: v })}
+                      sx={{ color: gold.accent }}
+                    />
+                  </Box>
+
+                  {/* Interactive Synaptic Firing Triggers (Immediate Visual & Audio Feedback) */}
+                  <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1, fontFamily: mono, fontWeight: 800 }}>
+                    EXECUTE SYNAPTIC DISCHARGE:
+                  </Typography>
+
+                  <Stack spacing={1.5} sx={{ mb: 2.5 }}>
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                      <Button
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        onClick={() => handleFireSynapticSpike(15)}
+                        sx={{
+                          borderColor: isDark ? '#34D399' : '#059669',
+                          color: isDark ? '#34D399' : '#059669',
+                          fontWeight: 800,
+                          bgcolor: isDark ? 'rgba(52,211,153,0.08)' : '#ECFDF5',
+                          '&:hover': { bgcolor: isDark ? 'rgba(52,211,153,0.18)' : '#D1FAE5' },
+                        }}
+                      >
+                        ⚡ Fire LTP (+15ms)
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        fullWidth
+                        size="small"
+                        onClick={() => handleFireSynapticSpike(-15)}
+                        sx={{
+                          borderColor: isDark ? '#F472B6' : '#DB2777',
+                          color: isDark ? '#F472B6' : '#DB2777',
+                          fontWeight: 800,
+                          bgcolor: isDark ? 'rgba(244,114,182,0.08)' : '#FFF1F2',
+                          '&:hover': { bgcolor: isDark ? 'rgba(244,114,182,0.18)' : '#FCE7F3' },
+                        }}
+                      >
+                        ❄️ Fire LTD (-15ms)
+                      </Button>
+                    </Box>
+
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      onClick={() => handleFireSynapticSpike()}
+                      sx={{
+                        bgcolor: gold.accent,
+                        color: '#08080B',
+                        fontWeight: 850,
+                        py: 1.1,
+                        boxShadow: `0 0 16px -2px ${gold.accent}`,
+                        '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' },
+                      }}
+                    >
+                      🎯 Discharge Synaptic Impulse (Δt = {stdpParams.testDt > 0 ? `+${stdpParams.testDt}` : stdpParams.testDt}ms)
+                    </Button>
+                  </Stack>
+
+                  {/* Quick Export Calibrated Weights */}
                   <Button
-                    variant="contained"
+                    variant="outlined"
                     fullWidth
-                    onClick={() => {
-                      setMemories((prev) =>
-                        prev.map((m) => ({
-                          ...m,
-                          weight: Math.min(1.0, Math.max(0.1, m.weight + (stdpParams.testDt > 0 ? 0.05 : -0.05))),
-                        }))
-                      );
-                      transmitLucy(`Simulated global synaptic spike with Δt = ${stdpParams.testDt}ms. Active vectors reinforced.`);
+                    size="small"
+                    startIcon={<DownloadIcon />}
+                    onClick={handleDownloadSnapshotFile}
+                    sx={{
+                      borderColor: gold.accent,
+                      color: gold.accent,
+                      fontWeight: 750,
+                      '&:hover': { bgcolor: gold.wash },
                     }}
-                    sx={{ bgcolor: gold.accent, color: isDark ? '#08080B' : '#FFFFFF', fontWeight: 800, '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' } }}
                   >
-                    Simulate Synaptic Spike
+                    Export Calibrated Snapshot (.json)
                   </Button>
                 </Paper>
               </Grid>
@@ -1894,7 +2246,7 @@ export default function MemoryPage() {
                         sx={{
                           fontWeight: 750,
                           bgcolor: episodicAuthor === author.id ? author.color : (isDark ? 'transparent' : '#F1F5F9'),
-                          color: episodicAuthor === author.id ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
+                          color: episodicAuthor === author.id ? '#08080B' : theme.palette.text.primary,
                           border: `1px solid ${episodicAuthor === author.id ? author.color : theme.palette.divider}`,
                         }}
                       />
@@ -1931,7 +2283,7 @@ export default function MemoryPage() {
                     </Typography>
                   </Box>
 
-                  <Button type="submit" variant="contained" disabled={!episodicSnippet.trim()} sx={{ bgcolor: gold.accent, color: isDark ? '#08080B' : '#FFFFFF', fontWeight: 800, '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' } }}>
+                  <Button type="submit" variant="contained" disabled={!episodicSnippet.trim()} sx={{ bgcolor: gold.accent, color: '#08080B', fontWeight: 800, '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' } }}>
                     Encode Episodic Vector
                   </Button>
                 </Box>
@@ -2205,7 +2557,7 @@ export default function MemoryPage() {
             onClick={handleDownloadSnapshotFile}
             sx={{
               bgcolor: gold.accent,
-              color: isDark ? '#08080B' : '#FFFFFF',
+              color: '#08080B',
               fontWeight: 800,
               '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' },
             }}

@@ -12,6 +12,7 @@
     "dev": "vite",
     "build": "vite build && node scripts/prerender.mjs",
     "prerender": "node scripts/prerender.mjs",
+    "test:routes": "node scripts/test-routes.mjs",
     "preview": "vite preview",
     "zoth": "node ./bin/zoth.js",
     "up": "node ./bin/zoth.js up"
