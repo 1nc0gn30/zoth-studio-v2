@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { siteConfig, generateSchemaGraph } from '../config/site';
+import { siteConfig, getRouteMeta, generateSchemaGraph } from '../config/site';
 
 /**
  * Dynamic SEO, AEO, and AX Component for Zoth Studio v2
@@ -9,12 +9,7 @@ import { siteConfig, generateSchemaGraph } from '../config/site';
 export default function SEO({ title: customTitle, description: customDescription, path: customPath }) {
   const location = useLocation();
   const currentPath = customPath || location.pathname;
-  const routeMeta = siteConfig.routes[currentPath] || {
-    title: `${siteConfig.name} // Sovereign Agent Studio`,
-    description: siteConfig.description,
-    keywords: siteConfig.keywords.join(', '),
-    type: 'website'
-  };
+  const routeMeta = getRouteMeta(currentPath);
 
   const pageTitle = customTitle || routeMeta.title;
   const pageDescription = customDescription || routeMeta.description;

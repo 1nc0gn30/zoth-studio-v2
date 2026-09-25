@@ -6,6 +6,7 @@
 import { microTools } from '../data/toolsData.js';
 import { workstations } from '../data/workstations.js';
 import { mathPillars } from '../data/mathPillars.js';
+import { FAQS_DATA } from '../data/faqsData.js';
 
 export const siteConfig = {
   name: 'Zoth Studio',
@@ -272,22 +273,83 @@ export function generateSchemaGraph(path = '/') {
     {
       '@type': 'BreadcrumbList',
       '@id': `${fullUrl}#breadcrumb`,
-      'itemListElement': [
-        {
-          '@type': 'ListItem',
-          'position': 1,
-          'name': 'Home',
-          'item': siteConfig.url
-        },
-        ...(path !== '/' ? [
+      'itemListElement': (() => {
+        const items = [
           {
+            '@type': 'ListItem',
+            'position': 1,
+            'name': 'Home',
+            'item': siteConfig.url
+          }
+        ];
+        if (path.startsWith('/tools/')) {
+          items.push({
+            '@type': 'ListItem',
+            'position': 2,
+            'name': 'Sovereign Tools Nexus',
+            'item': `${siteConfig.url}/tools`
+          });
+          items.push({
+            '@type': 'ListItem',
+            'position': 3,
+            'name': routeMeta.title.split('//')[0].trim(),
+            'item': fullUrl
+          });
+        } else if (path.startsWith('/workstations/')) {
+          items.push({
+            '@type': 'ListItem',
+            'position': 2,
+            'name': 'Workstations',
+            'item': `${siteConfig.url}/workstations`
+          });
+          items.push({
+            '@type': 'ListItem',
+            'position': 3,
+            'name': routeMeta.title.split('//')[0].trim(),
+            'item': fullUrl
+          });
+        } else if (path.startsWith('/docs/math/')) {
+          items.push({
+            '@type': 'ListItem',
+            'position': 2,
+            'name': 'Documentation',
+            'item': `${siteConfig.url}/docs`
+          });
+          items.push({
+            '@type': 'ListItem',
+            'position': 3,
+            'name': 'Six Math Pillars',
+            'item': `${siteConfig.url}/docs/math`
+          });
+          items.push({
+            '@type': 'ListItem',
+            'position': 4,
+            'name': routeMeta.title.split('//')[0].trim(),
+            'item': fullUrl
+          });
+        } else if (path === '/docs/math') {
+          items.push({
+            '@type': 'ListItem',
+            'position': 2,
+            'name': 'Documentation',
+            'item': `${siteConfig.url}/docs`
+          });
+          items.push({
+            '@type': 'ListItem',
+            'position': 3,
+            'name': 'Six Math Pillars',
+            'item': fullUrl
+          });
+        } else if (path !== '/') {
+          items.push({
             '@type': 'ListItem',
             'position': 2,
             'name': routeMeta.title.split('//')[0].trim(),
             'item': fullUrl
-          }
-        ] : [])
-      ]
+          });
+        }
+        return items;
+      })()
     }
   ];
 
@@ -296,56 +358,68 @@ export function generateSchemaGraph(path = '/') {
     graph.push({
       '@type': 'FAQPage',
       '@id': `${fullUrl}#faq`,
-      'mainEntity': [
-        {
-          '@type': 'Question',
-          'name': 'What is Zoth Studio v2?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Zoth Studio v2 is an air-gapped, zero-egress development studio designed for orchestrating autonomous AI agent pantheons, local LLMs, and biomorphic memory matrices with zero telemetry or data exfiltration.'
-          }
-        },
-        {
-          '@type': 'Question',
-          'name': 'What does "Zero-Egress" mean in Zoth Studio?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Zero-Egress means all network requests are strictly bound to local loopback interfaces (127.0.0.1). There are no cloud fallbacks, tracking SDKs, telemetry beacons, or external API leaks.'
-          }
-        },
-        {
-          '@type': 'Question',
-          'name': 'Who is Lucy and what is the Whitespace Netrunner Memory Hub?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Lucy (Lucyna Kushinada) is the Sovereign Netrunner Oracle (Codec 141.12) guiding the Zoth agent pantheon. The Whitespace Netrunner Memory Hub is a biomorphic memory stratum that uses Spike-Timing-Dependent Plasticity (STDP) to decay stale noise while strengthening frequently referenced decisions.'
-          }
-        },
-        {
-          '@type': 'Question',
-          'name': 'How does Spike-Timing-Dependent Plasticity (STDP) work for agent memory?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'STDP models synaptic weight adjustments based on relative impulse timing (Δw = A₊ · e^(-Δt/τ)). When an agent frequently references or verifies code, its synaptic weight increases. Unreferenced vectors decay logarithmically over time.'
-          }
-        },
-        {
-          '@type': 'Question',
-          'name': 'Can Zoth Studio run completely offline without an internet connection?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Yes. All 37 workstations, 25 micro-tools, the WebGPU AI console, and local model foundry (Ollama / llama.cpp) operate fully air-gapped without an active internet connection.'
-          }
-        },
-        {
-          '@type': 'Question',
-          'name': 'How does the 3-Agent Byzantine Consensus Arena resolve code conflicts?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'The Consensus Arena uses a triadic Socratic debate topology (Proposer, Evaluator, Arbiter). Each agent analyzes Abstract Syntax Tree (AST) diffs independently until a cryptographically verifiable quorum is signed before committing code.'
-          }
+      'mainEntity': FAQS_DATA.map((item) => ({
+        '@type': 'Question',
+        'name': item.q,
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': item.a.replace(/\n+/g, ' ')
         }
-      ]
+      }))
+    });
+  } else if (path === '/memory') {
+    graph.push({
+      '@type': 'TechArticle',
+      '@id': `${fullUrl}#tech-article`,
+      'headline': 'Lucy Netrunner Memory Hub // Biomorphic STDP Synaptic Laws & Whitespace Matrix',
+      'description': routeMeta.description,
+      'author': { '@type': 'Organization', 'name': 'NullAI Tech' },
+      'publisher': { '@id': `${siteConfig.url}/#organization` }
+    });
+  } else if (path === '/consensus') {
+    graph.push({
+      '@type': 'TechArticle',
+      '@id': `${fullUrl}#tech-article`,
+      'headline': 'Consensus Battle Arena // 3-Agent Byzantine Triangulation & AST Synthesis',
+      'description': routeMeta.description,
+      'author': { '@type': 'Organization', 'name': 'NullAI Tech' },
+      'publisher': { '@id': `${siteConfig.url}/#organization` }
+    });
+  } else if (path === '/adytum') {
+    graph.push({
+      '@type': 'SecurityService',
+      '@id': `${fullUrl}#security-service`,
+      'name': 'Adytum Sanctum Key Derivation & Enclave Vault',
+      'description': routeMeta.description,
+      'provider': { '@id': `${siteConfig.url}/#organization` }
+    });
+  } else if (path === '/zoth-os') {
+    graph.push({
+      '@type': 'SoftwareApplication',
+      '@id': `${fullUrl}#os-application`,
+      'name': 'Zoth OS Sovereign KVM Virtual Machine',
+      'applicationCategory': 'OperatingSystem',
+      'operatingSystem': 'Linux',
+      'description': routeMeta.description,
+      'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' }
+    });
+  } else if (path === '/ax') {
+    graph.push({
+      '@type': 'AboutPage',
+      '@id': `${fullUrl}#about-page`,
+      'name': 'Zoth Studio Agent Experience (AX) Entity Profile',
+      'description': routeMeta.description,
+      'publisher': { '@id': `${siteConfig.url}/#organization` }
+    });
+  } else if (path === '/webgen') {
+    graph.push({
+      '@type': 'SoftwareApplication',
+      '@id': `${fullUrl}#webgen-application`,
+      'name': 'WebGen Autonomous Layout Foundry',
+      'applicationCategory': 'DeveloperApplication',
+      'operatingSystem': 'Linux, macOS, Windows',
+      'description': routeMeta.description,
+      'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' }
     });
   } else if (path.startsWith('/tools/')) {
     const toolId = path.replace('/tools/', '');
