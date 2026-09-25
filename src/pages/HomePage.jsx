@@ -297,7 +297,7 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
           </Box>
 
           {/* Action Buttons: Copy & Run */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
             <Button
               size="small"
               onClick={handleRunSimulation}
@@ -307,17 +307,20 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                 fontSize: '0.75rem',
                 color: '#F5E6AB',
                 background: isDark
-                  ? 'repeating-linear-gradient(0deg, rgba(212,175,55,0.03) 0px, rgba(212,175,55,0.03) 1px, transparent 1px, transparent 3px), linear-gradient(180deg, #151520 0%, #0c0c12 100%)'
-                  : 'repeating-linear-gradient(0deg, rgba(184,134,11,0.03) 0px, rgba(184,134,11,0.03) 1px, transparent 1px, transparent 3px), linear-gradient(180deg, #2A374A 0%, #1E293B 100%)',
-                border: '1px solid rgba(212,175,55,0.35)',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
-                px: 1.5,
-                py: 0.4,
+                  ? 'repeating-linear-gradient(0deg, rgba(212,175,55,0.04) 0px, rgba(212,175,55,0.04) 1px, transparent 1px, transparent 3px), linear-gradient(180deg, #181820 0%, #0e0e16 100%)'
+                  : 'repeating-linear-gradient(0deg, rgba(184,134,11,0.04) 0px, rgba(184,134,11,0.04) 1px, transparent 1px, transparent 3px), linear-gradient(180deg, #2D3A4D 0%, #1F2A3A 100%)',
+                border: '1px solid rgba(212,175,55,0.4)',
+                borderRadius: 2,
+                boxShadow: '0 2px 6px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05)',
+                px: 2,
+                py: 0.5,
+                transition: 'all 0.2s ease',
                 '&:hover': {
                   background: isDark
-                    ? 'repeating-linear-gradient(0deg, rgba(212,175,55,0.05) 0px, rgba(212,175,55,0.05) 1px, transparent 1px, transparent 3px), linear-gradient(180deg, #1f1f2e 0%, #12121c 100%)'
-                    : 'repeating-linear-gradient(0deg, rgba(184,134,11,0.05) 0px, rgba(184,134,11,0.05) 1px, transparent 1px, transparent 3px), linear-gradient(180deg, #334155 0%, #243248 100%)',
+                    ? 'repeating-linear-gradient(0deg, rgba(212,175,55,0.07) 0px, rgba(212,175,55,0.07) 1px, transparent 1px, transparent 3px), linear-gradient(180deg, #242435 0%, #141420 100%)'
+                    : 'repeating-linear-gradient(0deg, rgba(184,134,11,0.07) 0px, rgba(184,134,11,0.07) 1px, transparent 1px, transparent 3px), linear-gradient(180deg, #384255 0%, #253042 100%)',
                   borderColor: '#D4AF37',
+                  boxShadow: '0 3px 10px rgba(0,0,0,0.4), 0 0 12px rgba(212,175,55,0.15)',
                 },
               }}
             >
@@ -334,16 +337,22 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                 fontWeight: 750,
                 bgcolor: copied ? '#059669' : '#D4AF37',
                 color: copied ? '#FFFFFF' : '#08080B',
+                borderRadius: 2,
                 boxShadow: copied
-                  ? 'inset 0 1px 1px rgba(255,255,255,0.35), 0 2px 4px rgba(0,0,0,0.2)'
-                  : 'inset 0 1px 1px rgba(255,255,255,0.45), inset 0 -1px 1px rgba(0,0,0,0.25), 0 2px 6px rgba(212,175,55,0.3)',
-                px: 1.8,
-                py: 0.4,
+                  ? 'inset 0 1px 1px rgba(255,255,255,0.35), 0 2px 6px rgba(0,0,0,0.25)'
+                  : 'inset 0 1px 1px rgba(255,255,255,0.5), inset 0 -1px 1px rgba(0,0,0,0.25), 0 2px 8px rgba(212,175,55,0.35)',
+                px: 2,
+                py: 0.5,
+                letterSpacing: '0.02em',
+                transition: 'all 0.2s ease',
                 '&:hover': {
                   bgcolor: copied ? '#047857' : '#E5C158',
                   boxShadow: copied
-                    ? 'inset 0 1px 1px rgba(255,255,255,0.4), 0 2px 6px rgba(0,0,0,0.3)'
-                    : 'inset 0 1px 1px rgba(255,255,255,0.5), inset 0 -1px 1px rgba(0,0,0,0.3), 0 3px 10px rgba(212,175,55,0.45)',
+                    ? 'inset 0 1px 1px rgba(255,255,255,0.4), 0 2px 8px rgba(0,0,0,0.3)'
+                    : 'inset 0 1px 1px rgba(255,255,255,0.55), inset 0 -1px 1px rgba(0,0,0,0.3), 0 3px 12px rgba(212,175,55,0.5)',
+                },
+                '&:active': {
+                  transform: 'scale(0.97)',
                 },
               }}
             >
@@ -358,12 +367,15 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             display: 'flex',
             alignItems: 'center',
             px: { xs: 2, md: 2.5 },
-            py: 1.25,
+            py: 1.4,
             bgcolor: isDark ? '#07070D' : '#141E33',
-            borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.08)'}`,
+            borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.09)'}`,
             overflowX: 'auto',
-            gap: 1.2,
+            gap: 1,
             position: 'relative',
+            scrollbarWidth: 'thin',
+            '&::-webkit-scrollbar': { height: 4 },
+            '&::-webkit-scrollbar-thumb': { bgcolor: isDark ? 'rgba(212,175,55,0.25)' : 'rgba(0,0,0,0.15)', borderRadius: 2 },
           }}
         >
           {/* Thin gold underline beneath entire strip */}
@@ -376,8 +388,22 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
               right: 0,
               height: '1px',
               bgcolor: gold.wash,
-              opacity: isDark ? 0.35 : 0.22,
+              opacity: isDark ? 0.4 : 0.25,
               pointerEvents: 'none',
+            }}
+          />
+
+          {/* Left gold spine accent */}
+          <Box
+            aria-hidden="true"
+            sx={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              bottom: 0,
+              width: '2px',
+              bgcolor: isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.2)',
+              opacity: 0.6,
             }}
           />
 
@@ -390,24 +416,32 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                 size="small"
                 sx={{
                   fontFamily: monoFont,
-                  fontSize: '0.76rem',
+                  fontSize: '0.78rem',
                   fontWeight: 750,
                   whiteSpace: 'nowrap',
-                  px: 1.75,
-                  py: 0.5,
-                  borderRadius: 2,
+                  px: 2,
+                  py: 0.6,
+                  borderRadius: 2.5,
                   color: isSelected ? '#F5E6AB' : '#94A3B8',
-                  bgcolor: isSelected ? 'rgba(212,175,55,0.18)' : 'transparent',
+                  bgcolor: isSelected
+                    ? isDark ? 'rgba(212,175,55,0.22)' : '#FEF9E7'
+                    : 'transparent',
                   border: '1px solid',
-                  borderColor: isSelected ? '#D4AF37' : 'rgba(148,163,184,0.15)',
+                  borderColor: isSelected ? '#D4AF37' : isDark ? 'rgba(148,163,184,0.12)' : 'rgba(255,255,255,0.08)',
                   boxShadow: isSelected
                     ? isDark
-                      ? '0 3px 8px rgba(0,0,0,0.5), 0 1px 3px rgba(212,175,55,0.25)'
-                      : '0 2px 6px rgba(184,134,11,0.2)'
+                      ? '0 4px 10px rgba(0,0,0,0.5), 0 0 12px rgba(212,175,55,0.25), inset 0 0 8px rgba(212,175,55,0.05)'
+                      : '0 2px 8px rgba(184,134,11,0.22), inset 0 0 4px rgba(184,134,11,0.1)'
                     : 'none',
+                  letterSpacing: '0.02em',
+                  transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
+                  position: 'relative',
                   '&:hover': {
-                    bgcolor: 'rgba(212,175,55,0.1)',
+                    bgcolor: isSelected ? (isDark ? 'rgba(212,175,55,0.22)' : '#FEF9E7') : isDark ? 'rgba(212,175,55,0.08)' : 'rgba(212,175,55,0.04)',
                     borderColor: '#D4AF37',
+                  },
+                  '&:active': {
+                    transform: 'scale(0.96)',
                   },
                 }}
               >
@@ -418,8 +452,8 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
 
           {/* If clone selected, provide quick template picker chips */}
           {activeTab === 'clone' && (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, ml: 'auto' }}>
-              <Typography sx={{ fontFamily: monoFont, fontSize: '0.7rem', color: '#64748B', display: { xs: 'none', md: 'block' } }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6, ml: 'auto', paddingLeft: 1 }}>
+              <Typography sx={{ fontFamily: monoFont, fontSize: '0.68rem', color: '#64748B', display: { xs: 'none', md: 'block' }, fontWeight: 600, letterSpacing: '0.08em' }}>
                 TEMPLATE:
               </Typography>
               {['sovereign-cadre', 'webgpu-tensor-flow', 'hexstrike-guard'].map((tName) => (
@@ -433,10 +467,17 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                     fontSize: '0.68rem',
                     fontWeight: 700,
                     cursor: 'pointer',
-                    bgcolor: selectedTemplate === tName ? 'rgba(56,189,248,0.18)' : 'rgba(255,255,255,0.04)',
+                    bgcolor: selectedTemplate === tName ? 'rgba(56,189,248,0.20)' : 'rgba(255,255,255,0.045)',
                     color: selectedTemplate === tName ? '#38BDF8' : '#94A3B8',
                     border: '1px solid',
-                    borderColor: selectedTemplate === tName ? '#38BDF8' : 'rgba(255,255,255,0.08)',
+                    borderColor: selectedTemplate === tName ? '#38BDF8' : isDark ? 'rgba(148,163,184,0.15)' : 'rgba(255,255,255,0.1)',
+                    borderRadius: 1.5,
+                    py: 0.4,
+                    px: 1.2,
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                      bgcolor: selectedTemplate === tName ? 'rgba(56,189,248,0.25)' : 'rgba(255,255,255,0.07)',
+                    },
                   }}
                 />
               ))}
@@ -456,8 +497,23 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             opacity: isSimulating ? 0.35 : 1,
             transition: 'opacity 0.18s ease',
             position: 'relative',
+            borderRadius: 0,
           }}
         >
+          {/* Subtle dark vignette overlay on the screen */}
+          {isDark && (
+            <Box
+              aria-hidden="true"
+              sx={{
+                position: 'absolute',
+                inset: 0,
+                pointerEvents: 'none',
+                background: 'linear-gradient(180deg, rgba(0,0,0,0.35) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.25) 100%)',
+                zIndex: 1,
+              }}
+            />
+          )}
+
           {/* Scan-line texture effect overlay (dark mode only) */}
           {isDark && (
             <Box
@@ -466,12 +522,30 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                 position: 'absolute',
                 inset: 0,
                 pointerEvents: 'none',
-                background: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 2px)',
-                opacity: 0.015,
+                background: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.045) 0px, rgba(255,255,255,0.045) 1px, transparent 1px, transparent 2px)',
+                opacity: 0.018,
                 zIndex: 1,
               }}
             />
           )}
+
+          {/* Subtle CRT curve hint in screen corners */}
+          <Box
+            aria-hidden="true"
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 40,
+              pointerEvents: 'none',
+              zIndex: 1,
+              background: isDark
+                ? 'linear-gradient(180deg, rgba(0,0,0,0.35) 0%, transparent 100%)'
+                : 'linear-gradient(180deg, rgba(0,0,0,0.05) 0%, transparent 100%)',
+              borderRadius: '4px 4px 0 0',
+            }}
+          />
 
           {activeData.lines.map((line, idx) => {
             if (line.type === 'empty') {
@@ -480,10 +554,10 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             if (line.type === 'command') {
               return (
                 <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5, flexWrap: 'wrap', position: 'relative', zIndex: 2 }}>
-                  <Typography component="span" sx={{ fontFamily: monoFont, color: '#D4AF37', fontWeight: 800 }}>
-                    user@zoth-metal:~$
+                  <Typography component="span" sx={{ fontFamily: monoFont, color: '#D4AF37', fontWeight: 800, textShadow: isDark ? '0 0 6px rgba(212,175,55,0.4)' : 'none' }}>
+                    user@zoth-metal:~
                   </Typography>
-                  <Typography component="span" sx={{ fontFamily: monoFont, color: '#FFFFFF', fontWeight: 800 }}>
+                  <Typography component="span" sx={{ fontFamily: monoFont, color: '#FFFFFF', fontWeight: 800, textShadow: isDark ? '0 0 6px rgba(255,255,255,0.3)' : 'none' }}>
                     {activeData.cmd}
                   </Typography>
                   <Box
@@ -494,7 +568,7 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                       height: '15px',
                       bgcolor: '#D4AF37',
                       ml: 0.5,
-                      boxShadow: '0 0 8px #D4AF37, 0 0 14px rgba(212,175,55,0.6)',
+                      boxShadow: '0 0 8px #D4AF37, 0 0 14px rgba(212,175,55,0.6), 0 0 20px rgba(212,175,55,0.3)',
                       animation: 'blinkCursor 1s step-start infinite',
                       '@keyframes blinkCursor': {
                         '50%': { opacity: 0 },
@@ -506,28 +580,28 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             }
             if (line.type === 'dim') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#64748B', fontSize: '0.82rem', position: 'relative', zIndex: 2 }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#64748B', fontSize: '0.82rem', position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 4px rgba(100,116,139,0.2)' : 'none' }}>
                   {line.text}
                 </Typography>
               );
             }
             if (line.type === 'success') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#34D399', fontWeight: 600, position: 'relative', zIndex: 2 }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#34D399', fontWeight: 600, position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 6px rgba(52,211,153,0.3)' : 'none' }}>
                   {line.text}
                 </Typography>
               );
             }
             if (line.type === 'cyan') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#38BDF8', fontWeight: 600, position: 'relative', zIndex: 2 }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#38BDF8', fontWeight: 600, position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 6px rgba(56,189,248,0.3)' : 'none' }}>
                   {line.text}
                 </Typography>
               );
             }
             if (line.type === 'gold') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#F5E6AB', fontWeight: 750, mt: 0.5, position: 'relative', zIndex: 2 }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#F5E6AB', fontWeight: 750, mt: 0.5, position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 8px rgba(245,230,171,0.45)' : '0 0 6px rgba(245,230,171,0.2)' }}>
                   {line.text}
                 </Typography>
               );
@@ -846,45 +920,99 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
         elevation={0}
         sx={{
           p: { xs: 3, md: 4.5 },
-          borderRadius: 3.5,
+          borderRadius: 4,
           bgcolor: isDark ? '#0B0B12' : '#FFFFFF',
-          border: `1px solid ${isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.28)'}`,
+          border: `1px solid ${isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.32)'}`,
           boxShadow: isDark
-            ? '0 18px 42px rgba(0,0,0,0.65), 0 0 28px rgba(212,175,55,0.06)'
-            : '0 18px 42px rgba(16,24,40,0.08)',
+            ? '0 22px 52px -14px rgba(0,0,0,0.75), 0 0 40px -10px rgba(212,175,55,0.08), 0 0 80px -30px rgba(212,175,55,0.05)'
+            : '0 22px 52px -14px rgba(16,24,40,0.1), 0 0 40px -10px rgba(212,175,55,0.10)',
           position: 'relative',
           overflow: 'hidden',
+          transition: 'box-shadow 0.35s ease',
+          '&:hover': {
+            boxShadow: isDark
+              ? '0 28px 64px -16px rgba(0,0,0,0.82), 0 0 52px -10px rgba(212,175,55,0.14), 0 0 100px -30px rgba(212,175,55,0.08)'
+              : '0 28px 64px -16px rgba(16,24,40,0.13), 0 0 52px -10px rgba(212,175,55,0.16)',
+          },
         }}
       >
-        {/* Soft pillar background accent glow - top right */}
+        {/* Dramatic gold glow — layered radial system */}
+        {/* Far outer ambient wash */}
         <Box
           aria-hidden="true"
           sx={{
             position: 'absolute',
             top: 0,
             right: 0,
-            width: 320,
-            height: 320,
+            width: 480,
+            height: 480,
             pointerEvents: 'none',
             background: isDark
-              ? 'radial-gradient(circle at top right, rgba(212,175,55,0.12) 0%, transparent 70%)'
-              : 'radial-gradient(circle at top right, rgba(212,175,55,0.08) 0%, transparent 70%)',
+              ? 'radial-gradient(circle at top right, rgba(212,175,55,0.14) 0%, rgba(212,175,55,0.04) 45%, transparent 75%)'
+              : 'radial-gradient(circle at top right, rgba(212,175,55,0.10) 0%, rgba(212,175,55,0.02) 45%, transparent 75%)',
+            filter: 'blur(8px)',
           }}
         />
-
-        {/* Mirrored opposing glow - bottom left */}
+        {/* Mid focused glow */}
         <Box
           aria-hidden="true"
           sx={{
             position: 'absolute',
-            bottom: 0,
-            left: 0,
-            width: 420,
-            height: 420,
+            top: -20,
+            right: -20,
+            width: 320,
+            height: 320,
             pointerEvents: 'none',
             background: isDark
-              ? 'radial-gradient(circle at bottom left, rgba(212,175,55,0.07) 0%, transparent 70%)'
-              : 'radial-gradient(circle at bottom left, rgba(212,175,55,0.05) 0%, transparent 70%)',
+              ? 'radial-gradient(circle at top right, rgba(245,230,171,0.16) 0%, rgba(212,175,55,0.06) 40%, transparent 70%)'
+              : 'radial-gradient(circle at top right, rgba(254,249,231,0.22) 0%, rgba(212,175,55,0.07) 40%, transparent 70%)',
+            filter: 'blur(14px)',
+          }}
+        />
+        {/* Tight warm glow behind icon area */}
+        <Box
+          aria-hidden="true"
+          sx={{
+            position: 'absolute',
+            top: 20,
+            right: 40,
+            width: 180,
+            height: 180,
+            pointerEvents: 'none',
+            background: isDark
+              ? 'radial-gradient(circle, rgba(245,230,171,0.18) 0%, rgba(212,175,55,0.06) 55%, transparent 75%)'
+              : 'radial-gradient(circle, rgba(254,249,231,0.24) 0%, rgba(212,175,55,0.08) 55%, transparent 75%)',
+            filter: 'blur(12px)',
+          }}
+        />
+        {/* Bottom-left counter glow */}
+        <Box
+          aria-hidden="true"
+          sx={{
+            position: 'absolute',
+            bottom: -30,
+            left: -30,
+            width: 380,
+            height: 380,
+            pointerEvents: 'none',
+            background: isDark
+              ? 'radial-gradient(circle at bottom left, rgba(212,175,55,0.05) 0%, transparent 65%)'
+              : 'radial-gradient(circle at bottom left, rgba(212,175,55,0.04) 0%, transparent 65%)',
+            filter: 'blur(16px)',
+          }}
+        />
+        {/* Subtle top-edge gold hairline on the whole card */}
+        <Box
+          aria-hidden="true"
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0.5,
+            right: 0.5,
+            height: '1px',
+            bgcolor: gold.wash,
+            opacity: isDark ? 0.4 : 0.25,
+            zIndex: 2,
           }}
         />
 
@@ -988,42 +1116,70 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                 <Paper
                   variant="outlined"
                   sx={{
-                    p: 2,
+                    p: 2.2,
                     height: '100%',
-                    borderRadius: 2.5,
+                    borderRadius: 2.8,
                     bgcolor: isDark ? '#07070B' : '#F8FAFC',
-                    borderColor: isDark ? 'rgba(212,175,55,0.22)' : '#EAECF0',
+                    borderColor: isDark ? 'rgba(212,175,55,0.28)' : '#EAECF0',
                     position: 'relative',
                     overflow: 'hidden',
-                    transition: 'all 0.22s ease',
+                    transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
                     '&:hover': {
                       borderColor: gold.accent,
-                      transform: 'translateY(-2px)',
+                      transform: 'translateY(-3px)',
                       boxShadow: isDark
-                        ? '0 6px 20px -4px rgba(0,0,0,0.6), 0 0 16px rgba(212,175,55,0.25)'
-                        : '0 6px 20px -4px rgba(16,24,40,0.1), 0 0 14px rgba(184,134,11,0.2)',
+                        ? '0 8px 24px -6px rgba(0,0,0,0.6), 0 0 18px rgba(212,175,55,0.3)'
+                        : '0 8px 24px -6px rgba(16,24,40,0.12), 0 0 16px rgba(184,134,11,0.25)',
+                      '& .metric-accent-top': {
+                        bgcolor: gold.accent,
+                        opacity: 1,
+                      },
+                      '& .metric-glow-dot': {
+                        opacity: 1,
+                        transform: 'scale(1)',
+                      },
                     },
                   }}
                 >
-                  {/* Subtle gold top accent strip */}
+                  {/* Animated gold accent strip — top */}
                   <Box
+                    className="metric-accent-top"
                     sx={{
                       position: 'absolute',
                       top: 0,
                       left: 0,
                       right: 0,
-                      height: '2px',
+                      height: '3px',
                       bgcolor: gold.wash,
-                      borderBottom: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.2)'}`,
+                      opacity: isDark ? 0.5 : 0.4,
+                      transition: 'all 0.25s ease',
+                      borderBottom: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : 'rgba(184,134,11,0.15)'}`,
                     }}
                   />
-                  <Typography variant="caption" sx={{ fontFamily: monoFont, color: isDark ? '#94A3B8' : '#64748B', fontWeight: 700, display: 'block', mb: 0.5, mt: 0.2 }}>
+                  {/* Subtle glow dot at top-right */}
+                  <Box
+                    className="metric-glow-dot"
+                    sx={{
+                      position: 'absolute',
+                      top: 6,
+                      right: 6,
+                      width: 5,
+                      height: 5,
+                      borderRadius: '50%',
+                      bgcolor: gold.accent,
+                      boxShadow: `0 0 6px ${gold.accent}`,
+                      opacity: 0,
+                      transform: 'scale(0)',
+                      transition: 'all 0.3s ease',
+                    }}
+                  />
+                  <Typography variant="caption" sx={{ fontFamily: monoFont, color: isDark ? '#94A3B8' : '#64748B', fontWeight: 700, display: 'block', mb: 0.5, mt: 0.3, letterSpacing: '0.04em' }}>
                     {metric.label}
                   </Typography>
-                  <Typography variant="h6" sx={{ fontFamily: monoFont, fontWeight: 800, color: isDark ? gold.soft : gold.accent, mb: 0.5, fontSize: { xs: '1rem', md: '1.25rem' } }}>
+                  <Typography variant="h6" sx={{ fontFamily: monoFont, fontWeight: 800, color: isDark ? gold.soft : gold.accent, mb: 0.5, fontSize: { xs: '1.05rem', md: '1.3rem' }, letterSpacing: '-0.01em' }}>
                     {metric.value}
                   </Typography>
-                  <Typography variant="body2" sx={{ fontSize: '0.78rem', color: isDark ? '#64748B' : '#98A2B3' }}>
+                  <Typography variant="body2" sx={{ fontSize: '0.79rem', color: isDark ? '#64748B' : '#98A2B3', borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)'}`, pt: 0.6, mt: 0.6 }}>
                     {metric.desc}
                   </Typography>
                 </Paper>
@@ -1039,22 +1195,37 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
             <Box
               sx={{
                 p: 2.5,
-                borderRadius: 2.5,
-                bgcolor: isDark ? 'rgba(255,255,255,0.02)' : '#F9FAFB',
-                border: `1px solid ${isDark ? '#26262F' : '#EAECF0'}`,
+                borderRadius: 2.8,
+                bgcolor: isDark ? 'rgba(255,255,255,0.025)' : '#F9FAFB',
+                border: `1px solid ${isDark ? 'rgba(212,175,55,0.22)' : 'rgba(184,134,11,0.2)'}`,
                 height: '100%',
+                position: 'relative',
+                overflow: 'hidden',
               }}
             >
+              {/* Subtle inner glow accent - top edge */}
+              <Box
+                aria-hidden="true"
+                sx={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: '2px',
+                  bgcolor: gold.wash,
+                  opacity: isDark ? 0.35 : 0.25,
+                }}
+              />
               <Typography sx={{ fontFamily: monoFont, fontSize: '0.74rem', fontWeight: 800, color: isDark ? gold.soft : gold.accent, letterSpacing: '0.1em', mb: 1.5 }}>
                 ARCHITECTURAL GUARANTEES &amp; INVARIANTS
               </Typography>
-              <Stack spacing={1.2}>
+              <Stack spacing={1.3}>
                 {activePillar.invariants.map((inv, invIdx) => (
-                  <Box key={invIdx} sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
+                  <Box key={invIdx} sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25, p: '3px 0', borderBottom: invIdx < activePillar.invariants.length - 1 ? `1px solid ${isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.04)'}` : 'none' }}>
                     <Box
                       sx={{
-                        width: 22,
-                        height: 22,
+                        width: 24,
+                        height: 24,
                         borderRadius: '50%',
                         bgcolor: gold.wash,
                         display: 'flex',
@@ -1062,12 +1233,18 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                         justifyContent: 'center',
                         flexShrink: 0,
                         mt: '1px',
-                        border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.2)'}`,
+                        border: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)'}`,
+                        boxShadow: isDark ? '0 0 6px rgba(212,175,55,0.15)' : 'none',
+                        transition: 'all 0.2s ease',
+                        '&:hover': {
+                          bgcolor: isDark ? 'rgba(212,175,55,0.2)' : '#FEF9E7',
+                          boxShadow: `0 0 10px ${gold.accent}`,
+                        },
                       }}
                     >
                       <CheckCircleIcon sx={{ fontSize: 16, color: '#34D399' }} />
                     </Box>
-                    <Typography variant="body2" sx={{ color: isDark ? '#D1D5DB' : '#374151', lineHeight: 1.55, fontSize: '0.86rem' }}>
+                    <Typography variant="body2" sx={{ color: isDark ? '#D1D5DB' : '#374151', lineHeight: 1.55, fontSize: '0.87rem' }}>
                       {inv}
                     </Typography>
                   </Box>
@@ -1081,16 +1258,32 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
             <Box
               sx={{
                 p: 2.5,
-                borderRadius: 2.5,
-                bgcolor: isDark ? 'rgba(255,255,255,0.02)' : '#F9FAFB',
-                border: `1px solid ${isDark ? '#26262F' : '#EAECF0'}`,
+                borderRadius: 2.8,
+                bgcolor: isDark ? 'rgba(255,255,255,0.025)' : '#F9FAFB',
+                border: `1px solid ${isDark ? 'rgba(212,175,55,0.22)' : 'rgba(184,134,11,0.2)'}`,
                 height: '100%',
+                position: 'relative',
+                overflow: 'hidden',
               }}
             >
+              {/* Left-edge gold accent bar */}
+              <Box
+                aria-hidden="true"
+                sx={{
+                  position: 'absolute',
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  width: '3px',
+                  bgcolor: isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.3)',
+                  borderRadius: 2.8,
+                  zIndex: 1,
+                }}
+              />
               <Typography sx={{ fontFamily: monoFont, fontSize: '0.74rem', fontWeight: 800, color: isDark ? gold.soft : gold.accent, letterSpacing: '0.1em', mb: 1.5 }}>
                 RUNTIME SPECIFICATIONS
               </Typography>
-              <Stack spacing={1.2}>
+              <Stack spacing={0.3}>
                 {activePillar.specs.map((spec, sIdx) => (
                   <Box
                     key={sIdx}
@@ -1098,20 +1291,21 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      py: 0.6,
-                      px: 1,
+                      py: 0.7,
+                      px: 1.2,
                       borderLeft: `2px solid ${gold.wash}`,
-                      borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}`,
-                      transition: 'background-color 0.15s ease',
+                      borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)'}`,
+                      transition: 'background-color 0.15s ease, border-left-color 0.2s ease',
                       '&:hover': {
-                        bgcolor: isDark ? 'rgba(212,175,55,0.04)' : 'rgba(212,175,55,0.03)',
+                        bgcolor: isDark ? 'rgba(212,175,55,0.05)' : 'rgba(212,175,55,0.035)',
+                        borderLeftColor: gold.accent,
                       },
                     }}
                   >
-                    <Typography sx={{ fontFamily: monoFont, fontSize: '0.74rem', color: isDark ? '#94A3B8' : '#64748B' }}>
+                    <Typography sx={{ fontFamily: monoFont, fontSize: '0.74rem', color: isDark ? '#94A3B8' : '#64748B', fontWeight: 600 }}>
                       {spec.label}
                     </Typography>
-                    <Typography sx={{ fontFamily: monoFont, fontSize: '0.78rem', fontWeight: 750, color: isDark ? gold.soft : gold.accent }}>
+                    <Typography sx={{ fontFamily: monoFont, fontSize: '0.78rem', fontWeight: 750, color: isDark ? gold.soft : gold.accent, letterSpacing: '-0.01em' }}>
                       {spec.value}
                     </Typography>
                   </Box>
@@ -1262,72 +1456,101 @@ export default function HomePage() {
           /* Paper texture: layered gradients for tactile card feel */
           background: isDark
             ? `
-                radial-gradient(ellipse at 20% 20%, rgba(212,175,55,0.04) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(212,175,55,0.03) 0%, transparent 50%),
-                linear-gradient(165deg, ${theme.palette.background.paper} 0%, rgba(212,175,55,0.05) 100%)
+                radial-gradient(ellipse at 15% 15%, rgba(212,175,55,0.055) 0%, transparent 45%),
+                radial-gradient(ellipse at 85% 85%, rgba(212,175,55,0.045) 0%, transparent 45%),
+                radial-gradient(ellipse at 50% 100%, rgba(212,175,55,0.025) 0%, transparent 55%),
+                linear-gradient(165deg, ${theme.palette.background.paper} 0%, rgba(212,175,55,0.06) 100%)
               `
             : `
-                radial-gradient(ellipse at 20% 20%, rgba(212,175,55,0.06) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(184,134,11,0.04) 0%, transparent 50%),
-                linear-gradient(165deg, ${theme.palette.background.paper} 0%, #FEF9E720 100%)
+                radial-gradient(ellipse at 15% 15%, rgba(212,175,55,0.075) 0%, transparent 45%),
+                radial-gradient(ellipse at 85% 85%, rgba(184,134,11,0.055) 0%, transparent 45%),
+                radial-gradient(ellipse at 50% 100%, rgba(184,134,11,0.03) 0%, transparent 55%),
+                linear-gradient(165deg, ${theme.palette.background.paper} 0%, #FEF9E726 100%)
               `,
           /* Multi-layered gold glow system: ambient + focused + edge + subtle inner glow border */
           boxShadow: isDark
             ? `
                 0 0 0 1px rgba(212,175,55,0.08),
-                0 20px 60px -12px rgba(0,0,0,0.7),
-                0 0 40px -8px rgba(212,175,55,0.12),
-                inset 0 0 20px rgba(212,175,55,0.05),
-                inset 0 1px 0 rgba(212,175,55,0.08)
+                0 24px 72px -14px rgba(0,0,0,0.75),
+                0 0 48px -10px rgba(212,175,55,0.14),
+                0 0 80px -24px rgba(212,175,55,0.08),
+                inset 0 0 24px rgba(212,175,55,0.05),
+                inset 0 1px 0 rgba(212,175,55,0.10),
+                inset 0 -1px 0 rgba(255,255,255,0.03)
               `
             : `
                 0 0 0 1px rgba(184,134,11,0.12),
-                0 20px 60px -12px rgba(16,24,40,0.12),
-                0 0 40px -8px rgba(212,175,55,0.15),
-                inset 0 0 20px rgba(184,134,11,0.05),
-                inset 0 1px 0 rgba(255,255,255,0.5)
+                0 24px 72px -14px rgba(16,24,40,0.14),
+                0 0 48px -10px rgba(212,175,55,0.18),
+                0 0 80px -24px rgba(212,175,55,0.09),
+                inset 0 0 24px rgba(184,134,11,0.05),
+                inset 0 1px 0 rgba(255,255,255,0.55),
+                inset 0 -1px 0 rgba(0,0,0,0.03)
               `,
           display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1.15fr) minmax(280px, 400px)' },
-          gap: { xs: 4, md: 7 },
+          gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1.1fr) minmax(280px, 400px)' },
+          gap: { xs: 4, md: 7.5 },
           alignItems: 'center',
           transition: 'box-shadow 0.4s ease, transform 0.3s ease',
           '&:hover': {
             boxShadow: isDark
               ? `
                   0 0 0 1px rgba(212,175,55,0.15),
-                  0 24px 72px -12px rgba(0,0,0,0.75),
-                  0 0 56px -8px rgba(212,175,55,0.18),
-                  inset 0 0 24px rgba(212,175,55,0.08),
-                  inset 0 1px 0 rgba(212,175,55,0.12)
+                  0 28px 80px -14px rgba(0,0,0,0.8),
+                  0 0 56px -10px rgba(212,175,55,0.20),
+                  0 0 96px -24px rgba(212,175,55,0.10),
+                  inset 0 0 28px rgba(212,175,55,0.08),
+                  inset 0 1px 0 rgba(212,175,55,0.12),
+                  inset 0 -1px 0 rgba(255,255,255,0.04)
                 `
               : `
-                  0 0 0 1px rgba(184,134,11,0.2),
-                  0 24px 72px -12px rgba(16,24,40,0.15),
-                  0 0 56px -8px rgba(212,175,55,0.22),
-                  inset 0 0 24px rgba(184,134,11,0.08),
-                  inset 0 1px 0 rgba(255,255,255,0.6)
+                  0 0 0 1px rgba(184,134,11,0.20),
+                  0 28px 80px -14px rgba(16,24,40,0.16),
+                  0 0 56px -10px rgba(212,175,55,0.24),
+                  0 0 96px -24px rgba(212,175,55,0.11),
+                  inset 0 0 28px rgba(184,134,11,0.08),
+                  inset 0 1px 0 rgba(255,255,255,0.62),
+                  inset 0 -1px 0 rgba(0,0,0,0.04)
                 `,
           },
         }}
       >
-        {/* Soft, large ambient gold glow behind logo */}
+        {/* Ambient mega-glow — large, soft, behind logo area */}
         <Box
           aria-hidden="true"
           sx={{
             position: 'absolute',
-            top: '50%',
-            right: { xs: '8%', md: '14%' },
+            top: '48%',
+            right: { xs: '6%', md: '12%' },
             transform: 'translateY(-50%)',
-            width: { xs: 300, md: 420 },
-            height: { xs: 300, md: 420 },
+            width: { xs: 320, md: 440 },
+            height: { xs: 320, md: 440 },
             pointerEvents: 'none',
             zIndex: 0,
             background: isDark
-              ? 'radial-gradient(circle, rgba(212,175,55,0.25) 0%, rgba(212,175,55,0.09) 40%, transparent 70%)'
-              : 'radial-gradient(circle, rgba(212,175,55,0.30) 0%, rgba(212,175,55,0.12) 40%, transparent 70%)',
-            filter: 'blur(16px)',
+              ? 'radial-gradient(circle, rgba(212,175,55,0.28) 0%, rgba(212,175,55,0.10) 40%, transparent 72%)'
+              : 'radial-gradient(circle, rgba(212,175,55,0.34) 0%, rgba(212,175,55,0.13) 40%, transparent 72%)',
+            filter: 'blur(22px)',
             transition: 'all 0.5s ease',
+          }}
+        />
+
+        {/* Secondary glow: tighter, warmer halo near logo */}
+        <Box
+          aria-hidden="true"
+          sx={{
+            position: 'absolute',
+            top: '52%',
+            right: { xs: '10%', md: '16%' },
+            transform: 'translateY(-50%)',
+            width: { xs: 180, md: 260 },
+            height: { xs: 180, md: 260 },
+            pointerEvents: 'none',
+            zIndex: 1,
+            background: isDark
+              ? 'radial-gradient(circle, rgba(245,230,171,0.20) 0%, rgba(212,175,55,0.06) 50%, transparent 75%)'
+              : 'radial-gradient(circle, rgba(245,230,171,0.28) 0%, rgba(212,175,55,0.08) 50%, transparent 75%)',
+            filter: 'blur(14px)',
           }}
         />
 
@@ -1366,8 +1589,8 @@ export default function HomePage() {
               mb: 4.5,
               borderRadius: 2,
               boxShadow: isDark
-                ? '0 0 12px rgba(212,175,55,0.5), 0 0 24px rgba(212,175,55,0.2)'
-                : '0 0 12px rgba(184,134,11,0.4), 0 0 24px rgba(184,134,11,0.15)',
+                ? '0 0 12px rgba(212,175,55,0.5), 0 0 24px rgba(212,175,55,0.2), 0 0 40px rgba(212,175,55,0.1)'
+                : '0 0 12px rgba(184,134,11,0.4), 0 0 24px rgba(184,134,11,0.15), 0 0 40px rgba(184,134,11,0.08)',
               transition: 'box-shadow 0.3s ease',
             }}
           />
@@ -1385,13 +1608,13 @@ export default function HomePage() {
           </Typography>
 
           <Box sx={{ display: 'flex', gap: 1.5, mt: 4.5, flexWrap: 'wrap' }}>
-            <Button component={RouterLink} to="/adytum" variant="contained" color="primary" size="large" className="pulse-glow-btn" sx={{ px: 3.8, py: 1.3, fontWeight: 800 }}>
+            <Button component={RouterLink} to="/adytum" variant="contained" color="primary" size="large" className="pulse-glow-btn" sx={{ px: 3.8, py: 1.3, fontWeight: 800, boxShadow: isDark ? '0 4px 20px rgba(212,175,55,0.4), 0 0 32px rgba(212,175,55,0.15)' : '0 4px 20px rgba(184,134,11,0.3), 0 0 32px rgba(184,134,11,0.1)', '&:hover': { boxShadow: isDark ? '0 6px 28px rgba(212,175,55,0.55), 0 0 44px rgba(212,175,55,0.22)' : '0 6px 28px rgba(184,134,11,0.45), 0 0 44px rgba(184,134,11,0.16)' } }}>
               Enter Adytum Rite
             </Button>
-            <Button component={RouterLink} to="/tools" variant="outlined" color="primary" size="large" sx={{ px: 3.2, py: 1.3, fontWeight: 750 }}>
+            <Button component={RouterLink} to="/tools" variant="outlined" color="primary" size="large" sx={{ px: 3.2, py: 1.3, fontWeight: 750, borderColor: isDark ? 'rgba(212,175,55,0.4)' : '#B8860B', '&:hover': { borderColor: gold.accent, boxShadow: isDark ? '0 0 20px rgba(212,175,55,0.25)' : '0 0 16px rgba(184,134,11,0.2)' } }}>
               Explore 25 Micro-Tools
             </Button>
-            <Button component={RouterLink} to="/zoth-os" variant="text" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2.5, mt: 0.5 }}>
+            <Button component={RouterLink} to="/zoth-os" variant="text" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2.5, mt: 0.5, '&:hover': { bgcolor: gold.wash, borderRadius: 2 } }}>
               Zoth OS ISO →
             </Button>
           </Box>
@@ -1413,8 +1636,9 @@ export default function HomePage() {
             minHeight: { xs: 280, md: 380 },
             borderRadius: 3,
             background: isDark
-              ? 'radial-gradient(circle at center, rgba(212,175,55,0.07) 0%, rgba(0,0,0,0.2) 70%, transparent 100%)'
-              : 'radial-gradient(circle at center, rgba(212,175,55,0.08) 0%, rgba(0,0,0,0.02) 70%, transparent 100%)',
+              ? 'radial-gradient(circle at center, rgba(212,175,55,0.08) 0%, rgba(0,0,0,0.22) 70%, transparent 100%)'
+              : 'radial-gradient(circle at center, rgba(212,175,55,0.09) 0%, rgba(0,0,0,0.025) 70%, transparent 100%)',
+            isolation: 'isolate',
           }}
         >
           {/* Third, even larger, fainter outer halo behind the outer ring */}
@@ -1422,18 +1646,18 @@ export default function HomePage() {
             aria-hidden="true"
             sx={{
               position: 'absolute',
-              width: { xs: 340, md: 460 },
-              height: { xs: 340, md: 460 },
+              width: { xs: 360, md: 480 },
+              height: { xs: 360, md: 480 },
               borderRadius: '50%',
               background: isDark
-                ? 'radial-gradient(circle, rgba(212,175,55,0.07) 0%, rgba(212,175,55,0.02) 50%, transparent 70%)'
-                : 'radial-gradient(circle, rgba(212,175,55,0.12) 0%, rgba(212,175,55,0.03) 50%, transparent 70%)',
-              filter: 'blur(28px)',
+                ? 'radial-gradient(circle, rgba(212,175,55,0.09) 0%, rgba(212,175,55,0.025) 50%, transparent 72%)'
+                : 'radial-gradient(circle, rgba(212,175,55,0.14) 0%, rgba(212,175,55,0.035) 50%, transparent 72%)',
+              filter: 'blur(32px)',
               animation: 'logoHaloBreath 8s ease-in-out infinite',
               animationDelay: '-4s',
               '@keyframes logoHaloBreath': {
-                '0%, 100%': { transform: 'scale(1)', opacity: 0.6 },
-                '50%': { transform: 'scale(1.05)', opacity: 0.9 },
+                '0%, 100%': { transform: 'scale(1)', opacity: 0.55 },
+                '50%': { transform: 'scale(1.06)', opacity: 0.85 },
               },
               transition: 'all 0.4s ease',
             }}
@@ -1444,19 +1668,39 @@ export default function HomePage() {
             aria-hidden="true"
             sx={{
               position: 'absolute',
-              width: { xs: 280, md: 380 },
-              height: { xs: 280, md: 380 },
+              width: { xs: 300, md: 400 },
+              height: { xs: 300, md: 400 },
               borderRadius: '50%',
               background: isDark
-                ? 'radial-gradient(circle, rgba(212,175,55,0.12) 0%, rgba(212,175,55,0.04) 50%, transparent 70%)'
-                : 'radial-gradient(circle, rgba(212,175,55,0.20) 0%, rgba(212,175,55,0.06) 50%, transparent 70%)',
-              filter: 'blur(20px)',
+                ? 'radial-gradient(circle, rgba(212,175,55,0.14) 0%, rgba(212,175,55,0.045) 50%, transparent 72%)'
+                : 'radial-gradient(circle, rgba(212,175,55,0.22) 0%, rgba(212,175,55,0.065) 50%, transparent 72%)',
+              filter: 'blur(22px)',
               animation: 'logoPulse 8s ease-in-out infinite',
               '@keyframes logoPulse': {
-                '0%, 100%': { transform: 'scale(1)', opacity: 0.75 },
-                '50%': { transform: 'scale(1.04)', opacity: 1 },
+                '0%, 100%': { transform: 'scale(1)', opacity: 0.7 },
+                '50%': { transform: 'scale(1.05)', opacity: 1 },
               },
               transition: 'all 0.4s ease',
+            }}
+          />
+
+          {/* Additional mid-tone glow ring — between inner and outer */}
+          <Box
+            aria-hidden="true"
+            sx={{
+              position: 'absolute',
+              width: { xs: 240, md: 320 },
+              height: { xs: 240, md: 320 },
+              borderRadius: '50%',
+              background: isDark
+                ? 'radial-gradient(circle, rgba(245,230,171,0.13) 0%, rgba(212,175,55,0.05) 55%, transparent 72%)'
+                : 'radial-gradient(circle, rgba(254,249,231,0.18) 0%, rgba(212,175,55,0.07) 55%, transparent 72%)',
+              filter: 'blur(16px)',
+              animation: 'logoMidPulse 6s ease-in-out infinite',
+              '@keyframes logoMidPulse': {
+                '0%, 100%': { transform: 'scale(1)', opacity: 0.6 },
+                '50%': { transform: 'scale(1.04)', opacity: 0.9 },
+              },
             }}
           />
 
@@ -1469,8 +1713,8 @@ export default function HomePage() {
               height: { xs: 200, md: 280 },
               borderRadius: '50%',
               background: isDark
-                ? 'radial-gradient(circle, rgba(212,175,55,0.25) 0%, transparent 60%)'
-                : 'radial-gradient(circle, rgba(212,175,55,0.35) 0%, transparent 60%)',
+                ? 'radial-gradient(circle, rgba(212,175,55,0.28) 0%, transparent 60%)'
+                : 'radial-gradient(circle, rgba(212,175,55,0.38) 0%, transparent 60%)',
               filter: 'blur(12px)',
               transition: 'all 0.4s ease',
             }}
@@ -1486,36 +1730,60 @@ export default function HomePage() {
         sx={{
           bgcolor: theme.palette.background.paper,
           border: `1px solid ${theme.palette.divider}`,
-          borderRadius: 3,
+          borderRadius: 3.5,
           p: { xs: 2, md: 2.5 },
           mb: 8,
           display: 'grid',
           gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(4, 1fr)' },
-          gap: 2,
-          boxShadow: isDark ? '0 10px 30px -18px rgba(0,0,0,0.8)' : '0 10px 30px -18px rgba(16,24,40,0.18)',
+          gap: 2.5,
+          boxShadow: isDark ? '0 12px 36px -18px rgba(0,0,0,0.85), 0 0 20px rgba(212,175,55,0.04)' : '0 12px 36px -18px rgba(16,24,40,0.18)',
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
+        {/* Subtle full-width gold wash background accent */}
+        <Box
+          aria-hidden="true"
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '2px',
+            bgcolor: gold.accent,
+            opacity: isDark ? 0.85 : 0.7,
+            zIndex: 3,
+          }}
+        />
+
         {[
-          { icon: <ShieldIcon sx={{ color: gold.accent, fontSize: 30 }} />, label: 'Zero-Cloud Telemetry', text: 'All LLM calls, embeddings, and memory retention stay 100% on your local metal.' },
-          { icon: <SpeedIcon sx={{ color: gold.accent, fontSize: 30 }} />, label: 'WebGPU WASM Engine', text: 'In-browser tensor matmul and neural inference running directly on client GPU.' },
-          { icon: <MemoryIcon sx={{ color: gold.accent, fontSize: 30 }} />, label: 'STDP Neuro Memory', text: 'Biological Spike-Timing-Dependent Plasticity daemon listening on 127.0.0.1:8788.' },
-          { icon: <TerminalIcon sx={{ color: gold.accent, fontSize: 30 }} />, label: 'Sovereign Agent Bridge', text: 'Decentralized peer-to-peer agent bus & consensus engine listening on 127.0.0.1:8789.' },
+          { icon: <ShieldIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'Zero-Cloud Telemetry', text: 'All LLM calls, embeddings, and memory retention stay 100% on your local metal.' },
+          { icon: <SpeedIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'WebGPU WASM Engine', text: 'In-browser tensor matmul and neural inference running directly on client GPU.' },
+          { icon: <MemoryIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'STDP Neuro Memory', text: 'Biological Spike-Timing-Dependent Plasticity daemon listening on 127.0.0.1:8788.' },
+          { icon: <TerminalIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'Sovereign Agent Bridge', text: 'Decentralized peer-to-peer agent bus & consensus engine listening on 127.0.0.1:8789.' },
         ].map((item, idx) => (
           <Box
             key={idx}
             sx={{
               position: 'relative',
               overflow: 'hidden',
-              borderRadius: 2,
+              borderRadius: 2.5,
               p: { xs: 2, md: 2.5 },
-              pt: 2.5,
+              pt: 3,
               borderRight: { md: idx < 3 ? `1px solid ${isDark ? 'rgba(212,175,55,0.22)' : 'rgba(184,134,11,0.18)'}` : 'none' },
-              transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+              transition: 'all 0.28s cubic-bezier(0.4, 0, 0.2, 1)',
               '&:hover': {
-                transform: 'translateY(-2px)',
+                transform: 'translateY(-3px)',
                 boxShadow: isDark
-                  ? '0 8px 24px -6px rgba(212,175,55,0.22)'
-                  : '0 8px 24px -6px rgba(184,134,11,0.18)',
+                  ? '0 12px 28px -8px rgba(212,175,55,0.28), 0 0 16px rgba(212,175,55,0.1)'
+                  : '0 12px 28px -8px rgba(184,134,11,0.22), 0 0 16px rgba(184,134,11,0.12)',
+                '& .feature-icon-ring': {
+                  borderColor: gold.accent,
+                  boxShadow: isDark ? '0 0 18px rgba(212,175,55,0.4), inset 0 0 8px rgba(212,175,55,0.2)' : '0 0 16px rgba(184,134,11,0.3), inset 0 0 8px rgba(184,134,11,0.15)',
+                },
+                '& .feature-icon-bg': {
+                  bgcolor: isDark ? 'rgba(212,175,55,0.18)' : '#FEF9E7',
+                },
               },
             }}
           >
@@ -1528,7 +1796,8 @@ export default function HomePage() {
                 right: 0,
                 height: '2px',
                 bgcolor: gold.accent,
-                opacity: isDark ? 0.75 : 0.65,
+                opacity: isDark ? 0.8 : 0.7,
+                zIndex: 2,
               }}
             />
 
@@ -1538,9 +1807,11 @@ export default function HomePage() {
                 fontFamily: mono,
                 fontSize: '0.68rem',
                 fontWeight: 800,
-                color: isDark ? 'rgba(212,175,55,0.7)' : 'rgba(184,134,11,0.75)',
+                color: isDark ? 'rgba(212,175,55,0.75)' : 'rgba(184,134,11,0.8)',
                 letterSpacing: '0.1em',
-                mb: 1.5,
+                mb: 2,
+                position: 'relative',
+                zIndex: 1,
               }}
             >
               0{idx + 1}
@@ -1548,23 +1819,27 @@ export default function HomePage() {
 
             {/* Circular icon frame: two-ring treatment with gold wash background and gold border ring with outer glow */}
             <Box
+              className="feature-icon-ring"
               sx={{
                 position: 'relative',
-                width: 48,
-                height: 48,
+                width: 52,
+                height: 52,
                 borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                mb: 1.75,
-                p: '3px',
-                border: `1px solid ${isDark ? 'rgba(212,175,55,0.45)' : 'rgba(184,134,11,0.45)'}`,
+                mb: 2,
+                p: '3.5px',
+                border: `1px solid ${isDark ? 'rgba(212,175,55,0.5)' : 'rgba(184,134,11,0.5)'}`,
                 boxShadow: isDark
-                  ? '0 0 12px rgba(212,175,55,0.22), inset 0 0 6px rgba(212,175,55,0.1)'
-                  : '0 0 10px rgba(184,134,11,0.18)',
+                  ? '0 0 14px rgba(212,175,55,0.28), inset 0 0 8px rgba(212,175,55,0.12)'
+                  : '0 0 12px rgba(184,134,11,0.22)',
+                transition: 'all 0.28s ease',
+                zIndex: 1,
               }}
             >
               <Box
+                className="feature-icon-bg"
                 sx={{
                   width: '100%',
                   height: '100%',
@@ -1573,19 +1848,41 @@ export default function HomePage() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   bgcolor: gold.wash,
-                  border: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : '#F0E1A8'}`,
+                  border: `1px solid ${isDark ? 'rgba(212,175,55,0.35)' : '#F0E1A8'}`,
+                  transition: 'all 0.28s ease',
                 }}
               >
                 {item.icon}
               </Box>
             </Box>
 
-            <Typography variant="subtitle1" sx={{ fontWeight: 850, fontSize: '1.02rem', mb: 0.8, color: theme.palette.text.primary }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 850, fontSize: '1.04rem', mb: 0.9, color: theme.palette.text.primary, position: 'relative', zIndex: 1 }}>
               {item.label}
             </Typography>
-            <Typography variant="body2" sx={{ fontSize: '0.88rem', color: theme.palette.text.secondary, lineHeight: 1.7 }}>
+            <Typography variant="body2" sx={{ fontSize: '0.89rem', color: theme.palette.text.secondary, lineHeight: 1.75, position: 'relative', zIndex: 1 }}>
               {item.text}
             </Typography>
+
+            {/* Subtle dot decoration at bottom-right */}
+            <Box
+              aria-hidden="true"
+              sx={{
+                position: 'absolute',
+                bottom: 8,
+                right: 10,
+                width: 5,
+                height: 5,
+                borderRadius: '50%',
+                bgcolor: gold.wash,
+                border: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)'}`,
+                boxShadow: isDark ? '0 0 4px rgba(212,175,55,0.2)' : 'none',
+                transition: 'all 0.28s ease',
+                '&:hover': {
+                  bgcolor: gold.accent,
+                  boxShadow: `0 0 8px ${gold.accent}`,
+                },
+              }}
+            />
           </Box>
         ))}
       </Box>
@@ -1654,31 +1951,35 @@ export default function HomePage() {
                 flexDirection: 'column',
                 position: 'relative',
                 overflow: 'hidden',
-                p: 1,
+                p: 1.5,
                 bgcolor: theme.palette.background.paper,
                 backgroundImage: isDark
-                  ? 'radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.05) 0%, rgba(0,0,0,0.25) 100%)'
-                  : 'radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.06) 0%, rgba(0,0,0,0.03) 100%)',
+                  ? 'radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.07) 0%, rgba(0,0,0,0.28) 100%)'
+                  : 'radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.08) 0%, rgba(0,0,0,0.035) 100%)',
                 border: '1px solid',
-                borderColor: isDark ? 'rgba(212,175,55,0.22)' : theme.palette.divider,
+                borderColor: isDark ? 'rgba(212,175,55,0.28)' : theme.palette.divider,
                 boxShadow: isDark
-                  ? '0 4px 20px -4px rgba(0,0,0,0.7), 0 0 12px rgba(212,175,55,0.04)'
-                  : '0 4px 16px -4px rgba(16,24,40,0.08)',
-                transition: 'all 0.28s cubic-bezier(0.4, 0, 0.2, 1)',
+                  ? '0 6px 24px -6px rgba(0,0,0,0.75), 0 0 16px rgba(212,175,55,0.05), inset 0 0 20px rgba(212,175,55,0.02)'
+                  : '0 6px 24px -6px rgba(16,24,40,0.10), 0 0 16px rgba(212,175,55,0.06), inset 0 0 20px rgba(212,175,55,0.02)',
+                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 animation: 'cardFadeIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both',
                 animationDelay: `${index * 60}ms`,
                 '@keyframes cardFadeIn': {
-                  '0%': { opacity: 0, transform: 'translateY(12px)' },
-                  '100%': { opacity: 1, transform: 'translateY(0)' },
+                  '0%': { opacity: 0, transform: 'translateY(14px) scale(0.99)' },
+                  '100%': { opacity: 1, transform: 'translateY(0) scale(1)' },
                 },
                 '&:hover': {
                   borderColor: gold.accent,
-                  transform: 'translateY(-4px)',
+                  transform: 'translateY(-5px)',
                   boxShadow: isDark
-                    ? '0 16px 36px -8px rgba(0,0,0,0.8), 0 0 28px rgba(212,175,55,0.3)'
-                    : '0 16px 36px -8px rgba(16,24,40,0.15), 0 0 24px rgba(184,134,11,0.25)',
+                    ? '0 20px 44px -10px rgba(0,0,0,0.85), 0 0 32px rgba(212,175,55,0.3), 0 0 60px rgba(212,175,55,0.10), inset 0 0 28px rgba(212,175,55,0.05)'
+                    : '0 20px 44px -10px rgba(16,24,40,0.18), 0 0 28px rgba(184,134,11,0.28), 0 0 52px rgba(184,134,11,0.12), inset 0 0 28px rgba(212,175,55,0.04)',
                   '& .cta-arrow': {
-                    transform: 'translateX(4px)',
+                    transform: 'translateX(5px)',
+                  },
+                  '& .ws-number-badge': {
+                    borderColor: gold.accent,
+                    boxShadow: `0 0 10px rgba(212,175,55,0.3)`,
                   },
                 },
               }}
@@ -1690,45 +1991,62 @@ export default function HomePage() {
                   top: 0,
                   left: 0,
                   right: 0,
-                  height: '2px',
+                  height: '3px',
                   bgcolor: gold.accent,
-                  opacity: isDark ? 0.75 : 0.65,
+                  opacity: isDark ? 0.8 : 0.7,
                   zIndex: 2,
+                  boxShadow: `0 0 8px ${gold.accent}`,
                 }}
               />
-              <CardContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', pt: 2.2 }}>
+              {/* Subtle bottom-edge shadow line */}
+              <Box
+                sx={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 1,
+                  right: 1,
+                  height: '1px',
+                  bgcolor: isDark ? 'rgba(212,175,55,0.15)' : 'rgba(184,134,11,0.1)',
+                  zIndex: 2,
+                  pointerEvents: 'none',
+                }}
+              />
+              <CardContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', pt: 2.5 }}>
                 <Box>
                   {/* Number badge pill with gold wash background and gold border */}
                   <Box
+                    className="ws-number-badge"
                     sx={{
                       display: 'inline-block',
-                      px: 1.2,
-                      py: 0.3,
-                      borderRadius: '12px',
+                      px: 1.4,
+                      py: 0.4,
+                      borderRadius: '14px',
                       bgcolor: gold.wash,
-                      border: `1px solid ${isDark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`,
-                      mb: 1.2,
+                      border: `1px solid ${isDark ? 'rgba(212,175,55,0.45)' : '#F0E1A8'}`,
+                      mb: 1.4,
+                      transition: 'all 0.3s ease',
+                      boxShadow: isDark ? '0 0 6px rgba(212,175,55,0.12)' : 'none',
                     }}
                   >
                     <Typography
                       sx={{
                         fontFamily: mono,
-                        fontSize: '0.72rem',
+                        fontSize: '0.74rem',
                         fontWeight: 800,
                         color: isDark ? gold.soft : gold.accent,
-                        letterSpacing: '0.08em',
+                        letterSpacing: '0.1em',
                         lineHeight: 1,
                       }}
                     >
                       0{index + 1}
                     </Typography>
                   </Box>
-                  <Typography variant="h5" sx={{ fontWeight: 800, mb: 1.2, color: theme.palette.text.primary }}>{title}</Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>{copy}</Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 800, mb: 1.3, color: theme.palette.text.primary, letterSpacing: '-0.015em' }}>{title}</Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.65, fontSize: '0.9rem' }}>{copy}</Typography>
                 </Box>
-                <Box sx={{ mt: 2, color: gold.accent, fontWeight: 800, fontSize: '0.88rem', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                <Box sx={{ mt: 2.2, color: gold.accent, fontWeight: 800, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: 0.6, letterSpacing: '0.02em' }}>
                   Open Workspace
-                  <Box component="span" className="cta-arrow" sx={{ display: 'inline-block', transition: 'transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)' }}>
+                  <Box component="span" className="cta-arrow" sx={{ display: 'inline-block', transition: 'transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)', fontWeight: 900 }}>
                     →
                   </Box>
                 </Box>
@@ -1776,39 +2094,55 @@ export default function HomePage() {
                   flexDirection: 'column',
                   bgcolor: theme.palette.background.paper,
                   backgroundImage: isDark
-                    ? 'radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.05) 0%, rgba(0,0,0,0.25) 100%)'
-                    : 'radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.06) 0%, rgba(0,0,0,0.03) 100%)',
+                    ? 'radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.07) 0%, rgba(0,0,0,0.28) 100%)'
+                    : 'radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.08) 0%, rgba(0,0,0,0.035) 100%)',
                   border: '1px solid',
-                  borderColor: isDark ? 'rgba(212,175,55,0.22)' : theme.palette.divider,
-                  borderRadius: 3,
+                  borderColor: isDark ? 'rgba(212,175,55,0.28)' : theme.palette.divider,
+                  borderRadius: 3.5,
                   position: 'relative',
                   overflow: 'hidden',
-                  transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  boxShadow: isDark
+                    ? '0 6px 20px -6px rgba(0,0,0,0.7), 0 0 12px rgba(212,175,55,0.04), inset 0 0 16px rgba(212,175,55,0.02)'
+                    : '0 6px 20px -6px rgba(16,24,40,0.10), 0 0 12px rgba(212,175,55,0.05), inset 0 0 16px rgba(212,175,55,0.02)',
                   '&:hover': {
                     borderColor: gold.accent,
-                    transform: 'translateY(-4px)',
+                    transform: 'translateY(-5px)',
                     boxShadow: isDark
-                      ? '0 16px 36px -8px rgba(0,0,0,0.8), 0 0 24px rgba(212,175,55,0.25)'
-                      : '0 16px 36px -8px rgba(16,24,40,0.12), 0 0 20px rgba(184,134,11,0.2)',
+                      ? '0 18px 40px -10px rgba(0,0,0,0.82), 0 0 28px rgba(212,175,55,0.28), 0 0 48px rgba(212,175,55,0.10), inset 0 0 24px rgba(212,175,55,0.04)'
+                      : '0 18px 40px -10px rgba(16,24,40,0.14), 0 0 24px rgba(184,134,11,0.22), 0 0 40px rgba(184,134,11,0.10), inset 0 0 24px rgba(212,175,55,0.03)',
+                    '& .tool-top-accent': {
+                      bgcolor: gold.accent,
+                      opacity: 1,
+                      boxShadow: `0 0 10px ${gold.accent}`,
+                    },
+                    '& .tool-dot-ornament': {
+                      bgcolor: gold.accent,
+                      boxShadow: `0 0 8px ${gold.accent}`,
+                      transform: 'scale(1.1)',
+                    },
                   },
                 }}
               >
                 {/* Thin gold top accent line */}
                 <Box
+                  className="tool-top-accent"
                   sx={{
                     position: 'absolute',
                     top: 0,
                     left: 0,
                     right: 0,
-                    height: '2px',
-                    bgcolor: gold.accent,
-                    opacity: isDark ? 0.75 : 0.65,
+                    height: '3px',
+                    bgcolor: gold.wash,
+                    opacity: isDark ? 0.55 : 0.4,
+                    transition: 'all 0.3s ease',
+                    borderBottom: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : 'rgba(184,134,11,0.15)'}`,
                     zIndex: 2,
                   }}
                 />
-                <CardContent sx={{ flex: 1, pt: 2.2 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-                    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                <CardContent sx={{ flex: 1, pt: 2.5 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1.8, gap: 1 }}>
+                    <Box sx={{ display: 'flex', gap: 0.8, alignItems: 'center', flexWrap: 'wrap' }}>
                       <Chip
                         label={`v${tool.version}`}
                         size="small"
@@ -1817,7 +2151,11 @@ export default function HomePage() {
                           color: isDark ? gold.soft : gold.accent,
                           fontWeight: 750,
                           border: '1px solid',
-                          borderColor: isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.25)',
+                          borderColor: isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.3)',
+                          fontSize: '0.7rem',
+                          fontFamily: mono,
+                          letterSpacing: '0.04em',
+                          borderRadius: 1.5,
                         }}
                       />
                       {tool.executionType === 'webgpu' && (
@@ -1825,59 +2163,76 @@ export default function HomePage() {
                           label="⚡ WEBGPU"
                           size="small"
                           sx={{
-                            bgcolor: isDark ? 'rgba(56,189,248,0.14)' : '#E0F2FE',
+                            bgcolor: isDark ? 'rgba(56,189,248,0.18)' : '#E0F2FE',
                             color: isDark ? '#38BDF8' : '#0369A1',
                             fontWeight: 750,
                             fontSize: '0.68rem',
                             fontFamily: mono,
-                            border: `1px solid ${isDark ? 'rgba(56,189,248,0.35)' : '#BAE6FD'}`,
+                            border: `1px solid ${isDark ? 'rgba(56,189,248,0.4)' : '#BAE6FD'}`,
+                            borderRadius: 1.5,
+                            letterSpacing: '0.04em',
                           }}
                         />
                       )}
                     </Box>
-                    {/* Tool type indicator icon */}
+                    {/* Tool type indicator icon with hover glow */}
                     <Tooltip title={tool.executionType === 'webgpu' ? 'WebGPU Shader Accelerated' : tool.localOnly ? 'Local Subprocess Only' : 'GitHub Open Source'}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', color: gold.accent, opacity: 0.85 }}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          color: gold.accent,
+                          opacity: 0.9,
+                          transition: 'all 0.2s ease',
+                          '&:hover': {
+                            opacity: 1,
+                            transform: 'scale(1.1)',
+                          },
+                        }}
+                      >
                         {tool.executionType === 'webgpu' ? (
-                          <FlashOnIcon sx={{ fontSize: 16 }} />
+                          <FlashOnIcon sx={{ fontSize: 17 }} />
                         ) : tool.localOnly ? (
-                          <TerminalIcon sx={{ fontSize: 16 }} />
+                          <TerminalIcon sx={{ fontSize: 17 }} />
                         ) : (
-                          <GitHubIcon sx={{ fontSize: 16 }} />
+                          <GitHubIcon sx={{ fontSize: 17 }} />
                         )}
                       </Box>
                     </Tooltip>
                   </Box>
-                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: theme.palette.text.primary }}>{tool.name}</Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>{tool.description}</Typography>
+                  <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.2, color: theme.palette.text.primary, letterSpacing: '-0.015em', fontSize: '1.05rem' }}>{tool.name}</Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.65, fontSize: '0.88rem' }}>{tool.description}</Typography>
                 </CardContent>
                 <CardActions
                   sx={{
-                    px: 2,
-                    pb: 2,
-                    pt: 1.5,
+                    px: 2.2,
+                    pb: 2.2,
+                    pt: 1.8,
                     justifyContent: 'space-between',
-                    borderTop: `1px solid ${isDark ? 'rgba(212,175,55,0.18)' : theme.palette.divider}`,
+                    borderTop: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider}`,
                     position: 'relative',
                   }}
                 >
                   {/* Tiny gold dot ornament centered on divider */}
                   <Box
+                    className="tool-dot-ornament"
                     aria-hidden="true"
                     sx={{
                       position: 'absolute',
-                      top: -2.5,
+                      top: -3,
                       left: '50%',
                       transform: 'translateX(-50%)',
-                      width: 4,
-                      height: 4,
+                      width: 5,
+                      height: 5,
                       borderRadius: '50%',
-                      bgcolor: gold.accent,
-                      boxShadow: `0 0 5px ${gold.accent}`,
+                      bgcolor: gold.wash,
+                      border: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.2)'}`,
+                      boxShadow: isDark ? '0 0 5px rgba(212,175,55,0.2)' : 'none',
+                      transition: 'all 0.3s ease',
                       zIndex: 2,
                     }}
                   />
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? gold.soft : gold.accent, fontWeight: 600 }}>{tool.repo}</Typography>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? gold.soft : gold.accent, fontWeight: 600, fontSize: '0.72rem', letterSpacing: '0.02em' }}>{tool.repo}</Typography>
                   {tool.executionType === 'webgpu' ? (
                     <Button
                       size="small"
@@ -1887,13 +2242,21 @@ export default function HomePage() {
                       to={`/tools/${tool.id}`}
                       startIcon={<FlashOnIcon sx={{ fontSize: '0.95rem !important' }} />}
                       sx={{
-                        fontSize: '0.75rem',
+                        fontSize: '0.76rem',
                         fontWeight: 750,
                         border: '1px solid transparent',
+                        borderRadius: 2,
+                        px: 2.2,
+                        py: 0.55,
                         transition: 'all 0.2s ease',
+                        letterSpacing: '0.02em',
                         '&:hover': {
                           borderColor: isDark ? '#F5E6AB' : '#D4AF37',
-                          boxShadow: '0 0 10px rgba(212,175,55,0.35)',
+                          boxShadow: '0 0 12px rgba(212,175,55,0.4)',
+                          transform: 'translateY(-1px)',
+                        },
+                        '&:active': {
+                          transform: 'scale(0.97)',
                         },
                       }}
                     >
@@ -1904,11 +2267,14 @@ export default function HomePage() {
                       label="LOCAL ONLY"
                       size="small"
                       sx={{
-                        bgcolor: isDark ? 'rgba(148,163,184,0.12)' : '#F1F5F9',
+                        bgcolor: isDark ? 'rgba(148,163,184,0.14)' : '#F1F5F9',
                         color: theme.palette.text.secondary,
                         fontWeight: 750,
                         fontSize: '0.68rem',
-                        border: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider}`,
+                        border: `1px solid ${isDark ? 'rgba(212,175,55,0.22)' : theme.palette.divider}`,
+                        borderRadius: 1.5,
+                        fontFamily: mono,
+                        letterSpacing: '0.04em',
                       }}
                     />
                   ) : (
@@ -1921,13 +2287,21 @@ export default function HomePage() {
                       rel="noopener noreferrer"
                       startIcon={<GitHubIcon sx={{ fontSize: '0.95rem !important' }} />}
                       sx={{
-                        fontSize: '0.75rem',
+                        fontSize: '0.76rem',
                         fontWeight: 750,
                         border: '1px solid transparent',
+                        borderRadius: 2,
+                        px: 2.2,
+                        py: 0.55,
                         transition: 'all 0.2s ease',
+                        letterSpacing: '0.02em',
                         '&:hover': {
                           borderColor: isDark ? '#F5E6AB' : '#D4AF37',
-                          boxShadow: '0 0 10px rgba(212,175,55,0.35)',
+                          boxShadow: '0 0 12px rgba(212,175,55,0.4)',
+                          transform: 'translateY(-1px)',
+                        },
+                        '&:active': {
+                          transform: 'scale(0.97)',
                         },
                       }}
                     >

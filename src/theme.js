@@ -54,6 +54,19 @@ export const theme = createTheme({
         body: {
           backgroundColor: '#FFFFFF',
           color: '#101828',
+          '&::after': {
+            content: '""',
+            position: 'fixed',
+            inset: 0,
+            pointerEvents: 'none',
+            zIndex: 0,
+            background:
+              'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.045) 0%, transparent 65%),' +
+              'radial-gradient(ellipse 60% 40% at 85% 90%, rgba(212,175,55,0.03) 0%, transparent 60%),' +
+              'radial-gradient(ellipse 50% 50% at 10% 80%, rgba(212,175,55,0.025) 0%, transparent 55%)',
+            opacity: 0.85,
+            mixBlendMode: 'soft-light',
+          },
         },
         '.text-highlight-gold': {
           backgroundColor: '#FEF9E7',
@@ -180,17 +193,29 @@ export const theme = createTheme({
           '100%': { opacity: 1, transform: 'translateY(0)' },
         },
         '@keyframes pulseGlow': {
-          '0%, 100%': {
+          '0%': {
             boxShadow: '0 0 0 0 rgba(212, 175, 55, 0.28), 0 0 14px -2px rgba(212, 175, 55, 0.18), 0 0 0 0 rgba(212, 175, 55, 0.08)',
+          },
+          '12.5%': {
+            boxShadow: '0 0 0 2px rgba(212, 175, 55, 0.38), 0 0 16px 0 rgba(212, 175, 55, 0.26), 0 0 0 0 rgba(212, 175, 55, 0.12)',
           },
           '25%': {
             boxShadow: '0 0 0 4px rgba(212, 175, 55, 0.18), 0 0 18px 0 rgba(212, 175, 55, 0.26), 0 0 22px 2px rgba(212, 175, 55, 0.14)',
           },
+          '37.5%': {
+            boxShadow: '0 0 0 6px rgba(212, 175, 55, 0.1), 0 0 20px 1px rgba(212, 175, 55, 0.22), 0 0 26px 4px rgba(212, 175, 55, 0.16)',
+          },
           '50%': {
             boxShadow: '0 0 0 6px rgba(212, 175, 55, 0.06), 0 0 22px 2px rgba(212, 175, 55, 0.2), 0 0 30px 6px rgba(212, 175, 55, 0.22)',
           },
+          '62.5%': {
+            boxShadow: '0 0 0 6px rgba(212, 175, 55, 0.02), 0 0 18px -1px rgba(212, 175, 55, 0.16), 0 0 30px 6px rgba(212, 175, 55, 0.16)',
+          },
           '75%': {
             boxShadow: '0 0 0 8px rgba(212, 175, 55, 0), 0 0 16px -1px rgba(212, 175, 55, 0.14), 0 0 34px 8px rgba(212, 175, 55, 0)',
+          },
+          '87.5%': {
+            boxShadow: '0 0 0 6px rgba(212, 175, 55, 0), 0 0 14px -2px rgba(212, 175, 55, 0.08), 0 0 26px 4px rgba(212, 175, 55, 0)',
           },
         },
         '@keyframes breatheGold': {
@@ -261,6 +286,35 @@ export const theme = createTheme({
             animationIterationCount: '1 !important',
             transitionDuration: '0.01ms !important',
             scrollBehavior: 'auto !important',
+          },
+        },
+        ':focus-visible': {
+          outline: '2px solid rgba(212, 175, 55, 0.75)',
+          outlineOffset: '2px',
+          borderRadius: '4px',
+        },
+        '.link-gold': {
+          color: '#8A6A09',
+          textDecoration: 'none',
+          position: 'relative',
+          transition: 'color 0.22s ease',
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            left: 0,
+            bottom: '-2px',
+            width: '100%',
+            height: '2px',
+            background: 'linear-gradient(90deg, #B8860B, #D4AF37)',
+            transform: 'scaleX(0)',
+            transformOrigin: 'left',
+            transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+          },
+          '&:hover': {
+            color: '#B8860B',
+            '&::after': {
+              transform: 'scaleX(1)',
+            },
           },
         },
       },
@@ -460,6 +514,24 @@ export const darkTheme = createTheme({
               'radial-gradient(ellipse 120% 95% at 50% 115%, rgba(0,0,0,0.62) 0%, transparent 62%),' +
               'radial-gradient(ellipse 80% 70% at 50% 45%, transparent 60%, rgba(0,0,0,0.4) 100%)',
             opacity: 0.8,
+          },
+          '@media (prefers-color-scheme: dark)': {
+            '&::-webkit-scrollbar': {
+              width: '6px',
+              height: '6px',
+            },
+            '&::-webkit-scrollbar-track': {
+              background: 'transparent',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              background: 'rgba(212, 175, 55, 0.25)',
+              borderRadius: '9999px',
+              border: '2px solid transparent',
+              backgroundClip: 'padding-box',
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+              background: 'rgba(212, 175, 55, 0.45)',
+            },
           },
           '@keyframes zothScan': {
             '0%': { backgroundPosition: '0 0' },
@@ -675,6 +747,35 @@ export const darkTheme = createTheme({
           },
           'body::before': {
             animation: 'none',
+          },
+        },
+        ':focus-visible': {
+          outline: '2px solid rgba(212, 175, 55, 0.85)',
+          outlineOffset: '2px',
+          borderRadius: '4px',
+        },
+        '.link-gold': {
+          color: '#F5E6AB',
+          textDecoration: 'none',
+          position: 'relative',
+          transition: 'color 0.22s ease',
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            left: 0,
+            bottom: '-2px',
+            width: '100%',
+            height: '2px',
+            background: 'linear-gradient(90deg, #D4AF37, #F3D56A)',
+            transform: 'scaleX(0)',
+            transformOrigin: 'left',
+            transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+          },
+          '&:hover': {
+            color: '#FBF1D6',
+            '&::after': {
+              transform: 'scaleX(1)',
+            },
           },
         },
       },

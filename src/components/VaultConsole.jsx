@@ -19,7 +19,7 @@ export default function VaultConsole() {
   const gold = isDark ? '#D4AF37' : '#B8860B';
   const goldText = isDark ? '#F5E6AB' : '#8A6A09';
   const [secretName, setSecretName] = useState('OPENAI_API_KEY');
-  const [secretValue, setSecretValue] = useState('sk-proj-7a98f7e21a0098bc19d45e6f3128765c');
+  const [secretValue, setSecretValue] = useState('sk-demo-vault-token-00000000000000000000000000000000');
   const [passphrase, setPassphrase] = useState('zoth-zero-cloud-master-key');
   const [encryptedPayload, setEncryptedPayload] = useState(null);
   const [copied, setCopied] = useState(false);

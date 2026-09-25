@@ -2,22 +2,6 @@
 // All templates are vetted for clean deployment, zero telemetry, and professional design standards.
 export const templates = [
   {
-    "id": "01-clients-services/multi-page-business",
-    "name": "multi page business",
-    "category": "Business & Corporate",
-    "slug": "01-clients-services",
-    "openable": false,
-    "path": ""
-  },
-  {
-    "id": "01-clients-services/single-page-business-portfolio-template",
-    "name": "single page business portfolio template",
-    "category": "Business & Corporate",
-    "slug": "01-clients-services",
-    "openable": false,
-    "path": ""
-  },
-  {
     "id": "02-netlify-ax-creator/Netlify-Ghost-Hub",
     "name": "Netlify Ghost Hub",
     "category": "Netlify & Creator",
@@ -40,14 +24,6 @@ export const templates = [
     "slug": "02-netlify-ax-creator",
     "openable": false,
     "path": ""
-  },
-  {
-    "id": "02-netlify-ax-creator/creatorplaybooks",
-    "name": "creatorplaybooks",
-    "category": "Netlify & Creator",
-    "slug": "02-netlify-ax-creator",
-    "openable": true,
-    "path": "/templates-source/02-netlify-ax-creator/creatorplaybooks/"
   },
   {
     "id": "02-netlify-ax-creator/netlify-cli-agent-runner",
@@ -448,38 +424,6 @@ export const templates = [
     "slug": "05-portfolio-agency",
     "openable": true,
     "path": "/templates-source/05-portfolio-agency/SonicVision-AI/"
-  },
-  {
-    "id": "05-portfolio-agency/hacker-portfolio-v2",
-    "name": "hacker portfolio v2",
-    "category": "Portfolio & Agency",
-    "slug": "05-portfolio-agency",
-    "openable": true,
-    "path": "/templates-source/05-portfolio-agency/hacker-portfolio-v2/"
-  },
-  {
-    "id": "05-portfolio-agency/multi-page-portfolio",
-    "name": "multi page portfolio",
-    "category": "Portfolio & Agency",
-    "slug": "05-portfolio-agency",
-    "openable": false,
-    "path": ""
-  },
-  {
-    "id": "05-portfolio-agency/reusable-tech-portfolio",
-    "name": "reusable tech portfolio",
-    "category": "Portfolio & Agency",
-    "slug": "05-portfolio-agency",
-    "openable": true,
-    "path": "/templates-source/05-portfolio-agency/reusable-tech-portfolio/"
-  },
-  {
-    "id": "05-portfolio-agency/single-page-portfolio-1",
-    "name": "single page portfolio 1",
-    "category": "Portfolio & Agency",
-    "slug": "05-portfolio-agency",
-    "openable": true,
-    "path": "/templates-source/05-portfolio-agency/single-page-portfolio-1/"
   },
   {
     "id": "06-learning-courses/100-websites-in-30-days",

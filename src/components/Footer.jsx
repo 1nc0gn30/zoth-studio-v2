@@ -71,31 +71,37 @@ export default function Footer() {
     { label: 'Zero-Egress Security Invariant', to: '/docs' },
   ];
 
+  // Refined section heading — clearer hierarchy with depth shadow
   const sectionHeadingStyle = {
     fontFamily: mono,
     fontWeight: 800,
     color: headingColor,
     display: 'inline-block',
-    mb: 2.2,
-    letterSpacing: '0.1em',
-    fontSize: '0.76rem',
+    mb: 2.8,
+    letterSpacing: '0.12em',
+    fontSize: '0.74rem',
     textTransform: 'uppercase',
     position: 'relative',
-    pb: 0.6,
+    pb: 0.7,
+    '.MuiTypography-root': {
+      background: 'none',
+    },
     '&::after': {
       content: '""',
       position: 'absolute',
       bottom: 0,
       left: 0,
-      width: '22px',
+      width: '28px',
       height: '2px',
       borderRadius: '1px',
       background: isDark
-        ? 'linear-gradient(90deg, #D4AF37 0%, rgba(212,175,55,0.2) 100%)'
-        : 'linear-gradient(90deg, #B8860B 0%, rgba(184,134,11,0.2) 100%)',
-    }
+        ? 'linear-gradient(90deg, #D4AF37 0%, rgba(212,175,55,0.15) 100%)'
+        : 'linear-gradient(90deg, #B8860B 0%, rgba(184,134,11,0.15) 100%)',
+      boxShadow: isDark ? '0 0 8px rgba(212,175,55,0.25)' : '0 0 6px rgba(184,134,11,0.15)',
+    },
   };
 
+  // Elegant link hover — gold gradient underline with silk-smooth transition
   const navLinkStyle = {
     color: linkColor,
     fontSize: '0.84rem',
@@ -103,37 +109,41 @@ export default function Footer() {
     position: 'relative',
     display: 'inline-flex',
     alignItems: 'center',
-    py: 0.35,
-    px: 0.8,
-    mx: -0.8,
+    py: 0.45,
+    px: 0.9,
+    mx: -0.9,
     borderRadius: '6px',
-    transition: 'color 0.22s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.22s cubic-bezier(0.16, 1, 0.3, 1), transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)',
+    transition: 'color 0.25s cubic-bezier(0.16,1,0.3,1), background-color 0.25s cubic-bezier(0.16,1,0.3,1), transform 0.25s cubic-bezier(0.16,1,0.3,1)',
     '&::after': {
       content: '""',
       position: 'absolute',
-      bottom: '3px',
-      left: '8px',
+      bottom: '4px',
+      left: '10px',
       width: 0,
       height: '1.5px',
       borderRadius: '1px',
       background: isDark
-        ? 'linear-gradient(90deg, #D4AF37 0%, rgba(212,175,55,0.4) 100%)'
-        : 'linear-gradient(90deg, #B8860B 0%, rgba(184,134,11,0.3) 100%)',
-      transition: 'width 0.28s cubic-bezier(0.16, 1, 0.3, 1)',
+        ? 'linear-gradient(90deg, #D4AF37 0%, rgba(212,175,55,0.5) 100%)'
+        : 'linear-gradient(90deg, #B8860B 0%, rgba(184,134,11,0.4) 100%)',
+      transition: 'width 0.3s cubic-bezier(0.16,1,0.3,1)',
+      boxShadow: isDark ? '0 0 6px rgba(212,175,55,0.3)' : 'none',
     },
     '&:hover': {
       color: gold,
-      bgcolor: isDark ? 'rgba(212, 175, 55, 0.06)' : 'rgba(184, 134, 11, 0.06)',
-      transform: 'translateX(3px)',
+      bgcolor: isDark ? 'rgba(212,175,55,0.07)' : 'rgba(184,134,11,0.07)',
+      transform: 'translateX(4px)',
       '&::after': {
-        width: 'calc(100% - 16px)',
+        width: 'calc(100% - 20px)',
       },
       '& .nav-external-icon': {
         opacity: 1,
-        color: gold,
-        transform: 'translate(2px, -2px)',
-      }
-    }
+        color: goldLight,
+        transform: 'translate(3px, -2px) scale(1.1)',
+      },
+    },
+    '&:active': {
+      transform: 'translateX(2px) scale(0.98)',
+    },
   };
 
   return (
@@ -144,52 +154,66 @@ export default function Footer() {
         borderTop: `1px solid ${borderCol}`,
         bgcolor: isDark ? '#06070B' : '#F8FAFC',
         color: theme.palette.text.secondary,
-        pt: { xs: 6, md: 8 },
-        pb: 4,
+        pt: { xs: 7, md: 9 },
+        pb: 5,
         position: 'relative',
         zIndex: 2,
         overflow: 'hidden',
         backgroundImage: isDark
-          ? 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(212,175,55,0.07) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 100% 100%, rgba(212,175,55,0.03) 0%, transparent 60%)'
-          : 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(184,134,11,0.04) 0%, transparent 70%)',
+          ? 'radial-gradient(ellipse 80% 55% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 72%), radial-gradient(ellipse 50% 45% at 100% 100%, rgba(212,175,55,0.035) 0%, transparent 62%)'
+          : 'radial-gradient(ellipse 80% 55% at 50% 0%, rgba(184,134,11,0.045) 0%, transparent 72%), radial-gradient(ellipse 40% 35% at 100% 100%, rgba(184,134,11,0.025) 0%, transparent 65%)',
         '&::before': {
           content: '""',
           position: 'absolute',
           top: 0,
-          left: { xs: '5%', md: '15%' },
-          right: { xs: '5%', md: '15%' },
+          left: { xs: '4%', md: '12%' },
+          right: { xs: '4%', md: '12%' },
           height: '1px',
           background: isDark
-            ? 'linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent)'
-            : 'linear-gradient(90deg, transparent, rgba(184,134,11,0.4), transparent)',
-          pointerEvents: 'none'
-        }
+            ? 'linear-gradient(90deg, transparent, rgba(212,175,55,0.55), rgba(212,175,55,0.35), transparent)'
+            : 'linear-gradient(90deg, transparent, rgba(184,134,11,0.45), rgba(184,134,11,0.25), transparent)',
+          pointerEvents: 'none',
+        },
       }}
     >
       <Container maxWidth="xl">
-        <Grid container spacing={{ xs: 4, sm: 4, md: 4, lg: 4.5 }}>
-          
-          {/* Column 1: Brand & Zero-Egress Manifest */}
+        <Grid container spacing={{ xs: 4.5, sm: 4.5, md: 4.5, lg: 5 }}>
+
+          {/* Column 1: Brand & Manifest — elevated with logo halo */}
           <Grid xs={12} lg={4}>
-            <Box sx={{ mb: 2.5 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.75, mb: 2 }}>
+            <Box sx={{ mb: 3 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2.5 }}>
+                {/* Logo with premium halo ring */}
                 <Box
                   sx={{
-                    p: 0.75,
-                    borderRadius: 1.5,
+                    p: 1,
+                    borderRadius: 2.5,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    border: isDark ? '1px solid rgba(212,175,55,0.25)' : '1px solid rgba(184,134,11,0.2)',
-                    bgcolor: isDark ? 'rgba(212,175,55,0.05)' : 'rgba(184,134,11,0.05)',
-                    boxShadow: isDark ? '0 0 16px rgba(212,175,55,0.08)' : '0 2px 8px rgba(184,134,11,0.06)'
+                    border: isDark
+                      ? '1px solid rgba(212,175,55,0.3)'
+                      : '1px solid rgba(184,134,11,0.25)',
+                    bgcolor: isDark
+                      ? 'rgba(212,175,55,0.065)'
+                      : 'rgba(184,134,11,0.065)',
+                    boxShadow: isDark
+                      ? '0 0 20px rgba(212,175,55,0.1), inset 0 0 12px rgba(212,175,55,0.04)'
+                      : '0 2px 12px rgba(184,134,11,0.08), inset 0 0 8px rgba(184,134,11,0.03)',
+                    transition: 'all 0.25s ease',
+                    '&:hover': {
+                      boxShadow: isDark
+                        ? '0 0 28px rgba(212,175,55,0.18), inset 0 0 16px rgba(212,175,55,0.06)'
+                        : '0 4px 16px rgba(184,134,11,0.14), inset 0 0 12px rgba(184,134,11,0.05)',
+                      borderColor: isDark ? 'rgba(212,175,55,0.5)' : 'rgba(184,134,11,0.45)',
+                    },
                   }}
                 >
                   <Box
                     component="img"
                     src={isDark ? '/brand/ghostbyte-dark.png' : '/brand/ghostbyte.png'}
                     alt="Ghostbyte NullAI Logo"
-                    sx={{ height: 32, width: 'auto', display: 'block' }}
+                    sx={{ height: 36, width: 'auto', display: 'block', filter: isDark ? 'drop-shadow(0 0 6px rgba(212,175,55,0.3))' : 'drop-shadow(0 0 4px rgba(184,134,11,0.2))' }}
                   />
                 </Box>
                 <Box>
@@ -199,9 +223,10 @@ export default function Footer() {
                       fontFamily: '"Celtic Garamond", Georgia, serif',
                       fontWeight: 800,
                       color: isDark ? goldLight : '#101828',
-                      lineHeight: 1.15,
-                      fontSize: '1.28rem',
-                      letterSpacing: '0.015em'
+                      lineHeight: 1.12,
+                      fontSize: '1.32rem',
+                      letterSpacing: '0.018em',
+                      transition: 'color 0.2s ease',
                     }}
                   >
                     Zoth Studio v2
@@ -212,10 +237,10 @@ export default function Footer() {
                       color: gold,
                       fontFamily: mono,
                       fontWeight: 750,
-                      fontSize: '0.7rem',
-                      letterSpacing: '0.12em',
+                      fontSize: '0.68rem',
+                      letterSpacing: '0.14em',
                       display: 'block',
-                      mt: 0.25
+                      mt: 0.35,
                     }}
                   >
                     SOVEREIGN COMPILATION STRATUM
@@ -223,17 +248,19 @@ export default function Footer() {
                 </Box>
               </Box>
 
+              {/* Manifest description — refined border, better rhythm */}
               <Typography
                 variant="body2"
                 sx={{
                   color: isDark ? '#94A3B8' : '#475569',
-                  mb: 3,
-                  lineHeight: 1.68,
+                  mb: 3.5,
+                  lineHeight: 1.72,
                   fontSize: '0.86rem',
-                  maxWidth: 380,
-                  borderLeft: `2px solid ${isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.35)'}`,
-                  pl: 1.75,
-                  py: 0.25
+                  maxWidth: 400,
+                  borderLeft: `2px solid ${isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.4)'}`,
+                  pl: 2,
+                  py: 0.3,
+                  fontWeight: 400,
                 }}
               >
                 High-performance sovereign intelligence suite designed and maintained by{' '}
@@ -246,22 +273,21 @@ export default function Footer() {
                     fontWeight: 700,
                     textDecoration: 'none',
                     position: 'relative',
-                    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                    transition: 'color 0.22s ease',
                     '&:hover': {
                       color: isDark ? goldLight : '#8A6A09',
-                      textDecoration: 'none',
-                      '&::after': { width: '100%' }
+                      '&::after': { width: '100%' },
                     },
                     '&::after': {
                       content: '""',
                       position: 'absolute',
-                      bottom: 0,
+                      bottom: -1,
                       left: 0,
                       width: 0,
                       height: '1px',
                       bgcolor: gold,
-                      transition: 'width 0.25s cubic-bezier(0.16, 1, 0.3, 1)'
-                    }
+                      transition: 'width 0.25s cubic-bezier(0.16,1,0.3,1)',
+                    },
                   }}
                 >
                   NullAI Tech
@@ -269,8 +295,8 @@ export default function Footer() {
                 . Air-gapped neural memory, Byzantine multi-agent consensus, and local WebGPU / WASM execution with zero external cloud egress.
               </Typography>
 
-              {/* Status Badges */}
-              <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap sx={{ mb: 3 }}>
+              {/* Status Badges — elevated, animated pulse */}
+              <Stack direction="row" spacing={1.75} flexWrap="wrap" useFlexGap sx={{ mb: 3.5 }}>
                 <Chip
                   icon={
                     <Box
@@ -278,35 +304,36 @@ export default function Footer() {
                         position: 'relative',
                         width: 8,
                         height: 8,
-                        ml: 1,
-                        mr: -0.2,
+                        ml: 1.2,
+                        mr: -0.3,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                       }}
                     >
+                      {/* Outer pulse ring */}
                       <Box
                         sx={{
                           position: 'absolute',
                           width: 8,
                           height: 8,
                           borderRadius: '50%',
-                          bgcolor: '#10B981',
-                          opacity: 0.75,
-                          animation: 'loopbackPulse 2.2s cubic-bezier(0, 0, 0.2, 1) infinite',
+                          border: '1.5px solid rgba(16,185,129,0.35)',
+                          animation: 'loopbackPulse 2.4s cubic-bezier(0,0,0.2,1) infinite',
                           '@keyframes loopbackPulse': {
-                            '0%': { transform: 'scale(1)', opacity: 0.8 },
-                            '70%, 100%': { transform: 'scale(2.4)', opacity: 0 }
-                          }
+                            '0%': { transform: 'scale(1)', opacity: 0.6 },
+                            '60%, 100%': { transform: 'scale(2.6)', opacity: 0 },
+                          },
                         }}
                       />
+                      {/* Core dot */}
                       <Box
                         sx={{
                           width: 6,
                           height: 6,
                           borderRadius: '50%',
                           bgcolor: '#10B981',
-                          boxShadow: '0 0 6px #10B981'
+                          boxShadow: '0 0 8px #10B981, 0 0 16px rgba(16,185,129,0.3)',
                         }}
                       />
                     </Box>
@@ -314,56 +341,66 @@ export default function Footer() {
                   label="127.0.0.1 LOCAL LOOPBACK"
                   size="small"
                   sx={{
-                    bgcolor: isDark ? 'rgba(16, 185, 129, 0.08)' : 'rgba(16, 185, 129, 0.09)',
+                    bgcolor: isDark ? 'rgba(16,185,129,0.09)' : 'rgba(16,185,129,0.095)',
                     color: isDark ? '#34D399' : '#059669',
-                    border: '1px solid rgba(16, 185, 129, 0.28)',
+                    border: `1px solid ${isDark ? 'rgba(16,185,129,0.32)' : 'rgba(16,185,129,0.35)'}`,
                     fontFamily: mono,
-                    fontSize: '0.67rem',
+                    fontSize: '0.66rem',
                     fontWeight: 800,
-                    letterSpacing: '0.04em',
-                    boxShadow: isDark ? '0 0 12px -2px rgba(16, 185, 129, 0.16)' : '0 1px 3px rgba(16, 185, 129, 0.1)',
-                    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                    letterSpacing: '0.05em',
+                    boxShadow: isDark
+                      ? '0 0 14px -2px rgba(16,185,129,0.2), inset 0 0 8px rgba(16,185,129,0.04)'
+                      : '0 1px 4px rgba(16,185,129,0.12), inset 0 0 6px rgba(16,185,129,0.03)',
+                    transition: 'all 0.22s cubic-bezier(0.16,1,0.3,1)',
                     '&:hover': {
                       borderColor: '#10B981',
-                      bgcolor: isDark ? 'rgba(16, 185, 129, 0.14)' : 'rgba(16, 185, 129, 0.14)',
-                      boxShadow: '0 0 14px rgba(16, 185, 129, 0.25)',
-                    }
+                      bgcolor: isDark ? 'rgba(16,185,129,0.16)' : 'rgba(16,185,129,0.15)',
+                      boxShadow: '0 0 18px rgba(16,185,129,0.3), inset 0 0 10px rgba(16,185,129,0.06)',
+                      transform: 'translateY(-1px) scale(1.02)',
+                    },
                   }}
                 />
                 <Chip
                   icon={
                     <ShieldIcon
                       sx={{
-                        fontSize: '0.85rem !important',
+                        fontSize: '0.88rem !important',
                         color: `${gold} !important`,
-                        ml: 0.8,
-                        filter: isDark ? 'drop-shadow(0 0 4px rgba(212,175,55,0.4))' : 'none',
+                        ml: 1,
+                        filter: isDark ? 'drop-shadow(0 0 5px rgba(212,175,55,0.5))' : 'none',
+                        transition: 'filter 0.2s ease',
+                        '&:hover': {
+                          filter: isDark ? 'drop-shadow(0 0 8px rgba(212,175,55,0.7))' : 'drop-shadow(0 0 4px rgba(184,134,11,0.4))',
+                        },
                       }}
                     />
                   }
                   label="ZERO CLOUD EGRESS"
                   size="small"
                   sx={{
-                    bgcolor: isDark ? 'rgba(212, 175, 55, 0.08)' : 'rgba(184, 134, 11, 0.08)',
+                    bgcolor: isDark ? 'rgba(212,175,55,0.085)' : 'rgba(184,134,11,0.085)',
                     color: gold,
-                    border: isDark ? '1px solid rgba(212, 175, 55, 0.3)' : '1px solid rgba(184, 134, 11, 0.3)',
+                    border: `1px solid ${isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.35)'}`,
                     fontFamily: mono,
-                    fontSize: '0.67rem',
+                    fontSize: '0.66rem',
                     fontWeight: 800,
-                    letterSpacing: '0.04em',
-                    boxShadow: isDark ? '0 0 12px -2px rgba(212, 175, 55, 0.15)' : '0 1px 3px rgba(184, 134, 11, 0.08)',
-                    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                    letterSpacing: '0.05em',
+                    boxShadow: isDark
+                      ? '0 0 14px -2px rgba(212,175,55,0.18), inset 0 0 8px rgba(212,175,55,0.03)'
+                      : '0 1px 4px rgba(184,134,11,0.08), inset 0 0 6px rgba(184,134,11,0.02)',
+                    transition: 'all 0.22s cubic-bezier(0.16,1,0.3,1)',
                     '&:hover': {
                       borderColor: gold,
-                      bgcolor: isDark ? 'rgba(212, 175, 55, 0.14)' : 'rgba(184, 134, 11, 0.14)',
-                      boxShadow: isDark ? '0 0 14px rgba(212, 175, 55, 0.25)' : '0 2px 8px rgba(184, 134, 11, 0.2)',
-                    }
+                      bgcolor: isDark ? 'rgba(212,175,55,0.15)' : 'rgba(184,134,11,0.15)',
+                      boxShadow: isDark ? '0 0 20px rgba(212,175,55,0.3)' : '0 2px 10px rgba(184,134,11,0.22)',
+                      transform: 'translateY(-1px) scale(1.02)',
+                    },
                   }}
                 />
               </Stack>
 
-              {/* External Links */}
-              <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
+              {/* External Links — refined icon buttons */}
+              <Box sx={{ display: 'flex', gap: 1.75, alignItems: 'center' }}>
                 <Tooltip title="NullAI Tech Sovereign Portal">
                   <IconButton
                     component="a"
@@ -372,17 +409,20 @@ export default function Footer() {
                     rel="noopener noreferrer"
                     size="small"
                     sx={{
-                      bgcolor: isDark ? 'rgba(16, 18, 26, 0.75)' : '#EDE8D5',
+                      bgcolor: isDark ? 'rgba(16,18,26,0.82)' : '#EDE8D5',
                       color: gold,
-                      border: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : borderCol}`,
-                      transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-                      backdropFilter: 'blur(6px)',
+                      border: `1px solid ${isDark ? 'rgba(212,175,55,0.22)' : borderCol}`,
+                      borderRadius: 2,
+                      transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
+                      backdropFilter: 'blur(8px)',
                       '&:hover': {
-                        bgcolor: isDark ? 'rgba(24, 27, 38, 0.95)' : '#E2DABF',
+                        bgcolor: isDark ? 'rgba(24,27,38,0.97)' : '#E2DABF',
                         borderColor: gold,
                         transform: 'translateY(-2px)',
-                        boxShadow: isDark ? '0 4px 14px rgba(212, 175, 55, 0.2)' : '0 3px 10px rgba(184, 134, 11, 0.18)',
-                      }
+                        boxShadow: isDark
+                          ? '0 6px 20px rgba(212,175,55,0.22), 0 0 0 1px rgba(212,175,55,0.15)'
+                          : '0 5px 14px rgba(184,134,11,0.2), 0 0 0 1px rgba(184,134,11,0.12)',
+                      },
                     }}
                   >
                     <LanguageIcon fontSize="small" />
@@ -397,26 +437,29 @@ export default function Footer() {
                     rel="noopener noreferrer"
                     size="small"
                     sx={{
-                      bgcolor: isDark ? 'rgba(16, 18, 26, 0.75)' : '#EDE8D5',
+                      bgcolor: isDark ? 'rgba(16,18,26,0.82)' : '#EDE8D5',
                       color: isDark ? '#FFF' : '#08080B',
                       border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : borderCol}`,
-                      transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-                      backdropFilter: 'blur(6px)',
+                      borderRadius: 2,
+                      transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
+                      backdropFilter: 'blur(8px)',
                       '&:hover': {
-                        bgcolor: isDark ? 'rgba(24, 27, 38, 0.95)' : '#E2DABF',
+                        bgcolor: isDark ? 'rgba(24,27,38,0.97)' : '#E2DABF',
                         borderColor: gold,
                         transform: 'translateY(-2px)',
                         color: gold,
-                        boxShadow: isDark ? '0 4px 14px rgba(212, 175, 55, 0.2)' : '0 3px 10px rgba(184, 134, 11, 0.18)',
-                      }
+                        boxShadow: isDark
+                          ? '0 6px 20px rgba(212,175,55,0.22), 0 0 0 1px rgba(212,175,55,0.15)'
+                          : '0 5px 14px rgba(184,134,11,0.2), 0 0 0 1px rgba(184,134,11,0.12)',
+                      },
                     }}
                   >
                     <GitHubIcon fontSize="small" />
                   </IconButton>
                 </Tooltip>
 
-                <Typography variant="caption" sx={{ fontFamily: mono, color: subtextColor, fontSize: '0.74rem', letterSpacing: '0.02em' }}>
-                  org: <strong style={{ color: gold }}>NullAITech</strong>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: subtextColor, fontSize: '0.72rem', letterSpacing: '0.03em', fontWeight: 600 }}>
+                  org: <strong style={{ color: gold, fontWeight: 800 }}>NullAITech</strong>
                 </Typography>
               </Box>
             </Box>
@@ -425,9 +468,9 @@ export default function Footer() {
           {/* Column 2: Sovereign Workstations */}
           <Grid xs={6} sm={3} lg={2}>
             <Typography variant="caption" sx={sectionHeadingStyle}>
-              WORKSTATIONS
+              Workstations
             </Typography>
-            <Stack spacing={1.2}>
+            <Stack spacing={1.3}>
               {workstations.map((item, idx) => (
                 <Link
                   key={idx}
@@ -444,9 +487,9 @@ export default function Footer() {
           {/* Column 3: NullAI Tech Repos & Tools */}
           <Grid xs={6} sm={3} lg={2.5}>
             <Typography variant="caption" sx={sectionHeadingStyle}>
-              NULLAI TECH REPOS
+              NullAI Tech Repos
             </Typography>
-            <Stack spacing={1.2}>
+            <Stack spacing={1.3}>
               {toolsAndRepos.map((item, idx) => (
                 item.external ? (
                   <Link
@@ -457,7 +500,7 @@ export default function Footer() {
                     sx={navLinkStyle}
                   >
                     {item.label}
-                    <OpenInNewIcon className="nav-external-icon" sx={{ fontSize: '0.75rem', opacity: 0.55, ml: 0.5, transition: 'transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), color 0.22s cubic-bezier(0.16, 1, 0.3, 1)' }} />
+                    <OpenInNewIcon className="nav-external-icon" sx={{ fontSize: '0.72rem', opacity: 0.5, ml: 0.6, transition: 'transform 0.25s cubic-bezier(0.16,1,0.3,1), opacity 0.25s cubic-bezier(0.16,1,0.3,1), color 0.25s cubic-bezier(0.16,1,0.3,1)' }} />
                   </Link>
                 ) : (
                   <Link
@@ -476,9 +519,9 @@ export default function Footer() {
           {/* Column 4: Theory & Math Pillars */}
           <Grid xs={6} sm={3} lg={2}>
             <Typography variant="caption" sx={sectionHeadingStyle}>
-              THEORY &amp; MATH
+              Theory &amp; Math
             </Typography>
-            <Stack spacing={1.2}>
+            <Stack spacing={1.3}>
               {theoryAndDocs.map((item, idx) => (
                 <Link
                   key={idx}
@@ -495,9 +538,9 @@ export default function Footer() {
           {/* Column 5: Machine Interfaces & Standards */}
           <Grid xs={6} sm={3} lg={1.5}>
             <Typography variant="caption" sx={sectionHeadingStyle}>
-              STANDARDS
+              Standards
             </Typography>
-            <Stack spacing={1.2}>
+            <Stack spacing={1.3}>
               {machineStandards.map((item, idx) => (
                 item.external ? (
                   <Link
@@ -508,7 +551,7 @@ export default function Footer() {
                     sx={navLinkStyle}
                   >
                     {item.label}
-                    <OpenInNewIcon className="nav-external-icon" sx={{ fontSize: '0.75rem', opacity: 0.55, ml: 0.5, transition: 'transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), color 0.22s cubic-bezier(0.16, 1, 0.3, 1)' }} />
+                    <OpenInNewIcon className="nav-external-icon" sx={{ fontSize: '0.72rem', opacity: 0.5, ml: 0.6, transition: 'transform 0.25s cubic-bezier(0.16,1,0.3,1), opacity 0.25s cubic-bezier(0.16,1,0.3,1), color 0.25s cubic-bezier(0.16,1,0.3,1)' }} />
                   </Link>
                 ) : (
                   <Link
@@ -526,73 +569,84 @@ export default function Footer() {
 
         </Grid>
 
-        {/* Elegant Gradient Divider */}
+        {/* Elegant Gradient Divider — richer gold bloom */}
         <Box
           sx={{
-            my: { xs: 4, md: 5 },
+            my: { xs: 5, md: 6 },
             height: '1px',
             background: isDark
-              ? 'linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.15) 15%, rgba(212,175,55,0.4) 50%, rgba(212,175,55,0.15) 85%, transparent 100%)'
-              : 'linear-gradient(90deg, transparent 0%, rgba(184,134,11,0.15) 15%, rgba(184,134,11,0.35) 50%, rgba(184,134,11,0.15) 85%, transparent 100%)',
+              ? 'linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.12) 12%, rgba(212,175,55,0.45) 50%, rgba(212,175,55,0.12) 88%, transparent 100%)'
+              : 'linear-gradient(90deg, transparent 0%, rgba(184,134,11,0.12) 12%, rgba(184,134,11,0.38) 50%, rgba(184,134,11,0.12) 88%, transparent 100%)',
           }}
         />
 
-        {/* Mascot Interactive Strip with Sanctum Framing */}
+        {/* Mascot Interactive Strip — refined sanctum framing */}
         <Box
           sx={{
-            mb: 4,
-            p: { xs: 2, sm: 3 },
-            borderRadius: 2.5,
-            bgcolor: isDark ? 'rgba(10, 12, 18, 0.55)' : 'rgba(255, 255, 255, 0.55)',
-            border: isDark ? '1px solid rgba(212, 175, 55, 0.16)' : '1px solid rgba(184, 134, 11, 0.16)',
+            mb: 5,
+            p: { xs: 2.5, sm: 3.5 },
+            borderRadius: 3.5,
+            bgcolor: isDark
+              ? 'rgba(10,12,18,0.62)'
+              : 'rgba(255,255,255,0.6)',
+            border: isDark
+              ? '1px solid rgba(212,175,55,0.18)'
+              : '1px solid rgba(184,134,11,0.18)',
             boxShadow: isDark
-              ? '0 8px 32px -4px rgba(0, 0, 0, 0.4), inset 0 0 24px rgba(212, 175, 55, 0.03)'
-              : '0 4px 20px -2px rgba(0, 0, 0, 0.04), inset 0 0 16px rgba(184, 134, 11, 0.02)',
-            backdropFilter: 'blur(8px)',
+              ? '0 10px 40px -6px rgba(0,0,0,0.45), inset 0 0 30px rgba(212,175,55,0.03), 0 0 0 1px rgba(212,175,55,0.06)'
+              : '0 6px 24px -3px rgba(0,0,0,0.05), inset 0 0 20px rgba(184,134,11,0.025), 0 0 0 1px rgba(184,134,11,0.06)',
+            backdropFilter: 'blur(12px)',
             position: 'relative',
             overflow: 'hidden',
             '&::before': {
               content: '""',
               position: 'absolute',
               top: 0,
-              left: '15%',
-              right: '15%',
+              left: '12%',
+              right: '12%',
               height: '1px',
               background: isDark
-                ? 'linear-gradient(90deg, transparent, rgba(212,175,55,0.45), transparent)'
-                : 'linear-gradient(90deg, transparent, rgba(184,134,11,0.35), transparent)',
+                ? 'linear-gradient(90deg, transparent, rgba(212,175,55,0.5), rgba(212,175,55,0.25), transparent)'
+                : 'linear-gradient(90deg, transparent, rgba(184,134,11,0.4), rgba(184,134,11,0.2), transparent)',
               pointerEvents: 'none',
             },
-            '& > div': {
-              mt: 0,
-              pt: 0,
-              borderTop: 'none',
-            }
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: '1px',
+              background: isDark
+                ? 'linear-gradient(90deg, transparent, rgba(212,175,55,0.2), transparent)'
+                : 'linear-gradient(90deg, transparent, rgba(184,134,11,0.15), transparent)',
+              pointerEvents: 'none',
+            },
           }}
         >
           <SovereignMascots />
         </Box>
 
-        {/* Sub-Footer Copyright & Invariant */}
+        {/* Sub-Footer Copyright & Invariant — refined spacing */}
         <Box
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             flexWrap: 'wrap',
-            gap: 2.5,
-            pt: 2.5,
-            borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
-            fontSize: '0.78rem',
+            gap: 3,
+            pt: 3,
+            borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.065)' : 'rgba(0,0,0,0.065)'}`,
+            fontSize: '0.76rem',
             color: subtextColor,
-            fontFamily: mono
+            fontFamily: mono,
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
             <span>© 2026 NullAI Tech &amp; Zoth Studio.</span>
-            <Box component="span" sx={{ opacity: 0.4 }}>•</Box>
+            <Box component="span" sx={{ opacity: 0.35, fontSize: '0.7rem' }}>•</Box>
             <span>Released under Sovereign Apache 2.0 / MIT.</span>
-            <Box component="span" sx={{ opacity: 0.4 }}>•</Box>
+            <Box component="span" sx={{ opacity: 0.35, fontSize: '0.7rem' }}>•</Box>
             <Link
               href="https://nullai.tech"
               target="_blank"
@@ -605,42 +659,62 @@ export default function Footer() {
                 transition: 'color 0.2s ease',
                 '&:hover': {
                   color: isDark ? goldLight : '#8A6A09',
-                  textDecoration: 'underline'
-                }
+                  textDecoration: 'underline',
+                  '&::after': { width: '100%' },
+                },
+                '&::after': {
+                  content: '""',
+                  position: 'absolute',
+                  bottom: -2,
+                  left: 0,
+                  width: 0,
+                  height: '1px',
+                  bgcolor: gold,
+                  transition: 'width 0.22s ease',
+                },
               }}
             >
               nullai.tech
             </Link>
           </Box>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5, flexWrap: 'wrap' }}>
             <Box
               sx={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: 0.8,
-                fontSize: '0.73rem',
+                gap: 1,
+                fontSize: '0.72rem',
                 color: subtextColor,
-                letterSpacing: '0.04em'
+                letterSpacing: '0.05em',
+                fontWeight: 600,
               }}
             >
               <span>AIR-GAPPED ZERO-EGRESS HARDWARE</span>
             </Box>
-            <Box component="span" sx={{ opacity: 0.4 }}>•</Box>
+            <Box component="span" sx={{ opacity: 0.35, fontSize: '0.7rem' }}>•</Box>
             <Box
               sx={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: 0.75,
-                px: 1,
-                py: 0.35,
-                borderRadius: '4px',
-                bgcolor: isDark ? 'rgba(16, 185, 129, 0.08)' : 'rgba(16, 185, 129, 0.07)',
-                border: '1px solid rgba(16, 185, 129, 0.25)',
+                gap: 1,
+                px: 1.25,
+                py: 0.45,
+                borderRadius: '5px',
+                bgcolor: isDark ? 'rgba(16,185,129,0.09)' : 'rgba(16,185,129,0.08)',
+                border: '1px solid rgba(16,185,129,0.3)',
                 color: isDark ? '#34D399' : '#059669',
-                fontSize: '0.72rem',
+                fontSize: '0.7rem',
                 fontWeight: 750,
-                letterSpacing: '0.04em'
+                letterSpacing: '0.05em',
+                boxShadow: isDark ? '0 0 10px -2px rgba(16,185,129,0.18)' : '0 1px 4px rgba(16,185,129,0.08)',
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                  borderColor: '#10B981',
+                  bgcolor: isDark ? 'rgba(16,185,129,0.15)' : 'rgba(16,185,129,0.14)',
+                  boxShadow: '0 0 16px rgba(16,185,129,0.25)',
+                  transform: 'translateY(-1px)',
+                },
               }}
             >
               <Box
@@ -649,7 +723,7 @@ export default function Footer() {
                   height: 5,
                   borderRadius: '50%',
                   bgcolor: '#10B981',
-                  boxShadow: '0 0 6px #10B981'
+                  boxShadow: '0 0 8px #10B981',
                 }}
               />
               <span>SYSTEM PURITY: 100%</span>
