@@ -69,13 +69,13 @@ export default function TemplatesPage() {
       <Box sx={{ height: 3, width: '100%', background: 'linear-gradient(90deg, #D4AF37 0%, transparent 60%)', mb: 3 }} />
 
       <Typography variant="overline" sx={{ color: gold.accent, letterSpacing: '0.18em', fontWeight: 800 }}>
-        OPEN-SOURCE TEMPLATE REPOSITORY // 215+ REPRODUCIBLE BLUEPRINTS
+        OPEN-SOURCE TEMPLATE REPOSITORY // 100+ CURATED NETLIFY &amp; WEB APP BLUEPRINTS
       </Typography>
       <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', mb: 1 }}>
         Templates &amp; Agent Scaffolds
       </Typography>
       <Typography color="text.secondary" sx={{ mb: 3, maxWidth: 840, fontSize: '1.05rem', lineHeight: 1.6 }}>
-        Zero-egress web and agent templates curated from the Zoth open-source library. Inspect project architectures, stack configurations, and offline build scripts directly in v2.
+        Zero-egress, production-ready web application and site templates vetted for clean Netlify deployment, modern design aesthetics, and offline compilation. Inspect project architectures, stack configurations, and deploy scripts directly in v2.
       </Typography>
 
       {/* Status Bar */}
