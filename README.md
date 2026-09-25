@@ -5,10 +5,11 @@
 
 [![Zero-Egress Guaranteed](https://img.shields.io/badge/Security-Zero--Egress%20Enclave-gold?style=flat-square)](#zero-egress-security-invariants)
 [![Netlify Deploy Ready](https://img.shields.io/badge/Deploy-Netlify%20Production-00C7B7?style=flat-square&logo=netlify)](#netlify-deployment-instructions)
-[![83 Prerendered Routes](https://img.shields.io/badge/AEO-83%20Static%20Routes-blueviolet?style=flat-square)](#prerendered-static-routes-83-total)
+[![87 Prerendered Routes](https://img.shields.io/badge/AEO-87%20Static%20Routes-blueviolet?style=flat-square)](#prerendered-static-routes-87-total)
 [![Vite 5.4](https://img.shields.io/badge/Build-Vite%205.4-purple?style=flat-square)](https://vitejs.dev)
 [![React 18.2](https://img.shields.io/badge/Framework-React%2018.2-blue?style=flat-square)](https://react.dev)
 [![MUI v5.15](https://img.shields.io/badge/UI-Material--UI%20v5.15-007FFF?style=flat-square)](https://mui.com)
+[![WindowCarousel](https://img.shields.io/badge/UI-WindowCarousel%20Engine-gold?style=flat-square)](#windowcarousel--column-stacking-architecture)
 [![Lucy Oracle Codec](https://img.shields.io/badge/Oracle-Codec%20141.12-cyan?style=flat-square)](#lucy-oracle--biomorphic-stdp-synaptic-memory)
 [![License: Sovereign](https://img.shields.io/badge/License-Sovereign%20Developer-green?style=flat-square)](#license)
 
@@ -20,6 +21,7 @@
 
 - **WHAT THIS IS**: A complete, single-page application (SPA) and loopback development environment for coordinating autonomous AI agent swarms, testing zero-egress developer tools, tuning biomorphic STDP synaptic memories, executing 3-agent Byzantine consensus proofs, and running local models on local silicon.
 - **WHAT THIS IS NOT**: This is not a cloud SaaS, does not send prompts or telemetry to third-party endpoints, and does not depend on cloud authentication providers. Everything executes on your physical hardware via loopback enclaves (`127.0.0.1`).
+- **WINDOWCAROUSEL ARCHITECTURE**: Unlike tacky dashboards that squish 4+ complex interface windows into a cramped horizontal row, Zoth Studio v2 implements an adaptive `WindowCarousel` architecture across tool suites (WebGen, Memory, Archon Swarms). Operators can glide through full-detail interface cards with generous breathing room or toggle into a clean, stacked single-column view with a single click.
 
 ---
 

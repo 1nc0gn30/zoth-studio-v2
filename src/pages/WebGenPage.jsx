@@ -33,6 +33,7 @@ import PsychologyIcon from '@mui/icons-material/Psychology';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import CheckIcon from '@mui/icons-material/Check';
+import WindowCarousel from '../components/WindowCarousel';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -1677,20 +1678,16 @@ export default function WebGenPage() {
               <Typography variant="body2" sx={{ color: textSecondary, fontSize: '0.8rem', mb: 0.5 }}>● AZOTH-OS: Autonomous Neural OS (Zero-Egress)</Typography>
               <Typography variant="body2" sx={{ color: textSecondary, fontSize: '0.8rem' }}>● HEXSTRIKE: Cryptographic AST Shield</Typography>
             </Paper>
-            <Grid container spacing={2}>
-              <Grid xs={12} sm={6}>
-                <Box sx={{ p: 2, bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2 }}>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: textPrimary }}>AZOTH-OS 2.0</Typography>
-                  <Typography variant="caption" sx={{ color: textSecondary }}>Micro-kernel WASM runtime.</Typography>
-                </Box>
-              </Grid>
-              <Grid xs={12} sm={6}>
-                <Box sx={{ p: 2, bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2 }}>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: textPrimary }}>NEURO-DAEMON</Typography>
-                  <Typography variant="caption" sx={{ color: textSecondary }}>Local vectorized memory on :8788.</Typography>
-                </Box>
-              </Grid>
-            </Grid>
+            <Stack spacing={1.5}>
+              <Box sx={{ p: 2, bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2 }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 800, color: textPrimary }}>AZOTH-OS 2.0</Typography>
+                <Typography variant="caption" sx={{ color: textSecondary }}>Micro-kernel WASM runtime with zero egress.</Typography>
+              </Box>
+              <Box sx={{ p: 2, bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2 }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 800, color: textPrimary }}>NEURO-DAEMON</Typography>
+                <Typography variant="caption" sx={{ color: textSecondary }}>Local vectorized memory on port 8788.</Typography>
+              </Box>
+            </Stack>
           </Box>
         );
 
@@ -1701,23 +1698,21 @@ export default function WebGenPage() {
               <Chip label="TRI-AGENT CONSENSUS ACTIVE" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono }} />
               <Typography variant="caption" sx={{ color: dark ? '#10B981' : '#059669', fontFamily: mono, fontWeight: 700 }}>● 3 NODES SYNCED</Typography>
             </Box>
-            <Grid container spacing={1.5} sx={{ mb: 2.5 }}>
+            <Stack spacing={1.5} sx={{ mb: 2.5 }}>
               {[
-                { name: 'Planner Alpha', status: 'RUNNING', job: 'Task Routing', color: dark ? '#10B981' : '#059669' },
-                { name: 'Coder Omega', status: 'SYNTHESIZING', job: 'AST Generation', color: dark ? '#D4AF37' : '#B8860B' },
-                { name: 'Auditor Sigma', status: 'VERIFYING', job: 'Zero-Egress Seal', color: dark ? '#38BDF8' : '#0284C7' }
+                { name: 'Planner Alpha', status: 'RUNNING', job: 'Task Routing & DAG Calibration', color: dark ? '#10B981' : '#059669' },
+                { name: 'Coder Omega', status: 'SYNTHESIZING', job: 'AST Generation & Micro-Transpilation', color: dark ? '#D4AF37' : '#B8860B' },
+                { name: 'Auditor Sigma', status: 'VERIFYING', job: 'Zero-Egress Seal & Invariant Verification', color: dark ? '#38BDF8' : '#0284C7' }
               ].map((ag, i) => (
-                <Grid key={i} xs={12} sm={4}>
-                  <Box sx={{ p: 1.5, bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                      <Typography variant="caption" sx={{ fontWeight: 800, color: textPrimary }}>{ag.name}</Typography>
-                      <span style={{ fontSize: '0.65rem', color: ag.color, fontWeight: 800, fontFamily: 'monospace' }}>{ag.status}</span>
-                    </Box>
-                    <Typography variant="caption" sx={{ color: textSecondary, fontSize: '0.72rem' }}>{ag.job}</Typography>
+                <Box key={i} sx={{ p: 1.5, bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                    <Typography variant="caption" sx={{ fontWeight: 800, color: textPrimary }}>{ag.name}</Typography>
+                    <span style={{ fontSize: '0.65rem', color: ag.color, fontWeight: 800, fontFamily: 'monospace' }}>{ag.status}</span>
                   </Box>
-                </Grid>
+                  <Typography variant="caption" sx={{ color: textSecondary, fontSize: '0.72rem' }}>{ag.job}</Typography>
+                </Box>
               ))}
-            </Grid>
+            </Stack>
             <Paper sx={{ p: 2, bgcolor: dark ? '#0D0E16' : '#F1F5F9', border: `1px solid ${divider}`, borderRadius: 2, fontFamily: mono, fontSize: '0.75rem' }}>
               <div style={{ color: dark ? '#10B981' : '#047857' }}>✔ Planner Alpha dispatched task: Synthesize 142 AST nodes.</div>
               <div style={{ color: textSecondary, marginTop: 4 }}>✔ Coder Omega sealed AST with hash 0x8F4A...3B21 (Zero egress).</div>
@@ -1777,22 +1772,20 @@ export default function WebGenPage() {
               <Chip label="NEURAL MESH STORE" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono }} />
               <Typography variant="caption" sx={{ color: dark ? '#10B981' : '#059669', fontFamily: mono, fontWeight: 700 }}>● 98.6% SYNC</Typography>
             </Box>
-            <Grid container spacing={1.5}>
+            <Stack spacing={1.5}>
               {[
                 { name: 'Cortical Neural Interface v3', price: '2.40 GOLD', sync: '99.4%' },
                 { name: 'Dopamine Synapse Stabilizer', price: '0.85 GOLD', sync: '97.8%' }
               ].map((p, i) => (
-                <Grid key={i} xs={12} sm={6}>
-                  <Box sx={{ p: 2, bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                      <Typography variant="subtitle2" sx={{ fontWeight: 800, color: textPrimary }}>{p.name}</Typography>
-                      <span style={{ fontSize: '0.65rem', color: dark ? '#10B981' : '#059669', fontWeight: 800 }}>{p.sync}</span>
-                    </Box>
-                    <Typography variant="h6" sx={{ color: gold, fontWeight: 900, fontFamily: mono, mt: 1 }}>{p.price}</Typography>
+                <Box key={i} sx={{ p: 2, bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: textPrimary }}>{p.name}</Typography>
+                    <span style={{ fontSize: '0.65rem', color: dark ? '#10B981' : '#059669', fontWeight: 800 }}>{p.sync}</span>
                   </Box>
-                </Grid>
+                  <Typography variant="h6" sx={{ color: gold, fontWeight: 900, fontFamily: mono, mt: 1 }}>{p.price}</Typography>
+                </Box>
               ))}
-            </Grid>
+            </Stack>
           </Box>
         );
 
@@ -1813,26 +1806,31 @@ export default function WebGenPage() {
               </Typography>
             </Paper>
 
-            <Grid container spacing={2}>
-              <Grid xs={12} sm={4}>
-                <Box sx={{ p: 2, bgcolor: dark ? '#161824' : '#FFFFFF', borderRadius: 2, border: `1px solid ${divider}` }}>
-                  <Typography variant="caption" sx={{ color: textSecondary }}>NODE LATENCY</Typography>
-                  <Typography variant="h5" sx={{ fontWeight: 800, color: gold }}>12.4ms</Typography>
+            <Stack spacing={1.5}>
+              <Box sx={{ p: 2, bgcolor: dark ? '#161824' : '#FFFFFF', borderRadius: 2, border: `1px solid ${divider}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Box>
+                  <Typography variant="caption" sx={{ color: textSecondary, textTransform: 'uppercase', fontFamily: mono }}>Node Latency</Typography>
+                  <Typography variant="h6" sx={{ fontWeight: 800, color: gold }}>12.4ms</Typography>
                 </Box>
-              </Grid>
-              <Grid xs={12} sm={4}>
-                <Box sx={{ p: 2, bgcolor: dark ? '#161824' : '#FFFFFF', borderRadius: 2, border: `1px solid ${divider}` }}>
-                  <Typography variant="caption" sx={{ color: textSecondary }}>SEAL HASH</Typography>
-                  <Typography variant="subtitle1" sx={{ fontFamily: mono, fontWeight: 700, color: dark ? '#10B981' : '#059669', textOverflow: 'ellipsis', overflow: 'hidden' }}>0x8F4A...3B21</Typography>
+                <Chip label="OPTIMAL" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', fontWeight: 800 }} />
+              </Box>
+
+              <Box sx={{ p: 2, bgcolor: dark ? '#161824' : '#FFFFFF', borderRadius: 2, border: `1px solid ${divider}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Box>
+                  <Typography variant="caption" sx={{ color: textSecondary, textTransform: 'uppercase', fontFamily: mono }}>Seal Hash</Typography>
+                  <Typography variant="subtitle1" sx={{ fontFamily: mono, fontWeight: 700, color: dark ? '#10B981' : '#059669' }}>0x8F4A...3B21</Typography>
                 </Box>
-              </Grid>
-              <Grid xs={12} sm={4}>
-                <Box sx={{ p: 2, bgcolor: dark ? '#161824' : '#FFFFFF', borderRadius: 2, border: `1px solid ${divider}` }}>
-                  <Typography variant="caption" sx={{ color: textSecondary }}>SWARM STATUS</Typography>
-                  <Typography variant="h5" sx={{ fontWeight: 800, color: dark ? '#38BDF8' : '#0284C7' }}>Active (6/6)</Typography>
+                <Chip label="ZERO-EGRESS" size="small" sx={{ bgcolor: goldBg, color: gold, fontWeight: 800 }} />
+              </Box>
+
+              <Box sx={{ p: 2, bgcolor: dark ? '#161824' : '#FFFFFF', borderRadius: 2, border: `1px solid ${divider}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Box>
+                  <Typography variant="caption" sx={{ color: textSecondary, textTransform: 'uppercase', fontFamily: mono }}>Swarm Status</Typography>
+                  <Typography variant="h6" sx={{ fontWeight: 800, color: dark ? '#38BDF8' : '#0284C7' }}>Active (6/6 Synced)</Typography>
                 </Box>
-              </Grid>
-            </Grid>
+                <Chip label="QUORUM" size="small" sx={{ bgcolor: dark ? 'rgba(56,189,248,0.15)' : '#E0F2FE', color: dark ? '#38BDF8' : '#0284C7', fontWeight: 800 }} />
+              </Box>
+            </Stack>
           </Box>
         );
     }
@@ -2068,32 +2066,58 @@ export default function WebGenPage() {
           <Divider sx={{ my: 2.5, borderColor: divider }} />
 
                 {/* Starter Templates (6 Presets) */}
-                <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1.2, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
-                  STARTER SPEC TEMPLATES ({TEMPLATES.length} PRESETS)
-                </Typography>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
-                  {TEMPLATES.map((tpl) => {
+                {/* Starter Templates Carousel / Stacked Window Showcase */}
+                <WindowCarousel
+                  title="Starter Component Spec Presets"
+                  badge="Foundry Showcase"
+                  items={TEMPLATES}
+                  initialView="carousel"
+                  allowToggleMode={true}
+                  renderItem={(tpl) => {
                     const isSelected = selectedTemplate === tpl.name;
                     const IconComp = tpl.icon;
                     return (
-                      <Chip
-                        key={tpl.id}
-                        icon={<IconComp sx={{ fontSize: '1rem', color: isSelected ? `${gold} !important` : `${textSecondary} !important` }} />}
-                        label={tpl.name}
-                        onClick={() => handleSelectTemplate(tpl)}
-                        sx={{
-                          borderColor: isSelected ? gold : divider,
-                          backgroundColor: isSelected ? goldBg : (dark ? '#121420' : '#F1F5F9'),
-                          color: isSelected ? (dark ? goldLight : '#8A6A09') : textSecondary,
-                          fontWeight: 700,
-                          cursor: 'pointer',
-                          border: '1px solid',
-                          '&:hover': { backgroundColor: goldBg, borderColor: gold }
-                        }}
-                      />
+                      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 2 }}>
+                        <Box sx={{ flex: 1 }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1, flexWrap: 'wrap' }}>
+                            <Box sx={{ p: 1, borderRadius: 1.5, bgcolor: goldBg, color: gold, display: 'flex' }}>
+                              <IconComp fontSize="small" />
+                            </Box>
+                            <Typography variant="h6" sx={{ fontWeight: 800, color: textPrimary }}>
+                              {tpl.name}
+                            </Typography>
+                            <Chip label={tpl.tag} size="small" sx={{ bgcolor: isSelected ? gold : (dark ? '#1E293B' : '#E2E8F0'), color: isSelected ? (dark ? '#08080B' : '#FFFFFF') : textSecondary, fontWeight: 800, fontSize: '0.68rem', fontFamily: mono }} />
+                          </Box>
+                          <Typography variant="body2" sx={{ color: textSecondary, mb: 1.5, lineHeight: 1.6 }}>
+                            {tpl.desc}
+                          </Typography>
+                          <Paper sx={{ p: 1.5, bgcolor: dark ? '#0A0C14' : '#F1F5F9', border: `1px solid ${divider}`, borderRadius: 1.5 }}>
+                            <Typography variant="caption" sx={{ fontFamily: mono, color: dark ? goldLight : '#8A6A09', display: 'block', fontSize: '0.75rem' }}>
+                              Default Spec: "{tpl.defaultPrompt}"
+                            </Typography>
+                          </Paper>
+                        </Box>
+
+                        <Button
+                          variant={isSelected ? "contained" : "outlined"}
+                          onClick={() => handleSelectTemplate(tpl)}
+                          sx={{
+                            flexShrink: 0,
+                            bgcolor: isSelected ? gold : 'transparent',
+                            color: isSelected ? (dark ? '#08080B' : '#FFFFFF') : gold,
+                            borderColor: gold,
+                            fontWeight: 800,
+                            px: 2.5,
+                            py: 1,
+                            '&:hover': { bgcolor: isSelected ? goldLight : goldBg }
+                          }}
+                        >
+                          {isSelected ? '✓ Active Template' : 'Load Template Spec'}
+                        </Button>
+                      </Box>
                     );
-                  })}
-                </Box>
+                  }}
+                />
 
                 {/* Prompt Spec Input */}
                 <TextField
@@ -2370,7 +2394,7 @@ export default function WebGenPage() {
                       </Box>
 
                       {/* Metrics Counter Bar */}
-                      <Grid container spacing={1.5}>
+                      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(5, 1fr)' }, gap: 1.5 }}>
                         {[
                           { label: 'Total AST Nodes', count: 142, color: textPrimary },
                           { label: 'Root & Declarations', count: 2, color: '#A855F7' },
@@ -2378,14 +2402,12 @@ export default function WebGenPage() {
                           { label: 'Tailwind Utility Tokens', count: 84, color: '#10B981' },
                           { label: 'Reactive Hooks', count: 18, color: '#F59E0B' }
                         ].map((m, i) => (
-                          <Grid key={i} xs={6} sm={2.4}>
-                            <Box sx={{ p: 1, bgcolor: dark ? '#141622' : '#FFFFFF', borderRadius: 1.5, border: `1px solid ${divider}` }}>
-                              <Typography variant="caption" sx={{ color: textSecondary, fontSize: '0.65rem', display: 'block', textTransform: 'uppercase', fontFamily: mono }}>{m.label}</Typography>
-                              <Typography variant="subtitle1" sx={{ fontWeight: 900, color: m.color, fontFamily: mono }}>{m.count}</Typography>
-                            </Box>
-                          </Grid>
+                          <Box key={i} sx={{ p: 1.5, bgcolor: dark ? '#141622' : '#FFFFFF', borderRadius: 1.5, border: `1px solid ${divider}` }}>
+                            <Typography variant="caption" sx={{ color: textSecondary, fontSize: '0.68rem', display: 'block', textTransform: 'uppercase', fontFamily: mono }}>{m.label}</Typography>
+                            <Typography variant="subtitle1" sx={{ fontWeight: 900, color: m.color, fontFamily: mono }}>{m.count}</Typography>
+                          </Box>
                         ))}
-                      </Grid>
+                      </Box>
                     </Box>
 
                     {astMode === 'tree' ? (

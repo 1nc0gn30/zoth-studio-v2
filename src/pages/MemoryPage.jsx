@@ -1306,116 +1306,135 @@ export default function MemoryPage() {
            ========================================================================== */}
         <Paper
           sx={{
-            p: 2,
+            p: { xs: 2, sm: 2.5 },
             mb: 3,
             border: `1px solid ${isMuted ? (isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider) : gold.accent}`,
-            borderRadius: 2,
+            borderRadius: 2.5,
             bgcolor: isDark ? '#08080B' : theme.palette.background.paper,
-            boxShadow: isMuted ? 'none' : (isDark ? '0 0 20px rgba(212,175,55,0.15)' : '0 4px 16px rgba(184,134,11,0.12)'),
+            boxShadow: isMuted ? 'none' : (isDark ? '0 0 24px rgba(212,175,55,0.18)' : '0 4px 16px rgba(184,134,11,0.12)'),
           }}
         >
-          <Grid container spacing={2} alignItems="center">
-            {/* Unmute Toggle & Frequency Label */}
-            <Grid xs={12} sm={4} md={3.5}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <Button
-                  variant={isMuted ? 'outlined' : 'contained'}
-                  size="small"
-                  startIcon={isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
-                  onClick={handleToggleMute}
-                  sx={{
-                    bgcolor: isMuted ? 'transparent' : gold.accent,
-                    color: isMuted ? theme.palette.text.secondary : (isDark ? '#08080B' : '#FFFFFF'),
-                    borderColor: isMuted ? (isDark ? 'rgba(212,175,55,0.4)' : theme.palette.divider) : gold.accent,
-                    fontWeight: 800,
-                    whiteSpace: 'nowrap',
-                    '&:hover': {
-                      bgcolor: isMuted ? (isDark ? 'rgba(212,175,55,0.1)' : '#FEF9E7') : gold.accent,
-                    },
-                  }}
-                >
-                  {isMuted ? 'Carrier Muted' : 'Carrier Active'}
-                </Button>
+          {/* Row 1: Tone Controls with ample breathing room */}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2, mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+              <Button
+                variant={isMuted ? 'outlined' : 'contained'}
+                size="small"
+                startIcon={isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
+                onClick={handleToggleMute}
+                sx={{
+                  bgcolor: isMuted ? 'transparent' : gold.accent,
+                  color: isMuted ? theme.palette.text.secondary : (isDark ? '#08080B' : '#FFFFFF'),
+                  borderColor: isMuted ? (isDark ? 'rgba(212,175,55,0.4)' : theme.palette.divider) : gold.accent,
+                  fontWeight: 800,
+                  whiteSpace: 'nowrap',
+                  px: 2,
+                  py: 0.75,
+                  '&:hover': {
+                    bgcolor: isMuted ? (isDark ? 'rgba(212,175,55,0.1)' : '#FEF9E7') : gold.accent,
+                  },
+                }}
+              >
+                {isMuted ? 'Carrier Muted' : 'Carrier Active'}
+              </Button>
 
-                <Box>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, display: 'block' }}>
-                    COGNITIVE CARRIER
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: isMuted ? 'text.secondary' : (isDark ? '#00F0FF' : '#0284C7'), fontFamily: mono, fontSize: '0.72rem', fontWeight: 600 }}>
-                    {isMuted ? 'Sound Default: Muted' : `${carrierFreq}Hz Resonant Wave`}
-                  </Typography>
-                </Box>
-              </Box>
-            </Grid>
-
-            {/* Carrier Wave Selection (432Hz Alpha vs 528Hz Theta) */}
-            <Grid xs={12} sm={4} md={3.5}>
-              <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                <Chip
-                  label="432Hz Alpha"
-                  size="small"
-                  clickable
-                  onClick={() => handleFrequencyChange(432)}
-                  sx={{
-                    fontFamily: mono,
-                    fontWeight: 750,
-                    fontSize: '0.75rem',
-                    bgcolor: carrierFreq === 432 ? gold.accent : (isDark ? 'rgba(255,255,255,0.05)' : '#F1F5F9'),
-                    color: carrierFreq === 432 ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
-                    border: `1px solid ${carrierFreq === 432 ? gold.accent : (isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider)}`,
-                  }}
-                />
-                <Chip
-                  label="528Hz Theta"
-                  size="small"
-                  clickable
-                  onClick={() => handleFrequencyChange(528)}
-                  sx={{
-                    fontFamily: mono,
-                    fontWeight: 750,
-                    fontSize: '0.75rem',
-                    bgcolor: carrierFreq === 528 ? (isDark ? '#00F0FF' : '#0284C7') : (isDark ? 'rgba(255,255,255,0.05)' : '#F1F5F9'),
-                    color: carrierFreq === 528 ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
-                    border: `1px solid ${carrierFreq === 528 ? (isDark ? '#00F0FF' : '#0284C7') : (isDark ? 'rgba(0,240,255,0.2)' : theme.palette.divider)}`,
-                  }}
-                />
-                <Tooltip title={carrierFreq === 432 ? "432Hz Alpha: Promotes mental balance, calm focus, and sovereign stillness." : "528Hz Theta: The transformation frequency; deep netrunner drift and rapid synaptic plasticity."}>
-                  <GraphicEqIcon sx={{ color: gold.accent, fontSize: '1.2rem', cursor: 'pointer' }} />
-                </Tooltip>
-              </Box>
-            </Grid>
-
-            {/* Volume Slider */}
-            <Grid xs={12} sm={4} md={2.5}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem', minWidth: 28 }}>
-                  {isMuted ? '0%' : `${Math.round(volume * 100)}%`}
+              <Box>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, display: 'block' }}>
+                  COGNITIVE CARRIER ENGINE
                 </Typography>
-                <Slider
-                  size="small"
-                  value={isMuted ? 0 : Math.round(volume * 100)}
-                  min={0}
-                  max={100}
-                  disabled={isMuted}
-                  onChange={(e, val) => handleVolumeChange(val / 100)}
-                  sx={{
-                    color: gold.accent,
-                    '& .MuiSlider-thumb': {
-                      width: 14,
-                      height: 14,
-                    },
-                  }}
-                />
+                <Typography variant="caption" sx={{ color: isMuted ? 'text.secondary' : (isDark ? '#00F0FF' : '#0284C7'), fontFamily: mono, fontSize: '0.75rem', fontWeight: 600 }}>
+                  {isMuted ? 'Audio Inactive (Sound Muted by Default)' : `${carrierFreq}Hz Harmonic Continuous Tone`}
+                </Typography>
               </Box>
-            </Grid>
+            </Box>
 
-            {/* Live Carrier Oscilloscope Canvas */}
-            <Grid xs={12} md={2.5}>
-              <Box sx={{ borderRadius: 1.5, overflow: 'hidden', border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider}`, height: 36 }}>
-                <canvas ref={carrierCanvasRef} width={180} height={36} style={{ width: '100%', height: '100%', display: 'block' }} />
-              </Box>
-            </Grid>
-          </Grid>
+            {/* Carrier Frequency Selectors */}
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', mr: 0.5, fontWeight: 700 }}>
+                MODE:
+              </Typography>
+              <Chip
+                label="432Hz Alpha (Calm)"
+                size="small"
+                clickable
+                onClick={() => handleFrequencyChange(432)}
+                sx={{
+                  fontFamily: mono,
+                  fontWeight: 750,
+                  fontSize: '0.75rem',
+                  bgcolor: carrierFreq === 432 ? gold.accent : (isDark ? 'rgba(255,255,255,0.05)' : '#F1F5F9'),
+                  color: carrierFreq === 432 ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
+                  border: `1px solid ${carrierFreq === 432 ? gold.accent : (isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider)}`,
+                }}
+              />
+              <Chip
+                label="528Hz Theta (Synaptic)"
+                size="small"
+                clickable
+                onClick={() => handleFrequencyChange(528)}
+                sx={{
+                  fontFamily: mono,
+                  fontWeight: 750,
+                  fontSize: '0.75rem',
+                  bgcolor: carrierFreq === 528 ? (isDark ? '#00F0FF' : '#0284C7') : (isDark ? 'rgba(255,255,255,0.05)' : '#F1F5F9'),
+                  color: carrierFreq === 528 ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
+                  border: `1px solid ${carrierFreq === 528 ? (isDark ? '#00F0FF' : '#0284C7') : (isDark ? 'rgba(0,240,255,0.2)' : theme.palette.divider)}`,
+                }}
+              />
+              <Tooltip title={carrierFreq === 432 ? "432Hz Alpha: Mental balance and sovereign stillness." : "528Hz Theta: Deep netrunner drift and rapid synaptic plasticity."}>
+                <GraphicEqIcon sx={{ color: gold.accent, fontSize: '1.2rem', cursor: 'pointer', ml: 0.5 }} />
+              </Tooltip>
+            </Box>
+
+            {/* Volume Control */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: { xs: '100%', sm: 180 } }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem', minWidth: 32 }}>
+                VOL {isMuted ? '0%' : `${Math.round(volume * 100)}%`}
+              </Typography>
+              <Slider
+                size="small"
+                value={isMuted ? 0 : Math.round(volume * 100)}
+                min={0}
+                max={100}
+                disabled={isMuted}
+                onChange={(e, val) => handleVolumeChange(val / 100)}
+                sx={{
+                  color: gold.accent,
+                  '& .MuiSlider-thumb': {
+                    width: 14,
+                    height: 14,
+                  },
+                }}
+              />
+            </Box>
+          </Box>
+
+          {/* Row 2: Live Full-Width Carrier Wave Oscilloscope (Spacious, Never Squished) */}
+          <Box
+            sx={{
+              borderRadius: 2,
+              overflow: 'hidden',
+              border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider}`,
+              bgcolor: isDark ? '#040508' : '#0F172A',
+              p: 1.5,
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              alignItems: 'center',
+              gap: 2,
+            }}
+          >
+            <Box sx={{ flexShrink: 0, minWidth: 160 }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, display: 'block' }}>
+                WAVEFORM TELEMETRY
+              </Typography>
+              <Typography variant="caption" sx={{ color: isDark ? '#94A3B8' : '#CBD5E1', fontSize: '0.72rem' }}>
+                {isMuted ? 'Standby (Muted)' : `Active Harmonic: ${carrierFreq}Hz Resonant Mode`}
+              </Typography>
+            </Box>
+            <Box sx={{ flex: 1, width: '100%', height: 48, borderRadius: 1.5, overflow: 'hidden' }}>
+              <canvas ref={carrierCanvasRef} width={800} height={48} style={{ width: '100%', height: '100%', display: 'block' }} />
+            </Box>
+          </Box>
         </Paper>
 
         <DaemonStatusStrip />
