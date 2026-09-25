@@ -338,11 +338,12 @@ vite build && node scripts/prerender.mjs
     to = "/index.html"
     status = 200
   ```
+- **Legacy Hub Aliases**: `/hub` → `/` and `/hub/*` → `/:splat` (301) for backward compatibility.
 - **Security & Caching Headers**:
-  - `X-Frame-Options: SAMEORIGIN`
-  - Strict Content Security Policy preventing unauthorized frame embedding.
+  - `X-Frame-Options: SAMEORIGIN` + strict `Content-Security-Policy` (`frame-ancestors 'self' https://zoth.nullai.tech https://*.nullai.tech http://127.0.0.1:* http://localhost:*`).
+  - `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`, `Cross-Origin-Opener-Policy: same-origin`, and `Cross-Origin-Embedder-Policy: credentialless`.
   - Immutable 1-year caching for `/assets/*`, `/fonts/*`, `/brand/*`, `/mascot/*`, `/pets/*`.
-  - CORS-enabled open headers (`Access-Control-Allow-Origin: *`) for machine discovery endpoints (`/llms.txt`, `/ai.txt`, `/sitemap.xml`).
+  - CORS-enabled open headers (`Access-Control-Allow-Origin: *`) for machine discovery endpoints (`/llms.txt`, `/ai.txt`, `/sitemap.xml`, `/robots.txt`, `/api/*`).
 
 ### Prerendered Static Routes (83 Total)
 
@@ -409,7 +410,7 @@ npm install
 # Run diagnostic health check across ports :8788, :8789, :8787, :11434
 npm run zoth -- doctor
 
-# Launch local backend daemons
+# Launch local backend daemons (memory :8788, bridge :8789, vault :8787)
 npm run zoth -- up
 
 # Start Vite development server
@@ -418,7 +419,22 @@ npm run dev
 
 Visit **`http://127.0.0.1:3000`** in your browser.
 
-### 3. Production Build & Verify
+### 3. Zoth CLI Reference
+
+The `zoth` CLI (`bin/zoth.js`, aliased as `zoth` / `zoth-studio`) is the operator's control surface for the local enclave:
+
+| Command | Action |
+| :--- | :--- |
+| `npm run zoth -- doctor` | Probe loopback services (`:8788`, `:8789`, `:8787`, `:11434`) and local tool checkouts |
+| `npm run zoth -- list` | Catalog all published micro-tools with their GitHub URLs |
+| `npm run zoth -- pull <repo>` | Clone or fast-forward one published tool into `./tools` |
+| `npm run zoth -- pull --all` | Clone every published tool into `./tools` |
+| `npm run zoth -- up` | Start memory, bridge, and vault daemons from `backend/` |
+| `npm run zoth -- down` | Stop processes this CLI started |
+| `npm run zoth -- swarm` | Print the documented pantheon agent roster |
+| `npm run zoth -- init` | Create `./tools` and `./.zoth` state directories |
+
+### 4. Production Build & Verify
 ```bash
 # Compile and prerender all 83 static routes
 npm run build
@@ -434,11 +450,15 @@ npm run preview
 ```
 zoth-studio-v2/
 ├── bin/
-│   └── zoth.js                 # Zoth Studio CLI (doctor, pull, up, down, swarm)
-├── backend/                    # Local Python daemons and Modelfiles
-│   ├── neuro-memory-daemon/    # Python STDP memory service (Port 8788)
-│   ├── sovereign-agent-bridge/ # Inter-agent IPC service (Port 8789)
-│   └── vault-daemon/           # Rust Argon2id vault daemon (Port 8787)
+│   └── zoth.js                 # Zoth Studio CLI (doctor, list, pull, up, down, swarm, init)
+├── backend/                    # Local daemons and frameworks
+│   ├── memory-daemon/          # Python Netrunner Memory Hub (STDP + SQLite HNSW, Port 8788)
+│   ├── neuro-memory-daemon/    # Python STDP biomorphic memory service (Port 8788)
+│   ├── sovereign-agent-bridge/ # Inter-agent E2EE IPC service (Port 8789)
+│   ├── secure-comms-bridge/    # Rust secure comms bridge
+│   ├── vault-daemon/           # Rust Argon2id + XChaCha20-Poly1305 vault (Port 8787)
+│   ├── orchestrator/           # Z0TH multi-agent orchestration framework (Port 8484)
+│   └── hardware-arduino/       # Arduino firmware, bridges, and hardware docs
 ├── docs/                       # Architectural documentation & AEO specs
 │   ├── ARCHITECTURE.md         # System blueprint and security model
 │   ├── AEO_AX_SPECIFICATION.md # Agent Experience & AI crawler protocols
@@ -474,6 +494,28 @@ zoth-studio-v2/
 ├── package.json                # Project manifest and scripts
 └── vite.config.js              # Vite configuration with API middleware
 ```
+
+---
+
+## Contributing
+
+Zoth Studio v2 is a sovereign, local-first project. Contributions are welcome within the zero-egress philosophy:
+
+1. **Fork & branch** — work on a feature branch off `main`.
+2. **Keep it local-first** — no new cloud telemetry, analytics SDKs, or third-party auth. New tools must run entirely in-browser or on loopback daemons.
+3. **Respect the invariants** — no `eval()`, `new Function()`, or `document.write()`; no `0.0.0.0` bindings; no prototype pollution.
+4. **Add a workstation or tool** — register it in `src/data/workstations.js` or `src/data/toolsData.js` and add its route to `scripts/prerender.mjs` so it ships as a prerendered static route.
+5. **Verify before opening a PR** — run `npm run build` and `npm run zoth -- doctor`; confirm the new route appears in the prerender output.
+
+## Troubleshooting
+
+| Symptom | Likely Cause | Resolution |
+| :--- | :--- | :--- |
+| `npm run zoth -- doctor` reports daemons down | Backend daemons not started | Run `npm run zoth -- up` |
+| Memory/bridge daemon fails to start | Tool not checked out | Run `npm run zoth -- pull neuro-memory-daemon` (and `sovereign-agent-bridge`) |
+| Vault daemon down | Rust binary not built | `cargo build --release` in `backend/vault-daemon` (the CLI does this automatically) |
+| Prerender step fails during build | New route missing from `scripts/prerender.mjs` | Add the route to the prerender route list |
+| Port already in use | A previous daemon is still running | `npm run zoth -- down`, then retry |
 
 ---
 
