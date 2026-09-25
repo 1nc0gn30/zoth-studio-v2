@@ -48,9 +48,16 @@ echo -e "\e[1;36m[🌐] Zoth Studio v2 live at: $URL\e[0m"
 
 export PORT
 
+# Autostart local daemons (memory daemon, vault, bridge) if present
+if [[ -f "$ROOT/bin/zoth.js" ]]; then
+    node "$ROOT/bin/zoth.js" up >/dev/null 2>&1 &
+fi
+
 # Delegate to native Python / Electron wrapper if available
 if [[ -x "/usr/local/bin/zoth-studio" && "${1:-}" != "--browser" ]]; then
     exec /usr/local/bin/zoth-studio "$@"
+elif [[ -x "/opt/electron/electron" && "${1:-}" != "--browser" && -f "$ROOT/main.cjs" ]]; then
+    exec /opt/electron/electron --no-sandbox --disable-dev-shm-usage --disable-gpu-sandbox --enable-features=UseOzonePlatform --ozone-platform=x11 "$ROOT" "$@"
 fi
 
 # Launch in dedicated application window mode

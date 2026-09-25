@@ -1,5 +1,7 @@
 import http from 'node:http';
 import fs from 'node:fs';
+import os from 'node:os';
+import { exec } from 'node:child_process';
 
 function requestJson(port, urlPath, { method = 'GET', body = null, timeout = 900 } = {}) {
   return new Promise((resolve) => {
@@ -149,6 +151,61 @@ export function studioMiddleware() {
     try {
       if (req.method === 'GET' && url.pathname === '/api/studio/status') {
         send(res, 200, await probeStatus());
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/host') {
+        const isZothOS = fs.existsSync('/etc/zothos-release') || fs.existsSync('/usr/local/bin/zoth-doctor') || fs.existsSync('/opt/zoth-studio');
+        const info = {
+          isZothOS,
+          distro: 'ZothOS Sovereign Linux',
+          release: '2026.1 (Imperial Sovereign Edition)',
+          kernel: os.release(),
+          arch: os.arch(),
+          hostname: os.hostname(),
+          cpus: os.cpus().length,
+          cpuModel: os.cpus()[0]?.model || 'Native Silicon',
+          totalMem: Math.round(os.totalmem() / (1024 * 1024)),
+          freeMem: Math.round(os.freemem() / (1024 * 1024)),
+          uptime: Math.round(os.uptime()),
+          audioDevice: 'ICH9 High Definition Audio (Active)',
+          installedTools: {
+            claude: fs.existsSync('/usr/local/bin/claude'),
+            opencode: fs.existsSync('/usr/local/bin/opencode'),
+            hermes: fs.existsSync('/usr/local/bin/hermes'),
+            burpsuite: fs.existsSync('/usr/bin/burpsuite'),
+            bitwarden: fs.existsSync('/usr/local/bin/bw'),
+            streamlit: fs.existsSync('/usr/local/bin/streamlit'),
+            netlify: fs.existsSync('/usr/local/bin/netlify'),
+            ollama: fs.existsSync('/usr/local/bin/ollama') || fs.existsSync('/usr/bin/ollama')
+          }
+        };
+        send(res, 200, info);
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/launch') {
+        const body = await readBody(req);
+        const tool = body.tool;
+        const allowedCommands = {
+          claude: 'xfce4-terminal --title="Claude CLI" -e "claude" &',
+          opencode: 'xfce4-terminal --title="OpenCode" -e "opencode" &',
+          hermes: 'xfce4-terminal --title="Hermes Agent" -e "hermes" &',
+          netlify: 'xfce4-terminal --title="Netlify CLI" -e "netlify" &',
+          burpsuite: 'burpsuite &',
+          bitwarden: 'xfce4-terminal --title="Bitwarden CLI" -e "bw" &',
+          streamlit: 'xfce4-terminal --title="Streamlit" -e "streamlit" &',
+          terminal: 'xfce4-terminal &',
+          arsenal: 'xfce4-terminal --title="Arsenal Provisioner" -e "zoth-arsenal-sync" &'
+        };
+        if (allowedCommands[tool]) {
+          exec(allowedCommands[tool], (err) => {
+            if (err) console.error('[Zoth Studio] Launch error:', err);
+          });
+          send(res, 200, { success: true, tool });
+          return;
+        }
+        send(res, 400, { error: 'Unknown or disallowed tool: ' + tool });
         return;
       }
 

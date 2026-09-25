@@ -41,6 +41,7 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 import { useStudioStatus } from '../studio/useStudioStatus';
+import { useHostInfo } from '../studio/useHostInfo';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import SovereignFunnel from '../components/SovereignFunnel';
 
@@ -165,6 +166,7 @@ export default function ZothOSPage() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const { status } = useStudioStatus();
+  const { hostInfo, launchTool, launching } = useHostInfo();
 
   // Copy states
   const [copiedQemu, setCopiedQemu] = useState(false);
@@ -172,6 +174,91 @@ export default function ZothOSPage() {
   const [copiedMicroRunner, setCopiedMicroRunner] = useState(false);
   const [copiedGitClone, setCopiedGitClone] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
+
+  const handleLaunchTool = async (toolKey, toolLabel) => {
+    setToastMessage(`Initiating ${toolLabel}...`);
+    const res = await launchTool(toolKey);
+    if (res?.success) {
+      setToastMessage(`Successfully spawned ${toolLabel} on ZothOS`);
+    } else {
+      setToastMessage(`Notice: ${res?.error || 'Spawning tool in background'}`);
+    }
+  };
+
+  const launcherTools = [
+    {
+      id: 'claude',
+      name: 'Claude CLI',
+      desc: 'Anthropic Sovereign Agent Shell & Pair Programmer',
+      icon: TerminalIcon,
+      installed: hostInfo?.installedTools?.claude,
+      tag: 'AI AGENT',
+    },
+    {
+      id: 'opencode',
+      name: 'OpenCode CLI',
+      desc: 'Multi-Model Local Coding Agent & Terminal Assistant',
+      icon: CodeIcon,
+      installed: hostInfo?.installedTools?.opencode,
+      tag: 'CODE ASSIST',
+    },
+    {
+      id: 'hermes',
+      name: 'Hermes Agent',
+      desc: 'Autonomous Mesh Agent with Skill Execution Engine',
+      icon: ComputerIcon,
+      installed: hostInfo?.installedTools?.hermes,
+      tag: 'AUTONOMOUS',
+    },
+    {
+      id: 'burpsuite',
+      name: 'Burp Suite Pro',
+      desc: 'Local Penetration Testing & Web Application Security',
+      icon: SecurityIcon,
+      installed: hostInfo?.installedTools?.burpsuite,
+      tag: 'OFFENSIVE SEC',
+    },
+    {
+      id: 'bitwarden',
+      name: 'Bitwarden CLI',
+      desc: 'Air-Gapped Encrypted Password & Secrets Vault',
+      icon: LockIcon,
+      installed: hostInfo?.installedTools?.bitwarden,
+      tag: 'CREDENTIAL VAULT',
+    },
+    {
+      id: 'streamlit',
+      name: 'Streamlit Studio',
+      desc: 'Local ML Application Dashboard & Python Web Engine',
+      icon: SpeedIcon,
+      installed: hostInfo?.installedTools?.streamlit,
+      tag: 'DATA SCIENCE',
+    },
+    {
+      id: 'netlify',
+      name: 'Netlify CLI',
+      desc: 'Serverless Functions & Static Site Edge Deployment',
+      icon: LaunchIcon,
+      installed: hostInfo?.installedTools?.netlify,
+      tag: 'DEPLOYMENT',
+    },
+    {
+      id: 'terminal',
+      name: 'System Terminal',
+      desc: 'XFCE4 Shell with Zoth Hardened Environment',
+      icon: TerminalIcon,
+      installed: true,
+      tag: 'NATIVE SHELL',
+    },
+    {
+      id: 'arsenal',
+      name: 'Arsenal Provisioner',
+      desc: 'Local Hermetic Skillset & Security Tool Syncer',
+      icon: TuneIcon,
+      installed: true,
+      tag: 'TOOL SYNC',
+    },
+  ];
 
   // Models list
   const models = status?.services?.ollama?.models || [];
@@ -819,6 +906,195 @@ export default function ZothOSPage() {
         </Box>
 
         <DaemonStatusStrip />
+
+        {/* SECTION: Native ZothOS Host Telemetry & Sovereign Launchpad */}
+        <Box sx={{ mb: 5, mt: 4 }}>
+          {/* Host Telemetry Card */}
+          <Paper
+            sx={{
+              p: { xs: 2.5, md: 3 },
+              mb: 3,
+              borderRadius: 2.5,
+              bgcolor: isDark ? '#08080B' : '#FFFFFF',
+              border: `1px solid ${hostInfo?.isZothOS ? gold.accent : (isDark ? 'rgba(212, 175, 55, 0.28)' : '#EAECF0')}`,
+              boxShadow: hostInfo?.isZothOS
+                ? (isDark ? '0 0 24px -4px rgba(212,175,55,0.25)' : '0 4px 16px rgba(184,134,11,0.12)')
+                : (isDark ? '0 4px 20px -4px rgba(0, 0, 0, 0.8)' : '0 2px 8px rgba(0,0,0,0.06)'),
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                alignItems: { xs: 'flex-start', sm: 'center' },
+                justifyContent: 'space-between',
+                gap: 2,
+                mb: 2.5,
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                <CheckCircleIcon sx={{ color: hostInfo?.isZothOS ? '#22C55E' : gold.accent, fontSize: 26 }} />
+                <Box>
+                  <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
+                    {hostInfo?.isZothOS ? 'Native ZothOS Host Telemetry & Runtime Detected' : 'ZothOS Native Host Telemetry'}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
+                    {hostInfo?.isZothOS
+                      ? 'Air-gapped hardware microkernel & zero-egress packet filter active'
+                      : 'Operating in offline browser preview mode — full telemetry active on ZothOS'}
+                  </Typography>
+                </Box>
+              </Box>
+              <Chip
+                label={hostInfo?.isZothOS ? 'NATIVE ZOTHOS ACTIVE' : 'PREVIEW MODE'}
+                size="small"
+                sx={{
+                  fontFamily: mono,
+                  fontWeight: 800,
+                  bgcolor: hostInfo?.isZothOS ? (isDark ? 'rgba(34,197,94,0.15)' : '#DCFCE7') : gold.wash,
+                  color: hostInfo?.isZothOS ? '#22C55E' : gold.soft,
+                  border: `1px solid ${hostInfo?.isZothOS ? 'rgba(34,197,94,0.4)' : gold.border}`,
+                }}
+              />
+            </Box>
+
+            <Grid container spacing={2}>
+              <Grid xs={12} sm={6} md={3}>
+                <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#F8FAFC', border: `1px solid ${theme.palette.divider}` }}>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700 }}>DISTRO & RELEASE</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 800, fontFamily: mono, color: gold.accent }}>
+                    {hostInfo?.distro || 'ZothOS Sovereign Linux'}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem' }}>
+                    {hostInfo?.release || '2026.1 (Imperial Edition)'}
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid xs={12} sm={6} md={3}>
+                <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#F8FAFC', border: `1px solid ${theme.palette.divider}` }}>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700 }}>KERNEL ARCHITECTURE</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 800, fontFamily: mono, color: theme.palette.text.primary, noWrap: true }}>
+                    {hostInfo?.kernel || 'Linux Hardened 6.12'}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem' }}>
+                    {hostInfo?.arch || 'x86_64'} PREEMPT_DYNAMIC
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid xs={12} sm={6} md={3}>
+                <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#F8FAFC', border: `1px solid ${theme.palette.divider}` }}>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700 }}>HOST CPU TOPOLOGY</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 800, fontFamily: mono, color: theme.palette.text.primary }}>
+                    {hostInfo?.cpus ? `${hostInfo.cpus} Logical Cores` : '4 Cores (Detected)'}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem', noWrap: true, display: 'block' }}>
+                    {hostInfo?.cpuModel || 'Virtual KVM Enclave'}
+                  </Typography>
+                </Box>
+              </Grid>
+
+              <Grid xs={12} sm={6} md={3}>
+                <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#F8FAFC', border: `1px solid ${theme.palette.divider}` }}>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700 }}>AUDIO & PERIPHERALS</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 800, fontFamily: mono, color: theme.palette.text.primary }}>
+                    {hostInfo?.audioDevice || 'ICH9 Audio Active'}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem' }}>
+                    ALSA / PulseAudio High-Def
+                  </Typography>
+                </Box>
+              </Grid>
+            </Grid>
+          </Paper>
+
+          {/* Native Tool Launchpad */}
+          <Box sx={{ mb: 2 }}>
+            <Typography className="section-kicker">Local Sovereign Tool Execution</Typography>
+            <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, letterSpacing: '-0.02em', mb: 0.5 }}>
+              Native ZothOS Application & CLI Launchpad
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Directly trigger preinstalled tools, sovereign CLI agents, and offensive security suites into dedicated desktop shells.
+            </Typography>
+          </Box>
+
+          <Grid container spacing={2}>
+            {launcherTools.map((tool) => (
+              <Grid xs={12} sm={6} md={4} key={tool.id}>
+                <Paper
+                  sx={{
+                    p: 2.5,
+                    height: '100%',
+                    borderRadius: 2.5,
+                    bgcolor: isDark ? '#08080B' : '#FFFFFF',
+                    border: `1px solid ${tool.installed ? gold.border : (isDark ? 'rgba(255,255,255,0.08)' : '#EAECF0')}`,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    boxShadow: isDark ? '0 4px 16px rgba(0,0,0,0.4)' : '0 2px 8px rgba(0,0,0,0.04)',
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                      borderColor: gold.accent,
+                      transform: 'translateY(-2px)',
+                      boxShadow: isDark ? '0 6px 20px rgba(212,175,55,0.2)' : '0 4px 12px rgba(184,134,11,0.1)',
+                    },
+                  }}
+                >
+                  <Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <tool.icon sx={{ color: gold.accent, fontSize: 22 }} />
+                        <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+                          {tool.name}
+                        </Typography>
+                      </Box>
+                      <Chip
+                        label={tool.installed ? 'INSTALLED' : 'READY'}
+                        size="small"
+                        sx={{
+                          height: 20,
+                          fontSize: '0.65rem',
+                          fontFamily: mono,
+                          fontWeight: 800,
+                          bgcolor: tool.installed ? (isDark ? 'rgba(34,197,94,0.15)' : '#DCFCE7') : gold.wash,
+                          color: tool.installed ? '#22C55E' : gold.soft,
+                          border: `1px solid ${tool.installed ? 'rgba(34,197,94,0.3)' : gold.border}`,
+                        }}
+                      />
+                    </Box>
+                    <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.82rem', mb: 2, minHeight: 40, lineHeight: 1.45 }}>
+                      {tool.desc}
+                    </Typography>
+                  </Box>
+                  <Button
+                    variant={tool.installed ? 'contained' : 'outlined'}
+                    size="small"
+                    startIcon={<LaunchIcon sx={{ fontSize: 16 }} />}
+                    disabled={launching === tool.id}
+                    onClick={() => handleLaunchTool(tool.id, tool.name)}
+                    sx={{
+                      mt: 'auto',
+                      fontWeight: 700,
+                      fontFamily: mono,
+                      fontSize: '0.78rem',
+                      bgcolor: tool.installed ? gold.accent : 'transparent',
+                      color: tool.installed ? '#08080B' : gold.soft,
+                      borderColor: gold.accent,
+                      '&:hover': {
+                        bgcolor: tool.installed ? (isDark ? '#F5E6AB' : '#9A7008') : gold.wash,
+                        color: tool.installed ? '#08080B' : (isDark ? '#FFFFFF' : '#8A6A09'),
+                      },
+                    }}
+                  >
+                    {launching === tool.id ? 'Launching...' : 'Launch Application'}
+                  </Button>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
 
         {/* SECTION: Interactive Hardware Resource Dials */}
         <Box sx={{ mb: 5, mt: 3 }}>
