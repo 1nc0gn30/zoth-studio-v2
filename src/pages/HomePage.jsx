@@ -33,6 +33,7 @@ import GoldenZLogo3D from '../components/GoldenZLogo3D';
 import MathPillarsGrid from '../components/MathPillarsGrid';
 import CompanyTicker from '../components/CompanyTicker';
 import WebGPUAIConsole from '../components/WebGPUAIConsole';
+import SovereignFunnel from '../components/SovereignFunnel';
 import { microTools } from '../data/toolsData';
 import { useStudioStatus } from '../studio/useStudioStatus';
 
@@ -44,7 +45,7 @@ export function ServiceRow() {
   const services = status ? Object.values(status.services) : [];
 
   return (
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 3.5 }}>
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1.5 }}>
       {error && <Chip label="Status unavailable" size="small" sx={{ fontWeight: 700 }} />}
       {!status && !error && <Chip label="Checking local machine..." size="small" sx={{ fontWeight: 700 }} />}
       {services.map((service) => (
@@ -222,14 +223,64 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             borderBottom: `1px solid ${isDark ? 'rgba(212,175,55,0.15)' : 'rgba(255,255,255,0.1)'}`,
             flexWrap: 'wrap',
             gap: 1.5,
+            position: 'relative',
           }}
         >
+          {/* Subtle horizontal gold accent line at bottom edge of header */}
+          <Box
+            aria-hidden="true"
+            sx={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: '1px',
+              bgcolor: gold.wash,
+              opacity: isDark ? 0.35 : 0.25,
+              pointerEvents: 'none',
+            }}
+          />
+
           {/* Traffic light dots + Title */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
-            <Box sx={{ display: 'flex', gap: 0.8 }}>
-              <Box sx={{ width: 11, height: 11, borderRadius: '50%', bgcolor: '#EF4444' }} />
-              <Box sx={{ width: 11, height: 11, borderRadius: '50%', bgcolor: '#F59E0B' }} />
-              <Box sx={{ width: 11, height: 11, borderRadius: '50%', bgcolor: '#10B981' }} />
+            <Box sx={{ display: 'flex', gap: 0.8, alignItems: 'center' }}>
+              {[
+                { color: '#EF4444' },
+                { color: '#F59E0B' },
+                { color: '#10B981' },
+              ].map((dot, dIdx) => (
+                <Box
+                  key={dIdx}
+                  sx={{
+                    position: 'relative',
+                    width: 15,
+                    height: 15,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Box
+                    aria-hidden="true"
+                    sx={{
+                      position: 'absolute',
+                      inset: 0,
+                      borderRadius: '50%',
+                      border: '1px solid',
+                      borderColor: isDark ? 'rgba(212,175,55,0.28)' : 'rgba(184,134,11,0.25)',
+                      pointerEvents: 'none',
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      width: 10,
+                      height: 10,
+                      borderRadius: '50%',
+                      bgcolor: dot.color,
+                    }}
+                  />
+                </Box>
+              ))}
             </Box>
             <Typography
               sx={{
@@ -255,11 +306,19 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                 fontFamily: monoFont,
                 fontSize: '0.75rem',
                 color: '#F5E6AB',
-                bgcolor: 'rgba(212,175,55,0.12)',
-                border: '1px solid rgba(212,175,55,0.3)',
+                background: isDark
+                  ? 'repeating-linear-gradient(0deg, rgba(212,175,55,0.03) 0px, rgba(212,175,55,0.03) 1px, transparent 1px, transparent 3px), linear-gradient(180deg, #151520 0%, #0c0c12 100%)'
+                  : 'repeating-linear-gradient(0deg, rgba(184,134,11,0.03) 0px, rgba(184,134,11,0.03) 1px, transparent 1px, transparent 3px), linear-gradient(180deg, #2A374A 0%, #1E293B 100%)',
+                border: '1px solid rgba(212,175,55,0.35)',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
                 px: 1.5,
                 py: 0.4,
-                '&:hover': { bgcolor: 'rgba(212,175,55,0.22)' },
+                '&:hover': {
+                  background: isDark
+                    ? 'repeating-linear-gradient(0deg, rgba(212,175,55,0.05) 0px, rgba(212,175,55,0.05) 1px, transparent 1px, transparent 3px), linear-gradient(180deg, #1f1f2e 0%, #12121c 100%)'
+                    : 'repeating-linear-gradient(0deg, rgba(184,134,11,0.05) 0px, rgba(184,134,11,0.05) 1px, transparent 1px, transparent 3px), linear-gradient(180deg, #334155 0%, #243248 100%)',
+                  borderColor: '#D4AF37',
+                },
               }}
             >
               Replay Command
@@ -275,9 +334,17 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                 fontWeight: 750,
                 bgcolor: copied ? '#059669' : '#D4AF37',
                 color: copied ? '#FFFFFF' : '#08080B',
+                boxShadow: copied
+                  ? 'inset 0 1px 1px rgba(255,255,255,0.35), 0 2px 4px rgba(0,0,0,0.2)'
+                  : 'inset 0 1px 1px rgba(255,255,255,0.45), inset 0 -1px 1px rgba(0,0,0,0.25), 0 2px 6px rgba(212,175,55,0.3)',
                 px: 1.8,
                 py: 0.4,
-                '&:hover': { bgcolor: copied ? '#047857' : '#E5C158' },
+                '&:hover': {
+                  bgcolor: copied ? '#047857' : '#E5C158',
+                  boxShadow: copied
+                    ? 'inset 0 1px 1px rgba(255,255,255,0.4), 0 2px 6px rgba(0,0,0,0.3)'
+                    : 'inset 0 1px 1px rgba(255,255,255,0.5), inset 0 -1px 1px rgba(0,0,0,0.3), 0 3px 10px rgba(212,175,55,0.45)',
+                },
               }}
             >
               {copied ? 'Copied!' : 'Copy Command'}
@@ -296,8 +363,24 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.08)'}`,
             overflowX: 'auto',
             gap: 1.2,
+            position: 'relative',
           }}
         >
+          {/* Thin gold underline beneath entire strip */}
+          <Box
+            aria-hidden="true"
+            sx={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: '1px',
+              bgcolor: gold.wash,
+              opacity: isDark ? 0.35 : 0.22,
+              pointerEvents: 'none',
+            }}
+          />
+
           {Object.values(commands).map((cmd) => {
             const isSelected = activeTab === cmd.id;
             return (
@@ -317,6 +400,11 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                   bgcolor: isSelected ? 'rgba(212,175,55,0.18)' : 'transparent',
                   border: '1px solid',
                   borderColor: isSelected ? '#D4AF37' : 'rgba(148,163,184,0.15)',
+                  boxShadow: isSelected
+                    ? isDark
+                      ? '0 3px 8px rgba(0,0,0,0.5), 0 1px 3px rgba(212,175,55,0.25)'
+                      : '0 2px 6px rgba(184,134,11,0.2)'
+                    : 'none',
                   '&:hover': {
                     bgcolor: 'rgba(212,175,55,0.1)',
                     borderColor: '#D4AF37',
@@ -367,15 +455,31 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             overflowX: 'auto',
             opacity: isSimulating ? 0.35 : 1,
             transition: 'opacity 0.18s ease',
+            position: 'relative',
           }}
         >
+          {/* Scan-line texture effect overlay (dark mode only) */}
+          {isDark && (
+            <Box
+              aria-hidden="true"
+              sx={{
+                position: 'absolute',
+                inset: 0,
+                pointerEvents: 'none',
+                background: 'repeating-linear-gradient(0deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 1px, transparent 1px, transparent 2px)',
+                opacity: 0.015,
+                zIndex: 1,
+              }}
+            />
+          )}
+
           {activeData.lines.map((line, idx) => {
             if (line.type === 'empty') {
               return <Box key={idx} sx={{ height: '0.6em' }} />;
             }
             if (line.type === 'command') {
               return (
-                <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5, flexWrap: 'wrap' }}>
+                <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5, flexWrap: 'wrap', position: 'relative', zIndex: 2 }}>
                   <Typography component="span" sx={{ fontFamily: monoFont, color: '#D4AF37', fontWeight: 800 }}>
                     user@zoth-metal:~$
                   </Typography>
@@ -390,6 +494,7 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                       height: '15px',
                       bgcolor: '#D4AF37',
                       ml: 0.5,
+                      boxShadow: '0 0 8px #D4AF37, 0 0 14px rgba(212,175,55,0.6)',
                       animation: 'blinkCursor 1s step-start infinite',
                       '@keyframes blinkCursor': {
                         '50%': { opacity: 0 },
@@ -401,34 +506,34 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             }
             if (line.type === 'dim') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#64748B', fontSize: '0.82rem' }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#64748B', fontSize: '0.82rem', position: 'relative', zIndex: 2 }}>
                   {line.text}
                 </Typography>
               );
             }
             if (line.type === 'success') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#34D399', fontWeight: 600 }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#34D399', fontWeight: 600, position: 'relative', zIndex: 2 }}>
                   {line.text}
                 </Typography>
               );
             }
             if (line.type === 'cyan') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#38BDF8', fontWeight: 600 }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#38BDF8', fontWeight: 600, position: 'relative', zIndex: 2 }}>
                   {line.text}
                 </Typography>
               );
             }
             if (line.type === 'gold') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#F5E6AB', fontWeight: 750, mt: 0.5 }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#F5E6AB', fontWeight: 750, mt: 0.5, position: 'relative', zIndex: 2 }}>
                   {line.text}
                 </Typography>
               );
             }
             return (
-              <Typography key={idx} sx={{ fontFamily: monoFont, color: '#EDEFF2' }}>
+              <Typography key={idx} sx={{ fontFamily: monoFont, color: '#EDEFF2', position: 'relative', zIndex: 2 }}>
                 {line.text}
               </Typography>
             );
@@ -751,7 +856,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
           overflow: 'hidden',
         }}
       >
-        {/* Soft pillar background accent glow */}
+        {/* Soft pillar background accent glow - top right */}
         <Box
           aria-hidden="true"
           sx={{
@@ -767,23 +872,79 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
           }}
         />
 
+        {/* Mirrored opposing glow - bottom left */}
+        <Box
+          aria-hidden="true"
+          sx={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: 420,
+            height: 420,
+            pointerEvents: 'none',
+            background: isDark
+              ? 'radial-gradient(circle at bottom left, rgba(212,175,55,0.07) 0%, transparent 70%)'
+              : 'radial-gradient(circle at bottom left, rgba(212,175,55,0.05) 0%, transparent 70%)',
+          }}
+        />
+
         {/* Card Header: Pillar Index, Badges, Title & Subtitle */}
         <Box sx={{ mb: 3.5, position: 'relative', zIndex: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 1.5 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <Box
-                sx={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: 2,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  bgcolor: gold.wash,
-                  border: `1px solid ${isDark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`,
-                }}
-              >
-                {activePillar.icon}
+              {/* Pillar icon frame with pulsing inner glow and animated gold ring outline */}
+              <Box sx={{ position: 'relative', width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Box
+                  aria-hidden="true"
+                  sx={{
+                    position: 'absolute',
+                    inset: -3,
+                    borderRadius: 2.5,
+                    border: `1px solid ${isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.35)'}`,
+                    bgcolor: 'transparent',
+                    pointerEvents: 'none',
+                    animation: 'ringPulse 4s ease-in-out infinite',
+                    '@keyframes ringPulse': {
+                      '0%, 100%': { transform: 'scale(1)', opacity: 0.35 },
+                      '50%': { transform: 'scale(1.08)', opacity: 0.75 },
+                    },
+                  }}
+                />
+                <Box
+                  sx={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    bgcolor: gold.wash,
+                    border: `1px solid ${isDark ? 'rgba(212,175,55,0.45)' : '#F0E1A8'}`,
+                    position: 'relative',
+                    zIndex: 1,
+                    animation: 'iconInnerGlow 5s ease-in-out infinite',
+                    '@keyframes iconInnerGlow': {
+                      '0%, 100%': {
+                        background: isDark
+                          ? 'radial-gradient(circle at center, rgba(212,175,55,0.22) 0%, rgba(212,175,55,0.08) 100%)'
+                          : 'radial-gradient(circle at center, rgba(254,249,231,0.9) 0%, rgba(240,225,168,0.4) 100%)',
+                        boxShadow: isDark
+                          ? '0 0 10px rgba(212,175,55,0.2), inset 0 0 6px rgba(212,175,55,0.15)'
+                          : '0 0 8px rgba(184,134,11,0.15)',
+                      },
+                      '50%': {
+                        background: isDark
+                          ? 'radial-gradient(circle at 60% 40%, rgba(212,175,55,0.32) 0%, rgba(212,175,55,0.14) 100%)'
+                          : 'radial-gradient(circle at 60% 40%, rgba(254,249,231,1) 0%, rgba(240,225,168,0.6) 100%)',
+                        boxShadow: isDark
+                          ? '0 0 16px rgba(212,175,55,0.35), inset 0 0 10px rgba(212,175,55,0.25)'
+                          : '0 0 12px rgba(184,134,11,0.25)',
+                      },
+                    },
+                  }}
+                >
+                  {activePillar.icon}
+                </Box>
               </Box>
               <Box>
                 <Typography sx={{ fontFamily: monoFont, fontSize: '0.72rem', color: isDark ? gold.soft : gold.accent, fontWeight: 800, letterSpacing: '0.12em' }}>
@@ -832,17 +993,34 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                     borderRadius: 2.5,
                     bgcolor: isDark ? '#07070B' : '#F8FAFC',
                     borderColor: isDark ? 'rgba(212,175,55,0.22)' : '#EAECF0',
-                    transition: 'all 0.2s ease',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    transition: 'all 0.22s ease',
                     '&:hover': {
                       borderColor: gold.accent,
                       transform: 'translateY(-2px)',
+                      boxShadow: isDark
+                        ? '0 6px 20px -4px rgba(0,0,0,0.6), 0 0 16px rgba(212,175,55,0.25)'
+                        : '0 6px 20px -4px rgba(16,24,40,0.1), 0 0 14px rgba(184,134,11,0.2)',
                     },
                   }}
                 >
-                  <Typography variant="caption" sx={{ fontFamily: monoFont, color: isDark ? '#94A3B8' : '#64748B', fontWeight: 700, display: 'block', mb: 0.5 }}>
+                  {/* Subtle gold top accent strip */}
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: '2px',
+                      bgcolor: gold.wash,
+                      borderBottom: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.2)'}`,
+                    }}
+                  />
+                  <Typography variant="caption" sx={{ fontFamily: monoFont, color: isDark ? '#94A3B8' : '#64748B', fontWeight: 700, display: 'block', mb: 0.5, mt: 0.2 }}>
                     {metric.label}
                   </Typography>
-                  <Typography variant="h6" sx={{ fontFamily: monoFont, fontWeight: 800, color: isDark ? gold.soft : gold.accent, mb: 0.5, fontSize: { xs: '1rem', md: '1.15rem' } }}>
+                  <Typography variant="h6" sx={{ fontFamily: monoFont, fontWeight: 800, color: isDark ? gold.soft : gold.accent, mb: 0.5, fontSize: { xs: '1rem', md: '1.25rem' } }}>
                     {metric.value}
                   </Typography>
                   <Typography variant="body2" sx={{ fontSize: '0.78rem', color: isDark ? '#64748B' : '#98A2B3' }}>
@@ -872,8 +1050,23 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
               </Typography>
               <Stack spacing={1.2}>
                 {activePillar.invariants.map((inv, invIdx) => (
-                  <Box key={invIdx} sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.2 }}>
-                    <CheckCircleIcon sx={{ fontSize: 18, color: '#34D399', mt: '2px', flexShrink: 0 }} />
+                  <Box key={invIdx} sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
+                    <Box
+                      sx={{
+                        width: 22,
+                        height: 22,
+                        borderRadius: '50%',
+                        bgcolor: gold.wash,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        mt: '1px',
+                        border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.2)'}`,
+                      }}
+                    >
+                      <CheckCircleIcon sx={{ fontSize: 16, color: '#34D399' }} />
+                    </Box>
                     <Typography variant="body2" sx={{ color: isDark ? '#D1D5DB' : '#374151', lineHeight: 1.55, fontSize: '0.86rem' }}>
                       {inv}
                     </Typography>
@@ -899,7 +1092,22 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
               </Typography>
               <Stack spacing={1.2}>
                 {activePillar.specs.map((spec, sIdx) => (
-                  <Box key={sIdx} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 0.8, borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}` }}>
+                  <Box
+                    key={sIdx}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      py: 0.6,
+                      px: 1,
+                      borderLeft: `2px solid ${gold.wash}`,
+                      borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}`,
+                      transition: 'background-color 0.15s ease',
+                      '&:hover': {
+                        bgcolor: isDark ? 'rgba(212,175,55,0.04)' : 'rgba(212,175,55,0.03)',
+                      },
+                    }}
+                  >
                     <Typography sx={{ fontFamily: monoFont, fontSize: '0.74rem', color: isDark ? '#94A3B8' : '#64748B' }}>
                       {spec.label}
                     </Typography>
@@ -927,6 +1135,22 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
             zIndex: 1,
           }}
         >
+          {/* Centered gold diamond ornament on divider */}
+          <Box
+            aria-hidden="true"
+            sx={{
+              position: 'absolute',
+              top: -3,
+              left: '50%',
+              transform: 'translateX(-50%) rotate(45deg)',
+              width: 6,
+              height: 6,
+              bgcolor: gold.accent,
+              boxShadow: `0 0 6px ${gold.accent}`,
+              zIndex: 2,
+            }}
+          />
+
           <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
             <Button
               component={RouterLink}
@@ -1022,7 +1246,7 @@ export default function HomePage() {
         }}
       />
 
-      {/* Enhanced Hero Section */}
+      {/* Enhanced Hero Section — multi-layered paper treatment with dramatic gold glow system */}
       <Paper
         elevation={0}
         className="breathe-card"
@@ -1030,25 +1254,86 @@ export default function HomePage() {
           position: 'relative',
           zIndex: 1,
           p: { xs: 3.5, md: 6 },
-          mb: 8,
+          mb: 8.5,
           borderRadius: 4,
-          border: '1px solid #D4AF3744',
+          border: '1px solid',
+          borderColor: isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.25)',
           bgcolor: theme.palette.background.paper,
+          /* Paper texture: layered gradients for tactile card feel */
           background: isDark
-            ? `linear-gradient(180deg, ${theme.palette.background.paper} 0%, rgba(212,175,55,0.06) 100%)`
-            : `linear-gradient(180deg, ${theme.palette.background.paper} 0%, #FEF9E733 100%)`,
+            ? `
+                radial-gradient(ellipse at 20% 20%, rgba(212,175,55,0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(212,175,55,0.03) 0%, transparent 50%),
+                linear-gradient(165deg, ${theme.palette.background.paper} 0%, rgba(212,175,55,0.05) 100%)
+              `
+            : `
+                radial-gradient(ellipse at 20% 20%, rgba(212,175,55,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(184,134,11,0.04) 0%, transparent 50%),
+                linear-gradient(165deg, ${theme.palette.background.paper} 0%, #FEF9E720 100%)
+              `,
+          /* Multi-layered gold glow system: ambient + focused + edge + subtle inner glow border */
           boxShadow: isDark
-            ? '0 12px 36px rgba(0,0,0,0.5)'
-            : '0 12px 36px rgba(16,24,40,0.06)',
+            ? `
+                0 0 0 1px rgba(212,175,55,0.08),
+                0 20px 60px -12px rgba(0,0,0,0.7),
+                0 0 40px -8px rgba(212,175,55,0.12),
+                inset 0 0 20px rgba(212,175,55,0.05),
+                inset 0 1px 0 rgba(212,175,55,0.08)
+              `
+            : `
+                0 0 0 1px rgba(184,134,11,0.12),
+                0 20px 60px -12px rgba(16,24,40,0.12),
+                0 0 40px -8px rgba(212,175,55,0.15),
+                inset 0 0 20px rgba(184,134,11,0.05),
+                inset 0 1px 0 rgba(255,255,255,0.5)
+              `,
           display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1.2fr) minmax(280px, 360px)' },
-          gap: { xs: 4, md: 6 },
+          gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1.15fr) minmax(280px, 400px)' },
+          gap: { xs: 4, md: 7 },
           alignItems: 'center',
+          transition: 'box-shadow 0.4s ease, transform 0.3s ease',
+          '&:hover': {
+            boxShadow: isDark
+              ? `
+                  0 0 0 1px rgba(212,175,55,0.15),
+                  0 24px 72px -12px rgba(0,0,0,0.75),
+                  0 0 56px -8px rgba(212,175,55,0.18),
+                  inset 0 0 24px rgba(212,175,55,0.08),
+                  inset 0 1px 0 rgba(212,175,55,0.12)
+                `
+              : `
+                  0 0 0 1px rgba(184,134,11,0.2),
+                  0 24px 72px -12px rgba(16,24,40,0.15),
+                  0 0 56px -8px rgba(212,175,55,0.22),
+                  inset 0 0 24px rgba(184,134,11,0.08),
+                  inset 0 1px 0 rgba(255,255,255,0.6)
+                `,
+          },
         }}
       >
-        <Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, mb: 2 }}>
-            <Box component="img" src="/brand/ghostbyte-dark.png" alt="" sx={{ height: 28, width: 'auto' }} />
+        {/* Soft, large ambient gold glow behind logo */}
+        <Box
+          aria-hidden="true"
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            right: { xs: '8%', md: '14%' },
+            transform: 'translateY(-50%)',
+            width: { xs: 300, md: 420 },
+            height: { xs: 300, md: 420 },
+            pointerEvents: 'none',
+            zIndex: 0,
+            background: isDark
+              ? 'radial-gradient(circle, rgba(212,175,55,0.25) 0%, rgba(212,175,55,0.09) 40%, transparent 70%)'
+              : 'radial-gradient(circle, rgba(212,175,55,0.30) 0%, rgba(212,175,55,0.12) 40%, transparent 70%)',
+            filter: 'blur(16px)',
+            transition: 'all 0.5s ease',
+          }}
+        />
+
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, mb: 1.25 }}>
+            <Box component="img" src="/brand/ghostbyte-dark.png" alt="" sx={{ height: 28, width: 'auto', filter: isDark ? 'drop-shadow(0 0 6px rgba(212,175,55,0.4))' : 'drop-shadow(0 0 4px rgba(184,134,11,0.3))' }} />
             <Typography sx={{ fontFamily: mono, letterSpacing: '0.22em', fontSize: '0.75rem', color: isDark ? gold.soft : gold.accent, fontWeight: 800 }}>
               NULLAI TECH • LOCAL AI WORKSTATION ENGINE
             </Typography>
@@ -1057,40 +1342,142 @@ export default function HomePage() {
           <Typography
             variant="h1"
             sx={{
-              fontSize: { xs: '3.6rem', sm: '5.2rem', md: '6.2rem' },
+              fontSize: { xs: '3.4rem', sm: '5rem', md: '6rem' },
               color: theme.palette.text.primary,
               fontWeight: 400,
-              lineHeight: 0.95,
-              mb: 1.5,
+              lineHeight: 0.92,
+              mb: 2,
+              letterSpacing: '-0.025em',
             }}
           >
             Zoth
-            <Box component="span" className="text-gradient-gold" sx={{ display: 'block' }}>Studio</Box>
+            <Box component="span" className="text-gradient-gold" sx={{ display: 'block', fontSize: { xs: '2.8rem', sm: '4rem', md: '5rem' } }}>
+              Studio
+            </Box>
           </Typography>
 
-          <Box sx={{ width: 140, height: 4.5, bgcolor: gold.accent, my: 3, borderRadius: 2 }} />
+          {/* Decorative gold rule with gradient fade */}
+          <Box
+            sx={{
+              width: { xs: 100, sm: 140, md: 160 },
+              height: 4,
+              bgcolor: gold.accent,
+              mt: 3.5,
+              mb: 4.5,
+              borderRadius: 2,
+              boxShadow: isDark
+                ? '0 0 12px rgba(212,175,55,0.5), 0 0 24px rgba(212,175,55,0.2)'
+                : '0 0 12px rgba(184,134,11,0.4), 0 0 24px rgba(184,134,11,0.15)',
+              transition: 'box-shadow 0.3s ease',
+            }}
+          />
 
-          <Typography sx={{ maxWidth: 560, fontSize: '1.25rem', lineHeight: 1.65, color: theme.palette.text.primary, fontWeight: 450 }}>
+          <Typography
+            sx={{
+              maxWidth: 600,
+              fontSize: { xs: '1.1rem', sm: '1.2rem', md: '1.3rem' },
+              lineHeight: 1.7,
+              color: theme.palette.text.primary,
+              fontWeight: 450,
+            }}
+          >
             An autonomous, <span className="text-highlight-gold">Zero-Telemetry Local AI Studio</span> built for mathematical rigor, sovereign multi-agent consensus, real-time memory persistence, and in-browser <span className="text-highlight-dark">WebGPU Compute</span>.
           </Typography>
 
-          <Box sx={{ display: 'flex', gap: 1.5, mt: 4, flexWrap: 'wrap' }}>
-            <Button component={RouterLink} to="/adytum" variant="contained" color="primary" size="large" className="pulse-glow-btn" sx={{ px: 3.5, py: 1.2, fontWeight: 800 }}>
+          <Box sx={{ display: 'flex', gap: 1.5, mt: 4.5, flexWrap: 'wrap' }}>
+            <Button component={RouterLink} to="/adytum" variant="contained" color="primary" size="large" className="pulse-glow-btn" sx={{ px: 3.8, py: 1.3, fontWeight: 800 }}>
               Enter Adytum Rite
             </Button>
-            <Button component={RouterLink} to="/tools" variant="outlined" color="primary" size="large" sx={{ px: 3, py: 1.2, fontWeight: 750 }}>
+            <Button component={RouterLink} to="/tools" variant="outlined" color="primary" size="large" sx={{ px: 3.2, py: 1.3, fontWeight: 750 }}>
               Explore 25 Micro-Tools
             </Button>
-            <Button component={RouterLink} to="/zoth-os" variant="text" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2 }}>
+            <Button component={RouterLink} to="/zoth-os" variant="text" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2.5, mt: 0.5 }}>
               Zoth OS ISO →
             </Button>
           </Box>
 
-          <ServiceRow />
+          {/* Grounded CTA divider rule above ServiceRow */}
+          <Box sx={{ mt: 4, pt: 1.5, borderTop: `1px solid ${isDark ? 'rgba(212,175,55,0.15)' : 'rgba(184,134,11,0.15)'}` }}>
+            <ServiceRow />
+          </Box>
         </Box>
 
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <GoldenZLogo3D size={320} />
+        {/* GoldenZLogo3D with ambient glow rings and subtle vignette */}
+        <Box
+          sx={{
+            position: 'relative',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+            minHeight: { xs: 280, md: 380 },
+            borderRadius: 3,
+            background: isDark
+              ? 'radial-gradient(circle at center, rgba(212,175,55,0.07) 0%, rgba(0,0,0,0.2) 70%, transparent 100%)'
+              : 'radial-gradient(circle at center, rgba(212,175,55,0.08) 0%, rgba(0,0,0,0.02) 70%, transparent 100%)',
+          }}
+        >
+          {/* Third, even larger, fainter outer halo behind the outer ring */}
+          <Box
+            aria-hidden="true"
+            sx={{
+              position: 'absolute',
+              width: { xs: 340, md: 460 },
+              height: { xs: 340, md: 460 },
+              borderRadius: '50%',
+              background: isDark
+                ? 'radial-gradient(circle, rgba(212,175,55,0.07) 0%, rgba(212,175,55,0.02) 50%, transparent 70%)'
+                : 'radial-gradient(circle, rgba(212,175,55,0.12) 0%, rgba(212,175,55,0.03) 50%, transparent 70%)',
+              filter: 'blur(28px)',
+              animation: 'logoHaloBreath 8s ease-in-out infinite',
+              animationDelay: '-4s',
+              '@keyframes logoHaloBreath': {
+                '0%, 100%': { transform: 'scale(1)', opacity: 0.6 },
+                '50%': { transform: 'scale(1.05)', opacity: 0.9 },
+              },
+              transition: 'all 0.4s ease',
+            }}
+          />
+
+          {/* Outer glow ring - slower 8s, subtler scale 1 -> 1.04 */}
+          <Box
+            aria-hidden="true"
+            sx={{
+              position: 'absolute',
+              width: { xs: 280, md: 380 },
+              height: { xs: 280, md: 380 },
+              borderRadius: '50%',
+              background: isDark
+                ? 'radial-gradient(circle, rgba(212,175,55,0.12) 0%, rgba(212,175,55,0.04) 50%, transparent 70%)'
+                : 'radial-gradient(circle, rgba(212,175,55,0.20) 0%, rgba(212,175,55,0.06) 50%, transparent 70%)',
+              filter: 'blur(20px)',
+              animation: 'logoPulse 8s ease-in-out infinite',
+              '@keyframes logoPulse': {
+                '0%, 100%': { transform: 'scale(1)', opacity: 0.75 },
+                '50%': { transform: 'scale(1.04)', opacity: 1 },
+              },
+              transition: 'all 0.4s ease',
+            }}
+          />
+
+          {/* Inner focused glow */}
+          <Box
+            aria-hidden="true"
+            sx={{
+              position: 'absolute',
+              width: { xs: 200, md: 280 },
+              height: { xs: 200, md: 280 },
+              borderRadius: '50%',
+              background: isDark
+                ? 'radial-gradient(circle, rgba(212,175,55,0.25) 0%, transparent 60%)'
+                : 'radial-gradient(circle, rgba(212,175,55,0.35) 0%, transparent 60%)',
+              filter: 'blur(12px)',
+              transition: 'all 0.4s ease',
+            }}
+          />
+
+          {/* Logo itself */}
+          <GoldenZLogo3D size={{ xs: 240, md: 340 }} />
         </Box>
       </Paper>
 
@@ -1100,28 +1487,103 @@ export default function HomePage() {
           bgcolor: theme.palette.background.paper,
           border: `1px solid ${theme.palette.divider}`,
           borderRadius: 3,
-          p: { xs: 2.5, md: 3.5 },
+          p: { xs: 2, md: 2.5 },
           mb: 8,
           display: 'grid',
           gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(4, 1fr)' },
-          gap: 3,
+          gap: 2,
           boxShadow: isDark ? '0 10px 30px -18px rgba(0,0,0,0.8)' : '0 10px 30px -18px rgba(16,24,40,0.18)',
         }}
       >
         {[
-          { icon: <ShieldIcon sx={{ color: gold.accent, fontSize: 28 }} />, label: 'Zero-Cloud Telemetry', text: 'All LLM calls, embeddings, and memory retention stay 100% on your local metal.' },
-          { icon: <SpeedIcon sx={{ color: gold.accent, fontSize: 28 }} />, label: 'WebGPU WASM Engine', text: 'In-browser tensor matmul and neural inference running directly on client GPU.' },
-          { icon: <MemoryIcon sx={{ color: gold.accent, fontSize: 28 }} />, label: 'STDP Neuro Memory', text: 'Biological Spike-Timing-Dependent Plasticity daemon listening on 127.0.0.1:8788.' },
-          { icon: <TerminalIcon sx={{ color: gold.accent, fontSize: 28 }} />, label: 'Sovereign Agent Bridge', text: 'Decentralized peer-to-peer agent bus & consensus engine listening on 127.0.0.1:8789.' },
+          { icon: <ShieldIcon sx={{ color: gold.accent, fontSize: 30 }} />, label: 'Zero-Cloud Telemetry', text: 'All LLM calls, embeddings, and memory retention stay 100% on your local metal.' },
+          { icon: <SpeedIcon sx={{ color: gold.accent, fontSize: 30 }} />, label: 'WebGPU WASM Engine', text: 'In-browser tensor matmul and neural inference running directly on client GPU.' },
+          { icon: <MemoryIcon sx={{ color: gold.accent, fontSize: 30 }} />, label: 'STDP Neuro Memory', text: 'Biological Spike-Timing-Dependent Plasticity daemon listening on 127.0.0.1:8788.' },
+          { icon: <TerminalIcon sx={{ color: gold.accent, fontSize: 30 }} />, label: 'Sovereign Agent Bridge', text: 'Decentralized peer-to-peer agent bus & consensus engine listening on 127.0.0.1:8789.' },
         ].map((item, idx) => (
-          <Box key={idx} sx={{ borderRight: { md: idx < 3 ? `1px solid ${theme.palette.divider}` : 'none' }, pr: { md: 2.5 } }}>
-            <Box sx={{ width: 42, height: 42, borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 1.5, bgcolor: gold.wash, border: `1px solid ${isDark ? 'rgba(212,175,55,0.35)' : '#F0E1A8'}` }}>
-              {item.icon}
+          <Box
+            key={idx}
+            sx={{
+              position: 'relative',
+              overflow: 'hidden',
+              borderRadius: 2,
+              p: { xs: 2, md: 2.5 },
+              pt: 2.5,
+              borderRight: { md: idx < 3 ? `1px solid ${isDark ? 'rgba(212,175,55,0.22)' : 'rgba(184,134,11,0.18)'}` : 'none' },
+              transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+              '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: isDark
+                  ? '0 8px 24px -6px rgba(212,175,55,0.22)'
+                  : '0 8px 24px -6px rgba(184,134,11,0.18)',
+              },
+            }}
+          >
+            {/* Thin gold top accent line on each item */}
+            <Box
+              sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '2px',
+                bgcolor: gold.accent,
+                opacity: isDark ? 0.75 : 0.65,
+              }}
+            />
+
+            {/* Tiny index number (01, 02, 03, 04) in top-left in tiny mono text */}
+            <Typography
+              sx={{
+                fontFamily: mono,
+                fontSize: '0.68rem',
+                fontWeight: 800,
+                color: isDark ? 'rgba(212,175,55,0.7)' : 'rgba(184,134,11,0.75)',
+                letterSpacing: '0.1em',
+                mb: 1.5,
+              }}
+            >
+              0{idx + 1}
+            </Typography>
+
+            {/* Circular icon frame: two-ring treatment with gold wash background and gold border ring with outer glow */}
+            <Box
+              sx={{
+                position: 'relative',
+                width: 48,
+                height: 48,
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mb: 1.75,
+                p: '3px',
+                border: `1px solid ${isDark ? 'rgba(212,175,55,0.45)' : 'rgba(184,134,11,0.45)'}`,
+                boxShadow: isDark
+                  ? '0 0 12px rgba(212,175,55,0.22), inset 0 0 6px rgba(212,175,55,0.1)'
+                  : '0 0 10px rgba(184,134,11,0.18)',
+              }}
+            >
+              <Box
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  bgcolor: gold.wash,
+                  border: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : '#F0E1A8'}`,
+                }}
+              >
+                {item.icon}
+              </Box>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, mb: 1.25 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>{item.label}</Typography>
-            </Box>
-            <Typography variant="body2" sx={{ fontSize: '0.88rem', color: theme.palette.text.secondary, lineHeight: 1.6 }}>
+
+            <Typography variant="subtitle1" sx={{ fontWeight: 850, fontSize: '1.02rem', mb: 0.8, color: theme.palette.text.primary }}>
+              {item.label}
+            </Typography>
+            <Typography variant="body2" sx={{ fontSize: '0.88rem', color: theme.palette.text.secondary, lineHeight: 1.7 }}>
               {item.text}
             </Typography>
           </Box>
@@ -1177,38 +1639,98 @@ export default function HomePage() {
             ['Tool Catalog', '/tools', `Browse ${published.length} open-source CLI & browser tools with instant WebGPU launchers and CLI copy snippets.`],
             ['Neuro Memory', '/memory', 'Query the STDP biological memory daemon running locally on port 8788 with vector decay search.'],
             ['Signal Bridge', '/bridges', 'Inspect real-time agent-to-agent communication, simplex channels, and WebSocket heartbeats on port 8789.'],
+            ['Consensus Arena', '/consensus', 'Tri-agent Byzantine fault-tolerant debate chamber for hallucination-resistant AST code synthesis.'],
           ].map(([title, to, copy], index) => (
             <Card
               key={title}
               component={RouterLink}
               to={to}
               sx={{
-                gridColumn: { md: index < 3 ? 'span 2' : 'span 3' },
+                gridColumn: { md: 'span 2' },
                 height: '100%',
                 textDecoration: 'none',
                 color: 'inherit',
                 display: 'flex',
+                flexDirection: 'column',
+                position: 'relative',
+                overflow: 'hidden',
                 p: 1,
                 bgcolor: theme.palette.background.paper,
-                border: `1px solid ${theme.palette.divider}`,
-                transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                backgroundImage: isDark
+                  ? 'radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.05) 0%, rgba(0,0,0,0.25) 100%)'
+                  : 'radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.06) 0%, rgba(0,0,0,0.03) 100%)',
+                border: '1px solid',
+                borderColor: isDark ? 'rgba(212,175,55,0.22)' : theme.palette.divider,
+                boxShadow: isDark
+                  ? '0 4px 20px -4px rgba(0,0,0,0.7), 0 0 12px rgba(212,175,55,0.04)'
+                  : '0 4px 16px -4px rgba(16,24,40,0.08)',
+                transition: 'all 0.28s cubic-bezier(0.4, 0, 0.2, 1)',
+                animation: 'cardFadeIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both',
+                animationDelay: `${index * 60}ms`,
+                '@keyframes cardFadeIn': {
+                  '0%': { opacity: 0, transform: 'translateY(12px)' },
+                  '100%': { opacity: 1, transform: 'translateY(0)' },
+                },
                 '&:hover': {
                   borderColor: gold.accent,
                   transform: 'translateY(-4px)',
                   boxShadow: isDark
-                    ? '0 12px 28px rgba(212, 175, 55, 0.22)'
-                    : '0 12px 28px rgba(212, 175, 55, 0.2)'
-                }
+                    ? '0 16px 36px -8px rgba(0,0,0,0.8), 0 0 28px rgba(212,175,55,0.3)'
+                    : '0 16px 36px -8px rgba(16,24,40,0.15), 0 0 24px rgba(184,134,11,0.25)',
+                  '& .cta-arrow': {
+                    transform: 'translateX(4px)',
+                  },
+                },
               }}
             >
-              <CardContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              {/* Thin gold top accent line */}
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: '2px',
+                  bgcolor: gold.accent,
+                  opacity: isDark ? 0.75 : 0.65,
+                  zIndex: 2,
+                }}
+              />
+              <CardContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '100%', pt: 2.2 }}>
                 <Box>
-                  <Typography className="section-kicker" sx={{ mb: 0.8 }}>0{index + 1}</Typography>
+                  {/* Number badge pill with gold wash background and gold border */}
+                  <Box
+                    sx={{
+                      display: 'inline-block',
+                      px: 1.2,
+                      py: 0.3,
+                      borderRadius: '12px',
+                      bgcolor: gold.wash,
+                      border: `1px solid ${isDark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`,
+                      mb: 1.2,
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontFamily: mono,
+                        fontSize: '0.72rem',
+                        fontWeight: 800,
+                        color: isDark ? gold.soft : gold.accent,
+                        letterSpacing: '0.08em',
+                        lineHeight: 1,
+                      }}
+                    >
+                      0{index + 1}
+                    </Typography>
+                  </Box>
                   <Typography variant="h5" sx={{ fontWeight: 800, mb: 1.2, color: theme.palette.text.primary }}>{title}</Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>{copy}</Typography>
                 </Box>
-                <Box sx={{ mt: 2, color: gold.accent, fontWeight: 800, fontSize: '0.88rem' }}>
-                  Open Workspace →
+                <Box sx={{ mt: 2, color: gold.accent, fontWeight: 800, fontSize: '0.88rem', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                  Open Workspace
+                  <Box component="span" className="cta-arrow" sx={{ display: 'inline-block', transition: 'transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)' }}>
+                    →
+                  </Box>
                 </Box>
               </CardContent>
             </Card>
@@ -1247,38 +1769,168 @@ export default function HomePage() {
         <Grid container spacing={3}>
           {published.slice(0, 6).map((tool) => (
             <Grid key={tool.id} xs={12} sm={6} md={4}>
-              <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, transition: 'all 0.25s ease', '&:hover': { borderColor: gold.accent, transform: 'translateY(-3px)' } }}>
-                <CardContent sx={{ flex: 1 }}>
+              <Card
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  bgcolor: theme.palette.background.paper,
+                  backgroundImage: isDark
+                    ? 'radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.05) 0%, rgba(0,0,0,0.25) 100%)'
+                    : 'radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.06) 0%, rgba(0,0,0,0.03) 100%)',
+                  border: '1px solid',
+                  borderColor: isDark ? 'rgba(212,175,55,0.22)' : theme.palette.divider,
+                  borderRadius: 3,
+                  position: 'relative',
+                  overflow: 'hidden',
+                  transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                  '&:hover': {
+                    borderColor: gold.accent,
+                    transform: 'translateY(-4px)',
+                    boxShadow: isDark
+                      ? '0 16px 36px -8px rgba(0,0,0,0.8), 0 0 24px rgba(212,175,55,0.25)'
+                      : '0 16px 36px -8px rgba(16,24,40,0.12), 0 0 20px rgba(184,134,11,0.2)',
+                  },
+                }}
+              >
+                {/* Thin gold top accent line */}
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '2px',
+                    bgcolor: gold.accent,
+                    opacity: isDark ? 0.75 : 0.65,
+                    zIndex: 2,
+                  }}
+                />
+                <CardContent sx={{ flex: 1, pt: 2.2 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-                    <Chip label={`v${tool.version}`} size="small" sx={{ bgcolor: gold.wash, color: isDark ? gold.soft : gold.accent, fontWeight: 750 }} />
-                    {tool.executionType === 'webgpu' && (
+                    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                       <Chip
-                        label="⚡ WEBGPU"
+                        label={`v${tool.version}`}
                         size="small"
                         sx={{
-                          bgcolor: isDark ? 'rgba(56,189,248,0.14)' : '#E0F2FE',
-                          color: isDark ? '#38BDF8' : '#0369A1',
+                          bgcolor: gold.wash,
+                          color: isDark ? gold.soft : gold.accent,
                           fontWeight: 750,
-                          fontSize: '0.68rem',
-                          fontFamily: mono,
-                          border: `1px solid ${isDark ? 'rgba(56,189,248,0.3)' : '#BAE6FD'}`,
+                          border: '1px solid',
+                          borderColor: isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.25)',
                         }}
                       />
-                    )}
+                      {tool.executionType === 'webgpu' && (
+                        <Chip
+                          label="⚡ WEBGPU"
+                          size="small"
+                          sx={{
+                            bgcolor: isDark ? 'rgba(56,189,248,0.14)' : '#E0F2FE',
+                            color: isDark ? '#38BDF8' : '#0369A1',
+                            fontWeight: 750,
+                            fontSize: '0.68rem',
+                            fontFamily: mono,
+                            border: `1px solid ${isDark ? 'rgba(56,189,248,0.35)' : '#BAE6FD'}`,
+                          }}
+                        />
+                      )}
+                    </Box>
+                    {/* Tool type indicator icon */}
+                    <Tooltip title={tool.executionType === 'webgpu' ? 'WebGPU Shader Accelerated' : tool.localOnly ? 'Local Subprocess Only' : 'GitHub Open Source'}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', color: gold.accent, opacity: 0.85 }}>
+                        {tool.executionType === 'webgpu' ? (
+                          <FlashOnIcon sx={{ fontSize: 16 }} />
+                        ) : tool.localOnly ? (
+                          <TerminalIcon sx={{ fontSize: 16 }} />
+                        ) : (
+                          <GitHubIcon sx={{ fontSize: 16 }} />
+                        )}
+                      </Box>
+                    </Tooltip>
                   </Box>
                   <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: theme.palette.text.primary }}>{tool.name}</Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>{tool.description}</Typography>
                 </CardContent>
-                <CardActions sx={{ px: 2, pb: 2, pt: 1.5, justifyContent: 'space-between', borderTop: `1px solid ${theme.palette.divider}` }}>
+                <CardActions
+                  sx={{
+                    px: 2,
+                    pb: 2,
+                    pt: 1.5,
+                    justifyContent: 'space-between',
+                    borderTop: `1px solid ${isDark ? 'rgba(212,175,55,0.18)' : theme.palette.divider}`,
+                    position: 'relative',
+                  }}
+                >
+                  {/* Tiny gold dot ornament centered on divider */}
+                  <Box
+                    aria-hidden="true"
+                    sx={{
+                      position: 'absolute',
+                      top: -2.5,
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      width: 4,
+                      height: 4,
+                      borderRadius: '50%',
+                      bgcolor: gold.accent,
+                      boxShadow: `0 0 5px ${gold.accent}`,
+                      zIndex: 2,
+                    }}
+                  />
                   <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? gold.soft : gold.accent, fontWeight: 600 }}>{tool.repo}</Typography>
                   {tool.executionType === 'webgpu' ? (
-                    <Button size="small" variant="contained" color="primary" component={RouterLink} to={`/tools/${tool.id}`} startIcon={<FlashOnIcon />}>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      color="primary"
+                      component={RouterLink}
+                      to={`/tools/${tool.id}`}
+                      startIcon={<FlashOnIcon sx={{ fontSize: '0.95rem !important' }} />}
+                      sx={{
+                        fontSize: '0.75rem',
+                        fontWeight: 750,
+                        border: '1px solid transparent',
+                        transition: 'all 0.2s ease',
+                        '&:hover': {
+                          borderColor: isDark ? '#F5E6AB' : '#D4AF37',
+                          boxShadow: '0 0 10px rgba(212,175,55,0.35)',
+                        },
+                      }}
+                    >
                       Open Tool
                     </Button>
                   ) : tool.localOnly ? (
-                    <Chip label="LOCAL ONLY" size="small" sx={{ bgcolor: isDark ? 'rgba(148,163,184,0.12)' : '#F1F5F9', color: theme.palette.text.secondary, fontWeight: 750, fontSize: '0.68rem', border: `1px solid ${theme.palette.divider}` }} />
+                    <Chip
+                      label="LOCAL ONLY"
+                      size="small"
+                      sx={{
+                        bgcolor: isDark ? 'rgba(148,163,184,0.12)' : '#F1F5F9',
+                        color: theme.palette.text.secondary,
+                        fontWeight: 750,
+                        fontSize: '0.68rem',
+                        border: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider}`,
+                      }}
+                    />
                   ) : (
-                    <Button size="small" variant="contained" color="primary" href={tool.github} target="_blank" rel="noopener noreferrer" startIcon={<GitHubIcon />}>
+                    <Button
+                      size="small"
+                      variant="contained"
+                      color="primary"
+                      href={tool.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      startIcon={<GitHubIcon sx={{ fontSize: '0.95rem !important' }} />}
+                      sx={{
+                        fontSize: '0.75rem',
+                        fontWeight: 750,
+                        border: '1px solid transparent',
+                        transition: 'all 0.2s ease',
+                        '&:hover': {
+                          borderColor: isDark ? '#F5E6AB' : '#D4AF37',
+                          boxShadow: '0 0 10px rgba(212,175,55,0.35)',
+                        },
+                      }}
+                    >
                       Repo
                     </Button>
                   )}
@@ -1288,6 +1940,17 @@ export default function HomePage() {
           ))}
         </Grid>
       </Box>
+
+      {/* Sovereign Ecosystem Deployment Funnel */}
+      <SovereignFunnel
+        title="Deploy Zoth Studio & Sovereign AI Tools Locally"
+        subtitle="Experience zero-telemetry AI engineering with sovereign in-browser workstations, bare-metal operating system images, or modular standalone micro-repos."
+        toolTitle="Option 1: Adytum Alchemist Micro-Repo"
+        toolTag="WORKFLOW CLI"
+        toolDescription="Offline cryptographic 22-Key planning rite, automated incubation clocks, and cryptographic SHA-256 seal stamp generators."
+        toolRepo="https://github.com/NullAITech/adytum-alchemist-ai-workflow"
+        toolCommand="npx zoth pull adytum-alchemist-ai-workflow"
+      />
     </Container>
   );
 }

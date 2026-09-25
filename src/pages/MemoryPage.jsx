@@ -33,6 +33,7 @@ import MathPillarsGrid from '../components/MathPillarsGrid';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import Netrunner3DWorld from '../components/Netrunner3DWorld';
+import SovereignFunnel from '../components/SovereignFunnel';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -624,12 +625,12 @@ export default function MemoryPage() {
   };
 
   const clusterColors = {
-    'Kernel': '#D4AF37',
-    'Lucy Oracle': '#00F0FF',
-    'Consensus': '#C084FC',
-    'Security': '#F472B6',
-    'Vault': '#34D399',
-    'Pantheon': '#F59E0B',
+    'Kernel': isDark ? '#D4AF37' : '#B8860B',
+    'Lucy Oracle': isDark ? '#00F0FF' : '#0284C7',
+    'Consensus': isDark ? '#C084FC' : '#7C3AED',
+    'Security': isDark ? '#F472B6' : '#BE185D',
+    'Vault': isDark ? '#34D399' : '#059669',
+    'Pantheon': isDark ? '#F59E0B' : '#D97706',
   };
 
   // Speech synthesis handler
@@ -1227,18 +1228,18 @@ export default function MemoryPage() {
               />
               <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-                  <Typography variant="overline" sx={{ color: '#F472B6', fontWeight: 800, letterSpacing: '0.14em' }}>
+                  <Typography variant="overline" sx={{ color: isDark ? '#F472B6' : '#BE185D', fontWeight: 800, letterSpacing: '0.14em' }}>
                     LUCY // DEEP-DIVE NETRUNNER ORACLE
                   </Typography>
                   <Chip
                     label="CODEC 141.12 // DEEP NET BREACH"
                     size="small"
-                    sx={{ bgcolor: 'rgba(244,114,182,0.15)', color: '#F472B6', fontWeight: 800, fontSize: '0.72rem' }}
+                    sx={{ bgcolor: isDark ? 'rgba(244,114,182,0.15)' : '#FDF2F8', color: isDark ? '#F472B6' : '#BE185D', fontWeight: 800, fontSize: '0.72rem' }}
                   />
                   <Chip
                     label="ZERO-EGRESS INVARIANT"
                     size="small"
-                    sx={{ bgcolor: 'rgba(0,240,255,0.12)', color: '#00F0FF', fontWeight: 800, fontSize: '0.72rem' }}
+                    sx={{ bgcolor: isDark ? 'rgba(0,240,255,0.12)' : '#E0F2FE', color: isDark ? '#00F0FF' : '#0284C7', fontWeight: 800, fontSize: '0.72rem' }}
                   />
                 </Box>
                 <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', lineHeight: 1.15 }}>
@@ -2194,6 +2195,17 @@ export default function MemoryPage() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Sovereign Installation Funnel */}
+      <SovereignFunnel
+        title="Deploy Netrunner Memory & Vector Search Locally"
+        subtitle="Zero-egress local memory consolidation engine powered by STDP synaptic plasticity, 3D semantic clustering, and offline vector similarity search."
+        toolTitle="Option 1: Vector Search Engine Micro-Repo"
+        toolTag="VECTOR ENGINE"
+        toolDescription="Standalone zero-egress vector similarity and semantic search micro-engine with cosine indexing and local memory storage."
+        toolRepo="https://github.com/NullAITech/vector-search-engine"
+        toolCommand="git clone https://github.com/NullAITech/vector-search-engine.git"
+      />
     </Container>
   );
 }

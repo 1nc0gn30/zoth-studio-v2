@@ -22,6 +22,7 @@ import NetworkCheckIcon from '@mui/icons-material/NetworkCheck';
 import SwarmCanvasVisualizer from '../components/SwarmCanvasVisualizer';
 import SwarmTaskDispatcher from '../components/SwarmTaskDispatcher';
 import { pantheonAgents, pantheonCadres } from '../data/pantheon';
+import SovereignFunnel from '../components/SovereignFunnel';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -38,13 +39,13 @@ const getCadreColor = (cadreName, isDark) => {
     return CADRE_COLORS[cadreName] || '#D4AF37';
   }
   const LIGHT_CADRE_COLORS = {
-    Architects: '#B8860B',
+    Architects: '#785404',
     Code: '#0284C7',
     Security: '#DC2626',
     Creative: '#7C3AED',
     Swarm: '#059669',
   };
-  return LIGHT_CADRE_COLORS[cadreName] || '#B8860B';
+  return LIGHT_CADRE_COLORS[cadreName] || '#785404';
 };
 
 const CADRE_METRICS_INIT = {
@@ -209,13 +210,13 @@ export default function SwarmPage() {
             }}
           />
           <Chip
-            icon={<ShieldIcon sx={{ fontSize: '0.9rem !important', color: '#34D399' }} />}
+            icon={<ShieldIcon sx={{ fontSize: '0.9rem !important', color: isDark ? '#34D399' : '#027A48' }} />}
             label="ZERO-CLOUD AIR-GAP ENGINE"
             size="small"
             sx={{
-              bgcolor: isDark ? '#08080B' : '#F1F5F9',
-              color: '#34D399',
-              border: '1px solid rgba(52,211,153,0.3)',
+              bgcolor: isDark ? '#08080B' : '#ECFDF3',
+              color: isDark ? '#34D399' : '#027A48',
+              border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`,
               fontWeight: 800,
             }}
           />
@@ -586,7 +587,7 @@ export default function SwarmPage() {
                 startIcon={<BoltIcon />}
                 sx={{
                   bgcolor: gold,
-                  color: isDark ? '#08080B' : '#FFFFFF',
+                  color: '#08080B',
                   fontWeight: 800,
                   px: 2.5,
                   boxShadow: `0 0 16px -2px ${gold}`,
@@ -733,7 +734,7 @@ export default function SwarmPage() {
                 fontWeight: 750,
                 px: 1,
                 bgcolor: cadre === name ? gold : voidBg,
-                color: cadre === name ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
+                color: cadre === name ? '#08080B' : theme.palette.text.primary,
                 border: '1.5px solid',
                 borderColor: cadre === name ? gold : (isDark ? 'rgba(212,175,55,0.22)' : theme.palette.divider),
                 '&:hover': {
@@ -839,6 +840,17 @@ export default function SwarmPage() {
           </Grid>
         </Collapse>
       </Box>
+
+      {/* Sovereign Installation Funnel */}
+      <SovereignFunnel
+        title="Deploy Sovereign Swarm Orchestrator Locally"
+        subtitle="Zero-cloud multi-agent orchestrator executing autonomous coordination, IPC socket communication, and cryptographic loopback attestation."
+        toolTitle="Option 1: Sovereign Agent Bridge Micro-Repo"
+        toolTag="SWARM BRIDGE"
+        toolDescription="Standalone zero-egress Unix domain socket IPC bridge for low-latency multi-agent message routing and health attestations."
+        toolRepo="https://github.com/NullAITech/sovereign-agent-bridge"
+        toolCommand="git clone https://github.com/NullAITech/sovereign-agent-bridge.git"
+      />
     </Container>
   );
 }

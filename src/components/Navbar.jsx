@@ -72,12 +72,17 @@ export default function Navbar({ mode, onToggleTheme }) {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
 
-  const appBarBg = dark ? 'rgba(8, 8, 11, 0.92)' : 'rgba(255, 255, 255, 0.96)';
+  const appBarBg = dark ? 'rgba(8, 8, 11, 0.90)' : 'rgba(255, 255, 255, 0.94)';
   const borderColor = theme.palette.divider;
   const brandColor = dark ? '#F5E6AB' : '#101828';
   const navIdle = dark ? '#9CA3AF' : '#475467';
   const navActive = dark ? '#D4AF37' : '#B8860B';
   const goldAccent = dark ? '#D4AF37' : '#B8860B';
+
+  // Subtle underlay gradient for the app bar (gives depth without changing colors)
+  const appBarUnderlay = dark
+    ? 'linear-gradient(180deg, rgba(212,175,55,0.04) 0%, rgba(8,8,11,0.90) 100%)'
+    : 'linear-gradient(180deg, rgba(212,175,55,0.07) 0%, rgba(255,255,255,0.94) 100%)';
 
   // Global Keyboard Shortcut: ⌘K or Ctrl+K opens Command Palette
   useEffect(() => {
@@ -124,9 +129,13 @@ export default function Navbar({ mode, onToggleTheme }) {
       position="sticky"
       elevation={0}
       sx={{
-        background: appBarBg,
-        backdropFilter: 'blur(20px)',
+        background: appBarUnderlay,
+        backdropFilter: 'blur(24px) saturate(1.4)',
+        WebkitBackdropFilter: 'blur(24px) saturate(1.4)',
         borderBottom: `1px solid ${borderColor}`,
+        boxShadow: dark
+          ? '0 1px 0 rgba(255,255,255,0.04), 0 8px 32px rgba(0,0,0,0.5)'
+          : '0 1px 0 rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.08)',
         zIndex: 1100,
       }}
     >
@@ -135,7 +144,24 @@ export default function Navbar({ mode, onToggleTheme }) {
 
           {/* Left: Brand Logo & Status */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexShrink: 0 }}>
-            <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.25, textDecoration: 'none', color: brandColor }}>
+            <Box component={RouterLink} to="/" sx={{ display: 'flex', alignItems: 'center', gap: 1.25, textDecoration: 'none', color: brandColor, position: 'relative' }}>
+              {/* Brand glow ring */}
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: 18,
+                  transform: 'translateY(-50%)',
+                  width: 44,
+                  height: 44,
+                  borderRadius: '50%',
+                  background: dark
+                    ? 'radial-gradient(circle, rgba(212,175,55,0.18) 0%, transparent 70%)'
+                    : 'radial-gradient(circle, rgba(212,175,55,0.14) 0%, transparent 70%)',
+                  pointerEvents: 'none',
+                  zIndex: -1,
+                }}
+              />
               <GoldenZLogo3D size={38} />
               <Box>
                 <Typography
@@ -150,6 +176,20 @@ export default function Navbar({ mode, onToggleTheme }) {
                   }}
                 >
                   Zoth Studio
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: '0.62rem',
+                    color: dark ? '#6B7280' : '#94A3B8',
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    display: 'block',
+                    marginTop: 2,
+                  }}
+                >
+                  ZERO-EGRESS STUDIO
                 </Typography>
               </Box>
             </Box>
@@ -213,10 +253,16 @@ export default function Navbar({ mode, onToggleTheme }) {
                     fontSize: '0.84rem',
                     bgcolor: active ? (dark ? 'rgba(212,175,55,0.16)' : '#FEF9E7') : 'transparent',
                     border: active ? `1px solid ${dark ? 'rgba(212,175,55,0.35)' : '#F0E1A8'}` : '1px solid transparent',
-                    transition: 'all 0.18s ease-in-out',
+                    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                    letterSpacing: '0.01em',
                     '&:hover': {
                       color: navActive,
-                      bgcolor: dark ? 'rgba(212,175,55,0.1)' : '#FEF9E7',
+                      bgcolor: dark ? 'rgba(212,175,55,0.12)' : '#FEF9E7',
+                      borderColor: dark ? 'rgba(212,175,55,0.25)' : 'rgba(212,175,55,0.3)',
+                      transform: 'translateY(-1px)',
+                    },
+                    '&:active': {
+                      transform: 'translateY(0px) scale(0.97)',
                     },
                   }}
                 >
@@ -247,6 +293,10 @@ export default function Navbar({ mode, onToggleTheme }) {
                           color: active ? '#08080B' : (dark ? '#D1D5DB' : '#4B5563'),
                           px: 0,
                           cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          '&:hover': {
+                            bgcolor: active ? (dark ? '#E5C24F' : '#D4A517') : (dark ? 'rgba(255,255,255,0.14)' : 'rgba(0,0,0,0.14)'),
+                          },
                         }}
                       />
                     )}
@@ -258,7 +308,7 @@ export default function Navbar({ mode, onToggleTheme }) {
             {/* Enclaves Dropdown Trigger */}
             <Button
               onClick={handleOpenEnclaves}
-              endIcon={<KeyboardArrowDownIcon sx={{ fontSize: '18px !important', transform: enclaveAnchor ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />}
+              endIcon={<KeyboardArrowDownIcon sx={{ fontSize: '18px !important', transform: enclaveAnchor ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)' }} />}
               sx={{
                 color: isEnclaveActive ? navActive : navIdle,
                 fontWeight: isEnclaveActive ? 800 : 600,
@@ -269,10 +319,16 @@ export default function Navbar({ mode, onToggleTheme }) {
                 fontSize: '0.84rem',
                 bgcolor: isEnclaveActive ? (dark ? 'rgba(212,175,55,0.16)' : '#FEF9E7') : 'transparent',
                 border: isEnclaveActive ? `1px solid ${dark ? 'rgba(212,175,55,0.35)' : '#F0E1A8'}` : '1px solid transparent',
-                transition: 'all 0.18s ease-in-out',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                letterSpacing: '0.01em',
                 '&:hover': {
                   color: navActive,
-                  bgcolor: dark ? 'rgba(212,175,55,0.1)' : '#FEF9E7',
+                  bgcolor: dark ? 'rgba(212,175,55,0.12)' : '#FEF9E7',
+                  borderColor: dark ? 'rgba(212,175,55,0.25)' : 'rgba(212,175,55,0.3)',
+                  transform: 'translateY(-1px)',
+                },
+                '&:active': {
+                  transform: 'translateY(0px) scale(0.97)',
                 },
               }}
             >
@@ -282,7 +338,7 @@ export default function Navbar({ mode, onToggleTheme }) {
             {/* Knowledge Dropdown Trigger */}
             <Button
               onClick={handleOpenKnowledge}
-              endIcon={<KeyboardArrowDownIcon sx={{ fontSize: '18px !important', transform: knowledgeAnchor ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />}
+              endIcon={<KeyboardArrowDownIcon sx={{ fontSize: '18px !important', transform: knowledgeAnchor ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)' }} />}
               sx={{
                 color: isKnowledgeActive ? navActive : navIdle,
                 fontWeight: isKnowledgeActive ? 800 : 600,
@@ -293,10 +349,16 @@ export default function Navbar({ mode, onToggleTheme }) {
                 fontSize: '0.84rem',
                 bgcolor: isKnowledgeActive ? (dark ? 'rgba(212,175,55,0.16)' : '#FEF9E7') : 'transparent',
                 border: isKnowledgeActive ? `1px solid ${dark ? 'rgba(212,175,55,0.35)' : '#F0E1A8'}` : '1px solid transparent',
-                transition: 'all 0.18s ease-in-out',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                letterSpacing: '0.01em',
                 '&:hover': {
                   color: navActive,
-                  bgcolor: dark ? 'rgba(212,175,55,0.1)' : '#FEF9E7',
+                  bgcolor: dark ? 'rgba(212,175,55,0.12)' : '#FEF9E7',
+                  borderColor: dark ? 'rgba(212,175,55,0.25)' : 'rgba(212,175,55,0.3)',
+                  transform: 'translateY(-1px)',
+                },
+                '&:active': {
+                  transform: 'translateY(0px) scale(0.97)',
                 },
               }}
             >
@@ -310,7 +372,7 @@ export default function Navbar({ mode, onToggleTheme }) {
             <Button
               size="small"
               onClick={() => setPaletteOpen(true)}
-              startIcon={<SearchIcon sx={{ color: goldAccent, fontSize: '18px !important' }} />}
+              startIcon={<SearchIcon sx={{ color: goldAccent, fontSize: '17px !important' }} />}
               endIcon={
                 <Chip
                   label="⌘K"
@@ -320,10 +382,11 @@ export default function Navbar({ mode, onToggleTheme }) {
                     fontSize: '0.65rem',
                     fontFamily: mono,
                     fontWeight: 800,
-                    bgcolor: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
-                    color: dark ? '#9CA3AF' : '#6B7280',
+                    bgcolor: dark ? 'rgba(212,175,55,0.14)' : 'rgba(212,175,55,0.1)',
+                    color: goldAccent,
                     px: 0,
                     cursor: 'pointer',
+                    border: `1px solid ${dark ? 'rgba(212,175,55,0.2)' : 'rgba(212,175,55,0.25)'}`,
                   }}
                 />
               }
@@ -331,17 +394,22 @@ export default function Navbar({ mode, onToggleTheme }) {
                 display: { xs: 'none', md: 'inline-flex' },
                 color: navIdle,
                 bgcolor: dark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.04)',
-                border: `1px solid ${dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'}`,
+                border: `1px solid ${dark ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.09)'}`,
                 borderRadius: 9999,
                 px: 1.5,
                 py: 0.6,
                 fontSize: '0.78rem',
                 fontWeight: 600,
                 textTransform: 'none',
+                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                 '&:hover': {
                   color: navActive,
                   bgcolor: dark ? 'rgba(212,175,55,0.1)' : '#FEF9E7',
                   borderColor: goldAccent,
+                  transform: 'translateY(-1px)',
+                },
+                '&:active': {
+                  transform: 'translateY(0px) scale(0.97)',
                 },
               }}
             >
@@ -549,29 +617,86 @@ export default function Navbar({ mode, onToggleTheme }) {
         onClose={() => setPaletteOpen(false)}
         maxWidth="sm"
         fullWidth
+        slotProps={{
+          backdrop: {
+            sx: {
+              backdropFilter: 'blur(8px)',
+              backgroundColor: dark ? 'rgba(0,0,0,0.6)' : 'rgba(0,0,0,0.3)',
+            },
+          },
+        }}
         PaperProps={{
           sx: {
             bgcolor: dark ? '#0A0A10' : '#FFFFFF',
             border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#E5E7EB'}`,
             borderRadius: 3,
-            boxShadow: dark ? '0 16px 48px rgba(0,0,0,0.8), 0 0 32px rgba(212,175,55,0.2)' : '0 16px 40px rgba(0,0,0,0.15)',
+            boxShadow: dark
+              ? '0 24px 64px rgba(0,0,0,0.8), 0 0 48px rgba(212,175,55,0.15), 0 0 8px rgba(212,175,55,0.1)'
+              : '0 24px 64px rgba(0,0,0,0.18), 0 0 48px rgba(212,175,55,0.06)',
             overflow: 'hidden',
+            mt: 4,
           },
         }}
       >
         <DialogContent sx={{ p: 0 }}>
-          {/* Input Header */}
-          <Box sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1.5, borderBottom: `1px solid ${borderColor}` }}>
-            <SearchIcon sx={{ color: goldAccent }} />
+          {/* Input Header — elevated chrome treatment */}
+          <Box
+            sx={{
+              p: 2,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1.5,
+              borderBottom: `1px solid ${borderColor}`,
+              bgcolor: dark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)',
+            }}
+          >
+            {/* Search icon — premium gold accent with glow */}
+            <Box
+              sx={{
+                width: 36,
+                height: 36,
+                borderRadius: 2,
+                bgcolor: dark ? 'rgba(212,175,55,0.12)' : 'rgba(212,175,55,0.1)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: `1px solid ${dark ? 'rgba(212,175,55,0.2)' : 'rgba(212,175,55,0.2)'}`,
+                color: goldAccent,
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <SearchIcon sx={{ fontSize: '17px !important' }} />
+            </Box>
             <InputBase
               autoFocus
               fullWidth
               placeholder="Search all 25 tools, 37 workstations, hubs, or documentation..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              sx={{ color: theme.palette.text.primary, fontSize: '1rem', fontFamily: 'inherit' }}
+              sx={{
+                color: theme.palette.text.primary,
+                fontSize: '1rem',
+                fontFamily: 'inherit',
+                py: 0.5,
+                '&::placeholder': {
+                  color: dark ? '#6B7280' : '#9CA3AF',
+                  opacity: 1,
+                  fontWeight: 400,
+                },
+              }}
             />
-            <IconButton size="small" onClick={() => setPaletteOpen(false)}>
+            <IconButton
+              size="small"
+              onClick={() => setPaletteOpen(false)}
+              sx={{
+                color: dark ? '#9CA3AF' : '#6B7280',
+                '&:hover': {
+                  bgcolor: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+                  color: goldAccent,
+                },
+                transition: 'all 0.15s ease',
+              }}
+            >
               <CloseIcon fontSize="small" />
             </IconButton>
           </Box>
@@ -579,62 +704,101 @@ export default function Navbar({ mode, onToggleTheme }) {
           {/* Quick Jump List */}
           <Box sx={{ maxHeight: 380, overflowY: 'auto', p: 1 }}>
             {/* Core Hubs */}
-            <Typography variant="caption" sx={{ px: 2, pt: 1, display: 'block', fontWeight: 800, color: dark ? '#6B7280' : '#9CA3AF', textTransform: 'uppercase' }}>
+            <Typography variant="caption" sx={{ px: 2, pt: 1, display: 'block', fontWeight: 800, color: dark ? '#6B7280' : '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', fontSize: '0.7rem' }}>
               Flagship Studios
             </Typography>
             <List dense disablePadding>
               {primaryNav.map((n) => (
                 <ListItem key={n.path} disablePadding>
-                  <ListItemButton onClick={() => handleSelectRoute(n.path)} sx={{ borderRadius: 1.5, my: 0.25 }}>
+                  <ListItemButton
+                    onClick={() => handleSelectRoute(n.path)}
+                    sx={{
+                      borderRadius: 1.5,
+                      my: 0.25,
+                      border: `1px solid transparent`,
+                      transition: 'all 0.15s ease',
+                      '&:hover': {
+                        bgcolor: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
+                        borderColor: dark ? 'rgba(212,175,55,0.2)' : 'rgba(212,175,55,0.15)',
+                        transform: 'translateX(2px)',
+                      },
+                    }}
+                  >
                     <ListItemIcon sx={{ minWidth: 32 }}><HubIcon sx={{ color: goldAccent, fontSize: 18 }} /></ListItemIcon>
-                    <ListItemText primary={n.label} primaryTypographyProps={{ fontWeight: 700 }} />
-                    <Chip label="Studio" size="small" sx={{ height: 18, fontSize: '0.65rem' }} />
+                    <ListItemText primary={n.label} primaryTypographyProps={{ fontWeight: 700, fontSize: '0.9rem' }} />
+                    <Chip label="Studio" size="small" sx={{ height: 18, fontSize: '0.65rem', bgcolor: dark ? 'rgba(212,175,55,0.12)' : 'rgba(212,175,55,0.1)', color: goldAccent, fontWeight: 700, border: `1px solid ${dark ? 'rgba(212,175,55,0.2)' : 'rgba(212,175,55,0.2)'}` }} />
                   </ListItemButton>
                 </ListItem>
               ))}
             </List>
 
-            <Divider sx={{ my: 1 }} />
+            <Divider sx={{ my: 1, opacity: 0.4 }} />
 
             {/* Matching Tools */}
-            <Typography variant="caption" sx={{ px: 2, pt: 0.5, display: 'block', fontWeight: 800, color: dark ? '#6B7280' : '#9CA3AF', textTransform: 'uppercase' }}>
+            <Typography variant="caption" sx={{ px: 2, pt: 0.5, display: 'block', fontWeight: 800, color: dark ? '#6B7280' : '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', fontSize: '0.7rem', mt: 0.5 }}>
               Developer Tools ({filteredTools.length})
             </Typography>
             <List dense disablePadding>
               {filteredTools.map((t) => (
                 <ListItem key={t.id} disablePadding>
-                  <ListItemButton onClick={() => handleSelectRoute(`/tools/${t.id}`)} sx={{ borderRadius: 1.5, my: 0.25 }}>
+                  <ListItemButton
+                    onClick={() => handleSelectRoute(`/tools/${t.id}`)}
+                    sx={{
+                      borderRadius: 1.5,
+                      my: 0.25,
+                      border: `1px solid transparent`,
+                      transition: 'all 0.15s ease',
+                      '&:hover': {
+                        bgcolor: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
+                        borderColor: dark ? 'rgba(96,165,250,0.2)' : 'rgba(96,165,250,0.15)',
+                        transform: 'translateX(2px)',
+                      },
+                    }}
+                  >
                     <ListItemIcon sx={{ minWidth: 32 }}><FlashOnIcon sx={{ color: '#60A5FA', fontSize: 18 }} /></ListItemIcon>
                     <ListItemText
                       primary={t.name}
                       secondary={t.category}
                       primaryTypographyProps={{ fontWeight: 700, fontSize: '0.88rem' }}
-                      secondaryTypographyProps={{ fontSize: '0.72rem' }}
+                      secondaryTypographyProps={{ fontSize: '0.72rem', color: dark ? '#6B7280' : '#9CA3AF' }}
                     />
-                    <Chip label="Open Tool" size="small" sx={{ height: 18, fontSize: '0.65rem', bgcolor: dark ? 'rgba(96,165,250,0.12)' : '#EFF6FF', color: '#60A5FA', fontWeight: 700 }} />
+                    <Chip label="Open Tool" size="small" sx={{ height: 18, fontSize: '0.65rem', bgcolor: dark ? 'rgba(96,165,250,0.12)' : '#EFF6FF', color: '#60A5FA', fontWeight: 700, border: `1px solid rgba(96,165,250,0.2)` }} />
                   </ListItemButton>
                 </ListItem>
               ))}
             </List>
 
-            <Divider sx={{ my: 1 }} />
+            {filteredTools.length > 0 && <Divider sx={{ my: 1, opacity: 0.4 }} />}
 
             {/* Matching Workstations */}
-            <Typography variant="caption" sx={{ px: 2, pt: 0.5, display: 'block', fontWeight: 800, color: dark ? '#6B7280' : '#9CA3AF', textTransform: 'uppercase' }}>
+            <Typography variant="caption" sx={{ px: 2, pt: 0.5, display: 'block', fontWeight: 800, color: dark ? '#6B7280' : '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.08em', fontSize: '0.7rem', mt: 0.5 }}>
               Workstations ({filteredWorkstations.length})
             </Typography>
             <List dense disablePadding>
               {filteredWorkstations.map((w) => (
                 <ListItem key={w.id} disablePadding>
-                  <ListItemButton onClick={() => handleSelectRoute(`/workstations/${w.id}`)} sx={{ borderRadius: 1.5, my: 0.25 }}>
+                  <ListItemButton
+                    onClick={() => handleSelectRoute(`/workstations/${w.id}`)}
+                    sx={{
+                      borderRadius: 1.5,
+                      my: 0.25,
+                      border: `1px solid transparent`,
+                      transition: 'all 0.15s ease',
+                      '&:hover': {
+                        bgcolor: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
+                        borderColor: dark ? 'rgba(16,185,129,0.2)' : 'rgba(16,185,129,0.15)',
+                        transform: 'translateX(2px)',
+                      },
+                    }}
+                  >
                     <ListItemIcon sx={{ minWidth: 32 }}><TerminalIcon sx={{ color: '#10B981', fontSize: 18 }} /></ListItemIcon>
                     <ListItemText
                       primary={w.name}
                       secondary={`Band: ${w.band}`}
                       primaryTypographyProps={{ fontWeight: 700, fontSize: '0.88rem' }}
-                      secondaryTypographyProps={{ fontSize: '0.72rem' }}
+                      secondaryTypographyProps={{ fontSize: '0.72rem', color: dark ? '#6B7280' : '#9CA3AF' }}
                     />
-                    <Chip label="Workstation" size="small" sx={{ height: 18, fontSize: '0.65rem', bgcolor: dark ? 'rgba(16,185,129,0.12)' : '#ECFDF5', color: '#10B981', fontWeight: 700 }} />
+                    <Chip label="Workstation" size="small" sx={{ height: 18, fontSize: '0.65rem', bgcolor: dark ? 'rgba(16,185,129,0.12)' : '#ECFDF5', color: '#10B981', fontWeight: 700, border: `1px solid rgba(16,185,129,0.2)` }} />
                   </ListItemButton>
                 </ListItem>
               ))}

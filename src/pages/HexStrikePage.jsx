@@ -31,6 +31,7 @@ import CheckIcon from '@mui/icons-material/Check';
 
 import VaultConsole from '../components/VaultConsole';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
+import SovereignFunnel from '../components/SovereignFunnel';
 import { microTools } from '../data/toolsData';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -642,7 +643,7 @@ export default function HexStrikePage() {
               onClick={handleExportSignedCveReport}
               sx={{
                 bgcolor: gold.accent,
-                color: isDark ? '#08080B' : '#FFFFFF',
+                color: '#08080B',
                 fontWeight: 800,
                 boxShadow: `0 4px 14px ${gold.glow}`,
                 '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#9A7209' }
@@ -731,7 +732,7 @@ export default function HexStrikePage() {
                 <svg width="220" height="220" viewBox="0 0 220 220" style={{ transform: 'rotate(-90deg)' }}>
                   <defs>
                     <linearGradient id="dialGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#FFF3B0" />
+                      <stop offset="0%" stopColor={isDark ? '#FFF3B0' : '#E5C158'} />
                       <stop offset="50%" stopColor="#D4AF37" />
                       <stop offset="100%" stopColor="#9A7209" />
                     </linearGradient>
@@ -945,7 +946,7 @@ export default function HexStrikePage() {
               disabled={isScanningPorts}
               sx={{
                 bgcolor: isScanningPorts ? (isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.4)') : gold.accent,
-                color: isDark ? '#08080B' : '#FFFFFF',
+                color: '#08080B',
                 fontFamily: mono,
                 fontWeight: 850,
                 boxShadow: `0 4px 16px ${gold.glow}`,
@@ -1167,7 +1168,7 @@ export default function HexStrikePage() {
                       transition: 'background-color 0.15s'
                     }}
                   >
-                    <TableCell sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent }}>
+                    <TableCell sx={{ fontFamily: mono, fontWeight: 800, color: gold.soft }}>
                       :{p.port}
                     </TableCell>
                     <TableCell sx={{ fontWeight: 650, color: theme.palette.text.primary }}>
@@ -1452,7 +1453,7 @@ export default function HexStrikePage() {
             onClick={handleExportSignedCveReport}
             sx={{
               bgcolor: gold.accent,
-              color: isDark ? '#08080B' : '#FFFFFF',
+              color: '#08080B',
               fontWeight: 850,
               fontFamily: mono,
               px: 3,
@@ -1557,7 +1558,7 @@ export default function HexStrikePage() {
                           startIcon={<RocketLaunchIcon sx={{ fontSize: '0.9rem !important' }} />}
                           sx={{
                             bgcolor: gold.accent,
-                            color: isDark ? '#08080B' : '#FFFFFF',
+                            color: '#08080B',
                             fontWeight: 800,
                             fontFamily: mono,
                             fontSize: '0.76rem',
@@ -1629,6 +1630,17 @@ export default function HexStrikePage() {
           </Box>
         </Alert>
       </Snackbar>
+
+      {/* Sovereign Installation Funnel */}
+      <SovereignFunnel
+        title="Deploy HexStrike Cyber-Security & Vault Locally"
+        subtitle="Zero-telemetry cryptographic security auditing, loopback attack surface scanning, and Argon2id + AES-256-GCM hardware vault security."
+        toolTitle="Option 1: EnvGuard Secrets Vault Micro-Repo"
+        toolTag="SECURITY VAULT"
+        toolDescription="Standalone zero-egress environment secret encryption vault with Argon2id key derivation, AES-256-GCM authenticated envelopes, and leak prevention."
+        toolRepo="https://github.com/NullAITech/envguard-secrets-vault"
+        toolCommand="git clone https://github.com/NullAITech/envguard-secrets-vault.git"
+      />
     </Container>
   );
 }

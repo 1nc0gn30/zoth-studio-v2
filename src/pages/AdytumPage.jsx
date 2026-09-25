@@ -15,6 +15,8 @@ import {
   LinearProgress,
   Collapse,
   IconButton,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
@@ -24,6 +26,8 @@ import FastForwardIcon from '@mui/icons-material/FastForward';
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import SecurityIcon from '@mui/icons-material/Security';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import TerminalIcon from '@mui/icons-material/Terminal';
 import PsychologyIcon from '@mui/icons-material/Psychology';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -246,11 +250,11 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
       const cy = height / 2;
       const maxRadius = Math.min(width, height) * 0.43;
 
-      // Deep celestial void background with radial gold glow
+      // Celestial void (dark) or illuminated golden vellum (light) background
       const grad = ctx.createRadialGradient(cx, cy, 4, cx, cy, maxRadius * 1.15);
-      grad.addColorStop(0, 'rgba(212, 175, 55, 0.12)');
-      grad.addColorStop(0.55, 'rgba(212, 175, 55, 0.03)');
-      grad.addColorStop(1, isDark ? '#08080B' : '#0B1120');
+      grad.addColorStop(0, isDark ? 'rgba(212, 175, 55, 0.14)' : 'rgba(212, 175, 55, 0.22)');
+      grad.addColorStop(0.55, isDark ? 'rgba(212, 175, 55, 0.03)' : 'rgba(245, 230, 171, 0.16)');
+      grad.addColorStop(1, isDark ? '#08080B' : '#FEFAF0');
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, width, height);
 
@@ -266,7 +270,9 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
 
         ctx.beginPath();
         ctx.arc(0, 0, rad, 0, Math.PI * 2);
-        ctx.strokeStyle = r === ringCount ? 'rgba(212, 175, 55, 0.65)' : 'rgba(212, 175, 55, 0.22)';
+        ctx.strokeStyle = r === ringCount
+          ? (isDark ? 'rgba(212, 175, 55, 0.75)' : 'rgba(184, 134, 11, 0.85)')
+          : (isDark ? 'rgba(212, 175, 55, 0.22)' : 'rgba(184, 134, 11, 0.32)');
         ctx.lineWidth = r === ringCount ? 1.4 : 0.8;
         if (r % 2 === 1) {
           ctx.setLineDash([4, 6]);
@@ -289,7 +295,9 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
             ctx.beginPath();
             ctx.moveTo(x1, y1);
             ctx.lineTo(x2, y2);
-            ctx.strokeStyle = isMajor ? '#D4AF37' : 'rgba(212, 175, 55, 0.4)';
+            ctx.strokeStyle = isMajor
+              ? (isDark ? '#D4AF37' : '#B8860B')
+              : (isDark ? 'rgba(212, 175, 55, 0.4)' : 'rgba(184, 134, 11, 0.5)');
             ctx.lineWidth = isMajor ? 1.2 : 0.6;
             ctx.stroke();
           }
@@ -315,9 +323,13 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
           else ctx.lineTo(x, y);
         }
         ctx.closePath();
-        ctx.strokeStyle = `rgba(212, 175, 55, ${strokeAlpha})`;
+        ctx.strokeStyle = isDark
+          ? `rgba(212, 175, 55, ${strokeAlpha})`
+          : `rgba(184, 134, 11, ${strokeAlpha * 1.1})`;
         ctx.lineWidth = 1.3;
-        ctx.fillStyle = `rgba(212, 175, 55, ${fillAlpha})`;
+        ctx.fillStyle = isDark
+          ? `rgba(212, 175, 55, ${fillAlpha})`
+          : `rgba(212, 175, 55, ${fillAlpha * 1.6})`;
         ctx.fill();
         ctx.stroke();
 
@@ -327,7 +339,9 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
           ctx.moveTo(0, 0);
           ctx.lineTo(Math.cos(a) * triRadius, Math.sin(a) * triRadius);
         }
-        ctx.strokeStyle = `rgba(212, 175, 55, ${strokeAlpha * 0.35})`;
+        ctx.strokeStyle = isDark
+          ? `rgba(212, 175, 55, ${strokeAlpha * 0.35})`
+          : `rgba(184, 134, 11, ${strokeAlpha * 0.45})`;
         ctx.lineWidth = 0.7;
         ctx.stroke();
         ctx.restore();
@@ -360,7 +374,7 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
           ctx.lineTo(nodeCoords[j].x, nodeCoords[j].y);
         }
       }
-      ctx.strokeStyle = 'rgba(212, 175, 55, 0.22)';
+      ctx.strokeStyle = isDark ? 'rgba(212, 175, 55, 0.22)' : 'rgba(184, 134, 11, 0.32)';
       ctx.lineWidth = 0.8;
       ctx.stroke();
 
@@ -371,7 +385,7 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
         else ctx.lineTo(nodeCoords[i].x, nodeCoords[i].y);
       }
       ctx.closePath();
-      ctx.strokeStyle = 'rgba(212, 175, 55, 0.7)';
+      ctx.strokeStyle = isDark ? 'rgba(212, 175, 55, 0.7)' : 'rgba(184, 134, 11, 0.85)';
       ctx.lineWidth = 1.1;
       ctx.stroke();
 
@@ -382,14 +396,14 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
         ctx.save();
         ctx.beginPath();
         ctx.arc(x, y, 3.2 * pulse, 0, Math.PI * 2);
-        ctx.fillStyle = '#FFF2B2';
-        ctx.shadowColor = '#D4AF37';
+        ctx.fillStyle = isDark ? '#FFF2B2' : '#B8860B';
+        ctx.shadowColor = isDark ? '#D4AF37' : 'rgba(184, 134, 11, 0.5)';
         ctx.shadowBlur = 9 * pulse;
         ctx.fill();
 
         ctx.beginPath();
         ctx.arc(x, y, 1.4, 0, Math.PI * 2);
-        ctx.fillStyle = isDark ? '#08080B' : '#0B1120';
+        ctx.fillStyle = isDark ? '#08080B' : '#FEFAF0';
         ctx.fill();
         ctx.restore();
       }
@@ -402,14 +416,14 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
       const coreGlow = 4 + 1.8 * Math.sin(t * 2.5);
       ctx.beginPath();
       ctx.arc(0, 0, coreGlow, 0, Math.PI * 2);
-      ctx.fillStyle = '#D4AF37';
-      ctx.shadowColor = '#F5E6AB';
+      ctx.fillStyle = isDark ? '#D4AF37' : '#B8860B';
+      ctx.shadowColor = isDark ? '#F5E6AB' : 'rgba(212, 175, 55, 0.6)';
       ctx.shadowBlur = 10;
       ctx.fill();
 
       ctx.beginPath();
       ctx.arc(0, 0, 14, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(212, 175, 55, 0.45)';
+      ctx.strokeStyle = isDark ? 'rgba(212, 175, 55, 0.45)' : 'rgba(184, 134, 11, 0.5)';
       ctx.lineWidth = 0.9;
       ctx.stroke();
 
@@ -429,11 +443,11 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
         position: 'relative',
         width: '100%',
         height: 240,
-        bgcolor: isDark ? '#08080B' : '#0B1120',
+        bgcolor: isDark ? '#08080B' : '#FEFAF0',
         borderRadius: 2,
         overflow: 'hidden',
-        border: isDark ? '1px solid rgba(212, 175, 55, 0.4)' : '1px solid rgba(184, 134, 11, 0.35)',
-        boxShadow: isDark ? '0 0 24px -6px rgba(212, 175, 55, 0.25)' : '0 8px 24px -6px rgba(184, 134, 11, 0.2)',
+        border: isDark ? '1px solid rgba(212, 175, 55, 0.4)' : '1px solid rgba(184, 134, 11, 0.4)',
+        boxShadow: isDark ? '0 0 24px -6px rgba(212, 175, 55, 0.25)' : '0 8px 24px -6px rgba(184, 134, 11, 0.15)',
       }}
     >
       <canvas
@@ -460,14 +474,14 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
           sx={{
             fontFamily: mono,
             fontSize: '0.66rem',
-            color: '#D4AF37',
+            color: isDark ? '#D4AF37' : '#8A6A09',
             fontWeight: 800,
             letterSpacing: '0.08em',
-            bgcolor: 'rgba(8, 8, 11, 0.88)',
+            bgcolor: isDark ? 'rgba(8, 8, 11, 0.88)' : 'rgba(255, 255, 255, 0.92)',
             px: 0.8,
             py: 0.3,
             borderRadius: 0.5,
-            border: '1px solid rgba(212,175,55,0.35)',
+            border: isDark ? '1px solid rgba(212,175,55,0.35)' : '1px solid rgba(184,134,11,0.35)',
           }}
         >
           SIGIL · KEY {keyIndex}
@@ -476,13 +490,13 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
           sx={{
             fontFamily: mono,
             fontSize: '0.64rem',
-            color: '#F5E6AB',
+            color: isDark ? '#F5E6AB' : '#B8860B',
             fontWeight: 700,
-            bgcolor: 'rgba(8, 8, 11, 0.88)',
+            bgcolor: isDark ? 'rgba(8, 8, 11, 0.88)' : 'rgba(255, 255, 255, 0.92)',
             px: 0.8,
             py: 0.3,
             borderRadius: 0.5,
-            border: '1px solid rgba(212,175,55,0.35)',
+            border: isDark ? '1px solid rgba(212,175,55,0.35)' : '1px solid rgba(184,134,11,0.35)',
           }}
         >
           {3 + (keyIndex % 7)}-FOLD HARMONIC
@@ -515,6 +529,14 @@ export function AdytumEngine({ embedded = false }) {
   const [now, setNow] = useState(Date.now());
   const [liveDigest, setLiveDigest] = useState('');
   const [copiedDigest, setCopiedDigest] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
+  const handleCopyCodeText = (text, label = 'Command') => {
+    navigator.clipboard?.writeText(text);
+    setSnackbarMessage(`${label} copied to clipboard!`);
+    setSnackbarOpen(true);
+  };
 
   const opened = Object.values(plan.entries).filter((entry) => entry && entry.gate).length;
   const card = keys[plan.current] || keys[0];
@@ -1839,19 +1861,23 @@ export function AdytumEngine({ embedded = false }) {
               <Paper
                 sx={{
                   p: 3,
-                  bgcolor: dark ? '#08080B' : '#0F172A',
-                  color: reading.includes('[GATE OPENED]') ? '#34D399' : '#F8FAFC',
+                  bgcolor: dark
+                    ? '#08080B'
+                    : (reading.includes('[GATE OPENED]') ? '#F0FDF4' : '#FEFAF0'),
+                  color: reading.includes('[GATE OPENED]')
+                    ? (dark ? '#34D399' : '#15803D')
+                    : (dark ? '#F8FAFC' : '#1E293B'),
                   whiteSpace: 'pre-wrap',
                   fontFamily: mono,
                   fontSize: '0.85rem',
                   lineHeight: 1.6,
                   borderRadius: 2,
                   border: reading.includes('[GATE OPENED]')
-                    ? '1px solid rgba(52, 211, 153, 0.5)'
-                    : (dark ? '1px solid rgba(212, 175, 55, 0.4)' : '1px solid #334155'),
+                    ? (dark ? '1px solid rgba(52, 211, 153, 0.5)' : '1px solid #86EFAC')
+                    : (dark ? '1px solid rgba(212, 175, 55, 0.4)' : '1px solid #F5E6AB'),
                   boxShadow: reading.includes('[GATE OPENED]')
-                    ? '0 0 20px rgba(52, 211, 153, 0.15)'
-                    : '0 0 20px rgba(212, 175, 55, 0.15)',
+                    ? (dark ? '0 0 20px rgba(52, 211, 153, 0.15)' : '0 4px 16px rgba(16, 185, 129, 0.12)')
+                    : (dark ? '0 0 20px rgba(212, 175, 55, 0.15)' : '0 4px 16px rgba(184, 134, 11, 0.1)'),
                 }}
               >
                 {reading}
@@ -1860,6 +1886,152 @@ export function AdytumEngine({ embedded = false }) {
           )}
         </Box>
       </Box>
+
+      {/* Sovereign Installation & Ecosystem Deployment Funnel */}
+      <Paper
+        elevation={0}
+        sx={{
+          mt: 6,
+          p: { xs: 3, md: 4.5 },
+          borderRadius: 3,
+          border: `1.5px solid ${gold}`,
+          bgcolor: dark ? '#0D0E16' : '#FFFFFF',
+          boxShadow: dark ? '0 12px 40px rgba(0,0,0,0.5)' : '0 8px 30px rgba(212,175,55,0.1)',
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 1.5 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
+            <RocketLaunchIcon sx={{ color: gold, fontSize: '1.6rem' }} />
+            <Typography variant="h5" sx={{ fontWeight: 900, color: textPrimary, letterSpacing: '-0.01em' }}>
+              Deploy Adytum Alchemist & Sovereign Tools Locally
+            </Typography>
+          </Box>
+          <Chip
+            label="AIR-GAPPED SOVEREIGN ECOSYSTEM"
+            size="small"
+            sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
+          />
+        </Box>
+
+        <Typography variant="body1" sx={{ color: textSecondary, mb: 3.5, maxWidth: 920, lineHeight: 1.65 }}>
+          Adytum Alchemist and the entire Zoth Studio suite are designed for 100% offline, zero-cloud execution. Run the standalone Adytum CLI package on your machine, clone the full Zoth Studio v2 cockpit, or boot the air-gapped bare-metal Zoth OS.
+        </Typography>
+
+        <Grid container spacing={3}>
+          {/* Option 1: Standalone Adytum CLI Package */}
+          <Grid xs={12} md={4}>
+            <Box sx={{ p: 2.5, height: '100%', bgcolor: dark ? '#121420' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2.5, display: 'flex', flexDirection: 'column' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: dark ? goldLight : '#8A6A09' }}>
+                  Option 1: Adytum CLI Micro-Repo
+                </Typography>
+                <Chip label="STANDALONE" size="small" sx={{ bgcolor: dark ? 'rgba(56,189,248,0.15)' : '#E0F2FE', color: dark ? '#38BDF8' : '#0369A1', fontWeight: 800, fontSize: '0.65rem' }} />
+              </Box>
+              <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
+                Dedicated standalone repository with offline 22-Key planning rite, automated incubation clocks, and cryptographic SHA-256 seal stamp generators.
+              </Typography>
+              <Box sx={{ p: 1.2, mb: 2, bgcolor: dark ? '#08080B' : '#EDF2F7', border: `1px solid ${divider}`, borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: dark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git
+                </Typography>
+                <IconButton size="small" onClick={() => handleCopyCodeText('git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git')} sx={{ color: gold, ml: 1, p: 0.5 }}>
+                  <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                </IconButton>
+              </Box>
+              <Button
+                variant="contained"
+                href="https://github.com/NullAITech/adytum-alchemist-ai-workflow"
+                target="_blank"
+                rel="noopener noreferrer"
+                fullWidth
+                sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
+              >
+                Open Adytum GitHub Repo
+              </Button>
+            </Box>
+          </Grid>
+
+          {/* Option 2: Zoth Studio v2 Unified Cockpit */}
+          <Grid xs={12} md={4}>
+            <Box sx={{ p: 2.5, height: '100%', bgcolor: dark ? '#121420' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2.5, display: 'flex', flexDirection: 'column' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: dark ? goldLight : '#8A6A09' }}>
+                  Option 2: Zoth Studio v2 Cockpit
+                </Typography>
+                <Chip label="FULL SUITE" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontSize: '0.65rem' }} />
+              </Box>
+              <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
+                The full sovereign workstation cockpit featuring 29+ interactive micro-tools, STDP neural memory daemon, and WebGPU hardware shaders.
+              </Typography>
+              <Box sx={{ p: 1.2, mb: 2, bgcolor: dark ? '#08080B' : '#EDF2F7', border: `1px solid ${divider}`, borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: dark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  git clone https://github.com/NullAITech/zoth-studio-v2.git
+                </Typography>
+                <IconButton size="small" onClick={() => handleCopyCodeText('git clone https://github.com/NullAITech/zoth-studio-v2.git')} sx={{ color: gold, ml: 1, p: 0.5 }}>
+                  <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                </IconButton>
+              </Box>
+              <Button
+                variant="contained"
+                href="https://github.com/NullAITech/zoth-studio-v2"
+                target="_blank"
+                rel="noopener noreferrer"
+                fullWidth
+                sx={{ bgcolor: gold, color: dark ? '#08080B' : '#FFFFFF', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
+              >
+                Open Studio v2 GitHub Repo
+              </Button>
+            </Box>
+          </Grid>
+
+          {/* Option 3: Sovereign Zoth OS */}
+          <Grid xs={12} md={4}>
+            <Box sx={{ p: 2.5, height: '100%', bgcolor: dark ? '#121420' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2.5, display: 'flex', flexDirection: 'column' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: dark ? goldLight : '#8A6A09' }}>
+                  Option 3: Sovereign Zoth OS
+                </Typography>
+                <Chip label="BARE-METAL OS" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF3', color: dark ? '#10B981' : '#059669', fontWeight: 800, fontSize: '0.65rem' }} />
+              </Box>
+              <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
+                Zero-telemetry air-gapped operating system kernel for autonomous agent swarms, hardware enclave encryption, and memory vaults.
+              </Typography>
+              <Box sx={{ p: 1.2, mb: 2, bgcolor: dark ? '#08080B' : '#EDF2F7', border: `1px solid ${divider}`, borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: dark ? '#10B981' : '#059669', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  https://github.com/NullAITech/zoth-os
+                </Typography>
+                <IconButton size="small" onClick={() => handleCopyCodeText('https://github.com/NullAITech/zoth-os')} sx={{ color: gold, ml: 1, p: 0.5 }}>
+                  <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                </IconButton>
+              </Box>
+              <Button
+                variant="outlined"
+                href="https://github.com/NullAITech/zoth-os"
+                target="_blank"
+                rel="noopener noreferrer"
+                fullWidth
+                sx={{ borderColor: gold, color: gold, fontWeight: 800, textTransform: 'none', '&:hover': { borderColor: dark ? goldLight : '#9A7008', bgcolor: goldBg } }}
+              >
+                Inspect Zoth OS Architecture
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
+      </Paper>
+
+      {/* Snackbar Feedback */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setSnackbarOpen(false)} severity="success" sx={{ width: '100%', bgcolor: '#10B981', color: '#FFFFFF', fontWeight: 700 }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 
