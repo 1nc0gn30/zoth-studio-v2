@@ -16,6 +16,10 @@ import CodeIcon from '@mui/icons-material/Code';
 import SecurityIcon from '@mui/icons-material/Security';
 import MemoryIcon from '@mui/icons-material/Memory';
 import DnsIcon from '@mui/icons-material/Dns';
+import TerminalIcon from '@mui/icons-material/Terminal';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import DownloadIcon from '@mui/icons-material/Download';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { microTools } from '../data/toolsData';
 import ZothAIAssistant from '../components/ZothAIAssistant';
 import { useStudioStatus } from '../studio/useStudioStatus';
@@ -1459,6 +1463,884 @@ function drawFallback(ctx, W, H, title, sub) {
 }
 
 /* ==========================================================================
+   TOOL: PWA Manifest Builder (Real In-Browser Web Manifest Synthesizer)
+   ========================================================================== */
+function PwaManifestBuilderTool() {
+  const theme = useTheme();
+  const [name, setName] = useState('Sovereign Matrix Workstation');
+  const [shortName, setShortName] = useState('SovMatrix');
+  const [themeColor, setThemeColor] = useState('#D4AF37');
+  const [bgColor, setBgColor] = useState('#08080B');
+  const [displayMode, setDisplayMode] = useState('standalone');
+  const [startUrl, setStartUrl] = useState('/');
+  const [copied, setCopied] = useState(false);
+
+  const manifestObj = {
+    name,
+    short_name: shortName,
+    start_url: startUrl,
+    display: displayMode,
+    theme_color: themeColor,
+    background_color: bgColor,
+    icons: [
+      { src: "/favicon.ico", sizes: "64x64 32x32 24x24 16x16", type: "image/x-icon" },
+      { src: "/brand/logo192.png", type: "image/png", sizes: "192x192" },
+      { src: "/brand/logo512.png", type: "image/png", sizes: "512x512" }
+    ],
+    orientation: "any",
+    prefer_related_applications: false
+  };
+
+  const manifestJson = JSON.stringify(manifestObj, null, 2);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(manifestJson);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleDownload = () => {
+    const blob = new Blob([manifestJson], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'manifest.json';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <Box sx={{ mt: 1 }}>
+      <Typography className="section-kicker">PWA Sovereign Web Manifest Builder</Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
+        Generate zero-telemetry, installable Progressive Web App manifests for offline local hosting and Netlify deployments.
+      </Typography>
+
+      <Grid container spacing={3}>
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 2 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 850, color: goldSoft(theme), mb: 2 }}>
+              Application Metadata
+            </Typography>
+            <Stack spacing={2}>
+              <TextField
+                label="Application Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                size="small"
+                fullWidth
+              />
+              <TextField
+                label="Short Name"
+                value={shortName}
+                onChange={(e) => setShortName(e.target.value)}
+                size="small"
+                fullWidth
+              />
+              <Box sx={{ display: 'flex', gap: 2 }}>
+                <TextField
+                  label="Theme Color"
+                  value={themeColor}
+                  onChange={(e) => setThemeColor(e.target.value)}
+                  size="small"
+                  fullWidth
+                />
+                <TextField
+                  label="Background Color"
+                  value={bgColor}
+                  onChange={(e) => setBgColor(e.target.value)}
+                  size="small"
+                  fullWidth
+                />
+              </Box>
+              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
+                <Typography variant="caption" sx={{ color: theme.palette.text.secondary, fontWeight: 750 }}>
+                  Display Mode:
+                </Typography>
+                {['standalone', 'minimal-ui', 'fullscreen'].map((mode) => (
+                  <Chip
+                    key={mode}
+                    label={mode}
+                    size="small"
+                    onClick={() => setDisplayMode(mode)}
+                    clickable
+                    sx={{
+                      fontWeight: 750,
+                      bgcolor: displayMode === mode ? gold(theme) : 'transparent',
+                      color: displayMode === mode ? '#08080B' : theme.palette.text.primary,
+                      border: `1px solid ${displayMode === mode ? gold(theme) : theme.palette.divider}`
+                    }}
+                  />
+                ))}
+              </Box>
+              <TextField
+                label="Start URL"
+                value={startUrl}
+                onChange={(e) => setStartUrl(e.target.value)}
+                size="small"
+                fullWidth
+              />
+            </Stack>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 850, color: goldSoft(theme) }}>
+                manifest.json Preview
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  startIcon={copied ? <CheckIcon sx={{ color: '#34D399' }} /> : <ContentCopyIcon />}
+                  onClick={handleCopy}
+                  sx={{ borderColor: goldBorder(theme), color: gold(theme), fontWeight: 750 }}
+                >
+                  {copied ? 'Copied' : 'Copy'}
+                </Button>
+                <Button
+                  size="small"
+                  variant="contained"
+                  startIcon={<DownloadIcon />}
+                  onClick={handleDownload}
+                  sx={{ bgcolor: gold(theme), color: '#08080B', fontWeight: 800, '&:hover': { bgcolor: goldSoft(theme) } }}
+                >
+                  Download
+                </Button>
+              </Box>
+            </Box>
+            <Paper sx={{ p: 1.5, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, color: '#38BDF8', fontFamily: mono, fontSize: '0.78rem', whiteSpace: 'pre-wrap', flexGrow: 1, overflow: 'auto', maxHeight: 280 }}>
+              {manifestJson}
+            </Paper>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   TOOL: RegexDroid Builder (Air-Gapped Regular Expression Synthesizer)
+   ========================================================================== */
+function RegexDroidBuilderTool() {
+  const theme = useTheme();
+  const [pattern, setPattern] = useState('^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$');
+  const [flags, setFlags] = useState('gim');
+  const [testText, setTestText] = useState('contact@sovereign-matrix.org\nnullai@127.0.0.1\nsovereign.agent@zoth.internal\ninvalid-email-format');
+  const [copied, setCopied] = useState(false);
+
+  let matches = [];
+  let error = '';
+
+  try {
+    const re = new RegExp(pattern, flags);
+    const lines = testText.split('\n');
+    lines.forEach((line, lineIdx) => {
+      const match = line.match(re);
+      if (match) {
+        matches.push({ line: lineIdx + 1, text: line, groups: match.slice(1) });
+      }
+    });
+  } catch (e) {
+    error = e.message;
+  }
+
+  const presets = [
+    { label: 'Email RFC5322', pattern: '^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$', flags: 'gim' },
+    { label: 'SemVer Regex', pattern: '^v?(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?$', flags: 'gm' },
+    { label: 'IPv4 Loopback', pattern: '^(?:127\\.0\\.0\\.1|10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|192\\.168\\.\\d{1,3}\\.\\d{1,3})$', flags: 'gm' },
+    { label: 'JWT Token Structure', pattern: '^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$', flags: 'gm' },
+  ];
+
+  return (
+    <Box sx={{ mt: 1 }}>
+      <Typography className="section-kicker">RegexDroid Expression Synthesizer</Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
+        Air-gapped regex parsing and security validation engine. Test expressions locally without cloud execution.
+      </Typography>
+
+      <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
+        {presets.map((p) => (
+          <Chip
+            key={p.label}
+            label={p.label}
+            size="small"
+            clickable
+            onClick={() => { setPattern(p.pattern); setFlags(p.flags); }}
+            sx={{
+              fontWeight: 750,
+              bgcolor: pattern === p.pattern ? gold(theme) : 'transparent',
+              color: pattern === p.pattern ? '#08080B' : theme.palette.text.primary,
+              border: `1px solid ${pattern === p.pattern ? gold(theme) : theme.palette.divider}`
+            }}
+          />
+        ))}
+      </Box>
+
+      <Grid container spacing={3}>
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 2 }}>
+            <Box sx={{ display: 'flex', gap: 1.5, mb: 2 }}>
+              <TextField
+                label="Regex Pattern"
+                value={pattern}
+                onChange={(e) => setPattern(e.target.value)}
+                size="small"
+                fullWidth
+                error={Boolean(error)}
+                helperText={error}
+                InputProps={{ sx: { fontFamily: mono } }}
+              />
+              <TextField
+                label="Flags"
+                value={flags}
+                onChange={(e) => setFlags(e.target.value)}
+                size="small"
+                sx={{ width: 100 }}
+                InputProps={{ sx: { fontFamily: mono } }}
+              />
+            </Box>
+            <TextField
+              label="Test String / Payload Input"
+              value={testText}
+              onChange={(e) => setTestText(e.target.value)}
+              multiline
+              rows={6}
+              fullWidth
+              InputProps={{ sx: { fontFamily: mono, fontSize: '0.82rem' } }}
+            />
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 850, color: goldSoft(theme) }}>
+                  Match Telemetry
+                </Typography>
+                <Chip
+                  label={`${matches.length} Matches Found`}
+                  size="small"
+                  sx={{ bgcolor: matches.length ? successBg(theme) : 'rgba(255,255,255,0.06)', color: matches.length ? successFg(theme) : '#94A3B8', fontWeight: 800, fontSize: '0.7rem' }}
+                />
+              </Box>
+              <Button
+                size="small"
+                variant="contained"
+                onClick={() => {
+                  navigator.clipboard.writeText(`/${pattern}/${flags}`);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                }}
+                sx={{ bgcolor: gold(theme), color: '#08080B', fontWeight: 800, '&:hover': { bgcolor: goldSoft(theme) } }}
+              >
+                {copied ? 'Copied' : 'Copy Regex'}
+              </Button>
+            </Box>
+            <Paper sx={{ p: 1.5, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, flexGrow: 1, overflow: 'auto', maxHeight: 220 }}>
+              {matches.length === 0 ? (
+                <Typography sx={{ color: '#64748B', fontFamily: mono, fontSize: '0.8rem' }}>
+                  No matches found for current pattern against input text.
+                </Typography>
+              ) : (
+                matches.map((m, idx) => (
+                  <Box key={idx} sx={{ mb: 1, pb: 1, borderBottom: '1px dashed rgba(255,255,255,0.1)' }}>
+                    <Typography sx={{ color: '#34D399', fontFamily: mono, fontSize: '0.8rem', fontWeight: 800 }}>
+                      [Line {m.line}] {m.text}
+                    </Typography>
+                    {m.groups.length > 0 && (
+                      <Typography sx={{ color: '#94A3B8', fontFamily: mono, fontSize: '0.72rem', pl: 1 }}>
+                        Groups: {m.groups.join(' | ')}
+                      </Typography>
+                    )}
+                  </Box>
+                ))
+              )}
+            </Paper>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   TOOL: Schema Illustrator (Schema.org JSON-LD Semantic Synthesizer)
+   ========================================================================== */
+function SchemaIllustratorTool() {
+  const theme = useTheme();
+  const [schemaType, setSchemaType] = useState('SoftwareApplication');
+  const [appName, setAppName] = useState('Zoth Sovereign Workstation');
+  const [appDesc, setAppDesc] = useState('Zero-egress air-gapped development studio for autonomous agent swarms and local LLM execution.');
+  const [author, setAuthor] = useState('NullAI Tech');
+  const [license, setLicense] = useState('MIT');
+  const [copied, setCopied] = useState(false);
+
+  const schemaGraph = {
+    "@context": "https://schema.org",
+    "@type": schemaType,
+    "name": appName,
+    "description": appDesc,
+    "author": {
+      "@type": "Organization",
+      "name": author
+    },
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Linux, macOS, Windows",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "license": license
+  };
+
+  const schemaJson = JSON.stringify(schemaGraph, null, 2);
+
+  return (
+    <Box sx={{ mt: 1 }}>
+      <Typography className="section-kicker">Schema.org JSON-LD Synthesizer</Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
+        Produce schema graphs for search, answer engine optimization (AEO), and semantic crawler discovery.
+      </Typography>
+
+      <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
+        {['SoftwareApplication', 'Article', 'Dataset', 'TechArticle'].map((st) => (
+          <Chip
+            key={st}
+            label={st}
+            size="small"
+            clickable
+            onClick={() => setSchemaType(st)}
+            sx={{
+              fontWeight: 750,
+              bgcolor: schemaType === st ? gold(theme) : 'transparent',
+              color: schemaType === st ? '#08080B' : theme.palette.text.primary,
+              border: `1px solid ${schemaType === st ? gold(theme) : theme.palette.divider}`
+            }}
+          />
+        ))}
+      </Box>
+
+      <Grid container spacing={3}>
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 2 }}>
+            <Stack spacing={2}>
+              <TextField
+                label="Entity Name"
+                value={appName}
+                onChange={(e) => setAppName(e.target.value)}
+                size="small"
+                fullWidth
+              />
+              <TextField
+                label="Description"
+                value={appDesc}
+                onChange={(e) => setAppDesc(e.target.value)}
+                multiline
+                rows={3}
+                size="small"
+                fullWidth
+              />
+              <TextField
+                label="Author / Org"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+                size="small"
+                fullWidth
+              />
+              <TextField
+                label="License"
+                value={license}
+                onChange={(e) => setLicense(e.target.value)}
+                size="small"
+                fullWidth
+              />
+            </Stack>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 850, color: goldSoft(theme) }}>
+                Validated JSON-LD Output
+              </Typography>
+              <Button
+                size="small"
+                variant="contained"
+                onClick={() => {
+                  navigator.clipboard.writeText(`<script type="application/ld+json">\n${schemaJson}\n</script>`);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                }}
+                sx={{ bgcolor: gold(theme), color: '#08080B', fontWeight: 800, '&:hover': { bgcolor: goldSoft(theme) } }}
+              >
+                {copied ? 'Copied script tag' : 'Copy JSON-LD'}
+              </Button>
+            </Box>
+            <Paper sx={{ p: 1.5, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, color: '#34D399', fontFamily: mono, fontSize: '0.76rem', whiteSpace: 'pre-wrap', flexGrow: 1, overflow: 'auto', maxHeight: 260 }}>
+              {schemaJson}
+            </Paper>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   TOOL: CertPath Roadmap Studio (Sovereign Certification Navigator)
+   ========================================================================== */
+function CertPathRoadmapTool() {
+  const theme = useTheme();
+  const certTracks = [
+    {
+      id: 'zoth-sov',
+      name: 'Zoth Sovereign Systems Architect',
+      org: 'NullAI Sovereign Standard',
+      domains: [
+        'Domain 1: Air-gapped Hardware Enclave Architecture & Memory Isolation',
+        'Domain 2: Local LLM Orchestration & Zero-Egress Ollama Routing',
+        'Domain 3: Biomorphic Synaptic Memory (STDP) Vectors & Byzantine Consensus',
+        'Domain 4: Cryptographic Seals, Ephemeral Enclaves & Tor Ghostmode'
+      ],
+      difficulty: 'Advanced / Sovereign',
+      hours: '120 Hours'
+    },
+    {
+      id: 'oscp',
+      name: 'OffSec Certified Professional (OSCP)',
+      org: 'Offensive Security',
+      domains: [
+        'Domain 1: Information Gathering & Reconnaissance (Passive & Active)',
+        'Domain 2: Vulnerability Assessment & Exploitation Techniques',
+        'Domain 3: Privilege Escalation (Linux & Windows Enclaves)',
+        'Domain 4: Antivirus Evasion & Zero-Telemetry Pivoting'
+      ],
+      difficulty: 'Hard / Hands-On',
+      hours: '200 Hours'
+    },
+    {
+      id: 'cka',
+      name: 'Certified Kubernetes Administrator (CKA)',
+      org: 'Cloud Native Computing Foundation',
+      domains: [
+        'Domain 1: Cluster Architecture, Installation & Configuration',
+        'Domain 2: Workloads & Scheduling without External Egress',
+        'Domain 3: Services & Networking, Ingress Isolation',
+        'Domain 4: Storage, Troubleshooting & Air-gapped Cluster Recovery'
+      ],
+      difficulty: 'Intermediate / Ops',
+      hours: '80 Hours'
+    }
+  ];
+
+  const [activeTrack, setActiveTrack] = useState(certTracks[0]);
+  const [completedDomains, setCompletedDomains] = useState(() => new Set());
+
+  const toggleDomain = (dom) => {
+    setCompletedDomains((prev) => {
+      const next = new Set(prev);
+      if (next.has(dom)) next.delete(dom);
+      else next.add(dom);
+      return next;
+    });
+  };
+
+  const pct = Math.round((completedDomains.size / activeTrack.domains.length) * 100);
+
+  return (
+    <Box sx={{ mt: 1 }}>
+      <Typography className="section-kicker">CertPath Interactive Roadmap Studio</Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
+        Curated sovereign cybersecurity and cloud engineering certification roadmaps with domain checklist tracking.
+      </Typography>
+
+      <Box sx={{ display: 'flex', gap: 1, mb: 3, flexWrap: 'wrap' }}>
+        {certTracks.map((ct) => (
+          <Chip
+            key={ct.id}
+            label={ct.name}
+            clickable
+            onClick={() => { setActiveTrack(ct); setCompletedDomains(new Set()); }}
+            sx={{
+              fontWeight: 750,
+              bgcolor: activeTrack.id === ct.id ? gold(theme) : 'transparent',
+              color: activeTrack.id === ct.id ? '#08080B' : theme.palette.text.primary,
+              border: `1px solid ${activeTrack.id === ct.id ? gold(theme) : theme.palette.divider}`
+            }}
+          />
+        ))}
+      </Box>
+
+      <Paper sx={{ p: 3, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+          <Box>
+            <Typography variant="h6" sx={{ fontWeight: 800, color: '#FFFFFF' }}>
+              {activeTrack.name}
+            </Typography>
+            <Typography variant="caption" sx={{ color: goldSoft(theme), fontWeight: 750 }}>
+              Issued by {activeTrack.org} · Estimated Study: {activeTrack.hours} · Level: {activeTrack.difficulty}
+            </Typography>
+          </Box>
+          <Box sx={{ textAlign: 'right' }}>
+            <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block' }}>Progress</Typography>
+            <Typography variant="h6" sx={{ color: '#34D399', fontWeight: 800 }}>{pct}%</Typography>
+          </Box>
+        </Box>
+
+        <LinearProgress variant="determinate" value={pct} sx={{ height: 6, borderRadius: 1, mb: 3, bgcolor: 'rgba(255,255,255,0.1)', '& .MuiLinearProgress-bar': { bgcolor: '#34D399' } }} />
+
+        <Stack spacing={1.5}>
+          {activeTrack.domains.map((dom) => {
+            const done = completedDomains.has(dom);
+            return (
+              <Paper
+                key={dom}
+                onClick={() => toggleDomain(dom)}
+                sx={{
+                  p: 1.5,
+                  cursor: 'pointer',
+                  bgcolor: done ? 'rgba(52,211,153,0.08)' : '#050508',
+                  border: `1px solid ${done ? 'rgba(52,211,153,0.3)' : 'rgba(255,255,255,0.08)'}`,
+                  borderRadius: 1.5,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.5,
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <Box
+                  sx={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: '50%',
+                    border: `2px solid ${done ? '#34D399' : '#64748B'}`,
+                    bgcolor: done ? '#34D399' : 'transparent',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0
+                  }}
+                >
+                  {done && <CheckIcon sx={{ fontSize: '0.85rem', color: '#08080B' }} />}
+                </Box>
+                <Typography sx={{ color: done ? '#FFFFFF' : '#CBD5E1', fontSize: '0.86rem', fontWeight: done ? 750 : 500, fontFamily: mono }}>
+                  {dom}
+                </Typography>
+              </Paper>
+            );
+          })}
+        </Stack>
+      </Paper>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   TOOL: Dynamic Enclave Tool (Fallback Workstation for All Catalog Tools)
+   ========================================================================== */
+function DynamicEnclaveTool({ tool }) {
+  const theme = useTheme();
+  const [copied, setCopied] = useState(false);
+  return (
+    <Box sx={{ mt: 1 }}>
+      <Typography className="section-kicker">{tool.name} Sovereign Workspace</Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
+        {tool.description}
+      </Typography>
+      <Paper sx={{ p: 3, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+          <Chip
+            label={tool.executionType === 'webgpu' ? '⚡ In-Browser WebGPU Ready' : '🔒 Local CLI Enclave Required'}
+            size="small"
+            sx={{ bgcolor: goldBg(theme), color: gold(theme), border: `1px solid ${goldBorder(theme)}`, fontWeight: 800 }}
+          />
+          <Chip label={`v${tool.version}`} size="small" variant="outlined" sx={{ fontFamily: mono, borderColor: theme.palette.divider }} />
+        </Box>
+        <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2 }}>
+          Run this tool standalone or via Zoth Studio v2 zero-egress hardware bridge:
+        </Typography>
+        <Paper sx={{ p: 1.5, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, color: '#38BDF8', fontFamily: mono, fontSize: '0.82rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <code>{tool.pull}</code>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => {
+              navigator.clipboard.writeText(tool.pull);
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2000);
+            }}
+            sx={{ borderColor: goldBorder(theme), color: gold(theme), ml: 1 }}
+          >
+            {copied ? 'Copied' : 'Copy'}
+          </Button>
+        </Paper>
+      </Paper>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   SOVEREIGN TERMINAL OUTPUT SIMULATOR COMPONENT
+   ========================================================================== */
+function TerminalOutputSimulator({ tool }) {
+  const theme = useTheme();
+  const [terminalLines, setTerminalLines] = useState(() => [
+    `[SOVEREIGN KERNEL v2.0.0] Initialized hardware enclave for "${tool.name}"`,
+    `[SECURITY SEAL] SHA-256 verification: PASS | Telemetry: 0 packets outbound (AIR-GAPPED)`,
+    `[LOOPBACK IPC] 127.0.0.1:11434 (Ollama), :8788 (STDP Memory), :8787 (Vault) status: READY`,
+    `[READY] Type a command below or click a quick action preset to simulate execution.`
+  ]);
+  const [cmdInput, setCmdInput] = useState('');
+  const [isExecuting, setIsExecuting] = useState(false);
+  const terminalEndRef = useRef(null);
+
+  useEffect(() => {
+    setTerminalLines([
+      `[SOVEREIGN KERNEL v2.0.0] Initialized hardware enclave for "${tool.name}"`,
+      `[SECURITY SEAL] SHA-256 verification: PASS | Telemetry: 0 packets outbound (AIR-GAPPED)`,
+      `[LOOPBACK IPC] 127.0.0.1:11434 (Ollama), :8788 (STDP Memory), :8787 (Vault) status: READY`,
+      `[READY] Type a command below or click a quick action preset to simulate execution.`
+    ]);
+  }, [tool.id]);
+
+  useEffect(() => {
+    if (terminalEndRef.current) {
+      terminalEndRef.current.scrollTop = terminalEndRef.current.scrollHeight;
+    }
+  }, [terminalLines]);
+
+  const executeCmd = (command) => {
+    const trimmed = (command || cmdInput).trim();
+    if (!trimmed) return;
+
+    setTerminalLines((prev) => [...prev, `zoth@sovereign-matrix:~$ ${trimmed}`]);
+    setCmdInput('');
+    setIsExecuting(true);
+
+    setTimeout(() => {
+      let responses = [];
+      const lower = trimmed.toLowerCase();
+
+      if (lower.includes('pull')) {
+        responses = [
+          `[PULL] Resolving repository "NullAITech/${tool.repo}" from sovereign registry...`,
+          `[PULL] Checksum verified: 8f9b4c2... [OK]`,
+          `[PULL] Unpacking isolated micro-module into .zoth/modules/${tool.repo}`,
+          `✔ Successfully pulled ${tool.name} (v${tool.version}). Zero external telemetry verified.`
+        ];
+      } else if (lower.includes('test') || lower.includes('air-gapped')) {
+        responses = [
+          `[TEST] Running zero-telemetry test suite on ${tool.id}...`,
+          `[NET] Outbound network egress test: BLOCKED (PASS)`,
+          `[MEM] WebGPU WGSL memory boundary test: CONFINED (PASS)`,
+          `[BYZANTINE] 3/3 validator quorum agreement: 100% (PASS)`,
+          `✔ All 14 sovereign test invariants satisfied.`
+        ];
+      } else if (lower.includes('doctor') || lower.includes('status')) {
+        responses = [
+          `[DIAGNOSTICS] Sovereign Studio Cockpit Health:`,
+          `  - Hardware Loopback 127.0.0.1: OK`,
+          `  - Local Ollama Daemon (Port 11434): READY (qwen2.5-coder:7b loaded)`,
+          `  - STDP Memory Daemon (Port 8788): READY (2,400 synapsed vectors)`,
+          `  - Secrets Vault (Port 8787): SEALED`,
+          `✔ System operational in 100% sovereign mode.`
+        ];
+      } else if (lower.includes('zoth-os') || lower.includes('install')) {
+        responses = [
+          `[ZOTH OS] Launching bare-metal installer protocol...`,
+          `[ISO] Target: Sovereign Alchemical Linux (KDE Plasma 6 + Tor Ghostmode)`,
+          `[ENCLAVE] Checking TPM 2.0 cryptographic root of trust... DETECTED`,
+          `[READY] Bootable USB medium ready or run: git clone https://github.com/NullAITech/zoth-os.git`
+        ];
+      } else if (lower === 'clear') {
+        setTerminalLines([]);
+        setIsExecuting(false);
+        return;
+      } else if (lower === 'help') {
+        responses = [
+          `Available Sovereign CLI Commands:`,
+          `  npx zoth pull ${tool.id}   - Pull isolated micro-module`,
+          `  zoth run --air-gapped      - Execute tool in memory isolation`,
+          `  zoth test --zero-telemetry - Verify zero outbound packets`,
+          `  zoth doctor                - Healthcheck local daemons`,
+          `  zoth-os-install            - Bare-metal OS ISO deployment`,
+          `  clear                      - Clear terminal telemetry screen`
+        ];
+      } else {
+        responses = [
+          `[EXEC] Command evaluated in sovereign sandbox: "${trimmed}"`,
+          `✔ Return code: 0 | Output streamed to enclave | Zero outbound egress.`
+        ];
+      }
+
+      setTerminalLines((prev) => [...prev, ...responses]);
+      setIsExecuting(false);
+    }, 350);
+  };
+
+  return (
+    <Paper
+      sx={{
+        p: { xs: 2.5, md: 3 },
+        mb: 5,
+        borderRadius: 3,
+        bgcolor: '#08080B',
+        border: `1px solid ${darkPanelBorder(theme)}`,
+        boxShadow: '0 12px 36px rgba(0,0,0,0.6)',
+        position: 'relative',
+        zIndex: 1,
+        overflow: 'hidden'
+      }}
+    >
+      {/* Terminal Title Bar */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, borderBottom: '1px solid rgba(255,255,255,0.1)', pb: 1.5, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Box sx={{ display: 'flex', gap: 0.75 }}>
+            <Box sx={{ width: 11, height: 11, borderRadius: '50%', bgcolor: '#EF4444' }} />
+            <Box sx={{ width: 11, height: 11, borderRadius: '50%', bgcolor: '#F59E0B' }} />
+            <Box sx={{ width: 11, height: 11, borderRadius: '50%', bgcolor: '#10B981' }} />
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <TerminalIcon sx={{ color: gold(theme), fontSize: '1.1rem' }} />
+            <Typography sx={{ fontFamily: mono, fontSize: '0.8rem', fontWeight: 800, color: '#E2E8F0' }}>
+              zoth-enclave-terminal // {tool.id} [127.0.0.1:LOOPBACK]
+            </Typography>
+          </Box>
+        </Box>
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <Button
+            size="small"
+            variant="text"
+            onClick={() => setTerminalLines([])}
+            sx={{ color: '#94A3B8', fontSize: '0.72rem', textTransform: 'none', py: 0.2 }}
+          >
+            Clear
+          </Button>
+          <Button
+            size="small"
+            variant="text"
+            onClick={() => navigator.clipboard.writeText(terminalLines.join('\n'))}
+            sx={{ color: gold(theme), fontSize: '0.72rem', textTransform: 'none', py: 0.2 }}
+          >
+            Copy Logs
+          </Button>
+        </Box>
+      </Box>
+
+      {/* Terminal Output Log Area */}
+      <Box
+        ref={terminalEndRef}
+        sx={{
+          minHeight: 180,
+          maxHeight: 280,
+          overflowY: 'auto',
+          p: 1.5,
+          bgcolor: '#040407',
+          border: '1px solid rgba(255,255,255,0.06)',
+          borderRadius: 2,
+          fontFamily: mono,
+          fontSize: '0.78rem',
+          mb: 2,
+          lineHeight: 1.6
+        }}
+      >
+        {terminalLines.map((line, idx) => {
+          const isCmd = line.startsWith('zoth@sovereign-matrix:~$');
+          const isPass = line.includes('[OK]') || line.includes('PASS') || line.includes('✔');
+          const isWarn = line.includes('[DIAGNOSTICS]') || line.includes('[SECURITY SEAL]');
+          const isPull = line.includes('[PULL]') || line.includes('[ZOTH OS]');
+          let col = '#94A3B8';
+          if (isCmd) col = '#F5E6AB';
+          else if (isPass) col = '#34D399';
+          else if (isWarn) col = '#38BDF8';
+          else if (isPull) col = '#D4AF37';
+
+          return (
+            <Box key={idx} sx={{ color: col, wordBreak: 'break-all', mb: 0.3 }}>
+              {line}
+            </Box>
+          );
+        })}
+        {isExecuting && (
+          <Box sx={{ color: '#F59E0B', fontStyle: 'italic' }}>
+            ⚡ Simulating air-gapped cryptographic execution...
+          </Box>
+        )}
+      </Box>
+
+      {/* Interactive Command Input & Quick Presets */}
+      <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
+        {[
+          { label: 'Pull Tool', cmd: `npx zoth pull ${tool.id}` },
+          { label: 'Run Air-Gapped', cmd: `zoth run --air-gapped ${tool.id}` },
+          { label: 'Healthcheck', cmd: `zoth doctor` },
+          { label: 'Zoth OS ISO', cmd: `zoth-os-install --bare-metal` }
+        ].map((preset) => (
+          <Button
+            key={preset.label}
+            size="small"
+            variant="outlined"
+            onClick={() => executeCmd(preset.cmd)}
+            sx={{
+              borderColor: 'rgba(255,255,255,0.15)',
+              color: '#CBD5E1',
+              fontSize: '0.72rem',
+              py: 0.3,
+              fontFamily: mono,
+              textTransform: 'none',
+              '&:hover': { borderColor: gold(theme), color: gold(theme), bgcolor: 'rgba(212,175,55,0.06)' }
+            }}
+          >
+            $ {preset.cmd}
+          </Button>
+        ))}
+      </Box>
+
+      {/* Input Line */}
+      <Box
+        component="form"
+        onSubmit={(e) => { e.preventDefault(); executeCmd(); }}
+        sx={{ display: 'flex', alignItems: 'center', gap: 1, bgcolor: '#0B0B12', border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 1.5, p: 0.75 }}
+      >
+        <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: gold(theme), pl: 1, fontWeight: 800 }}>
+          zoth@sovereign:~$
+        </Typography>
+        <input
+          value={cmdInput}
+          onChange={(e) => setCmdInput(e.target.value)}
+          placeholder={`type "help", "npx zoth pull ${tool.id}", or "zoth doctor"...`}
+          style={{
+            flex: 1,
+            background: 'transparent',
+            border: 'none',
+            outline: 'none',
+            color: '#FFFFFF',
+            fontFamily: mono,
+            fontSize: '0.8rem',
+            padding: '4px 6px'
+          }}
+        />
+        <Button
+          type="submit"
+          size="small"
+          variant="contained"
+          disabled={!cmdInput.trim()}
+          sx={{ bgcolor: gold(theme), color: '#08080B', fontWeight: 800, fontSize: '0.75rem', py: 0.4, '&:hover': { bgcolor: goldSoft(theme) } }}
+        >
+          Execute
+        </Button>
+      </Box>
+    </Paper>
+  );
+}
+
+/* ==========================================================================
    MAIN PAGE COMPONENT (100% REAL WORKING TOOL WORKSPACE PAGE, NO POPUPS!)
    ========================================================================== */
 export default function RealToolWorkspacePage() {
@@ -1591,10 +2473,10 @@ export default function RealToolWorkspacePage() {
               GitHub Repo ↗
             </Button>
           )}
-          <Button component={RouterLink} to="/docs" variant="outlined" color="primary" size="small" sx={{ fontWeight: 800 }}>
+          <Button component={RouterLink} to="/docs" variant="outlined" size="small" sx={{ fontWeight: 800, borderColor: goldBorder(theme), color: gold(theme), '&:hover': { bgcolor: goldBg(theme) } }}>
             Install Zoth Studio
           </Button>
-          <Button component={RouterLink} to="/zoth-os" variant="contained" color="primary" size="small" sx={{ fontWeight: 800 }}>
+          <Button component={RouterLink} to="/zoth-os" variant="contained" color="primary" size="small" sx={{ fontWeight: 800, color: '#08080B' }}>
             Get Zoth OS
           </Button>
         </Stack>
@@ -1686,7 +2568,7 @@ export default function RealToolWorkspacePage() {
                 color="primary"
                 component={RouterLink}
                 to="/docs"
-                sx={{ fontWeight: 800, px: 3 }}
+                sx={{ fontWeight: 800, px: 3, color: '#08080B' }}
               >
                 Local Daemon Setup Guide
               </Button>
@@ -1749,9 +2631,28 @@ export default function RealToolWorkspacePage() {
             {tool.id === 'subsweep-lead-scanner' && <SubSweepTool />}
             {tool.id === 'omnipost-social-engine' && <OmniPostSocialTool />}
             {tool.id === 'cron-rhythm-studio' && <CronRhythmTool />}
+            {tool.id === 'certpath-roadmap-studio' && <CertPathRoadmapTool />}
+            {tool.id === 'pwa-manifest-builder' && <PwaManifestBuilderTool />}
+            {tool.id === 'regex-droid-builder' && <RegexDroidBuilderTool />}
+            {tool.id === 'schema-illustrator-studio' && <SchemaIllustratorTool />}
+            {![
+              'jwt-inspector-guard', 'payload-entropy-studio', 'polyglot-framework-exporter',
+              'nexus-3d-scene-studio', 'badge3d-coin-generator', 'ufo-sacred-geometry',
+              'cyber-turtle-studio', 'datamosh-glitch-studio', 'vision-gesture-control',
+              'adytum-alchemist-ai-workflow', 'azoth-local-agent', 'sovereign-agent-bridge',
+              'neuro-memory-daemon', 'vector-search-engine', 'deepsearch-research-agent',
+              'promptmaster-studio', 'hexstrike-arsenal', 'envguard-secrets-vault',
+              'web-security-guard', 'audiocipher-stego-engine', 'aeo-graph-engine',
+              'cwv-speed-engine', 'subsweep-lead-scanner', 'omnipost-social-engine',
+              'cron-rhythm-studio', 'certpath-roadmap-studio', 'pwa-manifest-builder',
+              'regex-droid-builder', 'schema-illustrator-studio'
+            ].includes(tool.id) && <DynamicEnclaveTool tool={tool} />}
           </>
         )}
       </Paper>
+
+      {/* SOVEREIGN TERMINAL OUTPUT SIMULATOR */}
+      <TerminalOutputSimulator tool={tool} />
 
       {/* SOVEREIGN INSTALLATION & DEPLOYMENT FUNNEL */}
       <Paper
@@ -1785,69 +2686,104 @@ export default function RealToolWorkspacePage() {
         </Typography>
 
         <Grid container spacing={2.5}>
-          {/* Option A: Zoth Studio v2 */}
-          <Grid xs={12} md={6}>
+          {/* Option 1: Standalone Micro-Tool Enclave CLI */}
+          <Grid xs={12} md={4}>
             <Box sx={{ p: 2.5, height: '100%', bgcolor: 'rgba(255,255,255,0.03)', border: `1px solid rgba(255,255,255,0.1)`, borderRadius: 2, display: 'flex', flexDirection: 'column' }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: goldSoft(theme) }}>
-                  Option 1: Clone Zoth Studio v2 Repo
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#38BDF8' }}>
+                  Option 1: Micro-Tool CLI
                 </Typography>
-                <Chip label="LOCAL-FIRST SUITE" size="small" sx={{ bgcolor: 'rgba(212,175,55,0.15)', color: gold(theme), fontWeight: 750, fontSize: '0.65rem' }} />
+                <Chip label="STANDALONE" size="small" sx={{ bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8', fontWeight: 800, fontSize: '0.65rem' }} />
               </Box>
               <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
-                Full workstation cockpit with 29+ interactive micro-tools, STDP neural memory daemon, and WebGPU accelerators.
+                Pull isolated zero-egress single-purpose micro-engines without spinning up the entire studio workspace.
               </Typography>
               <Box sx={{ p: 1.2, mb: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: '#38BDF8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  git clone https://github.com/NullAITech/zoth-studio-v2.git
+                <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {tool.pull || `npx zoth pull ${tool.id}`}
                 </Typography>
-                <IconButton size="small" onClick={() => handleCopyCmd('git clone https://github.com/NullAITech/zoth-studio-v2.git')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
+                <IconButton size="small" onClick={() => handleCopyCmd(tool.pull || `npx zoth pull ${tool.id}`)} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
                   <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
                 </IconButton>
               </Box>
-              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                 <Button
-                  component="a"
-                  href="https://github.com/NullAITech/zoth-studio-v2"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variant="contained"
+                  variant="outlined"
                   fullWidth
-                  sx={{ bgcolor: gold(theme), color: '#08080B', fontWeight: 800, fontSize: '0.8rem', '&:hover': { bgcolor: goldSoft(theme) } }}
+                  onClick={() => handleCopyCmd(tool.pull || `npx zoth pull ${tool.id}`)}
+                  sx={{ borderColor: '#38BDF8', color: '#38BDF8', fontWeight: 800, fontSize: '0.8rem', textTransform: 'none', '&:hover': { bgcolor: 'rgba(56,189,248,0.1)' } }}
                 >
-                  View Zoth Studio v2 Repo ↗
+                  {copiedCmd === (tool.pull || `npx zoth pull ${tool.id}`) ? 'Copied Pull Command!' : 'Copy Pull Command'}
                 </Button>
-                {tool.pull && (
+                {tool.github && (
                   <Button
-                    variant="outlined"
+                    component="a"
+                    href={tool.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="text"
                     fullWidth
-                    onClick={() => handleCopyCmd(tool.pull)}
-                    sx={{ borderColor: goldBorder(theme), color: gold(theme), fontSize: '0.78rem', fontWeight: 750, mt: 1 }}
+                    startIcon={<GitHubIcon sx={{ fontSize: '1rem !important' }} />}
+                    sx={{ color: '#94A3B8', fontSize: '0.78rem', textTransform: 'none', '&:hover': { color: '#FFF' } }}
                   >
-                    {copiedCmd === tool.pull ? 'Copied Pull Command!' : `Copy: ${tool.pull}`}
+                    Inspect GitHub Source ↗
                   </Button>
                 )}
               </Box>
             </Box>
           </Grid>
 
-          {/* Option B: Zoth OS */}
-          <Grid xs={12} md={6}>
+          {/* Option 2: Zoth Studio v2 Unified Cockpit */}
+          <Grid xs={12} md={4}>
             <Box sx={{ p: 2.5, height: '100%', bgcolor: 'rgba(255,255,255,0.03)', border: `1px solid rgba(255,255,255,0.1)`, borderRadius: 2, display: 'flex', flexDirection: 'column' }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#34D399' }}>
-                  Option 2: Install Sovereign Zoth OS
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: goldSoft(theme) }}>
+                  Option 2: Zoth Studio v2
                 </Typography>
-                <Chip label="FULL OS ISO" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399', fontWeight: 750, fontSize: '0.65rem' }} />
+                <Chip label="FULL SUITE" size="small" sx={{ bgcolor: goldBg(theme), color: gold(theme), border: `1px solid ${goldBorder(theme)}`, fontWeight: 800, fontSize: '0.65rem' }} />
               </Box>
               <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
-                Complete alchemical intelligence operating system with Kali/Parrot tool parity, local Ollama models, and Tor Ghostmode.
+                Full workstation cockpit with all 29 interactive micro-tools, STDP neural memory daemon, and WebGPU accelerators.
               </Typography>
               <Box sx={{ p: 1.2, mb: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: '#34D399', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  https://github.com/NullAITech/zoth-os
+                <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: gold(theme), overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  git clone https://github.com/NullAITech/zoth-studio-v2.git
                 </Typography>
-                <IconButton size="small" onClick={() => handleCopyCmd('https://github.com/NullAITech/zoth-os')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
+                <IconButton size="small" onClick={() => handleCopyCmd('git clone https://github.com/NullAITech/zoth-studio-v2.git')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
+                  <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                </IconButton>
+              </Box>
+              <Button
+                component="a"
+                href="https://github.com/NullAITech/zoth-studio-v2"
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="contained"
+                fullWidth
+                sx={{ bgcolor: gold(theme), color: '#08080B', fontWeight: 800, fontSize: '0.8rem', textTransform: 'none', '&:hover': { bgcolor: goldSoft(theme) } }}
+              >
+                {copiedCmd === 'git clone https://github.com/NullAITech/zoth-studio-v2.git' ? 'Command Copied!' : 'Clone Studio v2 Repo ↗'}
+              </Button>
+            </Box>
+          </Grid>
+
+          {/* Option 3: Sovereign Zoth OS Bare-Metal ISO */}
+          <Grid xs={12} md={4}>
+            <Box sx={{ p: 2.5, height: '100%', bgcolor: 'rgba(255,255,255,0.03)', border: `1px solid rgba(255,255,255,0.1)`, borderRadius: 2, display: 'flex', flexDirection: 'column' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#34D399' }}>
+                  Option 3: Sovereign Zoth OS
+                </Typography>
+                <Chip label="BARE-METAL OS" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399', fontWeight: 800, fontSize: '0.65rem' }} />
+              </Box>
+              <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
+                Alchemical Linux OS based on KDE Plasma 6 with Kali/Parrot security arsenal, 10 Ollama models, and Tor Ghostmode.
+              </Typography>
+              <Box sx={{ p: 1.2, mb: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#34D399', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  zoth-os-install --bare-metal
+                </Typography>
+                <IconButton size="small" onClick={() => handleCopyCmd('zoth-os-install --bare-metal')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
                   <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
                 </IconButton>
               </Box>
@@ -1858,9 +2794,9 @@ export default function RealToolWorkspacePage() {
                 rel="noopener noreferrer"
                 variant="outlined"
                 fullWidth
-                sx={{ borderColor: '#34D399', color: '#34D399', fontWeight: 800, fontSize: '0.8rem', '&:hover': { bgcolor: 'rgba(52,211,153,0.1)' } }}
+                sx={{ borderColor: '#34D399', color: '#34D399', fontWeight: 800, fontSize: '0.8rem', textTransform: 'none', '&:hover': { bgcolor: 'rgba(52,211,153,0.1)' } }}
               >
-                Explore &amp; Install Zoth OS ↗
+                {copiedCmd === 'zoth-os-install --bare-metal' ? 'Command Copied!' : 'Explore Zoth OS ISO ↗'}
               </Button>
             </Box>
           </Grid>

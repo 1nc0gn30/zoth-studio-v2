@@ -643,7 +643,7 @@ export default function HexStrikePage() {
               onClick={handleExportSignedCveReport}
               sx={{
                 bgcolor: gold.accent,
-                color: '#08080B',
+                color: isDark ? '#08080B' : '#101828',
                 fontWeight: 800,
                 boxShadow: `0 4px 14px ${gold.glow}`,
                 '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#9A7209' }
@@ -732,7 +732,7 @@ export default function HexStrikePage() {
                 <svg width="220" height="220" viewBox="0 0 220 220" style={{ transform: 'rotate(-90deg)' }}>
                   <defs>
                     <linearGradient id="dialGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor={isDark ? '#FFF3B0' : '#E5C158'} />
+                      <stop offset="0%" stopColor={isDark ? '#FFF3B0' : '#D4AF37'} />
                       <stop offset="50%" stopColor="#D4AF37" />
                       <stop offset="100%" stopColor="#9A7209" />
                     </linearGradient>
@@ -946,7 +946,7 @@ export default function HexStrikePage() {
               disabled={isScanningPorts}
               sx={{
                 bgcolor: isScanningPorts ? (isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.4)') : gold.accent,
-                color: '#08080B',
+                color: isDark ? '#08080B' : '#101828',
                 fontFamily: mono,
                 fontWeight: 850,
                 boxShadow: `0 4px 16px ${gold.glow}`,
@@ -1453,7 +1453,7 @@ export default function HexStrikePage() {
             onClick={handleExportSignedCveReport}
             sx={{
               bgcolor: gold.accent,
-              color: '#08080B',
+              color: isDark ? '#08080B' : '#101828',
               fontWeight: 850,
               fontFamily: mono,
               px: 3,
@@ -1558,7 +1558,7 @@ export default function HexStrikePage() {
                           startIcon={<RocketLaunchIcon sx={{ fontSize: '0.9rem !important' }} />}
                           sx={{
                             bgcolor: gold.accent,
-                            color: '#08080B',
+                            color: isDark ? '#08080B' : '#101828',
                             fontWeight: 800,
                             fontFamily: mono,
                             fontSize: '0.76rem',

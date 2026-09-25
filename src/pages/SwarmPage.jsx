@@ -210,13 +210,13 @@ export default function SwarmPage() {
             }}
           />
           <Chip
-            icon={<ShieldIcon sx={{ fontSize: '0.9rem !important', color: isDark ? '#34D399' : '#027A48' }} />}
+            icon={<ShieldIcon sx={{ fontSize: '0.9rem !important', color: isDark ? '#34D399' : '#065F46' }} />}
             label="ZERO-CLOUD AIR-GAP ENGINE"
             size="small"
             sx={{
-              bgcolor: isDark ? '#08080B' : '#ECFDF3',
-              color: isDark ? '#34D399' : '#027A48',
-              border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`,
+              bgcolor: isDark ? '#08080B' : '#D1FADF',
+              color: isDark ? '#34D399' : '#065F46',
+              border: `1.5px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#059669'}`,
               fontWeight: 800,
             }}
           />
@@ -587,7 +587,7 @@ export default function SwarmPage() {
                 startIcon={<BoltIcon />}
                 sx={{
                   bgcolor: gold,
-                  color: '#08080B',
+                  color: isDark ? '#08080B' : '#101828',
                   fontWeight: 800,
                   px: 2.5,
                   boxShadow: `0 0 16px -2px ${gold}`,
@@ -734,7 +734,7 @@ export default function SwarmPage() {
                 fontWeight: 750,
                 px: 1,
                 bgcolor: cadre === name ? gold : voidBg,
-                color: cadre === name ? '#08080B' : theme.palette.text.primary,
+                color: cadre === name ? (isDark ? '#08080B' : '#101828') : theme.palette.text.primary,
                 border: '1.5px solid',
                 borderColor: cadre === name ? gold : (isDark ? 'rgba(212,175,55,0.22)' : theme.palette.divider),
                 '&:hover': {

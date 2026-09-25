@@ -46,6 +46,7 @@ import { microTools } from '../data/toolsData';
 import MathPillarsGrid from '../components/MathPillarsGrid';
 import ZeroEgressPanel from '../components/ZeroEgressPanel';
 import WorkstationMap from '../components/WorkstationMap';
+import SovereignFunnel from '../components/SovereignFunnel';
 
 /**
  * Reusable CodeSnippet component with pristine gold-on-void aesthetic
@@ -153,7 +154,7 @@ export default function DocsPage() {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
   const gold = dark ? '#D4AF37' : '#B8860B';
-  const goldLight = dark ? '#F5E6AB' : '#8A6A09';
+  const goldLight = dark ? '#F5E6AB' : '#715507';
   const goldBg = dark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
   const voidDark = '#08080B';
   const surface = dark ? '#0E1017' : '#FFFFFF';
@@ -367,9 +368,9 @@ Runs local invariant verification before staging tools.`
               size="small"
               sx={{
                 bgcolor: goldBg,
-                color: gold,
+                color: goldLight,
                 border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`,
-                fontWeight: 700,
+                fontWeight: 750,
                 letterSpacing: '0.05em'
               }}
             />
@@ -477,7 +478,7 @@ Runs local invariant verification before staging tools.`
                       key={tf.label}
                       icon={React.cloneElement(tf.icon, {
                         sx: {
-                          color: isSelected ? `${dark ? voidDark : '#FFFFFF'} !important` : `${gold} !important`,
+                          color: isSelected ? `${dark ? voidDark : '#101828'} !important` : `${dark ? gold : '#715507'} !important`,
                           fontSize: '16px !important'
                         }
                       })}
@@ -489,7 +490,7 @@ Runs local invariant verification before staging tools.`
                         fontSize: '0.82rem',
                         transition: 'all 0.2s ease',
                         bgcolor: isSelected ? gold : dark ? 'rgba(212,175,55,0.08)' : '#F2F4F7',
-                        color: isSelected ? (dark ? voidDark : '#FFFFFF') : textPrimary,
+                        color: isSelected ? (dark ? voidDark : '#101828') : textPrimary,
                         border: `1px solid ${isSelected ? gold : dark ? 'rgba(212,175,55,0.25)' : '#EAECF0'}`,
                         '&:hover': {
                           bgcolor: isSelected ? (dark ? '#E5C048' : '#9A7209') : dark ? 'rgba(212,175,55,0.2)' : '#E4E7EC',
@@ -704,7 +705,7 @@ Runs local invariant verification before staging tools.`
                     <Chip
                       label="CORE ARCHITECTURE"
                       size="small"
-                      sx={{ bgcolor: goldBg, color: gold, fontWeight: 700 }}
+                      sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
                       1. Sovereign Architecture Overview &amp; Topology
@@ -820,7 +821,7 @@ npm run dev`}
                       <Chip
                         label="MICRO-REPO INDEX"
                         size="small"
-                        sx={{ bgcolor: goldBg, color: gold, fontWeight: 700, mb: 1 }}
+                        sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700, mb: 1 }}
                       />
                       <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
                         2. Decoupled 24 Micro-Repo Directory ({filteredTools.length})
@@ -843,7 +844,7 @@ npm run dev`}
                                 : dark
                                 ? 'rgba(212,175,55,0.08)'
                                 : '#F2F4F7',
-                            color: selectedToolCategory === cat ? (dark ? voidDark : '#FFFFFF') : textSecondary,
+                            color: selectedToolCategory === cat ? (dark ? voidDark : '#101828') : textSecondary,
                             border: `1px solid ${
                               selectedToolCategory === cat ? gold : dark ? 'rgba(212,175,55,0.2)' : '#EAECF0'
                             }`,
@@ -968,7 +969,7 @@ npm run dev`}
                     <Chip
                       label="SWARM PROTOCOL"
                       size="small"
-                      sx={{ bgcolor: goldBg, color: gold, fontWeight: 700 }}
+                      sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
                       3. 21 Pantheon Agent Swarm Protocol
@@ -1021,7 +1022,7 @@ npm run dev`}
                               mb: 1,
                               fontWeight: 700,
                               bgcolor: goldBg,
-                              color: gold,
+                              color: goldLight,
                               border: `1px solid ${dark ? 'rgba(212,175,55,0.3)' : '#F0E1A8'}`
                             }}
                           />
@@ -1069,7 +1070,7 @@ const task = await dispatcher.broadcastTask({
                     <Chip
                       label="E2EE NETWORKING"
                       size="small"
-                      sx={{ bgcolor: goldBg, color: gold, fontWeight: 700 }}
+                      sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
                       4. Signal Bridge &amp; Simplex E2EE Protocol
@@ -1108,7 +1109,7 @@ npm run zoth -- up`}
                     <Chip
                       label="HARDWARE SANCTUM"
                       size="small"
-                      sx={{ bgcolor: goldBg, color: gold, fontWeight: 700 }}
+                      sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
                       5. Argon2id Hardware Vault &amp; Adytum Sanctum
@@ -1343,7 +1344,7 @@ npm run preview`}
                     <Chip
                       label="VIRTUAL MACHINE"
                       size="small"
-                      sx={{ bgcolor: goldBg, color: gold, fontWeight: 700 }}
+                      sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
                       9. Zoth OS VM Setup &amp; USB Booting
@@ -1382,7 +1383,7 @@ npm run preview`}
                     <Chip
                       label="TERMINAL AUDIT"
                       size="small"
-                      sx={{ bgcolor: goldBg, color: gold, fontWeight: 700 }}
+                      sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
                       10. CLI Command Cheat Sheet &amp; Health Audit
@@ -1502,7 +1503,7 @@ npm run preview`}
                   <Chip
                     label="MATH ACADEMY & DEDICATED DOC PAGES"
                     size="small"
-                    sx={{ bgcolor: goldBg, color: gold, fontWeight: 700, mb: 1.5 }}
+                    sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700, mb: 1.5 }}
                   />
                   <Typography variant="h5" sx={{ fontWeight: 750, mb: 1, color: textPrimary }}>
                     11. Six Math Pillars Technical Reference
@@ -1529,9 +1530,9 @@ npm run preview`}
                         sx={{
                           fontWeight: 700,
                           bgcolor: goldBg,
-                          color: gold,
+                          color: goldLight,
                           border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`,
-                          '&:hover': { bgcolor: gold, color: dark ? voidDark : '#FFFFFF' }
+                          '&:hover': { bgcolor: gold, color: dark ? voidDark : '#101828' }
                         }}
                       />
                     ))}
@@ -1587,7 +1588,7 @@ npm run preview`}
                     <Chip
                       label="WORKSTATION TOPOLOGY"
                       size="small"
-                      sx={{ bgcolor: goldBg, color: gold, fontWeight: 700 }}
+                      sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 750, color: textPrimary }}>
                       13. Sovereign Workstation Map (37 Total)
@@ -1606,6 +1607,18 @@ npm run preview`}
             </Box>
           </Grid>
         </Grid>
+
+        {/* Sovereign Installation Funnel */}
+        <SovereignFunnel
+          title="Install Zoth Studio v2 &amp; Sovereign Zoth OS"
+          subtitle="Full documentation and deployment pipeline for zero-telemetry development, local loopback enclaves, 37 workstations, and bare-metal OS hypervisors."
+          toolTitle="Option 1: Zero-Egress CLI Suite"
+          toolTag="DOCS &amp; RUNTIME"
+          toolDescription="Download the air-gapped documentation suite, offline CLI diagnostic toolbench, and local IPC verification harness."
+          toolRepo="https://github.com/NullAITech/zoth-studio-v2"
+          toolCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git && cd zoth-studio-v2 && npm install"
+          sx={{ mt: 6 }}
+        />
       </Container>
     </Box>
   );

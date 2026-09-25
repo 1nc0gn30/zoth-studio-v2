@@ -336,7 +336,7 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                 fontSize: '0.75rem',
                 fontWeight: 750,
                 bgcolor: copied ? '#059669' : '#D4AF37',
-                color: copied ? '#FFFFFF' : '#08080B',
+                color: copied ? '#FFFFFF' : (isDark ? '#08080B' : '#101828'),
                 borderRadius: 2,
                 boxShadow: copied
                   ? 'inset 0 1px 1px rgba(255,255,255,0.35), 0 2px 6px rgba(0,0,0,0.25)'
@@ -1173,13 +1173,13 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                       transition: 'all 0.3s ease',
                     }}
                   />
-                  <Typography variant="caption" sx={{ fontFamily: monoFont, color: isDark ? '#94A3B8' : '#64748B', fontWeight: 700, display: 'block', mb: 0.5, mt: 0.3, letterSpacing: '0.04em' }}>
+                  <Typography variant="caption" sx={{ fontFamily: monoFont, color: isDark ? '#94A3B8' : '#475467', fontWeight: 700, display: 'block', mb: 0.5, mt: 0.3, letterSpacing: '0.04em' }}>
                     {metric.label}
                   </Typography>
                   <Typography variant="h6" sx={{ fontFamily: monoFont, fontWeight: 800, color: isDark ? gold.soft : gold.accent, mb: 0.5, fontSize: { xs: '1.05rem', md: '1.3rem' }, letterSpacing: '-0.01em' }}>
                     {metric.value}
                   </Typography>
-                  <Typography variant="body2" sx={{ fontSize: '0.79rem', color: isDark ? '#64748B' : '#98A2B3', borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)'}`, pt: 0.6, mt: 0.6 }}>
+                  <Typography variant="body2" sx={{ fontSize: '0.79rem', color: isDark ? '#98A2B3' : '#475467', borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)'}`, pt: 0.6, mt: 0.6 }}>
                     {metric.desc}
                   </Typography>
                 </Paper>
@@ -1302,7 +1302,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                       },
                     }}
                   >
-                    <Typography sx={{ fontFamily: monoFont, fontSize: '0.74rem', color: isDark ? '#94A3B8' : '#64748B', fontWeight: 600 }}>
+                    <Typography sx={{ fontFamily: monoFont, fontSize: '0.74rem', color: isDark ? '#94A3B8' : '#475467', fontWeight: 600 }}>
                       {spec.label}
                     </Typography>
                     <Typography sx={{ fontFamily: monoFont, fontSize: '0.78rem', fontWeight: 750, color: isDark ? gold.soft : gold.accent, letterSpacing: '-0.01em' }}>
@@ -1359,7 +1359,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                 fontWeight: 800,
                 letterSpacing: '0.02em',
                 bgcolor: isDark ? '#D4AF37' : '#B8860B',
-                color: isDark ? '#08080B' : '#FFFFFF',
+                color: isDark ? '#08080B' : '#101828',
                 boxShadow: isDark
                   ? '0 4px 18px rgba(212,175,55,0.35)'
                   : '0 4px 18px rgba(184,134,11,0.25)',
@@ -1396,7 +1396,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
             </Button>
           </Box>
 
-          <Typography sx={{ fontFamily: monoFont, fontSize: '0.74rem', color: isDark ? '#64748B' : '#94A3B8' }}>
+          <Typography sx={{ fontFamily: monoFont, fontSize: '0.74rem', color: isDark ? '#94A3B8' : '#475467' }}>
             Loopback Enclave · Zero Outbound Telemetry · Pure Bare Metal
           </Typography>
         </Box>

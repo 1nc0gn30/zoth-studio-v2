@@ -401,10 +401,10 @@ export default function AXPage() {
   const [promptCopied, setPromptCopied] = useState(false);
 
   const gold = {
-    accent: isDark ? '#D4AF37' : '#B8860B',
-    soft: isDark ? '#F5E6AB' : '#8A6A09',
+    accent: isDark ? '#D4AF37' : '#926A05',
+    soft: isDark ? '#F5E6AB' : '#715507',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-    border: isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.25)',
+    border: isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.35)',
   };
 
   const axSpec = {
@@ -487,7 +487,7 @@ export default function AXPage() {
             size="small"
             sx={{ bgcolor: gold.wash, color: gold.soft, border: `1px solid ${gold.border}`, fontWeight: 800, px: 1 }}
           />
-          <Chip label="SCHEMA: https://schema.org/SoftwareApplication" size="small" variant="outlined" sx={{ fontFamily: mono, fontSize: '0.72rem' }} />
+          <Chip label="SCHEMA: https://schema.org/SoftwareApplication" size="small" variant="outlined" sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 650, borderColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(16,24,40,0.25)', color: isDark ? '#9CA3AF' : '#344054' }} />
           <Chip label="OWASP ZERO-EGRESS RATIFIED" size="small" sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5', color: isDark ? '#10B981' : '#047857', fontWeight: 800, border: isDark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0' }} />
         </Box>
         <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontWeight: 800, mb: 1.5, letterSpacing: '-0.02em' }}>
@@ -759,8 +759,9 @@ export default function AXPage() {
                 sx={{
                   fontFamily: mono,
                   fontSize: '0.72rem',
-                  borderColor: gold.border,
-                  color: gold.accent,
+                  fontWeight: 700,
+                  borderColor: isDark ? gold.border : 'rgba(146,106,5,0.4)',
+                  color: gold.soft,
                 }}
               />
               <Chip
@@ -769,9 +770,10 @@ export default function AXPage() {
                 sx={{
                   fontFamily: mono,
                   fontSize: '0.7rem',
+                  fontWeight: 650,
                   bgcolor: isDark ? '#13151F' : '#F1F5F9',
-                  color: theme.palette.text.secondary,
-                  border: `1px solid ${theme.palette.divider}`,
+                  color: isDark ? '#9CA3AF' : '#344054',
+                  border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.12)'}`,
                 }}
               />
             </Box>
@@ -847,7 +849,7 @@ export default function AXPage() {
               </Box>
             </Box>
 
-            <Typography variant="caption" sx={{ fontFamily: mono, color: gold.soft, fontWeight: 700 }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? gold.soft : '#475467', fontWeight: 750, opacity: 1.0 }}>
               SHA256: 7f8a9e4b...0b32 (LOCAL HARDWARE ATTESTATION)
             </Typography>
           </Box>
@@ -1019,8 +1021,9 @@ export default function AXPage() {
                   fontSize: '0.72rem',
                   cursor: 'pointer',
                   bgcolor: agentTask === preset.task ? gold.wash : (isDark ? '#141622' : '#F8FAFC'),
-                  color: agentTask === preset.task ? gold.soft : (isDark ? '#94A3B8' : '#334155'),
+                  color: agentTask === preset.task ? gold.soft : (isDark ? '#94A3B8' : '#344054'),
                   border: `1px solid ${agentTask === preset.task ? gold.accent : (isDark ? '#262A3B' : '#CBD5E1')}`,
+                  fontWeight: 650,
                   '&:hover': {
                     bgcolor: gold.wash,
                     color: gold.soft,
@@ -1075,7 +1078,13 @@ export default function AXPage() {
                 label={`~${Math.ceil(synthesizedPrompt.length / 4)} tokens`}
                 size="small"
                 variant="outlined"
-                sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: gold.border, color: gold.soft, fontWeight: 700 }}
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  borderColor: isDark ? gold.border : 'rgba(146,106,5,0.4)',
+                  color: gold.soft
+                }}
               />
               <Chip
                 label="Invariants: OWASP Air-Gapped Strict"

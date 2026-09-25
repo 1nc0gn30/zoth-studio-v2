@@ -1,5 +1,5 @@
 // Curated, production-ready web application & site templates for Netlify and Zoth Studio.
-// All templates are vetted for clean deployment, zero telemetry, and professional design standards.
+// All templates are vetted for clean deployment, zero telemetry, sovereign security, and professional design standards.
 export const templates = [
   {
     "id": "02-netlify-ax-creator/Netlify-Ghost-Hub",
@@ -7,7 +7,28 @@ export const templates = [
     "category": "Netlify & Creator",
     "slug": "02-netlify-ax-creator",
     "openable": false,
-    "path": ""
+    "path": "",
+    "description": "Sovereign headless publishing portal optimized for zero-egress Netlify edge routing, ghostmode content caching, and automated static generation.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "02-netlify-ax-creator/Netlify-Hall-of-Fame",
@@ -15,7 +36,28 @@ export const templates = [
     "category": "Netlify & Creator",
     "slug": "02-netlify-ax-creator",
     "openable": true,
-    "path": "/templates-source/02-netlify-ax-creator/Netlify-Hall-of-Fame/"
+    "path": "/templates-source/02-netlify-ax-creator/Netlify-Hall-of-Fame/",
+    "description": "Showcase repository highlighting sovereign open-source engineering achievements, verified smart contracts, and decentralized architectures.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "02-netlify-ax-creator/NullAI-HexStrike-AI-Terminal",
@@ -23,7 +65,28 @@ export const templates = [
     "category": "Netlify & Creator",
     "slug": "02-netlify-ax-creator",
     "openable": false,
-    "path": ""
+    "path": "",
+    "description": "Air-gapped security workstation providing local CVE exploration, zero-telemetry penetration simulation, and automated hardening scripts.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "02-netlify-ax-creator/netlify-cli-agent-runner",
@@ -31,15 +94,57 @@ export const templates = [
     "category": "Netlify & Creator",
     "slug": "02-netlify-ax-creator",
     "openable": true,
-    "path": "/templates-source/02-netlify-ax-creator/netlify-cli-agent-runner/"
+    "path": "/templates-source/02-netlify-ax-creator/netlify-cli-agent-runner/",
+    "description": "Autonomous agent CLI workflow runner compiling local tasks into reproducible Netlify build steps and serverless functions.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "02-netlify-ax-creator/netlify-client-dev-portal",
-    "name": "netlify client dev portal",
+    "name": "Netlify Sovereign Dev Portal",
     "category": "Netlify & Creator",
     "slug": "02-netlify-ax-creator",
     "openable": true,
-    "path": "/templates-source/02-netlify-ax-creator/netlify-client-dev-portal/"
+    "path": "/templates-source/02-netlify-ax-creator/netlify-client-dev-portal/",
+    "description": "High-assurance sovereign developer cockpit featuring role-based enclave access, audited API token vaults, and static documentation.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "02-netlify-ax-creator/nullai-ui",
@@ -47,7 +152,28 @@ export const templates = [
     "category": "Netlify & Creator",
     "slug": "02-netlify-ax-creator",
     "openable": true,
-    "path": "/templates-source/02-netlify-ax-creator/nullai-ui/"
+    "path": "/templates-source/02-netlify-ax-creator/nullai-ui/",
+    "description": "Production-hardened Nullai ui scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "02-netlify-ax-creator/nullai2026",
@@ -55,7 +181,28 @@ export const templates = [
     "category": "Netlify & Creator",
     "slug": "02-netlify-ax-creator",
     "openable": true,
-    "path": "/templates-source/02-netlify-ax-creator/nullai2026/"
+    "path": "/templates-source/02-netlify-ax-creator/nullai2026/",
+    "description": "Production-hardened Nullai2026 scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/SignalBridge-AI",
@@ -63,7 +210,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": true,
-    "path": "/templates-source/03-ai-agents-llm/SignalBridge-AI/"
+    "path": "/templates-source/03-ai-agents-llm/SignalBridge-AI/",
+    "description": "Sovereign SignalBridge AI workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/adytum-alchemist-ai-workflow",
@@ -71,7 +239,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": true,
-    "path": "/templates-source/03-ai-agents-llm/adytum-alchemist-ai-workflow/"
+    "path": "/templates-source/03-ai-agents-llm/adytum-alchemist-ai-workflow/",
+    "description": "Sovereign Adytum alchemist ai workflow workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/agent-loom",
@@ -79,7 +268,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": true,
-    "path": "/templates-source/03-ai-agents-llm/agent-loom/"
+    "path": "/templates-source/03-ai-agents-llm/agent-loom/",
+    "description": "Sovereign Agent loom workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/ai-agent-ui-gallery",
@@ -87,7 +297,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": true,
-    "path": "/templates-source/03-ai-agents-llm/ai-agent-ui-gallery/"
+    "path": "/templates-source/03-ai-agents-llm/ai-agent-ui-gallery/",
+    "description": "Sovereign Ai agent ui gallery workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/ai-talk-ai-go",
@@ -95,7 +326,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": true,
-    "path": "/templates-source/03-ai-agents-llm/ai-talk-ai-go/"
+    "path": "/templates-source/03-ai-agents-llm/ai-talk-ai-go/",
+    "description": "Sovereign Ai talk ai go workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/ai-university",
@@ -103,7 +355,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": true,
-    "path": "/templates-source/03-ai-agents-llm/ai-university/"
+    "path": "/templates-source/03-ai-agents-llm/ai-university/",
+    "description": "Sovereign Ai university workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/aura-ai",
@@ -111,7 +384,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": true,
-    "path": "/templates-source/03-ai-agents-llm/aura-ai/"
+    "path": "/templates-source/03-ai-agents-llm/aura-ai/",
+    "description": "Sovereign Aura ai workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/brainwidth",
@@ -119,7 +413,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": true,
-    "path": "/templates-source/03-ai-agents-llm/brainwidth/"
+    "path": "/templates-source/03-ai-agents-llm/brainwidth/",
+    "description": "Sovereign Brainwidth workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/buildestimate-ai",
@@ -127,7 +442,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": true,
-    "path": "/templates-source/03-ai-agents-llm/buildestimate-ai/"
+    "path": "/templates-source/03-ai-agents-llm/buildestimate-ai/",
+    "description": "Sovereign Buildestimate ai workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/deepsearch-ai",
@@ -135,7 +471,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": true,
-    "path": "/templates-source/03-ai-agents-llm/deepsearch-ai/"
+    "path": "/templates-source/03-ai-agents-llm/deepsearch-ai/",
+    "description": "Sovereign Deepsearch ai workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/libsignal",
@@ -143,7 +500,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": true,
-    "path": "/templates-source/03-ai-agents-llm/libsignal/"
+    "path": "/templates-source/03-ai-agents-llm/libsignal/",
+    "description": "Sovereign Libsignal workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/linguabot",
@@ -151,7 +529,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": true,
-    "path": "/templates-source/03-ai-agents-llm/linguabot/"
+    "path": "/templates-source/03-ai-agents-llm/linguabot/",
+    "description": "Sovereign Linguabot workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/nullai-infinite-harness",
@@ -159,7 +558,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": false,
-    "path": ""
+    "path": "",
+    "description": "Sovereign Nullai infinite harness workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/off-grid-survival-ai",
@@ -167,7 +587,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": true,
-    "path": "/templates-source/03-ai-agents-llm/off-grid-survival-ai/"
+    "path": "/templates-source/03-ai-agents-llm/off-grid-survival-ai/",
+    "description": "Sovereign Off grid survival ai workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/precision-paint-pro",
@@ -175,7 +616,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": true,
-    "path": "/templates-source/03-ai-agents-llm/precision-paint-pro/"
+    "path": "/templates-source/03-ai-agents-llm/precision-paint-pro/",
+    "description": "Sovereign Precision paint pro workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/signalnest",
@@ -183,7 +645,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": true,
-    "path": "/templates-source/03-ai-agents-llm/signalnest/"
+    "path": "/templates-source/03-ai-agents-llm/signalnest/",
+    "description": "Sovereign Signalnest workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/unthink-ai",
@@ -191,7 +674,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": true,
-    "path": "/templates-source/03-ai-agents-llm/unthink-ai/"
+    "path": "/templates-source/03-ai-agents-llm/unthink-ai/",
+    "description": "Sovereign Unthink ai workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "03-ai-agents-llm/veganify-ai",
@@ -199,7 +703,28 @@ export const templates = [
     "category": "AI Agents & LLM",
     "slug": "03-ai-agents-llm",
     "openable": true,
-    "path": "/templates-source/03-ai-agents-llm/veganify-ai/"
+    "path": "/templates-source/03-ai-agents-llm/veganify-ai/",
+    "description": "Sovereign Veganify ai workstation engineered for local neural synthesis, zero-cloud inference, and deterministic agent orchestration.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/Vite-Mui-React-Framer-Motion-Starter-App",
@@ -207,7 +732,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/Vite-Mui-React-Framer-Motion-Starter-App/"
+    "path": "/templates-source/04-web-apps-saas/Vite-Mui-React-Framer-Motion-Starter-App/",
+    "description": "Production-hardened Vite Mui React Framer Motion Starter App scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/aether",
@@ -215,7 +761,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/aether/"
+    "path": "/templates-source/04-web-apps-saas/aether/",
+    "description": "Production-hardened Aether scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/aetheris",
@@ -223,7 +790,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/aetheris/"
+    "path": "/templates-source/04-web-apps-saas/aetheris/",
+    "description": "Production-hardened Aetheris scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/astro-for-ai",
@@ -231,7 +819,27 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": false,
-    "path": ""
+    "path": "",
+    "description": "Production-hardened Astro for ai scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "Astro 4 / Tailwind CSS",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Astro",
+      "Static-Site"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/aura-map",
@@ -239,7 +847,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/aura-map/"
+    "path": "/templates-source/04-web-apps-saas/aura-map/",
+    "description": "Production-hardened Aura map scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/avatar-studio",
@@ -247,7 +876,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/avatar-studio/"
+    "path": "/templates-source/04-web-apps-saas/avatar-studio/",
+    "description": "Production-hardened Avatar studio scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/blog-template",
@@ -255,7 +905,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": false,
-    "path": ""
+    "path": "",
+    "description": "Production-hardened Blog template scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/edge-forge",
@@ -263,7 +934,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/edge-forge/"
+    "path": "/templates-source/04-web-apps-saas/edge-forge/",
+    "description": "Production-hardened Edge forge scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/envguard-pro",
@@ -271,7 +963,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/envguard-pro/"
+    "path": "/templates-source/04-web-apps-saas/envguard-pro/",
+    "description": "Production-hardened Envguard pro scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/kitchen-forge",
@@ -279,7 +992,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/kitchen-forge/"
+    "path": "/templates-source/04-web-apps-saas/kitchen-forge/",
+    "description": "Production-hardened Kitchen forge scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/lumina-builder",
@@ -287,7 +1021,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/lumina-builder/"
+    "path": "/templates-source/04-web-apps-saas/lumina-builder/",
+    "description": "Production-hardened Lumina builder scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/magicui-for-astro",
@@ -295,7 +1050,27 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": false,
-    "path": ""
+    "path": "",
+    "description": "Production-hardened Magicui for astro scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "Astro 4 / Tailwind CSS",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Astro",
+      "Static-Site"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/mentorship-marketplace",
@@ -303,7 +1078,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/mentorship-marketplace/"
+    "path": "/templates-source/04-web-apps-saas/mentorship-marketplace/",
+    "description": "Production-hardened Mentorship marketplace scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/migratex",
@@ -311,7 +1107,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/migratex/"
+    "path": "/templates-source/04-web-apps-saas/migratex/",
+    "description": "Production-hardened Migratex scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/nexus",
@@ -319,7 +1136,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/nexus/"
+    "path": "/templates-source/04-web-apps-saas/nexus/",
+    "description": "Production-hardened Nexus scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/nexus-3d-editor",
@@ -327,7 +1165,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/nexus-3d-editor/"
+    "path": "/templates-source/04-web-apps-saas/nexus-3d-editor/",
+    "description": "Production-hardened Nexus 3d editor scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/nfc-link-hub",
@@ -335,7 +1194,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/nfc-link-hub/"
+    "path": "/templates-source/04-web-apps-saas/nfc-link-hub/",
+    "description": "Production-hardened Nfc link hub scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/nova-os-analytics",
@@ -343,7 +1223,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/nova-os-analytics/"
+    "path": "/templates-source/04-web-apps-saas/nova-os-analytics/",
+    "description": "Production-hardened Nova os analytics scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/omnipost",
@@ -351,7 +1252,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/omnipost/"
+    "path": "/templates-source/04-web-apps-saas/omnipost/",
+    "description": "Production-hardened Omnipost scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/optimalism",
@@ -359,7 +1281,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/optimalism/"
+    "path": "/templates-source/04-web-apps-saas/optimalism/",
+    "description": "Production-hardened Optimalism scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/packageforge",
@@ -367,7 +1310,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/packageforge/"
+    "path": "/templates-source/04-web-apps-saas/packageforge/",
+    "description": "Production-hardened Packageforge scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/taskforge-lite",
@@ -375,7 +1339,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": false,
-    "path": ""
+    "path": "",
+    "description": "Production-hardened Taskforge lite scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/tech-pro",
@@ -383,7 +1368,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": false,
-    "path": ""
+    "path": "",
+    "description": "Production-hardened Tech pro scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/url-shortener",
@@ -391,7 +1397,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/url-shortener/"
+    "path": "/templates-source/04-web-apps-saas/url-shortener/",
+    "description": "Production-hardened Url shortener scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/vision-link",
@@ -399,7 +1426,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/vision-link/"
+    "path": "/templates-source/04-web-apps-saas/vision-link/",
+    "description": "Production-hardened Vision link scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "04-web-apps-saas/zen-breathing-companion",
@@ -407,7 +1455,28 @@ export const templates = [
     "category": "Web Apps & SaaS",
     "slug": "04-web-apps-saas",
     "openable": true,
-    "path": "/templates-source/04-web-apps-saas/zen-breathing-companion/"
+    "path": "/templates-source/04-web-apps-saas/zen-breathing-companion/",
+    "description": "Production-hardened Zen breathing companion scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "05-portfolio-agency/Resume-Grader-ATS-Savior",
@@ -415,7 +1484,28 @@ export const templates = [
     "category": "Portfolio & Agency",
     "slug": "05-portfolio-agency",
     "openable": false,
-    "path": ""
+    "path": "",
+    "description": "Zero-egress ATS resume analyzer and semantic keyword scoring engine with browser-local text extraction and scoring.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "05-portfolio-agency/SonicVision-AI",
@@ -423,7 +1513,28 @@ export const templates = [
     "category": "Portfolio & Agency",
     "slug": "05-portfolio-agency",
     "openable": true,
-    "path": "/templates-source/05-portfolio-agency/SonicVision-AI/"
+    "path": "/templates-source/05-portfolio-agency/SonicVision-AI/",
+    "description": "Production-hardened SonicVision AI scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "06-learning-courses/100-websites-in-30-days",
@@ -431,7 +1542,28 @@ export const templates = [
     "category": "Learning & Courses",
     "slug": "06-learning-courses",
     "openable": true,
-    "path": "/templates-source/06-learning-courses/100-websites-in-30-days/"
+    "path": "/templates-source/06-learning-courses/100-websites-in-30-days/",
+    "description": "Self-contained 100 websites in 30 days curriculum sandbox with offline interactive exercise compilers and zero-telemetry progress tracking.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "06-learning-courses/30-Days-Of-Python",
@@ -439,7 +1571,28 @@ export const templates = [
     "category": "Learning & Courses",
     "slug": "06-learning-courses",
     "openable": true,
-    "path": "/templates-source/06-learning-courses/30-Days-Of-Python/"
+    "path": "/templates-source/06-learning-courses/30-Days-Of-Python/",
+    "description": "Self-contained 30 Days Of Python curriculum sandbox with offline interactive exercise compilers and zero-telemetry progress tracking.",
+    "stack": "Python 3.11 / Jupyter WASM",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Python",
+      "WASM",
+      "Interactive"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "06-learning-courses/30-Days-of-Python-Math",
@@ -447,7 +1600,28 @@ export const templates = [
     "category": "Learning & Courses",
     "slug": "06-learning-courses",
     "openable": true,
-    "path": "/templates-source/06-learning-courses/30-Days-of-Python-Math/"
+    "path": "/templates-source/06-learning-courses/30-Days-of-Python-Math/",
+    "description": "Self-contained 30 Days of Python Math curriculum sandbox with offline interactive exercise compilers and zero-telemetry progress tracking.",
+    "stack": "Python 3.11 / Jupyter WASM",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Python",
+      "WASM",
+      "Interactive"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "06-learning-courses/AI-Mastery-In-30-Days",
@@ -455,7 +1629,28 @@ export const templates = [
     "category": "Learning & Courses",
     "slug": "06-learning-courses",
     "openable": true,
-    "path": "/templates-source/06-learning-courses/AI-Mastery-In-30-Days/"
+    "path": "/templates-source/06-learning-courses/AI-Mastery-In-30-Days/",
+    "description": "Self-contained AI Mastery In 30 Days curriculum sandbox with offline interactive exercise compilers and zero-telemetry progress tracking.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "06-learning-courses/Learn-PowerShell-In-30-Days",
@@ -463,7 +1658,28 @@ export const templates = [
     "category": "Learning & Courses",
     "slug": "06-learning-courses",
     "openable": true,
-    "path": "/templates-source/06-learning-courses/Learn-PowerShell-In-30-Days/"
+    "path": "/templates-source/06-learning-courses/Learn-PowerShell-In-30-Days/",
+    "description": "Self-contained Learn PowerShell In 30 Days curriculum sandbox with offline interactive exercise compilers and zero-telemetry progress tracking.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "06-learning-courses/c-in-30-days",
@@ -471,7 +1687,28 @@ export const templates = [
     "category": "Learning & Courses",
     "slug": "06-learning-courses",
     "openable": true,
-    "path": "/templates-source/06-learning-courses/c-in-30-days/"
+    "path": "/templates-source/06-learning-courses/c-in-30-days/",
+    "description": "Self-contained C in 30 days curriculum sandbox with offline interactive exercise compilers and zero-telemetry progress tracking.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "06-learning-courses/js-mastery-zero-to-hero",
@@ -479,7 +1716,28 @@ export const templates = [
     "category": "Learning & Courses",
     "slug": "06-learning-courses",
     "openable": true,
-    "path": "/templates-source/06-learning-courses/js-mastery-zero-to-hero/"
+    "path": "/templates-source/06-learning-courses/js-mastery-zero-to-hero/",
+    "description": "Self-contained Js mastery zero to hero curriculum sandbox with offline interactive exercise compilers and zero-telemetry progress tracking.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "06-learning-courses/stripe-mastery-hub",
@@ -487,7 +1745,28 @@ export const templates = [
     "category": "Learning & Courses",
     "slug": "06-learning-courses",
     "openable": true,
-    "path": "/templates-source/06-learning-courses/stripe-mastery-hub/"
+    "path": "/templates-source/06-learning-courses/stripe-mastery-hub/",
+    "description": "Self-contained Stripe mastery hub curriculum sandbox with offline interactive exercise compilers and zero-telemetry progress tracking.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "07-security-osint/Local-Business-Lead-Scanner",
@@ -495,7 +1774,28 @@ export const templates = [
     "category": "Security & OSINT",
     "slug": "07-security-osint",
     "openable": true,
-    "path": "/templates-source/07-security-osint/Local-Business-Lead-Scanner/"
+    "path": "/templates-source/07-security-osint/Local-Business-Lead-Scanner/",
+    "description": "Air-gapped Local Business Lead Scanner security engine delivering automated threat scanning, local vulnerability mapping, and cryptographic verification.",
+    "stack": "TypeScript / Web Crypto API",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Cybersecurity",
+      "Air-Gapped",
+      "Recon"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "07-security-osint/SubSweep",
@@ -503,7 +1803,28 @@ export const templates = [
     "category": "Security & OSINT",
     "slug": "07-security-osint",
     "openable": true,
-    "path": "/templates-source/07-security-osint/SubSweep/"
+    "path": "/templates-source/07-security-osint/SubSweep/",
+    "description": "Air-gapped SubSweep security engine delivering automated threat scanning, local vulnerability mapping, and cryptographic verification.",
+    "stack": "TypeScript / Web Crypto API",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Cybersecurity",
+      "Air-Gapped",
+      "Recon"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "07-security-osint/boilerplate-infosec",
@@ -511,7 +1832,28 @@ export const templates = [
     "category": "Security & OSINT",
     "slug": "07-security-osint",
     "openable": false,
-    "path": ""
+    "path": "",
+    "description": "Air-gapped Boilerplate infosec security engine delivering automated threat scanning, local vulnerability mapping, and cryptographic verification.",
+    "stack": "TypeScript / Web Crypto API",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Cybersecurity",
+      "Air-Gapped",
+      "Recon"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "07-security-osint/cisa-grc-study-portal",
@@ -519,7 +1861,28 @@ export const templates = [
     "category": "Security & OSINT",
     "slug": "07-security-osint",
     "openable": true,
-    "path": "/templates-source/07-security-osint/cisa-grc-study-portal/"
+    "path": "/templates-source/07-security-osint/cisa-grc-study-portal/",
+    "description": "Air-gapped Cisa grc study portal security engine delivering automated threat scanning, local vulnerability mapping, and cryptographic verification.",
+    "stack": "TypeScript / Web Crypto API",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Cybersecurity",
+      "Air-Gapped",
+      "Recon"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "07-security-osint/privacy-toolbelt",
@@ -527,7 +1890,28 @@ export const templates = [
     "category": "Security & OSINT",
     "slug": "07-security-osint",
     "openable": true,
-    "path": "/templates-source/07-security-osint/privacy-toolbelt/"
+    "path": "/templates-source/07-security-osint/privacy-toolbelt/",
+    "description": "Air-gapped Privacy toolbelt security engine delivering automated threat scanning, local vulnerability mapping, and cryptographic verification.",
+    "stack": "TypeScript / Web Crypto API",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Cybersecurity",
+      "Air-Gapped",
+      "Recon"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "07-security-osint/security-champions-playbook",
@@ -535,7 +1919,28 @@ export const templates = [
     "category": "Security & OSINT",
     "slug": "07-security-osint",
     "openable": true,
-    "path": "/templates-source/07-security-osint/security-champions-playbook/"
+    "path": "/templates-source/07-security-osint/security-champions-playbook/",
+    "description": "Air-gapped Security champions playbook security engine delivering automated threat scanning, local vulnerability mapping, and cryptographic verification.",
+    "stack": "TypeScript / Web Crypto API",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Cybersecurity",
+      "Air-Gapped",
+      "Recon"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "08-crypto-web3/blockfans",
@@ -543,7 +1948,28 @@ export const templates = [
     "category": "Crypto & Web3",
     "slug": "08-crypto-web3",
     "openable": true,
-    "path": "/templates-source/08-crypto-web3/blockfans/"
+    "path": "/templates-source/08-crypto-web3/blockfans/",
+    "description": "Decentralized Blockfans explorer built with client-side cryptographic RPC validation and air-gapped transaction synthesis.",
+    "stack": "React 18 / Ethers / Solana Web3.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Web3",
+      "Crypto",
+      "Decentralized"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "08-crypto-web3/crypto-tracker-agent",
@@ -551,7 +1977,28 @@ export const templates = [
     "category": "Crypto & Web3",
     "slug": "08-crypto-web3",
     "openable": true,
-    "path": "/templates-source/08-crypto-web3/crypto-tracker-agent/"
+    "path": "/templates-source/08-crypto-web3/crypto-tracker-agent/",
+    "description": "Decentralized Crypto tracker agent explorer built with client-side cryptographic RPC validation and air-gapped transaction synthesis.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "08-crypto-web3/solanaworldmap",
@@ -559,7 +2006,28 @@ export const templates = [
     "category": "Crypto & Web3",
     "slug": "08-crypto-web3",
     "openable": true,
-    "path": "/templates-source/08-crypto-web3/solanaworldmap/"
+    "path": "/templates-source/08-crypto-web3/solanaworldmap/",
+    "description": "Decentralized Solanaworldmap explorer built with client-side cryptographic RPC validation and air-gapped transaction synthesis.",
+    "stack": "React 18 / Ethers / Solana Web3.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Web3",
+      "Crypto",
+      "Decentralized"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "11-tools-scripts/AudioCipher",
@@ -567,7 +2035,28 @@ export const templates = [
     "category": "Interactive Web Tools",
     "slug": "11-tools-scripts",
     "openable": true,
-    "path": "/templates-source/11-tools-scripts/AudioCipher/"
+    "path": "/templates-source/11-tools-scripts/AudioCipher/",
+    "description": "Production-hardened AudioCipher scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "TypeScript / Web Crypto API",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Cybersecurity",
+      "Air-Gapped",
+      "Recon"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "11-tools-scripts/HTML-To-PDF-Invoice-Generator",
@@ -575,7 +2064,28 @@ export const templates = [
     "category": "Interactive Web Tools",
     "slug": "11-tools-scripts",
     "openable": true,
-    "path": "/templates-source/11-tools-scripts/HTML-To-PDF-Invoice-Generator/"
+    "path": "/templates-source/11-tools-scripts/HTML-To-PDF-Invoice-Generator/",
+    "description": "Production-hardened HTML To PDF Invoice Generator scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "11-tools-scripts/Quick-QR",
@@ -583,7 +2093,28 @@ export const templates = [
     "category": "Interactive Web Tools",
     "slug": "11-tools-scripts",
     "openable": true,
-    "path": "/templates-source/11-tools-scripts/Quick-QR/"
+    "path": "/templates-source/11-tools-scripts/Quick-QR/",
+    "description": "Production-hardened Quick QR scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "11-tools-scripts/badge3d-logo-to-coin-generator",
@@ -591,7 +2122,28 @@ export const templates = [
     "category": "Interactive Web Tools",
     "slug": "11-tools-scripts",
     "openable": true,
-    "path": "/templates-source/11-tools-scripts/badge3d-logo-to-coin-generator/"
+    "path": "/templates-source/11-tools-scripts/badge3d-logo-to-coin-generator/",
+    "description": "Production-hardened Badge3d logo to coin generator scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "11-tools-scripts/certpath-interactive-certification-roadmaps",
@@ -599,7 +2151,28 @@ export const templates = [
     "category": "Interactive Web Tools",
     "slug": "11-tools-scripts",
     "openable": true,
-    "path": "/templates-source/11-tools-scripts/certpath-interactive-certification-roadmaps/"
+    "path": "/templates-source/11-tools-scripts/certpath-interactive-certification-roadmaps/",
+    "description": "Production-hardened Certpath interactive certification roadmaps scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "11-tools-scripts/seo-trend-tool",
@@ -607,7 +2180,28 @@ export const templates = [
     "category": "Interactive Web Tools",
     "slug": "11-tools-scripts",
     "openable": false,
-    "path": ""
+    "path": "",
+    "description": "Production-hardened Seo trend tool scaffold featuring modular state engines, zero-egress Netlify configuration, and instant Vite HMR.",
+    "stack": "React 18 / Vite 5 / Tailwind",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Fullstack",
+      "SaaS",
+      "Dashboard"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/badgeblast",
@@ -615,7 +2209,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/badgeblast/"
+    "path": "/templates-source/13-creative-media/badgeblast/",
+    "description": "High-performance Badgeblast canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/cyber-turtle",
@@ -623,7 +2238,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/cyber-turtle/"
+    "path": "/templates-source/13-creative-media/cyber-turtle/",
+    "description": "High-performance Cyber turtle canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/cyphertag",
@@ -631,7 +2267,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/cyphertag/"
+    "path": "/templates-source/13-creative-media/cyphertag/",
+    "description": "High-performance Cyphertag canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/data-explorer",
@@ -639,7 +2296,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/data-explorer/"
+    "path": "/templates-source/13-creative-media/data-explorer/",
+    "description": "High-performance Data explorer canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/datamosh-studio",
@@ -647,7 +2325,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/datamosh-studio/"
+    "path": "/templates-source/13-creative-media/datamosh-studio/",
+    "description": "High-performance Datamosh studio canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/echo-shrine",
@@ -655,7 +2354,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/echo-shrine/"
+    "path": "/templates-source/13-creative-media/echo-shrine/",
+    "description": "High-performance Echo shrine canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/forge-and-fracture",
@@ -663,7 +2383,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/forge-and-fracture/"
+    "path": "/templates-source/13-creative-media/forge-and-fracture/",
+    "description": "High-performance Forge and fracture canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/holo-audio",
@@ -671,7 +2412,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/holo-audio/"
+    "path": "/templates-source/13-creative-media/holo-audio/",
+    "description": "High-performance Holo audio canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/hotappsummer-wisdom",
@@ -679,7 +2441,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/hotappsummer-wisdom/"
+    "path": "/templates-source/13-creative-media/hotappsummer-wisdom/",
+    "description": "High-performance Hotappsummer wisdom canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/neon-annotate",
@@ -687,7 +2470,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/neon-annotate/"
+    "path": "/templates-source/13-creative-media/neon-annotate/",
+    "description": "High-performance Neon annotate canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/neon-pulse",
@@ -695,7 +2499,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/neon-pulse/"
+    "path": "/templates-source/13-creative-media/neon-pulse/",
+    "description": "High-performance Neon pulse canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/neural-city",
@@ -703,7 +2528,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/neural-city/"
+    "path": "/templates-source/13-creative-media/neural-city/",
+    "description": "High-performance Neural city canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/origin-cacao",
@@ -711,7 +2557,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/origin-cacao/"
+    "path": "/templates-source/13-creative-media/origin-cacao/",
+    "description": "High-performance Origin cacao canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/painting-site",
@@ -719,7 +2586,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/painting-site/"
+    "path": "/templates-source/13-creative-media/painting-site/",
+    "description": "High-performance Painting site canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "React 18 / WebGPU Transformers.js",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "AI-Studio",
+      "Local-LLM",
+      "WebGPU"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/procrastinator-pro",
@@ -727,7 +2615,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/procrastinator-pro/"
+    "path": "/templates-source/13-creative-media/procrastinator-pro/",
+    "description": "High-performance Procrastinator pro canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/promptmaster",
@@ -735,7 +2644,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/promptmaster/"
+    "path": "/templates-source/13-creative-media/promptmaster/",
+    "description": "High-performance Promptmaster canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/reflection",
@@ -743,7 +2673,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/reflection/"
+    "path": "/templates-source/13-creative-media/reflection/",
+    "description": "High-performance Reflection canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/regexdroid",
@@ -751,7 +2702,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/regexdroid/"
+    "path": "/templates-source/13-creative-media/regexdroid/",
+    "description": "High-performance Regexdroid canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/schema-illustrator",
@@ -759,7 +2731,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/schema-illustrator/"
+    "path": "/templates-source/13-creative-media/schema-illustrator/",
+    "description": "High-performance Schema illustrator canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/stoicism",
@@ -767,7 +2760,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/stoicism/"
+    "path": "/templates-source/13-creative-media/stoicism/",
+    "description": "High-performance Stoicism canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/the-gazette-hub",
@@ -775,7 +2789,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/the-gazette-hub/"
+    "path": "/templates-source/13-creative-media/the-gazette-hub/",
+    "description": "High-performance The gazette hub canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/the-greene-strategist",
@@ -783,7 +2818,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/the-greene-strategist/"
+    "path": "/templates-source/13-creative-media/the-greene-strategist/",
+    "description": "High-performance The greene strategist canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/ufo-crop-circle",
@@ -791,7 +2847,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/ufo-crop-circle/"
+    "path": "/templates-source/13-creative-media/ufo-crop-circle/",
+    "description": "High-performance Ufo crop circle canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/vector-search",
@@ -799,7 +2876,28 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/vector-search/"
+    "path": "/templates-source/13-creative-media/vector-search/",
+    "description": "High-performance Vector search canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   },
   {
     "id": "13-creative-media/zoth-website",
@@ -807,6 +2905,27 @@ export const templates = [
     "category": "Creative & Media",
     "slug": "13-creative-media",
     "openable": true,
-    "path": "/templates-source/13-creative-media/zoth-website/"
+    "path": "/templates-source/13-creative-media/zoth-website/",
+    "description": "High-performance Zoth website canvas studio utilizing client-side WebGPU acceleration and reactive generative media pipelines.",
+    "stack": "Three.js / WebGL / Canvas2D",
+    "tags": [
+      "Netlify",
+      "Zero-Telemetry",
+      "Sovereign",
+      "Creative-Media",
+      "WebGL",
+      "Generative"
+    ],
+    "mockFiles": [
+      "src/App.jsx",
+      "src/main.jsx",
+      "src/index.css",
+      "public/index.html",
+      "public/favicon.ico",
+      "package.json",
+      "vite.config.js",
+      "netlify.toml",
+      "README.md"
+    ]
   }
 ];

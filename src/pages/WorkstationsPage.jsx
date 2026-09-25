@@ -549,10 +549,11 @@ export default function WorkstationsPage() {
               transition: 'all 0.2s ease',
               '&.Mui-selected': {
                 bgcolor: gold.accent,
-                color: '#101828',
+                color: isDark ? '#08080B' : '#101828',
                 boxShadow: '0 2px 10px rgba(212,175,55,0.3)',
                 '&:hover': {
                   bgcolor: '#F3D56A',
+                  color: isDark ? '#08080B' : '#101828',
                 },
               },
               '&:hover': {
@@ -622,7 +623,7 @@ export default function WorkstationsPage() {
             fontSize: '0.82rem',
             fontFamily: mono,
             bgcolor: band === 'All' ? gold.accent : (isDark ? '#0B0B12' : '#FFFFFF'),
-            color: band === 'All' ? '#101828' : 'text.primary',
+            color: band === 'All' ? (isDark ? '#08080B' : '#101828') : 'text.primary',
             border: '1px solid',
             borderColor: band === 'All' ? gold.accent : (isDark ? '#26262F' : '#EAECF0'),
             '&:hover': {
@@ -642,7 +643,7 @@ export default function WorkstationsPage() {
           return (
             <Chip
               key={item}
-              icon={<IconComp sx={{ fontSize: '0.9rem !important', color: active ? '#101828 !important' : `${cfg.color} !important` }} />}
+              icon={<IconComp sx={{ fontSize: '0.9rem !important', color: active ? `${isDark ? '#08080B' : '#101828'} !important` : `${cfg.color} !important` }} />}
               label={`${item} · ${count}`}
               clickable
               onClick={() => setBand(item)}
@@ -651,7 +652,7 @@ export default function WorkstationsPage() {
                 fontSize: '0.82rem',
                 fontFamily: mono,
                 bgcolor: active ? gold.accent : (isDark ? '#0B0B12' : '#FFFFFF'),
-                color: active ? '#101828' : 'text.primary',
+                color: active ? (isDark ? '#08080B' : '#101828') : 'text.primary',
                 border: '1px solid',
                 borderColor: active ? gold.accent : (isDark ? '#26262F' : '#EAECF0'),
                 '&:hover': {
@@ -764,7 +765,7 @@ export default function WorkstationsPage() {
                   fontFamily: mono,
                   fontWeight: 800,
                   bgcolor: isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7',
-                  color: gold.accent,
+                  color: isDark ? '#D4AF37' : '#8A6A09',
                   border: `1px solid ${gold.border}`,
                 }}
               />
@@ -800,9 +801,9 @@ export default function WorkstationsPage() {
                 </defs>
 
                 {/* Concentric Background Grid Rings */}
-                <circle cx="460" cy="240" r="100" fill="none" stroke={isDark ? 'rgba(212,175,55,0.12)' : 'rgba(184,134,11,0.18)'} strokeDasharray="3 6" />
-                <circle cx="460" cy="240" r="190" fill="none" stroke={isDark ? 'rgba(212,175,55,0.10)' : 'rgba(184,134,11,0.15)'} strokeDasharray="4 8" />
-                <circle cx="460" cy="240" r="275" fill="none" stroke={isDark ? 'rgba(212,175,55,0.08)' : 'rgba(184,134,11,0.12)'} strokeDasharray="5 10" />
+                <circle cx="460" cy="240" r="100" fill="none" stroke={isDark ? 'rgba(212,175,55,0.12)' : 'rgba(184,134,11,0.22)'} strokeWidth="1.2" strokeDasharray="3 6" />
+                <circle cx="460" cy="240" r="190" fill="none" stroke={isDark ? 'rgba(212,175,55,0.10)' : 'rgba(184,134,11,0.20)'} strokeWidth="1.2" strokeDasharray="4 8" />
+                <circle cx="460" cy="240" r="275" fill="none" stroke={isDark ? 'rgba(212,175,55,0.08)' : 'rgba(184,134,11,0.2)'} strokeWidth="1.2" strokeDasharray="5 10" />
 
                 {/* Connecting Links from Core to the 6 Band Hubs */}
                 {ORDERED_BANDS.map((bName) => {
@@ -817,10 +818,10 @@ export default function WorkstationsPage() {
                         y1="240"
                         x2={cfg.svgPos.x}
                         y2={cfg.svgPos.y}
-                        stroke={isCurrent ? cfg.color : (active ? 'rgba(212,175,55,0.3)' : (isDark ? 'rgba(100,100,120,0.2)' : 'rgba(180,185,195,0.4)'))}
-                        strokeWidth={isCurrent ? 3 : (active ? 1.75 : 1)}
+                        stroke={isCurrent ? cfg.color : (active ? (isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.45)') : (isDark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.35)'))}
+                        strokeWidth={isCurrent ? 3 : (active ? 1.75 : 1.2)}
                         strokeDasharray={isCurrent ? 'none' : '4 4'}
-                        opacity={active ? 1 : 0.4}
+                        opacity={active ? 1 : 0.65}
                       />
                       {/* Pulse particle along link */}
                       {active && (
@@ -864,7 +865,7 @@ export default function WorkstationsPage() {
                     x="460"
                     y="228"
                     textAnchor="middle"
-                    fill={gold.accent}
+                    fill={isDark ? '#D4AF37' : '#8A6A09'}
                     fontSize="10"
                     fontWeight="800"
                     fontFamily={mono}
@@ -887,7 +888,7 @@ export default function WorkstationsPage() {
                     x="460"
                     y="258"
                     textAnchor="middle"
-                    fill={isDark ? '#9CA3AF' : '#6B7280'}
+                    fill={isDark ? '#9CA3AF' : '#475467'}
                     fontSize="8"
                     fontFamily={mono}
                   >
@@ -934,8 +935,8 @@ export default function WorkstationsPage() {
                               y1={hy}
                               x2={sx}
                               y2={sy}
-                              stroke={isCurrent ? cfg.color : 'rgba(212,175,55,0.2)'}
-                              strokeWidth="1"
+                              stroke={isCurrent ? cfg.color : (isDark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.35)')}
+                              strokeWidth="1.2"
                               strokeDasharray="2 2"
                             />
                             {/* Satellite dot */}
@@ -1046,7 +1047,7 @@ export default function WorkstationsPage() {
                   fontFamily: mono,
                   fontWeight: 750,
                   bgcolor: band === 'All' ? gold.accent : (isDark ? 'transparent' : '#FFFFFF'),
-                  color: band === 'All' ? '#101828' : 'text.primary',
+                  color: band === 'All' ? (isDark ? '#08080B' : '#101828') : 'text.primary',
                   border: '1px solid',
                   borderColor: band === 'All' ? gold.accent : (isDark ? '#374151' : '#D1D5DB'),
                 }}
@@ -1062,7 +1063,7 @@ export default function WorkstationsPage() {
                     fontFamily: mono,
                     fontWeight: 750,
                     bgcolor: band === bName ? gold.accent : (isDark ? 'transparent' : '#FFFFFF'),
-                    color: band === bName ? '#101828' : 'text.primary',
+                    color: band === bName ? (isDark ? '#08080B' : '#101828') : 'text.primary',
                     border: '1px solid',
                     borderColor: band === bName ? gold.accent : (isDark ? '#374151' : '#D1D5DB'),
                   }}
