@@ -33,6 +33,7 @@ import TerminalIcon from '@mui/icons-material/Terminal';
 import SendIcon from '@mui/icons-material/Send';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
+import SovereignFunnel from '../components/SovereignFunnel';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -1426,7 +1427,7 @@ export default function BridgesPage() {
                       px: 1.5,
                       borderRadius: 2,
                       bgcolor: isSelected ? gold.accent : 'transparent',
-                      color: isSelected ? (isDark ? '#08080B' : '#FFFFFF') : (isDark ? gold.soft : '#8A6A09'),
+                      color: isSelected ? '#08080B' : (isDark ? gold.soft : '#8A6A09'),
                       borderColor: gold.border,
                       '&:hover': {
                         bgcolor: isSelected ? (isDark ? '#E5C04A' : '#9A7209') : gold.wash,
@@ -1496,7 +1497,7 @@ export default function BridgesPage() {
                       fontSize: '0.74rem',
                       fontWeight: 800,
                       bgcolor: originNode === node.id ? gold.accent : 'transparent',
-                      color: originNode === node.id ? (isDark ? '#08080B' : '#FFFFFF') : 'text.primary',
+                      color: originNode === node.id ? '#08080B' : 'text.primary',
                       borderColor: originNode === node.id ? gold.accent : (isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider),
                       '&:hover': {
                         bgcolor: originNode === node.id ? (isDark ? '#E5C04A' : '#9A7209') : gold.wash,
@@ -1543,7 +1544,7 @@ export default function BridgesPage() {
                       fontSize: '0.74rem',
                       fontWeight: 800,
                       bgcolor: targetNode === node.id ? gold.accent : 'transparent',
-                      color: targetNode === node.id ? (isDark ? '#08080B' : '#FFFFFF') : 'text.primary',
+                      color: targetNode === node.id ? '#08080B' : 'text.primary',
                       borderColor: targetNode === node.id ? gold.accent : (isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider),
                       '&:hover': {
                         bgcolor: targetNode === node.id ? (isDark ? '#E5C04A' : '#9A7209') : gold.wash,
@@ -1584,12 +1585,12 @@ export default function BridgesPage() {
                 type="submit"
                 variant="contained"
                 disabled={isRouting || !message.trim()}
-                startIcon={<SendIcon sx={{ color: isDark ? '#08080B' : '#FFFFFF' }} />}
+                startIcon={<SendIcon sx={{ color: '#08080B' }} />}
                 sx={{
                   px: 4,
                   py: 1.2,
                   bgcolor: gold.accent,
-                  color: isDark ? '#08080B' : '#FFFFFF',
+                  color: '#08080B',
                   fontWeight: 900,
                   fontSize: '0.9rem',
                   fontFamily: mono,
@@ -1658,7 +1659,7 @@ export default function BridgesPage() {
                   fontSize: '0.72rem',
                   fontWeight: 800,
                   bgcolor: ledgerTab === 'envelope' ? gold.accent : 'transparent',
-                  color: ledgerTab === 'envelope' ? (isDark ? '#08080B' : '#FFFFFF') : (isDark ? gold.soft : '#8A6A09'),
+                  color: ledgerTab === 'envelope' ? '#08080B' : (isDark ? gold.soft : '#8A6A09'),
                   borderColor: gold.border,
                   '&:hover': {
                     bgcolor: ledgerTab === 'envelope' ? (isDark ? '#E5C04A' : '#9A7209') : gold.wash,
@@ -1677,7 +1678,7 @@ export default function BridgesPage() {
                   fontSize: '0.72rem',
                   fontWeight: 800,
                   bgcolor: ledgerTab === 'telemetry' ? gold.accent : 'transparent',
-                  color: ledgerTab === 'telemetry' ? (isDark ? '#08080B' : '#FFFFFF') : (isDark ? gold.soft : '#8A6A09'),
+                  color: ledgerTab === 'telemetry' ? '#08080B' : (isDark ? gold.soft : '#8A6A09'),
                   borderColor: gold.border,
                   '&:hover': {
                     bgcolor: ledgerTab === 'telemetry' ? (isDark ? '#E5C04A' : '#9A7209') : gold.wash,
@@ -1696,7 +1697,7 @@ export default function BridgesPage() {
                   fontSize: '0.72rem',
                   fontWeight: 800,
                   bgcolor: ledgerTab === 'raw' ? gold.accent : 'transparent',
-                  color: ledgerTab === 'raw' ? (isDark ? '#08080B' : '#FFFFFF') : (isDark ? gold.soft : '#8A6A09'),
+                  color: ledgerTab === 'raw' ? '#08080B' : (isDark ? gold.soft : '#8A6A09'),
                   borderColor: gold.border,
                   '&:hover': {
                     bgcolor: ledgerTab === 'raw' ? (isDark ? '#E5C04A' : '#9A7209') : gold.wash,
@@ -1801,6 +1802,17 @@ export default function BridgesPage() {
           </Paper>
         </Box>
       </Box>
+
+      {/* Sovereign Installation Funnel */}
+      <SovereignFunnel
+        title="Deploy Cryptographic Signal Bridge Locally"
+        subtitle="Zero-egress cryptographic IPC mesh with HMAC-SHA256 signature verification, simulated hop telemetry, and offline packet envelope inspection."
+        toolTitle="Option 1: Sovereign Agent Bridge Micro-Repo"
+        toolTag="SIGNAL MESH"
+        toolDescription="Standalone zero-egress IPC signal router for signing and forwarding inter-process packets across sovereign enclaves."
+        toolRepo="https://github.com/NullAITech/sovereign-agent-bridge"
+        toolCommand="git clone https://github.com/NullAITech/sovereign-agent-bridge.git"
+      />
     </Container>
   );
 }

@@ -3,7 +3,7 @@ dist/
 dist-*/
 .DS_Store
 *.log
-tools/
+/tools/
 .zoth/
 
 # Old original site backend and build artifacts

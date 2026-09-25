@@ -25,6 +25,7 @@ import LanguageIcon from '@mui/icons-material/Language';
 import HubIcon from '@mui/icons-material/Hub';
 import TuneIcon from '@mui/icons-material/Tune';
 import SEO from '../components/SEO';
+import SovereignFunnel from '../components/SovereignFunnel';
 import { enclaveBinds, zeroEgressInvariants } from '../data/zeroEgress';
 import { microTools } from '../data/toolsData';
 
@@ -481,10 +482,10 @@ export default function AXPage() {
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5, flexWrap: 'wrap' }}>
           <Chip
-            icon={<SmartToyIcon sx={{ color: `${gold.accent} !important` }} />}
+            icon={<SmartToyIcon sx={{ color: `${gold.soft} !important` }} />}
             label="AGENT EXPERIENCE (AX) ONTOLOGY"
             size="small"
-            sx={{ bgcolor: gold.wash, color: gold.accent, border: `1px solid ${gold.border}`, fontWeight: 800, px: 1 }}
+            sx={{ bgcolor: gold.wash, color: gold.soft, border: `1px solid ${gold.border}`, fontWeight: 800, px: 1 }}
           />
           <Chip label="SCHEMA: https://schema.org/SoftwareApplication" size="small" variant="outlined" sx={{ fontFamily: mono, fontSize: '0.72rem' }} />
           <Chip label="OWASP ZERO-EGRESS RATIFIED" size="small" sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5', color: isDark ? '#10B981' : '#047857', fontWeight: 800, border: isDark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0' }} />
@@ -846,7 +847,7 @@ export default function AXPage() {
               </Box>
             </Box>
 
-            <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, opacity: 0.85 }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, color: gold.soft, fontWeight: 700 }}>
               SHA256: 7f8a9e4b...0b32 (LOCAL HARDWARE ATTESTATION)
             </Typography>
           </Box>
@@ -1018,11 +1019,11 @@ export default function AXPage() {
                   fontSize: '0.72rem',
                   cursor: 'pointer',
                   bgcolor: agentTask === preset.task ? gold.wash : (isDark ? '#141622' : '#F8FAFC'),
-                  color: agentTask === preset.task ? gold.accent : (isDark ? '#94A3B8' : '#334155'),
+                  color: agentTask === preset.task ? gold.soft : (isDark ? '#94A3B8' : '#334155'),
                   border: `1px solid ${agentTask === preset.task ? gold.accent : (isDark ? '#262A3B' : '#CBD5E1')}`,
                   '&:hover': {
                     bgcolor: gold.wash,
-                    color: gold.accent,
+                    color: gold.soft,
                   }
                 }}
               />
@@ -1064,7 +1065,7 @@ export default function AXPage() {
                 size="small"
                 sx={{
                   bgcolor: gold.wash,
-                  color: gold.accent,
+                  color: gold.soft,
                   border: `1px solid ${gold.border}`,
                   fontWeight: 800,
                   fontFamily: mono,
@@ -1074,7 +1075,7 @@ export default function AXPage() {
                 label={`~${Math.ceil(synthesizedPrompt.length / 4)} tokens`}
                 size="small"
                 variant="outlined"
-                sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: gold.border, color: gold.accent }}
+                sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: gold.border, color: gold.soft, fontWeight: 700 }}
               />
               <Chip
                 label="Invariants: OWASP Air-Gapped Strict"
@@ -1193,6 +1194,17 @@ export default function AXPage() {
           </Stack>
         </Grid>
       </Grid>
+
+      {/* Sovereign Installation Funnel */}
+      <SovereignFunnel
+        title="Deploy Agent Experience (AX) Engine Locally"
+        subtitle="Zero-egress machine discovery ontology, automated prompt compiler, and local crawler simulation for air-gapped sovereign intelligence."
+        toolTitle="Option 1: Sovereign Agent Bridge Micro-Repo"
+        toolTag="AX ONTOLOGY"
+        toolDescription="Standalone zero-egress ontology and agent communication protocol for local model instruction routing and machine-readable schema validation."
+        toolRepo="https://github.com/NullAITech/sovereign-agent-bridge"
+        toolCommand="git clone https://github.com/NullAITech/sovereign-agent-bridge.git"
+      />
     </Container>
   );
 }

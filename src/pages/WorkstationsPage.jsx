@@ -29,6 +29,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 
 import { workstations } from '../data/workstations';
 import { useStudioStatus } from '../studio/useStudioStatus';
+import SovereignFunnel from '../components/SovereignFunnel';
 
 const CLASSIC = 'http://127.0.0.1:8088';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -56,7 +57,7 @@ const BAND_CONFIG = {
   },
   'Observe': {
     color: '#38BDF8',
-    lightColor: '#0284C7',
+    lightColor: '#0369A1',
     wash: 'rgba(56, 189, 248, 0.14)',
     lightWash: '#F0F9FF',
     border: 'rgba(56, 189, 248, 0.35)',
@@ -799,9 +800,9 @@ export default function WorkstationsPage() {
                 </defs>
 
                 {/* Concentric Background Grid Rings */}
-                <circle cx="460" cy="240" r="100" fill="none" stroke={isDark ? 'rgba(212,175,55,0.08)' : 'rgba(184,134,11,0.08)'} strokeDasharray="3 6" />
-                <circle cx="460" cy="240" r="190" fill="none" stroke={isDark ? 'rgba(212,175,55,0.06)' : 'rgba(184,134,11,0.06)'} strokeDasharray="4 8" />
-                <circle cx="460" cy="240" r="275" fill="none" stroke={isDark ? 'rgba(212,175,55,0.05)' : 'rgba(184,134,11,0.05)'} strokeDasharray="5 10" />
+                <circle cx="460" cy="240" r="100" fill="none" stroke={isDark ? 'rgba(212,175,55,0.12)' : 'rgba(184,134,11,0.18)'} strokeDasharray="3 6" />
+                <circle cx="460" cy="240" r="190" fill="none" stroke={isDark ? 'rgba(212,175,55,0.10)' : 'rgba(184,134,11,0.15)'} strokeDasharray="4 8" />
+                <circle cx="460" cy="240" r="275" fill="none" stroke={isDark ? 'rgba(212,175,55,0.08)' : 'rgba(184,134,11,0.12)'} strokeDasharray="5 10" />
 
                 {/* Connecting Links from Core to the 6 Band Hubs */}
                 {ORDERED_BANDS.map((bName) => {
@@ -1179,6 +1180,17 @@ export default function WorkstationsPage() {
           </Stack>
         </Box>
       )}
+
+      {/* Sovereign Installation Funnel */}
+      <SovereignFunnel
+        title="Deploy Sovereign Workstations Locally"
+        subtitle="Zero-egress developer workstations, offline code compiler sandboxes, local telemetry arrays, and multi-agent coordination bridges."
+        toolTitle="Option 1: Zoth CLI Workstations Engine"
+        toolTag="WORKSTATIONS"
+        toolDescription="Launch any of the 6 sovereign workstation bands locally with offline telemetry arrays, sandboxed runtimes, and local IPC daemon bridges."
+        toolRepo="https://github.com/NullAITech/zoth-studio-v2"
+        toolCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git && npm install"
+      />
     </Container>
   );
 }

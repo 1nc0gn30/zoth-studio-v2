@@ -20,6 +20,7 @@ import BoltIcon from '@mui/icons-material/Bolt';
 import LockIcon from '@mui/icons-material/Lock';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
+import SovereignFunnel from '../components/SovereignFunnel';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -1208,7 +1209,7 @@ export default function ConsensusPage() {
                   </Typography>
                 </Box>
                 <Chip
-                  icon={<CheckCircleIcon sx={{ fontSize: '1rem !important', color: isDark ? '#08080B' : '#FFFFFF' }} />}
+                  icon={<CheckCircleIcon sx={{ fontSize: '1rem !important', color: verdict ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.secondary }} />}
                   label={verdict ? 'QUORUM RATIFIED' : 'AWAITING RUN'}
                   size="small"
                   sx={{
@@ -1344,6 +1345,17 @@ export default function ConsensusPage() {
           </Paper>
         </Box>
       )}
+
+      {/* Sovereign Installation Funnel */}
+      <SovereignFunnel
+        title="Deploy Byzantine Consensus Engine Locally"
+        subtitle="Execute fault-tolerant BFT voting routines across local models, cryptographic quorum validation, and tamper-evident verdict logging."
+        toolTitle="Option 1: Consensus Engine Micro-Repo"
+        toolTag="CONSENSUS ENGINE"
+        toolDescription="Standalone zero-dependency Byzantine consensus state-machine engine with PBFT round transitions and multi-signature verification."
+        toolRepo="https://github.com/NullAITech/byzantine-consensus-engine"
+        toolCommand="git clone https://github.com/NullAITech/byzantine-consensus-engine.git"
+      />
     </Container>
   );
 }

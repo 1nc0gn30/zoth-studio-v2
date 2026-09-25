@@ -2,13 +2,14 @@ import React, { useMemo, useState } from 'react';
 import {
   Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, CardActions,
   Chip, Button, TextField, InputAdornment, Paper, Dialog, DialogTitle, DialogContent,
-  DialogActions, Divider, Tabs, Tab, Alert, IconButton
+  DialogActions, Divider, Tabs, Tab, Alert, IconButton, Stack
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import LaunchIcon from '@mui/icons-material/Launch';
 import CodeIcon from '@mui/icons-material/Code';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
 import FolderIcon from '@mui/icons-material/Folder';
@@ -18,6 +19,7 @@ import TerminalIcon from '@mui/icons-material/Terminal';
 import LayersIcon from '@mui/icons-material/Layers';
 import { templates } from '../data/templates';
 import { useStudioStatus } from '../studio/useStudioStatus';
+import SovereignFunnel from '../components/SovereignFunnel';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const CLASSIC = 'http://127.0.0.1:8088';
@@ -37,6 +39,7 @@ export default function TemplatesPage() {
   const gold = {
     accent: isDark ? '#D4AF37' : '#B8860B',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
+    soft: isDark ? '#F5E6AB' : '#8A6A09',
   };
 
   const categories = useMemo(() => {
@@ -66,13 +69,13 @@ export default function TemplatesPage() {
       <Box sx={{ height: 3, width: '100%', background: 'linear-gradient(90deg, #D4AF37 0%, transparent 60%)', mb: 3 }} />
 
       <Typography variant="overline" sx={{ color: gold.accent, letterSpacing: '0.18em', fontWeight: 800 }}>
-        OPEN-SOURCE TEMPLATE REPOSITORY // 215+ REPRODUCIBLE BLUEPRINTS
+        OPEN-SOURCE TEMPLATE REPOSITORY // 100+ CURATED NETLIFY &amp; WEB APP BLUEPRINTS
       </Typography>
       <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', mb: 1 }}>
         Templates &amp; Agent Scaffolds
       </Typography>
       <Typography color="text.secondary" sx={{ mb: 3, maxWidth: 840, fontSize: '1.05rem', lineHeight: 1.6 }}>
-        Zero-egress web and agent templates curated from the Zoth open-source library. Inspect project architectures, stack configurations, and offline build scripts directly in v2.
+        Zero-egress, production-ready web application and site templates vetted for clean Netlify deployment, modern design aesthetics, and offline compilation. Inspect project architectures, stack configurations, and deploy scripts directly in v2.
       </Typography>
 
       {/* Status Bar */}
@@ -86,7 +89,7 @@ export default function TemplatesPage() {
         <Chip
           size="small"
           label={`${openableCount} Offline HTML Previews`}
-          sx={{ bgcolor: gold.wash, color: gold.accent, fontWeight: 750, border: `1px solid ${isDark ? 'rgba(212,175,55,0.42)' : 'rgba(184,134,11,0.3)'}` }}
+          sx={{ bgcolor: gold.wash, color: gold.soft, fontWeight: 750, border: `1px solid ${isDark ? 'rgba(212,175,55,0.42)' : 'rgba(184,134,11,0.3)'}` }}
         />
         <Chip
           size="small"
@@ -119,7 +122,7 @@ export default function TemplatesPage() {
             fontWeight: 750,
             alignSelf: 'center',
             bgcolor: openableOnly ? gold.accent : theme.palette.background.paper,
-            color: openableOnly ? (isDark ? '#08080B' : '#0F172A') : theme.palette.text.primary,
+            color: openableOnly ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
             border: '1px solid',
             borderColor: openableOnly ? gold.accent : theme.palette.divider
           }}
@@ -139,7 +142,7 @@ export default function TemplatesPage() {
               sx={{
                 fontWeight: 750,
                 bgcolor: active ? gold.accent : theme.palette.background.paper,
-                color: active ? (isDark ? '#08080B' : '#0F172A') : theme.palette.text.primary,
+                color: active ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
                 border: '1px solid',
                 borderColor: active ? gold.accent : theme.palette.divider,
               }}
@@ -266,7 +269,7 @@ export default function TemplatesPage() {
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', gap: 1 }}>
-              <Chip label={selectedTemplate.category} size="small" sx={{ bgcolor: gold.wash, color: gold.accent, border: `1px solid ${isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.3)'}`, fontWeight: 800 }} />
+              <Chip label={selectedTemplate.category} size="small" sx={{ bgcolor: gold.wash, color: gold.soft, border: `1px solid ${isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.3)'}`, fontWeight: 800 }} />
               {selectedTemplate.openable && (
                 <Chip label="HTML Pre-rendered" size="small" sx={{ bgcolor: isDark ? 'rgba(52,211,153,0.18)' : '#ECFDF3', color: isDark ? '#34D399' : '#027A48', border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`, fontWeight: 800 }} />
               )}
@@ -543,9 +546,9 @@ export default function TemplatesPage() {
               onClick={() => setSelectedTemplate(null)}
               sx={{
                 bgcolor: gold.accent,
-                color: isDark ? '#08080B' : '#0F172A',
+                color: isDark ? '#08080B' : '#FFFFFF',
                 fontWeight: 750,
-                '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#D4AF37' }
+                '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#9A7008' }
               }}
             >
               Close
@@ -553,6 +556,17 @@ export default function TemplatesPage() {
           </DialogActions>
         </Dialog>
       )}
+
+      {/* Sovereign Installation Funnel */}
+      <SovereignFunnel
+        title="Deploy Offline Application Templates Locally"
+        subtitle="Every template in this library is designed for zero-telemetry local compilation, isolated Docker sandboxing, or one-click export into Zoth OS."
+        toolTitle="Option 1: Template Boilerplate Generator"
+        toolTag="BOILERPLATE"
+        toolDescription="Generate ready-to-run web application scaffolds directly from CLI with offline-first static builds and Netlify configurations."
+        toolRepo="https://github.com/NullAITech/zoth-webgen"
+        toolCommand="npx zoth-webgen --template corporate-portal"
+      />
     </Container>
   );
 }

@@ -36,6 +36,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import { useStudioStatus } from '../studio/useStudioStatus';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
+import SovereignFunnel from '../components/SovereignFunnel';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const qemu = 'qemu-system-x86_64 -enable-kvm -m 8192 -smp 4 -hda zoth-agent-os.qcow2';
@@ -534,7 +535,7 @@ export default function ZothOSPage() {
         >
           <Box>
             <Chip
-              icon={<SecurityIcon style={{ fontSize: 16, color: '#D4AF37' }} />}
+              icon={<SecurityIcon style={{ fontSize: 16, color: gold.accent }} />}
               label="SOVEREIGN LOCAL OPERATING SYSTEM // AIR-GAPPED KERNEL"
               size="small"
               sx={{
@@ -1358,6 +1359,17 @@ export default function ZothOSPage() {
           {toastMessage}
         </Alert>
       </Snackbar>
+
+      {/* Sovereign Installation Funnel */}
+      <SovereignFunnel
+        title="Deploy Sovereign Zoth OS to Hardware"
+        subtitle="Zero-telemetry air-gapped operating system kernel for autonomous agent swarms, hardware enclave encryption, and memory vaults."
+        toolTitle="Option 1: Bare Metal ISO / QEMU Image"
+        toolTag="BARE METAL"
+        toolDescription="Download and flash bootable Zoth OS image for direct bare-metal deployment or boot into local hardware-accelerated KVM virtual machines."
+        toolRepo="https://github.com/NullAITech/zoth-os"
+        toolCommand="git clone https://github.com/NullAITech/zoth-os.git && cd zoth-os"
+      />
     </Container>
   );
 }
