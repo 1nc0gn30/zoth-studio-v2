@@ -24,6 +24,7 @@ import HubIcon from '@mui/icons-material/Hub';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import SovereignFunnel from '../components/SovereignFunnel';
+import WindowCarousel from '../components/WindowCarousel';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -1170,102 +1171,85 @@ export default function ConsensusPage() {
             <canvas ref={bftCanvasRef} width={680} height={320} style={{ width: '100%', height: 'auto', display: 'block' }} />
           </Box>
 
-          {/* 4 Node Status Cards Grid */}
-          <Grid container spacing={2}>
-            {/* Node 1: Azoth */}
-            <Grid xs={12} sm={6} md={3}>
-              <Paper sx={{ p: 2, borderRadius: 2, bgcolor: gold.darkPaper, border: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider}`, height: '100%' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold.accent }}>
-                    Node 1: Azoth
+          {/* BFT Validator Nodes Carousel / Stacked Window Showcase */}
+          <WindowCarousel
+            title="Byzantine Consensus Validator Nodes"
+            badge="BFT Quorum Nodes"
+            items={[
+              {
+                id: 'node-1',
+                name: 'Node 1: Azoth',
+                role: 'ROLE: Leader / Proponent',
+                badge: bftPhase === 0 ? 'IDLE' : bftPhase === 1 ? 'PROPOSING' : 'COMMITTED',
+                badgeBg: gold.accent,
+                badgeFg: '#08080B',
+                detailColor: isDark ? '#F5E6AB' : '#8A6A09',
+                borderColor: isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider,
+                titleColor: gold.accent,
+                vote: 'Vote: 0x7A3F…C120 [VALID]'
+              },
+              {
+                id: 'node-2',
+                name: 'Node 2: Kai',
+                role: 'ROLE: Skeptic / Auditor',
+                badge: bftPhase < 2 ? 'IDLE' : bftPhase === 2 ? 'AUDITING' : 'COMMITTED',
+                badgeBg: bftPhase >= 2 ? (isDark ? 'rgba(52,211,153,0.2)' : '#DCFCE7') : (isDark ? 'rgba(255,255,255,0.08)' : '#F1F5F9'),
+                badgeFg: bftPhase >= 2 ? (isDark ? '#34D399' : '#059669') : 'text.disabled',
+                detailColor: isDark ? '#F87171' : '#DC2626',
+                borderColor: isDark ? 'rgba(248,113,113,0.25)' : theme.palette.divider,
+                titleColor: isDark ? '#F87171' : '#DC2626',
+                vote: 'Merkle: Verified (No Drift)'
+              },
+              {
+                id: 'node-3',
+                name: 'Node 3: Draco',
+                role: 'ROLE: Arbitrator / Judge',
+                badge: bftPhase < 3 ? 'IDLE' : 'RATIFIED',
+                badgeBg: bftPhase >= 3 ? (isDark ? 'rgba(56,189,248,0.2)' : '#E0F2FE') : (isDark ? 'rgba(255,255,255,0.08)' : '#F1F5F9'),
+                badgeFg: bftPhase >= 3 ? (isDark ? '#38BDF8' : '#0284C7') : 'text.disabled',
+                detailColor: isDark ? '#38BDF8' : '#0284C7',
+                borderColor: isDark ? 'rgba(56,189,248,0.25)' : theme.palette.divider,
+                titleColor: isDark ? '#38BDF8' : '#0284C7',
+                vote: 'Bayesian Seal: Ready'
+              },
+              {
+                id: 'node-4',
+                name: isMaliciousInjected ? 'Node 4: Adversary' : 'Node 4: Lycan',
+                role: isMaliciousInjected ? 'STATUS: Byzantine Traitor' : 'ROLE: Sentinel Validator',
+                badge: isMaliciousInjected ? 'EQUIVOCATING' : bftPhase >= 3 ? 'COMMITTED' : 'READY',
+                badgeBg: isMaliciousInjected ? '#EF4444' : (isDark ? 'rgba(52,211,153,0.2)' : '#DCFCE7'),
+                badgeFg: isMaliciousInjected ? '#FFFFFF' : (isDark ? '#34D399' : '#059669'),
+                detailColor: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669'),
+                borderColor: isMaliciousInjected ? '#EF4444' : (isDark ? 'rgba(52,211,153,0.25)' : theme.palette.divider),
+                titleColor: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669'),
+                vote: isMaliciousInjected ? '0xDEAD…BEEF [ERR_POISON]' : 'Vote: 0x7A3F…C120 [VALID]'
+              }
+            ]}
+            initialView="carousel"
+            allowToggleMode={true}
+            renderItem={(node) => (
+              <Box sx={{ p: 1.5 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 800, color: node.titleColor }}>
+                    {node.name}
                   </Typography>
                   <Chip
-                    label={bftPhase === 0 ? 'IDLE' : bftPhase === 1 ? 'PROPOSING' : 'COMMITTED'}
+                    label={node.badge}
                     size="small"
-                    sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.65rem', bgcolor: gold.accent, color: '#08080B' }}
+                    sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.72rem', bgcolor: node.badgeBg, color: node.badgeFg }}
                   />
                 </Box>
-                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 0.5, fontFamily: mono }}>
-                  ROLE: Leader / Proponent
+                <Typography variant="body2" sx={{ color: 'text.secondary', display: 'block', mb: 1.5, fontFamily: mono }}>
+                  {node.role}
                 </Typography>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#F5E6AB' : '#8A6A09' }}>
-                  Vote: 0x7A3F…C120 [VALID]
-                </Typography>
-              </Paper>
-            </Grid>
-
-            {/* Node 2: Kai */}
-            <Grid xs={12} sm={6} md={3}>
-              <Paper sx={{ p: 2, borderRadius: 2, bgcolor: gold.darkPaper, border: `1px solid ${isDark ? 'rgba(248,113,113,0.25)' : theme.palette.divider}`, height: '100%' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? '#F87171' : '#DC2626' }}>
-                    Node 2: Kai
+                <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#05060A' : '#F8FAFC', border: `1px solid ${node.borderColor}` }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', color: node.detailColor, fontWeight: 700 }}>
+                    {node.vote}
                   </Typography>
-                  <Chip
-                    label={bftPhase < 2 ? 'IDLE' : bftPhase === 2 ? 'AUDITING' : 'COMMITTED'}
-                    size="small"
-                    sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.65rem', bgcolor: bftPhase >= 2 ? (isDark ? 'rgba(52,211,153,0.2)' : '#DCFCE7') : (isDark ? 'rgba(255,255,255,0.08)' : '#F1F5F9'), color: bftPhase >= 2 ? (isDark ? '#34D399' : '#059669') : 'text.disabled' }}
-                  />
                 </Box>
-                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 0.5, fontFamily: mono }}>
-                  ROLE: Skeptic / Auditor
-                </Typography>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#F87171' : '#DC2626' }}>
-                  Merkle: Verified (No Drift)
-                </Typography>
-              </Paper>
-            </Grid>
-
-            {/* Node 3: Draco */}
-            <Grid xs={12} sm={6} md={3}>
-              <Paper sx={{ p: 2, borderRadius: 2, bgcolor: gold.darkPaper, border: `1px solid ${isDark ? 'rgba(56,189,248,0.25)' : theme.palette.divider}`, height: '100%' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? '#38BDF8' : '#0284C7' }}>
-                    Node 3: Draco
-                  </Typography>
-                  <Chip
-                    label={bftPhase < 3 ? 'IDLE' : 'RATIFIED'}
-                    size="small"
-                    sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.65rem', bgcolor: bftPhase >= 3 ? (isDark ? 'rgba(56,189,248,0.2)' : '#E0F2FE') : (isDark ? 'rgba(255,255,255,0.08)' : '#F1F5F9'), color: bftPhase >= 3 ? (isDark ? '#38BDF8' : '#0284C7') : 'text.disabled' }}
-                  />
-                </Box>
-                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 0.5, fontFamily: mono }}>
-                  ROLE: Arbitrator / Judge
-                </Typography>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#38BDF8' : '#0284C7' }}>
-                  Bayesian Seal: Ready
-                </Typography>
-              </Paper>
-            </Grid>
-
-            {/* Node 4: Lycan / Adversary */}
-            <Grid xs={12} sm={6} md={3}>
-              <Paper sx={{ p: 2, borderRadius: 2, bgcolor: gold.darkPaper, border: `1.5px solid ${isMaliciousInjected ? '#EF4444' : (isDark ? 'rgba(52,211,153,0.25)' : theme.palette.divider)}`, height: '100%' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669') }}>
-                    {isMaliciousInjected ? 'Node 4: Adversary' : 'Node 4: Lycan'}
-                  </Typography>
-                  <Chip
-                    label={isMaliciousInjected ? 'EQUIVOCATING' : bftPhase >= 3 ? 'COMMITTED' : 'READY'}
-                    size="small"
-                    sx={{
-                      fontFamily: mono,
-                      fontWeight: 800,
-                      fontSize: '0.65rem',
-                      bgcolor: isMaliciousInjected ? '#EF4444' : (isDark ? 'rgba(52,211,153,0.2)' : '#DCFCE7'),
-                      color: isMaliciousInjected ? '#FFFFFF' : (isDark ? '#34D399' : '#059669'),
-                    }}
-                  />
-                </Box>
-                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 0.5, fontFamily: mono }}>
-                  {isMaliciousInjected ? 'STATUS: Byzantine Traitor' : 'ROLE: Sentinel Validator'}
-                </Typography>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669') }}>
-                  {isMaliciousInjected ? '0xDEAD…BEEF [ERR_POISON]' : 'Vote: 0x7A3F…C120 [VALID]'}
-                </Typography>
-              </Paper>
-            </Grid>
-          </Grid>
+              </Box>
+            )}
+          />
         </Paper>
       </Box>
 

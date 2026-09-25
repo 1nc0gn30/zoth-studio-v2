@@ -2367,52 +2367,59 @@ export default function WebGenPage() {
           <Divider sx={{ my: 2.5, borderColor: divider }} />
 
           {/* Starter Templates (6 Presets) */}
-          <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1.5, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
-            STARTER ARCHETYPE PRESETS ({TEMPLATES.length} SEEDS)
-          </Typography>
-          <Grid container spacing={1.5} sx={{ mb: 3 }}>
-            {TEMPLATES.map((tpl) => {
+          {/* Starter Spec Archetypes Carousel / Stacked Window Showcase */}
+          <WindowCarousel
+            title="Starter Component Archetypes"
+            badge="Spec Archetypes"
+            items={TEMPLATES}
+            initialView="carousel"
+            allowToggleMode={true}
+            renderItem={(tpl) => {
               const isSelected = selectedTemplate === tpl.name;
               const IconComp = tpl.icon;
               return (
-                <Grid key={tpl.id} xs={12} sm={6} md={4}>
-                  <Box
-                    onClick={() => handleSelectTemplate(tpl)}
-                    sx={{
-                      p: 2,
-                      borderRadius: 2.5,
-                      border: isSelected ? `2px solid ${gold}` : `1px solid ${divider}`,
-                      backgroundColor: isSelected ? goldBg : (dark ? '#121420' : '#F1F5F9'),
-                      cursor: 'pointer',
-                      transition: 'all 0.18s ease',
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      '&:hover': {
-                        borderColor: gold,
-                        backgroundColor: goldBg,
-                        transform: 'translateY(-2px)'
-                      }
-                    }}
-                  >
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <IconComp sx={{ fontSize: '1.15rem', color: isSelected ? gold : textSecondary }} />
-                        <Typography variant="subtitle2" sx={{ fontWeight: 800, color: textPrimary, fontSize: '0.88rem' }}>
-                          {tpl.name}
-                        </Typography>
-                      </Box>
-                      <Chip label={tpl.tag} size="small" sx={{ height: 18, fontSize: '0.62rem', bgcolor: isSelected ? gold : (dark ? 'rgba(255,255,255,0.08)' : '#E2E8F0'), color: isSelected ? '#08080B' : textSecondary, fontFamily: mono, fontWeight: 800 }} />
+                <Box
+                  onClick={() => handleSelectTemplate(tpl)}
+                  sx={{
+                    p: 2.5,
+                    borderRadius: 2.5,
+                    border: isSelected ? `2px solid ${gold}` : `1px solid ${divider}`,
+                    backgroundColor: isSelected ? goldBg : (dark ? '#121420' : '#F1F5F9'),
+                    cursor: 'pointer',
+                    transition: 'all 0.18s ease',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1.5,
+                    '&:hover': {
+                      borderColor: gold,
+                      backgroundColor: goldBg,
+                    }
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
+                      <IconComp sx={{ fontSize: '1.4rem', color: isSelected ? gold : textSecondary }} />
+                      <Typography variant="subtitle1" sx={{ fontWeight: 800, color: textPrimary }}>
+                        {tpl.name}
+                      </Typography>
                     </Box>
-                    <Typography variant="caption" sx={{ color: textSecondary, lineHeight: 1.4, fontSize: '0.76rem' }}>
-                      {tpl.desc}
+                    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                      <Chip label={tpl.tag} size="small" sx={{ height: 22, fontSize: '0.7rem', bgcolor: isSelected ? gold : (dark ? 'rgba(255,255,255,0.08)' : '#E2E8F0'), color: isSelected ? '#08080B' : textSecondary, fontFamily: mono, fontWeight: 800 }} />
+                      {isSelected && <Chip label="SELECTED SEED" size="small" sx={{ height: 22, fontSize: '0.68rem', bgcolor: gold, color: '#08080B', fontWeight: 800 }} />}
+                    </Box>
+                  </Box>
+                  <Typography variant="body2" sx={{ color: textSecondary, lineHeight: 1.6 }}>
+                    {tpl.desc}
+                  </Typography>
+                  <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: dark ? '#08080D' : '#FFFFFF', border: `1px solid ${divider}` }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: dark ? goldLight : '#8A6A09', fontSize: '0.75rem', display: 'block' }}>
+                      Prompt Seed: "{tpl.defaultPrompt}"
                     </Typography>
                   </Box>
-                </Grid>
+                </Box>
               );
-            })}
-          </Grid>
+            }}
+          />
 
           {/* Prompt Spec Input */}
           <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
@@ -2498,46 +2505,53 @@ export default function WebGenPage() {
             />
           </Box>
 
-          {/* 4 Theme Selection Cards */}
-          <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1.5, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>
-            HIGH-CONTRAST TOKEN PALETTES (4 THEME SYSTEMS)
-          </Typography>
-          <Grid container spacing={2} sx={{ mb: 3.5 }}>
-            {THEMES.map((th) => {
+          {/* High-Contrast Token Palettes Carousel / Stacked Window Showcase */}
+          <WindowCarousel
+            title="High-Contrast Design Token Palettes"
+            badge="Theme Systems"
+            items={THEMES}
+            initialView="carousel"
+            allowToggleMode={true}
+            renderItem={(th) => {
               const isSelected = selectedTheme === th.id;
               return (
-                <Grid key={th.id} xs={12} sm={6} md={3}>
-                  <Box
-                    onClick={() => setSelectedTheme(th.id)}
-                    sx={{
-                      p: 2,
-                      borderRadius: 2.5,
-                      border: isSelected ? `2px solid ${th.primary}` : `1px solid ${divider}`,
-                      backgroundColor: isSelected ? (dark ? 'rgba(255,255,255,0.06)' : '#FFFFFF') : (dark ? '#10121C' : '#F8FAFC'),
-                      cursor: 'pointer',
-                      transition: 'all 0.18s ease',
-                      height: '100%',
-                      boxShadow: isSelected ? `0 4px 20px ${th.primary}33` : 'none',
-                      '&:hover': {
-                        borderColor: th.primary,
-                        transform: 'translateY(-2px)'
-                      }
-                    }}
-                  >
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                      <Box sx={{ width: 14, height: 14, borderRadius: '50%', bgcolor: th.primary, border: '1px solid rgba(255,255,255,0.3)' }} />
-                      <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isSelected ? th.primary : textPrimary, fontSize: '0.84rem' }}>
+                <Box
+                  onClick={() => setSelectedTheme(th.id)}
+                  sx={{
+                    p: 2.5,
+                    borderRadius: 2.5,
+                    border: isSelected ? `2px solid ${th.primary}` : `1px solid ${divider}`,
+                    backgroundColor: isSelected ? (dark ? 'rgba(255,255,255,0.06)' : '#FFFFFF') : (dark ? '#10121C' : '#F8FAFC'),
+                    cursor: 'pointer',
+                    transition: 'all 0.18s ease',
+                    boxShadow: isSelected ? `0 4px 20px ${th.primary}33` : 'none',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1.5,
+                    '&:hover': {
+                      borderColor: th.primary,
+                    }
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                      <Box sx={{ width: 18, height: 18, borderRadius: '50%', bgcolor: th.primary, border: '2px solid rgba(255,255,255,0.4)', boxShadow: `0 0 10px ${th.primary}` }} />
+                      <Typography variant="subtitle1" sx={{ fontWeight: 800, color: isSelected ? th.primary : textPrimary }}>
                         {th.name}
                       </Typography>
                     </Box>
-                    <Typography variant="caption" sx={{ color: textSecondary, fontSize: '0.74rem', lineHeight: 1.4, display: 'block' }}>
-                      {th.desc}
-                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                      <Chip label={`PRIMARY ${th.primary}`} size="small" sx={{ height: 22, fontSize: '0.68rem', fontFamily: mono, bgcolor: `${th.primary}22`, color: th.primary, border: `1px solid ${th.primary}44`, fontWeight: 800 }} />
+                      {isSelected && <Chip label="ACTIVE PALETTE" size="small" sx={{ height: 22, fontSize: '0.68rem', bgcolor: th.primary, color: '#08080B', fontWeight: 800 }} />}
+                    </Box>
                   </Box>
-                </Grid>
+                  <Typography variant="body2" sx={{ color: textSecondary, lineHeight: 1.6 }}>
+                    {th.desc}
+                  </Typography>
+                </Box>
               );
-            })}
-          </Grid>
+            }}
+          />
 
           {/* Builder Skills Guide Chips */}
           <Typography variant="caption" sx={{ fontWeight: 800, color: textSecondary, mb: 1.5, display: 'block', letterSpacing: '0.04em', fontFamily: mono }}>

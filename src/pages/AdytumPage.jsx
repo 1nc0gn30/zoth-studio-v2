@@ -52,6 +52,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import keys from '../data/adytumKeys.json';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import SovereignFunnel from '../components/SovereignFunnel';
+import WindowCarousel from '../components/WindowCarousel';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const STORAGE_KEY = 'zoth-adytum-plan-v1';
@@ -1820,92 +1821,46 @@ export function AdytumEngine({ embedded = false }) {
           </Button>
         </Box>
         <Collapse in={showTutorial}>
-          <Box sx={{ p: 3 }}>
-            <Grid container spacing={2.5}>
-              <Grid xs={12} sm={6} md={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    height: '100%',
-                    bgcolor: dark ? '#08080B' : '#FFFFFF',
-                    border: dark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #EAECF0',
-                    borderRadius: 2,
-                    boxShadow: dark ? 'none' : '0 2px 8px rgba(16,24,40,0.04)',
-                  }}
-                >
-                  <Chip label="STEP 1" size="small" sx={{ bgcolor: dark ? '#D4AF37' : '#B8860B', color: '#101828', fontWeight: 800, mb: 1 }} />
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? goldLight : '#101828', mb: 0.5 }}>
-                    Select / Draw Tarot Key
+          <Box sx={{ p: { xs: 2, sm: 3 } }}>
+            <WindowCarousel
+              title="Adytum Sovereign Workflow Guide"
+              badge="4 Architectural Steps"
+              items={[
+                {
+                  step: 'STEP 1',
+                  title: 'Select / Draw Tarot Key',
+                  desc: 'Select from Key 0 (The Fool) through Key 21 (The World). Each card maps an archetypal principle (e.g. Key 1 = Self-Attention, Key 4 = Guardrails, Key 2 = Memory).'
+                },
+                {
+                  step: 'STEP 2',
+                  title: 'Formulate Intention',
+                  desc: 'Articulate your software invariant or engineering goal for this key. Declare the exact problem, component boundary, or protocol requirement.'
+                },
+                {
+                  step: 'STEP 3',
+                  title: '5-Minute Incubation Window',
+                  desc: 'Why 5 Minutes? Immediate coding produces cognitive fixation and premature technical debt. The 300-second pause forces subconscious diffuse-mode contemplation. Fast-Forward test override available for quick audits.'
+                },
+                {
+                  step: 'STEP 4',
+                  title: 'Oracle Evaluation & Gate Seal',
+                  desc: 'Submit your architectural reflection. Evaluated in-browser (zero-egress) or via local Ollama. When approved ([GATE OPENED]), the gate unlocks and stamps your cryptographic SHA-256 seal.'
+                }
+              ]}
+              initialView="carousel"
+              allowToggleMode={true}
+              renderItem={(item) => (
+                <Box sx={{ p: 2 }}>
+                  <Chip label={item.step} size="small" sx={{ bgcolor: dark ? '#D4AF37' : '#B8860B', color: '#101828', fontWeight: 800, mb: 1.5 }} />
+                  <Typography variant="h6" sx={{ fontWeight: 800, color: dark ? goldLight : '#101828', mb: 1 }}>
+                    {item.title}
                   </Typography>
-                  <Typography variant="caption" sx={{ color: textSecondary, display: 'block', lineHeight: 1.5 }}>
-                    Select from Key 0 (The Fool) through Key 21 (The World). Each card maps an archetypal principle (e.g. Key 1 = Self-Attention, Key 4 = Guardrails, Key 2 = Memory).
+                  <Typography variant="body1" sx={{ color: textSecondary, lineHeight: 1.65 }}>
+                    {item.desc}
                   </Typography>
-                </Paper>
-              </Grid>
-
-              <Grid xs={12} sm={6} md={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    height: '100%',
-                    bgcolor: dark ? '#08080B' : '#FFFFFF',
-                    border: dark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #EAECF0',
-                    borderRadius: 2,
-                    boxShadow: dark ? 'none' : '0 2px 8px rgba(16,24,40,0.04)',
-                  }}
-                >
-                  <Chip label="STEP 2" size="small" sx={{ bgcolor: dark ? '#D4AF37' : '#B8860B', color: '#101828', fontWeight: 800, mb: 1 }} />
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? goldLight : '#101828', mb: 0.5 }}>
-                    Formulate Intention
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: textSecondary, display: 'block', lineHeight: 1.5 }}>
-                    Articulate your software invariant or engineering goal for this key. Declare the exact problem, component boundary, or protocol requirement.
-                  </Typography>
-                </Paper>
-              </Grid>
-
-              <Grid xs={12} sm={6} md={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    height: '100%',
-                    bgcolor: dark ? '#08080B' : '#FFFFFF',
-                    border: dark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #EAECF0',
-                    borderRadius: 2,
-                    boxShadow: dark ? 'none' : '0 2px 8px rgba(16,24,40,0.04)',
-                  }}
-                >
-                  <Chip label="STEP 3" size="small" sx={{ bgcolor: dark ? '#D4AF37' : '#B8860B', color: '#101828', fontWeight: 800, mb: 1 }} />
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? goldLight : '#101828', mb: 0.5 }}>
-                    5-Minute Incubation Window
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: textSecondary, display: 'block', lineHeight: 1.5 }}>
-                    <strong>Why 5 Minutes?</strong> Immediate coding produces cognitive fixation and premature technical debt. The 300-second pause forces subconscious diffuse-mode contemplation. <em>Fast-Forward test override available for quick audits.</em>
-                  </Typography>
-                </Paper>
-              </Grid>
-
-              <Grid xs={12} sm={6} md={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    height: '100%',
-                    bgcolor: dark ? '#08080B' : '#FFFFFF',
-                    border: dark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #EAECF0',
-                    borderRadius: 2,
-                    boxShadow: dark ? 'none' : '0 2px 8px rgba(16,24,40,0.04)',
-                  }}
-                >
-                  <Chip label="STEP 4" size="small" sx={{ bgcolor: dark ? '#D4AF37' : '#B8860B', color: '#101828', fontWeight: 800, mb: 1 }} />
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? goldLight : '#101828', mb: 0.5 }}>
-                    Oracle Evaluation &amp; Gate Seal
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: textSecondary, display: 'block', lineHeight: 1.5 }}>
-                    Submit your architectural reflection. Evaluated in-browser (zero-egress) or via local Ollama. When approved (`[GATE OPENED]`), the gate unlocks and stamps your cryptographic SHA-256 seal.
-                  </Typography>
-                </Paper>
-              </Grid>
-            </Grid>
+                </Box>
+              )}
+            />
           </Box>
         </Collapse>
       </Paper>

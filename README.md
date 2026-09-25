@@ -61,9 +61,9 @@
         v                                     v                                     v
 +-------------------------------+  +-------------------------------+  +-------------------------------+
 |      LOCAL BACKEND DAEMONS    |  |   NETLIFY EDGE PRERENDER      |  |   AEO / AX MACHINE DISCOVERY  |
-|  - Neuro Memory :8788 (Python)|  |  - 83 Prerendered Routes      |  |  - /llms.txt & /llms-full.txt |
+|  - Neuro Memory :8788 (Python)|  |  - 87 Prerendered Routes      |  |  - /llms.txt & /llms-full.txt |
 |  - Signal Bridge :8789 (IPC)  |  |  - Serverless Proxy Functions |  |  - /ai.txt Crawler Contract   |
-|  - Hardware Vault :8787 (Rust)|  |  - Strict Security Headers    |  |  - /sitemap.xml (83 Entries)  |
+|  - Hardware Vault :8787 (Rust)|  |  - Strict Security Headers    |  |  - /sitemap.xml (87 Entries)  |
 |  - Ollama / llama.cpp :11434  |  |  - Immutable Asset Caching    |  |  - /api/ax/manifest.json      |
 +-------------------------------+  +-------------------------------+  +-------------------------------+
 ```
@@ -108,7 +108,7 @@ flowchart TD
 
     subgraph Distribution["Netlify Edge & AEO Discovery"]
         Netlify["Netlify Production Hosting<br/>npm run build -> dist/"]
-        Routes["83 Prerendered Static Routes<br/>Route-Specific Head & Schema.org"]
+        Routes["87 Prerendered Static Routes<br/>Route-Specific Head & Schema.org"]
         AEO["Machine Discovery Endpoints<br/>/llms.txt | /llms-full.txt<br/>/ai.txt | /sitemap.xml"]
         Netlify --> Routes
         Netlify --> AEO
@@ -345,9 +345,9 @@ vite build && node scripts/prerender.mjs
   - Immutable 1-year caching for `/assets/*`, `/fonts/*`, `/brand/*`, `/mascot/*`, `/pets/*`.
   - CORS-enabled open headers (`Access-Control-Allow-Origin: *`) for machine discovery endpoints (`/llms.txt`, `/ai.txt`, `/sitemap.xml`, `/robots.txt`, `/api/*`).
 
-### Prerendered Static Routes (83 Total)
+### Prerendered Static Routes (87 Total)
 
-During `npm run build`, `scripts/prerender.mjs` prerenders **83 static HTML routes** into `dist/`, including:
+During `npm run build`, `scripts/prerender.mjs` prerenders **87 static HTML routes** into `dist/`, including:
 - **Core Hub & Pages**: `/`, `/docs`, `/memory`, `/swarm`, `/bridges`, `/consensus`, `/hexstrike`, `/zoth-os`, `/webgen`, `/adytum`, `/faqs`, `/ax`, `/workstations`, `/tools`, `/templates`
 - **37 Workstation Detail Routes**: `/workstations/agent-composer`, `/workstations/brand-seals`, `/workstations/cyberpunk-hud`, etc.
 - **25 In-Browser Tool Routes**: `/tools/jwt-inspector-guard`, `/tools/payload-entropy-studio`, `/tools/polyglot-framework-exporter`, etc.
@@ -371,7 +371,7 @@ Zoth Studio implements state-of-the-art Answer Engine Optimization (AEO) and Age
 | **`/llms.txt`** | `text/plain; charset=UTF-8` | Condensed markdown system overview (< 5 KB) for LLM agents, ChatGPT, Claude, and Perplexity |
 | **`/llms-full.txt`** | `text/plain; charset=UTF-8` | Comprehensive system architecture manual, schema specs, and enclave protocols for deep analysis |
 | **`/ai.txt`** | `text/plain; charset=UTF-8` | Autonomous crawler policy granting grounding, indexing, and attribution rights to AI bots |
-| **`/sitemap.xml`** | `application/xml; charset=UTF-8`| XML sitemap covering all 83 static routes with priorities and update timestamps |
+| **`/sitemap.xml`** | `application/xml; charset=UTF-8`| XML sitemap covering all 87 static routes with priorities and update timestamps |
 | **`/robots.txt`** | `text/plain; charset=UTF-8` | Crawler permissions explicitly welcoming `GPTBot`, `Claude-Web`, `PerplexityBot`, `Googlebot` |
 | **`/api/ax/manifest.json`** | `application/json; charset=UTF-8`| Machine-readable AX manifest for programmatic agent discovery and tool binding |
 
@@ -436,7 +436,7 @@ The `zoth` CLI (`bin/zoth.js`, aliased as `zoth` / `zoth-studio`) is the operato
 
 ### 4. Production Build & Verify
 ```bash
-# Compile and prerender all 83 static routes
+# Compile and prerender all 87 static routes
 npm run build
 
 # Preview production build locally
@@ -473,9 +473,9 @@ zoth-studio-v2/
 │   ├── llms-full.txt           # Exhaustive machine-readable system manual
 │   ├── ai.txt                  # Autonomous AI crawler policy
 │   ├── robots.txt              # Crawler permissions with explicit AI bot rules
-│   └── sitemap.xml             # 83-route search engine index
+│   └── sitemap.xml             # 87-route search engine index
 ├── scripts/
-│   └── prerender.mjs           # Prerender engine for 83 static HTML routes
+│   └── prerender.mjs           # Prerender engine for 87 static HTML routes
 ├── server/
 │   ├── studio-api.mjs          # Vite loopback proxy middleware
 │   ├── classic-server.mjs      # Optional legacy static server
