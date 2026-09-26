@@ -114,7 +114,7 @@ export default function ToolsPage() {
           Tool Nexus <span className="text-gradient-gold">Sovereign Repositories</span>
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 840, lineHeight: 1.65, fontSize: '1.05rem' }}>
-          Click any WebGPU tool below to open its <span className="text-highlight-gold">Real Working In-Browser Tool Workspace</span>. For CLI or daemon-backed tools, copy the checkout command or run <span className="text-highlight-dark">Zoth OS</span> for zero-configuration out-of-the-box execution.
+          Explore the official documentation, MCP agent schemas, and architectural dossiers for all 29 sovereign micro-tools. To run any tool with zero setup, copy the CLI command, launch natively inside Zoth Studio, or boot <span className="text-highlight-dark">Zoth OS</span> for complete out-of-the-box preinstalled execution.
         </Typography>
       </Box>
 
@@ -382,14 +382,14 @@ export default function ToolsPage() {
                   <Button
                     fullWidth
                     size="small"
-                    variant={isWebGPU ? 'contained' : 'outlined'}
+                    variant="contained"
                     color="primary"
                     component={RouterLink}
                     to={`/tools/${tool.id}`}
-                    startIcon={isWebGPU ? <FlashOnIcon /> : <LaunchIcon />}
-                    sx={{ fontWeight: 800, py: 0.85, borderRadius: 2, color: isWebGPU ? '#08080B' : 'inherit' }}
+                    startIcon={<LaunchIcon />}
+                    sx={{ fontWeight: 800, py: 0.85, borderRadius: 2, color: '#08080B' }}
                   >
-                    {isWebGPU ? 'Launch WebGPU Workspace' : 'Launch Tool Workspace'}
+                    View Docs & Specs
                   </Button>
                   <Box sx={{ display: 'flex', gap: 1, width: '100%', justifyContent: 'space-between' }}>
                     <Button
