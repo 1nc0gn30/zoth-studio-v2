@@ -1228,13 +1228,13 @@ export default function HexStrikePage() {
             ==================================================================== */}
         <RevealOnScroll preset="slideRight" delay={0.3}>
         <Box sx={{ mb: 6 }} id="hexstrike-terminal-section">
-          <Typography className="section-kicker">Interactive Offensive Terminal</Typography>
+          <Typography className="section-kicker">Autonomous Security Enclave &amp; Architecture</Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 1 }}>
             <Typography variant="h5" sx={{ fontWeight: 800, display: 'flex', alignItems: 'center', gap: 1.2, color: theme.palette.text.primary }}>
-              <TerminalIcon sx={{ color: gold.accent }} /> Offensive Security Sentinel Terminal
+              <TerminalIcon sx={{ color: gold.accent }} /> Why HexStrike Runs in an Isolated Local Enclave
             </Typography>
             <Chip
-              label="sentinel@hexstrike:~$ [LOOPBACK ENCLAVE]"
+              label="ZERO-EGRESS AIR-GAPPED INVARIANT"
               size="small"
               sx={{ fontFamily: mono, bgcolor: isDark ? '#08080B' : '#0F172A', color: isDark ? gold.soft : '#F5E6AB', border: `1px solid ${gold.border}`, fontWeight: 750 }}
             />
@@ -1243,189 +1243,142 @@ export default function HexStrikePage() {
           <Paper
             elevation={0}
             sx={{
+              p: { xs: 2.5, md: 3.5 },
               borderRadius: 3,
-              overflow: 'hidden',
-              bgcolor: isDark ? '#08080B' : '#0B0F19',
+              bgcolor: isDark ? '#08080B' : '#FFFFFF',
               border: `1px solid ${gold.border}`,
               boxShadow: isDark
                 ? '0 18px 40px rgba(0,0,0,0.8), 0 0 28px rgba(212,175,55,0.15)'
                 : '0 12px 32px rgba(0,0,0,0.14), 0 0 20px rgba(184,134,11,0.10)'
             }}
           >
-            {/* Terminal Window Header */}
-            <Box
-              sx={{
-                px: 2,
-                py: 1.2,
-                bgcolor: isDark ? '#0E0E16' : '#111827',
-                borderBottom: `1px solid ${gold.border}`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Box sx={{ width: 11, height: 11, borderRadius: '50%', bgcolor: '#EF4444' }} />
-                <Box sx={{ width: 11, height: 11, borderRadius: '50%', bgcolor: '#F59E0B' }} />
-                <Box sx={{ width: 11, height: 11, borderRadius: '50%', bgcolor: '#10B981' }} />
-                <Typography variant="caption" sx={{ fontFamily: mono, color: '#9CA3AF', ml: 1, fontWeight: 700 }}>
-                  hexstrike-sentinel-v3.1 [loopback-enclave]
-                </Typography>
-              </Box>
+            <Typography variant="body1" sx={{ color: theme.palette.text.secondary, mb: 3, lineHeight: 1.65, fontSize: '0.98rem' }}>
+              Offensive vulnerability assessments, kernel CVE audits, and cryptographic envelope sealing require direct raw hardware access and strict zero-telemetry containment. HexStrike does not transmit data to remote servers—it operates strictly within a dedicated Linux local enclave on physical hardware.
+            </Typography>
 
-              <Chip
-                label="AIR-GAPPED 127.0.0.1"
-                size="small"
-                sx={{
-                  height: 18,
-                  fontSize: '0.65rem',
-                  fontFamily: mono,
-                  fontWeight: 800,
-                  bgcolor: 'rgba(16,185,129,0.15)',
-                  color: '#34D399'
-                }}
-              />
-            </Box>
+            <Grid container spacing={2.5} sx={{ mb: 3.5 }}>
+              <Grid xs={12} md={4}>
+                <Paper sx={{ p: 2.2, height: '100%', bgcolor: isDark ? '#0D0E16' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? gold.soft : '#8A6A09', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <ShieldIcon sx={{ fontSize: '1.1rem', color: gold.accent }} /> 1. Raw Socket Access
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: theme.palette.text.secondary, lineHeight: 1.6, display: 'block' }}>
+                    Network vulnerability probes and loopback port sniffing require Linux <code>cap_net_raw</code> and <code>cap_sys_admin</code> capabilities. Public web browsers are sandboxed and cannot inspect physical network sockets.
+                  </Typography>
+                </Paper>
+              </Grid>
 
-            {/* Quick Action Command Buttons */}
-            <Box
-              sx={{
-                px: 2,
-                py: 1,
-                bgcolor: isDark ? '#0B0B12' : '#0F172A',
-                borderBottom: '1px solid rgba(255,255,255,0.06)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                overflowX: 'auto'
-              }}
-            >
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#9CA3AF', mr: 0.5, flexShrink: 0 }}>
-                QUICK EXECUTE:
-              </Typography>
-              {['help', 'cve audit', 'entropy probe', 'tpm seal', 'ports scan', 'clear'].map((cmd) => (
-                <Chip
-                  key={cmd}
-                  label={cmd}
-                  size="small"
-                  onClick={() => executeCommand(cmd)}
-                  sx={{
-                    fontFamily: mono,
-                    fontWeight: 750,
-                    fontSize: '0.72rem',
-                    bgcolor: 'rgba(212,175,55,0.12)',
-                    color: '#F5E6AB',
-                    border: '1px solid rgba(212,175,55,0.3)',
-                    cursor: 'pointer',
-                    '&:hover': {
-                      bgcolor: 'rgba(212,175,55,0.25)',
-                      borderColor: '#D4AF37'
-                    }
-                  }}
-                />
-              ))}
-            </Box>
+              <Grid xs={12} md={4}>
+                <Paper sx={{ p: 2.2, height: '100%', bgcolor: isDark ? '#0D0E16' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#38BDF8', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <LockIcon sx={{ fontSize: '1.1rem', color: '#38BDF8' }} /> 2. Hardware TPM Sealing
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: theme.palette.text.secondary, lineHeight: 1.6, display: 'block' }}>
+                    Tamper-evident attestation requires communicating directly with physical TPM 2.0 registers (<code>/dev/tpmrm0</code>) and Argon2id key derivation, preventing memory dumps from compromising keys.
+                  </Typography>
+                </Paper>
+              </Grid>
 
-            {/* Terminal History Output */}
+              <Grid xs={12} md={4}>
+                <Paper sx={{ p: 2.2, height: '100%', bgcolor: isDark ? '#0D0E16' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#34D399', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <SecurityIcon sx={{ fontSize: '1.1rem', color: '#34D399' }} /> 3. Zero-Egress Invariant
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: theme.palette.text.secondary, lineHeight: 1.6, display: 'block' }}>
+                    Discovered vulnerabilities and AST security flaws must never touch third-party cloud analytics or LLM servers. All analysis runs offline with zero bytes of egress.
+                  </Typography>
+                </Paper>
+              </Grid>
+            </Grid>
+
+            {/* Quick Pull Terminal Command Strip */}
             <Box
-              ref={terminalScrollRef}
               sx={{
                 p: 2.5,
-                height: 320,
-                overflowY: 'auto',
-                fontFamily: mono,
-                fontSize: '0.85rem',
-                color: '#E5E7EB',
-                lineHeight: 1.6,
-                '&::-webkit-scrollbar': { width: 6 },
-                '&::-webkit-scrollbar-thumb': { bgcolor: 'rgba(212,175,55,0.3)', borderRadius: 3 }
+                borderRadius: 2,
+                bgcolor: isDark ? '#05070E' : '#F1F5F9',
+                border: `1px solid ${gold.border}`,
+                mb: 3
               }}
             >
-              {terminalHistory.map((item, idx) => {
-                if (item.type === 'cmd') {
-                  return (
-                    <Box key={idx} sx={{ color: isDark ? gold.accent : '#FBBF24', fontWeight: 750, my: 0.5 }}>
-                      {item.text}
-                    </Box>
-                  );
-                }
-                if (item.type === 'emerald') {
-                  return (
-                    <Box key={idx} sx={{ color: '#34D399', fontWeight: 750, my: 0.25 }}>
-                      {item.text}
-                    </Box>
-                  );
-                }
-                if (item.type === 'gold') {
-                  return (
-                    <Box key={idx} sx={{ color: isDark ? gold.soft : '#FDE047', my: 0.25 }}>
-                      {item.text}
-                    </Box>
-                  );
-                }
-                if (item.type === 'err') {
-                  return (
-                    <Box key={idx} sx={{ color: '#F87171', fontWeight: 650, my: 0.25 }}>
-                      {item.text}
-                    </Box>
-                  );
-                }
-                return (
-                  <Box key={idx} sx={{ color: '#9CA3AF', my: 0.15 }}>
-                    {item.text}
-                  </Box>
-                );
-              })}
-            </Box>
-
-            {/* Terminal Input Bar */}
-            <Box
-              sx={{
-                p: 1.5,
-                bgcolor: isDark ? '#0E0E16' : '#111827',
-                borderTop: `1px solid ${gold.border}`,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1.2
-              }}
-            >
-              <Typography
-                sx={{
-                  fontFamily: mono,
-                  fontWeight: 850,
-                  fontSize: '0.85rem',
-                  color: '#34D399',
-                  whiteSpace: 'nowrap'
-                }}
-              >
-                sentinel@hexstrike:~$
+              <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent, mb: 1 }}>
+                ⚡ RUN HEXSTRIKE SENTINEL LOCALLY (MICRO-REPO CLI):
               </Typography>
-              <input
-                type="text"
-                value={commandInput}
-                onChange={(e) => setCommandInput(e.target.value)}
-                onKeyDown={handleTerminalKeyDown}
-                placeholder="type command (help, cve audit, entropy probe, tpm seal, ports scan, clear)..."
-                style={{
-                  flexGrow: 1,
-                  background: 'transparent',
-                  border: 'none',
-                  outline: 'none',
-                  color: '#F5E6AB',
-                  fontFamily: mono,
-                  fontSize: '0.88rem',
-                  fontWeight: 600
+              <Typography variant="caption" sx={{ color: theme.palette.text.secondary, display: 'block', mb: 1.5 }}>
+                Clone and execute the standalone zero-egress offensive security engine on your local terminal:
+              </Typography>
+              <Box
+                sx={{
+                  p: 1.5,
+                  mb: 2,
+                  bgcolor: isDark ? '#020306' : '#FFFFFF',
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: 1.5,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
                 }}
-                autoComplete="off"
-                spellCheck="false"
-              />
-              <IconButton
-                size="small"
-                onClick={() => executeCommand(commandInput)}
-                sx={{ color: isDark ? gold.accent : '#FBBF24', '&:hover': { bgcolor: 'rgba(212,175,55,0.2)' } }}
               >
-                <PlayArrowIcon fontSize="small" />
-              </IconButton>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', color: isDark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  git clone https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal.git &amp;&amp; cd NullAI-HexStrike-AI-Terminal &amp;&amp; python3 hexstrike.py --audit
+                </Typography>
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    navigator.clipboard.writeText('git clone https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal.git && cd NullAI-HexStrike-AI-Terminal && python3 hexstrike.py --audit');
+                    setSnackbarOpen(true);
+                  }}
+                  sx={{ color: gold.accent, ml: 1, p: 0.5 }}
+                >
+                  <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                </IconButton>
+              </Box>
+
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+                <Button
+                  variant="contained"
+                  href="https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  startIcon={<GitHubIcon />}
+                  sx={{
+                    bgcolor: gold.accent,
+                    color: '#08080B',
+                    fontWeight: 800,
+                    textTransform: 'none',
+                    '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' }
+                  }}
+                >
+                  Open HexStrike GitHub Repo
+                </Button>
+                <Button
+                  variant="outlined"
+                  component={RouterLink}
+                  to="/tools/envguard-secrets-vault"
+                  sx={{
+                    borderColor: gold.border,
+                    color: gold.soft,
+                    fontWeight: 800,
+                    textTransform: 'none',
+                    '&:hover': { borderColor: gold.accent, bgcolor: gold.wash }
+                  }}
+                >
+                  Inspect EnvGuard Secrets Vault
+                </Button>
+                <Button
+                  variant="outlined"
+                  component={RouterLink}
+                  to="/zoth-os"
+                  sx={{
+                    borderColor: isDark ? '#38BDF8' : '#0284C7',
+                    color: isDark ? '#38BDF8' : '#0284C7',
+                    fontWeight: 800,
+                    textTransform: 'none'
+                  }}
+                >
+                  Launch via Zoth OS Hypervisor
+                </Button>
+              </Stack>
             </Box>
           </Paper>
         </Box>

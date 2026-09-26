@@ -1416,7 +1416,7 @@ export function AdytumEngine({ embedded = false }) {
             )}
           </Paper>
 
-          {/* Section 2: Cryptographic Enclave Vault Simulator */}
+          {/* Section 2: How & Why Hardware Enclaves Function in Ring-0 */}
           <Paper
             elevation={0}
             sx={{
@@ -1425,6 +1425,7 @@ export function AdytumEngine({ embedded = false }) {
               border: `1.5px solid ${gold}`,
               bgcolor: dark ? '#0B0B12' : '#FFFFFF',
               boxShadow: dark ? '0 8px 32px rgba(0,0,0,0.5)' : '0 4px 20px rgba(184,134,11,0.08)',
+              mb: 4,
             }}
           >
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
@@ -1432,198 +1433,20 @@ export function AdytumEngine({ embedded = false }) {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 0.5 }}>
                   <LockIcon sx={{ color: gold, fontSize: '1.6rem' }} />
                   <Typography variant="h5" sx={{ fontWeight: 900, color: textPrimary, letterSpacing: '-0.01em' }}>
-                    Hardware Enclave Vault Simulator (Argon2id + AES-256-GCM)
+                    How &amp; Why Hardware Enclaves Function (Zero Cloud Egress)
                   </Typography>
                 </Box>
                 <Typography variant="body2" sx={{ color: textSecondary, maxWidth: 840, lineHeight: 1.6 }}>
-                  Emulate hardware memory enclave isolation (e.g. AMD SEV-SNP / Intel SGX / Apple Secure Enclave). Encrypt confidential agent swarms, memory embeddings, and API keys with authenticated 256-bit Galois/Counter Mode.
+                  Why true cryptographic security cannot execute inside a web browser: Web browsers lack Ring-0 kernel access, cannot interface with CPU memory encryption registers (AMD SEV-SNP, Intel SGX, Apple Secure Enclave), and expose heap memory to speculative side-channel attacks. True sovereign protection requires physical hardware enclaves.
                 </Typography>
               </Box>
               <Chip
-                label="ENCLAVE REGION: 0x7FFF_ADYTUM_VAULT"
+                label="RING-0 HARDWARE ENCLAVE INVARIANT"
                 size="small"
                 sx={{
-                  bgcolor: vaultIsLocked ? (dark ? 'rgba(239,68,68,0.15)' : '#FEF2F2') : (dark ? 'rgba(52,211,153,0.15)' : '#ECFDF3'),
-                  color: vaultIsLocked ? (dark ? '#F87171' : '#B42318') : (dark ? '#34D399' : '#027A48'),
-                  border: `1px solid ${vaultIsLocked ? (dark ? '#F87171' : '#FECDCA') : (dark ? '#34D399' : '#A6F4C5')}`,
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  fontSize: '0.72rem',
-                }}
-              />
-            </Box>
-
-            {vaultAlert && (
-              <Alert
-                severity={vaultAlert.type}
-                sx={{ mb: 2.5, fontWeight: 700, fontFamily: mono, fontSize: '0.8rem' }}
-                onClose={() => setVaultAlert(null)}
-              >
-                {vaultAlert.message}
-              </Alert>
-            )}
-
-            {!vaultIsLocked ? (
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={3}
-                  label="Confidential Swarm Payload & Memory Invariant"
-                  value={vaultSecret}
-                  onChange={(e) => setVaultSecret(e.target.value)}
-                  placeholder="Enter secret architectural memory..."
-                  InputProps={{ sx: { fontFamily: mono, fontSize: '0.84rem', bgcolor: dark ? '#08080B' : '#F8FAFC' } }}
-                />
-                <Grid container spacing={2} alignItems="center">
-                  <Grid xs={12} sm={8} md={6}>
-                    <TextField
-                      fullWidth
-                      size="small"
-                      type="password"
-                      label="Enclave Master Passphrase (Argon2id KDF Salt)"
-                      value={vaultPassword}
-                      onChange={(e) => setVaultPassword(e.target.value)}
-                      placeholder="Passphrase..."
-                      InputProps={{ sx: { fontFamily: mono, fontSize: '0.84rem', bgcolor: dark ? '#08080B' : '#F8FAFC' } }}
-                    />
-                  </Grid>
-                  <Grid xs={12} sm={4} md={6}>
-                    <Button
-                      variant="contained"
-                      startIcon={<LockIcon />}
-                      onClick={handleEncryptVault}
-                      sx={{
-                        bgcolor: gold,
-                        color: '#101828',
-                        fontWeight: 800,
-                        boxShadow: '0 0 16px rgba(212,175,55,0.3)',
-                        '&:hover': { bgcolor: dark ? goldLight : '#9A7008' },
-                      }}
-                    >
-                      Seal into Enclave Vault (AES-256-GCM)
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Box>
-            ) : (
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    borderRadius: 2,
-                    bgcolor: dark ? '#08080B' : '#F8FAFC',
-                    border: `1px solid ${divider}`,
-                  }}
-                >
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: goldLight, fontWeight: 800, display: 'block', mb: 1 }}>
-                    [ENCLAVE SEALED]: CIPHERTEXT &amp; AUTHENTICATION TAG RESIDING IN ISOLATED HEAP
-                  </Typography>
-                  <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.78rem', color: dark ? '#F87171' : '#DC2626', wordBreak: 'break-all', mb: 1 }}>
-                    <strong>CIPHERTEXT:</strong> {vaultCiphertext}
-                  </Typography>
-                  <Grid container spacing={2}>
-                    <Grid xs={12} sm={6}>
-                      <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, display: 'block' }}>
-                        INITIALIZATION VECTOR IV (96-BIT):
-                      </Typography>
-                      <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.78rem', color: dark ? '#38BDF8' : '#0284C7' }}>
-                        {vaultIv}
-                      </Typography>
-                    </Grid>
-                    <Grid xs={12} sm={6}>
-                      <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, display: 'block' }}>
-                        GCM AUTHENTICATION TAG (128-BIT):
-                      </Typography>
-                      <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.78rem', color: dark ? '#34D399' : '#059669' }}>
-                        {vaultAuthTag}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </Paper>
-
-                <Grid container spacing={2} alignItems="center">
-                  <Grid xs={12} sm={8} md={6}>
-                    <TextField
-                      fullWidth
-                      size="small"
-                      type="password"
-                      label="Enter Master Passphrase to Unseal Enclave"
-                      value={vaultInputPassword}
-                      onChange={(e) => setVaultInputPassword(e.target.value)}
-                      placeholder="Enter passphrase..."
-                      InputProps={{ sx: { fontFamily: mono, fontSize: '0.84rem', bgcolor: dark ? '#08080B' : '#F8FAFC' } }}
-                    />
-                  </Grid>
-                  <Grid xs={12} sm={4} md={6}>
-                    <Button
-                      variant="contained"
-                      startIcon={<LockOpenIcon />}
-                      onClick={handleDecryptVault}
-                      sx={{
-                        bgcolor: '#10B981',
-                        color: '#101828',
-                        fontWeight: 800,
-                        '&:hover': { bgcolor: '#059669', color: '#FFFFFF' },
-                      }}
-                    >
-                      Unseal Enclave Vault
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Box>
-            )}
-
-            {vaultDecryptedText && (
-              <Box
-                sx={{
-                  mt: 2.5,
-                  p: 2,
-                  borderRadius: 1.5,
-                  bgcolor: dark ? 'rgba(52,211,153,0.08)' : '#ECFDF3',
-                  border: dark ? '1px solid rgba(52,211,153,0.3)' : '1px solid #A6F4C5',
-                }}
-              >
-                <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: dark ? '#34D399' : '#027A48', mb: 0.5 }}>
-                  UNSEALED RECOVERED PAYLOAD:
-                </Typography>
-                <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.82rem', color: textPrimary }}>
-                  {vaultDecryptedText}
-                </Typography>
-              </Box>
-            )}
-          </Paper>
-
-          {/* Section 3: Hardware Enclave Key Rotator */}
-          <Paper
-            elevation={0}
-            sx={{
-              p: { xs: 2.5, md: 3.5 },
-              borderRadius: 2.5,
-              border: `1.5px solid ${gold}`,
-              bgcolor: dark ? '#0B0B12' : '#FFFFFF',
-              boxShadow: dark ? '0 8px 32px rgba(0,0,0,0.5)' : '0 4px 20px rgba(184,134,11,0.08)',
-            }}
-          >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
-              <Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 0.5 }}>
-                  <SyncIcon sx={{ color: gold, fontSize: '1.6rem' }} />
-                  <Typography variant="h5" sx={{ fontWeight: 900, color: textPrimary, letterSpacing: '-0.01em' }}>
-                    Hardware Enclave Key Rotator (Forward-Secure Ratchet)
-                  </Typography>
-                </Box>
-                <Typography variant="body2" sx={{ color: textSecondary, maxWidth: 840, lineHeight: 1.6 }}>
-                  Provides post-compromise security (PCS) and forward secrecy. Rotates master enclave keys via a symmetric ratchet function, securely wiping deprecated key material from hardware registers.
-                </Typography>
-              </Box>
-              <Chip
-                label="FORWARD SECRECY (HKDF-SHA256)"
-                size="small"
-                sx={{
-                  bgcolor: dark ? 'rgba(56,189,248,0.15)' : '#E0F2FE',
-                  color: dark ? '#38BDF8' : '#0369A1',
-                  border: `1px solid ${dark ? '#38BDF8' : '#7DD3FC'}`,
+                  bgcolor: dark ? 'rgba(52,211,153,0.15)' : '#ECFDF3',
+                  color: dark ? '#34D399' : '#027A48',
+                  border: `1px solid ${dark ? '#34D399' : '#A6F4C5'}`,
                   fontWeight: 800,
                   fontFamily: mono,
                   fontSize: '0.72rem',
@@ -1632,122 +1455,91 @@ export function AdytumEngine({ embedded = false }) {
             </Box>
 
             <Grid container spacing={2.5} sx={{ mb: 3 }}>
-              <Grid xs={12} sm={4}>
-                <Paper sx={{ p: 2, bgcolor: dark ? '#08080B' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2 }}>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary }}>
-                    ACTIVE KEY EPOCH
+              <Grid xs={12} md={4}>
+                <Paper sx={{ p: 2, height: '100%', bgcolor: dark ? '#08080B' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? goldLight : '#8A6A09', mb: 1 }}>
+                    1. Memory Isolation (`mlock`)
                   </Typography>
-                  <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: mono, color: goldLight, mt: 0.5 }}>
-                    Epoch #{enclaveEpoch}
-                  </Typography>
-                </Paper>
-              </Grid>
-              <Grid xs={12} sm={4}>
-                <Paper sx={{ p: 2, bgcolor: dark ? '#08080B' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2 }}>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary }}>
-                    SYMMETRIC RATCHET COUNTER
-                  </Typography>
-                  <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: mono, color: dark ? '#38BDF8' : '#0284C7', mt: 0.5 }}>
-                    Step #{ratchetCounter}
+                  <Typography variant="caption" sx={{ color: textSecondary, lineHeight: 1.6, display: 'block' }}>
+                    Production Zoth enclaves pin cryptographic heaps into physical RAM via <code>mlock()</code>, preventing keys from ever paging to unencrypted swap or SSD storage.
                   </Typography>
                 </Paper>
               </Grid>
-              <Grid xs={12} sm={4}>
-                <Paper sx={{ p: 2, bgcolor: dark ? '#08080B' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2 }}>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary }}>
-                    SECURITY POSTURE
+              <Grid xs={12} md={4}>
+                <Paper sx={{ p: 2, height: '100%', bgcolor: dark ? '#08080B' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? '#38BDF8' : '#0284C7', mb: 1 }}>
+                    2. Argon2id + AES-256-GCM
                   </Typography>
-                  <Typography variant="h5" sx={{ fontWeight: 800, color: dark ? '#34D399' : '#059669', mt: 0.5 }}>
-                    Forward-Secure Active
+                  <Typography variant="caption" sx={{ color: textSecondary, lineHeight: 1.6, display: 'block' }}>
+                    Master secrets are derived with 64MB memory-hard Argon2id parameters and sealed with authenticated 256-bit Galois/Counter Mode with 128-bit authentication tags.
+                  </Typography>
+                </Paper>
+              </Grid>
+              <Grid xs={12} md={4}>
+                <Paper sx={{ p: 2, height: '100%', bgcolor: dark ? '#08080B' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? '#34D399' : '#059669', mb: 1 }}>
+                    3. Forward-Secure Ratchet
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: textSecondary, lineHeight: 1.6, display: 'block' }}>
+                    Epoch keys rotate continuously via HKDF-SHA256 symmetric ratchets. Deprecated key material is immediately zeroized in hardware registers.
                   </Typography>
                 </Paper>
               </Grid>
             </Grid>
 
-            <Box sx={{ mb: 3 }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: goldLight, fontWeight: 700, display: 'block', mb: 0.5 }}>
-                ACTIVE HARDWARE KEY FINGERPRINT:
+            {/* Local Execution & Micro-Repo Funnel Strip */}
+            <Box sx={{ p: 2.5, bgcolor: dark ? '#08080B' : '#F1F5F9', border: `1px solid ${divider}`, borderRadius: 2, mb: 3 }}>
+              <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: dark ? goldLight : '#8A6A09', mb: 1 }}>
+                ⚡ RUN ADYTUM CRYPTOGRAPHIC ENCLAVE LOCALLY:
               </Typography>
-              <Box
-                sx={{
-                  p: 1.5,
-                  borderRadius: 1.5,
-                  bgcolor: dark ? '#08080B' : '#F1F5F9',
-                  border: `1px solid ${divider}`,
-                  fontFamily: mono,
-                  fontSize: '0.82rem',
-                  color: dark ? '#FCD34D' : '#B45309',
-                  wordBreak: 'break-all',
-                }}
-              >
-                {activeKeyFingerprint}
-              </Box>
-            </Box>
-
-            <Button
-              variant="contained"
-              startIcon={<SyncIcon />}
-              onClick={handleRotateEnclaveKey}
-              sx={{
-                bgcolor: gold,
-                color: '#101828',
-                fontWeight: 800,
-                boxShadow: '0 0 16px rgba(212,175,55,0.3)',
-                '&:hover': { bgcolor: dark ? goldLight : '#9A7008' },
-                mb: 3,
-              }}
-            >
-              Rotate Enclave Master Key (Forward Ratchet)
-            </Button>
-
-            <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, fontWeight: 800, display: 'block', mb: 1 }}>
-              KEY ROTATION &amp; HARDWARE REGISTER AUDIT LOG:
-            </Typography>
-            <Stack spacing={1}>
-              {keyRotationsHistory.map((item, idx) => (
-                <Paper
-                  key={idx}
-                  sx={{
-                    p: 1.25,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    flexWrap: 'wrap',
-                    gap: 1,
-                    bgcolor: dark ? '#08080B' : '#F8FAFC',
-                    border: `1px solid ${divider}`,
-                    borderRadius: 1.5,
+              <Typography variant="caption" sx={{ color: textSecondary, display: 'block', mb: 1.5 }}>
+                Clone the standalone zero-egress micro-repo to run real Argon2id vault sealing and forward-secure ratchets on your physical machine:
+              </Typography>
+              <Box sx={{ p: 1.2, mb: 2, bgcolor: dark ? '#040508' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.8rem', color: dark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git &amp;&amp; cd adytum-alchemist-ai-workflow
+                </Typography>
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    navigator.clipboard.writeText('git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git && cd adytum-alchemist-ai-workflow');
+                    setSnackbarMessage('CLI Command Copied to Clipboard!');
+                    setSnackbarOpen(true);
                   }}
+                  sx={{ color: gold, ml: 1, p: 0.5 }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                    <Chip
-                      label={`EPOCH ${item.epoch}`}
-                      size="small"
-                      sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.7rem', bgcolor: goldBg, color: goldLight }}
-                    />
-                    <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.76rem', color: textPrimary, wordBreak: 'break-all' }}>
-                      {item.fingerprint}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                    <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary }}>
-                      {item.timestamp}
-                    </Typography>
-                    <Chip
-                      label={item.status}
-                      size="small"
-                      sx={{
-                        fontFamily: mono,
-                        fontWeight: 800,
-                        fontSize: '0.68rem',
-                        bgcolor: item.status === 'ACTIVE' ? (dark ? 'rgba(52,211,153,0.18)' : '#ECFDF3') : (dark ? 'rgba(107,114,128,0.15)' : '#F3F4F6'),
-                        color: item.status === 'ACTIVE' ? (dark ? '#34D399' : '#027A48') : textSecondary,
-                      }}
-                    />
-                  </Box>
-                </Paper>
-              ))}
-            </Stack>
+                  <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                </IconButton>
+              </Box>
+
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+                <Button
+                  variant="contained"
+                  href="https://github.com/NullAITech/adytum-alchemist-ai-workflow"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
+                >
+                  Inspect Adytum Micro-Repo
+                </Button>
+                <Button
+                  variant="outlined"
+                  component={RouterLink}
+                  to="/tools/envguard-secrets-vault"
+                  sx={{ borderColor: gold, color: gold, fontWeight: 800, textTransform: 'none', '&:hover': { borderColor: dark ? goldLight : '#9A7008', bgcolor: goldBg } }}
+                >
+                  View EnvGuard Secrets Vault
+                </Button>
+                <Button
+                  variant="outlined"
+                  component={RouterLink}
+                  to="/zoth-os"
+                  sx={{ borderColor: dark ? '#38BDF8' : '#0284C7', color: dark ? '#38BDF8' : '#0284C7', fontWeight: 800, textTransform: 'none' }}
+                >
+                  Boot Zoth OS Hardware Hypervisor
+                </Button>
+              </Stack>
+            </Box>
           </Paper>
         </Box>
         </RevealOnScroll>
