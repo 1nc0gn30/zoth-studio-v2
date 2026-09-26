@@ -145,7 +145,7 @@ When executing vector embeddings, cosine similarities, or quantized neural matmu
     oracleResponse: `WebGPU matrix pipeline online: WGSL compute shaders dispatch parallel workgroups directly to client hardware VRAM. Neural matmuls and semantic embeddings run at hardware speeds with zero outbound network calls.`,
     jumpTargets: [
       { label: 'WebGPU AI Matrix Console', path: '/tools', type: 'tools' },
-      { label: '3D Scene Viewport Studio', path: '/tools/nexus-3d-scene-studio', type: 'tools' }
+      { label: 'Vision Gesture Control', path: '/tools/vision-gesture-control', type: 'tools' }
     ]
   },
   {
@@ -161,7 +161,7 @@ When executing vector embeddings, cosine similarities, or quantized neural matmu
 All three computational tiers produce bit-identical deterministic outputs, ensuring uninterrupted offline capability across modern browsers and legacy hardware.`,
     oracleResponse: `Graceful fallback architecture: If WebGPU is unavailable, Zoth Studio transparently shifts to WASM SIMD 128-bit execution before utilizing multi-core CPU workers. All tiers remain 100% client-side and zero-egress.`,
     jumpTargets: [
-      { label: 'Micro-Tools Catalog (25 Tools)', path: '/tools', type: 'tools' },
+      { label: 'Micro-Tools Catalog (21 Tools)', path: '/tools', type: 'tools' },
       { label: 'WebGen Workspace', path: '/webgen', type: 'tools' }
     ]
   },
@@ -234,10 +234,10 @@ During boot, the kernel detects and loads native NVIDIA CUDA and AMD ROCm driver
     keywords: ['mcp', 'model context protocol', 'stdio', 'ipc', 'sse', '8788/sse', 'tools/list', 'tools/call', 'prompts/get', 'anthropic', 'agents', 'schema'],
     a: `Zoth Studio implements the Anthropic Model Context Protocol (MCP) standard across local STDIO / IPC and Server-Sent Events (http://127.0.0.1:8788/sse).
 
-External agent environments (Claude Code, Hermes Agent, Cursor, OpenCode, or local Ollama instances) connect directly to Zoth Studio, calling tools/list to discover 25 micro-tools and 37 workstations, tools/call to execute sandboxed code mutations, and resources/read to query STDP vector memory—all validated against JSON-Schema contracts with zero cloud exposure.`,
+External agent environments (Claude Code, Hermes Agent, Cursor, OpenCode, or local Ollama instances) connect directly to Zoth Studio, calling tools/list to discover 21 micro-tools and 15 cockpits, tools/call to execute sandboxed code mutations, and resources/read to query STDP vector memory—all validated against JSON-Schema contracts with zero cloud exposure.`,
     oracleResponse: `MCP standard implemented: External agents connect via loopback SSE (127.0.0.1:8788/sse) or STDIO. Exposes tools/list, tools/call, and resources/read with strict JSON-Schema validation and zero telemetry.`,
     jumpTargets: [
-      { label: 'Micro-Tools Catalog (25 Tools)', path: '/tools', type: 'tools' },
+      { label: 'Micro-Tools Catalog (21 Tools)', path: '/tools', type: 'tools' },
       { label: 'Workstations Directory (37)', path: '/workstations', type: 'workstations' },
       { label: 'Signal Bridge Console', path: '/bridges', type: 'bus' }
     ]

@@ -45,7 +45,7 @@ const PRIMARY_ROUTES = [
 
 const SAMPLE_ROUTES = [
   '/tools/envguard-secrets-vault',
-  '/tools/ufo-sacred-geometry',
+  '/tools/vision-gesture-control',
   '/workstations/cockpit',
   '/workstations/mission-control',
   '/docs/math/stdp',

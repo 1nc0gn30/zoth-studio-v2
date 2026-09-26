@@ -184,34 +184,12 @@ export const workstations = [
     pullCommand: "npx zoth pull subsweep-lead-scanner"
   },
   {
-    id: "tool-stamp",
-    name: "Zoth Badge 3D Stamp Generator",
-    path: "/studio/tool-stamp.html",
-    band: "Studio",
-    type: "integrated_tool",
-    description: "Interactive 3D metallic coin and alchemical seal designer with gold-on-void shader lighting.",
-    alsoInApp: "/tools/badge3d-coin-generator",
-    toolRepoId: "badge3d-coin-generator",
-    pullCommand: "npx zoth pull badge3d-coin-generator"
-  },
-  {
-    id: "3d-editor",
-    name: "Zoth Nexus 3D Scene Studio",
-    path: "/studio/3d-editor.html",
-    band: "Spatial",
-    type: "integrated_tool",
-    description: "In-browser Three.js WebGL spatial composition studio with material shaders and GLTF export.",
-    alsoInApp: "/tools/nexus-3d-scene-studio",
-    toolRepoId: "nexus-3d-scene-studio",
-    pullCommand: "npx zoth pull nexus-3d-scene-studio"
-  },
-  {
     id: "connectors",
     name: "Zoth Tool Bench & Integration Ecosystem",
     path: "/studio/connectors.html",
     band: "Observe",
     type: "integrated_tool",
-    description: "Integration workbench bridging the 27 sovereign micro-repos and MCP contract endpoints.",
+    description: "Integration workbench bridging the 21 sovereign micro-repos and MCP contract endpoints.",
     alsoInApp: "/tools",
     toolRepoId: "envguard-secrets-vault",
     pullCommand: "npx zoth tools list"

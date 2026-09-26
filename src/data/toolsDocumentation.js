@@ -438,39 +438,39 @@ export const toolsDocumentation = {
     ]
   },
 
-  'audiocipher-stego-engine': {
-    whyUse: 'Acoustic Least-Significant-Bit (LSB) steganography engine and spectrum hidden data detector.',
-    problemSolved: 'Enables covert, air-gapped data transmission encoded inside audio waveforms without perceptible audio degradation.',
-    architecture: 'Python 3.10+ with NumPy and SciPy. Operates on WAV, FLAC, and uncompressed PCM audio buffers.',
+  'vision-gesture-control': {
+    whyUse: 'In-browser MediaPipe webcam hand-gesture recognition and spatial control engine.',
+    problemSolved: 'Enables hands-free spatial navigation and gesture-driven UI interaction using local WebGPU / WebAssembly models without sending video frames over the network.',
+    architecture: 'MediaPipe Hands + WebGPU acceleration pipeline running purely in client browser context with zero cloud telemetry.',
     aiAgentProtocol: {
-      mcpTool: 'stego_encode_audio',
-      description: 'Encode an encrypted payload into the least significant bits of an audio file.',
-      cliExample: 'audiocipher encode --carrier voice.wav --secret payload.enc --output carrier_stego.wav',
+      mcpTool: 'detect_hand_gestures',
+      description: 'Stream camera video buffer into local MediaPipe hand landmark detection model.',
+      cliExample: 'npx zoth pull vision-gesture-control',
       inputSchema: {
         type: 'object',
         properties: {
-          carrierFile: { type: 'string' },
-          secretData: { type: 'string' }
+          enableVideo: { type: 'boolean' },
+          maxNumHands: { type: 'number' }
         },
-        required: ['carrierFile', 'secretData']
+        required: ['enableVideo']
       },
       outputSchema: {
         success: 'boolean',
-        capacityUsedPercent: 'number',
-        psnr: 'number'
+        landmarksDetected: 'number',
+        gesture: 'string'
       }
     },
     quickstart: [
-      'git clone https://github.com/NullAITech/audiocipher-stego-engine.git',
-      'cd audiocipher-stego-engine && pip install -r requirements.txt',
-      'python3 -m audiocipher test'
+      'npx zoth pull vision-gesture-control',
+      'cd vision-gesture-control && npm install',
+      'npm run dev'
     ],
     features: [
-      'Multi-channel LSB audio embedding',
-      'FFT spectrum waterfall hidden message detection',
-      'AES-256 pre-encryption of embedded payloads',
-      'Zero perceptual audio distortion (PSNR > 60dB)',
-      '100% offline signal processing'
+      '21-point 3D hand landmark mesh tracking',
+      'Pinch, point, swipe, and palm gesture recognition',
+      'WebGPU shader-accelerated landmark geometry projection',
+      '100% client-side zero-egress webcam processing',
+      'Low-latency 60 FPS spatial input controller'
     ]
   },
 

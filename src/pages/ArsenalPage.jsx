@@ -514,7 +514,7 @@ export default function ArsenalPage() {
             </HeroItem>
             <HeroItem>
               <Typography color="text.secondary" sx={{ maxWidth: 880, fontSize: '1.05rem', lineHeight: 1.6 }}>
-                One unified directory consolidating all 49 sovereign assets: air-gapped developer cockpits, standalone micro-tools, and zero-egress hardware enclaves. Everything executes strictly on local hardware with zero external cloud dependencies.
+                One unified directory consolidating all {arsenalStats.total} sovereign assets: air-gapped developer cockpits, standalone micro-tools, and zero-egress hardware enclaves. Everything executes strictly on local hardware with zero external cloud dependencies.
               </Typography>
             </HeroItem>
           </Box>
@@ -802,7 +802,7 @@ export default function ArsenalPage() {
             {/* Instant Search Input */}
             <TextField
               size="small"
-              placeholder="Search across all 49 assets by name, ID, command..."
+              placeholder={`Search across all ${arsenalStats.total} assets by name, ID, command...`}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               InputProps={{
@@ -911,7 +911,7 @@ export default function ArsenalPage() {
         {/* Sovereign Funnel */}
         <SovereignFunnel
           title="Deploy the Entire Sovereign Arsenal Locally"
-          subtitle="Run all 49 studio cockpits, standalone micro-tools, and hardware enclaves on your own bare metal with complete zero-telemetry air-gap guarantees."
+          subtitle={`Run all ${arsenalStats.total} studio cockpits, standalone micro-tools, and hardware enclaves on your own bare metal with complete zero-telemetry air-gap guarantees.`}
           toolTitle="Zoth Sovereign Suite"
           toolTag="FULL ARSENAL"
           toolDescription="Complete local-first developer environment for autonomous AI pantheons. Binds strictly to 127.0.0.1 with zero egress sockets."

@@ -701,12 +701,12 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
         icon: <FlashOnIcon />,
       },
       secondaryButton: {
-        label: 'Open WebGPU Tensor Engine',
-        to: '/tools/nexus-3d-scene-studio',
+        label: 'Open Vision Gesture Engine',
+        to: '/tools/vision-gesture-control',
         icon: <LaunchIcon />,
       },
       icon: <FlashOnIcon sx={{ fontSize: 32, color: gold.accent }} />,
-      featuredChip: '25 STANDALONE TOOLS',
+      featuredChip: '21 SOVEREIGN TOOLS',
     },
     {
       id: 'stdp-memory',
@@ -1620,8 +1620,8 @@ export default function HomePage() {
             <Button component={RouterLink} to="/adytum" variant="contained" color="primary" size="large" className="pulse-glow-btn" sx={{ px: 3.8, py: 1.3, fontWeight: 800, boxShadow: isDark ? '0 4px 20px rgba(212,175,55,0.4), 0 0 32px rgba(212,175,55,0.15)' : '0 4px 20px rgba(184,134,11,0.3), 0 0 32px rgba(184,134,11,0.1)', '&:hover': { boxShadow: isDark ? '0 6px 28px rgba(212,175,55,0.55), 0 0 44px rgba(212,175,55,0.22)' : '0 6px 28px rgba(184,134,11,0.45), 0 0 44px rgba(184,134,11,0.16)' } }}>
               Enter Adytum Rite
             </Button>
-            <Button component={RouterLink} to="/tools" variant="outlined" color="primary" size="large" sx={{ px: 3.2, py: 1.3, fontWeight: 750, borderColor: isDark ? 'rgba(212,175,55,0.4)' : '#B8860B', '&:hover': { borderColor: gold.accent, boxShadow: isDark ? '0 0 20px rgba(212,175,55,0.25)' : '0 0 16px rgba(184,134,11,0.2)' } }}>
-              Explore 25 Micro-Tools
+            <Button component={RouterLink} to="/arsenal" variant="outlined" color="primary" size="large" sx={{ px: 3.2, py: 1.3, fontWeight: 750, borderColor: isDark ? 'rgba(212,175,55,0.4)' : '#B8860B', '&:hover': { borderColor: gold.accent, boxShadow: isDark ? '0 0 20px rgba(212,175,55,0.25)' : '0 0 16px rgba(184,134,11,0.2)' } }}>
+              Explore Sovereign Arsenal
             </Button>
             <Button component={RouterLink} to="/zoth-os" variant="text" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2.5, mt: 0.5, '&:hover': { bgcolor: gold.wash, borderRadius: 2 } }}>
               Zoth OS ISO →

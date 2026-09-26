@@ -175,12 +175,6 @@
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://zoth.nullai.tech/tools/audiocipher-stego-engine</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
     <loc>https://zoth.nullai.tech/tools/polyglot-framework-exporter</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
@@ -199,37 +193,7 @@
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://zoth.nullai.tech/tools/nexus-3d-scene-studio</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/tools/badge3d-coin-generator</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/tools/cyber-turtle-studio</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/tools/datamosh-glitch-studio</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
     <loc>https://zoth.nullai.tech/tools/vision-gesture-control</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/tools/ufo-sacred-geometry</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
@@ -392,18 +356,6 @@
   </url>
   <url>
     <loc>https://zoth.nullai.tech/workstations/subsweep</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/tool-stamp</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/3d-editor</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>

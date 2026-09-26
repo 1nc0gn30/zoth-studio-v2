@@ -223,17 +223,13 @@ export function App() {
 `;
       break;
     }
-    case 'nexus-3d-scene-studio':
-    case 'badge3d-coin-generator':
-    case 'cyber-turtle-studio':
-    case 'datamosh-glitch-studio':
-    case 'ufo-sacred-geometry': {
+    case 'vision-gesture-control': {
       toolResult = JSON.stringify({
-        status: 'WEBGPU_WGSL_RENDER_PIPELINE_ACTIVE',
+        status: 'WEBGPU_VISION_GESTURE_PIPELINE_ACTIVE',
         tool: toolId,
-        inputSpec: inputStr || 'Default Procedural Vector Parameters',
-        renderPasses: 16,
-        verticesProcessed: 131072,
+        inputSpec: inputStr || 'MediaPipe WebGPU Hand-Landmark Tensor Stream',
+        landmarksDetected: 21,
+        fps: 60,
         computeShaderLatency: `${bench.timeMs} ms`,
         hardwareAdapter: bench.adapter,
         throughput: bench.tflops

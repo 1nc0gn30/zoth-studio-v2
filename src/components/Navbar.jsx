@@ -31,12 +31,13 @@ import GoldenZLogo3D from './GoldenZLogo3D';
 import SwarmDaemonMultiplexer from './SwarmDaemonMultiplexer';
 import { microTools } from '../data/toolsData';
 import { workstations } from '../data/workstations';
+import { arsenalStats } from '../data/arsenalData';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 // Flagship Primary Links
 const primaryNav = [
-  { label: 'Arsenal', path: '/arsenal', badge: '49' },
+  { label: 'Arsenal', path: '/arsenal', badge: `${arsenalStats.total}` },
   { label: 'Templates', path: '/templates', badge: '10' },
 ];
 
@@ -1012,7 +1013,7 @@ export default function Navbar({ mode, onToggleTheme }) {
             <InputBase
               autoFocus
               fullWidth
-              placeholder="Search all 27 tools, 15 cockpits, enclaves, or documentation..."
+              placeholder={`Search all ${arsenalStats.total} arsenal capabilities, documentation...`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               sx={{

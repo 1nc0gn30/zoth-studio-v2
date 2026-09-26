@@ -1744,27 +1744,6 @@ function HubWorkstationConsole({ station }) {
       badge: 'Synthesizer',
       stats: [{ label: 'Frameworks', val: 'React / Astro / Svelte' }, { label: 'Target', val: 'Zero-Egress Static' }, { label: 'Build Time', val: 'Sub-second' }],
     },
-    'nexus-3d': {
-      title: 'Zoth Nexus 3D Scene Studio',
-      desc: 'Full 3D WebGL scene builder with camera calibration, directional lighting, and geometry primitives.',
-      target: '/tools/nexus-3d-scene-studio',
-      badge: 'Spatial 3D',
-      stats: [{ label: 'Engine', val: 'Three.js / WebGL' }, { label: 'Render Target', val: 'Interactive 3D Canvas' }, { label: 'Status', val: 'Hardware Accelerated' }],
-    },
-    '3d-editor': {
-      title: 'Zoth Nexus 3D Omniverse',
-      desc: 'Spatial scene composition workspace with material shaders, orbital controls, and OBJ/GLTF export.',
-      target: '/tools/nexus-3d-scene-studio',
-      badge: 'Spatial 3D',
-      stats: [{ label: 'Engine', val: 'Three.js / WebGL' }, { label: 'Render Target', val: 'Interactive 3D Canvas' }, { label: 'Status', val: 'Hardware Accelerated' }],
-    },
-    'nexus-3d-editor': {
-      title: 'Zoth Nexus 3D Omniverse',
-      desc: 'Spatial scene composition workspace with material shaders, orbital controls, and OBJ/GLTF export.',
-      target: '/tools/nexus-3d-scene-studio',
-      badge: 'Spatial 3D',
-      stats: [{ label: 'Engine', val: 'Three.js / WebGL' }, { label: 'Render Target', val: 'Interactive 3D Canvas' }, { label: 'Status', val: 'Hardware Accelerated' }],
-    },
     'subsweep': {
       title: 'Zoth SubSweep Surface Scanner',
       desc: 'Local network attack surface mapper and port scanner with zero cloud leakage.',
@@ -1781,17 +1760,10 @@ function HubWorkstationConsole({ station }) {
     },
     'tool-nexus': {
       title: 'Zoth Tool Nexus Workstation',
-      desc: 'Unified launcher for all 25 sovereign tools and hardware micro-utilities.',
-      target: '/tools',
+      desc: 'Unified launcher for all 21 sovereign tools and hardware micro-utilities.',
+      target: '/arsenal',
       badge: 'Tool Nexus',
-      stats: [{ label: 'Total Tools', val: '25 Native Tools' }, { label: 'Execution', val: 'In-Browser / Web Crypto' }, { label: 'Status', val: 'All Active' }],
-    },
-    'tool-stamp': {
-      title: 'Zoth Badge 3D Stamp Generator',
-      desc: 'Interactive 3D coin and metallic seal badge designer with gold-on-void shader lighting.',
-      target: '/tools/badge3d-coin-generator',
-      badge: 'Design Utility',
-      stats: [{ label: 'Shader', val: 'Specular Gold Foil' }, { label: 'Format', val: 'SVG & WebGL' }, { label: 'Status', val: 'Interactive' }],
+      stats: [{ label: 'Total Tools', val: '21 Native Tools' }, { label: 'Execution', val: 'In-Browser / Web Crypto' }, { label: 'Status', val: 'All Active' }],
     },
   };
 
