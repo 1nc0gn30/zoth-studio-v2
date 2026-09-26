@@ -31,6 +31,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { microTools } from '../data/toolsData';
 import { getToolDocumentation } from '../data/toolsDocumentation';
 import SovereignFunnel from '../components/SovereignFunnel';
+import AirGapToolLockout, { isLocalRuntime } from '../components/AirGapToolLockout';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -42,6 +43,10 @@ export default function RealToolWorkspacePage() {
 
   const [copiedCmd, setCopiedCmd] = useState(false);
   const [copiedMcp, setCopiedMcp] = useState(false);
+  const [unlockedPreview, setUnlockedPreview] = useState(false);
+
+  const isLocal = isLocalRuntime();
+  const isLocked = !isLocal && !unlockedPreview;
 
   const tool = microTools.find((t) => t.id === toolId || t.repo === toolId);
   const docs = getToolDocumentation(tool);
@@ -148,6 +153,27 @@ export default function RealToolWorkspacePage() {
         </Box>
       </Box>
 
+      {/* Air-Gap Enclave Lockout Shield for Remote Hosts */}
+      {!isLocal && (
+        <AirGapToolLockout
+          tool={tool}
+          isUnlocked={unlockedPreview}
+          onUnlockPreview={() => setUnlockedPreview(true)}
+          onReseal={() => setUnlockedPreview(false)}
+        />
+      )}
+
+      {/* Main Tool Dossier Workspace — Blurred and Blocked when Remote and Not Unlocked */}
+      <Box
+        sx={{
+          filter: isLocked ? 'blur(10px) grayscale(30%)' : 'none',
+          pointerEvents: isLocked ? 'none' : 'auto',
+          userSelect: isLocked ? 'none' : 'auto',
+          transition: 'all 0.35s ease',
+          opacity: isLocked ? 0.42 : 1,
+          position: 'relative',
+        }}
+      >
       {/* Hero Dossier Header */}
       <Paper
         sx={{
@@ -579,12 +605,13 @@ export default function RealToolWorkspacePage() {
       <Box sx={{ mt: 6 }}>
         <SovereignFunnel
           title={`Deploy ${tool.name} in Your Sovereign Workspace`}
-          subtitle="Choose between pulling this standalone micro-tool repository, running it natively inside Zoth Studio, or booting ZothOS where all 29 tools are pre-configured."
+          subtitle="Choose between pulling this standalone micro-tool repository, running it natively inside Zoth Studio, or booting ZothOS where all 25 sovereign tools are pre-configured."
           toolTitle={tool.name}
           toolDescription={tool.description}
           toolRepo={tool.github}
           toolCommand={tool.pull || `git clone ${tool.github}.git`}
         />
+      </Box>
       </Box>
     </Container>
   );

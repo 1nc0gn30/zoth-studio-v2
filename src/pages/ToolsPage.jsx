@@ -21,6 +21,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { microTools } from '../data/toolsData';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
+import { isLocalRuntime } from '../components/AirGapToolLockout';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const categories = ['All', 'Planning', 'Swarm & Core', 'AI & Knowledge', 'Security & Recon', 'Security & Steganography', 'Autonomous Web', 'Media & 3D', 'Automation'];
@@ -29,6 +30,7 @@ export default function ToolsPage() {
   const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
+  const isLocal = isLocalRuntime();
   const { status } = useStudioStatus();
   const isBackendConnected = Boolean(status?.services);
 
@@ -120,11 +122,98 @@ export default function ToolsPage() {
           </HeroItem>
           <HeroItem>
             <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 840, lineHeight: 1.65, fontSize: '1.05rem' }}>
-              Explore the official documentation, MCP agent schemas, and architectural dossiers for all 29 sovereign micro-tools. To run any tool with zero setup, copy the CLI command, launch natively inside Zoth Studio, or boot <span className="text-highlight-dark">Zoth OS</span> for complete out-of-the-box preinstalled execution.
+              Explore the official documentation, MCP agent schemas, and architectural dossiers for all {microTools.length} sovereign micro-tools. To run any tool with zero setup, copy the CLI command, launch natively inside Zoth Studio, or boot <span className="text-highlight-dark">Zoth OS</span> for complete out-of-the-box preinstalled execution.
             </Typography>
           </HeroItem>
         </Box>
       </HeroReveal>
+
+      {/* Remote Host Air-Gap Lockout Banner */}
+      {!isLocal && (
+        <Paper
+          elevation={0}
+          sx={{
+            p: 3,
+            mb: 4,
+            borderRadius: 3,
+            bgcolor: isDark ? 'rgba(239, 68, 68, 0.08)' : '#FEF2F2',
+            border: '1.5px solid',
+            borderColor: isDark ? 'rgba(239, 68, 68, 0.45)' : '#FCA5A5',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 2,
+            boxShadow: isDark ? '0 0 30px -8px rgba(239, 68, 68, 0.25)' : 'none',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, maxWidth: 760 }}>
+            <Box sx={{ p: 1.2, borderRadius: 2, bgcolor: isDark ? 'rgba(239, 68, 68, 0.18)' : '#FEE2E2', color: '#EF4444', display: 'flex' }}>
+              <LockIcon sx={{ fontSize: 28 }} />
+            </Box>
+            <Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 0.5 }}>
+                <Typography sx={{ fontFamily: mono, fontWeight: 850, fontSize: '0.86rem', color: '#EF4444' }}>
+                  REMOTE CLOUD HOST DETECTED — AIR-GAP ENCLAVE ACTIVE
+                </Typography>
+                <Chip
+                  label="DIRECT EXECUTION BLOCKED"
+                  size="small"
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: '0.64rem',
+                    fontWeight: 800,
+                    bgcolor: isDark ? '#1F2937' : '#E5E7EB',
+                    color: isDark ? '#FCA5A5' : '#991B1B',
+                  }}
+                />
+              </Box>
+              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.88rem', lineHeight: 1.6 }}>
+                You are accessing this catalog through a remote web host. Sovereign tools execute strictly against local hardware, kernel page-locking (<code>mlock</code>), and loopback sockets (<code>127.0.0.1</code>). To run tools, deploy <RouterLink to="/zoth-os" style={{ color: '#D4AF37', fontWeight: 700 }}>Zoth OS</RouterLink> or clone individual micro-repositories from <RouterLink to="/arsenal" style={{ color: '#34D399', fontWeight: 700 }}>The Sovereign Arsenal</RouterLink>.
+              </Typography>
+            </Box>
+          </Box>
+
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+            <Button
+              component={RouterLink}
+              to="/zoth-os"
+              variant="contained"
+              size="small"
+              startIcon={<LaunchIcon />}
+              sx={{
+                bgcolor: '#D4AF37',
+                color: '#08080B',
+                fontFamily: mono,
+                fontWeight: 800,
+                fontSize: '0.78rem',
+                py: 1,
+                px: 2,
+                '&:hover': { bgcolor: '#F5E6AB' },
+              }}
+            >
+              Boot Zoth OS
+            </Button>
+            <Button
+              component={RouterLink}
+              to="/arsenal"
+              variant="outlined"
+              size="small"
+              sx={{
+                borderColor: isDark ? 'rgba(52, 211, 153, 0.4)' : '#059669',
+                color: isDark ? '#34D399' : '#065F46',
+                fontFamily: mono,
+                fontWeight: 800,
+                fontSize: '0.78rem',
+                py: 1,
+                px: 2,
+              }}
+            >
+              Browse Repos
+            </Button>
+          </Stack>
+        </Paper>
+      )}
 
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr 1fr', sm: 'repeat(4, 1fr)' }, gap: 1.5, mb: 4 }}>
         {[
@@ -173,10 +262,10 @@ export default function ToolsPage() {
               }}
             />
             <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: theme.palette.text.primary }}>
-              Want all 29 micro-tools preinstalled ready to use?
+              Want all {microTools.length} sovereign tools preinstalled ready to use?
             </Typography>
             <Typography variant="body2" sx={{ color: theme.palette.text.secondary, lineHeight: 1.6 }}>
-              Download the <strong>Zoth OS ISO</strong> image. Flash to USB or boot inside QEMU / KVM to run all 29 tools, local daemons, and 10 Ollama models with zero manual dependencies!
+              Download the <strong>Zoth OS ISO</strong> image. Flash to USB or boot inside QEMU / KVM to run all {microTools.length} tools, local daemons, and local Ollama models with zero manual dependencies!
             </Typography>
           </Box>
           <Button

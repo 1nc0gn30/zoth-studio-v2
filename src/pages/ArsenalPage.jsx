@@ -30,9 +30,11 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import LayersIcon from '@mui/icons-material/Layers';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import PsychologyIcon from '@mui/icons-material/Psychology';
+import LockIcon from '@mui/icons-material/Lock';
 
 import { masterArsenal, arsenalStats } from '../data/arsenalData';
 import SovereignFunnel from '../components/SovereignFunnel';
+import { isLocalRuntime } from '../components/AirGapToolLockout';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -337,6 +339,7 @@ export default function ArsenalPage() {
   const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
+  const isLocal = isLocalRuntime();
 
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [search, setSearch] = useState('');
@@ -398,6 +401,93 @@ export default function ArsenalPage() {
             </HeroItem>
           </Box>
         </HeroReveal>
+
+        {/* Remote Host Air-Gap Lockout Notice */}
+        {!isLocal && (
+          <Paper
+            elevation={0}
+            sx={{
+              p: 2.5,
+              mb: 3.5,
+              borderRadius: 3,
+              bgcolor: isDark ? 'rgba(239, 68, 68, 0.08)' : '#FEF2F2',
+              border: '1.5px solid',
+              borderColor: isDark ? 'rgba(239, 68, 68, 0.45)' : '#FCA5A5',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: 2,
+              boxShadow: isDark ? '0 0 30px -8px rgba(239, 68, 68, 0.25)' : 'none',
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, maxWidth: 780 }}>
+              <Box sx={{ p: 1.2, borderRadius: 2, bgcolor: isDark ? 'rgba(239, 68, 68, 0.18)' : '#FEE2E2', color: '#EF4444', display: 'flex' }}>
+                <LockIcon sx={{ fontSize: 28 }} />
+              </Box>
+              <Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 0.5 }}>
+                  <Typography sx={{ fontFamily: mono, fontWeight: 850, fontSize: '0.86rem', color: '#EF4444' }}>
+                    REMOTE CLOUD HOST DETECTED — AIR-GAP ENCLAVE LOCKED
+                  </Typography>
+                  <Chip
+                    label="DIRECT EXECUTION PREVENTED"
+                    size="small"
+                    sx={{
+                      fontFamily: mono,
+                      fontSize: '0.64rem',
+                      fontWeight: 800,
+                      bgcolor: isDark ? '#1F2937' : '#E5E7EB',
+                      color: isDark ? '#FCA5A5' : '#991B1B',
+                    }}
+                  />
+                </Box>
+                <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.88rem', lineHeight: 1.6 }}>
+                  You are viewing the sovereign arsenal over a public web host. Local daemons and raw hardware hooks cannot bind over remote HTTP. To execute any tool with zero telemetry, deploy the full OS via <RouterLink to="/zoth-os" style={{ color: '#D4AF37', fontWeight: 700 }}>Zoth OS</RouterLink> or copy the standalone repository <code>git clone</code> commands below.
+                </Typography>
+              </Box>
+            </Box>
+
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+              <Button
+                component={RouterLink}
+                to="/zoth-os"
+                variant="contained"
+                size="small"
+                startIcon={<RocketLaunchIcon />}
+                sx={{
+                  bgcolor: '#D4AF37',
+                  color: '#08080B',
+                  fontFamily: mono,
+                  fontWeight: 800,
+                  fontSize: '0.78rem',
+                  py: 1,
+                  px: 2,
+                  '&:hover': { bgcolor: '#F5E6AB' },
+                }}
+              >
+                Boot Zoth OS
+              </Button>
+              <Button
+                component={RouterLink}
+                to="/tools"
+                variant="outlined"
+                size="small"
+                sx={{
+                  borderColor: isDark ? 'rgba(52, 211, 153, 0.4)' : '#059669',
+                  color: isDark ? '#34D399' : '#065F46',
+                  fontFamily: mono,
+                  fontWeight: 800,
+                  fontSize: '0.78rem',
+                  py: 1,
+                  px: 2,
+                }}
+              >
+                Interactive Catalog
+              </Button>
+            </Stack>
+          </Paper>
+        )}
 
         {/* Telemetry Stats Bar */}
         <RevealOnScroll preset="fadeUp" delay={0.2}>
