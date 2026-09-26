@@ -1,0 +1,14 @@
+/* TEAM */
+Engineering: NullAI Tech
+Author: 1nc0gn30
+Site: https://nullai.tech
+GitHub: https://github.com/NullAITech
+Contact: team@nullai.tech
+
+/* SITE */
+Software: Zoth Studio v2
+Architecture: Air-Gapped Sovereign AI Agent Studio
+Standards: HTML5, CSS3, ES2022, React 18, Vite, MUI v5, WebGPU WGSL, Three.js
+Zero-Egress: 100% Local Silicon, Zero Cloud Telemetry
+Canonical: https://zoth.nullai.tech
+Codebase: https://github.com/NullAITech/zoth-studio-v2

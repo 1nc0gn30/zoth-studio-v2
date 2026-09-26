@@ -1,0 +1,47 @@
+# Zoth Studio v2
+
+> Zoth Studio v2 is an air-gapped sovereign intelligence suite and multi-agent development studio engineered by NullAI Tech. It unifies 21 autonomous agents across 5 operational cadres, local model foundries, WebGPU WASM acceleration, and biomorphic Spike-Timing-Dependent Plasticity (STDP) synaptic memory with zero cloud egress.
+
+Canonical URL: https://zoth.nullai.tech
+Codebase: https://github.com/NullAITech/zoth-studio-v2
+Publisher: NullAI Tech (https://nullai.tech)
+
+## Core Hubs & Consoles
+
+- [Sovereign Hub](https://zoth.nullai.tech/): Primary mission control, zero-egress architecture overview, and quickstart commands.
+- [Lucy Netrunner Memory Hub](https://zoth.nullai.tech/memory): Biomorphic STDP synaptic associative memory matrix, real-time waveform visualizer, and SQLite vector strata.
+- [21 Swarm Pantheon](https://zoth.nullai.tech/swarm): Autonomous multi-agent coordination across Architects, Code, Security, Creative, and Swarm cadres.
+- [Byzantine Consensus Arena](https://zoth.nullai.tech/consensus): Triadic AST diff arbitration and cryptographic 2/3 quorum verification.
+- [Autonomous WebGen](https://zoth.nullai.tech/webgen): Deterministic zero-cloud website generator and layout synthesizer with 6 architectural archetypes.
+- [HexStrike Cybersec Terminal](https://zoth.nullai.tech/hexstrike): Air-gapped CVE vulnerability matrix, attack surface analyzer, and exploit audit lab.
+- [Zoth OS Kernel](https://zoth.nullai.tech/zoth-os): Local Linux KVM hypervisor sandbox, thin QEMU disk management, and WebContainer runtime.
+- [Adytum Sanctum](https://zoth.nullai.tech/adytum): 22 Hermetic key engineering lifecycle, 5-minute incubation gates, and Argon2id hardware key vault.
+- [Sovereign Arsenal](https://zoth.nullai.tech/arsenal): Comprehensive searchable directory of all 24 workstations, 25 micro-tools, and 21 autonomous agents.
+- [Micro-Tools Registry](https://zoth.nullai.tech/tools): 25 schema-validated air-gapped developer utilities for JWT verification, payload entropy, and code export.
+- [Workstations Matrix](https://zoth.nullai.tech/workstations): 24 interactive studio environments spanning Build, Security, Swarm, Spatial, and Observe bands.
+- [Enclave Bridges](https://zoth.nullai.tech/bridges): End-to-end encrypted inter-agent signal mesh and local IPC bus monitor.
+
+## Formal Mathematical Pillars
+
+- [Six Mathematical Pillars](https://zoth.nullai.tech/docs/math): Formal mathematical foundations governing attention, loss landscapes, dynamical systems, and STDP.
+- [Pillar I: Linear Algebra](https://zoth.nullai.tech/docs/math/linear): Attention mechanisms, projection tensors, and scaled dot-product matrices.
+- [Pillar II: Multivariable Calculus](https://zoth.nullai.tech/docs/math/calculus): Non-convex gradient descent, AdamW momentum, and loss manifolds.
+- [Pillar III: Probability & Information](https://zoth.nullai.tech/docs/math/probability): Shannon entropy, sampling temperature dynamics, and token logit distributions.
+- [Pillar IV: Loss Landscapes & Hessian](https://zoth.nullai.tech/docs/math/hessian): Curvature eigenspaces, Hessian condition numbers, and saddle-point escape dynamics.
+- [Pillar V: Dynamical Systems & Lyapunov](https://zoth.nullai.tech/docs/math/lyapunov): Phase space attractors, Hamiltonian orbits, and Lyapunov stability proofs.
+- [Pillar VI: Neuromorphic STDP](https://zoth.nullai.tech/docs/math/stdp): Exponential Spike-Timing-Dependent Plasticity proofs and biomorphic synaptic weight adaptation.
+
+## Documentation & Machine Interfaces
+
+- [Architecture & Whitepaper](https://zoth.nullai.tech/docs): Technical specifications, zero-egress invariants, and local IPC protocols.
+- [Frequently Asked Questions](https://zoth.nullai.tech/faqs): Truthful answers regarding offline mode, local daemons, and security architecture.
+- [Agent Experience (AX)](https://zoth.nullai.tech/ax): Machine-readable entity specifications, API schemas, and service catalogs.
+
+## Optional & Machine Discovery
+
+- [Full Knowledge Corpus](https://zoth.nullai.tech/llms-full.txt): Comprehensive technical specifications, equations, and workstation details.
+- [Agent Discovery Manifest](https://zoth.nullai.tech/ai.txt): Machine crawling and answer-engine grounding policy.
+- [Tools Registry API](https://zoth.nullai.tech/api/tools.json): JSON catalog of all 25 air-gapped developer utilities.
+- [Netlify AX API](https://zoth.nullai.tech/api/netlify-ax.json): Serverless edge function contract definitions.
+- [Netlify MCP API](https://zoth.nullai.tech/api/netlify-ax-mcp.json): Model Context Protocol server configuration.
+- [XML Sitemap](https://zoth.nullai.tech/sitemap.xml): Synchronized static route index across all 71 URLs.

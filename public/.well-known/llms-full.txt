@@ -1,0 +1,190 @@
+# ZOTH STUDIO v2 — Full Knowledge Graph & Technical Specification
+# Canonical URL: https://zoth.nullai.tech/llms-full.txt
+# License: Sovereign Developer License / Apache 2.0 & MIT
+# Publisher: NullAI Tech (Author: 1nc0gn30 / Zoth Engineering Team)
+# Updated: 2026-09-26
+
+================================================================================
+SECTION 1: SYSTEM OVERVIEW & ZERO-EGRESS CORE INVARIANTS
+================================================================================
+
+Zoth Studio v2 is an air-gapped, zero-egress development studio designed for orchestrating autonomous AI agent pantheons, local model foundries (Ollama, llama.cpp), and biomorphic synaptic memory matrices. All prompts, code ASTs, secrets, and weights execute strictly on local loopback enclaves (127.0.0.1) with zero cloud telemetry or external data exfiltration.
+
+Zero-Egress Architectural Invariants:
+1. Local Silicon Guarantee: No external network calls (HTTP/HTTPS/gRPC) are dispatched during code execution, analysis, or prompt inference.
+2. Cryptographic Enclave: Keys are derived via Argon2id (memory hard) and secrets encrypted using XChaCha20-Poly1305 / AES-256-GCM.
+3. No Cloud Fallbacks: In the absence of remote APIs, the system falls back to local models or mock enclaves rather than failing open to third-party endpoints.
+4. Deterministic AST Verification: Code modifications pass through a 3-agent Byzantine consensus arena prior to staging.
+5. Honest Runtime Reflection: The hosted client app at https://zoth.nullai.tech never fakes active loopback connections; hardware daemons are locked with clear indicators until the repo is run locally.
+
+================================================================================
+SECTION 2: LUCY COGNITIVE ORACLE & WHITESPACE MEMORY MATRIX (STDP)
+================================================================================
+
+Guardian: Lucy
+Role: Sovereign Cognitive Memory Oracle & Agent Knowledge Guide
+Channel: Semantic Bus :8094 // Zero-Egress Memory Stratum
+Theme: Whitespace Cyberspace — a serene, luminous, non-hectic memory void with gold-on-void (#D4AF37 on #08080B) visual ergonomics.
+
+Biomorphic Spike-Timing-Dependent Plasticity (STDP) Synaptic Equation:
+The neural memory engine computes synaptic adjustments for knowledge vectors using exponential spike-timing windows:
+
+  For pre-synaptic spike arriving before post-synaptic retrieval (Δt > 0, Long-Term Potentiation):
+    Δw = A₊ · exp(-Δt / τ₊)
+
+  For post-synaptic retrieval before confirmation (Δt < 0, Long-Term Depression):
+    Δw = -A₋ · exp(Δt / τ₋)
+
+Key Hyperparameters:
+- A₊ (Potentiation Constant): 1.0 (default maximum synaptic weight burst)
+- A₋ (Depression Constant): 1.05 (asymmetric penalty preventing memory saturation)
+- τ₊ (Potentiation Time Window): 20.0 ms
+- τ₋ (Depression Time Window): 20.0 ms
+- Baseline Decay Factor: Logarithmic stale-vector pruning after 14-day inactivity
+- Synaptic Storage: SQLite vec0 / HNSW table running on loopback at http://127.0.0.1:8094 (when local repo daemon is active)
+
+================================================================================
+SECTION 3: THE SIX MATHEMATICAL PILLARS OF ZOTH
+================================================================================
+
+PILLAR I: LINEAR ALGEBRA
+- Numeral: I
+- Subtitle: Tensors, Projections, Geometry, and Scaled Dot-Product Attention
+- Formula: Attention(Q, K, V) = softmax((Q · Kᵀ) / √d_k) · V
+- Metrics: d_model = 2048 / 4096; h = 16 / 32 heads; d_k = 128
+- Description: Projects high-dimensional latent vectors into sub-spaces for multi-head attention and orthogonal subspace alignment.
+
+PILLAR II: MULTIVARIABLE CALCULUS
+- Numeral: II
+- Subtitle: Gradients, Loss Optimization, and Momentum
+- Formula: θ_{t+1} = θ_t - η · m_t / (√(v_t) + ε)  [AdamW update]
+- Metrics: Learning rate η = 3.0 × 10⁻⁴; β₁ = 0.90; β₂ = 0.999; norm clip = 1.0
+- Description: Navigates non-convex loss manifolds via adaptive moment estimation with weight decay regularization.
+
+PILLAR III: PROBABILITY & INFORMATION THEORY
+- Numeral: III
+- Subtitle: Logit Distributions, Shannon Entropy, and Sampling
+- Formula: H(X) = -Σ P(x) · log₂ P(x) ; P(w_i) = exp(z_i / τ) / Σ exp(z_j / τ)
+- Metrics: Temperature τ = 0.70; Top-p = 0.90; Shannon Entropy H = 1.482 bits
+- Description: Regulates sampling stochasticity and quantifies uncertainty across speculative token generations.
+
+PILLAR IV: OPTIMIZATION & LOSS LANDSCAPES (HESSIAN)
+- Numeral: IV
+- Subtitle: Curvature, Condition Numbers, and Saddle-Point Escaping
+- Formula: H = ∇²L(θ) ; Δθ ≈ -H⁻¹ · ∇L(θ)  [Newton-Raphson curvature step]
+- Metrics: Spectral norm λ_max/λ_min = 142.6; Saddle-point threshold ε = 10⁻⁵
+- Description: Quantifies local curvature across the loss surface to evade pathological saddles and guide hyper-parameter step sizes.
+
+PILLAR V: DYNAMICAL SYSTEMS & ATTRACTOR NETWORKS (LYAPUNOV)
+- Numeral: V
+- Subtitle: Phase Space, Hamiltonian Orbits, and Lyapunov Stability
+- Formula: V̇(x) = (∇V(x))ᵀ · f(x) ≤ 0 ; λ = lim_{t→∞} (1/t) · ln(||δx(t)|| / ||δx(0)||)
+- Metrics: Damping γ = 0.05; Phase space dimension D = 256; Symplectic step Δt = 0.01
+- Description: Enforces energy conservation and Lyapunov stability across recurrent multi-agent state trajectories.
+
+PILLAR VI: NEUROMORPHIC SYNAPTIC PLASTICITY (STDP)
+- Numeral: VI
+- Subtitle: Spike-Timing-Dependent Plasticity & STDP Memory Adaptation
+- Formula: Δw = A₊ · e^(-Δt/τ₊) (Δt ≥ 0) | Δw = -A₋ · e^(Δt/τ₋) (Δt < 0)
+- Metrics: τ₊ = 20.0 ms; τ₋ = 20.0 ms; A₊ = 1.0; A₋ = 1.05
+- Description: Biomorphic Hebbian plasticity engine governing synaptic vector weight potentiations and anti-causal memory pruning.
+
+================================================================================
+SECTION 4: THE 21 SWARM PANTHEON & CONSENSUS ARENA
+================================================================================
+
+The 21-Agent Swarm Pantheon is organized into five operational cadres:
+1. Architects Cadre: Azoth (Prime Architect :8790), Sophia (Philosophical Blueprint), Janus (Duality & Edge Cases), Chronos (Temporal Orchestrator)
+2. Code Cadre: Daedalus (Foundry Engineer), Vulcan (Compiler & Transpiler), Prometheus (API Synthesizer), Hephaestus (Hardware Interface)
+3. Security Cadre: Lycan (Enclave Sentinel :8787), Cerberus (Zero-Egress Firewall), Aegis (Integrity Watchdog), Minotaur (Obfuscation Breaker)
+4. Creative Cadre: Apollo (Visual Aesthetics), Calliope (Narrative Voice), Thoth (Documentation Scribe), Hermes (Signal Messenger :8102)
+5. Swarm Cadre: Lucy (Netrunner Memory Oracle :8094), Mnemosyne (Episodic Archivist), Morpheus (Latent State Explorer), Veritas (AST Verifier), Atlas (Resource Balancer)
+
+Consensus Battle Arena Protocol:
+- Topology: Triadic Byzantine consensus (Proposer, Evaluator, Arbiter).
+- Mechanism: AST Diff Synthesis. Rather than simple text voting, the agents parse AST trees, detect edge-case semantic regressions, and require a 2/3 signed cryptographic quorum before code is staged or merged.
+
+================================================================================
+SECTION 5: 24 NATIVE WORKSTATIONS DIRECTORY
+================================================================================
+
+1. cockpit: The Cockpit // Sovereign Operator Command - master telemetry HUD and unified fleet status.
+2. ide: Sovereign Operator IDE & Code Foundry - air-gapped code editor and syntax tree inspector.
+3. agent-composer: Multi-Agent DAG Composer & Pipeline Foundry - visual node-graph workflow builder.
+4. mission-control: Zoth Mission Control & Fleet Dispatcher - supervisor tracking active subagents and queues.
+5. models: Zoth AI Model Foundry & Spirit Matrix Pro - local GGUF, Ollama, vLLM, and LM Studio provider routing.
+6. ax-powerhouse: Zoth AX Powerhouse & Contract Studio - machine contract compiler and schema validator.
+7. cyberpunk-hud: Cyberpunk Telemetry HUD Cockpit - high-density cybernetic monitoring cockpit.
+8. chronicle: Zoth Chronicle & Engineering Horizon Roadmap - release telemetry logs and architecture milestones.
+9. notes-reviewer: Zoth Visual Notes & Agent Reviewer - multi-agent markdown knowledge extraction and diffs.
+10. brand: Zoth Studio Brand Assets & Alchemical Seals Kit - vector seals, cyber-sigils, and token design system.
+11. vision-link: Zoth Vision Link Multimodal Inspector - spatial image diagnostics and layout segmentation.
+12. web3-hub: Web3 Sovereign Bridge & Solana Swarm Tracker - on-chain state auditor and decentralized bridge.
+13. github-tool: Zoth GitHub Studio & Autonomous Repo Workstation - autonomous Git repo and PR pipelines.
+14. edge-forge: Zoth Edge Forge & Micro-Kernel Sandbox - WASM module packaging and kernel sandbox.
+15. netlify-ax: Zoth Netlify AX & Serverless Edge Console - edge function deployer and production hardening.
+16. webgen: Zoth WebGen Foundry - autonomous multi-framework website generator with 6 archetypes.
+17. omnipost: OmniPost Multi-Platform Social Engine - social content preview synthesizer and scheduler.
+18. subsweep: Zoth SubSweep Surface Scanner - local subnet recon probe and zero-egress OSINT discovery.
+19. connectors: Zoth Tool Bench & Integration Ecosystem - integration workbench bridging tools and MCP contracts.
+20. hexstrike: HEXSTRIKE // Threat & Security Radar - air-gapped security sentinel and exploit sandbox.
+21. netrunner-memory: Lucy Oracle Biomorphic Memory Hub - STDP biomorphic spike-timing vector memory on :8094.
+22. consensus: Byzantine Consensus Battle Arena - 3-agent Byzantine AST synthesis arena and truth arbitration.
+23. bus-monitor: Zoth Swarm NOC & Signal Bridge - decentralized agent bus monitor with E2EE WebSocket pinger.
+24. math-pillars: Six Mathematical Pillars Academy - formal mathematical foundations and proofs.
+
+================================================================================
+SECTION 6: 25 AIR-GAPPED MICRO-TOOLS DIRECTORY
+================================================================================
+
+1. adytum-alchemist-ai-workflow: 22-key hermetic planning rite and incubation gate.
+2. azoth-local-agent: Archon core orchestrator for local zero-telemetry task dispatching.
+3. sovereign-agent-bridge: E2EE WebSocket signal protocol and Simplex peer mesh IPC communicator.
+4. neuro-memory-daemon: STDP biomorphic memory vector engine & cross-session recall on loopback :8094.
+5. vector-search-engine: Local HNSW vector index engine for fast zero-latency semantic similarity search.
+6. deepsearch-research-agent: Autonomous multi-source research agent with grounded inline citations.
+7. promptmaster-studio: System prompt engineering workstation, DSPy prompt optimizer, and template store.
+8. hexstrike-arsenal: Autonomous penetration audit suite, CVE matrix inspector, and exploit payload lab.
+9. envguard-secrets-vault: Argon2id + AES-256-GCM hardware vault for zero-cloud secret storage.
+10. jwt-inspector-guard: In-browser JWT token decoder, cryptographic signature validator, and claim auditor.
+11. payload-entropy-studio: In-browser Shannon entropy analysis tool for detecting obfuscated payloads.
+12. web-security-guard: Security headers auditor, CSP validator, and WAF protection scanner.
+13. polyglot-framework-exporter: In-browser exporter from React/JSX to HTML/CSS, Vue, Svelte, and Solid.js.
+14. aeo-graph-engine: Answer Engine Optimization knowledge graph builder & Schema.org entity linker.
+15. cwv-speed-engine: Core Web Vitals LCP, CLS, and INP diagnostic engine & asset minifier.
+16. vision-gesture-control: In-browser MediaPipe webcam hand-gesture recognition interface controller.
+17. subsweep-lead-scanner: Subdomain recon scanner and OSINT lead enrichment engine.
+18. omnipost-social-engine: Multi-platform social content scheduler and cross-post automation engine.
+19. cron-rhythm-studio: Cron expression rhythm visualizer, scheduler simulator, and trigger matrix.
+20. certpath-roadmap-studio: Interactive cybersecurity & engineering certification roadmap generator.
+21. pwa-manifest-builder: Progressive Web App manifest authoring, icon generator, and offline worker builder.
+22. regex-droid-builder: Visual regular expression tester, neural explainer, and syntax highlighter.
+23. schema-illustrator-studio: Interactive JSON-Schema to database diagram visualizer and code generator.
+24. zoth-webgen: Deterministic zero-cloud website generator and layout synthesizer with MCP server.
+25. zoth-swarm-multiplexer: 21-terminal autonomous agent multiplexer daemon with hot-swappable harnesses.
+
+================================================================================
+SECTION 7: LOCAL ENCLAVE PORTS & DAEMON SERVICES
+================================================================================
+
+When running the full Zoth Studio repository on bare metal, daemons bind strictly to local loopback (127.0.0.1):
+- Port 3000: Zoth Studio v2 Web Dashboard (React 18 + Vite + MUI v5)
+- Port 8094: Neuro Memory Daemon (STDP Synaptic Vectors + SQLite vec0)
+- Port 8102: Sovereign Agent Bridge (WebSocket IPC Message Bus)
+- Port 8484: Operator Deck PTY Terminal
+- Port 8787: Adytum Keymaster Hardware Vault (Argon2id + XChaCha20-Poly1305)
+- Port 8790: Azoth Local Agent / Archon Core Orchestrator
+- Port 8989: Swarm Multiplexer Daemon (21-Terminal SSE Agent Telemetry)
+- Port 11434: Local Model Foundry (Ollama / llama.cpp GGUF Inference)
+
+Note: In the remote/static web deployment, these endpoints are safely locked with visual indicators, guaranteeing zero fake connection claims and total runtime transparency.
+
+================================================================================
+SECTION 8: CONTACT & REPOSITORY
+================================================================================
+
+Canonical URL: https://zoth.nullai.tech
+Codebase: https://github.com/NullAITech/zoth-studio-v2
+Publisher: NullAI Tech (team@nullai.tech / https://nullai.tech)
+Author: 1nc0gn30
+EOF

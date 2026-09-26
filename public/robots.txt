@@ -1,25 +1,21 @@
-# Zoth Studio v2 Robots Policy
+# ==============================================================================
+# ⚡ ZOTH STUDIO v2 — Robots Crawling & Indexing Policy
+# Canonical: https://zoth.nullai.tech/robots.txt
+# Sitemap: https://zoth.nullai.tech/sitemap.xml
+# LLMs Discovery: https://zoth.nullai.tech/llms.txt
+# Agent Policy: https://zoth.nullai.tech/ai.txt
+# ==============================================================================
+
 User-agent: *
 Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /ai.txt
+Allow: /sitemap.xml
 Disallow: /api/studio/bridge/send
 Disallow: /api/studio/adytum
 
-# AI Answer Engines & LLM Web Crawlers
-User-agent: GPTBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
+# ── Primary Search Engine Crawlers ──
 User-agent: Googlebot
 Allow: /
 
@@ -29,4 +25,48 @@ Allow: /
 User-agent: Applebot
 Allow: /
 
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+# ── AI Answer Engines & LLM Research Crawlers ──
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Cohere-ai
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+# ── Sitemap Declaration ──
 Sitemap: https://zoth.nullai.tech/sitemap.xml

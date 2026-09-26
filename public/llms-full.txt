@@ -1,8 +1,8 @@
 # ZOTH STUDIO v2 — Full Knowledge Graph & Technical Specification
 # Canonical URL: https://zoth.nullai.tech/llms-full.txt
-# License: Sovereign Developer License / Creative Commons CC BY-NC 4.0
-# Publisher: NullAI Tech / 757tech (Author: 1nc0gn30)
-# Updated: 2026-09-24
+# License: Sovereign Developer License / Apache 2.0 & MIT
+# Publisher: NullAI Tech (Author: 1nc0gn30 / Zoth Engineering Team)
+# Updated: 2026-09-26
 
 ================================================================================
 SECTION 1: SYSTEM OVERVIEW & ZERO-EGRESS CORE INVARIANTS
@@ -15,6 +15,7 @@ Zero-Egress Architectural Invariants:
 2. Cryptographic Enclave: Keys are derived via Argon2id (memory hard) and secrets encrypted using XChaCha20-Poly1305 / AES-256-GCM.
 3. No Cloud Fallbacks: In the absence of remote APIs, the system falls back to local models or mock enclaves rather than failing open to third-party endpoints.
 4. Deterministic AST Verification: Code modifications pass through a 3-agent Byzantine consensus arena prior to staging.
+5. Honest Runtime Reflection: The hosted client app at https://zoth.nullai.tech never fakes active loopback connections; hardware daemons are locked with clear indicators until the repo is run locally.
 
 ================================================================================
 SECTION 2: LUCY COGNITIVE ORACLE & WHITESPACE MEMORY MATRIX (STDP)
@@ -40,7 +41,7 @@ Key Hyperparameters:
 - τ₊ (Potentiation Time Window): 20.0 ms
 - τ₋ (Depression Time Window): 20.0 ms
 - Baseline Decay Factor: Logarithmic stale-vector pruning after 14-day inactivity
-- Synaptic Storage: SQLite vec0 / HNSW table running on loopback at http://127.0.0.1:8094
+- Synaptic Storage: SQLite vec0 / HNSW table running on loopback at http://127.0.0.1:8094 (when local repo daemon is active)
 
 ================================================================================
 SECTION 3: THE SIX MATHEMATICAL PILLARS OF ZOTH
@@ -67,41 +68,41 @@ PILLAR III: PROBABILITY & INFORMATION THEORY
 - Metrics: Temperature τ = 0.70; Top-p = 0.90; Shannon Entropy H = 1.482 bits
 - Description: Regulates sampling stochasticity and quantifies uncertainty across speculative token generations.
 
-PILLAR IV: CLASSICAL DYNAMICS & DRIFT
+PILLAR IV: OPTIMIZATION & LOSS LANDSCAPES (HESSIAN)
 - Numeral: IV
-- Subtitle: Momentum, Hamiltonian Orbits, and Thermal Drift
-- Formula: H(q, p) = T(p) + V(q) ; dq/dt = ∂H/∂p ; dp/dt = -∂H/∂q
-- Metrics: Damping γ = 0.05; Phase space dimension D = 256; Symplectic step Δt = 0.01
-- Description: Models agent state trajectories through energy-conserving phase spaces to prevent divergence and collapse.
+- Subtitle: Curvature, Condition Numbers, and Saddle-Point Escaping
+- Formula: H = ∇²L(θ) ; Δθ ≈ -H⁻¹ · ∇L(θ)  [Newton-Raphson curvature step]
+- Metrics: Spectral norm λ_max/λ_min = 142.6; Saddle-point threshold ε = 10⁻⁵
+- Description: Quantifies local curvature across the loss surface to evade pathological saddles and guide hyper-parameter step sizes.
 
-PILLAR V: GRAPH THEORY & TOPOLOGY
+PILLAR V: DYNAMICAL SYSTEMS & ATTRACTOR NETWORKS (LYAPUNOV)
 - Numeral: V
-- Subtitle: DAG Compaction, Consensus Quorums, and Adjacency
-- Formula: Q = ⌊(2n + 1) / 3⌋ [Byzantine Fault Tolerance Threshold]
-- Metrics: 21 Pantheon Nodes; Degree centrality = 4.2; Clustering coefficient C = 0.78
-- Description: Coordinates multi-agent dependency graphs, message routing trees, and Byzantine agreement topologies.
+- Subtitle: Phase Space, Hamiltonian Orbits, and Lyapunov Stability
+- Formula: V̇(x) = (∇V(x))ᵀ · f(x) ≤ 0 ; λ = lim_{t→∞} (1/t) · ln(||δx(t)|| / ||δx(0)||)
+- Metrics: Damping γ = 0.05; Phase space dimension D = 256; Symplectic step Δt = 0.01
+- Description: Enforces energy conservation and Lyapunov stability across recurrent multi-agent state trajectories.
 
-PILLAR VI: HARDWARE SYSTEMS & NUMERICAL PRECISION
+PILLAR VI: NEUROMORPHIC SYNAPTIC PLASTICITY (STDP)
 - Numeral: VI
-- Subtitle: Quantization, Memory Bandwidth, and Arithmetic Precision
-- Formula: Memory Bandwidth = 2 · Size_params · Clock_eff / Bus_width
-- Metrics: FP16 / BF16 / INT4 (GGUF Q4_K_M); Cache line = 64B; AVX-512 / Metal / CUDA
-- Description: Governs memory-bounded inference scheduling, KV cache tiling, and SIMD vector execution.
+- Subtitle: Spike-Timing-Dependent Plasticity & STDP Memory Adaptation
+- Formula: Δw = A₊ · e^(-Δt/τ₊) (Δt ≥ 0) | Δw = -A₋ · e^(Δt/τ₋) (Δt < 0)
+- Metrics: τ₊ = 20.0 ms; τ₋ = 20.0 ms; A₊ = 1.0; A₋ = 1.05
+- Description: Biomorphic Hebbian plasticity engine governing synaptic vector weight potentiations and anti-causal memory pruning.
 
 ================================================================================
 SECTION 4: THE 21 SWARM PANTHEON & CONSENSUS ARENA
 ================================================================================
 
-The 21-Agent Swarm Pantheon is organized into five operational divisions:
-1. Executive & Orchestration: Archon, Chronos, Overseer
-2. Cognitive & Knowledge: Athena, Thoth, Daedalus, Hephaestus
-3. Security & Boundary: Cerberus, Aegis, Sentinel, Hermes
-4. Code & Architecture: Apollo, Vulcan, Prometheus, Atlas
-5. Memory & Synthesis: Lucy (Netrunner Oracle), Mnemosyne, Calliope, Morpheus, Janus, Veritas
+The 21-Agent Swarm Pantheon is organized into five operational cadres:
+1. Architects Cadre: Azoth (Prime Architect :8790), Sophia (Philosophical Blueprint), Janus (Duality & Edge Cases), Chronos (Temporal Orchestrator)
+2. Code Cadre: Daedalus (Foundry Engineer), Vulcan (Compiler & Transpiler), Prometheus (API Synthesizer), Hephaestus (Hardware Interface)
+3. Security Cadre: Lycan (Enclave Sentinel :8787), Cerberus (Zero-Egress Firewall), Aegis (Integrity Watchdog), Minotaur (Obfuscation Breaker)
+4. Creative Cadre: Apollo (Visual Aesthetics), Calliope (Narrative Voice), Thoth (Documentation Scribe), Hermes (Signal Messenger :8102)
+5. Swarm Cadre: Lucy (Netrunner Memory Oracle :8094), Mnemosyne (Episodic Archivist), Morpheus (Latent State Explorer), Veritas (AST Verifier), Atlas (Resource Balancer)
 
 Consensus Battle Arena Protocol:
 - Topology: Triadic Byzantine consensus (Proposer, Evaluator, Arbiter).
-- Mechanism: AST Diff Synthesis. Rather than simple text voting, the agents parse AST trees, detect edge-case semantic regressions, and require a 2/3 signed cryptographic quorum before code is merged.
+- Mechanism: AST Diff Synthesis. Rather than simple text voting, the agents parse AST trees, detect edge-case semantic regressions, and require a 2/3 signed cryptographic quorum before code is staged or merged.
 
 ================================================================================
 SECTION 5: 24 NATIVE WORKSTATIONS DIRECTORY
@@ -166,6 +167,7 @@ SECTION 6: 25 AIR-GAPPED MICRO-TOOLS DIRECTORY
 SECTION 7: LOCAL ENCLAVE PORTS & DAEMON SERVICES
 ================================================================================
 
+When running the full Zoth Studio repository on bare metal, daemons bind strictly to local loopback (127.0.0.1):
 - Port 3000: Zoth Studio v2 Web Dashboard (React 18 + Vite + MUI v5)
 - Port 8094: Neuro Memory Daemon (STDP Synaptic Vectors + SQLite vec0)
 - Port 8102: Sovereign Agent Bridge (WebSocket IPC Message Bus)
@@ -175,12 +177,14 @@ SECTION 7: LOCAL ENCLAVE PORTS & DAEMON SERVICES
 - Port 8989: Swarm Multiplexer Daemon (21-Terminal SSE Agent Telemetry)
 - Port 11434: Local Model Foundry (Ollama / llama.cpp GGUF Inference)
 
+Note: In the remote/static web deployment, these endpoints are safely locked with visual indicators, guaranteeing zero fake connection claims and total runtime transparency.
+
 ================================================================================
 SECTION 8: CONTACT & REPOSITORY
 ================================================================================
 
 Canonical URL: https://zoth.nullai.tech
 Codebase: https://github.com/NullAITech/zoth-studio-v2
-Contact: NullAI Tech (team@nullai.tech / https://nullai.tech)
+Publisher: NullAI Tech (team@nullai.tech / https://nullai.tech)
 Author: 1nc0gn30
 EOF

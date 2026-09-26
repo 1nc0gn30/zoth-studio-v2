@@ -25,39 +25,36 @@ export default function Footer() {
 
   const workstations = [
     { label: 'Autonomous WebGen', to: '/webgen' },
-    { label: 'Netrunner Memory Hub', to: '/memory' },
-    { label: 'Byzantine Consensus', to: '/consensus' },
-    { label: 'Adytum Alchemist', to: '/adytum' },
-    { label: 'HexStrike Red Team', to: '/hexstrike' },
-    { label: 'Zoth OS Kernel', to: '/zoth-os' },
-    { label: 'Swarm Coordinator', to: '/swarm' },
-    { label: 'Workstations Matrix', to: '/workstations' },
-    { label: 'Sovereign Arsenal', to: '/arsenal' },
+    { label: 'Lucy Netrunner Memory Hub', to: '/memory' },
+    { label: 'Byzantine Consensus Arena', to: '/consensus' },
+    { label: 'Adytum Sanctum (22 Keys)', to: '/adytum' },
+    { label: 'HexStrike Cybersec Terminal', to: '/hexstrike' },
+    { label: 'Zoth OS Kernel (KVM)', to: '/zoth-os' },
+    { label: '21 Swarm Pantheon', to: '/swarm' },
+    { label: 'Workstations Matrix (24)', to: '/workstations' },
+    { label: 'Sovereign Arsenal Hub', to: '/arsenal' },
   ];
 
   const toolsAndRepos = [
+    { label: 'Sovereign Arsenal (All)', to: '/arsenal' },
     { label: 'Micro-Tools Registry (25)', to: '/tools' },
+    { label: 'Enclave Bridges (IPC Mesh)', to: '/bridges' },
     { label: 'Zoth Studio v2 Repo', href: 'https://github.com/NullAITech/zoth-studio-v2', external: true },
     { label: 'NullAI Tech GitHub Org', href: 'https://github.com/NullAITech', external: true },
     { label: 'WebGen Autonomous Foundry', href: 'https://github.com/NullAITech/zoth-webgen', external: true },
-    { label: 'Neuro-Memory Daemon Repo', href: 'https://github.com/NullAITech/neuro-memory-daemon', external: true },
-    { label: 'Adytum Alchemist Repo', href: 'https://github.com/NullAITech/adytum-alchemist-ai-workflow', external: true },
-    { label: 'HexStrike AI Terminal Repo', href: 'https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal', external: true },
-    { label: 'Polyglot Exporter Repo', href: 'https://github.com/NullAITech/polyglot-framework-exporter', external: true },
+    { label: 'Neuro-Memory Daemon', href: 'https://github.com/NullAITech/neuro-memory-daemon', external: true },
     { label: '21-Agent Swarm Multiplexer', href: 'https://github.com/NullAITech/zoth-swarm-multiplexer', external: true },
-    { label: 'Sovereign Agent Bridge', href: 'https://github.com/NullAITech/sovereign-agent-bridge', external: true },
-    { label: 'EnvGuard Secrets Vault', href: 'https://github.com/NullAITech/envguard-secrets-vault', external: true },
-    { label: 'Vector Search Engine', href: 'https://github.com/NullAITech/vector-search-engine', external: true },
-    { label: 'Zoth OS Daemon Repo', href: 'https://github.com/NullAITech/zoth-os', external: true },
-    { label: 'Netlify Ghost Hub Repo', href: 'https://github.com/NullAITech/Netlify-Ghost-Hub', external: true },
-    { label: 'Enclave Bridges', to: '/bridges' },
+    { label: 'Adytum Alchemist Workflow', href: 'https://github.com/NullAITech/adytum-alchemist-ai-workflow', external: true },
   ];
 
   const theoryAndDocs = [
-    { label: 'Mathematical Foundations', to: '/docs/math' },
-    { label: 'STDP Synaptic Plasticity', to: '/docs/math/stdp-plasticity' },
-    { label: 'Byzantine Triangulation', to: '/docs/math/byzantine-triangulation' },
-    { label: 'Tri-Tier Cryptographic Vault', to: '/docs/math/tri-tier-vault' },
+    { label: 'Six Mathematical Pillars', to: '/docs/math' },
+    { label: 'Pillar I: Linear Attention', to: '/docs/math/linear' },
+    { label: 'Pillar II: Calculus & AdamW', to: '/docs/math/calculus' },
+    { label: 'Pillar III: Shannon Entropy', to: '/docs/math/probability' },
+    { label: 'Pillar IV: Loss Landscapes', to: '/docs/math/hessian' },
+    { label: 'Pillar V: Lyapunov Attractors', to: '/docs/math/lyapunov' },
+    { label: 'Pillar VI: STDP Synaptic Proof', to: '/docs/math/stdp' },
     { label: 'Architecture & Whitepaper', to: '/docs' },
     { label: 'Frequently Asked Questions', to: '/faqs' },
   ];
@@ -65,10 +62,12 @@ export default function Footer() {
   const machineStandards = [
     { label: 'Agent AX Specification', to: '/ax' },
     { label: 'LLMs Context (llms.txt)', href: '/llms.txt', external: true },
-    { label: 'Full LLMs Corpus (llms-full.txt)', href: '/llms-full.txt', external: true },
-    { label: 'Agent Crawlers Spec (ai.txt)', href: '/ai.txt', external: true },
-    { label: 'Sitemap XML (sitemap.xml)', href: '/sitemap.xml', external: true },
-    { label: 'Zero-Egress Security Invariant', to: '/docs' },
+    { label: 'Full Corpus (llms-full.txt)', href: '/llms-full.txt', external: true },
+    { label: 'Agent Policy (ai.txt)', href: '/ai.txt', external: true },
+    { label: 'Sitemap Index (sitemap.xml)', href: '/sitemap.xml', external: true },
+    { label: 'Robots Policy (robots.txt)', href: '/robots.txt', external: true },
+    { label: 'Humans Attribution (humans.txt)', href: '/humans.txt', external: true },
+    { label: 'Zero-Egress Invariants', to: '/docs' },
   ];
 
   // Refined section heading — clearer hierarchy with depth shadow
