@@ -36,8 +36,7 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 // Flagship Primary Links
 const primaryNav = [
-  { label: 'Workstations', path: '/workstations', badge: '15' },
-  { label: 'Tools', path: '/tools', badge: '27' },
+  { label: 'Arsenal', path: '/arsenal', badge: '49' },
   { label: 'Templates', path: '/templates', badge: '10' },
 ];
 
@@ -299,7 +298,10 @@ export default function Navbar({ mode, onToggleTheme }) {
             }}
           >
             {primaryNav.map((item) => {
-              const active = location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
+              const active =
+                location.pathname === item.path ||
+                location.pathname.startsWith(`${item.path}/`) ||
+                (item.path === '/arsenal' && (location.pathname === '/tools' || location.pathname === '/workstations'));
               return (
                 <Button
                   key={item.label}
@@ -1467,7 +1469,10 @@ export default function Navbar({ mode, onToggleTheme }) {
             </Typography>
             <List dense sx={{ mb: 2 }}>
               {primaryNav.map((item) => {
-                const selected = location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
+                const selected =
+                  location.pathname === item.path ||
+                  location.pathname.startsWith(`${item.path}/`) ||
+                  (item.path === '/arsenal' && (location.pathname === '/tools' || location.pathname === '/workstations'));
                 return (
                   <ListItem key={item.label} disablePadding>
                     <ListItemButton

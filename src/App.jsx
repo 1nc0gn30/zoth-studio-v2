@@ -19,6 +19,7 @@ import MathPillarsPage from './pages/MathPillarsPage';
 import RealToolWorkspacePage from './pages/RealToolWorkspacePage';
 import WorkstationsPage from './pages/WorkstationsPage';
 import WorkstationDetailPage from './pages/WorkstationDetailPage';
+import ArsenalPage from './pages/ArsenalPage';
 import TemplatesPage from './pages/TemplatesPage';
 import FaqsPage from './pages/FaqsPage';
 import AXPage from './pages/AXPage';
@@ -73,11 +74,12 @@ function AppShell({ mode, onToggleTheme }) {
       >
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/arsenal" element={<ArsenalPage />} />
           <Route path="/adytum" element={<AdytumPage />} />
           <Route path="/swarm" element={<SwarmPage />} />
           <Route path="/bridges" element={<BridgesPage />} />
-          <Route path="/tools" element={<ToolsPage />} />
-          <Route path="/workstations" element={<WorkstationsPage />} />
+          <Route path="/tools" element={<ArsenalPage />} />
+          <Route path="/workstations" element={<ArsenalPage />} />
           <Route path="/workstations/:workstationId" element={<WorkstationDetailPage />} />
           <Route path="/templates" element={<TemplatesPage />} />
           <Route path="/tools/:toolId" element={<RealToolWorkspacePage />} />

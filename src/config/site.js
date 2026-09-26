@@ -58,6 +58,12 @@ export const siteConfig = {
       keywords: 'signal bridge, sovereign communications, E2EE mesh, inter-agent bus, zero-leakage',
       type: 'article',
     },
+    '/arsenal': {
+      title: 'The Sovereign Arsenal // Unified Command Matrix & Developer Catalog',
+      description: 'Unified master directory consolidating 49 sovereign assets: air-gapped developer cockpits, standalone micro-tools, and hardware enclaves.',
+      keywords: 'sovereign arsenal, zoth catalog, developer cockpits, sovereign micro tools, hardware enclaves',
+      type: 'article',
+    },
     '/tools': {
       title: 'Sovereign Tool Arsenal // 27 Air-Gapped Micro-Tools & Repos',
       description: 'Explore 27 standalone, schema-validated developer tools for website generation, social syndication, recon mapping, and 3D modeling.',
