@@ -791,16 +791,17 @@ export default function ConsensusPage() {
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (calculatedConfidence / 100) * circumference;
 
-  if (!introDone) {
-
-    return <CinematicIntro words={["BYZANTINE", "FAULT", "TOLERANCE"]} onComplete={() => setIntroDone(true)} />;
-
-
-  }
-
-
   return (
-    <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6 }}>
+    <>
+      {!introDone && (
+        <CinematicIntro
+          words={["BYZANTINE", "FAULT", "TOLERANCE"]}
+          themeColor="cyan"
+          subtitle="BYZANTINE QUORUM VALIDATOR"
+          onComplete={() => setIntroDone(true)}
+        />
+      )}
+      <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6 }}>
       {/* Page Header */}
       <HeroReveal>
         <Box sx={{ mb: 4, position: 'relative' }}>
@@ -1876,5 +1877,6 @@ export default function ConsensusPage() {
         />
       </RevealOnScroll>
     </Container>
+    </>
   );
 }

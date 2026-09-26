@@ -1424,12 +1424,16 @@ export default function HomePage() {
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
   };
 
-  if (!introDone) {
-    return <CinematicIntro words={["ZOTH", "WELCOME", "TO", "ZOTH OS"]} onComplete={() => setIntroDone(true)} />;
-  }
-
   return (
-    <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 4, md: 7 } }}>
+    <>
+      {!introDone && (
+        <CinematicIntro
+          words={["ZOTH", "WELCOME", "TO", "ZOTH OS"]}
+          themeColor="gold"
+          onComplete={() => setIntroDone(true)}
+        />
+      )}
+      <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 4, md: 7 } }}>
       {/* Soft radial gold glow behind the hero (HomePage signature) */}
       <ParallaxGlow offset={60} style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '100%', pointerEvents: 'none', zIndex: 0 }}>
         <Box
@@ -2331,5 +2335,6 @@ export default function HomePage() {
         toolCommand="npx zoth pull adytum-alchemist-ai-workflow"
       />
     </Container>
+    </>
   );
 }

@@ -456,16 +456,17 @@ export default function AXPage() {
     setTimeout(() => setProbeCopied(false), 2000);
   };
 
-  if (!introDone) {
-
-    return <CinematicIntro words={["AGENT", "EXPERIENCE", "CRAWLERS"]} onComplete={() => setIntroDone(true)} />;
-
-
-  }
-
-
   return (
-    <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
+    <>
+      {!introDone && (
+        <CinematicIntro
+          words={["AGENT", "EXPERIENCE", "CRAWLERS"]}
+          themeColor="cyan"
+          subtitle="MACHINE ONTOLOGY & AX CRAWLERS"
+          onComplete={() => setIntroDone(true)}
+        />
+      )}
+      <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
       <SEO
         title="Agent Experience (AX) // Machine-Readable Entity Profile & Capabilities"
         description="Structured entity profile, service catalog, and API schema endpoints optimized for autonomous AI search and agent engines."
@@ -1234,5 +1235,6 @@ export default function AXPage() {
         toolCommand="git clone https://github.com/NullAITech/sovereign-agent-bridge.git"
       />
     </Container>
+    </>
   );
 }

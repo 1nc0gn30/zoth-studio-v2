@@ -360,16 +360,17 @@ Clones all 25 catalog entries that are published into ./tools.
 Runs local invariant verification before staging tools.`
   ];
 
-  if (!introDone) {
-
-    return <CinematicIntro words={["ZOTH", "DOCUMENTATION", "SPECS"]} onComplete={() => setIntroDone(true)} />;
-
-
-  }
-
-
   return (
-    <Box sx={{ bgcolor: dark ? voidDark : '#FAFBFD', minHeight: '100vh', py: 6 }}>
+    <>
+      {!introDone && (
+        <CinematicIntro
+          words={["ZOTH", "DOCUMENTATION", "SPECS"]}
+          themeColor="gold"
+          subtitle="SYSTEM TOPOLOGY & ZERO EGRESS"
+          onComplete={() => setIntroDone(true)}
+        />
+      )}
+      <Box sx={{ bgcolor: dark ? voidDark : '#FAFBFD', minHeight: '100vh', py: 6 }}>
       <Container maxWidth="xl">
         {/* Header / Hero Section */}
         <HeroReveal>
@@ -1649,5 +1650,6 @@ npm run preview`}
         </RevealOnScroll>
       </Container>
     </Box>
+    </>
   );
 }

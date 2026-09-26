@@ -183,16 +183,17 @@ export default function SwarmPage() {
     return () => clearInterval(timer);
   }, [autoPing, pingCadre]);
 
-  if (!introDone) {
-
-    return <CinematicIntro words={["SOVEREIGN", "AGENT", "SWARM"]} onComplete={() => setIntroDone(true)} />;
-
-
-  }
-
-
   return (
-    <Container maxWidth="lg" sx={{ py: 6, position: 'relative' }}>
+    <>
+      {!introDone && (
+        <CinematicIntro
+          words={["SOVEREIGN", "AGENT", "SWARM"]}
+          themeColor="emerald"
+          subtitle="21-AGENT MULTIPLEXER MESH"
+          onComplete={() => setIntroDone(true)}
+        />
+      )}
+      <Container maxWidth="lg" sx={{ py: 6, position: 'relative' }}>
       {/* Unique gold radial glow behind page header */}
       <ParallaxGlow offset={60}>
         <Box
@@ -940,5 +941,6 @@ export default function SwarmPage() {
       />
       </RevealOnScroll>
     </Container>
+    </>
   );
 }

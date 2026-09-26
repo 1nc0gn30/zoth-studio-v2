@@ -30,6 +30,7 @@ import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import CodeIcon from '@mui/icons-material/Code';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 import VaultConsole from '../components/VaultConsole';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
@@ -578,16 +579,17 @@ export default function HexStrikePage() {
   const dialCircumference = 2 * Math.PI * dialRadius;
   const dialOffset = dialCircumference * (1 - securityScore / 100);
 
-  if (!introDone) {
-
-    return <CinematicIntro words={["HEXSTRIKE", "OFFENSIVE", "ARSENAL"]} onComplete={() => setIntroDone(true)} />;
-
-
-  }
-
-
   return (
-    <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>
+    <>
+      {!introDone && (
+        <CinematicIntro
+          words={["HEXSTRIKE", "OFFENSIVE", "ARSENAL"]}
+          themeColor="crimson"
+          subtitle="KERNEL CVE & RING-0 AUDIT"
+          onComplete={() => setIntroDone(true)}
+        />
+      )}
+      <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>
       {/* Background signature gold radial glow */}
       <ParallaxGlow offset={60}>
         <Box
@@ -1623,5 +1625,6 @@ export default function HexStrikePage() {
         toolCommand="git clone https://github.com/NullAITech/envguard-secrets-vault.git"
       />
     </Container>
+    </>
   );
 }

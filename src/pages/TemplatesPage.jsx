@@ -66,16 +66,17 @@ export default function TemplatesPage() {
     setTimeout(() => setCopiedCmd(''), 1800);
   };
 
-  if (!introDone) {
-
-    return <CinematicIntro words={["OPEN SOURCE", "AGENT", "TEMPLATES"]} onComplete={() => setIntroDone(true)} />;
-
-
-  }
-
-
   return (
-    <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 } }}>
+    <>
+      {!introDone && (
+        <CinematicIntro
+          words={["OPEN SOURCE", "AGENT", "TEMPLATES"]}
+          themeColor="purple"
+          subtitle="SOVEREIGN SCAFFOLD FOUNDRY"
+          onComplete={() => setIntroDone(true)}
+        />
+      )}
+      <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 } }}>
       {/* Top Gold Illumination Line */}
       <GlowLine />
 
@@ -599,5 +600,6 @@ export default function TemplatesPage() {
         />
       </RevealOnScroll>
     </Container>
+    </>
   );
 }

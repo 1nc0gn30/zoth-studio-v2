@@ -45,7 +45,7 @@ import { useStudioStatus } from '../studio/useStudioStatus';
 import { useHostInfo } from '../studio/useHostInfo';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import SovereignFunnel from '../components/SovereignFunnel';
-import { HeroReveal, ParallaxGlow, RevealOnScroll, StaggerChildren, StaggerItem } from '../components/MotionReveal';
+import { HeroReveal, HeroItem, ParallaxGlow, RevealOnScroll, StaggerChildren, StaggerItem } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const qemu = 'qemu-system-x86_64 -enable-kvm -m 8192 -smp 4 -hda zoth-agent-os.qcow2';
@@ -827,12 +827,17 @@ export default function ZothOSPage() {
     'clear',
   ];
 
-  if (!introDone) {
-    return <CinematicIntro words={["ZOTH OS", "KVM", "HYPERVISOR"]} onComplete={() => setIntroDone(true)} />;
-  }
-
   return (
-    <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>
+    <>
+      {!introDone && (
+        <CinematicIntro
+          words={["ZOTH OS", "KVM", "HYPERVISOR"]}
+          themeColor="emerald"
+          subtitle="BARE-METAL SOVEREIGN KERNEL"
+          onComplete={() => setIntroDone(true)}
+        />
+      )}
+      <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>
       {/* ZothOS signature: gold glow behind the header */}
       <ParallaxGlow offset={60}>
         <Box
@@ -2359,5 +2364,6 @@ export default function ZothOSPage() {
         </Alert>
       </Snackbar>
     </Container>
+    </>
   );
 }

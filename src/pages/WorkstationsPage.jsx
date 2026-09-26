@@ -28,6 +28,11 @@ import PaletteIcon from '@mui/icons-material/Palette';
 import HubIcon from '@mui/icons-material/Hub';
 import ComputerIcon from '@mui/icons-material/Computer';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import HandymanIcon from '@mui/icons-material/Handyman';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CheckIcon from '@mui/icons-material/Check';
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 import { workstations } from '../data/workstations';
 import { useStudioStatus } from '../studio/useStudioStatus';
@@ -126,6 +131,7 @@ function getBandConfig(bandName, isDark) {
 }
 
 function WorkstationCard({ item, classicUp, isDark, gold }) {
+  const [copied, setCopied] = useState(false);
   const bandCfg = getBandConfig(item.band, isDark) || {
     color: gold.accent,
     wash: gold.wash,
@@ -133,6 +139,22 @@ function WorkstationCard({ item, classicUp, isDark, gold }) {
     icon: ComputerIcon
   };
   const BandIconComponent = bandCfg.icon;
+
+  const isTool = item.type === 'integrated_tool';
+  const isEnclave = item.type === 'enclave_daemon';
+  const isCockpit = item.type === 'cockpit' || (!isTool && !isEnclave);
+
+  const handleCopyPull = (e) => {
+    e.stopPropagation();
+    if (!item.pullCommand) return;
+    try {
+      navigator.clipboard.writeText(item.pullCommand);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <Card
@@ -147,43 +169,76 @@ function WorkstationCard({ item, classicUp, isDark, gold }) {
         boxShadow: isDark ? 'none' : '0 1px 3px rgba(16, 24, 40, 0.05)',
         transition: 'transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease',
         '&:hover': {
-          borderColor: gold.accent,
+          borderColor: isTool ? '#38BDF8' : isEnclave ? '#A78BFA' : gold.accent,
           transform: 'translateY(-3px)',
           boxShadow: isDark
-            ? '0 12px 28px -6px rgba(212, 175, 55, 0.25), 0 0 0 1px rgba(212, 175, 55, 0.3)'
+            ? '0 12px 28px -6px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(212, 175, 55, 0.25)'
             : '0 12px 24px -4px rgba(16, 24, 40, 0.08), 0 0 0 1px rgba(184, 134, 11, 0.25)',
         },
       }}
     >
       <CardContent sx={{ flexGrow: 1, p: 2.5, pb: 1.5 }}>
-        {/* Top Badges: Classification Band & Zero-Egress Invariant */}
+        {/* Top Badges: Classification Type & Architectural Band */}
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, mb: 1.5, flexWrap: 'wrap' }}>
+          {isTool ? (
+            <Chip
+              size="small"
+              icon={<HandymanIcon sx={{ fontSize: '0.85rem !important', color: `${isDark ? '#38BDF8' : '#0284C7'} !important` }} />}
+              label="STANDALONE MICRO-TOOL"
+              sx={{
+                height: 24,
+                fontSize: '0.68rem',
+                fontWeight: 800,
+                fontFamily: mono,
+                bgcolor: isDark ? 'rgba(56, 189, 248, 0.12)' : '#F0F9FF',
+                color: isDark ? '#38BDF8' : '#0284C7',
+                border: `1px solid ${isDark ? 'rgba(56, 189, 248, 0.3)' : '#BAE6FD'}`,
+              }}
+            />
+          ) : isEnclave ? (
+            <Chip
+              size="small"
+              icon={<HubIcon sx={{ fontSize: '0.85rem !important', color: `${isDark ? '#A78BFA' : '#7C3AED'} !important` }} />}
+              label="CORE HARDWARE ENCLAVE"
+              sx={{
+                height: 24,
+                fontSize: '0.68rem',
+                fontWeight: 800,
+                fontFamily: mono,
+                bgcolor: isDark ? 'rgba(167, 139, 250, 0.12)' : '#FAF5FF',
+                color: isDark ? '#A78BFA' : '#7C3AED',
+                border: `1px solid ${isDark ? 'rgba(167, 139, 250, 0.3)' : '#DDD6FE'}`,
+              }}
+            />
+          ) : (
+            <Chip
+              size="small"
+              icon={<TerminalIcon sx={{ fontSize: '0.85rem !important', color: `${gold.accent} !important` }} />}
+              label="STUDIO COCKPIT & IDE"
+              sx={{
+                height: 24,
+                fontSize: '0.68rem',
+                fontWeight: 800,
+                fontFamily: mono,
+                bgcolor: gold.wash,
+                color: gold.accent,
+                border: `1px solid ${gold.border}`,
+              }}
+            />
+          )}
+
           <Chip
             size="small"
             icon={<BandIconComponent sx={{ fontSize: '0.85rem !important', color: `${bandCfg.color} !important` }} />}
             label={item.band}
             sx={{
               height: 24,
-              fontSize: '0.74rem',
+              fontSize: '0.7rem',
               fontWeight: 800,
               fontFamily: mono,
               bgcolor: bandCfg.wash,
               color: bandCfg.color,
               border: `1px solid ${bandCfg.border}`,
-            }}
-          />
-          <Chip
-            size="small"
-            icon={<VerifiedUserIcon sx={{ fontSize: '0.8rem !important', color: `${isDark ? '#34D399' : '#047857'} !important` }} />}
-            label="Zero-Egress Invariant Verified"
-            sx={{
-              height: 24,
-              fontSize: '0.68rem',
-              fontWeight: 750,
-              fontFamily: mono,
-              bgcolor: isDark ? 'rgba(52, 211, 153, 0.1)' : '#ECFDF3',
-              color: isDark ? '#34D399' : '#047857',
-              border: `1px solid ${isDark ? 'rgba(52, 211, 153, 0.3)' : 'rgba(4, 120, 87, 0.3)'}`,
             }}
           />
         </Box>
@@ -195,86 +250,230 @@ function WorkstationCard({ item, classicUp, isDark, gold }) {
             fontSize: '1.05rem',
             fontWeight: 800,
             lineHeight: 1.35,
-            mb: 1.25,
+            mb: 1,
             color: isDark ? '#EDEFF2' : '#101828',
           }}
         >
           {item.name}
         </Typography>
 
-        {/* Workstation ID & Path */}
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, mb: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.7rem', color: gold.accent, fontWeight: 700 }}>
-              ID:
-            </Typography>
-            <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#9CA3AF' : '#374151', bgcolor: isDark ? '#14141E' : '#F3F4F6', px: 0.8, py: 0.2, borderRadius: 1, border: `1px solid ${isDark ? '#26262F' : '#E5E7EB'}` }}>
-              {item.id}
-            </Typography>
+        {/* Description */}
+        <Typography
+          variant="body2"
+          sx={{
+            color: 'text.secondary',
+            fontSize: '0.84rem',
+            lineHeight: 1.55,
+            mb: 1.5,
+          }}
+        >
+          {item.description || "Zero-egress sovereign workstation integrated into Zoth Studio v2."}
+        </Typography>
+
+        {/* Workstation ID & Micro-repo Pull CLI */}
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75, mb: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.68rem', color: gold.accent, fontWeight: 700 }}>
+                ID:
+              </Typography>
+              <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.7rem', color: isDark ? '#9CA3AF' : '#374151', bgcolor: isDark ? '#14141E' : '#F3F4F6', px: 0.8, py: 0.2, borderRadius: 1, border: `1px solid ${isDark ? '#26262F' : '#E5E7EB'}` }}>
+                {item.id}
+              </Typography>
+            </Box>
+            <Chip
+              size="small"
+              icon={<VerifiedUserIcon sx={{ fontSize: '0.75rem !important', color: `${isDark ? '#34D399' : '#047857'} !important` }} />}
+              label="Zero-Egress"
+              sx={{
+                height: 20,
+                fontSize: '0.65rem',
+                fontWeight: 750,
+                fontFamily: mono,
+                bgcolor: isDark ? 'rgba(52, 211, 153, 0.1)' : '#ECFDF3',
+                color: isDark ? '#34D399' : '#047857',
+                border: `1px solid ${isDark ? 'rgba(52, 211, 153, 0.3)' : 'rgba(4, 120, 87, 0.3)'}`,
+              }}
+            />
           </Box>
-          <Typography
-            variant="caption"
-            sx={{
-              fontFamily: mono,
-              fontSize: '0.74rem',
-              color: isDark ? '#9CA3AF' : '#4B5563',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-              display: 'block',
-            }}
-          >
-            {item.path}
-          </Typography>
+
+          {item.pullCommand && (
+            <Box
+              onClick={handleCopyPull}
+              sx={{
+                cursor: 'pointer',
+                p: 0.75,
+                px: 1,
+                borderRadius: 1.5,
+                bgcolor: isDark ? '#08080C' : '#F3F4F6',
+                border: `1px solid ${isDark ? '#26262F' : '#E5E7EB'}`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 1,
+                '&:hover': {
+                  borderColor: isTool ? '#38BDF8' : gold.accent,
+                  bgcolor: isDark ? '#0E1118' : '#EDEFEF',
+                },
+                transition: 'all 0.18s ease',
+              }}
+            >
+              <Typography
+                variant="caption"
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.68rem',
+                  color: isDark ? '#9CA3AF' : '#4B5563',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {item.pullCommand}
+              </Typography>
+              {copied ? (
+                <CheckIcon sx={{ fontSize: '0.85rem', color: '#10B981', flexShrink: 0 }} />
+              ) : (
+                <ContentCopyIcon sx={{ fontSize: '0.8rem', color: 'text.secondary', flexShrink: 0 }} />
+              )}
+            </Box>
+          )}
         </Box>
       </CardContent>
 
       <CardActions sx={{ px: 2.5, pb: 2.5, pt: 0, gap: 1, flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
-        {/* Direct primary Launch Workstation button */}
-        <Button
-          size="small"
-          variant="contained"
-          component={RouterLink}
-          to={`/workstations/${item.id}`}
-          startIcon={<PlayArrowIcon sx={{ fontSize: '1rem' }} />}
-          sx={{
-            bgcolor: gold.accent,
-            color: '#101828',
-            fontWeight: 800,
-            fontSize: '0.8rem',
-            px: 2,
-            py: 0.6,
-            borderRadius: 9999,
-            boxShadow: '0 2px 10px rgba(212, 175, 55, 0.3)',
-            '&:hover': {
-              bgcolor: '#F3D56A',
-              boxShadow: '0 4px 16px rgba(212, 175, 55, 0.45)',
-              transform: 'translateY(-1px)',
-            },
-            transition: 'all 0.2s ease',
-          }}
-        >
-          Launch Workstation
-        </Button>
+        {isTool ? (
+          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Button
+              size="small"
+              variant="contained"
+              component={RouterLink}
+              to={item.alsoInApp}
+              startIcon={<RocketLaunchIcon sx={{ fontSize: '0.95rem' }} />}
+              sx={{
+                bgcolor: isDark ? '#38BDF8' : '#0284C7',
+                color: '#FFFFFF',
+                fontWeight: 800,
+                fontSize: '0.78rem',
+                px: 2,
+                py: 0.6,
+                borderRadius: 9999,
+                boxShadow: '0 2px 10px rgba(56, 189, 248, 0.3)',
+                '&:hover': {
+                  bgcolor: isDark ? '#7DD3FC' : '#0369A1',
+                  color: isDark ? '#0B0B12' : '#FFFFFF',
+                },
+                transition: 'all 0.2s ease',
+              }}
+            >
+              Open in Tool Arsenal ↗
+            </Button>
+            <Button
+              size="small"
+              variant="text"
+              component={RouterLink}
+              to={`/workstations/${item.id}`}
+              sx={{
+                color: isDark ? '#9CA3AF' : '#6B7280',
+                fontSize: '0.74rem',
+                fontFamily: mono,
+                p: 0.5,
+                '&:hover': { color: gold.accent },
+              }}
+            >
+              Console View
+            </Button>
+          </Box>
+        ) : isEnclave ? (
+          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Button
+              size="small"
+              variant="contained"
+              component={RouterLink}
+              to={item.alsoInApp}
+              startIcon={<HubIcon sx={{ fontSize: '0.95rem' }} />}
+              sx={{
+                bgcolor: isDark ? '#A78BFA' : '#7C3AED',
+                color: '#FFFFFF',
+                fontWeight: 800,
+                fontSize: '0.78rem',
+                px: 2,
+                py: 0.6,
+                borderRadius: 9999,
+                boxShadow: '0 2px 10px rgba(167, 139, 250, 0.3)',
+                '&:hover': {
+                  bgcolor: isDark ? '#C4B5FD' : '#6D28D9',
+                  color: isDark ? '#0B0B12' : '#FFFFFF',
+                },
+                transition: 'all 0.2s ease',
+              }}
+            >
+              Enter Enclave Hub ↗
+            </Button>
+            <Button
+              size="small"
+              variant="text"
+              component={RouterLink}
+              to={`/workstations/${item.id}`}
+              sx={{
+                color: isDark ? '#9CA3AF' : '#6B7280',
+                fontSize: '0.74rem',
+                fontFamily: mono,
+                p: 0.5,
+                '&:hover': { color: gold.accent },
+              }}
+            >
+              Console View
+            </Button>
+          </Box>
+        ) : (
+          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Button
+              size="small"
+              variant="contained"
+              component={RouterLink}
+              to={`/workstations/${item.id}`}
+              startIcon={<PlayArrowIcon sx={{ fontSize: '1rem' }} />}
+              sx={{
+                bgcolor: gold.accent,
+                color: '#101828',
+                fontWeight: 800,
+                fontSize: '0.8rem',
+                px: 2,
+                py: 0.6,
+                borderRadius: 9999,
+                boxShadow: '0 2px 10px rgba(212, 175, 55, 0.3)',
+                '&:hover': {
+                  bgcolor: '#F3D56A',
+                  boxShadow: '0 4px 16px rgba(212, 175, 55, 0.45)',
+                  transform: 'translateY(-1px)',
+                },
+                transition: 'all 0.2s ease',
+              }}
+            >
+              Launch Cockpit
+            </Button>
 
-        {classicUp && (
-          <Button
-            size="small"
-            variant="text"
-            endIcon={<LaunchIcon sx={{ fontSize: '0.8rem' }} />}
-            href={`${CLASSIC}${item.path}`}
-            target="_blank"
-            rel="noreferrer"
-            sx={{
-              color: isDark ? '#9CA3AF' : '#6B7280',
-              fontSize: '0.73rem',
-              fontFamily: mono,
-              p: 0.5,
-              '&:hover': { color: gold.accent },
-            }}
-          >
-            Classic (:8088)
-          </Button>
+            {classicUp && (
+              <Button
+                size="small"
+                variant="text"
+                endIcon={<LaunchIcon sx={{ fontSize: '0.8rem' }} />}
+                href={`${CLASSIC}${item.path}`}
+                target="_blank"
+                rel="noreferrer"
+                sx={{
+                  color: isDark ? '#9CA3AF' : '#6B7280',
+                  fontSize: '0.73rem',
+                  fontFamily: mono,
+                  p: 0.5,
+                  '&:hover': { color: gold.accent },
+                }}
+              >
+                Classic (:8088)
+              </Button>
+            )}
+          </Box>
         )}
       </CardActions>
     </Card>
@@ -287,6 +486,7 @@ export default function WorkstationsPage() {
   const isDark = theme.palette.mode === 'dark';
   const [search, setSearch] = useState('');
   const [band, setBand] = useState('All');
+  const [typeFilter, setTypeFilter] = useState('all'); // 'all' | 'cockpit' | 'integrated_tool' | 'enclave_daemon'
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'topology'
   const { status } = useStudioStatus();
   const classicUp = Boolean(status?.services?.classic?.up);
@@ -297,7 +497,7 @@ export default function WorkstationsPage() {
     border: isDark ? 'rgba(212,175,55,0.28)' : 'rgba(184,134,11,0.25)',
   };
 
-  // Precomputed band counts based on static 37 workstations
+  // Precomputed band counts
   const bandCounts = useMemo(() => {
     const counts = {};
     for (const item of workstations) {
@@ -306,20 +506,34 @@ export default function WorkstationsPage() {
     return counts;
   }, []);
 
-  // Filtered workstations matching both band and search
+  // Precomputed type counts
+  const typeCounts = useMemo(() => {
+    const counts = { all: workstations.length, cockpit: 0, integrated_tool: 0, enclave_daemon: 0 };
+    for (const item of workstations) {
+      if (item.type && counts[item.type] !== undefined) {
+        counts[item.type]++;
+      }
+    }
+    return counts;
+  }, []);
+
+  // Filtered workstations matching type, band, and search
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return workstations.filter((item) => {
+      const inType = typeFilter === 'all' || item.type === typeFilter;
+      if (!inType) return false;
       const inBand = band === 'All' || item.band === band;
       if (!inBand) return false;
       if (!q) return true;
       return (
         item.name.toLowerCase().includes(q) ||
         item.id.toLowerCase().includes(q) ||
-        item.band.toLowerCase().includes(q)
+        item.band.toLowerCase().includes(q) ||
+        (item.description && item.description.toLowerCase().includes(q))
       );
     });
-  }, [band, search]);
+  }, [typeFilter, band, search]);
 
   // Grouped by band for Cadre Topology Map
   const groupedByBand = useMemo(() => {
@@ -337,16 +551,17 @@ export default function WorkstationsPage() {
     return map;
   }, [filtered]);
 
-  if (!introDone) {
-
-    return <CinematicIntro words={["ZOTH", "ISOLATED", "WORKSTATIONS"]} onComplete={() => setIntroDone(true)} />;
-
-
-  }
-
-
   return (
-    <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 } }}>
+    <>
+      {!introDone && (
+        <CinematicIntro
+          words={["ZOTH", "STUDIO", "WORKSTATIONS"]}
+          themeColor="gold"
+          subtitle="SOVEREIGN DEVELOPER COCKPITS"
+          onComplete={() => setIntroDone(true)}
+        />
+      )}
+      <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 } }}>
       {/* Page Header */}
       <HeroReveal>
         <Box sx={{ mb: 3 }}>
@@ -357,12 +572,12 @@ export default function WorkstationsPage() {
           </HeroItem>
           <HeroItem>
             <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', mb: 1, color: isDark ? '#EDEFF2' : '#101828' }}>
-              Workstations
+              Workstations & Cockpits
             </Typography>
           </HeroItem>
           <HeroItem>
             <Typography color="text.secondary" sx={{ maxWidth: 880, fontSize: '1.05rem', lineHeight: 1.6 }}>
-              All 37 studio workstations are integrated directly into Zoth Studio v2. They render with the native gold-on-void design system, zero external runtime dependency, and immediate interactive execution.
+              Curated matrix of sovereign studio cockpits, standalone micro-tools, and hardware enclave daemons integrated directly into Zoth Studio v2. Operating strictly with zero cloud telemetry and deterministic loopback verification.
             </Typography>
           </HeroItem>
         </Box>
@@ -385,7 +600,7 @@ export default function WorkstationsPage() {
           }}
         >
           <Grid container spacing={2.5} alignItems="center">
-            {/* Stat 1: 37 Sovereign Consoles Native in v2 */}
+            {/* Stat 1: Curated Sovereign Consoles */}
             <Grid xs={12} sm={6} md={3}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.75 }}>
                 <Box
@@ -406,10 +621,10 @@ export default function WorkstationsPage() {
                 </Box>
                 <Box>
                   <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent, lineHeight: 1.15 }}>
-                    37
+                    {workstations.length}
                   </Typography>
                   <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', fontSize: '0.78rem' }}>
-                    37 Sovereign Consoles Native in v2
+                    {typeCounts.cockpit} Cockpits · {typeCounts.integrated_tool} Tools · {typeCounts.enclave_daemon} Enclaves
                   </Typography>
                 </Box>
               </Box>
@@ -439,7 +654,7 @@ export default function WorkstationsPage() {
                     6
                   </Typography>
                   <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', fontSize: '0.78rem' }}>
-                    6 Architectural Bands
+                    6 Architectural Cadres
                   </Typography>
                 </Box>
               </Box>
@@ -469,7 +684,7 @@ export default function WorkstationsPage() {
                     100% Loopback
                   </Typography>
                   <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', fontSize: '0.78rem' }}>
-                    Zero Cloud Dependencies (100% Loopback)
+                    Zero Cloud Dependencies
                   </Typography>
                 </Box>
               </Box>
@@ -526,6 +741,70 @@ export default function WorkstationsPage() {
                     border: `1px solid ${classicUp ? (isDark ? 'rgba(52,211,153,0.4)' : '#6EE7B7') : (isDark ? '#374151' : '#D1D5DB')}`,
                   }}
                 />
+              </Box>
+            </Grid>
+          </Grid>
+        </Paper>
+      </RevealOnScroll>
+
+      {/* Architectural Taxonomy Clarification Card */}
+      <RevealOnScroll preset="fadeUp" delay={0.25}>
+        <Paper
+          sx={{
+            p: 2.5,
+            mb: 3.5,
+            borderRadius: 3,
+            bgcolor: isDark ? '#080A12' : '#F8FAFC',
+            border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : '#E2E8F0'}`,
+            background: isDark
+              ? 'linear-gradient(135deg, rgba(212,175,55,0.06) 0%, rgba(8,10,18,0.95) 100%)'
+              : 'linear-gradient(135deg, rgba(212,175,55,0.04) 0%, #FFFFFF 100%)',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
+            <InfoOutlinedIcon sx={{ color: gold.accent, fontSize: '1.2rem' }} />
+            <Typography variant="overline" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent, letterSpacing: '0.12em' }}>
+              TAXONOMY CLARIFICATION · COCKPITS VS. TOOLS VS. ENCLAVES
+            </Typography>
+          </Box>
+          <Grid container spacing={2}>
+            <Grid xs={12} md={4}>
+              <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? '#0D111D' : '#FFFFFF', border: `1px solid ${isDark ? '#26262F' : '#EAECF0'}`, height: '100%' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.75 }}>
+                  <TerminalIcon sx={{ color: gold.accent, fontSize: '1.1rem' }} />
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? '#F5E6AB' : '#101828' }}>
+                    1. Studio Cockpits & IDEs (15)
+                  </Typography>
+                </Box>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', lineHeight: 1.5 }}>
+                  Multi-pane visual environments where human operators compose agent DAGs, review code ASTs, switch local AI models, and supervise swarm dispatchers.
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid xs={12} md={4}>
+              <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? '#0D111D' : '#FFFFFF', border: `1px solid ${isDark ? '#26262F' : '#EAECF0'}`, height: '100%' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.75 }}>
+                  <HandymanIcon sx={{ color: isDark ? '#38BDF8' : '#0284C7', fontSize: '1.1rem' }} />
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? '#BAE6FD' : '#101828' }}>
+                    2. Sovereign Tools (27 Repos)
+                  </Typography>
+                </Box>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', lineHeight: 1.5 }}>
+                  Standalone micro-repos (WebGen, OmniPost, SubSweep, 3D Scene Studio) that can be cloned and run independently offline via CLI or MCP servers.
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid xs={12} md={4}>
+              <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? '#0D111D' : '#FFFFFF', border: `1px solid ${isDark ? '#26262F' : '#EAECF0'}`, height: '100%' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.75 }}>
+                  <HubIcon sx={{ color: isDark ? '#A78BFA' : '#7C3AED', fontSize: '1.1rem' }} />
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? '#DDD6FE' : '#101828' }}>
+                    3. Hardware Enclaves (Loopback :8788)
+                  </Typography>
+                </Box>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', lineHeight: 1.5 }}>
+                  Zero-telemetry local background daemons (21-Agent Swarm, Lucy Neural Memory, Adytum Sanctum, HexStrike) bound strictly to loopback sockets.
+                </Typography>
               </Box>
             </Grid>
           </Grid>
@@ -598,7 +877,7 @@ export default function WorkstationsPage() {
           {/* Instant Search Input matching workstation name, id, and band */}
           <TextField
             size="small"
-            placeholder="Search 37 workstations by name, ID, or band..."
+            placeholder="Search 26 sovereign consoles by name, ID, band, or capability..."
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             InputProps={{
@@ -616,7 +895,7 @@ export default function WorkstationsPage() {
               ) : null,
             }}
             sx={{
-              minWidth: { xs: '100%', md: 360 },
+              minWidth: { xs: '100%', md: 380 },
               '& .MuiOutlinedInput-root': {
                 borderRadius: 2.5,
                 bgcolor: isDark ? '#0B0B12' : '#FFFFFF',
@@ -635,11 +914,52 @@ export default function WorkstationsPage() {
         </Box>
       </RevealOnScroll>
 
+      {/* Cadre Classification Filter Chips */}
+      <RevealOnScroll preset="fadeUp" delay={0.35}>
+        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 2, alignItems: 'center' }}>
+          <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: 'text.secondary', mr: 0.5 }}>
+            CADRE:
+          </Typography>
+          {[
+            { id: 'all', label: `All Consoles (${workstations.length})`, icon: GridViewIcon },
+            { id: 'cockpit', label: `Studio Cockpits (${typeCounts.cockpit})`, icon: TerminalIcon },
+            { id: 'integrated_tool', label: `Sovereign Tools (${typeCounts.integrated_tool})`, icon: HandymanIcon },
+            { id: 'enclave_daemon', label: `Enclave Daemons (${typeCounts.enclave_daemon})`, icon: HubIcon },
+          ].map((t) => {
+            const active = typeFilter === t.id;
+            const IconComponent = t.icon;
+            return (
+              <Chip
+                key={t.id}
+                icon={<IconComponent sx={{ fontSize: '0.85rem !important', color: active ? `${isDark ? '#08080B' : '#101828'} !important` : `${gold.accent} !important` }} />}
+                label={t.label}
+                clickable
+                onClick={() => setTypeFilter(t.id)}
+                sx={{
+                  fontWeight: 800,
+                  fontSize: '0.78rem',
+                  fontFamily: mono,
+                  bgcolor: active ? gold.accent : (isDark ? '#0B0B12' : '#FFFFFF'),
+                  color: active ? (isDark ? '#08080B' : '#101828') : 'text.primary',
+                  border: '1px solid',
+                  borderColor: active ? gold.accent : (isDark ? '#26262F' : '#EAECF0'),
+                  '&:hover': {
+                    borderColor: gold.accent,
+                    bgcolor: active ? gold.accent : (isDark ? 'rgba(212,175,55,0.1)' : '#FEF9E7'),
+                  },
+                  transition: 'all 0.18s ease',
+                }}
+              />
+            );
+          })}
+        </Box>
+      </RevealOnScroll>
+
       {/* Band Filter Chips with Counts */}
       <RevealOnScroll preset="fadeUp" delay={0.4}>
         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 3, alignItems: 'center' }}>
           <Chip
-            label={`All · ${workstations.length}`}
+            label={`All Bands · ${workstations.length}`}
             clickable
             onClick={() => setBand('All')}
             sx={{
@@ -695,20 +1015,22 @@ export default function WorkstationsPage() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="body2" color="text.secondary" sx={{ fontFamily: mono, fontSize: '0.85rem' }}>
           Showing <strong>{filtered.length}</strong> of <strong>{workstations.length}</strong> consoles
-          {band !== 'All' && <span> in <strong>{band}</strong></span>}
+          {typeFilter !== 'all' && <span> in <strong>{typeFilter === 'cockpit' ? 'Studio Cockpits' : typeFilter === 'integrated_tool' ? 'Sovereign Tools' : 'Enclave Daemons'}</strong></span>}
+          {band !== 'All' && <span> in band <strong>{band}</strong></span>}
           {search.trim() && <span> matching &ldquo;{search.trim()}&rdquo;</span>}
         </Typography>
 
-        {(band !== 'All' || search) && (
+        {(band !== 'All' || search || typeFilter !== 'all') && (
           <Button
             size="small"
             onClick={() => {
               setBand('All');
+              setTypeFilter('all');
               setSearch('');
             }}
             sx={{ color: gold.accent, fontSize: '0.78rem', textTransform: 'none', fontWeight: 700 }}
           >
-            Reset Filters
+            Reset All Filters
           </Button>
         )}
       </Box>
@@ -1226,5 +1548,6 @@ export default function WorkstationsPage() {
         />
       </RevealOnScroll>
     </Container>
+    </>
   );
 }

@@ -785,16 +785,17 @@ export default function BridgesPage() {
     animationTimerRef.current = setTimeout(runHopAnimation, 240);
   };
 
-  if (!introDone) {
-
-    return <CinematicIntro words={["SOVEREIGN", "BRIDGES", "MESH"]} onComplete={() => setIntroDone(true)} />;
-
-
-  }
-
-
   return (
-    <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>
+    <>
+      {!introDone && (
+        <CinematicIntro
+          words={["SOVEREIGN", "BRIDGES", "MESH"]}
+          themeColor="cyan"
+          subtitle="E2EE SIGNAL MESH PROTOCOL"
+          onComplete={() => setIntroDone(true)}
+        />
+      )}
+      <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>
       {/* Signature gold top-edge glow */}
       <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
         <GlowLine 
@@ -1836,5 +1837,6 @@ export default function BridgesPage() {
       />
       </RevealOnScroll>
     </Container>
+    </>
   );
 }

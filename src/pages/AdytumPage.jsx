@@ -449,14 +449,6 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
     return () => cancelAnimationFrame(animationId);
   }, [keyIndex, isDark]);
 
-  if (!introDone) {
-
-    return <CinematicIntro words={["ADYTUM", "SANCTUM", "VAULT"]} onComplete={() => setIntroDone(true)} />;
-
-
-  }
-
-
   return (
     <Box
       sx={{
@@ -2395,5 +2387,17 @@ export function AdytumEngine({ embedded = false }) {
 
 export default function AdytumPage() {
   const [introDone, setIntroDone] = React.useState(false);
-  return <AdytumEngine embedded={false} />;
+  return (
+    <>
+      {!introDone && (
+        <CinematicIntro
+          words={["ADYTUM", "SANCTUM", "VAULT"]}
+          themeColor="gold"
+          subtitle="ARGON2ID HARDWARE VAULT"
+          onComplete={() => setIntroDone(true)}
+        />
+      )}
+      <AdytumEngine embedded={false} />
+    </>
+  );
 }

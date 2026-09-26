@@ -69,16 +69,17 @@ export default function ToolsPage() {
     return matchesCat && matchesExec && matchesSearch;
   });
 
-  if (!introDone) {
-
-    return <CinematicIntro words={["25 LOCAL", "MICRO", "TOOLS"]} onComplete={() => setIntroDone(true)} />;
-
-
-  }
-
-
   return (
-    <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6 }}>
+    <>
+      {!introDone && (
+        <CinematicIntro
+          words={["26 LOCAL", "MICRO", "TOOLS"]}
+          themeColor="gold"
+          subtitle="SOVEREIGN TOOL ARSENAL"
+          onComplete={() => setIntroDone(true)}
+        />
+      )}
+      <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6 }}>
       {/* Page Header with gold top-edge glow (ToolsPage signature) */}
       <HeroReveal>
         <Box sx={{ position: 'relative', mb: 4, pt: 1 }}>
@@ -568,5 +569,6 @@ export default function ToolsPage() {
         </Paper>
       </RevealOnScroll>
     </Container>
+    </>
   );
 }

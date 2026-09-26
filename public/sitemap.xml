@@ -271,37 +271,13 @@
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://zoth.nullai.tech/workstations/3d-editor</loc>
+    <loc>https://zoth.nullai.tech/tools/zoth-webgen</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://zoth.nullai.tech/workstations/agent-composer</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/ax-powerhouse</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/brand</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/bus-monitor</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/chronicle</loc>
+    <loc>https://zoth.nullai.tech/tools/zoth-swarm-multiplexer</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
@@ -313,55 +289,13 @@
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://zoth.nullai.tech/workstations/connectors</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/consensus</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/cyberpunk-hud</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/edge-forge</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/fusion-arena</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/github-tool</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/hexstrike</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
     <loc>https://zoth.nullai.tech/workstations/ide</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://zoth.nullai.tech/workstations/math-pillars</loc>
+    <loc>https://zoth.nullai.tech/workstations/agent-composer</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
@@ -379,25 +313,19 @@
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://zoth.nullai.tech/workstations/netlify-ax</loc>
+    <loc>https://zoth.nullai.tech/workstations/ax-powerhouse</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://zoth.nullai.tech/workstations/netrunner-memory</loc>
+    <loc>https://zoth.nullai.tech/workstations/cyberpunk-hud</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://zoth.nullai.tech/workstations/nexus-3d-editor</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/nexus-3d</loc>
+    <loc>https://zoth.nullai.tech/workstations/chronicle</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
@@ -409,55 +337,7 @@
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://zoth.nullai.tech/workstations/omnipost</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/peer-bus</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/signal-bridge</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/site-generator</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/subsweep</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/swarm</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/tool-bench</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/tool-nexus</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/workstations/tool-stamp</loc>
+    <loc>https://zoth.nullai.tech/workstations/brand</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
@@ -469,19 +349,91 @@
     <priority>0.75</priority>
   </url>
   <url>
-    <loc>https://zoth.nullai.tech/workstations/vos-sandbox</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.75</priority>
-  </url>
-  <url>
     <loc>https://zoth.nullai.tech/workstations/web3-hub</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
   </url>
   <url>
+    <loc>https://zoth.nullai.tech/workstations/github-tool</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/workstations/edge-forge</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/workstations/netlify-ax</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://zoth.nullai.tech/workstations/webgen</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/workstations/omnipost</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/workstations/subsweep</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/workstations/tool-stamp</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/workstations/3d-editor</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/workstations/connectors</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/workstations/hexstrike</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/workstations/netrunner-memory</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/workstations/consensus</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/workstations/bus-monitor</loc>
+    <lastmod>2026-09-26</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/workstations/math-pillars</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>

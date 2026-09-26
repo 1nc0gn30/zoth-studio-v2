@@ -36,16 +36,17 @@ export default function MathPillarsPage() {
   const goldWash = isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7';
   const borderCol = isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)';
 
-  if (!introDone) {
-
-    return <CinematicIntro words={["SIX", "MATH", "PILLARS"]} onComplete={() => setIntroDone(true)} />;
-
-
-  }
-
-
   return (
-    <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 } }}>
+    <>
+      {!introDone && (
+        <CinematicIntro
+          words={["SIX", "MATH", "PILLARS"]}
+          themeColor="cyan"
+          subtitle="THEORETICAL FOUNDATIONS & PROOFS"
+          onComplete={() => setIntroDone(true)}
+        />
+      )}
+      <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 } }}>
       <SEO
         title="Six Mathematical Pillars // Theoretical Foundations & Neuromorphic Proofs"
         description="Formal theoretical foundations of Zoth Studio v2: Linear Algebra, Multivariable Calculus, Shannon Probability, Hessian Curvature, Lyapunov Phase Dynamics, and Neuromorphic STDP."
@@ -217,5 +218,6 @@ export default function MathPillarsPage() {
         />
       </RevealOnScroll>
     </Container>
+    </>
   );
 }

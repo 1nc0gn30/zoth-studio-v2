@@ -36,25 +36,20 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 // Flagship Primary Links
 const primaryNav = [
-  { label: 'Workstations', path: '/workstations', badge: '37' },
-  { label: 'Tools', path: '/tools', badge: '25' },
+  { label: 'Workstations', path: '/workstations', badge: '15' },
+  { label: 'Tools', path: '/tools', badge: '27' },
+  { label: 'Templates', path: '/templates', badge: '10' },
 ];
 
-// Systems Dropdown
-const systemsItems = [
-  { label: 'Neural Memory', path: '/memory', desc: 'Biological STDP Spike-Timing-Dependent Plasticity', pulse: true, icon: <PsychologyIcon fontSize="small" sx={{ color: '#D4AF37' }} /> },
-  { label: 'Sovereign Swarm', path: '/swarm', badge: '21', desc: 'Decentralized peer-to-peer agent bus multiplexer', icon: <HubIcon fontSize="small" sx={{ color: '#3B82F6' }} /> },
-  { label: 'Consensus Engine', path: '/consensus', desc: 'Byzantine Fault Tolerance math simulations', icon: <GavelIcon fontSize="small" sx={{ color: '#10B981' }} /> },
-];
-
-// Enclaves Dropdown
+// Enclaves & Hardware Daemons Dropdown
 const enclaveItems = [
-  { label: 'Adytum Sanctum Vault', path: '/adytum', desc: 'Argon2id KDF & hardware-anchored key derivation', icon: <VpnKeyIcon fontSize="small" sx={{ color: '#D4AF37' }} /> },
-  { label: 'HexStrike Arsenal', path: '/hexstrike', desc: 'Threat intelligence, CVE matrix & offensive terminal', icon: <SecurityIcon fontSize="small" sx={{ color: '#EF4444' }} /> },
+  { label: 'Neural Memory & Lucy Oracle', path: '/memory', desc: 'Biological STDP Spike-Timing Plasticity & vector graph', pulse: true, icon: <PsychologyIcon fontSize="small" sx={{ color: '#D4AF37' }} /> },
+  { label: 'Sovereign Swarm Multiplexer', path: '/swarm', badge: '21', desc: '21-agent decentralized peer-to-peer bus multiplexer', icon: <HubIcon fontSize="small" sx={{ color: '#3B82F6' }} /> },
+  { label: 'Adytum Sanctum Vault', path: '/adytum', desc: 'Argon2id KDF & hardware-anchored key derivation enclave', icon: <VpnKeyIcon fontSize="small" sx={{ color: '#D4AF37' }} /> },
+  { label: 'HexStrike Security Sentinel', path: '/hexstrike', desc: 'Shannon entropy audit, CVE matrix & offensive terminal', icon: <SecurityIcon fontSize="small" sx={{ color: '#EF4444' }} /> },
   { label: 'Zoth OS Sandbox', path: '/zoth-os', desc: 'Hardware-isolated Linux KVM hypervisor enclave', icon: <TerminalIcon fontSize="small" sx={{ color: '#10B981' }} /> },
-  { label: 'Sovereign Bridges', path: '/bridges', desc: 'E2EE Signal mesh & loopback WebSocket pinger', icon: <CableIcon fontSize="small" sx={{ color: '#3B82F6' }} /> },
-  { label: 'WebGen Layout Foundry', path: '/webgen', desc: 'Zero-cloud polyglot framework UI synthesizer', icon: <WebIcon fontSize="small" sx={{ color: '#F59E0B' }} /> },
-  { label: 'Open-Source Templates', path: '/templates', desc: 'Curated library of sovereign agent scaffolds', icon: <FolderZipIcon fontSize="small" sx={{ color: '#8B5CF6' }} /> },
+  { label: 'Consensus Battle Arena', path: '/consensus', desc: 'Byzantine Fault Tolerance math simulations & AST synthesis', icon: <GavelIcon fontSize="small" sx={{ color: '#10B981' }} /> },
+  { label: 'Sovereign Signal Bridges', path: '/bridges', desc: 'E2EE Signal mesh & loopback WebSocket pinger', icon: <CableIcon fontSize="small" sx={{ color: '#3B82F6' }} /> },
 ];
 
 // Knowledge Dropdown
@@ -67,7 +62,6 @@ const knowledgeItems = [
 
 export default function Navbar({ mode, onToggleTheme }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [systemsAnchor, setSystemsAnchor] = useState(null);
   const [enclaveAnchor, setEnclaveAnchor] = useState(null);
   const [knowledgeAnchor, setKnowledgeAnchor] = useState(null);
   const [paletteOpen, setPaletteOpen] = useState(false);
@@ -101,9 +95,6 @@ export default function Navbar({ mode, onToggleTheme }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const handleOpenSystems = (event) => setSystemsAnchor(event.currentTarget);
-  const handleCloseSystems = () => setSystemsAnchor(null);
-
   const handleOpenEnclaves = (event) => setEnclaveAnchor(event.currentTarget);
   const handleCloseEnclaves = () => setEnclaveAnchor(null);
 
@@ -112,7 +103,6 @@ export default function Navbar({ mode, onToggleTheme }) {
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
-  const isSystemsActive = systemsItems.some((item) => location.pathname === item.path);
   const isEnclaveActive = enclaveItems.some((item) => location.pathname === item.path);
   const isKnowledgeActive = knowledgeItems.some((item) => location.pathname.startsWith(item.path));
 
@@ -439,67 +429,6 @@ export default function Navbar({ mode, onToggleTheme }) {
                 </Button>
               );
             })}
-
-            {/* Systems Dropdown Trigger */}
-            <Button
-              onClick={handleOpenSystems}
-              endIcon={
-                <KeyboardArrowDownIcon
-                  className="dropdown-icon"
-                  sx={{
-                    fontSize: '18px !important',
-                    transform: systemsAnchor ? 'rotate(180deg)' : 'none',
-                    transition: 'transform 0.24s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease',
-                  }}
-                />
-              }
-              sx={{
-                color: isSystemsActive ? navActive : navIdle,
-                fontWeight: isSystemsActive ? 800 : 600,
-                borderRadius: 9999,
-                px: 1.5,
-                py: 0.65,
-                minWidth: 0,
-                fontSize: '0.84rem',
-                textTransform: 'none',
-                bgcolor: isSystemsActive
-                  ? (dark ? 'rgba(212, 175, 55, 0.16)' : '#FEF9E7')
-                  : (systemsAnchor ? (dark ? 'rgba(212, 175, 55, 0.1)' : 'rgba(212, 175, 55, 0.08)') : 'transparent'),
-                border: isSystemsActive
-                  ? `1px solid ${dark ? 'rgba(212, 175, 55, 0.45)' : '#F0E1A8'}`
-                  : `1px dashed ${systemsAnchor ? goldAccent : (dark ? 'rgba(212, 175, 55, 0.25)' : 'rgba(0, 0, 0, 0.14)')}`,
-                boxShadow: isSystemsActive
-                  ? (dark
-                      ? '0 0 16px rgba(212, 175, 55, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12)'
-                      : '0 2px 8px rgba(212, 175, 55, 0.18), inset 0 1px 0 #FFFFFF')
-                  : 'none',
-                transform: 'translateY(0) scale(1)',
-                transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
-                '&:hover': {
-                  color: navActive,
-                  transform: 'translateY(-1.5px) scale(1.025)',
-                  bgcolor: dark ? 'rgba(212, 175, 55, 0.12)' : '#FEF9E7',
-                  borderColor: goldAccent,
-                  borderStyle: 'solid',
-                  boxShadow: dark
-                    ? '0 4px 16px rgba(212, 175, 55, 0.25), inset 0 0 8px rgba(212, 175, 55, 0.1)'
-                    : '0 3px 12px rgba(212, 175, 55, 0.18)',
-                  '& .dropdown-icon': {
-                    color: goldAccent,
-                    transform: systemsAnchor ? 'rotate(180deg)' : 'translateY(1.5px)',
-                  },
-                },
-                '&:active': {
-                  transform: 'translateY(0.5px) scale(0.985)',
-                  boxShadow: dark
-                    ? 'inset 0 2px 5px rgba(0, 0, 0, 0.5)'
-                    : 'inset 0 1px 3px rgba(0, 0, 0, 0.15)',
-                  transition: 'transform 0.08s ease, box-shadow 0.08s ease',
-                },
-              }}
-            >
-              Systems
-            </Button>
 
             {/* Enclaves Dropdown Trigger */}
             <Button
@@ -832,127 +761,6 @@ export default function Navbar({ mode, onToggleTheme }) {
         </Toolbar>
       </Container>
 
-      {/* Systems Dropdown Menu */}
-      <Menu
-        anchorEl={systemsAnchor}
-        open={Boolean(systemsAnchor)}
-        onClose={handleCloseSystems}
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            mt: 1.5,
-            width: { xs: 'calc(100vw - 32px)', sm: 410 },
-            maxWidth: 440,
-            p: 1.2,
-            borderRadius: '16px',
-            bgcolor: dark ? 'rgba(13, 14, 21, 0.96)' : 'rgba(255, 255, 255, 0.98)',
-            backdropFilter: 'blur(30px) saturate(190%)',
-            WebkitBackdropFilter: 'blur(30px) saturate(190%)',
-            border: `1px solid ${dark ? 'rgba(212, 175, 55, 0.35)' : 'rgba(212, 175, 55, 0.25)'}`,
-            boxShadow: dark
-              ? '0 20px 48px -8px rgba(0, 0, 0, 0.85), 0 0 24px rgba(212, 175, 55, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-              : '0 20px 40px -8px rgba(0, 0, 0, 0.14), 0 0 16px rgba(212, 175, 55, 0.12), inset 0 1px 0 #FFFFFF',
-            overflow: 'hidden',
-          },
-        }}
-        transformOrigin={{ horizontal: 'center', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-      >
-        <Typography variant="caption" sx={{ px: 2, py: 1, display: 'block', fontWeight: 800, color: goldAccent, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: mono, fontSize: '0.7rem' }}>
-          Core Systems &amp; Compute
-        </Typography>
-        <Divider sx={{ mb: 1, opacity: 0.4, borderColor: dark ? 'rgba(212, 175, 55, 0.15)' : 'rgba(212, 175, 55, 0.2)' }} />
-        {systemsItems.map((item) => {
-          const selected = location.pathname === item.path;
-          return (
-            <MenuItem
-              key={item.path}
-              component={RouterLink}
-              to={item.path}
-              onClick={handleCloseSystems}
-              selected={selected}
-              sx={{
-                borderRadius: '10px',
-                py: 1.2,
-                px: 1.5,
-                mb: 0.5,
-                whiteSpace: 'normal',
-                alignItems: 'flex-start',
-                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                border: selected
-                  ? `1px solid ${dark ? 'rgba(212, 175, 55, 0.35)' : '#F0E1A8'}`
-                  : '1px solid transparent',
-                '&.Mui-selected': {
-                  bgcolor: dark ? 'rgba(212, 175, 55, 0.15)' : '#FEF9E7',
-                  boxShadow: dark ? 'inset 0 1px 0 rgba(212, 175, 55, 0.2)' : 'none',
-                },
-                '&:hover': {
-                  bgcolor: selected
-                    ? (dark ? 'rgba(212, 175, 55, 0.22)' : '#FDF4D4')
-                    : (dark ? 'rgba(212, 175, 55, 0.08)' : 'rgba(212, 175, 55, 0.05)'),
-                  borderColor: dark ? 'rgba(212, 175, 55, 0.3)' : 'rgba(212, 175, 55, 0.2)',
-                  transform: 'translateX(4px)',
-                },
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 36,
-                  mt: 0.25,
-                  position: 'relative',
-                  transition: 'transform 0.2s ease',
-                  '.MuiMenuItem-root:hover &': {
-                    transform: 'scale(1.1)',
-                  },
-                }}
-              >
-                {item.pulse && (
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      top: -2,
-                      right: 12,
-                      width: 6,
-                      height: 6,
-                      borderRadius: '50%',
-                      bgcolor: goldAccent,
-                      boxShadow: `0 0 8px ${goldAccent}, 0 0 2px ${goldAccent}`,
-                      animation: 'navPulse 2s infinite ease-in-out',
-                    }}
-                  />
-                )}
-                {item.icon}
-              </ListItemIcon>
-              <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 700, color: selected ? goldAccent : (dark ? '#F3F4F6' : '#111827'), whiteSpace: 'normal' }}>
-                    {item.label}
-                  </Typography>
-                  {item.badge && (
-                    <Chip
-                      label={item.badge}
-                      size="small"
-                      sx={{
-                        height: 16,
-                        fontSize: '0.6rem',
-                        fontFamily: mono,
-                        fontWeight: 800,
-                        bgcolor: selected ? (dark ? '#D4AF37' : '#B8860B') : (dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'),
-                        color: selected ? '#08080B' : (dark ? '#D1D5DB' : '#4B5563'),
-                        borderRadius: '4px',
-                      }}
-                    />
-                  )}
-                </Box>
-                <Typography variant="caption" sx={{ color: dark ? '#9CA3AF' : '#6B7280', display: 'block', fontSize: '0.74rem', whiteSpace: 'normal', wordBreak: 'break-word', lineHeight: 1.35, mt: 0.25 }}>
-                  {item.desc}
-                </Typography>
-              </Box>
-            </MenuItem>
-          );
-        })}
-      </Menu>
-
       {/* Enclaves Dropdown Menu */}
       <Menu
         anchorEl={enclaveAnchor}
@@ -980,7 +788,7 @@ export default function Navbar({ mode, onToggleTheme }) {
         anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
       >
         <Typography variant="caption" sx={{ px: 2, py: 1, display: 'block', fontWeight: 800, color: goldAccent, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: mono, fontSize: '0.7rem' }}>
-          Hardware Enclaves &amp; Sandboxes
+          Hardware Enclaves &amp; Loopback Daemons
         </Typography>
         <Divider sx={{ mb: 1, opacity: 0.4, borderColor: dark ? 'rgba(212, 175, 55, 0.15)' : 'rgba(212, 175, 55, 0.2)' }} />
         {enclaveItems.map((item) => {
@@ -1202,7 +1010,7 @@ export default function Navbar({ mode, onToggleTheme }) {
             <InputBase
               autoFocus
               fullWidth
-              placeholder="Search all 25 tools, 37 workstations, hubs, or documentation..."
+              placeholder="Search all 27 tools, 15 cockpits, enclaves, or documentation..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               sx={{

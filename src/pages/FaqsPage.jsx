@@ -191,16 +191,17 @@ ${oracleResult.faq.a}`;
     });
   }, [search, selectedCat]);
 
-  if (!introDone) {
-
-    return <CinematicIntro words={["SYSTEM", "FAQS", "ORACLE"]} onComplete={() => setIntroDone(true)} />;
-
-
-  }
-
-
   return (
-    <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
+    <>
+      {!introDone && (
+        <CinematicIntro
+          words={["SYSTEM", "FAQS", "ORACLE"]}
+          themeColor="gold"
+          subtitle="ORACLE INTELLIGENCE & FAQS"
+          onComplete={() => setIntroDone(true)}
+        />
+      )}
+      <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
       <SEO
         title="Frequently Asked Questions // Zoth Studio v2 Architecture & Security"
         description="Official answers to 16 core architectural questions: Zero-Egress Invariants, Lucy Netrunner Oracle STDP memory, 3-Agent Byzantine Consensus, WebGPU shaders, and Zoth OS."
@@ -864,5 +865,6 @@ ${oracleResult.faq.a}`;
         </Paper>
       </RevealOnScroll>
     </Container>
+    </>
   );
 }

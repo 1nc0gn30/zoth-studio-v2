@@ -1312,16 +1312,17 @@ export default function MemoryPage() {
     isDraggingHoloRef.current = false;
   };
 
-  if (!introDone) {
-
-    return <CinematicIntro words={["STDP", "NEURAL", "MEMORY"]} onComplete={() => setIntroDone(true)} />;
-
-
-  }
-
-
   return (
-    <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 }, position: 'relative' }}>
+    <>
+      {!introDone && (
+        <CinematicIntro
+          words={["STDP", "NEURAL", "MEMORY"]}
+          themeColor="gold"
+          subtitle="BIOMORPHIC STDP SYNAPSE MATRIX"
+          onComplete={() => setIntroDone(true)}
+        />
+      )}
+      <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 }, position: 'relative' }}>
       {/* Background Radial Glow */}
       <ParallaxGlow offset={60}>
         <Box
@@ -2717,5 +2718,6 @@ export default function MemoryPage() {
         />
       </RevealOnScroll>
     </Container>
+    </>
   );
 }

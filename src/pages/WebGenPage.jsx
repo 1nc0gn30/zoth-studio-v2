@@ -154,17 +154,8 @@ function getGeneratedCode(templateName, frameworkId) {
 import { Activity, ShieldCheck, Cpu, Terminal, ChevronRight } from 'lucide-react';
 
 export default function SovereignDashboard() {
-  const [introDone, setIntroDone] = React.useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [latency, setLatency] = useState('12.4ms');
-
-  if (!introDone) {
-
-    return <CinematicIntro words={["WEBGEN", "LAYOUT", "FOUNDRY"]} onComplete={() => setIntroDone(true)} />;
-
-
-  }
-
 
   return (
     <div className="min-h-screen bg-[#08080B] text-slate-100 p-6 md:p-10 font-sans selection:bg-[#D4AF37]/30">
@@ -1812,6 +1803,7 @@ export default function WebGenPage() {
   const [copied, setCopied] = useState(false);
   const [deviceFrame, setDeviceFrame] = useState('desktop'); // 'mobile' | 'tablet' | 'desktop'
   const [mobileSection, setMobileSection] = useState('preview'); // 'prompt' | 'code' | 'preview' | 'specs'
+  const [introDone, setIntroDone] = useState(false);
 
   // Procedural Web Audio SFX State & Synthesizer
   const [sfxEnabled, setSfxEnabled] = useState(true);
@@ -2533,7 +2525,16 @@ wait $PID`;
   };
 
   return (
-    <Container maxWidth="xl" sx={{ py: { xs: 3, md: 5 }, pb: { xs: 12, md: 6 } }}>
+    <>
+      {!introDone && (
+        <CinematicIntro
+          words={["WEBGEN", "LAYOUT", "FOUNDRY"]}
+          themeColor="cyan"
+          subtitle="DETERMINISTIC COMPILER MATRIX"
+          onComplete={() => setIntroDone(true)}
+        />
+      )}
+      <Container maxWidth="xl" sx={{ py: { xs: 3, md: 5 }, pb: { xs: 12, md: 6 } }}>
       
       {/* Header Section — gold radial glow behind header */}
       <ParallaxGlow offset={60}>
@@ -4135,5 +4136,6 @@ wait $PID`;
       </Snackbar>
 
     </Container>
+    </>
   );
 }
