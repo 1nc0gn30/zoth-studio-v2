@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Box, Typography } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getAsciiBanner, isCelticWord } from '../data/asciiBanners';
@@ -99,6 +99,93 @@ function playCyberBlip(isCeltic = false) {
   } catch {
     // Fail silently if browser audio autoplay policy prohibits it
   }
+}
+
+function AsciiTypewriterBanner({ word, palette, mono }) {
+  const raw = getAsciiBanner(word);
+  const lines = useMemo(() => (raw ? raw.split('\n') : [word]), [raw, word]);
+  const [visibleLineCount, setVisibleLineCount] = useState(1);
+
+  useEffect(() => {
+    setVisibleLineCount(1);
+    let current = 1;
+    const interval = setInterval(() => {
+      current++;
+      setVisibleLineCount(current);
+      if (current >= lines.length) {
+        clearInterval(interval);
+      }
+    }, 36);
+    return () => clearInterval(interval);
+  }, [lines]);
+
+  const displayedText = lines.slice(0, visibleLineCount).join('\n');
+  const isComplete = visibleLineCount >= lines.length;
+
+  return (
+    <Box sx={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Box
+        component="pre"
+        sx={{
+          fontFamily: mono,
+          fontSize: {
+            xs: 'clamp(0.30rem, 1.25vw, 0.54rem)',
+            sm: 'clamp(0.52rem, 1.45vw, 0.84rem)',
+            md: 'clamp(0.78rem, 1.7vw, 1.10rem)',
+            lg: 'clamp(0.92rem, 1.9vw, 1.28rem)',
+          },
+          lineHeight: { xs: 1.06, sm: 1.10, md: 1.14 },
+          fontWeight: 800,
+          background: `linear-gradient(90deg, ${palette.primary} 0%, ${palette.secondary} 20%, #FFFFFF 48%, ${palette.secondary} 76%, ${palette.primary} 100%)`,
+          backgroundSize: '250% 100%',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          animation: 'asciiSnakeGlow 2.4s linear infinite',
+          filter: `drop-shadow(0 0 10px ${palette.glow}) drop-shadow(0 0 24px ${palette.glow})`,
+          margin: 0,
+          whiteSpace: 'pre',
+          overflow: 'visible',
+          textAlign: 'center',
+          userSelect: 'none',
+          position: 'relative',
+          display: 'inline-block',
+          letterSpacing: '-0.02em',
+        }}
+      >
+        {displayedText}
+        {!isComplete && (
+          <Box
+            component="span"
+            sx={{
+              display: 'inline-block',
+              WebkitTextFillColor: palette.secondary,
+              animation: 'asciiCursorBlink 0.4s infinite',
+              verticalAlign: 'bottom',
+              ml: 0.5,
+              fontSize: '1em',
+            }}
+          >
+            █
+          </Box>
+        )}
+      </Box>
+
+      {/* Laser Scanning Beam Sweep across the banner */}
+      <Box
+        aria-hidden
+        sx={{
+          position: 'absolute',
+          left: '5%',
+          right: '5%',
+          height: '2px',
+          background: `linear-gradient(90deg, transparent 0%, ${palette.primary} 50%, transparent 100%)`,
+          boxShadow: `0 0 12px ${palette.primary}`,
+          animation: 'asciiLaserSweep 2s ease-in-out infinite',
+          pointerEvents: 'none',
+        }}
+      />
+    </Box>
+  );
 }
 
 /**
@@ -572,30 +659,27 @@ export default function CinematicIntro({
                           [ KINETIC ASCII VECTOR FRAME 0{currentIndex + 1} ]
                         </Typography>
 
-                        <Box
-                          component="pre"
-                          sx={{
-                            fontFamily: mono,
-                            fontSize: {
-                              xs: 'clamp(0.38rem, 1.45vw, 0.58rem)',
-                              sm: 'clamp(0.6rem, 1.6vw, 0.92rem)',
-                              md: 'clamp(0.85rem, 1.8vw, 1.18rem)',
-                              lg: 'clamp(1rem, 2vw, 1.35rem)',
-                            },
-                            lineHeight: { xs: 1.08, sm: 1.12, md: 1.16 },
-                            fontWeight: 700,
-                            color: palette.primary,
-                            textShadow: `0 0 12px ${palette.glow}, 0 0 28px ${palette.glow}`,
-                            margin: 0,
-                            whiteSpace: 'pre',
-                            overflow: 'visible',
-                            textAlign: 'center',
-                            filter: 'contrast(1.2)',
-                            userSelect: 'none',
-                          }}
-                        >
-                          {getAsciiBanner(currentWord)}
-                        </Box>
+                        <style>{`
+                          @keyframes asciiSnakeGlow {
+                            0% { background-position: -250% 0; }
+                            100% { background-position: 250% 0; }
+                          }
+                          @keyframes asciiLaserSweep {
+                            0% { top: 0%; opacity: 0.2; }
+                            50% { opacity: 0.9; }
+                            100% { top: 100%; opacity: 0.2; }
+                          }
+                          @keyframes asciiCursorBlink {
+                            0%, 49% { opacity: 1; }
+                            50%, 100% { opacity: 0; }
+                          }
+                        `}</style>
+
+                        <AsciiTypewriterBanner
+                          word={currentWord}
+                          palette={palette}
+                          mono={mono}
+                        />
 
                         <Typography
                           variant="caption"

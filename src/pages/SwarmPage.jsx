@@ -27,6 +27,12 @@ import CheckIcon from '@mui/icons-material/Check';
 import SwarmCanvasVisualizer from '../components/SwarmCanvasVisualizer';
 import SwarmTaskDispatcher from '../components/SwarmTaskDispatcher';
 import SwarmDaemonMultiplexer from '../components/SwarmDaemonMultiplexer';
+import SwarmFrameJourney from '../components/SwarmFrameJourney';
+import ExploreIcon from '@mui/icons-material/Explore';
+import SlideshowIcon from '@mui/icons-material/Slideshow';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import GavelIcon from '@mui/icons-material/Gavel';
 import { pantheonAgents, pantheonCadres } from '../data/pantheon';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
@@ -85,6 +91,14 @@ export default function SwarmPage() {
   const [cadre, setCadre] = useState('All');
   const [rosterOpen, setRosterOpen] = useState(false);
   const [swarmTab, setSwarmTab] = useState(0);
+  const [viewMode, setViewMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('view') === 'cockpit') return 'cockpit';
+      if (params.get('view') === 'journey') return 'journey';
+    }
+    return 'funnel';
+  });
   const visible = pantheonAgents.filter((agent) => cadre === 'All' || agent.cadre === cadre);
 
   // Live daemon status
@@ -269,6 +283,98 @@ export default function SwarmPage() {
         />
       </ParallaxGlow>
 
+      {/* Master View Mode Switcher */}
+      <Box
+        sx={{
+          mb: 4,
+          position: 'relative',
+          zIndex: 2,
+          p: 1.2,
+          borderRadius: 2.5,
+          bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#F3F4F6',
+          border: '1px solid',
+          borderColor: isDark ? 'rgba(255,255,255,0.08)' : '#E5E7EB',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 1.5,
+        }}
+      >
+        <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
+          <Chip
+            icon={<ExploreIcon sx={{ fontSize: '1rem !important' }} />}
+            label="1. Swarm Overview & Funnel"
+            clickable
+            onClick={() => setViewMode('funnel')}
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.78rem',
+              bgcolor: viewMode === 'funnel' ? gold : 'transparent',
+              color: viewMode === 'funnel' ? (isDark ? '#08080B' : '#FFFFFF') : 'text.primary',
+              border: viewMode === 'funnel' ? 'none' : '1px solid transparent',
+              '&:hover': {
+                bgcolor: viewMode === 'funnel' ? gold : (isDark ? 'rgba(255,255,255,0.06)' : '#E5E7EB'),
+              },
+            }}
+          />
+          <Chip
+            icon={<SlideshowIcon sx={{ fontSize: '1rem !important' }} />}
+            label="2. Play-by-Play Journey (6 Frames)"
+            clickable
+            onClick={() => setViewMode('journey')}
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.78rem',
+              bgcolor: viewMode === 'journey' ? gold : 'transparent',
+              color: viewMode === 'journey' ? (isDark ? '#08080B' : '#FFFFFF') : 'text.primary',
+              border: viewMode === 'journey' ? 'none' : '1px solid transparent',
+              '&:hover': {
+                bgcolor: viewMode === 'journey' ? gold : (isDark ? 'rgba(255,255,255,0.06)' : '#E5E7EB'),
+              },
+            }}
+          />
+          <Chip
+            icon={<TerminalIcon sx={{ fontSize: '1rem !important' }} />}
+            label="3. Live Telemetry Cockpit (:8989)"
+            clickable
+            onClick={() => setViewMode('cockpit')}
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.78rem',
+              bgcolor: viewMode === 'cockpit' ? gold : 'transparent',
+              color: viewMode === 'cockpit' ? (isDark ? '#08080B' : '#FFFFFF') : 'text.primary',
+              border: viewMode === 'cockpit' ? 'none' : '1px solid transparent',
+              '&:hover': {
+                bgcolor: viewMode === 'cockpit' ? gold : (isDark ? 'rgba(255,255,255,0.06)' : '#E5E7EB'),
+              },
+            }}
+          />
+        </Stack>
+
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Chip
+            label={daemonState.up ? ':8989 ONLINE' : ':8989 STANDBY'}
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              bgcolor: daemonState.up ? '#10B981' : (isDark ? '#374151' : '#E5E7EB'),
+              color: daemonState.up ? '#FFFFFF' : 'text.secondary',
+            }}
+          />
+        </Box>
+      </Box>
+
+      {/* MODE 1: SWARM OVERVIEW & FUNNEL */}
+      {viewMode === 'funnel' && (
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+
+
       {/* Header */}
       <HeroReveal>
         <Box sx={{ mb: 4, position: 'relative', zIndex: 1 }}>
@@ -314,7 +420,413 @@ export default function SwarmPage() {
         </Box>
       </HeroReveal>
 
-      {/* Live Daemon Connectivity Banner */}
+      
+
+          {/* Hero Play-by-Play Invitation Funnel */}
+          <Paper
+            elevation={0}
+            sx={{
+              p: { xs: 3, md: 4 },
+              mb: 5,
+              borderRadius: 3,
+              bgcolor: isDark ? '#0B0E17' : '#FFFFFF',
+              border: '1.5px solid ' + goldBorder,
+              boxShadow: isDark
+                ? '0 0 35px -8px rgba(212,175,55,0.22), inset 0 1px 0 rgba(212,175,55,0.2)'
+                : '0 12px 30px -6px rgba(184,134,11,0.15)',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            <Box
+              aria-hidden
+              sx={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '3px',
+                background: 'linear-gradient(90deg, transparent 0%, ' + gold + ' 50%, transparent 100%)',
+              }}
+            />
+
+            <Grid container spacing={3} alignItems="center">
+              <Grid xs={12} md={8}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
+                  <Chip
+                    icon={<SlideshowIcon sx={{ fontSize: '0.95rem !important', color: gold }} />}
+                    label="INTERACTIVE 6-FRAME WALKTHROUGH"
+                    size="small"
+                    sx={{
+                      fontFamily: mono,
+                      fontWeight: 800,
+                      fontSize: '0.74rem',
+                      bgcolor: isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7',
+                      color: gold,
+                      border: '1px solid ' + goldBorder,
+                    }}
+                  />
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: 'text.secondary' }}>
+                    6 FRAMES · AUTONOMOUS AGENT ORCHESTRATION
+                  </Typography>
+                </Box>
+
+                <Typography variant="h4" sx={{ fontWeight: 850, letterSpacing: '-0.02em', mb: 1.5, color: isDark ? '#FFFFFF' : '#111827' }}>
+                  Deconstruct the Swarm <span className="text-gradient-gold">Play-by-Play</span>
+                </Typography>
+
+                <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.65, mb: 2.5, fontSize: '1rem', maxWidth: 720 }}>
+                  Curious how 21 agents cooperate without corporate cloud APIs? Step through our frame-by-frame presentation:
+                  discover why monolithic LLMs break down, explore the 21-Agent Pantheon, inspect our zero-egress tri-socket architecture, witness the 5-phase consensus lifecycle, and interact with the live topology graph.
+                </Typography>
+
+                {/* Quick 6-step trail preview */}
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
+                  {[
+                    { n: '01', l: 'WHYS' },
+                    { n: '02', l: 'WHATS' },
+                    { n: '03', l: 'HOWS' },
+                    { n: '04', l: 'WHENS' },
+                    { n: '05', l: 'USING IT' },
+                    { n: '06', l: 'TAKE FLIGHT' },
+                  ].map((step) => (
+                    <Chip
+                      key={step.n}
+                      label={step.n + ' ' + step.l}
+                      size="small"
+                      sx={{
+                        fontFamily: mono,
+                        fontWeight: 750,
+                        fontSize: '0.72rem',
+                        bgcolor: isDark ? 'rgba(255,255,255,0.04)' : '#F3F4F6',
+                        color: isDark ? '#CBD5E1' : '#475467',
+                        border: '1px solid',
+                        borderColor: isDark ? 'rgba(255,255,255,0.08)' : '#E5E7EB',
+                      }}
+                    />
+                  ))}
+                </Box>
+
+                {/* CTA Buttons */}
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={() => setViewMode('journey')}
+                    startIcon={<PlayArrowIcon sx={{ fontSize: '1.2rem !important' }} />}
+                    sx={{
+                      bgcolor: gold,
+                      color: '#08080B',
+                      fontWeight: 850,
+                      fontFamily: mono,
+                      fontSize: '0.92rem',
+                      letterSpacing: '0.02em',
+                      px: 3,
+                      py: 1.3,
+                      borderRadius: 2,
+                      boxShadow: '0 0 20px -2px ' + gold,
+                      '&:hover': {
+                        bgcolor: isDark ? '#F5E6AB' : '#9A7209',
+                        boxShadow: '0 0 28px 0px ' + gold,
+                      },
+                    }}
+                  >
+                    START PLAY-BY-PLAY JOURNEY
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    onClick={() => setViewMode('cockpit')}
+                    endIcon={<ArrowForwardIcon sx={{ fontSize: '1rem !important' }} />}
+                    sx={{
+                      borderColor: isDark ? 'rgba(255,255,255,0.2)' : '#D1D5DB',
+                      color: 'text.primary',
+                      fontFamily: mono,
+                      fontWeight: 750,
+                      fontSize: '0.88rem',
+                      px: 2.5,
+                      borderRadius: 2,
+                      '&:hover': {
+                        borderColor: gold,
+                        color: gold,
+                      },
+                    }}
+                  >
+                    Skip to Live Cockpit (:8989)
+                  </Button>
+                </Stack>
+              </Grid>
+
+              <Grid xs={12} md={4}>
+                <Box
+                  sx={{
+                    p: 2.5,
+                    borderRadius: 2.5,
+                    bgcolor: isDark ? '#06080E' : '#F8FAFC',
+                    border: '1px solid ' + (isDark ? 'rgba(212,175,55,0.2)' : '#E2E8F0'),
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1.5,
+                  }}
+                >
+                  <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.78rem', color: gold, letterSpacing: '0.06em' }}>
+                    ARCHITECTURE SPECS
+                  </Typography>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid ' + (isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0'), pb: 1 }}>
+                    <Typography variant="caption" color="text.secondary">Active Agents</Typography>
+                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: 'text.primary' }}>21 Sovereign Nodes</Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid ' + (isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0'), pb: 1 }}>
+                    <Typography variant="caption" color="text.secondary">Cadres</Typography>
+                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: 'text.primary' }}>5 Tactical Divisions</Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid ' + (isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0'), pb: 1 }}>
+                    <Typography variant="caption" color="text.secondary">Transport</Typography>
+                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#38BDF8' }}>Loopback HTTP / SSE :8989</Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid ' + (isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0'), pb: 1 }}>
+                    <Typography variant="caption" color="text.secondary">Fault Tolerance</Typography>
+                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#34D399' }}>2f + 1 Byzantine Quorum</Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant="caption" color="text.secondary">Egress Policy</Typography>
+                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#F87171' }}>0 Outbound Packets</Typography>
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid>
+          </Paper>
+
+          {/* Architecture Highlights Grid */}
+          <Typography className="section-kicker" sx={{ mb: 2 }}>Core Architecture Pillars</Typography>
+          <Grid container spacing={2.5} sx={{ mb: 4.5 }}>
+            <Grid xs={12} md={3}>
+              <Card sx={{ height: '100%', bgcolor: voidBg, border: '1px solid ' + goldBorder, borderRadius: 2.5 }}>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 1 }}>
+                    <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7', display: 'flex' }}>
+                      <GroupsIcon sx={{ color: gold }} />
+                    </Box>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+                      Role Sandboxing
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.55 }}>
+                    Each agent operates within an immutable prompt sandbox with deterministic tool access contracts and zero cross-domain hallucination risks.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid xs={12} md={3}>
+              <Card sx={{ height: '100%', bgcolor: voidBg, border: '1px solid ' + goldBorder, borderRadius: 2.5 }}>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 1 }}>
+                    <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF3', display: 'flex' }}>
+                      <PrecisionManufacturingIcon sx={{ color: '#34D399' }} />
+                    </Box>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+                      Zero Egress
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.55 }}>
+                    Inter-agent communication uses <span className="text-highlight-gold">local loopback sockets</span> and memory daemons with 0.00% external API leakage.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid xs={12} md={3}>
+              <Card sx={{ height: '100%', bgcolor: voidBg, border: '1px solid ' + goldBorder, borderRadius: 2.5 }}>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 1 }}>
+                    <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF', display: 'flex' }}>
+                      <SecurityIcon sx={{ color: '#38BDF8' }} />
+                    </Box>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+                      Socratic Debate
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.55 }}>
+                    Architectural decisions pass through Proponent, Skeptic, and Arbitrator roles before output execution is approved.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid xs={12} md={3}>
+              <Card sx={{ height: '100%', bgcolor: voidBg, border: '1px solid ' + goldBorder, borderRadius: 2.5 }}>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 1 }}>
+                    <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: isDark ? 'rgba(192,132,252,0.12)' : '#FAF5FF', display: 'flex' }}>
+                      <GavelIcon sx={{ color: '#C084FC' }} />
+                    </Box>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+                      Byzantine Quorum
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.55 }}>
+                    Critical actions require 2f+1 consensus verification across active cadres before state transitions are ratified.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+
+          {/* Cadre Composition Tiles */}
+          <Typography className="section-kicker" sx={{ mb: 2 }}>5 Tactical Sovereign Cadres (21 Nodes)</Typography>
+          <Box sx={{ mb: 4, display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(3, 1fr)', md: 'repeat(5, 1fr)' }, gap: 1.5 }}>
+            {pantheonCadres.filter((name) => name !== 'All').map((name) => {
+              const count = pantheonAgents.filter((agent) => agent.cadre === name).length;
+              const color = getCadreColor(name, isDark);
+              return (
+                <Box
+                  key={name}
+                  sx={{
+                    p: 2,
+                    borderRadius: 2.5,
+                    bgcolor: voidBg,
+                    border: '1.5px solid',
+                    borderColor: isDark ? 'rgba(212,175,55,0.18)' : theme.palette.divider,
+                    transition: 'all 0.22s ease',
+                    '&:hover': { borderColor: color, transform: 'translateY(-2px)' },
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', mb: 0.5 }}>
+                    <Typography sx={{ fontFamily: mono, fontWeight: 900, fontSize: '1.5rem', color }}>{count}</Typography>
+                    <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: color }} />
+                  </Box>
+                  <Typography variant="caption" sx={{ fontWeight: 800, letterSpacing: '0.06em', textTransform: 'uppercase', color: theme.palette.text.secondary }}>
+                    {name} CADRE
+                  </Typography>
+                </Box>
+              );
+            })}
+          </Box>
+
+          {/* Zero-Cloud Verification Badges Grid */}
+          <Box sx={{ mb: 5 }}>
+            <Typography className="section-kicker" sx={{ mb: 2 }}>Pantheon Air-Gap Certification Badges</Typography>
+            <Grid container spacing={1.5}>
+              {ZERO_CLOUD_BADGES.map((b) => {
+                const IconComponent = b.icon;
+                return (
+                  <Grid xs={12} sm={6} md={2.4} key={b.id}>
+                    <Paper
+                      sx={{
+                        p: 1.5,
+                        height: '100%',
+                        bgcolor: isDark ? '#050508' : '#F8FAFC',
+                        border: '1px solid',
+                        borderColor: isDark ? 'rgba(212,175,55,0.22)' : theme.palette.divider,
+                        borderRadius: 2,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        transition: 'border-color 0.2s ease',
+                        '&:hover': { borderColor: gold },
+                      }}
+                    >
+                      <Box sx={{ p: 0.8, borderRadius: '50%', bgcolor: 'rgba(52,211,153,0.12)', mb: 1 }}>
+                        <IconComponent sx={{ fontSize: '1.2rem', color: '#34D399' }} />
+                      </Box>
+                      <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: theme.palette.text.primary, mb: 0.5, lineHeight: 1.2 }}>
+                        {b.label}
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.68rem', color: goldSoft }}>
+                        {b.sub}
+                      </Typography>
+                    </Paper>
+                  </Grid>
+                );
+              })}
+            </Grid>
+          </Box>
+        </Box>
+      )}
+
+      {/* MODE 2: PLAY-BY-PLAY JOURNEY (6 FRAMES) */}
+      {viewMode === 'journey' && (
+        <Box sx={{ position: 'relative', zIndex: 1, mb: 6 }}>
+          <SwarmFrameJourney
+            onEnterCockpit={() => setViewMode('cockpit')}
+            onBackToFunnel={() => setViewMode('funnel')}
+          />
+        </Box>
+      )}
+
+      {/* MODE 3: LIVE TELEMETRY COCKPIT (:8989) */}
+      {viewMode === 'cockpit' && (
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 3 }}>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => setViewMode('journey')}
+              startIcon={<ArrowBackIcon />}
+              sx={{ fontFamily: mono, fontWeight: 750, fontSize: '0.8rem', borderColor: goldBorder, color: goldSoft }}
+            >
+              Take Play-by-Play Journey
+            </Button>
+            <Button
+              size="small"
+              variant="text"
+              onClick={() => setViewMode('funnel')}
+              sx={{ fontFamily: mono, fontWeight: 700, fontSize: '0.78rem', color: 'text.secondary' }}
+            >
+              Swarm Overview & Pillars
+            </Button>
+          </Box>
+
+
+      {/* Header */}
+      <HeroReveal>
+        <Box sx={{ mb: 4, position: 'relative', zIndex: 1 }}>
+          <HeroItem>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 1.5 }}>
+              <Chip
+                label="PANTHEON MULTI-AGENT SWARM HUB"
+                size="small"
+                sx={{
+                  bgcolor: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
+                  color: goldSoft,
+                  border: `1px solid ${goldBorder}`,
+                  fontWeight: 800,
+                }}
+              />
+              <Chip
+                icon={<ShieldIcon sx={{ fontSize: '0.9rem !important', color: isDark ? '#34D399' : '#065F46' }} />}
+                label="ZERO-CLOUD AIR-GAP ENGINE"
+                size="small"
+                sx={{
+                  bgcolor: isDark ? '#08080B' : '#D1FADF',
+                  color: isDark ? '#34D399' : '#065F46',
+                  border: `1.5px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#059669'}`,
+                  fontWeight: 800,
+                }}
+              />
+            </Box>
+          </HeroItem>
+
+          <HeroItem>
+            <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1.5 }}>
+              Pantheon Multi-Agent <span className="text-gradient-gold">Swarm Hub</span>
+            </Typography>
+          </HeroItem>
+          
+          <HeroItem>
+            <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 860, lineHeight: 1.65, fontSize: '1.05rem' }}>
+              Real-time telemetry and process coordination for the <span className="text-highlight-gold">{pantheonAgents.length} sovereign agent nodes</span> in Zoth Studio.
+              Agents execute on local hardware via loopback HTTP and SSE multiplexing on 127.0.0.1:8989 with zero external cloud egress.
+              Inspect live node heartbeats, test cadre loopback latencies, and verify air-gap cryptographic isolation.
+            </Typography>
+          </HeroItem>
+        </Box>
+      </HeroReveal>
+
+      
+{/* Live Daemon Connectivity Banner */}
       <Paper
         elevation={0}
         sx={{
@@ -1045,7 +1557,10 @@ export default function SwarmPage() {
     </Box>
   )}
 
-  {/* Sovereign Installation Funnel */}
+  
+        </Box>
+      )}
+{/* Sovereign Installation Funnel */}
       <RevealOnScroll>
       <SovereignFunnel
         title="Deploy Sovereign Swarm Multiplexer Locally"
