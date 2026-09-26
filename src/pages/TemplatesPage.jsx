@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import CinematicIntro from '../components/CinematicIntro';
 import {
   Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, CardActions,
   Chip, Button, TextField, InputAdornment, Paper, Dialog, DialogTitle, DialogContent,
@@ -26,6 +27,7 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const CLASSIC = 'http://127.0.0.1:8088';
 
 export default function TemplatesPage() {
+  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const [search, setSearch] = useState('');
@@ -63,6 +65,14 @@ export default function TemplatesPage() {
     setCopiedCmd(id);
     setTimeout(() => setCopiedCmd(''), 1800);
   };
+
+  if (!introDone) {
+
+    return <CinematicIntro words={["OPEN SOURCE", "AGENT", "TEMPLATES"]} onComplete={() => setIntroDone(true)} />;
+
+
+  }
+
 
   return (
     <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 } }}>

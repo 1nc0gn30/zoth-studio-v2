@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import CinematicIntro from '../components/CinematicIntro';
 import {
   Box, Container, Typography, Accordion, AccordionSummary, AccordionDetails,
   Paper, Chip, TextField, InputAdornment, Button, Stack, IconButton,
@@ -45,6 +46,7 @@ const QUICK_PROMPTS = [
 ];
 
 export default function FaqsPage() {
+  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const [search, setSearch] = useState('');
@@ -188,6 +190,14 @@ ${oracleResult.faq.a}`;
       return matchesCat && matchesSearch;
     });
   }, [search, selectedCat]);
+
+  if (!introDone) {
+
+    return <CinematicIntro words={["SYSTEM", "FAQS", "ORACLE"]} onComplete={() => setIntroDone(true)} />;
+
+
+  }
+
 
   return (
     <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>

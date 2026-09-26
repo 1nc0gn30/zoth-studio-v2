@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import CinematicIntro from '../components/CinematicIntro';
 import {
   Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, CardActions,
   Chip, Button, TextField, InputAdornment, Paper, ToggleButtonGroup, ToggleButton,
@@ -281,6 +282,7 @@ function WorkstationCard({ item, classicUp, isDark, gold }) {
 }
 
 export default function WorkstationsPage() {
+  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const [search, setSearch] = useState('');
@@ -334,6 +336,14 @@ export default function WorkstationsPage() {
     }
     return map;
   }, [filtered]);
+
+  if (!introDone) {
+
+    return <CinematicIntro words={["ZOTH", "ISOLATED", "WORKSTATIONS"]} onComplete={() => setIntroDone(true)} />;
+
+
+  }
+
 
   return (
     <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 } }}>

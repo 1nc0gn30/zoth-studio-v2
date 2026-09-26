@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import CinematicIntro from '../components/CinematicIntro';
 import {
   Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, CardActions,
   Chip, Button, TextField, InputAdornment, MenuItem, Select, FormControl, InputLabel,
@@ -25,6 +26,7 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const categories = ['All', 'Planning', 'Swarm & Core', 'AI & Knowledge', 'Security & Recon', 'Security & Steganography', 'Autonomous Web', 'Media & 3D', 'Automation'];
 
 export default function ToolsPage() {
+  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const { status } = useStudioStatus();
@@ -66,6 +68,14 @@ export default function ToolsPage() {
       t.repo.toLowerCase().includes(search.toLowerCase());
     return matchesCat && matchesExec && matchesSearch;
   });
+
+  if (!introDone) {
+
+    return <CinematicIntro words={["25 LOCAL", "MICRO", "TOOLS"]} onComplete={() => setIntroDone(true)} />;
+
+
+  }
+
 
   return (
     <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6 }}>

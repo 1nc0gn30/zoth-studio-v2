@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import CinematicIntro from '../components/CinematicIntro';
 import {
   Box, Container, Typography, Chip, Card, CardContent, Unstable_Grid2 as Grid, Avatar, Stack,
   Collapse, Button, Paper, Tooltip, IconButton, Switch, FormControlLabel, LinearProgress,
@@ -70,6 +71,7 @@ const ZERO_CLOUD_BADGES = [
 ];
 
 export default function SwarmPage() {
+  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const gold = isDark ? '#D4AF37' : '#B8860B';
@@ -180,6 +182,14 @@ export default function SwarmPage() {
     }, 2800);
     return () => clearInterval(timer);
   }, [autoPing, pingCadre]);
+
+  if (!introDone) {
+
+    return <CinematicIntro words={["SOVEREIGN", "AGENT", "SWARM"]} onComplete={() => setIntroDone(true)} />;
+
+
+  }
+
 
   return (
     <Container maxWidth="lg" sx={{ py: 6, position: 'relative' }}>

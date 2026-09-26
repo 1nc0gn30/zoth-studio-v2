@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
+import CinematicIntro from '../components/CinematicIntro';
 import {
   Box,
   Container,
@@ -339,6 +340,7 @@ async function computeHmacSha256(secretKey, text) {
 }
 
 export default function BridgesPage() {
+  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const { status } = useStudioStatus();
@@ -782,6 +784,14 @@ export default function BridgesPage() {
 
     animationTimerRef.current = setTimeout(runHopAnimation, 240);
   };
+
+  if (!introDone) {
+
+    return <CinematicIntro words={["SOVEREIGN", "BRIDGES", "MESH"]} onComplete={() => setIntroDone(true)} />;
+
+
+  }
+
 
   return (
     <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>

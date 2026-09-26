@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import CinematicIntro from '../components/CinematicIntro';
 import { Link as RouterLink } from 'react-router-dom';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 import {
@@ -234,6 +235,7 @@ const FULL_64_PORTS = (() => {
 })();
 
 export default function HexStrikePage() {
+  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
@@ -575,6 +577,14 @@ export default function HexStrikePage() {
   const dialRadius = 85;
   const dialCircumference = 2 * Math.PI * dialRadius;
   const dialOffset = dialCircumference * (1 - securityScore / 100);
+
+  if (!introDone) {
+
+    return <CinematicIntro words={["HEXSTRIKE", "OFFENSIVE", "ARSENAL"]} onComplete={() => setIntroDone(true)} />;
+
+
+  }
+
 
   return (
     <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>

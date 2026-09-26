@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import CinematicIntro from '../components/CinematicIntro';
 import {
   Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, Chip, Button, Paper, TextField,
   LinearProgress, IconButton, Tooltip, Tabs, Tab, RadioGroup, FormControlLabel, Radio,
@@ -37,7 +38,10 @@ import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DescriptionIcon from '@mui/icons-material/Description';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import WindowCarousel from '../components/WindowCarousel';
+import SovereignFunnel from '../components/SovereignFunnel';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -150,8 +154,17 @@ function getGeneratedCode(templateName, frameworkId) {
 import { Activity, ShieldCheck, Cpu, Terminal, ChevronRight } from 'lucide-react';
 
 export default function SovereignDashboard() {
+  const [introDone, setIntroDone] = React.useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [latency, setLatency] = useState('12.4ms');
+
+  if (!introDone) {
+
+    return <CinematicIntro words={["WEBGEN", "LAYOUT", "FOUNDRY"]} onComplete={() => setIntroDone(true)} />;
+
+
+  }
+
 
   return (
     <div className="min-h-screen bg-[#08080B] text-slate-100 p-6 md:p-10 font-sans selection:bg-[#D4AF37]/30">
@@ -383,6 +396,7 @@ function refreshMetrics() {
         return `import { createSignal } from 'solid-js';
 
 export default function SovereignDashboard() {
+  const [introDone, setIntroDone] = React.useState(false);
   const [latency, setLatency] = createSignal('12.4ms');
   const [isAuditing, setIsAuditing] = createSignal(false);
 
@@ -1873,9 +1887,30 @@ export default function WebGenPage() {
   const [expandedNodes, setExpandedNodes] = useState({ 'node-root': true, 'node-decl': true, 'node-jsx-root': true, 'node-tailwind-root': true, 'node-hooks': true });
   const [astMode, setAstMode] = useState('tree'); // 'tree' | 'diff'
 
-  // Deploy Dialog & Snackbar
-  const [deployOpen, setDeployOpen] = useState(false);
-  const [deployStep, setDeployStep] = useState(0);
+  // Micro-Repo CLI & MCP Server Configuration Helpers
+  const selectedTemplateId = useMemo(() => {
+    const tpl = TEMPLATES.find(t => t.name === selectedTemplate) || TEMPLATES[0];
+    return tpl.id;
+  }, [selectedTemplate]);
+
+  const dynamicCliCommand = useMemo(() => {
+    return `python3 webgen_engine.py --template ${selectedTemplateId} --framework ${selectedFramework} --theme ${selectedTheme} --out ./dist/index.html --artifacts-dir ./dist/artifacts`;
+  }, [selectedTemplateId, selectedFramework, selectedTheme]);
+
+  const mcpConfigSnippet = JSON.stringify({
+    mcpServers: {
+      "zoth-webgen": {
+        "command": "python3",
+        "args": ["mcp_server.py"],
+        "env": {
+          "ZOTH_ZERO_EGRESS": "true",
+          "ZOTH_LOCAL_INVARIANT": "enforced"
+        }
+      }
+    }
+  }, null, 2);
+
+  // Snackbar State
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
@@ -2178,13 +2213,12 @@ wait $PID`;
     setSnackbarOpen(true);
   };
 
-  // Deploy Bundle Dialog Trigger
-  const handleDeployModalOpen = () => {
-    setDeployOpen(true);
-    setDeployStep(1);
-    setTimeout(() => setDeployStep(2), 500);
-    setTimeout(() => setDeployStep(3), 1100);
-    setTimeout(() => setDeployStep(4), 1700);
+  // Copy Micro-Repo Command / Config Helper
+  const handleCopyText = (text, label) => {
+    navigator.clipboard.writeText(text);
+    playSfx('click');
+    setSnackbarMessage(`Copied ${label} to clipboard!`);
+    setSnackbarOpen(true);
   };
 
   // Toggle AST Node Expand
@@ -2515,10 +2549,10 @@ wait $PID`;
           }}
         >
           <HeroItem>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 1.5 }}>
               <Chip
-                icon={<AutoAwesomeIcon sx={{ color: `${gold} !important` }} />}
-                label="AUTONOMOUS SITE FOUNDRY • SOVEREIGN ENGINE"
+                icon={<GitHubIcon sx={{ color: `${gold} !important`, fontSize: '0.95rem' }} />}
+                label="MICRO-REPO // NullAITech/zoth-webgen"
                 size="small"
                 sx={{
                   backgroundColor: goldBg,
@@ -2540,22 +2574,207 @@ wait $PID`;
                   fontFamily: mono
                 }}
               />
+              <Chip
+                label="PURE STDLIB • NO PIP DEPS"
+                size="small"
+                sx={{
+                  bgcolor: dark ? 'rgba(56,189,248,0.12)' : '#E0F2FE',
+                  color: dark ? '#38BDF8' : '#0284C7',
+                  border: dark ? '1px solid rgba(56,189,248,0.3)' : '1px solid #BAE6FD',
+                  fontWeight: 800,
+                  fontFamily: mono
+                }}
+              />
+              <Chip
+                label="MCP PROTOCOL COMPLIANT"
+                size="small"
+                sx={{
+                  bgcolor: dark ? 'rgba(168,85,247,0.12)' : '#F3E8FF',
+                  color: dark ? '#C084FC' : '#7E22CE',
+                  border: dark ? '1px solid rgba(168,85,247,0.3)' : '1px solid #E9D5FF',
+                  fontWeight: 800,
+                  fontFamily: mono
+                }}
+              />
             </Box>
           </HeroItem>
           
           <HeroItem>
             <Typography variant="h3" sx={{ mb: 1, fontWeight: 900, color: textPrimary, fontSize: { xs: '2.2rem', sm: '3rem', md: '3.4rem' }, letterSpacing: '-0.02em' }}>
-              Autonomous WebGen Foundry
+              Zoth WebGen // Autonomous Site Foundry
             </Typography>
           </HeroItem>
           <HeroItem>
-            <Typography variant="body1" sx={{ color: textSecondary, maxWidth: 880, fontSize: { xs: '0.95rem', md: '1.05rem' } }}>
-              High-performance sovereign component foundry. Select layout spec templates, preview live responsive UI in device frames, inspect deterministic AST token trees, and export polyglot code or standalone zero-dependency bundles.
+            <Typography variant="body1" sx={{ color: textSecondary, maxWidth: 940, fontSize: { xs: '0.95rem', md: '1.05rem' }, mb: 2.5, lineHeight: 1.6 }}>
+              Standalone zero-egress site generator and multi-agent synthesis engine. Pull the micro-repo to build 6 production archetypes directly via CLI (<code style={{ color: gold }}>webgen_engine.py</code>), export master artifacts (<code style={{ color: gold }}>master-prompt.txt</code>, <code style={{ color: gold }}>master-instructions.sh</code>, <code style={{ color: gold }}>master-blueprint.json</code>, <code style={{ color: gold }}>llms.txt</code>), or connect AI agents directly via Model Context Protocol (<code style={{ color: gold }}>mcp_server.py</code>).
             </Typography>
+          </HeroItem>
+
+          <HeroItem>
+            <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap' }}>
+              <Box sx={{ p: 1, px: 1.5, bgcolor: dark ? '#08080B' : '#F1F5F9', border: `1px solid ${divider}`, borderRadius: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: dark ? '#38BDF8' : '#0284C7' }}>
+                  git clone https://github.com/NullAITech/zoth-webgen.git
+                </Typography>
+                <IconButton size="small" onClick={() => handleCopyText('git clone https://github.com/NullAITech/zoth-webgen.git', 'git clone command')} sx={{ color: gold, p: 0.4 }}>
+                  <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
+                </IconButton>
+              </Box>
+              <Button
+                variant="contained"
+                startIcon={<GitHubIcon />}
+                href="https://github.com/NullAITech/zoth-webgen"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
+              >
+                Open GitHub Micro-Repo
+              </Button>
+            </Box>
           </HeroItem>
         </Box>
       </HeroReveal>
       </ParallaxGlow>
+
+      {/* =========================================================================
+          MICRO-REPO CLI & MCP SERVER ARCHITECTURE DOSSIER
+          ========================================================================= */}
+      <RevealOnScroll delay={0.05} preset="fadeUp">
+        <Paper
+          elevation={0}
+          sx={{
+            p: { xs: 2.5, md: 3.5 },
+            mb: 4,
+            border: `1px solid ${divider}`,
+            borderRadius: 3.5,
+            bgcolor: dark ? '#0A0C14' : '#F8FAFC',
+            boxShadow: dark ? '0 12px 32px rgba(0,0,0,0.4)' : '0 4px 16px rgba(0,0,0,0.04)'
+          }}
+        >
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1.5 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <TerminalIcon sx={{ color: gold, fontSize: '1.5rem' }} />
+              <div>
+                <Typography variant="subtitle1" sx={{ fontWeight: 900, color: textPrimary, fontFamily: mono, display: 'flex', alignItems: 'center', gap: 1 }}>
+                  MICRO-REPO ARCHITECTURE &amp; MCP INTEGRATION
+                  <Chip label="STANDALONE" size="small" sx={{ bgcolor: goldBg, color: gold, fontFamily: mono, fontWeight: 800, fontSize: '0.65rem' }} />
+                </Typography>
+                <Typography variant="caption" sx={{ color: textSecondary, fontFamily: mono, fontSize: '0.74rem' }}>
+                  Pull the repo directly to execute zero-egress builds or equip AI agents (Claude, Cursor, Hermes, Cline) via MCP stdio.
+                </Typography>
+              </div>
+            </Box>
+            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+              <Button
+                size="small"
+                variant="outlined"
+                startIcon={<ContentCopyIcon />}
+                onClick={() => handleCopyText('git clone https://github.com/NullAITech/zoth-webgen.git', 'git clone command')}
+                sx={{ borderColor: divider, color: textPrimary, fontSize: '0.72rem', fontFamily: mono }}
+              >
+                Copy git clone
+              </Button>
+              <Button
+                size="small"
+                variant="contained"
+                startIcon={<GitHubIcon />}
+                href="https://github.com/NullAITech/zoth-webgen"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, fontSize: '0.72rem', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
+              >
+                GitHub Repo
+              </Button>
+            </Box>
+          </Box>
+
+          <Grid container spacing={3}>
+            {/* Left: CLI Execution Engine */}
+            <Grid xs={12} md={6}>
+              <Box sx={{ p: 2, bgcolor: dark ? '#10121C' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2.5, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                  <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: dark ? goldLight : '#8A6A09', display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                    <CodeIcon sx={{ fontSize: '1.1rem' }} /> CLI ENGINE: webgen_engine.py
+                  </Typography>
+                  <Chip label="PURE STDLIB" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', fontSize: '0.65rem', fontWeight: 800, fontFamily: mono }} />
+                </Box>
+                <Typography variant="body2" sx={{ color: textSecondary, fontSize: '0.8rem', mb: 1.5, lineHeight: 1.5 }}>
+                  Deterministic compiler for 6 sovereign archetypes. Zero external pip dependencies; uses standard Python 3.10+ runtime.
+                </Typography>
+                
+                <Box sx={{ mb: 1.5, p: 1.5, bgcolor: dark ? '#05070F' : '#F1F5F9', border: `1px solid ${divider}`, borderRadius: 2 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                    <Typography variant="caption" sx={{ color: textSecondary, fontFamily: mono, fontSize: '0.68rem', fontWeight: 700 }}>
+                      LIVE DYNAMIC CLI COMMAND (UPDATES WITH CONFIG):
+                    </Typography>
+                    <IconButton size="small" onClick={() => handleCopyText(dynamicCliCommand, 'CLI command')} sx={{ color: gold, p: 0.2 }}>
+                      <ContentCopyIcon sx={{ fontSize: '0.8rem' }} />
+                    </IconButton>
+                  </Box>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: dark ? '#38BDF8' : '#0284C7', wordBreak: 'break-all', lineHeight: 1.4 }}>
+                    {dynamicCliCommand}
+                  </Typography>
+                </Box>
+
+                <Box sx={{ display: 'flex', gap: 1, mt: 'auto' }}>
+                  <Button
+                    size="small"
+                    fullWidth
+                    variant="contained"
+                    startIcon={<ContentCopyIcon />}
+                    onClick={() => handleCopyText(dynamicCliCommand, 'WebGen CLI command')}
+                    sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, fontSize: '0.72rem', py: 0.8, '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
+                  >
+                    Copy CLI Command
+                  </Button>
+                </Box>
+              </Box>
+            </Grid>
+
+            {/* Right: Model Context Protocol (MCP) Server */}
+            <Grid xs={12} md={6}>
+              <Box sx={{ p: 2, bgcolor: dark ? '#10121C' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2.5, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                  <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: dark ? goldLight : '#8A6A09', display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                    <HubIcon sx={{ fontSize: '1.1rem' }} /> MCP SERVER: mcp_server.py
+                  </Typography>
+                  <Chip label="MCP 2024-11-05" size="small" sx={{ bgcolor: goldBg, color: gold, fontSize: '0.65rem', fontWeight: 800, fontFamily: mono }} />
+                </Box>
+                <Typography variant="body2" sx={{ color: textSecondary, fontSize: '0.8rem', mb: 1.5, lineHeight: 1.5 }}>
+                  Equips AI agents (Claude, Cursor, Hermes, Cline) with tools: <code style={{ color: gold }}>webgen_list_templates</code>, <code style={{ color: gold }}>webgen_generate_site</code>, and <code style={{ color: gold }}>webgen_generate_master_artifacts</code>.
+                </Typography>
+
+                <Box sx={{ mb: 1.5, p: 1.5, bgcolor: dark ? '#05070F' : '#F1F5F9', border: `1px solid ${divider}`, borderRadius: 2 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                    <Typography variant="caption" sx={{ color: textSecondary, fontFamily: mono, fontSize: '0.68rem', fontWeight: 700 }}>
+                      CLAUDE / CURSOR / HERMES CONFIG SNIPPET:
+                    </Typography>
+                    <IconButton size="small" onClick={() => handleCopyText(mcpConfigSnippet, 'MCP config')} sx={{ color: gold, p: 0.2 }}>
+                      <ContentCopyIcon sx={{ fontSize: '0.8rem' }} />
+                    </IconButton>
+                  </Box>
+                  <pre style={{ margin: 0, fontFamily: mono, fontSize: '0.7rem', color: dark ? '#F8FAFC' : '#0F172A', maxHeight: 85, overflowY: 'auto' }}>
+                    {mcpConfigSnippet}
+                  </pre>
+                </Box>
+
+                <Box sx={{ display: 'flex', gap: 1, mt: 'auto' }}>
+                  <Button
+                    size="small"
+                    fullWidth
+                    variant="outlined"
+                    startIcon={<ContentCopyIcon />}
+                    onClick={() => handleCopyText(mcpConfigSnippet, 'MCP config snippet')}
+                    sx={{ borderColor: gold, color: gold, fontWeight: 800, fontSize: '0.72rem', py: 0.8 }}
+                  >
+                    Copy MCP Server JSON
+                  </Button>
+                </Box>
+              </Box>
+            </Grid>
+          </Grid>
+        </Paper>
+      </RevealOnScroll>
 
       {/* MOBILE TABBED WORKSTATION BAR */}
       {isMobile && (
@@ -2988,11 +3207,23 @@ wait $PID`;
             <Button
               variant="contained"
               size="large"
-              startIcon={<CloudDoneIcon />}
-              onClick={handleDeployModalOpen}
-              sx={{ bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, color: textPrimary, py: 1.4, px: 3, fontWeight: 750, borderRadius: 2, '&:hover': { borderColor: gold } }}
+              startIcon={<TerminalIcon />}
+              onClick={() => handleCopyText(dynamicCliCommand, 'WebGen CLI execution command')}
+              sx={{ bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${gold}`, color: gold, py: 1.4, px: 3, fontWeight: 800, borderRadius: 2, '&:hover': { bgcolor: goldBg } }}
             >
-              Deploy Local Edge
+              Copy CLI Command
+            </Button>
+
+            <Button
+              variant="outlined"
+              size="large"
+              startIcon={<GitHubIcon />}
+              href="https://github.com/NullAITech/zoth-webgen"
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{ borderColor: divider, color: textPrimary, py: 1.4, px: 2.5, fontWeight: 750, borderRadius: 2, '&:hover': { borderColor: gold } }}
+            >
+              Pull Micro-Repo
             </Button>
           </Box>
 
@@ -3340,8 +3571,8 @@ wait $PID`;
                       <Button size="small" variant="outlined" onClick={handleExportBundle} sx={{ color: gold, borderColor: gold, fontSize: '0.7rem', fontWeight: 800 }}>
                         Export Bundle
                       </Button>
-                      <Button size="small" variant="contained" onClick={handleDeployModalOpen} sx={{ bgcolor: gold, color: '#08080B', fontSize: '0.7rem', fontWeight: 800, '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}>
-                        Deploy
+                      <Button size="small" variant="contained" onClick={() => handleCopyText(dynamicCliCommand, 'WebGen CLI command')} sx={{ bgcolor: gold, color: '#08080B', fontSize: '0.7rem', fontWeight: 800, '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}>
+                        Copy CLI Command
                       </Button>
                     </Box>
                   </Box>
@@ -3830,150 +4061,15 @@ wait $PID`;
           STAGE 06: SOVEREIGN REPOSITORY & INSTALLATION FUNNEL
           ========================================================================= */}
       <RevealOnScroll delay={0.6} preset="fadeUp">
-      <Paper
-        elevation={0}
-        sx={{
-          p: { xs: 3, md: 4.5 },
-          mb: 6,
-          borderRadius: 3,
-          border: `1.5px solid ${gold}`,
-          bgcolor: dark ? '#0D0E16' : surface,
-          boxShadow: dark ? '0 12px 40px rgba(0,0,0,0.5)' : '0 8px 30px rgba(212,175,55,0.1)',
-          position: 'relative',
-          overflow: 'hidden'
-        }}
-      >
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 1.5 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
-            <RocketLaunchIcon sx={{ color: gold, fontSize: '1.6rem' }} />
-            <Typography variant="h5" sx={{ fontWeight: 900, color: textPrimary, letterSpacing: '-0.01em' }}>
-              Deploy WebGen & Autonomous Tools Locally
-            </Typography>
-          </Box>
-          <Chip
-            label="AIR-GAPPED SOVEREIGN ECOSYSTEM"
-            size="small"
-            sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
-          />
-        </Box>
-
-        <Typography variant="body1" sx={{ color: textSecondary, mb: 3.5, maxWidth: 920, lineHeight: 1.65 }}>
-          Zoth WebGen and the accompanying 29+ autonomous developer utilities are engineered for 100% offline, zero-cloud sovereign operation. Run the standalone WebGen foundry micro-repo, clone the unified Zoth Studio v2 cockpit, or install the full bare-metal Zoth OS runtime.
-        </Typography>
-
-        <Grid container spacing={3}>
-          {/* Funnel Option 1: Standalone WebGen Repo */}
-          <Grid xs={12} md={4}>
-            <Box sx={{ p: 2.5, height: '100%', bgcolor: dark ? '#121420' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2.5, display: 'flex', flexDirection: 'column' }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: dark ? goldLight : '#8A6A09' }}>
-                  Option 1: Zoth WebGen Micro-Repo
-                </Typography>
-                <Chip label="STANDALONE" size="small" sx={{ bgcolor: dark ? 'rgba(56,189,248,0.15)' : '#E0F2FE', color: dark ? '#38BDF8' : '#0369A1', fontWeight: 800, fontSize: '0.65rem' }} />
-              </Box>
-              <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
-                Dedicated standalone repository with offline WebGen engine, AST transformer, and polyglot framework exporters.
-              </Typography>
-              <Box sx={{ p: 1.2, mb: 2, bgcolor: dark ? '#08080B' : '#EDF2F7', border: `1px solid ${divider}`, borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: dark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  git clone https://github.com/NullAITech/zoth-webgen.git
-                </Typography>
-                <IconButton size="small" onClick={() => handleCopyCodeText('git clone https://github.com/NullAITech/zoth-webgen.git')} sx={{ color: gold, ml: 1, p: 0.5 }}>
-                  <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
-                </IconButton>
-              </Box>
-              <Button
-                variant="contained"
-                href="https://github.com/NullAITech/zoth-webgen"
-                target="_blank"
-                rel="noopener noreferrer"
-                fullWidth
-                sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
-              >
-                Open WebGen GitHub Repo
-              </Button>
-            </Box>
-          </Grid>
-
-          {/* Funnel Option 2: Zoth Studio v2 Unified Cockpit */}
-          <Grid xs={12} md={4}>
-            <Box sx={{ p: 2.5, height: '100%', bgcolor: dark ? '#121420' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2.5, display: 'flex', flexDirection: 'column' }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: dark ? goldLight : '#8A6A09' }}>
-                  Option 2: Zoth Studio v2 Unified
-                </Typography>
-                <Chip label="FULL SUITE" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontSize: '0.65rem' }} />
-              </Box>
-              <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
-                The full sovereign workstation cockpit featuring 29+ tools, STDP memory neural daemon, and WebGPU hardware shaders.
-              </Typography>
-              <Box sx={{ p: 1.2, mb: 2, bgcolor: dark ? '#08080B' : '#EDF2F7', border: `1px solid ${divider}`, borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: dark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  git clone https://github.com/NullAITech/zoth-studio-v2.git
-                </Typography>
-                <IconButton size="small" onClick={() => handleCopyCodeText('git clone https://github.com/NullAITech/zoth-studio-v2.git')} sx={{ color: gold, ml: 1, p: 0.5 }}>
-                  <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
-                </IconButton>
-              </Box>
-              <Button
-                variant="contained"
-                href="https://github.com/NullAITech/zoth-studio-v2"
-                target="_blank"
-                rel="noopener noreferrer"
-                fullWidth
-                sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
-              >
-                Open Studio v2 GitHub Repo
-              </Button>
-            </Box>
-          </Grid>
-
-          {/* Funnel Option 3: Sovereign Zoth OS Bare-Metal ISO */}
-          <Grid xs={12} md={4}>
-            <Box sx={{ p: 2.5, height: '100%', bgcolor: dark ? '#121420' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2.5, display: 'flex', flexDirection: 'column' }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: dark ? goldLight : '#8A6A09' }}>
-                  Option 3: Sovereign Zoth OS
-                </Typography>
-                <Chip label="BARE-METAL ISO" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', fontWeight: 800, fontSize: '0.65rem' }} />
-              </Box>
-              <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
-                Zero-telemetry air-gapped bootable OS ISO for autonomous agent swarms, hardware enclave encryption, and memory vaults.
-              </Typography>
-              <Box sx={{ p: 1.2, mb: 2, bgcolor: dark ? '#08080B' : '#EDF2F7', border: `1px solid ${divider}`, borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: dark ? '#10B981' : '#059669', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  curl -LO https://.../zoth-os-baremetal.iso
-                </Typography>
-                <IconButton size="small" onClick={() => handleCopyCodeText('curl -LO https://github.com/NullAITech/zoth-os/releases/download/v2.0/zoth-os-baremetal.iso')} sx={{ color: gold, ml: 1, p: 0.5 }}>
-                  <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
-                </IconButton>
-              </Box>
-              <Stack spacing={1}>
-                <Button
-                  variant="contained"
-                  href="https://github.com/NullAITech/zoth-os/releases/tag/v2.0"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  fullWidth
-                  sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
-                >
-                  Download Bare-Metal ISO (v2.0)
-                </Button>
-                <Button
-                  variant="outlined"
-                  href="https://github.com/NullAITech/zoth-os"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  fullWidth
-                  sx={{ borderColor: gold, color: gold, fontWeight: 800, textTransform: 'none', '&:hover': { borderColor: dark ? goldLight : '#9A7008', bgcolor: goldBg } }}
-                >
-                  Inspect OS Architecture
-                </Button>
-              </Stack>
-            </Box>
-          </Grid>
-        </Grid>
-      </Paper>
+        <SovereignFunnel
+          title="Deploy Zoth WebGen Locally"
+          subtitle="Autonomous zero-egress site generator and template synthesizer with zero external dependencies, 6 production archetypes, and Model Context Protocol (MCP) server."
+          toolTitle="Option 1: Zoth WebGen Micro-Repo"
+          toolTag="MICRO-REPO"
+          toolDescription="Standalone zero-egress static site generator with CLI engine, MCP tools for AI coding assistants, and automated test suite."
+          toolRepo="https://github.com/NullAITech/zoth-webgen"
+          toolCommand="git clone https://github.com/NullAITech/zoth-webgen.git && cd zoth-webgen && python3 webgen_engine.py --help"
+        />
       </RevealOnScroll>
 
       {/* MOBILE STICKY FLOATING QUICK-ACTION BOTTOM BAR */}
@@ -4013,64 +4109,6 @@ wait $PID`;
           </Button>
         </Paper>
       )}
-
-      {/* DEPLOY BUNDLE PIPELINE MODAL */}
-      <Dialog
-        open={deployOpen}
-        onClose={() => setDeployOpen(false)}
-        maxWidth="sm"
-        fullWidth
-        PaperProps={{
-          sx: {
-            bgcolor: dark ? '#10121A' : surface,
-            border: `1px solid ${gold}`,
-            borderRadius: 3,
-            color: textPrimary
-          }
-        }}
-      >
-        <DialogTitle sx={{ fontFamily: mono, fontWeight: 800, borderBottom: `1px solid ${divider}`, color: gold, display: 'flex', alignItems: 'center', gap: 1 }}>
-          <CloudDoneIcon /> Sovereign Deploy Pipeline
-        </DialogTitle>
-        <DialogContent sx={{ py: 3 }}>
-          <Typography variant="body2" sx={{ color: textSecondary, mb: 2 }}>
-            Deploying <strong style={{ color: textPrimary }}>{selectedTemplate}</strong> to the local zero-egress sandbox runtime.
-          </Typography>
-
-          <Stack spacing={1.5} sx={{ fontFamily: mono, fontSize: '0.8rem' }}>
-            <Box sx={{ p: 1.5, bgcolor: dark ? '#141624' : '#F8FAFC', borderRadius: 2, border: `1px solid ${divider}`, color: textPrimary, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span>1. Sealing WASM AST Nodes (142 nodes)</span>
-              {deployStep >= 1 ? <CheckIcon sx={{ color: dark ? '#10B981' : '#059669', fontSize: '1rem' }} /> : <LinearProgress sx={{ width: 40 }} />}
-            </Box>
-            <Box sx={{ p: 1.5, bgcolor: dark ? '#141624' : '#F8FAFC', borderRadius: 2, border: `1px solid ${divider}`, color: textPrimary, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span>2. Zero Cloud Egress Audit (0 Bytes out)</span>
-              {deployStep >= 2 ? <CheckIcon sx={{ color: dark ? '#10B981' : '#059669', fontSize: '1rem' }} /> : deployStep === 1 ? <LinearProgress sx={{ width: 40 }} /> : <span style={{ color: textSecondary }}>Queued</span>}
-            </Box>
-            <Box sx={{ p: 1.5, bgcolor: dark ? '#141624' : '#F8FAFC', borderRadius: 2, border: `1px solid ${divider}`, color: textPrimary, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span>3. Inlining Gold Theme Tokens (#D4AF37)</span>
-              {deployStep >= 3 ? <CheckIcon sx={{ color: dark ? '#10B981' : '#059669', fontSize: '1rem' }} /> : deployStep === 2 ? <LinearProgress sx={{ width: 40 }} /> : <span style={{ color: textSecondary }}>Queued</span>}
-            </Box>
-            <Box sx={{ p: 1.5, bgcolor: dark ? '#141624' : '#F8FAFC', borderRadius: 2, border: `1px solid ${divider}`, color: textPrimary, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span>4. Target: http://127.0.0.1:8788/sovereign-bundle</span>
-              {deployStep >= 4 ? <Chip label="DEPLOYED" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.2)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', border: dark ? 'none' : '1px solid #A7F3D0', fontWeight: 800, fontSize: '0.65rem' }} /> : <span style={{ color: textSecondary }}>Pending</span>}
-            </Box>
-          </Stack>
-        </DialogContent>
-        <DialogActions sx={{ p: 2.5, borderTop: `1px solid ${divider}` }}>
-          <Button onClick={() => setDeployOpen(false)} sx={{ color: textSecondary }}>Close</Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setDeployOpen(false);
-              setSnackbarMessage('Sovereign Bundle Deployed to Local Edge Sandbox!');
-              setSnackbarOpen(true);
-            }}
-            sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
-          >
-            Launch Sandbox
-          </Button>
-        </DialogActions>
-      </Dialog>
 
       {/* SNACKBAR FEEDBACK */}
       <Snackbar

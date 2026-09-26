@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import CinematicIntro from '../components/CinematicIntro';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 import {
   Box, Container, Typography, Paper, Chip, Unstable_Grid2 as Grid, Button,
@@ -384,6 +385,7 @@ When invoking local tooling, output strictly conforming JSON-RPC 2.0 tool reques
 }
 
 export default function AXPage() {
+  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
@@ -453,6 +455,14 @@ export default function AXPage() {
     setProbeCopied(true);
     setTimeout(() => setProbeCopied(false), 2000);
   };
+
+  if (!introDone) {
+
+    return <CinematicIntro words={["AGENT", "EXPERIENCE", "CRAWLERS"]} onComplete={() => setIntroDone(true)} />;
+
+
+  }
+
 
   return (
     <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>

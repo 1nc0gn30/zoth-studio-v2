@@ -1,4 +1,5 @@
 import React from 'react';
+import CinematicIntro from '../components/CinematicIntro';
 import {
   Box,
   Container,
@@ -26,6 +27,7 @@ import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, Stagge
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 export default function MathPillarsPage() {
+  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
@@ -33,6 +35,14 @@ export default function MathPillarsPage() {
   const goldHeading = isDark ? '#F5E6AB' : '#715507';
   const goldWash = isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7';
   const borderCol = isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)';
+
+  if (!introDone) {
+
+    return <CinematicIntro words={["SIX", "MATH", "PILLARS"]} onComplete={() => setIntroDone(true)} />;
+
+
+  }
+
 
   return (
     <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 } }}>

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import CinematicIntro from '../components/CinematicIntro';
 import {
   Box,
   Container,
@@ -44,6 +45,7 @@ import { useStudioStatus } from '../studio/useStudioStatus';
 import { useHostInfo } from '../studio/useHostInfo';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import SovereignFunnel from '../components/SovereignFunnel';
+import { HeroReveal, ParallaxGlow, RevealOnScroll, StaggerChildren, StaggerItem } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const qemu = 'qemu-system-x86_64 -enable-kvm -m 8192 -smp 4 -hda zoth-agent-os.qcow2';
@@ -163,6 +165,7 @@ function RadialResourceDial({ value, max = 100, label, subtext, metricText, stat
 }
 
 export default function ZothOSPage() {
+  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const { status } = useStudioStatus();
@@ -823,6 +826,10 @@ export default function ZothOSPage() {
     'help',
     'clear',
   ];
+
+  if (!introDone) {
+    return <CinematicIntro words={["ZOTH OS", "KVM", "HYPERVISOR"]} onComplete={() => setIntroDone(true)} />;
+  }
 
   return (
     <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>

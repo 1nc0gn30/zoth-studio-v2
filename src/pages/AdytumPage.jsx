@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import CinematicIntro from '../components/CinematicIntro';
 import {
   Box,
   Button,
@@ -447,6 +448,14 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
     animationId = requestAnimationFrame(render);
     return () => cancelAnimationFrame(animationId);
   }, [keyIndex, isDark]);
+
+  if (!introDone) {
+
+    return <CinematicIntro words={["ADYTUM", "SANCTUM", "VAULT"]} onComplete={() => setIntroDone(true)} />;
+
+
+  }
+
 
   return (
     <Box
@@ -2593,5 +2602,6 @@ export function AdytumEngine({ embedded = false }) {
 }
 
 export default function AdytumPage() {
+  const [introDone, setIntroDone] = React.useState(false);
   return <AdytumEngine embedded={false} />;
 }

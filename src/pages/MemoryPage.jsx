@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import CinematicIntro from '../components/CinematicIntro';
 import {
   Box, Container, Typography, Chip, Paper, Button, TextField, InputAdornment,
   Table, TableBody, TableCell, TableHead, TableRow, Unstable_Grid2 as Grid,
@@ -267,6 +268,7 @@ export const AUTHOR_SPECS = [
    MAIN COMPONENT: MemoryPage (Zoth Sovereign Netrunner Memory Hub)
    ========================================================================== */
 export default function MemoryPage() {
+  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const { status } = useStudioStatus();
@@ -1306,6 +1308,14 @@ export default function MemoryPage() {
   const handleHoloMouseUp = () => {
     isDraggingHoloRef.current = false;
   };
+
+  if (!introDone) {
+
+    return <CinematicIntro words={["STDP", "NEURAL", "MEMORY"]} onComplete={() => setIntroDone(true)} />;
+
+
+  }
+
 
   return (
     <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 }, position: 'relative' }}>

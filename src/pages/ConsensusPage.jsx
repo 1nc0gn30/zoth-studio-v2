@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import CinematicIntro from '../components/CinematicIntro';
 import {
   Box, Container, Typography, Chip, Paper, Button, TextField, Unstable_Grid2 as Grid,
   Card, CardContent, Slider, LinearProgress, Tooltip, IconButton, Stack, Divider, Alert,
@@ -337,6 +338,7 @@ async function computeSha256(text) {
 }
 
 export default function ConsensusPage() {
+  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const { status } = useStudioStatus();
@@ -788,6 +790,14 @@ export default function ConsensusPage() {
   const strokeWidth = 9;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (calculatedConfidence / 100) * circumference;
+
+  if (!introDone) {
+
+    return <CinematicIntro words={["BYZANTINE", "FAULT", "TOLERANCE"]} onComplete={() => setIntroDone(true)} />;
+
+
+  }
+
 
   return (
     <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6 }}>

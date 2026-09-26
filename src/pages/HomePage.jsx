@@ -1409,17 +1409,24 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
 /* ==========================================================================
    HOMEPAGE MAIN COMPONENT
    ========================================================================== */
+import CinematicIntro from '../components/CinematicIntro';
+
 export default function HomePage() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const published = microTools.filter((tool) => tool.published);
   const { status } = useStudioStatus();
+  const [introDone, setIntroDone] = useState(false);
 
   const gold = {
     accent: isDark ? '#D4AF37' : '#B8860B',
     soft: isDark ? '#F5E6AB' : '#8A6A09',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
   };
+
+  if (!introDone) {
+    return <CinematicIntro words={["ZOTH", "WELCOME", "TO", "ZOTH OS"]} onComplete={() => setIntroDone(true)} />;
+  }
 
   return (
     <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 4, md: 7 } }}>

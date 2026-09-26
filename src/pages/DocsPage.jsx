@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import CinematicIntro from '../components/CinematicIntro';
 import {
   Box,
   Container,
@@ -152,6 +153,7 @@ function CodeSnippet({ title, code, language = 'bash' }) {
 }
 
 export default function DocsPage() {
+  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
   const gold = dark ? '#D4AF37' : '#B8860B';
@@ -357,6 +359,14 @@ Shannon entropy gatekeeper active on all inter-process channels.`,
 Clones all 25 catalog entries that are published into ./tools.
 Runs local invariant verification before staging tools.`
   ];
+
+  if (!introDone) {
+
+    return <CinematicIntro words={["ZOTH", "DOCUMENTATION", "SPECS"]} onComplete={() => setIntroDone(true)} />;
+
+
+  }
+
 
   return (
     <Box sx={{ bgcolor: dark ? voidDark : '#FAFBFD', minHeight: '100vh', py: 6 }}>
