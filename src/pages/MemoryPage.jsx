@@ -31,11 +31,14 @@ import TuneIcon from '@mui/icons-material/Tune';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CloseIcon from '@mui/icons-material/Close';
 import HubIcon from '@mui/icons-material/Hub';
+import LockIcon from '@mui/icons-material/Lock';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MathPillarsGrid from '../components/MathPillarsGrid';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import Netrunner3DWorld from '../components/Netrunner3DWorld';
 import SovereignFunnel from '../components/SovereignFunnel';
+import { isLocalRuntime } from '../components/AirGapToolLockout';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -274,6 +277,7 @@ export default function MemoryPage() {
   const isDark = theme.palette.mode === 'dark';
   const { status } = useStudioStatus();
   const daemonUp = Boolean(status?.services?.memory?.up);
+  const isLocal = isLocalRuntime();
 
   // View state
   const [activeTab, setActiveTab] = useState(0); // 0: Whitespace, 1: STDP Lab, 2: Stratum Database, 3: Lucy 3D
@@ -1322,7 +1326,7 @@ export default function MemoryPage() {
           onComplete={() => setIntroDone(true)}
         />
       )}
-      <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 }, position: 'relative' }}>
+      <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 7 }, px: { xs: 2, sm: 3, md: 4 }, position: 'relative' }}>
       {/* Background Radial Glow */}
       <ParallaxGlow offset={60}>
         <Box
@@ -1346,31 +1350,31 @@ export default function MemoryPage() {
       <Box sx={{ position: 'relative', zIndex: 1 }}>
         {/* Header / Lucy Oracle Status Bar */}
         <HeroReveal>
-          <Box sx={{ mb: 3 }}>
+          <Box sx={{ mb: 4 }}>
             <HeroItem>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2, mb: 1.5 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 3, mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5 }}>
               <Box
                 component="img"
                 src="/assets/lucy.png"
                 alt="Lucy Oracle Avatar"
                 onError={(e) => { e.target.src = '/brand/ghostbyte-dark.png'; }}
                 sx={{
-                  width: 58,
-                  height: 58,
+                  width: 64,
+                  height: 64,
                   borderRadius: '50%',
                   objectFit: 'cover',
                   border: '2px solid #F472B6',
-                  boxShadow: '0 0 16px rgba(244,114,182,0.4)',
+                  boxShadow: '0 0 20px rgba(244,114,182,0.4)',
                 }}
               />
               <Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 0.5 }}>
                   <Typography variant="overline" sx={{ color: isDark ? '#F472B6' : '#BE185D', fontWeight: 800, letterSpacing: '0.14em' }}>
                     LUCY // DEEP-DIVE NETRUNNER ORACLE
                   </Typography>
                   <Chip
-                    label="SEMANTIC BUS :8094 // COGNITIVE ORACLE"
+                    label="SEMANTIC BUS :8094"
                     size="small"
                     sx={{ bgcolor: isDark ? 'rgba(244,114,182,0.15)' : '#FDF2F8', color: isDark ? '#F472B6' : '#BE185D', fontWeight: 800, fontSize: '0.72rem' }}
                   />
@@ -1380,7 +1384,7 @@ export default function MemoryPage() {
                     sx={{ bgcolor: isDark ? 'rgba(0,240,255,0.12)' : '#E0F2FE', color: isDark ? '#00F0FF' : '#0284C7', fontWeight: 800, fontSize: '0.72rem' }}
                   />
                 </Box>
-                <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', lineHeight: 1.15 }}>
+                <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', lineHeight: 1.2 }}>
                   Netrunner Memory Hub
                 </Typography>
               </Box>
@@ -1423,21 +1427,44 @@ export default function MemoryPage() {
                 {isVoiceMuted ? 'Voice Muted' : 'Voice Active'}
               </Button>
 
-              <Chip
-                label={daemonUp ? 'DAEMON ONLINE :8094' : 'LOCAL ENCLAVE CACHE'}
-                size="small"
-                sx={{
-                  bgcolor: daemonUp ? 'rgba(52,211,153,0.15)' : gold.wash,
-                  color: daemonUp ? '#34D399' : gold.accent,
-                  fontWeight: 800,
-                }}
-              />
+              {daemonUp ? (
+                <Chip
+                  icon={<MemoryIcon sx={{ fontSize: '0.85rem !important', color: '#34D399 !important' }} />}
+                  label="DAEMON ONLINE :8094"
+                  size="small"
+                  sx={{
+                    bgcolor: 'rgba(52,211,153,0.15)',
+                    color: '#34D399',
+                    border: '1px solid rgba(52,211,153,0.4)',
+                    fontWeight: 800,
+                    fontFamily: mono,
+                    fontSize: '0.72rem',
+                  }}
+                />
+              ) : (
+                <Tooltip title="Local memory daemon is not listening on 127.0.0.1:8094. Run the repo locally with 'npx zoth up' to connect.">
+                  <Chip
+                    icon={<LockIcon sx={{ fontSize: '0.85rem !important', color: isDark ? '#FCA5A5 !important' : '#DC2626 !important' }} />}
+                    label="LOCAL DAEMON LOCKED · RUN REPO LOCALLY"
+                    size="small"
+                    sx={{
+                      bgcolor: isDark ? 'rgba(239, 68, 68, 0.12)' : '#FEF2F2',
+                      color: isDark ? '#FCA5A5' : '#DC2626',
+                      border: '1px solid',
+                      borderColor: isDark ? 'rgba(239, 68, 68, 0.35)' : '#FCA5A5',
+                      fontWeight: 800,
+                      fontFamily: mono,
+                      fontSize: '0.72rem',
+                    }}
+                  />
+                </Tooltip>
+              )}
             </Box>
             </Box>
             </HeroItem>
 
             <HeroItem>
-              <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 880, fontSize: '1.02rem', lineHeight: 1.6 }}>
+              <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 880, fontSize: '1.04rem', lineHeight: 1.65 }}>
                 The sovereign memory matrix with Lucy's deep-net breach oracle and serene whitespace neural constellation. Long-term memory is calibrated with biological <span className="text-highlight-gold">Spike-Timing-Dependent Plasticity (STDP)</span> weight decay, zero cloud exfiltration, and local SQLite persistence.
               </Typography>
             </HeroItem>
@@ -1450,17 +1477,17 @@ export default function MemoryPage() {
         <RevealOnScroll preset="fadeUp" delay={0.1}>
         <Paper
           sx={{
-            p: { xs: 2, sm: 2.5 },
-            mb: 3,
+            p: { xs: 2.5, md: 3.5 },
+            mb: 4,
             border: `1px solid ${isMuted ? (isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider) : gold.accent}`,
-            borderRadius: 2.5,
+            borderRadius: 3,
             bgcolor: isDark ? '#08080B' : theme.palette.background.paper,
             boxShadow: isMuted ? 'none' : (isDark ? '0 0 24px rgba(212,175,55,0.18)' : '0 4px 16px rgba(184,134,11,0.12)'),
           }}
         >
           {/* Row 1: Tone Controls with ample breathing room */}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2, mb: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 3, mb: 3 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5, flexWrap: 'wrap' }}>
               <Button
                 variant={isMuted ? 'outlined' : 'contained'}
                 size="small"
@@ -1472,8 +1499,8 @@ export default function MemoryPage() {
                   borderColor: isMuted ? (isDark ? 'rgba(212,175,55,0.4)' : theme.palette.divider) : gold.accent,
                   fontWeight: 800,
                   whiteSpace: 'nowrap',
-                  px: 2,
-                  py: 0.75,
+                  px: 2.5,
+                  py: 0.9,
                   '&:hover': {
                     bgcolor: isMuted ? (isDark ? 'rgba(212,175,55,0.1)' : '#FEF9E7') : gold.accent,
                   },
@@ -1486,14 +1513,14 @@ export default function MemoryPage() {
                 <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, display: 'block' }}>
                   COGNITIVE CARRIER ENGINE
                 </Typography>
-                <Typography variant="caption" sx={{ color: isMuted ? 'text.secondary' : (isDark ? '#00F0FF' : '#0284C7'), fontFamily: mono, fontSize: '0.75rem', fontWeight: 600 }}>
+                <Typography variant="caption" sx={{ color: isMuted ? 'text.secondary' : (isDark ? '#00F0FF' : '#0284C7'), fontFamily: mono, fontSize: '0.78rem', fontWeight: 600 }}>
                   {isMuted ? 'Audio Inactive (Sound Muted by Default)' : `${carrierFreq}Hz Harmonic Continuous Tone`}
                 </Typography>
               </Box>
             </Box>
 
             {/* Carrier Frequency Selectors */}
-            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
+            <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap' }}>
               <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', mr: 0.5, fontWeight: 700 }}>
                 MODE:
               </Typography>
@@ -1526,13 +1553,13 @@ export default function MemoryPage() {
                 }}
               />
               <Tooltip title={carrierFreq === 432 ? "432Hz Alpha: Mental balance and sovereign stillness." : "528Hz Theta: Deep netrunner drift and rapid synaptic plasticity."}>
-                <GraphicEqIcon sx={{ color: gold.accent, fontSize: '1.2rem', cursor: 'pointer', ml: 0.5 }} />
+                <GraphicEqIcon sx={{ color: gold.accent, fontSize: '1.25rem', cursor: 'pointer', ml: 0.5 }} />
               </Tooltip>
             </Box>
 
             {/* Volume Control */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: { xs: '100%', sm: 180 } }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem', minWidth: 32 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, minWidth: { xs: '100%', sm: 200 } }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.78rem', minWidth: 36 }}>
                 VOL {isMuted ? '0%' : `${Math.round(volume * 100)}%`}
               </Typography>
               <Slider
@@ -1556,36 +1583,38 @@ export default function MemoryPage() {
           {/* Row 2: Live Full-Width Carrier Wave Oscilloscope (Spacious, Never Squished) */}
           <Box
             sx={{
-              borderRadius: 2,
+              borderRadius: 2.5,
               overflow: 'hidden',
               border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider}`,
               bgcolor: isDark ? '#040508' : '#0F172A',
-              p: 1.5,
+              p: 2,
               display: 'flex',
               flexDirection: { xs: 'column', md: 'row' },
               alignItems: 'center',
-              gap: 2,
+              gap: 2.5,
             }}
           >
-            <Box sx={{ flexShrink: 0, minWidth: 160 }}>
+            <Box sx={{ flexShrink: 0, minWidth: 170 }}>
               <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, display: 'block' }}>
                 WAVEFORM TELEMETRY
               </Typography>
-              <Typography variant="caption" sx={{ color: isDark ? '#94A3B8' : '#CBD5E1', fontSize: '0.72rem' }}>
+              <Typography variant="caption" sx={{ color: isDark ? '#94A3B8' : '#CBD5E1', fontSize: '0.74rem' }}>
                 {isMuted ? 'Standby (Muted)' : `Active Harmonic: ${carrierFreq}Hz Resonant Mode`}
               </Typography>
             </Box>
-            <Box sx={{ flex: 1, width: '100%', height: 48, borderRadius: 1.5, overflow: 'hidden' }}>
-              <canvas ref={carrierCanvasRef} width={800} height={48} style={{ width: '100%', height: '100%', display: 'block' }} />
+            <Box sx={{ flex: 1, width: '100%', height: 56, borderRadius: 1.5, overflow: 'hidden' }}>
+              <canvas ref={carrierCanvasRef} width={800} height={56} style={{ width: '100%', height: '100%', display: 'block' }} />
             </Box>
           </Box>
         </Paper>
         </RevealOnScroll>
 
-        <DaemonStatusStrip />
+        <Box sx={{ mb: 4 }}>
+          <DaemonStatusStrip />
+        </Box>
 
         {/* Navigation Tabs */}
-        <Paper sx={{ mb: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+        <Paper sx={{ mb: 4, p: 0.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2.5, bgcolor: theme.palette.background.paper }}>
           <Tabs
             value={activeTab}
             onChange={(e, val) => setActiveTab(val)}
@@ -1593,9 +1622,9 @@ export default function MemoryPage() {
             scrollButtons="auto"
             allowScrollButtonsMobile
             sx={{
-              '& .MuiTab-root': { fontWeight: 750, minHeight: 48, fontSize: '0.9rem' },
+              '& .MuiTab-root': { fontWeight: 750, minHeight: 52, fontSize: '0.92rem', px: { xs: 2, sm: 3 } },
               '& .Mui-selected': { color: '#D4AF37' },
-              '& .MuiTabs-indicator': { bgcolor: '#D4AF37' },
+              '& .MuiTabs-indicator': { bgcolor: '#D4AF37', height: 3, borderRadius: '3px 3px 0 0' },
             }}
           >
             <Tab icon={<PsychologyIcon fontSize="small" />} iconPosition="start" label="Whitespace Cyberspace" />
@@ -1610,11 +1639,11 @@ export default function MemoryPage() {
            ========================================================================== */}
         {activeTab === 0 && (
           <Box>
-            <Grid container spacing={3}>
+            <Grid container spacing={4}>
               {/* Left Column: Cyberspace Canvas Constellation & Codec */}
               <Grid xs={12} lg={8}>
-                <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: isDark ? '#08080B' : theme.palette.background.paper, mb: 2.5 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
+                <Paper sx={{ p: { xs: 2, md: 3 }, border: `1px solid ${theme.palette.divider}`, borderRadius: 3, bgcolor: isDark ? '#08080B' : theme.palette.background.paper, mb: 4 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1.5 }}>
                     <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                       {['All', 'Kernel', 'Lucy Oracle', 'Consensus', 'Security', 'Vault', 'Pantheon'].map((c) => (
                         <Chip
@@ -1637,7 +1666,7 @@ export default function MemoryPage() {
                     </Typography>
                   </Box>
 
-                  <Box sx={{ position: 'relative', width: '100%', borderRadius: 2, overflow: 'hidden' }}>
+                  <Box sx={{ position: 'relative', width: '100%', borderRadius: 2.5, overflow: 'hidden' }}>
                     <Netrunner3DWorld
                       memories={filteredMemories}
                       selectedMemory={selectedMemory}
@@ -1646,141 +1675,63 @@ export default function MemoryPage() {
                         playSynapticPulse(m.weight);
                       }}
                       isDark={isDark}
-                      height={460}
+                      height={500}
                     />
-                  </Box>
-                </Paper>
-
-                {/* Episodic Memory Node Synthesis Engine (HOUSE RULE #2) */}
-                <Paper
-                  sx={{
-                    p: 2.5,
-                    border: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : theme.palette.divider}`,
-                    borderRadius: 2,
-                    bgcolor: isDark ? '#08080B' : theme.palette.background.paper,
-                    mb: 2.5,
-                  }}
-                >
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <PsychologyIcon sx={{ color: gold.accent, fontSize: '1.4rem' }} />
-                      <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold.accent, fontFamily: mono }}>
-                        WHY NEUROMORPHIC STDP MEMORY REQUIRES A LOCAL ENCLAVE
-                      </Typography>
-                    </Box>
-                    <Chip
-                      label="ZERO CLOUD EGRESS INVARIANT"
-                      size="small"
-                      sx={{ bgcolor: gold.wash, color: gold.soft, fontFamily: mono, fontSize: '0.72rem', fontWeight: 800 }}
-                    />
-                  </Box>
-
-                  <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2.5, lineHeight: 1.65 }}>
-                    Biological Spike-Timing-Dependent Plasticity (STDP) requires sub-millisecond weight updates across millions of synaptic connections. Transmitting memory queries or continuous thought vectors to third-party cloud APIs leaks proprietary system prompts, exposes codebase topologies, and introduces crippling latency. Zoth Memory operates strictly on your physical machine via local loopback.
-                  </Typography>
-
-                  <Grid container spacing={2} sx={{ mb: 2.5 }}>
-                    <Grid xs={12} sm={4}>
-                      <Box sx={{ p: 1.5, height: '100%', bgcolor: isDark ? '#05070E' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? gold.soft : '#8A6A09', mb: 0.5, fontSize: '0.8rem' }}>
-                          ⚡ Microsecond Latency
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: 'text.secondary', lineHeight: 1.5, display: 'block' }}>
-                          Local SQLite vector indices on <code>127.0.0.1:8094</code> deliver 0.4ms cosine similarity lookup without WAN roundtrips.
-                        </Typography>
-                      </Box>
-                    </Grid>
-                    <Grid xs={12} sm={4}>
-                      <Box sx={{ p: 1.5, height: '100%', bgcolor: isDark ? '#05070E' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#38BDF8', mb: 0.5, fontSize: '0.8rem' }}>
-                          🛡️ Zero-Knowledge Recall
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: 'text.secondary', lineHeight: 1.5, display: 'block' }}>
-                          Embeddings are stored in hardware-encrypted local enclaves. Your agent thoughts never leave your physical storage.
-                        </Typography>
-                      </Box>
-                    </Grid>
-                    <Grid xs={12} sm={4}>
-                      <Box sx={{ p: 1.5, height: '100%', bgcolor: isDark ? '#05070E' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#34D399', mb: 0.5, fontSize: '0.8rem' }}>
-                          🧠 STDP Synaptic Pruning
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: 'text.secondary', lineHeight: 1.5, display: 'block' }}>
-                          Autonomous Long-Term Potentiation (LTP) and Depression (LTD) continuously reinforce critical insights and prune noise.
-                        </Typography>
-                      </Box>
-                    </Grid>
-                  </Grid>
-
-                  {/* Local Funnel Strip */}
-                  <Box sx={{ p: 2, bgcolor: isDark ? '#04050A' : '#F1F5F9', border: `1px solid ${gold.border}`, borderRadius: 1.5 }}>
-                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent, display: 'block', mb: 0.8 }}>
-                      RUN NEURO-MEMORY-DAEMON LOCALLY (MICRO-REPO):
-                    </Typography>
-                    <Box sx={{ p: 1, mb: 1.5, bgcolor: isDark ? '#000000' : '#FFFFFF', border: `1px solid ${theme.palette.divider}`, borderRadius: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: isDark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        git clone https://github.com/NullAITech/neuro-memory-daemon.git &amp;&amp; cd neuro-memory-daemon &amp;&amp; python3 src/daemon.py --port 8094
-                      </Typography>
-                      <IconButton
-                        size="small"
-                        onClick={() => {
-                          navigator.clipboard.writeText('git clone https://github.com/NullAITech/neuro-memory-daemon.git && cd neuro-memory-daemon && python3 src/daemon.py --port 8094');
-                          setCopied(true);
-                          setTimeout(() => setCopied(false), 2000);
-                        }}
-                        sx={{ color: gold.accent, ml: 1, p: 0.5 }}
-                      >
-                        <ContentCopyIcon sx={{ fontSize: '0.85rem' }} />
-                      </IconButton>
-                    </Box>
-                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
-                      <Button
-                        size="small"
-                        variant="contained"
-                        href="https://github.com/NullAITech/neuro-memory-daemon"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        sx={{ bgcolor: gold.accent, color: '#08080B', fontWeight: 800, fontSize: '0.74rem', textTransform: 'none', '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' } }}
-                      >
-                        Open Daemon GitHub Repo
-                      </Button>
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        component={RouterLink}
-                        to="/tools/vector-search-engine"
-                        sx={{ borderColor: gold.border, color: gold.soft, fontWeight: 800, fontSize: '0.74rem', textTransform: 'none', '&:hover': { borderColor: gold.accent, bgcolor: gold.wash } }}
-                      >
-                        Inspect Vector Search Engine
-                      </Button>
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        component={RouterLink}
-                        to="/zoth-os"
-                        sx={{ borderColor: isDark ? '#38BDF8' : '#0284C7', color: isDark ? '#38BDF8' : '#0284C7', fontWeight: 800, fontSize: '0.74rem', textTransform: 'none' }}
-                      >
-                        Boot via Zoth OS
-                      </Button>
-                    </Stack>
                   </Box>
                 </Paper>
 
                 {/* Lucy Codec Terminal */}
-                <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: isDark ? '#08080B' : theme.palette.background.paper }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <TerminalIcon sx={{ color: '#F472B6', fontSize: '1.2rem' }} />
-                      <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#F472B6', fontFamily: mono }}>
+                <Paper sx={{ p: { xs: 2.5, md: 3.5 }, border: `1px solid ${theme.palette.divider}`, borderRadius: 3, bgcolor: isDark ? '#08080B' : theme.palette.background.paper }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                      <TerminalIcon sx={{ color: '#F472B6', fontSize: '1.3rem' }} />
+                      <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#F472B6', fontFamily: mono, fontSize: '0.88rem' }}>
                         LUCY ORACLE TRANSMISSION // SEMANTIC BUS :8094
                       </Typography>
                     </Box>
-                    <Chip label="Zero Egress Enclave" size="small" sx={{ bgcolor: 'rgba(0,240,255,0.1)', color: isDark ? '#00F0FF' : '#0284C7', fontWeight: 700 }} />
+                    <Chip
+                      label={daemonUp ? 'BUS ONLINE :8094' : 'PREVIEW MODE'}
+                      size="small"
+                      sx={{ bgcolor: daemonUp ? 'rgba(52,211,153,0.15)' : 'rgba(0,240,255,0.1)', color: daemonUp ? '#34D399' : (isDark ? '#00F0FF' : '#0284C7'), fontWeight: 750 }}
+                    />
                   </Box>
 
-                  <Paper sx={{ p: 2, bgcolor: '#050508', color: '#F5E6AB', fontFamily: mono, fontSize: '0.82rem', height: 140, overflowY: 'auto', mb: 2, borderRadius: 1.5, border: '1px solid rgba(244,114,182,0.25)' }}>
+                  {/* Lock Banner when running in remote preview / daemon offline */}
+                  {!daemonUp && (
+                    <Alert
+                      severity="info"
+                      icon={<LockIcon sx={{ color: gold.accent }} />}
+                      sx={{
+                        mb: 2.5,
+                        bgcolor: isDark ? 'rgba(212,175,55,0.08)' : '#FEF9E7',
+                        border: `1px solid ${gold.border}`,
+                        borderRadius: 2,
+                        color: theme.palette.text.primary,
+                        '& .MuiAlert-message': { width: '100%' },
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+                        <Box>
+                          <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent, display: 'block' }}>
+                            LOCK STATUS: LOCAL DAEMON REQUIRED (:8094)
+                          </Typography>
+                          <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.3 }}>
+                            Live semantic queries and real-time context retrieval are locked in remote preview. Run the repo locally (<code>git clone https://github.com/NullAITech/zoth-studio-v2.git &amp;&amp; npx zoth up</code>) to connect live LLMs and agent memory.
+                          </Typography>
+                        </Box>
+                        <Chip
+                          icon={<LockIcon sx={{ fontSize: '0.75rem !important' }} />}
+                          label="DAEMON LOCKED"
+                          size="small"
+                          sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, bgcolor: gold.wash, color: gold.accent }}
+                        />
+                      </Box>
+                    </Alert>
+                  )}
+
+                  <Paper sx={{ p: 2.5, bgcolor: '#050508', color: '#F5E6AB', fontFamily: mono, fontSize: '0.84rem', height: 160, overflowY: 'auto', mb: 2.5, borderRadius: 2, border: '1px solid rgba(244,114,182,0.25)' }}>
                     {codecLogs.map((log, index) => (
-                      <Box key={index} sx={{ mb: 0.75, lineHeight: 1.45 }}>
+                      <Box key={index} sx={{ mb: 1, lineHeight: 1.55 }}>
                         <span style={{ color: log.speaker.includes('LUCY') ? '#F472B6' : log.speaker.includes('OPERATOR') ? '#00F0FF' : '#34D399', fontWeight: 700 }}>
                           [{log.time}] {log.speaker}:
                         </span>{' '}
@@ -1789,7 +1740,7 @@ export default function MemoryPage() {
                     ))}
                   </Paper>
 
-                  <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Box sx={{ display: 'flex', gap: 1.5 }}>
                     <TextField
                       fullWidth
                       size="small"
@@ -1800,9 +1751,10 @@ export default function MemoryPage() {
                       sx={{
                         '& .MuiInputBase-root': {
                           fontFamily: mono,
-                          fontSize: '0.85rem',
+                          fontSize: '0.88rem',
                           bgcolor: isDark ? '#0A0C14' : '#F8FAFC',
                           color: theme.palette.text.primary,
+                          borderRadius: 1.5,
                           border: `1px solid ${isDark ? 'rgba(244,114,182,0.25)' : theme.palette.divider}`
                         },
                       }}
@@ -1811,7 +1763,7 @@ export default function MemoryPage() {
                       variant="contained"
                       onClick={handleConsultLucy}
                       endIcon={<SendIcon />}
-                      sx={{ bgcolor: '#F472B6', color: '#08080B', fontWeight: 800, px: 2.5, '&:hover': { bgcolor: isDark ? '#F687B3' : '#EC4899' } }}
+                      sx={{ bgcolor: '#F472B6', color: '#08080B', fontWeight: 800, px: 3, borderRadius: 1.5, '&:hover': { bgcolor: isDark ? '#F687B3' : '#EC4899' } }}
                     >
                       Transmit
                     </Button>
@@ -1916,17 +1868,49 @@ export default function MemoryPage() {
            ========================================================================== */}
         {activeTab === 1 && (
           <Box>
+            {/* Lock status for agent memory bus synchronization */}
+            {!daemonUp && (
+              <Alert
+                severity="info"
+                icon={<LockIcon sx={{ color: gold.accent }} />}
+                sx={{
+                  mb: 4,
+                  bgcolor: isDark ? 'rgba(212,175,55,0.06)' : '#FEF9E7',
+                  border: `1px solid ${gold.border}`,
+                  borderRadius: 2.5,
+                  color: theme.palette.text.primary,
+                }}
+              >
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5 }}>
+                  <Box>
+                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent, display: 'block' }}>
+                      PERSISTENT STDP WEIGHT COMMIT LOCKED
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.3 }}>
+                      Interactive mathematical discharge below computes biological potentiation and depression in browser memory. Persisting calibrated weights to the agent memory bus (<code>ipc:///run/zoth/memory.sock</code>) requires running the local repo daemon on <code>127.0.0.1:8094</code>.
+                    </Typography>
+                  </Box>
+                  <Chip
+                    icon={<LockIcon sx={{ fontSize: '0.75rem !important' }} />}
+                    label="RUN REPO LOCALLY TO SYNC"
+                    size="small"
+                    sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, bgcolor: gold.wash, color: gold.accent }}
+                  />
+                </Box>
+              </Alert>
+            )}
+
             {/* Live Synaptic Spike Feedback Banner */}
             {lastSpikeFeedback && (
               <Alert
                 severity={lastSpikeFeedback.type === 'LTP' ? 'success' : 'warning'}
                 icon={lastSpikeFeedback.type === 'LTP' ? <AutoFixHighIcon sx={{ color: isDark ? '#34D399' : '#059669' }} /> : <TuneIcon sx={{ color: isDark ? '#F472B6' : '#DB2777' }} />}
                 sx={{
-                  mb: 3,
+                  mb: 4,
                   bgcolor: lastSpikeFeedback.type === 'LTP' ? (isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF5') : (isDark ? 'rgba(244,114,182,0.12)' : '#FFF1F2'),
                   border: `1px solid ${lastSpikeFeedback.type === 'LTP' ? (isDark ? '#34D399' : '#059669') : (isDark ? '#F472B6' : '#DB2777')}`,
                   color: theme.palette.text.primary,
-                  borderRadius: 2,
+                  borderRadius: 2.5,
                 }}
               >
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
@@ -1948,13 +1932,13 @@ export default function MemoryPage() {
             )}
 
             {/* Dual STDP Mathematical Pillars (Equations with Light/Dark Theme Contrast) */}
-            <Grid container spacing={2.5} sx={{ mb: 3 }}>
+            <Grid container spacing={3.5} sx={{ mb: 4 }}>
               {/* Pillar 1: Long-Term Potentiation (LTP) */}
               <Grid xs={12} md={6}>
                 <Paper
                   sx={{
-                    p: 2.5,
-                    borderRadius: 2.5,
+                    p: { xs: 2.5, md: 3.5 },
+                    borderRadius: 3,
                     bgcolor: isDark ? '#08080B' : '#F8FAFC',
                     border: `1.5px solid ${stdpParams.testDt >= 0 ? (isDark ? '#34D399' : '#059669') : (isDark ? 'rgba(52,211,153,0.25)' : '#D1FAE5')}`,
                     boxShadow: stdpParams.testDt >= 0 ? (isDark ? '0 0 18px rgba(52,211,153,0.25)' : '0 2px 10px rgba(5,150,105,0.15)') : 'none',
@@ -1995,15 +1979,15 @@ export default function MemoryPage() {
               <Grid xs={12} md={6}>
                 <Paper
                   sx={{
-                    p: 2.5,
-                    borderRadius: 2.5,
+                    p: { xs: 2.5, md: 3.5 },
+                    borderRadius: 3,
                     bgcolor: isDark ? '#08080B' : '#F8FAFC',
                     border: `1.5px solid ${stdpParams.testDt < 0 ? (isDark ? '#F472B6' : '#DB2777') : (isDark ? 'rgba(244,114,182,0.25)' : '#FCE7F3')}`,
                     boxShadow: stdpParams.testDt < 0 ? (isDark ? '0 0 18px rgba(244,114,182,0.25)' : '0 2px 10px rgba(219,39,119,0.15)') : 'none',
                     transition: 'all 0.25s ease',
                   }}
                 >
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.2 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <ScienceIcon sx={{ color: isDark ? '#F472B6' : '#DB2777' }} />
                       <Typography variant="subtitle1" sx={{ fontWeight: 800, color: isDark ? '#F472B6' : '#BE185D' }}>
@@ -2022,12 +2006,12 @@ export default function MemoryPage() {
                       }}
                     />
                   </Box>
-                  <Box sx={{ p: 1.2, mb: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#040508' : '#FFFFFF', border: `1px solid ${isDark ? 'rgba(244,114,182,0.3)' : '#FBCFE8'}` }}>
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.86rem', fontWeight: 800, color: isDark ? '#F472B6' : '#BE185D', textAlign: 'center' }}>
+                  <Box sx={{ p: 1.5, mb: 2, borderRadius: 1.5, bgcolor: isDark ? '#040508' : '#FFFFFF', border: `1px solid ${isDark ? 'rgba(244,114,182,0.3)' : '#FBCFE8'}` }}>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.92rem', fontWeight: 800, color: isDark ? '#F472B6' : '#BE185D', textAlign: 'center' }}>
                       Δw = –A₋ · e^(+Δt / τ₋)
                     </Typography>
                   </Box>
-                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem', lineHeight: 1.5 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.88rem', lineHeight: 1.6 }}>
                     <strong>Anti-Causal Spike Timing:</strong> Post-synaptic neuron spikes <em>before</em> pre-synaptic neuron ($\Delta t &lt; 0$), inducing sub-threshold biological decay and pruning uninformative connections.
                   </Typography>
                 </Paper>
@@ -2035,10 +2019,10 @@ export default function MemoryPage() {
             </Grid>
 
             {/* Main Interactive STDP Curve Visualizer & Synaptic Controller */}
-            <Grid container spacing={3}>
+            <Grid container spacing={4}>
               <Grid xs={12} lg={7}>
-                <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2.5, bgcolor: theme.palette.background.paper, mb: 3 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, flexWrap: 'wrap', gap: 1 }}>
+                <Paper sx={{ p: { xs: 2.5, md: 3.5 }, border: `1px solid ${theme.palette.divider}`, borderRadius: 3, bgcolor: theme.palette.background.paper, mb: 4 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1.5 }}>
                     <Typography variant="h6" sx={{ fontWeight: 800 }}>Biomorphic Synaptic Plasticity Curve</Typography>
                     <Chip
                       label={stdpParams.testDt >= 0 ? `LTP REINFORCEMENT: +${(stdpParams.aPlus * Math.exp(-stdpParams.testDt / stdpParams.tauPlus)).toFixed(3)}Δw` : `LTD PRUNING: -${(stdpParams.aMinus * Math.exp(stdpParams.testDt / stdpParams.tauMinus)).toFixed(3)}Δw`}
@@ -2051,11 +2035,11 @@ export default function MemoryPage() {
                       }}
                     />
                   </Box>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 3, lineHeight: 1.6 }}>
                     Interactive visualizer of the biomorphic STDP function. Drag the Δt delta slider below to explore the exponential potentiation vs depression phases.
                   </Typography>
 
-                  <Box sx={{ borderRadius: 2, overflow: 'hidden', border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider}`, mb: 2 }}>
+                  <Box sx={{ borderRadius: 2.5, overflow: 'hidden', border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider}`, mb: 2.5 }}>
                     <canvas ref={stdpCanvasRef} width={620} height={320} style={{ width: '100%', height: 'auto', display: 'block' }} />
                   </Box>
 
@@ -2066,17 +2050,17 @@ export default function MemoryPage() {
               </Grid>
 
               <Grid xs={12} lg={5}>
-                <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2.5, bgcolor: theme.palette.background.paper, height: '100%' }}>
+                <Paper sx={{ p: { xs: 2.5, md: 3.5 }, border: `1px solid ${theme.palette.divider}`, borderRadius: 3, bgcolor: theme.palette.background.paper, height: '100%' }}>
                   <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: gold.accent }}>
                     Synaptic Parameters & Spike Firing
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 3, lineHeight: 1.6 }}>
                     Tune biomorphic decay parameters, simulate synaptic firing, and inspect weight distribution shifts.
                   </Typography>
 
                   {/* STDP Time-Difference Delta Slider (HOUSE RULE #1 / TASK 1 DEEPENING) */}
-                  <Box sx={{ p: 2, mb: 2.5, bgcolor: isDark ? '#08080B' : '#F8FAFC', borderRadius: 2, border: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider}` }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                  <Box sx={{ p: 2.5, mb: 3, bgcolor: isDark ? '#08080B' : '#F8FAFC', borderRadius: 2.5, border: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider}` }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
                       <Typography variant="caption" sx={{ fontWeight: 800, fontFamily: mono, color: gold.accent }}>
                         TEST SPIKE TIMING Δt
                       </Typography>
@@ -2253,126 +2237,62 @@ export default function MemoryPage() {
            ========================================================================== */}
         {activeTab === 2 && (
           <Box>
-            {/* Architectural Rationale & Local Ingestion Dossier */}
+            {/* Prominent Local Runtime Lock Banner */}
             <Paper
               sx={{
-                p: { xs: 3, md: 4 },
-                border: `1px solid ${gold.border}`,
-                borderRadius: 2.5,
-                bgcolor: isDark ? '#08080B' : '#FFFFFF',
+                p: { xs: 2.5, md: 3.5 },
                 mb: 4,
-                boxShadow: isDark ? '0 12px 32px rgba(0,0,0,0.6)' : '0 4px 16px rgba(184,134,11,0.1)',
+                borderRadius: 3,
+                bgcolor: isDark ? 'rgba(212,175,55,0.05)' : '#FEF9E7',
+                border: `1.5px solid ${gold.border}`,
+                display: 'flex',
+                flexDirection: { xs: 'column', md: 'row' },
+                alignItems: { xs: 'flex-start', md: 'center' },
+                justifyContent: 'space-between',
+                gap: 3,
               }}
             >
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                  <PsychologyIcon sx={{ color: gold.accent }} />
-                  <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                    Why Autonomous Memory Must Run in a Local Hardware Enclave
-                  </Typography>
-                </Box>
-                <Chip
-                  label="ZERO CLOUD EGRESS INVARIANT"
-                  size="small"
+              <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2.5 }}>
+                <Box
                   sx={{
-                    fontFamily: mono,
-                    bgcolor: isDark ? 'rgba(34,197,94,0.15)' : '#DCFCE7',
-                    color: '#22C55E',
-                    border: '1px solid rgba(34,197,94,0.3)',
-                    fontWeight: 800,
+                    p: 1.5,
+                    borderRadius: 2,
+                    bgcolor: isDark ? 'rgba(212,175,55,0.12)' : 'rgba(184,134,11,0.12)',
+                    color: gold.accent,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
                   }}
-                />
-              </Box>
-
-              <Typography variant="body1" color="text.secondary" sx={{ mb: 3, lineHeight: 1.7 }}>
-                Cloud vector databases (Pinecone, Weaviate, remote Qdrant) represent a catastrophic security failure for sovereign AI agents: every proprietary AST node, cryptographic seed, and system observation is streamed in plaintext across the public internet. Furthermore, remote network latency (150–600ms) starves autonomous multi-agent loops that require sub-millisecond synaptic recall.
-              </Typography>
-
-              <Grid container spacing={2.5} sx={{ mb: 3 }}>
-                <Grid xs={12} md={4}>
-                  <Paper
-                    sx={{
-                      p: 2.5,
-                      height: '100%',
-                      borderRadius: 2,
-                      bgcolor: isDark ? '#0D0D12' : '#F8FAFC',
-                      border: `1px solid ${theme.palette.divider}`,
-                    }}
-                  >
-                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold.accent, mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <StorageIcon fontSize="small" /> Ring-0 Local Vector Index
+                >
+                  <LockIcon sx={{ fontSize: 30 }} />
+                </Box>
+                <Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 0.8 }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 800, color: gold.accent, fontFamily: mono, fontSize: '0.95rem' }}>
+                      PERSISTENT SQLITE INGESTION LOCKED
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6, fontSize: '0.86rem' }}>
-                      Embeddings are indexed directly on physical NVMe using local SIMD cosine distance (AVX-512 / Apple AMX). Zero bytes leave loopback <code>127.0.0.1:8094</code>.
-                    </Typography>
-                  </Paper>
-                </Grid>
-                <Grid xs={12} md={4}>
-                  <Paper
-                    sx={{
-                      p: 2.5,
-                      height: '100%',
-                      borderRadius: 2,
-                      bgcolor: isDark ? '#0D0D12' : '#F8FAFC',
-                      border: `1px solid ${theme.palette.divider}`,
-                    }}
-                  >
-                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#34D399', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <GraphicEqIcon fontSize="small" /> Biomorphic STDP Plasticity
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6, fontSize: '0.86rem' }}>
-                      Unlike static RAG that suffers from context poisoning, the local daemon exponentially decays ephemeral noise while reinforcing proven architectural breakthroughs.
-                    </Typography>
-                  </Paper>
-                </Grid>
-                <Grid xs={12} md={4}>
-                  <Paper
-                    sx={{
-                      p: 2.5,
-                      height: '100%',
-                      borderRadius: 2,
-                      bgcolor: isDark ? '#0D0D12' : '#F8FAFC',
-                      border: `1px solid ${theme.palette.divider}`,
-                    }}
-                  >
-                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#00F0FF', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <TerminalIcon fontSize="small" /> Universal MCP Protocol
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6, fontSize: '0.86rem' }}>
-                      Native JSON-RPC stdio daemon exposes <code>memory_store</code>, <code>memory_recall</code>, and <code>memory_decay</code> to Claude Code, Hermes Agent, OpenCode, and Codex.
-                    </Typography>
-                  </Paper>
-                </Grid>
-              </Grid>
-
-              {/* Local Execution Quick-Copy Strip */}
-              <Box
-                sx={{
-                  p: 2,
-                  borderRadius: 2,
-                  bgcolor: isDark ? '#040406' : '#F1F5F9',
-                  border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider}`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: 2,
-                  flexWrap: 'wrap',
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0 }}>
-                  <TerminalIcon sx={{ color: gold.accent, fontSize: 20 }} />
-                  <Typography
-                    sx={{
-                      fontFamily: mono,
-                      fontSize: { xs: '0.78rem', sm: '0.86rem' },
-                      color: isDark ? '#E2E8F0' : '#1E293B',
-                      wordBreak: 'break-all',
-                    }}
-                  >
-                    git clone https://github.com/NullAITech/neuro-memory-daemon.git &amp;&amp; cd neuro-memory-daemon &amp;&amp; python3 src/daemon.py --port 8094
+                    <Chip
+                      label={daemonUp ? 'DAEMON ACTIVE :8094' : 'LOCAL REPO REQUIRED'}
+                      size="small"
+                      sx={{
+                        fontFamily: mono,
+                        fontSize: '0.68rem',
+                        fontWeight: 800,
+                        bgcolor: daemonUp ? 'rgba(52,211,153,0.15)' : gold.wash,
+                        color: daemonUp ? '#34D399' : gold.accent,
+                        border: '1px solid',
+                        borderColor: daemonUp ? 'rgba(52,211,153,0.4)' : gold.border,
+                      }}
+                    />
+                  </Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 760, lineHeight: 1.65 }}>
+                    You are viewing an architectural snapshot of the sovereign vector stratum. Live agent memory ingestion, real-time HNSW cosine distance indexing, and SQLite commits (<code>~/.zoth/memory.db</code>) are active only when running the repo locally on bare-metal hardware.
                   </Typography>
                 </Box>
-                <Tooltip title={copiedTab2 ? 'Copied command!' : 'Copy to clipboard'}>
+              </Box>
+              <Box sx={{ flexShrink: 0, width: { xs: '100%', md: 'auto' } }}>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
                   <Button
                     size="small"
                     variant="outlined"
@@ -2386,43 +2306,38 @@ export default function MemoryPage() {
                     startIcon={copiedTab2 ? <CheckIcon sx={{ fontSize: 16 }} /> : <ContentCopyIcon sx={{ fontSize: 16 }} />}
                     sx={{
                       fontFamily: mono,
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
+                      fontSize: '0.76rem',
+                      fontWeight: 750,
                       borderColor: gold.border,
                       color: gold.soft,
                       whiteSpace: 'nowrap',
+                      px: 2,
+                      py: 0.8,
                     }}
                   >
-                    {copiedTab2 ? 'Copied' : 'Copy CLI Command'}
+                    {copiedTab2 ? 'Copied CLI Command' : 'Copy Daemon Command'}
                   </Button>
-                </Tooltip>
-              </Box>
-
-              {/* Funnel Options */}
-              <Box sx={{ mt: 3, pt: 2.5, borderTop: `1px solid ${theme.palette.divider}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
-                <Typography variant="body2" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.82rem' }}>
-                  ⚡ Standalone Zero-Dependency Python stdlib daemon with SQLite persistence &amp; MCP 2024-11-05 server.
-                </Typography>
-                <Stack direction="row" spacing={1.5}>
                   <Button
                     component="a"
-                    href="https://github.com/NullAITech/neuro-memory-daemon"
+                    href="https://github.com/NullAITech/zoth-studio-v2"
                     target="_blank"
                     rel="noopener noreferrer"
-                    variant="outlined"
-                    size="small"
-                    sx={{ borderColor: gold.border, color: theme.palette.text.primary, fontWeight: 750, fontFamily: mono, fontSize: '0.78rem' }}
-                  >
-                    Inspect Micro-Repo
-                  </Button>
-                  <Button
-                    component={RouterLink}
-                    to="/zoth-os"
                     variant="contained"
                     size="small"
-                    sx={{ bgcolor: gold.accent, color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.78rem', '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' } }}
+                    startIcon={<LockIcon sx={{ fontSize: 16 }} />}
+                    sx={{
+                      bgcolor: gold.accent,
+                      color: '#08080B',
+                      fontWeight: 800,
+                      fontFamily: mono,
+                      fontSize: '0.76rem',
+                      whiteSpace: 'nowrap',
+                      px: 2.5,
+                      py: 0.8,
+                      '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' },
+                    }}
                   >
-                    Boot in Zoth OS
+                    Clone Repo to Unlock
                   </Button>
                 </Stack>
               </Box>
@@ -2505,18 +2420,23 @@ export default function MemoryPage() {
            ========================================================================== */}
         {activeTab === 3 && (
           <Box>
-            <Grid container spacing={3}>
+            <Grid container spacing={4}>
               <Grid xs={12} md={8}>
-                <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: isDark ? '#08080B' : theme.palette.background.paper, mb: 2 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <ViewInArIcon sx={{ color: '#F472B6' }} />
-                      <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#F472B6' }}>
+                <Paper sx={{ p: { xs: 2.5, md: 3.5 }, border: `1px solid ${theme.palette.divider}`, borderRadius: 3, bgcolor: isDark ? '#08080B' : theme.palette.background.paper, mb: 3 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1.5 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                      <ViewInArIcon sx={{ color: '#F472B6', fontSize: '1.4rem' }} />
+                      <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#F472B6', fontSize: '0.92rem' }}>
                         LUCYNA KUSHINADA 3D NEURAL HOLOGRAM
                       </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', gap: 1 }}>
-                      <Chip label="Zero-Egress Air-Gapped" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: isDark ? '#34D399' : '#059669', fontWeight: 750 }} />
+                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                      <Chip
+                        icon={<LockIcon sx={{ fontSize: '0.75rem !important' }} />}
+                        label="BARE-METAL BINDING LOCKED"
+                        size="small"
+                        sx={{ bgcolor: gold.wash, color: gold.accent, fontFamily: mono, fontSize: '0.68rem', fontWeight: 800 }}
+                      />
                       <Chip label="Interactive 3D Orbit" size="small" sx={{ bgcolor: 'rgba(244,114,182,0.15)', color: '#F472B6', fontWeight: 750 }} />
                     </Box>
                   </Box>
@@ -2526,10 +2446,10 @@ export default function MemoryPage() {
                     sx={{
                       position: 'relative',
                       width: '100%',
-                      height: 440,
-                      borderRadius: 2,
+                      height: 480,
+                      borderRadius: 2.5,
                       overflow: 'hidden',
-                      border: `1px solid ${isDark ? 'rgba(0,240,255,0.4)' : theme.palette.divider}`,
+                      border: `1px solid ${isDark ? 'rgba(0,240,255,0.35)' : theme.palette.divider}`,
                       bgcolor: isDark ? '#08080B' : '#0B0F19',
                       cursor: 'grab',
                       '&:active': { cursor: 'grabbing' },
@@ -2542,18 +2462,18 @@ export default function MemoryPage() {
                     <canvas
                       ref={holoCanvasRef}
                       width={740}
-                      height={440}
+                      height={480}
                       style={{ width: '100%', height: '100%', display: 'block' }}
                     />
                   </Box>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1, px: 1 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 1.5, px: 1 }}>
                     <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
                       🎮 Click and drag mouse to orbit Lucy's 3D holographic projection in real-time.
                     </Typography>
                     <Button
                       size="small"
                       onClick={() => setHoloOrbit({ yaw: 0.35, pitch: 0.15 })}
-                      sx={{ color: gold.accent, fontSize: '0.72rem', textTransform: 'none', fontFamily: mono }}
+                      sx={{ color: gold.accent, fontSize: '0.74rem', textTransform: 'none', fontFamily: mono }}
                     >
                       Reset 3D Orbit
                     </Button>
@@ -2562,36 +2482,36 @@ export default function MemoryPage() {
               </Grid>
 
               <Grid xs={12} md={4}>
-                <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
+                <Paper sx={{ p: { xs: 2.5, md: 3.5 }, border: `1px solid ${theme.palette.divider}`, borderRadius: 3, bgcolor: theme.palette.background.paper, height: '100%' }}>
                   <Typography variant="overline" sx={{ color: '#F472B6', fontWeight: 800, letterSpacing: '0.12em' }}>
                     LUCY COGNITIVE ORACLE
                   </Typography>
                   <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5 }}>
                     Oracle of the Sovereign Grid
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2, lineHeight: 1.6 }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 3, lineHeight: 1.65 }}>
                     Lucy serves as the sovereign cognitive memory agent and semantic oracle across Zoth Studio. Operating on loopback port 8094, Lucy intercepts and validates high-entropy memory spikes with zero external cloud footprint.
                   </Typography>
 
-                  <Divider sx={{ my: 2 }} />
+                  <Divider sx={{ my: 2.5 }} />
 
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1 }}>Deep Net Capabilities</Typography>
-                  <Stack spacing={1}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5 }}>Deep Net Capabilities</Typography>
+                  <Stack spacing={1.5}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                       <Chip label="Zero-Egress Isolation" size="small" sx={{ bgcolor: 'rgba(244,114,182,0.15)', color: '#F472B6', fontWeight: 700 }} />
-                      <Typography variant="caption">Zero packet interception</Typography>
+                      <Typography variant="caption" color="text.secondary">Zero packet exfiltration</Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                       <Chip label="STDP Regulator" size="small" sx={{ bgcolor: 'rgba(212,175,55,0.15)', color: gold.accent, fontWeight: 700 }} />
-                      <Typography variant="caption">Logarithmic half-life decay</Typography>
+                      <Typography variant="caption" color="text.secondary">Logarithmic half-life decay</Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Chip label="Zero-Egress Guard" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: isDark ? '#34D399' : '#059669', fontWeight: 700 }} />
-                      <Typography variant="caption">Strict loopback containment</Typography>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                      <Chip label="Local Enclave Guard" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: isDark ? '#34D399' : '#059669', fontWeight: 700 }} />
+                      <Typography variant="caption" color="text.secondary">Strict loopback containment</Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                       <Chip label="Cognitive Waves" size="small" sx={{ bgcolor: 'rgba(0,240,255,0.15)', color: isDark ? '#00F0FF' : '#0284C7', fontWeight: 700 }} />
-                      <Typography variant="caption">432Hz Alpha / 528Hz Theta</Typography>
+                      <Typography variant="caption" color="text.secondary">432Hz Alpha / 528Hz Theta</Typography>
                     </Box>
                   </Stack>
                 </Paper>
@@ -2600,16 +2520,104 @@ export default function MemoryPage() {
           </Box>
         )}
 
-        {/* STDP Mathematical Foundation Reference */}
-        <Box sx={{ mt: 5 }}>
+        {/* STDP Mathematical Foundation Reference (Focused Pillar VI Spotlight) */}
+        <Box sx={{ mt: 7, mb: 4 }}>
           <Typography className="section-kicker">Mathematical Foundation</Typography>
-          <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: theme.palette.text.primary }}>
-            Pillar VI: STDP Synaptic Weight Adaptation
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 3, maxWidth: 740, lineHeight: 1.6 }}>
-            The memory daemon is driven by Spike-Timing-Dependent Plasticity, where memory weight updates depend strictly on the relative arrival time between agent query impulses:
-          </Typography>
-          <MathPillarsGrid />
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, flexWrap: 'wrap', gap: 2, mb: 2.5 }}>
+            <Box>
+              <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+                Pillar VI: STDP Synaptic Weight Adaptation
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 740, lineHeight: 1.65, mt: 0.5 }}>
+                Biological Hebbian learning rules calibrated for autonomous agent memory retention, causal trace consolidation, and exponential noise pruning.
+              </Typography>
+            </Box>
+            <Button
+              component={RouterLink}
+              to="/docs/math"
+              endIcon={<ArrowForwardIcon />}
+              sx={{ color: gold.accent, fontWeight: 750, fontFamily: mono, fontSize: '0.82rem', textTransform: 'none' }}
+            >
+              Explore All 6 Mathematical Pillars
+            </Button>
+          </Box>
+
+          <Paper
+            sx={{
+              p: { xs: 3, md: 4 },
+              borderRadius: 3,
+              border: `1.5px solid ${gold.border}`,
+              bgcolor: isDark ? '#08080B' : '#FFFFFF',
+              boxShadow: isDark ? '0 12px 32px rgba(0,0,0,0.6)' : '0 4px 16px rgba(184,134,11,0.08)',
+            }}
+          >
+            <Grid container spacing={3.5} alignItems="center">
+              <Grid xs={12} md={7}>
+                <Typography variant="overline" sx={{ color: isDark ? '#34D399' : '#059669', fontWeight: 800, letterSpacing: '0.12em' }}>
+                  EXPONENTIAL HEBBIAN PLASTICITY FORMULATION
+                </Typography>
+                <Typography variant="h6" sx={{ fontWeight: 800, mt: 0.5, mb: 1.5, fontFamily: mono, color: gold.accent }}>
+                  Δw = A₊ · e^(–Δt/τ₊) (Δt ≥ 0) &nbsp;|&nbsp; Δw = –A₋ · e^(Δt/τ₋) (Δt &lt; 0)
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7, mb: 3 }}>
+                  The memory daemon calculates weight reinforcement (Δw &gt; 0) whenever an agent query precedes a successful consensus outcome within temporal half-life τ₊ = 20ms. When output ordering is decoupled or anti-causal (Δt &lt; 0), synaptic depression prunes the context weight to prevent token window pollution.
+                </Typography>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+                  <Button
+                    component={RouterLink}
+                    to="/docs/math/stdp"
+                    variant="contained"
+                    size="small"
+                    endIcon={<ArrowForwardIcon />}
+                    sx={{ bgcolor: gold.accent, color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.78rem', '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' } }}
+                  >
+                    View Complete STDP Proof &amp; Spec
+                  </Button>
+                  <Button
+                    component={RouterLink}
+                    to="/arsenal"
+                    variant="outlined"
+                    size="small"
+                    sx={{ borderColor: gold.border, color: theme.palette.text.primary, fontWeight: 750, fontFamily: mono, fontSize: '0.78rem' }}
+                  >
+                    Browse Core Micro-Tools
+                  </Button>
+                </Stack>
+              </Grid>
+              <Grid xs={12} md={5}>
+                <Box
+                  sx={{
+                    p: 3,
+                    borderRadius: 2.5,
+                    bgcolor: isDark ? '#040508' : '#F8FAFC',
+                    border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : theme.palette.divider}`,
+                  }}
+                >
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, display: 'block', mb: 1.5 }}>
+                    CALIBRATED PARAMETER BASELINES
+                  </Typography>
+                  <Stack spacing={1.2} sx={{ fontFamily: mono, fontSize: '0.8rem' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: theme.palette.text.secondary }}>Potentiation Amplitude (A₊):</span>
+                      <strong style={{ color: isDark ? '#34D399' : '#059669' }}>1.00</strong>
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: theme.palette.text.secondary }}>Depression Amplitude (A₋):</span>
+                      <strong style={{ color: isDark ? '#F472B6' : '#DB2777' }}>0.85</strong>
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: theme.palette.text.secondary }}>Time Constant (τ₊, τ₋):</span>
+                      <strong style={{ color: gold.accent }}>20.0 ms</strong>
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: theme.palette.text.secondary }}>Decay Half-Life:</span>
+                      <strong>ln(2) · τ ≈ 13.86 ms</strong>
+                    </Box>
+                  </Stack>
+                </Box>
+              </Grid>
+            </Grid>
+          </Paper>
         </Box>
       </Box>
 
