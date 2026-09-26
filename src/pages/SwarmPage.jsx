@@ -930,13 +930,13 @@ export default function SwarmPage() {
   {/* Sovereign Installation Funnel */}
       <RevealOnScroll>
       <SovereignFunnel
-        title="Deploy Sovereign Swarm Orchestrator Locally"
-        subtitle="Zero-cloud multi-agent orchestrator executing autonomous coordination, IPC socket communication, and cryptographic loopback attestation."
-        toolTitle="Option 1: Sovereign Agent Bridge Micro-Repo"
-        toolTag="SWARM BRIDGE"
-        toolDescription="Standalone zero-egress Unix domain socket IPC bridge for low-latency multi-agent message routing and health attestations."
-        toolRepo="https://github.com/NullAITech/sovereign-agent-bridge"
-        toolCommand="git clone https://github.com/NullAITech/sovereign-agent-bridge.git"
+        title="Deploy Sovereign Swarm Multiplexer Locally"
+        subtitle="Zero-cloud 21-agent terminal multiplexer and universal harness daemon executing autonomous coordination, IPC socket communication, and cryptographic loopback attestation."
+        toolTitle="Option 1: Zoth Swarm Multiplexer Micro-Repo"
+        toolTag="SWARM MULTIPLEXER"
+        toolDescription="Standalone zero-egress 21-agent terminal multiplexer and universal daemon supporting Hermes Agent, Antigravity, Codex, Claude Code, OpenCode, and Ollama with live SSE streaming."
+        toolRepo="https://github.com/NullAITech/zoth-swarm-multiplexer"
+        toolCommand="git clone https://github.com/NullAITech/zoth-swarm-multiplexer.git && cd zoth-swarm-multiplexer && python3 swarm_cli.py status"
       />
       </RevealOnScroll>
     </Container>
