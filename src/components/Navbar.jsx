@@ -9,14 +9,10 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import HubIcon from '@mui/icons-material/Hub';
-import PsychologyIcon from '@mui/icons-material/Psychology';
 import BuildIcon from '@mui/icons-material/Build';
 import HandymanIcon from '@mui/icons-material/Handyman';
-import GavelIcon from '@mui/icons-material/Gavel';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import SecurityIcon from '@mui/icons-material/Security';
 import TerminalIcon from '@mui/icons-material/Terminal';
-import CableIcon from '@mui/icons-material/Cable';
 import WebIcon from '@mui/icons-material/Web';
 import FolderZipIcon from '@mui/icons-material/FolderZip';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
@@ -40,17 +36,6 @@ const primaryNav = [
   { label: 'Arsenal', path: '/arsenal', badge: `${arsenalStats.total}` },
 ];
 
-// Enclaves & Hardware Daemons Dropdown
-const enclaveItems = [
-  { label: 'Neural Memory & Lucy Oracle', path: '/memory', desc: 'Biological STDP Spike-Timing Plasticity & vector graph', pulse: true, icon: <PsychologyIcon fontSize="small" sx={{ color: '#D4AF37' }} /> },
-  { label: 'Sovereign Swarm Multiplexer', path: '/swarm', badge: '21', desc: '21-agent decentralized peer-to-peer bus multiplexer', icon: <HubIcon fontSize="small" sx={{ color: '#3B82F6' }} /> },
-  { label: 'Adytum Sanctum Vault', path: '/adytum', desc: 'Argon2id KDF & hardware-anchored key derivation enclave', icon: <VpnKeyIcon fontSize="small" sx={{ color: '#D4AF37' }} /> },
-  { label: 'HexStrike Security Sentinel', path: '/hexstrike', desc: 'Shannon entropy audit, CVE matrix & offensive terminal', icon: <SecurityIcon fontSize="small" sx={{ color: '#EF4444' }} /> },
-  { label: 'Zoth OS Sandbox', path: '/zoth-os', desc: 'Hardware-isolated Linux KVM hypervisor enclave', icon: <TerminalIcon fontSize="small" sx={{ color: '#10B981' }} /> },
-  { label: 'Consensus Battle Arena', path: '/consensus', desc: 'Byzantine Fault Tolerance math simulations & AST synthesis', icon: <GavelIcon fontSize="small" sx={{ color: '#10B981' }} /> },
-  { label: 'Sovereign Signal Bridges', path: '/bridges', desc: 'E2EE Signal mesh & loopback WebSocket pinger', icon: <CableIcon fontSize="small" sx={{ color: '#3B82F6' }} /> },
-];
-
 // Knowledge Dropdown
 const knowledgeItems = [
   { label: 'Documentation', path: '/docs', desc: 'Zero-egress invariants, system topology & architecture', icon: <MenuBookIcon fontSize="small" sx={{ color: '#D4AF37' }} /> },
@@ -61,7 +46,6 @@ const knowledgeItems = [
 
 export default function Navbar({ mode, onToggleTheme }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [enclaveAnchor, setEnclaveAnchor] = useState(null);
   const [knowledgeAnchor, setKnowledgeAnchor] = useState(null);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [swarmDaemonOpen, setSwarmDaemonOpen] = useState(false);
@@ -94,15 +78,11 @@ export default function Navbar({ mode, onToggleTheme }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const handleOpenEnclaves = (event) => setEnclaveAnchor(event.currentTarget);
-  const handleCloseEnclaves = () => setEnclaveAnchor(null);
-
   const handleOpenKnowledge = (event) => setKnowledgeAnchor(event.currentTarget);
   const handleCloseKnowledge = () => setKnowledgeAnchor(null);
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
 
-  const isEnclaveActive = enclaveItems.some((item) => location.pathname === item.path);
   const isKnowledgeActive = knowledgeItems.some((item) => location.pathname.startsWith(item.path));
 
   // Search Results for Command Palette
@@ -432,67 +412,6 @@ export default function Navbar({ mode, onToggleTheme }) {
               );
             })}
 
-            {/* Enclaves Dropdown Trigger */}
-            <Button
-              onClick={handleOpenEnclaves}
-              endIcon={
-                <KeyboardArrowDownIcon
-                  className="dropdown-icon"
-                  sx={{
-                    fontSize: '18px !important',
-                    transform: enclaveAnchor ? 'rotate(180deg)' : 'none',
-                    transition: 'transform 0.24s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease',
-                  }}
-                />
-              }
-              sx={{
-                color: isEnclaveActive ? navActive : navIdle,
-                fontWeight: isEnclaveActive ? 800 : 600,
-                borderRadius: 9999,
-                px: 1.5,
-                py: 0.65,
-                minWidth: 0,
-                fontSize: '0.84rem',
-                textTransform: 'none',
-                bgcolor: isEnclaveActive
-                  ? (dark ? 'rgba(212, 175, 55, 0.16)' : '#FEF9E7')
-                  : (enclaveAnchor ? (dark ? 'rgba(212, 175, 55, 0.1)' : 'rgba(212, 175, 55, 0.08)') : 'transparent'),
-                border: isEnclaveActive
-                  ? `1px solid ${dark ? 'rgba(212, 175, 55, 0.45)' : '#F0E1A8'}`
-                  : `1px dashed ${enclaveAnchor ? goldAccent : (dark ? 'rgba(212, 175, 55, 0.25)' : 'rgba(0, 0, 0, 0.14)')}`,
-                boxShadow: isEnclaveActive
-                  ? (dark
-                      ? '0 0 16px rgba(212, 175, 55, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12)'
-                      : '0 2px 8px rgba(212, 175, 55, 0.18), inset 0 1px 0 #FFFFFF')
-                  : 'none',
-                transform: 'translateY(0) scale(1)',
-                transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
-                '&:hover': {
-                  color: navActive,
-                  transform: 'translateY(-1.5px) scale(1.025)',
-                  bgcolor: dark ? 'rgba(212, 175, 55, 0.12)' : '#FEF9E7',
-                  borderColor: goldAccent,
-                  borderStyle: 'solid',
-                  boxShadow: dark
-                    ? '0 4px 16px rgba(212, 175, 55, 0.25), inset 0 0 8px rgba(212, 175, 55, 0.1)'
-                    : '0 3px 12px rgba(212, 175, 55, 0.18)',
-                  '& .dropdown-icon': {
-                    color: goldAccent,
-                    transform: enclaveAnchor ? 'rotate(180deg)' : 'translateY(1.5px)',
-                  },
-                },
-                '&:active': {
-                  transform: 'translateY(0.5px) scale(0.985)',
-                  boxShadow: dark
-                    ? 'inset 0 2px 5px rgba(0, 0, 0, 0.5)'
-                    : 'inset 0 1px 3px rgba(0, 0, 0, 0.15)',
-                  transition: 'transform 0.08s ease, box-shadow 0.08s ease',
-                },
-              }}
-            >
-              Enclaves
-            </Button>
-
             {/* Knowledge Dropdown Trigger */}
             <Button
               onClick={handleOpenKnowledge}
@@ -762,94 +681,6 @@ export default function Navbar({ mode, onToggleTheme }) {
           </Box>
         </Toolbar>
       </Container>
-
-      {/* Enclaves Dropdown Menu */}
-      <Menu
-        anchorEl={enclaveAnchor}
-        open={Boolean(enclaveAnchor)}
-        onClose={handleCloseEnclaves}
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            mt: 1.5,
-            width: { xs: 'calc(100vw - 32px)', sm: 410 },
-            maxWidth: 440,
-            p: 1.2,
-            borderRadius: '16px',
-            bgcolor: dark ? 'rgba(13, 14, 21, 0.96)' : 'rgba(255, 255, 255, 0.98)',
-            backdropFilter: 'blur(30px) saturate(190%)',
-            WebkitBackdropFilter: 'blur(30px) saturate(190%)',
-            border: `1px solid ${dark ? 'rgba(212, 175, 55, 0.35)' : 'rgba(212, 175, 55, 0.25)'}`,
-            boxShadow: dark
-              ? '0 20px 48px -8px rgba(0, 0, 0, 0.85), 0 0 24px rgba(212, 175, 55, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-              : '0 20px 40px -8px rgba(0, 0, 0, 0.14), 0 0 16px rgba(212, 175, 55, 0.12), inset 0 1px 0 #FFFFFF',
-            overflow: 'hidden',
-          },
-        }}
-        transformOrigin={{ horizontal: 'center', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-      >
-        <Typography variant="caption" sx={{ px: 2, py: 1, display: 'block', fontWeight: 800, color: goldAccent, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: mono, fontSize: '0.7rem' }}>
-          Hardware Enclaves &amp; Loopback Daemons
-        </Typography>
-        <Divider sx={{ mb: 1, opacity: 0.4, borderColor: dark ? 'rgba(212, 175, 55, 0.15)' : 'rgba(212, 175, 55, 0.2)' }} />
-        {enclaveItems.map((item) => {
-          const selected = location.pathname === item.path;
-          return (
-            <MenuItem
-              key={item.path}
-              component={RouterLink}
-              to={item.path}
-              onClick={handleCloseEnclaves}
-              selected={selected}
-              sx={{
-                borderRadius: '10px',
-                py: 1.2,
-                px: 1.5,
-                mb: 0.5,
-                whiteSpace: 'normal',
-                alignItems: 'flex-start',
-                transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                border: selected
-                  ? `1px solid ${dark ? 'rgba(212, 175, 55, 0.35)' : '#F0E1A8'}`
-                  : '1px solid transparent',
-                '&.Mui-selected': {
-                  bgcolor: dark ? 'rgba(212, 175, 55, 0.15)' : '#FEF9E7',
-                  boxShadow: dark ? 'inset 0 1px 0 rgba(212, 175, 55, 0.2)' : 'none',
-                },
-                '&:hover': {
-                  bgcolor: selected
-                    ? (dark ? 'rgba(212, 175, 55, 0.22)' : '#FDF4D4')
-                    : (dark ? 'rgba(212, 175, 55, 0.08)' : 'rgba(212, 175, 55, 0.05)'),
-                  borderColor: dark ? 'rgba(212, 175, 55, 0.3)' : 'rgba(212, 175, 55, 0.2)',
-                  transform: 'translateX(4px)',
-                },
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 36,
-                  mt: 0.25,
-                  transition: 'transform 0.2s ease',
-                  '.MuiMenuItem-root:hover &': {
-                    transform: 'scale(1.1)',
-                  },
-                }}
-              >
-                {item.icon}
-              </ListItemIcon>
-              <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography variant="body2" sx={{ fontWeight: 700, color: selected ? goldAccent : (dark ? '#F3F4F6' : '#111827'), whiteSpace: 'normal' }}>
-                  {item.label}
-                </Typography>
-                <Typography variant="caption" sx={{ color: dark ? '#9CA3AF' : '#6B7280', display: 'block', fontSize: '0.74rem', whiteSpace: 'normal', wordBreak: 'break-word', lineHeight: 1.35, mt: 0.25 }}>
-                  {item.desc}
-                </Typography>
-              </Box>
-            </MenuItem>
-          );
-        })}
-      </Menu>
 
       {/* Knowledge Dropdown Menu */}
       <Menu
@@ -1530,75 +1361,6 @@ export default function Navbar({ mode, onToggleTheme }) {
                           }}
                         />
                       )}
-                    </ListItemButton>
-                  </ListItem>
-                );
-              })}
-            </List>
-
-            {/* Enclaves */}
-            <Typography
-              variant="caption"
-              sx={{
-                px: 1.5,
-                pb: 0.75,
-                display: 'block',
-                fontWeight: 800,
-                color: goldAccent,
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                fontFamily: mono,
-                fontSize: '0.7rem',
-              }}
-            >
-              Enclaves &amp; Tools
-            </Typography>
-            <List dense sx={{ mb: 2 }}>
-              {enclaveItems.map((item) => {
-                const selected = location.pathname === item.path;
-                return (
-                  <ListItem key={item.label} disablePadding>
-                    <ListItemButton
-                      component={RouterLink}
-                      to={item.path}
-                      onClick={handleDrawerToggle}
-                      selected={selected}
-                      sx={{
-                        borderRadius: '10px',
-                        my: 0.35,
-                        px: 1.5,
-                        py: 0.9,
-                        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                        border: selected
-                          ? `1px solid ${dark ? 'rgba(212, 175, 55, 0.45)' : '#F0E1A8'}`
-                          : '1px solid transparent',
-                        bgcolor: selected
-                          ? (dark ? 'rgba(212, 175, 55, 0.15)' : '#FEF9E7')
-                          : 'transparent',
-                        boxShadow: selected
-                          ? (dark ? '0 2px 10px rgba(212, 175, 55, 0.18)' : '0 1px 4px rgba(212, 175, 55, 0.1)')
-                          : 'none',
-                        '&:hover': {
-                          bgcolor: selected
-                            ? (dark ? 'rgba(212, 175, 55, 0.22)' : '#FDF4D4')
-                            : (dark ? 'rgba(212, 175, 55, 0.08)' : 'rgba(212, 175, 55, 0.05)'),
-                          borderColor: dark ? 'rgba(212, 175, 55, 0.3)' : 'rgba(212, 175, 55, 0.2)',
-                          transform: 'translateX(4px)',
-                        },
-                        '&:active': {
-                          transform: 'translateX(2px) scale(0.99)',
-                        },
-                      }}
-                    >
-                      <ListItemIcon sx={{ minWidth: 32 }}>{item.icon}</ListItemIcon>
-                      <ListItemText
-                        primary={item.label}
-                        primaryTypographyProps={{
-                          fontWeight: selected ? 800 : 500,
-                          color: selected ? goldAccent : theme.palette.text.primary,
-                          fontSize: '0.86rem',
-                        }}
-                      />
                     </ListItemButton>
                   </ListItem>
                 );
