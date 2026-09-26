@@ -15,7 +15,6 @@ import { workstations } from '../src/data/workstations.js';
 import { mathPillars } from '../src/data/mathPillars.js';
 import { FAQS_DATA } from '../src/data/faqsData.js';
 import { pantheonAgents, pantheonCadres } from '../src/data/pantheon.js';
-import { templates } from '../src/data/templates.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -145,21 +144,6 @@ $ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</co
         <p style="color: #D1D5DB; line-height: 1.6;">Full directory of 37 native studio workstations organized across the 6 operational bands: Build, Observe, Security, Spatial, Studio, and Swarm &amp; Consensus.</p>
         <ul style="line-height: 1.8; color: #E5E7EB; margin-top: 1rem;">
           ${stationList}
-        </ul>
-      </section>
-    `;
-  } else if (routePath === '/templates') {
-    const tplList = templates.slice(0, 15).map((tpl) => `
-      <li style="margin-bottom: 0.4rem;">
-        <strong>${tpl.name}</strong> (${tpl.category}) — Stack: ${tpl.stack || 'Vite / React'} | Netlify Ready: Yes
-      </li>
-    `).join('');
-    extraContent = `
-      <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Templates // Open-Source Agent &amp; Web Applications Library</h2>
-        <p style="color: #D1D5DB; line-height: 1.6;">Curated repository of ${templates.length} open-source templates, Astro scaffolds, and Vite fullstack starters vetted for clean Netlify deployment and offline compilation.</p>
-        <ul style="line-height: 1.8; color: #E5E7EB; margin-top: 1rem;">
-          ${tplList}
         </ul>
       </section>
     `;
@@ -402,7 +386,7 @@ $ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</co
               <li><a href="/webgen" style="color: #D4AF37; text-decoration: underline;">WebGen Foundry</a></li>
               <li><a href="/hexstrike" style="color: #D4AF37; text-decoration: underline;">HexStrike Cybersec</a></li>
               <li><a href="/zoth-os" style="color: #D4AF37; text-decoration: underline;">Zoth OS KVM</a></li>
-              <li><a href="/templates" style="color: #D4AF37; text-decoration: underline;">Open-Source Templates</a></li>
+              <li><a href="/arsenal" style="color: #D4AF37; text-decoration: underline;">Sovereign Arsenal</a></li>
               <li><a href="/docs" style="color: #D4AF37; text-decoration: underline;">Documentation</a></li>
               <li><a href="/docs/math" style="color: #D4AF37; text-decoration: underline;">Six Math Pillars</a></li>
               <li><a href="/faqs" style="color: #D4AF37; text-decoration: underline;">Frequently Asked Questions</a></li>
@@ -516,9 +500,9 @@ console.log('⚡ Generating synchronized sitemap.xml for search and answer engin
 function getSitemapPriority(routePath) {
   if (routePath === '/') return '1.0';
   if (routePath === '/memory') return '0.95';
-  if (['/swarm', '/workstations', '/tools'].includes(routePath)) return '0.90';
+  if (['/arsenal', '/swarm', '/workstations', '/tools'].includes(routePath)) return '0.90';
   if (['/consensus', '/bridges', '/webgen', '/hexstrike', '/faqs', '/ax', '/docs'].includes(routePath)) return '0.85';
-  if (['/zoth-os', '/adytum', '/templates', '/docs/math'].includes(routePath)) return '0.80';
+  if (['/zoth-os', '/adytum', '/docs/math'].includes(routePath)) return '0.80';
   if (routePath.startsWith('/tools/')) return '0.75';
   if (routePath.startsWith('/workstations/')) return '0.75';
   if (routePath.startsWith('/docs/math/')) return '0.75';

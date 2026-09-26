@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { Box, ThemeProvider, CssBaseline, useTheme } from '@mui/material';
 import { theme as lightTheme, darkTheme } from './theme';
 import Navbar from './components/Navbar';
@@ -20,7 +20,6 @@ import RealToolWorkspacePage from './pages/RealToolWorkspacePage';
 import WorkstationsPage from './pages/WorkstationsPage';
 import WorkstationDetailPage from './pages/WorkstationDetailPage';
 import ArsenalPage from './pages/ArsenalPage';
-import TemplatesPage from './pages/TemplatesPage';
 import FaqsPage from './pages/FaqsPage';
 import AXPage from './pages/AXPage';
 import SEO from './components/SEO';
@@ -81,7 +80,7 @@ function AppShell({ mode, onToggleTheme }) {
           <Route path="/tools" element={<ArsenalPage />} />
           <Route path="/workstations" element={<ArsenalPage />} />
           <Route path="/workstations/:workstationId" element={<WorkstationDetailPage />} />
-          <Route path="/templates" element={<TemplatesPage />} />
+          <Route path="/templates" element={<Navigate to="/arsenal" replace />} />
           <Route path="/tools/:toolId" element={<RealToolWorkspacePage />} />
           <Route path="/memory" element={<MemoryPage />} />
           <Route path="/consensus" element={<ConsensusPage />} />

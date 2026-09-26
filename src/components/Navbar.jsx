@@ -38,7 +38,6 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 // Flagship Primary Links
 const primaryNav = [
   { label: 'Arsenal', path: '/arsenal', badge: `${arsenalStats.total}` },
-  { label: 'Templates', path: '/templates', badge: '10' },
 ];
 
 // Enclaves & Hardware Daemons Dropdown

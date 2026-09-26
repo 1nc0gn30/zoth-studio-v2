@@ -31,7 +31,7 @@ const PRIMARY_ROUTES = [
   '/bridges',
   '/tools',
   '/workstations',
-  '/templates',
+  '/arsenal',
   '/memory',
   '/consensus',
   '/webgen',

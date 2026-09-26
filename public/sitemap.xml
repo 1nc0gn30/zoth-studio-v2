@@ -28,7 +28,7 @@
     <loc>https://zoth.nullai.tech/arsenal</loc>
     <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.70</priority>
+    <priority>0.90</priority>
   </url>
   <url>
     <loc>https://zoth.nullai.tech/tools</loc>
@@ -41,12 +41,6 @@
     <lastmod>2026-09-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
-  </url>
-  <url>
-    <loc>https://zoth.nullai.tech/templates</loc>
-    <lastmod>2026-09-26</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.80</priority>
   </url>
   <url>
     <loc>https://zoth.nullai.tech/memory</loc>

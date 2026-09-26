@@ -32,7 +32,7 @@ export default function Footer() {
     { label: 'Zoth OS Kernel', to: '/zoth-os' },
     { label: 'Swarm Coordinator', to: '/swarm' },
     { label: 'Workstations Matrix', to: '/workstations' },
-    { label: 'Starter Templates', to: '/templates' },
+    { label: 'Sovereign Arsenal', to: '/arsenal' },
   ];
 
   const toolsAndRepos = [

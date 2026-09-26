@@ -76,12 +76,6 @@ export const siteConfig = {
       keywords: 'studio workstations, developer cockpits, DAG composer, cyberpunk HUD, operator IDE, model foundry',
       type: 'article',
     },
-    '/templates': {
-      title: 'Templates // Open-Source Agent & Web Applications Library',
-      description: 'Curated repository of open-source templates, Astro scaffolds, and Vite fullstack starters with inspectable file architectures.',
-      keywords: 'web templates, open-source starters, Astro templates, Vite templates, developer scaffolds',
-      type: 'article',
-    },
     '/memory': {
       title: 'Lucy Netrunner Memory Hub // Whitespace Cyberspace & STDP Matrix',
       description: 'Biomorphic Spike-Timing-Dependent Plasticity (STDP) synaptic memory matrix with Lucy Oracle Core and serene Whitespace constellation visualizer.',

@@ -117,7 +117,7 @@ Each key embodies a foundational principle—such as Zero-Egress Invariants, Soc
     oracleResponse: `Adytum Rite transmission: The 22 Arcana keys unify ancient Hermetic principles with zero-egress software architecture. Each key enforces alchemical transmutation—from raw unconditioned ideation to fully realized sovereign code.`,
     jumpTargets: [
       { label: 'Adytum Hermetic Chamber', path: '/adytum', type: 'adytum' },
-      { label: 'Sovereign Templates Library', path: '/templates', type: 'templates' }
+      { label: 'Sovereign Arsenal Matrix', path: '/arsenal', type: 'arsenal' }
     ]
   },
   {
