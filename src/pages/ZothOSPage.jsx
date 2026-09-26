@@ -827,505 +827,528 @@ export default function ZothOSPage() {
   return (
     <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>
       {/* ZothOS signature: gold glow behind the header */}
-      <Box
-        aria-hidden="true"
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: { xs: '100%', md: '920px' },
-          height: { xs: 400, md: 520 },
-          pointerEvents: 'none',
-          zIndex: 0,
-          background: isDark
-            ? 'radial-gradient(ellipse 65% 55% at 50% 0%, rgba(212,175,55,0.22) 0%, rgba(8,8,11,0) 75%)'
-            : 'radial-gradient(ellipse 65% 55% at 50% 0%, rgba(184,134,11,0.12) 0%, transparent 75%)',
-        }}
-      />
+      <ParallaxGlow offset={60}>
+        <Box
+          aria-hidden="true"
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: { xs: '100%', md: '920px' },
+            height: { xs: 400, md: 520 },
+            pointerEvents: 'none',
+            zIndex: 0,
+            background: isDark
+              ? 'radial-gradient(ellipse 65% 55% at 50% 0%, rgba(212,175,55,0.22) 0%, rgba(8,8,11,0) 75%)'
+              : 'radial-gradient(ellipse 65% 55% at 50% 0%, rgba(184,134,11,0.12) 0%, transparent 75%)',
+          }}
+        />
+      </ParallaxGlow>
 
       <Box sx={{ position: 'relative', zIndex: 1 }}>
         {/* Header with Export Manifest Action */}
-        <Box
-          sx={{
-            mb: 4,
-            display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' },
-            justifyContent: 'space-between',
-            alignItems: { xs: 'flex-start', md: 'flex-end' },
-            gap: 2,
-          }}
-        >
-          <Box>
-            <Chip
-              icon={<SecurityIcon style={{ fontSize: 16, color: gold.accent }} />}
-              label="SOVEREIGN LOCAL OPERATING SYSTEM // AIR-GAPPED KERNEL"
-              size="small"
-              sx={{
-                bgcolor: gold.wash,
-                color: gold.soft,
-                border: `1px solid ${gold.border}`,
-                fontWeight: 800,
-                letterSpacing: '0.04em',
-                mb: 1.5,
-              }}
-            />
-            <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1.5, color: theme.palette.text.primary }}>
-              Zoth OS: Sovereign <span className="text-gradient-gold">Agent Operating System</span>
-            </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 760, lineHeight: 1.65, fontSize: '1.02rem' }}>
-              Zoth OS is a custom Linux distribution engineered to run Zoth Studio, Ollama, all micro-tools, and the local memory daemon out-of-the-box with zero setup hassle. Flashed to bare metal or run via QEMU/KVM, it guarantees <span className="text-highlight-gold">100% Zero-Telemetry Local Operation</span>.
-            </Typography>
-          </Box>
-
-          {/* Export Manifest Button with high-contrast text */}
-          <Button
-            variant="contained"
-            startIcon={<DownloadIcon />}
-            onClick={handleExportManifest}
+        <HeroReveal>
+          <Box
             sx={{
-              px: 3,
-              py: 1.3,
-              fontWeight: 800,
-              fontSize: '0.88rem',
-              letterSpacing: '0.02em',
-              whiteSpace: 'nowrap',
-              bgcolor: gold.accent,
-              color: '#08080B',
-              boxShadow: '0 4px 18px rgba(212, 175, 55, 0.35)',
-              border: `1px solid ${gold.accent}`,
-              '&:hover': {
-                bgcolor: isDark ? '#F5E6AB' : '#9A7008',
-                color: isDark ? '#08080B' : '#FFFFFF',
-                boxShadow: '0 6px 24px rgba(212, 175, 55, 0.5)',
-              },
+              mb: 4,
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              justifyContent: 'space-between',
+              alignItems: { xs: 'flex-start', md: 'flex-end' },
+              gap: 2,
             }}
           >
-            Export OS ISO Bootloader Manifest
-          </Button>
-        </Box>
-
-        <DaemonStatusStrip />
-
-        {/* SECTION: Native ZothOS Host Telemetry & Sovereign Launchpad */}
-        <Box sx={{ mb: 5, mt: 4 }}>
-          {/* Host Telemetry Card */}
-          <Paper
-            sx={{
-              p: { xs: 2.5, md: 3 },
-              mb: 3,
-              borderRadius: 2.5,
-              bgcolor: isDark ? '#08080B' : '#FFFFFF',
-              border: `1px solid ${hostInfo?.isZothOS ? gold.accent : (isDark ? 'rgba(212, 175, 55, 0.28)' : '#EAECF0')}`,
-              boxShadow: hostInfo?.isZothOS
-                ? (isDark ? '0 0 24px -4px rgba(212,175,55,0.25)' : '0 4px 16px rgba(184,134,11,0.12)')
-                : (isDark ? '0 4px 20px -4px rgba(0, 0, 0, 0.8)' : '0 2px 8px rgba(0,0,0,0.06)'),
-            }}
-          >
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: { xs: 'column', sm: 'row' },
-                alignItems: { xs: 'flex-start', sm: 'center' },
-                justifyContent: 'space-between',
-                gap: 2,
-                mb: 2.5,
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                <CheckCircleIcon sx={{ color: hostInfo?.isZothOS ? '#22C55E' : gold.accent, fontSize: 26 }} />
-                <Box>
-                  <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
-                    {hostInfo?.isZothOS ? 'Native ZothOS Host Telemetry & Runtime Detected' : 'ZothOS Native Host Telemetry'}
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
-                    {hostInfo?.isZothOS
-                      ? 'Air-gapped hardware microkernel & zero-egress packet filter active'
-                      : 'Operating in offline browser preview mode — full telemetry active on ZothOS'}
-                  </Typography>
-                </Box>
-              </Box>
-              <Chip
-                label={hostInfo?.isZothOS ? 'NATIVE ZOTHOS ACTIVE' : 'PREVIEW MODE'}
-                size="small"
-                sx={{
-                  fontFamily: mono,
-                  fontWeight: 800,
-                  bgcolor: hostInfo?.isZothOS ? (isDark ? 'rgba(34,197,94,0.15)' : '#DCFCE7') : gold.wash,
-                  color: hostInfo?.isZothOS ? '#22C55E' : gold.soft,
-                  border: `1px solid ${hostInfo?.isZothOS ? 'rgba(34,197,94,0.4)' : gold.border}`,
-                }}
-              />
-            </Box>
-
-            <Grid container spacing={2}>
-              <Grid xs={12} sm={6} md={3}>
-                <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#F8FAFC', border: `1px solid ${theme.palette.divider}` }}>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700 }}>DISTRO & RELEASE</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 800, fontFamily: mono, color: gold.accent }}>
-                    {hostInfo?.distro || 'ZothOS Sovereign Linux'}
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem' }}>
-                    {hostInfo?.release || '2026.1 (Imperial Edition)'}
-                  </Typography>
-                </Box>
-              </Grid>
-
-              <Grid xs={12} sm={6} md={3}>
-                <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#F8FAFC', border: `1px solid ${theme.palette.divider}` }}>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700 }}>KERNEL ARCHITECTURE</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 800, fontFamily: mono, color: theme.palette.text.primary, noWrap: true }}>
-                    {hostInfo?.kernel || 'Linux Hardened 6.12'}
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem' }}>
-                    {hostInfo?.arch || 'x86_64'} PREEMPT_DYNAMIC
-                  </Typography>
-                </Box>
-              </Grid>
-
-              <Grid xs={12} sm={6} md={3}>
-                <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#F8FAFC', border: `1px solid ${theme.palette.divider}` }}>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700 }}>HOST CPU TOPOLOGY</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 800, fontFamily: mono, color: theme.palette.text.primary }}>
-                    {hostInfo?.cpus ? `${hostInfo.cpus} Logical Cores` : '4 Cores (Detected)'}
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem', noWrap: true, display: 'block' }}>
-                    {hostInfo?.cpuModel || 'Virtual KVM Enclave'}
-                  </Typography>
-                </Box>
-              </Grid>
-
-              <Grid xs={12} sm={6} md={3}>
-                <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#F8FAFC', border: `1px solid ${theme.palette.divider}` }}>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700 }}>AUDIO & PERIPHERALS</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 800, fontFamily: mono, color: theme.palette.text.primary }}>
-                    {hostInfo?.audioDevice || 'ICH9 Audio Active'}
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem' }}>
-                    ALSA / PulseAudio High-Def
-                  </Typography>
-                </Box>
-              </Grid>
-            </Grid>
-          </Paper>
-
-          {/* Native Tool Launchpad */}
-          <Box sx={{ mb: 2 }}>
-            <Typography className="section-kicker">Local Sovereign Tool Execution</Typography>
-            <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, letterSpacing: '-0.02em', mb: 0.5 }}>
-              Native ZothOS Application & CLI Launchpad
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Directly trigger preinstalled tools, sovereign CLI agents, and offensive security suites into dedicated desktop shells.
-            </Typography>
-          </Box>
-
-          <Grid container spacing={2}>
-            {launcherTools.map((tool) => (
-              <Grid xs={12} sm={6} md={4} key={tool.id}>
-                <Paper
-                  sx={{
-                    p: 2.5,
-                    height: '100%',
-                    borderRadius: 2.5,
-                    bgcolor: isDark ? '#08080B' : '#FFFFFF',
-                    border: `1px solid ${tool.installed ? gold.border : (isDark ? 'rgba(255,255,255,0.08)' : '#EAECF0')}`,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    boxShadow: isDark ? '0 4px 16px rgba(0,0,0,0.4)' : '0 2px 8px rgba(0,0,0,0.04)',
-                    transition: 'all 0.2s ease',
-                    '&:hover': {
-                      borderColor: gold.accent,
-                      transform: 'translateY(-2px)',
-                      boxShadow: isDark ? '0 6px 20px rgba(212,175,55,0.2)' : '0 4px 12px rgba(184,134,11,0.1)',
-                    },
-                  }}
-                >
-                  <Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <tool.icon sx={{ color: gold.accent, fontSize: 22 }} />
-                        <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                          {tool.name}
-                        </Typography>
-                      </Box>
-                      <Chip
-                        label={tool.installed ? 'INSTALLED' : 'READY'}
-                        size="small"
-                        sx={{
-                          height: 20,
-                          fontSize: '0.65rem',
-                          fontFamily: mono,
-                          fontWeight: 800,
-                          bgcolor: tool.installed ? (isDark ? 'rgba(34,197,94,0.15)' : '#DCFCE7') : gold.wash,
-                          color: tool.installed ? '#22C55E' : gold.soft,
-                          border: `1px solid ${tool.installed ? 'rgba(34,197,94,0.3)' : gold.border}`,
-                        }}
-                      />
-                    </Box>
-                    <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.82rem', mb: 2, minHeight: 40, lineHeight: 1.45 }}>
-                      {tool.desc}
-                    </Typography>
-                  </Box>
-                  <Button
-                    variant={tool.installed ? 'contained' : 'outlined'}
-                    size="small"
-                    startIcon={<LaunchIcon sx={{ fontSize: 16 }} />}
-                    disabled={launching === tool.id}
-                    onClick={() => handleLaunchTool(tool.id, tool.name)}
-                    sx={{
-                      mt: 'auto',
-                      fontWeight: 700,
-                      fontFamily: mono,
-                      fontSize: '0.78rem',
-                      bgcolor: tool.installed ? gold.accent : 'transparent',
-                      color: tool.installed ? '#08080B' : gold.soft,
-                      borderColor: gold.accent,
-                      '&:hover': {
-                        bgcolor: tool.installed ? (isDark ? '#F5E6AB' : '#9A7008') : gold.wash,
-                        color: tool.installed ? '#08080B' : (isDark ? '#FFFFFF' : '#8A6A09'),
-                      },
-                    }}
-                  >
-                    {launching === tool.id ? 'Launching...' : 'Launch Application'}
-                  </Button>
-                </Paper>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-
-        {/* SECTION: Interactive Hardware Resource Dials */}
-        <Box sx={{ mb: 5, mt: 3 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
             <Box>
-              <Typography className="section-kicker">Interactive Hardware Resource Telemetry</Typography>
-              <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, letterSpacing: '-0.02em' }}>
-                Hardware Resource Dials & Enclave Buffer Allocation
-              </Typography>
-            </Box>
-            <Tooltip title="Trigger simulated high-throughput memory and agent processing burst">
-              <Button
-                size="small"
-                variant="outlined"
-                startIcon={<SpeedIcon sx={{ color: gold.accent }} />}
-                onClick={handleSimulateBurst}
-                disabled={isSimulatingBurst}
-                sx={{
-                  borderColor: gold.border,
-                  color: gold.soft,
-                  fontFamily: mono,
-                  fontSize: '0.75rem',
-                  fontWeight: 700,
-                  textTransform: 'none',
-                  '&:hover': {
-                    borderColor: gold.accent,
+              <HeroItem>
+                <Chip
+                  icon={<SecurityIcon style={{ fontSize: 16, color: gold.accent }} />}
+                  label="SOVEREIGN LOCAL OPERATING SYSTEM // AIR-GAPPED KERNEL"
+                  size="small"
+                  sx={{
                     bgcolor: gold.wash,
+                    color: gold.soft,
+                    border: `1px solid ${gold.border}`,
+                    fontWeight: 800,
+                    letterSpacing: '0.04em',
+                    mb: 1.5,
+                  }}
+                />
+              </HeroItem>
+              <HeroItem>
+                <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1.5, color: theme.palette.text.primary }}>
+                  Zoth OS: Sovereign <span className="text-gradient-gold">Agent Operating System</span>
+                </Typography>
+              </HeroItem>
+              <HeroItem>
+                <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 760, lineHeight: 1.65, fontSize: '1.02rem' }}>
+                  Zoth OS is a custom Linux distribution engineered to run Zoth Studio, Ollama, all micro-tools, and the local memory daemon out-of-the-box with zero setup hassle. Flashed to bare metal or run via QEMU/KVM, it guarantees <span className="text-highlight-gold">100% Zero-Telemetry Local Operation</span>.
+                </Typography>
+              </HeroItem>
+            </Box>
+
+            {/* Export Manifest Button with high-contrast text */}
+            <HeroItem>
+              <Button
+                variant="contained"
+                startIcon={<DownloadIcon />}
+                onClick={handleExportManifest}
+                sx={{
+                  px: 3,
+                  py: 1.3,
+                  fontWeight: 800,
+                  fontSize: '0.88rem',
+                  letterSpacing: '0.02em',
+                  whiteSpace: 'nowrap',
+                  bgcolor: gold.accent,
+                  color: '#08080B',
+                  boxShadow: '0 4px 18px rgba(212, 175, 55, 0.35)',
+                  border: `1px solid ${gold.accent}`,
+                  '&:hover': {
+                    bgcolor: isDark ? '#F5E6AB' : '#9A7008',
+                    color: isDark ? '#08080B' : '#FFFFFF',
+                    boxShadow: '0 6px 24px rgba(212, 175, 55, 0.5)',
                   },
                 }}
               >
-                {isSimulatingBurst ? 'Simulating Burst...' : 'Simulate Workload Burst'}
+                Export OS ISO Bootloader Manifest
               </Button>
-            </Tooltip>
+            </HeroItem>
           </Box>
+        </HeroReveal>
 
-          <Grid container spacing={2.5}>
-            {/* DIAL 1: CPU Core Allocation */}
-            <Grid xs={12} md={4}>
-              <Paper
+        <RevealOnScroll preset="fadeUp" delay={0.1}>
+          <DaemonStatusStrip />
+        </RevealOnScroll>
+
+        {/* SECTION: Native ZothOS Host Telemetry & Sovereign Launchpad */}
+        <RevealOnScroll preset="fadeUp" delay={0.2}>
+          <Box sx={{ mb: 5, mt: 4 }}>
+            {/* Host Telemetry Card */}
+            <Paper
+              sx={{
+                p: { xs: 2.5, md: 3 },
+                mb: 3,
+                borderRadius: 2.5,
+                bgcolor: isDark ? '#08080B' : '#FFFFFF',
+                border: `1px solid ${hostInfo?.isZothOS ? gold.accent : (isDark ? 'rgba(212, 175, 55, 0.28)' : '#EAECF0')}`,
+                boxShadow: hostInfo?.isZothOS
+                  ? (isDark ? '0 0 24px -4px rgba(212,175,55,0.25)' : '0 4px 16px rgba(184,134,11,0.12)')
+                  : (isDark ? '0 4px 20px -4px rgba(0, 0, 0, 0.8)' : '0 2px 8px rgba(0,0,0,0.06)'),
+              }}
+            >
+              <Box
                 sx={{
-                  p: 3,
-                  height: '100%',
-                  bgcolor: isDark ? '#08080B' : '#FFFFFF',
-                  borderRadius: 2.5,
-                  border: `1px solid ${isDark ? 'rgba(212, 175, 55, 0.28)' : '#EAECF0'}`,
-                  boxShadow: isDark
-                    ? '0 4px 20px -4px rgba(0, 0, 0, 0.8), 0 0 16px -6px rgba(212, 175, 55, 0.2)'
-                    : '0 2px 8px rgba(0,0,0,0.06)',
                   display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
+                  flexDirection: { xs: 'column', sm: 'row' },
+                  alignItems: { xs: 'flex-start', sm: 'center' },
+                  justifyContent: 'space-between',
+                  gap: 2,
+                  mb: 2.5,
                 }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%', mb: 1 }}>
-                  <SpeedIcon sx={{ color: gold.accent, fontSize: 20 }} />
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                    CPU Core Allocation
-                  </Typography>
-                </Box>
-
-                <RadialResourceDial
-                  value={cpuLoad}
-                  max={100}
-                  metricText={`${cpuLoad}%`}
-                  label="Core Load"
-                  statusBadge={cpuConfigs[cpuPreset].label}
-                  subtext={cpuConfigs[cpuPreset].freq}
-                  accentColor={isDark ? '#D4AF37' : '#B8860B'}
-                  glowColor={isDark ? 'rgba(212, 175, 55, 0.45)' : 'rgba(184, 134, 11, 0.25)'}
-                />
-
-                <Box sx={{ mt: 2, pt: 1.5, borderTop: `1px solid ${theme.palette.divider}`, width: '100%', textAlign: 'center' }}>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1, fontWeight: 700 }}>
-                    CORE ALLOCATION PRESET:
-                  </Typography>
-                  <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
-                    {Object.keys(cpuConfigs).map((k) => (
-                      <Chip
-                        key={k}
-                        label={k === '2c4t' ? '2C / 4T' : k === '4c8t' ? '4C / 8T (Def)' : '8C / 16T'}
-                        size="small"
-                        clickable
-                        onClick={() => handleCpuPresetChange(k)}
-                        sx={{
-                          fontFamily: mono,
-                          fontSize: '0.72rem',
-                          fontWeight: 800,
-                          bgcolor: cpuPreset === k ? gold.accent : gold.wash,
-                          color: cpuPreset === k ? '#08080B' : gold.soft,
-                          border: `1px solid ${cpuPreset === k ? gold.accent : gold.border}`,
-                        }}
-                      />
-                    ))}
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <CheckCircleIcon sx={{ color: hostInfo?.isZothOS ? '#22C55E' : gold.accent, fontSize: 26 }} />
+                  <Box>
+                    <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
+                      {hostInfo?.isZothOS ? 'Native ZothOS Host Telemetry & Runtime Detected' : 'ZothOS Native Host Telemetry'}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
+                      {hostInfo?.isZothOS
+                        ? 'Air-gapped hardware microkernel & zero-egress packet filter active'
+                        : 'Operating in offline browser preview mode — full telemetry active on ZothOS'}
+                    </Typography>
                   </Box>
                 </Box>
-              </Paper>
-            </Grid>
-
-            {/* DIAL 2: KVM RAM Buffer */}
-            <Grid xs={12} md={4}>
-              <Paper
-                sx={{
-                  p: 3,
-                  height: '100%',
-                  bgcolor: isDark ? '#08080B' : '#FFFFFF',
-                  borderRadius: 2.5,
-                  border: `1px solid ${isDark ? 'rgba(212, 175, 55, 0.28)' : '#EAECF0'}`,
-                  boxShadow: isDark
-                    ? '0 4px 20px -4px rgba(0, 0, 0, 0.8), 0 0 16px -6px rgba(212, 175, 55, 0.2)'
-                    : '0 2px 8px rgba(0,0,0,0.06)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%', mb: 1 }}>
-                  <MemoryIcon sx={{ color: gold.accent, fontSize: 20 }} />
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                    KVM RAM Buffer
-                  </Typography>
-                </Box>
-
-                <RadialResourceDial
-                  value={(ramActiveGb / (ramAllocation / 1024)) * 100}
-                  max={100}
-                  metricText={`${ramActiveGb} GB`}
-                  label="Active In-Use"
-                  statusBadge={`${ramAllocation} MB ALLOCATED`}
-                  subtext="Zero-Leak Enclave Buffer with AES-256 Encrypted Swap"
-                  accentColor={isDark ? '#38BDF8' : '#0284C7'}
-                  glowColor={isDark ? 'rgba(56, 189, 248, 0.45)' : 'rgba(2, 132, 199, 0.25)'}
+                <Chip
+                  label={hostInfo?.isZothOS ? 'NATIVE ZOTHOS ACTIVE' : 'PREVIEW MODE'}
+                  size="small"
+                  sx={{
+                    fontFamily: mono,
+                    fontWeight: 800,
+                    bgcolor: hostInfo?.isZothOS ? (isDark ? 'rgba(34,197,94,0.15)' : '#DCFCE7') : gold.wash,
+                    color: hostInfo?.isZothOS ? '#22C55E' : gold.soft,
+                    border: `1px solid ${hostInfo?.isZothOS ? 'rgba(34,197,94,0.4)' : gold.border}`,
+                  }}
                 />
+              </Box>
 
-                <Box sx={{ mt: 2, pt: 1.5, borderTop: `1px solid ${theme.palette.divider}`, width: '100%', textAlign: 'center' }}>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1, fontWeight: 700 }}>
-                    BUFFER BUFFER TUNING:
-                  </Typography>
-                  <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
-                    {[4096, 8192, 16384].map((sz) => (
-                      <Chip
-                        key={sz}
-                        label={`${sz / 1024} GB`}
-                        size="small"
-                        clickable
-                        onClick={() => {
-                          setRamAllocation(sz);
-                          setToastMessage(`KVM Buffer adjusted to ${sz} MB.`);
-                        }}
-                        sx={{
-                          fontFamily: mono,
-                          fontSize: '0.72rem',
-                          fontWeight: 800,
-                          bgcolor: ramAllocation === sz ? (isDark ? '#38BDF8' : '#0284C7') : gold.wash,
-                          color: ramAllocation === sz ? (isDark ? '#08080B' : '#FFFFFF') : gold.soft,
-                          border: `1px solid ${ramAllocation === sz ? (isDark ? '#38BDF8' : '#0284C7') : gold.border}`,
-                        }}
-                      />
-                    ))}
+              <Grid container spacing={2}>
+                <Grid xs={12} sm={6} md={3}>
+                  <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#F8FAFC', border: `1px solid ${theme.palette.divider}` }}>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700 }}>DISTRO & RELEASE</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 800, fontFamily: mono, color: gold.accent }}>
+                      {hostInfo?.distro || 'ZothOS Sovereign Linux'}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem' }}>
+                      {hostInfo?.release || '2026.1 (Imperial Edition)'}
+                    </Typography>
                   </Box>
-                </Box>
-              </Paper>
+                </Grid>
+
+                <Grid xs={12} sm={6} md={3}>
+                  <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#F8FAFC', border: `1px solid ${theme.palette.divider}` }}>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700 }}>KERNEL ARCHITECTURE</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 800, fontFamily: mono, color: theme.palette.text.primary, noWrap: true }}>
+                      {hostInfo?.kernel || 'Linux Hardened 6.12'}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem' }}>
+                      {hostInfo?.arch || 'x86_64'} PREEMPT_DYNAMIC
+                    </Typography>
+                  </Box>
+                </Grid>
+
+                <Grid xs={12} sm={6} md={3}>
+                  <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#F8FAFC', border: `1px solid ${theme.palette.divider}` }}>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700 }}>HOST CPU TOPOLOGY</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 800, fontFamily: mono, color: theme.palette.text.primary }}>
+                      {hostInfo?.cpus ? `${hostInfo.cpus} Logical Cores` : '4 Cores (Detected)'}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem', noWrap: true, display: 'block' }}>
+                      {hostInfo?.cpuModel || 'Virtual KVM Enclave'}
+                    </Typography>
+                  </Box>
+                </Grid>
+
+                <Grid xs={12} sm={6} md={3}>
+                  <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#F8FAFC', border: `1px solid ${theme.palette.divider}` }}>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700 }}>AUDIO & PERIPHERALS</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 800, fontFamily: mono, color: theme.palette.text.primary }}>
+                      {hostInfo?.audioDevice || 'ICH9 Audio Active'}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem' }}>
+                      ALSA / PulseAudio High-Def
+                    </Typography>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Paper>
+
+            {/* Native Tool Launchpad */}
+            <Box sx={{ mb: 2 }}>
+              <Typography className="section-kicker">Local Sovereign Tool Execution</Typography>
+              <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, letterSpacing: '-0.02em', mb: 0.5 }}>
+                Native ZothOS Application & CLI Launchpad
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Directly trigger preinstalled tools, sovereign CLI agents, and offensive security suites into dedicated desktop shells.
+              </Typography>
+            </Box>
+
+            <StaggerChildren>
+              <Grid container spacing={2}>
+                {launcherTools.map((tool) => (
+                  <Grid xs={12} sm={6} md={4} key={tool.id}>
+                    <StaggerItem>
+                      <Paper
+                        sx={{
+                          p: 2.5,
+                          height: '100%',
+                          borderRadius: 2.5,
+                          bgcolor: isDark ? '#08080B' : '#FFFFFF',
+                          border: `1px solid ${tool.installed ? gold.border : (isDark ? 'rgba(255,255,255,0.08)' : '#EAECF0')}`,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                          boxShadow: isDark ? '0 4px 16px rgba(0,0,0,0.4)' : '0 2px 8px rgba(0,0,0,0.04)',
+                          transition: 'all 0.2s ease',
+                          '&:hover': {
+                            borderColor: gold.accent,
+                            transform: 'translateY(-2px)',
+                            boxShadow: isDark ? '0 6px 20px rgba(212,175,55,0.2)' : '0 4px 12px rgba(184,134,11,0.1)',
+                          },
+                        }}
+                      >
+                        <Box>
+                          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              <tool.icon sx={{ color: gold.accent, fontSize: 22 }} />
+                              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+                                {tool.name}
+                              </Typography>
+                            </Box>
+                            <Chip
+                              label={tool.installed ? 'INSTALLED' : 'READY'}
+                              size="small"
+                              sx={{
+                                height: 20,
+                                fontSize: '0.65rem',
+                                fontFamily: mono,
+                                fontWeight: 800,
+                                bgcolor: tool.installed ? (isDark ? 'rgba(34,197,94,0.15)' : '#DCFCE7') : gold.wash,
+                                color: tool.installed ? '#22C55E' : gold.soft,
+                                border: `1px solid ${tool.installed ? 'rgba(34,197,94,0.3)' : gold.border}`,
+                              }}
+                            />
+                          </Box>
+                          <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.82rem', mb: 2, minHeight: 40, lineHeight: 1.45 }}>
+                            {tool.desc}
+                          </Typography>
+                        </Box>
+                        <Button
+                          variant={tool.installed ? 'contained' : 'outlined'}
+                          size="small"
+                          startIcon={<LaunchIcon sx={{ fontSize: 16 }} />}
+                          disabled={launching === tool.id}
+                          onClick={() => handleLaunchTool(tool.id, tool.name)}
+                          sx={{
+                            mt: 'auto',
+                            fontWeight: 700,
+                            fontFamily: mono,
+                            fontSize: '0.78rem',
+                            bgcolor: tool.installed ? gold.accent : 'transparent',
+                            color: tool.installed ? '#08080B' : gold.soft,
+                            borderColor: gold.accent,
+                            '&:hover': {
+                              bgcolor: tool.installed ? (isDark ? '#F5E6AB' : '#9A7008') : gold.wash,
+                              color: tool.installed ? '#08080B' : (isDark ? '#FFFFFF' : '#8A6A09'),
+                            },
+                          }}
+                        >
+                          {launching === tool.id ? 'Launching...' : 'Launch Application'}
+                        </Button>
+                      </Paper>
+                    </StaggerItem>
+                  </Grid>
+                ))}
+              </Grid>
+            </StaggerChildren>
+          </Box>
+        </RevealOnScroll>
+
+        {/* SECTION: Interactive Hardware Resource Dials */}
+        <RevealOnScroll preset="fadeUp" delay={0.3}>
+          <Box sx={{ mb: 5, mt: 3 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
+              <Box>
+                <Typography className="section-kicker">Interactive Hardware Resource Telemetry</Typography>
+                <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, letterSpacing: '-0.02em' }}>
+                  Hardware Resource Dials & Enclave Buffer Allocation
+                </Typography>
+              </Box>
+              <Tooltip title="Trigger simulated high-throughput memory and agent processing burst">
+                <Button
+                  size="small"
+                  variant="outlined"
+                  startIcon={<SpeedIcon sx={{ color: gold.accent }} />}
+                  onClick={handleSimulateBurst}
+                  disabled={isSimulatingBurst}
+                  sx={{
+                    borderColor: gold.border,
+                    color: gold.soft,
+                    fontFamily: mono,
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    textTransform: 'none',
+                    '&:hover': {
+                      borderColor: gold.accent,
+                      bgcolor: gold.wash,
+                    },
+                  }}
+                >
+                  {isSimulatingBurst ? 'Simulating Burst...' : 'Simulate Workload Burst'}
+                </Button>
+              </Tooltip>
+            </Box>
+
+            <Grid container spacing={2.5}>
+              {/* DIAL 1: CPU Core Allocation */}
+              <Grid xs={12} md={4}>
+                <Paper
+                  sx={{
+                    p: 3,
+                    height: '100%',
+                    bgcolor: isDark ? '#08080B' : '#FFFFFF',
+                    borderRadius: 2.5,
+                    border: `1px solid ${isDark ? 'rgba(212, 175, 55, 0.28)' : '#EAECF0'}`,
+                    boxShadow: isDark
+                      ? '0 4px 20px -4px rgba(0, 0, 0, 0.8), 0 0 16px -6px rgba(212, 175, 55, 0.2)'
+                      : '0 2px 8px rgba(0,0,0,0.06)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%', mb: 1 }}>
+                    <SpeedIcon sx={{ color: gold.accent, fontSize: 20 }} />
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+                      CPU Core Allocation
+                    </Typography>
+                  </Box>
+
+                  <RadialResourceDial
+                    value={cpuLoad}
+                    max={100}
+                    metricText={`${cpuLoad}%`}
+                    label="Core Load"
+                    statusBadge={cpuConfigs[cpuPreset].label}
+                    subtext={cpuConfigs[cpuPreset].freq}
+                    accentColor={isDark ? '#D4AF37' : '#B8860B'}
+                    glowColor={isDark ? 'rgba(212, 175, 55, 0.45)' : 'rgba(184, 134, 11, 0.25)'}
+                  />
+
+                  <Box sx={{ mt: 2, pt: 1.5, borderTop: `1px solid ${theme.palette.divider}`, width: '100%', textAlign: 'center' }}>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1, fontWeight: 700 }}>
+                      CORE ALLOCATION PRESET:
+                    </Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
+                      {Object.keys(cpuConfigs).map((k) => (
+                        <Chip
+                          key={k}
+                          label={k === '2c4t' ? '2C / 4T' : k === '4c8t' ? '4C / 8T (Def)' : '8C / 16T'}
+                          size="small"
+                          clickable
+                          onClick={() => handleCpuPresetChange(k)}
+                          sx={{
+                            fontFamily: mono,
+                            fontSize: '0.72rem',
+                            fontWeight: 800,
+                            bgcolor: cpuPreset === k ? gold.accent : gold.wash,
+                            color: cpuPreset === k ? '#08080B' : gold.soft,
+                            border: `1px solid ${cpuPreset === k ? gold.accent : gold.border}`,
+                          }}
+                        />
+                      ))}
+                    </Box>
+                  </Box>
+                </Paper>
+              </Grid>
+
+              {/* DIAL 2: KVM RAM Buffer */}
+              <Grid xs={12} md={4}>
+                <Paper
+                  sx={{
+                    p: 3,
+                    height: '100%',
+                    bgcolor: isDark ? '#08080B' : '#FFFFFF',
+                    borderRadius: 2.5,
+                    border: `1px solid ${isDark ? 'rgba(212, 175, 55, 0.28)' : '#EAECF0'}`,
+                    boxShadow: isDark
+                      ? '0 4px 20px -4px rgba(0, 0, 0, 0.8), 0 0 16px -6px rgba(212, 175, 55, 0.2)'
+                      : '0 2px 8px rgba(0,0,0,0.06)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%', mb: 1 }}>
+                    <MemoryIcon sx={{ color: gold.accent, fontSize: 20 }} />
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+                      KVM RAM Buffer
+                    </Typography>
+                  </Box>
+
+                  <RadialResourceDial
+                    value={(ramActiveGb / (ramAllocation / 1024)) * 100}
+                    max={100}
+                    metricText={`${ramActiveGb} GB`}
+                    label="Active In-Use"
+                    statusBadge={`${ramAllocation} MB ALLOCATED`}
+                    subtext="Zero-Leak Enclave Buffer with AES-256 Encrypted Swap"
+                    accentColor={isDark ? '#38BDF8' : '#0284C7'}
+                    glowColor={isDark ? 'rgba(56, 189, 248, 0.45)' : 'rgba(2, 132, 199, 0.25)'}
+                  />
+
+                  <Box sx={{ mt: 2, pt: 1.5, borderTop: `1px solid ${theme.palette.divider}`, width: '100%', textAlign: 'center' }}>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1, fontWeight: 700 }}>
+                      BUFFER BUFFER TUNING:
+                    </Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
+                      {[4096, 8192, 16384].map((sz) => (
+                        <Chip
+                          key={sz}
+                          label={`${sz / 1024} GB`}
+                          size="small"
+                          clickable
+                          onClick={() => {
+                            setRamAllocation(sz);
+                            setToastMessage(`KVM Buffer adjusted to ${sz} MB.`);
+                          }}
+                          sx={{
+                            fontFamily: mono,
+                            fontSize: '0.72rem',
+                            fontWeight: 800,
+                            bgcolor: ramAllocation === sz ? (isDark ? '#38BDF8' : '#0284C7') : gold.wash,
+                            color: ramAllocation === sz ? (isDark ? '#08080B' : '#FFFFFF') : gold.soft,
+                            border: `1px solid ${ramAllocation === sz ? (isDark ? '#38BDF8' : '#0284C7') : gold.border}`,
+                          }}
+                        />
+                      ))}
+                    </Box>
+                  </Box>
+                </Paper>
+              </Grid>
+
+              {/* DIAL 3: Zero-Egress Kernel Module Status */}
+              <Grid xs={12} md={4}>
+                <Paper
+                  sx={{
+                    p: 3,
+                    height: '100%',
+                    bgcolor: isDark ? '#08080B' : '#FFFFFF',
+                    borderRadius: 2.5,
+                    border: `1px solid ${isDark ? 'rgba(212, 175, 55, 0.28)' : '#EAECF0'}`,
+                    boxShadow: isDark
+                      ? '0 4px 20px -4px rgba(0, 0, 0, 0.8), 0 0 16px -6px rgba(212, 175, 55, 0.2)'
+                      : '0 2px 8px rgba(0,0,0,0.06)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%', mb: 1 }}>
+                    <LockIcon sx={{ color: isDark ? '#34D399' : '#059669', fontSize: 20 }} />
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+                      Zero-Egress Kernel Module
+                    </Typography>
+                  </Box>
+
+                  <RadialResourceDial
+                    value={100}
+                    max={100}
+                    metricText="100%"
+                    label="Loopback Locked"
+                    statusBadge="AIR-GAP STRICT"
+                    subtext="All Outbound SYN dropped. Interfaces isolated to lo & kvm-br0"
+                    accentColor={isDark ? '#34D399' : '#059669'}
+                    glowColor={isDark ? 'rgba(52, 211, 153, 0.45)' : 'rgba(5, 150, 105, 0.25)'}
+                  />
+
+                  <Box sx={{ mt: 2, pt: 1.5, borderTop: `1px solid ${theme.palette.divider}`, width: '100%', textAlign: 'center' }}>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1, fontWeight: 700 }}>
+                      KERNEL MODULE POSTURE:
+                    </Typography>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      startIcon={<SecurityIcon />}
+                      onClick={handleEgressProbe}
+                      disabled={egressProbeActive}
+                      sx={{
+                        fontFamily: mono,
+                        fontSize: '0.72rem',
+                        fontWeight: 800,
+                        color: isDark ? '#34D399' : '#027A48',
+                        borderColor: isDark ? 'rgba(52, 211, 153, 0.4)' : '#A6F4C5',
+                        '&:hover': {
+                          borderColor: isDark ? '#34D399' : '#059669',
+                          bgcolor: isDark ? 'rgba(52, 211, 153, 0.1)' : '#ECFDF3',
+                        },
+                      }}
+                    >
+                      {egressProbeActive ? 'Auditing NIC Filters...' : 'Verify Air-Gap Lock'}
+                    </Button>
+                  </Box>
+                </Paper>
+              </Grid>
             </Grid>
-
-            {/* DIAL 3: Zero-Egress Kernel Module Status */}
-            <Grid xs={12} md={4}>
-              <Paper
-                sx={{
-                  p: 3,
-                  height: '100%',
-                  bgcolor: isDark ? '#08080B' : '#FFFFFF',
-                  borderRadius: 2.5,
-                  border: `1px solid ${isDark ? 'rgba(212, 175, 55, 0.28)' : '#EAECF0'}`,
-                  boxShadow: isDark
-                    ? '0 4px 20px -4px rgba(0, 0, 0, 0.8), 0 0 16px -6px rgba(212, 175, 55, 0.2)'
-                    : '0 2px 8px rgba(0,0,0,0.06)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%', mb: 1 }}>
-                  <LockIcon sx={{ color: isDark ? '#34D399' : '#059669', fontSize: 20 }} />
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                    Zero-Egress Kernel Module
-                  </Typography>
-                </Box>
-
-                <RadialResourceDial
-                  value={100}
-                  max={100}
-                  metricText="100%"
-                  label="Loopback Locked"
-                  statusBadge="AIR-GAP STRICT"
-                  subtext="All Outbound SYN dropped. Interfaces isolated to lo & kvm-br0"
-                  accentColor={isDark ? '#34D399' : '#059669'}
-                  glowColor={isDark ? 'rgba(52, 211, 153, 0.45)' : 'rgba(5, 150, 105, 0.25)'}
-                />
-
-                <Box sx={{ mt: 2, pt: 1.5, borderTop: `1px solid ${theme.palette.divider}`, width: '100%', textAlign: 'center' }}>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1, fontWeight: 700 }}>
-                    KERNEL MODULE POSTURE:
-                  </Typography>
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    startIcon={<SecurityIcon />}
-                    onClick={handleEgressProbe}
-                    disabled={egressProbeActive}
-                    sx={{
-                      fontFamily: mono,
-                      fontSize: '0.72rem',
-                      fontWeight: 800,
-                      color: isDark ? '#34D399' : '#027A48',
-                      borderColor: isDark ? 'rgba(52, 211, 153, 0.4)' : '#A6F4C5',
-                      '&:hover': {
-                        borderColor: isDark ? '#34D399' : '#059669',
-                        bgcolor: isDark ? 'rgba(52, 211, 153, 0.1)' : '#ECFDF3',
-                      },
-                    }}
-                  >
-                    {egressProbeActive ? 'Auditing NIC Filters...' : 'Verify Air-Gap Lock'}
-                  </Button>
-                </Box>
-              </Paper>
-            </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        </RevealOnScroll>
 
         {/* SECTION: Interactive KVM Hypervisor & WebContainer Simulator */}
-        <Box sx={{ mb: 5 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
+        <RevealOnScroll preset="fadeUp" delay={0.4}>
+          <Box sx={{ mb: 5 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
             <Box>
               <Typography className="section-kicker">Interactive Hardware Virtualization Cockpit</Typography>
               <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, letterSpacing: '-0.02em' }}>
@@ -1751,8 +1774,10 @@ export default function ZothOSPage() {
             </Box>
           </Paper>
         </Box>
+        </RevealOnScroll>
 
         {/* Feature Cards */}
+        <RevealOnScroll preset="fadeUp" delay={0.5}>
         <Grid container spacing={2.5} sx={{ mb: 5 }}>
           <Grid xs={12} md={4}>
             <Card sx={{ height: '100%', bgcolor: theme.palette.background.paper, border: `1px solid ${isDark ? 'rgba(212, 175, 55, 0.28)' : '#EAECF0'}` }}>
@@ -1800,8 +1825,10 @@ export default function ZothOSPage() {
             </Card>
           </Grid>
         </Grid>
+        </RevealOnScroll>
 
         {/* Host Diagnostic Box */}
+        <RevealOnScroll preset="fadeUp" delay={0.5}>
         <Box sx={{ mb: 5 }}>
           <Typography className="section-kicker">Local Host Machine Diagnostics</Typography>
           <Paper
@@ -1860,8 +1887,10 @@ export default function ZothOSPage() {
             )}
           </Paper>
         </Box>
+        </RevealOnScroll>
 
         {/* Command Launchers */}
+        <RevealOnScroll preset="fadeUp" delay={0.5}>
         <Grid container spacing={3} sx={{ mb: 5 }}>
           <Grid xs={12} md={6}>
             <Paper sx={{ p: 3, bgcolor: isDark ? '#0B0B12' : '#FFFFFF', color: theme.palette.text.primary, borderRadius: 2, border: `1px solid ${isDark ? '#2A2A38' : '#EAECF0'}`, height: '100%' }}>
@@ -1929,8 +1958,10 @@ export default function ZothOSPage() {
             </Paper>
           </Grid>
         </Grid>
+        </RevealOnScroll>
 
         {/* SECTION: Prominent Sovereign Deployment Actions Strip */}
+        <RevealOnScroll preset="fadeUp" delay={0.5}>
         <Box sx={{ mb: 2 }}>
           <Typography className="section-kicker">Sovereign Deployment Fast Actions</Typography>
           <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, letterSpacing: '-0.02em', mb: 2 }}>
@@ -2176,19 +2207,22 @@ export default function ZothOSPage() {
             </Grid>
           </Grid>
         </Box>
+        </RevealOnScroll>
 
         {/* Cleanly Mounted Sovereign Installation Funnel */}
-        <SovereignFunnel
-          title="Deploy Sovereign Zoth OS to Hardware"
-          subtitle="Zero-telemetry air-gapped operating system kernel for autonomous agent swarms, hardware enclave encryption, and memory vaults."
-          toolTitle="Option 1: Micro-Runner CLI & Bootable ISO"
-          toolTag="CLI & BARE METAL"
-          toolDescription="Download and flash bootable Zoth OS image (zothos-2.0-amd64.iso) for direct bare-metal deployment, or boot instantly via the micro-runner CLI."
-          toolRepo="https://github.com/NullAITech/zoth-os"
-          toolCommand="curl -fsSL https://get.zoth.io/micro-runner.sh | bash"
-          osRepo="https://github.com/NullAITech/zoth-os"
-          studioRepo="https://github.com/NullAITech/zoth-studio-v2"
-        />
+        <RevealOnScroll preset="fadeUp" delay={0.6}>
+          <SovereignFunnel
+            title="Deploy Sovereign Zoth OS to Hardware"
+            subtitle="Zero-telemetry air-gapped operating system kernel for autonomous agent swarms, hardware enclave encryption, and memory vaults."
+            toolTitle="Option 1: Micro-Runner CLI & Bootable ISO"
+            toolTag="CLI & BARE METAL"
+            toolDescription="Download and flash bootable Zoth OS image (zothos-2.0-amd64.iso) for direct bare-metal deployment, or boot instantly via the micro-runner CLI."
+            toolRepo="https://github.com/NullAITech/zoth-os"
+            toolCommand="curl -fsSL https://get.zoth.io/micro-runner.sh | bash"
+            osRepo="https://github.com/NullAITech/zoth-os"
+            studioRepo="https://github.com/NullAITech/zoth-studio-v2"
+          />
+        </RevealOnScroll>
       </Box>
 
       {/* Bootloader Manifest Modal */}
