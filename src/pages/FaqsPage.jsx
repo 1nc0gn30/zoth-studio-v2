@@ -581,9 +581,9 @@ ${oracleResult.faq.a}`;
               </Box>
 
               <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
-                {oracleResult.faq.jumpTargets.map((tgt) => (
+                {oracleResult.faq.jumpTargets.map((tgt, idx) => (
                   <Button
-                    key={tgt.path}
+                    key={`${tgt.path}-${tgt.label || idx}`}
                     component={RouterLink}
                     to={tgt.path}
                     size="small"
@@ -780,9 +780,9 @@ ${oracleResult.faq.a}`;
                       </Button>
 
                       <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
-                        {faq.jumpTargets.map((tgt) => (
+                        {faq.jumpTargets.map((tgt, idx) => (
                           <Button
-                            key={tgt.path}
+                            key={`${tgt.path}-${tgt.label || idx}`}
                             component={RouterLink}
                             to={tgt.path}
                             size="small"

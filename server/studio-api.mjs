@@ -51,21 +51,6 @@ function localModels(tags) {
     .filter((name) => name && !/cloud/i.test(name));
 }
 
-function probeClassic() {
-  return new Promise((resolve) => {
-    const req = http.request(
-      { hostname: '127.0.0.1', port: 8088, path: '/studio/index.html', method: 'GET', timeout: 900 },
-      (res) => {
-        res.resume();
-        resolve(res.statusCode > 0 && res.statusCode < 400);
-      }
-    );
-    req.on('error', () => resolve(false));
-    req.on('timeout', () => { req.destroy(); resolve(false); });
-    req.end();
-  });
-}
-
 export async function probeStatus() {
   const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama] = await Promise.all([
     requestJson(8094, '/health'),

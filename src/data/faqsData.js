@@ -24,7 +24,7 @@ No telemetry beacons, cloud fallbacks, or data exfiltration routes can open unde
     oracleResponse: `Lucy Oracle Telemetry: Zero-Egress is mathematically absolute. Every byte of prompt context, token emission, and agent state is locked to 127.0.0.1. Hardware sockets on ports 3000, 8989, 8094, 8102, 8790, and 11434 execute in pure isolation. No WAN packets are permitted to escape the physical machine.`,
     jumpTargets: [
       { label: 'HexStrike Port Auditor', path: '/hexstrike', type: 'security' },
-      { label: 'Signal Bridge (:8102)', path: '/bridges', type: 'bus' },
+      { label: 'Signal Bridge (:8102)', path: '/tools/sovereign-agent-bridge', type: 'bus' },
       { label: 'Zoth OS Daemon Sandbox', path: '/zoth-os', type: 'os' }
     ]
   },
@@ -89,7 +89,7 @@ with decay constant λ = 0.0018 hr⁻¹, pruning stale noise while reinforcing a
 Draco synthesizes counterarguments into hardened invariants and issues a cryptographically signed execution verdict.`,
     oracleResponse: `Byzantine Triad active: Azoth delivers the thesis, Kai probes for failure modes and deadlock traps, and Draco computes Bayesian posterior confidence to deliver the final binding ratification before any code is merged.`,
     jumpTargets: [
-      { label: 'Consensus Battle Arena', path: '/consensus', type: 'consensus' },
+      { label: 'Consensus Arena in Arsenal', path: '/arsenal', type: 'consensus' },
       { label: 'Architecture Documentation', path: '/docs', type: 'doc' }
     ]
   },
@@ -103,7 +103,7 @@ Draco synthesizes counterarguments into hardened invariants and issues a cryptog
 Every proposed code transformation generates a deterministic SHA-256 Merkle trie over its Abstract Syntax Tree (AST) nodes. If a Byzantine or corrupted agent injects invalid syntax or malicious macro loops, the Merkle root hash verification fails with O(log N) audit complexity. The Lamport epoch clock triggers an instantaneous rollback to the last ratified snapshot, neutralizing poisoning attempts.`,
     oracleResponse: `Quorum threshold: 2f + 1 = 66.7% supermajority. Every AST mutation is committed to a SHA-256 Merkle trie. Hallucinated or corrupted syntax breaks the Merkle root, triggering a zero-cost rollback to the last verified Lamport epoch.`,
     jumpTargets: [
-      { label: 'Byzantine Consensus Arena', path: '/consensus', type: 'consensus' },
+      { label: 'Byzantine Consensus in Arsenal', path: '/arsenal', type: 'consensus' },
       { label: 'WebGen AST Synthesis', path: '/webgen', type: 'tools' }
     ]
   },
@@ -145,7 +145,7 @@ During this incubation window, the browser computes a SHA-256 cryptographic dige
 When executing vector embeddings, cosine similarities, or quantized neural matmuls (C = A × B), memory buffers are allocated directly in VRAM and processed across parallel GPU workgroups (8×8 or 16×16 threads). This delivers microsecond-tier matrix operations directly on local hardware (Vulkan, Metal, DirectX 12) without server dependencies or external API round-trips.`,
     oracleResponse: `WebGPU matrix pipeline online: WGSL compute shaders dispatch parallel workgroups directly to client hardware VRAM. Neural matmuls and semantic embeddings run at hardware speeds with zero outbound network calls.`,
     jumpTargets: [
-      { label: 'WebGPU AI Matrix Console', path: '/tools', type: 'tools' },
+      { label: 'Unified Arsenal (25 Tools)', path: '/arsenal', type: 'arsenal' },
       { label: 'Vision Gesture Control', path: '/tools/vision-gesture-control', type: 'tools' }
     ]
   },
@@ -162,7 +162,7 @@ When executing vector embeddings, cosine similarities, or quantized neural matmu
 All three computational tiers produce bit-identical deterministic outputs, ensuring uninterrupted offline capability across modern browsers and legacy hardware.`,
     oracleResponse: `Graceful fallback architecture: If WebGPU is unavailable, Zoth Studio transparently shifts to WASM SIMD 128-bit execution before utilizing multi-core CPU workers. All tiers remain 100% client-side and zero-egress.`,
     jumpTargets: [
-      { label: 'Micro-Tools Catalog (21 Tools)', path: '/tools', type: 'tools' },
+      { label: 'Unified Arsenal (25 Tools)', path: '/arsenal', type: 'arsenal' },
       { label: 'WebGen Workspace', path: '/webgen', type: 'tools' }
     ]
   },
@@ -173,7 +173,7 @@ All three computational tiers produce bit-identical deterministic outputs, ensur
     keywords: ['netlify', 'prerender', 'static', 'routes', '71', 'aeo', 'seo', 'schema.org', 'json-ld', 'crawler', 'scripts/prerender.mjs', 'build'],
     a: `Netlify production deployments compile with an automated prerendering pipeline (npm run build -> vite build && node scripts/prerender.mjs).
 
-The engine generates static HTML snapshots for all 71+ studio routes—including 24 workstations, 25 micro-tools, and 6 math academy pillars. Each snapshot embeds structured Schema.org JSON-LD graphs (FAQPage, SoftwareApplication, TechArticle) and rich semantic DOM structures, providing instant First Contentful Paint (< 200ms) and comprehensive Answer Engine Optimization (AEO).`,
+The engine generates static HTML snapshots for all 71+ studio routes—including 25 sovereign tools, interactive flagship workspaces, and 6 math academy pillars. Each snapshot embeds structured Schema.org JSON-LD graphs (FAQPage, SoftwareApplication, TechArticle) and rich semantic DOM structures, providing instant First Contentful Paint (< 200ms) and comprehensive Answer Engine Optimization (AEO).`,
     oracleResponse: `Prerendering engine verified: 71 static route shells are pre-compiled with embedded Schema.org graphs and semantic metadata. Answer engines (AEO) and web crawlers index authoritative answers instantly without client JavaScript delays.`,
     jumpTargets: [
       { label: 'Agent AX Discovery Manifest', path: '/ax', type: 'ax' },
@@ -225,7 +225,7 @@ During boot, the kernel detects and loads native NVIDIA CUDA and AMD ROCm driver
     oracleResponse: `Bare-metal ISO deployment: Flash to physical drive using dd. Boots directly into an air-gapped environment with pre-loaded NVIDIA CUDA and AMD ROCm drivers for maximum local tensor throughput.`,
     jumpTargets: [
       { label: 'Zoth OS ISO Hub', path: '/zoth-os', type: 'os' },
-      { label: 'All Workstations (24)', path: '/workstations', type: 'workstations' }
+      { label: 'Unified Arsenal (25 Tools)', path: '/arsenal', type: 'arsenal' }
     ]
   },
   {
@@ -235,12 +235,11 @@ During boot, the kernel detects and loads native NVIDIA CUDA and AMD ROCm driver
     keywords: ['mcp', 'model context protocol', 'stdio', 'ipc', 'sse', '8989/events', '8094/sse', 'tools/list', 'tools/call', 'prompts/get', 'anthropic', 'agents', 'schema'],
     a: `Zoth Studio implements the Anthropic Model Context Protocol (MCP) standard across local STDIO / IPC and Server-Sent Events (http://127.0.0.1:8989/events and :8094/sse).
 
-External agent environments (Claude Code, Hermes Agent, Cursor, OpenCode, or local Ollama instances) connect directly to Zoth Studio, calling tools/list to discover 25 micro-tools and 24 cockpits, tools/call to execute sandboxed code mutations, and resources/read to query STDP vector memory—all validated against JSON-Schema contracts with zero cloud exposure.`,
+External agent environments (Claude Code, Hermes Agent, Cursor, OpenCode, or local Ollama instances) connect directly to Zoth Studio, calling tools/list to discover 25 sovereign tools across 5 cadres, tools/call to execute sandboxed code mutations, and resources/read to query STDP vector memory—all validated against JSON-Schema contracts with zero cloud exposure.`,
     oracleResponse: `MCP standard implemented: External agents connect via loopback SSE (127.0.0.1:8989/events) or STDIO. Exposes tools/list, tools/call, and resources/read with strict JSON-Schema validation and zero telemetry.`,
     jumpTargets: [
-      { label: 'Micro-Tools Catalog (25 Tools)', path: '/tools', type: 'tools' },
-      { label: 'Workstations Directory (24)', path: '/workstations', type: 'workstations' },
-      { label: 'Signal Bridge Console', path: '/bridges', type: 'bus' }
+      { label: 'Unified Arsenal (25 Tools)', path: '/arsenal', type: 'arsenal' },
+      { label: 'Sovereign Agent Bridge', path: '/tools/sovereign-agent-bridge', type: 'bus' }
     ]
   },
   {
@@ -253,8 +252,28 @@ External agent environments (Claude Code, Hermes Agent, Cursor, OpenCode, or loc
 Agents transmit messages across unidirectional channels over local WebSockets, signing each payload with Ed25519 cryptographic keys. The simplex architecture isolates agent failure domains: if an individual synthesis agent encounters an unhandled exception or thread block, peer nodes continue consensus deliberations without crashing the collective bus.`,
     oracleResponse: `Signal Bridge IPC online at 127.0.0.1:8102: Ed25519 signed simplex channels over local WebSockets. Sub-millisecond peer-to-peer message passing prevents single-point-of-failure deadlocks across the agent mesh.`,
     jumpTargets: [
-      { label: 'Zoth Signal Bridge Console', path: '/bridges', type: 'bus' },
-      { label: 'Consensus Arena', path: '/consensus', type: 'consensus' }
+      { label: 'Sovereign Arsenal', path: '/arsenal', type: 'arsenal' },
+      { label: 'Signal Bridge Workspace', path: '/tools/sovereign-agent-bridge', type: 'bus' }
+    ]
+  },
+  {
+    id: 'how-to-launch-desktop-and-cli',
+    q: 'How do operators run Zoth Studio as an Electron desktop workstation or configure local CLI tools?',
+    category: 'Architecture',
+    keywords: ['desktop', 'electron', 'cli', 'launcher', 'ollama', 'azoth', 'npm run desktop', 'usr/local/bin', 'terminal'],
+    a: `Zoth Studio v2 supports native execution across multiple environments:
+1. Electron Desktop Workstation:
+   Run 'npm run desktop' or 'azoth desktop --port 3000 --airgap' to launch the native desktop window with hardware-accelerated WebGPU flags and sandboxed loopback policies.
+2. CLI Tools Global Installation:
+   Symlink the zoth CLI directly into your system PATH:
+   sudo ln -sf "$(pwd)/bin/zoth.js" /usr/local/bin/zoth
+   Run 'npm run zoth -- doctor' to verify loopback port reachability (:8989, :8094, :8102, :8790, :8787).
+3. Local Ollama Integration:
+   Launch Ollama locally ('ollama serve' on :11434) and pull recommended models ('ollama pull qwen2.5-coder:32b'). All 25 tools automatically interface with local models via loopback with zero cloud telemetry.`,
+    oracleResponse: `Desktop & CLI guide verified: Launch native Electron workstation via 'npm run desktop' or install CLI globally to /usr/local/bin/zoth. Connect local models via 127.0.0.1:11434 with zero external telemetry.`,
+    jumpTargets: [
+      { label: 'Developer Quickstart in Docs', path: '/docs', type: 'doc' },
+      { label: 'Sovereign Arsenal', path: '/arsenal', type: 'arsenal' }
     ]
   }
 ];

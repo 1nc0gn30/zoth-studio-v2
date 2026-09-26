@@ -143,13 +143,15 @@ export default function SwarmPage() {
     return () => clearInterval(interval);
   }, [heartbeatActive, heartbeatRate]);
 
+  const pingLogCounter = useRef(100);
+
   // Helper to add ping log
   const addPingLog = useCallback((cadreName, rtt, socket, status = 'ZERO_EGRESS_OK') => {
     const now = new Date();
     const timeStr = now.toTimeString().split(' ')[0] + '.' + String(now.getMilliseconds()).padStart(3, '0');
     setPingLogs((prev) => [
       {
-        id: Date.now() + Math.random(),
+        id: ++pingLogCounter.current,
         time: timeStr,
         cadre: cadreName,
         rtt: `${rtt.toFixed(2)}ms`,
@@ -222,13 +224,16 @@ export default function SwarmPage() {
     setPingingCadre(null);
   }, [pingCadre]);
 
+  const autoPingCadreIdx = useRef(0);
+
   // Auto-ping background interval
   useEffect(() => {
     if (!autoPing) return;
+    const cadresList = ['Architects', 'Code', 'Security', 'Creative', 'Swarm'];
     const timer = setInterval(() => {
-      const cadresList = ['Architects', 'Code', 'Security', 'Creative', 'Swarm'];
-      const randomCadre = cadresList[Math.floor(Math.random() * cadresList.length)];
-      pingCadre(randomCadre);
+      const nextCadre = cadresList[autoPingCadreIdx.current % cadresList.length];
+      autoPingCadreIdx.current += 1;
+      pingCadre(nextCadre);
     }, 2800);
     return () => clearInterval(timer);
   }, [autoPing, pingCadre]);

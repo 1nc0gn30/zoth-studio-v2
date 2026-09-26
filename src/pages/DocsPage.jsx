@@ -275,9 +275,9 @@ export default function DocsPage() {
       },
       {
         id: 'sec-workstations',
-        title: '13. Sovereign Workstation Map (24 Consoles)',
+        title: '13. Sovereign Arsenal Architecture (25 Tools)',
         topics: ['Enclaves & Netlify'],
-        kicker: 'WORKSTATION TOPOLOGY'
+        kicker: 'ARSENAL TOPOLOGY'
       },
       {
         id: 'sec-quickstart',
@@ -457,7 +457,7 @@ Runs local invariant verification before staging tools.`
                 }}
               >
                 Comprehensive architectural blueprint for Zoth Studio v2: air-gapped agent orchestration,
-                biomorphic STDP synaptic memory, Lucy Netrunner Oracle, 3-agent Byzantine consensus,
+                biomorphic STDP synaptic memory, Lucy Cognitive Oracle, 3-agent Byzantine consensus,
                 Adytum Hardware Sanctum, and production Netlify deployment with 71 prerendered static routes.
               </Typography>
             </HeroItem>
@@ -787,7 +787,7 @@ Runs local invariant verification before staging tools.`
                       }}
                     >
                       {[
-                        { icon: <CodeIcon sx={{ mb: 0.5, color: dark ? '#79C0FF' : '#0969DA' }} />, title: '24 Workstations', desc: 'DAG Composer, IDE & Foundry' },
+                        { icon: <CodeIcon sx={{ mb: 0.5, color: dark ? '#79C0FF' : '#0969DA' }} />, title: '25 Sovereign Tools', desc: 'DAG Composer, IDE & Foundry' },
                         { icon: <MemoryIcon sx={{ mb: 0.5, color: dark ? '#00F0FF' : '#0891B2' }} />, title: 'Lucy Cognitive Oracle', desc: 'STDP Synaptic Plasticity (:8094)' },
                         { icon: <GavelIcon sx={{ mb: 0.5, color: dark ? '#C084FC' : '#7C3AED' }} />, title: '3-Agent Byzantine', desc: 'Triadic AST Socratic Debate' },
                         { icon: <ShieldIcon sx={{ mb: 0.5, color: dark ? '#34D399' : '#059669' }} />, title: 'Zero-Egress Invariants', desc: 'Shannon Entropy & Loopback' },
@@ -1619,17 +1619,17 @@ npm run preview`}
                 >
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
                     <Chip
-                      label="WORKSTATION TOPOLOGY"
+                      label="ARSENAL TOPOLOGY"
                       size="small"
                       sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 750, color: textPrimary }}>
-                      13. Sovereign Workstation Map (24 Total)
+                      13. Sovereign Arsenal Architecture (25 Authentic Tools)
                     </Typography>
                   </Box>
 
                   <Typography variant="body1" color="text.secondary" paragraph>
-                    Comprehensive interactive index of all 24 sovereign workstations across agent
+                    Comprehensive interactive index of all 25 sovereign tools and workspaces across agent
                     coordination, neural memory, Byzantine consensus, code development, and hardware
                     sanctum domains.
                   </Typography>

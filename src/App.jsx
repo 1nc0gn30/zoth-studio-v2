@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import { Box, ThemeProvider, CssBaseline, useTheme } from '@mui/material';
 import { theme as lightTheme, darkTheme } from './theme';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import SwarmPage from './pages/SwarmPage';
-import BridgesPage from './pages/BridgesPage';
-import ToolsPage from './pages/ToolsPage';
-import ConsensusPage from './pages/ConsensusPage';
 import WebGenPage from './pages/WebGenPage';
 import HexStrikePage from './pages/HexStrikePage';
 import ZothOSPage from './pages/ZothOSPage';
@@ -17,8 +14,6 @@ import AdytumPage from './pages/AdytumPage';
 import MathPillarDetailPage from './pages/MathPillarDetailPage';
 import MathPillarsPage from './pages/MathPillarsPage';
 import RealToolWorkspacePage from './pages/RealToolWorkspacePage';
-import WorkstationsPage from './pages/WorkstationsPage';
-import WorkstationDetailPage from './pages/WorkstationDetailPage';
 import ArsenalPage from './pages/ArsenalPage';
 import FaqsPage from './pages/FaqsPage';
 import AXPage from './pages/AXPage';
@@ -38,6 +33,11 @@ function getInitialMode() {
     return 'dark';
   }
   return 'light';
+}
+
+function WorkstationRedirect() {
+  const { workstationId } = useParams();
+  return <Navigate to={`/tools/${workstationId}`} replace />;
 }
 
 function AppShell({ mode, onToggleTheme }) {
@@ -76,14 +76,14 @@ function AppShell({ mode, onToggleTheme }) {
           <Route path="/arsenal" element={<ArsenalPage />} />
           <Route path="/adytum" element={<AdytumPage />} />
           <Route path="/swarm" element={<SwarmPage />} />
-          <Route path="/bridges" element={<BridgesPage />} />
-          <Route path="/tools" element={<ArsenalPage />} />
-          <Route path="/workstations" element={<ArsenalPage />} />
-          <Route path="/workstations/:workstationId" element={<WorkstationDetailPage />} />
+          <Route path="/bridges" element={<Navigate to="/arsenal" replace />} />
+          <Route path="/tools" element={<Navigate to="/arsenal" replace />} />
+          <Route path="/workstations" element={<Navigate to="/arsenal" replace />} />
+          <Route path="/workstations/:workstationId" element={<WorkstationRedirect />} />
           <Route path="/templates" element={<Navigate to="/arsenal" replace />} />
           <Route path="/tools/:toolId" element={<RealToolWorkspacePage />} />
           <Route path="/memory" element={<MemoryPage />} />
-          <Route path="/consensus" element={<ConsensusPage />} />
+          <Route path="/consensus" element={<Navigate to="/arsenal" replace />} />
           <Route path="/webgen" element={<WebGenPage />} />
           <Route path="/hexstrike" element={<HexStrikePage />} />
           <Route path="/zoth-os" element={<ZothOSPage />} />

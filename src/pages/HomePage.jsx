@@ -632,20 +632,20 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
 
   const pillars = useMemo(() => [
     {
-      id: 'workstations',
+      id: 'arsenal',
       indexLabel: '01',
-      tabLabel: '1. Workstations (24 Sovereign Consoles)',
-      shortTitle: 'Workstations',
-      badge: 'SOVEREIGN RUNTIME',
-      title: '24 Sovereign Consoles & Operative Cockpits',
+      tabLabel: '1. Sovereign Arsenal (25 Authentic Tools)',
+      shortTitle: 'Arsenal',
+      badge: 'UNIFIED ARSENAL',
+      title: '25 Sovereign Tools & Interactive Workspaces',
       subtitle: 'Zero-Egress In-Browser Multi-Agent Execution Matrix',
       description:
-        'All 24 studio workstations are integrated directly into Zoth Studio v2. They render with the native gold-on-void design system, zero external runtime dependency, and immediate interactive execution across Spatial, Build, Swarm, and Observe cadres.',
+        'All 25 authentic tools are unified directly into Zoth Studio v2. They render with the native gold-on-void design system, zero external runtime dependency, and immediate interactive execution across Security & Recon, Swarm & Core, Developer Velocity, Memory & Cognitive, and Crypto & Identity.',
       metrics: [
-        { label: 'Total Consoles', value: '24 Sovereign', desc: '100% In-Browser Native' },
+        { label: 'Total Arsenal Tools', value: '25 Sovereign', desc: '100% Client-Side Native' },
         { label: 'Loopback Enclaves', value: ':8989 / :8094', desc: 'Air-Gapped Process Isolation' },
         { label: 'Runtime Egress', value: '0.00 KB', desc: 'OWASP Zero-Egress Compliant' },
-        { label: 'Cadres Supported', value: '4 Tactical', desc: 'Spatial, Build, Swarm, Observe' },
+        { label: 'Cadres Supported', value: '5 Tactical', desc: 'Security, Swarm, Velocity, Memory, Crypto' },
       ],
       invariants: [
         'Pure client-side rendering with zero external telemetry',
@@ -654,34 +654,34 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
         'Zero cloud fallback required for offline operations',
       ],
       specs: [
-        { label: 'Primary Port', value: '127.0.0.1:3000 (Native Desk)' },
+        { label: 'Primary Port', value: '127.0.0.1:3000 (Studio Desk)' },
         { label: 'Process Isolation', value: 'Dedicated Subprocess Daemons' },
-        { label: 'Operator Deck', value: '127.0.0.1:8484 (Consensus IDE)' },
+        { label: 'Swarm Multiplexer', value: '127.0.0.1:8989 (21 Pantheon Agents)' },
         { label: 'Asset Bundling', value: 'Vite 5 Production Prerendered' },
       ],
       launchButton: {
-        label: 'Launch Workstation',
-        to: '/workstations',
+        label: 'Explore Arsenal',
+        to: '/arsenal',
         icon: <RocketLaunchIcon />,
       },
       secondaryButton: {
-        label: 'Open Agent Composer',
-        to: '/workstations/agent-composer',
+        label: 'Open Swarm Cockpit',
+        to: '/swarm',
         icon: <LaunchIcon />,
       },
       icon: <TerminalIcon sx={{ fontSize: 32, color: gold.accent }} />,
-      featuredChip: '24 SOVEREIGN CONSOLES',
+      featuredChip: '25 AUTHENTIC TOOLS',
     },
     {
       id: 'micro-tools',
       indexLabel: '02',
-      tabLabel: '2. Micro-Tools (25 Standalone In-Browser Tools)',
-      shortTitle: 'Micro-Tools',
+      tabLabel: '2. Micro-Tools Dossiers (25 Deep Specifications)',
+      shortTitle: 'Tool Dossiers',
       badge: 'STANDALONE RUNTIME',
       title: '25 Standalone In-Browser Micro-Tools',
       subtitle: 'Client-Side WebGPU Shaders & Zero-Leakage Cryptographic Utilities',
       description:
-        '25 standalone, single-purpose utilities engineered for security researchers, cryptographers, and AI engineers. Features WebGPU tensor matrix shaders, steganographic audio encoders, regex droid engines, and WCAG contrast guards without external servers.',
+        '25 standalone, single-purpose utilities engineered for security researchers, cryptographers, and AI engineers. Features WebGPU tensor matrix shaders, regex droid engines, and WCAG contrast guards without external servers.',
       metrics: [
         { label: 'Catalog Capacity', value: '25 Standalone', desc: '100% Client-Side Ready' },
         { label: 'WebGPU Shaders', value: '14 Hardware Shaders', desc: 'Client WGSL Matrix Matmul' },
@@ -701,8 +701,8 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
         { label: 'Audit Baseline', value: 'OWASP Zero-Egress Matrix' },
       ],
       launchButton: {
-        label: 'Launch Tool',
-        to: '/tools',
+        label: 'View Arsenal',
+        to: '/arsenal',
         icon: <FlashOnIcon />,
       },
       secondaryButton: {
@@ -711,7 +711,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
         icon: <LaunchIcon />,
       },
       icon: <FlashOnIcon sx={{ fontSize: 32, color: gold.accent }} />,
-      featuredChip: '21 SOVEREIGN TOOLS',
+      featuredChip: '25 SOVEREIGN TOOLS',
     },
     {
       id: 'stdp-memory',
@@ -787,13 +787,13 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
         { label: 'Synthesis Metric', value: 'Bayesian Weighted Confidence Score' },
       ],
       launchButton: {
-        label: 'Launch Workstation',
-        to: '/consensus',
+        label: 'Launch Consensus',
+        to: '/arsenal',
         icon: <GavelIcon />,
       },
       secondaryButton: {
         label: 'Inspect Agent Bridge',
-        to: '/bridges',
+        to: '/tools/sovereign-agent-bridge',
         icon: <HubIcon />,
       },
       icon: <GavelIcon sx={{ fontSize: 32, color: gold.accent }} />,
@@ -2094,8 +2094,8 @@ export default function HomePage() {
             <Typography className="section-kicker">Local Tool Ecosystem</Typography>
             <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.02em', color: theme.palette.text.primary }}>Featured Micro-Tools</Typography>
           </Box>
-          <Button component={RouterLink} to="/tools" variant="outlined" color="primary" sx={{ fontWeight: 750 }}>
-            View All {microTools.length} Micro-Tools →
+          <Button component={RouterLink} to="/arsenal" variant="outlined" color="primary" sx={{ fontWeight: 750 }}>
+            View All {microTools.length} Sovereign Tools →
           </Button>
         </Box>
         <Grid container spacing={3}>
