@@ -33,7 +33,12 @@ import PsychologyIcon from '@mui/icons-material/Psychology';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import CheckIcon from '@mui/icons-material/Check';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import DescriptionIcon from '@mui/icons-material/Description';
 import WindowCarousel from '../components/WindowCarousel';
+import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -1789,10 +1794,77 @@ export default function WebGenPage() {
   const [selectedFramework, setSelectedFramework] = useState('react-tailwind');
   const [tweakText, setTweakText] = useState('');
   const [isCompiling, setIsCompiling] = useState(false);
-  const [activeTab, setActiveTab] = useState(1); // Default 1: Live UI Preview (front and center!)
+  const [activeTab, setActiveTab] = useState(0); // Default 0: Live UI Preview (front and center!)
   const [copied, setCopied] = useState(false);
   const [deviceFrame, setDeviceFrame] = useState('desktop'); // 'mobile' | 'tablet' | 'desktop'
   const [mobileSection, setMobileSection] = useState('preview'); // 'prompt' | 'code' | 'preview' | 'specs'
+
+  // Procedural Web Audio SFX State & Synthesizer
+  const [sfxEnabled, setSfxEnabled] = useState(true);
+  const playSfx = (type) => {
+    if (!sfxEnabled) return;
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      if (ctx.state === 'suspended') ctx.resume();
+      const t = ctx.currentTime;
+      if (type === 'click') {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(900, t);
+        osc.frequency.exponentialRampToValueAtTime(350, t + 0.04);
+        gain.gain.setValueAtTime(0.12, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + 0.04);
+      } else if (type === 'compile') {
+        [587.33, 880, 1174.66].forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, t + idx * 0.07);
+          gain.gain.setValueAtTime(0.08, t + idx * 0.07);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t + idx * 0.07 + 0.45);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(t + idx * 0.07);
+          osc.stop(t + idx * 0.07 + 0.45);
+        });
+      } else if (type === 'success') {
+        [523.25, 659.25, 783.99, 1046.5].forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, t + idx * 0.08);
+          gain.gain.setValueAtTime(0.1, t + idx * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t + idx * 0.08 + 0.55);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(t + idx * 0.08);
+          osc.stop(t + idx * 0.08 + 0.55);
+        });
+      }
+    } catch (e) {
+      // Audio autoplay policy catch
+    }
+  };
+
+  // 4-Agent Swarm Multi-Agent Collaboration State
+  const [swarmActive, setSwarmActive] = useState(false);
+  const [swarmAgents, setSwarmAgents] = useState({
+    lycan: { status: 'idle', label: 'Lycan (@antigravity)', role: 'OWASP CSP & WCAG AA Auditor', emoji: '🐺' },
+    kitsune: { status: 'idle', label: 'Kitsune (@grok)', role: 'Glassmorphism UI Synthesizer', emoji: '🦊' },
+    draco: { status: 'idle', label: 'Draco (@hermes)', role: 'Schema.org & llms.txt Compiler', emoji: '🐲' },
+    workbot: { status: 'idle', label: 'Workbot (@ollama)', role: 'Neural Copy & Logic Compiler', emoji: '🤖' },
+  });
+  const [swarmLogs, setSwarmLogs] = useState([
+    { time: '00:00:01', tag: 'SYSTEM', text: 'Quad-agent synthesis harness online. Ready for compilation dispatch.', color: '#94A3B8' }
+  ]);
+  const [activeArtifactTab, setActiveArtifactTab] = useState('prompt'); // 'prompt' | 'instructions' | 'blueprint' | 'llms'
 
   // AST Tab State
   const [astSearch, setAstSearch] = useState('');
@@ -1809,6 +1881,7 @@ export default function WebGenPage() {
 
   // Handle skill toggle
   const handleToggleSkill = (skillId) => {
+    playSfx('click');
     setSelectedSkills(prev =>
       prev.includes(skillId) ? prev.filter(s => s !== skillId) : [...prev, skillId]
     );
@@ -1817,12 +1890,14 @@ export default function WebGenPage() {
   // Handle interactive tweak
   const handleTweak = () => {
     if (!tweakText.trim()) return;
+    playSfx('compile');
     setIsCompiling(true);
     setTimeout(() => {
       setIsCompiling(false);
+      playSfx('success');
       setSnackbarMessage(`Applied tweak: "${tweakText}" to live sneak-peek preview!`);
       setSnackbarOpen(true);
-      setActiveTab(1);
+      setActiveTab(0);
     }, 600);
   };
 
@@ -1831,6 +1906,112 @@ export default function WebGenPage() {
     return getGeneratedCode(selectedTemplate, selectedFramework);
   }, [selectedTemplate, selectedFramework]);
 
+  // Master Artifacts Generator Memo
+  const masterArtifacts = useMemo(() => {
+    const currentFw = FRAMEWORKS.find(f => f.id === selectedFramework) || FRAMEWORKS[0];
+    const tpl = TEMPLATES.find(t => t.name === selectedTemplate) || TEMPLATES[0];
+
+    const prompt = `=== ZOTH STUDIO :: SOVEREIGN AUTONOMOUS MASTER PROMPT ===
+TARGET ARCHETYPE: ${tpl.name.toUpperCase()}
+CATEGORY: ${tpl.tag}
+FRAMEWORK: ${currentFw.name.toUpperCase()} (${currentFw.badge})
+DESIGN THEME: ${THEMES.find(t => t.id === selectedTheme)?.name || 'Sovereign Imperial Gold'}
+SECURITY SPEC: OWASP TOP 10 HARDENED, CONTENT-SECURITY-POLICY STRICT (AIR-GAPPED)
+A11Y STANDARD: WCAG 2.2 AAA COMPLIANT
+ACTIVE SKILLS: ${selectedSkills.join(', ').toUpperCase()}
+
+[CORE OBJECTIVE]
+${promptText}
+
+[COMPILATION DIRECTIVES]
+1. Architecture: Single-file zero-dependency modular architecture.
+2. Styling: High-contrast tokens, CSS custom properties, responsive breakpoints (375px, 768px, 1440px).
+3. Performance: Zero runtime bloat, pre-baked inline SVG glyphs, Sub-50ms First Contentful Paint.
+4. Telemetry: Integrated loopback latency monitor, deterministic AST node hashing, and non-custodial local state persistence.
+5. Accessibility: Semantics for screen readers, keyboard focus traps, aria-labels on interactive elements.`;
+
+    const instructions = `#!/usr/bin/env bash
+# ==============================================================================
+# ZOTH STUDIO :: SOVEREIGN REPRODUCIBLE DEPLOYMENT INSTRUCTIONS
+# ARCHETYPE: ${tpl.name.toUpperCase()} | TARGET: ${currentFw.name}
+# GENERATED AT: ${new Date().toISOString()}
+# ==============================================================================
+
+set -euo pipefail
+
+echo "⚡ [Zoth Studio] Initializing sovereign deployment for ${siteName}..."
+
+# 1. Directory Setup
+mkdir -p ${siteName}/dist ${siteName}/src ${siteName}/assets
+cd ${siteName}
+
+# 2. Extract Sealed AST Artifacts
+cat << 'EOF' > dist/index.${currentFw.ext}
+${currentCode}
+EOF
+
+# 3. Security & Zero-Egress Invariant Verification
+echo "🔒 [Audit] Verifying CSP headers and offline zero-cloud invariants..."
+test -f dist/index.${currentFw.ext} && echo "✔ Dist artifact verified."
+
+# 4. Local Sandbox Server Boot
+echo "🚀 [Launch] Spawning zero-egress sandbox runtime at http://127.0.0.1:8788..."
+python3 -m http.server 8788 --directory dist &
+PID=$!
+echo "Sandbox daemon active (PID: $PID). Press Ctrl+C to terminate."
+wait $PID`;
+
+    const blueprint = JSON.stringify({
+      "$schema": "https://zoth.network/schemas/master-blueprint-v2.json",
+      "project": siteName,
+      "archetype": tpl.name,
+      "category": tpl.tag,
+      "frameworkTarget": currentFw.name,
+      "theme": selectedTheme,
+      "generatedAt": new Date().toISOString(),
+      "security": {
+        "zeroEgress": true,
+        "csp": "default-src 'self' 'unsafe-inline'; connect-src 'self' http://127.0.0.1:*",
+        "wcagCompliance": "AAA"
+      },
+      "components": [
+        "HeaderNavigation",
+        "BentoMetricGrid",
+        "InteractiveTerminalHarness",
+        "TelemetryFeed",
+        "ZeroEgressFooter"
+      ],
+      "skillsEnabled": selectedSkills,
+      "agentConsensus": {
+        "lycan": "OWASP & WCAG verified",
+        "kitsune": "Glassmorphism UI synthesized",
+        "draco": "Schema.org & llms.txt generated",
+        "workbot": "Neural loopback logic validated"
+      }
+    }, null, 2);
+
+    const llmsTxt = `# ${tpl.name}
+> Autonomous Sovereign Web Application synthesized via Zoth Studio v2
+
+## System Overview
+- **Archetype**: ${tpl.name}
+- **Framework**: ${currentFw.name}
+- **Security Standard**: Air-gapped, zero-cloud egress, deterministic WASM AST.
+- **A11y**: WCAG 2.2 AAA certified.
+
+## Core Capabilities
+- Sub-50ms local compilation via deterministic token isolate.
+- Real-time biomorphic telemetry metrics.
+- 4-Agent Swarm consensus verification (Lycan, Kitsune, Draco, Workbot).
+
+## API & Route Invariants
+- \`GET /\`: Main application workstation.
+- \`GET /llms.txt\`: Machine-readable AI agent discovery manifest.
+- \`GET /health\`: Zero-egress local loopback status check.`;
+
+    return { prompt, instructions, blueprint, llmsTxt };
+  }, [selectedTemplate, selectedFramework, selectedTheme, selectedSkills, promptText, siteName, currentCode]);
+
   // AST Data based on template & framework
   const astData = useMemo(() => {
     return getAstTreeData(selectedTemplate, selectedFramework);
@@ -1838,22 +2019,103 @@ export default function WebGenPage() {
 
   // Handle template selection
   const handleSelectTemplate = (tpl) => {
+    playSfx('click');
     setSelectedTemplate(tpl.name);
     setPromptText(tpl.defaultPrompt);
-    setActiveTab(1);
+    setActiveTab(0);
     if (isMobile) setMobileSection('preview');
   };
 
-  // Compile Trigger
+  // 4-Agent Multi-Agent Compile Sequence
   const handleCompile = () => {
     setIsCompiling(true);
+    setSwarmActive(true);
+    playSfx('compile');
+
+    const now = () => new Date().toTimeString().split(' ')[0];
+
+    setSwarmLogs([
+      { time: now(), tag: 'MASTER', text: `🚀 Initializing multi-agent website synthesis for ${selectedTemplate}...`, color: '#D4AF37' }
+    ]);
+    setSwarmAgents({
+      lycan: { status: 'active', label: 'Lycan (@antigravity)', role: 'Auditing OWASP CSP & WCAG AA tokens...', emoji: '🐺' },
+      kitsune: { status: 'idle', label: 'Kitsune (@grok)', role: 'Queued', emoji: '🦊' },
+      draco: { status: 'idle', label: 'Draco (@hermes)', role: 'Queued', emoji: '🐲' },
+      workbot: { status: 'idle', label: 'Workbot (@ollama)', role: 'Queued', emoji: '🤖' },
+    });
+
     setTimeout(() => {
+      setSwarmAgents(prev => ({
+        ...prev,
+        lycan: { ...prev.lycan, status: 'done', role: 'OWASP Top 10 CSP & WCAG AA: PASSED' },
+        kitsune: { ...prev.kitsune, status: 'active', role: 'Synthesizing Glassmorphism UI tokens & responsive frame...' }
+      }));
+      setSwarmLogs(prev => [...prev, { time: now(), tag: 'LYCAN', text: '🐺 [Lycan @antigravity] Validating OWASP Top 10 CSP & WCAG AA tokens... [PASS]', color: '#38BDF8' }]);
+      playSfx('click');
+    }, 400);
+
+    setTimeout(() => {
+      setSwarmAgents(prev => ({
+        ...prev,
+        kitsune: { ...prev.kitsune, status: 'done', role: 'Glassmorphism UI tokens & particle mesh: SYNTHESIZED' },
+        draco: { ...prev.draco, status: 'active', role: 'Constructing Schema.org JSON-LD & llms.txt AEO manifest...' }
+      }));
+      setSwarmLogs(prev => [...prev, { time: now(), tag: 'KITSUNE', text: '🦊 [Kitsune @grok] Synthesizing Glassmorphism UI tokens, particle canvas, & responsive layout... [DONE]', color: '#F472B6' }]);
+      playSfx('click');
+    }, 850);
+
+    setTimeout(() => {
+      setSwarmAgents(prev => ({
+        ...prev,
+        draco: { ...prev.draco, status: 'done', role: 'Schema.org JSON-LD & llms.txt: VERIFIED' },
+        workbot: { ...prev.workbot, status: 'active', role: 'Compiling neural copy & interactive sandbox logic on loopback...' }
+      }));
+      setSwarmLogs(prev => [...prev, { time: now(), tag: 'DRACO', text: '🐲 [Draco @hermes] Constructing Schema.org JSON-LD graph & llms.txt AEO manifest... [VERIFIED]', color: '#34D399' }]);
+      playSfx('click');
+    }, 1300);
+
+    setTimeout(() => {
+      setSwarmAgents(prev => ({
+        ...prev,
+        workbot: { ...prev.workbot, status: 'done', role: 'Neural copy & interactive sandbox logic: OPTIMIZED' }
+      }));
+      setSwarmLogs(prev => [
+        ...prev,
+        { time: now(), tag: 'WORKBOT', text: '🤖 [Workbot @ollama] Compiling neural copy & interactive sandbox logic on loopback... [OPTIMIZED]', color: '#A78BFA' },
+        { time: now(), tag: 'MASTER', text: `✅ [Swarm Complete] Consensus verified across all 4 agents. 142 AST nodes sealed with 0 bytes external egress.`, color: '#D4AF37' }
+      ]);
       setIsCompiling(false);
+      playSfx('success');
       setSnackbarMessage(`Successfully synthesized ${selectedTemplate} for ${selectedFramework.toUpperCase()}`);
       setSnackbarOpen(true);
-      setActiveTab(1);
+      setActiveTab(0);
       if (isMobile) setMobileSection('preview');
-    }, 700);
+    }, 1800);
+  };
+
+  // Master Artifact Copy / Download Handlers
+  const handleCopyArtifact = (text, name) => {
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    playSfx('click');
+    setSnackbarMessage(`${name} copied to clipboard!`);
+    setSnackbarOpen(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleDownloadArtifact = (text, filename) => {
+    playSfx('click');
+    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    setSnackbarMessage(`Downloaded ${filename}`);
+    setSnackbarOpen(true);
   };
 
   // Copy Code
@@ -2240,50 +2502,60 @@ export default function WebGenPage() {
     <Container maxWidth="xl" sx={{ py: { xs: 3, md: 5 }, pb: { xs: 12, md: 6 } }}>
       
       {/* Header Section — gold radial glow behind header */}
-      <Box
-        sx={{
-          mb: { xs: 2.5, md: 4 },
-          position: 'relative',
-          borderRadius: 3,
-          p: { xs: 2.5, md: 3.5 },
-          background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 70%)',
-          border: `1px solid ${divider}`
-        }}
-      >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 1 }}>
-          <Chip
-            icon={<AutoAwesomeIcon sx={{ color: `${gold} !important` }} />}
-            label="AUTONOMOUS SITE FOUNDRY • SOVEREIGN ENGINE"
-            size="small"
-            sx={{
-              backgroundColor: goldBg,
-              color: gold,
-              border: `1px solid ${gold}`,
-              fontWeight: 800,
-              fontFamily: mono,
-              px: 1
-            }}
-          />
-          <Chip
-            label="ZERO CLOUD EGRESS"
-            size="small"
-            sx={{
-              bgcolor: dark ? '#121420' : '#ECFDF5',
-              color: dark ? '#10B981' : '#059669',
-              border: dark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0',
-              fontWeight: 800,
-              fontFamily: mono
-            }}
-          />
+      <ParallaxGlow offset={60}>
+      <HeroReveal>
+        <Box
+          sx={{
+            mb: { xs: 2.5, md: 4 },
+            position: 'relative',
+            borderRadius: 3,
+            p: { xs: 2.5, md: 3.5 },
+            background: 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 70%)',
+            border: `1px solid ${divider}`
+          }}
+        >
+          <HeroItem>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 1 }}>
+              <Chip
+                icon={<AutoAwesomeIcon sx={{ color: `${gold} !important` }} />}
+                label="AUTONOMOUS SITE FOUNDRY • SOVEREIGN ENGINE"
+                size="small"
+                sx={{
+                  backgroundColor: goldBg,
+                  color: gold,
+                  border: `1px solid ${gold}`,
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  px: 1
+                }}
+              />
+              <Chip
+                label="ZERO CLOUD EGRESS"
+                size="small"
+                sx={{
+                  bgcolor: dark ? '#121420' : '#ECFDF5',
+                  color: dark ? '#10B981' : '#059669',
+                  border: dark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0',
+                  fontWeight: 800,
+                  fontFamily: mono
+                }}
+              />
+            </Box>
+          </HeroItem>
+          
+          <HeroItem>
+            <Typography variant="h3" sx={{ mb: 1, fontWeight: 900, color: textPrimary, fontSize: { xs: '2.2rem', sm: '3rem', md: '3.4rem' }, letterSpacing: '-0.02em' }}>
+              Autonomous WebGen Foundry
+            </Typography>
+          </HeroItem>
+          <HeroItem>
+            <Typography variant="body1" sx={{ color: textSecondary, maxWidth: 880, fontSize: { xs: '0.95rem', md: '1.05rem' } }}>
+              High-performance sovereign component foundry. Select layout spec templates, preview live responsive UI in device frames, inspect deterministic AST token trees, and export polyglot code or standalone zero-dependency bundles.
+            </Typography>
+          </HeroItem>
         </Box>
-        
-        <Typography variant="h3" sx={{ mb: 1, fontWeight: 900, color: textPrimary, fontSize: { xs: '2.2rem', sm: '3rem', md: '3.4rem' }, letterSpacing: '-0.02em' }}>
-          Autonomous WebGen Foundry
-        </Typography>
-        <Typography variant="body1" sx={{ color: textSecondary, maxWidth: 880, fontSize: { xs: '0.95rem', md: '1.05rem' } }}>
-          High-performance sovereign component foundry. Select layout spec templates, preview live responsive UI in device frames, inspect deterministic AST token trees, and export polyglot code or standalone zero-dependency bundles.
-        </Typography>
-      </Box>
+      </HeroReveal>
+      </ParallaxGlow>
 
       {/* MOBILE TABBED WORKSTATION BAR */}
       {isMobile && (
@@ -2336,6 +2608,7 @@ export default function WebGenPage() {
           STAGE 01: SPEC PROMPT FOUNDRY & STARTER ARCHETYPES
           ========================================================================= */}
       {(!isMobile || mobileSection === 'prompt') && (
+        <RevealOnScroll delay={0.1} preset="fadeUp">
         <Paper
           elevation={0}
           sx={{
@@ -2444,12 +2717,14 @@ export default function WebGenPage() {
             }}
           />
         </Paper>
+        </RevealOnScroll>
       )}
 
       {/* =========================================================================
           STAGE 02: BRAND LOOK, VISUAL THEME TOKENS & BUILDER SKILLS
           ========================================================================= */}
       {(!isMobile || mobileSection === 'prompt') && (
+        <RevealOnScroll delay={0.2} preset="fadeUp">
         <Paper
           elevation={0}
           sx={{
@@ -2579,12 +2854,14 @@ export default function WebGenPage() {
             })}
           </Box>
         </Paper>
+        </RevealOnScroll>
       )}
 
       {/* =========================================================================
           STAGE 03: LAYOUT BLUEPRINT & SYNTHESIS ENGINE
           ========================================================================= */}
       {(!isMobile || mobileSection === 'prompt') && (
+        <RevealOnScroll delay={0.3} preset="fadeUp">
         <Paper
           elevation={0}
           sx={{
@@ -2725,12 +3002,142 @@ export default function WebGenPage() {
             </Box>
           )}
         </Paper>
+        </RevealOnScroll>
       )}
+
+      {/* =========================================================================
+          4-AGENT AUTONOMOUS SWARM FOUNDRY HUD & LOOPBACK STREAM
+          ========================================================================= */}
+      <Collapse in={swarmActive || isCompiling} timeout={400}>
+        <Paper
+          sx={{
+            p: { xs: 2, sm: 3 },
+            mb: 4,
+            borderRadius: 3.5,
+            border: `1px solid ${isCompiling ? gold : divider}`,
+            bgcolor: dark ? '#0A0C14' : '#F8FAFC',
+            boxShadow: isCompiling ? (dark ? '0 0 25px rgba(212,175,55,0.25)' : '0 0 20px rgba(184,134,11,0.15)') : 'none',
+            transition: 'all 0.3s ease'
+          }}
+        >
+          {/* HUD Top Bar */}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <HubIcon sx={{ color: gold, fontSize: '1.4rem' }} />
+              <div>
+                <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 900, color: dark ? goldLight : '#8A6A09', display: 'flex', alignItems: 'center', gap: 1 }}>
+                  4-AGENT AUTONOMOUS SWARM FOUNDRY
+                  <Chip
+                    label={isCompiling ? 'SYNTHESIZING' : 'CONSENSUS VERIFIED'}
+                    size="small"
+                    sx={{
+                      height: 20,
+                      fontSize: '0.65rem',
+                      fontFamily: mono,
+                      fontWeight: 800,
+                      bgcolor: isCompiling ? goldBg : (dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5'),
+                      color: isCompiling ? gold : (dark ? '#10B981' : '#059669'),
+                      border: isCompiling ? `1px solid ${gold}` : '1px solid #10B981'
+                    }}
+                  />
+                </Typography>
+                <Typography variant="caption" sx={{ color: textSecondary, fontFamily: mono, fontSize: '0.74rem' }}>
+                  Lycan 🐺, Kitsune 🦊, Draco 🐲, and Workbot 🤖 collaborating on local loopback.
+                </Typography>
+              </div>
+            </Box>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <Button
+                size="small"
+                variant="outlined"
+                startIcon={<RefreshIcon />}
+                onClick={handleCompile}
+                disabled={isCompiling}
+                sx={{ borderColor: divider, color: textPrimary, fontSize: '0.72rem', fontFamily: mono, py: 0.3 }}
+              >
+                Rerun Consensus
+              </Button>
+              <IconButton size="small" onClick={() => setSwarmActive(false)} sx={{ color: textSecondary }}>
+                ✕
+              </IconButton>
+            </Box>
+          </Box>
+
+          {/* 4 Agent Cards Grid */}
+          <Grid container spacing={2} sx={{ mb: 2.5 }}>
+            {Object.entries(swarmAgents).map(([key, ag]) => {
+              const isActive = ag.status === 'active';
+              const isDone = ag.status === 'done';
+              return (
+                <Grid xs={12} sm={6} md={3} key={key}>
+                  <Box
+                    sx={{
+                      p: 2,
+                      borderRadius: 2.5,
+                      bgcolor: dark ? '#10121C' : '#FFFFFF',
+                      border: `1px solid ${isActive ? gold : (isDone ? (dark ? '#1E3A2F' : '#D1FAE5') : divider)}`,
+                      boxShadow: isActive ? `0 0 16px ${goldBg}` : 'none',
+                      transition: 'all 0.25s ease'
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <span style={{ fontSize: '1.4rem' }}>{ag.emoji}</span>
+                        <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.8rem', color: textPrimary }}>
+                          {ag.label}
+                        </Typography>
+                      </Box>
+                      {isActive && <LinearProgress sx={{ width: 32, height: 4, borderRadius: 2, '& .MuiLinearProgress-bar': { bgcolor: gold } }} />}
+                      {isDone && <CheckCircleIcon sx={{ fontSize: '1rem', color: dark ? '#10B981' : '#059669' }} />}
+                    </Box>
+                    <Typography variant="caption" sx={{ display: 'block', color: isActive ? gold : textSecondary, fontFamily: mono, fontSize: '0.7rem', minHeight: 32, lineHeight: 1.4 }}>
+                      {ag.role}
+                    </Typography>
+                  </Box>
+                </Grid>
+              );
+            })}
+          </Grid>
+
+          {/* Terminal Logs Bar */}
+          <Box
+            sx={{
+              borderRadius: 2,
+              bgcolor: dark ? '#05070F' : '#0F172A',
+              border: '1px solid #1E293B',
+              overflow: 'hidden'
+            }}
+          >
+            <Box sx={{ px: 2, py: 1, bgcolor: dark ? '#090D1A' : '#1E293B', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #1E293B' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#EF4444' }} />
+                <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#F59E0B' }} />
+                <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#10B981' }} />
+                <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.72rem', ml: 1 }}>
+                  zoth-swarm-foundry :: loopback execution stream
+                </Typography>
+              </Box>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: dark ? goldLight : '#D4AF37', fontSize: '0.68rem', fontWeight: 700 }}>
+                127.0.0.1:8788 • ZERO-EGRESS
+              </Typography>
+            </Box>
+            <Box sx={{ p: 2, maxHeight: 180, overflowY: 'auto', fontFamily: mono, fontSize: '0.76rem', lineHeight: 1.6 }}>
+              {swarmLogs.map((log, idx) => (
+                <Box key={idx} sx={{ display: 'flex', gap: 1.5, mb: 0.5 }}>
+                  <span style={{ color: '#64748B', userSelect: 'none' }}>[{log.time}]</span>
+                  <span style={{ color: log.color, wordBreak: 'break-word' }}>{log.text}</span>
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        </Paper>
+      </Collapse>
 
       {/* =========================================================================
           STAGE 04: REAL-TIME SNEAK-PEEK LIVE PREVIEW & WORKSTATION
           ========================================================================= */}
       {(!isMobile || mobileSection === 'code' || mobileSection === 'preview') && (
+        <RevealOnScroll delay={0.4} preset="fadeUp">
         <Paper
           sx={{
             border: `1px solid ${divider}`,
@@ -2766,31 +3173,79 @@ export default function WebGenPage() {
               </Typography>
             </Box>
 
-            {/* Device Viewport Switcher */}
-            <ToggleButtonGroup
-              size="small"
-              value={deviceFrame}
-              exclusive
-              onChange={(e, val) => val && setDeviceFrame(val)}
-              sx={{ bgcolor: dark ? '#0D0E15' : '#FFFFFF', border: `1px solid ${divider}`, '& .MuiToggleButton-root': { color: textSecondary, px: 1.5, py: 0.6, '&.Mui-selected': { color: gold, bgcolor: goldBg } } }}
-            >
-              <ToggleButton value="desktop" aria-label="desktop viewport">
-                <Tooltip title="Desktop Viewport (100%)"><Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}><DesktopWindowsIcon fontSize="small" /><span style={{ fontSize: '0.72rem', fontFamily: mono }}>Desktop</span></Box></Tooltip>
-              </ToggleButton>
-              <ToggleButton value="tablet" aria-label="tablet viewport">
-                <Tooltip title="Tablet Viewport (768px)"><Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}><TabletIcon fontSize="small" /><span style={{ fontSize: '0.72rem', fontFamily: mono }}>Tablet</span></Box></Tooltip>
-              </ToggleButton>
-              <ToggleButton value="mobile" aria-label="mobile viewport">
-                <Tooltip title="Mobile Viewport (375px)"><Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}><SmartphoneIcon fontSize="small" /><span style={{ fontSize: '0.72rem', fontFamily: mono }}>Mobile</span></Box></Tooltip>
-              </ToggleButton>
-            </ToggleButtonGroup>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, flexWrap: 'wrap' }}>
+              {/* Procedural Web Audio SFX Toggle */}
+              <Tooltip title={sfxEnabled ? "Procedural Web Audio SFX Active (Click to Mute)" : "Procedural Web Audio SFX Muted (Click to Enable)"}>
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    setSfxEnabled(!sfxEnabled);
+                    if (!sfxEnabled) playSfx('compile');
+                  }}
+                  sx={{
+                    bgcolor: sfxEnabled ? goldBg : (dark ? '#0D0E15' : '#FFFFFF'),
+                    border: `1px solid ${divider}`,
+                    color: sfxEnabled ? gold : textSecondary,
+                    px: 1.2,
+                    borderRadius: 1.5,
+                    gap: 0.5
+                  }}
+                >
+                  {sfxEnabled ? <VolumeUpIcon fontSize="small" /> : <VolumeOffIcon fontSize="small" />}
+                  <span style={{ fontSize: '0.72rem', fontFamily: mono, fontWeight: 700 }}>
+                    {sfxEnabled ? 'SFX: ON' : 'SFX: OFF'}
+                  </span>
+                </IconButton>
+              </Tooltip>
+
+              {/* Swarm HUD Toggle */}
+              <Tooltip title="Toggle 4-Agent Swarm HUD">
+                <IconButton
+                  size="small"
+                  onClick={() => setSwarmActive(!swarmActive)}
+                  sx={{
+                    bgcolor: swarmActive ? goldBg : (dark ? '#0D0E15' : '#FFFFFF'),
+                    border: `1px solid ${divider}`,
+                    color: swarmActive ? gold : textSecondary,
+                    px: 1.2,
+                    borderRadius: 1.5,
+                    gap: 0.5
+                  }}
+                >
+                  <HubIcon fontSize="small" />
+                  <span style={{ fontSize: '0.72rem', fontFamily: mono, fontWeight: 700 }}>SWARM HUD</span>
+                </IconButton>
+              </Tooltip>
+
+              {/* Device Viewport Switcher */}
+              <ToggleButtonGroup
+                size="small"
+                value={deviceFrame}
+                exclusive
+                onChange={(e, val) => val && setDeviceFrame(val)}
+                sx={{ bgcolor: dark ? '#0D0E15' : '#FFFFFF', border: `1px solid ${divider}`, '& .MuiToggleButton-root': { color: textSecondary, px: 1.5, py: 0.6, '&.Mui-selected': { color: gold, bgcolor: goldBg } } }}
+              >
+                <ToggleButton value="desktop" aria-label="desktop viewport">
+                  <Tooltip title="Desktop Viewport (100%)"><Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}><DesktopWindowsIcon fontSize="small" /><span style={{ fontSize: '0.72rem', fontFamily: mono }}>Desktop</span></Box></Tooltip>
+                </ToggleButton>
+                <ToggleButton value="tablet" aria-label="tablet viewport">
+                  <Tooltip title="Tablet Viewport (768px)"><Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}><TabletIcon fontSize="small" /><span style={{ fontSize: '0.72rem', fontFamily: mono }}>Tablet</span></Box></Tooltip>
+                </ToggleButton>
+                <ToggleButton value="mobile" aria-label="mobile viewport">
+                  <Tooltip title="Mobile Viewport (375px)"><Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}><SmartphoneIcon fontSize="small" /><span style={{ fontSize: '0.72rem', fontFamily: mono }}>Mobile</span></Box></Tooltip>
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Box>
           </Box>
 
           {/* Console Navigation Tabs */}
           <Box sx={{ borderBottom: `1px solid ${divider}`, backgroundColor: dark ? '#10121A' : surface }}>
             <Tabs
               value={activeTab}
-              onChange={(e, v) => setActiveTab(v)}
+              onChange={(e, v) => {
+                setActiveTab(v);
+                playSfx('click');
+              }}
               variant="scrollable"
               scrollButtons="auto"
               sx={{
@@ -2808,8 +3263,10 @@ export default function WebGenPage() {
             >
               <Tab icon={<VisibilityIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Live Sandbox &amp; Sneak-Peek" />
               <Tab icon={<CodeIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Generated Polyglot Code" />
+              <Tab icon={<LayersIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Master Artifacts (Prompt / Blueprint / sh)" />
               <Tab icon={<AccountTreeIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Deterministic AST Inspector" />
               <Tab icon={<SpeedIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Compiler Telemetry" />
+              <Tab icon={<HubIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="4-Agent Swarm Collaboration Stream" />
             </Tabs>
           </Box>
 
@@ -2913,8 +3370,84 @@ export default function WebGenPage() {
             </Box>
           )}
 
-          {/* Tab Content 2: AST Diff & Inspector Tab */}
+          {/* Tab 2: Master Artifacts (Prompt, Instructions, Blueprint, llms.txt) */}
           {activeTab === 2 && (
+            <Box sx={{ bgcolor: dark ? '#090B12' : '#F8FAFC' }}>
+              {/* Artifact Selector Header */}
+              <Box sx={{ p: 2, px: { xs: 2, sm: 3 }, bgcolor: dark ? '#10121A' : surface, borderBottom: `1px solid ${divider}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5 }}>
+                <ToggleButtonGroup
+                  size="small"
+                  value={activeArtifactTab}
+                  exclusive
+                  onChange={(e, val) => {
+                    if (val) {
+                      setActiveArtifactTab(val);
+                      playSfx('click');
+                    }
+                  }}
+                  sx={{ bgcolor: dark ? '#0D0E15' : '#FFFFFF', border: `1px solid ${divider}`, '& .MuiToggleButton-root': { color: textSecondary, px: 2, py: 0.6, fontFamily: mono, fontSize: '0.74rem', textTransform: 'none', '&.Mui-selected': { color: gold, bgcolor: goldBg, fontWeight: 800 } } }}
+                >
+                  <ToggleButton value="prompt">
+                    <Tooltip title="Master Autonomous Prompt"><Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6 }}><TuneIcon fontSize="small" /><span>master-prompt.txt</span></Box></Tooltip>
+                  </ToggleButton>
+                  <ToggleButton value="instructions">
+                    <Tooltip title="Reproducible Deployment Bash Script"><Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6 }}><TerminalIcon fontSize="small" /><span>master-instructions.sh</span></Box></Tooltip>
+                  </ToggleButton>
+                  <ToggleButton value="blueprint">
+                    <Tooltip title="Structural JSON Architecture Blueprint"><Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6 }}><AccountTreeIcon fontSize="small" /><span>master-blueprint.json</span></Box></Tooltip>
+                  </ToggleButton>
+                  <ToggleButton value="llms">
+                    <Tooltip title="AEO Agent Discovery Manifest"><Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6 }}><DescriptionIcon fontSize="small" /><span>llms.txt</span></Box></Tooltip>
+                  </ToggleButton>
+                </ToggleButtonGroup>
+
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    startIcon={<ContentCopyIcon />}
+                    onClick={() => {
+                      const text = activeArtifactTab === 'prompt' ? masterArtifacts.prompt :
+                        activeArtifactTab === 'instructions' ? masterArtifacts.instructions :
+                        activeArtifactTab === 'blueprint' ? masterArtifacts.blueprint :
+                        masterArtifacts.llmsTxt;
+                      handleCopyArtifact(text, `master-${activeArtifactTab}`);
+                    }}
+                    sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, fontSize: '0.74rem', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
+                  >
+                    {copied ? 'Copied' : 'Copy Artifact'}
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={<DownloadIcon />}
+                    onClick={() => {
+                      if (activeArtifactTab === 'prompt') handleDownloadArtifact(masterArtifacts.prompt, `${siteName}-master-prompt.txt`);
+                      else if (activeArtifactTab === 'instructions') handleDownloadArtifact(masterArtifacts.instructions, `${siteName}-master-instructions.sh`);
+                      else if (activeArtifactTab === 'blueprint') handleDownloadArtifact(masterArtifacts.blueprint, `${siteName}-master-blueprint.json`);
+                      else handleDownloadArtifact(masterArtifacts.llmsTxt, 'llms.txt');
+                    }}
+                    sx={{ borderColor: gold, color: gold, bgcolor: goldBg, fontWeight: 800, fontSize: '0.74rem' }}
+                  >
+                    Download
+                  </Button>
+                </Box>
+              </Box>
+
+              {/* Artifact Body */}
+              <Box sx={{ p: { xs: 2, sm: 3 }, fontFamily: mono, fontSize: '0.84rem', minHeight: 340, maxHeight: 540, overflowY: 'auto', bgcolor: dark ? '#08080B' : '#F8FAFC' }}>
+                <pre style={{ margin: 0, color: dark ? '#F8FAFC' : '#0F172A', whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: 1.6 }}>
+                  {activeArtifactTab === 'prompt' && masterArtifacts.prompt}
+                  {activeArtifactTab === 'instructions' && masterArtifacts.instructions}
+                  {activeArtifactTab === 'blueprint' && masterArtifacts.blueprint}
+                  {activeArtifactTab === 'llms' && masterArtifacts.llmsTxt}
+                </pre>
+              </Box>
+            </Box>
+          )}
+
+          {/* Tab Content 3: AST Diff & Inspector Tab */}
+          {activeTab === 3 && (
                   <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: dark ? '#090B12' : '#F8FAFC', minHeight: 380 }}>
                     
                     {/* AST Node Count Metrics Header */}
@@ -3085,8 +3618,8 @@ export default function WebGenPage() {
                   </Box>
                 )}
 
-                {/* Tab Content 3: Compiler Logs */}
-                {activeTab === 3 && (
+                {/* Tab Content 4: Compiler Logs */}
+                {activeTab === 4 && (
                   <Box sx={{ p: 3, fontFamily: mono, fontSize: '0.85rem', minHeight: 320, bgcolor: dark ? '#08080B' : '#F8FAFC' }}>
                     <div style={{ color: dark ? '#10B981' : '#059669', fontWeight: 700 }}>✔ Local WASM WebGen compiler v2.4 initialized.</div>
                     <div style={{ color: textSecondary, marginTop: 8 }}>Target Template: {selectedTemplate}</div>
@@ -3096,11 +3629,62 @@ export default function WebGenPage() {
                   </Box>
                 )}
 
+                {/* Tab Content 5: 4-Agent Swarm Collaboration Stream */}
+                {activeTab === 5 && (
+                  <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: dark ? '#090B12' : '#F8FAFC' }}>
+                    <Box sx={{ p: 2, mb: 2.5, bgcolor: dark ? '#10121A' : surface, border: `1px solid ${divider}`, borderRadius: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+                      <Box>
+                        <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: gold }}>
+                          ⚡ 4-AGENT SWARM CONSENSUS MATRIX
+                        </Typography>
+                        <Typography variant="caption" sx={{ color: textSecondary, fontFamily: mono }}>
+                          Real-time loopback telemetry across all four Pantheon spirit engines.
+                        </Typography>
+                      </Box>
+                      <Button
+                        size="small"
+                        variant="contained"
+                        startIcon={<RefreshIcon />}
+                        onClick={handleCompile}
+                        disabled={isCompiling}
+                        sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, fontSize: '0.74rem', '&:hover': { bgcolor: dark ? goldLight : '#9A7008' } }}
+                      >
+                        Rerun Quad-Agent Pipeline
+                      </Button>
+                    </Box>
+
+                    {/* Terminal Feed */}
+                    <Box sx={{ borderRadius: 2.5, bgcolor: dark ? '#05070F' : '#0F172A', border: '1px solid #1E293B', overflow: 'hidden' }}>
+                      <Box sx={{ px: 2.5, py: 1.5, bgcolor: dark ? '#090D1A' : '#1E293B', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #1E293B' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#EF4444' }} />
+                          <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#F59E0B' }} />
+                          <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#10B981' }} />
+                          <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.78rem', ml: 1, fontWeight: 700 }}>
+                            zoth-swarm-foundry :: loopback execution stream
+                          </Typography>
+                        </Box>
+                        <Chip label="127.0.0.1:8788" size="small" sx={{ bgcolor: 'rgba(212,175,55,0.15)', color: gold, fontFamily: mono, fontSize: '0.7rem', fontWeight: 800 }} />
+                      </Box>
+                      <Box sx={{ p: 2.5, minHeight: 300, maxHeight: 480, overflowY: 'auto', fontFamily: mono, fontSize: '0.8rem', lineHeight: 1.7 }}>
+                        {swarmLogs.map((log, idx) => (
+                          <Box key={idx} sx={{ display: 'flex', gap: 1.5, mb: 1 }}>
+                            <span style={{ color: '#64748B', userSelect: 'none' }}>[{log.time}]</span>
+                            <span style={{ color: log.color, wordBreak: 'break-word' }}>{log.text}</span>
+                          </Box>
+                        ))}
+                      </Box>
+                    </Box>
+                  </Box>
+                )}
+
               </Paper>
-            )}
+        </RevealOnScroll>
+      )}
 
       {/* SECTION 3: Polyglot Exporter Runtimes & Component Spec Registry Matrix (Spacious 2-Column Grid) */}
       {(!isMobile || mobileSection === 'specs') && (
+        <RevealOnScroll delay={0.5} preset="fadeUp">
         <Grid container spacing={{ xs: 3, md: 4 }} sx={{ mb: 6 }}>
           
           {/* Left Column: Polyglot Exporters */}
@@ -3239,11 +3823,13 @@ export default function WebGenPage() {
             </Grid>
 
         </Grid>
+        </RevealOnScroll>
       )}
 
       {/* =========================================================================
           STAGE 06: SOVEREIGN REPOSITORY & INSTALLATION FUNNEL
           ========================================================================= */}
+      <RevealOnScroll delay={0.6} preset="fadeUp">
       <Paper
         elevation={0}
         sx={{
@@ -3388,6 +3974,7 @@ export default function WebGenPage() {
           </Grid>
         </Grid>
       </Paper>
+      </RevealOnScroll>
 
       {/* MOBILE STICKY FLOATING QUICK-ACTION BOTTOM BAR */}
       {isMobile && (

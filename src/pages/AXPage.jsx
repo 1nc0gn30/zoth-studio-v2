@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 import {
   Box, Container, Typography, Paper, Chip, Unstable_Grid2 as Grid, Button,
   Divider, Stack, Table, TableHead, TableBody, TableRow, TableCell,
@@ -461,25 +462,17 @@ export default function AXPage() {
       />
 
       {/* Signature Gold Header Accent */}
+      <HeroReveal>
       <Box sx={{ position: 'relative', mb: 5, pt: 1 }}>
-        <Box
-          aria-hidden="true"
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: 3,
-            borderRadius: 2,
-            background: isDark
-              ? 'linear-gradient(90deg, transparent, rgba(212,175,55,0.9) 20%, #D4AF37 50%, rgba(212,175,55,0.9) 80%, transparent)'
-              : 'linear-gradient(90deg, transparent, rgba(184,134,11,0.7) 20%, #B8860B 50%, rgba(184,134,11,0.7) 80%, transparent)',
-            boxShadow: isDark
-              ? '0 0 18px 2px rgba(212,175,55,0.45)'
-              : '0 0 12px 1px rgba(184,134,11,0.35)',
-          }}
+        <GlowLine
+          height={3}
+          color={isDark ? '#D4AF37' : '#B8860B'}
+          glowColor={isDark ? 'rgba(212,175,55,0.45)' : 'rgba(184,134,11,0.35)'}
+          duration={1.5}
+          delay={0.1}
         />
 
+        <HeroItem>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5, flexWrap: 'wrap' }}>
           <Chip
             icon={<SmartToyIcon sx={{ color: `${gold.soft} !important` }} />}
@@ -490,15 +483,24 @@ export default function AXPage() {
           <Chip label="SCHEMA: https://schema.org/SoftwareApplication" size="small" variant="outlined" sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 650, borderColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(16,24,40,0.25)', color: isDark ? '#9CA3AF' : '#344054' }} />
           <Chip label="OWASP ZERO-EGRESS RATIFIED" size="small" sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5', color: isDark ? '#10B981' : '#047857', fontWeight: 800, border: isDark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0' }} />
         </Box>
+        </HeroItem>
+        
+        <HeroItem>
         <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontWeight: 800, mb: 1.5, letterSpacing: '-0.02em' }}>
           Agent Experience Directory &amp; Machine Discovery
         </Typography>
+        </HeroItem>
+        
+        <HeroItem>
         <Typography color="text.secondary" sx={{ maxWidth: 880, fontSize: '1.05rem', lineHeight: 1.65 }}>
           Standardized machine-readable ontology, crawler simulation playground, and sovereign prompt compiler designed for autonomous AI agents (ChatGPT, Claude, Perplexity, DeepSeek, OpenClaw, Ollama) interacting with air-gapped Zoth Studio enclaves.
         </Typography>
+        </HeroItem>
       </Box>
+      </HeroReveal>
 
       {/* Discovery File Actions Strip (Preserved) */}
+      <RevealOnScroll preset="fadeUp" delay={0.1}>
       <Paper
         elevation={0}
         sx={{
@@ -584,8 +586,10 @@ export default function AXPage() {
           sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.1)' : '#ECFDF5', color: isDark ? '#10B981' : '#047857', fontWeight: 800, fontFamily: mono, border: isDark ? 'none' : '1px solid #A7F3D0' }}
         />
       </Paper>
+      </RevealOnScroll>
 
       {/* FEATURE 1: Autonomous Agent Crawler Simulator */}
+      <RevealOnScroll preset="fadeUp" delay={0.15}>
       <Paper
         sx={{
           p: { xs: 2.5, md: 3.5 },
@@ -933,8 +937,10 @@ export default function AXPage() {
           </Paper>
         </Paper>
       </Paper>
+      </RevealOnScroll>
 
       {/* FEATURE 2: Agent System Prompt Synthesizer */}
+      <RevealOnScroll preset="fadeUp" delay={0.2}>
       <Paper
         sx={{
           p: { xs: 2.5, md: 3.5 },
@@ -1123,8 +1129,10 @@ export default function AXPage() {
           </Paper>
         </Paper>
       </Paper>
+      </RevealOnScroll>
 
       {/* Main Grid: JSON-LD Graph Inspector & Loopback Binds (Preserved) */}
+      <RevealOnScroll preset="fadeUp" delay={0.25}>
       <Grid container spacing={3}>
         {/* Left Column: Live JSON-LD Schema Inspector */}
         <Grid xs={12} lg={6}>
@@ -1203,6 +1211,7 @@ export default function AXPage() {
           </Stack>
         </Grid>
       </Grid>
+      </RevealOnScroll>
 
       {/* Sovereign Installation Funnel */}
       <SovereignFunnel

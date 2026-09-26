@@ -34,6 +34,7 @@ import { useStudioStatus } from '../studio/useStudioStatus';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import Netrunner3DWorld from '../components/Netrunner3DWorld';
 import SovereignFunnel from '../components/SovereignFunnel';
+import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -1309,27 +1310,31 @@ export default function MemoryPage() {
   return (
     <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 }, position: 'relative' }}>
       {/* Background Radial Glow */}
-      <Box
-        aria-hidden="true"
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: { xs: '100%', md: '940px' },
-          height: { xs: 400, md: 520 },
-          pointerEvents: 'none',
-          zIndex: 0,
-          background: isDark
-            ? 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(212,175,55,0.18) 0%, rgba(244,114,182,0.08) 45%, transparent 75%)'
-            : 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(212,175,55,0.10) 0%, rgba(244,114,182,0.05) 45%, transparent 75%)',
-        }}
-      />
+      <ParallaxGlow offset={60}>
+        <Box
+          aria-hidden="true"
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: { xs: '100%', md: '940px' },
+            height: { xs: 400, md: 520 },
+            pointerEvents: 'none',
+            zIndex: 0,
+            background: isDark
+              ? 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(212,175,55,0.18) 0%, rgba(244,114,182,0.08) 45%, transparent 75%)'
+              : 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(212,175,55,0.10) 0%, rgba(244,114,182,0.05) 45%, transparent 75%)',
+          }}
+        />
+      </ParallaxGlow>
 
       <Box sx={{ position: 'relative', zIndex: 1 }}>
         {/* Header / Lucy Oracle Status Bar */}
-        <Box sx={{ mb: 3 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2, mb: 1.5 }}>
+        <HeroReveal>
+          <Box sx={{ mb: 3 }}>
+            <HeroItem>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2, mb: 1.5 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <Box
                 component="img"
@@ -1414,16 +1419,21 @@ export default function MemoryPage() {
                 }}
               />
             </Box>
-          </Box>
+            </Box>
+            </HeroItem>
 
-          <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 880, fontSize: '1.02rem', lineHeight: 1.6 }}>
-            The sovereign memory matrix with Lucy's deep-net breach oracle and serene whitespace neural constellation. Long-term memory is calibrated with biological <span className="text-highlight-gold">Spike-Timing-Dependent Plasticity (STDP)</span> weight decay, zero cloud exfiltration, and local SQLite persistence.
-          </Typography>
-        </Box>
+            <HeroItem>
+              <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 880, fontSize: '1.02rem', lineHeight: 1.6 }}>
+                The sovereign memory matrix with Lucy's deep-net breach oracle and serene whitespace neural constellation. Long-term memory is calibrated with biological <span className="text-highlight-gold">Spike-Timing-Dependent Plasticity (STDP)</span> weight decay, zero cloud exfiltration, and local SQLite persistence.
+              </Typography>
+            </HeroItem>
+          </Box>
+        </HeroReveal>
 
         {/* ==========================================================================
            BIOMORPHIC FREQUENCY CARRIER WAVE TONE GENERATOR BAR (HOUSE RULE #1)
            ========================================================================== */}
+        <RevealOnScroll preset="fadeUp" delay={0.1}>
         <Paper
           sx={{
             p: { xs: 2, sm: 2.5 },
@@ -1556,6 +1566,7 @@ export default function MemoryPage() {
             </Box>
           </Box>
         </Paper>
+        </RevealOnScroll>
 
         <DaemonStatusStrip />
 
@@ -2568,15 +2579,17 @@ export default function MemoryPage() {
       </Dialog>
 
       {/* Sovereign Installation Funnel */}
-      <SovereignFunnel
-        title="Deploy Netrunner Memory & Vector Search Locally"
-        subtitle="Zero-egress local memory consolidation engine powered by STDP synaptic plasticity, 3D semantic clustering, and offline vector similarity search."
-        toolTitle="Option 1: Vector Search Engine Micro-Repo"
-        toolTag="VECTOR ENGINE"
-        toolDescription="Standalone zero-egress vector similarity and semantic search micro-engine with cosine indexing and local memory storage."
-        toolRepo="https://github.com/NullAITech/vector-search-engine"
-        toolCommand="git clone https://github.com/NullAITech/vector-search-engine.git"
-      />
+      <RevealOnScroll preset="fadeUp">
+        <SovereignFunnel
+          title="Deploy Netrunner Memory & Vector Search Locally"
+          subtitle="Zero-egress local memory consolidation engine powered by STDP synaptic plasticity, 3D semantic clustering, and offline vector similarity search."
+          toolTitle="Option 1: Vector Search Engine Micro-Repo"
+          toolTag="VECTOR ENGINE"
+          toolDescription="Standalone zero-egress vector similarity and semantic search micro-engine with cosine indexing and local memory storage."
+          toolRepo="https://github.com/NullAITech/vector-search-engine"
+          toolCommand="git clone https://github.com/NullAITech/vector-search-engine.git"
+        />
+      </RevealOnScroll>
     </Container>
   );
 }

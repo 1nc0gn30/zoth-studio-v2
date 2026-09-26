@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 import {
   Box, Container, Typography, Chip, Paper, Button, Unstable_Grid2 as Grid,
   Card, CardContent, LinearProgress, Table, TableBody, TableCell,
@@ -578,28 +579,32 @@ export default function HexStrikePage() {
   return (
     <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>
       {/* Background signature gold radial glow */}
-      <Box
-        aria-hidden="true"
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: { xs: '100%', md: '920px' },
-          height: { xs: 420, md: 520 },
-          pointerEvents: 'none',
-          zIndex: 0,
-          background: isDark
-            ? 'radial-gradient(ellipse 65% 55% at 50% 0%, rgba(212,175,55,0.22) 0%, transparent 72%)'
-            : 'radial-gradient(ellipse 65% 55% at 50% 0%, rgba(184,134,11,0.12) 0%, transparent 72%)',
-        }}
-      />
+      <ParallaxGlow offset={60}>
+        <Box
+          aria-hidden="true"
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: { xs: '100%', md: '920px' },
+            height: { xs: 420, md: 520 },
+            pointerEvents: 'none',
+            zIndex: 0,
+            background: isDark
+              ? 'radial-gradient(ellipse 65% 55% at 50% 0%, rgba(212,175,55,0.22) 0%, transparent 72%)'
+              : 'radial-gradient(ellipse 65% 55% at 50% 0%, rgba(184,134,11,0.12) 0%, transparent 72%)',
+          }}
+        />
+      </ParallaxGlow>
 
       <Box sx={{ position: 'relative', zIndex: 1 }}>
         {/* Header with Badges & Export Button */}
-        <Box sx={{ mb: 4 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2, mb: 1.5 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, flexWrap: 'wrap' }}>
+        <HeroReveal>
+          <Box sx={{ mb: 4 }}>
+            <HeroItem>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2, mb: 1.5 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, flexWrap: 'wrap' }}>
               <Chip
                 icon={<SecurityIcon sx={{ fontSize: '1rem !important', color: isDark ? '#FB7185' : '#B42318' }} />}
                 label="HARDWARE VAULT & CIPHER SUITE"
@@ -651,21 +656,28 @@ export default function HexStrikePage() {
             >
               Export Signed CVE Audit Report
             </Button>
-          </Box>
+              </Box>
+            </HeroItem>
 
-          <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1.5, color: theme.palette.text.primary }}>
-            HexStrike Cyber-Security & <span className="text-gradient-gold">Vault Suite</span>
-          </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 880, lineHeight: 1.65, fontSize: '1.05rem' }}>
-            Zero-telemetry cryptographic security workstation and loopback offensive audit lab. Harden your local attack surface, verify <span className="text-highlight-gold">zero-egress loopback isolation</span>, execute simulated penetration commands, compute <span className="text-highlight-dark">Argon2id + AES-256-GCM</span> seals, and export cryptographically signed CVE audit attestations with SHA-256 integrity proofs.
-          </Typography>
-        </Box>
+            <HeroItem>
+              <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1.5, color: theme.palette.text.primary }}>
+                HexStrike Cyber-Security & <span className="text-gradient-gold">Vault Suite</span>
+              </Typography>
+            </HeroItem>
+            <HeroItem>
+              <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 880, lineHeight: 1.65, fontSize: '1.05rem' }}>
+                Zero-telemetry cryptographic security workstation and loopback offensive audit lab. Harden your local attack surface, verify <span className="text-highlight-gold">zero-egress loopback isolation</span>, execute simulated penetration commands, compute <span className="text-highlight-dark">Argon2id + AES-256-GCM</span> seals, and export cryptographically signed CVE audit attestations with SHA-256 integrity proofs.
+              </Typography>
+            </HeroItem>
+          </Box>
+        </HeroReveal>
 
         <DaemonStatusStrip />
 
         {/* ====================================================================
             FEATURE 1: INTERACTIVE RADIAL CVE RISK & SECURITY DIAL
             ==================================================================== */}
+        <RevealOnScroll preset="fadeUp" delay={0.1}>
         <Paper
           elevation={0}
           sx={{
@@ -682,16 +694,7 @@ export default function HexStrikePage() {
           }}
         >
           {/* Subtle top edge glow bar */}
-          <Box
-            sx={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              height: '3px',
-              background: `linear-gradient(90deg, transparent, ${gold.accent}, transparent)`
-            }}
-          />
+          <GlowLine height={3} color={gold.accent} glowColor={gold.glow} duration={1.5} delay={0.2} />
 
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3, flexWrap: 'wrap', gap: 2 }}>
             <Box>
@@ -927,10 +930,12 @@ export default function HexStrikePage() {
             </Grid>
           </Grid>
         </Paper>
+        </RevealOnScroll>
 
         {/* ====================================================================
             FEATURE 2: 64-PORT LOOPBACK ATTACK SURFACE SCANNER
             ==================================================================== */}
+        <RevealOnScroll preset="slideLeft" delay={0.2}>
         <Box sx={{ mb: 6 }} id="hexstrike-scanner-section">
           <Typography className="section-kicker">Loopback Confinement & Port Matrix</Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2.5, flexWrap: 'wrap', gap: 2 }}>
@@ -1206,10 +1211,12 @@ export default function HexStrikePage() {
             </Table>
           </TableContainer>
         </Box>
+        </RevealOnScroll>
 
         {/* ====================================================================
             FEATURE 3: INTERACTIVE OFFENSIVE SECURITY TERMINAL
             ==================================================================== */}
+        <RevealOnScroll preset="slideRight" delay={0.3}>
         <Box sx={{ mb: 6 }} id="hexstrike-terminal-section">
           <Typography className="section-kicker">Interactive Offensive Terminal</Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 1 }}>
@@ -1412,10 +1419,12 @@ export default function HexStrikePage() {
             </Box>
           </Paper>
         </Box>
+        </RevealOnScroll>
 
         {/* ====================================================================
             FEATURE 4: EXPORT SIGNED CVE AUDIT REPORT HERO BANNER
             ==================================================================== */}
+        <RevealOnScroll preset="fadeUp" delay={0.4}>
         <Paper
           elevation={0}
           sx={{
@@ -1464,24 +1473,29 @@ export default function HexStrikePage() {
             Export Signed CVE Audit Report (.json)
           </Button>
         </Paper>
+        </RevealOnScroll>
 
         {/* ====================================================================
             FEATURE 5: PRESERVED HARDWARE VAULT CONSOLE
             ==================================================================== */}
+        <RevealOnScroll preset="fadeUp" delay={0.5}>
         <Box sx={{ mb: 6 }}>
           <Typography className="section-kicker">Interactive Cipher Console</Typography>
           <VaultConsole />
         </Box>
+        </RevealOnScroll>
 
         {/* ====================================================================
             FEATURE 5 (CONT.): PUBLISHED SECURITY MICRO-TOOLS CATALOG
             ==================================================================== */}
+        <RevealOnScroll preset="fadeUp" delay={0.6}>
         <Box>
           <Typography className="section-kicker">Security Tool Catalog</Typography>
           <Typography variant="h5" sx={{ fontWeight: 800, mb: 2.5, display: 'flex', alignItems: 'center', gap: 1, color: theme.palette.text.primary }}>
             <ShieldIcon sx={{ color: gold.accent }} /> Published Security & Encryption Micro-Tools
           </Typography>
 
+          <StaggerChildren>
           <Grid container spacing={2.5}>
             {securityTools.map((tool) => {
               // Direct tool workspace route mapping
@@ -1489,6 +1503,7 @@ export default function HexStrikePage() {
 
               return (
                 <Grid xs={12} sm={6} md={4} key={tool.id}>
+                  <StaggerItem>
                   <Card
                     sx={{
                       height: '100%',
@@ -1590,11 +1605,14 @@ export default function HexStrikePage() {
                       </Box>
                     </CardContent>
                   </Card>
+                  </StaggerItem>
                 </Grid>
               );
             })}
           </Grid>
+          </StaggerChildren>
         </Box>
+        </RevealOnScroll>
       </Box>
 
       {/* Snackbar notification on Signed CVE Report Export */}

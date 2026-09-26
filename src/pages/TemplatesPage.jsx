@@ -20,6 +20,7 @@ import LayersIcon from '@mui/icons-material/Layers';
 import { templates } from '../data/templates';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import SovereignFunnel from '../components/SovereignFunnel';
+import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const CLASSIC = 'http://127.0.0.1:8088';
@@ -66,184 +67,202 @@ export default function TemplatesPage() {
   return (
     <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 } }}>
       {/* Top Gold Illumination Line */}
-      <Box sx={{ height: 3, width: '100%', background: 'linear-gradient(90deg, #D4AF37 0%, transparent 60%)', mb: 3 }} />
+      <GlowLine />
 
-      <Typography variant="overline" sx={{ color: gold.accent, letterSpacing: '0.18em', fontWeight: 800 }}>
-        OPEN-SOURCE TEMPLATE REPOSITORY // 100+ CURATED NETLIFY &amp; WEB APP BLUEPRINTS
-      </Typography>
-      <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', mb: 1 }}>
-        Templates &amp; Agent Scaffolds
-      </Typography>
-      <Typography color="text.secondary" sx={{ mb: 3, maxWidth: 840, fontSize: '1.05rem', lineHeight: 1.6 }}>
-        Zero-egress, production-ready web application and site templates vetted for clean Netlify deployment, modern design aesthetics, and offline compilation. Inspect project architectures, stack configurations, and deploy scripts directly in v2.
-      </Typography>
+      <HeroReveal>
+        <Box sx={{ mb: 3 }}>
+          <HeroItem>
+            <Typography variant="overline" sx={{ color: gold.accent, letterSpacing: '0.18em', fontWeight: 800, display: 'block', mb: 1 }}>
+              OPEN-SOURCE TEMPLATE REPOSITORY // 100+ CURATED NETLIFY &amp; WEB APP BLUEPRINTS
+            </Typography>
+          </HeroItem>
+          <HeroItem>
+            <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', mb: 1 }}>
+              Templates &amp; Agent Scaffolds
+            </Typography>
+          </HeroItem>
+          <HeroItem>
+            <Typography color="text.secondary" sx={{ maxWidth: 840, fontSize: '1.05rem', lineHeight: 1.6 }}>
+              Zero-egress, production-ready web application and site templates vetted for clean Netlify deployment, modern design aesthetics, and offline compilation. Inspect project architectures, stack configurations, and deploy scripts directly in v2.
+            </Typography>
+          </HeroItem>
+        </Box>
+      </HeroReveal>
 
       {/* Status Bar */}
-      <Paper variant="outlined" sx={{ px: 2.5, py: 1.5, mb: 3, display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap', bgcolor: theme.palette.background.paper }}>
-        <Chip
-          icon={<CheckCircleIcon sx={{ fontSize: '1rem !important', color: isDark ? '#34D399' : '#027A48' }} />}
-          size="small"
-          label={`${templates.length} Curated Templates Viewable in v2`}
-          sx={{ bgcolor: isDark ? 'rgba(52,211,153,0.14)' : '#ECFDF3', color: isDark ? '#34D399' : '#027A48', border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`, fontWeight: 800 }}
-        />
-        <Chip
-          size="small"
-          label={`${openableCount} Offline HTML Previews`}
-          sx={{ bgcolor: gold.wash, color: gold.soft, fontWeight: 750, border: `1px solid ${isDark ? 'rgba(212,175,55,0.42)' : 'rgba(184,134,11,0.3)'}` }}
-        />
-        <Chip
-          size="small"
-          label={classicUp ? 'Live Preview Server Online · :8088' : 'Classic Server Standby (Optional)'}
-          sx={{
-            bgcolor: classicUp ? (isDark ? 'rgba(52,211,153,0.15)' : '#ECFDF3') : (isDark ? 'rgba(255,255,255,0.06)' : '#F2F4F7'),
-            color: classicUp ? (isDark ? '#34D399' : '#027A48') : theme.palette.text.secondary,
-            fontWeight: 700,
-            border: '1px solid',
-            borderColor: classicUp ? (isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0') : theme.palette.divider
-          }}
-        />
-      </Paper>
+      <RevealOnScroll preset="fadeUp" delay={0.2}>
+        <Paper variant="outlined" sx={{ px: 2.5, py: 1.5, mb: 3, display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap', bgcolor: theme.palette.background.paper }}>
+          <Chip
+            icon={<CheckCircleIcon sx={{ fontSize: '1rem !important', color: isDark ? '#34D399' : '#027A48' }} />}
+            size="small"
+            label={`${templates.length} Curated Templates Viewable in v2`}
+            sx={{ bgcolor: isDark ? 'rgba(52,211,153,0.14)' : '#ECFDF3', color: isDark ? '#34D399' : '#027A48', border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`, fontWeight: 800 }}
+          />
+          <Chip
+            size="small"
+            label={`${openableCount} Offline HTML Previews`}
+            sx={{ bgcolor: gold.wash, color: gold.soft, fontWeight: 750, border: `1px solid ${isDark ? 'rgba(212,175,55,0.42)' : 'rgba(184,134,11,0.3)'}` }}
+          />
+          <Chip
+            size="small"
+            label={classicUp ? 'Live Preview Server Online · :8088' : 'Classic Server Standby (Optional)'}
+            sx={{
+              bgcolor: classicUp ? (isDark ? 'rgba(52,211,153,0.15)' : '#ECFDF3') : (isDark ? 'rgba(255,255,255,0.06)' : '#F2F4F7'),
+              color: classicUp ? (isDark ? '#34D399' : '#027A48') : theme.palette.text.secondary,
+              fontWeight: 700,
+              border: '1px solid',
+              borderColor: classicUp ? (isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0') : theme.palette.divider
+            }}
+          />
+        </Paper>
+      </RevealOnScroll>
 
       {/* Search & Filters */}
-      <Box sx={{ display: 'flex', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
-        <TextField
-          size="small"
-          placeholder="Search templates by name, framework, or category..."
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon fontSize="small" sx={{ color: gold.accent }} /></InputAdornment> }}
-          sx={{ flex: '1 1 260px' }}
-        />
-        <Chip
-          label={openableOnly ? 'Openable only (Active)' : 'All templates'}
-          clickable
-          onClick={() => setOpenableOnly((value) => !value)}
-          sx={{
-            fontWeight: 750,
-            alignSelf: 'center',
-            bgcolor: openableOnly ? gold.accent : theme.palette.background.paper,
-            color: openableOnly ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
-            border: '1px solid',
-            borderColor: openableOnly ? gold.accent : theme.palette.divider
-          }}
-        />
-      </Box>
+      <RevealOnScroll preset="fadeUp" delay={0.3}>
+        <Box sx={{ display: 'flex', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
+          <TextField
+            size="small"
+            placeholder="Search templates by name, framework, or category..."
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon fontSize="small" sx={{ color: gold.accent }} /></InputAdornment> }}
+            sx={{ flex: '1 1 260px' }}
+          />
+          <Chip
+            label={openableOnly ? 'Openable only (Active)' : 'All templates'}
+            clickable
+            onClick={() => setOpenableOnly((value) => !value)}
+            sx={{
+              fontWeight: 750,
+              alignSelf: 'center',
+              bgcolor: openableOnly ? gold.accent : theme.palette.background.paper,
+              color: openableOnly ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
+              border: '1px solid',
+              borderColor: openableOnly ? gold.accent : theme.palette.divider
+            }}
+          />
+        </Box>
 
-      {/* Category Pills */}
-      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 3 }}>
-        {categories.map(([name, count]) => {
-          const active = name === category;
-          return (
-            <Chip
-              key={name}
-              label={`${name} · ${count}`}
-              clickable
-              onClick={() => setCategory(name)}
-              sx={{
-                fontWeight: 750,
-                bgcolor: active ? gold.accent : theme.palette.background.paper,
-                color: active ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
-                border: '1px solid',
-                borderColor: active ? gold.accent : theme.palette.divider,
-              }}
-            />
-          );
-        })}
-      </Box>
+        {/* Category Pills */}
+        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 3 }}>
+          {categories.map(([name, count]) => {
+            const active = name === category;
+            return (
+              <Chip
+                key={name}
+                label={`${name} · ${count}`}
+                clickable
+                onClick={() => setCategory(name)}
+                sx={{
+                  fontWeight: 750,
+                  bgcolor: active ? gold.accent : theme.palette.background.paper,
+                  color: active ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
+                  border: '1px solid',
+                  borderColor: active ? gold.accent : theme.palette.divider,
+                }}
+              />
+            );
+          })}
+        </Box>
 
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        Showing <strong>{filtered.length}</strong> of <strong>{templates.length}</strong> templates
-      </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+          Showing <strong>{filtered.length}</strong> of <strong>{templates.length}</strong> templates
+        </Typography>
+      </RevealOnScroll>
 
       {/* Template Cards Grid */}
-      <Grid container spacing={2}>
-        {filtered.map((item) => (
-          <Grid xs={12} sm={6} md={4} lg={3} key={item.id}>
-            <Card sx={{
-              height: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              border: `1px solid ${theme.palette.divider}`,
-              bgcolor: theme.palette.background.paper,
-              transition: 'all 0.2s ease',
-              '&:hover': {
-                borderColor: isDark ? '#D4AF37' : '#B8860B',
-                boxShadow: isDark
-                  ? '0 8px 24px rgba(0,0,0,0.4), 0 0 16px -2px rgba(212,175,55,0.2)'
-                  : '0 8px 20px rgba(16,24,40,0.08), 0 0 12px -2px rgba(184,134,11,0.15)',
-                transform: 'translateY(-2px)'
-              }
-            }}>
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.25, flexWrap: 'wrap', gap: 0.5 }}>
-                  <Chip
-                    size="small"
-                    label={item.category}
-                    sx={{
-                      fontWeight: 700,
-                      fontSize: '0.72rem',
-                      bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#F2F4F7',
-                      color: theme.palette.text.primary,
-                      border: `1px solid ${theme.palette.divider}`
-                    }}
-                  />
-                  {item.openable && (
-                    <Chip
-                      label="Offline HTML"
+      <StaggerChildren>
+        <Grid container spacing={2}>
+          {filtered.map((item) => (
+            <Grid xs={12} sm={6} md={4} lg={3} key={item.id}>
+              <StaggerItem>
+                <Card sx={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  border: `1px solid ${theme.palette.divider}`,
+                  bgcolor: theme.palette.background.paper,
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    borderColor: isDark ? '#D4AF37' : '#B8860B',
+                    boxShadow: isDark
+                      ? '0 8px 24px rgba(0,0,0,0.4), 0 0 16px -2px rgba(212,175,55,0.2)'
+                      : '0 8px 20px rgba(16,24,40,0.08), 0 0 12px -2px rgba(184,134,11,0.15)',
+                    transform: 'translateY(-2px)'
+                  }
+                }}>
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.25, flexWrap: 'wrap', gap: 0.5 }}>
+                      <Chip
+                        size="small"
+                        label={item.category}
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: '0.72rem',
+                          bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#F2F4F7',
+                          color: theme.palette.text.primary,
+                          border: `1px solid ${theme.palette.divider}`
+                        }}
+                      />
+                      {item.openable && (
+                        <Chip
+                          label="Offline HTML"
+                          size="small"
+                          sx={{
+                            bgcolor: isDark ? 'rgba(52,211,153,0.15)' : '#ECFDF3',
+                            color: isDark ? '#34D399' : '#027A48',
+                            border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`,
+                            fontWeight: 750,
+                            fontSize: '0.68rem'
+                          }}
+                        />
+                      )}
+                    </Box>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 750, textTransform: 'capitalize', lineHeight: 1.35, color: theme.palette.text.primary }}>
+                      {item.name}
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.75, fontFamily: mono, fontSize: '0.72rem', wordBreak: 'break-all' }}>
+                      {item.id}
+                    </Typography>
+                  </CardContent>
+                  <CardActions sx={{ px: 2, pb: 2, gap: 1, flexWrap: 'wrap', borderTop: `1px solid ${theme.palette.divider}`, bgcolor: isDark ? 'rgba(212,175,55,0.03)' : 'rgba(184,134,11,0.02)' }}>
+                    <Button
                       size="small"
-                      sx={{
-                        bgcolor: isDark ? 'rgba(52,211,153,0.15)' : '#ECFDF3',
-                        color: isDark ? '#34D399' : '#027A48',
-                        border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`,
-                        fontWeight: 750,
-                        fontSize: '0.68rem'
+                      variant="contained"
+                      startIcon={<CodeIcon />}
+                      onClick={() => {
+                        setSelectedTemplate(item);
+                        setDialogTab(0);
                       }}
-                    />
-                  )}
-                </Box>
-                <Typography variant="subtitle1" sx={{ fontWeight: 750, textTransform: 'capitalize', lineHeight: 1.35, color: theme.palette.text.primary }}>
-                  {item.name}
-                </Typography>
-                <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.75, fontFamily: mono, fontSize: '0.72rem', wordBreak: 'break-all' }}>
-                  {item.id}
-                </Typography>
-              </CardContent>
-              <CardActions sx={{ px: 2, pb: 2, gap: 1, flexWrap: 'wrap', borderTop: `1px solid ${theme.palette.divider}`, bgcolor: isDark ? 'rgba(212,175,55,0.03)' : 'rgba(184,134,11,0.02)' }}>
-                <Button
-                  size="small"
-                  variant="contained"
-                  startIcon={<CodeIcon />}
-                  onClick={() => {
-                    setSelectedTemplate(item);
-                    setDialogTab(0);
-                  }}
-                  sx={{
-                    bgcolor: isDark ? gold.accent : '#D4AF37',
-                    color: '#101828',
-                    fontWeight: 750,
-                    '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#E4C56A' }
-                  }}
-                >
-                  Inspect
-                </Button>
-                {item.openable && classicUp && (
-                  <Button
-                    size="small"
-                    variant="text"
-                    endIcon={<LaunchIcon sx={{ fontSize: '0.85rem' }} />}
-                    href={`${CLASSIC}${item.path}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    sx={{ color: theme.palette.text.secondary, fontSize: '0.75rem', fontWeight: 700 }}
-                  >
-                    :8088
-                  </Button>
-                )}
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+                      sx={{
+                        bgcolor: isDark ? gold.accent : '#D4AF37',
+                        color: '#101828',
+                        fontWeight: 750,
+                        '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#E4C56A' }
+                      }}
+                    >
+                      Inspect
+                    </Button>
+                    {item.openable && classicUp && (
+                      <Button
+                        size="small"
+                        variant="text"
+                        endIcon={<LaunchIcon sx={{ fontSize: '0.85rem' }} />}
+                        href={`${CLASSIC}${item.path}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        sx={{ color: theme.palette.text.secondary, fontSize: '0.75rem', fontWeight: 700 }}
+                      >
+                        :8088
+                      </Button>
+                    )}
+                  </CardActions>
+                </Card>
+              </StaggerItem>
+            </Grid>
+          ))}
+        </Grid>
+      </StaggerChildren>
 
       {/* Enhanced Multi-Tab Template Inspector Dialog */}
       {selectedTemplate && (
@@ -558,15 +577,17 @@ export default function TemplatesPage() {
       )}
 
       {/* Sovereign Installation Funnel */}
-      <SovereignFunnel
-        title="Deploy Offline Application Templates Locally"
-        subtitle="Every template in this library is designed for zero-telemetry local compilation, isolated Docker sandboxing, or one-click export into Zoth OS."
-        toolTitle="Option 1: Template Boilerplate Generator"
-        toolTag="BOILERPLATE"
-        toolDescription="Generate ready-to-run web application scaffolds directly from CLI with offline-first static builds and Netlify configurations."
-        toolRepo="https://github.com/NullAITech/zoth-webgen"
-        toolCommand="npx zoth-webgen --template corporate-portal"
-      />
+      <RevealOnScroll preset="fadeUp" delay={0.4}>
+        <SovereignFunnel
+          title="Deploy Offline Application Templates Locally"
+          subtitle="Every template in this library is designed for zero-telemetry local compilation, isolated Docker sandboxing, or one-click export into Zoth OS."
+          toolTitle="Option 1: Template Boilerplate Generator"
+          toolTag="BOILERPLATE"
+          toolDescription="Generate ready-to-run web application scaffolds directly from CLI with offline-first static builds and Netlify configurations."
+          toolRepo="https://github.com/NullAITech/zoth-webgen"
+          toolCommand="npx zoth-webgen --template corporate-portal"
+        />
+      </RevealOnScroll>
     </Container>
   );
 }

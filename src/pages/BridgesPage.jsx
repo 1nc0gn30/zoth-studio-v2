@@ -34,6 +34,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import SovereignFunnel from '../components/SovereignFunnel';
+import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -785,100 +786,99 @@ export default function BridgesPage() {
   return (
     <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>
       {/* Signature gold top-edge glow */}
-      <Box
-        aria-hidden="true"
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 3,
-          borderRadius: 2,
-          background: isDark
-            ? 'linear-gradient(90deg, transparent, rgba(212,175,55,0.9) 20%, #D4AF37 50%, rgba(212,175,55,0.9) 80%, transparent)'
-            : 'linear-gradient(90deg, transparent, rgba(184,134,11,0.7) 20%, #B8860B 50%, rgba(184,134,11,0.7) 80%, transparent)',
-          boxShadow: isDark
-            ? '0 0 18px 2px rgba(212,175,55,0.45)'
-            : '0 0 12px 1px rgba(184,134,11,0.35)',
-        }}
-      />
+      <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
+        <GlowLine 
+          color={isDark ? 'rgba(212,175,55,0.9)' : 'rgba(184,134,11,0.7)'}
+          glowColor={isDark ? 'rgba(212,175,55,0.45)' : 'rgba(184,134,11,0.35)'}
+        />
+      </Box>
 
       <Box sx={{ position: 'relative', zIndex: 1 }}>
         {/* Header Strip */}
-        <Box sx={{ mb: 4 }}>
-          <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
-            <Chip
-              icon={<BoltIcon sx={{ fontSize: '1rem !important', color: up ? gold.accent : '#F59E0B' }} />}
-              label={up ? 'LIVE BRIDGE ACTIVE :8789' : 'OFFLINE SIGNAL MESH SIMULATOR ACTIVE'}
-              size="small"
-              sx={{
-                bgcolor: up ? gold.wash : isDark ? 'rgba(245,158,11,0.14)' : '#FEF3C7',
-                color: up ? gold.soft : isDark ? '#FCD34D' : '#92400E',
-                border: `1px solid ${up ? gold.border : 'rgba(245,158,11,0.4)'}`,
-                fontWeight: 800,
-                fontSize: '0.75rem',
-                fontFamily: mono,
-              }}
-            />
-            <Chip
-              icon={<ShieldIcon sx={{ fontSize: '1rem !important', color: '#10B981' }} />}
-              label="ZERO-EGRESS AIR-GAP (127.0.0.1 / IPC)"
-              size="small"
-              sx={{
-                bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5',
-                color: isDark ? '#6EE7B7' : '#065F46',
-                border: '1px solid rgba(16,185,129,0.3)',
-                fontWeight: 750,
-                fontSize: '0.72rem',
-                fontFamily: mono,
-              }}
-            />
-            <Chip
-              icon={<SpeedIcon sx={{ fontSize: '1rem !important', color: gold.accent }} />}
-              label={`LATENCY: ${lastLatency}`}
-              size="small"
-              sx={{
-                bgcolor: isDark ? 'rgba(212,175,55,0.08)' : '#FDF8EC',
-                color: gold.soft,
-                border: `1px solid ${gold.border}`,
-                fontWeight: 750,
-                fontSize: '0.72rem',
-                fontFamily: mono,
-              }}
-            />
-          </Stack>
+        <HeroReveal>
+          <Box sx={{ mb: 4 }}>
+            <HeroItem>
+              <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
+                <Chip
+                  icon={<BoltIcon sx={{ fontSize: '1rem !important', color: up ? gold.accent : '#F59E0B' }} />}
+                  label={up ? 'LIVE BRIDGE ACTIVE :8789' : 'OFFLINE SIGNAL MESH SIMULATOR ACTIVE'}
+                  size="small"
+                  sx={{
+                    bgcolor: up ? gold.wash : isDark ? 'rgba(245,158,11,0.14)' : '#FEF3C7',
+                    color: up ? gold.soft : isDark ? '#FCD34D' : '#92400E',
+                    border: `1px solid ${up ? gold.border : 'rgba(245,158,11,0.4)'}`,
+                    fontWeight: 800,
+                    fontSize: '0.75rem',
+                    fontFamily: mono,
+                  }}
+                />
+                <Chip
+                  icon={<ShieldIcon sx={{ fontSize: '1rem !important', color: '#10B981' }} />}
+                  label="ZERO-EGRESS AIR-GAP (127.0.0.1 / IPC)"
+                  size="small"
+                  sx={{
+                    bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5',
+                    color: isDark ? '#6EE7B7' : '#065F46',
+                    border: '1px solid rgba(16,185,129,0.3)',
+                    fontWeight: 750,
+                    fontSize: '0.72rem',
+                    fontFamily: mono,
+                  }}
+                />
+                <Chip
+                  icon={<SpeedIcon sx={{ fontSize: '1rem !important', color: gold.accent }} />}
+                  label={`LATENCY: ${lastLatency}`}
+                  size="small"
+                  sx={{
+                    bgcolor: isDark ? 'rgba(212,175,55,0.08)' : '#FDF8EC',
+                    color: gold.soft,
+                    border: `1px solid ${gold.border}`,
+                    fontWeight: 750,
+                    fontSize: '0.72rem',
+                    fontFamily: mono,
+                  }}
+                />
+              </Stack>
+            </HeroItem>
 
-          <Typography
-            variant="h3"
-            sx={{
-              fontWeight: 850,
-              letterSpacing: '-0.035em',
-              mb: 1.5,
-              color: theme.palette.text.primary,
-              fontSize: { xs: '2rem', md: '2.75rem' },
-            }}
-          >
-            Sovereign Agent <span className="text-gradient-gold">Signal Bridge</span>
-          </Typography>
+            <HeroItem>
+              <Typography
+                variant="h3"
+                sx={{
+                  fontWeight: 850,
+                  letterSpacing: '-0.035em',
+                  mb: 1.5,
+                  color: theme.palette.text.primary,
+                  fontSize: { xs: '2rem', md: '2.75rem' },
+                }}
+              >
+                Sovereign Agent <span className="text-gradient-gold">Signal Bridge</span>
+              </Typography>
+            </HeroItem>
 
-          <Typography
-            variant="body1"
-            color="text.secondary"
-            sx={{ maxWidth: 880, lineHeight: 1.65, fontSize: '1.02rem' }}
-          >
-            The <span className="text-highlight-gold">sovereign-agent-bridge</span> orchestrates zero-egress inter-process
-            signal routing, event broadcasting, and Byzantine cryptographic consensus between autonomous agents. When the
-            local daemon on <span className="text-highlight-dark">127.0.0.1:8789</span> is offline, the embedded
-            high-fidelity <span className="text-highlight-gold">Offline Signal Mesh Simulator</span> delivers microsecond
-            packet routing, laser trajectory animations, and real HMAC-SHA256 envelopes directly in-memory.
-          </Typography>
-        </Box>
+            <HeroItem>
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                sx={{ maxWidth: 880, lineHeight: 1.65, fontSize: '1.02rem' }}
+              >
+                The <span className="text-highlight-gold">sovereign-agent-bridge</span> orchestrates zero-egress inter-process
+                signal routing, event broadcasting, and Byzantine cryptographic consensus between autonomous agents. When the
+                local daemon on <span className="text-highlight-dark">127.0.0.1:8789</span> is offline, the embedded
+                high-fidelity <span className="text-highlight-gold">Offline Signal Mesh Simulator</span> delivers microsecond
+                packet routing, laser trajectory animations, and real HMAC-SHA256 envelopes directly in-memory.
+              </Typography>
+            </HeroItem>
+          </Box>
+        </HeroReveal>
 
         <DaemonStatusStrip />
 
         {/* Top Architecture Cards */}
+        <StaggerChildren>
         <Grid container spacing={2.5} sx={{ mb: 4 }}>
           <Grid xs={12} md={4}>
+            <StaggerItem>
             <Card
               sx={{
                 height: '100%',
@@ -901,8 +901,10 @@ export default function BridgesPage() {
                 </Typography>
               </CardContent>
             </Card>
+            </StaggerItem>
           </Grid>
           <Grid xs={12} md={4}>
+            <StaggerItem>
             <Card
               sx={{
                 height: '100%',
@@ -925,8 +927,10 @@ export default function BridgesPage() {
                 </Typography>
               </CardContent>
             </Card>
+            </StaggerItem>
           </Grid>
           <Grid xs={12} md={4}>
+            <StaggerItem>
             <Card
               sx={{
                 height: '100%',
@@ -949,12 +953,15 @@ export default function BridgesPage() {
                 </Typography>
               </CardContent>
             </Card>
+            </StaggerItem>
           </Grid>
         </Grid>
+        </StaggerChildren>
 
         {/* ======================================================== */}
         {/* ANIMATED SVG PACKET NETWORK CANVAS & SOVEREIGN MESH HUD  */}
         {/* ======================================================== */}
+        <RevealOnScroll preset="fadeUp" delay={0.2}>
         <Paper
           sx={{
             mb: 4,
@@ -1636,10 +1643,12 @@ export default function BridgesPage() {
             </Box>
           )}
         </Paper>
+        </RevealOnScroll>
 
         {/* ======================================================== */}
         {/* CRYPTOGRAPHIC ENVELOPE LEDGER & HOP TELEMETRY (Req 5 & 6) */}
         {/* ======================================================== */}
+        <RevealOnScroll preset="fadeUp" delay={0.3}>
         <Box sx={{ mb: 4 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
             <Box>
@@ -1801,9 +1810,11 @@ export default function BridgesPage() {
             )}
           </Paper>
         </Box>
+        </RevealOnScroll>
       </Box>
 
       {/* Sovereign Installation Funnel */}
+      <RevealOnScroll preset="fadeUp">
       <SovereignFunnel
         title="Deploy Cryptographic Signal Bridge Locally"
         subtitle="Zero-egress cryptographic IPC mesh with HMAC-SHA256 signature verification, simulated hop telemetry, and offline packet envelope inspection."
@@ -1813,6 +1824,7 @@ export default function BridgesPage() {
         toolRepo="https://github.com/NullAITech/sovereign-agent-bridge"
         toolCommand="git clone https://github.com/NullAITech/sovereign-agent-bridge.git"
       />
+      </RevealOnScroll>
     </Container>
   );
 }

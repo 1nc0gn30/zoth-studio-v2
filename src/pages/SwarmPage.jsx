@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Box, Container, Typography, Chip, Card, CardContent, Unstable_Grid2 as Grid, Avatar, Stack,
-  Collapse, Button, Paper, Tooltip, IconButton, Switch, FormControlLabel, LinearProgress
+  Collapse, Button, Paper, Tooltip, IconButton, Switch, FormControlLabel, LinearProgress,
+  Tabs, Tab
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -19,10 +20,13 @@ import TerminalIcon from '@mui/icons-material/Terminal';
 import BoltIcon from '@mui/icons-material/Bolt';
 import RouterIcon from '@mui/icons-material/Router';
 import NetworkCheckIcon from '@mui/icons-material/NetworkCheck';
+import HubIcon from '@mui/icons-material/Hub';
 import SwarmCanvasVisualizer from '../components/SwarmCanvasVisualizer';
 import SwarmTaskDispatcher from '../components/SwarmTaskDispatcher';
+import SwarmDaemonMultiplexer from '../components/SwarmDaemonMultiplexer';
 import { pantheonAgents, pantheonCadres } from '../data/pantheon';
 import SovereignFunnel from '../components/SovereignFunnel';
+import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -76,6 +80,7 @@ export default function SwarmPage() {
 
   const [cadre, setCadre] = useState('All');
   const [rosterOpen, setRosterOpen] = useState(false);
+  const [swarmTab, setSwarmTab] = useState(0);
   const visible = pantheonAgents.filter((agent) => cadre === 'All' || agent.cadre === cadre);
 
   // Heartbeat state
@@ -179,61 +184,114 @@ export default function SwarmPage() {
   return (
     <Container maxWidth="lg" sx={{ py: 6, position: 'relative' }}>
       {/* Unique gold radial glow behind page header */}
-      <Box
-        aria-hidden
-        sx={{
-          position: 'absolute',
-          top: -40,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: 'min(760px, 92%)',
-          height: 320,
-          pointerEvents: 'none',
-          zIndex: 0,
-          background: isDark
-            ? 'radial-gradient(ellipse 60% 55% at 50% 40%, rgba(212,175,55,0.24) 0%, rgba(212,175,55,0.08) 45%, transparent 72%)'
-            : 'radial-gradient(ellipse 60% 55% at 50% 40%, rgba(212,175,55,0.20) 0%, rgba(212,175,55,0.07) 45%, transparent 72%)',
-        }}
-      />
+      <ParallaxGlow offset={60}>
+        <Box
+          aria-hidden
+          sx={{
+            position: 'absolute',
+            top: -40,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: 'min(760px, 92%)',
+            height: 320,
+            pointerEvents: 'none',
+            zIndex: 0,
+            background: isDark
+              ? 'radial-gradient(ellipse 60% 55% at 50% 40%, rgba(212,175,55,0.24) 0%, rgba(212,175,55,0.08) 45%, transparent 72%)'
+              : 'radial-gradient(ellipse 60% 55% at 50% 40%, rgba(212,175,55,0.20) 0%, rgba(212,175,55,0.07) 45%, transparent 72%)',
+          }}
+        />
+      </ParallaxGlow>
 
       {/* Header */}
-      <Box sx={{ mb: 4, position: 'relative', zIndex: 1 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 1.5 }}>
-          <Chip
-            label="PANTHEON MULTI-AGENT SWARM HUB"
-            size="small"
-            sx={{
-              bgcolor: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-              color: goldSoft,
-              border: `1px solid ${goldBorder}`,
-              fontWeight: 800,
-            }}
-          />
-          <Chip
-            icon={<ShieldIcon sx={{ fontSize: '0.9rem !important', color: isDark ? '#34D399' : '#065F46' }} />}
-            label="ZERO-CLOUD AIR-GAP ENGINE"
-            size="small"
-            sx={{
-              bgcolor: isDark ? '#08080B' : '#D1FADF',
-              color: isDark ? '#34D399' : '#065F46',
-              border: `1.5px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#059669'}`,
-              fontWeight: 800,
-            }}
-          />
-        </Box>
+      <HeroReveal>
+        <Box sx={{ mb: 4, position: 'relative', zIndex: 1 }}>
+          <HeroItem>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 1.5 }}>
+              <Chip
+                label="PANTHEON MULTI-AGENT SWARM HUB"
+                size="small"
+                sx={{
+                  bgcolor: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
+                  color: goldSoft,
+                  border: `1px solid ${goldBorder}`,
+                  fontWeight: 800,
+                }}
+              />
+              <Chip
+                icon={<ShieldIcon sx={{ fontSize: '0.9rem !important', color: isDark ? '#34D399' : '#065F46' }} />}
+                label="ZERO-CLOUD AIR-GAP ENGINE"
+                size="small"
+                sx={{
+                  bgcolor: isDark ? '#08080B' : '#D1FADF',
+                  color: isDark ? '#34D399' : '#065F46',
+                  border: `1.5px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#059669'}`,
+                  fontWeight: 800,
+                }}
+              />
+            </Box>
+          </HeroItem>
 
-        <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1.5 }}>
-          Pantheon Multi-Agent <span className="text-gradient-gold">Swarm Hub</span>
-        </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 860, lineHeight: 1.65, fontSize: '1.05rem' }}>
-          Real-time telemetry and process coordination for the <span className="text-highlight-gold">{pantheonAgents.length} sovereign agent nodes</span> in Zoth Studio.
-          Agents execute on local hardware via simplex Unix domain sockets with zero external cloud egress.
-          Inspect live node heartbeats, test cadre loopback latencies, and verify air-gap cryptographic isolation.
-        </Typography>
+          <HeroItem>
+            <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1.5 }}>
+              Pantheon Multi-Agent <span className="text-gradient-gold">Swarm Hub</span>
+            </Typography>
+          </HeroItem>
+          
+          <HeroItem>
+            <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 860, lineHeight: 1.65, fontSize: '1.05rem' }}>
+              Real-time telemetry and process coordination for the <span className="text-highlight-gold">{pantheonAgents.length} sovereign agent nodes</span> in Zoth Studio.
+              Agents execute on local hardware via simplex Unix domain sockets with zero external cloud egress.
+              Inspect live node heartbeats, test cadre loopback latencies, and verify air-gap cryptographic isolation.
+            </Typography>
+          </HeroItem>
+        </Box>
+      </HeroReveal>
+
+      {/* Master Swarm Navigation Tabs */}
+      <Box sx={{ mb: 4, position: 'relative', zIndex: 1, borderBottom: `1.5px solid ${goldBorder}` }}>
+        <Tabs
+          value={swarmTab}
+          onChange={(e, v) => setSwarmTab(v)}
+          variant="scrollable"
+          scrollButtons="auto"
+          sx={{
+            '& .MuiTab-root': {
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: { xs: '0.82rem', md: '0.92rem' },
+              textTransform: 'none',
+              color: isDark ? '#9CA3AF' : '#475467',
+              py: 1.5,
+              '&.Mui-selected': {
+                color: gold,
+              },
+            },
+            '& .MuiTabs-indicator': {
+              bgcolor: gold,
+              height: 3,
+              borderRadius: '3px 3px 0 0',
+            },
+          }}
+        >
+          <Tab icon={<TerminalIcon sx={{ mr: 1, fontSize: 18 }} />} iconPosition="start" label="21-TERMINAL DAEMON MULTIPLEXER" />
+          <Tab icon={<HubIcon sx={{ mr: 1, fontSize: 18 }} />} iconPosition="start" label="MESH TOPOLOGY & ROSTER" />
+          <Tab icon={<RouterIcon sx={{ mr: 1, fontSize: 18 }} />} iconPosition="start" label="CADRE LOOPBACK BENCHMARK" />
+        </Tabs>
       </Box>
 
-      {/* Architecture Highlights */}
-      <Grid container spacing={2.5} sx={{ mb: 4.5, position: 'relative', zIndex: 1 }}>
+      {/* TAB 0: 21-TERMINAL DAEMON MULTIPLEXER */}
+      {swarmTab === 0 && (
+        <Box sx={{ position: 'relative', zIndex: 1, mb: 4 }}>
+          <SwarmDaemonMultiplexer />
+        </Box>
+      )}
+
+      {/* TAB 1: MESH TOPOLOGY & ROSTER */}
+      {swarmTab === 1 && (
+        <Box sx={{ position: 'relative', zIndex: 1 }}>
+          {/* Architecture Highlights */}
+          <Grid container spacing={2.5} sx={{ mb: 4.5, position: 'relative', zIndex: 1 }}>
         <Grid xs={12} md={4}>
           <Card sx={{ height: '100%', bgcolor: voidBg, border: `1px solid ${goldBorder}`, borderRadius: 2.5 }}>
             <CardContent>
@@ -322,7 +380,12 @@ export default function SwarmPage() {
           );
         })}
       </Box>
+    </Box>
+  )}
 
+  {/* TAB 2: CADRE LOOPBACK BENCHMARK */}
+  {swarmTab === 2 && (
+    <Box sx={{ position: 'relative', zIndex: 1 }}>
       {/* LIVE SWARM HEARTBEAT MONITOR */}
       <Box sx={{ mb: 5, position: 'relative', zIndex: 1 }}>
         <Paper
@@ -427,6 +490,7 @@ export default function SwarmPage() {
           </Box>
 
           {/* Animated Heartbeat EKG Waveform Visualizer */}
+          <RevealOnScroll preset="scaleUp">
           <Box
             sx={{
               p: 2.5,
@@ -493,6 +557,7 @@ export default function SwarmPage() {
               </Typography>
             </Box>
           </Box>
+          </RevealOnScroll>
 
           {/* Zero-Cloud Verification Badges Grid */}
           <Box>
@@ -600,6 +665,7 @@ export default function SwarmPage() {
           </Box>
 
           {/* Cadre Ping Tester Grid (5 Cadres) */}
+          <RevealOnScroll preset="fadeUp" delay={0.2}>
           <Grid container spacing={2} sx={{ mb: 3 }}>
             {['Architects', 'Code', 'Security', 'Creative', 'Swarm'].map((name) => {
               const metrics = cadreMetrics[name];
@@ -688,8 +754,10 @@ export default function SwarmPage() {
               );
             })}
           </Grid>
+          </RevealOnScroll>
 
           {/* Real-Time Ping Audit Console */}
+          <RevealOnScroll preset="fadeUp" delay={0.4}>
           <Box sx={{ p: 2, bgcolor: isDark ? '#050508' : '#0F172A', borderRadius: 2, border: '1px solid', borderColor: isDark ? 'rgba(212,175,55,0.2)' : '#1E293B' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.2 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -717,9 +785,15 @@ export default function SwarmPage() {
               ))}
             </Box>
           </Box>
+          </RevealOnScroll>
         </Paper>
       </Box>
+    </Box>
+  )}
 
+  {/* TAB 1 (PART 2): MESH TOPOLOGY & ROSTER */}
+  {swarmTab === 1 && (
+    <Box sx={{ position: 'relative', zIndex: 1 }}>
       {/* Filter Cadres */}
       <Box sx={{ mb: 4, position: 'relative', zIndex: 1 }}>
         <Typography className="section-kicker">Filter Agent Cadres</Typography>
@@ -840,8 +914,11 @@ export default function SwarmPage() {
           </Grid>
         </Collapse>
       </Box>
+    </Box>
+  )}
 
-      {/* Sovereign Installation Funnel */}
+  {/* Sovereign Installation Funnel */}
+      <RevealOnScroll>
       <SovereignFunnel
         title="Deploy Sovereign Swarm Orchestrator Locally"
         subtitle="Zero-cloud multi-agent orchestrator executing autonomous coordination, IPC socket communication, and cryptographic loopback attestation."
@@ -851,6 +928,7 @@ export default function SwarmPage() {
         toolRepo="https://github.com/NullAITech/sovereign-agent-bridge"
         toolCommand="git clone https://github.com/NullAITech/sovereign-agent-bridge.git"
       />
+      </RevealOnScroll>
     </Container>
   );
 }

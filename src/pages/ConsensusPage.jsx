@@ -25,6 +25,7 @@ import { useStudioStatus } from '../studio/useStudioStatus';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import SovereignFunnel from '../components/SovereignFunnel';
 import WindowCarousel from '../components/WindowCarousel';
+import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -791,643 +792,670 @@ export default function ConsensusPage() {
   return (
     <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6 }}>
       {/* Page Header */}
-      <Box sx={{ mb: 4, position: 'relative' }}>
-        {/* Glow behind title */}
-        <Box
-          aria-hidden
-          sx={{
-            position: 'absolute',
-            top: -20,
-            left: '30%',
-            transform: 'translateX(-50%)',
-            width: '480px',
-            height: '180px',
-            pointerEvents: 'none',
-            zIndex: 0,
-            background: isDark
-              ? 'radial-gradient(ellipse 60% 50% at 50% 30%, rgba(212,175,55,0.20) 0%, transparent 70%)'
-              : 'radial-gradient(ellipse 60% 50% at 50% 30%, rgba(184,134,11,0.12) 0%, transparent 70%)',
-          }}
-        />
+      <HeroReveal>
+        <Box sx={{ mb: 4, position: 'relative' }}>
+          {/* Glow behind title */}
+          <ParallaxGlow offset={60}>
+            <Box
+              aria-hidden
+              sx={{
+                position: 'absolute',
+                top: -20,
+                left: '30%',
+                transform: 'translateX(-50%)',
+                width: '480px',
+                height: '180px',
+                pointerEvents: 'none',
+                zIndex: 0,
+                background: isDark
+                  ? 'radial-gradient(ellipse 60% 50% at 50% 30%, rgba(212,175,55,0.20) 0%, transparent 70%)'
+                  : 'radial-gradient(ellipse 60% 50% at 50% 30%, rgba(184,134,11,0.12) 0%, transparent 70%)',
+              }}
+            />
+          </ParallaxGlow>
 
-        <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 1.5 }}>
-          <Chip
-            icon={<ShieldIcon sx={{ fontSize: '1rem !important', color: up ? (isDark ? '#34D399' : '#059669') : gold.accent }} />}
-            label={up ? 'SIGNAL BRIDGE LINKED' : 'ZERO-EGRESS SIMULATION READY'}
-            size="small"
-            sx={{
-              bgcolor: up ? (isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF3') : (isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7'),
-              color: up ? (isDark ? '#34D399' : '#027A48') : gold.soft,
-              border: `1px solid ${up ? (isDark ? 'rgba(52,211,153,0.3)' : '#A6F4C5') : gold.border}`,
-              fontWeight: 800,
-            }}
-          />
-          <Chip
-            icon={<LockIcon sx={{ fontSize: '0.95rem !important', color: gold.accent }} />}
-            label="AIR-GAPPED SOVEREIGN ARENA"
-            size="small"
-            sx={{
-              bgcolor: isDark ? '#08080B' : '#F1F5F9',
-              color: gold.soft,
-              border: `1px solid ${gold.border}`,
-              fontWeight: 750,
-            }}
-          />
+          <HeroItem>
+            <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 1.5 }}>
+              <Chip
+                icon={<ShieldIcon sx={{ fontSize: '1rem !important', color: up ? (isDark ? '#34D399' : '#059669') : gold.accent }} />}
+                label={up ? 'SIGNAL BRIDGE LINKED' : 'ZERO-EGRESS SIMULATION READY'}
+                size="small"
+                sx={{
+                  bgcolor: up ? (isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF3') : (isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7'),
+                  color: up ? (isDark ? '#34D399' : '#027A48') : gold.soft,
+                  border: `1px solid ${up ? (isDark ? 'rgba(52,211,153,0.3)' : '#A6F4C5') : gold.border}`,
+                  fontWeight: 800,
+                }}
+              />
+              <Chip
+                icon={<LockIcon sx={{ fontSize: '0.95rem !important', color: gold.accent }} />}
+                label="AIR-GAPPED SOVEREIGN ARENA"
+                size="small"
+                sx={{
+                  bgcolor: isDark ? '#08080B' : '#F1F5F9',
+                  color: gold.soft,
+                  border: `1px solid ${gold.border}`,
+                  fontWeight: 750,
+                }}
+              />
+            </Box>
+          </HeroItem>
+
+          <HeroItem>
+            <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1.5, color: theme.palette.text.primary, position: 'relative', zIndex: 1 }}>
+              Byzantine Socratic <span className="text-gradient-gold">Consensus Arena</span>
+            </Typography>
+          </HeroItem>
+
+          <HeroItem>
+            <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 880, lineHeight: 1.65, fontSize: '1.05rem', position: 'relative', zIndex: 1 }}>
+              Orchestrate multi-agent dialectic debates governed by Byzantine fault-tolerant quorum mathematics.
+              When the backend bridge is unreachable, this arena automatically activates an <span className="text-highlight-gold">air-gapped zero-egress simulation fallback</span> that evaluates architectural propositions across <span className="text-highlight-gold">Azoth (Proponent)</span>, <span className="text-highlight-gold">Kai (Skeptic)</span>, and <span className="text-highlight-gold">Draco (Arbitrator)</span> with SHA-256 signed verdicts.
+            </Typography>
+          </HeroItem>
         </Box>
-
-        <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1.5, color: theme.palette.text.primary, position: 'relative', zIndex: 1 }}>
-          Byzantine Socratic <span className="text-gradient-gold">Consensus Arena</span>
-        </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 880, lineHeight: 1.65, fontSize: '1.05rem', position: 'relative', zIndex: 1 }}>
-          Orchestrate multi-agent dialectic debates governed by Byzantine fault-tolerant quorum mathematics.
-          When the backend bridge is unreachable, this arena automatically activates an <span className="text-highlight-gold">air-gapped zero-egress simulation fallback</span> that evaluates architectural propositions across <span className="text-highlight-gold">Azoth (Proponent)</span>, <span className="text-highlight-gold">Kai (Skeptic)</span>, and <span className="text-highlight-gold">Draco (Arbitrator)</span> with SHA-256 signed verdicts.
-        </Typography>
-      </Box>
+      </HeroReveal>
 
       <DaemonStatusStrip />
 
       {/* Instant Scenario Presets */}
-      <Box sx={{ mb: 4 }}>
-        <Typography className="section-kicker">Instant Battle Arena Presets</Typography>
-        <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5 }}>
-          Select an architectural stress-test scenario
-        </Typography>
-        <Grid container spacing={2}>
-          {SCENARIO_PRESETS.map((preset) => {
-            const isSelected = selectedPresetId === preset.id;
-            return (
-              <Grid xs={12} md={4} key={preset.id}>
-                <Paper
-                  onClick={() => handleSelectPreset(preset)}
-                  sx={{
-                    p: 2.2,
-                    height: '100%',
-                    cursor: 'pointer',
-                    bgcolor: isSelected ? (isDark ? '#0D0D14' : '#FEF9E7') : gold.voidBg,
-                    border: '1.5px solid',
-                    borderColor: isSelected ? gold.accent : (isDark ? 'rgba(212,175,55,0.18)' : theme.palette.divider),
-                    boxShadow: isSelected
-                      ? (isDark ? '0 0 20px -3px rgba(212,175,55,0.30)' : '0 0 16px -2px rgba(184,134,11,0.22)')
-                      : 'none',
-                    borderRadius: 2.5,
-                    transition: 'all 0.22s ease',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    '&:hover': {
-                      borderColor: gold.accent,
-                      transform: 'translateY(-2px)',
-                    },
-                  }}
-                >
-                  <Box>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                      <Chip
-                        label={preset.badge}
-                        size="small"
-                        sx={{
-                          fontFamily: mono,
-                          fontSize: '0.7rem',
-                          fontWeight: 800,
-                          bgcolor: isSelected ? gold.accent : (isDark ? 'rgba(212,175,55,0.12)' : '#F2F4F7'),
-                          color: isSelected ? '#08080B' : gold.soft,
-                        }}
-                      />
-                      <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: gold.accent, fontWeight: 800 }}>
-                        {preset.defaultConfidence}% Quorum
+      <RevealOnScroll preset="fadeUp">
+        <Box sx={{ mb: 4 }}>
+          <Typography className="section-kicker">Instant Battle Arena Presets</Typography>
+          <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5 }}>
+            Select an architectural stress-test scenario
+          </Typography>
+          <Grid container spacing={2}>
+            {SCENARIO_PRESETS.map((preset) => {
+              const isSelected = selectedPresetId === preset.id;
+              return (
+                <Grid xs={12} md={4} key={preset.id}>
+                  <Paper
+                    onClick={() => handleSelectPreset(preset)}
+                    sx={{
+                      p: 2.2,
+                      height: '100%',
+                      cursor: 'pointer',
+                      bgcolor: isSelected ? (isDark ? '#0D0D14' : '#FEF9E7') : gold.voidBg,
+                      border: '1.5px solid',
+                      borderColor: isSelected ? gold.accent : (isDark ? 'rgba(212,175,55,0.18)' : theme.palette.divider),
+                      boxShadow: isSelected
+                        ? (isDark ? '0 0 20px -3px rgba(212,175,55,0.30)' : '0 0 16px -2px rgba(184,134,11,0.22)')
+                        : 'none',
+                      borderRadius: 2.5,
+                      transition: 'all 0.22s ease',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      '&:hover': {
+                        borderColor: gold.accent,
+                        transform: 'translateY(-2px)',
+                      },
+                    }}
+                  >
+                    <Box>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                        <Chip
+                          label={preset.badge}
+                          size="small"
+                          sx={{
+                            fontFamily: mono,
+                            fontSize: '0.7rem',
+                            fontWeight: 800,
+                            bgcolor: isSelected ? gold.accent : (isDark ? 'rgba(212,175,55,0.12)' : '#F2F4F7'),
+                            color: isSelected ? '#08080B' : gold.soft,
+                          }}
+                        />
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: gold.accent, fontWeight: 800 }}>
+                          {preset.defaultConfidence}% Quorum
+                        </Typography>
+                      </Box>
+                      <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary, mb: 0.75, lineHeight: 1.3 }}>
+                        {preset.title}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.86rem', lineHeight: 1.5 }}>
+                        {preset.description}
                       </Typography>
                     </Box>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary, mb: 0.75, lineHeight: 1.3 }}>
-                      {preset.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.86rem', lineHeight: 1.5 }}>
-                      {preset.description}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ mt: 1.75, pt: 1, borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isSelected ? gold.accent : 'text.secondary' }}>
-                      {isSelected ? '● ACTIVE PRESET' : 'Click to Load'}
-                    </Typography>
-                    <BoltIcon sx={{ fontSize: '1.1rem', color: isSelected ? gold.accent : 'text.disabled' }} />
-                  </Box>
-                </Paper>
-              </Grid>
-            );
-          })}
-        </Grid>
-      </Box>
+                    <Box sx={{ mt: 1.75, pt: 1, borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isSelected ? gold.accent : 'text.secondary' }}>
+                        {isSelected ? '● ACTIVE PRESET' : 'Click to Load'}
+                      </Typography>
+                      <BoltIcon sx={{ fontSize: '1.1rem', color: isSelected ? gold.accent : 'text.disabled' }} />
+                    </Box>
+                  </Paper>
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Box>
+      </RevealOnScroll>
 
       {/* Role Feature Cards */}
-      <Grid container spacing={2.5} sx={{ mb: 4.5 }}>
-        <Grid xs={12} md={4}>
-          <Card sx={{ height: '100%', bgcolor: gold.voidBg, border: `1px solid ${gold.border}`, borderRadius: 2.5 }}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 1.2 }}>
-                <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: gold.wash, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <ForumIcon sx={{ color: gold.accent }} />
-                </Box>
-                <Box>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
-                    Azoth (Proponent)
-                  </Typography>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 700 }}>
-                    THESIS & HARDENING
-                  </Typography>
-                </Box>
-              </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.55 }}>
-                Generates the initial architectural proposal, data structure invariants, Lamport epoch bounds, and algorithmic performance guarantees.
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+      <RevealOnScroll preset="fadeUp">
+        <StaggerChildren>
+          <Grid container spacing={2.5} sx={{ mb: 4.5 }}>
+            <Grid xs={12} md={4}>
+              <StaggerItem>
+                <Card sx={{ height: '100%', bgcolor: gold.voidBg, border: `1px solid ${gold.border}`, borderRadius: 2.5 }}>
+                  <CardContent>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 1.2 }}>
+                      <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: gold.wash, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <ForumIcon sx={{ color: gold.accent }} />
+                      </Box>
+                      <Box>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
+                          Azoth (Proponent)
+                        </Typography>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 700 }}>
+                          THESIS & HARDENING
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.55 }}>
+                      Generates the initial architectural proposal, data structure invariants, Lamport epoch bounds, and algorithmic performance guarantees.
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </StaggerItem>
+            </Grid>
 
-        <Grid xs={12} md={4}>
-          <Card sx={{ height: '100%', bgcolor: gold.voidBg, border: `1px solid ${gold.border}`, borderRadius: 2.5 }}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 1.2 }}>
-                <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: gold.wash, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <BalanceIcon sx={{ color: gold.accent }} />
-                </Box>
-                <Box>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
-                    Kai (Skeptic)
-                  </Typography>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#F87171' : '#DC2626', fontWeight: 700 }}>
-                    ANTITHESIS & VULNERABILITY AUDIT
-                  </Typography>
-                </Box>
-              </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.55 }}>
-                Rigorously stress-tests proposals against Byzantine deadlocks, memory cache collisions, microarchitectural side channels, and concurrency faults.
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+            <Grid xs={12} md={4}>
+              <StaggerItem>
+                <Card sx={{ height: '100%', bgcolor: gold.voidBg, border: `1px solid ${gold.border}`, borderRadius: 2.5 }}>
+                  <CardContent>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 1.2 }}>
+                      <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: gold.wash, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <BalanceIcon sx={{ color: gold.accent }} />
+                      </Box>
+                      <Box>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
+                          Kai (Skeptic)
+                        </Typography>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#F87171' : '#DC2626', fontWeight: 700 }}>
+                          ANTITHESIS & VULNERABILITY AUDIT
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.55 }}>
+                      Rigorously stress-tests proposals against Byzantine deadlocks, memory cache collisions, microarchitectural side channels, and concurrency faults.
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </StaggerItem>
+            </Grid>
 
-        <Grid xs={12} md={4}>
-          <Card sx={{ height: '100%', bgcolor: gold.voidBg, border: `1px solid ${gold.border}`, borderRadius: 2.5 }}>
-            <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 1.2 }}>
-                <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: gold.wash, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <GavelIcon sx={{ color: gold.accent }} />
-                </Box>
-                <Box>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
-                    Draco (Arbitrator)
-                  </Typography>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#38BDF8' : '#0284C7', fontWeight: 700 }}>
-                    SYNTHESIS & QUORUM VERDICT
-                  </Typography>
-                </Box>
-              </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.55 }}>
-                Synthesizes dialectic argument vectors, calculates the mathematical Bayesian consensus confidence rating, and stamps the cryptographic verdict.
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+            <Grid xs={12} md={4}>
+              <StaggerItem>
+                <Card sx={{ height: '100%', bgcolor: gold.voidBg, border: `1px solid ${gold.border}`, borderRadius: 2.5 }}>
+                  <CardContent>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 1.2 }}>
+                      <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: gold.wash, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <GavelIcon sx={{ color: gold.accent }} />
+                      </Box>
+                      <Box>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
+                          Draco (Arbitrator)
+                        </Typography>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#38BDF8' : '#0284C7', fontWeight: 700 }}>
+                          SYNTHESIS & QUORUM VERDICT
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.55 }}>
+                      Synthesizes dialectic argument vectors, calculates the mathematical Bayesian consensus confidence rating, and stamps the cryptographic verdict.
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </StaggerItem>
+            </Grid>
+          </Grid>
+        </StaggerChildren>
+      </RevealOnScroll>
 
       {/* ==========================================================================
          INTERACTIVE BYZANTINE TRIANGULATION & MALICIOUS INJECTION SIMULATOR (TASK 2)
          ========================================================================== */}
-      <Box sx={{ mb: 4.5 }}>
-        <Paper
-          sx={{
-            p: { xs: 2.5, md: 3.5 },
-            border: `1.5px solid ${gold.border}`,
-            borderRadius: 3,
-            bgcolor: gold.voidBg,
-            boxShadow: isDark
-              ? '0 0 32px -6px rgba(212,175,55,0.25)'
-              : '0 8px 24px -4px rgba(184,134,11,0.12)',
-            position: 'relative',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Section Header & Interactive Controls */}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2, mb: 2.5 }}>
-            <Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-                <HubIcon sx={{ color: gold.accent, fontSize: '1.3rem' }} />
-                <Typography className="section-kicker" sx={{ mb: 0 }}>
-                  Byzantine Triangulation Engine
-                </Typography>
-              </Box>
-              <Typography variant="h5" sx={{ fontWeight: 800 }}>
-                Interactive Byzantine Triangulation Simulator (3f + 1 ≥ 4 Quorum)
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, maxWidth: 760, fontSize: '0.88rem' }}>
-                Simulate PBFT/Socratic consensus state transitions across partitioned network topology. Toggle active malicious traitor node injection to verify the 2/3 supermajority Byzantine fault tolerance guarantee in real-time.
-              </Typography>
-            </Box>
-
-            {/* Live Controls: Malicious Injection Switch & Round Stepper */}
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, alignItems: { xs: 'flex-start', md: 'flex-end' } }}>
-              {/* Malicious Node Injection Toggle */}
-              <Box
-                sx={{
-                  p: 1,
-                  px: 1.5,
-                  borderRadius: 2,
-                  bgcolor: isMaliciousInjected ? (isDark ? 'rgba(239,68,68,0.15)' : '#FEF2F2') : (isDark ? '#0D0D14' : '#F1F5F9'),
-                  border: `1.5px solid ${isMaliciousInjected ? '#EF4444' : gold.border}`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 1.5,
-                  transition: 'all 0.25s ease',
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-                  <WarningAmberIcon sx={{ color: isMaliciousInjected ? '#EF4444' : 'text.secondary', fontSize: '1.2rem' }} />
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: isMaliciousInjected ? '#EF4444' : theme.palette.text.primary }}>
-                    MALICIOUS NODE INJECTION:
+      <RevealOnScroll preset="fadeUp">
+        <Box sx={{ mb: 4.5 }}>
+          <Paper
+            sx={{
+              p: { xs: 2.5, md: 3.5 },
+              border: `1.5px solid ${gold.border}`,
+              borderRadius: 3,
+              bgcolor: gold.voidBg,
+              boxShadow: isDark
+                ? '0 0 32px -6px rgba(212,175,55,0.25)'
+                : '0 8px 24px -4px rgba(184,134,11,0.12)',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+          >
+            {/* Section Header & Interactive Controls */}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2, mb: 2.5 }}>
+              <Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                  <HubIcon sx={{ color: gold.accent, fontSize: '1.3rem' }} />
+                  <Typography className="section-kicker" sx={{ mb: 0 }}>
+                    Byzantine Triangulation Engine
                   </Typography>
                 </Box>
-                <Switch
-                  checked={isMaliciousInjected}
-                  onChange={(e) => {
-                    setIsMaliciousInjected(e.target.checked);
-                    if (bftPhase === 0) setBftPhase(1);
+                <Typography variant="h5" sx={{ fontWeight: 800 }}>
+                  Interactive Byzantine Triangulation Simulator (3f + 1 ≥ 4 Quorum)
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, maxWidth: 760, fontSize: '0.88rem' }}>
+                  Simulate PBFT/Socratic consensus state transitions across partitioned network topology. Toggle active malicious traitor node injection to verify the 2/3 supermajority Byzantine fault tolerance guarantee in real-time.
+                </Typography>
+              </Box>
+
+              {/* Live Controls: Malicious Injection Switch & Round Stepper */}
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, alignItems: { xs: 'flex-start', md: 'flex-end' } }}>
+                {/* Malicious Node Injection Toggle */}
+                <Box
+                  sx={{
+                    p: 1,
+                    px: 1.5,
+                    borderRadius: 2,
+                    bgcolor: isMaliciousInjected ? (isDark ? 'rgba(239,68,68,0.15)' : '#FEF2F2') : (isDark ? '#0D0D14' : '#F1F5F9'),
+                    border: `1.5px solid ${isMaliciousInjected ? '#EF4444' : gold.border}`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1.5,
+                    transition: 'all 0.25s ease',
                   }}
-                  color="error"
-                  size="small"
-                />
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                    <WarningAmberIcon sx={{ color: isMaliciousInjected ? '#EF4444' : 'text.secondary', fontSize: '1.2rem' }} />
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: isMaliciousInjected ? '#EF4444' : theme.palette.text.primary }}>
+                      MALICIOUS NODE INJECTION:
+                    </Typography>
+                  </Box>
+                  <Switch
+                    checked={isMaliciousInjected}
+                    onChange={(e) => {
+                      setIsMaliciousInjected(e.target.checked);
+                      if (bftPhase === 0) setBftPhase(1);
+                    }}
+                    color="error"
+                    size="small"
+                  />
+                  <Chip
+                    label={isMaliciousInjected ? 'TRAITOR ACTIVE (f = 1)' : 'BENIGN (f = 0)'}
+                    size="small"
+                    sx={{
+                      fontFamily: mono,
+                      fontWeight: 800,
+                      fontSize: '0.68rem',
+                      bgcolor: isMaliciousInjected ? '#EF4444' : (isDark ? 'rgba(52,211,153,0.15)' : '#DCFCE7'),
+                      color: isMaliciousInjected ? '#FFFFFF' : (isDark ? '#34D399' : '#059669'),
+                    }}
+                  />
+                </Box>
+
+                {/* Protocol Trigger Buttons */}
+                <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+                  <Button
+                    variant="contained"
+                    size="small"
+                    startIcon={<PlayArrowIcon />}
+                    disabled={bftAutoPlaying}
+                    onClick={() => {
+                      setBftPhase(1);
+                      setBftAutoPlaying(true);
+                    }}
+                    sx={{
+                      bgcolor: gold.accent,
+                      color: '#08080B',
+                      fontWeight: 800,
+                      fontSize: '0.78rem',
+                      boxShadow: `0 0 14px -2px ${gold.accent}`,
+                      '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' },
+                    }}
+                  >
+                    {bftAutoPlaying ? 'Protocol Advancing…' : '▶ Run Consensus Protocol'}
+                  </Button>
+
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={() => setBftPhase((prev) => (prev + 1) % 5)}
+                    sx={{
+                      borderColor: gold.border,
+                      color: gold.soft,
+                      fontWeight: 750,
+                      fontSize: '0.78rem',
+                      '&:hover': { borderColor: gold.accent, bgcolor: gold.wash },
+                    }}
+                  >
+                    ⏭ Step Phase ({bftPhase}/4)
+                  </Button>
+
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      setBftPhase(0);
+                      setBftAutoPlaying(false);
+                    }}
+                    sx={{ color: 'text.secondary' }}
+                    title="Reset Consensus State"
+                  >
+                    <ReplayIcon fontSize="small" />
+                  </IconButton>
+                </Stack>
+              </Box>
+            </Box>
+
+            {/* Dynamic BFT Status Alert Banner */}
+            <Alert
+              severity={isMaliciousInjected ? 'warning' : 'success'}
+              icon={isMaliciousInjected ? <WarningAmberIcon sx={{ color: '#EF4444' }} /> : <ShieldIcon sx={{ color: isDark ? '#34D399' : '#059669' }} />}
+              sx={{
+                mb: 3,
+                bgcolor: isMaliciousInjected ? (isDark ? 'rgba(239,68,68,0.12)' : '#FEF2F2') : (isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF5'),
+                border: `1px solid ${isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669')}`,
+                borderRadius: 2,
+              }}
+            >
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5 }}>
+                <Typography variant="body2" sx={{ fontWeight: 650, color: theme.palette.text.primary, lineHeight: 1.55 }}>
+                  {isMaliciousInjected ? (
+                    <>
+                      <strong>Byzantine Traitor Injected:</strong> Node 4 is broadcasting equivocal conflicting AST mutations. BFT Quorum: <strong>3 of 4 honest nodes (75.0%)</strong> exceed the 66.7% threshold ($3f+1 \ge 4$). The poisoned payload is quarantined and consensus <strong>STILL SUCCEEDS</strong>!
+                    </>
+                  ) : (
+                    <>
+                      <strong>Nominal Quorum Active:</strong> All 4 validator nodes operating in deterministic Merkle-trie synchrony. Unanimous <strong>100.0% consensus agreement</strong> achieved across all shards.
+                    </>
+                  )}
+                </Typography>
                 <Chip
-                  label={isMaliciousInjected ? 'TRAITOR ACTIVE (f = 1)' : 'BENIGN (f = 0)'}
+                  label={isMaliciousInjected ? '75.0% BFT QUORUM (TOLERATED)' : '100% UNANIMOUS QUORUM'}
                   size="small"
                   sx={{
                     fontFamily: mono,
                     fontWeight: 800,
-                    fontSize: '0.68rem',
-                    bgcolor: isMaliciousInjected ? '#EF4444' : (isDark ? 'rgba(52,211,153,0.15)' : '#DCFCE7'),
-                    color: isMaliciousInjected ? '#FFFFFF' : (isDark ? '#34D399' : '#059669'),
+                    bgcolor: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669'),
+                    color: '#FFFFFF',
+                    fontSize: '0.7rem',
                   }}
                 />
               </Box>
+            </Alert>
 
-              {/* Protocol Trigger Buttons */}
-              <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
-                <Button
-                  variant="contained"
+            {/* Triangulation Visualizer Canvas */}
+            <Box
+              sx={{
+                borderRadius: 2.5,
+                overflow: 'hidden',
+                border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider}`,
+                bgcolor: isDark ? '#08080B' : '#F8FAFC',
+                mb: 3,
+                position: 'relative',
+              }}
+            >
+              <canvas ref={bftCanvasRef} width={680} height={320} style={{ width: '100%', height: 'auto', display: 'block' }} />
+            </Box>
+
+            {/* BFT Validator Nodes Carousel / Stacked Window Showcase */}
+            <WindowCarousel
+              title="Byzantine Consensus Validator Nodes"
+              badge="BFT Quorum Nodes"
+              items={[
+                {
+                  id: 'node-1',
+                  name: 'Node 1: Azoth',
+                  role: 'ROLE: Leader / Proponent',
+                  badge: bftPhase === 0 ? 'IDLE' : bftPhase === 1 ? 'PROPOSING' : 'COMMITTED',
+                  badgeBg: gold.accent,
+                  badgeFg: '#08080B',
+                  detailColor: isDark ? '#F5E6AB' : '#8A6A09',
+                  borderColor: isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider,
+                  titleColor: gold.accent,
+                  vote: 'Vote: 0x7A3F…C120 [VALID]'
+                },
+                {
+                  id: 'node-2',
+                  name: 'Node 2: Kai',
+                  role: 'ROLE: Skeptic / Auditor',
+                  badge: bftPhase < 2 ? 'IDLE' : bftPhase === 2 ? 'AUDITING' : 'COMMITTED',
+                  badgeBg: bftPhase >= 2 ? (isDark ? 'rgba(52,211,153,0.2)' : '#DCFCE7') : (isDark ? 'rgba(255,255,255,0.08)' : '#F1F5F9'),
+                  badgeFg: bftPhase >= 2 ? (isDark ? '#34D399' : '#059669') : 'text.disabled',
+                  detailColor: isDark ? '#F87171' : '#DC2626',
+                  borderColor: isDark ? 'rgba(248,113,113,0.25)' : theme.palette.divider,
+                  titleColor: isDark ? '#F87171' : '#DC2626',
+                  vote: 'Merkle: Verified (No Drift)'
+                },
+                {
+                  id: 'node-3',
+                  name: 'Node 3: Draco',
+                  role: 'ROLE: Arbitrator / Judge',
+                  badge: bftPhase < 3 ? 'IDLE' : 'RATIFIED',
+                  badgeBg: bftPhase >= 3 ? (isDark ? 'rgba(56,189,248,0.2)' : '#E0F2FE') : (isDark ? 'rgba(255,255,255,0.08)' : '#F1F5F9'),
+                  badgeFg: bftPhase >= 3 ? (isDark ? '#38BDF8' : '#0284C7') : 'text.disabled',
+                  detailColor: isDark ? '#38BDF8' : '#0284C7',
+                  borderColor: isDark ? 'rgba(56,189,248,0.25)' : theme.palette.divider,
+                  titleColor: isDark ? '#38BDF8' : '#0284C7',
+                  vote: 'Bayesian Seal: Ready'
+                },
+                {
+                  id: 'node-4',
+                  name: isMaliciousInjected ? 'Node 4: Adversary' : 'Node 4: Lycan',
+                  role: isMaliciousInjected ? 'STATUS: Byzantine Traitor' : 'ROLE: Sentinel Validator',
+                  badge: isMaliciousInjected ? 'EQUIVOCATING' : bftPhase >= 3 ? 'COMMITTED' : 'READY',
+                  badgeBg: isMaliciousInjected ? '#EF4444' : (isDark ? 'rgba(52,211,153,0.2)' : '#DCFCE7'),
+                  badgeFg: isMaliciousInjected ? '#FFFFFF' : (isDark ? '#34D399' : '#059669'),
+                  detailColor: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669'),
+                  borderColor: isMaliciousInjected ? '#EF4444' : (isDark ? 'rgba(52,211,153,0.25)' : theme.palette.divider),
+                  titleColor: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669'),
+                  vote: isMaliciousInjected ? '0xDEAD…BEEF [ERR_POISON]' : 'Vote: 0x7A3F…C120 [VALID]'
+                }
+              ]}
+              initialView="carousel"
+              allowToggleMode={true}
+              renderItem={(node) => (
+                <Box sx={{ p: 1.5 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 800, color: node.titleColor }}>
+                      {node.name}
+                    </Typography>
+                    <Chip
+                      label={node.badge}
+                      size="small"
+                      sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.72rem', bgcolor: node.badgeBg, color: node.badgeFg }}
+                    />
+                  </Box>
+                  <Typography variant="body2" sx={{ color: 'text.secondary', display: 'block', mb: 1.5, fontFamily: mono }}>
+                    {node.role}
+                  </Typography>
+                  <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#05060A' : '#F8FAFC', border: `1px solid ${node.borderColor}` }}>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', color: node.detailColor, fontWeight: 700 }}>
+                      {node.vote}
+                    </Typography>
+                  </Box>
+                </Box>
+              )}
+            />
+          </Paper>
+        </Box>
+      </RevealOnScroll>
+
+      {/* Proposal Submission & Simulation Controls */}
+      <RevealOnScroll preset="fadeUp">
+        <Box sx={{ mb: 4.5, position: 'relative' }}>
+          <Paper
+            sx={{
+              position: 'relative',
+              zIndex: 1,
+              p: { xs: 2.5, md: 3.5 },
+              border: `1.5px solid ${gold.border}`,
+              borderRadius: 3,
+              bgcolor: gold.voidBg,
+              boxShadow: isDark
+                ? '0 0 30px -8px rgba(212,175,55,0.22)'
+                : '0 8px 24px -4px rgba(184,134,11,0.12)',
+            }}
+          >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
+              <Box>
+                <Typography className="section-kicker">Consensus Battle Arena Input</Typography>
+                <Typography variant="h5" sx={{ fontWeight: 800 }}>
+                  Submit Proposition to the Socratic Dialectic Loop
+                </Typography>
+              </Box>
+
+              <Stack direction="row" spacing={1} alignItems="center">
+                <Chip
+                  label={isSimulationMode ? 'MODE: OFFLINE ZERO-EGRESS' : 'MODE: BRIDGE ATTEMPT'}
                   size="small"
-                  startIcon={<PlayArrowIcon />}
-                  disabled={bftAutoPlaying}
-                  onClick={() => {
-                    setBftPhase(1);
-                    setBftAutoPlaying(true);
+                  sx={{
+                    fontFamily: mono,
+                    fontWeight: 800,
+                    bgcolor: isDark ? '#0D0D14' : '#F1F5F9',
+                    color: isSimulationMode ? gold.soft : (isDark ? '#34D399' : '#027A48'),
+                    border: `1px solid ${isSimulationMode ? gold.accent : (isDark ? '#34D399' : '#059669')}`,
                   }}
+                />
+                <Button
+                  size="small"
+                  variant="text"
+                  onClick={() => setIsSimulationMode(!isSimulationMode)}
+                  sx={{ color: gold.accent, textTransform: 'none', fontWeight: 700, fontSize: '0.8rem' }}
+                >
+                  Toggle Mode
+                </Button>
+              </Stack>
+            </Box>
+
+            <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <TextField
+                multiline
+                minRows={4}
+                required
+                value={proposal}
+                onChange={(event) => setProposal(event.target.value)}
+                placeholder="Enter proposal text or engineering feature specification for the multi-agent consensus arena..."
+                sx={{
+                  bgcolor: gold.darkPaper,
+                  borderRadius: 1.5,
+                  '& .MuiOutlinedInput-root': {
+                    fontFamily: mono,
+                    fontSize: '0.88rem',
+                    lineHeight: 1.6,
+                    '& fieldset': { borderColor: isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider },
+                    '&:hover fieldset': { borderColor: gold.accent },
+                    '&.Mui-focused fieldset': { borderColor: gold.accent },
+                  }
+                }}
+              />
+
+              {/* Dialectic Trigger Buttons */}
+              <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', alignItems: 'center' }}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  disabled={busy || !proposal.trim()}
+                  startIcon={<PlayArrowIcon />}
                   sx={{
                     bgcolor: gold.accent,
                     color: '#08080B',
                     fontWeight: 800,
-                    fontSize: '0.78rem',
-                    boxShadow: `0 0 14px -2px ${gold.accent}`,
-                    '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' },
+                    px: 3.5,
+                    py: 1.2,
+                    boxShadow: `0 0 16px -2px ${gold.accent}`,
+                    '&:hover': { bgcolor: isDark ? '#E5C158' : '#9A7209' },
                   }}
                 >
-                  {bftAutoPlaying ? 'Protocol Advancing…' : '▶ Run Consensus Protocol'}
+                  {busy
+                    ? 'Debating in Socratic Loop…'
+                    : isSimulationMode || !up
+                      ? 'Run Zero-Egress Simulation'
+                      : 'Submit to Bridge Consensus'}
                 </Button>
 
                 <Button
                   variant="outlined"
-                  size="small"
-                  onClick={() => setBftPhase((prev) => (prev + 1) % 5)}
+                  disabled={busy || !proposal.trim()}
+                  onClick={() => runOfflineSimulation(activePreset, proposal)}
+                  startIcon={<PsychologyIcon />}
                   sx={{
                     borderColor: gold.border,
                     color: gold.soft,
                     fontWeight: 750,
-                    fontSize: '0.78rem',
+                    px: 2.5,
+                    py: 1.2,
                     '&:hover': { borderColor: gold.accent, bgcolor: gold.wash },
                   }}
                 >
-                  ⏭ Step Phase ({bftPhase}/4)
+                  Force Offline Simulation
                 </Button>
 
-                <IconButton
-                  size="small"
-                  onClick={() => {
-                    setBftPhase(0);
-                    setBftAutoPlaying(false);
-                  }}
-                  sx={{ color: 'text.secondary' }}
-                  title="Reset Consensus State"
+                <Button
+                  variant="text"
+                  disabled={busy}
+                  onClick={() => handleSelectPreset(activePreset)}
+                  startIcon={<ReplayIcon />}
+                  sx={{ color: 'text.secondary', fontWeight: 650, ml: 'auto' }}
                 >
-                  <ReplayIcon fontSize="small" />
-                </IconButton>
-              </Stack>
-            </Box>
-          </Box>
+                  Reset Proposal
+                </Button>
+              </Box>
 
-          {/* Dynamic BFT Status Alert Banner */}
-          <Alert
-            severity={isMaliciousInjected ? 'warning' : 'success'}
-            icon={isMaliciousInjected ? <WarningAmberIcon sx={{ color: '#EF4444' }} /> : <ShieldIcon sx={{ color: isDark ? '#34D399' : '#059669' }} />}
-            sx={{
-              mb: 3,
-              bgcolor: isMaliciousInjected ? (isDark ? 'rgba(239,68,68,0.12)' : '#FEF2F2') : (isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF5'),
-              border: `1px solid ${isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669')}`,
-              borderRadius: 2,
-            }}
-          >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5 }}>
-              <Typography variant="body2" sx={{ fontWeight: 650, color: theme.palette.text.primary, lineHeight: 1.55 }}>
-                {isMaliciousInjected ? (
-                  <>
-                    <strong>Byzantine Traitor Injected:</strong> Node 4 is broadcasting equivocal conflicting AST mutations. BFT Quorum: <strong>3 of 4 honest nodes (75.0%)</strong> exceed the 66.7% threshold ($3f+1 \ge 4$). The poisoned payload is quarantined and consensus <strong>STILL SUCCEEDS</strong>!
-                  </>
-                ) : (
-                  <>
-                    <strong>Nominal Quorum Active:</strong> All 4 validator nodes operating in deterministic Merkle-trie synchrony. Unanimous <strong>100.0% consensus agreement</strong> achieved across all shards.
-                  </>
-                )}
-              </Typography>
-              <Chip
-                label={isMaliciousInjected ? '75.0% BFT QUORUM (TOLERATED)' : '100% UNANIMOUS QUORUM'}
-                size="small"
-                sx={{
-                  fontFamily: mono,
-                  fontWeight: 800,
-                  bgcolor: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669'),
-                  color: '#FFFFFF',
-                  fontSize: '0.7rem',
-                }}
-              />
-            </Box>
-          </Alert>
-
-          {/* Triangulation Visualizer Canvas */}
-          <Box
-            sx={{
-              borderRadius: 2.5,
-              overflow: 'hidden',
-              border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider}`,
-              bgcolor: isDark ? '#08080B' : '#F8FAFC',
-              mb: 3,
-              position: 'relative',
-            }}
-          >
-            <canvas ref={bftCanvasRef} width={680} height={320} style={{ width: '100%', height: 'auto', display: 'block' }} />
-          </Box>
-
-          {/* BFT Validator Nodes Carousel / Stacked Window Showcase */}
-          <WindowCarousel
-            title="Byzantine Consensus Validator Nodes"
-            badge="BFT Quorum Nodes"
-            items={[
-              {
-                id: 'node-1',
-                name: 'Node 1: Azoth',
-                role: 'ROLE: Leader / Proponent',
-                badge: bftPhase === 0 ? 'IDLE' : bftPhase === 1 ? 'PROPOSING' : 'COMMITTED',
-                badgeBg: gold.accent,
-                badgeFg: '#08080B',
-                detailColor: isDark ? '#F5E6AB' : '#8A6A09',
-                borderColor: isDark ? 'rgba(212,175,55,0.2)' : theme.palette.divider,
-                titleColor: gold.accent,
-                vote: 'Vote: 0x7A3F…C120 [VALID]'
-              },
-              {
-                id: 'node-2',
-                name: 'Node 2: Kai',
-                role: 'ROLE: Skeptic / Auditor',
-                badge: bftPhase < 2 ? 'IDLE' : bftPhase === 2 ? 'AUDITING' : 'COMMITTED',
-                badgeBg: bftPhase >= 2 ? (isDark ? 'rgba(52,211,153,0.2)' : '#DCFCE7') : (isDark ? 'rgba(255,255,255,0.08)' : '#F1F5F9'),
-                badgeFg: bftPhase >= 2 ? (isDark ? '#34D399' : '#059669') : 'text.disabled',
-                detailColor: isDark ? '#F87171' : '#DC2626',
-                borderColor: isDark ? 'rgba(248,113,113,0.25)' : theme.palette.divider,
-                titleColor: isDark ? '#F87171' : '#DC2626',
-                vote: 'Merkle: Verified (No Drift)'
-              },
-              {
-                id: 'node-3',
-                name: 'Node 3: Draco',
-                role: 'ROLE: Arbitrator / Judge',
-                badge: bftPhase < 3 ? 'IDLE' : 'RATIFIED',
-                badgeBg: bftPhase >= 3 ? (isDark ? 'rgba(56,189,248,0.2)' : '#E0F2FE') : (isDark ? 'rgba(255,255,255,0.08)' : '#F1F5F9'),
-                badgeFg: bftPhase >= 3 ? (isDark ? '#38BDF8' : '#0284C7') : 'text.disabled',
-                detailColor: isDark ? '#38BDF8' : '#0284C7',
-                borderColor: isDark ? 'rgba(56,189,248,0.25)' : theme.palette.divider,
-                titleColor: isDark ? '#38BDF8' : '#0284C7',
-                vote: 'Bayesian Seal: Ready'
-              },
-              {
-                id: 'node-4',
-                name: isMaliciousInjected ? 'Node 4: Adversary' : 'Node 4: Lycan',
-                role: isMaliciousInjected ? 'STATUS: Byzantine Traitor' : 'ROLE: Sentinel Validator',
-                badge: isMaliciousInjected ? 'EQUIVOCATING' : bftPhase >= 3 ? 'COMMITTED' : 'READY',
-                badgeBg: isMaliciousInjected ? '#EF4444' : (isDark ? 'rgba(52,211,153,0.2)' : '#DCFCE7'),
-                badgeFg: isMaliciousInjected ? '#FFFFFF' : (isDark ? '#34D399' : '#059669'),
-                detailColor: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669'),
-                borderColor: isMaliciousInjected ? '#EF4444' : (isDark ? 'rgba(52,211,153,0.25)' : theme.palette.divider),
-                titleColor: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669'),
-                vote: isMaliciousInjected ? '0xDEAD…BEEF [ERR_POISON]' : 'Vote: 0x7A3F…C120 [VALID]'
-              }
-            ]}
-            initialView="carousel"
-            allowToggleMode={true}
-            renderItem={(node) => (
-              <Box sx={{ p: 1.5 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-                  <Typography variant="h6" sx={{ fontWeight: 800, color: node.titleColor }}>
-                    {node.name}
-                  </Typography>
-                  <Chip
-                    label={node.badge}
-                    size="small"
-                    sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.72rem', bgcolor: node.badgeBg, color: node.badgeFg }}
+              {/* Simulation Progress Bar */}
+              {busy && (
+                <Box sx={{ mt: 1.5, p: 2, bgcolor: isDark ? '#0D0D14' : '#F8FAFC', borderRadius: 2, border: `1px solid ${gold.border}` }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', color: gold.accent, fontWeight: 700 }}>
+                      {simStep === 1 && 'ROUND 1: Azoth presenting thesis vs Kai vulnerability audit…'}
+                      {simStep === 2 && 'ROUND 2: Azoth hardening proof vs Kai adversary stress-testing…'}
+                      {simStep === 3 && 'ROUND 3: Draco synthesizing Bayesian consensus & SHA-256 seal…'}
+                      {simStep === 0 && 'Connecting to multi-agent consensus bus…'}
+                    </Typography>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', color: gold.soft }}>
+                      {simStep === 1 ? '33%' : simStep === 2 ? '66%' : '95%'}
+                    </Typography>
+                  </Box>
+                  <LinearProgress
+                    variant="determinate"
+                    value={simStep === 1 ? 33 : simStep === 2 ? 66 : 95}
+                    sx={{
+                      height: 8,
+                      borderRadius: 4,
+                      bgcolor: isDark ? 'rgba(212,175,55,0.15)' : '#E2E8F0',
+                      '& .MuiLinearProgress-bar': { bgcolor: gold.accent }
+                    }}
                   />
                 </Box>
-                <Typography variant="body2" sx={{ color: 'text.secondary', display: 'block', mb: 1.5, fontFamily: mono }}>
-                  {node.role}
-                </Typography>
-                <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#05060A' : '#F8FAFC', border: `1px solid ${node.borderColor}` }}>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', color: node.detailColor, fontWeight: 700 }}>
-                    {node.vote}
-                  </Typography>
-                </Box>
-              </Box>
-            )}
-          />
-        </Paper>
-      </Box>
+              )}
 
-      {/* Proposal Submission & Simulation Controls */}
-      <Box sx={{ mb: 4.5, position: 'relative' }}>
-        <Paper
-          sx={{
-            position: 'relative',
-            zIndex: 1,
-            p: { xs: 2.5, md: 3.5 },
-            border: `1.5px solid ${gold.border}`,
-            borderRadius: 3,
-            bgcolor: gold.voidBg,
-            boxShadow: isDark
-              ? '0 0 30px -8px rgba(212,175,55,0.22)'
-              : '0 8px 24px -4px rgba(184,134,11,0.12)',
-          }}
-        >
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
-            <Box>
-              <Typography className="section-kicker">Consensus Battle Arena Input</Typography>
-              <Typography variant="h5" sx={{ fontWeight: 800 }}>
-                Submit Proposition to the Socratic Dialectic Loop
-              </Typography>
-            </Box>
-
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Chip
-                label={isSimulationMode ? 'MODE: OFFLINE ZERO-EGRESS' : 'MODE: BRIDGE ATTEMPT'}
-                size="small"
-                sx={{
-                  fontFamily: mono,
-                  fontWeight: 800,
-                  bgcolor: isDark ? '#0D0D14' : '#F1F5F9',
-                  color: isSimulationMode ? gold.soft : (isDark ? '#34D399' : '#027A48'),
-                  border: `1px solid ${isSimulationMode ? gold.accent : (isDark ? '#34D399' : '#059669')}`,
-                }}
-              />
-              <Button
-                size="small"
-                variant="text"
-                onClick={() => setIsSimulationMode(!isSimulationMode)}
-                sx={{ color: gold.accent, textTransform: 'none', fontWeight: 700, fontSize: '0.8rem' }}
-              >
-                Toggle Mode
-              </Button>
-            </Stack>
-          </Box>
-
-          <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <TextField
-              multiline
-              minRows={4}
-              required
-              value={proposal}
-              onChange={(event) => setProposal(event.target.value)}
-              placeholder="Enter proposal text or engineering feature specification for the multi-agent consensus arena..."
-              sx={{
-                bgcolor: gold.darkPaper,
-                borderRadius: 1.5,
-                '& .MuiOutlinedInput-root': {
-                  fontFamily: mono,
-                  fontSize: '0.88rem',
-                  lineHeight: 1.6,
-                  '& fieldset': { borderColor: isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider },
-                  '&:hover fieldset': { borderColor: gold.accent },
-                  '&.Mui-focused fieldset': { borderColor: gold.accent },
-                }
-              }}
-            />
-
-            {/* Dialectic Trigger Buttons */}
-            <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', alignItems: 'center' }}>
-              <Button
-                type="submit"
-                variant="contained"
-                disabled={busy || !proposal.trim()}
-                startIcon={<PlayArrowIcon />}
-                sx={{
-                  bgcolor: gold.accent,
-                  color: '#08080B',
-                  fontWeight: 800,
-                  px: 3.5,
-                  py: 1.2,
-                  boxShadow: `0 0 16px -2px ${gold.accent}`,
-                  '&:hover': { bgcolor: isDark ? '#E5C158' : '#9A7209' },
-                }}
-              >
-                {busy
-                  ? 'Debating in Socratic Loop…'
-                  : isSimulationMode || !up
-                    ? 'Run Zero-Egress Simulation'
-                    : 'Submit to Bridge Consensus'}
-              </Button>
-
-              <Button
-                variant="outlined"
-                disabled={busy || !proposal.trim()}
-                onClick={() => runOfflineSimulation(activePreset, proposal)}
-                startIcon={<PsychologyIcon />}
-                sx={{
-                  borderColor: gold.border,
-                  color: gold.soft,
-                  fontWeight: 750,
-                  px: 2.5,
-                  py: 1.2,
-                  '&:hover': { borderColor: gold.accent, bgcolor: gold.wash },
-                }}
-              >
-                Force Offline Simulation
-              </Button>
-
-              <Button
-                variant="text"
-                disabled={busy}
-                onClick={() => handleSelectPreset(activePreset)}
-                startIcon={<ReplayIcon />}
-                sx={{ color: 'text.secondary', fontWeight: 650, ml: 'auto' }}
-              >
-                Reset Proposal
-              </Button>
-            </Box>
-
-            {/* Simulation Progress Bar */}
-            {busy && (
-              <Box sx={{ mt: 1.5, p: 2, bgcolor: isDark ? '#0D0D14' : '#F8FAFC', borderRadius: 2, border: `1px solid ${gold.border}` }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', color: gold.accent, fontWeight: 700 }}>
-                    {simStep === 1 && 'ROUND 1: Azoth presenting thesis vs Kai vulnerability audit…'}
-                    {simStep === 2 && 'ROUND 2: Azoth hardening proof vs Kai adversary stress-testing…'}
-                    {simStep === 3 && 'ROUND 3: Draco synthesizing Bayesian consensus & SHA-256 seal…'}
-                    {simStep === 0 && 'Connecting to multi-agent consensus bus…'}
-                  </Typography>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', color: gold.soft }}>
-                    {simStep === 1 ? '33%' : simStep === 2 ? '66%' : '95%'}
-                  </Typography>
-                </Box>
-                <LinearProgress
-                  variant="determinate"
-                  value={simStep === 1 ? 33 : simStep === 2 ? 66 : 95}
+              {!up && (
+                <Alert
+                  severity="info"
+                  icon={<ShieldIcon sx={{ color: gold.accent }} />}
                   sx={{
-                    height: 8,
-                    borderRadius: 4,
-                    bgcolor: isDark ? 'rgba(212,175,55,0.15)' : '#E2E8F0',
-                    '& .MuiLinearProgress-bar': { bgcolor: gold.accent }
+                    bgcolor: isDark ? 'rgba(212,175,55,0.08)' : '#FEF9E7',
+                    border: `1px solid ${gold.border}`,
+                    color: isDark ? '#F5E6AB' : '#8A6A09',
+                    borderRadius: 2,
+                    mt: 1,
+                    '& .MuiAlert-message': { width: '100%' }
                   }}
-                />
-              </Box>
-            )}
-
-            {!up && (
-              <Alert
-                severity="info"
-                icon={<ShieldIcon sx={{ color: gold.accent }} />}
-                sx={{
-                  bgcolor: isDark ? 'rgba(212,175,55,0.08)' : '#FEF9E7',
-                  border: `1px solid ${gold.border}`,
-                  color: isDark ? '#F5E6AB' : '#8A6A09',
-                  borderRadius: 2,
-                  mt: 1,
-                  '& .MuiAlert-message': { width: '100%' }
-                }}
-              >
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 650 }}>
-                    Bridge daemon is offline (<span className="text-highlight-dark">127.0.0.1:8789</span>). Zero-egress fallback is active: dialectic debates and cryptographic verdicts run 100% locally in your browser.
-                  </Typography>
-                  <Chip
-                    label="ZERO EXTERNAL EGRESS"
-                    size="small"
-                    sx={{ fontFamily: mono, fontWeight: 800, bgcolor: gold.accent, color: '#08080B', fontSize: '0.68rem' }}
-                  />
-                </Box>
-              </Alert>
-            )}
-          </Box>
-        </Paper>
-      </Box>
+                >
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 650 }}>
+                      Bridge daemon is offline (<span className="text-highlight-dark">127.0.0.1:8789</span>). Zero-egress fallback is active: dialectic debates and cryptographic verdicts run 100% locally in your browser.
+                    </Typography>
+                    <Chip
+                      label="ZERO EXTERNAL EGRESS"
+                      size="small"
+                      sx={{ fontFamily: mono, fontWeight: 800, bgcolor: gold.accent, color: '#08080B', fontSize: '0.68rem' }}
+                    />
+                  </Box>
+                </Alert>
+              )}
+            </Box>
+          </Paper>
+        </Box>
+      </RevealOnScroll>
 
       {/* Dialectic Debate Rounds Ledger */}
       {roundsHistory.length > 0 && (
@@ -1826,15 +1854,17 @@ export default function ConsensusPage() {
       )}
 
       {/* Sovereign Installation Funnel */}
-      <SovereignFunnel
-        title="Deploy Byzantine Consensus Engine Locally"
-        subtitle="Execute fault-tolerant BFT voting routines across local models, cryptographic quorum validation, and tamper-evident verdict logging."
-        toolTitle="Option 1: Consensus Engine Micro-Repo"
-        toolTag="CONSENSUS ENGINE"
-        toolDescription="Standalone zero-dependency Byzantine consensus state-machine engine with PBFT round transitions and multi-signature verification."
-        toolRepo="https://github.com/NullAITech/byzantine-consensus-engine"
-        toolCommand="git clone https://github.com/NullAITech/byzantine-consensus-engine.git"
-      />
+      <RevealOnScroll preset="fadeUp">
+        <SovereignFunnel
+          title="Deploy Byzantine Consensus Engine Locally"
+          subtitle="Execute fault-tolerant BFT voting routines across local models, cryptographic quorum validation, and tamper-evident verdict logging."
+          toolTitle="Option 1: Consensus Engine Micro-Repo"
+          toolTag="CONSENSUS ENGINE"
+          toolDescription="Standalone zero-dependency Byzantine consensus state-machine engine with PBFT round transitions and multi-signature verification."
+          toolRepo="https://github.com/NullAITech/byzantine-consensus-engine"
+          toolCommand="git clone https://github.com/NullAITech/byzantine-consensus-engine.git"
+        />
+      </RevealOnScroll>
     </Container>
   );
 }

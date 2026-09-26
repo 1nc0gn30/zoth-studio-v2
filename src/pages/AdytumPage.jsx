@@ -53,7 +53,7 @@ import keys from '../data/adytumKeys.json';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import SovereignFunnel from '../components/SovereignFunnel';
 import WindowCarousel from '../components/WindowCarousel';
-
+import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const STORAGE_KEY = 'zoth-adytum-plan-v1';
 const INCUBATION_MS = 5 * 60 * 1000;
@@ -1027,6 +1027,7 @@ export function AdytumEngine({ embedded = false }) {
       )}
 
       {/* Header with gold radial glow */}
+      <HeroReveal>
       <Box
         sx={{
           position: 'relative',
@@ -1041,6 +1042,7 @@ export function AdytumEngine({ embedded = false }) {
             : 'radial-gradient(ellipse 85% 95% at 50% 0%, rgba(212,175,55,0.14) 0%, #FFFFFF 85%)',
         }}
       >
+        <HeroItem>
         <Chip
           label="NULLAI • ARCHITECTURAL RITE"
           size="small"
@@ -1052,6 +1054,8 @@ export function AdytumEngine({ embedded = false }) {
             border: dark ? '1px solid rgba(212,175,55,0.3)' : '1px solid rgba(184,134,11,0.25)',
           }}
         />
+        </HeroItem>
+        <HeroItem>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2.5, flexWrap: 'wrap', alignItems: 'flex-end' }}>
           <Box>
             <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', color: textPrimary }}>
@@ -1098,8 +1102,10 @@ export function AdytumEngine({ embedded = false }) {
             </Button>
           </Stack>
         </Box>
+        </HeroItem>
 
         {/* Cryptographic Seal & Provenance Bar */}
+        <HeroItem>
         <Paper
           sx={{
             mt: 3,
@@ -1168,7 +1174,9 @@ export function AdytumEngine({ embedded = false }) {
             </Typography>
           </Box>
         </Paper>
+        </HeroItem>
       </Box>
+      </HeroReveal>
 
       {/* Sanctum Navigation Tabs */}
       <Tabs
@@ -1203,6 +1211,7 @@ export function AdytumEngine({ embedded = false }) {
       {/* TAB 0: Cryptographic Enclave, ZK Attestation & Hardware Ratchet Simulator */}
       {/* ========================================================================= */}
       {activeSanctumTab === 0 && (
+        <RevealOnScroll preset="fadeUp">
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4, mb: 4 }}>
           {/* Section 1: Zero-Knowledge Attestation Engine */}
           <Paper
@@ -1732,13 +1741,14 @@ export function AdytumEngine({ embedded = false }) {
             </Stack>
           </Paper>
         </Box>
+        </RevealOnScroll>
       )}
 
       {/* ========================================================================= */}
       {/* TAB 1: 22-Arcana Hermetic Planning Rite */}
       {/* ========================================================================= */}
       {activeSanctumTab === 1 && (
-        <>
+        <RevealOnScroll preset="fadeUp">
       {/* Rite Progress Bar */}
       <Box sx={{ mb: 4 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
@@ -2042,6 +2052,7 @@ export function AdytumEngine({ embedded = false }) {
             })}
           </Box>
         ) : (
+          <StaggerChildren>
           <Grid container spacing={2}>
             {keys.map((item) => {
               const saved = plan.entries[item.key];
@@ -2051,7 +2062,8 @@ export function AdytumEngine({ embedded = false }) {
               const lens = ARCHITECTURAL_LENSES[item.key] || item.name;
 
               return (
-                <Grid xs={6} sm={4} md={3} lg={2} key={item.key}>
+                <StaggerItem key={item.key}>
+                <Grid xs={6} sm={4} md={3} lg={2}>
                   <Card
                     onClick={() => {
                       setPlan((prev) => ({ ...prev, current: item.key, startedAt: item.key === prev.current ? prev.startedAt : null }));
@@ -2107,9 +2119,11 @@ export function AdytumEngine({ embedded = false }) {
                     </CardContent>
                   </Card>
                 </Grid>
+                </StaggerItem>
               );
             })}
           </Grid>
+          </StaggerChildren>
         )}
       </Paper>
 
@@ -2536,10 +2550,11 @@ export function AdytumEngine({ embedded = false }) {
           )}
         </Box>
       </Box>
-      </>
+      </RevealOnScroll>
       )}
 
       {/* Sovereign Installation & Ecosystem Deployment Funnel */}
+      <RevealOnScroll preset="fadeUp">
       <SovereignFunnel
         title="Deploy Adytum Alchemist & Sovereign Tools Locally"
         subtitle="Adytum Alchemist and the entire Zoth Studio suite are designed for 100% offline, zero-cloud execution. Run the standalone Adytum CLI package on your machine, clone the full Zoth Studio v2 cockpit, or boot the air-gapped bare-metal Zoth OS."
@@ -2550,6 +2565,7 @@ export function AdytumEngine({ embedded = false }) {
         toolCommand="git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git"
         sx={{ mt: 6 }}
       />
+      </RevealOnScroll>
 
       {/* Snackbar Feedback */}
       <Snackbar

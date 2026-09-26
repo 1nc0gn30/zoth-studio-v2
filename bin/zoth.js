@@ -245,11 +245,22 @@ async function handleUp() {
     pids.ui = started;
     console.log(`${GREEN}✔ UI Server${RESET} pid ${started.pid}  log ${path.relative(root, started.log)}`);
   } else {
-    console.log(`${GREEN}✔ UI Server${RESET} already listening on http://127.0.0.1:3000/`);
+  // Spawn Swarm Daemon on port 8790
+  const isSwarmUp = await fetch('http://127.0.0.1:8790/api/swarm/status').then((res) => res.ok).catch(() => false);
+  if (!isSwarmUp) {
+    const swarmPy = path.join(root, 'bin', 'swarm_daemon.py');
+    if (fs.existsSync(swarmPy)) {
+      const started = spawnDaemon('swarm', 'python3', [swarmPy], root);
+      pids.swarm = started;
+      console.log(`${GREEN}✔ Swarm Daemon (21-Agent Matrix)${RESET} pid ${started.pid}  http://127.0.0.1:8790/`);
+    }
+  } else {
+    console.log(`${GREEN}✔ Swarm Daemon (21-Agent Matrix)${RESET} already listening on http://127.0.0.1:8790/`);
   }
 
   writePids(pids);
   console.log(`\n${BOLD}UI${RESET}  ${CYAN}http://127.0.0.1:3000/${RESET}`);
+  console.log(`${BOLD}Swarm Daemon${RESET}  ${CYAN}http://127.0.0.1:8790/api/swarm/agents${RESET}`);
   console.log(`${GRAY}Give the daemons a second, then run npm run zoth -- doctor.${RESET}`);
 }
 

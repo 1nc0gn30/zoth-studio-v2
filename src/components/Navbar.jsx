@@ -28,6 +28,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import FlashOnIcon from '@mui/icons-material/FlashOn';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import GoldenZLogo3D from './GoldenZLogo3D';
+import SwarmDaemonMultiplexer from './SwarmDaemonMultiplexer';
 import { microTools } from '../data/toolsData';
 import { workstations } from '../data/workstations';
 
@@ -65,6 +66,7 @@ export default function Navbar({ mode, onToggleTheme }) {
   const [enclaveAnchor, setEnclaveAnchor] = useState(null);
   const [knowledgeAnchor, setKnowledgeAnchor] = useState(null);
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [swarmDaemonOpen, setSwarmDaemonOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const location = useLocation();
@@ -78,12 +80,16 @@ export default function Navbar({ mode, onToggleTheme }) {
   const navActive = dark ? '#D4AF37' : '#B8860B';
   const goldAccent = dark ? '#D4AF37' : '#B8860B';
 
-  // Global Keyboard Shortcut: ⌘K or Ctrl+K opens Command Palette
+  // Global Keyboard Shortcuts: ⌘K for Command Palette, Ctrl+~ for Swarm Daemon
   useEffect(() => {
     const handleKeyDown = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
         setPaletteOpen((prev) => !prev);
+      }
+      if ((e.metaKey || e.ctrlKey) && (e.key === '`' || e.key === '~')) {
+        e.preventDefault();
+        setSwarmDaemonOpen((prev) => !prev);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -550,6 +556,34 @@ export default function Navbar({ mode, onToggleTheme }) {
 
           {/* Right Action Buttons */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, flexShrink: 0 }}>
+            {/* Universal Swarm Daemon 21-Terminal Trigger */}
+            <Button
+              size="small"
+              onClick={() => setSwarmDaemonOpen(true)}
+              startIcon={<TerminalIcon sx={{ color: '#08080B', fontSize: '17px !important' }} />}
+              sx={{
+                display: { xs: 'none', sm: 'inline-flex' },
+                color: '#08080B',
+                bgcolor: goldAccent,
+                borderRadius: 9999,
+                px: 1.5,
+                py: 0.55,
+                fontSize: '0.78rem',
+                fontWeight: 800,
+                fontFamily: mono,
+                textTransform: 'none',
+                boxShadow: `0 0 14px ${goldAccent}66`,
+                transition: 'all 0.22s ease',
+                '&:hover': {
+                  bgcolor: dark ? '#F5E6AB' : '#9A7209',
+                  boxShadow: `0 0 20px ${goldAccent}99`,
+                  transform: 'translateY(-1.5px)',
+                },
+              }}
+            >
+              SWARM [21]
+            </Button>
+
             {/* Quick Command Palette Search Button */}
             <Button
               size="small"
@@ -1706,6 +1740,45 @@ export default function Navbar({ mode, onToggleTheme }) {
           </Box>
         </Box>
       </Drawer>
+
+      {/* Universal Swarm Daemon Modal Console (Available anywhere via Ctrl+~ or button) */}
+      <Dialog
+        open={swarmDaemonOpen}
+        onClose={() => setSwarmDaemonOpen(false)}
+        maxWidth="xl"
+        fullWidth
+        PaperProps={{
+          sx: {
+            bgcolor: dark ? '#08080B' : '#F8FAFC',
+            border: `1.5px solid ${goldAccent}`,
+            borderRadius: 3,
+            backgroundImage: 'none',
+            p: { xs: 1, md: 2.5 },
+            maxHeight: '94vh',
+            boxShadow: dark ? '0 0 48px -8px rgba(212,175,55,0.4)' : '0 20px 48px rgba(0,0,0,0.15)',
+          },
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 1, pb: 1, borderBottom: `1px solid ${borderColor}` }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <TerminalIcon sx={{ color: goldAccent, fontSize: 24 }} />
+            <Typography variant="h6" sx={{ fontFamily: mono, fontWeight: 800, color: dark ? '#FFFFFF' : '#101828' }}>
+              UNIVERSAL SWARM DAEMON // 21 TERMINALS
+            </Typography>
+            <Chip
+              size="small"
+              label="GLOBAL SHORTCUT: CTRL+~"
+              sx={{ fontFamily: mono, fontSize: '0.65rem', fontWeight: 800, bgcolor: dark ? 'rgba(212,175,55,0.15)' : '#FEF9E7', color: goldAccent }}
+            />
+          </Box>
+          <IconButton onClick={() => setSwarmDaemonOpen(false)} sx={{ color: dark ? '#9CA3AF' : '#475467' }}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <DialogContent sx={{ p: { xs: 0.5, md: 1 }, mt: 1 }}>
+          <SwarmDaemonMultiplexer embedded />
+        </DialogContent>
+      </Dialog>
     </AppBar>
   );
 }

@@ -42,6 +42,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import PublicIcon from '@mui/icons-material/Public';
 
+import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 import { microTools } from '../data/toolsData';
 import MathPillarsGrid from '../components/MathPillarsGrid';
 import ZeroEgressPanel from '../components/ZeroEgressPanel';
@@ -361,91 +362,100 @@ Runs local invariant verification before staging tools.`
     <Box sx={{ bgcolor: dark ? voidDark : '#FAFBFD', minHeight: '100vh', py: 6 }}>
       <Container maxWidth="xl">
         {/* Header / Hero Section */}
-        <Box sx={{ mb: 4 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 2 }}>
-            <Chip
-              label="DOCUMENTATION & TECHNICAL SPECIFICATION"
-              size="small"
-              sx={{
-                bgcolor: goldBg,
-                color: goldLight,
-                border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`,
-                fontWeight: 750,
-                letterSpacing: '0.05em'
-              }}
-            />
-            <Chip
-              icon={<HubIcon sx={{ fontSize: '14px !important', color: `${textSecondary} !important` }} />}
-              label="37 WORKSTATIONS & 25 TOOLS"
-              size="small"
-              sx={{
-                bgcolor: dark ? '#14141E' : '#F2F4F7',
-                color: textSecondary,
-                border: `1px solid ${divider}`,
-                fontWeight: 700
-              }}
-            />
-            <Chip
-              icon={<CloudDoneIcon sx={{ fontSize: '14px !important', color: `${dark ? '#38BDF8' : '#0284C7'} !important` }} />}
-              label="NETLIFY 83 PRERENDERED ROUTES"
-              size="small"
-              sx={{
-                bgcolor: dark ? 'rgba(56,189,248,0.12)' : '#E0F2FE',
-                color: dark ? '#38BDF8' : '#0284C7',
-                border: `1px solid ${dark ? 'rgba(56,189,248,0.3)' : '#BAE6FD'}`,
-                fontWeight: 700
-              }}
-            />
-            <Chip
-              icon={<ShieldIcon sx={{ fontSize: '14px !important', color: `${dark ? '#34D399' : '#027A48'} !important` }} />}
-              label="ZERO-EGRESS INVARIANTS"
-              size="small"
-              sx={{
-                bgcolor: dark ? 'rgba(52,211,153,0.14)' : '#ECFDF5',
-                color: dark ? '#34D399' : '#027A48',
-                border: `1px solid ${dark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`,
-                fontWeight: 700
-              }}
-            />
-          </Box>
+        <HeroReveal>
+          <Box sx={{ mb: 4 }}>
+            <HeroItem>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 2 }}>
+                <Chip
+                  label="DOCUMENTATION & TECHNICAL SPECIFICATION"
+                  size="small"
+                  sx={{
+                    bgcolor: goldBg,
+                    color: goldLight,
+                    border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`,
+                    fontWeight: 750,
+                    letterSpacing: '0.05em'
+                  }}
+                />
+                <Chip
+                  icon={<HubIcon sx={{ fontSize: '14px !important', color: `${textSecondary} !important` }} />}
+                  label="37 WORKSTATIONS & 25 TOOLS"
+                  size="small"
+                  sx={{
+                    bgcolor: dark ? '#14141E' : '#F2F4F7',
+                    color: textSecondary,
+                    border: `1px solid ${divider}`,
+                    fontWeight: 700
+                  }}
+                />
+                <Chip
+                  icon={<CloudDoneIcon sx={{ fontSize: '14px !important', color: `${dark ? '#38BDF8' : '#0284C7'} !important` }} />}
+                  label="NETLIFY 83 PRERENDERED ROUTES"
+                  size="small"
+                  sx={{
+                    bgcolor: dark ? 'rgba(56,189,248,0.12)' : '#E0F2FE',
+                    color: dark ? '#38BDF8' : '#0284C7',
+                    border: `1px solid ${dark ? 'rgba(56,189,248,0.3)' : '#BAE6FD'}`,
+                    fontWeight: 700
+                  }}
+                />
+                <Chip
+                  icon={<ShieldIcon sx={{ fontSize: '14px !important', color: `${dark ? '#34D399' : '#027A48'} !important` }} />}
+                  label="ZERO-EGRESS INVARIANTS"
+                  size="small"
+                  sx={{
+                    bgcolor: dark ? 'rgba(52,211,153,0.14)' : '#ECFDF5',
+                    color: dark ? '#34D399' : '#027A48',
+                    border: `1px solid ${dark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`,
+                    fontWeight: 700
+                  }}
+                />
+              </Box>
+            </HeroItem>
 
-          <Typography
-            variant="h3"
-            sx={{
-              fontWeight: 800,
-              mb: 1.5,
-              color: textPrimary,
-              letterSpacing: '-0.02em'
-            }}
-          >
-            Zoth Studio Technical Documentation
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{
-              maxWidth: '950px',
-              fontSize: '1.1rem',
-              color: textSecondary,
-              lineHeight: 1.7,
-              mb: 3
-            }}
-          >
-            Comprehensive architectural blueprint for Zoth Studio v2: air-gapped agent orchestration,
-            biomorphic STDP synaptic memory, Lucy Netrunner Oracle, 3-agent Byzantine consensus,
-            Adytum Hardware Sanctum, and production Netlify deployment with 83 prerendered static routes.
-          </Typography>
+            <HeroItem>
+              <Typography
+                variant="h3"
+                sx={{
+                  fontWeight: 800,
+                  mb: 1.5,
+                  color: textPrimary,
+                  letterSpacing: '-0.02em'
+                }}
+              >
+                Zoth Studio Technical Documentation
+              </Typography>
+            </HeroItem>
+            
+            <HeroItem>
+              <Typography
+                variant="body1"
+                sx={{
+                  maxWidth: '950px',
+                  fontSize: '1.1rem',
+                  color: textSecondary,
+                  lineHeight: 1.7,
+                  mb: 3
+                }}
+              >
+                Comprehensive architectural blueprint for Zoth Studio v2: air-gapped agent orchestration,
+                biomorphic STDP synaptic memory, Lucy Netrunner Oracle, 3-agent Byzantine consensus,
+                Adytum Hardware Sanctum, and production Netlify deployment with 83 prerendered static routes.
+              </Typography>
+            </HeroItem>
 
-          {/* Topic Category Filter Chips Bar */}
-          <Paper
-            sx={{
-              p: 2,
-              borderRadius: 3,
-              bgcolor: dark ? '#0E1017' : '#FFFFFF',
-              border: `1px solid ${dark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.25)'}`,
-              boxShadow: dark ? '0 4px 20px rgba(0,0,0,0.25)' : '0 2px 10px rgba(16,24,40,0.06)',
-              mb: 3
-            }}
-          >
+            {/* Topic Category Filter Chips Bar */}
+            <HeroItem>
+              <Paper
+                sx={{
+                  p: 2,
+                  borderRadius: 3,
+                  bgcolor: dark ? '#0E1017' : '#FFFFFF',
+                  border: `1px solid ${dark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.25)'}`,
+                  boxShadow: dark ? '0 4px 20px rgba(0,0,0,0.25)' : '0 2px 10px rgba(16,24,40,0.06)',
+                  mb: 3
+                }}
+              >
             <Box
               sx={{
                 display: 'flex',
@@ -533,37 +543,42 @@ Runs local invariant verification before staging tools.`
                 </Button>
               </Box>
             )}
-          </Paper>
+            </Paper>
+            </HeroItem>
 
           {/* Search Bar */}
-          <Box sx={{ maxWidth: '650px' }}>
-            <TextField
-              fullWidth
-              placeholder="Search documentation, micro-tools, invariants, consensus math..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon sx={{ color: gold }} />
-                  </InputAdornment>
-                ),
-                sx: {
-                  borderRadius: 9999,
-                  bgcolor: dark ? '#0E1017' : '#FFFFFF',
-                  color: textPrimary,
-                  border: `1px solid ${dark ? 'rgba(212,175,55,0.25)' : '#D0D5DD'}`,
-                  '&:hover': { borderColor: gold },
-                  '&.Mui-focused': { borderColor: gold }
-                }
-              }}
-              size="medium"
-            />
+          <HeroItem>
+            <Box sx={{ maxWidth: '650px' }}>
+              <TextField
+                fullWidth
+                placeholder="Search documentation, micro-tools, invariants, consensus math..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon sx={{ color: gold }} />
+                    </InputAdornment>
+                  ),
+                  sx: {
+                    borderRadius: 9999,
+                    bgcolor: dark ? '#0E1017' : '#FFFFFF',
+                    color: textPrimary,
+                    border: `1px solid ${dark ? 'rgba(212,175,55,0.25)' : '#D0D5DD'}`,
+                    '&:hover': { borderColor: gold },
+                    '&.Mui-focused': { borderColor: gold }
+                  }
+                }}
+                size="medium"
+              />
+            </Box>
+          </HeroItem>
           </Box>
-        </Box>
+        </HeroReveal>
 
         {/* Responsive Split Layout */}
-        <Grid container spacing={4}>
+        <RevealOnScroll preset="fadeUp" delay={0.4}>
+          <Grid container spacing={4}>
           {/* Left Column: Sticky Table of Contents & Quick Command Block */}
           <Grid xs={12} md={4} lg={3}>
             <Box sx={{ position: { md: 'sticky' }, top: 24 }}>
@@ -1607,18 +1622,21 @@ npm run preview`}
             </Box>
           </Grid>
         </Grid>
+        </RevealOnScroll>
 
         {/* Sovereign Installation Funnel */}
-        <SovereignFunnel
-          title="Install Zoth Studio v2 &amp; Sovereign Zoth OS"
-          subtitle="Full documentation and deployment pipeline for zero-telemetry development, local loopback enclaves, 37 workstations, and bare-metal OS hypervisors."
-          toolTitle="Option 1: Zero-Egress CLI Suite"
-          toolTag="DOCS &amp; RUNTIME"
-          toolDescription="Download the air-gapped documentation suite, offline CLI diagnostic toolbench, and local IPC verification harness."
-          toolRepo="https://github.com/NullAITech/zoth-studio-v2"
-          toolCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git && cd zoth-studio-v2 && npm install"
-          sx={{ mt: 6 }}
-        />
+        <RevealOnScroll preset="fadeUp">
+          <SovereignFunnel
+            title="Install Zoth Studio v2 &amp; Sovereign Zoth OS"
+            subtitle="Full documentation and deployment pipeline for zero-telemetry development, local loopback enclaves, 37 workstations, and bare-metal OS hypervisors."
+            toolTitle="Option 1: Zero-Egress CLI Suite"
+            toolTag="DOCS &amp; RUNTIME"
+            toolDescription="Download the air-gapped documentation suite, offline CLI diagnostic toolbench, and local IPC verification harness."
+            toolRepo="https://github.com/NullAITech/zoth-studio-v2"
+            toolCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git && cd zoth-studio-v2 && npm install"
+            sx={{ mt: 6 }}
+          />
+        </RevealOnScroll>
       </Container>
     </Box>
   );

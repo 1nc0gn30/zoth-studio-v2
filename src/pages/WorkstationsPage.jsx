@@ -6,6 +6,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
+import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 
 // Icons
 import SearchIcon from '@mui/icons-material/Search';
@@ -337,334 +338,348 @@ export default function WorkstationsPage() {
   return (
     <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 } }}>
       {/* Page Header */}
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="overline" sx={{ color: gold.accent, letterSpacing: '0.18em', fontWeight: 800 }}>
-          SOVEREIGN WORKSTATION DIRECTORY
-        </Typography>
-        <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', mb: 1, color: isDark ? '#EDEFF2' : '#101828' }}>
-          Workstations
-        </Typography>
-        <Typography color="text.secondary" sx={{ maxWidth: 880, fontSize: '1.05rem', lineHeight: 1.6 }}>
-          All 37 studio workstations are integrated directly into Zoth Studio v2. They render with the native gold-on-void design system, zero external runtime dependency, and immediate interactive execution.
-        </Typography>
-      </Box>
+      <HeroReveal>
+        <Box sx={{ mb: 3 }}>
+          <HeroItem>
+            <Typography variant="overline" sx={{ color: gold.accent, letterSpacing: '0.18em', fontWeight: 800, display: 'block', mb: 1 }}>
+              SOVEREIGN WORKSTATION DIRECTORY
+            </Typography>
+          </HeroItem>
+          <HeroItem>
+            <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', mb: 1, color: isDark ? '#EDEFF2' : '#101828' }}>
+              Workstations
+            </Typography>
+          </HeroItem>
+          <HeroItem>
+            <Typography color="text.secondary" sx={{ maxWidth: 880, fontSize: '1.05rem', lineHeight: 1.6 }}>
+              All 37 studio workstations are integrated directly into Zoth Studio v2. They render with the native gold-on-void design system, zero external runtime dependency, and immediate interactive execution.
+            </Typography>
+          </HeroItem>
+        </Box>
+      </HeroReveal>
 
       {/* Workstation Stats Bar */}
-      <Paper
-        elevation={0}
-        sx={{
-          p: { xs: 2, md: 2.5 },
-          mb: 3.5,
-          borderRadius: 3,
-          bgcolor: isDark ? '#0B0B12' : '#FFFFFF',
-          border: '1px solid',
-          borderColor: isDark ? 'rgba(212,175,55,0.22)' : 'rgba(184,134,11,0.2)',
-          boxShadow: isDark
-            ? '0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(212,175,55,0.1)'
-            : '0 2px 12px rgba(16,24,40,0.06)',
-        }}
-      >
-        <Grid container spacing={2.5} alignItems="center">
-          {/* Stat 1: 37 Sovereign Consoles Native in v2 */}
-          <Grid xs={12} sm={6} md={3}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.75 }}>
-              <Box
-                sx={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: 2,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  bgcolor: 'rgba(212,175,55,0.12)',
-                  border: '1px solid rgba(212,175,55,0.3)',
-                  color: gold.accent,
-                  flexShrink: 0,
-                }}
-              >
-                <TerminalIcon sx={{ fontSize: '1.35rem' }} />
-              </Box>
-              <Box>
-                <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent, lineHeight: 1.15 }}>
-                  37
-                </Typography>
-                <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', fontSize: '0.78rem' }}>
-                  37 Sovereign Consoles Native in v2
-                </Typography>
-              </Box>
-            </Box>
-          </Grid>
-
-          {/* Stat 2: 6 Architectural Bands */}
-          <Grid xs={12} sm={6} md={3}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.75 }}>
-              <Box
-                sx={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: 2,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF',
-                  border: `1px solid ${isDark ? 'rgba(56,189,248,0.3)' : '#BAE6FD'}`,
-                  color: isDark ? '#38BDF8' : '#0284C7',
-                  flexShrink: 0,
-                }}
-              >
-                <AccountTreeIcon sx={{ fontSize: '1.35rem' }} />
-              </Box>
-              <Box>
-                <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 800, color: isDark ? '#EDEFF2' : '#101828', lineHeight: 1.15 }}>
-                  6
-                </Typography>
-                <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', fontSize: '0.78rem' }}>
-                  6 Architectural Bands
-                </Typography>
-              </Box>
-            </Box>
-          </Grid>
-
-          {/* Stat 3: Zero Cloud Dependencies (100% Loopback) */}
-          <Grid xs={12} sm={6} md={3}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.75 }}>
-              <Box
-                sx={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: 2,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  bgcolor: isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF5',
-                  border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`,
-                  color: isDark ? '#34D399' : '#047857',
-                  flexShrink: 0,
-                }}
-              >
-                <CloudOffIcon sx={{ fontSize: '1.35rem' }} />
-              </Box>
-              <Box>
-                <Typography variant="subtitle1" sx={{ fontFamily: mono, fontWeight: 800, color: isDark ? '#34D399' : '#047857', lineHeight: 1.2 }}>
-                  100% Loopback
-                </Typography>
-                <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', fontSize: '0.78rem' }}>
-                  Zero Cloud Dependencies (100% Loopback)
-                </Typography>
-              </Box>
-            </Box>
-          </Grid>
-
-          {/* Stat 4: Legacy server status badge */}
-          <Grid xs={12} sm={6} md={3}>
-            <Box
-              sx={{
-                p: 1.25,
-                px: 1.5,
-                borderRadius: 2,
-                border: '1px solid',
-                borderColor: classicUp ? (isDark ? 'rgba(52,211,153,0.35)' : '#A7F3D0') : (isDark ? '#26262F' : '#EAECF0'),
-                bgcolor: classicUp
-                  ? (isDark ? 'rgba(52,211,153,0.08)' : '#ECFDF3')
-                  : (isDark ? 'rgba(255,255,255,0.02)' : '#F9FAFB'),
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: 1.25,
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
+      <RevealOnScroll preset="fadeUp" delay={0.2}>
+        <Paper
+          elevation={0}
+          sx={{
+            p: { xs: 2, md: 2.5 },
+            mb: 3.5,
+            borderRadius: 3,
+            bgcolor: isDark ? '#0B0B12' : '#FFFFFF',
+            border: '1px solid',
+            borderColor: isDark ? 'rgba(212,175,55,0.22)' : 'rgba(184,134,11,0.2)',
+            boxShadow: isDark
+              ? '0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(212,175,55,0.1)'
+              : '0 2px 12px rgba(16,24,40,0.06)',
+          }}
+        >
+          <Grid container spacing={2.5} alignItems="center">
+            {/* Stat 1: 37 Sovereign Consoles Native in v2 */}
+            <Grid xs={12} sm={6} md={3}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.75 }}>
                 <Box
                   sx={{
-                    width: 10,
-                    height: 10,
-                    borderRadius: '50%',
-                    bgcolor: classicUp ? (isDark ? '#34D399' : '#059669') : '#6B7280',
-                    boxShadow: classicUp ? (isDark ? '0 0 8px #34D399' : '0 0 6px rgba(5,150,105,0.4)') : 'none',
+                    width: 44,
+                    height: 44,
+                    borderRadius: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    bgcolor: 'rgba(212,175,55,0.12)',
+                    border: '1px solid rgba(212,175,55,0.3)',
+                    color: gold.accent,
                     flexShrink: 0,
                   }}
-                />
+                >
+                  <TerminalIcon sx={{ fontSize: '1.35rem' }} />
+                </Box>
                 <Box>
-                  <Typography variant="caption" sx={{ fontWeight: 800, display: 'block', color: classicUp ? (isDark ? '#34D399' : '#047857') : 'text.primary', lineHeight: 1.2 }}>
-                    {classicUp ? 'Legacy Server Online · :8088' : 'Legacy Server Offline'}
+                  <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent, lineHeight: 1.15 }}>
+                    37
                   </Typography>
-                  <Typography variant="caption" sx={{ fontSize: '0.68rem', color: 'text.secondary', fontFamily: mono }}>
-                    {classicUp ? 'Dual runtime active' : 'Not Required · v2 Native'}
+                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', fontSize: '0.78rem' }}>
+                    37 Sovereign Consoles Native in v2
                   </Typography>
                 </Box>
               </Box>
-              <Chip
-                size="small"
-                label={classicUp ? ':8088 UP' : 'OFFLINE'}
+            </Grid>
+
+            {/* Stat 2: 6 Architectural Bands */}
+            <Grid xs={12} sm={6} md={3}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.75 }}>
+                <Box
+                  sx={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF',
+                    border: `1px solid ${isDark ? 'rgba(56,189,248,0.3)' : '#BAE6FD'}`,
+                    color: isDark ? '#38BDF8' : '#0284C7',
+                    flexShrink: 0,
+                  }}
+                >
+                  <AccountTreeIcon sx={{ fontSize: '1.35rem' }} />
+                </Box>
+                <Box>
+                  <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 800, color: isDark ? '#EDEFF2' : '#101828', lineHeight: 1.15 }}>
+                    6
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', fontSize: '0.78rem' }}>
+                    6 Architectural Bands
+                  </Typography>
+                </Box>
+              </Box>
+            </Grid>
+
+            {/* Stat 3: Zero Cloud Dependencies (100% Loopback) */}
+            <Grid xs={12} sm={6} md={3}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.75 }}>
+                <Box
+                  sx={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    bgcolor: isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF5',
+                    border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`,
+                    color: isDark ? '#34D399' : '#047857',
+                    flexShrink: 0,
+                  }}
+                >
+                  <CloudOffIcon sx={{ fontSize: '1.35rem' }} />
+                </Box>
+                <Box>
+                  <Typography variant="subtitle1" sx={{ fontFamily: mono, fontWeight: 800, color: isDark ? '#34D399' : '#047857', lineHeight: 1.2 }}>
+                    100% Loopback
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', fontSize: '0.78rem' }}>
+                    Zero Cloud Dependencies (100% Loopback)
+                  </Typography>
+                </Box>
+              </Box>
+            </Grid>
+
+            {/* Stat 4: Legacy server status badge */}
+            <Grid xs={12} sm={6} md={3}>
+              <Box
                 sx={{
-                  height: 20,
-                  fontSize: '0.65rem',
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  bgcolor: classicUp ? (isDark ? 'rgba(52,211,153,0.2)' : '#D1FAE5') : (isDark ? 'rgba(255,255,255,0.06)' : '#E5E7EB'),
-                  color: classicUp ? (isDark ? '#34D399' : '#047857') : 'text.secondary',
-                  border: `1px solid ${classicUp ? (isDark ? 'rgba(52,211,153,0.4)' : '#6EE7B7') : (isDark ? '#374151' : '#D1D5DB')}`,
+                  p: 1.25,
+                  px: 1.5,
+                  borderRadius: 2,
+                  border: '1px solid',
+                  borderColor: classicUp ? (isDark ? 'rgba(52,211,153,0.35)' : '#A7F3D0') : (isDark ? '#26262F' : '#EAECF0'),
+                  bgcolor: classicUp
+                    ? (isDark ? 'rgba(52,211,153,0.08)' : '#ECFDF3')
+                    : (isDark ? 'rgba(255,255,255,0.02)' : '#F9FAFB'),
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 1.25,
                 }}
-              />
-            </Box>
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
+                  <Box
+                    sx={{
+                      width: 10,
+                      height: 10,
+                      borderRadius: '50%',
+                      bgcolor: classicUp ? (isDark ? '#34D399' : '#059669') : '#6B7280',
+                      boxShadow: classicUp ? (isDark ? '0 0 8px #34D399' : '0 0 6px rgba(5,150,105,0.4)') : 'none',
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Box>
+                    <Typography variant="caption" sx={{ fontWeight: 800, display: 'block', color: classicUp ? (isDark ? '#34D399' : '#047857') : 'text.primary', lineHeight: 1.2 }}>
+                      {classicUp ? 'Legacy Server Online · :8088' : 'Legacy Server Offline'}
+                    </Typography>
+                    <Typography variant="caption" sx={{ fontSize: '0.68rem', color: 'text.secondary', fontFamily: mono }}>
+                      {classicUp ? 'Dual runtime active' : 'Not Required · v2 Native'}
+                    </Typography>
+                  </Box>
+                </Box>
+                <Chip
+                  size="small"
+                  label={classicUp ? ':8088 UP' : 'OFFLINE'}
+                  sx={{
+                    height: 20,
+                    fontSize: '0.65rem',
+                    fontWeight: 800,
+                    fontFamily: mono,
+                    bgcolor: classicUp ? (isDark ? 'rgba(52,211,153,0.2)' : '#D1FAE5') : (isDark ? 'rgba(255,255,255,0.06)' : '#E5E7EB'),
+                    color: classicUp ? (isDark ? '#34D399' : '#047857') : 'text.secondary',
+                    border: `1px solid ${classicUp ? (isDark ? 'rgba(52,211,153,0.4)' : '#6EE7B7') : (isDark ? '#374151' : '#D1D5DB')}`,
+                  }}
+                />
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
-      </Paper>
+        </Paper>
+      </RevealOnScroll>
 
       {/* Control Bar: Dual-View Toggle & Instant Search */}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-          gap: 2,
-          justifyContent: 'space-between',
-          alignItems: { xs: 'stretch', md: 'center' },
-          mb: 2.5,
-        }}
-      >
-        {/* Dual-View Toggle: Grid Matrix vs Cadre Topology Map */}
-        <ToggleButtonGroup
-          value={viewMode}
-          exclusive
-          onChange={(e, next) => {
-            if (next) setViewMode(next);
-          }}
-          size="small"
+      <RevealOnScroll preset="fadeUp" delay={0.3}>
+        <Box
           sx={{
-            bgcolor: isDark ? '#0B0B12' : '#FFFFFF',
-            border: '1px solid',
-            borderColor: isDark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.25)',
-            borderRadius: 2.5,
-            p: 0.5,
-            alignSelf: { xs: 'flex-start', md: 'center' },
-            '& .MuiToggleButton-root': {
-              px: 2,
-              py: 0.8,
-              border: 'none',
-              borderRadius: '8px !important',
-              textTransform: 'none',
-              fontWeight: 750,
-              fontSize: '0.85rem',
-              color: isDark ? '#9CA3AF' : '#4B5563',
-              transition: 'all 0.2s ease',
-              '&.Mui-selected': {
-                bgcolor: gold.accent,
-                color: isDark ? '#08080B' : '#101828',
-                boxShadow: '0 2px 10px rgba(212,175,55,0.3)',
-                '&:hover': {
-                  bgcolor: '#F3D56A',
-                  color: isDark ? '#08080B' : '#101828',
-                },
-              },
-              '&:hover': {
-                bgcolor: isDark ? 'rgba(212,175,55,0.1)' : 'rgba(212,175,55,0.08)',
-                color: gold.accent,
-              },
-            },
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            gap: 2,
+            justifyContent: 'space-between',
+            alignItems: { xs: 'stretch', md: 'center' },
+            mb: 2.5,
           }}
         >
-          <ToggleButton value="grid" aria-label="Grid Matrix">
-            <GridViewIcon sx={{ fontSize: '1.1rem', mr: 1 }} />
-            Grid Matrix
-          </ToggleButton>
-          <ToggleButton value="topology" aria-label="Cadre Topology Map">
-            <AccountTreeIcon sx={{ fontSize: '1.1rem', mr: 1 }} />
-            Cadre Topology Map
-          </ToggleButton>
-        </ToggleButtonGroup>
-
-        {/* Instant Search Input matching workstation name, id, and band */}
-        <TextField
-          size="small"
-          placeholder="Search 37 workstations by name, ID, or band..."
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon fontSize="small" sx={{ color: gold.accent }} />
-              </InputAdornment>
-            ),
-            endAdornment: search ? (
-              <InputAdornment position="end">
-                <IconButton size="small" onClick={() => setSearch('')} sx={{ color: 'text.secondary' }}>
-                  <ClearIcon fontSize="small" />
-                </IconButton>
-              </InputAdornment>
-            ) : null,
-          }}
-          sx={{
-            minWidth: { xs: '100%', md: 360 },
-            '& .MuiOutlinedInput-root': {
-              borderRadius: 2.5,
+          {/* Dual-View Toggle: Grid Matrix vs Cadre Topology Map */}
+          <ToggleButtonGroup
+            value={viewMode}
+            exclusive
+            onChange={(e, next) => {
+              if (next) setViewMode(next);
+            }}
+            size="small"
+            sx={{
               bgcolor: isDark ? '#0B0B12' : '#FFFFFF',
-              '& fieldset': {
-                borderColor: isDark ? 'rgba(212,175,55,0.22)' : 'rgba(184,134,11,0.2)',
+              border: '1px solid',
+              borderColor: isDark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.25)',
+              borderRadius: 2.5,
+              p: 0.5,
+              alignSelf: { xs: 'flex-start', md: 'center' },
+              '& .MuiToggleButton-root': {
+                px: 2,
+                py: 0.8,
+                border: 'none',
+                borderRadius: '8px !important',
+                textTransform: 'none',
+                fontWeight: 750,
+                fontSize: '0.85rem',
+                color: isDark ? '#9CA3AF' : '#4B5563',
+                transition: 'all 0.2s ease',
+                '&.Mui-selected': {
+                  bgcolor: gold.accent,
+                  color: isDark ? '#08080B' : '#101828',
+                  boxShadow: '0 2px 10px rgba(212,175,55,0.3)',
+                  '&:hover': {
+                    bgcolor: '#F3D56A',
+                    color: isDark ? '#08080B' : '#101828',
+                  },
+                },
+                '&:hover': {
+                  bgcolor: isDark ? 'rgba(212,175,55,0.1)' : 'rgba(212,175,55,0.08)',
+                  color: gold.accent,
+                },
               },
-              '&:hover fieldset': {
-                borderColor: gold.accent,
+            }}
+          >
+            <ToggleButton value="grid" aria-label="Grid Matrix">
+              <GridViewIcon sx={{ fontSize: '1.1rem', mr: 1 }} />
+              Grid Matrix
+            </ToggleButton>
+            <ToggleButton value="topology" aria-label="Cadre Topology Map">
+              <AccountTreeIcon sx={{ fontSize: '1.1rem', mr: 1 }} />
+              Cadre Topology Map
+            </ToggleButton>
+          </ToggleButtonGroup>
+
+          {/* Instant Search Input matching workstation name, id, and band */}
+          <TextField
+            size="small"
+            placeholder="Search 37 workstations by name, ID, or band..."
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon fontSize="small" sx={{ color: gold.accent }} />
+                </InputAdornment>
+              ),
+              endAdornment: search ? (
+                <InputAdornment position="end">
+                  <IconButton size="small" onClick={() => setSearch('')} sx={{ color: 'text.secondary' }}>
+                    <ClearIcon fontSize="small" />
+                  </IconButton>
+                </InputAdornment>
+              ) : null,
+            }}
+            sx={{
+              minWidth: { xs: '100%', md: 360 },
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 2.5,
+                bgcolor: isDark ? '#0B0B12' : '#FFFFFF',
+                '& fieldset': {
+                  borderColor: isDark ? 'rgba(212,175,55,0.22)' : 'rgba(184,134,11,0.2)',
+                },
+                '&:hover fieldset': {
+                  borderColor: gold.accent,
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: gold.accent,
+                },
               },
-              '&.Mui-focused fieldset': {
-                borderColor: gold.accent,
-              },
-            },
-          }}
-        />
-      </Box>
+            }}
+          />
+        </Box>
+      </RevealOnScroll>
 
       {/* Band Filter Chips with Counts */}
-      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 3, alignItems: 'center' }}>
-        <Chip
-          label={`All · ${workstations.length}`}
-          clickable
-          onClick={() => setBand('All')}
-          sx={{
-            fontWeight: 800,
-            fontSize: '0.82rem',
-            fontFamily: mono,
-            bgcolor: band === 'All' ? gold.accent : (isDark ? '#0B0B12' : '#FFFFFF'),
-            color: band === 'All' ? (isDark ? '#08080B' : '#101828') : 'text.primary',
-            border: '1px solid',
-            borderColor: band === 'All' ? gold.accent : (isDark ? '#26262F' : '#EAECF0'),
-            '&:hover': {
-              borderColor: gold.accent,
-              bgcolor: band === 'All' ? gold.accent : (isDark ? 'rgba(212,175,55,0.1)' : '#FEF9E7'),
-            },
-            transition: 'all 0.18s ease',
-          }}
-        />
+      <RevealOnScroll preset="fadeUp" delay={0.4}>
+        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 3, alignItems: 'center' }}>
+          <Chip
+            label={`All · ${workstations.length}`}
+            clickable
+            onClick={() => setBand('All')}
+            sx={{
+              fontWeight: 800,
+              fontSize: '0.82rem',
+              fontFamily: mono,
+              bgcolor: band === 'All' ? gold.accent : (isDark ? '#0B0B12' : '#FFFFFF'),
+              color: band === 'All' ? (isDark ? '#08080B' : '#101828') : 'text.primary',
+              border: '1px solid',
+              borderColor: band === 'All' ? gold.accent : (isDark ? '#26262F' : '#EAECF0'),
+              '&:hover': {
+                borderColor: gold.accent,
+                bgcolor: band === 'All' ? gold.accent : (isDark ? 'rgba(212,175,55,0.1)' : '#FEF9E7'),
+              },
+              transition: 'all 0.18s ease',
+            }}
+          />
 
-        {ORDERED_BANDS.map((item) => {
-          const active = item === band;
-          const count = bandCounts[item] || 0;
-          const cfg = getBandConfig(item, isDark);
-          const IconComp = cfg.icon;
+          {ORDERED_BANDS.map((item) => {
+            const active = item === band;
+            const count = bandCounts[item] || 0;
+            const cfg = getBandConfig(item, isDark);
+            const IconComp = cfg.icon;
 
-          return (
-            <Chip
-              key={item}
-              icon={<IconComp sx={{ fontSize: '0.9rem !important', color: active ? `${isDark ? '#08080B' : '#101828'} !important` : `${cfg.color} !important` }} />}
-              label={`${item} · ${count}`}
-              clickable
-              onClick={() => setBand(item)}
-              sx={{
-                fontWeight: 750,
-                fontSize: '0.82rem',
-                fontFamily: mono,
-                bgcolor: active ? gold.accent : (isDark ? '#0B0B12' : '#FFFFFF'),
-                color: active ? (isDark ? '#08080B' : '#101828') : 'text.primary',
-                border: '1px solid',
-                borderColor: active ? gold.accent : (isDark ? '#26262F' : '#EAECF0'),
-                '&:hover': {
-                  borderColor: cfg.color,
-                  bgcolor: active ? gold.accent : (isDark ? cfg.wash : '#FEF9E7'),
-                },
-                transition: 'all 0.18s ease',
-              }}
-            />
-          );
-        })}
-      </Box>
+            return (
+              <Chip
+                key={item}
+                icon={<IconComp sx={{ fontSize: '0.9rem !important', color: active ? `${isDark ? '#08080B' : '#101828'} !important` : `${cfg.color} !important` }} />}
+                label={`${item} · ${count}`}
+                clickable
+                onClick={() => setBand(item)}
+                sx={{
+                  fontWeight: 750,
+                  fontSize: '0.82rem',
+                  fontFamily: mono,
+                  bgcolor: active ? gold.accent : (isDark ? '#0B0B12' : '#FFFFFF'),
+                  color: active ? (isDark ? '#08080B' : '#101828') : 'text.primary',
+                  border: '1px solid',
+                  borderColor: active ? gold.accent : (isDark ? '#26262F' : '#EAECF0'),
+                  '&:hover': {
+                    borderColor: cfg.color,
+                    bgcolor: active ? gold.accent : (isDark ? cfg.wash : '#FEF9E7'),
+                  },
+                  transition: 'all 0.18s ease',
+                }}
+              />
+            );
+          })}
+        </Box>
+      </RevealOnScroll>
 
       {/* Result Metrics */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
@@ -721,34 +736,39 @@ export default function WorkstationsPage() {
               </Button>
             </Paper>
           ) : (
-            <Grid container spacing={3}>
-              {filtered.map((item) => (
-                <Grid xs={12} sm={6} md={4} key={item.id}>
-                  <WorkstationCard item={item} classicUp={classicUp} isDark={isDark} gold={gold} />
-                </Grid>
-              ))}
-            </Grid>
+            <StaggerChildren>
+              <Grid container spacing={3}>
+                {filtered.map((item) => (
+                  <Grid xs={12} sm={6} md={4} key={item.id}>
+                    <StaggerItem>
+                      <WorkstationCard item={item} classicUp={classicUp} isDark={isDark} gold={gold} />
+                    </StaggerItem>
+                  </Grid>
+                ))}
+              </Grid>
+            </StaggerChildren>
           )}
         </>
       )}
 
       {/* VIEW MODE 2: CADRE TOPOLOGY MAP */}
       {viewMode === 'topology' && (
-        <Box>
-          {/* Interactive Visual SVG Node Graph */}
-          <Paper
-            elevation={0}
-            sx={{
-              p: { xs: 1.5, md: 3 },
-              mb: 4,
-              borderRadius: 3,
-              bgcolor: isDark ? '#08080B' : '#FAFAFA',
-              border: '1px solid',
-              borderColor: isDark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.25)',
-              position: 'relative',
-              overflow: 'hidden',
-            }}
-          >
+        <RevealOnScroll preset="scaleUp" delay={0.2}>
+          <Box>
+            {/* Interactive Visual SVG Node Graph */}
+            <Paper
+              elevation={0}
+              sx={{
+                p: { xs: 1.5, md: 3 },
+                mb: 4,
+                borderRadius: 3,
+                bgcolor: isDark ? '#08080B' : '#FAFAFA',
+                border: '1px solid',
+                borderColor: isDark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.25)',
+                position: 'relative',
+                overflow: 'hidden',
+              }}
+            >
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
               <Box>
                 <Typography variant="overline" sx={{ color: gold.accent, letterSpacing: '0.15em', fontWeight: 800 }}>
@@ -1179,19 +1199,22 @@ export default function WorkstationsPage() {
               );
             })}
           </Stack>
-        </Box>
+          </Box>
+        </RevealOnScroll>
       )}
 
       {/* Sovereign Installation Funnel */}
-      <SovereignFunnel
-        title="Deploy Sovereign Workstations Locally"
-        subtitle="Zero-egress developer workstations, offline code compiler sandboxes, local telemetry arrays, and multi-agent coordination bridges."
-        toolTitle="Option 1: Zoth CLI Workstations Engine"
-        toolTag="WORKSTATIONS"
-        toolDescription="Launch any of the 6 sovereign workstation bands locally with offline telemetry arrays, sandboxed runtimes, and local IPC daemon bridges."
-        toolRepo="https://github.com/NullAITech/zoth-studio-v2"
-        toolCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git && npm install"
-      />
+      <RevealOnScroll preset="fadeUp" delay={0.4}>
+        <SovereignFunnel
+          title="Deploy Sovereign Workstations Locally"
+          subtitle="Zero-egress developer workstations, offline code compiler sandboxes, local telemetry arrays, and multi-agent coordination bridges."
+          toolTitle="Option 1: Zoth CLI Workstations Engine"
+          toolTag="WORKSTATIONS"
+          toolDescription="Launch any of the 6 sovereign workstation bands locally with offline telemetry arrays, sandboxed runtimes, and local IPC daemon bridges."
+          toolRepo="https://github.com/NullAITech/zoth-studio-v2"
+          toolCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git && npm install"
+        />
+      </RevealOnScroll>
     </Container>
   );
 }

@@ -23,6 +23,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ClearIcon from '@mui/icons-material/Clear';
 import { Link as RouterLink } from 'react-router-dom';
 import SEO from '../components/SEO';
+import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace';
 
@@ -196,58 +197,51 @@ ${oracleResult.faq.a}`;
       />
 
       {/* Signature Gold Header Accent */}
-      <Box sx={{ position: 'relative', mb: 5, pt: 1, textAlign: 'center' }}>
-        <Box
-          aria-hidden="true"
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: '20%',
-            right: '20%',
-            height: 3,
-            borderRadius: 2,
-            background: isDark
-              ? 'linear-gradient(90deg, transparent, rgba(212,175,55,0.9) 20%, #D4AF37 50%, rgba(212,175,55,0.9) 80%, transparent)'
-              : 'linear-gradient(90deg, transparent, rgba(184,134,11,0.7) 20%, #B8860B 50%, rgba(184,134,11,0.7) 80%, transparent)',
-            boxShadow: isDark
-              ? '0 0 20px 2px rgba(212,175,55,0.45)'
-              : '0 0 12px 1px rgba(184,134,11,0.35)',
-          }}
-        />
+      <HeroReveal>
+        <Box sx={{ position: 'relative', mb: 5, pt: 1, textAlign: 'center' }}>
+          <GlowLine />
 
-        <Chip
-          icon={<HelpOutlineIcon sx={{ color: `${gold.accent} !important` }} />}
-          label="KNOWLEDGE BASE &amp; AEO GROUNDING // 16 RATIFIED SPECIFICATIONS"
-          size="small"
-          sx={{ bgcolor: gold.wash, color: gold.accent, border: `1px solid ${gold.border}`, fontWeight: 800, mb: 2, px: 1 }}
-        />
-        <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontWeight: 800, mb: 1.5, letterSpacing: '-0.02em' }}>
-          Frequently Asked Questions
-        </Typography>
-        <Typography color="text.secondary" sx={{ maxWidth: 780, mx: 'auto', fontSize: '1.05rem', lineHeight: 1.65 }}>
-          Authoritative architectural, cryptographic, and mathematical specifications for Zoth Studio v2. Grounded for both sovereign human operators and autonomous answer engines.
-        </Typography>
-      </Box>
+          <HeroItem>
+            <Chip
+              icon={<HelpOutlineIcon sx={{ color: `${gold.accent} !important` }} />}
+              label="KNOWLEDGE BASE &amp; AEO GROUNDING // 16 RATIFIED SPECIFICATIONS"
+              size="small"
+              sx={{ bgcolor: gold.wash, color: gold.accent, border: `1px solid ${gold.border}`, fontWeight: 800, mb: 2, px: 1 }}
+            />
+          </HeroItem>
+          <HeroItem>
+            <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontWeight: 800, mb: 1.5, letterSpacing: '-0.02em' }}>
+              Frequently Asked Questions
+            </Typography>
+          </HeroItem>
+          <HeroItem>
+            <Typography color="text.secondary" sx={{ maxWidth: 780, mx: 'auto', fontSize: '1.05rem', lineHeight: 1.65 }}>
+              Authoritative architectural, cryptographic, and mathematical specifications for Zoth Studio v2. Grounded for both sovereign human operators and autonomous answer engines.
+            </Typography>
+          </HeroItem>
+        </Box>
+      </HeroReveal>
 
       {/* ────────────────────────────────────────────────────────────────────────── */}
       {/* 🔮 ASK LUCY ORACLE: SEARCH & TERMINAL CONSOLE */}
       {/* ────────────────────────────────────────────────────────────────────────── */}
-      <Paper
-        sx={{
-          maxWidth: 920,
-          mx: 'auto',
-          mb: 6,
-          p: { xs: 2.5, md: 3.5 },
-          borderRadius: 3,
-          bgcolor: isDark ? '#08080B' : '#FFFFFF',
-          border: `1.5px solid ${isDark ? 'rgba(212,175,55,0.45)' : '#E5C768'}`,
-          boxShadow: isDark
-            ? '0 8px 32px rgba(0,0,0,0.8), 0 0 24px -6px rgba(212,175,55,0.22)'
-            : '0 4px 20px rgba(184,134,11,0.12)',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
+      <RevealOnScroll preset="fadeUp" delay={0.2}>
+        <Paper
+          sx={{
+            maxWidth: 920,
+            mx: 'auto',
+            mb: 6,
+            p: { xs: 2.5, md: 3.5 },
+            borderRadius: 3,
+            bgcolor: isDark ? '#08080B' : '#FFFFFF',
+            border: `1.5px solid ${isDark ? 'rgba(212,175,55,0.45)' : '#E5C768'}`,
+            boxShadow: isDark
+              ? '0 8px 32px rgba(0,0,0,0.8), 0 0 24px -6px rgba(212,175,55,0.22)'
+              : '0 4px 20px rgba(184,134,11,0.12)',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
         {/* Terminal Header Bar */}
         <Box
           sx={{
@@ -600,258 +594,265 @@ ${oracleResult.faq.a}`;
           </Paper>
         )}
       </Paper>
+      </RevealOnScroll>
 
       {/* ────────────────────────────────────────────────────────────────────────── */}
       {/* 📑 FAQ SEARCH BAR & CATEGORY FILTER CHIPS */}
       {/* ────────────────────────────────────────────────────────────────────────── */}
-      <Box sx={{ mb: 4, maxWidth: 860, mx: 'auto' }}>
-        <TextField
-          fullWidth
-          size="small"
-          placeholder="Filter the 16 architectural questions (e.g. STDP, Zero-Egress, Consensus, Netlify, QEMU, MCP)..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          sx={{
-            mb: 2.5,
-            bgcolor: theme.palette.background.paper,
-            borderRadius: 2,
-            '& .MuiOutlinedInput-root': { borderRadius: 2 },
-          }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon fontSize="small" sx={{ color: gold.accent }} />
-              </InputAdornment>
-            ),
-            endAdornment: search && (
-              <InputAdornment position="end">
-                <IconButton size="small" onClick={() => setSearch('')}>
-                  <ClearIcon fontSize="small" />
-                </IconButton>
-              </InputAdornment>
-            )
-          }}
-        />
+      <RevealOnScroll preset="fadeUp" delay={0.3}>
+        <Box sx={{ mb: 4, maxWidth: 860, mx: 'auto' }}>
+          <TextField
+            fullWidth
+            size="small"
+            placeholder="Filter the 16 architectural questions (e.g. STDP, Zero-Egress, Consensus, Netlify, QEMU, MCP)..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            sx={{
+              mb: 2.5,
+              bgcolor: theme.palette.background.paper,
+              borderRadius: 2,
+              '& .MuiOutlinedInput-root': { borderRadius: 2 },
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon fontSize="small" sx={{ color: gold.accent }} />
+                </InputAdornment>
+              ),
+              endAdornment: search && (
+                <InputAdornment position="end">
+                  <IconButton size="small" onClick={() => setSearch('')}>
+                    <ClearIcon fontSize="small" />
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
+          />
 
-        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', justifyContent: 'center' }}>
-          {categories.map((cat) => {
-            const active = selectedCat === cat;
-            const count = cat === 'All' ? FAQS_DATA.length : FAQS_DATA.filter((f) => f.category === cat).length;
-            return (
-              <Chip
-                key={cat}
-                label={`${cat} (${count})`}
-                clickable
-                onClick={() => setSelectedCat(cat)}
-                sx={{
-                  fontWeight: 750,
-                  fontSize: '0.8rem',
-                  bgcolor: active ? gold.accent : theme.palette.background.paper,
-                  color: active ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
-                  border: '1px solid',
-                  borderColor: active ? gold.accent : theme.palette.divider,
-                  transition: 'all 0.18s ease',
-                  '&:hover': {
-                    borderColor: gold.accent,
-                  },
-                }}
-              />
-            );
-          })}
+          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', justifyContent: 'center' }}>
+            {categories.map((cat) => {
+              const active = selectedCat === cat;
+              const count = cat === 'All' ? FAQS_DATA.length : FAQS_DATA.filter((f) => f.category === cat).length;
+              return (
+                <Chip
+                  key={cat}
+                  label={`${cat} (${count})`}
+                  clickable
+                  onClick={() => setSelectedCat(cat)}
+                  sx={{
+                    fontWeight: 750,
+                    fontSize: '0.8rem',
+                    bgcolor: active ? gold.accent : theme.palette.background.paper,
+                    color: active ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
+                    border: '1px solid',
+                    borderColor: active ? gold.accent : theme.palette.divider,
+                    transition: 'all 0.18s ease',
+                    '&:hover': {
+                      borderColor: gold.accent,
+                    },
+                  }}
+                />
+              );
+            })}
+          </Box>
         </Box>
-      </Box>
+      </RevealOnScroll>
 
       {/* ────────────────────────────────────────────────────────────────────────── */}
       {/* 📜 QUESTIONS ACCORDION LIST (16 COMPREHENSIVE ENTRIES) */}
       {/* ────────────────────────────────────────────────────────────────────────── */}
-      <Box sx={{ maxWidth: 880, mx: 'auto', mb: 6 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, px: 0.5 }}>
-          <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>
-            Showing {filteredFaqs.length} of {FAQS_DATA.length} ratified specifications
-          </Typography>
-          <Stack direction="row" spacing={1}>
-            <Button
-              size="small"
-              onClick={() => setExpanded(false)}
-              sx={{ color: 'text.secondary', fontSize: '0.75rem', fontFamily: mono }}
-            >
-              Collapse All
-            </Button>
-            <Button
-              size="small"
-              onClick={() => setExpanded('all')}
-              sx={{ color: gold.accent, fontSize: '0.75rem', fontFamily: mono, fontWeight: 700 }}
-            >
-              Expand Active
-            </Button>
-          </Stack>
-        </Box>
-
-        {filteredFaqs.length === 0 ? (
-          <Paper sx={{ p: 4, textAlign: 'center', bgcolor: theme.palette.background.paper, borderRadius: 3, border: `1px solid ${theme.palette.divider}` }}>
-            <Typography variant="body1" color="text.secondary">
-              No matching questions found for &ldquo;{search}&rdquo;.
+      <RevealOnScroll preset="fadeUp" delay={0.4}>
+        <Box sx={{ maxWidth: 880, mx: 'auto', mb: 6 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, px: 0.5 }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>
+              Showing {filteredFaqs.length} of {FAQS_DATA.length} ratified specifications
             </Typography>
-            <Button size="small" onClick={() => { setSearch(''); setSelectedCat('All'); }} sx={{ mt: 1, color: gold.accent, fontWeight: 750 }}>
-              Reset Filters
-            </Button>
-          </Paper>
-        ) : (
-          filteredFaqs.map((faq, index) => {
-            const panelId = `panel-${index}`;
-            const isExpanded = expanded === panelId || expanded === 'all';
-            return (
-              <Accordion
-                key={faq.id}
-                ref={(el) => { accordionRefs.current[faq.id] = el; }}
-                expanded={isExpanded}
-                onChange={(e, isExp) => setExpanded(isExp ? panelId : false)}
-                sx={{
-                  mb: 1.8,
-                  border: isExpanded ? `1.5px solid ${gold.accent}` : `1px solid ${theme.palette.divider}`,
-                  bgcolor: theme.palette.background.paper,
-                  borderRadius: '12px !important',
-                  boxShadow: isExpanded ? (isDark ? '0 4px 22px rgba(212,175,55,0.14)' : '0 4px 20px rgba(184,134,11,0.1)') : 'none',
-                  transition: 'border-color 0.2s, box-shadow 0.2s',
-                  '&:before': { display: 'none' },
-                }}
+            <Stack direction="row" spacing={1}>
+              <Button
+                size="small"
+                onClick={() => setExpanded(false)}
+                sx={{ color: 'text.secondary', fontSize: '0.75rem', fontFamily: mono }}
               >
-                <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: gold.accent }} />}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', pr: 1 }}>
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        fontFamily: mono,
-                        fontWeight: 800,
-                        color: gold.accent,
-                        bgcolor: gold.wash,
-                        px: 0.9,
-                        py: 0.3,
-                        borderRadius: 1,
-                        border: `1px solid ${gold.border}`,
-                      }}
-                    >
-                      {String(index + 1).padStart(2, '0')}
-                    </Typography>
-                    <Chip
-                      label={faq.category}
-                      size="small"
-                      sx={{
-                        fontWeight: 800,
-                        fontSize: '0.7rem',
-                        bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#F3F4F6',
-                        color: isDark ? gold.soft : gold.accent,
-                        border: `1px solid ${isDark ? 'transparent' : '#E5E7EB'}`,
-                      }}
-                    />
-                    <Typography variant="subtitle1" sx={{ fontWeight: 750, color: theme.palette.text.primary, fontSize: '0.98rem' }}>
-                      {faq.q}
-                    </Typography>
-                  </Box>
-                </AccordionSummary>
-                <AccordionDetails sx={{ pt: 0, pb: 3, px: 3 }}>
-                  <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.75, fontSize: '0.94rem', whiteSpace: 'pre-line', mb: 2 }}>
-                    {faq.a}
-                  </Typography>
+                Collapse All
+              </Button>
+              <Button
+                size="small"
+                onClick={() => setExpanded('all')}
+                sx={{ color: gold.accent, fontSize: '0.75rem', fontFamily: mono, fontWeight: 700 }}
+              >
+                Expand Active
+              </Button>
+            </Stack>
+          </Box>
 
-                  {/* Quick Action Bar for Accordion Entry */}
-                  <Divider sx={{ my: 1.8, borderColor: theme.palette.divider }} />
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5 }}>
-                    <Button
-                      size="small"
-                      startIcon={<PsychologyIcon sx={{ color: isDark ? '#F472B6' : '#BE185D' }} />}
-                      onClick={() => handleQuickPrompt(faq.q)}
-                      sx={{
-                        fontFamily: mono,
-                        fontSize: '0.74rem',
-                        color: isDark ? '#F5E6AB' : '#8A6A09',
-                      }}
-                    >
-                      Consult Lucy on this
-                    </Button>
+          {filteredFaqs.length === 0 ? (
+            <Paper sx={{ p: 4, textAlign: 'center', bgcolor: theme.palette.background.paper, borderRadius: 3, border: `1px solid ${theme.palette.divider}` }}>
+              <Typography variant="body1" color="text.secondary">
+                No matching questions found for &ldquo;{search}&rdquo;.
+              </Typography>
+              <Button size="small" onClick={() => { setSearch(''); setSelectedCat('All'); }} sx={{ mt: 1, color: gold.accent, fontWeight: 750 }}>
+                Reset Filters
+              </Button>
+            </Paper>
+          ) : (
+            filteredFaqs.map((faq, index) => {
+              const panelId = `panel-${index}`;
+              const isExpanded = expanded === panelId || expanded === 'all';
+              return (
+                <Accordion
+                  key={faq.id}
+                  ref={(el) => { accordionRefs.current[faq.id] = el; }}
+                  expanded={isExpanded}
+                  onChange={(e, isExp) => setExpanded(isExp ? panelId : false)}
+                  sx={{
+                    mb: 1.8,
+                    border: isExpanded ? `1.5px solid ${gold.accent}` : `1px solid ${theme.palette.divider}`,
+                    bgcolor: theme.palette.background.paper,
+                    borderRadius: '12px !important',
+                    boxShadow: isExpanded ? (isDark ? '0 4px 22px rgba(212,175,55,0.14)' : '0 4px 20px rgba(184,134,11,0.1)') : 'none',
+                    transition: 'border-color 0.2s, box-shadow 0.2s',
+                    '&:before': { display: 'none' },
+                  }}
+                >
+                  <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: gold.accent }} />}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', pr: 1 }}>
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          fontFamily: mono,
+                          fontWeight: 800,
+                          color: gold.accent,
+                          bgcolor: gold.wash,
+                          px: 0.9,
+                          py: 0.3,
+                          borderRadius: 1,
+                          border: `1px solid ${gold.border}`,
+                        }}
+                      >
+                        {String(index + 1).padStart(2, '0')}
+                      </Typography>
+                      <Chip
+                        label={faq.category}
+                        size="small"
+                        sx={{
+                          fontWeight: 800,
+                          fontSize: '0.7rem',
+                          bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#F3F4F6',
+                          color: isDark ? gold.soft : gold.accent,
+                          border: `1px solid ${isDark ? 'transparent' : '#E5E7EB'}`,
+                        }}
+                      />
+                      <Typography variant="subtitle1" sx={{ fontWeight: 750, color: theme.palette.text.primary, fontSize: '0.98rem' }}>
+                        {faq.q}
+                      </Typography>
+                    </Box>
+                  </AccordionSummary>
+                  <AccordionDetails sx={{ pt: 0, pb: 3, px: 3 }}>
+                    <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.75, fontSize: '0.94rem', whiteSpace: 'pre-line', mb: 2 }}>
+                      {faq.a}
+                    </Typography>
 
-                    <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
-                      {faq.jumpTargets.map((tgt) => (
-                        <Button
-                          key={tgt.path}
-                          component={RouterLink}
-                          to={tgt.path}
-                          size="small"
-                          variant="outlined"
-                          endIcon={<OpenInNewIcon sx={{ fontSize: '13px !important' }} />}
-                          sx={{
-                            fontFamily: mono,
-                            fontSize: '0.72rem',
-                            fontWeight: 700,
-                            borderColor: isDark ? gold.border : gold.accent,
-                            color: isDark ? gold.soft : gold.accent,
-                            py: 0.3,
-                            px: 1.5,
-                          }}
-                        >
-                          {tgt.label}
-                        </Button>
-                      ))}
-                    </Stack>
-                  </Box>
-                </AccordionDetails>
-              </Accordion>
-            );
-          })
-        )}
-      </Box>
+                    {/* Quick Action Bar for Accordion Entry */}
+                    <Divider sx={{ my: 1.8, borderColor: theme.palette.divider }} />
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5 }}>
+                      <Button
+                        size="small"
+                        startIcon={<PsychologyIcon sx={{ color: isDark ? '#F472B6' : '#BE185D' }} />}
+                        onClick={() => handleQuickPrompt(faq.q)}
+                        sx={{
+                          fontFamily: mono,
+                          fontSize: '0.74rem',
+                          color: isDark ? '#F5E6AB' : '#8A6A09',
+                        }}
+                      >
+                        Consult Lucy on this
+                      </Button>
+
+                      <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
+                        {faq.jumpTargets.map((tgt) => (
+                          <Button
+                            key={tgt.path}
+                            component={RouterLink}
+                            to={tgt.path}
+                            size="small"
+                            variant="outlined"
+                            endIcon={<OpenInNewIcon sx={{ fontSize: '13px !important' }} />}
+                            sx={{
+                              fontFamily: mono,
+                              fontSize: '0.72rem',
+                              fontWeight: 700,
+                              borderColor: isDark ? gold.border : gold.accent,
+                              color: isDark ? gold.soft : gold.accent,
+                              py: 0.3,
+                              px: 1.5,
+                            }}
+                          >
+                            {tgt.label}
+                          </Button>
+                        ))}
+                      </Stack>
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+              );
+            })
+          )}
+        </Box>
+      </RevealOnScroll>
 
       {/* ────────────────────────────────────────────────────────────────────────── */}
       {/* 🔗 DIRECT ORACLE ASSISTANCE CARD (FOOTER) */}
       {/* ────────────────────────────────────────────────────────────────────────── */}
-      <Paper
-        sx={{
-          maxWidth: 880,
-          mx: 'auto',
-          p: { xs: 3, md: 4 },
-          borderRadius: 3,
-          bgcolor: isDark ? 'rgba(212,175,55,0.05)' : '#FEF9E7',
-          border: `1px solid ${isDark ? gold.border : '#E5C768'}`,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: 2,
-        }}
-      >
-        <Box sx={{ minWidth: 260, flex: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-            <PsychologyIcon sx={{ color: gold.accent }} />
-            <Typography variant="subtitle1" sx={{ fontWeight: 800, color: isDark ? gold.soft : gold.accent }}>
-              Need deeper answers? Consult the Lucy Netrunner Oracle
+      <RevealOnScroll preset="fadeUp" delay={0.5}>
+        <Paper
+          sx={{
+            maxWidth: 880,
+            mx: 'auto',
+            p: { xs: 3, md: 4 },
+            borderRadius: 3,
+            bgcolor: isDark ? 'rgba(212,175,55,0.05)' : '#FEF9E7',
+            border: `1px solid ${isDark ? gold.border : '#E5C768'}`,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: 2,
+          }}
+        >
+          <Box sx={{ minWidth: 260, flex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+              <PsychologyIcon sx={{ color: gold.accent }} />
+              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: isDark ? gold.soft : gold.accent }}>
+                Need deeper answers? Consult the Lucy Netrunner Oracle
+              </Typography>
+            </Box>
+            <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
+              Breach Codec 141.12 to query the Whitespace memory matrix directly, run live STDP synaptic calculations, or consult the 21-Agent Swarm Pantheon.
             </Typography>
           </Box>
-          <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
-            Breach Codec 141.12 to query the Whitespace memory matrix directly, run live STDP synaptic calculations, or consult the 21-Agent Swarm Pantheon.
-          </Typography>
-        </Box>
-        <Stack direction="row" spacing={1.5} sx={{ flexShrink: 0 }}>
-          <Button
-            component={RouterLink}
-            to="/memory"
-            variant="contained"
-            color="primary"
-            endIcon={<ArrowForwardIcon />}
-            sx={{ fontWeight: 800, px: 2.5 }}
-          >
-            Open Lucy Memory Hub
-          </Button>
-          <Button
-            component={RouterLink}
-            to="/docs/math"
-            variant="outlined"
-            color="primary"
-            sx={{ fontWeight: 750 }}
-          >
-            Six Math Pillars
-          </Button>
-        </Stack>
-      </Paper>
+          <Stack direction="row" spacing={1.5} sx={{ flexShrink: 0 }}>
+            <Button
+              component={RouterLink}
+              to="/memory"
+              variant="contained"
+              color="primary"
+              endIcon={<ArrowForwardIcon />}
+              sx={{ fontWeight: 800, px: 2.5 }}
+            >
+              Open Lucy Memory Hub
+            </Button>
+            <Button
+              component={RouterLink}
+              to="/docs/math"
+              variant="outlined"
+              color="primary"
+              sx={{ fontWeight: 750 }}
+            >
+              Six Math Pillars
+            </Button>
+          </Stack>
+        </Paper>
+      </RevealOnScroll>
     </Container>
   );
 }

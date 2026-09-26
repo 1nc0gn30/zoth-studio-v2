@@ -34,6 +34,7 @@ import MathPillarsGrid from '../components/MathPillarsGrid';
 import CompanyTicker from '../components/CompanyTicker';
 import WebGPUAIConsole from '../components/WebGPUAIConsole';
 import SovereignFunnel from '../components/SovereignFunnel';
+import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 import { microTools } from '../data/toolsData';
 import { useStudioStatus } from '../studio/useStudioStatus';
 
@@ -1423,22 +1424,19 @@ export default function HomePage() {
   return (
     <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 4, md: 7 } }}>
       {/* Soft radial gold glow behind the hero (HomePage signature) */}
-      <Box
-        aria-hidden="true"
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: { xs: '100%', md: '900px' },
-          height: { xs: 420, md: 520 },
-          pointerEvents: 'none',
-          zIndex: 0,
-          background: isDark
-            ? 'radial-gradient(ellipse 60% 55% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 70%)'
-            : 'radial-gradient(ellipse 60% 55% at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 70%)',
-        }}
-      />
+      <ParallaxGlow offset={60} style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '100%', pointerEvents: 'none', zIndex: 0 }}>
+        <Box
+          aria-hidden="true"
+          sx={{
+            width: { xs: '100%', md: '900px' },
+            height: { xs: 420, md: 520 },
+            margin: '0 auto',
+            background: isDark
+              ? 'radial-gradient(ellipse 60% 55% at 50% 0%, rgba(212,175,55,0.18) 0%, transparent 70%)'
+              : 'radial-gradient(ellipse 60% 55% at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 70%)',
+          }}
+        />
+      </ParallaxGlow>
 
       {/* Enhanced Hero Section — multi-layered paper treatment with dramatic gold glow system */}
       <Paper
