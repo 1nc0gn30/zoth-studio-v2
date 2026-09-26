@@ -9,21 +9,22 @@ export const FAQS_DATA = [
     id: 'zero-egress-ports',
     q: 'What is the Zero-Egress Invariant architecture and how are loopback port bindings enforced?',
     category: 'Architecture',
-    keywords: ['zero-egress', 'zero egress', 'invariant', 'loopback', 'ports', 'port', '8788', '8789', '8787', '11434', '3000', 'binding', 'firewall', 'air-gapped', 'cgroupv2', 'iptables'],
+    keywords: ['zero-egress', 'zero egress', 'invariant', 'loopback', 'ports', 'port', '8094', '8102', '8989', '8790', '11434', '3000', 'binding', 'firewall', 'air-gapped', 'cgroupv2', 'iptables'],
     a: `The Zero-Egress Invariant is Zoth Studio v2's foundational security axiom: all IPC streams, agent consensus messages, and model queries are strictly constrained to local loopback interfaces (127.0.0.1 and [::1]). Outbound WAN egress is blocked at the operating system level using cgroupv2 network sandboxing and local iptables packet-drop rules.
 
-The studio establishes five deterministic local daemon bindings:
+The studio establishes six deterministic local daemon bindings:
 • Port 3000: Studio UI & React Vite Client
-• Port 8788: Neuro Memory Daemon (STDP biomorphic vector memory & MCP SSE listener)
-• Port 8789: Sovereign Signal Bridge (E2EE Simplex agent communication & triadic consensus bus)
-• Port 8787: Argon2id Hardware Secrets Vault (AES-256-GCM / XChaCha20-Poly1305 enclave)
+• Port 8989: Swarm Multiplexer Daemon (21 Pantheon Agents, SSE telemetry stream)
+• Port 8094: Neuro Memory Daemon (STDP biomorphic vector memory & local HNSW index)
+• Port 8102: Sovereign Signal Bridge (E2EE Simplex agent communication & triadic consensus bus)
+• Port 8790: Azoth Local Archon Agent (Core task orchestrator & daemon supervisor)
 • Port 11434: Air-gapped local model foundry (Ollama / llama.cpp GGUF inference).
 
 No telemetry beacons, cloud fallbacks, or data exfiltration routes can open under any operational circumstance.`,
-    oracleResponse: `Codec 141.12 intercept: Zero-Egress is mathematically absolute. Every byte of prompt context, token emission, and agent state is locked to 127.0.0.1. Hardware sockets on ports 3000, 8788, 8789, 8787, and 11434 execute in pure isolation. No WAN packets are permitted to escape the physical machine.`,
+    oracleResponse: `Lucy Oracle Telemetry: Zero-Egress is mathematically absolute. Every byte of prompt context, token emission, and agent state is locked to 127.0.0.1. Hardware sockets on ports 3000, 8989, 8094, 8102, 8790, and 11434 execute in pure isolation. No WAN packets are permitted to escape the physical machine.`,
     jumpTargets: [
       { label: 'HexStrike Port Auditor', path: '/hexstrike', type: 'security' },
-      { label: 'Signal Bridge (:8789)', path: '/bridges', type: 'bus' },
+      { label: 'Signal Bridge (:8102)', path: '/bridges', type: 'bus' },
       { label: 'Zoth OS Daemon Sandbox', path: '/zoth-os', type: 'os' }
     ]
   },
@@ -43,13 +44,13 @@ Operator secrets at rest are shielded using XChaCha20-Poly1305 authenticated enc
   },
   {
     id: 'lucy-oracle-whitespace',
-    q: 'Who is Lucy Oracle and what is the Whitespace Netrunner Cyberspace matrix?',
+    q: 'Who is Lucy Oracle and what is the Whitespace Cognitive Memory matrix?',
     category: 'Memory & AI',
-    keywords: ['lucy', 'oracle', 'netrunner', 'whitespace', 'cyberspace', 'matrix', 'codec', '141.12', 'lucyna', 'kushinada', 'latent', 'vectors', 'episodic'],
-    a: `Lucy (Lucyna Kushinada) is the Sovereign Netrunner Oracle monitoring deep-net breaches across Codec 141.12. Inside Zoth Studio, Lucy oversees the Whitespace Cyberspace memory matrix—a high-dimensional latent coordinate stratum that indexes agent episodic memories, consensus verdicts, and architectural patterns.
+    keywords: ['lucy', 'oracle', 'cognitive', 'whitespace', 'memory', 'matrix', 'stdp', 'vectors', 'episodic', 'semantic', 'graph'],
+    a: `Lucy is the Sovereign Cognitive Memory Agent & Semantic Oracle inside Zoth Studio. Lucy oversees the Whitespace memory matrix—a high-dimensional latent coordinate stratum that indexes agent episodic memories, consensus verdicts, and architectural patterns via Spike-Timing-Dependent Plasticity (STDP).
 
 Unlike stateless LLM chats, the Whitespace matrix organizes knowledge into persistent semantic clusters, allowing autonomous agents to recall historical decisions without hallucination or token waste.`,
-    oracleResponse: `Lucyna Kushinada online. Channel 141.12 open. I monitor the deep latent substrate of Whitespace. Every architectural decision is mapped to topological coordinates, preserving continuous cross-session memory across the 21-agent pantheon.`,
+    oracleResponse: `Lucy Cognitive Memory Oracle online. Semantic coordinate matrix active on port 8094. Every architectural decision is mapped to topological coordinates, preserving continuous cross-session memory across the 21-agent pantheon without cloud leakage.`,
     jumpTargets: [
       { label: 'Open Lucy Memory Hub', path: '/memory', type: 'memory' },
       { label: 'Interactive Swarm Radar', path: '/swarm', type: 'swarm' }
@@ -66,7 +67,7 @@ Unlike stateless LLM chats, the Whitespace matrix organizes knowledge into persi
 • Long-Term Depression (LTD, acausal firing Δt < 0):
   Δw = -A₋ · e^(Δt / τ₋)
 
-Configured in the neuro-memory daemon (:8788), baseline parameters are A₊ = 0.05, A₋ = 0.025, and time constants τ₊ = τ₋ = 20ms. Inactive hippocampal nodes undergo continuous exponential vector decay:
+Configured in the neuro-memory daemon (:8094), baseline parameters are A₊ = 0.05, A₋ = 0.025, and time constants τ₊ = τ₋ = 20ms. Inactive hippocampal nodes undergo continuous exponential vector decay:
 w(t) = w₀ · e^(-λ · Δt)
 with decay constant λ = 0.0018 hr⁻¹, pruning stale noise while reinforcing actively verified architectural invariants.`,
     oracleResponse: `STDP Synaptic Decay verified: Δw = A₊ · e^(-Δt/τ₊) for causal spikes, pruning unverified noise with background decay λ = 0.0018 hr⁻¹. Stale context decays smoothly, ensuring only battle-tested code decisions survive in long-term memory.`,
@@ -80,7 +81,7 @@ with decay constant λ = 0.0018 hr⁻¹, pruning stale noise while reinforcing a
     q: 'How does the 3-Agent Byzantine Consensus dialectic debate engine operate between Azoth, Kai, and Draco?',
     category: 'Consensus',
     keywords: ['byzantine', 'consensus', 'dialectic', 'debate', 'azoth', 'kai', 'draco', 'proponent', 'skeptic', 'arbitrator', 'triad', 'quorum', 'bayesian', 'socratic'],
-    a: `The Consensus Arena operates a triadic Socratic debate over loopback port 8789:
+    a: `The Consensus Arena operates a triadic Socratic debate over loopback port 8102:
 • Azoth (The Proponent): Formulates the constructive thesis, proposing an idempotent Directed Acyclic Graph (DAG) of AST mutations.
 • Kai (The Skeptic): Adversarially interrogates the proposal, searching for race conditions, asynchronous deadlock vectors, and macro recursion loops.
 • Draco (The Arbitrator): Evaluates the dialectic through Bayesian posterior probability calculations:
@@ -167,13 +168,13 @@ All three computational tiers produce bit-identical deterministic outputs, ensur
   },
   {
     id: 'netlify-prerender-aeo',
-    q: 'How does Netlify production deployment prerender 83+ static routes for search and answer engines?',
+    q: 'How does Netlify production deployment prerender 71+ static routes for search and answer engines?',
     category: 'OS & Deployment',
-    keywords: ['netlify', 'prerender', 'static', 'routes', '83', 'aeo', 'seo', 'schema.org', 'json-ld', 'crawler', 'scripts/prerender.mjs', 'build'],
+    keywords: ['netlify', 'prerender', 'static', 'routes', '71', 'aeo', 'seo', 'schema.org', 'json-ld', 'crawler', 'scripts/prerender.mjs', 'build'],
     a: `Netlify production deployments compile with an automated prerendering pipeline (npm run build -> vite build && node scripts/prerender.mjs).
 
-The engine generates static HTML snapshots for all 83+ studio routes—including 37 workstations, 25 micro-tools, and 6 math academy pillars. Each snapshot embeds structured Schema.org JSON-LD graphs (FAQPage, SoftwareApplication, TechArticle) and rich semantic DOM structures, providing instant First Contentful Paint (< 200ms) and comprehensive Answer Engine Optimization (AEO).`,
-    oracleResponse: `Prerendering engine verified: 83 static route shells are pre-compiled with embedded Schema.org graphs and semantic metadata. Answer engines (AEO) and web crawlers index authoritative answers instantly without client JavaScript delays.`,
+The engine generates static HTML snapshots for all 71+ studio routes—including 24 workstations, 25 micro-tools, and 6 math academy pillars. Each snapshot embeds structured Schema.org JSON-LD graphs (FAQPage, SoftwareApplication, TechArticle) and rich semantic DOM structures, providing instant First Contentful Paint (< 200ms) and comprehensive Answer Engine Optimization (AEO).`,
+    oracleResponse: `Prerendering engine verified: 71 static route shells are pre-compiled with embedded Schema.org graphs and semantic metadata. Answer engines (AEO) and web crawlers index authoritative answers instantly without client JavaScript delays.`,
     jumpTargets: [
       { label: 'Agent AX Discovery Manifest', path: '/ax', type: 'ax' },
       { label: 'Full Engineering Documentation', path: '/docs', type: 'doc' }
@@ -202,7 +203,7 @@ The engine generates static HTML snapshots for all 83+ studio routes—including
     q: 'What is the Zoth OS QEMU/KVM virtual machine and how do operators launch it locally?',
     category: 'OS & Deployment',
     keywords: ['zoth os', 'qemu', 'kvm', 'vm', 'virtual machine', 'qcow2', 'cgroupv2', 'air-gapped', 'isolation', 'command', 'linux'],
-    a: `Zoth OS (/zoth-os) is an air-gapped, Debian/Parrot-hardened Linux environment distributed as a thin copy-on-write qcow2 disk image. It encapsulates the full studio stack—including all daemons (:8788, :8789, :8787), Ollama LLM foundry, PyTorch, and vLLM—behind cgroupv2 memory guards and local loopback firewalls.
+    a: `Zoth OS (/zoth-os) is an air-gapped, Debian/Parrot-hardened Linux environment distributed as a thin copy-on-write qcow2 disk image. It encapsulates the full studio stack—including all daemons (:8989, :8094, :8102, :8790), Ollama LLM foundry, PyTorch, and vLLM—behind cgroupv2 memory guards and local loopback firewalls.
 
 Operators launch the virtual machine with native KVM hardware acceleration via:
 qemu-system-x86_64 -enable-kvm -m 8192 -smp 4 -hda zoth-agent-os.qcow2`,
@@ -224,33 +225,33 @@ During boot, the kernel detects and loads native NVIDIA CUDA and AMD ROCm driver
     oracleResponse: `Bare-metal ISO deployment: Flash to physical drive using dd. Boots directly into an air-gapped environment with pre-loaded NVIDIA CUDA and AMD ROCm drivers for maximum local tensor throughput.`,
     jumpTargets: [
       { label: 'Zoth OS ISO Hub', path: '/zoth-os', type: 'os' },
-      { label: 'All Workstations (37)', path: '/workstations', type: 'workstations' }
+      { label: 'All Workstations (24)', path: '/workstations', type: 'workstations' }
     ]
   },
   {
     id: 'mcp-tool-integration',
     q: 'How does Model Context Protocol (MCP) tool integration work in Zoth Studio v2?',
     category: 'Architecture',
-    keywords: ['mcp', 'model context protocol', 'stdio', 'ipc', 'sse', '8788/sse', 'tools/list', 'tools/call', 'prompts/get', 'anthropic', 'agents', 'schema'],
-    a: `Zoth Studio implements the Anthropic Model Context Protocol (MCP) standard across local STDIO / IPC and Server-Sent Events (http://127.0.0.1:8788/sse).
+    keywords: ['mcp', 'model context protocol', 'stdio', 'ipc', 'sse', '8989/events', '8094/sse', 'tools/list', 'tools/call', 'prompts/get', 'anthropic', 'agents', 'schema'],
+    a: `Zoth Studio implements the Anthropic Model Context Protocol (MCP) standard across local STDIO / IPC and Server-Sent Events (http://127.0.0.1:8989/events and :8094/sse).
 
-External agent environments (Claude Code, Hermes Agent, Cursor, OpenCode, or local Ollama instances) connect directly to Zoth Studio, calling tools/list to discover 21 micro-tools and 15 cockpits, tools/call to execute sandboxed code mutations, and resources/read to query STDP vector memory—all validated against JSON-Schema contracts with zero cloud exposure.`,
-    oracleResponse: `MCP standard implemented: External agents connect via loopback SSE (127.0.0.1:8788/sse) or STDIO. Exposes tools/list, tools/call, and resources/read with strict JSON-Schema validation and zero telemetry.`,
+External agent environments (Claude Code, Hermes Agent, Cursor, OpenCode, or local Ollama instances) connect directly to Zoth Studio, calling tools/list to discover 25 micro-tools and 24 cockpits, tools/call to execute sandboxed code mutations, and resources/read to query STDP vector memory—all validated against JSON-Schema contracts with zero cloud exposure.`,
+    oracleResponse: `MCP standard implemented: External agents connect via loopback SSE (127.0.0.1:8989/events) or STDIO. Exposes tools/list, tools/call, and resources/read with strict JSON-Schema validation and zero telemetry.`,
     jumpTargets: [
-      { label: 'Micro-Tools Catalog (21 Tools)', path: '/tools', type: 'tools' },
-      { label: 'Workstations Directory (37)', path: '/workstations', type: 'workstations' },
+      { label: 'Micro-Tools Catalog (25 Tools)', path: '/tools', type: 'tools' },
+      { label: 'Workstations Directory (24)', path: '/workstations', type: 'workstations' },
       { label: 'Signal Bridge Console', path: '/bridges', type: 'bus' }
     ]
   },
   {
     id: 'signal-bridge-simplex-mesh',
-    q: 'How does the Sovereign Signal Bridge on port 8789 maintain an E2EE simplex peer mesh?',
+    q: 'How does the Sovereign Signal Bridge on port 8102 maintain an E2EE simplex peer mesh?',
     category: 'Architecture',
-    keywords: ['signal bridge', '8789', 'simplex', 'peer mesh', 'e2ee', 'ipc', 'ed25519', 'websocket', 'bus', 'decentralized', 'heartbeats'],
-    a: `The Sovereign Signal Bridge (127.0.0.1:8789) functions as a low-latency, point-to-point simplex communication bus for the 21-agent pantheon.
+    keywords: ['signal bridge', '8102', 'simplex', 'peer mesh', 'e2ee', 'ipc', 'ed25519', 'websocket', 'bus', 'decentralized', 'heartbeats'],
+    a: `The Sovereign Signal Bridge (127.0.0.1:8102) functions as a low-latency, point-to-point simplex communication bus for the 21-agent pantheon.
 
 Agents transmit messages across unidirectional channels over local WebSockets, signing each payload with Ed25519 cryptographic keys. The simplex architecture isolates agent failure domains: if an individual synthesis agent encounters an unhandled exception or thread block, peer nodes continue consensus deliberations without crashing the collective bus.`,
-    oracleResponse: `Signal Bridge IPC online at 127.0.0.1:8789: Ed25519 signed simplex channels over local WebSockets. Sub-millisecond peer-to-peer message passing prevents single-point-of-failure deadlocks across the agent mesh.`,
+    oracleResponse: `Signal Bridge IPC online at 127.0.0.1:8102: Ed25519 signed simplex channels over local WebSockets. Sub-millisecond peer-to-peer message passing prevents single-point-of-failure deadlocks across the agent mesh.`,
     jumpTargets: [
       { label: 'Zoth Signal Bridge Console', path: '/bridges', type: 'bus' },
       { label: 'Consensus Arena', path: '/consensus', type: 'consensus' }

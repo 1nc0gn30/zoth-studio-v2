@@ -169,14 +169,14 @@ async function handleUp() {
       const started = spawnDaemon(
         'memory',
         'python3',
-        ['-m', 'neuro_memory_daemon', 'serve', '-H', '127.0.0.1', '-p', '8788'],
+        ['-m', 'neuro_memory_daemon', 'serve', '-H', '127.0.0.1', '-p', '8094'],
         memoryDir
       );
       pids.memory = started;
       console.log(`${GREEN}✔ memory${RESET} pid ${started.pid}  log ${path.relative(root, started.log)}`);
     }
   } else {
-    console.log(`${GREEN}✔ memory${RESET} already listening on 127.0.0.1:8788`);
+    console.log(`${GREEN}✔ memory${RESET} already listening on 127.0.0.1:8094`);
   }
 
   if (!before.services.bridge.up) {
@@ -186,14 +186,14 @@ async function handleUp() {
       const started = spawnDaemon(
         'bridge',
         'python3',
-        ['-m', 'sovereign_agent_bridge', 'serve', '--host', '127.0.0.1', '--port', '8789'],
+        ['-m', 'sovereign_agent_bridge', 'serve', '--host', '127.0.0.1', '--port', '8102'],
         bridgeDir
       );
       pids.bridge = started;
       console.log(`${GREEN}✔ bridge${RESET} pid ${started.pid}  log ${path.relative(root, started.log)}`);
     }
   } else {
-    console.log(`${GREEN}✔ bridge${RESET} already listening on 127.0.0.1:8789`);
+    console.log(`${GREEN}✔ bridge${RESET} already listening on 127.0.0.1:8102`);
   }
 
   if (before.services.vault.up) {
@@ -306,7 +306,7 @@ function handleHelp() {
   console.log(`  ${GOLD}npm run zoth -- list${RESET}            Catalog, with published GitHub URLs`);
   console.log(`  ${GOLD}npm run zoth -- pull <repo>${RESET}     Clone or fast-forward one published tool into ./tools`);
   console.log(`  ${GOLD}npm run zoth -- pull --all${RESET}      Clone every published tool`);
-  console.log(`  ${GOLD}npm run zoth -- up${RESET}              Start memory (:8788), bridge (:8789), and vault (:8787) from backend/`);
+  console.log(`  ${GOLD}npm run zoth -- up${RESET}              Start memory (:8094), bridge (:8102), and vault (:8787) from backend/`);
   console.log(`  ${GOLD}npm run zoth -- down${RESET}            Stop processes this CLI started`);
   console.log(`  ${GOLD}npm run zoth -- swarm${RESET}           Print the pantheon roster`);
   console.log(`  ${GOLD}npm run dev${RESET}                     Studio UI on http://127.0.0.1:3000/`);

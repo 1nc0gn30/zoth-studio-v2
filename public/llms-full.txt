@@ -17,12 +17,12 @@ Zero-Egress Architectural Invariants:
 4. Deterministic AST Verification: Code modifications pass through a 3-agent Byzantine consensus arena prior to staging.
 
 ================================================================================
-SECTION 2: LUCY NETRUNNER ORACLE & WHITESPACE CYBERSPACE (STDP MEMORY)
+SECTION 2: LUCY COGNITIVE ORACLE & WHITESPACE MEMORY MATRIX (STDP)
 ================================================================================
 
-Guardian: Lucy (Lucyna Kushinada)
-Role: Sovereign Netrunner Oracle & Cyberdeck Guide
-Channel: Codec 141.12 // Deep Net Breach Stratum
+Guardian: Lucy
+Role: Sovereign Cognitive Memory Oracle & Agent Knowledge Guide
+Channel: Semantic Bus :8094 // Zero-Egress Memory Stratum
 Theme: Whitespace Cyberspace — a serene, luminous, non-hectic memory void with gold-on-void (#D4AF37 on #08080B) visual ergonomics.
 
 Biomorphic Spike-Timing-Dependent Plasticity (STDP) Synaptic Equation:
@@ -40,7 +40,7 @@ Key Hyperparameters:
 - τ₊ (Potentiation Time Window): 20.0 ms
 - τ₋ (Depression Time Window): 20.0 ms
 - Baseline Decay Factor: Logarithmic stale-vector pruning after 14-day inactivity
-- Synaptic Storage: SQLite vec0 / HNSW table running on loopback at http://127.0.0.1:8788
+- Synaptic Storage: SQLite vec0 / HNSW table running on loopback at http://127.0.0.1:8094
 
 ================================================================================
 SECTION 3: THE SIX MATHEMATICAL PILLARS OF ZOTH
@@ -104,86 +104,75 @@ Consensus Battle Arena Protocol:
 - Mechanism: AST Diff Synthesis. Rather than simple text voting, the agents parse AST trees, detect edge-case semantic regressions, and require a 2/3 signed cryptographic quorum before code is merged.
 
 ================================================================================
-SECTION 5: 37 NATIVE WORKSTATIONS DIRECTORY
+SECTION 5: 24 NATIVE WORKSTATIONS DIRECTORY
 ================================================================================
 
-1. agent-composer: Visual drag-and-drop DAG workflow builder for autonomous agent task execution.
-2. ax: Agent Experience powerhouse and machine-readable schema inspector.
-3. badge-3d: Interactive WebGL three-dimensional sovereign badge and coin visualizer.
-4. brand: Brand identity sigils, vector marks, and typography design studio.
-5. bridge: E2EE local WebSocket packet pinger and signal mesh monitor.
-6. chronicle: Project milestones, version history, and sprint planning matrix.
-7. cockpit: High-altitude mission control radar for 21-agent pantheon coordination.
-8. connectors: Universal plugin directory and zero-telemetry tool connector registry.
-9. consensus: Socratic 3-agent Byzantine consensus debate and AST synthesis arena.
-10. cyberpunk-hud: Immersive sci-fi operator terminal HUD with telemetry readouts.
-11. edge-forge: Edge device deployment target packager and cross-compilation pipeline.
-12. geometry: Sacred geometry interactive generator with phi-ratio harmonics.
-13. ide: Sovereign code editor with syntax highlighting, AST parsing, and local linting.
-14. math-pillars: Interactive formal mathematics academy covering the 6 core pillars.
-15. memory-core: SQLite/HNSW vector memory inspector and similarity query lab.
-16. models: Local Ollama / llama.cpp model foundry and weight benchmarking suite.
-17. netrunner-memory: Lucy's Whitespace Netrunner Memory Hub and STDP synapse controller.
-18. nexus-3d: 3D spatial omniverse node visualizer and spatial agent positioning.
-19. notes: Markdown scratchpad, meeting intelligence, and technical documentation forge.
-20. obsidian-vault: Local Obsidian markdown knowledge base sync and graph viewer.
-21. promptmaster: DSPy system prompt engineering studio and template optimizer.
-22. secrets: Argon2id encrypted key vault and hardware-anchored secret manager.
-23. soundscape: Ambient biophilic background noise generator for focused operator sessions.
-24. subagent-swarm: Subagent worker pool coordinator and task delegation queue.
-25. subsweep: Network reconnaissance, attack surface mapper, and subdomain scanner.
-26. swarm: Real-time 21-agent message bus telemetry and inter-process communicator.
-27. terminal: Web-based interactive pseudo-terminal connected to local sandbox.
-28. tool-bench: Micro-tool test harness, schema validator, and CLI mock playground.
-29. typography: Typographic scale calculator and custom font pairing workbench.
-30. vision: Computer vision edge pipeline, SAM segmentation, and OCR previewer.
-31. web3-solana: Zero-egress Solana wallet generator, RPC monitor, and key validator.
-32. webgen: Polyglot frontend generator exporting to React, Vue, Svelte, and Solid.
-33. whitepaper: Academic paper typesetter and formal documentation compiler.
-34. world: 3D Sanctum virtual world rendered via Three.js / WebGL.
-35. zoth-os: Linux KVM hypervisor orchestrator and thin QEMU disk sandbox.
-36. zoth-ui: Sovereign design system component library and gold-on-void palette tokens.
-37. zoth-world: 3D interactive isometric sanctum environment.
+1. cockpit: The Cockpit // Sovereign Operator Command - master telemetry HUD and unified fleet status.
+2. ide: Sovereign Operator IDE & Code Foundry - air-gapped code editor and syntax tree inspector.
+3. agent-composer: Multi-Agent DAG Composer & Pipeline Foundry - visual node-graph workflow builder.
+4. mission-control: Zoth Mission Control & Fleet Dispatcher - supervisor tracking active subagents and queues.
+5. models: Zoth AI Model Foundry & Spirit Matrix Pro - local GGUF, Ollama, vLLM, and LM Studio provider routing.
+6. ax-powerhouse: Zoth AX Powerhouse & Contract Studio - machine contract compiler and schema validator.
+7. cyberpunk-hud: Cyberpunk Telemetry HUD Cockpit - high-density cybernetic monitoring cockpit.
+8. chronicle: Zoth Chronicle & Engineering Horizon Roadmap - release telemetry logs and architecture milestones.
+9. notes-reviewer: Zoth Visual Notes & Agent Reviewer - multi-agent markdown knowledge extraction and diffs.
+10. brand: Zoth Studio Brand Assets & Alchemical Seals Kit - vector seals, cyber-sigils, and token design system.
+11. vision-link: Zoth Vision Link Multimodal Inspector - spatial image diagnostics and layout segmentation.
+12. web3-hub: Web3 Sovereign Bridge & Solana Swarm Tracker - on-chain state auditor and decentralized bridge.
+13. github-tool: Zoth GitHub Studio & Autonomous Repo Workstation - autonomous Git repo and PR pipelines.
+14. edge-forge: Zoth Edge Forge & Micro-Kernel Sandbox - WASM module packaging and kernel sandbox.
+15. netlify-ax: Zoth Netlify AX & Serverless Edge Console - edge function deployer and production hardening.
+16. webgen: Zoth WebGen Foundry - autonomous multi-framework website generator with 6 archetypes.
+17. omnipost: OmniPost Multi-Platform Social Engine - social content preview synthesizer and scheduler.
+18. subsweep: Zoth SubSweep Surface Scanner - local subnet recon probe and zero-egress OSINT discovery.
+19. connectors: Zoth Tool Bench & Integration Ecosystem - integration workbench bridging tools and MCP contracts.
+20. hexstrike: HEXSTRIKE // Threat & Security Radar - air-gapped security sentinel and exploit sandbox.
+21. netrunner-memory: Lucy Oracle Biomorphic Memory Hub - STDP biomorphic spike-timing vector memory on :8094.
+22. consensus: Byzantine Consensus Battle Arena - 3-agent Byzantine AST synthesis arena and truth arbitration.
+23. bus-monitor: Zoth Swarm NOC & Signal Bridge - decentralized agent bus monitor with E2EE WebSocket pinger.
+24. math-pillars: Six Mathematical Pillars Academy - formal mathematical foundations and proofs.
 
 ================================================================================
 SECTION 6: 25 AIR-GAPPED MICRO-TOOLS DIRECTORY
 ================================================================================
 
 1. adytum-alchemist-ai-workflow: 22-key hermetic planning rite and incubation gate.
-2. azoth-local-agent: Archon core orchestrator for local zero-telemetry dispatching.
-3. sovereign-agent-bridge: E2EE WebSocket signal protocol and Simplex peer mesh IPC.
-4. neuro-memory-daemon: STDP biomorphic memory vector engine at 127.0.0.1:8788.
-5. vector-search-engine: Local HNSW vector index for zero-latency semantic search.
-6. deepsearch-research-agent: Multi-source research agent with grounded inline citations.
-7. promptmaster-studio: Prompt engineering workstation, DSPy optimizer, and template store.
-8. hexstrike-arsenal: Penetration audit suite, CVE matrix inspector, and exploit lab.
-9. envguard-secrets-vault: Argon2id + AES-256-GCM hardware vault for zero-cloud storage.
-10. jwt-inspector-guard: In-browser JWT decoder, signature validator, and claim auditor.
-11. payload-entropy-analyzer: Shannon entropy calculator for detecting obfuscated shells.
-12. polyglot-code-transpiler: AST-driven transpiler converting between Python, JS, Go, Rust.
-13. subagent-fleet-manager: Parallel background agent pool monitor and task queue.
-14. network-boundary-sentinel: Port binding scanner and outbound packet leak detector.
-15. git-provenance-verifier: Cryptographic commit signature inspector and provenance auditor.
-16. ast-security-linter: Static AST analyzer detecting dangerous eval/exec invocations.
-17. mock-enclave-tester: Simulation harness for testing offline enclave isolation.
-18. local-rag-evaluator: Precision/Recall benchmarking suite for local embedding models.
-19. license-compliance-scanner: Open-source dependency license auditor.
-20. audio-spectrogram-viewer: Mel and FFT audio frequency analyzer for acoustic signals.
-21. svg-sigil-generator: Mathematical vector sigil and logo synthesizer.
-22. markdown-spec-builder: Formal specification authoring tool with JSON-Schema validation.
-23. regex-explainer-forge: Deterministic regular expression visualizer and compiler.
-24. cron-schedule-validator: 5-field cron expression parser, debugger, and timer preview.
+2. azoth-local-agent: Archon core orchestrator for local zero-telemetry task dispatching.
+3. sovereign-agent-bridge: E2EE WebSocket signal protocol and Simplex peer mesh IPC communicator.
+4. neuro-memory-daemon: STDP biomorphic memory vector engine & cross-session recall on loopback :8094.
+5. vector-search-engine: Local HNSW vector index engine for fast zero-latency semantic similarity search.
+6. deepsearch-research-agent: Autonomous multi-source research agent with grounded inline citations.
+7. promptmaster-studio: System prompt engineering workstation, DSPy prompt optimizer, and template store.
+8. hexstrike-arsenal: Autonomous penetration audit suite, CVE matrix inspector, and exploit payload lab.
+9. envguard-secrets-vault: Argon2id + AES-256-GCM hardware vault for zero-cloud secret storage.
+10. jwt-inspector-guard: In-browser JWT token decoder, cryptographic signature validator, and claim auditor.
+11. payload-entropy-studio: In-browser Shannon entropy analysis tool for detecting obfuscated payloads.
+12. web-security-guard: Security headers auditor, CSP validator, and WAF protection scanner.
+13. polyglot-framework-exporter: In-browser exporter from React/JSX to HTML/CSS, Vue, Svelte, and Solid.js.
+14. aeo-graph-engine: Answer Engine Optimization knowledge graph builder & Schema.org entity linker.
+15. cwv-speed-engine: Core Web Vitals LCP, CLS, and INP diagnostic engine & asset minifier.
+16. vision-gesture-control: In-browser MediaPipe webcam hand-gesture recognition interface controller.
+17. subsweep-lead-scanner: Subdomain recon scanner and OSINT lead enrichment engine.
+18. omnipost-social-engine: Multi-platform social content scheduler and cross-post automation engine.
+19. cron-rhythm-studio: Cron expression rhythm visualizer, scheduler simulator, and trigger matrix.
+20. certpath-roadmap-studio: Interactive cybersecurity & engineering certification roadmap generator.
+21. pwa-manifest-builder: Progressive Web App manifest authoring, icon generator, and offline worker builder.
+22. regex-droid-builder: Visual regular expression tester, neural explainer, and syntax highlighter.
+23. schema-illustrator-studio: Interactive JSON-Schema to database diagram visualizer and code generator.
+24. zoth-webgen: Deterministic zero-cloud website generator and layout synthesizer with MCP server.
+25. zoth-swarm-multiplexer: 21-terminal autonomous agent multiplexer daemon with hot-swappable harnesses.
 
 ================================================================================
 SECTION 7: LOCAL ENCLAVE PORTS & DAEMON SERVICES
 ================================================================================
 
-- Port 3000: Zoth Studio v2 Single-Page Application (React 18 + Vite + MUI v5)
-- Port 8088: Legacy Core-App compatibility fallback (optional, decoupled in v2)
+- Port 3000: Zoth Studio v2 Web Dashboard (React 18 + Vite + MUI v5)
+- Port 8094: Neuro Memory Daemon (STDP Synaptic Vectors + SQLite vec0)
+- Port 8102: Sovereign Agent Bridge (WebSocket IPC Message Bus)
 - Port 8484: Operator Deck PTY Terminal
 - Port 8787: Adytum Keymaster Hardware Vault (Argon2id + XChaCha20-Poly1305)
-- Port 8788: Neuro Memory Daemon (STDP Synaptic Vectors + SQLite)
-- Port 8789: Sovereign Agent Bridge (WebSocket IPC Message Bus)
+- Port 8790: Azoth Local Agent / Archon Core Orchestrator
+- Port 8989: Swarm Multiplexer Daemon (21-Terminal SSE Agent Telemetry)
 - Port 11434: Local Model Foundry (Ollama / llama.cpp GGUF Inference)
 
 ================================================================================

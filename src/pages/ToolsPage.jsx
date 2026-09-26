@@ -73,7 +73,7 @@ export default function ToolsPage() {
     <>
       {!introDone && (
         <CinematicIntro
-          words={["26 LOCAL", "MICRO", "TOOLS"]}
+          words={["25 LOCAL", "MICRO", "TOOLS"]}
           themeColor="gold"
           subtitle="SOVEREIGN TOOL ARSENAL"
           onComplete={() => setIntroDone(true)}
@@ -99,7 +99,7 @@ export default function ToolsPage() {
               {isBackendConnected ? (
                 <Chip
                   icon={<DnsIcon sx={{ color: isDark ? '#34D399 !important' : '#027A48 !important' }} />}
-                  label="127.0.0.1 BACKEND CONNECTED · ALL 29 TOOLS RUNNING LIVE"
+                  label={`127.0.0.1 BACKEND CONNECTED · ALL ${microTools.length} TOOLS RUNNING LIVE`}
                   size="small"
                   sx={{ bgcolor: isDark ? 'rgba(52,211,153,0.14)' : '#ECFDF3', color: isDark ? '#34D399' : '#027A48', border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`, fontWeight: 800 }}
                 />

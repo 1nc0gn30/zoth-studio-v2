@@ -561,7 +561,7 @@ export default function CyberpunkPortfolio() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
           { name: 'AZOTH-OS 2.0', tag: 'CORE RUNTIME', desc: 'Zero-cloud micro-kernel with local LLM tensor pipeline and fast reactive IPC.' },
-          { name: 'NEURO-DAEMON', tag: 'SYNAPTIC DB', desc: 'Vectorized memory daemon running at 8788/v1 with instant vector synthesis.' },
+          { name: 'NEURO-DAEMON', tag: 'SYNAPTIC DB', desc: 'Vectorized memory daemon running at 8094/v1 with instant vector synthesis.' },
           { name: 'HEXSTRIKE ARSENAL', tag: 'SECURITY', desc: 'High-entropy AST validation shield guarding against cloud exfiltration.' }
         ].map((proj, i) => (
           <div key={i} className="bg-[#12131C] border border-[#D4AF37]/20 p-5 rounded-xl hover:border-[#D4AF37] transition group">
@@ -583,7 +583,7 @@ export default function CyberpunkPortfolio() {
 // Astro 4.0 Cyberpunk Matrix Portfolio
 const projects = [
   { name: 'AZOTH-OS 2.0', cat: 'RUNTIME', desc: 'Zero-cloud micro-kernel with local tensor pipeline.' },
-  { name: 'NEURO-DAEMON', cat: 'SYNAPSE', desc: 'Vectorized memory daemon running on 8788/v1.' },
+  { name: 'NEURO-DAEMON', cat: 'SYNAPSE', desc: 'Vectorized memory daemon running on 8094/v1.' },
   { name: 'HEXSTRIKE', cat: 'DEFENSE', desc: 'High-entropy AST validation shield.' }
 ];
 ---
@@ -663,7 +663,7 @@ const projects = ref([
 export default function CyberpunkPortfolio() {
   const [projects] = createSignal([
     { name: 'AZOTH-OS 2.0', tag: 'CORE RUNTIME', desc: 'Zero-cloud micro-kernel with local tensor pipeline.' },
-    { name: 'NEURO-DAEMON', tag: 'SYNAPTIC DB', desc: 'Vectorized memory daemon running on 8788/v1.' },
+    { name: 'NEURO-DAEMON', tag: 'SYNAPTIC DB', desc: 'Vectorized memory daemon running on 8094/v1.' },
     { name: 'HEXSTRIKE ARSENAL', tag: 'SECURITY', desc: 'High-entropy AST validation shield guarding against cloud egress.' }
   ]);
 
@@ -921,7 +921,7 @@ export default function DocumentationHub() {
   const [activeSection, setActiveSection] = useState('ast-engine');
   const [copied, setCopied] = useState(false);
 
-  const curlSnippet = \`curl -X POST http://127.0.0.1:8788/v2/ast/compile \\
+  const curlSnippet = \`curl -X POST http://127.0.0.1:8094/v2/ast/compile \\
   -H "Content-Type: application/json" \\
   -d '{"template": "sovereign-saas", "framework": "react-tailwind"}'\`;
 
@@ -1982,8 +1982,8 @@ echo "🔒 [Audit] Verifying CSP headers and offline zero-cloud invariants..."
 test -f dist/index.${currentFw.ext} && echo "✔ Dist artifact verified."
 
 # 4. Local Sandbox Server Boot
-echo "🚀 [Launch] Spawning zero-egress sandbox runtime at http://127.0.0.1:8788..."
-python3 -m http.server 8788 --directory dist &
+echo "🚀 [Launch] Spawning zero-egress sandbox runtime at http://127.0.0.1:8094..."
+python3 -m http.server 8094 --directory dist &
 PID=$!
 echo "Sandbox daemon active (PID: $PID). Press Ctrl+C to terminate."
 wait $PID`;
@@ -2272,7 +2272,7 @@ wait $PID`;
               </Box>
               <Box sx={{ p: 2, bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2 }}>
                 <Typography variant="subtitle2" sx={{ fontWeight: 800, color: textPrimary }}>NEURO-DAEMON</Typography>
-                <Typography variant="caption" sx={{ color: textSecondary }}>Local vectorized memory on port 8788.</Typography>
+                <Typography variant="caption" sx={{ color: textSecondary }}>Local vectorized memory on port 8094.</Typography>
               </Box>
             </Stack>
           </Box>
@@ -2317,7 +2317,7 @@ wait $PID`;
             <Paper sx={{ p: 2, bgcolor: dark ? '#121420' : surface, border: `1px solid ${divider}`, borderRadius: 2, mb: 2 }}>
               <Typography variant="subtitle2" sx={{ fontWeight: 800, color: textPrimary, mb: 1 }}>POST /v2/ast/compile</Typography>
               <Box sx={{ p: 1.5, bgcolor: dark ? '#08080B' : '#F1F5F9', border: `1px solid ${divider}`, borderRadius: 1.5, fontFamily: mono, fontSize: '0.75rem', color: dark ? goldLight : '#8A6A09' }}>
-                curl -X POST http://127.0.0.1:8788/v2/ast/compile -d '&#123;"template":"sovereign"&#125;'
+                curl -X POST http://127.0.0.1:8094/v2/ast/compile -d '&#123;"template":"sovereign"&#125;'
               </Box>
             </Paper>
             <Box sx={{ display: 'flex', gap: 1 }}>
@@ -3350,7 +3350,7 @@ wait $PID`;
                 </Typography>
               </Box>
               <Typography variant="caption" sx={{ fontFamily: mono, color: dark ? goldLight : '#D4AF37', fontSize: '0.68rem', fontWeight: 700 }}>
-                127.0.0.1:8788 • ZERO-EGRESS
+                127.0.0.1:8094 • ZERO-EGRESS
               </Typography>
             </Box>
             <Box sx={{ p: 2, maxHeight: 180, overflowY: 'auto', fontFamily: mono, fontSize: '0.76rem', lineHeight: 1.6 }}>
@@ -3896,7 +3896,7 @@ wait $PID`;
                             zoth-swarm-foundry :: loopback execution stream
                           </Typography>
                         </Box>
-                        <Chip label="127.0.0.1:8788" size="small" sx={{ bgcolor: 'rgba(212,175,55,0.15)', color: gold, fontFamily: mono, fontSize: '0.7rem', fontWeight: 800 }} />
+                        <Chip label="127.0.0.1:8094" size="small" sx={{ bgcolor: 'rgba(212,175,55,0.15)', color: gold, fontFamily: mono, fontSize: '0.7rem', fontWeight: 800 }} />
                       </Box>
                       <Box sx={{ p: 2.5, minHeight: 300, maxHeight: 480, overflowY: 'auto', fontFamily: mono, fontSize: '0.8rem', lineHeight: 1.7 }}>
                         {swarmLogs.map((log, idx) => (

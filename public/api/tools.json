@@ -1,7 +1,7 @@
 {
   "schema": "zoth/tools-static/v1",
-  "generated_at": "2026-09-25T03:25:32.373Z",
-  "tool_count": 29,
+  "generated_at": "2026-09-26T06:23:17.951Z",
+  "tool_count": 25,
   "tools": [
     {
       "id": "adytum-alchemist-ai-workflow",
@@ -13,6 +13,7 @@
       "pull": "npx zoth pull adytum-alchemist-ai-workflow",
       "execution_type": "local_cli",
       "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
@@ -28,6 +29,7 @@
       "pull": "npx zoth pull azoth-local-agent",
       "execution_type": "local_cli",
       "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
@@ -43,6 +45,7 @@
       "pull": "npx zoth pull sovereign-agent-bridge",
       "execution_type": "local_cli",
       "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
@@ -51,13 +54,14 @@
     {
       "id": "neuro-memory-daemon",
       "name": "Neuro Memory Daemon",
-      "description": "STDP biomorphic memory vector engine & cross-session agent context recall at 127.0.0.1:8788.",
+      "description": "STDP biomorphic memory vector engine & cross-session agent context recall at 127.0.0.1:8094.",
       "category": "Swarm & Core",
       "github": "https://github.com/NullAITech/neuro-memory-daemon",
       "version": "2.8.0",
       "pull": "npx zoth pull neuro-memory-daemon",
       "execution_type": "local_cli",
       "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
@@ -73,6 +77,7 @@
       "pull": "npx zoth pull vector-search-engine",
       "execution_type": "local_cli",
       "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
@@ -88,6 +93,7 @@
       "pull": "npx zoth pull deepsearch-research-agent",
       "execution_type": "local_cli",
       "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
@@ -103,6 +109,7 @@
       "pull": "npx zoth pull promptmaster-studio",
       "execution_type": "local_cli",
       "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
@@ -118,6 +125,7 @@
       "pull": "npx zoth pull hexstrike-arsenal",
       "execution_type": "local_cli",
       "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
@@ -133,6 +141,7 @@
       "pull": "npx zoth pull envguard-secrets-vault",
       "execution_type": "local_cli",
       "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
@@ -148,8 +157,8 @@
       "pull": "npx zoth pull jwt-inspector-guard",
       "execution_type": "webgpu",
       "runtimes": [
-        "node",
-        "cli",
+        "webgpu",
+        "browser",
         "zero-egress"
       ]
     },
@@ -163,8 +172,8 @@
       "pull": "npx zoth pull payload-entropy-studio",
       "execution_type": "webgpu",
       "runtimes": [
-        "node",
-        "cli",
+        "webgpu",
+        "browser",
         "zero-egress"
       ]
     },
@@ -178,21 +187,7 @@
       "pull": "npx zoth pull web-security-guard",
       "execution_type": "local_cli",
       "runtimes": [
-        "node",
-        "cli",
-        "zero-egress"
-      ]
-    },
-    {
-      "id": "audiocipher-stego-engine",
-      "name": "AudioCipher Stego Engine",
-      "description": "LSB audio steganography encoder/decoder and spectrum hidden signal detector.",
-      "category": "Security & Steganography",
-      "github": "https://github.com/NullAITech/audiocipher-stego-engine",
-      "version": "2.1.0",
-      "pull": "npx zoth pull audiocipher-stego-engine",
-      "execution_type": "local_cli",
-      "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
@@ -208,8 +203,8 @@
       "pull": "npx zoth pull polyglot-framework-exporter",
       "execution_type": "webgpu",
       "runtimes": [
-        "node",
-        "cli",
+        "webgpu",
+        "browser",
         "zero-egress"
       ]
     },
@@ -223,6 +218,7 @@
       "pull": "npx zoth pull aeo-graph-engine",
       "execution_type": "local_cli",
       "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
@@ -238,66 +234,7 @@
       "pull": "npx zoth pull cwv-speed-engine",
       "execution_type": "local_cli",
       "runtimes": [
-        "node",
-        "cli",
-        "zero-egress"
-      ]
-    },
-    {
-      "id": "nexus-3d-scene-studio",
-      "name": "Nexus 3D Scene Studio",
-      "description": "WebGPU & Three.js 3D viewport editor with real-time bloom shaders and object rigging.",
-      "category": "Media & 3D",
-      "github": "https://github.com/NullAITech/nexus-3d-scene-studio",
-      "version": "2.0.0",
-      "pull": "npx zoth pull nexus-3d-scene-studio",
-      "execution_type": "webgpu",
-      "runtimes": [
-        "node",
-        "cli",
-        "zero-egress"
-      ]
-    },
-    {
-      "id": "badge3d-coin-generator",
-      "name": "3D Badge & Coin Generator",
-      "description": "WebGPU & Three.js 3D metallic coin, seal, and interactive badge renderer in browser.",
-      "category": "Media & 3D",
-      "github": "https://github.com/NullAITech/badge3d-coin-generator",
-      "version": "1.2.0",
-      "pull": "npx zoth pull badge3d-coin-generator",
-      "execution_type": "webgpu",
-      "runtimes": [
-        "node",
-        "cli",
-        "zero-egress"
-      ]
-    },
-    {
-      "id": "cyber-turtle-studio",
-      "name": "CyberTurtle Graphic Studio",
-      "description": "In-browser turtle graphics vector synth & procedural cyberpunk logo generator.",
-      "category": "Media & 3D",
-      "github": "https://github.com/NullAITech/cyber-turtle-studio",
-      "version": "1.5.0",
-      "pull": "npx zoth pull cyber-turtle-studio",
-      "execution_type": "webgpu",
-      "runtimes": [
-        "node",
-        "cli",
-        "zero-egress"
-      ]
-    },
-    {
-      "id": "datamosh-glitch-studio",
-      "name": "Datamosh Glitch Studio",
-      "description": "WebGPU canvas I-frame corruption and analog glitch video/image effect engine.",
-      "category": "Media & 3D",
-      "github": "https://github.com/NullAITech/datamosh-glitch-studio",
-      "version": "1.3.0",
-      "pull": "npx zoth pull datamosh-glitch-studio",
-      "execution_type": "webgpu",
-      "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
@@ -313,23 +250,8 @@
       "pull": "npx zoth pull vision-gesture-control",
       "execution_type": "webgpu",
       "runtimes": [
-        "node",
-        "cli",
-        "zero-egress"
-      ]
-    },
-    {
-      "id": "ufo-sacred-geometry",
-      "name": "UFO Sacred Geometry",
-      "description": "In-browser procedural sacred geometry canvas engine & harmonic vector visualizer.",
-      "category": "Media & 3D",
-      "github": "https://github.com/NullAITech/ufo-sacred-geometry",
-      "version": "1.1.0",
-      "pull": "npx zoth pull ufo-sacred-geometry",
-      "execution_type": "webgpu",
-      "runtimes": [
-        "node",
-        "cli",
+        "webgpu",
+        "browser",
         "zero-egress"
       ]
     },
@@ -343,6 +265,7 @@
       "pull": "npx zoth pull subsweep-lead-scanner",
       "execution_type": "local_cli",
       "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
@@ -358,6 +281,7 @@
       "pull": "npx zoth pull omnipost-social-engine",
       "execution_type": "local_cli",
       "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
@@ -373,6 +297,7 @@
       "pull": "npx zoth pull cron-rhythm-studio",
       "execution_type": "local_cli",
       "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
@@ -388,6 +313,7 @@
       "pull": "npx zoth pull certpath-roadmap-studio",
       "execution_type": "local_cli",
       "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
@@ -403,8 +329,8 @@
       "pull": "npx zoth pull pwa-manifest-builder",
       "execution_type": "webgpu",
       "runtimes": [
-        "node",
-        "cli",
+        "webgpu",
+        "browser",
         "zero-egress"
       ]
     },
@@ -418,8 +344,8 @@
       "pull": "npx zoth pull regex-droid-builder",
       "execution_type": "webgpu",
       "runtimes": [
-        "node",
-        "cli",
+        "webgpu",
+        "browser",
         "zero-egress"
       ]
     },
@@ -433,6 +359,38 @@
       "pull": "npx zoth pull schema-illustrator-studio",
       "execution_type": "webgpu",
       "runtimes": [
+        "webgpu",
+        "browser",
+        "zero-egress"
+      ]
+    },
+    {
+      "id": "zoth-webgen",
+      "name": "Zoth WebGen Foundry",
+      "description": "Deterministic zero-cloud website generator and layout synthesizer with 6 production archetypes, MCP server, and automated tests.",
+      "category": "Autonomous Web",
+      "github": "https://github.com/NullAITech/zoth-webgen",
+      "version": "2.0.0",
+      "pull": "git clone https://github.com/NullAITech/zoth-webgen.git && cd zoth-webgen && python3 webgen_engine.py --help",
+      "execution_type": "local_cli",
+      "runtimes": [
+        "python",
+        "node",
+        "cli",
+        "zero-egress"
+      ]
+    },
+    {
+      "id": "zoth-swarm-multiplexer",
+      "name": "21-Agent Swarm Multiplexer",
+      "description": "21-terminal autonomous agent multiplexer daemon with hot-swappable AI harnesses, PWD control, and SSE telemetry.",
+      "category": "Swarm & Core",
+      "github": "https://github.com/NullAITech/zoth-swarm-multiplexer",
+      "version": "2.5.0",
+      "pull": "git clone https://github.com/NullAITech/zoth-swarm-multiplexer.git && cd zoth-swarm-multiplexer && python3 swarm_cli.py status",
+      "execution_type": "local_cli",
+      "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"

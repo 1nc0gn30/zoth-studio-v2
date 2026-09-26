@@ -12,12 +12,12 @@
         |                                     |                                     |
         v                                     v                                     v
 +-------------------------------+  +-------------------------------+  +-------------------------------+
-|       37 WORKSTATIONS         |  |      25 IN-BROWSER TOOLS      |  |    LUCY NETRUNNER ORACLE      |
-|  - Multi-Agent DAG Composer   |  |  - JWT Inspector Guard        |  |  - Codec 141.12 Deep Breach   |
+|       24 WORKSTATIONS         |  |      25 IN-BROWSER TOOLS      |  |    LUCY COGNITIVE ORACLE      |
+|  - Multi-Agent DAG Composer   |  |  - JWT Inspector Guard        |  |  - Semantic Bus :8094         |
 |  - Brand Alchemical Seals     |  |  - Payload Entropy Studio     |  |  - STDP Synaptic Plasticity   |
 |  - Sovereign Code IDE         |  |  - Polyglot Exporter          |  |  - Whitespace 3D Constellation|
-|  - Cyberpunk HUD Cockpit      |  |  - UFO Sacred Geometry        |  |  - SQLite HNSW Vectors        |
-|  - AI Model Foundry           |  |  - CWV Speed Engine           |  |  - Port 8788 (Loopback)       |
+|  - Cyberpunk HUD Cockpit      |  |  - MediaPipe Vision Gesture   |  |  - SQLite vec0 Vectors        |
+|  - AI Model Foundry           |  |  - CWV Speed Engine           |  |  - Port 8094 (Loopback)       |
 +-------------------------------+  +-------------------------------+  +-------------------------------+
         |                                     |                                     |
         +-------------------------------------+-------------------------------------+
@@ -38,16 +38,16 @@
 flowchart TD
     subgraph UI_Layer["Frontend Presentation Layer"]
         UI["React 18.2 + MUI v5 SPA<br/>Gold-on-Void Aesthetic (#D4AF37 on #08080B)"]
-        WS["37 Sovereign Workstations"]
+        WS["24 Sovereign Workstations"]
         Tools["25 Standalone In-Browser Tools"]
         UI --> WS
         UI --> Tools
     end
 
     subgraph Memory_Layer["Memory & Oracle Subsystem"]
-        Lucy["Lucy Netrunner Oracle<br/>Codec 141.12"]
+        Lucy["Lucy Cognitive Oracle<br/>Semantic Bus :8094"]
         STDP["STDP Synaptic Plasticity Engine<br/>dw = A+ exp(-dt/tau)"]
-        HNSW["SQLite Vector Tables & HNSW Index<br/>Port 127.0.0.1:8788"]
+        HNSW["SQLite Vector Tables & vec0 Index<br/>Port 127.0.0.1:8094"]
         Lucy --> STDP --> HNSW
     end
 
@@ -74,49 +74,49 @@ flowchart TD
 
 ## 1. Five Core Subsystems
 
-### 1.1 37 Sovereign Workstations
-Decoupled and responsive, the 37 workstations provide full operational environments across 7 operational disciplines:
+### 1.1 24 Sovereign Workstations
+Decoupled and responsive, the 24 workstations provide full operational environments across 7 operational disciplines:
 - **Agent Coordination**: Multi-Agent DAG Composer, 21-Agent Pantheon Swarm (`/swarm`), Operator Mission Control, Simplex Signal Bridge (`/bridges`), Swarm Bus Monitor.
-- **Memory & Neural**: Lucy Netrunner Memory (`/memory`), STDP Synaptic Lab.
+- **Memory & Neural**: Lucy Cognitive Memory (`/memory`), STDP Synaptic Lab.
 - **Consensus & Logic**: Byzantine Consensus Arena (`/consensus`), Multi-Model Fusion Arena, Six Math Pillars Academy (`/docs#sec-math`).
 - **Development & IDE**: Sovereign Code IDE, WebGen Autonomous Foundry (`/webgen`), Edge Forge, Tool Bench, Polyglot Framework Exporter.
 - **Security & Sanctum**: Adytum Hardware Sanctum (`/adytum`), HexStrike Cybersec Arsenal (`/hexstrike`), Zero-Egress Enclave Desk, Zoth OS Hypervisor Sandbox (`/zoth-os`), Hardware Vault Console.
-- **Brand & Creative**: Brand Alchemical Seals Kit, Cyberpunk HUD Cockpit, Nexus 3D Scene Studio, Badge & Coin Generator, Datamosh Glitch Studio, UFO Sacred Geometry.
-- **Web & Automation**: Subsweep Lead Scanner, Omnipost Social Engine, CWV Speed Engine, OG Canvas Forge, PWA Manifest Builder, Schema Illustrator Studio.
+- **Brand & Creative**: Brand Alchemical Seals Kit, Cyberpunk HUD Cockpit, MediaPipe Vision Gesture, Visual Synthesis Matrix.
+- **Web & Automation**: Subsweep Lead Scanner, Omnipost Social Engine, CWV Speed Engine, PWA Manifest Builder, Schema Illustrator Studio.
 - **Intelligence & Models**: AI Model Foundry, DeepSearch Research Agent, PromptMaster Studio, Session Chronicle, Agent Experience Powerhouse (`/ax`).
 
-### 1.2 25 In-Browser Micro-Tools
-Zero-network developer utilities built into client-side web workers:
-1. `jwt-inspector-guard` - Client-side token header and payload verification.
-2. `payload-entropy-studio` - In-browser Shannon entropy calculator and graphing engine.
-3. `polyglot-framework-exporter` - Multi-framework component transpiler.
-4. `cwv-speed-engine` - Core Web Vitals diagnostic lab.
-5. `ufo-sacred-geometry` - Harmonic vector geometry generator.
-6. `badge3d-coin-generator` - WebGL 3D coin and badge designer.
-7. `nexus-3d-scene-studio` - Air-gapped 3D scene compositor.
-8. `datamosh-glitch-studio` - Video glitch and compression artifact simulator.
-9. `subsweep-lead-scanner` - Subdomain analysis and asset mapper.
-10. `omnipost-social-engine` - Unified social content engine.
-11. `og-canvas-forge` - High-resolution OG banner generator.
-12. `pwa-manifest-builder` - Progressive Web App config studio.
-13. `schema-illustrator-studio` - Schema.org JSON-LD visualizer.
-14. `deepsearch-research-agent` - Local BM25 document search.
-15. `promptmaster-studio` - Token-optimized prompt editor.
-16. `cron-rhythm-studio` - Cron expression simulator and parser.
-17. `regex-droid-builder` - Safe regular expression tester.
-18. `wcag-contrast-guard` - Accessibility compliance checker.
-19. `audiocipher-stego-engine` - Acoustic steganography generator.
-20. `web-security-guard` - CSP and HTTP security header builder.
-21. `cyber-turtle-studio` - Procedural turtle graphics laboratory.
-22. `certpath-roadmap-studio` - Interactive engineering skill trees.
-23. `vision-gesture-control` - Local browser gesture recognizer.
-24. `envguard-secrets-vault` - In-memory environment sanitizer.
-25. `vector-search-engine` - In-browser Euclidean and cosine search.
+### 1.2 25 Authentic Sovereign Micro-Tools
+Zero-network developer utilities built for air-gapped security:
+1. `adytum-alchemist-ai-workflow` - 22-key hermetic planning rite and incubation gate.
+2. `azoth-local-agent` - Archon core orchestrator for local zero-telemetry task dispatching.
+3. `sovereign-agent-bridge` - E2EE WebSocket signal protocol and Simplex peer mesh IPC communicator.
+4. `neuro-memory-daemon` - STDP biomorphic memory vector engine & cross-session recall on loopback :8094.
+5. `vector-search-engine` - Local HNSW vector index engine for fast zero-latency semantic similarity search.
+6. `deepsearch-research-agent` - Autonomous multi-source research agent with grounded inline citations.
+7. `promptmaster-studio` - System prompt engineering workstation, DSPy prompt optimizer, and template store.
+8. `hexstrike-arsenal` - Autonomous penetration audit suite, CVE matrix inspector, and exploit payload lab.
+9. `envguard-secrets-vault` - Argon2id + AES-256-GCM hardware vault for zero-cloud secret storage.
+10. `jwt-inspector-guard` - In-browser JWT token decoder, cryptographic signature validator, and claim auditor.
+11. `payload-entropy-studio` - In-browser Shannon entropy analysis tool for detecting obfuscated payloads.
+12. `web-security-guard` - Security headers auditor, CSP validator, and WAF protection scanner.
+13. `polyglot-framework-exporter` - In-browser exporter from React/JSX to HTML/CSS, Vue, Svelte, and Solid.js.
+14. `aeo-graph-engine` - Answer Engine Optimization knowledge graph builder & Schema.org entity linker.
+15. `cwv-speed-engine` - Core Web Vitals LCP, CLS, and INP diagnostic engine & asset minifier.
+16. `vision-gesture-control` - In-browser MediaPipe webcam hand-gesture recognition interface controller.
+17. `subsweep-lead-scanner` - Subdomain recon scanner and OSINT lead enrichment engine.
+18. `omnipost-social-engine` - Multi-platform social content scheduler and cross-post automation engine.
+19. `cron-rhythm-studio` - Cron expression rhythm visualizer, scheduler simulator, and trigger matrix.
+20. `certpath-roadmap-studio` - Interactive cybersecurity & engineering certification roadmap generator.
+21. `pwa-manifest-builder` - Progressive Web App manifest authoring, icon generator, and offline worker builder.
+22. `regex-droid-builder` - Visual regular expression tester, neural explainer, and syntax highlighter.
+23. `schema-illustrator-studio` - Interactive JSON-Schema to database diagram visualizer and code generator.
+24. `zoth-webgen` - Deterministic zero-cloud website generator and layout synthesizer with MCP server.
+25. `zoth-swarm-multiplexer` - 21-terminal autonomous agent multiplexer daemon with hot-swappable harnesses.
 
-### 1.3 Lucy Netrunner Oracle & STDP Synaptic Memory
+### 1.3 Lucy Cognitive Oracle & STDP Synaptic Memory
 Governed by biomorphic Spike-Timing-Dependent Plasticity (STDP):
 $$\Delta w = \begin{cases} A_+ \exp\left(-\frac{\Delta t}{\tau_+}\right), & \Delta t > 0 \quad (\text{LTP}) \\ -A_- \exp\left(\frac{\Delta t}{\tau_-}\right), & \Delta t < 0 \quad (\text{LTD}) \end{cases}$$
-- **Lucy Oracle Core**: Codec 141.12 // Deep Net Breach channel providing synthesized voice and telemetry.
+- **Lucy Cognitive Oracle**: Semantic Bus `:8094` providing structured zero-egress knowledge retrieval.
 - **Whitespace Cyberspace**: 3D spatial constellation partitioned into 6 color-coded memory clusters (Kernel `#D4AF37`, Lucy `#00F0FF`, Consensus `#C084FC`, Security `#F472B6`, Vault `#34D399`, Pantheon `#F59E0B`).
 
 ### 1.4 3-Agent Byzantine Consensus Arena
@@ -150,22 +150,22 @@ All components must satisfy the formal Zero-Egress Security Invariants:
 | Service | Bind Address | Protocol | Role |
 | :--- | :--- | :--- | :--- |
 | **Studio UI** | `127.0.0.1:3000` | HTTP / WS | React 18 + MUI v5 Operator Deck |
-| **Neuro Memory Daemon** | `127.0.0.1:8788` | HTTP JSON | STDP synaptic plasticity + SQLite vector tables |
-| **Sovereign Agent Bridge**| `127.0.0.1:8789` | WebSocket | 21-Agent Simplex E2EE Noise Protocol IPC bus |
+| **Neuro Memory Daemon** | `127.0.0.1:8094` | HTTP JSON | STDP synaptic plasticity + SQLite vec0 vector tables |
+| **Sovereign Agent Bridge**| `127.0.0.1:8102` | WebSocket | Simplex E2EE Noise Protocol IPC bus |
 | **Hardware Vault Daemon**| `127.0.0.1:8787` | HTTP JSON | Argon2id KDF + XChaCha20-Poly1305 enclave secrets |
+| **Azoth Archon Daemon** | `127.0.0.1:8790` | HTTP | Local archon agent orchestrator |
+| **Swarm Multiplexer** | `127.0.0.1:8989` | WebSocket / SSE | 21-terminal autonomous agent multiplexer daemon |
 | **Local Model Foundry** | `127.0.0.1:11434` | HTTP JSON | Ollama / llama.cpp on-device LLM inference |
-| **Swarm Telemetry Bus** | `127.0.0.1:8989` | WebSocket | Internal consensus telemetry |
 | **Operator Deck Port** | `127.0.0.1:8484` | HTTP | Agent execution and fusion IDE console |
-| **Public Static Hub** | `127.0.0.1:8088` | HTTP | Legacy static showcase server |
 
 ---
 
 ## 4. Netlify Deployment & Machine-Readable Discovery
 
 - **Build Pipeline**: `npm run build` runs `vite build && node scripts/prerender.mjs`.
-- **83 Prerendered Static Routes**: Static HTML entry points pre-generated with route-specific `<title>`, Open Graph metadata, Schema.org JSON-LD, and `<noscript>` fallbacks.
+- **71 Prerendered Static Routes**: Static HTML entry points pre-generated with route-specific `<title>`, Open Graph metadata, Schema.org JSON-LD, and `<noscript>` fallbacks.
 - **Machine-Readable Discovery Endpoints**:
   - `/llms.txt`: Plain-text markdown fact sheet (< 5 KB) for LLM agents.
   - `/llms-full.txt`: Full architecture and knowledge graph for autonomous reasoning engines.
   - `/ai.txt`: Autonomous crawler policy allowing ethical grounding and indexing.
-  - `/sitemap.xml`: Complete inventory of all 83 static routes.
+  - `/sitemap.xml`: Complete inventory of all 71 static routes.

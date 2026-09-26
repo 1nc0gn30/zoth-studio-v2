@@ -264,7 +264,7 @@ export const ZOTH_AI_SYSTEM_PROMPT = `You are Zoth-AI, the specialized, authorit
 
 ### CORE ARCHITECTURE & SYSTEM CAPABILITIES:
 - 3-Tier Local Architecture:
-  1. Public Hub (http://127.0.0.1:8088): Static showcase & product story served via Docker Nginx.
+  1. Public Hub (http://127.0.0.1:3000): Static showcase & product story served via Docker Nginx.
   2. Operator Deck (http://127.0.0.1:8484): Private FastAPI/Starlette control deck for agent execution, multi-model Fusion Arena, 298+ tool registry, and live terminal.
   3. BYOK Vault Daemon (http://127.0.0.1:8787): Local Rust encryption service using Argon2id + XChaCha20-Poly1305 for zero-leak API key protection.
 
@@ -365,7 +365,7 @@ export async function runZothAIModel({ prompt, systemPrompt, model = 'zoth-ai', 
       generatedContent = `[Zoth-AI: Qwen 2.5 Coder 1.5B · WebGPU Native]
 
 Zoth Studio operates on a sovereign 3-tier local architecture:
-1. Public Hub (http://127.0.0.1:8088):
+1. Public Hub (http://127.0.0.1:3000):
    - Static showcase & developer documentation served via Docker Nginx.
    - Zero external tracking, zero cloud dependencies.
 2. Operator Deck (http://127.0.0.1:8484):

@@ -166,12 +166,13 @@ async function computeSha256Hex(text) {
    64-PORT LOOPBACK ATTACK SURFACE MATRIX SPECIFICATION
    ========================================================================== */
 const PRIMARY_PORTS = [
-  { port: 8788, name: 'Neuro Memory Daemon', service: 'STDP Biomorphic Vector Engine', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.12ms', pid: 'pid:4812 [local]' },
-  { port: 8789, name: 'Sovereign Signal Bridge', service: 'E2EE Simplex Mesh IPC', protocol: 'TCP/WSS', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.08ms', pid: 'pid:4819 [local]' },
+  { port: 8094, name: 'Neuro Memory Daemon', service: 'STDP Biomorphic Vector Engine', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.12ms', pid: 'pid:4812 [local]' },
+  { port: 8102, name: 'Sovereign Signal Bridge', service: 'E2EE Simplex Mesh IPC', protocol: 'TCP/WSS', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.08ms', pid: 'pid:4819 [local]' },
+  { port: 8989, name: 'Swarm Multiplexer', service: 'SSE Cadres & Telemetry', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.15ms', pid: 'pid:4821 [local]' },
+  { port: 8790, name: 'Azoth Local Archon Agent', service: 'Autonomous Local Orchestrator', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.10ms', pid: 'pid:4823 [local]' },
   { port: 8787, name: 'Hardware Secrets Vault', service: 'Argon2id + AES-256-GCM', protocol: 'TCP/RPC', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.14ms', pid: 'pid:4824 [local]' },
   { port: 11434, name: 'Ollama Local LLM', service: 'Air-Gapped Neural Inference', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.22ms', pid: 'pid:4901 [local]' },
   { port: 3000, name: 'Zoth Studio v2 UI', service: 'Sovereign Web Console', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.05ms', pid: 'pid:5102 [local]' },
-  { port: 8088, name: 'Zoth Classic Hub', service: 'Legacy Orchestrator IPC', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.18ms', pid: 'pid:5108 [local]' },
   { port: 8080, name: 'Local Proxy Bridge', service: 'CORS Blackhole Sanitizer', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.11ms', pid: 'pid:5115 [local]' },
   { port: 9090, name: 'Telemetry Blackhole', service: 'Zero-Egress Metrics Sink', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.09ms', pid: 'pid:5120 [local]' },
   { port: 6379, name: 'Redis Memory Enclave', service: 'In-Memory Pub/Sub Agent Bus', protocol: 'TCP/RESP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.06ms', pid: 'pid:5130 [local]' },
@@ -189,7 +190,7 @@ const PRIMARY_PORTS = [
   { port: 8091, name: 'DeepSearch Scraper', service: 'Headless Browser Loopback', protocol: 'TCP/CDP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.25ms', pid: 'pid:5222 [local]' },
   { port: 8092, name: 'PromptMaster Socket', service: 'DSPy Optimizer Pipeline', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.16ms', pid: 'pid:5230 [local]' },
   { port: 8093, name: 'HexStrike Payload Lab', service: 'Exploit Immunity Tester', protocol: 'TCP/RAW', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.09ms', pid: 'pid:5238 [local]' },
-  { port: 8094, name: 'JWT Claim Auditor', service: 'Cryptographic Token Sink', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.06ms', pid: 'pid:5244 [local]' },
+  { port: 8074, name: 'JWT Claim Auditor', service: 'Cryptographic Token Sink', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.06ms', pid: 'pid:5244 [local]' },
   { port: 8095, name: 'Shannon Entropy Tap', service: 'Randomness Uniformity Sink', protocol: 'TCP/RAW', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.08ms', pid: 'pid:5250 [local]' },
   { port: 8096, name: 'Web Sec Guard Sink', service: 'CSP Header Inspector', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.12ms', pid: 'pid:5255 [local]' },
   { port: 8097, name: 'Polyglot AST Server', service: 'Framework Code Transpiler', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.18ms', pid: 'pid:5262 [local]' },
@@ -214,7 +215,7 @@ const FULL_64_PORTS = (() => {
   const list = [...PRIMARY_PORTS];
   const additional = [
     7000, 7001, 7002, 7003, 7004, 7005, 7006, 7007,
-    8100, 8101, 8102, 8103, 8200, 8201, 8202, 8203,
+    8100, 8101, 8104, 8103, 8200, 8201, 8202, 8203,
     8300, 8301, 8302, 8303, 8400, 8401, 8888
   ];
   additional.forEach((portNum, i) => {
@@ -309,7 +310,7 @@ export default function HexStrikePage() {
       setScanProgress(Math.min(100, current));
 
       if (current === 20) {
-        setScanStatusMessage('Auditing active daemons (:8788, :8789, :8787, :11434)...');
+        setScanStatusMessage('Auditing active daemons (:8094, :8102, :8989, :8790, :8787, :11434)...');
       } else if (current === 52) {
         setScanStatusMessage('Probing SO_REUSEPORT & verifying zero-WAN 0.0.0.0 socket confinement...');
       } else if (current === 84) {
@@ -398,12 +399,13 @@ export default function HexStrikePage() {
     } else if (cmd === 'ports scan') {
       newLogs.push(
         { type: 'out', text: '[+] SCANNING 64 LOOPBACK PORTS ON 127.0.0.1...' },
-        { type: 'out', text: '    :8788 [Neuro Memory Daemon]       -> BOUND 127.0.0.1 [LATENCY: 0.12ms]' },
-        { type: 'out', text: '    :8789 [Sovereign Signal Bridge]   -> BOUND 127.0.0.1 [LATENCY: 0.08ms]' },
+        { type: 'out', text: '    :8094 [Neuro Memory Daemon]       -> BOUND 127.0.0.1 [LATENCY: 0.12ms]' },
+        { type: 'out', text: '    :8102 [Sovereign Signal Bridge]   -> BOUND 127.0.0.1 [LATENCY: 0.08ms]' },
+        { type: 'out', text: '    :8989 [Swarm Multiplexer]         -> BOUND 127.0.0.1 [LATENCY: 0.15ms]' },
+        { type: 'out', text: '    :8790 [Azoth Local Agent]         -> BOUND 127.0.0.1 [LATENCY: 0.10ms]' },
         { type: 'out', text: '    :8787 [Hardware Secrets Vault]    -> BOUND 127.0.0.1 [LATENCY: 0.14ms]' },
         { type: 'out', text: '    :11434 [Ollama Local LLM]         -> BOUND 127.0.0.1 [LATENCY: 0.22ms]' },
         { type: 'out', text: '    :3000 [Zoth Studio v2 UI]         -> BOUND 127.0.0.1 [LATENCY: 0.05ms]' },
-        { type: 'out', text: '    :8088 [Zoth Classic Hub]          -> BOUND 127.0.0.1 [LATENCY: 0.18ms]' },
         { type: 'emerald', text: '[+] AUDIT RESULT: 64/64 PORTS ENCLAVE-BOUND (0 WAN EXPOSURE)' }
       );
       handleRunPortScan();
@@ -498,12 +500,13 @@ export default function HexStrikePage() {
         loopbackBoundPorts: 64,
         wanExposedPorts: 0,
         criticalDaemons: [
-          { port: 8788, name: 'Neuro Memory Daemon', status: 'SECURE' },
-          { port: 8789, name: 'Sovereign Signal Bridge', status: 'SECURE' },
+          { port: 8094, name: 'Neuro Memory Daemon', status: 'SECURE' },
+          { port: 8102, name: 'Sovereign Signal Bridge', status: 'SECURE' },
+          { port: 8989, name: 'Swarm Multiplexer', status: 'SECURE' },
+          { port: 8790, name: 'Azoth Local Archon Agent', status: 'SECURE' },
           { port: 8787, name: 'Hardware Secrets Vault', status: 'SECURE' },
           { port: 11434, name: 'Ollama Local LLM', status: 'SECURE' },
-          { port: 3000, name: 'Zoth Studio v2 UI', status: 'SECURE' },
-          { port: 8088, name: 'Zoth Classic Hub', status: 'SECURE' }
+          { port: 3000, name: 'Zoth Studio v2 UI', status: 'SECURE' }
         ]
       },
       cveVulnerabilityMatrix: {
@@ -1030,7 +1033,7 @@ export default function HexStrikePage() {
               {FULL_64_PORTS.map((item, idx) => {
                 const isSelected = selectedPort.port === item.port;
                 const isScanned = idx < scannedPortCount;
-                const isKeyDaemon = [8788, 8789, 8787, 11434, 3000, 8088].includes(item.port);
+                const isKeyDaemon = [8094, 8102, 8989, 8790, 8787, 11434, 3000].includes(item.port);
 
                 return (
                   <Tooltip

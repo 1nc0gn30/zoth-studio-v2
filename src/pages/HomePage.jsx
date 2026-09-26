@@ -52,7 +52,13 @@ export function ServiceRow() {
       {services.map((service) => (
         <Chip
           key={service.name}
-          label={`${({ 'Neuro memory daemon': 'Memory :8788', 'Sovereign agent bridge': 'Bridge :8789', 'Vault daemon': 'Vault :8787', Ollama: 'Models :11434' })[service.name] || service.name} ${service.up ? 'READY' : 'OFFLINE'}`}
+          label={`${({
+            'Swarm multiplexer': 'Swarm :8989',
+            'Neuro memory daemon': 'Memory :8094',
+            'Sovereign agent bridge': 'Bridge :8102',
+            'Azoth local agent': 'Azoth :8790',
+            Ollama: 'Models :11434'
+          })[service.name] || `${service.name} :${service.port}`} ${service.up ? 'READY' : 'OFFLINE'}`}
           size="small"
           sx={{
             fontWeight: 750,
@@ -81,69 +87,68 @@ export function ServiceRow() {
 function CliTerminalSimulator({ gold, isDark, monoFont }) {
   const [activeTab, setActiveTab] = useState('up');
   const [copied, setCopied] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState('sovereign-cadre');
+  const [selectedTool, setSelectedTool] = useState('subsweep-lead-scanner');
   const [isSimulating, setIsSimulating] = useState(false);
 
   const commands = useMemo(() => ({
     up: {
       id: 'up',
       chipLabel: 'npx zoth up',
-      desc: 'Starts offline daemons (memory, bridge, vault, studio)',
+      desc: 'Starts offline daemons (swarm, memory, bridge, studio)',
       cmd: 'npx zoth up',
       lines: [
         { type: 'command', text: '$ npx zoth up' },
         { type: 'dim', text: 'Zoth CLI 2.0.0 · studio root ~/.../zoth-studio-v2' },
         { type: 'empty', text: '' },
-        { type: 'success', text: '✔ memory   pid 41802  listening on 127.0.0.1:8788  (STDP HNSW Daemon)' },
-        { type: 'success', text: '✔ bridge   pid 41819  listening on 127.0.0.1:8789  (Sovereign Peer Bus)' },
-        { type: 'success', text: '✔ vault    pid 41835  listening on 127.0.0.1:8787  (Argon2id Hardware Sanctum)' },
-        { type: 'success', text: '✔ classic  pid 41848  listening on 127.0.0.1:8088  (37 Sovereign Workstations)' },
-        { type: 'success', text: '✔ ollama   ready      4 local models detected (qwen2.5-coder, llama3)' },
-        { type: 'success', text: '✔ UI       ready      http://127.0.0.1:3000/ (Zero-Egress Studio)' },
+        { type: 'success', text: '✔ swarm    listening on 127.0.0.1:8989  (21-Agent Multiplexer Daemon)' },
+        { type: 'success', text: '✔ memory   listening on 127.0.0.1:8094  (STDP Vector Memory Engine)' },
+        { type: 'success', text: '✔ bridge   listening on 127.0.0.1:8102  (Sovereign Peer Bus & Signal Mesh)' },
+        { type: 'success', text: '✔ azoth    listening on 127.0.0.1:8790  (Archon Orchestrator Core)' },
+        { type: 'success', text: '✔ ollama   ready      127.0.0.1:11434 (Local GGUF Silicon Models)' },
+        { type: 'success', text: '✔ studio   ready      http://127.0.0.1:3000/ (Zero-Egress Studio)' },
         { type: 'empty', text: '' },
-        { type: 'gold', text: '★ All 5 offline enclaves initialized. Zero external telemetry active.' },
+        { type: 'gold', text: '★ All local enclaves initialized on loopback. Zero external telemetry active.' },
       ],
     },
     status: {
       id: 'status',
       chipLabel: 'npx zoth status',
-      desc: 'Checks loopback enclaves & hardware readiness',
+      desc: 'Probes live loopback daemon ports and hardware readiness',
       cmd: 'npx zoth status',
       lines: [
         { type: 'command', text: '$ npx zoth status' },
-        { type: 'dim', text: 'Zoth CLI 2.0.0 · probing loopback enclaves & hardware readiness...' },
+        { type: 'dim', text: 'Zoth CLI 2.0.0 · probing loopback ports & hardware readiness...' },
         { type: 'empty', text: '' },
-        { type: 'success', text: '  up   Memory Daemon           127.0.0.1:8788   latency: 0.32ms (Lucy Oracle Synaptic Matrix)' },
-        { type: 'success', text: '  up   Sovereign Agent Bridge  127.0.0.1:8789   latency: 0.41ms (E2EE Simplex Mesh)' },
-        { type: 'success', text: '  up   Hardware Vault Daemon   127.0.0.1:8787   latency: 0.28ms (Argon2id / XChaCha20-Poly1305)' },
-        { type: 'success', text: '  up   Classic Workstations    127.0.0.1:8088   latency: 0.55ms (37 Consoles In-App)' },
-        { type: 'success', text: '  up   Ollama Local Engine     127.0.0.1:11434  local models: 4 (Zero-Cloud Fallback)' },
-        { type: 'success', text: '  yes  /dev/kvm                QEMU/KVM Hardware Hypervisor Acceleration (vCPU Sandboxed)' },
+        { type: 'success', text: '  up   Swarm Multiplexer       127.0.0.1:8989   (21 Pantheon Agents, SSE Stream)' },
+        { type: 'success', text: '  up   Neuro Memory Daemon     127.0.0.1:8094   (Lucy STDP Vector Store)' },
+        { type: 'success', text: '  up   Sovereign Agent Bridge  127.0.0.1:8102   (E2EE Simplex Peer Mesh)' },
+        { type: 'success', text: '  up   Azoth Local Agent       127.0.0.1:8790   (Prime Alchemist Dispatcher)' },
+        { type: 'success', text: '  up   Ollama Local Engine     127.0.0.1:11434  (qwen2.5-coder, llama3.2)' },
+        { type: 'success', text: '  yes  /dev/kvm                QEMU/KVM Hardware Hypervisor Acceleration' },
         { type: 'empty', text: '' },
-        { type: 'cyan', text: 'Published Tool Checkouts: 25/25 verified on disk' },
-        { type: 'gold', text: 'OWASP Zero-Egress Invariant: 0 outbound connections detected. Host strictly air-gapped.' },
+        { type: 'cyan', text: 'Sovereign Tool Repositories: 25/25 verified on disk' },
+        { type: 'gold', text: 'OWASP Zero-Egress Invariant: 0 outbound connections detected. Host air-gapped.' },
       ],
     },
-    clone: {
-      id: 'clone',
-      chipLabel: 'npx zoth clone <template>',
-      desc: 'Scaffolds open-source templates and cadres',
-      cmd: `npx zoth clone ${selectedTemplate}`,
+    pull: {
+      id: 'pull',
+      chipLabel: 'npx zoth pull <tool>',
+      desc: 'Pulls standalone tool repositories with zero telemetry',
+      cmd: `npx zoth pull ${selectedTool}`,
       lines: [
-        { type: 'command', text: `$ npx zoth clone ${selectedTemplate}` },
-        { type: 'dim', text: `Zoth CLI 2.0.0 · fetching scaffold for template: ${selectedTemplate}...` },
+        { type: 'command', text: `$ npx zoth pull ${selectedTool}` },
+        { type: 'dim', text: `Zoth CLI 2.0.0 · fetching air-gapped repository: ${selectedTool}...` },
         { type: 'empty', text: '' },
-        { type: 'cyan', text: `Scaffolding template: ${selectedTemplate} (Zero-egress architecture)` },
-        { type: 'success', text: `✔ Created ./cadres/${selectedTemplate} with 21 pantheon definitions` },
-        { type: 'success', text: '✔ Linked STDP synaptic memory client to loopback port :8788' },
-        { type: 'success', text: '✔ Configured Byzantine consensus arbiter on loopback port :8789' },
-        { type: 'success', text: '✔ Verified Argon2id vault hardware secret derivation hooks' },
-        { type: 'success', text: '✔ Scaffold complete: 0 outbound dependencies, pure local execution.' },
+        { type: 'cyan', text: `Cloning repository: ${selectedTool} from @NullAITech` },
+        { type: 'success', text: `✔ Created ./tools/${selectedTool}` },
+        { type: 'success', text: '✔ Linked STDP synaptic memory client to 127.0.0.1:8094' },
+        { type: 'success', text: '✔ Configured Swarm telemetry multiplexer to 127.0.0.1:8989' },
+        { type: 'success', text: '✔ Verified Argon2id key derivation & zero cloud telemetry invariants' },
         { type: 'empty', text: '' },
-        { type: 'gold', text: `Ready: cd cadres/${selectedTemplate} && npx zoth up` },
+        { type: 'gold', text: `Ready: cd tools/${selectedTool} && npm start` },
       ],
     },
-  }), [selectedTemplate]);
+  }), [selectedTool]);
 
   const activeData = commands[activeTab];
 
@@ -451,33 +456,33 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             );
           })}
 
-          {/* If clone selected, provide quick template picker chips */}
-          {activeTab === 'clone' && (
+          {/* If pull selected, provide quick tool picker chips */}
+          {activeTab === 'pull' && (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6, ml: 'auto', paddingLeft: 1 }}>
               <Typography sx={{ fontFamily: monoFont, fontSize: '0.68rem', color: '#64748B', display: { xs: 'none', md: 'block' }, fontWeight: 600, letterSpacing: '0.08em' }}>
-                TEMPLATE:
+                TOOL REPO:
               </Typography>
-              {['sovereign-cadre', 'webgpu-tensor-flow', 'hexstrike-guard'].map((tName) => (
+              {['subsweep-lead-scanner', 'envguard-secrets-vault', 'neuro-memory-daemon'].map((tName) => (
                 <Chip
                   key={tName}
                   label={tName}
                   size="small"
-                  onClick={() => setSelectedTemplate(tName)}
+                  onClick={() => setSelectedTool(tName)}
                   sx={{
                     fontFamily: monoFont,
                     fontSize: '0.68rem',
                     fontWeight: 700,
                     cursor: 'pointer',
-                    bgcolor: selectedTemplate === tName ? 'rgba(56,189,248,0.20)' : 'rgba(255,255,255,0.045)',
-                    color: selectedTemplate === tName ? '#38BDF8' : '#94A3B8',
+                    bgcolor: selectedTool === tName ? 'rgba(56,189,248,0.20)' : 'rgba(255,255,255,0.045)',
+                    color: selectedTool === tName ? '#38BDF8' : '#94A3B8',
                     border: '1px solid',
-                    borderColor: selectedTemplate === tName ? '#38BDF8' : isDark ? 'rgba(148,163,184,0.15)' : 'rgba(255,255,255,0.1)',
+                    borderColor: selectedTool === tName ? '#38BDF8' : isDark ? 'rgba(148,163,184,0.15)' : 'rgba(255,255,255,0.1)',
                     borderRadius: 1.5,
                     py: 0.4,
                     px: 1.2,
                     transition: 'all 0.2s ease',
                     '&:hover': {
-                      bgcolor: selectedTemplate === tName ? 'rgba(56,189,248,0.25)' : 'rgba(255,255,255,0.07)',
+                      bgcolor: selectedTool === tName ? 'rgba(56,189,248,0.25)' : 'rgba(255,255,255,0.07)',
                     },
                   }}
                 />
@@ -629,16 +634,16 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
     {
       id: 'workstations',
       indexLabel: '01',
-      tabLabel: '1. Workstations (37 Sovereign Consoles)',
+      tabLabel: '1. Workstations (24 Sovereign Consoles)',
       shortTitle: 'Workstations',
       badge: 'SOVEREIGN RUNTIME',
-      title: '37 Sovereign Consoles & Operative Cockpits',
+      title: '24 Sovereign Consoles & Operative Cockpits',
       subtitle: 'Zero-Egress In-Browser Multi-Agent Execution Matrix',
       description:
-        'All 37 studio workstations are integrated directly into Zoth Studio v2. They render with the native gold-on-void design system, zero external runtime dependency, and immediate interactive execution across Spatial, Build, Swarm, and Observe cadres.',
+        'All 24 studio workstations are integrated directly into Zoth Studio v2. They render with the native gold-on-void design system, zero external runtime dependency, and immediate interactive execution across Spatial, Build, Swarm, and Observe cadres.',
       metrics: [
-        { label: 'Total Consoles', value: '37 Sovereign', desc: '100% In-Browser Native' },
-        { label: 'Loopback Enclaves', value: ':8088 / :8484', desc: 'Air-Gapped Process Isolation' },
+        { label: 'Total Consoles', value: '24 Sovereign', desc: '100% In-Browser Native' },
+        { label: 'Loopback Enclaves', value: ':8989 / :8094', desc: 'Air-Gapped Process Isolation' },
         { label: 'Runtime Egress', value: '0.00 KB', desc: 'OWASP Zero-Egress Compliant' },
         { label: 'Cadres Supported', value: '4 Tactical', desc: 'Spatial, Build, Swarm, Observe' },
       ],
@@ -649,7 +654,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
         'Zero cloud fallback required for offline operations',
       ],
       specs: [
-        { label: 'Primary Port', value: '127.0.0.1:8088 (Static Hub)' },
+        { label: 'Primary Port', value: '127.0.0.1:3000 (Native Desk)' },
         { label: 'Process Isolation', value: 'Dedicated Subprocess Daemons' },
         { label: 'Operator Deck', value: '127.0.0.1:8484 (Consensus IDE)' },
         { label: 'Asset Bundling', value: 'Vite 5 Production Prerendered' },
@@ -665,7 +670,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
         icon: <LaunchIcon />,
       },
       icon: <TerminalIcon sx={{ fontSize: 32, color: gold.accent }} />,
-      featuredChip: '37 SOVEREIGN CONSOLES',
+      featuredChip: '24 SOVEREIGN CONSOLES',
     },
     {
       id: 'micro-tools',
@@ -717,9 +722,9 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
       title: 'STDP Neuro Memory & Lucy Oracle Synaptic Matrix',
       subtitle: 'Spike-Timing-Dependent Plasticity Synaptic Memory Persistence Daemon',
       description:
-        'Biological memory persistence engine executing locally on loopback port 8788. Models asymmetric Hebbian learning with long-term potentiation (LTP) and long-term depression (LTD). Features 3D pseudo-vector manifold projection and the Lucy Oracle synaptic search.',
+        'Biological memory persistence engine executing locally on loopback port 8094. Models asymmetric Hebbian learning with long-term potentiation (LTP) and long-term depression (LTD). Features 3D pseudo-vector manifold projection and the Lucy Oracle synaptic search.',
       metrics: [
-        { label: 'Daemon Port', value: '127.0.0.1:8788', desc: 'Loopback IPC Socket' },
+        { label: 'Daemon Port', value: '127.0.0.1:8094', desc: 'Loopback IPC Socket' },
         {
           label: 'Daemon Status',
           value: status?.services?.memory?.up ? 'ONLINE (READY)' : 'OFFLINE (STANDBY)',
@@ -736,7 +741,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
       ],
       specs: [
         { label: 'Daemon Architecture', value: 'Python 3 HNSW + STDP Worker' },
-        { label: 'Endpoint', value: 'http://127.0.0.1:8788/v1/memory' },
+        { label: 'Endpoint', value: 'http://127.0.0.1:8094/v1/memory' },
         { label: 'Recall Latency', value: '< 1.2ms Local Retrieval' },
         { label: 'Persistence Format', value: 'Local Encrypted JSON State' },
       ],
@@ -767,7 +772,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
         { label: 'Quorum Threshold', value: '2f + 1 = 66.7%', desc: 'Byzantine Supermajority' },
         { label: 'Agent Quorum', value: 'Azoth · Kai · Lycan', desc: 'Tri-Cadre Dialectic Debate' },
         { label: 'Fault Tolerance', value: '33.3% Max Ceiling', desc: 'Asynchronous Partition Safety' },
-        { label: 'Consensus Bus', value: '127.0.0.1:8789', desc: 'E2EE Simplex Peer Mesh' },
+        { label: 'Consensus Bus', value: '127.0.0.1:8102', desc: 'E2EE Simplex Peer Mesh' },
       ],
       invariants: [
         'Three-phase commit protocol: Propose -> Pre-Commit -> Final AST Ratification',
@@ -777,7 +782,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
       ],
       specs: [
         { label: 'Arbiter Protocol', value: 'Deterministic Socratic BFT' },
-        { label: 'Communication Bus', value: 'Loopback Simplex Socket :8789' },
+        { label: 'Communication Bus', value: 'Loopback Simplex Socket :8102' },
         { label: 'Verification Model', value: 'SHA-256 Merkle-Trie AST Diff' },
         { label: 'Synthesis Metric', value: 'Bayesian Weighted Confidence Score' },
       ],
@@ -1768,8 +1773,8 @@ export default function HomePage() {
         {[
           { icon: <ShieldIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'Zero-Cloud Telemetry', text: 'All LLM calls, embeddings, and memory retention stay 100% on your local metal.' },
           { icon: <SpeedIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'WebGPU WASM Engine', text: 'In-browser tensor matmul and neural inference running directly on client GPU.' },
-          { icon: <MemoryIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'STDP Neuro Memory', text: 'Biological Spike-Timing-Dependent Plasticity daemon listening on 127.0.0.1:8788.' },
-          { icon: <TerminalIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'Sovereign Agent Bridge', text: 'Decentralized peer-to-peer agent bus & consensus engine listening on 127.0.0.1:8789.' },
+          { icon: <MemoryIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'STDP Neuro Memory', text: 'Biological Spike-Timing-Dependent Plasticity daemon listening on 127.0.0.1:8094.' },
+          { icon: <TerminalIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'Sovereign Agent Bridge', text: 'Decentralized peer-to-peer agent bus & consensus engine listening on 127.0.0.1:8102.' },
         ].map((item, idx) => (
           <Box
             key={idx}
@@ -1943,8 +1948,8 @@ export default function HomePage() {
             ['Adytum', '/adytum', 'A ritualistic planning workspace with multi-tier execution roadmap generators and prompt synthesis tools.'],
             ['Pantheon Roster', '/swarm', 'Explore 21 specialized autonomous agent roles organized by tactical cadres, skills, and model mappings.'],
             ['Tool Catalog', '/tools', `Browse ${published.length} open-source CLI & browser tools with instant WebGPU launchers and CLI copy snippets.`],
-            ['Neuro Memory', '/memory', 'Query the STDP biological memory daemon running locally on port 8788 with vector decay search.'],
-            ['Signal Bridge', '/bridges', 'Inspect real-time agent-to-agent communication, simplex channels, and WebSocket heartbeats on port 8789.'],
+            ['Neuro Memory', '/memory', 'Query the STDP biological memory daemon running locally on port 8094 with vector decay search.'],
+            ['Signal Bridge', '/bridges', 'Inspect real-time agent-to-agent communication, simplex channels, and WebSocket heartbeats on port 8102.'],
             ['Consensus Arena', '/consensus', 'Tri-agent Byzantine fault-tolerant debate chamber for hallucination-resistant AST code synthesis.'],
           ].map(([title, to, copy], index) => (
             <Card

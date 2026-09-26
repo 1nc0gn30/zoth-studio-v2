@@ -261,7 +261,7 @@ export function AzothArchonTool() {
   const [running, setRunning] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [logs, setLogs] = useState([
-    '[127.0.0.1:8789] Archon Agent standby on loopback IPC bus',
+    '[127.0.0.1:8790] Archon Agent standby on loopback IPC bus',
     '[Archon] Subagent delegation pool initialized: Athena, Vulcan, Cerberus'
   ]);
 
@@ -646,7 +646,7 @@ export function VectorSearchTool() {
     { rank: 1, id: 'vec_701', score: 0.942, label: 'Consensus Triangulation Protocol', x: 180, y: 70 },
     { rank: 2, id: 'vec_109', score: 0.887, label: 'Byzantine AST Diff Validator', x: 210, y: 110 },
     { rank: 3, id: 'vec_420', score: 0.814, label: 'Argon2id Enclave Memory Bounds', x: 80, y: 130 },
-    { rank: 4, id: 'vec_055', score: 0.762, label: 'Lucy Netrunner Codec 141.12', x: 90, y: 50 },
+    { rank: 4, id: 'vec_055', score: 0.762, label: 'Lucy Semantic Oracle :8094', x: 90, y: 50 },
   ];
 
   // 2D Vector Radar Projection
@@ -941,12 +941,14 @@ export function HexStrikeTool() {
           ...prev,
           'Scanning loopback interface 127.0.0.1...',
           '[PASS] Port 3000: Zoth Studio React UI (No external telemetry)',
-          '[PASS] Port 8788: STDP Memory Daemon (Isolated)',
+          '[PASS] Port 8094: STDP Memory Daemon (Isolated)',
+          '[PASS] Port 8102: Sovereign Signal Bridge (E2EE Mesh)',
+          '[PASS] Port 8989: Swarm Multiplexer (SSE Cadres)',
           '[PASS] Strict CSP Header: active',
           'Audit complete: 0 vulnerabilities detected.'
         ]);
       } else if (cmd === 'ports') {
-        setTerminalLines((prev) => [...prev, 'Active Loopback Ports: 3000, 8787, 8788, 8789, 11434']);
+        setTerminalLines((prev) => [...prev, 'Active Loopback Ports: 3000, 8094, 8102, 8787, 8790, 8989, 11434']);
       } else if (cmd === 'clear') {
         setTerminalLines([]);
       } else {
@@ -1275,7 +1277,7 @@ export function AeoGraphEngineTool() {
                 https://zoth.nullai.tech
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
-                Air-gapped development studio featuring 37 workstations, biomorphic STDP memory, and Byzantine consensus triangulation.
+                Air-gapped development studio featuring 24 workstations, 25 sovereign tools, biomorphic STDP memory, and Byzantine consensus triangulation.
               </Typography>
             </Paper>
           </Paper>

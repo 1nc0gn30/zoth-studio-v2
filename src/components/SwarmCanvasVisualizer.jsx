@@ -15,7 +15,7 @@ const CADRE_COLORS = {
 };
 const CORE_IDS = new Set(['AZOTH', 'AETHER', 'MERCURY']);
 
-const BRIDGE_URL = 'http://127.0.0.1:8789/api/stats';
+const BRIDGE_URL = 'http://127.0.0.1:8102/api/stats';
 const POLL_MS = 5000;
 
 export default function SwarmCanvasVisualizer() {
@@ -381,7 +381,7 @@ export default function SwarmCanvasVisualizer() {
           />
         </Box>
         <Typography variant="caption" sx={{ color: theme.palette.text.secondary, fontWeight: 700, fontFamily: mono }}>
-          {bridgeUp ? `bridge 127.0.0.1:8789 · ${monitored} monitored` : 'daemon offline · roster diagram'}
+          {bridgeUp ? `bridge 127.0.0.1:8102 · ${monitored} monitored` : 'daemon offline · roster diagram'}
         </Typography>
       </Box>
 

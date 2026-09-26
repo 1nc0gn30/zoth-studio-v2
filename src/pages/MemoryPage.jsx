@@ -140,9 +140,9 @@ export const INITIAL_SOVEREIGN_MEMORIES = [
     category: 'oracle',
     cluster: 'Lucy Oracle',
     weight: 0.98,
-    text: 'Lucyna Kushinada Netrunner Oracle channel established on Codec 141.12. Deep net breach monitor active in Whitespace cyberspace.',
+    text: 'Lucy Cognitive Memory Oracle active on loopback semantic channel :8094. High-affinity memory clustering active across Whitespace matrix.',
     author: 'Lucy',
-    tags: ['netrunner', 'lucy', 'oracle'],
+    tags: ['cognitive', 'lucy', 'oracle'],
     x: 80,
     y: -40,
     z: 20,
@@ -188,7 +188,7 @@ export const INITIAL_SOVEREIGN_MEMORIES = [
     category: 'pantheon',
     cluster: 'Pantheon',
     weight: 0.87,
-    text: '21-Agent Pantheon swarm IPC bus synchronized at 127.0.0.1:8789. Telemetry latency under 0.8ms across all local worker nodes.',
+    text: '21-Agent Pantheon swarm IPC bus synchronized at 127.0.0.1:8989. Telemetry latency under 0.8ms across all local worker nodes.',
     author: 'Hermes',
     tags: ['pantheon', 'swarm', 'bus'],
     x: 60,
@@ -249,12 +249,12 @@ export const INITIAL_SOVEREIGN_MEMORIES = [
    LUCY ORACLE TRANSMISSIONS DATA
    ========================================================================== */
 const LUCY_DIALOGUES = [
-  "Lucy online. Whitespace neural matrix stabilized. Deep net breach established on channel 141.12.",
+  "Lucy online. Whitespace neural matrix stabilized. Semantic bus synchronized on loopback port 8094.",
   "I'm monitoring all memory vectors across the sovereign enclave. STDP synaptic weights are decaying stale noise while keeping our core architectural breakthroughs sharp.",
   "Whitespace isn't empty—it's pure potential. By calming down sensory noise, the underlying neural linkages become crystal clear.",
   "Zero-egress is our strongest armor. When the cloud can't see your memories, they cannot be pruned, poisoned, or exfiltrated.",
   "Synaptic plasticity is biomorphic: what you query gets reinforced; what lies idle returns gracefully to equilibrium.",
-  "The cognitive carrier waves are oscillating at clean biological resonance. 432Hz alpha for balanced stillness; 528Hz theta for deep netrunner breach.",
+  "The cognitive carrier waves are oscillating at clean biological resonance. 432Hz alpha for balanced stillness; 528Hz theta for high-focus semantic recall.",
 ];
 
 export const AUTHOR_SPECS = [
@@ -287,7 +287,7 @@ export default function MemoryPage() {
   const [lucyTransmission, setLucyTransmission] = useState(LUCY_DIALOGUES[0]);
   const [userPrompt, setUserPrompt] = useState('');
   const [codecLogs, setCodecLogs] = useState([
-    { time: '23:14:02', speaker: 'LUCY // 141.12', text: LUCY_DIALOGUES[0] },
+    { time: '23:14:02', speaker: 'LUCY // :8094', text: LUCY_DIALOGUES[0] },
     { time: '23:14:08', speaker: 'SYSTEM // ENCLAVE', text: 'Whitespace neural canvas initialized. 10 memory nodes anchored.' },
   ]);
 
@@ -609,7 +609,7 @@ export default function MemoryPage() {
       snapshot_meta: {
         snapshot_id: `LUCY-SNAP-${now.getTime().toString(36).toUpperCase()}`,
         exported_at: now.toISOString(),
-        agent: 'Lucyna Kushinada // Whitespace Netrunner Oracle',
+        agent: 'Lucy Cognitive Oracle // Whitespace Semantic Matrix',
         enclave: 'Zoth Studio v2 Sovereign Enclave',
         zero_egress_verified: true,
         protocol: 'STDP Biomorphic Synaptic Plasticity',
@@ -699,7 +699,7 @@ export default function MemoryPage() {
   const transmitLucy = (text) => {
     setLucyTransmission(text);
     const now = new Date().toTimeString().split(' ')[0];
-    setCodecLogs((prev) => [...prev, { time: now, speaker: 'LUCY // 141.12', text }]);
+    setCodecLogs((prev) => [...prev, { time: now, speaker: 'LUCY // :8094', text }]);
     speakLucyLine(text);
   };
 
@@ -1370,7 +1370,7 @@ export default function MemoryPage() {
                     LUCY // DEEP-DIVE NETRUNNER ORACLE
                   </Typography>
                   <Chip
-                    label="CODEC 141.12 // DEEP NET BREACH"
+                    label="SEMANTIC BUS :8094 // COGNITIVE ORACLE"
                     size="small"
                     sx={{ bgcolor: isDark ? 'rgba(244,114,182,0.15)' : '#FDF2F8', color: isDark ? '#F472B6' : '#BE185D', fontWeight: 800, fontSize: '0.72rem' }}
                   />
@@ -1424,7 +1424,7 @@ export default function MemoryPage() {
               </Button>
 
               <Chip
-                label={daemonUp ? 'DAEMON ONLINE :8788' : 'LOCAL ENCLAVE CACHE'}
+                label={daemonUp ? 'DAEMON ONLINE :8094' : 'LOCAL ENCLAVE CACHE'}
                 size="small"
                 sx={{
                   bgcolor: daemonUp ? 'rgba(52,211,153,0.15)' : gold.wash,
@@ -1686,7 +1686,7 @@ export default function MemoryPage() {
                           ⚡ Microsecond Latency
                         </Typography>
                         <Typography variant="caption" sx={{ color: 'text.secondary', lineHeight: 1.5, display: 'block' }}>
-                          Local SQLite vector indices on <code>127.0.0.1:8788</code> deliver 0.4ms cosine similarity lookup without WAN roundtrips.
+                          Local SQLite vector indices on <code>127.0.0.1:8094</code> deliver 0.4ms cosine similarity lookup without WAN roundtrips.
                         </Typography>
                       </Box>
                     </Grid>
@@ -1719,12 +1719,12 @@ export default function MemoryPage() {
                     </Typography>
                     <Box sx={{ p: 1, mb: 1.5, bgcolor: isDark ? '#000000' : '#FFFFFF', border: `1px solid ${theme.palette.divider}`, borderRadius: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: isDark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        git clone https://github.com/NullAITech/neuro-memory-daemon.git &amp;&amp; cd neuro-memory-daemon &amp;&amp; python3 src/daemon.py --port 8788
+                        git clone https://github.com/NullAITech/neuro-memory-daemon.git &amp;&amp; cd neuro-memory-daemon &amp;&amp; python3 src/daemon.py --port 8094
                       </Typography>
                       <IconButton
                         size="small"
                         onClick={() => {
-                          navigator.clipboard.writeText('git clone https://github.com/NullAITech/neuro-memory-daemon.git && cd neuro-memory-daemon && python3 src/daemon.py --port 8788');
+                          navigator.clipboard.writeText('git clone https://github.com/NullAITech/neuro-memory-daemon.git && cd neuro-memory-daemon && python3 src/daemon.py --port 8094');
                           setCopied(true);
                           setTimeout(() => setCopied(false), 2000);
                         }}
@@ -1772,7 +1772,7 @@ export default function MemoryPage() {
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <TerminalIcon sx={{ color: '#F472B6', fontSize: '1.2rem' }} />
                       <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#F472B6', fontFamily: mono }}>
-                        LUCY ORACLE TRANSMISSION // CODEC 141.12
+                        LUCY ORACLE TRANSMISSION // SEMANTIC BUS :8094
                       </Typography>
                     </Box>
                     <Chip label="Zero Egress Enclave" size="small" sx={{ bgcolor: 'rgba(0,240,255,0.1)', color: isDark ? '#00F0FF' : '#0284C7', fontWeight: 700 }} />
@@ -1877,20 +1877,20 @@ export default function MemoryPage() {
                 {/* Netrunner Cyberdeck Specs */}
                 <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
                   <Typography variant="overline" sx={{ color: isDark ? '#00F0FF' : '#0284C7', fontWeight: 800, letterSpacing: '0.12em' }}>
-                    NETRUNNER SPECS
+                    COGNITIVE SPECS
                   </Typography>
                   <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 2 }}>
-                    Lucyna Kushinada Cyberware
+                    Lucy Cognitive Architecture
                   </Typography>
 
                   <Stack spacing={1.5} sx={{ fontSize: '0.85rem' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                       <span style={{ color: theme.palette.text.secondary }}>Neural Interface:</span>
-                      <strong>Black ICE Bypass v2.1</strong>
+                      <strong>Biomorphic Synaptic Bridge</strong>
                     </Box>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: theme.palette.text.secondary }}>Cyberdeck:</span>
-                      <strong>Militech Paraline v4</strong>
+                      <span style={{ color: theme.palette.text.secondary }}>Vector Engine:</span>
+                      <strong>Whitespace STDP Matrix</strong>
                     </Box>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                       <span style={{ color: theme.palette.text.secondary }}>Carrier Frequency:</span>
@@ -2303,7 +2303,7 @@ export default function MemoryPage() {
                       <StorageIcon fontSize="small" /> Ring-0 Local Vector Index
                     </Typography>
                     <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6, fontSize: '0.86rem' }}>
-                      Embeddings are indexed directly on physical NVMe using local SIMD cosine distance (AVX-512 / Apple AMX). Zero bytes leave loopback <code>127.0.0.1:8788</code>.
+                      Embeddings are indexed directly on physical NVMe using local SIMD cosine distance (AVX-512 / Apple AMX). Zero bytes leave loopback <code>127.0.0.1:8094</code>.
                     </Typography>
                   </Paper>
                 </Grid>
@@ -2369,7 +2369,7 @@ export default function MemoryPage() {
                       wordBreak: 'break-all',
                     }}
                   >
-                    git clone https://github.com/NullAITech/neuro-memory-daemon.git &amp;&amp; cd neuro-memory-daemon &amp;&amp; python3 src/daemon.py --port 8788
+                    git clone https://github.com/NullAITech/neuro-memory-daemon.git &amp;&amp; cd neuro-memory-daemon &amp;&amp; python3 src/daemon.py --port 8094
                   </Typography>
                 </Box>
                 <Tooltip title={copiedTab2 ? 'Copied command!' : 'Copy to clipboard'}>
@@ -2378,7 +2378,7 @@ export default function MemoryPage() {
                     variant="outlined"
                     onClick={() => {
                       if (navigator?.clipboard?.writeText) {
-                        navigator.clipboard.writeText('git clone https://github.com/NullAITech/neuro-memory-daemon.git && cd neuro-memory-daemon && python3 src/daemon.py --port 8788');
+                        navigator.clipboard.writeText('git clone https://github.com/NullAITech/neuro-memory-daemon.git && cd neuro-memory-daemon && python3 src/daemon.py --port 8094');
                         setCopiedTab2(true);
                         setTimeout(() => setCopiedTab2(false), 2000);
                       }
@@ -2564,13 +2564,13 @@ export default function MemoryPage() {
               <Grid xs={12} md={4}>
                 <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
                   <Typography variant="overline" sx={{ color: '#F472B6', fontWeight: 800, letterSpacing: '0.12em' }}>
-                    LUCY ORACLE LORE
+                    LUCY COGNITIVE ORACLE
                   </Typography>
                   <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5 }}>
                     Oracle of the Sovereign Grid
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 2, lineHeight: 1.6 }}>
-                    Lucyna Kushinada guides the Zoth Studio agent pantheon through the Whitespace Cyberspace construct. Her codec frequency 141.12 intercepts and validates high-entropy memory spikes with zero external cloud footprint.
+                    Lucy serves as the sovereign cognitive memory agent and semantic oracle across Zoth Studio. Operating on loopback port 8094, Lucy intercepts and validates high-entropy memory spikes with zero external cloud footprint.
                   </Typography>
 
                   <Divider sx={{ my: 2 }} />
@@ -2578,7 +2578,7 @@ export default function MemoryPage() {
                   <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1 }}>Deep Net Capabilities</Typography>
                   <Stack spacing={1}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Chip label="Black ICE Bypass" size="small" sx={{ bgcolor: 'rgba(244,114,182,0.15)', color: '#F472B6', fontWeight: 700 }} />
+                      <Chip label="Zero-Egress Isolation" size="small" sx={{ bgcolor: 'rgba(244,114,182,0.15)', color: '#F472B6', fontWeight: 700 }} />
                       <Typography variant="caption">Zero packet interception</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>

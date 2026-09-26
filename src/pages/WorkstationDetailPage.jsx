@@ -44,7 +44,6 @@ import ZothAIAssistant from '../components/ZothAIAssistant';
 import SovereignFunnel from '../components/SovereignFunnel';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const CLASSIC = 'http://127.0.0.1:8088';
 
 /* ==========================================================================
    WORKSTATION 1: Agent Composer (Multi-Agent DAG Composer & Pipeline Foundry)
@@ -449,7 +448,7 @@ function CyberpunkHudWorkstation() {
               <Divider sx={{ my: 1 }} />
               <Paper sx={{ p: 2, bgcolor: isDark ? '#0E131F' : '#F0F9FF', border: `1px solid ${isDark ? 'rgba(0,240,255,0.2)' : 'rgba(2,132,199,0.3)'}` }}>
                 <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#00F0FF' : '#0284C7', fontWeight: 700 }}>
-                  LOCK-ON TARGET: LUCY ORACLE CORE (141.12 MHZ)
+                  LOCK-ON TARGET: LUCY ORACLE CORE (LOOPBACK :8094)
                 </Typography>
                 <Typography variant="body2" sx={{ mt: 0.5, fontSize: '0.85rem' }}>
                   Biomorphic link stable. Zero packets routed through public internet.
@@ -850,8 +849,8 @@ function ConnectorsWorkstation() {
   const isDark = theme.palette.mode === 'dark';
 
   const [connectors, setConnectors] = useState([
-    { id: 'mcp-stdio', name: 'Model Context Protocol (MCP)', transport: 'Loopback STDIO / IPC', port: '8788/sse', status: 'Online', latency: '0.32ms', capabilities: ['tools/list', 'tools/call', 'prompts/get'] },
-    { id: 'rest-enclave', name: 'Zoth Enclave REST Daemon', transport: 'HTTP/1.1 Loopback', port: '127.0.0.1:8788', status: 'Online', latency: '0.24ms', capabilities: ['/api/studio/status', '/api/adytum/keys', '/api/vault'] },
+    { id: 'mcp-stdio', name: 'Model Context Protocol (MCP)', transport: 'Loopback STDIO / IPC', port: '8094/sse', status: 'Online', latency: '0.32ms', capabilities: ['tools/list', 'tools/call', 'prompts/get'] },
+    { id: 'rest-enclave', name: 'Zoth Enclave REST Daemon', transport: 'HTTP/1.1 Loopback', port: '127.0.0.1:8094', status: 'Online', latency: '0.24ms', capabilities: ['/api/studio/status', '/api/adytum/keys', '/api/vault'] },
     { id: 'zeromq-bus', name: 'Inter-Agent ZeroMQ Mesh', transport: 'IPC Socket /tmp/zoth.sock', port: 'ipc://zoth-swarm', status: 'Standby', latency: '0.12ms', capabilities: ['AST-Quorum', 'SwarmHeartbeat', 'STDPWeightSync'] },
     { id: 'webrtc-peer', name: 'WebRTC Sovereign DataChannel', transport: 'E2EE SCTP Enclave', port: '127.0.0.1:9001', status: 'Online', latency: '0.45ms', capabilities: ['P2P-Mesh', 'AudioSpectrogram', 'NeuralWeights'] },
     { id: 'ollama-native', name: 'Ollama LLM Engine Socket', transport: 'Localhost REST', port: '127.0.0.1:11434', status: 'Online', latency: '0.88ms', capabilities: ['generate', 'embeddings', 'chat'] },
@@ -1436,7 +1435,7 @@ Description: Sovereign AI agent developer environment with zero cloud telemetry.
 System: Strictly local execution via 127.0.0.1.
 
 ## Core Capabilities
-- Workstations: 37 zero-egress consoles
+- Workstations: 24 zero-egress consoles
 - Micro-Tools: 25 standalone Web Crypto and diagnostic tools
 - Consensus: Byzantine 3-Agent Triangulation
 - Memory: Lucy Oracle STDP Synaptic Graph`,
@@ -1679,7 +1678,7 @@ function HubWorkstationConsole({ station }) {
       desc: 'Spike-Timing-Dependent Plasticity (STDP) synaptic weight matrix and biomorphic cognitive memory workspace.',
       target: '/memory',
       badge: 'Neural Core',
-      stats: [{ label: 'Synapse Plasticity', val: 'STDP Active' }, { label: 'Loopback Daemon', val: ':8788' }, { label: 'Lucy Core', val: 'Online' }],
+      stats: [{ label: 'Synapse Plasticity', val: 'STDP Active' }, { label: 'Loopback Daemon', val: ':8094' }, { label: 'Lucy Core', val: 'Online' }],
     },
     'bus-monitor': {
       title: 'Zoth Swarm NOC & Multi-Agent Bus Monitor',
@@ -1728,7 +1727,7 @@ function HubWorkstationConsole({ station }) {
       desc: 'Full-spectrum swarm oversight console with task dispatchers, agent status matrices, and health monitors.',
       target: '/swarm',
       badge: 'Mission Control',
-      stats: [{ label: 'Telemetry Stream', val: '127.0.0.1:8788' }, { label: 'Task Queue', val: 'Autonomous' }, { label: 'Consensus', val: 'Triangulated' }],
+      stats: [{ label: 'Telemetry Stream', val: '127.0.0.1:8989' }, { label: 'Task Queue', val: 'Autonomous' }, { label: 'Consensus', val: 'Triangulated' }],
     },
     'site-generator': {
       title: 'WebGen Autonomous Site Generator',
@@ -1967,7 +1966,7 @@ function UniversalEnclaveConsole({ station }) {
                   ⚡ 2. Sub-Millisecond Loopback IPC (0.24ms)
                 </Typography>
                 <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.5 }}>
-                  Agent inter-process communication communicates across local Unix sockets (<code>127.0.0.1:8788</code>), eliminating 300ms cloud network overhead.
+                  Agent inter-process communication communicates across local Unix sockets (<code>127.0.0.1:8094</code>), eliminating 300ms cloud network overhead.
                 </Typography>
               </Paper>
               <Paper sx={{ p: 1.5, bgcolor: isDark ? '#0D0D12' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
@@ -2051,8 +2050,6 @@ export default function WorkstationDetailPage() {
   const { workstationId } = useParams();
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const { status } = useStudioStatus();
-  const classicUp = Boolean(status?.services?.classic?.up);
 
   const station = workstations.find((w) => w.id === workstationId) || {
     id: workstationId,
@@ -2102,8 +2099,8 @@ export default function WorkstationDetailPage() {
   const hubLinkedStations = [
     'hexstrike', 'consensus', 'fusion-arena', 'netrunner-memory', 'bus-monitor',
     'peer-bus', 'signal-bridge', 'vos-sandbox', 'math-pillars', 'swarm',
-    'mission-control', 'site-generator', 'webgen', 'nexus-3d', '3d-editor',
-    'nexus-3d-editor', 'subsweep', 'omnipost', 'tool-nexus', 'tool-stamp'
+    'mission-control', 'site-generator', 'webgen',
+    'subsweep', 'omnipost', 'tool-nexus', 'tool-stamp'
   ];
 
   // Render specific workstation implementation
@@ -2152,19 +2149,6 @@ export default function WorkstationDetailPage() {
         </Button>
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
           <Chip label="v2 Native Studio Workstation" size="small" sx={{ bgcolor: gold.wash, color: isDark ? '#D4AF37' : '#8A6A09', fontWeight: 800, border: `1px solid ${gold.border}` }} />
-          {classicUp && (
-            <Button
-              size="small"
-              variant="outlined"
-              endIcon={<LaunchIcon />}
-              href={`${CLASSIC}${station.path}`}
-              target="_blank"
-              rel="noreferrer"
-              sx={{ fontWeight: 750 }}
-            >
-              Classic (:8088)
-            </Button>
-          )}
         </Box>
       </Box>
 
@@ -2191,7 +2175,7 @@ export default function WorkstationDetailPage() {
             }}
           />
           <Chip
-            label="STRICT LOOPBACK :8788"
+            label="STRICT LOOPBACK :8094"
             size="small"
             sx={{
               bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF',
@@ -2315,7 +2299,7 @@ export default function WorkstationDetailPage() {
 
           <Grid container spacing={1.5}>
             {[
-              { label: 'Host Loopback', value: '127.0.0.1:8788', highlight: false },
+              { label: 'Host Loopback', value: '127.0.0.1:8094', highlight: false },
               { label: 'IPC Latency', value: telemetry.latency, highlight: true, color: isDark ? '#34D399' : '#047857' },
               { label: 'Local Throughput', value: telemetry.throughput, highlight: false },
               { label: 'Hardware TRNG Entropy', value: `${telemetry.entropy} / 8.0`, highlight: true, color: isDark ? '#D4AF37' : '#8A6A09' },

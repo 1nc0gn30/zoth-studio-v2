@@ -36,7 +36,7 @@ export default function Footer() {
   ];
 
   const toolsAndRepos = [
-    { label: 'Micro-Tools Registry (29)', to: '/tools' },
+    { label: 'Micro-Tools Registry (25)', to: '/tools' },
     { label: 'Zoth Studio v2 Repo', href: 'https://github.com/NullAITech/zoth-studio-v2', external: true },
     { label: 'NullAI Tech GitHub Org', href: 'https://github.com/NullAITech', external: true },
     { label: 'WebGen Autonomous Foundry', href: 'https://github.com/NullAITech/zoth-webgen', external: true },
@@ -44,7 +44,7 @@ export default function Footer() {
     { label: 'Adytum Alchemist Repo', href: 'https://github.com/NullAITech/adytum-alchemist-ai-workflow', external: true },
     { label: 'HexStrike AI Terminal Repo', href: 'https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal', external: true },
     { label: 'Polyglot Exporter Repo', href: 'https://github.com/NullAITech/polyglot-framework-exporter', external: true },
-    { label: 'Byzantine Consensus Engine', href: 'https://github.com/NullAITech/byzantine-consensus-engine', external: true },
+    { label: '21-Agent Swarm Multiplexer', href: 'https://github.com/NullAITech/zoth-swarm-multiplexer', external: true },
     { label: 'Sovereign Agent Bridge', href: 'https://github.com/NullAITech/sovereign-agent-bridge', external: true },
     { label: 'EnvGuard Secrets Vault', href: 'https://github.com/NullAITech/envguard-secrets-vault', external: true },
     { label: 'Vector Search Engine', href: 'https://github.com/NullAITech/vector-search-engine', external: true },

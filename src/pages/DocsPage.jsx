@@ -209,7 +209,7 @@ export default function DocsPage() {
       },
       {
         id: 'sec-2',
-        title: '2. Decoupled 24 Micro-Repo Directory',
+        title: '2. Decoupled 25 Micro-Repo Directory',
         topics: ['Invariants'],
         kicker: 'MICRO-REPO INDEX'
       },
@@ -221,7 +221,7 @@ export default function DocsPage() {
       },
       {
         id: 'sec-4',
-        title: '4. Signal Bridge & Simplex E2EE',
+        title: '4. Signal Bridge & E2EE Loopback Mesh',
         topics: ['Invariants', 'Enclaves & Netlify'],
         kicker: 'E2EE NETWORKING'
       },
@@ -233,7 +233,7 @@ export default function DocsPage() {
       },
       {
         id: 'sec-memory',
-        title: '6. Lucy Oracle & STDP Synaptic Memory',
+        title: '6. Lucy Memory Oracle & STDP Synapses',
         topics: ['Memory & STDP'],
         kicker: 'NEURAL STRATUM'
       },
@@ -245,7 +245,7 @@ export default function DocsPage() {
       },
       {
         id: 'sec-netlify',
-        title: '8. Netlify Edge & 83 Prerendered Routes',
+        title: '8. Netlify Edge & 71 Prerendered Routes',
         topics: ['Enclaves & Netlify', 'Invariants'],
         kicker: 'EDGE & AEO DISCOVERY'
       },
@@ -275,9 +275,15 @@ export default function DocsPage() {
       },
       {
         id: 'sec-workstations',
-        title: '13. Sovereign Workstation Map (37 Total)',
+        title: '13. Sovereign Workstation Map (24 Consoles)',
         topics: ['Enclaves & Netlify'],
         kicker: 'WORKSTATION TOPOLOGY'
+      },
+      {
+        id: 'sec-quickstart',
+        title: '14. Practical Developer Quickstart: Desktop, Ollama & CLI Tools',
+        topics: ['Invariants', 'Enclaves & Netlify'],
+        kicker: 'DEVELOPER QUICKSTART'
       }
     ],
     []
@@ -344,13 +350,14 @@ export default function DocsPage() {
   const terminalAuditLogs = [
     `npm run zoth -- doctor
 
-Probes 127.0.0.1:8788 (memory), :8789 (bridge), :8787 (vault), and :11434 (Ollama).
+Probes 127.0.0.1:8094 (memory), :8102 (bridge), :8989 (swarm), :8787 (vault), and :11434 (Ollama).
 Zero Cloud Telemetry Guaranteed. 100% loopback enclave binding.
 Prints whether each published tool is checked out. Run directly in the repo.`,
 
     `npm run zoth -- up
 
-Starts neuro-memory-daemon on 127.0.0.1:8788 and sovereign-agent-bridge on 127.0.0.1:8789.
+Starts neuro-memory-daemon on 127.0.0.1:8094 and sovereign-agent-bridge on 127.0.0.1:8102.
+Swarm multiplexer active on 127.0.0.1:8989.
 Argon2id vault binary daemon listening on 127.0.0.1:8787.
 Shannon entropy gatekeeper active on all inter-process channels.`,
 
@@ -390,7 +397,7 @@ Runs local invariant verification before staging tools.`
                 />
                 <Chip
                   icon={<HubIcon sx={{ fontSize: '14px !important', color: `${textSecondary} !important` }} />}
-                  label="37 WORKSTATIONS & 25 TOOLS"
+                  label="24 WORKSTATIONS & 25 TOOLS"
                   size="small"
                   sx={{
                     bgcolor: dark ? '#14141E' : '#F2F4F7',
@@ -401,7 +408,7 @@ Runs local invariant verification before staging tools.`
                 />
                 <Chip
                   icon={<CloudDoneIcon sx={{ fontSize: '14px !important', color: `${dark ? '#38BDF8' : '#0284C7'} !important` }} />}
-                  label="NETLIFY 83 PRERENDERED ROUTES"
+                  label="NETLIFY 71 PRERENDERED ROUTES"
                   size="small"
                   sx={{
                     bgcolor: dark ? 'rgba(56,189,248,0.12)' : '#E0F2FE',
@@ -451,7 +458,7 @@ Runs local invariant verification before staging tools.`
               >
                 Comprehensive architectural blueprint for Zoth Studio v2: air-gapped agent orchestration,
                 biomorphic STDP synaptic memory, Lucy Netrunner Oracle, 3-agent Byzantine consensus,
-                Adytum Hardware Sanctum, and production Netlify deployment with 83 prerendered static routes.
+                Adytum Hardware Sanctum, and production Netlify deployment with 71 prerendered static routes.
               </Typography>
             </HeroItem>
 
@@ -740,7 +747,7 @@ Runs local invariant verification before staging tools.`
 
                   <Typography variant="body1" color="text.secondary" paragraph>
                     Zoth Studio v2 is the air-gapped operator desk for sovereign AI agent development.
-                    Integrating 37 dedicated workstations, 25 in-browser micro-tools, Lucy Oracle STDP
+                    Integrating 24 dedicated workstations, 25 in-browser micro-tools, Lucy Oracle STDP
                     synaptic memory, 3-agent Byzantine consensus, and the Adytum Hardware Sanctum,
                     all execution runs strictly on physical hardware via local loopback enclaves (
                     <code>127.0.0.1</code>).
@@ -780,12 +787,12 @@ Runs local invariant verification before staging tools.`
                       }}
                     >
                       {[
-                        { icon: <CodeIcon sx={{ mb: 0.5, color: dark ? '#79C0FF' : '#0969DA' }} />, title: '37 Workstations', desc: 'DAG Composer, IDE & Foundry' },
-                        { icon: <MemoryIcon sx={{ mb: 0.5, color: dark ? '#00F0FF' : '#0891B2' }} />, title: 'Lucy Netrunner Oracle', desc: 'STDP Synaptic Plasticity (:8788)' },
+                        { icon: <CodeIcon sx={{ mb: 0.5, color: dark ? '#79C0FF' : '#0969DA' }} />, title: '24 Workstations', desc: 'DAG Composer, IDE & Foundry' },
+                        { icon: <MemoryIcon sx={{ mb: 0.5, color: dark ? '#00F0FF' : '#0891B2' }} />, title: 'Lucy Cognitive Oracle', desc: 'STDP Synaptic Plasticity (:8094)' },
                         { icon: <GavelIcon sx={{ mb: 0.5, color: dark ? '#C084FC' : '#7C3AED' }} />, title: '3-Agent Byzantine', desc: 'Triadic AST Socratic Debate' },
                         { icon: <ShieldIcon sx={{ mb: 0.5, color: dark ? '#34D399' : '#059669' }} />, title: 'Zero-Egress Invariants', desc: 'Shannon Entropy & Loopback' },
                         { icon: <LockIcon sx={{ mb: 0.5, color: dark ? '#F59E0B' : '#D97706' }} />, title: 'Adytum Sanctum', desc: '22 Keys & 5-Min Incubation' },
-                        { icon: <CloudDoneIcon sx={{ mb: 0.5, color: dark ? '#38BDF8' : '#0284C7' }} />, title: 'Netlify Edge AEO', desc: '83 Prerendered Static Routes' },
+                        { icon: <CloudDoneIcon sx={{ mb: 0.5, color: dark ? '#38BDF8' : '#0284C7' }} />, title: 'Netlify Edge AEO', desc: '71 Prerendered Static Routes' },
                       ].map((item, i) => (
                         <Paper
                           key={i}
@@ -810,7 +817,7 @@ Runs local invariant verification before staging tools.`
 
                   <CodeSnippet
                     title="SYSTEM INITIALIZATION SEQUENCE"
-                    code={`# Check local daemons and enclave port health (:8788, :8789, :8787, :11434)
+                    code={`# Check local daemons and enclave port health (:8094, :8102, :8989, :8787, :11434)
 npm run zoth -- doctor
 
 # Launch local backend daemons
@@ -822,7 +829,7 @@ npm run dev`}
                 </Paper>
               )}
 
-              {/* SECTION 2: Decoupled 24 Micro-Repo Directory */}
+              {/* SECTION 2: Decoupled 25 Micro-Repo Directory */}
               {visibleSectionIds.has('sec-2') && (
                 <Paper
                   id="sec-2"
@@ -850,7 +857,7 @@ npm run dev`}
                         sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700, mb: 1 }}
                       />
                       <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
-                        2. Decoupled 24 Micro-Repo Directory ({filteredTools.length})
+                        2. Decoupled 25 Micro-Repo Directory ({filteredTools.length})
                       </Typography>
                     </Box>
 
@@ -1068,7 +1075,7 @@ npm run dev`}
                     code={`import { PantheonDispatcher } from 'zoth-pantheon';
 
 const dispatcher = new PantheonDispatcher({
-  busAddress: 'ws://127.0.0.1:8789',
+  busAddress: 'ws://127.0.0.1:8102',
   consensusThreshold: 3 // Requires 3/3 Byzantine verification
 });
 
@@ -1112,10 +1119,10 @@ const task = await dispatcher.broadcastTask({
                   <CodeSnippet
                     title="SIGNAL BRIDGE INITIALIZATION COMMANDS"
                     code={`# Clone signal bridge daemon
-npm run zoth -- pull sovereign-agent-bridge
+npx zoth pull sovereign-agent-bridge
 
-# Start IPC bridge on loopback port 127.0.0.1:8789
-npm run zoth -- up`}
+# Start IPC bridge on loopback port 127.0.0.1:8102
+cd tools/sovereign-agent-bridge && npm start`}
                   />
                 </Paper>
               )}
@@ -1167,7 +1174,7 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}
                 </Paper>
               )}
 
-              {/* SECTION 6: Lucy Netrunner Oracle & STDP Synaptic Memory */}
+              {/* SECTION 6: Lucy Memory Oracle & STDP Synaptic Memory */}
               {visibleSectionIds.has('sec-memory') && (
                 <Paper
                   id="sec-memory"
@@ -1185,14 +1192,14 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}
                       sx={{ bgcolor: 'rgba(0,240,255,0.12)', color: '#00F0FF', fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
-                      6. Lucy Oracle &amp; Biomorphic STDP Synaptic Memory
+                      6. Lucy Cognitive Oracle &amp; Biomorphic STDP Synaptic Memory
                     </Typography>
                   </Box>
 
                   <Typography variant="body1" color="text.secondary" paragraph>
-                    Governed by <strong>Spike-Timing-Dependent Plasticity (STDP)</strong>, the Lucy Netrunner
-                    Oracle (Codec 141.12 // Deep Net Breach) continuously potentiates verified decisions
-                    and decays transient noise across the Whitespace Cyberspace 3D constellation.
+                    Governed by <strong>Spike-Timing-Dependent Plasticity (STDP)</strong>, the Lucy Cognitive
+                    Memory Oracle continuously potentiates verified decisions and decays transient noise
+                    across the persistent 3D vector constellation.
                   </Typography>
 
                   <Paper
@@ -1222,8 +1229,8 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}
 
                   <CodeSnippet
                     title="STDP SYNAPTIC RECALL RPC"
-                    code={`# Query local Neuro Memory Daemon via loopback
-curl -X POST http://127.0.0.1:8788/v1/memory/recall \\
+                    code={`# Query local Neuro Memory Daemon via loopback port 8094
+curl -X POST http://127.0.0.1:8094/v1/memory/recall \\
   -H "Content-Type: application/json" \\
   -d '{"query": "Byzantine consensus AST verification delta", "top_k": 5}'`}
                   />
@@ -1281,7 +1288,7 @@ console.log("Byzantine Consensus Verdict:", verdict.sealed ? "UNANIMOUS APPROVAL
                 </Paper>
               )}
 
-              {/* SECTION 8: Netlify Edge Deployment & 83 Prerendered Routes */}
+              {/* SECTION 8: Netlify Edge Deployment & 71 Prerendered Routes */}
               {visibleSectionIds.has('sec-netlify') && (
                 <Paper
                   id="sec-netlify"
@@ -1299,13 +1306,13 @@ console.log("Byzantine Consensus Verdict:", verdict.sealed ? "UNANIMOUS APPROVAL
                       sx={{ bgcolor: 'rgba(56,189,248,0.12)', color: '#38BDF8', fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
-                      8. Netlify Edge Deployment &amp; 83 Prerendered Routes
+                      8. Netlify Edge Deployment &amp; 71 Prerendered Routes
                     </Typography>
                   </Box>
 
                   <Typography variant="body1" color="text.secondary" paragraph>
                     Production deployment compiles with <code>npm run build</code>, running Vite and the
-                    static prerender engine (<code>scripts/prerender.mjs</code>). This emits 83 distinct
+                    static prerender engine (<code>scripts/prerender.mjs</code>). This emits 71 distinct
                     static HTML routes into <code>dist/</code>, complete with Schema.org JSON-LD graphs and
                     machine-readable endpoints for AI answer engines.
                   </Typography>
@@ -1315,7 +1322,7 @@ console.log("Byzantine Consensus Verdict:", verdict.sealed ? "UNANIMOUS APPROVAL
                       { ep: '/llms.txt', desc: 'Compact plain-text summary (< 5 KB) for LLM agents' },
                       { ep: '/llms-full.txt', desc: 'Complete architecture manual and knowledge graph' },
                       { ep: '/ai.txt', desc: 'AI crawler discovery and grounding policy manifest' },
-                      { ep: '/sitemap.xml', desc: 'XML sitemap covering all 83 static routes' }
+                      { ep: '/sitemap.xml', desc: 'XML sitemap covering all 71 static routes' }
                     ].map((item, idx) => (
                       <Grid xs={12} sm={6} key={idx}>
                         <Paper
@@ -1346,7 +1353,7 @@ console.log("Byzantine Consensus Verdict:", verdict.sealed ? "UNANIMOUS APPROVAL
                     code={`# Install dependencies cleanly
 npm ci
 
-# Build Vite application and automatically prerender 83 static routes
+# Build Vite application and automatically prerender 71 static routes
 npm run build
 
 # Preview production build locally on http://127.0.0.1:4173
@@ -1617,17 +1624,112 @@ npm run preview`}
                       sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 750, color: textPrimary }}>
-                      13. Sovereign Workstation Map (37 Total)
+                      13. Sovereign Workstation Map (24 Total)
                     </Typography>
                   </Box>
 
                   <Typography variant="body1" color="text.secondary" paragraph>
-                    Comprehensive interactive index of all 37 sovereign workstations across agent
+                    Comprehensive interactive index of all 24 sovereign workstations across agent
                     coordination, neural memory, Byzantine consensus, code development, and hardware
                     sanctum domains.
                   </Typography>
 
                   <WorkstationMap embedded />
+                </Paper>
+              )}
+
+              {/* SECTION 14: Practical Developer Quickstart & Desktop Ops */}
+              {visibleSectionIds.has('sec-quickstart') && (
+                <Paper
+                  id="sec-quickstart"
+                  sx={{
+                    p: { xs: 2.5, md: 4 },
+                    border: `1px solid rgba(212,175,55,0.25)`,
+                    borderRadius: 3,
+                    bgcolor: surface
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                    <Chip
+                      label="DEVELOPER QUICKSTART"
+                      size="small"
+                      sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
+                    />
+                    <Typography variant="h5" sx={{ fontWeight: 750, color: textPrimary }}>
+                      14. Practical Developer Quickstart: Desktop, Ollama &amp; CLI Tools
+                    </Typography>
+                  </Box>
+
+                  <Typography variant="body1" color="text.secondary" paragraph>
+                    Essential operations for running Zoth Studio as an air-gapped desktop workstation, configuring local Ollama models with zero egress, and installing the 25 micro-tools into your global PATH.
+                  </Typography>
+
+                  {/* 1. Electron Desktop Workstation */}
+                  <Typography variant="subtitle1" sx={{ fontWeight: 800, mt: 3, mb: 1, color: textPrimary }}>
+                    A. Running as an Electron Desktop Workstation
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" paragraph>
+                    Launch the native Electron desktop application with hardware-accelerated WebGPU flags and loopback security policies:
+                  </Typography>
+                  <CodeSnippet
+                    title="DESKTOP WORKSTATION LAUNCH"
+                    code={`# Option 1: Run native Electron workstation directly from repo
+npm run desktop
+
+# Option 2: Launch via the Azoth local agent orchestrator
+azoth desktop --port 3000 --airgap
+
+# Option 3: Package standalone native Linux AppImage / Debian binary
+npm run electron:build`}
+                  />
+
+                  {/* 2. Ollama Local Model Setup */}
+                  <Typography variant="subtitle1" sx={{ fontWeight: 800, mt: 3, mb: 1, color: textPrimary }}>
+                    B. Configuring Local Ollama Models with Studio Tools
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" paragraph>
+                    All 25 tools automatically connect to your local Ollama engine at <code>http://localhost:11434</code> without external cloud egress:
+                  </Typography>
+                  <CodeSnippet
+                    title="LOCAL OLLAMA SETUP & CONFIGURATION"
+                    code={`# 1. Pull recommended coding & reasoning models
+ollama pull qwen2.5-coder:32b
+ollama pull llama3.2:3b
+ollama pull deepseek-r1:70b
+
+# 2. Verify local models are bound to loopback :11434
+curl http://127.0.0.1:11434/api/tags
+
+# 3. Export environment variables for local agent harnesses
+export OLLAMA_HOST="http://127.0.0.1:11434"
+export ZOTH_DEFAULT_MODEL="qwen2.5-coder:32b"`}
+                  />
+
+                  {/* 3. Installing CLI Tools into /usr/local/bin */}
+                  <Typography variant="subtitle1" sx={{ fontWeight: 800, mt: 3, mb: 1, color: textPrimary }}>
+                    C. Installing Micro-Tools into /usr/local/bin
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" paragraph>
+                    Link any of the 25 micro-tools into your system PATH for immediate command-line execution:
+                  </Typography>
+                  <CodeSnippet
+                    title="GLOBAL PATH INSTALLATION"
+                    code={`# Symlink all local micro-tool CLI executables into /usr/local/bin
+cd zoth-micro-repos
+for tool in */; do
+  if [ -f "$tool/package.json" ]; then
+    (cd "$tool" && npm link)
+  fi
+done
+
+# Alternatively, symlink the unified zoth CLI binary
+sudo ln -sf "$(pwd)/bin/zoth" /usr/local/bin/zoth
+
+# Verify global installation
+zoth --version
+subsweep --help
+envguard --help`}
+                  />
                 </Paper>
               )}
             </Box>
@@ -1639,7 +1741,7 @@ npm run preview`}
         <RevealOnScroll preset="fadeUp">
           <SovereignFunnel
             title="Install Zoth Studio v2 &amp; Sovereign Zoth OS"
-            subtitle="Full documentation and deployment pipeline for zero-telemetry development, local loopback enclaves, 37 workstations, and bare-metal OS hypervisors."
+            subtitle="Full documentation and deployment pipeline for zero-telemetry development, local loopback enclaves, 24 workstations, and bare-metal OS hypervisors."
             toolTitle="Option 1: Zero-Egress CLI Suite"
             toolTag="DOCS &amp; RUNTIME"
             toolDescription="Download the air-gapped documentation suite, offline CLI diagnostic toolbench, and local IPC verification harness."

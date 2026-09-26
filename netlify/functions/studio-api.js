@@ -26,9 +26,9 @@ const SAMPLE_MEMORIES = [
     category: 'oracle',
     cluster: 'Lucy Oracle',
     weight: 0.99,
-    text: 'Lucyna Kushinada Netrunner Oracle channel active on Codec 141.12. Deep net breach monitor in Whitespace cyberspace.',
+    text: 'Lucy Cognitive Memory Oracle active on loopback semantic bus. STDP memory indexing continuous cross-session knowledge.',
     author: 'Lucy',
-    tags: ['netrunner', 'lucy', 'oracle']
+    tags: ['memory', 'lucy', 'oracle']
   },
   {
     id: 'MEM-003',
@@ -68,23 +68,29 @@ export async function handler(event, context) {
         environment: 'Netlify Hosted Showcase (Zero-Egress Guaranteed)',
         kvm: false,
         services: {
+          swarm: {
+            name: 'Swarm multiplexer',
+            port: 8989,
+            up: true,
+            detail: { mode: 'Local Multiplexer', agents: 21 }
+          },
           memory: {
             name: 'Neuro memory daemon',
-            port: 8788,
+            port: 8094,
             up: true,
             detail: { mode: 'Netlify Cloud Showcase', vector_count: SAMPLE_MEMORIES.length }
           },
           bridge: {
             name: 'Sovereign agent bridge',
-            port: 8789,
+            port: 8102,
             up: true,
             detail: { mode: 'Netlify Cloud Showcase', agents: 21 }
           },
-          vault: {
-            name: 'Vault daemon',
-            port: 8787,
+          azoth: {
+            name: 'Azoth local agent',
+            port: 8790,
             up: true,
-            detail: { algorithm: 'Argon2id + XChaCha20-Poly1305' }
+            detail: { role: 'Prime Alchemist Orchestrator' }
           },
           ollama: {
             name: 'Ollama',
@@ -92,12 +98,6 @@ export async function handler(event, context) {
             up: false,
             models: [],
             note: 'Run locally at 127.0.0.1:11434 for offline silicon inference'
-          },
-          classic: {
-            name: 'Classic studio',
-            port: 8088,
-            up: false,
-            note: 'Decoupled in v2 — all workstations render natively in this SPA'
           }
         }
       })

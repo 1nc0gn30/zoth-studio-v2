@@ -147,7 +147,7 @@ export default function FaqsPage() {
 
   const handleCopyTransmission = () => {
     if (!oracleResult) return;
-    const textToCopy = `[LUCY ORACLE VERIFIED TRANSMISSION // CODEC 141.12]
+    const textToCopy = `[LUCY COGNITIVE ORACLE // ARCHITECTURAL KNOWLEDGE BASE]
 Query: "${oracleResult.query}"
 Confidence: ${oracleResult.confidence} (Latency: ${oracleResult.latency}ms)
 Topic: ${oracleResult.faq.q}
@@ -305,7 +305,7 @@ ${oracleResult.faq.a}`;
 
           <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
             <Chip
-              label="CODEC 141.12"
+              label="SEMANTIC BUS :8094"
               size="small"
               sx={{
                 bgcolor: isDark ? 'rgba(244,114,182,0.12)' : '#FDF2F8',
@@ -834,11 +834,11 @@ ${oracleResult.faq.a}`;
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
               <PsychologyIcon sx={{ color: gold.accent }} />
               <Typography variant="subtitle1" sx={{ fontWeight: 800, color: isDark ? gold.soft : gold.accent }}>
-                Need deeper answers? Consult the Lucy Netrunner Oracle
+                Need deeper answers? Consult the Lucy Cognitive Memory Hub
               </Typography>
             </Box>
             <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
-              Breach Codec 141.12 to query the Whitespace memory matrix directly, run live STDP synaptic calculations, or consult the 21-Agent Swarm Pantheon.
+              Query the Whitespace semantic memory matrix directly on loopback :8094, run live STDP synaptic calculations, or monitor swarm telemetry.
             </Typography>
           </Box>
           <Stack direction="row" spacing={1.5} sx={{ flexShrink: 0 }}>

@@ -1,10 +1,10 @@
-# Lucy Netrunner Oracle & Whitespace Cyberspace Specification
+# Lucy Cognitive Memory Oracle & Whitespace Cyberspace Specification
 
 ## Character Profile
-- **Name**: Lucyna Kushinada (Lucy)
-- **Role**: Deep-Dive Netrunner // Oracle of the Sovereign Matrix
-- **Codec Frequency**: 141.12 MHz
-- **Security Protocols**: Black ICE Bypass v2.1, Zero-Egress Enclave Anchor
+- **Name**: Lucy
+- **Role**: Cognitive Memory Oracle // Semantic Memory Stratum Guide
+- **Channel**: Loopback Semantic Bus :8094
+- **Security Protocols**: Zero-Egress Enclave Anchor, Argon2id, XChaCha20-Poly1305
 - **Avatar Asset**: `/assets/lucy.png` / `/mascot/lucy-portrait.png`
 
 ## The Whitespace Cyberspace Construct

@@ -10,23 +10,25 @@ Zoth Studio v2 is an air-gapped, zero-egress development studio designed for orc
 
 ## Architecture & Enclave Binds
 - Loopback UI: http://127.0.0.1:3000 (React 18 + MUI v5 SPA)
-- Neuro Memory Daemon: http://127.0.0.1:8788 (Spike-Timing-Dependent Plasticity STDP + SQLite HNSW vectors)
-- Sovereign Agent Bridge: http://127.0.0.1:8789 (21-agent inter-process bus & packet pinger)
+- Neuro Memory Daemon: http://127.0.0.1:8094 (Spike-Timing-Dependent Plasticity STDP + SQLite vec0 vectors)
+- Sovereign Agent Bridge: http://127.0.0.1:8102 (WebSocket IPC message bus)
 - Hardware Vault: http://127.0.0.1:8787 (Argon2id key derivation & XChaCha20-Poly1305 encryption)
+- Azoth Archon Agent: http://127.0.0.1:8790 (Zero-telemetry local task dispatching)
+- Swarm Multiplexer: http://127.0.0.1:8989 (21-terminal SSE agent daemon)
 - Local Model Foundry: http://127.0.0.1:11434 (Ollama / llama.cpp local inference)
 
-## Lucy Netrunner Oracle & Whitespace Cyberspace
-- Guardian: Lucy (Lucyna Kushinada), Deep-Dive Netrunner
-- Channel: Codec 141.12 // Deep Net Breach
-- Function: Guides the 21-agent pantheon through the Whitespace Cyberspace memory stratum.
+## Lucy Cognitive Oracle & Whitespace Memory Matrix
+- Guardian: Lucy, Cognitive Memory Oracle
+- Channel: Semantic Bus :8094 // Zero-Egress Memory Stratum
+- Function: Guides the sovereign agent pantheon through the Whitespace Cyberspace memory stratum.
 - Memory Law: Spike-Timing-Dependent Plasticity (STDP) adjusts synaptic weights (dw = A+ * exp(-dt/tau)). Frequent queries reinforce memories; stale vectors decay logarithmically.
 
-## 37 Studio Workstations & 25 Tools
-- Build: Agent Composer (DAG builder), AX Powerhouse, IDE Code Foundry, Edge Forge, Tool Bench, WebGen.
+## 24 Studio Workstations & 25 Tools
+- Build: Agent Composer (DAG builder), AX Powerhouse, IDE Code Foundry, Edge Forge, Tool Bench, WebGen, Netlify AX, GitHub Studio.
 - Security: HexStrike CVE matrix, Web3 Sovereign Solana Bridge, SubSweep lead scanner, Adytum Key Sanctum.
-- Swarm & Consensus: 3-Agent Byzantine Triangulation (Socratic AST debate), Swarm NOC, Cockpit radar, Signal Bridge.
-- Spatial & 3D: Nexus 3D Omniverse, 3D Badge & Coin generator, Sacred Geometry engine, Vision Link.
-- Observe: Chronicle roadmap, AI Model Foundry, Connectors ecosystem, Notes Reviewer.
+- Swarm & Consensus: 3-Agent Byzantine Triangulation (Socratic AST debate), Swarm NOC, Cockpit radar, Signal Bridge, Mission Control.
+- Spatial & Media: Vision Link Multimodal Inspector, Vision Gesture Control, Brand Sigil & Alchemical Seals Kit.
+- Observe: Chronicle roadmap, AI Model Foundry, Connectors ecosystem, Notes Reviewer, Cyberpunk HUD, Six Math Pillars Academy.
 
 ## Zero-Egress Invariants
 1. No external HTTP(S) requests or tracking SDKs.

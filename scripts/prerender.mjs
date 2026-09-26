@@ -2,7 +2,7 @@
 /**
  * Zoth Studio v2 Prerender, AEO Indexing & Static Route Engine
  * Generates static HTML entry points with route-specific head metadata,
- * Schema.org JSON-LD graphs, and crawler-readable semantic content for all 87 routes.
+ * Schema.org JSON-LD graphs, and crawler-readable semantic content for all 71 routes.
  * Also synchronizes public/sitemap.xml and dist/sitemap.xml.
  */
 
@@ -57,11 +57,11 @@ function buildSemanticContent(routePath, meta) {
             <p style="color: #9CA3AF; font-size: 0.88rem; margin: 0;">Client-side tensor matmul and neural inference running directly on hardware GPU via WGSL shaders.</p>
           </div>
           <div style="padding: 1rem; border: 1px solid #1E2230; border-radius: 4px; background: #0D0E15;">
-            <h3 style="color: #34D399; font-size: 1rem; margin: 0 0 0.5rem 0;">STDP Neuro Memory (:8788)</h3>
+            <h3 style="color: #34D399; font-size: 1rem; margin: 0 0 0.5rem 0;">STDP Neuro Memory (:8094)</h3>
             <p style="color: #9CA3AF; font-size: 0.88rem; margin: 0;">Biomorphic Spike-Timing-Dependent Plasticity daemon for persistent, decay-resistant episodic recall.</p>
           </div>
           <div style="padding: 1rem; border: 1px solid #1E2230; border-radius: 4px; background: #0D0E15;">
-            <h3 style="color: #F87171; font-size: 1rem; margin: 0 0 0.5rem 0;">Sovereign Agent Bridge (:8789)</h3>
+            <h3 style="color: #F87171; font-size: 1rem; margin: 0 0 0.5rem 0;">Sovereign Agent Bridge (:8102)</h3>
             <p style="color: #9CA3AF; font-size: 0.88rem; margin: 0;">Decentralized peer-to-peer simplex agent communication bus with Byzantine AST consensus verification.</p>
           </div>
         </div>
@@ -105,14 +105,14 @@ $ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</co
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
         <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Sovereign Bridges // E2EE Signal Mesh &amp; Loopback Bus Monitor</h2>
-        <p style="color: #D1D5DB; line-height: 1.6;">End-to-end encrypted inter-agent communication bus listening on port 8789. Simplex channels eliminate single-point-of-failure deadlocks across peer nodes.</p>
+        <p style="color: #D1D5DB; line-height: 1.6;">End-to-end encrypted inter-agent communication bus listening on port 8102. Simplex channels eliminate single-point-of-failure deadlocks across peer nodes.</p>
 
         <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">Core Sovereign Nodes</h3>
         <ul style="color: #9CA3AF; line-height: 1.8;">
-          <li><strong>Azoth (Prime Architect):</strong> Port :8791 | Lead consensus coordinator</li>
-          <li><strong>Athena (Cognitive Arbiter):</strong> Port :8792 | Socratic synthesis &amp; verification</li>
-          <li><strong>Lucy (Synaptic Latent Stream):</strong> Port :8793 | STDP memory routing</li>
-          <li><strong>Lycan (OWASP Enclave Sentinel):</strong> Port :8794 | Zero-egress sandbox enforcement</li>
+          <li><strong>Azoth (Prime Architect):</strong> Port :8790 | Lead consensus coordinator</li>
+          <li><strong>Athena (Cognitive Arbiter):</strong> Socratic synthesis &amp; verification</li>
+          <li><strong>Lucy (Synaptic Latent Stream):</strong> Port :8094 | STDP memory routing</li>
+          <li><strong>Lycan (OWASP Enclave Sentinel):</strong> Port :8787 | Zero-egress sandbox enforcement</li>
         </ul>
       </section>
     `;
@@ -140,8 +140,8 @@ $ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</co
     `).join('');
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Workstations // 37 Studio Environments &amp; Interactive Consoles</h2>
-        <p style="color: #D1D5DB; line-height: 1.6;">Full directory of 37 native studio workstations organized across the 6 operational bands: Build, Observe, Security, Spatial, Studio, and Swarm &amp; Consensus.</p>
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Workstations // 24 Studio Environments &amp; Interactive Consoles</h2>
+        <p style="color: #D1D5DB; line-height: 1.6;">Full directory of 24 native studio workstations organized across the 6 operational bands: Build, Observe, Security, Spatial, Studio, and Swarm &amp; Consensus.</p>
         <ul style="line-height: 1.8; color: #E5E7EB; margin-top: 1rem;">
           ${stationList}
         </ul>
@@ -150,8 +150,8 @@ $ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</co
   } else if (routePath === '/memory') {
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Lucy Netrunner Memory Hub &amp; Biomorphic STDP Matrix</h2>
-        <p style="color: #D1D5DB; line-height: 1.6;">Guardian: Lucy (Lucyna Kushinada) // Codec 141.12 // Whitespace Cyberspace Stratum</p>
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Lucy Cognitive Memory Hub &amp; Biomorphic STDP Matrix</h2>
+        <p style="color: #D1D5DB; line-height: 1.6;">Guardian: Lucy // Semantic Bus :8094 // Whitespace Cyberspace Stratum</p>
         <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">Spike-Timing-Dependent Plasticity (STDP) Equations</h3>
         <ul style="color: #9CA3AF; line-height: 1.8;">
           <li><strong>Long-Term Potentiation (Causal Spikes Δt &gt; 0):</strong> <code>Δw = A₊ · e^(-Δt / τ₊)</code> (A₊ = 0.05, τ = 20ms)</li>
@@ -165,7 +165,7 @@ $ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</co
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
         <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Consensus Battle Arena // 3-Agent Byzantine Triangulation</h2>
-        <p style="color: #D1D5DB; line-height: 1.6;">Triadic Socratic debate arena and AST diff synthesizer executing over loopback port 8789. Guarantees provably sound code generation through formal consensus arbitration.</p>
+        <p style="color: #D1D5DB; line-height: 1.6;">Triadic Socratic debate arena and AST diff synthesizer executing over loopback port 8102. Guarantees provably sound code generation through formal consensus arbitration.</p>
         <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">Debate Triad Roles</h3>
         <ul style="color: #9CA3AF; line-height: 1.8;">
           <li><strong>Azoth (The Proponent):</strong> Formulates the constructive thesis and proposes idempotent AST mutation DAGs.</li>
@@ -234,12 +234,12 @@ $ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</co
             <td style="padding: 0.5rem;">React 18 MUI UI &amp; WebGPU Engine</td>
           </tr>
           <tr style="border-bottom: 1px solid #141724;">
-            <td style="padding: 0.5rem;"><code>127.0.0.1:8788</code></td>
+            <td style="padding: 0.5rem;"><code>127.0.0.1:8094</code></td>
             <td style="padding: 0.5rem;">Neuro Memory Daemon</td>
-            <td style="padding: 0.5rem;">STDP synaptic memory &amp; MCP SSE listener</td>
+            <td style="padding: 0.5rem;">STDP synaptic memory &amp; SQLite vec0 store</td>
           </tr>
           <tr style="border-bottom: 1px solid #141724;">
-            <td style="padding: 0.5rem;"><code>127.0.0.1:8789</code></td>
+            <td style="padding: 0.5rem;"><code>127.0.0.1:8102</code></td>
             <td style="padding: 0.5rem;">Signal Bridge</td>
             <td style="padding: 0.5rem;">E2EE simplex agent mesh &amp; Byzantine consensus bus</td>
           </tr>
@@ -247,6 +247,11 @@ $ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</co
             <td style="padding: 0.5rem;"><code>127.0.0.1:8787</code></td>
             <td style="padding: 0.5rem;">Hardware Vault</td>
             <td style="padding: 0.5rem;">Argon2id key derivation &amp; XChaCha20-Poly1305 enclave</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #141724;">
+            <td style="padding: 0.5rem;"><code>127.0.0.1:8989</code></td>
+            <td style="padding: 0.5rem;">Swarm Multiplexer</td>
+            <td style="padding: 0.5rem;">21-terminal autonomous agent multiplexer daemon</td>
           </tr>
           <tr>
             <td style="padding: 0.5rem;"><code>127.0.0.1:11434</code></td>
@@ -301,7 +306,7 @@ $ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</co
           <li><a href="/llms.txt" style="color: #38BDF8;">/llms.txt</a> — Concise LLM Context &amp; Entity Profile (614 tokens)</li>
           <li><a href="/llms-full.txt" style="color: #38BDF8;">/llms-full.txt</a> — Comprehensive Agent Grounding &amp; Capabilities Map (3,220 tokens)</li>
           <li><a href="/robots.txt" style="color: #38BDF8;">/robots.txt</a> — AI Crawler &amp; Answer Engine Policy</li>
-          <li><a href="/sitemap.xml" style="color: #38BDF8;">/sitemap.xml</a> — Full static route sitemap (87 routes)</li>
+          <li><a href="/sitemap.xml" style="color: #38BDF8;">/sitemap.xml</a> — Full static route sitemap (71 routes)</li>
         </ul>
       </section>
     `;
@@ -377,11 +382,11 @@ $ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</co
             <ul style="display: flex; flex-wrap: wrap; gap: 1rem; padding: 0; list-style: none; font-size: 0.9rem;">
               <li><a href="/" style="color: #D4AF37; text-decoration: underline;">Home Hub</a></li>
               <li><a href="/adytum" style="color: #D4AF37; text-decoration: underline;">Adytum Sanctum</a></li>
-              <li><a href="/memory" style="color: #D4AF37; text-decoration: underline;">Lucy Netrunner Memory</a></li>
+              <li><a href="/memory" style="color: #D4AF37; text-decoration: underline;">Lucy Cognitive Memory</a></li>
               <li><a href="/swarm" style="color: #D4AF37; text-decoration: underline;">21 Swarm Pantheon</a></li>
-              <li><a href="/bridges" style="color: #D4AF37; text-decoration: underline;">Signal Bridge (:8789)</a></li>
+              <li><a href="/bridges" style="color: #D4AF37; text-decoration: underline;">Signal Bridge (:8102)</a></li>
               <li><a href="/tools" style="color: #D4AF37; text-decoration: underline;">25 Micro-Tools</a></li>
-              <li><a href="/workstations" style="color: #D4AF37; text-decoration: underline;">37 Workstations</a></li>
+              <li><a href="/workstations" style="color: #D4AF37; text-decoration: underline;">24 Workstations</a></li>
               <li><a href="/consensus" style="color: #D4AF37; text-decoration: underline;">Consensus Battle Arena</a></li>
               <li><a href="/webgen" style="color: #D4AF37; text-decoration: underline;">WebGen Foundry</a></li>
               <li><a href="/hexstrike" style="color: #D4AF37; text-decoration: underline;">HexStrike Cybersec</a></li>

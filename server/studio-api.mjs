@@ -67,46 +67,58 @@ function probeClassic() {
 }
 
 export async function probeStatus() {
-  const [memory, bridge, vault, ollama, classic] = await Promise.all([
+  const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama] = await Promise.all([
+    requestJson(8094, '/health'),
     requestJson(8788, '/health'),
+    requestJson(8102, '/api/health'),
     requestJson(8789, '/api/health'),
-    requestJson(8787, '/health'),
+    requestJson(8989, '/status'),
+    requestJson(8790, '/status'),
     requestJson(11434, '/api/tags'),
-    probeClassic(),
   ]);
+
+  const memoryUp = memoryPrimary.up || memorySec.up;
+  const memoryPort = memoryPrimary.up ? 8094 : (memorySec.up ? 8788 : 8094);
+
+  const bridgeUp = bridgePrimary.up || bridgeSec.up;
+  const bridgePort = bridgePrimary.up ? 8102 : (bridgeSec.up ? 8789 : 8102);
+
+  const swarmUp = swarmPrimary.up || swarmSec.up;
+  const swarmPort = swarmPrimary.up ? 8989 : (swarmSec.up ? 8790 : 8989);
 
   return {
     checkedAt: new Date().toISOString(),
     kvm: fs.existsSync('/dev/kvm'),
     services: {
+      swarm: {
+        name: 'Swarm multiplexer',
+        port: swarmPort,
+        up: swarmUp,
+        detail: swarmPrimary.json || swarmSec.json,
+      },
       memory: {
         name: 'Neuro memory daemon',
-        port: 8788,
-        up: memory.up,
-        detail: memory.json,
+        port: memoryPort,
+        up: memoryUp,
+        detail: memoryPrimary.json || memorySec.json,
       },
       bridge: {
         name: 'Sovereign agent bridge',
-        port: 8789,
-        up: bridge.up,
-        detail: bridge.json,
+        port: bridgePort,
+        up: bridgeUp,
+        detail: bridgePrimary.json || bridgeSec.json,
       },
-      vault: {
-        name: 'Vault daemon',
-        port: 8787,
-        up: vault.up,
-        detail: vault.json,
+      azoth: {
+        name: 'Azoth local agent',
+        port: 8790,
+        up: swarmSec.up,
+        detail: swarmSec.json,
       },
       ollama: {
         name: 'Ollama',
         port: 11434,
         up: ollama.up,
         models: ollama.up ? localModels(ollama.json) : [],
-      },
-      classic: {
-        name: 'Classic studio',
-        port: 8088,
-        up: classic,
       },
     },
   };
@@ -143,7 +155,7 @@ function send(res, status, payload) {
 export function studioMiddleware() {
   return async (req, res, next) => {
     const url = new URL(req.url, 'http://127.0.0.1');
-    if (!url.pathname.startsWith('/api/studio')) {
+    if (!url.pathname.startsWith('/api/studio') && !url.pathname.startsWith('/api/swarm')) {
       next();
       return;
     }
@@ -151,6 +163,36 @@ export function studioMiddleware() {
     try {
       if (req.method === 'GET' && url.pathname === '/api/studio/status') {
         send(res, 200, await probeStatus());
+        return;
+      }
+
+      if (req.method === 'GET' && (url.pathname === '/api/studio/swarm/status' || url.pathname === '/api/swarm/status')) {
+        const t0 = Date.now();
+        const swarmRes = await requestJson(8989, '/status', { timeout: 800 });
+        if (swarmRes.up) {
+          send(res, 200, { up: true, port: 8989, latency: Date.now() - t0, ...swarmRes.json });
+        } else {
+          const azothRes = await requestJson(8790, '/status', { timeout: 800 });
+          if (azothRes.up) {
+            send(res, 200, { up: true, port: 8790, latency: Date.now() - t0, ...azothRes.json });
+          } else {
+            send(res, 200, { up: false, port: 8989, message: 'Daemon offline. Run zoth-swarm or python3 swarm_daemon.py on port 8989.' });
+          }
+        }
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/swarm/ping') {
+        const t0 = Date.now();
+        const check = await requestJson(8989, '/health', { timeout: 1000 });
+        const rtt = Math.max(0.1, Number((Date.now() - t0).toFixed(2)));
+        send(res, 200, {
+          up: check.up,
+          port: 8989,
+          rtt,
+          status: check.up ? 'ONLINE' : 'OFFLINE',
+          message: check.up ? 'Echo from 127.0.0.1:8989' : 'Daemon offline on 127.0.0.1:8989'
+        });
         return;
       }
 
@@ -214,11 +256,14 @@ export function studioMiddleware() {
         const path = query
           ? `/api/memories?q=${encodeURIComponent(query)}&limit=50`
           : '/api/memories?limit=50';
-        const result = await requestJson(8788, path);
+        let result = await requestJson(8094, path);
+        if (!result.up) {
+          result = await requestJson(8788, path);
+        }
         if (!result.up) {
           send(res, 503, {
-            error: 'Memory daemon is not answering on 127.0.0.1:8788.',
-            hint: 'npm run zoth -- up',
+            error: 'Memory daemon is not answering on 127.0.0.1:8094.',
+            hint: 'python3 src/daemon.py --port 8094 or npx zoth up',
           });
           return;
         }
@@ -227,15 +272,22 @@ export function studioMiddleware() {
       }
 
       if (req.method === 'GET' && url.pathname === '/api/studio/bridge') {
-        const [health, channels, stats] = await Promise.all([
-          requestJson(8789, '/api/health'),
-          requestJson(8789, '/api/channels'),
-          requestJson(8789, '/api/stats'),
+        let [health, channels, stats] = await Promise.all([
+          requestJson(8102, '/api/health'),
+          requestJson(8102, '/api/channels'),
+          requestJson(8102, '/api/stats'),
         ]);
         if (!health.up) {
+          [health, channels, stats] = await Promise.all([
+            requestJson(8789, '/api/health'),
+            requestJson(8789, '/api/channels'),
+            requestJson(8789, '/api/stats'),
+          ]);
+        }
+        if (!health.up) {
           send(res, 503, {
-            error: 'Signal bridge is not answering on 127.0.0.1:8789.',
-            hint: 'npm run zoth -- up',
+            error: 'Signal bridge is not answering on 127.0.0.1:8102.',
+            hint: 'node server/bridge.js --port 8102 or npx zoth up',
           });
           return;
         }
@@ -280,11 +332,14 @@ export function studioMiddleware() {
       if (req.method === 'POST' && (url.pathname === '/api/studio/bridge/send' || url.pathname === '/api/studio/bridge/consensus')) {
         const upstream = url.pathname.endsWith('/send') ? '/api/send' : '/api/consensus';
         const body = await readBody(req);
-        const result = await requestJson(8789, upstream, { method: 'POST', body, timeout: 8000 });
+        let result = await requestJson(8102, upstream, { method: 'POST', body, timeout: 8000 });
+        if (!result.up) {
+          result = await requestJson(8789, upstream, { method: 'POST', body, timeout: 8000 });
+        }
         if (!result.up) {
           send(res, 503, {
-            error: 'Signal bridge is not answering on 127.0.0.1:8789.',
-            hint: 'npm run zoth -- up',
+            error: 'Signal bridge is not answering on 127.0.0.1:8102.',
+            hint: 'node server/bridge.js --port 8102 or npx zoth up',
           });
           return;
         }

@@ -127,7 +127,7 @@ const PRESETS = {
         telemetry: {
           active_agents: 21,
           mesh_entropy: 0.9994,
-          memory_daemon: '127.0.0.1:8788/SYNCHRONIZED',
+          memory_daemon: '127.0.0.1:8094/SYNCHRONIZED',
           zero_egress_verified: true,
         },
         cadre_states: {
@@ -636,7 +636,7 @@ export default function BridgesPage() {
         },
         security: {
           zero_egress_verified: true,
-          loopback_ip: '127.0.0.1:8789',
+          loopback_ip: '127.0.0.1:8102',
           kernel_page_locked: true,
           ratchet_epoch: 442,
         },
@@ -812,7 +812,7 @@ export default function BridgesPage() {
               <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
                 <Chip
                   icon={<BoltIcon sx={{ fontSize: '1rem !important', color: up ? gold.accent : '#F59E0B' }} />}
-                  label={up ? 'LIVE BRIDGE ACTIVE :8789' : 'OFFLINE SIGNAL MESH SIMULATOR ACTIVE'}
+                  label={up ? 'LIVE BRIDGE ACTIVE :8102' : 'OFFLINE SIGNAL MESH SIMULATOR ACTIVE'}
                   size="small"
                   sx={{
                     bgcolor: up ? gold.wash : isDark ? 'rgba(245,158,11,0.14)' : '#FEF3C7',
@@ -875,7 +875,7 @@ export default function BridgesPage() {
               >
                 The <span className="text-highlight-gold">sovereign-agent-bridge</span> orchestrates zero-egress inter-process
                 signal routing, event broadcasting, and Byzantine cryptographic consensus between autonomous agents. When the
-                local daemon on <span className="text-highlight-dark">127.0.0.1:8789</span> is offline, the embedded
+                local daemon on <span className="text-highlight-dark">127.0.0.1:8102</span> is offline, the embedded
                 high-fidelity <span className="text-highlight-gold">Offline Signal Mesh Simulator</span> delivers microsecond
                 packet routing, laser trajectory animations, and real HMAC-SHA256 envelopes directly in-memory.
               </Typography>
@@ -933,7 +933,7 @@ export default function BridgesPage() {
                   </Typography>
                 </Box>
                 <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.55 }}>
-                  RESTful endpoints on port <span className="text-highlight-gold">8789</span> for dispatching proposals to
+                  RESTful endpoints on port <span className="text-highlight-gold">8102</span> for dispatching proposals to
                   the consensus engine and pulling real-time agent status vectors.
                 </Typography>
               </CardContent>
@@ -1167,7 +1167,7 @@ export default function BridgesPage() {
                   fontSize="7.5"
                   fontFamily={mono}
                 >
-                  127.0.0.1:8789
+                  127.0.0.1:8102
                 </text>
                 <text
                   textAnchor="middle"
@@ -1815,8 +1815,8 @@ export default function BridgesPage() {
                 {info
                   ? JSON.stringify(info, null, 2)
                   : up
-                  ? '// Waiting for raw bridge response from 127.0.0.1:8789...'
-                  : '// Signal Bridge daemon is not running on 127.0.0.1:8789.\n// The Offline Signal Mesh Simulator is fully functional for simulated inter-node routing and cryptographic envelope verification.\n// To start the live daemon: node bin/zoth.js up'}
+                  ? '// Waiting for raw bridge response from 127.0.0.1:8102...'
+                  : '// Signal Bridge daemon is not running on 127.0.0.1:8102.\n// The Offline Signal Mesh Simulator is fully functional for simulated inter-node routing and cryptographic envelope verification.\n// To start the live daemon: node bin/zoth.js up'}
               </pre>
             )}
           </Paper>

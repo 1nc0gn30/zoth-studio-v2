@@ -168,9 +168,9 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
       } else if (command.includes('git')) {
         outputText = `On branch main\nYour branch is up to date with 'origin/main'.\nnothing to commit, working tree clean`;
       } else if (command.includes('stdp') || command.includes('memory')) {
-        outputText = `✔ STDP Synaptic Matrix synced with neuro-memory-daemon at 127.0.0.1:8788. LTP weight reinforced (+0.05).`;
+        outputText = `✔ STDP Synaptic Matrix synced with neuro-memory-daemon at 127.0.0.1:8094. LTP weight reinforced (+0.05).`;
       } else if (command.includes('build')) {
-        outputText = `✔ Built 1234 modules in 4.8s. All 87 routes prerendered with Schema.org graph.`;
+        outputText = `✔ Built 1234 modules in 4.8s. All 71 routes prerendered with Schema.org graph.`;
       } else {
         outputText = `[${agentId} EXECUTION OK] Command completed with code 0 in ${agent.pwd}.\nOutputs buffered locally in zero-knowledge enclave.`;
       }

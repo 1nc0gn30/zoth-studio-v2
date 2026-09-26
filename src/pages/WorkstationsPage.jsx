@@ -38,7 +38,6 @@ import { workstations } from '../data/workstations';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import SovereignFunnel from '../components/SovereignFunnel';
 
-const CLASSIC = 'http://127.0.0.1:8088';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const ORDERED_BANDS = [
@@ -130,7 +129,7 @@ function getBandConfig(bandName, isDark) {
   };
 }
 
-function WorkstationCard({ item, classicUp, isDark, gold }) {
+function WorkstationCard({ item, isDark, gold }) {
   const [copied, setCopied] = useState(false);
   const bandCfg = getBandConfig(item.band, isDark) || {
     color: gold.accent,
@@ -453,26 +452,6 @@ function WorkstationCard({ item, classicUp, isDark, gold }) {
             >
               Launch Cockpit
             </Button>
-
-            {classicUp && (
-              <Button
-                size="small"
-                variant="text"
-                endIcon={<LaunchIcon sx={{ fontSize: '0.8rem' }} />}
-                href={`${CLASSIC}${item.path}`}
-                target="_blank"
-                rel="noreferrer"
-                sx={{
-                  color: isDark ? '#9CA3AF' : '#6B7280',
-                  fontSize: '0.73rem',
-                  fontFamily: mono,
-                  p: 0.5,
-                  '&:hover': { color: gold.accent },
-                }}
-              >
-                Classic (:8088)
-              </Button>
-            )}
           </Box>
         )}
       </CardActions>
@@ -489,7 +468,7 @@ export default function WorkstationsPage() {
   const [typeFilter, setTypeFilter] = useState('all'); // 'all' | 'cockpit' | 'integrated_tool' | 'enclave_daemon'
   const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'topology'
   const { status } = useStudioStatus();
-  const classicUp = Boolean(status?.services?.classic?.up);
+  const swarmUp = Boolean(status?.services?.swarm?.up);
 
   const gold = {
     accent: isDark ? '#D4AF37' : '#B8860B',
@@ -690,7 +669,7 @@ export default function WorkstationsPage() {
               </Box>
             </Grid>
 
-            {/* Stat 4: Legacy server status badge */}
+            {/* Stat 4: Swarm multiplexer status badge */}
             <Grid xs={12} sm={6} md={3}>
               <Box
                 sx={{
@@ -698,8 +677,8 @@ export default function WorkstationsPage() {
                   px: 1.5,
                   borderRadius: 2,
                   border: '1px solid',
-                  borderColor: classicUp ? (isDark ? 'rgba(52,211,153,0.35)' : '#A7F3D0') : (isDark ? '#26262F' : '#EAECF0'),
-                  bgcolor: classicUp
+                  borderColor: swarmUp ? (isDark ? 'rgba(52,211,153,0.35)' : '#A7F3D0') : (isDark ? '#26262F' : '#EAECF0'),
+                  bgcolor: swarmUp
                     ? (isDark ? 'rgba(52,211,153,0.08)' : '#ECFDF3')
                     : (isDark ? 'rgba(255,255,255,0.02)' : '#F9FAFB'),
                   display: 'flex',
@@ -714,31 +693,31 @@ export default function WorkstationsPage() {
                       width: 10,
                       height: 10,
                       borderRadius: '50%',
-                      bgcolor: classicUp ? (isDark ? '#34D399' : '#059669') : '#6B7280',
-                      boxShadow: classicUp ? (isDark ? '0 0 8px #34D399' : '0 0 6px rgba(5,150,105,0.4)') : 'none',
+                      bgcolor: swarmUp ? (isDark ? '#34D399' : '#059669') : '#6B7280',
+                      boxShadow: swarmUp ? (isDark ? '0 0 8px #34D399' : '0 0 6px rgba(5,150,105,0.4)') : 'none',
                       flexShrink: 0,
                     }}
                   />
                   <Box>
-                    <Typography variant="caption" sx={{ fontWeight: 800, display: 'block', color: classicUp ? (isDark ? '#34D399' : '#047857') : 'text.primary', lineHeight: 1.2 }}>
-                      {classicUp ? 'Legacy Server Online · :8088' : 'Legacy Server Offline'}
+                    <Typography variant="caption" sx={{ fontWeight: 800, display: 'block', color: swarmUp ? (isDark ? '#34D399' : '#047857') : 'text.primary', lineHeight: 1.2 }}>
+                      {swarmUp ? 'Swarm Multiplexer :8989' : 'Swarm Offline :8989'}
                     </Typography>
                     <Typography variant="caption" sx={{ fontSize: '0.68rem', color: 'text.secondary', fontFamily: mono }}>
-                      {classicUp ? 'Dual runtime active' : 'Not Required · v2 Native'}
+                      {swarmUp ? 'Live SSE Cadres' : 'zoth-swarm daemon'}
                     </Typography>
                   </Box>
                 </Box>
                 <Chip
                   size="small"
-                  label={classicUp ? ':8088 UP' : 'OFFLINE'}
+                  label={swarmUp ? ':8989 UP' : 'OFFLINE'}
                   sx={{
                     height: 20,
                     fontSize: '0.65rem',
                     fontWeight: 800,
                     fontFamily: mono,
-                    bgcolor: classicUp ? (isDark ? 'rgba(52,211,153,0.2)' : '#D1FAE5') : (isDark ? 'rgba(255,255,255,0.06)' : '#E5E7EB'),
-                    color: classicUp ? (isDark ? '#34D399' : '#047857') : 'text.secondary',
-                    border: `1px solid ${classicUp ? (isDark ? 'rgba(52,211,153,0.4)' : '#6EE7B7') : (isDark ? '#374151' : '#D1D5DB')}`,
+                    bgcolor: swarmUp ? (isDark ? 'rgba(52,211,153,0.2)' : '#D1FAE5') : (isDark ? 'rgba(255,255,255,0.06)' : '#E5E7EB'),
+                    color: swarmUp ? (isDark ? '#34D399' : '#047857') : 'text.secondary',
+                    border: `1px solid ${swarmUp ? (isDark ? 'rgba(52,211,153,0.4)' : '#6EE7B7') : (isDark ? '#374151' : '#D1D5DB')}`,
                   }}
                 />
               </Box>
@@ -799,7 +778,7 @@ export default function WorkstationsPage() {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.75 }}>
                   <HubIcon sx={{ color: isDark ? '#A78BFA' : '#7C3AED', fontSize: '1.1rem' }} />
                   <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? '#DDD6FE' : '#101828' }}>
-                    3. Hardware Enclaves (Loopback :8788)
+                    3. Hardware Enclaves (Loopback :8094 / :8989)
                   </Typography>
                 </Box>
                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', lineHeight: 1.5 }}>
@@ -877,7 +856,7 @@ export default function WorkstationsPage() {
           {/* Instant Search Input matching workstation name, id, and band */}
           <TextField
             size="small"
-            placeholder="Search 26 sovereign consoles by name, ID, band, or capability..."
+            placeholder={`Search ${workstations.length} sovereign consoles by name, ID, band, or capability...`}
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             InputProps={{
@@ -1073,7 +1052,7 @@ export default function WorkstationsPage() {
                 {filtered.map((item) => (
                   <Grid xs={12} sm={6} md={4} key={item.id}>
                     <StaggerItem>
-                      <WorkstationCard item={item} classicUp={classicUp} isDark={isDark} gold={gold} />
+                      <WorkstationCard item={item} isDark={isDark} gold={gold} />
                     </StaggerItem>
                   </Grid>
                 ))}
@@ -1244,7 +1223,7 @@ export default function WorkstationsPage() {
                     fontSize="8"
                     fontFamily={mono}
                   >
-                    37 CONSOLES
+                    {workstations.length} CONSOLES
                   </text>
                   <title>Zoth Loopback Core (127.0.0.1) · Click to view All Cadres</title>
                 </g>
@@ -1522,7 +1501,7 @@ export default function WorkstationsPage() {
                     <Grid container spacing={2.5}>
                       {bItems.map((item) => (
                         <Grid xs={12} sm={6} md={4} key={item.id}>
-                          <WorkstationCard item={item} classicUp={classicUp} isDark={isDark} gold={gold} />
+                          <WorkstationCard item={item} isDark={isDark} gold={gold} />
                         </Grid>
                       ))}
                     </Grid>

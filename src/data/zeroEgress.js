@@ -19,12 +19,13 @@ export const zeroEgressInvariants = [
  * and the Zoth Studio workstation pages. Nothing here is a public listener.
  */
 export const enclaveBinds = [
-  { service: 'Public hub (static)', bind: '127.0.0.1:8088', note: 'Showcase only. No operator secrets.' },
+  { service: 'Public hub (static)', bind: '127.0.0.1:3000', note: 'Showcase only. No operator secrets.' },
   { service: 'Operator deck', bind: '127.0.0.1:8484', note: 'Agent execution, fusion, and the IDE console.' },
   { service: 'Hardware vault', bind: '127.0.0.1:8787', note: 'Argon2id key derivation + XChaCha20-Poly1305 at rest.' },
-  { service: 'Memory daemon', bind: '127.0.0.1:8788', note: 'HNSW / STDP recall. JSON over loopback.' },
-  { service: 'Signal bridge', bind: '127.0.0.1:8789', note: 'E2EE Simplex peer mesh. AES-256-GCM.' },
-  { service: 'Swarm bus', bind: '127.0.0.1:8989', note: 'Pantheon telemetry. Never leaves the host.' },
+  { service: 'Neuro Memory daemon', bind: '127.0.0.1:8094', note: 'HNSW / STDP recall. JSON over loopback.' },
+  { service: 'Signal bridge', bind: '127.0.0.1:8102', note: 'E2EE Simplex peer mesh. AES-256-GCM.' },
+  { service: 'Swarm multiplexer', bind: '127.0.0.1:8989', note: 'Pantheon telemetry. Never leaves the host.' },
+  { service: 'Azoth local agent', bind: '127.0.0.1:8790', note: 'Autonomous orchestrator and tool execution.' },
   { service: 'Local models', bind: '127.0.0.1:11434', note: 'Ollama / llama.cpp. No cloud fallback.' },
 ];
 
@@ -45,7 +46,6 @@ export const legacyWorkstations = [
   { file: 'connectors.html', job: 'Tool and model connector directory', to: '/tools' },
   { file: 'subsweep.html', job: 'Subdomain recon, now subsweep-lead-scanner', to: '/tools' },
   { file: 'omnipost.html', job: 'Cross-post scheduler, now omnipost-social-engine', to: '/tools' },
-  { file: '3d-editor.html', job: 'Nexus 3D scene studio', to: '/tools' },
   { file: 'notes-reviewer.html', job: 'Annotation and codex review', to: '/docs' },
   { file: 'chronicle.html', job: 'Session chronicle of swarm verdicts and audits', to: '/docs' },
   { file: 'ax-powerhouse.html', job: 'Agent-experience and answer-engine surfaces', to: '/docs' },

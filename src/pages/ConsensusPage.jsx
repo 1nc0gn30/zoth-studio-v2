@@ -115,7 +115,7 @@ Implement a deterministic 2/3 Byzantine Fault Tolerant AST consensus commit loop
     description: 'Zero-copy circular ring-buffer eviction for sovereign neuro-memory plasticity daemon.',
     defaultConfidence: 94.8,
     proposal: `PROPOSAL: SOVEREIGN-RING-BUFFER-EVICTION
-Architect a lock-free circular ring-buffer with SIMD-accelerated exponential vector decay for the sovereign neuro-memory daemon (port 8788). When continuous high-frequency embedding ingest threatens L1/L2 cache saturation, apply localized exponential decay weights to stale hippocampal nodes and enforce strict zero-copy page pinning to guarantee 0.00% process heap overflow.`,
+Architect a lock-free circular ring-buffer with SIMD-accelerated exponential vector decay for the sovereign neuro-memory daemon (port 8094). When continuous high-frequency embedding ingest threatens L1/L2 cache saturation, apply localized exponential decay weights to stale hippocampal nodes and enforce strict zero-copy page pinning to guarantee 0.00% process heap overflow.`,
     rounds: [
       {
         round: 1,
@@ -1453,7 +1453,7 @@ export default function ConsensusPage() {
                 >
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
                     <Typography variant="body2" sx={{ fontWeight: 650 }}>
-                      Bridge daemon is offline (<span className="text-highlight-dark">127.0.0.1:8789</span>). Zero-egress fallback is active: dialectic debates and cryptographic verdicts run 100% locally in your browser.
+                      Bridge daemon is offline (<span className="text-highlight-dark">127.0.0.1:8102</span>). Zero-egress fallback is active: dialectic debates and cryptographic verdicts run 100% locally in your browser.
                     </Typography>
                     <Chip
                       label="ZERO EXTERNAL EGRESS"

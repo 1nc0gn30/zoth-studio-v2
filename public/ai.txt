@@ -46,8 +46,8 @@ blueprints-foundry: https://zoth.nullai.tech/blueprints/
 # Sovereign Private Localhost Daemons (Loopback Only — No Remote Access):
 local-operator-deck: http://127.0.0.1:8484 (Private localhost operator deck & terminal PTY)
 local-keymaster-vault: http://127.0.0.1:8787 (Argon2id + XChaCha20-Poly1305 hardware vault)
-local-stdp-memory: http://127.0.0.1:8788 (Biomorphic STDP synaptic associative memory)
-local-simplex-bridge: http://127.0.0.1:5225 (Zero-metadata E2EE mobile messaging bridge)
+local-stdp-memory: http://127.0.0.1:8094 (Biomorphic STDP synaptic associative memory)
+local-agent-bridge: http://127.0.0.1:8102 (WebSocket IPC message bus)
 local-swarm-bus: ws://127.0.0.1:8989 (21-agent peer bus binary multiplexer)
 local-ollama-inference: http://127.0.0.1:11434 (100% offline local LLM inference)
 

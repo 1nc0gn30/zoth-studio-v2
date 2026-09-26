@@ -22,6 +22,8 @@ import BoltIcon from '@mui/icons-material/Bolt';
 import RouterIcon from '@mui/icons-material/Router';
 import NetworkCheckIcon from '@mui/icons-material/NetworkCheck';
 import HubIcon from '@mui/icons-material/Hub';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CheckIcon from '@mui/icons-material/Check';
 import SwarmCanvasVisualizer from '../components/SwarmCanvasVisualizer';
 import SwarmTaskDispatcher from '../components/SwarmTaskDispatcher';
 import SwarmDaemonMultiplexer from '../components/SwarmDaemonMultiplexer';
@@ -54,18 +56,18 @@ const getCadreColor = (cadreName, isDark) => {
 };
 
 const CADRE_METRICS_INIT = {
-  Architects: { latency: 0.24, min: 0.18, max: 0.35, sent: 24, received: 24, socket: 'ipc:///run/zoth/architects.sock', status: 'ONLINE' },
-  Code: { latency: 0.31, min: 0.22, max: 0.44, sent: 24, received: 24, socket: 'ipc:///run/zoth/code-ast.sock', status: 'ONLINE' },
-  Security: { latency: 0.14, min: 0.11, max: 0.26, sent: 24, received: 24, socket: 'ipc:///run/zoth/airgap-enclave.sock', status: 'ONLINE' },
-  Creative: { latency: 0.48, min: 0.38, max: 0.65, sent: 24, received: 24, socket: 'ipc:///run/zoth/tensor-mesh.sock', status: 'ONLINE' },
-  Swarm: { latency: 0.19, min: 0.14, max: 0.28, sent: 24, received: 24, socket: 'ipc:///run/zoth/peer-bus.sock', status: 'ONLINE' },
+  Architects: { latency: 0.0, min: 0.0, max: 0.0, sent: 0, received: 0, socket: 'http://127.0.0.1:8989/cadres/architects', status: 'STANDBY' },
+  Code: { latency: 0.0, min: 0.0, max: 0.0, sent: 0, received: 0, socket: 'http://127.0.0.1:8989/cadres/code', status: 'STANDBY' },
+  Security: { latency: 0.0, min: 0.0, max: 0.0, sent: 0, received: 0, socket: 'http://127.0.0.1:8989/cadres/security', status: 'STANDBY' },
+  Creative: { latency: 0.0, min: 0.0, max: 0.0, sent: 0, received: 0, socket: 'http://127.0.0.1:8989/cadres/creative', status: 'STANDBY' },
+  Swarm: { latency: 0.0, min: 0.0, max: 0.0, sent: 0, received: 0, socket: 'http://127.0.0.1:8989/cadres/swarm', status: 'STANDBY' },
 };
 
 // Zero-Cloud Verification Badges list
 const ZERO_CLOUD_BADGES = [
-  { id: 'loopback', label: '100% LOCAL LOOPBACK', sub: '127.0.0.1 / IPC', icon: RouterIcon },
+  { id: 'loopback', label: '100% LOCAL LOOPBACK', sub: '127.0.0.1:8989', icon: RouterIcon },
   { id: 'zero-cloud', label: 'ZERO CLOUD EGRESS VERIFIED', sub: 'No Outbound Packets', icon: ShieldIcon },
-  { id: 'airgap', label: 'AIR-GAPPED SIMPLEX SOCKET', sub: 'Kernel Page-Locked', icon: LockIcon },
+  { id: 'airgap', label: 'AIR-GAPPED SIMPLEX PROTOCOL', sub: 'Kernel Page-Locked', icon: LockIcon },
   { id: 'telemetry', label: 'NO EXTERNAL TELEMETRY', sub: 'Zero Phone-Home', icon: SecurityIcon },
   { id: 'sha256', label: 'SHA-256 HEARTBEAT PROOF', sub: 'Tamper-Proof Tick', icon: CheckCircleIcon },
 ];
@@ -85,6 +87,33 @@ export default function SwarmPage() {
   const [swarmTab, setSwarmTab] = useState(0);
   const visible = pantheonAgents.filter((agent) => cadre === 'All' || agent.cadre === cadre);
 
+  // Live daemon status
+  const [daemonState, setDaemonState] = useState({ checked: false, up: false, port: 8989, agents: 21 });
+  const [copiedDaemonCmd, setCopiedDaemonCmd] = useState(false);
+
+  // Check daemon status on mount
+  useEffect(() => {
+    let mounted = true;
+    const checkDaemon = async () => {
+      try {
+        const res = await fetch('/api/studio/swarm/status');
+        if (res.ok) {
+          const data = await res.json();
+          if (mounted) {
+            setDaemonState({ checked: true, up: Boolean(data.up), port: data.port || 8989, agents: data.agents?.length || 21 });
+          }
+        } else {
+          if (mounted) setDaemonState({ checked: true, up: false, port: 8989, agents: 21 });
+        }
+      } catch {
+        if (mounted) setDaemonState({ checked: true, up: false, port: 8989, agents: 21 });
+      }
+    };
+    checkDaemon();
+    const timer = setInterval(checkDaemon, 8000);
+    return () => { mounted = false; clearInterval(timer); };
+  }, []);
+
   // Heartbeat state
   const [beatCount, setBeatCount] = useState(1842);
   const [heartbeatActive, setHeartbeatActive] = useState(true);
@@ -97,9 +126,9 @@ export default function SwarmPage() {
   const [pingingCadre, setPingingCadre] = useState(null); // name or 'ALL'
   const [autoPing, setAutoPing] = useState(false);
   const [pingLogs, setPingLogs] = useState([
-    { id: 1, time: '03:28:10.142', cadre: 'Architects', rtt: '0.24ms', socket: 'ipc:///run/zoth/architects.sock', status: 'ZERO_EGRESS_OK' },
-    { id: 2, time: '03:28:11.205', cadre: 'Security', rtt: '0.14ms', socket: 'ipc:///run/zoth/airgap-enclave.sock', status: 'ZERO_EGRESS_OK' },
-    { id: 3, time: '03:28:12.448', cadre: 'Swarm', rtt: '0.19ms', socket: 'ipc:///run/zoth/peer-bus.sock', status: 'ZERO_EGRESS_OK' },
+    { id: 1, time: '03:28:10.142', cadre: 'Architects', rtt: '0.00ms', socket: 'http://127.0.0.1:8989/cadres/architects', status: 'STANDBY' },
+    { id: 2, time: '03:28:11.205', cadre: 'Security', rtt: '0.00ms', socket: 'http://127.0.0.1:8989/cadres/security', status: 'STANDBY' },
+    { id: 3, time: '03:28:12.448', cadre: 'Swarm', rtt: '0.00ms', socket: 'http://127.0.0.1:8989/cadres/swarm', status: 'STANDBY' },
   ]);
 
   // Heartbeat loop timer
@@ -115,7 +144,7 @@ export default function SwarmPage() {
   }, [heartbeatActive, heartbeatRate]);
 
   // Helper to add ping log
-  const addPingLog = useCallback((cadreName, rtt, socket) => {
+  const addPingLog = useCallback((cadreName, rtt, socket, status = 'ZERO_EGRESS_OK') => {
     const now = new Date();
     const timeStr = now.toTimeString().split(' ')[0] + '.' + String(now.getMilliseconds()).padStart(3, '0');
     setPingLogs((prev) => [
@@ -125,40 +154,61 @@ export default function SwarmPage() {
         cadre: cadreName,
         rtt: `${rtt.toFixed(2)}ms`,
         socket,
-        status: 'ZERO_EGRESS_OK',
+        status,
       },
       ...prev.slice(0, 11),
     ]);
   }, []);
 
-  // Ping single cadre
+  // Ping single cadre via real HTTP endpoint
   const pingCadre = useCallback(async (cadreName) => {
     setPingingCadre(cadreName);
-    const delay = Math.floor(Math.random() * 80) + 120; // 120-200ms simulated UI loop
-    await new Promise((r) => setTimeout(r, delay));
+    const t0 = performance.now();
+    let measured = 0;
+    let isOnline = false;
+    const endpoint = CADRE_METRICS_INIT[cadreName]?.socket || `http://127.0.0.1:8989/cadres/${cadreName.toLowerCase()}`;
 
-    // Simulated real loopback latency in milliseconds (0.1ms - 0.6ms) with slight jitter
-    const base = CADRE_METRICS_INIT[cadreName]?.latency || 0.25;
-    const jitter = (Math.random() - 0.5) * 0.08;
-    const measured = Math.max(0.10, Number((base + jitter).toFixed(2)));
+    try {
+      const res = await fetch('/api/studio/swarm/ping', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cadre: cadreName }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        isOnline = Boolean(data.up);
+        measured = data.rtt || Math.max(0.1, Number((performance.now() - t0).toFixed(2)));
+      } else {
+        isOnline = false;
+        measured = Math.max(0.1, Number((performance.now() - t0).toFixed(2)));
+      }
+    } catch {
+      isOnline = false;
+      measured = Math.max(0.1, Number((performance.now() - t0).toFixed(2)));
+    }
 
     setCadreMetrics((prev) => {
-      const curr = prev[cadreName];
+      const curr = prev[cadreName] || { min: measured, max: measured, sent: 0, received: 0 };
       return {
         ...prev,
         [cadreName]: {
           ...curr,
           latency: measured,
-          min: Math.min(curr.min, measured),
-          max: Math.max(curr.max, measured),
+          min: curr.min ? Math.min(curr.min, measured) : measured,
+          max: Math.max(curr.max || 0, measured),
           sent: curr.sent + 1,
-          received: curr.received + 1,
-          status: 'ONLINE',
+          received: isOnline ? curr.received + 1 : curr.received,
+          status: isOnline ? 'ONLINE' : 'STANDBY',
         }
       };
     });
 
-    addPingLog(cadreName, measured, CADRE_METRICS_INIT[cadreName]?.socket || 'ipc:///run/zoth.sock');
+    addPingLog(
+      cadreName,
+      measured,
+      endpoint,
+      isOnline ? 'ZERO_EGRESS_OK' : 'DAEMON_STANDBY'
+    );
     setPingingCadre(null);
   }, [addPingLog]);
 
@@ -252,12 +302,74 @@ export default function SwarmPage() {
           <HeroItem>
             <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 860, lineHeight: 1.65, fontSize: '1.05rem' }}>
               Real-time telemetry and process coordination for the <span className="text-highlight-gold">{pantheonAgents.length} sovereign agent nodes</span> in Zoth Studio.
-              Agents execute on local hardware via simplex Unix domain sockets with zero external cloud egress.
+              Agents execute on local hardware via loopback HTTP and SSE multiplexing on 127.0.0.1:8989 with zero external cloud egress.
               Inspect live node heartbeats, test cadre loopback latencies, and verify air-gap cryptographic isolation.
             </Typography>
           </HeroItem>
         </Box>
       </HeroReveal>
+
+      {/* Live Daemon Connectivity Banner */}
+      <Paper
+        elevation={0}
+        sx={{
+          p: 2,
+          mb: 3,
+          borderRadius: 2.5,
+          bgcolor: daemonState.up
+            ? isDark ? 'rgba(52, 211, 153, 0.08)' : '#ECFDF3'
+            : isDark ? 'rgba(245, 158, 11, 0.08)' : '#FFFBEB',
+          border: '1px solid',
+          borderColor: daemonState.up
+            ? isDark ? 'rgba(52, 211, 153, 0.3)' : '#ABE5C6'
+            : isDark ? 'rgba(245, 158, 11, 0.3)' : '#FDE68A',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 2,
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Chip
+            label={daemonState.up ? `DAEMON ONLINE (:8989)` : `DAEMON OFFLINE (:8989)`}
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              bgcolor: daemonState.up ? '#10B981' : '#F59E0B',
+              color: '#FFFFFF',
+            }}
+          />
+          <Typography sx={{ fontSize: '0.85rem', color: isDark ? '#EDEFF2' : '#1E293B', fontWeight: 600 }}>
+            {daemonState.up
+              ? `Connected to local zoth-swarm-multiplexer on port 8989. Live SSE telemetry and ${daemonState.agents} agents active.`
+              : 'Swarm Multiplexer daemon is offline on 127.0.0.1:8989. Run the local daemon to stream real-time agent telemetry.'}
+          </Typography>
+        </Box>
+        {!daemonState.up && (
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => {
+              navigator.clipboard.writeText('cd zoth-micro-repos/zoth-swarm-multiplexer && python3 swarm_daemon.py');
+              setCopiedDaemonCmd(true);
+              setTimeout(() => setCopiedDaemonCmd(false), 2200);
+            }}
+            startIcon={copiedDaemonCmd ? <CheckIcon sx={{ fontSize: '0.9rem !important' }} /> : <ContentCopyIcon sx={{ fontSize: '0.85rem !important' }} />}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.74rem',
+              borderColor: isDark ? 'rgba(245, 158, 11, 0.4)' : '#D97706',
+              color: isDark ? '#FCD34D' : '#B45309',
+              borderRadius: 2,
+            }}
+          >
+            {copiedDaemonCmd ? 'Copied Command!' : 'Copy Daemon Start Command'}
+          </Button>
+        )}
+      </Paper>
 
       {/* Master Swarm Navigation Tabs */}
       <Box sx={{ mb: 4, position: 'relative', zIndex: 1, borderBottom: `1.5px solid ${goldBorder}` }}>
@@ -561,7 +673,7 @@ export default function SwarmPage() {
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1, position: 'relative', zIndex: 1 }}>
               <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8' }}>
-                DAEMON PID: 18420 · IPC_SOCKET: /run/user/1000/zoth-swarm.sock
+                STREAM TRANSPORT: HTTP/1.1 &amp; SSE · 127.0.0.1:8989 (LOOPBACK)
               </Typography>
               <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#34D399', fontWeight: 800 }}>
                 EGRESS: 0 BYTES (AIR-GAPPED LOCAL HOST)

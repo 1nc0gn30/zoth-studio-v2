@@ -600,7 +600,7 @@ export function AdytumEngine({ embedded = false }) {
   };
 
   // 2. Cryptographic Enclave Vault State
-  const [vaultSecret, setVaultSecret] = useState('CONFIDENTIAL_SWARM_INVARIANT: Zero cloud telemetry; local SQLite memory persistence on port 8788; PBFT quorum 3f+1>=4.');
+  const [vaultSecret, setVaultSecret] = useState('CONFIDENTIAL_SWARM_INVARIANT: Zero cloud telemetry; local SQLite memory persistence on port 8094; PBFT quorum 3f+1>=4.');
   const [vaultPassword, setVaultPassword] = useState('HermeticSovereignKey#2026');
   const [vaultInputPassword, setVaultInputPassword] = useState('');
   const [vaultIsLocked, setVaultIsLocked] = useState(false);

@@ -196,7 +196,7 @@ export const workstations = [
   },
 
   // ==========================================
-  // 3. HARDWARE ENCLAVE DAEMONS (Loopback :8788)
+  // 3. HARDWARE ENCLAVE DAEMONS (Loopback :8094 / :8989)
   // ==========================================
   {
     id: "hexstrike",

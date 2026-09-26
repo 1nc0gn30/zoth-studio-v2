@@ -87,11 +87,11 @@ export const toolsDocumentation = {
   'sovereign-agent-bridge': {
     whyUse: 'Provides end-to-end encrypted, zero-leak communication between autonomous AI agents across local processes, Docker containers, and Simplex/Signal mesh protocols.',
     problemSolved: 'Replaces insecure plaintext HTTP webhooks and centralized cloud messaging brokers (Slack, Discord bots) with zero-egress cryptographic ratchets.',
-    architecture: 'Python asyncio WebSocket daemon bound strictly to 127.0.0.1:8789 with libsodium/Ed25519 authenticated message envelopes and Simplex chat daemon integration.',
+    architecture: 'Python asyncio WebSocket daemon bound strictly to 127.0.0.1:8102 with libsodium/Ed25519 authenticated message envelopes and Simplex chat daemon integration.',
     aiAgentProtocol: {
       mcpTool: 'bridge_send_signal',
       description: 'Transmit an encrypted signal envelope to another local or peer agent.',
-      cliExample: 'curl -X POST http://127.0.0.1:8789/api/bridge/send -d \'{"to":"agent-7","message":"Task complete"}\'',
+      cliExample: 'curl -X POST http://127.0.0.1:8102/api/bridge/send -d \'{"to":"agent-7","message":"Task complete"}\'',
       inputSchema: {
         type: 'object',
         properties: {
@@ -109,8 +109,8 @@ export const toolsDocumentation = {
     },
     quickstart: [
       'git clone https://github.com/NullAITech/sovereign-agent-bridge.git',
-      'cd sovereign-agent-bridge && python3 -m sovereign_agent_bridge serve --port 8789',
-      'curl http://127.0.0.1:8789/api/bridge/status'
+      'cd sovereign-agent-bridge && python3 -m sovereign_agent_bridge serve --port 8102',
+      'curl http://127.0.0.1:8102/api/bridge/status'
     ],
     features: [
       'E2EE WebSocket & Simplex protocol bridge',
@@ -124,11 +124,11 @@ export const toolsDocumentation = {
   'neuro-memory-daemon': {
     whyUse: 'Biomorphic synaptic memory daemon modeled after Spike-Timing-Dependent Plasticity (STDP). Retains high-salience context across sessions while automatically decaying stale noise.',
     problemSolved: 'Solves the LLM memory amnesia and context-window pollution crisis without requiring expensive and invasive vector SaaS subscriptions (Pinecone, Weaviate Cloud).',
-    architecture: 'Python 3.10+ daemon running at 127.0.0.1:8788. Implements continuous STDP biological weight adaptation with fast SQLite/HNSW vector persistence.',
+    architecture: 'Python 3.10+ daemon running at 127.0.0.1:8094. Implements continuous STDP biological weight adaptation with fast SQLite/HNSW vector persistence.',
     aiAgentProtocol: {
       mcpTool: 'memory_recall',
       description: 'Query synaptic memory for high-salience knowledge embeddings from prior sessions.',
-      cliExample: 'curl "http://127.0.0.1:8788/api/memory?q=jwt+bypass+rules&top=5"',
+      cliExample: 'curl "http://127.0.0.1:8094/api/memory?q=jwt+bypass+rules&top=5"',
       inputSchema: {
         type: 'object',
         properties: {
@@ -144,8 +144,8 @@ export const toolsDocumentation = {
     },
     quickstart: [
       'git clone https://github.com/NullAITech/neuro-memory-daemon.git',
-      'cd neuro-memory-daemon && python3 -m neuro_memory_daemon serve -H 127.0.0.1 -p 8788',
-      'curl http://127.0.0.1:8788/health'
+      'cd neuro-memory-daemon && python3 -m neuro_memory_daemon serve -H 127.0.0.1 -p 8094',
+      'curl http://127.0.0.1:8094/health'
     ],
     features: [
       'Biological STDP synaptic reinforcement & exponential decay',

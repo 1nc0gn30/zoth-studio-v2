@@ -4,8 +4,10 @@ import { useTheme } from '@mui/material/styles';
 import { useStudioStatus } from '../studio/useStudioStatus';
 
 const LABELS = {
-  'Neuro memory daemon': 'Memory :8788',
-  'Sovereign agent bridge': 'Bridge :8789',
+  'Swarm multiplexer': 'Swarm :8989',
+  'Neuro memory daemon': 'Memory :8094',
+  'Sovereign agent bridge': 'Bridge :8102',
+  'Azoth local agent': 'Azoth :8790',
   'Vault daemon': 'Vault :8787',
   Ollama: 'Models :11434',
 };

@@ -44,7 +44,7 @@ export const microTools = [
     category: 'Swarm & Core',
     executionType: 'local_cli',
     github: 'https://github.com/NullAITech/neuro-memory-daemon',
-    description: 'STDP biomorphic memory vector engine & cross-session agent context recall at 127.0.0.1:8788.',
+    description: 'STDP biomorphic memory vector engine & cross-session agent context recall at 127.0.0.1:8094.',
     version: '2.8.0',
     pull: 'npx zoth pull neuro-memory-daemon',
   },

@@ -1,23 +1,23 @@
 # Zoth Studio v2
 
 > **Zero-Egress Sovereign Agent Development Studio & Pantheon Matrix**  
-> *Air-gapped local AI agent orchestration, biomorphic STDP memory, Lucy Netrunner Oracle, 37 sovereign workstations, 25 in-browser micro-tools, 3-agent Byzantine consensus, and Adytum Hardware Sanctum.*
+> *Air-gapped local AI agent orchestration, biomorphic STDP memory, Lucy Cognitive Oracle, 24 sovereign workstations, 25 in-browser micro-tools, 3-agent Byzantine consensus, and Adytum Hardware Sanctum.*
 
 [![Zero-Egress Guaranteed](https://img.shields.io/badge/Security-Zero--Egress%20Enclave-gold?style=flat-square)](#zero-egress-security-invariants)
 [![Netlify Deploy Ready](https://img.shields.io/badge/Deploy-Netlify%20Production-00C7B7?style=flat-square&logo=netlify)](#netlify-deployment-instructions)
-[![87 Prerendered Routes](https://img.shields.io/badge/AEO-87%20Static%20Routes-blueviolet?style=flat-square)](#prerendered-static-routes-87-total)
+[![71 Prerendered Routes](https://img.shields.io/badge/AEO-71%20Static%20Routes-blueviolet?style=flat-square)](#prerendered-static-routes-71-total)
 [![Vite 5.4](https://img.shields.io/badge/Build-Vite%205.4-purple?style=flat-square)](https://vitejs.dev)
 [![React 18.2](https://img.shields.io/badge/Framework-React%2018.2-blue?style=flat-square)](https://react.dev)
 [![MUI v5.15](https://img.shields.io/badge/UI-Material--UI%20v5.15-007FFF?style=flat-square)](https://mui.com)
 [![WindowCarousel](https://img.shields.io/badge/UI-WindowCarousel%20Engine-gold?style=flat-square)](#windowcarousel--column-stacking-architecture)
-[![Lucy Oracle Codec](https://img.shields.io/badge/Oracle-Codec%20141.12-cyan?style=flat-square)](#lucy-oracle--biomorphic-stdp-synaptic-memory)
+[![Lucy Cognitive Oracle](https://img.shields.io/badge/Oracle-Semantic%20Bus%20%3A8094-cyan?style=flat-square)](#lucy-oracle--biomorphic-stdp-synaptic-memory)
 [![License: Sovereign](https://img.shields.io/badge/License-Sovereign%20Developer-green?style=flat-square)](#license)
 
 ---
 
 ## System Overview & Core Philosophy
 
-**Zoth Studio v2** is an air-gapped, zero-egress development studio and operator cockpit designed for orchestrating autonomous AI agent pantheons, local model foundries (Ollama, llama.cpp), and biomorphic synaptic memory matrices. Built on a pristine gold-on-void aesthetic (`#D4AF37` on `#08080B`), Zoth Studio v2 decouples complex multi-agent workflows into 37 dedicated workstations and 25 zero-leakage in-browser developer utilities.
+**Zoth Studio v2** is an air-gapped, zero-egress development studio and operator cockpit designed for orchestrating autonomous AI agent pantheons, local model foundries (Ollama, llama.cpp), and biomorphic synaptic memory matrices. Built on a pristine gold-on-void aesthetic (`#D4AF37` on `#08080B`), Zoth Studio v2 decouples complex multi-agent workflows into 24 dedicated workstations and 25 zero-leakage in-browser developer utilities.
 
 - **WHAT THIS IS**: A complete, single-page application (SPA) and loopback development environment for coordinating autonomous AI agent swarms, testing zero-egress developer tools, tuning biomorphic STDP synaptic memories, executing 3-agent Byzantine consensus proofs, and running local models on local silicon.
 - **WHAT THIS IS NOT**: This is not a cloud SaaS, does not send prompts or telemetry to third-party endpoints, and does not depend on cloud authentication providers. Everything executes on your physical hardware via loopback enclaves (`127.0.0.1`).
@@ -37,12 +37,12 @@
         |                                     |                                     |
         v                                     v                                     v
 +-------------------------------+  +-------------------------------+  +-------------------------------+
-|       37 WORKSTATIONS         |  |      25 IN-BROWSER TOOLS      |  |    LUCY NETRUNNER ORACLE      |
-|  - Multi-Agent DAG Composer   |  |  - JWT Inspector Guard        |  |  - Codec 141.12 Deep Breach   |
+|       24 WORKSTATIONS         |  |      25 IN-BROWSER TOOLS      |  |    LUCY COGNITIVE ORACLE      |
+|  - Multi-Agent DAG Composer   |  |  - JWT Inspector Guard        |  |  - Semantic Bus :8094         |
 |  - Brand Alchemical Seals     |  |  - Payload Entropy Studio     |  |  - STDP Synaptic Plasticity   |
 |  - Sovereign Code IDE         |  |  - Polyglot Exporter          |  |  - Whitespace 3D Constellation|
-|  - Cyberpunk HUD Cockpit      |  |  - UFO Sacred Geometry        |  |  - SQLite HNSW Vectors        |
-|  - AI Model Foundry           |  |  - CWV Speed Engine           |  |  - Port 8788 (Loopback)       |
+|  - Cyberpunk HUD Cockpit      |  |  - MediaPipe Vision Gesture   |  |  - SQLite vec0 Vectors        |
+|  - AI Model Foundry           |  |  - CWV Speed Engine           |  |  - Port 8094 (Loopback)       |
 +-------------------------------+  +-------------------------------+  +-------------------------------+
         |                                     |                                     |
         +-------------------------------------+-------------------------------------+
@@ -61,9 +61,9 @@
         v                                     v                                     v
 +-------------------------------+  +-------------------------------+  +-------------------------------+
 |      LOCAL BACKEND DAEMONS    |  |   NETLIFY EDGE PRERENDER      |  |   AEO / AX MACHINE DISCOVERY  |
-|  - Neuro Memory :8788 (Python)|  |  - 87 Prerendered Routes      |  |  - /llms.txt & /llms-full.txt |
-|  - Signal Bridge :8789 (IPC)  |  |  - Serverless Proxy Functions |  |  - /ai.txt Crawler Contract   |
-|  - Hardware Vault :8787 (Rust)|  |  - Strict Security Headers    |  |  - /sitemap.xml (87 Entries)  |
+|  - Neuro Memory :8094 (Python)|  |  - 71 Prerendered Routes      |  |  - /llms.txt & /llms-full.txt |
+|  - Signal Bridge :8102 (IPC)  |  |  - Serverless Proxy Functions |  |  - /ai.txt Crawler Contract   |
+|  - Hardware Vault :8787 (Rust)|  |  - Strict Security Headers    |  |  - /sitemap.xml (71 Entries)  |
 |  - Ollama / llama.cpp :11434  |  |  - Immutable Asset Caching    |  |  - /api/ax/manifest.json      |
 +-------------------------------+  +-------------------------------+  +-------------------------------+
 ```
@@ -74,16 +74,16 @@
 flowchart TD
     subgraph Client["Zoth Studio v2 Frontend (Loopback Enclave)"]
         UI["Operator Deck UI<br/>http://127.0.0.1:3000<br/>React 18 + MUI v5"]
-        WS["37 Sovereign Workstations<br/>DAG Composer, Code IDE, Model Foundry"]
+        WS["24 Sovereign Workstations<br/>DAG Composer, Code IDE, Model Foundry"]
         Tools["25 In-Browser Tools<br/>JWT Guard, Shannon Entropy, Exporters"]
         UI --> WS
         UI --> Tools
     end
 
-    subgraph Memory["Lucy Netrunner Oracle & Whitespace Cyberspace"]
-        Lucy["Lucy Oracle Core<br/>Codec 141.12 // Deep Net Breach"]
+    subgraph Memory["Lucy Cognitive Oracle & Whitespace Memory"]
+        Lucy["Lucy Oracle Core<br/>Semantic Bus :8094 // Zero Egress"]
         STDP["STDP Synaptic Plasticity Engine<br/>dw = A+ exp(-dt/tau)"]
-        HNSW["SQLite Vector Tables & HNSW Index<br/>Port 127.0.0.1:8788"]
+        HNSW["SQLite Vector Tables & vec0 Index<br/>Port 127.0.0.1:8094"]
         Lucy --> STDP --> HNSW
     end
 
@@ -102,7 +102,7 @@ flowchart TD
     end
 
     subgraph Daemons["Local Loopback Daemons"]
-        Bridge["Sovereign Signal Bridge<br/>Simplex E2EE Noise Protocol IPC<br/>Port 127.0.0.1:8789"]
+        Bridge["Sovereign Signal Bridge<br/>Simplex E2EE Noise Protocol IPC<br/>Port 127.0.0.1:8102"]
         LLM["Local Model Foundry<br/>Ollama / llama.cpp<br/>Port 127.0.0.1:11434"]
     end
 
@@ -202,7 +202,7 @@ Air-gapped developer utilities operating with zero network calls:
 
 ## Lucy Oracle & Biomorphic STDP Synaptic Memory
 
-Governed by **Spike-Timing-Dependent Plasticity (STDP)**, the Lucy Oracle (`/memory`, Codec 141.12) ensures that verified architectural decisions remain potentiated while transient noise naturally decays:
+Governed by **Spike-Timing-Dependent Plasticity (STDP)**, the Lucy Cognitive Oracle (`/memory`, Semantic Bus `:8094`) ensures that verified architectural decisions remain potentiated while transient noise naturally decays:
 
 ### Mathematical Formulation
 
@@ -382,13 +382,13 @@ Zoth Studio implements state-of-the-art Answer Engine Optimization (AEO) and Age
 | Service | Bind Address | Protocol | Operational Role |
 | :--- | :--- | :--- | :--- |
 | **Studio UI** | `127.0.0.1:3000` | HTTP / WS | React 18 + MUI v5 Operator Deck (Vite dev server) |
-| **Neuro Memory Daemon** | `127.0.0.1:8788` | HTTP JSON | Biomorphic STDP synaptic decay + SQLite HNSW vector storage |
-| **Sovereign Agent Bridge**| `127.0.0.1:8789` | WebSocket | Simplex E2EE Noise Protocol IPC bus for 21-agent pantheon |
+| **Neuro Memory Daemon** | `127.0.0.1:8094` | HTTP JSON | Biomorphic STDP synaptic decay + SQLite vec0 vector storage |
+| **Sovereign Agent Bridge**| `127.0.0.1:8102` | WebSocket | Simplex E2EE Noise Protocol IPC bus for 21-agent pantheon |
 | **Hardware Vault Daemon**| `127.0.0.1:8787` | HTTP JSON | Argon2id KDF + XChaCha20-Poly1305 enclave secret storage |
 | **Local Model Foundry** | `127.0.0.1:11434` | HTTP JSON | Ollama / llama.cpp local LLM inference |
-| **Swarm Telemetry Bus** | `127.0.0.1:8989` | WebSocket | Pantheon internal consensus telemetry (host-only) |
+| **Swarm Telemetry Bus** | `127.0.0.1:8989` | WebSocket / SSE | Swarm multiplexer and agent execution telemetry |
+| **Azoth Archon Daemon** | `127.0.0.1:8790` | HTTP | Local archon agent orchestrator and fallback matrix |
 | **Operator Deck Port** | `127.0.0.1:8484` | HTTP | Agent execution and fusion IDE console |
-| **Public Static Hub** | `127.0.0.1:8088` | HTTP | Legacy static showcase server |
 
 ---
 
@@ -407,10 +407,10 @@ cd zoth-studio-v2
 # Install dependencies
 npm install
 
-# Run diagnostic health check across ports :8788, :8789, :8787, :11434
+# Run diagnostic health check across ports :8094, :8102, :8787, :8989, :11434
 npm run zoth -- doctor
 
-# Launch local backend daemons (memory :8788, bridge :8789, vault :8787)
+# Launch local backend daemons (memory :8094, bridge :8102, vault :8787)
 npm run zoth -- up
 
 # Start Vite development server
@@ -425,7 +425,7 @@ The `zoth` CLI (`bin/zoth.js`, aliased as `zoth` / `zoth-studio`) is the operato
 
 | Command | Action |
 | :--- | :--- |
-| `npm run zoth -- doctor` | Probe loopback services (`:8788`, `:8789`, `:8787`, `:11434`) and local tool checkouts |
+| `npm run zoth -- doctor` | Probe loopback services (`:8094`, `:8102`, `:8787`, `:8989`, `:11434`) and local tool checkouts |
 | `npm run zoth -- list` | Catalog all published micro-tools with their GitHub URLs |
 | `npm run zoth -- pull <repo>` | Clone or fast-forward one published tool into `./tools` |
 | `npm run zoth -- pull --all` | Clone every published tool into `./tools` |
@@ -436,7 +436,7 @@ The `zoth` CLI (`bin/zoth.js`, aliased as `zoth` / `zoth-studio`) is the operato
 
 ### 4. Production Build & Verify
 ```bash
-# Compile and prerender all 87 static routes
+# Compile and prerender all 71 static routes
 npm run build
 
 # Preview production build locally
@@ -452,9 +452,9 @@ zoth-studio-v2/
 ├── bin/
 │   └── zoth.js                 # Zoth Studio CLI (doctor, list, pull, up, down, swarm, init)
 ├── backend/                    # Local daemons and frameworks
-│   ├── memory-daemon/          # Python Netrunner Memory Hub (STDP + SQLite HNSW, Port 8788)
-│   ├── neuro-memory-daemon/    # Python STDP biomorphic memory service (Port 8788)
-│   ├── sovereign-agent-bridge/ # Inter-agent E2EE IPC service (Port 8789)
+│   ├── memory-daemon/          # Python Cognitive Memory Hub (STDP + SQLite vec0, Port 8094)
+│   ├── neuro-memory-daemon/    # Python STDP biomorphic memory service (Port 8094)
+│   ├── sovereign-agent-bridge/ # Inter-agent E2EE IPC service (Port 8102)
 │   ├── secure-comms-bridge/    # Rust secure comms bridge
 │   ├── vault-daemon/           # Rust Argon2id + XChaCha20-Poly1305 vault (Port 8787)
 │   ├── orchestrator/           # Z0TH multi-agent orchestration framework (Port 8484)

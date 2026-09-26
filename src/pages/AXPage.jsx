@@ -64,22 +64,24 @@ Zoth Studio v2 is an air-gapped, zero-egress development studio designed for orc
 
 ## Architecture & Enclave Binds
 - Loopback UI: http://127.0.0.1:3000 (React 18 + MUI v5 SPA)
-- Neuro Memory Daemon: http://127.0.0.1:8788 (Spike-Timing-Dependent Plasticity STDP + SQLite HNSW vectors)
-- Sovereign Agent Bridge: http://127.0.0.1:8789 (21-agent inter-process bus & packet pinger)
+- Swarm Multiplexer: http://127.0.0.1:8989 (SSE telemetry & cadre orchestrator)
+- Neuro Memory Daemon: http://127.0.0.1:8094 (Spike-Timing-Dependent Plasticity STDP + SQLite HNSW vectors)
+- Sovereign Agent Bridge: http://127.0.0.1:8102 (21-agent inter-process bus & packet pinger)
+- Azoth Local Agent: http://127.0.0.1:8790 (Autonomous local operator orchestrator)
 - Hardware Vault: http://127.0.0.1:8787 (Argon2id key derivation & XChaCha20-Poly1305 encryption)
 - Local Model Foundry: http://127.0.0.1:11434 (Ollama / llama.cpp local inference)
 
-## Lucy Netrunner Oracle & Whitespace Cyberspace
-- Guardian: Lucy (Lucyna Kushinada), Deep-Dive Netrunner
-- Channel: Codec 141.12 // Deep Net Breach
-- Function: Guides the 21-agent pantheon through the Whitespace Cyberspace memory stratum.
+## Lucy Cognitive Oracle & Whitespace Cyberspace
+- Guardian: Lucy, Sovereign Cognitive Memory Agent & Semantic Oracle
+- Channel: Loopback Semantic Bus :8094
+- Function: Guides the sovereign agent pantheon through the Whitespace Cyberspace memory stratum.
 - Memory Law: Spike-Timing-Dependent Plasticity (STDP) adjusts synaptic weights (dw = A+ * exp(-dt/tau)). Frequent queries reinforce memories; stale vectors decay logarithmically.
 
-## 37 Studio Workstations & 25 Tools
+## 24 Studio Workstations & 25 Tools
 - Build: Agent Composer (DAG builder), AX Powerhouse, IDE Code Foundry, Edge Forge, Tool Bench, WebGen.
 - Security: HexStrike CVE matrix, Web3 Sovereign Solana Bridge, SubSweep lead scanner, Adytum Key Sanctum.
 - Swarm & Consensus: 3-Agent Byzantine Triangulation (Socratic AST debate), Swarm NOC, Cockpit radar, Signal Bridge.
-- Spatial & 3D: Nexus 3D Omniverse, 3D Badge & Coin generator, Sacred Geometry engine, Vision Link.
+- Spatial & 3D: Vision Gesture Control, Local Canvas & 3D environments.
 - Observe: Chronicle roadmap, AI Model Foundry, Connectors ecosystem, Notes Reviewer.
 
 ## Zero-Egress Invariants
@@ -107,7 +109,7 @@ Updated: 2026-09-24 // OWASP Zero-Egress Verified Enclave
 ================================================================================
 SECTION 1: PANTHEON AGENT TOPOLOGY & ARCHITECTURE
 ================================================================================
-- 21 Autonomous Micro-Agents operating over the Loopback Bus (127.0.0.1:8789).
+- 21 Autonomous Micro-Agents operating over the Loopback Bus (127.0.0.1:8102).
 - Primary Orchestrators:
   * AZOTH-Archon: Master task coordinator and subagent delegation hub.
   * Lucy-Netrunner: Deep net memory traversal & STDP synaptic arbitration.
@@ -130,7 +132,7 @@ SECTION 3: MACHINE-READABLE CONTRACTS & TOOL SCHEMAS
 - Tool Index API: /api/tools.json (25 sovereign CLI tools and micro-repos)
 - MCP Schemas: /api/netlify-ax-mcp.json (Model Context Protocol endpoints)
 - Agent Crawler Rules: /ai.txt
-- Full XML Route Index: /sitemap.xml (83 static routes)`
+- Full XML Route Index: /sitemap.xml (71 static routes)`
   },
   {
     endpoint: '/ai.txt',
@@ -175,7 +177,7 @@ netlify-mcp-api: https://zoth.nullai.tech/api/netlify-ax-mcp.json`
     endpoint: '/sitemap.xml',
     label: '/sitemap.xml',
     mime: 'application/xml; charset=utf-8',
-    description: 'Synchronized XML Index (83 Routes)',
+    description: 'Synchronized XML Index (71 Routes)',
     tokens: 3730,
     sizeBytes: 14930,
     content: `<?xml version="1.0" encoding="UTF-8"?>
@@ -216,7 +218,7 @@ netlify-mcp-api: https://zoth.nullai.tech/api/netlify-ax-mcp.json`
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
-  <!-- [Synchronized: 83 production static routes ready for sovereign agent indexing] -->
+  <!-- [Synchronized: 71 production static routes ready for sovereign agent indexing] -->
 </urlset>`
   },
   {
@@ -233,12 +235,13 @@ netlify-mcp-api: https://zoth.nullai.tech/api/netlify-ax-mcp.json`
   "egress_mode": "AIR_GAPPED_ZERO_EGRESS",
   "security_seal": "OWASP_ZERO_EGRESS_VERIFIED_2026_09_15",
   "loopback_enclaves": {
-    "public_hub": "127.0.0.1:8088",
+    "public_hub": "127.0.0.1:3000",
     "operator_deck": "127.0.0.1:8484",
     "hardware_vault": "127.0.0.1:8787",
-    "memory_daemon": "127.0.0.1:8788",
-    "signal_bridge": "127.0.0.1:8789",
-    "swarm_bus": "127.0.0.1:8989",
+    "neuro_memory": "127.0.0.1:8094",
+    "signal_bridge": "127.0.0.1:8102",
+    "swarm_multiplexer": "127.0.0.1:8989",
+    "azoth_agent": "127.0.0.1:8790",
     "local_models": "127.0.0.1:11434"
   },
   "cors": {
@@ -266,7 +269,7 @@ const TASK_PRESETS = [
   },
   {
     label: 'STDP Biomorphic Memory Recall',
-    task: 'Query the loopback STDP memory daemon (127.0.0.1:8788) for architectural context, compute synaptic decay (dw = A+ * exp(-dt/tau)), and return verified vector matches.'
+    task: 'Query the loopback STDP memory daemon (127.0.0.1:8094) for architectural context, compute synaptic decay (dw = A+ * exp(-dt/tau)), and return verified vector matches.'
   },
   {
     label: '3-Agent Byzantine AST Quorum',
@@ -283,7 +286,7 @@ function synthesizeSovereignDirective(customTask) {
 
   return `### SYSTEM DIRECTIVE: ZOTH ZERO-EGRESS SOVEREIGN AGENT PROTOCOL v2.0
 CLASSIFICATION: AIR-GAPPED LOCAL LOOPBACK ENCLAVE // STRICT AUTONOMOUS DIRECTIVE
-ORACLE CODEC: 141.12 // LUCY NETRUNNER DEEP-DIVE STRATUM
+ORACLE CODEC: 8094 // LUCY COGNITIVE ORACLE SEMANTIC BUS
 AUTHORITY: NullAI Tech / Zoth Studio Architecture Guild
 
 ================================================================================
@@ -313,19 +316,20 @@ strictly bound by the following OWASP Zero-Egress Invariants:
 ================================================================================
 All auxiliary services operate on dedicated local loopback ports. When interacting
 with the studio stack, route traffic exclusively to these validated endpoints:
-- Memory Daemon (STDP Recall) : http://127.0.0.1:8788/v1/memory
+- Neuro Memory Daemon (STDP Recall) : http://127.0.0.1:8094/v1/memory
   * Plasticity Equation: dw = A+ * exp(-dt/tau)
   * Vector Search: SQLite HNSW cosine distance threshold <= 0.28
-- Sovereign Agent Bridge       : http://127.0.0.1:8789/v1/bus
+- Sovereign Agent Bridge             : http://127.0.0.1:8102/v1/bus
   * Topology: 21-Agent Pantheon inter-process bus & packet pinger
   * Protocol: E2EE Simplex peer mesh with AES-256-GCM authentication
-- Hardware Vault Enclave      : http://127.0.0.1:8787/v1/vault
+- Swarm Multiplexer Telemetry       : http://127.0.0.1:8989 (SSE telemetry & cadres)
+- Azoth Local Archon Agent          : http://127.0.0.1:8790 (Autonomous local operator)
+- Hardware Vault Enclave            : http://127.0.0.1:8787/v1/vault
   * Key Derivation: Argon2id (m=64MB, t=3, p=4) + XChaCha20-Poly1305 at rest
-- Local Model Foundry         : http://127.0.0.1:11434/api/generate
+- Local Model Foundry               : http://127.0.0.1:11434/api/generate
   * Engine: Local Ollama / llama.cpp (zero external LLM inference)
-- Operator Deck Console       : http://127.0.0.1:8484 (IDE console & fusion)
-- Public Hub (Static Showcase): http://127.0.0.1:8088 (No operator secrets)
-- Swarm Bus Telemetry         : http://127.0.0.1:8989 (Internal metrics)
+- Operator Deck Console             : http://127.0.0.1:8484 (IDE console & fusion)
+- Public Hub (Static Showcase)      : http://127.0.0.1:3000 (No operator secrets)
 
 ================================================================================
 4. MODEL CONTEXT PROTOCOL (MCP) LOCAL TOOL SCHEMAS
@@ -334,7 +338,7 @@ When invoking local tooling, output strictly conforming JSON-RPC 2.0 tool reques
 
 {
   "name": "stdp_memory_recall",
-  "description": "Recall biomorphic memory vectors from loopback STDP daemon (127.0.0.1:8788)",
+  "description": "Recall biomorphic memory vectors from loopback STDP daemon (127.0.0.1:8094)",
   "parameters": {
     "type": "object",
     "properties": {
@@ -348,7 +352,7 @@ When invoking local tooling, output strictly conforming JSON-RPC 2.0 tool reques
 
 {
   "name": "sovereign_signal_ping",
-  "description": "Dispatch peer verification packet across 21-agent mesh (127.0.0.1:8789)",
+  "description": "Dispatch peer verification packet across 21-agent mesh (127.0.0.1:8102)",
   "parameters": {
     "type": "object",
     "properties": {
@@ -418,9 +422,9 @@ export default function AXPage() {
     invariants: zeroEgressInvariants,
     daemons: enclaveBinds,
     tools_count: microTools.length,
-    workstations_count: 37,
+    workstations_count: 24,
     memory_protocol: 'Biomorphic Spike-Timing-Dependent Plasticity (STDP)',
-    oracle: 'Lucy (Lucyna Kushinada) // Codec 141.12',
+    oracle: 'Lucy Cognitive Memory Oracle (:8094)',
     consensus: '3-Agent Byzantine Fault Tolerance AST Diff Quorum'
   };
 
@@ -587,7 +591,7 @@ export default function AXPage() {
             startIcon={<OpenInNewIcon />}
             sx={{ fontWeight: 750, color: theme.palette.text.secondary }}
           >
-            sitemap.xml (83 URLs)
+            sitemap.xml (71 URLs)
           </Button>
         </Box>
 
