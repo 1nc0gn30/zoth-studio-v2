@@ -40,7 +40,123 @@
         font-style: normal;
         font-display: swap;
       }
+
+      /* Baseline dark void to prevent white/unstyled flash during initial load */
+      html, body {
+        background-color: #070709 !important;
+        color: #EDEFF2;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Polished Zero-Latency Sovereign Splash Veil */
+      #zoth-preloader {
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        background-color: #070709;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease;
+        pointer-events: all;
+        user-select: none;
+      }
+      #zoth-preloader.fade-out {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      .zoth-loader-core {
+        position: relative;
+        width: 72px;
+        height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 24px;
+      }
+      .zoth-spinner-ring {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 2px solid rgba(200, 169, 110, 0.12);
+        border-top-color: #C8A96E;
+        box-shadow: 0 0 16px rgba(200, 169, 110, 0.25);
+        animation: zoth-spin 1.2s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
+      }
+      .zoth-spinner-ring-inner {
+        position: absolute;
+        inset: 8px;
+        border-radius: 50%;
+        border: 1.5px solid rgba(237, 239, 242, 0.08);
+        border-bottom-color: #E2C992;
+        animation: zoth-spin-rev 1.6s linear infinite;
+      }
+      .zoth-loader-emblem {
+        width: 28px;
+        height: 28px;
+        opacity: 0.92;
+        filter: drop-shadow(0 0 10px rgba(200, 169, 110, 0.45));
+      }
+      .zoth-loader-title {
+        font-family: "Celtic Garamond", serif, -apple-system;
+        font-size: 1.2rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        background: linear-gradient(135deg, #FFF1D0 0%, #C8A96E 50%, #9B7B3E 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin: 0 0 8px 0;
+        font-weight: 600;
+        text-align: center;
+      }
+      .zoth-loader-status {
+        font-family: 'JetBrains Mono', 'IBM Plex Mono', monospace;
+        font-size: 0.72rem;
+        letter-spacing: 0.22em;
+        color: rgba(200, 169, 110, 0.75);
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .zoth-loader-progress {
+        width: 130px;
+        height: 2px;
+        background: rgba(200, 169, 110, 0.15);
+        border-radius: 2px;
+        overflow: hidden;
+        position: relative;
+      }
+      .zoth-loader-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 45%;
+        background: linear-gradient(90deg, transparent, #C8A96E, #FFF1D0, transparent);
+        animation: zoth-slide 1.3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      }
+      @keyframes zoth-spin {
+        to { transform: rotate(360deg); }
+      }
+      @keyframes zoth-spin-rev {
+        to { transform: rotate(-360deg); }
+      }
+      @keyframes zoth-slide {
+        0% { left: -45%; }
+        100% { left: 100%; }
+      }
     </style>
+    <noscript>
+      <style>
+        #zoth-preloader { display: none !important; }
+      </style>
+    </noscript>
 
     <!-- Schema.org Structured Data (Base Static Layer) -->
     <script type="application/ld+json" id="zoth-schema-graph">
@@ -89,6 +205,20 @@
     </script>
   </head>
   <body>
+    <!-- Zero-Latency Sovereign Splash Veil (covers FOUC before React & MUI hydrate) -->
+    <div id="zoth-preloader" aria-hidden="true">
+      <div class="zoth-loader-core">
+        <div class="zoth-spinner-ring"></div>
+        <div class="zoth-spinner-ring-inner"></div>
+        <img src="/brand/ghostbyte-dark.png" alt="Zoth Studio" class="zoth-loader-emblem" />
+      </div>
+      <div class="zoth-loader-title">ZOTH STUDIO</div>
+      <div class="zoth-loader-status">INITIALIZING MATRIX</div>
+      <div class="zoth-loader-progress">
+        <div class="zoth-loader-bar"></div>
+      </div>
+    </div>
+
     <div id="root"></div>
 
     <!-- Netlify Form Detection Shell for React SPA -->

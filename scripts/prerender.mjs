@@ -88,7 +88,7 @@ $ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</co
       </section>
     `;
   } else if (routePath === '/swarm') {
-    const agentsList = pantheonAgents.slice(0, 10).map((a) => `<li><strong>${a.name}</strong> (${a.role}) — Cadre: ${a.cadre}</li>`).join('');
+    const agentsList = pantheonAgents.slice(0, 10).map((a) => `<li><strong>${a.id}</strong> (${a.role}) — Cadre: ${a.cadre}</li>`).join('');
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
         <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">21 Swarm Pantheon // Autonomous Agent Command &amp; IPC Topology</h2>

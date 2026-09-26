@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Routes, Route, Navigate, useParams } from 'react-router-dom';
+import { Routes, Route, Navigate, useParams, useLocation } from 'react-router-dom';
 import { Box, ThemeProvider, CssBaseline, useTheme } from '@mui/material';
 import { theme as lightTheme, darkTheme } from './theme';
 import Navbar from './components/Navbar';
@@ -40,6 +40,21 @@ function WorkstationRedirect() {
   return <Navigate to={`/tools/${workstationId}`} replace />;
 }
 
+/**
+ * Ensures user is immediately landed at the top of the page on every route navigation.
+ */
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    if (document.documentElement) document.documentElement.scrollTop = 0;
+    if (document.body) document.body.scrollTop = 0;
+  }, [pathname]);
+
+  return null;
+}
+
 function AppShell({ mode, onToggleTheme }) {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
@@ -56,6 +71,7 @@ function AppShell({ mode, onToggleTheme }) {
         zIndex: 2,
       }}
     >
+      <ScrollToTop />
       <SEO />
       <Navbar mode={mode} onToggleTheme={onToggleTheme} />
       <Box
@@ -109,6 +125,20 @@ export default function App() {
       /* ignore */
     }
   }, [mode]);
+
+  // Seamlessly fade out and dismiss the zero-latency sovereign splash veil
+  useEffect(() => {
+    const preloader = document.getElementById('zoth-preloader');
+    if (preloader) {
+      preloader.classList.add('fade-out');
+      const timer = setTimeout(() => {
+        if (preloader.parentNode) {
+          preloader.parentNode.removeChild(preloader);
+        }
+      }, 420);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   const activeTheme = useMemo(() => (mode === 'dark' ? darkTheme : lightTheme), [mode]);
 
