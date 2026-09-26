@@ -398,15 +398,15 @@ export default function HexStrikePage() {
       );
     } else if (cmd === 'ports scan') {
       newLogs.push(
-        { type: 'out', text: '[+] SCANNING 64 LOOPBACK PORTS ON 127.0.0.1...' },
-        { type: 'out', text: '    :8094 [Neuro Memory Daemon]       -> BOUND 127.0.0.1 [LATENCY: 0.12ms]' },
-        { type: 'out', text: '    :8102 [Sovereign Signal Bridge]   -> BOUND 127.0.0.1 [LATENCY: 0.08ms]' },
-        { type: 'out', text: '    :8989 [Swarm Multiplexer]         -> BOUND 127.0.0.1 [LATENCY: 0.15ms]' },
-        { type: 'out', text: '    :8790 [Azoth Local Agent]         -> BOUND 127.0.0.1 [LATENCY: 0.10ms]' },
-        { type: 'out', text: '    :8787 [Hardware Secrets Vault]    -> BOUND 127.0.0.1 [LATENCY: 0.14ms]' },
-        { type: 'out', text: '    :11434 [Ollama Local LLM]         -> BOUND 127.0.0.1 [LATENCY: 0.22ms]' },
-        { type: 'out', text: '    :3000 [Zoth Studio v2 UI]         -> BOUND 127.0.0.1 [LATENCY: 0.05ms]' },
-        { type: 'emerald', text: '[+] AUDIT RESULT: 64/64 PORTS ENCLAVE-BOUND (0 WAN EXPOSURE)' }
+        { type: 'out', text: '[+] AUDITING PORT CONFIGURATION SPECIFICATIONS...' },
+        { type: 'out', text: '    :8094 [Neuro Memory Daemon]       -> SPEC: LOCAL ENCLAVE ONLY' },
+        { type: 'out', text: '    :8102 [Sovereign Signal Bridge]   -> SPEC: LOCAL ENCLAVE ONLY' },
+        { type: 'out', text: '    :8989 [Swarm Multiplexer]         -> SPEC: LOCAL ENCLAVE ONLY' },
+        { type: 'out', text: '    :8790 [Azoth Local Agent]         -> SPEC: LOCAL ENCLAVE ONLY' },
+        { type: 'out', text: '    :8787 [Hardware Secrets Vault]    -> SPEC: LOCAL ENCLAVE ONLY' },
+        { type: 'out', text: '    :11434 [Ollama Local LLM]         -> SPEC: LOCAL ENCLAVE ONLY' },
+        { type: 'out', text: '    :3000 [Zoth Studio v2 UI]         -> SPEC: LOCAL ENCLAVE ONLY' },
+        { type: 'emerald', text: '[+] SPECIFICATION AUDIT: ALL 64 PORTS ENCLAVE-BOUND (0 WAN EXPOSURE)' }
       );
       handleRunPortScan();
     } else if (cmd === 'clear') {

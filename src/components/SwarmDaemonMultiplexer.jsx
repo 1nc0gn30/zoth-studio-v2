@@ -112,7 +112,7 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
         memoryScore: 92 + (idx % 8),
         synapses: 140 + idx * 12,
         logs: [
-          { type: 'system', text: `[${agent.id} ONLINE] Daemon socket connected. Zero-egress loopback verified.` },
+          { type: 'system', text: `[${agent.id} STANDBY] Agent harness initialized in ${agent.cadre} cadre.` },
           { type: 'thought', text: `Monitoring cadre channel #${agent.cadre.toLowerCase()}. Ready for sovereign tasks.` },
         ],
       };
@@ -168,7 +168,7 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
       } else if (command.includes('git')) {
         outputText = `On branch main\nYour branch is up to date with 'origin/main'.\nnothing to commit, working tree clean`;
       } else if (command.includes('stdp') || command.includes('memory')) {
-        outputText = `✔ STDP Synaptic Matrix synced with neuro-memory-daemon at 127.0.0.1:8094. LTP weight reinforced (+0.05).`;
+        outputText = `✔ STDP Synaptic Matrix local tick. LTP weight reinforced (+0.05).`;
       } else if (command.includes('build')) {
         outputText = `✔ Built 1234 modules in 4.8s. All 71 routes prerendered with Schema.org graph.`;
       } else {
@@ -313,7 +313,7 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
                 />
               </Box>
               <Typography variant="caption" sx={{ color: isDark ? '#9CA3AF' : '#475467', fontFamily: mono }}>
-                127.0.0.1:8790 // ZERO-EGRESS AIR-GAPPED PROCESS MULTIPLEXER // 100% LOOPBACK
+                ZERO-EGRESS AIR-GAPPED PROCESS MULTIPLEXER // WORKSPACE HARNESS
               </Typography>
             </Box>
           </Box>

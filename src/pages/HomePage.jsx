@@ -89,23 +89,26 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
   const [copied, setCopied] = useState(false);
   const [selectedTool, setSelectedTool] = useState('subsweep-lead-scanner');
   const [isSimulating, setIsSimulating] = useState(false);
+  const { status } = useStudioStatus();
+
+  const services = status?.services ? Object.values(status.services) : [];
 
   const commands = useMemo(() => ({
     up: {
       id: 'up',
       chipLabel: 'npx zoth up',
-      desc: 'Starts offline daemons (swarm, memory, bridge, studio)',
+      desc: 'CLI sequence: initializes offline daemons (swarm, memory, bridge, studio)',
       cmd: 'npx zoth up',
       lines: [
         { type: 'command', text: '$ npx zoth up' },
-        { type: 'dim', text: 'Zoth CLI 2.0.0 · studio root ~/.../zoth-studio-v2' },
+        { type: 'dim', text: 'Zoth CLI 2.0.0 · launching sovereign enclaves...' },
         { type: 'empty', text: '' },
-        { type: 'success', text: '✔ swarm    listening on 127.0.0.1:8989  (21-Agent Multiplexer Daemon)' },
-        { type: 'success', text: '✔ memory   listening on 127.0.0.1:8094  (STDP Vector Memory Engine)' },
-        { type: 'success', text: '✔ bridge   listening on 127.0.0.1:8102  (Sovereign Peer Bus & Signal Mesh)' },
-        { type: 'success', text: '✔ azoth    listening on 127.0.0.1:8790  (Archon Orchestrator Core)' },
-        { type: 'success', text: '✔ ollama   ready      127.0.0.1:11434 (Local GGUF Silicon Models)' },
-        { type: 'success', text: '✔ studio   ready      http://127.0.0.1:3000/ (Zero-Egress Studio)' },
+        { type: 'success', text: '✔ swarm    listening on :8989  (21-Agent Multiplexer Daemon)' },
+        { type: 'success', text: '✔ memory   listening on :8094  (STDP Vector Memory Engine)' },
+        { type: 'success', text: '✔ bridge   listening on :8102  (Sovereign Peer Bus & Signal Mesh)' },
+        { type: 'success', text: '✔ azoth    listening on :8790  (Archon Orchestrator Core)' },
+        { type: 'success', text: '✔ ollama   ready      :11434 (Local GGUF Silicon Models)' },
+        { type: 'success', text: '✔ studio   ready      http://localhost:3000/ (Zero-Egress Studio)' },
         { type: 'empty', text: '' },
         { type: 'gold', text: '★ All local enclaves initialized on loopback. Zero external telemetry active.' },
       ],
@@ -113,18 +116,24 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
     status: {
       id: 'status',
       chipLabel: 'npx zoth status',
-      desc: 'Probes live loopback daemon ports and hardware readiness',
+      desc: 'Live probe: inspects local daemon sockets and hardware readiness',
       cmd: 'npx zoth status',
       lines: [
         { type: 'command', text: '$ npx zoth status' },
-        { type: 'dim', text: 'Zoth CLI 2.0.0 · probing loopback ports & hardware readiness...' },
+        { type: 'dim', text: 'Zoth CLI 2.0.0 · probing local daemon sockets & hardware...' },
         { type: 'empty', text: '' },
-        { type: 'success', text: '  up   Swarm Multiplexer       127.0.0.1:8989   (21 Pantheon Agents, SSE Stream)' },
-        { type: 'success', text: '  up   Neuro Memory Daemon     127.0.0.1:8094   (Lucy STDP Vector Store)' },
-        { type: 'success', text: '  up   Sovereign Agent Bridge  127.0.0.1:8102   (E2EE Simplex Peer Mesh)' },
-        { type: 'success', text: '  up   Azoth Local Agent       127.0.0.1:8790   (Prime Alchemist Dispatcher)' },
-        { type: 'success', text: '  up   Ollama Local Engine     127.0.0.1:11434  (qwen2.5-coder, llama3.2)' },
-        { type: 'success', text: '  yes  /dev/kvm                QEMU/KVM Hardware Hypervisor Acceleration' },
+        ...(services.length > 0
+          ? services.map((s) => ({
+              type: s.up ? 'success' : 'dim',
+              text: `  ${s.up ? 'up ' : 'off'}   ${s.name.padEnd(24)} :${s.port}   (${s.up ? 'Active listener' : 'Offline · run npx zoth up'})`,
+            }))
+          : [
+              { type: 'dim', text: '  off  Swarm Multiplexer       :8989   (Offline · run npx zoth up)' },
+              { type: 'dim', text: '  off  Neuro Memory Daemon     :8094   (Offline · run npx zoth up)' },
+              { type: 'dim', text: '  off  Sovereign Agent Bridge  :8102   (Offline · run npx zoth up)' },
+              { type: 'dim', text: '  off  Azoth Local Agent       :8790   (Offline · run npx zoth up)' },
+              { type: 'dim', text: '  off  Ollama Local Engine     :11434  (Offline · run ollama serve)' },
+            ]),
         { type: 'empty', text: '' },
         { type: 'cyan', text: 'Sovereign Tool Repositories: 25/25 verified on disk' },
         { type: 'gold', text: 'OWASP Zero-Egress Invariant: 0 outbound connections detected. Host air-gapped.' },

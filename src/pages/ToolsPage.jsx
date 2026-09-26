@@ -31,8 +31,10 @@ export default function ToolsPage() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const isLocal = isLocalRuntime();
-  const { status } = useStudioStatus();
-  const isBackendConnected = Boolean(status?.services);
+  const activeServices = status?.services
+    ? Object.values(status.services).filter((s) => s.up)
+    : [];
+  const isBackendConnected = activeServices.length > 0;
 
   const [search, setSearch] = useState('');
   const [selectedCat, setSelectedCat] = useState('All');
@@ -101,16 +103,16 @@ export default function ToolsPage() {
               {isBackendConnected ? (
                 <Chip
                   icon={<DnsIcon sx={{ color: isDark ? '#34D399 !important' : '#027A48 !important' }} />}
-                  label={`127.0.0.1 BACKEND CONNECTED · ALL ${microTools.length} TOOLS RUNNING LIVE`}
+                  label={`LOCAL DAEMON CONNECTED · ${activeServices.length} SERVICES ACTIVE`}
                   size="small"
                   sx={{ bgcolor: isDark ? 'rgba(52,211,153,0.14)' : '#ECFDF3', color: isDark ? '#34D399' : '#027A48', border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`, fontWeight: 800 }}
                 />
               ) : (
                 <Chip
-                  icon={<DnsIcon sx={{ color: isDark ? '#F59E0B !important' : '#92400E !important' }} />}
-                  label="CLOUD STATIC MODE · IN-BROWSER WEBGPU READY · CLI TOOLS REQUIRE LOCAL DAEMON"
+                  icon={<DnsIcon sx={{ color: isDark ? '#94A3B8 !important' : '#64748B !important' }} />}
+                  label="STANDALONE MODE · IN-BROWSER WEBGPU READY (RUN NPX ZOTH UP FOR LOCAL DAEMONS)"
                   size="small"
-                  sx={{ bgcolor: isDark ? 'rgba(245,158,11,0.14)' : '#FFFBEB', color: isDark ? '#F59E0B' : '#92400E', border: `1px solid ${isDark ? 'rgba(245,158,11,0.3)' : '#FCD34D'}`, fontWeight: 800 }}
+                  sx={{ bgcolor: isDark ? 'rgba(148,163,184,0.1)' : '#F1F5F9', color: isDark ? '#CBD5E1' : '#475569', border: `1px solid ${isDark ? 'rgba(148,163,184,0.25)' : '#CBD5E1'}`, fontWeight: 750 }}
                 />
               )}
             </Box>

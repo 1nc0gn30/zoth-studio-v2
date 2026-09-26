@@ -188,7 +188,7 @@ export const INITIAL_SOVEREIGN_MEMORIES = [
     category: 'pantheon',
     cluster: 'Pantheon',
     weight: 0.87,
-    text: '21-Agent Pantheon swarm IPC bus synchronized at 127.0.0.1:8989. Telemetry latency under 0.8ms across all local worker nodes.',
+    text: '21-Agent Pantheon swarm IPC bus architecture specification with zero cloud vector egress and local STDP synaptic decay.',
     author: 'Hermes',
     tags: ['pantheon', 'swarm', 'bus'],
     x: 60,

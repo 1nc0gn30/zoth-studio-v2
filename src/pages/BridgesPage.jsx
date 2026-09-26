@@ -127,7 +127,7 @@ const PRESETS = {
         telemetry: {
           active_agents: 21,
           mesh_entropy: 0.9994,
-          memory_daemon: '127.0.0.1:8094/SYNCHRONIZED',
+          memory_daemon: 'STANDBY/LOCAL',
           zero_egress_verified: true,
         },
         cadre_states: {

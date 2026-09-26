@@ -563,36 +563,6 @@ export default function Navbar({ mode, onToggleTheme }) {
               Search studio...
             </Button>
 
-            {/* Quick Enclave Status Indicator */}
-            <Chip
-              component={RouterLink}
-              to="/bridges"
-              clickable
-              label="127.0.0.1"
-              size="small"
-              sx={{
-                display: { xs: 'none', sm: 'inline-flex' },
-                bgcolor: dark ? 'rgba(212, 175, 55, 0.08)' : '#FEF9E7',
-                color: goldAccent,
-                border: `1px solid ${dark ? 'rgba(212, 175, 55, 0.3)' : '#F5E6AB'}`,
-                fontWeight: 700,
-                fontSize: '0.72rem',
-                fontFamily: mono,
-                height: 28,
-                borderRadius: 9999,
-                boxShadow: dark ? '0 0 10px rgba(212, 175, 55, 0.1)' : 'none',
-                transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
-                '&:hover': {
-                  bgcolor: dark ? 'rgba(212, 175, 55, 0.18)' : '#FDF3D0',
-                  borderColor: goldAccent,
-                  transform: 'translateY(-1px) scale(1.03)',
-                  boxShadow: dark ? '0 4px 14px rgba(212, 175, 55, 0.25)' : '0 2px 8px rgba(212, 175, 55, 0.2)',
-                },
-                '&:active': {
-                  transform: 'translateY(0.5px) scale(0.98)',
-                },
-              }}
-            />
 
             {/* NullAI External Link */}
             <Button
@@ -1501,7 +1471,7 @@ export default function Navbar({ mode, onToggleTheme }) {
               />
             </Box>
             <Typography variant="caption" sx={{ color: dark ? '#9CA3AF' : '#6B7280', display: 'block', fontSize: '0.72rem', lineHeight: 1.4 }}>
-              127.0.0.1 loopback isolation · Zero external egress
+              Air-Gapped Architecture · Zero External Egress
             </Typography>
           </Box>
         </Box>

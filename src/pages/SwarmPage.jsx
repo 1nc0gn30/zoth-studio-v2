@@ -71,7 +71,7 @@ const CADRE_METRICS_INIT = {
 
 // Zero-Cloud Verification Badges list
 const ZERO_CLOUD_BADGES = [
-  { id: 'loopback', label: '100% LOCAL LOOPBACK', sub: '127.0.0.1:8989', icon: RouterIcon },
+  { id: 'loopback', label: 'AIR-GAPPED ARCHITECTURE', sub: 'Zero External Egress', icon: RouterIcon },
   { id: 'zero-cloud', label: 'ZERO CLOUD EGRESS VERIFIED', sub: 'No Outbound Packets', icon: ShieldIcon },
   { id: 'airgap', label: 'AIR-GAPPED SIMPLEX PROTOCOL', sub: 'Kernel Page-Locked', icon: LockIcon },
   { id: 'telemetry', label: 'NO EXTERNAL TELEMETRY', sub: 'Zero Phone-Home', icon: SecurityIcon },
@@ -1160,10 +1160,10 @@ export default function SwarmPage() {
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, position: 'relative', zIndex: 1 }}>
               <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: '#F5E6AB', fontWeight: 700 }}>
-                ● LOOPBACK SIMPLEX EKG: 21 / 21 THREADS SYNCED
+                {daemonState.up ? '● LIVE SWARM TELEMETRY: 21 THREADS SYNCED' : '● SWARM CADRE SIMULATOR (STANDBY)'}
               </Typography>
               <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#94A3B8' }}>
-                Interval: {heartbeatRate}ms · Jitter: &plusmn;0.02ms
+                {daemonState.up ? `Interval: ${heartbeatRate}ms · Jitter: ±0.02ms` : 'Status: Daemon Offline'}
               </Typography>
             </Box>
 
@@ -1190,7 +1190,7 @@ export default function SwarmPage() {
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1, position: 'relative', zIndex: 1 }}>
               <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8' }}>
-                STREAM TRANSPORT: HTTP/1.1 &amp; SSE · 127.0.0.1:8989 (LOOPBACK)
+                STREAM TRANSPORT: {daemonState.up ? 'HTTP/1.1 & SSE · 127.0.0.1:8989 (ACTIVE)' : 'OFFLINE · RUN NPX ZOTH UP TO STREAM'}
               </Typography>
               <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#34D399', fontWeight: 800 }}>
                 EGRESS: 0 BYTES (AIR-GAPPED LOCAL HOST)

@@ -1225,7 +1225,7 @@ export default function WorkstationsPage() {
                   >
                     {workstations.length} CONSOLES
                   </text>
-                  <title>Zoth Loopback Core (127.0.0.1) · Click to view All Cadres</title>
+                  <title>Zoth Sovereign Core · Click to view All Cadres</title>
                 </g>
 
                 {/* 6 Cadre Hub Nodes with Satellites */}

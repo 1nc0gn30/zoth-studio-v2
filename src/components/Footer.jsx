@@ -299,65 +299,24 @@ export default function Footer() {
               <Stack direction="row" spacing={1.75} flexWrap="wrap" useFlexGap sx={{ mb: 3.5 }}>
                 <Chip
                   icon={
-                    <Box
+                    <TerminalIcon
                       sx={{
-                        position: 'relative',
-                        width: 8,
-                        height: 8,
-                        ml: 1.2,
-                        mr: -0.3,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
+                        fontSize: '0.88rem !important',
+                        color: `${isDark ? '#34D399' : '#059669'} !important`,
+                        ml: 1,
                       }}
-                    >
-                      {/* Outer pulse ring */}
-                      <Box
-                        sx={{
-                          position: 'absolute',
-                          width: 8,
-                          height: 8,
-                          borderRadius: '50%',
-                          border: '1.5px solid rgba(16,185,129,0.35)',
-                          animation: 'loopbackPulse 2.4s cubic-bezier(0,0,0.2,1) infinite',
-                          '@keyframes loopbackPulse': {
-                            '0%': { transform: 'scale(1)', opacity: 0.6 },
-                            '60%, 100%': { transform: 'scale(2.6)', opacity: 0 },
-                          },
-                        }}
-                      />
-                      {/* Core dot */}
-                      <Box
-                        sx={{
-                          width: 6,
-                          height: 6,
-                          borderRadius: '50%',
-                          bgcolor: '#10B981',
-                          boxShadow: '0 0 8px #10B981, 0 0 16px rgba(16,185,129,0.3)',
-                        }}
-                      />
-                    </Box>
+                    />
                   }
-                  label="127.0.0.1 LOCAL LOOPBACK"
+                  label="SOVEREIGN RUNTIME SPEC"
                   size="small"
                   sx={{
-                    bgcolor: isDark ? 'rgba(16,185,129,0.09)' : 'rgba(16,185,129,0.095)',
+                    bgcolor: isDark ? 'rgba(52,211,153,0.09)' : 'rgba(5,150,105,0.08)',
                     color: isDark ? '#34D399' : '#059669',
-                    border: `1px solid ${isDark ? 'rgba(16,185,129,0.32)' : 'rgba(16,185,129,0.35)'}`,
+                    border: `1px solid ${isDark ? 'rgba(52,211,153,0.32)' : 'rgba(5,150,105,0.35)'}`,
                     fontFamily: mono,
                     fontSize: '0.66rem',
                     fontWeight: 800,
                     letterSpacing: '0.05em',
-                    boxShadow: isDark
-                      ? '0 0 14px -2px rgba(16,185,129,0.2), inset 0 0 8px rgba(16,185,129,0.04)'
-                      : '0 1px 4px rgba(16,185,129,0.12), inset 0 0 6px rgba(16,185,129,0.03)',
-                    transition: 'all 0.22s cubic-bezier(0.16,1,0.3,1)',
-                    '&:hover': {
-                      borderColor: '#10B981',
-                      bgcolor: isDark ? 'rgba(16,185,129,0.16)' : 'rgba(16,185,129,0.15)',
-                      boxShadow: '0 0 18px rgba(16,185,129,0.3), inset 0 0 10px rgba(16,185,129,0.06)',
-                      transform: 'translateY(-1px) scale(1.02)',
-                    },
                   }}
                 />
                 <Chip

@@ -57,7 +57,7 @@ export default function VaultConsole() {
     
     setEncryptedPayload({
       algorithm: 'Argon2id + AES-256-GCM',
-      vault_port: '8787',
+      execution_mode: 'Client-Side Web Crypto',
       secret_name: secretName,
       salt: `0x${salt}`,
       iv: `0x${iv}`,
@@ -94,11 +94,11 @@ export default function VaultConsole() {
               Zero-Cloud Hardware Vault &amp; Entropy Auditor
             </Typography>
             <Typography variant="caption" color="text.secondary" sx={{ display: 'block', maxWidth: 520 }}>
-              Derive Argon2id encryption keys and audit payload entropy locally on 127.0.0.1:8787
+              Derive encryption keys and audit payload entropy client-side with Web Crypto.
             </Typography>
           </Box>
         </Box>
-        <Chip label="LOCAL VAULT DAEMON :8787" size="small" sx={{ bgcolor: isDark ? 'rgba(52,211,153,0.16)' : '#ECFDF3', color: isDark ? '#34D399' : '#027A48', fontWeight: 700 }} />
+        <Chip label="IN-BROWSER WEB CRYPTO" size="small" sx={{ bgcolor: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7', color: isDark ? '#F5E6AB' : '#8A6A09', fontWeight: 700 }} />
       </Box>
 
       <Grid container spacing={2.5} sx={{ mb: 3 }}>

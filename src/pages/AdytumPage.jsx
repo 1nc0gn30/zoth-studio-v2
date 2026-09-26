@@ -2291,7 +2291,7 @@ export function AdytumEngine({ embedded = false }) {
             >
               <PsychologyIcon sx={{ color: gold, fontSize: '1.25rem' }} />
               <Typography variant="body2" sx={{ color: dark ? goldLight : '#8A6A09', fontSize: '0.85rem' }}>
-                Local Ollama is offline on 127.0.0.1:11434. <strong>Zero-Egress Hermetic Evaluator</strong> is active. Your reflection is analyzed directly in your browser against the lesson mechanisms with zero data egress.
+                Local Ollama daemon not detected. <strong>In-Browser Hermetic Evaluator</strong> is active. Your reflection is analyzed directly in your browser with zero data egress.
               </Typography>
             </Paper>
           )}

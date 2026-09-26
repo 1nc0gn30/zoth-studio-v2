@@ -106,6 +106,12 @@ function AsciiTypewriterBanner({ word, palette, mono }) {
   const lines = useMemo(() => (raw ? raw.split('\n') : [word]), [raw, word]);
   const [visibleLineCount, setVisibleLineCount] = useState(1);
 
+  // Compute banner width for adaptive font sizing
+  const maxCharWidth = useMemo(() => Math.max(...lines.map(l => l.length)), [lines]);
+
+  // Adaptive typewriter speed: keep total reveal time ~180ms regardless of line count
+  const lineRevealMs = useMemo(() => Math.max(24, Math.min(45, Math.round(180 / lines.length))), [lines]);
+
   useEffect(() => {
     setVisibleLineCount(1);
     let current = 1;
@@ -115,12 +121,43 @@ function AsciiTypewriterBanner({ word, palette, mono }) {
       if (current >= lines.length) {
         clearInterval(interval);
       }
-    }, 36);
+    }, lineRevealMs);
     return () => clearInterval(interval);
-  }, [lines]);
+  }, [lines, lineRevealMs]);
 
   const displayedText = lines.slice(0, visibleLineCount).join('\n');
   const isComplete = visibleLineCount >= lines.length;
+
+  // Adaptive font size tier based on banner character width:
+  //   narrow (<25 chars):  boost font size for visual weight
+  //   standard (25–55):    default sizing
+  //   wide (>55):          reduce to prevent overflow
+  const fontSizeTier = useMemo(() => {
+    if (maxCharWidth < 25) return 'narrow';
+    if (maxCharWidth > 55) return 'wide';
+    return 'standard';
+  }, [maxCharWidth]);
+
+  const fontSizeMap = {
+    narrow: {
+      xs: 'clamp(0.44rem, 2.0vw, 0.72rem)',
+      sm: 'clamp(0.70rem, 2.2vw, 1.10rem)',
+      md: 'clamp(1.00rem, 2.5vw, 1.50rem)',
+      lg: 'clamp(1.20rem, 2.8vw, 1.72rem)',
+    },
+    standard: {
+      xs: 'clamp(0.30rem, 1.25vw, 0.54rem)',
+      sm: 'clamp(0.52rem, 1.45vw, 0.84rem)',
+      md: 'clamp(0.78rem, 1.7vw, 1.10rem)',
+      lg: 'clamp(0.92rem, 1.9vw, 1.28rem)',
+    },
+    wide: {
+      xs: 'clamp(0.24rem, 1.05vw, 0.44rem)',
+      sm: 'clamp(0.42rem, 1.25vw, 0.72rem)',
+      md: 'clamp(0.62rem, 1.4vw, 0.92rem)',
+      lg: 'clamp(0.78rem, 1.6vw, 1.08rem)',
+    },
+  };
 
   return (
     <Box sx={{ position: 'relative', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -128,12 +165,7 @@ function AsciiTypewriterBanner({ word, palette, mono }) {
         component="pre"
         sx={{
           fontFamily: mono,
-          fontSize: {
-            xs: 'clamp(0.30rem, 1.25vw, 0.54rem)',
-            sm: 'clamp(0.52rem, 1.45vw, 0.84rem)',
-            md: 'clamp(0.78rem, 1.7vw, 1.10rem)',
-            lg: 'clamp(0.92rem, 1.9vw, 1.28rem)',
-          },
+          fontSize: fontSizeMap[fontSizeTier],
           lineHeight: { xs: 1.06, sm: 1.10, md: 1.14 },
           fontWeight: 800,
           background: `linear-gradient(90deg, ${palette.primary} 0%, ${palette.secondary} 20%, #FFFFFF 48%, ${palette.secondary} 76%, ${palette.primary} 100%)`,
@@ -169,6 +201,20 @@ function AsciiTypewriterBanner({ word, palette, mono }) {
           </Box>
         )}
       </Box>
+
+      {/* Completion shimmer pulse — brief flash when typewriter finishes */}
+      {isComplete && (
+        <Box
+          aria-hidden
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            background: `radial-gradient(ellipse at center, ${palette.glow.replace('0.45', '0.25')} 0%, transparent 70%)`,
+            animation: 'asciiCompletionPulse 0.6s ease-out forwards',
+            pointerEvents: 'none',
+          }}
+        />
+      )}
 
       {/* Laser Scanning Beam Sweep across the banner */}
       <Box
@@ -672,6 +718,10 @@ export default function CinematicIntro({
                           @keyframes asciiCursorBlink {
                             0%, 49% { opacity: 1; }
                             50%, 100% { opacity: 0; }
+                          }
+                          @keyframes asciiCompletionPulse {
+                            0% { opacity: 0.8; transform: scale(0.92); }
+                            100% { opacity: 0; transform: scale(1.15); }
                           }
                         `}</style>
 

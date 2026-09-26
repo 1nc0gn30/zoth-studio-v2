@@ -18,7 +18,7 @@ export default function SwarmTaskDispatcher() {
   const steps = [
     { agent: 'AZOTH', action: 'Decomposing task into 4 parallel micro-work orders...', status: 'DONE' },
     { agent: 'MERCURY', action: 'Dispatching work orders to 21 Pantheon subagent nodes...', status: 'IN_PROGRESS' },
-    { agent: 'NEURO-MEM', action: 'Recalling HNSW vector embeddings from 127.0.0.1:8094...', status: 'PENDING' },
+    { agent: 'NEURO-MEM', action: 'Querying local HNSW vector index & STDP memory graph...', status: 'PENDING' },
     { agent: 'HEXSTRIKE', action: 'Auditing payload entropy & checking OWASP zero-egress security...', status: 'PENDING' },
     { agent: 'VIGIL / CONSENSUS', action: 'Synthesizing tri-agent Socratic debate & generating SHA-256 seal...', status: 'PENDING' },
   ];

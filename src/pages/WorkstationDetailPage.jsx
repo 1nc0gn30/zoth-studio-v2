@@ -849,27 +849,41 @@ function ConnectorsWorkstation() {
   const isDark = theme.palette.mode === 'dark';
 
   const [connectors, setConnectors] = useState([
-    { id: 'mcp-stdio', name: 'Model Context Protocol (MCP)', transport: 'Loopback STDIO / IPC', port: '8094/sse', status: 'Online', latency: '0.32ms', capabilities: ['tools/list', 'tools/call', 'prompts/get'] },
-    { id: 'rest-enclave', name: 'Zoth Enclave REST Daemon', transport: 'HTTP/1.1 Loopback', port: '127.0.0.1:8094', status: 'Online', latency: '0.24ms', capabilities: ['/api/studio/status', '/api/adytum/keys', '/api/vault'] },
-    { id: 'zeromq-bus', name: 'Inter-Agent ZeroMQ Mesh', transport: 'IPC Socket /tmp/zoth.sock', port: 'ipc://zoth-swarm', status: 'Standby', latency: '0.12ms', capabilities: ['AST-Quorum', 'SwarmHeartbeat', 'STDPWeightSync'] },
-    { id: 'webrtc-peer', name: 'WebRTC Sovereign DataChannel', transport: 'E2EE SCTP Enclave', port: '127.0.0.1:9001', status: 'Online', latency: '0.45ms', capabilities: ['P2P-Mesh', 'AudioSpectrogram', 'NeuralWeights'] },
-    { id: 'ollama-native', name: 'Ollama LLM Engine Socket', transport: 'Localhost REST', port: '127.0.0.1:11434', status: 'Online', latency: '0.88ms', capabilities: ['generate', 'embeddings', 'chat'] },
+    { id: 'mcp-stdio', name: 'Model Context Protocol (MCP)', transport: 'Loopback STDIO / IPC', port: '8094/sse', status: 'Standby', latency: null, capabilities: ['tools/list', 'tools/call', 'prompts/get'] },
+    { id: 'rest-enclave', name: 'Zoth Enclave REST Daemon', transport: 'HTTP/1.1 Loopback', port: '127.0.0.1:8094', status: 'Standby', latency: null, capabilities: ['/api/studio/status', '/api/adytum/keys', '/api/vault'] },
+    { id: 'zeromq-bus', name: 'Inter-Agent ZeroMQ Mesh', transport: 'IPC Socket /tmp/zoth.sock', port: 'ipc://zoth-swarm', status: 'Standby', latency: null, capabilities: ['AST-Quorum', 'SwarmHeartbeat', 'STDPWeightSync'] },
+    { id: 'webrtc-peer', name: 'WebRTC Sovereign DataChannel', transport: 'E2EE SCTP Enclave', port: '127.0.0.1:9001', status: 'Standby', latency: null, capabilities: ['P2P-Mesh', 'AudioSpectrogram', 'NeuralWeights'] },
+    { id: 'ollama-native', name: 'Ollama LLM Engine Socket', transport: 'Localhost REST', port: '127.0.0.1:11434', status: 'Standby', latency: null, capabilities: ['generate', 'embeddings', 'chat'] },
   ]);
 
   const [pinging, setPinging] = useState(false);
 
-  const handlePingAll = () => {
+  const handlePingAll = async () => {
     setPinging(true);
-    setTimeout(() => {
+    try {
+      const res = await fetch('/api/studio/status').then(r => r.json()).catch(() => null);
+      setConnectors((prev) =>
+        prev.map((c) => {
+          const portNum = parseInt(c.port.replace(/\D/g, ''), 10);
+          const serviceMatch = res?.services ? Object.values(res.services).find(s => s.port === portNum) : null;
+          return {
+            ...c,
+            status: serviceMatch?.up ? 'Online' : 'Offline (No Daemon)',
+            latency: serviceMatch?.up ? '< 1ms' : null,
+          };
+        })
+      );
+    } catch {
       setConnectors((prev) =>
         prev.map((c) => ({
           ...c,
-          status: 'Online',
-          latency: `${(Math.random() * 0.4 + 0.15).toFixed(2)}ms`,
+          status: 'Offline (No Daemon)',
+          latency: null,
         }))
       );
+    } finally {
       setPinging(false);
-    }, 700);
+    }
   };
 
   return (
@@ -890,7 +904,7 @@ function ConnectorsWorkstation() {
                 onClick={handlePingAll}
                 sx={{ fontWeight: 750 }}
               >
-                {pinging ? 'Pinging Channels…' : 'Ping All Connectors'}
+                {pinging ? 'Probing Daemons…' : 'Probe Daemon Sockets'}
               </Button>
             </Box>
 
@@ -908,29 +922,35 @@ function ConnectorsWorkstation() {
                 >
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, flexWrap: 'wrap', gap: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                      <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: isDark ? '#34D399' : '#059669', boxShadow: isDark ? '0 0 8px #34D399' : '0 0 6px rgba(5,150,105,0.4)' }} />
+                      <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: c.status === 'Online' ? (isDark ? '#34D399' : '#059669') : (isDark ? '#64748B' : '#94A3B8'), boxShadow: c.status === 'Online' ? '0 0 8px #34D399' : 'none' }} />
                       <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>{c.name}</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                      <Chip
-                        label={`Latency: ${c.latency}`}
-                        size="small"
-                        sx={{
-                          fontFamily: mono,
-                          fontWeight: 750,
-                          bgcolor: isDark ? 'rgba(52,211,153,0.14)' : '#ECFDF3',
-                          color: isDark ? '#34D399' : '#047857',
-                          border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : 'rgba(5,150,105,0.25)'}`,
-                        }}
-                      />
+                      {c.latency && (
+                        <Chip
+                          label={`Latency: ${c.latency}`}
+                          size="small"
+                          sx={{
+                            fontFamily: mono,
+                            fontWeight: 750,
+                            bgcolor: isDark ? 'rgba(52,211,153,0.14)' : '#ECFDF3',
+                            color: isDark ? '#34D399' : '#047857',
+                            border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : 'rgba(5,150,105,0.25)'}`,
+                          }}
+                        />
+                      )}
                       <Chip
                         label={c.status}
                         size="small"
                         sx={{
                           fontWeight: 800,
-                          bgcolor: isDark ? 'rgba(212,175,55,0.18)' : '#FEF9E7',
-                          color: isDark ? '#D4AF37' : '#8A6A09',
-                          border: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)'}`,
+                          bgcolor: c.status === 'Online'
+                            ? (isDark ? 'rgba(52,211,153,0.18)' : '#ECFDF3')
+                            : (isDark ? 'rgba(148,163,184,0.12)' : '#F1F5F9'),
+                          color: c.status === 'Online'
+                            ? (isDark ? '#34D399' : '#047857')
+                            : (isDark ? '#94A3B8' : '#64748B'),
+                          border: `1px solid ${c.status === 'Online' ? (isDark ? 'rgba(52,211,153,0.3)' : 'rgba(5,150,105,0.25)') : (isDark ? 'rgba(148,163,184,0.2)' : 'rgba(203,213,225,0.8)')}`,
                         }}
                       />
                     </Box>
@@ -1386,9 +1406,9 @@ function Web3HubWorkstation() {
 
         <Grid xs={12} md={5}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#B8860B' }}>Solana Localnet Tracker</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#B8860B' }}>Solana Localnet Configuration</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Monitors loopback RPC cluster 127.0.0.1:8899 without external internet calls.
+              Configured loopback RPC target (127.0.0.1:8899). Start local validator via solana-test-validator.
             </Typography>
 
             <Stack spacing={2}>
@@ -1398,18 +1418,18 @@ function Web3HubWorkstation() {
               </Box>
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
-                <Typography variant="body2" color="text.secondary">Current Slot Height</Typography>
-                <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 750, color: isDark ? '#34D399' : '#047857' }}>291,842,109</Typography>
+                <Typography variant="body2" color="text.secondary">Local Validator Status</Typography>
+                <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 750, color: isDark ? '#94A3B8' : '#64748B' }}>Standby (Not Running)</Typography>
               </Box>
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
-                <Typography variant="body2" color="text.secondary">Estimated Local TPS</Typography>
-                <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 750, color: isDark ? '#D4AF37' : '#B8860B' }}>2,840 tx/s</Typography>
+                <Typography variant="body2" color="text.secondary">Target Slot Time</Typography>
+                <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 750, color: isDark ? '#D4AF37' : '#B8860B' }}>400ms</Typography>
               </Box>
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
-                <Typography variant="body2" color="text.secondary">Air-Gapped Mode</Typography>
-                <Chip label="ACTIVE (Zero-Egress)" size="small" sx={{ bgcolor: isDark ? 'rgba(52,211,153,0.18)' : '#ECFDF5', color: isDark ? '#34D399' : '#047857', fontWeight: 800, border: isDark ? 'none' : '1px solid #A7F3D0' }} />
+                <Typography variant="body2" color="text.secondary">Air-Gapped Policy</Typography>
+                <Chip label="Zero-Egress Spec" size="small" sx={{ bgcolor: isDark ? 'rgba(52,211,153,0.18)' : '#ECFDF5', color: isDark ? '#34D399' : '#047857', fontWeight: 800, border: isDark ? 'none' : '1px solid #A7F3D0' }} />
               </Box>
             </Stack>
           </Paper>
@@ -1727,7 +1747,7 @@ function HubWorkstationConsole({ station }) {
       desc: 'Full-spectrum swarm oversight console with task dispatchers, agent status matrices, and health monitors.',
       target: '/swarm',
       badge: 'Mission Control',
-      stats: [{ label: 'Telemetry Stream', val: '127.0.0.1:8989' }, { label: 'Task Queue', val: 'Autonomous' }, { label: 'Consensus', val: 'Triangulated' }],
+      stats: [{ label: 'Telemetry Bus', val: 'Air-Gapped IPC' }, { label: 'Task Queue', val: 'Autonomous' }, { label: 'Consensus', val: 'Triangulated' }],
     },
     'site-generator': {
       title: 'WebGen Autonomous Site Generator',
@@ -2299,7 +2319,7 @@ export default function WorkstationDetailPage() {
 
           <Grid container spacing={1.5}>
             {[
-              { label: 'Host Loopback', value: '127.0.0.1:8094', highlight: false },
+              { label: 'Target Binding', value: ':8094 (Local)', highlight: false },
               { label: 'IPC Latency', value: telemetry.latency, highlight: true, color: isDark ? '#34D399' : '#047857' },
               { label: 'Local Throughput', value: telemetry.throughput, highlight: false },
               { label: 'Hardware TRNG Entropy', value: `${telemetry.entropy} / 8.0`, highlight: true, color: isDark ? '#D4AF37' : '#8A6A09' },

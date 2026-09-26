@@ -939,16 +939,16 @@ export function HexStrikeTool() {
       } else if (cmd === 'scan') {
         setTerminalLines((prev) => [
           ...prev,
-          'Scanning loopback interface 127.0.0.1...',
-          '[PASS] Port 3000: Zoth Studio React UI (No external telemetry)',
-          '[PASS] Port 8094: STDP Memory Daemon (Isolated)',
-          '[PASS] Port 8102: Sovereign Signal Bridge (E2EE Mesh)',
-          '[PASS] Port 8989: Swarm Multiplexer (SSE Cadres)',
-          '[PASS] Strict CSP Header: active',
-          'Audit complete: 0 vulnerabilities detected.'
+          'Verifying local port security policy...',
+          '[POLICY] Port 3000: Studio UI (Zero external telemetry)',
+          '[POLICY] Port 8094: STDP Memory Engine (Local binding)',
+          '[POLICY] Port 8102: Sovereign Signal Bridge (E2EE Simplex)',
+          '[POLICY] Port 8989: Swarm Multiplexer (Local process broker)',
+          '[POLICY] Strict Content-Security-Policy: active',
+          'Policy audit complete: 0 WAN egress vectors configured.'
         ]);
       } else if (cmd === 'ports') {
-        setTerminalLines((prev) => [...prev, 'Active Loopback Ports: 3000, 8094, 8102, 8787, 8790, 8989, 11434']);
+        setTerminalLines((prev) => [...prev, 'Configured Enclave Ports: 3000 (UI), 8094 (Memory), 8102 (Bridge), 8787 (Vault), 8790 (Azoth), 8989 (Swarm), 11434 (Ollama)']);
       } else if (cmd === 'clear') {
         setTerminalLines([]);
       } else {
