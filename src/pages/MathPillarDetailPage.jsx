@@ -1130,13 +1130,13 @@ export class STDPPlasticityEngineWASM {
           </Box>
 
           {/* Previous / Next Pillar Navigation Buttons */}
-          <Stack direction="row" spacing={1.5}>
+          <Stack direction="row" spacing={1.5} sx={{ width: { xs: '100%', sm: 'auto' } }}>
             <Button
               variant="outlined"
               color="inherit"
               startIcon={<ArrowBackIcon />}
               onClick={() => navigate(`/docs/math/${prevPillar.id}`)}
-              sx={{ fontWeight: 700, borderColor: divider, color: textPrimary }}
+              sx={{ fontWeight: 700, borderColor: divider, color: textPrimary, flex: { xs: 1, sm: 'initial' } }}
             >
               Prev ({prevPillar.numeral})
             </Button>
@@ -1148,6 +1148,7 @@ export class STDPPlasticityEngineWASM {
                 fontWeight: 700,
                 bgcolor: gold,
                 color: dark ? '#08080B' : '#101828',
+                flex: { xs: 1, sm: 'initial' },
                 '&:hover': { bgcolor: dark ? goldLight : '#9A7209', color: dark ? '#08080B' : '#FFFFFF' }
               }}
             >

@@ -35,6 +35,7 @@ import CompanyTicker from '../components/CompanyTicker';
 import WebGPUAIConsole from '../components/WebGPUAIConsole';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
+import CinematicIntro from '../components/CinematicIntro';
 import { microTools } from '../data/toolsData';
 import { useStudioStatus } from '../studio/useStudioStatus';
 
@@ -317,7 +318,7 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
           </Box>
 
           {/* Action Buttons: Copy & Run */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: { xs: 'auto', sm: 0 } }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: { xs: 'auto', sm: 0 }, flexWrap: 'wrap' }}>
             <Button
               size="small"
               onClick={handleRunSimulation}
@@ -390,13 +391,8 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             py: { xs: 1, sm: 1.2 },
             bgcolor: isDark ? '#07070D' : '#141E33',
             borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.09)'}`,
-            overflowX: 'auto',
-            overflowY: 'hidden',
-            WebkitOverflowScrolling: 'touch',
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none',
-            '&::-webkit-scrollbar': { display: 'none' },
-            gap: 1,
+            flexWrap: 'wrap',
+            gap: { xs: 0.75, sm: 1 },
             position: 'relative',
             maxWidth: '100%',
             boxSizing: 'border-box',
@@ -477,7 +473,7 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
 
           {/* If pull selected, provide quick tool picker chips */}
           {activeTab === 'pull' && (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6, ml: { xs: 1, md: 'auto' }, flexShrink: 0, paddingLeft: 0.5 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, ml: { xs: 0, md: 'auto' }, flexWrap: 'wrap', paddingLeft: { xs: 0, sm: 0.5 }, py: { xs: 0.5, md: 0 } }}>
               <Typography sx={{ fontFamily: monoFont, fontSize: '0.68rem', color: '#64748B', display: { xs: 'none', md: 'block' }, fontWeight: 600, letterSpacing: '0.08em', flexShrink: 0 }}>
                 TOOL:
               </Typography>
@@ -1441,7 +1437,6 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
 /* ==========================================================================
    HOMEPAGE MAIN COMPONENT
    ========================================================================== */
-import CinematicIntro from '../components/CinematicIntro';
 
 export default function HomePage() {
   const theme = useTheme();
@@ -1460,8 +1455,9 @@ export default function HomePage() {
     <>
       {!introDone && (
         <CinematicIntro
-          words={["ZOTH", "WELCOME", "TO", "ZOTH OS"]}
+          words={['WELCOME', 'TO', 'ZOTH', 'STUDIO']}
           themeColor="gold"
+          subtitle="Air-Gapped Sovereign Intelligence Suite // Zero External Cloud Egress"
           onComplete={() => setIntroDone(true)}
         />
       )}

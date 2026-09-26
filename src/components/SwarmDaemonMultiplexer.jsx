@@ -570,7 +570,7 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
                   }}
                 >
                   {/* Harness & Model */}
-                  <Stack direction="row" spacing={1} sx={{ flex: 1, minWidth: 260 }}>
+                  <Stack direction="row" spacing={1} sx={{ flex: 1, minWidth: { xs: '100%', sm: 260 } }}>
                     <FormControl size="small" sx={{ minWidth: 125, flex: 1 }}>
                       <Select
                         value={state.harness}

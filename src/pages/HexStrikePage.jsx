@@ -586,9 +586,9 @@ export default function HexStrikePage() {
     <>
       {!introDone && (
         <CinematicIntro
-          words={["HEXSTRIKE", "OFFENSIVE", "ARSENAL"]}
+          words={["HEXSTRIKE", "OFFENSIVE", "SECURITY"]}
           themeColor="crimson"
-          subtitle="KERNEL CVE & RING-0 AUDIT"
+          subtitle="Autonomous Penetration Testing & CVE Vulnerability Matrix"
           onComplete={() => setIntroDone(true)}
         />
       )}
@@ -718,7 +718,7 @@ export default function HexStrikePage() {
                 <RadarIcon sx={{ color: gold.accent }} /> Radial CVE Risk & Security Dial
               </Typography>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
               <Chip
                 label={`Last Audit: ${lastAuditTimestamp}`}
                 size="small"
@@ -1135,7 +1135,7 @@ export default function HexStrikePage() {
                   </Typography>
                 </Box>
 
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
                   <Box sx={{ textAlign: 'right' }}>
                     <Typography variant="caption" sx={{ fontFamily: mono, color: theme.palette.text.secondary, display: 'block' }}>
                       LOOPBACK LATENCY
@@ -1339,7 +1339,7 @@ export default function HexStrikePage() {
                 </IconButton>
               </Box>
 
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ flexWrap: 'wrap' }}>
                 <Button
                   variant="contained"
                   href="https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal"
@@ -1412,7 +1412,7 @@ export default function HexStrikePage() {
           }}
         >
           <Box sx={{ maxWidth: 680 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexWrap: 'wrap' }}>
               <VerifiedUserIcon sx={{ color: gold.accent }} />
               <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
                 Export Signed CVE Security Audit Report

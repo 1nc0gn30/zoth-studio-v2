@@ -376,7 +376,9 @@ export default function ArsenalPage() {
       {/* Cinematic Intro Banner */}
       {!introDone && (
         <CinematicIntro
-          words={['25 SOVEREIGN', 'TOOL', 'ARSENAL']}
+          words={['ARSENAL', '25 SOVEREIGN', 'TOOLS']}
+          themeColor="gold"
+          subtitle="24 Workstations // 25 Micro-Tools // 21 Autonomous Agents"
           onComplete={() => setIntroDone(true)}
         />
       )}
@@ -421,7 +423,7 @@ export default function ArsenalPage() {
               boxShadow: isDark ? '0 0 30px -8px rgba(239, 68, 68, 0.25)' : 'none',
             }}
           >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, maxWidth: 780 }}>
+            <Box sx={{ display: 'flex', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2, maxWidth: 780, flexWrap: { xs: 'wrap', sm: 'nowrap' } }}>
               <Box sx={{ p: 1.2, borderRadius: 2, bgcolor: isDark ? 'rgba(239, 68, 68, 0.18)' : '#FEE2E2', color: '#EF4444', display: 'flex' }}>
                 <LockIcon sx={{ fontSize: 28 }} />
               </Box>
@@ -448,7 +450,7 @@ export default function ArsenalPage() {
               </Box>
             </Box>
 
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: { xs: '100%', sm: 'auto' } }}>
               <Button
                 component={RouterLink}
                 to="/zoth-os"
@@ -463,6 +465,7 @@ export default function ArsenalPage() {
                   fontSize: '0.78rem',
                   py: 1,
                   px: 2,
+                  width: { xs: '100%', sm: 'auto' },
                   '&:hover': { bgcolor: '#F5E6AB' },
                 }}
               >
@@ -481,6 +484,7 @@ export default function ArsenalPage() {
                   fontSize: '0.78rem',
                   py: 1,
                   px: 2,
+                  width: { xs: '100%', sm: 'auto' },
                 }}
               >
                 Interactive Catalog
@@ -664,7 +668,7 @@ export default function ArsenalPage() {
             </Grid>
 
             {/* View Mode Toggle */}
-            <Grid xs={12} md={5} sx={{ display: 'flex', justifyContent: { xs: 'flex-start', md: 'flex-end' }, gap: 1 }}>
+            <Grid xs={12} md={5} sx={{ display: 'flex', justifyContent: { xs: 'flex-start', md: 'flex-end' }, gap: 1, flexWrap: 'wrap' }}>
               <ToggleButtonGroup
                 value={viewMode}
                 exclusive

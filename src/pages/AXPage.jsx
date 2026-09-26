@@ -464,9 +464,9 @@ export default function AXPage() {
     <>
       {!introDone && (
         <CinematicIntro
-          words={["AGENT", "EXPERIENCE", "CRAWLERS"]}
-          themeColor="cyan"
-          subtitle="MACHINE ONTOLOGY & AX CRAWLERS"
+          words={["AGENT", "EXPERIENCE", "SPECS"]}
+          themeColor="gold"
+          subtitle="Machine-Readable Entity Architecture, Capabilities & OpenAPI Schemas"
           onComplete={() => setIntroDone(true)}
         />
       )}
@@ -493,10 +493,45 @@ export default function AXPage() {
             icon={<SmartToyIcon sx={{ color: `${gold.soft} !important` }} />}
             label="AGENT EXPERIENCE (AX) ONTOLOGY"
             size="small"
-            sx={{ bgcolor: gold.wash, color: gold.soft, border: `1px solid ${gold.border}`, fontWeight: 800, px: 1 }}
+            sx={{
+              bgcolor: gold.wash,
+              color: gold.soft,
+              border: `1px solid ${gold.border}`,
+              fontWeight: 800,
+              px: 1,
+              maxWidth: '100%',
+              height: 'auto',
+              '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 }
+            }}
           />
-          <Chip label="SCHEMA: https://schema.org/SoftwareApplication" size="small" variant="outlined" sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 650, borderColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(16,24,40,0.25)', color: isDark ? '#9CA3AF' : '#344054' }} />
-          <Chip label="OWASP ZERO-EGRESS RATIFIED" size="small" sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5', color: isDark ? '#10B981' : '#047857', fontWeight: 800, border: isDark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0' }} />
+          <Chip
+            label="SCHEMA: https://schema.org/SoftwareApplication"
+            size="small"
+            variant="outlined"
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.72rem',
+              fontWeight: 650,
+              borderColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(16,24,40,0.25)',
+              color: isDark ? '#9CA3AF' : '#344054',
+              maxWidth: '100%',
+              height: 'auto',
+              '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 }
+            }}
+          />
+          <Chip
+            label="OWASP ZERO-EGRESS RATIFIED"
+            size="small"
+            sx={{
+              bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5',
+              color: isDark ? '#10B981' : '#047857',
+              fontWeight: 800,
+              border: isDark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0',
+              maxWidth: '100%',
+              height: 'auto',
+              '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 }
+            }}
+          />
         </Box>
         </HeroItem>
         
@@ -525,13 +560,13 @@ export default function AXPage() {
           bgcolor: isDark ? 'rgba(212,175,55,0.06)' : '#FEF9E7',
           border: `1px solid ${gold.border}`,
           display: 'flex',
-          alignItems: 'center',
+          alignItems: { xs: 'flex-start', sm: 'center' },
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           gap: 2,
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'stretch', sm: 'center' }, gap: 1.5, flexWrap: 'wrap', width: { xs: '100%', md: 'auto' } }}>
           <Button
             variant="contained"
             color="primary"
@@ -615,7 +650,7 @@ export default function AXPage() {
           boxShadow: isDark ? '0 0 24px rgba(212,175,55,0.08)' : 'none',
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2.5, flexWrap: 'wrap', gap: 1.5 }}>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' }, justifyContent: 'space-between', mb: 2.5, flexWrap: 'wrap', gap: 1.5 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <Box
               sx={{
@@ -745,7 +780,7 @@ export default function AXPage() {
           }}
         >
           {/* Metadata & Status Bar */}
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 1.5 }}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' }, justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 1.5 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
               <Chip
                 label="HTTP/1.1 200 OK"
@@ -803,7 +838,7 @@ export default function AXPage() {
               color="primary"
               startIcon={probeCopied ? <CheckIcon /> : <ContentCopyIcon />}
               onClick={handleCopyProbeContent}
-              sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700 }}
+              sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700, width: { xs: '100%', sm: 'auto' } }}
             >
               {probeCopied ? 'Sample Copied!' : 'Copy Sample'}
             </Button>
@@ -820,7 +855,8 @@ export default function AXPage() {
                 ? 'linear-gradient(135deg, rgba(212,175,55,0.12) 0%, rgba(16,185,129,0.08) 100%)'
                 : 'linear-gradient(135deg, #FEF9E7 0%, #ECFDF5 100%)',
               display: 'flex',
-              alignItems: 'center',
+              flexDirection: { xs: 'column', sm: 'row' },
+              alignItems: { xs: 'flex-start', sm: 'center' },
               justifyContent: 'space-between',
               flexWrap: 'wrap',
               gap: 1.5,
@@ -966,7 +1002,7 @@ export default function AXPage() {
           boxShadow: isDark ? '0 0 24px rgba(212,175,55,0.08)' : 'none',
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2.5, flexWrap: 'wrap', gap: 1.5 }}>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' }, justifyContent: 'space-between', mb: 2.5, flexWrap: 'wrap', gap: 1.5 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <Box
               sx={{
@@ -998,7 +1034,7 @@ export default function AXPage() {
             color="primary"
             startIcon={promptCopied ? <CheckIcon /> : <ContentCopyIcon />}
             onClick={handleCopyDirective}
-            sx={{ fontWeight: 800 }}
+            sx={{ fontWeight: 800, width: { xs: '100%', sm: 'auto' } }}
           >
             {promptCopied ? 'Directive Copied!' : 'Copy Directive'}
           </Button>
@@ -1024,8 +1060,8 @@ export default function AXPage() {
           />
 
           {/* Quick Task Presets */}
-          <Stack direction="row" spacing={1} sx={{ mt: 1.5, flexWrap: 'wrap', gap: 1 }}>
-            <Typography variant="caption" sx={{ color: gold.accent, fontWeight: 700, alignSelf: 'center', mr: 0.5 }}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ mt: 1.5, flexWrap: 'wrap', gap: 1 }}>
+            <Typography variant="caption" sx={{ color: gold.accent, fontWeight: 700, alignSelf: { xs: 'flex-start', sm: 'center' }, mr: 0.5 }}>
               Task Presets:
             </Typography>
             {TASK_PRESETS.map((preset) => (
@@ -1066,6 +1102,7 @@ export default function AXPage() {
               fontWeight: 800,
               px: 3,
               boxShadow: isDark ? '0 0 16px rgba(212,175,55,0.3)' : 'none',
+              width: { xs: '100%', sm: 'auto' }
             }}
           >
             Synthesize Sovereign Directive
@@ -1082,8 +1119,8 @@ export default function AXPage() {
             bgcolor: isDark ? '#040406' : '#F8FAFC',
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' }, justifyContent: 'space-between', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
               <Chip
                 label="SOVEREIGN DIRECTIVE v2.0"
                 size="small"
@@ -1120,7 +1157,7 @@ export default function AXPage() {
               color="primary"
               startIcon={promptCopied ? <CheckIcon /> : <ContentCopyIcon />}
               onClick={handleCopyDirective}
-              sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700 }}
+              sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700, width: { xs: '100%', sm: 'auto' } }}
             >
               {promptCopied ? 'Directive Copied!' : 'Copy Directive'}
             </Button>

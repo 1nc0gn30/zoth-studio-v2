@@ -194,9 +194,9 @@ ${oracleResult.faq.a}`;
     <>
       {!introDone && (
         <CinematicIntro
-          words={["STUDIO", "FAQS", "SPECS"]}
+          words={["FAQS", "ORACLE", "ANSWERS"]}
           themeColor="gold"
-          subtitle="ARCHITECTURAL SPECIFICATIONS & FAQS"
+          subtitle="Zero-Egress Security Invariants & Sovereign Architecture Answers"
           onComplete={() => setIntroDone(true)}
         />
       )}
@@ -214,9 +214,19 @@ ${oracleResult.faq.a}`;
           <HeroItem>
             <Chip
               icon={<HelpOutlineIcon sx={{ color: `${gold.accent} !important` }} />}
-              label="KNOWLEDGE BASE &amp; AEO GROUNDING // 17 RATIFIED SPECIFICATIONS"
+              label="KNOWLEDGE BASE & AEO GROUNDING // 17 RATIFIED SPECIFICATIONS"
               size="small"
-              sx={{ bgcolor: gold.wash, color: gold.accent, border: `1px solid ${gold.border}`, fontWeight: 800, mb: 2, px: 1 }}
+              sx={{
+                bgcolor: gold.wash,
+                color: gold.accent,
+                border: `1px solid ${gold.border}`,
+                fontWeight: 800,
+                mb: 2,
+                px: 1,
+                maxWidth: '100%',
+                height: 'auto',
+                '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 }
+              }}
             />
           </HeroItem>
           <HeroItem>
@@ -256,8 +266,9 @@ ${oracleResult.faq.a}`;
         <Box
           sx={{
             display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
             justifyContent: 'space-between',
-            alignItems: 'center',
+            alignItems: { xs: 'flex-start', sm: 'center' },
             flexWrap: 'wrap',
             gap: 1.5,
             pb: 2,
@@ -302,7 +313,7 @@ ${oracleResult.faq.a}`;
             </Box>
           </Box>
 
-          <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ alignItems: { xs: 'flex-start', sm: 'center' }, flexWrap: 'wrap', width: { xs: '100%', sm: 'auto' } }}>
             <Chip
               label="CLIENT RUNTIME: VERIFIED"
               size="small"
@@ -313,6 +324,9 @@ ${oracleResult.faq.a}`;
                 fontWeight: 750,
                 fontSize: '0.72rem',
                 border: `1px solid ${isDark ? 'rgba(56,189,248,0.3)' : '#BAE6FD'}`,
+                maxWidth: '100%',
+                height: 'auto',
+                '& .MuiChip-label': { whiteSpace: 'normal', py: 0.3 }
               }}
             />
             <Chip
@@ -326,6 +340,9 @@ ${oracleResult.faq.a}`;
                 fontWeight: 750,
                 fontSize: '0.72rem',
                 border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`,
+                maxWidth: '100%',
+                height: 'auto',
+                '& .MuiChip-label': { whiteSpace: 'normal', py: 0.3 }
               }}
             />
           </Stack>
@@ -386,7 +403,7 @@ ${oracleResult.faq.a}`;
                     variant="contained"
                     color="primary"
                     disabled={isConsulting || !oracleQuery.trim()}
-                    onClick={() => consultLucyOracle()}
+                    onClick={() => queryKnowledgeBase()}
                     sx={{
                       px: 2.5,
                       py: 0.6,
@@ -505,7 +522,7 @@ ${oracleResult.faq.a}`;
                 </Box>
               </Box>
 
-              <Stack direction="row" spacing={1} sx={{ flexShrink: 0 }}>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ flexWrap: 'wrap', width: { xs: '100%', sm: 'auto' } }}>
                 <Tooltip title={copiedResponse ? 'Copied Specification!' : 'Copy Specification'}>
                   <IconButton
                     size="small"
@@ -572,7 +589,7 @@ ${oracleResult.faq.a}`;
 
             {/* Direct Jump Buttons to Relevant Workstations & Tools */}
             <Divider sx={{ mb: 2, borderColor: isDark ? 'rgba(212,175,55,0.2)' : '#F0E1A8' }} />
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5 }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' }, justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <AutoAwesomeIcon sx={{ color: gold.accent, fontSize: 18 }} />
                 <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 750, color: isDark ? gold.soft : gold.accent, textTransform: 'uppercase' }}>
@@ -580,7 +597,7 @@ ${oracleResult.faq.a}`;
                 </Typography>
               </Box>
 
-              <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ flexWrap: 'wrap', gap: 1, width: { xs: '100%', sm: 'auto' } }}>
                 {oracleResult.faq.jumpTargets.map((tgt, idx) => (
                   <Button
                     key={`${tgt.path}-${tgt.label || idx}`}
@@ -674,11 +691,11 @@ ${oracleResult.faq.a}`;
       {/* ────────────────────────────────────────────────────────────────────────── */}
       <RevealOnScroll preset="fadeUp" delay={0.4}>
         <Box sx={{ maxWidth: 880, mx: 'auto', mb: 6 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, px: 0.5 }}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, flexWrap: 'wrap', gap: 1, mb: 2, px: 0.5 }}>
             <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>
               Showing {filteredFaqs.length} of {FAQS_DATA.length} ratified specifications
             </Typography>
-            <Stack direction="row" spacing={1}>
+            <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
               <Button
                 size="small"
                 onClick={() => setExpanded(false)}
@@ -765,7 +782,7 @@ ${oracleResult.faq.a}`;
 
                     {/* Quick Action Bar for Accordion Entry */}
                     <Divider sx={{ my: 1.8, borderColor: theme.palette.divider }} />
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5 }}>
+                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, flexWrap: 'wrap', gap: 1.5 }}>
                       <Button
                         size="small"
                         startIcon={<TerminalIcon sx={{ color: gold.accent }} />}
@@ -779,7 +796,7 @@ ${oracleResult.faq.a}`;
                         Query Console on this
                       </Button>
 
-                      <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
+                      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ flexWrap: 'wrap', gap: 1, width: { xs: '100%', sm: 'auto' } }}>
                         {faq.jumpTargets.map((tgt, idx) => (
                           <Button
                             key={`${tgt.path}-${tgt.label || idx}`}
@@ -841,13 +858,14 @@ ${oracleResult.faq.a}`;
               Inspect live client-side STDP synaptic calculations, 3D vector manifold projection, WebGPU WGSL shaders, and sovereign multi-agent consensus in the interactive hubs.
             </Typography>
           </Box>
-          <Stack direction="row" spacing={1.5} sx={{ flexShrink: 0 }}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: { xs: '100%', sm: 'auto' }, flexShrink: 0 }}>
             <Button
               component={RouterLink}
               to="/memory"
               variant="contained"
               color="primary"
               endIcon={<ArrowForwardIcon />}
+              fullWidth
               sx={{ fontWeight: 800, px: 2.5 }}
             >
               Open Memory Hub
@@ -857,6 +875,7 @@ ${oracleResult.faq.a}`;
               to="/arsenal"
               variant="outlined"
               color="primary"
+              fullWidth
               sx={{ fontWeight: 750 }}
             >
               Explore Arsenal

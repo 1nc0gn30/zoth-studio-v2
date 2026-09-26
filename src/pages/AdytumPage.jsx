@@ -1122,7 +1122,7 @@ export function AdytumEngine({ embedded = false }) {
             gap: 1.5,
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
             <FingerprintIcon sx={{ color: gold, fontSize: '1.25rem' }} />
             <Typography variant="caption" sx={{ fontFamily: mono, color: goldLight, fontWeight: 700 }}>
               SHA-256 DIGEST STAMP:
@@ -1157,7 +1157,7 @@ export function AdytumEngine({ embedded = false }) {
               </Button>
             </Tooltip>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
             <Chip
               icon={<PsychologyIcon sx={{ '&&': { color: gold } }} />}
               label={models.length ? `Ollama Active (${models.length} models)` : 'Zero-Egress Oracle Engaged'}
@@ -1599,6 +1599,8 @@ export function AdytumEngine({ embedded = false }) {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: 1.5,
             bgcolor: dark ? 'rgba(212,175,55,0.08)' : '#FEF9E7',
             borderBottom: showTutorial ? (dark ? '1px solid rgba(212,175,55,0.25)' : '1px solid #F5E6AB') : 'none',
             '&:hover': { bgcolor: dark ? 'rgba(212,175,55,0.12)' : '#FDF3D0' },
@@ -2391,9 +2393,9 @@ export default function AdytumPage() {
     <>
       {!introDone && (
         <CinematicIntro
-          words={["ADYTUM", "SANCTUM", "VAULT"]}
+          words={["ADYTUM", "KEYMASTER", "SANCTUM"]}
           themeColor="gold"
-          subtitle="ARGON2ID HARDWARE VAULT"
+          subtitle="22-Key Hermetic Planning Rite & Memory-Hard Cryptographic Vault"
           onComplete={() => setIntroDone(true)}
         />
       )}

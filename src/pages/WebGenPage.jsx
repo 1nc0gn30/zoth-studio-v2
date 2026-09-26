@@ -2528,9 +2528,9 @@ wait $PID`;
     <>
       {!introDone && (
         <CinematicIntro
-          words={["WEBGEN", "LAYOUT", "FOUNDRY"]}
-          themeColor="cyan"
-          subtitle="DETERMINISTIC COMPILER MATRIX"
+          words={["WEBGEN", "AUTONOMOUS", "FOUNDRY"]}
+          themeColor="emerald"
+          subtitle="Deterministic Zero-Cloud Website Generator & Layout Synthesizer"
           onComplete={() => setIntroDone(true)}
         />
       )}
@@ -3278,7 +3278,7 @@ wait $PID`;
                 </Typography>
               </div>
             </Box>
-            <Box sx={{ display: 'flex', gap: 1 }}>
+            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
               <Button
                 size="small"
                 variant="outlined"

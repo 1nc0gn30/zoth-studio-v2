@@ -789,9 +789,9 @@ export default function BridgesPage() {
     <>
       {!introDone && (
         <CinematicIntro
-          words={["SOVEREIGN", "BRIDGES", "MESH"]}
+          words={['BRIDGES', 'MESH', 'SOVEREIGN']}
           themeColor="cyan"
-          subtitle="E2EE SIGNAL MESH PROTOCOL"
+          subtitle="End-to-end encrypted inter-agent signal protocol & message bus"
           onComplete={() => setIntroDone(true)}
         />
       )}
@@ -809,7 +809,7 @@ export default function BridgesPage() {
         <HeroReveal>
           <Box sx={{ mb: 4 }}>
             <HeroItem>
-              <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} alignItems={{ xs: 'flex-start', sm: 'center' }} sx={{ mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
                 <Chip
                   icon={<BoltIcon sx={{ fontSize: '1rem !important', color: up ? gold.accent : '#F59E0B' }} />}
                   label={up ? 'LIVE BRIDGE ACTIVE :8102' : 'OFFLINE SIGNAL MESH SIMULATOR ACTIVE'}
@@ -988,7 +988,8 @@ export default function BridgesPage() {
           <Box
             sx={{
               display: 'flex',
-              alignItems: 'center',
+              flexDirection: { xs: 'column', sm: 'row' },
+              alignItems: { xs: 'flex-start', sm: 'center' },
               justifyContent: 'space-between',
               flexWrap: 'wrap',
               gap: 2,
@@ -998,7 +999,7 @@ export default function BridgesPage() {
             }}
           >
             <Box>
-              <Stack direction="row" spacing={1} alignItems="center">
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} alignItems={{ xs: 'flex-start', sm: 'center' }} flexWrap="wrap">
                 <Box
                   sx={{
                     width: 10,
@@ -1041,7 +1042,7 @@ export default function BridgesPage() {
             </Box>
 
             {/* Mesh Telemetry Counters */}
-            <Stack direction="row" spacing={2} sx={{ fontFamily: mono, fontSize: '0.78rem' }}>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ fontFamily: mono, fontSize: '0.78rem', width: { xs: '100%', md: 'auto' }, flexWrap: 'wrap', gap: 1.5 }}>
               <Box sx={{ textAlign: 'right' }}>
                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
                   PACKETS DISPATCHED
@@ -1502,7 +1503,7 @@ export default function BridgesPage() {
               <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, mb: 0.8, display: 'block', fontFamily: mono }}>
                 ORIGIN SOVEREIGN NODE:
               </Typography>
-              <Stack direction="row" spacing={1}>
+              <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 0.5 }}>
                 {SOVEREIGN_NODES.map((node) => (
                   <Button
                     key={node.id}
@@ -1598,7 +1599,7 @@ export default function BridgesPage() {
               }}
             />
 
-            <Stack direction="row" spacing={2} alignItems="center" sx={{ flexWrap: 'wrap', gap: 1 }}>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ xs: 'stretch', sm: 'center' }} sx={{ flexWrap: 'wrap', gap: 1 }}>
               <Button
                 type="submit"
                 variant="contained"
@@ -1669,7 +1670,7 @@ export default function BridgesPage() {
               </Typography>
             </Box>
 
-            <Stack direction="row" spacing={1} alignItems="center">
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} alignItems={{ xs: 'stretch', sm: 'center' }} sx={{ flexWrap: 'wrap', gap: 1 }}>
               <Button
                 size="small"
                 variant={ledgerTab === 'envelope' ? 'contained' : 'outlined'}

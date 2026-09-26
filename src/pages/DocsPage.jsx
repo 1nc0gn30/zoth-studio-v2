@@ -83,7 +83,9 @@ function CodeSnippet({ title, code, language = 'bash' }) {
           borderBottom: '1px solid rgba(212,175,55,0.15)',
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 1
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -371,9 +373,9 @@ Runs local invariant verification before staging tools.`
     <>
       {!introDone && (
         <CinematicIntro
-          words={["ZOTH", "DOCUMENTATION", "SPECS"]}
+          words={["DOCUMENTATION", "ZERO", "EGRESS"]}
           themeColor="gold"
-          subtitle="SYSTEM TOPOLOGY & ZERO EGRESS"
+          subtitle="Technical Architecture, Invariants, and Formal Specifications"
           onComplete={() => setIntroDone(true)}
         />
       )}
@@ -392,7 +394,10 @@ Runs local invariant verification before staging tools.`
                     color: goldLight,
                     border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}`,
                     fontWeight: 750,
-                    letterSpacing: '0.05em'
+                    letterSpacing: '0.05em',
+                    maxWidth: '100%',
+                    height: 'auto',
+                    '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 }
                   }}
                 />
                 <Chip
@@ -403,7 +408,10 @@ Runs local invariant verification before staging tools.`
                     bgcolor: dark ? '#14141E' : '#F2F4F7',
                     color: textSecondary,
                     border: `1px solid ${divider}`,
-                    fontWeight: 700
+                    fontWeight: 700,
+                    maxWidth: '100%',
+                    height: 'auto',
+                    '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 }
                   }}
                 />
                 <Chip
@@ -414,7 +422,10 @@ Runs local invariant verification before staging tools.`
                     bgcolor: dark ? 'rgba(56,189,248,0.12)' : '#E0F2FE',
                     color: dark ? '#38BDF8' : '#0284C7',
                     border: `1px solid ${dark ? 'rgba(56,189,248,0.3)' : '#BAE6FD'}`,
-                    fontWeight: 700
+                    fontWeight: 700,
+                    maxWidth: '100%',
+                    height: 'auto',
+                    '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 }
                   }}
                 />
                 <Chip
@@ -425,7 +436,10 @@ Runs local invariant verification before staging tools.`
                     bgcolor: dark ? 'rgba(52,211,153,0.14)' : '#ECFDF5',
                     color: dark ? '#34D399' : '#027A48',
                     border: `1px solid ${dark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`,
-                    fontWeight: 700
+                    fontWeight: 700,
+                    maxWidth: '100%',
+                    height: 'auto',
+                    '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 }
                   }}
                 />
               </Box>
@@ -477,7 +491,8 @@ Runs local invariant verification before staging tools.`
             <Box
               sx={{
                 display: 'flex',
-                alignItems: 'center',
+                flexDirection: { xs: 'column', sm: 'row' },
+                alignItems: { xs: 'flex-start', sm: 'center' },
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
                 gap: 2
@@ -498,7 +513,7 @@ Runs local invariant verification before staging tools.`
                 </Typography>
               </Box>
 
-              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', width: { xs: '100%', sm: 'auto' } }}>
                 {topicFilters.map((tf) => {
                   const isSelected = selectedTopic === tf.label;
                   return (
@@ -538,8 +553,10 @@ Runs local invariant verification before staging tools.`
                   pt: 1.5,
                   borderTop: `1px dashed ${divider}`,
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between'
+                  flexDirection: { xs: 'column', sm: 'row' },
+                  alignItems: { xs: 'flex-start', sm: 'center' },
+                  justifyContent: 'space-between',
+                  gap: 1
                 }}
               >
                 <Typography variant="caption" sx={{ color: textSecondary }}>
@@ -734,7 +751,7 @@ Runs local invariant verification before staging tools.`
                     bgcolor: surface
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
                     <Chip
                       label="CORE ARCHITECTURE"
                       size="small"
@@ -998,7 +1015,7 @@ npm run dev`}
                     bgcolor: surface
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
                     <Chip
                       label="SWARM PROTOCOL"
                       size="small"
@@ -1099,7 +1116,7 @@ const task = await dispatcher.broadcastTask({
                     bgcolor: surface
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
                     <Chip
                       label="E2EE NETWORKING"
                       size="small"
@@ -1138,7 +1155,7 @@ cd tools/sovereign-agent-bridge && npm start`}
                     bgcolor: surface
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
                     <Chip
                       label="HARDWARE SANCTUM"
                       size="small"
@@ -1185,7 +1202,7 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}
                     bgcolor: surface
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
                     <Chip
                       label="NEURAL STRATUM"
                       size="small"
@@ -1248,7 +1265,7 @@ curl -X POST http://127.0.0.1:8094/v1/memory/recall \\
                     bgcolor: surface
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
                     <Chip
                       label="BYZANTINE VERIFICATION"
                       size="small"
@@ -1299,7 +1316,7 @@ console.log("Byzantine Consensus Verdict:", verdict.sealed ? "UNANIMOUS APPROVAL
                     bgcolor: surface
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
                     <Chip
                       label="EDGE & AEO DISCOVERY"
                       size="small"
@@ -1373,7 +1390,7 @@ npm run preview`}
                     bgcolor: surface
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
                     <Chip
                       label="VIRTUAL MACHINE"
                       size="small"
@@ -1412,7 +1429,7 @@ npm run preview`}
                     bgcolor: surface
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
                     <Chip
                       label="TERMINAL AUDIT"
                       size="small"
@@ -1585,7 +1602,7 @@ npm run preview`}
                     bgcolor: surface
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
                     <Chip
                       label="SECURITY INVARIANTS"
                       size="small"
@@ -1617,7 +1634,7 @@ npm run preview`}
                     bgcolor: surface
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
                     <Chip
                       label="ARSENAL TOPOLOGY"
                       size="small"
@@ -1649,7 +1666,7 @@ npm run preview`}
                     bgcolor: surface
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
                     <Chip
                       label="DEVELOPER QUICKSTART"
                       size="small"

@@ -123,7 +123,7 @@ export default function WebGPUAIConsole() {
           </Box>
         </Box>
 
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap sx={{ gap: 1 }}>
           <Chip
             icon={<SecurityIcon sx={{ color: '#10B981 !important' }} />}
             label="ZERO-EGRESS IN-BROWSER"
@@ -277,7 +277,7 @@ export default function WebGPUAIConsole() {
             }}
           />
 
-          <Stack direction="row" spacing={1} flexShrink={0}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} flexShrink={0}>
             <Button
               variant="contained"
               startIcon={isGenerating ? <MemoryIcon sx={{ animation: 'spin 1s linear infinite' }} /> : <PlayArrowIcon />}

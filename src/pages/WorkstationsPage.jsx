@@ -534,9 +534,9 @@ export default function WorkstationsPage() {
     <>
       {!introDone && (
         <CinematicIntro
-          words={["ZOTH", "STUDIO", "WORKSTATIONS"]}
-          themeColor="gold"
-          subtitle="SOVEREIGN DEVELOPER COCKPITS"
+          words={['24 LOCAL', 'WORKSTATIONS', 'MATRIX']}
+          themeColor="cyan"
+          subtitle="Interactive Environments Spanning Build, Observe, Security & Spatial Bands"
           onComplete={() => setIntroDone(true)}
         />
       )}
@@ -685,6 +685,7 @@ export default function WorkstationsPage() {
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   gap: 1.25,
+                  flexWrap: 'wrap',
                 }}
               >
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
@@ -816,15 +817,17 @@ export default function WorkstationsPage() {
               borderColor: isDark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.25)',
               borderRadius: 2.5,
               p: 0.5,
+              maxWidth: '100%',
+              flexWrap: 'wrap',
               alignSelf: { xs: 'flex-start', md: 'center' },
               '& .MuiToggleButton-root': {
-                px: 2,
+                px: { xs: 1.25, sm: 2 },
                 py: 0.8,
                 border: 'none',
                 borderRadius: '8px !important',
                 textTransform: 'none',
                 fontWeight: 750,
-                fontSize: '0.85rem',
+                fontSize: { xs: '0.78rem', sm: '0.85rem' },
                 color: isDark ? '#9CA3AF' : '#4B5563',
                 transition: 'all 0.2s ease',
                 '&.Mui-selected': {

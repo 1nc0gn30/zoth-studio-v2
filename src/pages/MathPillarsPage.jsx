@@ -41,8 +41,8 @@ export default function MathPillarsPage() {
       {!introDone && (
         <CinematicIntro
           words={["SIX", "MATH", "PILLARS"]}
-          themeColor="cyan"
-          subtitle="THEORETICAL FOUNDATIONS & PROOFS"
+          themeColor="gold"
+          subtitle="Formal Mathematical Dynamics Powering Sovereign Agent Intelligence"
           onComplete={() => setIntroDone(true)}
         />
       )}
@@ -81,7 +81,10 @@ export default function MathPillarsPage() {
                   color: goldHeading,
                   border: `1px solid ${borderCol}`,
                   fontWeight: 800,
-                  letterSpacing: '0.04em'
+                  letterSpacing: '0.04em',
+                  maxWidth: '100%',
+                  height: 'auto',
+                  '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 }
                 }}
               />
               <Chip
@@ -92,7 +95,10 @@ export default function MathPillarsPage() {
                   bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5',
                   color: isDark ? '#10B981' : '#047857',
                   fontWeight: 800,
-                  border: isDark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0'
+                  border: isDark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0',
+                  maxWidth: '100%',
+                  height: 'auto',
+                  '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 }
                 }}
               />
             </Box>

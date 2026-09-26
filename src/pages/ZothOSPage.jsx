@@ -832,8 +832,8 @@ export default function ZothOSPage() {
       {!introDone && (
         <CinematicIntro
           words={["ZOTH OS", "KVM", "HYPERVISOR"]}
-          themeColor="emerald"
-          subtitle="BARE-METAL SOVEREIGN KERNEL"
+          themeColor="purple"
+          subtitle="Hardware-Isolated Linux KVM Virtualization & WebContainer Sandbox"
           onComplete={() => setIntroDone(true)}
         />
       )}
@@ -1131,7 +1131,7 @@ export default function ZothOSPage() {
         {/* SECTION: Interactive Hardware Resource Dials */}
         <RevealOnScroll preset="fadeUp" delay={0.3}>
           <Box sx={{ mb: 5, mt: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5, flexWrap: 'wrap', gap: 1.5 }}>
               <Box>
                 <Typography className="section-kicker">Interactive Hardware Resource Telemetry</Typography>
                 <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary, letterSpacing: '-0.02em' }}>
@@ -1203,7 +1203,7 @@ export default function ZothOSPage() {
                     <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1, fontWeight: 700 }}>
                       CORE ALLOCATION PRESET:
                     </Typography>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
                       {Object.keys(cpuConfigs).map((k) => (
                         <Chip
                           key={k}
@@ -1265,7 +1265,7 @@ export default function ZothOSPage() {
                     <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1, fontWeight: 700 }}>
                       BUFFER BUFFER TUNING:
                     </Typography>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
                       {[4096, 8192, 16384].map((sz) => (
                         <Chip
                           key={sz}
@@ -1367,7 +1367,7 @@ export default function ZothOSPage() {
                 KVM Hypervisor & WebContainer Terminal (TTY-01)
               </Typography>
             </Box>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
               <Chip
                 icon={<CheckCircleIcon style={{ fontSize: 14, color: '#34D399' }} />}
                 label={
@@ -1559,6 +1559,8 @@ export default function ZothOSPage() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: 1,
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -1999,7 +2001,7 @@ export default function ZothOSPage() {
                 }}
               >
                 <Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <DownloadIcon sx={{ color: gold.accent }} />
                       <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
@@ -2069,7 +2071,7 @@ export default function ZothOSPage() {
                 }}
               >
                 <Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <CodeIcon sx={{ color: isDark ? '#38BDF8' : '#0284C7' }} />
                       <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
@@ -2152,7 +2154,7 @@ export default function ZothOSPage() {
                 }}
               >
                 <Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <TerminalIcon sx={{ color: isDark ? '#34D399' : '#059669' }} />
                       <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>

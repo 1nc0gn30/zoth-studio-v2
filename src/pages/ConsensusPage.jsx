@@ -797,7 +797,7 @@ export default function ConsensusPage() {
         <CinematicIntro
           words={["BYZANTINE", "FAULT", "TOLERANCE"]}
           themeColor="cyan"
-          subtitle="BYZANTINE QUORUM VALIDATOR"
+          subtitle="3-Agent Triadic AST Consensus Arena // Socratic Dialectic Loop"
           onComplete={() => setIntroDone(true)}
         />
       )}
@@ -826,7 +826,7 @@ export default function ConsensusPage() {
           </ParallaxGlow>
 
           <HeroItem>
-            <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 1.5 }}>
+            <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' }, gap: 1.5, flexWrap: 'wrap', mb: 1.5 }}>
               <Chip
                 icon={<ShieldIcon sx={{ fontSize: '1rem !important', color: up ? (isDark ? '#34D399' : '#059669') : gold.accent }} />}
                 label={up ? 'SIGNAL BRIDGE LINKED' : 'ZERO-EGRESS SIMULATION READY'}
@@ -1043,7 +1043,7 @@ export default function ConsensusPage() {
             }}
           >
             {/* Section Header & Interactive Controls */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2, mb: 2.5 }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, flexWrap: 'wrap', gap: 2, mb: 2.5 }}>
               <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
                   <HubIcon sx={{ color: gold.accent, fontSize: '1.3rem' }} />
@@ -1060,7 +1060,7 @@ export default function ConsensusPage() {
               </Box>
 
               {/* Live Controls: Malicious Injection Switch & Round Stepper */}
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, alignItems: { xs: 'flex-start', md: 'flex-end' } }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, alignItems: { xs: 'flex-start', md: 'flex-end' }, width: { xs: '100%', md: 'auto' } }}>
                 {/* Malicious Node Injection Toggle */}
                 <Box
                   sx={{
@@ -1070,8 +1070,10 @@ export default function ConsensusPage() {
                     bgcolor: isMaliciousInjected ? (isDark ? 'rgba(239,68,68,0.15)' : '#FEF2F2') : (isDark ? '#0D0D14' : '#F1F5F9'),
                     border: `1.5px solid ${isMaliciousInjected ? '#EF4444' : gold.border}`,
                     display: 'flex',
-                    alignItems: 'center',
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    alignItems: { xs: 'flex-start', sm: 'center' },
                     gap: 1.5,
+                    flexWrap: 'wrap',
                     transition: 'all 0.25s ease',
                   }}
                 >
@@ -1104,7 +1106,7 @@ export default function ConsensusPage() {
                 </Box>
 
                 {/* Protocol Trigger Buttons */}
-                <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} alignItems={{ xs: 'stretch', sm: 'center' }} flexWrap="wrap">
                   <Button
                     variant="contained"
                     size="small"
@@ -1306,7 +1308,7 @@ export default function ConsensusPage() {
                 : '0 8px 24px -4px rgba(184,134,11,0.12)',
             }}
           >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
               <Box>
                 <Typography className="section-kicker">Consensus Battle Arena Input</Typography>
                 <Typography variant="h5" sx={{ fontWeight: 800 }}>
@@ -1314,7 +1316,7 @@ export default function ConsensusPage() {
                 </Typography>
               </Box>
 
-              <Stack direction="row" spacing={1} alignItems="center">
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} alignItems={{ xs: 'flex-start', sm: 'center' }} flexWrap="wrap" useFlexGap sx={{ gap: 1 }}>
                 <Chip
                   label={isSimulationMode ? 'MODE: OFFLINE ZERO-EGRESS' : 'MODE: BRIDGE ATTEMPT'}
                   size="small"
@@ -1360,7 +1362,7 @@ export default function ConsensusPage() {
               />
 
               {/* Dialectic Trigger Buttons */}
-              <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 1.5, flexWrap: 'wrap', alignItems: { xs: 'stretch', sm: 'center' } }}>
                 <Button
                   type="submit"
                   variant="contained"

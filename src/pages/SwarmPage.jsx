@@ -256,9 +256,9 @@ export default function SwarmPage() {
     <>
       {!introDone && (
         <CinematicIntro
-          words={["SOVEREIGN", "AGENT", "SWARM"]}
+          words={['21 LOCAL', 'SWARM', 'PANTHEON']}
           themeColor="emerald"
-          subtitle="21-AGENT MULTIPLEXER MESH"
+          subtitle="Autonomous Agent Coordination Matrix // 5 Operational Cadres"
           onComplete={() => setIntroDone(true)}
         />
       )}
@@ -295,13 +295,14 @@ export default function SwarmPage() {
           border: '1px solid',
           borderColor: isDark ? 'rgba(255,255,255,0.08)' : '#E5E7EB',
           display: 'flex',
-          alignItems: 'center',
+          flexDirection: { xs: 'column', sm: 'row' },
+          alignItems: { xs: 'flex-start', sm: 'center' },
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           gap: 1.5,
         }}
       >
-        <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ flexWrap: 'wrap', width: { xs: '100%', sm: 'auto' } }}>
           <Chip
             icon={<ExploreIcon sx={{ fontSize: '1rem !important' }} />}
             label="1. Swarm Overview & Funnel"
@@ -379,7 +380,7 @@ export default function SwarmPage() {
       <HeroReveal>
         <Box sx={{ mb: 4, position: 'relative', zIndex: 1 }}>
           <HeroItem>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 1.5 }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' }, gap: 1.5, flexWrap: 'wrap', mb: 1.5 }}>
               <Chip
                 label="PANTHEON MULTI-AGENT SWARM HUB"
                 size="small"
@@ -756,10 +757,10 @@ export default function SwarmPage() {
         </Box>
       )}
 
-      {/* MODE 3: LIVE TELEMETRY COCKPIT (:8989) */}
+       {/* MODE 3: LIVE TELEMETRY COCKPIT (:8989) */}
       {viewMode === 'cockpit' && (
         <Box sx={{ position: 'relative', zIndex: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 3 }}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' }, justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 3 }}>
             <Button
               size="small"
               variant="outlined"
@@ -784,7 +785,7 @@ export default function SwarmPage() {
       <HeroReveal>
         <Box sx={{ mb: 4, position: 'relative', zIndex: 1 }}>
           <HeroItem>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 1.5 }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' }, gap: 1.5, flexWrap: 'wrap', mb: 1.5 }}>
               <Chip
                 label="PANTHEON MULTI-AGENT SWARM HUB"
                 size="small"
@@ -841,13 +842,14 @@ export default function SwarmPage() {
             ? isDark ? 'rgba(52, 211, 153, 0.3)' : '#ABE5C6'
             : isDark ? 'rgba(245, 158, 11, 0.3)' : '#FDE68A',
           display: 'flex',
-          alignItems: 'center',
+          flexDirection: { xs: 'column', sm: 'row' },
+          alignItems: { xs: 'flex-start', sm: 'center' },
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           gap: 2,
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' }, gap: 1.5, flexWrap: 'wrap' }}>
           <Chip
             label={daemonState.up ? `DAEMON ONLINE (:8989)` : `DAEMON OFFLINE (:8989)`}
             size="small"
@@ -1088,7 +1090,7 @@ export default function SwarmPage() {
             </Box>
 
             {/* Cadence Badges */}
-            <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} alignItems={{ xs: 'flex-start', sm: 'center' }} flexWrap="wrap">
               <Chip
                 label={`BEAT #${beatCount}`}
                 size="small"

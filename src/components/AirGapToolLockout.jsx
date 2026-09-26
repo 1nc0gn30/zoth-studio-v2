@@ -476,7 +476,7 @@ export default function AirGapToolLockout({
                 </Box>
               </Box>
 
-              <Stack direction="row" spacing={1.5}>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
                 <Button
                   component={RouterLink}
                   to="/arsenal"

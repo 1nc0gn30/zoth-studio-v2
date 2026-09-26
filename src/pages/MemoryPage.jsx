@@ -1320,9 +1320,9 @@ export default function MemoryPage() {
     <>
       {!introDone && (
         <CinematicIntro
-          words={["STDP", "NEURAL", "MEMORY"]}
-          themeColor="gold"
-          subtitle="BIOMORPHIC STDP SYNAPSE MATRIX"
+          words={['MEMORY', 'STDP', 'SYNAPSE']}
+          themeColor="purple"
+          subtitle="Biomorphic Spike-Timing-Dependent Plasticity Synaptic Memory Matrix"
           onComplete={() => setIntroDone(true)}
         />
       )}
@@ -1352,8 +1352,8 @@ export default function MemoryPage() {
         <HeroReveal>
           <Box sx={{ mb: 4 }}>
             <HeroItem>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 3, mb: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5 }}>
+              <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, flexWrap: 'wrap', gap: 3, mb: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2.5 }}>
               <Box
                 component="img"
                 src="/assets/lucy.png"
@@ -1391,7 +1391,7 @@ export default function MemoryPage() {
             </Box>
 
             {/* Header Action Strip */}
-            <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap' }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 1.5, alignItems: { xs: 'stretch', sm: 'center' }, flexWrap: 'wrap', width: { xs: '100%', sm: 'auto' } }}>
               {/* Export Lucy Neural Snapshot Button */}
               <Button
                 variant="outlined"
@@ -1486,8 +1486,8 @@ export default function MemoryPage() {
           }}
         >
           {/* Row 1: Tone Controls with ample breathing room */}
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 3, mb: 3 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5, flexWrap: 'wrap' }}>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, flexWrap: 'wrap', gap: 3, mb: 3 }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2.5, flexWrap: 'wrap' }}>
               <Button
                 variant={isMuted ? 'outlined' : 'contained'}
                 size="small"
@@ -1520,7 +1520,7 @@ export default function MemoryPage() {
             </Box>
 
             {/* Carrier Frequency Selectors */}
-            <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap' }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 1.5, alignItems: { xs: 'flex-start', sm: 'center' }, flexWrap: 'wrap' }}>
               <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', mr: 0.5, fontWeight: 700 }}>
                 MODE:
               </Typography>
@@ -2345,8 +2345,8 @@ export default function MemoryPage() {
 
             {/* Query & Stored Vectors Table */}
             <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1.5 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, mb: 2, flexWrap: 'wrap', gap: 1.5 }}>
+                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2, flexWrap: 'wrap', width: { xs: '100%', sm: 'auto' } }}>
                   <Typography variant="h6" sx={{ fontWeight: 800 }}>
                     Stored Vectors ({filteredMemories.length})
                   </Typography>
@@ -2367,7 +2367,7 @@ export default function MemoryPage() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon fontSize="small" /></InputAdornment> }}
                   sx={{
-                    width: 280,
+                    width: { xs: '100%', sm: 280 },
                     '& .MuiInputBase-root': {
                       bgcolor: isDark ? '#08080B' : '#F8FAFC',
                       color: theme.palette.text.primary,

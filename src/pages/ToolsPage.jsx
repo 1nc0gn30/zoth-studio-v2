@@ -77,9 +77,9 @@ export default function ToolsPage() {
     <>
       {!introDone && (
         <CinematicIntro
-          words={["25 LOCAL", "MICRO", "TOOLS"]}
-          themeColor="gold"
-          subtitle="SOVEREIGN TOOL ARSENAL"
+          words={['25 LOCAL', 'MICRO', 'TOOLS']}
+          themeColor="emerald"
+          subtitle="Schema-Validated Air-Gapped Utilities for Sovereign Development"
           onComplete={() => setIntroDone(true)}
         />
       )}
@@ -149,7 +149,7 @@ export default function ToolsPage() {
             boxShadow: isDark ? '0 0 30px -8px rgba(239, 68, 68, 0.25)' : 'none',
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, maxWidth: 760 }}>
+          <Box sx={{ display: 'flex', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2, maxWidth: 760, flexWrap: { xs: 'wrap', sm: 'nowrap' } }}>
             <Box sx={{ p: 1.2, borderRadius: 2, bgcolor: isDark ? 'rgba(239, 68, 68, 0.18)' : '#FEE2E2', color: '#EF4444', display: 'flex' }}>
               <LockIcon sx={{ fontSize: 28 }} />
             </Box>
@@ -176,7 +176,7 @@ export default function ToolsPage() {
             </Box>
           </Box>
 
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: { xs: '100%', sm: 'auto' } }}>
             <Button
               component={RouterLink}
               to="/zoth-os"
@@ -191,6 +191,7 @@ export default function ToolsPage() {
                 fontSize: '0.78rem',
                 py: 1,
                 px: 2,
+                width: { xs: '100%', sm: 'auto' },
                 '&:hover': { bgcolor: '#F5E6AB' },
               }}
             >
@@ -209,6 +210,7 @@ export default function ToolsPage() {
                 fontSize: '0.78rem',
                 py: 1,
                 px: 2,
+                width: { xs: '100%', sm: 'auto' },
               }}
             >
               Browse Repos
@@ -278,7 +280,7 @@ export default function ToolsPage() {
             size="large"
             endIcon={<LaunchIcon />}
             className="pulse-glow-btn"
-            sx={{ px: 3.5, py: 1.4, fontWeight: 800, borderRadius: 9999, color: '#08080B' }}
+            sx={{ px: 3.5, py: 1.4, fontWeight: 800, borderRadius: 9999, color: '#08080B', width: { xs: '100%', sm: 'auto' }, textAlign: 'center' }}
           >
             Get Zoth OS ISO
           </Button>
