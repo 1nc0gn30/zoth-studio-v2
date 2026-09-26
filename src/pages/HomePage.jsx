@@ -103,14 +103,14 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
         { type: 'command', text: '$ npx zoth up' },
         { type: 'dim', text: 'Zoth CLI 2.0.0 · launching sovereign enclaves...' },
         { type: 'empty', text: '' },
-        { type: 'success', text: '✔ swarm    listening on :8989  (21-Agent Multiplexer Daemon)' },
-        { type: 'success', text: '✔ memory   listening on :8094  (STDP Vector Memory Engine)' },
-        { type: 'success', text: '✔ bridge   listening on :8102  (Sovereign Peer Bus & Signal Mesh)' },
-        { type: 'success', text: '✔ azoth    listening on :8790  (Archon Orchestrator Core)' },
-        { type: 'success', text: '✔ ollama   ready      :11434 (Local GGUF Silicon Models)' },
-        { type: 'success', text: '✔ studio   ready      http://localhost:3000/ (Zero-Egress Studio)' },
+        { type: 'success', text: '✔ swarm    ready (21-Agent Multiplexer Daemon)' },
+        { type: 'success', text: '✔ memory   ready (STDP Vector Memory Engine)' },
+        { type: 'success', text: '✔ bridge   ready (Sovereign Peer Bus & Signal Mesh)' },
+        { type: 'success', text: '✔ azoth    ready (Archon Orchestrator Core)' },
+        { type: 'success', text: '✔ ollama   ready (Local GGUF Silicon Models)' },
+        { type: 'success', text: '✔ studio   ready (In-Browser Zero-Egress Studio)' },
         { type: 'empty', text: '' },
-        { type: 'gold', text: '★ All local enclaves initialized on loopback. Zero external telemetry active.' },
+        { type: 'gold', text: '★ All sovereign enclaves initialized. Zero external telemetry active.' },
       ],
     },
     status: {
@@ -125,14 +125,14 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
         ...(services.length > 0
           ? services.map((s) => ({
               type: s.up ? 'success' : 'dim',
-              text: `  ${s.up ? 'up ' : 'off'}   ${s.name.padEnd(24)} :${s.port}   (${s.up ? 'Active listener' : 'Offline · run npx zoth up'})`,
+              text: `  ${s.up ? 'up ' : 'off'}   ${s.name.padEnd(24)} (${s.up ? 'Active listener' : 'Offline · run npx zoth up'})`,
             }))
           : [
-              { type: 'dim', text: '  off  Swarm Multiplexer       :8989   (Offline · run npx zoth up)' },
-              { type: 'dim', text: '  off  Neuro Memory Daemon     :8094   (Offline · run npx zoth up)' },
-              { type: 'dim', text: '  off  Sovereign Agent Bridge  :8102   (Offline · run npx zoth up)' },
-              { type: 'dim', text: '  off  Azoth Local Agent       :8790   (Offline · run npx zoth up)' },
-              { type: 'dim', text: '  off  Ollama Local Engine     :11434  (Offline · run ollama serve)' },
+              { type: 'dim', text: '  off  Swarm Multiplexer       (Offline · run npx zoth up)' },
+              { type: 'dim', text: '  off  Neuro Memory Daemon     (Offline · run npx zoth up)' },
+              { type: 'dim', text: '  off  Sovereign Agent Bridge  (Offline · run npx zoth up)' },
+              { type: 'dim', text: '  off  Azoth Local Agent       (Offline · run npx zoth up)' },
+              { type: 'dim', text: '  off  Ollama Local Engine     (Offline · run ollama serve)' },
             ]),
         { type: 'empty', text: '' },
         { type: 'cyan', text: 'Sovereign Tool Repositories: 25/25 verified on disk' },
@@ -150,8 +150,8 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
         { type: 'empty', text: '' },
         { type: 'cyan', text: `Cloning repository: ${selectedTool} from @NullAITech` },
         { type: 'success', text: `✔ Created ./tools/${selectedTool}` },
-        { type: 'success', text: '✔ Linked STDP synaptic memory client to 127.0.0.1:8094' },
-        { type: 'success', text: '✔ Configured Swarm telemetry multiplexer to 127.0.0.1:8989' },
+        { type: 'success', text: '✔ Linked STDP synaptic memory client (local memory enclave)' },
+        { type: 'success', text: '✔ Configured Swarm telemetry multiplexer (loopback process)' },
         { type: 'success', text: '✔ Verified Argon2id key derivation & zero cloud telemetry invariants' },
         { type: 'empty', text: '' },
         { type: 'gold', text: `Ready: cd tools/${selectedTool} && npm start` },
@@ -217,8 +217,10 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
       <Paper
         elevation={0}
         sx={{
-          borderRadius: 3.5,
+          borderRadius: { xs: 2.5, md: 3.5 },
           overflow: 'hidden',
+          maxWidth: '100%',
+          boxSizing: 'border-box',
           border: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)'}`,
           bgcolor: isDark ? '#050508' : '#0F172A',
           boxShadow: isDark
@@ -232,13 +234,15 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            px: { xs: 2, md: 2.5 },
-            py: 1.4,
+            px: { xs: 1.5, sm: 2, md: 2.5 },
+            py: { xs: 1.1, sm: 1.4 },
             bgcolor: isDark ? '#0A0A10' : '#1E293B',
             borderBottom: `1px solid ${isDark ? 'rgba(212,175,55,0.15)' : 'rgba(255,255,255,0.1)'}`,
             flexWrap: 'wrap',
-            gap: 1.5,
+            gap: 1.25,
             position: 'relative',
+            maxWidth: '100%',
+            boxSizing: 'border-box',
           }}
         >
           {/* Subtle horizontal gold accent line at bottom edge of header */}
@@ -257,8 +261,8 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
           />
 
           {/* Traffic light dots + Title */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
-            <Box sx={{ display: 'flex', gap: 0.8, alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, minWidth: 0 }}>
+            <Box sx={{ display: 'flex', gap: 0.8, alignItems: 'center', flexShrink: 0 }}>
               {[
                 { color: '#EF4444' },
                 { color: '#F59E0B' },
@@ -268,8 +272,8 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                   key={dIdx}
                   sx={{
                     position: 'relative',
-                    width: 15,
-                    height: 15,
+                    width: 14,
+                    height: 14,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -288,8 +292,8 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                   />
                   <Box
                     sx={{
-                      width: 10,
-                      height: 10,
+                      width: 9,
+                      height: 9,
                       borderRadius: '50%',
                       bgcolor: dot.color,
                     }}
@@ -298,28 +302,29 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
               ))}
             </Box>
             <Typography
+              noWrap
               sx={{
                 fontFamily: monoFont,
-                fontSize: { xs: '0.72rem', sm: '0.8rem' },
+                fontSize: { xs: '0.70rem', sm: '0.8rem' },
                 color: isDark ? '#94A3B8' : '#CBD5E1',
-                ml: 1,
+                ml: 0.75,
                 fontWeight: 600,
                 letterSpacing: '0.04em',
               }}
             >
-              neo@zoth-metal:~ (bash — 127.0.0.1)
+              neo@zoth-metal:~ (bash)
             </Typography>
           </Box>
 
           {/* Action Buttons: Copy & Run */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: { xs: 'auto', sm: 0 } }}>
             <Button
               size="small"
               onClick={handleRunSimulation}
-              startIcon={<PlayArrowIcon sx={{ fontSize: '1rem !important' }} />}
+              startIcon={<PlayArrowIcon sx={{ fontSize: '0.9rem !important' }} />}
               sx={{
                 fontFamily: monoFont,
-                fontSize: '0.75rem',
+                fontSize: { xs: '0.7rem', sm: '0.75rem' },
                 color: '#F5E6AB',
                 background: isDark
                   ? 'repeating-linear-gradient(0deg, rgba(212,175,55,0.04) 0px, rgba(212,175,55,0.04) 1px, transparent 1px, transparent 3px), linear-gradient(180deg, #181820 0%, #0e0e16 100%)'
@@ -327,8 +332,8 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                 border: '1px solid rgba(212,175,55,0.4)',
                 borderRadius: 2,
                 boxShadow: '0 2px 6px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05)',
-                px: 2,
-                py: 0.5,
+                px: { xs: 1.25, sm: 2 },
+                py: 0.45,
                 transition: 'all 0.2s ease',
                 '&:hover': {
                   background: isDark
@@ -339,16 +344,16 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                 },
               }}
             >
-              Replay Command
+              Replay
             </Button>
             <Button
               size="small"
               variant="contained"
               onClick={() => handleCopy(activeData.cmd)}
-              startIcon={copied ? <CheckIcon sx={{ fontSize: '1rem !important' }} /> : <ContentCopyIcon sx={{ fontSize: '0.9rem !important' }} />}
+              startIcon={copied ? <CheckIcon sx={{ fontSize: '0.9rem !important' }} /> : <ContentCopyIcon sx={{ fontSize: '0.85rem !important' }} />}
               sx={{
                 fontFamily: monoFont,
-                fontSize: '0.75rem',
+                fontSize: { xs: '0.7rem', sm: '0.75rem' },
                 fontWeight: 750,
                 bgcolor: copied ? '#059669' : '#D4AF37',
                 color: copied ? '#FFFFFF' : (isDark ? '#08080B' : '#101828'),
@@ -356,8 +361,8 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                 boxShadow: copied
                   ? 'inset 0 1px 1px rgba(255,255,255,0.35), 0 2px 6px rgba(0,0,0,0.25)'
                   : 'inset 0 1px 1px rgba(255,255,255,0.5), inset 0 -1px 1px rgba(0,0,0,0.25), 0 2px 8px rgba(212,175,55,0.35)',
-                px: 2,
-                py: 0.5,
+                px: { xs: 1.25, sm: 2 },
+                py: 0.45,
                 letterSpacing: '0.02em',
                 transition: 'all 0.2s ease',
                 '&:hover': {
@@ -371,7 +376,7 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                 },
               }}
             >
-              {copied ? 'Copied!' : 'Copy Command'}
+              {copied ? 'Copied!' : 'Copy'}
             </Button>
           </Box>
         </Box>
@@ -381,16 +386,20 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
           sx={{
             display: 'flex',
             alignItems: 'center',
-            px: { xs: 2, md: 2.5 },
-            py: 1.4,
+            px: { xs: 1.5, sm: 2, md: 2.5 },
+            py: { xs: 1, sm: 1.2 },
             bgcolor: isDark ? '#07070D' : '#141E33',
             borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.09)'}`,
             overflowX: 'auto',
+            overflowY: 'hidden',
+            WebkitOverflowScrolling: 'touch',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            '&::-webkit-scrollbar': { display: 'none' },
             gap: 1,
             position: 'relative',
-            scrollbarWidth: 'thin',
-            '&::-webkit-scrollbar': { height: 4 },
-            '&::-webkit-scrollbar-thumb': { bgcolor: isDark ? 'rgba(212,175,55,0.25)' : 'rgba(0,0,0,0.15)', borderRadius: 2 },
+            maxWidth: '100%',
+            boxSizing: 'border-box',
           }}
         >
           {/* Thin gold underline beneath entire strip */}
@@ -431,11 +440,12 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                 size="small"
                 sx={{
                   fontFamily: monoFont,
-                  fontSize: '0.78rem',
+                  fontSize: { xs: '0.72rem', sm: '0.78rem' },
                   fontWeight: 750,
                   whiteSpace: 'nowrap',
-                  px: 2,
-                  py: 0.6,
+                  flexShrink: 0,
+                  px: { xs: 1.4, sm: 2 },
+                  py: 0.5,
                   borderRadius: 2.5,
                   color: isSelected ? (isDark ? '#F5E6AB' : '#FCD34D') : (isDark ? '#94A3B8' : '#CBD5E1'),
                   bgcolor: isSelected
@@ -467,9 +477,9 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
 
           {/* If pull selected, provide quick tool picker chips */}
           {activeTab === 'pull' && (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6, ml: 'auto', paddingLeft: 1 }}>
-              <Typography sx={{ fontFamily: monoFont, fontSize: '0.68rem', color: '#64748B', display: { xs: 'none', md: 'block' }, fontWeight: 600, letterSpacing: '0.08em' }}>
-                TOOL REPO:
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.6, ml: { xs: 1, md: 'auto' }, flexShrink: 0, paddingLeft: 0.5 }}>
+              <Typography sx={{ fontFamily: monoFont, fontSize: '0.68rem', color: '#64748B', display: { xs: 'none', md: 'block' }, fontWeight: 600, letterSpacing: '0.08em', flexShrink: 0 }}>
+                TOOL:
               </Typography>
               {['subsweep-lead-scanner', 'envguard-secrets-vault', 'neuro-memory-daemon'].map((tName) => (
                 <Chip
@@ -482,13 +492,14 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
                     fontSize: '0.68rem',
                     fontWeight: 700,
                     cursor: 'pointer',
+                    flexShrink: 0,
                     bgcolor: selectedTool === tName ? 'rgba(56,189,248,0.20)' : 'rgba(255,255,255,0.045)',
                     color: selectedTool === tName ? '#38BDF8' : '#94A3B8',
                     border: '1px solid',
                     borderColor: selectedTool === tName ? '#38BDF8' : isDark ? 'rgba(148,163,184,0.15)' : 'rgba(255,255,255,0.1)',
                     borderRadius: 1.5,
-                    py: 0.4,
-                    px: 1.2,
+                    py: 0.3,
+                    px: 1,
                     transition: 'all 0.2s ease',
                     '&:hover': {
                       bgcolor: selectedTool === tName ? 'rgba(56,189,248,0.25)' : 'rgba(255,255,255,0.07)',
@@ -503,16 +514,23 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
         {/* Terminal Screen Body with Syntax Highlighting */}
         <Box
           sx={{
-            p: { xs: 2, md: 3 },
+            p: { xs: 1.5, sm: 2, md: 3 },
             fontFamily: monoFont,
-            fontSize: { xs: '0.78rem', sm: '0.86rem' },
-            lineHeight: 1.75,
-            minHeight: 280,
+            fontSize: { xs: '0.72rem', sm: '0.84rem' },
+            lineHeight: { xs: 1.6, sm: 1.75 },
+            minHeight: { xs: 240, sm: 280 },
             overflowX: 'auto',
+            overflowY: 'hidden',
+            WebkitOverflowScrolling: 'touch',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            '&::-webkit-scrollbar': { display: 'none' },
             opacity: isSimulating ? 0.35 : 1,
             transition: 'opacity 0.18s ease',
             position: 'relative',
             borderRadius: 0,
+            maxWidth: '100%',
+            boxSizing: 'border-box',
           }}
         >
           {/* Subtle dark vignette overlay on the screen */}
@@ -564,26 +582,26 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
 
           {activeData.lines.map((line, idx) => {
             if (line.type === 'empty') {
-              return <Box key={idx} sx={{ height: '0.6em' }} />;
+              return <Box key={idx} sx={{ height: '0.5em' }} />;
             }
             if (line.type === 'command') {
               return (
-                <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5, flexWrap: 'wrap', position: 'relative', zIndex: 2 }}>
-                  <Typography component="span" sx={{ fontFamily: monoFont, color: '#D4AF37', fontWeight: 800, textShadow: isDark ? '0 0 6px rgba(212,175,55,0.4)' : 'none' }}>
+                <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5, flexWrap: 'wrap', position: 'relative', zIndex: 2, maxWidth: '100%', wordBreak: 'break-word' }}>
+                  <Typography component="span" sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#D4AF37', fontWeight: 800, textShadow: isDark ? '0 0 6px rgba(212,175,55,0.4)' : 'none' }}>
                     user@zoth-metal:~
                   </Typography>
-                  <Typography component="span" sx={{ fontFamily: monoFont, color: '#FFFFFF', fontWeight: 800, textShadow: isDark ? '0 0 6px rgba(255,255,255,0.3)' : 'none' }}>
+                  <Typography component="span" sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#FFFFFF', fontWeight: 800, textShadow: isDark ? '0 0 6px rgba(255,255,255,0.3)' : 'none', wordBreak: 'break-all' }}>
                     {activeData.cmd}
                   </Typography>
                   <Box
                     component="span"
                     sx={{
                       display: 'inline-block',
-                      width: '8px',
-                      height: '15px',
+                      width: '7px',
+                      height: '14px',
                       bgcolor: '#D4AF37',
                       ml: 0.5,
-                      boxShadow: '0 0 8px #D4AF37, 0 0 14px rgba(212,175,55,0.6), 0 0 20px rgba(212,175,55,0.3)',
+                      boxShadow: '0 0 8px #D4AF37, 0 0 14px rgba(212,175,55,0.6)',
                       animation: 'blinkCursor 1s step-start infinite',
                       '@keyframes blinkCursor': {
                         '50%': { opacity: 0 },
@@ -595,34 +613,34 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             }
             if (line.type === 'dim') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#64748B', fontSize: '0.82rem', position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 4px rgba(100,116,139,0.2)' : 'none' }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#64748B', position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 4px rgba(100,116,139,0.2)' : 'none', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
                   {line.text}
                 </Typography>
               );
             }
             if (line.type === 'success') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#34D399', fontWeight: 600, position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 6px rgba(52,211,153,0.3)' : 'none' }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#34D399', fontWeight: 600, position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 6px rgba(52,211,153,0.3)' : 'none', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
                   {line.text}
                 </Typography>
               );
             }
             if (line.type === 'cyan') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#38BDF8', fontWeight: 600, position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 6px rgba(56,189,248,0.3)' : 'none' }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#38BDF8', fontWeight: 600, position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 6px rgba(56,189,248,0.3)' : 'none', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
                   {line.text}
                 </Typography>
               );
             }
             if (line.type === 'gold') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, color: '#F5E6AB', fontWeight: 750, mt: 0.5, position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 8px rgba(245,230,171,0.45)' : '0 0 6px rgba(245,230,171,0.2)' }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#F5E6AB', fontWeight: 750, mt: 0.5, position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 8px rgba(245,230,171,0.45)' : '0 0 6px rgba(245,230,171,0.2)', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
                   {line.text}
                 </Typography>
               );
             }
             return (
-              <Typography key={idx} sx={{ fontFamily: monoFont, color: '#EDEFF2', position: 'relative', zIndex: 2 }}>
+              <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#EDEFF2', position: 'relative', zIndex: 2, whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
                 {line.text}
               </Typography>
             );
@@ -663,9 +681,9 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
         'Zero cloud fallback required for offline operations',
       ],
       specs: [
-        { label: 'Primary Port', value: '127.0.0.1:3000 (Studio Desk)' },
-        { label: 'Process Isolation', value: 'Dedicated Subprocess Daemons' },
-        { label: 'Swarm Multiplexer', value: '127.0.0.1:8989 (21 Pantheon Agents)' },
+        { label: 'Execution Model', value: 'Client-Side Workstation' },
+        { label: 'Process Isolation', value: 'Web Workers & Sandboxed Iframes' },
+        { label: 'Swarm Multiplexer', value: '21 Sovereign Agents' },
         { label: 'Asset Bundling', value: 'Vite 5 Production Prerendered' },
       ],
       launchButton: {
@@ -731,9 +749,9 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
       title: 'STDP Neuro Memory & Lucy Oracle Synaptic Matrix',
       subtitle: 'Spike-Timing-Dependent Plasticity Synaptic Memory Persistence Daemon',
       description:
-        'Biological memory persistence engine executing locally on loopback port 8094. Models asymmetric Hebbian learning with long-term potentiation (LTP) and long-term depression (LTD). Features 3D pseudo-vector manifold projection and the Lucy Oracle synaptic search.',
+        'Biological memory persistence engine executing locally. Models asymmetric Hebbian learning with long-term potentiation (LTP) and long-term depression (LTD). Features 3D pseudo-vector manifold projection and synaptic search.',
       metrics: [
-        { label: 'Daemon Port', value: '127.0.0.1:8094', desc: 'Loopback IPC Socket' },
+        { label: 'Memory Engine', value: 'Local STDP Model', desc: 'In-Memory / IPC Socket' },
         {
           label: 'Daemon Status',
           value: status?.services?.memory?.up ? 'ONLINE (READY)' : 'OFFLINE (STANDBY)',
@@ -749,8 +767,8 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
         '3D interactive synaptic scatter matrix with semantic tag clustering',
       ],
       specs: [
-        { label: 'Daemon Architecture', value: 'Python 3 HNSW + STDP Worker' },
-        { label: 'Endpoint', value: 'http://127.0.0.1:8094/v1/memory' },
+        { label: 'Memory Architecture', value: 'Client-Side HNSW + STDP Worker' },
+        { label: 'Protocol', value: 'Local Air-Gapped IPC / WASM' },
         { label: 'Recall Latency', value: '< 1.2ms Local Retrieval' },
         { label: 'Persistence Format', value: 'Local Encrypted JSON State' },
       ],
@@ -781,7 +799,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
         { label: 'Quorum Threshold', value: '2f + 1 = 66.7%', desc: 'Byzantine Supermajority' },
         { label: 'Agent Quorum', value: 'Azoth · Kai · Lycan', desc: 'Tri-Cadre Dialectic Debate' },
         { label: 'Fault Tolerance', value: '33.3% Max Ceiling', desc: 'Asynchronous Partition Safety' },
-        { label: 'Consensus Bus', value: '127.0.0.1:8102', desc: 'E2EE Simplex Peer Mesh' },
+        { label: 'Consensus Bus', value: 'Local Mesh / WebWorker Bus', desc: 'E2EE Simplex Peer Mesh' },
       ],
       invariants: [
         'Three-phase commit protocol: Propose -> Pre-Commit -> Final AST Ratification',
@@ -791,7 +809,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
       ],
       specs: [
         { label: 'Arbiter Protocol', value: 'Deterministic Socratic BFT' },
-        { label: 'Communication Bus', value: 'Loopback Simplex Socket :8102' },
+        { label: 'Communication Bus', value: 'WebWorker Simplex Bus' },
         { label: 'Verification Model', value: 'SHA-256 Merkle-Trie AST Diff' },
         { label: 'Synthesis Metric', value: 'Bayesian Weighted Confidence Score' },
       ],
@@ -817,9 +835,9 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
       title: 'Adytum Vault: Argon2id Hardware Sanctum',
       subtitle: 'Zero-Knowledge Memory-Hard Cryptographic Key Derivation & Incubation Rite',
       description:
-        'Air-gapped cryptographic sanctum listening on loopback port 8787. Derives high-entropy master keys using memory-hard Argon2id (t=3, m=64MB, p=4) and protects operator secrets at rest with XChaCha20-Poly1305 authenticated encryption and the 5-minute incubation rite.',
+        'Air-gapped cryptographic sanctum. Derives high-entropy master keys using memory-hard Argon2id (t=3, m=64MB, p=4) and protects operator secrets at rest with XChaCha20-Poly1305 authenticated encryption and WebCrypto primitives.',
       metrics: [
-        { label: 'Vault Daemon Port', value: '127.0.0.1:8787', desc: 'Hardware Enclave Listener' },
+        { label: 'Cryptographic Engine', value: 'Argon2id + WebCrypto', desc: 'In-Browser Enclave' },
         {
           label: 'Daemon Status',
           value: status?.services?.vault?.up ? 'ONLINE (READY)' : 'OFFLINE (STANDBY)',
@@ -1782,8 +1800,8 @@ export default function HomePage() {
         {[
           { icon: <ShieldIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'Zero-Cloud Telemetry', text: 'All LLM calls, embeddings, and memory retention stay 100% on your local metal.' },
           { icon: <SpeedIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'WebGPU WASM Engine', text: 'In-browser tensor matmul and neural inference running directly on client GPU.' },
-          { icon: <MemoryIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'STDP Neuro Memory', text: 'Biological Spike-Timing-Dependent Plasticity daemon listening on 127.0.0.1:8094.' },
-          { icon: <TerminalIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'Sovereign Agent Bridge', text: 'Decentralized peer-to-peer agent bus & consensus engine listening on 127.0.0.1:8102.' },
+          { icon: <MemoryIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'STDP Neuro Memory', text: 'Biological Spike-Timing-Dependent Plasticity engine running via client memory models or local daemon.' },
+          { icon: <TerminalIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'Sovereign Agent Bridge', text: 'Decentralized peer-to-peer agent bus & consensus engine for multi-agent workflows.' },
         ].map((item, idx) => (
           <Box
             key={idx}

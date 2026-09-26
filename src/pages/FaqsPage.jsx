@@ -31,18 +31,20 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, M
 import { FAQS_DATA } from '../data/faqsData';
 export { FAQS_DATA };
 
-const categories = ['All', 'Architecture', 'Security', 'Memory & AI', 'Consensus', 'Adytum Rite', 'WebGPU & Tools', 'OS & Deployment'];
+const categories = ['All', 'Architecture', 'Security', 'Memory & AI', 'Consensus', 'WebGPU & Tools', 'CLI & Deployment'];
 
 // Curated quick prompt pills for rapid terminal exploration
 const QUICK_PROMPTS = [
+  'Zero-Egress Invariant',
+  'WebGPU Tensor Acceleration',
+  'Zoth CLI Workflow',
+  'Local LLM Integration (Ollama)',
   'STDP Synaptic Decay Math',
-  '3-Agent Byzantine Triad',
-  'Adytum 5-Min Incubation',
-  'WebGPU Tensor Shaders',
-  'Zero-Egress Port Bindings',
+  '3-Agent Byzantine Consensus',
+  'Argon2id Secrets Vault',
+  'Model Context Protocol (MCP)',
   'Netlify Static Prerender',
-  'Zoth OS QEMU Command',
-  'Model Context Protocol (MCP)'
+  'Offline Execution & Fallbacks'
 ];
 
 export default function FaqsPage() {
@@ -53,7 +55,7 @@ export default function FaqsPage() {
   const [selectedCat, setSelectedCat] = useState('All');
   const [expanded, setExpanded] = useState('panel-0');
 
-  // Oracle Terminal Console States
+  // Terminal Query Console States
   const [oracleQuery, setOracleQuery] = useState('');
   const [oracleResult, setOracleResult] = useState(null);
   const [isConsulting, setIsConsulting] = useState(false);
@@ -68,14 +70,13 @@ export default function FaqsPage() {
   };
 
   // Perform intent matching against the architectural knowledge base
-  const consultLucyOracle = (rawQuery) => {
+  const queryKnowledgeBase = (rawQuery) => {
     const query = (rawQuery || oracleQuery).trim();
     if (!query) return;
 
     setIsConsulting(true);
     setCopiedResponse(false);
 
-    // Simulate cybernetic transmission latency
     setTimeout(() => {
       const qTokens = query
         .toLowerCase()
@@ -125,36 +126,34 @@ export default function FaqsPage() {
         highestScore = 15;
       }
 
-      // Bayesian confidence calculation
       const calculatedConfidence = Math.min(99.6, Math.max(88.4, 86.0 + (highestScore / 18) * 2.8)).toFixed(1);
 
       setOracleResult({
         faq: bestMatch,
         query,
         confidence: `${calculatedConfidence}%`,
-        latency: (0.08 + Math.random() * 0.12).toFixed(2),
         timestamp: new Date().toLocaleTimeString('en-US', { hour12: false })
       });
 
       setIsConsulting(false);
-    }, 280);
+    }, 120);
   };
 
   const handleQuickPrompt = (promptText) => {
     setOracleQuery(promptText);
-    consultLucyOracle(promptText);
+    queryKnowledgeBase(promptText);
   };
 
   const handleCopyTransmission = () => {
     if (!oracleResult) return;
-    const textToCopy = `[LUCY COGNITIVE ORACLE // ARCHITECTURAL KNOWLEDGE BASE]
-Query: "${oracleResult.query}"
-Confidence: ${oracleResult.confidence} (Latency: ${oracleResult.latency}ms)
+    const textToCopy = `[ZOTH STUDIO v2 // ARCHITECTURAL SPECIFICATION]
 Topic: ${oracleResult.faq.q}
+Category: ${oracleResult.faq.category}
 
-${oracleResult.faq.oracleResponse}
+Summary:
+${oracleResult.faq.summary || oracleResult.faq.oracleResponse}
 
-Architecture Invariant:
+Specification:
 ${oracleResult.faq.a}`;
 
     if (navigator.clipboard) {
@@ -195,16 +194,16 @@ ${oracleResult.faq.a}`;
     <>
       {!introDone && (
         <CinematicIntro
-          words={["SYSTEM", "FAQS", "ORACLE"]}
+          words={["STUDIO", "FAQS", "SPECS"]}
           themeColor="gold"
-          subtitle="ORACLE INTELLIGENCE & FAQS"
+          subtitle="ARCHITECTURAL SPECIFICATIONS & FAQS"
           onComplete={() => setIntroDone(true)}
         />
       )}
       <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
       <SEO
         title="Frequently Asked Questions // Zoth Studio v2 Architecture & Security"
-        description="Official answers to 16 core architectural questions: Zero-Egress Invariants, Lucy Netrunner Oracle STDP memory, 3-Agent Byzantine Consensus, WebGPU shaders, and Zoth OS."
+        description="Authoritative answers to 17 architectural questions: Zero-Egress Invariants, WebGPU WASM acceleration, STDP biomorphic memory, 3-Agent Byzantine Consensus, and Zoth CLI workflows."
       />
 
       {/* Signature Gold Header Accent */}
@@ -215,7 +214,7 @@ ${oracleResult.faq.a}`;
           <HeroItem>
             <Chip
               icon={<HelpOutlineIcon sx={{ color: `${gold.accent} !important` }} />}
-              label="KNOWLEDGE BASE &amp; AEO GROUNDING // 16 RATIFIED SPECIFICATIONS"
+              label="KNOWLEDGE BASE &amp; AEO GROUNDING // 17 RATIFIED SPECIFICATIONS"
               size="small"
               sx={{ bgcolor: gold.wash, color: gold.accent, border: `1px solid ${gold.border}`, fontWeight: 800, mb: 2, px: 1 }}
             />
@@ -234,7 +233,7 @@ ${oracleResult.faq.a}`;
       </HeroReveal>
 
       {/* ────────────────────────────────────────────────────────────────────────── */}
-      {/* 🔮 ASK LUCY ORACLE: SEARCH & TERMINAL CONSOLE */}
+      {/* 💻 STUDIO ARCHITECTURAL KNOWLEDGE BASE: SEARCH & QUERY CONSOLE */}
       {/* ────────────────────────────────────────────────────────────────────────── */}
       <RevealOnScroll preset="fadeUp" delay={0.2}>
         <Paper
@@ -268,52 +267,52 @@ ${oracleResult.faq.a}`;
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <Box
-              component="img"
-              src="/assets/lucy.png"
-              alt="Lucy Oracle Avatar"
-              onError={(e) => { e.target.src = '/brand/ghostbyte-dark.png'; }}
               sx={{
-                width: 36,
-                height: 36,
+                width: 38,
+                height: 38,
                 borderRadius: '50%',
-                objectFit: 'cover',
-                border: '1.5px solid #F472B6',
-                boxShadow: '0 0 10px rgba(244,114,182,0.4)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                bgcolor: gold.wash,
+                border: `1.5px solid ${gold.border}`,
+                boxShadow: isDark ? '0 0 12px rgba(212,175,55,0.3)' : '0 0 8px rgba(184,134,11,0.2)',
               }}
-            />
+            >
+              <TerminalIcon sx={{ fontSize: 20, color: gold.accent }} />
+            </Box>
             <Box>
               <Typography
                 variant="subtitle2"
                 sx={{
                   fontFamily: mono,
                   fontWeight: 800,
-                  letterSpacing: '0.08em',
+                  letterSpacing: '0.06em',
                   color: isDark ? '#F5E6AB' : '#8A6A09',
                   display: 'flex',
                   alignItems: 'center',
                   gap: 0.8,
                 }}
               >
-                <TerminalIcon sx={{ fontSize: 16, color: isDark ? '#F472B6' : '#BE185D' }} />
-                ASK LUCY ORACLE // SEARCH & TERMINAL CONSOLE
+                STUDIO KNOWLEDGE BASE // QUERY CONSOLE
               </Typography>
               <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
-                Direct intent matching over the Zoth architectural knowledge matrix
+                Instant intent matching across 17 verified Zoth Studio v2 specifications
               </Typography>
             </Box>
           </Box>
 
           <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
             <Chip
-              label="SEMANTIC BUS :8094"
+              label="CLIENT RUNTIME: VERIFIED"
               size="small"
               sx={{
-                bgcolor: isDark ? 'rgba(244,114,182,0.12)' : '#FDF2F8',
-                color: isDark ? '#F472B6' : '#BE185D',
+                bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF',
+                color: isDark ? '#38BDF8' : '#0369A1',
                 fontFamily: mono,
                 fontWeight: 750,
                 fontSize: '0.72rem',
-                border: `1px solid ${isDark ? 'rgba(244,114,182,0.3)' : '#FBCFE8'}`,
+                border: `1px solid ${isDark ? 'rgba(56,189,248,0.3)' : '#BAE6FD'}`,
               }}
             />
             <Chip
@@ -336,11 +335,11 @@ ${oracleResult.faq.a}`;
         <Box sx={{ mb: 2 }}>
           <TextField
             fullWidth
-            placeholder="Type any architectural question (e.g. 'How does STDP decay stale vectors?', 'Explain Azoth and Kai debate', 'What are the port bindings?')..."
+            placeholder="Type any architectural question (e.g. 'How does STDP decay stale vectors?', 'Explain 3-agent Byzantine consensus', 'How to use Zoth CLI?')..."
             value={oracleQuery}
             onChange={(e) => setOracleQuery(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === 'Enter') consultLucyOracle();
+              if (e.key === 'Enter') queryKnowledgeBase();
             }}
             sx={{
               bgcolor: isDark ? '#0B0B12' : '#F9FAFB',
@@ -467,27 +466,28 @@ ${oracleResult.faq.a}`;
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.8 }}>
                 <Box
-                  component="img"
-                  src="/assets/lucy.png"
-                  alt="Lucy Netrunner"
-                  onError={(e) => { e.target.src = '/brand/ghostbyte-dark.png'; }}
                   sx={{
-                    width: 52,
-                    height: 52,
+                    width: 44,
+                    height: 44,
                     borderRadius: '50%',
-                    objectFit: 'cover',
-                    border: `2px solid ${isDark ? '#F472B6' : '#BE185D'}`,
-                    boxShadow: isDark ? '0 0 16px rgba(244,114,182,0.5)' : '0 2px 8px rgba(190,24,93,0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    bgcolor: gold.wash,
+                    border: `1.5px solid ${gold.border}`,
+                    boxShadow: isDark ? '0 0 16px rgba(212,175,55,0.35)' : '0 2px 8px rgba(184,134,11,0.2)',
                   }}
-                />
+                >
+                  <TerminalIcon sx={{ fontSize: 22, color: gold.accent }} />
+                </Box>
                 <Box>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-                    <Typography variant="overline" sx={{ color: isDark ? '#F472B6' : '#BE185D', fontWeight: 800, letterSpacing: '0.12em', lineHeight: 1.2 }}>
-                      LUCY // SOVEREIGN NETRUNNER ORACLE
+                    <Typography variant="overline" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 800, letterSpacing: '0.08em', lineHeight: 1.2 }}>
+                      SPECIFICATION // {oracleResult.faq.category.toUpperCase()}
                     </Typography>
                     <Chip
                       icon={<CheckCircleIcon sx={{ fontSize: 13, color: `${isDark ? '#34D399' : '#027A48'} !important` }} />}
-                      label={`CONFIDENCE: ${oracleResult.confidence}`}
+                      label={`MATCH: ${oracleResult.confidence}`}
                       size="small"
                       sx={{
                         bgcolor: isDark ? 'rgba(52,211,153,0.15)' : '#ECFDF5',
@@ -500,13 +500,13 @@ ${oracleResult.faq.a}`;
                     />
                   </Box>
                   <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
-                    Matched: &ldquo;{oracleResult.faq.q}&rdquo; · Local Latency: {oracleResult.latency}ms
+                    Matched: &ldquo;{oracleResult.faq.q}&rdquo;
                   </Typography>
                 </Box>
               </Box>
 
               <Stack direction="row" spacing={1} sx={{ flexShrink: 0 }}>
-                <Tooltip title={copiedResponse ? 'Copied Transmission!' : 'Copy Oracle Transmission'}>
+                <Tooltip title={copiedResponse ? 'Copied Specification!' : 'Copy Specification'}>
                   <IconButton
                     size="small"
                     onClick={handleCopyTransmission}
@@ -537,14 +537,14 @@ ${oracleResult.faq.a}`;
               </Stack>
             </Box>
 
-            {/* Oracle Speech / Transcript Box */}
+            {/* Architectural Summary Box */}
             <Box
               sx={{
                 mb: 2.5,
                 p: 2,
                 borderRadius: 2,
                 bgcolor: isDark ? 'rgba(0,0,0,0.6)' : '#FFFFFF',
-                border: `1px solid ${isDark ? 'rgba(244,114,182,0.25)' : '#E5C768'}`,
+                border: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : '#E5C768'}`,
               }}
             >
               <Typography
@@ -557,7 +557,7 @@ ${oracleResult.faq.a}`;
                   whiteSpace: 'pre-line',
                 }}
               >
-                &ldquo;{oracleResult.faq.oracleResponse}&rdquo;
+                &ldquo;{oracleResult.faq.summary || oracleResult.faq.oracleResponse}&rdquo;
               </Typography>
             </Box>
 
@@ -615,7 +615,7 @@ ${oracleResult.faq.a}`;
           <TextField
             fullWidth
             size="small"
-            placeholder="Filter the 16 architectural questions (e.g. STDP, Zero-Egress, Consensus, Netlify, QEMU, MCP)..."
+            placeholder="Filter the 17 architectural questions (e.g. STDP, Zero-Egress, WebGPU, Consensus, Zoth CLI, MCP)..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             sx={{
@@ -768,7 +768,7 @@ ${oracleResult.faq.a}`;
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5 }}>
                       <Button
                         size="small"
-                        startIcon={<PsychologyIcon sx={{ color: isDark ? '#F472B6' : '#BE185D' }} />}
+                        startIcon={<TerminalIcon sx={{ color: gold.accent }} />}
                         onClick={() => handleQuickPrompt(faq.q)}
                         sx={{
                           fontFamily: mono,
@@ -776,7 +776,7 @@ ${oracleResult.faq.a}`;
                           color: isDark ? '#F5E6AB' : '#8A6A09',
                         }}
                       >
-                        Consult Lucy on this
+                        Query Console on this
                       </Button>
 
                       <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
@@ -812,7 +812,7 @@ ${oracleResult.faq.a}`;
       </RevealOnScroll>
 
       {/* ────────────────────────────────────────────────────────────────────────── */}
-      {/* 🔗 DIRECT ORACLE ASSISTANCE CARD (FOOTER) */}
+      {/* 🔗 DIRECT EXPLORATION ASSISTANCE CARD (FOOTER) */}
       {/* ────────────────────────────────────────────────────────────────────────── */}
       <RevealOnScroll preset="fadeUp" delay={0.5}>
         <Paper
@@ -832,13 +832,13 @@ ${oracleResult.faq.a}`;
         >
           <Box sx={{ minWidth: 260, flex: 1 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-              <PsychologyIcon sx={{ color: gold.accent }} />
+              <TerminalIcon sx={{ color: gold.accent }} />
               <Typography variant="subtitle1" sx={{ fontWeight: 800, color: isDark ? gold.soft : gold.accent }}>
-                Need deeper answers? Consult the Lucy Cognitive Memory Hub
+                Explore Interactive Workstations &amp; Shaders
               </Typography>
             </Box>
             <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
-              Query the Whitespace semantic memory matrix directly on loopback :8094, run live STDP synaptic calculations, or monitor swarm telemetry.
+              Inspect live client-side STDP synaptic calculations, 3D vector manifold projection, WebGPU WGSL shaders, and sovereign multi-agent consensus in the interactive hubs.
             </Typography>
           </Box>
           <Stack direction="row" spacing={1.5} sx={{ flexShrink: 0 }}>
@@ -850,16 +850,16 @@ ${oracleResult.faq.a}`;
               endIcon={<ArrowForwardIcon />}
               sx={{ fontWeight: 800, px: 2.5 }}
             >
-              Open Lucy Memory Hub
+              Open Memory Hub
             </Button>
             <Button
               component={RouterLink}
-              to="/docs/math"
+              to="/arsenal"
               variant="outlined"
               color="primary"
               sx={{ fontWeight: 750 }}
             >
-              Six Math Pillars
+              Explore Arsenal
             </Button>
           </Stack>
         </Paper>

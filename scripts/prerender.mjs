@@ -283,14 +283,14 @@ $ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</co
         <h3 style="color: #D4AF37; font-size: 1.05rem; margin: 0 0 0.5rem 0;">${i + 1}. ${f.q}</h3>
         <p style="color: #D1D5DB; line-height: 1.6; margin: 0 0 0.75rem 0;">${f.a.replace(/\n+/g, '<br/>')}</p>
         <blockquote style="margin: 0; padding: 0.5rem 0.75rem; border-left: 2px solid #38BDF8; background: #08080B; color: #93C5FD; font-size: 0.85rem;">
-          <strong>Lucy Oracle Telemetry:</strong> ${f.oracleResponse}
+          <strong>Architectural Summary:</strong> ${f.summary || f.oracleResponse}
         </blockquote>
       </article>
     `).join('');
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
         <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Frequently Asked Questions // Architectural Knowledge Base</h2>
-        <p style="color: #D1D5DB; line-height: 1.6; margin-bottom: 1.5rem;">Comprehensive architectural reference answering foundational questions on zero-egress invariants, STDP synaptic equations, Byzantine consensus arbitration, and offline KVM execution.</p>
+        <p style="color: #D1D5DB; line-height: 1.6; margin-bottom: 1.5rem;">Comprehensive architectural reference answering foundational questions on zero-egress invariants, WebGPU tensor acceleration, STDP synaptic equations, Byzantine consensus arbitration, and local CLI workflows.</p>
         <div>
           ${faqsList}
         </div>

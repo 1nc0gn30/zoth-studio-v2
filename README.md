@@ -1,7 +1,7 @@
 # Zoth Studio v2
 
-> **Zero-Egress Sovereign Agent Development Studio & Pantheon Matrix**  
-> *Air-gapped local AI agent orchestration, biomorphic STDP memory, Lucy Cognitive Oracle, 24 sovereign workstations, 25 in-browser micro-tools, 3-agent Byzantine consensus, and Adytum Hardware Sanctum.*
+> **Zero-Egress Sovereign Agent Development Studio & Tool Matrix**  
+> *Client-side WebGPU acceleration, biomorphic STDP memory, 24 sovereign workstations, 25 in-browser micro-tools, 3-agent Byzantine consensus, and Argon2id cryptographic vault.*
 
 [![Zero-Egress Guaranteed](https://img.shields.io/badge/Security-Zero--Egress%20Enclave-gold?style=flat-square)](#zero-egress-security-invariants)
 [![Netlify Deploy Ready](https://img.shields.io/badge/Deploy-Netlify%20Production-00C7B7?style=flat-square&logo=netlify)](#netlify-deployment-instructions)
@@ -9,19 +9,19 @@
 [![Vite 5.4](https://img.shields.io/badge/Build-Vite%205.4-purple?style=flat-square)](https://vitejs.dev)
 [![React 18.2](https://img.shields.io/badge/Framework-React%2018.2-blue?style=flat-square)](https://react.dev)
 [![MUI v5.15](https://img.shields.io/badge/UI-Material--UI%20v5.15-007FFF?style=flat-square)](https://mui.com)
-[![WindowCarousel](https://img.shields.io/badge/UI-WindowCarousel%20Engine-gold?style=flat-square)](#windowcarousel--column-stacking-architecture)
-[![Lucy Cognitive Oracle](https://img.shields.io/badge/Oracle-Semantic%20Bus%20%3A8094-cyan?style=flat-square)](#lucy-oracle--biomorphic-stdp-synaptic-memory)
+[![WebGPU Acceleration](https://img.shields.io/badge/Compute-WebGPU%20WGSL%20%2B%20WASM-cyan?style=flat-square)](#webgpu--wasm-acceleration)
+[![STDP Neuro Memory](https://img.shields.io/badge/Memory-STDP%20Hebbian%20Engine-cyan?style=flat-square)](#stdp-neuro-memory--biomorphic-synaptic-persistence)
 [![License: Sovereign](https://img.shields.io/badge/License-Sovereign%20Developer-green?style=flat-square)](#license)
 
 ---
 
 ## System Overview & Core Philosophy
 
-**Zoth Studio v2** is an air-gapped, zero-egress development studio and operator cockpit designed for orchestrating autonomous AI agent pantheons, local model foundries (Ollama, llama.cpp), and biomorphic synaptic memory matrices. Built on a pristine gold-on-void aesthetic (`#D4AF37` on `#08080B`), Zoth Studio v2 decouples complex multi-agent workflows into 24 dedicated workstations and 25 zero-leakage in-browser developer utilities.
+**Zoth Studio v2** is a zero-egress, sovereign developer studio designed for orchestrating autonomous AI agent workflows, inspecting code syntax, executing hardware-accelerated WebGPU shaders, and interfacing with local model foundries (such as Ollama or llama.cpp). Built with a gold-on-void aesthetic (`#D4AF37` on `#08080B`), Zoth Studio v2 unifies 24 dedicated workstations and 25 standalone, zero-leakage developer utilities directly in the browser.
 
-- **WHAT THIS IS**: A complete, single-page application (SPA) and loopback development environment for coordinating autonomous AI agent swarms, testing zero-egress developer tools, tuning biomorphic STDP synaptic memories, executing 3-agent Byzantine consensus proofs, and running local models on local silicon.
-- **WHAT THIS IS NOT**: This is not a cloud SaaS, does not send prompts or telemetry to third-party endpoints, and does not depend on cloud authentication providers. Everything executes on your physical hardware via loopback enclaves (`127.0.0.1`).
-- **WINDOWCAROUSEL ARCHITECTURE**: Unlike tacky dashboards that squish 4+ complex interface windows into a cramped horizontal row, Zoth Studio v2 implements an adaptive `WindowCarousel` architecture across tool suites (WebGen, Memory, Archon Swarms). Operators can glide through full-detail interface cards with generous breathing room or toggle into a clean, stacked single-column view with a single click.
+- **WHAT THIS IS**: A client-side developer workstation and local tool catalog for coordinating autonomous agent workflows, running WebGPU tensor calculations, visualizing biomorphic STDP synaptic memories, executing 3-agent Byzantine consensus simulations, and connecting to local models on local silicon.
+- **WHAT THIS IS NOT**: This is not a cloud SaaS, does not send prompts or telemetry to remote endpoints, and does not require third-party accounts. All primary tools run client-side in the browser, with optional local CLI daemons for IPC and local storage.
+- **WINDOWCAROUSEL ARCHITECTURE**: Zoth Studio v2 implements an adaptive `WindowCarousel` architecture across tool suites (WebGen, Memory, Swarms). Operators can glide through full-detail interface cards with generous breathing room or toggle into a clean, stacked single-column view with a single click.
 
 ---
 
@@ -31,18 +31,18 @@
 
 ```
 +====================================================================================================+
-|                                    ZOTH STUDIO v2 OPERATOR DESK                                    |
-|                         http://127.0.0.1:3000 (React 18 + MUI v5 Gold-on-Void)                     |
+|                                    ZOTH STUDIO v2 OPERATOR WORKSTATION                              |
+|                       Client-Side Browser Runtime (React 18 + MUI v5 Gold-on-Void)                  |
 +====================================================================================================+
         |                                     |                                     |
         v                                     v                                     v
 +-------------------------------+  +-------------------------------+  +-------------------------------+
-|       24 WORKSTATIONS         |  |      25 IN-BROWSER TOOLS      |  |    LUCY COGNITIVE ORACLE      |
-|  - Multi-Agent DAG Composer   |  |  - JWT Inspector Guard        |  |  - Semantic Bus :8094         |
-|  - Brand Alchemical Seals     |  |  - Payload Entropy Studio     |  |  - STDP Synaptic Plasticity   |
-|  - Sovereign Code IDE         |  |  - Polyglot Exporter          |  |  - Whitespace 3D Constellation|
-|  - Cyberpunk HUD Cockpit      |  |  - MediaPipe Vision Gesture   |  |  - SQLite vec0 Vectors        |
-|  - AI Model Foundry           |  |  - CWV Speed Engine           |  |  - Port 8094 (Loopback)       |
+|       24 WORKSTATIONS         |  |      25 IN-BROWSER TOOLS      |  |      STDP NEURO MEMORY        |
+|  - Multi-Agent DAG Composer   |  |  - JWT Inspector Guard        |  |  - Hebbian LTP / LTD Learning |
+|  - WebGen Layout Composer     |  |  - Payload Entropy Studio     |  |  - 3D Synaptic Manifold       |
+|  - Sovereign Code IDE         |  |  - Polyglot Exporter          |  |  - Exponential Weight Decay   |
+|  - Vision Gesture Control     |  |  - MediaPipe Vision Gesture   |  |  - Local Vector Clustering    |
+|  - AI Model Connector (Ollama)|  |  - CWV Speed Engine           |  |  - Pure Client Memory State   |
 +-------------------------------+  +-------------------------------+  +-------------------------------+
         |                                     |                                     |
         +-------------------------------------+-------------------------------------+
@@ -51,20 +51,20 @@
         |                                     |                                     |
         v                                     v                                     v
 +-------------------------------+  +-------------------------------+  +-------------------------------+
-|  3-AGENT BYZANTINE CONSENSUS  |  |    ADYTUM HARDWARE SANCTUM    |  |     ZERO-EGRESS GUARANTEE     |
-|  - Proposer Agent (AST Diff)  |  |  - 22-Key Cryptographic Gate  |  |  - Loopback Only (127.0.0.1)  |
-|  - Evaluator Agent (Entropy)  |  |  - 5-Min Incubation Lock      |  |  - Shannon Entropy Gating     |
-|  - Arbiter Agent (Verdict)    |  |  - Argon2id KDF Memory Hard   |  |  - 0 Cloud Telemetry / Beacons|
-|  - 3/3 Cryptographic Seal     |  |  - XChaCha20-Poly1305 Vault   |  |  - No eval() / new Function() |
+|  3-AGENT BYZANTINE CONSENSUS  |  |    ARGON2id SECRETS VAULT     |  |     ZERO-EGRESS GUARANTEE     |
+|  - Proposer Agent (AST Diff)  |  |  - Client WebCrypto Enclave   |  |  - 100% Client-Side Execution |
+|  - Skeptic Agent (Evaluation) |  |  - Memory-Hard Argon2id KDF   |  |  - Zero Cloud Telemetry       |
+|  - Auditor Agent (Synthesis)  |  |  - Authenticated AEAD Cipher  |  |  - No Remote Analytics Trackers|
+|  - 2/3 Supermajority Seal     |  |  - Local Key Zeroization      |  |  - Air-Gapped Safe            |
 +-------------------------------+  +-------------------------------+  +-------------------------------+
         |                                     |                                     |
         v                                     v                                     v
 +-------------------------------+  +-------------------------------+  +-------------------------------+
-|      LOCAL BACKEND DAEMONS    |  |   NETLIFY EDGE PRERENDER      |  |   AEO / AX MACHINE DISCOVERY  |
-|  - Neuro Memory :8094 (Python)|  |  - 71 Prerendered Routes      |  |  - /llms.txt & /llms-full.txt |
-|  - Signal Bridge :8102 (IPC)  |  |  - Serverless Proxy Functions |  |  - /ai.txt Crawler Contract   |
-|  - Hardware Vault :8787 (Rust)|  |  - Strict Security Headers    |  |  - /sitemap.xml (71 Entries)  |
-|  - Ollama / llama.cpp :11434  |  |  - Immutable Asset Caching    |  |  - /api/ax/manifest.json      |
+|    OPTIONAL LOCAL DAEMONS     |  |    NETLIFY STATIC HOSTING     |  |   AEO / AX MACHINE DISCOVERY  |
+|  - Ollama Engine (:11434)     |  |  - 71 Prerendered Routes      |  |  - /llms.txt & /llms-full.txt |
+|  - Neuro Memory Daemon (:8094)|  |  - Instant FCP (< 200ms)      |  |  - /ai.txt Crawler Policy     |
+|  - Sovereign Bridge (:8102)   |  |  - Strict CSP & Security      |  |  - /sitemap.xml (71 Entries)  |
+|  - Invoked via `npx zoth up`  |  |  - Immutable Asset Caching    |  |  - Schema.org JSON-LD Graphs  |
 +-------------------------------+  +-------------------------------+  +-------------------------------+
 ```
 
@@ -72,44 +72,42 @@
 
 ```mermaid
 flowchart TD
-    subgraph Client["Zoth Studio v2 Frontend (Loopback Enclave)"]
-        UI["Operator Deck UI<br/>http://127.0.0.1:3000<br/>React 18 + MUI v5"]
-        WS["24 Sovereign Workstations<br/>DAG Composer, Code IDE, Model Foundry"]
-        Tools["25 In-Browser Tools<br/>JWT Guard, Shannon Entropy, Exporters"]
+    subgraph Client["Zoth Studio v2 Client Runtime"]
+        UI["Operator Deck UI<br/>Vite + React 18 + MUI v5"]
+        WS["24 Sovereign Workstations<br/>DAG Composer, Code IDE, Model Connector"]
+        Tools["25 In-Browser Micro-Tools<br/>WebGPU Shaders, JWT Guard, Entropy Analyzer"]
         UI --> WS
         UI --> Tools
     end
 
-    subgraph Memory["Lucy Cognitive Oracle & Whitespace Memory"]
-        Lucy["Lucy Oracle Core<br/>Semantic Bus :8094 // Zero Egress"]
+    subgraph Memory["STDP Neuro Memory Engine"]
         STDP["STDP Synaptic Plasticity Engine<br/>dw = A+ exp(-dt/tau)"]
-        HNSW["SQLite Vector Tables & vec0 Index<br/>Port 127.0.0.1:8094"]
-        Lucy --> STDP --> HNSW
+        Manifold["3D Synaptic Manifold Visualizer<br/>Local In-Memory Semantic Clustering"]
+        STDP --> Manifold
     end
 
-    subgraph Consensus["3-Agent Byzantine Consensus Arena"]
-        Proposer["Proposer Agent<br/>Generates AST Code Diff"]
-        Evaluator["Evaluator Agent<br/>Shannon Entropy & Security Check"]
-        Arbiter["Arbiter Agent<br/>3/3 Cryptographic Verification Seal"]
-        Proposer --> Evaluator --> Arbiter
+    subgraph Consensus["3-Agent Byzantine Consensus Chamber"]
+        Proposer["Proposer Agent (Nexus)<br/>Constructs AST Code Diffs"]
+        Skeptic["Skeptic Agent (Vigil)<br/>Adversarial Syntax & Entropy Checks"]
+        Auditor["Auditor Agent (Aegis)<br/>Bayesian Verification & 2/3 Quorum Seal"]
+        Proposer --> Skeptic --> Auditor
     end
 
-    subgraph Security["Hardware Sanctum & Zero-Egress Boundary"]
-        Adytum["Adytum Hardware Sanctum<br/>22-Key Cryptographic Gate<br/>5-Min Incubation Timer"]
-        Vault["Argon2id Hardware Vault<br/>XChaCha20-Poly1305 Encryption<br/>Port 127.0.0.1:8787"]
-        Egress["Zero-Egress Gatekeeper<br/>Shannon Entropy Gating H(X)<br/>Strict Loopback 127.0.0.1 Binding<br/>Zero Cloud Telemetry"]
-        Adytum --> Vault --> Egress
+    subgraph Security["Local Security & Cryptographic Vault"]
+        Vault["Argon2id Secrets Vault<br/>Memory-Hard KDF + Authenticated Encryption"]
+        Egress["Zero-Egress Boundary<br/>Pure Client Memory · 0 Outbound Trackers"]
+        Vault --> Egress
     end
 
-    subgraph Daemons["Local Loopback Daemons"]
-        Bridge["Sovereign Signal Bridge<br/>Simplex E2EE Noise Protocol IPC<br/>Port 127.0.0.1:8102"]
-        LLM["Local Model Foundry<br/>Ollama / llama.cpp<br/>Port 127.0.0.1:11434"]
+    subgraph OptionalDaemons["Optional Local CLI Daemons (npx zoth up)"]
+        Ollama["Local Model Engine<br/>Ollama / llama.cpp (:11434)"]
+        Bridge["Sovereign Agent Bridge<br/>Simplex Peer Bus (:8102)"]
     end
 
-    subgraph Distribution["Netlify Edge & AEO Discovery"]
-        Netlify["Netlify Production Hosting<br/>npm run build -> dist/"]
-        Routes["87 Prerendered Static Routes<br/>Route-Specific Head & Schema.org"]
-        AEO["Machine Discovery Endpoints<br/>/llms.txt | /llms-full.txt<br/>/ai.txt | /sitemap.xml"]
+    subgraph Distribution["Static Distribution & AEO"]
+        Netlify["Production Static Distribution<br/>npm run build -> dist/"]
+        Routes["71 Prerendered Static Routes<br/>Schema.org JSON-LD Graphs"]
+        AEO["Machine Discovery Endpoints<br/>/llms.txt | /llms-full.txt | /sitemap.xml"]
         Netlify --> Routes
         Netlify --> AEO
     end
@@ -117,54 +115,41 @@ flowchart TD
     UI <--> Memory
     UI <--> Consensus
     UI <--> Security
-    UI <--> Daemons
+    UI -.-> OptionalDaemons
 ```
 
 ---
 
-## 37 Sovereign Studio Workstations
+## 24 Sovereign Studio Workstations
 
-All 37 workstations render directly in Zoth Studio v2 without external dependencies:
+All 24 workstations render natively in Zoth Studio v2 with zero required external dependencies:
 
-| Category | Workstation | Route / File | Core Operational Function |
+| Category | Workstation | Route | Core Function |
 | :--- | :--- | :--- | :--- |
 | **Agent Coordination** | Multi-Agent DAG Composer | `/workstations/agent-composer` | Visual graph editor for orchestrating agent dependency pipelines |
-| **Agent Coordination** | 21-Agent Pantheon Swarm | `/swarm` | Real-time swarm orchestration, task dispatch, and bus latency |
-| **Agent Coordination** | Operator Mission Control | `/workstations/mission-control` | Global mission status board, active subagents, and thread logs |
-| **Agent Coordination** | Simplex Signal Bridge | `/bridges` | E2EE WebSocket loopback signal bridge and packet ping matrix |
-| **Agent Coordination** | Swarm Bus Monitor | `/workstations/bus-monitor` | Inter-agent IPC channel inspector and packet delivery verification |
-| **Memory & Neural** | Lucy Netrunner Memory | `/memory` | 3D Whitespace Cyberspace constellation and vector query console |
-| **Memory & Neural** | STDP Synaptic Lab | `/memory#lab` | Interactive curve plotter and synaptic weight potentiometer |
-| **Consensus & Logic** | Byzantine Consensus Arena | `/consensus` | Triadic Socratic debate arena (Proposer, Evaluator, Arbiter) |
+| **Agent Coordination** | 21-Agent Swarm Radar | `/swarm` | Swarm orchestration, task dispatch, and agent telemetry |
+| **Agent Coordination** | Operator Mission Control | `/workstations/mission-control` | Mission status board, active subagents, and thread chronicle |
+| **Agent Coordination** | Simplex Signal Bridge | `/bridges` | Sovereign event communication and peer signal matrix |
+| **Agent Coordination** | Swarm Bus Monitor | `/workstations/bus-monitor` | Inter-agent event channel inspector and message delivery verification |
+| **Memory & Cognitive** | STDP Neuro Memory Hub | `/memory` | 3D synaptic vector manifold and biomorphic persistence console |
+| **Memory & Cognitive** | STDP Synaptic Lab | `/memory#lab` | Interactive curve plotter and synaptic weight potentiometer |
+| **Consensus & Logic** | Byzantine Consensus Arena | `/consensus` | Triadic dialectic debate arena (Proposer, Skeptic, Auditor) |
 | **Consensus & Logic** | Multi-Model Fusion Arena | `/workstations/fusion-arena` | Cross-model AST mutation arbitration and weighted vote tally |
-| **Consensus & Logic** | Six Math Pillars Academy | `/docs#sec-math` | Linear Algebra, Calculus, Probability, Hessian, Lyapunov, STDP |
+| **Consensus & Logic** | Six Math Pillars Academy | `/docs#sec-math` | Interactive theory academy across Linear Algebra, Calculus, Probability, and STDP |
 | **Development & IDE** | Sovereign Code IDE | `/workstations/ide` | Local syntax tree editor, diff review, and invariant linter |
 | **Development & IDE** | WebGen Autonomous Foundry | `/webgen` | Standalone HTML/CSS/JS rapid generator and layout composer |
 | **Development & IDE** | Edge Forge Micro-Builder | `/workstations/edge-forge` | Sandbox compiler and edge bundle packager |
 | **Development & IDE** | Tool Bench Sandbox | `/workstations/tool-bench` | Live test harness for isolated schema-validated agent tools |
 | **Development & IDE** | Polyglot Framework Exporter | `/tools/polyglot-framework-exporter` | Transpiles components across React, Vue, Svelte, and Solid |
-| **Security & Sanctum** | Adytum Hardware Sanctum | `/adytum` | 22-key meditative cryptographic vault with 5-minute incubation |
-| **Security & Sanctum** | HexStrike Cybersec Arsenal | `/hexstrike` | Air-gapped CVE vulnerability matrix, attack graph analyzer |
-| **Security & Sanctum** | Zero-Egress Enclave Desk | `/docs#sec-egress` | Shannon entropy gate, port audit, and egress firewall rules |
-| **Security & Sanctum** | Zoth OS Hypervisor Sandbox | `/zoth-os` | QEMU/KVM virtual machine runner and isolated runtime sandbox |
-| **Security & Sanctum** | Hardware Vault Console | `/docs#sec-5` | Argon2id key derivation manager and secret seal console |
-| **Brand & Creative** | Brand Alchemical Seals | `/workstations/brand-seals` | Vector seal generation, sacred geometry, and badge stampers |
-| **Brand & Creative** | Cyberpunk HUD Cockpit | `/workstations/cyberpunk-hud` | High-density telemetry displays, frequency sweeps, audio meters |
-| **Brand & Creative** | Nexus 3D Scene Studio | `/tools/nexus-3d-scene-studio` | Three.js / WebGL 3D environment builder and spatial layout |
-| **Brand & Creative** | Badge & Coin Generator | `/tools/badge3d-coin-generator` | High-fidelity metallic 3D asset generator |
-| **Brand & Creative** | Datamosh Glitch Studio | `/tools/datamosh-glitch-studio` | Visual entropy injection and video compression distortion |
-| **Brand & Creative** | UFO Sacred Geometry | `/tools/ufo-sacred-geometry` | Harmonic resonant SVG pattern generator |
-| **Web & Automation** | Subsweep Lead Scanner | `/tools/subsweep-lead-scanner` | Passive DNS and asset inventory tool |
-| **Web & Automation** | Omnipost Social Engine | `/tools/omnipost-social-engine` | Markdown cross-platform publication formatter |
-| **Web & Automation** | CWV Speed Engine | `/tools/cwv-speed-engine` | In-browser Core Web Vitals optimization and audit suite |
-| **Web & Automation** | OG Canvas Forge | `/tools/og-canvas-forge` | High-resolution Open Graph image generator |
-| **Web & Automation** | PWA Manifest Builder | `/tools/pwa-manifest-builder` | Progressive Web App manifest and icon pipeline |
-| **Web & Automation** | Schema Illustrator Studio | `/tools/schema-illustrator-studio` | Schema.org JSON-LD interactive visualizer |
-| **Intelligence & Models** | AI Model Foundry | `/workstations/models` | Connectors for local Ollama, llama.cpp, and ONNX Runtime Web |
-| **Intelligence & Models** | DeepSearch Research Agent | `/tools/deepsearch-research-agent` | Air-gapped knowledge synthesizer and document parser |
-| **Intelligence & Models** | PromptMaster Studio | `/tools/promptmaster-studio` | Prompt engineering optimizer with token entropy metrics |
-| **Review & Chronicle** | Session Chronicle | `/workstations/chronicle` | Swarm audit trails, cryptographic consensus logs, and commits |
-| **Review & Chronicle** | Agent Experience Powerhouse| `/ax` | Machine-readable AX manifest builder and agent benchmark |
+| **Security & Cryptography** | Adytum Hardware Sanctum | `/adytum` | Meditative cryptographic sanctum with Argon2id memory hardness |
+| **Security & Cryptography** | HexStrike Cybersec Arsenal | `/hexstrike` | Air-gapped CVE vulnerability matrix and attack surface analyzer |
+| **Security & Cryptography** | Zero-Egress Enclave Desk | `/docs#sec-egress` | Shannon entropy gate, port audit, and privacy invariants |
+| **Security & Cryptography** | Zoth OS Hypervisor Sandbox | `/zoth-os` | Virtual machine runner and isolated runtime sandbox guide |
+| **Security & Cryptography** | Hardware Vault Console | `/docs#sec-5` | Argon2id key derivation manager and secret seal console |
+| **Brand & Creative** | Brand Seals Studio | `/workstations/brand-seals` | Vector seal generation, geometric seals, and badge stampers |
+| **Brand & Creative** | Telemetry HUD Cockpit | `/workstations/cyberpunk-hud` | High-density telemetry displays, frequency sweeps, and audio meters |
+| **Intelligence & Models** | AI Model Connector | `/workstations/models` | Connectors for local Ollama, llama.cpp, and ONNX Runtime Web |
+| **Review & Machine AX** | Agent Experience Powerhouse | `/ax` | Machine-readable AX manifest builder and agent benchmark |
 
 ---
 
@@ -186,23 +171,23 @@ Air-gapped developer utilities operating with zero network calls:
 12. **PWA Manifest Builder** (`/tools/pwa-manifest-builder`): Complete Web App Manifest JSON generator with asset bundling.
 13. **Schema Illustrator Studio** (`/tools/schema-illustrator-studio`): Interactive Schema.org graph builder and validator.
 14. **DeepSearch Research Agent** (`/tools/deepsearch-research-agent`): Local document indexer with BM25 keyword matching.
-15. **PromptMaster Studio** (`/tools/promptmaster-studio`): Systematic prompt optimizer with few-shot token analysis.
+15. **PromptMaster Studio** (`/tools/promptmaster-studio`): Systematic prompt optimizer with token analysis.
 16. **Cron Rhythm Studio** (`/tools/cron-rhythm-studio`): Visual crontab expression synthesizer and human-readable timeline.
 17. **Regex Droid Builder** (`/tools/regex-droid-builder`): Regular expression visualizer with catastrophic backtracking analysis.
 18. **WCAG Contrast Guard** (`/tools/wcag-contrast-guard`): Accessibility color contrast ratio tester complying with WCAG 2.1 AAA.
 19. **AudioCipher Stego Engine** (`/tools/audiocipher-stego-engine`): Spectrogram-based acoustic steganography encoder.
 20. **Web Security Guard** (`/tools/web-security-guard`): Client-side Content Security Policy (CSP) builder and audit engine.
 21. **Cyber Turtle Studio** (`/tools/cyber-turtle-studio`): Recursive geometric logo and procedural vector art generator.
-22. **CertPath Roadmap Studio** (`/tools/certpath-roadmap-studio`): Interactive technical skill tree and cybersecurity cert tracker.
+22. **CertPath Roadmap Studio** (`/tools/certpath-roadmap-studio`): Interactive technical skill tree and certification tracker.
 23. **Vision Gesture Control** (`/tools/vision-gesture-control`): In-browser computer vision hand-tracking interface.
 24. **EnvGuard Secrets Vault** (`/tools/envguard-secrets-vault`): Local memory-hard credential store and environment sanitizer.
 25. **Vector Search Engine** (`/tools/vector-search-engine`): In-browser cosine similarity and Euclidean distance vector ranker.
 
 ---
 
-## Lucy Oracle & Biomorphic STDP Synaptic Memory
+## STDP Neuro Memory & Biomorphic Synaptic Persistence
 
-Governed by **Spike-Timing-Dependent Plasticity (STDP)**, the Lucy Cognitive Oracle (`/memory`, Semantic Bus `:8094`) ensures that verified architectural decisions remain potentiated while transient noise naturally decays:
+Governed by **Spike-Timing-Dependent Plasticity (STDP)**, the Neuro Memory engine (`/memory`) models biological Hebbian learning so verified architectural decisions remain potentiated while transient noise naturally decays:
 
 ### Mathematical Formulation
 
@@ -230,49 +215,39 @@ Potentiation (+Δw)
 Depression (-Δw)
 ```
 
-### Whitespace Cyberspace 3D Constellations
-
-1. **Kernel (`#D4AF37` Gold)**: Core runtime invariants, SQLite table schemas, HNSW vector indices.
-2. **Lucy Oracle (`#00F0FF` Cyan)**: Deep-net breaches, neural transmissions, codec handshakes.
-3. **Consensus (`#C084FC` Purple)**: 3-Agent Byzantine Triangulation AST diffs, Socratic debate proofs.
-4. **Security (`#F472B6` Pink)**: HexStrike CVE audits, Shannon entropy bounds, JWT claim assertions.
-5. **Vault (`#34D399` Emerald)**: Argon2id derivation params, XChaCha20 keys, loopback secrets.
-6. **Pantheon (`#F59E0B` Amber)**: 21-Agent telemetry, IPC latency records, worker task queues.
+Synaptic vectors are projected onto an interactive 3D scatter manifold with semantic clustering, allowing developers to explore agent memory graphs without external vector databases.
 
 ---
 
-## 3-Agent Byzantine Consensus Arena
+## 3-Agent Byzantine Consensus Chamber
 
-Before modifying project code, staging commits, or mutating schemas, Zoth Studio executes a **Triadic Byzantine Consensus Protocol** (`/consensus`):
+Before modifying project code, staging commits, or mutating schemas, Zoth Studio can simulate a **Triadic Byzantine Consensus Protocol** (`/consensus`):
 
 ```
 +------------------+       +-------------------+       +------------------+
-|  Proposer Agent  | ----> |  Evaluator Agent  | ----> |  Arbiter Agent   |
-| (AST Mutation)   |       | (Entropy & Types) |       | (Verdict Seal)   |
+|  Proposer Agent  | ----> |   Skeptic Agent   | ----> |  Auditor Agent   |
+| (AST Mutation)   |       | (Adversarial Check|       | (Verdict Seal)   |
 +------------------+       +-------------------+       +------------------+
         |                           |                           |
         +---------------------------+---------------------------+
                                     |
                                     v
-                     3/3 Unanimous Cryptographic Seal
+                     2/3 Byzantine Supermajority Ratification
 ```
 
-1. **Proposer Agent (Nexus)**: Parses the target syntax tree, constructs minimal surgical AST mutations, and presents the semantic delta.
-2. **Evaluator Agent (Vigil)**: Analyzes the AST diff for breaking changes, runs static type checks, and computes the Shannon entropy delta to ensure no secret exfiltration or malicious payloads.
-3. **Arbiter Agent (Aegis)**: Synthesizes Socratic debate arguments, verifies compliance with OWASP Zero-Egress invariants, and requires unanimous $3/3$ signature consensus before applying the diff.
+1. **Proposer Agent (Nexus)**: Constructs minimal surgical AST mutations and presents the semantic delta.
+2. **Skeptic Agent (Vigil)**: Analyzes the AST diff for breaking changes, race conditions, and anomalous entropy deltas.
+3. **Auditor Agent (Aegis)**: Evaluates the dialectic via Bayesian confidence scoring, verifying compliance with Zero-Egress invariants before issuing a ratification verdict.
 
 ---
 
-## Adytum Hardware Sanctum
+## WebGPU & WASM Acceleration
 
-The **Adytum Hardware Sanctum** (`/adytum`) is a meditative cryptographic sanctuary built around 22 architectural keys:
+Zoth Studio v2 harnesses client hardware acceleration directly in the browser:
 
-- **Argon2id Memory Hardness**:
-  - Memory Cost: 65,536 KiB (64 MB)
-  - Time Cost: 3 iterations
-  - Parallelism: 4 threads
-- **5-Minute Incubation Lock**: Requires a mandatory 5-minute incubation period after key entry, enforcing deliberate reflection and preventing automated brute-force attacks against the local hardware enclave.
-- **XChaCha20-Poly1305 / AES-256-GCM Encryption**: Secrets are stored encrypted at rest on local disk (`~/.zoth/vault.enc`) and decrypted solely in-memory during active tool invocation.
+1. **WebGPU WGSL Pipelines**: Executes parallel compute shaders across GPU workgroups (8×8 or 16×16 threads) for microsecond-tier tensor matrix multiplications ($C = A \times B$) and vector similarity searches.
+2. **WASM SIMD 128-bit Fallback**: When WebGPU is not supported by the platform, computation automatically shifts to WebAssembly compiled with 128-bit SIMD vector instructions running across multi-threaded Web Workers.
+3. **Deterministic Outputs**: All acceleration tiers produce bit-identical deterministic outputs, ensuring reliable offline capability across modern browsers and legacy hardware.
 
 ---
 
@@ -280,29 +255,17 @@ The **Adytum Hardware Sanctum** (`/adytum`) is a meditative cryptographic sanctu
 
 Zoth Studio enforces the strict **OWASP Zero-Egress Invariants**:
 
-1. **Loopback Binding Isolation (`127.0.0.1`)**:
-   - Every daemon, WebSocket bridge, and inference gateway binds strictly to `127.0.0.1` or `localhost`.
-   - Explicit rejection of `0.0.0.0` wildcard interfaces to prevent exposure to LAN or WAN.
-2. **Shannon Entropy Gating**:
-   $$H(X) = -\sum_{i=1}^n P(x_i) \log_2 P(x_i)$$
-   - Inbound and outbound buffers are scanned for anomalous entropy thresholds ($H(X) > 7.2$ bits/byte).
-   - Payloads exceeding the threshold are intercepted and gated to prevent obfuscated web shells, encrypted backdoors, and credential exfiltration.
-3. **Zero Cloud Telemetry & Tracking**:
-   - Zero third-party analytics SDKs (no Google Analytics, Mixpanel, Segment, or PostHog).
-   - Zero remote tracking beacons or error-reporting endpoints.
-   - All diagnostic audits run locally via `npm run zoth -- doctor`.
-4. **Code Execution Safeguards**:
-   - Absolute prohibition against `eval()`, `new Function()`, and `document.write()`.
-   - Invariant verification against prototype pollution (`__proto__`) and unescaped HTML injection.
-5. **Local Data Persistence**:
-   - Synaptic memory vectors stored locally in SQLite (`~/.zoth/memory.db`).
-   - Hardware credentials stored in encrypted local vault (`~/.zoth/vault.enc`).
+1. **Client-Side Isolation**: All core tool logic, cryptographic hashing, and tensor compute runs 100% in client browser memory.
+2. **Zero Cloud Telemetry & Tracking**: Zero third-party analytics SDKs (no Google Analytics, Mixpanel, Segment, or PostHog). Zero remote error beacons.
+3. **Shannon Entropy Gating**: Payloads are scanned for anomalous entropy thresholds ($H(X) > 7.2$ bits/byte) to detect obfuscated shell payloads and credential leakage.
+4. **Code Execution Safeguards**: Absolute prohibition against `eval()`, `new Function()`, and `document.write()`. Strict defenses against prototype pollution and unescaped HTML injection.
+5. **Local Data Persistence**: State is stored strictly in client storage (IndexedDB, Web Crypto keys, local storage) with zero external cloud sync.
 
 ---
 
 ## Netlify Deployment Instructions
 
-Zoth Studio v2 is engineered to deploy seamlessly to **Netlify Edge** as a high-performance static application with serverless proxy capabilities:
+Zoth Studio v2 compiles into a high-performance static distribution ready for Netlify or any static web host:
 
 ### Build Commands
 
@@ -322,15 +285,7 @@ vite build && node scripts/prerender.mjs
 ### Netlify Configuration (`netlify.toml`)
 
 - **Publish Directory**: `dist`
-- **Functions Directory**: `netlify/functions`
 - **Node Version**: `20`
-- **Serverless API Proxy**:
-  ```toml
-  [[redirects]]
-    from = "/api/studio/*"
-    to = "/.netlify/functions/studio-api/:splat"
-    status = 200
-  ```
 - **SPA Fallback**:
   ```toml
   [[redirects]]
@@ -338,27 +293,26 @@ vite build && node scripts/prerender.mjs
     to = "/index.html"
     status = 200
   ```
-- **Legacy Hub Aliases**: `/hub` → `/` and `/hub/*` → `/:splat` (301) for backward compatibility.
 - **Security & Caching Headers**:
-  - `X-Frame-Options: SAMEORIGIN` + strict `Content-Security-Policy` (`frame-ancestors 'self' https://zoth.nullai.tech https://*.nullai.tech http://127.0.0.1:* http://localhost:*`).
-  - `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`, `Cross-Origin-Opener-Policy: same-origin`, and `Cross-Origin-Embedder-Policy: credentialless`.
-  - Immutable 1-year caching for `/assets/*`, `/fonts/*`, `/brand/*`, `/mascot/*`, `/pets/*`.
-  - CORS-enabled open headers (`Access-Control-Allow-Origin: *`) for machine discovery endpoints (`/llms.txt`, `/ai.txt`, `/sitemap.xml`, `/robots.txt`, `/api/*`).
+  - `X-Frame-Options: SAMEORIGIN` + strict `Content-Security-Policy`.
+  - `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, and `Permissions-Policy`.
+  - Immutable 1-year caching for static `/assets/*` and `/brand/*`.
+  - Open headers (`Access-Control-Allow-Origin: *`) for machine discovery endpoints (`/llms.txt`, `/ai.txt`, `/sitemap.xml`).
 
-### Prerendered Static Routes (87 Total)
+### Prerendered Static Routes (71 Total)
 
-During `npm run build`, `scripts/prerender.mjs` prerenders **87 static HTML routes** into `dist/`, including:
+During `npm run build`, `scripts/prerender.mjs` prerenders **71 static HTML routes** into `dist/`, including:
 - **Core Hub & Pages**: `/`, `/docs`, `/memory`, `/swarm`, `/bridges`, `/consensus`, `/hexstrike`, `/zoth-os`, `/webgen`, `/adytum`, `/faqs`, `/ax`, `/workstations`, `/tools`, `/templates`
-- **37 Workstation Detail Routes**: `/workstations/agent-composer`, `/workstations/brand-seals`, `/workstations/cyberpunk-hud`, etc.
+- **24 Workstation Detail Routes**: `/workstations/agent-composer`, `/workstations/brand-seals`, `/workstations/cyberpunk-hud`, etc.
 - **25 In-Browser Tool Routes**: `/tools/jwt-inspector-guard`, `/tools/payload-entropy-studio`, `/tools/polyglot-framework-exporter`, etc.
 - **6 Math Pillar Pages**: `/docs/math/linear`, `/docs/math/calculus`, `/docs/math/probability`, `/docs/math/hessian`, `/docs/math/lyapunov`, `/docs/math/stdp`
-- **10 Template Category Routes**: Complete agent scaffold starter templates.
+- **Static Template Routes**: Scaffolding starter templates.
 
 Every prerendered route includes:
 - Unique, keyword-optimized `<title>` and `<meta name="description">` tags.
 - Open Graph (`og:*`) and Twitter Card metadata.
-- Fully hydrated Schema.org JSON-LD `@graph` (`WebSite`, `Organization`, `SoftwareApplication`, `WebPage`, `BreadcrumbList`).
-- Semantic `<noscript>` HTML fallback shells for crawlers and answer engines.
+- Fully hydrated Schema.org JSON-LD `@graph` (`WebSite`, `Organization`, `SoftwareApplication`, `FAQPage`).
+- Semantic `<noscript>` HTML fallback shells for search crawlers and answer engines.
 
 ---
 
@@ -369,35 +323,19 @@ Zoth Studio implements state-of-the-art Answer Engine Optimization (AEO) and Age
 | Endpoint | Content Type | Purpose & Target Consumer |
 | :--- | :--- | :--- |
 | **`/llms.txt`** | `text/plain; charset=UTF-8` | Condensed markdown system overview (< 5 KB) for LLM agents, ChatGPT, Claude, and Perplexity |
-| **`/llms-full.txt`** | `text/plain; charset=UTF-8` | Comprehensive system architecture manual, schema specs, and enclave protocols for deep analysis |
+| **`/llms-full.txt`** | `text/plain; charset=UTF-8` | Comprehensive system architecture manual, schema specs, and protocols for deep analysis |
 | **`/ai.txt`** | `text/plain; charset=UTF-8` | Autonomous crawler policy granting grounding, indexing, and attribution rights to AI bots |
-| **`/sitemap.xml`** | `application/xml; charset=UTF-8`| XML sitemap covering all 87 static routes with priorities and update timestamps |
-| **`/robots.txt`** | `text/plain; charset=UTF-8` | Crawler permissions explicitly welcoming `GPTBot`, `Claude-Web`, `PerplexityBot`, `Googlebot` |
+| **`/sitemap.xml`** | `application/xml; charset=UTF-8`| Synchronized XML sitemap covering all 71 static routes with priorities and update timestamps |
+| **`/robots.txt`** | `text/plain; charset=UTF-8` | Crawler permissions explicitly welcoming search and AI crawlers |
 | **`/api/ax/manifest.json`** | `application/json; charset=UTF-8`| Machine-readable AX manifest for programmatic agent discovery and tool binding |
 
 ---
 
-## Local Enclave Ports & Daemons
-
-| Service | Bind Address | Protocol | Operational Role |
-| :--- | :--- | :--- | :--- |
-| **Studio UI** | `127.0.0.1:3000` | HTTP / WS | React 18 + MUI v5 Operator Deck (Vite dev server) |
-| **Neuro Memory Daemon** | `127.0.0.1:8094` | HTTP JSON | Biomorphic STDP synaptic decay + SQLite vec0 vector storage |
-| **Sovereign Agent Bridge**| `127.0.0.1:8102` | WebSocket | Simplex E2EE Noise Protocol IPC bus for 21-agent pantheon |
-| **Hardware Vault Daemon**| `127.0.0.1:8787` | HTTP JSON | Argon2id KDF + XChaCha20-Poly1305 enclave secret storage |
-| **Local Model Foundry** | `127.0.0.1:11434` | HTTP JSON | Ollama / llama.cpp local LLM inference |
-| **Swarm Telemetry Bus** | `127.0.0.1:8989` | WebSocket / SSE | Swarm multiplexer and agent execution telemetry |
-| **Azoth Archon Daemon** | `127.0.0.1:8790` | HTTP | Local archon agent orchestrator and fallback matrix |
-| **Operator Deck Port** | `127.0.0.1:8484` | HTTP | Agent execution and fusion IDE console |
-
----
-
-## Quick Start & CLI Cheat Sheet
+## Quick Start & CLI Reference
 
 ### 1. Prerequisites
 - **Node.js**: `>= 20.0.0`
-- **Python 3**: For local neuro-memory and bridge daemons
-- **Ollama / llama.cpp**: For on-device LLM inference (e.g. `ollama run llama3`)
+- **Optional**: Local Ollama or llama.cpp for on-device LLM inference (`ollama serve` on port 11434).
 
 ### 2. Local Setup
 ```bash
@@ -407,36 +345,29 @@ cd zoth-studio-v2
 # Install dependencies
 npm install
 
-# Run diagnostic health check across ports :8094, :8102, :8787, :8989, :11434
-npm run zoth -- doctor
-
-# Launch local backend daemons (memory :8094, bridge :8102, vault :8787)
-npm run zoth -- up
-
 # Start Vite development server
 npm run dev
 ```
 
-Visit **`http://127.0.0.1:3000`** in your browser.
+Visit the local development URL (typically `http://localhost:5173` or `http://localhost:3000`) in your browser.
 
-### 3. Zoth CLI Reference
+### 3. Zoth CLI (`npx zoth`)
 
-The `zoth` CLI (`bin/zoth.js`, aliased as `zoth` / `zoth-studio`) is the operator's control surface for the local enclave:
+The `zoth` CLI (`bin/zoth.js`, executable via `npx zoth` or `npm run zoth -- <command>`) provides developer orchestration:
 
 | Command | Action |
 | :--- | :--- |
-| `npm run zoth -- doctor` | Probe loopback services (`:8094`, `:8102`, `:8787`, `:8989`, `:11434`) and local tool checkouts |
-| `npm run zoth -- list` | Catalog all published micro-tools with their GitHub URLs |
-| `npm run zoth -- pull <repo>` | Clone or fast-forward one published tool into `./tools` |
-| `npm run zoth -- pull --all` | Clone every published tool into `./tools` |
-| `npm run zoth -- up` | Start memory, bridge, and vault daemons from `backend/` |
-| `npm run zoth -- down` | Stop processes this CLI started |
-| `npm run zoth -- swarm` | Print the documented pantheon agent roster |
-| `npm run zoth -- init` | Create `./tools` and `./.zoth` state directories |
+| `npx zoth status` | Probe local environment readiness, hardware acceleration, and tool repos |
+| `npx zoth list` | Catalog all 25 sovereign micro-tools with their open-source URLs |
+| `npx zoth pull <tool>` | Clone or fast-forward a standalone micro-tool into `./tools/<tool>` |
+| `npx zoth pull --all` | Clone all 25 published tools into `./tools` |
+| `npx zoth up` | Initialize local daemons and offline caches |
+| `npx zoth down` | Stop local background processes |
+| `npx zoth doctor` | Verify local dependencies and environment integrity |
 
 ### 4. Production Build & Verify
 ```bash
-# Compile and prerender all 71 static routes
+# Compile bundle and prerender all 71 static routes
 npm run build
 
 # Preview production build locally
@@ -450,49 +381,39 @@ npm run preview
 ```
 zoth-studio-v2/
 ├── bin/
-│   └── zoth.js                 # Zoth Studio CLI (doctor, list, pull, up, down, swarm, init)
-├── backend/                    # Local daemons and frameworks
-│   ├── memory-daemon/          # Python Cognitive Memory Hub (STDP + SQLite vec0, Port 8094)
-│   ├── neuro-memory-daemon/    # Python STDP biomorphic memory service (Port 8094)
-│   ├── sovereign-agent-bridge/ # Inter-agent E2EE IPC service (Port 8102)
-│   ├── secure-comms-bridge/    # Rust secure comms bridge
-│   ├── vault-daemon/           # Rust Argon2id + XChaCha20-Poly1305 vault (Port 8787)
-│   ├── orchestrator/           # Z0TH multi-agent orchestration framework (Port 8484)
-│   └── hardware-arduino/       # Arduino firmware, bridges, and hardware docs
+│   └── zoth.js                 # Zoth Studio CLI (status, list, pull, up, down, doctor)
+├── backend/                    # Optional local daemons and service harnesses
+│   ├── neuro-memory-daemon/    # Python STDP biomorphic memory service
+│   ├── sovereign-agent-bridge/ # Inter-agent IPC service
+│   └── vault-daemon/           # Argon2id + authenticated encryption vault
 ├── docs/                       # Architectural documentation & AEO specs
 │   ├── ARCHITECTURE.md         # System blueprint and security model
 │   ├── AEO_AX_SPECIFICATION.md # Agent Experience & AI crawler protocols
-│   ├── LUCY_NETRUNNER_ORACLE.md# Lucy Oracle & STDP math formulation
 │   └── NETLIFY_DEPLOYMENT_AEO.md# Netlify deployment and route prerender guide
 ├── public/                     # Static assets served at root
-│   ├── assets/                 # Brand and Lucy avatars (lucy.png)
+│   ├── assets/                 # Brand visuals and graphics
 │   ├── brand/                  # Vector logos and GhostByte seals
-│   ├── fonts/                  # Celtic Garamond typography
-│   ├── mascot/                 # Pantheon agent mascots
+│   ├── fonts/                  # Celtic Garamond and monospace typography
 │   ├── llms.txt                # Standardized AI answer engine summary
 │   ├── llms-full.txt           # Exhaustive machine-readable system manual
 │   ├── ai.txt                  # Autonomous AI crawler policy
-│   ├── robots.txt              # Crawler permissions with explicit AI bot rules
-│   └── sitemap.xml             # 87-route search engine index
+│   ├── robots.txt              # Crawler permissions
+│   └── sitemap.xml             # 71-route search engine index
 ├── scripts/
-│   └── prerender.mjs           # Prerender engine for 87 static HTML routes
-├── server/
-│   ├── studio-api.mjs          # Vite loopback proxy middleware
-│   ├── classic-server.mjs      # Optional legacy static server
-│   └── daemon-runner.mjs       # Subprocess lifecycle manager
+│   └── prerender.mjs           # Prerender engine for 71 static HTML routes
 ├── src/
-│   ├── components/             # Reusable UI components (SEO, Navbar, Mascot, etc.)
+│   ├── components/             # Reusable UI components (CinematicIntro, Navbar, Footer, etc.)
 │   ├── config/
 │   │   └── site.js             # Central SEO/AEO metadata & Schema.org generators
-│   ├── data/                   # Workstations, tools, pantheon, and math pillars
-│   ├── pages/                  # React views (DocsPage, MemoryPage, Adytum, etc.)
-│   ├── theme.js                # Dual light/dark gold-on-void MUI palette
+│   ├── data/                   # Workstations, 25 tools, ASCII banners, and FAQs data
+│   ├── pages/                  # React page views (HomePage, FaqsPage, MemoryPage, etc.)
+│   ├── theme.js                # Dual light/dark gold-on-void MUI theme
 │   ├── App.jsx                 # Central router & AppShell
 │   └── main.jsx                # React root entry point
 ├── index.html                  # HTML entry point with Schema.org JSON-LD
 ├── netlify.toml                # Netlify production configuration
 ├── package.json                # Project manifest and scripts
-└── vite.config.js              # Vite configuration with API middleware
+└── vite.config.js              # Vite configuration
 ```
 
 ---
@@ -502,20 +423,10 @@ zoth-studio-v2/
 Zoth Studio v2 is a sovereign, local-first project. Contributions are welcome within the zero-egress philosophy:
 
 1. **Fork & branch** — work on a feature branch off `main`.
-2. **Keep it local-first** — no new cloud telemetry, analytics SDKs, or third-party auth. New tools must run entirely in-browser or on loopback daemons.
-3. **Respect the invariants** — no `eval()`, `new Function()`, or `document.write()`; no `0.0.0.0` bindings; no prototype pollution.
-4. **Add a workstation or tool** — register it in `src/data/workstations.js` or `src/data/toolsData.js` and add its route to `scripts/prerender.mjs` so it ships as a prerendered static route.
-5. **Verify before opening a PR** — run `npm run build` and `npm run zoth -- doctor`; confirm the new route appears in the prerender output.
-
-## Troubleshooting
-
-| Symptom | Likely Cause | Resolution |
-| :--- | :--- | :--- |
-| `npm run zoth -- doctor` reports daemons down | Backend daemons not started | Run `npm run zoth -- up` |
-| Memory/bridge daemon fails to start | Tool not checked out | Run `npm run zoth -- pull neuro-memory-daemon` (and `sovereign-agent-bridge`) |
-| Vault daemon down | Rust binary not built | `cargo build --release` in `backend/vault-daemon` (the CLI does this automatically) |
-| Prerender step fails during build | New route missing from `scripts/prerender.mjs` | Add the route to the prerender route list |
-| Port already in use | A previous daemon is still running | `npm run zoth -- down`, then retry |
+2. **Keep it local-first** — no new cloud telemetry, analytics SDKs, or third-party auth. New tools must run client-side in the browser or on local daemons.
+3. **Respect the invariants** — no `eval()`, `new Function()`, or `document.write()`; no wildcard network exposure; no prototype pollution.
+4. **Register new tools** — add entries to `src/data/toolsData.js` and register corresponding routes in `scripts/prerender.mjs`.
+5. **Verify before opening a PR** — run `npm run build` and ensure all routes prerender cleanly.
 
 ---
 

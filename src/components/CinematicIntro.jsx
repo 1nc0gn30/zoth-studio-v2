@@ -176,6 +176,8 @@ function AsciiTypewriterBanner({ word, palette, mono }) {
           filter: `drop-shadow(0 0 10px ${palette.glow}) drop-shadow(0 0 24px ${palette.glow})`,
           margin: 0,
           whiteSpace: 'pre',
+          maxWidth: '100%',
+          boxSizing: 'border-box',
           overflow: 'visible',
           textAlign: 'center',
           userSelect: 'none',
