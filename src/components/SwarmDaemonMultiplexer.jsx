@@ -170,7 +170,7 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
       } else if (command.includes('stdp') || command.includes('memory')) {
         outputText = `✔ STDP Synaptic Matrix local tick. LTP weight reinforced (+0.05).`;
       } else if (command.includes('build')) {
-        outputText = `✔ Built 1234 modules in 4.8s. All 71 routes prerendered with Schema.org graph.`;
+        outputText = `✔ Built 1234 modules in 4.8s. All 72 routes prerendered with Schema.org graph.`;
       } else {
         outputText = `[${agentId} EXECUTION OK] Command completed with code 0 in ${agent.pwd}.\nOutputs buffered locally in zero-knowledge enclave.`;
       }

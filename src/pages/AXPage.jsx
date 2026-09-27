@@ -63,7 +63,7 @@ const DISCOVERY_ENDPOINTS = [
 Zoth Studio v2 is an air-gapped, zero-egress development studio designed for orchestrating autonomous AI agent pantheons, local LLMs, and biomorphic synaptic memory matrices. All prompts, secrets, and weights execute strictly on local loopback enclaves with zero cloud telemetry or data leakage.
 
 ## Architecture & Enclave Binds
-- Loopback UI: http://127.0.0.1:3000 (React 18 + MUI v5 SPA)
+- Loopback UI: http://127.0.0.1:3000 (React 19.3 + MUI v5 SPA)
 - Swarm Multiplexer: http://127.0.0.1:8989 (SSE telemetry & cadre orchestrator)
 - Neuro Memory Daemon: http://127.0.0.1:8094 (Spike-Timing-Dependent Plasticity STDP + SQLite HNSW vectors)
 - Sovereign Agent Bridge: http://127.0.0.1:8102 (21-agent inter-process bus & packet pinger)
@@ -132,7 +132,7 @@ SECTION 3: MACHINE-READABLE CONTRACTS & TOOL SCHEMAS
 - Tool Index API: /api/tools.json (25 sovereign CLI tools and micro-repos)
 - MCP Schemas: /api/netlify-ax-mcp.json (Model Context Protocol endpoints)
 - Agent Crawler Rules: /ai.txt
-- Full XML Route Index: /sitemap.xml (71 static routes)`
+- Full XML Route Index: /sitemap.xml (72 static routes)`
   },
   {
     endpoint: '/ai.txt',
@@ -177,7 +177,7 @@ netlify-mcp-api: https://zoth.nullai.tech/api/netlify-ax-mcp.json`
     endpoint: '/sitemap.xml',
     label: '/sitemap.xml',
     mime: 'application/xml; charset=utf-8',
-    description: 'Synchronized XML Index (71 Routes)',
+    description: 'Synchronized XML Index (72 Routes)',
     tokens: 3730,
     sizeBytes: 14930,
     content: `<?xml version="1.0" encoding="UTF-8"?>
@@ -218,7 +218,7 @@ netlify-mcp-api: https://zoth.nullai.tech/api/netlify-ax-mcp.json`
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
-  <!-- [Synchronized: 71 production static routes ready for sovereign agent indexing] -->
+  <!-- [Synchronized: 72 production static routes ready for sovereign agent indexing] -->
 </urlset>`
   },
   {
@@ -626,7 +626,7 @@ export default function AXPage() {
             startIcon={<OpenInNewIcon />}
             sx={{ fontWeight: 750, color: theme.palette.text.secondary }}
           >
-            sitemap.xml (71 URLs)
+            sitemap.xml (72 URLs)
           </Button>
         </Box>
 

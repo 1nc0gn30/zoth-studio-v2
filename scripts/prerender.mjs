@@ -2,7 +2,7 @@
 /**
  * Zoth Studio v2 Prerender, AEO Indexing & Static Route Engine
  * Generates static HTML entry points with route-specific head metadata,
- * Schema.org JSON-LD graphs, and crawler-readable semantic content for all 71 routes.
+ * Schema.org JSON-LD graphs, and crawler-readable semantic content for all 72 routes.
  * Also synchronizes public/sitemap.xml and dist/sitemap.xml.
  */
 
@@ -231,7 +231,7 @@ $ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</co
           <tr style="border-bottom: 1px solid #141724;">
             <td style="padding: 0.5rem;"><code>127.0.0.1:3000</code></td>
             <td style="padding: 0.5rem;">Studio Client</td>
-            <td style="padding: 0.5rem;">React 18 MUI UI &amp; WebGPU Engine</td>
+            <td style="padding: 0.5rem;">React 19.3 MUI UI &amp; WebGPU Engine</td>
           </tr>
           <tr style="border-bottom: 1px solid #141724;">
             <td style="padding: 0.5rem;"><code>127.0.0.1:8094</code></td>
@@ -306,7 +306,7 @@ $ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</co
           <li><a href="/llms.txt" style="color: #38BDF8;">/llms.txt</a> — Concise LLM Context &amp; Entity Profile (614 tokens)</li>
           <li><a href="/llms-full.txt" style="color: #38BDF8;">/llms-full.txt</a> — Comprehensive Agent Grounding &amp; Capabilities Map (3,220 tokens)</li>
           <li><a href="/robots.txt" style="color: #38BDF8;">/robots.txt</a> — AI Crawler &amp; Answer Engine Policy</li>
-          <li><a href="/sitemap.xml" style="color: #38BDF8;">/sitemap.xml</a> — Full static route sitemap (71 routes)</li>
+          <li><a href="/sitemap.xml" style="color: #38BDF8;">/sitemap.xml</a> — Full static route sitemap (72 routes)</li>
         </ul>
       </section>
     `;

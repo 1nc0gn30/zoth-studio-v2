@@ -1,13 +1,13 @@
 # Zoth Studio v2
 
 > **Zero-Egress Sovereign Agent Development Studio & Tool Matrix**  
-> *Client-side WebGPU acceleration, biomorphic STDP memory, 24 sovereign workstations, 25 in-browser micro-tools, 3-agent Byzantine consensus, and Argon2id cryptographic vault.*
+> *Client-side WebGPU acceleration, biomorphic STDP memory, 24 sovereign workstations, 25+ in-browser micro-tools & WebMCP suite, 3-agent Byzantine consensus, and Argon2id cryptographic vault.*
 
 [![Zero-Egress Guaranteed](https://img.shields.io/badge/Security-Zero--Egress%20Enclave-gold?style=flat-square)](#zero-egress-security-invariants)
 [![Netlify Deploy Ready](https://img.shields.io/badge/Deploy-Netlify%20Production-00C7B7?style=flat-square&logo=netlify)](#netlify-deployment-instructions)
-[![71 Prerendered Routes](https://img.shields.io/badge/AEO-71%20Static%20Routes-blueviolet?style=flat-square)](#prerendered-static-routes-71-total)
+[![72 Prerendered Routes](https://img.shields.io/badge/AEO-72%20Static%20Routes-blueviolet?style=flat-square)](#prerendered-static-routes-72-total)
 [![Vite 5.4](https://img.shields.io/badge/Build-Vite%205.4-purple?style=flat-square)](https://vitejs.dev)
-[![React 18.2](https://img.shields.io/badge/Framework-React%2018.2-blue?style=flat-square)](https://react.dev)
+[![React 19.3](https://img.shields.io/badge/Framework-React%2019.3-blue?style=flat-square)](https://react.dev)
 [![MUI v5.15](https://img.shields.io/badge/UI-Material--UI%20v5.15-007FFF?style=flat-square)](https://mui.com)
 [![WebGPU Acceleration](https://img.shields.io/badge/Compute-WebGPU%20WGSL%20%2B%20WASM-cyan?style=flat-square)](#webgpu--wasm-acceleration)
 [![STDP Neuro Memory](https://img.shields.io/badge/Memory-STDP%20Hebbian%20Engine-cyan?style=flat-square)](#stdp-neuro-memory--biomorphic-synaptic-persistence)
@@ -17,7 +17,7 @@
 
 ## System Overview & Core Philosophy
 
-**Zoth Studio v2** is a zero-egress, sovereign developer studio designed for orchestrating autonomous AI agent workflows, inspecting code syntax, executing hardware-accelerated WebGPU shaders, and interfacing with local model foundries (such as Ollama or llama.cpp). Built with a gold-on-void aesthetic (`#D4AF37` on `#08080B`), Zoth Studio v2 unifies 24 dedicated workstations and 25 standalone, zero-leakage developer utilities directly in the browser.
+**Zoth Studio v2** is a zero-egress, sovereign developer studio designed for orchestrating autonomous AI agent workflows, inspecting code syntax, executing hardware-accelerated WebGPU shaders, and interfacing with local model foundries (such as Ollama or llama.cpp). Built with **React 19.3** and a gold-on-void aesthetic (`#D4AF37` on `#08080B`), Zoth Studio v2 unifies 24 dedicated workstations, 25+ standalone zero-leakage developer utilities, and the WebMCP (Model Context Protocol) tool suite directly in the browser.
 
 - **WHAT THIS IS**: A client-side developer workstation and local tool catalog for coordinating autonomous agent workflows, running WebGPU tensor calculations, visualizing biomorphic STDP synaptic memories, executing 3-agent Byzantine consensus simulations, and connecting to local models on local silicon.
 - **WHAT THIS IS NOT**: This is not a cloud SaaS, does not send prompts or telemetry to remote endpoints, and does not require third-party accounts. All primary tools run client-side in the browser, with optional local CLI daemons for IPC and local storage.
@@ -32,17 +32,17 @@
 ```
 +====================================================================================================+
 |                                    ZOTH STUDIO v2 OPERATOR WORKSTATION                              |
-|                       Client-Side Browser Runtime (React 18 + MUI v5 Gold-on-Void)                  |
+|                       Client-Side Browser Runtime (React 19.3 + MUI v5 Gold-on-Void)                |
 +====================================================================================================+
         |                                     |                                     |
         v                                     v                                     v
 +-------------------------------+  +-------------------------------+  +-------------------------------+
-|       24 WORKSTATIONS         |  |      25 IN-BROWSER TOOLS      |  |      STDP NEURO MEMORY        |
-|  - Multi-Agent DAG Composer   |  |  - JWT Inspector Guard        |  |  - Hebbian LTP / LTD Learning |
-|  - WebGen Layout Composer     |  |  - Payload Entropy Studio     |  |  - 3D Synaptic Manifold       |
-|  - Sovereign Code IDE         |  |  - Polyglot Exporter          |  |  - Exponential Weight Decay   |
-|  - Vision Gesture Control     |  |  - MediaPipe Vision Gesture   |  |  - Local Vector Clustering    |
-|  - AI Model Connector (Ollama)|  |  - CWV Speed Engine           |  |  - Pure Client Memory State   |
+|       24 WORKSTATIONS         |  |   25+ TOOLS & WebMCP SUITE    |  |      STDP NEURO MEMORY        |
+|  - Multi-Agent DAG Composer   |  |  - WebMCP JSON-RPC Inspector  |  |  - Hebbian LTP / LTD Learning |
+|  - WebGen Layout Composer     |  |  - JWT Inspector Guard        |  |  - 3D Synaptic Manifold       |
+|  - Sovereign Code IDE         |  |  - Payload Entropy Studio     |  |  - Exponential Weight Decay   |
+|  - Vision Gesture Control     |  |  - Polyglot Exporter          |  |  - Local Vector Clustering    |
+|  - AI Model Connector (Ollama)|  |  - MediaPipe Vision Gesture   |  |  - Pure Client Memory State   |
 +-------------------------------+  +-------------------------------+  +-------------------------------+
         |                                     |                                     |
         +-------------------------------------+-------------------------------------+
@@ -61,10 +61,10 @@
         v                                     v                                     v
 +-------------------------------+  +-------------------------------+  +-------------------------------+
 |    OPTIONAL LOCAL DAEMONS     |  |    NETLIFY STATIC HOSTING     |  |   AEO / AX MACHINE DISCOVERY  |
-|  - Ollama Engine (:11434)     |  |  - 71 Prerendered Routes      |  |  - /llms.txt & /llms-full.txt |
+|  - Ollama Engine (:11434)     |  |  - 72 Prerendered Routes      |  |  - /llms.txt & /llms-full.txt |
 |  - Neuro Memory Daemon (:8094)|  |  - Instant FCP (< 200ms)      |  |  - /ai.txt Crawler Policy     |
-|  - Sovereign Bridge (:8102)   |  |  - Strict CSP & Security      |  |  - /sitemap.xml (71 Entries)  |
-|  - Invoked via `npx zoth up`  |  |  - Immutable Asset Caching    |  |  - Schema.org JSON-LD Graphs  |
+|  - Sovereign Bridge (:8102)   |  |  - Strict CSP & Security      |  |  - /sitemap.xml (72 Entries)  |
+|  - WebMCP Bridge (:8094)      |  |  - Immutable Asset Caching    |  |  - Schema.org JSON-LD Graphs  |
 +-------------------------------+  +-------------------------------+  +-------------------------------+
 ```
 
@@ -72,10 +72,10 @@
 
 ```mermaid
 flowchart TD
-    subgraph Client["Zoth Studio v2 Client Runtime"]
-        UI["Operator Deck UI<br/>Vite + React 18 + MUI v5"]
+    subgraph Client["Zoth Studio v2 Client Runtime (React 19.3)"]
+        UI["Operator Deck UI<br/>Vite + React 19.3 + MUI v5"]
         WS["24 Sovereign Workstations<br/>DAG Composer, Code IDE, Model Connector"]
-        Tools["25 In-Browser Micro-Tools<br/>WebGPU Shaders, JWT Guard, Entropy Analyzer"]
+        Tools["25+ In-Browser Micro-Tools & WebMCP<br/>WebGPU Shaders, JWT Guard, MCP Inspector"]
         UI --> WS
         UI --> Tools
     end
@@ -102,11 +102,12 @@ flowchart TD
     subgraph OptionalDaemons["Optional Local CLI Daemons (npx zoth up)"]
         Ollama["Local Model Engine<br/>Ollama / llama.cpp (:11434)"]
         Bridge["Sovereign Agent Bridge<br/>Simplex Peer Bus (:8102)"]
+        WebMCP["WebMCP Bridge<br/>SSE JSON-RPC 2.0 (:8094)"]
     end
 
     subgraph Distribution["Static Distribution & AEO"]
         Netlify["Production Static Distribution<br/>npm run build -> dist/"]
-        Routes["71 Prerendered Static Routes<br/>Schema.org JSON-LD Graphs"]
+        Routes["72 Prerendered Static Routes<br/>Schema.org JSON-LD Graphs"]
         AEO["Machine Discovery Endpoints<br/>/llms.txt | /llms-full.txt | /sitemap.xml"]
         Netlify --> Routes
         Netlify --> AEO
@@ -299,12 +300,12 @@ vite build && node scripts/prerender.mjs
   - Immutable 1-year caching for static `/assets/*` and `/brand/*`.
   - Open headers (`Access-Control-Allow-Origin: *`) for machine discovery endpoints (`/llms.txt`, `/ai.txt`, `/sitemap.xml`).
 
-### Prerendered Static Routes (71 Total)
+### Prerendered Static Routes (72 Total)
 
-During `npm run build`, `scripts/prerender.mjs` prerenders **71 static HTML routes** into `dist/`, including:
+During `npm run build`, `scripts/prerender.mjs` prerenders **72 static HTML routes** into `dist/`, including:
 - **Core Hub & Pages**: `/`, `/docs`, `/memory`, `/swarm`, `/bridges`, `/consensus`, `/hexstrike`, `/zoth-os`, `/webgen`, `/adytum`, `/faqs`, `/ax`, `/workstations`, `/tools`, `/templates`
 - **24 Workstation Detail Routes**: `/workstations/agent-composer`, `/workstations/brand-seals`, `/workstations/cyberpunk-hud`, etc.
-- **25 In-Browser Tool Routes**: `/tools/jwt-inspector-guard`, `/tools/payload-entropy-studio`, `/tools/polyglot-framework-exporter`, etc.
+- **26 In-Browser Tool Routes**: `/tools/webmcp-protocol-inspector`, `/tools/jwt-inspector-guard`, `/tools/payload-entropy-studio`, `/tools/polyglot-framework-exporter`, etc.
 - **6 Math Pillar Pages**: `/docs/math/linear`, `/docs/math/calculus`, `/docs/math/probability`, `/docs/math/hessian`, `/docs/math/lyapunov`, `/docs/math/stdp`
 - **Static Template Routes**: Scaffolding starter templates.
 
@@ -325,7 +326,7 @@ Zoth Studio implements state-of-the-art Answer Engine Optimization (AEO) and Age
 | **`/llms.txt`** | `text/plain; charset=UTF-8` | Condensed markdown system overview (< 5 KB) for LLM agents, ChatGPT, Claude, and Perplexity |
 | **`/llms-full.txt`** | `text/plain; charset=UTF-8` | Comprehensive system architecture manual, schema specs, and protocols for deep analysis |
 | **`/ai.txt`** | `text/plain; charset=UTF-8` | Autonomous crawler policy granting grounding, indexing, and attribution rights to AI bots |
-| **`/sitemap.xml`** | `application/xml; charset=UTF-8`| Synchronized XML sitemap covering all 71 static routes with priorities and update timestamps |
+| **`/sitemap.xml`** | `application/xml; charset=UTF-8`| Synchronized XML sitemap covering all 72 static routes with priorities and update timestamps |
 | **`/robots.txt`** | `text/plain; charset=UTF-8` | Crawler permissions explicitly welcoming search and AI crawlers |
 | **`/api/ax/manifest.json`** | `application/json; charset=UTF-8`| Machine-readable AX manifest for programmatic agent discovery and tool binding |
 
@@ -367,7 +368,7 @@ The `zoth` CLI (`bin/zoth.js`, executable via `npx zoth` or `npm run zoth -- <co
 
 ### 4. Production Build & Verify
 ```bash
-# Compile bundle and prerender all 71 static routes
+# Compile bundle and prerender all 72 static routes
 npm run build
 
 # Preview production build locally
@@ -398,9 +399,9 @@ zoth-studio-v2/
 │   ├── llms-full.txt           # Exhaustive machine-readable system manual
 │   ├── ai.txt                  # Autonomous AI crawler policy
 │   ├── robots.txt              # Crawler permissions
-│   └── sitemap.xml             # 71-route search engine index
+│   └── sitemap.xml             # 72-route search engine index
 ├── scripts/
-│   └── prerender.mjs           # Prerender engine for 71 static HTML routes
+│   └── prerender.mjs           # Prerender engine for 72 static HTML routes
 ├── src/
 │   ├── components/             # Reusable UI components (CinematicIntro, Navbar, Footer, etc.)
 │   ├── config/

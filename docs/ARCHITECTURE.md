@@ -7,7 +7,7 @@
 ```
 +====================================================================================================+
 |                                    ZOTH STUDIO v2 OPERATOR DESK                                    |
-|                         http://127.0.0.1:3000 (React 18 + MUI v5 Gold-on-Void)                     |
+|                         http://127.0.0.1:3000 (React 19.3 + MUI v5 Gold-on-Void)                     |
 +====================================================================================================+
         |                                     |                                     |
         v                                     v                                     v
@@ -37,7 +37,7 @@
 ```mermaid
 flowchart TD
     subgraph UI_Layer["Frontend Presentation Layer"]
-        UI["React 18.2 + MUI v5 SPA<br/>Gold-on-Void Aesthetic (#D4AF37 on #08080B)"]
+        UI["React 19.3 + MUI v5 SPA<br/>Gold-on-Void Aesthetic (#D4AF37 on #08080B)"]
         WS["24 Sovereign Workstations"]
         Tools["25 Standalone In-Browser Tools"]
         UI --> WS
@@ -149,7 +149,7 @@ All components must satisfy the formal Zero-Egress Security Invariants:
 
 | Service | Bind Address | Protocol | Role |
 | :--- | :--- | :--- | :--- |
-| **Studio UI** | `127.0.0.1:3000` | HTTP / WS | React 18 + MUI v5 Operator Deck |
+| **Studio UI** | `127.0.0.1:3000` | HTTP / WS | React 19.3 + MUI v5 Operator Deck |
 | **Neuro Memory Daemon** | `127.0.0.1:8094` | HTTP JSON | STDP synaptic plasticity + SQLite vec0 vector tables |
 | **Sovereign Agent Bridge**| `127.0.0.1:8102` | WebSocket | Simplex E2EE Noise Protocol IPC bus |
 | **Hardware Vault Daemon**| `127.0.0.1:8787` | HTTP JSON | Argon2id KDF + XChaCha20-Poly1305 enclave secrets |
@@ -163,9 +163,9 @@ All components must satisfy the formal Zero-Egress Security Invariants:
 ## 4. Netlify Deployment & Machine-Readable Discovery
 
 - **Build Pipeline**: `npm run build` runs `vite build && node scripts/prerender.mjs`.
-- **71 Prerendered Static Routes**: Static HTML entry points pre-generated with route-specific `<title>`, Open Graph metadata, Schema.org JSON-LD, and `<noscript>` fallbacks.
+- **72 Prerendered Static Routes**: Static HTML entry points pre-generated with route-specific `<title>`, Open Graph metadata, Schema.org JSON-LD, and `<noscript>` fallbacks.
 - **Machine-Readable Discovery Endpoints**:
   - `/llms.txt`: Plain-text markdown fact sheet (< 5 KB) for LLM agents.
   - `/llms-full.txt`: Full architecture and knowledge graph for autonomous reasoning engines.
   - `/ai.txt`: Autonomous crawler policy allowing ethical grounding and indexing.
-  - `/sitemap.xml`: Complete inventory of all 71 static routes.
+  - `/sitemap.xml`: Complete inventory of all 72 static routes.
