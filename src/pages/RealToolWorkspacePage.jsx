@@ -32,6 +32,7 @@ import { microTools } from '../data/toolsData';
 import { getToolDocumentation } from '../data/toolsDocumentation';
 import SovereignFunnel from '../components/SovereignFunnel';
 import AirGapToolLockout, { isLocalRuntime } from '../components/AirGapToolLockout';
+import WebMCPConsole from '../components/WebMCPConsole';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -600,6 +601,17 @@ export default function RealToolWorkspacePage() {
           </Grid>
         </Paper>
       </Box>
+
+      {/* SECTION 3.5: Interactive Enclave Sandbox (WebMCP Tool) */}
+      {tool.id === 'webmcp-protocol-inspector' && (
+        <Box sx={{ mb: 6 }}>
+          <Typography className="section-kicker">Interactive Sovereign Enclave</Typography>
+          <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em', mb: 3, color: theme.palette.text.primary }}>
+            Live WebMCP Inspector &amp; Zoth OS Video Player
+          </Typography>
+          <WebMCPConsole />
+        </Box>
+      )}
 
       {/* SECTION 4: Sovereign Funnel */}
       <Box sx={{ mt: 6 }}>

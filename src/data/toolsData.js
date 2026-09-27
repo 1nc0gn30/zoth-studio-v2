@@ -299,5 +299,17 @@ export const microTools = [
     description: '21-terminal autonomous agent multiplexer daemon with hot-swappable AI harnesses, PWD control, and SSE telemetry.',
     version: '2.5.0',
     pull: 'git clone https://github.com/NullAITech/zoth-swarm-multiplexer.git && cd zoth-swarm-multiplexer && python3 swarm_cli.py status',
+  },
+  {
+    id: 'webmcp-protocol-inspector',
+    published: true,
+    name: 'WebMCP Protocol Suite',
+    repo: 'webmcp-protocol-inspector',
+    category: 'AI & Knowledge',
+    executionType: 'webgpu',
+    github: 'https://github.com/NullAITech/zoth-studio-v2',
+    description: 'In-browser Model Context Protocol (MCP) JSON-RPC 2.0 inspector, tool schema dispatcher, and Zoth OS bare-metal video showcase.',
+    version: '1.0.0',
+    pull: 'npx zoth pull webmcp-protocol-inspector && npx zoth mcp serve --port 8094',
   }
 ];

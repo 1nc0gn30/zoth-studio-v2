@@ -683,6 +683,42 @@ export const toolsDocumentation = {
       'Visual timeline execution graph',
       'Zero external dependencies'
     ]
+  },
+
+  'webmcp-protocol-inspector': {
+    whyUse: 'Enables developers and external autonomous agents (Claude Desktop, Cursor, Hermes Agent) to discover, test, and invoke sovereign tools via standard Model Context Protocol (MCP) JSON-RPC 2.0 specifications without leaking context.',
+    problemSolved: 'Eliminates proprietary, walled-garden agent protocols by adhering strictly to the Anthropic open MCP standard with zero-egress cryptographic verification.',
+    architecture: 'In-browser JSON-RPC 2.0 schema inspector and WebGPU test runner, with loopback SSE transport (127.0.0.1:8094/sse) for local bare-metal daemons.',
+    aiAgentProtocol: {
+      mcpTool: 'webmcp_inspect_schema',
+      description: 'Inspect and dispatch validated MCP JSON-RPC 2.0 tool calls against local sovereign enclaves.',
+      cliExample: 'zoth mcp serve --port 8094',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          targetTool: { type: 'string', description: 'Name of the MCP tool to inspect or call' },
+          parameters: { type: 'object', description: 'Parameters validating against the target schema' }
+        },
+        required: ['targetTool']
+      },
+      outputSchema: {
+        jsonrpc: '2.0',
+        result: 'object',
+        isError: 'boolean'
+      }
+    },
+    quickstart: [
+      'npx zoth pull webmcp-protocol-inspector',
+      'npx zoth mcp serve --port 8094',
+      'claude --mcp-config ./claude_desktop_config.json'
+    ],
+    features: [
+      'Anthropic MCP JSON-RPC 2.0 protocol compliance',
+      'Interactive in-browser tools/list and tools/call dispatcher',
+      'Zoth OS bare-metal demonstration video player',
+      'Air-gapped loopback SSE transport (127.0.0.1:8094)',
+      '100% zero outbound network telemetry'
+    ]
   }
 };
 

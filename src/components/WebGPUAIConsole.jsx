@@ -81,6 +81,9 @@ export default function WebGPUAIConsole() {
           setStreamingText(accumulated);
         },
       });
+      if (result.isLocked) {
+        setStreamingText(result.message);
+      }
       setGenerationMeta(result);
     } catch (err) {
       setStreamingText(`[Execution Error] ${err.message || 'WebGPU compute pass failed'}`);
@@ -331,12 +334,16 @@ export default function WebGPUAIConsole() {
                   animation: isGenerating ? 'pulse 1s infinite' : 'none',
                 }}
               />
-              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: goldSoft }}>
-                {isGenerating ? 'WEBGPU STREAMING INFERENCE ACTIVE' : 'INFERENCE COMPLETE · RECORD SEALED'}
+              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: generationMeta?.isLocked ? '#F59E0B' : goldSoft }}>
+                {isGenerating
+                  ? 'WEBGPU STREAMING INFERENCE ACTIVE'
+                  : generationMeta?.isLocked
+                  ? '🔒 NEURAL WEIGHTS AIR-GAPPED / LOCKED'
+                  : 'INFERENCE COMPLETE · RECORD SEALED'}
               </Typography>
             </Box>
 
-            <Tooltip title={copied ? 'Copied Output!' : 'Copy Response'}>
+            <Tooltip title={copied ? 'Copied Output!' : 'Copy Output'}>
               <IconButton size="small" onClick={handleCopyOutput} sx={{ color: gold }}>
                 <ContentCopyIcon sx={{ fontSize: '16px !important' }} />
               </IconButton>
