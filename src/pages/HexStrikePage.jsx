@@ -675,8 +675,20 @@ export default function HexStrikePage() {
             </HeroItem>
 
             <HeroItem>
-              <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1.5, color: theme.palette.text.primary }}>
-                HexStrike Cyber-Security & <span className="text-gradient-gold">Vault Suite</span>
+              <Typography
+                variant="h3"
+                sx={{
+                  fontWeight: 800,
+                  letterSpacing: '-0.03em',
+                  mb: 1.5,
+                  color: theme.palette.text.primary,
+                  fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' },
+                  lineHeight: 1.15,
+                  wordBreak: 'break-word',
+                  overflowWrap: 'break-word',
+                }}
+              >
+                HexStrike Cyber-Security &amp; <span className="text-gradient-gold">Vault Suite</span>
               </Typography>
             </HeroItem>
             <HeroItem>

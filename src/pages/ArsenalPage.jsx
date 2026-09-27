@@ -378,26 +378,76 @@ export default function ArsenalPage() {
         <CinematicIntro
           words={['ARSENAL', '25 SOVEREIGN', 'TOOLS']}
           themeColor="gold"
-          subtitle="24 Workstations // 25 Micro-Tools // 21 Autonomous Agents"
+          subtitle="24 Workstations // 26 Micro-Tools // 21 Autonomous Agents"
           onComplete={() => setIntroDone(true)}
         />
       )}
       <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 } }}>
         {/* Page Header */}
         <HeroReveal>
-          <Box sx={{ mb: 3 }}>
+          <Box
+            sx={{
+              mb: 3.5,
+              position: 'relative',
+              borderRadius: 3,
+              p: { xs: 2.5, md: 3.5 },
+              background: isDark
+                ? 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.14) 0%, rgba(212,175,55,0.02) 60%, transparent 75%)'
+                : 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.18) 0%, rgba(254,249,231,0.5) 60%, transparent 75%)',
+              border: `1px solid ${isDark ? 'rgba(212,175,55,0.22)' : 'rgba(184,134,11,0.22)'}`,
+              boxShadow: isDark
+                ? '0 12px 30px -8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(212,175,55,0.15)'
+                : '0 8px 24px -4px rgba(184,134,11,0.08)',
+            }}
+          >
             <HeroItem>
-              <Typography variant="overline" sx={{ color: gold.accent, letterSpacing: '0.18em', fontWeight: 800, display: 'block', mb: 1 }}>
-                SOVEREIGN COMMAND HUB &amp; ARSENAL
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 1 }}>
+                <Chip
+                  label="SOVEREIGN COMMAND HUB"
+                  size="small"
+                  sx={{
+                    bgcolor: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
+                    color: gold.accent,
+                    border: `1px solid ${isDark ? 'rgba(212,175,55,0.35)' : '#F0E1A8'}`,
+                    fontWeight: 800,
+                    letterSpacing: '0.08em',
+                    fontSize: '0.72rem',
+                    fontFamily: mono,
+                  }}
+                />
+                <Chip
+                  label="AIR-GAPPED MATRIX"
+                  size="small"
+                  sx={{
+                    bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5',
+                    color: isDark ? '#10B981' : '#047857',
+                    border: isDark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0',
+                    fontWeight: 800,
+                    fontSize: '0.72rem',
+                    fontFamily: mono,
+                  }}
+                />
+              </Box>
+            </HeroItem>
+            <HeroItem>
+              <Typography
+                variant="h3"
+                sx={{
+                  fontFamily: '"Celtic Garamond", Georgia, serif',
+                  mb: 1,
+                  color: isDark ? '#EDEFF2' : '#101828',
+                  fontSize: { xs: '1.9rem', sm: '2.8rem', md: '3.4rem' },
+                  fontWeight: 800,
+                  lineHeight: 1.1,
+                  wordBreak: 'break-word',
+                  overflowWrap: 'break-word',
+                }}
+              >
+                The Sovereign <span className="text-gradient-gold">Arsenal</span>
               </Typography>
             </HeroItem>
             <HeroItem>
-              <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', mb: 1, color: isDark ? '#EDEFF2' : '#101828' }}>
-                The Sovereign Arsenal
-              </Typography>
-            </HeroItem>
-            <HeroItem>
-              <Typography color="text.secondary" sx={{ maxWidth: 880, fontSize: '1.05rem', lineHeight: 1.6 }}>
+              <Typography color="text.secondary" sx={{ maxWidth: 880, fontSize: { xs: '0.98rem', sm: '1.05rem' }, lineHeight: 1.65 }}>
                 One unified directory consolidating all {arsenalStats.total} sovereign micro-tools and repositories. Everything executes strictly on local hardware with zero external cloud dependencies.
               </Typography>
             </HeroItem>

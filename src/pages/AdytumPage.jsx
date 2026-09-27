@@ -1059,7 +1059,18 @@ export function AdytumEngine({ embedded = false }) {
         <HeroItem>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2.5, flexWrap: 'wrap', alignItems: 'flex-end' }}>
           <Box>
-            <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', color: textPrimary }}>
+            <Typography
+              variant="h3"
+              sx={{
+                fontWeight: 800,
+                letterSpacing: '-0.03em',
+                color: textPrimary,
+                fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' },
+                lineHeight: 1.15,
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word',
+              }}
+            >
               Adytum Hermetic <span className="text-gradient-gold">Planning Rite</span>
             </Typography>
             <Typography variant="body1" sx={{ color: textSecondary, maxWidth: 740, mt: 1, lineHeight: 1.6, fontSize: '1.05rem' }}>

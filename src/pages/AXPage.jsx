@@ -536,8 +536,20 @@ export default function AXPage() {
         </HeroItem>
         
         <HeroItem>
-        <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontWeight: 800, mb: 1.5, letterSpacing: '-0.02em' }}>
-          Agent Experience Directory &amp; Machine Discovery
+        <Typography
+          variant="h3"
+          sx={{
+            fontFamily: '"Celtic Garamond", Georgia, serif',
+            fontWeight: 800,
+            mb: 1.5,
+            letterSpacing: '-0.02em',
+            fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' },
+            lineHeight: 1.15,
+            wordBreak: 'break-word',
+            overflowWrap: 'break-word',
+          }}
+        >
+          Agent Experience Directory &amp; <span className="text-gradient-gold">Machine Discovery</span>
         </Typography>
         </HeroItem>
         

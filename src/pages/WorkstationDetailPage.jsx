@@ -2207,7 +2207,7 @@ export default function WorkstationDetailPage() {
           />
         </Box>
 
-        <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontWeight: 800, color: theme.palette.text.primary, mb: 1.5, letterSpacing: '-0.01em' }}>
+        <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontWeight: 800, color: theme.palette.text.primary, mb: 1.5, letterSpacing: '-0.01em', fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' }, lineHeight: 1.15, wordBreak: 'break-word', overflowWrap: 'break-word' }}>
           {station.name}
         </Typography>
 

@@ -853,7 +853,7 @@ export default function ConsensusPage() {
           </HeroItem>
 
           <HeroItem>
-            <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1.5, color: theme.palette.text.primary, position: 'relative', zIndex: 1 }}>
+            <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1.5, color: theme.palette.text.primary, fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' }, lineHeight: 1.15, wordBreak: 'break-word', overflowWrap: 'break-word', position: 'relative', zIndex: 1 }}>
               Byzantine Socratic <span className="text-gradient-gold">Consensus Arena</span>
             </Typography>
           </HeroItem>

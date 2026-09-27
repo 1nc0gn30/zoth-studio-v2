@@ -230,8 +230,20 @@ ${oracleResult.faq.a}`;
             />
           </HeroItem>
           <HeroItem>
-            <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontWeight: 800, mb: 1.5, letterSpacing: '-0.02em' }}>
-              Frequently Asked Questions
+            <Typography
+              variant="h3"
+              sx={{
+                fontFamily: '"Celtic Garamond", Georgia, serif',
+                fontWeight: 800,
+                mb: 1.5,
+                letterSpacing: '-0.02em',
+                fontSize: { xs: '1.85rem', sm: '2.6rem', md: '3.4rem' },
+                lineHeight: 1.15,
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word',
+              }}
+            >
+              Frequently Asked <span className="text-gradient-gold">Questions</span>
             </Typography>
           </HeroItem>
           <HeroItem>

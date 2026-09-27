@@ -378,9 +378,24 @@ export default function SwarmPage() {
 
       {/* Header */}
       <HeroReveal>
-        <Box sx={{ mb: 4, position: 'relative', zIndex: 1 }}>
+        <Box
+          sx={{
+            mb: 4,
+            position: 'relative',
+            zIndex: 1,
+            p: { xs: 2.5, md: 3.5 },
+            borderRadius: 3,
+            background: isDark
+              ? 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(52,211,153,0.12) 0%, rgba(212,175,55,0.06) 50%, transparent 75%)'
+              : 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(52,211,153,0.14) 0%, rgba(254,249,231,0.6) 60%, transparent 75%)',
+            border: `1px solid ${isDark ? 'rgba(52,211,153,0.25)' : 'rgba(5,150,105,0.22)'}`,
+            boxShadow: isDark
+              ? '0 12px 30px -8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(52,211,153,0.15)'
+              : '0 8px 24px -4px rgba(5,150,105,0.08)',
+          }}
+        >
           <HeroItem>
-            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' }, gap: 1.5, flexWrap: 'wrap', mb: 1.5 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 1.5 }}>
               <Chip
                 label="PANTHEON MULTI-AGENT SWARM HUB"
                 size="small"
@@ -389,6 +404,7 @@ export default function SwarmPage() {
                   color: goldSoft,
                   border: `1px solid ${goldBorder}`,
                   fontWeight: 800,
+                  fontSize: '0.72rem',
                 }}
               />
               <Chip
@@ -400,19 +416,31 @@ export default function SwarmPage() {
                   color: isDark ? '#34D399' : '#065F46',
                   border: `1.5px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#059669'}`,
                   fontWeight: 800,
+                  fontSize: '0.72rem',
                 }}
               />
             </Box>
           </HeroItem>
 
           <HeroItem>
-            <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1.5 }}>
+            <Typography
+              variant="h3"
+              sx={{
+                fontWeight: 800,
+                letterSpacing: '-0.03em',
+                mb: 1.5,
+                fontSize: { xs: '1.85rem', sm: '2.5rem', md: '3.2rem' },
+                lineHeight: 1.12,
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word',
+              }}
+            >
               Pantheon Multi-Agent <span className="text-gradient-gold">Swarm Hub</span>
             </Typography>
           </HeroItem>
           
           <HeroItem>
-            <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 860, lineHeight: 1.65, fontSize: '1.05rem' }}>
+            <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 860, lineHeight: 1.65, fontSize: { xs: '0.98rem', sm: '1.05rem' } }}>
               Real-time telemetry and process coordination for the <span className="text-highlight-gold">{pantheonAgents.length} sovereign agent nodes</span> in Zoth Studio.
               Agents execute on local hardware via loopback HTTP and SSE multiplexing on 127.0.0.1:8989 with zero external cloud egress.
               Inspect live node heartbeats, test cadre loopback latencies, and verify air-gap cryptographic isolation.
