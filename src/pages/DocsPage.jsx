@@ -612,11 +612,73 @@ Runs local invariant verification before staging tools.`
         </HeroReveal>
 
         {/* Responsive Split Layout */}
-        <RevealOnScroll preset="fadeUp" delay={0.4}>
-          <Grid container spacing={4}>
-          {/* Left Column: Sticky Table of Contents & Quick Command Block */}
+        <Grid container spacing={4}>
+          {/* Left Column: Mobile Accordion TOC & Desktop Sticky Table of Contents */}
           <Grid xs={12} md={4} lg={3}>
-            <Box sx={{ position: { md: 'sticky' }, top: 24 }}>
+            {/* Mobile Collapsible TOC (Prevents 2,000px scroll barrier on phone screens) */}
+            <Accordion
+              disableGutters
+              sx={{
+                display: { xs: 'block', md: 'none' },
+                bgcolor: surface,
+                border: `1px solid ${dark ? 'rgba(212,175,55,0.25)' : '#EAECF0'}`,
+                borderRadius: '12px !important',
+                mb: 3,
+                borderLeft: `4px solid ${gold}`,
+                boxShadow: dark ? '0 4px 20px rgba(0,0,0,0.3)' : '0 2px 8px rgba(16,24,40,0.06)',
+                '&:before': { display: 'none' }
+              }}
+            >
+              <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: gold }} />}>
+                <Typography
+                  sx={{
+                    color: gold,
+                    fontWeight: 750,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1,
+                    fontSize: '0.92rem'
+                  }}
+                >
+                  <MenuBookIcon fontSize="small" />
+                  Table of Contents ({visibleSections.length} Sections)
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ pt: 0, px: 2, pb: 2 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.8 }}>
+                  {visibleSections.map((item) => (
+                    <Button
+                      key={item.id}
+                      onClick={() => scrollToSection(item.id)}
+                      sx={{
+                        justifyContent: 'flex-start',
+                        textAlign: 'left',
+                        py: 0.7,
+                        px: 1.5,
+                        borderRadius: 2,
+                        fontSize: '0.82rem',
+                        fontWeight: activeSection === item.id ? 700 : 500,
+                        color: activeSection === item.id ? gold : textSecondary,
+                        bgcolor: activeSection === item.id ? goldBg : 'transparent',
+                        border:
+                          activeSection === item.id
+                            ? `1px solid ${dark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.3)'}`
+                            : '1px solid transparent',
+                        '&:hover': {
+                          bgcolor: dark ? 'rgba(212,175,55,0.1)' : '#F8F9FA',
+                          color: gold
+                        }
+                      }}
+                    >
+                      {item.title}
+                    </Button>
+                  ))}
+                </Box>
+              </AccordionDetails>
+            </Accordion>
+
+            {/* Desktop Sticky Table of Contents */}
+            <Box sx={{ display: { xs: 'none', md: 'block' }, position: { md: 'sticky' }, top: 24 }}>
               <Paper
                 sx={{
                   p: 3,
@@ -1752,7 +1814,6 @@ envguard --help`}
             </Box>
           </Grid>
         </Grid>
-        </RevealOnScroll>
 
         {/* Sovereign Installation Funnel */}
         <RevealOnScroll preset="fadeUp">

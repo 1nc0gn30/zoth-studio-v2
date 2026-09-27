@@ -353,126 +353,46 @@ export async function runZothAIModel({ prompt, systemPrompt, model = 'zoth-ai', 
       }
     }
   } catch (err) {
-    // Local Ollama offline, uninstalled, or timeout — continue with in-browser WebGPU engine
+    // Local Ollama offline, uninstalled, or network timeout
   }
 
-  // 3. Fallback: In-Browser WebGPU WGSL Tensor Shader Engine (for Netlify / offline)
+  // 3. Fallback Handling: In-Browser WebGPU Hardware Compute Verification
+  // When local Ollama daemon is offline or on static web hosting, DO NOT fabricate fake AI responses.
+  // Report honest locked status with real WebGPU hardware benchmark metrics.
   if (!ollamaSuccess) {
-    const lower = userQuery.toLowerCase();
-    let generatedContent = '';
-
-    if (lower.includes('architecture') || lower.includes('3-tier') || lower.includes('tier') || lower.includes('structure')) {
-      generatedContent = `[Zoth-AI: Qwen 2.5 Coder 1.5B · WebGPU Native]
-
-Zoth Studio operates on a sovereign 3-tier local architecture:
-1. Public Hub (http://127.0.0.1:3000):
-   - Static showcase & developer documentation served via Docker Nginx.
-   - Zero external tracking, zero cloud dependencies.
-2. Operator Deck (http://127.0.0.1:8484):
-   - Private FastAPI / Starlette control deck for autonomous agent execution.
-   - Multi-model Fusion Arena, 298+ local tool registry, and live terminal loop.
-3. BYOK Vault Daemon (http://127.0.0.1:8787):
-   - Local Rust hardware encryption service using Argon2id + XChaCha20-Poly1305.
-   - Master keys remain encrypted in-memory with automatic scrub on sleep.
-
-Hardware Invariant: All agent IPC stays bound strictly to 127.0.0.1 loopback with zero telemetry egress.`;
-    } else if (lower.includes('pet') || lower.includes('companion') || lower.includes('kai') || lower.includes('draco')) {
-      generatedContent = `[Zoth-AI: Qwen 2.5 Coder 1.5B · WebGPU Native]
-
-The 9 Zoth Cyber Pet companions and their operational specialties:
-1. Kai (3D Holographic Cat) — Workspace & Code AST Inspector.
-2. Draco (3D Cyber Dragon) — Multi-Agent Fusion Compiler & Swarm Orchestrator.
-3. Ignis (3D Neon Phoenix) — Code Refactoring & Stalled Pipeline Resurrector.
-4. Lycan (3D Cyber Wolf) — OWASP Security & Host Vulnerability Sentinel.
-5. Athena (3D Mecha Owl) — Knowledge Graph, Mathematical Invariants & AEO.
-6. Kitsune (16-Bit Cyber Fox) — Vibe Coding, Typography & Dark UI Aesthetics.
-7. Pixel-Neko (16-Bit Retro Cat) — Drive Tool Indexer & Registry Sentinel.
-8. Pixel-Shiba (16-Bit Cyber Doge) — BYOK Key Vault & Memory Guardian.
-9. Radical Minion (Hermes AI) — Autonomous Task Execution & Continuous Delivery.`;
-    } else if (lower.includes('pour') || lower.includes('website') || lower.includes('generator') || lower.includes('saas')) {
-      generatedContent = `[Zoth-AI: Qwen 2.5 Coder 1.5B · WebGPU Native]
-
-Pour is Zoth Studio's automated prompt-to-production website and SaaS generation engine (http://127.0.0.1:8484/#pour).
-
-The 8-Microstep Workflow:
-1. Craft / Subject: Primary domain, industry vertical, and technical scope.
-2. Audience: Ideal client avatar, technical literacy, and intent vectors.
-3. Action / CTAs: Primary conversion mechanism (BYOK signup, download, checkout).
-4. Brand Name: Punchy 1-2 word sovereign brand identifier.
-5. Headline: High-impact thesis (<10 words) communicating core value.
-6. Offers / Works: 3 distinct deliverables, tool capabilities, or SaaS tiers.
-7. Look & Theme: Dark gold-on-void (#08080B + #D4AF37) tokens and layout grid.
-8. Pour & Stamp: Compiles production static assets directly into 'sites/<slug>/'.`;
-    } else if (lower.includes('vault') || lower.includes('key') || lower.includes('argon') || lower.includes('secret') || lower.includes('security')) {
-      generatedContent = `[Zoth-AI: Qwen 2.5 Coder 1.5B · WebGPU Native]
-
-The BYOK (Bring Your Own Key) Vault Daemon is Zoth Studio's cryptographic protection layer:
-- Encryption Primitive: Argon2id key derivation combined with authenticated XChaCha20-Poly1305 AEAD.
-- Zero Cloud Storage: All API tokens (OpenAI, Anthropic, HuggingFace) remain exclusively on your local filesystem at '127.0.0.1:8787'.
-- Enclave Isolation: Child agent processes request transient token sessions over Unix domain sockets or loopback HTTP. Keys are never logged in plaintext.`;
-    } else if (lower.includes('code') || lower.includes('pydantic') || lower.includes('invariant') || lower.includes('python')) {
-      generatedContent = `[Zoth-AI: Qwen 2.5 Coder 1.5B · WebGPU Native]
-
-\`\`\`python
-# Sovereign Zero-Egress Invariant Guard
-from pydantic import BaseModel, Field, IPvAnyAddress
-from typing import Literal
-
-class SovereignLoopbackPolicy(BaseModel):
-    bind_host: IPvAnyAddress = Field(default="127.0.0.1", description="Strict loopback only")
-    telemetry_allowed: Literal[False] = Field(default=False, description="Zero-egress invariant")
-    cipher_suite: str = "XChaCha20-Poly1305"
-    vault_port: int = 8787
-
-    class Config:
-        frozen = True  # Immutable at runtime
-
-def verify_zero_egress(policy: SovereignLoopbackPolicy) -> bool:
-    assert str(policy.bind_host) == "127.0.0.1", "SECURITY BREACH: External binding detected"
-    assert policy.telemetry_allowed is False, "TELEMETRY VIOLATION: Zero egress violated"
-    return True
-\`\`\`
-Compiled via Qwen 2.5 Coder WebGPU runtime. Invariants strictly enforced.`;
-    } else {
-      generatedContent = `[Zoth-AI: Qwen 2.5 Coder 1.5B · WebGPU Native]
-
-Query Analyzed: "${userQuery}"
-System Substrate: Qwen 2.5 Coder architecture running in-browser via WebGPU Tensor Shaders.
-
-Synthesis:
-Zoth-AI processes this request under strict local-first zero-egress invariants. All vector embeddings, token decoding, and AST representations remain localized to your hardware GPU adapter (${bench.adapter}). 
-
-To operationalize this in Zoth Studio:
-1. Launch local daemon: \`node bin/zoth.js up\`
-2. Engage Archon Orchestrator: \`npx zoth run azoth-local-agent\`
-3. Continuous audit: verified 0 external egress bytes.`;
-    }
-
-    const tokens = generatedContent.match(/(\S+\s*|\s+)/g) || [generatedContent];
-    fullText = '';
-
-    for (let i = 0; i < tokens.length; i++) {
-      fullText += tokens[i];
-      if (onToken) onToken(fullText);
-      await new Promise((r) => setTimeout(r, 16));
-    }
-    tokenCount = tokens.length;
+    const elapsedMs = Math.max(1, performance.now() - startTime).toFixed(1);
+    return {
+      success: false,
+      isLocked: true,
+      error: 'LOCAL_DAEMON_OFFLINE',
+      model: targetOllamaModel,
+      fullText: '',
+      message: `Local LLM neural weights (${targetOllamaModel}) require a running Ollama service at http://127.0.0.1:11434.\n\nWebGPU hardware tensor acceleration is verified active on your client (${bench.adapter}, ${bench.tflops}), but text generation requires local model weights loaded locally. Zero fake responses are permitted in sovereign mode.`,
+      localSetupCommand: `ollama run ${model === 'zoth-ai-micro' ? 'smollm2:360m' : 'qwen2.5-coder:1.5b'}`,
+      engineType: 'ollama_local_locked',
+      adapter: bench.adapter,
+      tflops: bench.tflops,
+      tokensGenerated: 0,
+      elapsedMs,
+      throughput: '0.0 tok/s',
+      egress: '0 bytes (Air-Gapped / In-Browser Hardware Verified)',
+    };
   }
 
   const elapsedMs = Math.max(1, performance.now() - startTime).toFixed(1);
   const tps = (tokenCount / (parseFloat(elapsedMs) / 1000)).toFixed(1);
 
   return {
+    success: true,
+    isLocked: false,
     fullText,
-    model: ollamaSuccess
-      ? `${targetOllamaModel} (Local Silicon Engine)`
-      : `${targetOllamaModel} (In-Browser WebGPU Native)`,
-    engineType: ollamaSuccess ? 'ollama_local' : 'webgpu_tensor',
-    adapter: ollamaSuccess ? 'Local Hardware Silicon (127.0.0.1:11434)' : bench.adapter,
+    model: `${targetOllamaModel} (Local Silicon Engine)`,
+    engineType: 'ollama_local',
+    adapter: 'Local Hardware Silicon (127.0.0.1:11434)',
     tflops: bench.tflops,
     tokensGenerated: tokenCount,
     elapsedMs,
     throughput: `${tps} tok/s`,
-    egress: '0 bytes (100% Local / In-Browser)',
+    egress: '0 bytes (100% Local)',
   };
 }

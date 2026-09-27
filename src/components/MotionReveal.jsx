@@ -135,7 +135,7 @@ export function RevealOnScroll({
   preset = 'fadeUp',
   duration = 0.7,
   delay = 0,
-  threshold = 0.15,
+  threshold = 'some',
   once = true,
   style,
   className,

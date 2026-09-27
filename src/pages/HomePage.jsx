@@ -33,6 +33,7 @@ import GoldenZLogo3D from '../components/GoldenZLogo3D';
 import MathPillarsGrid from '../components/MathPillarsGrid';
 import CompanyTicker from '../components/CompanyTicker';
 import WebGPUAIConsole from '../components/WebGPUAIConsole';
+import WebMCPConsole from '../components/WebMCPConsole';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 import CinematicIntro from '../components/CinematicIntro';
@@ -1939,16 +1940,17 @@ export default function HomePage() {
         monoFont={mono}
       />
 
-      {/* Section 1: In-Browser WebGPU AI Tensor Engine Console */}
+      {/* Section 1: In-Browser WebGPU AI Tensor Engine Console & WebMCP Suite */}
       <Box sx={{ mb: 9, pt: 2 }}>
-        <Typography className="section-kicker">Local Hardware Accelerator</Typography>
+        <Typography className="section-kicker">Local Hardware Accelerator &amp; Protocol Suite</Typography>
         <Typography variant="h3" sx={{ fontWeight: 800, mb: 2, color: theme.palette.text.primary, letterSpacing: '-0.02em' }}>
-          WebGPU High-Performance <span className="text-gradient-gold">Tensor Matrix Console</span>
+          WebGPU Hardware Engine &amp; <span className="text-gradient-gold">WebMCP Protocol Suite</span>
         </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 4, maxWidth: 780, lineHeight: 1.65 }}>
-          Execute mathematical matrix multiplication benchmarks directly inside your browser window. Uses native <span className="text-highlight-gold">WGSL compute shaders</span> with automatic fallback to <span className="text-highlight-dark">WASM SIMD 128-bit</span> execution.
+        <Typography variant="body1" color="text.secondary" sx={{ mb: 4, maxWidth: 840, lineHeight: 1.65 }}>
+          Client-side <span className="text-highlight-gold">WebGPU WGSL compute shaders</span> paired with the sovereign <span className="text-highlight-gold">WebMCP (Model Context Protocol)</span> inspector, live JSON-Schema dispatcher, and Zoth OS bare-metal video showcase.
         </Typography>
         <WebGPUAIConsole />
+        <WebMCPConsole />
       </Box>
 
       {/* Section 2: Primary Workstation Navigation Grid */}
