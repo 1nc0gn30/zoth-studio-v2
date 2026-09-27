@@ -112,10 +112,14 @@ export default function MathPillarsPage() {
                 fontWeight: 800,
                 mb: 1.5,
                 letterSpacing: '-0.02em',
-                color: isDark ? '#EDEFF2' : '#101828'
+                color: isDark ? '#EDEFF2' : '#101828',
+                fontSize: { xs: '1.85rem', sm: '2.6rem', md: '3.4rem' },
+                lineHeight: 1.15,
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word',
               }}
             >
-              Six Mathematical Pillars
+              Six Mathematical <span className="text-gradient-gold">Pillars</span>
             </Typography>
           </HeroItem>
 

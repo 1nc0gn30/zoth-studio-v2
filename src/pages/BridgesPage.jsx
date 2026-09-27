@@ -860,7 +860,10 @@ export default function BridgesPage() {
                   letterSpacing: '-0.035em',
                   mb: 1.5,
                   color: theme.palette.text.primary,
-                  fontSize: { xs: '2rem', md: '2.75rem' },
+                  fontSize: { xs: '1.75rem', sm: '2.4rem', md: '3.2rem' },
+                  lineHeight: 1.15,
+                  wordBreak: 'break-word',
+                  overflowWrap: 'break-word',
                 }}
               >
                 Sovereign Agent <span className="text-gradient-gold">Signal Bridge</span>

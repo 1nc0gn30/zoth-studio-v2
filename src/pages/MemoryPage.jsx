@@ -1384,8 +1384,17 @@ export default function MemoryPage() {
                     sx={{ bgcolor: isDark ? 'rgba(0,240,255,0.12)' : '#E0F2FE', color: isDark ? '#00F0FF' : '#0284C7', fontWeight: 800, fontSize: '0.72rem' }}
                   />
                 </Box>
-                <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', lineHeight: 1.2 }}>
-                  Netrunner Memory Hub
+                <Typography
+                  variant="h3"
+                  sx={{
+                    fontFamily: '"Celtic Garamond", Georgia, serif',
+                    lineHeight: 1.15,
+                    fontSize: { xs: '1.85rem', sm: '2.5rem', md: '3.2rem' },
+                    wordBreak: 'break-word',
+                    overflowWrap: 'break-word',
+                  }}
+                >
+                  Netrunner <span className="text-gradient-gold">Memory Hub</span>
                 </Typography>
               </Box>
             </Box>

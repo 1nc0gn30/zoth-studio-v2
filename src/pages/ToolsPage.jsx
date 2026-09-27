@@ -118,7 +118,7 @@ export default function ToolsPage() {
             </Box>
           </HeroItem>
           <HeroItem>
-            <Typography variant="h3" sx={{ mb: 1, fontWeight: 800, letterSpacing: '-0.03em', color: theme.palette.text.primary }}>
+            <Typography variant="h3" sx={{ mb: 1, fontWeight: 800, letterSpacing: '-0.03em', color: theme.palette.text.primary, fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' }, lineHeight: 1.15, wordBreak: 'break-word', overflowWrap: 'break-word' }}>
               Tool Nexus <span className="text-gradient-gold">Sovereign Repositories</span>
             </Typography>
           </HeroItem>

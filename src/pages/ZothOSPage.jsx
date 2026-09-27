@@ -884,11 +884,26 @@ export default function ZothOSPage() {
                     fontWeight: 800,
                     letterSpacing: '0.04em',
                     mb: 1.5,
+                    maxWidth: '100%',
+                    height: 'auto',
+                    '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 },
                   }}
                 />
               </HeroItem>
               <HeroItem>
-                <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1.5, color: theme.palette.text.primary }}>
+                <Typography
+                  variant="h3"
+                  sx={{
+                    fontWeight: 800,
+                    letterSpacing: '-0.03em',
+                    mb: 1.5,
+                    color: theme.palette.text.primary,
+                    fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' },
+                    lineHeight: 1.15,
+                    wordBreak: 'break-word',
+                    overflowWrap: 'break-word',
+                  }}
+                >
                   Zoth OS: Sovereign <span className="text-gradient-gold">Agent Operating System</span>
                 </Typography>
               </HeroItem>

@@ -452,10 +452,14 @@ Runs local invariant verification before staging tools.`
                   fontWeight: 800,
                   mb: 1.5,
                   color: textPrimary,
-                  letterSpacing: '-0.02em'
+                  letterSpacing: '-0.02em',
+                  fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' },
+                  lineHeight: 1.15,
+                  wordBreak: 'break-word',
+                  overflowWrap: 'break-word',
                 }}
               >
-                Zoth Studio Technical Documentation
+                Zoth Studio <span className="text-gradient-gold">Technical Documentation</span>
               </Typography>
             </HeroItem>
             
@@ -472,7 +476,7 @@ Runs local invariant verification before staging tools.`
               >
                 Comprehensive architectural blueprint for Zoth Studio v2: air-gapped agent orchestration,
                 biomorphic STDP synaptic memory, Lucy Cognitive Oracle, 3-agent Byzantine consensus,
-                Adytum Hardware Sanctum, and production Netlify deployment with 71 prerendered static routes.
+                Adytum Hardware Sanctum, and production Netlify deployment with 72 prerendered static routes.
               </Typography>
             </HeroItem>
 

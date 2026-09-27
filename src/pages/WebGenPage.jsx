@@ -2601,8 +2601,20 @@ wait $PID`;
           </HeroItem>
           
           <HeroItem>
-            <Typography variant="h3" sx={{ mb: 1, fontWeight: 900, color: textPrimary, fontSize: { xs: '2.2rem', sm: '3rem', md: '3.4rem' }, letterSpacing: '-0.02em' }}>
-              Zoth WebGen // Autonomous Site Foundry
+            <Typography
+              variant="h3"
+              sx={{
+                mb: 1,
+                fontWeight: 900,
+                color: textPrimary,
+                fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' },
+                lineHeight: 1.15,
+                letterSpacing: '-0.02em',
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word',
+              }}
+            >
+              Zoth WebGen // <span className="text-gradient-gold">Autonomous Site Foundry</span>
             </Typography>
           </HeroItem>
           <HeroItem>

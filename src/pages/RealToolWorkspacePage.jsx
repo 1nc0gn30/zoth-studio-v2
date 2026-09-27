@@ -223,7 +223,19 @@ export default function RealToolWorkspacePage() {
                 }}
               />
             </Box>
-            <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1.5, color: theme.palette.text.primary }}>
+            <Typography
+              variant="h3"
+              sx={{
+                fontWeight: 800,
+                letterSpacing: '-0.03em',
+                mb: 1.5,
+                color: theme.palette.text.primary,
+                fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' },
+                lineHeight: 1.15,
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word',
+              }}
+            >
               {tool.name}
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ fontSize: '1.05rem', lineHeight: 1.65 }}>

@@ -1121,7 +1121,19 @@ export class STDPPlasticityEngineWASM {
               <Chip label={`PILLAR ${pillar.numeral}`} size="small" sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 800, border: `1px solid ${dark ? 'rgba(212,175,55,0.4)' : '#F0E1A8'}` }} />
               <Chip label="CLOSED-FORM PROOF" size="small" sx={{ bgcolor: dark ? 'rgba(52,211,153,0.16)' : '#ECFDF3', color: dark ? '#34D399' : '#027A48', fontWeight: 800 }} />
             </Box>
-            <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.03em', mb: 1, color: textPrimary, fontSize: { xs: '2rem', sm: '2.8rem', md: '3.2rem' } }}>
+            <Typography
+              variant="h3"
+              sx={{
+                fontWeight: 800,
+                letterSpacing: '-0.03em',
+                mb: 1,
+                color: textPrimary,
+                fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.2rem' },
+                lineHeight: 1.15,
+                wordBreak: 'break-word',
+                overflowWrap: 'break-word',
+              }}
+            >
               {pillar.title}
             </Typography>
             <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 500, maxWidth: 850, fontSize: { xs: '1rem', md: '1.15rem' } }}>

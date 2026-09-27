@@ -194,7 +194,7 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 2, mb: 3 }}>
         <Box>
           <Typography className="section-kicker">Local Terminal Control</Typography>
-          <Typography variant="h3" sx={{ fontWeight: 800, mb: 1, letterSpacing: '-0.02em' }}>
+          <Typography variant="h3" sx={{ fontWeight: 800, mb: 1, letterSpacing: '-0.02em', fontSize: { xs: '1.6rem', sm: '2.2rem', md: '2.6rem' }, wordBreak: 'break-word', overflowWrap: 'break-word' }}>
             Autonomous CLI &amp; <span className="text-gradient-gold">Enclave Orchestrator</span>
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 760, lineHeight: 1.65 }}>
@@ -877,7 +877,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 2, mb: 3 }}>
         <Box>
           <Typography className="section-kicker">Core System Architecture</Typography>
-          <Typography variant="h3" sx={{ fontWeight: 800, mb: 1, letterSpacing: '-0.02em' }}>
+          <Typography variant="h3" sx={{ fontWeight: 800, mb: 1, letterSpacing: '-0.02em', fontSize: { xs: '1.6rem', sm: '2.2rem', md: '2.6rem' }, wordBreak: 'break-word', overflowWrap: 'break-word' }}>
             5 Pillars <span className="text-gradient-gold">Architecture Explorer</span>
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 780, lineHeight: 1.65 }}>
@@ -1593,9 +1593,9 @@ export default function HomePage() {
         />
 
         <Box sx={{ position: 'relative', zIndex: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, mb: 1.25 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, mb: 1.25, flexWrap: 'wrap' }}>
             <Box component="img" src="/brand/ghostbyte-dark.png" alt="" sx={{ height: 28, width: 'auto', filter: isDark ? 'drop-shadow(0 0 6px rgba(212,175,55,0.4))' : 'drop-shadow(0 0 4px rgba(184,134,11,0.3))' }} />
-            <Typography sx={{ fontFamily: mono, letterSpacing: '0.22em', fontSize: '0.75rem', color: isDark ? gold.soft : gold.accent, fontWeight: 800 }}>
+            <Typography sx={{ fontFamily: mono, letterSpacing: { xs: '0.08em', sm: '0.16em', md: '0.22em' }, fontSize: { xs: '0.65rem', sm: '0.75rem' }, color: isDark ? gold.soft : gold.accent, fontWeight: 800 }}>
               NULLAI TECH • LOCAL AI WORKSTATION ENGINE
             </Typography>
           </Box>
@@ -1603,16 +1603,18 @@ export default function HomePage() {
           <Typography
             variant="h1"
             sx={{
-              fontSize: { xs: '3.4rem', sm: '5rem', md: '6rem' },
+              fontSize: { xs: '2.5rem', sm: '4rem', md: '5.5rem' },
               color: theme.palette.text.primary,
               fontWeight: 400,
-              lineHeight: 0.92,
+              lineHeight: 1.02,
               mb: 2,
               letterSpacing: '-0.025em',
+              wordBreak: 'break-word',
+              overflowWrap: 'break-word',
             }}
           >
             Zoth
-            <Box component="span" className="text-gradient-gold" sx={{ display: 'block', fontSize: { xs: '2.8rem', sm: '4rem', md: '5rem' } }}>
+            <Box component="span" className="text-gradient-gold" sx={{ display: 'block', fontSize: { xs: '2.2rem', sm: '3.4rem', md: '4.8rem' } }}>
               Studio
             </Box>
           </Typography>
