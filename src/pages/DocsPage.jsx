@@ -1401,7 +1401,7 @@ console.log("Byzantine Consensus Verdict:", verdict.sealed ? "UNANIMOUS APPROVAL
                       { ep: '/llms.txt', desc: 'Compact plain-text summary (< 5 KB) for LLM agents' },
                       { ep: '/llms-full.txt', desc: 'Complete architecture manual and knowledge graph' },
                       { ep: '/ai.txt', desc: 'AI crawler discovery and grounding policy manifest' },
-                      { ep: '/sitemap.xml', desc: 'XML sitemap covering all 71 static routes' }
+                      { ep: '/sitemap.xml', desc: 'XML sitemap covering all 72 static routes' }
                     ].map((item, idx) => (
                       <Grid xs={12} sm={6} key={idx}>
                         <Paper
@@ -1432,7 +1432,7 @@ console.log("Byzantine Consensus Verdict:", verdict.sealed ? "UNANIMOUS APPROVAL
                     code={`# Install dependencies cleanly
 npm ci
 
-# Build Vite application and automatically prerender 71 static routes
+# Build Vite application and automatically prerender 72 static routes
 npm run build
 
 # Preview production build locally on http://127.0.0.1:4173

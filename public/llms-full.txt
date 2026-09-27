@@ -168,7 +168,7 @@ SECTION 7: LOCAL ENCLAVE PORTS & DAEMON SERVICES
 ================================================================================
 
 When running the full Zoth Studio repository on bare metal, daemons bind strictly to local loopback (127.0.0.1):
-- Port 3000: Zoth Studio v2 Web Dashboard (React 18 + Vite + MUI v5)
+- Port 3000: Zoth Studio v2 Web Dashboard (React 19.3 + Vite + MUI v5)
 - Port 8094: Neuro Memory Daemon (STDP Synaptic Vectors + SQLite vec0)
 - Port 8102: Sovereign Agent Bridge (WebSocket IPC Message Bus)
 - Port 8484: Operator Deck PTY Terminal

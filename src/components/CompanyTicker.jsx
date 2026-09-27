@@ -163,7 +163,7 @@ const partners = [
   { name: 'LangChain', category: 'Agent Chains & Tools', url: 'https://langchain.com', color: '#1C3C3C', logoKey: 'langchain' },
   { name: 'LlamaIndex', category: 'RAG Vector Index', url: 'https://llamaindex.ai', color: '#8B5CF6', logoKey: 'llamaindex' },
   { name: 'Vite', category: 'Rapid Build Engine', url: 'https://vitejs.dev', color: '#646CFF', logoKey: 'vite' },
-  { name: 'React 18', category: 'UI Component Tree', url: 'https://react.dev', color: '#61DAFB', logoKey: 'react' },
+  { name: 'React 19.3', category: 'UI Component Tree', url: 'https://react.dev', color: '#61DAFB', logoKey: 'react' },
   { name: 'Material-UI', category: 'Design System', url: 'https://mui.com', color: '#007FFF', logoKey: 'mui' },
   { name: 'Tailwind CSS', category: 'Utility Styling', url: 'https://tailwindcss.com', color: '#38BDF8', logoKey: 'tailwind' },
   { name: 'WebGPU (W3C)', category: 'In-Browser Compute', url: 'https://www.w3.org/TR/webgpu/', color: '#D4AF37', logoKey: 'webgpu' },
