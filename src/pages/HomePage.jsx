@@ -193,12 +193,12 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
     <Box sx={{ mb: 9, pt: 1 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 2, mb: 3 }}>
         <Box>
-          <Typography className="section-kicker">Local Terminal Control</Typography>
+          <Typography className="section-kicker">Instant Local Control</Typography>
           <Typography variant="h3" sx={{ fontWeight: 800, mb: 1, letterSpacing: '-0.02em', fontSize: { xs: '1.6rem', sm: '2.2rem', md: '2.6rem' }, wordBreak: 'break-word', overflowWrap: 'break-word' }}>
-            Autonomous CLI &amp; <span className="text-gradient-gold">Enclave Orchestrator</span>
+            One-Command <span className="text-gradient-gold">Local AI Setup</span>
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 760, lineHeight: 1.65 }}>
-            Spin up offline memory daemons, inspect loopback enclaves, and scaffold air-gapped agent cadres with zero cloud dependencies.
+            Launch your offline AI daemons, check system health, or pull standalone tools with simple, copy-paste terminal commands.
           </Typography>
         </Box>
         <Chip
@@ -1458,7 +1458,7 @@ export default function HomePage() {
         <CinematicIntro
           words={['WELCOME', 'TO', 'ZOTH', 'STUDIO']}
           themeColor="gold"
-          subtitle="Air-Gapped Sovereign Intelligence Suite // Zero External Cloud Egress"
+          subtitle="Private, Local AI Tools Running Directly on Your Hardware — Zero Cloud Needed"
           onComplete={() => setIntroDone(true)}
         />
       )}
@@ -1637,25 +1637,25 @@ export default function HomePage() {
 
           <Typography
             sx={{
-              maxWidth: 600,
-              fontSize: { xs: '1.1rem', sm: '1.2rem', md: '1.3rem' },
+              maxWidth: 620,
+              fontSize: { xs: '1.05rem', sm: '1.18rem', md: '1.25rem' },
               lineHeight: 1.7,
               color: theme.palette.text.primary,
               fontWeight: 450,
             }}
           >
-            An autonomous, <span className="text-highlight-gold">Zero-Telemetry Local AI Studio</span> built for mathematical rigor, sovereign multi-agent consensus, real-time memory persistence, and in-browser <span className="text-highlight-dark">WebGPU Compute</span>.
+            A powerful suite of <span className="text-highlight-gold">100% Local AI Tools</span> built to generate websites, coordinate smart agents, audit security, and retain persistent memory — running privately on your own hardware with zero cloud subscriptions.
           </Typography>
 
           <Box sx={{ display: 'flex', gap: 1.5, mt: 4.5, flexWrap: 'wrap' }}>
-            <Button component={RouterLink} to="/adytum" variant="contained" color="primary" size="large" className="pulse-glow-btn" sx={{ px: 3.8, py: 1.3, fontWeight: 800, boxShadow: isDark ? '0 4px 20px rgba(212,175,55,0.4), 0 0 32px rgba(212,175,55,0.15)' : '0 4px 20px rgba(184,134,11,0.3), 0 0 32px rgba(184,134,11,0.1)', '&:hover': { boxShadow: isDark ? '0 6px 28px rgba(212,175,55,0.55), 0 0 44px rgba(212,175,55,0.22)' : '0 6px 28px rgba(184,134,11,0.45), 0 0 44px rgba(184,134,11,0.16)' } }}>
-              Enter Adytum Rite
+            <Button component={RouterLink} to="/arsenal" variant="contained" color="primary" size="large" className="pulse-glow-btn" sx={{ px: 3.8, py: 1.3, fontWeight: 800, boxShadow: isDark ? '0 4px 20px rgba(212,175,55,0.4), 0 0 32px rgba(212,175,55,0.15)' : '0 4px 20px rgba(184,134,11,0.3), 0 0 32px rgba(184,134,11,0.1)', '&:hover': { boxShadow: isDark ? '0 6px 28px rgba(212,175,55,0.55), 0 0 44px rgba(212,175,55,0.22)' : '0 6px 28px rgba(184,134,11,0.45), 0 0 44px rgba(184,134,11,0.16)' } }}>
+              Explore All AI Tools
             </Button>
-            <Button component={RouterLink} to="/arsenal" variant="outlined" color="primary" size="large" sx={{ px: 3.2, py: 1.3, fontWeight: 750, borderColor: isDark ? 'rgba(212,175,55,0.4)' : '#B8860B', '&:hover': { borderColor: gold.accent, boxShadow: isDark ? '0 0 20px rgba(212,175,55,0.25)' : '0 0 16px rgba(184,134,11,0.2)' } }}>
-              Explore Sovereign Arsenal
+            <Button component={RouterLink} to="/webgen" variant="outlined" color="primary" size="large" sx={{ px: 3.2, py: 1.3, fontWeight: 750, borderColor: isDark ? 'rgba(212,175,55,0.4)' : '#B8860B', '&:hover': { borderColor: gold.accent, boxShadow: isDark ? '0 0 20px rgba(212,175,55,0.25)' : '0 0 16px rgba(184,134,11,0.2)' } }}>
+              Try WebGen Builder
             </Button>
             <Button component={RouterLink} to="/zoth-os" variant="text" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2.5, mt: 0.5, '&:hover': { bgcolor: gold.wash, borderRadius: 2 } }}>
-              Zoth OS ISO →
+              Zoth OS Distro →
             </Button>
           </Box>
 
@@ -1797,10 +1797,10 @@ export default function HomePage() {
         />
 
         {[
-          { icon: <ShieldIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'Zero-Cloud Telemetry', text: 'All LLM calls, embeddings, and memory retention stay 100% on your local metal.' },
-          { icon: <SpeedIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'WebGPU WASM Engine', text: 'In-browser tensor matmul and neural inference running directly on client GPU.' },
-          { icon: <MemoryIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'STDP Neuro Memory', text: 'Biological Spike-Timing-Dependent Plasticity engine running via client memory models or local daemon.' },
-          { icon: <TerminalIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'Sovereign Agent Bridge', text: 'Decentralized peer-to-peer agent bus & consensus engine for multi-agent workflows.' },
+          { icon: <ShieldIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: '100% Private & Local', text: 'Your prompts, code, and documents never leave your computer. Zero cloud accounts and zero tracking.' },
+          { icon: <SpeedIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'High-Speed Local AI', text: 'Powered by offline neural models and instant local compilers that run smoothly on your everyday hardware.' },
+          { icon: <MemoryIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'Long-Term AI Memory', text: 'Intelligent memory retention so your assistants actually remember context and projects across sessions.' },
+          { icon: <TerminalIcon sx={{ color: gold.accent, fontSize: 32 }} />, label: 'Multi-Agent Teamwork', text: 'Specialized autonomous AI assistants collaborate together to plan, code, and test your ideas.' },
         ].map((item, idx) => (
           <Box
             key={idx}
@@ -1942,27 +1942,27 @@ export default function HomePage() {
         monoFont={mono}
       />
 
-      {/* Section 1: In-Browser WebGPU AI Tensor Engine Console & WebMCP Suite */}
+      {/* Section 1: Local AI Engine & Agent Protocol Console */}
       <Box sx={{ mb: 9, pt: 2 }}>
-        <Typography className="section-kicker">Local Hardware Accelerator &amp; Protocol Suite</Typography>
+        <Typography className="section-kicker">Local Hardware Acceleration &amp; Open Protocols</Typography>
         <Typography variant="h3" sx={{ fontWeight: 800, mb: 2, color: theme.palette.text.primary, letterSpacing: '-0.02em' }}>
-          WebGPU Hardware Engine &amp; <span className="text-gradient-gold">WebMCP Protocol Suite</span>
+          On-Device AI Engine &amp; <span className="text-gradient-gold">Agent Protocol Console</span>
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ mb: 4, maxWidth: 840, lineHeight: 1.65 }}>
-          Client-side <span className="text-highlight-gold">WebGPU WGSL compute shaders</span> paired with the sovereign <span className="text-highlight-gold">WebMCP (Model Context Protocol)</span> inspector, live JSON-Schema dispatcher, and Zoth OS bare-metal video showcase.
+          Run AI models and neural processing directly on your own computer’s graphics chip or processor. Test local inference, inspect agent tools, and dispatch tasks in real time.
         </Typography>
         <WebGPUAIConsole />
         <WebMCPConsole />
       </Box>
 
-      {/* Section 2: Primary Workstation Navigation Grid */}
+      {/* Section 2: Flagship Workspaces Navigation Grid */}
       <Box sx={{ mb: 9, pt: 2 }}>
-        <Typography className="section-kicker">Core Workstations</Typography>
+        <Typography className="section-kicker">Flagship Studios</Typography>
         <Typography variant="h3" sx={{ fontWeight: 800, mb: 2, color: theme.palette.text.primary, letterSpacing: '-0.02em' }}>
-          Studio Navigation &amp; <span className="text-gradient-gold">Specialized Workspaces</span>
+          Explore Flagship <span className="text-gradient-gold">AI Workspaces</span>
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ mb: 4, maxWidth: 780, lineHeight: 1.65 }}>
-          Jump straight into sovereign planning, agent cadre inspection, vector memory search, and real-time IPC bridges.
+          Explore approachable, purpose-built tools for instant website building, multi-agent teamwork, threat analysis, and long-term agent memory.
         </Typography>
         <Box
           sx={{
@@ -1972,12 +1972,12 @@ export default function HomePage() {
           }}
         >
           {[
-            ['Adytum', '/adytum', 'A ritualistic planning workspace with multi-tier execution roadmap generators and prompt synthesis tools.'],
-            ['Pantheon Roster', '/swarm', 'Explore 21 specialized autonomous agent roles organized by tactical cadres, skills, and model mappings.'],
-            ['Tool Catalog', '/tools', `Browse ${published.length} open-source CLI & browser tools with instant WebGPU launchers and CLI copy snippets.`],
-            ['Neuro Memory', '/memory', 'Query the STDP biological memory daemon running locally on port 8094 with vector decay search.'],
-            ['Signal Bridge', '/bridges', 'Inspect real-time agent-to-agent communication, simplex channels, and WebSocket heartbeats on port 8102.'],
-            ['Consensus Arena', '/consensus', 'Tri-agent Byzantine fault-tolerant debate chamber for hallucination-resistant AST code synthesis.'],
+            ['WebGen', '/webgen', 'Describe what you need in plain text and get a complete, production-ready website exported in seconds.'],
+            ['AI Swarm', '/swarm', 'Autonomous team of AI models that collaborate to plan, write code, and verify results locally.'],
+            ['HexStrike', '/hexstrike', 'Offensive security suite for scanning vulnerabilities, checking CVEs, and penetration testing.'],
+            ['Neuro Memory', '/memory', 'Brain-inspired long-term memory so your AI assistants remember context across conversations.'],
+            ['Zoth OS', '/zoth-os', 'A complete bootable Linux operating system with all AI tools and models pre-installed out of the box.'],
+            ['Adytum', '/adytum', 'Automate complex, multi-step AI tasks into reliable pipelines with built-in quality checks.'],
           ].map(([title, to, copy], index) => (
             <Card
               key={title}

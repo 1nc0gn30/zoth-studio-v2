@@ -44,6 +44,13 @@ const PRIMARY_ROUTES = [
 ];
 
 const SAMPLE_ROUTES = [
+  '/webgen/docs',
+  '/swarm/docs',
+  '/hexstrike/docs',
+  '/memory/docs',
+  '/zoth-os/docs',
+  '/adytum/docs',
+  '/ax/docs',
   '/tools/envguard-secrets-vault',
   '/tools/vision-gesture-control',
   '/workstations/cockpit',
