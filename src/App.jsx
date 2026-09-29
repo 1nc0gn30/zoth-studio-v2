@@ -5,18 +5,25 @@ import { theme as lightTheme, darkTheme } from './theme';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import SwarmPage from './pages/SwarmPage';
+import SwarmShowcasePage from './pages/SwarmShowcasePage';
 import WebGenPage from './pages/WebGenPage';
+import WebGenShowcasePage from './pages/WebGenShowcasePage';
 import HexStrikePage from './pages/HexStrikePage';
+import HexStrikeShowcasePage from './pages/HexStrikeShowcasePage';
 import ZothOSPage from './pages/ZothOSPage';
+import ZothOSShowcasePage from './pages/ZothOSShowcasePage';
 import MemoryPage from './pages/MemoryPage';
+import MemoryShowcasePage from './pages/MemoryShowcasePage';
 import DocsPage from './pages/DocsPage';
 import AdytumPage from './pages/AdytumPage';
+import AdytumShowcasePage from './pages/AdytumShowcasePage';
 import MathPillarDetailPage from './pages/MathPillarDetailPage';
 import MathPillarsPage from './pages/MathPillarsPage';
 import RealToolWorkspacePage from './pages/RealToolWorkspacePage';
 import ArsenalPage from './pages/ArsenalPage';
 import FaqsPage from './pages/FaqsPage';
 import AXPage from './pages/AXPage';
+import AXShowcasePage from './pages/AXShowcasePage';
 import SEO from './components/SEO';
 import Footer from './components/Footer';
 
@@ -90,24 +97,31 @@ function AppShell({ mode, onToggleTheme }) {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/arsenal" element={<ArsenalPage />} />
-          <Route path="/adytum" element={<AdytumPage />} />
-          <Route path="/swarm" element={<SwarmPage />} />
+          <Route path="/adytum" element={<AdytumShowcasePage />} />
+          <Route path="/adytum/docs" element={<AdytumPage />} />
+          <Route path="/swarm" element={<SwarmShowcasePage />} />
+          <Route path="/swarm/docs" element={<SwarmPage />} />
           <Route path="/bridges" element={<Navigate to="/arsenal" replace />} />
           <Route path="/tools" element={<Navigate to="/arsenal" replace />} />
           <Route path="/workstations" element={<Navigate to="/arsenal" replace />} />
           <Route path="/workstations/:workstationId" element={<WorkstationRedirect />} />
           <Route path="/templates" element={<Navigate to="/arsenal" replace />} />
           <Route path="/tools/:toolId" element={<RealToolWorkspacePage />} />
-          <Route path="/memory" element={<MemoryPage />} />
+          <Route path="/memory" element={<MemoryShowcasePage />} />
+          <Route path="/memory/docs" element={<MemoryPage />} />
           <Route path="/consensus" element={<Navigate to="/arsenal" replace />} />
-          <Route path="/webgen" element={<WebGenPage />} />
-          <Route path="/hexstrike" element={<HexStrikePage />} />
-          <Route path="/zoth-os" element={<ZothOSPage />} />
+          <Route path="/webgen" element={<WebGenShowcasePage />} />
+          <Route path="/webgen/docs" element={<WebGenPage />} />
+          <Route path="/hexstrike" element={<HexStrikeShowcasePage />} />
+          <Route path="/hexstrike/docs" element={<HexStrikePage />} />
+          <Route path="/zoth-os" element={<ZothOSShowcasePage />} />
+          <Route path="/zoth-os/docs" element={<ZothOSPage />} />
           <Route path="/docs" element={<DocsPage />} />
           <Route path="/docs/math/:pillarId" element={<MathPillarDetailPage />} />
           <Route path="/docs/math" element={<MathPillarsPage />} />
           <Route path="/faqs" element={<FaqsPage />} />
-          <Route path="/ax" element={<AXPage />} />
+          <Route path="/ax" element={<AXShowcasePage />} />
+          <Route path="/ax/docs" element={<AXPage />} />
         </Routes>
       </Box>
       <Footer />
