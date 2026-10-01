@@ -5,12 +5,14 @@ const http = require('http');
 const os = require('os');
 const { spawn, exec } = require('child_process');
 
-// 1. VM & Linux Display Safeguards (prevents GPU process crash in QEMU/KVM & live ISOs)
+// 1. VM & Linux Display Safeguards (prevents GPU process crash in QEMU/KVM, live ISOs & bare metal GPUs)
 app.commandLine.appendSwitch('no-sandbox');
 app.commandLine.appendSwitch('disable-dev-shm-usage');
 app.commandLine.appendSwitch('disable-gpu-sandbox');
-app.commandLine.appendSwitch('enable-features', 'UseOzonePlatform');
-app.commandLine.appendSwitch('ozone-platform', 'x11');
+app.commandLine.appendSwitch('ozone-platform-hint', 'auto');
+if (process.platform === 'linux') {
+  app.disableHardwareAcceleration();
+}
 
 // Handle GPU crash gracefully without crashing application
 app.on('child-process-gone', (event, details) => {
@@ -22,6 +24,8 @@ app.on('child-process-gone', (event, details) => {
 let mainWindow = null;
 let serverInstance = null;
 let activePort = parseInt(process.env.PORT || '3000', 10);
+const distDir = path.join(__dirname, 'dist');
+const serveRoot = fs.existsSync(distDir) ? distDir : path.join(__dirname, 'public');
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -218,7 +222,20 @@ function createWindow(port) {
   });
 
   const studioUrl = `http://127.0.0.1:${port}/index.html`;
-  mainWindow.loadURL(studioUrl);
+  const diskIndex = path.join(serveRoot, 'index.html');
+
+  mainWindow.loadURL(studioUrl).catch(() => {
+    if (fs.existsSync(diskIndex)) {
+      mainWindow.loadFile(diskIndex);
+    }
+  });
+
+  mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+    console.warn(`[Zoth Studio] Failed to load ${validatedURL} (${errorCode}: ${errorDescription}), falling back to disk...`);
+    if (fs.existsSync(diskIndex)) {
+      mainWindow.loadFile(diskIndex);
+    }
+  });
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url);

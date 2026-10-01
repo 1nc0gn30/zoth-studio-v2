@@ -34,7 +34,7 @@ import LockIcon from '@mui/icons-material/Lock';
 
 import { masterArsenal, arsenalStats } from '../data/arsenalData';
 import SovereignFunnel from '../components/SovereignFunnel';
-import { isLocalRuntime } from '../components/AirGapToolLockout';
+import { useSovereignRuntime, isLocalRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -94,7 +94,7 @@ const CATEGORY_CONFIG = {
   },
 };
 
-function UnifiedAssetCard({ item, isDark, gold }) {
+function UnifiedAssetCard({ item, isDark, gold, runtime }) {
   const [copied, setCopied] = useState(false);
   const catCfg = CATEGORY_CONFIG[item.category] || {
     color: gold.accent,
@@ -102,6 +102,7 @@ function UnifiedAssetCard({ item, isDark, gold }) {
     icon: HandymanIcon,
   };
   const CatIconComponent = catCfg.icon;
+  const execEval = runtime?.evaluateTool ? runtime.evaluateTool(item) : { canExecute: false, label: 'Inspect Specs 📖' };
 
   const handleCopyPull = (e) => {
     e.stopPropagation();
@@ -166,22 +167,34 @@ function UnifiedAssetCard({ item, isDark, gold }) {
 
           <Chip
             size="small"
-            label={item.executionType === 'webgpu' ? 'WebGPU Native' : 'Local CLI'}
+            label={
+              runtime?.isLocal
+                ? 'Local Sovereign Node'
+                : item.executionType === 'webgpu'
+                  ? 'WebGPU In-Browser'
+                  : 'Bare-Metal Enclave'
+            }
             sx={{
               height: 22,
               fontSize: '0.65rem',
               fontWeight: 800,
               fontFamily: mono,
-              bgcolor: item.executionType === 'webgpu'
-                ? isDark ? 'rgba(56, 189, 248, 0.12)' : '#F0F9FF'
-                : isDark ? 'rgba(212, 175, 55, 0.12)' : '#FFFBEB',
-              color: item.executionType === 'webgpu'
-                ? isDark ? '#38BDF8' : '#0284C7'
-                : isDark ? '#D4AF37' : '#B45309',
+              bgcolor: runtime?.isLocal
+                ? (isDark ? 'rgba(52, 211, 153, 0.12)' : '#ECFDF3')
+                : item.executionType === 'webgpu'
+                  ? (isDark ? 'rgba(56, 189, 248, 0.12)' : '#F0F9FF')
+                  : (isDark ? 'rgba(239, 68, 68, 0.12)' : '#FEF2F2'),
+              color: runtime?.isLocal
+                ? (isDark ? '#34D399' : '#047857')
+                : item.executionType === 'webgpu'
+                  ? (isDark ? '#38BDF8' : '#0284C7')
+                  : (isDark ? '#FCA5A5' : '#B91C1C'),
               border: '1px solid',
-              borderColor: item.executionType === 'webgpu'
-                ? isDark ? 'rgba(56, 189, 248, 0.3)' : '#BAE6FD'
-                : isDark ? 'rgba(212, 175, 55, 0.3)' : '#FDE68A',
+              borderColor: runtime?.isLocal
+                ? (isDark ? 'rgba(52, 211, 153, 0.3)' : '#A7F3D0')
+                : item.executionType === 'webgpu'
+                  ? (isDark ? 'rgba(56, 189, 248, 0.3)' : '#BAE6FD')
+                  : (isDark ? 'rgba(239, 68, 68, 0.3)' : '#FCA5A5'),
             }}
           />
         </Box>
@@ -288,27 +301,45 @@ function UnifiedAssetCard({ item, isDark, gold }) {
       <CardActions sx={{ px: 2.5, pb: 2.5, pt: 0, gap: 1, flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
         <Button
           size="small"
-          variant="contained"
+          variant={execEval.canExecute ? "contained" : "outlined"}
           component={RouterLink}
           to={item.target}
-          startIcon={<RocketLaunchIcon sx={{ fontSize: '0.95rem' }} />}
+          startIcon={
+            runtime?.isLocal ? (
+              <FlashOnIcon sx={{ fontSize: '0.95rem' }} />
+            ) : execEval.canExecute ? (
+              <RocketLaunchIcon sx={{ fontSize: '0.95rem' }} />
+            ) : (
+              <TerminalIcon sx={{ fontSize: '0.95rem' }} />
+            )
+          }
           sx={{
-            bgcolor: isDark ? '#38BDF8' : '#0284C7',
-            color: '#FFFFFF',
+            bgcolor: execEval.canExecute
+              ? (runtime?.isLocal ? (isDark ? '#10B981' : '#059669') : (isDark ? '#38BDF8' : '#0284C7'))
+              : 'transparent',
+            borderColor: execEval.canExecute ? 'transparent' : (isDark ? 'rgba(212,175,55,0.4)' : '#D4AF37'),
+            color: execEval.canExecute
+              ? '#FFFFFF'
+              : (isDark ? '#F5E6AB' : '#8A6A09'),
             fontWeight: 800,
             fontSize: '0.78rem',
             px: 2.5,
             py: 0.6,
             borderRadius: 9999,
-            boxShadow: '0 2px 10px rgba(56, 189, 248, 0.3)',
+            boxShadow: execEval.canExecute
+              ? (isDark ? '0 2px 10px rgba(56, 189, 248, 0.3)' : '0 2px 10px rgba(2, 132, 199, 0.2)')
+              : 'none',
             '&:hover': {
-              bgcolor: isDark ? '#7DD3FC' : '#0369A1',
-              color: isDark ? '#0B0B12' : '#FFFFFF',
+              bgcolor: execEval.canExecute
+                ? (runtime?.isLocal ? '#34D399' : '#7DD3FC')
+                : (isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7'),
+              borderColor: gold.accent,
+              color: execEval.canExecute ? '#0B0B12' : gold.accent,
             },
             transition: 'all 0.2s ease',
           }}
         >
-          Launch Tool ↗
+          {runtime?.isLocal ? 'Launch Tool ⚡' : execEval.label}
         </Button>
 
         {item.github && (
@@ -339,7 +370,8 @@ export default function ArsenalPage() {
   const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const isLocal = isLocalRuntime();
+  const runtime = useSovereignRuntime();
+  const isLocal = runtime.isLocal;
 
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [search, setSearch] = useState('');
@@ -819,72 +851,108 @@ export default function ArsenalPage() {
           <Grid container spacing={2.5}>
             {filteredAssets.map((asset) => (
               <Grid xs={12} sm={6} md={4} key={asset.id}>
-                <UnifiedAssetCard item={asset} isDark={isDark} gold={gold} />
+                <UnifiedAssetCard item={asset} isDark={isDark} gold={gold} runtime={runtime} />
               </Grid>
             ))}
           </Grid>
         ) : (
           <Stack spacing={1.5}>
-            {filteredAssets.map((asset) => (
-              <Paper
-                key={asset.id}
-                elevation={0}
-                sx={{
-                  p: 2,
-                  px: 2.5,
-                  borderRadius: 2.5,
-                  bgcolor: isDark ? '#0A0A10' : '#FFFFFF',
-                  border: '1px solid',
-                  borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  flexWrap: 'wrap',
-                  gap: 2,
-                  '&:hover': {
-                    borderColor: isDark ? '#38BDF8' : '#0284C7',
-                  },
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, minWidth: 260 }}>
-                  <Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Typography sx={{ fontWeight: 800, fontSize: '0.95rem', color: isDark ? '#EDEFF2' : '#101828' }}>
-                        {asset.name}
+            {filteredAssets.map((asset) => {
+              const assetEval = runtime.evaluateTool(asset);
+              return (
+                <Paper
+                  key={asset.id}
+                  elevation={0}
+                  sx={{
+                    p: 2,
+                    px: 2.5,
+                    borderRadius: 2.5,
+                    bgcolor: isDark ? '#0A0A10' : '#FFFFFF',
+                    border: '1px solid',
+                    borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: 2,
+                    '&:hover': {
+                      borderColor: isDark ? '#38BDF8' : '#0284C7',
+                    },
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, minWidth: 260 }}>
+                    <Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <Typography sx={{ fontWeight: 800, fontSize: '0.95rem', color: isDark ? '#EDEFF2' : '#101828' }}>
+                          {asset.name}
+                        </Typography>
+                        <Chip
+                          size="small"
+                          label={asset.category}
+                          sx={{ height: 20, fontSize: '0.65rem', fontFamily: mono, fontWeight: 700 }}
+                        />
+                        <Chip
+                          size="small"
+                          label={
+                            runtime.isLocal
+                              ? 'Local Node'
+                              : asset.executionType === 'webgpu'
+                                ? 'WebGPU In-Browser'
+                                : 'Bare-Metal'
+                          }
+                          sx={{
+                            height: 20,
+                            fontSize: '0.62rem',
+                            fontFamily: mono,
+                            fontWeight: 750,
+                            bgcolor: runtime.isLocal
+                              ? (isDark ? 'rgba(52, 211, 153, 0.12)' : '#ECFDF3')
+                              : asset.executionType === 'webgpu'
+                                ? (isDark ? 'rgba(56, 189, 248, 0.12)' : '#F0F9FF')
+                                : (isDark ? 'rgba(239, 68, 68, 0.12)' : '#FEF2F2'),
+                            color: runtime.isLocal
+                              ? (isDark ? '#34D399' : '#047857')
+                              : asset.executionType === 'webgpu'
+                                ? (isDark ? '#38BDF8' : '#0284C7')
+                                : (isDark ? '#FCA5A5' : '#B91C1C'),
+                          }}
+                        />
+                      </Box>
+                      <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', maxWidth: 540 }}>
+                        {asset.description}
                       </Typography>
-                      <Chip
-                        size="small"
-                        label={asset.category}
-                        sx={{ height: 20, fontSize: '0.65rem', fontFamily: mono, fontWeight: 700 }}
-                      />
                     </Box>
-                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', maxWidth: 540 }}>
-                      {asset.description}
-                    </Typography>
                   </Box>
-                </Box>
 
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.7rem', color: isDark ? '#9CA3AF' : '#4B5563', bgcolor: isDark ? '#14141E' : '#F3F4F6', px: 1, py: 0.3, borderRadius: 1 }}>
-                    {asset.id}
-                  </Typography>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    component={RouterLink}
-                    to={asset.target}
-                    sx={{
-                      bgcolor: isDark ? '#38BDF8' : '#0284C7',
-                      color: '#FFFFFF',
-                      fontFamily: mono,
-                      fontWeight: 750,
-                      fontSize: '0.75rem',
-                      px: 2,
-                      borderRadius: 2,
-                    }}
-                  >
-                    Launch ↗
-                  </Button>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.7rem', color: isDark ? '#9CA3AF' : '#4B5563', bgcolor: isDark ? '#14141E' : '#F3F4F6', px: 1, py: 0.3, borderRadius: 1 }}>
+                      {asset.id}
+                    </Typography>
+                    <Button
+                      size="small"
+                      variant={assetEval.canExecute ? "contained" : "outlined"}
+                      component={RouterLink}
+                      to={asset.target}
+                      sx={{
+                        bgcolor: assetEval.canExecute
+                          ? (runtime.isLocal ? (isDark ? '#10B981' : '#059669') : (isDark ? '#38BDF8' : '#0284C7'))
+                          : 'transparent',
+                        borderColor: assetEval.canExecute ? 'transparent' : (isDark ? 'rgba(212,175,55,0.4)' : '#D4AF37'),
+                        color: assetEval.canExecute ? '#FFFFFF' : (isDark ? '#F5E6AB' : '#8A6A09'),
+                        fontFamily: mono,
+                        fontWeight: 750,
+                        fontSize: '0.75rem',
+                        px: 2,
+                        borderRadius: 2,
+                        '&:hover': {
+                          bgcolor: assetEval.canExecute
+                            ? (runtime.isLocal ? '#34D399' : '#7DD3FC')
+                            : (isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7'),
+                        },
+                      }}
+                    >
+                      {runtime.isLocal ? 'Launch ⚡' : assetEval.label}
+                    </Button>
                   {asset.github && (
                     <Button
                       size="small"
@@ -905,7 +973,7 @@ export default function ArsenalPage() {
                   )}
                 </Box>
               </Paper>
-            ))}
+            ); })}
           </Stack>
         )}
 

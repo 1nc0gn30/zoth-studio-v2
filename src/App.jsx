@@ -21,6 +21,7 @@ import MathPillarDetailPage from './pages/MathPillarDetailPage';
 import MathPillarsPage from './pages/MathPillarsPage';
 import RealToolWorkspacePage from './pages/RealToolWorkspacePage';
 import ArsenalPage from './pages/ArsenalPage';
+import ToolsPage from './pages/ToolsPage';
 import FaqsPage from './pages/FaqsPage';
 import AXPage from './pages/AXPage';
 import AXShowcasePage from './pages/AXShowcasePage';
@@ -102,7 +103,7 @@ function AppShell({ mode, onToggleTheme }) {
           <Route path="/swarm" element={<SwarmShowcasePage />} />
           <Route path="/swarm/docs" element={<SwarmPage />} />
           <Route path="/bridges" element={<Navigate to="/arsenal" replace />} />
-          <Route path="/tools" element={<Navigate to="/arsenal" replace />} />
+          <Route path="/tools" element={<ToolsPage />} />
           <Route path="/workstations" element={<Navigate to="/arsenal" replace />} />
           <Route path="/workstations/:workstationId" element={<WorkstationRedirect />} />
           <Route path="/templates" element={<Navigate to="/arsenal" replace />} />

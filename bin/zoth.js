@@ -147,7 +147,12 @@ function spawnDaemon(id, command, args, cwd) {
     cwd,
     detached: true,
     stdio: ['ignore', log, log],
-    env: { ...process.env, PYTHONPATH: 'src' },
+    env: {
+      ...process.env,
+      PYTHONPATH: 'src',
+      SIGNAL_ACCOUNT: process.env.SIGNAL_ACCOUNT || '+19482047987',
+      SIGNAL_CLI_PATH: process.env.SIGNAL_CLI_PATH || '/usr/local/bin/signal-cli',
+    },
   });
   child.unref();
   fs.closeSync(log);
@@ -196,7 +201,7 @@ async function handleUp() {
     console.log(`${GREEN}✔ bridge${RESET} already listening on 127.0.0.1:8102`);
   }
 
-  if (before.services.vault.up) {
+  if (before.services?.vault?.up) {
     console.log(`${GREEN}✔ vault${RESET} already listening on 127.0.0.1:8787`);
   } else {
     const vaultDir = path.join(root, 'backend', 'vault-daemon');
@@ -245,6 +250,9 @@ async function handleUp() {
     pids.ui = started;
     console.log(`${GREEN}✔ UI Server${RESET} pid ${started.pid}  log ${path.relative(root, started.log)}`);
   } else {
+    console.log(`${GREEN}✔ UI Server${RESET} already listening on http://127.0.0.1:3000/`);
+  }
+
   // Spawn Swarm Daemon on port 8790
   const isSwarmUp = await fetch('http://127.0.0.1:8790/api/swarm/status').then((res) => res.ok).catch(() => false);
   if (!isSwarmUp) {

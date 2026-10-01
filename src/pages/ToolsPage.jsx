@@ -3,7 +3,7 @@ import CinematicIntro from '../components/CinematicIntro';
 import {
   Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, CardActions,
   Chip, Button, TextField, InputAdornment, MenuItem, Select, FormControl, InputLabel,
-  Paper, IconButton
+  Paper, IconButton, Stack
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
@@ -21,7 +21,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { microTools } from '../data/toolsData';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
-import { isLocalRuntime } from '../components/AirGapToolLockout';
+import { useSovereignRuntime, isLocalRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const categories = ['All', 'Planning', 'Swarm & Core', 'AI & Knowledge', 'Security & Recon', 'Security & Steganography', 'Autonomous Web', 'Media & 3D', 'Automation'];
@@ -30,7 +30,8 @@ export default function ToolsPage() {
   const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const isLocal = isLocalRuntime();
+  const { status } = useStudioStatus();
+  const { isLocal, hasWebGPU, evaluateTool } = useSovereignRuntime();
   const activeServices = status?.services
     ? Object.values(status.services).filter((s) => s.up)
     : [];
@@ -383,6 +384,7 @@ export default function ToolsPage() {
       <StaggerChildren>
         <Grid container spacing={3}>
           {filtered.map((tool) => {
+            const execEval = evaluateTool(tool);
             const isWebGPU = tool.executionType === 'webgpu';
             const isExpanded = expanded.has(tool.id);
             return (
@@ -412,17 +414,24 @@ export default function ToolsPage() {
                     <CardContent sx={{ pb: 1 }}>
                       {/* Badge Row */}
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 0.5 }}>
-                        {isWebGPU ? (
+                        {isLocal ? (
                           <Chip
-                            icon={<FlashOnIcon sx={{ color: `${gold.accent} !important`, fontSize: '14px !important' }} />}
+                            icon={<FlashOnIcon sx={{ color: '#10B981 !important', fontSize: '14px !important' }} />}
+                            label="Local Sovereign Node"
+                            size="small"
+                            sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: isDark ? '#34D399' : '#047857', fontWeight: 800, fontSize: '0.72rem', border: '1px solid rgba(16,185,129,0.3)' }}
+                          />
+                        ) : execEval.canExecute ? (
+                          <Chip
+                            icon={<FlashOnIcon sx={{ color: '#38BDF8 !important', fontSize: '14px !important' }} />}
                             label="⚡ WebGPU (In-Browser)"
                             size="small"
-                            sx={{ bgcolor: gold.wash, color: gold.accent, fontWeight: 800, fontSize: '0.72rem', border: `1px solid ${isDark ? 'rgba(212,175,55,0.42)' : 'rgba(184,134,11,0.35)'}` }}
+                            sx={{ bgcolor: isDark ? 'rgba(56,189,248,0.15)' : '#F0F9FF', color: isDark ? '#38BDF8' : '#0284C7', fontWeight: 800, fontSize: '0.72rem', border: '1px solid rgba(56,189,248,0.35)' }}
                           />
                         ) : (
                           <Chip
                             icon={<LockIcon sx={{ color: `${theme.palette.text.secondary} !important`, fontSize: '13px !important' }} />}
-                            label="Requires CLI / Zoth OS"
+                            label="Requires Local CLI"
                             size="small"
                             sx={{ bgcolor: isDark ? 'rgba(148,163,184,0.12)' : '#F1F5F9', color: theme.palette.text.secondary, fontWeight: 700, fontSize: '0.72rem', border: `1px solid ${theme.palette.divider}` }}
                           />
@@ -485,14 +494,29 @@ export default function ToolsPage() {
                       <Button
                         fullWidth
                         size="small"
-                        variant="contained"
-                        color="primary"
+                        variant={execEval.canExecute ? "contained" : "outlined"}
                         component={RouterLink}
                         to={`/tools/${tool.id}`}
-                        startIcon={<LaunchIcon />}
-                        sx={{ fontWeight: 800, py: 0.85, borderRadius: 2, color: '#08080B' }}
+                        startIcon={execEval.canExecute ? <RocketLaunchIcon /> : <LaunchIcon />}
+                        sx={{
+                          fontWeight: 800,
+                          py: 0.85,
+                          borderRadius: 2,
+                          color: execEval.canExecute
+                            ? (isLocal ? '#FFFFFF' : '#08080B')
+                            : (isDark ? '#F5E6AB' : '#8A6A09'),
+                          bgcolor: execEval.canExecute
+                            ? (isLocal ? (isDark ? '#10B981' : '#059669') : '#38BDF8')
+                            : 'transparent',
+                          borderColor: execEval.canExecute ? 'transparent' : gold.accent,
+                          '&:hover': {
+                            bgcolor: execEval.canExecute
+                              ? (isLocal ? '#34D399' : '#7DD3FC')
+                              : gold.wash,
+                          }
+                        }}
                       >
-                        View Docs & Specs
+                        {isLocal ? 'Launch Tool ⚡' : execEval.label}
                       </Button>
                       <Box sx={{ display: 'flex', gap: 1, width: '100%', justifyContent: 'space-between' }}>
                         <Button
