@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   AppBar, Toolbar, Typography, Button, Box, Container, Chip, IconButton, Drawer,
   List, ListItem, ListItemButton, ListItemText, ListItemIcon, Divider, Menu, MenuItem,
-  Dialog, DialogContent, InputBase, Paper, useTheme
+  Dialog, DialogContent, InputBase, Paper, useTheme, Tooltip
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
@@ -28,12 +28,17 @@ import SwarmDaemonMultiplexer from './SwarmDaemonMultiplexer';
 import { microTools } from '../data/toolsData';
 import { workstations } from '../data/workstations';
 import { arsenalStats } from '../data/arsenalData';
+import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 // Flagship Primary Links
 const primaryNav = [
   { label: 'Arsenal', path: '/arsenal', badge: `${arsenalStats.total}` },
+  { label: 'Zoth OS', path: '/zoth-os', badge: 'OS', pulse: true },
+  { label: 'WebGen', path: '/webgen', badge: 'NEW' },
+  { label: 'Swarm', path: '/swarm' },
+  { label: 'HexStrike', path: '/hexstrike' },
 ];
 
 // Knowledge Dropdown
@@ -61,6 +66,7 @@ export default function Navbar({ mode, onToggleTheme }) {
   const navIdle = dark ? '#9CA3AF' : '#475467';
   const navActive = dark ? '#D4AF37' : '#B8860B';
   const goldAccent = dark ? '#D4AF37' : '#B8860B';
+  const { isLocal, hasWebGPU, badgeLabel, badgeColor, badgeTooltip } = useSovereignRuntime();
 
   // Global Keyboard Shortcuts: ⌘K for Command Palette, Ctrl+~ for Swarm Daemon
   useEffect(() => {
@@ -218,52 +224,54 @@ export default function Navbar({ mode, onToggleTheme }) {
               </Box>
             </Box>
 
-            {/* Enclave Air-Gapped Pill */}
-            <Chip
-              icon={
-                <Box
-                  sx={{
-                    width: 7,
-                    height: 7,
-                    borderRadius: '50%',
-                    bgcolor: '#10B981',
-                    boxShadow: '0 0 8px #10B981, 0 0 2px #10B981',
-                    ml: '6px !important',
-                    animation: 'statusDotPulse 2.5s infinite ease-in-out',
-                    '@keyframes statusDotPulse': {
-                      '0%': { opacity: 0.8, transform: 'scale(0.95)' },
-                      '50%': { opacity: 1, transform: 'scale(1.2)', boxShadow: '0 0 12px #10B981, 0 0 4px #10B981' },
-                      '100%': { opacity: 0.8, transform: 'scale(0.95)' },
-                    },
-                  }}
-                />
-              }
-              label="AIR-GAPPED v2.0"
-              size="small"
-              sx={{
-                display: { xs: 'none', md: 'inline-flex' },
-                bgcolor: dark ? 'rgba(16, 185, 129, 0.08)' : '#ECFDF5',
-                color: dark ? '#6EE7B7' : '#065F46',
-                border: `1px solid ${dark ? 'rgba(16, 185, 129, 0.28)' : '#A7F3D0'}`,
-                boxShadow: dark ? 'inset 0 1px 0 rgba(255, 255, 255, 0.05)' : 'none',
-                fontWeight: 800,
-                fontSize: '0.68rem',
-                fontFamily: mono,
-                height: 22,
-                cursor: 'default',
-                transition: 'all 0.2s ease',
-                '&:hover': {
-                  borderColor: '#10B981',
-                  bgcolor: dark ? 'rgba(16, 185, 129, 0.12)' : '#D1FAE5',
-                },
-              }}
-            />
+            {/* Dynamic Sovereign Runtime Status Pill */}
+            <Tooltip title={badgeTooltip} arrow>
+              <Chip
+                icon={
+                  <Box
+                    sx={{
+                      width: 7,
+                      height: 7,
+                      borderRadius: '50%',
+                      bgcolor: badgeColor,
+                      boxShadow: `0 0 8px ${badgeColor}, 0 0 2px ${badgeColor}`,
+                      ml: '6px !important',
+                      animation: 'statusDotPulse 2.5s infinite ease-in-out',
+                      '@keyframes statusDotPulse': {
+                        '0%': { opacity: 0.8, transform: 'scale(0.95)' },
+                        '50%': { opacity: 1, transform: 'scale(1.2)', boxShadow: `0 0 12px ${badgeColor}, 0 0 4px ${badgeColor}` },
+                        '100%': { opacity: 0.8, transform: 'scale(0.95)' },
+                      },
+                    }}
+                  />
+                }
+                label={badgeLabel}
+                size="small"
+                sx={{
+                  display: { xs: 'none', lg: 'inline-flex' },
+                  bgcolor: dark ? `${badgeColor}18` : `${badgeColor}12`,
+                  color: dark ? (isLocal ? '#6EE7B7' : '#7DD3FC') : (isLocal ? '#065F46' : '#0369A1'),
+                  border: `1px solid ${dark ? `${badgeColor}44` : `${badgeColor}55`}`,
+                  boxShadow: dark ? 'inset 0 1px 0 rgba(255, 255, 255, 0.05)' : 'none',
+                  fontWeight: 800,
+                  fontSize: '0.68rem',
+                  fontFamily: mono,
+                  height: 22,
+                  cursor: 'default',
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    borderColor: badgeColor,
+                    bgcolor: dark ? `${badgeColor}25` : `${badgeColor}20`,
+                  },
+                }}
+              />
+            </Tooltip>
           </Box>
 
           {/* Center: Desktop Navigation Bar */}
           <Box
             sx={{
-              display: { xs: 'none', lg: 'flex' },
+              display: { xs: 'none', xl: 'flex' },
               alignItems: 'center',
               gap: 0.5,
               background: dark
@@ -475,14 +483,39 @@ export default function Navbar({ mode, onToggleTheme }) {
           </Box>
 
           {/* Right Action Buttons */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, flexShrink: 0 }}>
-            {/* Universal Swarm Daemon 21-Terminal Trigger */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.75, sm: 1.25 }, flexShrink: 0 }}>
+            {/* Universal Swarm Daemon 21-Terminal Trigger: Compact Icon on Tablets / Small Laptops (< xl) */}
+            <IconButton
+              size="small"
+              onClick={() => setSwarmDaemonOpen(true)}
+              aria-label="Open 21 Swarm Matrix (Ctrl+~)"
+              title="Open 21 Swarm Matrix (Ctrl+~)"
+              sx={{
+                display: { xs: 'none', sm: 'inline-flex', xl: 'none' },
+                color: '#08080B',
+                bgcolor: goldAccent,
+                border: `1px solid ${goldAccent}`,
+                borderRadius: '10px',
+                p: 0.85,
+                boxShadow: `0 0 10px ${goldAccent}66`,
+                transition: 'all 0.22s ease',
+                '&:hover': {
+                  bgcolor: dark ? '#F5E6AB' : '#9A7209',
+                  boxShadow: `0 0 16px ${goldAccent}99`,
+                  transform: 'scale(1.05)',
+                },
+              }}
+            >
+              <TerminalIcon fontSize="small" />
+            </IconButton>
+
+            {/* Universal Swarm Daemon 21-Terminal Trigger: Full Pill Button for Large Desktop (>= xl) */}
             <Button
               size="small"
               onClick={() => setSwarmDaemonOpen(true)}
               startIcon={<TerminalIcon sx={{ color: '#08080B', fontSize: '17px !important' }} />}
               sx={{
-                display: { xs: 'none', sm: 'inline-flex' },
+                display: { xs: 'none', xl: 'inline-flex' },
                 color: '#08080B',
                 bgcolor: goldAccent,
                 borderRadius: 9999,
@@ -504,7 +537,33 @@ export default function Navbar({ mode, onToggleTheme }) {
               SWARM [21]
             </Button>
 
-            {/* Quick Command Palette Search Button */}
+            {/* Quick Command Palette Search Button: Compact Icon for Mobile / Tablet / Laptop (< xl) */}
+            <IconButton
+              size="small"
+              onClick={() => setPaletteOpen(true)}
+              aria-label="Search studio (⌘K)"
+              title="Search studio capabilities (⌘K)"
+              sx={{
+                display: { xs: 'inline-flex', xl: 'none' },
+                color: goldAccent,
+                border: `1px solid ${dark ? 'rgba(212, 175, 55, 0.28)' : 'rgba(212, 175, 55, 0.22)'}`,
+                background: dark ? 'rgba(212, 175, 55, 0.08)' : 'rgba(212, 175, 55, 0.06)',
+                borderRadius: '10px',
+                p: 0.85,
+                transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
+                '&:hover': {
+                  color: dark ? '#FFFFFF' : '#08080B',
+                  borderColor: goldAccent,
+                  background: dark ? 'rgba(212, 175, 55, 0.2)' : 'rgba(212, 175, 55, 0.15)',
+                  transform: 'scale(1.05)',
+                  boxShadow: `0 0 12px ${goldAccent}44`,
+                },
+              }}
+            >
+              <SearchIcon fontSize="small" />
+            </IconButton>
+
+            {/* Quick Command Palette Search Button: Full Search Bar for Large Desktop (>= xl) */}
             <Button
               size="small"
               onClick={() => setPaletteOpen(true)}
@@ -533,7 +592,7 @@ export default function Navbar({ mode, onToggleTheme }) {
                 />
               }
               sx={{
-                display: { xs: 'none', md: 'inline-flex' },
+                display: { xs: 'none', xl: 'inline-flex' },
                 color: navIdle,
                 bgcolor: dark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.04)',
                 border: `1px solid ${dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'}`,
@@ -563,8 +622,7 @@ export default function Navbar({ mode, onToggleTheme }) {
               Search studio...
             </Button>
 
-
-            {/* NullAI External Link */}
+            {/* NullAI External Link (Large Desktop >= xl) */}
             <Button
               variant="contained"
               color="primary"
@@ -573,7 +631,7 @@ export default function Navbar({ mode, onToggleTheme }) {
               rel="noopener noreferrer"
               startIcon={<Box component="img" src="/brand/ghostbyte-dark.png" alt="" sx={{ height: 20, width: 'auto' }} />}
               sx={{
-                display: { xs: 'none', sm: 'inline-flex' },
+                display: { xs: 'none', xl: 'inline-flex' },
                 fontWeight: 800,
                 px: 2,
                 py: 0.7,
@@ -623,13 +681,13 @@ export default function Navbar({ mode, onToggleTheme }) {
               {dark ? <LightModeIcon fontSize="small" /> : <DarkModeIcon fontSize="small" />}
             </IconButton>
 
-            {/* Mobile / Tablet Menu Button */}
+            {/* Mobile / Tablet / Laptop Menu Button (Shown on all screens < xl) */}
             <IconButton
               color="inherit"
               onClick={handleDrawerToggle}
               aria-label="Open sovereign navigation drawer"
               sx={{
-                display: { xs: 'inline-flex', lg: 'none' },
+                display: { xs: 'inline-flex', xl: 'none' },
                 color: brandColor,
                 border: `1px solid ${borderColor}`,
                 borderRadius: '10px',
@@ -1154,7 +1212,8 @@ export default function Navbar({ mode, onToggleTheme }) {
         ModalProps={{ keepMounted: true }}
         PaperProps={{
           sx: {
-            width: { xs: 310, sm: 340 },
+            width: { xs: '86vw', sm: 380, md: 420 },
+            maxWidth: 440,
             bgcolor: dark ? 'rgba(10, 10, 15, 0.97)' : 'rgba(255, 255, 255, 0.98)',
             backdropFilter: 'blur(30px) saturate(190%)',
             WebkitBackdropFilter: 'blur(30px) saturate(190%)',
@@ -1174,10 +1233,10 @@ export default function Navbar({ mode, onToggleTheme }) {
           },
         }}
         sx={{
-          display: { xs: 'block', lg: 'none' },
+          display: { xs: 'block', xl: 'none' },
         }}
       >
-        <Box sx={{ p: 2.5, display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <Box sx={{ p: { xs: 2, sm: 2.5 }, display: 'flex', flexDirection: 'column', height: '100%' }}>
           {/* Drawer Header */}
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
             <Box
@@ -1221,9 +1280,24 @@ export default function Navbar({ mode, onToggleTheme }) {
                 >
                   Zoth Studio
                 </Typography>
-                <Typography variant="caption" sx={{ color: dark ? '#9CA3AF' : '#6B7280', fontFamily: mono, fontSize: '0.7rem' }}>
-                  Zero-Egress v2.0
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.25, flexWrap: 'wrap' }}>
+                  <Typography variant="caption" sx={{ color: dark ? '#9CA3AF' : '#6B7280', fontFamily: mono, fontSize: '0.68rem' }}>
+                    Zero-Egress v2.0
+                  </Typography>
+                  <Chip
+                    label={badgeLabel}
+                    size="small"
+                    sx={{
+                      height: 18,
+                      fontFamily: mono,
+                      fontSize: '0.6rem',
+                      fontWeight: 800,
+                      bgcolor: dark ? `${badgeColor}22` : `${badgeColor}15`,
+                      color: dark ? (isLocal ? '#6EE7B7' : '#7DD3FC') : (isLocal ? '#065F46' : '#0369A1'),
+                      border: `1px solid ${badgeColor}35`,
+                    }}
+                  />
+                </Box>
               </Box>
             </Box>
             <IconButton
@@ -1245,6 +1319,104 @@ export default function Navbar({ mode, onToggleTheme }) {
             >
               <CloseIcon fontSize="small" />
             </IconButton>
+          </Box>
+
+          {/* Mobile & Tablet Quick Actions (Search, Swarm, NullAI) */}
+          <Box sx={{ mb: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+            <Button
+              fullWidth
+              size="small"
+              onClick={() => {
+                handleDrawerToggle();
+                setPaletteOpen(true);
+              }}
+              startIcon={<SearchIcon sx={{ color: goldAccent }} />}
+              endIcon={
+                <Chip
+                  label="⌘K"
+                  size="small"
+                  sx={{
+                    height: 18,
+                    fontSize: '0.65rem',
+                    fontFamily: mono,
+                    fontWeight: 700,
+                    bgcolor: dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)',
+                    color: dark ? '#9CA3AF' : '#6B7280',
+                  }}
+                />
+              }
+              sx={{
+                justifyContent: 'space-between',
+                py: 0.85,
+                px: 1.5,
+                borderRadius: '10px',
+                bgcolor: dark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)',
+                border: `1px solid ${dark ? 'rgba(212, 175, 55, 0.25)' : 'rgba(0, 0, 0, 0.1)'}`,
+                color: dark ? '#E5E7EB' : '#1F2937',
+                fontSize: '0.82rem',
+                fontFamily: mono,
+                textTransform: 'none',
+                '&:hover': {
+                  bgcolor: dark ? 'rgba(212, 175, 55, 0.1)' : '#FEF9E7',
+                  borderColor: goldAccent,
+                },
+              }}
+            >
+              Quick Search (⌘K)
+            </Button>
+
+            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1 }}>
+              <Button
+                size="small"
+                onClick={() => {
+                  handleDrawerToggle();
+                  setSwarmDaemonOpen(true);
+                }}
+                startIcon={<TerminalIcon sx={{ fontSize: '16px !important' }} />}
+                sx={{
+                  py: 0.75,
+                  borderRadius: '10px',
+                  bgcolor: goldAccent,
+                  color: '#08080B',
+                  fontWeight: 800,
+                  fontSize: '0.74rem',
+                  fontFamily: mono,
+                  textTransform: 'none',
+                  boxShadow: `0 0 10px ${goldAccent}44`,
+                  '&:hover': {
+                    bgcolor: dark ? '#F5E6AB' : '#9A7209',
+                  },
+                }}
+              >
+                SWARM [21]
+              </Button>
+
+              <Button
+                size="small"
+                component="a"
+                href="https://nullai.tech"
+                target="_blank"
+                rel="noopener noreferrer"
+                startIcon={<Box component="img" src="/brand/ghostbyte-dark.png" alt="" sx={{ height: 16, width: 'auto' }} />}
+                sx={{
+                  py: 0.75,
+                  borderRadius: '10px',
+                  bgcolor: dark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
+                  border: `1px solid ${dark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+                  color: dark ? '#F5E6AB' : '#101828',
+                  fontWeight: 700,
+                  fontSize: '0.74rem',
+                  fontFamily: mono,
+                  textTransform: 'none',
+                  '&:hover': {
+                    borderColor: goldAccent,
+                    bgcolor: dark ? 'rgba(212, 175, 55, 0.1)' : '#FEF9E7',
+                  },
+                }}
+              >
+                NullAI Lab
+              </Button>
+            </Box>
           </Box>
 
           <Divider sx={{ mb: 2, borderColor: dark ? 'rgba(212, 175, 55, 0.15)' : 'rgba(212, 175, 55, 0.15)' }} />

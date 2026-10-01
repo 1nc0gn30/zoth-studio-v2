@@ -31,8 +31,10 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { microTools } from '../data/toolsData';
 import { getToolDocumentation } from '../data/toolsDocumentation';
 import SovereignFunnel from '../components/SovereignFunnel';
-import AirGapToolLockout, { isLocalRuntime } from '../components/AirGapToolLockout';
+import AirGapToolLockout from '../components/AirGapToolLockout';
 import WebMCPConsole from '../components/WebMCPConsole';
+import WebGPUToolWorkstation from '../components/tools/WebGPUToolWorkstation';
+import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -46,11 +48,14 @@ export default function RealToolWorkspacePage() {
   const [copiedMcp, setCopiedMcp] = useState(false);
   const [unlockedPreview, setUnlockedPreview] = useState(false);
 
-  const isLocal = isLocalRuntime();
-  const isLocked = !isLocal && !unlockedPreview;
-
+  const { isLocal, hasWebGPU, evaluateTool } = useSovereignRuntime();
   const tool = microTools.find((t) => t.id === toolId || t.repo === toolId);
   const docs = getToolDocumentation(tool);
+  const execEval = evaluateTool(tool);
+  const canRunClientSide = execEval.canExecute;
+  // If the tool is client-side capable (WebGPU or WebMCP) and supported on client device, it is NEVER locked out!
+  // If the tool is bare-metal local_cli and on public web, it is locked out to prevent non-functional host execution.
+  const isLocked = !isLocal && !canRunClientSide && !unlockedPreview;
 
   const gold = {
     accent: isDark ? '#D4AF37' : '#B8860B',
@@ -154,14 +159,121 @@ export default function RealToolWorkspacePage() {
         </Box>
       </Box>
 
-      {/* Air-Gap Enclave Lockout Shield for Remote Hosts */}
-      {!isLocal && (
+      {/* If Public Web and Bare-Metal Tool: Display Hardware Enclave Lockout */}
+      {!isLocal && !canRunClientSide && (
         <AirGapToolLockout
           tool={tool}
           isUnlocked={unlockedPreview}
           onUnlockPreview={() => setUnlockedPreview(true)}
           onReseal={() => setUnlockedPreview(false)}
         />
+      )}
+
+      {/* If Public Web and WebGPU/WebMCP Tool: Display Active Client Compute HUD */}
+      {!isLocal && canRunClientSide && (
+        <Paper
+          elevation={0}
+          sx={{
+            mb: 4,
+            p: 2.2,
+            borderRadius: 2.5,
+            bgcolor: isDark ? 'rgba(56, 189, 248, 0.08)' : '#F0F9FF',
+            border: '1.5px solid',
+            borderColor: isDark ? 'rgba(56, 189, 248, 0.4)' : '#BAE6FD',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 2,
+            boxShadow: isDark ? '0 0 24px -4px rgba(56, 189, 248, 0.25)' : 'none',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Box sx={{ p: 1, borderRadius: '50%', bgcolor: isDark ? 'rgba(56, 189, 248, 0.18)' : '#E0F2FE', color: '#38BDF8', display: 'flex' }}>
+              <SpeedIcon sx={{ fontSize: 22 }} />
+            </Box>
+            <Box>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+                <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.82rem', color: '#38BDF8' }}>
+                  IN-BROWSER CLIENT EXECUTION UNLOCKED · ZERO DATA EGRESS
+                </Typography>
+                <Chip
+                  label={hasWebGPU ? "WEBGPU HARDWARE ACCELERATED" : "WASM CPU FALLBACK"}
+                  size="small"
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: '0.64rem',
+                    fontWeight: 800,
+                    bgcolor: isDark ? '#111827' : '#E0F2FE',
+                    color: isDark ? '#7DD3FC' : '#0369A1',
+                    height: 20,
+                  }}
+                />
+              </Box>
+              <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontSize: '0.76rem' }}>
+                You are on the public website. This tool executes 100% client-side in your browser via {hasWebGPU ? 'WebGPU WGSL shaders' : 'WebAssembly CPU SIMD'}. No network data is transmitted.
+              </Typography>
+            </Box>
+          </Box>
+          <Button
+            size="small"
+            variant="contained"
+            onClick={() => {
+              const el = document.getElementById('client-workstation-deck');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            sx={{
+              fontFamily: mono,
+              fontWeight: 850,
+              fontSize: '0.74rem',
+              bgcolor: isDark ? '#38BDF8' : '#0284C7',
+              color: '#08080B',
+              px: 2,
+              '&:hover': { bgcolor: '#7DD3FC' },
+            }}
+          >
+            Launch WebGPU Deck ⚡
+          </Button>
+        </Paper>
+      )}
+
+      {/* If Local Sovereign Node: Display Node Status */}
+      {isLocal && (
+        <Paper
+          elevation={0}
+          sx={{
+            mb: 4,
+            p: 2,
+            borderRadius: 2.5,
+            bgcolor: isDark ? 'rgba(16, 185, 129, 0.08)' : '#ECFDF5',
+            border: '1.5px solid',
+            borderColor: isDark ? 'rgba(16, 185, 129, 0.35)' : '#A7F3D0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 2,
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Box sx={{ p: 0.8, borderRadius: '50%', bgcolor: isDark ? 'rgba(16, 185, 129, 0.18)' : '#D1FAE5', color: '#10B981', display: 'flex' }}>
+              <SecurityIcon sx={{ fontSize: 20 }} />
+            </Box>
+            <Box>
+              <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.8rem', color: '#10B981' }}>
+                LOCAL SOVEREIGN NODE ACTIVE (127.0.0.1)
+              </Typography>
+              <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontSize: '0.74rem' }}>
+                Bare-metal hardware access, local daemons, and loopback Unix sockets available.
+              </Typography>
+            </Box>
+          </Box>
+          <Chip
+            label="FULL PRIVILEGES"
+            size="small"
+            sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.66rem', bgcolor: isDark ? '#064E3B' : '#D1FAE5', color: '#34D399' }}
+          />
+        </Paper>
       )}
 
       {/* Main Tool Dossier Workspace — Blurred and Blocked when Remote and Not Unlocked */}
@@ -263,21 +375,41 @@ export default function RealToolWorkspacePage() {
                 GitHub Repository
               </Button>
             )}
-            <Button
-              component={RouterLink}
-              to="/zoth-os"
-              variant="contained"
-              startIcon={<LaunchIcon />}
-              sx={{
-                bgcolor: gold.accent,
-                color: '#08080B',
-                fontWeight: 800,
-                boxShadow: '0 4px 16px rgba(212,175,55,0.3)',
-                '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#9A7008' },
-              }}
-            >
-              Run in ZothOS
-            </Button>
+            {canRunClientSide ? (
+              <Button
+                variant="contained"
+                onClick={() => {
+                  const el = document.getElementById('client-workstation-deck');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
+                startIcon={<SpeedIcon />}
+                sx={{
+                  bgcolor: '#38BDF8',
+                  color: '#08080B',
+                  fontWeight: 800,
+                  boxShadow: '0 4px 16px rgba(56,189,248,0.3)',
+                  '&:hover': { bgcolor: '#7DD3FC' },
+                }}
+              >
+                Try In-Browser ⚡
+              </Button>
+            ) : (
+              <Button
+                component={RouterLink}
+                to="/zoth-os"
+                variant="contained"
+                startIcon={<LaunchIcon />}
+                sx={{
+                  bgcolor: gold.accent,
+                  color: '#08080B',
+                  fontWeight: 800,
+                  boxShadow: '0 4px 16px rgba(212,175,55,0.3)',
+                  '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#9A7008' },
+                }}
+              >
+                {isLocal ? 'Run in ZothOS' : 'Bare-Metal ZothOS'}
+              </Button>
+            )}
           </Stack>
         </Box>
 
@@ -329,6 +461,13 @@ export default function RealToolWorkspacePage() {
           </Tooltip>
         </Box>
       </Paper>
+
+      {/* Interactive In-Browser Workstation (Mounted when tool has WebGPU/WASM client engine) */}
+      {canRunClientSide && tool.id !== 'webmcp-protocol-inspector' && (
+        <Box id="client-workstation-deck">
+          <WebGPUToolWorkstation tool={tool} />
+        </Box>
+      )}
 
       {/* SECTION 1: Why Use This Tool & Problem Solved */}
       <Box sx={{ mb: 6 }}>

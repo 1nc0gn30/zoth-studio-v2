@@ -27,34 +27,7 @@ import ComputerIcon from '@mui/icons-material/Computer';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
-/**
- * Detects whether Zoth Studio is running in a local sovereign runtime (localhost / 127.0.0.1 / desktop)
- * or in a remote public cloud environment (Netlify, custom domain, remote web server).
- *
- * Supports URL overrides for auditing & testing:
- * - ?remote=1 or ?mock_remote=true forces the remote lockout UI
- * - ?local=1 or ?mock_local=true forces local execution mode
- */
-export function isLocalRuntime() {
-  if (typeof window === 'undefined') return true; // Prerendering pass
-  const search = window.location.search || '';
-  if (search.includes('mock_remote=true') || search.includes('remote=1')) {
-    return false;
-  }
-  if (search.includes('mock_local=true') || search.includes('local=1')) {
-    return true;
-  }
-  const hostname = window.location.hostname;
-  return (
-    hostname === 'localhost' ||
-    hostname === '127.0.0.1' ||
-    hostname === '0.0.0.0' ||
-    hostname === '::1' ||
-    hostname.endsWith('.local') ||
-    hostname.endsWith('.test') ||
-    window.location.protocol === 'file:'
-  );
-}
+export { isLocalRuntime } from '../utils/sovereignRuntime';
 
 /**
  * Creative Sovereign Air-Gap Hardware Enclave Lockout Overlay.
