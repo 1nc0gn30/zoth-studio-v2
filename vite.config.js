@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import { studioMiddleware } from './server/studio-api.mjs';
 
 export default defineConfig({
+  cacheDir: './.vite_cache',
   plugins: [
     react(),
     {

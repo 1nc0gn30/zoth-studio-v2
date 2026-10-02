@@ -28,6 +28,7 @@ id_rsa*
 credentials.json
 
 # Cache & scratch
+.vite_cache/
 coverage/
 .turbo/
 .cache/
