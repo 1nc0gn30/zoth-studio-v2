@@ -34,9 +34,46 @@ import SovereignFunnel from '../components/SovereignFunnel';
 import AirGapToolLockout from '../components/AirGapToolLockout';
 import WebMCPConsole from '../components/WebMCPConsole';
 import WebGPUToolWorkstation from '../components/tools/WebGPUToolWorkstation';
+import {
+  AdytumPlannerTool,
+  AzothArchonTool,
+  SovereignBridgeTool,
+  NeuroMemoryTool,
+  VectorSearchTool,
+  DeepSearchResearchTool,
+  PromptMasterTool,
+  HexStrikeTool,
+  EnvGuardVaultTool,
+  WebSecurityGuardTool,
+  AudioCipherStegoTool,
+  AeoGraphEngineTool,
+  CwvSpeedEngineTool,
+  SubSweepTool,
+  OmniPostSocialTool,
+  CronRhythmTool,
+} from '../components/tools/EnclaveToolsSuite';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
+
+const ENCLAVE_TOOL_COMPONENTS = {
+  'adytum-alchemist-ai-workflow': AdytumPlannerTool,
+  'azoth-archon-orchestrator': AzothArchonTool,
+  'sovereign-bridge-protocol': SovereignBridgeTool,
+  'neuro-memory-service': NeuroMemoryTool,
+  'vector-search-engine': VectorSearchTool,
+  'deepsearch-research-agent': DeepSearchResearchTool,
+  'prompt-master-optimizer': PromptMasterTool,
+  'hexstrike-tactical-terminal': HexStrikeTool,
+  'envguard-secrets-vault': EnvGuardVaultTool,
+  'web-security-guard': WebSecurityGuardTool,
+  'audiocipher-stego-vault': AudioCipherStegoTool,
+  'aeo-graph-engine': AeoGraphEngineTool,
+  'cwv-speed-engine': CwvSpeedEngineTool,
+  'subsweep-lead-scanner': SubSweepTool,
+  'omnipost-social-engine': OmniPostSocialTool,
+  'cron-rhythm-studio': CronRhythmTool,
+};
 
 export default function RealToolWorkspacePage() {
   const { toolId } = useParams();
@@ -53,6 +90,7 @@ export default function RealToolWorkspacePage() {
   const docs = getToolDocumentation(tool);
   const execEval = evaluateTool(tool);
   const canRunClientSide = execEval.canExecute;
+  const EnclaveToolComponent = ENCLAVE_TOOL_COMPONENTS[tool?.id];
   // If the tool is client-side capable (WebGPU or WebMCP) and supported on client device, it is NEVER locked out!
   // If the tool is bare-metal local_cli and on public web, it is locked out to prevent non-functional host execution.
   const isLocked = !isLocal && !canRunClientSide && !unlockedPreview;
@@ -393,6 +431,24 @@ export default function RealToolWorkspacePage() {
               >
                 Try In-Browser ⚡
               </Button>
+            ) : EnclaveToolComponent && (isLocal || unlockedPreview) ? (
+              <Button
+                variant="contained"
+                onClick={() => {
+                  const el = document.getElementById('enclave-workstation-deck');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
+                startIcon={<TerminalIcon />}
+                sx={{
+                  bgcolor: isLocal ? '#10B981' : gold.accent,
+                  color: '#08080B',
+                  fontWeight: 800,
+                  boxShadow: isLocal ? '0 4px 16px rgba(16,185,129,0.3)' : '0 4px 16px rgba(212,175,55,0.3)',
+                  '&:hover': { bgcolor: isLocal ? '#34D399' : (isDark ? '#F5E6AB' : '#9A7008') },
+                }}
+              >
+                {isLocal ? 'Launch Enclave ⚡' : 'Inspect Simulator ⚡'}
+              </Button>
             ) : (
               <Button
                 component={RouterLink}
@@ -467,6 +523,54 @@ export default function RealToolWorkspacePage() {
         <Box id="client-workstation-deck">
           <WebGPUToolWorkstation tool={tool} />
         </Box>
+      )}
+
+      {/* Sovereign Enclave Microtool Workstation (Mounted when tool has an enclave component and either local node or preview unlocked) */}
+      {EnclaveToolComponent && (isLocal || unlockedPreview) && (
+        <Paper
+          elevation={0}
+          id="enclave-workstation-deck"
+          sx={{
+            p: { xs: 2.5, md: 3.5 },
+            mb: 5,
+            borderRadius: 3,
+            bgcolor: isDark ? '#0A0A10' : '#FFFFFF',
+            border: `1.5px solid ${isLocal ? 'rgba(34,197,94,0.35)' : gold.border}`,
+            boxShadow: isDark
+              ? '0 12px 32px rgba(0,0,0,0.6), 0 0 20px -4px rgba(212,175,55,0.2)'
+              : '0 4px 20px rgba(212,175,55,0.12)',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 3 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Box sx={{ p: 1, borderRadius: 2, bgcolor: isDark ? 'rgba(212,175,55,0.15)' : '#FEF9E7', color: gold.accent, display: 'flex' }}>
+                <TerminalIcon sx={{ fontSize: 24 }} />
+              </Box>
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
+                  Interactive Enclave Workstation
+                </Typography>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: isLocal ? '#34D399' : gold.soft, fontWeight: 700 }}>
+                  {isLocal ? 'LOCAL SOVEREIGN ENCLAVE · BARE-METAL HARNESS ACTIVE' : 'AIR-GAPPED SIMULATION HARNESS · ZERO EGRESS'}
+                </Typography>
+              </Box>
+            </Box>
+            <Chip
+              icon={<CheckCircleIcon sx={{ fontSize: '0.85rem !important', color: isLocal ? '#10B981' : gold.accent }} />}
+              label={isLocal ? 'LIVE LOCAL EXECUTION' : 'ENCLAVE SIMULATION HARNESS'}
+              size="small"
+              sx={{
+                fontFamily: mono,
+                fontWeight: 800,
+                fontSize: '0.68rem',
+                bgcolor: isLocal ? (isDark ? 'rgba(16,185,129,0.15)' : '#ECFDF5') : gold.wash,
+                color: isLocal ? (isDark ? '#34D399' : '#047857') : gold.soft,
+                border: `1px solid ${isLocal ? 'rgba(16,185,129,0.3)' : gold.border}`,
+              }}
+            />
+          </Box>
+          <EnclaveToolComponent />
+        </Paper>
       )}
 
       {/* SECTION 1: Why Use This Tool & Problem Solved */}

@@ -29,6 +29,8 @@ import CenterFocusStrongIcon from '@mui/icons-material/CenterFocusStrong';
 import CallSplitIcon from '@mui/icons-material/CallSplit';
 
 import { pantheonAgents, pantheonCadres } from '../data/pantheon';
+import { useStudioStatus } from '../studio/useStudioStatus';
+import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -74,6 +76,8 @@ const CADRE_THEME_COLORS = {
 export default function SwarmDaemonMultiplexer({ embedded = false }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
+  const { isLocal } = useSovereignRuntime();
+  const { status } = useStudioStatus();
 
   const gold = isDark ? '#D4AF37' : '#B8860B';
   const goldText = isDark ? '#F5E6AB' : '#715507';
@@ -96,10 +100,10 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
       const defaultHarness = idx % 2 === 0 ? 'agy' : (idx % 3 === 0 ? 'hermes-agent' : 'claude-code');
       const defaultModel = idx % 2 === 0 ? 'claude-3-7-sonnet' : 'deepseek-r1:70b';
       const defaultPwd = agent.cadre === 'Security'
-        ? '/media/neo/f2fdda77-178b-4603-ae80-c7aa4cd97908/zoth-micro-repos/NullAI-HexStrike-AI-Terminal'
+        ? '~/NullAITech/NullAI-HexStrike-AI-Terminal'
         : (agent.cadre === 'Creative'
-          ? '/media/neo/f2fdda77-178b-4603-ae80-c7aa4cd97908/zoth-micro-repos/zoth-webgen'
-          : '/media/neo/f2fdda77-178b-4603-ae80-c7aa4cd97908/zoth-studio-v2');
+          ? '~/NullAITech/zoth-webgen'
+          : '~/NullAITech/zoth-studio-v2');
 
       states[agent.id] = {
         harness: defaultHarness,
@@ -311,6 +315,21 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
                     border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#059669'}`,
                   }}
                 />
+                {isLocal && status?.services?.swarm && (
+                  <Chip
+                    size="small"
+                    label={status.services.swarm.up ? `DAEMON :${status.services.swarm.port} UP` : `PORT :${status.services.swarm.port} STANDBY`}
+                    sx={{
+                      bgcolor: status.services.swarm.up ? (isDark ? 'rgba(34,197,94,0.15)' : '#DCFCE7') : (isDark ? 'rgba(245,158,11,0.15)' : '#FEF3C7'),
+                      color: status.services.swarm.up ? '#22C55E' : '#D97706',
+                      fontFamily: mono,
+                      fontWeight: 800,
+                      fontSize: '0.7rem',
+                      border: '1px solid',
+                      borderColor: status.services.swarm.up ? 'rgba(34,197,94,0.3)' : 'rgba(245,158,11,0.3)',
+                    }}
+                  />
+                )}
               </Box>
               <Typography variant="caption" sx={{ color: isDark ? '#9CA3AF' : '#475467', fontFamily: mono }}>
                 ZERO-EGRESS AIR-GAPPED PROCESS MULTIPLEXER // WORKSPACE HARNESS
@@ -658,7 +677,7 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
                         whiteSpace: 'nowrap',
                       }}
                     >
-                      {state.pwd.replace('/media/neo/f2fdda77-178b-4603-ae80-c7aa4cd97908', '~')}
+                      {state.pwd}
                     </Typography>
                   </Box>
                   <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.65rem', color: isDark ? '#6B7280' : '#64748B' }}>
