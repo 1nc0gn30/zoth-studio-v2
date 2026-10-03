@@ -1,5 +1,5 @@
 import React from 'react';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   Box,
   Button,
@@ -55,16 +55,11 @@ export default function AdytumShowcasePage() {
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={['ADYTUM', 'KEYMASTER', 'SANCTUM']}
-          themeColor="gold"
-          subtitle="22-Key Hermetic Planning Rite & Memory-Hard Cryptographic Vault"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="adytum" onComplete={() => setIntroDone(true)} />
       )}
 
       <Box sx={{ bgcolor: bg, minHeight: '100vh' }}>
-        <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6 }}>
+        <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 } }}>
           {/* ── Hero ─────────────────────────────────── */}
           <HeroReveal>
             <HeroItem>
@@ -107,7 +102,7 @@ export default function AdytumShowcasePage() {
 
             <HeroItem>
               <Typography
-                sx={{ mt: 1, maxWidth: 600, color: theme.palette.text.secondary }}
+                sx={{ mt: 1.5, maxWidth: 640, lineHeight: 1.65, color: theme.palette.text.secondary }}
               >
                 Define your workflow once — Adytum chains every AI call, validates
                 results, and keeps the whole pipeline on track.
@@ -121,8 +116,9 @@ export default function AdytumShowcasePage() {
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-                gap: 20,
-                marginTop: 48,
+                gap: 24,
+                marginTop: 56,
+                alignItems: 'stretch',
               }}
             >
               {FEATURES.map((f) => (
@@ -131,6 +127,8 @@ export default function AdytumShowcasePage() {
                     variant="outlined"
                     sx={{
                       height: '100%',
+                      width: '100%',
+                      flex: 1,
                       bgcolor: surface,
                       borderColor: isDark
                         ? 'rgba(212,175,55,0.18)'
@@ -188,7 +186,7 @@ export default function AdytumShowcasePage() {
 
           {/* ── CTA ──────────────────────────────────── */}
           <RevealOnScroll preset="fadeUp" delay={0.2}>
-            <Box sx={{ mt: 8, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+            <Box sx={{ mt: 7, display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
               <Button
                 component={RouterLink}
                 to="/adytum/docs"

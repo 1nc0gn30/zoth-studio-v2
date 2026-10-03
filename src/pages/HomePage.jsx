@@ -36,7 +36,7 @@ import WebGPUAIConsole from '../components/WebGPUAIConsole';
 import WebMCPConsole from '../components/WebMCPConsole';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import { microTools } from '../data/toolsData';
 import { useStudioStatus } from '../studio/useStudioStatus';
 
@@ -1455,14 +1455,9 @@ export default function HomePage() {
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={['WELCOME', 'TO', 'ZOTH', 'STUDIO']}
-          themeColor="gold"
-          subtitle="Private, Local AI Tools Running Directly on Your Hardware — Zero Cloud Needed"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="home" onComplete={() => setIntroDone(true)} />
       )}
-      <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 4, md: 7 } }}>
+      <Container maxWidth="lg" className="page-fade-in" sx={{ position: 'relative', py: { xs: 5, md: 8 } }}>
       {/* Soft radial gold glow behind the hero (HomePage signature) */}
       <ParallaxGlow offset={60} style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '100%', pointerEvents: 'none', zIndex: 0 }}>
         <Box
@@ -1527,7 +1522,7 @@ export default function HomePage() {
               `,
           display: 'grid',
           gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1.1fr) minmax(280px, 400px)' },
-          gap: { xs: 4, md: 7.5 },
+          gap: { xs: 3.5, md: 6 },
           alignItems: 'center',
           transition: 'box-shadow 0.4s ease, transform 0.3s ease',
           '&:hover': {
@@ -1647,14 +1642,14 @@ export default function HomePage() {
             A powerful suite of <span className="text-highlight-gold">100% Local AI Tools</span> built to generate websites, coordinate smart agents, audit security, and retain persistent memory — running privately on your own hardware with zero cloud subscriptions.
           </Typography>
 
-          <Box sx={{ display: 'flex', gap: 1.5, mt: 4.5, flexWrap: 'wrap' }}>
+          <Box sx={{ display: 'flex', gap: 1.5, mt: 4, flexWrap: 'wrap', alignItems: 'center' }}>
             <Button component={RouterLink} to="/arsenal" variant="contained" color="primary" size="large" className="pulse-glow-btn" sx={{ px: 3.8, py: 1.3, fontWeight: 800, boxShadow: isDark ? '0 4px 20px rgba(212,175,55,0.4), 0 0 32px rgba(212,175,55,0.15)' : '0 4px 20px rgba(184,134,11,0.3), 0 0 32px rgba(184,134,11,0.1)', '&:hover': { boxShadow: isDark ? '0 6px 28px rgba(212,175,55,0.55), 0 0 44px rgba(212,175,55,0.22)' : '0 6px 28px rgba(184,134,11,0.45), 0 0 44px rgba(184,134,11,0.16)' } }}>
               Explore All AI Tools
             </Button>
             <Button component={RouterLink} to="/webgen" variant="outlined" color="primary" size="large" sx={{ px: 3.2, py: 1.3, fontWeight: 750, borderColor: isDark ? 'rgba(212,175,55,0.4)' : '#B8860B', '&:hover': { borderColor: gold.accent, boxShadow: isDark ? '0 0 20px rgba(212,175,55,0.25)' : '0 0 16px rgba(184,134,11,0.2)' } }}>
               Try WebGen Builder
             </Button>
-            <Button component={RouterLink} to="/zoth-os" variant="text" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2.5, mt: 0.5, '&:hover': { bgcolor: gold.wash, borderRadius: 2 } }}>
+            <Button component={RouterLink} to="/zoth-os" variant="text" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2.5, '&:hover': { bgcolor: gold.wash, borderRadius: 2 } }}>
               Zoth OS Distro →
             </Button>
           </Box>
