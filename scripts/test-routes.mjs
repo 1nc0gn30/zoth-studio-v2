@@ -41,6 +41,7 @@ const PRIMARY_ROUTES = [
   '/docs/math',
   '/faqs',
   '/ax',
+  '/gallery',
 ];
 
 const SAMPLE_ROUTES = [

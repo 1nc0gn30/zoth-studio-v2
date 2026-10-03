@@ -5,13 +5,58 @@
 
 [![Zero-Egress Guaranteed](https://img.shields.io/badge/Security-Zero--Egress%20Enclave-gold?style=flat-square)](#zero-egress-security-invariants)
 [![Netlify Deploy Ready](https://img.shields.io/badge/Deploy-Netlify%20Production-00C7B7?style=flat-square&logo=netlify)](#netlify-deployment-instructions)
-[![72 Prerendered Routes](https://img.shields.io/badge/AEO-72%20Static%20Routes-blueviolet?style=flat-square)](#prerendered-static-routes-72-total)
+[![73 Prerendered Routes](https://img.shields.io/badge/AEO-73%20Static%20Routes-blueviolet?style=flat-square)](#prerendered-static-routes-73-total)
 [![Vite 5.4](https://img.shields.io/badge/Build-Vite%205.4-purple?style=flat-square)](https://vitejs.dev)
 [![React 19.3](https://img.shields.io/badge/Framework-React%2019.3-blue?style=flat-square)](https://react.dev)
 [![MUI v5.15](https://img.shields.io/badge/UI-Material--UI%20v5.15-007FFF?style=flat-square)](https://mui.com)
 [![WebGPU Acceleration](https://img.shields.io/badge/Compute-WebGPU%20WGSL%20%2B%20WASM-cyan?style=flat-square)](#webgpu--wasm-acceleration)
 [![STDP Neuro Memory](https://img.shields.io/badge/Memory-STDP%20Hebbian%20Engine-cyan?style=flat-square)](#stdp-neuro-memory--biomorphic-synaptic-persistence)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+
+---
+
+## See the studio
+
+Desktop and mobile screenshots, plus screen recordings of each motion intro, live on [/gallery](https://zoth.nullai.tech/gallery). The files are in [`public/studio-captures/`](public/studio-captures). Nested docs routes such as `/adytum/docs` play that section’s intro. Recordings show the intro, then the page.
+
+<p>
+  <img src="public/studio-captures/home-desktop.webp" alt="Home, desktop" width="480" />
+  <img src="public/studio-captures/home-mobile.webp" alt="Home, mobile" width="180" />
+</p>
+<p>
+  <img src="public/studio-captures/adytum-desktop.webp" alt="Adytum, desktop" width="480" />
+  <img src="public/studio-captures/adytum-docs-desktop.webp" alt="Adytum docs after the Adytum intro, desktop" width="480" />
+</p>
+<p>
+  <img src="public/studio-captures/swarm-desktop.webp" alt="Swarm, desktop" width="480" />
+  <img src="public/studio-captures/memory-desktop.webp" alt="Memory, desktop" width="480" />
+</p>
+
+| Page | Route | Desktop | Mobile | Intro, desktop | Intro, mobile |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| Home | `/` | [shot](public/studio-captures/home-desktop.webp) | [shot](public/studio-captures/home-mobile.webp) | [video](public/studio-captures/home-intro-desktop.mp4) | [video](public/studio-captures/home-intro-mobile.mp4) |
+| Adytum | `/adytum` | [shot](public/studio-captures/adytum-desktop.webp) | [shot](public/studio-captures/adytum-mobile.webp) | [video](public/studio-captures/adytum-intro-desktop.mp4) | [video](public/studio-captures/adytum-intro-mobile.mp4) |
+| Memory | `/memory` | [shot](public/studio-captures/memory-desktop.webp) | [shot](public/studio-captures/memory-mobile.webp) | [video](public/studio-captures/memory-intro-desktop.mp4) | [video](public/studio-captures/memory-intro-mobile.mp4) |
+| Swarm | `/swarm` | [shot](public/studio-captures/swarm-desktop.webp) | [shot](public/studio-captures/swarm-mobile.webp) | [video](public/studio-captures/swarm-intro-desktop.mp4) | [video](public/studio-captures/swarm-intro-mobile.mp4) |
+| Bridges | `/bridges` | [shot](public/studio-captures/bridges-desktop.webp) | [shot](public/studio-captures/bridges-mobile.webp) | [video](public/studio-captures/bridges-intro-desktop.mp4) | [video](public/studio-captures/bridges-intro-mobile.mp4) |
+| Tools | `/tools` | [shot](public/studio-captures/tools-desktop.webp) | [shot](public/studio-captures/tools-mobile.webp) | [video](public/studio-captures/tools-intro-desktop.mp4) | [video](public/studio-captures/tools-intro-mobile.mp4) |
+| Workstations | `/workstations` | [shot](public/studio-captures/workstations-desktop.webp) | [shot](public/studio-captures/workstations-mobile.webp) | [video](public/studio-captures/workstations-intro-desktop.mp4) | [video](public/studio-captures/workstations-intro-mobile.mp4) |
+| Consensus | `/consensus` | [shot](public/studio-captures/consensus-desktop.webp) | [shot](public/studio-captures/consensus-mobile.webp) | [video](public/studio-captures/consensus-intro-desktop.mp4) | [video](public/studio-captures/consensus-intro-mobile.mp4) |
+| WebGen | `/webgen` | [shot](public/studio-captures/webgen-desktop.webp) | [shot](public/studio-captures/webgen-mobile.webp) | [video](public/studio-captures/webgen-intro-desktop.mp4) | [video](public/studio-captures/webgen-intro-mobile.mp4) |
+| HexStrike | `/hexstrike` | [shot](public/studio-captures/hexstrike-desktop.webp) | [shot](public/studio-captures/hexstrike-mobile.webp) | [video](public/studio-captures/hexstrike-intro-desktop.mp4) | [video](public/studio-captures/hexstrike-intro-mobile.mp4) |
+| Zoth OS | `/zoth-os` | [shot](public/studio-captures/zoth-os-desktop.webp) | [shot](public/studio-captures/zoth-os-mobile.webp) | [video](public/studio-captures/zoth-os-intro-desktop.mp4) | [video](public/studio-captures/zoth-os-intro-mobile.mp4) |
+| Arsenal | `/arsenal` | [shot](public/studio-captures/arsenal-desktop.webp) | [shot](public/studio-captures/arsenal-mobile.webp) | [video](public/studio-captures/arsenal-intro-desktop.mp4) | [video](public/studio-captures/arsenal-intro-mobile.mp4) |
+| Documentation | `/docs` | [shot](public/studio-captures/docs-desktop.webp) | [shot](public/studio-captures/docs-mobile.webp) | [video](public/studio-captures/docs-intro-desktop.mp4) | [video](public/studio-captures/docs-intro-mobile.mp4) |
+| Six Math Pillars | `/docs/math` | [shot](public/studio-captures/docs-math-desktop.webp) | [shot](public/studio-captures/docs-math-mobile.webp) | [video](public/studio-captures/docs-math-intro-desktop.mp4) | [video](public/studio-captures/docs-math-intro-mobile.mp4) |
+| FAQs | `/faqs` | [shot](public/studio-captures/faqs-desktop.webp) | [shot](public/studio-captures/faqs-mobile.webp) | [video](public/studio-captures/faqs-intro-desktop.mp4) | [video](public/studio-captures/faqs-intro-mobile.mp4) |
+| Agent Experience | `/ax` | [shot](public/studio-captures/ax-desktop.webp) | [shot](public/studio-captures/ax-mobile.webp) | [video](public/studio-captures/ax-intro-desktop.mp4) | [video](public/studio-captures/ax-intro-mobile.mp4) |
+| Adytum docs | `/adytum/docs` | [shot](public/studio-captures/adytum-docs-desktop.webp) | [shot](public/studio-captures/adytum-docs-mobile.webp) | [video](public/studio-captures/adytum-docs-intro-desktop.mp4) | [video](public/studio-captures/adytum-docs-intro-mobile.mp4) |
+| Memory docs | `/memory/docs` | [shot](public/studio-captures/memory-docs-desktop.webp) | [shot](public/studio-captures/memory-docs-mobile.webp) | [video](public/studio-captures/memory-docs-intro-desktop.mp4) | [video](public/studio-captures/memory-docs-intro-mobile.mp4) |
+| Swarm docs | `/swarm/docs` | [shot](public/studio-captures/swarm-docs-desktop.webp) | [shot](public/studio-captures/swarm-docs-mobile.webp) | [video](public/studio-captures/swarm-docs-intro-desktop.mp4) | [video](public/studio-captures/swarm-docs-intro-mobile.mp4) |
+| WebGen docs | `/webgen/docs` | [shot](public/studio-captures/webgen-docs-desktop.webp) | [shot](public/studio-captures/webgen-docs-mobile.webp) | [video](public/studio-captures/webgen-docs-intro-desktop.mp4) | [video](public/studio-captures/webgen-docs-intro-mobile.mp4) |
+| HexStrike docs | `/hexstrike/docs` | [shot](public/studio-captures/hexstrike-docs-desktop.webp) | [shot](public/studio-captures/hexstrike-docs-mobile.webp) | [video](public/studio-captures/hexstrike-docs-intro-desktop.mp4) | [video](public/studio-captures/hexstrike-docs-intro-mobile.mp4) |
+| Zoth OS docs | `/zoth-os/docs` | [shot](public/studio-captures/zoth-os-docs-desktop.webp) | [shot](public/studio-captures/zoth-os-docs-mobile.webp) | [video](public/studio-captures/zoth-os-docs-intro-desktop.mp4) | [video](public/studio-captures/zoth-os-docs-intro-mobile.mp4) |
+| Agent Experience docs | `/ax/docs` | [shot](public/studio-captures/ax-docs-desktop.webp) | [shot](public/studio-captures/ax-docs-mobile.webp) | [video](public/studio-captures/ax-docs-intro-desktop.mp4) | [video](public/studio-captures/ax-docs-intro-mobile.mp4) |
 
 ---
 
@@ -61,9 +106,9 @@
         v                                     v                                     v
 +-------------------------------+  +-------------------------------+  +-------------------------------+
 |    OPTIONAL LOCAL DAEMONS     |  |    NETLIFY STATIC HOSTING     |  |   AEO / AX MACHINE DISCOVERY  |
-|  - Ollama Engine (:11434)     |  |  - 72 Prerendered Routes      |  |  - /llms.txt & /llms-full.txt |
+|  - Ollama Engine (:11434)     |  |  - 73 Prerendered Routes      |  |  - /llms.txt & /llms-full.txt |
 |  - Neuro Memory Daemon (:8094)|  |  - Instant FCP (< 200ms)      |  |  - /ai.txt Crawler Policy     |
-|  - Sovereign Bridge (:8102)   |  |  - Strict CSP & Security      |  |  - /sitemap.xml (72 Entries)  |
+|  - Sovereign Bridge (:8102)   |  |  - Strict CSP & Security      |  |  - /sitemap.xml (73 Entries)  |
 |  - WebMCP Bridge (:8094)      |  |  - Immutable Asset Caching    |  |  - Schema.org JSON-LD Graphs  |
 +-------------------------------+  +-------------------------------+  +-------------------------------+
 ```
@@ -107,7 +152,7 @@ flowchart TD
 
     subgraph Distribution["Static Distribution & AEO"]
         Netlify["Production Static Distribution<br/>npm run build -> dist/"]
-        Routes["72 Prerendered Static Routes<br/>Schema.org JSON-LD Graphs"]
+        Routes["73 Prerendered Static Routes<br/>Schema.org JSON-LD Graphs"]
         AEO["Machine Discovery Endpoints<br/>/llms.txt | /llms-full.txt | /sitemap.xml"]
         Netlify --> Routes
         Netlify --> AEO
@@ -300,10 +345,10 @@ vite build && node scripts/prerender.mjs
   - Immutable 1-year caching for static `/assets/*` and `/brand/*`.
   - Open headers (`Access-Control-Allow-Origin: *`) for machine discovery endpoints (`/llms.txt`, `/ai.txt`, `/sitemap.xml`).
 
-### Prerendered Static Routes (72 Total)
+### Prerendered Static Routes (73 Total)
 
-During `npm run build`, `scripts/prerender.mjs` prerenders **72 static HTML routes** into `dist/`, including:
-- **Core Hub & Pages**: `/`, `/docs`, `/memory`, `/swarm`, `/bridges`, `/consensus`, `/hexstrike`, `/zoth-os`, `/webgen`, `/adytum`, `/faqs`, `/ax`, `/workstations`, `/tools`, `/templates`
+During `npm run build`, `scripts/prerender.mjs` prerenders **73 static HTML routes** into `dist/`, including:
+- **Core Hub & Pages**: `/`, `/docs`, `/memory`, `/swarm`, `/bridges`, `/consensus`, `/hexstrike`, `/zoth-os`, `/webgen`, `/adytum`, `/faqs`, `/ax`, `/gallery`, `/workstations`, `/tools`, `/templates`
 - **24 Workstation Detail Routes**: `/workstations/agent-composer`, `/workstations/brand-seals`, `/workstations/cyberpunk-hud`, etc.
 - **26 In-Browser Tool Routes**: `/tools/webmcp-protocol-inspector`, `/tools/jwt-inspector-guard`, `/tools/payload-entropy-studio`, `/tools/polyglot-framework-exporter`, etc.
 - **6 Math Pillar Pages**: `/docs/math/linear`, `/docs/math/calculus`, `/docs/math/probability`, `/docs/math/hessian`, `/docs/math/lyapunov`, `/docs/math/stdp`
@@ -326,7 +371,7 @@ Zoth Studio implements state-of-the-art Answer Engine Optimization (AEO) and Age
 | **`/llms.txt`** | `text/plain; charset=UTF-8` | Condensed markdown system overview (< 5 KB) for LLM agents, ChatGPT, Claude, and Perplexity |
 | **`/llms-full.txt`** | `text/plain; charset=UTF-8` | Comprehensive system architecture manual, schema specs, and protocols for deep analysis |
 | **`/ai.txt`** | `text/plain; charset=UTF-8` | Autonomous crawler policy granting grounding, indexing, and attribution rights to AI bots |
-| **`/sitemap.xml`** | `application/xml; charset=UTF-8`| Synchronized XML sitemap covering all 72 static routes with priorities and update timestamps |
+| **`/sitemap.xml`** | `application/xml; charset=UTF-8`| Synchronized XML sitemap covering all 73 static routes with priorities and update timestamps |
 | **`/robots.txt`** | `text/plain; charset=UTF-8` | Crawler permissions explicitly welcoming search and AI crawlers |
 | **`/api/ax/manifest.json`** | `application/json; charset=UTF-8`| Machine-readable AX manifest for programmatic agent discovery and tool binding |
 
@@ -368,7 +413,7 @@ The `zoth` CLI (`bin/zoth.js`, executable via `npx zoth` or `npm run zoth -- <co
 
 ### 4. Production Build & Verify
 ```bash
-# Compile bundle and prerender all 72 static routes
+# Compile bundle and prerender all 73 static routes
 npm run build
 
 # Preview production build locally
@@ -399,9 +444,9 @@ zoth-studio-v2/
 │   ├── llms-full.txt           # Exhaustive machine-readable system manual
 │   ├── ai.txt                  # Autonomous AI crawler policy
 │   ├── robots.txt              # Crawler permissions
-│   └── sitemap.xml             # 72-route search engine index
+│   └── sitemap.xml             # 73-route search engine index
 ├── scripts/
-│   └── prerender.mjs           # Prerender engine for 72 static HTML routes
+│   └── prerender.mjs           # Prerender engine for 73 static HTML routes
 ├── src/
 │   ├── components/             # Reusable UI components (CinematicIntro, Navbar, Footer, etc.)
 │   ├── config/

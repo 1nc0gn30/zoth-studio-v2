@@ -22,6 +22,7 @@ import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturi
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import FlashOnIcon from '@mui/icons-material/FlashOn';
+import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import GoldenZLogo3D from './GoldenZLogo3D';
 import SwarmDaemonMultiplexer from './SwarmDaemonMultiplexer';
@@ -47,6 +48,7 @@ const knowledgeItems = [
   { label: 'Six Math Pillars', path: '/docs/math', desc: 'Formal theory: STDP, Byzantine math & Shannon entropy', icon: <FunctionsIcon fontSize="small" sx={{ color: '#60A5FA' }} /> },
   { label: 'Architecture FAQs', path: '/faqs', desc: 'Answers regarding Lucy Oracle, offline daemons & safety', icon: <HelpOutlineIcon fontSize="small" sx={{ color: '#34D399' }} /> },
   { label: 'Agent Experience (AX)', path: '/ax', desc: 'Machine-readable schemas & autonomous crawler endpoints', icon: <PrecisionManufacturingIcon fontSize="small" sx={{ color: '#A78BFA' }} /> },
+  { label: 'Studio Gallery', path: '/gallery', desc: 'Desktop and mobile screenshots and motion intro recordings', icon: <OndemandVideoIcon fontSize="small" sx={{ color: '#D4AF37' }} /> },
 ];
 
 export default function Navbar({ mode, onToggleTheme }) {

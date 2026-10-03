@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, Chip, Button, Paper, TextField,
   LinearProgress, IconButton, Tooltip, Tabs, Tab, RadioGroup, FormControlLabel, Radio,
@@ -2527,12 +2527,7 @@ wait $PID`;
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={["WEBGEN", "AUTONOMOUS", "FOUNDRY"]}
-          themeColor="emerald"
-          subtitle="Deterministic Zero-Cloud Website Generator & Layout Synthesizer"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="webgen" onComplete={() => setIntroDone(true)} />
       )}
       <Container maxWidth="xl" sx={{ py: { xs: 3, md: 5 }, pb: { xs: 12, md: 6 } }}>
       

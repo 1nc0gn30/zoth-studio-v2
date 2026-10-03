@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 import {
   Box, Container, Typography, Paper, Chip, Unstable_Grid2 as Grid, Button,
@@ -463,12 +463,7 @@ export default function AXPage() {
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={["AGENT", "EXPERIENCE", "SPECS"]}
-          themeColor="gold"
-          subtitle="Machine-Readable Entity Architecture, Capabilities & OpenAPI Schemas"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="ax" onComplete={() => setIntroDone(true)} />
       )}
       <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
       <SEO
