@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, CardActions,
   Chip, Button, TextField, InputAdornment, MenuItem, Select, FormControl, InputLabel,
@@ -77,14 +77,9 @@ export default function ToolsPage() {
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={['25 LOCAL', 'MICRO', 'TOOLS']}
-          themeColor="emerald"
-          subtitle="Schema-Validated Air-Gapped Utilities for Sovereign Development"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="tools" onComplete={() => setIntroDone(true)} />
       )}
-      <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6 }}>
+      <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 } }}>
       {/* Page Header with gold top-edge glow (ToolsPage signature) */}
       <HeroReveal>
         <Box sx={{ position: 'relative', mb: 4, pt: 1 }}>
@@ -99,7 +94,7 @@ export default function ToolsPage() {
                 icon={<TerminalIcon sx={{ color: `${gold.accent} !important` }} />}
                 label="NULLAI TOOL CATALOG & WEBGPU WORKSTATIONS"
                 size="small"
-                sx={{ bgcolor: gold.wash, color: gold.accent, border: `1px solid ${isDark ? 'rgba(212,175,55,0.42)' : '#F0E1A8'}`, fontWeight: 800, px: 1 }}
+                sx={{ bgcolor: gold.wash, color: gold.accent, border: `1px solid ${isDark ? 'rgba(212,175,55,0.42)' : '#F0E1A8'}`, fontWeight: 800, px: 1, maxWidth: '100%', height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 } }}
               />
               {isBackendConnected ? (
                 <Chip
@@ -113,7 +108,7 @@ export default function ToolsPage() {
                   icon={<DnsIcon sx={{ color: isDark ? '#94A3B8 !important' : '#64748B !important' }} />}
                   label="STANDALONE MODE · IN-BROWSER WEBGPU READY (RUN NPX ZOTH UP FOR LOCAL DAEMONS)"
                   size="small"
-                  sx={{ bgcolor: isDark ? 'rgba(148,163,184,0.1)' : '#F1F5F9', color: isDark ? '#CBD5E1' : '#475569', border: `1px solid ${isDark ? 'rgba(148,163,184,0.25)' : '#CBD5E1'}`, fontWeight: 750 }}
+                  sx={{ bgcolor: isDark ? 'rgba(148,163,184,0.1)' : '#F1F5F9', color: isDark ? '#CBD5E1' : '#475569', border: `1px solid ${isDark ? 'rgba(148,163,184,0.25)' : '#CBD5E1'}`, fontWeight: 750, maxWidth: '100%', height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 } }}
                 />
               )}
             </Box>

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   Box,
   Container,
@@ -830,12 +830,7 @@ export default function ZothOSPage() {
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={["ZOTH OS", "KVM", "HYPERVISOR"]}
-          themeColor="purple"
-          subtitle="Hardware-Isolated Linux KVM Virtualization & WebContainer Sandbox"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="zoth-os" onComplete={() => setIntroDone(true)} />
       )}
       <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>
       {/* ZothOS signature: gold glow behind the header */}

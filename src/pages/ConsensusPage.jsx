@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   Box, Container, Typography, Chip, Paper, Button, TextField, Unstable_Grid2 as Grid,
   Card, CardContent, Slider, LinearProgress, Tooltip, IconButton, Stack, Divider, Alert,
@@ -794,14 +794,9 @@ export default function ConsensusPage() {
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={["BYZANTINE", "FAULT", "TOLERANCE"]}
-          themeColor="cyan"
-          subtitle="3-Agent Triadic AST Consensus Arena // Socratic Dialectic Loop"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="consensus" onComplete={() => setIntroDone(true)} />
       )}
-      <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6 }}>
+      <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 } }}>
       {/* Page Header */}
       <HeroReveal>
         <Box sx={{ mb: 4, position: 'relative' }}>
@@ -876,16 +871,18 @@ export default function ConsensusPage() {
           <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5 }}>
             Select an architectural stress-test scenario
           </Typography>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} alignItems="stretch">
             {SCENARIO_PRESETS.map((preset) => {
               const isSelected = selectedPresetId === preset.id;
               return (
-                <Grid xs={12} md={4} key={preset.id}>
+                <Grid xs={12} md={4} key={preset.id} sx={{ display: 'flex' }}>
                   <Paper
                     onClick={() => handleSelectPreset(preset)}
                     sx={{
                       p: 2.2,
                       height: '100%',
+                      width: '100%',
+                      flex: 1,
                       cursor: 'pointer',
                       bgcolor: isSelected ? (isDark ? '#0D0D14' : '#FEF9E7') : gold.voidBg,
                       border: '1.5px solid',

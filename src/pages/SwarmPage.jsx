@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   Box, Container, Typography, Chip, Card, CardContent, Unstable_Grid2 as Grid, Avatar, Stack,
   Collapse, Button, Paper, Tooltip, IconButton, Switch, FormControlLabel, LinearProgress,
@@ -255,12 +255,7 @@ export default function SwarmPage() {
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={['21 LOCAL', 'SWARM', 'PANTHEON']}
-          themeColor="emerald"
-          subtitle="Autonomous Agent Coordination Matrix // 5 Operational Cadres"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="swarm" onComplete={() => setIntroDone(true)} />
       )}
       <Container maxWidth="lg" sx={{ py: 6, position: 'relative' }}>
       {/* Unique gold radial glow behind page header */}

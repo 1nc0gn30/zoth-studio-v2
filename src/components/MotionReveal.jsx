@@ -38,8 +38,8 @@ const heroContainerVariants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.05,
+      staggerChildren: 0.08,
+      delayChildren: 0.04,
     },
   },
 };
@@ -47,15 +47,15 @@ const heroContainerVariants = {
 const heroItemVariants = {
   hidden: {
     opacity: 0,
-    y: 32,
-    filter: 'blur(8px)',
+    y: 20,
+    filter: 'blur(6px)',
   },
   visible: {
     opacity: 1,
     y: 0,
     filter: 'blur(0px)',
     transition: {
-      duration: 0.7,
+      duration: 0.58,
       ease: EASE_OUT_EXPO,
     },
   },
@@ -109,7 +109,7 @@ export function HeroItem({ children, custom, style, ...rest }) {
    ======================================================================== */
 const revealPresets = {
   fadeUp: {
-    hidden: { opacity: 0, y: 48, filter: 'blur(6px)' },
+    hidden: { opacity: 0, y: 28, filter: 'blur(4px)' },
     visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
   },
   fadeIn: {
@@ -121,11 +121,11 @@ const revealPresets = {
     visible: { opacity: 1, scale: 1, filter: 'blur(0px)' },
   },
   slideLeft: {
-    hidden: { opacity: 0, x: 60 },
+    hidden: { opacity: 0, x: 36 },
     visible: { opacity: 1, x: 0 },
   },
   slideRight: {
-    hidden: { opacity: 0, x: -60 },
+    hidden: { opacity: 0, x: -36 },
     visible: { opacity: 1, x: 0 },
   },
 };
@@ -133,7 +133,7 @@ const revealPresets = {
 export function RevealOnScroll({
   children,
   preset = 'fadeUp',
-  duration = 0.7,
+  duration = 0.58,
   delay = 0,
   threshold = 'some',
   once = true,
@@ -189,12 +189,12 @@ const staggerContainerVariants = {
 };
 
 const staggerItemVariants = {
-  hidden: { opacity: 0, y: 28, filter: 'blur(4px)' },
+  hidden: { opacity: 0, y: 18, filter: 'blur(4px)' },
   visible: {
     opacity: 1,
     y: 0,
     filter: 'blur(0px)',
-    transition: { duration: 0.55, ease: EASE_OUT_EXPO },
+    transition: { duration: 0.48, ease: EASE_OUT_EXPO },
   },
 };
 
@@ -240,7 +240,11 @@ export function StaggerItem({ children, style, ...rest }) {
     return <div style={style} {...rest}>{children}</div>;
   }
   return (
-    <motion.div variants={staggerItemVariants} style={style} {...rest}>
+    <motion.div
+      variants={staggerItemVariants}
+      style={{ display: 'flex', flexDirection: 'column', width: '100%', flex: '1 1 auto', ...style }}
+      {...rest}
+    >
       {children}
     </motion.div>
   );

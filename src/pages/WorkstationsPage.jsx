@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, CardActions,
   Chip, Button, TextField, InputAdornment, Paper, ToggleButtonGroup, ToggleButton,
@@ -533,14 +533,9 @@ export default function WorkstationsPage() {
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={['24 LOCAL', 'WORKSTATIONS', 'MATRIX']}
-          themeColor="cyan"
-          subtitle="Interactive Environments Spanning Build, Observe, Security & Spatial Bands"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="workstations" onComplete={() => setIntroDone(true)} />
       )}
-      <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 } }}>
+      <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
       {/* Page Header */}
       <HeroReveal>
         <Box sx={{ mb: 3 }}>
@@ -747,9 +742,9 @@ export default function WorkstationsPage() {
               TAXONOMY CLARIFICATION · COCKPITS VS. TOOLS VS. ENCLAVES
             </Typography>
           </Box>
-          <Grid container spacing={2}>
-            <Grid xs={12} md={4}>
-              <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? '#0D111D' : '#FFFFFF', border: `1px solid ${isDark ? '#26262F' : '#EAECF0'}`, height: '100%' }}>
+          <Grid container spacing={2} alignItems="stretch">
+            <Grid xs={12} md={4} sx={{ display: 'flex' }}>
+              <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? '#0D111D' : '#FFFFFF', border: `1px solid ${isDark ? '#26262F' : '#EAECF0'}`, height: '100%', width: '100%', flex: 1 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.75 }}>
                   <TerminalIcon sx={{ color: gold.accent, fontSize: '1.1rem' }} />
                   <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? '#F5E6AB' : '#101828' }}>
@@ -761,8 +756,8 @@ export default function WorkstationsPage() {
                 </Typography>
               </Box>
             </Grid>
-            <Grid xs={12} md={4}>
-              <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? '#0D111D' : '#FFFFFF', border: `1px solid ${isDark ? '#26262F' : '#EAECF0'}`, height: '100%' }}>
+            <Grid xs={12} md={4} sx={{ display: 'flex' }}>
+              <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? '#0D111D' : '#FFFFFF', border: `1px solid ${isDark ? '#26262F' : '#EAECF0'}`, height: '100%', width: '100%', flex: 1 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.75 }}>
                   <HandymanIcon sx={{ color: isDark ? '#38BDF8' : '#0284C7', fontSize: '1.1rem' }} />
                   <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? '#BAE6FD' : '#101828' }}>
@@ -774,8 +769,8 @@ export default function WorkstationsPage() {
                 </Typography>
               </Box>
             </Grid>
-            <Grid xs={12} md={4}>
-              <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? '#0D111D' : '#FFFFFF', border: `1px solid ${isDark ? '#26262F' : '#EAECF0'}`, height: '100%' }}>
+            <Grid xs={12} md={4} sx={{ display: 'flex' }}>
+              <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? '#0D111D' : '#FFFFFF', border: `1px solid ${isDark ? '#26262F' : '#EAECF0'}`, height: '100%', width: '100%', flex: 1 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.75 }}>
                   <HubIcon sx={{ color: isDark ? '#A78BFA' : '#7C3AED', fontSize: '1.1rem' }} />
                   <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? '#DDD6FE' : '#101828' }}>

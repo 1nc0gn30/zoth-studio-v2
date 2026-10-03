@@ -2,7 +2,7 @@
 /**
  * Zoth Studio v2 Prerender, AEO Indexing & Static Route Engine
  * Generates static HTML entry points with route-specific head metadata,
- * Schema.org JSON-LD graphs, and crawler-readable semantic content for all 72 routes.
+ * Schema.org JSON-LD graphs, and crawler-readable semantic content for all static routes.
  * Also synchronizes public/sitemap.xml and dist/sitemap.xml.
  */
 
@@ -306,7 +306,7 @@ $ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</co
           <li><a href="/llms.txt" style="color: #38BDF8;">/llms.txt</a> — Concise LLM Context &amp; Entity Profile (614 tokens)</li>
           <li><a href="/llms-full.txt" style="color: #38BDF8;">/llms-full.txt</a> — Comprehensive Agent Grounding &amp; Capabilities Map (3,220 tokens)</li>
           <li><a href="/robots.txt" style="color: #38BDF8;">/robots.txt</a> — AI Crawler &amp; Answer Engine Policy</li>
-          <li><a href="/sitemap.xml" style="color: #38BDF8;">/sitemap.xml</a> — Full static route sitemap (72 routes)</li>
+          <li><a href="/sitemap.xml" style="color: #38BDF8;">/sitemap.xml</a> — Full static route sitemap</li>
         </ul>
       </section>
     `;
@@ -396,6 +396,7 @@ $ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</co
               <li><a href="/docs/math" style="color: #D4AF37; text-decoration: underline;">Six Math Pillars</a></li>
               <li><a href="/faqs" style="color: #D4AF37; text-decoration: underline;">Frequently Asked Questions</a></li>
               <li><a href="/ax" style="color: #D4AF37; text-decoration: underline;">Agent Experience (AX)</a></li>
+              <li><a href="/gallery" style="color: #D4AF37; text-decoration: underline;">Studio Gallery</a></li>
             </ul>
           </div>
         </main>
@@ -506,7 +507,7 @@ function getSitemapPriority(routePath) {
   if (routePath === '/') return '1.0';
   if (routePath === '/memory') return '0.95';
   if (['/arsenal', '/swarm', '/workstations', '/tools'].includes(routePath)) return '0.90';
-  if (['/consensus', '/bridges', '/webgen', '/hexstrike', '/faqs', '/ax', '/docs'].includes(routePath)) return '0.85';
+  if (['/consensus', '/bridges', '/webgen', '/hexstrike', '/faqs', '/ax', '/docs', '/gallery'].includes(routePath)) return '0.85';
   if (['/zoth-os', '/adytum', '/docs/math'].includes(routePath)) return '0.80';
   if (routePath.startsWith('/tools/')) return '0.75';
   if (routePath.startsWith('/workstations/')) return '0.75';

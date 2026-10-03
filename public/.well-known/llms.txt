@@ -36,6 +36,7 @@ Publisher: NullAI Tech (https://nullai.tech)
 - [Architecture & Whitepaper](https://zoth.nullai.tech/docs): Technical specifications, zero-egress invariants, and local IPC protocols.
 - [Frequently Asked Questions](https://zoth.nullai.tech/faqs): Truthful answers regarding offline mode, local daemons, and security architecture.
 - [Agent Experience (AX)](https://zoth.nullai.tech/ax): Machine-readable entity specifications, API schemas, and service catalogs.
+- [Studio Gallery](https://zoth.nullai.tech/gallery): Desktop and mobile screenshots and motion intro recordings of the studio.
 
 ## Optional & Machine Discovery
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem } from '../components/MotionReveal';
 import { Box, Container, Typography, Paper, Button, Unstable_Grid2 as Grid } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -41,15 +41,10 @@ export default function MemoryShowcasePage() {
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={['MEMORY', 'STDP', 'SYNAPSE']}
-          themeColor="purple"
-          subtitle="Biomorphic Spike-Timing-Dependent Plasticity Synaptic Memory Matrix"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="memory" onComplete={() => setIntroDone(true)} />
       )}
 
-      <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6 }}>
+      <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 } }}>
         {/* ── Hero ── */}
         <HeroReveal>
           <Box sx={{ mb: 6, pt: 1 }}>
@@ -83,15 +78,17 @@ export default function MemoryShowcasePage() {
         {/* ── Feature Cards ── */}
         <RevealOnScroll preset="fadeUp" delay={0.1}>
           <StaggerChildren>
-            <Grid container spacing={3} sx={{ mb: 8 }}>
+            <Grid container spacing={3} sx={{ mb: 8 }} alignItems="stretch">
               {FEATURES.map((f, i) => (
-                <Grid xs={12} sm={6} md={3} key={i}>
+                <Grid xs={12} sm={6} md={3} key={i} sx={{ display: 'flex' }}>
                   <StaggerItem>
                     <Paper
                       elevation={0}
                       sx={{
                         p: 3,
                         height: '100%',
+                        width: '100%',
+                        flex: 1,
                         borderRadius: 3,
                         bgcolor: isDark ? '#0B0B12' : theme.palette.background.paper,
                         border: `1px solid ${purple.border}`,
@@ -160,6 +157,7 @@ export default function MemoryShowcasePage() {
               display: 'flex',
               gap: 2,
               flexWrap: 'wrap',
+              alignItems: 'center',
               justifyContent: 'center',
               py: 4,
               borderTop: `1px solid ${purple.border}`,

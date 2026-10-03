@@ -49,6 +49,7 @@ enclave-bridges: https://zoth.nullai.tech/bridges
 architecture-docs: https://zoth.nullai.tech/docs
 faqs-security: https://zoth.nullai.tech/faqs
 agent-experience-ax: https://zoth.nullai.tech/ax
+studio-gallery: https://zoth.nullai.tech/gallery
 
 # ── Local Developer Enclave Daemons (When Running Repository Locally) ──
 # Note: In static/hosted preview mode, these ports are inactive and safely locked.
