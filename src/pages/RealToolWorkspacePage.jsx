@@ -27,6 +27,7 @@ import CodeIcon from '@mui/icons-material/Code';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import SpeedIcon from '@mui/icons-material/Speed';
 
 import { microTools } from '../data/toolsData';
 import { getToolDocumentation } from '../data/toolsDocumentation';
