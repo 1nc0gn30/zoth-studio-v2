@@ -6,7 +6,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import ChatIcon from '@mui/icons-material/Chat';
 import SchemaIcon from '@mui/icons-material/Schema';
 import ExtensionIcon from '@mui/icons-material/Extension';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   HeroReveal,
   HeroItem,
@@ -45,18 +45,13 @@ export default function AXShowcasePage() {
 
   if (!introDone) {
     return (
-      <CinematicIntro
-        words={['AGENT', 'EXPERIENCE', 'SPECS']}
-        themeColor="gold"
-        subtitle="Machine-Readable Entity Architecture, Capabilities & OpenAPI Schemas"
-        onComplete={() => setIntroDone(true)}
-      />
+      <MotionIntro page="ax" onComplete={() => setIntroDone(true)} />
     );
   }
 
   return (
     <Box sx={{ bgcolor: bg, minHeight: '100vh' }}>
-      <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6 }}>
+      <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 } }}>
         {/* ── Hero ── */}
         <HeroReveal>
           <HeroItem>
@@ -98,8 +93,9 @@ export default function AXShowcasePage() {
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-              gap: 20,
-              marginTop: 48,
+              gap: 24,
+              marginTop: 56,
+              alignItems: 'stretch',
             }}
           >
             {FEATURES.map((f) => (
@@ -109,9 +105,11 @@ export default function AXShowcasePage() {
                   sx={{
                     p: 3,
                     borderRadius: 3,
+                    height: '100%',
+                    width: '100%',
+                    flex: 1,
                     bgcolor: cardBg,
                     border: `1px solid ${cardBorder}`,
-                    height: '100%',
                     transition: 'border-color 0.3s',
                     '&:hover': { borderColor: accent },
                   }}
@@ -161,7 +159,7 @@ export default function AXShowcasePage() {
 
         {/* ── CTA ── */}
         <RevealOnScroll preset="fadeUp" delay={0.25}>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mt: 6, mb: 4 }}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mt: 7, mb: 2 }} alignItems="center">
             <Button component={RouterLink} to="/ax/docs" variant="contained" size="large"
               sx={{ bgcolor: accent, color: '#000', fontFamily: mono, fontWeight: 700,
                 '&:hover': { bgcolor: dark ? '#E5C04B' : '#9A7209' } }}>

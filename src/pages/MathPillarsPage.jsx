@@ -1,5 +1,5 @@
 import React from 'react';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   Box,
   Container,
@@ -39,14 +39,9 @@ export default function MathPillarsPage() {
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={["SIX", "MATH", "PILLARS"]}
-          themeColor="gold"
-          subtitle="Formal Mathematical Dynamics Powering Sovereign Agent Intelligence"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="docs-math" onComplete={() => setIntroDone(true)} />
       )}
-      <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 } }}>
+      <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
       <SEO
         title="Six Mathematical Pillars // Theoretical Foundations & Neuromorphic Proofs"
         description="Formal theoretical foundations of Zoth Studio v2: Linear Algebra, Multivariable Calculus, Shannon Probability, Hessian Curvature, Lyapunov Phase Dynamics, and Neuromorphic STDP."

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import { Link as RouterLink } from 'react-router-dom';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 import {
@@ -585,12 +585,7 @@ export default function HexStrikePage() {
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={["HEXSTRIKE", "OFFENSIVE", "SECURITY"]}
-          themeColor="crimson"
-          subtitle="Autonomous Penetration Testing & CVE Vulnerability Matrix"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="hexstrike" onComplete={() => setIntroDone(true)} />
       )}
       <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>
       {/* Background signature gold radial glow */}

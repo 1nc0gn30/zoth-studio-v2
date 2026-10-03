@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, CardActions,
   Chip, Button, TextField, InputAdornment, Paper, ToggleButtonGroup, ToggleButton,
@@ -121,6 +121,8 @@ function UnifiedAssetCard({ item, isDark, gold, runtime }) {
     <Card
       sx={{
         height: '100%',
+        width: '100%',
+        flex: 1,
         display: 'flex',
         flexDirection: 'column',
         borderRadius: 3,
@@ -408,14 +410,9 @@ export default function ArsenalPage() {
     <Box sx={{ bgcolor: isDark ? '#08080B' : '#F8FAFC', minHeight: '100vh', pb: 10 }}>
       {/* Cinematic Intro Banner */}
       {!introDone && (
-        <CinematicIntro
-          words={['ARSENAL', '25 SOVEREIGN', 'TOOLS']}
-          themeColor="gold"
-          subtitle="24 Workstations // 26 Micro-Tools // 21 Autonomous Agents"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="arsenal" onComplete={() => setIntroDone(true)} />
       )}
-      <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 3, md: 5 } }}>
+      <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
         {/* Page Header */}
         <HeroReveal>
           <Box
@@ -851,7 +848,7 @@ export default function ArsenalPage() {
         ) : viewMode === 'grid' ? (
           <Grid container spacing={2.5}>
             {filteredAssets.map((asset) => (
-              <Grid xs={12} sm={6} md={4} key={asset.id}>
+              <Grid xs={12} sm={6} md={4} key={asset.id} sx={{ display: 'flex' }}>
                 <UnifiedAssetCard item={asset} isDark={isDark} gold={gold} runtime={runtime} />
               </Grid>
             ))}

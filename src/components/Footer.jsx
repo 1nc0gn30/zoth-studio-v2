@@ -55,6 +55,7 @@ export default function Footer() {
     { label: 'Pillar IV: Loss Landscapes', to: '/docs/math/hessian' },
     { label: 'Pillar V: Lyapunov Attractors', to: '/docs/math/lyapunov' },
     { label: 'Pillar VI: STDP Synaptic Proof', to: '/docs/math/stdp' },
+    { label: 'Studio Gallery', to: '/gallery' },
     { label: 'Architecture & Whitepaper', to: '/docs' },
     { label: 'Frequently Asked Questions', to: '/faqs' },
   ];
@@ -210,7 +211,7 @@ export default function Footer() {
                 >
                   <Box
                     component="img"
-                    src={isDark ? '/brand/ghostbyte-dark.png' : '/brand/ghostbyte.png'}
+                    src="/brand/ghostbyte-dark.png"
                     alt="Ghostbyte NullAI Logo"
                     sx={{ height: 36, width: 'auto', display: 'block', filter: isDark ? 'drop-shadow(0 0 6px rgba(212,175,55,0.3))' : 'drop-shadow(0 0 4px rgba(184,134,11,0.2))' }}
                   />

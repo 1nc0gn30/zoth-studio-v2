@@ -1,5 +1,5 @@
 import React from 'react';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem,
@@ -59,14 +59,9 @@ export default function HexStrikeShowcasePage() {
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={["HEXSTRIKE", "OFFENSIVE", "SECURITY"]}
-          themeColor="crimson"
-          subtitle="Autonomous Penetration Testing & CVE Vulnerability Matrix"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="hexstrike" onComplete={() => setIntroDone(true)} />
       )}
-      <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>
+      <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 }, position: 'relative' }}>
 
         {/* Hero Section */}
         <HeroReveal>
@@ -105,14 +100,16 @@ export default function HexStrikeShowcasePage() {
 
         {/* Feature Cards */}
         <RevealOnScroll preset="fadeUp" delay={0.1}>
-          <Grid container spacing={2.5} sx={{ mb: 8 }}>
+          <Grid container spacing={2.5} sx={{ mb: 8 }} alignItems="stretch">
             {FEATURES.map((f) => {
               const Icon = f.icon;
               return (
-                <Grid xs={12} sm={6} md={3} key={f.title}>
+                <Grid xs={12} sm={6} md={3} key={f.title} sx={{ display: 'flex' }}>
                   <Card
                     sx={{
                       height: '100%',
+                      width: '100%',
+                      flex: 1,
                       bgcolor: voidBg,
                       border: `1px solid ${accentBorder}`,
                       borderRadius: 2.5,
@@ -189,7 +186,7 @@ export default function HexStrikeShowcasePage() {
             <Typography variant="h6" sx={{ fontWeight: 800, mb: 3, color: theme.palette.text.primary }}>
               Ready to take control of your security?
             </Typography>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center">
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center" alignItems="center">
               <Button
                 component={RouterLink}
                 to="/hexstrike/docs"

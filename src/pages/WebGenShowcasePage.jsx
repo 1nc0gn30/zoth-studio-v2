@@ -10,7 +10,7 @@ import WifiOffIcon from '@mui/icons-material/WifiOff';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   HeroReveal, HeroItem, GlowLine, RevealOnScroll,
   StaggerChildren, StaggerItem,
@@ -44,18 +44,13 @@ export default function WebGenShowcasePage() {
 
   if (!introDone) {
     return (
-      <CinematicIntro
-        words={["WEBGEN", "AUTONOMOUS", "FOUNDRY"]}
-        themeColor="emerald"
-        subtitle="Deterministic Zero-Cloud Website Generator & Layout Synthesizer"
-        onComplete={() => setIntroDone(true)}
-      />
+      <MotionIntro page="webgen" onComplete={() => setIntroDone(true)} />
     );
   }
 
   return (
     <Box sx={{ bgcolor: surfaceBg, minHeight: '100vh' }}>
-      <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6 }}>
+      <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 } }}>
 
         {/* ── Hero ── */}
         <HeroReveal>
@@ -100,15 +95,15 @@ export default function WebGenShowcasePage() {
         </HeroReveal>
 
         {/* ── Feature Cards ── */}
-        <StaggerChildren style={{ marginTop: 48 }}>
-          <Grid container spacing={3}>
+        <StaggerChildren style={{ marginTop: 56 }}>
+          <Grid container spacing={3} alignItems="stretch">
             {FEATURES.map((f) => (
-              <Grid xs={12} sm={6} md={3} key={f.title}>
+              <Grid xs={12} sm={6} md={3} key={f.title} sx={{ display: 'flex' }}>
                 <StaggerItem>
                   <Card
                     elevation={0}
                     sx={{
-                      height: '100%', bgcolor: cardBg,
+                      height: '100%', width: '100%', flex: 1, bgcolor: cardBg,
                       border: `1px solid ${cardBorder}`, borderRadius: 3,
                       transition: 'border-color 0.3s',
                       '&:hover': { borderColor: accent },
@@ -163,7 +158,7 @@ export default function WebGenShowcasePage() {
 
         {/* ── CTA ── */}
         <RevealOnScroll preset="fadeUp" delay={0.15}>
-          <Box sx={{ mt: 6, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+          <Box sx={{ mt: 7, display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
             <Button
               component={RouterLink}
               to="/webgen/docs"

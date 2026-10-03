@@ -21,10 +21,14 @@ import MathPillarDetailPage from './pages/MathPillarDetailPage';
 import MathPillarsPage from './pages/MathPillarsPage';
 import RealToolWorkspacePage from './pages/RealToolWorkspacePage';
 import ArsenalPage from './pages/ArsenalPage';
+import BridgesPage from './pages/BridgesPage';
+import WorkstationsPage from './pages/WorkstationsPage';
+import ConsensusPage from './pages/ConsensusPage';
 import ToolsPage from './pages/ToolsPage';
 import FaqsPage from './pages/FaqsPage';
 import AXPage from './pages/AXPage';
 import AXShowcasePage from './pages/AXShowcasePage';
+import GalleryPage from './pages/GalleryPage';
 import SEO from './components/SEO';
 import Footer from './components/Footer';
 
@@ -102,15 +106,15 @@ function AppShell({ mode, onToggleTheme }) {
           <Route path="/adytum/docs" element={<AdytumPage />} />
           <Route path="/swarm" element={<SwarmShowcasePage />} />
           <Route path="/swarm/docs" element={<SwarmPage />} />
-          <Route path="/bridges" element={<Navigate to="/arsenal" replace />} />
+          <Route path="/bridges" element={<BridgesPage />} />
           <Route path="/tools" element={<ToolsPage />} />
-          <Route path="/workstations" element={<Navigate to="/arsenal" replace />} />
+          <Route path="/workstations" element={<WorkstationsPage />} />
           <Route path="/workstations/:workstationId" element={<WorkstationRedirect />} />
           <Route path="/templates" element={<Navigate to="/arsenal" replace />} />
           <Route path="/tools/:toolId" element={<RealToolWorkspacePage />} />
           <Route path="/memory" element={<MemoryShowcasePage />} />
           <Route path="/memory/docs" element={<MemoryPage />} />
-          <Route path="/consensus" element={<Navigate to="/arsenal" replace />} />
+          <Route path="/consensus" element={<ConsensusPage />} />
           <Route path="/webgen" element={<WebGenShowcasePage />} />
           <Route path="/webgen/docs" element={<WebGenPage />} />
           <Route path="/hexstrike" element={<HexStrikeShowcasePage />} />
@@ -123,6 +127,7 @@ function AppShell({ mode, onToggleTheme }) {
           <Route path="/faqs" element={<FaqsPage />} />
           <Route path="/ax" element={<AXShowcasePage />} />
           <Route path="/ax/docs" element={<AXPage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
         </Routes>
       </Box>
       <Footer />

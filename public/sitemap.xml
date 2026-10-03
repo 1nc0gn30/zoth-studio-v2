@@ -97,6 +97,12 @@
     <priority>0.85</priority>
   </url>
   <url>
+    <loc>https://zoth.nullai.tech/gallery</loc>
+    <lastmod>2026-10-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://zoth.nullai.tech/tools/adytum-alchemist-ai-workflow</loc>
     <lastmod>2026-10-03</lastmod>
     <changefreq>weekly</changefreq>

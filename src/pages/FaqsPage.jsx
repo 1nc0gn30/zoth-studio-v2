@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   Box, Container, Typography, Accordion, AccordionSummary, AccordionDetails,
   Paper, Chip, TextField, InputAdornment, Button, Stack, IconButton,
@@ -193,14 +193,9 @@ ${oracleResult.faq.a}`;
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={["FAQS", "ORACLE", "ANSWERS"]}
-          themeColor="gold"
-          subtitle="Zero-Egress Security Invariants & Sovereign Architecture Answers"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="faqs" onComplete={() => setIntroDone(true)} />
       )}
-      <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
+      <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 } }}>
       <SEO
         title="Frequently Asked Questions // Zoth Studio v2 Architecture & Security"
         description="Authoritative answers to 17 architectural questions: Zero-Egress Invariants, WebGPU WASM acceleration, STDP biomorphic memory, 3-Agent Byzantine Consensus, and Zoth CLI workflows."

@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   HeroReveal,
   HeroItem,
@@ -184,12 +184,7 @@ export default function ZothOSShowcasePage() {
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={['ZOTH OS', 'SOVEREIGN', 'INTELLIGENCE']}
-          themeColor="gold"
-          subtitle="The Sovereign Alchemical Intelligence & Offensive Security Operating System"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="zoth-os" onComplete={() => setIntroDone(true)} />
       )}
 
       <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 4, md: 7 } }}>
@@ -270,7 +265,7 @@ export default function ZothOSShowcasePage() {
             </Typography>
           </HeroItem>
           <HeroItem>
-            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 5 }}>
+            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center', mb: 5 }}>
               <Button
                 variant="contained"
                 color="primary"
@@ -342,14 +337,14 @@ export default function ZothOSShowcasePage() {
             border: `1px solid ${goldBorder}`,
             display: 'flex',
             flexDirection: { xs: 'column', md: 'row' },
-            alignItems: { xs: 'flex-start', md: 'center' },
+            alignItems: { xs: 'stretch', md: 'center' },
             justifyContent: 'space-between',
             gap: 2,
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <TerminalIcon sx={{ color: gold }} />
-            <Typography sx={{ fontFamily: mono, fontSize: '0.85rem', color: goldSoft, fontWeight: 700 }}>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.85rem', color: goldSoft, fontWeight: 700, overflowWrap: 'anywhere' }}>
               $ git clone https://github.com/NullAITech/zoth-os.git &amp;&amp; cd zoth-os
             </Typography>
           </Box>
@@ -399,6 +394,8 @@ export default function ZothOSShowcasePage() {
                     sx={{
                       p: 3.5,
                       height: '100%',
+                      width: '100%',
+                      flex: 1,
                       display: 'flex',
                       flexDirection: 'column',
                       borderRadius: 3.5,
@@ -469,7 +466,7 @@ export default function ZothOSShowcasePage() {
               borderRadius: 3,
               border: `1px solid ${goldBorder}`,
               bgcolor: cardBg,
-              overflow: 'hidden',
+              overflowX: 'auto',
             }}
           >
             <Table sx={{ minWidth: 650 }}>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   Box,
   Container,
@@ -372,14 +372,9 @@ Runs local invariant verification before staging tools.`
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={["DOCUMENTATION", "ZERO", "EGRESS"]}
-          themeColor="gold"
-          subtitle="Technical Architecture, Invariants, and Formal Specifications"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="docs" onComplete={() => setIntroDone(true)} />
       )}
-      <Box sx={{ bgcolor: dark ? voidDark : '#FAFBFD', minHeight: '100vh', py: 6 }}>
+      <Box sx={{ bgcolor: dark ? voidDark : '#FAFBFD', minHeight: '100vh', py: { xs: 4, md: 7 } }}>
       <Container maxWidth="xl">
         {/* Header / Hero Section */}
         <HeroReveal>
