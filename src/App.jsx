@@ -28,6 +28,7 @@ import ToolsPage from './pages/ToolsPage';
 import FaqsPage from './pages/FaqsPage';
 import AXPage from './pages/AXPage';
 import AXShowcasePage from './pages/AXShowcasePage';
+import GalleryPage from './pages/GalleryPage';
 import SEO from './components/SEO';
 import Footer from './components/Footer';
 
@@ -126,6 +127,7 @@ function AppShell({ mode, onToggleTheme }) {
           <Route path="/faqs" element={<FaqsPage />} />
           <Route path="/ax" element={<AXShowcasePage />} />
           <Route path="/ax/docs" element={<AXPage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
         </Routes>
       </Box>
       <Footer />

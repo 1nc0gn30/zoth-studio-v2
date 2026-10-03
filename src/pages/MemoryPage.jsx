@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   Box, Container, Typography, Chip, Paper, Button, TextField, InputAdornment,
   Table, TableBody, TableCell, TableHead, TableRow, Unstable_Grid2 as Grid,
@@ -1319,12 +1319,7 @@ export default function MemoryPage() {
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={['MEMORY', 'STDP', 'SYNAPSE']}
-          themeColor="purple"
-          subtitle="Biomorphic Spike-Timing-Dependent Plasticity Synaptic Memory Matrix"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="memory" onComplete={() => setIntroDone(true)} />
       )}
       <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 7 }, px: { xs: 2, sm: 3, md: 4 }, position: 'relative' }}>
       {/* Background Radial Glow */}

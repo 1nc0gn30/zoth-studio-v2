@@ -129,6 +129,12 @@ export const siteConfig = {
       description: 'Structured entity profile, service catalog, and API schema endpoints optimized for autonomous AI search and agent engines.',
       keywords: 'Agent Experience, AX profile, machine-readable schema, LLM search optimization, AI agent directory',
       type: 'article',
+    },
+    '/gallery': {
+      title: 'Studio Gallery // Pages and Motion Intros',
+      description: 'Desktop and mobile screenshots and intro recordings of Zoth Studio, including nested documentation routes.',
+      keywords: 'Zoth Studio gallery, motion intros, page screenshots, nested documentation',
+      type: 'article',
     }
   }
 };

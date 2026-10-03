@@ -55,6 +55,7 @@ export default function Footer() {
     { label: 'Pillar IV: Loss Landscapes', to: '/docs/math/hessian' },
     { label: 'Pillar V: Lyapunov Attractors', to: '/docs/math/lyapunov' },
     { label: 'Pillar VI: STDP Synaptic Proof', to: '/docs/math/stdp' },
+    { label: 'Studio Gallery', to: '/gallery' },
     { label: 'Architecture & Whitepaper', to: '/docs' },
     { label: 'Frequently Asked Questions', to: '/faqs' },
   ];

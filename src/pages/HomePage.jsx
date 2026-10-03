@@ -1652,6 +1652,9 @@ export default function HomePage() {
             <Button component={RouterLink} to="/zoth-os" variant="text" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2.5, '&:hover': { bgcolor: gold.wash, borderRadius: 2 } }}>
               Zoth OS Distro →
             </Button>
+            <Button component={RouterLink} to="/gallery" variant="text" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2.5, '&:hover': { bgcolor: gold.wash, borderRadius: 2 } }}>
+              Studio gallery
+            </Button>
           </Box>
 
           {/* Grounded CTA divider rule above ServiceRow */}

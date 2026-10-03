@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   Box,
   Button,
@@ -2403,12 +2403,7 @@ export default function AdytumPage() {
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={["ADYTUM", "KEYMASTER", "SANCTUM"]}
-          themeColor="gold"
-          subtitle="22-Key Hermetic Planning Rite & Memory-Hard Cryptographic Vault"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="adytum" onComplete={() => setIntroDone(true)} />
       )}
       <AdytumEngine embedded={false} />
     </>
