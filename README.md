@@ -11,7 +11,7 @@
 [![MUI v5.15](https://img.shields.io/badge/UI-Material--UI%20v5.15-007FFF?style=flat-square)](https://mui.com)
 [![WebGPU Acceleration](https://img.shields.io/badge/Compute-WebGPU%20WGSL%20%2B%20WASM-cyan?style=flat-square)](#webgpu--wasm-acceleration)
 [![STDP Neuro Memory](https://img.shields.io/badge/Memory-STDP%20Hebbian%20Engine-cyan?style=flat-square)](#stdp-neuro-memory--biomorphic-synaptic-persistence)
-[![License: Sovereign](https://img.shields.io/badge/License-Sovereign%20Developer-green?style=flat-square)](#license)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
 ---
 
@@ -434,4 +434,4 @@ Zoth Studio v2 is a sovereign, local-first project. Contributions are welcome wi
 ## License
 
 Copyright © 2026 NullAI Tech. All rights reserved.  
-Licensed under the **Sovereign Developer License** (Zero-Egress Guaranteed).
+Licensed under the [MIT License](LICENSE).
