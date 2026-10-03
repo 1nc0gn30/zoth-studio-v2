@@ -30,6 +30,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import LayersIcon from '@mui/icons-material/Layers';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import PsychologyIcon from '@mui/icons-material/Psychology';
+import FlashOnIcon from '@mui/icons-material/FlashOn';
 import LockIcon from '@mui/icons-material/Lock';
 
 import { masterArsenal, arsenalStats } from '../data/arsenalData';
