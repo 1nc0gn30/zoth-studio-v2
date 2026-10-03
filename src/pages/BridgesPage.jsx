@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   Box,
   Container,
@@ -788,14 +788,9 @@ export default function BridgesPage() {
   return (
     <>
       {!introDone && (
-        <CinematicIntro
-          words={['BRIDGES', 'MESH', 'SOVEREIGN']}
-          themeColor="cyan"
-          subtitle="End-to-end encrypted inter-agent signal protocol & message bus"
-          onComplete={() => setIntroDone(true)}
-        />
+        <MotionIntro page="bridges" onComplete={() => setIntroDone(true)} />
       )}
-      <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>
+      <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 }, position: 'relative' }}>
       {/* Signature gold top-edge glow */}
       <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
         <GlowLine 
@@ -890,12 +885,14 @@ export default function BridgesPage() {
 
         {/* Top Architecture Cards */}
         <StaggerChildren>
-        <Grid container spacing={2.5} sx={{ mb: 4 }}>
-          <Grid xs={12} md={4}>
+        <Grid container spacing={2.5} sx={{ mb: 4 }} alignItems="stretch">
+          <Grid xs={12} md={4} sx={{ display: 'flex' }}>
             <StaggerItem>
             <Card
               sx={{
                 height: '100%',
+                width: '100%',
+                flex: 1,
                 bgcolor: theme.palette.background.paper,
                 border: `1px solid ${gold.border}`,
                 transition: 'border-color 0.2s',
@@ -917,11 +914,13 @@ export default function BridgesPage() {
             </Card>
             </StaggerItem>
           </Grid>
-          <Grid xs={12} md={4}>
+          <Grid xs={12} md={4} sx={{ display: 'flex' }}>
             <StaggerItem>
             <Card
               sx={{
                 height: '100%',
+                width: '100%',
+                flex: 1,
                 bgcolor: theme.palette.background.paper,
                 border: `1px solid ${gold.border}`,
                 transition: 'border-color 0.2s',
@@ -943,11 +942,13 @@ export default function BridgesPage() {
             </Card>
             </StaggerItem>
           </Grid>
-          <Grid xs={12} md={4}>
+          <Grid xs={12} md={4} sx={{ display: 'flex' }}>
             <StaggerItem>
             <Card
               sx={{
                 height: '100%',
+                width: '100%',
+                flex: 1,
                 bgcolor: theme.palette.background.paper,
                 border: `1px solid ${gold.border}`,
                 transition: 'border-color 0.2s',

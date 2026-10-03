@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import CinematicIntro from '../components/CinematicIntro';
+import MotionIntro from '../components/MotionIntro';
 import {
   Box, Container, Typography, Button, Paper, Unstable_Grid2 as Grid,
 } from '@mui/material';
@@ -42,18 +42,13 @@ export default function SwarmShowcasePage() {
 
   if (!introDone) {
     return (
-      <CinematicIntro
-        words={['21 LOCAL', 'SWARM', 'PANTHEON']}
-        themeColor="emerald"
-        subtitle="Autonomous Agent Coordination Matrix // 5 Operational Cadres"
-        onComplete={() => setIntroDone(true)}
-      />
+      <MotionIntro page="swarm" onComplete={() => setIntroDone(true)} />
     );
   }
 
   return (
     <Box sx={{ bgcolor: bg, minHeight: '100vh' }}>
-      <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6 }}>
+      <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 } }}>
         {/* Hero */}
         <HeroReveal>
           <HeroItem>
@@ -72,7 +67,7 @@ export default function SwarmShowcasePage() {
             </Typography>
           </HeroItem>
           <HeroItem>
-            <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 600, mb: 5 }}>
+            <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 640, mb: 5, lineHeight: 1.6 }}>
               A team of AI models that plan, build, and verify — running entirely on your hardware.
             </Typography>
           </HeroItem>
@@ -80,14 +75,14 @@ export default function SwarmShowcasePage() {
 
         {/* Feature Cards */}
         <StaggerChildren>
-          <Grid container spacing={3} sx={{ mb: 8 }}>
+          <Grid container spacing={3} sx={{ mb: 8 }} alignItems="stretch">
             {FEATURES.map((f) => (
-              <Grid xs={12} sm={6} md={3} key={f.title}>
+              <Grid xs={12} sm={6} md={3} key={f.title} sx={{ display: 'flex' }}>
                 <StaggerItem>
                   <Paper
                     elevation={0}
                     sx={{
-                      p: 3, height: '100%', bgcolor: accentWash,
+                      p: 3, height: '100%', width: '100%', flex: 1, bgcolor: accentWash,
                       border: `1px solid ${accentBorder}`, borderRadius: 2,
                     }}
                   >
@@ -119,7 +114,7 @@ export default function SwarmShowcasePage() {
 
         {/* CTA */}
         <RevealOnScroll>
-          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
             <Button
               component={RouterLink} to="/swarm/docs" variant="contained" size="large"
               endIcon={<ArrowForwardIcon />}
