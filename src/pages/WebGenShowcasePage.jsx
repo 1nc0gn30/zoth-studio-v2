@@ -34,16 +34,15 @@ export default function WebGenShowcasePage() {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
 
-  const accent = '#34D399';
-  const accentGlow = 'rgba(52, 211, 153, 0.45)';
-  const cardBg = dark ? 'rgba(52, 211, 153, 0.04)' : 'rgba(52, 211, 153, 0.06)';
-  const cardBorder = dark ? 'rgba(52, 211, 153, 0.18)' : 'rgba(52, 211, 153, 0.25)';
+  const accent = '#38BDF8';
+  const accentGlow = 'rgba(56, 189, 248, 0.45)';
+  const cardBg = dark ? 'rgba(56, 189, 248, 0.04)' : 'rgba(56, 189, 248, 0.06)';
+  const cardBorder = dark ? 'rgba(56, 189, 248, 0.18)' : 'rgba(56, 189, 248, 0.25)';
   const surfaceBg = dark ? '#0B0B12' : theme.palette.background.default;
-
 
   return (
     <Box sx={{ bgcolor: surfaceBg, minHeight: '100vh' }}>
-      <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 } }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
 
         {/* ── Hero ── */}
         <HeroReveal>
@@ -88,18 +87,22 @@ export default function WebGenShowcasePage() {
         </HeroReveal>
 
         {/* ── Feature Cards ── */}
-        <StaggerChildren style={{ marginTop: 56 }}>
+        <Box sx={{ mt: 7 }}>
           <Grid container spacing={3} alignItems="stretch">
-            {FEATURES.map((f) => (
+            {FEATURES.map((f, idx) => (
               <Grid xs={12} sm={6} md={3} key={f.title} sx={{ display: 'flex' }}>
-                <StaggerItem>
+                <RevealOnScroll preset="fadeUp" delay={0.06 * idx} style={{ width: '100%', display: 'flex' }}>
                   <Card
                     elevation={0}
                     sx={{
                       height: '100%', width: '100%', flex: 1, bgcolor: cardBg,
                       border: `1px solid ${cardBorder}`, borderRadius: 3,
-                      transition: 'border-color 0.3s',
-                      '&:hover': { borderColor: accent },
+                      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                      '&:hover': {
+                        borderColor: accent,
+                        transform: 'translateY(-4px)',
+                        boxShadow: `0 8px 24px ${accent}22`,
+                      },
                     }}
                   >
                     <CardContent sx={{ p: 3 }}>
@@ -112,11 +115,11 @@ export default function WebGenShowcasePage() {
                       </Typography>
                     </CardContent>
                   </Card>
-                </StaggerItem>
+                </RevealOnScroll>
               </Grid>
             ))}
           </Grid>
-        </StaggerChildren>
+        </Box>
 
         {/* ── Built For ── */}
         <RevealOnScroll preset="fadeUp" delay={0.1}>
@@ -158,9 +161,10 @@ export default function WebGenShowcasePage() {
               variant="contained"
               endIcon={<ArrowForwardIcon />}
               sx={{
-                bgcolor: accent, color: '#000', fontWeight: 700,
+                bgcolor: accent, color: '#070709', fontWeight: 700,
                 textTransform: 'none', borderRadius: 2, px: 3, py: 1.2,
-                '&:hover': { bgcolor: '#2CC489' },
+                boxShadow: `0 4px 14px ${accent}40`,
+                '&:hover': { bgcolor: '#0284C7', color: '#fff' },
               }}
             >
               Explore Full Documentation
