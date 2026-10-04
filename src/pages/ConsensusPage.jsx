@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import MotionIntro from '../components/MotionIntro';
 import {
   Box, Container, Typography, Chip, Paper, Button, TextField, Unstable_Grid2 as Grid,
   Card, CardContent, Slider, LinearProgress, Tooltip, IconButton, Stack, Divider, Alert,
@@ -338,7 +337,6 @@ async function computeSha256(text) {
 }
 
 export default function ConsensusPage() {
-  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const { status } = useStudioStatus();
@@ -793,9 +791,6 @@ export default function ConsensusPage() {
 
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="consensus" onComplete={() => setIntroDone(true)} />
-      )}
       <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 } }}>
       {/* Page Header */}
       <HeroReveal>

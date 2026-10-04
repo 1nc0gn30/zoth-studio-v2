@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import MotionIntro from '../components/MotionIntro';
 import {
   Box, Container, Typography, Button, Paper, Unstable_Grid2 as Grid,
 } from '@mui/material';
@@ -31,7 +30,6 @@ const AUDIENCE = [
 ];
 
 export default function SwarmShowcasePage() {
-  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
@@ -40,11 +38,6 @@ export default function SwarmShowcasePage() {
   const accentBorder = isDark ? 'rgba(52,211,153,0.30)' : 'rgba(5,150,105,0.22)';
   const bg = isDark ? '#08080B' : theme.palette.background.default;
 
-  if (!introDone) {
-    return (
-      <MotionIntro page="swarm" onComplete={() => setIntroDone(true)} />
-    );
-  }
 
   return (
     <Box sx={{ bgcolor: bg, minHeight: '100vh' }}>

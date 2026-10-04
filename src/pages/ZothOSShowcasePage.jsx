@@ -19,7 +19,6 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
-import MotionIntro from '../components/MotionIntro';
 import {
   HeroReveal,
   HeroItem,
@@ -51,7 +50,6 @@ import HealingIcon from '@mui/icons-material/Healing';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 export default function ZothOSShowcasePage() {
-  const [introDone, setIntroDone] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
@@ -183,9 +181,6 @@ export default function ZothOSShowcasePage() {
 
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="zoth-os" onComplete={() => setIntroDone(true)} />
-      )}
 
       <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 4, md: 7 } }}>
         {/* Hero Section */}

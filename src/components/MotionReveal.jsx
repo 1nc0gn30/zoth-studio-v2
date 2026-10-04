@@ -13,6 +13,17 @@ import {
   useTransform,
   useReducedMotion,
 } from 'framer-motion';
+import { useIntroReleased } from '../motion/IntroGate';
+
+/**
+ * useInView that also waits for the route intro to hand off, so entrance
+ * animations play *during* the aperture reveal instead of invisibly behind it.
+ */
+function useGatedInView(ref, options) {
+  const inView = useInView(ref, options);
+  const released = useIntroReleased();
+  return inView && released;
+}
 
 /* ========================================================================
    EASING PRESETS
@@ -64,7 +75,7 @@ const heroItemVariants = {
 export function HeroReveal({ children, className, style, delay = 0, ...rest }) {
   const prefersReduced = useReducedMotion();
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-40px' });
+  const isInView = useGatedInView(ref, { once: true, margin: '-40px' });
 
   if (prefersReduced) {
     return (
@@ -143,7 +154,7 @@ export function RevealOnScroll({
 }) {
   const prefersReduced = useReducedMotion();
   const ref = useRef(null);
-  const isInView = useInView(ref, { once, amount: threshold });
+  const isInView = useGatedInView(ref, { once, amount: threshold });
 
   if (prefersReduced) {
     return (
@@ -208,7 +219,7 @@ export function StaggerChildren({
 }) {
   const prefersReduced = useReducedMotion();
   const ref = useRef(null);
-  const isInView = useInView(ref, { once, amount: 0.1 });
+  const isInView = useGatedInView(ref, { once, amount: 0.1 });
 
   if (prefersReduced) {
     return (
@@ -265,7 +276,7 @@ export function GlowLine({
 }) {
   const prefersReduced = useReducedMotion();
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-20px' });
+  const isInView = useGatedInView(ref, { once: true, margin: '-20px' });
 
   if (prefersReduced) {
     return (
@@ -366,7 +377,7 @@ export function SplitText({
 }) {
   const prefersReduced = useReducedMotion();
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-30px' });
+  const isInView = useGatedInView(ref, { once: true, margin: '-30px' });
 
   const words = useMemo(() => text.split(' '), [text]);
 
@@ -459,7 +470,7 @@ export function CountUp({
 }) {
   const prefersReduced = useReducedMotion();
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const isInView = useGatedInView(ref, { once: true });
   const [display, setDisplay] = React.useState(from);
 
   React.useEffect(() => {

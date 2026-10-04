@@ -1,5 +1,4 @@
 import React from 'react';
-import MotionIntro from '../components/MotionIntro';
 import {
   Box,
   Container,
@@ -27,7 +26,6 @@ import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, Stagge
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 export default function MathPillarsPage() {
-  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
@@ -38,9 +36,6 @@ export default function MathPillarsPage() {
 
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="docs-math" onComplete={() => setIntroDone(true)} />
-      )}
       <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
       <SEO
         title="Six Mathematical Pillars // Theoretical Foundations & Neuromorphic Proofs"

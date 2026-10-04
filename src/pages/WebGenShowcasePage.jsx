@@ -10,7 +10,6 @@ import WifiOffIcon from '@mui/icons-material/WifiOff';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import MotionIntro from '../components/MotionIntro';
 import {
   HeroReveal, HeroItem, GlowLine, RevealOnScroll,
   StaggerChildren, StaggerItem,
@@ -34,7 +33,6 @@ const AUDIENCE = [
 export default function WebGenShowcasePage() {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
-  const [introDone, setIntroDone] = useState(false);
 
   const accent = '#34D399';
   const accentGlow = 'rgba(52, 211, 153, 0.45)';
@@ -42,11 +40,6 @@ export default function WebGenShowcasePage() {
   const cardBorder = dark ? 'rgba(52, 211, 153, 0.18)' : 'rgba(52, 211, 153, 0.25)';
   const surfaceBg = dark ? '#0B0B12' : theme.palette.background.default;
 
-  if (!introDone) {
-    return (
-      <MotionIntro page="webgen" onComplete={() => setIntroDone(true)} />
-    );
-  }
 
   return (
     <Box sx={{ bgcolor: surfaceBg, minHeight: '100vh' }}>

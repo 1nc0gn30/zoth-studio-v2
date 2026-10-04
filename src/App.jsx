@@ -31,6 +31,7 @@ import AXShowcasePage from './pages/AXShowcasePage';
 import GalleryPage from './pages/GalleryPage';
 import SEO from './components/SEO';
 import Footer from './components/Footer';
+import { IntroDirector, PageStage } from './motion/IntroDirector';
 
 const STORAGE_KEY = 'zoth-studio-theme';
 
@@ -72,6 +73,7 @@ function AppShell({ mode, onToggleTheme }) {
   const dark = theme.palette.mode === 'dark';
 
   return (
+    <IntroDirector>
     <Box
       sx={{
         minHeight: '100vh',
@@ -96,9 +98,11 @@ function AppShell({ mode, onToggleTheme }) {
           zIndex: 2,
           minWidth: 0,
           overflowX: 'clip',
-          '& > .MuiContainer-root': { flex: 1, width: '100%', minWidth: 0 },
+          '& > .MuiContainer-root, & > .page-stage > .MuiContainer-root': { flex: 1, width: '100%', minWidth: 0 },
+          '& > .page-stage': { flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 },
         }}
       >
+        <PageStage>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/arsenal" element={<ArsenalPage />} />
@@ -129,9 +133,11 @@ function AppShell({ mode, onToggleTheme }) {
           <Route path="/ax/docs" element={<AXPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
         </Routes>
+        </PageStage>
       </Box>
       <Footer />
     </Box>
+    </IntroDirector>
   );
 }
 

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import MotionIntro from '../components/MotionIntro';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 import {
   Box, Container, Typography, Paper, Chip, Unstable_Grid2 as Grid, Button,
@@ -389,7 +388,6 @@ When invoking local tooling, output strictly conforming JSON-RPC 2.0 tool reques
 }
 
 export default function AXPage() {
-  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
@@ -462,9 +460,6 @@ export default function AXPage() {
 
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="ax" onComplete={() => setIntroDone(true)} />
-      )}
       <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
       <SEO
         title="Agent Experience (AX) // Machine-Readable Entity Profile & Capabilities"

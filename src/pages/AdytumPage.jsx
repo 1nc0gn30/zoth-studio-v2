@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import MotionIntro from '../components/MotionIntro';
 import {
   Box,
   Button,
@@ -2399,12 +2398,8 @@ export function AdytumEngine({ embedded = false }) {
 }
 
 export default function AdytumPage() {
-  const [introDone, setIntroDone] = React.useState(false);
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="adytum" onComplete={() => setIntroDone(true)} />
-      )}
       <AdytumEngine embedded={false} />
     </>
   );

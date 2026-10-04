@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import MotionIntro from '../components/MotionIntro';
 import {
   Box, Container, Typography, Chip, Paper, Button, TextField, InputAdornment,
   Table, TableBody, TableCell, TableHead, TableRow, Unstable_Grid2 as Grid,
@@ -272,7 +271,6 @@ export const AUTHOR_SPECS = [
    MAIN COMPONENT: MemoryPage (Zoth Sovereign Netrunner Memory Hub)
    ========================================================================== */
 export default function MemoryPage() {
-  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const { status } = useStudioStatus();
@@ -1318,9 +1316,6 @@ export default function MemoryPage() {
 
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="memory" onComplete={() => setIntroDone(true)} />
-      )}
       <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 7 }, px: { xs: 2, sm: 3, md: 4 }, position: 'relative' }}>
       {/* Background Radial Glow */}
       <ParallaxGlow offset={60}>

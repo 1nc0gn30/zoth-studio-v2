@@ -1,5 +1,4 @@
 import React from 'react';
-import MotionIntro from '../components/MotionIntro';
 import {
   Box,
   Button,
@@ -42,7 +41,6 @@ const AUDIENCES = [
 ];
 
 export default function AdytumShowcasePage() {
-  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const gold = isDark ? '#D4AF37' : '#B8860B';
@@ -54,9 +52,6 @@ export default function AdytumShowcasePage() {
 
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="adytum" onComplete={() => setIntroDone(true)} />
-      )}
 
       <Box sx={{ bgcolor: bg, minHeight: '100vh' }}>
         <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 } }}>

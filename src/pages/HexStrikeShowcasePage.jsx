@@ -1,5 +1,4 @@
 import React from 'react';
-import MotionIntro from '../components/MotionIntro';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem,
@@ -48,7 +47,6 @@ const BUILT_FOR = [
 ];
 
 export default function HexStrikeShowcasePage() {
-  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const accent = isDark ? '#EF4444' : '#DC2626';
@@ -58,9 +56,6 @@ export default function HexStrikeShowcasePage() {
 
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="hexstrike" onComplete={() => setIntroDone(true)} />
-      )}
       <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 }, position: 'relative' }}>
 
         {/* Hero Section */}

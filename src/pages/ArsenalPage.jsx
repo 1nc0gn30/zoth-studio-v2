@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import MotionIntro from '../components/MotionIntro';
 import {
   Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, CardActions,
   Chip, Button, TextField, InputAdornment, Paper, ToggleButtonGroup, ToggleButton,
@@ -370,7 +369,6 @@ function UnifiedAssetCard({ item, isDark, gold, runtime }) {
 }
 
 export default function ArsenalPage() {
-  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const runtime = useSovereignRuntime();
@@ -409,9 +407,6 @@ export default function ArsenalPage() {
   return (
     <Box sx={{ bgcolor: isDark ? '#08080B' : '#F8FAFC', minHeight: '100vh', pb: 10 }}>
       {/* Cinematic Intro Banner */}
-      {!introDone && (
-        <MotionIntro page="arsenal" onComplete={() => setIntroDone(true)} />
-      )}
       <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
         {/* Page Header */}
         <HeroReveal>
