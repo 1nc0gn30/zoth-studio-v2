@@ -59,10 +59,10 @@ function readSeen() {
     return new Set();
   }
 }
-function markSeen(clip) {
+function markSeen(key) {
   try {
     const seen = readSeen();
-    seen.add(clip);
+    seen.add(key);
     window.sessionStorage.setItem(SEEN_KEY, JSON.stringify([...seen]));
   } catch {
     /* storage unavailable — intros simply replay */
@@ -81,7 +81,7 @@ function decideMode(intro, reduced, search) {
   if (flag === '0') return 'none';
   if (flag === '1') return 'full';
   if (reduced || isAutomated()) return 'none';
-  return readSeen().has(intro.clip) ? 'wipe' : 'full';
+  return readSeen().has(intro.key) ? 'wipe' : 'full';
 }
 
 function makeRun(intro, reduced, search, pathname) {
@@ -249,7 +249,7 @@ function IntroOverlay({ intro, mode, enter, onHandoff, onDone }) {
   // Full: remember the clip, watch playback, hand off just before the end.
   useEffect(() => {
     if (mode !== 'full') return undefined;
-    markSeen(intro.clip);
+    markSeen(intro.key);
     let raf = 0;
     const tick = () => {
       const v = videoRef.current;
@@ -285,7 +285,7 @@ function IntroOverlay({ intro, mode, enter, onHandoff, onDone }) {
       window.clearTimeout(stall);
       window.clearTimeout(cap);
     };
-  }, [mode, dark, intro.clip, intro.handoffLead, progress, cardWash, beginHandoff]);
+  }, [mode, dark, intro.key, intro.handoffLead, progress, cardWash, beginHandoff]);
 
   // Autoplay can be refused (power saver, iOS low-power) — never trap the user.
   useEffect(() => {
@@ -555,7 +555,7 @@ function usePrefetchOnIntent() {
       const a = e.target && e.target.closest ? e.target.closest('a[href^="/"]') : null;
       if (!a) return;
       const intro = resolveRouteIntro(new URL(a.href, window.location.origin).pathname);
-      if (!intro || done.has(intro.clip) || readSeen().has(intro.clip)) return;
+      if (!intro || done.has(intro.clip) || readSeen().has(intro.key)) return;
       done.add(intro.clip);
       const cut = window.matchMedia(NARROW_QUERY).matches ? 'mobile' : 'desktop';
       const link = document.createElement('link');
