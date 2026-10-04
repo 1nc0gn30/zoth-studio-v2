@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import MotionIntro from '../components/MotionIntro';
 import {
   Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, CardActions,
   Chip, Button, TextField, InputAdornment, MenuItem, Select, FormControl, InputLabel,
@@ -27,7 +26,6 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const categories = ['All', 'Planning', 'Swarm & Core', 'AI & Knowledge', 'Security & Recon', 'Security & Steganography', 'Autonomous Web', 'Media & 3D', 'Automation'];
 
 export default function ToolsPage() {
-  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const { status } = useStudioStatus();
@@ -76,9 +74,6 @@ export default function ToolsPage() {
 
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="tools" onComplete={() => setIntroDone(true)} />
-      )}
       <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 } }}>
       {/* Page Header with gold top-edge glow (ToolsPage signature) */}
       <HeroReveal>

@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import MotionIntro from '../components/MotionIntro';
 import {
   Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, CardActions,
   Chip, Button, TextField, InputAdornment, Paper, ToggleButtonGroup, ToggleButton,
@@ -460,7 +459,6 @@ function WorkstationCard({ item, isDark, gold }) {
 }
 
 export default function WorkstationsPage() {
-  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const [search, setSearch] = useState('');
@@ -532,9 +530,6 @@ export default function WorkstationsPage() {
 
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="workstations" onComplete={() => setIntroDone(true)} />
-      )}
       <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
       {/* Page Header */}
       <HeroReveal>

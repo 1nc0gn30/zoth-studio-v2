@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import MotionIntro from '../components/MotionIntro';
 import {
   Box,
   Container,
@@ -340,7 +339,6 @@ async function computeHmacSha256(secretKey, text) {
 }
 
 export default function BridgesPage() {
-  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const { status } = useStudioStatus();
@@ -787,9 +785,6 @@ export default function BridgesPage() {
 
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="bridges" onComplete={() => setIntroDone(true)} />
-      )}
       <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 }, position: 'relative' }}>
       {/* Signature gold top-edge glow */}
       <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>

@@ -36,7 +36,6 @@ import WebGPUAIConsole from '../components/WebGPUAIConsole';
 import WebMCPConsole from '../components/WebMCPConsole';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
-import MotionIntro from '../components/MotionIntro';
 import { microTools } from '../data/toolsData';
 import { useStudioStatus } from '../studio/useStudioStatus';
 
@@ -1444,7 +1443,6 @@ export default function HomePage() {
   const isDark = theme.palette.mode === 'dark';
   const published = microTools.filter((tool) => tool.published);
   const { status } = useStudioStatus();
-  const [introDone, setIntroDone] = useState(false);
 
   const gold = {
     accent: isDark ? '#D4AF37' : '#B8860B',
@@ -1454,9 +1452,6 @@ export default function HomePage() {
 
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="home" onComplete={() => setIntroDone(true)} />
-      )}
       <Container maxWidth="lg" className="page-fade-in" sx={{ position: 'relative', py: { xs: 5, md: 8 } }}>
       {/* Soft radial gold glow behind the hero (HomePage signature) */}
       <ParallaxGlow offset={60} style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '100%', pointerEvents: 'none', zIndex: 0 }}>

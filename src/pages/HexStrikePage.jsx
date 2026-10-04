@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import MotionIntro from '../components/MotionIntro';
 import { Link as RouterLink } from 'react-router-dom';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 import {
@@ -237,7 +236,6 @@ const FULL_64_PORTS = (() => {
 })();
 
 export default function HexStrikePage() {
-  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
@@ -584,9 +582,6 @@ export default function HexStrikePage() {
 
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="hexstrike" onComplete={() => setIntroDone(true)} />
-      )}
       <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>
       {/* Background signature gold radial glow */}
       <ParallaxGlow offset={60}>

@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import MotionIntro from '../components/MotionIntro';
 import {
   Box,
   Container,
@@ -155,7 +154,6 @@ function CodeSnippet({ title, code, language = 'bash' }) {
 }
 
 export default function DocsPage() {
-  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
   const gold = dark ? '#D4AF37' : '#B8860B';
@@ -371,9 +369,6 @@ Runs local invariant verification before staging tools.`
 
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="docs" onComplete={() => setIntroDone(true)} />
-      )}
       <Box sx={{ bgcolor: dark ? voidDark : '#FAFBFD', minHeight: '100vh', py: { xs: 4, md: 7 } }}>
       <Container maxWidth="xl">
         {/* Header / Hero Section */}

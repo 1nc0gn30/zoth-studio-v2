@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import MotionIntro from '../components/MotionIntro';
 import {
   Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, Chip, Button, Paper, TextField,
   LinearProgress, IconButton, Tooltip, Tabs, Tab, RadioGroup, FormControlLabel, Radio,
@@ -387,7 +386,6 @@ function refreshMetrics() {
         return `import { createSignal } from 'solid-js';
 
 export default function SovereignDashboard() {
-  const [introDone, setIntroDone] = React.useState(false);
   const [latency, setLatency] = createSignal('12.4ms');
   const [isAuditing, setIsAuditing] = createSignal(false);
 
@@ -1803,7 +1801,6 @@ export default function WebGenPage() {
   const [copied, setCopied] = useState(false);
   const [deviceFrame, setDeviceFrame] = useState('desktop'); // 'mobile' | 'tablet' | 'desktop'
   const [mobileSection, setMobileSection] = useState('preview'); // 'prompt' | 'code' | 'preview' | 'specs'
-  const [introDone, setIntroDone] = useState(false);
 
   // Procedural Web Audio SFX State & Synthesizer
   const [sfxEnabled, setSfxEnabled] = useState(true);
@@ -2526,9 +2523,6 @@ wait $PID`;
 
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="webgen" onComplete={() => setIntroDone(true)} />
-      )}
       <Container maxWidth="xl" sx={{ py: { xs: 3, md: 5 }, pb: { xs: 12, md: 6 } }}>
       
       {/* Header Section — gold radial glow behind header */}

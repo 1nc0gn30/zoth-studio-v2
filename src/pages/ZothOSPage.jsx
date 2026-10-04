@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import MotionIntro from '../components/MotionIntro';
 import {
   Box,
   Container,
@@ -165,7 +164,6 @@ function RadialResourceDial({ value, max = 100, label, subtext, metricText, stat
 }
 
 export default function ZothOSPage() {
-  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const { status } = useStudioStatus();
@@ -829,9 +827,6 @@ export default function ZothOSPage() {
 
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="zoth-os" onComplete={() => setIntroDone(true)} />
-      )}
       <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>
       {/* ZothOS signature: gold glow behind the header */}
       <ParallaxGlow offset={60}>

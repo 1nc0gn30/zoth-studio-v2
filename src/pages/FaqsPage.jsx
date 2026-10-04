@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
-import MotionIntro from '../components/MotionIntro';
 import {
   Box, Container, Typography, Accordion, AccordionSummary, AccordionDetails,
   Paper, Chip, TextField, InputAdornment, Button, Stack, IconButton,
@@ -48,7 +47,6 @@ const QUICK_PROMPTS = [
 ];
 
 export default function FaqsPage() {
-  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const [search, setSearch] = useState('');
@@ -192,9 +190,6 @@ ${oracleResult.faq.a}`;
 
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="faqs" onComplete={() => setIntroDone(true)} />
-      )}
       <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 } }}>
       <SEO
         title="Frequently Asked Questions // Zoth Studio v2 Architecture & Security"

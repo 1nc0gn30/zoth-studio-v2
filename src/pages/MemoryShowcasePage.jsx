@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import MotionIntro from '../components/MotionIntro';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem } from '../components/MotionReveal';
 import { Box, Container, Typography, Paper, Button, Unstable_Grid2 as Grid } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -27,7 +26,6 @@ const AUDIENCES = [
 ];
 
 export default function MemoryShowcasePage() {
-  const [introDone, setIntroDone] = React.useState(false);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
@@ -40,9 +38,6 @@ export default function MemoryShowcasePage() {
 
   return (
     <>
-      {!introDone && (
-        <MotionIntro page="memory" onComplete={() => setIntroDone(true)} />
-      )}
 
       <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 } }}>
         {/* ── Hero ── */}

@@ -6,7 +6,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import ChatIcon from '@mui/icons-material/Chat';
 import SchemaIcon from '@mui/icons-material/Schema';
 import ExtensionIcon from '@mui/icons-material/Extension';
-import MotionIntro from '../components/MotionIntro';
 import {
   HeroReveal,
   HeroItem,
@@ -36,18 +35,12 @@ const AUDIENCES = [
 export default function AXShowcasePage() {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
-  const [introDone, setIntroDone] = useState(false);
 
   const accent = dark ? GOLD : '#B8860B';
   const bg = dark ? '#08080B' : theme.palette.background.default;
   const cardBg = dark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)';
   const cardBorder = dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)';
 
-  if (!introDone) {
-    return (
-      <MotionIntro page="ax" onComplete={() => setIntroDone(true)} />
-    );
-  }
 
   return (
     <Box sx={{ bgcolor: bg, minHeight: '100vh' }}>
