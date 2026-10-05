@@ -96,7 +96,7 @@ async function resolvePlaywright() {
   }
 
   // 3. Search common npx cache locations
-  const homedir = process.env.HOME || '/home/neo';
+  const homedir = os.homedir();
   const npxDir = path.join(homedir, '.npm', '_npx');
   if (fs.existsSync(npxDir)) {
     try {
@@ -124,15 +124,16 @@ function findChromeExecutable() {
     return process.env.CHROME_PATH;
   }
 
+  const homedir = os.homedir();
   const standardPaths = [
     '/usr/bin/google-chrome',
     '/usr/bin/google-chrome-stable',
     '/usr/bin/chromium-browser',
     '/usr/bin/chromium',
-    '/home/neo/.cache/ms-playwright/chromium-1234/chrome-linux/chrome',
-    '/home/neo/.cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell',
-    '/home/neo/.cache/ms-playwright/chromium-1187/chrome-linux/chrome',
-    '/home/neo/.cache/ms-playwright/chromium-1223/chrome-linux/chrome',
+    path.join(homedir, '.cache/ms-playwright/chromium-1234/chrome-linux/chrome'),
+    path.join(homedir, '.cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell'),
+    path.join(homedir, '.cache/ms-playwright/chromium-1187/chrome-linux/chrome'),
+    path.join(homedir, '.cache/ms-playwright/chromium-1223/chrome-linux/chrome'),
   ];
 
   for (const p of standardPaths) {

@@ -4,10 +4,11 @@
 # ==============================================================================
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="/opt/zoth-studio"
 if [[ ! -d "$ROOT" ]]; then
-    if [[ -d "/home/neo/zothos/config/includes.chroot/opt/zoth-studio" ]]; then
-        ROOT="/home/neo/zothos/config/includes.chroot/opt/zoth-studio"
+    if [[ -d "$SCRIPT_DIR" && (-f "$SCRIPT_DIR/index.html" || -d "$SCRIPT_DIR/dist") ]]; then
+        ROOT="$SCRIPT_DIR"
     elif [[ -d "/usr/share/zoth-studio" ]]; then
         ROOT="/usr/share/zoth-studio"
     fi
