@@ -719,6 +719,143 @@ export const toolsDocumentation = {
       'Air-gapped loopback SSE transport (127.0.0.1:8094)',
       '100% zero outbound network telemetry'
     ]
+  },
+
+  'anderson-security-sentinel': {
+    whyUse: 'High-accuracy RF sensing and physical-layer intruder tracking utilizing multi-antenna Wi-Fi differential reception and computer vision fusion.',
+    problemSolved: 'Replaces blind heuristic RF detectors with physical angle-of-arrival (AoA), differential wall discrimination, and optical ground truth validation.',
+    architecture: 'Python 3.12 daemon interfacing with Linux nl80211, multi-transceiver synthetic aperture array, and OpenCV facial tracking.',
+    aiAgentProtocol: {
+      mcpTool: 'sentinel_scan_rf',
+      description: 'Run physical RF radar sweep across tri-antenna array and return intruder coordinates.',
+      cliExample: 'python3 engine/sentinel.py --port 7890 --accuracy high',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          accuracy: { type: 'string', enum: ['standard', 'high'] },
+          differentialLoss: { type: 'boolean' }
+        }
+      },
+      outputSchema: {
+        bearingDeg: 'number',
+        zone: 'string',
+        material: 'string',
+        coordinates: 'object'
+      }
+    },
+    quickstart: [
+      'git clone https://github.com/1nc0gn30/anderson-security-sentinel.git',
+      'cd anderson-security-sentinel && pip install -r requirements.txt',
+      'python3 engine/sentinel.py'
+    ],
+    features: [
+      'Tri-transceiver synthetic aperture array geometry (wlan0, wlan1, wlan2)',
+      'Dual-band differential wall discriminator (2.4 GHz vs 5.0 GHz)',
+      'Real-time physical Angle-of-Arrival (AoA) bearing calculation',
+      'Camera optical ground-truth pinhole fusion',
+      'Tailscale-authorized remote video and RF dashboard on port 7890'
+    ]
+  },
+
+  'badge3d-coin-generator': {
+    whyUse: 'WebGL real-time procedural coin minter, glassmorphic metallic badges, and pure CSS conic border lighting.',
+    problemSolved: 'Eliminates flat 2D graphic assets in favor of real-time interactive 3D coins and badges ready for Web3 tokenomics.',
+    architecture: 'Vanilla Three.js and WebGL canvas with parametric edge-milling geometry and STL/OBJ/GLB 3D export.',
+    aiAgentProtocol: {
+      mcpTool: 'badge3d_mint_mesh',
+      description: 'Generate 3D watertight procedural coin mesh from SVG relief heightmaps.',
+      cliExample: 'python3 -m badge3d.cli generate --diameter 30 --depth 2.5 --out coin.stl',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          diameter: { type: 'number' },
+          metalType: { type: 'string' }
+        }
+      },
+      outputSchema: {
+        stlPath: 'string',
+        vertices: 'number',
+        triangles: 'number'
+      }
+    },
+    quickstart: [
+      'git clone https://github.com/1nc0gn30/badge3d-coin-generator.git',
+      'cd badge3d-coin-generator && python3 -m http.server 8080'
+    ],
+    features: [
+      'Real-time WebGL gold, silver, and obsidian shader materials',
+      'Sub-millimeter procedural edge milling and reeding patterns',
+      'Watertight 3D printable STL and binary GLB mesh export',
+      'In-browser 3D lighting customizer with conic border highlights'
+    ]
+  },
+
+  'robots-txt-auditor': {
+    whyUse: 'Audits robots.txt rules, dynamic sitemaps, and Schema.org graph structures against frontier AI bot crawlers.',
+    problemSolved: 'Prevents accidental de-indexation or aggressive scraping by testing Googlebot, GPTBot, ClaudeBot, and PerplexityBot compliance.',
+    architecture: 'Client-side deterministic AST parser for robots.txt directives and JSON-LD schema verification.',
+    aiAgentProtocol: {
+      mcpTool: 'robots_txt_audit',
+      description: 'Audit robots.txt directives and report crawler accessibility scores.',
+      cliExample: 'robots-audit scan https://nealfrazier.tech/robots.txt',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          url: { type: 'string' }
+        },
+        required: ['url']
+      },
+      outputSchema: {
+        allowedCrawlers: 'array',
+        warnings: 'array',
+        aeoScore: 'number'
+      }
+    },
+    quickstart: [
+      'git clone https://github.com/1nc0gn30/robots-txt-auditor.git',
+      'cd robots-txt-auditor && python3 -m http.server 8080'
+    ],
+    features: [
+      'Live syntax parsing for User-agent, Allow, Disallow, and Crawl-delay',
+      'Frontier AI bot test harness (GPTBot, ClaudeBot, PerplexityBot, Applebot)',
+      'Schema.org graph validator for instant search generative engine readiness',
+      '100% in-browser offline execution without external API calls'
+    ]
+  },
+
+  'city-desk': {
+    whyUse: 'High-converting split-hero contractor directory engine generating 1,000+ localized trade pages with zero horizontal overflow.',
+    problemSolved: 'Replaces generic, cookie-cutter agency directory pages with high-contrast, editorial typography, real pricing calculators, and localized trade authority.',
+    architecture: 'Deterministic Node.js static site generator compiling 1,000 city/trade static pages in under 2 seconds.',
+    aiAgentProtocol: {
+      mcpTool: 'citydesk_build_pages',
+      description: 'Generate 1,000 localized static pages across 50 US metros and 20 service trades.',
+      cliExample: 'cd city-desk && node build.js',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          city: { type: 'string' },
+          trade: { type: 'string' }
+        }
+      },
+      outputSchema: {
+        pageCount: 'number',
+        distPath: 'string',
+        buildTimeMs: 'number'
+      }
+    },
+    quickstart: [
+      'git clone https://github.com/1nc0gn30/city-desk.git',
+      'cd city-desk && node build.js',
+      'python3 -m http.server 8877 --directory site'
+    ],
+    features: [
+      'Editorial split-hero layout with painter tape high-contrast styling',
+      'Interactive trade pricing calculators with zero fake work',
+      'Accordion FAQs answering trade-specific homeowner objections',
+      'Strict zero horizontal overflow across 375px mobile, tablet, and desktop',
+      'Subtle, isolated $800 localized asset handoff offer block at the bottom'
+    ]
   }
 };
 
