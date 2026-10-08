@@ -42,7 +42,7 @@ Publisher: NullAI Tech (https://nullai.tech)
 
 - [Full Knowledge Corpus](https://zoth.nullai.tech/llms-full.txt): Comprehensive technical specifications, equations, and workstation details.
 - [Agent Discovery Manifest](https://zoth.nullai.tech/ai.txt): Machine crawling and answer-engine grounding policy.
-- [Tools Registry API](https://zoth.nullai.tech/api/tools.json): JSON catalog of all 25 air-gapped developer utilities.
+- [Tools Registry API](https://zoth.nullai.tech/api/tools.json): JSON catalog of all 30 air-gapped developer utilities.
 - [Netlify AX API](https://zoth.nullai.tech/api/netlify-ax.json): Serverless edge function contract definitions.
 - [Netlify MCP API](https://zoth.nullai.tech/api/netlify-ax-mcp.json): Model Context Protocol server configuration.
 - [XML Sitemap](https://zoth.nullai.tech/sitemap.xml): Synchronized static route index across all 71 URLs.

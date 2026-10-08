@@ -37,6 +37,7 @@ import WebMCPConsole from '../components/WebMCPConsole';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 import { microTools } from '../data/toolsData';
+import ToolOfferLine from '../components/ToolOfferLine';
 import { useStudioStatus } from '../studio/useStudioStatus';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -2236,6 +2237,7 @@ export default function HomePage() {
                   </Box>
                   <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.2, color: theme.palette.text.primary, letterSpacing: '-0.015em', fontSize: '1.05rem' }}>{tool.name}</Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.65, fontSize: '0.88rem' }}>{tool.description}</Typography>
+                  <ToolOfferLine tool={tool} isDark={isDark} />
                 </CardContent>
                 <CardActions
                   sx={{

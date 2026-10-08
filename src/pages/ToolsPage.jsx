@@ -18,12 +18,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DnsIcon from '@mui/icons-material/Dns';
 import { Link as RouterLink } from 'react-router-dom';
 import { microTools } from '../data/toolsData';
+import ToolOfferLine from '../components/ToolOfferLine';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 import { useSovereignRuntime, isLocalRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const categories = ['All', 'Planning', 'Swarm & Core', 'AI & Knowledge', 'Security & Recon', 'Security & Steganography', 'Autonomous Web', 'Media & 3D', 'Automation'];
+const categories = ['All', 'Planning', 'Swarm & Core', 'AI & Knowledge', 'Security & Recon', 'Security & OpSec', 'Security & Steganography', 'Autonomous Web', 'Media & 3D', 'Growth & SEO', 'Automation'];
 
 export default function ToolsPage() {
   const theme = useTheme();
@@ -453,6 +454,7 @@ export default function ToolsPage() {
                       >
                         {tool.description}
                       </Typography>
+                      <ToolOfferLine tool={tool} isDark={isDark} />
 
                       <Button
                         size="small"
@@ -565,7 +567,7 @@ export default function ToolsPage() {
                   Deploy Sovereign Intelligence Locally
                 </Typography>
                 <Typography variant="body2" sx={{ color: '#94A3B8' }}>
-                  Run all 29 tools offline with zero telemetry. Pull standalone micro-modules, clone the unified Studio v2 cockpit, or flash bare-metal Zoth OS.
+                  Run all {microTools.length} tools offline with zero telemetry. Pull standalone micro-modules, clone the unified Studio v2 cockpit, or flash bare-metal Zoth OS.
                 </Typography>
               </Box>
             </Box>
@@ -617,7 +619,7 @@ export default function ToolsPage() {
                   <Chip label="FULL SUITE" size="small" sx={{ bgcolor: gold.wash, color: gold.accent, fontWeight: 800, fontSize: '0.65rem', border: `1px solid ${gold.accent}` }} />
                 </Box>
                 <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
-                  Complete workstation with all 29 tools, local WebGPU inference, STDP memory vector daemon, and Byzantine consensus.
+                  Complete workstation with all {microTools.length} tools, local WebGPU inference, STDP memory vector daemon, and Byzantine consensus.
                 </Typography>
                 <Box sx={{ p: 1.2, mb: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: gold.accent, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>

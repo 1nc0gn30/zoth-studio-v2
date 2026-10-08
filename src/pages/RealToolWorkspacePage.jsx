@@ -30,6 +30,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import SpeedIcon from '@mui/icons-material/Speed';
 
 import { microTools } from '../data/toolsData';
+import ToolOfferLine from '../components/ToolOfferLine';
 import { getToolDocumentation } from '../data/toolsDocumentation';
 import SovereignFunnel from '../components/SovereignFunnel';
 import AirGapToolLockout from '../components/AirGapToolLockout';
@@ -392,6 +393,7 @@ export default function RealToolWorkspacePage() {
             <Typography variant="body1" color="text.secondary" sx={{ fontSize: '1.05rem', lineHeight: 1.65 }}>
               {tool.description}
             </Typography>
+            <ToolOfferLine tool={tool} isDark={isDark} />
           </Box>
 
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: { xs: '100%', md: 'auto' }, flexShrink: 0 }}>
@@ -873,7 +875,7 @@ export default function RealToolWorkspacePage() {
       <Box sx={{ mt: 6 }}>
         <SovereignFunnel
           title={`Deploy ${tool.name} in Your Sovereign Workspace`}
-          subtitle="Choose between pulling this standalone micro-tool repository, running it natively inside Zoth Studio, or booting ZothOS where all 25 sovereign tools are pre-configured."
+          subtitle={`Choose between pulling this standalone micro-tool repository, running it natively inside Zoth Studio, or booting ZothOS where all ${microTools.length} sovereign tools are pre-configured.`}
           toolTitle={tool.name}
           toolDescription={tool.description}
           toolRepo={tool.github}

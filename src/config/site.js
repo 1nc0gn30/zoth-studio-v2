@@ -13,7 +13,7 @@ export const siteConfig = {
   legalName: 'NullAI Tech',
   url: 'https://zoth.nullai.tech',
   tagline: 'Zero-Egress Sovereign Agent Development Studio & Pantheon Matrix',
-  description: 'Zoth Studio v2 is an air-gapped, zero-egress development environment for autonomous AI agents, featuring biomorphic STDP memory, Lucy Netrunner Oracle, Byzantine consensus triangulation, sovereign developer cockpits, and 25 micro-tools.',
+  description: 'Zoth Studio v2 is an air-gapped, zero-egress development environment for autonomous AI agents, featuring biomorphic STDP memory, Lucy Netrunner Oracle, Byzantine consensus triangulation, sovereign developer cockpits, and 30 micro-tools.',
   author: 'NullAI Tech',
   twitterHandle: '@NullAITech',
   githubUrl: 'https://github.com/NullAITech/zoth-studio-v2',
@@ -65,8 +65,8 @@ export const siteConfig = {
       type: 'article',
     },
     '/tools': {
-      title: 'Sovereign Tool Arsenal // 25 Air-Gapped Micro-Tools & Repos',
-      description: 'Explore 25 standalone, schema-validated developer tools for website generation, social syndication, recon mapping, and 3D modeling.',
+      title: 'Sovereign Tool Arsenal // 30 Air-Gapped Micro-Tools & Repos',
+      description: 'Explore 30 standalone, schema-validated developer tools for website generation, social syndication, recon mapping, and 3D modeling.',
       keywords: 'developer tools, zoth webgen, omnipost, subsweep, payload entropy, air-gapped tools',
       type: 'article',
     },
@@ -441,8 +441,9 @@ export function generateSchemaGraph(path = '/') {
         'softwareVersion': tool.version,
         'offers': {
           '@type': 'Offer',
-          'price': '0',
-          'priceCurrency': 'USD'
+          'price': tool.priceUsd || '0',
+          'priceCurrency': 'USD',
+          ...(tool.liveUrl ? { 'url': tool.liveUrl } : {}),
         }
       });
     }

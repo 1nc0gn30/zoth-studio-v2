@@ -206,7 +206,7 @@ Air-gapped developer utilities operating with zero network calls:
 1. **JWT Inspector Guard** (`/tools/jwt-inspector-guard`): Client-side decoding, signature structure validation, and Shannon entropy analysis on claims.
 2. **Payload Shannon Entropy Studio** (`/tools/payload-entropy-studio`): Shannon entropy curve calculation to detect encrypted or obfuscated shell payloads.
 3. **Polyglot Framework Exporter** (`/tools/polyglot-framework-exporter`): Transpiles UI templates across React, Svelte, Vue, and vanilla DOM.
-4. **CWV Speed Engine** (`/tools/cwv-speed-engine`): In-browser Core Web Vitals analyzer calculating LCP, FID, and CLS bottlenecks.
+4. **CWV Speed Engine** (`/tools/cwv-speed-engine`): In-browser Core Web Vitals analyzer calculating LCP, INP, and CLS bottlenecks.
 5. **UFO Sacred Geometry** (`/tools/ufo-sacred-geometry`): Mathematical geometric pattern generator rendering high-precision SVGs.
 6. **Badge3D Coin Generator** (`/tools/badge3d-coin-generator`): WebGL metallic medallion and physical token renderer.
 7. **Nexus 3D Scene Studio** (`/tools/nexus-3d-scene-studio`): Zero-dependency 3D canvas editor for spatial entity positioning.
@@ -404,9 +404,9 @@ The `zoth` CLI (`bin/zoth.js`, executable via `npx zoth` or `npm run zoth -- <co
 | Command | Action |
 | :--- | :--- |
 | `npx zoth status` | Probe local environment readiness, hardware acceleration, and tool repos |
-| `npx zoth list` | Catalog all 25 sovereign micro-tools with their open-source URLs |
+| `npx zoth list` | Catalog all 30 sovereign micro-tools with their open-source URLs |
 | `npx zoth pull <tool>` | Clone or fast-forward a standalone micro-tool into `./tools/<tool>` |
-| `npx zoth pull --all` | Clone all 25 published tools into `./tools` |
+| `npx zoth pull --all` | Clone all 30 published tools into `./tools` |
 | `npx zoth up` | Initialize local daemons and offline caches |
 | `npx zoth down` | Stop local background processes |
 | `npx zoth doctor` | Verify local dependencies and environment integrity |

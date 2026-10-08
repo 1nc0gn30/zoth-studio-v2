@@ -331,7 +331,7 @@ export default function AirGapToolLockout({
                   Option 1: Deploy Bare-Metal Zoth OS
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6, mb: 2.5 }}>
-                  Boot into the sealed Zoth OS KVM hypervisor or flash the Linux ISO image. All 25 sovereign tools, 21-agent swarm multiplexers, and hardware enclave daemons come pre-configured with memory page-locking and zero outbound networking.
+                  Boot into the sealed Zoth OS KVM hypervisor or flash the Linux ISO image. All 30 sovereign tools, 21-agent swarm multiplexers, and hardware enclave daemons come pre-configured with memory page-locking and zero outbound networking.
                 </Typography>
               </Box>
 

@@ -2608,7 +2608,7 @@ wait $PID`;
           </HeroItem>
           <HeroItem>
             <Typography variant="body1" sx={{ color: textSecondary, maxWidth: 940, fontSize: { xs: '0.95rem', md: '1.05rem' }, mb: 2.5, lineHeight: 1.6 }}>
-              Standalone zero-egress site generator and multi-agent synthesis engine. Pull the micro-repo to build 6 production archetypes directly via CLI (<code style={{ color: gold }}>webgen_engine.py</code>), export master artifacts (<code style={{ color: gold }}>master-prompt.txt</code>, <code style={{ color: gold }}>master-instructions.sh</code>, <code style={{ color: gold }}>master-blueprint.json</code>, <code style={{ color: gold }}>llms.txt</code>), or connect AI agents directly via Model Context Protocol (<code style={{ color: gold }}>mcp_server.py</code>).
+              Standalone zero-egress site generator and multi-agent synthesis engine. Pull the micro-repo to build 6 production archetypes directly via CLI (<code style={{ color: gold }}>webgen_engine.py</code>), export master artifacts (<code style={{ color: gold }}>master-prompt.txt</code>, <code style={{ color: gold }}>master-instructions.sh</code>, <code style={{ color: gold }}>master-blueprint.json</code>, <code style={{ color: gold }}>llms.txt</code>), or connect AI agents directly via Model Context Protocol (<code style={{ color: gold }}>mcp_server.py</code>). The local site foundry is a separate runner. It keeps the agent you choose — Grok CLI, Hermes, OpenCode, Cline, Aider, AGY, or Claude Code — on the job until the site artifact is closed. OpenCode runs only when that CLI is installed. This page still drives the published Python engine.
             </Typography>
           </HeroItem>
 
@@ -2662,7 +2662,7 @@ wait $PID`;
                   <Chip label="STANDALONE" size="small" sx={{ bgcolor: goldBg, color: gold, fontFamily: mono, fontWeight: 800, fontSize: '0.65rem' }} />
                 </Typography>
                 <Typography variant="caption" sx={{ color: textSecondary, fontFamily: mono, fontSize: '0.74rem' }}>
-                  Pull the repo directly to execute zero-egress builds or equip AI agents (Claude, Cursor, Hermes, Cline) via MCP stdio.
+                  Pull the published Python engine for zero-egress builds. Its MCP server speaks to Claude, Cursor, Hermes, and Cline. The separate local foundry keeps Grok CLI, Hermes, OpenCode, Cline, Aider, AGY, or Claude Code working until the site artifact is closed.
                 </Typography>
               </div>
             </Box>
@@ -2743,7 +2743,7 @@ wait $PID`;
                   <Chip label="MCP 2024-11-05" size="small" sx={{ bgcolor: goldBg, color: gold, fontSize: '0.65rem', fontWeight: 800, fontFamily: mono }} />
                 </Box>
                 <Typography variant="body2" sx={{ color: textSecondary, fontSize: '0.8rem', mb: 1.5, lineHeight: 1.5 }}>
-                  Equips AI agents (Claude, Cursor, Hermes, Cline) with tools: <code style={{ color: gold }}>webgen_list_templates</code>, <code style={{ color: gold }}>webgen_generate_site</code>, and <code style={{ color: gold }}>webgen_generate_master_artifacts</code>.
+                  This MCP server equips Claude, Cursor, Hermes, and Cline with <code style={{ color: gold }}>webgen_list_templates</code>, <code style={{ color: gold }}>webgen_generate_site</code>, and <code style={{ color: gold }}>webgen_generate_master_artifacts</code>. Grok CLI, Aider, and AGY run in the separate local foundry, not through this server.
                 </Typography>
 
                 <Box sx={{ mb: 1.5, p: 1.5, bgcolor: dark ? '#05070F' : '#F1F5F9', border: `1px solid ${divider}`, borderRadius: 2 }}>

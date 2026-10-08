@@ -79,13 +79,13 @@ export default function ZothOSShowcasePage() {
     {
       icon: <SmartToyIcon sx={{ fontSize: 32 }} />,
       title: 'Frontier AI Agent Core Pre-Installed',
-      desc: 'The only operating system shipping with autonomous coding agents pre-configured: Claude Code, Cline, Aider, Hermes Swarm Agent, OpenCode, and Ollama local GGUF models. Zero subscription lock-in.',
+      desc: 'Ships with coding agents pre-configured: Grok CLI, Claude Code, Cline, Aider, Hermes, OpenCode, and AGY, plus Ollama bound to 127.0.0.1. v3.2 starts UFW default-deny and allows loopback, tailscale0, UDP 41641, and TCP 7890. Skills load from ~/.gemini/config/skills.',
       badge: 'FRONTIER AI',
     },
     {
       icon: <AutoAwesomeIcon sx={{ fontSize: 32 }} />,
       title: 'Integrated Zoth Studio v2 Cockpit',
-      desc: 'Native desktop deployment of Zoth Studio with 26 micro-tools, 24 workstations, 21 autonomous swarm agents, biomorphic STDP memory, and local WebMCP execution engine at /opt/zoth-studio.',
+      desc: 'Native desktop deployment of Zoth Studio with 30 micro-tools, 24 workstations, 21 autonomous swarm agents, biomorphic STDP memory, and local WebMCP execution engine at /opt/zoth-studio.',
       badge: 'STUDIO COCKPIT',
     },
     {
@@ -118,21 +118,21 @@ export default function ZothOSShowcasePage() {
     },
     {
       feature: 'Pre-Installed Frontier AI Coding Agents',
-      zoth: 'Claude Code, Cline, Aider, Hermes, OpenCode, agy',
+      zoth: 'Grok CLI, Claude Code, Cline, Aider, Hermes, OpenCode, AGY',
       kali: 'None',
       parrot: 'None',
       ubuntu: 'None',
     },
     {
       feature: 'Integrated AI Development Studio',
-      zoth: 'Zoth Studio v2 (26 micro-tools + 24 workstations)',
+      zoth: 'Zoth Studio v2 (30 micro-tools + 24 workstations)',
       kali: 'None',
       parrot: 'None',
       ubuntu: 'None',
     },
     {
       feature: 'Local LLM Inference Engine',
-      zoth: 'Ollama + Silicon Models Pre-Wired',
+      zoth: 'Ollama on 127.0.0.1',
       kali: 'Manual setup',
       parrot: 'Manual setup',
       ubuntu: 'Manual setup',
@@ -191,7 +191,7 @@ export default function ZothOSShowcasePage() {
           <HeroItem>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mt: 3, mb: 1, flexWrap: 'wrap' }}>
               <Chip
-                label="ZOTH OS 1.0 RELEASE"
+                label="ZOTH OS v3.2"
                 size="small"
                 sx={{
                   bgcolor: goldWash,
@@ -256,7 +256,7 @@ export default function ZothOSShowcasePage() {
                 mb: 4,
               }}
             >
-              A bootable Linux operating system engineered by NullAI Tech. Combines the full offensive security arsenal of Kali and Parrot with pre-configured frontier AI coding agents, the complete Zoth Studio v2 development suite, and zero-egress hardware isolation.
+              A bootable Linux operating system engineered by NullAI Tech. Combines the Kali and Parrot security arsenal with the Zoth Studio v2 suite. The shipped release is v3.2, with Grok CLI, Claude Code, Cline, Aider, Hermes, OpenCode, and AGY. Ollama listens on 127.0.0.1. UFW starts default-deny and allows loopback, tailscale0, UDP 41641, and TCP 7890. Skills load from ~/.gemini/config/skills.
             </Typography>
           </HeroItem>
           <HeroItem>

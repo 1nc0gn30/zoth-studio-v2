@@ -85,7 +85,7 @@ Decoupled and responsive, the 24 workstations provide full operational environme
 - **Web & Automation**: Subsweep Lead Scanner, Omnipost Social Engine, CWV Speed Engine, PWA Manifest Builder, Schema Illustrator Studio.
 - **Intelligence & Models**: AI Model Foundry, DeepSearch Research Agent, PromptMaster Studio, Session Chronicle, Agent Experience Powerhouse (`/ax`).
 
-### 1.2 25 Authentic Sovereign Micro-Tools
+### 1.2 30 Authentic Sovereign Micro-Tools
 Zero-network developer utilities built for air-gapped security:
 1. `adytum-alchemist-ai-workflow` - 22-key hermetic planning rite and incubation gate.
 2. `azoth-local-agent` - Archon core orchestrator for local zero-telemetry task dispatching.
@@ -93,15 +93,15 @@ Zero-network developer utilities built for air-gapped security:
 4. `neuro-memory-daemon` - STDP biomorphic memory vector engine & cross-session recall on loopback :8094.
 5. `vector-search-engine` - Local HNSW vector index engine for fast zero-latency semantic similarity search.
 6. `deepsearch-research-agent` - Autonomous multi-source research agent with grounded inline citations.
-7. `promptmaster-studio` - System prompt engineering workstation, DSPy prompt optimizer, and template store.
+7. `promptmaster-studio` - In-browser prompt optimizer. Pro is $19, and the live page has a free plan.
 8. `hexstrike-arsenal` - Autonomous penetration audit suite, CVE matrix inspector, and exploit payload lab.
-9. `envguard-secrets-vault` - Argon2id + AES-256-GCM hardware vault for zero-cloud secret storage.
+9. `envguard-secrets-vault` - Argon2id + AES-256-GCM hardware vault for zero-cloud secret storage. Live app is $29.
 10. `jwt-inspector-guard` - In-browser JWT token decoder, cryptographic signature validator, and claim auditor.
 11. `payload-entropy-studio` - In-browser Shannon entropy analysis tool for detecting obfuscated payloads.
 12. `web-security-guard` - Security headers auditor, CSP validator, and WAF protection scanner.
 13. `polyglot-framework-exporter` - In-browser exporter from React/JSX to HTML/CSS, Vue, Svelte, and Solid.js.
-14. `aeo-graph-engine` - Answer Engine Optimization knowledge graph builder & Schema.org entity linker.
-15. `cwv-speed-engine` - Core Web Vitals LCP, CLS, and INP diagnostic engine & asset minifier.
+14. `aeo-graph-engine` - Answer Engine Optimization knowledge graph builder and Schema.org entity linker. Live app is $49.
+15. `cwv-speed-engine` - Core Web Vitals LCP, CLS, and INP diagnostic engine and asset minifier. Live app is $39.
 16. `vision-gesture-control` - In-browser MediaPipe webcam hand-gesture recognition interface controller.
 17. `subsweep-lead-scanner` - Subdomain recon scanner and OSINT lead enrichment engine.
 18. `omnipost-social-engine` - Multi-platform social content scheduler and cross-post automation engine.
@@ -110,8 +110,13 @@ Zero-network developer utilities built for air-gapped security:
 21. `pwa-manifest-builder` - Progressive Web App manifest authoring, icon generator, and offline worker builder.
 22. `regex-droid-builder` - Visual regular expression tester, neural explainer, and syntax highlighter.
 23. `schema-illustrator-studio` - Interactive JSON-Schema to database diagram visualizer and code generator.
-24. `zoth-webgen` - Deterministic zero-cloud website generator and layout synthesizer with MCP server.
+24. `zoth-webgen` - Published Python generator with 6 archetypes and an MCP server. The local site foundry keeps the chosen agent working until the site artifact is closed.
 25. `zoth-swarm-multiplexer` - 21-terminal autonomous agent multiplexer daemon with hot-swappable harnesses.
+26. `webmcp-protocol-inspector` - In-browser MCP JSON-RPC inspector and tool schema dispatcher.
+27. `anderson-security-sentinel` - RF sentinel with angle-of-arrival tracking. Its dashboard port is TCP 7890.
+28. `badge3d-coin-generator` - Browser 3D coin, medallion, and relief badge generator. Live checkout is $19. The page also lists $79 regular.
+29. `robots-txt-auditor` - Robots.txt and frontier-crawler auditor. Live app is $19.
+30. `city-desk` - One studio writes the finished page for a trade and a city. Boise painters $800, plumbers $900, HVAC $1,100. Those are the page price, not a job quote.
 
 ### 1.3 Lucy Cognitive Oracle & STDP Synaptic Memory
 Governed by biomorphic Spike-Timing-Dependent Plasticity (STDP):

@@ -363,7 +363,7 @@ Shannon entropy gatekeeper active on all inter-process channels.`,
 
     `npm run zoth -- pull --all
 
-Clones all 25 catalog entries that are published into ./tools.
+Clones all 30 catalog entries that are published into ./tools.
 Runs local invariant verification before staging tools.`
   ];
 
@@ -1702,7 +1702,7 @@ npm run preview`}
                   </Box>
 
                   <Typography variant="body1" color="text.secondary" paragraph>
-                    Comprehensive interactive index of all 25 sovereign tools and workspaces across agent
+                    Comprehensive interactive index of all 30 sovereign tools and workspaces across agent
                     coordination, neural memory, Byzantine consensus, code development, and hardware
                     sanctum domains.
                   </Typography>
@@ -1734,7 +1734,7 @@ npm run preview`}
                   </Box>
 
                   <Typography variant="body1" color="text.secondary" paragraph>
-                    Essential operations for running Zoth Studio as an air-gapped desktop workstation, configuring local Ollama models with zero egress, and installing the 25 micro-tools into your global PATH.
+                    Essential operations for running Zoth Studio as an air-gapped desktop workstation, configuring local Ollama models with zero egress, and installing the 30 micro-tools into your global PATH.
                   </Typography>
 
                   {/* 1. Electron Desktop Workstation */}
@@ -1783,7 +1783,7 @@ export ZOTH_DEFAULT_MODEL="qwen2.5-coder:32b"`}
                     C. Installing Micro-Tools into /usr/local/bin
                   </Typography>
                   <Typography variant="body2" color="text.secondary" paragraph>
-                    Link any of the 25 micro-tools into your system PATH for immediate command-line execution:
+                    Link any of the 30 micro-tools into your system PATH for immediate command-line execution:
                   </Typography>
                   <CodeSnippet
                     title="GLOBAL PATH INSTALLATION"

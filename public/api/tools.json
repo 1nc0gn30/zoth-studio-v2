@@ -1,7 +1,7 @@
 {
   "schema": "zoth/tools-static/v1",
-  "generated_at": "2026-09-26T06:23:17.951Z",
-  "tool_count": 25,
+  "generated_at": "2026-10-08T03:10:39.598Z",
+  "tool_count": 30,
   "tools": [
     {
       "id": "adytum-alchemist-ai-workflow",
@@ -102,7 +102,7 @@
     {
       "id": "promptmaster-studio",
       "name": "PromptMaster Studio",
-      "description": "System prompt engineering workstation, DSPy prompt optimizer, and template store.",
+      "description": "In-browser prompt optimizer. AST linting, scoring, and token costs stay in the browser. Pro is $19, and the live page has a free plan.",
       "category": "AI & Knowledge",
       "github": "https://github.com/NullAITech/promptmaster-studio",
       "version": "3.0.0",
@@ -134,7 +134,7 @@
     {
       "id": "envguard-secrets-vault",
       "name": "EnvGuard Secrets Vault",
-      "description": "Argon2id + AES-256-GCM hardware vault for zero-cloud secret storage and leak scanning.",
+      "description": "Argon2id + AES-256-GCM hardware vault for zero-cloud secret storage and leak scanning. Live app is $29.",
       "category": "Security & Recon",
       "github": "https://github.com/NullAITech/envguard-secrets-vault",
       "version": "2.2.0",
@@ -211,7 +211,7 @@
     {
       "id": "aeo-graph-engine",
       "name": "AEO Graph Engine",
-      "description": "Answer Engine Optimization knowledge graph builder & Schema.org entity linker.",
+      "description": "Answer Engine Optimization knowledge graph builder and Schema.org entity linker. Live app is $49.",
       "category": "Autonomous Web",
       "github": "https://github.com/NullAITech/aeo-graph-engine",
       "version": "1.4.0",
@@ -227,7 +227,7 @@
     {
       "id": "cwv-speed-engine",
       "name": "CWV Speed Engine",
-      "description": "Core Web Vitals LCP, CLS, and INP diagnostic engine & asset minifier.",
+      "description": "Core Web Vitals LCP, CLS, and INP diagnostic engine and asset minifier. Live app is $39.",
       "category": "Autonomous Web",
       "github": "https://github.com/NullAITech/cwv-speed-engine",
       "version": "2.0.1",
@@ -367,7 +367,7 @@
     {
       "id": "zoth-webgen",
       "name": "Zoth WebGen Foundry",
-      "description": "Deterministic zero-cloud website generator and layout synthesizer with 6 production archetypes, MCP server, and automated tests.",
+      "description": "Published Python generator with 6 archetypes and an MCP server. A separate local site foundry keeps Grok CLI, Hermes, OpenCode, Cline, Aider, AGY, or Claude Code working until the site artifact is closed.",
       "category": "Autonomous Web",
       "github": "https://github.com/NullAITech/zoth-webgen",
       "version": "2.0.0",
@@ -388,6 +388,81 @@
       "github": "https://github.com/NullAITech/zoth-swarm-multiplexer",
       "version": "2.5.0",
       "pull": "git clone https://github.com/NullAITech/zoth-swarm-multiplexer.git && cd zoth-swarm-multiplexer && python3 swarm_cli.py status",
+      "execution_type": "local_cli",
+      "runtimes": [
+        "python",
+        "node",
+        "cli",
+        "zero-egress"
+      ]
+    },
+    {
+      "id": "webmcp-protocol-inspector",
+      "name": "WebMCP Protocol Suite",
+      "description": "In-browser Model Context Protocol (MCP) JSON-RPC 2.0 inspector, tool schema dispatcher, and Zoth OS bare-metal video showcase.",
+      "category": "AI & Knowledge",
+      "github": "https://github.com/NullAITech/zoth-studio-v2",
+      "version": "1.0.0",
+      "pull": "npx zoth pull webmcp-protocol-inspector && npx zoth mcp serve --port 8094",
+      "execution_type": "webgpu",
+      "runtimes": [
+        "webgpu",
+        "browser",
+        "zero-egress"
+      ]
+    },
+    {
+      "id": "anderson-security-sentinel",
+      "name": "Anderson Security Sentinel",
+      "description": "Tri-transceiver synthetic aperture array, differential RF wall discriminator, real-time AoA & optical camera tracking.",
+      "category": "Security & OpSec",
+      "github": "https://github.com/1nc0gn30/anderson-security-sentinel",
+      "version": "1.0.0",
+      "pull": "git clone https://github.com/1nc0gn30/anderson-security-sentinel.git && cd anderson-security-sentinel && python3 engine/sentinel.py",
+      "execution_type": "local_cli",
+      "runtimes": [
+        "python",
+        "node",
+        "cli",
+        "zero-egress"
+      ]
+    },
+    {
+      "id": "badge3d-coin-generator",
+      "name": "Badge3D Coin Generator",
+      "description": "Browser 3D coin, medallion, and relief badge generator. Live checkout is $19. The page also lists $79 regular.",
+      "category": "Media & 3D",
+      "github": "https://github.com/1nc0gn30/badge3d-coin-generator",
+      "version": "1.0.0",
+      "pull": "git clone https://github.com/1nc0gn30/badge3d-coin-generator.git && cd badge3d-coin-generator && python3 -m http.server 8080",
+      "execution_type": "browser",
+      "runtimes": [
+        "browser",
+        "zero-egress"
+      ]
+    },
+    {
+      "id": "robots-txt-auditor",
+      "name": "Robots.txt & AEO Auditor",
+      "description": "Frontier AI bot crawler validation, Googlebot and Perplexity rate analysis, and Schema.org graph verification. Live app is $19.",
+      "category": "Growth & SEO",
+      "github": "https://github.com/1nc0gn30/robots-txt-auditor",
+      "version": "1.0.0",
+      "pull": "git clone https://github.com/1nc0gn30/robots-txt-auditor.git && cd robots-txt-auditor && python3 -m http.server 8080",
+      "execution_type": "browser",
+      "runtimes": [
+        "browser",
+        "zero-egress"
+      ]
+    },
+    {
+      "id": "city-desk",
+      "name": "City Desk",
+      "description": "One studio writes the finished page for a trade and a city. Boise painters $800, plumbers $900, HVAC $1,100. Those are the page price, not a job quote. Owner name, phone, and email stay blank.",
+      "category": "Growth & SEO",
+      "github": "https://github.com/1nc0gn30/city-desk",
+      "version": "1.0.0",
+      "pull": "git clone https://github.com/1nc0gn30/city-desk.git && cd city-desk && node build.js",
       "execution_type": "local_cli",
       "runtimes": [
         "python",

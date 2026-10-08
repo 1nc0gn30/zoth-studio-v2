@@ -23,7 +23,7 @@ No telemetry beacons, cloud analytics, tracking pixels, or data exfiltration rou
   },
   {
     id: 'client-side-micro-tools',
-    q: 'How do the 25 sovereign tools execute in the browser without server dependencies?',
+    q: 'How do the 30 sovereign tools execute in the browser without server dependencies?',
     category: 'Architecture',
     keywords: ['micro-tools', 'standalone', 'tools', 'browser', 'client-side', 'execution', 'webgpu', 'wasm', 'webcrypto', 'zero server'],
     a: `All 25 authentic tools in Zoth Studio v2 are engineered as standalone, client-executable micro-applications bundled into the Vite production distribution.
@@ -51,7 +51,7 @@ Tools launch instantly in < 16ms with zero server latency.`,
 
 • npx zoth status: Inspects the local development environment, probes hardware acceleration capabilities, and verifies tool repository integrity.
 • npx zoth up: Initializes local studio services, offline cache warmups, and development orchestrators.
-• npx zoth pull <tool>: Clones any of the 25 sovereign micro-tool repositories from the @NullAITech ecosystem into an isolated ./tools/<tool> directory with independent package configs.
+• npx zoth pull <tool>: Clones any of the 30 sovereign micro-tool repositories from the @NullAITech ecosystem into an isolated ./tools/<tool> directory with independent package configs.
 
 This allows developers to inspect, modify, or embed individual tools into custom pipelines or run them as dedicated local micro-apps.`,
     summary: 'npx zoth provides local CLI control to scaffold sovereign tool repositories, verify environment readiness, and run tools in standalone micro-app isolation.',
@@ -172,10 +172,10 @@ Every proposed code transformation computes a deterministic SHA-256 Merkle trie 
   },
   {
     id: 'tactical-cadres-organization',
-    q: 'What are the 5 Tactical Cadres and how are the 25 sovereign tools categorized?',
+    q: 'What are the 5 Tactical Cadres and how are the 30 sovereign tools categorized?',
     category: 'Architecture',
     keywords: ['cadres', '5 cadres', 'categories', 'tools', 'security', 'swarm', 'velocity', 'memory', 'crypto', 'arsenal'],
-    a: `The studio organizes its 25 sovereign tools into 5 tactical domains:
+    a: `The studio organizes its 30 sovereign tools into 5 tactical domains:
 
 1. Security & Recon: HexStrike vulnerability auditor, SubSweep subdomain scanner, EnvGuard secrets detector, and CyberChef format processor.
 2. Swarm & Core: 21-Agent telemetry radar, Byzantine consensus chamber, and sovereign agent communication bridge.
@@ -230,7 +230,7 @@ All three computational tiers produce bit-identical deterministic outputs, ensur
     a: `Zoth Studio implements the Anthropic Model Context Protocol (MCP) specification to bridge tools with external agent frameworks.
 
 External agent environments (such as Claude Code, Hermes Agent, Cursor, or local agents) can connect to the studio interface:
-• tools/list: Discovers all 25 sovereign tools with complete input parameter schemas.
+• tools/list: Discovers all 30 sovereign tools with complete input parameter schemas.
 • tools/call: Dispatches execution requests against validated JSON-Schema contracts.
 • resources/read: Inspects local memory states or architectural specifications.
 
@@ -265,7 +265,7 @@ Agents transmit typed messages across unidirectional event channels, signing pay
     a: `Yes. Zoth Studio is built from the ground up for sovereign, offline-first reliability.
 
 Once loaded or saved locally:
-• All 25 micro-tools, WGSL shaders, UI icons, and CSS stylesheets are bundled directly into static assets without third-party CDN links.
+• All 30 micro-tools, WGSL shaders, UI icons, and CSS stylesheets are bundled directly into static assets without third-party CDN links.
 • Static routing and state persistence rely entirely on browser-native storage (IndexedDB, Web Crypto, and local caches).
 • No remote API tokens or internet connections are required to run security audits, compile regexes, test WCAG contrast, or simulate multi-agent consensus.`,
     summary: '100% offline-first architecture with local asset caching, zero CDN dependencies, and air-gapped readiness.',

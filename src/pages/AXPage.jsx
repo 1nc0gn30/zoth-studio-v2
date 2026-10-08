@@ -128,7 +128,7 @@ SECTION 2: ZERO-EGRESS AIR-GAPPED AUDIT INVARIANTS
 ================================================================================
 SECTION 3: MACHINE-READABLE CONTRACTS & TOOL SCHEMAS
 ================================================================================
-- Tool Index API: /api/tools.json (25 sovereign CLI tools and micro-repos)
+- Tool Index API: /api/tools.json (30 sovereign CLI tools and micro-repos)
 - MCP Schemas: /api/netlify-ax-mcp.json (Model Context Protocol endpoints)
 - Agent Crawler Rules: /ai.txt
 - Full XML Route Index: /sitemap.xml (72 static routes)`

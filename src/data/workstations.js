@@ -156,7 +156,7 @@ export const workstations = [
     path: "/studio/webgen.html",
     band: "Build",
     type: "integrated_tool",
-    description: "Autonomous multi-framework website generator with 6 production archetypes and MCP integration.",
+    description: "Published Python generator with 6 archetypes and an MCP server. The separate local site foundry keeps the chosen agent working until the site artifact is closed.",
     alsoInApp: "/webgen",
     toolRepoId: "zoth-webgen",
     pullCommand: "git clone https://github.com/NullAITech/zoth-webgen.git && cd zoth-webgen && python3 webgen_engine.py --help"

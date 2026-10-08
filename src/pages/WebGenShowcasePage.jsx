@@ -81,7 +81,7 @@ export default function WebGenShowcasePage() {
                 fontSize: { xs: '1rem', md: '1.15rem' }, lineHeight: 1.6,
               }}
             >
-              Type a prompt, pick a framework, and get a production-ready website — all running locally on your machine.
+              Type a prompt, pick a framework, and get a production-ready website on your machine. The published engine is the Python generator. The local site foundry keeps Grok CLI, Hermes, OpenCode, Cline, Aider, AGY, or Claude Code working until the site artifact is closed.
             </Typography>
           </HeroItem>
         </HeroReveal>

@@ -226,13 +226,13 @@ export const toolsDocumentation = {
   },
 
   'promptmaster-studio': {
-    whyUse: 'Systematic prompt engineering, template management, and DSPy algorithmic prompt optimization workstation.',
-    problemSolved: 'Replaces ad-hoc trial-and-error prompt tweaking with rigorous evaluation metrics, few-shot bootstrapping, and versioned prompt artifacts.',
-    architecture: 'Python + TypeScript dual architecture with DSPy optimization framework support and local YAML prompt registries.',
+    whyUse: 'In-browser prompt optimizer. A rough prompt is linted, scored, and rewritten without leaving the browser. Pro is $19. The live page also has a free plan.',
+    problemSolved: 'Keeps the prompt on the machine. AST linting, scoring, and multi-model token costs run in the browser and are not sent to a third-party server.',
+    architecture: 'The live app at promptmaster-studio.netlify.app is browser JavaScript. The published repo also documents a Python standard-library CLI. It is not a DSPy template store.',
     aiAgentProtocol: {
       mcpTool: 'prompt_optimize',
-      description: 'Optimize a prompt template against a target verification metric using DSPy.',
-      cliExample: 'promptmaster optimize --template ./prompts/code_review.yaml --metric strict_syntax',
+      description: 'Lint and rewrite a prompt in the local optimizer. The prompt stays in the browser.',
+      cliExample: 'promptmaster optimize "Write a sorting function" --target anthropic --cot',
       inputSchema: {
         type: 'object',
         properties: {
@@ -252,11 +252,11 @@ export const toolsDocumentation = {
       'promptmaster test-all'
     ],
     features: [
-      'DSPy prompt compilation & automated few-shot injection',
-      'Token budget counter for Ollama, Claude, and OpenAI',
-      'Prompt diff & regression detector across LLM versions',
-      'Exportable to Hermes skills, Antigravity prompts, and Cursor rules',
-      'Zero cloud dependency'
+      'In-browser AST lint, score, and rewrite',
+      'Token budget for the models named on the live page',
+      'Prompt stays in the browser',
+      'Pro is $19. A free plan is on the live page',
+      'Published repo also documents a local Python CLI'
     ]
   },
 
@@ -758,8 +758,8 @@ export const toolsDocumentation = {
   },
 
   'badge3d-coin-generator': {
-    whyUse: 'WebGL real-time procedural coin minter, glassmorphic metallic badges, and pure CSS conic border lighting.',
-    problemSolved: 'Eliminates flat 2D graphic assets in favor of real-time interactive 3D coins and badges ready for Web3 tokenomics.',
+    whyUse: 'Browser 3D coin, medallion, and relief badge generator. Live checkout is $19. The page also lists $79 regular.',
+    problemSolved: 'Mints a 3D coin in the browser and exports a mesh. The live page takes a card checkout and also lists a Solana rail.',
     architecture: 'Vanilla Three.js and WebGL canvas with parametric edge-milling geometry and STL/OBJ/GLB 3D export.',
     aiAgentProtocol: {
       mcpTool: 'badge3d_mint_mesh',
@@ -824,12 +824,12 @@ export const toolsDocumentation = {
   },
 
   'city-desk': {
-    whyUse: 'High-converting split-hero contractor directory engine generating 1,000+ localized trade pages with zero horizontal overflow.',
-    problemSolved: 'Replaces generic, cookie-cutter agency directory pages with high-contrast, editorial typography, real pricing calculators, and localized trade authority.',
-    architecture: 'Deterministic Node.js static site generator compiling 1,000 city/trade static pages in under 2 seconds.',
+    whyUse: 'One studio writes the finished page for a trade and a city. The page is what gets sent. City Desk is not a local office and not a contractor directory.',
+    problemSolved: 'The owner fills in name, phone, and email. The page does not invent reviews, rankings, a local shop, a reply address, or a domain. The Boise page prices are the price of the page, not a job quote.',
+    architecture: 'Node static generator. It rebuilds the full finished set together so a later build does not revert a page. Painters use the tape layout. Other trades use the same bones with an ink rule.',
     aiAgentProtocol: {
       mcpTool: 'citydesk_build_pages',
-      description: 'Generate 1,000 localized static pages across 50 US metros and 20 service trades.',
+      description: 'Build the finished page set. Each page is one trade in one city. The first sendable set is Boise painters, plumbers, and HVAC.',
       cliExample: 'cd city-desk && node build.js',
       inputSchema: {
         type: 'object',
@@ -850,11 +850,11 @@ export const toolsDocumentation = {
       'python3 -m http.server 8877 --directory site'
     ],
     features: [
-      'Editorial split-hero layout with painter tape high-contrast styling',
-      'Interactive trade pricing calculators with zero fake work',
-      'Accordion FAQs answering trade-specific homeowner objections',
-      'Strict zero horizontal overflow across 375px mobile, tablet, and desktop',
-      'Subtle, isolated $800 localized asset handoff offer block at the bottom'
+      'Finished page for one trade in one city, sent as the site',
+      'Boise painters $800, plumbers $900, HVAC $1,100, labeled as the page price',
+      'Owner name, phone, and email stay blank lines',
+      'Footer says this is not a local office',
+      'No reviews, rankings, invented neighborhoods, reply address, or domain'
     ]
   }
 };

@@ -4,7 +4,7 @@
    Strategy: Cache-First / Stale-While-Revalidate with Clean Shell Fallback
    ========================================================================== */
 
-const CACHE_VERSION = 'zoth-v2.0.0-offline';
+const CACHE_VERSION = 'zoth-v2.0.1-offline';
 const SHELL_CACHE = `zoth-shell-${CACHE_VERSION}`;
 const RUNTIME_CACHE = `zoth-runtime-${CACHE_VERSION}`;
 

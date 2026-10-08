@@ -1290,7 +1290,7 @@ export function AeoGraphEngineTool() {
                 https://zoth.nullai.tech
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
-                Air-gapped development studio featuring 24 workstations, 25 sovereign tools, biomorphic STDP memory, and Byzantine consensus triangulation.
+                Air-gapped development studio featuring 24 workstations, 30 sovereign tools, biomorphic STDP memory, and Byzantine consensus triangulation.
               </Typography>
             </Paper>
           </Paper>

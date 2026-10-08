@@ -48,7 +48,7 @@ import { HeroReveal, HeroItem, ParallaxGlow, RevealOnScroll, StaggerChildren, St
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const qemu = 'qemu-system-x86_64 -enable-kvm -m 8192 -smp 4 -hda zoth-agent-os.qcow2';
-const isoCmd = 'sudo dd if=zothos-2.0-amd64.iso of=/dev/sdX status=progress bs=4M conv=fdatasync';
+const isoCmd = 'sudo dd if=zothos-3.2-amd64.iso of=/dev/sdX status=progress bs=4M conv=fdatasync';
 const microRunnerCmd = 'curl -fsSL https://get.zoth.io/micro-runner.sh | bash';
 const gitCloneCmd = 'git clone https://github.com/NullAITech/zoth-os.git && cd zoth-os';
 
@@ -288,7 +288,7 @@ export default function ZothOSPage() {
       id: 1,
       type: 'system',
       text: [
-        'ZOTH SOVEREIGN OS v2.0.0-RELEASE (x86_64 Hardened Microkernel)',
+        'ZOTH SOVEREIGN OS v3.2.0-RELEASE (x86_64 Hardened Microkernel)',
         'Built with Zero-Egress Invariant & Air-Gapped Cryptographic Enclaves.',
         'Type "help" to inspect commands or execute "zoth boot --kvm" to run virtual boot sequence.',
       ].join('\n'),
@@ -550,7 +550,7 @@ export default function ZothOSPage() {
     return {
       $schema: 'https://zoth.io/schemas/bootloader-manifest-v2.json',
       os_name: 'ZothOS Sovereign Distribution',
-      version: '2.0.0-hardened-lts',
+      version: '3.2.0',
       target_architecture: 'x86_64',
       kernel_build: 'vmlinuz-6.8.0-zoth-hardened-x86_64',
       initrd_image: 'initrd.img-6.8.0-zoth-hardened',
@@ -658,7 +658,7 @@ export default function ZothOSPage() {
         id: Date.now() + 1,
         type: 'output',
         text: [
-          'Zoth OS Sovereign Micro-Kernel Diagnostic CLI v2.0.0',
+          'Zoth OS Sovereign Micro-Kernel Diagnostic CLI v3.2.0',
           'Usage: [command] [options...]',
           '',
           'Available diagnostic commands:',
@@ -899,7 +899,7 @@ export default function ZothOSPage() {
               </HeroItem>
               <HeroItem>
                 <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 760, lineHeight: 1.65, fontSize: '1.02rem' }}>
-                  Zoth OS is a custom Linux distribution engineered to run Zoth Studio, Ollama, all micro-tools, and the local memory daemon out-of-the-box with zero setup hassle. Flashed to bare metal or run via QEMU/KVM, it guarantees <span className="text-highlight-gold">100% Zero-Telemetry Local Operation</span>.
+                  The shipped release is v3.2. Zoth OS is a custom Linux distribution engineered to run Zoth Studio, Ollama, all micro-tools, and the local memory daemon out-of-the-box with zero setup hassle. Flashed to bare metal or run via QEMU/KVM, it guarantees <span className="text-highlight-gold">100% Zero-Telemetry Local Operation</span>.
                 </Typography>
               </HeroItem>
             </Box>
@@ -1048,7 +1048,7 @@ export default function ZothOSPage() {
                 Native ZothOS Application & CLI Launchpad
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Directly trigger preinstalled tools, sovereign CLI agents, and offensive security suites into dedicated desktop shells.
+                v3.2 is the shipped image. UFW starts default-deny and allows loopback, tailscale0, UDP 41641, and TCP 7890. Ollama listens on 127.0.0.1. Skills load from ~/.gemini/config/skills. Grok CLI, Cline, Aider, and AGY are on the image. This launchpad only starts shells the studio host already recognizes. The OpenCode button opens the OS menu entry. The OpenCode CLI runs only when that CLI is installed.
               </Typography>
             </Box>
 
@@ -2235,7 +2235,7 @@ export default function ZothOSPage() {
             subtitle="Zero-telemetry air-gapped operating system kernel for autonomous agent swarms, hardware enclave encryption, and memory vaults."
             toolTitle="Option 1: Micro-Runner CLI & Bootable ISO"
             toolTag="CLI & BARE METAL"
-            toolDescription="Download and flash bootable Zoth OS image (zothos-2.0-amd64.iso) for direct bare-metal deployment, or boot instantly via the micro-runner CLI."
+            toolDescription="Download and flash bootable Zoth OS image (zothos-3.2-amd64.iso) for direct bare-metal deployment, or boot instantly via the micro-runner CLI."
             toolRepo="https://github.com/NullAITech/zoth-os"
             toolCommand="curl -fsSL https://get.zoth.io/micro-runner.sh | bash"
             osRepo="https://github.com/NullAITech/zoth-os"
@@ -2288,7 +2288,7 @@ export default function ZothOSPage() {
           </Box>
 
           <Typography variant="body2" sx={{ color: isDark ? '#94A3B8' : '#CBD5E1', mb: 2 }}>
-            This cryptographic manifest links the bare-metal bootloader to isolated enclave invariants. The checksums below match verified Zoth OS v2 ISO and QEMU images.
+            This dialog is a studio preview of the bootloader manifest. The hashes here are not the signed v3.2 release attestation.
           </Typography>
 
           <Box
