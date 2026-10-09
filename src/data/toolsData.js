@@ -451,6 +451,21 @@ export const microTools = [
     liveUrl: 'https://capsule.nullai.tech',
     version: '0.1.0',
     pull: 'git clone https://github.com/1nc0gn30/agent-capsule-jail.git && cd agent-capsule-jail && ./bin/agent-capsule serve --port 8105',
+  },
+  {
+    id: 'agent-policy-auditor',
+    published: true,
+    name: 'Agent Policy Auditor',
+    repo: 'agent-policy-auditor',
+    category: 'Security & Enclave',
+    executionType: 'local_cli',
+    github: 'https://github.com/1nc0gn30/agent-policy-auditor',
+    description: 'Cryptographic capability leaser, permission broker, and OWASP LLM manifest security auditor.',
+    localPort: 8106,
+    localUrl: 'http://127.0.0.1:8106',
+    liveUrl: 'https://policy.nullai.tech',
+    version: '0.1.0',
+    pull: 'git clone https://github.com/1nc0gn30/agent-policy-auditor.git && cd agent-policy-auditor && ./bin/agent-policy serve --port 8106',
   }
 ];
 

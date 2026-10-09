@@ -3697,3 +3697,466 @@ export function AgentCapsuleJailTool() {
   );
 }
 
+/* ==========================================================================
+   TOOL 21: Agent Policy Auditor (agent-policy-auditor)
+   Features: Cryptographic Capability Leaser, Permission Broker,
+             Active TTL Countdown HUD, and Static Manifest Security Auditor.
+   ========================================================================== */
+export function AgentPolicyAuditorTool() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [stats, setStats] = useState(null);
+  const [leases, setLeases] = useState([]);
+  const [agentId, setAgentId] = useState('pantheon_01');
+  const [capability, setCapability] = useState('FS_WRITE');
+  const [target, setTarget] = useState('~/NullAITech/**');
+  const [durationSec, setDurationSec] = useState(300);
+  const [budgetUsd, setBudgetUsd] = useState(0.50);
+  const [issuing, setIssuing] = useState(false);
+
+  // Manifest audit state
+  const [manifestText, setManifestText] = useState('{\n  "name": "pantheon_builder",\n  "tools": [\n    {\n      "name": "bash_terminal",\n      "description": "Executes shell commands",\n      "parameters": {"type": "object", "properties": {"cmd": {"type": "string"}}}\n    }\n  ]\n}');
+  const [auditing, setAuditing] = useState(false);
+  const [auditReport, setAuditReport] = useState(null);
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  // Demo fallback leases
+  const DEMO_LEASES = [
+    { lease_id: 'lease_4a81b2', agent_id: 'pantheon_01', capability: 'FS_WRITE', target: '~/NullAITech/**', max_budget_usd: 0.50, ttl_seconds: 245 },
+    { lease_id: 'lease_9c23f1', agent_id: 'pantheon_02', capability: 'NET_EGRESS', target: '*.nullai.tech', max_budget_usd: 0.00, ttl_seconds: 180 },
+  ];
+
+  const fetchBrokerData = async () => {
+    try {
+      const sRes = await fetch('http://127.0.0.1:8106/api/stats', { signal: AbortSignal.timeout(1200) });
+      if (sRes.ok) {
+        const sData = await sRes.json();
+        setDaemonOnline(true);
+        setStats(sData);
+
+        const lRes = await fetch('http://127.0.0.1:8106/api/leases');
+        if (lRes.ok) {
+          const lData = await lRes.json();
+          setLeases(lData.leases || []);
+        }
+        return;
+      }
+    } catch {
+      // offline fallback
+    }
+    setDaemonOnline(false);
+    setLeases(DEMO_LEASES);
+  };
+
+  useEffect(() => {
+    fetchBrokerData();
+    const interval = setInterval(fetchBrokerData, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleIssueLease = async () => {
+    setIssuing(true);
+    if (daemonOnline) {
+      try {
+        const res = await fetch('http://127.0.0.1:8106/api/leases/grant', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            agent_id: agentId,
+            capability,
+            target,
+            duration_sec: durationSec,
+            budget_usd: budgetUsd,
+          }),
+        });
+        if (res.ok) {
+          setIssuing(false);
+          fetchBrokerData();
+          return;
+        }
+      } catch {}
+    }
+
+    setTimeout(() => {
+      setIssuing(false);
+      const newMock = {
+        lease_id: `lease_${Math.random().toString(16).slice(2, 8)}`,
+        agent_id: agentId,
+        capability,
+        target,
+        max_budget_usd: budgetUsd,
+        ttl_seconds: durationSec,
+      };
+      setLeases((prev) => [newMock, ...prev]);
+    }, 300);
+  };
+
+  const handleRevokeLease = async (leaseId) => {
+    if (daemonOnline) {
+      try {
+        await fetch('http://127.0.0.1:8106/api/leases/revoke', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lease_id: leaseId }),
+        });
+        fetchBrokerData();
+        return;
+      } catch {}
+    }
+    setLeases((prev) => prev.filter((l) => l.lease_id !== leaseId));
+  };
+
+  const handleAuditManifest = async () => {
+    setAuditing(true);
+    setAuditReport(null);
+
+    if (daemonOnline) {
+      try {
+        const res = await fetch('http://127.0.0.1:8106/api/audit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ manifest: manifestText, name: 'custom_mcp_agent' }),
+        });
+        if (res.ok) {
+          const report = await res.json();
+          setAuditReport(report);
+          setAuditing(false);
+          return;
+        }
+      } catch {}
+    }
+
+    setTimeout(() => {
+      setAuditing(false);
+      setAuditReport({
+        security_score: 75,
+        risk_level: 'MEDIUM',
+        total_findings: 1,
+        findings: [
+          {
+            rule_id: 'EXEC-002-UNSANDBOXED-SHELL',
+            severity: 'HIGH',
+            description: "Tool 'bash_terminal' provides shell execution without sandbox or quota boundaries.",
+            remediation: 'Wrap subprocess in Agent Capsule Jail (:8105) or apply resource limits.',
+          },
+        ],
+        compliance_frameworks: {
+          NIST_AI_RMF: 'NON_COMPLIANT',
+          OWASP_LLM_TOP_10: 'ACTION_REQUIRED',
+          ZOTH_ZERO_EGRESS_INVARIANT: 'QUARANTINED',
+        },
+      });
+    }, 400);
+  };
+
+  const handleCopyCli = (text) => {
+    navigator.clipboard?.writeText(text);
+    setCopiedCmd(true);
+    setTimeout(() => setCopiedCmd(false), 2000);
+  };
+
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      {/* Header Banner */}
+      <Paper
+        sx={{
+          p: 2.5,
+          borderRadius: 2.5,
+          bgcolor: goldBg(theme),
+          border: `1px solid ${goldBorder(theme)}`,
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          justifyContent: 'space-between',
+          alignItems: { xs: 'flex-start', md: 'center' },
+          gap: 2,
+        }}
+      >
+        <Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 0.5 }}>
+            <Typography variant="h6" sx={{ fontWeight: 800, color: gold(theme), fontFamily: mono, fontSize: '1.05rem' }}>
+              AGENT POLICY AUDITOR (PORT 8106)
+            </Typography>
+            <Chip
+              label={daemonOnline ? '● BROKER ACTIVE (:8106)' : '○ LOCAL SIMULATION'}
+              size="small"
+              sx={{
+                bgcolor: daemonOnline ? 'rgba(16, 185, 129, 0.15)' : 'rgba(212, 175, 55, 0.15)',
+                color: daemonOnline ? '#10B981' : gold(theme),
+                fontWeight: 700,
+                fontSize: '0.68rem',
+                fontFamily: mono,
+                border: '1px solid',
+                borderColor: daemonOnline ? 'rgba(16, 185, 129, 0.4)' : goldBorder(theme),
+              }}
+            />
+          </Box>
+          <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.82rem' }}>
+            HMAC-SHA256 capability leasing broker and OWASP LLM manifest security auditor.
+          </Typography>
+        </Box>
+
+        <Stack direction="row" spacing={1.5} alignItems="center">
+          <Button
+            size="small"
+            variant="contained"
+            onClick={() => window.open('http://127.0.0.1:8106', '_blank')}
+            startIcon={<OpenInNewIcon sx={{ fontSize: 16 }} />}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.74rem',
+              fontWeight: 700,
+              bgcolor: gold(theme),
+              color: '#000000',
+              '&:hover': { bgcolor: '#B89628' },
+            }}
+          >
+            Open Cockpit :8106
+          </Button>
+        </Stack>
+      </Paper>
+
+      {/* Main Grid: Issue Lease vs Manifest Auditor */}
+      <Grid container spacing={3}>
+        {/* Left Column: Issue Lease */}
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="caption" sx={{ color: gold(theme), fontWeight: 800, fontFamily: mono, display: 'block', mb: 1.5 }}>
+              ISSUE CAPABILITY LEASE
+            </Typography>
+
+            <Stack spacing={2}>
+              <TextField
+                size="small"
+                label="Agent Identifier"
+                fullWidth
+                value={agentId}
+                onChange={(e) => setAgentId(e.target.value)}
+                sx={{ '& .MuiInputBase-root': { fontFamily: mono, fontSize: '0.8rem' } }}
+              />
+
+              <Grid container spacing={1.5}>
+                <Grid xs={6}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel sx={{ fontFamily: mono, fontSize: '0.8rem' }}>Capability</InputLabel>
+                    <Select
+                      value={capability}
+                      label="Capability"
+                      onChange={(e) => setCapability(e.target.value)}
+                      sx={{ fontFamily: mono, fontSize: '0.8rem' }}
+                    >
+                      <MenuItem value="FS_READ">FS_READ</MenuItem>
+                      <MenuItem value="FS_WRITE">FS_WRITE</MenuItem>
+                      <MenuItem value="NET_EGRESS">NET_EGRESS</MenuItem>
+                      <MenuItem value="SHELL_EXEC">SHELL_EXEC</MenuItem>
+                      <MenuItem value="TOKEN_BUDGET">TOKEN_BUDGET</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid xs={6}>
+                  <TextField
+                    size="small"
+                    type="number"
+                    label="TTL (Seconds)"
+                    fullWidth
+                    value={durationSec}
+                    onChange={(e) => setDurationSec(Number(e.target.value))}
+                    sx={{ '& .MuiInputBase-root': { fontFamily: mono, fontSize: '0.8rem' } }}
+                  />
+                </Grid>
+              </Grid>
+
+              <TextField
+                size="small"
+                label="Target Glob or Domain"
+                fullWidth
+                value={target}
+                onChange={(e) => setTarget(e.target.value)}
+                sx={{ '& .MuiInputBase-root': { fontFamily: mono, fontSize: '0.8rem' } }}
+              />
+
+              <TextField
+                size="small"
+                type="number"
+                label="USD Budget Quota"
+                fullWidth
+                value={budgetUsd}
+                onChange={(e) => setBudgetUsd(Number(e.target.value))}
+                sx={{ '& .MuiInputBase-root': { fontFamily: mono, fontSize: '0.8rem' } }}
+              />
+
+              <Button
+                variant="contained"
+                onClick={handleIssueLease}
+                disabled={issuing}
+                startIcon={<VpnKeyIcon sx={{ fontSize: 16 }} />}
+                sx={{
+                  bgcolor: '#A855F7',
+                  color: '#FFFFFF',
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  fontSize: '0.8rem',
+                  '&:hover': { bgcolor: '#9333EA' },
+                }}
+              >
+                {issuing ? 'Signing Lease...' : 'Issue Cryptographic Lease'}
+              </Button>
+            </Stack>
+          </Paper>
+        </Grid>
+
+        {/* Right Column: Manifest Auditor */}
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper, height: '100%' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
+              <Typography variant="caption" sx={{ color: gold(theme), fontWeight: 800, fontFamily: mono }}>
+                STATIC MANIFEST SECURITY AUDITOR
+              </Typography>
+              {auditReport && (
+                <Chip
+                  label={`${auditReport.security_score}/100 [${auditReport.risk_level}]`}
+                  size="small"
+                  sx={{
+                    fontFamily: mono,
+                    fontWeight: 700,
+                    fontSize: '0.65rem',
+                    bgcolor: auditReport.security_score >= 80 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(244, 63, 94, 0.15)',
+                    color: auditReport.security_score >= 80 ? '#10B981' : '#F43F5E',
+                  }}
+                />
+              )}
+            </Box>
+
+            <TextField
+              multiline
+              rows={5}
+              fullWidth
+              value={manifestText}
+              onChange={(e) => setManifestText(e.target.value)}
+              placeholder="Paste JSON manifest, MCP schema, or prompt..."
+              sx={{
+                mb: 2,
+                '& .MuiInputBase-root': {
+                  fontFamily: mono,
+                  fontSize: '0.74rem',
+                  lineHeight: 1.4,
+                },
+              }}
+            />
+
+            <Button
+              variant="contained"
+              onClick={handleAuditManifest}
+              disabled={auditing || !manifestText.trim()}
+              startIcon={<SecurityIcon sx={{ fontSize: 16 }} />}
+              sx={{
+                bgcolor: '#10B981',
+                color: '#FFFFFF',
+                fontWeight: 800,
+                fontFamily: mono,
+                fontSize: '0.8rem',
+                mb: 2,
+                '&:hover': { bgcolor: '#059669' },
+              }}
+            >
+              {auditing ? 'Auditing Invariants...' : 'Audit Security Invariants'}
+            </Button>
+
+            {auditReport && (
+              <Box sx={{ maxHeight: 120, overflowY: 'auto' }}>
+                {auditReport.findings.length === 0 ? (
+                  <Typography variant="caption" sx={{ color: '#10B981', fontFamily: mono, display: 'block' }}>
+                    ✓ 0 vulnerabilities detected. Manifest is fully compliant.
+                  </Typography>
+                ) : (
+                  auditReport.findings.map((f, i) => (
+                    <Box key={i} sx={{ p: 1, mb: 1, borderRadius: 1.5, bgcolor: isDark ? '#040508' : '#F8FAFC', border: `1px solid ${theme.palette.divider}` }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: '#F43F5E', display: 'block', fontSize: '0.68rem' }}>
+                        [{f.severity}] {f.rule_id}
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.68rem', color: 'text.secondary' }}>
+                        {f.description}
+                      </Typography>
+                    </Box>
+                  ))
+                )}
+              </Box>
+            )}
+          </Paper>
+        </Grid>
+
+        {/* Active Leases Table */}
+        <Grid xs={12}>
+          <Paper sx={{ p: 2.5, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+              <Typography variant="caption" sx={{ color: gold(theme), fontWeight: 800, fontFamily: mono }}>
+                ACTIVE TIME-BOUND CAPABILITY LEASES ({leases.length})
+              </Typography>
+              <Button size="small" variant="outlined" onClick={fetchBrokerData} sx={{ fontFamily: mono, fontSize: '0.68rem' }}>
+                Refresh
+              </Button>
+            </Box>
+
+            <TableContainer>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.7rem' }}>Lease ID</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.7rem' }}>Agent</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.7rem' }}>Capability</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.7rem' }}>Target Scope</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.7rem' }}>Budget</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.7rem' }}>TTL</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.7rem' }}>Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {leases.map((l) => (
+                    <TableRow key={l.lease_id}>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem' }}><code>{l.lease_id}</code></TableCell>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem' }}>{l.agent_id}</TableCell>
+                      <TableCell><Chip label={l.capability} size="small" sx={{ fontFamily: mono, fontSize: '0.65rem', height: 20 }} /></TableCell>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem' }}><code>{l.target}</code></TableCell>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem' }}>${(l.max_budget_usd || 0).toFixed(2)}</TableCell>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 700, color: '#38BDF8' }}>
+                        {(l.ttl_seconds || 0).toFixed(0)}s
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          size="small"
+                          color="error"
+                          onClick={() => handleRevokeLease(l.lease_id)}
+                          sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+                        >
+                          Revoke
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+
+            {/* Quick CLI Reference */}
+            <Divider sx={{ my: 1.5 }} />
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.72rem' }}>
+                CLI: <code>./bin/agent-policy lease grant --agent pantheon_01 --cap FS_WRITE --target &quot;/tmp/*&quot;</code>
+              </Typography>
+              <Button
+                size="small"
+                onClick={() => handleCopyCli('./bin/agent-policy lease grant --agent pantheon_01 --cap FS_WRITE --target "/tmp/*"')}
+                startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 14 }} /> : <ContentCopyIcon sx={{ fontSize: 14 }} />}
+                sx={{ fontFamily: mono, fontSize: '0.68rem' }}
+              >
+                {copiedCmd ? 'Copied' : 'Copy CLI'}
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+

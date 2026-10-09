@@ -239,6 +239,17 @@ export const workstations = [
     pullCommand: "./bin/agent-capsule serve --port 8105"
   },
   {
+    id: "agent-policy-auditor",
+    name: "Agent Policy Auditor // Capability Leaser & Broker",
+    path: "/studio/agent-policy.html",
+    band: "Security",
+    type: "integrated_tool",
+    description: "Cryptographic capability leaser, permission broker, and OWASP LLM manifest security auditor.",
+    alsoInApp: "/tools/agent-policy-auditor",
+    toolRepoId: "agent-policy-auditor",
+    pullCommand: "./bin/agent-policy serve --port 8106"
+  },
+  {
     id: "connectors",
     name: "Zoth Tool Bench & Integration Ecosystem",
     path: "/studio/connectors.html",

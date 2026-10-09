@@ -1055,6 +1055,47 @@ export const toolsDocumentation = {
       'Real-time Web Cockpit with resource gauges, process log feeds, and filesystem diffs',
       'Zero external dependencies (100% Python standard library)'
     ]
+  },
+
+  'agent-policy-auditor': {
+    whyUse: 'Autonomous zero-dependency capability leasing broker, permission manager, and static manifest security auditor for AI agents. Issues time-bound HMAC-SHA256 signed capability tokens across filesystem scopes, network egress, and token budgets.',
+    problemSolved: 'Replaces dangerous all-or-nothing execution models with granular, time-expiring capability leases, preventing runaway agent actions and auditing tool definitions against OWASP Top 10 for LLMs.',
+    architecture: 'Python 3.10+ standard library daemon running on port 8106. Features HMAC-SHA256 lease signing, path glob matching, automatic TTL expiry, emergency kill-switches, and automated telemetry streaming into Agent Flight Recorder (:8104).',
+    aiAgentProtocol: {
+      mcpTool: 'policy_lease_grant',
+      description: 'Issue or verify a time-bound capability lease for an autonomous agent action.',
+      cliExample: './bin/agent-policy lease grant --agent pantheon_01 --cap FS_WRITE --target "/tmp/*" --duration 300',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          agent_id: { type: 'string', description: 'Unique agent identifier' },
+          capability: { type: 'string', enum: ['FS_READ', 'FS_WRITE', 'NET_EGRESS', 'SHELL_EXEC', 'TOKEN_BUDGET'] },
+          target: { type: 'string', description: 'Target glob pattern, domain, or command prefix' },
+          duration_sec: { type: 'number', description: 'Lease TTL in seconds', default: 300 },
+          budget_usd: { type: 'number', description: 'Maximum USD spend quota', default: 0.0 }
+        },
+        required: ['agent_id', 'capability']
+      },
+      outputSchema: {
+        lease_id: 'string',
+        signature: 'string',
+        expires_at: 'number',
+        status: 'granted | verified | denied'
+      }
+    },
+    quickstart: [
+      'git clone https://github.com/1nc0gn30/agent-policy-auditor.git',
+      'cd agent-policy-auditor && chmod +x bin/agent-policy',
+      './bin/agent-policy serve --port 8106'
+    ],
+    features: [
+      'Cryptographic HMAC-SHA256 time-bound capability leases (FS, Network, Shell, Budget)',
+      'Automatic TTL expiration with real-time countdown meters',
+      'Emergency kill-switch for instant agent lease revocation',
+      'Static tool schema and manifest security auditor (OWASP LLM & NIST AI RMF scoring)',
+      'Direct telemetry forwarding to Agent Flight Recorder on port 8104',
+      'Zero external dependencies (100% Python standard library)'
+    ]
   }
 };
 
