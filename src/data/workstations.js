@@ -272,6 +272,17 @@ export const workstations = [
     pullCommand: "./bin/etsy-connector serve --port 8108"
   },
   {
+    id: "mcp-lens",
+    name: "MCP Lens // Traffic Sniffer & Token Auditor",
+    path: "/studio/mcp-lens.html",
+    band: "Observe",
+    type: "integrated_tool",
+    description: "Zero-dependency real-time stdio/SSE traffic sniffer, token weight auditor, and visual playground for Model Context Protocol.",
+    alsoInApp: "/tools/mcp-lens",
+    toolRepoId: "mcp-lens",
+    pullCommand: "./bin/mcp-lens serve --port 8109"
+  },
+  {
     id: "connectors",
     name: "Zoth Tool Bench & Integration Ecosystem",
     path: "/studio/connectors.html",

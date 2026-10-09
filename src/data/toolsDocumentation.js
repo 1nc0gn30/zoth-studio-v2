@@ -1172,6 +1172,41 @@ export const toolsDocumentation = {
       'Native Model Context Protocol (MCP) server exposing 8 tools for Antigravity agents',
       'Real-time Web Cockpit on port 8108'
     ]
+  },
+
+  'mcp-lens': {
+    whyUse: 'Zero-dependency real-time stdio/SSE traffic sniffer, token weight auditor, and visual playground for Model Context Protocol (MCP) servers.',
+    problemSolved: 'Eliminates blind JSON-RPC debugging, catches tool schema token bloat before it drains LLM budgets, and provides an instant in-browser test harness for all MCP tools.',
+    architecture: 'Python 3.10+ standard library daemon running on port 8109 with bidirectional non-blocking stdio proxy, SSE real-time event broadcaster, and client-side token minifier.',
+    aiAgentProtocol: {
+      mcpTool: 'mcp_audit_schema_tokens',
+      description: 'Calculates raw vs minified token weights of tool schemas and taps live traffic.',
+      cliExample: './bin/mcp-lens proxy -- python my_mcp_server.py',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          schema: { type: 'object', description: 'JSON schema of MCP tool definition' }
+        },
+        required: ['schema']
+      },
+      outputSchema: {
+        raw_tokens: 'number',
+        minified_tokens: 'number',
+        savings_percent: 'number'
+      }
+    },
+    quickstart: [
+      'git clone https://github.com/1nc0gn30/mcp-lens.git',
+      'cd mcp-lens && chmod +x bin/mcp-lens',
+      './bin/mcp-lens serve --port 8109'
+    ],
+    features: [
+      'Bidirectional non-blocking stdio & SSE proxy tapping JSON-RPC 2.0 frames with 0 lag',
+      'Accurate BPE heuristic token weight auditor for tool schemas',
+      'Automated schema minification saving 20%–45% of prompt context tokens',
+      'Interactive Web Cockpit on port 8109 with dynamic tool execution forms',
+      'Zero external dependencies (100% Python standard library)'
+    ]
   }
 };
 

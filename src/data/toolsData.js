@@ -496,6 +496,21 @@ export const microTools = [
     liveUrl: 'https://etsy.nullai.tech',
     version: '1.0.0',
     pull: 'git clone https://github.com/1nc0gn30/etsy-connector.git && cd etsy-connector && ./bin/etsy-connector serve --port 8108',
+  },
+  {
+    id: 'mcp-lens',
+    published: true,
+    name: 'MCP Lens',
+    repo: 'mcp-lens',
+    category: 'Simulation & Testing',
+    executionType: 'local_cli',
+    github: 'https://github.com/1nc0gn30/mcp-lens',
+    description: 'Zero-dependency real-time stdio/SSE traffic sniffer, token weight auditor, and visual playground for Model Context Protocol.',
+    localPort: 8109,
+    localUrl: 'http://127.0.0.1:8109',
+    liveUrl: 'https://mcp-lens.nullai.tech',
+    version: '1.0.0',
+    pull: 'git clone https://github.com/1nc0gn30/mcp-lens.git && cd mcp-lens && ./bin/mcp-lens serve --port 8109',
   }
 ];
 
