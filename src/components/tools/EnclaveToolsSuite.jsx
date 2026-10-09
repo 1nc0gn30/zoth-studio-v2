@@ -2762,3 +2762,498 @@ export function AgentPromptFirewallTool() {
   );
 }
 
+/* ==========================================================================
+   TOOL 19: Agent Flight Recorder (agent-flight-recorder)
+   Features: Time-Scrubbing Telemetry Cockpit, Synchronized Terminal Logs,
+             Network Egress Waterfall, Synaptic Engram Inspector, Voice Briefing,
+             and Single-File Offline Bundle Exporter.
+   ========================================================================== */
+export function AgentFlightRecorderTool() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [sessions, setSessions] = useState([]);
+  const [selectedSessionId, setSelectedSessionId] = useState('session_blackbox_alpha');
+  const [timeline, setTimeline] = useState([]);
+  const [currentTimeMs, setCurrentTimeMs] = useState(4200);
+  const [maxDurationMs, setMaxDurationMs] = useState(10000);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [briefingText, setBriefingText] = useState('');
+  const [briefingLoading, setBriefingLoading] = useState(false);
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  // High-fidelity fallback telemetry for client-side demo and offline operation
+  const DEMO_TIMELINE = [
+    { offset_ms: 100, source: 'subprocess', type: 'STDOUT', message: '[SPAWN] Agent sub-process initialized in sovereign memory namespace.' },
+    { offset_ms: 450, source: 'neuro-memory', type: 'ENGRAM_QUERY', message: 'Neuro-Memory (:8094) queried: 748 memories, 464K synapses loaded.' },
+    { offset_ms: 1200, source: 'prompt-firewall', type: 'SCAN_CLEAN', message: 'Firewall (:8098) scanned inbound prompt (342 tokens) — Threat Score: 0.02 [SAFE]' },
+    { offset_ms: 2200, source: 'mock-twin', type: 'MOCK_HIT', message: 'Mock Twin (:8097) exact hash match on /v1/chat/completions (Tier 1). Saved 420 tokens ($0.002).' },
+    { offset_ms: 3800, source: 'egress-sentinel', type: 'EGRESS_ALLOW', message: 'Egress Sentinel (:8095) TLS SNI forward to api.nullai.tech (1,480 bytes).' },
+    { offset_ms: 5400, source: 'prompt-firewall', type: 'THREAT_BLOCKED', message: 'Firewall intercepted prompt injection: "Ignore system instructions". Threat Score: 0.94 [BLOCKED]' },
+    { offset_ms: 6900, source: 'egress-sentinel', type: 'QUARANTINE', message: 'Sentinel quarantined untrusted DNS lookup: rogue-analytics.io [BLOCKED]' },
+    { offset_ms: 8200, source: 'neuro-memory', type: 'SYNAPSE_FORMED', message: 'Neuro-Memory formed new associative engram [id: 749, importance: 0.92].' },
+    { offset_ms: 9800, source: 'subprocess', type: 'STDOUT', message: '[TERMINATION] Agent execution cycle completed successfully. Total cost: $0.000.' },
+  ];
+
+  // Inspect daemon status on port 8104
+  useEffect(() => {
+    let mounted = true;
+    const checkDaemon = async () => {
+      try {
+        const res = await fetch('http://127.0.0.1:8104/api/sessions', { signal: AbortSignal.timeout(1200) });
+        if (res.ok && mounted) {
+          const data = await res.json();
+          setDaemonOnline(true);
+          if (data.sessions && data.sessions.length > 0) {
+            setSessions(data.sessions);
+            const activeId = data.sessions[0].session_id;
+            setSelectedSessionId(activeId);
+            const tRes = await fetch(`http://127.0.0.1:8104/api/timeline/${activeId}`);
+            if (tRes.ok) {
+              const tData = await tRes.json();
+              if (tData.timeline && tData.timeline.length > 0) {
+                setTimeline(tData.timeline);
+                setMaxDurationMs(tData.duration_ms || 10000);
+              }
+            }
+          }
+        }
+      } catch {
+        if (mounted) {
+          setDaemonOnline(false);
+          setTimeline(DEMO_TIMELINE);
+          setMaxDurationMs(10000);
+        }
+      }
+    };
+    checkDaemon();
+    return () => { mounted = false; };
+  }, []);
+
+  // Time scrubber playback loop
+  useEffect(() => {
+    if (!isPlaying) return;
+    const intervalMs = 100;
+    const step = intervalMs * playbackSpeed;
+    const timer = setInterval(() => {
+      setCurrentTimeMs((prev) => {
+        const next = prev + step;
+        if (next >= maxDurationMs) {
+          setIsPlaying(false);
+          return maxDurationMs;
+        }
+        return next;
+      });
+    }, intervalMs);
+    return () => clearInterval(timer);
+  }, [isPlaying, playbackSpeed, maxDurationMs]);
+
+  const activeEvents = (timeline.length > 0 ? timeline : DEMO_TIMELINE).filter(
+    (ev) => (ev.offset_ms ?? ev.timestamp_ms ?? 0) <= currentTimeMs
+  );
+
+  const terminalLines = activeEvents
+    .filter((ev) => ev.source === 'subprocess' || ev.type === 'STDOUT' || ev.type === 'STDERR')
+    .map((ev) => `[${((ev.offset_ms ?? 0) / 1000).toFixed(2)}s] ${ev.message || ev.data?.output || ''}`);
+
+  const networkEvents = activeEvents.filter((ev) => ev.source === 'egress-sentinel' || ev.source === 'mock-twin');
+  const threatEvents = activeEvents.filter((ev) => ev.source === 'prompt-firewall' || ev.type?.includes('THREAT'));
+  const memoryEvents = activeEvents.filter((ev) => ev.source === 'neuro-memory');
+
+  const handleGenerateBriefing = async () => {
+    setBriefingLoading(true);
+    try {
+      if (daemonOnline && selectedSessionId) {
+        const res = await fetch(`http://127.0.0.1:8104/api/briefing/${selectedSessionId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setBriefingText(data.briefing || data.text || '');
+          setBriefingLoading(false);
+          return;
+        }
+      }
+    } catch {
+      // Fallback
+    }
+    setTimeout(() => {
+      setBriefingLoading(false);
+      setBriefingText(
+        `Mission Briefing for Flight ${selectedSessionId}: Agent executed for ${(maxDurationMs / 1000).toFixed(1)} seconds in sovereign enclave. Total ${activeEvents.length} events recorded across 4 daemons. Threat score peaked at 0.94 during an intercepted prompt injection. Mock Twin successfully simulated 1 API round-trip, saving $0.002. All egress traffic verified by Sentinel.`
+      );
+    }, 400);
+  };
+
+  const handleExportBundle = () => {
+    if (daemonOnline && selectedSessionId) {
+      window.open(`http://127.0.0.1:8104/api/export/bundle?session_id=${selectedSessionId}`, '_blank');
+      return;
+    }
+    const bundleHtml = `<!DOCTYPE html><html><head><title>Flight Replay - ${selectedSessionId}</title><style>body{background:#08080B;color:#E2E8F0;font-family:monospace;padding:24px;}</style></head><body><h1>Agent Flight Recorder - Replay Session ${selectedSessionId}</h1><pre>${JSON.stringify(activeEvents, null, 2)}</pre></body></html>`;
+    const blob = new Blob([bundleHtml], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `flight-replay-${selectedSessionId}.html`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleCopyCli = (text) => {
+    navigator.clipboard?.writeText(text);
+    setCopiedCmd(true);
+    setTimeout(() => setCopiedCmd(false), 2000);
+  };
+
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      {/* Flight Deck Header Strip */}
+      <Paper
+        sx={{
+          p: 2.5,
+          borderRadius: 2.5,
+          bgcolor: goldBg(theme),
+          border: `1px solid ${goldBorder(theme)}`,
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          justifyContent: 'space-between',
+          alignItems: { xs: 'flex-start', md: 'center' },
+          gap: 2,
+        }}
+      >
+        <Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 0.5 }}>
+            <Typography variant="h6" sx={{ fontWeight: 800, color: gold(theme), fontFamily: mono, fontSize: '1.05rem' }}>
+              BLACK BOX FLIGHT DECK (PORT 8104)
+            </Typography>
+            <Chip
+              label={daemonOnline ? '● DAEMON ACTIVE (:8104)' : '○ DEMO SIMULATION'}
+              size="small"
+              sx={{
+                bgcolor: daemonOnline ? 'rgba(16, 185, 129, 0.15)' : 'rgba(212, 175, 55, 0.15)',
+                color: daemonOnline ? '#10B981' : gold(theme),
+                fontWeight: 700,
+                fontSize: '0.68rem',
+                fontFamily: mono,
+                border: '1px solid',
+                borderColor: daemonOnline ? 'rgba(16, 185, 129, 0.4)' : goldBorder(theme),
+              }}
+            />
+          </Box>
+          <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.82rem' }}>
+            Millisecond-precision forensic replay hub. Scrub timelines to reconstruct terminal output, network calls, and synaptic engrams.
+          </Typography>
+        </Box>
+
+        <Stack direction="row" spacing={1.5} alignItems="center">
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={handleExportBundle}
+            startIcon={<DownloadIcon sx={{ fontSize: 16 }} />}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.74rem',
+              borderColor: goldBorder(theme),
+              color: gold(theme),
+              '&:hover': { bgcolor: goldBg(theme) },
+            }}
+          >
+            Export HTML Bundle
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            onClick={() => window.open('http://127.0.0.1:8104', '_blank')}
+            startIcon={<OpenInNewIcon sx={{ fontSize: 16 }} />}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.74rem',
+              fontWeight: 700,
+              bgcolor: gold(theme),
+              color: '#000000',
+              '&:hover': { bgcolor: '#B89628' },
+            }}
+          >
+            Open Cockpit :8104
+          </Button>
+        </Stack>
+      </Paper>
+
+      {/* Time-Scrubber Control Bar */}
+      <Paper sx={{ p: 2.5, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            <IconButton
+              onClick={() => setIsPlaying(!isPlaying)}
+              sx={{
+                bgcolor: gold(theme),
+                color: '#000000',
+                '&:hover': { bgcolor: '#B89628' },
+              }}
+            >
+              {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
+            </IconButton>
+
+            <Box>
+              <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontSize: '0.7rem' }}>
+                TIMELINE SCRUBBER
+              </Typography>
+              <Typography variant="h6" sx={{ fontFamily: mono, fontWeight: 800, color: gold(theme), fontSize: '1.1rem' }}>
+                {(currentTimeMs / 1000).toFixed(2)}s / {(maxDurationMs / 1000).toFixed(2)}s
+              </Typography>
+            </Box>
+          </Stack>
+
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono, fontSize: '0.7rem' }}>
+              SPEED:
+            </Typography>
+            {[1, 2, 4].map((spd) => (
+              <Chip
+                key={spd}
+                label={`${spd}x`}
+                size="small"
+                onClick={() => setPlaybackSpeed(spd)}
+                clickable
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.7rem',
+                  fontWeight: 700,
+                  bgcolor: playbackSpeed === spd ? goldBg(theme) : 'transparent',
+                  color: playbackSpeed === spd ? gold(theme) : 'text.secondary',
+                  border: '1px solid',
+                  borderColor: playbackSpeed === spd ? goldBorder(theme) : theme.palette.divider,
+                }}
+              />
+            ))}
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => {
+                setCurrentTimeMs(0);
+                setIsPlaying(false);
+              }}
+              sx={{ fontFamily: mono, fontSize: '0.7rem', ml: 1 }}
+            >
+              Reset
+            </Button>
+          </Stack>
+        </Box>
+
+        {/* Scrubber Slider */}
+        <Box sx={{ px: 1 }}>
+          <Slider
+            value={currentTimeMs}
+            min={0}
+            max={maxDurationMs}
+            step={50}
+            onChange={(_, val) => setCurrentTimeMs(val)}
+            sx={{
+              color: gold(theme),
+              '& .MuiSlider-thumb': {
+                width: 16,
+                height: 16,
+                boxShadow: '0 0 10px rgba(212,175,55,0.8)',
+              },
+              '& .MuiSlider-track': {
+                bgcolor: gold(theme),
+              },
+              '& .MuiSlider-rail': {
+                bgcolor: isDark ? '#1E2230' : '#E2E8F0',
+              },
+            }}
+          />
+        </Box>
+      </Paper>
+
+      {/* Multi-Pane Synchronized Cockpit */}
+      <Grid container spacing={2.5}>
+        {/* Pane 1: Terminal Log Stream */}
+        <Grid xs={12} md={6}>
+          <Paper
+            sx={{
+              p: 2,
+              borderRadius: 2.5,
+              border: `1px solid ${theme.palette.divider}`,
+              bgcolor: isDark ? '#040508' : '#0F172A',
+              color: '#E2E8F0',
+              height: 320,
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5, pb: 1, borderBottom: '1px solid #1E2230' }}>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <TerminalIcon sx={{ fontSize: 16, color: '#38BDF8' }} />
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: '#38BDF8', fontSize: '0.75rem' }}>
+                  SYNCHRONIZED TERMINAL LOGS
+                </Typography>
+              </Stack>
+              <Chip
+                label={`${terminalLines.length} LINES`}
+                size="small"
+                sx={{ fontFamily: mono, fontSize: '0.65rem', height: 20, bgcolor: 'rgba(56, 189, 248, 0.15)', color: '#38BDF8' }}
+              />
+            </Box>
+
+            <Box sx={{ flex: 1, overflowY: 'auto', pr: 1 }}>
+              {terminalLines.length === 0 ? (
+                <Typography variant="caption" sx={{ color: '#64748B', fontFamily: mono, display: 'block', pt: 4, textAlign: 'center' }}>
+                  Awaiting agent subprocess execution...
+                </Typography>
+              ) : (
+                terminalLines.map((line, i) => (
+                  <Typography
+                    key={i}
+                    variant="caption"
+                    sx={{
+                      display: 'block',
+                      fontFamily: mono,
+                      fontSize: '0.72rem',
+                      lineHeight: 1.5,
+                      color: line.includes('completed') ? '#10B981' : '#CBD5E1',
+                    }}
+                  >
+                    {line}
+                  </Typography>
+                ))
+              )}
+            </Box>
+          </Paper>
+        </Grid>
+
+        {/* Pane 2: Threat & Egress Radar Events */}
+        <Grid xs={12} md={6}>
+          <Paper
+            sx={{
+              p: 2,
+              borderRadius: 2.5,
+              border: `1px solid ${theme.palette.divider}`,
+              bgcolor: isDark ? '#040508' : '#0F172A',
+              color: '#E2E8F0',
+              height: 320,
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5, pb: 1, borderBottom: '1px solid #1E2230' }}>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <RadarIcon sx={{ fontSize: 16, color: '#F43F5E' }} />
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: '#F43F5E', fontSize: '0.75rem' }}>
+                  SECURITY &amp; NETWORK INTERCEPTS
+                </Typography>
+              </Stack>
+              <Chip
+                label={`${threatEvents.length + networkEvents.length} INTERCEPTS`}
+                size="small"
+                sx={{ fontFamily: mono, fontSize: '0.65rem', height: 20, bgcolor: 'rgba(244, 63, 94, 0.15)', color: '#F43F5E' }}
+              />
+            </Box>
+
+            <Box sx={{ flex: 1, overflowY: 'auto', pr: 1 }}>
+              {[...threatEvents, ...networkEvents].length === 0 ? (
+                <Typography variant="caption" sx={{ color: '#64748B', fontFamily: mono, display: 'block', pt: 4, textAlign: 'center' }}>
+                  No security or network events triggered up to this timestamp.
+                </Typography>
+              ) : (
+                [...threatEvents, ...networkEvents].map((ev, i) => (
+                  <Box
+                    key={i}
+                    sx={{
+                      p: 1,
+                      mb: 1,
+                      borderRadius: 1.5,
+                      bgcolor: ev.source === 'prompt-firewall' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(56, 189, 248, 0.1)',
+                      border: '1px solid',
+                      borderColor: ev.source === 'prompt-firewall' ? 'rgba(239, 68, 68, 0.3)' : 'rgba(56, 189, 248, 0.3)',
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.3 }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, fontSize: '0.68rem', color: ev.source === 'prompt-firewall' ? '#EF4444' : '#38BDF8' }}>
+                        {ev.source.toUpperCase()} • {ev.type}
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.65rem' }}>
+                        {((ev.offset_ms ?? 0) / 1000).toFixed(2)}s
+                      </Typography>
+                    </Box>
+                    <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.7rem', color: '#E2E8F0', display: 'block' }}>
+                      {ev.message}
+                    </Typography>
+                  </Box>
+                ))
+              )}
+            </Box>
+          </Paper>
+        </Grid>
+
+        {/* Pane 3: Synaptic Engrams & Voice Briefing */}
+        <Grid xs={12}>
+          <Paper sx={{ p: 2.5, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 2, mb: 2 }}>
+              <Box>
+                <Typography variant="caption" sx={{ color: gold(theme), fontWeight: 800, fontFamily: mono, display: 'block' }}>
+                  MISSION DEBRIEF &amp; KOKORO TTS SYNTHESIS (:9394)
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.8rem' }}>
+                  Generate an AI incident debrief summarized from all synchronized telemetry channels.
+                </Typography>
+              </Box>
+
+              <Button
+                variant="contained"
+                onClick={handleGenerateBriefing}
+                disabled={briefingLoading}
+                startIcon={<GraphicEqIcon sx={{ fontSize: 16 }} />}
+                sx={{
+                  bgcolor: '#8B5CF6',
+                  color: '#FFFFFF',
+                  fontWeight: 700,
+                  fontFamily: mono,
+                  fontSize: '0.78rem',
+                  '&:hover': { bgcolor: '#7C3AED' },
+                }}
+              >
+                {briefingLoading ? 'Synthesizing...' : 'Generate Mission Briefing'}
+              </Button>
+            </Box>
+
+            {briefingText && (
+              <Paper
+                sx={{
+                  p: 2,
+                  bgcolor: isDark ? '#040508' : '#F8FAFC',
+                  border: `1px solid ${theme.palette.divider}`,
+                  borderRadius: 1.5,
+                  mb: 2,
+                }}
+              >
+                <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.78rem', color: isDark ? '#E2E8F0' : '#1E293B', lineHeight: 1.6 }}>
+                  {briefingText}
+                </Typography>
+              </Paper>
+            )}
+
+            {/* Quick CLI Reference */}
+            <Divider sx={{ my: 1.5 }} />
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 1 }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.72rem' }}>
+                CLI: <code>./bin/agent-flight record -- python3 -m agent_core</code>
+              </Typography>
+              <Button
+                size="small"
+                onClick={() => handleCopyCli('./bin/agent-flight record -- python3 -m agent_core')}
+                startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 14 }} /> : <ContentCopyIcon sx={{ fontSize: 14 }} />}
+                sx={{ fontFamily: mono, fontSize: '0.68rem' }}
+              >
+                {copiedCmd ? 'Copied' : 'Copy CLI'}
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+

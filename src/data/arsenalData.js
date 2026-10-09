@@ -39,6 +39,8 @@ function toolToAsset(t) {
       'neuro-memory-daemon',
       'agent-egress-sentinel',
       'agent-mock-twin',
+      'agent-prompt-firewall',
+      'agent-flight-recorder',
       'subsweep-lead-scanner',
       'envguard-secrets-vault'
     ].includes(t.id),

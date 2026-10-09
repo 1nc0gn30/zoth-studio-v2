@@ -56,6 +56,7 @@ import {
   AgentEgressSentinelTool,
   AgentMockTwinTool,
   AgentPromptFirewallTool,
+  AgentFlightRecorderTool,
 } from '../components/tools/EnclaveToolsSuite';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
@@ -70,6 +71,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'agent-egress-sentinel': AgentEgressSentinelTool,
   'agent-mock-twin': AgentMockTwinTool,
   'agent-prompt-firewall': AgentPromptFirewallTool,
+  'agent-flight-recorder': AgentFlightRecorderTool,
   'vector-search-engine': VectorSearchTool,
   'deepsearch-research-agent': DeepSearchResearchTool,
   'prompt-master-optimizer': PromptMasterTool,

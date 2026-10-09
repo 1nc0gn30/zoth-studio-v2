@@ -206,6 +206,28 @@ export const workstations = [
     pullCommand: "./bin/agent-mock serve --port 8097"
   },
   {
+    id: "agent-prompt-firewall",
+    name: "Agent Prompt Firewall // Inline Defense & Radar",
+    path: "/studio/agent-firewall.html",
+    band: "Security",
+    type: "integrated_tool",
+    description: "Autonomous inline prompt injection defense, PII redactor, and real-time SSE threat radar.",
+    alsoInApp: "/tools/agent-prompt-firewall",
+    toolRepoId: "agent-prompt-firewall",
+    pullCommand: "./bin/agent-firewall serve --web-port 8098 --proxy-port 8099"
+  },
+  {
+    id: "agent-flight-recorder",
+    name: "Agent Flight Recorder // Black Box Forensics",
+    path: "/studio/agent-flight.html",
+    band: "Observe",
+    type: "integrated_tool",
+    description: "Black box flight recorder & time-scrubbing telemetry forensics hub for AI agents.",
+    alsoInApp: "/tools/agent-flight-recorder",
+    toolRepoId: "agent-flight-recorder",
+    pullCommand: "./bin/agent-flight serve --port 8104"
+  },
+  {
     id: "connectors",
     name: "Zoth Tool Bench & Integration Ecosystem",
     path: "/studio/connectors.html",

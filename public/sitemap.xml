@@ -301,6 +301,12 @@
     <priority>0.75</priority>
   </url>
   <url>
+    <loc>https://zoth.nullai.tech/tools/agent-flight-recorder</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://zoth.nullai.tech/workstations/cockpit</loc>
     <lastmod>2026-10-09</lastmod>
     <changefreq>weekly</changefreq>
@@ -416,6 +422,18 @@
   </url>
   <url>
     <loc>https://zoth.nullai.tech/workstations/agent-mock-twin</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/workstations/agent-prompt-firewall</loc>
+    <lastmod>2026-10-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/workstations/agent-flight-recorder</loc>
     <lastmod>2026-10-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
