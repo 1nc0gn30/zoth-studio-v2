@@ -53,6 +53,8 @@ import {
   SubSweepTool,
   OmniPostSocialTool,
   CronRhythmTool,
+  AgentEgressSentinelTool,
+  AgentMockTwinTool,
 } from '../components/tools/EnclaveToolsSuite';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
@@ -63,6 +65,9 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'azoth-archon-orchestrator': AzothArchonTool,
   'sovereign-bridge-protocol': SovereignBridgeTool,
   'neuro-memory-service': NeuroMemoryTool,
+  'neuro-memory-daemon': NeuroMemoryTool,
+  'agent-egress-sentinel': AgentEgressSentinelTool,
+  'agent-mock-twin': AgentMockTwinTool,
   'vector-search-engine': VectorSearchTool,
   'deepsearch-research-agent': DeepSearchResearchTool,
   'prompt-master-optimizer': PromptMasterTool,
@@ -396,7 +401,67 @@ export default function RealToolWorkspacePage() {
             <ToolOfferLine tool={tool} isDark={isDark} />
           </Box>
 
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: { xs: '100%', md: 'auto' }, flexShrink: 0 }}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: { xs: '100%', md: 'auto' }, flexShrink: 0, flexWrap: 'wrap' }}>
+            {tool.localPort && (
+              <Button
+                component="a"
+                href={tool.localUrl || `http://127.0.0.1:${tool.localPort}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="outlined"
+                endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+                sx={{
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  fontSize: '0.8rem',
+                  borderColor: isDark ? 'rgba(52,211,153,0.45)' : '#A7F3D0',
+                  color: isDark ? '#34D399' : '#059669',
+                  bgcolor: isDark ? 'rgba(52,211,153,0.08)' : '#ECFDF3',
+                  '&:hover': { borderColor: '#34D399', bgcolor: isDark ? 'rgba(52,211,153,0.18)' : '#D1FAE5' },
+                }}
+              >
+                Local :{tool.localPort}
+              </Button>
+            )}
+            {tool.liveUrl && (
+              <Button
+                component="a"
+                href={tool.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="outlined"
+                endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+                sx={{
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  fontSize: '0.8rem',
+                  borderColor: gold.border,
+                  color: gold.accent,
+                  '&:hover': { borderColor: gold.accent, bgcolor: gold.wash },
+                }}
+              >
+                Web Mirror ↗
+              </Button>
+            )}
+            {tool.id === 'neuro-memory-daemon' && (
+              <Button
+                component={RouterLink}
+                to="/memory"
+                variant="outlined"
+                startIcon={<MemoryIcon sx={{ fontSize: 16 }} />}
+                sx={{
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  fontSize: '0.8rem',
+                  borderColor: isDark ? 'rgba(192,132,252,0.45)' : '#E9D5FF',
+                  color: isDark ? '#C084FC' : '#7E22CE',
+                  bgcolor: isDark ? 'rgba(192,132,252,0.08)' : '#FAF5FF',
+                  '&:hover': { borderColor: '#C084FC', bgcolor: isDark ? 'rgba(192,132,252,0.18)' : '#F3E8FF' },
+                }}
+              >
+                3D Cosmic Nebula
+              </Button>
+            )}
             {tool.github && (
               <Button
                 component="a"

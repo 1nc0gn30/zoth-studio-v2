@@ -96,8 +96,10 @@ export default function Navbar({ mode, onToggleTheme }) {
   // Search Results for Command Palette
   const filteredTools = microTools.filter((t) =>
     t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    t.category.toLowerCase().includes(searchQuery.toLowerCase())
-  ).slice(0, 6);
+    t.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (t.description && t.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (t.localPort && String(t.localPort).includes(searchQuery))
+  ).slice(0, 8);
 
   const filteredWorkstations = workstations.filter((w) =>
     w.name.toLowerCase().includes(searchQuery.toLowerCase()) ||

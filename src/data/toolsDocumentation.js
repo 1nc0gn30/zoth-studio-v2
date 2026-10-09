@@ -122,13 +122,13 @@ export const toolsDocumentation = {
   },
 
   'neuro-memory-daemon': {
-    whyUse: 'Biomorphic synaptic memory daemon modeled after Spike-Timing-Dependent Plasticity (STDP). Retains high-salience context across sessions while automatically decaying stale noise.',
+    whyUse: 'Biological-fidelity memory substrate with 3D Cosmic Nebula. Biomorphic synaptic memory daemon modeled after Spike-Timing-Dependent Plasticity (STDP) and Hippocampal CA3/CA1 pattern completion. Retains high-salience context across sessions while automatically decaying stale noise.',
     problemSolved: 'Solves the LLM memory amnesia and context-window pollution crisis without requiring expensive and invasive vector SaaS subscriptions (Pinecone, Weaviate Cloud).',
-    architecture: 'Python 3.10+ daemon running at 127.0.0.1:8094. Implements continuous STDP biological weight adaptation with fast SQLite/HNSW vector persistence.',
+    architecture: 'Python 3.10+ daemon running at 127.0.0.1:8094 with 3D Volumetric Synaptic Substrate, 3,500+ harmonic stardust particles, 5 galaxy clusters, and fast SQLite/HNSW vector persistence.',
     aiAgentProtocol: {
       mcpTool: 'memory_recall',
-      description: 'Query synaptic memory for high-salience knowledge embeddings from prior sessions.',
-      cliExample: 'curl "http://127.0.0.1:8094/api/memory?q=jwt+bypass+rules&top=5"',
+      description: 'Query synaptic memory for high-salience knowledge embeddings and 3D cosmic nebula coordinates from prior sessions.',
+      cliExample: 'curl "http://127.0.0.1:8094/api/memories?q=jwt+bypass+rules&limit=5"',
       inputSchema: {
         type: 'object',
         properties: {
@@ -144,14 +144,15 @@ export const toolsDocumentation = {
     },
     quickstart: [
       'git clone https://github.com/NullAITech/neuro-memory-daemon.git',
-      'cd neuro-memory-daemon && python3 -m neuro_memory_daemon serve -H 127.0.0.1 -p 8094',
+      'cd neuro-memory-daemon && python3 -m neuro_memory_daemon.cli serve --port 8094',
       'curl http://127.0.0.1:8094/health'
     ],
     features: [
+      '3D Cosmic Nebula volumetric substrate with 3,500+ particles & 5 galaxy clusters',
       'Biological STDP synaptic reinforcement & exponential decay',
-      'Zero-cloud local vector embeddings and recall',
-      'Real-time memory visualizer stream for Zoth Studio',
-      'Automated session consolidation and knowledge extraction',
+      'Zero-cloud local vector embeddings and recall at 127.0.0.1:8094',
+      'Native Model Context Protocol (MCP) JSON-RPC 2.0 stdio server',
+      'Hippocampal CA3/CA1 auto-associative recall with pattern completion',
       'Under 25MB baseline memory footprint'
     ]
   },
@@ -855,6 +856,80 @@ export const toolsDocumentation = {
       'Owner name, phone, and email stay blank lines',
       'Footer says this is not a local office',
       'No reviews, rankings, invented neighborhoods, reply address, or domain'
+    ]
+  },
+
+  'agent-egress-sentinel': {
+    whyUse: 'Autonomous zero-dependency network interceptor, TLS SNI sniffer, and kinetic egress radar for AI agents and LLM runtimes. Audits, maps, and quarantines silent background network egress without installing intrusive root CA certificates.',
+    problemSolved: 'Eliminates silent agent exfiltration, unannounced telemetry leaks (Segment, PostHog, Sentry), and uninspected external connections during autonomous prompt loops.',
+    architecture: '100% Python standard library daemon running at 127.0.0.1:8095 (web radar UI) and 127.0.0.1:8096 (HTTP/HTTPS proxy). Extracts SNI from TLS ClientHello packets and maps destinations to orbital radar rings.',
+    aiAgentProtocol: {
+      mcpTool: 'egress_audit_status',
+      description: 'Audit live network egress telemetry, domain classifications, and quarantine enforcement.',
+      cliExample: 'agent-egress serve --web-port 8095 --proxy-port 8096',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          quarantine: { type: 'string', enum: ['allow_all', 'block_telemetry', 'zero_egress', 'allowlist_only'] },
+          filterDomain: { type: 'string', description: 'Target domain filter' }
+        }
+      },
+      outputSchema: {
+        activeEgressRequests: 'number',
+        quarantinedCount: 'number',
+        domains: [{ name: 'string', category: 'string', bytesSent: 'number' }]
+      }
+    },
+    quickstart: [
+      'git clone https://github.com/1nc0gn30/agent-egress-sentinel.git',
+      'cd agent-egress-sentinel && pip install -e .',
+      'agent-egress serve --web-port 8095 --proxy-port 8096'
+    ],
+    features: [
+      'In-memory TLS ClientHello SNI extractor with zero root CA installation',
+      'Kinetic domain vector radar with 5 concentric orbital rings',
+      'Autonomous quarantine policies (ALLOW_ALL, BLOCK_TELEMETRY, ZERO_EGRESS)',
+      'Standard HAR 1.2 export compatible with Chrome DevTools and Wireshark',
+      'Zero external pip dependencies (100% Python standard library)'
+    ]
+  },
+
+  'agent-mock-twin': {
+    whyUse: 'Autonomous offline API mock and deterministic replay server for AI agents. Run test suites and local agent loops with $0 token spend, zero latency, and 100% deterministic outputs.',
+    problemSolved: 'Eliminates $500+ CI/CD test bills, rate limits (HTTP 429), and non-deterministic agent test failures by providing high-speed offline simulation.',
+    architecture: 'Python 3.10+ standard library daemon running at 127.0.0.1:8097. Multi-Tier Request Matcher (Tier 1 Exact Hash Match, Tier 2 Fuzzy Semantic Match, Tier 3 Fallback Synthesis) with SQLite cache.',
+    aiAgentProtocol: {
+      mcpTool: 'mock_replay_query',
+      description: 'Execute or test an offline API mock request against recorded HAR or OpenAPI routes.',
+      cliExample: './bin/agent-mock serve --port 8097',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          method: { type: 'string', enum: ['GET', 'POST', 'PUT', 'DELETE'] },
+          path: { type: 'string', description: 'Target request path' },
+          body: { type: 'object', description: 'Request payload' }
+        },
+        required: ['method', 'path']
+      },
+      outputSchema: {
+        status: 'number',
+        matchedTier: 'exact | fuzzy | synthetic',
+        tokensSaved: 'number',
+        response: 'object'
+      }
+    },
+    quickstart: [
+      'git clone https://github.com/1nc0gn30/agent-mock-twin.git',
+      'cd agent-mock-twin && chmod +x bin/agent-mock',
+      './bin/agent-mock serve --port 8097'
+    ],
+    features: [
+      'Multi-Tier Request Matcher (Exact Hash, Fuzzy Semantic, Fallback Synthesis)',
+      'Deterministic replay server hosting OpenAI/Anthropic compatible endpoints on port 8097',
+      'Real-time token and USD savings dashboard with live telemetry',
+      'Ingests standard HAR 1.2 recordings and OpenAPI 3.0 blueprints',
+      'Chaos injection simulation (latency jitter, 429 rate limit triggers)',
+      'Zero external dependencies (Python standard library only)'
     ]
   }
 };

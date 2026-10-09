@@ -24,23 +24,28 @@ function toolToAsset(t) {
     category: t.category,
     target,
     description: t.description,
-    badge: t.executionType === 'webgpu' ? 'WEBGPU TOOL' : 'LOCAL CLI TOOL',
-    status: t.executionType === 'webgpu' ? 'Browser Native' : 'Local Binary',
+    badge: t.executionType === 'webgpu' ? 'WEBGPU TOOL' : (t.localPort ? `PORT :${t.localPort}` : 'LOCAL CLI TOOL'),
+    status: t.executionType === 'webgpu' ? 'Browser Native' : (t.localPort ? `Daemon :${t.localPort}` : 'Local Binary'),
     pullCommand: t.pull,
     github: t.github,
     version: t.version,
     executionType: t.executionType,
+    localPort: t.localPort,
+    localUrl: t.localUrl,
+    liveUrl: t.liveUrl,
     isFlagship: [
       'zoth-webgen',
       'zoth-swarm-multiplexer',
       'neuro-memory-daemon',
+      'agent-egress-sentinel',
+      'agent-mock-twin',
       'subsweep-lead-scanner',
       'envguard-secrets-vault'
     ].includes(t.id),
   };
 }
 
-// Master unified arsenal: 25 authentic sovereign tools
+// Master unified arsenal
 export const masterArsenal = microTools.map(toolToAsset);
 
 // Helper lookup
@@ -50,8 +55,8 @@ export function getAssetById(id) {
 
 // Unified Counts
 export const arsenalStats = {
-  total: microTools.length, // 25
-  tools: microTools.length, // 25
-  cli: microTools.filter((t) => t.executionType === 'local_cli').length, // 18
-  webgpu: microTools.filter((t) => t.executionType === 'webgpu').length, // 7
+  total: microTools.length,
+  tools: microTools.length,
+  cli: microTools.filter((t) => t.executionType === 'local_cli').length,
+  webgpu: microTools.filter((t) => t.executionType === 'webgpu').length,
 };

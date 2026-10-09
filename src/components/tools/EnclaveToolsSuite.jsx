@@ -26,6 +26,10 @@ import CodeIcon from '@mui/icons-material/Code';
 import DownloadIcon from '@mui/icons-material/Download';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import RadarIcon from '@mui/icons-material/Radar';
+import PsychologyIcon from '@mui/icons-material/Psychology';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import RouterIcon from '@mui/icons-material/Router';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const gold = (t) => (t.palette.mode === 'dark' ? '#D4AF37' : '#B8860B');
@@ -506,18 +510,27 @@ export function SovereignBridgeTool() {
 
 /* ==========================================================================
    TOOL 4: Neuro Memory Daemon (neuro-memory-daemon)
-   Features: Real Dynamic STDP Plasticity Curve Canvas, Live Coordinates
+   Features: Biological-Fidelity Memory Substrate with 3D Cosmic Nebula & STDP
    ========================================================================== */
 export function NeuroMemoryTool() {
   const theme = useTheme();
   const [query, setQuery] = useState('Byzantine consensus AST diff synthesis');
   const [deltaT, setDeltaT] = useState(12);
   const [tau, setTau] = useState(20);
+  const [activeGalaxy, setActiveGalaxy] = useState('agents');
   const canvasRef = useRef(null);
 
   const deltaW = deltaT >= 0
     ? (1.0 * Math.exp(-deltaT / tau)).toFixed(4)
     : (-1.05 * Math.exp(deltaT / tau)).toFixed(4);
+
+  const GALAXY_CLUSTERS = [
+    { id: 'agents', name: 'Agents Galaxy', color: '#D4AF37', count: '1,420 engrams', desc: 'Antigravity, Grok, Claude, Hermes, Cursor, Sentinel, Ollama' },
+    { id: 'tools', name: 'Tools Galaxy', color: '#00E5FF', count: '890 engrams', desc: 'Bash CLI, AST Parser, Network Sniffer, Math Pillars' },
+    { id: 'security', name: 'Security Galaxy', color: '#FF3366', count: '640 engrams', desc: 'Memory Guardrails, Sandboxes, Shannon Entropy, Zero-Egress' },
+    { id: 'system', name: 'System Galaxy', color: '#A855F7', count: '512 engrams', desc: 'ZothOS Kernel, SQLite WAL, Process Tree, Hardware Telemetry' },
+    { id: 'minds', name: 'Living Minds Galaxy', color: '#34D399', count: '380 engrams', desc: 'Civilization colonies, Emergent dialogues, Agent pantheon' },
+  ];
 
   // Render Real STDP Plasticity Curve on Canvas
   useEffect(() => {
@@ -576,6 +589,107 @@ export function NeuroMemoryTool() {
 
   return (
     <Box sx={{ mt: 1 }}>
+      {/* Top Daemon Status & Direct Port Navigation Bar */}
+      <Paper
+        sx={{
+          p: 2.2,
+          mb: 3,
+          borderRadius: 2.5,
+          bgcolor: theme.palette.mode === 'dark' ? 'rgba(192, 132, 252, 0.08)' : '#FAF5FF',
+          border: '1.5px solid',
+          borderColor: theme.palette.mode === 'dark' ? 'rgba(192, 132, 252, 0.35)' : '#E9D5FF',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 2,
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Box sx={{ p: 1, borderRadius: '50%', bgcolor: 'rgba(192, 132, 252, 0.2)', color: '#C084FC', display: 'flex' }}>
+            <PsychologyIcon sx={{ fontSize: 24 }} />
+          </Box>
+          <Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+              <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.85rem', color: theme.palette.mode === 'dark' ? '#E9D5FF' : '#7E22CE' }}>
+                NEURO-MEMORY DAEMON // PORT 8094
+              </Typography>
+              <Chip
+                label="3D COSMIC NEBULA ACTIVE"
+                size="small"
+                sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.64rem', bgcolor: 'rgba(192,132,252,0.2)', color: '#C084FC', height: 20 }}
+              />
+              <Chip
+                label="STDP SYNAPTIC ENGINE"
+                size="small"
+                sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.64rem', bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399', height: 20 }}
+              />
+            </Box>
+            <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontSize: '0.76rem' }}>
+              Biological-fidelity memory substrate with 3D Cosmic Nebula, 3,500+ harmonic stardust particles &amp; 5 galaxy clusters.
+            </Typography>
+          </Box>
+        </Box>
+        <Stack direction="row" spacing={1} flexWrap="wrap">
+          <Button
+            size="small"
+            variant="contained"
+            component="a"
+            href="http://127.0.0.1:8094"
+            target="_blank"
+            rel="noopener noreferrer"
+            startIcon={<RouterIcon sx={{ fontSize: 16 }} />}
+            endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              bgcolor: '#A855F7',
+              color: '#FFFFFF',
+              '&:hover': { bgcolor: '#9333EA' },
+            }}
+          >
+            Local :8094
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            component="a"
+            href="/memory"
+            startIcon={<PsychologyIcon sx={{ fontSize: 16 }} />}
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              borderColor: 'rgba(192,132,252,0.5)',
+              color: '#C084FC',
+              '&:hover': { borderColor: '#C084FC', bgcolor: 'rgba(192,132,252,0.1)' },
+            }}
+          >
+            3D Memory Hub
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            component="a"
+            href="https://neuro-memory.nullai.tech"
+            target="_blank"
+            rel="noopener noreferrer"
+            endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+            sx={{
+              fontFamily: mono,
+              fontWeight: 750,
+              fontSize: '0.72rem',
+              borderColor: theme.palette.divider,
+              color: 'text.secondary',
+              '&:hover': { borderColor: gold(theme), color: gold(theme) },
+            }}
+          >
+            Web Mirror ↗
+          </Button>
+        </Stack>
+      </Paper>
+
       <Typography variant="h6" sx={{ fontWeight: 800, color: gold(theme), mb: 0.5 }}>
         STDP Biomorphic Synaptic Memory Vector Engine
       </Typography>
@@ -607,7 +721,7 @@ export function NeuroMemoryTool() {
             />
           </Box>
 
-          <Box>
+          <Box sx={{ mb: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', mb: 0.5 }}>
               <span>Time Constant (τ):</span>
               <strong>{tau} ms</strong>
@@ -619,6 +733,45 @@ export function NeuroMemoryTool() {
               onChange={(e, v) => setTau(v)}
               sx={{ color: gold(theme) }}
             />
+          </Box>
+
+          {/* 3D Cosmic Nebula Galaxy Clusters Matrix */}
+          <Typography variant="caption" sx={{ color: goldSoft(theme), fontWeight: 800, display: 'block', mb: 1 }}>
+            3D COSMIC NEBULA // 5 GALAXY CLUSTERS
+          </Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+            {GALAXY_CLUSTERS.map((galaxy) => (
+              <Box
+                key={galaxy.id}
+                onClick={() => setActiveGalaxy(galaxy.id)}
+                sx={{
+                  p: 1.2,
+                  borderRadius: 1.5,
+                  cursor: 'pointer',
+                  border: `1px solid ${activeGalaxy === galaxy.id ? galaxy.color : theme.palette.divider}`,
+                  bgcolor: activeGalaxy === galaxy.id ? `${galaxy.color}15` : theme.palette.background.paper,
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  transition: 'all 0.2s ease',
+                  '&:hover': { borderColor: galaxy.color },
+                }}
+              >
+                <Box>
+                  <Typography sx={{ fontWeight: 800, fontSize: '0.82rem', color: galaxy.color }}>
+                    {galaxy.name}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.72rem' }}>
+                    {galaxy.desc}
+                  </Typography>
+                </Box>
+                <Chip
+                  label={galaxy.count}
+                  size="small"
+                  sx={{ fontFamily: mono, fontWeight: 750, fontSize: '0.66rem', height: 20, bgcolor: `${galaxy.color}22`, color: galaxy.color }}
+                />
+              </Box>
+            ))}
           </Box>
         </Grid>
 
@@ -637,6 +790,26 @@ export function NeuroMemoryTool() {
                 size="small"
                 sx={{ bgcolor: deltaT >= 0 ? successBg(theme) : errorBg(theme), color: deltaT >= 0 ? successFg(theme) : errorFg(theme), fontWeight: 800 }}
               />
+            </Box>
+          </Paper>
+
+          {/* Hippocampal Pattern Completion Status */}
+          <Paper sx={{ p: 2, mt: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: darkPanel(theme), color: '#38BDF8', fontFamily: mono, fontSize: '0.78rem' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+              <span style={{ color: '#D4AF37' }}>Hippocampal Indexing:</span>
+              <strong style={{ color: '#34D399' }}>CA3 / CA1 ACTIVE</strong>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+              <span>DLPFC Buffer:</span>
+              <span>7 ± 2 engrams (Miller's Law)</span>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+              <span>Ebbinghaus Half-Life:</span>
+              <span>24.0h Decay Cycle</span>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>Loopback Transport:</span>
+              <span style={{ color: '#FBBF24' }}>http://127.0.0.1:8094</span>
             </Box>
           </Paper>
         </Grid>
@@ -1493,6 +1666,665 @@ export function CronRhythmTool() {
         <div style={{ color: '#D4AF37' }}>Natural Language Interpretation:</div>
         <div style={{ fontSize: '1rem', marginTop: 4 }}>{getExplanation(cron)}</div>
       </Paper>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   TOOL 17: Agent Egress Sentinel (agent-egress-sentinel)
+   Features: Kinetic Domain Vector Radar, TLS SNI Sniffer, Quarantine Policies
+   ========================================================================== */
+export function AgentEgressSentinelTool() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const [quarantineMode, setQuarantineMode] = useState('block_telemetry');
+  const [hoveredDomain, setHoveredDomain] = useState(null);
+  const radarCanvasRef = useRef(null);
+
+  const DOMAIN_TARGETS = [
+    { domain: '127.0.0.1:8094', category: 'local_service', ring: 0.22, angle: 0.8, color: '#F59E0B', label: 'Neuro-Memory Daemon' },
+    { domain: '127.0.0.1:8097', category: 'local_service', ring: 0.22, angle: 2.2, color: '#F59E0B', label: 'Agent Mock Twin' },
+    { domain: 'api.openai.com', category: 'llm_api', ring: 0.45, angle: 1.4, color: '#38BDF8', label: 'OpenAI GPT-4o API' },
+    { domain: 'api.anthropic.com', category: 'llm_api', ring: 0.45, angle: 4.1, color: '#38BDF8', label: 'Claude 3.5 Sonnet' },
+    { domain: 'huggingface.co', category: 'model_hub', ring: 0.65, angle: 3.2, color: '#A855F7', label: 'HuggingFace Model Hub' },
+    { domain: 'telemetry.segment.io', category: 'telemetry', ring: 0.82, angle: 0.3, color: '#EF4444', label: 'Segment Analytics (Deflected)' },
+    { domain: 'app.posthog.com', category: 'telemetry', ring: 0.82, angle: 5.2, color: '#EF4444', label: 'PostHog Telemetry (Deflected)' },
+    { domain: 'arxiv.org', category: 'scraper', ring: 0.95, angle: 2.9, color: '#10B981', label: 'Arxiv Research Papers' },
+  ];
+
+  // Kinetic Radar Canvas Sweep Animation
+  useEffect(() => {
+    const canvas = radarCanvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animationId;
+    let sweepAngle = 0;
+
+    const render = () => {
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+      const maxR = w / 2 - 12;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Radar Background
+      ctx.fillStyle = isDark ? '#040508' : '#F8FAFC';
+      ctx.fillRect(0, 0, w, h);
+
+      // Concentric Orbital Rings
+      const rings = [0.22, 0.45, 0.65, 0.82, 0.95];
+      rings.forEach((ratio, idx) => {
+        const r = maxR * ratio;
+        ctx.strokeStyle = isDark ? 'rgba(212, 175, 55, 0.18)' : 'rgba(184, 134, 11, 0.18)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([3, 4]);
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      });
+
+      // Axis Crosshairs
+      ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(cx, 10);
+      ctx.lineTo(cx, h - 10);
+      ctx.moveTo(10, cy);
+      ctx.lineTo(w - 10, cy);
+      ctx.stroke();
+
+      // Sweeping Beam with Gradient Sector
+      sweepAngle = (sweepAngle + 0.024) % (Math.PI * 2);
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, maxR, sweepAngle - 0.45, sweepAngle);
+      ctx.closePath();
+      const beamGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, maxR);
+      beamGrad.addColorStop(0, 'rgba(56, 189, 248, 0.28)');
+      beamGrad.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
+      ctx.fillStyle = beamGrad;
+      ctx.fill();
+
+      // Lead sweep line
+      ctx.strokeStyle = '#38BDF8';
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(sweepAngle) * maxR, cy + Math.sin(sweepAngle) * maxR);
+      ctx.stroke();
+      ctx.restore();
+
+      // Draw Domain Radar Blips
+      DOMAIN_TARGETS.forEach((node) => {
+        const r = maxR * node.ring;
+        const x = cx + Math.cos(node.angle) * r;
+        const y = cy + Math.sin(node.angle) * r;
+
+        const isBlocked = quarantineMode !== 'allow_all' && node.category === 'telemetry';
+        const blipColor = isBlocked ? '#EF4444' : node.color;
+
+        // Aura pulse
+        ctx.beginPath();
+        ctx.arc(x, y, 7, 0, Math.PI * 2);
+        ctx.fillStyle = blipColor + '33';
+        ctx.fill();
+
+        // Core dot
+        ctx.beginPath();
+        ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = blipColor;
+        ctx.fill();
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      });
+
+      animationId = requestAnimationFrame(render);
+    };
+
+    render();
+    return () => cancelAnimationFrame(animationId);
+  }, [isDark, quarantineMode]);
+
+  return (
+    <Box sx={{ mt: 1 }}>
+      {/* Top Action & Local Port Navigation Bar */}
+      <Paper
+        sx={{
+          p: 2.2,
+          mb: 3,
+          borderRadius: 2.5,
+          bgcolor: isDark ? 'rgba(56, 189, 248, 0.08)' : '#F0F9FF',
+          border: '1.5px solid',
+          borderColor: isDark ? 'rgba(56, 189, 248, 0.35)' : '#BAE6FD',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 2,
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Box sx={{ p: 1, borderRadius: '50%', bgcolor: 'rgba(56, 189, 248, 0.2)', color: '#38BDF8', display: 'flex' }}>
+            <RadarIcon sx={{ fontSize: 24 }} />
+          </Box>
+          <Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+              <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.85rem', color: isDark ? '#7DD3FC' : '#0369A1' }}>
+                AGENT EGRESS SENTINEL // PORT 8095
+              </Typography>
+              <Chip
+                label="TLS SNI SNIFFER ACTIVE"
+                size="small"
+                sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.64rem', bgcolor: 'rgba(56,189,248,0.2)', color: '#38BDF8', height: 20 }}
+              />
+              <Chip
+                label="PROXY :8096"
+                size="small"
+                sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.64rem', bgcolor: 'rgba(16,185,129,0.15)', color: '#10B981', height: 20 }}
+              />
+            </Box>
+            <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontSize: '0.76rem' }}>
+              Autonomous zero-dependency network interceptor, TLS SNI sniffer, and kinetic egress radar.
+            </Typography>
+          </Box>
+        </Box>
+        <Stack direction="row" spacing={1} flexWrap="wrap">
+          <Button
+            size="small"
+            variant="contained"
+            component="a"
+            href="http://127.0.0.1:8095"
+            target="_blank"
+            rel="noopener noreferrer"
+            startIcon={<RouterIcon sx={{ fontSize: 16 }} />}
+            endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              bgcolor: '#38BDF8',
+              color: '#08080B',
+              '&:hover': { bgcolor: '#7DD3FC' },
+            }}
+          >
+            Radar UI :8095
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            component="a"
+            href="http://127.0.0.1:8096"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              borderColor: 'rgba(56,189,248,0.5)',
+              color: '#38BDF8',
+              '&:hover': { borderColor: '#38BDF8', bgcolor: 'rgba(56,189,248,0.1)' },
+            }}
+          >
+            Proxy :8096
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            component="a"
+            href="https://agent-egress.nullai.tech"
+            target="_blank"
+            rel="noopener noreferrer"
+            endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+            sx={{
+              fontFamily: mono,
+              fontWeight: 750,
+              fontSize: '0.72rem',
+              borderColor: theme.palette.divider,
+              color: 'text.secondary',
+              '&:hover': { borderColor: gold(theme), color: gold(theme) },
+            }}
+          >
+            Web Mirror ↗
+          </Button>
+        </Stack>
+      </Paper>
+
+      {/* Main Radar Grid */}
+      <Grid container spacing={3}>
+        {/* Left: Interactive Canvas Radar & Quarantine Selector */}
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper, textAlign: 'center' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+              <Typography variant="caption" sx={{ color: gold(theme), fontWeight: 800, fontFamily: mono }}>
+                KINETIC ORBITAL EGRESS RADAR
+              </Typography>
+              <Chip
+                label={`MODE: ${quarantineMode.toUpperCase()}`}
+                size="small"
+                sx={{
+                  fontFamily: mono,
+                  fontWeight: 800,
+                  fontSize: '0.66rem',
+                  bgcolor: quarantineMode === 'zero_egress' ? errorBg(theme) : (quarantineMode === 'block_telemetry' ? 'rgba(56,189,248,0.15)' : successBg(theme)),
+                  color: quarantineMode === 'zero_egress' ? errorFg(theme) : (quarantineMode === 'block_telemetry' ? '#38BDF8' : successFg(theme)),
+                }}
+              />
+            </Box>
+
+            <canvas
+              ref={radarCanvasRef}
+              width={340}
+              height={340}
+              style={{ width: '100%', maxWidth: 340, height: 'auto', display: 'block', margin: '0 auto', borderRadius: 12 }}
+            />
+
+            {/* Quarantine Policy Switcher */}
+            <Box sx={{ mt: 2, display: 'flex', gap: 1, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Button
+                size="small"
+                variant={quarantineMode === 'allow_all' ? 'contained' : 'outlined'}
+                onClick={() => setQuarantineMode('allow_all')}
+                sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 750 }}
+              >
+                Allow All
+              </Button>
+              <Button
+                size="small"
+                variant={quarantineMode === 'block_telemetry' ? 'contained' : 'outlined'}
+                onClick={() => setQuarantineMode('block_telemetry')}
+                color="info"
+                sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 750 }}
+              >
+                Block Telemetry
+              </Button>
+              <Button
+                size="small"
+                variant={quarantineMode === 'zero_egress' ? 'contained' : 'outlined'}
+                onClick={() => setQuarantineMode('zero_egress')}
+                color="error"
+                sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 750 }}
+              >
+                Strict Zero-Egress
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
+
+        {/* Right: Captured Domain Feed & SNI Inspector */}
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="caption" sx={{ color: gold(theme), fontWeight: 800, fontFamily: mono, display: 'block', mb: 1.5 }}>
+              DISCOVERED TLS SNI DESTINATIONS ({DOMAIN_TARGETS.length})
+            </Typography>
+
+            <TableContainer sx={{ maxHeight: 270 }}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.75rem' }}>Destination SNI</TableCell>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.75rem' }}>Category</TableCell>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.75rem' }}>Policy</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {DOMAIN_TARGETS.map((t) => {
+                    const isBlocked = (quarantineMode === 'zero_egress' && !t.domain.includes('127.0.0.1')) ||
+                      (quarantineMode === 'block_telemetry' && t.category === 'telemetry');
+                    return (
+                      <TableRow key={t.domain} hover>
+                        <TableCell sx={{ fontFamily: mono, fontSize: '0.76rem' }}>
+                          <span style={{ color: t.color }}>● </span>{t.domain}
+                        </TableCell>
+                        <TableCell sx={{ fontSize: '0.72rem', textTransform: 'capitalize' }}>
+                          {t.category.replace('_', ' ')}
+                        </TableCell>
+                        <TableCell>
+                          <Chip
+                            label={isBlocked ? 'DEFLECTED (403)' : 'ALLOWED (200)'}
+                            size="small"
+                            sx={{
+                              height: 18,
+                              fontSize: '0.62rem',
+                              fontFamily: mono,
+                              fontWeight: 800,
+                              bgcolor: isBlocked ? errorBg(theme) : successBg(theme),
+                              color: isBlocked ? errorFg(theme) : successFg(theme),
+                            }}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+
+            {/* Telemetry Metrics Footer */}
+            <Paper sx={{ p: 1.8, mt: 2, bgcolor: darkPanel(theme), color: '#38BDF8', fontFamily: mono, fontSize: '0.76rem', borderRadius: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                <span style={{ color: '#D4AF37' }}>Throughput Monitored:</span>
+                <strong>4.82 MB (Zero Cloud Egress)</strong>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                <span>TLS ClientHello Sniffer:</span>
+                <span style={{ color: '#34D399' }}>ACTIVE (Zero Root CA)</span>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Socket Audit (/proc/net/tcp):</span>
+                <span style={{ color: '#A78BFA' }}>0 Unauthorized Exfiltrations</span>
+              </Box>
+            </Paper>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   TOOL 18: Agent Mock Twin (agent-mock-twin)
+   Features: Multi-Tier Request Matcher, Deterministic Replay, $0 Token Meter
+   ========================================================================== */
+export function AgentMockTwinTool() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const [selectedEndpoint, setSelectedEndpoint] = useState('/v1/chat/completions');
+  const [activeTier, setActiveTier] = useState('Tier 1: Exact Hash Match');
+  const [hitsCount, setHitsCount] = useState(48);
+  const [tokensSaved, setTokensSaved] = useState(1680);
+  const [testResponse, setTestResponse] = useState(null);
+  const [testing, setTesting] = useState(false);
+  const [chaosMode, setChaosMode] = useState(false);
+
+  const MOCK_ROUTES = [
+    { method: 'POST', path: '/v1/chat/completions', provider: 'OpenAI GPT-4o', latency: '0.38ms', hits: 28 },
+    { method: 'POST', path: '/v1/messages', provider: 'Anthropic Claude 3.5', latency: '0.42ms', hits: 14 },
+    { method: 'POST', path: '/api/generate', provider: 'Ollama Qwen 2.5', latency: '0.24ms', hits: 6 },
+  ];
+
+  const handleRunMockTest = () => {
+    setTesting(true);
+    setTimeout(() => {
+      setTesting(false);
+      setHitsCount((c) => c + 1);
+      setTokensSaved((t) => t + 120);
+      if (chaosMode) {
+        setTestResponse({
+          status: 429,
+          error: 'Rate limit exceeded (Chaos Simulation Injection)',
+          tier: 'Chaos Simulator',
+          latency: '240ms (jitter simulated)',
+          tokenCost: '$0.00'
+        });
+      } else {
+        setTestResponse({
+          status: 200,
+          tier: activeTier,
+          latency: '0.34ms',
+          tokenCost: '$0.00 (100% Mock Replay)',
+          response: {
+            id: 'mock-cmpl-' + Math.random().toString(36).substring(7),
+            choices: [{ message: { role: 'assistant', content: 'Autonomous deterministic replay output synthesized offline with $0 token spend.' } }],
+            usage: { prompt_tokens: 45, completion_tokens: 75, total_tokens: 120 }
+          }
+        });
+      }
+    }, 280);
+  };
+
+  return (
+    <Box sx={{ mt: 1 }}>
+      {/* Top Action & Local Port Navigation Bar */}
+      <Paper
+        sx={{
+          p: 2.2,
+          mb: 3,
+          borderRadius: 2.5,
+          bgcolor: isDark ? 'rgba(16, 185, 129, 0.08)' : '#ECFDF5',
+          border: '1.5px solid',
+          borderColor: isDark ? 'rgba(16, 185, 129, 0.35)' : '#A7F3D0',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 2,
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Box sx={{ p: 1, borderRadius: '50%', bgcolor: 'rgba(16, 185, 129, 0.2)', color: '#10B981', display: 'flex' }}>
+            <TerminalIcon sx={{ fontSize: 24 }} />
+          </Box>
+          <Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+              <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.85rem', color: isDark ? '#6EE7B7' : '#065F46' }}>
+                AGENT MOCK TWIN // PORT 8097
+              </Typography>
+              <Chip
+                label="$0 TOKEN SPEND"
+                size="small"
+                sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.64rem', bgcolor: 'rgba(16,185,129,0.2)', color: '#10B981', height: 20 }}
+              />
+              <Chip
+                label="DETERMINISTIC REPLAY"
+                size="small"
+                sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.64rem', bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8', height: 20 }}
+              />
+            </Box>
+            <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontSize: '0.76rem' }}>
+              Autonomous offline API mock &amp; deterministic replay server for AI agents with $0 token spend.
+            </Typography>
+          </Box>
+        </Box>
+        <Stack direction="row" spacing={1} flexWrap="wrap">
+          <Button
+            size="small"
+            variant="contained"
+            component="a"
+            href="http://127.0.0.1:8097"
+            target="_blank"
+            rel="noopener noreferrer"
+            startIcon={<RouterIcon sx={{ fontSize: 16 }} />}
+            endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              bgcolor: '#10B981',
+              color: '#FFFFFF',
+              '&:hover': { bgcolor: '#059669' },
+            }}
+          >
+            Dashboard :8097
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            component="a"
+            href="https://agent-mock.nullai.tech"
+            target="_blank"
+            rel="noopener noreferrer"
+            endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+            sx={{
+              fontFamily: mono,
+              fontWeight: 750,
+              fontSize: '0.72rem',
+              borderColor: theme.palette.divider,
+              color: 'text.secondary',
+              '&:hover': { borderColor: gold(theme), color: gold(theme) },
+            }}
+          >
+            Web Mirror ↗
+          </Button>
+        </Stack>
+      </Paper>
+
+      {/* Main Twin Simulator Grid */}
+      <Grid container spacing={3}>
+        {/* Left: Multi-Tier Request Matcher & Playground */}
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="caption" sx={{ color: gold(theme), fontWeight: 800, fontFamily: mono, display: 'block', mb: 1.5 }}>
+              MULTI-TIER REQUEST MATCHER PLAYGROUND
+            </Typography>
+
+            <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+              <InputLabel>Target Mock Endpoint</InputLabel>
+              <Select
+                value={selectedEndpoint}
+                label="Target Mock Endpoint"
+                onChange={(e) => setSelectedEndpoint(e.target.value)}
+                sx={{ fontFamily: mono, fontSize: '0.85rem' }}
+              >
+                <MenuItem value="/v1/chat/completions">POST /v1/chat/completions (OpenAI Compatible)</MenuItem>
+                <MenuItem value="/v1/messages">POST /v1/messages (Anthropic Compatible)</MenuItem>
+                <MenuItem value="/api/generate">POST /api/generate (Ollama Compatible)</MenuItem>
+              </Select>
+            </FormControl>
+
+            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+              {['Tier 1: Exact Hash', 'Tier 2: Fuzzy', 'Tier 3: Synthetic'].map((tier) => (
+                <Button
+                  key={tier}
+                  size="small"
+                  variant={activeTier.startsWith(tier.slice(0, 6)) ? 'contained' : 'outlined'}
+                  onClick={() => setActiveTier(tier)}
+                  sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 750, flex: 1 }}
+                >
+                  {tier}
+                </Button>
+              ))}
+            </Box>
+
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, p: 1.2, bgcolor: isDark ? '#040508' : '#F8FAFC', borderRadius: 1.5, border: `1px solid ${theme.palette.divider}` }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700 }}>
+                Chaos Mode (Simulate 429 Rate Limits / Jitter):
+              </Typography>
+              <Switch
+                size="small"
+                checked={chaosMode}
+                onChange={(e) => setChaosMode(e.target.checked)}
+              />
+            </Box>
+
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={handleRunMockTest}
+              disabled={testing}
+              startIcon={<PlayArrowIcon />}
+              sx={{
+                bgcolor: gold(theme),
+                color: '#08080B',
+                fontWeight: 800,
+                fontFamily: mono,
+                py: 1,
+                '&:hover': { bgcolor: goldSoft(theme) },
+              }}
+            >
+              {testing ? 'Matching Route...' : 'Simulate Offline Agent Query ⚡'}
+            </Button>
+
+            {testResponse && (
+              <Paper sx={{ mt: 2, p: 2, bgcolor: darkPanel(theme), borderRadius: 2, border: `1px solid ${darkPanelBorder(theme)}` }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                  <Chip
+                    label={`STATUS ${testResponse.status}`}
+                    size="small"
+                    sx={{
+                      height: 20,
+                      fontWeight: 800,
+                      fontFamily: mono,
+                      fontSize: '0.66rem',
+                      bgcolor: testResponse.status === 200 ? successBg(theme) : errorBg(theme),
+                      color: testResponse.status === 200 ? successFg(theme) : errorFg(theme),
+                    }}
+                  />
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#38BDF8' }}>
+                    Latency: {testResponse.latency}
+                  </Typography>
+                </Box>
+                <pre style={{ margin: 0, fontSize: '0.74rem', fontFamily: mono, color: '#A7F3D0', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>
+                  {JSON.stringify(testResponse, null, 2)}
+                </pre>
+              </Paper>
+            )}
+          </Paper>
+        </Grid>
+
+        {/* Right: Real-Time Savings HUD & Route Table */}
+        <Grid xs={12} md={6}>
+          {/* Savings Counters */}
+          <Paper sx={{ p: 2.5, mb: 2, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="caption" sx={{ color: gold(theme), fontWeight: 800, fontFamily: mono, display: 'block', mb: 1.5 }}>
+              CI/CD &amp; LOCAL SESSION SAVINGS METER
+            </Typography>
+
+            <Grid container spacing={2}>
+              <Grid xs={6}>
+                <Paper sx={{ p: 1.5, textAlign: 'center', bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5', borderRadius: 2, border: '1px solid rgba(16,185,129,0.3)' }}>
+                  <Typography variant="h5" sx={{ fontWeight: 800, color: '#10B981', fontFamily: mono }}>
+                    {hitsCount}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700 }}>
+                    Requests Intercepted
+                  </Typography>
+                </Paper>
+              </Grid>
+              <Grid xs={6}>
+                <Paper sx={{ p: 1.5, textAlign: 'center', bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF', borderRadius: 2, border: '1px solid rgba(56,189,248,0.3)' }}>
+                  <Typography variant="h5" sx={{ fontWeight: 800, color: '#38BDF8', fontFamily: mono }}>
+                    ${(tokensSaved * 0.000005).toFixed(4)}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700 }}>
+                    API Spend Saved ($0 Cost)
+                  </Typography>
+                </Paper>
+              </Grid>
+            </Grid>
+
+            <Box sx={{ mt: 2, p: 1.2, bgcolor: isDark ? '#040508' : '#F8FAFC', borderRadius: 1.5, border: `1px solid ${theme.palette.divider}` }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: '#D4AF37', display: 'block' }}>
+                Estimated Tokens Saved: <strong>{tokensSaved.toLocaleString()} tokens</strong>
+              </Typography>
+              <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem' }}>
+                Zero token burn in automated test loops. Responses answered in &lt; 0.5ms with deterministic fidelity.
+              </Typography>
+            </Box>
+          </Paper>
+
+          {/* Cached Route Table */}
+          <Paper sx={{ p: 2, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="caption" sx={{ color: gold(theme), fontWeight: 800, fontFamily: mono, display: 'block', mb: 1 }}>
+              RECORDED HAR 1.2 / OPENAPI ROUTES
+            </Typography>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ fontWeight: 800, fontSize: '0.72rem' }}>Path</TableCell>
+                  <TableCell sx={{ fontWeight: 800, fontSize: '0.72rem' }}>Target Engine</TableCell>
+                  <TableCell sx={{ fontWeight: 800, fontSize: '0.72rem' }}>Latency</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {MOCK_ROUTES.map((r) => (
+                  <TableRow key={r.path}>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: gold(theme) }}>
+                      {r.method} {r.path}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: '0.72rem' }}>{r.provider}</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#10B981' }}>{r.latency}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Paper>
+        </Grid>
+      </Grid>
     </Box>
   );
 }

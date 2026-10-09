@@ -24,7 +24,7 @@ import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, Stagge
 import { useSovereignRuntime, isLocalRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const categories = ['All', 'Planning', 'Swarm & Core', 'AI & Knowledge', 'Security & Recon', 'Security & OpSec', 'Security & Steganography', 'Autonomous Web', 'Media & 3D', 'Growth & SEO', 'Automation'];
+const categories = ['All', ...Array.from(new Set(microTools.map((t) => t.category)))];
 
 export default function ToolsPage() {
   const theme = useTheme();
@@ -425,6 +425,21 @@ export default function ToolsPage() {
                             label="Requires Local CLI"
                             size="small"
                             sx={{ bgcolor: isDark ? 'rgba(148,163,184,0.12)' : '#F1F5F9', color: theme.palette.text.secondary, fontWeight: 700, fontSize: '0.72rem', border: `1px solid ${theme.palette.divider}` }}
+                          />
+                        )}
+                        {tool.localPort && (
+                          <Chip
+                            label={`:${tool.localPort}`}
+                            size="small"
+                            sx={{
+                              height: 20,
+                              fontFamily: mono,
+                              fontWeight: 800,
+                              fontSize: '0.68rem',
+                              bgcolor: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
+                              color: gold.accent,
+                              border: `1px solid ${isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.3)'}`,
+                            }}
                           />
                         )}
                         <Chip label={`v${tool.version}`} size="small" variant="outlined" sx={{ color: theme.palette.text.secondary, fontSize: '0.72rem', fontFamily: mono, borderColor: theme.palette.divider }} />

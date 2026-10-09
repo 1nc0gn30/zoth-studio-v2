@@ -40,6 +40,9 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const ORDERED_CATEGORIES = [
   'All',
+  'Security & Network',
+  'Simulation & Testing',
+  'Memory & Brain',
   'Security & Recon',
   'Swarm & Core',
   'Autonomous Web',
@@ -50,6 +53,24 @@ const ORDERED_CATEGORIES = [
 ];
 
 const CATEGORY_CONFIG = {
+  'Security & Network': {
+    color: '#38BDF8',
+    lightColor: '#0284C7',
+    wash: 'rgba(56, 189, 248, 0.14)',
+    icon: SecurityIcon,
+  },
+  'Simulation & Testing': {
+    color: '#10B981',
+    lightColor: '#059669',
+    wash: 'rgba(16, 185, 129, 0.14)',
+    icon: TerminalIcon,
+  },
+  'Memory & Brain': {
+    color: '#C084FC',
+    lightColor: '#9333EA',
+    wash: 'rgba(192, 132, 252, 0.14)',
+    icon: PsychologyIcon,
+  },
   'Security & Recon': {
     color: '#F87171',
     lightColor: '#DC2626',

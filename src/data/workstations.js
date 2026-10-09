@@ -184,6 +184,28 @@ export const workstations = [
     pullCommand: "npx zoth pull subsweep-lead-scanner"
   },
   {
+    id: "agent-egress-sentinel",
+    name: "Agent Egress Sentinel // Kinetic Network Radar",
+    path: "/studio/egress-sentinel.html",
+    band: "Security",
+    type: "integrated_tool",
+    description: "Autonomous zero-dependency network interceptor, TLS SNI sniffer, and kinetic egress radar.",
+    alsoInApp: "/tools/agent-egress-sentinel",
+    toolRepoId: "agent-egress-sentinel",
+    pullCommand: "agent-egress serve --web-port 8095 --proxy-port 8096"
+  },
+  {
+    id: "agent-mock-twin",
+    name: "Agent Mock Twin // Deterministic API Replay",
+    path: "/studio/agent-mock.html",
+    band: "Build",
+    type: "integrated_tool",
+    description: "Autonomous offline API mock & deterministic replay server for AI agents with $0 token spend.",
+    alsoInApp: "/tools/agent-mock-twin",
+    toolRepoId: "agent-mock-twin",
+    pullCommand: "./bin/agent-mock serve --port 8097"
+  },
+  {
     id: "connectors",
     name: "Zoth Tool Bench & Integration Ecosystem",
     path: "/studio/connectors.html",
