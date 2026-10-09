@@ -511,6 +511,22 @@ export const microTools = [
     liveUrl: 'https://mcp-lens.nullai.tech',
     version: '1.0.0',
     pull: 'git clone https://github.com/1nc0gn30/mcp-lens.git && cd mcp-lens && ./bin/mcp-lens serve --port 8109',
+  },
+  {
+    id: 'agent-budget-sentinel',
+    published: true,
+    name: 'Agent Budget Sentinel',
+    repo: 'agent-budget-sentinel',
+    category: 'Security & Network',
+    executionType: 'local_cli',
+    github: 'https://github.com/1nc0gn30/agent-budget-sentinel',
+    description: 'Autonomous zero-dependency spending guardrail, real-time token cost circuit breaker, and runaway loop interceptor.',
+    localPort: 8110,
+    proxyPort: 8111,
+    localUrl: 'http://127.0.0.1:8110',
+    liveUrl: 'https://agent-budget-sentinel.nullai.tech',
+    version: '1.0.0',
+    pull: 'git clone https://github.com/1nc0gn30/agent-budget-sentinel.git && cd agent-budget-sentinel && ./bin/agent-budget serve --web-port 8110 --proxy-port 8111',
   }
 ];
 
