@@ -421,6 +421,22 @@ export const microTools = [
     liveUrl: 'https://firewall.nullai.tech',
     version: '1.0.0',
     pull: 'git clone https://github.com/1nc0gn30/agent-prompt-firewall.git && cd agent-prompt-firewall && ./bin/agent-firewall serve --web-port 8098 --proxy-port 8099',
+  },
+  {
+    id: 'agent-flight-recorder',
+    published: true,
+    name: 'Agent Flight Recorder',
+    repo: 'agent-flight-recorder',
+    category: 'Forensics & Telemetry',
+    executionType: 'local_cli',
+    github: 'https://github.com/1nc0gn30/agent-flight-recorder',
+    description: 'Black box flight recorder & time-scrubbing telemetry forensics hub for AI agents.',
+    localPort: 8104,
+    localUrl: 'http://127.0.0.1:8104',
+    liveUrl: 'https://flight.nullai.tech',
+    version: '0.1.0',
+    pull: 'git clone https://github.com/1nc0gn30/agent-flight-recorder.git && cd agent-flight-recorder && ./bin/agent-flight serve --port 8104',
   }
 ];
+
 
