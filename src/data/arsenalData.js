@@ -41,6 +41,7 @@ function toolToAsset(t) {
       'agent-mock-twin',
       'agent-prompt-firewall',
       'agent-flight-recorder',
+      'agent-capsule-jail',
       'subsweep-lead-scanner',
       'envguard-secrets-vault'
     ].includes(t.id),

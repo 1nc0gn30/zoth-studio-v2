@@ -436,6 +436,21 @@ export const microTools = [
     liveUrl: 'https://flight.nullai.tech',
     version: '0.1.0',
     pull: 'git clone https://github.com/1nc0gn30/agent-flight-recorder.git && cd agent-flight-recorder && ./bin/agent-flight serve --port 8104',
+  },
+  {
+    id: 'agent-capsule-jail',
+    published: true,
+    name: 'Agent Capsule Jail',
+    repo: 'agent-capsule-jail',
+    category: 'Security & Enclave',
+    executionType: 'local_cli',
+    github: 'https://github.com/1nc0gn30/agent-capsule-jail',
+    description: 'Kernel enclave sandbox, resource quotas, and ephemeral process isolation for AI agents.',
+    localPort: 8105,
+    localUrl: 'http://127.0.0.1:8105',
+    liveUrl: 'https://capsule.nullai.tech',
+    version: '0.1.0',
+    pull: 'git clone https://github.com/1nc0gn30/agent-capsule-jail.git && cd agent-capsule-jail && ./bin/agent-capsule serve --port 8105',
   }
 ];
 

@@ -52,7 +52,7 @@ function localModels(tags) {
 }
 
 export async function probeStatus() {
-  const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama, vault, egress, mock, firewall, flight] = await Promise.all([
+  const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama, vault, egress, mock, firewall, flight, capsule] = await Promise.all([
     requestJson(8094, '/health'),
     requestJson(8788, '/health'),
     requestJson(8102, '/api/health'),
@@ -65,6 +65,7 @@ export async function probeStatus() {
     requestJson(8097, '/api/stats'),
     requestJson(8098, '/api/stats'),
     requestJson(8104, '/api/stats'),
+    requestJson(8105, '/api/stats'),
   ]);
 
   const memoryUp = memoryPrimary.up || memorySec.up;
@@ -127,6 +128,12 @@ export async function probeStatus() {
         port: 8104,
         up: flight.up,
         detail: flight.json,
+      },
+      capsule: {
+        name: 'Agent capsule jail',
+        port: 8105,
+        up: capsule.up,
+        detail: capsule.json,
       },
       azoth: {
         name: 'Azoth local agent',

@@ -228,6 +228,17 @@ export const workstations = [
     pullCommand: "./bin/agent-flight serve --port 8104"
   },
   {
+    id: "agent-capsule-jail",
+    name: "Agent Capsule Jail // Kernel Sandbox & Isolation",
+    path: "/studio/agent-capsule.html",
+    band: "Security",
+    type: "integrated_tool",
+    description: "Kernel enclave sandbox, resource quotas, and ephemeral process isolation for AI agents.",
+    alsoInApp: "/tools/agent-capsule-jail",
+    toolRepoId: "agent-capsule-jail",
+    pullCommand: "./bin/agent-capsule serve --port 8105"
+  },
+  {
     id: "connectors",
     name: "Zoth Tool Bench & Integration Ecosystem",
     path: "/studio/connectors.html",

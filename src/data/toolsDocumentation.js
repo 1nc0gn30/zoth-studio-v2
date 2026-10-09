@@ -1009,6 +1009,52 @@ export const toolsDocumentation = {
       'Standalone single-file HTML replay bundle export (100% offline viewable)',
       'Zero external dependencies (100% Python standard library)'
     ]
+  },
+
+  'agent-capsule-jail': {
+    whyUse: 'Autonomous zero-dependency kernel enclave sandbox, resource quotas, and ephemeral process isolation for AI agents. Run arbitrary code, untrusted scripts, and multi-turn shell commands without risking host compromise, fork bombs, or credential theft.',
+    problemSolved: 'Eliminates the danger of rogue agent commands (rm -rf, disk wipes, infinite runaway loops, or secret exfiltration) while avoiding heavy Docker daemon dependencies.',
+    architecture: 'Python 3.10+ standard library daemon running on port 8105. Utilizes native Linux resource quotas via resource.setrlimit (CPU, RAM, process count, file size), ephemeral scratch spaces, environment sanitization, and filesystem delta diffing with direct telemetry forwarding to agent-flight-recorder (:8104).',
+    aiAgentProtocol: {
+      mcpTool: 'capsule_jail_exec',
+      description: 'Execute a command in an isolated ephemeral capsule sandbox with resource constraints.',
+      cliExample: './bin/agent-capsule exec -- python3 -c "print(1+1)"',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          command: { type: 'string', description: 'Shell command string to execute in capsule' },
+          timeout_sec: { type: 'number', description: 'Execution timeout in seconds', default: 30 },
+          memory_mb: { type: 'number', description: 'Maximum memory RSS cap in megabytes', default: 512 },
+          allowed_env: { type: 'array', items: { type: 'string' }, description: 'Allowed environment variable keys' }
+        },
+        required: ['command']
+      },
+      outputSchema: {
+        exit_code: 'number',
+        stdout: 'string',
+        stderr: 'string',
+        execution_ms: 'number',
+        files_diff: {
+          created: 'array',
+          modified: 'array',
+          deleted: 'array'
+        },
+        resource_usage: 'object'
+      }
+    },
+    quickstart: [
+      'git clone https://github.com/1nc0gn30/agent-capsule-jail.git',
+      'cd agent-capsule-jail && chmod +x bin/agent-capsule',
+      './bin/agent-capsule serve --port 8105'
+    ],
+    features: [
+      'Zero-dependency Linux kernel process isolation via resource.setrlimit',
+      'Ephemeral copy-on-write scratch directories with commit/discard policies',
+      'Host environment sanitization (automatic stripping of API and cloud secrets)',
+      'Automated telemetry stream to Agent Flight Recorder on port 8104',
+      'Real-time Web Cockpit with resource gauges, process log feeds, and filesystem diffs',
+      'Zero external dependencies (100% Python standard library)'
+    ]
   }
 };
 
