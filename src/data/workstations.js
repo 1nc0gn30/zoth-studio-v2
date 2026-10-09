@@ -250,6 +250,28 @@ export const workstations = [
     pullCommand: "./bin/agent-policy serve --port 8106"
   },
   {
+    id: "etsy-pod-forge",
+    name: "Etsy POD Forge // Print-on-Demand Studio",
+    path: "/studio/etsy-pod.html",
+    band: "Build",
+    type: "integrated_tool",
+    description: "Autonomous Print-on-Demand canvas engine, lifestyle mockup compositor, and listing kit synthesizer targeting 55+ women demographic.",
+    alsoInApp: "/tools/etsy-pod-forge",
+    toolRepoId: "etsy-pod-forge",
+    pullCommand: "./bin/etsy-pod-forge serve --port 8107"
+  },
+  {
+    id: "etsy-connector",
+    name: "Etsy Connector // Open API v3 & MCP Bridge",
+    path: "/studio/etsy-connector.html",
+    band: "Observe",
+    type: "integrated_tool",
+    description: "Etsy Open API v3 & Antigravity MCP bridge with 13-tag SEO auditor, fee/profit calculator, and Printify payload generator.",
+    alsoInApp: "/tools/etsy-connector",
+    toolRepoId: "etsy-connector",
+    pullCommand: "./bin/etsy-connector serve --port 8108"
+  },
+  {
     id: "connectors",
     name: "Zoth Tool Bench & Integration Ecosystem",
     path: "/studio/connectors.html",

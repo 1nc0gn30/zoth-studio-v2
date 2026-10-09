@@ -46,7 +46,7 @@ export default function DaemonStatusStrip() {
             borderColor: dark ? 'rgba(56,189,248,0.35)' : '#BAE6FD',
           }}
         />
-        <Tooltip title="Loopback microdaemons (Swarm :8790, Neuro Memory :8094, Egress Sentinel :8095, Mock Twin :8097, Prompt Firewall :8098, Flight Recorder :8104, Bridge :8102, Vault :8787, Ollama :11434) execute exclusively on the sovereign bare-metal host with zero cloud egress.">
+        <Tooltip title="Loopback microdaemons (Swarm :8790, Neuro Memory :8094, Egress Sentinel :8095, Mock Twin :8097, Prompt Firewall :8098, Flight Recorder :8104, Capsule Jail :8105, Policy Auditor :8106, POD Forge :8107, Etsy Connector :8108, Bridge :8102, Vault :8787, Ollama :11434) execute exclusively on the sovereign bare-metal host with zero cloud egress.">
           <Chip
 
             icon={<SecurityIcon sx={{ fontSize: '0.82rem !important', color: dark ? '#34D399' : '#059669' }} />}

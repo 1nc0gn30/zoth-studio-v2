@@ -1096,6 +1096,82 @@ export const toolsDocumentation = {
       'Direct telemetry forwarding to Agent Flight Recorder on port 8104',
       'Zero external dependencies (100% Python standard library)'
     ]
+  },
+
+  'etsy-pod-forge': {
+    whyUse: 'Autonomous Print-on-Demand canvas engine, lifestyle mockup compositor, and complete listing kit synthesizer tailored for high-margin commerce targeting the 55+ women demographic.',
+    problemSolved: 'Automates end-to-end POD product creation from high-res 300 DPI canvas rendering to 4 photorealistic lifestyle mockups and SEO-optimized listings in seconds.',
+    architecture: 'Python 3.10+ standard library daemon running on port 8107 with Web Cockpit, REST API, and prompt vault of 53 high-converting watercolor & botanical recipes.',
+    aiAgentProtocol: {
+      mcpTool: 'etsy_generate_pod_payload',
+      description: 'Synthesizes complete print-ready POD canvas, mockup files, and listing metadata.',
+      cliExample: './bin/etsy-pod-forge listing --cadre apparel --title "Grandma Garden Sweatshirt"',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          cadre: { type: 'string', enum: ['apparel', 'mugs', 'totes', 'wall_art', 'crafting'] },
+          title: { type: 'string', description: 'Product title prefix' },
+          colorway: { type: 'string', description: 'Garment or mockup colorway' }
+        },
+        required: ['cadre']
+      },
+      outputSchema: {
+        listing_kit: 'object',
+        canvas_path: 'string',
+        mockup_path: 'string',
+        profit_margin: 'number'
+      }
+    },
+    quickstart: [
+      'git clone https://github.com/1nc0gn30/etsy-pod-forge.git',
+      'cd etsy-pod-forge && chmod +x bin/etsy-pod-forge',
+      './bin/etsy-pod-forge serve --port 8107'
+    ],
+    features: [
+      '53 prompt recipes engineered specifically for the high-margin 55+ women demographic',
+      'Print-ready 300 DPI canvas generator with delicate watercolor & floral typography',
+      'Automated photorealistic lifestyle mockup compositor (tees, crewnecks, mugs, totes)',
+      'Autonomous Etsy listing kit synthesizer with 13 high-converting SEO tags',
+      'Real-time Web Cockpit & REST API on port 8107'
+    ]
+  },
+
+  'etsy-connector': {
+    whyUse: 'Etsy Open API v3 and Print-on-Demand (POD) connector for Antigravity, featuring an automated 13-tag SEO auditor, seller fee/profit margin calculator, and Printify payload generator.',
+    problemSolved: 'Eliminates manual listing preparation and ensures full compliance with Etsy ranking algorithms, fee structures, and taxonomy classifications.',
+    architecture: 'Python 3.10+ standard library daemon running on port 8108 with JSON-RPC 2.0 stdio MCP server, REST API, and Web Cockpit.',
+    aiAgentProtocol: {
+      mcpTool: 'etsy_audit_listing_seo',
+      description: 'Audits title length and validates exactly 13 unique tags under 20 characters against Etsy ranking criteria.',
+      cliExample: './bin/etsy-connector audit "Grandma Wildflower Sweatshirt" "grandma gift,cottagecore sweater"',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          title: { type: 'string', description: 'Listing title' },
+          tags: { type: 'array', items: { type: 'string' }, description: 'List of up to 13 search tags' }
+        },
+        required: ['title', 'tags']
+      },
+      outputSchema: {
+        seo_score: 'number',
+        grade: 'string',
+        is_compliant: 'boolean',
+        recommendations: 'array'
+      }
+    },
+    quickstart: [
+      'git clone https://github.com/1nc0gn30/etsy-connector.git',
+      'cd etsy-connector && chmod +x bin/etsy-connector',
+      './bin/etsy-connector serve --port 8108'
+    ],
+    features: [
+      'Official Etsy Open API v3 client with high-fidelity deterministic simulation mode',
+      '13-Tag Etsy SEO algorithm auditor with character limits and repeat-word penalty checks',
+      'Accurate seller fee and profit margin calculator ($0.20 listing, 6.5% transaction, 3%+$0.25 processing)',
+      'Printify & Gelato fulfillment JSON payload generator',
+      'Native Model Context Protocol (MCP) server exposing 8 tools for Antigravity agents',
+      'Real-time Web Cockpit on port 8108'
+    ]
   }
 };
 
