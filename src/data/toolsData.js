@@ -405,6 +405,22 @@ export const microTools = [
     liveUrl: 'https://agent-mock.nullai.tech',
     version: '1.0.0',
     pull: 'git clone https://github.com/1nc0gn30/agent-mock-twin.git && cd agent-mock-twin && ./bin/agent-mock serve --port 8097',
+  },
+  {
+    id: 'agent-prompt-firewall',
+    published: true,
+    name: 'Agent Prompt Firewall',
+    repo: 'agent-prompt-firewall',
+    category: 'Security & Network',
+    executionType: 'local_cli',
+    github: 'https://github.com/1nc0gn30/agent-prompt-firewall',
+    description: 'Autonomous inline prompt injection defense, PII redactor, and threat radar for AI agents.',
+    localPort: 8098,
+    proxyPort: 8099,
+    localUrl: 'http://127.0.0.1:8098',
+    liveUrl: 'https://firewall.nullai.tech',
+    version: '1.0.0',
+    pull: 'git clone https://github.com/1nc0gn30/agent-prompt-firewall.git && cd agent-prompt-firewall && ./bin/agent-firewall serve --web-port 8098 --proxy-port 8099',
   }
 ];
 
