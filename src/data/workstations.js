@@ -283,6 +283,17 @@ export const workstations = [
     pullCommand: "./bin/mcp-lens serve --port 8109"
   },
   {
+    id: "agent-budget-sentinel",
+    name: "Agent Budget Sentinel // Token Cost Circuit Breaker",
+    path: "/studio/budget-sentinel.html",
+    band: "Observe",
+    type: "integrated_tool",
+    description: "Autonomous zero-dependency spending guardrail, real-time token cost circuit breaker, and runaway loop interceptor.",
+    alsoInApp: "/tools/agent-budget-sentinel",
+    toolRepoId: "agent-budget-sentinel",
+    pullCommand: "./bin/agent-budget serve --web-port 8110 --proxy-port 8111"
+  },
+  {
     id: "connectors",
     name: "Zoth Tool Bench & Integration Ecosystem",
     path: "/studio/connectors.html",

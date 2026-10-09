@@ -1207,6 +1207,43 @@ export const toolsDocumentation = {
       'Interactive Web Cockpit on port 8109 with dynamic tool execution forms',
       'Zero external dependencies (100% Python standard library)'
     ]
+  },
+
+  'agent-budget-sentinel': {
+    whyUse: 'Autonomous zero-dependency spending guardrail, real-time token cost circuit breaker, and runaway loop interceptor.',
+    problemSolved: 'Permanently eliminates runaway LLM infinite loops, rogue retry bursts, and catastrophic end-of-month cloud API billing surprises.',
+    architecture: 'Python 3.10+ standard library daemon running on port 8110 (Web Deck) and port 8111 (Inline Proxy) with heuristic BPE token cost estimation, SQLite ledger, and instantaneous HTTP 429 circuit trip.',
+    aiAgentProtocol: {
+      mcpTool: 'budget_circuit_breaker_status',
+      description: 'Checks live spending, remaining budget ceiling, and circuit breaker trip state.',
+      cliExample: './bin/agent-budget run --max-budget 2.50 -- python my_agent.py',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          action: { type: 'string', enum: ['status', 'trip', 'reset', 'set-budget'], description: 'Circuit breaker operation' },
+          amount: { type: 'number', description: 'New budget ceiling in USD' }
+        },
+        required: ['action']
+      },
+      outputSchema: {
+        state: 'CLOSED | WARN | TRIPPED',
+        current_spend_usd: 'number',
+        max_budget_usd: 'number',
+        remaining_budget_usd: 'number'
+      }
+    },
+    quickstart: [
+      'git clone https://github.com/1nc0gn30/agent-budget-sentinel.git',
+      'cd agent-budget-sentinel && chmod +x bin/agent-budget',
+      './bin/agent-budget serve --web-port 8110 --proxy-port 8111'
+    ],
+    features: [
+      'Inline transparent HTTP proxy on port 8111 intercepting LLM requests with 0 latency overhead',
+      'Real-time token cost estimation for OpenAI, Anthropic, Gemini, and DeepSeek',
+      'Emergency kill-switch circuit breaker tripping on cumulative budget breach or velocity spike',
+      'Interactive Web Radar Deck on port 8110 with live SSE transaction feed and test harness',
+      'Zero external dependencies (100% Python standard library)'
+    ]
   }
 };
 
