@@ -55,6 +55,7 @@ import {
   CronRhythmTool,
   AgentEgressSentinelTool,
   AgentMockTwinTool,
+  AgentPromptFirewallTool,
 } from '../components/tools/EnclaveToolsSuite';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
@@ -68,6 +69,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'neuro-memory-daemon': NeuroMemoryTool,
   'agent-egress-sentinel': AgentEgressSentinelTool,
   'agent-mock-twin': AgentMockTwinTool,
+  'agent-prompt-firewall': AgentPromptFirewallTool,
   'vector-search-engine': VectorSearchTool,
   'deepsearch-research-agent': DeepSearchResearchTool,
   'prompt-master-optimizer': PromptMasterTool,
