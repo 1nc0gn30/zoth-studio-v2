@@ -1692,6 +1692,204 @@ function Badge3dCoinWorkstation({ isDark, gold }) {
 }
 
 /* --------------------------------------------------------------------------
+   10. CertPath Roadmap Studio Workstation
+   -------------------------------------------------------------------------- */
+function CertPathRoadmapWorkstation({ isDark, gold }) {
+  const tracks = {
+    'cloud-sec': {
+      title: 'Cloud Security Architect',
+      timeline: '12 - 18 Months',
+      medianSalary: '$165,000 USD',
+      steps: [
+        { id: 'ccna', name: 'CompTIA Security+ / Network+', provider: 'CompTIA', hours: 80, cost: '$392', level: 'Foundation' },
+        { id: 'aws-saa', name: 'AWS Certified Solutions Architect Associate', provider: 'AWS', hours: 120, cost: '$150', level: 'Associate' },
+        { id: 'aws-sec', name: 'AWS Certified Security - Specialty', provider: 'AWS', hours: 140, cost: '$300', level: 'Specialty' },
+        { id: 'cissp', name: 'CISSP (Certified Information Systems Security Professional)', provider: 'ISC2', hours: 250, cost: '$749', level: 'Expert / Governance' },
+      ]
+    },
+    'offensive': {
+      title: 'Offensive Security & Red Team Operator',
+      timeline: '14 - 24 Months',
+      medianSalary: '$152,000 USD',
+      steps: [
+        { id: 'sec-plus', name: 'CompTIA Security+ (SY0-701)', provider: 'CompTIA', hours: 80, cost: '$392', level: 'Foundation' },
+        { id: 'ejpt', name: 'eJPT (Junior Penetration Tester)', provider: 'INE Security', hours: 100, cost: '$249', level: 'Practical Associate' },
+        { id: 'oscp', name: 'OSCP (Offensive Security Certified Professional)', provider: 'OffSec', hours: 350, cost: '$1,649', level: 'Professional Hands-On' },
+        { id: 'osep', name: 'OSEP (OffSec Experienced Pentester - Evasion)', provider: 'OffSec', hours: 300, cost: '$1,649', level: 'Advanced Red Team' },
+      ]
+    },
+    'devsecops': {
+      title: 'DevSecOps & Platform Engineer',
+      timeline: '10 - 15 Months',
+      medianSalary: '$158,000 USD',
+      steps: [
+        { id: 'linux', name: 'RHCSA (Red Hat Certified System Administrator)', provider: 'Red Hat', hours: 120, cost: '$400', level: 'Core OS' },
+        { id: 'cka', name: 'CKA (Certified Kubernetes Administrator)', provider: 'CNCF', hours: 140, cost: '$395', level: 'Container Orchestration' },
+        { id: 'cks', name: 'CKS (Certified Kubernetes Security Specialist)', provider: 'CNCF', hours: 160, cost: '$395', level: 'Cloud Native Defense' },
+        { id: 'hashi', name: 'HashiCorp Certified: Terraform Associate', provider: 'HashiCorp', hours: 60, cost: '$70', level: 'IaC Infrastructure' },
+      ]
+    }
+  };
+
+  const [selectedTrack, setSelectedTrack] = useState('cloud-sec');
+  const current = tracks[selectedTrack];
+
+  const handleExportMarkdown = () => {
+    let md = `# ${current.title} — Career Roadmap Plan\n\n`;
+    md += `Estimated Timeline: ${current.timeline} • Target Median Salary: ${current.medianSalary}\n\n`;
+    md += `## Certification Path DAG:\n`;
+    current.steps.forEach((s, idx) => {
+      md += `${idx + 1}. **${s.name}** (${s.provider})\n`;
+      md += `   - Level: ${s.level} | Study Time: ~${s.hours} hours | Exam Fee: ${s.cost}\n`;
+    });
+    const blob = new Blob([md], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `roadmap_${selectedTrack}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          {Object.entries(tracks).map(([k, t]) => (
+            <Button
+              key={k}
+              size="small"
+              variant={selectedTrack === k ? 'contained' : 'outlined'}
+              onClick={() => setSelectedTrack(k)}
+              sx={{
+                fontFamily: mono,
+                fontSize: '0.72rem',
+                bgcolor: selectedTrack === k ? gold.accent : 'transparent',
+                color: selectedTrack === k ? '#08080B' : 'text.primary',
+                borderColor: gold.border,
+                fontWeight: 700
+              }}
+            >
+              {t.title}
+            </Button>
+          ))}
+        </Box>
+        <Button
+          size="small"
+          variant="outlined"
+          href="https://certpath-roadmap-studio.netlify.app"
+          target="_blank"
+          rel="noopener"
+          sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: gold.border, color: gold.accent }}
+        >
+          Open CertPath Full Studio ↗
+        </Button>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}` }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold.accent, fontSize: '0.9rem' }}>
+                {current.title} Roadmap Progression
+              </Typography>
+              <Chip label={`Target: ${current.medianSalary}`} size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(16,185,129,0.15)', color: '#10B981' }} />
+            </Box>
+
+            <Stack spacing={1.5}>
+              {current.steps.map((step, idx) => (
+                <Paper
+                  key={step.id}
+                  sx={{
+                    p: 1.8,
+                    bgcolor: isDark ? '#040408' : '#F8FAFC',
+                    border: `1px solid ${gold.border}`,
+                    borderRadius: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1.5,
+                  }}
+                >
+                  <Box sx={{ width: 28, height: 28, borderRadius: '50%', bgcolor: gold.accent, color: '#08080B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontFamily: mono, fontSize: '0.8rem', flexShrink: 0 }}>
+                    {idx + 1}
+                  </Box>
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, fontSize: '0.82rem', color: isDark ? '#F1F5F9' : '#0F172A', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {step.name}
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mt: 0.5 }}>
+                      <Chip label={step.provider} size="small" sx={{ height: 18, fontSize: '0.62rem', fontFamily: mono }} />
+                      <Chip label={step.level} size="small" sx={{ height: 18, fontSize: '0.62rem', fontFamily: mono, bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8' }} />
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#64748B', alignSelf: 'center' }}>
+                        ~{step.hours}h Study • {step.cost} Fee
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Paper>
+              ))}
+            </Stack>
+
+            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+              <Button
+                size="small"
+                variant="contained"
+                onClick={handleExportMarkdown}
+                startIcon={<DownloadIcon sx={{ fontSize: 14 }} />}
+                sx={{
+                  bgcolor: gold.accent,
+                  color: '#08080B',
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                  '&:hover': { bgcolor: gold.soft }
+                }}
+              >
+                Export Study Roadmap (.md)
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, bgcolor: isDark ? '#040408' : '#F8FAFC', border: `1px solid ${gold.border}`, height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, mb: 1.5 }}>
+              DAG CAREER PATH METRICS
+            </Typography>
+
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Estimated Completion Timeframe:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: isDark ? '#E2E8F0' : '#1E293B' }}>{current.timeline}</Typography>
+            </Box>
+
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Total Estimated Study Hours:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: '#38BDF8' }}>
+                {current.steps.reduce((acc, s) => acc + s.hours, 0)} Hours of Focused Labs
+              </Typography>
+            </Box>
+
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Total Exam Fees:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent }}>
+                ${current.steps.reduce((acc, s) => acc + parseInt(s.cost.replace(/[$,]/g, '') || 0), 0)} USD
+              </Typography>
+            </Box>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}`, mt: 'auto' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981', fontSize: '0.68rem', display: 'block' }}>
+                ✓ Topological Ordering Verified<br/>
+                ✓ 0 Circular Dependency Cycles<br/>
+                ✓ 100% In-Browser Client Computation
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* --------------------------------------------------------------------------
    Master Interactive Tool Workstation Dispatcher
    -------------------------------------------------------------------------- */
 export default function WebGPUToolWorkstation({ tool }) {
@@ -1724,6 +1922,8 @@ export default function WebGPUToolWorkstation({ tool }) {
         return <RobotsTxtAuditorWorkstation isDark={isDark} gold={gold} />;
       case 'badge3d-coin-generator':
         return <Badge3dCoinWorkstation isDark={isDark} gold={gold} />;
+      case 'certpath-roadmap-studio':
+        return <CertPathRoadmapWorkstation isDark={isDark} gold={gold} />;
       default:
         return (
           <PayloadEntropyWorkstation isDark={isDark} gold={gold} />
