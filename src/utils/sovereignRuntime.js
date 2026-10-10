@@ -101,6 +101,19 @@ export function canExecuteToolOnClient(tool, isLocal, hasWebGPU) {
   // Public web environment: check if tool supports client-side in-browser execution
   const isWebGPUTool = tool.executionType === 'webgpu';
   const isWebMCPTool = tool.id === 'webmcp-protocol-inspector' || tool.executionType === 'webmcp';
+  const isBrowserTool = tool.executionType === 'browser' || tool.executionType === 'in_browser';
+
+  if (isBrowserTool) {
+    return {
+      canExecute: true,
+      mode: 'in_browser_standalone',
+      badge: 'IN-BROWSER WORKSPACE',
+      label: 'Launch In-Browser Studio ⚡',
+      color: '#10B981',
+      description: '100% in-browser client utility. Runs client-side with zero external dependencies or cloud telemetry.',
+      isLocal: false,
+    };
+  }
 
   if (isWebGPUTool || isWebMCPTool) {
     if (hasWebGPU) {

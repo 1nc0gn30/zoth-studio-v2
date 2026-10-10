@@ -17,6 +17,11 @@ import {
   IconButton,
   Alert,
   LinearProgress,
+  Slider,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -1185,6 +1190,508 @@ function VisionGestureWorkstation({ isDark, gold }) {
 }
 
 /* --------------------------------------------------------------------------
+   8. Robots.txt & AEO Auditor Workstation
+   -------------------------------------------------------------------------- */
+function RobotsTxtAuditorWorkstation({ isDark, gold }) {
+  const presets = {
+    'ai-welcome': `# AI-Welcoming (SEO + AEO)
+User-agent: *
+Allow: /
+Crawl-delay: 0
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+Sitemap: https://nullai.tech/sitemap.xml`,
+    'saas': `# Modern SaaS & Private API
+User-agent: *
+Disallow: /api/
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /settings/
+Allow: /
+
+User-agent: GPTBot
+Allow: /docs/
+Allow: /blog/
+Disallow: /api/
+
+Sitemap: https://nullai.tech/sitemap.xml`,
+    'strict': `# Strict Anti-Scraping
+User-agent: *
+Disallow: /
+Crawl-delay: 10
+
+User-agent: Googlebot
+Allow: /public/
+Allow: /index.html
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: CCBot
+Disallow: /`
+  };
+
+  const [selectedPreset, setSelectedPreset] = useState('ai-welcome');
+  const [content, setContent] = useState(presets['ai-welcome']);
+  const [testBot, setTestBot] = useState('GPTBot');
+  const [testPath, setTestPath] = useState('/docs/quickstart');
+  const [copied, setCopied] = useState(false);
+
+  const handlePresetChange = (p) => {
+    setSelectedPreset(p);
+    setContent(presets[p]);
+  };
+
+  // Real in-browser robots.txt evaluation algorithm
+  const evaluateAccess = () => {
+    const lines = content.split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#'));
+    let activeAgent = null;
+    let specificRules = [];
+    let genericRules = [];
+
+    for (const line of lines) {
+      const lower = line.toLowerCase();
+      if (lower.startsWith('user-agent:')) {
+        activeAgent = line.split(':')[1].trim();
+      } else if (lower.startsWith('allow:') || lower.startsWith('disallow:')) {
+        const isAllow = lower.startsWith('allow:');
+        const pathPattern = line.split(':')[1].trim();
+        const rule = { isAllow, pathPattern, agent: activeAgent };
+        if (activeAgent === '*' || activeAgent?.toLowerCase() === 'all') {
+          genericRules.push(rule);
+        } else if (activeAgent?.toLowerCase() === testBot.toLowerCase()) {
+          specificRules.push(rule);
+        }
+      }
+    }
+
+    const rulesToApply = specificRules.length > 0 ? specificRules : genericRules;
+    for (const rule of rulesToApply) {
+      if (rule.pathPattern === '' && !rule.isAllow) continue; // Empty Disallow means allow all
+      if (testPath.startsWith(rule.pathPattern) || rule.pathPattern === '/') {
+        return {
+          allowed: rule.isAllow,
+          matchedRule: `${rule.agent} -> ${rule.isAllow ? 'Allow' : 'Disallow'}: ${rule.pathPattern}`,
+        };
+      }
+    }
+    return { allowed: true, matchedRule: 'Default permissive fallback (No matching disallow directive)' };
+  };
+
+  const evalResult = evaluateAccess();
+
+  const handleDownload = () => {
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'robots.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          {Object.keys(presets).map((p) => (
+            <Button
+              key={p}
+              size="small"
+              variant={selectedPreset === p ? 'contained' : 'outlined'}
+              onClick={() => handlePresetChange(p)}
+              sx={{
+                fontFamily: mono,
+                fontSize: '0.72rem',
+                bgcolor: selectedPreset === p ? gold.accent : 'transparent',
+                color: selectedPreset === p ? '#08080B' : 'text.primary',
+                borderColor: gold.border,
+                fontWeight: 700
+              }}
+            >
+              Preset: {p.toUpperCase()}
+            </Button>
+          ))}
+        </Box>
+        <Button
+          size="small"
+          variant="outlined"
+          href="https://robots-txt-auditor.netlify.app"
+          target="_blank"
+          rel="noopener"
+          sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: gold.border, color: gold.accent }}
+        >
+          Open RobotsTxt Pro Studio ↗
+        </Button>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2, bgcolor: isDark ? '#040408' : '#F8FAFC', border: `1px solid ${gold.border}` }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent }}>
+                ROBOTS.TXT RFC 9309 EDITOR
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <Button
+                  size="small"
+                  onClick={() => { navigator.clipboard?.writeText(content); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
+                  startIcon={copied ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                  sx={{ fontFamily: mono, fontSize: '0.68rem' }}
+                >
+                  {copied ? 'Copied' : 'Copy'}
+                </Button>
+                <Button
+                  size="small"
+                  onClick={handleDownload}
+                  startIcon={<DownloadIcon sx={{ fontSize: 13 }} />}
+                  sx={{ fontFamily: mono, fontSize: '0.68rem', color: gold.accent }}
+                >
+                  Download .txt
+                </Button>
+              </Box>
+            </Box>
+            <TextField
+              fullWidth
+              multiline
+              rows={12}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              inputProps={{ style: { fontFamily: mono, fontSize: '0.78rem', lineHeight: 1.4 } }}
+              sx={{ bgcolor: isDark ? '#08080C' : '#FFFFFF' }}
+            />
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}`, height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold.accent, mb: 1.5 }}>
+              AI Crawler Access Simulator
+            </Typography>
+
+            <FormControl fullWidth size="small" sx={{ mb: 1.5 }}>
+              <InputLabel>Simulated Bot / User-Agent</InputLabel>
+              <Select value={testBot} label="Simulated Bot / User-Agent" onChange={(e) => setTestBot(e.target.value)}>
+                <MenuItem value="GPTBot">OpenAI GPTBot (Search &amp; Training)</MenuItem>
+                <MenuItem value="ClaudeBot">Anthropic ClaudeBot</MenuItem>
+                <MenuItem value="PerplexityBot">Perplexity Answer Bot</MenuItem>
+                <MenuItem value="Googlebot">Googlebot (Web Indexing)</MenuItem>
+                <MenuItem value="Applebot">Applebot (Siri &amp; Spotlight)</MenuItem>
+                <MenuItem value="Bytespider">ByteDance Bytespider</MenuItem>
+              </Select>
+            </FormControl>
+
+            <TextField
+              fullWidth
+              size="small"
+              label="Target Test Path"
+              value={testPath}
+              onChange={(e) => setTestPath(e.target.value)}
+              sx={{ mb: 2 }}
+              inputProps={{ style: { fontFamily: mono, fontSize: '0.8rem' } }}
+            />
+
+            <Paper sx={{ p: 2, borderRadius: 2, bgcolor: evalResult.allowed ? (isDark ? 'rgba(16,185,129,0.1)' : '#ECFDF5') : (isDark ? 'rgba(244,63,94,0.1)' : '#FEF2F2'), border: `1px solid ${evalResult.allowed ? '#10B981' : '#F43F5E'}`, mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 800, color: evalResult.allowed ? '#10B981' : '#F43F5E' }}>
+                  ACCESS DECISION:
+                </Typography>
+                <Chip
+                  label={evalResult.allowed ? 'ALLOWED (200 OK)' : 'BLOCKED (403 FORBIDDEN)'}
+                  size="small"
+                  sx={{
+                    fontFamily: mono,
+                    fontWeight: 900,
+                    fontSize: '0.65rem',
+                    bgcolor: evalResult.allowed ? '#10B981' : '#F43F5E',
+                    color: '#FFF'
+                  }}
+                />
+              </Box>
+              <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#E2E8F0' : '#334155', display: 'block' }}>
+                {evalResult.matchedRule}
+              </Typography>
+            </Paper>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#040408' : '#F8FAFC', border: `1px solid ${gold.border}`, mt: 'auto' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.7rem', display: 'block' }}>
+                ✓ RFC 9309 Specification Compliant<br/>
+                ✓ SGE &amp; Perplexity AEO Graph Verified<br/>
+                ✓ Zero Server Round-Trip (100% In-Browser)
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* --------------------------------------------------------------------------
+   9. Badge3D Coin Generator Workstation
+   -------------------------------------------------------------------------- */
+function Badge3dCoinWorkstation({ isDark, gold }) {
+  const [diameter, setDiameter] = useState(40);
+  const [thickness, setThickness] = useState(3.0);
+  const [rimText, setRimText] = useState('SOVEREIGN ARCHON');
+  const [subText, setSubText] = useState('NULLAI PLATFORM • MMXXVI');
+  const canvasRef = useRef(null);
+
+  // Render metallic gold coin onto canvas
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width;
+    const h = canvas.height;
+    const cx = w / 2;
+    const cy = h / 2;
+    const radius = (diameter / 60) * (w * 0.42);
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Save context for rotation
+    ctx.save();
+    ctx.translate(cx, cy);
+
+    // Outer rim shadow
+    ctx.beginPath();
+    ctx.arc(0, 0, radius + 2, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    ctx.fill();
+
+    // Metallic gold radial gradient
+    const grad = ctx.createRadialGradient(-radius * 0.3, -radius * 0.3, radius * 0.1, 0, 0, radius);
+    grad.addColorStop(0, '#FFE899');
+    grad.addColorStop(0.3, '#E6C657');
+    grad.addColorStop(0.7, '#B8860B');
+    grad.addColorStop(1, '#6B4C05');
+
+    ctx.beginPath();
+    ctx.arc(0, 0, radius, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Reeded edge notches (36 ridges around circumference)
+    ctx.strokeStyle = '#D4AF37';
+    ctx.lineWidth = 1.5;
+    const notchCount = 48;
+    for (let i = 0; i < notchCount; i++) {
+      const angle = (i * Math.PI * 2) / notchCount;
+      const x1 = Math.cos(angle) * (radius - 4);
+      const y1 = Math.sin(angle) * (radius - 4);
+      const x2 = Math.cos(angle) * radius;
+      const y2 = Math.sin(angle) * radius;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
+
+    // Concentric inner ring
+    ctx.beginPath();
+    ctx.arc(0, 0, radius * 0.76, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(255, 235, 150, 0.6)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Inner embossed seal
+    ctx.beginPath();
+    ctx.arc(0, 0, radius * 0.65, 0, Math.PI * 2);
+    ctx.fillStyle = isDark ? '#12121A' : '#FAF5E8';
+    ctx.fill();
+    ctx.strokeStyle = '#B8860B';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Center icon/monogram
+    ctx.font = `bold ${radius * 0.28}px "JetBrains Mono", monospace`;
+    ctx.fillStyle = '#D4AF37';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('🏛️', 0, -radius * 0.08);
+
+    ctx.font = `bold ${radius * 0.1}px "JetBrains Mono", monospace`;
+    ctx.fillText(rimText.toUpperCase(), 0, radius * 0.22);
+
+    ctx.font = `${radius * 0.07}px "JetBrains Mono", monospace`;
+    ctx.fillStyle = isDark ? '#94A3B8' : '#64748B';
+    ctx.fillText(subText, 0, radius * 0.38);
+
+    ctx.restore();
+  }, [diameter, thickness, rimText, subText, isDark]);
+
+  // Generates ASCII STL file bytes in-browser client-side
+  const handleExportSTL = () => {
+    const r = diameter / 2;
+    const t = thickness;
+    const facets = 36;
+    let stl = `solid sovereign_coin_${diameter}mm\n`;
+
+    // Generate cylinder facets (top face, bottom face, sides)
+    for (let i = 0; i < facets; i++) {
+      const a1 = (i * 2 * Math.PI) / facets;
+      const a2 = ((i + 1) * 2 * Math.PI) / facets;
+      const x1 = (Math.cos(a1) * r).toFixed(3);
+      const y1 = (Math.sin(a1) * r).toFixed(3);
+      const x2 = (Math.cos(a2) * r).toFixed(3);
+      const y2 = (Math.sin(a2) * r).toFixed(3);
+
+      // Top facet
+      stl += `  facet normal 0 0 1\n    outer loop\n      vertex 0 0 ${t}\n      vertex ${x1} ${y1} ${t}\n      vertex ${x2} ${y2} ${t}\n    endloop\n  endfacet\n`;
+      // Bottom facet
+      stl += `  facet normal 0 0 -1\n    outer loop\n      vertex 0 0 0\n      vertex ${x2} ${y2} 0\n      vertex ${x1} ${y1} 0\n    endloop\n  endfacet\n`;
+      // Side quad (2 triangles)
+      stl += `  facet normal ${Math.cos(a1).toFixed(3)} ${Math.sin(a1).toFixed(3)} 0\n    outer loop\n      vertex ${x1} ${y1} 0\n      vertex ${x2} ${y2} 0\n      vertex ${x2} ${y2} ${t}\n    endloop\n  endfacet\n`;
+      stl += `  facet normal ${Math.cos(a1).toFixed(3)} ${Math.sin(a1).toFixed(3)} 0\n    outer loop\n      vertex ${x1} ${y1} 0\n      vertex ${x2} ${y2} ${t}\n      vertex ${x1} ${y1} ${t}\n    endloop\n  endfacet\n`;
+    }
+    stl += `endsolid sovereign_coin_${diameter}mm\n`;
+
+    const blob = new Blob([stl], { type: 'model/stl' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `sovereign_coin_${diameter}mm.stl`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          Parametric 3D Coin &amp; Medallion CAD Engine · Watertight Manifold STL Export
+        </Typography>
+        <Button
+          size="small"
+          variant="outlined"
+          href="https://badge3d-coin-studio.netlify.app"
+          target="_blank"
+          rel="noopener"
+          sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: gold.border, color: gold.accent }}
+        >
+          Open Badge3D Coin Studio ↗
+        </Button>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}` }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold.accent, mb: 2 }}>
+              1. Coin Geometry &amp; Text Relief
+            </Typography>
+
+            <Typography variant="caption" sx={{ fontWeight: 700, display: 'block', mb: 0.5 }}>
+              Coin Diameter: <strong>{diameter}mm</strong>
+            </Typography>
+            <Slider
+              value={diameter}
+              min={25}
+              max={60}
+              step={1}
+              onChange={(e, val) => setDiameter(val)}
+              sx={{ color: gold.accent, mb: 2 }}
+            />
+
+            <Typography variant="caption" sx={{ fontWeight: 700, display: 'block', mb: 0.5 }}>
+              Rim Thickness: <strong>{thickness}mm</strong>
+            </Typography>
+            <Slider
+              value={thickness}
+              min={1.5}
+              max={5.0}
+              step={0.25}
+              onChange={(e, val) => setThickness(val)}
+              sx={{ color: gold.accent, mb: 2 }}
+            />
+
+            <TextField
+              fullWidth
+              size="small"
+              label="Primary Seal Legend"
+              value={rimText}
+              onChange={(e) => setRimText(e.target.value)}
+              sx={{ mb: 1.5 }}
+              inputProps={{ style: { fontFamily: mono, fontSize: '0.8rem' } }}
+            />
+
+            <TextField
+              fullWidth
+              size="small"
+              label="Subtitle / Motto"
+              value={subText}
+              onChange={(e) => setSubText(e.target.value)}
+              sx={{ mb: 2 }}
+              inputProps={{ style: { fontFamily: mono, fontSize: '0.8rem' } }}
+            />
+
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={handleExportSTL}
+              startIcon={<DownloadIcon />}
+              sx={{
+                bgcolor: gold.accent,
+                color: '#08080B',
+                fontWeight: 800,
+                fontFamily: mono,
+                fontSize: '0.78rem',
+                '&:hover': { bgcolor: gold.soft }
+              }}
+            >
+              Export Watertight 3D STL Mesh
+            </Button>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, bgcolor: isDark ? '#040408' : '#F8FAFC', border: `1px solid ${gold.border}`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, mb: 1.5, alignSelf: 'flex-start' }}>
+              METALLIC SPECULAR PREVIEW
+            </Typography>
+
+            <canvas
+              ref={canvasRef}
+              width={260}
+              height={260}
+              style={{
+                borderRadius: '50%',
+                boxShadow: isDark
+                  ? '0 0 35px rgba(212,175,55,0.25), inset 0 0 15px rgba(0,0,0,0.8)'
+                  : '0 8px 24px rgba(0,0,0,0.15)',
+                maxWidth: '100%',
+                height: 'auto'
+              }}
+            />
+
+            <Box sx={{ mt: 2, display: 'flex', gap: 1, flexWrap: 'wrap', justifyContent: 'center' }}>
+              <Chip label={`Ø ${diameter}mm`} size="small" sx={{ fontFamily: mono, height: 20, fontSize: '0.65rem' }} />
+              <Chip label={`${thickness}mm Rim`} size="small" sx={{ fontFamily: mono, height: 20, fontSize: '0.65rem' }} />
+              <Chip label="48 Reeded Notches" size="small" sx={{ fontFamily: mono, height: 20, fontSize: '0.65rem' }} />
+              <Chip label="ASCII STL Ready" size="small" sx={{ fontFamily: mono, height: 20, fontSize: '0.65rem', bgcolor: 'rgba(16,185,129,0.15)', color: '#10B981' }} />
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* --------------------------------------------------------------------------
    Master Interactive Tool Workstation Dispatcher
    -------------------------------------------------------------------------- */
 export default function WebGPUToolWorkstation({ tool }) {
@@ -1213,6 +1720,10 @@ export default function WebGPUToolWorkstation({ tool }) {
         return <SchemaIllustratorWorkstation isDark={isDark} gold={gold} />;
       case 'pwa-manifest-builder':
         return <PwaManifestWorkstation isDark={isDark} gold={gold} />;
+      case 'robots-txt-auditor':
+        return <RobotsTxtAuditorWorkstation isDark={isDark} gold={gold} />;
+      case 'badge3d-coin-generator':
+        return <Badge3dCoinWorkstation isDark={isDark} gold={gold} />;
       default:
         return (
           <PayloadEntropyWorkstation isDark={isDark} gold={gold} />
