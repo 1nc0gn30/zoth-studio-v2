@@ -349,6 +349,28 @@ export const workstations = [
     pullCommand: "./bin/gelato-connector serve --port 8116"
   },
   {
+    id: "pod-smart-router",
+    name: "POD Smart Router // Printify vs Gelato Arbitrage Engine",
+    path: "/studio/pod-smart-router.html",
+    band: "Build",
+    type: "integrated_tool",
+    description: "Autonomous multi-channel POD routing engine, landed cost comparator, and automated customs & tariff avoidance shield.",
+    alsoInApp: "/tools/pod-smart-router",
+    toolRepoId: "pod-smart-router",
+    pullCommand: "./bin/pod-smart-router server --port 8117"
+  },
+  {
+    id: "digital-asset-forge",
+    name: "Digital Asset Forge // 300 DPI Wall Art Pack Generator",
+    path: "/studio/digital-asset-forge.html",
+    band: "Build",
+    type: "integrated_tool",
+    description: "High-resolution 300 DPI multi-ratio art pack generator, 20MB Etsy ZIP split optimizer, and automated customer printing guide synthesizer.",
+    alsoInApp: "/tools/digital-asset-forge",
+    toolRepoId: "digital-asset-forge",
+    pullCommand: "./bin/digital-asset-forge server --port 8118"
+  },
+  {
     id: "connectors",
     name: "Zoth Tool Bench & Integration Ecosystem",
     path: "/studio/connectors.html",
