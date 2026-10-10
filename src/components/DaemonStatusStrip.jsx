@@ -17,7 +17,8 @@ const getServiceLabel = (service) => {
     .replace(/ engine/i, '');
   const portStr = service.port ? ` :${service.port}` : '';
   const modelStr = service.models?.length ? ` (${service.models.length} models)` : '';
-  return `${shortName}${portStr}${modelStr}`;
+  const adytumStr = service.adytumCycleCount !== undefined ? ` [Adytum: ${service.adytumCycleCount} cycles]` : '';
+  return `${shortName}${portStr}${modelStr}${adytumStr}`;
 };
 
 /** Live loopback status. Differentiates public web mirror vs local sovereign node. */
@@ -92,32 +93,39 @@ export default function DaemonStatusStrip() {
           sx={{ fontWeight: 700, fontFamily: mono, fontSize: '0.68rem' }}
         />
       )}
-      {services.map((service) => (
-        <Chip
-          key={service.name}
-          size="small"
-          label={`${getServiceLabel(service)} · ${service.up ? 'UP' : 'OFFLINE'}`}
-          sx={{
-            fontWeight: 750,
-            fontFamily: mono,
-            fontSize: '0.7rem',
-            bgcolor: service.up
-              ? dark
-                ? 'rgba(52,211,153,0.12)'
-                : '#ECFDF3'
-              : dark
-                ? 'rgba(148,163,184,0.1)'
-                : '#F2F4F7',
-            color: service.up ? (dark ? '#34D399' : '#027A48') : theme.palette.text.secondary,
-            border: '1px solid',
-            borderColor: service.up
-              ? dark
-                ? 'rgba(52,211,153,0.4)'
-                : '#ABE5C6'
-              : theme.palette.divider,
-          }}
-        />
-      ))}
+      {services.map((service) => {
+        const tooltipTitle = service.latestReflection
+          ? `[Adytum Reflection · ${service.latestReflection.agentName || 'Hermes'}] "${service.latestReflection.reflection}"`
+          : (service.name || 'Daemon');
+        return (
+          <Tooltip key={service.name} title={tooltipTitle} arrow>
+            <Chip
+              size="small"
+              label={`${getServiceLabel(service)} · ${service.up ? 'UP' : 'OFFLINE'}`}
+              sx={{
+                fontWeight: 750,
+                fontFamily: mono,
+                fontSize: '0.7rem',
+                bgcolor: service.up
+                  ? dark
+                    ? 'rgba(52,211,153,0.12)'
+                    : '#ECFDF3'
+                  : dark
+                    ? 'rgba(148,163,184,0.1)'
+                    : '#F2F4F7',
+                color: service.up ? (dark ? '#34D399' : '#027A48') : theme.palette.text.secondary,
+                border: '1px solid',
+                borderColor: service.up
+                  ? dark
+                    ? 'rgba(52,211,153,0.4)'
+                    : '#ABE5C6'
+                  : theme.palette.divider,
+                cursor: service.latestReflection ? 'pointer' : 'default',
+              }}
+            />
+          </Tooltip>
+        );
+      })}
     </Box>
   );
 }

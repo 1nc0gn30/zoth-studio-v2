@@ -98,6 +98,14 @@ export async function handler(event, context) {
             up: false,
             models: [],
             note: 'Run locally at 127.0.0.1:11434 for offline silicon inference'
+          },
+          civilization: {
+            name: 'Zoth civilization',
+            port: 9393,
+            up: true,
+            adytumCycleCount: 4,
+            observationalCycles: 4,
+            detail: { day: 6, leader: 'AZOTH', adytumCycles: 4 }
           }
         }
       })

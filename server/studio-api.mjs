@@ -52,7 +52,7 @@ function localModels(tags) {
 }
 
 export async function probeStatus() {
-  const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama, vault, egress, mock, firewall, flight, capsule, policy] = await Promise.all([
+  const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama, vault, egress, mock, firewall, flight, capsule, policy, civ] = await Promise.all([
     requestJson(8094, '/health'),
     requestJson(8788, '/health'),
     requestJson(8102, '/api/health'),
@@ -67,6 +67,7 @@ export async function probeStatus() {
     requestJson(8104, '/api/stats'),
     requestJson(8105, '/api/stats'),
     requestJson(8106, '/api/stats'),
+    requestJson(9393, '/api/status', { timeout: 1000 }),
   ]);
 
   const memoryUp = memoryPrimary.up || memorySec.up;
@@ -153,6 +154,22 @@ export async function probeStatus() {
         port: 11434,
         up: ollama.up,
         models: ollama.up ? localModels(ollama.json) : [],
+      },
+      civilization: {
+        name: 'Zoth civilization',
+        port: 9393,
+        up: civ.up,
+        adytumCycleCount: civ.json?.adytumCycleCount || civ.json?.state?.completedAdytumCycles || 0,
+        observationalCycles: civ.json?.observationalCycles || 0,
+        reflectionsCount: civ.json?.mentalReflections?.length || 0,
+        latestReflection: (civ.json?.mentalReflections && civ.json.mentalReflections[civ.json.mentalReflections.length - 1]) || null,
+        detail: civ.json ? {
+          day: civ.json.state?.day,
+          leader: civ.json.state?.currentLeader,
+          adytumCycleCount: civ.json?.adytumCycleCount || civ.json?.state?.completedAdytumCycles || 0,
+          observationalCycles: civ.json?.observationalCycles || 0,
+          latestReflection: (civ.json?.mentalReflections && civ.json.mentalReflections[civ.json.mentalReflections.length - 1]) || null
+        } : null,
       },
     },
   };
