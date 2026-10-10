@@ -68,6 +68,7 @@ import {
   DigitalAssetForgeTool,
   PodMockupForgeTool,
   PodMarginSentinelTool,
+  AgentVoiceCallTool,
 } from '../components/tools/EnclaveToolsSuite';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
@@ -107,6 +108,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'digital-asset-forge': DigitalAssetForgeTool,
   'pod-mockup-forge': PodMockupForgeTool,
   'pod-margin-sentinel': PodMarginSentinelTool,
+  'agent-voice-call': AgentVoiceCallTool,
 };
 
 export default function RealToolWorkspacePage() {

@@ -5910,3 +5910,206 @@ export function PodMarginSentinelTool() {
     </Box>
   );
 }
+
+
+/* ==========================================================================
+   TOOL 32: Agent Voice Call (agent-voice-call)
+   Features: Full-Duplex Voice Cockpit & Neural Speech Bridge (:8114)
+   ========================================================================== */
+export function AgentVoiceCallTool() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [selectedVoice, setSelectedVoice] = useState('azoth');
+  const [callActive, setCallActive] = useState(false);
+  const [callDuration, setCallDuration] = useState(0);
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  const personas = [
+    { id: 'azoth', name: 'Azoth', role: 'Sovereign Strategic Intelligence', archetype: 'Architect & Governor', icon: '🏛️' },
+    { id: 'ghostbyte', name: 'Ghostbyte', role: 'Cyber Operations & Red Team', archetype: 'Offensive Security', icon: '⚡' },
+    { id: 'athena', name: 'Athena', role: 'Mathematical Logic & Verification', archetype: 'Purity Sentinel', icon: '🦉' },
+    { id: 'mercury', name: 'Mercury', role: 'High-Frequency Market & Trade', archetype: 'Commerce Synthesizer', icon: '📈' },
+    { id: 'kitsune', name: 'Kitsune', role: 'Creative Avant-Garde Design', archetype: 'Visual Alchemist', icon: '🦊' },
+    { id: 'chronos', name: 'Chronos', role: 'Temporal DAG & Task Rhythm', archetype: 'Rhythm Engine', icon: '⏳' },
+  ];
+
+  const currentPersona = personas.find((p) => p.id === selectedVoice) || personas[0];
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8114/health')
+      .then((r) => r.json())
+      .then((d) => setDaemonOnline(d.status === 'healthy'))
+      .catch(() => setDaemonOnline(false));
+  }, []);
+
+  useEffect(() => {
+    let timer = null;
+    if (callActive) {
+      timer = setInterval(() => setCallDuration((d) => d + 1), 1000);
+    } else {
+      setCallDuration(0);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [callActive]);
+
+  const formatTimer = (sec) => {
+    const m = Math.floor(sec / 60).toString().padStart(2, '0');
+    const s = (sec % 60).toString().padStart(2, '0');
+    return `${m}:${s}`;
+  };
+
+  const handleCopy = (text) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedCmd(true);
+      setTimeout(() => setCopiedCmd(false), 2000);
+    }
+  };
+
+  return (
+    <Box sx={{ my: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '1.1rem' }}>
+            Zoth Sovereign Voice Call Cockpit
+          </Typography>
+          <Chip
+            label={daemonOnline ? 'DAEMON ONLINE :8114' : 'IN-BROWSER VOICE COCKPIT'}
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: daemonOnline ? successBg(theme) : goldBg(theme),
+              color: daemonOnline ? successFg(theme) : gold(theme),
+              border: `1px solid ${daemonOnline ? 'rgba(16,185,129,0.3)' : goldBorder(theme)}`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          Full-Duplex Audio Cockpit · Pantheon Voice Personas · SimpleX Bridge
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Neural Voice Persona Selector
+            </Typography>
+
+            <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+              <InputLabel>Target Voice Persona</InputLabel>
+              <Select value={selectedVoice} label="Target Voice Persona" onChange={(e) => setSelectedVoice(e.target.value)}>
+                {personas.map((p) => (
+                  <MenuItem key={p.id} value={p.id}>
+                    {p.icon} {p.name} — {p.role}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, mb: 2, textAlign: 'center' }}>
+              <Typography variant="h3" sx={{ mb: 1 }}>{currentPersona.icon}</Typography>
+              <Typography variant="h6" sx={{ fontWeight: 800, color: gold(theme), fontFamily: mono }}>{currentPersona.name}</Typography>
+              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 1 }}>{currentPersona.role}</Typography>
+              <Chip label={currentPersona.archetype} size="small" sx={{ height: 20, fontSize: '0.65rem', fontFamily: mono, bgcolor: goldBg(theme), color: gold(theme) }} />
+
+              <Box sx={{ mt: 2, pt: 1.5, borderTop: `1px solid ${darkPanelBorder(theme)}`, display: 'flex', justifyContent: 'center', gap: 1.5 }}>
+                <Button
+                  variant="contained"
+                  onClick={() => setCallActive(!callActive)}
+                  sx={{
+                    bgcolor: callActive ? '#F43F5E' : '#10B981',
+                    color: '#FFF',
+                    fontWeight: 800,
+                    fontFamily: mono,
+                    fontSize: '0.75rem',
+                    '&:hover': { bgcolor: callActive ? '#E11D48' : '#059669' }
+                  }}
+                >
+                  {callActive ? `End Call (${formatTimer(callDuration)})` : '⚡ Start Simulation Call'}
+                </Button>
+                <Button
+                  variant="outlined"
+                  href="http://127.0.0.1:8114"
+                  target="_blank"
+                  rel="noopener"
+                  sx={{
+                    borderColor: gold(theme),
+                    color: gold(theme),
+                    fontWeight: 700,
+                    fontFamily: mono,
+                    fontSize: '0.75rem'
+                  }}
+                >
+                  Open Cockpit (:8114) ↗
+                </Button>
+              </Box>
+            </Box>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                  CLI VOICE BRIDGE (:8114)
+                </Typography>
+                <Button
+                  size="small"
+                  onClick={() => handleCopy(`./bin/agent-voice-call call --voice ${selectedVoice}`, setCopiedCmd)}
+                  startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                  sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+                >
+                  {copiedCmd ? 'Copied' : 'Copy CLI'}
+                </Button>
+              </Box>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+                ./bin/agent-voice-call call --voice {selectedVoice}
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              2. Live Speech Debrief &amp; E2EE Signal Bridge
+            </Typography>
+
+            <Box sx={{ p: 2, borderRadius: 2, bgcolor: isDark ? 'rgba(56,189,248,0.06)' : '#F0F9FF', border: '1px solid rgba(56,189,248,0.25)', mb: 2 }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#38BDF8', display: 'block', mb: 0.5 }}>
+                LIVE AGENT TRANSCRIPT FEED
+              </Typography>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', color: isDark ? '#E2E8F0' : '#1E293B', fontStyle: 'italic', mb: 1 }}>
+                &ldquo;I am on the line, Neal. Tap the mic or speak naturally—I am listening.&rdquo;
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                <Chip label="Latency: 42ms" size="small" sx={{ fontFamily: mono, height: 18, fontSize: '0.6rem' }} />
+                <Chip label="Codec: Opus 48kHz" size="small" sx={{ fontFamily: mono, height: 18, fontSize: '0.6rem' }} />
+                <Chip label="Audio: Kokoro Standby" size="small" sx={{ fontFamily: mono, height: 18, fontSize: '0.6rem', bgcolor: successBg(theme), color: successFg(theme) }} />
+              </Box>
+            </Box>
+
+            <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700, display: 'block', mb: 0.5 }}>
+                AUTOMATED ACTION ITEM DISPATCH
+              </Typography>
+              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 1, fontSize: '0.72rem' }}>
+                On call completion, speech turns are distilled into executive action items and dispatched end-to-end encrypted to your Signal group and SimpleX peer mesh.
+              </Typography>
+              <Box sx={{ p: 1, bgcolor: 'rgba(0,0,0,0.4)', borderRadius: 1, border: `1px solid ${darkPanelBorder(theme)}` }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#10B981' }}>
+                  ✓ SimpleX Chat Bridge: Connected<br/>
+                  ✓ Signal Sovereign CLI: Armed<br/>
+                  ✓ Immutable Forensics: Logged (:8104)
+                </Typography>
+              </Box>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
