@@ -4160,3 +4160,890 @@ export function AgentPolicyAuditorTool() {
   );
 }
 
+/* ==========================================================================
+   TOOL 23: Printify Connector (printify-connector)
+   Features: Blueprint Catalog, Multi-Channel Margin Engine, Artwork DPI Auditor
+   ========================================================================== */
+export function PrintifyConnectorTool() {
+  const theme = useTheme();
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [selectedBp, setSelectedBp] = useState('tee_gildan_5000');
+  const [retailPrice, setRetailPrice] = useState(28.0);
+  const [isPremium, setIsPremium] = useState(false);
+  const [artWidth, setArtWidth] = useState(4500);
+  const [artHeight, setArtHeight] = useState(5400);
+  const [printInchesW, setPrintInchesW] = useState(15);
+  const [printInchesH, setPrintInchesH] = useState(18);
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  const blueprints = [
+    { id: 'tee_gildan_5000', name: 'Unisex Heavy Cotton Tee (Gildan 5000)', base: 7.85, category: 'Apparel', provider: 'Monster Digital' },
+    { id: 'hoodie_gildan_18500', name: 'Heavy Blend Hooded Sweatshirt (Gildan 18500)', base: 17.50, category: 'Apparel', provider: 'SwiftPOD' },
+    { id: 'mug_ceramic_11oz', name: 'Glossy Ceramic Mug 11oz', base: 4.40, category: 'Home & Living', provider: 'District Photo' },
+    { id: 'poster_matte_18x24', name: 'Matte Horizontal Poster 18x24"', base: 8.95, category: 'Art & Wall Decor', provider: 'Sensaria' },
+    { id: 'canvas_wrap_16x20', name: 'Canvas Gallery Wrap 16x20"', base: 21.20, category: 'Art & Wall Decor', provider: 'Jondo' },
+  ];
+
+  const currentBp = blueprints.find((b) => b.id === selectedBp) || blueprints[0];
+  const effectiveBase = isPremium ? currentBp.base * 0.8 : currentBp.base;
+
+  const etsyFee = retailPrice * 0.065 + 0.20 + (retailPrice * 0.03 + 0.25);
+  const etsyProfit = retailPrice - effectiveBase - etsyFee;
+  const etsyMargin = (etsyProfit / retailPrice) * 100;
+
+  const shopifyFee = retailPrice * 0.029 + 0.30;
+  const shopifyProfit = retailPrice - effectiveBase - shopifyFee;
+  const shopifyMargin = (shopifyProfit / retailPrice) * 100;
+
+  const web3Profit = retailPrice - effectiveBase;
+  const web3Margin = (web3Profit / retailPrice) * 100;
+
+  const calculatedDpiW = Math.round(artWidth / (printInchesW || 1));
+  const calculatedDpiH = Math.round(artHeight / (printInchesH || 1));
+  const minDpi = Math.min(calculatedDpiW, calculatedDpiH);
+  const dpiStatus = minDpi >= 300 ? 'excellent' : minDpi >= 150 ? 'acceptable' : 'poor';
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8115/health')
+      .then((r) => r.json())
+      .then((d) => setDaemonOnline(d.status === 'healthy'))
+      .catch(() => setDaemonOnline(false));
+  }, []);
+
+  const handleCopyCli = (text) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedCmd(true);
+      setTimeout(() => setCopiedCmd(false), 2000);
+    }
+  };
+
+  return (
+    <Box sx={{ my: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '1.1rem' }}>
+            Printify Sovereign POD Forge
+          </Typography>
+          <Chip
+            label={daemonOnline ? 'DAEMON ONLINE :8115' : 'IN-BROWSER ENGINE'}
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: daemonOnline ? successBg(theme) : goldBg(theme),
+              color: daemonOnline ? successFg(theme) : gold(theme),
+              border: `1px solid ${daemonOnline ? 'rgba(16,185,129,0.3)' : goldBorder(theme)}`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          Catalog & Multi-Channel Margin Engine · Zero Pip Dependencies
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Blueprint Selection & Pricing Matrix
+            </Typography>
+
+            <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+              <InputLabel>Target Blueprint</InputLabel>
+              <Select value={selectedBp} label="Target Blueprint" onChange={(e) => setSelectedBp(e.target.value)}>
+                {blueprints.map((b) => (
+                  <MenuItem key={b.id} value={b.id}>
+                    {b.name} — ${b.base.toFixed(2)} base ({b.provider})
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>Retail Sale Price: <strong>${retailPrice.toFixed(2)}</strong></Typography>
+              <FormControlLabel
+                control={<Switch checked={isPremium} onChange={(e) => setIsPremium(e.target.checked)} size="small" />}
+                label={<Typography variant="caption" sx={{ fontFamily: mono }}>Printify Premium (-20% base)</Typography>}
+              />
+            </Box>
+            <Slider
+              value={retailPrice}
+              min={10}
+              max={80}
+              step={0.5}
+              onChange={(_, v) => setRetailPrice(v)}
+              sx={{ color: gold(theme), mb: 2.5 }}
+            />
+
+            <TableContainer component={Paper} elevation={0} sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow sx={{ bgcolor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.03)' : '#F8FAFC' }}>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.72rem' }}>Sales Channel</TableCell>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.72rem' }}>Base Cost</TableCell>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.72rem' }}>Channel Fees</TableCell>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.72rem' }}>Net Profit</TableCell>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.72rem' }}>Margin %</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem' }}>Etsy Marketplace</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem' }}>${effectiveBase.toFixed(2)}</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: errorFg(theme) }}>-${etsyFee.toFixed(2)}</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: etsyProfit > 0 ? '#10B981' : errorFg(theme) }}>
+                      ${etsyProfit.toFixed(2)}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700 }}>{etsyMargin.toFixed(1)}%</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem' }}>Shopify Store</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem' }}>${effectiveBase.toFixed(2)}</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: errorFg(theme) }}>-${shopifyFee.toFixed(2)}</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: shopifyProfit > 0 ? '#10B981' : errorFg(theme) }}>
+                      ${shopifyProfit.toFixed(2)}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700 }}>{shopifyMargin.toFixed(1)}%</TableCell>
+                  </TableRow>
+                  <TableRow sx={{ bgcolor: theme.palette.mode === 'dark' ? 'rgba(212,175,55,0.06)' : '#FFFBEB' }}>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.75rem', color: gold(theme) }}>Direct Sovereign Web3</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem' }}>${effectiveBase.toFixed(2)}</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#10B981' }}>$0.00 (0%)</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: '#10B981' }}>
+                      ${web3Profit.toFixed(2)}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: gold(theme) }}>{web3Margin.toFixed(1)}%</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, mb: 2 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              2. Artwork DPI & Print Spec Auditor
+            </Typography>
+
+            <Grid container spacing={1.5} sx={{ mb: 1.5 }}>
+              <Grid xs={6}>
+                <TextField
+                  label="Width (px)"
+                  type="number"
+                  size="small"
+                  fullWidth
+                  value={artWidth}
+                  onChange={(e) => setArtWidth(Number(e.target.value))}
+                />
+              </Grid>
+              <Grid xs={6}>
+                <TextField
+                  label="Height (px)"
+                  type="number"
+                  size="small"
+                  fullWidth
+                  value={artHeight}
+                  onChange={(e) => setArtHeight(Number(e.target.value))}
+                />
+              </Grid>
+              <Grid xs={6}>
+                <TextField
+                  label="Print Width (in)"
+                  type="number"
+                  size="small"
+                  fullWidth
+                  value={printInchesW}
+                  onChange={(e) => setPrintInchesW(Number(e.target.value))}
+                />
+              </Grid>
+              <Grid xs={6}>
+                <TextField
+                  label="Print Height (in)"
+                  type="number"
+                  size="small"
+                  fullWidth
+                  value={printInchesH}
+                  onChange={(e) => setPrintInchesH(Number(e.target.value))}
+                />
+              </Grid>
+            </Grid>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Box>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontSize: '0.7rem' }}>RESOLVED RESOLUTION</Typography>
+                <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '1rem', color: minDpi >= 300 ? '#10B981' : minDpi >= 150 ? '#F59E0B' : '#EF4444' }}>
+                  {minDpi} DPI
+                </Typography>
+              </Box>
+              <Chip
+                label={dpiStatus === 'excellent' ? '300+ DPI PRINT READY' : dpiStatus === 'acceptable' ? '150+ DPI ACCEPTABLE' : 'LOW RES WARNING'}
+                size="small"
+                sx={{
+                  fontFamily: mono,
+                  fontWeight: 800,
+                  fontSize: '0.65rem',
+                  bgcolor: minDpi >= 300 ? successBg(theme) : minDpi >= 150 ? 'rgba(245,158,11,0.15)' : errorBg(theme),
+                  color: minDpi >= 300 ? successFg(theme) : minDpi >= 150 ? '#F59E0B' : errorFg(theme),
+                }}
+              />
+            </Box>
+          </Paper>
+
+          <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: darkPanel(theme) }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                MCP / CLI SNIPPET (:8115)
+              </Typography>
+              <Button
+                size="small"
+                onClick={() => handleCopyCli(`./bin/printify-connector calculate-margins --blueprint ${selectedBp} --retail ${retailPrice}`)}
+                startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+              >
+                {copiedCmd ? 'Copied' : 'Copy CLI'}
+              </Button>
+            </Box>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+              ./bin/printify-connector calculate-margins --blueprint {selectedBp} --retail {retailPrice}
+            </Typography>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   TOOL 24: Gelato Connector (gelato-connector)
+   Features: Global Production Hub Routing, Currency/VAT Engine, Carbon Reducer
+   ========================================================================== */
+export function GelatoConnectorTool() {
+  const theme = useTheme();
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [destCountry, setDestCountry] = useState('US');
+  const [itemPrice, setItemPrice] = useState(32.0);
+  const [currency, setCurrency] = useState('USD');
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  const hubs = {
+    US: { name: 'Gelato US East / West (Atlanta, Denver)', transit: '2-3 business days', duty: 'None (Local Production)', co2Reduction: '68%', flag: '🇺🇸' },
+    DE: { name: 'Gelato Central Europe (Frankfurt, Munich)', transit: '1-3 business days', duty: 'None (EU Domestic)', co2Reduction: '74%', flag: '🇩🇪' },
+    GB: { name: 'Gelato United Kingdom (London, Leeds)', transit: '1-2 business days', duty: 'None (UK Domestic)', co2Reduction: '80%', flag: '🇬🇧' },
+    FR: { name: 'Gelato Western Europe (Paris)', transit: '2-3 business days', duty: 'None (EU Domestic)', co2Reduction: '71%', flag: '🇫🇷' },
+    JP: { name: 'Gelato East Asia (Tokyo)', transit: '2-4 business days', duty: 'None (Japan Domestic)', co2Reduction: '65%', flag: '🇯🇵' },
+    AU: { name: 'Gelato Oceania (Sydney, Melbourne)', transit: '2-3 business days', duty: 'None (AU Domestic)', co2Reduction: '79%', flag: '🇦🇺' },
+  };
+
+  const currentHub = hubs[destCountry] || hubs.US;
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8116/health')
+      .then((r) => r.json())
+      .then((d) => setDaemonOnline(d.status === 'healthy'))
+      .catch(() => setDaemonOnline(false));
+  }, []);
+
+  const handleCopyCli = (text) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedCmd(true);
+      setTimeout(() => setCopiedCmd(false), 2000);
+    }
+  };
+
+  return (
+    <Box sx={{ my: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '1.1rem' }}>
+            Gelato Global Sovereign Routing
+          </Typography>
+          <Chip
+            label={daemonOnline ? 'DAEMON ONLINE :8116' : 'IN-BROWSER ENGINE'}
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: daemonOnline ? successBg(theme) : goldBg(theme),
+              color: daemonOnline ? successFg(theme) : gold(theme),
+              border: `1px solid ${daemonOnline ? 'rgba(16,185,129,0.3)' : goldBorder(theme)}`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          32-Country Local Production Network · 100% Python Standard Library
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Local Production Hub Routing
+            </Typography>
+
+            <FormControl fullWidth size="small" sx={{ mb: 2.5 }}>
+              <InputLabel>Customer Destination Country</InputLabel>
+              <Select value={destCountry} label="Customer Destination Country" onChange={(e) => setDestCountry(e.target.value)}>
+                <MenuItem value="US">🇺🇸 United States (Gelato US Hub)</MenuItem>
+                <MenuItem value="DE">🇩🇪 Germany (Gelato EU Hub)</MenuItem>
+                <MenuItem value="GB">🇬🇧 United Kingdom (Gelato UK Hub)</MenuItem>
+                <MenuItem value="FR">🇫🇷 France (Gelato EU Hub)</MenuItem>
+                <MenuItem value="JP">🇯🇵 Japan (Gelato APAC Hub)</MenuItem>
+                <MenuItem value="AU">🇦🇺 Australia (Gelato ANZ Hub)</MenuItem>
+              </Select>
+            </FormControl>
+
+            <Paper elevation={0} sx={{ p: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 2, mb: 2 }}>
+              <Typography variant="caption" sx={{ color: goldSoft(theme), fontWeight: 800, display: 'block', mb: 0.5 }}>
+                ASSIGNED MANUFACTURING HUB
+              </Typography>
+              <Typography sx={{ fontWeight: 800, fontSize: '0.95rem', color: '#F8FAFC', mb: 1.5 }}>
+                {currentHub.flag} {currentHub.name}
+              </Typography>
+
+              <Grid container spacing={1.5}>
+                <Grid xs={4}>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.68rem', display: 'block' }}>EST. TRANSIT</Typography>
+                  <Typography sx={{ fontFamily: mono, fontWeight: 700, fontSize: '0.82rem', color: '#38BDF8' }}>{currentHub.transit}</Typography>
+                </Grid>
+                <Grid xs={4}>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.68rem', display: 'block' }}>CUSTOMS DUTIES</Typography>
+                  <Typography sx={{ fontFamily: mono, fontWeight: 700, fontSize: '0.82rem', color: '#10B981' }}>{currentHub.duty}</Typography>
+                </Grid>
+                <Grid xs={4}>
+                  <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.68rem', display: 'block' }}>CO2 REDUCTION</Typography>
+                  <Typography sx={{ fontFamily: mono, fontWeight: 700, fontSize: '0.82rem', color: gold(theme) }}>-{currentHub.co2Reduction}</Typography>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, mb: 2 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              2. Currency & VAT Settlement
+            </Typography>
+
+            <Grid container spacing={1.5} sx={{ mb: 2 }}>
+              <Grid xs={6}>
+                <TextField
+                  label="Product Price"
+                  type="number"
+                  size="small"
+                  fullWidth
+                  value={itemPrice}
+                  onChange={(e) => setItemPrice(Number(e.target.value))}
+                />
+              </Grid>
+              <Grid xs={6}>
+                <FormControl fullWidth size="small">
+                  <InputLabel>Currency</InputLabel>
+                  <Select value={currency} label="Currency" onChange={(e) => setCurrency(e.target.value)}>
+                    <MenuItem value="USD">USD ($)</MenuItem>
+                    <MenuItem value="EUR">EUR (€)</MenuItem>
+                    <MenuItem value="GBP">GBP (£)</MenuItem>
+                    <MenuItem value="AUD">AUD ($)</MenuItem>
+                    <MenuItem value="CAD">CAD ($)</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontSize: '0.7rem' }}>
+                DIRECT FULFILLMENT SETTLEMENT
+              </Typography>
+              <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '1rem', color: '#10B981' }}>
+                {currency === 'EUR' ? `€${itemPrice.toFixed(2)}` : currency === 'GBP' ? `£${itemPrice.toFixed(2)}` : `$${itemPrice.toFixed(2)}`} {currency}
+              </Typography>
+            </Box>
+          </Paper>
+
+          <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: darkPanel(theme) }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                MCP / CLI SNIPPET (:8116)
+              </Typography>
+              <Button
+                size="small"
+                onClick={() => handleCopyCli(`./bin/gelato-connector route-order --country ${destCountry} --price ${itemPrice}`)}
+                startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+              >
+                {copiedCmd ? 'Copied' : 'Copy CLI'}
+              </Button>
+            </Box>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+              ./bin/gelato-connector route-order --country {destCountry} --price {itemPrice}
+            </Typography>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   TOOL 25: Etsy Connector (etsy-connector)
+   Features: Title & 13 Search Tags SEO Rank Auditor, Etsy Fee Breakdown
+   ========================================================================== */
+export function EtsyConnectorTool() {
+  const theme = useTheme();
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [title, setTitle] = useState('Alchemical Sacred Geometry Crop Circle Tee Vintage Tarot Botanical Shirt');
+  const [tags, setTags] = useState('sacred geometry, vintage tarot tee, botanical shirt, alchemical art, occult streetwear, cyberpunk gothic, hermetic symbol, esoteric graphic, dark academia, mystic aesthetic, cosmic apparel, retro alchemy, spiritual gift');
+  const [retail, setRetail] = useState(32.0);
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  const tagList = tags.split(',').map((t) => t.trim()).filter(Boolean);
+  const tagCount = tagList.length;
+
+  // Real SEO Scoring
+  let score = 0;
+  if (title.length >= 60 && title.length <= 140) score += 30;
+  else if (title.length > 0) score += 15;
+
+  if (tagCount === 13) score += 35;
+  else score += Math.round((tagCount / 13) * 35);
+
+  const titleWords = title.toLowerCase().split(/\s+/);
+  const overlap = tagList.filter((t) => titleWords.some((w) => w.length > 3 && t.toLowerCase().includes(w))).length;
+  score += Math.min(35, overlap * 5);
+
+  // Fees
+  const listingFee = 0.20;
+  const transactionFee = retail * 0.065;
+  const paymentFee = retail * 0.03 + 0.25;
+  const totalFees = listingFee + transactionFee + paymentFee;
+  const net = retail - totalFees;
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8108/health')
+      .then((r) => r.json())
+      .then((d) => setDaemonOnline(d.status === 'healthy'))
+      .catch(() => setDaemonOnline(false));
+  }, []);
+
+  const handleCopyCli = (text) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedCmd(true);
+      setTimeout(() => setCopiedCmd(false), 2000);
+    }
+  };
+
+  return (
+    <Box sx={{ my: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '1.1rem' }}>
+            Etsy SEO & Algorithmic Tag Auditor
+          </Typography>
+          <Chip
+            label={daemonOnline ? 'DAEMON ONLINE :8108' : 'IN-BROWSER ENGINE'}
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: daemonOnline ? successBg(theme) : goldBg(theme),
+              color: daemonOnline ? successFg(theme) : gold(theme),
+              border: `1px solid ${daemonOnline ? 'rgba(16,185,129,0.3)' : goldBorder(theme)}`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          OpenAPI v3 & 13 Search Tag Optimizer · Zero Pip Dependencies
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Title & 13 Search Tags Invariant
+            </Typography>
+
+            <TextField
+              label={`Listing Title (${title.length}/140 chars)`}
+              fullWidth
+              size="small"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+
+            <TextField
+              label={`13 Search Tags (${tagCount}/13 used)`}
+              fullWidth
+              multiline
+              rows={3}
+              size="small"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+              helperText="Comma-separated. Maximum 20 characters per tag."
+              sx={{ mb: 2 }}
+            />
+
+            <Box sx={{ display: 'flex', gap: 0.8, flexWrap: 'wrap' }}>
+              {tagList.map((tag, idx) => (
+                <Chip
+                  key={idx}
+                  label={`${idx + 1}. ${tag}`}
+                  size="small"
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: '0.65rem',
+                    bgcolor: tag.length <= 20 ? (theme.palette.mode === 'dark' ? 'rgba(56,189,248,0.1)' : '#F0F9FF') : errorBg(theme),
+                    color: tag.length <= 20 ? '#38BDF8' : errorFg(theme),
+                    border: `1px solid ${tag.length <= 20 ? 'rgba(56,189,248,0.3)' : errorFg(theme)}`,
+                  }}
+                />
+              ))}
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, mb: 2 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              2. Algorithmic SEO Rank Score
+            </Typography>
+
+            <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, textAlign: 'center', mb: 2 }}>
+              <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontSize: '0.7rem' }}>
+                ETSY SEARCH RELEVANCY
+              </Typography>
+              <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '1.8rem', color: score >= 80 ? '#10B981' : score >= 60 ? '#F59E0B' : '#EF4444' }}>
+                {score}/100
+              </Typography>
+              <LinearProgress
+                variant="determinate"
+                value={score}
+                sx={{ height: 6, borderRadius: 3, mt: 1, bgcolor: 'rgba(255,255,255,0.06)' }}
+              />
+            </Box>
+
+            <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 0.5, fontSize: '0.7rem' }}>
+              ESTIMATED ETSY FEES (Retail ${retail.toFixed(2)})
+            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', fontFamily: mono, fontSize: '0.75rem', mb: 0.5 }}>
+              <span>Total Fees (Listing + 6.5% + 3%):</span>
+              <span style={{ color: errorFg(theme) }}>-${totalFees.toFixed(2)}</span>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', fontFamily: mono, fontSize: '0.82rem', fontWeight: 800 }}>
+              <span>Net Seller Payout:</span>
+              <span style={{ color: '#10B981' }}>${net.toFixed(2)}</span>
+            </Box>
+          </Paper>
+
+          <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: darkPanel(theme) }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                MCP / CLI SNIPPET (:8108)
+              </Typography>
+              <Button
+                size="small"
+                onClick={() => handleCopyCli(`./bin/etsy-connector audit-seo --title "${title}" --tags "${tags}"`)}
+                startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+              >
+                {copiedCmd ? 'Copied' : 'Copy CLI'}
+              </Button>
+            </Box>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+              ./bin/etsy-connector audit-seo --title &quot;{title.slice(0, 30)}...&quot;
+            </Typography>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   TOOL 26: Shopify Connector (shopify-connector)
+   Features: Etsy-to-Shopify Transpiler, GraphQL Payload Generator
+   ========================================================================== */
+export function ShopifyConnectorTool() {
+  const theme = useTheme();
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [inputTitle, setInputTitle] = useState('Cybernetic Sacred Geometry Heavyweight Tee');
+  const [inputTags, setInputTags] = useState('cyberpunk, sacred geometry, streetwear, vintage tee, alchemical');
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  const shopifyTags = inputTags.split(',').map((t) => t.trim()).filter(Boolean);
+  const graphQlPayload = JSON.stringify({
+    input: {
+      title: inputTitle,
+      descriptionHtml: `<p><strong>${inputTitle}</strong></p><ul><li>Direct-to-Garment premium print</li><li>100% preshrunk ring-spun cotton</li><li>Sovereign aesthetic engineered by Neal Frazier Tech</li></ul>`,
+      tags: shopifyTags,
+      productType: 'Apparel',
+      vendor: 'NullAI Tech',
+      status: 'DRAFT'
+    }
+  }, null, 2);
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8113/health')
+      .then((r) => r.json())
+      .then((d) => setDaemonOnline(d.status === 'ok' || d.status === 'healthy'))
+      .catch(() => setDaemonOnline(false));
+  }, []);
+
+  const handleCopyCli = (text) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedCmd(true);
+      setTimeout(() => setCopiedCmd(false), 2000);
+    }
+  };
+
+  return (
+    <Box sx={{ my: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '1.1rem' }}>
+            Shopify Transpiler & Store Sync
+          </Typography>
+          <Chip
+            label={daemonOnline ? 'DAEMON ONLINE :8113' : 'IN-BROWSER ENGINE'}
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: daemonOnline ? successBg(theme) : goldBg(theme),
+              color: daemonOnline ? successFg(theme) : gold(theme),
+              border: `1px solid ${daemonOnline ? 'rgba(16,185,129,0.3)' : goldBorder(theme)}`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          Etsy-to-Shopify Transpiler & GraphQL Mutation Engine
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Source Product Definition
+            </Typography>
+
+            <TextField
+              label="Product Title"
+              fullWidth
+              size="small"
+              value={inputTitle}
+              onChange={(e) => setInputTitle(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+
+            <TextField
+              label="Source Tags"
+              fullWidth
+              size="small"
+              value={inputTags}
+              onChange={(e) => setInputTags(e.target.value)}
+              helperText="Comma separated tags to transpile"
+              sx={{ mb: 2 }}
+            />
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <Typography variant="caption" sx={{ color: goldSoft(theme), fontWeight: 700, display: 'block', mb: 0.5 }}>
+                TRANSPILED SHOPIFY TAG ARRAY ({shopifyTags.length} tags)
+              </Typography>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', color: '#38BDF8' }}>
+                {JSON.stringify(shopifyTags)}
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold(theme), fontSize: '0.85rem' }}>
+                2. Shopify Admin GraphQL Payload
+              </Typography>
+              <Button
+                size="small"
+                onClick={() => handleCopyCli(graphQlPayload)}
+                startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+              >
+                {copiedCmd ? 'Copied' : 'Copy Payload'}
+              </Button>
+            </Box>
+
+            <Box
+              component="pre"
+              sx={{
+                p: 1.5,
+                borderRadius: 1.5,
+                bgcolor: darkPanel(theme),
+                border: `1px solid ${darkPanelBorder(theme)}`,
+                fontFamily: mono,
+                fontSize: '0.68rem',
+                color: '#E2E8F0',
+                overflowX: 'auto',
+                maxHeight: 220,
+              }}
+            >
+              {graphQlPayload}
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   TOOL 27: Etsy POD Forge (etsy-pod-forge)
+   Features: Automated Listing & Mockup Composer (:8107)
+   ========================================================================== */
+export function EtsyPodForgeTool() {
+  const theme = useTheme();
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [archetype, setArchetype] = useState('streetwear_tee');
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  const archetypes = {
+    streetwear_tee: {
+      title: 'Sacred Geometry Alchemy Crop Circle Oversized Tee Aesthetic Occult Streetwear',
+      tags: ['crop circle tee', 'sacred geometry', 'streetwear graphic', 'alchemical art', 'cyberpunk gothic', 'hermetic symbol', 'esoteric shirt', 'dark aesthetic', 'vintage occult', 'retro alchemy', 'tarot aesthetic', 'witchy clothing', 'spiritual gift'],
+      mockup: 'Heavyweight Unisex Cotton Tee (DTG)',
+      base: '$7.85'
+    },
+    hoodie_dark: {
+      title: 'Hermetic Monad Sacred Geometry Heavyweight Hoodie Minimalist Occult Sweatshirt',
+      tags: ['monad hoodie', 'sacred geometry', 'minimalist occult', 'hermetic hoodie', 'dark academia', 'cyberpunk gothic', 'alchemical symbol', 'esoteric streetwear', 'tarot aesthetic', 'vintage occult', 'spiritual hoodie', 'mystic clothing', 'geometry art'],
+      mockup: 'Heavy Blend Fleece Hoodie (Gildan 18500)',
+      base: '$17.50'
+    },
+    coffee_mug: {
+      title: 'Alchemical Ouroboros 11oz Ceramic Mug Esoteric Occult Coffee Cup Spiritual Gift',
+      tags: ['ouroboros mug', 'alchemical cup', 'sacred geometry', 'occult coffee mug', 'esoteric gift', 'witchy mug', 'tarot mug', 'hermetic symbol', 'dark academia', 'spiritual gift', 'mystic decor', 'alchemy art', 'alchemy symbol'],
+      mockup: 'Glossy Ceramic 11oz Mug (District Photo)',
+      base: '$4.40'
+    }
+  };
+
+  const current = archetypes[archetype] || archetypes.streetwear_tee;
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8107/health')
+      .then((r) => r.json())
+      .then((d) => setDaemonOnline(d.status === 'healthy' || d.status === 'ok'))
+      .catch(() => setDaemonOnline(false));
+  }, []);
+
+  const handleCopyCli = (text) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedCmd(true);
+      setTimeout(() => setCopiedCmd(false), 2000);
+    }
+  };
+
+  return (
+    <Box sx={{ my: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '1.1rem' }}>
+            Etsy POD Forge Automated Composer
+          </Typography>
+          <Chip
+            label={daemonOnline ? 'DAEMON ONLINE :8107' : 'IN-BROWSER ENGINE'}
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: daemonOnline ? successBg(theme) : goldBg(theme),
+              color: daemonOnline ? successFg(theme) : gold(theme),
+              border: `1px solid ${daemonOnline ? 'rgba(16,185,129,0.3)' : goldBorder(theme)}`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          Automated Listing & POD Blueprint Orchestrator (:8107)
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Product Archetype Composer
+            </Typography>
+
+            <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+              <InputLabel>Product Archetype</InputLabel>
+              <Select value={archetype} label="Product Archetype" onChange={(e) => setArchetype(e.target.value)}>
+                <MenuItem value="streetwear_tee">👕 Streetwear Graphic Tee (Gildan 5000)</MenuItem>
+                <MenuItem value="hoodie_dark">🧥 Dark Aesthetic Hoodie (Gildan 18500)</MenuItem>
+                <MenuItem value="coffee_mug">☕ Alchemical Ceramic Mug (11oz)</MenuItem>
+              </Select>
+            </FormControl>
+
+            <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 0.5, fontSize: '0.7rem' }}>COMPOSED TITLE</Typography>
+            <Paper elevation={0} sx={{ p: 1.5, mb: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', color: '#F8FAFC' }}>{current.title}</Typography>
+            </Paper>
+
+            <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 0.5, fontSize: '0.7rem' }}>COMPOSED 13 SEARCH TAGS</Typography>
+            <Box sx={{ display: 'flex', gap: 0.6, flexWrap: 'wrap' }}>
+              {current.tags.map((t, idx) => (
+                <Chip key={idx} label={t} size="small" sx={{ fontFamily: mono, fontSize: '0.65rem', bgcolor: goldBg(theme), color: gold(theme), border: `1px solid ${goldBorder(theme)}` }} />
+              ))}
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, mb: 2 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              2. Fulfillable Print Spec
+            </Typography>
+            <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <Typography variant="caption" sx={{ color: goldSoft(theme), fontWeight: 700, display: 'block' }}>TARGET BLUEPRINT</Typography>
+              <Typography sx={{ fontWeight: 800, fontSize: '0.9rem', color: '#F8FAFC', mb: 1 }}>{current.mockup}</Typography>
+              <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>ESTIMATED PRODUCTION BASE</Typography>
+              <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '1rem', color: '#10B981' }}>{current.base}</Typography>
+            </Box>
+          </Paper>
+
+          <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: darkPanel(theme) }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                CLI ORCHESTRATION (:8107)
+              </Typography>
+              <Button
+                size="small"
+                onClick={() => handleCopyCli(`./bin/etsy-pod-forge generate --archetype ${archetype}`)}
+                startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+              >
+                {copiedCmd ? 'Copied' : 'Copy CLI'}
+              </Button>
+            </Box>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+              ./bin/etsy-pod-forge generate --archetype {archetype}
+            </Typography>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+

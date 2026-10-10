@@ -59,6 +59,11 @@ import {
   AgentFlightRecorderTool,
   AgentCapsuleJailTool,
   AgentPolicyAuditorTool,
+  PrintifyConnectorTool,
+  GelatoConnectorTool,
+  EtsyConnectorTool,
+  ShopifyConnectorTool,
+  EtsyPodForgeTool,
 } from '../components/tools/EnclaveToolsSuite';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
@@ -83,11 +88,17 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'envguard-secrets-vault': EnvGuardVaultTool,
   'web-security-guard': WebSecurityGuardTool,
   'audiocipher-stego-vault': AudioCipherStegoTool,
+  'audiocipher-stego-engine': AudioCipherStegoTool,
   'aeo-graph-engine': AeoGraphEngineTool,
   'cwv-speed-engine': CwvSpeedEngineTool,
   'subsweep-lead-scanner': SubSweepTool,
   'omnipost-social-engine': OmniPostSocialTool,
   'cron-rhythm-studio': CronRhythmTool,
+  'printify-connector': PrintifyConnectorTool,
+  'gelato-connector': GelatoConnectorTool,
+  'etsy-connector': EtsyConnectorTool,
+  'shopify-connector': ShopifyConnectorTool,
+  'etsy-pod-forge': EtsyPodForgeTool,
 };
 
 export default function RealToolWorkspacePage() {
