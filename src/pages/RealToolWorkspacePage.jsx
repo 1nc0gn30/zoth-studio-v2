@@ -69,6 +69,7 @@ import {
   PodMockupForgeTool,
   PodMarginSentinelTool,
   AgentVoiceCallTool,
+  McpLensTool,
 } from '../components/tools/EnclaveToolsSuite';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
@@ -109,6 +110,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'pod-mockup-forge': PodMockupForgeTool,
   'pod-margin-sentinel': PodMarginSentinelTool,
   'agent-voice-call': AgentVoiceCallTool,
+  'mcp-lens': McpLensTool,
 };
 
 export default function RealToolWorkspacePage() {

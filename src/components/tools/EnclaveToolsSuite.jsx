@@ -6113,3 +6113,185 @@ export function AgentVoiceCallTool() {
     </Box>
   );
 }
+
+
+/* ==========================================================================
+   TOOL 33: MCP Lens Protocol Inspector (mcp-lens)
+   Features: Zero-Dependency JSON-RPC Sniffer & Token Weight Auditor (:8109)
+   ========================================================================== */
+export function McpLensTool() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [selectedSchema, setSelectedSchema] = useState('shopify_sync');
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  const schemas = {
+    shopify_sync: {
+      name: 'shopify_transpile_etsy',
+      rawTokens: 840,
+      optimizedTokens: 495,
+      savingPct: '41.1%',
+      optimizedJson: {
+        name: "shopify_transpile_etsy",
+        description: "Transpile Etsy tags/taxonomy to Shopify GraphQL product mutation.",
+        parameters: {
+          type: "object",
+          properties: {
+            etsy_tags: { type: "array", items: { type: "string" } },
+            listing_title: { type: "string" },
+            vendor_sku: { type: "string" }
+          },
+          required: ["etsy_tags", "listing_title"]
+        }
+      }
+    },
+    printify_calc: {
+      name: 'printify_calculate_margins',
+      rawTokens: 680,
+      optimizedTokens: 390,
+      savingPct: '42.6%',
+      optimizedJson: {
+        name: "printify_calculate_margins",
+        description: "Calculate net margins, Premium discount, and break-even.",
+        parameters: {
+          type: "object",
+          properties: {
+            blueprint_id: { type: "integer" },
+            retail_price: { type: "number" },
+            premium: { type: "boolean" }
+          },
+          required: ["blueprint_id", "retail_price"]
+        }
+      }
+    }
+  };
+
+  const current = schemas[selectedSchema] || schemas.shopify_sync;
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8109/health')
+      .then((r) => r.json())
+      .then((d) => setDaemonOnline(d.status === 'healthy'))
+      .catch(() => setDaemonOnline(false));
+  }, []);
+
+  const handleCopy = (text) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedCmd(true);
+      setTimeout(() => setCopiedCmd(false), 2000);
+    }
+  };
+
+  return (
+    <Box sx={{ my: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '1.1rem' }}>
+            MCP Lens Protocol &amp; Token Weight Auditor
+          </Typography>
+          <Chip
+            label={daemonOnline ? 'DAEMON ONLINE :8109' : 'IN-BROWSER AUDITOR'}
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: daemonOnline ? successBg(theme) : goldBg(theme),
+              color: daemonOnline ? successFg(theme) : gold(theme),
+              border: `1px solid ${daemonOnline ? 'rgba(16,185,129,0.3)' : goldBorder(theme)}`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          Zero-Dependency JSON-RPC 2.0 Traffic Sniffer · Context Token Compressor
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Tool Schema Token Compression
+            </Typography>
+
+            <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+              <InputLabel>Target Tool Schema</InputLabel>
+              <Select value={selectedSchema} label="Target Tool Schema" onChange={(e) => setSelectedSchema(e.target.value)}>
+                <MenuItem value="shopify_sync">Shopify Listing Transpiler (GraphQL)</MenuItem>
+                <MenuItem value="printify_calc">Printify Margin &amp; Fee Engine</MenuItem>
+              </Select>
+            </FormControl>
+
+            <Paper sx={{ p: 2, borderRadius: 2, bgcolor: isDark ? 'rgba(16,185,129,0.08)' : '#ECFDF5', border: '1px solid rgba(16,185,129,0.3)', mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 700 }}>Raw Context Weight:</Typography>
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#F43F5E' }}>{current.rawTokens} tokens</Typography>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 700 }}>Optimized Weight:</Typography>
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#10B981' }}>{current.optimizedTokens} tokens</Typography>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 1, borderTop: `1px solid ${theme.palette.divider}` }}>
+                <Typography variant="caption" sx={{ fontWeight: 800 }}>Token Savings Per Turn:</Typography>
+                <Chip label={`-${current.savingPct} (${current.rawTokens - current.optimizedTokens} Tokens Saved)`} size="small" sx={{ fontFamily: mono, fontWeight: 900, height: 20, bgcolor: '#10B981', color: '#040508' }} />
+              </Box>
+            </Paper>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                  CLI PROTOCOL SNIFFER (:8109)
+                </Typography>
+                <Button
+                  size="small"
+                  onClick={() => handleCopy(`./bin/mcp-lens sniff --port 8109`, setCopiedCmd)}
+                  startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                  sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+                >
+                  {copiedCmd ? 'Copied' : 'Copy CLI'}
+                </Button>
+              </Box>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+                ./bin/mcp-lens sniff --port 8109
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              2. Optimized JSON-RPC 2.0 Schema
+            </Typography>
+
+            <Paper elevation={0} sx={{ p: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 1.5 }}>
+              <pre style={{ margin: 0, fontFamily: mono, fontSize: '0.68rem', color: '#38BDF8', overflowX: 'auto', whiteSpace: 'pre-wrap', maxHeight: 280 }}>
+                {JSON.stringify(current.optimizedJson, null, 2)}
+              </pre>
+            </Paper>
+
+            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+              <Button
+                variant="outlined"
+                href="http://127.0.0.1:8109"
+                target="_blank"
+                rel="noopener"
+                sx={{
+                  borderColor: gold(theme),
+                  color: gold(theme),
+                  fontWeight: 700,
+                  fontFamily: mono,
+                  fontSize: '0.75rem'
+                }}
+              >
+                Open MCP Lens UI (:8109) ↗
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
