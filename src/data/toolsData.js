@@ -632,7 +632,23 @@ export const microTools = [
     liveUrl: 'https://digital-asset-forge.nullai.tech',
     version: '1.0.0',
     pull: 'git clone https://github.com/1nc0gn30/digital-asset-forge.git && cd digital-asset-forge && ./bin/digital-asset-forge server --port 8118',
+  },
+  {
+    id: 'pod-mockup-forge',
+    published: true,
+    name: 'POD Mockup Forge',
+    repo: 'pod-mockup-forge',
+    category: 'Commerce & MCP',
+    executionType: 'local_cli',
+    github: 'https://github.com/1nc0gn30/pod-mockup-forge',
+    description: 'Autonomous photorealistic mockup studio with 60fps Lumen Matrix, fabric ink blending, and Etsy 2026 photo standards compliance auditor.',
+    localPort: 8119,
+    localUrl: 'http://127.0.0.1:8119',
+    liveUrl: 'https://pod-mockup-forge.nullai.tech',
+    version: '1.0.0',
+    pull: 'git clone https://github.com/1nc0gn30/pod-mockup-forge.git && cd pod-mockup-forge && ./bin/pod-mockup-forge server --port 8119',
   }
 ];
+
 
 
