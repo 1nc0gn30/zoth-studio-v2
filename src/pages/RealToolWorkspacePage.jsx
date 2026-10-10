@@ -70,6 +70,8 @@ import {
   PodMarginSentinelTool,
   AgentVoiceCallTool,
   McpLensTool,
+  AgentBudgetSentinelTool,
+  AgentGodsEyeTool,
 } from '../components/tools/EnclaveToolsSuite';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
@@ -78,7 +80,9 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const ENCLAVE_TOOL_COMPONENTS = {
   'adytum-alchemist-ai-workflow': AdytumPlannerTool,
   'azoth-archon-orchestrator': AzothArchonTool,
+  'azoth-local-agent': AzothArchonTool,
   'sovereign-bridge-protocol': SovereignBridgeTool,
+  'sovereign-agent-bridge': SovereignBridgeTool,
   'neuro-memory-service': NeuroMemoryTool,
   'neuro-memory-daemon': NeuroMemoryTool,
   'agent-egress-sentinel': AgentEgressSentinelTool,
@@ -90,7 +94,9 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'vector-search-engine': VectorSearchTool,
   'deepsearch-research-agent': DeepSearchResearchTool,
   'prompt-master-optimizer': PromptMasterTool,
+  'promptmaster-studio': PromptMasterTool,
   'hexstrike-tactical-terminal': HexStrikeTool,
+  'hexstrike-arsenal': HexStrikeTool,
   'envguard-secrets-vault': EnvGuardVaultTool,
   'web-security-guard': WebSecurityGuardTool,
   'audiocipher-stego-vault': AudioCipherStegoTool,
@@ -111,6 +117,8 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'pod-margin-sentinel': PodMarginSentinelTool,
   'agent-voice-call': AgentVoiceCallTool,
   'mcp-lens': McpLensTool,
+  'agent-budget-sentinel': AgentBudgetSentinelTool,
+  'agent-gods-eye': AgentGodsEyeTool,
 };
 
 export default function RealToolWorkspacePage() {

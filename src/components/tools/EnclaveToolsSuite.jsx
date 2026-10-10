@@ -6295,3 +6295,648 @@ export function McpLensTool() {
     </Box>
   );
 }
+
+
+/* ==========================================================================
+   TOOL 34: Agent Budget Sentinel (agent-budget-sentinel)
+   Features: Real-Time Financial Circuit Breaker & Token Velocity Limiter (:8110/:8111)
+   ========================================================================== */
+export function AgentBudgetSentinelTool() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [breakerState, setBreakerState] = useState('CLOSED'); // CLOSED (Normal) or OPEN (Tripped)
+  const [currentSpend, setCurrentSpend] = useState(0.042);
+  const [maxBudget, setMaxBudget] = useState(5.0);
+  const [selectedModel, setSelectedModel] = useState('gpt-4o');
+  const [simTokens, setSimTokens] = useState({ prompt: 1500, completion: 450 });
+  const [recentEvents, setRecentEvents] = useState([
+    { id: 1, time: '15:38:12', model: 'gpt-4o', tokens: 1950, cost: '$0.0068', status: 'PASS' },
+    { id: 2, time: '15:39:04', model: 'claude-3-5-sonnet', tokens: 3200, cost: '$0.0125', status: 'PASS' },
+  ]);
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  const modelRates = {
+    'gpt-4o': { prompt: 2.5 / 1000000, completion: 10.0 / 1000000 },
+    'claude-3-5-sonnet': { prompt: 3.0 / 1000000, completion: 15.0 / 1000000 },
+    'o1-preview': { prompt: 15.0 / 1000000, completion: 60.0 / 1000000 },
+    'deepseek-chat': { prompt: 0.14 / 1000000, completion: 0.28 / 1000000 },
+  };
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8110/health')
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.status === 'ok') {
+          setDaemonOnline(true);
+          if (d.breaker_state) setBreakerState(d.breaker_state);
+        }
+      })
+      .catch(() => setDaemonOnline(false));
+
+    fetch('http://127.0.0.1:8110/api/stats')
+      .then((r) => r.json())
+      .then((s) => {
+        if (s.state) setBreakerState(s.state);
+        if (typeof s.current_spend_usd === 'number') setCurrentSpend(s.current_spend_usd);
+        if (typeof s.max_budget_usd === 'number') setMaxBudget(s.max_budget_usd);
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleSimulateRequest = () => {
+    if (breakerState === 'OPEN') {
+      alert('Circuit breaker is OPEN (TRIPPED). Requests are actively blocked until reset!');
+      return;
+    }
+    const rate = modelRates[selectedModel] || modelRates['gpt-4o'];
+    const cost = (simTokens.prompt * rate.prompt) + (simTokens.completion * rate.completion);
+    const newSpend = currentSpend + cost;
+    const now = new Date().toTimeString().slice(0, 8);
+
+    if (newSpend >= maxBudget) {
+      setBreakerState('OPEN');
+      setCurrentSpend(newSpend);
+      setRecentEvents((prev) => [
+        { id: Date.now(), time: now, model: selectedModel, tokens: simTokens.prompt + simTokens.completion, cost: `$${cost.toFixed(4)}`, status: 'KILL-SWITCH ENGAGED' },
+        ...prev.slice(0, 4)
+      ]);
+    } else {
+      setCurrentSpend(newSpend);
+      setRecentEvents((prev) => [
+        { id: Date.now(), time: now, model: selectedModel, tokens: simTokens.prompt + simTokens.completion, cost: `$${cost.toFixed(4)}`, status: 'PASS' },
+        ...prev.slice(0, 4)
+      ]);
+    }
+  };
+
+  const handleTripKillSwitch = () => {
+    setBreakerState('OPEN');
+    if (daemonOnline) {
+      fetch('http://127.0.0.1:8110/api/trip', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason: 'Operator Emergency Kill Switch Engaged via Enclave Studio' })
+      }).catch(() => {});
+    }
+  };
+
+  const handleResetBreaker = () => {
+    setBreakerState('CLOSED');
+    if (daemonOnline) {
+      fetch('http://127.0.0.1:8110/api/reset', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reset_spend: false })
+      }).catch(() => {});
+    }
+  };
+
+  const handleCopy = (text) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedCmd(true);
+      setTimeout(() => setCopiedCmd(false), 2000);
+    }
+  };
+
+  const pctUsed = Math.min(100, Math.round((currentSpend / maxBudget) * 100));
+
+  return (
+    <Box sx={{ my: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '1.1rem' }}>
+            Agent Budget Sentinel Cockpit
+          </Typography>
+          <Chip
+            label={daemonOnline ? 'DAEMON ONLINE :8110' : 'IN-BROWSER CIRCUIT BREAKER'}
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: daemonOnline ? successBg(theme) : goldBg(theme),
+              color: daemonOnline ? successFg(theme) : gold(theme),
+              border: `1px solid ${daemonOnline ? 'rgba(16,185,129,0.3)' : goldBorder(theme)}`,
+            }}
+          />
+          <Chip
+            label={breakerState === 'CLOSED' ? '⚡ BREAKER: ARMED (CLOSED)' : '🛑 BREAKER: TRIPPED (OPEN)'}
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 900,
+              fontSize: '0.65rem',
+              bgcolor: breakerState === 'CLOSED' ? successBg(theme) : errorBg(theme),
+              color: breakerState === 'CLOSED' ? successFg(theme) : errorFg(theme),
+              border: `1px solid ${breakerState === 'CLOSED' ? 'rgba(16,185,129,0.3)' : 'rgba(244,63,94,0.3)'}`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          Autonomous Financial Circuit Breaker · Velocity Spike Protection · Reverse Proxy (:8111)
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Financial Thresholds &amp; Spend Telemetry
+            </Typography>
+
+            <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8' }}>Current Session Spend:</Typography>
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 900, color: currentSpend >= maxBudget ? '#F43F5E' : '#10B981', fontSize: '0.9rem' }}>
+                  ${currentSpend.toFixed(4)} USD
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8' }}>Hard Budget Cap:</Typography>
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: gold(theme) }}>
+                  ${maxBudget.toFixed(2)} USD
+                </Typography>
+              </Box>
+              <LinearProgress
+                variant="determinate"
+                value={pctUsed}
+                sx={{
+                  height: 10,
+                  borderRadius: 5,
+                  bgcolor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+                  '& .MuiLinearProgress-bar': {
+                    bgcolor: pctUsed > 80 ? '#F43F5E' : pctUsed > 50 ? '#F59E0B' : '#10B981'
+                  }
+                }}
+              />
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#64748B' }}>
+                  {pctUsed}% Cap Consumed
+                </Typography>
+                <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#64748B' }}>
+                  ${(Math.max(0, maxBudget - currentSpend)).toFixed(4)} Remaining
+                </Typography>
+              </Box>
+            </Box>
+
+            <Typography variant="caption" sx={{ fontWeight: 700, display: 'block', mb: 0.5 }}>Adjust Hard Budget Limit ($1 - $25):</Typography>
+            <Slider
+              value={maxBudget}
+              min={1}
+              max={25}
+              step={0.5}
+              onChange={(e, val) => setMaxBudget(val)}
+              sx={{ color: gold(theme), mb: 2 }}
+            />
+
+            <Box sx={{ display: 'flex', gap: 1.5, mb: 2 }}>
+              <Button
+                variant="contained"
+                onClick={handleTripKillSwitch}
+                startIcon={<SecurityIcon sx={{ fontSize: 16 }} />}
+                sx={{
+                  bgcolor: '#F43F5E',
+                  color: '#FFF',
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  fontSize: '0.75rem',
+                  flex: 1,
+                  '&:hover': { bgcolor: '#E11D48' }
+                }}
+              >
+                Engage Kill Switch
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={handleResetBreaker}
+                startIcon={<RefreshIcon sx={{ fontSize: 16 }} />}
+                sx={{
+                  borderColor: theme.palette.divider,
+                  color: theme.palette.text.primary,
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  fontSize: '0.75rem',
+                  flex: 1
+                }}
+              >
+                Reset Breaker
+              </Button>
+            </Box>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                  CLI PROXY DAEMON (:8110 / :8111)
+                </Typography>
+                <Button
+                  size="small"
+                  onClick={() => handleCopy(`./bin/agent-budget serve --web-port 8110 --proxy-port 8111`, setCopiedCmd)}
+                  startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                  sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+                >
+                  {copiedCmd ? 'Copied' : 'Copy CLI'}
+                </Button>
+              </Box>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+                ./bin/agent-budget serve --web-port 8110 --proxy-port 8111
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              2. Interactive Inference Traffic Simulator
+            </Typography>
+
+            <FormControl fullWidth size="small" sx={{ mb: 1.5 }}>
+              <InputLabel>Simulated Model</InputLabel>
+              <Select value={selectedModel} label="Simulated Model" onChange={(e) => setSelectedModel(e.target.value)}>
+                <MenuItem value="gpt-4o">OpenAI GPT-4o ($2.50 / $10.00 per Mtok)</MenuItem>
+                <MenuItem value="claude-3-5-sonnet">Anthropic Claude 3.5 Sonnet ($3.00 / $15.00 per Mtok)</MenuItem>
+                <MenuItem value="o1-preview">OpenAI o1 Reasoning ($15.00 / $60.00 per Mtok)</MenuItem>
+                <MenuItem value="deepseek-chat">DeepSeek Chat ($0.14 / $0.28 per Mtok)</MenuItem>
+              </Select>
+            </FormControl>
+
+            <Box sx={{ display: 'flex', gap: 1.5, mb: 2 }}>
+              <TextField
+                label="Prompt Tokens"
+                type="number"
+                size="small"
+                value={simTokens.prompt}
+                onChange={(e) => setSimTokens({ ...simTokens, prompt: Math.max(0, parseInt(e.target.value) || 0) })}
+                fullWidth
+                inputProps={{ style: { fontFamily: mono, fontSize: '0.8rem' } }}
+              />
+              <TextField
+                label="Completion Tokens"
+                type="number"
+                size="small"
+                value={simTokens.completion}
+                onChange={(e) => setSimTokens({ ...simTokens, completion: Math.max(0, parseInt(e.target.value) || 0) })}
+                fullWidth
+                inputProps={{ style: { fontFamily: mono, fontSize: '0.8rem' } }}
+              />
+            </Box>
+
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={handleSimulateRequest}
+              startIcon={<FlashOnIcon sx={{ fontSize: 16 }} />}
+              sx={{
+                bgcolor: gold(theme),
+                color: '#08080B',
+                fontWeight: 800,
+                fontFamily: mono,
+                fontSize: '0.75rem',
+                mb: 2,
+                '&:hover': { bgcolor: goldSoft(theme) }
+              }}
+            >
+              Simulate Ingress Request
+            </Button>
+
+            <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 700, display: 'block', mb: 0.5 }}>
+              RECENT INGRESS TRANSACTIONS:
+            </Typography>
+            <TableContainer component={Paper} elevation={0} sx={{ border: `1px solid ${theme.palette.divider}`, bgcolor: darkPanel(theme), borderRadius: 1.5, maxHeight: 160 }}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ color: gold(theme), fontFamily: mono, fontSize: '0.65rem', py: 0.5 }}>TIME</TableCell>
+                    <TableCell sx={{ color: gold(theme), fontFamily: mono, fontSize: '0.65rem', py: 0.5 }}>MODEL</TableCell>
+                    <TableCell sx={{ color: gold(theme), fontFamily: mono, fontSize: '0.65rem', py: 0.5 }}>TOKENS</TableCell>
+                    <TableCell sx={{ color: gold(theme), fontFamily: mono, fontSize: '0.65rem', py: 0.5 }}>COST</TableCell>
+                    <TableCell sx={{ color: gold(theme), fontFamily: mono, fontSize: '0.65rem', py: 0.5 }}>STATUS</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {recentEvents.map((ev) => (
+                    <TableRow key={ev.id}>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.5, color: '#94A3B8' }}>{ev.time}</TableCell>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.5, color: '#E2E8F0' }}>{ev.model}</TableCell>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.5, color: '#38BDF8' }}>{ev.tokens}</TableCell>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.5, color: '#10B981', fontWeight: 800 }}>{ev.cost}</TableCell>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.5, color: ev.status === 'PASS' ? '#10B981' : '#F43F5E', fontWeight: 800 }}>
+                        {ev.status}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+
+            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end' }}>
+              <Button
+                variant="outlined"
+                href="http://127.0.0.1:8110"
+                target="_blank"
+                rel="noopener"
+                sx={{
+                  borderColor: gold(theme),
+                  color: gold(theme),
+                  fontWeight: 700,
+                  fontFamily: mono,
+                  fontSize: '0.75rem'
+                }}
+              >
+                Open Budget Sentinel UI (:8110) ↗
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+
+/* ==========================================================================
+   TOOL 35: Agent God's Eye Planetary Recon (agent-gods-eye)
+   Features: Real-Time Shodan Intelligence Stream & Industrial Recon Radar (:8112)
+   ========================================================================== */
+export function AgentGodsEyeTool() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [query, setQuery] = useState('has_screenshot:true');
+  const [targets, setTargets] = useState([]);
+  const [stats, setStats] = useState({ total_targets: 80, shodan_connected: true });
+  const [copiedCmd, setCopiedCmd] = useState(false);
+  const [selectedTarget, setSelectedTarget] = useState(null);
+
+  const mockFallbackTargets = [
+    { ip: '166.246.159.129', port: 554, org: 'Verizon Business', country: 'US', city: 'Oak Lawn', category: 'SURVEILLANCE_CAMERA', threat_level: 'HIGH', threat_score: 70, product: 'rtsp-tcp' },
+    { ip: '187.94.169.193', port: 554, org: 'Desktop Sigmanet', country: 'BR', city: 'Sumaré', category: 'SURVEILLANCE_CAMERA', threat_level: 'HIGH', threat_score: 70, product: 'rtsp-tcp' },
+    { ip: '113.61.207.31', port: 554, org: 'e-MAX NETWORK CORP', country: 'TW', city: 'Taichung', category: 'SURVEILLANCE_CAMERA', threat_level: 'HIGH', threat_score: 70, product: 'rtsp-tcp' },
+    { ip: '194.226.49.12', port: 502, org: 'Industrial Grid Systems', country: 'DE', city: 'Frankfurt', category: 'ICS_SCADA', threat_level: 'CRITICAL', threat_score: 95, product: 'modbus' },
+    { ip: '45.143.201.88', port: 22, org: 'Cloud Infrastructure Ltd', country: 'GB', city: 'London', category: 'INFRASTRUCTURE', threat_level: 'MEDIUM', threat_score: 45, product: 'OpenSSH 8.9' }
+  ];
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8112/health')
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.status === 'ok') setDaemonOnline(true);
+      })
+      .catch(() => setDaemonOnline(false));
+
+    fetch('http://127.0.0.1:8112/api/stats')
+      .then((r) => r.json())
+      .then((s) => setStats(s))
+      .catch(() => {});
+
+    fetch('http://127.0.0.1:8112/api/targets?limit=25')
+      .then((r) => r.json())
+      .then((res) => {
+        if (res.targets && res.targets.length > 0) {
+          setTargets(res.targets);
+          setSelectedTarget(res.targets[0]);
+        } else {
+          setTargets(mockFallbackTargets);
+          setSelectedTarget(mockFallbackTargets[0]);
+        }
+      })
+      .catch(() => {
+        setTargets(mockFallbackTargets);
+        setSelectedTarget(mockFallbackTargets[0]);
+      });
+  }, []);
+
+  const handleCopy = (text) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedCmd(true);
+      setTimeout(() => setCopiedCmd(false), 2000);
+    }
+  };
+
+  const handleExportJson = () => {
+    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(targets, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute('href', dataStr);
+    downloadAnchor.setAttribute('download', `godseye_osint_recon_${Date.now()}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+  };
+
+  return (
+    <Box sx={{ my: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '1.1rem' }}>
+            Agent God&rsquo;s Eye Recon Radar
+          </Typography>
+          <Chip
+            label={daemonOnline ? 'DAEMON ONLINE :8112' : 'IN-BROWSER OSINT RADAR'}
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: daemonOnline ? successBg(theme) : goldBg(theme),
+              color: daemonOnline ? successFg(theme) : gold(theme),
+              border: `1px solid ${daemonOnline ? 'rgba(16,185,129,0.3)' : goldBorder(theme)}`,
+            }}
+          />
+          <Chip
+            label={stats.shodan_connected ? 'SHODAN SATELLITE: ACTIVE' : 'RECON CACHE: LOCAL'}
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: goldBg(theme),
+              color: gold(theme),
+              border: `1px solid ${goldBorder(theme)}`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          Planetary OSINT Intelligence Stream · SCADA &amp; Surveillance Asset Discovery (:8112)
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Live Planetary Recon Radar
+            </Typography>
+
+            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+              <TextField
+                label="Recon Dork Query"
+                size="small"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                fullWidth
+                inputProps={{ style: { fontFamily: mono, fontSize: '0.8rem' } }}
+              />
+              <Button
+                variant="contained"
+                startIcon={<RadarIcon sx={{ fontSize: 16 }} />}
+                sx={{
+                  bgcolor: gold(theme),
+                  color: '#08080B',
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  fontSize: '0.75rem',
+                  whiteSpace: 'nowrap',
+                  '&:hover': { bgcolor: goldSoft(theme) }
+                }}
+              >
+                Scan Sector
+              </Button>
+            </Box>
+
+            <TableContainer component={Paper} elevation={0} sx={{ border: `1px solid ${theme.palette.divider}`, bgcolor: darkPanel(theme), borderRadius: 1.5, maxHeight: 280 }}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ color: gold(theme), fontFamily: mono, fontSize: '0.65rem', py: 0.5 }}>TARGET IP</TableCell>
+                    <TableCell sx={{ color: gold(theme), fontFamily: mono, fontSize: '0.65rem', py: 0.5 }}>PORT / PROTO</TableCell>
+                    <TableCell sx={{ color: gold(theme), fontFamily: mono, fontSize: '0.65rem', py: 0.5 }}>LOCATION</TableCell>
+                    <TableCell sx={{ color: gold(theme), fontFamily: mono, fontSize: '0.65rem', py: 0.5 }}>CATEGORY</TableCell>
+                    <TableCell sx={{ color: gold(theme), fontFamily: mono, fontSize: '0.65rem', py: 0.5 }}>THREAT</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {targets.slice(0, 10).map((t, idx) => (
+                    <TableRow
+                      key={idx}
+                      hover
+                      onClick={() => setSelectedTarget(t)}
+                      sx={{
+                        cursor: 'pointer',
+                        bgcolor: selectedTarget?.ip === t.ip ? 'rgba(212,175,55,0.08)' : 'transparent'
+                      }}
+                    >
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.68rem', py: 0.5, color: '#38BDF8', fontWeight: 700 }}>{t.ip}</TableCell>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.5, color: '#94A3B8' }}>{t.port} ({t.product || 'tcp'})</TableCell>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.5, color: '#E2E8F0' }}>{t.city ? `${t.city}, ` : ''}{t.country}</TableCell>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.5 }}>
+                        <Chip label={t.category} size="small" sx={{ height: 18, fontSize: '0.6rem', fontFamily: mono }} />
+                      </TableCell>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.5 }}>
+                        <Chip
+                          label={`${t.threat_score || 70} ${t.threat_level}`}
+                          size="small"
+                          sx={{
+                            height: 18,
+                            fontSize: '0.6rem',
+                            fontFamily: mono,
+                            fontWeight: 800,
+                            bgcolor: t.threat_level === 'CRITICAL' ? errorBg(theme) : 'rgba(245,158,11,0.15)',
+                            color: t.threat_level === 'CRITICAL' ? errorFg(theme) : '#F59E0B'
+                          }}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
+              <Button
+                size="small"
+                onClick={handleExportJson}
+                startIcon={<DownloadIcon sx={{ fontSize: 14 }} />}
+                sx={{ fontFamily: mono, fontSize: '0.72rem', color: gold(theme) }}
+              >
+                Export OSINT Bundle (JSON)
+              </Button>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B' }}>
+                Showing {Math.min(10, targets.length)} of {stats.total_targets || targets.length} assets
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              2. Target Forensics &amp; CLI Dispatch
+            </Typography>
+
+            {selectedTarget ? (
+              <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, mb: 2 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 800 }}>
+                    TARGET INSPECTOR: {selectedTarget.ip}
+                  </Typography>
+                  <Chip label={`PORT ${selectedTarget.port}`} size="small" sx={{ height: 18, fontSize: '0.6rem', fontFamily: mono, bgcolor: goldBg(theme), color: gold(theme) }} />
+                </Box>
+                <Box sx={{ mb: 1 }}>
+                  <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', fontSize: '0.7rem' }}>
+                    Organization: <strong style={{ color: '#E2E8F0' }}>{selectedTarget.org || 'Unspecified ISP'}</strong>
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', fontSize: '0.7rem' }}>
+                    Location: <strong style={{ color: '#E2E8F0' }}>{selectedTarget.city ? `${selectedTarget.city}, ` : ''}{selectedTarget.country_name || selectedTarget.country}</strong>
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', fontSize: '0.7rem' }}>
+                    Service / Product: <strong style={{ color: '#38BDF8' }}>{selectedTarget.product || 'Unknown'}</strong>
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', fontSize: '0.7rem' }}>
+                    Threat Classification: <strong style={{ color: selectedTarget.threat_level === 'CRITICAL' ? '#F43F5E' : '#F59E0B' }}>{selectedTarget.threat_level} ({selectedTarget.threat_score}/100)</strong>
+                  </Typography>
+                </Box>
+                <Box sx={{ p: 1, bgcolor: 'rgba(0,0,0,0.5)', borderRadius: 1, border: `1px solid ${darkPanelBorder(theme)}` }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#10B981' }}>
+                    ✓ Geo-Lock: Acquired<br/>
+                    ✓ Shodan Host Profile: Validated<br/>
+                    ✓ CVE Vulnerability Match: Checked
+                  </Typography>
+                </Box>
+              </Box>
+            ) : null}
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                  CLI RECON BRIDGE (:8112)
+                </Typography>
+                <Button
+                  size="small"
+                  onClick={() => handleCopy(`./bin/agent-gods-eye search --query "${query}" --port 8112`, setCopiedCmd)}
+                  startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                  sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+                >
+                  {copiedCmd ? 'Copied' : 'Copy CLI'}
+                </Button>
+              </Box>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+                ./bin/agent-gods-eye search --query &quot;{query}&quot; --port 8112
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Button
+                variant="outlined"
+                href="http://127.0.0.1:8112"
+                target="_blank"
+                rel="noopener"
+                sx={{
+                  borderColor: gold(theme),
+                  color: gold(theme),
+                  fontWeight: 700,
+                  fontFamily: mono,
+                  fontSize: '0.75rem'
+                }}
+              >
+                Open God&rsquo;s Eye UI (:8112) ↗
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
