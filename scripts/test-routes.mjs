@@ -60,6 +60,8 @@ const SAMPLE_ROUTES = [
   '/tools/gelato-connector',
   '/tools/pod-smart-router',
   '/tools/digital-asset-forge',
+  '/tools/pod-mockup-forge',
+  '/tools/pod-margin-sentinel',
   '/workstations/cockpit',
   '/workstations/mission-control',
   '/docs/math/stdp',
