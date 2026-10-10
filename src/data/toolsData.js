@@ -527,6 +527,21 @@ export const microTools = [
     liveUrl: 'https://agent-budget-sentinel.nullai.tech',
     version: '1.0.0',
     pull: 'git clone https://github.com/1nc0gn30/agent-budget-sentinel.git && cd agent-budget-sentinel && ./bin/agent-budget serve --web-port 8110 --proxy-port 8111',
+  },
+  {
+    id: 'agent-gods-eye',
+    published: true,
+    name: "Agent God's Eye",
+    repo: 'agent-gods-eye',
+    category: 'Security & Recon',
+    executionType: 'local_cli',
+    github: 'https://github.com/1nc0gn30/agent-gods-eye',
+    description: "Autonomous zero-dependency Shodan OSINT tactical radar, 3D kinetic planetary attack surface reconnaissance, and threat scoring.",
+    localPort: 8112,
+    localUrl: 'http://127.0.0.1:8112',
+    liveUrl: 'https://godseye.nullai.tech',
+    version: '1.0.0',
+    pull: 'git clone https://github.com/1nc0gn30/agent-gods-eye.git && cd agent-gods-eye && ./bin/agent-gods-eye serve --port 8112',
   }
 ];
 
