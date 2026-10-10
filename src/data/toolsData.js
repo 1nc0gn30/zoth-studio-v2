@@ -542,6 +542,21 @@ export const microTools = [
     liveUrl: 'https://godseye.nullai.tech',
     version: '1.0.0',
     pull: 'git clone https://github.com/1nc0gn30/agent-gods-eye.git && cd agent-gods-eye && ./bin/agent-gods-eye serve --port 8112',
+  },
+  {
+    id: 'shopify-connector',
+    published: true,
+    name: 'Shopify Connector',
+    repo: 'shopify-connector',
+    category: 'Commerce & MCP',
+    executionType: 'local_cli',
+    github: 'https://github.com/1nc0gn30/shopify-connector',
+    description: 'Shopify GraphQL Admin API & POD sync engine with 1-click Etsy listing transpiler, net profit simulator, and Antigravity MCP suite.',
+    localPort: 8113,
+    localUrl: 'http://127.0.0.1:8113',
+    liveUrl: 'https://shopify.nullai.tech',
+    version: '1.0.0',
+    pull: 'git clone https://github.com/1nc0gn30/shopify-connector.git && cd shopify-connector && ./bin/shopify-connector serve --port 8113',
   }
 ];
 
