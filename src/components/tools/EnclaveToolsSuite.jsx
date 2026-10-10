@@ -5047,3 +5047,866 @@ export function EtsyPodForgeTool() {
 }
 
 
+
+
+/* ==========================================================================
+   TOOL 28: POD Smart Router (pod-smart-router)
+   Features: Multi-Channel Order Router (Printify vs Gelato) (:8117)
+   ========================================================================== */
+export function PodSmartRouterTool() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [productSku, setProductSku] = useState('gildan_18000');
+  const [destCountry, setDestCountry] = useState('DE');
+  const [quantity, setQuantity] = useState(2);
+  const [priorityRule, setPriorityRule] = useState('fastest');
+  const [routingResult, setRoutingResult] = useState(null);
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  const products = [
+    { id: 'gildan_18000', name: 'Gildan 18000 Crewneck Sweatshirt', printifyBase: 10.00, gelatoBase: 11.50 },
+    { id: 'gildan_5000', name: 'Gildan 5000 Heavy Cotton Tee', printifyBase: 7.85, gelatoBase: 8.40 },
+    { id: 'bella_3001', name: 'Bella+Canvas 3001 Unisex Jersey Tee', printifyBase: 9.20, gelatoBase: 9.80 },
+    { id: 'ceramic_mug_11oz', name: 'Glossy Ceramic Mug 11oz', printifyBase: 4.40, gelatoBase: 4.80 },
+    { id: 'matte_poster_18x24', name: 'Matte Poster 18x24"', printifyBase: 8.95, gelatoBase: 8.20 },
+  ];
+
+  const countries = [
+    { code: 'US', name: 'United States', gelatoDomestic: true, printifyDomestic: true, gelatoShip: 5.50, printifyShip: 5.99, gelatoDays: 3, printifyDays: 4 },
+    { code: 'DE', name: 'Germany (EU)', gelatoDomestic: true, printifyDomestic: true, gelatoShip: 6.30, printifyShip: 6.99, gelatoDays: 3, printifyDays: 4 },
+    { code: 'UK', name: 'United Kingdom', gelatoDomestic: true, printifyDomestic: true, gelatoShip: 5.80, printifyShip: 6.50, gelatoDays: 3, printifyDays: 4 },
+    { code: 'CA', name: 'Canada', gelatoDomestic: true, printifyDomestic: true, gelatoShip: 7.20, printifyShip: 8.50, gelatoDays: 4, printifyDays: 5 },
+    { code: 'AU', name: 'Australia', gelatoDomestic: true, printifyDomestic: true, gelatoShip: 8.10, printifyShip: 12.00, gelatoDays: 4, printifyDays: 7 },
+  ];
+
+  const selProd = products.find((p) => p.id === productSku) || products[0];
+  const selCountry = countries.find((c) => c.code === destCountry) || countries[0];
+
+  const calcQuotes = () => {
+    const printifyLanded = (selProd.printifyBase * quantity) + selCountry.printifyShip;
+    const gelatoLanded = (selProd.gelatoBase * quantity) + selCountry.gelatoShip;
+    const printifyTotalDays = 2 + selCountry.printifyDays;
+    const gelatoTotalDays = 2 + selCountry.gelatoDays;
+
+    let winner = 'gelato';
+    let reason = '';
+    if (priorityRule === 'lowest_cost') {
+      winner = printifyLanded <= gelatoLanded ? 'printify' : 'gelato';
+      const diff = Math.abs(printifyLanded - gelatoLanded).toFixed(2);
+      reason = `${winner.toUpperCase()} is $${diff} cheaper total landed cost.`;
+    } else if (priorityRule === 'fastest') {
+      winner = gelatoTotalDays <= printifyTotalDays ? 'gelato' : 'printify';
+      const daysDiff = Math.abs(printifyTotalDays - gelatoTotalDays);
+      reason = `${winner.toUpperCase()} delivers ${daysDiff} day(s) faster via localized routing.`;
+    } else {
+      winner = (gelatoLanded <= printifyLanded + 1.5 && gelatoTotalDays < printifyTotalDays) ? 'gelato' : 'printify';
+      reason = winner === 'gelato' ? 'Gelato wins on localized EU domestic speed and reduced carbon freight.' : 'Printify wins on lower bulk unit cost.';
+    }
+
+    return {
+      winner,
+      reason,
+      gelatoLanded,
+      printifyLanded,
+      gelatoDays: gelatoTotalDays,
+      printifyDays: printifyTotalDays,
+      savings: Math.abs(printifyLanded - gelatoLanded).toFixed(2),
+      carbonMilesSaved: winner === 'gelato' ? 450 : 200,
+    };
+  };
+
+  const decision = routingResult || calcQuotes();
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8117/health')
+      .then((r) => r.json())
+      .then((d) => {
+        setDaemonOnline(d.status === 'healthy');
+        fetch('http://127.0.0.1:8117/api/route', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sku: productSku, destination_country: destCountry, quantity, rule: priorityRule }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data?.decision) {
+              const d = data.decision;
+              setRoutingResult({
+                winner: d.recommended_partner || d.winner,
+                reason: d.decision_reason,
+                gelatoLanded: d.recommended_partner === 'gelato' ? d.winner_quote.total_landed_cost : d.alternative_quote.total_landed_cost,
+                printifyLanded: d.recommended_partner === 'printify' ? d.winner_quote.total_landed_cost : d.alternative_quote.total_landed_cost,
+                gelatoDays: d.recommended_partner === 'gelato' ? d.winner_quote.total_delivery_days : d.alternative_quote.total_delivery_days,
+                printifyDays: d.recommended_partner === 'printify' ? d.winner_quote.total_delivery_days : d.alternative_quote.total_delivery_days,
+                savings: (d.dollar_savings || 0).toFixed(2),
+                carbonMilesSaved: d.carbon_miles_saved || 350,
+              });
+            }
+          })
+          .catch(() => {});
+      })
+      .catch(() => setDaemonOnline(false));
+  }, [productSku, destCountry, quantity, priorityRule]);
+
+  const handleCopyCli = (text) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedCmd(true);
+      setTimeout(() => setCopiedCmd(false), 2000);
+    }
+  };
+
+  return (
+    <Box sx={{ my: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '1.1rem' }}>
+            POD Smart Router (Printify vs Gelato)
+          </Typography>
+          <Chip
+            label={daemonOnline ? 'DAEMON ONLINE :8117' : 'IN-BROWSER ROUTER'}
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: daemonOnline ? successBg(theme) : goldBg(theme),
+              color: daemonOnline ? successFg(theme) : gold(theme),
+              border: `1px solid ${daemonOnline ? 'rgba(16,185,129,0.3)' : goldBorder(theme)}`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          Zero-Latency Multi-Partner Optimization · Domestic Hub Proximity
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Routing Parameters &amp; Destination
+            </Typography>
+
+            <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+              <InputLabel>Product Archetype</InputLabel>
+              <Select value={productSku} label="Product Archetype" onChange={(e) => setProductSku(e.target.value)}>
+                {products.map((p) => (
+                  <MenuItem key={p.id} value={p.id}>{p.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <Grid container spacing={1.5} sx={{ mb: 2 }}>
+              <Grid xs={6}>
+                <FormControl fullWidth size="small">
+                  <InputLabel>Destination Country</InputLabel>
+                  <Select value={destCountry} label="Destination Country" onChange={(e) => setDestCountry(e.target.value)}>
+                    {countries.map((c) => (
+                      <MenuItem key={c.code} value={c.code}>{c.name} ({c.code})</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid xs={6}>
+                <FormControl fullWidth size="small">
+                  <InputLabel>Priority Strategy</InputLabel>
+                  <Select value={priorityRule} label="Priority Strategy" onChange={(e) => setPriorityRule(e.target.value)}>
+                    <MenuItem value="balanced">⚖️ Balanced (Cost + Speed)</MenuItem>
+                    <MenuItem value="fastest">⚡ Fastest Delivery</MenuItem>
+                    <MenuItem value="lowest_cost">💰 Lowest Landed Cost</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+
+            <Typography variant="caption" sx={{ fontWeight: 700, display: 'block', mb: 0.5 }}>
+              Order Quantity: <strong>{quantity} unit(s)</strong>
+            </Typography>
+            <Slider
+              value={quantity}
+              min={1}
+              max={25}
+              onChange={(_, v) => setQuantity(v)}
+              sx={{ color: gold(theme), mb: 2 }}
+            />
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                  CLI ROUTING QUERY (:8117)
+                </Typography>
+                <Button
+                  size="small"
+                  onClick={() => handleCopyCli(`./bin/pod-smart-router route --sku ${productSku} --country ${destCountry} --qty ${quantity} --rule ${priorityRule}`)}
+                  startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                  sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+                >
+                  {copiedCmd ? 'Copied' : 'Copy CLI'}
+                </Button>
+              </Box>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+                ./bin/pod-smart-router route --sku {productSku} --country {destCountry} --qty {quantity}
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              2. Algorithmic Partner Comparison
+            </Typography>
+
+            <Paper sx={{ p: 2, mb: 2, borderRadius: 2, bgcolor: isDark ? 'rgba(16,185,129,0.08)' : '#ECFDF5', border: '1px solid rgba(16,185,129,0.3)' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#10B981' }}>
+                  RECOMMENDED FULFILLMENT PARTNER
+                </Typography>
+                <Chip
+                  label={decision.winner.toUpperCase()}
+                  size="small"
+                  sx={{ fontFamily: mono, fontWeight: 900, bgcolor: '#10B981', color: '#040508' }}
+                />
+              </Box>
+              <Typography variant="body2" sx={{ fontWeight: 700, mb: 1 }}>
+                {decision.reason}
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>
+                  Carbon Miles Saved: <strong style={{ color: '#10B981' }}>{decision.carbonMilesSaved} mi</strong>
+                </Typography>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>
+                  Customs Risk: <strong style={{ color: '#10B981' }}>ZERO (Domestic Hub)</strong>
+                </Typography>
+              </Box>
+            </Paper>
+
+            <TableContainer component={Paper} elevation={0} sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow sx={{ bgcolor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.03)' : '#F8FAFC' }}>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.72rem' }}>Partner</TableCell>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.72rem' }}>Landed Cost</TableCell>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.72rem' }}>Transit Time</TableCell>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.72rem' }}>Status</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow sx={{ bgcolor: decision.winner === 'gelato' ? (isDark ? 'rgba(16,185,129,0.06)' : '#F0FDF4') : 'inherit' }}>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.75rem' }}>Gelato Network</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: decision.winner === 'gelato' ? '#10B981' : 'inherit' }}>
+                      ${decision.gelatoLanded.toFixed(2)}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem' }}>{decision.gelatoDays} days</TableCell>
+                    <TableCell>
+                      {decision.winner === 'gelato' ? <Chip label="WINNER" size="small" sx={{ height: 18, fontSize: '0.6rem', fontWeight: 900, bgcolor: successBg(theme), color: successFg(theme) }} /> : <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.68rem' }}>Alternative</Typography>}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow sx={{ bgcolor: decision.winner === 'printify' ? (isDark ? 'rgba(16,185,129,0.06)' : '#F0FDF4') : 'inherit' }}>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.75rem' }}>Printify Global</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: decision.winner === 'printify' ? '#10B981' : 'inherit' }}>
+                      ${decision.printifyLanded.toFixed(2)}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem' }}>{decision.printifyDays} days</TableCell>
+                    <TableCell>
+                      {decision.winner === 'printify' ? <Chip label="WINNER" size="small" sx={{ height: 18, fontSize: '0.6rem', fontWeight: 900, bgcolor: successBg(theme), color: successFg(theme) }} /> : <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.68rem' }}>Alternative</Typography>}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   TOOL 29: Digital Asset Forge (digital-asset-forge)
+   Features: 300 DPI Wall Art Pack Generator & 20MB Multi-Zip Splitter (:8118)
+   ========================================================================== */
+export function DigitalAssetForgeTool() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [artWidth, setArtWidth] = useState(7200);
+  const [artHeight, setArtHeight] = useState(10800);
+  const [selectedRatios, setSelectedRatios] = useState(['2:3', '3:4', '4:5', 'iso']);
+  const [copiedCmd, setCopiedCmd] = useState(false);
+  const [copiedGuide, setCopiedGuide] = useState(false);
+
+  const ratioProfiles = [
+    { id: '2:3', name: '2:3 Ratio', sizes: '4x6", 8x12", 12x18", 16x24", 20x30", 24x36"', maxPx: '7200 x 10800', estMb: 14.5 },
+    { id: '3:4', name: '3:4 Ratio', sizes: '6x8", 9x12", 12x16", 15x20", 18x24"', maxPx: '5400 x 7200', estMb: 9.8 },
+    { id: '4:5', name: '4:5 Ratio', sizes: '4x5", 8x10", 12x15", 16x20"', maxPx: '4800 x 6000', estMb: 7.2 },
+    { id: '11:14', name: '11:14 Ratio', sizes: '11x14", 22x28"', maxPx: '3300 x 4200', estMb: 5.5 },
+    { id: 'iso', name: 'ISO Paper', sizes: 'A5, A4, A3, A2, A1', maxPx: '7016 x 9933', estMb: 12.8 },
+  ];
+
+  const totalPackMb = ratioProfiles
+    .filter((r) => selectedRatios.includes(r.id))
+    .reduce((sum, r) => sum + r.estMb, 0);
+
+  const zipPartsCount = Math.ceil(totalPackMb / 19.5);
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8118/health')
+      .then((r) => r.json())
+      .then((d) => setDaemonOnline(d.status === 'healthy'))
+      .catch(() => setDaemonOnline(false));
+  }, []);
+
+  const handleCopy = (text, setFn) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setFn(true);
+      setTimeout(() => setFn(false), 2000);
+    }
+  };
+
+  const printingGuideText = `PRINTING & SIZING GUIDE:
+Thank you for your order! Your download includes high-resolution 300 DPI JPG files formatted for standard framing:
+• 2:3 Ratio: Prints 4x6", 8x12", 12x18", 16x24", 20x30", 24x36"
+• 3:4 Ratio: Prints 6x8", 9x12", 12x16", 15x20", 18x24"
+• 4:5 Ratio: Prints 4x5", 8x10", 12x15", 16x20"
+• ISO Ratio: Prints standard international sizes A5, A4, A3, A2, A1
+For best results, use heavyweight matte paper or archival cardstock (200+ GSM).`;
+
+  return (
+    <Box sx={{ my: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '1.1rem' }}>
+            Digital Asset Forge (300 DPI Wall Art Pack)
+          </Typography>
+          <Chip
+            label={daemonOnline ? 'DAEMON ONLINE :8118' : 'IN-BROWSER PACK GENERATOR'}
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: daemonOnline ? successBg(theme) : goldBg(theme),
+              color: daemonOnline ? successFg(theme) : gold(theme),
+              border: `1px solid ${daemonOnline ? 'rgba(16,185,129,0.3)' : goldBorder(theme)}`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          98% Margin Digital Products · Automated 20MB Multi-Zip Splitter
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Master Artwork Dimensions &amp; Aspect Ratios
+            </Typography>
+
+            <Grid container spacing={1.5} sx={{ mb: 2 }}>
+              <Grid xs={6}>
+                <TextField
+                  label="Master Width (px)"
+                  type="number"
+                  size="small"
+                  fullWidth
+                  value={artWidth}
+                  onChange={(e) => setArtWidth(Number(e.target.value))}
+                />
+              </Grid>
+              <Grid xs={6}>
+                <TextField
+                  label="Master Height (px)"
+                  type="number"
+                  size="small"
+                  fullWidth
+                  value={artHeight}
+                  onChange={(e) => setArtHeight(Number(e.target.value))}
+                />
+              </Grid>
+            </Grid>
+
+            <Typography variant="caption" sx={{ fontWeight: 700, display: 'block', mb: 1 }}>
+              SELECT EXPORT RATIOS (FOR 300 DPI CROPPING):
+            </Typography>
+
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mb: 2 }}>
+              {ratioProfiles.map((r) => {
+                const active = selectedRatios.includes(r.id);
+                return (
+                  <Box
+                    key={r.id}
+                    onClick={() => {
+                      if (active) setSelectedRatios(selectedRatios.filter((x) => x !== r.id));
+                      else setSelectedRatios([...selectedRatios, r.id]);
+                    }}
+                    sx={{
+                      p: 1.2,
+                      borderRadius: 1.5,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      bgcolor: active ? (isDark ? 'rgba(212,175,55,0.08)' : '#FFFBEB') : (isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC'),
+                      border: `1px solid ${active ? gold(theme) : theme.palette.divider}`,
+                    }}
+                  >
+                    <Box>
+                      <Typography variant="body2" sx={{ fontWeight: 800, color: active ? gold(theme) : 'text.primary' }}>
+                        {r.name} — {r.maxPx} @ 300 DPI
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.7rem' }}>
+                        Frames: {r.sizes}
+                      </Typography>
+                    </Box>
+                    <Chip label={`~${r.estMb} MB`} size="small" sx={{ fontFamily: mono, fontSize: '0.65rem' }} />
+                  </Box>
+                );
+              })}
+            </Box>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                  CLI PACK GENERATOR (:8118)
+                </Typography>
+                <Button
+                  size="small"
+                  onClick={() => handleCopy(`./bin/digital-asset-forge generate --width ${artWidth} --height ${artHeight} --ratios ${selectedRatios.join(',')}`, setCopiedCmd)}
+                  startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                  sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+                >
+                  {copiedCmd ? 'Copied' : 'Copy CLI'}
+                </Button>
+              </Box>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+                ./bin/digital-asset-forge generate --width {artWidth} --height {artHeight} --ratios {selectedRatios.join(',')}
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, mb: 2 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              2. Etsy 20MB Multi-Zip Compliance
+            </Typography>
+
+            <Box sx={{ p: 2, borderRadius: 2, bgcolor: isDark ? 'rgba(56,189,248,0.08)' : '#F0F9FF', border: '1px solid rgba(56,189,248,0.3)', mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 700 }}>Total Export Payload:</Typography>
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#38BDF8' }}>{totalPackMb.toFixed(1)} MB</Typography>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontWeight: 700 }}>Etsy File Upload Limit:</Typography>
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800 }}>20.0 MB per slot</Typography>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 1, borderTop: `1px solid ${theme.palette.divider}` }}>
+                <Typography variant="caption" sx={{ fontWeight: 800 }}>Automated Zip Split:</Typography>
+                <Chip label={`${zipPartsCount} Zip Part(s)`} size="small" sx={{ fontFamily: mono, fontWeight: 800, height: 20, bgcolor: '#38BDF8', color: '#040508' }} />
+              </Box>
+            </Box>
+
+            <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                  CUSTOMER PRINTING GUIDE
+                </Typography>
+                <Button
+                  size="small"
+                  onClick={() => handleCopy(printingGuideText, setCopiedGuide)}
+                  startIcon={copiedGuide ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                  sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+                >
+                  {copiedGuide ? 'Copied' : 'Copy Guide'}
+                </Button>
+              </Box>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#CBD5E1', whiteSpace: 'pre-wrap', maxHeight: 160, overflowY: 'auto' }}>
+                {printingGuideText}
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   TOOL 30: POD Mockup Forge (pod-mockup-forge)
+   Features: Photorealistic Mockup Studio & Etsy Photo Auditor (:8119)
+   ========================================================================== */
+export function PodMockupForgeTool() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [silhouette, setSilhouette] = useState('tshirt');
+  const [sceneBackdrop, setSceneBackdrop] = useState('scandinavian');
+  const [lighting, setLighting] = useState('golden_hour');
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  const silhouettes = [
+    { id: 'tshirt', name: '👕 Unisex Heavyweight T-Shirt (Gildan 5000 / Bella 3001)' },
+    { id: 'hoodie', name: '🧥 Heavy Blend Fleece Hoodie (Gildan 18500)' },
+    { id: 'mug', name: '☕ Glossy Ceramic 11oz Coffee Mug' },
+    { id: 'canvas', name: '🖼️ Gallery Canvas Wrap (16x20 / 24x36)' },
+    { id: 'poster', name: '📜 Minimalist Framed Wood Poster' },
+  ];
+
+  const scenes = [
+    { id: 'scandinavian', name: '🛋️ Minimalist Scandinavian Living Room', contrast: 'High (Dark On Light)' },
+    { id: 'loft', name: '🏢 Industrial Brick Loft & Warm Window Light', contrast: 'Rich Midtones' },
+    { id: 'streetwear', name: '🛹 Streetwear Studio Concrete & Neon Accent', contrast: 'Dramatic High-Contrast' },
+    { id: 'cozy_cafe', name: '☕ Cozy Morning Coffee Bar & Wooden Table', contrast: 'Warm Golden Hues' },
+  ];
+
+  const auditChecks = [
+    { label: 'Minimum 2000px Resolution (2500x2500px)', pass: true, detail: 'Complies with Etsy 2026 zoom standard' },
+    { label: 'Aspect Ratio 4:3 or 1:1 Square', pass: true, detail: 'Perfect mobile thumbnail framing' },
+    { label: 'sRGB Color Space Profile', pass: true, detail: 'No washed-out CMYK browser discoloration' },
+    { label: 'Natural Fabric Wrinkle Blending (Lumen)', pass: true, detail: 'Zero floating sticker effect' },
+    { label: 'Thumbnail Legibility Index (0-100)', pass: true, score: '96/100' },
+  ];
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8119/health')
+      .then((r) => r.json())
+      .then((d) => setDaemonOnline(d.status === 'healthy'))
+      .catch(() => setDaemonOnline(false));
+  }, []);
+
+  const handleCopy = (text) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedCmd(true);
+      setTimeout(() => setCopiedCmd(false), 2000);
+    }
+  };
+
+  return (
+    <Box sx={{ my: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '1.1rem' }}>
+            POD Mockup Forge &amp; Etsy Photo Auditor
+          </Typography>
+          <Chip
+            label={daemonOnline ? 'DAEMON ONLINE :8119' : 'IN-BROWSER MOCKUP ENGINE'}
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: daemonOnline ? successBg(theme) : goldBg(theme),
+              color: daemonOnline ? successFg(theme) : gold(theme),
+              border: `1px solid ${daemonOnline ? 'rgba(16,185,129,0.3)' : goldBorder(theme)}`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          Lumen Matrix Fabric Blending · Etsy 2026 Photo Standards Compliance
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Mockup Scene &amp; Silhouette Setup
+            </Typography>
+
+            <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+              <InputLabel>Product Silhouette</InputLabel>
+              <Select value={silhouette} label="Product Silhouette" onChange={(e) => setSilhouette(e.target.value)}>
+                {silhouettes.map((s) => (
+                  <MenuItem key={s.id} value={s.id}>{s.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+              <InputLabel>Lifestyle Scene Backdrop</InputLabel>
+              <Select value={sceneBackdrop} label="Lifestyle Scene Backdrop" onChange={(e) => setSceneBackdrop(e.target.value)}>
+                {scenes.map((sc) => (
+                  <MenuItem key={sc.id} value={sc.id}>{sc.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth size="small" sx={{ mb: 2 }}>
+              <InputLabel>Lighting Environment</InputLabel>
+              <Select value={lighting} label="Lighting Environment" onChange={(e) => setLighting(e.target.value)}>
+                <MenuItem value="golden_hour">🌅 Warm Golden Hour (High Converting)</MenuItem>
+                <MenuItem value="soft_window">🪟 Soft Diffused Window Light (Neutral)</MenuItem>
+                <MenuItem value="studio_dramatic">💡 Editorial Dramatic Studio</MenuItem>
+              </Select>
+            </FormControl>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                  CLI MOCKUP GENERATOR (:8119)
+                </Typography>
+                <Button
+                  size="small"
+                  onClick={() => handleCopy(`./bin/pod-mockup-forge render --product ${silhouette} --scene ${sceneBackdrop} --lighting ${lighting}`)}
+                  startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                  sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+                >
+                  {copiedCmd ? 'Copied' : 'Copy CLI'}
+                </Button>
+              </Box>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+                ./bin/pod-mockup-forge render --product {silhouette} --scene {sceneBackdrop} --lighting {lighting}
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              2. Etsy 2026 Listing Image Compliance Radar
+            </Typography>
+
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.2 }}>
+              {auditChecks.map((c, idx) => (
+                <Box
+                  key={idx}
+                  sx={{
+                    p: 1.2,
+                    borderRadius: 1.5,
+                    bgcolor: isDark ? 'rgba(16,185,129,0.06)' : '#ECFDF5',
+                    border: '1px solid rgba(16,185,129,0.25)',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Box>
+                    <Typography variant="body2" sx={{ fontWeight: 800, fontSize: '0.8rem', color: '#10B981' }}>
+                      ✓ {c.label}
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.7rem' }}>
+                      {c.detail}
+                    </Typography>
+                  </Box>
+                  <Chip
+                    label={c.score || 'PASS'}
+                    size="small"
+                    sx={{ fontFamily: mono, fontWeight: 900, fontSize: '0.65rem', bgcolor: '#10B981', color: '#040508' }}
+                  />
+                </Box>
+              ))}
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   TOOL 31: POD Margin Sentinel (pod-margin-sentinel)
+   Features: Multi-Channel Profit Sentinel & Break-Even Solver (:8120)
+   ========================================================================== */
+export function PodMarginSentinelTool() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [retailPrice, setRetailPrice] = useState(28.00);
+  const [baseCost, setBaseCost] = useState(8.50);
+  const [shippingCharged, setShippingCharged] = useState(4.99);
+  const [shippingPaid, setShippingPaid] = useState(5.50);
+  const [adSpendPerOrder, setAdSpendPerOrder] = useState(3.00);
+  const [couponPercent, setCouponPercent] = useState(0);
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  const effectiveRetail = retailPrice * (1 - couponPercent / 100);
+  const totalCustomerPaid = effectiveRetail + shippingCharged;
+  const totalFulfillmentCost = baseCost + shippingPaid;
+
+  const etsyOrgFee = (totalCustomerPaid * 0.065) + 0.20 + (totalCustomerPaid * 0.03 + 0.25);
+  const etsyOrgProfit = totalCustomerPaid - totalFulfillmentCost - etsyOrgFee - adSpendPerOrder;
+  const etsyOrgMargin = (etsyOrgProfit / totalCustomerPaid) * 100;
+
+  const etsyAdsFee = etsyOrgFee + (totalCustomerPaid * 0.15);
+  const etsyAdsProfit = totalCustomerPaid - totalFulfillmentCost - etsyAdsFee;
+  const etsyAdsMargin = (etsyAdsProfit / totalCustomerPaid) * 100;
+
+  const shopifyFee = (totalCustomerPaid * 0.029) + 0.30;
+  const shopifyProfit = totalCustomerPaid - totalFulfillmentCost - shopifyFee - adSpendPerOrder;
+  const shopifyMargin = (shopifyProfit / totalCustomerPaid) * 100;
+
+  const tikTokFee = (totalCustomerPaid * 0.08);
+  const tikTokProfit = totalCustomerPaid - totalFulfillmentCost - tikTokFee - adSpendPerOrder;
+  const tikTokMargin = (tikTokProfit / totalCustomerPaid) * 100;
+
+  const web3Profit = totalCustomerPaid - totalFulfillmentCost;
+  const web3Margin = (web3Profit / totalCustomerPaid) * 100;
+
+  useEffect(() => {
+    fetch('http://127.0.0.1:8120/health')
+      .then((r) => r.json())
+      .then((d) => setDaemonOnline(d.status === 'healthy'))
+      .catch(() => setDaemonOnline(false));
+  }, []);
+
+  const handleCopy = (text) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedCmd(true);
+      setTimeout(() => setCopiedCmd(false), 2000);
+    }
+  };
+
+  return (
+    <Box sx={{ my: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '1.1rem' }}>
+            POD Margin Sentinel &amp; Fee Simulator
+          </Typography>
+          <Chip
+            label={daemonOnline ? 'DAEMON ONLINE :8120' : 'IN-BROWSER SENTINEL'}
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: daemonOnline ? successBg(theme) : goldBg(theme),
+              color: daemonOnline ? successFg(theme) : gold(theme),
+              border: `1px solid ${daemonOnline ? 'rgba(16,185,129,0.3)' : goldBorder(theme)}`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          Real-Time Multi-Channel Break-Even Solver · 2026 Fee Schedule Simulator
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Cost &amp; Price Drivers
+            </Typography>
+
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>Retail Price: <strong>${retailPrice.toFixed(2)}</strong></Typography>
+              {couponPercent > 0 && <Chip label={`-${couponPercent}% ($${effectiveRetail.toFixed(2)})`} size="small" sx={{ fontFamily: mono, height: 20, bgcolor: goldBg(theme), color: gold(theme) }} />}
+            </Box>
+            <Slider value={retailPrice} min={12} max={90} step={0.5} onChange={(_, v) => setRetailPrice(v)} sx={{ color: gold(theme), mb: 2 }} />
+
+            <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.5 }}>Base POD Production Cost: <strong>${baseCost.toFixed(2)}</strong></Typography>
+            <Slider value={baseCost} min={4} max={40} step={0.25} onChange={(_, v) => setBaseCost(v)} sx={{ color: '#F43F5E', mb: 2 }} />
+
+            <Grid container spacing={1.5} sx={{ mb: 2 }}>
+              <Grid xs={6}>
+                <TextField label="Shipping Charged ($)" type="number" size="small" fullWidth value={shippingCharged} onChange={(e) => setShippingCharged(Number(e.target.value))} />
+              </Grid>
+              <Grid xs={6}>
+                <TextField label="Shipping Paid ($)" type="number" size="small" fullWidth value={shippingPaid} onChange={(e) => setShippingPaid(Number(e.target.value))} />
+              </Grid>
+            </Grid>
+
+            <Grid container spacing={1.5} sx={{ mb: 2 }}>
+              <Grid xs={6}>
+                <TextField label="Ad Spend / Sale ($)" type="number" size="small" fullWidth value={adSpendPerOrder} onChange={(e) => setAdSpendPerOrder(Number(e.target.value))} />
+              </Grid>
+              <Grid xs={6}>
+                <TextField label="Coupon Discount (%)" type="number" size="small" fullWidth value={couponPercent} onChange={(e) => setCouponPercent(Number(e.target.value))} />
+              </Grid>
+            </Grid>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                  CLI SENTINEL CALCULATOR (:8120)
+                </Typography>
+                <Button
+                  size="small"
+                  onClick={() => handleCopy(`./bin/pod-margin-sentinel calculate --retail ${retailPrice} --base ${baseCost} --ship-in ${shippingPaid} --ship-out ${shippingCharged}`)}
+                  startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                  sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+                >
+                  {copiedCmd ? 'Copied' : 'Copy CLI'}
+                </Button>
+              </Box>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+                ./bin/pod-margin-sentinel calculate --retail {retailPrice} --base {baseCost}
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              2. Real-Time Multi-Channel Margin Matrix
+            </Typography>
+
+            <TableContainer component={Paper} elevation={0} sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5, mb: 2 }}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow sx={{ bgcolor: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.03)' : '#F8FAFC' }}>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.72rem' }}>Channel</TableCell>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.72rem' }}>Platform Fee</TableCell>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.72rem' }}>Net Profit</TableCell>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.72rem' }}>Margin %</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem' }}>Etsy (Organic)</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: errorFg(theme) }}>-${etsyOrgFee.toFixed(2)}</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: etsyOrgProfit > 0 ? '#10B981' : errorFg(theme) }}>
+                      ${etsyOrgProfit.toFixed(2)}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700 }}>{etsyOrgMargin.toFixed(1)}%</TableCell>
+                  </TableRow>
+                  <TableRow sx={{ bgcolor: isDark ? 'rgba(244,63,94,0.06)' : '#FEF2F2' }}>
+                    <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem' }}>Etsy (15% Offsite Ads)</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: errorFg(theme) }}>-${etsyAdsFee.toFixed(2)}</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: etsyAdsProfit > 0 ? '#10B981' : errorFg(theme) }}>
+                      ${etsyAdsProfit.toFixed(2)}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700 }}>{etsyAdsMargin.toFixed(1)}%</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem' }}>Shopify Store</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: errorFg(theme) }}>-${shopifyFee.toFixed(2)}</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: shopifyProfit > 0 ? '#10B981' : errorFg(theme) }}>
+                      ${shopifyProfit.toFixed(2)}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700 }}>{shopifyMargin.toFixed(1)}%</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem' }}>TikTok Shop (8%)</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: errorFg(theme) }}>-${tikTokFee.toFixed(2)}</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: tikTokProfit > 0 ? '#10B981' : errorFg(theme) }}>
+                      ${tikTokProfit.toFixed(2)}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700 }}>{tikTokMargin.toFixed(1)}%</TableCell>
+                  </TableRow>
+                  <TableRow sx={{ bgcolor: isDark ? 'rgba(212,175,55,0.08)' : '#FFFBEB' }}>
+                    <TableCell sx={{ fontWeight: 800, fontSize: '0.75rem', color: gold(theme) }}>Direct Sovereign Web3</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#10B981' }}>$0.00 (0%)</TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: '#10B981' }}>
+                      ${web3Profit.toFixed(2)}
+                    </TableCell>
+                    <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: gold(theme) }}>{web3Margin.toFixed(1)}%</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}

@@ -44,6 +44,7 @@ const PRIMARY_ROUTES = [
   '/faqs',
   '/ax',
   '/gallery',
+  '/agora',
 ];
 
 const SAMPLE_ROUTES = [

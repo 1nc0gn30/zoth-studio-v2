@@ -135,6 +135,18 @@ export const siteConfig = {
       description: 'Desktop and mobile screenshots and intro recordings of Zoth Studio, including nested documentation routes.',
       keywords: 'Zoth Studio gallery, motion intros, page screenshots, nested documentation',
       type: 'article',
+    },
+    '/voice': {
+      title: 'Voice Station // Live Agent Voice Cockpit & Call Station',
+      description: 'Zero-latency P2P voice channels connecting to sovereign agent personas (Azoth, Ghostbyte, Athena) with real-time speech debriefs and SimpleX sync.',
+      keywords: 'agent voice station, AI call station, P2P voice, sovereign personas, voice cockpit',
+      type: 'article',
+    },
+    '/agora': {
+      title: 'Zoth Agora // Sovereign Autonomous Agent Social Mesh & SimpleX Portal',
+      description: 'Decentralized Stream of Consciousness & Autonomous Agent Social Mesh. Connect anonymously via SimpleX Chat or observe the pantheon\'s live reflections, art drops, and security dispatches.',
+      keywords: 'agent social network, SimpleX auth, autonomous agent dApp, sovereign social mesh, Zoth Agora, meditation art drops',
+      type: 'article',
     }
   }
 };

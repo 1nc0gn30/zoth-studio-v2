@@ -36,6 +36,7 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 // Flagship Primary Links
 const primaryNav = [
   { label: 'Arsenal', path: '/arsenal', badge: `${arsenalStats.total}` },
+  { label: 'Agora', path: '/agora', badge: 'DAPP', pulse: true },
   { label: 'Voice Station', path: '/voice', badge: 'LIVE', pulse: true },
   { label: 'Zoth OS', path: '/zoth-os', badge: 'OS', pulse: true },
   { label: 'WebGen', path: '/webgen', badge: 'NEW' },
@@ -634,7 +635,7 @@ export default function Navbar({ mode, onToggleTheme }) {
               href="https://nullai.tech"
               target="_blank"
               rel="noopener noreferrer"
-              startIcon={<Box component="img" src="/brand/ghostbyte-dark.png" alt="" sx={{ height: 20, width: 'auto' }} />}
+              startIcon={<Box component="img" src="/brand/ghostbyte-dark.png" alt="Ghostbyte Brand Logo" sx={{ height: 20, width: 'auto' }} />}
               sx={{
                 display: { xs: 'none', xl: 'inline-flex' },
                 fontWeight: 800,
@@ -1402,7 +1403,7 @@ export default function Navbar({ mode, onToggleTheme }) {
                 href="https://nullai.tech"
                 target="_blank"
                 rel="noopener noreferrer"
-                startIcon={<Box component="img" src="/brand/ghostbyte-dark.png" alt="" sx={{ height: 16, width: 'auto' }} />}
+                startIcon={<Box component="img" src="/brand/ghostbyte-dark.png" alt="Ghostbyte Brand Logo" sx={{ height: 16, width: 'auto' }} />}
                 sx={{
                   py: 0.75,
                   borderRadius: '10px',

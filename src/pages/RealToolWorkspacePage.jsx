@@ -64,6 +64,10 @@ import {
   EtsyConnectorTool,
   ShopifyConnectorTool,
   EtsyPodForgeTool,
+  PodSmartRouterTool,
+  DigitalAssetForgeTool,
+  PodMockupForgeTool,
+  PodMarginSentinelTool,
 } from '../components/tools/EnclaveToolsSuite';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
@@ -99,6 +103,10 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'etsy-connector': EtsyConnectorTool,
   'shopify-connector': ShopifyConnectorTool,
   'etsy-pod-forge': EtsyPodForgeTool,
+  'pod-smart-router': PodSmartRouterTool,
+  'digital-asset-forge': DigitalAssetForgeTool,
+  'pod-mockup-forge': PodMockupForgeTool,
+  'pod-margin-sentinel': PodMarginSentinelTool,
 };
 
 export default function RealToolWorkspacePage() {
