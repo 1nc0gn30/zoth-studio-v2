@@ -371,6 +371,28 @@ export const workstations = [
     pullCommand: "./bin/digital-asset-forge server --port 8118"
   },
   {
+    id: "pod-mockup-forge",
+    name: "POD Mockup Forge // 60fps Lumen Matrix & Etsy Photo Auditor",
+    path: "/studio/pod-mockup-forge.html",
+    band: "Build",
+    type: "integrated_tool",
+    description: "Multi-product photorealistic vector SVG mockup compositor, dynamic lighting and shadows, and automated Etsy 2026 photo standards compliance auditor.",
+    alsoInApp: "/tools/pod-mockup-forge",
+    toolRepoId: "pod-mockup-forge",
+    pullCommand: "./bin/pod-mockup-forge server --port 8119"
+  },
+  {
+    id: "pod-margin-sentinel",
+    name: "POD Margin Sentinel // Multi-Channel Profit & Break-Even Matrix",
+    path: "/studio/pod-margin-sentinel.html",
+    band: "Build",
+    type: "integrated_tool",
+    description: "Autonomous profit margin calculator, reverse target margin solver, 5-platform fee comparator, and coupon discount stress-testing engine.",
+    alsoInApp: "/tools/pod-margin-sentinel",
+    toolRepoId: "pod-margin-sentinel",
+    pullCommand: "./bin/pod-margin-sentinel server --port 8120"
+  },
+  {
     id: "connectors",
     name: "Zoth Tool Bench & Integration Ecosystem",
     path: "/studio/connectors.html",

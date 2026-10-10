@@ -385,6 +385,18 @@
     <priority>0.75</priority>
   </url>
   <url>
+    <loc>https://zoth.nullai.tech/tools/pod-mockup-forge</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/tools/pod-margin-sentinel</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://zoth.nullai.tech/workstations/cockpit</loc>
     <lastmod>2026-10-10</lastmod>
     <changefreq>weekly</changefreq>
@@ -590,6 +602,18 @@
   </url>
   <url>
     <loc>https://zoth.nullai.tech/workstations/digital-asset-forge</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/workstations/pod-mockup-forge</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://zoth.nullai.tech/workstations/pod-margin-sentinel</loc>
     <lastmod>2026-10-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.75</priority>
