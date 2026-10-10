@@ -68,8 +68,8 @@ Desktop and mobile captures, plus screen recordings of each route intro motion d
         v                                     v                                     v
 +-------------------------------+  +-------------------------------+  +-------------------------------+
 |     59 DEDICATED WORKSTATIONS |  |  22 ENCLAVE LOOPBACK DAEMONS  |  |      STDP NEURO MEMORY        |
-|  - 19 In-Browser WebGPU/WASM  |  |  - Ports 8094-8120, 9393, 5225|  |  - Hebbian LTP / LTD Learning |
-|  - 40 Sovereign Enclaves      |  |  - Zero-Cloud SNI Proxy       |  |  - 3D Synaptic Manifold       |
+|  - 23 In-Browser WebGPU/Client|  |  - Ports 8094-8120, 9393, 5225|  |  - Hebbian LTP / LTD Learning |
+|  - 36 Sovereign Enclaves      |  |  - Zero-Cloud SNI Proxy       |  |  - 3D Synaptic Manifold       |
 |  - 100% Native Tool Coverage  |  |  - Full Forensics Flight Rec  |  |  - Exponential Weight Decay   |
 |  - Real Client Utility        |  |  - Multi-Channel POD Routers  |  |  - Local Vector Clustering    |
 |  - Zero Broken Dependencies   |  |  - Planetary Recon Radar      |  |  - Pure Client Memory State   |
@@ -104,7 +104,7 @@ Desktop and mobile captures, plus screen recordings of each route intro motion d
 flowchart TD
     subgraph Client["Zoth Studio v2 Client Runtime (React 19.3)"]
         UI["Operator Deck UI<br/>Vite + React 19.3 + MUI v5"]
-        WS["59 Dedicated Workstations (100% Coverage)<br/>19 In-Browser WebGPU + 40 Sovereign Enclave"]
+        WS["59 Dedicated Workstations (100% Coverage)<br/>23 In-Browser WebGPU/Client + 36 Sovereign Enclaves"]
         Tools["Real Working Utilities<br/>WebGPU Shaders, 3D Canvas, AST Linters, DoH OSINT"]
         UI --> WS
         UI --> Tools
@@ -300,8 +300,8 @@ zoth-studio-v2/
 ├── src/
 │   ├── components/             # Reusable UI components (CinematicIntro, Navbar, Footer, etc.)
 │   │   ├── tools/
-│   │   │   ├── WebGPUToolWorkstation.jsx  # 18 In-Browser WebGPU/WASM Workstations
-│   │   │   └── EnclaveToolsSuite.jsx      # 40 Sovereign Enclave Workstations
+│   │   │   ├── WebGPUToolWorkstation.jsx  # 23 In-Browser WebGPU/Client Workstations
+│   │   │   └── EnclaveToolsSuite.jsx      # 36 Sovereign Enclave Workstations
 │   ├── data/
 │   │   ├── toolsData.js        # Master 59-tool catalog definition
 │   │   └── toolsDocumentation.js# Comprehensive architectural docs
