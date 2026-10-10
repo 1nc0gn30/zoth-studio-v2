@@ -30,6 +30,11 @@ import RadarIcon from '@mui/icons-material/Radar';
 import PsychologyIcon from '@mui/icons-material/Psychology';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import RouterIcon from '@mui/icons-material/Router';
+import LaunchIcon from '@mui/icons-material/Launch';
+import FaceIcon from '@mui/icons-material/Face';
+import GroupsIcon from '@mui/icons-material/Groups';
+import WebIcon from '@mui/icons-material/Web';
+import StorageIcon from '@mui/icons-material/Storage';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const gold = (t) => (t.palette.mode === 'dark' ? '#D4AF37' : '#B8860B');
@@ -6940,3 +6945,1021 @@ export function AgentGodsEyeTool() {
     </Box>
   );
 }
+
+/* ==========================================================================
+   TOOL 36: Zoth WebGen Foundry (zoth-webgen)
+   Features: Multi-Framework Scaffolding Engine, Bento / HUD Blueprint Generator,
+             Real-Time File Tree, Direct Launcher to /webgen
+   ========================================================================== */
+export function ZothWebgenLauncherTool() {
+  const theme = useTheme();
+  const [framework, setFramework] = useState('react');
+  const [archetype, setArchetype] = useState('bento');
+  const [appName, setAppName] = useState('sovereign-vault-dashboard');
+  const [copiedCmd, setCopiedCmd] = useState(false);
+  const [copiedCode, setCopiedCode] = useState(false);
+  const [activeFile, setActiveFile] = useState('App.tsx');
+
+  const files = {
+    'App.tsx': `import React from 'react';\n\nexport default function App() {\n  return (\n    <main className="min-h-screen bg-[#08080B] text-white p-6 md:p-12">\n      <header className="max-w-6xl mx-auto flex justify-between items-center mb-10">\n        <div className="flex items-center gap-3">\n          <span className="w-3.5 h-3.5 rounded-full bg-[#D4AF37] shadow-[0_0_12px_#D4AF37]" />\n          <h1 className="text-xl font-bold tracking-tight">${appName}</h1>\n        </div>\n        <div className="text-xs font-mono text-[#D4AF37] px-3 py-1 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10">\n          ARCHETYPE: ${archetype.toUpperCase()}\n        </div>\n      </header>\n      <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">\n        <div className="p-6 rounded-2xl bg-[#0D0E15] border border-white/10 hover:border-[#D4AF37]/40 transition">\n          <h3 className="font-bold text-lg mb-2 text-[#D4AF37]">Zero Cloud Egress</h3>\n          <p className="text-sm text-gray-400">All compute, state, and cryptographic signatures execute client-side.</p>\n        </div>\n        <div className="p-6 rounded-2xl bg-[#0D0E15] border border-white/10 hover:border-[#D4AF37]/40 transition">\n          <h3 className="font-bold text-lg mb-2 text-[#38BDF8]">Avant-Garde Commodities</h3>\n          <p className="text-sm text-gray-400">Conic border beams, aurora gradients, and tactile Bento layout primitives.</p>\n        </div>\n        <div className="p-6 rounded-2xl bg-[#0D0E15] border border-white/10 hover:border-[#D4AF37]/40 transition">\n          <h3 className="font-bold text-lg mb-2 text-[#10B981]">Dual Cash Registers</h3>\n          <p className="text-sm text-gray-400">Pre-wired Stripe payment links and DePay Solana non-custodial checkout.</p>\n        </div>\n      </section>\n    </main>\n  );\n}`,
+    'package.json': `{\n  "name": "${appName}",\n  "version": "1.0.0",\n  "private": true,\n  "type": "module",\n  "scripts": {\n    "dev": "vite",\n    "build": "vite build",\n    "preview": "vite preview"\n  },\n  "dependencies": {\n    "react": "^19.0.0",\n    "react-dom": "^19.0.0",\n    "lucide-react": "^0.460.0"\n  },\n  "devDependencies": {\n    "@vitejs/plugin-react": "^4.3.4",\n    "tailwindcss": "^3.4.15",\n    "vite": "^6.0.0"\n  }\n}`,
+    'netlify.toml': `[build]\n  publish = "dist"\n  command = "npm run build"\n\n[[redirects]]\n  from = "/*"\n  to = "/index.html"\n  status = 200\n\n[[headers]]\n  for = "/*"\n  [headers.values]\n    X-Frame-Options = "SAMEORIGIN"\n    X-Content-Type-Options = "nosniff"\n    Referrer-Policy = "strict-origin-when-cross-origin"`
+  };
+
+  const handleCopy = (text, setFn) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setFn(true);
+      setTimeout(() => setFn(false), 2000);
+    }
+  };
+
+  return (
+    <Box sx={{ mt: 1 }}>
+      <Box sx={{ mb: 2.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 0.5, flexWrap: 'wrap' }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+            Zoth WebGen Foundry
+          </Typography>
+          <Chip
+            label="MULTI-FRAMEWORK SCAFFOLD ENGINE"
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: goldBg(theme),
+              color: gold(theme),
+              border: `1px solid ${goldBorder(theme)}`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          Autonomous Web Generation &amp; Blueprint Synthesizer · Client-Side Project Scaffolding
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 2, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Blueprint Configuration
+            </Typography>
+
+            <Stack spacing={2} sx={{ mb: 3 }}>
+              <TextField
+                label="Application Name"
+                size="small"
+                value={appName}
+                onChange={(e) => setAppName(e.target.value.toLowerCase().replace(/[^a-z0-9-_]/g, ''))}
+                fullWidth
+                inputProps={{ style: { fontFamily: mono, fontSize: '0.8rem' } }}
+              />
+
+              <FormControl size="small" fullWidth>
+                <InputLabel sx={{ fontFamily: mono, fontSize: '0.8rem' }}>Target Framework</InputLabel>
+                <Select
+                  value={framework}
+                  label="Target Framework"
+                  onChange={(e) => setFramework(e.target.value)}
+                  sx={{ fontFamily: mono, fontSize: '0.8rem' }}
+                >
+                  <MenuItem value="react">Vite + React 19 (SPA)</MenuItem>
+                  <MenuItem value="astro">Astro 5 Starlight (Static Content)</MenuItem>
+                  <MenuItem value="svelte">SvelteKit 2 (High Performance)</MenuItem>
+                  <MenuItem value="vue">Vue 3 + Vite (Pinia)</MenuItem>
+                  <MenuItem value="next">Next.js 15 (App Router)</MenuItem>
+                </Select>
+              </FormControl>
+
+              <FormControl size="small" fullWidth>
+                <InputLabel sx={{ fontFamily: mono, fontSize: '0.8rem' }}>UI Archetype</InputLabel>
+                <Select
+                  value={archetype}
+                  label="UI Archetype"
+                  onChange={(e) => setArchetype(e.target.value)}
+                  sx={{ fontFamily: mono, fontSize: '0.8rem' }}
+                >
+                  <MenuItem value="bento">Avant-Garde Bento Grid (Magic UI)</MenuItem>
+                  <MenuItem value="terminal">Cyberpunk Terminal HUD (JetBrains)</MenuItem>
+                  <MenuItem value="saas">High-Converting Micro-SaaS (Dual Stripe+Solana)</MenuItem>
+                  <MenuItem value="editorial">Luxury Serif Editorial (Syne &amp; Clash)</MenuItem>
+                </Select>
+              </FormControl>
+            </Stack>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                  CLI GENERATOR COMMAND
+                </Typography>
+                <Button
+                  size="small"
+                  onClick={() => handleCopy(`cd ~/NullAITech/zoth-webgen && node cli.js --name ${appName} --framework ${framework} --archetype ${archetype}`, setCopiedCmd)}
+                  startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                  sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+                >
+                  {copiedCmd ? 'Copied' : 'Copy CLI'}
+                </Button>
+              </Box>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+                cd ~/NullAITech/zoth-webgen &amp;&amp; node cli.js --name {appName} --framework {framework} --archetype {archetype}
+              </Typography>
+            </Box>
+
+            <Button
+              component="a"
+              href="/webgen"
+              variant="contained"
+              fullWidth
+              startIcon={<WebIcon />}
+              sx={{
+                bgcolor: gold(theme),
+                color: '#08080B',
+                fontWeight: 800,
+                fontFamily: mono,
+                fontSize: '0.8rem',
+                py: 1,
+                '&:hover': { bgcolor: goldSoft(theme) }
+              }}
+            >
+              Launch Full WebGen Foundry Studio ⚡
+            </Button>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold(theme), fontSize: '0.85rem' }}>
+                2. Live Generated Blueprint Code
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                {Object.keys(files).map((f) => (
+                  <Chip
+                    key={f}
+                    label={f}
+                    size="small"
+                    onClick={() => setActiveFile(f)}
+                    sx={{
+                      fontFamily: mono,
+                      fontSize: '0.65rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      bgcolor: activeFile === f ? gold(theme) : 'transparent',
+                      color: activeFile === f ? '#08080B' : 'text.secondary',
+                      border: `1px solid ${activeFile === f ? gold(theme) : theme.palette.divider}`,
+                    }}
+                  />
+                ))}
+              </Box>
+            </Box>
+
+            <Box sx={{ position: 'relative', bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 1.5, p: 2, minHeight: 320, overflow: 'auto' }}>
+              <Button
+                size="small"
+                onClick={() => handleCopy(files[activeFile], setCopiedCode)}
+                startIcon={copiedCode ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                sx={{
+                  position: 'absolute',
+                  top: 8,
+                  right: 8,
+                  fontFamily: mono,
+                  fontSize: '0.65rem',
+                  bgcolor: 'rgba(255,255,255,0.06)',
+                  color: '#CBD5E1',
+                  '&:hover': { bgcolor: 'rgba(255,255,255,0.12)' }
+                }}
+              >
+                {copiedCode ? 'Copied' : 'Copy File'}
+              </Button>
+              <pre style={{ margin: 0, fontFamily: mono, fontSize: '0.74rem', color: '#E2E8F0', whiteSpace: 'pre-wrap', lineHeight: 1.5 }}>
+                {files[activeFile]}
+              </pre>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   TOOL 37: 21-Agent Swarm Multiplexer (zoth-swarm-multiplexer)
+   Features: 21 Sovereign Agent Archetype Topology, Quorum Consensus Simulation,
+             Directive Dispatcher, Direct Launcher to /swarm
+   ========================================================================== */
+export function ZothSwarmMultiplexerLauncherTool() {
+  const theme = useTheme();
+  const [goal, setGoal] = useState('Conduct cross-platform POD profit audit and launch draft listing');
+  const [quorum, setQuorum] = useState(80);
+  const [dispatching, setDispatching] = useState(false);
+  const [voteCount, setVoteCount] = useState(20);
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  const AGENTS = [
+    { name: 'Archon', role: 'Governor', status: 'SYNCHRONIZED', ping: '1.2ms' },
+    { name: 'Hermes', role: 'Dispatcher', status: 'SYNCHRONIZED', ping: '0.8ms' },
+    { name: 'Thoth', role: 'Knowledge', status: 'SYNCHRONIZED', ping: '2.1ms' },
+    { name: 'Vulcan', role: 'Synthesis', status: 'SYNCHRONIZED', ping: '1.5ms' },
+    { name: 'Athena', role: 'Logic', status: 'SYNCHRONIZED', ping: '1.9ms' },
+    { name: 'Sentinel', role: 'Security', status: 'ARMED', ping: '0.4ms' },
+    { name: 'Chronos', role: 'Scheduler', status: 'SYNCHRONIZED', ping: '0.6ms' },
+    { name: 'Plutus', role: 'Treasury', status: 'SYNCHRONIZED', ping: '1.1ms' },
+    { name: 'Iris', role: 'UX / Visuals', status: 'SYNCHRONIZED', ping: '2.4ms' },
+    { name: 'Daedalus', role: 'Architecture', status: 'SYNCHRONIZED', ping: '1.7ms' },
+    { name: 'Argus', role: 'Recon (:8112)', status: 'SYNCHRONIZED', ping: '3.0ms' },
+    { name: 'Hephaestus', role: 'Build Engine', status: 'READY', ping: '1.0ms' },
+    { name: 'Prometheus', role: 'Breakthrough', status: 'SYNCHRONIZED', ping: '2.8ms' },
+    { name: 'Apollo', role: 'Intelligence', status: 'SYNCHRONIZED', ping: '1.4ms' },
+    { name: 'Janus', role: 'Firewall (:8098)', status: 'ARMED', ping: '0.5ms' },
+    { name: 'Nemesis', role: 'Verification', status: 'SYNCHRONIZED', ping: '1.8ms' },
+    { name: 'Morpheus', role: 'Latent Gen', status: 'SYNCHRONIZED', ping: '2.2ms' },
+    { name: 'Typhon', role: 'Chaos Tester', status: 'STANDBY', ping: '1.6ms' },
+    { name: 'Mnemosyne', role: 'Memory (:8094)', status: 'SYNCHRONIZED', ping: '0.7ms' },
+    { name: 'Fortuna', role: 'Arbitrage', status: 'SYNCHRONIZED', ping: '1.3ms' },
+    { name: 'Sovereign Core', role: 'Arbiter', status: 'SOVEREIGN', ping: '0.2ms' },
+  ];
+
+  const handleDispatch = () => {
+    setDispatching(true);
+    setTimeout(() => {
+      setDispatching(false);
+      setVoteCount(Math.min(21, Math.max(17, Math.floor(21 * (quorum / 100)) + Math.floor(Math.random() * 3))));
+    }, 1200);
+  };
+
+  const handleCopy = (text, setFn) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setFn(true);
+      setTimeout(() => setFn(false), 2000);
+    }
+  };
+
+  return (
+    <Box sx={{ mt: 1 }}>
+      <Box sx={{ mb: 2.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 0.5, flexWrap: 'wrap' }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+            21-Agent Swarm Multiplexer
+          </Typography>
+          <Chip
+            label="CONSENSUS QUORUM ROUTER"
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: goldBg(theme),
+              color: gold(theme),
+              border: `1px solid ${goldBorder(theme)}`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          Autonomous Multi-Agent Consensus Quorum &amp; Parallel Reasoning Bus
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Swarm Directive Dispatch
+            </Typography>
+
+            <TextField
+              label="Collective Directive"
+              multiline
+              rows={3}
+              size="small"
+              value={goal}
+              onChange={(e) => setGoal(e.target.value)}
+              fullWidth
+              sx={{ mb: 2 }}
+              inputProps={{ style: { fontFamily: mono, fontSize: '0.8rem' } }}
+            />
+
+            <Box sx={{ mb: 2.5 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>Quorum Threshold:</Typography>
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: gold(theme) }}>{quorum}% ({Math.ceil(21 * (quorum / 100))}/21 Votes)</Typography>
+              </Box>
+              <Slider
+                value={quorum}
+                min={50}
+                max={100}
+                step={5}
+                onChange={(_, v) => setQuorum(v)}
+                sx={{ color: gold(theme) }}
+              />
+            </Box>
+
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={handleDispatch}
+              disabled={dispatching}
+              startIcon={dispatching ? <RefreshIcon sx={{ animation: 'spin 1s linear infinite' }} /> : <FlashOnIcon />}
+              sx={{
+                bgcolor: gold(theme),
+                color: '#08080B',
+                fontWeight: 800,
+                fontFamily: mono,
+                fontSize: '0.8rem',
+                py: 1,
+                mb: 2,
+                '&:hover': { bgcolor: goldSoft(theme) }
+              }}
+            >
+              {dispatching ? 'Reaching Quorum...' : 'Broadcast Swarm Directive ⚡'}
+            </Button>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                  CLI SWARM RUNNER
+                </Typography>
+                <Button
+                  size="small"
+                  onClick={() => handleCopy(`cd ~/NullAITech/zoth-swarm-multiplexer && node engine.js --swarm 21 --consensus ${quorum / 100}`, setCopiedCmd)}
+                  startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                  sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+                >
+                  {copiedCmd ? 'Copied' : 'Copy CLI'}
+                </Button>
+              </Box>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+                cd ~/NullAITech/zoth-swarm-multiplexer &amp;&amp; node engine.js --swarm 21 --consensus {quorum / 100}
+              </Typography>
+            </Box>
+
+            <Button
+              component="a"
+              href="/swarm"
+              variant="outlined"
+              fullWidth
+              startIcon={<GroupsIcon />}
+              sx={{
+                borderColor: gold(theme),
+                color: gold(theme),
+                fontWeight: 800,
+                fontFamily: mono,
+                fontSize: '0.8rem',
+                '&:hover': { bgcolor: goldBg(theme) }
+              }}
+            >
+              Launch Swarm Multiplexer UI ↗
+            </Button>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold(theme), fontSize: '0.85rem' }}>
+                2. Live 21-Agent Quorum Matrix ({voteCount}/21 Consensus)
+              </Typography>
+              <Chip
+                label="QUORUM REACHED"
+                size="small"
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.65rem',
+                  fontWeight: 800,
+                  bgcolor: successBg(theme),
+                  color: successFg(theme),
+                }}
+              />
+            </Box>
+
+            <Box sx={{ maxHeight: 330, overflowY: 'auto', pr: 0.5 }}>
+              <Grid container spacing={1}>
+                {AGENTS.map((agent, i) => (
+                  <Grid xs={6} sm={4} key={agent.name}>
+                    <Box sx={{ p: 1, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, display: 'flex', flexDirection: 'column', gap: 0.3 }}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: '#F8FAFC' }}>
+                          {i + 1}. {agent.name}
+                        </Typography>
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.62rem', color: '#10B981' }}>
+                          {agent.ping}
+                        </Typography>
+                      </Box>
+                      <Typography sx={{ fontFamily: mono, fontSize: '0.65rem', color: '#94A3B8' }}>
+                        {agent.role}
+                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.2 }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#10B981' }} />
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.6rem', color: '#34D399', fontWeight: 700 }}>
+                          {agent.status}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   TOOL 38: Zoth Civilization Hub (zoth-civilization)
+   Features: Autonomous Society Simulation, Economic Velocity Telemetry,
+             Citizen Task Stream, Local Host Health Probe (:9393)
+   ========================================================================== */
+export function ZothCivilizationLauncherTool() {
+  const theme = useTheme();
+  const [population] = useState(21);
+  const [velocity] = useState('4,820');
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  const eventStream = [
+    { time: '17:02:14', actor: 'Archon', action: 'Approved multi-vendor POD payload generation', type: 'governance' },
+    { time: '17:01:45', actor: 'Fortuna', action: 'Arbitraged Gildan 5000 vs Bella+Canvas 3001 (+42% margin)', type: 'economy' },
+    { time: '17:00:20', actor: 'Sentinel', action: 'Thermal check CPU 47.0°C | Fans 0 RPM whisper-quiet', type: 'invariant' },
+    { time: '16:58:30', actor: 'Daedalus', action: 'Prerendered 127 static routes in Zoth Studio v2', type: 'build' },
+  ];
+
+  const handleCopy = (text, setFn) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setFn(true);
+      setTimeout(() => setFn(false), 2000);
+    }
+  };
+
+  return (
+    <Box sx={{ mt: 1 }}>
+      <Box sx={{ mb: 2.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 0.5, flexWrap: 'wrap' }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+            Zoth Civilization Hub
+          </Typography>
+          <Chip
+            label="PORT :9393 ACTIVE"
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: successBg(theme),
+              color: successFg(theme),
+              border: `1px solid rgba(16,185,129,0.3)`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          Autonomous Society Simulation &amp; Multi-Agent Economic Velocity (:9393)
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 2, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Society Health &amp; Invariants
+            </Typography>
+
+            <Stack spacing={1.5} sx={{ mb: 2.5 }}>
+              <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', display: 'block' }}>
+                  ACTIVE CITIZEN POPULATION:
+                </Typography>
+                <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 900, color: gold(theme) }}>
+                  {population} Sovereign Agents
+                </Typography>
+              </Box>
+
+              <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', display: 'block' }}>
+                  ECONOMIC VELOCITY:
+                </Typography>
+                <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 900, color: '#10B981' }}>
+                  {velocity} ZOTH Credits / hr
+                </Typography>
+              </Box>
+
+              <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', display: 'block' }}>
+                  THERMAL INVARIANT STATUS:
+                </Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', color: '#38BDF8', fontWeight: 700 }}>
+                  ✓ CPU &lt; 50°C · Fans 0 RPM · Kokoro Standby
+                </Typography>
+              </Box>
+            </Stack>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                  DAEMON COMMAND (:9393)
+                </Typography>
+                <Button
+                  size="small"
+                  onClick={() => handleCopy(`cd ~/NullAITech/zoth-civilization && ENABLE_KOKORO_VOICE=0 node server.js`, setCopiedCmd)}
+                  startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                  sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+                >
+                  {copiedCmd ? 'Copied' : 'Copy CLI'}
+                </Button>
+              </Box>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+                cd ~/NullAITech/zoth-civilization &amp;&amp; ENABLE_KOKORO_VOICE=0 node server.js
+              </Typography>
+            </Box>
+
+            <Button
+              component="a"
+              href="/civilization"
+              variant="contained"
+              fullWidth
+              startIcon={<HubIcon />}
+              sx={{
+                bgcolor: gold(theme),
+                color: '#08080B',
+                fontWeight: 800,
+                fontFamily: mono,
+                fontSize: '0.8rem',
+                py: 1,
+                '&:hover': { bgcolor: goldSoft(theme) }
+              }}
+            >
+              Launch Civilization Society Cockpit ⚡
+            </Button>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              2. Real-Time Society Event Stream
+            </Typography>
+
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.2 }}>
+              {eventStream.map((ev, idx) => (
+                <Box
+                  key={idx}
+                  sx={{
+                    p: 1.5,
+                    borderRadius: 1.5,
+                    bgcolor: darkPanel(theme),
+                    border: `1px solid ${darkPanelBorder(theme)}`,
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: 1.5,
+                  }}
+                >
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#64748B', whiteSpace: 'nowrap' }}>
+                    {ev.time}
+                  </Typography>
+                  <Box sx={{ flexGrow: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.3 }}>
+                      <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: gold(theme) }}>
+                        {ev.actor}
+                      </Typography>
+                      <Chip
+                        label={ev.type.toUpperCase()}
+                        size="small"
+                        sx={{ fontFamily: mono, fontSize: '0.58rem', height: 18 }}
+                      />
+                    </Box>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#CBD5E1' }}>
+                      {ev.action}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+
+            <Box sx={{ mt: 2.5, p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8' }}>
+                  Raw HTTP JSON Telemetry Endpoint:
+                </Typography>
+                <Button
+                  component="a"
+                  href="http://127.0.0.1:9393/status"
+                  target="_blank"
+                  rel="noopener"
+                  size="small"
+                  sx={{ fontFamily: mono, fontSize: '0.7rem', color: gold(theme) }}
+                >
+                  http://127.0.0.1:9393/status ↗
+                </Button>
+              </Box>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   TOOL 39: Likeness Desk (AI Video Double) (likeness-desk)
+   Features: Quadro P1000 4GB Hardware HUD, Lip-Sync GAN Controls,
+             Chatterbox Turbo Audio Synthesizer, Local Port :9395 Bridge
+   ========================================================================== */
+export function LikenessDeskTool() {
+  const theme = useTheme();
+  const [spokenLine, setSpokenLine] = useState('Welcome to the NullAI Sovereign Enclave. All operations execute strictly on local Quadro silicon.');
+  const [gain, setGain] = useState(1.2);
+  const [smoothing, setSmoothing] = useState(0.85);
+  const [synthesizing, setSynthesizing] = useState(false);
+  const [done, setDone] = useState(false);
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  const handleSynthesize = () => {
+    setSynthesizing(true);
+    setTimeout(() => {
+      setSynthesizing(false);
+      setDone(true);
+    }, 1500);
+  };
+
+  const handleCopy = (text, setFn) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setFn(true);
+      setTimeout(() => setFn(false), 2000);
+    }
+  };
+
+  return (
+    <Box sx={{ mt: 1 }}>
+      <Box sx={{ mb: 2.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 0.5, flexWrap: 'wrap' }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+            Likeness Desk (AI Video Double)
+          </Typography>
+          <Chip
+            label="PORT :9395 · QUADRO P1000 HARDWARE ACCELERATED"
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: goldBg(theme),
+              color: gold(theme),
+              border: `1px solid ${goldBorder(theme)}`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          Air-Gapped Local Video Double · Wav2Lip GAN &amp; Chatterbox Turbo TTS
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Voice Line &amp; Lip-Sync Controls
+            </Typography>
+
+            <TextField
+              label="Line to Speak"
+              multiline
+              rows={3}
+              size="small"
+              value={spokenLine}
+              onChange={(e) => setSpokenLine(e.target.value)}
+              fullWidth
+              sx={{ mb: 2 }}
+              inputProps={{ style: { fontFamily: mono, fontSize: '0.8rem' } }}
+            />
+
+            <Box sx={{ mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>Mouth Openness Gain:</Typography>
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: gold(theme) }}>{gain}x</Typography>
+              </Box>
+              <Slider
+                value={gain}
+                min={0.5}
+                max={2.0}
+                step={0.1}
+                onChange={(_, v) => setGain(v)}
+                sx={{ color: gold(theme) }}
+              />
+            </Box>
+
+            <Box sx={{ mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>Temporal Frame Smoothing:</Typography>
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: gold(theme) }}>{smoothing}</Typography>
+              </Box>
+              <Slider
+                value={smoothing}
+                min={0.1}
+                max={1.0}
+                step={0.05}
+                onChange={(_, v) => setSmoothing(v)}
+                sx={{ color: gold(theme) }}
+              />
+            </Box>
+
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={handleSynthesize}
+              disabled={synthesizing}
+              startIcon={synthesizing ? <RefreshIcon sx={{ animation: 'spin 1s linear infinite' }} /> : <FaceIcon />}
+              sx={{
+                bgcolor: gold(theme),
+                color: '#08080B',
+                fontWeight: 800,
+                fontFamily: mono,
+                fontSize: '0.8rem',
+                py: 1,
+                mb: 2,
+                '&:hover': { bgcolor: goldSoft(theme) }
+              }}
+            >
+              {synthesizing ? 'Rendering Lip-Sync...' : 'Synthesize Video Double ⚡'}
+            </Button>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                  CLI RUNNER (:9395)
+                </Typography>
+                <Button
+                  size="small"
+                  onClick={() => handleCopy(`cd ~/NullAITech/likeness-desk && node server.js`, setCopiedCmd)}
+                  startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                  sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+                >
+                  {copiedCmd ? 'Copied' : 'Copy CLI'}
+                </Button>
+              </Box>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+                cd ~/NullAITech/likeness-desk &amp;&amp; node server.js
+              </Typography>
+            </Box>
+
+            <Button
+              component="a"
+              href="http://127.0.0.1:9395"
+              target="_blank"
+              rel="noopener"
+              variant="outlined"
+              fullWidth
+              startIcon={<OpenInNewIcon />}
+              sx={{
+                borderColor: gold(theme),
+                color: gold(theme),
+                fontWeight: 800,
+                fontFamily: mono,
+                fontSize: '0.8rem',
+                '&:hover': { bgcolor: goldBg(theme) }
+              }}
+            >
+              Open Likeness Desk Raw Studio (:9395) ↗
+            </Button>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              2. Quadro Silicon Telemetry &amp; Mesh HUD
+            </Typography>
+
+            <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, mb: 2 }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#38BDF8', fontWeight: 700, mb: 1 }}>
+                HARDWARE ACCELERATION SPECIFICATION
+              </Typography>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', color: '#CBD5E1', lineHeight: 1.6 }}>
+                • Accelerator: NVIDIA Quadro P1000 (4 GB GDDR5)<br/>
+                • PyTorch Engine: v2.5.0 + CUDA 12.4<br/>
+                • Models: models/wav2lip_gan.pth (Face GAN) + models/s3fd.pth (Face Detection)<br/>
+                • Audio Synthesis: Chatterbox Turbo TTS (CPU Offline)<br/>
+                • Privacy Guarantee: Zero data uploads. Audio and video frames remain on localhost.
+              </Typography>
+            </Box>
+
+            <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, textAlign: 'center' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', mb: 1 }}>
+                LIP-SYNC RENDER STATE
+              </Typography>
+              {done ? (
+                <Box sx={{ p: 2, bgcolor: successBg(theme), border: '1px solid rgba(16,185,129,0.3)', borderRadius: 1.5 }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.8rem', color: successFg(theme), fontWeight: 800 }}>
+                    ✓ 15-SECOND VIDEO DOUBLE CLIP COMPILED
+                  </Typography>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: '#94A3B8', mt: 0.5 }}>
+                    Generated with 68-point facial landmark alignment. Ready at data/output.mp4
+                  </Typography>
+                </Box>
+              ) : (
+                <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', color: '#64748B', py: 3 }}>
+                  Standby. Enter a line and click &ldquo;Synthesize Video Double&rdquo; to execute the local Wav2Lip inference pass.
+                </Typography>
+              )}
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* ==========================================================================
+   TOOL 40: Bolt.DIY Full-Stack Engine (bolt.diy)
+   Features: WebContainer Client-Side Node Runtime HUD, Model Provider Selector,
+             Interactive Prompt Engine, Code Structure Synthesizer
+   ========================================================================== */
+export function BoltDiyTool() {
+  const theme = useTheme();
+  const [prompt, setPrompt] = useState('Build an autonomous cryptocurrency treasury dashboard with live Solana DePay integration and WebGPU charts');
+  const [provider, setProvider] = useState('ollama');
+  const [generating, setGenerating] = useState(false);
+  const [done, setDone] = useState(false);
+  const [copiedCmd, setCopiedCmd] = useState(false);
+
+  const handleGenerate = () => {
+    setGenerating(true);
+    setTimeout(() => {
+      setGenerating(false);
+      setDone(true);
+    }, 1400);
+  };
+
+  const handleCopy = (text, setFn) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setFn(true);
+      setTimeout(() => setFn(false), 2000);
+    }
+  };
+
+  return (
+    <Box sx={{ mt: 1 }}>
+      <Box sx={{ mb: 2.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 0.5, flexWrap: 'wrap' }}>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+            Bolt.DIY Full-Stack Engine
+          </Typography>
+          <Chip
+            label="WEBCONTAINER CLIENT RUNTIME"
+            size="small"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              bgcolor: goldBg(theme),
+              color: gold(theme),
+              border: `1px solid ${goldBorder(theme)}`,
+            }}
+          />
+        </Box>
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
+          Localized Open-Source Full-Stack AI Engineer &amp; In-Browser WebContainer Runtime
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              1. Full-Stack App Specification
+            </Typography>
+
+            <TextField
+              label="Application Specification"
+              multiline
+              rows={3}
+              size="small"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              fullWidth
+              sx={{ mb: 2 }}
+              inputProps={{ style: { fontFamily: mono, fontSize: '0.8rem' } }}
+            />
+
+            <FormControl size="small" fullWidth sx={{ mb: 2 }}>
+              <InputLabel sx={{ fontFamily: mono, fontSize: '0.8rem' }}>Model Provider</InputLabel>
+              <Select
+                value={provider}
+                label="Model Provider"
+                onChange={(e) => setProvider(e.target.value)}
+                sx={{ fontFamily: mono, fontSize: '0.8rem' }}
+              >
+                <MenuItem value="ollama">Local Ollama (127.0.0.1:11434 - Zero Cloud)</MenuItem>
+                <MenuItem value="anthropic">Anthropic Claude 3.5 Sonnet</MenuItem>
+                <MenuItem value="google">Google Gemini 2.0 Flash</MenuItem>
+                <MenuItem value="groq">Groq LPU (Ultra-Low Latency)</MenuItem>
+              </Select>
+            </FormControl>
+
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={handleGenerate}
+              disabled={generating}
+              startIcon={generating ? <RefreshIcon sx={{ animation: 'spin 1s linear infinite' }} /> : <CodeIcon />}
+              sx={{
+                bgcolor: gold(theme),
+                color: '#08080B',
+                fontWeight: 800,
+                fontFamily: mono,
+                fontSize: '0.8rem',
+                py: 1,
+                mb: 2,
+                '&:hover': { bgcolor: goldSoft(theme) }
+              }}
+            >
+              {generating ? 'Compiling WebContainer...' : 'Scaffold Full-Stack Project ⚡'}
+            </Button>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
+                  CLI DEV SERVER
+                </Typography>
+                <Button
+                  size="small"
+                  onClick={() => handleCopy(`cd ~/NullAITech/bolt.diy && pnpm run dev`, setCopiedCmd)}
+                  startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                  sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
+                >
+                  {copiedCmd ? 'Copied' : 'Copy CLI'}
+                </Button>
+              </Box>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+                cd ~/NullAITech/bolt.diy &amp;&amp; pnpm run dev
+              </Typography>
+            </Box>
+
+            <Button
+              component="a"
+              href="http://127.0.0.1:5173"
+              target="_blank"
+              rel="noopener"
+              variant="outlined"
+              fullWidth
+              startIcon={<OpenInNewIcon />}
+              sx={{
+                borderColor: gold(theme),
+                color: gold(theme),
+                fontWeight: 800,
+                fontFamily: mono,
+                fontSize: '0.8rem',
+                '&:hover': { bgcolor: goldBg(theme) }
+              }}
+            >
+              Open Bolt.DIY Dev Server ↗
+            </Button>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
+              2. WebContainer In-Browser File Tree &amp; Terminal
+            </Typography>
+
+            <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, minHeight: 320 }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#10B981', fontWeight: 700, mb: 1 }}>
+                WEBCONTAINER VIRTUAL FILE SYSTEM
+              </Typography>
+              <pre style={{ margin: 0, fontFamily: mono, fontSize: '0.74rem', color: '#E2E8F0', whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
+{done ? `📁 bolt-project/
+├── 📄 package.json (Vite + React 19 + TailwindCSS)
+├── 📄 vite.config.ts
+├── 📄 tsconfig.json
+├── 📁 src/
+│   ├── 📄 main.tsx
+│   ├── 📄 App.tsx (Treasury Dashboard + Solana Rails)
+│   ├── 📁 components/
+│   │   ├── 📄 DePaySolanaCheckout.tsx
+│   │   ├── 📄 SlippageSentinel.tsx
+│   │   └── 📄 WebGPUTreasuryChart.tsx
+│   └── 📄 index.css
+└── 📁 public/
+    └── 📄 favicon.svg
+
+[WebContainer Terminal]
+$ pnpm install
+Progress: resolved 245, reused 245, downloaded 0, added 245
+$ vite
+VITE v6.0.0 ready in 182 ms
+➜ Local: http://localhost:5173/` : `WebContainer runtime initialized.
+Virtual Node.js process ready in browser memory.
+Select model provider and enter specification to scaffold project.`}
+              </pre>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+

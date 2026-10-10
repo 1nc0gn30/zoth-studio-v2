@@ -72,6 +72,11 @@ import {
   McpLensTool,
   AgentBudgetSentinelTool,
   AgentGodsEyeTool,
+  ZothWebgenLauncherTool,
+  ZothSwarmMultiplexerLauncherTool,
+  ZothCivilizationLauncherTool,
+  LikenessDeskTool,
+  BoltDiyTool,
 } from '../components/tools/EnclaveToolsSuite';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
@@ -119,6 +124,12 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'mcp-lens': McpLensTool,
   'agent-budget-sentinel': AgentBudgetSentinelTool,
   'agent-gods-eye': AgentGodsEyeTool,
+  'zoth-webgen': ZothWebgenLauncherTool,
+  'zoth-swarm-multiplexer': ZothSwarmMultiplexerLauncherTool,
+  'zoth-civilization': ZothCivilizationLauncherTool,
+  'likeness-desk': LikenessDeskTool,
+  'bolt.diy': BoltDiyTool,
+  'bolt-diy': BoltDiyTool,
 };
 
 export default function RealToolWorkspacePage() {
