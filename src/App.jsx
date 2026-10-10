@@ -34,6 +34,7 @@ const FaqsPage = lazy(() => import('./pages/FaqsPage'));
 const AXPage = lazy(() => import('./pages/AXPage'));
 const AXShowcasePage = lazy(() => import('./pages/AXShowcasePage'));
 const GalleryPage = lazy(() => import('./pages/GalleryPage'));
+const VoiceStationPage = lazy(() => import('./pages/VoiceStationPage'));
 
 function RouteFallback() {
   const theme = useTheme();
@@ -154,6 +155,7 @@ function AppShell({ mode, onToggleTheme }) {
               <Route path="/adytum/docs" element={<AdytumPage />} />
               <Route path="/swarm" element={<SwarmShowcasePage />} />
               <Route path="/swarm/docs" element={<SwarmPage />} />
+              <Route path="/voice" element={<VoiceStationPage />} />
               <Route path="/bridges" element={<BridgesPage />} />
               <Route path="/tools" element={<ToolsPage />} />
               <Route path="/workstations" element={<WorkstationsPage />} />

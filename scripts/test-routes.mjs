@@ -30,6 +30,7 @@ const PRIMARY_ROUTES = [
   '/adytum',
   '/swarm',
   '/bridges',
+  '/voice',
   '/tools',
   '/workstations',
   '/arsenal',

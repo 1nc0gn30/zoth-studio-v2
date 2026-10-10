@@ -36,6 +36,7 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 // Flagship Primary Links
 const primaryNav = [
   { label: 'Arsenal', path: '/arsenal', badge: `${arsenalStats.total}` },
+  { label: 'Voice Station', path: '/voice', badge: 'LIVE', pulse: true },
   { label: 'Zoth OS', path: '/zoth-os', badge: 'OS', pulse: true },
   { label: 'WebGen', path: '/webgen', badge: 'NEW' },
   { label: 'Swarm', path: '/swarm' },

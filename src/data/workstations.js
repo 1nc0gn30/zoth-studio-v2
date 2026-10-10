@@ -294,6 +294,61 @@ export const workstations = [
     pullCommand: "./bin/agent-budget serve --web-port 8110 --proxy-port 8111"
   },
   {
+    id: "agent-gods-eye",
+    name: "Agent God's Eye // OSINT Planetary Threat Radar",
+    path: "/studio/gods-eye.html",
+    band: "Security",
+    type: "integrated_tool",
+    description: "Shodan-powered threat vector reconnaissance, vulnerable exposed service scanner, and planetary attack surface radar.",
+    alsoInApp: "/tools/agent-gods-eye",
+    toolRepoId: "agent-gods-eye",
+    pullCommand: "./bin/agent-gods-eye serve --port 8112"
+  },
+  {
+    id: "shopify-connector",
+    name: "Shopify Connector // GraphQL Admin & POD Sync Engine",
+    path: "/studio/shopify-connector.html",
+    band: "Observe",
+    type: "integrated_tool",
+    description: "Shopify GraphQL Admin & Antigravity MCP bridge with Etsy-to-Shopify transpiler, profit margin calculator, and draft publisher.",
+    alsoInApp: "/tools/shopify-connector",
+    toolRepoId: "shopify-connector",
+    pullCommand: "./bin/shopify-connector serve --port 8113"
+  },
+  {
+    id: "agent-voice-call",
+    name: "Agent Voice Station // Full-Duplex Calling Cockpit",
+    path: "/studio/voice-station.html",
+    band: "Studio",
+    type: "integrated_tool",
+    description: "Sovereign full-duplex live audio calling station, 60fps Golden Orb visualizer, and 6-agent voice persona pantheon.",
+    alsoInApp: "/voice",
+    toolRepoId: "agent-voice-call",
+    pullCommand: "./bin/agent-voice-call serve --port 8114"
+  },
+  {
+    id: "printify-connector",
+    name: "Printify Connector // Open API v1 & 20% Premium Margin Engine",
+    path: "/studio/printify-connector.html",
+    band: "Build",
+    type: "integrated_tool",
+    description: "Autonomous zero-dependency Printify Open API v1 connector, 20% Premium margin calculator, artwork DPI auditor, and Antigravity MCP suite.",
+    alsoInApp: "/tools/printify-connector",
+    toolRepoId: "printify-connector",
+    pullCommand: "./bin/printify-connector serve --port 8115"
+  },
+  {
+    id: "gelato-connector",
+    name: "Gelato Connector // 32-Country Local POD Router",
+    path: "/studio/gelato-connector.html",
+    band: "Build",
+    type: "integrated_tool",
+    description: "Autonomous zero-dependency Gelato Open API v2 connector, localized 32-country print routing optimizer, and multi-currency margin engine.",
+    alsoInApp: "/tools/gelato-connector",
+    toolRepoId: "gelato-connector",
+    pullCommand: "./bin/gelato-connector serve --port 8116"
+  },
+  {
     id: "connectors",
     name: "Zoth Tool Bench & Integration Ecosystem",
     path: "/studio/connectors.html",

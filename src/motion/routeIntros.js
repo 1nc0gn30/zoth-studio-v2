@@ -26,6 +26,7 @@ const ROUTES = [
   { match: /^\/adytum\/?$/, clip: 'adytum', label: 'Adytum', accent: 'gold' },
   { match: /^\/swarm\/docs\/?$/, clip: 'swarm', label: 'Swarm · Docs', accent: 'emerald' },
   { match: /^\/swarm\/?$/, clip: 'swarm', label: 'Swarm', accent: 'emerald' },
+  { match: /^\/voice\/?$/, clip: 'bridges', label: 'Voice Station', accent: 'gold' },
   { match: /^\/bridges\/?$/, clip: 'bridges', label: 'Bridges', accent: 'gold' },
   { match: /^\/tools\/[^/]+\/?$/, clip: 'tools', label: 'Tool Workspace', accent: 'gold', dynamic: 'toolId' },
   { match: /^\/tools\/?$/, clip: 'tools', label: 'Tools', accent: 'gold' },
