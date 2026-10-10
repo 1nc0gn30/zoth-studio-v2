@@ -647,8 +647,24 @@ export const microTools = [
     liveUrl: 'https://pod-mockup-forge.nullai.tech',
     version: '1.0.0',
     pull: 'git clone https://github.com/1nc0gn30/pod-mockup-forge.git && cd pod-mockup-forge && ./bin/pod-mockup-forge server --port 8119',
+  },
+  {
+    id: 'pod-margin-sentinel',
+    published: true,
+    name: 'POD Margin Sentinel',
+    repo: 'pod-margin-sentinel',
+    category: 'Commerce & MCP',
+    executionType: 'local_cli',
+    github: 'https://github.com/1nc0gn30/pod-margin-sentinel',
+    description: 'Autonomous real-time profit sentinel, break-even solver, and 2026 fee simulator across Etsy (Organic & 15% Ads), Shopify, and TikTok Shop.',
+    localPort: 8120,
+    localUrl: 'http://127.0.0.1:8120',
+    liveUrl: 'https://pod-margin-sentinel.nullai.tech',
+    version: '1.0.0',
+    pull: 'git clone https://github.com/1nc0gn30/pod-margin-sentinel.git && cd pod-margin-sentinel && ./bin/pod-margin-sentinel server --port 8120',
   }
 ];
+
 
 
 
