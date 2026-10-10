@@ -1890,6 +1890,250 @@ function CertPathRoadmapWorkstation({ isDark, gold }) {
 }
 
 /* --------------------------------------------------------------------------
+   Anderson Sentinel Tactical Workstation (anderson-security-sentinel)
+   -------------------------------------------------------------------------- */
+function AndersonSentinelWorkstation({ isDark, gold }) {
+  const [opticsMode, setOpticsMode] = useState('optical');
+  const [radarMode, setRadarMode] = useState('radar');
+  const [isArmed, setIsArmed] = useState(true);
+  const [defcon, setDefcon] = useState(5);
+  const [rfDisturbance, setRfDisturbance] = useState(3.4);
+  const [respiration, setRespiration] = useState(15);
+  const canvasRef = useRef(null);
+  const animRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let angle = 0;
+
+    const render = () => {
+      angle += 0.03;
+      const w = canvas.width;
+      const h = canvas.height;
+      const cx = w / 2;
+      const cy = h / 2;
+
+      ctx.fillStyle = isDark ? '#04070A' : '#0B131E';
+      ctx.fillRect(0, 0, w, h);
+
+      // Grid & Range Rings
+      ctx.strokeStyle = 'rgba(0, 255, 136, 0.15)';
+      ctx.lineWidth = 1;
+      [40, 80, 120, 160].forEach((r) => {
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.stroke();
+      });
+
+      // Axis lines
+      ctx.beginPath();
+      ctx.moveTo(cx - 170, cy); ctx.lineTo(cx + 170, cy);
+      ctx.moveTo(cx, cy - 170); ctx.lineTo(cx, cy + 170);
+      ctx.stroke();
+
+      // Rotating radar sweep
+      const sweepX = cx + Math.cos(angle) * 160;
+      const sweepY = cy + Math.sin(angle) * 160;
+
+      ctx.strokeStyle = '#00FF88';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(sweepX, sweepY);
+      ctx.stroke();
+
+      // Simulated Beacons
+      const beacons = [
+        { label: 'AP-5G', dist: 50, a: 0.9, color: '#00E5FF' },
+        { label: 'VAULT-2.4', dist: 95, a: 2.2, color: '#00FF88' },
+        { label: 'CAM-WYZE', dist: 125, a: 3.8, color: '#FF1744' },
+        { label: 'CAM-RING', dist: 145, a: 5.1, color: '#FF1744' },
+        { label: 'TARGET', dist: 75, a: angle - 0.4, color: '#F59E0B' },
+      ];
+
+      beacons.forEach((b) => {
+        const bx = cx + Math.cos(b.a) * b.dist;
+        const by = cy + Math.sin(b.a) * b.dist;
+        ctx.fillStyle = b.color;
+        ctx.beginPath();
+        ctx.arc(bx, by, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#94A3B8';
+        ctx.font = '9px monospace';
+        ctx.fillText(b.label, bx + 6, by + 3);
+      });
+
+      animRef.current = requestAnimationFrame(render);
+    };
+
+    render();
+    return () => cancelAnimationFrame(animRef.current);
+  }, [isDark, radarMode]);
+
+  const handleExportJson = () => {
+    const dossier = {
+      system: 'Anderson Security Sentinel v2.4 (Zoth Studio)',
+      timestamp: new Date().toISOString(),
+      armed: isArmed,
+      defcon: `DEFCON ${defcon} [CLEAR]`,
+      rfSensors: {
+        beacons: 6,
+        surveillanceCameras: 2,
+        demisingWalls: 3,
+        respirationBpm: respiration,
+        rfDisturbance: `${rfDisturbance}%`,
+      },
+      integrity: '100% NOMINAL'
+    };
+    const blob = new Blob([JSON.stringify(dossier, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `anderson_sentinel_dossier_${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
+          <Chip label={`DEFCON ${defcon} [CLEAR]`} size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(0,255,136,0.15)', color: '#00FF88', borderColor: '#00FF88' }} variant="outlined" />
+          <Button
+            size="small"
+            variant={isArmed ? 'contained' : 'outlined'}
+            onClick={() => setIsArmed(!isArmed)}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.72rem',
+              bgcolor: isArmed ? '#00FF88' : 'transparent',
+              color: isArmed ? '#05080A' : '#64748B',
+              fontWeight: 800
+            }}
+          >
+            {isArmed ? 'ARMED' : 'STANDBY'}
+          </Button>
+          <Box sx={{ display: 'flex', gap: 0.5 }}>
+            {['optical', 'thermal', 'predator'].map((mode) => (
+              <Button
+                key={mode}
+                size="small"
+                variant={opticsMode === mode ? 'contained' : 'outlined'}
+                onClick={() => setOpticsMode(mode)}
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.68rem',
+                  py: 0.2,
+                  px: 1,
+                  bgcolor: opticsMode === mode ? gold.accent : 'transparent',
+                  color: opticsMode === mode ? '#08080B' : 'text.primary',
+                  borderColor: gold.border,
+                }}
+              >
+                {mode.toUpperCase()}
+              </Button>
+            ))}
+          </Box>
+        </Box>
+        <Button
+          size="small"
+          variant="outlined"
+          href="https://anderson-security-sentinel.netlify.app"
+          target="_blank"
+          rel="noopener"
+          sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: '#00FF88', color: '#00FF88' }}
+        >
+          Open Anderson Full Cockpit ↗
+        </Button>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2, bgcolor: isDark ? '#04070A' : '#0B131E', border: '1px solid rgba(0,255,136,0.3)', borderRadius: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: '#00FF88', fontWeight: 800, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Box component="span" sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#00FF88', display: 'inline-block' }} />
+                WIFI X-RAY SPATIAL RADAR & RF TOMOGRAPHY
+              </Typography>
+              <Chip label="2 CAMS DETECTED" size="small" sx={{ fontFamily: mono, fontSize: '0.65rem', bgcolor: 'rgba(255,23,68,0.2)', color: '#FF1744', height: 20 }} />
+            </Box>
+
+            <Box sx={{ display: 'flex', justifyContent: 'center', my: 1 }}>
+              <canvas ref={canvasRef} width={360} height={360} style={{ maxWidth: '100%', height: 'auto', display: 'block', borderRadius: 8 }} />
+            </Box>
+
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1.5, pt: 1, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8' }}>
+                Respiration: <strong style={{ color: '#00E5FF' }}>15 BPM</strong> · Micro-Doppler: <strong style={{ color: '#00FF88' }}>0.00 m/s</strong>
+              </Typography>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8' }}>
+                RF Disturbance: <strong style={{ color: '#F59E0B' }}>3.4%</strong>
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, bgcolor: isDark ? '#04070A' : '#0B131E', border: `1px solid ${gold.border}`, height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, mb: 1.5 }}>
+              TACTICAL DEFENSE ARSENAL
+            </Typography>
+
+            <Box sx={{ mb: 2, p: 1.5, borderRadius: 1.5, bgcolor: 'rgba(0,255,136,0.05)', border: '1px solid rgba(0,255,136,0.2)' }}>
+              <Typography variant="caption" sx={{ color: '#00FF88', fontWeight: 700, display: 'block', mb: 0.5 }}>
+                USB Hardware Tripwire:
+              </Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.75rem', color: '#E2E8F0' }}>
+                0 Unauthorized sysfs Bus Injections · BadUSB Keystroke Guard Active
+              </Typography>
+            </Box>
+
+            <Box sx={{ mb: 2, p: 1.5, borderRadius: 1.5, bgcolor: 'rgba(0,229,255,0.05)', border: '1px solid rgba(0,229,255,0.2)' }}>
+              <Typography variant="caption" sx={{ color: '#00E5FF', fontWeight: 700, display: 'block', mb: 0.5 }}>
+                BLE Counter-Surveillance Radar:
+              </Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.75rem', color: '#E2E8F0' }}>
+                0 Rogue Tracking Beacons · AirTag Distance Filter Nominal
+              </Typography>
+            </Box>
+
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Calculated Building Envelope:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent }}>
+                14.2m × 9.8m (3 Demising Partition Walls)
+              </Typography>
+            </Box>
+
+            <Box sx={{ mt: 'auto', display: 'flex', flexDirection: 'column', gap: 1 }}>
+              <Button
+                fullWidth
+                size="small"
+                variant="contained"
+                onClick={handleExportJson}
+                startIcon={<DownloadIcon sx={{ fontSize: 14 }} />}
+                sx={{
+                  bgcolor: '#00FF88',
+                  color: '#05080A',
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                  '&:hover': { bgcolor: '#00CC6A' }
+                }}
+              >
+                Export Forensic Dossier (.json)
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* --------------------------------------------------------------------------
    Master Interactive Tool Workstation Dispatcher
    -------------------------------------------------------------------------- */
 export default function WebGPUToolWorkstation({ tool }) {
@@ -1924,6 +2168,8 @@ export default function WebGPUToolWorkstation({ tool }) {
         return <Badge3dCoinWorkstation isDark={isDark} gold={gold} />;
       case 'certpath-roadmap-studio':
         return <CertPathRoadmapWorkstation isDark={isDark} gold={gold} />;
+      case 'anderson-security-sentinel':
+        return <AndersonSentinelWorkstation isDark={isDark} gold={gold} />;
       default:
         return (
           <PayloadEntropyWorkstation isDark={isDark} gold={gold} />

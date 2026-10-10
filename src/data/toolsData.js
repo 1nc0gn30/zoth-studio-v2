@@ -330,10 +330,11 @@ export const microTools = [
     name: 'Anderson Security Sentinel',
     repo: 'anderson-security-sentinel',
     category: 'Security & OpSec',
-    executionType: 'local_cli',
+    executionType: 'browser',
     github: 'https://github.com/1nc0gn30/anderson-security-sentinel',
+    liveUrl: 'https://anderson-security-sentinel.netlify.app',
     description: 'Tri-transceiver synthetic aperture array, differential RF wall discriminator, real-time AoA & optical camera tracking.',
-    version: '1.0.0',
+    version: '2.4.0',
     pull: 'git clone https://github.com/1nc0gn30/anderson-security-sentinel.git && cd anderson-security-sentinel && python3 engine/sentinel.py',
   },
   {
