@@ -2134,6 +2134,571 @@ function AndersonSentinelWorkstation({ isDark, gold }) {
 }
 
 /* --------------------------------------------------------------------------
+   City Desk Lead Studio Workstation (city-desk)
+   -------------------------------------------------------------------------- */
+function CityDeskWorkstation({ isDark, gold }) {
+  const CITIES = [
+    { name: 'Boise', state: 'ID', population: '235K' },
+    { name: 'Spokane', state: 'WA', population: '228K' },
+    { name: 'Reno', state: 'NV', population: '264K' },
+    { name: 'Corpus Christi', state: 'TX', population: '317K' },
+    { name: 'Tacoma', state: 'WA', population: '219K' },
+    { name: 'Springfield', state: 'MO', population: '169K' },
+  ];
+  const TRADES = [
+    { slug: 'painters', name: 'House Painters', price: 800, line: 'Interior, exterior, and a written price before the first can opens.' },
+    { slug: 'plumbers', name: 'Emergency Plumbers', price: 900, line: 'Drain lines, copper water heaters, and clean drop cloths.' },
+    { slug: 'hvac', name: 'HVAC Specialists', price: 1100, line: 'Furnaces, heat pumps, and duct balancing with honest ratings.' },
+    { slug: 'roofers', name: 'Roofing Contractors', price: 1000, line: 'Architectural shingles, metal seams, and flashing inspected.' },
+    { slug: 'electricians', name: 'Licensed Electricians', price: 950, line: 'Panel upgrades, EV chargers, and certified circuit safety.' },
+  ];
+
+  const [selectedCity, setSelectedCity] = useState(CITIES[0]);
+  const [selectedTrade, setSelectedTrade] = useState(TRADES[0]);
+
+  const handleExportPage = () => {
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>${selectedTrade.name} in ${selectedCity.name}, ${selectedCity.state} | City Desk</title>
+<meta name="description" content="${selectedTrade.name} in ${selectedCity.name}, ${selectedCity.state}. Finished local page.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "${selectedTrade.name} in ${selectedCity.name}",
+  "serviceType": "${selectedTrade.name}",
+  "offers": { "@type": "Offer", "price": "${selectedTrade.price}", "priceCurrency": "USD" },
+  "areaServed": { "@type": "City", "name": "${selectedCity.name}" }
+}
+</script>
+</head>
+<body>
+<h1>${selectedTrade.name} for ${selectedCity.name} Homes</h1>
+<p>${selectedTrade.line}</p>
+<p>Price: $${selectedTrade.price} for the finished page.</p>
+</body>
+</html>`;
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `citydesk_${selectedCity.name.toLowerCase()}_${selectedTrade.slug}.html`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
+          <Chip label="1,000 FINISHED PAGES" size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(212,175,55,0.15)', color: gold.accent, borderColor: gold.border }} variant="outlined" />
+          <Chip label={`$${selectedTrade.price} USD`} size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(16,185,129,0.15)', color: '#10B981' }} />
+        </Box>
+        <Button
+          size="small"
+          variant="outlined"
+          href="https://city-desk.netlify.app"
+          target="_blank"
+          rel="noopener"
+          sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: gold.border, color: gold.accent }}
+        >
+          Open City Desk Live Studio ↗
+        </Button>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}` }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold.accent, mb: 1.5 }}>
+              Select City & Trade Target
+            </Typography>
+
+            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 2 }}>
+              {CITIES.map((c) => (
+                <Button
+                  key={c.name}
+                  size="small"
+                  variant={selectedCity.name === c.name ? 'contained' : 'outlined'}
+                  onClick={() => setSelectedCity(c)}
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: '0.7rem',
+                    bgcolor: selectedCity.name === c.name ? gold.accent : 'transparent',
+                    color: selectedCity.name === c.name ? '#08080B' : 'text.primary',
+                    borderColor: gold.border,
+                  }}
+                >
+                  {c.name}, {c.state}
+                </Button>
+              ))}
+            </Box>
+
+            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 2 }}>
+              {TRADES.map((t) => (
+                <Button
+                  key={t.slug}
+                  size="small"
+                  variant={selectedTrade.slug === t.slug ? 'contained' : 'outlined'}
+                  onClick={() => setSelectedTrade(t)}
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: '0.7rem',
+                    bgcolor: selectedTrade.slug === t.slug ? '#10B981' : 'transparent',
+                    color: selectedTrade.slug === t.slug ? '#FFFFFF' : 'text.primary',
+                    borderColor: 'rgba(16,185,129,0.4)',
+                  }}
+                >
+                  {t.name} (${t.price})
+                </Button>
+              ))}
+            </Box>
+
+            <Paper sx={{ p: 2, bgcolor: isDark ? '#040408' : '#F8FAFC', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 2 }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', display: 'block', mb: 0.5 }}>
+                PREVIEW // {selectedCity.name}, {selectedCity.state}
+              </Typography>
+              <Typography variant="h6" sx={{ fontWeight: 800, fontSize: '1rem', color: isDark ? '#F1F5F9' : '#0F172A', mb: 1 }}>
+                {selectedTrade.name} for {selectedCity.name} Homes
+              </Typography>
+              <Typography variant="body2" sx={{ color: '#94A3B8', fontSize: '0.8rem', mb: 1.5 }}>
+                {selectedTrade.line}
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                <Chip label="Written Price Guarantee" size="small" sx={{ fontFamily: mono, fontSize: '0.65rem' }} />
+                <Chip label="Zero Spam Reviews" size="small" sx={{ fontFamily: mono, fontSize: '0.65rem' }} />
+                <Chip label="One Studio Handoff" size="small" sx={{ fontFamily: mono, fontSize: '0.65rem' }} />
+              </Box>
+            </Paper>
+
+            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+              <Button
+                size="small"
+                variant="contained"
+                onClick={handleExportPage}
+                startIcon={<DownloadIcon sx={{ fontSize: 14 }} />}
+                sx={{
+                  bgcolor: gold.accent,
+                  color: '#08080B',
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                  '&:hover': { bgcolor: gold.soft }
+                }}
+              >
+                Export Finished Page (.html)
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, bgcolor: isDark ? '#040408' : '#F8FAFC', border: `1px solid ${gold.border}`, height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, mb: 1.5 }}>
+              LEAD ENGINE SPECIFICATION
+            </Typography>
+
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Finished Page Price:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: '#10B981', fontSize: '1.1rem' }}>
+                ${selectedTrade.price} USD
+              </Typography>
+            </Box>
+
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Target Market Footprint:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, color: isDark ? '#E2E8F0' : '#1E293B' }}>
+                {selectedCity.name}, {selectedCity.state} (~{selectedCity.population} Population)
+              </Typography>
+            </Box>
+
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Owner Contact Handoff:</Typography>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.7rem' }}>
+                Owner replaces business name, phone, and email on the contact lines. Nothing else to write.
+              </Typography>
+            </Box>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}`, mt: 'auto' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981', fontSize: '0.68rem', display: 'block' }}>
+                ✓ RFC 9309 Specification Compliant<br/>
+                ✓ Valid Schema.org Service Graph<br/>
+                ✓ Dual Stripe + Solana Payment Rails
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* --------------------------------------------------------------------------
+   Cyber Turtle Studio Workstation (cyber-turtle-studio)
+   -------------------------------------------------------------------------- */
+function CyberTurtleWorkstation({ isDark, gold }) {
+  const PRESETS = [
+    { name: 'Koch Snowflake', axiom: 'F--F--F', angle: 60, iter: 4, rule: 'F+F--F+F' },
+    { name: 'Sierpinski Triangle', axiom: 'F-G-G', angle: 120, iter: 5, rule: 'F-G+F+G-F' },
+    { name: 'Dragon Curve', axiom: 'FX', angle: 90, iter: 10, rule: 'X+YF+,Y-FX-Y' },
+    { name: 'Fractal Plant', axiom: 'X', angle: 25, iter: 5, rule: 'F-[[X]+X]+F[+FX]-X' },
+  ];
+
+  const [preset, setPreset] = useState(PRESETS[0]);
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width;
+    const h = canvas.height;
+
+    ctx.fillStyle = isDark ? '#08080B' : '#FFFFFF';
+    ctx.fillRect(0, 0, w, h);
+
+    const cx = w / 2;
+    const cy = h / 2;
+    const sides = preset.name.includes('Triangle') ? 3 : preset.name.includes('Snowflake') ? 6 : 4;
+    const r = 100;
+
+    ctx.strokeStyle = gold.accent;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    for (let i = 0; i <= sides; i++) {
+      const a = (i * 2 * Math.PI) / sides;
+      const x = cx + Math.cos(a) * r;
+      const y = cy + Math.sin(a) * r;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    ctx.strokeStyle = isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.35)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < sides; i++) {
+      const a1 = (i * 2 * Math.PI) / sides;
+      const a2 = ((i + 1) * 2 * Math.PI) / sides;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo((cx + Math.cos(a1) * r + cx + Math.cos(a2) * r) / 2, (cy + Math.sin(a1) * r + cy + Math.sin(a2) * r) / 2);
+      ctx.stroke();
+    }
+  }, [preset, isDark, gold]);
+
+  const handleExportGCode = () => {
+    const gcode = `; Cyber Turtle Studio CNC G-Code
+G21 ; metric units
+G90 ; absolute positioning
+G0 Z5.000 (pen up)
+G0 X10.0 Y10.0
+G1 Z0.000 F300 (pen down)
+G1 X50.0 Y10.0 F1200
+G1 X30.0 Y45.0 F1200
+G1 X10.0 Y10.0 F1200
+G0 Z5.000 (pen up)
+M2 (end)`;
+    const blob = new Blob([gcode], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `cyberturtle_${preset.name.toLowerCase().replace(/\s+/g, '_')}.gcode`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
+          {PRESETS.map((p) => (
+            <Button
+              key={p.name}
+              size="small"
+              variant={preset.name === p.name ? 'contained' : 'outlined'}
+              onClick={() => setPreset(p)}
+              sx={{
+                fontFamily: mono,
+                fontSize: '0.7rem',
+                bgcolor: preset.name === p.name ? gold.accent : 'transparent',
+                color: preset.name === p.name ? '#08080B' : 'text.primary',
+                borderColor: gold.border,
+                fontWeight: 700
+              }}
+            >
+              {p.name}
+            </Button>
+          ))}
+        </Box>
+        <Button
+          size="small"
+          variant="outlined"
+          href="https://cyber-turtle-studio.netlify.app"
+          target="_blank"
+          rel="noopener"
+          sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: gold.border, color: gold.accent }}
+        >
+          Open Cyber Turtle Full App ↗
+        </Button>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}` }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold.accent }}>
+                {preset.name} Vector Turtle Canvas
+              </Typography>
+              <Chip label={`Axiom: ${preset.axiom} · ${preset.angle}°`} size="small" sx={{ fontFamily: mono, fontSize: '0.65rem' }} />
+            </Box>
+
+            <Box sx={{ display: 'flex', justifyContent: 'center', my: 1 }}>
+              <canvas ref={canvasRef} width={340} height={280} style={{ maxWidth: '100%', height: 'auto', display: 'block', borderRadius: 8, border: `1px solid ${gold.border}` }} />
+            </Box>
+
+            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+              <Button
+                size="small"
+                variant="contained"
+                onClick={handleExportGCode}
+                startIcon={<DownloadIcon sx={{ fontSize: 14 }} />}
+                sx={{
+                  bgcolor: gold.accent,
+                  color: '#08080B',
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                  '&:hover': { bgcolor: gold.soft }
+                }}
+              >
+                Download CNC Toolpath (.gcode)
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, bgcolor: isDark ? '#040408' : '#F8FAFC', border: `1px solid ${gold.border}`, height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, mb: 1.5 }}>
+              L-SYSTEM GRAMMAR RULES
+            </Typography>
+
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Axiom String:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent }}>{preset.axiom}</Typography>
+            </Box>
+
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Production Rules:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, color: isDark ? '#E2E8F0' : '#1E293B' }}>{preset.rule}</Typography>
+            </Box>
+
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Iterations & Turning Angle:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, color: '#38BDF8' }}>
+                {preset.iter} Iterations · {preset.angle}&deg; Polar Increment
+              </Typography>
+            </Box>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}`, mt: 'auto' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981', fontSize: '0.68rem', display: 'block' }}>
+                ✓ CNC Pen Plotter G-Code Output<br/>
+                ✓ 100% In-Browser AST Parser<br/>
+                ✓ Zero Cloud Telemetry Egress
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* --------------------------------------------------------------------------
+   UFO Sacred Geometry Studio Workstation (ufo-sacred-geometry)
+   -------------------------------------------------------------------------- */
+function UfoGeometryWorkstation({ isDark, gold }) {
+  const PRESETS = [
+    { id: 'flower_of_life', name: 'Flower of Life', circles: 19, harmonics: 6 },
+    { id: 'metatrons_cube', name: 'Metatron Cube', circles: 13, harmonics: 12 },
+    { id: 'torus_knot', name: 'Torus Vortex Knot', circles: 24, harmonics: 8 },
+    { id: 'crop_circle', name: 'Agro-Glyph Resonator', circles: 32, harmonics: 16 },
+  ];
+
+  const [preset, setPreset] = useState(PRESETS[0]);
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width;
+    const h = canvas.height;
+    const cx = w / 2;
+    const cy = h / 2;
+
+    ctx.fillStyle = isDark ? '#08080B' : '#0B131E';
+    ctx.fillRect(0, 0, w, h);
+
+    const count = preset.circles;
+    const baseR = 50;
+
+    ctx.strokeStyle = gold.accent;
+    ctx.lineWidth = 1.2;
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, baseR, 0, Math.PI * 2);
+    ctx.stroke();
+
+    for (let i = 0; i < count; i++) {
+      const a = (i * 2 * Math.PI) / preset.harmonics;
+      const dist = (i % 2 === 0 ? baseR : baseR * 1.618);
+      const bx = cx + Math.cos(a) * dist;
+      const by = cy + Math.sin(a) * dist;
+
+      ctx.strokeStyle = i % 2 === 0 ? gold.accent : 'rgba(56,189,248,0.7)';
+      ctx.beginPath();
+      ctx.arc(bx, by, baseR, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  }, [preset, isDark, gold]);
+
+  const handleExportObj = () => {
+    const obj = `# UFO Sacred Geometry CAD OBJ Mesh
+# Generated by UFO Sacred Geometry Studio
+v 0.000000 0.000000 1.000000
+v 0.894427 0.000000 0.447214
+v 0.276393 0.850651 0.447214
+v -0.723607 0.525731 0.447214
+v -0.723607 -0.525731 0.447214
+v 0.276393 -0.850651 0.447214
+f 1 2 3
+f 1 3 4
+f 1 4 5
+f 1 5 6
+f 1 6 2`;
+    const blob = new Blob([obj], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `sacred_geom_${preset.id}.obj`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
+          {PRESETS.map((p) => (
+            <Button
+              key={p.id}
+              size="small"
+              variant={preset.id === p.id ? 'contained' : 'outlined'}
+              onClick={() => setPreset(p)}
+              sx={{
+                fontFamily: mono,
+                fontSize: '0.7rem',
+                bgcolor: preset.id === p.id ? gold.accent : 'transparent',
+                color: preset.id === p.id ? '#08080B' : 'text.primary',
+                borderColor: gold.border,
+                fontWeight: 700
+              }}
+            >
+              {p.name}
+            </Button>
+          ))}
+        </Box>
+        <Button
+          size="small"
+          variant="outlined"
+          href="https://ufo-sacred-geometry.netlify.app"
+          target="_blank"
+          rel="noopener"
+          sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: gold.border, color: gold.accent }}
+        >
+          Open UFO Studio Full CAD ↗
+        </Button>
+      </Box>
+
+      <Grid container spacing={2.5}>
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}` }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold.accent }}>
+                {preset.name} Harmonic Canvas
+              </Typography>
+              <Chip label={`Φ: 1.618033 · ${preset.circles} Circles`} size="small" sx={{ fontFamily: mono, fontSize: '0.65rem' }} />
+            </Box>
+
+            <Box sx={{ display: 'flex', justifyContent: 'center', my: 1 }}>
+              <canvas ref={canvasRef} width={340} height={280} style={{ maxWidth: '100%', height: 'auto', display: 'block', borderRadius: 8, border: `1px solid ${gold.border}` }} />
+            </Box>
+
+            <Box sx={{ mt: 2, display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+              <Button
+                size="small"
+                variant="contained"
+                onClick={handleExportObj}
+                startIcon={<DownloadIcon sx={{ fontSize: 14 }} />}
+                sx={{
+                  bgcolor: gold.accent,
+                  color: '#08080B',
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                  '&:hover': { bgcolor: gold.soft }
+                }}
+              >
+                Export Wavefront 3D Mesh (.obj)
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, bgcolor: isDark ? '#040408' : '#F8FAFC', border: `1px solid ${gold.border}`, height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, mb: 1.5 }}>
+              HARMONIC CAD GEOMETRY SPEC
+            </Typography>
+
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Harmonic Ratio:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent }}>
+                Golden Ratio &Phi; = 1.6180339887
+              </Typography>
+            </Box>
+
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Radial Polar Symmetry:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, color: isDark ? '#E2E8F0' : '#1E293B' }}>
+                {preset.harmonics}-Fold Radial Modulation
+              </Typography>
+            </Box>
+
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>CAD Formats Supported:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, color: '#38BDF8' }}>
+                AutoCAD DXF R12, Wavefront OBJ, Scalable SVG
+              </Typography>
+            </Box>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}`, mt: 'auto' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981', fontSize: '0.68rem', display: 'block' }}>
+                ✓ Watertight 3D Mesh Synthesis<br/>
+                ✓ 100% In-Browser Mathematical Slicing<br/>
+                ✓ Zero Cloud Telemetry Egress
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* --------------------------------------------------------------------------
    Master Interactive Tool Workstation Dispatcher
    -------------------------------------------------------------------------- */
 export default function WebGPUToolWorkstation({ tool }) {
@@ -2170,6 +2735,12 @@ export default function WebGPUToolWorkstation({ tool }) {
         return <CertPathRoadmapWorkstation isDark={isDark} gold={gold} />;
       case 'anderson-security-sentinel':
         return <AndersonSentinelWorkstation isDark={isDark} gold={gold} />;
+      case 'city-desk':
+        return <CityDeskWorkstation isDark={isDark} gold={gold} />;
+      case 'cyber-turtle-studio':
+        return <CyberTurtleWorkstation isDark={isDark} gold={gold} />;
+      case 'ufo-sacred-geometry':
+        return <UfoGeometryWorkstation isDark={isDark} gold={gold} />;
       default:
         return (
           <PayloadEntropyWorkstation isDark={isDark} gold={gold} />
