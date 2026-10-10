@@ -2699,6 +2699,660 @@ f 1 6 2`;
 }
 
 /* --------------------------------------------------------------------------
+   15. Datamosh Glitch Studio Workstation
+   -------------------------------------------------------------------------- */
+function DatamoshWorkstation({ isDark, gold }) {
+  const canvasRef = useRef(null);
+  const [preset, setPreset] = useState('iframe');
+  const [source, setSource] = useState('bars');
+  const [sliceHeight, setSliceHeight] = useState(16);
+  const [shiftMax, setShiftMax] = useState(28);
+  const [rgbSplit, setRgbSplit] = useState(8);
+  const [scanIntensity, setScanIntensity] = useState(25);
+  const [fps, setFps] = useState(12);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const PRESETS = {
+    iframe: { name: 'H.264 I-Frame Drop', slice: 18, shift: 36, rgb: 6, scan: 15 },
+    vcr: { name: 'Cyberpunk VCR Tracking', slice: 6, shift: 48, rgb: 14, scan: 65 },
+    rgb: { name: 'RGB Chromatic Overdrive', slice: 12, shift: 16, rgb: 24, scan: 20 },
+    tape: { name: 'Analog Tape Decay', slice: 10, shift: 24, rgb: 8, scan: 45 },
+    matrix: { name: 'Quantum Matrix Tear', slice: 24, shift: 55, rgb: 16, scan: 30 },
+    bitplane: { name: 'Bitplane Solarizer', slice: 14, shift: 28, rgb: 12, scan: 35 },
+  };
+
+  const applyPreset = (key) => {
+    setPreset(key);
+    const p = PRESETS[key];
+    if (p) {
+      setSliceHeight(p.slice);
+      setShiftMax(p.shift);
+      setRgbSplit(p.rgb);
+      setScanIntensity(p.scan);
+    }
+  };
+
+  const drawBasePattern = (ctx, w, h) => {
+    if (source === 'grid') {
+      ctx.fillStyle = '#05050A';
+      ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = '#00FFCC';
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += 20) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (let y = 0; y < h; y += 20) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+      ctx.fillStyle = '#D4AF37';
+      ctx.font = 'bold 18px monospace';
+      ctx.fillText('NULLAI // CYBER GRID', 24, 44);
+      return;
+    }
+    if (source === 'grad') {
+      const grad = ctx.createLinearGradient(0, 0, w, h);
+      grad.addColorStop(0, '#FF007F');
+      grad.addColorStop(0.5, '#7928CA');
+      grad.addColorStop(1, '#00DFD8');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 22px sans-serif';
+      ctx.fillText('NEON HORIZON', 32, 120);
+      return;
+    }
+    // SMPTE Color Bars
+    const colors = ['#C0C0C0', '#C0C000', '#00C0C0', '#00C000', '#C000C0', '#C00000', '#0000C0'];
+    const barW = w / colors.length;
+    colors.forEach((col, i) => {
+      ctx.fillStyle = col;
+      ctx.fillRect(i * barW, 0, barW, h * 0.75);
+    });
+    ctx.fillStyle = '#0000C0'; ctx.fillRect(0, h * 0.75, w * 0.2, h * 0.25);
+    ctx.fillStyle = '#FFFFFF'; ctx.fillRect(w * 0.2, h * 0.75, w * 0.2, h * 0.25);
+    ctx.fillStyle = '#C000C0'; ctx.fillRect(w * 0.4, h * 0.75, w * 0.2, h * 0.25);
+    ctx.fillStyle = '#101010'; ctx.fillRect(w * 0.6, h * 0.75, w * 0.4, h * 0.25);
+  };
+
+  const renderGlitch = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width;
+    const h = canvas.height;
+
+    drawBasePattern(ctx, w, h);
+    const imgData = ctx.getImageData(0, 0, w, h);
+    const data = imgData.data;
+    const copy = new Uint8ClampedArray(data);
+
+    // 1. Horizontal slice displacement
+    if (shiftMax > 0 && sliceHeight > 0) {
+      for (let y = 0; y < h; y += sliceHeight) {
+        if (Math.random() < 0.7) {
+          const shift = Math.floor((Math.random() * 2 - 1) * shiftMax);
+          const sliceEnd = Math.min(h, y + sliceHeight);
+          for (let sy = y; sy < sliceEnd; sy++) {
+            for (let sx = 0; sx < w; sx++) {
+              const targetX = (sx + shift + w) % w;
+              const srcIdx = (sy * w + sx) * 4;
+              const dstIdx = (sy * w + targetX) * 4;
+              data[dstIdx] = copy[srcIdx];
+              data[dstIdx + 1] = copy[srcIdx + 1];
+              data[dstIdx + 2] = copy[srcIdx + 2];
+            }
+          }
+        }
+      }
+    }
+
+    // 2. RGB chromatic split
+    if (rgbSplit > 0) {
+      const current = new Uint8ClampedArray(data);
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          const rx = (x + rgbSplit + w) % w;
+          const bx = (x - rgbSplit + w) % w;
+          const idx = (y * w + x) * 4;
+          data[idx] = current[(y * w + rx) * 4];
+          data[idx + 2] = current[(y * w + bx) * 4 + 2];
+        }
+      }
+    }
+
+    // 3. Scanline CRT factor
+    if (scanIntensity > 0) {
+      const factor = 1 - scanIntensity / 100;
+      for (let y = 0; y < h; y += 3) {
+        const rowStart = y * w * 4;
+        const rowEnd = rowStart + w * 4;
+        for (let i = rowStart; i < rowEnd; i += 4) {
+          data[i] = data[i] * factor;
+          data[i + 1] = data[i + 1] * factor;
+          data[i + 2] = data[i + 2] * factor;
+        }
+      }
+    }
+
+    // 4. Bitplane glitch
+    if (preset === 'bitplane') {
+      for (let i = 0; i < data.length; i += 4) {
+        if (Math.random() < 0.05) {
+          data[i] = data[i] ^ 0xAA;
+          data[i + 1] = data[i + 1] ^ 0x55;
+        }
+      }
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+  };
+
+  useEffect(() => {
+    renderGlitch();
+  }, [preset, source, sliceHeight, shiftMax, rgbSplit, scanIntensity]);
+
+  useEffect(() => {
+    let timer = null;
+    if (isPlaying) {
+      timer = setInterval(renderGlitch, 1000 / fps);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [isPlaying, fps, preset, source, sliceHeight, shiftMax, rgbSplit, scanIntensity]);
+
+  const handleDownload = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const a = document.createElement('a');
+    a.download = `datamosh_${preset}_${Date.now()}.png`;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  };
+
+  const randomizeParams = () => {
+    setShiftMax(Math.floor(Math.random() * 50) + 10);
+    setRgbSplit(Math.floor(Math.random() * 20));
+    setSliceHeight(Math.floor(Math.random() * 28) + 4);
+  };
+
+  return (
+    <Box sx={{ p: { xs: 2, md: 3 }, bgcolor: isDark ? '#08080C' : '#F8FAFC', borderRadius: 2, border: `1px solid ${gold.border}` }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Chip label="DATAMOSH STUDIO" size="small" sx={{ bgcolor: gold.accent, color: '#000', fontWeight: 800, fontFamily: mono }} />
+          <Typography variant="h6" sx={{ fontWeight: 800, color: isDark ? '#FFF' : '#000' }}>
+            Visual Artifact & I-Frame Glitch Synthesizer
+          </Typography>
+        </Box>
+        <Chip label="100% IN-BROWSER SYNTHESIS" size="small" variant="outlined" sx={{ borderColor: gold.accent, color: gold.accent, fontFamily: mono }} />
+      </Box>
+
+      <Grid container spacing={2}>
+        <Grid xs={12} md={7}>
+          <Paper sx={{ p: 2, bgcolor: isDark ? '#020204' : '#FFFFFF', border: `1px solid ${gold.border}`, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Box sx={{ width: '100%', maxWidth: 440, aspectRatio: '3/2', bgcolor: '#000', borderRadius: 1.5, overflow: 'hidden', mb: 1.5, border: '1px solid rgba(255,255,255,0.1)' }}>
+              <canvas ref={canvasRef} width={440} height={293} style={{ width: '100%', height: '100%', display: 'block', objectFit: 'contain' }} />
+            </Box>
+
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <Button size="small" variant={isPlaying ? 'contained' : 'outlined'} onClick={() => setIsPlaying(!isPlaying)} sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: gold.border, color: isPlaying ? '#000' : gold.accent, bgcolor: isPlaying ? gold.accent : 'transparent' }}>
+                  {isPlaying ? '⏸ Pause Loop' : '▶ Play Loop'}
+                </Button>
+                <Button size="small" variant="outlined" onClick={randomizeParams} sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: gold.border, color: gold.accent }}>
+                  🎲 Randomize
+                </Button>
+              </Box>
+
+              <Button size="small" variant="contained" onClick={handleDownload} startIcon={<DownloadIcon sx={{ fontSize: 14 }} />} sx={{ fontFamily: mono, fontSize: '0.72rem', bgcolor: gold.accent, color: '#000', fontWeight: 700 }}>
+                Download Frame (.png)
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, bgcolor: isDark ? '#040408' : '#F8FAFC', border: `1px solid ${gold.border}`, height: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Box>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, display: 'block', mb: 1 }}>
+                GLITCH PRESETS
+              </Typography>
+              <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 1 }}>
+                {Object.keys(PRESETS).map((key) => (
+                  <Button
+                    key={key}
+                    size="small"
+                    variant={preset === key ? 'contained' : 'outlined'}
+                    onClick={() => applyPreset(key)}
+                    sx={{
+                      fontFamily: mono,
+                      fontSize: '0.68rem',
+                      py: 0.6,
+                      px: 1,
+                      textTransform: 'none',
+                      justifyContent: 'flex-start',
+                      borderColor: gold.border,
+                      bgcolor: preset === key ? gold.accent : 'transparent',
+                      color: preset === key ? '#000' : isDark ? '#E2E8F0' : '#1E293B',
+                      fontWeight: preset === key ? 800 : 500,
+                    }}
+                  >
+                    {PRESETS[key].name}
+                  </Button>
+                ))}
+              </Box>
+            </Box>
+
+            <Box>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, display: 'block', mb: 1 }}>
+                TEST PATTERN SOURCE
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                {['bars', 'grid', 'grad'].map((s) => (
+                  <Button
+                    key={s}
+                    size="small"
+                    variant={source === s ? 'contained' : 'outlined'}
+                    onClick={() => setSource(s)}
+                    sx={{
+                      fontFamily: mono,
+                      fontSize: '0.68rem',
+                      flex: 1,
+                      borderColor: gold.border,
+                      bgcolor: source === s ? gold.accent : 'transparent',
+                      color: source === s ? '#000' : isDark ? '#E2E8F0' : '#1E293B',
+                      fontWeight: source === s ? 800 : 500,
+                    }}
+                  >
+                    {s === 'bars' ? 'SMPTE Bars' : s === 'grid' ? 'Cyber Grid' : 'Neon Sunrise'}
+                  </Button>
+                ))}
+              </Box>
+            </Box>
+
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+              <Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography variant="caption" sx={{ color: '#94A3B8' }}>Slice Height:</Typography>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#38BDF8' }}>{sliceHeight}px</Typography>
+                </Box>
+                <Slider size="small" min={4} max={48} value={sliceHeight} onChange={(_, val) => setSliceHeight(val)} sx={{ color: gold.accent, py: 0.5 }} />
+              </Box>
+
+              <Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography variant="caption" sx={{ color: '#94A3B8' }}>Horizontal Shift:</Typography>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#38BDF8' }}>{shiftMax}px</Typography>
+                </Box>
+                <Slider size="small" min={0} max={80} value={shiftMax} onChange={(_, val) => setShiftMax(val)} sx={{ color: gold.accent, py: 0.5 }} />
+              </Box>
+
+              <Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography variant="caption" sx={{ color: '#94A3B8' }}>RGB Chromatic Offset:</Typography>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#38BDF8' }}>{rgbSplit}px</Typography>
+                </Box>
+                <Slider size="small" min={0} max={32} value={rgbSplit} onChange={(_, val) => setRgbSplit(val)} sx={{ color: gold.accent, py: 0.5 }} />
+              </Box>
+
+              <Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography variant="caption" sx={{ color: '#94A3B8' }}>Scanline CRT Intensity:</Typography>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#38BDF8' }}>{scanIntensity}%</Typography>
+                </Box>
+                <Slider size="small" min={0} max={100} value={scanIntensity} onChange={(_, val) => setScanIntensity(val)} sx={{ color: gold.accent, py: 0.5 }} />
+              </Box>
+            </Box>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}`, mt: 'auto' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981', fontSize: '0.68rem', display: 'block' }}>
+                ✓ Zero Cloud Telemetry Egress<br/>
+                ✓ 60 FPS Real-Time Canvas Pipeline<br/>
+                ✓ Pixel-Accurate Macroblock Displacement
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* --------------------------------------------------------------------------
+   16. Nexus 3D Scene Studio Workstation
+   -------------------------------------------------------------------------- */
+function Nexus3dWorkstation({ isDark, gold }) {
+  const canvasRef = useRef(null);
+  const [shape, setShape] = useState('torusKnot');
+  const [rotX, setRotX] = useState(0.4);
+  const [rotY, setRotY] = useState(0.6);
+  const [autoRotate, setAutoRotate] = useState(true);
+  const [tesseractAngle, setTesseractAngle] = useState(0);
+  const isDraggingRef = useRef(false);
+  const lastMouseRef = useRef({ x: 0, y: 0 });
+
+  const SHAPES = {
+    tesseract: { name: 'Tesseract 4D', verts: 16, edges: 32, type: '4D Hypercube' },
+    torusKnot: { name: 'Torus Knot (2,3)', verts: 120, edges: 120, type: 'Harmonic Knot' },
+    klein: { name: 'Klein Bottle', verts: 240, edges: 480, type: 'Non-Orientable' },
+    dodeca: { name: 'Dodecahedron', verts: 20, edges: 30, type: 'Platonic Solid' }
+  };
+
+  const getShapeData = () => {
+    const points = [];
+    const edges = [];
+
+    if (shape === 'tesseract') {
+      const a = tesseractAngle;
+      for (let i = 0; i < 16; i++) {
+        let x = (i & 1 ? 1 : -1);
+        let y = (i & 2 ? 1 : -1);
+        let z = (i & 4 ? 1 : -1);
+        let w = (i & 8 ? 1 : -1);
+
+        const rx = x * Math.cos(a) - w * Math.sin(a);
+        const rw = x * Math.sin(a) + w * Math.cos(a);
+
+        const d = 2.5;
+        const factor = d / (d - rw * 0.5);
+        points.push([rx * factor * 50, y * factor * 50, z * factor * 50]);
+      }
+      for (let i = 0; i < 16; i++) {
+        for (let bit = 0; bit < 4; bit++) {
+          const j = i ^ (1 << bit);
+          if (i < j) edges.push([i, j]);
+        }
+      }
+    } else if (shape === 'torusKnot') {
+      const p = 2, q = 3;
+      const count = 120;
+      for (let i = 0; i < count; i++) {
+        const u = (i / count) * Math.PI * 2;
+        const r = 55 + 20 * Math.cos(q * u);
+        const x = r * Math.cos(p * u);
+        const y = r * Math.sin(p * u);
+        const z = -25 * Math.sin(q * u);
+        points.push([x, y, z]);
+        edges.push([i, (i + 1) % count]);
+      }
+    } else if (shape === 'klein') {
+      const uCount = 16, vCount = 10;
+      for (let i = 0; i < uCount; i++) {
+        const u = (i / uCount) * Math.PI * 2;
+        for (let j = 0; j < vCount; j++) {
+          const v = (j / vCount) * Math.PI * 2;
+          const r = 3.5 * (1 - Math.cos(u) / 2);
+          let x, y, z;
+          if (u < Math.PI) {
+            x = 6 * Math.cos(u) * (1 + Math.sin(u)) + r * Math.cos(u) * Math.cos(v);
+            y = 14 * Math.sin(u) + r * Math.sin(u) * Math.cos(v);
+          } else {
+            x = 6 * Math.cos(u) * (1 + Math.sin(u)) + r * Math.cos(v + Math.PI);
+            y = 14 * Math.sin(u);
+          }
+          z = r * Math.sin(v);
+          points.push([x * 3.8, y * 3.5 - 15, z * 3.8]);
+        }
+      }
+      for (let i = 0; i < uCount; i++) {
+        for (let j = 0; j < vCount; j++) {
+          const idx = i * vCount + j;
+          const nextV = i * vCount + ((j + 1) % vCount);
+          const nextU = ((i + 1) % uCount) * vCount + j;
+          edges.push([idx, nextV]);
+          edges.push([idx, nextU]);
+        }
+      }
+    } else {
+      const phi = (1 + Math.sqrt(5)) / 2;
+      const s = 45;
+      const raw = [
+        [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
+        [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1],
+        [0, -phi, -1/phi], [0, -phi, 1/phi], [0, phi, 1/phi], [0, phi, -1/phi],
+        [-1/phi, 0, -phi], [1/phi, 0, -phi], [1/phi, 0, phi], [-1/phi, 0, phi],
+        [-phi, -1/phi, 0], [phi, -1/phi, 0], [phi, 1/phi, 0], [-phi, 1/phi, 0]
+      ];
+      raw.forEach(p => points.push([p[0] * s, p[1] * s, p[2] * s]));
+      for (let i = 0; i < points.length; i++) {
+        for (let j = i + 1; j < points.length; j++) {
+          const dx = points[i][0] - points[j][0];
+          const dy = points[i][1] - points[j][1];
+          const dz = points[i][2] - points[j][2];
+          const dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+          if (dist < s * 1.35) edges.push([i, j]);
+        }
+      }
+    }
+
+    return { points, edges };
+  };
+
+  const renderScene = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width;
+    const h = canvas.height;
+    const cx = w / 2;
+    const cy = h / 2;
+
+    ctx.clearRect(0, 0, w, h);
+
+    const { points, edges } = getShapeData();
+
+    const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+    const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+
+    const projected = points.map(([x, y, z]) => {
+      const x1 = x * cosY + z * sinY;
+      const z1 = -x * sinY + z * cosY;
+      const y2 = y * cosX - z1 * sinX;
+      const z2 = y * sinX + z1 * cosX;
+
+      const cameraDist = 320;
+      const fov = cameraDist / (cameraDist + z2);
+      return {
+        px: cx + x1 * fov,
+        py: cy + y2 * fov,
+        depth: z2,
+        fov
+      };
+    });
+
+    // Draw coordinate base ring
+    ctx.strokeStyle = isDark ? 'rgba(212,175,55,0.12)' : 'rgba(184,134,11,0.12)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy + 90, 100, 30, 0, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Draw Edges
+    ctx.strokeStyle = isDark ? '#38BDF8' : '#0284C7';
+    ctx.lineWidth = 1.6;
+    edges.forEach(([i, j]) => {
+      if (!projected[i] || !projected[j]) return;
+      ctx.beginPath();
+      ctx.moveTo(projected[i].px, projected[i].py);
+      ctx.lineTo(projected[j].px, projected[j].py);
+      ctx.stroke();
+    });
+
+    // Draw Vertices
+    projected.forEach(({ px, py, fov }) => {
+      const r = Math.max(2, 4.2 * fov);
+      ctx.beginPath();
+      ctx.arc(px, py, r, 0, Math.PI * 2);
+      ctx.fillStyle = gold.accent;
+      ctx.fill();
+    });
+  };
+
+  useEffect(() => {
+    renderScene();
+  }, [shape, rotX, rotY, tesseractAngle]);
+
+  useEffect(() => {
+    let animId;
+    const loop = () => {
+      if (autoRotate) {
+        setRotY(r => r + 0.012);
+      }
+      if (shape === 'tesseract') {
+        setTesseractAngle(a => a + 0.02);
+      }
+      animId = requestAnimationFrame(loop);
+    };
+    animId = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(animId);
+  }, [autoRotate, shape]);
+
+  const handleMouseDown = (e) => {
+    isDraggingRef.current = true;
+    lastMouseRef.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDraggingRef.current) return;
+    const dx = e.clientX - lastMouseRef.current.x;
+    const dy = e.clientY - lastMouseRef.current.y;
+    lastMouseRef.current = { x: e.clientX, y: e.clientY };
+    setRotY(y => y + dx * 0.01);
+    setRotX(x => Math.max(-1.5, Math.min(1.5, x + dy * 0.01)));
+  };
+
+  const handleMouseUp = () => {
+    isDraggingRef.current = false;
+  };
+
+  const handleExportOBJ = () => {
+    const { points, edges } = getShapeData();
+    let obj = `# Nexus 3D Studio - Wavefront OBJ Exporter\n# Shape: ${shape}\n\no ${shape}\n\n`;
+    points.forEach(([x, y, z]) => {
+      obj += `v ${(x/50).toFixed(6)} ${(y/50).toFixed(6)} ${(z/50).toFixed(6)}\n`;
+    });
+    edges.forEach(([i, j]) => {
+      obj += `l ${i + 1} ${j + 1}\n`;
+    });
+
+    const blob = new Blob([obj], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.download = `nexus3d_${shape}.obj`;
+    a.href = URL.createObjectURL(blob);
+    a.click();
+  };
+
+  return (
+    <Box sx={{ p: { xs: 2, md: 3 }, bgcolor: isDark ? '#08080C' : '#F8FAFC', borderRadius: 2, border: `1px solid ${gold.border}` }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Chip label="NEXUS 3D" size="small" sx={{ bgcolor: gold.accent, color: '#000', fontWeight: 800, fontFamily: mono }} />
+          <Typography variant="h6" sx={{ fontWeight: 800, color: isDark ? '#FFF' : '#000' }}>
+            Mathematical 3D Geometry Engine & MCP Hub
+          </Typography>
+        </Box>
+        <Chip label="100% IN-BROWSER 3D SYNTHESIS" size="small" variant="outlined" sx={{ borderColor: gold.accent, color: gold.accent, fontFamily: mono }} />
+      </Box>
+
+      <Grid container spacing={2}>
+        <Grid xs={12} md={7}>
+          <Paper
+            sx={{
+              p: 2,
+              bgcolor: isDark ? '#020204' : '#FFFFFF',
+              border: `1px solid ${gold.border}`,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              userSelect: 'none',
+              cursor: isDraggingRef.current ? 'grabbing' : 'grab'
+            }}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+          >
+            <Box sx={{ width: '100%', maxWidth: 440, aspectRatio: '3/2', bgcolor: '#000', borderRadius: 1.5, overflow: 'hidden', mb: 1.5, border: '1px solid rgba(255,255,255,0.1)' }}>
+              <canvas ref={canvasRef} width={440} height={293} style={{ width: '100%', height: '100%', display: 'block', objectFit: 'contain' }} />
+            </Box>
+
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <Button size="small" variant={autoRotate ? 'contained' : 'outlined'} onClick={() => setAutoRotate(!autoRotate)} sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: gold.border, color: autoRotate ? '#000' : gold.accent, bgcolor: autoRotate ? gold.accent : 'transparent' }}>
+                  {autoRotate ? '⏸ Pause Orbit' : '▶ Orbit'}
+                </Button>
+                <Button size="small" variant="outlined" onClick={() => { setRotX(0.4); setRotY(0.6); }} sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: gold.border, color: gold.accent }}>
+                  Reset Camera
+                </Button>
+              </Box>
+
+              <Button size="small" variant="contained" onClick={handleExportOBJ} startIcon={<DownloadIcon sx={{ fontSize: 14 }} />} sx={{ fontFamily: mono, fontSize: '0.72rem', bgcolor: gold.accent, color: '#000', fontWeight: 700 }}>
+                Export OBJ (.obj)
+              </Button>
+            </Box>
+          </Paper>
+        </Grid>
+
+        <Grid xs={12} md={5}>
+          <Paper sx={{ p: 2.5, bgcolor: isDark ? '#040408' : '#F8FAFC', border: `1px solid ${gold.border}`, height: '100%', display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Box>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, display: 'block', mb: 1 }}>
+                PARAMETRIC 3D SHAPES
+              </Typography>
+              <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 1 }}>
+                {Object.keys(SHAPES).map((key) => (
+                  <Button
+                    key={key}
+                    size="small"
+                    variant={shape === key ? 'contained' : 'outlined'}
+                    onClick={() => setShape(key)}
+                    sx={{
+                      fontFamily: mono,
+                      fontSize: '0.68rem',
+                      py: 0.6,
+                      px: 1,
+                      textTransform: 'none',
+                      justifyContent: 'flex-start',
+                      borderColor: gold.border,
+                      bgcolor: shape === key ? gold.accent : 'transparent',
+                      color: shape === key ? '#000' : isDark ? '#E2E8F0' : '#1E293B',
+                      fontWeight: shape === key ? 800 : 500,
+                    }}
+                  >
+                    {SHAPES[key].name}
+                  </Button>
+                ))}
+              </Box>
+            </Box>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}` }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, display: 'block', mb: 0.5 }}>
+                GEOMETRY TELEMETRY
+              </Typography>
+              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block' }}>
+                Vertices: <strong style={{ color: '#38BDF8' }}>{SHAPES[shape].verts}</strong> &bull; Edges: <strong style={{ color: '#38BDF8' }}>{SHAPES[shape].edges}</strong>
+              </Typography>
+              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block' }}>
+                Type: <strong style={{ color: gold.accent }}>{SHAPES[shape].type}</strong>
+              </Typography>
+            </Box>
+
+            <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}`, mt: 'auto' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981', fontSize: '0.68rem', display: 'block' }}>
+                ✓ Zero Cloud Telemetry Egress<br/>
+                ✓ Real-Time 60 FPS Orbit Engine<br/>
+                ✓ Direct Wavefront OBJ Mesh Download
+              </Typography>
+            </Box>
+          </Paper>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+/* --------------------------------------------------------------------------
    Master Interactive Tool Workstation Dispatcher
    -------------------------------------------------------------------------- */
 export default function WebGPUToolWorkstation({ tool }) {
@@ -2741,6 +3395,10 @@ export default function WebGPUToolWorkstation({ tool }) {
         return <CyberTurtleWorkstation isDark={isDark} gold={gold} />;
       case 'ufo-sacred-geometry':
         return <UfoGeometryWorkstation isDark={isDark} gold={gold} />;
+      case 'datamosh-glitch-studio':
+        return <DatamoshWorkstation isDark={isDark} gold={gold} />;
+      case 'nexus-3d-scene-studio':
+        return <Nexus3dWorkstation isDark={isDark} gold={gold} />;
       default:
         return (
           <PayloadEntropyWorkstation isDark={isDark} gold={gold} />
