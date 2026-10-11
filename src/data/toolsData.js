@@ -277,9 +277,9 @@ export const microTools = [
     priceCents: 1900,
     stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
     depay: true,
-    description: 'High-precision cron AST parser, 24x7 rhythm heatmap, countdown timeline, and multi-dialect transpiler across K8s, GitHub Actions, AWS EventBridge, and Systemd with zero egress.',
-    version: '2.4.0',
-    pull: 'git clone https://github.com/1nc0gn30/cron-rhythm-studio.git && cd cron-rhythm-studio && python3 -m http.server 8080',
+    description: 'High-precision cron AST parser, 24x7 rhythm heatmap, countdown timeline, multi-dialect transpiler across K8s, GitHub Actions, AWS EventBridge, and Systemd with procedural chronometer brand media and dual Stripe + Solana rails.',
+    version: '2.5.0',
+    pull: 'git clone https://github.com/1nc0gn30/cron-rhythm-studio.git && cd cron-rhythm-studio && python3 -m http.server 8080 --directory public',
   },
   {
     id: 'certpath-roadmap-studio',
