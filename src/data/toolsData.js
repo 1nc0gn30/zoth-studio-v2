@@ -241,6 +241,8 @@ export const microTools = [
     executionType: 'browser',
     github: 'https://github.com/1nc0gn30/subsweep-lead-scanner',
     liveUrl: 'https://subsweep.nullai.tech',
+    localPort: 8090,
+    localUrl: 'http://127.0.0.1:8090',
     priceUsd: '19',
     price: '$19',
     priceCents: 1900,
@@ -248,7 +250,7 @@ export const microTools = [
     depay: true,
     description: '100% in-browser OSINT reconnaissance, passive DNS discovery, tech stack fingerprinting, OSINT radar brand media, and executive lead intelligence with zero cloud egress.',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/subsweep-lead-scanner.git && cd subsweep-lead-scanner && python3 -m http.server 8080 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/subsweep-lead-scanner.git && cd subsweep-lead-scanner && python3 -m http.server 8090 --directory public',
   },
   {
     id: 'omnipost-social-engine',
