@@ -10,10 +10,10 @@ export default defineConfig({
         // Long-cacheable vendor chunks: app deploys no longer re-download React/MUI.
         manualChunks(id) {
           if (!id.includes('node_modules')) return undefined;
-          if (/[\\/](react|react-dom|react-router|react-router-dom|scheduler)[\\/]/.test(id)) return 'vendor-react';
-          if (/[\\/](@mui|@emotion)[\\/]/.test(id)) return 'vendor-mui';
+          // React + MUI + Emotion share one chunk: splitting them creates a circular
+          // init order ("Cannot access X before initialization").
           if (/[\\/](three|@react-three)[\\/]/.test(id)) return 'vendor-three';
-          if (/[\\/](framer-motion|motion)[\\/]/.test(id)) return 'vendor-motion';
+          if (/[\\/](react|react-dom|react-router|react-router-dom|@remix-run|scheduler|@mui|@emotion|@babel[\\/]runtime|react-is|react-transition-group|@popperjs|clsx|prop-types|stylis|hoist-non-react-statics|framer-motion|motion|motion-dom|motion-utils)[\\/]/.test(id)) return 'vendor';
           return undefined;
         },
       },
