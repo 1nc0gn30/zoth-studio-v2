@@ -450,9 +450,9 @@ export const microTools = [
     priceCents: 1900,
     stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
     depay: true,
-    description: 'One studio writes the finished page for a trade and a city. 1,000 localized service pages across 20 trades and 50 mid-size cities with live customizer and standalone HTML export.',
-    version: '1.0.0',
-    pull: 'git clone https://github.com/1nc0gn30/city-desk.git && cd city-desk && node build.js',
+    description: 'One studio writes the finished page for a trade and a city. 1,000 localized service pages across 20 trades and 50 mid-size cities with live customizer, multi-mipmap ICO, Pro bundle export, and dual Stripe + Solana checkout rails.',
+    version: '2.5.0',
+    pull: 'git clone https://github.com/1nc0gn30/city-desk.git && cd city-desk && node build.js && python3 -m http.server 8080 --directory site',
   },
   {
     id: 'agent-egress-sentinel',
