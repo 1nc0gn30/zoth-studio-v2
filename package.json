@@ -16,7 +16,9 @@
     "preview": "vite preview",
     "zoth": "node ./bin/zoth.js",
     "up": "node ./bin/zoth.js up",
-    "serve": "node server/serve.mjs --port 3000"
+    "serve": "node server/serve.mjs --port 3000",
+    "test:serve": "node scripts/test-serve.mjs",
+    "test": "node scripts/test-serve.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",

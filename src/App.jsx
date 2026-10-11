@@ -4,12 +4,15 @@ import { Box, ThemeProvider, CssBaseline, useTheme } from '@mui/material';
 import { theme as lightTheme, darkTheme } from './theme';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
+import ShortcutsHelp from './components/ShortcutsHelp';
+import ErrorBoundary from './components/ErrorBoundary';
 import SEO from './components/SEO';
 import Footer from './components/Footer';
 import { IntroDirector, PageStage } from './motion/IntroDirector';
 
 // Code-split route modules for instant initial load and on-demand streaming
 const SwarmPage = lazy(() => import('./pages/SwarmPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const SwarmShowcasePage = lazy(() => import('./pages/SwarmShowcasePage'));
 const WebGenPage = lazy(() => import('./pages/WebGenPage'));
 const WebGenShowcasePage = lazy(() => import('./pages/WebGenShowcasePage'));
@@ -114,6 +117,9 @@ function ScrollToTop() {
 }
 
 function AppShell({ mode, onToggleTheme }) {
+  // Page-level boundary keyed on the route: a crashing page no longer takes down the
+  // navbar, and navigating to another page recovers automatically.
+  const { pathname: routePath } = useLocation();
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
 
@@ -148,6 +154,7 @@ function AppShell({ mode, onToggleTheme }) {
         }}
       >
         <PageStage>
+          <ErrorBoundary key={routePath}>
           <Suspense fallback={<RouteFallback />}>
             <Routes>
               <Route path="/" element={<HomePage />} />
@@ -180,8 +187,11 @@ function AppShell({ mode, onToggleTheme }) {
               <Route path="/ax/docs" element={<AXPage />} />
               <Route path="/gallery" element={<GalleryPage />} />
               <Route path="/agora" element={<AgoraPage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
+            <ShortcutsHelp />
           </Suspense>
+          </ErrorBoundary>
         </PageStage>
       </Box>
       <Footer />

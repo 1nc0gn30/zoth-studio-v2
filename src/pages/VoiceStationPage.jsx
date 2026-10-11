@@ -69,6 +69,31 @@ export default function VoiceStationPage() {
     }
   ]);
   const [textInput, setTextInput] = useState('');
+  // Real export (was an alert placeholder): the session transcript as a Markdown debrief.
+  const exportDebrief = () => {
+    const stamp = new Date().toISOString();
+    const lines = [
+      `# Voice Station debrief`,
+      ``,
+      `- Exported: ${stamp}`,
+      `- Persona: ${activePersona?.name || 'unknown'}`,
+      sessionId ? `- Session: ${sessionId}` : null,
+      `- Turns: ${turns.length}`,
+      ``,
+      `## Transcript`,
+      ``,
+      ...turns.map((t) => `**${t.speaker || (t.isAgent ? 'Agent' : 'You')}** _(${t.time || '--:--'})_  \n${String(t.text || '').trim()}\n`),
+      `## Action items`,
+      ``,
+      ...turns.filter((t) => /\b(todo|next|should|will|need to|let's)\b/i.test(t.text || '')).map((t) => `- [ ] ${String(t.text).trim().slice(0, 200)}`),
+    ].filter((l) => l !== null);
+    const blob = new Blob([lines.join('\n')], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `voice-debrief-${stamp.slice(0, 19).replace(/[:T]/g, '-')}.md`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
   const [copiedLink, setCopiedLink] = useState('');
 
   // Pro SaaS State
@@ -839,10 +864,12 @@ export default function VoiceStationPage() {
                   fullWidth
                   variant="outlined"
                   size="small"
-                  onClick={() => alert('Exporting WAV audio recording and markdown transcript...')}
+                  onClick={exportDebrief}
+                  disabled={turns.length < 2}
+                  title={turns.length < 2 ? 'Talk with a persona first; the debrief exports the conversation.' : 'Download this session as a Markdown debrief'}
                   sx={{ borderColor: '#D4AF37', color: '#D4AF37', fontWeight: 700 }}
                 >
-                  📥 Export WAV & Markdown Debrief
+                  📥 Export Markdown Debrief
                 </Button>
               </Box>
 
