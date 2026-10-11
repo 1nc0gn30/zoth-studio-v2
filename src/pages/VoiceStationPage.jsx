@@ -681,7 +681,7 @@ export default function VoiceStationPage() {
                     >
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
                         <Typography sx={{ fontSize: '1.25rem' }}>{p.glyph}</Typography>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: isSelected ? p.color : '#F3F4F6' }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: isSelected ? p.color : (dark ? '#F3F4F6' : '#101828') }}>
                           {p.label}
                         </Typography>
                       </Box>

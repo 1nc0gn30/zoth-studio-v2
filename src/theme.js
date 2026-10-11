@@ -263,15 +263,26 @@ export const theme = createTheme({
           '0%, 100%': { opacity: 0.3 },
           '50%': { opacity: 0.6 },
         },
+        // MUI Grid2 sizes nested items with var(--Grid-columnsLevelN); nothing defined
+        // it, so every nested grid collapsed to content width. Default to 12 columns.
+        ':root': {
+          '--Grid-columnsLevel1': 12,
+          '--Grid-columnsLevel2': 12,
+          '--Grid-columnsLevel3': 12,
+          '--Grid-columnsLevel4': 12,
+        },
         '.MuiGrid-container, .MuiGrid2-container': {
           width: '100%',
           alignItems: 'stretch',
         },
-        '.MuiGrid-container > .MuiGrid-root:has(> .MuiCard-root), .MuiGrid-container > .MuiGrid-root:has(> .MuiPaper-root), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiCard-root), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiPaper-root)': {
+        '.MuiGrid-container > .MuiGrid-root:has(> .MuiCard-root:only-child), .MuiGrid-container > .MuiGrid-root:has(> .MuiPaper-root:only-child), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiCard-root:only-child), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiPaper-root:only-child)': {
+          // Equal-height cards only when the card is the item's sole child; a flex
+          // row here squeezed multi-child items side by side (Voice on mobile).
           display: 'flex',
+          flexDirection: 'column',
           minWidth: 0,
         },
-        '.MuiGrid-container > .MuiGrid-root > .MuiCard-root, .MuiGrid-container > .MuiGrid-root > .MuiPaper-root, .MuiGrid2-container > .MuiGrid2-root > .MuiCard-root, .MuiGrid2-container > .MuiGrid2-root > .MuiPaper-root': {
+        '.MuiGrid-container > .MuiGrid-root > .MuiCard-root:only-child, .MuiGrid-container > .MuiGrid-root > .MuiPaper-root:only-child, .MuiGrid2-container > .MuiGrid2-root > .MuiCard-root:only-child, .MuiGrid2-container > .MuiGrid2-root > .MuiPaper-root:only-child': {
           flex: '1 1 auto',
           width: '100%',
           minWidth: 0,
@@ -721,15 +732,26 @@ export const darkTheme = createTheme({
           '0%, 100%': { opacity: 0.3 },
           '50%': { opacity: 0.6 },
         },
+        // MUI Grid2 sizes nested items with var(--Grid-columnsLevelN); nothing defined
+        // it, so every nested grid collapsed to content width. Default to 12 columns.
+        ':root': {
+          '--Grid-columnsLevel1': 12,
+          '--Grid-columnsLevel2': 12,
+          '--Grid-columnsLevel3': 12,
+          '--Grid-columnsLevel4': 12,
+        },
         '.MuiGrid-container, .MuiGrid2-container': {
           width: '100%',
           alignItems: 'stretch',
         },
-        '.MuiGrid-container > .MuiGrid-root:has(> .MuiCard-root), .MuiGrid-container > .MuiGrid-root:has(> .MuiPaper-root), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiCard-root), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiPaper-root)': {
+        '.MuiGrid-container > .MuiGrid-root:has(> .MuiCard-root:only-child), .MuiGrid-container > .MuiGrid-root:has(> .MuiPaper-root:only-child), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiCard-root:only-child), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiPaper-root:only-child)': {
+          // Equal-height cards only when the card is the item's sole child; a flex
+          // row here squeezed multi-child items side by side (Voice on mobile).
           display: 'flex',
+          flexDirection: 'column',
           minWidth: 0,
         },
-        '.MuiGrid-container > .MuiGrid-root > .MuiCard-root, .MuiGrid-container > .MuiGrid-root > .MuiPaper-root, .MuiGrid2-container > .MuiGrid2-root > .MuiCard-root, .MuiGrid2-container > .MuiGrid2-root > .MuiPaper-root': {
+        '.MuiGrid-container > .MuiGrid-root > .MuiCard-root:only-child, .MuiGrid-container > .MuiGrid-root > .MuiPaper-root:only-child, .MuiGrid2-container > .MuiGrid2-root > .MuiCard-root:only-child, .MuiGrid2-container > .MuiGrid2-root > .MuiPaper-root:only-child': {
           flex: '1 1 auto',
           width: '100%',
           minWidth: 0,
