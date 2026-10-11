@@ -784,9 +784,9 @@ export const microTools = [
     github: 'https://github.com/1nc0gn30/ufo-sacred-geometry',
     liveUrl: 'https://ufo-sacred-geometry.netlify.app',
     priceUsd: '19',
-    description: 'Sacred geometry & agro-glyph synthesizer exporting to AutoCAD DXF R12/2000, Wavefront OBJ 3D Meshes, and vector SVGs.',
+    description: 'Sovereign in-browser vector CAD engine & agro-glyph synthesizer with 1-click AutoCAD DXF R12/2000, Wavefront OBJ 3D Meshes, scalable SVGs, and dual checkout rails ($19).',
     version: '1.0.0',
-    pull: 'git clone https://github.com/1nc0gn30/ufo-sacred-geometry.git && cd ufo-sacred-geometry && python3 -m ufo_geometry',
+    pull: 'git clone https://github.com/1nc0gn30/ufo-sacred-geometry.git && cd ufo-sacred-geometry && pip install -e .',
   },
   {
     id: 'likeness-desk',
