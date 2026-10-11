@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, CardActions,
   Chip, Button, TextField, InputAdornment, MenuItem, Select, FormControl, InputLabel,
@@ -16,7 +16,9 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import SecurityIcon from '@mui/icons-material/Security';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DnsIcon from '@mui/icons-material/Dns';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 import { microTools } from '../data/toolsData';
 import ToolOfferLine from '../components/ToolOfferLine';
 import { useStudioStatus } from '../studio/useStudioStatus';
@@ -36,9 +38,40 @@ export default function ToolsPage() {
     : [];
   const isBackendConnected = activeServices.length > 0;
 
-  const [search, setSearch] = useState('');
-  const [selectedCat, setSelectedCat] = useState('All');
-  const [execFilter, setExecFilter] = useState('all'); // 'all' | 'webgpu' | 'local_cli'
+  // Filters live in the URL (?q=&cat=&mode=&pinned=1) so views are shareable and survive reload/back.
+  const [params, setParams] = useSearchParams();
+  const [search, setSearch] = useState(() => params.get('q') || '');
+  const [selectedCat, setSelectedCat] = useState(() => params.get('cat') || 'All');
+  const [execFilter, setExecFilter] = useState(() => (['all', 'webgpu', 'local_cli'].includes(params.get('mode')) ? params.get('mode') : 'all')); // 'all' | 'webgpu' | 'local_cli'
+  const [pinnedOnly, setPinnedOnly] = useState(() => params.get('pinned') === '1');
+  const [pinned, setPinned] = useState(() => {
+    try { const v = JSON.parse(localStorage.getItem('zoth.pinnedTools') || '[]'); return Array.isArray(v) ? v : []; } catch { return []; }
+  });
+  const searchRef = useRef(null);
+  useEffect(() => {
+    const next = new URLSearchParams();
+    if (search) next.set('q', search);
+    if (selectedCat !== 'All') next.set('cat', selectedCat);
+    if (execFilter !== 'all') next.set('mode', execFilter);
+    if (pinnedOnly) next.set('pinned', '1');
+    if (next.toString() !== params.toString()) setParams(next, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search, selectedCat, execFilter, pinnedOnly]);
+  useEffect(() => {
+    try { localStorage.setItem('zoth.pinnedTools', JSON.stringify(pinned)); } catch { /* private mode */ }
+  }, [pinned]);
+  useEffect(() => {
+    // "/" focuses the catalog search (unless already typing somewhere).
+    const onKey = (e) => {
+      const t = e.target;
+      if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+      if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+      e.preventDefault(); searchRef.current?.focus();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+  const togglePin = (id) => setPinned((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   const [copiedId, setCopiedId] = useState(null);
   const [expanded, setExpanded] = useState(() => new Set());
 
@@ -70,8 +103,9 @@ export default function ToolsPage() {
       t.name.toLowerCase().includes(search.toLowerCase()) ||
       t.description.toLowerCase().includes(search.toLowerCase()) ||
       t.repo.toLowerCase().includes(search.toLowerCase());
-    return matchesCat && matchesExec && matchesSearch;
-  });
+    const matchesPin = !pinnedOnly || pinned.includes(t.id);
+    return matchesCat && matchesExec && matchesSearch && matchesPin;
+  }).sort((a, b) => Number(pinned.includes(b.id)) - Number(pinned.includes(a.id)));
 
   return (
     <>
@@ -282,7 +316,9 @@ export default function ToolsPage() {
       {/* Filter & Search Bar */}
       <TextField
         fullWidth
-        placeholder="Search the catalog by name, category, or repo..."
+        placeholder="Search the catalog by name, category, or repo...  (press / to focus)"
+        inputRef={searchRef}
+        inputProps={{ 'aria-label': 'Search the tool catalog' }}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         sx={{ mb: 2 }}
@@ -337,6 +373,15 @@ export default function ToolsPage() {
             color: execFilter === 'local_cli' ? (isDark ? '#08080B' : '#0F172A') : theme.palette.text.primary,
             border: `1px solid ${execFilter === 'local_cli' ? gold.accent : theme.palette.divider}`,
           }}
+        />
+        <Chip
+          size="small"
+          clickable
+          onClick={() => setPinnedOnly((v) => !v)}
+          icon={<StarIcon sx={{ fontSize: 16, color: pinnedOnly ? '#08080B !important' : `${gold.accent} !important` }} />}
+          label={`Pinned (${pinned.length})`}
+          aria-pressed={pinnedOnly}
+          sx={{ fontWeight: 700, bgcolor: pinnedOnly ? gold.accent : 'transparent', color: pinnedOnly ? '#08080B' : 'text.primary', border: `1px solid ${gold.accent}66` }}
         />
       </Box>
 
@@ -445,14 +490,26 @@ export default function ToolsPage() {
                         <Chip label={`v${tool.version}`} size="small" variant="outlined" sx={{ color: theme.palette.text.secondary, fontSize: '0.72rem', fontFamily: mono, borderColor: theme.palette.divider }} />
                       </Box>
 
+                      <Box sx={{ position: 'relative' }}>
                       <Typography
                         variant="h6"
                         component={RouterLink}
                         to={`/tools/${tool.id}`}
-                        sx={{ color: theme.palette.text.primary, mb: 1, fontWeight: 800, textDecoration: 'none', display: 'block', '&:hover': { color: gold.accent } }}
+                        sx={{ color: theme.palette.text.primary, mb: 1, fontWeight: 800, textDecoration: 'none', display: 'block', pr: 4, '&:hover': { color: gold.accent } }}
                       >
                         {tool.name}
                       </Typography>
+                      <IconButton
+                        size="small"
+                        onClick={() => togglePin(tool.id)}
+                        aria-label={pinned.includes(tool.id) ? `Unpin ${tool.name}` : `Pin ${tool.name}`}
+                        aria-pressed={pinned.includes(tool.id)}
+                        title={pinned.includes(tool.id) ? 'Unpin' : 'Pin to top'}
+                        sx={{ position: 'absolute', top: -4, right: -8, color: pinned.includes(tool.id) ? gold.accent : 'text.disabled', '&:hover': { color: gold.accent } }}
+                      >
+                        {pinned.includes(tool.id) ? <StarIcon fontSize="small" /> : <StarBorderIcon fontSize="small" />}
+                      </IconButton>
+                      </Box>
 
                       <Typography
                         variant="body2"
