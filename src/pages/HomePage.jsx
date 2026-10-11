@@ -32,9 +32,9 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import GoldenZLogo3D from '../components/GoldenZLogo3D';
 import MathPillarsGrid from '../components/MathPillarsGrid';
 import CompanyTicker from '../components/CompanyTicker';
-import WebGPUAIConsole from '../components/WebGPUAIConsole';
-import WebMCPConsole from '../components/WebMCPConsole';
-import SovereignFunnel from '../components/SovereignFunnel';
+const WebGPUAIConsole = React.lazy(() => import('../components/WebGPUAIConsole'));
+const WebMCPConsole = React.lazy(() => import('../components/WebMCPConsole'));
+const SovereignFunnel = React.lazy(() => import('../components/SovereignFunnel'));
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 import { microTools } from '../data/toolsData';
 import ToolOfferLine from '../components/ToolOfferLine';
@@ -1945,8 +1945,10 @@ export default function HomePage() {
         <Typography variant="body1" color="text.secondary" sx={{ mb: 4, maxWidth: 840, lineHeight: 1.65 }}>
           Run AI models and neural processing directly on your own computer’s graphics chip or processor. Test local inference, inspect agent tools, and dispatch tasks in real time.
         </Typography>
-        <WebGPUAIConsole />
-        <WebMCPConsole />
+        <React.Suspense fallback={<Box role="status" aria-label="Loading consoles" sx={{ minHeight: 420, borderRadius: 3, border: '1px solid rgba(212,175,55,0.25)', bgcolor: 'rgba(212,175,55,0.04)' }} />}>
+          <WebGPUAIConsole />
+          <WebMCPConsole />
+        </React.Suspense>
       </Box>
 
       {/* Section 2: Flagship Workspaces Navigation Grid */}
@@ -2352,6 +2354,7 @@ export default function HomePage() {
       </Box>
 
       {/* Sovereign Ecosystem Deployment Funnel */}
+      <React.Suspense fallback={<Box sx={{ minHeight: 360 }} />}>
       <SovereignFunnel
         title="Deploy Zoth Studio & Sovereign AI Tools Locally"
         subtitle="Experience zero-telemetry AI engineering with sovereign in-browser workstations, bare-metal operating system images, or modular standalone micro-repos."
@@ -2361,6 +2364,7 @@ export default function HomePage() {
         toolRepo="https://github.com/NullAITech/adytum-alchemist-ai-workflow"
         toolCommand="npx zoth pull adytum-alchemist-ai-workflow"
       />
+      </React.Suspense>
     </Container>
     </>
   );

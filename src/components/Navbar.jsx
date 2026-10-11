@@ -25,7 +25,7 @@ import FlashOnIcon from '@mui/icons-material/FlashOn';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import GoldenZLogo3D from './GoldenZLogo3D';
-import SwarmDaemonMultiplexer from './SwarmDaemonMultiplexer';
+const SwarmDaemonMultiplexer = React.lazy(() => import('./SwarmDaemonMultiplexer'));
 import { microTools } from '../data/toolsData';
 import { workstations } from '../data/workstations';
 import { arsenalStats } from '../data/arsenalData';
@@ -1690,7 +1690,9 @@ export default function Navbar({ mode, onToggleTheme }) {
           </IconButton>
         </Box>
         <DialogContent sx={{ p: { xs: 0.5, md: 1 }, mt: 1 }}>
-          <SwarmDaemonMultiplexer embedded />
+          <React.Suspense fallback={<Box role="status" sx={{ p: 4, textAlign: 'center', color: 'text.secondary' }}>Loading swarm matrix…</Box>}>
+            <SwarmDaemonMultiplexer embedded />
+          </React.Suspense>
         </DialogContent>
       </Dialog>
     </AppBar>
