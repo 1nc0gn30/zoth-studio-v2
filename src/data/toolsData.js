@@ -770,9 +770,9 @@ export const microTools = [
     github: 'https://github.com/1nc0gn30/nexus-3d-scene-studio',
     liveUrl: 'https://nexus-3d-studio.netlify.app',
     priceUsd: '19',
-    description: 'Pure Python 3D mathematical geometry engine, parametric mesh generator, and Model Context Protocol (MCP) server for spatial agent synthesis.',
-    version: '1.0.0',
-    pull: 'git clone https://github.com/1nc0gn30/nexus-3d-scene-studio.git && cd nexus-3d-scene-studio && python3 -m nexus3d',
+    description: '100% in-browser WebGL mathematical 3D geometry engine, 4D Tesseract, parametric surfaces, FastMCP server, and precision OBJ/STL mesh exporters with dual checkout rails.',
+    version: '1.2.0',
+    pull: 'git clone https://github.com/1nc0gn30/nexus-3d-scene-studio.git && cd nexus-3d-scene-studio && pip install -e .',
   },
   {
     id: 'ufo-sacred-geometry',
