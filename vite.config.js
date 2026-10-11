@@ -4,6 +4,21 @@ import { existsSync } from 'node:fs';
 import { studioMiddleware } from './server/studio-api.mjs';
 
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        // Long-cacheable vendor chunks: app deploys no longer re-download React/MUI.
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return undefined;
+          if (/[\\/](react|react-dom|react-router|react-router-dom|scheduler)[\\/]/.test(id)) return 'vendor-react';
+          if (/[\\/](@mui|@emotion)[\\/]/.test(id)) return 'vendor-mui';
+          if (/[\\/](three|@react-three)[\\/]/.test(id)) return 'vendor-three';
+          if (/[\\/](framer-motion|motion)[\\/]/.test(id)) return 'vendor-motion';
+          return undefined;
+        },
+      },
+    },
+  },
   define: {
     // Only request the WebMCP demo MP4 when it actually ships; otherwise the
     // console shows its simulation reel without a 404 on every page load.
