@@ -281,6 +281,8 @@ export const microTools = [
     executionType: 'browser',
     github: 'https://github.com/1nc0gn30/cron-rhythm-studio',
     liveUrl: 'https://cronrhythm.nullai.tech',
+    localPort: 8092,
+    localUrl: 'http://127.0.0.1:8092',
     priceUsd: '19',
     price: '$19',
     priceCents: 1900,
@@ -288,7 +290,7 @@ export const microTools = [
     depay: true,
     description: 'High-precision cron AST parser, 24x7 rhythm heatmap, countdown timeline, multi-dialect transpiler across K8s, GitHub Actions, AWS EventBridge, and Systemd with procedural chronometer brand media and dual Stripe + Solana rails.',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/cron-rhythm-studio.git && cd cron-rhythm-studio && python3 -m http.server 8080 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/cron-rhythm-studio.git && cd cron-rhythm-studio && python3 -m http.server 8092 --directory public',
   },
   {
     id: 'certpath-roadmap-studio',
