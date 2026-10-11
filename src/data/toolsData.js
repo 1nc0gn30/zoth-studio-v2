@@ -630,7 +630,7 @@ export const microTools = [
     name: 'Printify Connector',
     repo: 'printify-connector',
     category: 'Commerce & MCP',
-    executionType: 'local_cli',
+    executionType: 'browser',
     github: 'https://github.com/1nc0gn30/printify-connector',
     description: 'Autonomous zero-dependency Printify Open API v1 connector, 20% Premium margin calculator, artwork DPI auditor, and Antigravity MCP suite.',
     localPort: 8115,
