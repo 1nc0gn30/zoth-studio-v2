@@ -943,8 +943,10 @@ export const microTools = [
     stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
     depay: true,
     description: '100% in-browser passive domain intelligence & attack surface reconnaissance engine auditing Certificate Transparency logs, DoH DNS records, and SPF/DMARC posture with dual Stripe + Solana rails ($19).',
+    localPort: 8085,
+    localUrl: 'http://127.0.0.1:8085',
     version: '2.5.0',
-    pull: 'git clone https://github.com/NullAITech/osint-scout-skill.git && cd osint-scout-skill && python3 -m http.server 8080 --directory public',
+    pull: 'git clone https://github.com/NullAITech/osint-scout-skill.git && cd osint-scout-skill && python3 -m http.server 8085 --directory public',
   },
   {
     id: 'bolt.diy',
