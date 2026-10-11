@@ -675,7 +675,7 @@ export const microTools = [
     name: 'POD Smart Router',
     repo: 'pod-smart-router',
     category: 'Commerce & MCP',
-    executionType: 'local_cli',
+    executionType: 'browser',
     github: 'https://github.com/1nc0gn30/pod-smart-router',
     description: 'Multi-channel POD order router dynamically comparing Printify (:8115) and Gelato (:8116) on landed cost, domestic proximity, delivery speed, and tariff avoidance.',
     localPort: 8117,
