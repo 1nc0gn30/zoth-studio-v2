@@ -697,7 +697,11 @@ export const microTools = [
     localPort: 8115,
     localUrl: 'http://127.0.0.1:8115',
     liveUrl: 'https://printify.nullai.tech',
-    version: '1.0.0',
+    priceUsd: '19',
+    priceCents: 1900,
+    stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
+    depay: true,
+    version: '2.5.0',
     pull: 'git clone https://github.com/1nc0gn30/printify-connector.git && cd printify-connector && ./bin/printify-connector serve --port 8115',
   },
   {
