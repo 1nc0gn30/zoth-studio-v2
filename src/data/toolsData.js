@@ -224,7 +224,7 @@ export const microTools = [
     priceUsd: '19',
     stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
     description: '100% in-browser touchless gesture control, 21-joint 3D hand tracking, spatial air drawing, and Model Context Protocol (MCP) agent connectivity with dual Stripe + Solana checkout rails.',
-    version: '1.8.0',
+    version: '2.5.0',
     pull: 'git clone https://github.com/1nc0gn30/vision-gesture-control.git && cd vision-gesture-control && python3 -m http.server 8080 --directory public',
   },
   {
