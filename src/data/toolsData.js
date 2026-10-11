@@ -644,7 +644,7 @@ export const microTools = [
     priceCents: 1900,
     stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
     depay: true,
-    version: '1.0.0',
+    version: '2.5.0',
     pull: 'git clone https://github.com/1nc0gn30/agent-budget-sentinel.git && cd agent-budget-sentinel && ./bin/agent-budget serve --web-port 8110 --proxy-port 8111',
   },
   {
