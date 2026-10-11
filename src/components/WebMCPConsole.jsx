@@ -79,7 +79,15 @@ export default function WebMCPConsole() {
   const [copiedConfig, setCopiedConfig] = useState(false);
 
   // Video State
-  const [videoSrc, setVideoSrc] = useState('/assets/videos/webmcp-zoth-os.mp4');
+  const [videoSrc, setVideoSrc] = useState(null);
+  // Probe once so a missing recording shows the placeholder without a console 404 storm.
+  useEffect(() => {
+    let alive = true;
+    fetch('/assets/videos/webmcp-zoth-os.mp4', { method: 'HEAD' })
+      .then((r) => { if (!alive) return; if (r.ok && /video/.test(r.headers.get('content-type') || '')) setVideoSrc('/assets/videos/webmcp-zoth-os.mp4'); else setVideoError(true); })
+      .catch(() => alive && setVideoError(true));
+    return () => { alive = false; };
+  }, []);
   const [videoError, setVideoError] = useState(false);
   const [isPlayingSim, setIsPlayingSim] = useState(false);
   const [simStep, setSimStep] = useState(0);
