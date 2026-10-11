@@ -89,11 +89,11 @@ export const microTools = [
     category: 'AI & Knowledge',
     executionType: 'browser',
     github: 'https://github.com/1nc0gn30/promptmaster-studio',
-    description: '100% in-browser prompt engineering and meta-optimization studio with real-time AST linting, multi-model rewrites, and token cost estimation.',
+    description: '100% in-browser prompt engineering and meta-optimization studio with real-time AST linting, multi-model rewrites (Claude, ChatGPT, Gemini), tri-model constellation brand media, and dual Stripe + Solana rails.',
     liveUrl: 'https://promptmaster-studio.netlify.app',
     priceUsd: '19',
     stripeUrl: 'https://buy.stripe.com/cNiaEWaEldKo6Tm1C0fw40D',
-    version: '3.1.0',
+    version: '3.2.0',
     pull: 'git clone https://github.com/1nc0gn30/promptmaster-studio.git && cd promptmaster-studio && python3 -m http.server 8080 --directory public',
   },
   {
