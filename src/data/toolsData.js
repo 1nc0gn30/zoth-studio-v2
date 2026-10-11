@@ -295,9 +295,9 @@ export const microTools = [
     priceCents: 1900,
     stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
     depay: true,
-    description: '100% in-browser certification DAG solver, career roadmap planner, and study guide generator with 137 credentials and dual Stripe + Solana checkout rails.',
-    version: '1.2.0',
-    pull: 'git clone https://github.com/1nc0gn30/certpath-roadmap-studio.git && cd certpath-roadmap-studio && python3 -m http.server 8080',
+    description: '100% in-browser certification DAG solver, career roadmap planner, and study guide generator with 137 credentials, procedural DAG brand media, and dual Stripe + Solana rails.',
+    version: '2.5.0',
+    pull: 'git clone https://github.com/1nc0gn30/certpath-roadmap-studio.git && cd certpath-roadmap-studio && python3 -m http.server 8080 --directory public',
   },
   {
     id: 'pwa-manifest-builder',
