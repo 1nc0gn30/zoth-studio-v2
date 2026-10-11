@@ -548,8 +548,8 @@ export const microTools = [
     priceCents: 1900,
     stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
     depay: true,
-    version: '1.0.0',
-    pull: 'git clone https://github.com/1nc0gn30/agent-capsule-jail.git && cd agent-capsule-jail && ./bin/agent-capsule serve --port 8105',
+    version: '2.5.0',
+    pull: 'git clone https://github.com/1nc0gn30/agent-capsule-jail.git && cd agent-capsule-jail && python3 -m http.server 8105 --directory public',
   },
   {
     id: 'agent-policy-auditor',
