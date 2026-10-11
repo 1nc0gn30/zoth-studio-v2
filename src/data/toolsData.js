@@ -567,8 +567,8 @@ export const microTools = [
     priceCents: 1900,
     stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
     depay: true,
-    version: '1.0.0',
-    pull: 'git clone https://github.com/1nc0gn30/agent-policy-auditor.git && cd agent-policy-auditor && ./bin/agent-policy serve --port 8106',
+    version: '2.5.0',
+    pull: 'git clone https://github.com/1nc0gn30/agent-policy-auditor.git && cd agent-policy-auditor && python3 -m http.server 8106 --directory public',
   },
   {
     id: 'etsy-pod-forge',
