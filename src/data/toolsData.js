@@ -261,6 +261,8 @@ export const microTools = [
     executionType: 'browser',
     github: 'https://github.com/1nc0gn30/omnipost-social-engine',
     liveUrl: 'https://omnipost.nullai.tech',
+    localPort: 8091,
+    localUrl: 'http://127.0.0.1:8091',
     priceUsd: '19',
     price: '$19',
     priceCents: 1900,
@@ -268,7 +270,7 @@ export const microTools = [
     depay: true,
     description: '100% in-browser social content formatting, viral thread splitter, virality scoring, MCP AI agent client hub, and procedural omni-beacon brand media with dual Stripe + Solana rails.',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/omnipost-social-engine.git && cd omnipost-social-engine && python3 -m http.server 8080 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/omnipost-social-engine.git && cd omnipost-social-engine && python3 -m http.server 8091 --directory public',
   },
   {
     id: 'cron-rhythm-studio',
