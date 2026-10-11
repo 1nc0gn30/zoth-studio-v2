@@ -848,6 +848,8 @@ export const microTools = [
     stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
     depay: true,
     description: '100% in-browser L-System fractal synthesizer, turtle geometry studio, and physical CNC pen-plotter G-Code and SVG vector exporter with dual Stripe + Solana checkout rails.',
+    localPort: 8080,
+    localUrl: 'http://127.0.0.1:8080',
     version: '2.5.0',
     pull: 'git clone https://github.com/1nc0gn30/cyber-turtle-studio.git && cd cyber-turtle-studio && python3 -m http.server 8080 --directory public',
   },
