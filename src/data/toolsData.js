@@ -678,7 +678,11 @@ export const microTools = [
     localPort: 8113,
     localUrl: 'http://127.0.0.1:8113',
     liveUrl: 'https://shopify.nullai.tech',
-    version: '1.0.0',
+    priceUsd: '19',
+    priceCents: 1900,
+    stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
+    depay: true,
+    version: '2.5.0',
     pull: 'git clone https://github.com/1nc0gn30/shopify-connector.git && cd shopify-connector && ./bin/shopify-connector serve --port 8113',
   },
   {
