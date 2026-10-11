@@ -15,7 +15,8 @@
     "test:routes": "node scripts/test-routes.mjs",
     "preview": "vite preview",
     "zoth": "node ./bin/zoth.js",
-    "up": "node ./bin/zoth.js up"
+    "up": "node ./bin/zoth.js up",
+    "serve": "node server/serve.mjs --port 3000"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
