@@ -5,6 +5,7 @@ const gold = '#D4AF37';
 const SHORTCUTS = [
   ['Ctrl / ⌘ + K', 'Search every page and tool (command palette)'],
   ['Ctrl + ~', 'Open the 21-terminal Swarm matrix'],
+  ['/', 'Focus search (Tools catalog)'],
   ['?', 'Show this list'],
   ['Esc', 'Close dialogs and palettes'],
   ['Tab / Shift + Tab', 'Move between controls'],
