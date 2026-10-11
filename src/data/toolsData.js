@@ -400,8 +400,8 @@ export const microTools = [
     stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
     depay: true,
     description: 'Autonomous biometric laptop perimeter defense, WiFi X-Ray RF tomography, USB tripwire guard, and thermal FLIR optics with dual Stripe + Solana checkout rails.',
-    version: '2.4.0',
-    pull: 'git clone https://github.com/1nc0gn30/anderson-security-sentinel.git && cd anderson-security-sentinel && python3 engine/sentinel.py',
+    version: '2.5.0',
+    pull: 'git clone https://github.com/1nc0gn30/anderson-security-sentinel.git && cd anderson-security-sentinel && python3 -m http.server 8080 --directory public',
   },
   {
     id: 'badge3d-coin-generator',
