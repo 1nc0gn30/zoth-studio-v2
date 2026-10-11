@@ -605,8 +605,8 @@ export const microTools = [
     priceCents: 1900,
     stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
     depay: true,
-    version: '1.0.0',
-    pull: 'git clone https://github.com/1nc0gn30/etsy-connector.git && cd etsy-connector && ./bin/etsy-connector serve --port 8108',
+    version: '2.5.0',
+    pull: 'git clone https://github.com/1nc0gn30/etsy-connector.git && cd etsy-connector && python3 -m http.server 8108 --directory public',
   },
   {
     id: 'mcp-lens',
