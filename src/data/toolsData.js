@@ -663,7 +663,7 @@ export const microTools = [
     priceCents: 1900,
     stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
     depay: true,
-    version: '1.0.0',
+    version: '2.5.0',
     pull: 'git clone https://github.com/1nc0gn30/agent-gods-eye.git && cd agent-gods-eye && ./bin/agent-gods-eye serve --port 8112',
   },
   {
