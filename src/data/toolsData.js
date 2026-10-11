@@ -690,7 +690,7 @@ export const microTools = [
     name: 'Digital Asset Forge',
     repo: 'digital-asset-forge',
     category: 'Commerce & MCP',
-    executionType: 'local_cli',
+    executionType: 'browser',
     github: 'https://github.com/1nc0gn30/digital-asset-forge',
     description: 'High-Res 300 DPI multi-ratio wall art pack generator (2:3, 3:4, 4:5, 11:14, ISO) for Etsy & Shopify digital downloads (98% margin) with 20MB multi-zip splitting.',
     localPort: 8118,
