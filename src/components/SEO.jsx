@@ -6,7 +6,7 @@ import { siteConfig, getRouteMeta, generateSchemaGraph } from '../config/site';
  * Dynamic SEO, AEO, and AX Component for Zoth Studio v2
  * Updates runtime document head metadata and injects Schema.org JSON-LD graph.
  */
-export default function SEO({ title: customTitle, description: customDescription, path: customPath }) {
+export default function SEO({ title: customTitle, description: customDescription, path: customPath, noindex = false }) {
   const location = useLocation();
   const currentPath = customPath || location.pathname;
   const routeMeta = getRouteMeta(currentPath);
@@ -34,7 +34,7 @@ export default function SEO({ title: customTitle, description: customDescription
     setMetaTag('name', 'description', pageDescription);
     setMetaTag('name', 'keywords', routeMeta.keywords || siteConfig.keywords.join(', '));
     setMetaTag('name', 'author', siteConfig.author);
-    setMetaTag('name', 'robots', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1');
+    setMetaTag('name', 'robots', noindex ? 'noindex, follow' : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1');
 
     // 3. Open Graph Tags
     setMetaTag('property', 'og:title', pageTitle);
