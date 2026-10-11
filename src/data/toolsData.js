@@ -417,8 +417,10 @@ export const microTools = [
     priceCents: 1900,
     stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
     depay: true,
+    localPort: 8084,
+    localUrl: 'http://127.0.0.1:8084',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/badge3d-coin-generator.git && cd badge3d-coin-generator && python3 -m http.server 8080 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/badge3d-coin-generator.git && cd badge3d-coin-generator && python3 -m http.server 8084 --directory public',
   },
   {
     id: 'robots-txt-auditor',
