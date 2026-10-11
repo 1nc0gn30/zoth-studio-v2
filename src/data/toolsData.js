@@ -624,8 +624,8 @@ export const microTools = [
     priceCents: 1900,
     stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
     depay: true,
-    version: '1.0.0',
-    pull: 'git clone https://github.com/1nc0gn30/mcp-lens.git && cd mcp-lens && ./bin/mcp-lens serve --port 8109',
+    version: '2.5.0',
+    pull: 'git clone https://github.com/1nc0gn30/mcp-lens.git && cd mcp-lens && python3 -m http.server 8109 --directory public',
   },
   {
     id: 'agent-budget-sentinel',
