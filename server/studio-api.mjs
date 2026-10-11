@@ -203,11 +203,36 @@ function send(res, status, payload) {
   res.end(body);
 }
 
+const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
+
+export function isLocalOrigin(origin) {
+  if (!origin) return true;
+  try {
+    const u = new URL(origin);
+    return (u.protocol === 'http:' || u.protocol === 'https:') && LOCAL_HOSTS.has(u.hostname);
+  } catch {
+    return false;
+  }
+}
+
+export function isLocalRequest(req) {
+  const host = String(req.headers?.host || '').replace(/:\d+$/, '').toLowerCase();
+  if (host && !LOCAL_HOSTS.has(host)) return false;
+  return isLocalOrigin(req.headers?.origin);
+}
+
 export function studioMiddleware() {
   return async (req, res, next) => {
     const url = new URL(req.url, 'http://127.0.0.1');
     if (!url.pathname.startsWith('/api/studio') && !url.pathname.startsWith('/api/swarm')) {
       next();
+      return;
+    }
+
+    // Writes (launch terminals, run the local model, send via bridge) only from
+    // local pages: blocks CSRF from any website and DNS-rebinding hosts.
+    if (req.method !== 'GET' && req.method !== 'HEAD' && !isLocalRequest(req)) {
+      send(res, 403, { error: 'Cross-origin request blocked.' });
       return;
     }
 
