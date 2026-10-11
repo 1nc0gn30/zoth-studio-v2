@@ -750,7 +750,11 @@ export const microTools = [
     localPort: 8117,
     localUrl: 'http://127.0.0.1:8117',
     liveUrl: 'https://pod-smart-router.nullai.tech',
-    version: '1.0.0',
+    priceUsd: '19',
+    priceCents: 1900,
+    stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
+    depay: true,
+    version: '2.5.0',
     pull: 'git clone https://github.com/1nc0gn30/pod-smart-router.git && cd pod-smart-router && ./bin/pod-smart-router server --port 8117',
   },
   {
