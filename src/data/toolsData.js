@@ -908,8 +908,10 @@ export const microTools = [
     stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
     depay: true,
     description: '100% in-browser sacred geometry synthesizer, crop circle agro-glyph CAD generator, procedural Metatron brand media, and AutoCAD DXF, Wavefront OBJ, and vector SVG exporter with dual Stripe + Solana rails.',
+    localPort: 8083,
+    localUrl: 'http://127.0.0.1:8083',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/ufo-sacred-geometry.git && cd ufo-sacred-geometry && python3 -m http.server 8080 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/ufo-sacred-geometry.git && cd ufo-sacred-geometry && python3 -m http.server 8083 --directory public',
   },
   {
     id: 'likeness-desk',
