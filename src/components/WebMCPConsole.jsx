@@ -66,7 +66,7 @@ const SAMPLE_MCP_TOOLS = [
 export default function WebMCPConsole() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const gold = isDark ? '#D4AF37' : '#8A6508';
   const goldSoft = isDark ? '#F5E6AB' : '#8A6A09';
   const goldWash = isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
   const darkPanel = isDark ? '#08080B' : '#0F172A';

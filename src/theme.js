@@ -9,7 +9,7 @@ export const theme = createTheme({
     mode: 'light',
     primary: {
       main: '#D4AF37',
-      dark: '#B8860B',
+      dark: '#8A6508',
       light: '#F5E6AB',
       contrastText: '#101828',
     },
@@ -103,7 +103,7 @@ export const theme = createTheme({
           textTransform: 'uppercase',
           letterSpacing: '0.14em',
           fontWeight: 800,
-          color: '#B8860B',
+          color: '#8A6508',
           marginBottom: '6px',
           display: 'block',
         },
@@ -311,7 +311,7 @@ export const theme = createTheme({
             transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
           },
           '&:hover': {
-            color: '#B8860B',
+            color: '#8A6508',
             '&::after': {
               transform: 'scaleX(1)',
             },

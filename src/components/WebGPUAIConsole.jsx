@@ -39,7 +39,7 @@ const PRESET_PROMPTS = [
 export default function WebGPUAIConsole() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const gold = isDark ? '#D4AF37' : '#8A6508';
   const goldSoft = isDark ? '#F5E6AB' : '#8A6A09';
   const goldWash = isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
   const darkPanel = isDark ? '#08080B' : '#0F172A';
@@ -344,7 +344,7 @@ export default function WebGPUAIConsole() {
             </Box>
 
             <Tooltip title={copied ? 'Copied Output!' : 'Copy Output'}>
-              <IconButton size="small" onClick={handleCopyOutput} sx={{ color: gold }}>
+              <IconButton aria-label="Copy to clipboard" size="small" onClick={handleCopyOutput} sx={{ color: gold }}>
                 <ContentCopyIcon sx={{ fontSize: '16px !important' }} />
               </IconButton>
             </Tooltip>

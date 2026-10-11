@@ -1728,7 +1728,7 @@ export default function BridgesPage() {
                 DAEMON OUTPUT
               </Button>
               <Tooltip title={copied ? 'Copied to Clipboard!' : 'Copy Envelope JSON'}>
-                <IconButton
+                <IconButton aria-label="Copy to clipboard"
                   size="small"
                   onClick={handleCopyLedger}
                   sx={{

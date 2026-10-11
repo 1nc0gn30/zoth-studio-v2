@@ -79,7 +79,7 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
   const { isLocal } = useSovereignRuntime();
   const { status } = useStudioStatus();
 
-  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const gold = isDark ? '#D4AF37' : '#8A6508';
   const goldText = isDark ? '#F5E6AB' : '#715507';
   const voidDark = isDark ? '#08080B' : '#FFFFFF';
   const cardSurface = isDark ? '#0C0D16' : '#FFFFFF';
@@ -809,7 +809,7 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
 
                     <Stack direction="row" spacing={0.5}>
                       <Tooltip title="Copy transcript logs">
-                        <IconButton size="small" onClick={() => handleCopyLogs(agent.id)} sx={{ p: 0.4, color: isDark ? '#9CA3AF' : '#475467' }}>
+                        <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopyLogs(agent.id)} sx={{ p: 0.4, color: isDark ? '#9CA3AF' : '#475467' }}>
                           {state.copied ? <CheckIcon sx={{ fontSize: 14, color: '#34D399' }} /> : <ContentCopyIcon sx={{ fontSize: 14 }} />}
                         </IconButton>
                       </Tooltip>

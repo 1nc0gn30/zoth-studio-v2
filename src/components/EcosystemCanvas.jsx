@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles';
 export default function EcosystemCanvas() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const gold = isDark ? '#D4AF37' : '#8A6508';
   const canvasRef = useRef(null);
 
   useEffect(() => {

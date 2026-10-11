@@ -121,7 +121,7 @@ export default function AgoraPage() {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
 
-  const gold = dark ? '#D4AF37' : '#B8860B';
+  const gold = dark ? '#D4AF37' : '#8A6508';
   const cardBg = dark ? '#0E111B' : '#FFFFFF';
   const borderCol = dark ? 'rgba(212,175,55,0.22)' : 'rgba(184,134,11,0.25)';
   const textMuted = dark ? '#9CA3AF' : '#6B7280';
@@ -1149,7 +1149,7 @@ export default function AgoraPage() {
             <Typography variant="h6" sx={{ fontWeight: 800, color: dark ? '#FFFFFF' : '#111827' }}>
               SimpleX Sovereign Auth
             </Typography>
-            <IconButton onClick={() => setQrModalOpen(false)} size="small" sx={{ color: textMuted }}>
+            <IconButton aria-label="Close" onClick={() => setQrModalOpen(false)} size="small" sx={{ color: textMuted }}>
               <CloseIcon />
             </IconButton>
           </Box>
@@ -1234,7 +1234,7 @@ export default function AgoraPage() {
               boxShadow: '0 20px 50px rgba(0,0,0,0.9)',
             }}
           >
-            <IconButton
+            <IconButton aria-label="Close"
               onClick={() => setPaywallOpen(false)}
               sx={{ position: 'absolute', top: 12, right: 12, color: '#9CA3AF' }}
             >
@@ -1242,7 +1242,7 @@ export default function AgoraPage() {
             </IconButton>
 
             <Typography variant="h5" sx={{ fontWeight: 800, color: '#FFFFFF', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-              <span style={{ color: '#D4AF37' }}>★</span> Zoth Agora Sovereign Pass
+              <span style={{ color: dark ? '#D4AF37' : '#8A6508' }}>★</span> Zoth Agora Sovereign Pass
             </Typography>
             <Typography variant="body2" sx={{ color: '#9CA3AF', mb: 2 }}>
               Permanent lifetime access. Unlocks raw neuro-memory engrams, multi-agent dispatch pipelines, and high-res art master downloads.
@@ -1272,7 +1272,7 @@ export default function AgoraPage() {
               href="https://depay.com/pay?integration=428790dd-7ad1-407c-8ecf-c048c77a4cb8&receiver=GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK&amount=19"
               target="_blank"
               rel="noopener"
-              sx={{ borderColor: '#D4AF37', color: '#D4AF37', fontWeight: 700, py: 1, mb: 2 }}
+              sx={{ borderColor: '#D4AF37', color: dark ? '#D4AF37' : '#8A6508', fontWeight: 700, py: 1, mb: 2 }}
             >
               ⚡ Tip via Solana / Crypto (DePay)
             </Button>
@@ -1290,7 +1290,7 @@ export default function AgoraPage() {
                   onChange={(e) => setLicenseInput(e.target.value)}
                   sx={{ '& .MuiOutlinedInput-root': { fontFamily: mono, fontSize: '0.85rem' } }}
                 />
-                <Button variant="outlined" onClick={activatePro} sx={{ borderColor: '#D4AF37', color: '#D4AF37' }}>
+                <Button variant="outlined" onClick={activatePro} sx={{ borderColor: '#D4AF37', color: dark ? '#D4AF37' : '#8A6508' }}>
                   Activate
                 </Button>
               </Box>

@@ -526,7 +526,7 @@ ${oracleResult.faq.a}`;
 
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ flexWrap: 'wrap', width: { xs: '100%', sm: 'auto' } }}>
                 <Tooltip title={copiedResponse ? 'Copied Specification!' : 'Copy Specification'}>
-                  <IconButton
+                  <IconButton aria-label="Copy to clipboard"
                     size="small"
                     onClick={handleCopyTransmission}
                     sx={{

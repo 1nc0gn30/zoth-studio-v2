@@ -36,7 +36,7 @@ function loadPipeline() {
 export default function ZothAIAssistant({ toolName, actions = [], accent = '#D4AF37' }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const gold = isDark ? '#D4AF37' : '#8A6508';
   const [input, setInput] = useState('');
   const [status, setStatus] = useState('idle'); // idle | loading | ready | error | running
   const [log, setLog] = useState([]);

@@ -69,7 +69,7 @@ export default function Navbar({ mode, onToggleTheme }) {
   const brandColor = dark ? '#F5E6AB' : '#101828';
   const navIdle = dark ? '#9CA3AF' : '#475467';
   const navActive = dark ? '#D4AF37' : '#B8860B';
-  const goldAccent = dark ? '#D4AF37' : '#B8860B';
+  const goldAccent = dark ? '#D4AF37' : '#8A6508';
   const { isLocal, hasWebGPU, badgeLabel, badgeColor, badgeTooltip } = useSovereignRuntime();
 
   // Global Keyboard Shortcuts: ⌘K for Command Palette, Ctrl+~ for Swarm Daemon
@@ -1685,7 +1685,7 @@ export default function Navbar({ mode, onToggleTheme }) {
               sx={{ fontFamily: mono, fontSize: '0.65rem', fontWeight: 800, bgcolor: dark ? 'rgba(212,175,55,0.15)' : '#FEF9E7', color: goldAccent }}
             />
           </Box>
-          <IconButton onClick={() => setSwarmDaemonOpen(false)} sx={{ color: dark ? '#9CA3AF' : '#475467' }}>
+          <IconButton aria-label="Close" onClick={() => setSwarmDaemonOpen(false)} sx={{ color: dark ? '#9CA3AF' : '#475467' }}>
             <CloseIcon />
           </IconButton>
         </Box>
