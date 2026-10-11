@@ -73,7 +73,16 @@ function startInternalServer() {
       let pathname = decodeURIComponent(parsedUrl.pathname);
 
       // CORS & Security headers
-      res.setHeader('Access-Control-Allow-Origin', '*');
+      const reqOrigin = req.headers.origin || '';
+      let originOk = !reqOrigin;
+      try { const o = new URL(reqOrigin); originOk = originOk || (['http:', 'https:'].includes(o.protocol) && ['localhost', '127.0.0.1', '[::1]'].includes(o.hostname)); } catch (_) {}
+      res.setHeader('Access-Control-Allow-Origin', originOk && reqOrigin ? reqOrigin : 'http://127.0.0.1');
+      res.setHeader('Vary', 'Origin');
+      if (req.method !== 'GET' && req.method !== 'HEAD' && req.method !== 'OPTIONS' && !originOk) {
+        res.writeHead(403, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'cross-origin request blocked' }));
+        return;
+      }
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -151,7 +160,10 @@ function startInternalServer() {
       }
 
       // Static File Serving with SPA Fallback
-      let filePath = path.join(serveRoot, pathname);
+      let filePath = path.resolve(serveRoot, '.' + path.posix.normalize('/' + pathname));
+      if (filePath !== serveRoot && !filePath.startsWith(serveRoot + path.sep)) {
+        res.writeHead(403); res.end('Forbidden'); return;
+      }
       if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
         filePath = path.join(filePath, 'index.html');
       }
@@ -237,6 +249,15 @@ function createWindow(port) {
     }
   });
 
+  // Keep the Studio window on the local Studio origin; web links go to the browser.
+  mainWindow.webContents.on('will-navigate', (event, url) => {
+    const local = /^(file:|https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?\/)/i.test(url);
+    if (!local) {
+      event.preventDefault();
+      if (/^https?:\/\//i.test(url)) shell.openExternal(url);
+    }
+  });
+  mainWindow.webContents.on('will-attach-webview', (event) => event.preventDefault());
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url);
     return { action: 'deny' };
