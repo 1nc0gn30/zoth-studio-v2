@@ -645,7 +645,7 @@ export const microTools = [
     name: 'Gelato Connector',
     repo: 'gelato-connector',
     category: 'Commerce & MCP',
-    executionType: 'local_cli',
+    executionType: 'browser',
     github: 'https://github.com/1nc0gn30/gelato-connector',
     description: 'Autonomous zero-dependency Gelato Open API v2 connector, localized 32-country print routing optimizer, multi-currency margin engine, and Antigravity MCP suite.',
     localPort: 8116,
