@@ -818,9 +818,10 @@ export const microTools = [
     price: '$19',
     priceCents: 1900,
     stripeUrl: 'https://buy.stripe.com/7sI7sA8hM2X8eFG8ww',
-    description: '100% in-browser L-System fractal synthesizer, turtle geometry studio, and CNC pen-plotter G-Code and SVG vector exporter with dual checkout rails.',
-    version: '1.0.0',
-    pull: 'git clone https://github.com/1nc0gn30/cyber-turtle-studio.git && cd cyber-turtle-studio && python3 -m cyber_turtle',
+    depay: true,
+    description: '100% in-browser L-System fractal synthesizer, turtle geometry studio, and physical CNC pen-plotter G-Code and SVG vector exporter with dual Stripe + Solana checkout rails.',
+    version: '2.5.0',
+    pull: 'git clone https://github.com/1nc0gn30/cyber-turtle-studio.git && cd cyber-turtle-studio && python3 -m http.server 8080 --directory public',
   },
   {
     id: 'datamosh-glitch-studio',
