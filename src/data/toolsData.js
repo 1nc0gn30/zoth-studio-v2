@@ -615,7 +615,7 @@ export const microTools = [
     name: 'Shopify Connector',
     repo: 'shopify-connector',
     category: 'Commerce & MCP',
-    executionType: 'local_cli',
+    executionType: 'browser',
     github: 'https://github.com/1nc0gn30/shopify-connector',
     description: 'Shopify GraphQL Admin API & POD sync engine with 1-click Etsy listing transpiler, net profit simulator, and Antigravity MCP suite.',
     localPort: 8113,
