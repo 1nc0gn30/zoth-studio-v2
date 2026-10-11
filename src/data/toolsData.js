@@ -205,11 +205,11 @@ export const microTools = [
     category: 'Autonomous Web',
     executionType: 'browser',
     github: 'https://github.com/1nc0gn30/cwv-speed-engine',
-    description: '100% in-browser Core Web Vitals diagnostic engine, client AST speed transformer, PWA manifest builder, and dual Stripe + Solana checkout rails.',
+    description: '100% in-browser Core Web Vitals diagnostic engine, client DOM AST speed transformer, PWA manifest builder, tachometer gauge brand media, and dual Stripe + Solana checkout rails.',
     liveUrl: 'https://cwv-speed-studio.netlify.app',
     priceUsd: '19',
     stripeUrl: 'https://buy.stripe.com/00w14mdQxgWA3Ha5Sgfw40H',
-    version: '2.1.0',
+    version: '2.5.0',
     pull: 'git clone https://github.com/1nc0gn30/cwv-speed-engine.git && cd cwv-speed-engine && python3 -m http.server 8080 --directory public',
   },
   {
