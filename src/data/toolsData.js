@@ -756,9 +756,9 @@ export const microTools = [
     github: 'https://github.com/1nc0gn30/datamosh-glitch-studio',
     liveUrl: 'https://datamosh-glitch-studio.netlify.app',
     priceUsd: '19',
-    description: 'Parametric video datamoshing, I-frame drop corruption, delta-frame duplication, and glitch art synthesizer with FastMCP stdio server.',
-    version: '1.0.0',
-    pull: 'git clone https://github.com/1nc0gn30/datamosh-glitch-studio.git && cd datamosh-glitch-studio && python3 -m datamosh',
+    description: '100% in-browser parametric video datamosh synthesizer, H.264 I-frame drop corruption, CRT scanlines, and live camera mosh buffer with dual checkout rails.',
+    version: '1.2.0',
+    pull: 'git clone https://github.com/1nc0gn30/datamosh-glitch-studio.git && cd datamosh-glitch-studio && pip install -e .',
   },
   {
     id: 'nexus-3d-scene-studio',
