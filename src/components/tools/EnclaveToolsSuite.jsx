@@ -254,7 +254,7 @@ export function AdytumPlannerTool() {
               <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: theme.palette.mode === 'dark' ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 npx zoth pull adytum-alchemist-ai-workflow
               </Typography>
-              <IconButton size="small" onClick={() => handleCopyCmd('npx zoth pull adytum-alchemist-ai-workflow')} sx={{ color: gold(theme), ml: 1, p: 0.5 }}>
+              <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopyCmd('npx zoth pull adytum-alchemist-ai-workflow')} sx={{ color: gold(theme), ml: 1, p: 0.5 }}>
                 <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
               </IconButton>
             </Box>
@@ -2990,7 +2990,7 @@ export function AgentFlightRecorderTool() {
       <Paper sx={{ p: 2.5, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
           <Stack direction="row" spacing={1.5} alignItems="center">
-            <IconButton
+            <IconButton aria-label="Play"
               onClick={() => setIsPlaying(!isPlaying)}
               sx={{
                 bgcolor: gold(theme),

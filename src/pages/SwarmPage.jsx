@@ -80,7 +80,7 @@ const ZERO_CLOUD_BADGES = [
 export default function SwarmPage() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const gold = isDark ? '#D4AF37' : '#8A6508';
   const goldSoft = isDark ? '#F5E6AB' : '#8A6A09';
   const goldBorder = isDark ? 'rgba(212,175,55,0.28)' : '#E2CE82';
   const voidBg = isDark ? '#08080B' : '#FFFFFF';

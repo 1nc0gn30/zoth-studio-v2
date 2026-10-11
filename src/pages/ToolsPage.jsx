@@ -43,7 +43,7 @@ export default function ToolsPage() {
   const [expanded, setExpanded] = useState(() => new Set());
 
   const gold = {
-    accent: isDark ? '#D4AF37' : '#B8860B',
+    accent: isDark ? '#D4AF37' : '#8A6508',
     soft: isDark ? '#F5E6AB' : '#8A6A09',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
   };
@@ -81,7 +81,7 @@ export default function ToolsPage() {
         <Box sx={{ position: 'relative', mb: 4, pt: 1 }}>
           <GlowLine
             height={3}
-            color={isDark ? '#D4AF37' : '#B8860B'}
+            color={isDark ? '#D4AF37' : '#8A6508'}
             glowColor={isDark ? 'rgba(212,175,55,0.45)' : 'rgba(184,134,11,0.35)'}
           />
           <HeroItem>
@@ -246,7 +246,7 @@ export default function ToolsPage() {
         <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
           <Box sx={{ maxWidth: 740 }}>
             <Chip
-              icon={<RocketLaunchIcon sx={{ color: isDark ? '#FDD663 !important' : '#B8860B !important' }} />}
+              icon={<RocketLaunchIcon sx={{ color: isDark ? '#FDD663 !important' : '#8A6508 !important' }} />}
               label="SOVEREIGN BARE-METAL DISTRIBUTION"
               size="small"
               sx={{
@@ -610,7 +610,7 @@ export default function ToolsPage() {
                   <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: '#38BDF8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     npx zoth pull &lt;tool-id&gt;
                   </Typography>
-                  <IconButton size="small" onClick={() => handleCopy('npx zoth pull adytum-alchemist-ai-workflow', 'cli-funnel')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
+                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('npx zoth pull adytum-alchemist-ai-workflow', 'cli-funnel')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
                     <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
                   </IconButton>
                 </Box>
@@ -640,7 +640,7 @@ export default function ToolsPage() {
                   <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: gold.accent, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     git clone https://github.com/NullAITech/zoth-studio-v2.git
                   </Typography>
-                  <IconButton size="small" onClick={() => handleCopy('git clone https://github.com/NullAITech/zoth-studio-v2.git', 'studio-funnel')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
+                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('git clone https://github.com/NullAITech/zoth-studio-v2.git', 'studio-funnel')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
                     <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
                   </IconButton>
                 </Box>
@@ -673,7 +673,7 @@ export default function ToolsPage() {
                   <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: '#34D399', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     zoth-os-install --bare-metal
                   </Typography>
-                  <IconButton size="small" onClick={() => handleCopy('zoth-os-install --bare-metal', 'os-funnel')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
+                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('zoth-os-install --bare-metal', 'os-funnel')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
                     <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
                   </IconButton>
                 </Box>

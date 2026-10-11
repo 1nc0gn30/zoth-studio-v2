@@ -285,7 +285,7 @@ export default function AirGapToolLockout({
         </Box>
 
         {/* Funnel Selection Grid: Zoth OS vs Git Micro-Repo */}
-        <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.8rem', color: isDark ? '#D4AF37' : '#B8860B', mb: 2, letterSpacing: '0.06em' }}>
+        <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.8rem', color: isDark ? '#D4AF37' : '#8A6508', mb: 2, letterSpacing: '0.06em' }}>
           CHOOSE YOUR SOVEREIGN DEPLOYMENT PATH:
         </Typography>
 

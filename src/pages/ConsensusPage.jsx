@@ -541,7 +541,7 @@ export default function ConsensusPage() {
       ctx.arc(node.x, node.y, 22, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.strokeStyle = isMalicious ? '#EF4444' : (isDark ? node.color : (idx === 0 ? '#B8860B' : node.color));
+      ctx.strokeStyle = isMalicious ? '#EF4444' : (isDark ? node.color : (idx === 0 ? '#8A6508' : node.color));
       ctx.lineWidth = 2.5;
       ctx.stroke();
       ctx.shadowBlur = 0;
@@ -1135,7 +1135,7 @@ export default function ConsensusPage() {
                     ⏭ Step Phase ({bftPhase}/4)
                   </Button>
 
-                  <IconButton
+                  <IconButton aria-label="Reset Consensus State"
                     size="small"
                     onClick={() => {
                       setBftPhase(0);
@@ -1757,7 +1757,7 @@ export default function ConsensusPage() {
                         </Typography>
                       </Box>
                       <Tooltip title={copiedHash ? 'Hash Copied!' : 'Copy SHA-256'}>
-                        <IconButton size="small" onClick={copySha256} sx={{ color: gold.accent }}>
+                        <IconButton aria-label="Copy to clipboard" size="small" onClick={copySha256} sx={{ color: gold.accent }}>
                           {copiedHash ? <CheckCircleIcon sx={{ fontSize: '1rem', color: isDark ? '#34D399' : '#059669' }} /> : <ContentCopyIcon sx={{ fontSize: '1rem' }} />}
                         </IconButton>
                       </Tooltip>

@@ -2644,7 +2644,7 @@ export default function MemoryPage() {
               LUCY NEURAL SNAPSHOT // SERIALIZATION
             </Typography>
           </Box>
-          <IconButton onClick={() => setIsExportDialogOpen(false)} sx={{ color: 'text.secondary' }}>
+          <IconButton aria-label="Close" onClick={() => setIsExportDialogOpen(false)} sx={{ color: 'text.secondary' }}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>

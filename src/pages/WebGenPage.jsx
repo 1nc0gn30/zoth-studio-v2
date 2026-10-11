@@ -1777,7 +1777,7 @@ function getAstTreeData(templateName, frameworkId) {
 export default function WebGenPage() {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
-  const gold = dark ? '#D4AF37' : '#B8860B';
+  const gold = dark ? '#D4AF37' : '#8A6508';
   const goldLight = dark ? '#F5E6AB' : '#8A6A09';
   const goldBg = dark ? 'rgba(212,175,55,0.12)' : '#FEF9E7';
   const surface = theme.palette.background.paper;
@@ -2285,7 +2285,7 @@ wait $PID`;
             <Stack spacing={1.5} sx={{ mb: 2.5 }}>
               {[
                 { name: 'Planner Alpha', status: 'RUNNING', job: 'Task Routing & DAG Calibration', color: dark ? '#10B981' : '#059669' },
-                { name: 'Coder Omega', status: 'SYNTHESIZING', job: 'AST Generation & Micro-Transpilation', color: dark ? '#D4AF37' : '#B8860B' },
+                { name: 'Coder Omega', status: 'SYNTHESIZING', job: 'AST Generation & Micro-Transpilation', color: dark ? '#D4AF37' : '#8A6508' },
                 { name: 'Auditor Sigma', status: 'VERIFYING', job: 'Zero-Egress Seal & Invariant Verification', color: dark ? '#38BDF8' : '#0284C7' }
               ].map((ag, i) => (
                 <Box key={i} sx={{ p: 1.5, bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2 }}>
@@ -2618,7 +2618,7 @@ wait $PID`;
                 <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: dark ? '#38BDF8' : '#0284C7' }}>
                   git clone https://github.com/NullAITech/zoth-webgen.git
                 </Typography>
-                <IconButton size="small" onClick={() => handleCopyText('git clone https://github.com/NullAITech/zoth-webgen.git', 'git clone command')} sx={{ color: gold, p: 0.4 }}>
+                <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopyText('git clone https://github.com/NullAITech/zoth-webgen.git', 'git clone command')} sx={{ color: gold, p: 0.4 }}>
                   <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
                 </IconButton>
               </Box>
@@ -2709,7 +2709,7 @@ wait $PID`;
                     <Typography variant="caption" sx={{ color: textSecondary, fontFamily: mono, fontSize: '0.68rem', fontWeight: 700 }}>
                       LIVE DYNAMIC CLI COMMAND (UPDATES WITH CONFIG):
                     </Typography>
-                    <IconButton size="small" onClick={() => handleCopyText(dynamicCliCommand, 'CLI command')} sx={{ color: gold, p: 0.2 }}>
+                    <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopyText(dynamicCliCommand, 'CLI command')} sx={{ color: gold, p: 0.2 }}>
                       <ContentCopyIcon sx={{ fontSize: '0.8rem' }} />
                     </IconButton>
                   </Box>
@@ -2751,7 +2751,7 @@ wait $PID`;
                     <Typography variant="caption" sx={{ color: textSecondary, fontFamily: mono, fontSize: '0.68rem', fontWeight: 700 }}>
                       CLAUDE / CURSOR / HERMES CONFIG SNIPPET:
                     </Typography>
-                    <IconButton size="small" onClick={() => handleCopyText(mcpConfigSnippet, 'MCP config')} sx={{ color: gold, p: 0.2 }}>
+                    <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopyText(mcpConfigSnippet, 'MCP config')} sx={{ color: gold, p: 0.2 }}>
                       <ContentCopyIcon sx={{ fontSize: '0.8rem' }} />
                     </IconButton>
                   </Box>
@@ -3409,7 +3409,7 @@ wait $PID`;
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, flexWrap: 'wrap' }}>
               {/* Procedural Web Audio SFX Toggle */}
               <Tooltip title={sfxEnabled ? "Procedural Web Audio SFX Active (Click to Mute)" : "Procedural Web Audio SFX Muted (Click to Enable)"}>
-                <IconButton
+                <IconButton aria-label="Play"
                   size="small"
                   onClick={() => {
                     setSfxEnabled(!sfxEnabled);

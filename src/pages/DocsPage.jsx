@@ -156,7 +156,7 @@ function CodeSnippet({ title, code, language = 'bash' }) {
 export default function DocsPage() {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
-  const gold = dark ? '#D4AF37' : '#B8860B';
+  const gold = dark ? '#D4AF37' : '#8A6508';
   const goldLight = dark ? '#F5E6AB' : '#715507';
   const goldBg = dark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
   const voidDark = '#08080B';
@@ -760,7 +760,7 @@ Runs local invariant verification before staging tools.`
                   >
                     QUICK INITIALIZATION
                   </Typography>
-                  <IconButton
+                  <IconButton aria-label="Copy to clipboard"
                     size="small"
                     onClick={() => handleCopy('npm run zoth -- init', 'quick-install')}
                     sx={{ color: '#D4AF37', '&:hover': { color: '#FFFFFF' } }}
@@ -1040,7 +1040,7 @@ npm run dev`}
                               }}
                             >
                               <span>$ {tool.pull}</span>
-                              <IconButton
+                              <IconButton aria-label="Copy to clipboard"
                                 size="small"
                                 onClick={() => handleCopy(tool.pull, tool.id)}
                                 sx={{ color: '#D4AF37', p: 0.5, '&:hover': { color: '#FFFFFF' } }}
@@ -1539,7 +1539,7 @@ npm run preview`}
                         </Typography>
                       </Box>
 
-                      <IconButton
+                      <IconButton aria-label="Copy to clipboard"
                         size="small"
                         onClick={() => handleCopy(terminalAuditLogs[terminalTab], 'audit-terminal-copy')}
                         sx={{ color: gold, '&:hover': { color: '#FFFFFF' } }}

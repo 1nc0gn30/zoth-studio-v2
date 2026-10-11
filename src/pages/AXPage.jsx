@@ -936,7 +936,7 @@ export default function AXPage() {
               <span>-s -H &quot;User-Agent: {selectedAgent}&quot; http://127.0.0.1:3000{selectedEndpoint}</span>
             </Box>
             <Tooltip title="Copy curl command">
-              <IconButton
+              <IconButton aria-label="Copy to clipboard"
                 size="small"
                 onClick={() => {
                   navigator.clipboard.writeText(`curl -s -H "User-Agent: ${selectedAgent}" http://127.0.0.1:3000${selectedEndpoint}`);

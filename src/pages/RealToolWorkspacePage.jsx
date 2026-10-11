@@ -810,7 +810,7 @@ export default function RealToolWorkspacePage() {
                   </Typography>
                 </Box>
                 <Tooltip title={copiedMcp ? 'Copied MCP config!' : 'Copy MCP JSON'}>
-                  <IconButton size="small" onClick={() => handleCopy(mcpConfigSnippet, setCopiedMcp)} sx={{ color: gold.accent }}>
+                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy(mcpConfigSnippet, setCopiedMcp)} sx={{ color: gold.accent }}>
                     {copiedMcp ? <CheckIcon sx={{ fontSize: 16 }} /> : <ContentCopyIcon sx={{ fontSize: 16 }} />}
                   </IconButton>
                 </Tooltip>

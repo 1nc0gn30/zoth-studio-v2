@@ -1329,7 +1329,7 @@ export default function HexStrikePage() {
                 <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', color: isDark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   git clone https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal.git &amp;&amp; cd NullAI-HexStrike-AI-Terminal &amp;&amp; python3 hexstrike.py --audit
                 </Typography>
-                <IconButton
+                <IconButton aria-label="Copy to clipboard"
                   size="small"
                   onClick={() => {
                     navigator.clipboard.writeText('git clone https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal.git && cd NullAI-HexStrike-AI-Terminal && python3 hexstrike.py --audit');
@@ -1603,7 +1603,7 @@ export default function HexStrikePage() {
             fontFamily: mono
           }}
           action={
-            <IconButton size="small" onClick={copyHashToClipboard} sx={{ color: gold.accent }}>
+            <IconButton aria-label="Copy to clipboard" size="small" onClick={copyHashToClipboard} sx={{ color: gold.accent }}>
               {copiedHash ? <CheckIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
             </IconButton>
           }

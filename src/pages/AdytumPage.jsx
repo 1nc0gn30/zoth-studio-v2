@@ -501,7 +501,7 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
           sx={{
             fontFamily: mono,
             fontSize: '0.64rem',
-            color: isDark ? '#F5E6AB' : '#B8860B',
+            color: isDark ? '#F5E6AB' : '#8A6508',
             fontWeight: 700,
             bgcolor: isDark ? 'rgba(8, 8, 11, 0.88)' : 'rgba(255, 255, 255, 0.92)',
             px: 0.8,
@@ -520,7 +520,7 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
 export function AdytumEngine({ embedded = false }) {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
-  const gold = dark ? '#D4AF37' : '#B8860B';
+  const gold = dark ? '#D4AF37' : '#8A6508';
   const goldLight = dark ? '#F5E6AB' : '#8A6A09';
   const goldBg = dark ? 'rgba(212,175,55,0.12)' : '#FEF9E7';
   const surface = theme.palette.background.paper;
@@ -1142,7 +1142,7 @@ export function AdytumEngine({ embedded = false }) {
               sx={{
                 fontFamily: mono,
                 fontSize: '0.8rem',
-                color: dark ? gold : '#B8860B',
+                color: dark ? gold : '#8A6508',
                 bgcolor: dark ? 'rgba(212,175,55,0.1)' : '#FFFFFF',
                 px: 1,
                 py: 0.25,
@@ -1501,7 +1501,7 @@ export function AdytumEngine({ embedded = false }) {
                 <Typography sx={{ fontFamily: mono, fontSize: '0.8rem', color: dark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git &amp;&amp; cd adytum-alchemist-ai-workflow
                 </Typography>
-                <IconButton
+                <IconButton aria-label="Copy to clipboard"
                   size="small"
                   onClick={() => {
                     navigator.clipboard.writeText('git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git && cd adytum-alchemist-ai-workflow');
@@ -1845,7 +1845,7 @@ export function AdytumEngine({ embedded = false }) {
                     </Box>
                   </Box>
                   <CardContent sx={{ p: 1.5, '&:last-child': { pb: 1.5 } }}>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isCurrent ? (dark ? gold : '#B8860B') : textPrimary, fontSize: '0.88rem', lineHeight: 1.2 }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isCurrent ? (dark ? gold : '#8A6508') : textPrimary, fontSize: '0.88rem', lineHeight: 1.2 }}>
                       {item.name}
                     </Typography>
                     <Typography variant="caption" sx={{ color: dark ? goldLight : '#8A6A09', fontWeight: 700, display: 'block', mt: 0.5, fontSize: '0.72rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
@@ -1915,7 +1915,7 @@ export function AdytumEngine({ embedded = false }) {
                       </Box>
                     </Box>
                     <CardContent sx={{ p: 1.25, '&:last-child': { pb: 1.25 } }}>
-                      <Typography variant="body2" sx={{ fontWeight: 800, color: isCurrent ? (dark ? gold : '#B8860B') : textPrimary, fontSize: '0.82rem', lineHeight: 1.2 }}>
+                      <Typography variant="body2" sx={{ fontWeight: 800, color: isCurrent ? (dark ? gold : '#8A6508') : textPrimary, fontSize: '0.82rem', lineHeight: 1.2 }}>
                         {item.name}
                       </Typography>
                       <Typography variant="caption" sx={{ color: dark ? goldLight : '#8A6A09', fontWeight: 650, display: 'block', mt: 0.25, fontSize: '0.68rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
@@ -2011,7 +2011,7 @@ export function AdytumEngine({ embedded = false }) {
               }}
             />
             <Typography className="section-kicker">Arcana Key {card.key}</Typography>
-            <Typography variant="h5" sx={{ fontWeight: 800, color: dark ? gold : '#B8860B' }}>
+            <Typography variant="h5" sx={{ fontWeight: 800, color: dark ? gold : '#8A6508' }}>
               {card.name}
             </Typography>
             <Typography variant="caption" sx={{ display: 'block', mt: 1, color: textSecondary, fontWeight: 600, lineHeight: 1.5 }}>

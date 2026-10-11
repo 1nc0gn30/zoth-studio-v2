@@ -2102,7 +2102,7 @@ export default function ZothOSPage() {
                     <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {gitCloneCmd}
                     </Typography>
-                    <IconButton
+                    <IconButton aria-label="Copy clone command"
                       size="small"
                       onClick={() => {
                         navigator.clipboard.writeText(gitCloneCmd);
@@ -2185,7 +2185,7 @@ export default function ZothOSPage() {
                     <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#34D399' : '#027A48', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {microRunnerCmd}
                     </Typography>
-                    <IconButton
+                    <IconButton aria-label="Copy micro-runner command"
                       size="small"
                       onClick={() => {
                         navigator.clipboard.writeText(microRunnerCmd);
@@ -2275,7 +2275,7 @@ export default function ZothOSPage() {
               Zoth OS Bootloader Manifest (Signed SHA-256)
             </Typography>
           </Box>
-          <IconButton size="small" onClick={() => setManifestModalOpen(false)} sx={{ color: '#A6A8B4' }}>
+          <IconButton aria-label="Close" size="small" onClick={() => setManifestModalOpen(false)} sx={{ color: '#A6A8B4' }}>
             <CloseIcon fontSize="small" />
           </IconButton>
         </DialogTitle>
