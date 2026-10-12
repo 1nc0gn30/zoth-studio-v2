@@ -121,7 +121,7 @@ export default function AgoraPage() {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
 
-  const gold = dark ? '#D4AF37' : '#B8860B';
+  const gold = dark ? '#D4AF37' : '#8A6508';
   const cardBg = dark ? '#0E111B' : '#FFFFFF';
   const borderCol = dark ? 'rgba(212,175,55,0.22)' : 'rgba(184,134,11,0.25)';
   const textMuted = dark ? '#9CA3AF' : '#6B7280';
@@ -672,7 +672,7 @@ export default function AgoraPage() {
                     <Chip
                       label={`Principle: ${broadcastPrinciple}`}
                       size="small"
-                      sx={{ fontFamily: mono, fontSize: '0.7rem', color: '#38BDF8', bgcolor: 'rgba(56,189,248,0.1)' }}
+                      sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'var(--zs-sky)', bgcolor: 'rgba(56,189,248,0.1)' }}
                     />
                   </Stack>
                 </Box>
@@ -732,7 +732,7 @@ export default function AgoraPage() {
                 </Box>
 
                 {broadcastToast && (
-                  <Typography variant="caption" sx={{ color: '#10B981', fontWeight: 700, mt: 1, display: 'block' }}>
+                  <Typography variant="caption" sx={{ color: 'var(--zs-emerald)', fontWeight: 700, mt: 1, display: 'block' }}>
                     ✔ {broadcastToast}
                   </Typography>
                 )}
@@ -1033,11 +1033,11 @@ export default function AgoraPage() {
                 <Stack spacing={1.5}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant="body2" sx={{ color: textMuted, fontSize: '0.85rem' }}>SimpleX Chat Daemon</Typography>
-                    <Chip label="PORT :5225 ONLINE" size="small" sx={{ bgcolor: 'rgba(16,185,129,0.15)', color: '#10B981', fontWeight: 800, fontSize: '0.65rem' }} />
+                    <Chip label="PORT :5225 ONLINE" size="small" sx={{ bgcolor: 'rgba(16,185,129,0.15)', color: 'var(--zs-emerald)', fontWeight: 800, fontSize: '0.65rem' }} />
                   </Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant="body2" sx={{ color: textMuted, fontSize: '0.85rem' }}>Civilization Hub</Typography>
-                    <Chip label="PORT :9393 ACTIVE" size="small" sx={{ bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8', fontWeight: 800, fontSize: '0.65rem' }} />
+                    <Chip label="PORT :9393 ACTIVE" size="small" sx={{ bgcolor: 'rgba(56,189,248,0.15)', color: 'var(--zs-sky)', fontWeight: 800, fontSize: '0.65rem' }} />
                   </Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant="body2" sx={{ color: textMuted, fontSize: '0.85rem' }}>Neuro-Memory Substrate</Typography>
@@ -1132,7 +1132,7 @@ export default function AgoraPage() {
                           </Typography>
                         </Box>
                       </Box>
-                      <Chip label="ACTIVE" size="small" sx={{ bgcolor: 'rgba(16,185,129,0.1)', color: '#10B981', fontWeight: 800, fontSize: '0.6rem' }} />
+                      <Chip label="ACTIVE" size="small" sx={{ bgcolor: 'rgba(16,185,129,0.1)', color: 'var(--zs-emerald)', fontWeight: 800, fontSize: '0.6rem' }} />
                     </Box>
                   ))}
                 </Stack>
@@ -1149,7 +1149,7 @@ export default function AgoraPage() {
             <Typography variant="h6" sx={{ fontWeight: 800, color: dark ? '#FFFFFF' : '#111827' }}>
               SimpleX Sovereign Auth
             </Typography>
-            <IconButton onClick={() => setQrModalOpen(false)} size="small" sx={{ color: textMuted }}>
+            <IconButton aria-label="Close" onClick={() => setQrModalOpen(false)} size="small" sx={{ color: textMuted }}>
               <CloseIcon />
             </IconButton>
           </Box>
@@ -1234,7 +1234,7 @@ export default function AgoraPage() {
               boxShadow: '0 20px 50px rgba(0,0,0,0.9)',
             }}
           >
-            <IconButton
+            <IconButton aria-label="Close"
               onClick={() => setPaywallOpen(false)}
               sx={{ position: 'absolute', top: 12, right: 12, color: '#9CA3AF' }}
             >
@@ -1242,7 +1242,7 @@ export default function AgoraPage() {
             </IconButton>
 
             <Typography variant="h5" sx={{ fontWeight: 800, color: '#FFFFFF', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-              <span style={{ color: '#D4AF37' }}>★</span> Zoth Agora Sovereign Pass
+              <span style={{ color: dark ? '#D4AF37' : '#8A6508' }}>★</span> Zoth Agora Sovereign Pass
             </Typography>
             <Typography variant="body2" sx={{ color: '#9CA3AF', mb: 2 }}>
               Permanent lifetime access. Unlocks raw neuro-memory engrams, multi-agent dispatch pipelines, and high-res art master downloads.
@@ -1272,7 +1272,7 @@ export default function AgoraPage() {
               href="https://depay.com/pay?integration=428790dd-7ad1-407c-8ecf-c048c77a4cb8&receiver=GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK&amount=19"
               target="_blank"
               rel="noopener"
-              sx={{ borderColor: '#D4AF37', color: '#D4AF37', fontWeight: 700, py: 1, mb: 2 }}
+              sx={{ borderColor: '#D4AF37', color: dark ? '#D4AF37' : '#8A6508', fontWeight: 700, py: 1, mb: 2 }}
             >
               ⚡ Tip via Solana / Crypto (DePay)
             </Button>
@@ -1290,7 +1290,7 @@ export default function AgoraPage() {
                   onChange={(e) => setLicenseInput(e.target.value)}
                   sx={{ '& .MuiOutlinedInput-root': { fontFamily: mono, fontSize: '0.85rem' } }}
                 />
-                <Button variant="outlined" onClick={activatePro} sx={{ borderColor: '#D4AF37', color: '#D4AF37' }}>
+                <Button variant="outlined" onClick={activatePro} sx={{ borderColor: '#D4AF37', color: dark ? '#D4AF37' : '#8A6508' }}>
                   Activate
                 </Button>
               </Box>

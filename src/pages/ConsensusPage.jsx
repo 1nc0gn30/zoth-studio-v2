@@ -343,7 +343,7 @@ export default function ConsensusPage() {
   const up = Boolean(status?.services?.bridge?.up);
 
   const gold = {
-    accent: isDark ? '#D4AF37' : '#B8860B',
+    accent: isDark ? '#D4AF37' : '#8A6508',
     soft: isDark ? '#F5E6AB' : '#8A6A09',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
     border: isDark ? 'rgba(212,175,55,0.30)' : '#E2CE82',
@@ -416,14 +416,14 @@ export default function ConsensusPage() {
     const nodes = [
       { id: 1, name: 'Azoth', role: 'Leader (Proponent)', x: cx, y: 55, color: '#D4AF37' },
       { id: 2, name: 'Kai', role: 'Skeptic (Auditor)', x: cx - 185, y: 265, color: isDark ? '#F87171' : '#DC2626' },
-      { id: 3, name: 'Draco', role: 'Arbitrator (Judge)', x: cx + 185, y: 265, color: isDark ? '#38BDF8' : '#0284C7' },
+      { id: 3, name: 'Draco', role: 'Arbitrator (Judge)', x: cx + 185, y: 265, color: isDark ? '#38BDF8' : '#0369A1' },
       {
         id: 4,
         name: isMaliciousInjected ? 'Adversary (Byzantine)' : 'Lycan (Validator)',
         role: isMaliciousInjected ? 'Equivocating AST Poisoner' : 'Honest Validator',
         x: cx,
         y: 175,
-        color: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669')
+        color: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#047857')
       }
     ];
 
@@ -443,7 +443,7 @@ export default function ConsensusPage() {
       ctx.closePath();
       ctx.fill();
 
-      ctx.strokeStyle = isDark ? '#34D399' : '#059669';
+      ctx.strokeStyle = isDark ? '#34D399' : '#047857';
       ctx.lineWidth = 2.5;
       ctx.stroke();
 
@@ -508,7 +508,7 @@ export default function ConsensusPage() {
           ctx.stroke();
           ctx.setLineDash([]);
         } else {
-          ctx.strokeStyle = isDark ? '#38BDF8' : '#0284C7';
+          ctx.strokeStyle = isDark ? '#38BDF8' : '#0369A1';
           ctx.lineWidth = 2;
           ctx.stroke();
         }
@@ -521,7 +521,7 @@ export default function ConsensusPage() {
           ctx.stroke();
           ctx.setLineDash([]);
         } else {
-          ctx.strokeStyle = isDark ? '#34D399' : '#059669';
+          ctx.strokeStyle = isDark ? '#34D399' : '#047857';
           ctx.lineWidth = 2.5;
           ctx.stroke();
         }
@@ -541,7 +541,7 @@ export default function ConsensusPage() {
       ctx.arc(node.x, node.y, 22, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.strokeStyle = isMalicious ? '#EF4444' : (isDark ? node.color : (idx === 0 ? '#B8860B' : node.color));
+      ctx.strokeStyle = isMalicious ? '#EF4444' : (isDark ? node.color : (idx === 0 ? '#8A6508' : node.color));
       ctx.lineWidth = 2.5;
       ctx.stroke();
       ctx.shadowBlur = 0;
@@ -571,7 +571,7 @@ export default function ConsensusPage() {
     ctx.fillText(phaseNames[bftPhase], 25, H - 20);
 
     ctx.textAlign = 'right';
-    ctx.fillStyle = isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669');
+    ctx.fillStyle = isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#047857');
     ctx.fillText(isMaliciousInjected ? '3/4 HONEST NODES (75.0% > 66.7% BFT QUORUM)' : '4/4 HONEST NODES (100% UNANIMOUS QUORUM)', W - 25, H - 20);
   }, [bftPhase, isMaliciousInjected, isDark]);
 
@@ -818,7 +818,7 @@ export default function ConsensusPage() {
           <HeroItem>
             <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' }, gap: 1.5, flexWrap: 'wrap', mb: 1.5 }}>
               <Chip
-                icon={<ShieldIcon sx={{ fontSize: '1rem !important', color: up ? (isDark ? '#34D399' : '#059669') : gold.accent }} />}
+                icon={<ShieldIcon sx={{ fontSize: '1rem !important', color: up ? (isDark ? '#34D399' : '#047857') : gold.accent }} />}
                 label={up ? 'SIGNAL BRIDGE LINKED' : 'ZERO-EGRESS SIMULATION READY'}
                 size="small"
                 sx={{
@@ -1000,7 +1000,7 @@ export default function ConsensusPage() {
                         <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
                           Draco (Arbitrator)
                         </Typography>
-                        <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#38BDF8' : '#0284C7', fontWeight: 700 }}>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#38BDF8' : '#0369A1', fontWeight: 700 }}>
                           SYNTHESIS & QUORUM VERDICT
                         </Typography>
                       </Box>
@@ -1092,7 +1092,7 @@ export default function ConsensusPage() {
                       fontWeight: 800,
                       fontSize: '0.68rem',
                       bgcolor: isMaliciousInjected ? '#EF4444' : (isDark ? 'rgba(52,211,153,0.15)' : '#DCFCE7'),
-                      color: isMaliciousInjected ? '#FFFFFF' : (isDark ? '#34D399' : '#059669'),
+                      color: isMaliciousInjected ? '#FFFFFF' : (isDark ? '#34D399' : '#047857'),
                     }}
                   />
                 </Box>
@@ -1135,7 +1135,7 @@ export default function ConsensusPage() {
                     ⏭ Step Phase ({bftPhase}/4)
                   </Button>
 
-                  <IconButton
+                  <IconButton aria-label="Reset Consensus State"
                     size="small"
                     onClick={() => {
                       setBftPhase(0);
@@ -1153,11 +1153,11 @@ export default function ConsensusPage() {
             {/* Dynamic BFT Status Alert Banner */}
             <Alert
               severity={isMaliciousInjected ? 'warning' : 'success'}
-              icon={isMaliciousInjected ? <WarningAmberIcon sx={{ color: '#EF4444' }} /> : <ShieldIcon sx={{ color: isDark ? '#34D399' : '#059669' }} />}
+              icon={isMaliciousInjected ? <WarningAmberIcon sx={{ color: '#EF4444' }} /> : <ShieldIcon sx={{ color: isDark ? '#34D399' : '#047857' }} />}
               sx={{
                 mb: 3,
                 bgcolor: isMaliciousInjected ? (isDark ? 'rgba(239,68,68,0.12)' : '#FEF2F2') : (isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF5'),
-                border: `1px solid ${isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669')}`,
+                border: `1px solid ${isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#047857')}`,
                 borderRadius: 2,
               }}
             >
@@ -1179,7 +1179,7 @@ export default function ConsensusPage() {
                   sx={{
                     fontFamily: mono,
                     fontWeight: 800,
-                    bgcolor: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669'),
+                    bgcolor: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#047857'),
                     color: '#FFFFFF',
                     fontSize: '0.7rem',
                   }}
@@ -1224,7 +1224,7 @@ export default function ConsensusPage() {
                   role: 'ROLE: Skeptic / Auditor',
                   badge: bftPhase < 2 ? 'IDLE' : bftPhase === 2 ? 'AUDITING' : 'COMMITTED',
                   badgeBg: bftPhase >= 2 ? (isDark ? 'rgba(52,211,153,0.2)' : '#DCFCE7') : (isDark ? 'rgba(255,255,255,0.08)' : '#F1F5F9'),
-                  badgeFg: bftPhase >= 2 ? (isDark ? '#34D399' : '#059669') : 'text.disabled',
+                  badgeFg: bftPhase >= 2 ? (isDark ? '#34D399' : '#047857') : 'text.disabled',
                   detailColor: isDark ? '#F87171' : '#DC2626',
                   borderColor: isDark ? 'rgba(248,113,113,0.25)' : theme.palette.divider,
                   titleColor: isDark ? '#F87171' : '#DC2626',
@@ -1236,10 +1236,10 @@ export default function ConsensusPage() {
                   role: 'ROLE: Arbitrator / Judge',
                   badge: bftPhase < 3 ? 'IDLE' : 'RATIFIED',
                   badgeBg: bftPhase >= 3 ? (isDark ? 'rgba(56,189,248,0.2)' : '#E0F2FE') : (isDark ? 'rgba(255,255,255,0.08)' : '#F1F5F9'),
-                  badgeFg: bftPhase >= 3 ? (isDark ? '#38BDF8' : '#0284C7') : 'text.disabled',
-                  detailColor: isDark ? '#38BDF8' : '#0284C7',
+                  badgeFg: bftPhase >= 3 ? (isDark ? '#38BDF8' : '#0369A1') : 'text.disabled',
+                  detailColor: isDark ? '#38BDF8' : '#0369A1',
                   borderColor: isDark ? 'rgba(56,189,248,0.25)' : theme.palette.divider,
-                  titleColor: isDark ? '#38BDF8' : '#0284C7',
+                  titleColor: isDark ? '#38BDF8' : '#0369A1',
                   vote: 'Bayesian Seal: Ready'
                 },
                 {
@@ -1248,10 +1248,10 @@ export default function ConsensusPage() {
                   role: isMaliciousInjected ? 'STATUS: Byzantine Traitor' : 'ROLE: Sentinel Validator',
                   badge: isMaliciousInjected ? 'EQUIVOCATING' : bftPhase >= 3 ? 'COMMITTED' : 'READY',
                   badgeBg: isMaliciousInjected ? '#EF4444' : (isDark ? 'rgba(52,211,153,0.2)' : '#DCFCE7'),
-                  badgeFg: isMaliciousInjected ? '#FFFFFF' : (isDark ? '#34D399' : '#059669'),
-                  detailColor: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669'),
+                  badgeFg: isMaliciousInjected ? '#FFFFFF' : (isDark ? '#34D399' : '#047857'),
+                  detailColor: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#047857'),
                   borderColor: isMaliciousInjected ? '#EF4444' : (isDark ? 'rgba(52,211,153,0.25)' : theme.palette.divider),
-                  titleColor: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#059669'),
+                  titleColor: isMaliciousInjected ? '#EF4444' : (isDark ? '#34D399' : '#047857'),
                   vote: isMaliciousInjected ? '0xDEAD…BEEF [ERR_POISON]' : 'Vote: 0x7A3F…C120 [VALID]'
                 }
               ]}
@@ -1317,7 +1317,7 @@ export default function ConsensusPage() {
                     fontWeight: 800,
                     bgcolor: isDark ? '#0D0D14' : '#F1F5F9',
                     color: isSimulationMode ? gold.soft : (isDark ? '#34D399' : '#027A48'),
-                    border: `1px solid ${isSimulationMode ? gold.accent : (isDark ? '#34D399' : '#059669')}`,
+                    border: `1px solid ${isSimulationMode ? gold.accent : (isDark ? '#34D399' : '#047857')}`,
                   }}
                 />
                 <Button
@@ -1506,7 +1506,7 @@ export default function ConsensusPage() {
                   {roundObj.turns.map((turn, tIdx) => {
                     const isProponent = turn.speaker === 'AZOTH';
                     const isSkeptic = turn.speaker === 'KAI';
-                    const speakerColor = isProponent ? gold.accent : isSkeptic ? (isDark ? '#F87171' : '#DC2626') : (isDark ? '#38BDF8' : '#0284C7');
+                    const speakerColor = isProponent ? gold.accent : isSkeptic ? (isDark ? '#F87171' : '#DC2626') : (isDark ? '#38BDF8' : '#0369A1');
                     const stanceBg = isProponent
                       ? (isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7')
                       : isSkeptic
@@ -1650,7 +1650,7 @@ export default function ConsensusPage() {
               <Box sx={{ p: 2, bgcolor: gold.darkPaper, borderRadius: 2, border: `1px solid ${isDark ? 'rgba(212,175,55,0.18)' : theme.palette.divider}`, mb: 2 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.8 }}>
                   <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: 'text.secondary' }}>BFT Quorum Threshold:</Typography>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: isDark ? '#34D399' : '#059669' }}>66.7% (Supermajority)</Typography>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: isDark ? '#34D399' : '#047857' }}>66.7% (Supermajority)</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.8 }}>
                   <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: 'text.secondary' }}>Fault Tolerance Margin:</Typography>
@@ -1658,7 +1658,7 @@ export default function ConsensusPage() {
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                   <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: 'text.secondary' }}>Skeptic Entropy Reduction:</Typography>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: isDark ? '#38BDF8' : '#0284C7' }}>-1.84 nats (Converged)</Typography>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: isDark ? '#38BDF8' : '#0369A1' }}>-1.84 nats (Converged)</Typography>
                 </Box>
               </Box>
 
@@ -1757,8 +1757,8 @@ export default function ConsensusPage() {
                         </Typography>
                       </Box>
                       <Tooltip title={copiedHash ? 'Hash Copied!' : 'Copy SHA-256'}>
-                        <IconButton size="small" onClick={copySha256} sx={{ color: gold.accent }}>
-                          {copiedHash ? <CheckCircleIcon sx={{ fontSize: '1rem', color: isDark ? '#34D399' : '#059669' }} /> : <ContentCopyIcon sx={{ fontSize: '1rem' }} />}
+                        <IconButton aria-label="Copy to clipboard" size="small" onClick={copySha256} sx={{ color: gold.accent }}>
+                          {copiedHash ? <CheckCircleIcon sx={{ fontSize: '1rem', color: isDark ? '#34D399' : '#047857' }} /> : <ContentCopyIcon sx={{ fontSize: '1rem' }} />}
                         </IconButton>
                       </Tooltip>
                     </Box>

@@ -1,8 +1,29 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { existsSync } from 'node:fs';
 import { studioMiddleware } from './server/studio-api.mjs';
 
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        // Long-cacheable vendor chunks: app deploys no longer re-download React/MUI.
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return undefined;
+          // React + MUI + Emotion share one chunk: splitting them creates a circular
+          // init order ("Cannot access X before initialization").
+          if (/[\\/](three|@react-three)[\\/]/.test(id)) return 'vendor-three';
+          if (/[\\/](react|react-dom|react-router|react-router-dom|@remix-run|scheduler|@mui|@emotion|@babel[\\/]runtime|react-is|react-transition-group|@popperjs|clsx|prop-types|stylis|hoist-non-react-statics|framer-motion|motion|motion-dom|motion-utils)[\\/]/.test(id)) return 'vendor';
+          return undefined;
+        },
+      },
+    },
+  },
+  define: {
+    // Only request the WebMCP demo MP4 when it actually ships; otherwise the
+    // console shows its simulation reel without a 404 on every page load.
+    __WEBMCP_DEMO_VIDEO__: JSON.stringify(existsSync('public/assets/videos/webmcp-zoth-os.mp4')),
+  },
   cacheDir: './.vite_cache',
   plugins: [
     react(),

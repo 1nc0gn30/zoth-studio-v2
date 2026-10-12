@@ -16,7 +16,7 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 export default function VaultConsole() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const gold = isDark ? '#D4AF37' : '#8A6508';
   const goldText = isDark ? '#F5E6AB' : '#8A6A09';
   const [secretName, setSecretName] = useState('OPENAI_API_KEY');
   const [secretValue, setSecretValue] = useState('sk-demo-vault-token-00000000000000000000000000000000');
@@ -87,7 +87,7 @@ export default function VaultConsole() {
       <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Box sx={{ width: 40, height: 40, borderRadius: 1.5, bgcolor: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <SecurityIcon sx={{ color: isDark ? '#F5E6AB' : '#B8860B' }} />
+            <SecurityIcon sx={{ color: isDark ? '#F5E6AB' : '#8A6508' }} />
           </Box>
           <Box>
             <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.2, color: theme.palette.text.primary }}>
@@ -211,7 +211,7 @@ export default function VaultConsole() {
               Encrypted Vault Sealed Payload (AES-256-GCM)
             </Typography>
             <Tooltip title={copied ? 'Copied!' : 'Copy Sealed JSON'}>
-              <IconButton size="small" onClick={handleCopy} sx={{ color: '#E6F4EA' }}>
+              <IconButton aria-label="Copy to clipboard" size="small" onClick={handleCopy} sx={{ color: '#E6F4EA' }}>
                 {copied ? <CheckIcon fontSize="small" sx={{ color: '#12B76A' }} /> : <ContentCopyIcon fontSize="small" />}
               </IconButton>
             </Tooltip>

@@ -219,7 +219,7 @@ export default function AirGapToolLockout({
               }}
             />
             <Chip
-              icon={<CloudOffIcon sx={{ fontSize: '0.85rem !important', color: '#F59E0B' }} />}
+              icon={<CloudOffIcon sx={{ fontSize: '0.85rem !important', color: 'var(--zs-amber)' }} />}
               label="ZERO-EGRESS INVARIANT"
               size="small"
               sx={{
@@ -285,7 +285,7 @@ export default function AirGapToolLockout({
         </Box>
 
         {/* Funnel Selection Grid: Zoth OS vs Git Micro-Repo */}
-        <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.8rem', color: isDark ? '#D4AF37' : '#B8860B', mb: 2, letterSpacing: '0.06em' }}>
+        <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.8rem', color: isDark ? '#D4AF37' : '#8A6508', mb: 2, letterSpacing: '0.06em' }}>
           CHOOSE YOUR SOVEREIGN DEPLOYMENT PATH:
         </Typography>
 
@@ -381,7 +381,7 @@ export default function AirGapToolLockout({
             >
               <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 1.5 }}>
-                  <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: isDark ? 'rgba(52, 211, 153, 0.15)' : '#ECFDF3', display: 'flex', color: '#34D399' }}>
+                  <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: isDark ? 'rgba(52, 211, 153, 0.15)' : '#ECFDF3', display: 'flex', color: 'var(--zs-mint)' }}>
                     <TerminalIcon sx={{ fontSize: 20 }} />
                   </Box>
                   <Chip

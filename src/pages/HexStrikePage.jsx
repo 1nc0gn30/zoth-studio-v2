@@ -241,13 +241,13 @@ export default function HexStrikePage() {
 
   // Strict gold-on-void styling tokens
   const gold = {
-    accent: isDark ? '#D4AF37' : '#B8860B',
+    accent: isDark ? '#D4AF37' : '#8A6508',
     soft: isDark ? '#F5E6AB' : '#8A6A09',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
     border: isDark ? 'rgba(212,175,55,0.28)' : '#E2CE82',
     glow: isDark ? 'rgba(212,175,55,0.40)' : 'rgba(184,134,11,0.22)',
-    emerald: isDark ? '#10B981' : '#059669',
-    emeraldSoft: isDark ? '#34D399' : '#059669',
+    emerald: isDark ? '#10B981' : '#047857',
+    emeraldSoft: isDark ? '#34D399' : '#047857',
     emeraldWash: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF3',
     void: isDark ? '#08080B' : '#FFFFFF',
     surface: isDark ? '#0E0E14' : '#FFFFFF',
@@ -1277,8 +1277,8 @@ export default function HexStrikePage() {
 
               <Grid xs={12} md={4}>
                 <Paper sx={{ p: 2.2, height: '100%', bgcolor: isDark ? '#0D0E16' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#38BDF8', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <LockIcon sx={{ fontSize: '1.1rem', color: '#38BDF8' }} /> 2. Hardware TPM Sealing
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: 'var(--zs-sky)', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <LockIcon sx={{ fontSize: '1.1rem', color: 'var(--zs-sky)' }} /> 2. Hardware TPM Sealing
                   </Typography>
                   <Typography variant="caption" sx={{ color: theme.palette.text.secondary, lineHeight: 1.6, display: 'block' }}>
                     Tamper-evident attestation requires communicating directly with physical TPM 2.0 registers (<code>/dev/tpmrm0</code>) and Argon2id key derivation, preventing memory dumps from compromising keys.
@@ -1288,8 +1288,8 @@ export default function HexStrikePage() {
 
               <Grid xs={12} md={4}>
                 <Paper sx={{ p: 2.2, height: '100%', bgcolor: isDark ? '#0D0E16' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#34D399', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <SecurityIcon sx={{ fontSize: '1.1rem', color: '#34D399' }} /> 3. Zero-Egress Invariant
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: 'var(--zs-mint)', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <SecurityIcon sx={{ fontSize: '1.1rem', color: 'var(--zs-mint)' }} /> 3. Zero-Egress Invariant
                   </Typography>
                   <Typography variant="caption" sx={{ color: theme.palette.text.secondary, lineHeight: 1.6, display: 'block' }}>
                     Discovered vulnerabilities and AST security flaws must never touch third-party cloud analytics or LLM servers. All analysis runs offline with zero bytes of egress.
@@ -1326,10 +1326,10 @@ export default function HexStrikePage() {
                   justifyContent: 'space-between'
                 }}
               >
-                <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', color: isDark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', color: isDark ? '#38BDF8' : '#0369A1', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   git clone https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal.git &amp;&amp; cd NullAI-HexStrike-AI-Terminal &amp;&amp; python3 hexstrike.py --audit
                 </Typography>
-                <IconButton
+                <IconButton aria-label="Copy to clipboard"
                   size="small"
                   onClick={() => {
                     navigator.clipboard.writeText('git clone https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal.git && cd NullAI-HexStrike-AI-Terminal && python3 hexstrike.py --audit');
@@ -1377,8 +1377,8 @@ export default function HexStrikePage() {
                   component={RouterLink}
                   to="/zoth-os"
                   sx={{
-                    borderColor: isDark ? '#38BDF8' : '#0284C7',
-                    color: isDark ? '#38BDF8' : '#0284C7',
+                    borderColor: isDark ? '#38BDF8' : '#0369A1',
+                    color: isDark ? '#38BDF8' : '#0369A1',
                     fontWeight: 800,
                     textTransform: 'none'
                   }}
@@ -1603,7 +1603,7 @@ export default function HexStrikePage() {
             fontFamily: mono
           }}
           action={
-            <IconButton size="small" onClick={copyHashToClipboard} sx={{ color: gold.accent }}>
+            <IconButton aria-label="Copy to clipboard" size="small" onClick={copyHashToClipboard} sx={{ color: gold.accent }}>
               {copiedHash ? <CheckIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
             </IconButton>
           }

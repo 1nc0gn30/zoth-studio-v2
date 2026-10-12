@@ -41,7 +41,12 @@ echo -e "\e[1;32m[⚡] Initializing Zoth Studio v2 Sovereign Cockpit...\e[0m"
 
 # Start background web hub if not already running on this port
 if ! lsof -i :"$PORT" >/dev/null 2>&1 && ! ss -tuln 2>/dev/null | grep -q ":$PORT "; then
-    python3 -m http.server "$PORT" --bind 127.0.0.1 --directory "$SERVE_DIR" >/dev/null 2>&1 &
+    # Node server = static files + the Studio API (/api/studio/*). Python is a static-only fallback.
+    if command -v node >/dev/null 2>&1 && [[ -f "$ROOT/server/serve.mjs" ]]; then
+        setsid node "$ROOT/server/serve.mjs" --port "$PORT" --dir "$SERVE_DIR" >/tmp/zoth-studio-web.log 2>&1 < /dev/null &
+    else
+        python3 -m http.server "$PORT" --bind 127.0.0.1 --directory "$SERVE_DIR" >/dev/null 2>&1 &
+    fi
     sleep 0.6
 fi
 

@@ -43,7 +43,7 @@ const AUDIENCES = [
 export default function AdytumShowcasePage() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const gold = isDark ? '#D4AF37' : '#8A6508';
   const goldGlow = isDark ? 'rgba(212,175,55,0.45)' : 'rgba(184,134,11,0.35)';
   const surface = isDark
     ? 'rgba(212,175,55,0.06)'

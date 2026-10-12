@@ -43,7 +43,7 @@ export default function SovereignFunnel({
     }
   };
 
-  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const gold = isDark ? '#D4AF37' : '#8A6508';
   const goldHeading = isDark ? '#F5E6AB' : '#8A6A09';
   const textPrimary = theme.palette.text.primary;
   const textSecondary = theme.palette.text.secondary;
@@ -146,7 +146,7 @@ export default function SovereignFunnel({
                 sx={{
                   fontFamily: mono,
                   fontSize: '0.74rem',
-                  color: isDark ? '#38BDF8' : '#0284C7',
+                  color: isDark ? '#38BDF8' : '#0369A1',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap'
@@ -154,7 +154,7 @@ export default function SovereignFunnel({
               >
                 {opt1Cmd}
               </Typography>
-              <IconButton
+              <IconButton aria-label="Copy command"
                 size="small"
                 onClick={() => handleCopy(opt1Cmd, opt1Title)}
                 sx={{ color: gold, ml: 1, p: 0.5 }}
@@ -233,7 +233,7 @@ export default function SovereignFunnel({
                 sx={{
                   fontFamily: mono,
                   fontSize: '0.74rem',
-                  color: isDark ? '#38BDF8' : '#0284C7',
+                  color: isDark ? '#38BDF8' : '#0369A1',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap'
@@ -241,7 +241,7 @@ export default function SovereignFunnel({
               >
                 git clone https://github.com/NullAITech/zoth-studio-v2.git
               </Typography>
-              <IconButton
+              <IconButton aria-label="Copy command"
                 size="small"
                 onClick={() => handleCopy('git clone https://github.com/NullAITech/zoth-studio-v2.git', 'Studio v2 clone')}
                 sx={{ color: gold, ml: 1, p: 0.5 }}
@@ -293,7 +293,7 @@ export default function SovereignFunnel({
                 size="small"
                 sx={{
                   bgcolor: isDark ? 'rgba(16,185,129,0.15)' : '#ECFDF3',
-                  color: isDark ? '#10B981' : '#059669',
+                  color: isDark ? '#10B981' : '#047857',
                   fontWeight: 800,
                   fontSize: '0.65rem'
                 }}
@@ -319,7 +319,7 @@ export default function SovereignFunnel({
                 sx={{
                   fontFamily: mono,
                   fontSize: '0.74rem',
-                  color: isDark ? '#10B981' : '#059669',
+                  color: isDark ? '#10B981' : '#047857',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap'
@@ -327,7 +327,7 @@ export default function SovereignFunnel({
               >
                 https://github.com/NullAITech/zoth-os
               </Typography>
-              <IconButton
+              <IconButton aria-label="Copy link"
                 size="small"
                 onClick={() => handleCopy('https://github.com/NullAITech/zoth-os', 'Zoth OS link')}
                 sx={{ color: gold, ml: 1, p: 0.5 }}

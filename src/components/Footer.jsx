@@ -16,7 +16,7 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 export default function Footer() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const gold = isDark ? '#D4AF37' : '#8A6508';
   const goldLight = isDark ? '#F3E5AB' : '#8A6A09';
   const borderCol = theme.palette.divider;
   const linkColor = isDark ? '#94A3B8' : '#334155';
@@ -302,7 +302,7 @@ export default function Footer() {
                     <TerminalIcon
                       sx={{
                         fontSize: '0.88rem !important',
-                        color: `${isDark ? '#34D399' : '#059669'} !important`,
+                        color: `${isDark ? '#34D399' : '#047857'} !important`,
                         ml: 1,
                       }}
                     />
@@ -311,7 +311,7 @@ export default function Footer() {
                   size="small"
                   sx={{
                     bgcolor: isDark ? 'rgba(52,211,153,0.09)' : 'rgba(5,150,105,0.08)',
-                    color: isDark ? '#34D399' : '#059669',
+                    color: isDark ? '#34D399' : '#047857',
                     border: `1px solid ${isDark ? 'rgba(52,211,153,0.32)' : 'rgba(5,150,105,0.35)'}`,
                     fontFamily: mono,
                     fontSize: '0.66rem',
@@ -662,7 +662,7 @@ export default function Footer() {
                 borderRadius: '5px',
                 bgcolor: isDark ? 'rgba(16,185,129,0.09)' : 'rgba(16,185,129,0.08)',
                 border: '1px solid rgba(16,185,129,0.3)',
-                color: isDark ? '#34D399' : '#059669',
+                color: isDark ? '#34D399' : '#047857',
                 fontSize: '0.7rem',
                 fontWeight: 750,
                 letterSpacing: '0.05em',

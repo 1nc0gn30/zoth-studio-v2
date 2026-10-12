@@ -188,7 +188,7 @@ function AgentComposerWorkstation() {
             <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1, color: isDark ? '#D4AF37' : '#8A6A09' }}>
               Autonomous Execution Log
             </Typography>
-            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: '#38BDF8', fontFamily: mono, fontSize: '0.8rem', height: 320, overflowY: 'auto', borderRadius: 1.5, border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #1E293B' }}>
+            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: 'var(--zs-sky)', fontFamily: mono, fontSize: '0.8rem', height: 320, overflowY: 'auto', borderRadius: 1.5, border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #1E293B' }}>
               {execLog.map((log, i) => (
                 <Box key={i} sx={{ mb: 0.75, lineHeight: 1.45 }}>{log}</Box>
               ))}
@@ -447,7 +447,7 @@ function CyberpunkHudWorkstation() {
 
               <Divider sx={{ my: 1 }} />
               <Paper sx={{ p: 2, bgcolor: isDark ? '#0E131F' : '#F0F9FF', border: `1px solid ${isDark ? 'rgba(0,240,255,0.2)' : 'rgba(2,132,199,0.3)'}` }}>
-                <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#00F0FF' : '#0284C7', fontWeight: 700 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#00F0FF' : '#0369A1', fontWeight: 700 }}>
                   LOCK-ON TARGET: LUCY ORACLE CORE (LOOPBACK :8094)
                 </Typography>
                 <Typography variant="body2" sx={{ mt: 0.5, fontSize: '0.85rem' }}>
@@ -787,7 +787,7 @@ function ChronicleWorkstation() {
                           borderRadius: 1,
                           bgcolor: isDark ? '#1E293B' : '#E2E8F0',
                           '& .MuiLinearProgress-bar': {
-                            bgcolor: item.progress === 100 ? (isDark ? '#34D399' : '#059669') : (isDark ? '#D4AF37' : '#B8860B'),
+                            bgcolor: item.progress === 100 ? (isDark ? '#34D399' : '#047857') : (isDark ? '#D4AF37' : '#B8860B'),
                           },
                         }}
                       />
@@ -922,7 +922,7 @@ function ConnectorsWorkstation() {
                 >
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, flexWrap: 'wrap', gap: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                      <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: c.status === 'Online' ? (isDark ? '#34D399' : '#059669') : (isDark ? '#64748B' : '#94A3B8'), boxShadow: c.status === 'Online' ? '0 0 8px #34D399' : 'none' }} />
+                      <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: c.status === 'Online' ? (isDark ? '#34D399' : '#047857') : (isDark ? '#64748B' : '#94A3B8'), boxShadow: c.status === 'Online' ? '0 0 8px #34D399' : 'none' }} />
                       <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>{c.name}</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
@@ -978,7 +978,7 @@ function ConnectorsWorkstation() {
               Inspect live Model Context Protocol (MCP) capabilities format:
             </Typography>
 
-            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: '#38BDF8', fontFamily: mono, fontSize: '0.78rem', borderRadius: 1.5, border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #1E293B', whiteSpace: 'pre-wrap' }}>
+            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: 'var(--zs-sky)', fontFamily: mono, fontSize: '0.78rem', borderRadius: 1.5, border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #1E293B', whiteSpace: 'pre-wrap' }}>
 {`{
   "jsonrpc": "2.0",
   "result": {
@@ -1174,7 +1174,7 @@ $$\\Delta w = A_+ e^{-\\Delta t / \\tau_+}$$
               <Stack spacing={0.75}>
                 {reviews[activeReviewer].checklist.map((c, i) => (
                   <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 1, fontSize: '0.8rem' }}>
-                    <CheckCircleIcon sx={{ fontSize: '0.9rem', color: isDark ? '#34D399' : '#059669' }} />
+                    <CheckCircleIcon sx={{ fontSize: '0.9rem', color: isDark ? '#34D399' : '#047857' }} />
                     <span>{c}</span>
                   </Box>
                 ))}
@@ -1286,7 +1286,7 @@ function EdgeForgeWorkstation() {
 
         <Grid xs={12} md={5}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1, color: isDark ? '#D4AF37' : '#B8860B' }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1, color: isDark ? '#D4AF37' : '#8A6508' }}>
               Compiler Build Pipeline Output
             </Typography>
             <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: isDark ? '#34D399' : '#4ADE80', fontFamily: mono, fontSize: '0.8rem', height: 320, overflowY: 'auto', borderRadius: 1.5, border: isDark ? '1px solid rgba(52,211,153,0.2)' : '1px solid #334155' }}>
@@ -1296,7 +1296,7 @@ function EdgeForgeWorkstation() {
             </Paper>
 
             <Paper sx={{ p: 1.5, mt: 2, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #E2E8F0', borderRadius: 1.5 }}>
-              <Typography variant="caption" sx={{ fontWeight: 800, color: isDark ? '#D4AF37' : '#B8860B', display: 'block' }}>Zero-Egress Embed Guarantee</Typography>
+              <Typography variant="caption" sx={{ fontWeight: 800, color: isDark ? '#D4AF37' : '#8A6508', display: 'block' }}>Zero-Egress Embed Guarantee</Typography>
               <Typography variant="body2" sx={{ fontSize: '0.8rem' }}>
                 All generated binaries bundle the loopback HTTP micro-daemon and contain zero telemetry sockets.
               </Typography>
@@ -1406,7 +1406,7 @@ function Web3HubWorkstation() {
 
         <Grid xs={12} md={5}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#B8860B' }}>Solana Localnet Configuration</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#8A6508' }}>Solana Localnet Configuration</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Configured loopback RPC target (127.0.0.1:8899). Start local validator via solana-test-validator.
             </Typography>
@@ -1424,7 +1424,7 @@ function Web3HubWorkstation() {
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
                 <Typography variant="body2" color="text.secondary">Target Slot Time</Typography>
-                <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 750, color: isDark ? '#D4AF37' : '#B8860B' }}>400ms</Typography>
+                <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 750, color: isDark ? '#D4AF37' : '#8A6508' }}>400ms</Typography>
               </Box>
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
@@ -1534,7 +1534,7 @@ Zero-Egress: Guaranteed`,
 
         <Grid xs={12} md={5}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#B8860B' }}>Autonomous Crawler Readiness</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#8A6508' }}>Autonomous Crawler Readiness</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Zoth Studio exposes machine-readable endpoints optimized for LLM scrapers, Perplexity, and MCP agents.
             </Typography>
@@ -1552,7 +1552,7 @@ Zero-Egress: Guaranteed`,
 
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
                 <Typography variant="body2">Machine Ontology</Typography>
-                <Chip label="/ax" size="small" component={RouterLink} to="/ax" clickable sx={{ fontFamily: mono, fontWeight: 700, color: isDark ? '#D4AF37' : '#B8860B' }} />
+                <Chip label="/ax" size="small" component={RouterLink} to="/ax" clickable sx={{ fontFamily: mono, fontWeight: 700, color: isDark ? '#D4AF37' : '#8A6508' }} />
               </Box>
             </Stack>
           </Paper>
@@ -1636,14 +1636,14 @@ function ToolBenchWorkstation() {
 
         <Grid xs={12} md={5}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#B8860B' }}>Tool Bench Diagnostic Suite</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#8A6508' }}>Tool Bench Diagnostic Suite</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Simulates autonomous agent calling contracts and verifies deterministic schema enforcement.
             </Typography>
 
             <Stack spacing={2}>
               <Paper sx={{ p: 1.5, bgcolor: isDark ? '#0A0D15' : '#F8FAFC', border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #E2E8F0', borderRadius: 1.5 }}>
-                <Typography variant="caption" sx={{ fontWeight: 800, color: isDark ? '#D4AF37' : '#B8860B' }}>Zero-Egress Contract Verification</Typography>
+                <Typography variant="caption" sx={{ fontWeight: 800, color: isDark ? '#D4AF37' : '#8A6508' }}>Zero-Egress Contract Verification</Typography>
                 <Typography variant="body2" sx={{ fontSize: '0.8rem', mt: 0.5 }}>
                   Rejects any payload containing external URI destinations or unencrypted secrets.
                 </Typography>
@@ -1812,7 +1812,7 @@ function HubWorkstationConsole({ station }) {
       >
         <Box sx={{ position: 'relative', zIndex: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
-            <Chip label={hub.badge} size="small" sx={{ bgcolor: isDark ? 'rgba(212,175,55,0.2)' : '#FEF9E7', color: isDark ? '#D4AF37' : '#B8860B', fontWeight: 800, border: isDark ? 'none' : '1px solid #FDE68A' }} />
+            <Chip label={hub.badge} size="small" sx={{ bgcolor: isDark ? 'rgba(212,175,55,0.2)' : '#FEF9E7', color: isDark ? '#D4AF37' : '#8A6508', fontWeight: 800, border: isDark ? 'none' : '1px solid #FDE68A' }} />
             <Chip label="Core Hub Component" size="small" sx={{ bgcolor: isDark ? 'rgba(52,211,153,0.15)' : '#ECFDF5', color: isDark ? '#34D399' : '#047857', fontWeight: 800, border: isDark ? 'none' : '1px solid #A7F3D0' }} />
           </Box>
 
@@ -1829,7 +1829,7 @@ function HubWorkstationConsole({ station }) {
               <Grid xs={12} sm={4} key={i}>
                 <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#F8FAFC', border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #E2E8F0', borderRadius: 2 }}>
                   <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>{s.label}</Typography>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 800, fontFamily: mono, color: isDark ? '#D4AF37' : '#B8860B' }}>{s.val}</Typography>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 800, fontFamily: mono, color: isDark ? '#D4AF37' : '#8A6508' }}>{s.val}</Typography>
                 </Paper>
               </Grid>
             ))}
@@ -1878,7 +1878,7 @@ function UniversalEnclaveConsole({ station }) {
   const [copiedCli, setCopiedCli] = useState(false);
 
   const gold = {
-    accent: isDark ? '#D4AF37' : '#B8860B',
+    accent: isDark ? '#D4AF37' : '#8A6508',
     soft: isDark ? '#F5E6AB' : '#8A6A09',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
     border: isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)',
@@ -1955,7 +1955,7 @@ function UniversalEnclaveConsole({ station }) {
                 </Typography>
               </Box>
               <Tooltip title={copiedCli ? 'Copied command!' : 'Copy to clipboard'}>
-                <IconButton
+                <IconButton aria-label="Copy to clipboard"
                   size="small"
                   onClick={() => {
                     if (navigator?.clipboard?.writeText) {
@@ -1982,7 +1982,7 @@ function UniversalEnclaveConsole({ station }) {
                 </Typography>
               </Paper>
               <Paper sx={{ p: 1.5, bgcolor: isDark ? '#0D0D12' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
-                <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#34D399', fontSize: '0.82rem', mb: 0.5 }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 800, color: 'var(--zs-mint)', fontSize: '0.82rem', mb: 0.5 }}>
                   ⚡ 2. Sub-Millisecond Loopback IPC (0.24ms)
                 </Typography>
                 <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.5 }}>
@@ -2025,7 +2025,7 @@ function UniversalEnclaveConsole({ station }) {
 
         <Grid xs={12} md={5}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#B8860B' }}>Workstation Diagnostics</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#8A6508' }}>Workstation Diagnostics</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
               Hardware security telemetry and enclave operational invariants.
             </Typography>
@@ -2042,7 +2042,7 @@ function UniversalEnclaveConsole({ station }) {
               <Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5, fontSize: '0.85rem' }}>
                   <span>Zero-Egress Firewall Rule</span>
-                  <strong style={{ fontFamily: mono, color: isDark ? '#D4AF37' : '#B8860B' }}>100% BLOCKED</strong>
+                  <strong style={{ fontFamily: mono, color: isDark ? '#D4AF37' : '#8A6508' }}>100% BLOCKED</strong>
                 </Box>
                 <LinearProgress variant="determinate" value={100} color="primary" sx={{ height: 6, borderRadius: 1 }} />
               </Box>
@@ -2079,7 +2079,7 @@ export default function WorkstationDetailPage() {
   };
 
   const gold = {
-    accent: isDark ? '#D4AF37' : '#B8860B',
+    accent: isDark ? '#D4AF37' : '#8A6508',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
     border: isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)',
   };
@@ -2199,7 +2199,7 @@ export default function WorkstationDetailPage() {
             size="small"
             sx={{
               bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF',
-              color: isDark ? '#38BDF8' : '#0284C7',
+              color: isDark ? '#38BDF8' : '#0369A1',
               border: isDark ? '1px solid rgba(56,189,248,0.3)' : '1px solid #BAE6FD',
               fontWeight: 750,
               fontFamily: mono,
@@ -2268,12 +2268,12 @@ export default function WorkstationDetailPage() {
                 fontFamily: mono,
                 fontWeight: 800,
                 fontSize: '0.78rem',
-                bgcolor: copiedCmd === 'run' ? (isDark ? '#34D399' : '#059669') : (isDark ? '#121624' : '#FFFFFF'),
+                bgcolor: copiedCmd === 'run' ? (isDark ? '#34D399' : '#047857') : (isDark ? '#121624' : '#FFFFFF'),
                 color: copiedCmd === 'run' ? '#101828' : (isDark ? '#F8FAFC' : '#101828'),
                 border: isDark ? '1px solid rgba(52,211,153,0.35)' : '1px solid #CBD5E1',
                 '&:hover': {
                   bgcolor: isDark ? 'rgba(52,211,153,0.2)' : '#ECFDF5',
-                  borderColor: isDark ? '#34D399' : '#059669',
+                  borderColor: isDark ? '#34D399' : '#047857',
                 },
               }}
             />
@@ -2324,7 +2324,7 @@ export default function WorkstationDetailPage() {
               { label: 'Local Throughput', value: telemetry.throughput, highlight: false },
               { label: 'Hardware TRNG Entropy', value: `${telemetry.entropy} / 8.0`, highlight: true, color: isDark ? '#D4AF37' : '#8A6A09' },
               { label: 'Packets Routed', value: `${telemetry.loopbackPackets.toLocaleString()} pkts`, highlight: false },
-              { label: 'Egress Firewall', value: telemetry.egressDrop, highlight: true, color: isDark ? '#38BDF8' : '#0284C7' },
+              { label: 'Egress Firewall', value: telemetry.egressDrop, highlight: true, color: isDark ? '#38BDF8' : '#0369A1' },
             ].map((stat, i) => (
               <Grid xs={6} sm={4} md={2} key={i}>
                 <Box

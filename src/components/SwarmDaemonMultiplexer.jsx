@@ -67,10 +67,10 @@ const QUICK_COMMANDS = [
 
 const CADRE_THEME_COLORS = {
   Architects: { dark: '#D4AF37', light: '#8A6A09', bgDark: 'rgba(212,175,55,0.12)', bgLight: '#FEF9E7' },
-  Code: { dark: '#38BDF8', light: '#0284C7', bgDark: 'rgba(56,189,248,0.12)', bgLight: '#E0F2FE' },
+  Code: { dark: '#38BDF8', light: '#0369A1', bgDark: 'rgba(56,189,248,0.12)', bgLight: '#E0F2FE' },
   Security: { dark: '#F87171', light: '#DC2626', bgDark: 'rgba(248,113,113,0.12)', bgLight: '#FEE2E2' },
   Creative: { dark: '#C084FC', light: '#7C3AED', bgDark: 'rgba(192,132,252,0.12)', bgLight: '#F3E8FF' },
-  Swarm: { dark: '#34D399', light: '#059669', bgDark: 'rgba(52,211,153,0.12)', bgLight: '#D1FADF' },
+  Swarm: { dark: '#34D399', light: '#047857', bgDark: 'rgba(52,211,153,0.12)', bgLight: '#D1FADF' },
 };
 
 export default function SwarmDaemonMultiplexer({ embedded = false }) {
@@ -79,7 +79,7 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
   const { isLocal } = useSovereignRuntime();
   const { status } = useStudioStatus();
 
-  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const gold = isDark ? '#D4AF37' : '#8A6508';
   const goldText = isDark ? '#F5E6AB' : '#715507';
   const voidDark = isDark ? '#08080B' : '#FFFFFF';
   const cardSurface = isDark ? '#0C0D16' : '#FFFFFF';
@@ -308,7 +308,7 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
                   label="21 AGENTS ONLINE"
                   sx={{
                     bgcolor: isDark ? 'rgba(52,211,153,0.15)' : '#D1FADF',
-                    color: isDark ? '#34D399' : '#059669',
+                    color: isDark ? '#34D399' : '#047857',
                     fontFamily: mono,
                     fontWeight: 800,
                     fontSize: '0.75rem',
@@ -809,8 +809,8 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
 
                     <Stack direction="row" spacing={0.5}>
                       <Tooltip title="Copy transcript logs">
-                        <IconButton size="small" onClick={() => handleCopyLogs(agent.id)} sx={{ p: 0.4, color: isDark ? '#9CA3AF' : '#475467' }}>
-                          {state.copied ? <CheckIcon sx={{ fontSize: 14, color: '#34D399' }} /> : <ContentCopyIcon sx={{ fontSize: 14 }} />}
+                        <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopyLogs(agent.id)} sx={{ p: 0.4, color: isDark ? '#9CA3AF' : '#475467' }}>
+                          {state.copied ? <CheckIcon sx={{ fontSize: 14, color: 'var(--zs-mint)' }} /> : <ContentCopyIcon sx={{ fontSize: 14 }} />}
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="Clear terminal">

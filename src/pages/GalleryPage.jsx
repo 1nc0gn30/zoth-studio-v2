@@ -10,7 +10,7 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 function Frame({ label, image, video, narrow }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const gold = isDark ? '#D4AF37' : '#8A6508';
   const muted = theme.palette.text.secondary;
 
   return (
@@ -124,7 +124,7 @@ function CaptureCard({ item }) {
 export default function GalleryPage() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const gold = isDark ? '#D4AF37' : '#8A6508';
 
   return (
     <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 4, md: 7 } }}>

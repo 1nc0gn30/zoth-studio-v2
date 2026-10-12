@@ -34,7 +34,7 @@ export default function DaemonStatusStrip() {
     return (
       <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1, mb: 3 }}>
         <Chip
-          icon={<PublicIcon sx={{ fontSize: '0.85rem !important', color: dark ? '#38BDF8' : '#0284C7' }} />}
+          icon={<PublicIcon sx={{ fontSize: '0.85rem !important', color: dark ? '#38BDF8' : '#0369A1' }} />}
           size="small"
           label="PUBLIC WEB MIRROR · AIR-GAPPED FROM BARE-METAL DAEMONS"
           sx={{
@@ -42,7 +42,7 @@ export default function DaemonStatusStrip() {
             fontFamily: mono,
             fontSize: '0.68rem',
             bgcolor: dark ? 'rgba(56,189,248,0.12)' : '#F0F9FF',
-            color: dark ? '#38BDF8' : '#0284C7',
+            color: dark ? '#38BDF8' : '#0369A1',
             border: '1px solid',
             borderColor: dark ? 'rgba(56,189,248,0.35)' : '#BAE6FD',
           }}
@@ -50,7 +50,7 @@ export default function DaemonStatusStrip() {
         <Tooltip title="Loopback microdaemons (Swarm :8790, Neuro Memory :8094, Egress Sentinel :8095, Mock Twin :8097, Prompt Firewall :8098, Flight Recorder :8104, Capsule Jail :8105, Policy Auditor :8106, POD Forge :8107, Etsy Connector :8108, MCP Lens :8109, Budget Sentinel :8110, Bridge :8102, Vault :8787, Ollama :11434) execute exclusively on the sovereign bare-metal host with zero cloud egress.">
           <Chip
 
-            icon={<SecurityIcon sx={{ fontSize: '0.82rem !important', color: dark ? '#34D399' : '#059669' }} />}
+            icon={<SecurityIcon sx={{ fontSize: '0.82rem !important', color: dark ? '#34D399' : '#047857' }} />}
             size="small"
             label="ZERO-EGRESS INVARIANT ENFORCED"
             sx={{
@@ -58,7 +58,7 @@ export default function DaemonStatusStrip() {
               fontFamily: mono,
               fontSize: '0.66rem',
               bgcolor: dark ? 'rgba(52,211,153,0.1)' : '#ECFDF3',
-              color: dark ? '#34D399' : '#059669',
+              color: dark ? '#34D399' : '#047857',
               border: '1px solid',
               borderColor: dark ? 'rgba(52,211,153,0.3)' : '#A7F3D0',
               cursor: 'help',

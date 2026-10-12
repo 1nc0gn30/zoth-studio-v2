@@ -107,7 +107,7 @@ function CodeSnippet({ title, code, language = 'bash' }) {
             onClick={handleCopy}
             startIcon={
               copied ? (
-                <CheckIcon sx={{ fontSize: '14px !important', color: '#34D399' }} />
+                <CheckIcon sx={{ fontSize: '14px !important', color: 'var(--zs-mint)' }} />
               ) : (
                 <ContentCopyIcon sx={{ fontSize: '14px !important' }} />
               )
@@ -156,7 +156,7 @@ function CodeSnippet({ title, code, language = 'bash' }) {
 export default function DocsPage() {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
-  const gold = dark ? '#D4AF37' : '#B8860B';
+  const gold = dark ? '#D4AF37' : '#8A6508';
   const goldLight = dark ? '#F5E6AB' : '#715507';
   const goldBg = dark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
   const voidDark = '#08080B';
@@ -405,12 +405,12 @@ Runs local invariant verification before staging tools.`
                   }}
                 />
                 <Chip
-                  icon={<CloudDoneIcon sx={{ fontSize: '14px !important', color: `${dark ? '#38BDF8' : '#0284C7'} !important` }} />}
+                  icon={<CloudDoneIcon sx={{ fontSize: '14px !important', color: `${dark ? '#38BDF8' : '#0369A1'} !important` }} />}
                   label="NETLIFY 71 PRERENDERED ROUTES"
                   size="small"
                   sx={{
                     bgcolor: dark ? 'rgba(56,189,248,0.12)' : '#E0F2FE',
-                    color: dark ? '#38BDF8' : '#0284C7',
+                    color: dark ? '#38BDF8' : '#0369A1',
                     border: `1px solid ${dark ? 'rgba(56,189,248,0.3)' : '#BAE6FD'}`,
                     fontWeight: 700,
                     maxWidth: '100%',
@@ -760,13 +760,13 @@ Runs local invariant verification before staging tools.`
                   >
                     QUICK INITIALIZATION
                   </Typography>
-                  <IconButton
+                  <IconButton aria-label="Copy to clipboard"
                     size="small"
                     onClick={() => handleCopy('npm run zoth -- init', 'quick-install')}
                     sx={{ color: '#D4AF37', '&:hover': { color: '#FFFFFF' } }}
                   >
                     {copiedIndex === 'quick-install' ? (
-                      <CheckIcon fontSize="small" sx={{ color: '#34D399' }} />
+                      <CheckIcon fontSize="small" sx={{ color: 'var(--zs-mint)' }} />
                     ) : (
                       <ContentCopyIcon fontSize="small" />
                     )}
@@ -863,9 +863,9 @@ Runs local invariant verification before staging tools.`
                         { icon: <CodeIcon sx={{ mb: 0.5, color: dark ? '#79C0FF' : '#0969DA' }} />, title: '25 Sovereign Tools', desc: 'DAG Composer, IDE & Foundry' },
                         { icon: <MemoryIcon sx={{ mb: 0.5, color: dark ? '#00F0FF' : '#0891B2' }} />, title: 'Lucy Cognitive Oracle', desc: 'STDP Synaptic Plasticity (:8094)' },
                         { icon: <GavelIcon sx={{ mb: 0.5, color: dark ? '#C084FC' : '#7C3AED' }} />, title: '3-Agent Byzantine', desc: 'Triadic AST Socratic Debate' },
-                        { icon: <ShieldIcon sx={{ mb: 0.5, color: dark ? '#34D399' : '#059669' }} />, title: 'Zero-Egress Invariants', desc: 'Shannon Entropy & Loopback' },
+                        { icon: <ShieldIcon sx={{ mb: 0.5, color: dark ? '#34D399' : '#047857' }} />, title: 'Zero-Egress Invariants', desc: 'Shannon Entropy & Loopback' },
                         { icon: <LockIcon sx={{ mb: 0.5, color: dark ? '#F59E0B' : '#D97706' }} />, title: 'Adytum Sanctum', desc: '22 Keys & 5-Min Incubation' },
-                        { icon: <CloudDoneIcon sx={{ mb: 0.5, color: dark ? '#38BDF8' : '#0284C7' }} />, title: 'Netlify Edge AEO', desc: '71 Prerendered Static Routes' },
+                        { icon: <CloudDoneIcon sx={{ mb: 0.5, color: dark ? '#38BDF8' : '#0369A1' }} />, title: 'Netlify Edge AEO', desc: '71 Prerendered Static Routes' },
                       ].map((item, i) => (
                         <Paper
                           key={i}
@@ -1004,7 +1004,7 @@ npm run dev`}
                                 size="small"
                                 sx={{
                                   bgcolor: dark ? 'rgba(56,189,248,0.12)' : '#E0F2FE',
-                                  color: dark ? '#38BDF8' : '#0284C7',
+                                  color: dark ? '#38BDF8' : '#0369A1',
                                   fontWeight: 700,
                                   fontSize: '0.75rem'
                                 }}
@@ -1040,13 +1040,13 @@ npm run dev`}
                               }}
                             >
                               <span>$ {tool.pull}</span>
-                              <IconButton
+                              <IconButton aria-label="Copy to clipboard"
                                 size="small"
                                 onClick={() => handleCopy(tool.pull, tool.id)}
                                 sx={{ color: '#D4AF37', p: 0.5, '&:hover': { color: '#FFFFFF' } }}
                               >
                                 {copiedIndex === tool.id ? (
-                                  <CheckIcon fontSize="small" sx={{ color: '#34D399' }} />
+                                  <CheckIcon fontSize="small" sx={{ color: 'var(--zs-mint)' }} />
                                 ) : (
                                   <ContentCopyIcon fontSize="small" />
                                 )}
@@ -1376,7 +1376,7 @@ console.log("Byzantine Consensus Verdict:", verdict.sealed ? "UNANIMOUS APPROVAL
                     <Chip
                       label="EDGE & AEO DISCOVERY"
                       size="small"
-                      sx={{ bgcolor: 'rgba(56,189,248,0.12)', color: '#38BDF8', fontWeight: 700 }}
+                      sx={{ bgcolor: 'rgba(56,189,248,0.12)', color: 'var(--zs-sky)', fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
                       8. Netlify Edge Deployment &amp; 71 Prerendered Routes
@@ -1409,7 +1409,7 @@ console.log("Byzantine Consensus Verdict:", verdict.sealed ? "UNANIMOUS APPROVAL
                         >
                           <Typography
                             variant="subtitle2"
-                            sx={{ color: dark ? '#38BDF8' : '#0284C7', fontFamily: '"JetBrains Mono", monospace', fontWeight: 700 }}
+                            sx={{ color: dark ? '#38BDF8' : '#0369A1', fontFamily: '"JetBrains Mono", monospace', fontWeight: 700 }}
                           >
                             {item.ep}
                           </Typography>
@@ -1539,13 +1539,13 @@ npm run preview`}
                         </Typography>
                       </Box>
 
-                      <IconButton
+                      <IconButton aria-label="Copy to clipboard"
                         size="small"
                         onClick={() => handleCopy(terminalAuditLogs[terminalTab], 'audit-terminal-copy')}
                         sx={{ color: gold, '&:hover': { color: '#FFFFFF' } }}
                       >
                         {copiedIndex === 'audit-terminal-copy' ? (
-                          <CheckIcon fontSize="small" sx={{ color: '#34D399' }} />
+                          <CheckIcon fontSize="small" sx={{ color: 'var(--zs-mint)' }} />
                         ) : (
                           <ContentCopyIcon fontSize="small" />
                         )}
@@ -1662,7 +1662,7 @@ npm run preview`}
                     <Chip
                       label="SECURITY INVARIANTS"
                       size="small"
-                      sx={{ bgcolor: 'rgba(52,211,153,0.14)', color: '#34D399', fontWeight: 700 }}
+                      sx={{ bgcolor: 'rgba(52,211,153,0.14)', color: 'var(--zs-mint)', fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 750, color: textPrimary }}>
                       12. Zero-Egress Enclave &amp; Shannon Entropy Gating

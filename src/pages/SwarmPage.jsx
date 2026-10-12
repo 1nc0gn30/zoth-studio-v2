@@ -80,7 +80,7 @@ const ZERO_CLOUD_BADGES = [
 export default function SwarmPage() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const gold = isDark ? '#D4AF37' : '#8A6508';
   const goldSoft = isDark ? '#F5E6AB' : '#8A6A09';
   const goldBorder = isDark ? 'rgba(212,175,55,0.28)' : '#E2CE82';
   const voidBg = isDark ? '#08080B' : '#FFFFFF';
@@ -601,11 +601,11 @@ export default function SwarmPage() {
                   </Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid ' + (isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0'), pb: 1 }}>
                     <Typography variant="caption" color="text.secondary">Transport</Typography>
-                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#38BDF8' }}>Loopback HTTP / SSE :8989</Typography>
+                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: 'var(--zs-sky)' }}>Loopback HTTP / SSE :8989</Typography>
                   </Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid ' + (isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0'), pb: 1 }}>
                     <Typography variant="caption" color="text.secondary">Fault Tolerance</Typography>
-                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#34D399' }}>2f + 1 Byzantine Quorum</Typography>
+                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: 'var(--zs-mint)' }}>2f + 1 Byzantine Quorum</Typography>
                   </Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography variant="caption" color="text.secondary">Egress Policy</Typography>
@@ -642,7 +642,7 @@ export default function SwarmPage() {
                 <CardContent>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 1 }}>
                     <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF3', display: 'flex' }}>
-                      <PrecisionManufacturingIcon sx={{ color: '#34D399' }} />
+                      <PrecisionManufacturingIcon sx={{ color: 'var(--zs-mint)' }} />
                     </Box>
                     <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
                       Zero Egress
@@ -660,7 +660,7 @@ export default function SwarmPage() {
                 <CardContent>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 1 }}>
                     <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF', display: 'flex' }}>
-                      <SecurityIcon sx={{ color: '#38BDF8' }} />
+                      <SecurityIcon sx={{ color: 'var(--zs-sky)' }} />
                     </Box>
                     <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
                       Socratic Debate
@@ -748,7 +748,7 @@ export default function SwarmPage() {
                       }}
                     >
                       <Box sx={{ p: 0.8, borderRadius: '50%', bgcolor: 'rgba(52,211,153,0.12)', mb: 1 }}>
-                        <IconComponent sx={{ fontSize: '1.2rem', color: '#34D399' }} />
+                        <IconComponent sx={{ fontSize: '1.2rem', color: 'var(--zs-mint)' }} />
                       </Box>
                       <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: theme.palette.text.primary, mb: 0.5, lineHeight: 1.2 }}>
                         {b.label}
@@ -975,7 +975,7 @@ export default function SwarmPage() {
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 1 }}>
                 <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF3', display: 'flex' }}>
-                  <PrecisionManufacturingIcon sx={{ color: '#34D399' }} />
+                  <PrecisionManufacturingIcon sx={{ color: 'var(--zs-mint)' }} />
                 </Box>
                 <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
                   Zero Cloud Roundtrips
@@ -993,7 +993,7 @@ export default function SwarmPage() {
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 1 }}>
                 <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF', display: 'flex' }}>
-                  <SecurityIcon sx={{ color: '#38BDF8' }} />
+                  <SecurityIcon sx={{ color: 'var(--zs-sky)' }} />
                 </Box>
                 <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
                   Socratic Debate Engine
@@ -1127,7 +1127,7 @@ export default function SwarmPage() {
                   fontFamily: mono,
                   fontWeight: 800,
                   bgcolor: isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF3',
-                  color: isDark ? '#34D399' : '#059669',
+                  color: isDark ? '#34D399' : '#047857',
                   border: '1px solid rgba(52,211,153,0.3)',
                 }}
               />
@@ -1182,7 +1182,7 @@ export default function SwarmPage() {
               <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: '#F5E6AB', fontWeight: 700 }}>
                 {daemonState.up ? '● LIVE SWARM TELEMETRY: 21 THREADS SYNCED' : '● SWARM CADRE SIMULATOR (STANDBY)'}
               </Typography>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#94A3B8' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: 'var(--zs-slate)' }}>
                 {daemonState.up ? `Interval: ${heartbeatRate}ms · Jitter: ±0.02ms` : 'Status: Daemon Offline'}
               </Typography>
             </Box>
@@ -1209,10 +1209,10 @@ export default function SwarmPage() {
             </Box>
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1, position: 'relative', zIndex: 1 }}>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)' }}>
                 STREAM TRANSPORT: {daemonState.up ? 'HTTP/1.1 & SSE · 127.0.0.1:8989 (ACTIVE)' : 'OFFLINE · RUN NPX ZOTH UP TO STREAM'}
               </Typography>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#34D399', fontWeight: 800 }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-mint)', fontWeight: 800 }}>
                 EGRESS: 0 BYTES (AIR-GAPPED LOCAL HOST)
               </Typography>
             </Box>
@@ -1246,7 +1246,7 @@ export default function SwarmPage() {
                       }}
                     >
                       <Box sx={{ p: 0.8, borderRadius: '50%', bgcolor: 'rgba(52,211,153,0.12)', mb: 1 }}>
-                        <IconComponent sx={{ fontSize: '1.2rem', color: '#34D399' }} />
+                        <IconComponent sx={{ fontSize: '1.2rem', color: 'var(--zs-mint)' }} />
                       </Box>
                       <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: theme.palette.text.primary, mb: 0.5, lineHeight: 1.2 }}>
                         {b.label}
@@ -1370,7 +1370,7 @@ export default function SwarmPage() {
 
                       {/* Measured Latency Metric */}
                       <Box sx={{ my: 1.5, textAlign: 'center', p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#050508' : '#FFFFFF', border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}` }}>
-                        <Typography sx={{ fontFamily: mono, fontSize: '1.6rem', fontWeight: 900, color: isPinging ? (isDark ? '#34D399' : '#059669') : color, lineHeight: 1 }}>
+                        <Typography sx={{ fontFamily: mono, fontSize: '1.6rem', fontWeight: 900, color: isPinging ? (isDark ? '#34D399' : '#047857') : color, lineHeight: 1 }}>
                           {metrics.latency.toFixed(2)} ms
                         </Typography>
                         <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.68rem', color: isDark ? '#94A3B8' : '#64748B', mt: 0.5, display: 'block' }}>
@@ -1382,7 +1382,7 @@ export default function SwarmPage() {
                       <Box sx={{ mb: 1.5 }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.4 }}>
                           <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary' }}>Packet Loss:</Typography>
-                          <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 800, color: isDark ? '#34D399' : '#059669' }}>0.00% Zero-Drop</Typography>
+                          <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 800, color: isDark ? '#34D399' : '#047857' }}>0.00% Zero-Drop</Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                           <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary' }}>Sent / Recv:</Typography>
@@ -1429,17 +1429,17 @@ export default function SwarmPage() {
               <Chip
                 label="AIR-GAP VERIFIED"
                 size="small"
-                sx={{ fontFamily: mono, fontSize: '0.65rem', fontWeight: 800, bgcolor: 'rgba(52,211,153,0.14)', color: '#34D399' }}
+                sx={{ fontFamily: mono, fontSize: '0.65rem', fontWeight: 800, bgcolor: 'rgba(52,211,153,0.14)', color: 'var(--zs-mint)' }}
               />
             </Box>
 
             <Box sx={{ maxHeight: 130, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 0.5 }}>
               {pingLogs.map((log) => (
-                <Typography key={log.id} sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#94A3B8', lineHeight: 1.4 }}>
+                <Typography key={log.id} sx={{ fontFamily: mono, fontSize: '0.74rem', color: 'var(--zs-slate)', lineHeight: 1.4 }}>
                   <span style={{ color: '#64748B' }}>[{log.time}]</span>{' '}
                   <span style={{ color: getCadreColor(log.cadre, true), fontWeight: 700 }}>PING {log.cadre}</span>{' '}
                   <span style={{ color: '#64748B' }}>-&gt; {log.socket}:</span>{' '}
-                  <span style={{ color: '#34D399', fontWeight: 700 }}>rtt={log.rtt}</span>{' '}
+                  <span style={{ color: 'var(--zs-mint)', fontWeight: 700 }}>rtt={log.rtt}</span>{' '}
                   <span style={{ color: '#F5E6AB' }}>status={log.status}</span>
                 </Typography>
               ))}
