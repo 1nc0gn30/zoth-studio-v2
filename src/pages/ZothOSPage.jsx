@@ -1779,7 +1779,6 @@ export default function ZothOSPage() {
                   style={{
                     backgroundColor: 'transparent',
                     border: 'none',
-                    outline: 'none',
                     color: '#F5E6AB',
                     fontFamily: mono,
                     fontSize: '0.85rem',
