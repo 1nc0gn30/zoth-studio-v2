@@ -111,6 +111,7 @@ export default function WindowCarousel({
               </Typography>
               <IconButton
                 size="small"
+                aria-label="Previous window"
                 onClick={handlePrev}
                 sx={{
                   border: `1px solid ${theme.palette.divider}`,
@@ -123,6 +124,7 @@ export default function WindowCarousel({
               </IconButton>
               <IconButton
                 size="small"
+                aria-label="Next window"
                 onClick={handleNext}
                 sx={{
                   border: `1px solid ${theme.palette.divider}`,
