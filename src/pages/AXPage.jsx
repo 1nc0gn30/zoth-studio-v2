@@ -801,7 +801,7 @@ export default function AXPage() {
                 size="small"
                 sx={{
                   bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF',
-                  color: isDark ? '#38BDF8' : '#0284C7',
+                  color: isDark ? '#38BDF8' : '#0369A1',
                   fontFamily: mono,
                   fontWeight: 800,
                   fontSize: '0.72rem',
@@ -931,17 +931,17 @@ export default function AXPage() {
           >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
               <TerminalIcon sx={{ fontSize: '1rem', color: gold.accent }} />
-              <span style={{ color: '#94A3B8' }}>$</span>
+              <span style={{ color: 'var(--zs-slate)' }}>$</span>
               <span style={{ color: isDark ? '#34D399' : '#4ADE80', fontWeight: 750 }}>curl</span>
               <span>-s -H &quot;User-Agent: {selectedAgent}&quot; http://127.0.0.1:3000{selectedEndpoint}</span>
             </Box>
             <Tooltip title="Copy curl command">
-              <IconButton
+              <IconButton aria-label="Copy to clipboard"
                 size="small"
                 onClick={() => {
                   navigator.clipboard.writeText(`curl -s -H "User-Agent: ${selectedAgent}" http://127.0.0.1:3000${selectedEndpoint}`);
                 }}
-                sx={{ color: '#94A3B8', '&:hover': { color: '#FFFFFF' } }}
+                sx={{ color: 'var(--zs-slate)', '&:hover': { color: '#FFFFFF' } }}
               >
                 <ContentCopyIcon sx={{ fontSize: '0.85rem' }} />
               </IconButton>
@@ -968,7 +968,7 @@ export default function AXPage() {
             <div>Content-Type: {currentEndpointData.mime}</div>
             <div>Content-Length: {currentEndpointData.sizeBytes} bytes</div>
             <div style={{ color: isDark ? '#D4AF37' : '#FCD34D' }}>X-Agent-User-Agent: {selectedAgent}</div>
-            <div style={{ color: '#38BDF8' }}>X-Zero-Egress-Status: verified-zero-telemetry</div>
+            <div style={{ color: 'var(--zs-sky)' }}>X-Zero-Egress-Status: verified-zero-telemetry</div>
           </Paper>
 
           {/* Live Content Sample */}

@@ -66,7 +66,7 @@ const SAMPLE_MCP_TOOLS = [
 export default function WebMCPConsole() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const gold = isDark ? '#D4AF37' : '#8A6508';
   const goldSoft = isDark ? '#F5E6AB' : '#8A6A09';
   const goldWash = isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
   const darkPanel = isDark ? '#08080B' : '#0F172A';
@@ -79,8 +79,10 @@ export default function WebMCPConsole() {
   const [copiedConfig, setCopiedConfig] = useState(false);
 
   // Video State
-  const [videoSrc, setVideoSrc] = useState('/assets/videos/webmcp-zoth-os.mp4');
-  const [videoError, setVideoError] = useState(false);
+  /* global __WEBMCP_DEMO_VIDEO__ */
+  const HAS_DEMO_VIDEO = typeof __WEBMCP_DEMO_VIDEO__ !== 'undefined' && __WEBMCP_DEMO_VIDEO__;
+  const videoSrc = HAS_DEMO_VIDEO ? '/assets/videos/webmcp-zoth-os.mp4' : undefined;
+  const [videoError, setVideoError] = useState(!HAS_DEMO_VIDEO);
   const [isPlayingSim, setIsPlayingSim] = useState(false);
   const [simStep, setSimStep] = useState(0);
   const videoRef = useRef(null);
@@ -308,14 +310,15 @@ export default function WebMCPConsole() {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: isPlayingSim ? '#10B981' : gold, animation: isPlayingSim ? 'pulse 1s infinite' : 'none' }} />
-                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: goldSoft, letterSpacing: '0.06em' }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: "#F5E6AB", letterSpacing: '0.06em' }}>
                       {isPlayingSim ? 'ZOTH OS DEMO REEL ACTIVE [4K 60FPS]' : 'STANDBY · READY FOR RECORDED MP4 FOOTAGE'}
                     </Typography>
                   </Box>
                   <Chip
                     size="small"
+                    className="zs-ondark"
                     label={demoChapters[simStep].time}
-                    sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(212,175,55,0.2)', color: gold }}
+                    sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(212,175,55,0.2)', color: "#E5C158" }}
                   />
                 </Box>
 
@@ -330,17 +333,17 @@ export default function WebMCPConsole() {
                     fontFamily: mono
                   }}
                 >
-                  <Typography variant="h6" sx={{ fontWeight: 800, color: gold, mb: 1 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 800, color: "#D4AF37", mb: 1 }}>
                     {demoChapters[simStep].title}
                   </Typography>
                   <Typography variant="body2" sx={{ color: '#E2E8F0', mb: 2, lineHeight: 1.6 }}>
                     {demoChapters[simStep].desc}
                   </Typography>
                   <Box sx={{ p: 1.5, bgcolor: '#06060A', borderRadius: 1.5, border: '1px dashed rgba(255,255,255,0.1)' }}>
-                    <Typography variant="caption" sx={{ color: '#10B981', display: 'block', mb: 0.5 }}>
+                    <Typography variant="caption" sx={{ color: 'var(--zs-emerald)', display: 'block', mb: 0.5 }}>
                       $ [ZOTH-KERNEL-IPC] webmcp_bridge --transport sse --port 8094 --bind 127.0.0.1
                     </Typography>
-                    <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block' }}>
+                    <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block' }}>
                       &gt; Tools registered: 30 sovereign tools · WebGPU acceleration enabled · Zero egress telemetry: OK
                     </Typography>
                   </Box>
@@ -353,13 +356,13 @@ export default function WebMCPConsole() {
                     size="small"
                     startIcon={isPlayingSim ? <PauseIcon /> : <PlayArrowIcon />}
                     onClick={() => setIsPlayingSim(!isPlayingSim)}
-                    sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, '&:hover': { bgcolor: '#E5C158' } }}
+                    sx={{ bgcolor: "#D4AF37", color: '#08080B', fontWeight: 800, '&:hover': { bgcolor: '#E5C158' } }}
                   >
                     {isPlayingSim ? 'Pause Demonstration Reel' : 'Play Interactive Zoth OS Reel'}
                   </Button>
 
-                  <Typography variant="caption" color="text.secondary" sx={{ fontFamily: mono }}>
-                    Place recorded MP4 at <code style={{ color: gold }}>public/assets/videos/webmcp-zoth-os.mp4</code>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: "#9CA3AF" }}>
+                    Interactive walkthrough · recorded demo coming soon
                   </Typography>
                 </Box>
               </Box>
@@ -474,7 +477,7 @@ export default function WebMCPConsole() {
             {jsonRpcOutput && (
               <Box sx={{ mt: 2 }}>
                 <Divider sx={{ my: 2, opacity: 0.5 }} />
-                <Typography variant="caption" sx={{ fontWeight: 800, color: '#10B981', display: 'flex', alignItems: 'center', gap: 0.5, mb: 1 }}>
+                <Typography variant="caption" sx={{ fontWeight: 800, color: 'var(--zs-emerald)', display: 'flex', alignItems: 'center', gap: 0.5, mb: 1 }}>
                   <CheckCircleIcon sx={{ fontSize: '15px !important' }} /> JSON-RPC 2.0 RESPONSE FRAME (ZERO-EGRESS SEALED):
                 </Typography>
                 <Paper sx={{ p: 2, bgcolor: isDark ? '#040406' : '#FFFFFF', border: '1px solid rgba(16,185,129,0.3)', borderRadius: 1.5 }}>

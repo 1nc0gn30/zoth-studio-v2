@@ -25,7 +25,7 @@ import FlashOnIcon from '@mui/icons-material/FlashOn';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import GoldenZLogo3D from './GoldenZLogo3D';
-import SwarmDaemonMultiplexer from './SwarmDaemonMultiplexer';
+const SwarmDaemonMultiplexer = React.lazy(() => import('./SwarmDaemonMultiplexer'));
 import { microTools } from '../data/toolsData';
 import { workstations } from '../data/workstations';
 import { arsenalStats } from '../data/arsenalData';
@@ -48,7 +48,7 @@ const primaryNav = [
 const knowledgeItems = [
   { label: 'Documentation', path: '/docs', desc: 'Zero-egress invariants, system topology & architecture', icon: <MenuBookIcon fontSize="small" sx={{ color: '#D4AF37' }} /> },
   { label: 'Six Math Pillars', path: '/docs/math', desc: 'Formal theory: STDP, Byzantine math & Shannon entropy', icon: <FunctionsIcon fontSize="small" sx={{ color: '#60A5FA' }} /> },
-  { label: 'Architecture FAQs', path: '/faqs', desc: 'Answers regarding Lucy Oracle, offline daemons & safety', icon: <HelpOutlineIcon fontSize="small" sx={{ color: '#34D399' }} /> },
+  { label: 'Architecture FAQs', path: '/faqs', desc: 'Answers regarding Lucy Oracle, offline daemons & safety', icon: <HelpOutlineIcon fontSize="small" sx={{ color: 'var(--zs-mint)' }} /> },
   { label: 'Agent Experience (AX)', path: '/ax', desc: 'Machine-readable schemas & autonomous crawler endpoints', icon: <PrecisionManufacturingIcon fontSize="small" sx={{ color: '#A78BFA' }} /> },
   { label: 'Studio Gallery', path: '/gallery', desc: 'Desktop and mobile screenshots and motion intro recordings', icon: <OndemandVideoIcon fontSize="small" sx={{ color: '#D4AF37' }} /> },
 ];
@@ -69,7 +69,7 @@ export default function Navbar({ mode, onToggleTheme }) {
   const brandColor = dark ? '#F5E6AB' : '#101828';
   const navIdle = dark ? '#9CA3AF' : '#475467';
   const navActive = dark ? '#D4AF37' : '#B8860B';
-  const goldAccent = dark ? '#D4AF37' : '#B8860B';
+  const goldAccent = dark ? '#D4AF37' : '#8A6508';
   const { isLocal, hasWebGPU, badgeLabel, badgeColor, badgeTooltip } = useSovereignRuntime();
 
   // Global Keyboard Shortcuts: ⌘K for Command Palette, Ctrl+~ for Swarm Daemon
@@ -1151,7 +1151,7 @@ export default function Navbar({ mode, onToggleTheme }) {
                           border: `1px solid ${dark ? 'rgba(16, 185, 129, 0.25)' : '#A7F3D0'}`,
                         }}
                       >
-                        <TerminalIcon sx={{ color: '#10B981', fontSize: 16 }} />
+                        <TerminalIcon sx={{ color: 'var(--zs-emerald)', fontSize: 16 }} />
                       </Box>
                     </ListItemIcon>
                     <ListItemText
@@ -1685,12 +1685,14 @@ export default function Navbar({ mode, onToggleTheme }) {
               sx={{ fontFamily: mono, fontSize: '0.65rem', fontWeight: 800, bgcolor: dark ? 'rgba(212,175,55,0.15)' : '#FEF9E7', color: goldAccent }}
             />
           </Box>
-          <IconButton onClick={() => setSwarmDaemonOpen(false)} sx={{ color: dark ? '#9CA3AF' : '#475467' }}>
+          <IconButton aria-label="Close" onClick={() => setSwarmDaemonOpen(false)} sx={{ color: dark ? '#9CA3AF' : '#475467' }}>
             <CloseIcon />
           </IconButton>
         </Box>
         <DialogContent sx={{ p: { xs: 0.5, md: 1 }, mt: 1 }}>
-          <SwarmDaemonMultiplexer embedded />
+          <React.Suspense fallback={<Box role="status" sx={{ p: 4, textAlign: 'center', color: 'text.secondary' }}>Loading swarm matrix…</Box>}>
+            <SwarmDaemonMultiplexer embedded />
+          </React.Suspense>
         </DialogContent>
       </Dialog>
     </AppBar>

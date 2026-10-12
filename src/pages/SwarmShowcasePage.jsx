@@ -33,7 +33,7 @@ export default function SwarmShowcasePage() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
-  const accent = isDark ? '#34D399' : '#059669';
+  const accent = isDark ? '#34D399' : '#047857';
   const accentWash = isDark ? 'rgba(52,211,153,0.10)' : 'rgba(5,150,105,0.08)';
   const accentBorder = isDark ? 'rgba(52,211,153,0.30)' : 'rgba(5,150,105,0.22)';
   const bg = isDark ? '#08080B' : theme.palette.background.default;

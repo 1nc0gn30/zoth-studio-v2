@@ -9,7 +9,7 @@ export const theme = createTheme({
     mode: 'light',
     primary: {
       main: '#D4AF37',
-      dark: '#B8860B',
+      dark: '#8A6508',
       light: '#F5E6AB',
       contrastText: '#101828',
     },
@@ -51,6 +51,8 @@ export const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
+        // Accent text tokens: neon in dark mode, AA-safe (>=4.5:1 on white/tints) in light mode.
+        ':root': { '--zs-sky': '#0369A1', '--zs-emerald': '#047857', '--zs-mint': '#047857', '--zs-slate': '#475569', '--zs-amber': '#B45309', '--zs-green': '#15803D' },
         body: {
           backgroundColor: '#FFFFFF',
           color: '#101828',
@@ -103,7 +105,7 @@ export const theme = createTheme({
           textTransform: 'uppercase',
           letterSpacing: '0.14em',
           fontWeight: 800,
-          color: '#B8860B',
+          color: '#8A6508',
           marginBottom: '6px',
           display: 'block',
         },
@@ -263,15 +265,26 @@ export const theme = createTheme({
           '0%, 100%': { opacity: 0.3 },
           '50%': { opacity: 0.6 },
         },
+        // MUI Grid2 sizes nested items with var(--Grid-columnsLevelN); nothing defined
+        // it, so every nested grid collapsed to content width. Default to 12 columns.
+        ':root': {
+          '--Grid-columnsLevel1': 12,
+          '--Grid-columnsLevel2': 12,
+          '--Grid-columnsLevel3': 12,
+          '--Grid-columnsLevel4': 12,
+        },
         '.MuiGrid-container, .MuiGrid2-container': {
           width: '100%',
           alignItems: 'stretch',
         },
-        '.MuiGrid-container > .MuiGrid-root:has(> .MuiCard-root), .MuiGrid-container > .MuiGrid-root:has(> .MuiPaper-root), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiCard-root), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiPaper-root)': {
+        '.MuiGrid-container > .MuiGrid-root:has(> .MuiCard-root:only-child), .MuiGrid-container > .MuiGrid-root:has(> .MuiPaper-root:only-child), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiCard-root:only-child), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiPaper-root:only-child)': {
+          // Equal-height cards only when the card is the item's sole child; a flex
+          // row here squeezed multi-child items side by side (Voice on mobile).
           display: 'flex',
+          flexDirection: 'column',
           minWidth: 0,
         },
-        '.MuiGrid-container > .MuiGrid-root > .MuiCard-root, .MuiGrid-container > .MuiGrid-root > .MuiPaper-root, .MuiGrid2-container > .MuiGrid2-root > .MuiCard-root, .MuiGrid2-container > .MuiGrid2-root > .MuiPaper-root': {
+        '.MuiGrid-container > .MuiGrid-root > .MuiCard-root:only-child, .MuiGrid-container > .MuiGrid-root > .MuiPaper-root:only-child, .MuiGrid2-container > .MuiGrid2-root > .MuiCard-root:only-child, .MuiGrid2-container > .MuiGrid2-root > .MuiPaper-root:only-child': {
           flex: '1 1 auto',
           width: '100%',
           minWidth: 0,
@@ -311,7 +324,7 @@ export const theme = createTheme({
             transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
           },
           '&:hover': {
-            color: '#B8860B',
+            color: '#8A6508',
             '&::after': {
               transform: 'scaleX(1)',
             },
@@ -385,6 +398,14 @@ export const theme = createTheme({
     },
     MuiChip: {
       styleOverrides: {
+        // Light mode: accent chips inherit neon dark-theme hues (#38bdf8, #10b981...) that
+        // fail WCAG AA on pale tints. Darken the label from its own colour so every
+        // per-page accent keeps its hue but reaches >=4.5:1. Filled palette chips keep theirs.
+        label: {
+          '.MuiChip-colorDefault:not(.zs-ondark) &, .MuiChip-outlined:not(.zs-ondark) &': {
+            color: 'color-mix(in srgb, currentColor 50%, #000)',
+          },
+        },
         root: {
           fontWeight: 650,
           borderRadius: 9999,
@@ -485,6 +506,7 @@ export const darkTheme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
+        ':root': { '--zs-sky': '#38BDF8', '--zs-emerald': '#10B981', '--zs-mint': '#34D399', '--zs-slate': '#94A3B8', '--zs-amber': '#F59E0B', '--zs-green': '#22C55E' },
         body: {
           backgroundColor: '#08080B',
           color: '#EDEFF2',
@@ -721,15 +743,26 @@ export const darkTheme = createTheme({
           '0%, 100%': { opacity: 0.3 },
           '50%': { opacity: 0.6 },
         },
+        // MUI Grid2 sizes nested items with var(--Grid-columnsLevelN); nothing defined
+        // it, so every nested grid collapsed to content width. Default to 12 columns.
+        ':root': {
+          '--Grid-columnsLevel1': 12,
+          '--Grid-columnsLevel2': 12,
+          '--Grid-columnsLevel3': 12,
+          '--Grid-columnsLevel4': 12,
+        },
         '.MuiGrid-container, .MuiGrid2-container': {
           width: '100%',
           alignItems: 'stretch',
         },
-        '.MuiGrid-container > .MuiGrid-root:has(> .MuiCard-root), .MuiGrid-container > .MuiGrid-root:has(> .MuiPaper-root), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiCard-root), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiPaper-root)': {
+        '.MuiGrid-container > .MuiGrid-root:has(> .MuiCard-root:only-child), .MuiGrid-container > .MuiGrid-root:has(> .MuiPaper-root:only-child), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiCard-root:only-child), .MuiGrid2-container > .MuiGrid2-root:has(> .MuiPaper-root:only-child)': {
+          // Equal-height cards only when the card is the item's sole child; a flex
+          // row here squeezed multi-child items side by side (Voice on mobile).
           display: 'flex',
+          flexDirection: 'column',
           minWidth: 0,
         },
-        '.MuiGrid-container > .MuiGrid-root > .MuiCard-root, .MuiGrid-container > .MuiGrid-root > .MuiPaper-root, .MuiGrid2-container > .MuiGrid2-root > .MuiCard-root, .MuiGrid2-container > .MuiGrid2-root > .MuiPaper-root': {
+        '.MuiGrid-container > .MuiGrid-root > .MuiCard-root:only-child, .MuiGrid-container > .MuiGrid-root > .MuiPaper-root:only-child, .MuiGrid2-container > .MuiGrid2-root > .MuiCard-root:only-child, .MuiGrid2-container > .MuiGrid2-root > .MuiPaper-root:only-child': {
           flex: '1 1 auto',
           width: '100%',
           minWidth: 0,

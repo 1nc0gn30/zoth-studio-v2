@@ -17,7 +17,7 @@ export default function SovereignMascots() {
           fontFamily: '"Celtic Garamond", Georgia, serif',
           fontSize: '1.15rem',
           letterSpacing: '0.04em',
-          color: dark ? '#D4AF37' : '#B8860B',
+          color: dark ? '#D4AF37' : '#8A6508',
           mb: 1.5,
         }}
       >

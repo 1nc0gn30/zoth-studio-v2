@@ -8,7 +8,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 export default function SwarmTaskDispatcher() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#B8860B';
+  const gold = isDark ? '#D4AF37' : '#8A6508';
   const goldSoft = isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
   const [prompt, setPrompt] = useState('Build high-throughput E2EE WebSocket proxy with biomorphic memory recall');
   const [running, setRunning] = useState(false);

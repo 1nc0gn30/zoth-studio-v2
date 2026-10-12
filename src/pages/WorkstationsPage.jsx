@@ -181,7 +181,7 @@ function WorkstationCard({ item, isDark, gold }) {
           {isTool ? (
             <Chip
               size="small"
-              icon={<HandymanIcon sx={{ fontSize: '0.85rem !important', color: `${isDark ? '#38BDF8' : '#0284C7'} !important` }} />}
+              icon={<HandymanIcon sx={{ fontSize: '0.85rem !important', color: `${isDark ? '#38BDF8' : '#0369A1'} !important` }} />}
               label="STANDALONE MICRO-TOOL"
               sx={{
                 height: 24,
@@ -189,7 +189,7 @@ function WorkstationCard({ item, isDark, gold }) {
                 fontWeight: 800,
                 fontFamily: mono,
                 bgcolor: isDark ? 'rgba(56, 189, 248, 0.12)' : '#F0F9FF',
-                color: isDark ? '#38BDF8' : '#0284C7',
+                color: isDark ? '#38BDF8' : '#0369A1',
                 border: `1px solid ${isDark ? 'rgba(56, 189, 248, 0.3)' : '#BAE6FD'}`,
               }}
             />
@@ -330,7 +330,7 @@ function WorkstationCard({ item, isDark, gold }) {
                 {item.pullCommand}
               </Typography>
               {copied ? (
-                <CheckIcon sx={{ fontSize: '0.85rem', color: '#10B981', flexShrink: 0 }} />
+                <CheckIcon sx={{ fontSize: '0.85rem', color: 'var(--zs-emerald)', flexShrink: 0 }} />
               ) : (
                 <ContentCopyIcon sx={{ fontSize: '0.8rem', color: 'text.secondary', flexShrink: 0 }} />
               )}
@@ -349,7 +349,7 @@ function WorkstationCard({ item, isDark, gold }) {
               to={item.alsoInApp}
               startIcon={<RocketLaunchIcon sx={{ fontSize: '0.95rem' }} />}
               sx={{
-                bgcolor: isDark ? '#38BDF8' : '#0284C7',
+                bgcolor: isDark ? '#38BDF8' : '#0369A1',
                 color: '#FFFFFF',
                 fontWeight: 800,
                 fontSize: '0.78rem',
@@ -469,7 +469,7 @@ export default function WorkstationsPage() {
   const swarmUp = Boolean(status?.services?.swarm?.up);
 
   const gold = {
-    accent: isDark ? '#D4AF37' : '#B8860B',
+    accent: isDark ? '#D4AF37' : '#8A6508',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
     border: isDark ? 'rgba(212,175,55,0.28)' : 'rgba(184,134,11,0.25)',
   };
@@ -612,7 +612,7 @@ export default function WorkstationsPage() {
                     justifyContent: 'center',
                     bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF',
                     border: `1px solid ${isDark ? 'rgba(56,189,248,0.3)' : '#BAE6FD'}`,
-                    color: isDark ? '#38BDF8' : '#0284C7',
+                    color: isDark ? '#38BDF8' : '#0369A1',
                     flexShrink: 0,
                   }}
                 >
@@ -684,7 +684,7 @@ export default function WorkstationsPage() {
                       width: 10,
                       height: 10,
                       borderRadius: '50%',
-                      bgcolor: swarmUp ? (isDark ? '#34D399' : '#059669') : '#6B7280',
+                      bgcolor: swarmUp ? (isDark ? '#34D399' : '#047857') : '#6B7280',
                       boxShadow: swarmUp ? (isDark ? '0 0 8px #34D399' : '0 0 6px rgba(5,150,105,0.4)') : 'none',
                       flexShrink: 0,
                     }}
@@ -754,7 +754,7 @@ export default function WorkstationsPage() {
             <Grid xs={12} md={4} sx={{ display: 'flex' }}>
               <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? '#0D111D' : '#FFFFFF', border: `1px solid ${isDark ? '#26262F' : '#EAECF0'}`, height: '100%', width: '100%', flex: 1 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.75 }}>
-                  <HandymanIcon sx={{ color: isDark ? '#38BDF8' : '#0284C7', fontSize: '1.1rem' }} />
+                  <HandymanIcon sx={{ color: isDark ? '#38BDF8' : '#0369A1', fontSize: '1.1rem' }} />
                   <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? '#BAE6FD' : '#101828' }}>
                     2. Sovereign Tools (27 Repos)
                   </Typography>

@@ -501,7 +501,7 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
           sx={{
             fontFamily: mono,
             fontSize: '0.64rem',
-            color: isDark ? '#F5E6AB' : '#B8860B',
+            color: isDark ? '#F5E6AB' : '#8A6508',
             fontWeight: 700,
             bgcolor: isDark ? 'rgba(8, 8, 11, 0.88)' : 'rgba(255, 255, 255, 0.92)',
             px: 0.8,
@@ -520,7 +520,7 @@ function SacredGeometrySigil({ keyIndex, cardName, attribution }) {
 export function AdytumEngine({ embedded = false }) {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
-  const gold = dark ? '#D4AF37' : '#B8860B';
+  const gold = dark ? '#D4AF37' : '#8A6508';
   const goldLight = dark ? '#F5E6AB' : '#8A6A09';
   const goldBg = dark ? 'rgba(212,175,55,0.12)' : '#FEF9E7';
   const surface = theme.palette.background.paper;
@@ -1142,7 +1142,7 @@ export function AdytumEngine({ embedded = false }) {
               sx={{
                 fontFamily: mono,
                 fontSize: '0.8rem',
-                color: dark ? gold : '#B8860B',
+                color: dark ? gold : '#8A6508',
                 bgcolor: dark ? 'rgba(212,175,55,0.1)' : '#FFFFFF',
                 px: 1,
                 py: 0.25,
@@ -1367,7 +1367,7 @@ export function AdytumEngine({ embedded = false }) {
                     <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, display: 'block', mb: 0.5 }}>
                       π_A ∈ G1 (x, y):
                     </Typography>
-                    <Box sx={{ p: 1, bgcolor: dark ? '#040406' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 1, fontFamily: mono, fontSize: '0.75rem', color: dark ? '#38BDF8' : '#0284C7' }}>
+                    <Box sx={{ p: 1, bgcolor: dark ? '#040406' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 1, fontFamily: mono, fontSize: '0.75rem', color: dark ? '#38BDF8' : '#0369A1' }}>
                       {zkProof.pi_a.join('\n')}
                     </Box>
                   </Grid>
@@ -1383,7 +1383,7 @@ export function AdytumEngine({ embedded = false }) {
                     <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, display: 'block', mb: 0.5 }}>
                       π_C ∈ G1 (x, y):
                     </Typography>
-                    <Box sx={{ p: 1, bgcolor: dark ? '#040406' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 1, fontFamily: mono, fontSize: '0.75rem', color: dark ? '#34D399' : '#059669' }}>
+                    <Box sx={{ p: 1, bgcolor: dark ? '#040406' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 1, fontFamily: mono, fontSize: '0.75rem', color: dark ? '#34D399' : '#047857' }}>
                       {zkProof.pi_c.join('\n')}
                     </Box>
                   </Grid>
@@ -1469,7 +1469,7 @@ export function AdytumEngine({ embedded = false }) {
               </Grid>
               <Grid xs={12} md={4}>
                 <Paper sx={{ p: 2, height: '100%', bgcolor: dark ? '#08080B' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2 }}>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? '#38BDF8' : '#0284C7', mb: 1 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? '#38BDF8' : '#0369A1', mb: 1 }}>
                     2. Argon2id + AES-256-GCM
                   </Typography>
                   <Typography variant="caption" sx={{ color: textSecondary, lineHeight: 1.6, display: 'block' }}>
@@ -1479,7 +1479,7 @@ export function AdytumEngine({ embedded = false }) {
               </Grid>
               <Grid xs={12} md={4}>
                 <Paper sx={{ p: 2, height: '100%', bgcolor: dark ? '#08080B' : '#F8FAFC', border: `1px solid ${divider}`, borderRadius: 2 }}>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? '#34D399' : '#059669', mb: 1 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: dark ? '#34D399' : '#047857', mb: 1 }}>
                     3. Forward-Secure Ratchet
                   </Typography>
                   <Typography variant="caption" sx={{ color: textSecondary, lineHeight: 1.6, display: 'block' }}>
@@ -1498,10 +1498,10 @@ export function AdytumEngine({ embedded = false }) {
                 Clone the standalone zero-egress micro-repo to run real Argon2id vault sealing and forward-secure ratchets on your physical machine:
               </Typography>
               <Box sx={{ p: 1.2, mb: 2, bgcolor: dark ? '#040508' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.8rem', color: dark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.8rem', color: dark ? '#38BDF8' : '#0369A1', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git &amp;&amp; cd adytum-alchemist-ai-workflow
                 </Typography>
-                <IconButton
+                <IconButton aria-label="Copy to clipboard"
                   size="small"
                   onClick={() => {
                     navigator.clipboard.writeText('git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git && cd adytum-alchemist-ai-workflow');
@@ -1536,7 +1536,7 @@ export function AdytumEngine({ embedded = false }) {
                   variant="outlined"
                   component={RouterLink}
                   to="/zoth-os"
-                  sx={{ borderColor: dark ? '#38BDF8' : '#0284C7', color: dark ? '#38BDF8' : '#0284C7', fontWeight: 800, textTransform: 'none' }}
+                  sx={{ borderColor: dark ? '#38BDF8' : '#0369A1', color: dark ? '#38BDF8' : '#0369A1', fontWeight: 800, textTransform: 'none' }}
                 >
                   Boot Zoth OS Hardware Hypervisor
                 </Button>
@@ -1845,7 +1845,7 @@ export function AdytumEngine({ embedded = false }) {
                     </Box>
                   </Box>
                   <CardContent sx={{ p: 1.5, '&:last-child': { pb: 1.5 } }}>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isCurrent ? (dark ? gold : '#B8860B') : textPrimary, fontSize: '0.88rem', lineHeight: 1.2 }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isCurrent ? (dark ? gold : '#8A6508') : textPrimary, fontSize: '0.88rem', lineHeight: 1.2 }}>
                       {item.name}
                     </Typography>
                     <Typography variant="caption" sx={{ color: dark ? goldLight : '#8A6A09', fontWeight: 700, display: 'block', mt: 0.5, fontSize: '0.72rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
@@ -1915,7 +1915,7 @@ export function AdytumEngine({ embedded = false }) {
                       </Box>
                     </Box>
                     <CardContent sx={{ p: 1.25, '&:last-child': { pb: 1.25 } }}>
-                      <Typography variant="body2" sx={{ fontWeight: 800, color: isCurrent ? (dark ? gold : '#B8860B') : textPrimary, fontSize: '0.82rem', lineHeight: 1.2 }}>
+                      <Typography variant="body2" sx={{ fontWeight: 800, color: isCurrent ? (dark ? gold : '#8A6508') : textPrimary, fontSize: '0.82rem', lineHeight: 1.2 }}>
                         {item.name}
                       </Typography>
                       <Typography variant="caption" sx={{ color: dark ? goldLight : '#8A6A09', fontWeight: 650, display: 'block', mt: 0.25, fontSize: '0.68rem', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
@@ -2011,7 +2011,7 @@ export function AdytumEngine({ embedded = false }) {
               }}
             />
             <Typography className="section-kicker">Arcana Key {card.key}</Typography>
-            <Typography variant="h5" sx={{ fontWeight: 800, color: dark ? gold : '#B8860B' }}>
+            <Typography variant="h5" sx={{ fontWeight: 800, color: dark ? gold : '#8A6508' }}>
               {card.name}
             </Typography>
             <Typography variant="caption" sx={{ display: 'block', mt: 1, color: textSecondary, fontWeight: 600, lineHeight: 1.5 }}>
@@ -2319,7 +2319,7 @@ export function AdytumEngine({ embedded = false }) {
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                 {reading.includes('[GATE OPENED]') ? (
-                  <CheckCircleIcon sx={{ color: '#34D399', fontSize: '1.15rem' }} />
+                  <CheckCircleIcon sx={{ color: 'var(--zs-mint)', fontSize: '1.15rem' }} />
                 ) : (
                   <AutoAwesomeIcon sx={{ color: gold, fontSize: '1.15rem' }} />
                 )}

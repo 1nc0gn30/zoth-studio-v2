@@ -636,7 +636,7 @@ export default function Netrunner3DWorld({
         </Tooltip>
 
         <Tooltip title="Reset 3D Vantage">
-          <IconButton size="small" onClick={resetCamera} sx={{ color: '#94A3B8', '&:hover': { color: '#00F0FF' } }}>
+          <IconButton size="small" onClick={resetCamera} sx={{ color: 'var(--zs-slate)', '&:hover': { color: '#00F0FF' } }}>
             <RestartAltIcon fontSize="small" />
           </IconButton>
         </Tooltip>
@@ -717,8 +717,8 @@ export default function Netrunner3DWorld({
           <Typography variant="body2" sx={{ fontWeight: 700, color: '#FFF', fontSize: '0.78rem', mb: 0.5, lineHeight: 1.3 }}>
             {hoveredMemory.concept || hoveredMemory.id}
           </Typography>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', color: '#94A3B8', fontSize: '0.68rem', fontFamily: mono }}>
-            <span>STDP Weight: <strong style={{ color: '#10B981' }}>{hoveredMemory.weight}</strong></span>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', color: 'var(--zs-slate)', fontSize: '0.68rem', fontFamily: mono }}>
+            <span>STDP Weight: <strong style={{ color: 'var(--zs-emerald)' }}>{hoveredMemory.weight}</strong></span>
             <span>({hoveredMemory.x}, {hoveredMemory.y}, {hoveredMemory.z})</span>
           </Box>
         </Paper>

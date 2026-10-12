@@ -69,6 +69,31 @@ export default function VoiceStationPage() {
     }
   ]);
   const [textInput, setTextInput] = useState('');
+  // Real export (was an alert placeholder): the session transcript as a Markdown debrief.
+  const exportDebrief = () => {
+    const stamp = new Date().toISOString();
+    const lines = [
+      `# Voice Station debrief`,
+      ``,
+      `- Exported: ${stamp}`,
+      `- Persona: ${activePersona?.name || 'unknown'}`,
+      sessionId ? `- Session: ${sessionId}` : null,
+      `- Turns: ${turns.length}`,
+      ``,
+      `## Transcript`,
+      ``,
+      ...turns.map((t) => `**${t.speaker || (t.isAgent ? 'Agent' : 'You')}** _(${t.time || '--:--'})_  \n${String(t.text || '').trim()}\n`),
+      `## Action items`,
+      ``,
+      ...turns.filter((t) => /\b(todo|next|should|will|need to|let's)\b/i.test(t.text || '')).map((t) => `- [ ] ${String(t.text).trim().slice(0, 200)}`),
+    ].filter((l) => l !== null);
+    const blob = new Blob([lines.join('\n')], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `voice-debrief-${stamp.slice(0, 19).replace(/[:T]/g, '-')}.md`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
   const [copiedLink, setCopiedLink] = useState('');
 
   // Pro SaaS State
@@ -403,8 +428,8 @@ export default function VoiceStationPage() {
               size="small"
               sx={{ bgcolor: '#D4AF37', color: '#08090E', fontWeight: 800, fontSize: '0.72rem' }}
             />
-            <Typography variant="body2" sx={{ color: '#F3F4F6', fontSize: '0.88rem' }}>
-              <strong>Sovereign Live Voice Station:</strong> <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>$79</span> <span style={{ color: '#10B981', fontWeight: 800 }}>$19 Lifetime</span> • Direct P2P audio, transcript debriefs, and multi-persona switching.
+            <Typography variant="body2" sx={{ color: dark ? '#F3F4F6' : '#101828', fontSize: '0.88rem' }}>
+              <strong>Sovereign Live Voice Station:</strong> <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>$79</span> <span style={{ color: 'var(--zs-emerald)', fontWeight: 800 }}>$19 Lifetime</span> • Direct P2P audio, transcript debriefs, and multi-persona switching.
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
@@ -430,7 +455,7 @@ export default function VoiceStationPage() {
               variant="text"
               size="small"
               onClick={() => setPaywallOpen(true)}
-              sx={{ color: '#D4AF37', textDecoration: 'underline', fontSize: '0.8rem' }}
+              sx={{ color: dark ? '#D4AF37' : '#8A6508', textDecoration: 'underline', fontSize: '0.8rem' }}
             >
               Activate Key
             </Button>
@@ -453,7 +478,7 @@ export default function VoiceStationPage() {
                   fontSize: '0.72rem',
                   letterSpacing: '0.15em',
                   bgcolor: 'rgba(212, 175, 55, 0.12)',
-                  color: '#D4AF37',
+                  color: dark ? '#D4AF37' : '#8A6508',
                   border: '1px solid rgba(212, 175, 55, 0.3)',
                 }}
               />
@@ -477,14 +502,14 @@ export default function VoiceStationPage() {
                   fontWeight: 700,
                   fontSize: '0.72rem',
                   bgcolor: isPro ? 'rgba(212, 175, 55, 0.2)' : 'rgba(156, 163, 175, 0.12)',
-                  color: isPro ? '#D4AF37' : '#9CA3AF',
+                  color: isPro ? (dark ? '#D4AF37' : '#8A6508') : (dark ? '#9CA3AF' : '#4B5563'),
                 }}
               />
             </Box>
           </HeroItem>
           <HeroItem>
             <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.02em', mb: 1 }}>
-              Sovereign <span style={{ color: '#D4AF37' }}>Voice Station</span>
+              Sovereign <span style={{ color: dark ? '#D4AF37' : '#8A6508' }}>Voice Station</span>
             </Typography>
           </HeroItem>
           <HeroItem>
@@ -521,10 +546,10 @@ export default function VoiceStationPage() {
                     fontFamily: mono,
                     fontWeight: 700,
                     bgcolor: isSpeaking ? 'rgba(212, 175, 55, 0.2)' : (isListening ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255,255,255,0.06)'),
-                    color: isSpeaking ? '#D4AF37' : (isListening ? '#10B981' : (isProcessing ? '#38BDF8' : '#9CA3AF')),
+                    color: isSpeaking ? '#D4AF37' : (isListening ? '#10B981' : (isProcessing ? '#38BDF8' : (dark ? '#9CA3AF' : '#4B5563'))),
                   }}
                 />
-                <Typography sx={{ fontFamily: mono, fontWeight: 700, fontSize: '1.1rem', color: '#D4AF37' }}>
+                <Typography sx={{ fontFamily: mono, fontWeight: 700, fontSize: '1.1rem', color: dark ? '#D4AF37' : '#8A6508' }}>
                   {formatTime(callTimer)}
                 </Typography>
               </Box>
@@ -559,7 +584,7 @@ export default function VoiceStationPage() {
               </Box>
 
               {/* Active Persona Details */}
-              <Typography variant="h5" sx={{ fontWeight: 800, color: '#F3F4F6', mt: 1 }}>
+              <Typography variant="h5" sx={{ fontWeight: 800, color: dark ? '#F3F4F6' : '#101828', mt: 1 }}>
                 {activePersona.label}
               </Typography>
               <Typography variant="body2" sx={{ color: activePersona.color, fontFamily: mono, fontSize: '0.8rem', mb: 2 }}>
@@ -579,7 +604,7 @@ export default function VoiceStationPage() {
                     bgcolor: isListening ? '#EF4444' : '#10B981',
                     color: '#08090E',
                     boxShadow: isListening ? '0 0 24px rgba(239, 68, 68, 0.6)' : '0 0 24px rgba(16, 185, 129, 0.6)',
-                    '&:hover': { bgcolor: isListening ? '#DC2626' : '#059669' },
+                    '&:hover': { bgcolor: isListening ? '#DC2626' : '#047857' },
                   }}
                   title={isListening ? "Mute Microphone" : "Tap to Speak"}
                 >
@@ -595,7 +620,7 @@ export default function VoiceStationPage() {
                     borderRadius: '50%',
                     minWidth: 52,
                     borderColor: callActive ? '#EF4444' : '#D4AF37',
-                    color: callActive ? '#EF4444' : '#D4AF37',
+                    color: callActive ? (dark ? '#EF4444' : '#B91C1C') : (dark ? '#D4AF37' : '#8A6508'),
                     '&:hover': { bgcolor: 'rgba(212, 175, 55, 0.1)' },
                   }}
                   title={callActive ? "End Live Session" : "Start Live Session"}
@@ -656,11 +681,11 @@ export default function VoiceStationPage() {
                     >
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
                         <Typography sx={{ fontSize: '1.25rem' }}>{p.glyph}</Typography>
-                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: isSelected ? p.color : '#F3F4F6' }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: isSelected ? p.color : (dark ? '#F3F4F6' : '#101828') }}>
                           {p.label}
                         </Typography>
                       </Box>
-                      <Typography variant="caption" sx={{ color: '#9CA3AF', fontSize: '0.72rem', display: 'block', lineHeight: 1.3 }}>
+                      <Typography variant="caption" sx={{ color: dark ? '#9CA3AF' : '#4B5563', fontSize: '0.72rem', display: 'block', lineHeight: 1.3 }}>
                         {p.role}
                       </Typography>
                     </Paper>
@@ -707,21 +732,21 @@ export default function VoiceStationPage() {
                     }}
                   >
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
-                      <Typography sx={{ fontWeight: 700, fontSize: '0.78rem', color: t.isAgent ? '#D4AF37' : '#10B981', fontFamily: mono }}>
+                      <Typography sx={{ fontWeight: 700, fontSize: '0.78rem', color: t.isAgent ? (dark ? '#D4AF37' : '#8A6508') : (dark ? '#10B981' : '#047857'), fontFamily: mono }}>
                         {t.speaker}
                       </Typography>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Typography sx={{ fontSize: '0.7rem', color: '#6B7280', fontFamily: mono }}>
+                        <Typography sx={{ fontSize: '0.7rem', color: dark ? '#9CA3AF' : '#4B5563', fontFamily: mono }}>
                           {t.time} {t.latency && `• ${t.latency}`}
                         </Typography>
                         {t.audioBase64 && (
-                          <IconButton size="small" onClick={() => playAudioBase64(t.audioBase64)} title="Replay turn audio" sx={{ color: '#D4AF37', p: 0.25 }}>
+                          <IconButton aria-label="Replay turn audio" size="small" onClick={() => playAudioBase64(t.audioBase64)} title="Replay turn audio" sx={{ color: dark ? '#D4AF37' : '#8A6508', p: 0.25 }}>
                             <VolumeUpIcon fontSize="inherit" />
                           </IconButton>
                         )}
                       </Box>
                     </Box>
-                    <Typography variant="body2" sx={{ fontSize: '0.85rem', color: '#F3F4F6', lineHeight: 1.4 }}>
+                    <Typography variant="body2" sx={{ fontSize: '0.85rem', color: dark ? '#F3F4F6' : '#101828', lineHeight: 1.4 }}>
                       "{t.text}"
                     </Typography>
                   </Box>
@@ -758,18 +783,18 @@ export default function VoiceStationPage() {
                   }}
                 >
                   <Box>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#38BDF8' }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: dark ? '#38BDF8' : '#0369A1' }}>
                       Signal Messenger Bridge
                     </Typography>
-                    <Typography variant="caption" sx={{ color: '#9CA3AF', fontFamily: mono }}>
+                    <Typography variant="caption" sx={{ color: dark ? '#9CA3AF' : '#4B5563', fontFamily: mono }}>
                       +1 (948) 204-7987 • Type /call to trigger
                     </Typography>
                   </Box>
-                  <IconButton
+                  <IconButton aria-label="Copy /call command"
                     size="small"
                     onClick={() => copyToClipboard('/call', 'Signal')}
                     title="Copy /call command"
-                    sx={{ color: '#38BDF8' }}
+                    sx={{ color: 'var(--zs-sky)' }}
                   >
                     <ContentCopyIcon fontSize="small" />
                   </IconButton>
@@ -789,14 +814,14 @@ export default function VoiceStationPage() {
                   }}
                 >
                   <Box>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#C084FC' }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: dark ? '#C084FC' : '#7E22CE' }}>
                       SimpleX P2P Chat
                     </Typography>
-                    <Typography variant="caption" sx={{ color: '#9CA3AF', fontFamily: mono }}>
+                    <Typography variant="caption" sx={{ color: dark ? '#9CA3AF' : '#4B5563', fontFamily: mono }}>
                       @neal • Zero-Metadata E2EE Socket
                     </Typography>
                   </Box>
-                  <IconButton
+                  <IconButton aria-label="Copy /voice command"
                     size="small"
                     onClick={() => copyToClipboard('/voice', 'SimpleX')}
                     title="Copy /voice command"
@@ -819,7 +844,7 @@ export default function VoiceStationPage() {
                 overflow: 'hidden',
               }}
             >
-              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, color: '#D4AF37' }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1, color: dark ? '#D4AF37' : '#8A6508' }}>
                 🔒 Executive Call Debrief & Audio Export (Pro)
               </Typography>
 
@@ -832,17 +857,19 @@ export default function VoiceStationPage() {
                   transition: 'filter 0.3s ease',
                 }}
               >
-                <Typography variant="body2" sx={{ color: '#9CA3AF', mb: 1.5 }}>
+                <Typography variant="body2" sx={{ color: dark ? '#9CA3AF' : '#4B5563', mb: 1.5 }}>
                   Synthesizes full audio recordings into actionable markdown debriefs, task lists, and sovereign memory commits directly to :8094.
                 </Typography>
                 <Button
                   fullWidth
                   variant="outlined"
                   size="small"
-                  onClick={() => alert('Exporting WAV audio recording and markdown transcript...')}
-                  sx={{ borderColor: '#D4AF37', color: '#D4AF37', fontWeight: 700 }}
+                  onClick={exportDebrief}
+                  disabled={turns.length < 2}
+                  title={turns.length < 2 ? 'Talk with a persona first; the debrief exports the conversation.' : 'Download this session as a Markdown debrief'}
+                  sx={{ borderColor: '#D4AF37', color: dark ? '#D4AF37' : '#8A6508', fontWeight: 700 }}
                 >
-                  📥 Export WAV & Markdown Debrief
+                  📥 Export Markdown Debrief
                 </Button>
               </Box>
 
@@ -864,11 +891,11 @@ export default function VoiceStationPage() {
                     zIndex: 10,
                   }}
                 >
-                  <LockIcon sx={{ color: '#D4AF37', fontSize: '1.8rem', mb: 0.5 }} />
+                  <LockIcon sx={{ color: dark ? '#D4AF37' : '#8A6508', fontSize: '1.8rem', mb: 0.5 }} />
                   <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#FFFFFF', mb: 0.5 }}>
                     Unlock Pro Voice Debriefs
                   </Typography>
-                  <Typography variant="caption" sx={{ color: '#9CA3AF', display: 'block', mb: 1.5 }}>
+                  <Typography variant="caption" sx={{ color: dark ? '#9CA3AF' : '#4B5563', display: 'block', mb: 1.5 }}>
                     Get unlimited transcript exports, Signal audio archiving, and memory sync.
                   </Typography>
                   <Button
@@ -885,7 +912,7 @@ export default function VoiceStationPage() {
                     variant="outlined"
                     size="small"
                     onClick={() => setPaywallOpen(true)}
-                    sx={{ borderColor: '#D4AF37', color: '#D4AF37' }}
+                    sx={{ borderColor: '#D4AF37', color: dark ? '#D4AF37' : '#8A6508' }}
                   >
                     Key
                   </Button>
@@ -924,7 +951,7 @@ export default function VoiceStationPage() {
               boxShadow: '0 20px 50px rgba(0,0,0,0.9)',
             }}
           >
-            <IconButton
+            <IconButton aria-label="Close"
               onClick={() => setPaywallOpen(false)}
               sx={{ position: 'absolute', top: 12, right: 12, color: '#9CA3AF' }}
             >
@@ -932,7 +959,7 @@ export default function VoiceStationPage() {
             </IconButton>
 
             <Typography variant="h5" sx={{ fontWeight: 800, color: '#FFFFFF', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-              <span style={{ color: '#D4AF37' }}>★</span> Zoth Voice Pro License
+              <span style={{ color: dark ? '#D4AF37' : '#8A6508' }}>★</span> Zoth Voice Pro License
             </Typography>
             <Typography variant="body2" sx={{ color: '#9CA3AF', mb: 2 }}>
               Permanent lifetime access. Unlocks real-time debrief generators, multi-persona voice archiving, and SimpleX chat sync.
@@ -969,7 +996,7 @@ export default function VoiceStationPage() {
                   onChange={(e) => setLicenseInput(e.target.value)}
                   sx={{ '& .MuiOutlinedInput-root': { fontFamily: mono, fontSize: '0.85rem' } }}
                 />
-                <Button variant="outlined" onClick={activatePro} sx={{ borderColor: '#D4AF37', color: '#D4AF37' }}>
+                <Button variant="outlined" onClick={activatePro} sx={{ borderColor: '#D4AF37', color: dark ? '#D4AF37' : '#8A6508' }}>
                   Activate
                 </Button>
               </Box>

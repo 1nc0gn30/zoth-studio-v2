@@ -25,7 +25,7 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 export default function MathPillarDetailPage() {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
-  const gold = dark ? '#D4AF37' : '#B8860B';
+  const gold = dark ? '#D4AF37' : '#8A6508';
   const goldLight = dark ? '#F5E6AB' : '#8A6A09';
   const goldBg = dark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
   const surface = theme.palette.background.paper;
@@ -1210,7 +1210,7 @@ export class STDPPlasticityEngineWASM {
             </Box>
 
             <Tooltip title="Copy Selected Formula">
-              <IconButton size="small" onClick={handleCopyFormulaText} sx={{ color: copiedFormula ? (dark ? '#34D399' : '#12B76A') : textSecondary }}>
+              <IconButton aria-label="Copy to clipboard" size="small" onClick={handleCopyFormulaText} sx={{ color: copiedFormula ? (dark ? '#34D399' : '#12B76A') : textSecondary }}>
                 {copiedFormula ? <CheckIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
               </IconButton>
             </Tooltip>

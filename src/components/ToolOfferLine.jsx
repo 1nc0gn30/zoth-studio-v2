@@ -8,7 +8,7 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
  */
 export default function ToolOfferLine({ tool, isDark }) {
   if (!tool?.priceUsd && !tool?.liveUrl) return null;
-  const color = isDark ? '#F5E6AB' : '#B8860B';
+  const color = isDark ? '#F5E6AB' : '#8A6508';
   const wash = isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
   const border = isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.35)';
 
