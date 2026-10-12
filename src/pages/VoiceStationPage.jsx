@@ -502,7 +502,7 @@ export default function VoiceStationPage() {
                   fontWeight: 700,
                   fontSize: '0.72rem',
                   bgcolor: isPro ? 'rgba(212, 175, 55, 0.2)' : 'rgba(156, 163, 175, 0.12)',
-                  color: isPro ? '#D4AF37' : '#9CA3AF',
+                  color: isPro ? (dark ? '#D4AF37' : '#8A6508') : (dark ? '#9CA3AF' : '#4B5563'),
                 }}
               />
             </Box>
@@ -546,7 +546,7 @@ export default function VoiceStationPage() {
                     fontFamily: mono,
                     fontWeight: 700,
                     bgcolor: isSpeaking ? 'rgba(212, 175, 55, 0.2)' : (isListening ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255,255,255,0.06)'),
-                    color: isSpeaking ? '#D4AF37' : (isListening ? '#10B981' : (isProcessing ? '#38BDF8' : '#9CA3AF')),
+                    color: isSpeaking ? '#D4AF37' : (isListening ? '#10B981' : (isProcessing ? '#38BDF8' : (dark ? '#9CA3AF' : '#4B5563'))),
                   }}
                 />
                 <Typography sx={{ fontFamily: mono, fontWeight: 700, fontSize: '1.1rem', color: dark ? '#D4AF37' : '#8A6508' }}>
@@ -620,7 +620,7 @@ export default function VoiceStationPage() {
                     borderRadius: '50%',
                     minWidth: 52,
                     borderColor: callActive ? '#EF4444' : '#D4AF37',
-                    color: callActive ? '#EF4444' : '#D4AF37',
+                    color: callActive ? (dark ? '#EF4444' : '#B91C1C') : (dark ? '#D4AF37' : '#8A6508'),
                     '&:hover': { bgcolor: 'rgba(212, 175, 55, 0.1)' },
                   }}
                   title={callActive ? "End Live Session" : "Start Live Session"}
@@ -732,11 +732,11 @@ export default function VoiceStationPage() {
                     }}
                   >
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
-                      <Typography sx={{ fontWeight: 700, fontSize: '0.78rem', color: t.isAgent ? '#D4AF37' : '#10B981', fontFamily: mono }}>
+                      <Typography sx={{ fontWeight: 700, fontSize: '0.78rem', color: t.isAgent ? (dark ? '#D4AF37' : '#8A6508') : (dark ? '#10B981' : '#047857'), fontFamily: mono }}>
                         {t.speaker}
                       </Typography>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Typography sx={{ fontSize: '0.7rem', color: '#6B7280', fontFamily: mono }}>
+                        <Typography sx={{ fontSize: '0.7rem', color: dark ? '#9CA3AF' : '#4B5563', fontFamily: mono }}>
                           {t.time} {t.latency && `• ${t.latency}`}
                         </Typography>
                         {t.audioBase64 && (
@@ -783,7 +783,7 @@ export default function VoiceStationPage() {
                   }}
                 >
                   <Box>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#38BDF8' }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: dark ? '#38BDF8' : '#0369A1' }}>
                       Signal Messenger Bridge
                     </Typography>
                     <Typography variant="caption" sx={{ color: dark ? '#9CA3AF' : '#4B5563', fontFamily: mono }}>
@@ -814,7 +814,7 @@ export default function VoiceStationPage() {
                   }}
                 >
                   <Box>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#C084FC' }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 700, color: dark ? '#C084FC' : '#7E22CE' }}>
                       SimpleX P2P Chat
                     </Typography>
                     <Typography variant="caption" sx={{ color: dark ? '#9CA3AF' : '#4B5563', fontFamily: mono }}>

@@ -610,7 +610,7 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             }
             if (line.type === 'dim') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#64748B', position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 4px rgba(100,116,139,0.2)' : 'none', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#94A3B8', position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 4px rgba(100,116,139,0.2)' : 'none', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
                   {line.text}
                 </Typography>
               );

@@ -310,14 +310,15 @@ export default function WebMCPConsole() {
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: isPlayingSim ? '#10B981' : gold, animation: isPlayingSim ? 'pulse 1s infinite' : 'none' }} />
-                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: goldSoft, letterSpacing: '0.06em' }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: "#F5E6AB", letterSpacing: '0.06em' }}>
                       {isPlayingSim ? 'ZOTH OS DEMO REEL ACTIVE [4K 60FPS]' : 'STANDBY · READY FOR RECORDED MP4 FOOTAGE'}
                     </Typography>
                   </Box>
                   <Chip
                     size="small"
+                    className="zs-ondark"
                     label={demoChapters[simStep].time}
-                    sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(212,175,55,0.2)', color: gold }}
+                    sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(212,175,55,0.2)', color: "#E5C158" }}
                   />
                 </Box>
 
@@ -332,7 +333,7 @@ export default function WebMCPConsole() {
                     fontFamily: mono
                   }}
                 >
-                  <Typography variant="h6" sx={{ fontWeight: 800, color: gold, mb: 1 }}>
+                  <Typography variant="h6" sx={{ fontWeight: 800, color: "#D4AF37", mb: 1 }}>
                     {demoChapters[simStep].title}
                   </Typography>
                   <Typography variant="body2" sx={{ color: '#E2E8F0', mb: 2, lineHeight: 1.6 }}>
@@ -355,13 +356,13 @@ export default function WebMCPConsole() {
                     size="small"
                     startIcon={isPlayingSim ? <PauseIcon /> : <PlayArrowIcon />}
                     onClick={() => setIsPlayingSim(!isPlayingSim)}
-                    sx={{ bgcolor: gold, color: '#08080B', fontWeight: 800, '&:hover': { bgcolor: '#E5C158' } }}
+                    sx={{ bgcolor: "#D4AF37", color: '#08080B', fontWeight: 800, '&:hover': { bgcolor: '#E5C158' } }}
                   >
                     {isPlayingSim ? 'Pause Demonstration Reel' : 'Play Interactive Zoth OS Reel'}
                   </Button>
 
-                  <Typography variant="caption" color="text.secondary" sx={{ fontFamily: mono }}>
-                    Place recorded MP4 at <code style={{ color: gold }}>public/assets/videos/webmcp-zoth-os.mp4</code>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: "#9CA3AF" }}>
+                    Interactive walkthrough · recorded demo coming soon
                   </Typography>
                 </Box>
               </Box>

@@ -400,7 +400,7 @@ export const theme = createTheme({
         // fail WCAG AA on pale tints. Darken the label from its own colour so every
         // per-page accent keeps its hue but reaches >=4.5:1. Filled palette chips keep theirs.
         label: {
-          '.MuiChip-colorDefault &, .MuiChip-outlined &': {
+          '.MuiChip-colorDefault:not(.zs-ondark) &, .MuiChip-outlined:not(.zs-ondark) &': {
             color: 'color-mix(in srgb, currentColor 50%, #000)',
           },
         },
