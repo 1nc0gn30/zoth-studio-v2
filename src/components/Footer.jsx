@@ -364,6 +364,7 @@ export default function Footer() {
                   <IconButton
                     component="a"
                     href="https://nullai.tech"
+                    aria-label="NullAI Tech website (opens in new tab)"
                     target="_blank"
                     rel="noopener noreferrer"
                     size="small"
@@ -392,6 +393,7 @@ export default function Footer() {
                   <IconButton
                     component="a"
                     href="https://github.com/NullAITech"
+                    aria-label="NullAI Tech on GitHub (opens in new tab)"
                     target="_blank"
                     rel="noopener noreferrer"
                     size="small"

@@ -208,6 +208,7 @@ export default function SwarmFrameJourney({ onEnterCockpit, onBackToFunnel }) {
               <span>
                 <IconButton
                   size="small"
+                  aria-label="Previous frame"
                   onClick={handlePrev}
                   disabled={activeFrameIndex === 0}
                   sx={{ color: isDark ? '#EDEFF2' : '#1E293B' }}
@@ -221,6 +222,7 @@ export default function SwarmFrameJourney({ onEnterCockpit, onBackToFunnel }) {
               <span>
                 <IconButton
                   size="small"
+                  aria-label="Next frame"
                   onClick={handleNext}
                   disabled={activeFrameIndex === FRAMES.length - 1}
                   sx={{ color: isDark ? '#EDEFF2' : '#1E293B' }}
