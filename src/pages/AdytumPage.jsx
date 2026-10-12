@@ -1000,7 +1000,7 @@ export function AdytumEngine({ embedded = false }) {
                 />
               </Box>
               <Typography variant="body2" sx={{ color: textSecondary, mt: 0.5, maxWidth: 720 }}>
-                This workspace executes the published CLI tool package (<code>npx zoth pull adytum-alchemist-ai-workflow</code>). It embeds the complete 22-Key Adytum Alchemist Planner with interactive Tarot Arcana cards, live In-Browser Hermetic Oracle, 5-minute incubation pause, and cryptographic SHA-256 seal stamps.
+                This workspace executes the published CLI tool package (<code>npx @nullaitech/zoth pull adytum-alchemist-ai-workflow</code>). It embeds the complete 22-Key Adytum Alchemist Planner with interactive Tarot Arcana cards, live In-Browser Hermetic Oracle, 5-minute incubation pause, and cryptographic SHA-256 seal stamps.
               </Typography>
             </Box>
           </Box>

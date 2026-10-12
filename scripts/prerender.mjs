@@ -67,9 +67,9 @@ function buildSemanticContent(routePath, meta) {
         </div>
 
         <h3 style="color: #D4AF37; font-size: 1.1rem; margin-top: 1.5rem;">Autonomous Local CLI Quickstart</h3>
-        <pre style="background: #0D0E15; padding: 0.85rem; border: 1px solid #1E2230; border-radius: 4px; color: #D4AF37; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;"><code>$ npx zoth up          # Starts offline daemons (memory, bridge, vault, studio)
-$ npx zoth status      # Probes loopback enclaves & hardware readiness
-$ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</code></pre>
+        <pre style="background: #0D0E15; padding: 0.85rem; border: 1px solid #1E2230; border-radius: 4px; color: #D4AF37; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;"><code>$ npx @nullaitech/zoth studio        # Clones, installs, and runs Zoth Studio at :3000
+$ npx @nullaitech/zoth status        # Checks local Zoth services and /dev/kvm
+$ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./tools</code></pre>
       </section>
     `;
   } else if (routePath === '/adytum') {
@@ -319,7 +319,7 @@ $ npx zoth clone       # Scaffolds open-source templates and 21-agent cadres</co
           <h2 style="font-size: 1.25rem; color: #D4AF37;">${tool.name} Developer Workspace</h2>
           <p><strong>Category:</strong> ${tool.category} | <strong>Execution Engine:</strong> ${tool.executionType} | <strong>Version:</strong> ${tool.version}</p>
           <p style="color: #D1D5DB; line-height: 1.6;">${tool.description}</p>
-          <pre style="background: #0D0E15; padding: 0.75rem; border: 1px solid #1E2230; border-radius: 4px; color: #D4AF37; overflow-x: auto;"><code>${tool.pull || `npx zoth pull ${tool.id}`}</code></pre>
+          <pre style="background: #0D0E15; padding: 0.75rem; border: 1px solid #1E2230; border-radius: 4px; color: #D4AF37; overflow-x: auto;"><code>${tool.pull || `npx @nullaitech/zoth pull ${tool.id}`}</code></pre>
           ${tool.github ? `<p><a href="${tool.github}" target="_blank" rel="noopener noreferrer" style="color: #60A5FA;">View Open-Source Repository ↗</a></p>` : ''}
         </section>
       `;

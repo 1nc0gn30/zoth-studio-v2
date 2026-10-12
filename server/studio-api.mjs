@@ -339,7 +339,7 @@ export function studioMiddleware() {
         if (!result.up) {
           send(res, 503, {
             error: 'Memory daemon is not answering on 127.0.0.1:8094.',
-            hint: 'python3 src/daemon.py --port 8094 or npx zoth up',
+            hint: 'python3 src/daemon.py --port 8094 or npm run zoth -- up',
           });
           return;
         }
@@ -363,7 +363,7 @@ export function studioMiddleware() {
         if (!health.up) {
           send(res, 503, {
             error: 'Signal bridge is not answering on 127.0.0.1:8102.',
-            hint: 'node server/bridge.js --port 8102 or npx zoth up',
+            hint: 'node server/bridge.js --port 8102 or npm run zoth -- up',
           });
           return;
         }
@@ -415,7 +415,7 @@ export function studioMiddleware() {
         if (!result.up) {
           send(res, 503, {
             error: 'Signal bridge is not answering on 127.0.0.1:8102.',
-            hint: 'node server/bridge.js --port 8102 or npx zoth up',
+            hint: 'node server/bridge.js --port 8102 or npm run zoth -- up',
           });
           return;
         }
