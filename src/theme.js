@@ -396,6 +396,14 @@ export const theme = createTheme({
     },
     MuiChip: {
       styleOverrides: {
+        // Light mode: accent chips inherit neon dark-theme hues (#38bdf8, #10b981...) that
+        // fail WCAG AA on pale tints. Darken the label from its own colour so every
+        // per-page accent keeps its hue but reaches >=4.5:1. Filled palette chips keep theirs.
+        label: {
+          '.MuiChip-colorDefault &, .MuiChip-outlined &': {
+            color: 'color-mix(in srgb, currentColor 50%, #000)',
+          },
+        },
         root: {
           fontWeight: 650,
           borderRadius: 9999,

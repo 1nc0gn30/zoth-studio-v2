@@ -604,7 +604,7 @@ export default function VoiceStationPage() {
                     bgcolor: isListening ? '#EF4444' : '#10B981',
                     color: '#08090E',
                     boxShadow: isListening ? '0 0 24px rgba(239, 68, 68, 0.6)' : '0 0 24px rgba(16, 185, 129, 0.6)',
-                    '&:hover': { bgcolor: isListening ? '#DC2626' : '#059669' },
+                    '&:hover': { bgcolor: isListening ? '#DC2626' : '#047857' },
                   }}
                   title={isListening ? "Mute Microphone" : "Tap to Speak"}
                 >

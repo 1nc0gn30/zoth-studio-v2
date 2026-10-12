@@ -1127,7 +1127,7 @@ export default function SwarmPage() {
                   fontFamily: mono,
                   fontWeight: 800,
                   bgcolor: isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF3',
-                  color: isDark ? '#34D399' : '#059669',
+                  color: isDark ? '#34D399' : '#047857',
                   border: '1px solid rgba(52,211,153,0.3)',
                 }}
               />
@@ -1370,7 +1370,7 @@ export default function SwarmPage() {
 
                       {/* Measured Latency Metric */}
                       <Box sx={{ my: 1.5, textAlign: 'center', p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#050508' : '#FFFFFF', border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}` }}>
-                        <Typography sx={{ fontFamily: mono, fontSize: '1.6rem', fontWeight: 900, color: isPinging ? (isDark ? '#34D399' : '#059669') : color, lineHeight: 1 }}>
+                        <Typography sx={{ fontFamily: mono, fontSize: '1.6rem', fontWeight: 900, color: isPinging ? (isDark ? '#34D399' : '#047857') : color, lineHeight: 1 }}>
                           {metrics.latency.toFixed(2)} ms
                         </Typography>
                         <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.68rem', color: isDark ? '#94A3B8' : '#64748B', mt: 0.5, display: 'block' }}>
@@ -1382,7 +1382,7 @@ export default function SwarmPage() {
                       <Box sx={{ mb: 1.5 }}>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.4 }}>
                           <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary' }}>Packet Loss:</Typography>
-                          <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 800, color: isDark ? '#34D399' : '#059669' }}>0.00% Zero-Drop</Typography>
+                          <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 800, color: isDark ? '#34D399' : '#047857' }}>0.00% Zero-Drop</Typography>
                         </Box>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                           <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary' }}>Sent / Recv:</Typography>

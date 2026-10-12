@@ -91,7 +91,7 @@ const CATEGORY_CONFIG = {
   },
   'Planning': {
     color: '#D4AF37',
-    lightColor: '#B8860B',
+    lightColor: '#8A6508',
     wash: 'rgba(212, 175, 55, 0.14)',
     icon: LayersIcon,
   },
@@ -163,7 +163,7 @@ function UnifiedAssetCard({ item, isDark, gold, runtime }) {
         transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
         '&:hover': {
           transform: 'translateY(-3px)',
-          borderColor: isDark ? '#38BDF8' : '#0284C7',
+          borderColor: isDark ? '#38BDF8' : '#0369A1',
           boxShadow: isDark
             ? '0 12px 32px rgba(0, 0, 0, 0.6), 0 0 16px rgba(56, 189, 248, 0.15)'
             : '0 8px 24px rgba(2, 132, 199, 0.12)',
@@ -210,7 +210,7 @@ function UnifiedAssetCard({ item, isDark, gold, runtime }) {
               color: runtime?.isLocal
                 ? (isDark ? '#34D399' : '#047857')
                 : item.executionType === 'webgpu'
-                  ? (isDark ? '#38BDF8' : '#0284C7')
+                  ? (isDark ? '#38BDF8' : '#0369A1')
                   : (isDark ? '#FCA5A5' : '#B91C1C'),
               border: '1px solid',
               borderColor: runtime?.isLocal
@@ -292,7 +292,7 @@ function UnifiedAssetCard({ item, isDark, gold, runtime }) {
                 justifyContent: 'space-between',
                 gap: 1,
                 '&:hover': {
-                  borderColor: isDark ? '#38BDF8' : '#0284C7',
+                  borderColor: isDark ? '#38BDF8' : '#0369A1',
                   bgcolor: isDark ? '#0E1118' : '#EDEFEF',
                 },
                 transition: 'all 0.18s ease',
@@ -338,7 +338,7 @@ function UnifiedAssetCard({ item, isDark, gold, runtime }) {
           }
           sx={{
             bgcolor: execEval.canExecute
-              ? (runtime?.isLocal ? (isDark ? '#10B981' : '#059669') : (isDark ? '#38BDF8' : '#0284C7'))
+              ? (runtime?.isLocal ? (isDark ? '#10B981' : '#047857') : (isDark ? '#38BDF8' : '#0369A1'))
               : 'transparent',
             borderColor: execEval.canExecute ? 'transparent' : (isDark ? 'rgba(212,175,55,0.4)' : '#D4AF37'),
             color: execEval.canExecute
@@ -400,7 +400,7 @@ export default function ArsenalPage() {
   const [viewMode, setViewMode] = useState('grid');
 
   const gold = {
-    accent: isDark ? '#D4AF37' : '#B8860B',
+    accent: isDark ? '#D4AF37' : '#8A6508',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
     border: isDark ? 'rgba(212,175,55,0.28)' : 'rgba(184,134,11,0.25)',
   };
@@ -649,7 +649,7 @@ export default function ArsenalPage() {
                       justifyContent: 'center',
                       bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF',
                       border: `1px solid ${isDark ? 'rgba(56,189,248,0.3)' : '#BAE6FD'}`,
-                      color: isDark ? '#38BDF8' : '#0284C7',
+                      color: isDark ? '#38BDF8' : '#0369A1',
                       flexShrink: 0,
                     }}
                   >
@@ -821,12 +821,12 @@ export default function ArsenalPage() {
                   px: 0.8,
                   borderRadius: 2,
                   bgcolor: isSelected
-                    ? (isDark ? '#38BDF8' : '#0284C7')
+                    ? (isDark ? '#38BDF8' : '#0369A1')
                     : (isDark ? '#0D0D14' : '#FFFFFF'),
                   color: isSelected ? '#FFFFFF' : (isDark ? '#D1D5DB' : '#374151'),
                   border: '1px solid',
                   borderColor: isSelected
-                    ? (isDark ? '#38BDF8' : '#0284C7')
+                    ? (isDark ? '#38BDF8' : '#0369A1')
                     : (isDark ? 'rgba(255, 255, 255, 0.08)' : '#E2E8F0'),
                   '&:hover': {
                     bgcolor: isSelected ? (isDark ? '#7DD3FC' : '#0369A1') : (isDark ? '#141420' : '#F1F5F9'),
@@ -890,7 +890,7 @@ export default function ArsenalPage() {
                     flexWrap: 'wrap',
                     gap: 2,
                     '&:hover': {
-                      borderColor: isDark ? '#38BDF8' : '#0284C7',
+                      borderColor: isDark ? '#38BDF8' : '#0369A1',
                     },
                   }}
                 >
@@ -927,7 +927,7 @@ export default function ArsenalPage() {
                             color: runtime.isLocal
                               ? (isDark ? '#34D399' : '#047857')
                               : asset.executionType === 'webgpu'
-                                ? (isDark ? '#38BDF8' : '#0284C7')
+                                ? (isDark ? '#38BDF8' : '#0369A1')
                                 : (isDark ? '#FCA5A5' : '#B91C1C'),
                           }}
                         />
@@ -949,7 +949,7 @@ export default function ArsenalPage() {
                       to={asset.target}
                       sx={{
                         bgcolor: assetEval.canExecute
-                          ? (runtime.isLocal ? (isDark ? '#10B981' : '#059669') : (isDark ? '#38BDF8' : '#0284C7'))
+                          ? (runtime.isLocal ? (isDark ? '#10B981' : '#047857') : (isDark ? '#38BDF8' : '#0369A1'))
                           : 'transparent',
                         borderColor: assetEval.canExecute ? 'transparent' : (isDark ? 'rgba(212,175,55,0.4)' : '#D4AF37'),
                         color: assetEval.canExecute ? '#FFFFFF' : (isDark ? '#F5E6AB' : '#8A6A09'),

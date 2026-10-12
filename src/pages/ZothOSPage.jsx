@@ -303,7 +303,7 @@ export default function ZothOSPage() {
   const terminalInputRef = useRef(null);
 
   const gold = {
-    accent: isDark ? '#D4AF37' : '#B8860B',
+    accent: isDark ? '#D4AF37' : '#8A6508',
     soft: isDark ? '#F5E6AB' : '#8A6A09',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
     border: isDark ? 'rgba(212,175,55,0.32)' : '#E2CE82',
@@ -1262,7 +1262,7 @@ export default function ZothOSPage() {
                     label="Active In-Use"
                     statusBadge={`${ramAllocation} MB ALLOCATED`}
                     subtext="Zero-Leak Enclave Buffer with AES-256 Encrypted Swap"
-                    accentColor={isDark ? '#38BDF8' : '#0284C7'}
+                    accentColor={isDark ? '#38BDF8' : '#0369A1'}
                     glowColor={isDark ? 'rgba(56, 189, 248, 0.45)' : 'rgba(2, 132, 199, 0.25)'}
                   />
 
@@ -1285,9 +1285,9 @@ export default function ZothOSPage() {
                             fontFamily: mono,
                             fontSize: '0.72rem',
                             fontWeight: 800,
-                            bgcolor: ramAllocation === sz ? (isDark ? '#38BDF8' : '#0284C7') : gold.wash,
+                            bgcolor: ramAllocation === sz ? (isDark ? '#38BDF8' : '#0369A1') : gold.wash,
                             color: ramAllocation === sz ? (isDark ? '#08080B' : '#FFFFFF') : gold.soft,
-                            border: `1px solid ${ramAllocation === sz ? (isDark ? '#38BDF8' : '#0284C7') : gold.border}`,
+                            border: `1px solid ${ramAllocation === sz ? (isDark ? '#38BDF8' : '#0369A1') : gold.border}`,
                           }}
                         />
                       ))}
@@ -1314,7 +1314,7 @@ export default function ZothOSPage() {
                   }}
                 >
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%', mb: 1 }}>
-                    <LockIcon sx={{ color: isDark ? '#34D399' : '#059669', fontSize: 20 }} />
+                    <LockIcon sx={{ color: isDark ? '#34D399' : '#047857', fontSize: 20 }} />
                     <Typography variant="subtitle2" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
                       Zero-Egress Kernel Module
                     </Typography>
@@ -1327,7 +1327,7 @@ export default function ZothOSPage() {
                     label="Loopback Locked"
                     statusBadge="AIR-GAP STRICT"
                     subtext="All Outbound SYN dropped. Interfaces isolated to lo & kvm-br0"
-                    accentColor={isDark ? '#34D399' : '#059669'}
+                    accentColor={isDark ? '#34D399' : '#047857'}
                     glowColor={isDark ? 'rgba(52, 211, 153, 0.45)' : 'rgba(5, 150, 105, 0.25)'}
                   />
 
@@ -1348,7 +1348,7 @@ export default function ZothOSPage() {
                         color: isDark ? '#34D399' : '#027A48',
                         borderColor: isDark ? 'rgba(52, 211, 153, 0.4)' : '#A6F4C5',
                         '&:hover': {
-                          borderColor: isDark ? '#34D399' : '#059669',
+                          borderColor: isDark ? '#34D399' : '#047857',
                           bgcolor: isDark ? 'rgba(52, 211, 153, 0.1)' : '#ECFDF3',
                         },
                       }}
@@ -1452,7 +1452,7 @@ export default function ZothOSPage() {
                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700, fontFamily: mono, fontSize: '0.68rem' }}>
                   GUEST VCPU ARCH
                 </Typography>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', fontWeight: 800, color: isDark ? '#38BDF8' : '#0284C7' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', fontWeight: 800, color: isDark ? '#38BDF8' : '#0369A1' }}>
                   {cpuConfigs[cpuPreset].cores} vCPUs @ {cpuConfigs[cpuPreset].freq.split(' ')[0]} ({cpuLoad}% Load)
                 </Typography>
               </Box>
@@ -2078,7 +2078,7 @@ export default function ZothOSPage() {
                 <Box>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <CodeIcon sx={{ color: isDark ? '#38BDF8' : '#0284C7' }} />
+                      <CodeIcon sx={{ color: isDark ? '#38BDF8' : '#0369A1' }} />
                       <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
                         Source Repository
                       </Typography>
@@ -2099,7 +2099,7 @@ export default function ZothOSPage() {
                     Clone the sovereign distribution kernel build scripts, QEMU configuration, and hardened BPF zero-egress network rules.
                   </Typography>
                   <Box sx={{ p: 1.2, mb: 2, bgcolor: isDark ? '#040407' : '#F1F5F9', borderRadius: 1.5, border: '1px solid rgba(56, 189, 248, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#38BDF8' : '#0369A1', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {gitCloneCmd}
                     </Typography>
                     <IconButton aria-label="Copy clone command"
@@ -2109,7 +2109,7 @@ export default function ZothOSPage() {
                         setCopiedGitClone(true);
                         setTimeout(() => setCopiedGitClone(false), 1600);
                       }}
-                      sx={{ color: isDark ? '#38BDF8' : '#0284C7', ml: 1, p: 0.5 }}
+                      sx={{ color: isDark ? '#38BDF8' : '#0369A1', ml: 1, p: 0.5 }}
                       title="Copy clone command"
                     >
                       <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
@@ -2125,8 +2125,8 @@ export default function ZothOSPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   sx={{
-                    borderColor: isDark ? '#38BDF8' : '#0284C7',
-                    color: isDark ? '#38BDF8' : '#0284C7',
+                    borderColor: isDark ? '#38BDF8' : '#0369A1',
+                    color: isDark ? '#38BDF8' : '#0369A1',
                     fontWeight: 800,
                     textTransform: 'none',
                     py: 1,
@@ -2161,7 +2161,7 @@ export default function ZothOSPage() {
                 <Box>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <TerminalIcon sx={{ color: isDark ? '#34D399' : '#059669' }} />
+                      <TerminalIcon sx={{ color: isDark ? '#34D399' : '#047857' }} />
                       <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
                         Micro-Runner CLI
                       </Typography>
@@ -2209,7 +2209,7 @@ export default function ZothOSPage() {
                     terminalInputRef.current?.focus();
                   }}
                   sx={{
-                    borderColor: isDark ? '#34D399' : '#059669',
+                    borderColor: isDark ? '#34D399' : '#047857',
                     color: isDark ? '#34D399' : '#027A48',
                     fontWeight: 800,
                     textTransform: 'none',

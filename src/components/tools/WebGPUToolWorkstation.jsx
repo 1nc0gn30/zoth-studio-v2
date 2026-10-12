@@ -3169,7 +3169,7 @@ function Nexus3dWorkstation({ isDark, gold }) {
     ctx.stroke();
 
     // Draw Edges
-    ctx.strokeStyle = isDark ? '#38BDF8' : '#0284C7';
+    ctx.strokeStyle = isDark ? '#38BDF8' : '#0369A1';
     ctx.lineWidth = 1.6;
     edges.forEach(([i, j]) => {
       if (!projected[i] || !projected[j]) return;
@@ -3649,7 +3649,7 @@ export default function WebGPUToolWorkstation({ tool }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const gold = {
-    accent: isDark ? '#D4AF37' : '#B8860B',
+    accent: isDark ? '#D4AF37' : '#8A6508',
     soft: isDark ? '#F5E6AB' : '#8A6A09',
     wash: isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7',
     border: isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.3)',

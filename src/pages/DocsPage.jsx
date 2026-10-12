@@ -405,12 +405,12 @@ Runs local invariant verification before staging tools.`
                   }}
                 />
                 <Chip
-                  icon={<CloudDoneIcon sx={{ fontSize: '14px !important', color: `${dark ? '#38BDF8' : '#0284C7'} !important` }} />}
+                  icon={<CloudDoneIcon sx={{ fontSize: '14px !important', color: `${dark ? '#38BDF8' : '#0369A1'} !important` }} />}
                   label="NETLIFY 71 PRERENDERED ROUTES"
                   size="small"
                   sx={{
                     bgcolor: dark ? 'rgba(56,189,248,0.12)' : '#E0F2FE',
-                    color: dark ? '#38BDF8' : '#0284C7',
+                    color: dark ? '#38BDF8' : '#0369A1',
                     border: `1px solid ${dark ? 'rgba(56,189,248,0.3)' : '#BAE6FD'}`,
                     fontWeight: 700,
                     maxWidth: '100%',
@@ -863,9 +863,9 @@ Runs local invariant verification before staging tools.`
                         { icon: <CodeIcon sx={{ mb: 0.5, color: dark ? '#79C0FF' : '#0969DA' }} />, title: '25 Sovereign Tools', desc: 'DAG Composer, IDE & Foundry' },
                         { icon: <MemoryIcon sx={{ mb: 0.5, color: dark ? '#00F0FF' : '#0891B2' }} />, title: 'Lucy Cognitive Oracle', desc: 'STDP Synaptic Plasticity (:8094)' },
                         { icon: <GavelIcon sx={{ mb: 0.5, color: dark ? '#C084FC' : '#7C3AED' }} />, title: '3-Agent Byzantine', desc: 'Triadic AST Socratic Debate' },
-                        { icon: <ShieldIcon sx={{ mb: 0.5, color: dark ? '#34D399' : '#059669' }} />, title: 'Zero-Egress Invariants', desc: 'Shannon Entropy & Loopback' },
+                        { icon: <ShieldIcon sx={{ mb: 0.5, color: dark ? '#34D399' : '#047857' }} />, title: 'Zero-Egress Invariants', desc: 'Shannon Entropy & Loopback' },
                         { icon: <LockIcon sx={{ mb: 0.5, color: dark ? '#F59E0B' : '#D97706' }} />, title: 'Adytum Sanctum', desc: '22 Keys & 5-Min Incubation' },
-                        { icon: <CloudDoneIcon sx={{ mb: 0.5, color: dark ? '#38BDF8' : '#0284C7' }} />, title: 'Netlify Edge AEO', desc: '71 Prerendered Static Routes' },
+                        { icon: <CloudDoneIcon sx={{ mb: 0.5, color: dark ? '#38BDF8' : '#0369A1' }} />, title: 'Netlify Edge AEO', desc: '71 Prerendered Static Routes' },
                       ].map((item, i) => (
                         <Paper
                           key={i}
@@ -1004,7 +1004,7 @@ npm run dev`}
                                 size="small"
                                 sx={{
                                   bgcolor: dark ? 'rgba(56,189,248,0.12)' : '#E0F2FE',
-                                  color: dark ? '#38BDF8' : '#0284C7',
+                                  color: dark ? '#38BDF8' : '#0369A1',
                                   fontWeight: 700,
                                   fontSize: '0.75rem'
                                 }}
@@ -1409,7 +1409,7 @@ console.log("Byzantine Consensus Verdict:", verdict.sealed ? "UNANIMOUS APPROVAL
                         >
                           <Typography
                             variant="subtitle2"
-                            sx={{ color: dark ? '#38BDF8' : '#0284C7', fontFamily: '"JetBrains Mono", monospace', fontWeight: 700 }}
+                            sx={{ color: dark ? '#38BDF8' : '#0369A1', fontFamily: '"JetBrains Mono", monospace', fontWeight: 700 }}
                           >
                             {item.ep}
                           </Typography>
