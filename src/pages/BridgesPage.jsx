@@ -346,7 +346,7 @@ export default function BridgesPage() {
 
   // Styling tokens
   const gold = {
-    accent: isDark ? '#D4AF37' : '#B8860B',
+    accent: isDark ? '#D4AF37' : '#8A6508',
     soft: isDark ? '#F5E6AB' : '#8A6A09',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
     border: isDark ? 'rgba(212,175,55,0.28)' : 'rgba(184,134,11,0.25)',
@@ -1064,7 +1064,7 @@ export default function BridgesPage() {
                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
                   LAST ROUTE LATENCY
                 </Typography>
-                <Typography variant="body2" sx={{ fontWeight: 800, color: isDark ? '#38BDF8' : '#0284C7' }}>
+                <Typography variant="body2" sx={{ fontWeight: 800, color: isDark ? '#38BDF8' : '#0369A1' }}>
                   {lastLatency}
                 </Typography>
               </Box>
@@ -1541,8 +1541,8 @@ export default function BridgesPage() {
                     fontFamily: mono,
                     fontSize: '0.74rem',
                     fontWeight: 800,
-                    bgcolor: targetNode === 'Broadcast' ? (isDark ? '#38BDF8' : '#0284C7') : 'transparent',
-                    color: targetNode === 'Broadcast' ? (isDark ? '#08080B' : '#FFFFFF') : (isDark ? '#38BDF8' : '#0284C7'),
+                    bgcolor: targetNode === 'Broadcast' ? (isDark ? '#38BDF8' : '#0369A1') : 'transparent',
+                    color: targetNode === 'Broadcast' ? (isDark ? '#08080B' : '#FFFFFF') : (isDark ? '#38BDF8' : '#0369A1'),
                     borderColor: isDark ? 'rgba(56,189,248,0.4)' : '#0284C7',
                     '&:hover': {
                       bgcolor: targetNode === 'Broadcast' ? (isDark ? '#7DD3FC' : '#0369A1') : (isDark ? 'rgba(56,189,248,0.1)' : '#F0F9FF'),

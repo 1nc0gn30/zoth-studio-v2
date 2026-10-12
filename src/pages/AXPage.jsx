@@ -801,7 +801,7 @@ export default function AXPage() {
                 size="small"
                 sx={{
                   bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF',
-                  color: isDark ? '#38BDF8' : '#0284C7',
+                  color: isDark ? '#38BDF8' : '#0369A1',
                   fontFamily: mono,
                   fontWeight: 800,
                   fontSize: '0.72rem',

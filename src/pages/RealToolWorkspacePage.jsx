@@ -153,7 +153,7 @@ export default function RealToolWorkspacePage() {
   const isLocked = !isLocal && !canRunClientSide && !unlockedPreview;
 
   const gold = {
-    accent: isDark ? '#D4AF37' : '#B8860B',
+    accent: isDark ? '#D4AF37' : '#8A6508',
     soft: isDark ? '#F5E6AB' : '#8A6A09',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
     border: isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.3)',
@@ -321,7 +321,7 @@ export default function RealToolWorkspacePage() {
               fontFamily: mono,
               fontWeight: 850,
               fontSize: '0.74rem',
-              bgcolor: isDark ? '#38BDF8' : '#0284C7',
+              bgcolor: isDark ? '#38BDF8' : '#0369A1',
               color: '#08080B',
               px: 2,
               '&:hover': { bgcolor: '#7DD3FC' },
@@ -465,7 +465,7 @@ export default function RealToolWorkspacePage() {
                   fontFamily: mono,
                   fontSize: '0.8rem',
                   borderColor: isDark ? 'rgba(52,211,153,0.45)' : '#A7F3D0',
-                  color: isDark ? '#34D399' : '#059669',
+                  color: isDark ? '#34D399' : '#047857',
                   bgcolor: isDark ? 'rgba(52,211,153,0.08)' : '#ECFDF3',
                   '&:hover': { borderColor: '#34D399', bgcolor: isDark ? 'rgba(52,211,153,0.18)' : '#D1FAE5' },
                 }}

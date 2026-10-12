@@ -241,13 +241,13 @@ export default function HexStrikePage() {
 
   // Strict gold-on-void styling tokens
   const gold = {
-    accent: isDark ? '#D4AF37' : '#B8860B',
+    accent: isDark ? '#D4AF37' : '#8A6508',
     soft: isDark ? '#F5E6AB' : '#8A6A09',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
     border: isDark ? 'rgba(212,175,55,0.28)' : '#E2CE82',
     glow: isDark ? 'rgba(212,175,55,0.40)' : 'rgba(184,134,11,0.22)',
-    emerald: isDark ? '#10B981' : '#059669',
-    emeraldSoft: isDark ? '#34D399' : '#059669',
+    emerald: isDark ? '#10B981' : '#047857',
+    emeraldSoft: isDark ? '#34D399' : '#047857',
     emeraldWash: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF3',
     void: isDark ? '#08080B' : '#FFFFFF',
     surface: isDark ? '#0E0E14' : '#FFFFFF',
@@ -1326,7 +1326,7 @@ export default function HexStrikePage() {
                   justifyContent: 'space-between'
                 }}
               >
-                <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', color: isDark ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', color: isDark ? '#38BDF8' : '#0369A1', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   git clone https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal.git &amp;&amp; cd NullAI-HexStrike-AI-Terminal &amp;&amp; python3 hexstrike.py --audit
                 </Typography>
                 <IconButton aria-label="Copy to clipboard"
@@ -1377,8 +1377,8 @@ export default function HexStrikePage() {
                   component={RouterLink}
                   to="/zoth-os"
                   sx={{
-                    borderColor: isDark ? '#38BDF8' : '#0284C7',
-                    color: isDark ? '#38BDF8' : '#0284C7',
+                    borderColor: isDark ? '#38BDF8' : '#0369A1',
+                    color: isDark ? '#38BDF8' : '#0369A1',
                     fontWeight: 800,
                     textTransform: 'none'
                   }}

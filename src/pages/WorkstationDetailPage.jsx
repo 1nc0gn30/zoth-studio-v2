@@ -447,7 +447,7 @@ function CyberpunkHudWorkstation() {
 
               <Divider sx={{ my: 1 }} />
               <Paper sx={{ p: 2, bgcolor: isDark ? '#0E131F' : '#F0F9FF', border: `1px solid ${isDark ? 'rgba(0,240,255,0.2)' : 'rgba(2,132,199,0.3)'}` }}>
-                <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#00F0FF' : '#0284C7', fontWeight: 700 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#00F0FF' : '#0369A1', fontWeight: 700 }}>
                   LOCK-ON TARGET: LUCY ORACLE CORE (LOOPBACK :8094)
                 </Typography>
                 <Typography variant="body2" sx={{ mt: 0.5, fontSize: '0.85rem' }}>
@@ -787,7 +787,7 @@ function ChronicleWorkstation() {
                           borderRadius: 1,
                           bgcolor: isDark ? '#1E293B' : '#E2E8F0',
                           '& .MuiLinearProgress-bar': {
-                            bgcolor: item.progress === 100 ? (isDark ? '#34D399' : '#059669') : (isDark ? '#D4AF37' : '#B8860B'),
+                            bgcolor: item.progress === 100 ? (isDark ? '#34D399' : '#047857') : (isDark ? '#D4AF37' : '#B8860B'),
                           },
                         }}
                       />
@@ -922,7 +922,7 @@ function ConnectorsWorkstation() {
                 >
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, flexWrap: 'wrap', gap: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                      <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: c.status === 'Online' ? (isDark ? '#34D399' : '#059669') : (isDark ? '#64748B' : '#94A3B8'), boxShadow: c.status === 'Online' ? '0 0 8px #34D399' : 'none' }} />
+                      <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: c.status === 'Online' ? (isDark ? '#34D399' : '#047857') : (isDark ? '#64748B' : '#94A3B8'), boxShadow: c.status === 'Online' ? '0 0 8px #34D399' : 'none' }} />
                       <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>{c.name}</Typography>
                     </Box>
                     <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
@@ -1174,7 +1174,7 @@ $$\\Delta w = A_+ e^{-\\Delta t / \\tau_+}$$
               <Stack spacing={0.75}>
                 {reviews[activeReviewer].checklist.map((c, i) => (
                   <Box key={i} sx={{ display: 'flex', alignItems: 'center', gap: 1, fontSize: '0.8rem' }}>
-                    <CheckCircleIcon sx={{ fontSize: '0.9rem', color: isDark ? '#34D399' : '#059669' }} />
+                    <CheckCircleIcon sx={{ fontSize: '0.9rem', color: isDark ? '#34D399' : '#047857' }} />
                     <span>{c}</span>
                   </Box>
                 ))}
@@ -1878,7 +1878,7 @@ function UniversalEnclaveConsole({ station }) {
   const [copiedCli, setCopiedCli] = useState(false);
 
   const gold = {
-    accent: isDark ? '#D4AF37' : '#B8860B',
+    accent: isDark ? '#D4AF37' : '#8A6508',
     soft: isDark ? '#F5E6AB' : '#8A6A09',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
     border: isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)',
@@ -2079,7 +2079,7 @@ export default function WorkstationDetailPage() {
   };
 
   const gold = {
-    accent: isDark ? '#D4AF37' : '#B8860B',
+    accent: isDark ? '#D4AF37' : '#8A6508',
     wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
     border: isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)',
   };
@@ -2199,7 +2199,7 @@ export default function WorkstationDetailPage() {
             size="small"
             sx={{
               bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF',
-              color: isDark ? '#38BDF8' : '#0284C7',
+              color: isDark ? '#38BDF8' : '#0369A1',
               border: isDark ? '1px solid rgba(56,189,248,0.3)' : '1px solid #BAE6FD',
               fontWeight: 750,
               fontFamily: mono,
@@ -2268,12 +2268,12 @@ export default function WorkstationDetailPage() {
                 fontFamily: mono,
                 fontWeight: 800,
                 fontSize: '0.78rem',
-                bgcolor: copiedCmd === 'run' ? (isDark ? '#34D399' : '#059669') : (isDark ? '#121624' : '#FFFFFF'),
+                bgcolor: copiedCmd === 'run' ? (isDark ? '#34D399' : '#047857') : (isDark ? '#121624' : '#FFFFFF'),
                 color: copiedCmd === 'run' ? '#101828' : (isDark ? '#F8FAFC' : '#101828'),
                 border: isDark ? '1px solid rgba(52,211,153,0.35)' : '1px solid #CBD5E1',
                 '&:hover': {
                   bgcolor: isDark ? 'rgba(52,211,153,0.2)' : '#ECFDF5',
-                  borderColor: isDark ? '#34D399' : '#059669',
+                  borderColor: isDark ? '#34D399' : '#047857',
                 },
               }}
             />
@@ -2324,7 +2324,7 @@ export default function WorkstationDetailPage() {
               { label: 'Local Throughput', value: telemetry.throughput, highlight: false },
               { label: 'Hardware TRNG Entropy', value: `${telemetry.entropy} / 8.0`, highlight: true, color: isDark ? '#D4AF37' : '#8A6A09' },
               { label: 'Packets Routed', value: `${telemetry.loopbackPackets.toLocaleString()} pkts`, highlight: false },
-              { label: 'Egress Firewall', value: telemetry.egressDrop, highlight: true, color: isDark ? '#38BDF8' : '#0284C7' },
+              { label: 'Egress Firewall', value: telemetry.egressDrop, highlight: true, color: isDark ? '#38BDF8' : '#0369A1' },
             ].map((stat, i) => (
               <Grid xs={6} sm={4} md={2} key={i}>
                 <Box

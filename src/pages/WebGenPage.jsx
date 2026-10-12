@@ -2255,7 +2255,7 @@ wait $PID`;
                 <Typography variant="caption" sx={{ color: dark ? gold : '#8A6A09', fontWeight: 800 }}>// OPERATIVE MATRIX //</Typography>
                 <Typography variant="h5" sx={{ fontWeight: 900, color: textPrimary, letterSpacing: '-0.02em' }}>NEO.SOVEREIGN_</Typography>
               </Box>
-              <Chip label="ONLINE // 3.8ms" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', border: dark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0', fontFamily: mono, fontWeight: 700 }} />
+              <Chip label="ONLINE // 3.8ms" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#047857', border: dark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0', fontFamily: mono, fontWeight: 700 }} />
             </Box>
             <Paper sx={{ p: 2, bgcolor: dark ? '#10121A' : surface, border: `1px solid ${divider}`, borderRadius: 2, mb: 2.5 }}>
               <Typography variant="caption" sx={{ color: dark ? gold : '#8A6A09', display: 'block', mb: 1 }}>root@sovereign:~$ cat deployments.matrix</Typography>
@@ -2280,13 +2280,13 @@ wait $PID`;
           <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: dark ? '#08080B' : '#F8FAFC', color: textPrimary }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5 }}>
               <Chip label="TRI-AGENT CONSENSUS ACTIVE" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono }} />
-              <Typography variant="caption" sx={{ color: dark ? '#10B981' : '#059669', fontFamily: mono, fontWeight: 700 }}>● 3 NODES SYNCED</Typography>
+              <Typography variant="caption" sx={{ color: dark ? '#10B981' : '#047857', fontFamily: mono, fontWeight: 700 }}>● 3 NODES SYNCED</Typography>
             </Box>
             <Stack spacing={1.5} sx={{ mb: 2.5 }}>
               {[
-                { name: 'Planner Alpha', status: 'RUNNING', job: 'Task Routing & DAG Calibration', color: dark ? '#10B981' : '#059669' },
+                { name: 'Planner Alpha', status: 'RUNNING', job: 'Task Routing & DAG Calibration', color: dark ? '#10B981' : '#047857' },
                 { name: 'Coder Omega', status: 'SYNTHESIZING', job: 'AST Generation & Micro-Transpilation', color: dark ? '#D4AF37' : '#8A6508' },
-                { name: 'Auditor Sigma', status: 'VERIFYING', job: 'Zero-Egress Seal & Invariant Verification', color: dark ? '#38BDF8' : '#0284C7' }
+                { name: 'Auditor Sigma', status: 'VERIFYING', job: 'Zero-Egress Seal & Invariant Verification', color: dark ? '#38BDF8' : '#0369A1' }
               ].map((ag, i) => (
                 <Box key={i} sx={{ p: 1.5, bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
@@ -2318,7 +2318,7 @@ wait $PID`;
               </Box>
             </Paper>
             <Box sx={{ display: 'flex', gap: 1 }}>
-              <Chip label="200 OK" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', border: dark ? 'none' : '1px solid #A7F3D0', fontWeight: 800, fontSize: '0.7rem' }} />
+              <Chip label="200 OK" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#047857', border: dark ? 'none' : '1px solid #A7F3D0', fontWeight: 800, fontSize: '0.7rem' }} />
               <Chip label="0 EGRESS PACKETS" size="small" sx={{ bgcolor: dark ? 'rgba(56,189,248,0.15)' : '#E0F2FE', color: dark ? '#38BDF8' : '#0369A1', border: dark ? 'none' : '1px solid #BAE6FD', fontWeight: 800, fontSize: '0.7rem' }} />
             </Box>
           </Box>
@@ -2329,7 +2329,7 @@ wait $PID`;
           <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: dark ? '#08080B' : '#F8FAFC', color: textPrimary, textAlign: 'center' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
               <Chip label="SOLANA CANDY MACHINE v3" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono }} />
-              <Typography variant="caption" sx={{ color: dark ? '#10B981' : '#059669', fontFamily: mono, fontWeight: 700 }}>🟢 PHANTOM CONNECTED</Typography>
+              <Typography variant="caption" sx={{ color: dark ? '#10B981' : '#047857', fontFamily: mono, fontWeight: 700 }}>🟢 PHANTOM CONNECTED</Typography>
             </Box>
             <Paper sx={{ p: 3, bgcolor: dark ? '#121420' : surface, border: `1px solid ${divider}`, borderRadius: 3, mb: 2 }}>
               <Typography variant="h4" sx={{ fontWeight: 900, color: textPrimary, fontFamily: mono, mb: 0.5 }}>1.25 SOL</Typography>
@@ -2354,7 +2354,7 @@ wait $PID`;
           <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: dark ? '#08080B' : '#F8FAFC', color: textPrimary }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
               <Chip label="NEURAL MESH STORE" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontFamily: mono }} />
-              <Typography variant="caption" sx={{ color: dark ? '#10B981' : '#059669', fontFamily: mono, fontWeight: 700 }}>● 98.6% SYNC</Typography>
+              <Typography variant="caption" sx={{ color: dark ? '#10B981' : '#047857', fontFamily: mono, fontWeight: 700 }}>● 98.6% SYNC</Typography>
             </Box>
             <Stack spacing={1.5}>
               {[
@@ -2364,7 +2364,7 @@ wait $PID`;
                 <Box key={i} sx={{ p: 2, bgcolor: dark ? '#121420' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 2 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
                     <Typography variant="subtitle2" sx={{ fontWeight: 800, color: textPrimary }}>{p.name}</Typography>
-                    <span style={{ fontSize: '0.65rem', color: dark ? '#10B981' : '#059669', fontWeight: 800 }}>{p.sync}</span>
+                    <span style={{ fontSize: '0.65rem', color: dark ? '#10B981' : '#047857', fontWeight: 800 }}>{p.sync}</span>
                   </Box>
                   <Typography variant="h6" sx={{ color: gold, fontWeight: 900, fontFamily: mono, mt: 1 }}>{p.price}</Typography>
                 </Box>
@@ -2378,7 +2378,7 @@ wait $PID`;
           <Box sx={{ p: { xs: 2, sm: 3 }, bgcolor: dark ? '#08080B' : '#F8FAFC', color: textPrimary }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
               <Chip label="LIVE SIMULATED UI CANVAS" size="small" sx={{ bgcolor: goldBg, color: gold, border: `1px solid ${gold}`, fontWeight: 800, fontSize: '0.7rem' }} />
-              <Typography variant="caption" sx={{ fontFamily: mono, color: dark ? '#10B981' : '#059669', fontWeight: 700 }}>● 60 FPS LOCAL RENDER</Typography>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: dark ? '#10B981' : '#047857', fontWeight: 700 }}>● 60 FPS LOCAL RENDER</Typography>
             </Box>
 
             <Paper sx={{ p: 2.5, bgcolor: dark ? '#121420' : surface, border: `1px solid ${divider}`, borderRadius: 2, mb: 2.5 }}>
@@ -2396,13 +2396,13 @@ wait $PID`;
                   <Typography variant="caption" sx={{ color: textSecondary, textTransform: 'uppercase', fontFamily: mono }}>Node Latency</Typography>
                   <Typography variant="h6" sx={{ fontWeight: 800, color: gold }}>12.4ms</Typography>
                 </Box>
-                <Chip label="OPTIMAL" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', fontWeight: 800 }} />
+                <Chip label="OPTIMAL" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#047857', fontWeight: 800 }} />
               </Box>
 
               <Box sx={{ p: 2, bgcolor: dark ? '#161824' : '#FFFFFF', borderRadius: 2, border: `1px solid ${divider}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
                   <Typography variant="caption" sx={{ color: textSecondary, textTransform: 'uppercase', fontFamily: mono }}>Seal Hash</Typography>
-                  <Typography variant="subtitle1" sx={{ fontFamily: mono, fontWeight: 700, color: dark ? '#10B981' : '#059669' }}>0x8F4A...3B21</Typography>
+                  <Typography variant="subtitle1" sx={{ fontFamily: mono, fontWeight: 700, color: dark ? '#10B981' : '#047857' }}>0x8F4A...3B21</Typography>
                 </Box>
                 <Chip label="ZERO-EGRESS" size="small" sx={{ bgcolor: goldBg, color: gold, fontWeight: 800 }} />
               </Box>
@@ -2410,9 +2410,9 @@ wait $PID`;
               <Box sx={{ p: 2, bgcolor: dark ? '#161824' : '#FFFFFF', borderRadius: 2, border: `1px solid ${divider}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box>
                   <Typography variant="caption" sx={{ color: textSecondary, textTransform: 'uppercase', fontFamily: mono }}>Swarm Status</Typography>
-                  <Typography variant="h6" sx={{ fontWeight: 800, color: dark ? '#38BDF8' : '#0284C7' }}>Active (6/6 Synced)</Typography>
+                  <Typography variant="h6" sx={{ fontWeight: 800, color: dark ? '#38BDF8' : '#0369A1' }}>Active (6/6 Synced)</Typography>
                 </Box>
-                <Chip label="QUORUM" size="small" sx={{ bgcolor: dark ? 'rgba(56,189,248,0.15)' : '#E0F2FE', color: dark ? '#38BDF8' : '#0284C7', fontWeight: 800 }} />
+                <Chip label="QUORUM" size="small" sx={{ bgcolor: dark ? 'rgba(56,189,248,0.15)' : '#E0F2FE', color: dark ? '#38BDF8' : '#0369A1', fontWeight: 800 }} />
               </Box>
             </Stack>
           </Box>
@@ -2558,7 +2558,7 @@ wait $PID`;
                 size="small"
                 sx={{
                   bgcolor: dark ? '#121420' : '#ECFDF5',
-                  color: dark ? '#10B981' : '#059669',
+                  color: dark ? '#10B981' : '#047857',
                   border: dark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0',
                   fontWeight: 800,
                   fontFamily: mono
@@ -2569,7 +2569,7 @@ wait $PID`;
                 size="small"
                 sx={{
                   bgcolor: dark ? 'rgba(56,189,248,0.12)' : '#E0F2FE',
-                  color: dark ? '#38BDF8' : '#0284C7',
+                  color: dark ? '#38BDF8' : '#0369A1',
                   border: dark ? '1px solid rgba(56,189,248,0.3)' : '1px solid #BAE6FD',
                   fontWeight: 800,
                   fontFamily: mono
@@ -2615,7 +2615,7 @@ wait $PID`;
           <HeroItem>
             <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flexWrap: 'wrap' }}>
               <Box sx={{ p: 1, px: 1.5, bgcolor: dark ? '#08080B' : '#F1F5F9', border: `1px solid ${divider}`, borderRadius: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: dark ? '#38BDF8' : '#0284C7' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', color: dark ? '#38BDF8' : '#0369A1' }}>
                   git clone https://github.com/NullAITech/zoth-webgen.git
                 </Typography>
                 <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopyText('git clone https://github.com/NullAITech/zoth-webgen.git', 'git clone command')} sx={{ color: gold, p: 0.4 }}>
@@ -2698,7 +2698,7 @@ wait $PID`;
                   <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: dark ? goldLight : '#8A6A09', display: 'flex', alignItems: 'center', gap: 0.8 }}>
                     <CodeIcon sx={{ fontSize: '1.1rem' }} /> CLI ENGINE: webgen_engine.py
                   </Typography>
-                  <Chip label="PURE STDLIB" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', fontSize: '0.65rem', fontWeight: 800, fontFamily: mono }} />
+                  <Chip label="PURE STDLIB" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#047857', fontSize: '0.65rem', fontWeight: 800, fontFamily: mono }} />
                 </Box>
                 <Typography variant="body2" sx={{ color: textSecondary, fontSize: '0.8rem', mb: 1.5, lineHeight: 1.5 }}>
                   Deterministic compiler for 6 sovereign archetypes. Zero external pip dependencies; uses standard Python 3.10+ runtime.
@@ -2713,7 +2713,7 @@ wait $PID`;
                       <ContentCopyIcon sx={{ fontSize: '0.8rem' }} />
                     </IconButton>
                   </Box>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: dark ? '#38BDF8' : '#0284C7', wordBreak: 'break-all', lineHeight: 1.4 }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: dark ? '#38BDF8' : '#0369A1', wordBreak: 'break-all', lineHeight: 1.4 }}>
                     {dynamicCliCommand}
                   </Typography>
                 </Box>
@@ -3269,7 +3269,7 @@ wait $PID`;
                       fontFamily: mono,
                       fontWeight: 800,
                       bgcolor: isCompiling ? goldBg : (dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5'),
-                      color: isCompiling ? gold : (dark ? '#10B981' : '#059669'),
+                      color: isCompiling ? gold : (dark ? '#10B981' : '#047857'),
                       border: isCompiling ? `1px solid ${gold}` : '1px solid #10B981'
                     }}
                   />
@@ -3321,7 +3321,7 @@ wait $PID`;
                         </Typography>
                       </Box>
                       {isActive && <LinearProgress sx={{ width: 32, height: 4, borderRadius: 2, '& .MuiLinearProgress-bar': { bgcolor: gold } }} />}
-                      {isDone && <CheckCircleIcon sx={{ fontSize: '1rem', color: dark ? '#10B981' : '#059669' }} />}
+                      {isDone && <CheckCircleIcon sx={{ fontSize: '1rem', color: dark ? '#10B981' : '#047857' }} />}
                     </Box>
                     <Typography variant="caption" sx={{ display: 'block', color: isActive ? gold : textSecondary, fontFamily: mono, fontSize: '0.7rem', minHeight: 32, lineHeight: 1.4 }}>
                       {ag.role}
@@ -3557,7 +3557,7 @@ wait $PID`;
                     <Box sx={{ bgcolor: dark ? '#121420' : '#E2E8F0', py: 0.8, px: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid ${divider}` }}>
                       <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, fontSize: '0.65rem' }}>9:41</Typography>
                       <Box sx={{ width: 60, height: 8, bgcolor: dark ? '#08080B' : '#CBD5E1', borderRadius: 4 }} />
-                      <Typography variant="caption" sx={{ fontFamily: mono, color: dark ? '#10B981' : '#059669', fontSize: '0.65rem' }}>5G 100%</Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: dark ? '#10B981' : '#047857', fontSize: '0.65rem' }}>5G 100%</Typography>
                     </Box>
                   )}
 
@@ -3688,7 +3688,7 @@ wait $PID`;
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                           <Chip label="AST DETERMINISTIC METRICS" size="small" sx={{ bgcolor: goldBg, color: gold, fontWeight: 800, fontFamily: mono }} />
-                          <Chip label="100% WASM PURITY" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', border: dark ? 'none' : '1px solid #A7F3D0', fontWeight: 800, fontFamily: mono }} />
+                          <Chip label="100% WASM PURITY" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#047857', border: dark ? 'none' : '1px solid #A7F3D0', fontWeight: 800, fontFamily: mono }} />
                         </Box>
 
                         {/* Mode Switcher: Tree vs Diff */}
@@ -3796,7 +3796,7 @@ wait $PID`;
                                 <Typography variant="caption" sx={{ color: gold, fontWeight: 800, display: 'block', mb: 1 }}>
                                   NODE ATTRIBUTES (CRYPTOGRAPHIC AST)
                                 </Typography>
-                                <Paper sx={{ p: 1.5, bgcolor: dark ? '#08080B' : '#F1F5F9', border: `1px solid ${divider}`, borderRadius: 1.5, color: dark ? '#38BDF8' : '#0284C7', mb: 2 }}>
+                                <Paper sx={{ p: 1.5, bgcolor: dark ? '#08080B' : '#F1F5F9', border: `1px solid ${divider}`, borderRadius: 1.5, color: dark ? '#38BDF8' : '#0369A1', mb: 2 }}>
                                   <pre style={{ margin: 0, fontSize: '0.72rem', whiteSpace: 'pre-wrap' }}>
                                     {JSON.stringify(selectedAstNode.attrs, null, 2)}
                                   </pre>
@@ -3825,7 +3825,7 @@ wait $PID`;
                           <Typography variant="subtitle2" sx={{ fontWeight: 800, color: textPrimary, fontFamily: mono }}>
                             AST OPTIMIZATION DIFF COMPARISON
                           </Typography>
-                          <Chip label="-34.7% AST REDUCTION" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#059669', border: dark ? 'none' : '1px solid #A7F3D0', fontWeight: 800, fontFamily: mono }} />
+                          <Chip label="-34.7% AST REDUCTION" size="small" sx={{ bgcolor: dark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: dark ? '#10B981' : '#047857', border: dark ? 'none' : '1px solid #A7F3D0', fontWeight: 800, fontFamily: mono }} />
                         </Box>
 
                         <Box sx={{ spaceY: 1, fontFamily: mono, fontSize: '0.78rem' }}>
@@ -3854,7 +3854,7 @@ wait $PID`;
                 {/* Tab Content 4: Compiler Logs */}
                 {activeTab === 4 && (
                   <Box sx={{ p: 3, fontFamily: mono, fontSize: '0.85rem', minHeight: 320, bgcolor: dark ? '#08080B' : '#F8FAFC' }}>
-                    <div style={{ color: dark ? '#10B981' : '#059669', fontWeight: 700 }}>✔ Local WASM WebGen compiler v2.4 initialized.</div>
+                    <div style={{ color: dark ? '#10B981' : '#047857', fontWeight: 700 }}>✔ Local WASM WebGen compiler v2.4 initialized.</div>
                     <div style={{ color: textSecondary, marginTop: 8 }}>Target Template: {selectedTemplate}</div>
                     <div style={{ color: textSecondary, marginTop: 4 }}>Target Framework: {FRAMEWORKS.find(f => f.id === selectedFramework)?.name}</div>
                     <div style={{ color: textSecondary, marginTop: 4 }}>Local AST Seal: 0x8F4A92B10476C128 • 0 egress calls logged.</div>

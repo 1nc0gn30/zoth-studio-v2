@@ -146,7 +146,7 @@ export default function SovereignFunnel({
                 sx={{
                   fontFamily: mono,
                   fontSize: '0.74rem',
-                  color: isDark ? '#38BDF8' : '#0284C7',
+                  color: isDark ? '#38BDF8' : '#0369A1',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap'
@@ -233,7 +233,7 @@ export default function SovereignFunnel({
                 sx={{
                   fontFamily: mono,
                   fontSize: '0.74rem',
-                  color: isDark ? '#38BDF8' : '#0284C7',
+                  color: isDark ? '#38BDF8' : '#0369A1',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap'
@@ -293,7 +293,7 @@ export default function SovereignFunnel({
                 size="small"
                 sx={{
                   bgcolor: isDark ? 'rgba(16,185,129,0.15)' : '#ECFDF3',
-                  color: isDark ? '#10B981' : '#059669',
+                  color: isDark ? '#10B981' : '#047857',
                   fontWeight: 800,
                   fontSize: '0.65rem'
                 }}
@@ -319,7 +319,7 @@ export default function SovereignFunnel({
                 sx={{
                   fontFamily: mono,
                   fontSize: '0.74rem',
-                  color: isDark ? '#10B981' : '#059669',
+                  color: isDark ? '#10B981' : '#047857',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap'

@@ -462,7 +462,7 @@ export default function ToolsPage() {
                             icon={<FlashOnIcon sx={{ color: '#38BDF8 !important', fontSize: '14px !important' }} />}
                             label="⚡ WebGPU (In-Browser)"
                             size="small"
-                            sx={{ bgcolor: isDark ? 'rgba(56,189,248,0.15)' : '#F0F9FF', color: isDark ? '#38BDF8' : '#0284C7', fontWeight: 800, fontSize: '0.72rem', border: '1px solid rgba(56,189,248,0.35)' }}
+                            sx={{ bgcolor: isDark ? 'rgba(56,189,248,0.15)' : '#F0F9FF', color: isDark ? '#38BDF8' : '#0369A1', fontWeight: 800, fontSize: '0.72rem', border: '1px solid rgba(56,189,248,0.35)' }}
                           />
                         ) : (
                           <Chip
@@ -570,7 +570,7 @@ export default function ToolsPage() {
                             ? (isLocal ? '#FFFFFF' : '#08080B')
                             : (isDark ? '#F5E6AB' : '#8A6A09'),
                           bgcolor: execEval.canExecute
-                            ? (isLocal ? (isDark ? '#10B981' : '#059669') : '#38BDF8')
+                            ? (isLocal ? (isDark ? '#10B981' : '#047857') : '#38BDF8')
                             : 'transparent',
                           borderColor: execEval.canExecute ? 'transparent' : gold.accent,
                           '&:hover': {

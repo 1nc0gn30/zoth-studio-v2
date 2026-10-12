@@ -251,7 +251,7 @@ export function AdytumPlannerTool() {
 
             {/* Quick Terminal Pull Bar */}
             <Box sx={{ p: 1.2, bgcolor: theme.palette.mode === 'dark' ? '#050508' : '#E2E8F0', border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: theme.palette.mode === 'dark' ? '#38BDF8' : '#0284C7', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: theme.palette.mode === 'dark' ? '#38BDF8' : '#0369A1', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 npx zoth pull adytum-alchemist-ai-workflow
               </Typography>
               <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopyCmd('npx zoth pull adytum-alchemist-ai-workflow')} sx={{ color: gold(theme), ml: 1, p: 0.5 }}>
@@ -6033,7 +6033,7 @@ export function AgentVoiceCallTool() {
                     fontWeight: 800,
                     fontFamily: mono,
                     fontSize: '0.75rem',
-                    '&:hover': { bgcolor: callActive ? '#E11D48' : '#059669' }
+                    '&:hover': { bgcolor: callActive ? '#E11D48' : '#047857' }
                   }}
                 >
                   {callActive ? `End Call (${formatTimer(callDuration)})` : '⚡ Start Simulation Call'}
