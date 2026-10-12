@@ -1441,7 +1441,7 @@ export default function MemoryPage() {
                   }}
                 />
               ) : (
-                <Tooltip title="Local memory daemon is not listening on 127.0.0.1:8094. Run the repo locally with 'npx zoth up' to connect.">
+                <Tooltip title="Local memory daemon is not listening on 127.0.0.1:8094. Run the repo locally with 'npx @nullaitech/zoth up' to connect.">
                   <Chip
                     icon={<LockIcon sx={{ fontSize: '0.85rem !important', color: isDark ? '#FCA5A5 !important' : '#DC2626 !important' }} />}
                     label="LOCAL DAEMON LOCKED · RUN REPO LOCALLY"
@@ -1715,7 +1715,7 @@ export default function MemoryPage() {
                             LOCK STATUS: LOCAL DAEMON REQUIRED (:8094)
                           </Typography>
                           <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.3 }}>
-                            Live semantic queries and real-time context retrieval are locked in remote preview. Run the repo locally (<code>git clone https://github.com/NullAITech/zoth-studio-v2.git &amp;&amp; npx zoth up</code>) to connect live LLMs and agent memory.
+                            Live semantic queries and real-time context retrieval are locked in remote preview. Run the repo locally (<code>git clone https://github.com/NullAITech/zoth-studio-v2.git &amp;&amp; npx @nullaitech/zoth up</code>) to connect live LLMs and agent memory.
                           </Typography>
                         </Box>
                         <Chip

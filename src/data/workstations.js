@@ -170,7 +170,7 @@ export const workstations = [
     description: "Multi-platform content preview synthesizer and scheduler with live character validation.",
     alsoInApp: "/tools/omnipost-social-engine",
     toolRepoId: "omnipost-social-engine",
-    pullCommand: "npx zoth pull omnipost-social-engine"
+    pullCommand: "npx @nullaitech/zoth pull omnipost-social-engine"
   },
   {
     id: "subsweep",
@@ -181,7 +181,7 @@ export const workstations = [
     description: "Local subnet recon probe, port scanner, and zero-egress OSINT lead discovery.",
     alsoInApp: "/tools/subsweep-lead-scanner",
     toolRepoId: "subsweep-lead-scanner",
-    pullCommand: "npx zoth pull subsweep-lead-scanner"
+    pullCommand: "npx @nullaitech/zoth pull subsweep-lead-scanner"
   },
   {
     id: "agent-egress-sentinel",
@@ -401,7 +401,7 @@ export const workstations = [
     description: "Integration workbench bridging the 21 sovereign micro-repos and MCP contract endpoints.",
     alsoInApp: "/tools",
     toolRepoId: "envguard-secrets-vault",
-    pullCommand: "npx zoth tools list"
+    pullCommand: "npx @nullaitech/zoth tools list"
   },
 
   // ==========================================

@@ -98,11 +98,11 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
   const commands = useMemo(() => ({
     up: {
       id: 'up',
-      chipLabel: 'npx zoth up',
+      chipLabel: 'npx @nullaitech/zoth up',
       desc: 'CLI sequence: initializes offline daemons (swarm, memory, bridge, studio)',
-      cmd: 'npx zoth up',
+      cmd: 'npx @nullaitech/zoth up',
       lines: [
-        { type: 'command', text: '$ npx zoth up' },
+        { type: 'command', text: '$ npx @nullaitech/zoth up' },
         { type: 'dim', text: 'Zoth CLI 2.0.0 · launching sovereign enclaves...' },
         { type: 'empty', text: '' },
         { type: 'success', text: '✔ swarm    ready (21-Agent Multiplexer Daemon)' },
@@ -117,23 +117,23 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
     },
     status: {
       id: 'status',
-      chipLabel: 'npx zoth status',
+      chipLabel: 'npx @nullaitech/zoth status',
       desc: 'Live probe: inspects local daemon sockets and hardware readiness',
-      cmd: 'npx zoth status',
+      cmd: 'npx @nullaitech/zoth status',
       lines: [
-        { type: 'command', text: '$ npx zoth status' },
+        { type: 'command', text: '$ npx @nullaitech/zoth status' },
         { type: 'dim', text: 'Zoth CLI 2.0.0 · probing local daemon sockets & hardware...' },
         { type: 'empty', text: '' },
         ...(services.length > 0
           ? services.map((s) => ({
               type: s.up ? 'success' : 'dim',
-              text: `  ${s.up ? 'up ' : 'off'}   ${s.name.padEnd(24)} (${s.up ? 'Active listener' : 'Offline · run npx zoth up'})`,
+              text: `  ${s.up ? 'up ' : 'off'}   ${s.name.padEnd(24)} (${s.up ? 'Active listener' : 'Offline · run npx @nullaitech/zoth up'})`,
             }))
           : [
-              { type: 'dim', text: '  off  Swarm Multiplexer       (Offline · run npx zoth up)' },
-              { type: 'dim', text: '  off  Neuro Memory Daemon     (Offline · run npx zoth up)' },
-              { type: 'dim', text: '  off  Sovereign Agent Bridge  (Offline · run npx zoth up)' },
-              { type: 'dim', text: '  off  Azoth Local Agent       (Offline · run npx zoth up)' },
+              { type: 'dim', text: '  off  Swarm Multiplexer       (Offline · run npx @nullaitech/zoth up)' },
+              { type: 'dim', text: '  off  Neuro Memory Daemon     (Offline · run npx @nullaitech/zoth up)' },
+              { type: 'dim', text: '  off  Sovereign Agent Bridge  (Offline · run npx @nullaitech/zoth up)' },
+              { type: 'dim', text: '  off  Azoth Local Agent       (Offline · run npx @nullaitech/zoth up)' },
               { type: 'dim', text: '  off  Ollama Local Engine     (Offline · run ollama serve)' },
             ]),
         { type: 'empty', text: '' },
@@ -143,11 +143,11 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
     },
     pull: {
       id: 'pull',
-      chipLabel: 'npx zoth pull <tool>',
+      chipLabel: 'npx @nullaitech/zoth pull <tool>',
       desc: 'Pulls standalone tool repositories with zero telemetry',
-      cmd: `npx zoth pull ${selectedTool}`,
+      cmd: `npx @nullaitech/zoth pull ${selectedTool}`,
       lines: [
-        { type: 'command', text: `$ npx zoth pull ${selectedTool}` },
+        { type: 'command', text: `$ npx @nullaitech/zoth pull ${selectedTool}` },
         { type: 'dim', text: `Zoth CLI 2.0.0 · fetching air-gapped repository: ${selectedTool}...` },
         { type: 'empty', text: '' },
         { type: 'cyan', text: `Cloning repository: ${selectedTool} from @NullAITech` },
@@ -2362,7 +2362,7 @@ export default function HomePage() {
         toolTag="WORKFLOW CLI"
         toolDescription="Offline cryptographic 22-Key planning rite, automated incubation clocks, and cryptographic SHA-256 seal stamp generators."
         toolRepo="https://github.com/NullAITech/adytum-alchemist-ai-workflow"
-        toolCommand="npx zoth pull adytum-alchemist-ai-workflow"
+        toolCommand="npx @nullaitech/zoth pull adytum-alchemist-ai-workflow"
       />
       </React.Suspense>
     </Container>
