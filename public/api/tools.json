@@ -10,7 +10,7 @@
       "category": "Planning",
       "github": "https://github.com/NullAITech/adytum-alchemist-ai-workflow",
       "version": "1.0.0",
-      "pull": "npx zoth pull adytum-alchemist-ai-workflow",
+      "pull": "npx @nullaitech/zoth pull adytum-alchemist-ai-workflow",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -26,7 +26,7 @@
       "category": "Swarm & Core",
       "github": "https://github.com/NullAITech/azoth-local-agent",
       "version": "3.0.0",
-      "pull": "npx zoth pull azoth-local-agent",
+      "pull": "npx @nullaitech/zoth pull azoth-local-agent",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -42,7 +42,7 @@
       "category": "Swarm & Core",
       "github": "https://github.com/NullAITech/sovereign-agent-bridge",
       "version": "3.2.0",
-      "pull": "npx zoth pull sovereign-agent-bridge",
+      "pull": "npx @nullaitech/zoth pull sovereign-agent-bridge",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -58,7 +58,7 @@
       "category": "Swarm & Core",
       "github": "https://github.com/NullAITech/neuro-memory-daemon",
       "version": "2.8.0",
-      "pull": "npx zoth pull neuro-memory-daemon",
+      "pull": "npx @nullaitech/zoth pull neuro-memory-daemon",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -74,7 +74,7 @@
       "category": "Swarm & Core",
       "github": "https://github.com/NullAITech/vector-search-engine",
       "version": "2.3.0",
-      "pull": "npx zoth pull vector-search-engine",
+      "pull": "npx @nullaitech/zoth pull vector-search-engine",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -90,7 +90,7 @@
       "category": "AI & Knowledge",
       "github": "https://github.com/NullAITech/deepsearch-research-agent",
       "version": "2.4.0",
-      "pull": "npx zoth pull deepsearch-research-agent",
+      "pull": "npx @nullaitech/zoth pull deepsearch-research-agent",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -106,7 +106,7 @@
       "category": "AI & Knowledge",
       "github": "https://github.com/NullAITech/promptmaster-studio",
       "version": "3.0.0",
-      "pull": "npx zoth pull promptmaster-studio",
+      "pull": "npx @nullaitech/zoth pull promptmaster-studio",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -122,7 +122,7 @@
       "category": "Security & Recon",
       "github": "https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal",
       "version": "3.1.0",
-      "pull": "npx zoth pull hexstrike-arsenal",
+      "pull": "npx @nullaitech/zoth pull hexstrike-arsenal",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -138,7 +138,7 @@
       "category": "Security & Recon",
       "github": "https://github.com/NullAITech/envguard-secrets-vault",
       "version": "2.2.0",
-      "pull": "npx zoth pull envguard-secrets-vault",
+      "pull": "npx @nullaitech/zoth pull envguard-secrets-vault",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -154,7 +154,7 @@
       "category": "Security & Recon",
       "github": "https://github.com/NullAITech/jwt-inspector-guard",
       "version": "1.0.8",
-      "pull": "npx zoth pull jwt-inspector-guard",
+      "pull": "npx @nullaitech/zoth pull jwt-inspector-guard",
       "execution_type": "webgpu",
       "runtimes": [
         "webgpu",
@@ -169,7 +169,7 @@
       "category": "Security & Recon",
       "github": "https://github.com/NullAITech/payload-entropy-studio",
       "version": "1.4.0",
-      "pull": "npx zoth pull payload-entropy-studio",
+      "pull": "npx @nullaitech/zoth pull payload-entropy-studio",
       "execution_type": "webgpu",
       "runtimes": [
         "webgpu",
@@ -184,7 +184,7 @@
       "category": "Security & Recon",
       "github": "https://github.com/NullAITech/web-security-guard",
       "version": "1.5.0",
-      "pull": "npx zoth pull web-security-guard",
+      "pull": "npx @nullaitech/zoth pull web-security-guard",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -200,7 +200,7 @@
       "category": "Autonomous Web",
       "github": "https://github.com/NullAITech/polyglot-framework-exporter",
       "version": "1.9.0",
-      "pull": "npx zoth pull polyglot-framework-exporter",
+      "pull": "npx @nullaitech/zoth pull polyglot-framework-exporter",
       "execution_type": "webgpu",
       "runtimes": [
         "webgpu",
@@ -215,7 +215,7 @@
       "category": "Autonomous Web",
       "github": "https://github.com/NullAITech/aeo-graph-engine",
       "version": "1.4.0",
-      "pull": "npx zoth pull aeo-graph-engine",
+      "pull": "npx @nullaitech/zoth pull aeo-graph-engine",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -231,7 +231,7 @@
       "category": "Autonomous Web",
       "github": "https://github.com/NullAITech/cwv-speed-engine",
       "version": "2.0.1",
-      "pull": "npx zoth pull cwv-speed-engine",
+      "pull": "npx @nullaitech/zoth pull cwv-speed-engine",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -247,7 +247,7 @@
       "category": "Media & 3D",
       "github": "https://github.com/NullAITech/vision-gesture-control",
       "version": "1.8.0",
-      "pull": "npx zoth pull vision-gesture-control",
+      "pull": "npx @nullaitech/zoth pull vision-gesture-control",
       "execution_type": "webgpu",
       "runtimes": [
         "webgpu",
@@ -262,7 +262,7 @@
       "category": "Automation",
       "github": "https://github.com/NullAITech/subsweep-lead-scanner",
       "version": "2.0.4",
-      "pull": "npx zoth pull subsweep-lead-scanner",
+      "pull": "npx @nullaitech/zoth pull subsweep-lead-scanner",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -278,7 +278,7 @@
       "category": "Automation",
       "github": "https://github.com/NullAITech/omnipost-social-engine",
       "version": "2.1.2",
-      "pull": "npx zoth pull omnipost-social-engine",
+      "pull": "npx @nullaitech/zoth pull omnipost-social-engine",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -294,7 +294,7 @@
       "category": "Automation",
       "github": "https://github.com/NullAITech/cron-rhythm-studio",
       "version": "1.0.4",
-      "pull": "npx zoth pull cron-rhythm-studio",
+      "pull": "npx @nullaitech/zoth pull cron-rhythm-studio",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -310,7 +310,7 @@
       "category": "Automation",
       "github": "https://github.com/NullAITech/certpath-roadmap-studio",
       "version": "1.2.0",
-      "pull": "npx zoth pull certpath-roadmap-studio",
+      "pull": "npx @nullaitech/zoth pull certpath-roadmap-studio",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -326,7 +326,7 @@
       "category": "Autonomous Web",
       "github": "https://github.com/NullAITech/pwa-manifest-builder",
       "version": "1.1.0",
-      "pull": "npx zoth pull pwa-manifest-builder",
+      "pull": "npx @nullaitech/zoth pull pwa-manifest-builder",
       "execution_type": "webgpu",
       "runtimes": [
         "webgpu",
@@ -341,7 +341,7 @@
       "category": "Automation",
       "github": "https://github.com/NullAITech/regex-droid-builder",
       "version": "1.3.0",
-      "pull": "npx zoth pull regex-droid-builder",
+      "pull": "npx @nullaitech/zoth pull regex-droid-builder",
       "execution_type": "webgpu",
       "runtimes": [
         "webgpu",
@@ -356,7 +356,7 @@
       "category": "Autonomous Web",
       "github": "https://github.com/NullAITech/schema-illustrator-studio",
       "version": "1.4.0",
-      "pull": "npx zoth pull schema-illustrator-studio",
+      "pull": "npx @nullaitech/zoth pull schema-illustrator-studio",
       "execution_type": "webgpu",
       "runtimes": [
         "webgpu",
@@ -403,7 +403,7 @@
       "category": "AI & Knowledge",
       "github": "https://github.com/NullAITech/zoth-studio-v2",
       "version": "1.0.0",
-      "pull": "npx zoth pull webmcp-protocol-inspector && npx zoth mcp serve --port 8094",
+      "pull": "npx @nullaitech/zoth pull webmcp-protocol-inspector",
       "execution_type": "webgpu",
       "runtimes": [
         "webgpu",

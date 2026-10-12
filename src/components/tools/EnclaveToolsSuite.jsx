@@ -252,9 +252,9 @@ export function AdytumPlannerTool() {
             {/* Quick Terminal Pull Bar */}
             <Box sx={{ p: 1.2, bgcolor: theme.palette.mode === 'dark' ? '#050508' : '#E2E8F0', border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: theme.palette.mode === 'dark' ? '#38BDF8' : '#0369A1', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                npx zoth pull adytum-alchemist-ai-workflow
+                npx @nullaitech/zoth pull adytum-alchemist-ai-workflow
               </Typography>
-              <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopyCmd('npx zoth pull adytum-alchemist-ai-workflow')} sx={{ color: gold(theme), ml: 1, p: 0.5 }}>
+              <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopyCmd('npx @nullaitech/zoth pull adytum-alchemist-ai-workflow')} sx={{ color: gold(theme), ml: 1, p: 0.5 }}>
                 <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
               </IconButton>
             </Box>
@@ -311,7 +311,7 @@ export function AzothArchonTool() {
       setTimeout(() => {
         setActiveStep(4);
         setLogs((prev) => [...prev, '[Cerberus] Network boundary verified: 0 outbound packets, 100% in-browser air-gapped']);
-        setLogs((prev) => [...prev, '[Archon] Evaluation complete. (Bare-metal OS subagent execution requires local daemon: npx zoth pull azoth-local-agent)']);
+        setLogs((prev) => [...prev, '[Archon] Evaluation complete. (Bare-metal OS subagent execution requires local daemon: npx @nullaitech/zoth pull azoth-local-agent)']);
         setRunning(false);
       }, 1200);
     } catch {

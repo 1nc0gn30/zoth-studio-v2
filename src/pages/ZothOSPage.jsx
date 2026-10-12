@@ -49,7 +49,7 @@ import { HeroReveal, HeroItem, ParallaxGlow, RevealOnScroll, StaggerChildren, St
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const qemu = 'qemu-system-x86_64 -enable-kvm -m 8192 -smp 4 -hda zoth-agent-os.qcow2';
 const isoCmd = 'sudo dd if=zothos-3.2-amd64.iso of=/dev/sdX status=progress bs=4M conv=fdatasync';
-const microRunnerCmd = 'curl -fsSL https://get.zoth.io/micro-runner.sh | bash';
+const microRunnerCmd = 'npx @nullaitech/zoth status';
 const gitCloneCmd = 'git clone https://github.com/NullAITech/zoth-os.git && cd zoth-os';
 
 // Circular Radial Dial Component
@@ -2162,7 +2162,7 @@ export default function ZothOSPage() {
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <TerminalIcon sx={{ color: isDark ? '#34D399' : '#047857' }} />
                       <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                        Micro-Runner CLI
+                        Zoth CLI
                       </Typography>
                     </Box>
                     <Chip
@@ -2178,13 +2178,13 @@ export default function ZothOSPage() {
                     />
                   </Box>
                   <Typography variant="body2" sx={{ color: theme.palette.text.secondary, mb: 2, fontSize: '0.86rem', lineHeight: 1.55 }}>
-                    Spin up the sovereign runner directly in terminal or container with one command. Automatically discovers KVM hardware acceleration.
+                    Check which Zoth services are running on this machine and whether KVM is available. Needs Node 18+.
                   </Typography>
                   <Box sx={{ p: 1.2, mb: 2, bgcolor: isDark ? '#040407' : '#F1F5F9', borderRadius: 1.5, border: '1px solid rgba(52, 211, 153, 0.3)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#34D399' : '#027A48', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {microRunnerCmd}
                     </Typography>
-                    <IconButton aria-label="Copy micro-runner command"
+                    <IconButton aria-label="Copy Zoth CLI command"
                       size="small"
                       onClick={() => {
                         navigator.clipboard.writeText(microRunnerCmd);
@@ -2192,7 +2192,7 @@ export default function ZothOSPage() {
                         setTimeout(() => setCopiedMicroRunner(false), 1600);
                       }}
                       sx={{ color: isDark ? '#34D399' : '#027A48', ml: 1, p: 0.5 }}
-                      title="Copy micro-runner command"
+                      title="Copy Zoth CLI command"
                     >
                       <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
                     </IconButton>
@@ -2232,11 +2232,11 @@ export default function ZothOSPage() {
           <SovereignFunnel
             title="Deploy Sovereign Zoth OS to Hardware"
             subtitle="Zero-telemetry air-gapped operating system kernel for autonomous agent swarms, hardware enclave encryption, and memory vaults."
-            toolTitle="Option 1: Micro-Runner CLI & Bootable ISO"
+            toolTitle="Option 1: Zoth CLI & Bootable ISO"
             toolTag="CLI & BARE METAL"
-            toolDescription="Download and flash bootable Zoth OS image (zothos-3.2-amd64.iso) for direct bare-metal deployment, or boot instantly via the micro-runner CLI."
+            toolDescription="Download and flash bootable Zoth OS image (zothos-3.2-amd64.iso) for direct bare-metal deployment, or check your machine with the Zoth CLI."
             toolRepo="https://github.com/NullAITech/zoth-os"
-            toolCommand="curl -fsSL https://get.zoth.io/micro-runner.sh | bash"
+            toolCommand="npx @nullaitech/zoth status"
             osRepo="https://github.com/NullAITech/zoth-os"
             studioRepo="https://github.com/NullAITech/zoth-studio-v2"
           />
