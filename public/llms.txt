@@ -1,10 +1,19 @@
 # Zoth Studio v2
 
-> Zoth Studio v2 is an air-gapped sovereign intelligence suite and multi-agent development studio engineered by NullAI Tech. It unifies 21 autonomous agents across 5 operational cadres, local model foundries, WebGPU WASM acceleration, and biomorphic Spike-Timing-Dependent Plasticity (STDP) synaptic memory with zero cloud egress.
+> Zoth Studio v2 is a local-first multi-agent development studio engineered by NullAI Tech. It unifies 21 autonomous agents across 5 operational cadres, local model foundries, WebGPU WASM acceleration, and biomorphic Spike-Timing-Dependent Plasticity (STDP) synaptic memory designed to run on your own machine.
 
 Canonical URL: https://zoth.nullai.tech
 Codebase: https://github.com/NullAITech/zoth-studio-v2
 Publisher: NullAI Tech (https://nullai.tech)
+npm CLI: https://www.npmjs.com/package/@nullaitech/zoth
+
+## Quickstart (npm CLI)
+
+- `npx @nullaitech/zoth status`: Check which local Zoth services are running.
+- `npx @nullaitech/zoth list`: List the 53 public Zoth tool repos (of 59 total in the NullAITech org).
+- `npx @nullaitech/zoth pull <tool>`: Download a Zoth tool repo.
+- `npx @nullaitech/zoth studio`: Install and launch Zoth Studio locally on http://localhost:3000.
+- ZOTHOS (the Linux distro with 75+ curated tools): https://github.com/NullAITech/zoth-os
 
 ## Core Hubs & Consoles
 
@@ -13,11 +22,11 @@ Publisher: NullAI Tech (https://nullai.tech)
 - [21 Swarm Pantheon](https://zoth.nullai.tech/swarm): Autonomous multi-agent coordination across Architects, Code, Security, Creative, and Swarm cadres.
 - [Byzantine Consensus Arena](https://zoth.nullai.tech/consensus): Triadic AST diff arbitration and cryptographic 2/3 quorum verification.
 - [Autonomous WebGen](https://zoth.nullai.tech/webgen): Deterministic zero-cloud website generator and layout synthesizer with 6 architectural archetypes.
-- [HexStrike Cybersec Terminal](https://zoth.nullai.tech/hexstrike): Air-gapped CVE vulnerability matrix, attack surface analyzer, and exploit audit lab.
+- [HexStrike Cybersec Terminal](https://zoth.nullai.tech/hexstrike): Local CVE vulnerability matrix, attack surface analyzer, and exploit audit lab.
 - [Zoth OS Kernel](https://zoth.nullai.tech/zoth-os): Local Linux KVM hypervisor sandbox, thin QEMU disk management, and WebContainer runtime.
 - [Adytum Sanctum](https://zoth.nullai.tech/adytum): 22 Hermetic key engineering lifecycle, 5-minute incubation gates, and Argon2id hardware key vault.
-- [Sovereign Arsenal](https://zoth.nullai.tech/arsenal): Comprehensive searchable directory of all 24 workstations, 25 micro-tools, and 21 autonomous agents.
-- [Micro-Tools Registry](https://zoth.nullai.tech/tools): 25 schema-validated air-gapped developer utilities for JWT verification, payload entropy, and code export.
+- [Sovereign Arsenal](https://zoth.nullai.tech/arsenal): Comprehensive searchable directory of all 24 workstations, 30 micro-tools, and 21 autonomous agents.
+- [Micro-Tools Registry](https://zoth.nullai.tech/tools): schema-validated in-browser developer utilities for JWT verification, payload entropy, and code export.
 - [Workstations Matrix](https://zoth.nullai.tech/workstations): 24 interactive studio environments spanning Build, Security, Swarm, Spatial, and Observe bands.
 - [Enclave Bridges](https://zoth.nullai.tech/bridges): End-to-end encrypted inter-agent signal mesh and local IPC bus monitor.
 
@@ -42,7 +51,7 @@ Publisher: NullAI Tech (https://nullai.tech)
 
 - [Full Knowledge Corpus](https://zoth.nullai.tech/llms-full.txt): Comprehensive technical specifications, equations, and workstation details.
 - [Agent Discovery Manifest](https://zoth.nullai.tech/ai.txt): Machine crawling and answer-engine grounding policy.
-- [Tools Registry API](https://zoth.nullai.tech/api/tools.json): JSON catalog of all 30 air-gapped developer utilities.
+- [Tools Registry API](https://zoth.nullai.tech/api/tools.json): JSON catalog of all 30 in-browser developer utilities.
 - [Netlify AX API](https://zoth.nullai.tech/api/netlify-ax.json): Serverless edge function contract definitions.
 - [Netlify MCP API](https://zoth.nullai.tech/api/netlify-ax-mcp.json): Model Context Protocol server configuration.
 - [XML Sitemap](https://zoth.nullai.tech/sitemap.xml): Synchronized static route index across all 71 URLs.
