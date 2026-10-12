@@ -284,12 +284,12 @@ export default function RealToolWorkspacePage() {
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Box sx={{ p: 1, borderRadius: '50%', bgcolor: isDark ? 'rgba(56, 189, 248, 0.18)' : '#E0F2FE', color: '#38BDF8', display: 'flex' }}>
+            <Box sx={{ p: 1, borderRadius: '50%', bgcolor: isDark ? 'rgba(56, 189, 248, 0.18)' : '#E0F2FE', color: 'var(--zs-sky)', display: 'flex' }}>
               <SpeedIcon sx={{ fontSize: 22 }} />
             </Box>
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-                <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.82rem', color: '#38BDF8' }}>
+                <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.82rem', color: 'var(--zs-sky)' }}>
                   IN-BROWSER CLIENT EXECUTION UNLOCKED · ZERO DATA EGRESS
                 </Typography>
                 <Chip
@@ -351,11 +351,11 @@ export default function RealToolWorkspacePage() {
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Box sx={{ p: 0.8, borderRadius: '50%', bgcolor: isDark ? 'rgba(16, 185, 129, 0.18)' : '#D1FAE5', color: '#10B981', display: 'flex' }}>
+            <Box sx={{ p: 0.8, borderRadius: '50%', bgcolor: isDark ? 'rgba(16, 185, 129, 0.18)' : '#D1FAE5', color: 'var(--zs-emerald)', display: 'flex' }}>
               <SecurityIcon sx={{ fontSize: 20 }} />
             </Box>
             <Box>
-              <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.8rem', color: '#10B981' }}>
+              <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.8rem', color: 'var(--zs-emerald)' }}>
                 LOCAL SOVEREIGN NODE ACTIVE (127.0.0.1)
               </Typography>
               <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontSize: '0.74rem' }}>
@@ -366,7 +366,7 @@ export default function RealToolWorkspacePage() {
           <Chip
             label="FULL PRIVILEGES"
             size="small"
-            sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.66rem', bgcolor: isDark ? '#064E3B' : '#D1FAE5', color: '#34D399' }}
+            sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.66rem', bgcolor: isDark ? '#064E3B' : '#D1FAE5', color: 'var(--zs-mint)' }}
           />
         </Paper>
       )}
@@ -736,7 +736,7 @@ export default function RealToolWorkspacePage() {
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-                <AutoFixHighIcon sx={{ color: '#22C55E', fontSize: 24 }} />
+                <AutoFixHighIcon sx={{ color: 'var(--zs-green)', fontSize: 24 }} />
                 <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
                   Eliminated SaaS Pain Points & Telemetry Risks
                 </Typography>
@@ -937,7 +937,7 @@ export default function RealToolWorkspacePage() {
               </Typography>
               <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC', border: `1px solid ${theme.palette.divider}` }}>
                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700 }}>SOVEREIGN NETWORK POLICY:</Typography>
-                <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, color: '#22C55E' }}>
+                <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, color: 'var(--zs-green)' }}>
                   100% Zero-Egress // No Outbound Cloud Requests
                 </Typography>
               </Box>

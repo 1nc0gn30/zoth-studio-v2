@@ -219,7 +219,7 @@ export default function AirGapToolLockout({
               }}
             />
             <Chip
-              icon={<CloudOffIcon sx={{ fontSize: '0.85rem !important', color: '#F59E0B' }} />}
+              icon={<CloudOffIcon sx={{ fontSize: '0.85rem !important', color: 'var(--zs-amber)' }} />}
               label="ZERO-EGRESS INVARIANT"
               size="small"
               sx={{
@@ -381,7 +381,7 @@ export default function AirGapToolLockout({
             >
               <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 1.5 }}>
-                  <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: isDark ? 'rgba(52, 211, 153, 0.15)' : '#ECFDF3', display: 'flex', color: '#34D399' }}>
+                  <Box sx={{ p: 0.8, borderRadius: 1.5, bgcolor: isDark ? 'rgba(52, 211, 153, 0.15)' : '#ECFDF3', display: 'flex', color: 'var(--zs-mint)' }}>
                     <TerminalIcon sx={{ fontSize: 20 }} />
                   </Box>
                   <Chip

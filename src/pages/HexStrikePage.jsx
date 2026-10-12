@@ -1277,8 +1277,8 @@ export default function HexStrikePage() {
 
               <Grid xs={12} md={4}>
                 <Paper sx={{ p: 2.2, height: '100%', bgcolor: isDark ? '#0D0E16' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#38BDF8', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <LockIcon sx={{ fontSize: '1.1rem', color: '#38BDF8' }} /> 2. Hardware TPM Sealing
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: 'var(--zs-sky)', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <LockIcon sx={{ fontSize: '1.1rem', color: 'var(--zs-sky)' }} /> 2. Hardware TPM Sealing
                   </Typography>
                   <Typography variant="caption" sx={{ color: theme.palette.text.secondary, lineHeight: 1.6, display: 'block' }}>
                     Tamper-evident attestation requires communicating directly with physical TPM 2.0 registers (<code>/dev/tpmrm0</code>) and Argon2id key derivation, preventing memory dumps from compromising keys.
@@ -1288,8 +1288,8 @@ export default function HexStrikePage() {
 
               <Grid xs={12} md={4}>
                 <Paper sx={{ p: 2.2, height: '100%', bgcolor: isDark ? '#0D0E16' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#34D399', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <SecurityIcon sx={{ fontSize: '1.1rem', color: '#34D399' }} /> 3. Zero-Egress Invariant
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: 'var(--zs-mint)', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <SecurityIcon sx={{ fontSize: '1.1rem', color: 'var(--zs-mint)' }} /> 3. Zero-Egress Invariant
                   </Typography>
                   <Typography variant="caption" sx={{ color: theme.palette.text.secondary, lineHeight: 1.6, display: 'block' }}>
                     Discovered vulnerabilities and AST security flaws must never touch third-party cloud analytics or LLM servers. All analysis runs offline with zero bytes of egress.

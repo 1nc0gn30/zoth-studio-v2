@@ -3346,7 +3346,7 @@ wait $PID`;
                 <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#EF4444' }} />
                 <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#F59E0B' }} />
                 <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#10B981' }} />
-                <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.72rem', ml: 1 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-slate)', fontSize: '0.72rem', ml: 1 }}>
                   zoth-swarm-foundry :: loopback execution stream
                 </Typography>
               </Box>
@@ -3893,7 +3893,7 @@ wait $PID`;
                           <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#EF4444' }} />
                           <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#F59E0B' }} />
                           <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#10B981' }} />
-                          <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.78rem', ml: 1, fontWeight: 700 }}>
+                          <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-slate)', fontSize: '0.78rem', ml: 1, fontWeight: 700 }}>
                             zoth-swarm-foundry :: loopback execution stream
                           </Typography>
                         </Box>

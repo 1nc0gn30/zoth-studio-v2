@@ -48,7 +48,7 @@ const primaryNav = [
 const knowledgeItems = [
   { label: 'Documentation', path: '/docs', desc: 'Zero-egress invariants, system topology & architecture', icon: <MenuBookIcon fontSize="small" sx={{ color: '#D4AF37' }} /> },
   { label: 'Six Math Pillars', path: '/docs/math', desc: 'Formal theory: STDP, Byzantine math & Shannon entropy', icon: <FunctionsIcon fontSize="small" sx={{ color: '#60A5FA' }} /> },
-  { label: 'Architecture FAQs', path: '/faqs', desc: 'Answers regarding Lucy Oracle, offline daemons & safety', icon: <HelpOutlineIcon fontSize="small" sx={{ color: '#34D399' }} /> },
+  { label: 'Architecture FAQs', path: '/faqs', desc: 'Answers regarding Lucy Oracle, offline daemons & safety', icon: <HelpOutlineIcon fontSize="small" sx={{ color: 'var(--zs-mint)' }} /> },
   { label: 'Agent Experience (AX)', path: '/ax', desc: 'Machine-readable schemas & autonomous crawler endpoints', icon: <PrecisionManufacturingIcon fontSize="small" sx={{ color: '#A78BFA' }} /> },
   { label: 'Studio Gallery', path: '/gallery', desc: 'Desktop and mobile screenshots and motion intro recordings', icon: <OndemandVideoIcon fontSize="small" sx={{ color: '#D4AF37' }} /> },
 ];
@@ -1151,7 +1151,7 @@ export default function Navbar({ mode, onToggleTheme }) {
                           border: `1px solid ${dark ? 'rgba(16, 185, 129, 0.25)' : '#A7F3D0'}`,
                         }}
                       >
-                        <TerminalIcon sx={{ color: '#10B981', fontSize: 16 }} />
+                        <TerminalIcon sx={{ color: 'var(--zs-emerald)', fontSize: 16 }} />
                       </Box>
                     </ListItemIcon>
                     <ListItemText

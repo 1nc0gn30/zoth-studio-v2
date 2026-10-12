@@ -121,7 +121,7 @@ function JwtInspectorWorkstation({ isDark, gold }) {
           </Grid>
           <Grid xs={12} md={3}>
             <Paper sx={{ p: 2, bgcolor: isDark ? '#040408' : '#F8FAFC', border: `1px solid ${gold.border}`, height: '100%' }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#38BDF8', display: 'block', mb: 1 }}>CRYPTOGRAPHIC SIGNATURE</Typography>
+              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: 'var(--zs-sky)', display: 'block', mb: 1 }}>CRYPTOGRAPHIC SIGNATURE</Typography>
               <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'text.secondary', display: 'block', wordBreak: 'break-all', mb: 1.5 }}>
                 {signatureRaw ? `${signatureRaw.substring(0, 32)}...` : 'Unsigned Token'}
               </Typography>
@@ -190,6 +190,7 @@ function PayloadEntropyWorkstation({ isDark, gold }) {
 
   const riskLabel = entropy >= 7.0 ? 'CRITICAL OBSTACLES (High Entropy / Encrypted Payload)' : entropy >= 5.2 ? 'MODERATE (Compressed or Packed Shell)' : 'LOW (Plaintext / Standard Code)';
   const riskColor = entropy >= 7.0 ? '#EF4444' : entropy >= 5.2 ? '#F59E0B' : '#10B981';
+  const riskText = entropy >= 7.0 ? 'var(--zs-red, #EF4444)' : entropy >= 5.2 ? 'var(--zs-amber)' : 'var(--zs-emerald)';
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
@@ -220,8 +221,8 @@ function PayloadEntropyWorkstation({ isDark, gold }) {
         <Grid xs={12} sm={4}>
           <Paper sx={{ p: 2, bgcolor: isDark ? '#040408' : '#F8FAFC', border: `1px solid ${gold.border}` }}>
             <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: 'text.secondary' }}>SHANNON ENTROPY (H)</Typography>
-            <Typography sx={{ fontFamily: mono, fontWeight: 900, fontSize: '2rem', color: riskColor }}>
-              {entropy} <span style={{ fontSize: '0.85rem', color: '#94A3B8' }}>bits/byte</span>
+            <Typography sx={{ fontFamily: mono, fontWeight: 900, fontSize: '2rem', color: riskText }}>
+              {entropy} <span style={{ fontSize: '0.85rem', color: 'var(--zs-slate)' }}>bits/byte</span>
             </Typography>
             <Typography variant="caption" sx={{ color: 'text.secondary' }}>Max theoretical: 8.000 bits/byte</Typography>
           </Paper>
@@ -231,7 +232,7 @@ function PayloadEntropyWorkstation({ isDark, gold }) {
             <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: 'text.secondary', mb: 0.5 }}>OBFUSCATION / WEBSHELL RISK EVALUATION</Typography>
             <Chip label={riskLabel} sx={{ bgcolor: `${riskColor}22`, color: riskColor, fontFamily: mono, fontWeight: 800, fontSize: '0.76rem', alignSelf: 'flex-start', mb: 1 }} />
             {bench && (
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#38BDF8' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-sky)' }}>
                 ⚡ WGSL Compute Shader Verified: {bench.adapter} ({bench.tflops}, {bench.timeMs}ms)
               </Typography>
             )}
@@ -415,7 +416,7 @@ function RegexDroidWorkstation({ isDark, gold }) {
             <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent }}>
               MATCHES FOUND ({matches.length})
             </Typography>
-            <Chip label="In-Browser Engine Active" size="small" sx={{ fontFamily: mono, height: 20, fontSize: '0.68rem', bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399' }} />
+            <Chip label="In-Browser Engine Active" size="small" sx={{ fontFamily: mono, height: 20, fontSize: '0.68rem', bgcolor: 'rgba(52,211,153,0.15)', color: 'var(--zs-mint)' }} />
           </Box>
           {matches.length === 0 ? (
             <Typography variant="body2" sx={{ fontFamily: mono, color: 'text.secondary' }}>No matches found for current pattern.</Typography>
@@ -423,7 +424,7 @@ function RegexDroidWorkstation({ isDark, gold }) {
             <Stack spacing={1}>
               {matches.map((m, idx) => (
                 <Box key={idx} sx={{ p: 1, borderRadius: 1.5, bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#FFFFFF', border: `1px solid ${gold.border}` }}>
-                  <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: '#38BDF8' }}>
+                  <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: 'var(--zs-sky)' }}>
                     Match #{idx + 1} at index {m.index}: <code>"{m.match}"</code>
                   </Typography>
                   {m.groups.length > 0 && (
@@ -507,7 +508,7 @@ function SchemaIllustratorWorkstation({ isDark, gold }) {
                             {field}
                           </Typography>
                           <Box sx={{ display: 'flex', gap: 0.5 }}>
-                            <Chip label={meta.type || 'any'} size="small" sx={{ fontFamily: mono, height: 18, fontSize: '0.65rem', bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8' }} />
+                            <Chip label={meta.type || 'any'} size="small" sx={{ fontFamily: mono, height: 18, fontSize: '0.65rem', bgcolor: 'rgba(56,189,248,0.15)', color: 'var(--zs-sky)' }} />
                             {isReq && <Chip label="REQUIRED" size="small" sx={{ fontFamily: mono, height: 18, fontSize: '0.62rem', bgcolor: 'rgba(239,68,68,0.15)', color: '#EF4444' }} />}
                           </Box>
                         </Box>
@@ -1026,7 +1027,7 @@ function VisionGestureWorkstation({ isDark, gold }) {
             onClick={handleRunBenchmark}
             disabled={benchmarking}
             startIcon={<SpeedIcon />}
-            sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 750, color: '#38BDF8', borderColor: 'rgba(56,189,248,0.4)' }}
+            sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 750, color: 'var(--zs-sky)', borderColor: 'rgba(56,189,248,0.4)' }}
           >
             {benchmarking ? 'Benchmarking WGSL…' : 'Run WebGPU Tensor Benchmark'}
           </Button>
@@ -1084,7 +1085,7 @@ function VisionGestureWorkstation({ isDark, gold }) {
               <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.72rem' }}>
                 ZERO-EGRESS SKELETAL VISION · 21 3D LANDMARKS · CLIENT HARDWARE
               </Typography>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#38BDF8', fontWeight: 700, fontSize: '0.72rem' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-sky)', fontWeight: 700, fontSize: '0.72rem' }}>
                 {Math.round(fps)} FPS LIVE
               </Typography>
             </Box>
@@ -1131,13 +1132,13 @@ function VisionGestureWorkstation({ isDark, gold }) {
 
             <Paper sx={{ p: 2, bgcolor: isDark ? '#05050A' : '#F8FAFC', border: `1px solid ${gold.border}`, borderRadius: 2 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
-                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#38BDF8' }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: 'var(--zs-sky)' }}>
                   SOVEREIGN EVENT DISPATCHER
                 </Typography>
                 <Chip
                   label="ZERO-EGRESS DISPATCH"
                   size="small"
-                  sx={{ fontFamily: mono, fontSize: '0.62rem', height: 18, bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8' }}
+                  sx={{ fontFamily: mono, fontSize: '0.62rem', height: 18, bgcolor: 'rgba(56,189,248,0.15)', color: 'var(--zs-sky)' }}
                 />
               </Box>
               <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#0A0C14' : '#F1F5F9', border: `1px solid ${theme.palette.divider}` }}>
@@ -1156,7 +1157,7 @@ function VisionGestureWorkstation({ isDark, gold }) {
             </Paper>
 
             <Paper sx={{ p: 2, bgcolor: isDark ? '#05050A' : '#F8FAFC', border: `1px solid ${gold.border}`, borderRadius: 2 }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#22C55E', display: 'block', mb: 1 }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: 'var(--zs-green)', display: 'block', mb: 1 }}>
                 WEBGPU HARDWARE ACCELERATION TELEMETRY
               </Typography>
               <Grid container spacing={1.5}>
@@ -1165,7 +1166,7 @@ function VisionGestureWorkstation({ isDark, gold }) {
                     <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono, display: 'block', fontSize: '0.66rem' }}>
                       INFERENCE ENGINE
                     </Typography>
-                    <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: '#34D399' }}>
+                    <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: 'var(--zs-mint)' }}>
                       WebGPU WGSL
                     </Typography>
                   </Box>
@@ -1428,7 +1429,7 @@ Disallow: /`
             </Paper>
 
             <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#040408' : '#F8FAFC', border: `1px solid ${gold.border}`, mt: 'auto' }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.7rem', display: 'block' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-slate)', fontSize: '0.7rem', display: 'block' }}>
                 ✓ RFC 9309 Specification Compliant<br/>
                 ✓ SGE &amp; Perplexity AEO Graph Verified<br/>
                 ✓ Zero Server Round-Trip (100% In-Browser)
@@ -1682,7 +1683,7 @@ function Badge3dCoinWorkstation({ isDark, gold }) {
               <Chip label={`Ø ${diameter}mm`} size="small" sx={{ fontFamily: mono, height: 20, fontSize: '0.65rem' }} />
               <Chip label={`${thickness}mm Rim`} size="small" sx={{ fontFamily: mono, height: 20, fontSize: '0.65rem' }} />
               <Chip label="48 Reeded Notches" size="small" sx={{ fontFamily: mono, height: 20, fontSize: '0.65rem' }} />
-              <Chip label="ASCII STL Ready" size="small" sx={{ fontFamily: mono, height: 20, fontSize: '0.65rem', bgcolor: 'rgba(16,185,129,0.15)', color: '#10B981' }} />
+              <Chip label="ASCII STL Ready" size="small" sx={{ fontFamily: mono, height: 20, fontSize: '0.65rem', bgcolor: 'rgba(16,185,129,0.15)', color: 'var(--zs-emerald)' }} />
             </Box>
           </Paper>
         </Grid>
@@ -1793,7 +1794,7 @@ function CertPathRoadmapWorkstation({ isDark, gold }) {
               <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold.accent, fontSize: '0.9rem' }}>
                 {current.title} Roadmap Progression
               </Typography>
-              <Chip label={`Target: ${current.medianSalary}`} size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(16,185,129,0.15)', color: '#10B981' }} />
+              <Chip label={`Target: ${current.medianSalary}`} size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(16,185,129,0.15)', color: 'var(--zs-emerald)' }} />
             </Box>
 
             <Stack spacing={1.5}>
@@ -1819,7 +1820,7 @@ function CertPathRoadmapWorkstation({ isDark, gold }) {
                     </Typography>
                     <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mt: 0.5 }}>
                       <Chip label={step.provider} size="small" sx={{ height: 18, fontSize: '0.62rem', fontFamily: mono }} />
-                      <Chip label={step.level} size="small" sx={{ height: 18, fontSize: '0.62rem', fontFamily: mono, bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8' }} />
+                      <Chip label={step.level} size="small" sx={{ height: 18, fontSize: '0.62rem', fontFamily: mono, bgcolor: 'rgba(56,189,248,0.15)', color: 'var(--zs-sky)' }} />
                       <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#64748B', alignSelf: 'center' }}>
                         ~{step.hours}h Study • {step.cost} Fee
                       </Typography>
@@ -1857,26 +1858,26 @@ function CertPathRoadmapWorkstation({ isDark, gold }) {
             </Typography>
 
             <Box sx={{ mb: 2 }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Estimated Completion Timeframe:</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block', mb: 0.5 }}>Estimated Completion Timeframe:</Typography>
               <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: isDark ? '#E2E8F0' : '#1E293B' }}>{current.timeline}</Typography>
             </Box>
 
             <Box sx={{ mb: 2 }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Total Estimated Study Hours:</Typography>
-              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: '#38BDF8' }}>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block', mb: 0.5 }}>Total Estimated Study Hours:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: 'var(--zs-sky)' }}>
                 {current.steps.reduce((acc, s) => acc + s.hours, 0)} Hours of Focused Labs
               </Typography>
             </Box>
 
             <Box sx={{ mb: 2 }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Total Exam Fees:</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block', mb: 0.5 }}>Total Exam Fees:</Typography>
               <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent }}>
                 ${current.steps.reduce((acc, s) => acc + parseInt(s.cost.replace(/[$,]/g, '') || 0), 0)} USD
               </Typography>
             </Box>
 
             <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}`, mt: 'auto' }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981', fontSize: '0.68rem', display: 'block' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-emerald)', fontSize: '0.68rem', display: 'block' }}>
                 ✓ Topological Ordering Verified<br/>
                 ✓ 0 Circular Dependency Cycles<br/>
                 ✓ 100% In-Browser Client Computation
@@ -2066,11 +2067,11 @@ function AndersonSentinelWorkstation({ isDark, gold }) {
             </Box>
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1.5, pt: 1, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-slate)' }}>
                 Respiration: <strong style={{ color: '#00E5FF' }}>15 BPM</strong> · Micro-Doppler: <strong style={{ color: '#00FF88' }}>0.00 m/s</strong>
               </Typography>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8' }}>
-                RF Disturbance: <strong style={{ color: '#F59E0B' }}>3.4%</strong>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-slate)' }}>
+                RF Disturbance: <strong style={{ color: 'var(--zs-amber)' }}>3.4%</strong>
               </Typography>
             </Box>
           </Paper>
@@ -2101,7 +2102,7 @@ function AndersonSentinelWorkstation({ isDark, gold }) {
             </Box>
 
             <Box sx={{ mb: 2 }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Calculated Building Envelope:</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block', mb: 0.5 }}>Calculated Building Envelope:</Typography>
               <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent }}>
                 14.2m × 9.8m (3 Demising Partition Walls)
               </Typography>
@@ -2194,7 +2195,7 @@ function CityDeskWorkstation({ isDark, gold }) {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
           <Chip label="1,000 FINISHED PAGES" size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(212,175,55,0.15)', color: gold.accent, borderColor: gold.border }} variant="outlined" />
-          <Chip label={`$${selectedTrade.price} USD`} size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(16,185,129,0.15)', color: '#10B981' }} />
+          <Chip label={`$${selectedTrade.price} USD`} size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(16,185,129,0.15)', color: 'var(--zs-emerald)' }} />
         </Box>
         <Button
           size="small"
@@ -2256,13 +2257,13 @@ function CityDeskWorkstation({ isDark, gold }) {
             </Box>
 
             <Paper sx={{ p: 2, bgcolor: isDark ? '#040408' : '#F8FAFC', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 2 }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', display: 'block', mb: 0.5 }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-slate)', display: 'block', mb: 0.5 }}>
                 PREVIEW // {selectedCity.name}, {selectedCity.state}
               </Typography>
               <Typography variant="h6" sx={{ fontWeight: 800, fontSize: '1rem', color: isDark ? '#F1F5F9' : '#0F172A', mb: 1 }}>
                 {selectedTrade.name} for {selectedCity.name} Homes
               </Typography>
-              <Typography variant="body2" sx={{ color: '#94A3B8', fontSize: '0.8rem', mb: 1.5 }}>
+              <Typography variant="body2" sx={{ color: 'var(--zs-slate)', fontSize: '0.8rem', mb: 1.5 }}>
                 {selectedTrade.line}
               </Typography>
               <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
@@ -2300,28 +2301,28 @@ function CityDeskWorkstation({ isDark, gold }) {
             </Typography>
 
             <Box sx={{ mb: 2 }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Finished Page Price:</Typography>
-              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: '#10B981', fontSize: '1.1rem' }}>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block', mb: 0.5 }}>Finished Page Price:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: 'var(--zs-emerald)', fontSize: '1.1rem' }}>
                 ${selectedTrade.price} USD
               </Typography>
             </Box>
 
             <Box sx={{ mb: 2 }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Target Market Footprint:</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block', mb: 0.5 }}>Target Market Footprint:</Typography>
               <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, color: isDark ? '#E2E8F0' : '#1E293B' }}>
                 {selectedCity.name}, {selectedCity.state} (~{selectedCity.population} Population)
               </Typography>
             </Box>
 
             <Box sx={{ mb: 2 }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Owner Contact Handoff:</Typography>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.7rem' }}>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block', mb: 0.5 }}>Owner Contact Handoff:</Typography>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-slate)', fontSize: '0.7rem' }}>
                 Owner replaces business name, phone, and email on the contact lines. Nothing else to write.
               </Typography>
             </Box>
 
             <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}`, mt: 'auto' }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981', fontSize: '0.68rem', display: 'block' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-emerald)', fontSize: '0.68rem', display: 'block' }}>
                 ✓ RFC 9309 Specification Compliant<br/>
                 ✓ Valid Schema.org Service Graph<br/>
                 ✓ Dual Stripe + Solana Payment Rails
@@ -2485,24 +2486,24 @@ M2 (end)`;
             </Typography>
 
             <Box sx={{ mb: 2 }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Axiom String:</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block', mb: 0.5 }}>Axiom String:</Typography>
               <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent }}>{preset.axiom}</Typography>
             </Box>
 
             <Box sx={{ mb: 2 }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Production Rules:</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block', mb: 0.5 }}>Production Rules:</Typography>
               <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, color: isDark ? '#E2E8F0' : '#1E293B' }}>{preset.rule}</Typography>
             </Box>
 
             <Box sx={{ mb: 2 }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Iterations & Turning Angle:</Typography>
-              <Typography variant="body2" sx={{ fontFamily: mono, color: '#38BDF8' }}>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block', mb: 0.5 }}>Iterations & Turning Angle:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, color: 'var(--zs-sky)' }}>
                 {preset.iter} Iterations · {preset.angle}&deg; Polar Increment
               </Typography>
             </Box>
 
             <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}`, mt: 'auto' }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981', fontSize: '0.68rem', display: 'block' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-emerald)', fontSize: '0.68rem', display: 'block' }}>
                 ✓ CNC Pen Plotter G-Code Output<br/>
                 ✓ 100% In-Browser AST Parser<br/>
                 ✓ Zero Cloud Telemetry Egress
@@ -2664,28 +2665,28 @@ f 1 6 2`;
             </Typography>
 
             <Box sx={{ mb: 2 }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Harmonic Ratio:</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block', mb: 0.5 }}>Harmonic Ratio:</Typography>
               <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent }}>
                 Golden Ratio &Phi; = 1.6180339887
               </Typography>
             </Box>
 
             <Box sx={{ mb: 2 }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>Radial Polar Symmetry:</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block', mb: 0.5 }}>Radial Polar Symmetry:</Typography>
               <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, color: isDark ? '#E2E8F0' : '#1E293B' }}>
                 {preset.harmonics}-Fold Radial Modulation
               </Typography>
             </Box>
 
             <Box sx={{ mb: 2 }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mb: 0.5 }}>CAD Formats Supported:</Typography>
-              <Typography variant="body2" sx={{ fontFamily: mono, color: '#38BDF8' }}>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block', mb: 0.5 }}>CAD Formats Supported:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, color: 'var(--zs-sky)' }}>
                 AutoCAD DXF R12, Wavefront OBJ, Scalable SVG
               </Typography>
             </Box>
 
             <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}`, mt: 'auto' }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981', fontSize: '0.68rem', display: 'block' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-emerald)', fontSize: '0.68rem', display: 'block' }}>
                 ✓ Watertight 3D Mesh Synthesis<br/>
                 ✓ 100% In-Browser Mathematical Slicing<br/>
                 ✓ Zero Cloud Telemetry Egress
@@ -2974,39 +2975,39 @@ function DatamoshWorkstation({ isDark, gold }) {
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
               <Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography variant="caption" sx={{ color: '#94A3B8' }}>Slice Height:</Typography>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#38BDF8' }}>{sliceHeight}px</Typography>
+                  <Typography variant="caption" sx={{ color: 'var(--zs-slate)' }}>Slice Height:</Typography>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-sky)' }}>{sliceHeight}px</Typography>
                 </Box>
                 <Slider size="small" min={4} max={48} value={sliceHeight} onChange={(_, val) => setSliceHeight(val)} sx={{ color: gold.accent, py: 0.5 }} />
               </Box>
 
               <Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography variant="caption" sx={{ color: '#94A3B8' }}>Horizontal Shift:</Typography>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#38BDF8' }}>{shiftMax}px</Typography>
+                  <Typography variant="caption" sx={{ color: 'var(--zs-slate)' }}>Horizontal Shift:</Typography>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-sky)' }}>{shiftMax}px</Typography>
                 </Box>
                 <Slider size="small" min={0} max={80} value={shiftMax} onChange={(_, val) => setShiftMax(val)} sx={{ color: gold.accent, py: 0.5 }} />
               </Box>
 
               <Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography variant="caption" sx={{ color: '#94A3B8' }}>RGB Chromatic Offset:</Typography>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#38BDF8' }}>{rgbSplit}px</Typography>
+                  <Typography variant="caption" sx={{ color: 'var(--zs-slate)' }}>RGB Chromatic Offset:</Typography>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-sky)' }}>{rgbSplit}px</Typography>
                 </Box>
                 <Slider size="small" min={0} max={32} value={rgbSplit} onChange={(_, val) => setRgbSplit(val)} sx={{ color: gold.accent, py: 0.5 }} />
               </Box>
 
               <Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography variant="caption" sx={{ color: '#94A3B8' }}>Scanline CRT Intensity:</Typography>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#38BDF8' }}>{scanIntensity}%</Typography>
+                  <Typography variant="caption" sx={{ color: 'var(--zs-slate)' }}>Scanline CRT Intensity:</Typography>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-sky)' }}>{scanIntensity}%</Typography>
                 </Box>
                 <Slider size="small" min={0} max={100} value={scanIntensity} onChange={(_, val) => setScanIntensity(val)} sx={{ color: gold.accent, py: 0.5 }} />
               </Box>
             </Box>
 
             <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}`, mt: 'auto' }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981', fontSize: '0.68rem', display: 'block' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-emerald)', fontSize: '0.68rem', display: 'block' }}>
                 ✓ Zero Cloud Telemetry Egress<br/>
                 ✓ 60 FPS Real-Time Canvas Pipeline<br/>
                 ✓ Pixel-Accurate Macroblock Displacement
@@ -3330,16 +3331,16 @@ function Nexus3dWorkstation({ isDark, gold }) {
               <Typography variant="caption" sx={{ fontFamily: mono, color: gold.accent, fontWeight: 800, display: 'block', mb: 0.5 }}>
                 GEOMETRY TELEMETRY
               </Typography>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block' }}>
-                Vertices: <strong style={{ color: '#38BDF8' }}>{SHAPES[shape].verts}</strong> &bull; Edges: <strong style={{ color: '#38BDF8' }}>{SHAPES[shape].edges}</strong>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block' }}>
+                Vertices: <strong style={{ color: 'var(--zs-sky)' }}>{SHAPES[shape].verts}</strong> &bull; Edges: <strong style={{ color: 'var(--zs-sky)' }}>{SHAPES[shape].edges}</strong>
               </Typography>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block' }}>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block' }}>
                 Type: <strong style={{ color: gold.accent }}>{SHAPES[shape].type}</strong>
               </Typography>
             </Box>
 
             <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}`, mt: 'auto' }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981', fontSize: '0.68rem', display: 'block' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-emerald)', fontSize: '0.68rem', display: 'block' }}>
                 ✓ Zero Cloud Telemetry Egress<br/>
                 ✓ Real-Time 60 FPS Orbit Engine<br/>
                 ✓ Direct Wavefront OBJ Mesh Download
@@ -3436,21 +3437,21 @@ function OsintScoutWorkstation({ isDark, gold }) {
               RESOLVED DNS INFRASTRUCTURE
             </Typography>
             <Box sx={{ mb: 1.5 }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block' }}>A Records (IPv4):</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block' }}>A Records (IPv4):</Typography>
               {data.a.map((ip) => (
-                <Typography key={ip} variant="body2" sx={{ fontFamily: mono, color: '#38BDF8' }}>{ip}</Typography>
+                <Typography key={ip} variant="body2" sx={{ fontFamily: mono, color: 'var(--zs-sky)' }}>{ip}</Typography>
               ))}
             </Box>
             <Box sx={{ mb: 1.5 }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block' }}>Authoritative Name Servers (NS):</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block' }}>Authoritative Name Servers (NS):</Typography>
               {data.ns.map((ns) => (
                 <Typography key={ns} variant="body2" sx={{ fontFamily: mono, color: '#A855F7' }}>{ns}</Typography>
               ))}
             </Box>
             <Box>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block' }}>Mail Exchanger (MX):</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block' }}>Mail Exchanger (MX):</Typography>
               {data.mx.map((mx) => (
-                <Typography key={mx} variant="body2" sx={{ fontFamily: mono, color: '#10B981' }}>{mx}</Typography>
+                <Typography key={mx} variant="body2" sx={{ fontFamily: mono, color: 'var(--zs-emerald)' }}>{mx}</Typography>
               ))}
             </Box>
           </Paper>
@@ -3462,21 +3463,21 @@ function OsintScoutWorkstation({ isDark, gold }) {
               EMAIL AUTHENTICATION & SPOOFING GUARD
             </Typography>
             <Box sx={{ mb: 1.5 }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block' }}>Sender Policy Framework (SPF):</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block' }}>Sender Policy Framework (SPF):</Typography>
               <Typography variant="body2" sx={{ fontFamily: mono, color: isDark ? '#E2E8F0' : '#1E293B', fontSize: '0.78rem', wordBreak: 'break-all' }}>
                 {data.spf}
               </Typography>
             </Box>
             <Box sx={{ mb: 1.5 }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block' }}>DMARC Policy:</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block' }}>DMARC Policy:</Typography>
               <Typography variant="body2" sx={{ fontFamily: mono, color: isDark ? '#E2E8F0' : '#1E293B', fontSize: '0.78rem', wordBreak: 'break-all' }}>
                 {data.dmarc}
               </Typography>
             </Box>
             <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#08080C' : '#F1F5F9', border: `1px solid ${gold.border}`, mt: 'auto' }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography variant="caption" sx={{ color: '#94A3B8' }}>Security Posture Score:</Typography>
-                <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: '#10B981' }}>{data.score}% (GRADE A)</Typography>
+                <Typography variant="caption" sx={{ color: 'var(--zs-slate)' }}>Security Posture Score:</Typography>
+                <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: 'var(--zs-emerald)' }}>{data.score}% (GRADE A)</Typography>
               </Box>
             </Box>
           </Paper>
@@ -3546,7 +3547,7 @@ function StorefrontCatalogWorkstation({ isDark, gold }) {
             Day 7 Master Print-on-Demand Catalog Showcase
           </Typography>
         </Box>
-        <Chip label="62.6% BLENDED MARGIN" size="small" variant="outlined" sx={{ borderColor: '#10B981', color: '#10B981', fontFamily: mono, fontWeight: 700 }} />
+        <Chip label="62.6% BLENDED MARGIN" size="small" variant="outlined" sx={{ borderColor: '#10B981', color: 'var(--zs-emerald)', fontFamily: mono, fontWeight: 700 }} />
       </Box>
 
       <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
@@ -3579,7 +3580,7 @@ function StorefrontCatalogWorkstation({ isDark, gold }) {
             <Typography variant="caption" sx={{ color: gold.accent, fontFamily: mono, fontWeight: 700, mb: 1.5, display: 'block' }}>
               Base Product: {p.cat}
             </Typography>
-            <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2 }}>
+            <Typography variant="body2" sx={{ color: 'var(--zs-slate)', mb: 2 }}>
               {p.desc}
             </Typography>
 
@@ -3607,29 +3608,29 @@ function StorefrontCatalogWorkstation({ isDark, gold }) {
               UNIT PROFIT & MARGIN BREAKDOWN
             </Typography>
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8' }}>Retail Price (Listing):</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)' }}>Retail Price (Listing):</Typography>
               <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: isDark ? '#FFF' : '#000' }}>{p.price}</Typography>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8' }}>Printify Base Cost:</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)' }}>Printify Base Cost:</Typography>
               <Typography variant="body2" sx={{ fontFamily: mono, color: '#EF4444' }}>{p.cost}</Typography>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8' }}>Etsy 2026 Seller Fees (9.95%):</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)' }}>Etsy 2026 Seller Fees (9.95%):</Typography>
               <Typography variant="body2" sx={{ fontFamily: mono, color: '#EF4444' }}>{p.etsyFee}</Typography>
             </Box>
             <Divider sx={{ my: 0.5, borderColor: gold.border }} />
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', fontWeight: 800 }}>Net Take-Home Profit:</Typography>
-              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: '#10B981' }}>{p.netProfit} / unit</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', fontWeight: 800 }}>Net Take-Home Profit:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: 'var(--zs-emerald)' }}>{p.netProfit} / unit</Typography>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Typography variant="caption" sx={{ color: '#94A3B8', fontWeight: 800 }}>Profit Margin:</Typography>
-              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: '#10B981' }}>{p.margin}</Typography>
+              <Typography variant="caption" sx={{ color: 'var(--zs-slate)', fontWeight: 800 }}>Profit Margin:</Typography>
+              <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: 'var(--zs-emerald)' }}>{p.margin}</Typography>
             </Box>
 
             <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}`, mt: 'auto' }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981', fontSize: '0.68rem', display: 'block' }}>
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-emerald)', fontSize: '0.68rem', display: 'block' }}>
                 ✓ 300 DPI Ready Print Blueprint<br/>
                 ✓ Printify API Payload Validated<br/>
                 ✓ 100% In-Browser Interactive Showcase
@@ -3716,20 +3717,20 @@ export default function WebGPUToolWorkstation({ tool }) {
     >
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 2.5 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Box sx={{ p: 1, borderRadius: 2, bgcolor: isDark ? 'rgba(56,189,248,0.15)' : '#F0F9FF', color: '#38BDF8', display: 'flex' }}>
+          <Box sx={{ p: 1, borderRadius: 2, bgcolor: isDark ? 'rgba(56,189,248,0.15)' : '#F0F9FF', color: 'var(--zs-sky)', display: 'flex' }}>
             <SpeedIcon sx={{ fontSize: 24 }} />
           </Box>
           <Box>
             <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
               Interactive Client-Side Workstation
             </Typography>
-            <Typography variant="caption" sx={{ fontFamily: mono, color: '#38BDF8', fontWeight: 700 }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-sky)', fontWeight: 700 }}>
               IN-BROWSER WEBGPU / WASM ENGINE · ZERO DATA EGRESS
             </Typography>
           </Box>
         </Box>
         <Chip
-          icon={<CheckCircleIcon sx={{ fontSize: '0.85rem !important', color: '#10B981' }} />}
+          icon={<CheckCircleIcon sx={{ fontSize: '0.85rem !important', color: 'var(--zs-emerald)' }} />}
           label="RUNNING ON YOUR DEVICE HARDWARE"
           size="small"
           sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.68rem', bgcolor: isDark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: isDark ? '#34D399' : '#047857' }}
