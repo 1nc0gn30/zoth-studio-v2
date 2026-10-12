@@ -428,6 +428,7 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
               onChange={(e) => setBroadcastInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleBroadcast()}
               placeholder="⚡ Broadcast instruction or command to all 21 agents..."
+              inputProps={{ "aria-label": "Broadcast instruction to all agents" }}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
