@@ -340,10 +340,10 @@ export default function WebMCPConsole() {
                     {demoChapters[simStep].desc}
                   </Typography>
                   <Box sx={{ p: 1.5, bgcolor: '#06060A', borderRadius: 1.5, border: '1px dashed rgba(255,255,255,0.1)' }}>
-                    <Typography variant="caption" sx={{ color: '#10B981', display: 'block', mb: 0.5 }}>
+                    <Typography variant="caption" sx={{ color: 'var(--zs-emerald)', display: 'block', mb: 0.5 }}>
                       $ [ZOTH-KERNEL-IPC] webmcp_bridge --transport sse --port 8094 --bind 127.0.0.1
                     </Typography>
-                    <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block' }}>
+                    <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block' }}>
                       &gt; Tools registered: 30 sovereign tools · WebGPU acceleration enabled · Zero egress telemetry: OK
                     </Typography>
                   </Box>
@@ -477,7 +477,7 @@ export default function WebMCPConsole() {
             {jsonRpcOutput && (
               <Box sx={{ mt: 2 }}>
                 <Divider sx={{ my: 2, opacity: 0.5 }} />
-                <Typography variant="caption" sx={{ fontWeight: 800, color: '#10B981', display: 'flex', alignItems: 'center', gap: 0.5, mb: 1 }}>
+                <Typography variant="caption" sx={{ fontWeight: 800, color: 'var(--zs-emerald)', display: 'flex', alignItems: 'center', gap: 0.5, mb: 1 }}>
                   <CheckCircleIcon sx={{ fontSize: '15px !important' }} /> JSON-RPC 2.0 RESPONSE FRAME (ZERO-EGRESS SEALED):
                 </Typography>
                 <Paper sx={{ p: 2, bgcolor: isDark ? '#040406' : '#FFFFFF', border: '1px solid rgba(16,185,129,0.3)', borderRadius: 1.5 }}>

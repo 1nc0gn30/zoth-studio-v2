@@ -182,7 +182,7 @@ export default function WebGPUAIConsole() {
           <Card sx={{ bgcolor: isDark ? '#08080B' : '#F9FAFB', border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
             <CardContent sx={{ py: 2 }}>
               <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>WGSL Shader Latency</Typography>
-              <Typography variant="h5" sx={{ fontWeight: 800, color: '#10B981', mt: 0.5, fontFamily: mono }}>
+              <Typography variant="h5" sx={{ fontWeight: 800, color: 'var(--zs-emerald)', mt: 0.5, fontFamily: mono }}>
                 {benchResult ? `${benchResult.timeMs} ms` : '0.14 ms'}
               </Typography>
             </CardContent>
@@ -388,7 +388,7 @@ export default function WebGPUAIConsole() {
               <Chip
                 label={`Throughput: ${generationMeta.throughput}`}
                 size="small"
-                sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 750, bgcolor: 'rgba(16,185,129,0.1)', color: '#10B981' }}
+                sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 750, bgcolor: 'rgba(16,185,129,0.1)', color: 'var(--zs-emerald)' }}
               />
               <Chip
                 label={`Latency: ${generationMeta.elapsedMs} ms`}
@@ -398,7 +398,7 @@ export default function WebGPUAIConsole() {
               <Chip
                 label={`Egress: ${generationMeta.egress}`}
                 size="small"
-                sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399' }}
+                sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, bgcolor: 'rgba(52,211,153,0.15)', color: 'var(--zs-mint)' }}
               />
             </Box>
           )}

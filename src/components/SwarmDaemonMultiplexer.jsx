@@ -810,7 +810,7 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
                     <Stack direction="row" spacing={0.5}>
                       <Tooltip title="Copy transcript logs">
                         <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopyLogs(agent.id)} sx={{ p: 0.4, color: isDark ? '#9CA3AF' : '#475467' }}>
-                          {state.copied ? <CheckIcon sx={{ fontSize: 14, color: '#34D399' }} /> : <ContentCopyIcon sx={{ fontSize: 14 }} />}
+                          {state.copied ? <CheckIcon sx={{ fontSize: 14, color: 'var(--zs-mint)' }} /> : <ContentCopyIcon sx={{ fontSize: 14 }} />}
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="Clear terminal">

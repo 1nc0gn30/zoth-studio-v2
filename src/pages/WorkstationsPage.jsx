@@ -330,7 +330,7 @@ function WorkstationCard({ item, isDark, gold }) {
                 {item.pullCommand}
               </Typography>
               {copied ? (
-                <CheckIcon sx={{ fontSize: '0.85rem', color: '#10B981', flexShrink: 0 }} />
+                <CheckIcon sx={{ fontSize: '0.85rem', color: 'var(--zs-emerald)', flexShrink: 0 }} />
               ) : (
                 <ContentCopyIcon sx={{ fontSize: '0.8rem', color: 'text.secondary', flexShrink: 0 }} />
               )}

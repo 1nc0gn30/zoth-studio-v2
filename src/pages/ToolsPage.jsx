@@ -197,7 +197,7 @@ export default function ToolsPage() {
                 />
               </Box>
               <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.88rem', lineHeight: 1.6 }}>
-                You are accessing this catalog through a remote web host. Sovereign tools execute strictly against local hardware, kernel page-locking (<code>mlock</code>), and loopback sockets (<code>127.0.0.1</code>). To run tools, deploy <RouterLink to="/zoth-os" style={{ color: '#D4AF37', fontWeight: 700 }}>Zoth OS</RouterLink> or clone individual micro-repositories from <RouterLink to="/arsenal" style={{ color: '#34D399', fontWeight: 700 }}>The Sovereign Arsenal</RouterLink>.
+                You are accessing this catalog through a remote web host. Sovereign tools execute strictly against local hardware, kernel page-locking (<code>mlock</code>), and loopback sockets (<code>127.0.0.1</code>). To run tools, deploy <RouterLink to="/zoth-os" style={{ color: '#D4AF37', fontWeight: 700 }}>Zoth OS</RouterLink> or clone individual micro-repositories from <RouterLink to="/arsenal" style={{ color: 'var(--zs-mint)', fontWeight: 700 }}>The Sovereign Arsenal</RouterLink>.
               </Typography>
             </Box>
           </Box>
@@ -638,7 +638,7 @@ export default function ToolsPage() {
                 <Typography variant="h5" sx={{ fontWeight: 800, color: '#FFFFFF' }}>
                   Deploy Sovereign Intelligence Locally
                 </Typography>
-                <Typography variant="body2" sx={{ color: '#94A3B8' }}>
+                <Typography variant="body2" sx={{ color: 'var(--zs-slate)' }}>
                   Run all {microTools.length} tools offline with zero telemetry. Pull standalone micro-modules, clone the unified Studio v2 cockpit, or flash bare-metal Zoth OS.
                 </Typography>
               </Box>
@@ -655,26 +655,26 @@ export default function ToolsPage() {
             <Grid xs={12} md={4}>
               <Box sx={{ p: 2.5, height: '100%', bgcolor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 2, display: 'flex', flexDirection: 'column' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#38BDF8' }}>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'var(--zs-sky)' }}>
                     Option 1: Micro-Tool CLI
                   </Typography>
-                  <Chip label="STANDALONE" size="small" sx={{ bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8', fontWeight: 800, fontSize: '0.65rem' }} />
+                  <Chip label="STANDALONE" size="small" sx={{ bgcolor: 'rgba(56,189,248,0.15)', color: 'var(--zs-sky)', fontWeight: 800, fontSize: '0.65rem' }} />
                 </Box>
-                <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
+                <Typography variant="body2" sx={{ color: 'var(--zs-slate)', mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
                   Pull isolated zero-egress single-purpose micro-engines without spinning up the entire studio workspace.
                 </Typography>
                 <Box sx={{ p: 1.2, mb: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: '#38BDF8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: 'var(--zs-sky)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     npx zoth pull &lt;tool-id&gt;
                   </Typography>
-                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('npx zoth pull adytum-alchemist-ai-workflow', 'cli-funnel')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
+                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('npx zoth pull adytum-alchemist-ai-workflow', 'cli-funnel')} sx={{ color: 'var(--zs-slate)', '&:hover': { color: '#FFF' } }}>
                     <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
                   </IconButton>
                 </Box>
                 <Button
                   variant="outlined"
                   onClick={() => handleCopy('npx zoth pull adytum-alchemist-ai-workflow', 'cli-funnel')}
-                  sx={{ borderColor: '#38BDF8', color: '#38BDF8', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: 'rgba(56,189,248,0.1)' } }}
+                  sx={{ borderColor: '#38BDF8', color: 'var(--zs-sky)', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: 'rgba(56,189,248,0.1)' } }}
                 >
                   {copiedId === 'cli-funnel' ? 'Command Copied!' : 'Copy Sample Pull Command'}
                 </Button>
@@ -690,14 +690,14 @@ export default function ToolsPage() {
                   </Typography>
                   <Chip label="FULL SUITE" size="small" sx={{ bgcolor: gold.wash, color: gold.accent, fontWeight: 800, fontSize: '0.65rem', border: `1px solid ${gold.accent}` }} />
                 </Box>
-                <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
+                <Typography variant="body2" sx={{ color: 'var(--zs-slate)', mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
                   Complete workstation with all {microTools.length} tools, local WebGPU inference, STDP memory vector daemon, and Byzantine consensus.
                 </Typography>
                 <Box sx={{ p: 1.2, mb: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: gold.accent, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     git clone https://github.com/NullAITech/zoth-studio-v2.git
                   </Typography>
-                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('git clone https://github.com/NullAITech/zoth-studio-v2.git', 'studio-funnel')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
+                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('git clone https://github.com/NullAITech/zoth-studio-v2.git', 'studio-funnel')} sx={{ color: 'var(--zs-slate)', '&:hover': { color: '#FFF' } }}>
                     <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
                   </IconButton>
                 </Box>
@@ -718,19 +718,19 @@ export default function ToolsPage() {
             <Grid xs={12} md={4}>
               <Box sx={{ p: 2.5, height: '100%', bgcolor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 2, display: 'flex', flexDirection: 'column' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#34D399' }}>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'var(--zs-mint)' }}>
                     Option 3: Sovereign Zoth OS
                   </Typography>
-                  <Chip label="BARE-METAL OS" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399', fontWeight: 800, fontSize: '0.65rem' }} />
+                  <Chip label="BARE-METAL OS" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: 'var(--zs-mint)', fontWeight: 800, fontSize: '0.65rem' }} />
                 </Box>
-                <Typography variant="body2" sx={{ color: '#94A3B8', mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
+                <Typography variant="body2" sx={{ color: 'var(--zs-slate)', mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
                   Alchemical Linux OS based on KDE Plasma 6 with Kali/Parrot security arsenal, 10 Ollama models, and Tor Ghostmode.
                 </Typography>
                 <Box sx={{ p: 1.2, mb: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: '#34D399', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: 'var(--zs-mint)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     zoth-os-install --bare-metal
                   </Typography>
-                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('zoth-os-install --bare-metal', 'os-funnel')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
+                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('zoth-os-install --bare-metal', 'os-funnel')} sx={{ color: 'var(--zs-slate)', '&:hover': { color: '#FFF' } }}>
                     <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
                   </IconButton>
                 </Box>
@@ -740,7 +740,7 @@ export default function ToolsPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   variant="outlined"
-                  sx={{ borderColor: '#34D399', color: '#34D399', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: 'rgba(52,211,153,0.1)' } }}
+                  sx={{ borderColor: '#34D399', color: 'var(--zs-mint)', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: 'rgba(52,211,153,0.1)' } }}
                 >
                   {copiedId === 'os-funnel' ? 'Command Copied!' : 'Explore Zoth OS ISO ↗'}
                 </Button>

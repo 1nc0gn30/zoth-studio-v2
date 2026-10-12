@@ -107,7 +107,7 @@ function CodeSnippet({ title, code, language = 'bash' }) {
             onClick={handleCopy}
             startIcon={
               copied ? (
-                <CheckIcon sx={{ fontSize: '14px !important', color: '#34D399' }} />
+                <CheckIcon sx={{ fontSize: '14px !important', color: 'var(--zs-mint)' }} />
               ) : (
                 <ContentCopyIcon sx={{ fontSize: '14px !important' }} />
               )
@@ -766,7 +766,7 @@ Runs local invariant verification before staging tools.`
                     sx={{ color: '#D4AF37', '&:hover': { color: '#FFFFFF' } }}
                   >
                     {copiedIndex === 'quick-install' ? (
-                      <CheckIcon fontSize="small" sx={{ color: '#34D399' }} />
+                      <CheckIcon fontSize="small" sx={{ color: 'var(--zs-mint)' }} />
                     ) : (
                       <ContentCopyIcon fontSize="small" />
                     )}
@@ -1046,7 +1046,7 @@ npm run dev`}
                                 sx={{ color: '#D4AF37', p: 0.5, '&:hover': { color: '#FFFFFF' } }}
                               >
                                 {copiedIndex === tool.id ? (
-                                  <CheckIcon fontSize="small" sx={{ color: '#34D399' }} />
+                                  <CheckIcon fontSize="small" sx={{ color: 'var(--zs-mint)' }} />
                                 ) : (
                                   <ContentCopyIcon fontSize="small" />
                                 )}
@@ -1376,7 +1376,7 @@ console.log("Byzantine Consensus Verdict:", verdict.sealed ? "UNANIMOUS APPROVAL
                     <Chip
                       label="EDGE & AEO DISCOVERY"
                       size="small"
-                      sx={{ bgcolor: 'rgba(56,189,248,0.12)', color: '#38BDF8', fontWeight: 700 }}
+                      sx={{ bgcolor: 'rgba(56,189,248,0.12)', color: 'var(--zs-sky)', fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
                       8. Netlify Edge Deployment &amp; 71 Prerendered Routes
@@ -1545,7 +1545,7 @@ npm run preview`}
                         sx={{ color: gold, '&:hover': { color: '#FFFFFF' } }}
                       >
                         {copiedIndex === 'audit-terminal-copy' ? (
-                          <CheckIcon fontSize="small" sx={{ color: '#34D399' }} />
+                          <CheckIcon fontSize="small" sx={{ color: 'var(--zs-mint)' }} />
                         ) : (
                           <ContentCopyIcon fontSize="small" />
                         )}
@@ -1662,7 +1662,7 @@ npm run preview`}
                     <Chip
                       label="SECURITY INVARIANTS"
                       size="small"
-                      sx={{ bgcolor: 'rgba(52,211,153,0.14)', color: '#34D399', fontWeight: 700 }}
+                      sx={{ bgcolor: 'rgba(52,211,153,0.14)', color: 'var(--zs-mint)', fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 750, color: textPrimary }}>
                       12. Zero-Egress Enclave &amp; Shannon Entropy Gating

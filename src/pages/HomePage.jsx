@@ -610,21 +610,21 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             }
             if (line.type === 'dim') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#94A3B8', position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 4px rgba(100,116,139,0.2)' : 'none', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: 'var(--zs-slate)', position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 4px rgba(100,116,139,0.2)' : 'none', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
                   {line.text}
                 </Typography>
               );
             }
             if (line.type === 'success') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#34D399', fontWeight: 600, position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 6px rgba(52,211,153,0.3)' : 'none', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: 'var(--zs-mint)', fontWeight: 600, position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 6px rgba(52,211,153,0.3)' : 'none', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
                   {line.text}
                 </Typography>
               );
             }
             if (line.type === 'cyan') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#38BDF8', fontWeight: 600, position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 6px rgba(56,189,248,0.3)' : 'none', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: 'var(--zs-sky)', fontWeight: 600, position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 6px rgba(56,189,248,0.3)' : 'none', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
                   {line.text}
                 </Typography>
               );
@@ -1272,7 +1272,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                         },
                       }}
                     >
-                      <CheckCircleIcon sx={{ fontSize: 16, color: '#34D399' }} />
+                      <CheckCircleIcon sx={{ fontSize: 16, color: 'var(--zs-mint)' }} />
                     </Box>
                     <Typography variant="body2" sx={{ color: isDark ? '#D1D5DB' : '#374151', lineHeight: 1.55, fontSize: '0.87rem' }}>
                       {inv}

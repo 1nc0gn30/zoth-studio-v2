@@ -188,7 +188,7 @@ function AgentComposerWorkstation() {
             <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1, color: isDark ? '#D4AF37' : '#8A6A09' }}>
               Autonomous Execution Log
             </Typography>
-            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: '#38BDF8', fontFamily: mono, fontSize: '0.8rem', height: 320, overflowY: 'auto', borderRadius: 1.5, border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #1E293B' }}>
+            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: 'var(--zs-sky)', fontFamily: mono, fontSize: '0.8rem', height: 320, overflowY: 'auto', borderRadius: 1.5, border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #1E293B' }}>
               {execLog.map((log, i) => (
                 <Box key={i} sx={{ mb: 0.75, lineHeight: 1.45 }}>{log}</Box>
               ))}
@@ -978,7 +978,7 @@ function ConnectorsWorkstation() {
               Inspect live Model Context Protocol (MCP) capabilities format:
             </Typography>
 
-            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: '#38BDF8', fontFamily: mono, fontSize: '0.78rem', borderRadius: 1.5, border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #1E293B', whiteSpace: 'pre-wrap' }}>
+            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: 'var(--zs-sky)', fontFamily: mono, fontSize: '0.78rem', borderRadius: 1.5, border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #1E293B', whiteSpace: 'pre-wrap' }}>
 {`{
   "jsonrpc": "2.0",
   "result": {
@@ -1982,7 +1982,7 @@ function UniversalEnclaveConsole({ station }) {
                 </Typography>
               </Paper>
               <Paper sx={{ p: 1.5, bgcolor: isDark ? '#0D0D12' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
-                <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#34D399', fontSize: '0.82rem', mb: 0.5 }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 800, color: 'var(--zs-mint)', fontSize: '0.82rem', mb: 0.5 }}>
                   ⚡ 2. Sub-Millisecond Loopback IPC (0.24ms)
                 </Typography>
                 <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.5 }}>

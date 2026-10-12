@@ -814,7 +814,7 @@ export default function BridgesPage() {
                   }}
                 />
                 <Chip
-                  icon={<ShieldIcon sx={{ fontSize: '1rem !important', color: '#10B981' }} />}
+                  icon={<ShieldIcon sx={{ fontSize: '1rem !important', color: 'var(--zs-emerald)' }} />}
                   label="ZERO-EGRESS AIR-GAP (127.0.0.1 / IPC)"
                   size="small"
                   sx={{
@@ -1794,15 +1794,15 @@ export default function BridgesPage() {
                         <td style={{ padding: '6px 8px', color: '#D4AF37', fontWeight: 700 }}>#{pkt.seq}</td>
                         <td style={{ padding: '6px 8px', color: 'rgba(255,255,255,0.6)' }}>{pkt.time}</td>
                         <td style={{ padding: '6px 8px' }}>{pkt.channel}</td>
-                        <td style={{ padding: '6px 8px', color: '#38BDF8' }}>
+                        <td style={{ padding: '6px 8px', color: 'var(--zs-sky)' }}>
                           {pkt.origin} ➔ {pkt.target}
                         </td>
                         <td style={{ padding: '6px 8px', textAlign: 'center' }}>{pkt.hops}</td>
-                        <td style={{ padding: '6px 8px', textAlign: 'right', color: '#10B981', fontWeight: 700 }}>
+                        <td style={{ padding: '6px 8px', textAlign: 'right', color: 'var(--zs-emerald)', fontWeight: 700 }}>
                           {pkt.latency}
                         </td>
                         <td style={{ padding: '6px 8px', color: '#F5E6AB' }}>{pkt.digest}</td>
-                        <td style={{ padding: '6px 8px', textAlign: 'center', color: '#10B981' }}>ZERO_OK</td>
+                        <td style={{ padding: '6px 8px', textAlign: 'center', color: 'var(--zs-emerald)' }}>ZERO_OK</td>
                       </tr>
                     ))}
                   </tbody>

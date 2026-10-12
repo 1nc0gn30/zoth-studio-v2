@@ -429,7 +429,7 @@ export default function VoiceStationPage() {
               sx={{ bgcolor: '#D4AF37', color: '#08090E', fontWeight: 800, fontSize: '0.72rem' }}
             />
             <Typography variant="body2" sx={{ color: dark ? '#F3F4F6' : '#101828', fontSize: '0.88rem' }}>
-              <strong>Sovereign Live Voice Station:</strong> <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>$79</span> <span style={{ color: '#10B981', fontWeight: 800 }}>$19 Lifetime</span> • Direct P2P audio, transcript debriefs, and multi-persona switching.
+              <strong>Sovereign Live Voice Station:</strong> <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>$79</span> <span style={{ color: 'var(--zs-emerald)', fontWeight: 800 }}>$19 Lifetime</span> • Direct P2P audio, transcript debriefs, and multi-persona switching.
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
@@ -794,7 +794,7 @@ export default function VoiceStationPage() {
                     size="small"
                     onClick={() => copyToClipboard('/call', 'Signal')}
                     title="Copy /call command"
-                    sx={{ color: '#38BDF8' }}
+                    sx={{ color: 'var(--zs-sky)' }}
                   >
                     <ContentCopyIcon fontSize="small" />
                   </IconButton>

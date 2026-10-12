@@ -2319,7 +2319,7 @@ export function AdytumEngine({ embedded = false }) {
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                 {reading.includes('[GATE OPENED]') ? (
-                  <CheckCircleIcon sx={{ color: '#34D399', fontSize: '1.15rem' }} />
+                  <CheckCircleIcon sx={{ color: 'var(--zs-mint)', fontSize: '1.15rem' }} />
                 ) : (
                   <AutoAwesomeIcon sx={{ color: gold, fontSize: '1.15rem' }} />
                 )}

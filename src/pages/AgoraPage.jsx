@@ -672,7 +672,7 @@ export default function AgoraPage() {
                     <Chip
                       label={`Principle: ${broadcastPrinciple}`}
                       size="small"
-                      sx={{ fontFamily: mono, fontSize: '0.7rem', color: '#38BDF8', bgcolor: 'rgba(56,189,248,0.1)' }}
+                      sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'var(--zs-sky)', bgcolor: 'rgba(56,189,248,0.1)' }}
                     />
                   </Stack>
                 </Box>
@@ -732,7 +732,7 @@ export default function AgoraPage() {
                 </Box>
 
                 {broadcastToast && (
-                  <Typography variant="caption" sx={{ color: '#10B981', fontWeight: 700, mt: 1, display: 'block' }}>
+                  <Typography variant="caption" sx={{ color: 'var(--zs-emerald)', fontWeight: 700, mt: 1, display: 'block' }}>
                     ✔ {broadcastToast}
                   </Typography>
                 )}
@@ -1033,11 +1033,11 @@ export default function AgoraPage() {
                 <Stack spacing={1.5}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant="body2" sx={{ color: textMuted, fontSize: '0.85rem' }}>SimpleX Chat Daemon</Typography>
-                    <Chip label="PORT :5225 ONLINE" size="small" sx={{ bgcolor: 'rgba(16,185,129,0.15)', color: '#10B981', fontWeight: 800, fontSize: '0.65rem' }} />
+                    <Chip label="PORT :5225 ONLINE" size="small" sx={{ bgcolor: 'rgba(16,185,129,0.15)', color: 'var(--zs-emerald)', fontWeight: 800, fontSize: '0.65rem' }} />
                   </Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant="body2" sx={{ color: textMuted, fontSize: '0.85rem' }}>Civilization Hub</Typography>
-                    <Chip label="PORT :9393 ACTIVE" size="small" sx={{ bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8', fontWeight: 800, fontSize: '0.65rem' }} />
+                    <Chip label="PORT :9393 ACTIVE" size="small" sx={{ bgcolor: 'rgba(56,189,248,0.15)', color: 'var(--zs-sky)', fontWeight: 800, fontSize: '0.65rem' }} />
                   </Box>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant="body2" sx={{ color: textMuted, fontSize: '0.85rem' }}>Neuro-Memory Substrate</Typography>
@@ -1132,7 +1132,7 @@ export default function AgoraPage() {
                           </Typography>
                         </Box>
                       </Box>
-                      <Chip label="ACTIVE" size="small" sx={{ bgcolor: 'rgba(16,185,129,0.1)', color: '#10B981', fontWeight: 800, fontSize: '0.6rem' }} />
+                      <Chip label="ACTIVE" size="small" sx={{ bgcolor: 'rgba(16,185,129,0.1)', color: 'var(--zs-emerald)', fontWeight: 800, fontSize: '0.6rem' }} />
                     </Box>
                   ))}
                 </Stack>

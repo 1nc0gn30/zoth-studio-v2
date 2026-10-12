@@ -386,7 +386,7 @@ export default function SwarmFrameJourney({ onEnterCockpit, onBackToFunnel }) {
                   >
                     <Stack direction="row" alignItems="center" spacing={1.5} sx={{ mb: 2 }}>
                       <Box sx={{ width: 12, height: 12, borderRadius: '50%', bgcolor: '#10B981' }} />
-                      <Typography variant="h6" sx={{ fontWeight: 800, color: '#10B981' }}>
+                      <Typography variant="h6" sx={{ fontWeight: 800, color: 'var(--zs-emerald)' }}>
                         The 21-Agent Sovereign Solution
                       </Typography>
                     </Stack>
@@ -740,25 +740,25 @@ export default function SwarmFrameJourney({ onEnterCockpit, onBackToFunnel }) {
                     </Typography>
                     <Typography variant="body2" color="text.secondary" paragraph>
                       Before any LLM sees the prompt, Sentinel evaluates the request against mathematical Shannon entropy limits:
-                      <Box component="span" sx={{ fontFamily: mono, color: '#38BDF8', ml: 1 }}>
+                      <Box component="span" sx={{ fontFamily: mono, color: 'var(--zs-sky)', ml: 1 }}>
                         H(X) = -Σ P(x) log₂ P(x)
                       </Box>
                       . If entropy exceeds 7.2 bits/byte, the payload is rejected as an obfuscated shell injection attack.
                     </Typography>
-                    <Paper sx={{ p: 2, bgcolor: isDark ? '#000000' : '#F8FAFC', fontFamily: mono, fontSize: '0.78rem', color: '#10B981' }}>
+                    <Paper sx={{ p: 2, bgcolor: isDark ? '#000000' : '#F8FAFC', fontFamily: mono, fontSize: '0.78rem', color: 'var(--zs-emerald)' }}>
                       [SENTINEL :8989] Payload verified: 421 bytes · Shannon Entropy: 4.31 bits/byte (SAFE) · Forwarding to Architects Cadre.
                     </Paper>
                   </Box>
                 )}
                 {activePhase === 2 && (
                   <Box>
-                    <Typography variant="h6" sx={{ fontWeight: 800, color: '#38BDF8', mb: 1 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 800, color: 'var(--zs-sky)', mb: 1 }}>
                       Phase 2 (T+45ms): Socratic Triad Consensus Deliberation
                     </Typography>
                     <Typography variant="body2" color="text.secondary" paragraph>
                       Azoth (Proponent) drafts an AST mutation thesis. Kai (Skeptic) interrogates edge cases, race hazards, and memory leaks. Draco (Consensus Arbiter) computes Bayesian confidence to reach a ratified architectural contract.
                     </Typography>
-                    <Paper sx={{ p: 2, bgcolor: isDark ? '#000000' : '#F8FAFC', fontFamily: mono, fontSize: '0.78rem', color: '#38BDF8' }}>
+                    <Paper sx={{ p: 2, bgcolor: isDark ? '#000000' : '#F8FAFC', fontFamily: mono, fontSize: '0.78rem', color: 'var(--zs-sky)' }}>
                       [SOCRATIC_ARENA :8102] Azoth: Thesis DAG proposed → Kai: Probing 3 async race vectors → Draco: Bayesian Posterior 0.984 (APPROVED).
                     </Paper>
                   </Box>
@@ -791,13 +791,13 @@ export default function SwarmFrameJourney({ onEnterCockpit, onBackToFunnel }) {
                 )}
                 {activePhase === 5 && (
                   <Box>
-                    <Typography variant="h6" sx={{ fontWeight: 800, color: '#34D399', mb: 1 }}>
+                    <Typography variant="h6" sx={{ fontWeight: 800, color: 'var(--zs-mint)', mb: 1 }}>
                       Phase 5 (T+320ms): 2f+1 Quorum Ratification &amp; Disk Commit
                     </Typography>
                     <Typography variant="body2" color="text.secondary" paragraph>
                       A supermajority (15 of 21 agents) signs the SHA-256 Merkle root. Janus advances the Lamport epoch counter and commits the files to disk. The neuro-memory daemon records synaptic potentiations for future recall.
                     </Typography>
-                    <Paper sx={{ p: 2, bgcolor: isDark ? '#000000' : '#F8FAFC', fontFamily: mono, fontSize: '0.78rem', color: '#34D399' }}>
+                    <Paper sx={{ p: 2, bgcolor: isDark ? '#000000' : '#F8FAFC', fontFamily: mono, fontSize: '0.78rem', color: 'var(--zs-mint)' }}>
                       [MERKLE_ROOT] Quorum supermajority achieved (21/21 votes) · Hash 4a8e...f219 committed · Lamport Epoch 1,842 ratified.
                     </Paper>
                   </Box>
@@ -849,8 +849,8 @@ export default function SwarmFrameJourney({ onEnterCockpit, onBackToFunnel }) {
               {/* Status Chips */}
               <Stack direction="row" spacing={1.5} flexWrap="wrap" sx={{ mb: 3 }}>
                 <Chip label="21-AGENT TOPOLOGY" size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(212,175,55,0.18)', color: gold }} />
-                <Chip label="AIR-GAPPED ARCHITECTURE" size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399' }} />
-                <Chip label="ZERO CLOUD EGRESS" size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(52,211,153,0.12)', color: '#34D399' }} />
+                <Chip label="AIR-GAPPED ARCHITECTURE" size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(52,211,153,0.15)', color: 'var(--zs-mint)' }} />
+                <Chip label="ZERO CLOUD EGRESS" size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(52,211,153,0.12)', color: 'var(--zs-mint)' }} />
               </Stack>
 
               {/* Bottom Navigation */}
@@ -880,7 +880,7 @@ export default function SwarmFrameJourney({ onEnterCockpit, onBackToFunnel }) {
                   icon={<CheckCircleIcon sx={{ fontSize: '0.85rem !important', color: '#10B981 !important' }} />}
                   label="FRAME 06 // JOURNEY COMPLETE · SYSTEM READY"
                   size="small"
-                  sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399', mb: 1.5 }}
+                  sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(52,211,153,0.15)', color: 'var(--zs-mint)', mb: 1.5 }}
                 />
                 <Typography variant="h3" sx={{ fontWeight: 800, letterSpacing: '-0.02em', mb: 1 }}>
                   Take Flight: <span style={{ color: gold }}>Enter the Sovereign Swarm</span>

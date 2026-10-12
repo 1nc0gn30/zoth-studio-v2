@@ -1374,7 +1374,7 @@ export default function ZothOSPage() {
             </Box>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
               <Chip
-                icon={<CheckCircleIcon style={{ fontSize: 14, color: '#34D399' }} />}
+                icon={<CheckCircleIcon style={{ fontSize: 14, color: 'var(--zs-mint)' }} />}
                 label={
                   vmState === 'booting'
                     ? `VM-01 BOOTING (${bootProgress}%)`
@@ -1711,7 +1711,7 @@ export default function ZothOSPage() {
                 if (item.type === 'input') {
                   return (
                     <Box key={item.id} sx={{ display: 'flex', alignItems: 'baseline', mt: 1.2, mb: 0.5 }}>
-                      <Typography component="span" sx={{ color: '#34D399', fontWeight: 800, fontFamily: mono, mr: 0.8 }}>
+                      <Typography component="span" sx={{ color: 'var(--zs-mint)', fontWeight: 800, fontFamily: mono, mr: 0.8 }}>
                         operator@zoth-os
                       </Typography>
                       <Typography component="span" sx={{ color: '#D4AF37', fontWeight: 800, fontFamily: mono, mr: 0.8 }}>
@@ -1760,7 +1760,7 @@ export default function ZothOSPage() {
 
               {/* Active Command Line Input */}
               <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
-                <Typography component="span" sx={{ color: '#34D399', fontWeight: 800, fontFamily: mono, mr: 0.8, whiteSpace: 'nowrap' }}>
+                <Typography component="span" sx={{ color: 'var(--zs-mint)', fontWeight: 800, fontFamily: mono, mr: 0.8, whiteSpace: 'nowrap' }}>
                   operator@zoth-os
                 </Typography>
                 <Typography component="span" sx={{ color: '#D4AF37', fontWeight: 800, fontFamily: mono, mr: 0.8, whiteSpace: 'nowrap' }}>
@@ -2282,9 +2282,9 @@ export default function ZothOSPage() {
 
         <DialogContent sx={{ py: 2.5 }}>
           <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
-            <Chip label="ED25519 VERIFIED" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399', fontWeight: 800, fontFamily: mono }} />
+            <Chip label="ED25519 VERIFIED" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: 'var(--zs-mint)', fontWeight: 800, fontFamily: mono }} />
             <Chip label="SHA-256 ENCLAVE ROOT" size="small" sx={{ bgcolor: 'rgba(212,175,55,0.15)', color: '#F5E6AB', fontWeight: 800, fontFamily: mono }} />
-            <Chip label="GRUB2-EFI SECUREBOOT" size="small" sx={{ bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8', fontWeight: 800, fontFamily: mono }} />
+            <Chip label="GRUB2-EFI SECUREBOOT" size="small" sx={{ bgcolor: 'rgba(56,189,248,0.15)', color: 'var(--zs-sky)', fontWeight: 800, fontFamily: mono }} />
           </Box>
 
           <Typography variant="body2" sx={{ color: isDark ? '#94A3B8' : '#CBD5E1', mb: 2 }}>

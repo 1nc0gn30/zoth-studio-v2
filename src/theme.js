@@ -51,6 +51,8 @@ export const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
+        // Accent text tokens: neon in dark mode, AA-safe (>=4.5:1 on white/tints) in light mode.
+        ':root': { '--zs-sky': '#0369A1', '--zs-emerald': '#047857', '--zs-mint': '#047857', '--zs-slate': '#475569', '--zs-amber': '#B45309', '--zs-green': '#15803D' },
         body: {
           backgroundColor: '#FFFFFF',
           color: '#101828',
@@ -504,6 +506,7 @@ export const darkTheme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
+        ':root': { '--zs-sky': '#38BDF8', '--zs-emerald': '#10B981', '--zs-mint': '#34D399', '--zs-slate': '#94A3B8', '--zs-amber': '#F59E0B', '--zs-green': '#22C55E' },
         body: {
           backgroundColor: '#08080B',
           color: '#EDEFF2',
