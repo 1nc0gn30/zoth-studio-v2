@@ -363,7 +363,7 @@ Shannon entropy gatekeeper active on all inter-process channels.`,
 
     `npm run zoth -- pull --all
 
-Clones all 30 catalog entries that are published into ./tools.
+Clones the 53 public catalog entries (of 59) into ./tools.
 Runs local invariant verification before staging tools.`
   ];
 
@@ -1192,7 +1192,7 @@ const task = await dispatcher.broadcastTask({
                   <CodeSnippet
                     title="SIGNAL BRIDGE INITIALIZATION COMMANDS"
                     code={`# Clone signal bridge daemon
-npx zoth pull sovereign-agent-bridge
+npx @nullaitech/zoth pull sovereign-agent-bridge
 
 # Start IPC bridge on loopback port 127.0.0.1:8102
 cd tools/sovereign-agent-bridge && npm start`}

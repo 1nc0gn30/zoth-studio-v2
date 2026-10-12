@@ -44,17 +44,17 @@ Tools launch instantly in < 16ms with zero server latency.`,
   },
   {
     id: 'zoth-cli-architecture',
-    q: 'What is the Zoth CLI (`npx zoth`) and how do developers use it locally?',
+    q: 'What is the Zoth CLI (`npx @nullaitech/zoth`) and how do developers use it locally?',
     category: 'CLI & Deployment',
-    keywords: ['cli', 'npx zoth', 'terminal', 'commands', 'pull', 'status', 'up', 'scaffold', 'micro-repos', 'npm'],
+    keywords: ['cli', 'npx @nullaitech/zoth', 'terminal', 'commands', 'pull', 'status', 'up', 'scaffold', 'micro-repos', 'npm'],
     a: `The Zoth CLI provides command-line control for developers building with or extending Zoth Studio. It can be invoked directly via npx without global installation:
 
-• npx zoth status: Inspects the local development environment, probes hardware acceleration capabilities, and verifies tool repository integrity.
-• npx zoth up: Initializes local studio services, offline cache warmups, and development orchestrators.
-• npx zoth pull <tool>: Clones any of the 30 sovereign micro-tool repositories from the @NullAITech ecosystem into an isolated ./tools/<tool> directory with independent package configs.
+• npx @nullaitech/zoth status: Checks which Zoth services are up on 127.0.0.1 and whether /dev/kvm is available.
+• npx @nullaitech/zoth up: Clones Zoth Studio, installs it, and runs it at http://127.0.0.1:3000.
+• npx @nullaitech/zoth pull <tool>: Clones any of the 53 public tool repositories (59 in the catalog) from the @NullAITech ecosystem into an isolated ./tools/<tool> directory with independent package configs.
 
 This allows developers to inspect, modify, or embed individual tools into custom pipelines or run them as dedicated local micro-apps.`,
-    summary: 'npx zoth provides local CLI control to scaffold sovereign tool repositories, verify environment readiness, and run tools in standalone micro-app isolation.',
+    summary: 'npx @nullaitech/zoth provides local CLI control to scaffold sovereign tool repositories, verify environment readiness, and run tools in standalone micro-app isolation.',
     oracleResponse: 'The Zoth CLI enables developers to probe environment readiness, launch local orchestrators, and pull standalone tool repositories with zero telemetry.',
     jumpTargets: [
       { label: 'Local Terminal Showcase', path: '/', type: 'home' },
