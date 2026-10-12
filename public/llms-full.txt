@@ -8,7 +8,7 @@
 SECTION 1: SYSTEM OVERVIEW & ZERO-EGRESS CORE INVARIANTS
 ================================================================================
 
-Zoth Studio v2 is an air-gapped, zero-egress development studio designed for orchestrating autonomous AI agent pantheons, local model foundries (Ollama, llama.cpp), and biomorphic synaptic memory matrices. All prompts, code ASTs, secrets, and weights execute strictly on local loopback enclaves (127.0.0.1) with zero cloud telemetry or external data exfiltration.
+Zoth Studio v2 is a local-first development studio designed for orchestrating autonomous AI agent pantheons, local model foundries (Ollama, llama.cpp), and biomorphic synaptic memory matrices. All prompts, code ASTs, secrets, and weights execute strictly on local loopback enclaves (127.0.0.1) with zero cloud telemetry or external data exfiltration.
 
 Zero-Egress Architectural Invariants:
 1. Local Silicon Guarantee: No external network calls (HTTP/HTTPS/gRPC) are dispatched during code execution, analysis, or prompt inference.
@@ -109,7 +109,7 @@ SECTION 5: 24 NATIVE WORKSTATIONS DIRECTORY
 ================================================================================
 
 1. cockpit: The Cockpit // Sovereign Operator Command - master telemetry HUD and unified fleet status.
-2. ide: Sovereign Operator IDE & Code Foundry - air-gapped code editor and syntax tree inspector.
+2. ide: Sovereign Operator IDE & Code Foundry - local code editor and syntax tree inspector.
 3. agent-composer: Multi-Agent DAG Composer & Pipeline Foundry - visual node-graph workflow builder.
 4. mission-control: Zoth Mission Control & Fleet Dispatcher - supervisor tracking active subagents and queues.
 5. models: Zoth AI Model Foundry & Spirit Matrix Pro - local GGUF, Ollama, vLLM, and LM Studio provider routing.
@@ -127,7 +127,7 @@ SECTION 5: 24 NATIVE WORKSTATIONS DIRECTORY
 17. omnipost: OmniPost Multi-Platform Social Engine - social content preview synthesizer and scheduler.
 18. subsweep: Zoth SubSweep Surface Scanner - local subnet recon probe and zero-egress OSINT discovery.
 19. connectors: Zoth Tool Bench & Integration Ecosystem - integration workbench bridging tools and MCP contracts.
-20. hexstrike: HEXSTRIKE // Threat & Security Radar - air-gapped security sentinel and exploit sandbox.
+20. hexstrike: HEXSTRIKE // Threat & Security Radar - local security sentinel and exploit sandbox.
 21. netrunner-memory: Lucy Oracle Biomorphic Memory Hub - STDP biomorphic spike-timing vector memory on :8094.
 22. consensus: Byzantine Consensus Battle Arena - 3-agent Byzantine AST synthesis arena and truth arbitration.
 23. bus-monitor: Zoth Swarm NOC & Signal Bridge - decentralized agent bus monitor with E2EE WebSocket pinger.
