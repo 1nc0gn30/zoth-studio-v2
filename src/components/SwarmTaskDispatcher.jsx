@@ -64,6 +64,7 @@ export default function SwarmTaskDispatcher() {
         <TextField
           fullWidth
           placeholder="Enter task prompt for 21-agent swarm dispatch..."
+          inputProps={{ "aria-label": "Swarm task prompt" }}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           disabled={running}
