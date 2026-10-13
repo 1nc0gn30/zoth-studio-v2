@@ -231,7 +231,7 @@ export default function ZothOSShowcasePage() {
           <HeroItem>
             <Button
               variant="contained"
-              href="https://www.producthunt.com"
+              href="https://www.producthunt.com/products/zothos"
               target="_blank"
               rel="noopener"
               sx={{
