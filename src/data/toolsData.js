@@ -9,7 +9,7 @@ export const microTools = [
     github: 'https://github.com/NullAITech/adytum-alchemist-ai-workflow',
     description: 'The 22-key hermetic planning rite. Intention, five-minute incubation, and a local-model gate.',
     version: '1.0.0',
-    pull: 'npx zoth pull adytum-alchemist-ai-workflow',
+    pull: 'npx @nullaitech/zoth pull adytum-alchemist-ai-workflow',
   },
   {
     id: 'azoth-local-agent',
@@ -22,7 +22,7 @@ export const microTools = [
     localOnly: false,
     description: 'Archon Orchestrator core agent for local zero-telemetry task dispatching and subagent delegation.',
     version: '3.0.0',
-    pull: 'npx zoth pull azoth-local-agent',
+    pull: 'npx @nullaitech/zoth pull azoth-local-agent',
   },
   {
     id: 'sovereign-agent-bridge',
@@ -34,7 +34,7 @@ export const microTools = [
     github: 'https://github.com/NullAITech/sovereign-agent-bridge',
     description: 'E2EE WebSocket signal protocol and Simplex peer mesh IPC communicator.',
     version: '3.2.0',
-    pull: 'npx zoth pull sovereign-agent-bridge',
+    pull: 'npx @nullaitech/zoth pull sovereign-agent-bridge',
   },
   {
     id: 'neuro-memory-daemon',
@@ -116,7 +116,7 @@ export const microTools = [
     github: 'https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal',
     description: 'Autonomous penetration audit suite, CVE matrix inspector, and exploit payload lab.',
     version: '3.1.0',
-    pull: 'npx zoth pull hexstrike-arsenal',
+    pull: 'npx @nullaitech/zoth pull hexstrike-arsenal',
   },
   {
     id: 'envguard-secrets-vault',
@@ -415,7 +415,7 @@ export const microTools = [
     github: 'https://github.com/NullAITech/zoth-studio-v2',
     description: 'In-browser Model Context Protocol (MCP) JSON-RPC 2.0 inspector, tool schema dispatcher, and Zoth OS bare-metal video showcase.',
     version: '1.0.0',
-    pull: 'npx zoth pull webmcp-protocol-inspector && npx zoth mcp serve --port 8094',
+    pull: 'npx @nullaitech/zoth pull webmcp-protocol-inspector',
   },
   {
     id: 'anderson-security-sentinel',
@@ -988,14 +988,14 @@ export const microTools = [
   {
     id: 'bolt.diy',
     published: true,
-    name: 'Bolt.DIY Full-Stack Engine',
-    repo: 'bolt.diy',
+    name: 'Zoth WebGen',
+    repo: 'zoth-webgen',
     category: 'Autonomous Web',
     executionType: 'local_cli',
-    github: 'https://github.com/1nc0gn30/bolt.diy',
-    description: 'Localized open-source AI software engineer capable of scaffolding, modifying, and running full-stack web applications locally in the browser.',
+    github: 'https://github.com/1nc0gn30/zoth-webgen',
+    description: 'Local full-stack site foundry. Keeps Grok CLI, Hermes, OpenCode, Cline, Aider, AGY, or Claude Code on the job until the site is finished.',
     version: '1.0.0',
-    pull: 'cd ~/NullAITech/bolt.diy && npm run dev',
+    pull: 'git clone https://github.com/1nc0gn30/zoth-webgen.git && cd zoth-webgen && npm run dev',
   },
   {
     id: 'zoth-civilization',

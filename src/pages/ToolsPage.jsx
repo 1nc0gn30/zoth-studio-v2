@@ -665,15 +665,15 @@ export default function ToolsPage() {
                 </Typography>
                 <Box sx={{ p: 1.2, mb: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: 'var(--zs-sky)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    npx zoth pull &lt;tool-id&gt;
+                    npx @nullaitech/zoth pull &lt;tool-id&gt;
                   </Typography>
-                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('npx zoth pull adytum-alchemist-ai-workflow', 'cli-funnel')} sx={{ color: 'var(--zs-slate)', '&:hover': { color: '#FFF' } }}>
+                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('npx @nullaitech/zoth pull adytum-alchemist-ai-workflow', 'cli-funnel')} sx={{ color: 'var(--zs-slate)', '&:hover': { color: '#FFF' } }}>
                     <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
                   </IconButton>
                 </Box>
                 <Button
                   variant="outlined"
-                  onClick={() => handleCopy('npx zoth pull adytum-alchemist-ai-workflow', 'cli-funnel')}
+                  onClick={() => handleCopy('npx @nullaitech/zoth pull adytum-alchemist-ai-workflow', 'cli-funnel')}
                   sx={{ borderColor: '#38BDF8', color: 'var(--zs-sky)', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: 'rgba(56,189,248,0.1)' } }}
                 >
                   {copiedId === 'cli-funnel' ? 'Command Copied!' : 'Copy Sample Pull Command'}

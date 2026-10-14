@@ -30,6 +30,7 @@ import { microTools } from '../data/toolsData';
 import { workstations } from '../data/workstations';
 import { arsenalStats } from '../data/arsenalData';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
+import { useStudioStatus } from '../studio/useStudioStatus';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -71,6 +72,15 @@ export default function Navbar({ mode, onToggleTheme }) {
   const navActive = dark ? '#D4AF37' : '#B8860B';
   const goldAccent = dark ? '#D4AF37' : '#8A6508';
   const { isLocal, hasWebGPU, badgeLabel, badgeColor, badgeTooltip } = useSovereignRuntime();
+  const { status: studioStatus } = useStudioStatus();
+  const civSvc = studioStatus?.services?.civilization;
+  const webgenSvc = studioStatus?.services?.webgen;
+  const effectiveBadgeLabel = isLocal && civSvc?.up
+    ? `LOCAL NODE · CIV DAY ${civSvc.detail?.day || 1}${webgenSvc?.up ? ' · WEBGEN UP' : ''}`
+    : (!isLocal ? (hasWebGPU ? 'PUBLIC WEB · WEBGPU ACTIVE' : 'PUBLIC WEB · zoth.nullai.tech') : badgeLabel);
+  const effectiveBadgeTooltip = isLocal && civSvc?.up
+    ? `Connected to Local Sovereign Node (127.0.0.1). Zoth Civilization (:9393) Active — Imperator: ${String(civSvc.detail?.leader || 'Chronos').toUpperCase()} · Adytum Cycles: ${civSvc.adytumCycleCount || 0}.${webgenSvc?.up ? ' Zoth WebGen (:5173) Online.' : ''}`
+    : badgeTooltip;
 
   // Global Keyboard Shortcuts: ⌘K for Command Palette, Ctrl+~ for Swarm Daemon
   useEffect(() => {
@@ -231,7 +241,7 @@ export default function Navbar({ mode, onToggleTheme }) {
             </Box>
 
             {/* Dynamic Sovereign Runtime Status Pill */}
-            <Tooltip title={badgeTooltip} arrow>
+            <Tooltip title={effectiveBadgeTooltip} arrow>
               <Chip
                 icon={
                   <Box
@@ -251,7 +261,7 @@ export default function Navbar({ mode, onToggleTheme }) {
                     }}
                   />
                 }
-                label={badgeLabel}
+                label={effectiveBadgeLabel}
                 size="small"
                 sx={{
                   display: { xs: 'none', lg: 'inline-flex' },

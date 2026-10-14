@@ -98,11 +98,11 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
   const commands = useMemo(() => ({
     up: {
       id: 'up',
-      chipLabel: 'npx zoth up',
+      chipLabel: 'npx @nullaitech/zoth up',
       desc: 'CLI sequence: initializes offline daemons (swarm, memory, bridge, studio)',
-      cmd: 'npx zoth up',
+      cmd: 'npx @nullaitech/zoth up',
       lines: [
-        { type: 'command', text: '$ npx zoth up' },
+        { type: 'command', text: '$ npx @nullaitech/zoth up' },
         { type: 'dim', text: 'Zoth CLI 2.0.0 · launching sovereign enclaves...' },
         { type: 'empty', text: '' },
         { type: 'success', text: '✔ swarm    ready (21-Agent Multiplexer Daemon)' },
@@ -117,23 +117,23 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
     },
     status: {
       id: 'status',
-      chipLabel: 'npx zoth status',
+      chipLabel: 'npx @nullaitech/zoth status',
       desc: 'Live probe: inspects local daemon sockets and hardware readiness',
-      cmd: 'npx zoth status',
+      cmd: 'npx @nullaitech/zoth status',
       lines: [
-        { type: 'command', text: '$ npx zoth status' },
+        { type: 'command', text: '$ npx @nullaitech/zoth status' },
         { type: 'dim', text: 'Zoth CLI 2.0.0 · probing local daemon sockets & hardware...' },
         { type: 'empty', text: '' },
         ...(services.length > 0
           ? services.map((s) => ({
               type: s.up ? 'success' : 'dim',
-              text: `  ${s.up ? 'up ' : 'off'}   ${s.name.padEnd(24)} (${s.up ? 'Active listener' : 'Offline · run npx zoth up'})`,
+              text: `  ${s.up ? 'up ' : 'off'}   ${s.name.padEnd(24)} (${s.up ? 'Active listener' : 'Offline · run npx @nullaitech/zoth up'})`,
             }))
           : [
-              { type: 'dim', text: '  off  Swarm Multiplexer       (Offline · run npx zoth up)' },
-              { type: 'dim', text: '  off  Neuro Memory Daemon     (Offline · run npx zoth up)' },
-              { type: 'dim', text: '  off  Sovereign Agent Bridge  (Offline · run npx zoth up)' },
-              { type: 'dim', text: '  off  Azoth Local Agent       (Offline · run npx zoth up)' },
+              { type: 'dim', text: '  off  Swarm Multiplexer       (Offline · run npx @nullaitech/zoth up)' },
+              { type: 'dim', text: '  off  Neuro Memory Daemon     (Offline · run npx @nullaitech/zoth up)' },
+              { type: 'dim', text: '  off  Sovereign Agent Bridge  (Offline · run npx @nullaitech/zoth up)' },
+              { type: 'dim', text: '  off  Azoth Local Agent       (Offline · run npx @nullaitech/zoth up)' },
               { type: 'dim', text: '  off  Ollama Local Engine     (Offline · run ollama serve)' },
             ]),
         { type: 'empty', text: '' },
@@ -143,11 +143,11 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
     },
     pull: {
       id: 'pull',
-      chipLabel: 'npx zoth pull <tool>',
+      chipLabel: 'npx @nullaitech/zoth pull <tool>',
       desc: 'Pulls standalone tool repositories with zero telemetry',
-      cmd: `npx zoth pull ${selectedTool}`,
+      cmd: `npx @nullaitech/zoth pull ${selectedTool}`,
       lines: [
-        { type: 'command', text: `$ npx zoth pull ${selectedTool}` },
+        { type: 'command', text: `$ npx @nullaitech/zoth pull ${selectedTool}` },
         { type: 'dim', text: `Zoth CLI 2.0.0 · fetching air-gapped repository: ${selectedTool}...` },
         { type: 'empty', text: '' },
         { type: 'cyan', text: `Cloning repository: ${selectedTool} from @NullAITech` },
@@ -1585,7 +1585,7 @@ export default function HomePage() {
 
         <Box sx={{ position: 'relative', zIndex: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, mb: 1.25, flexWrap: 'wrap' }}>
-            <Box component="img" src="/brand/ghostbyte-dark.png" alt="" sx={{ height: 28, width: 'auto', filter: isDark ? 'drop-shadow(0 0 6px rgba(212,175,55,0.4))' : 'drop-shadow(0 0 4px rgba(184,134,11,0.3))' }} />
+            <Box component="img" src="/brand/ghostbyte-dark.png" alt="NullAI Ghostbyte Crest" sx={{ height: 28, width: 'auto', filter: isDark ? 'drop-shadow(0 0 6px rgba(212,175,55,0.4))' : 'drop-shadow(0 0 4px rgba(184,134,11,0.3))' }} />
             <Typography sx={{ fontFamily: mono, letterSpacing: { xs: '0.08em', sm: '0.16em', md: '0.22em' }, fontSize: { xs: '0.65rem', sm: '0.75rem' }, color: isDark ? gold.soft : gold.accent, fontWeight: 800 }}>
               NULLAI TECH • LOCAL AI WORKSTATION ENGINE
             </Typography>
@@ -1610,21 +1610,36 @@ export default function HomePage() {
             </Box>
           </Typography>
 
-          {/* Decorative gold rule with gradient fade */}
+          {/* Architectural GlowLine rule with specular core & center diamond */}
           <Box
+            aria-hidden="true"
             sx={{
-              width: { xs: 100, sm: 140, md: 160 },
-              height: 4,
-              bgcolor: gold.accent,
-              mt: 3.5,
-              mb: 4.5,
-              borderRadius: 2,
+              position: 'relative',
+              width: { xs: 180, sm: 240, md: 280 },
+              height: '2px',
+              mt: 3,
+              mb: 3.5,
+              background: isDark
+                ? 'linear-gradient(90deg, #D4AF37 0%, #FFF6D8 38%, rgba(212,175,55,0.45) 75%, transparent 100%)'
+                : 'linear-gradient(90deg, #B8860B 0%, #D4AF37 38%, rgba(184,134,11,0.35) 75%, transparent 100%)',
               boxShadow: isDark
-                ? '0 0 12px rgba(212,175,55,0.5), 0 0 24px rgba(212,175,55,0.2), 0 0 40px rgba(212,175,55,0.1)'
-                : '0 0 12px rgba(184,134,11,0.4), 0 0 24px rgba(184,134,11,0.15), 0 0 40px rgba(184,134,11,0.08)',
-              transition: 'box-shadow 0.3s ease',
+                ? '0 0 12px rgba(212,175,55,0.6), 0 0 28px rgba(212,175,55,0.22)'
+                : '0 0 10px rgba(184,134,11,0.4)',
             }}
-          />
+          >
+            <Box
+              sx={{
+                position: 'absolute',
+                top: -3,
+                left: 28,
+                width: 8,
+                height: 8,
+                transform: 'rotate(45deg)',
+                bgcolor: isDark ? '#FFF6D8' : '#D4AF37',
+                boxShadow: `0 0 10px ${gold.accent}`,
+              }}
+            />
+          </Box>
 
           <Typography
             sx={{
@@ -1635,21 +1650,55 @@ export default function HomePage() {
               fontWeight: 450,
             }}
           >
-            A powerful suite of <span className="text-highlight-gold">100% Local AI Tools</span> built to generate websites, coordinate smart agents, audit security, and retain persistent memory — running privately on your own hardware with zero cloud subscriptions.
+            A powerful suite of <span className="text-highlight-gold">100% Local AI Tools</span> built to generate full-stack websites, coordinate 23 autonomous Pantheon agents, audit security, and retain persistent synaptic memory — running privately on your own hardware with zero cloud subscriptions.
           </Typography>
 
-          <Box sx={{ display: 'flex', gap: 1.5, mt: 4, flexWrap: 'wrap', alignItems: 'center' }}>
+          {/* Sovereign Runtime Architecture Pills */}
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2.8 }}>
+            {[
+              { label: '⚡ WebGPU Shaders', to: '/arsenal' },
+              { label: '🛠️ Bolt.diy WebGen v2', to: '/webgen' },
+              { label: '🧠 23 Pantheon Minds', to: '/swarm' },
+              { label: '💿 ZothOS Live ISO', to: '/zoth-os' },
+            ].map((pill) => (
+              <Chip
+                key={pill.label}
+                component={RouterLink}
+                to={pill.to}
+                clickable
+                label={pill.label}
+                size="small"
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.7rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.04em',
+                  bgcolor: isDark ? 'rgba(212,175,55,0.09)' : '#FEF9E7',
+                  color: isDark ? gold.soft : gold.accent,
+                  border: `1px solid ${isDark ? 'rgba(212,175,55,0.32)' : 'rgba(184,134,11,0.28)'}`,
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    bgcolor: isDark ? 'rgba(212,175,55,0.18)' : '#FDF2C6',
+                    borderColor: gold.accent,
+                    transform: 'translateY(-1px)',
+                  },
+                }}
+              />
+            ))}
+          </Box>
+
+          <Box sx={{ display: 'flex', gap: 1.5, mt: 3.5, flexWrap: 'wrap', alignItems: 'center' }}>
             <Button component={RouterLink} to="/arsenal" variant="contained" color="primary" size="large" className="pulse-glow-btn" sx={{ px: 3.8, py: 1.3, fontWeight: 800, boxShadow: isDark ? '0 4px 20px rgba(212,175,55,0.4), 0 0 32px rgba(212,175,55,0.15)' : '0 4px 20px rgba(184,134,11,0.3), 0 0 32px rgba(184,134,11,0.1)', '&:hover': { boxShadow: isDark ? '0 6px 28px rgba(212,175,55,0.55), 0 0 44px rgba(212,175,55,0.22)' : '0 6px 28px rgba(184,134,11,0.45), 0 0 44px rgba(184,134,11,0.16)' } }}>
               Explore All AI Tools
             </Button>
             <Button component={RouterLink} to="/webgen" variant="outlined" color="primary" size="large" sx={{ px: 3.2, py: 1.3, fontWeight: 750, borderColor: isDark ? 'rgba(212,175,55,0.4)' : '#B8860B', '&:hover': { borderColor: gold.accent, boxShadow: isDark ? '0 0 20px rgba(212,175,55,0.25)' : '0 0 16px rgba(184,134,11,0.2)' } }}>
               Try WebGen Builder
             </Button>
-            <Button component={RouterLink} to="/zoth-os" variant="text" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2.5, '&:hover': { bgcolor: gold.wash, borderRadius: 2 } }}>
+            <Button component={RouterLink} to="/zoth-os" variant="text" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2.2, '&:hover': { bgcolor: gold.wash, borderRadius: 2 } }}>
               Zoth OS Distro →
             </Button>
-            <Button component={RouterLink} to="/gallery" variant="text" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2.5, '&:hover': { bgcolor: gold.wash, borderRadius: 2 } }}>
-              Studio gallery
+            <Button component={RouterLink} to="/?intro=1" variant="text" sx={{ fontFamily: mono, fontSize: '0.74rem', letterSpacing: '0.08em', color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2, border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.22)'}`, borderRadius: 999, '&:hover': { bgcolor: gold.wash, borderColor: gold.accent } }}>
+              ▶ Replay Cinema Intro
             </Button>
           </Box>
 
@@ -2362,7 +2411,7 @@ export default function HomePage() {
         toolTag="WORKFLOW CLI"
         toolDescription="Offline cryptographic 22-Key planning rite, automated incubation clocks, and cryptographic SHA-256 seal stamp generators."
         toolRepo="https://github.com/NullAITech/adytum-alchemist-ai-workflow"
-        toolCommand="npx zoth pull adytum-alchemist-ai-workflow"
+        toolCommand="npx @nullaitech/zoth pull adytum-alchemist-ai-workflow"
       />
       </React.Suspense>
     </Container>

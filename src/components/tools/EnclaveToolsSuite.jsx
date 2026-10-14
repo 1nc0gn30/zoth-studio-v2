@@ -252,9 +252,9 @@ export function AdytumPlannerTool() {
             {/* Quick Terminal Pull Bar */}
             <Box sx={{ p: 1.2, bgcolor: theme.palette.mode === 'dark' ? '#050508' : '#E2E8F0', border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: theme.palette.mode === 'dark' ? '#38BDF8' : '#0369A1', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                npx zoth pull adytum-alchemist-ai-workflow
+                npx @nullaitech/zoth pull adytum-alchemist-ai-workflow
               </Typography>
-              <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopyCmd('npx zoth pull adytum-alchemist-ai-workflow')} sx={{ color: gold(theme), ml: 1, p: 0.5 }}>
+              <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopyCmd('npx @nullaitech/zoth pull adytum-alchemist-ai-workflow')} sx={{ color: gold(theme), ml: 1, p: 0.5 }}>
                 <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
               </IconButton>
             </Box>
@@ -311,7 +311,7 @@ export function AzothArchonTool() {
       setTimeout(() => {
         setActiveStep(4);
         setLogs((prev) => [...prev, '[Cerberus] Network boundary verified: 0 outbound packets, 100% in-browser air-gapped']);
-        setLogs((prev) => [...prev, '[Archon] Evaluation complete. (Bare-metal OS subagent execution requires local daemon: npx zoth pull azoth-local-agent)']);
+        setLogs((prev) => [...prev, '[Archon] Evaluation complete. (Bare-metal OS subagent execution requires local daemon: npx @nullaitech/zoth pull azoth-local-agent)']);
         setRunning(false);
       }, 1200);
     } catch {
@@ -7772,24 +7772,137 @@ export function LikenessDeskTool() {
 }
 
 /* ==========================================================================
-   TOOL 40: Bolt.DIY Full-Stack Engine (bolt.diy)
+   TOOL 40: Bolt.DIY Full-Stack Engine (bolt.diy / zoth-web-gen)
    Features: WebContainer Client-Side Node Runtime HUD, Model Provider Selector,
-             Interactive Prompt Engine, Code Structure Synthesizer
+             Interactive Prompt Engine, Real Dynamic Code Structure Synthesizer,
+             Dual Public Web (zoth.nullai.tech) & Local Supervisor Auto-Boot (:5173)
    ========================================================================== */
 export function BoltDiyTool() {
   const theme = useTheme();
   const [prompt, setPrompt] = useState('Build an autonomous cryptocurrency treasury dashboard with live Solana DePay integration and WebGPU charts');
   const [provider, setProvider] = useState('ollama');
-  const [generating, setGenerating] = useState(false);
-  const [done, setDone] = useState(false);
+  const [compiledSpec, setCompiledSpec] = useState(null);
   const [copiedCmd, setCopiedCmd] = useState(false);
+  const [copiedCode, setCopiedCode] = useState(false);
+  const [localUp, setLocalUp] = useState(false);
+  const [bootingLocal, setBootingLocal] = useState(false);
+
+  const isLocalHost = typeof window !== 'undefined' && (
+    window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname === '0.0.0.0'
+  ) && !window.location.search.includes('remote=1');
+
+  useEffect(() => {
+    if (!isLocalHost) return;
+    let cancelled = false;
+    const checkLocal = async () => {
+      try {
+        const res = await fetch('/api/studio/status');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!cancelled) setLocalUp(!!data?.services?.webgen?.up);
+      } catch (_) {}
+    };
+    checkLocal();
+    const timer = setInterval(checkLocal, 6000);
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
+    };
+  }, [isLocalHost]);
+
+  const handleBootLocalEngine = async () => {
+    if (!isLocalHost || bootingLocal) return;
+    setBootingLocal(true);
+    try {
+      const res = await fetch('/api/studio/supervisor/boot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ service: 'webgen' }),
+      });
+      const data = await res.json();
+      if (data?.status?.services?.webgen?.up) {
+        setLocalUp(true);
+      }
+    } catch (_) {}
+    setTimeout(() => setBootingLocal(false), 1800);
+  };
+
+  const buildSpecFromPrompt = (rawPrompt, selectedProvider) => {
+    const clean = String(rawPrompt || 'Sovereign Web Application').trim();
+    const words = clean.replace(/[^a-zA-Z0-9\s]/g, '').split(/\s+/).filter(Boolean);
+    const slug = (words.slice(0, 3).join('-') || 'zoth-app').toLowerCase();
+    const pascal = (words.slice(0, 3).map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join('') || 'SovereignApp');
+    const hasWeb3 = /solana|depay|crypto|wallet|mint|web3|token|treasury/i.test(clean);
+    const hasGpu = /webgpu|shader|3d|three|canvas|chart|graph/i.test(clean);
+    const hasAuth = /auth|login|jwt|session|vault|key/i.test(clean);
+
+    const modules = [
+      `${pascal}Header.tsx`,
+      hasWeb3 ? 'SolanaDePayRail.tsx' : 'TelemetryKpiGrid.tsx',
+      hasGpu ? 'WebGPUViewportCanvas.tsx' : 'InteractiveWorkspace.tsx',
+      hasAuth ? 'ZeroEgressVaultGuard.tsx' : 'ExportBundleModal.tsx',
+    ];
+
+    const providerLabel = {
+      ollama: 'Ollama Local (qwen2.5-coder:14b @ 127.0.0.1:11434)',
+      anthropic: 'Anthropic Claude 3.5 Sonnet',
+      google: 'Google Gemini 2.5 Pro',
+      groq: 'Groq LPU Ultra-Low Latency',
+    }[selectedProvider] || selectedProvider;
+
+    const tree = `📁 ${slug}/
+├── 📄 package.json (Vite 6 + React 19 + TailwindCSS)
+├── 📄 vite.config.ts
+├── 📄 tsconfig.json
+├── 📁 src/
+│   ├── 📄 main.tsx
+│   ├── 📄 App.tsx (${pascal} Root Container)
+│   ├── 📁 components/
+│   │   ├── 📄 ${modules[0]}
+│   │   ├── 📄 ${modules[1]}
+│   │   ├── 📄 ${modules[2]}
+│   │   └── 📄 ${modules[3]}
+│   └── 📄 index.css
+└── 📁 public/
+    └── 📄 robots.txt & schema.json
+
+[Compiler Synthesis]
+• Model Provider : ${providerLabel}
+• Prompt Digest  : "${clean.slice(0, 88)}${clean.length > 88 ? '…' : ''}"
+• Modules Wired  : ${modules.length} typed TSX components`;
+
+    const entryCode = `// ${slug}/src/App.tsx — Generated by Zoth WebGen (bolt.diy) Spec Synthesizer
+import React, { useState } from 'react';
+import { ${modules.map((m) => m.replace('.tsx', '')).join(', ')} } from './components';
+
+export default function ${pascal}() {
+  const [status, setStatus] = useState<'READY' | 'ACTIVE'>('ACTIVE');
+
+  return (
+    <main className="min-h-screen bg-[#08080B] text-[#F4F1FA] p-6 md:p-10 font-sans">
+      <${modules[0].replace('.tsx', '')} title="${pascal}" status={status} />
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
+        <div className="lg:col-span-8">
+          <${modules[2].replace('.tsx', '')} promptSpec={${JSON.stringify(clean)}} />
+        </div>
+        <aside className="lg:col-span-4 space-y-6">
+          <${modules[1].replace('.tsx', '')} />
+          <${modules[3].replace('.tsx', '')} onStateChange={setStatus} />
+        </aside>
+      </section>
+    </main>
+  );
+}`;
+
+    return { slug, pascal, tree, entryCode };
+  };
+
+  const activeSpec = compiledSpec || buildSpecFromPrompt(prompt, provider);
 
   const handleGenerate = () => {
-    setGenerating(true);
-    setTimeout(() => {
-      setGenerating(false);
-      setDone(true);
-    }, 1400);
+    setCompiledSpec(buildSpecFromPrompt(prompt, provider));
   };
 
   const handleCopy = (text, setFn) => {
@@ -7805,10 +7918,10 @@ export function BoltDiyTool() {
       <Box sx={{ mb: 2.5 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 0.5, flexWrap: 'wrap' }}>
           <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-            Bolt.DIY Full-Stack Engine
+            Zoth WebGen · Bolt.DIY Full-Stack Engine
           </Typography>
           <Chip
-            label="WEBCONTAINER CLIENT RUNTIME"
+            label={isLocalHost ? (localUp ? '🟢 LOCAL :5173 ONLINE' : '⚡ LOCAL NODE READY') : '🌐 PUBLIC WEB COMPILER (zoth.nullai.tech)'}
             size="small"
             sx={{
               fontFamily: mono,
@@ -7820,8 +7933,10 @@ export function BoltDiyTool() {
             }}
           />
         </Box>
-        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
-          Localized Open-Source Full-Stack AI Engineer &amp; In-Browser WebContainer Runtime
+        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem', display: 'block' }}>
+          {isLocalHost
+            ? 'Local Sovereign Node detected: scaffold in-browser below or boot the full Bolt.DIY WebContainer workbench on 127.0.0.1:5173.'
+            : 'Viewing on public web (zoth.nullai.tech): the In-Browser Full-Stack Spec & TSX Synthesizer below works immediately in your browser. Full local container execution (:5173) runs when cloned locally or booted on ZothOS.'}
         </Typography>
       </Box>
 
@@ -7854,7 +7969,7 @@ export function BoltDiyTool() {
               >
                 <MenuItem value="ollama">Local Ollama (127.0.0.1:11434 - Zero Cloud)</MenuItem>
                 <MenuItem value="anthropic">Anthropic Claude 3.5 Sonnet</MenuItem>
-                <MenuItem value="google">Google Gemini 2.0 Flash</MenuItem>
+                <MenuItem value="google">Google Gemini 2.5 Pro</MenuItem>
                 <MenuItem value="groq">Groq LPU (Ultra-Low Latency)</MenuItem>
               </Select>
             </FormControl>
@@ -7863,8 +7978,7 @@ export function BoltDiyTool() {
               variant="contained"
               fullWidth
               onClick={handleGenerate}
-              disabled={generating}
-              startIcon={generating ? <RefreshIcon sx={{ animation: 'spin 1s linear infinite' }} /> : <CodeIcon />}
+              startIcon={<CodeIcon />}
               sx={{
                 bgcolor: gold(theme),
                 color: '#08080B',
@@ -7876,17 +7990,22 @@ export function BoltDiyTool() {
                 '&:hover': { bgcolor: goldSoft(theme) }
               }}
             >
-              {generating ? 'Compiling WebContainer...' : 'Scaffold Full-Stack Project ⚡'}
+              Synthesize Full-Stack Project Spec ⚡
             </Button>
 
             <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, mb: 2 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
                 <Typography variant="caption" sx={{ fontFamily: mono, color: goldSoft(theme), fontWeight: 700 }}>
-                  CLI DEV SERVER
+                  {isLocalHost ? 'LOCAL WORKSPACE CLI' : 'CLONE & RUN LOCALLY'}
                 </Typography>
                 <Button
                   size="small"
-                  onClick={() => handleCopy(`cd ~/NullAITech/bolt.diy && pnpm run dev`, setCopiedCmd)}
+                  onClick={() => handleCopy(
+                    isLocalHost
+                      ? 'cd ~/NullAITech/bolt.diy && pnpm run dev'
+                      : 'git clone https://github.com/1nc0gn30/zoth-webgen.git && cd zoth-webgen && pnpm install && pnpm run dev',
+                    setCopiedCmd
+                  )}
                   startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
                   sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
                 >
@@ -7894,66 +8013,109 @@ export function BoltDiyTool() {
                 </Button>
               </Box>
               <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
-                cd ~/NullAITech/bolt.diy &amp;&amp; pnpm run dev
+                {isLocalHost
+                  ? 'cd ~/NullAITech/bolt.diy && pnpm run dev'
+                  : 'git clone https://github.com/1nc0gn30/zoth-webgen.git && cd zoth-webgen && pnpm run dev'}
               </Typography>
             </Box>
 
-            <Button
-              component="a"
-              href="http://127.0.0.1:5173"
-              target="_blank"
-              rel="noopener"
-              variant="outlined"
-              fullWidth
-              startIcon={<OpenInNewIcon />}
-              sx={{
-                borderColor: gold(theme),
-                color: gold(theme),
-                fontWeight: 800,
-                fontFamily: mono,
-                fontSize: '0.8rem',
-                '&:hover': { bgcolor: goldBg(theme) }
-              }}
-            >
-              Open Bolt.DIY Dev Server ↗
-            </Button>
+            {isLocalHost ? (
+              <Stack spacing={1}>
+                {!localUp && (
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    onClick={handleBootLocalEngine}
+                    disabled={bootingLocal}
+                    startIcon={<FlashOnIcon />}
+                    sx={{
+                      bgcolor: '#10B981',
+                      color: '#04130D',
+                      fontWeight: 800,
+                      fontFamily: mono,
+                      fontSize: '0.78rem',
+                      '&:hover': { bgcolor: '#34D399' }
+                    }}
+                  >
+                    {bootingLocal ? 'Booting Local :5173 Engine…' : 'Auto-Boot Local Engine (:5173) ⚡'}
+                  </Button>
+                )}
+                <Button
+                  component="a"
+                  href="http://127.0.0.1:5173"
+                  target="_blank"
+                  rel="noopener"
+                  variant="outlined"
+                  fullWidth
+                  startIcon={<OpenInNewIcon />}
+                  sx={{
+                    borderColor: gold(theme),
+                    color: gold(theme),
+                    fontWeight: 800,
+                    fontFamily: mono,
+                    fontSize: '0.8rem',
+                    '&:hover': { bgcolor: goldBg(theme) }
+                  }}
+                >
+                  {localUp ? 'Open Active Bolt.DIY Workbench (:5173) ↗' : 'Open Bolt.DIY Local Port (:5173) ↗'}
+                </Button>
+              </Stack>
+            ) : (
+              <Button
+                component="a"
+                href="https://github.com/1nc0gn30/zoth-webgen"
+                target="_blank"
+                rel="noopener"
+                variant="outlined"
+                fullWidth
+                startIcon={<OpenInNewIcon />}
+                sx={{
+                  borderColor: gold(theme),
+                  color: gold(theme),
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  fontSize: '0.8rem',
+                  '&:hover': { bgcolor: goldBg(theme) }
+                }}
+              >
+                Get Zoth WebGen (bolt.diy) on GitHub ↗
+              </Button>
+            )}
           </Paper>
         </Grid>
 
         <Grid xs={12} md={7}>
           <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
-              2. WebContainer In-Browser File Tree &amp; Terminal
-            </Typography>
-
-            <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, minHeight: 320 }}>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-emerald)', fontWeight: 700, mb: 1 }}>
-                WEBCONTAINER VIRTUAL FILE SYSTEM
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold(theme), fontSize: '0.85rem' }}>
+                2. Synthesized Project Tree &amp; Entry TSX
               </Typography>
-              <pre style={{ margin: 0, fontFamily: mono, fontSize: '0.74rem', color: '#E2E8F0', whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
-{done ? `📁 bolt-project/
-├── 📄 package.json (Vite + React 19 + TailwindCSS)
-├── 📄 vite.config.ts
-├── 📄 tsconfig.json
-├── 📁 src/
-│   ├── 📄 main.tsx
-│   ├── 📄 App.tsx (Treasury Dashboard + Solana Rails)
-│   ├── 📁 components/
-│   │   ├── 📄 DePaySolanaCheckout.tsx
-│   │   ├── 📄 SlippageSentinel.tsx
-│   │   └── 📄 WebGPUTreasuryChart.tsx
-│   └── 📄 index.css
-└── 📁 public/
-    └── 📄 favicon.svg
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => handleCopy(activeSpec.entryCode, setCopiedCode)}
+                startIcon={copiedCode ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+                sx={{ fontFamily: mono, fontSize: '0.68rem', borderColor: goldBorder(theme), color: gold(theme) }}
+              >
+                {copiedCode ? 'Copied App.tsx' : 'Copy App.tsx'}
+              </Button>
+            </Box>
 
-[WebContainer Terminal]
-$ pnpm install
-Progress: resolved 245, reused 245, downloaded 0, added 245
-$ vite
-VITE v6.0.0 ready in 182 ms
-➜ Local: http://localhost:5173/` : `WebContainer runtime initialized.
-Virtual Node.js process ready in browser memory.
-Select model provider and enter specification to scaffold project.`}
+            <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, mb: 1.5 }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-emerald)', fontWeight: 700, mb: 1 }}>
+                VIRTUAL FILE SYSTEM &amp; MODULE TOPOLOGY
+              </Typography>
+              <pre style={{ margin: 0, fontFamily: mono, fontSize: '0.73rem', color: '#E2E8F0', whiteSpace: 'pre-wrap', lineHeight: 1.55 }}>
+                {activeSpec.tree}
+              </pre>
+            </Box>
+
+            <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: goldSoft(theme), fontWeight: 700, mb: 1 }}>
+                GENERATED ENTRYPOINT ({activeSpec.slug}/src/App.tsx)
+              </Typography>
+              <pre style={{ margin: 0, fontFamily: mono, fontSize: '0.72rem', color: '#38BDF8', whiteSpace: 'pre-wrap', lineHeight: 1.5, maxHeight: 185, overflowY: 'auto' }}>
+                {activeSpec.entryCode}
               </pre>
             </Box>
           </Paper>
@@ -7962,4 +8124,5 @@ Select model provider and enter specification to scaffold project.`}
     </Box>
   );
 }
+
 

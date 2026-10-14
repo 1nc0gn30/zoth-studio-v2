@@ -52,7 +52,7 @@ function localModels(tags) {
 }
 
 export async function probeStatus() {
-  const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama, vault, egress, mock, firewall, flight, capsule, policy, civ] = await Promise.all([
+  const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama, vault, egress, mock, firewall, flight, capsule, policy, civ, webgen] = await Promise.all([
     requestJson(8094, '/health'),
     requestJson(8788, '/health'),
     requestJson(8102, '/api/health'),
@@ -68,6 +68,7 @@ export async function probeStatus() {
     requestJson(8105, '/api/stats'),
     requestJson(8106, '/api/stats'),
     requestJson(9393, '/api/status', { timeout: 1000 }),
+    requestJson(5173, '/', { timeout: 700 }),
   ]);
 
   const memoryUp = memoryPrimary.up || memorySec.up;
@@ -166,10 +167,16 @@ export async function probeStatus() {
         detail: civ.json ? {
           day: civ.json.state?.day,
           leader: civ.json.state?.currentLeader,
+          treasuryUsd: civ.json.treasury?.totalUsd ?? civ.json.state?.treasuryUsd ?? null,
           adytumCycleCount: civ.json?.adytumCycleCount || civ.json?.state?.completedAdytumCycles || 0,
           observationalCycles: civ.json?.observationalCycles || 0,
           latestReflection: (civ.json?.mentalReflections && civ.json.mentalReflections[civ.json.mentalReflections.length - 1]) || null
         } : null,
+      },
+      webgen: {
+        name: 'Zoth WebGen (Bolt.DIY)',
+        port: 5173,
+        up: webgen.up,
       },
     },
   };
@@ -327,6 +334,32 @@ export function studioMiddleware() {
         return;
       }
 
+      if (req.method === 'POST' && url.pathname === '/api/studio/supervisor/boot') {
+        const body = await readBody(req);
+        const target = String(body.service || '').toLowerCase();
+        const homeDir = os.homedir() || '~';
+        const bootMap = {
+          civilization: `nohup node "${homeDir}/NullAITech/zoth-civilization/server.js" >/tmp/zoth-civ-supervisor.log 2>&1 &`,
+          webgen: `cd "${homeDir}/NullAITech/zoth-web-gen" && nohup pnpm run dev --port 5173 >/tmp/zoth-webgen-supervisor.log 2>&1 &`,
+          daemons: `nohup node "${homeDir}/NullAITech/zoth-studio-v2/server/daemon-runner.mjs" >/tmp/zoth-daemons-supervisor.log 2>&1 &`,
+        };
+        if (!bootMap[target]) {
+          send(res, 400, { error: `Unknown service "${target}". Allowed: civilization, webgen, daemons.` });
+          return;
+        }
+        exec(bootMap[target], (err) => {
+          if (err) console.error('[Zoth Supervisor] Boot error:', err);
+        });
+        await new Promise((r) => setTimeout(r, 1200));
+        const status = await probeStatus();
+        send(res, 200, {
+          success: true,
+          booted: target,
+          status,
+        });
+        return;
+      }
+
       if (req.method === 'GET' && url.pathname === '/api/studio/memory') {
         const query = url.searchParams.get('q') || '';
         const path = query
@@ -339,7 +372,7 @@ export function studioMiddleware() {
         if (!result.up) {
           send(res, 503, {
             error: 'Memory daemon is not answering on 127.0.0.1:8094.',
-            hint: 'python3 src/daemon.py --port 8094 or npx zoth up',
+            hint: 'python3 src/daemon.py --port 8094 or npm run zoth -- up',
           });
           return;
         }
@@ -363,7 +396,7 @@ export function studioMiddleware() {
         if (!health.up) {
           send(res, 503, {
             error: 'Signal bridge is not answering on 127.0.0.1:8102.',
-            hint: 'node server/bridge.js --port 8102 or npx zoth up',
+            hint: 'node server/bridge.js --port 8102 or npm run zoth -- up',
           });
           return;
         }
@@ -415,7 +448,7 @@ export function studioMiddleware() {
         if (!result.up) {
           send(res, 503, {
             error: 'Signal bridge is not answering on 127.0.0.1:8102.',
-            hint: 'node server/bridge.js --port 8102 or npx zoth up',
+            hint: 'node server/bridge.js --port 8102 or npm run zoth -- up',
           });
           return;
         }

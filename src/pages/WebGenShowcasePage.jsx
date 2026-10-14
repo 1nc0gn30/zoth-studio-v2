@@ -10,6 +10,7 @@ import WifiOffIcon from '@mui/icons-material/WifiOff';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import {
   HeroReveal, HeroItem, GlowLine, RevealOnScroll,
   StaggerChildren, StaggerItem,
@@ -86,8 +87,12 @@ export default function WebGenShowcasePage() {
           </HeroItem>
         </HeroReveal>
 
+        <Box sx={{ mt: 4 }}>
+          <DaemonStatusStrip />
+        </Box>
+
         {/* ── Feature Cards ── */}
-        <Box sx={{ mt: 7 }}>
+        <Box sx={{ mt: 5 }}>
           <Grid container spacing={3} alignItems="stretch">
             {FEATURES.map((f, idx) => (
               <Grid xs={12} sm={6} md={3} key={f.title} sx={{ display: 'flex' }}>
@@ -167,10 +172,23 @@ export default function WebGenShowcasePage() {
                 '&:hover': { bgcolor: '#0284C7', color: '#fff' },
               }}
             >
-              Explore Full Documentation
+              Launch In-Browser Compiler &amp; Docs
             </Button>
             <Button
-              href="https://github.com/NullAITech/zoth-webgen"
+              component={RouterLink}
+              to="/tools/bolt.diy"
+              variant="outlined"
+              endIcon={<ArrowForwardIcon />}
+              sx={{
+                borderColor: accent, color: accent, fontWeight: 700,
+                textTransform: 'none', borderRadius: 2, px: 3, py: 1.2,
+                '&:hover': { bgcolor: `${accent}15` },
+              }}
+            >
+              Open Zoth WebGen Workstation
+            </Button>
+            <Button
+              href="https://github.com/1nc0gn30/zoth-webgen"
               target="_blank"
               rel="noopener noreferrer"
               variant="outlined"
@@ -181,7 +199,7 @@ export default function WebGenShowcasePage() {
                 '&:hover': { borderColor: accent, color: accent },
               }}
             >
-              View on GitHub
+              View Zoth WebGen on GitHub
             </Button>
           </Box>
         </RevealOnScroll>
