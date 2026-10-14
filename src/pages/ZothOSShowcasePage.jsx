@@ -229,6 +229,25 @@ export default function ZothOSShowcasePage() {
             </Box>
           </HeroItem>
           <HeroItem>
+            <Button
+              variant="contained"
+              href="https://www.producthunt.com/products/zothos"
+              target="_blank"
+              rel="noopener"
+              sx={{
+                mt: 2, mb: 1,
+                bgcolor: '#FF6154', color: '#fff',
+                fontWeight: 800, fontFamily: mono, fontSize: '0.8rem',
+                px: 2.5, py: 1,
+                borderRadius: 999,
+                textTransform: 'none',
+                '&:hover': { bgcolor: '#E55347' },
+              }}
+            >
+              ▲ Live on Product Hunt — Oct 13
+            </Button>
+          </HeroItem>
+          <HeroItem>
             <Typography
               variant="h1"
               sx={{
