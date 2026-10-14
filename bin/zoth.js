@@ -266,9 +266,23 @@ async function handleUp() {
     console.log(`${GREEN}✔ Swarm Daemon (21-Agent Matrix)${RESET} already listening on http://127.0.0.1:8790/`);
   }
 
+  // Spawn Zoth Civilization on port 9393
+  const isCivUp = await fetch('http://127.0.0.1:9393/api/status').then((res) => res.ok).catch(() => false);
+  if (!isCivUp) {
+    const civDir = toolDir('zoth-civilization');
+    if (civDir && fs.existsSync(path.join(civDir, 'server.js'))) {
+      const started = spawnDaemon('civilization', process.execPath, ['server.js'], civDir);
+      pids.civilization = started;
+      console.log(`${GREEN}✔ Zoth Civilization${RESET} pid ${started.pid}  http://127.0.0.1:9393/`);
+    }
+  } else {
+    console.log(`${GREEN}✔ Zoth Civilization${RESET} already listening on http://127.0.0.1:9393/`);
+  }
+
   writePids(pids);
   console.log(`\n${BOLD}UI${RESET}  ${CYAN}http://127.0.0.1:3000/${RESET}`);
   console.log(`${BOLD}Swarm Daemon${RESET}  ${CYAN}http://127.0.0.1:8790/api/swarm/agents${RESET}`);
+  console.log(`${BOLD}Civilization${RESET}  ${CYAN}http://127.0.0.1:9393/${RESET}`);
   console.log(`${GRAY}Give the daemons a second, then run npm run zoth -- doctor.${RESET}`);
 }
 
