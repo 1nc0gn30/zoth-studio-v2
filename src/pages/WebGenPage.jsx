@@ -41,6 +41,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import WindowCarousel from '../components/WindowCarousel';
 import SovereignFunnel from '../components/SovereignFunnel';
+import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -2637,6 +2638,8 @@ wait $PID`;
         </Box>
       </HeroReveal>
       </ParallaxGlow>
+
+      <DaemonStatusStrip />
 
       {/* =========================================================================
           MICRO-REPO CLI & MCP SERVER ARCHITECTURE DOSSIER

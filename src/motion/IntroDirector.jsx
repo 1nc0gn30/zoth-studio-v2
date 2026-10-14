@@ -439,48 +439,103 @@ function TitleCard({ intro, handing, dark, text }) {
   return (
     <motion.div
       aria-hidden="true"
-      initial={{ opacity: 0, y: 8 }}
-      animate={handing ? { opacity: 0, y: -10 } : { opacity: 1, y: 0 }}
-      transition={{ duration: handing ? 0.22 : 0.34, delay: handing ? 0 : 0.16, ease: EASE_OUT_EXPO }}
+      initial={{ opacity: 0, y: 10, scale: 0.985 }}
+      animate={handing ? { opacity: 0, y: -12, scale: 1.015 } : { opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: handing ? 0.22 : 0.36, delay: handing ? 0 : 0.12, ease: EASE_OUT_EXPO }}
       style={{
         position: 'absolute',
         left: 0,
         right: 0,
-        bottom: 'calc(50% + 18px)',
+        bottom: 'calc(50% + 22px)',
         textAlign: 'center',
         padding: '0 24px',
         pointerEvents: 'none',
       }}
     >
+      {/* Subtle radial accent aura behind the title card */}
       <div
         style={{
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 'min(560px, 88vw)',
+          height: 180,
+          background: `radial-gradient(ellipse 60% 55% at 50% 50%, ${intro.accent}${dark ? '24' : '18'}, transparent 72%)`,
+          filter: 'blur(18px)',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 10,
+          padding: '4px 14px',
+          borderRadius: 999,
+          border: `1px solid ${intro.accent}${dark ? '44' : '33'}`,
+          background: dark ? 'rgba(8,8,11,0.65)' : 'rgba(255,255,255,0.75)',
           fontFamily: mono,
-          fontSize: 11,
-          letterSpacing: '0.28em',
+          fontSize: 10.5,
+          fontWeight: 700,
+          letterSpacing: '0.24em',
+          textTransform: 'uppercase',
           color: dark ? intro.accent : text,
-          opacity: dark ? 1 : 0.6,
-          marginBottom: 10,
+          marginBottom: 14,
         }}
       >
-        {intro.index} / {intro.total}
+        <span
+          style={{
+            width: 6,
+            height: 6,
+            borderRadius: '50%',
+            background: intro.accent,
+            boxShadow: `0 0 8px ${intro.accent}`,
+          }}
+        />
+        <span>{intro.index} / {intro.total}</span>
+        {intro.kicker && (
+          <>
+            <span style={{ opacity: 0.4 }}>·</span>
+            <span style={{ opacity: 0.9 }}>{intro.kicker}</span>
+          </>
+        )}
       </div>
       <div
         style={{
+          position: 'relative',
+          zIndex: 1,
           fontFamily: display,
-          fontSize: 'clamp(1.9rem, 4.5vw, 3.4rem)',
-          lineHeight: 1.05,
+          fontSize: 'clamp(2.1rem, 4.8vw, 3.75rem)',
+          lineHeight: 1.04,
           color: text,
-          letterSpacing: '0.01em',
+          letterSpacing: '0.015em',
+          textShadow: dark ? `0 0 34px ${intro.accent}33` : 'none',
         }}
       >
         {intro.label}
       </div>
+      {/* Architectural GlowLine rule beneath title */}
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          width: 'min(220px, 48vw)',
+          height: 1.5,
+          margin: '16px auto 0',
+          background: `linear-gradient(90deg, transparent 0%, ${intro.accent} 50%, transparent 100%)`,
+          boxShadow: `0 0 12px ${intro.accent}88`,
+        }}
+      />
     </motion.div>
   );
 }
 
 // The rendered cuts carry their own HUD (frame counter, progress), so ours is
-// a single centred skip control with a playback ring — nothing that competes.
+// a top-left cinema telemetry pill + a centred skip control with playback ring.
 function IntroHud({ intro, progress, handing, onSkip }) {
   const RING = 2 * Math.PI * 15;
   const dash = useTransform(progress, (p) => RING * (1 - p));
@@ -488,9 +543,46 @@ function IntroHud({ intro, progress, handing, onSkip }) {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: handing ? 0 : 1 }}
-      transition={{ duration: handing ? 0.2 : 0.6, delay: handing ? 0 : 0.35 }}
+      transition={{ duration: handing ? 0.2 : 0.6, delay: handing ? 0 : 0.3 }}
       style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
     >
+      {/* Top-left route cinema telemetry pill */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 'max(20px, env(safe-area-inset-top))',
+          left: 'max(22px, env(safe-area-inset-left))',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 10,
+          padding: '6px 14px',
+          borderRadius: 999,
+          border: '1px solid rgba(245,241,230,0.16)',
+          background: 'rgba(8,8,11,0.58)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          color: '#F5F1E6',
+          fontFamily: mono,
+          fontSize: 10.5,
+          fontWeight: 700,
+          letterSpacing: '0.2em',
+          textTransform: 'uppercase',
+        }}
+      >
+        <span
+          style={{
+            width: 7,
+            height: 7,
+            borderRadius: '50%',
+            background: intro.accent,
+            boxShadow: `0 0 10px ${intro.accent}`,
+          }}
+        />
+        <span style={{ color: intro.accent }}>{intro.index} / {intro.total}</span>
+        <span style={{ opacity: 0.35 }}>·</span>
+        <span>{intro.label}</span>
+      </div>
+
       <button
         type="button"
         onClick={(e) => {
@@ -503,20 +595,22 @@ function IntroHud({ intro, progress, handing, onSkip }) {
           position: 'absolute',
           left: '50%',
           transform: 'translateX(-50%)',
-          bottom: 'max(20px, env(safe-area-inset-bottom))',
+          bottom: 'max(22px, env(safe-area-inset-bottom))',
           minHeight: 44,
           display: 'inline-flex',
           alignItems: 'center',
           gap: 10,
           padding: '6px 16px 6px 8px',
           borderRadius: 999,
-          border: '1px solid rgba(245,241,230,0.18)',
-          background: 'rgba(8,8,11,0.55)',
-          backdropFilter: 'blur(10px)',
-          WebkitBackdropFilter: 'blur(10px)',
+          border: `1px solid ${intro.accent}55`,
+          background: 'rgba(8,8,11,0.68)',
+          boxShadow: `0 10px 28px rgba(0,0,0,0.55), 0 0 20px ${intro.accent}22`,
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
           color: '#F5F1E6',
           fontFamily: mono,
           fontSize: 11,
+          fontWeight: 700,
           letterSpacing: '0.18em',
           textTransform: 'uppercase',
           cursor: 'pointer',
@@ -537,9 +631,21 @@ function IntroHud({ intro, progress, handing, onSkip }) {
           />
           <path d="M14 12 L21 17 L14 22 Z" fill="#F5F1E6" />
         </svg>
-        Skip intro
+        <span>Skip intro</span>
+        <span
+          style={{
+            padding: '2px 7px',
+            borderRadius: 6,
+            border: '1px solid rgba(245,241,230,0.22)',
+            background: 'rgba(245,241,230,0.08)',
+            fontSize: 9.5,
+            letterSpacing: '0.12em',
+            opacity: 0.85,
+          }}
+        >
+          ESC
+        </span>
       </button>
-
     </motion.div>
   );
 }

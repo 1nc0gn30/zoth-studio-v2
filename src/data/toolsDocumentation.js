@@ -446,7 +446,7 @@ export const toolsDocumentation = {
     aiAgentProtocol: {
       mcpTool: 'detect_hand_gestures',
       description: 'Stream camera video buffer into local MediaPipe hand landmark detection model.',
-      cliExample: 'npx zoth pull vision-gesture-control',
+      cliExample: 'npx @nullaitech/zoth pull vision-gesture-control',
       inputSchema: {
         type: 'object',
         properties: {
@@ -462,7 +462,7 @@ export const toolsDocumentation = {
       }
     },
     quickstart: [
-      'npx zoth pull vision-gesture-control',
+      'npx @nullaitech/zoth pull vision-gesture-control',
       'cd vision-gesture-control && npm install',
       'npm run dev'
     ],
@@ -693,7 +693,7 @@ export const toolsDocumentation = {
     aiAgentProtocol: {
       mcpTool: 'webmcp_inspect_schema',
       description: 'Inspect and dispatch validated MCP JSON-RPC 2.0 tool calls against local sovereign enclaves.',
-      cliExample: 'zoth mcp serve --port 8094',
+      cliExample: 'npx @nullaitech/zoth pull webmcp-protocol-inspector',
       inputSchema: {
         type: 'object',
         properties: {
@@ -709,8 +709,7 @@ export const toolsDocumentation = {
       }
     },
     quickstart: [
-      'npx zoth pull webmcp-protocol-inspector',
-      'npx zoth mcp serve --port 8094',
+      'npx @nullaitech/zoth pull webmcp-protocol-inspector',
       'claude --mcp-config ./claude_desktop_config.json'
     ],
     features: [
@@ -1281,7 +1280,7 @@ export function getToolDocumentation(tool) {
     },
     quickstart: [
       `git clone ${tool.github || `https://github.com/NullAITech/${tool.repo}`}.git`,
-      `cd ${tool.repo} && ${tool.pull || `npx zoth pull ${tool.id}`}`,
+      `cd ${tool.repo} && ${tool.pull || `npx @nullaitech/zoth pull ${tool.id}`}`,
       'npm test || pytest || cargo test'
     ],
     features: [
