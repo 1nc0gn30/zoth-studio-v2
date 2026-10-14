@@ -177,6 +177,7 @@ function AppShell({ mode, onToggleTheme }) {
               <Route path="/webgen/docs" element={<WebGenPage />} />
               <Route path="/hexstrike" element={<HexStrikeShowcasePage />} />
               <Route path="/hexstrike/docs" element={<HexStrikePage />} />
+              <Route path="/zothos" element={<Navigate to="/zoth-os" replace />} />
               <Route path="/zoth-os" element={<ZothOSShowcasePage />} />
               <Route path="/zoth-os/docs" element={<ZothOSPage />} />
               <Route path="/docs" element={<DocsPage />} />
