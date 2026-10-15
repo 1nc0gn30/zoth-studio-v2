@@ -1,0 +1,110 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/2025-03-26/mcp-manifest.json",
+  "protocolVersion": "2025-03-26",
+  "name": "zoth-studio-v2-mcp-mesh",
+  "title": "Zoth Studio v2 — Zero-Egress Sovereign Agent Studio & 59-Tool MCP Mesh",
+  "version": "2.4.0",
+  "description": "Model Context Protocol (MCP) server & tool discovery manifest for Zoth Studio v2 (zoth.nullai.tech). Exposes the 21-Agent Sovereign Pantheon, Lucy STDP Memory Oracle (:8094), 3-Agent Byzantine AST Consensus Quorum, Adytum Argon2id Vault (:8787), and 30 standalone micro-tools.",
+  "homepage": "https://zoth.nullai.tech",
+  "documentationUrl": "https://zoth.nullai.tech/docs",
+  "axHubUrl": "https://zoth.nullai.tech/ax",
+  "osCompanionUrl": "https://zothos.nullai.tech",
+  "publisher": {
+    "name": "Neal Frazier Tech (NullAI Platform)",
+    "url": "https://nullai.tech",
+    "github": "https://github.com/1nc0gn30"
+  },
+  "securityInvariants": {
+    "zeroEgress": true,
+    "loopbackBindOnly": "127.0.0.1",
+    "byzantineConsensus": "3-Agent BFT AST Diff Quorum (n >= 3f + 1)",
+    "synapticMemory": "Spike-Timing-Dependent Plasticity (dw = A+ * exp(-dt/tau))"
+  },
+  "mcpServers": {
+    "zoth-studio-memory-mcp": {
+      "command": "npx",
+      "args": ["-y", "@nullaitech/zoth-memory-mcp", "--port", "8094"],
+      "sseEndpoint": "http://127.0.0.1:8094/mcp/sse",
+      "description": "Lucy Cognitive Memory Oracle & Biomorphic STDP Vector Matrix (:8094).",
+      "tools": [
+        {
+          "name": "stdp_memory_recall",
+          "description": "Recall biomorphic memory vectors from the loopback STDP daemon (:8094) and reinforce synaptic weights.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "query_vector": { "type": "string", "description": "Semantic query or architectural symbol" },
+              "tau_decay": { "type": "number", "default": 20.0 },
+              "top_k": { "type": "integer", "default": 5 }
+            },
+            "required": ["query_vector"]
+          }
+        }
+      ]
+    },
+    "zoth-studio-consensus-mcp": {
+      "command": "npx",
+      "args": ["-y", "@nullaitech/zoth-consensus-mcp", "--port", "8989"],
+      "sseEndpoint": "http://127.0.0.1:8989/mcp/sse",
+      "description": "3-Agent Byzantine Fault Tolerance (BFT) Socratic AST Diff Arbitrator.",
+      "tools": [
+        {
+          "name": "ast_diff_triangulation",
+          "description": "Submit speculative code diffs to the 3-Agent Byzantine Consensus Arena for zero-egress and memory-safety verification.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "target_file": { "type": "string" },
+              "proposed_diff": { "type": "string" },
+              "invariant_assertions": { "type": "array", "items": { "type": "string" } }
+            },
+            "required": ["target_file", "proposed_diff"]
+          }
+        }
+      ]
+    },
+    "zoth-studio-adytum-mcp": {
+      "command": "npx",
+      "args": ["-y", "@nullaitech/zoth-adytum-mcp", "--port", "8787"],
+      "sseEndpoint": "http://127.0.0.1:8787/mcp/sse",
+      "description": "Adytum Hardware Key Sanctum (Argon2id + XChaCha20-Poly1305 ephemeral secret leases).",
+      "tools": [
+        {
+          "name": "adytum_lease_secret",
+          "description": "Derive and lease an ephemeral secret in mlockall() RAM without writing plaintext .env files.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "vault_scope": { "type": "string" },
+              "ttl_seconds": { "type": "integer", "default": 60 }
+            },
+            "required": ["vault_scope"]
+          }
+        }
+      ]
+    },
+    "zoth-studio-pantheon-mcp": {
+      "command": "npx",
+      "args": ["-y", "@nullaitech/zoth-pantheon-mcp", "--port", "8102"],
+      "sseEndpoint": "http://127.0.0.1:8102/mcp/sse",
+      "description": "21-Agent Sovereign Pantheon E2EE Signal Bridge & Subagent Dispatcher (:8102).",
+      "tools": [
+        {
+          "name": "sovereign_signal_ping",
+          "description": "Dispatch an authenticated peer verification packet across the 21-agent loopback mesh.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "recipient_agent": {
+                "type": "string",
+                "enum": ["lucy-netrunner", "azoth-archon", "kai-bft", "nyx-cipher", "sol-chronicle"]
+              },
+              "payload_signature": { "type": "string" }
+            },
+            "required": ["recipient_agent", "payload_signature"]
+          }
+        }
+      ]
+    }
+  }
+}

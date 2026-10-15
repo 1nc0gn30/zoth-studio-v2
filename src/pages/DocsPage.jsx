@@ -284,6 +284,12 @@ export default function DocsPage() {
         title: '14. Practical Developer Quickstart: Desktop, Ollama & CLI Tools',
         topics: ['Invariants', 'Enclaves & Netlify'],
         kicker: 'DEVELOPER QUICKSTART'
+      },
+      {
+        id: 'sec-mcp',
+        title: '15. Model Context Protocol (MCP) & Agent Experience (AX) Specification',
+        topics: ['Invariants', 'Enclaves & Netlify', 'Memory & STDP'],
+        kicker: 'MCP & AX STANDARD'
       }
     ],
     []
@@ -1802,6 +1808,75 @@ sudo ln -sf "$(pwd)/bin/zoth" /usr/local/bin/zoth
 zoth --version
 subsweep --help
 envguard --help`}
+                  />
+                </Paper>
+              )}
+
+              {/* 15. Model Context Protocol (MCP) & Agent Experience (AX) Specification */}
+              {visibleSectionIds.has('sec-mcp') && (
+                <Paper
+                  id="sec-mcp"
+                  sx={{
+                    p: { xs: 2.5, md: 3.5 },
+                    border: `1px solid rgba(212,175,55,0.25)`,
+                    borderRadius: 3,
+                    bgcolor: surface
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
+                    <Chip
+                      label="MCP & AX STANDARD"
+                      size="small"
+                      sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
+                    />
+                    <Typography variant="h5" sx={{ fontWeight: 750, color: textPrimary }}>
+                      15. Model Context Protocol (MCP 2025-03-26) &amp; Agent Experience (AX) Specification
+                    </Typography>
+                  </Box>
+
+                  <Typography variant="body1" color="text.secondary" paragraph>
+                    Zoth Studio v2 publishes standardized machine-readable discovery manifests (<code>/.well-known/mcp.json</code>, <code>/.well-known/agent.json</code>, <code>/llms.txt</code>, <code>/llms-full.txt</code>, and <code>/ai.txt</code>) and exposes 4 core local MCP server clusters for Google Antigravity (AGY), Claude Desktop/Code, Cursor, and Cline.
+                  </Typography>
+
+                  <CodeSnippet
+                    title="~/.gemini/antigravity-cli/mcp_config.json (OR CLAUDE / CURSOR MCP CONFIG)"
+                    language="json"
+                    code={`{
+  "mcpServers": {
+    "zoth-studio-memory-mcp": {
+      "command": "npx",
+      "args": ["-y", "@nullaitech/zoth-memory-mcp", "--port", "8094"],
+      "env": { "ZOTH_LOOPBACK_ONLY": "1" }
+    },
+    "zoth-studio-consensus-mcp": {
+      "command": "npx",
+      "args": ["-y", "@nullaitech/zoth-consensus-mcp", "--port", "8989"],
+      "env": { "ZOTH_LOOPBACK_ONLY": "1" }
+    },
+    "zoth-studio-adytum-mcp": {
+      "command": "npx",
+      "args": ["-y", "@nullaitech/zoth-adytum-mcp", "--port", "8787"],
+      "env": { "ZOTH_LOOPBACK_ONLY": "1" }
+    },
+    "zoth-studio-pantheon-mcp": {
+      "command": "npx",
+      "args": ["-y", "@nullaitech/zoth-pantheon-mcp", "--port", "8102"],
+      "env": { "ZOTH_LOOPBACK_ONLY": "1" }
+    }
+  }
+}`}
+                  />
+
+                  <CodeSnippet
+                    title="VERIFY PUBLIC AX & MCP DISCOVERY ENDPOINTS"
+                    code={`# Inspect Model Context Protocol server & tool schemas
+curl -s https://zoth.nullai.tech/.well-known/mcp.json | jq .mcpServers
+
+# Inspect A2A / Agent Experience (AX) capability card
+curl -s https://zoth.nullai.tech/.well-known/agent.json | jq .capabilities
+
+# Companion Bare-Metal Operating System (ZothOS v3.2) MCP Manifest
+curl -s https://zothos.nullai.tech/.well-known/mcp.json | jq .mcpServers`}
                   />
                 </Paper>
               )}

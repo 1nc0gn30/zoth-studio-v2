@@ -1,0 +1,32 @@
+{
+  "$schema": "https://schemas.nullai.tech/agent-card/v1.json",
+  "protocol": "A2A-AX/1.0",
+  "name": "Zoth Studio v2 Sovereign Agent Pantheon",
+  "id": "did:web:zoth.nullai.tech",
+  "version": "2.4.0",
+  "url": "https://zoth.nullai.tech",
+  "companionOsUrl": "https://zothos.nullai.tech",
+  "description": "Zero-egress, air-gapped sovereign AI agent development studio featuring 24 studio workstations, 30 standalone micro-tools, 21 Pantheon agents, Lucy STDP Memory Oracle (:8094), and 3-Agent Byzantine AST Consensus.",
+  "provider": {
+    "organization": "Neal Frazier Tech • NullAI Platform",
+    "url": "https://nullai.tech",
+    "github": "https://github.com/1nc0gn30/zoth-studio-v2"
+  },
+  "discovery": {
+    "llmsTxt": "https://zoth.nullai.tech/llms.txt",
+    "llmsFullTxt": "https://zoth.nullai.tech/llms-full.txt",
+    "aiTxt": "https://zoth.nullai.tech/ai.txt",
+    "mcpManifest": "https://zoth.nullai.tech/.well-known/mcp.json",
+    "axManifest": "https://zoth.nullai.tech/api/ax/manifest.json",
+    "toolsCatalog": "https://zoth.nullai.tech/api/tools.json",
+    "sitemap": "https://zoth.nullai.tech/sitemap.xml"
+  },
+  "capabilities": {
+    "streaming": true,
+    "mcpStdio": true,
+    "mcpSseLoopback": true,
+    "byzantineAstQuorum": true,
+    "stdpVectorRecall": true,
+    "zeroEgressEnclave": true
+  }
+}

@@ -425,8 +425,26 @@ export function generateSchemaGraph(path = '/') {
     graph.push({
       '@type': 'AboutPage',
       '@id': `${fullUrl}#about-page`,
-      'name': 'Zoth Studio Agent Experience (AX) Entity Profile',
+      'name': 'Zoth Studio Agent Experience (AX) & Model Context Protocol (MCP) Profile',
       'description': routeMeta.description,
+      'publisher': { '@id': `${siteConfig.url}/#organization` }
+    });
+    graph.push({
+      '@type': 'WebAPI',
+      '@id': `${fullUrl}#mcp-api`,
+      'name': 'Zoth Studio v2 Model Context Protocol (MCP) Loopback Mesh',
+      'documentation': `${siteConfig.url}/.well-known/mcp.json`,
+      'termsOfService': `${siteConfig.url}/ai.txt`,
+      'provider': { '@id': `${siteConfig.url}/#organization` }
+    });
+  } else if (path === '/docs') {
+    graph.push({
+      '@type': 'TechArticle',
+      '@id': `${fullUrl}#tech-article`,
+      'headline': 'Zoth Studio v2 Sovereign Architecture, Zero-Egress Invariants, MCP & Six Math Pillars',
+      'description': routeMeta.description,
+      'proficiencyLevel': 'Expert',
+      'author': { '@type': 'Organization', 'name': 'NullAI Tech' },
       'publisher': { '@id': `${siteConfig.url}/#organization` }
     });
   } else if (path === '/webgen') {

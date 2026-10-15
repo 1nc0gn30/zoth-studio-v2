@@ -257,6 +257,49 @@ netlify-mcp-api: https://zoth.nullai.tech/api/netlify-ax-mcp.json`
   "pantheon_consensus": "3-Agent Byzantine Fault Tolerance AST Diff Quorum",
   "synaptic_memory": "STDP dw = A+ * exp(-dt/tau)"
 }`
+  },
+  {
+    endpoint: '/.well-known/mcp.json',
+    label: '/.well-known/mcp.json',
+    mime: 'application/json; charset=utf-8',
+    description: 'Model Context Protocol (MCP 2025-03-26) Server & Tool Discovery Manifest',
+    tokens: 540,
+    sizeBytes: 2180,
+    content: `{
+  "$schema": "https://modelcontextprotocol.io/schemas/2025-03-26/mcp-manifest.json",
+  "protocolVersion": "2025-03-26",
+  "name": "zoth-studio-v2-mcp-mesh",
+  "version": "2.4.0",
+  "mcpServers": {
+    "zoth-studio-memory-mcp": { "sseEndpoint": "http://127.0.0.1:8094/mcp/sse" },
+    "zoth-studio-consensus-mcp": { "sseEndpoint": "http://127.0.0.1:8989/mcp/sse" },
+    "zoth-studio-adytum-mcp": { "sseEndpoint": "http://127.0.0.1:8787/mcp/sse" },
+    "zoth-studio-pantheon-mcp": { "sseEndpoint": "http://127.0.0.1:8102/mcp/sse" }
+  }
+}`
+  },
+  {
+    endpoint: '/.well-known/agent.json',
+    label: '/.well-known/agent.json',
+    mime: 'application/json; charset=utf-8',
+    description: 'A2A / Agent Experience (AX) Capability Card',
+    tokens: 310,
+    sizeBytes: 1240,
+    content: `{
+  "protocol": "A2A-AX/1.0",
+  "name": "Zoth Studio v2 Sovereign Agent Pantheon",
+  "id": "did:web:zoth.nullai.tech",
+  "version": "2.4.0",
+  "companionOsUrl": "https://zothos.nullai.tech",
+  "capabilities": {
+    "streaming": true,
+    "mcpStdio": true,
+    "mcpSseLoopback": true,
+    "byzantineAstQuorum": true,
+    "stdpVectorRecall": true,
+    "zeroEgressEnclave": true
+  }
+}`
   }
 ];
 
@@ -404,6 +447,114 @@ export default function AXPage() {
   const [agentTask, setAgentTask] = useState(TASK_PRESETS[0].task);
   const [synthesizedPrompt, setSynthesizedPrompt] = useState(() => synthesizeSovereignDirective(TASK_PRESETS[0].task));
   const [promptCopied, setPromptCopied] = useState(false);
+
+  // Interactive Multi-IDE MCP Config Synthesizer State
+  const [mcpIdeTarget, setMcpIdeTarget] = useState('agy');
+  const [mcpTransport, setMcpTransport] = useState('stdio');
+  const [mcpConfigCopied, setMcpConfigCopied] = useState(false);
+  const [mcpTestTool, setMcpTestTool] = useState('stdp_memory_recall');
+  const [mcpTestResult, setMcpTestResult] = useState(() => JSON.stringify({
+    jsonrpc: '2.0',
+    id: 'zoth-studio-rpc-8094',
+    result: {
+      daemon: '127.0.0.1:8094 (Lucy STDP Memory Oracle)',
+      stdpFormula: 'dw = A+ * exp(-dt / tau)',
+      matches: [
+        { id: 'eng_bft_quorum', score: 0.972, weight: 1.91, summary: '3-Agent Byzantine AST Diff Quorum verified zero-egress.' },
+        { id: 'eng_adytum_kdf', score: 0.941, weight: 1.68, summary: 'Argon2id (m=64MB, t=3, p=4) + XChaCha20-Poly1305 enclave.' },
+      ],
+      latencyMs: 3.1,
+    }
+  }, null, 2));
+
+  const studioMcpServersConfig = JSON.stringify({
+    mcpServers: mcpTransport === 'stdio' ? {
+      'zoth-studio-memory-mcp': {
+        command: 'npx',
+        args: ['-y', '@nullaitech/zoth-memory-mcp', '--port', '8094'],
+        env: { ZOTH_LOOPBACK_ONLY: '1' }
+      },
+      'zoth-studio-consensus-mcp': {
+        command: 'npx',
+        args: ['-y', '@nullaitech/zoth-consensus-mcp', '--port', '8989'],
+        env: { ZOTH_LOOPBACK_ONLY: '1' }
+      },
+      'zoth-studio-adytum-mcp': {
+        command: 'npx',
+        args: ['-y', '@nullaitech/zoth-adytum-mcp', '--port', '8787'],
+        env: { ZOTH_LOOPBACK_ONLY: '1' }
+      },
+      'zoth-studio-pantheon-mcp': {
+        command: 'npx',
+        args: ['-y', '@nullaitech/zoth-pantheon-mcp', '--port', '8102'],
+        env: { ZOTH_LOOPBACK_ONLY: '1' }
+      }
+    } : {
+      'zoth-studio-memory-mcp': { url: 'http://127.0.0.1:8094/mcp/sse', transport: 'sse' },
+      'zoth-studio-consensus-mcp': { url: 'http://127.0.0.1:8989/mcp/sse', transport: 'sse' },
+      'zoth-studio-adytum-mcp': { url: 'http://127.0.0.1:8787/mcp/sse', transport: 'sse' },
+      'zoth-studio-pantheon-mcp': { url: 'http://127.0.0.1:8102/mcp/sse', transport: 'sse' }
+    }
+  }, null, 2);
+
+  const handleCopyMcpConfig = () => {
+    navigator.clipboard.writeText(studioMcpServersConfig);
+    setMcpConfigCopied(true);
+    setTimeout(() => setMcpConfigCopied(false), 2000);
+  };
+
+  const handleRunMcpToolTest = (toolName) => {
+    setMcpTestTool(toolName);
+    const payloads = {
+      stdp_memory_recall: {
+        jsonrpc: '2.0',
+        id: 'zoth-studio-rpc-8094',
+        result: {
+          daemon: '127.0.0.1:8094 (Lucy STDP Memory Oracle)',
+          stdpFormula: 'dw = A+ * exp(-dt / tau)',
+          matches: [
+            { id: 'eng_bft_quorum', score: 0.972, weight: 1.91, summary: '3-Agent Byzantine AST Diff Quorum verified zero-egress.' },
+            { id: 'eng_adytum_kdf', score: 0.941, weight: 1.68, summary: 'Argon2id (m=64MB, t=3, p=4) + XChaCha20-Poly1305 enclave.' },
+          ],
+          latencyMs: 3.1,
+        }
+      },
+      ast_diff_triangulation: {
+        jsonrpc: '2.0',
+        id: 'zoth-studio-rpc-8989',
+        result: {
+          daemon: '127.0.0.1:8989 (3-Agent Byzantine AST Consensus)',
+          quorum: '3/3 RATIFIED (AZOTH-Archon, Kai-BFT, Nyx-Cipher)',
+          zeroEgressViolations: 0,
+          prototypePollutionCheck: 'PASSED',
+          latencyMs: 9.4,
+        }
+      },
+      adytum_lease_secret: {
+        jsonrpc: '2.0',
+        id: 'zoth-studio-rpc-8787',
+        result: {
+          daemon: '127.0.0.1:8787 (Adytum Key Sanctum)',
+          kdf: 'Argon2id (m=65536, t=3, p=4)',
+          cipher: 'XChaCha20-Poly1305',
+          mlockallPages: 12,
+          diskBytesWritten: 0,
+          latencyMs: 2.8,
+        }
+      },
+      sovereign_signal_ping: {
+        jsonrpc: '2.0',
+        id: 'zoth-studio-rpc-8102',
+        result: {
+          daemon: '127.0.0.1:8102 (21-Agent Sovereign Signal Bridge)',
+          onlineAgents: 21,
+          e2eeCipher: 'AES-256-GCM + Ed25519',
+          latencyMs: 1.7,
+        }
+      }
+    };
+    setMcpTestResult(JSON.stringify(payloads[toolName] || payloads.stdp_memory_recall, null, 2));
+  };
 
   const gold = {
     accent: isDark ? '#D4AF37' : '#926A05',
@@ -616,6 +767,32 @@ export default function AXPage() {
             sx={{ fontWeight: 750 }}
           >
             /ai.txt
+          </Button>
+
+          <Button
+            variant="outlined"
+            color="primary"
+            component="a"
+            href="/.well-known/mcp.json"
+            target="_blank"
+            rel="noopener noreferrer"
+            startIcon={<HubIcon />}
+            sx={{ fontWeight: 750 }}
+          >
+            /.well-known/mcp.json
+          </Button>
+
+          <Button
+            variant="outlined"
+            color="primary"
+            component="a"
+            href="/.well-known/agent.json"
+            target="_blank"
+            rel="noopener noreferrer"
+            startIcon={<VerifiedUserIcon />}
+            sx={{ fontWeight: 750 }}
+          >
+            /.well-known/agent.json
           </Button>
 
           <Button
@@ -1182,6 +1359,177 @@ export default function AXPage() {
             {synthesizedPrompt}
           </Paper>
         </Paper>
+      </Paper>
+      </RevealOnScroll>
+
+      {/* FEATURE 3: Model Context Protocol (MCP 2025-03-26) Multi-IDE Config & JSON-RPC 2.0 Playground */}
+      <RevealOnScroll preset="fadeUp" delay={0.22}>
+      <Paper
+        sx={{
+          p: { xs: 2.5, md: 3.5 },
+          mb: 4,
+          borderRadius: 3,
+          border: `1px solid ${gold.border}`,
+          bgcolor: isDark ? '#08080B' : '#FFFFFF',
+          boxShadow: isDark ? '0 0 24px rgba(212,175,55,0.08)' : 'none',
+        }}
+      >
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' }, justifyContent: 'space-between', mb: 2.5, flexWrap: 'wrap', gap: 1.5 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Box
+              sx={{
+                width: 38,
+                height: 38,
+                borderRadius: 2,
+                bgcolor: gold.wash,
+                color: gold.accent,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: `1px solid ${gold.border}`
+              }}
+            >
+              <HubIcon fontSize="small" />
+            </Box>
+            <Box>
+              <Typography variant="h6" sx={{ fontWeight: 800, color: gold.accent, letterSpacing: '-0.01em' }}>
+                Model Context Protocol (MCP) Multi-IDE Synthesizer &amp; JSON-RPC 2.0 Inspector
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Generate zero-egress <code>mcpServers</code> manifests for Antigravity (AGY), Claude Code, Cursor &amp; Cline and test loopback JSON-RPC 2.0 calls.
+              </Typography>
+            </Box>
+          </Box>
+
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={mcpConfigCopied ? <CheckIcon /> : <ContentCopyIcon />}
+            onClick={handleCopyMcpConfig}
+            sx={{ fontWeight: 800, width: { xs: '100%', sm: 'auto' } }}
+          >
+            {mcpConfigCopied ? 'mcpServers Copied!' : 'Copy mcpServers JSON'}
+          </Button>
+        </Box>
+
+        <Grid container spacing={3}>
+          <Grid xs={12} md={6}>
+            <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent, display: 'block', mb: 1 }}>
+              1. SELECT TARGET AI CODING AGENT / IDE
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+              {[
+                { id: 'agy', label: 'Google Antigravity (AGY)' },
+                { id: 'claude', label: 'Claude Desktop / Code' },
+                { id: 'cursor', label: 'Cursor AI IDE' },
+                { id: 'cline', label: 'Cline / Roo Code' },
+              ].map((t) => (
+                <Chip
+                  key={t.id}
+                  label={t.label}
+                  clickable
+                  onClick={() => setMcpIdeTarget(t.id)}
+                  sx={{
+                    fontFamily: mono,
+                    fontWeight: 700,
+                    fontSize: '0.73rem',
+                    bgcolor: mcpIdeTarget === t.id ? gold.wash : 'transparent',
+                    color: mcpIdeTarget === t.id ? gold.accent : 'text.secondary',
+                    border: `1px solid ${mcpIdeTarget === t.id ? gold.accent : theme.palette.divider}`,
+                  }}
+                />
+              ))}
+            </Box>
+
+            <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent, display: 'block', mb: 1 }}>
+              2. SELECT MCP TRANSPORT MODE
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+              {[
+                { id: 'stdio', label: 'STDIO Local Pipe (Recommended)' },
+                { id: 'sse', label: 'Loopback SSE (127.0.0.1)' },
+              ].map((tr) => (
+                <Chip
+                  key={tr.id}
+                  label={tr.label}
+                  clickable
+                  onClick={() => setMcpTransport(tr.id)}
+                  sx={{
+                    fontFamily: mono,
+                    fontWeight: 700,
+                    fontSize: '0.73rem',
+                    bgcolor: mcpTransport === tr.id ? gold.wash : 'transparent',
+                    color: mcpTransport === tr.id ? gold.accent : 'text.secondary',
+                    border: `1px solid ${mcpTransport === tr.id ? gold.accent : theme.palette.divider}`,
+                  }}
+                />
+              ))}
+            </Box>
+
+            <Paper
+              sx={{
+                p: 2,
+                bgcolor: isDark ? '#040406' : '#0F172A',
+                color: '#F5E6AB',
+                fontFamily: mono,
+                fontSize: '0.76rem',
+                whiteSpace: 'pre-wrap',
+                borderRadius: 2,
+                border: `1px solid ${gold.border}`,
+                maxHeight: 280,
+                overflowY: 'auto',
+              }}
+            >
+              {studioMcpServersConfig}
+            </Paper>
+          </Grid>
+
+          <Grid xs={12} md={6}>
+            <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent, display: 'block', mb: 1 }}>
+              3. INTERACTIVE JSON-RPC 2.0 TOOL INVOCATION SIMULATOR
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+              {[
+                { id: 'stdp_memory_recall', label: 'stdp_memory_recall (:8094)' },
+                { id: 'ast_diff_triangulation', label: 'ast_diff_triangulation (:8989)' },
+                { id: 'adytum_lease_secret', label: 'adytum_lease_secret (:8787)' },
+                { id: 'sovereign_signal_ping', label: 'sovereign_signal_ping (:8102)' },
+              ].map((tl) => (
+                <Chip
+                  key={tl.id}
+                  label={tl.label}
+                  clickable
+                  onClick={() => handleRunMcpToolTest(tl.id)}
+                  sx={{
+                    fontFamily: mono,
+                    fontWeight: 700,
+                    fontSize: '0.73rem',
+                    bgcolor: mcpTestTool === tl.id ? 'rgba(16,185,129,0.16)' : 'transparent',
+                    color: mcpTestTool === tl.id ? '#10B981' : 'text.secondary',
+                    border: `1px solid ${mcpTestTool === tl.id ? '#10B981' : theme.palette.divider}`,
+                  }}
+                />
+              ))}
+            </Box>
+
+            <Paper
+              sx={{
+                p: 2,
+                bgcolor: isDark ? '#040406' : '#0F172A',
+                color: '#34D399',
+                fontFamily: mono,
+                fontSize: '0.78rem',
+                whiteSpace: 'pre-wrap',
+                borderRadius: 2,
+                border: '1px solid rgba(16,185,129,0.35)',
+                minHeight: 280,
+                overflowY: 'auto',
+              }}
+            >
+              {mcpTestResult}
+            </Paper>
+          </Grid>
+        </Grid>
       </Paper>
       </RevealOnScroll>
 
