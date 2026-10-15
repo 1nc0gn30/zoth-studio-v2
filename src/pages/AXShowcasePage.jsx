@@ -152,17 +152,23 @@ export default function AXShowcasePage() {
 
         {/* ── CTA ── */}
         <RevealOnScroll preset="fadeUp" delay={0.25}>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mt: 7, mb: 2 }} alignItems="center">
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} sx={{ mt: 7, mb: 2, flexWrap: 'wrap', gap: 1.5 }} alignItems="center">
             <Button component={RouterLink} to="/ax/docs" variant="contained" size="large"
               sx={{ bgcolor: accent, color: '#000', fontFamily: mono, fontWeight: 700,
                 '&:hover': { bgcolor: dark ? '#E5C04B' : '#9A7209' } }}>
-              Explore Full Documentation →
+              Launch Interactive AX &amp; MCP Powerhouse →
             </Button>
-            <Button component="a" href="https://github.com/NullAITech/zoth-studio-v2"
+            <Button component="a" href="/.well-known/mcp.json"
               target="_blank" rel="noopener noreferrer" variant="outlined" size="large"
               sx={{ borderColor: accent, color: accent, fontFamily: mono, fontWeight: 700,
                 '&:hover': { borderColor: accent, bgcolor: `${accent}14` } }}>
-              View on GitHub →
+              /.well-known/mcp.json →
+            </Button>
+            <Button component="a" href="/.well-known/agent.json"
+              target="_blank" rel="noopener noreferrer" variant="outlined" size="large"
+              sx={{ borderColor: accent, color: accent, fontFamily: mono, fontWeight: 700,
+                '&:hover': { borderColor: accent, bgcolor: `${accent}14` } }}>
+              /.well-known/agent.json →
             </Button>
           </Stack>
         </RevealOnScroll>
