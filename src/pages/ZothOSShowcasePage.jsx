@@ -284,6 +284,24 @@ export default function ZothOSShowcasePage() {
                 variant="contained"
                 color="primary"
                 size="large"
+                href="https://zothos.nullai.tech"
+                target="_blank"
+                rel="noopener noreferrer"
+                startIcon={<LaunchIcon />}
+                sx={{
+                  px: 3.2,
+                  py: 1.3,
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  boxShadow: `0 4px 20px ${isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.3)'}`,
+                }}
+              >
+                zothos.nullai.tech
+              </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                size="large"
                 component={RouterLink}
                 to="/zoth-os/docs"
                 startIcon={<TerminalIcon />}
@@ -292,7 +310,7 @@ export default function ZothOSShowcasePage() {
                   py: 1.3,
                   fontWeight: 800,
                   fontFamily: mono,
-                  boxShadow: `0 4px 20px ${isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.3)'}`,
+                  borderColor: goldBorder,
                 }}
               >
                 Launch Live Codex &amp; Dials →
