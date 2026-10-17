@@ -229,23 +229,40 @@ export default function ZothOSShowcasePage() {
             </Box>
           </HeroItem>
           <HeroItem>
-            <Button
-              variant="contained"
-              href="https://www.producthunt.com/products/zothos"
-              target="_blank"
-              rel="noopener"
-              sx={{
-                mt: 2, mb: 1,
-                bgcolor: '#FF6154', color: '#fff',
-                fontWeight: 800, fontFamily: mono, fontSize: '0.8rem',
-                px: 2.5, py: 1,
-                borderRadius: 999,
-                textTransform: 'none',
-                '&:hover': { bgcolor: '#E55347' },
-              }}
-            >
-              ▲ Live on Product Hunt — Oct 13
-            </Button>
+            <Box sx={{ mt: 2, mb: 1, display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1.5 }}>
+              <Button
+                variant="contained"
+                href="https://www.producthunt.com/products/zothos"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  bgcolor: '#FF6154', color: '#fff',
+                  fontWeight: 800, fontFamily: mono, fontSize: '0.8rem',
+                  px: 2.5, py: 1,
+                  borderRadius: 999,
+                  textTransform: 'none',
+                  '&:hover': { bgcolor: '#E55347' },
+                }}
+              >
+                ▲ Live on Product Hunt — Oct 13
+              </Button>
+              <Box
+                component="a"
+                href="https://www.producthunt.com/products/zothos/reviews/new?utm_source=badge-product_review&utm_medium=badge&utm_source=badge-zothos"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ display: 'inline-flex', lineHeight: 0 }}
+              >
+                <Box
+                  component="img"
+                  src={`https://api.producthunt.com/widgets/embed-image/v1/product_review.svg?product_id=1333989&theme=${isDark ? 'dark' : 'light'}`}
+                  alt="ZOTHOS - Debian 13 + KDE Plasma 6 OS for AI agents and security | Product Hunt"
+                  width={250}
+                  height={54}
+                  sx={{ width: 250, height: 54, display: 'block' }}
+                />
+              </Box>
+            </Box>
           </HeroItem>
           <HeroItem>
             <Typography
