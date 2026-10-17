@@ -230,22 +230,22 @@ export default function ZothOSShowcasePage() {
           </HeroItem>
           <HeroItem>
             <Box sx={{ mt: 2, mb: 1, display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1.5 }}>
-              <Button
-                variant="contained"
-                href="https://www.producthunt.com/products/zothos"
+              <Box
+                component="a"
+                href="https://www.producthunt.com/products/zothos?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-zothos-2"
                 target="_blank"
                 rel="noopener noreferrer"
-                sx={{
-                  bgcolor: '#FF6154', color: '#fff',
-                  fontWeight: 800, fontFamily: mono, fontSize: '0.8rem',
-                  px: 2.5, py: 1,
-                  borderRadius: 999,
-                  textTransform: 'none',
-                  '&:hover': { bgcolor: '#E55347' },
-                }}
+                sx={{ display: 'inline-flex', lineHeight: 0 }}
               >
-                ▲ Live on Product Hunt — Oct 13
-              </Button>
+                <Box
+                  component="img"
+                  src={`https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1276873&theme=${isDark ? 'dark' : 'light'}&t=1792205107200`}
+                  alt="ZOTHOS - Debian 13 + KDE Plasma 6 OS for AI agents and security | Product Hunt"
+                  width={250}
+                  height={54}
+                  sx={{ width: 250, height: 54, display: 'block' }}
+                />
+              </Box>
               <Box
                 component="a"
                 href="https://www.producthunt.com/products/zothos/reviews/new?utm_source=badge-product_review&utm_medium=badge&utm_source=badge-zothos"
