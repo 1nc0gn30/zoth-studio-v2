@@ -29,7 +29,7 @@ export default function Footer() {
     { label: 'Byzantine Consensus Arena', to: '/consensus' },
     { label: 'Adytum Sanctum (22 Keys)', to: '/adytum' },
     { label: 'HexStrike Cybersec Terminal', to: '/hexstrike' },
-    { label: 'Zoth OS Kernel (KVM)', to: '/zoth-os' },
+    { label: 'Zoth OS v3.2', to: '/zoth-os' },
     { label: '21 Swarm Pantheon', to: '/swarm' },
     { label: 'Workstations Matrix (24)', to: '/workstations' },
     { label: 'Sovereign Arsenal Hub', to: '/arsenal' },

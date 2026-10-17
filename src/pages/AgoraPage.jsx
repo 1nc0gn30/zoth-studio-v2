@@ -369,7 +369,7 @@ export default function AgoraPage() {
             <Button
               variant="contained"
               size="small"
-              href="https://buy.stripe.com/7sI7sA8hM2X8eFG8ww"
+              href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
               target="_blank"
               rel="noopener"
               startIcon={<MonetizationOnIcon />}
@@ -1258,7 +1258,7 @@ export default function AgoraPage() {
             <Button
               fullWidth
               variant="contained"
-              href="https://buy.stripe.com/7sI7sA8hM2X8eFG8ww"
+              href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
               target="_blank"
               rel="noopener"
               sx={{ bgcolor: '#D4AF37', color: '#08090E', fontWeight: 800, py: 1.2, mb: 1.5 }}

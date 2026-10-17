@@ -101,9 +101,9 @@ export const siteConfig = {
       type: 'article',
     },
     '/zoth-os': {
-      title: 'Zoth OS // KVM Hypervisor Sandbox & WebContainer Runtime',
-      description: 'Hardware-isolated Linux KVM virtualization, thin QEMU disk management, and edge dispatch inside sovereign enclaves.',
-      keywords: 'Zoth OS, KVM sandbox, QEMU virtualization, WebContainer, air-gapped OS',
+      title: 'Zoth OS v3.2 // Debian 13 + KDE Plasma 6 Sovereign AI Distro',
+      description: 'Bootable Debian 13 + KDE Plasma 6.3 OS. Kali + Parrot parity, Zoth Studio v2, Ollama on 127.0.0.1, 152 MCP servers all off. Product site zothos.nullai.tech.',
+      keywords: 'Zoth OS, ZOTHOS, Debian 13, KDE Plasma 6, Kali, Parrot, sovereign AI OS',
       type: 'article',
     },
     '/docs': {
@@ -415,7 +415,7 @@ export function generateSchemaGraph(path = '/') {
     graph.push({
       '@type': 'SoftwareApplication',
       '@id': `${fullUrl}#os-application`,
-      'name': 'Zoth OS Sovereign KVM Virtual Machine',
+      'name': 'Zoth OS v3.2 Sovereign AI Linux Distro',
       'applicationCategory': 'OperatingSystem',
       'operatingSystem': 'Linux',
       'description': routeMeta.description,
