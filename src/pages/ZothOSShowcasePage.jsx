@@ -78,14 +78,14 @@ export default function ZothOSShowcasePage() {
     },
     {
       icon: <SmartToyIcon sx={{ fontSize: 32 }} />,
-      title: 'Frontier AI Agent Core Pre-Installed',
-      desc: 'Ships with coding agents pre-configured: Grok CLI, Claude Code, Cline, Aider, Hermes, OpenCode, and AGY, plus Ollama bound to 127.0.0.1. v3.2 starts UFW default-deny and allows loopback, tailscale0, UDP 41641, and TCP 7890. Skills load from ~/.gemini/config/skills.',
+      title: 'Frontier AI Agent Core',
+      desc: 'Ollama bound to 127.0.0.1. Image grok / hermes / agy / claude / opencode are install wrappers; real CLIs live in ~/.local/bin on this workstation. v3.2 starts UFW default-deny and allows loopback, tailscale0, UDP 41641, and TCP 7890. Skills load from ~/.gemini/config/skills. MCP catalog is 152 servers, all off.',
       badge: 'FRONTIER AI',
     },
     {
       icon: <AutoAwesomeIcon sx={{ fontSize: 32 }} />,
       title: 'Integrated Zoth Studio v2 Cockpit',
-      desc: 'Native desktop deployment of Zoth Studio with 30 micro-tools, 24 workstations, 21 autonomous swarm agents, biomorphic STDP memory, and local WebMCP execution engine at /opt/zoth-studio.',
+      desc: 'Native desktop launch of Zoth Studio v2 (zoth.nullai.tech, local :3000) with the 30-tool catalog, /zoth-os showcase, WebGen, and Neuro-Memory on :8094. zoth-studio prefers ~/NullAITech/zoth-studio-v2 then /opt/zoth-studio.',
       badge: 'STUDIO COCKPIT',
     },
     {
@@ -103,7 +103,7 @@ export default function ZothOSShowcasePage() {
     {
       icon: <PaletteIcon sx={{ fontSize: 32 }} />,
       title: 'KDE Plasma 6 Cyber-Gold Custom UX',
-      desc: 'Bespoke Hermetic icon sets, obsidian matte finish with cyber gold glow accents, live real-time telemetry HUD (zoth-os Sovereign Desk), and ambient focus classical audio suite.',
+      desc: 'Bespoke Hermetic icon sets, obsidian matte finish with cyber gold glow accents, and live telemetry HUD. Eight named virtual desktops (Forge, Studio, WebGen, Memory, Agents, Comms, Ops, Sanctum) in a 2×4 pager. zoth-workspaces places a Samsung / DP monitor on its own screen instead of cloning the laptop.',
       badge: 'ALCHEMICAL DESKTOP',
     },
   ];
@@ -117,15 +117,15 @@ export default function ZothOSShowcasePage() {
       ubuntu: 'None (Manual install)',
     },
     {
-      feature: 'Pre-Installed Frontier AI Coding Agents',
-      zoth: 'Grok CLI, Claude Code, Cline, Aider, Hermes, OpenCode, AGY',
+      feature: 'Frontier AI Coding Agents',
+      zoth: 'Install wrappers on ISO; Ollama on 127.0.0.1; MCP 152 all off',
       kali: 'None',
       parrot: 'None',
       ubuntu: 'None',
     },
     {
       feature: 'Integrated AI Development Studio',
-      zoth: 'Zoth Studio v2 (30 micro-tools + 24 workstations)',
+      zoth: 'Zoth Studio v2 (zoth.nullai.tech, 30-tool catalog)',
       kali: 'None',
       parrot: 'None',
       ubuntu: 'None',
@@ -150,6 +150,13 @@ export default function ZothOSShowcasePage() {
       kali: 'Standard Keyring',
       parrot: 'Standard Keyring',
       ubuntu: 'Standard Keyring',
+    },
+    {
+      feature: 'Virtual Desktops & Multi-Monitor',
+      zoth: '8 named desktops; Samsung on its own screen (zoth-workspaces)',
+      kali: 'Empty desktop by default',
+      parrot: 'Empty desktop by default',
+      ubuntu: 'Empty desktop by default',
     },
     {
       feature: 'Tor Anonymization & Ghostmode',
@@ -226,6 +233,18 @@ export default function ZothOSShowcasePage() {
                   fontSize: '0.72rem',
                 }}
               />
+              <Chip
+                label="152 MCP CATALOG (ALL OFF)"
+                size="small"
+                sx={{
+                  bgcolor: isDark ? 'rgba(248, 113, 113, 0.12)' : '#FEF2F2',
+                  color: isDark ? '#F87171' : '#B91C1C',
+                  border: `1px solid ${isDark ? 'rgba(248, 113, 113, 0.35)' : '#FECACA'}`,
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                }}
+              />
             </Box>
           </HeroItem>
           <HeroItem>
@@ -292,7 +311,7 @@ export default function ZothOSShowcasePage() {
                 mb: 4,
               }}
             >
-              A bootable Linux operating system engineered by NullAI Tech. Combines the Kali and Parrot security arsenal with the Zoth Studio v2 suite. The shipped release is v3.2, with Grok CLI, Claude Code, Cline, Aider, Hermes, OpenCode, and AGY. Ollama listens on 127.0.0.1. UFW starts default-deny and allows loopback, tailscale0, UDP 41641, and TCP 7890. Skills load from ~/.gemini/config/skills.
+              A bootable Linux operating system engineered by NullAI Tech. Combines the Kali and Parrot security arsenal with the Zoth Studio v2 suite. The shipped release is v3.2. Live users are zoth / azoth / root (password zoth). Ollama listens on 127.0.0.1. UFW starts default-deny and allows loopback, tailscale0, UDP 41641, and TCP 7890. The 152-server MCP catalog is present and all off. Skills load from ~/.gemini/config/skills.
             </Typography>
           </HeroItem>
           <HeroItem>
@@ -522,7 +541,7 @@ export default function ZothOSShowcasePage() {
               <TableHead sx={{ bgcolor: isDark ? 'rgba(212, 175, 55, 0.08)' : '#FEF9E7' }}>
                 <TableRow>
                   <TableCell sx={{ fontFamily: mono, fontWeight: 800, color: textPrimary, fontSize: '0.85rem' }}>Capability</TableCell>
-                  <TableCell sx={{ fontFamily: mono, fontWeight: 900, color: gold, fontSize: '0.85rem' }}>Zoth OS 1.0</TableCell>
+                  <TableCell sx={{ fontFamily: mono, fontWeight: 900, color: gold, fontSize: '0.85rem' }}>Zoth OS v3.2</TableCell>
                   <TableCell sx={{ fontFamily: mono, fontWeight: 700, color: textSecondary, fontSize: '0.85rem' }}>Kali Linux</TableCell>
                   <TableCell sx={{ fontFamily: mono, fontWeight: 700, color: textSecondary, fontSize: '0.85rem' }}>Parrot OS</TableCell>
                   <TableCell sx={{ fontFamily: mono, fontWeight: 700, color: textSecondary, fontSize: '0.85rem' }}>Ubuntu</TableCell>

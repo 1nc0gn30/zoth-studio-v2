@@ -2021,7 +2021,7 @@ export default function HomePage() {
             ['AI Swarm', '/swarm', 'Autonomous team of AI models that collaborate to plan, write code, and verify results locally.'],
             ['HexStrike', '/hexstrike', 'Offensive security suite for scanning vulnerabilities, checking CVEs, and penetration testing.'],
             ['Neuro Memory', '/memory', 'Brain-inspired long-term memory so your AI assistants remember context across conversations.'],
-            ['Zoth OS', '/zoth-os', 'A complete bootable Linux operating system with all AI tools and models pre-installed out of the box.'],
+            ['Zoth OS', '/zoth-os', 'Debian 13 + KDE Plasma 6.3. Eight named virtual desktops. Product site zothos.nullai.tech. MCP catalog all off.'],
             ['Adytum', '/adytum', 'Automate complex, multi-step AI tasks into reliable pipelines with built-in quality checks.'],
           ].map(([title, to, copy], index) => (
             <Card

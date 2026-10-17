@@ -436,7 +436,7 @@ export default function VoiceStationPage() {
             <Button
               variant="contained"
               size="small"
-              href="https://buy.stripe.com/7sI7sA8hM2X8eFG8ww"
+              href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
               target="_blank"
               rel="noopener"
               sx={{ bgcolor: '#D4AF37', color: '#08090E', fontWeight: 700, '&:hover': { bgcolor: '#F5E6AB' } }}
@@ -901,7 +901,7 @@ export default function VoiceStationPage() {
                   <Button
                     variant="contained"
                     size="small"
-                    href="https://buy.stripe.com/7sI7sA8hM2X8eFG8ww"
+                    href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
                     target="_blank"
                     rel="noopener"
                     sx={{ bgcolor: '#D4AF37', color: '#08090E', fontWeight: 700, mr: 1 }}
@@ -975,7 +975,7 @@ export default function VoiceStationPage() {
             <Button
               fullWidth
               variant="contained"
-              href="https://buy.stripe.com/7sI7sA8hM2X8eFG8ww"
+              href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
               target="_blank"
               rel="noopener"
               sx={{ bgcolor: '#D4AF37', color: '#08090E', fontWeight: 800, py: 1.2, mb: 1.5 }}
