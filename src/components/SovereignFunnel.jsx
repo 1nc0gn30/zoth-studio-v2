@@ -199,7 +199,81 @@ export default function SovereignFunnel({
               py: 0.85,
             }}
           >
-            👑 All-Access Bundle ($49)
+            👑 All 44 Tools ($49)
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
+            href="https://buy.stripe.com/00w8wO6o50XC2D60xWfw40S"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              borderColor: '#38BDF8',
+              color: '#38BDF8',
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.75rem',
+              textTransform: 'none',
+              px: 1.6,
+              py: 0.85,
+            }}
+          >
+            🤖 AI Receptionist ($299)
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
+            href="https://buy.stripe.com/3cIcN48wdbCgelOeoMfw40T"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              borderColor: '#34D399',
+              color: '#34D399',
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.75rem',
+              textTransform: 'none',
+              px: 1.6,
+              py: 0.85,
+            }}
+          >
+            🚀 5-Page DFY ($499)
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
+            href="https://buy.stripe.com/14A28qdQxdKo7XqfsQfw40U"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              borderColor: '#A78BFA',
+              color: '#A78BFA',
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.75rem',
+              textTransform: 'none',
+              px: 1.6,
+              py: 0.85,
+            }}
+          >
+            🛠️ Custom AI Swarm ($997)
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => handleCopy('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK', 'Phantom Solana Wallet Address')}
+            sx={{
+              borderColor: '#14F195',
+              color: '#14F195',
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.73rem',
+              textTransform: 'none',
+              px: 1.5,
+              py: 0.85,
+            }}
+          >
+            📋 Copy SOL Address
           </Button>
         </Box>
       </Box>
