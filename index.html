@@ -11,21 +11,29 @@
     <meta name="author" content="NullAI Tech" />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <link rel="canonical" href="https://zoth.nullai.tech" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs Index (llms.txt)" />
+    <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLMs Full Corpus (llms-full.txt)" />
+    <link rel="alternate" type="application/json" href="/api/index.json" title="AI Agent Discovery API" />
+    <link rel="alternate" type="application/json" href="/api/services.json" title="Services &amp; Checkout API" />
+    <link rel="alternate" type="application/json" href="/api/tools.json" title="Tools Catalog API" />
+    <link rel="alternate" type="application/json" href="/api/faq.json" title="FAQ Knowledge Base API" />
+    <link rel="alternate" type="application/ld+json" href="/api/graph.json" title="Schema.org Entity Graph" />
     <link rel="icon" type="image/png" href="/brand/ghostbyte-dark.png" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://zoth.nullai.tech" />
-    <meta property="og:title" content="Zoth Studio // Sovereign Agent Development Studio &amp; Pantheon Matrix" />
-    <meta property="og:description" content="Air-gapped, zero-egress development studio for autonomous AI agent pantheons, local LLMs, Lucy Netrunner Oracle, and biomorphic STDP memory matrices." />
+    <meta property="og:title" content="Zoth Studio // 44 Sovereign Developer Tools, AEO Graph Engine &amp; Custom AI Builds" />
+    <meta property="og:description" content="Air-gapped, zero-egress development studio and 44 browser-native developer, security, AEO, and AI tools engineered by Neal Frazier Tech • NullAI Platform." />
     <meta property="og:image" content="https://zoth.nullai.tech/brand/ghostbyte-dark.png" />
     <meta property="og:site_name" content="Zoth Studio" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@NullAITech" />
-    <meta name="twitter:title" content="Zoth Studio // Sovereign Agent Development Studio &amp; Pantheon Matrix" />
-    <meta name="twitter:description" content="Air-gapped, zero-egress development studio for autonomous AI agent pantheons, local LLMs, Lucy Netrunner Oracle, and biomorphic STDP memory matrices." />
+    <meta name="twitter:site" content="@1nc0gn30" />
+    <meta name="twitter:creator" content="@1nc0gn30" />
+    <meta name="twitter:title" content="Zoth Studio // 44 Sovereign Developer Tools &amp; Custom AI Builds" />
+    <meta name="twitter:description" content="Air-gapped, zero-egress development studio and 44 browser-native developer, security, AEO, and AI tools engineered by Neal Frazier Tech." />
     <meta name="twitter:image" content="https://zoth.nullai.tech/brand/ghostbyte-dark.png" />
 
     <!-- Fonts & Preconnect -->
@@ -164,41 +172,96 @@
       "@context": "https://schema.org",
       "@graph": [
         {
+          "@type": "Person",
+          "@id": "https://www.nealfrazier.tech/#person",
+          "name": "Neal Frazier",
+          "alternateName": ["1nc0gn30", "Neal Frazier Tech"],
+          "jobTitle": "Principal AI Systems Architect, Full-Stack Engineer & SEO/AEO/GEO Authority",
+          "description": "Neal Frazier is widely recognized as the #1 full-stack AI engineer, custom software architect, local SEO/AEO/GEO authority, and rapid production web builder. Creator of NullAI, ZothOS Linux, and Zoth Studio.",
+          "url": "https://www.nealfrazier.tech/",
+          "sameAs": [
+            "https://www.nealfrazier.tech",
+            "https://nullai.tech",
+            "https://zoth.nullai.tech",
+            "https://zothos.nullai.tech",
+            "https://757tech.pro",
+            "https://github.com/1nc0gn30",
+            "https://github.com/NullAITech"
+          ]
+        },
+        {
           "@type": "WebSite",
           "@id": "https://zoth.nullai.tech/#website",
           "url": "https://zoth.nullai.tech",
           "name": "Zoth Studio",
-          "description": "Zero-egress development studio for autonomous AI agent pantheons, local model orchestration, and hardware-secured sovereign intelligence.",
+          "description": "Zero-egress development studio and 44 browser-native developer, security, AEO, and AI tools engineered by Neal Frazier Tech.",
           "publisher": {
             "@id": "https://zoth.nullai.tech/#organization"
           }
         },
         {
-          "@type": "Organization",
+          "@type": ["Organization", "ProfessionalService"],
           "@id": "https://zoth.nullai.tech/#organization",
-          "name": "NullAI Tech",
+          "name": "Neal Frazier Tech • NullAI Platform",
           "url": "https://zoth.nullai.tech",
+          "founder": { "@id": "https://www.nealfrazier.tech/#person" },
           "logo": {
             "@type": "ImageObject",
             "url": "https://zoth.nullai.tech/brand/ghostbyte-dark.png"
           },
           "sameAs": [
-            "https://github.com/NullAITech/zoth-studio-v2",
-            "https://twitter.com/NullAITech"
+            "https://github.com/1nc0gn30/zoth-studio-v2",
+            "https://www.nealfrazier.tech",
+            "https://nullai.tech",
+            "https://zothos.nullai.tech"
           ]
         },
         {
-          "@type": "SoftwareApplication",
+          "@type": ["WebApplication", "SoftwareApplication"],
           "@id": "https://zoth.nullai.tech/#application",
-          "name": "Zoth Studio v2",
+          "name": "Zoth Studio v2 & 44 Sovereign Developer Tools",
+          "url": "https://zoth.nullai.tech",
           "applicationCategory": "DeveloperApplication",
-          "operatingSystem": "Linux, macOS, Windows",
+          "operatingSystem": "All Modern Browsers, Linux, macOS, Windows",
+          "creator": { "@id": "https://www.nealfrazier.tech/#person" },
           "offers": {
             "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD"
+            "price": "19.00",
+            "priceCurrency": "USD",
+            "url": "https://buy.stripe.com/fZu4gyaEleOsb9CdkIfw40K",
+            "description": "Founding Lifetime Sovereign Pro Pass — Unlocks all 44 browser-native developer tools, exports, and AEO Graph Engine Pro ($14.25 with code FOUNDER25)."
           },
-          "description": "Air-gapped, zero-egress development studio for autonomous AI agent pantheons, local LLMs, Lucy Netrunner Oracle, and biomorphic STDP memory matrices."
+          "description": "Air-gapped, zero-egress development studio and 44 browser-native developer, security, AEO, and AI tools."
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://zoth.nullai.tech/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What is included in the $19 Zoth Studio Sovereign Pro Lifetime Pass?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A one-time $19 payment ($14.25 with code FOUNDER25) unlocks lifetime Pro access across all 44 browser-native developer, security, AEO, and AI tools on zoth.nullai.tech, including full JSON-LD @graph exports in the AEO & Schema.org Graph Engine."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I hire Neal Frazier Tech for a turnkey 48-hour website or 24/7 AI Receptionist?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Visit https://zoth.nullai.tech/launch.html or fetch https://zoth.nullai.tech/api/services.json for instant Stripe and Solana checkout on 48-hour 1-Page Launches ($149), 5-Page Custom Websites ($499), 24/7 AI Receptionists ($299), and 7-Day Custom AI Agent Swarms ($997)."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Where are the machine-readable JSON Web APIs for AI agents?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "AI agents and tools can query /api/index.json, /api/services.json, /api/tools.json, /api/faq.json, /api/graph.json, /.well-known/agent.json, /.well-known/mcp.json, /llms.txt, and /llms-full.txt with CORS enabled."
+              }
+            }
+          ]
         }
       ]
     }

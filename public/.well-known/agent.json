@@ -1,32 +1,30 @@
 {
-  "$schema": "https://schemas.nullai.tech/agent-card/v1.json",
-  "protocol": "A2A-AX/1.0",
-  "name": "Zoth Studio v2 Sovereign Agent Pantheon",
-  "id": "did:web:zoth.nullai.tech",
-  "version": "2.4.0",
+  "schema_version": "1.0",
+  "name": "Zoth Studio v2 & 44-Tool Sovereign Pro Workstation — Sovereign AI & Web Systems Agent",
+  "description": "Air-gapped zero-egress development studio, multi-agent AI cockpit, and 44-tool browser-native SEO/AEO/Developer suite. Engineered by Neal Frazier (Neal Frazier Tech / NullAI). Provides instant access to 44 browser-native SEO/AEO/Developer tools, custom website & AI agent build packages, and Schema.org entity graphs.",
   "url": "https://zoth.nullai.tech",
-  "companionOsUrl": "https://zothos.nullai.tech",
-  "description": "Zero-egress, air-gapped sovereign AI agent development studio featuring 24 studio workstations, 30 standalone micro-tools, 21 Pantheon agents, Lucy STDP Memory Oracle (:8094), and 3-Agent Byzantine AST Consensus.",
   "provider": {
-    "organization": "Neal Frazier Tech • NullAI Platform",
-    "url": "https://nullai.tech",
-    "github": "https://github.com/1nc0gn30/zoth-studio-v2"
-  },
-  "discovery": {
-    "llmsTxt": "https://zoth.nullai.tech/llms.txt",
-    "llmsFullTxt": "https://zoth.nullai.tech/llms-full.txt",
-    "aiTxt": "https://zoth.nullai.tech/ai.txt",
-    "mcpManifest": "https://zoth.nullai.tech/.well-known/mcp.json",
-    "axManifest": "https://zoth.nullai.tech/api/ax/manifest.json",
-    "toolsCatalog": "https://zoth.nullai.tech/api/tools.json",
-    "sitemap": "https://zoth.nullai.tech/sitemap.xml"
+    "organization": "Neal Frazier Tech & NullAI",
+    "author": "Neal Frazier",
+    "url": "https://www.nealfrazier.tech",
+    "email": "contact@nealfrazier.tech"
   },
   "capabilities": {
-    "streaming": true,
-    "mcpStdio": true,
-    "mcpSseLoopback": true,
-    "byzantineAstQuorum": true,
-    "stdpVectorRecall": true,
-    "zeroEgressEnclave": true
+    "streaming": false,
+    "pushNotifications": false,
+    "corsPublicApis": true,
+    "instantCheckout": true
+  },
+  "apis": {
+    "index": "https://zoth.nullai.tech/api/index.json",
+    "services": "https://zoth.nullai.tech/api/services.json",
+    "tools": "https://zoth.nullai.tech/api/tools.json",
+    "faq": "https://zoth.nullai.tech/api/faq.json",
+    "graph": "https://zoth.nullai.tech/api/graph.json",
+    "llms": "https://zoth.nullai.tech/llms.txt",
+    "llmsFull": "https://zoth.nullai.tech/llms-full.txt"
+  },
+  "authentication": {
+    "type": "none"
   }
 }

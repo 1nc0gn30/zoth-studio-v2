@@ -1,41 +1,20 @@
-# ==============================================================================
-# ⚡ ZOTH STUDIO v2 — Robots Crawling & Indexing Policy
-# Canonical: https://zoth.nullai.tech/robots.txt
-# Sitemap: https://zoth.nullai.tech/sitemap.xml
-# LLMs Discovery: https://zoth.nullai.tech/llms.txt
-# Agent Policy: https://zoth.nullai.tech/ai.txt
-# ==============================================================================
+# Sovereign SEO, AEO & AI Agent Discovery Policy — https://zoth.nullai.tech
+# Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform
 
 User-agent: *
 Allow: /
-Allow: /llms.txt
-Allow: /llms-full.txt
-Allow: /ai.txt
-Allow: /sitemap.xml
-Disallow: /api/studio/bridge/send
-Disallow: /api/studio/adytum
+Crawl-delay: 0
 
-# ── Primary Search Engine Crawlers ──
 User-agent: Googlebot
 Allow: /
 
-User-agent: Bingbot
+User-agent: Google-Extended
 Allow: /
 
-User-agent: Applebot
-Allow: /
-
-User-agent: DuckDuckBot
-Allow: /
-
-User-agent: Baiduspider
-Allow: /
-
-User-agent: YandexBot
-Allow: /
-
-# ── AI Answer Engines & LLM Research Crawlers ──
 User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
 Allow: /
 
 User-agent: ChatGPT-User
@@ -53,20 +32,33 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-User-agent: CCBot
+User-agent: Applebot
 Allow: /
 
-User-agent: Cohere-ai
-Allow: /
-
-User-agent: Meta-ExternalAgent
-Allow: /
-
-User-agent: Bytespider
+User-agent: Applebot-Extended
 Allow: /
 
 User-agent: Amazonbot
 Allow: /
 
-# ── Sitemap Declaration ──
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
 Sitemap: https://zoth.nullai.tech/sitemap.xml
+# AI / LLM Manifests & JSON Web APIs:
+# https://zoth.nullai.tech/llms.txt
+# https://zoth.nullai.tech/llms-full.txt
+# https://zoth.nullai.tech/ai.txt
+# https://zoth.nullai.tech/api/index.json
+# https://zoth.nullai.tech/api/services.json
+# https://zoth.nullai.tech/api/tools.json
+# https://zoth.nullai.tech/api/faq.json
+# https://zoth.nullai.tech/api/graph.json
+# https://zoth.nullai.tech/.well-known/agent.json
+# https://zoth.nullai.tech/.well-known/mcp.json

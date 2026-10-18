@@ -116,6 +116,13 @@
     Cache-Control = "public, max-age=3600, must-revalidate"
 
 [[headers]]
+  for = "/llms-full.txt"
+  [headers.values]
+    Content-Type = "text/plain; charset=UTF-8"
+    Access-Control-Allow-Origin = "*"
+    Cache-Control = "public, max-age=3600, must-revalidate"
+
+[[headers]]
   for = "/ai.txt"
   [headers.values]
     Content-Type = "text/plain; charset=UTF-8"
@@ -127,4 +134,14 @@
   [headers.values]
     Content-Type = "application/json; charset=UTF-8"
     Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, OPTIONS"
     Cache-Control = "public, max-age=3600, must-revalidate"
+
+[[headers]]
+  for = "/.well-known/*"
+  [headers.values]
+    Content-Type = "application/json; charset=UTF-8"
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, OPTIONS"
+    Cache-Control = "public, max-age=3600, must-revalidate"
+

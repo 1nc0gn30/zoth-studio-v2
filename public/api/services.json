@@ -1,0 +1,92 @@
+{
+  "provider": "Neal Frazier Tech & NullAI Platform",
+  "architect": "Neal Frazier (@1nc0gn30)",
+  "contactEmail": "contact@nealfrazier.tech",
+  "promoCode": {
+    "code": "FOUNDER25",
+    "discountPercent": 25
+  },
+  "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
+  "services": [
+    {
+      "id": "custom-build-deposit-99",
+      "name": "Custom Website or AI Agent Build — $99 Risk-Free Kickoff Deposit",
+      "priceUsd": 99,
+      "regularPriceUsd": 499,
+      "billingModel": "One-Time Deposit (Pay Balance Only After Approving Live Working Preview)",
+      "deliverySla": "48-Hour Working Preview",
+      "stripeCheckoutUrl": "https://buy.stripe.com/eVqbJ05k1gWA3HacgEfw40V",
+      "landingUrl": "https://1nc0gn30.github.io/solutions/custom-build-deposit-99.html",
+      "promoCode": "FOUNDER25 (25% off)",
+      "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
+      "description": "Start any custom 5-page website, local SEO/AEO overhaul, or custom AI agent build for just $99 down. Inspect and test your live working build on a staging URL within 48 hours before paying the remaining balance."
+    },
+    {
+      "id": "city-desk-dfy-149",
+      "name": "Done-For-You 1-Page High-Speed Custom Website + Local SEO & AEO Launch",
+      "priceUsd": 149,
+      "regularPriceUsd": 499,
+      "billingModel": "One-Time Flat Fee ($0/month forever)",
+      "deliverySla": "24-Hour Turnkey Delivery",
+      "stripeCheckoutUrl": "https://buy.stripe.com/9B6fZg7s96hWa5ya8wfw40O",
+      "landingUrl": "https://city-desk.netlify.app",
+      "promoCode": "FOUNDER25 (25% off)",
+      "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
+      "description": "Complete 1-page high-converting custom website tailored with your brand, logo, phone number, interactive 60-second instant quote estimator, 100/100 Core Web Vitals, and full Schema.org LocalBusiness + FAQPage JSON-LD."
+    },
+    {
+      "id": "ai-receptionist-299",
+      "name": "24/7 Custom AI Receptionist, Instant Quote Bot & SMS Lead Capture Setup",
+      "priceUsd": 299,
+      "regularPriceUsd": 999,
+      "billingModel": "One-Time Flat Fee ($0/month SaaS fees)",
+      "deliverySla": "48-Hour Turnkey Delivery",
+      "stripeCheckoutUrl": "https://buy.stripe.com/00w8wO6o50XC2D60xWfw40S",
+      "landingUrl": "https://1nc0gn30.github.io/solutions/ai-receptionist-299.html",
+      "promoCode": "FOUNDER25 (25% off)",
+      "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
+      "description": "Custom-trained on your business services and pricing. Answers customer questions 24/7, calculates instant quotes on your website, captures contact details, and texts every hot lead directly to your phone."
+    },
+    {
+      "id": "custom-5page-launch-499",
+      "name": "Turnkey 5-Page Custom Website + Google Maps & AI Search Dominance Package",
+      "priceUsd": 499,
+      "regularPriceUsd": 2499,
+      "billingModel": "One-Time Flat Fee ($0/month hosting & zero retainers)",
+      "deliverySla": "72-Hour Turnkey Delivery",
+      "stripeCheckoutUrl": "https://buy.stripe.com/3cIcN48wdbCgelOeoMfw40T",
+      "depositCheckoutUrl": "https://buy.stripe.com/eVqbJ05k1gWA3HacgEfw40V",
+      "landingUrl": "https://1nc0gn30.github.io/solutions/custom-5page-launch-499.html",
+      "promoCode": "FOUNDER25 (25% off)",
+      "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
+      "description": "Bespoke 5-page custom web platform (Home, Services, Interactive Quote Calculator, Verified Reviews, Contact) + full Schema.org @graph AEO/GEO entity architecture + 24/7 AI Receptionist & Quote Bot included."
+    },
+    {
+      "id": "custom-ai-swarm-997",
+      "name": "Custom Autonomous AI Agent Swarm, MCP Server & Full-Stack SaaS MVP Build",
+      "priceUsd": 997,
+      "regularPriceUsd": 4999,
+      "billingModel": "One-Time Flat Fee (100% Source Code & IP Handoff)",
+      "deliverySla": "5-Day Engineering Sprint",
+      "stripeCheckoutUrl": "https://buy.stripe.com/14A28qdQxdKo7XqfsQfw40U",
+      "depositCheckoutUrl": "https://buy.stripe.com/eVqbJ05k1gWA3HacgEfw40V",
+      "landingUrl": "https://1nc0gn30.github.io/solutions/custom-ai-swarm-997.html",
+      "promoCode": "FOUNDER25 (25% off)",
+      "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
+      "description": "Bespoke multi-agent AI workflow, custom Model Context Protocol (MCP) server for Claude/Cursor/Antigravity, autonomous lead/ops pipeline, or full-stack web application engineered by Neal Frazier Tech."
+    },
+    {
+      "id": "sovereign-pro-bundle-49",
+      "name": "All-Access Sovereign Pro Bundle (Lifetime Pro License to All 44 Tools)",
+      "priceUsd": 49,
+      "regularPriceUsd": 299,
+      "billingModel": "One-Time Lifetime License ($0/month)",
+      "deliverySla": "Instant Browser Activation (?licensed=true)",
+      "stripeCheckoutUrl": "https://buy.stripe.com/eVq14m5k16hW4Le0xWfw40M",
+      "landingUrl": "https://1nc0gn30.github.io/",
+      "promoCode": "FOUNDER25 (25% off)",
+      "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
+      "description": "Unlocks unlimited production exports, full source code downloads, and unblurred outputs across all 44 browser-native SEO, AEO, Core Web Vitals, Cybersecurity, AI Agent Governance, and E-Commerce tools."
+    }
+  ]
+}
