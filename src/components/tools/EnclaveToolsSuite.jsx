@@ -35,6 +35,7 @@ import FaceIcon from '@mui/icons-material/Face';
 import GroupsIcon from '@mui/icons-material/Groups';
 import WebIcon from '@mui/icons-material/Web';
 import StorageIcon from '@mui/icons-material/Storage';
+import HexStrikeGodModeTool from './HexStrikeGodModeTool';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const gold = (t) => (t.palette.mode === 'dark' ? '#D4AF37' : '#B8860B');
@@ -1113,81 +1114,7 @@ INVARIANTS:
    Features: Radial Score Dial (98/100), Interactive Command Shell, Ports Matrix
    ========================================================================== */
 export function HexStrikeTool() {
-  const theme = useTheme();
-  const [scanning, setScanning] = useState(false);
-  const [cmdInput, setCmdInput] = useState('');
-  const [terminalLines, setTerminalLines] = useState([
-    'NullAI HexStrike Security Terminal v3.2.0 [Air-Gapped Mode]',
-    'Type "help" or "scan" to execute loopback vulnerability audits.'
-  ]);
-
-  const handleCommand = (e) => {
-    if (e.key === 'Enter' && cmdInput.trim()) {
-      const cmd = cmdInput.trim().toLowerCase();
-      setTerminalLines((prev) => [...prev, `$ ${cmdInput}`]);
-      if (cmd === 'help') {
-        setTerminalLines((prev) => [...prev, 'Available commands: scan, ports, cve, clear, exit']);
-      } else if (cmd === 'scan') {
-        setTerminalLines((prev) => [
-          ...prev,
-          'Verifying local port security policy...',
-          '[POLICY] Port 3000: Studio UI (Zero external telemetry)',
-          '[POLICY] Port 8094: STDP Memory Engine (Local binding)',
-          '[POLICY] Port 8102: Sovereign Signal Bridge (E2EE Simplex)',
-          '[POLICY] Port 8989: Swarm Multiplexer (Local process broker)',
-          '[POLICY] Strict Content-Security-Policy: active',
-          'Policy audit complete: 0 WAN egress vectors configured.'
-        ]);
-      } else if (cmd === 'ports') {
-        setTerminalLines((prev) => [...prev, 'Configured Enclave Ports: 3000 (UI), 8094 (Memory), 8102 (Bridge), 8787 (Vault), 8790 (Azoth), 8989 (Swarm), 11434 (Ollama)']);
-      } else if (cmd === 'clear') {
-        setTerminalLines([]);
-      } else {
-        setTerminalLines((prev) => [...prev, `Command not recognized: "${cmd}". Type "help".`]);
-      }
-      setCmdInput('');
-    }
-  };
-
-  return (
-    <Box sx={{ mt: 1 }}>
-      <Typography variant="h6" sx={{ fontWeight: 800, color: gold(theme), mb: 0.5 }}>
-        NullAI HexStrike Penetration &amp; CVE Audit Terminal
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
-        Zero-egress vulnerability auditing and threat surface inspection tool.
-      </Typography>
-
-      <Grid container spacing={3} sx={{ mb: 2 }}>
-        <Grid xs={12} md={4}>
-          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, textAlign: 'center' }}>
-            <Typography variant="caption" sx={{ color: goldSoft(theme), fontWeight: 800 }}>
-              SECURITY POSTURE SCORE
-            </Typography>
-            <Typography variant="h2" sx={{ fontWeight: 800, color: 'var(--zs-emerald)', my: 1 }}>
-              98<Typography component="span" variant="h5" color="text.secondary">/100</Typography>
-            </Typography>
-            <Chip label="HARDENED &amp; COMPLIANT" size="small" sx={{ bgcolor: successBg(theme), color: successFg(theme), fontWeight: 800 }} />
-          </Paper>
-        </Grid>
-
-        <Grid xs={12} md={8}>
-          <Paper sx={{ p: 2, bgcolor: darkPanel(theme), color: 'var(--zs-mint)', fontFamily: mono, fontSize: '0.82rem', height: 160, overflowY: 'auto', borderRadius: 2, border: `1px solid ${darkPanelBorder(theme)}` }}>
-            {terminalLines.map((line, i) => <div key={i} style={{ marginBottom: 3 }}>{line}</div>)}
-          </Paper>
-          <TextField
-            fullWidth
-            size="small"
-            placeholder="Type terminal command (e.g. scan, ports, help)..."
-            value={cmdInput}
-            onChange={(e) => setCmdInput(e.target.value)}
-            onKeyDown={handleCommand}
-            sx={{ mt: 1, bgcolor: theme.palette.background.paper, fontFamily: mono }}
-          />
-        </Grid>
-      </Grid>
-    </Box>
-  );
+  return <HexStrikeGodModeTool />;
 }
 
 /* ==========================================================================
