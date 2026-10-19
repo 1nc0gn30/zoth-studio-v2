@@ -677,7 +677,7 @@ export function NeuroMemoryTool() {
             size="small"
             variant="outlined"
             component="a"
-            href="https://neuro-memory.nullai.tech"
+            href="https://github.com/NullAITech/neuro-memory-daemon"
             target="_blank"
             rel="noopener noreferrer"
             endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
@@ -690,7 +690,7 @@ export function NeuroMemoryTool() {
               '&:hover': { borderColor: gold(theme), color: gold(theme) },
             }}
           >
-            Web Mirror ↗
+            Daemon Repo ↗
           </Button>
         </Stack>
       </Paper>
