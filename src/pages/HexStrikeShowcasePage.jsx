@@ -14,6 +14,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import MemoryIcon from '@mui/icons-material/Memory';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import HexStrikeGodModeTool from '../components/tools/HexStrikeGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -133,6 +134,13 @@ export default function HexStrikeShowcasePage() {
               );
             })}
           </Grid>
+        </RevealOnScroll>
+
+        {/* Live HexStrike God-Mode Pentesting Cockpit */}
+        <RevealOnScroll preset="fadeUp" delay={0.12}>
+          <Box sx={{ mb: 8 }}>
+            <HexStrikeGodModeTool />
+          </Box>
         </RevealOnScroll>
 
         {/* Built For Section */}
