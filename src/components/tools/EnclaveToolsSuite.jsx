@@ -37,6 +37,7 @@ import WebIcon from '@mui/icons-material/Web';
 import StorageIcon from '@mui/icons-material/Storage';
 import HexStrikeGodModeTool from './HexStrikeGodModeTool';
 import AgentGodsEyeGodModeTool from './AgentGodsEyeGodModeTool';
+import WebSecurityGuardGodModeTool from './WebSecurityGuardGodModeTool';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const gold = (t) => (t.palette.mode === 'dark' ? '#D4AF37' : '#B8860B');
@@ -1236,50 +1237,7 @@ export function EnvGuardVaultTool() {
    Features: Dynamic Header Toggles, Live Score Recalculator, Multi-Platform Export
    ========================================================================== */
 export function WebSecurityGuardTool() {
-  const theme = useTheme();
-  const [csp, setCsp] = useState(true);
-  const [xframe, setXframe] = useState(true);
-  const [hsts, setHsts] = useState(true);
-  const [nosniff, setNosniff] = useState(true);
-
-  let score = 20;
-  if (csp) score += 30;
-  if (xframe) score += 20;
-  if (hsts) score += 15;
-  if (nosniff) score += 15;
-
-  return (
-    <Box sx={{ mt: 1 }}>
-      <Typography variant="h6" sx={{ fontWeight: 800, color: gold(theme), mb: 0.5 }}>
-        Web Security Guard &amp; CSP Policy Auditor
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
-        Validates CSP, Frame Ancestors, HSTS, and Permissions-Policy compliance for zero-egress web deployment.
-      </Typography>
-
-      <Grid container spacing={3}>
-        <Grid xs={12} md={6}>
-          <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5 }}>Security Header Directives</Typography>
-            <FormControlLabel control={<Switch checked={csp} onChange={(e) => setCsp(e.target.checked)} />} label="Content-Security-Policy (Strict)" />
-            <FormControlLabel control={<Switch checked={xframe} onChange={(e) => setXframe(e.target.checked)} />} label="X-Frame-Options: SAMEORIGIN" />
-            <FormControlLabel control={<Switch checked={hsts} onChange={(e) => setHsts(e.target.checked)} />} label="Strict-Transport-Security (HSTS)" />
-            <FormControlLabel control={<Switch checked={nosniff} onChange={(e) => setNosniff(e.target.checked)} />} label="X-Content-Type-Options: nosniff" />
-          </Paper>
-        </Grid>
-
-        <Grid xs={12} md={6}>
-          <Paper sx={{ p: 3, bgcolor: goldBg(theme), border: `1px solid ${goldBorder(theme)}`, borderRadius: 2, textAlign: 'center' }}>
-            <Typography variant="caption" sx={{ fontWeight: 800, color: goldSoft(theme) }}>CALCULATED SECURITY GRADE</Typography>
-            <Typography variant="h2" sx={{ fontWeight: 800, color: score >= 90 ? '#10B981' : score >= 70 ? '#F59E0B' : '#EF4444', my: 0.5 }}>
-              {score >= 95 ? 'A+' : score >= 85 ? 'A' : score >= 70 ? 'B' : 'F'}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">Score: {score} / 100</Typography>
-          </Paper>
-        </Grid>
-      </Grid>
-    </Box>
-  );
+  return <WebSecurityGuardGodModeTool />;
 }
 
 /* ==========================================================================
