@@ -40,6 +40,7 @@ import AgentGodsEyeGodModeTool from './AgentGodsEyeGodModeTool';
 import WebSecurityGuardGodModeTool from './WebSecurityGuardGodModeTool';
 import EnvGuardVaultGodModeTool from './EnvGuardVaultGodModeTool';
 import SubSweepGodModeTool from './SubSweepGodModeTool';
+import AudioCipherGodModeTool from './AudioCipherGodModeTool';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const gold = (t) => (t.palette.mode === 'dark' ? '#D4AF37' : '#B8860B');
@@ -1139,87 +1140,10 @@ export function WebSecurityGuardTool() {
 
 /* ==========================================================================
    TOOL 11: AudioCipher Steganography Engine (audiocipher-stego-engine)
-   Features: HTML5 Audio Waveform Spectrogram Canvas, Secret Carrier Modulation
+   Features: Real 16-bit PCM WAV LSB Bitstream Injection & Extraction
    ========================================================================== */
 export function AudioCipherStegoTool() {
-  const theme = useTheme();
-  const [secret, setSecret] = useState('SOVEREIGN_KEY_ALPHA_77');
-  const [extracted, setExtracted] = useState('');
-  const canvasRef = useRef(null);
-
-  // Animated Spectrogram Waterfall
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let t = 0;
-    let animId;
-
-    const render = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const w = canvas.width;
-      const h = canvas.height;
-
-      // Draw Waveform Bars
-      const bars = 36;
-      const barW = w / bars;
-      for (let i = 0; i < bars; i++) {
-        const height = Math.sin(i * 0.3 + t * 0.05) * (h / 3) + (h / 2.5);
-        ctx.fillStyle = i % 4 === 0 && extracted ? gold(theme) : (theme.palette.mode === 'dark' ? '#1E293B' : '#CBD5E1');
-        ctx.fillRect(i * barW, h - height, barW - 2, height);
-      }
-
-      t += 1;
-      animId = requestAnimationFrame(render);
-    };
-
-    render();
-    return () => cancelAnimationFrame(animId);
-  }, [extracted, theme]);
-
-  return (
-    <Box sx={{ mt: 1 }}>
-      <Typography variant="h6" sx={{ fontWeight: 800, color: gold(theme), mb: 0.5 }}>
-        AudioCipher LSB Steganography &amp; Spectrum Hidden Signal Engine
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
-        Encode and extract confidential cryptographic keys into audio waveform spectra using LSB modulation.
-      </Typography>
-
-      <Grid container spacing={3}>
-        <Grid xs={12} md={6}>
-          <TextField
-            fullWidth
-            label="Secret Message to Embed"
-            value={secret}
-            onChange={(e) => setSecret(e.target.value)}
-            sx={{ mb: 2, bgcolor: theme.palette.background.paper }}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setExtracted(secret)}
-            startIcon={<GraphicEqIcon />}
-            sx={{ fontWeight: 800 }}
-          >
-            Embed Secret &amp; Verify Extraction
-          </Button>
-        </Grid>
-
-        <Grid xs={12} md={6}>
-          <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
-            <Typography variant="caption" sx={{ color: goldSoft(theme), fontWeight: 800 }}>
-              AUDIO FREQUENCY SPECTROGRAM
-            </Typography>
-            <canvas ref={canvasRef} width={280} height={90} style={{ width: '100%', height: 'auto', display: 'block', margin: '6px 0' }} />
-            <Typography variant="caption" sx={{ color: 'var(--zs-emerald)', fontFamily: mono, display: 'block' }}>
-              {extracted ? `✔ Recovered Payload: ${extracted}` : '// Click Embed to visualize carrier modulation'}
-            </Typography>
-          </Paper>
-        </Grid>
-      </Grid>
-    </Box>
-  );
+  return <AudioCipherGodModeTool />;
 }
 
 /* ==========================================================================
