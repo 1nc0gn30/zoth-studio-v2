@@ -38,6 +38,7 @@ import StorageIcon from '@mui/icons-material/Storage';
 import HexStrikeGodModeTool from './HexStrikeGodModeTool';
 import AgentGodsEyeGodModeTool from './AgentGodsEyeGodModeTool';
 import WebSecurityGuardGodModeTool from './WebSecurityGuardGodModeTool';
+import EnvGuardVaultGodModeTool from './EnvGuardVaultGodModeTool';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const gold = (t) => (t.palette.mode === 'dark' ? '#D4AF37' : '#B8860B');
@@ -1121,115 +1122,10 @@ export function HexStrikeTool() {
 
 /* ==========================================================================
    TOOL 9: EnvGuard Secrets Vault (envguard-secrets-vault)
-   Features: Real Web Crypto API AES-256-GCM Encryption / Decryption
+   Features: Real Web Crypto API AES-256-GCM + PBKDF2 Zero-Knowledge Secrets Sealer
    ========================================================================== */
 export function EnvGuardVaultTool() {
-  const theme = useTheme();
-  const [passphrase, setPassphrase] = useState('sovereign_enclave_master_key');
-  const [secretText, setSecretText] = useState('OLLAMA_API_TOKEN=sk-local-enclave-9921');
-  const [ciphertext, setCiphertext] = useState('');
-  const [decrypted, setDecrypted] = useState('');
-  const [ivHex, setIvHex] = useState('');
-
-  // Real In-Browser Web Crypto AES-GCM Encryption
-  const handleEncrypt = async () => {
-    try {
-      const enc = new TextEncoder();
-      const salt = enc.encode('sovereign_salt');
-      const passKey = await window.crypto.subtle.importKey(
-        'raw', enc.encode(passphrase), { name: 'PBKDF2' }, false, ['deriveKey']
-      );
-      const aesKey = await window.crypto.subtle.deriveKey(
-        { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
-        passKey, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']
-      );
-      const iv = window.crypto.getRandomValues(new Uint8Array(12));
-      const encrypted = await window.crypto.subtle.encrypt(
-        { name: 'AES-GCM', iv }, aesKey, enc.encode(secretText)
-      );
-
-      const cipherArray = Array.from(new Uint8Array(encrypted));
-      const cipherHex = cipherArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-      const ivString = Array.from(iv).map((b) => b.toString(16).padStart(2, '0')).join('');
-
-      setCiphertext(cipherHex);
-      setIvHex(ivString);
-      setDecrypted('');
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const handleDecrypt = () => {
-    setDecrypted(secretText);
-  };
-
-  return (
-    <Box sx={{ mt: 1 }}>
-      <Typography variant="h6" sx={{ fontWeight: 800, color: gold(theme), mb: 0.5 }}>
-        Argon2id + AES-256-GCM Hardware Secrets Vault
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
-        Hardware-anchored zero-cloud key derivation and in-memory cryptographic secret sealing via browser Web Crypto.
-      </Typography>
-
-      <Grid container spacing={3}>
-        <Grid xs={12} md={6}>
-          <TextField
-            fullWidth
-            label="Master Vault Passphrase"
-            type="password"
-            value={passphrase}
-            onChange={(e) => setPassphrase(e.target.value)}
-            sx={{ mb: 2, bgcolor: theme.palette.background.paper }}
-          />
-          <TextField
-            fullWidth
-            label="Secret Key/Value Payload"
-            value={secretText}
-            onChange={(e) => setSecretText(e.target.value)}
-            sx={{ mb: 2, bgcolor: theme.palette.background.paper, fontFamily: mono }}
-          />
-          <Stack direction="row" spacing={1.5}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleEncrypt}
-              startIcon={<LockIcon />}
-              sx={{ fontWeight: 800 }}
-            >
-              Encrypt AES-256-GCM
-            </Button>
-            {ciphertext && (
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleDecrypt}
-                startIcon={<CheckCircleIcon />}
-                sx={{ fontWeight: 750 }}
-              >
-                Decrypt &amp; Verify
-              </Button>
-            )}
-          </Stack>
-        </Grid>
-
-        <Grid xs={12} md={6}>
-          <Paper sx={{ p: 2.5, bgcolor: darkPanel(theme), color: 'var(--zs-mint)', fontFamily: mono, fontSize: '0.8rem', borderRadius: 2, border: `1px solid ${darkPanelBorder(theme)}` }}>
-            <div>Enclave Algorithm: AES-256-GCM (Hardware Accelerated)</div>
-            <div>IV: {ivHex || 'awaiting encryption...'}</div>
-            <div style={{ color: '#D4AF37', marginTop: 8 }}>Sealed Ciphertext:</div>
-            <div style={{ wordBreak: 'break-all', color: '#F5E6AB' }}>{ciphertext || '// Click Encrypt to generate authentic AES-GCM ciphertext'}</div>
-            {decrypted && (
-              <div style={{ color: 'var(--zs-mint)', marginTop: 8 }}>
-                ✔ Decrypted Plaintext: <strong>{decrypted}</strong>
-              </div>
-            )}
-          </Paper>
-        </Grid>
-      </Grid>
-    </Box>
-  );
+  return <EnvGuardVaultGodModeTool />;
 }
 
 /* ==========================================================================
