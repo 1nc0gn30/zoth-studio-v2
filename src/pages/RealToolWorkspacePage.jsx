@@ -85,11 +85,14 @@ import RegexDroidGodModeTool from '../components/tools/RegexDroidGodModeTool';
 import PolyglotStudioGodModeTool from '../components/tools/PolyglotStudioGodModeTool';
 import RobotsTxtAuditorGodModeTool from '../components/tools/RobotsTxtAuditorGodModeTool';
 import PwaManifestBuilderGodModeTool from '../components/tools/PwaManifestBuilderGodModeTool';
+import SchemaIllustratorGodModeTool from '../components/tools/SchemaIllustratorGodModeTool';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const ENCLAVE_TOOL_COMPONENTS = {
+  'schema-illustrator-studio': SchemaIllustratorGodModeTool,
+  'schema-illustrator': SchemaIllustratorGodModeTool,
   'robots-txt-auditor': RobotsTxtAuditorGodModeTool,
   'robots-txt': RobotsTxtAuditorGodModeTool,
   'pwa-manifest-builder': PwaManifestBuilderGodModeTool,
