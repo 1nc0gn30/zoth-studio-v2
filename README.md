@@ -1,12 +1,12 @@
 # Zoth Studio v2
 
-> **Zero-Egress Sovereign Agent Development Studio, Workstation Cockpit & 59-Tool Matrix**  
-> *Client-side WebGPU acceleration, biomorphic STDP memory, 100% workstation coverage across all 59 ecosystem tools (23 In-Browser WebGPU/Client + 36 Sovereign Enclaves), 127 prerendered static routes, 22 resident loopback daemons, 3-agent Byzantine consensus, dual checkout rails (Stripe + Solana DePay), and Argon2id cryptographic vault.*
+> **Zero-Egress Sovereign Agent Development Studio, Workstation Cockpit & 62-Tool Matrix**  
+> *Client-side WebGPU acceleration, biomorphic STDP memory, 100% workstation coverage across all 62 ecosystem tools (dedicated God Mode workstations + sovereign enclaves), 130 prerendered static routes, 22 resident loopback daemons, 3-agent Byzantine consensus, dual checkout rails (Stripe + Solana DePay), and Argon2id cryptographic vault.*
 
 [![Zero-Egress Guaranteed](https://img.shields.io/badge/Security-Zero--Egress%20Enclave-gold?style=flat-square)](#zero-egress-security-invariants)
 [![Netlify Deploy Ready](https://img.shields.io/badge/Deploy-Netlify%20Production-00C7B7?style=flat-square&logo=netlify)](#netlify-deployment-instructions)
-[![127 Prerendered Routes](https://img.shields.io/badge/AEO-127%20Static%20Routes-blueviolet?style=flat-square)](#prerendered-static-routes-127-total)
-[![100% Workstation Coverage](https://img.shields.io/badge/Workstations-59%2F59%20Covered%20(23%20Browser%20%2B%2036%20Enclaves)-success?style=flat-square)](#100-dedicated-interactive-workstation-coverage)
+[![130 Prerendered Routes](https://img.shields.io/badge/AEO-130%20Static%20Routes-blueviolet?style=flat-square)](#prerendered-static-routes-130-total)
+[![100% Workstation Coverage](https://img.shields.io/badge/Workstations-62%2F62%20Covered%20(God%20Mode%20%2B%20Enclaves)-success?style=flat-square)](#100-dedicated-interactive-workstation-coverage)
 [![Vite 5.4](https://img.shields.io/badge/Build-Vite%205.4-purple?style=flat-square)](https://vitejs.dev)
 [![React 19.3](https://img.shields.io/badge/Framework-React%2019.3-blue?style=flat-square)](https://react.dev)
 [![MUI v5.15](https://img.shields.io/badge/UI-Material--UI%20v5.15-007FFF?style=flat-square)](https://mui.com)
@@ -47,7 +47,7 @@ Desktop and mobile captures, plus screen recordings of each route intro motion d
 
 ## System Overview & Core Philosophy
 
-**Zoth Studio v2** is a zero-egress, sovereign developer studio designed for orchestrating autonomous AI agent workflows, inspecting code syntax, executing hardware-accelerated WebGPU compute shaders, and interfacing with local model foundries (such as Ollama or llama.cpp). Built with **React 19.3** and a gold-on-void aesthetic (`#D4AF37` on `#08080B`), Zoth Studio v2 unifies **59 dedicated interactive tool workstations**, 127 prerendered static routes, and the WebMCP (Model Context Protocol) tool suite directly in the browser.
+**Zoth Studio v2** is a zero-egress, sovereign developer studio designed for orchestrating autonomous AI agent workflows, inspecting code syntax, executing hardware-accelerated WebGPU compute shaders, and interfacing with local model foundries (such as Ollama or llama.cpp). Built with **React 19.3** and a gold-on-void aesthetic (`#D4AF37` on `#08080B`), Zoth Studio v2 unifies **62 dedicated interactive tool workstations**, 130 prerendered static routes, and the WebMCP (Model Context Protocol) tool suite directly in the browser.
 
 - **WHAT THIS IS**: A client-side developer workstation and local tool catalog for coordinating autonomous agent workflows, running WebGPU tensor calculations, visualizing biomorphic STDP synaptic memories, executing 3-agent Byzantine consensus simulations, and connecting to local models on local silicon.
 - **WHAT THIS IS NOT**: This is not a cloud SaaS, does not send prompts or telemetry to remote endpoints, and does not require third-party accounts. All primary tools run client-side in the browser, with optional local CLI daemons for IPC and local storage.
@@ -67,8 +67,8 @@ Desktop and mobile captures, plus screen recordings of each route intro motion d
         |                                     |                                     |
         v                                     v                                     v
 +-------------------------------+  +-------------------------------+  +-------------------------------+
-|     59 DEDICATED WORKSTATIONS |  |  22 ENCLAVE LOOPBACK DAEMONS  |  |      STDP NEURO MEMORY        |
-|  - 23 In-Browser WebGPU/Client|  |  - Ports 8094-8120, 9393, 5225|  |  - Hebbian LTP / LTD Learning |
+|     62 DEDICATED WORKSTATIONS |  |  22 ENCLAVE LOOPBACK DAEMONS  |  |      STDP NEURO MEMORY        |
+|  - In-Browser God Mode Engines|  |  - Ports 8094-8120, 9393, 5225|  |  - Hebbian LTP / LTD Learning |
 |  - 36 Sovereign Enclaves      |  |  - Zero-Cloud SNI Proxy       |  |  - 3D Synaptic Manifold       |
 |  - 100% Native Tool Coverage  |  |  - Full Forensics Flight Rec  |  |  - Exponential Weight Decay   |
 |  - Real Client Utility        |  |  - Multi-Channel POD Routers  |  |  - Local Vector Clustering    |
@@ -91,9 +91,9 @@ Desktop and mobile captures, plus screen recordings of each route intro motion d
         v                                     v                                     v
 +-------------------------------+  +-------------------------------+  +-------------------------------+
 |     DUAL CHECKOUT REGISTERS   |  |    NETLIFY STATIC HOSTING     |  |   AEO / AX MACHINE DISCOVERY  |
-|  - Stripe Instant Links ($19) |  |  - 127 Prerendered Routes     |  |  - /llms.txt & /llms-full.txt |
+|  - Stripe Instant Links ($19) |  |  - 130 Prerendered Routes     |  |  - /llms.txt & /llms-full.txt |
 |  - Solana DePay Receiver      |  |  - Instant FCP (< 200ms)      |  |  - /ai.txt Crawler Policy     |
-|  - 1-Click License Unlock     |  |  - Strict CSP & Security      |  |  - /sitemap.xml (127 Entries) |
+|  - 1-Click License Unlock     |  |  - Strict CSP & Security      |  |  - /sitemap.xml (130 Entries) |
 |  - Frosted Glass Paywall Blur |  |  - Immutable Asset Caching    |  |  - Schema.org JSON-LD Graphs  |
 +-------------------------------+  +-------------------------------+  +-------------------------------+
 ```
@@ -172,33 +172,35 @@ flowchart TD
 
 ## 100% Dedicated Interactive Workstation Coverage
 
-Every single tool in the 59-tool catalog has a dedicated, production-ready interactive interface with zero fake placeholders.
+Every single tool in the 62-tool catalog has a dedicated, production-ready interactive interface with zero fake placeholders.
 
-### Part A: 23 In-Browser WebGPU & Client Workstations (`WebGPUToolWorkstation.jsx`, Standalone Apps & Dedicated Pages)
+### Part A: Dedicated In-Browser God Mode Workstations (100% Client-Side AST, Three.js, PKZIP, and WebCrypto)
 
-1. **`jwt-inspector-guard`** (`/tools/jwt-inspector-guard`): In-browser JWT decoder, cryptographic signature validator, algorithm-confusion (`none`) vulnerability checker, and Shannon entropy analysis.
-2. **`payload-entropy-studio`** (`/tools/payload-entropy-studio`): Mathematical Shannon entropy curve analyzer detecting obfuscated web shells, binary packers, and encrypted malicious payloads.
-3. **`polyglot-framework-exporter`** (`/tools/polyglot-framework-exporter`): Universal code transpiler converting React components to Vue, Svelte, Angular, Solid, and native Web Components client-side.
-4. **`vision-gesture-control`** (`/tools/vision-gesture-control`): In-browser MediaPipe webcam hand-tracking interface translating physical hand landmarks into UI commands.
-5. **`certpath-roadmap-studio`** (`/tools/certpath-roadmap-studio`): Interactive engineering & cybersecurity certification roadmap generator (OSCP, CISSP, AWS) with exportable progress trees.
-6. **`pwa-manifest-builder`** (`/tools/pwa-manifest-builder`): Progressive Web App manifest generator creating `manifest.json`, multi-resolution icons, and offline Service Workers.
-7. **`regex-droid-builder`** (`/tools/regex-droid-builder`): Visual regular expression tester and neural explainer with catastrophic backtracking analysis and match highlight trees.
-8. **`schema-illustrator-studio`** (`/tools/schema-illustrator-studio`): Interactive JSON-Schema to database ER diagram visualizer exporting SQL DDL, Prisma schemas, and TypeScript interfaces.
-9. **`webmcp-protocol-inspector`** (`/webmcp`): In-browser Model Context Protocol (MCP) JSON-RPC 2.0 inspector validating tool schemas, prompts, resources, and handshake packets.
-10. **`anderson-security-sentinel`** (`/tools/anderson-security-sentinel`): Autonomous biometric laptop perimeter defense workstation with facial recognition, WiFi X-Ray RF tomography, and USB Rubber Ducky tripwire guard.
-11. **`badge3d-coin-generator`** (`/tools/badge3d-coin-generator`): Client-side 3D extruded coin and commemorative badge generator with Three.js metallic shaders and direct `.obj` mesh exports.
-12. **`robots-txt-auditor`** (`/tools/robots-txt-auditor`): Frontier AI crawler policy validator auditing access for GPTBot, ClaudeBot, PerplexityBot, and Googlebot.
-13. **`city-desk`** (`/tools/city-desk`): Programmatic local landing page generator constructing hyper-localized service pages for 50 cities and 20 trades.
-14. **`cyber-turtle-studio`** (`/tools/cyber-turtle-studio`): High-precision geometry engine, L-System botany synthesizer (fractal trees, leaves, Hilbert curves), and physical CNC pen-plotter G-Code generator. Live at `cyber-turtle-studio.netlify.app`.
-15. **`datamosh-glitch-studio`** (`/tools/datamosh-glitch-studio`): Parametric video datamoshing, I-Frame drop corruption, delta-frame duplication, and glitch art synthesizer. Live at `datamosh-glitch-studio.netlify.app`.
-16. **`nexus-3d-scene-studio`** (`/tools/nexus-3d-scene-studio`): Mathematical 3D geometry engine (Tesseract 4D, Torus Knot, Klein Bottle) with 60fps orbit controls and direct Wavefront OBJ export. Live at `nexus-3d-studio.netlify.app`.
-17. **`ufo-sacred-geometry`** (`/tools/ufo-sacred-geometry`): Synthesizes sacred geometry, crop circle agro-glyphs, Platonic solids, and harmonic vortex manifolds; exports to AutoCAD DXF and Wavefront OBJ. Live at `ufo-sacred-geometry.netlify.app`.
-18. **`osint-scout-skill`** (`/tools/osint-scout-skill`): Autonomous passive reconnaissance engine resolving DNS (A, AAAA, MX, NS, TXT) via public DNS-over-HTTPS (DoH), auditing email security (SPF/DMARC), and discovering subdomains. Live at `osint-domain-scout.netlify.app`.
-19. **`storefront-catalog`** (`/tools/storefront-catalog`): Digital asset storefront and luxury POD catalog live at `yourdigitalspace.nullai.tech` with 62.6% blended profit margin modeling and dual checkout rails.
-20. **`subsweep-lead-scanner`** (`/tools/subsweep-lead-scanner`): 100% in-browser subdomain recon scanner, attack surface analyzer, and OSINT lead enrichment engine. Live at `subsweep.nullai.tech`.
-21. **`omnipost-social-engine`** (`/tools/omnipost-social-engine`): 100% in-browser social content formatting, viral thread splitter, virality scoring, and MCP client config generator with zero cloud egress. Live at `omnipost.nullai.tech`.
-22. **`web-security-guard`** (`/tools/web-security-guard`): 100% in-browser security headers auditor, CSP Level 3 generator, native Web Crypto SHA-384 SRI hasher, and WCAG 2.2 simulator. Live at `websecurity.nullai.tech`.
-23. **`cron-rhythm-studio`** (`/tools/cron-rhythm-studio`): 100% in-browser cron expression rhythm visualizer, scheduler simulator, and task trigger matrix with dual checkout rails. Live at `cronrhythm.nullai.tech`.
+1. **`robots-txt-auditor`** (`/tools/robots-txt-auditor`): RFC 9309 in-browser parser, real-time crawler simulator across 7 frontier bots (Googlebot, GPTBot, ClaudeBot, PerplexityBot, Applebot, Bingbot, CCBot), path tester, and AEO indexation score gauge.
+2. **`pwa-manifest-builder`** (`/tools/pwa-manifest-builder`): W3C Progressive Web App manifest generator, 12 archetype presets, 3-mode device simulator (Install Sheet, Splash Screen, Home Icon), service worker compiler, and zero-dependency in-browser binary PKZIP bundler.
+3. **`schema-illustrator-studio`** (`/tools/schema-illustrator-studio`): Multi-dialect database ERD studio and schema transpiler converting SQL DDL, JSON Schema, GraphQL SDL, and TypeScript into interactive vector ER diagrams, Pydantic v2 models, Prisma schemas, and Mermaid graphs.
+4. **`certpath-roadmap-studio`** (`/tools/certpath-roadmap-studio`): 137-certification engineering & cybersecurity DAG solver with recursive prerequisite chain tracing, 6 career track presets, and side-by-side credential comparison.
+5. **`badge3d-coin-generator`** (`/tools/badge3d-coin-generator`): Three.js WebGL 3D coin, medallion, and relief badge generator with PBR metallic shaders, edge reeding serration deformation, 4K snapshot captures, and watertight STL 3D-printing exports.
+6. **`regex-droid-builder`** (`/tools/regex-droid-builder`): In-browser regular expression IDE with live match testing, execution timing, static algorithmic ReDoS detector ($O(N)$ vs $O(N^2)$ vs $O(2^N)$), token deconstructor, and multi-language code exporter (Python, JS, Rust, Go).
+7. **`polyglot-framework-exporter`** (`/tools/polyglot-framework-exporter`): In-browser multi-framework project scaffolder for 13 modern frameworks (Astro 5, Next.js 15, Vite React 19, SvelteKit 2, Nuxt 3, Bun+Hono, SolidStart, Tauri v2, Electron 33, HTMX+Alpine) with zero-dependency pure client-side PKZIP download.
+8. **`ghidra-mcp-bridge`** (`/tools/ghidra-mcp-bridge`): Reverse engineering workstation connected to LaurieWired's GhidraMCP with 15 native tools, interactive C pseudocode decompiler, function navigator, and Ghidra annotation injection.
+9. **`shodan-surface-sentinel`** (`/tools/shodan-surface-sentinel` / `/hexstrike`): Planetary attack surface auditor powered by unmetered, zero-credit CORS InternetDB reconnaissance and pre-configured Shodan CLI/MCP integration.
+10. **`jwt-inspector-guard`** (`/tools/jwt-inspector-guard`): In-browser JWT decoder, cryptographic signature validator, algorithm-confusion (`none`) vulnerability checker, and Shannon entropy analysis.
+11. **`payload-entropy-studio`** (`/tools/payload-entropy-studio`): Mathematical Shannon entropy curve analyzer detecting obfuscated web shells, binary packers, and encrypted malicious payloads.
+12. **`vision-gesture-control`** (`/tools/vision-gesture-control`): In-browser MediaPipe webcam hand-tracking interface translating physical hand landmarks into UI commands.
+13. **`webmcp-protocol-inspector`** (`/webmcp`): In-browser Model Context Protocol (MCP) JSON-RPC 2.0 inspector validating tool schemas, prompts, resources, and handshake packets.
+14. **`anderson-security-sentinel`** (`/tools/anderson-security-sentinel`): Autonomous biometric laptop perimeter defense workstation with facial recognition, WiFi X-Ray RF tomography, and USB Rubber Ducky tripwire guard.
+15. **`city-desk`** (`/tools/city-desk`): Programmatic local landing page generator constructing hyper-localized service pages for 50 cities and 20 trades.
+16. **`cyber-turtle-studio`** (`/tools/cyber-turtle-studio`): High-precision geometry engine, L-System botany synthesizer (fractal trees, leaves, Hilbert curves), and physical CNC pen-plotter G-Code generator. Live at `cyber-turtle-studio.netlify.app`.
+17. **`datamosh-glitch-studio`** (`/tools/datamosh-glitch-studio`): Parametric video datamoshing, I-Frame drop corruption, delta-frame duplication, and glitch art synthesizer. Live at `datamosh-glitch-studio.netlify.app`.
+18. **`nexus-3d-scene-studio`** (`/tools/nexus-3d-scene-studio`): Mathematical 3D geometry engine (Tesseract 4D, Torus Knot, Klein Bottle) with 60fps orbit controls and direct Wavefront OBJ export. Live at `nexus-3d-studio.netlify.app`.
+19. **`ufo-sacred-geometry`** (`/tools/ufo-sacred-geometry`): Synthesizes sacred geometry, crop circle agro-glyphs, Platonic solids, and harmonic vortex manifolds; exports to AutoCAD DXF and Wavefront OBJ. Live at `ufo-sacred-geometry.netlify.app`.
+20. **`osint-scout-skill`** (`/tools/osint-scout-skill`): Autonomous passive reconnaissance engine resolving DNS (A, AAAA, MX, NS, TXT) via public DNS-over-HTTPS (DoH), auditing email security (SPF/DMARC), and discovering subdomains. Live at `osint-domain-scout.netlify.app`.
+21. **`storefront-catalog`** (`/tools/storefront-catalog`): Digital asset storefront and luxury POD catalog live at `yourdigitalspace.nullai.tech` with 62.6% blended profit margin modeling and dual checkout rails.
+22. **`subsweep-lead-scanner`** (`/tools/subsweep-lead-scanner`): 100% in-browser subdomain recon scanner, attack surface analyzer, and OSINT lead enrichment engine. Live at `subsweep.nullai.tech`.
+23. **`omnipost-social-engine`** (`/tools/omnipost-social-engine`): 100% in-browser social content formatting, viral thread splitter, virality scoring, and MCP client config generator with zero cloud egress. Live at `omnipost.nullai.tech`.
+24. **`web-security-guard`** (`/tools/web-security-guard`): 100% in-browser security headers auditor, CSP Level 3 generator, native Web Crypto SHA-384 SRI hasher, and WCAG 2.2 simulator. Live at `websecurity.nullai.tech`.
+25. **`cron-rhythm-studio`** (`/tools/cron-rhythm-studio`): 100% in-browser cron expression rhythm visualizer, scheduler simulator, and task trigger matrix with dual checkout rails. Live at `cronrhythm.nullai.tech`.
 
 ---
 
