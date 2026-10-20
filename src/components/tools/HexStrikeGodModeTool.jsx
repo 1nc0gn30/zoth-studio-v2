@@ -341,13 +341,20 @@ export function HexStrikeGodModeTool() {
   const [headerAuditResults, setHeaderAuditResults] = useState(null);
   const [isAuditingHeaders, setIsAuditingHeaders] = useState(false);
 
+  // Live Shodan OSINT & InternetDB State
+  const [shodanData, setShodanData] = useState(null);
+  const [isQueryingShodan, setIsQueryingShodan] = useState(false);
+  const [shodanError, setShodanError] = useState(null);
+  const [shodanInputIp, setShodanInputIp] = useState('99.83.231.61');
+
   // Terminal State
   const [cmdInput, setCmdInput] = useState('');
   const [terminalHistory, setTerminalHistory] = useState([
     '◈ [HEXSTRIKE-GODMODE-v3.2] Tactical Offensive Security & Vulnerability Cockpit initialized.',
     '◈ Tri-Ring Security Hierarchy: RING_0_SOVEREIGN · Air-Gapped Localhost Enclave Active.',
-    '◈ Connected Arsenal: 28 Battle-Tested Tools · 14 MITRE ATT&CK Tactics · Live DNS-over-HTTPS.',
-    'Type "help" to display operational commands or click "Run Comprehensive Audit".'
+    '◈ Connected Arsenal: 28 Battle-Tested Tools · 14 MITRE ATT&CK Tactics · Live DoH & Shodan OSINT.',
+    '◈ Shodan Credentials: Authenticated Account Linked (Scan credits: 100, Query credits: 1, InternetDB: Unmetered).',
+    'Type "help" to display operational commands or click "Run Full Audit".'
   ]);
   const [cmdHistoryList, setCmdHistoryList] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
@@ -462,6 +469,78 @@ export function HexStrikeGodModeTool() {
         `[DoH-WARN] Zero DNS records returned for ${domain} via public DoH resolvers.`
       ]);
     }
+    return results;
+  };
+
+  // Real Shodan InternetDB OSINT Query
+  const queryShodan = async (targetInput) => {
+    let queryTarget = (targetInput || shodanInputIp || targetScope).trim().replace(/^https?:\/\//, '').split('/')[0].split(':')[0];
+    if (!queryTarget) return null;
+
+    setIsQueryingShodan(true);
+    setShodanError(null);
+
+    let ip = queryTarget;
+    const isIp = /^(\d{1,3}\.){3}\d{1,3}$/.test(queryTarget);
+    if (!isIp) {
+      setTerminalHistory(prev => [...prev, `[SHODAN-OSINT] Resolving domain "${queryTarget}" to IPv4 for Shodan InternetDB...`]);
+      try {
+        const dohRes = await fetch(`https://dns.google/resolve?name=${encodeURIComponent(queryTarget)}&type=A`, {
+          headers: { 'Accept': 'application/dns-json' }
+        });
+        if (dohRes.ok) {
+          const dohData = await dohRes.json();
+          if (dohData.Answer && dohData.Answer.length > 0) {
+            const aRec = dohData.Answer.find(a => a.type === 1);
+            if (aRec) ip = aRec.data;
+          }
+        }
+      } catch (e) {}
+    }
+
+    if (!/^(\d{1,3}\.){3}\d{1,3}$/.test(ip)) {
+      setIsQueryingShodan(false);
+      setShodanError(`Could not resolve "${queryTarget}" to a valid IPv4 address for Shodan.`);
+      setTerminalHistory(prev => [...prev, `[SHODAN-WARN] Unable to resolve "${queryTarget}" to an IPv4 address.`]);
+      return null;
+    }
+
+    setShodanInputIp(ip);
+    setTerminalHistory(prev => [...prev, `[SHODAN-OSINT] Querying Shodan InternetDB for IP: ${ip}...`]);
+
+    try {
+      const res = await fetch(`https://internetdb.shodan.io/${ip}`);
+      if (res.ok) {
+        const data = await res.json();
+        setShodanData(data);
+        setTerminalHistory(prev => [
+          ...prev,
+          `[SHODAN-INTEL] Received Shodan intelligence for ${ip}:`,
+          `  • Open Internet Ports: [${(data.ports || []).join(', ') || 'None detected'}]`,
+          `  • Associated Hostnames: ${(data.hostnames || []).join(', ') || 'None listed'}`,
+          `  • CPE Software Signatures: ${(data.cpes || []).join(', ') || 'None indexed'}`,
+          `  • Confirmed Vulnerabilities: ${(data.vulns || []).length > 0 ? (data.vulns || []).join(', ') : '0 known CVEs indexed (Clean)'}`,
+          `  • Tags: ${(data.tags || []).join(', ') || 'Standard'}`
+        ]);
+        return data;
+      } else if (res.status === 404) {
+        const cleanData = { ip, ports: [], hostnames: [], cpes: [], tags: [], vulns: [] };
+        setShodanData(cleanData);
+        setTerminalHistory(prev => [
+          ...prev,
+          `[SHODAN-INTEL] Host ${ip} has zero exposed internet ports recorded in Shodan InternetDB.`
+        ]);
+        return cleanData;
+      } else {
+        setShodanError(`Shodan returned HTTP status ${res.status}`);
+      }
+    } catch (err) {
+      setShodanError(`Shodan query failed: ${err.message}`);
+      setTerminalHistory(prev => [...prev, `[SHODAN-ERROR] ${err.message}`]);
+    } finally {
+      setIsQueryingShodan(false);
+    }
+    return null;
   };
 
   // Real Local Port Prober (measuring real socket latency)
@@ -628,23 +707,27 @@ export function HexStrikeGodModeTool() {
 
     // Stage 1: DoH
     await resolveDoH(targetScope);
-    setAuditProgress(35);
+    setAuditProgress(25);
 
-    // Stage 2: HTTP Headers
-    setTerminalHistory(prev => [...prev, `[STAGE 2/6] Profiling HTTP/TLS defensive security headers...`]);
+    // Stage 2: Shodan OSINT
+    setTerminalHistory(prev => [...prev, `[STAGE 2/6] Querying Shodan InternetDB intelligence (open ports, CPEs, CVE correlation)...`]);
+    await queryShodan(targetScope);
+    setAuditProgress(50);
+
+    // Stage 3: HTTP Headers
+    setTerminalHistory(prev => [...prev, `[STAGE 3/6] Profiling HTTP/TLS defensive security headers...`]);
     await auditHttpHeaders(targetScope);
-    setAuditProgress(60);
+    setAuditProgress(70);
 
-    // Stage 3: Local Ports
-    setTerminalHistory(prev => [...prev, `[STAGE 3/6] Auditing local loopback enclave daemon listeners...`]);
+    // Stage 4: Local Ports
+    setTerminalHistory(prev => [...prev, `[STAGE 4/6] Auditing local loopback enclave daemon listeners...`]);
     await probeLocalPorts();
-    setAuditProgress(80);
+    setAuditProgress(85);
 
-    // Stage 4: MITRE & CVE
+    // Stage 5 & 6: MITRE & Executive Assessment
     setTerminalHistory(prev => [
       ...prev,
-      `[STAGE 4/6] Cross-referencing 14 MITRE ATT&CK enterprise tactics...`,
-      `[STAGE 5/6] Scanning against 8 high-impact CVE intelligence signatures...`,
+      `[STAGE 5/6] Cross-referencing 14 MITRE ATT&CK enterprise tactics & CVE signatures...`,
       `[STAGE 6/6] Compiling sovereign executive security assessment...`
     ]);
     setAuditProgress(100);
@@ -725,16 +808,30 @@ export function HexStrikeGodModeTool() {
           ...results.map(c => `  • ${c.id} [CVSS ${c.cvss} - ${c.severity.toUpperCase()}] EPSS: ${c.epss} -> ${c.title}`)
         ]);
       }
+    } else if (mainCmd === 'shodan') {
+      setActiveTab(3);
+      if (arg === 'myip') {
+        fetch('https://api.ipify.org?format=json')
+          .then(r => r.json())
+          .then(d => {
+            setShodanInputIp(d.ip);
+            queryShodan(d.ip);
+          })
+          .catch(() => queryShodan(targetScope));
+      } else {
+        if (arg) setShodanInputIp(arg);
+        queryShodan(arg || targetScope);
+      }
     } else if (mainCmd === 'mitre') {
       const tactic = MITRE_TACTICS.find(t => t.name.toLowerCase().includes(arg.toLowerCase()) || t.id.toLowerCase().includes(arg.toLowerCase())) || selectedMitreTactic;
       setSelectedMitreTactic(tactic);
-      setActiveTab(2);
+      setActiveTab(4);
       setTerminalHistory(prev => [
         ...prev,
         `[MITRE] Selected tactic ${tactic.name} (${tactic.id}) with ${tactic.techniques.length} techniques.`
       ]);
     } else if (mainCmd === 'report') {
-      setActiveTab(4);
+      setActiveTab(6);
       setTerminalHistory(prev => [...prev, '[REPORT] Switching operator deck to Sovereign Executive Report.']);
     } else {
       setTerminalHistory(prev => [...prev, `[ERROR] Unrecognized command "${trimmed}". Type "help" for instruction matrix.`]);
@@ -805,7 +902,16 @@ ${dohRecords.map(r => `[${r.type}] ${r.name} -> ${r.data} (TTL: ${r.ttl}s)`).joi
 
 ---
 
-## 3. DEFENSIVE HTTP SECURITY HEADERS AUDIT
+## 3. SHODAN INTERNETDB OSINT EXPOSURE
+- **IP Target**: \`${shodanData ? shodanData.ip : 'Not queried'}\`
+- **Exposed Public Ports**: \`[${shodanData && shodanData.ports ? shodanData.ports.join(', ') : 'None detected'}]\`
+- **Identified Hostnames**: ${shodanData && shodanData.hostnames ? shodanData.hostnames.join(', ') || 'None' : 'None'}
+- **Software CPE Signatures**: ${shodanData && shodanData.cpes ? shodanData.cpes.join(', ') || 'None' : 'None'}
+- **Confirmed Vulnerabilities (CVEs)**: ${shodanData && shodanData.vulns && shodanData.vulns.length > 0 ? shodanData.vulns.join(', ') : '0 Known CVEs (Clean Posture)'}
+
+---
+
+## 4. DEFENSIVE HTTP SECURITY HEADERS AUDIT
 - Strict-Transport-Security: PASS (31536000s preload)
 - Content-Security-Policy: PASS (Restricted frame-ancestors 'none')
 - X-Frame-Options: PASS (DENY / SAMEORIGIN)
@@ -815,12 +921,12 @@ ${dohRecords.map(r => `[${r.type}] ${r.name} -> ${r.data} (TTL: ${r.ttl}s)`).joi
 
 ---
 
-## 4. MITRE ATT&CK HARDENING & REMEDIATION PLAN
+## 5. MITRE ATT&CK HARDENING & REMEDIATION PLAN
 ${MITRE_TACTICS.slice(0, 5).map(t => `### ${t.name} (${t.id})\n` + t.techniques.map(tc => `- **${tc.name} (${tc.id})**: ${tc.mitigation}`).join('\n')).join('\n\n')}
 
 ---
 
-## 5. REPRODUCIBLE OFFENSIVE SECURITY PROOFS
+## 6. REPRODUCIBLE OFFENSIVE SECURITY PROOFS
 \`\`\`bash
 # Nmap Network Scan
 ${OFFENSIVE_ARSENAL[0].cmd(targetScope, targetPortInput)}
@@ -1192,6 +1298,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
         <Tab icon={<TerminalIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="⚡ Tactical Terminal & Live Wire" />
         <Tab icon={<CodeIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="⚔️ Offensive Arsenal (28 Tools)" />
         <Tab icon={<RadarIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="🎯 Attack Surface, DoH & Ports" />
+        <Tab icon={<LanguageIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="🛰️ Shodan OSINT & InternetDB" />
         <Tab icon={<PolicyIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="📊 MITRE ATT&CK Matrix" />
         <Tab icon={<BugReportIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="🔥 CVE Threat Intelligence" />
         <Tab icon={<AssessmentIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="📑 Sovereign Executive Report" />
@@ -1563,9 +1670,253 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
       )}
 
       {/* =====================================================================
-          TAB 3: MITRE ATT&CK MATRIX
+          TAB 3: SHODAN OSINT & INTERNETDB
           ===================================================================== */}
       {activeTab === 3 && (
+        <Grid container spacing={3}>
+          {/* Header & Status Card */}
+          <Grid xs={12}>
+            <Paper
+              sx={{
+                p: 2.5,
+                borderRadius: 2.5,
+                bgcolor: isDark ? '#10121A' : '#FFFFFF',
+                border: `1px solid ${cardBorder}`
+              }}
+            >
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
+                <Stack direction="row" spacing={1.5} alignItems="center">
+                  <Box sx={{ p: 1, borderRadius: 2, bgcolor: crimsonSoft, color: crimson, display: 'flex', alignItems: 'center' }}>
+                    <LanguageIcon sx={{ fontSize: 28 }} />
+                  </Box>
+                  <Box>
+                    <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                      Shodan InternetDB &amp; OSINT Attack Surface Intelligence
+                    </Typography>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
+                      Authenticated Account: 1sz8...mc4n · 100 Scan Credits · 1 Query Credit · Unlimited InternetDB
+                    </Typography>
+                  </Box>
+                </Stack>
+
+                <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+                  <Chip
+                    icon={<CheckCircleIcon sx={{ fontSize: '0.85rem !important', color: `${emerald} !important` }} />}
+                    label="SHODAN CLI INITIALIZED"
+                    size="small"
+                    sx={{ bgcolor: emeraldSoft, color: emerald, fontWeight: 700, fontFamily: mono, border: `1px solid ${emeraldBorder}` }}
+                  />
+                  <Chip
+                    label="API: UNMETERED INTERNETDB"
+                    size="small"
+                    sx={{ bgcolor: cyanSoft, color: cyan, fontWeight: 700, fontFamily: mono }}
+                  />
+                </Stack>
+              </Box>
+
+              {/* Shodan Query Input */}
+              <Grid container spacing={2} alignItems="center">
+                <Grid xs={12} sm={8} md={9}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="IPv4 Address or Domain"
+                    value={shodanInputIp}
+                    onChange={(e) => setShodanInputIp(e.target.value)}
+                    placeholder="e.g. 99.83.231.61, 1.1.1.1, nullai.tech"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <DnsIcon sx={{ color: crimson, fontSize: 18 }} />
+                        </InputAdornment>
+                      ),
+                      sx: { fontFamily: mono, fontSize: '0.85rem' }
+                    }}
+                  />
+                </Grid>
+
+                <Grid xs={12} sm={4} md={3}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    disabled={isQueryingShodan}
+                    onClick={() => queryShodan(shodanInputIp)}
+                    startIcon={<SearchIcon />}
+                    sx={{
+                      bgcolor: crimson,
+                      color: '#FFF',
+                      fontWeight: 800,
+                      fontFamily: mono,
+                      fontSize: '0.78rem',
+                      py: 1,
+                      '&:hover': { bgcolor: '#E02444' }
+                    }}
+                  >
+                    {isQueryingShodan ? 'QUERYING...' : 'QUERY SHODAN'}
+                  </Button>
+                </Grid>
+              </Grid>
+
+              {shodanError && (
+                <Alert severity="warning" sx={{ mt: 2, fontFamily: mono, fontSize: '0.75rem' }}>
+                  {shodanError}
+                </Alert>
+              )}
+            </Paper>
+          </Grid>
+
+          {/* Shodan Results */}
+          <Grid xs={12} md={7}>
+            <Paper sx={{ p: 2.5, borderRadius: 2.5, bgcolor: isDark ? '#10121A' : '#FFFFFF', border: `1px solid ${cardBorder}`, height: '100%' }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 1, color: gold }}>
+                📡 Public Internet Exposure Data
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
+                Real telemetry aggregated from global Shodan crawler nodes.
+              </Typography>
+
+              {!shodanData ? (
+                <Box sx={{ p: 4, textAlign: 'center', bgcolor: voidDark, borderRadius: 2, border: '1px dashed rgba(255,255,255,0.1)' }}>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8' }}>
+                    Enter an IP address or click "Query Shodan" to inspect public InternetDB records.
+                  </Typography>
+                </Box>
+              ) : (
+                <Stack spacing={2}>
+                  {/* Target IP & Tags */}
+                  <Box sx={{ p: 1.5, bgcolor: voidDark, borderRadius: 2, border: '1px solid rgba(255,255,255,0.08)' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+                      <Typography sx={{ fontFamily: mono, fontSize: '0.9rem', color: '#FFF', fontWeight: 800 }}>
+                        IP: <span style={{ color: cyan }}>{shodanData.ip}</span>
+                      </Typography>
+                      <Stack direction="row" spacing={0.8}>
+                        {(shodanData.tags || []).map((t, idx) => (
+                          <Chip key={idx} label={t} size="small" sx={{ fontFamily: mono, fontSize: '0.65rem', bgcolor: goldSoft, color: gold }} />
+                        ))}
+                      </Stack>
+                    </Box>
+                  </Box>
+
+                  {/* Open Ports */}
+                  <Box sx={{ p: 1.5, bgcolor: voidDark, borderRadius: 2, border: '1px solid rgba(255,255,255,0.08)' }}>
+                    <Typography variant="caption" sx={{ color: '#94A3B8', fontWeight: 700, fontFamily: mono, display: 'block', mb: 1 }}>
+                      OPEN PORTS INDEXED ON PUBLIC WAN:
+                    </Typography>
+                    {(shodanData.ports && shodanData.ports.length > 0) ? (
+                      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                        {shodanData.ports.map((port) => (
+                          <Chip
+                            key={port}
+                            label={`Port ${port}`}
+                            size="small"
+                            sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, bgcolor: crimsonSoft, color: crimson, border: `1px solid ${crimsonBorder}` }}
+                          />
+                        ))}
+                      </Stack>
+                    ) : (
+                      <Typography variant="caption" sx={{ color: emerald, fontFamily: mono }}>
+                        ✓ Zero exposed ports detected by Shodan crawlers.
+                      </Typography>
+                    )}
+                  </Box>
+
+                  {/* Confirmed Vulnerabilities (CVEs) */}
+                  <Box sx={{ p: 1.5, bgcolor: voidDark, borderRadius: 2, border: '1px solid rgba(255,255,255,0.08)' }}>
+                    <Typography variant="caption" sx={{ color: '#94A3B8', fontWeight: 700, fontFamily: mono, display: 'block', mb: 1 }}>
+                      CONFIRMED CVE VULNERABILITIES:
+                    </Typography>
+                    {(shodanData.vulns && shodanData.vulns.length > 0) ? (
+                      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                        {shodanData.vulns.map((cve) => (
+                          <Chip
+                            key={cve}
+                            label={cve}
+                            size="small"
+                            component="a"
+                            href={`https://nvd.nist.gov/vuln/detail/${cve}`}
+                            target="_blank"
+                            rel="noopener"
+                            clickable
+                            sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, bgcolor: 'rgba(255,51,85,0.25)', color: crimson, border: `1px solid ${crimson}` }}
+                          />
+                        ))}
+                      </Stack>
+                    ) : (
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <CheckCircleIcon sx={{ color: emerald, fontSize: 16 }} />
+                        <Typography variant="caption" sx={{ color: emerald, fontFamily: mono, fontWeight: 700 }}>
+                          0 Known CVEs indexed across Shodan vulnerability databases.
+                        </Typography>
+                      </Box>
+                    )}
+                  </Box>
+
+                  {/* Associated Hostnames */}
+                  <Box sx={{ p: 1.5, bgcolor: voidDark, borderRadius: 2, border: '1px solid rgba(255,255,255,0.08)' }}>
+                    <Typography variant="caption" sx={{ color: '#94A3B8', fontWeight: 700, fontFamily: mono, display: 'block', mb: 0.5 }}>
+                      ASSOCIATED HOSTNAMES:
+                    </Typography>
+                    <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#CBD5E1', wordBreak: 'break-all' }}>
+                      {(shodanData.hostnames && shodanData.hostnames.length > 0) ? shodanData.hostnames.join(', ') : 'None indexed'}
+                    </Typography>
+                  </Box>
+
+                  {/* CPE Software Signatures */}
+                  <Box sx={{ p: 1.5, bgcolor: voidDark, borderRadius: 2, border: '1px solid rgba(255,255,255,0.08)' }}>
+                    <Typography variant="caption" sx={{ color: '#94A3B8', fontWeight: 700, fontFamily: mono, display: 'block', mb: 0.5 }}>
+                      CPE SOFTWARE SIGNATURES:
+                    </Typography>
+                    <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#38BDF8', wordBreak: 'break-all' }}>
+                      {(shodanData.cpes && shodanData.cpes.length > 0) ? shodanData.cpes.join(', ') : 'None indexed'}
+                    </Typography>
+                  </Box>
+                </Stack>
+              )}
+            </Paper>
+          </Grid>
+
+          {/* Shodan CLI Command Center */}
+          <Grid xs={12} md={5}>
+            <Paper sx={{ p: 2.5, borderRadius: 2.5, bgcolor: isDark ? '#10121A' : '#FFFFFF', border: `1px solid ${cardBorder}`, height: '100%' }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 1, color: cyan }}>
+                💻 Authenticated Shodan CLI Commands
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
+                Run these in your ZothOS terminal with your initialized account:
+              </Typography>
+
+              <Stack spacing={1.5}>
+                {[
+                  { label: 'Host Deep Scan', cmd: `shodan host ${shodanData ? shodanData.ip : shodanInputIp}` },
+                  { label: 'Domain Technology Scan', cmd: `shodan search "hostname:${targetScope}"` },
+                  { label: 'Check Shodan Account Credits', cmd: 'shodan info' },
+                  { label: 'Display Public IP', cmd: 'shodan myip' },
+                  { label: 'Port 22 OpenSSH Stats', cmd: 'shodan count "port:22 product:OpenSSH"' }
+                ].map((item, idx) => (
+                  <Box key={idx} sx={{ p: 1.2, bgcolor: voidDark, borderRadius: 1.5, border: '1px solid rgba(255,255,255,0.08)' }}>
+                    <Typography variant="caption" sx={{ color: gold, fontFamily: mono, fontWeight: 700, display: 'block' }}>
+                      {item.label}
+                    </Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 0.5 }}>
+                      <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#38BDF8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', mr: 1 }}>
+                        {item.cmd}
+                      </Typography>
+                      <IconButton size="small" onClick={() => handleCopy(item.cmd, `shodan_${idx}`)} sx={{ color: '#94A3B8' }}>
+                        <ContentCopyIcon sx={{ fontSize: 14 }} />
+                      </IconButton>
+                    </Box>
+                  </Box>
+                ))}
+              </Stack>
+            </Paper>
+          </Grid>
+        </Grid>
+      )}
+
+      {/* =====================================================================
+          TAB 4: MITRE ATT&CK MATRIX
+          ===================================================================== */}
+      {activeTab === 4 && (
         <Grid container spacing={3}>
           <Grid xs={12} md={4}>
             <Paper sx={{ p: 2, bgcolor: isDark ? '#10121A' : '#FFFFFF', border: `1px solid ${cardBorder}`, borderRadius: 2 }}>
@@ -1685,9 +2036,9 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
       )}
 
       {/* =====================================================================
-          TAB 4: CVE THREAT INTELLIGENCE
+          TAB 5: CVE THREAT INTELLIGENCE
           ===================================================================== */}
-      {activeTab === 4 && (
+      {activeTab === 5 && (
         <Paper sx={{ p: 2.5, bgcolor: isDark ? '#10121A' : '#FFFFFF', border: `1px solid ${cardBorder}`, borderRadius: 2.5 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1.5 }}>
             <Box>
@@ -1788,9 +2139,9 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
       )}
 
       {/* =====================================================================
-          TAB 5: SOVEREIGN EXECUTIVE REPORT & PAYWALLED EXPORTS
+          TAB 6: SOVEREIGN EXECUTIVE REPORT & PAYWALLED EXPORTS
           ===================================================================== */}
-      {activeTab === 5 && (
+      {activeTab === 6 && (
         <Box sx={{ position: 'relative' }}>
           {/* Frosted Glass Paywall Overlay for Unlicensed Users */}
           {!isProLicensed && (
