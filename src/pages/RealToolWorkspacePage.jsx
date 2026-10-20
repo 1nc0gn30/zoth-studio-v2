@@ -78,11 +78,17 @@ import {
   LikenessDeskTool,
   BoltDiyTool,
 } from '../components/tools/EnclaveToolsSuite';
+import JwtInspectorGodModeTool from '../components/tools/JwtInspectorGodModeTool';
+import PayloadEntropyGodModeTool from '../components/tools/PayloadEntropyGodModeTool';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const ENCLAVE_TOOL_COMPONENTS = {
+  'jwt-inspector-guard': JwtInspectorGodModeTool,
+  'jwt-inspector': JwtInspectorGodModeTool,
+  'payload-entropy-studio': PayloadEntropyGodModeTool,
+  'payload-entropy': PayloadEntropyGodModeTool,
   'adytum-alchemist-ai-workflow': AdytumPlannerTool,
   'azoth-archon-orchestrator': AzothArchonTool,
   'azoth-local-agent': AzothArchonTool,
