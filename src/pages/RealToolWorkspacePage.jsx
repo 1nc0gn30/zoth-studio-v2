@@ -86,11 +86,14 @@ import PolyglotStudioGodModeTool from '../components/tools/PolyglotStudioGodMode
 import RobotsTxtAuditorGodModeTool from '../components/tools/RobotsTxtAuditorGodModeTool';
 import PwaManifestBuilderGodModeTool from '../components/tools/PwaManifestBuilderGodModeTool';
 import SchemaIllustratorGodModeTool from '../components/tools/SchemaIllustratorGodModeTool';
+import CertPathRoadmapGodModeTool from '../components/tools/CertPathRoadmapGodModeTool';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const ENCLAVE_TOOL_COMPONENTS = {
+  'certpath-roadmap-studio': CertPathRoadmapGodModeTool,
+  'certpath-roadmap': CertPathRoadmapGodModeTool,
   'schema-illustrator-studio': SchemaIllustratorGodModeTool,
   'schema-illustrator': SchemaIllustratorGodModeTool,
   'robots-txt-auditor': RobotsTxtAuditorGodModeTool,
