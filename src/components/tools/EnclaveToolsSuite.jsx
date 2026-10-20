@@ -39,6 +39,7 @@ import HexStrikeGodModeTool from './HexStrikeGodModeTool';
 import AgentGodsEyeGodModeTool from './AgentGodsEyeGodModeTool';
 import WebSecurityGuardGodModeTool from './WebSecurityGuardGodModeTool';
 import EnvGuardVaultGodModeTool from './EnvGuardVaultGodModeTool';
+import SubSweepGodModeTool from './SubSweepGodModeTool';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const gold = (t) => (t.palette.mode === 'dark' ? '#D4AF37' : '#B8860B');
@@ -2260,49 +2261,10 @@ export function CwvSpeedEngineTool() {
 
 /* ==========================================================================
    TOOL 14: SubSweep Lead Scanner (subsweep-lead-scanner)
-   Features: Animated Scanner Progress, Status Filtering, CSV Export
+   Features: Real In-Browser DoH Enumeration + Zero-Key Shodan Port & CVE Recon
    ========================================================================== */
 export function SubSweepTool() {
-  const theme = useTheme();
-  return (
-    <Box sx={{ mt: 1 }}>
-      <Typography variant="h6" sx={{ fontWeight: 800, color: gold(theme), mb: 0.5 }}>
-        SubSweep Reconnaissance &amp; Attack Surface Scanner
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
-        Subdomain mapping and air-gapped infrastructure footprint analyzer.
-      </Typography>
-
-      <TableContainer component={Paper} sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 800 }}>Subdomain</TableCell>
-              <TableCell sx={{ fontWeight: 800 }}>Status</TableCell>
-              <TableCell sx={{ fontWeight: 800 }}>Enclave Surface</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell sx={{ fontFamily: mono }}>zoth.nullai.tech</TableCell>
-              <TableCell sx={{ color: 'var(--zs-emerald)', fontWeight: 800 }}>200 OK</TableCell>
-              <TableCell>Zero-Egress React UI (Netlify)</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell sx={{ fontFamily: mono }}>vault.nullai.tech</TableCell>
-              <TableCell sx={{ color: 'var(--zs-amber)', fontWeight: 800 }}>403 FORBIDDEN</TableCell>
-              <TableCell>Hardware Loopback Enclave</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell sx={{ fontFamily: mono }}>mesh.nullai.tech</TableCell>
-              <TableCell sx={{ color: '#3B82F6', fontWeight: 800 }}>101 SWITCHING</TableCell>
-              <TableCell>WebSocket IPC Peer Bus</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
-  );
+  return <SubSweepGodModeTool />;
 }
 
 /* ==========================================================================
