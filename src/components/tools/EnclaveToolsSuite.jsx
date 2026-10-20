@@ -41,6 +41,7 @@ import WebSecurityGuardGodModeTool from './WebSecurityGuardGodModeTool';
 import EnvGuardVaultGodModeTool from './EnvGuardVaultGodModeTool';
 import SubSweepGodModeTool from './SubSweepGodModeTool';
 import AudioCipherGodModeTool from './AudioCipherGodModeTool';
+import CronRhythmGodModeTool from './CronRhythmGodModeTool';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const gold = (t) => (t.palette.mode === 'dark' ? '#D4AF37' : '#B8860B');
@@ -2240,50 +2241,10 @@ export function OmniPostSocialTool() {
 
 /* ==========================================================================
    TOOL 16: CronRhythm Studio (cron-rhythm-studio)
-   Features: 24-Hour Circular Sequencer, Next 5 Trigger Times
+   Features: Real 5-Field Cron Parser, 24h Radial Orbit & Next Execution Schedule
    ========================================================================== */
 export function CronRhythmTool() {
-  const theme = useTheme();
-  const [cron, setCron] = useState('*/5 * * * *');
-
-  const getExplanation = (c) => {
-    if (c === '*/5 * * * *') return 'Every 5 minutes past every hour of every day';
-    if (c === '0 0 * * *') return 'Daily at midnight (00:00 UTC)';
-    if (c === '0 * * * *') return 'Every hour on the hour';
-    return `Cron trigger rule: ${c}`;
-  };
-
-  return (
-    <Box sx={{ mt: 1 }}>
-      <Typography variant="h6" sx={{ fontWeight: 800, color: gold(theme), mb: 0.5 }}>
-        CronRhythm Scheduler Visualizer &amp; Trigger Matrix
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
-        5-field cron rhythm parser with human-language translation and trigger simulator.
-      </Typography>
-
-      <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-        {['*/5 * * * *', '0 * * * *', '0 0 * * *'].map((preset) => (
-          <Button key={preset} size="small" variant="outlined" onClick={() => setCron(preset)} sx={{ fontFamily: mono }}>
-            {preset}
-          </Button>
-        ))}
-      </Box>
-
-      <TextField
-        fullWidth
-        value={cron}
-        onChange={(e) => setCron(e.target.value)}
-        label="5-Field Cron Expression"
-        sx={{ mb: 2, bgcolor: theme.palette.background.paper, fontFamily: mono }}
-      />
-
-      <Paper sx={{ p: 2.5, bgcolor: darkPanel(theme), color: 'var(--zs-mint)', fontFamily: mono, fontSize: '0.85rem', borderRadius: 2, border: `1px solid ${darkPanelBorder(theme)}` }}>
-        <div style={{ color: '#D4AF37' }}>Natural Language Interpretation:</div>
-        <div style={{ fontSize: '1rem', marginTop: 4 }}>{getExplanation(cron)}</div>
-      </Paper>
-    </Box>
-  );
+  return <CronRhythmGodModeTool />;
 }
 
 /* ==========================================================================
