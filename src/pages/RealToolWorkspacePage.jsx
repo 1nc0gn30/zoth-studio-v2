@@ -81,11 +81,17 @@ import {
 import JwtInspectorGodModeTool from '../components/tools/JwtInspectorGodModeTool';
 import PayloadEntropyGodModeTool from '../components/tools/PayloadEntropyGodModeTool';
 import GhidraMcpGodModeTool from '../components/tools/GhidraMcpGodModeTool';
+import RegexDroidGodModeTool from '../components/tools/RegexDroidGodModeTool';
+import PolyglotStudioGodModeTool from '../components/tools/PolyglotStudioGodModeTool';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const ENCLAVE_TOOL_COMPONENTS = {
+  'polyglot-framework-exporter': PolyglotStudioGodModeTool,
+  'polyglot-studio': PolyglotStudioGodModeTool,
+  'regex-droid-builder': RegexDroidGodModeTool,
+  'regex-droid': RegexDroidGodModeTool,
   'jwt-inspector-guard': JwtInspectorGodModeTool,
   'jwt-inspector': JwtInspectorGodModeTool,
   'payload-entropy-studio': PayloadEntropyGodModeTool,
