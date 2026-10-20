@@ -88,6 +88,7 @@ import PwaManifestBuilderGodModeTool from '../components/tools/PwaManifestBuilde
 import SchemaIllustratorGodModeTool from '../components/tools/SchemaIllustratorGodModeTool';
 import CertPathRoadmapGodModeTool from '../components/tools/CertPathRoadmapGodModeTool';
 import Badge3dCoinGodModeTool from '../components/tools/Badge3dCoinGodModeTool';
+import McpLensGodModeTool from '../components/tools/McpLensGodModeTool';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -153,7 +154,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'pod-mockup-forge': PodMockupForgeTool,
   'pod-margin-sentinel': PodMarginSentinelTool,
   'agent-voice-call': AgentVoiceCallTool,
-  'mcp-lens': McpLensTool,
+  'mcp-lens': McpLensGodModeTool,
   'agent-budget-sentinel': AgentBudgetSentinelTool,
   'agent-gods-eye': AgentGodsEyeTool,
   'zoth-webgen': ZothWebgenLauncherTool,
