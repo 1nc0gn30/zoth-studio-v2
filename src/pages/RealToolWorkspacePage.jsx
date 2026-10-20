@@ -87,11 +87,14 @@ import RobotsTxtAuditorGodModeTool from '../components/tools/RobotsTxtAuditorGod
 import PwaManifestBuilderGodModeTool from '../components/tools/PwaManifestBuilderGodModeTool';
 import SchemaIllustratorGodModeTool from '../components/tools/SchemaIllustratorGodModeTool';
 import CertPathRoadmapGodModeTool from '../components/tools/CertPathRoadmapGodModeTool';
+import Badge3dCoinGodModeTool from '../components/tools/Badge3dCoinGodModeTool';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const ENCLAVE_TOOL_COMPONENTS = {
+  'badge3d-coin-generator': Badge3dCoinGodModeTool,
+  'badge3d-coin': Badge3dCoinGodModeTool,
   'certpath-roadmap-studio': CertPathRoadmapGodModeTool,
   'certpath-roadmap': CertPathRoadmapGodModeTool,
   'schema-illustrator-studio': SchemaIllustratorGodModeTool,
