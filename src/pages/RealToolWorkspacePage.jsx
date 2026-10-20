@@ -83,11 +83,17 @@ import PayloadEntropyGodModeTool from '../components/tools/PayloadEntropyGodMode
 import GhidraMcpGodModeTool from '../components/tools/GhidraMcpGodModeTool';
 import RegexDroidGodModeTool from '../components/tools/RegexDroidGodModeTool';
 import PolyglotStudioGodModeTool from '../components/tools/PolyglotStudioGodModeTool';
+import RobotsTxtAuditorGodModeTool from '../components/tools/RobotsTxtAuditorGodModeTool';
+import PwaManifestBuilderGodModeTool from '../components/tools/PwaManifestBuilderGodModeTool';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const ENCLAVE_TOOL_COMPONENTS = {
+  'robots-txt-auditor': RobotsTxtAuditorGodModeTool,
+  'robots-txt': RobotsTxtAuditorGodModeTool,
+  'pwa-manifest-builder': PwaManifestBuilderGodModeTool,
+  'pwa-manifest': PwaManifestBuilderGodModeTool,
   'polyglot-framework-exporter': PolyglotStudioGodModeTool,
   'polyglot-studio': PolyglotStudioGodModeTool,
   'regex-droid-builder': RegexDroidGodModeTool,
@@ -653,15 +659,15 @@ export default function RealToolWorkspacePage() {
         </Box>
       </Paper>
 
-      {/* Interactive In-Browser Workstation (Mounted when tool has WebGPU/WASM client engine) */}
-      {canRunClientSide && tool.id !== 'webmcp-protocol-inspector' && (
+      {/* Interactive In-Browser Workstation (Mounted when tool has WebGPU/WASM client engine and no dedicated Enclave component) */}
+      {canRunClientSide && tool.id !== 'webmcp-protocol-inspector' && !EnclaveToolComponent && (
         <Box id="client-workstation-deck">
           <WebGPUToolWorkstation tool={tool} />
         </Box>
       )}
 
-      {/* Sovereign Enclave Microtool Workstation (Mounted when tool has an enclave component and either local node or preview unlocked) */}
-      {EnclaveToolComponent && (isLocal || unlockedPreview) && (
+      {/* Sovereign Enclave Microtool Workstation (Mounted when tool has an enclave component and either local node, preview unlocked, or client-side enabled) */}
+      {EnclaveToolComponent && (isLocal || unlockedPreview || canRunClientSide) && (
         <Paper
           elevation={0}
           id="enclave-workstation-deck"
