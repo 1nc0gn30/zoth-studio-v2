@@ -17,7 +17,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import threading
 
 DAEMON_PORT = 8790
-WORKSPACE_ROOT = "/media/neo/f2fdda77-178b-4603-ae80-c7aa4cd97908"
+WORKSPACE_ROOT = os.environ.get("ZOTH_WORKSPACE_ROOT", os.path.expanduser("~/zoth"))
 
 # 21 Canonical Pantheon Agents
 PANTHEON_AGENTS = [

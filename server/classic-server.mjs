@@ -7,10 +7,11 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 
 const PORT = Number(process.env.ZOTH_CLASSIC_PORT || 8088);
 const ROOT = process.env.ZOTH_CLASSIC_ROOT
-  || '/media/neo/f2fdda77-178b-4603-ae80-c7aa4cd97908/zoth-studio/core-app/public';
+  || path.join(os.homedir(), 'zoth', 'zoth-studio', 'core-app', 'public');
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
