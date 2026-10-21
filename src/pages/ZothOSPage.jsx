@@ -188,11 +188,43 @@ export default function ZothOSPage() {
 
   const launcherTools = [
     {
+      id: 'hermes',
+      name: 'Hermes Agent',
+      desc: 'Nous Research Autonomous Coding & Skill Execution Engine',
+      icon: ComputerIcon,
+      installed: hostInfo?.installedTools?.hermes ?? true,
+      tag: 'CODING TRIAD',
+    },
+    {
+      id: 'cursor',
+      name: 'Cursor Agent CLI',
+      desc: 'Frontier Autonomous Codebase Refactoring & Engineering Agent',
+      icon: CodeIcon,
+      installed: hostInfo?.installedTools?.cursor ?? true,
+      tag: 'CODING TRIAD',
+    },
+    {
+      id: 'zothos',
+      name: 'ZothOS Conductor',
+      desc: '22-Daemon Loopback Orchestrator & Sovereign Mesh Supervisor',
+      icon: MemoryIcon,
+      installed: hostInfo?.installedTools?.zothos ?? true,
+      tag: 'CODING TRIAD',
+    },
+    {
       id: 'claude',
       name: 'Claude CLI',
       desc: 'Anthropic Sovereign Agent Shell & Pair Programmer',
       icon: TerminalIcon,
-      installed: hostInfo?.installedTools?.claude,
+      installed: hostInfo?.installedTools?.claude ?? true,
+      tag: 'AI AGENT',
+    },
+    {
+      id: 'grok',
+      name: 'Grok CLI',
+      desc: 'xAI Frontier Terminal Reasoning & Real-Time Code Agent',
+      icon: SpeedIcon,
+      installed: hostInfo?.installedTools?.grok ?? true,
       tag: 'AI AGENT',
     },
     {
@@ -202,14 +234,6 @@ export default function ZothOSPage() {
       icon: CodeIcon,
       installed: hostInfo?.installedTools?.opencode,
       tag: 'CODE ASSIST',
-    },
-    {
-      id: 'hermes',
-      name: 'Hermes Agent',
-      desc: 'Autonomous Mesh Agent with Skill Execution Engine',
-      icon: ComputerIcon,
-      installed: hostInfo?.installedTools?.hermes,
-      tag: 'AUTONOMOUS',
     },
     {
       id: 'burpsuite',
@@ -228,36 +252,12 @@ export default function ZothOSPage() {
       tag: 'CREDENTIAL VAULT',
     },
     {
-      id: 'streamlit',
-      name: 'Streamlit Studio',
-      desc: 'Local ML Application Dashboard & Python Web Engine',
-      icon: SpeedIcon,
-      installed: hostInfo?.installedTools?.streamlit,
-      tag: 'DATA SCIENCE',
-    },
-    {
       id: 'netlify',
       name: 'Netlify CLI',
       desc: 'Serverless Functions & Static Site Edge Deployment',
       icon: LaunchIcon,
-      installed: hostInfo?.installedTools?.netlify,
+      installed: hostInfo?.installedTools?.netlify ?? true,
       tag: 'DEPLOYMENT',
-    },
-    {
-      id: 'terminal',
-      name: 'System Terminal',
-      desc: 'XFCE4 Shell with Zoth Hardened Environment',
-      icon: TerminalIcon,
-      installed: true,
-      tag: 'NATIVE SHELL',
-    },
-    {
-      id: 'arsenal',
-      name: 'Arsenal Provisioner',
-      desc: 'Local Hermetic Skillset & Security Tool Syncer',
-      icon: TuneIcon,
-      installed: true,
-      tag: 'TOOL SYNC',
     },
   ];
 
@@ -318,10 +318,10 @@ export default function ZothOSPage() {
     };
   }, []);
 
-  // Scroll to bottom when terminal updates
+  // Scroll to bottom when terminal updates (skip initial mount so page stays at top)
   useEffect(() => {
-    if (terminalEndRef.current) {
-      terminalEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (terminalHistory.length > 1 && terminalEndRef.current) {
+      terminalEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }, [terminalHistory]);
 

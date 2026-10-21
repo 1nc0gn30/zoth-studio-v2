@@ -265,22 +265,6 @@ export default function ZothOSShowcasePage() {
                   sx={{ width: 250, height: 54, display: 'block' }}
                 />
               </Box>
-              <Box
-                component="a"
-                href="https://www.producthunt.com/products/zothos/reviews/new?utm_source=badge-product_review&utm_medium=badge&utm_source=badge-zothos"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{ display: 'inline-flex', lineHeight: 0 }}
-              >
-                <Box
-                  component="img"
-                  src={`https://api.producthunt.com/widgets/embed-image/v1/product_review.svg?product_id=1333989&theme=${isDark ? 'dark' : 'light'}`}
-                  alt="ZOTHOS - Debian 13 + KDE Plasma 6 OS for AI agents and security | Product Hunt"
-                  width={250}
-                  height={54}
-                  sx={{ width: 250, height: 54, display: 'block' }}
-                />
-              </Box>
             </Box>
           </HeroItem>
           <HeroItem>

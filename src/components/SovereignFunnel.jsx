@@ -145,7 +145,7 @@ export default function SovereignFunnel({
             target="_blank"
             rel="noopener noreferrer"
             sx={{
-              bgcolor: '#635BFF',
+              background: '#635BFF',
               color: '#FFFFFF',
               fontFamily: mono,
               fontWeight: 800,
@@ -153,10 +153,10 @@ export default function SovereignFunnel({
               textTransform: 'none',
               px: 2,
               py: 0.9,
-              '&:hover': { bgcolor: '#4F46E5' },
+              '&:hover': { background: '#4F46E5' },
             }}
           >
-            💳 Card / Apple Pay ($19)
+            Card / Apple Pay ($19)
           </Button>
           <Button
             variant="contained"
@@ -169,18 +169,18 @@ export default function SovereignFunnel({
               }
             }}
             sx={{
-              bgcolor: gold,
-              color: '#08080B',
+              background: gold,
+              color: isDark ? '#08080B' : '#FFFFFF',
               fontFamily: mono,
               fontWeight: 800,
               fontSize: '0.76rem',
               textTransform: 'none',
               px: 2,
               py: 0.9,
-              '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#9A7008' },
+              '&:hover': { background: isDark ? '#F5E6AB' : '#6B4E06' },
             }}
           >
-            ⚡ Pay with SOL ($19)
+            Pay with SOL ($19)
           </Button>
           <Button
             variant="outlined"
@@ -353,11 +353,11 @@ export default function SovereignFunnel({
               fullWidth
               startIcon={<GitHubIcon />}
               sx={{
-                bgcolor: gold,
+                background: gold,
                 color: isDark ? '#08080B' : '#FFFFFF',
                 fontWeight: 800,
                 textTransform: 'none',
-                '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#9A7008' }
+                '&:hover': { background: isDark ? '#F5E6AB' : '#6B4E06' }
               }}
             >
               Inspect Repository
@@ -440,11 +440,11 @@ export default function SovereignFunnel({
               fullWidth
               startIcon={<GitHubIcon />}
               sx={{
-                bgcolor: gold,
+                background: gold,
                 color: isDark ? '#08080B' : '#FFFFFF',
                 fontWeight: 800,
                 textTransform: 'none',
-                '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#9A7008' }
+                '&:hover': { background: isDark ? '#F5E6AB' : '#6B4E06' }
               }}
             >
               Open Studio v2 Repo

@@ -264,7 +264,7 @@ export default function Navbar({ mode, onToggleTheme }) {
                 label={effectiveBadgeLabel}
                 size="small"
                 sx={{
-                  display: { xs: 'none', lg: 'inline-flex' },
+                  display: { xs: 'none', xl: 'inline-flex' },
                   bgcolor: dark ? `${badgeColor}18` : `${badgeColor}12`,
                   color: dark ? (isLocal ? '#6EE7B7' : '#7DD3FC') : (isLocal ? '#065F46' : '#0369A1'),
                   border: `1px solid ${dark ? `${badgeColor}44` : `${badgeColor}55`}`,
@@ -287,9 +287,9 @@ export default function Navbar({ mode, onToggleTheme }) {
           {/* Center: Desktop Navigation Bar */}
           <Box
             sx={{
-              display: { xs: 'none', xl: 'flex' },
+              display: { xs: 'none', lg: 'flex' },
               alignItems: 'center',
-              gap: 0.5,
+              gap: { lg: 0.25, xl: 0.5 },
               background: dark
                 ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 100%)'
                 : 'linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.04) 100%)',
@@ -314,13 +314,14 @@ export default function Navbar({ mode, onToggleTheme }) {
                   sx={{
                     position: 'relative',
                     overflow: 'hidden',
+                    whiteSpace: 'nowrap',
                     color: active ? navActive : navIdle,
                     fontWeight: active ? 800 : 600,
                     borderRadius: 9999,
-                    px: 1.5,
+                    px: { lg: 1.15, xl: 1.5 },
                     py: 0.65,
                     minWidth: 0,
-                    fontSize: '0.84rem',
+                    fontSize: { lg: '0.8rem', xl: '0.84rem' },
                     textTransform: 'none',
                     bgcolor: active
                       ? (dark ? 'rgba(212, 175, 55, 0.16)' : '#FEF9E7')
@@ -398,6 +399,7 @@ export default function Navbar({ mode, onToggleTheme }) {
                         label={item.badge}
                         size="small"
                         sx={{
+                          display: { xs: 'none', xl: 'inline-flex' },
                           height: 17,
                           minWidth: 20,
                           fontSize: '0.65rem',
@@ -697,13 +699,13 @@ export default function Navbar({ mode, onToggleTheme }) {
               {dark ? <LightModeIcon fontSize="small" /> : <DarkModeIcon fontSize="small" />}
             </IconButton>
 
-            {/* Mobile / Tablet / Laptop Menu Button (Shown on all screens < xl) */}
+            {/* Mobile / Tablet Menu Button (Shown on screens < lg) */}
             <IconButton
               color="inherit"
               onClick={handleDrawerToggle}
               aria-label="Open sovereign navigation drawer"
               sx={{
-                display: { xs: 'inline-flex', xl: 'none' },
+                display: { xs: 'inline-flex', lg: 'none' },
                 color: brandColor,
                 border: `1px solid ${borderColor}`,
                 borderRadius: '10px',
