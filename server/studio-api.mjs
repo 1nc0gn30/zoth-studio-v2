@@ -329,13 +329,14 @@ export function studioMiddleware() {
 
       if (req.method === 'POST' && url.pathname === '/api/studio/agent/dispatch') {
         const body = await readBody(req);
-        const engine = ['hermes', 'cursor', 'zothos', 'auto'].includes(String(body.engine || 'auto')) ? String(body.engine || 'auto') : 'auto';
+        const engine = ['hermes', 'cursor', 'grok', 'ollama', 'zothos', 'auto'].includes(String(body.engine || 'auto')) ? String(body.engine || 'auto') : 'auto';
         const promptText = String(body.prompt || 'Summarize workspace status').slice(0, 1200);
         const dirPath = String(body.dir || '~/NullAITech/zoth-studio-v2');
+        const modelName = String(body.model || 'qwen2.5-coder:1.5b').replace(/[^a-zA-Z0-9._:-]/g, '');
         const dryRunFlag = body.dryRun ? '--dry-run' : '';
         const safePrompt = JSON.stringify(promptText);
         const safeDir = JSON.stringify(dirPath);
-        exec(`"~/NullAITech/bin/zoth-agent-conductor" dispatch --engine ${engine} --dir ${safeDir} ${dryRunFlag} --json ${safePrompt}`, { timeout: 95000 }, (err, stdout, stderr) => {
+        exec(`"~/NullAITech/bin/zoth-agent-conductor" dispatch --engine ${engine} --model ${modelName} --dir ${safeDir} ${dryRunFlag} --json ${safePrompt}`, { timeout: 95000 }, (err, stdout, stderr) => {
           try {
             send(res, 200, JSON.parse(stdout));
           } catch {
@@ -357,6 +358,8 @@ export function studioMiddleware() {
           opencode: 'xfce4-terminal --title="OpenCode" -e "opencode" &',
           hermes: 'xfce4-terminal --title="Hermes Agent" -e "~/.local/bin/hermes" &',
           cursor: 'xfce4-terminal --title="Cursor Agent" -e "~/.local/bin/cursor-agent" &',
+          grok: 'xfce4-terminal --title="Grok Agent" -e "~/.grok/bin/grok" &',
+          ollama: 'xfce4-terminal --title="Ollama Local LLM" -e "ollama run qwen2.5-coder:1.5b" &',
           zothos: 'xfce4-terminal --title="ZothOS Conductor" -e "~/NullAITech/bin/zoth-agent-conductor watch" &',
           netlify: 'xfce4-terminal --title="Netlify CLI" -e "netlify" &',
           burpsuite: 'burpsuite &',

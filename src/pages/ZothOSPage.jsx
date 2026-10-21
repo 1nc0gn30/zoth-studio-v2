@@ -225,7 +225,15 @@ export default function ZothOSPage() {
       desc: 'xAI Frontier Terminal Reasoning & Real-Time Code Agent',
       icon: SpeedIcon,
       installed: hostInfo?.installedTools?.grok ?? true,
-      tag: 'AI AGENT',
+      tag: 'CODING SWARM',
+    },
+    {
+      id: 'ollama',
+      name: 'Ollama Local 1.5B',
+      desc: 'Cool-Running qwen2.5-coder:1.5b & zoth-model Local Inference',
+      icon: MemoryIcon,
+      installed: hostInfo?.installedTools?.ollama ?? true,
+      tag: 'LOCAL LLM',
     },
     {
       id: 'opencode',
