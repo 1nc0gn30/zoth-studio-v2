@@ -150,7 +150,7 @@ function spawnDaemon(id, command, args, cwd) {
     env: {
       ...process.env,
       PYTHONPATH: 'src',
-      SIGNAL_ACCOUNT: process.env.SIGNAL_ACCOUNT || '+19482047987',
+      SIGNAL_ACCOUNT: process.env.ZOTH_SIGNAL_ACCOUNT || process.env.SIGNAL_ACCOUNT || '',
       SIGNAL_CLI_PATH: process.env.SIGNAL_CLI_PATH || '/usr/local/bin/signal-cli',
     },
   });
