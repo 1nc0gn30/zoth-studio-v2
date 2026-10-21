@@ -295,17 +295,57 @@ export function studioMiddleware() {
           uptime: Math.round(os.uptime()),
           audioDevice: 'ICH9 High Definition Audio (Active)',
           installedTools: {
-            claude: fs.existsSync('/usr/local/bin/claude'),
-            opencode: fs.existsSync('/usr/local/bin/opencode'),
-            hermes: fs.existsSync('/usr/local/bin/hermes'),
+            claude: fs.existsSync('/usr/local/bin/claude') || fs.existsSync('/home/zoth/.local/bin/claude'),
+            opencode: fs.existsSync('/usr/local/bin/opencode') || fs.existsSync('/home/zoth/.local/bin/opencode'),
+            hermes: fs.existsSync('/home/zoth/.local/bin/hermes') || fs.existsSync('/usr/local/bin/hermes'),
+            cursor: fs.existsSync('/home/zoth/.local/bin/cursor-agent') || fs.existsSync('/usr/bin/cursor'),
+            zothos: fs.existsSync('/home/zoth/NullAITech/bin/zoth-agent-conductor') || fs.existsSync('/usr/local/bin/zoth-agent-conductor'),
+            grok: fs.existsSync('/home/zoth/.grok/bin/agent') || fs.existsSync('/usr/local/bin/grok'),
             burpsuite: fs.existsSync('/usr/bin/burpsuite'),
             bitwarden: fs.existsSync('/usr/local/bin/bw'),
             streamlit: fs.existsSync('/usr/local/bin/streamlit'),
-            netlify: fs.existsSync('/usr/local/bin/netlify'),
+            netlify: fs.existsSync('/usr/local/bin/netlify') || fs.existsSync('/home/zoth/.local/bin/netlify'),
             ollama: fs.existsSync('/usr/local/bin/ollama') || fs.existsSync('/usr/bin/ollama')
           }
         };
         send(res, 200, info);
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/agent/triad') {
+        exec('"/home/zoth/NullAITech/bin/zoth-agent-conductor" agents --json', { timeout: 6000 }, (err, stdout) => {
+          if (err) {
+            send(res, 500, { error: err.message });
+            return;
+          }
+          try {
+            send(res, 200, JSON.parse(stdout));
+          } catch {
+            send(res, 200, { raw: stdout });
+          }
+        });
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/agent/dispatch') {
+        const body = await readBody(req);
+        const engine = ['hermes', 'cursor', 'zothos', 'auto'].includes(String(body.engine || 'auto')) ? String(body.engine || 'auto') : 'auto';
+        const promptText = String(body.prompt || 'Summarize workspace status').slice(0, 1200);
+        const dirPath = String(body.dir || '/home/zoth/NullAITech/zoth-studio-v2');
+        const dryRunFlag = body.dryRun ? '--dry-run' : '';
+        const safePrompt = JSON.stringify(promptText);
+        const safeDir = JSON.stringify(dirPath);
+        exec(`"/home/zoth/NullAITech/bin/zoth-agent-conductor" dispatch --engine ${engine} --dir ${safeDir} ${dryRunFlag} --json ${safePrompt}`, { timeout: 95000 }, (err, stdout, stderr) => {
+          try {
+            send(res, 200, JSON.parse(stdout));
+          } catch {
+            send(res, 200, {
+              success: !err,
+              engine,
+              output: stdout || stderr || (err ? err.message : ''),
+            });
+          }
+        });
         return;
       }
 
@@ -315,7 +355,9 @@ export function studioMiddleware() {
         const allowedCommands = {
           claude: 'xfce4-terminal --title="Claude CLI" -e "claude" &',
           opencode: 'xfce4-terminal --title="OpenCode" -e "opencode" &',
-          hermes: 'xfce4-terminal --title="Hermes Agent" -e "hermes" &',
+          hermes: 'xfce4-terminal --title="Hermes Agent" -e "/home/zoth/.local/bin/hermes" &',
+          cursor: 'xfce4-terminal --title="Cursor Agent" -e "/home/zoth/.local/bin/cursor-agent" &',
+          zothos: 'xfce4-terminal --title="ZothOS Conductor" -e "/home/zoth/NullAITech/bin/zoth-agent-conductor watch" &',
           netlify: 'xfce4-terminal --title="Netlify CLI" -e "netlify" &',
           burpsuite: 'burpsuite &',
           bitwarden: 'xfce4-terminal --title="Bitwarden CLI" -e "bw" &',
@@ -339,9 +381,9 @@ export function studioMiddleware() {
         const target = String(body.service || '').toLowerCase();
         const homeDir = os.homedir() || '/home/zoth';
         const bootMap = {
-          civilization: `nohup node "${homeDir}/NullAITech/zoth-civilization/server.js" >/tmp/zoth-civ-supervisor.log 2>&1 &`,
-          webgen: `cd "${homeDir}/NullAITech/zoth-web-gen" && nohup pnpm run dev --port 5173 >/tmp/zoth-webgen-supervisor.log 2>&1 &`,
-          daemons: `nohup node "${homeDir}/NullAITech/zoth-studio-v2/server/daemon-runner.mjs" >/tmp/zoth-daemons-supervisor.log 2>&1 &`,
+          civilization: `ENABLE_KOKORO_VOICE=0 nohup node "${homeDir}/NullAITech/zoth-civilization/server.js" >/tmp/zoth-civ-supervisor.log 2>&1 &`,
+          webgen: `cd "${homeDir}/NullAITech/zoth-webgen" && nohup npm run dev -- --port 5173 >/tmp/zoth-webgen-supervisor.log 2>&1 &`,
+          daemons: `"${homeDir}/NullAITech/bin/zoth-agent-conductor" up >/tmp/zoth-daemons-supervisor.log 2>&1 && nohup node "${homeDir}/NullAITech/zoth-studio-v2/bin/zoth.js" up >>/tmp/zoth-daemons-supervisor.log 2>&1 &`,
         };
         if (!bootMap[target]) {
           send(res, 400, { error: `Unknown service "${target}". Allowed: civilization, webgen, daemons.` });

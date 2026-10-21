@@ -162,19 +162,18 @@ export function PageStage({ children }) {
     <motion.div
       key={key}
       className="page-stage"
-      initial={phase === 'idle' ? false : { opacity: 0, y: 22, scale: 0.988, filter: 'blur(6px)' }}
+      initial={phase === 'idle' ? false : { opacity: 0, y: 22, scale: 0.988 }}
       animate={
         released
           ? {
               opacity: 1,
               y: 0,
               scale: 1,
-              filter: 'blur(0px)',
-              // Clear transform/filter afterwards so position:fixed descendants
+              // Clear transform afterwards so position:fixed descendants
               // (HUDs, modals, floating pets) are not trapped in this layer.
-              transitionEnd: { transform: 'none', filter: 'none' },
+              transitionEnd: { transform: 'none' },
             }
-          : { opacity: 0, y: 22, scale: 0.988, filter: 'blur(6px)' }
+          : { opacity: 0, y: 22, scale: 0.988 }
       }
       transition={{ duration: 0.9, ease: EASE_OUT_EXPO, delay: phase === 'handoff' ? 0.1 : 0 }}
       style={{ transformOrigin: '50% 35vh' }}
