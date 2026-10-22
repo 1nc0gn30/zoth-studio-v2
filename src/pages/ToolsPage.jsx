@@ -162,7 +162,7 @@ export default function ToolsPage() {
         </Box>
       </HeroReveal>
 
-      {/* Remote Host Air-Gap Lockout Banner */}
+      {/* Public Web God-Mode Workstation Status Banner */}
       {!isLocal && (
         <Paper
           elevation={0}
@@ -170,40 +170,41 @@ export default function ToolsPage() {
             p: 3,
             mb: 4,
             borderRadius: 3,
-            bgcolor: isDark ? 'rgba(239, 68, 68, 0.08)' : '#FEF2F2',
+            bgcolor: isDark ? 'rgba(16, 185, 129, 0.07)' : '#ECFDF5',
             border: '1.5px solid',
-            borderColor: isDark ? 'rgba(239, 68, 68, 0.45)' : '#FCA5A5',
+            borderColor: isDark ? 'rgba(16, 185, 129, 0.4)' : '#6EE7B7',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             flexWrap: 'wrap',
             gap: 2,
-            boxShadow: isDark ? '0 0 30px -8px rgba(239, 68, 68, 0.25)' : 'none',
+            boxShadow: isDark ? '0 0 30px -8px rgba(16, 185, 129, 0.22)' : 'none',
           }}
         >
           <Box sx={{ display: 'flex', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2, maxWidth: 760, flexWrap: { xs: 'wrap', sm: 'nowrap' } }}>
-            <Box sx={{ p: 1.2, borderRadius: 2, bgcolor: isDark ? 'rgba(239, 68, 68, 0.18)' : '#FEE2E2', color: '#EF4444', display: 'flex' }}>
-              <LockIcon sx={{ fontSize: 28 }} />
+            <Box sx={{ p: 1.2, borderRadius: 2, bgcolor: isDark ? 'rgba(16, 185, 129, 0.16)' : '#D1FAE5', color: '#10B981', display: 'flex' }}>
+              <FlashOnIcon sx={{ fontSize: 28 }} />
             </Box>
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 0.5 }}>
-                <Typography sx={{ fontFamily: mono, fontWeight: 850, fontSize: '0.86rem', color: '#EF4444' }}>
-                  REMOTE CLOUD HOST DETECTED — AIR-GAP ENCLAVE ACTIVE
+                <Typography sx={{ fontFamily: mono, fontWeight: 850, fontSize: '0.86rem', color: '#10B981' }}>
+                  ALL {microTools.length} GOD-MODE WORKSTATIONS & 60FPS ASCII MOTION SYNTHS UNLOCKED
                 </Typography>
                 <Chip
-                  label="DIRECT EXECUTION BLOCKED"
+                  label="100% ZERO-EGRESS CLIENT EXECUTION"
                   size="small"
                   sx={{
                     fontFamily: mono,
                     fontSize: '0.64rem',
                     fontWeight: 800,
-                    bgcolor: isDark ? '#1F2937' : '#E5E7EB',
-                    color: isDark ? '#FCA5A5' : '#991B1B',
+                    bgcolor: isDark ? 'rgba(212,175,55,0.16)' : '#FEF9E7',
+                    color: gold.accent,
+                    border: `1px solid ${gold.accent}44`,
                   }}
                 />
               </Box>
               <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.88rem', lineHeight: 1.6 }}>
-                You are accessing this catalog through a remote web host. Sovereign tools execute strictly against local hardware, kernel page-locking (<code>mlock</code>), and loopback sockets (<code>127.0.0.1</code>). To run tools, deploy <RouterLink to="/zoth-os" style={{ color: '#D4AF37', fontWeight: 700 }}>Zoth OS</RouterLink> or clone individual micro-repositories from <RouterLink to="/arsenal" style={{ color: 'var(--zs-mint)', fontWeight: 700 }}>The Sovereign Arsenal</RouterLink>.
+                Every repository in the catalog includes a dedicated <strong>60fps interactive God-Mode Workstation</strong> and <strong>ASCII/Braille Motion Showcase</strong> directly in your browser. For bare-metal kernel daemons (<code>127.0.0.1</code>) and local Ollama pipelines, boot <RouterLink to="/zoth-os" style={{ color: '#D4AF37', fontWeight: 700 }}>Zoth OS</RouterLink> or pull from <RouterLink to="/arsenal" style={{ color: 'var(--zs-mint)', fontWeight: 700 }}>The Sovereign Arsenal</RouterLink>.
               </Typography>
             </Box>
           </Box>
