@@ -24,6 +24,7 @@ import ToolOfferLine from '../components/ToolOfferLine';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 import { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
+import AsciiMotionGodModeTool from '../components/tools/AsciiMotionGodModeTool';
 import { useSovereignRuntime, isLocalRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -317,6 +318,11 @@ export default function ToolsPage() {
           </Button>
         </Box>
       </Paper>
+
+      {/* Interactive 60FPS Sovereign ASCII & Braille Motion Synth */}
+      <Box sx={{ mb: 5 }}>
+        <AsciiMotionGodModeTool />
+      </Box>
 
       {/* Filter & Search Bar */}
       <TextField

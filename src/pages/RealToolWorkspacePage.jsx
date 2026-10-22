@@ -113,6 +113,7 @@ import AgentPromptFirewallGodModeTool from '../components/tools/AgentPromptFirew
 import AgentFlightRecorderGodModeTool from '../components/tools/AgentFlightRecorderGodModeTool';
 import AgentBudgetSentinelGodModeTool from '../components/tools/AgentBudgetSentinelGodModeTool';
 import PodCommerceGodModeTool from '../components/tools/PodCommerceGodModeTool';
+import AsciiMotionGodModeTool from '../components/tools/AsciiMotionGodModeTool';
 import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
 import {
   HeroReveal,
@@ -197,6 +198,11 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'likeness-desk': LikenessDeskTool,
   'bolt.diy': BoltDiyTool,
   'bolt-diy': BoltDiyTool,
+  'datamosh-glitch-studio': AsciiMotionGodModeTool,
+  'nexus-3d-scene-studio': AsciiMotionGodModeTool,
+  'ufo-sacred-geometry': AsciiMotionGodModeTool,
+  'cyber-turtle-studio': AsciiMotionGodModeTool,
+  'og-canvas-forge': AsciiMotionGodModeTool,
 };
 
 export default function RealToolWorkspacePage() {
@@ -778,7 +784,7 @@ export default function RealToolWorkspacePage() {
               }}
             />
           </Box>
-          <EnclaveToolComponent />
+          <EnclaveToolComponent tool={tool} />
         </Paper>
       )}
 
