@@ -601,19 +601,22 @@ Scene Breakdown & Exact On-Screen Copy:
             <Button
               key={m.id}
               size="small"
-              variant={renderMode === m.id ? 'contained' : 'outlined'}
+              variant="outlined"
               onClick={() => setRenderMode(m.id)}
               sx={{
                 fontFamily: mono,
                 fontSize: '0.64rem',
                 fontWeight: 800,
-                py: 0.3,
-                px: 1.0,
+                py: 0.35,
+                px: 1.15,
                 textTransform: 'none',
-                bgcolor: renderMode === m.id ? `${meta.accent}28` : 'transparent',
-                color: renderMode === m.id ? meta.accent : '#CBD5E1',
+                bgcolor: renderMode === m.id ? meta.accent : 'rgba(255,255,255,0.03)',
+                color: renderMode === m.id ? '#050508' : '#CBD5E1',
                 borderColor: renderMode === m.id ? meta.accent : 'rgba(255,255,255,0.16)',
-                '&:hover': { borderColor: meta.accent },
+                '&:hover': {
+                  bgcolor: renderMode === m.id ? '#F5E6AB' : 'rgba(255,255,255,0.08)',
+                  borderColor: meta.accent,
+                },
               }}
             >
               {m.label}
