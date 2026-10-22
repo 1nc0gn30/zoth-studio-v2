@@ -138,10 +138,12 @@ export default function ZothFoundryGodModeTool({ tool }) {
         }
       }
 
-      ctx.fillStyle = 'rgba(245,230,171,0.72)';
+      ctx.fillStyle = 'rgba(5, 6, 11, 0.88)';
+      ctx.fillRect(0, 0, cw, 28);
+      ctx.fillStyle = 'rgba(245,230,171,0.88)';
       ctx.font = `700 10px ${mono}`;
       ctx.textAlign = 'left';
-      ctx.fillText(`FOUNDRY_CORE // ${slug.toUpperCase()} // ${cols}x${rows} MATRIX`, 14, 18);
+      ctx.fillText(`FOUNDRY_CORE // ${slug.toUpperCase()} // ${cols}x${rows} MATRIX`, 14, 16);
 
       ctx.restore();
       raf = requestAnimationFrame(render);
