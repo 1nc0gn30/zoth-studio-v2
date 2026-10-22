@@ -95,6 +95,19 @@ import DeepSearchGodModeTool from '../components/tools/DeepSearchGodModeTool';
 import PromptMasterGodModeTool from '../components/tools/PromptMasterGodModeTool';
 import VectorSearchGodModeTool from '../components/tools/VectorSearchGodModeTool';
 import ZothOSGodModeTool from '../components/tools/ZothOSGodModeTool';
+import AgentCapsuleJailGodModeTool from '../components/tools/AgentCapsuleJailGodModeTool';
+import AgentGodsEyeGodModeTool from '../components/tools/AgentGodsEyeGodModeTool';
+import AgentMockTwinGodModeTool from '../components/tools/AgentMockTwinGodModeTool';
+import AgentPolicyAuditorGodModeTool from '../components/tools/AgentPolicyAuditorGodModeTool';
+import AudioCipherGodModeTool from '../components/tools/AudioCipherGodModeTool';
+import CronRhythmGodModeTool from '../components/tools/CronRhythmGodModeTool';
+import EnvGuardVaultGodModeTool from '../components/tools/EnvGuardVaultGodModeTool';
+import HexStrikeGodModeTool from '../components/tools/HexStrikeGodModeTool';
+import SubSweepGodModeTool from '../components/tools/SubSweepGodModeTool';
+import WebSecurityGuardGodModeTool from '../components/tools/WebSecurityGuardGodModeTool';
+import AeoGraphEngineGodModeTool from '../components/tools/AeoGraphEngineGodModeTool';
+import NeuroMemoryGodModeTool from '../components/tools/NeuroMemoryGodModeTool';
+import SovereignBridgeGodModeTool from '../components/tools/SovereignBridgeGodModeTool';
 import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
 import {
   HeroReveal,
@@ -130,36 +143,36 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'payload-entropy': PayloadEntropyGodModeTool,
   'ghidra-mcp-bridge': GhidraMcpGodModeTool,
   'ghidra-mcp': GhidraMcpGodModeTool,
-  'shodan-surface-sentinel': HexStrikeTool,
-  'shodan-sentinel': HexStrikeTool,
+  'shodan-surface-sentinel': HexStrikeGodModeTool,
+  'shodan-sentinel': HexStrikeGodModeTool,
   'adytum-alchemist-ai-workflow': AdytumPlannerTool,
   'azoth-archon-orchestrator': AzothArchonTool,
   'azoth-local-agent': AzothArchonTool,
-  'sovereign-bridge-protocol': SovereignBridgeTool,
-  'sovereign-agent-bridge': SovereignBridgeTool,
-  'neuro-memory-service': NeuroMemoryTool,
-  'neuro-memory-daemon': NeuroMemoryTool,
+  'sovereign-bridge-protocol': SovereignBridgeGodModeTool,
+  'sovereign-agent-bridge': SovereignBridgeGodModeTool,
+  'neuro-memory-service': NeuroMemoryGodModeTool,
+  'neuro-memory-daemon': NeuroMemoryGodModeTool,
   'agent-egress-sentinel': AgentEgressSentinelTool,
-  'agent-mock-twin': AgentMockTwinTool,
+  'agent-mock-twin': AgentMockTwinGodModeTool,
   'agent-prompt-firewall': AgentPromptFirewallTool,
   'agent-flight-recorder': AgentFlightRecorderTool,
-  'agent-capsule-jail': AgentCapsuleJailTool,
-  'agent-policy-auditor': AgentPolicyAuditorTool,
+  'agent-capsule-jail': AgentCapsuleJailGodModeTool,
+  'agent-policy-auditor': AgentPolicyAuditorGodModeTool,
   'vector-search-engine': VectorSearchGodModeTool,
   'deepsearch-research-agent': DeepSearchGodModeTool,
   'prompt-master-optimizer': PromptMasterGodModeTool,
   'promptmaster-studio': PromptMasterGodModeTool,
-  'hexstrike-tactical-terminal': HexStrikeTool,
-  'hexstrike-arsenal': HexStrikeTool,
-  'envguard-secrets-vault': EnvGuardVaultTool,
-  'web-security-guard': WebSecurityGuardTool,
-  'audiocipher-stego-vault': AudioCipherStegoTool,
-  'audiocipher-stego-engine': AudioCipherStegoTool,
-  'aeo-graph-engine': AeoGraphEngineTool,
+  'hexstrike-tactical-terminal': HexStrikeGodModeTool,
+  'hexstrike-arsenal': HexStrikeGodModeTool,
+  'envguard-secrets-vault': EnvGuardVaultGodModeTool,
+  'web-security-guard': WebSecurityGuardGodModeTool,
+  'audiocipher-stego-vault': AudioCipherGodModeTool,
+  'audiocipher-stego-engine': AudioCipherGodModeTool,
+  'aeo-graph-engine': AeoGraphEngineGodModeTool,
   'cwv-speed-engine': CwvSpeedEngineGodModeTool,
-  'subsweep-lead-scanner': SubSweepTool,
+  'subsweep-lead-scanner': SubSweepGodModeTool,
   'omnipost-social-engine': OmniPostSocialGodModeTool,
-  'cron-rhythm-studio': CronRhythmTool,
+  'cron-rhythm-studio': CronRhythmGodModeTool,
   'printify-connector': PrintifyConnectorTool,
   'gelato-connector': GelatoConnectorTool,
   'etsy-connector': EtsyConnectorTool,
@@ -172,7 +185,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'agent-voice-call': AgentVoiceCallTool,
   'mcp-lens': McpLensGodModeTool,
   'agent-budget-sentinel': AgentBudgetSentinelTool,
-  'agent-gods-eye': AgentGodsEyeTool,
+  'agent-gods-eye': AgentGodsEyeGodModeTool,
   'zoth-webgen': ZothWebgenLauncherTool,
   'zoth-swarm-multiplexer': ZothSwarmMultiplexerLauncherTool,
   'zoth-civilization': ZothCivilizationLauncherTool,
