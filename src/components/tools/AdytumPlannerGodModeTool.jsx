@@ -1,7 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Compass, Play, Pause, Copy, Check, Sparkles, Terminal, Layers, ShieldCheck
-} from 'lucide-react';
+  Box,
+  Paper,
+  Typography,
+  Chip,
+  Button,
+  Stack,
+  TextField,
+  Slider,
+  Unstable_Grid2 as Grid,
+} from '@mui/material';
+import AccountTreeIcon from '@mui/icons-material/AccountTree';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CheckIcon from '@mui/icons-material/Check';
+
+const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const HERMETIC_KEYS = [
   { key: 0, arcana: '0 · The Fool (Aleph)', phase: 'Zero-State Intention', gate: 'Air / Pneuma', prompt: 'Strip all inherited assumptions; define the irreducible sovereign objective.' },
@@ -9,7 +24,7 @@ const HERMETIC_KEYS = [
   { key: 7, arcana: 'VII · The Chariot (Cheth)', phase: 'Deterministic Execution Vector', gate: 'Cancer / Armor', prompt: 'Lock the execution harness into a bounded, zero-drift trajectory with verify gates.' },
   { key: 9, arcana: 'IX · The Hermit (Yod)', phase: 'Air-Gapped Incubation', gate: 'Virgo / Lantern', prompt: 'Isolate the reasoning loop inside loopback silicon (127.0.0.1) with zero external egress.' },
   { key: 11, arcana: 'XI · Justice (Lamed)', phase: 'Invariant Equilibrium Audit', gate: 'Libra / Scales', prompt: 'Verify mathematical invariants, memory safety, and cryptographic proofs before commit.' },
-  { key: 21, arcana: 'XXI · The World (Tau)', phase: 'Manifestation & Seal', gate: 'Saturn / Crown', prompt: 'Seal the compiled artifact, emit deterministic SHA-256 manifest, and close the rite.' }
+  { key: 21, arcana: 'XXI · The World (Tau)', phase: 'Manifestation & Seal', gate: 'Saturn / Crown', prompt: 'Seal the compiled artifact, emit deterministic SHA-256 manifest, and close the rite.' },
 ];
 
 const BRAILLE_RAMP = ' ⠁⠃⠇⠏⠟⠿⣿';
@@ -32,22 +47,22 @@ export default function AdytumPlannerGodModeTool() {
     let t = 0;
 
     const sephiroth = [
-      { id: 'Kether', x: 0.5, y: 0.12 },
-      { id: 'Chokmah', x: 0.76, y: 0.24 },
-      { id: 'Binah', x: 0.24, y: 0.24 },
+      { id: 'Kether', x: 0.5, y: 0.13 },
+      { id: 'Chokmah', x: 0.76, y: 0.25 },
+      { id: 'Binah', x: 0.24, y: 0.25 },
       { id: 'Chesed', x: 0.76, y: 0.45 },
       { id: 'Geburah', x: 0.24, y: 0.45 },
       { id: 'Tiphereth', x: 0.5, y: 0.52 },
       { id: 'Netzach', x: 0.76, y: 0.68 },
       { id: 'Hod', x: 0.24, y: 0.68 },
       { id: 'Yesod', x: 0.5, y: 0.78 },
-      { id: 'Malkuth', x: 0.5, y: 0.91 }
+      { id: 'Malkuth', x: 0.5, y: 0.91 },
     ];
 
     const paths = [
       [0, 1], [0, 2], [0, 5], [1, 2], [1, 3], [1, 5], [2, 4], [2, 5],
       [3, 4], [3, 5], [3, 6], [4, 5], [4, 7], [5, 6], [5, 7], [5, 8],
-      [6, 7], [6, 8], [6, 9], [7, 8], [7, 9], [8, 9]
+      [6, 7], [6, 8], [6, 9], [7, 8], [7, 9], [8, 9],
     ];
 
     const render = () => {
@@ -62,11 +77,10 @@ export default function AdytumPlannerGodModeTool() {
 
       ctx.save();
       ctx.scale(dpr, dpr);
-      ctx.fillStyle = '#06050a';
+      ctx.fillStyle = '#050509';
       ctx.fillRect(0, 0, cw, ch);
 
-      // Background ASCII Braille sacred standing wave
-      ctx.font = '10px "JetBrains Mono", monospace';
+      ctx.font = `10px ${mono}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       const cols = 38;
@@ -85,32 +99,31 @@ export default function AdytumPlannerGodModeTool() {
         }
       }
 
-      // Draw 22 Hermetic Paths
       paths.forEach(([a, b], i) => {
         const na = sephiroth[a];
         const nb = sephiroth[b];
-        const x1 = na.x * cw, y1 = na.y * ch;
-        const x2 = nb.x * cw, y2 = nb.y * ch;
-        const isActive = (i % HERMETIC_KEYS.length) === selectedIdx;
+        const x1 = na.x * cw;
+        const y1 = na.y * ch;
+        const x2 = nb.x * cw;
+        const y2 = nb.y * ch;
+        const isActive = i % HERMETIC_KEYS.length === selectedIdx;
 
-        ctx.strokeStyle = isActive ? 'rgba(212, 175, 55, 0.85)' : 'rgba(168, 85, 247, 0.24)';
+        ctx.strokeStyle = isActive ? 'rgba(212, 175, 55, 0.85)' : 'rgba(192, 132, 252, 0.24)';
         ctx.lineWidth = isActive ? 2.2 : 1;
         ctx.beginPath();
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
         ctx.stroke();
 
-        // Traveling photon pulse
         const p = (t * 0.65 + i * 0.13) % 1;
         const px = x1 + (x2 - x1) * p;
         const py = y1 + (y2 - y1) * p;
-        ctx.fillStyle = isActive ? '#F5E6AB' : '#A855F7';
+        ctx.fillStyle = isActive ? '#F5E6AB' : '#C084FC';
         ctx.beginPath();
         ctx.arc(px, py, isActive ? 3.2 : 1.8, 0, Math.PI * 2);
         ctx.fill();
       });
 
-      // Draw 10 Sephiroth nodes
       sephiroth.forEach((node, idx) => {
         const x = node.x * cw;
         const y = node.y * ch;
@@ -125,12 +138,12 @@ export default function AdytumPlannerGodModeTool() {
         ctx.stroke();
 
         ctx.fillStyle = '#F5E6AB';
-        ctx.font = '600 9px "JetBrains Mono", monospace';
-        ctx.fillText(node.id.toUpperCase(), x, y - 17);
+        ctx.font = `600 9px ${mono}`;
+        ctx.fillText(node.id.toUpperCase(), x, y - 16);
       });
 
-      ctx.fillStyle = 'rgba(245, 230, 171, 0.7)';
-      ctx.font = '600 10px "JetBrains Mono", monospace';
+      ctx.fillStyle = 'rgba(245, 230, 171, 0.72)';
+      ctx.font = `700 10px ${mono}`;
       ctx.textAlign = 'left';
       ctx.fillText(`ADYTUM // 22-KEY HERMETIC RITE // KEY [${activeKey.arcana.toUpperCase()}]`, 14, 18);
 
@@ -151,7 +164,7 @@ export default function AdytumPlannerGodModeTool() {
       sovereignIntention: intention,
       incubationMinutes: incubationDepth,
       localModelGate: 'ollama://qwen2.5-coder:1.5b-instruct (127.0.0.1:11434)',
-      directive: activeKey.prompt
+      directive: activeKey.prompt,
     },
     null,
     2
@@ -164,110 +177,198 @@ export default function AdytumPlannerGodModeTool() {
   };
 
   return (
-    <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#07070c] overflow-hidden">
-      <div className="px-5 py-4 border-b border-white/10 bg-[#0b0b14] flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-[#D4AF37]/15 border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37]">
-            <Compass className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-mono uppercase tracking-[0.18em] text-[#D4AF37] font-bold">
-                Adytum 22-Key Hermetic Planning Rite
-              </span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-purple-500/15 text-purple-300 border border-purple-500/30">
-                60 FPS TREE OF LIFE LATTICE
-              </span>
-            </div>
-            <p className="text-xs text-zinc-400 mt-0.5">
+    <Paper
+      elevation={0}
+      sx={{
+        borderRadius: 3,
+        overflow: 'hidden',
+        bgcolor: '#07070C',
+        border: '1px solid rgba(212, 175, 55, 0.32)',
+        boxShadow: '0 20px 60px rgba(0,0,0,0.85)',
+      }}
+    >
+      <Box
+        sx={{
+          px: { xs: 2, md: 3 },
+          py: 2,
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          bgcolor: '#0B0B14',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 2,
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Box
+            sx={{
+              p: 1,
+              borderRadius: 2,
+              bgcolor: 'rgba(212,175,55,0.14)',
+              border: '1px solid rgba(212,175,55,0.4)',
+              color: '#D4AF37',
+              display: 'flex',
+            }}
+          >
+            <AccountTreeIcon sx={{ fontSize: 20 }} />
+          </Box>
+          <Box>
+            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+              <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', fontWeight: 800, color: '#D4AF37', letterSpacing: '0.14em' }}>
+                ADYTUM 22-KEY HERMETIC PLANNING RITE
+              </Typography>
+              <Chip
+                label="60 FPS TREE OF LIFE LATTICE"
+                size="small"
+                sx={{
+                  height: 20,
+                  fontFamily: mono,
+                  fontSize: '0.62rem',
+                  fontWeight: 800,
+                  bgcolor: 'rgba(192,132,252,0.15)',
+                  color: '#C084FC',
+                  border: '1px solid rgba(192,132,252,0.35)',
+                }}
+              />
+            </Stack>
+            <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mt: 0.3 }}>
               Deterministic intention crystallization, 5-minute incubation timer &amp; local-model gate
-            </p>
-          </div>
-        </div>
+            </Typography>
+          </Box>
+        </Box>
 
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
+        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          <Button
+            size="small"
+            variant="outlined"
             onClick={() => setRunning((r) => !r)}
-            className="px-3 py-1.5 rounded-lg text-xs font-mono bg-white/5 hover:bg-white/10 text-white border border-white/10 flex items-center gap-1.5"
+            startIcon={running ? <PauseIcon sx={{ fontSize: 15 }} /> : <PlayArrowIcon sx={{ fontSize: 15 }} />}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              color: '#E2E8F0',
+              borderColor: 'rgba(255,255,255,0.16)',
+            }}
           >
-            {running ? <Pause className="w-3.5 h-3.5 text-[#D4AF37]" /> : <Play className="w-3.5 h-3.5 text-emerald-400" />}
             {running ? 'Pause Lattice' : 'Resume'}
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
             onClick={copyPlan}
-            className="px-3 py-1.5 rounded-lg text-xs font-mono bg-[#D4AF37]/20 hover:bg-[#D4AF37]/30 text-[#F5E6AB] border border-[#D4AF37]/40 flex items-center gap-1.5"
+            startIcon={copied ? <CheckIcon sx={{ fontSize: 15 }} /> : <ContentCopyIcon sx={{ fontSize: 15 }} />}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              bgcolor: '#D4AF37',
+              color: '#060609',
+              '&:hover': { bgcolor: '#F5E6AB' },
+            }}
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
             {copied ? 'Rite Copied' : 'Export Rite Manifest'}
-          </button>
-        </div>
-      </div>
+          </Button>
+        </Stack>
+      </Box>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12">
-        <div className="lg:col-span-7 border-b lg:border-b-0 lg:border-r border-white/10 bg-[#050509]">
-          <canvas ref={canvasRef} className="w-full h-[360px] block" />
-          <div className="p-3 border-t border-white/10 bg-[#090912] flex flex-wrap gap-1.5">
+      <Grid container>
+        <Grid xs={12} md={7} sx={{ borderRight: { md: '1px solid rgba(255,255,255,0.08)' }, bgcolor: '#050509' }}>
+          <Box sx={{ width: '100%', height: 350 }}>
+            <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />
+          </Box>
+          <Box
+            sx={{
+              p: 1.5,
+              borderTop: '1px solid rgba(255,255,255,0.08)',
+              bgcolor: '#090912',
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 1,
+            }}
+          >
             {HERMETIC_KEYS.map((item, idx) => (
-              <button
+              <Button
                 key={item.key}
-                type="button"
+                size="small"
+                variant="outlined"
                 onClick={() => setSelectedIdx(idx)}
-                className={`px-2.5 py-1.5 rounded-lg text-[11px] font-mono border transition ${
-                  selectedIdx === idx
-                    ? 'bg-[#D4AF37]/20 text-[#F5E6AB] border-[#D4AF37]/50 font-semibold'
-                    : 'bg-white/[0.03] text-zinc-400 border-white/10 hover:text-white'
-                }`}
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.66rem',
+                  fontWeight: 800,
+                  textTransform: 'none',
+                  bgcolor: selectedIdx === idx ? '#D4AF37' : 'rgba(255,255,255,0.02)',
+                  color: selectedIdx === idx ? '#050508' : '#94A3B8',
+                  borderColor: selectedIdx === idx ? '#D4AF37' : 'rgba(255,255,255,0.12)',
+                }}
               >
                 {item.arcana}
-              </button>
+              </Button>
             ))}
-          </div>
-        </div>
+          </Box>
+        </Grid>
 
-        <div className="lg:col-span-5 p-4 sm:p-5 flex flex-col justify-between gap-4 bg-[#090910]">
-          <div className="space-y-3">
-            <div>
-              <label className="block text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-1">
-                Sovereign Intention Vector
-              </label>
-              <textarea
-                rows={2}
-                value={intention}
-                onChange={(e) => setIntention(e.target.value)}
-                className="w-full rounded-lg bg-black/60 border border-white/15 px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#D4AF37]"
-              />
-            </div>
+        <Grid xs={12} md={5} sx={{ p: 2.5, bgcolor: '#090910', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 2 }}>
+          <Box>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, color: '#94A3B8', mb: 1 }}>
+              SOVEREIGN INTENTION VECTOR
+            </Typography>
+            <TextField
+              fullWidth
+              multiline
+              rows={2}
+              size="small"
+              value={intention}
+              onChange={(e) => setIntention(e.target.value)}
+              sx={{
+                mb: 2,
+                '& .MuiInputBase-root': {
+                  fontFamily: mono,
+                  fontSize: '0.76rem',
+                  bgcolor: 'rgba(0,0,0,0.45)',
+                },
+              }}
+            />
 
-            <div>
-              <div className="flex justify-between text-[11px] font-mono text-zinc-400 mb-1">
-                <span>INCUBATION GATE DURATION</span>
-                <span className="text-[#D4AF37]">{incubationDepth} min</span>
-              </div>
-              <input
-                type="range"
-                min="1"
-                max="22"
-                value={incubationDepth}
-                onChange={(e) => setIncubationDepth(Number(e.target.value))}
-                className="w-full accent-[#D4AF37]"
-              />
-            </div>
+            <Box sx={{ mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#94A3B8' }}>INCUBATION GATE DURATION</Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#D4AF37', fontWeight: 800 }}>{incubationDepth} min</Typography>
+              </Box>
+              <Slider size="small" min={1} max={22} value={incubationDepth} onChange={(_, v) => setIncubationDepth(v)} sx={{ color: '#D4AF37' }} />
+            </Box>
 
-            <div className="p-3 rounded-xl bg-[#D4AF37]/10 border border-[#D4AF37]/30">
-              <div className="text-[11px] font-mono text-[#D4AF37] font-bold uppercase">
+            <Box sx={{ p: 1.8, borderRadius: 2, bgcolor: 'rgba(212,175,55,0.1)', border: '1px solid rgba(212,175,55,0.3)' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: '#D4AF37' }}>
                 {activeKey.arcana} — {activeKey.phase}
-              </div>
-              <p className="text-xs text-zinc-300 mt-1 leading-relaxed">{activeKey.prompt}</p>
-            </div>
-          </div>
+              </Typography>
+              <Typography variant="body2" sx={{ color: '#CBD5E1', fontSize: '0.78rem', mt: 0.5 }}>
+                {activeKey.prompt}
+              </Typography>
+            </Box>
+          </Box>
 
-          <pre className="p-3 rounded-xl bg-black/70 border border-white/10 text-[10px] font-mono text-emerald-300 overflow-x-auto max-h-[160px]">
+          <Box
+            component="pre"
+            sx={{
+              p: 1.5,
+              m: 0,
+              borderRadius: 2,
+              bgcolor: '#040407',
+              border: '1px solid rgba(255,255,255,0.08)',
+              fontFamily: mono,
+              fontSize: '0.68rem',
+              color: '#34D399',
+              overflowX: 'auto',
+              maxHeight: 145,
+            }}
+          >
             {artifactJson}
-          </pre>
-        </div>
-      </div>
-    </div>
+          </Box>
+        </Grid>
+      </Grid>
+    </Paper>
   );
 }
