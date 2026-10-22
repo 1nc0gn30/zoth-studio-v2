@@ -13,6 +13,8 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import {
   HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem,
 } from '../components/MotionReveal';
+import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
+import AzothArchonGodModeTool from '../components/tools/AzothArchonGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -65,6 +67,23 @@ export default function SwarmShowcasePage() {
             </Typography>
           </HeroItem>
         </HeroReveal>
+
+        {/* 60FPS ASCII & Braille Motion Edit + AZOTH Archon Multi-Agent Dispatcher */}
+        <Box sx={{ mb: 7 }}>
+          <ToolMotionShowcase
+            tool={{
+              id: 'azoth-local-agent',
+              name: 'AZOTH Local Archon Agent',
+              category: 'Swarm & Core',
+              executionType: 'local_cli',
+              description: 'Archon Orchestrator core agent for local zero-telemetry task dispatching and subagent delegation.',
+            }}
+            onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
+          />
+          <Box sx={{ mt: 4 }}>
+            <AzothArchonGodModeTool />
+          </Box>
+        </Box>
 
         {/* Feature Cards */}
         <StaggerChildren>

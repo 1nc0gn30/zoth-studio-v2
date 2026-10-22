@@ -24,6 +24,8 @@ import {
   StaggerChildren,
   StaggerItem,
 } from '../components/MotionReveal';
+import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
+import AdytumPlannerGodModeTool from '../components/tools/AdytumPlannerGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -104,6 +106,23 @@ export default function AdytumShowcasePage() {
               </Typography>
             </HeroItem>
           </HeroReveal>
+
+          {/* ── 60FPS ASCII & Braille Motion Edit + 22-Key Hermetic Planning Rite ── */}
+          <Box sx={{ mt: 5 }}>
+            <ToolMotionShowcase
+              tool={{
+                id: 'adytum-alchemist-ai-workflow',
+                name: 'Adytum Planner',
+                category: 'Planning',
+                executionType: 'local_cli',
+                description: 'The 22-key hermetic planning rite. Intention, five-minute incubation, and a local-model gate.',
+              }}
+              onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
+            />
+            <Box sx={{ mt: 4 }}>
+              <AdytumPlannerGodModeTool />
+            </Box>
+          </Box>
 
           {/* ── Feature Cards ────────────────────────── */}
           <RevealOnScroll preset="fadeUp" delay={0.1}>
