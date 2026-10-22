@@ -36,48 +36,6 @@ import SovereignFunnel from '../components/SovereignFunnel';
 import AirGapToolLockout from '../components/AirGapToolLockout';
 import WebMCPConsole from '../components/WebMCPConsole';
 import WebGPUToolWorkstation from '../components/tools/WebGPUToolWorkstation';
-import {
-  AdytumPlannerTool,
-  AzothArchonTool,
-  SovereignBridgeTool,
-  NeuroMemoryTool,
-  VectorSearchTool,
-  DeepSearchResearchTool,
-  PromptMasterTool,
-  HexStrikeTool,
-  EnvGuardVaultTool,
-  WebSecurityGuardTool,
-  AudioCipherStegoTool,
-  AeoGraphEngineTool,
-  CwvSpeedEngineTool,
-  SubSweepTool,
-  OmniPostSocialTool,
-  CronRhythmTool,
-  AgentEgressSentinelTool,
-  AgentMockTwinTool,
-  AgentPromptFirewallTool,
-  AgentFlightRecorderTool,
-  AgentCapsuleJailTool,
-  AgentPolicyAuditorTool,
-  PrintifyConnectorTool,
-  GelatoConnectorTool,
-  EtsyConnectorTool,
-  ShopifyConnectorTool,
-  EtsyPodForgeTool,
-  PodSmartRouterTool,
-  DigitalAssetForgeTool,
-  PodMockupForgeTool,
-  PodMarginSentinelTool,
-  AgentVoiceCallTool,
-  McpLensTool,
-  AgentBudgetSentinelTool,
-  AgentGodsEyeTool,
-  ZothWebgenLauncherTool,
-  ZothSwarmMultiplexerLauncherTool,
-  ZothCivilizationLauncherTool,
-  LikenessDeskTool,
-  BoltDiyTool,
-} from '../components/tools/EnclaveToolsSuite';
 import JwtInspectorGodModeTool from '../components/tools/JwtInspectorGodModeTool';
 import PayloadEntropyGodModeTool from '../components/tools/PayloadEntropyGodModeTool';
 import GhidraMcpGodModeTool from '../components/tools/GhidraMcpGodModeTool';
@@ -114,6 +72,10 @@ import AgentFlightRecorderGodModeTool from '../components/tools/AgentFlightRecor
 import AgentBudgetSentinelGodModeTool from '../components/tools/AgentBudgetSentinelGodModeTool';
 import PodCommerceGodModeTool from '../components/tools/PodCommerceGodModeTool';
 import AsciiMotionGodModeTool from '../components/tools/AsciiMotionGodModeTool';
+import AdytumPlannerGodModeTool from '../components/tools/AdytumPlannerGodModeTool';
+import AzothArchonGodModeTool from '../components/tools/AzothArchonGodModeTool';
+import AgentVoiceCallGodModeTool from '../components/tools/AgentVoiceCallGodModeTool';
+import ZothFoundryGodModeTool from '../components/tools/ZothFoundryGodModeTool';
 import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
 import {
   HeroReveal,
@@ -151,9 +113,9 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'ghidra-mcp': GhidraMcpGodModeTool,
   'shodan-surface-sentinel': HexStrikeGodModeTool,
   'shodan-sentinel': HexStrikeGodModeTool,
-  'adytum-alchemist-ai-workflow': AdytumPlannerTool,
-  'azoth-archon-orchestrator': AzothArchonTool,
-  'azoth-local-agent': AzothArchonTool,
+  'adytum-alchemist-ai-workflow': AdytumPlannerGodModeTool,
+  'azoth-archon-orchestrator': AzothArchonGodModeTool,
+  'azoth-local-agent': AzothArchonGodModeTool,
   'sovereign-bridge-protocol': SovereignBridgeGodModeTool,
   'sovereign-agent-bridge': SovereignBridgeGodModeTool,
   'neuro-memory-service': NeuroMemoryGodModeTool,
@@ -185,24 +147,29 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'shopify-connector': PodCommerceGodModeTool,
   'etsy-pod-forge': PodCommerceGodModeTool,
   'pod-smart-router': PodCommerceGodModeTool,
-  'digital-asset-forge': DigitalAssetForgeTool,
-  'pod-mockup-forge': PodMockupForgeTool,
+  'digital-asset-forge': PodCommerceGodModeTool,
+  'pod-mockup-forge': PodCommerceGodModeTool,
   'pod-margin-sentinel': PodCommerceGodModeTool,
-  'agent-voice-call': AgentVoiceCallTool,
+  'agent-voice-call': AgentVoiceCallGodModeTool,
   'mcp-lens': McpLensGodModeTool,
   'agent-budget-sentinel': AgentBudgetSentinelGodModeTool,
   'agent-gods-eye': AgentGodsEyeGodModeTool,
-  'zoth-webgen': ZothWebgenLauncherTool,
-  'zoth-swarm-multiplexer': ZothSwarmMultiplexerLauncherTool,
-  'zoth-civilization': ZothCivilizationLauncherTool,
-  'likeness-desk': LikenessDeskTool,
-  'bolt.diy': BoltDiyTool,
-  'bolt-diy': BoltDiyTool,
+  'zoth-webgen': ZothFoundryGodModeTool,
+  'zoth-swarm-multiplexer': ZothFoundryGodModeTool,
+  'zoth-civilization': ZothFoundryGodModeTool,
+  'likeness-desk': ZothFoundryGodModeTool,
+  'bolt.diy': ZothFoundryGodModeTool,
+  'bolt-diy': ZothFoundryGodModeTool,
+  'vision-gesture-control': ZothFoundryGodModeTool,
   'datamosh-glitch-studio': AsciiMotionGodModeTool,
   'nexus-3d-scene-studio': AsciiMotionGodModeTool,
   'ufo-sacred-geometry': AsciiMotionGodModeTool,
   'cyber-turtle-studio': AsciiMotionGodModeTool,
   'og-canvas-forge': AsciiMotionGodModeTool,
+  'anderson-security-sentinel': HexStrikeGodModeTool,
+  'city-desk': ZothFoundryGodModeTool,
+  'osint-scout-skill': SubSweepGodModeTool,
+  'storefront-catalog': PodCommerceGodModeTool,
 };
 
 export default function RealToolWorkspacePage() {
