@@ -1172,7 +1172,7 @@ export function AeoGraphEngineTool() {
       osOrArea: 'Web Browser, Linux, macOS, Windows',
       ratingValue: '4.9',
       reviewCount: '184',
-      phone: '+1-757-555-0199',
+      phone: '+1-555-555-0199',
       creatorName: 'Neal Frazier Tech',
       creatorUrl: 'https://nealfrazier.tech',
       faqs: [
@@ -1203,8 +1203,8 @@ export function AeoGraphEngineTool() {
       osOrArea: 'Virginia Beach, Norfolk, Chesapeake & Hampton Roads, VA',
       ratingValue: '5.0',
       reviewCount: '312',
-      phone: '+1-757-555-0149',
-      creatorName: 'Apex Storm Roofing LLC',
+      phone: '+1-555-555-0199',
+      creatorName: 'Neal Frazier Tech',
       creatorUrl: 'https://city-desk.netlify.app',
       faqs: [
         {
@@ -1234,8 +1234,8 @@ export function AeoGraphEngineTool() {
       osOrArea: 'Greater Metro Area & Surrounding Suburbs',
       ratingValue: '4.9',
       reviewCount: '428',
-      phone: '+1-800-555-0188',
-      creatorName: 'Pillar Dental Group',
+      phone: '+1-555-555-0199',
+      creatorName: 'Neal Frazier Tech',
       creatorUrl: 'https://1nc0gn30.github.io',
       faqs: [
         {
@@ -1265,7 +1265,7 @@ export function AeoGraphEngineTool() {
       osOrArea: 'All Web Platforms (WordPress, Shopify, Webflow, Custom HTML5)',
       ratingValue: '5.0',
       reviewCount: '96',
-      phone: '+1-757-555-0299',
+      phone: '+1-555-555-0199',
       creatorName: 'Neal Frazier Tech',
       creatorUrl: 'https://1nc0gn30.github.io',
       faqs: [
