@@ -188,9 +188,8 @@ export default function RealToolWorkspacePage() {
   const execEval = evaluateTool(tool);
   const canRunClientSide = execEval.canExecute;
   const EnclaveToolComponent = ENCLAVE_TOOL_COMPONENTS[tool?.id];
-  // If the tool is client-side capable (WebGPU or WebMCP) and supported on client device, it is NEVER locked out!
-  // If the tool is bare-metal local_cli and on public web, it is locked out to prevent non-functional host execution.
-  const isLocked = !isLocal && !canRunClientSide && !unlockedPreview;
+  // Tools with dedicated 60fps in-browser God-Mode workstations or WebGPU/WASM engines are immediately interactive!
+  const isLocked = !isLocal && !canRunClientSide && !unlockedPreview && !EnclaveToolComponent;
 
   const gold = {
     accent: isDark ? '#D4AF37' : '#8A6508',
@@ -705,8 +704,8 @@ export default function RealToolWorkspacePage() {
         </Box>
       )}
 
-      {/* Sovereign Enclave Microtool Workstation (Mounted when tool has an enclave component and either local node, preview unlocked, or client-side enabled) */}
-      {EnclaveToolComponent && (isLocal || unlockedPreview || canRunClientSide) && (
+      {/* Sovereign Enclave Microtool Workstation (Mounted for all tools with a dedicated 60fps God-Mode component) */}
+      {EnclaveToolComponent && (
         <Paper
           elevation={0}
           id="enclave-workstation-deck"
