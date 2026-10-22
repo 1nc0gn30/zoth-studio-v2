@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem } from '../components/MotionReveal';
+import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
+import NeuroMemoryGodModeTool from '../components/tools/NeuroMemoryGodModeTool';
 import { Box, Container, Typography, Paper, Button, Unstable_Grid2 as Grid } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import PsychologyIcon from '@mui/icons-material/Psychology';
@@ -69,6 +71,24 @@ export default function MemoryShowcasePage() {
             </HeroItem>
           </Box>
         </HeroReveal>
+
+        {/* ── 60FPS ASCII & Braille Motion Edit + 3D Cosmic Nebula Memory Workstation ── */}
+        <Box sx={{ mb: 7 }}>
+          <ToolMotionShowcase
+            tool={{
+              id: 'neuro-memory-daemon',
+              name: 'Neuro-Memory Daemon',
+              category: 'Memory & Brain',
+              executionType: 'local_cli',
+              localPort: 8094,
+              description: 'Biological-fidelity memory substrate with 3D Cosmic Nebula, STDP Hebbian synaptic plasticity, and federated Zoth Memory viewer.',
+            }}
+            onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
+          />
+          <Box sx={{ mt: 4 }}>
+            <NeuroMemoryGodModeTool />
+          </Box>
+        </Box>
 
         {/* ── Feature Cards ── */}
         <RevealOnScroll preset="fadeUp" delay={0.1}>

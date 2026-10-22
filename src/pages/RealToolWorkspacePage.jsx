@@ -293,8 +293,8 @@ export default function RealToolWorkspacePage() {
         </Box>
       </Box>
 
-      {/* If Public Web and Bare-Metal Tool: Display Hardware Enclave Lockout */}
-      {!isLocal && !canRunClientSide && (
+      {/* If Public Web and Bare-Metal Tool without dedicated God-Mode Workstation: Display Hardware Enclave Lockout */}
+      {!isLocal && !canRunClientSide && !EnclaveToolComponent && (
         <AirGapToolLockout
           tool={tool}
           isUnlocked={unlockedPreview}
@@ -303,8 +303,8 @@ export default function RealToolWorkspacePage() {
         />
       )}
 
-      {/* If Public Web and WebGPU/WebMCP Tool: Display Active Client Compute HUD */}
-      {!isLocal && canRunClientSide && (
+      {/* If Public Web and Client/God-Mode Tool: Display Active Client Compute HUD */}
+      {!isLocal && (canRunClientSide || Boolean(EnclaveToolComponent)) && (
         <Paper
           elevation={0}
           sx={{
@@ -353,7 +353,7 @@ export default function RealToolWorkspacePage() {
             size="small"
             variant="contained"
             onClick={() => {
-              const el = document.getElementById('client-workstation-deck');
+              const el = document.getElementById('enclave-workstation-deck') || document.getElementById('client-workstation-deck');
               if (el) el.scrollIntoView({ behavior: 'smooth' });
             }}
             sx={{

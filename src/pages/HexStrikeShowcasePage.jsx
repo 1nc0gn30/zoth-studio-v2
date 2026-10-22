@@ -14,6 +14,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import MemoryIcon from '@mui/icons-material/Memory';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
 import HexStrikeGodModeTool from '../components/tools/HexStrikeGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -87,12 +88,29 @@ export default function HexStrikeShowcasePage() {
             <Typography
               variant="body1"
               color="text.secondary"
-              sx={{ maxWidth: 640, mb: 6, fontSize: '1.1rem', lineHeight: 1.65 }}
+              sx={{ maxWidth: 640, mb: 5, fontSize: '1.1rem', lineHeight: 1.65 }}
             >
               Scan for vulnerabilities, analyze threats, and simulate attacks — all from your own machine. No cloud required.
             </Typography>
           </HeroItem>
         </HeroReveal>
+
+        {/* 60FPS ASCII & Braille Motion Edit + Live HexStrike Pentesting Cockpit */}
+        <Box sx={{ mb: 7 }}>
+          <ToolMotionShowcase
+            tool={{
+              id: 'hexstrike-arsenal',
+              name: 'HexStrike Security Arsenal',
+              category: 'Security & Recon',
+              executionType: 'local_cli',
+              description: 'Autonomous penetration audit suite, CVE matrix inspector, and exploit payload lab.',
+            }}
+            onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
+          />
+          <Box sx={{ mt: 4 }}>
+            <HexStrikeGodModeTool />
+          </Box>
+        </Box>
 
         {/* Feature Cards */}
         <RevealOnScroll preset="fadeUp" delay={0.1}>
@@ -134,13 +152,6 @@ export default function HexStrikeShowcasePage() {
               );
             })}
           </Grid>
-        </RevealOnScroll>
-
-        {/* Live HexStrike God-Mode Pentesting Cockpit */}
-        <RevealOnScroll preset="fadeUp" delay={0.12}>
-          <Box sx={{ mb: 8 }}>
-            <HexStrikeGodModeTool />
-          </Box>
         </RevealOnScroll>
 
         {/* Built For Section */}
