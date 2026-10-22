@@ -1,30 +1,44 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Terminal, Play, Pause, Copy, Check, Download, Sparkles, Sliders,
-  Layers, Cpu, RefreshCw, Code2, Eye
-} from 'lucide-react';
+  Box,
+  Paper,
+  Typography,
+  Chip,
+  Button,
+  Stack,
+  Slider,
+  Unstable_Grid2 as Grid,
+} from '@mui/material';
+import TerminalIcon from '@mui/icons-material/Terminal';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CheckIcon from '@mui/icons-material/Check';
+import CodeIcon from '@mui/icons-material/Code';
+
+const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const GLYPH_RAMPS = {
   ascii: {
     id: 'ascii',
-    label: 'Sovereign ASCII (@#S%?*+:.)',
-    chars: ' ·,:;+*?%S#@'
+    label: 'Sovereign ASCII',
+    chars: ' ·,:;+*?%S#@',
   },
   braille: {
     id: 'braille',
-    label: 'Unicode Braille (⠁⠃⠇⠏⠟⠿⣿)',
-    chars: ' ⠁⠃⠇⠏⠟⠿⣿'
+    label: 'Unicode Braille',
+    chars: ' ⠁⠃⠇⠏⠟⠿⣿',
   },
   blocks: {
     id: 'blocks',
-    label: 'Block Density (░▒▓█)',
-    chars: ' ·░▒▓█'
+    label: 'Block Density',
+    chars: ' ·░▒▓█',
   },
   hex: {
     id: 'hex',
-    label: 'Cyber Hex (01379CEF)',
-    chars: ' .01379ACEF#'
-  }
+    label: 'Cyber Hex',
+    chars: ' .01379ACEF#',
+  },
 };
 
 const SHADER_PRESETS = {
@@ -32,38 +46,38 @@ const SHADER_PRESETS = {
     id: 'torus4d',
     name: '4D Rotating Torus Knot',
     subtitle: 'Harmonic topological surface with dual-axis phase precession',
-    accent: '#D4AF37'
+    accent: '#D4AF37',
   },
   merkaba: {
     id: 'merkaba',
     name: 'Sacred Merkaba Hypercube',
     subtitle: 'Counter-rotating star tetrahedron & golden ratio interference rings',
-    accent: '#A855F7'
+    accent: '#C084FC',
   },
   datamosh: {
     id: 'datamosh',
     name: 'CRT Datamosh Wavefront',
     subtitle: 'I-frame displacement vectors with scanline quantization',
-    accent: '#EC4899'
+    accent: '#EC4899',
   },
   quorum: {
     id: 'quorum',
     name: 'Byzantine Quorum Vortex',
     subtitle: '4-node consensus spiral with cryptographic phase locking',
-    accent: '#22D3EE'
+    accent: '#38BDF8',
   },
   radar: {
     id: 'radar',
     name: 'Perimeter Radar Matrix',
     subtitle: '360° polar sweep with deterministic harmonic target pings',
-    accent: '#10B981'
+    accent: '#34D399',
   },
   sigil: {
     id: 'sigil',
     name: 'ZothOS Kernel Sigil',
     subtitle: 'Standing wave lattice & sovereign enclave boundary field',
-    accent: '#F59E0B'
-  }
+    accent: '#F59E0B',
+  },
 };
 
 const SLUG_DEFAULTS = {
@@ -71,7 +85,7 @@ const SLUG_DEFAULTS = {
   'nexus-3d-scene-studio': { preset: 'torus4d', ramp: 'ascii' },
   'ufo-sacred-geometry': { preset: 'merkaba', ramp: 'braille' },
   'cyber-turtle-studio': { preset: 'sigil', ramp: 'ascii' },
-  'og-canvas-forge': { preset: 'quorum', ramp: 'braille' }
+  'og-canvas-forge': { preset: 'quorum', ramp: 'braille' },
 };
 
 function evaluateField(nx, ny, t, preset, warp, freq) {
@@ -84,14 +98,15 @@ function evaluateField(nx, ny, t, preset, warp, freq) {
     const ring1 = Math.cos((r - 0.52 - 0.14 * Math.sin(3 * a + t * 2.1)) * 13);
     const twist = Math.sin(4 * a - t * 2.6 + r * 6 * warp);
     const core = Math.exp(-r * 2.2) * Math.cos(r * 16 - t * 4);
-    return Math.max(0, Math.min(1, (ring1 * 0.5 + twist * 0.35 + core * 0.45 + 0.55)));
+    return Math.max(0, Math.min(1, ring1 * 0.5 + twist * 0.35 + core * 0.45 + 0.55));
   }
 
   if (preset === 'merkaba') {
     const tri1 = Math.cos(3 * (a + t * 0.9)) * Math.exp(-Math.abs(r - 0.55) * 4.5);
     const tri2 = Math.cos(3 * (a - t * 0.9 + Math.PI / 3)) * Math.exp(-Math.abs(r - 0.55) * 4.5);
-    const lattice = Math.sin((x * Math.cos(t * 0.5) - y * Math.sin(t * 0.5)) * 10 * warp) *
-                    Math.cos((x * Math.sin(t * 0.5) + y * Math.cos(t * 0.5)) * 10 * warp);
+    const lattice =
+      Math.sin((x * Math.cos(t * 0.5) - y * Math.sin(t * 0.5)) * 10 * warp) *
+      Math.cos((x * Math.sin(t * 0.5) + y * Math.cos(t * 0.5)) * 10 * warp);
     const center = Math.exp(-r * 3.8);
     return Math.max(0, Math.min(1, 0.48 + tri1 * 0.45 + tri2 * 0.45 + lattice * 0.25 + center * 0.4));
   }
@@ -113,14 +128,13 @@ function evaluateField(nx, ny, t, preset, warp, freq) {
 
   if (preset === 'radar') {
     const sweepAngle = (t * 2.2) % (Math.PI * 2);
-    let diff = ((a - sweepAngle) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
+    const diff = (((a - sweepAngle) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
     const beam = Math.exp(-diff * 3.2) * Math.exp(-r * 0.9);
     const rings = Math.pow(Math.max(0, Math.cos(r * 16)), 6) * 0.55;
-    const cross = (Math.abs(nx) < 0.035 || Math.abs(ny) < 0.035) ? 0.45 : 0;
+    const cross = Math.abs(nx) < 0.035 || Math.abs(ny) < 0.035 ? 0.45 : 0;
     return Math.max(0, Math.min(1, beam * 0.85 + rings + cross));
   }
 
-  // sigil
   const hexWave = Math.cos(6 * a + Math.sin(r * 10 - t * 3) * warp * 2);
   const seal = Math.exp(-Math.abs(r - 0.62) * 6.5) + Math.exp(-Math.abs(r - 0.32) * 7.5);
   const standing = Math.cos(r * 18 - t * 3.8) * 0.35;
@@ -128,7 +142,7 @@ function evaluateField(nx, ny, t, preset, warp, freq) {
 }
 
 export default function AsciiMotionGodModeTool({ tool }) {
-  const defaultCfg = SLUG_DEFAULTS[tool?.slug] || { preset: 'torus4d', ramp: 'ascii' };
+  const defaultCfg = SLUG_DEFAULTS[tool?.id] || SLUG_DEFAULTS[tool?.slug] || { preset: 'torus4d', ramp: 'ascii' };
   const [preset, setPreset] = useState(defaultCfg.preset);
   const [rampKey, setRampKey] = useState(defaultCfg.ramp);
   const [cols, setCols] = useState(68);
@@ -143,12 +157,12 @@ export default function AsciiMotionGodModeTool({ tool }) {
   const timeRef = useRef(0);
 
   useEffect(() => {
-    const cfg = SLUG_DEFAULTS[tool?.slug];
+    const cfg = SLUG_DEFAULTS[tool?.id] || SLUG_DEFAULTS[tool?.slug];
     if (cfg) {
       setPreset(cfg.preset);
       setRampKey(cfg.ramp);
     }
-  }, [tool?.slug]);
+  }, [tool?.id, tool?.slug]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -167,8 +181,8 @@ export default function AsciiMotionGodModeTool({ tool }) {
       const t = timeRef.current;
 
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const cw = canvas.clientWidth || 760;
-      const ch = canvas.clientHeight || 380;
+      const cw = canvas.clientWidth || 720;
+      const ch = canvas.clientHeight || 360;
       if (canvas.width !== cw * dpr || canvas.height !== ch * dpr) {
         canvas.width = cw * dpr;
         canvas.height = ch * dpr;
@@ -177,7 +191,6 @@ export default function AsciiMotionGodModeTool({ tool }) {
       ctx.save();
       ctx.scale(dpr, dpr);
 
-      // Deep Obsidian Void
       ctx.fillStyle = '#050508';
       ctx.fillRect(0, 0, cw, ch);
 
@@ -187,9 +200,9 @@ export default function AsciiMotionGodModeTool({ tool }) {
       const rows = Math.max(16, Math.round(cols * (ch / cw) * 0.55));
       const cellW = cw / cols;
       const cellH = ch / rows;
-      const fontSize = Math.max(9, Math.min(18, Math.floor(cellH * 0.92)));
+      const fontSize = Math.max(9, Math.min(16, Math.floor(cellH * 0.92)));
 
-      ctx.font = `600 ${fontSize}px "JetBrains Mono", monospace`;
+      ctx.font = `600 ${fontSize}px ${mono}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
@@ -207,7 +220,7 @@ export default function AsciiMotionGodModeTool({ tool }) {
           if (captureText) rowStr += chGlyph;
 
           if (idx > 0) {
-            const alpha = (0.14 + v * 0.86).toFixed(2);
+            const alpha = (0.16 + v * 0.84).toFixed(2);
             if (v > 0.78) {
               ctx.fillStyle = `rgba(255, 250, 235, ${alpha})`;
             } else {
@@ -221,16 +234,8 @@ export default function AsciiMotionGodModeTool({ tool }) {
         if (captureText) textRows.push(rowStr);
       }
 
-      // Subtle CRT scanline & vignette overlay
-      const grad = ctx.createRadialGradient(cw / 2, ch / 2, ch * 0.15, cw / 2, ch / 2, cw * 0.65);
-      grad.addColorStop(0, 'rgba(5,5,8,0)');
-      grad.addColorStop(1, 'rgba(5,5,8,0.55)');
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, cw, ch);
-
-      // Top HUD telemetry stamp
-      ctx.fillStyle = 'rgba(255,255,255,0.45)';
-      ctx.font = '600 10px "JetBrains Mono", monospace';
+      ctx.fillStyle = 'rgba(245, 230, 171, 0.7)';
+      ctx.font = `700 10px ${mono}`;
       ctx.textAlign = 'left';
       ctx.fillText(
         `ASCII_SHADER // ${activePreset.name.toUpperCase()} // ${cols}x${rows} MATRIX // t=${t.toFixed(2)}s`,
@@ -257,10 +262,7 @@ export default function AsciiMotionGodModeTool({ tool }) {
 
     let text = '';
     if (mode === 'frame') {
-      text = [
-        `/* ZOTH STUDIO // ASCII MOTION FRAME (${activePreset.name}) */`,
-        asciiSnapshot
-      ].join('\n');
+      text = [`/* ZOTH STUDIO // ASCII MOTION FRAME (${activePreset.name}) */`, asciiSnapshot].join('\n');
     } else if (mode === 'embed') {
       text = `<!-- Zoth Studio Standalone 60FPS ASCII Motion Shader (${activePreset.name}) -->
 <pre id="zoth-ascii-stage" style="background:#050508;color:${activePreset.accent};font:600 11px/1.15 'JetBrains Mono',monospace;padding:20px;border-radius:12px;overflow:hidden;margin:0;"></pre>
@@ -300,191 +302,240 @@ export default function AsciiMotionGodModeTool({ tool }) {
   const activePresetObj = SHADER_PRESETS[preset] || SHADER_PRESETS.torus4d;
 
   return (
-    <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#07080d]/95 overflow-hidden shadow-[0_20px_70px_rgba(0,0,0,0.85)]">
-      {/* Header Bar */}
-      <div className="px-5 py-4 border-b border-white/10 bg-[#0b0d14] flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-[#D4AF37]/15 border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37]">
-            <Terminal className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-mono uppercase tracking-[0.2em] text-[#D4AF37] font-bold">
-                ASCII &amp; Braille Motion Synth
-              </span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                60 FPS DETERMINISTIC
-              </span>
-            </div>
-            <p className="text-xs text-zinc-400 mt-0.5">
+    <Paper
+      elevation={0}
+      sx={{
+        borderRadius: 3,
+        overflow: 'hidden',
+        bgcolor: '#07080D',
+        border: '1px solid rgba(212, 175, 55, 0.32)',
+        boxShadow: '0 20px 60px rgba(0,0,0,0.85)',
+      }}
+    >
+      {/* Top Header Strip */}
+      <Box
+        sx={{
+          px: { xs: 2, md: 3 },
+          py: 2,
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          bgcolor: '#0B0D14',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 2,
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Box
+            sx={{
+              p: 1,
+              borderRadius: 2,
+              bgcolor: 'rgba(212,175,55,0.14)',
+              border: '1px solid rgba(212,175,55,0.4)',
+              color: '#D4AF37',
+              display: 'flex',
+            }}
+          >
+            <TerminalIcon sx={{ fontSize: 20 }} />
+          </Box>
+          <Box>
+            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+              <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', fontWeight: 800, color: '#D4AF37', letterSpacing: '0.14em' }}>
+                ASCII &amp; BRAILLE MOTION SYNTH
+              </Typography>
+              <Chip
+                label="60 FPS DETERMINISTIC"
+                size="small"
+                sx={{
+                  height: 20,
+                  fontFamily: mono,
+                  fontSize: '0.62rem',
+                  fontWeight: 800,
+                  bgcolor: 'rgba(16,185,129,0.15)',
+                  color: '#34D399',
+                  border: '1px solid rgba(16,185,129,0.35)',
+                }}
+              />
+            </Stack>
+            <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mt: 0.3 }}>
               {activePresetObj.name} — {activePresetObj.subtitle}
-            </p>
-          </div>
-        </div>
+            </Typography>
+          </Box>
+        </Box>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
+        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          <Button
+            size="small"
+            variant="outlined"
             onClick={() => setPlaying((p) => !p)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono uppercase tracking-wider bg-white/5 hover:bg-white/10 text-white border border-white/10 transition"
+            startIcon={playing ? <PauseIcon sx={{ fontSize: 15 }} /> : <PlayArrowIcon sx={{ fontSize: 15 }} />}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              color: '#E2E8F0',
+              borderColor: 'rgba(255,255,255,0.16)',
+            }}
           >
-            {playing ? <Pause className="w-3.5 h-3.5 text-[#D4AF37]" /> : <Play className="w-3.5 h-3.5 text-emerald-400" />}
-            {playing ? 'Pause Field' : 'Resume Field'}
-          </button>
-
-          <button
-            type="button"
+            {playing ? 'Pause Field' : 'Resume'}
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
             onClick={() => copyPayload('frame')}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono uppercase tracking-wider bg-[#D4AF37]/15 hover:bg-[#D4AF37]/25 text-[#F3E5AB] border border-[#D4AF37]/40 transition"
+            startIcon={copiedMode === 'frame' ? <CheckIcon sx={{ fontSize: 15 }} /> : <ContentCopyIcon sx={{ fontSize: 15 }} />}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              color: '#F5E6AB',
+              borderColor: 'rgba(212,175,55,0.45)',
+              bgcolor: 'rgba(212,175,55,0.12)',
+            }}
           >
-            {copiedMode === 'frame' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
             {copiedMode === 'frame' ? 'ASCII Copied' : 'Copy ASCII Frame'}
-          </button>
-
-          <button
-            type="button"
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
             onClick={() => copyPayload('embed')}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono uppercase tracking-wider bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-200 border border-cyan-500/30 transition"
+            startIcon={copiedMode === 'embed' ? <CheckIcon sx={{ fontSize: 15 }} /> : <CodeIcon sx={{ fontSize: 15 }} />}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              bgcolor: '#D4AF37',
+              color: '#060609',
+              '&:hover': { bgcolor: '#F5E6AB' },
+            }}
           >
-            {copiedMode === 'embed' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Code2 className="w-3.5 h-3.5" />}
             {copiedMode === 'embed' ? 'Snippet Copied' : 'Export HTML/JS Shader'}
-          </button>
-        </div>
-      </div>
+          </Button>
+        </Stack>
+      </Box>
 
-      {/* Main Grid: Left 60fps ASCII Stage + Right Parameter & Matrix Deck */}
-      <div className="grid grid-cols-1 lg:grid-cols-12">
-        {/* 60fps Canvas Viewport */}
-        <div className="lg:col-span-8 relative border-b lg:border-b-0 lg:border-r border-white/10 bg-[#050508]">
-          <canvas
-            ref={canvasRef}
-            className="w-full h-[360px] sm:h-[420px] block"
-          />
-
-          {/* Preset Selector Pill Strip */}
-          <div className="p-3 bg-[#090b11]/95 border-t border-white/10 flex flex-wrap items-center gap-1.5">
+      {/* Main Grid */}
+      <Grid container>
+        <Grid xs={12} md={8} sx={{ borderRight: { md: '1px solid rgba(255,255,255,0.08)' }, bgcolor: '#050508' }}>
+          <Box sx={{ width: '100%', height: { xs: 300, sm: 380 } }}>
+            <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />
+          </Box>
+          <Box
+            sx={{
+              p: 1.5,
+              borderTop: '1px solid rgba(255,255,255,0.08)',
+              bgcolor: '#090B11',
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 1,
+            }}
+          >
             {Object.values(SHADER_PRESETS).map((item) => (
-              <button
+              <Button
                 key={item.id}
-                type="button"
+                size="small"
+                variant="outlined"
                 onClick={() => setPreset(item.id)}
-                className={`px-2.5 py-1.5 rounded-lg text-[11px] font-mono transition border ${
-                  preset === item.id
-                    ? 'bg-[#D4AF37]/20 text-[#F3E5AB] border-[#D4AF37]/50 font-semibold'
-                    : 'bg-white/[0.03] text-zinc-400 border-white/10 hover:text-white'
-                }`}
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.66rem',
+                  fontWeight: 800,
+                  textTransform: 'none',
+                  bgcolor: preset === item.id ? item.accent : 'rgba(255,255,255,0.02)',
+                  color: preset === item.id ? '#050508' : '#94A3B8',
+                  borderColor: preset === item.id ? item.accent : 'rgba(255,255,255,0.12)',
+                  '&:hover': {
+                    bgcolor: preset === item.id ? '#F5E6AB' : 'rgba(255,255,255,0.08)',
+                    borderColor: item.accent,
+                  },
+                }}
               >
                 {item.name}
-              </button>
+              </Button>
             ))}
-          </div>
-        </div>
+          </Box>
+        </Grid>
 
-        {/* Right Controls & Live ASCII Buffer */}
-        <div className="lg:col-span-4 p-4 sm:p-5 flex flex-col justify-between gap-4 bg-[#090b10]">
-          <div className="space-y-4">
-            <div>
-              <label className="block text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-2">
-                Character Ramp Quantizer
-              </label>
-              <div className="grid grid-cols-2 gap-1.5">
-                {Object.values(GLYPH_RAMPS).map((r) => (
-                  <button
-                    key={r.id}
-                    type="button"
+        <Grid xs={12} md={4} sx={{ p: 2.5, bgcolor: '#090B10', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 2 }}>
+          <Box>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, color: '#94A3B8', mb: 1, letterSpacing: '0.08em' }}>
+              CHARACTER RAMP QUANTIZER
+            </Typography>
+            <Grid container spacing={1} sx={{ mb: 2 }}>
+              {Object.values(GLYPH_RAMPS).map((r) => (
+                <Grid xs={6} key={r.id}>
+                  <Button
+                    fullWidth
+                    size="small"
+                    variant="outlined"
                     onClick={() => setRampKey(r.id)}
-                    className={`px-2.5 py-2 rounded-lg text-left text-[11px] font-mono border transition ${
-                      rampKey === r.id
-                        ? 'bg-[#D4AF37]/15 border-[#D4AF37]/50 text-[#F3E5AB]'
-                        : 'bg-white/[0.02] border-white/10 text-zinc-400 hover:text-white'
-                    }`}
+                    sx={{
+                      justifyContent: 'flex-start',
+                      textAlign: 'left',
+                      fontFamily: mono,
+                      fontSize: '0.65rem',
+                      fontWeight: 700,
+                      textTransform: 'none',
+                      py: 0.8,
+                      bgcolor: rampKey === r.id ? 'rgba(212,175,55,0.16)' : 'rgba(255,255,255,0.02)',
+                      color: rampKey === r.id ? '#F5E6AB' : '#94A3B8',
+                      borderColor: rampKey === r.id ? '#D4AF37' : 'rgba(255,255,255,0.1)',
+                    }}
                   >
-                    <div className="truncate font-semibold">{r.label.split(' (')[0]}</div>
-                    <div className="text-[10px] text-zinc-500 truncate mt-0.5">{r.chars}</div>
-                  </button>
-                ))}
-              </div>
-            </div>
+                    {r.label}
+                  </Button>
+                </Grid>
+              ))}
+            </Grid>
 
-            <div className="space-y-3 pt-1">
-              <div>
-                <div className="flex justify-between text-[11px] font-mono text-zinc-400 mb-1">
-                  <span>MATRIX COLUMNS</span>
-                  <span className="text-[#D4AF37]">{cols} cols</span>
-                </div>
-                <input
-                  type="range"
-                  min="42"
-                  max="96"
-                  step="2"
-                  value={cols}
-                  onChange={(e) => setCols(Number(e.target.value))}
-                  className="w-full accent-[#D4AF37]"
-                />
-              </div>
+            <Box sx={{ mb: 1.5 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#94A3B8' }}>MATRIX COLUMNS</Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#D4AF37', fontWeight: 800 }}>{cols} cols</Typography>
+              </Box>
+              <Slider size="small" min={42} max={96} step={2} value={cols} onChange={(_, v) => setCols(v)} sx={{ color: '#D4AF37' }} />
+            </Box>
 
-              <div>
-                <div className="flex justify-between text-[11px] font-mono text-zinc-400 mb-1">
-                  <span>TEMPORAL VELOCITY</span>
-                  <span className="text-[#D4AF37]">{speed.toFixed(2)}x</span>
-                </div>
-                <input
-                  type="range"
-                  min="0.2"
-                  max="2.5"
-                  step="0.05"
-                  value={speed}
-                  onChange={(e) => setSpeed(Number(e.target.value))}
-                  className="w-full accent-[#D4AF37]"
-                />
-              </div>
+            <Box sx={{ mb: 1.5 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#94A3B8' }}>TEMPORAL VELOCITY</Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#D4AF37', fontWeight: 800 }}>{speed.toFixed(2)}x</Typography>
+              </Box>
+              <Slider size="small" min={0.2} max={2.5} step={0.05} value={speed} onChange={(_, v) => setSpeed(v)} sx={{ color: '#D4AF37' }} />
+            </Box>
 
-              <div>
-                <div className="flex justify-between text-[11px] font-mono text-zinc-400 mb-1">
-                  <span>HARMONIC WARP</span>
-                  <span className="text-[#D4AF37]">{warp.toFixed(2)}</span>
-                </div>
-                <input
-                  type="range"
-                  min="0.3"
-                  max="2.4"
-                  step="0.05"
-                  value={warp}
-                  onChange={(e) => setWarp(Number(e.target.value))}
-                  className="w-full accent-[#D4AF37]"
-                />
-              </div>
+            <Box sx={{ mb: 1 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#94A3B8' }}>HARMONIC WARP</Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#D4AF37', fontWeight: 800 }}>{warp.toFixed(2)}</Typography>
+              </Box>
+              <Slider size="small" min={0.3} max={2.4} step={0.05} value={warp} onChange={(_, v) => setWarp(v)} sx={{ color: '#D4AF37' }} />
+            </Box>
+          </Box>
 
-              <div>
-                <div className="flex justify-between text-[11px] font-mono text-zinc-400 mb-1">
-                  <span>FIELD FREQUENCY</span>
-                  <span className="text-[#D4AF37]">{freq.toFixed(2)}x</span>
-                </div>
-                <input
-                  type="range"
-                  min="0.6"
-                  max="2.2"
-                  step="0.05"
-                  value={freq}
-                  onChange={(e) => setFreq(Number(e.target.value))}
-                  className="w-full accent-[#D4AF37]"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Live Raw ASCII Stream Preview */}
-          <div className="rounded-xl border border-white/10 bg-[#050508] p-3">
-            <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5">
-              <span>LIVE DOM TEXT BUFFER</span>
-              <span className="text-emerald-400">READY TO EMBED</span>
-            </div>
-            <pre className="text-[7px] leading-[7.5px] font-mono text-[#D4AF37]/80 overflow-hidden max-h-[115px] select-all">
+          <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.08)' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.8 }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.62rem', color: '#94A3B8', fontWeight: 700 }}>LIVE DOM TEXT MATRIX</Typography>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.62rem', color: '#34D399', fontWeight: 800 }}>READY TO EMBED</Typography>
+            </Box>
+            <Box
+              component="pre"
+              sx={{
+                m: 0,
+                fontFamily: mono,
+                fontSize: '6.5px',
+                lineHeight: '7px',
+                color: 'rgba(212,175,55,0.85)',
+                overflow: 'hidden',
+                maxHeight: 96,
+              }}
+            >
               {asciiSnapshot}
-            </pre>
-          </div>
-        </div>
-      </div>
-    </div>
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
+    </Paper>
   );
 }

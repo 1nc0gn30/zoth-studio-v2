@@ -1,13 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Cpu, Play, Pause, Copy, Check, Terminal, GitBranch, Zap
-} from 'lucide-react';
+  Box,
+  Paper,
+  Typography,
+  Chip,
+  Button,
+  Stack,
+  TextField,
+  Slider,
+  Unstable_Grid2 as Grid,
+} from '@mui/material';
+import MemoryIcon from '@mui/icons-material/Memory';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CheckIcon from '@mui/icons-material/Check';
+
+const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const SUBAGENTS = [
   { id: 'hermes', name: 'Hermes Agent (Copilot GPT-4o)', role: 'Autonomous Code & Refactoring', port: 8099, color: '#D4AF37' },
-  { id: 'grok', name: 'Grok CLI (Fast Recon)', role: 'Rapid AST & Spec Verification', port: 8104, color: '#22D3EE' },
-  { id: 'ollama', name: 'Ollama Local (Qwen2.5 1.5B)', role: 'Zero-Egress Loopback Gate', port: 11434, color: '#10B981' },
-  { id: 'sentinel', name: 'Zoth Sentinel Daemon', role: 'Thermal & Memory Guard (<60°C)', port: 8112, color: '#A855F7' }
+  { id: 'grok', name: 'Grok CLI (Fast Recon)', role: 'Rapid AST & Spec Verification', port: 8104, color: '#38BDF8' },
+  { id: 'ollama', name: 'Ollama Local (Qwen2.5 1.5B)', role: 'Zero-Egress Loopback Gate', port: 11434, color: '#34D399' },
+  { id: 'sentinel', name: 'Zoth Sentinel Daemon', role: 'Thermal & Memory Guard (<60°C)', port: 8112, color: '#C084FC' },
 ];
 
 const ASCII_CHARS = ' ·,:;+*?%S#@';
@@ -41,17 +56,17 @@ export default function AzothArchonGodModeTool() {
 
       ctx.save();
       ctx.scale(dpr, dpr);
-      ctx.fillStyle = '#05060b';
+      ctx.fillStyle = '#05060B';
       ctx.fillRect(0, 0, cw, ch);
 
       const cx = cw * 0.5;
       const cy = ch * 0.52;
 
-      // ASCII field ring around Archon hub
-      ctx.font = '10px "JetBrains Mono", monospace';
+      ctx.font = `10px ${mono}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      const cols = 42, rows = 18;
+      const cols = 42;
+      const rows = 18;
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
           const nx = (c / (cols - 1)) * 2 - 1;
@@ -67,7 +82,6 @@ export default function AzothArchonGodModeTool() {
         }
       }
 
-      // Draw orbital subagents and dispatch packets
       SUBAGENTS.forEach((ag, i) => {
         const angle = (i / SUBAGENTS.length) * Math.PI * 2 + t * 0.45;
         const radX = cw * 0.31;
@@ -83,7 +97,6 @@ export default function AzothArchonGodModeTool() {
         ctx.lineTo(ax, ay);
         ctx.stroke();
 
-        // Packet stream
         const p = (t * 1.1 + i * 0.25) % 1;
         const px = cx + (ax - cx) * p;
         const py = cy + (ay - cy) * p;
@@ -92,8 +105,7 @@ export default function AzothArchonGodModeTool() {
         ctx.arc(px, py, isSel ? 4 : 2.5, 0, Math.PI * 2);
         ctx.fill();
 
-        // Node circle
-        ctx.fillStyle = '#090c15';
+        ctx.fillStyle = '#090C15';
         ctx.strokeStyle = ag.color;
         ctx.lineWidth = isSel ? 2.5 : 1.4;
         ctx.beginPath();
@@ -102,15 +114,14 @@ export default function AzothArchonGodModeTool() {
         ctx.stroke();
 
         ctx.fillStyle = '#FFFFFF';
-        ctx.font = '700 9px "JetBrains Mono", monospace';
+        ctx.font = `700 9px ${mono}`;
         ctx.fillText(ag.id.toUpperCase(), ax, ay - 2);
         ctx.fillStyle = ag.color;
-        ctx.font = '600 8px "JetBrains Mono", monospace';
+        ctx.font = `600 8px ${mono}`;
         ctx.fillText(`:${ag.port}`, ax, ay + 9);
       });
 
-      // Center Archon Kernel
-      ctx.fillStyle = '#0d101b';
+      ctx.fillStyle = '#0D101B';
       ctx.strokeStyle = '#D4AF37';
       ctx.lineWidth = 2.5;
       ctx.beginPath();
@@ -119,14 +130,14 @@ export default function AzothArchonGodModeTool() {
       ctx.stroke();
 
       ctx.fillStyle = '#F5E6AB';
-      ctx.font = '800 10px "JetBrains Mono", monospace';
+      ctx.font = `800 10px ${mono}`;
       ctx.fillText('AZOTH', cx, cy - 4);
       ctx.fillStyle = '#34D399';
-      ctx.font = '600 8px "JetBrains Mono", monospace';
+      ctx.font = `600 8px ${mono}`;
       ctx.fillText('ARCHON v3', cx, cy + 8);
 
-      ctx.fillStyle = 'rgba(255,255,255,0.55)';
-      ctx.font = '600 10px "JetBrains Mono", monospace';
+      ctx.fillStyle = 'rgba(245,230,171,0.7)';
+      ctx.font = `700 10px ${mono}`;
       ctx.textAlign = 'left';
       ctx.fillText(`AZOTH_ORCHESTRATOR // ENGINE=${selectedAgent.toUpperCase()} // WORKERS=${concurrency} // NICE=10`, 14, 18);
 
@@ -147,115 +158,198 @@ export default function AzothArchonGodModeTool() {
   };
 
   return (
-    <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#07080e] overflow-hidden">
-      <div className="px-5 py-4 border-b border-white/10 bg-[#0b0d16] flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-[#D4AF37]/15 border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37]">
-            <Cpu className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-mono uppercase tracking-[0.18em] text-[#D4AF37] font-bold">
-                AZOTH Local Archon Orchestrator
-              </span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                ZERO-TELEMETRY DISPATCH DAG
-              </span>
-            </div>
-            <p className="text-xs text-zinc-400 mt-0.5">
+    <Paper
+      elevation={0}
+      sx={{
+        borderRadius: 3,
+        overflow: 'hidden',
+        bgcolor: '#07080E',
+        border: '1px solid rgba(212, 175, 55, 0.32)',
+        boxShadow: '0 20px 60px rgba(0,0,0,0.85)',
+      }}
+    >
+      <Box
+        sx={{
+          px: { xs: 2, md: 3 },
+          py: 2,
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          bgcolor: '#0B0D16',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 2,
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Box
+            sx={{
+              p: 1,
+              borderRadius: 2,
+              bgcolor: 'rgba(212,175,55,0.14)',
+              border: '1px solid rgba(212,175,55,0.4)',
+              color: '#D4AF37',
+              display: 'flex',
+            }}
+          >
+            <MemoryIcon sx={{ fontSize: 20 }} />
+          </Box>
+          <Box>
+            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+              <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', fontWeight: 800, color: '#D4AF37', letterSpacing: '0.14em' }}>
+                AZOTH LOCAL ARCHON ORCHESTRATOR
+              </Typography>
+              <Chip
+                label="ZERO-TELEMETRY DISPATCH DAG"
+                size="small"
+                sx={{
+                  height: 20,
+                  fontFamily: mono,
+                  fontSize: '0.62rem',
+                  fontWeight: 800,
+                  bgcolor: 'rgba(16,185,129,0.15)',
+                  color: '#34D399',
+                  border: '1px solid rgba(16,185,129,0.35)',
+                }}
+              />
+            </Stack>
+            <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mt: 0.3 }}>
               Multi-agent loopback dispatcher for Hermes, Grok CLI, and local Ollama models
-            </p>
-          </div>
-        </div>
+            </Typography>
+          </Box>
+        </Box>
 
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
+        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          <Button
+            size="small"
+            variant="outlined"
             onClick={() => setRunning((r) => !r)}
-            className="px-3 py-1.5 rounded-lg text-xs font-mono bg-white/5 hover:bg-white/10 text-white border border-white/10 flex items-center gap-1.5"
+            startIcon={running ? <PauseIcon sx={{ fontSize: 15 }} /> : <PlayArrowIcon sx={{ fontSize: 15 }} />}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              color: '#E2E8F0',
+              borderColor: 'rgba(255,255,255,0.16)',
+            }}
           >
-            {running ? <Pause className="w-3.5 h-3.5 text-[#D4AF37]" /> : <Play className="w-3.5 h-3.5 text-emerald-400" />}
             {running ? 'Pause DAG' : 'Resume'}
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
             onClick={copyCmd}
-            className="px-3 py-1.5 rounded-lg text-xs font-mono bg-[#D4AF37]/20 hover:bg-[#D4AF37]/30 text-[#F5E6AB] border border-[#D4AF37]/40 flex items-center gap-1.5"
+            startIcon={copied ? <CheckIcon sx={{ fontSize: 15 }} /> : <ContentCopyIcon sx={{ fontSize: 15 }} />}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              bgcolor: '#D4AF37',
+              color: '#060609',
+              '&:hover': { bgcolor: '#F5E6AB' },
+            }}
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
             {copied ? 'Dispatch CLI Copied' : 'Copy Dispatch Command'}
-          </button>
-        </div>
-      </div>
+          </Button>
+        </Stack>
+      </Box>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12">
-        <div className="lg:col-span-7 border-b lg:border-b-0 lg:border-r border-white/10 bg-[#05060b]">
-          <canvas ref={canvasRef} className="w-full h-[350px] block" />
-          <div className="p-3 border-t border-white/10 bg-[#090b13] flex flex-wrap gap-1.5">
+      <Grid container>
+        <Grid xs={12} md={7} sx={{ borderRight: { md: '1px solid rgba(255,255,255,0.08)' }, bgcolor: '#05060B' }}>
+          <Box sx={{ width: '100%', height: 350 }}>
+            <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />
+          </Box>
+          <Box
+            sx={{
+              p: 1.5,
+              borderTop: '1px solid rgba(255,255,255,0.08)',
+              bgcolor: '#090B13',
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: 1,
+            }}
+          >
             {SUBAGENTS.map((ag) => (
-              <button
+              <Button
                 key={ag.id}
-                type="button"
+                size="small"
+                variant="outlined"
                 onClick={() => setSelectedAgent(ag.id)}
-                className={`px-2.5 py-1.5 rounded-lg text-[11px] font-mono border transition ${
-                  selectedAgent === ag.id
-                    ? 'bg-[#D4AF37]/20 text-[#F5E6AB] border-[#D4AF37]/50 font-semibold'
-                    : 'bg-white/[0.03] text-zinc-400 border-white/10 hover:text-white'
-                }`}
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.66rem',
+                  fontWeight: 800,
+                  textTransform: 'none',
+                  bgcolor: selectedAgent === ag.id ? ag.color : 'rgba(255,255,255,0.02)',
+                  color: selectedAgent === ag.id ? '#050508' : '#94A3B8',
+                  borderColor: selectedAgent === ag.id ? ag.color : 'rgba(255,255,255,0.12)',
+                }}
               >
                 {ag.name}
-              </button>
+              </Button>
             ))}
-          </div>
-        </div>
+          </Box>
+        </Grid>
 
-        <div className="lg:col-span-5 p-4 sm:p-5 flex flex-col justify-between gap-4 bg-[#080a12]">
-          <div className="space-y-3">
-            <div>
-              <label className="block text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-1">
-                Subagent Dispatch Directive
-              </label>
-              <textarea
-                rows={2}
-                value={taskPrompt}
-                onChange={(e) => setTaskPrompt(e.target.value)}
-                className="w-full rounded-lg bg-black/60 border border-white/15 px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#D4AF37]"
-              />
-            </div>
+        <Grid xs={12} md={5} sx={{ p: 2.5, bgcolor: '#080A12', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 2 }}>
+          <Box>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, color: '#94A3B8', mb: 1 }}>
+              SUBAGENT DISPATCH DIRECTIVE
+            </Typography>
+            <TextField
+              fullWidth
+              multiline
+              rows={2}
+              size="small"
+              value={taskPrompt}
+              onChange={(e) => setTaskPrompt(e.target.value)}
+              sx={{
+                mb: 2,
+                '& .MuiInputBase-root': {
+                  fontFamily: mono,
+                  fontSize: '0.76rem',
+                  bgcolor: 'rgba(0,0,0,0.45)',
+                },
+              }}
+            />
 
-            <div>
-              <div className="flex justify-between text-[11px] font-mono text-zinc-400 mb-1">
-                <span>SWARM WORKER CONCURRENCY</span>
-                <span className="text-[#D4AF37]">{concurrency} threads</span>
-              </div>
-              <input
-                type="range"
-                min="1"
-                max="8"
-                value={concurrency}
-                onChange={(e) => setConcurrency(Number(e.target.value))}
-                className="w-full accent-[#D4AF37]"
-              />
-            </div>
+            <Box sx={{ mb: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#94A3B8' }}>SWARM WORKER CONCURRENCY</Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#D4AF37', fontWeight: 800 }}>{concurrency} threads</Typography>
+              </Box>
+              <Slider size="small" min={1} max={8} value={concurrency} onChange={(_, v) => setConcurrency(v)} sx={{ color: '#D4AF37' }} />
+            </Box>
 
-            <div className="p-3 rounded-xl bg-white/[0.03] border border-white/10">
-              <div className="text-[11px] font-mono font-bold text-[#F5E6AB]">
+            <Box sx={{ p: 1.8, borderRadius: 2, bgcolor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: '#F5E6AB' }}>
                 Active Engine: {activeObj.name} (127.0.0.1:{activeObj.port})
-              </div>
-              <p className="text-xs text-zinc-400 mt-1">{activeObj.role}</p>
-            </div>
-          </div>
+              </Typography>
+              <Typography variant="body2" sx={{ color: '#94A3B8', fontSize: '0.78rem', mt: 0.5 }}>
+                {activeObj.role}
+              </Typography>
+            </Box>
+          </Box>
 
-          <div className="rounded-xl bg-black/70 border border-white/10 p-3">
-            <div className="text-[10px] font-mono uppercase text-zinc-400 mb-1">
-              Sovereign Conductor CLI Invocation
-            </div>
-            <pre className="text-[11px] font-mono text-emerald-300 whitespace-pre-wrap break-all">
-              $ {cliCommand}
-            </pre>
-          </div>
-        </div>
-      </div>
-    </div>
+          <Box
+            component="pre"
+            sx={{
+              p: 1.5,
+              m: 0,
+              borderRadius: 2,
+              bgcolor: '#040407',
+              border: '1px solid rgba(255,255,255,0.08)',
+              fontFamily: mono,
+              fontSize: '0.68rem',
+              color: '#34D399',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-all',
+            }}
+          >
+            $ {cliCommand}
+          </Box>
+        </Grid>
+      </Grid>
+    </Paper>
   );
 }

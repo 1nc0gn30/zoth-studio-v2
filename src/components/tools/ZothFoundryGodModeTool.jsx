@@ -1,51 +1,66 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Sparkles, Play, Pause, Copy, Check, Layers, Terminal, Cpu, Box as BoxIcon
-} from 'lucide-react';
+  Box,
+  Paper,
+  Typography,
+  Chip,
+  Button,
+  Stack,
+  TextField,
+  Slider,
+  Unstable_Grid2 as Grid,
+} from '@mui/material';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CheckIcon from '@mui/icons-material/Check';
+
+const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const FOUNDRY_MODES = {
   'zoth-webgen': {
     title: 'Zoth WebGen Autonomous Site Foundry',
     subtitle: '6-Archetype Full-Stack Compiler with Schema.org AEO & Triple-Viewport Guardrails',
     accent: '#D4AF37',
-    glyphs: ' ·,:;+*?%S#@'
+    glyphs: ' ·,:;+*?%S#@',
   },
   'zoth-swarm-multiplexer': {
     title: 'Zoth Swarm Daemon Multiplexer',
     subtitle: '22-Daemon Loopback PTY Multiplexer & Byzantine Quorum Bus (:8094–:8121)',
-    accent: '#22D3EE',
-    glyphs: ' ⠁⠃⠇⠏⠟⠿⣿'
+    accent: '#38BDF8',
+    glyphs: ' ⠁⠃⠇⠏⠟⠿⣿',
   },
   'zoth-civilization': {
     title: 'Zoth Multi-Agent Civilization Engine',
     subtitle: 'Emergent Autonomous Agent Society, Resource Ledger & Consensus Simulation',
-    accent: '#10B981',
-    glyphs: ' ·░▒▓█'
+    accent: '#34D399',
+    glyphs: ' ·░▒▓█',
   },
   'vision-gesture-control': {
     title: 'Vision 21-Joint 3D Spatial Hand Tracker',
     subtitle: 'Sub-15ms MediaPipe Skeletal Kinematics & Air-Canvas MCP Bridge',
-    accent: '#A855F7',
-    glyphs: ' ⠁⠃⠇⠏⠟⠿⣿'
+    accent: '#C084FC',
+    glyphs: ' ⠁⠃⠇⠏⠟⠿⣿',
   },
   'likeness-desk': {
     title: 'Likeness Desk Identity & Rights Vault',
     subtitle: 'Cryptographic Biometric Consent Ledger & Perceptual Hash Watermarker',
     accent: '#EC4899',
-    glyphs: ' .01379ACEF#'
+    glyphs: ' .01379ACEF#',
   },
   'bolt-diy': {
     title: 'Bolt.DIY Local Full-Stack Sandbox',
     subtitle: 'Air-Gapped WebContainer & Local Ollama Code Generation Workbench',
     accent: '#F59E0B',
-    glyphs: ' ·,:;+*?%S#@'
+    glyphs: ' ·,:;+*?%S#@',
   },
   'city-desk': {
     title: 'City Desk 1,000-Page Programmatic Trade & Geo Engine',
     subtitle: 'Static Trade × City AEO Matrix, Schema.org LocalBusiness Graph & Zero-Bloat Navbar',
-    accent: '#10B981',
-    glyphs: ' ⠁⠃⠇⠏⠟⠿⣿'
-  }
+    accent: '#34D399',
+    glyphs: ' ⠁⠃⠇⠏⠟⠿⣿',
+  },
 };
 
 export default function ZothFoundryGodModeTool({ tool }) {
@@ -54,7 +69,7 @@ export default function ZothFoundryGodModeTool({ tool }) {
     title: `${tool?.name || 'Sovereign Foundry'} God-Mode Studio`,
     subtitle: 'Deterministic 60fps ASCII/Vector Synthesizer & Autonomous Artifact Compiler',
     accent: '#D4AF37',
-    glyphs: ' ⠁⠃⠇⠏⠟⠿⣿'
+    glyphs: ' ⠁⠃⠇⠏⠟⠿⣿',
   };
 
   const [density, setDensity] = useState(52);
@@ -85,7 +100,7 @@ export default function ZothFoundryGodModeTool({ tool }) {
 
       ctx.save();
       ctx.scale(dpr, dpr);
-      ctx.fillStyle = '#05060b';
+      ctx.fillStyle = '#05060B';
       ctx.fillRect(0, 0, cw, ch);
 
       const cols = density;
@@ -94,7 +109,7 @@ export default function ZothFoundryGodModeTool({ tool }) {
       const cellH = ch / rows;
       const ramp = mode.glyphs;
 
-      ctx.font = `600 ${Math.max(8, Math.floor(cellH * 0.88))}px "JetBrains Mono", monospace`;
+      ctx.font = `600 ${Math.max(8, Math.floor(cellH * 0.88))}px ${mono}`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
@@ -123,8 +138,8 @@ export default function ZothFoundryGodModeTool({ tool }) {
         }
       }
 
-      ctx.fillStyle = 'rgba(255,255,255,0.6)';
-      ctx.font = '600 10px "JetBrains Mono", monospace';
+      ctx.fillStyle = 'rgba(245,230,171,0.72)';
+      ctx.font = `700 10px ${mono}`;
       ctx.textAlign = 'left';
       ctx.fillText(`FOUNDRY_CORE // ${slug.toUpperCase()} // ${cols}x${rows} MATRIX`, 14, 18);
 
@@ -145,7 +160,7 @@ export default function ZothFoundryGodModeTool({ tool }) {
       dispatchEmail: 'neal@nealfrazier.tech',
       gridMatrix: `${density} cols`,
       harmonicOrder: harmonic,
-      directive
+      directive,
     },
     null,
     2
@@ -158,102 +173,167 @@ export default function ZothFoundryGodModeTool({ tool }) {
   };
 
   return (
-    <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#07080e] overflow-hidden">
-      <div className="px-5 py-4 border-b border-white/10 bg-[#0b0d16] flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-[#D4AF37]/15 border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37]">
-            <Sparkles className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-mono uppercase tracking-[0.18em] text-[#D4AF37] font-bold">
-                {mode.title}
-              </span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                60 FPS SOVEREIGN CORE
-              </span>
-            </div>
-            <p className="text-xs text-zinc-400 mt-0.5">{mode.subtitle}</p>
-          </div>
-        </div>
+    <Paper
+      elevation={0}
+      sx={{
+        borderRadius: 3,
+        overflow: 'hidden',
+        bgcolor: '#07080E',
+        border: '1px solid rgba(212, 175, 55, 0.32)',
+        boxShadow: '0 20px 60px rgba(0,0,0,0.85)',
+      }}
+    >
+      <Box
+        sx={{
+          px: { xs: 2, md: 3 },
+          py: 2,
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          bgcolor: '#0B0D16',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 2,
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Box
+            sx={{
+              p: 1,
+              borderRadius: 2,
+              bgcolor: 'rgba(212,175,55,0.14)',
+              border: '1px solid rgba(212,175,55,0.4)',
+              color: '#D4AF37',
+              display: 'flex',
+            }}
+          >
+            <AutoAwesomeIcon sx={{ fontSize: 20 }} />
+          </Box>
+          <Box>
+            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+              <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', fontWeight: 800, color: '#D4AF37', letterSpacing: '0.14em' }}>
+                {mode.title.toUpperCase()}
+              </Typography>
+              <Chip
+                label="60 FPS SOVEREIGN CORE"
+                size="small"
+                sx={{
+                  height: 20,
+                  fontFamily: mono,
+                  fontSize: '0.62rem',
+                  fontWeight: 800,
+                  bgcolor: 'rgba(16,185,129,0.15)',
+                  color: '#34D399',
+                  border: '1px solid rgba(16,185,129,0.35)',
+                }}
+              />
+            </Stack>
+            <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mt: 0.3 }}>
+              {mode.subtitle}
+            </Typography>
+          </Box>
+        </Box>
 
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
+        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          <Button
+            size="small"
+            variant="outlined"
             onClick={() => setRunning((r) => !r)}
-            className="px-3 py-1.5 rounded-lg text-xs font-mono bg-white/5 hover:bg-white/10 text-white border border-white/10 flex items-center gap-1.5"
+            startIcon={running ? <PauseIcon sx={{ fontSize: 15 }} /> : <PlayArrowIcon sx={{ fontSize: 15 }} />}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              color: '#E2E8F0',
+              borderColor: 'rgba(255,255,255,0.16)',
+            }}
           >
-            {running ? <Pause className="w-3.5 h-3.5 text-[#D4AF37]" /> : <Play className="w-3.5 h-3.5 text-emerald-400" />}
             {running ? 'Pause Shader' : 'Resume'}
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
             onClick={handleCopy}
-            className="px-3 py-1.5 rounded-lg text-xs font-mono bg-[#D4AF37]/20 hover:bg-[#D4AF37]/30 text-[#F5E6AB] border border-[#D4AF37]/40 flex items-center gap-1.5"
+            startIcon={copied ? <CheckIcon sx={{ fontSize: 15 }} /> : <ContentCopyIcon sx={{ fontSize: 15 }} />}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              bgcolor: '#D4AF37',
+              color: '#060609',
+              '&:hover': { bgcolor: '#F5E6AB' },
+            }}
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
             {copied ? 'Manifest Copied' : 'Export Foundry Spec'}
-          </button>
-        </div>
-      </div>
+          </Button>
+        </Stack>
+      </Box>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12">
-        <div className="lg:col-span-7 border-b lg:border-b-0 lg:border-r border-white/10 bg-[#05060b]">
-          <canvas ref={canvasRef} className="w-full h-[350px] block" />
-        </div>
+      <Grid container>
+        <Grid xs={12} md={7} sx={{ borderRight: { md: '1px solid rgba(255,255,255,0.08)' }, bgcolor: '#05060B' }}>
+          <Box sx={{ width: '100%', height: 350 }}>
+            <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />
+          </Box>
+        </Grid>
 
-        <div className="lg:col-span-5 p-4 sm:p-5 flex flex-col justify-between gap-4 bg-[#080a12]">
-          <div className="space-y-3">
-            <div>
-              <label className="block text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-1">
-                Foundry Execution Directive
-              </label>
-              <textarea
-                rows={2}
-                value={directive}
-                onChange={(e) => setDirective(e.target.value)}
-                className="w-full rounded-lg bg-black/60 border border-white/15 px-3 py-2 text-xs font-mono text-white focus:outline-none focus:border-[#D4AF37]"
-              />
-            </div>
+        <Grid xs={12} md={5} sx={{ p: 2.5, bgcolor: '#080A12', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 2 }}>
+          <Box>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, color: '#94A3B8', mb: 1 }}>
+              FOUNDRY EXECUTION DIRECTIVE
+            </Typography>
+            <TextField
+              fullWidth
+              multiline
+              rows={2}
+              size="small"
+              value={directive}
+              onChange={(e) => setDirective(e.target.value)}
+              sx={{
+                mb: 2,
+                '& .MuiInputBase-root': {
+                  fontFamily: mono,
+                  fontSize: '0.76rem',
+                  bgcolor: 'rgba(0,0,0,0.45)',
+                },
+              }}
+            />
 
-            <div>
-              <div className="flex justify-between text-[11px] font-mono text-zinc-400 mb-1">
-                <span>ASCII MATRIX DENSITY</span>
-                <span className="text-[#D4AF37]">{density} cols</span>
-              </div>
-              <input
-                type="range"
-                min="36"
-                max="84"
-                step="2"
-                value={density}
-                onChange={(e) => setDensity(Number(e.target.value))}
-                className="w-full accent-[#D4AF37]"
-              />
-            </div>
+            <Box sx={{ mb: 1.5 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#94A3B8' }}>ASCII MATRIX DENSITY</Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#D4AF37', fontWeight: 800 }}>{density} cols</Typography>
+              </Box>
+              <Slider size="small" min={36} max={84} step={2} value={density} onChange={(_, v) => setDensity(v)} sx={{ color: '#D4AF37' }} />
+            </Box>
 
-            <div>
-              <div className="flex justify-between text-[11px] font-mono text-zinc-400 mb-1">
-                <span>SYMMETRY HARMONIC ORDER</span>
-                <span className="text-[#D4AF37]">{harmonic.toFixed(1)}</span>
-              </div>
-              <input
-                type="range"
-                min="1"
-                max="8"
-                step="0.5"
-                value={harmonic}
-                onChange={(e) => setHarmonic(Number(e.target.value))}
-                className="w-full accent-[#D4AF37]"
-              />
-            </div>
-          </div>
+            <Box sx={{ mb: 1 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#94A3B8' }}>SYMMETRY HARMONIC ORDER</Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#D4AF37', fontWeight: 800 }}>{harmonic.toFixed(1)}</Typography>
+              </Box>
+              <Slider size="small" min={1} max={8} step={0.5} value={harmonic} onChange={(_, v) => setHarmonic(v)} sx={{ color: '#D4AF37' }} />
+            </Box>
+          </Box>
 
-          <pre className="p-3 rounded-xl bg-black/70 border border-white/10 text-[10px] font-mono text-emerald-300 overflow-x-auto max-h-[155px]">
+          <Box
+            component="pre"
+            sx={{
+              p: 1.5,
+              m: 0,
+              borderRadius: 2,
+              bgcolor: '#040407',
+              border: '1px solid rgba(255,255,255,0.08)',
+              fontFamily: mono,
+              fontSize: '0.68rem',
+              color: '#34D399',
+              overflowX: 'auto',
+              maxHeight: 150,
+            }}
+          >
             {manifest}
-          </pre>
-        </div>
-      </div>
-    </div>
+          </Box>
+        </Grid>
+      </Grid>
+    </Paper>
   );
 }
