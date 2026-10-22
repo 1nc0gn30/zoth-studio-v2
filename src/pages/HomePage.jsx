@@ -32,6 +32,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import GoldenZLogo3D from '../components/GoldenZLogo3D';
 import MathPillarsGrid from '../components/MathPillarsGrid';
 import CompanyTicker from '../components/CompanyTicker';
+import AsciiMotionGodModeTool from '../components/tools/AsciiMotionGodModeTool';
 const WebGPUAIConsole = React.lazy(() => import('../components/WebGPUAIConsole'));
 const WebMCPConsole = React.lazy(() => import('../components/WebMCPConsole'));
 const SovereignFunnel = React.lazy(() => import('../components/SovereignFunnel'));
@@ -1968,6 +1969,11 @@ export default function HomePage() {
             />
           </Box>
         ))}
+      </Box>
+
+      {/* Interactive 60FPS ASCII & Braille Motion Synth Theater */}
+      <Box sx={{ mb: 8 }}>
+        <AsciiMotionGodModeTool />
       </Box>
 
       {/* Task 1: 5 Pillars Architecture Explorer (Right below Feature Highlights) */}

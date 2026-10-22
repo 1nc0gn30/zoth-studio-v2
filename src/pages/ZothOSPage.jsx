@@ -44,6 +44,8 @@ import { useStudioStatus } from '../studio/useStudioStatus';
 import { useHostInfo } from '../studio/useHostInfo';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import SovereignFunnel from '../components/SovereignFunnel';
+import ZothOSGodModeTool from '../components/tools/ZothOSGodModeTool';
+import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
 import { HeroReveal, HeroItem, ParallaxGlow, RevealOnScroll, StaggerChildren, StaggerItem } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -896,10 +898,8 @@ export default function ZothOSPage() {
                     letterSpacing: '-0.03em',
                     mb: 1.5,
                     color: theme.palette.text.primary,
-                    fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' },
+                    fontSize: { xs: '1.75rem', sm: '2.35rem', md: '2.95rem' },
                     lineHeight: 1.15,
-                    wordBreak: 'break-word',
-                    overflowWrap: 'break-word',
                   }}
                 >
                   Zoth OS: Sovereign <span className="text-gradient-gold">Agent Operating System</span>
@@ -942,9 +942,27 @@ export default function ZothOSPage() {
           </Box>
         </HeroReveal>
 
-        <RevealOnScroll preset="fadeUp" delay={0.1}>
+        <Box sx={{ mb: 4 }}>
           <DaemonStatusStrip />
-        </RevealOnScroll>
+        </Box>
+
+        {/* 60FPS ASCII & Braille Motion Edit + Interactive ZothOS v3.2 Desktop Pillar Inspector */}
+        <Box sx={{ mb: 5 }}>
+          <ToolMotionShowcase
+            tool={{
+              id: 'zoth-os',
+              name: 'Zoth OS v3.2',
+              category: 'Swarm & Core',
+              executionType: 'local_cli',
+              localPort: 8094,
+              description: 'Debian 13 Trixie + KDE Plasma 6.3 sovereign AI distribution with 10 Root Flagships, 4 Desktop Pillar Folders, and 22 Loopback Daemons.',
+            }}
+            onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
+          />
+          <Box sx={{ mt: 4 }}>
+            <ZothOSGodModeTool />
+          </Box>
+        </Box>
 
         {/* SECTION: Native ZothOS Host Telemetry & Sovereign Launchpad */}
         <RevealOnScroll preset="fadeUp" delay={0.2}>
