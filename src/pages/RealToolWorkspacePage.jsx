@@ -89,11 +89,27 @@ import SchemaIllustratorGodModeTool from '../components/tools/SchemaIllustratorG
 import CertPathRoadmapGodModeTool from '../components/tools/CertPathRoadmapGodModeTool';
 import Badge3dCoinGodModeTool from '../components/tools/Badge3dCoinGodModeTool';
 import McpLensGodModeTool from '../components/tools/McpLensGodModeTool';
+import CwvSpeedEngineGodModeTool from '../components/tools/CwvSpeedEngineGodModeTool';
+import OmniPostSocialGodModeTool from '../components/tools/OmniPostSocialGodModeTool';
+import DeepSearchGodModeTool from '../components/tools/DeepSearchGodModeTool';
+import PromptMasterGodModeTool from '../components/tools/PromptMasterGodModeTool';
+import VectorSearchGodModeTool from '../components/tools/VectorSearchGodModeTool';
+import ZothOSGodModeTool from '../components/tools/ZothOSGodModeTool';
+import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
+import {
+  HeroReveal,
+  HeroItem,
+  GlowLine,
+  RevealOnScroll,
+  StaggerChildren,
+  StaggerItem,
+} from '../components/MotionReveal';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const ENCLAVE_TOOL_COMPONENTS = {
+  'zoth-os': ZothOSGodModeTool,
   'badge3d-coin-generator': Badge3dCoinGodModeTool,
   'badge3d-coin': Badge3dCoinGodModeTool,
   'certpath-roadmap-studio': CertPathRoadmapGodModeTool,
@@ -129,10 +145,10 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'agent-flight-recorder': AgentFlightRecorderTool,
   'agent-capsule-jail': AgentCapsuleJailTool,
   'agent-policy-auditor': AgentPolicyAuditorTool,
-  'vector-search-engine': VectorSearchTool,
-  'deepsearch-research-agent': DeepSearchResearchTool,
-  'prompt-master-optimizer': PromptMasterTool,
-  'promptmaster-studio': PromptMasterTool,
+  'vector-search-engine': VectorSearchGodModeTool,
+  'deepsearch-research-agent': DeepSearchGodModeTool,
+  'prompt-master-optimizer': PromptMasterGodModeTool,
+  'promptmaster-studio': PromptMasterGodModeTool,
   'hexstrike-tactical-terminal': HexStrikeTool,
   'hexstrike-arsenal': HexStrikeTool,
   'envguard-secrets-vault': EnvGuardVaultTool,
@@ -140,9 +156,9 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'audiocipher-stego-vault': AudioCipherStegoTool,
   'audiocipher-stego-engine': AudioCipherStegoTool,
   'aeo-graph-engine': AeoGraphEngineTool,
-  'cwv-speed-engine': CwvSpeedEngineTool,
+  'cwv-speed-engine': CwvSpeedEngineGodModeTool,
   'subsweep-lead-scanner': SubSweepTool,
-  'omnipost-social-engine': OmniPostSocialTool,
+  'omnipost-social-engine': OmniPostSocialGodModeTool,
   'cron-rhythm-studio': CronRhythmTool,
   'printify-connector': PrintifyConnectorTool,
   'gelato-connector': GelatoConnectorTool,
@@ -415,259 +431,283 @@ export default function RealToolWorkspacePage() {
           position: 'relative',
         }}
       >
-      {/* Hero Dossier Header */}
-      <Paper
-        sx={{
-          p: { xs: 3, md: 4.5 },
-          mb: 5,
-          borderRadius: 3,
-          bgcolor: isDark ? '#08080B' : '#FFFFFF',
-          border: `1px solid ${gold.border}`,
-          boxShadow: isDark ? '0 12px 32px rgba(0,0,0,0.6), 0 0 20px -4px rgba(212,175,55,0.2)' : '0 4px 16px rgba(184,134,11,0.12)',
-        }}
-      >
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 3 }}>
-          <Box sx={{ maxWidth: 760 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5, flexWrap: 'wrap' }}>
-              <Chip
-                label={tool.category}
-                size="small"
-                sx={{
-                  bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#F1F5F9',
-                  color: theme.palette.text.primary,
-                  fontWeight: 700,
-                  fontSize: '0.75rem',
-                }}
-              />
-              <Chip
-                label={`v${tool.version || '1.0.0'}`}
-                size="small"
-                sx={{
-                  fontFamily: mono,
-                  bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#F1F5F9',
-                  color: gold.accent,
-                  fontWeight: 800,
-                  fontSize: '0.75rem',
-                }}
-              />
-              <Chip
-                label={tool.executionType === 'local_cli' ? 'LOCAL CLI & MCP DAEMON' : 'STANDALONE WASM RUNTIME'}
-                size="small"
-                sx={{
-                  fontFamily: mono,
-                  bgcolor: gold.wash,
-                  color: gold.soft,
-                  border: `1px solid ${gold.border}`,
-                  fontWeight: 800,
-                  fontSize: '0.72rem',
-                }}
-              />
-            </Box>
-            <Typography
-              variant="h3"
-              sx={{
-                fontWeight: 800,
-                letterSpacing: '-0.03em',
-                mb: 1.5,
-                color: theme.palette.text.primary,
-                fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' },
-                lineHeight: 1.15,
-                wordBreak: 'break-word',
-                overflowWrap: 'break-word',
-              }}
-            >
-              {tool.name}
-            </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ fontSize: '1.05rem', lineHeight: 1.65 }}>
-              {tool.description}
-            </Typography>
-            <ToolOfferLine tool={tool} isDark={isDark} />
-          </Box>
-
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: { xs: '100%', md: 'auto' }, flexShrink: 0, flexWrap: 'wrap' }}>
-            {tool.localPort && (
-              <Button
-                component="a"
-                href={tool.localUrl || `http://127.0.0.1:${tool.localPort}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="outlined"
-                endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
-                sx={{
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  fontSize: '0.8rem',
-                  borderColor: isDark ? 'rgba(52,211,153,0.45)' : '#A7F3D0',
-                  color: isDark ? '#34D399' : '#047857',
-                  bgcolor: isDark ? 'rgba(52,211,153,0.08)' : '#ECFDF3',
-                  '&:hover': { borderColor: '#34D399', bgcolor: isDark ? 'rgba(52,211,153,0.18)' : '#D1FAE5' },
-                }}
-              >
-                Local :{tool.localPort}
-              </Button>
-            )}
-            {tool.liveUrl && (
-              <Button
-                component="a"
-                href={tool.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="outlined"
-                endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
-                sx={{
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  fontSize: '0.8rem',
-                  borderColor: gold.border,
-                  color: gold.accent,
-                  '&:hover': { borderColor: gold.accent, bgcolor: gold.wash },
-                }}
-              >
-                Web Mirror ↗
-              </Button>
-            )}
-            {tool.id === 'neuro-memory-daemon' && (
-              <Button
-                component={RouterLink}
-                to="/memory"
-                variant="outlined"
-                startIcon={<MemoryIcon sx={{ fontSize: 16 }} />}
-                sx={{
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  fontSize: '0.8rem',
-                  borderColor: isDark ? 'rgba(192,132,252,0.45)' : '#E9D5FF',
-                  color: isDark ? '#C084FC' : '#7E22CE',
-                  bgcolor: isDark ? 'rgba(192,132,252,0.08)' : '#FAF5FF',
-                  '&:hover': { borderColor: '#C084FC', bgcolor: isDark ? 'rgba(192,132,252,0.18)' : '#F3E8FF' },
-                }}
-              >
-                3D Cosmic Nebula
-              </Button>
-            )}
-            {tool.github && (
-              <Button
-                component="a"
-                href={tool.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="outlined"
-                startIcon={<GitHubIcon />}
-                endIcon={<OpenInNewIcon sx={{ fontSize: 14 }} />}
-                sx={{
-                  fontWeight: 800,
-                  borderColor: gold.border,
-                  color: theme.palette.text.primary,
-                  '&:hover': { borderColor: gold.accent, bgcolor: gold.wash },
-                }}
-              >
-                GitHub Repository
-              </Button>
-            )}
-            {canRunClientSide ? (
-              <Button
-                variant="contained"
-                onClick={() => {
-                  const el = document.getElementById('client-workstation-deck');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }}
-                startIcon={<SpeedIcon />}
-                sx={{
-                  bgcolor: '#38BDF8',
-                  color: '#08080B',
-                  fontWeight: 800,
-                  boxShadow: '0 4px 16px rgba(56,189,248,0.3)',
-                  '&:hover': { bgcolor: '#7DD3FC' },
-                }}
-              >
-                Try In-Browser ⚡
-              </Button>
-            ) : EnclaveToolComponent && (isLocal || unlockedPreview) ? (
-              <Button
-                variant="contained"
-                onClick={() => {
-                  const el = document.getElementById('enclave-workstation-deck');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }}
-                startIcon={<TerminalIcon />}
-                sx={{
-                  bgcolor: isLocal ? '#10B981' : gold.accent,
-                  color: '#08080B',
-                  fontWeight: 800,
-                  boxShadow: isLocal ? '0 4px 16px rgba(16,185,129,0.3)' : '0 4px 16px rgba(212,175,55,0.3)',
-                  '&:hover': { bgcolor: isLocal ? '#34D399' : (isDark ? '#F5E6AB' : '#9A7008') },
-                }}
-              >
-                {isLocal ? 'Launch Enclave ⚡' : 'Inspect Simulator ⚡'}
-              </Button>
-            ) : (
-              <Button
-                component={RouterLink}
-                to="/zoth-os"
-                variant="contained"
-                startIcon={<LaunchIcon />}
-                sx={{
-                  bgcolor: gold.accent,
-                  color: '#08080B',
-                  fontWeight: 800,
-                  boxShadow: '0 4px 16px rgba(212,175,55,0.3)',
-                  '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#9A7008' },
-                }}
-              >
-                {isLocal ? 'Run in ZothOS' : 'Bare-Metal ZothOS'}
-              </Button>
-            )}
-          </Stack>
-        </Box>
-
-        {/* Quick Pull Terminal Command Strip */}
-        <Box
+      {/* Hero Dossier Header with Category-Coded GlowLine Seam & MotionReveal */}
+      <HeroReveal>
+        <Paper
           sx={{
-            mt: 3.5,
-            p: 1.8,
-            borderRadius: 2,
-            bgcolor: isDark ? '#040406' : '#F8FAFC',
-            border: `1px solid ${theme.palette.divider}`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 2,
-            flexWrap: 'wrap',
+            p: { xs: 3, md: 4.5 },
+            mb: 4,
+            borderRadius: 3,
+            bgcolor: isDark ? '#08080B' : '#FFFFFF',
+            border: `1px solid ${gold.border}`,
+            boxShadow: isDark ? '0 12px 32px rgba(0,0,0,0.6), 0 0 20px -4px rgba(212,175,55,0.2)' : '0 4px 16px rgba(184,134,11,0.12)',
+            position: 'relative',
+            overflow: 'hidden',
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0 }}>
-            <TerminalIcon sx={{ color: gold.accent, fontSize: 20 }} />
-            <Typography
+          <HeroItem>
+            <GlowLine
+              height={3}
+              color={getCategoryMotionMeta(tool.category).accent}
+              glowColor={`${getCategoryMotionMeta(tool.category).accent}66`}
+            />
+          </HeroItem>
+          <HeroItem>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 3, mt: 1 }}>
+              <Box sx={{ maxWidth: 760 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5, flexWrap: 'wrap' }}>
+                  <Chip
+                    label={tool.category}
+                    size="small"
+                    sx={{
+                      bgcolor: `${getCategoryMotionMeta(tool.category).accent}20`,
+                      color: getCategoryMotionMeta(tool.category).accent,
+                      border: `1px solid ${getCategoryMotionMeta(tool.category).accent}55`,
+                      fontWeight: 800,
+                      fontSize: '0.75rem',
+                    }}
+                  />
+                  <Chip
+                    label={`v${tool.version || '1.0.0'}`}
+                    size="small"
+                    sx={{
+                      fontFamily: mono,
+                      bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#F1F5F9',
+                      color: gold.accent,
+                      fontWeight: 800,
+                      fontSize: '0.75rem',
+                    }}
+                  />
+                  <Chip
+                    label={tool.executionType === 'local_cli' ? 'LOCAL CLI & MCP DAEMON' : '100% IN-BROWSER CLIENT ENGINE'}
+                    size="small"
+                    sx={{
+                      fontFamily: mono,
+                      bgcolor: gold.wash,
+                      color: gold.soft,
+                      border: `1px solid ${gold.border}`,
+                      fontWeight: 800,
+                      fontSize: '0.72rem',
+                    }}
+                  />
+                </Box>
+                <Typography
+                  variant="h3"
+                  sx={{
+                    fontWeight: 800,
+                    letterSpacing: '-0.03em',
+                    mb: 1.5,
+                    color: theme.palette.text.primary,
+                    fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' },
+                    lineHeight: 1.15,
+                    wordBreak: 'break-word',
+                    overflowWrap: 'break-word',
+                  }}
+                >
+                  {tool.name}
+                </Typography>
+                <Typography variant="body1" color="text.secondary" sx={{ fontSize: '1.05rem', lineHeight: 1.65 }}>
+                  {tool.description}
+                </Typography>
+                <ToolOfferLine tool={tool} isDark={isDark} />
+              </Box>
+
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: { xs: '100%', md: 'auto' }, flexShrink: 0, flexWrap: 'wrap' }}>
+                {tool.localPort && (
+                  <Button
+                    component="a"
+                    href={tool.localUrl || `http://127.0.0.1:${tool.localPort}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="outlined"
+                    endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+                    sx={{
+                      fontWeight: 800,
+                      fontFamily: mono,
+                      fontSize: '0.8rem',
+                      borderColor: isDark ? 'rgba(52,211,153,0.45)' : '#A7F3D0',
+                      color: isDark ? '#34D399' : '#047857',
+                      bgcolor: isDark ? 'rgba(52,211,153,0.08)' : '#ECFDF3',
+                      '&:hover': { borderColor: '#34D399', bgcolor: isDark ? 'rgba(52,211,153,0.18)' : '#D1FAE5' },
+                    }}
+                  >
+                    Local :{tool.localPort}
+                  </Button>
+                )}
+                {tool.liveUrl && (
+                  <Button
+                    component="a"
+                    href={tool.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="outlined"
+                    endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+                    sx={{
+                      fontWeight: 800,
+                      fontFamily: mono,
+                      fontSize: '0.8rem',
+                      borderColor: gold.border,
+                      color: gold.accent,
+                      '&:hover': { borderColor: gold.accent, bgcolor: gold.wash },
+                    }}
+                  >
+                    Web Mirror ↗
+                  </Button>
+                )}
+                {tool.id === 'neuro-memory-daemon' && (
+                  <Button
+                    component={RouterLink}
+                    to="/memory"
+                    variant="outlined"
+                    startIcon={<MemoryIcon sx={{ fontSize: 16 }} />}
+                    sx={{
+                      fontWeight: 800,
+                      fontFamily: mono,
+                      fontSize: '0.8rem',
+                      borderColor: isDark ? 'rgba(192,132,252,0.45)' : '#E9D5FF',
+                      color: isDark ? '#C084FC' : '#7E22CE',
+                      bgcolor: isDark ? 'rgba(192,132,252,0.08)' : '#FAF5FF',
+                      '&:hover': { borderColor: '#C084FC', bgcolor: isDark ? 'rgba(192,132,252,0.18)' : '#F3E8FF' },
+                    }}
+                  >
+                    3D Cosmic Nebula
+                  </Button>
+                )}
+                {tool.github && (
+                  <Button
+                    component="a"
+                    href={tool.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="outlined"
+                    startIcon={<GitHubIcon />}
+                    endIcon={<OpenInNewIcon sx={{ fontSize: 14 }} />}
+                    sx={{
+                      fontWeight: 800,
+                      borderColor: gold.border,
+                      color: theme.palette.text.primary,
+                      '&:hover': { borderColor: gold.accent, bgcolor: gold.wash },
+                    }}
+                  >
+                    GitHub Repository
+                  </Button>
+                )}
+                {canRunClientSide ? (
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      const el = document.getElementById('enclave-workstation-deck') || document.getElementById('client-workstation-deck');
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    startIcon={<SpeedIcon />}
+                    sx={{
+                      bgcolor: '#38BDF8',
+                      color: '#08080B',
+                      fontWeight: 800,
+                      boxShadow: '0 4px 16px rgba(56,189,248,0.3)',
+                      '&:hover': { bgcolor: '#7DD3FC' },
+                    }}
+                  >
+                    Try In-Browser ⚡
+                  </Button>
+                ) : EnclaveToolComponent && (isLocal || unlockedPreview) ? (
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      const el = document.getElementById('enclave-workstation-deck');
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    startIcon={<TerminalIcon />}
+                    sx={{
+                      bgcolor: isLocal ? '#10B981' : gold.accent,
+                      color: '#08080B',
+                      fontWeight: 800,
+                      boxShadow: isLocal ? '0 4px 16px rgba(16,185,129,0.3)' : '0 4px 16px rgba(212,175,55,0.3)',
+                      '&:hover': { bgcolor: isLocal ? '#34D399' : (isDark ? '#F5E6AB' : '#9A7008') },
+                    }}
+                  >
+                    {isLocal ? 'Launch Enclave ⚡' : 'Inspect Simulator ⚡'}
+                  </Button>
+                ) : (
+                  <Button
+                    component={RouterLink}
+                    to="/zoth-os"
+                    variant="contained"
+                    startIcon={<LaunchIcon />}
+                    sx={{
+                      bgcolor: gold.accent,
+                      color: '#08080B',
+                      fontWeight: 800,
+                      boxShadow: '0 4px 16px rgba(212,175,55,0.3)',
+                      '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#9A7008' },
+                    }}
+                  >
+                    {isLocal ? 'Run in ZothOS' : 'Bare-Metal ZothOS'}
+                  </Button>
+                )}
+              </Stack>
+            </Box>
+          </HeroItem>
+
+          {/* Quick Pull Terminal Command Strip */}
+          <HeroItem>
+            <Box
               sx={{
-                fontFamily: mono,
-                fontSize: { xs: '0.78rem', sm: '0.88rem' },
-                color: isDark ? '#E2E8F0' : '#1E293B',
-                wordBreak: 'break-all',
+                mt: 3.5,
+                p: 1.8,
+                borderRadius: 2,
+                bgcolor: isDark ? '#040406' : '#F8FAFC',
+                border: `1px solid ${theme.palette.divider}`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 2,
+                flexWrap: 'wrap',
               }}
             >
-              {tool.pull || `git clone ${tool.github}.git`}
-            </Typography>
-          </Box>
-          <Tooltip title={copiedCmd ? 'Copied command!' : 'Copy to clipboard'}>
-            <Button
-              size="small"
-              variant="outlined"
-              onClick={() => handleCopy(tool.pull || `git clone ${tool.github}.git`, setCopiedCmd)}
-              startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 16 }} /> : <ContentCopyIcon sx={{ fontSize: 16 }} />}
-              sx={{
-                fontFamily: mono,
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                borderColor: gold.border,
-                color: gold.soft,
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {copiedCmd ? 'Copied' : 'Copy Command'}
-            </Button>
-          </Tooltip>
-        </Box>
-      </Paper>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0 }}>
+                <TerminalIcon sx={{ color: gold.accent, fontSize: 20 }} />
+                <Typography
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: { xs: '0.78rem', sm: '0.88rem' },
+                    color: isDark ? '#E2E8F0' : '#1E293B',
+                    wordBreak: 'break-all',
+                  }}
+                >
+                  {tool.pull || `git clone ${tool.github}.git`}
+                </Typography>
+              </Box>
+              <Tooltip title={copiedCmd ? 'Copied command!' : 'Copy to clipboard'}>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={() => handleCopy(tool.pull || `git clone ${tool.github}.git`, setCopiedCmd)}
+                  startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 16 }} /> : <ContentCopyIcon sx={{ fontSize: 16 }} />}
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    borderColor: gold.border,
+                    color: gold.soft,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {copiedCmd ? 'Copied' : 'Copy Command'}
+                </Button>
+              </Tooltip>
+            </Box>
+          </HeroItem>
+        </Paper>
+      </HeroReveal>
+
+      {/* Interactive 15s Code-First Motion Edit & Kinetic Anchor Stage */}
+      <RevealOnScroll preset="fadeUp">
+        <ToolMotionShowcase
+          tool={tool}
+          onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
+        />
+      </RevealOnScroll>
 
       {/* Interactive In-Browser Workstation (Mounted when tool has WebGPU/WASM client engine and no dedicated Enclave component) */}
       {canRunClientSide && tool.id !== 'webmcp-protocol-inspector' && !EnclaveToolComponent && (

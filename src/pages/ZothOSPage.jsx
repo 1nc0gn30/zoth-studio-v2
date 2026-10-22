@@ -1138,6 +1138,70 @@ export default function ZothOSPage() {
                 ))}
               </Grid>
             </StaggerChildren>
+
+            {/* Consolidated 4-Pillar Desktop App Architecture */}
+            <Box sx={{ mt: 4 }}>
+              <Typography className="section-kicker">Digestible Desktop Architecture (v3.2 Consolidated)</Typography>
+              <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, letterSpacing: '-0.02em', mb: 0.5 }}>
+                10 Root Flagships + 4 Consolidated Desktop Pillars
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                All 81 sovereign applications on ZothOS are organized into 10 primary desktop flagships and 4 clean desktop folders, managed via the unified <code>zoth-control-center</code> v2.0 hub.
+              </Typography>
+              <Grid container spacing={2}>
+                {[
+                  {
+                    folder: '01-AI-Agents-and-Dev',
+                    count: '16 Apps',
+                    title: 'AI Agents & Developer Workspaces',
+                    items: 'Aider, Cline, OpenCode, OpenAI Codex, Antigravity, Bolt.DIY, WebGen, Streamlit, Netlify, LazyDocker, Workspaces',
+                  },
+                  {
+                    folder: '02-Security-and-Privacy',
+                    count: '19 Apps',
+                    title: 'Offensive Security & Stealth Vaults',
+                    items: 'HexStrike AI, Burp Suite, Ghostmode, Amnesic RAM Mode, Undercover, NetKill, Tor, Signal, SimpleX, Bitwarden, VeraCrypt',
+                  },
+                  {
+                    folder: '03-ZothOS-Daemons',
+                    count: '17 Apps',
+                    title: 'Loopback Enclave Daemons & Telemetry',
+                    items: 'Agent Conductor, Agent HUD, Sentinel AI, Neuro-Memory, Egress Sentinel, Prompt Firewall, Capsule Jail, Flight Recorder, Mock Twin, Budget Sentinel',
+                  },
+                  {
+                    folder: '04-Media-and-Utilities',
+                    count: '19 Apps',
+                    title: 'Media, Knowledge & System Utilities',
+                    items: 'Obsidian Canon, Yazi Navigator, Desktop Pet HUD, Reality Switcher, Matrix Rain, Hermetic Audio, Maya Studio, Math Pillar, Web3 Solana',
+                  },
+                ].map((pillar) => (
+                  <Grid xs={12} sm={6} md={3} key={pillar.folder}>
+                    <Paper
+                      sx={{
+                        p: 2,
+                        height: '100%',
+                        borderRadius: 2,
+                        bgcolor: isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC',
+                        border: `1px solid ${gold.border}`,
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                        <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent }}>
+                          {pillar.folder}
+                        </Typography>
+                        <Chip label={pillar.count} size="small" sx={{ height: 18, fontSize: '0.62rem', fontFamily: mono, fontWeight: 800, bgcolor: gold.wash, color: gold.soft }} />
+                      </Box>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 0.5, color: theme.palette.text.primary }}>
+                        {pillar.title}
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', lineHeight: 1.45 }}>
+                        {pillar.items}
+                      </Typography>
+                    </Paper>
+                  </Grid>
+                ))}
+              </Grid>
+            </Box>
           </Box>
         </RevealOnScroll>
 

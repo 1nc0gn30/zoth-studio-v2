@@ -23,6 +23,7 @@ import { microTools } from '../data/toolsData';
 import ToolOfferLine from '../components/ToolOfferLine';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
+import { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
 import { useSovereignRuntime, isLocalRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -49,11 +50,11 @@ export default function ToolsPage() {
   });
   const searchRef = useRef(null);
   useEffect(() => {
-    const next = new URLSearchParams();
-    if (search) next.set('q', search);
-    if (selectedCat !== 'All') next.set('cat', selectedCat);
-    if (execFilter !== 'all') next.set('mode', execFilter);
-    if (pinnedOnly) next.set('pinned', '1');
+    const next = new URLSearchParams(params);
+    if (search) next.set('q', search); else next.delete('q');
+    if (selectedCat !== 'All') next.set('cat', selectedCat); else next.delete('cat');
+    if (execFilter !== 'all') next.set('mode', execFilter); else next.delete('mode');
+    if (pinnedOnly) next.set('pinned', '1'); else next.delete('pinned');
     if (next.toString() !== params.toString()) setParams(next, { replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, selectedCat, execFilter, pinnedOnly]);
@@ -96,9 +97,13 @@ export default function ToolsPage() {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  const isBrowserTool = (t) => t.executionType === 'webgpu' || t.executionType === 'browser';
+
   const filtered = microTools.filter((t) => {
     const matchesCat = selectedCat === 'All' || t.category === selectedCat;
-    const matchesExec = execFilter === 'all' || t.executionType === execFilter;
+    const matchesExec =
+      execFilter === 'all' ||
+      (execFilter === 'webgpu' ? isBrowserTool(t) : t.executionType === execFilter);
     const matchesSearch =
       t.name.toLowerCase().includes(search.toLowerCase()) ||
       t.description.toLowerCase().includes(search.toLowerCase()) ||
@@ -248,7 +253,7 @@ export default function ToolsPage() {
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr 1fr', sm: 'repeat(4, 1fr)' }, gap: 1.5, mb: 4 }}>
         {[
           ['Catalog', microTools.length],
-          ['In browser', microTools.filter((tool) => tool.executionType === 'webgpu').length],
+          ['In browser', microTools.filter(isBrowserTool).length],
           ['Local CLI', microTools.filter((tool) => tool.executionType === 'local_cli').length],
           ['Categories', categories.length - 1],
         ].map(([label, value]) => (
@@ -350,7 +355,7 @@ export default function ToolsPage() {
         />
         <Chip
           icon={<FlashOnIcon sx={{ fontSize: '16px !important', color: execFilter === 'webgpu' ? (isDark ? '#08080B !important' : '#0F172A !important') : `${gold.accent} !important` }} />}
-          label={`In-Browser WebGPU (${microTools.filter((t) => t.executionType === 'webgpu').length})`}
+          label={`In-Browser Workstations (${microTools.filter(isBrowserTool).length})`}
           clickable
           onClick={() => setExecFilter('webgpu')}
           size="small"
@@ -411,7 +416,7 @@ export default function ToolsPage() {
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
         Showing <strong>{filtered.length}</strong> of <strong>{microTools.length}</strong> micro-tool repositories (
         <Box component="span" sx={{ color: gold.accent, fontWeight: 800 }}>
-          {microTools.filter((t) => t.executionType === 'webgpu').length} WebGPU In-Browser
+          {microTools.filter(isBrowserTool).length} In-Browser Workstations
         </Box>{' '}
         | {microTools.filter((t) => t.executionType === 'local_cli').length} Local CLI / Zoth OS)
       </Typography>
@@ -421,8 +426,9 @@ export default function ToolsPage() {
         <Grid container spacing={3}>
           {filtered.map((tool) => {
             const execEval = evaluateTool(tool);
-            const isWebGPU = tool.executionType === 'webgpu';
+            const isWebGPU = isBrowserTool(tool);
             const isExpanded = expanded.has(tool.id);
+            const catAccent = getCategoryMotionMeta(tool.category).accent;
             return (
               <Grid xs={12} sm={6} md={4} key={tool.id}>
                 <StaggerItem>
@@ -432,17 +438,17 @@ export default function ToolsPage() {
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'space-between',
-                      border: isWebGPU ? (isDark ? '1.5px solid #D4AF37' : '1.5px solid #B8860B') : `1px solid ${theme.palette.divider}`,
+                      border: `1px solid ${theme.palette.divider}`,
+                      borderTop: `2.5px solid ${catAccent}`,
                       bgcolor: theme.palette.background.paper,
-                      transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                      transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
                       position: 'relative',
+                      overflow: 'hidden',
                       '&:hover': {
-                        borderColor: gold.accent,
-                        boxShadow: isWebGPU
-                          ? (isDark ? '0 12px 32px rgba(212, 175, 55, 0.32)' : '0 12px 32px rgba(184, 134, 11, 0.22)')
-                          : isDark
-                            ? '0 8px 22px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,175,55,0.25), 0 0 20px -4px rgba(212,175,55,0.18)'
-                            : '0 8px 22px rgba(16,24,40,0.08), 0 0 16px -4px rgba(184,134,11,0.15)',
+                        borderColor: catAccent,
+                        boxShadow: isDark
+                          ? `0 12px 28px rgba(0,0,0,0.55), 0 0 22px -6px ${catAccent}44`
+                          : `0 10px 24px rgba(16,24,40,0.08), 0 0 18px -6px ${catAccent}33`,
                         transform: 'translateY(-3px)'
                       }
                     }}
