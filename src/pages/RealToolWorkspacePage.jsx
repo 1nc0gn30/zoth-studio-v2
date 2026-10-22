@@ -477,8 +477,8 @@ export default function RealToolWorkspacePage() {
             />
           </HeroItem>
           <HeroItem>
-            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 3, mt: 1 }}>
-              <Box sx={{ maxWidth: 760 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, mt: 1 }}>
+              <Box sx={{ maxWidth: 920 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5, flexWrap: 'wrap' }}>
                   <Chip
                     label={tool.category}
@@ -522,10 +522,8 @@ export default function RealToolWorkspacePage() {
                     letterSpacing: '-0.03em',
                     mb: 1.5,
                     color: theme.palette.text.primary,
-                    fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' },
+                    fontSize: { xs: '1.75rem', sm: '2.35rem', md: '2.85rem' },
                     lineHeight: 1.15,
-                    wordBreak: 'break-word',
-                    overflowWrap: 'break-word',
                   }}
                 >
                   {tool.name}
@@ -536,7 +534,7 @@ export default function RealToolWorkspacePage() {
                 <ToolOfferLine tool={tool} isDark={isDark} />
               </Box>
 
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: { xs: '100%', md: 'auto' }, flexShrink: 0, flexWrap: 'wrap' }}>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: '100%', flexWrap: 'wrap' }}>
                 {tool.localPort && (
                   <Button
                     component="a"
@@ -726,12 +724,12 @@ export default function RealToolWorkspacePage() {
       </HeroReveal>
 
       {/* Interactive 15s Code-First Motion Edit & Kinetic Anchor Stage */}
-      <RevealOnScroll preset="fadeUp">
+      <Box sx={{ mb: 4 }}>
         <ToolMotionShowcase
           tool={tool}
           onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
         />
-      </RevealOnScroll>
+      </Box>
 
       {/* Interactive In-Browser Workstation (Mounted when tool has WebGPU/WASM client engine and no dedicated Enclave component) */}
       {canRunClientSide && tool.id !== 'webmcp-protocol-inspector' && !EnclaveToolComponent && (
