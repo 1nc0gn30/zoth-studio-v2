@@ -28,6 +28,8 @@ import {
   StaggerItem,
 } from '../components/MotionReveal';
 import SovereignFunnel from '../components/SovereignFunnel';
+import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
+import ZothOSGodModeTool from '../components/tools/ZothOSGodModeTool';
 
 // Icons
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
@@ -417,6 +419,24 @@ export default function ZothOSShowcasePage() {
             Copy Quickstart
           </Button>
         </Paper>
+
+        {/* Interactive 60FPS ASCII & Braille Motion Edit + ZothOS v3.2 Desktop Pillar Inspector */}
+        <Box sx={{ mb: 8 }}>
+          <ToolMotionShowcase
+            tool={{
+              id: 'zoth-os',
+              name: 'Zoth OS v3.2',
+              category: 'Swarm & Core',
+              executionType: 'local_cli',
+              localPort: 8094,
+              description: 'Debian 13 Trixie + KDE Plasma 6.3 sovereign AI distribution with 10 Root Flagships, 4 Desktop Pillar Folders, and 22 Loopback Daemons.',
+            }}
+            onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
+          />
+          <Box sx={{ mt: 4 }}>
+            <ZothOSGodModeTool />
+          </Box>
+        </Box>
 
         {/* 6 Key Pillars Grid */}
         <Box sx={{ mb: 10 }}>
