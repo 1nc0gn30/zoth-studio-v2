@@ -108,6 +108,11 @@ import WebSecurityGuardGodModeTool from '../components/tools/WebSecurityGuardGod
 import AeoGraphEngineGodModeTool from '../components/tools/AeoGraphEngineGodModeTool';
 import NeuroMemoryGodModeTool from '../components/tools/NeuroMemoryGodModeTool';
 import SovereignBridgeGodModeTool from '../components/tools/SovereignBridgeGodModeTool';
+import AgentEgressSentinelGodModeTool from '../components/tools/AgentEgressSentinelGodModeTool';
+import AgentPromptFirewallGodModeTool from '../components/tools/AgentPromptFirewallGodModeTool';
+import AgentFlightRecorderGodModeTool from '../components/tools/AgentFlightRecorderGodModeTool';
+import AgentBudgetSentinelGodModeTool from '../components/tools/AgentBudgetSentinelGodModeTool';
+import PodCommerceGodModeTool from '../components/tools/PodCommerceGodModeTool';
 import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
 import {
   HeroReveal,
@@ -152,10 +157,10 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'sovereign-agent-bridge': SovereignBridgeGodModeTool,
   'neuro-memory-service': NeuroMemoryGodModeTool,
   'neuro-memory-daemon': NeuroMemoryGodModeTool,
-  'agent-egress-sentinel': AgentEgressSentinelTool,
+  'agent-egress-sentinel': AgentEgressSentinelGodModeTool,
   'agent-mock-twin': AgentMockTwinGodModeTool,
-  'agent-prompt-firewall': AgentPromptFirewallTool,
-  'agent-flight-recorder': AgentFlightRecorderTool,
+  'agent-prompt-firewall': AgentPromptFirewallGodModeTool,
+  'agent-flight-recorder': AgentFlightRecorderGodModeTool,
   'agent-capsule-jail': AgentCapsuleJailGodModeTool,
   'agent-policy-auditor': AgentPolicyAuditorGodModeTool,
   'vector-search-engine': VectorSearchGodModeTool,
@@ -173,18 +178,18 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'subsweep-lead-scanner': SubSweepGodModeTool,
   'omnipost-social-engine': OmniPostSocialGodModeTool,
   'cron-rhythm-studio': CronRhythmGodModeTool,
-  'printify-connector': PrintifyConnectorTool,
-  'gelato-connector': GelatoConnectorTool,
-  'etsy-connector': EtsyConnectorTool,
-  'shopify-connector': ShopifyConnectorTool,
-  'etsy-pod-forge': EtsyPodForgeTool,
-  'pod-smart-router': PodSmartRouterTool,
+  'printify-connector': PodCommerceGodModeTool,
+  'gelato-connector': PodCommerceGodModeTool,
+  'etsy-connector': PodCommerceGodModeTool,
+  'shopify-connector': PodCommerceGodModeTool,
+  'etsy-pod-forge': PodCommerceGodModeTool,
+  'pod-smart-router': PodCommerceGodModeTool,
   'digital-asset-forge': DigitalAssetForgeTool,
   'pod-mockup-forge': PodMockupForgeTool,
-  'pod-margin-sentinel': PodMarginSentinelTool,
+  'pod-margin-sentinel': PodCommerceGodModeTool,
   'agent-voice-call': AgentVoiceCallTool,
   'mcp-lens': McpLensGodModeTool,
-  'agent-budget-sentinel': AgentBudgetSentinelTool,
+  'agent-budget-sentinel': AgentBudgetSentinelGodModeTool,
   'agent-gods-eye': AgentGodsEyeGodModeTool,
   'zoth-webgen': ZothWebgenLauncherTool,
   'zoth-swarm-multiplexer': ZothSwarmMultiplexerLauncherTool,
