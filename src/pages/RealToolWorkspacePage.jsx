@@ -93,6 +93,7 @@ import {
   StaggerItem,
 } from '../components/MotionReveal';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
+import { useReality } from '../context/RealityContext';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -201,12 +202,13 @@ export default function RealToolWorkspacePage() {
   const EnclaveToolComponent = ENCLAVE_TOOL_COMPONENTS[tool?.id];
   // Tools with dedicated 60fps in-browser God-Mode workstations or WebGPU/WASM engines are immediately interactive!
   const isLocked = !isLocal && !canRunClientSide && !unlockedPreview && !EnclaveToolComponent;
+  const { reality } = useReality();
 
   const gold = {
-    accent: isDark ? '#D4AF37' : '#8A6508',
-    soft: isDark ? '#F5E6AB' : '#8A6A09',
-    wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-    border: isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.3)',
+    accent: isDark ? reality.accent : reality.accentLightMode,
+    soft: isDark ? reality.accentSoft : reality.accentLightMode,
+    wash: isDark ? reality.accentWash : '#FEF9E7',
+    border: isDark ? reality.accentBorder : 'rgba(184,134,11,0.3)',
   };
 
   const handleCopy = (text, setCopiedFn) => {
