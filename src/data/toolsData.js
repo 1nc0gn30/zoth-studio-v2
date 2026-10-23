@@ -1065,6 +1065,26 @@ export const microTools = [
     description: 'LaurieWired Ghidra Model Context Protocol bridge for autonomous binary decompilation, AST method analysis, and project variable annotation.',
     version: '2.0.0',
     pull: 'uvx --from git+https://github.com/LaurieWired/GhidraMCP ghidra-mcp --ghidra-server http://127.0.0.1:8080/',
+  },
+  {
+    id: 'zoth-ascii-magic',
+    published: true,
+    name: 'Zoth ASCII Magic Studio',
+    repo: 'zoth-ascii-magic',
+    category: 'Media & 3D',
+    executionType: 'browser',
+    github: 'https://github.com/1nc0gn30/zoth-ascii-magic',
+    liveUrl: 'https://zoth-ascii-magic.netlify.app',
+    priceUsd: '19',
+    price: '$19',
+    priceCents: 1900,
+    stripeUrl: 'https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L',
+    depay: true,
+    description: '100% client-side Image/Video/3D-to-ASCII & Sub-Pixel Unicode Braille studio with Sobel directional edge detection (/\\|-), interactive 2D point relighting, CRT phosphor bloom, and 24-bit TrueColor ANSI/HTML/SVG exports.',
+    localPort: 8089,
+    localUrl: 'http://127.0.0.1:8089',
+    version: '2.6.0',
+    pull: 'git clone https://github.com/1nc0gn30/zoth-ascii-magic.git && cd zoth-ascii-magic && zoth-ascii-magic --serve 8089',
   }
 ];
 
