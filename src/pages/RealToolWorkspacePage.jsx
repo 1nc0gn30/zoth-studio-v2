@@ -80,6 +80,7 @@ import WebMcpInspectorGodModeTool from '../components/tools/WebMcpInspectorGodMo
 import YaraSigmaForgeGodModeTool from '../components/tools/YaraSigmaForgeGodModeTool';
 import RealityShaderForgeGodModeTool from '../components/tools/RealityShaderForgeGodModeTool';
 import AttackSurfaceSentinelGodModeTool from '../components/tools/AttackSurfaceSentinelGodModeTool';
+import VisionKinematicsGodModeTool from '../components/tools/VisionKinematicsGodModeTool';
 import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
 import {
   HeroReveal,
@@ -161,10 +162,10 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'zoth-webgen': ZothFoundryGodModeTool,
   'zoth-swarm-multiplexer': ZothFoundryGodModeTool,
   'zoth-civilization': ZothFoundryGodModeTool,
-  'likeness-desk': ZothFoundryGodModeTool,
+  'likeness-desk': VisionKinematicsGodModeTool,
   'bolt.diy': ZothFoundryGodModeTool,
   'bolt-diy': ZothFoundryGodModeTool,
-  'vision-gesture-control': ZothFoundryGodModeTool,
+  'vision-gesture-control': VisionKinematicsGodModeTool,
   'datamosh-glitch-studio': AsciiMotionGodModeTool,
   'nexus-3d-scene-studio': AsciiMotionGodModeTool,
   'ufo-sacred-geometry': AsciiMotionGodModeTool,
