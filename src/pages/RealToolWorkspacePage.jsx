@@ -81,6 +81,7 @@ import YaraSigmaForgeGodModeTool from '../components/tools/YaraSigmaForgeGodMode
 import RealityShaderForgeGodModeTool from '../components/tools/RealityShaderForgeGodModeTool';
 import AttackSurfaceSentinelGodModeTool from '../components/tools/AttackSurfaceSentinelGodModeTool';
 import VisionKinematicsGodModeTool from '../components/tools/VisionKinematicsGodModeTool';
+import SwarmCivilizationGodModeTool from '../components/tools/SwarmCivilizationGodModeTool';
 import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
 import {
   HeroReveal,
@@ -160,8 +161,8 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'agent-budget-sentinel': AgentBudgetSentinelGodModeTool,
   'agent-gods-eye': AgentGodsEyeGodModeTool,
   'zoth-webgen': ZothFoundryGodModeTool,
-  'zoth-swarm-multiplexer': ZothFoundryGodModeTool,
-  'zoth-civilization': ZothFoundryGodModeTool,
+  'zoth-swarm-multiplexer': SwarmCivilizationGodModeTool,
+  'zoth-civilization': SwarmCivilizationGodModeTool,
   'likeness-desk': VisionKinematicsGodModeTool,
   'bolt.diy': ZothFoundryGodModeTool,
   'bolt-diy': ZothFoundryGodModeTool,
