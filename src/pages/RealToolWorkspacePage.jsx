@@ -166,6 +166,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'ufo-sacred-geometry': AsciiMotionGodModeTool,
   'cyber-turtle-studio': AsciiMotionGodModeTool,
   'og-canvas-forge': AsciiMotionGodModeTool,
+  'zoth-ascii-magic': AsciiMotionGodModeTool,
   'anderson-security-sentinel': HexStrikeGodModeTool,
   'city-desk': ZothFoundryGodModeTool,
   'osint-scout-skill': SubSweepGodModeTool,
