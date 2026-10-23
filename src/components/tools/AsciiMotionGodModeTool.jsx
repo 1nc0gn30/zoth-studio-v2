@@ -17,8 +17,17 @@ import CheckIcon from '@mui/icons-material/Check';
 import CodeIcon from '@mui/icons-material/Code';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import DownloadIcon from '@mui/icons-material/Download';
+import { useReality } from '../../context/RealityContext';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
+
+const BAYER_4X4 = [
+  [0 / 16, 8 / 16, 2 / 16, 10 / 16],
+  [12 / 16, 4 / 16, 14 / 16, 6 / 16],
+  [3 / 16, 11 / 16, 1 / 16, 9 / 16],
+  [15 / 16, 7 / 16, 13 / 16, 5 / 16],
+];
 
 const GLYPH_RAMPS = {
   ascii: {
@@ -41,9 +50,26 @@ const GLYPH_RAMPS = {
     label: 'Cyber Matrix',
     chars: ' ·:+=*ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿ',
   },
+  bayer4: {
+    id: 'bayer4',
+    label: 'Bayer 4×4 Dither',
+    chars: ' ·░▒▓█',
+    isDither: true,
+  },
+  newsprint: {
+    id: 'newsprint',
+    label: 'Halftone Newsprint',
+    chars: ' ·•●⬤',
+  },
 };
 
 const SHADER_PRESETS = {
+  liquidChrome: {
+    id: 'liquidChrome',
+    name: 'Liquid Metal Chrome (Paper Shaders)',
+    subtitle: 'SDF surface normals, specular reflections & pointer illumination',
+    accent: '#F1F5F9',
+  },
   torus4d: {
     id: 'torus4d',
     name: '4D Rotating Torus Knot',
@@ -104,6 +130,22 @@ function evaluateField(nx, ny, t, preset, warp, freq, lightPos) {
   const a = Math.atan2(y, x);
 
   let base = 0.5;
+
+  if (preset === 'liquidChrome') {
+    const dx = nx - lightPos.x;
+    const dy = ny - lightPos.y;
+    const dLight = Math.hypot(dx, dy);
+    const ripple = Math.sin(dLight * 14.0 * warp - t * 3.5) * Math.exp(-dLight * 1.8);
+    const sigilR = Math.hypot(nx, ny);
+    const sigilA = Math.atan2(ny, nx);
+    const crest = Math.exp(-Math.abs(sigilR - 0.62) * 8.0) * (0.8 + 0.3 * Math.cos(sigilA * 6));
+    const normX = nx + ripple * (dx / Math.max(0.1, dLight)) + Math.cos(sigilA * 3) * 0.15;
+    const normY = ny + ripple * (dy / Math.max(0.1, dLight)) + Math.sin(sigilA * 3) * 0.15;
+    const spec = Math.pow(Math.max(0, normX * Math.cos(t * 0.8) + normY * Math.sin(t * 0.8)), 5.0);
+    const rim = Math.pow(1.0 - Math.min(1.0, Math.hypot(normX, normY)), 2.2);
+    base = Math.max(0, Math.min(1, crest * 0.45 + spec * 0.65 + rim * 0.35 + 0.08));
+    return base;
+  }
 
   if (preset === 'cyberBust') {
     // Relightable 3D Sphere / Bust SDF with visor & halo ring
@@ -174,6 +216,7 @@ function evaluateField(nx, ny, t, preset, warp, freq, lightPos) {
 }
 
 export default function AsciiMotionGodModeTool({ tool }) {
+  const { activeTheme } = useReality();
   const defaultCfg = SLUG_DEFAULTS[tool?.id] || SLUG_DEFAULTS[tool?.slug] || { preset: 'torus4d', ramp: 'ascii', edge: true };
   const [preset, setPreset] = useState(defaultCfg.preset);
   const [rampKey, setRampKey] = useState(defaultCfg.ramp);
@@ -339,6 +382,11 @@ export default function AsciiMotionGodModeTool({ tool }) {
           const cellIdx = r * cols + c;
           const v = lumGrid[cellIdx];
           let chGlyph = ramp[Math.min(ramp.length - 1, Math.max(0, Math.floor(v * ramp.length)))];
+          if (rampKey === 'bayer4') {
+            const threshold = BAYER_4X4[r % 4][c % 4];
+            const ditherVal = Math.max(0, Math.min(0.99, v + (threshold - 0.5) * 0.32));
+            chGlyph = ramp[Math.min(ramp.length - 1, Math.max(0, Math.floor(ditherVal * ramp.length)))];
+          }
 
           // Sobel directional edge override
           if (sobelEdges && r > 0 && r < rows - 1 && c > 0 && c < cols - 1) {
@@ -437,6 +485,46 @@ export default function AsciiMotionGodModeTool({ tool }) {
     return () => cancelAnimationFrame(raf);
   }, [preset, rampKey, cols, speed, warp, freq, playing, sobelEdges, crtScanlines, lightPos, uploadedGrid, uploadedName]);
 
+  const generateSvg = () => {
+    const lines = asciiSnapshot.split('\n');
+    const lineHeight = 13;
+    const charWidth = 7.6;
+    const svgW = Math.round(cols * charWidth + 32);
+    const svgH = Math.round(lines.length * lineHeight + 36);
+    const activePreset = SHADER_PRESETS[preset] || SHADER_PRESETS.torus4d;
+    const accent = activePreset.accent || activeTheme?.accent || '#D4AF37';
+    const escapeXml = (str) =>
+      str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const textNodes = lines
+      .map((l, i) => `    <text x="16" y="${(i + 1) * lineHeight + 18}" fill="${accent}">${escapeXml(l)}</text>`)
+      .join('\n');
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${svgW} ${svgH}" width="${svgW}" height="${svgH}">
+  <defs>
+    <style>
+      text { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 11px; font-weight: 600; font-variant-ligatures: none; }
+    </style>
+  </defs>
+  <rect width="100%" height="100%" rx="12" fill="#050508"/>
+  <rect width="100%" height="100%" rx="12" fill="none" stroke="${accent}" stroke-width="1.5" stroke-opacity="0.35"/>
+  <g>
+${textNodes}
+  </g>
+</svg>`;
+  };
+
+  const downloadSvg = () => {
+    const svgCode = generateSvg();
+    const blob = new Blob([svgCode], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `zoth-ascii-${preset}-${cols}cols.svg`;
+    a.click();
+    URL.revokeObjectURL(url);
+    setCopiedMode('svg-download');
+    setTimeout(() => setCopiedMode(null), 1800);
+  };
+
   const copyPayload = (mode) => {
     const activePreset = SHADER_PRESETS[preset] || SHADER_PRESETS.torus4d;
     const ramp = (GLYPH_RAMPS[rampKey] || GLYPH_RAMPS.ascii).chars;
@@ -446,6 +534,8 @@ export default function AsciiMotionGodModeTool({ tool }) {
       text = [`/* ZOTH ASCII MAGIC // ${activePreset.name} */`, asciiSnapshot].join('\n');
     } else if (mode === 'ansi') {
       text = ansiSnapshot;
+    } else if (mode === 'svg') {
+      text = generateSvg();
     } else if (mode === 'embed') {
       text = `<!-- Zoth Studio Standalone 60FPS ASCII Magic Shader (${activePreset.name}) -->
 <pre id="zoth-ascii-stage" style="background:#050508;color:${activePreset.accent};font:600 11px/1.15 'JetBrains Mono',monospace;padding:20px;border-radius:12px;overflow:hidden;margin:0;"></pre>
@@ -620,6 +710,38 @@ export default function AsciiMotionGodModeTool({ tool }) {
           </Button>
           <Button
             size="small"
+            variant="outlined"
+            onClick={() => copyPayload('svg')}
+            startIcon={copiedMode === 'svg' ? <CheckIcon sx={{ fontSize: 15 }} /> : <CodeIcon sx={{ fontSize: 15 }} />}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              color: '#C084FC',
+              borderColor: 'rgba(192,132,252,0.45)',
+              bgcolor: 'rgba(192,132,252,0.1)',
+            }}
+          >
+            {copiedMode === 'svg' ? 'SVG Copied' : 'Copy SVG'}
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={downloadSvg}
+            startIcon={copiedMode === 'svg-download' ? <CheckIcon sx={{ fontSize: 15 }} /> : <DownloadIcon sx={{ fontSize: 15 }} />}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              color: '#38BDF8',
+              borderColor: 'rgba(56,189,248,0.45)',
+              bgcolor: 'rgba(56,189,248,0.1)',
+            }}
+          >
+            {copiedMode === 'svg-download' ? 'Downloaded' : 'Download SVG'}
+          </Button>
+          <Button
+            size="small"
             variant="contained"
             onClick={() => copyPayload('embed')}
             startIcon={copiedMode === 'embed' ? <CheckIcon sx={{ fontSize: 15 }} /> : <CodeIcon sx={{ fontSize: 15 }} />}
@@ -627,9 +749,9 @@ export default function AsciiMotionGodModeTool({ tool }) {
               fontFamily: mono,
               fontSize: '0.7rem',
               fontWeight: 800,
-              bgcolor: '#D4AF37',
+              bgcolor: activeTheme?.accent || '#D4AF37',
               color: '#060609',
-              '&:hover': { bgcolor: '#F5E6AB' },
+              '&:hover': { bgcolor: activeTheme?.accentSoft || '#F5E6AB' },
             }}
           >
             {copiedMode === 'embed' ? 'Snippet Copied' : 'Export HTML/JS'}
