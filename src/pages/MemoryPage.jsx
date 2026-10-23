@@ -39,6 +39,7 @@ import Netrunner3DWorld from '../components/Netrunner3DWorld';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { isLocalRuntime } from '../components/AirGapToolLockout';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
+import { useReality } from '../context/RealityContext';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -661,12 +662,13 @@ export default function MemoryPage() {
     transmitLucy(`Neural Snapshot downloaded. ${memories.length} vector nodes exported cleanly.`);
   };
 
-  // Palette references for strict Gold-on-Void aesthetic
+  const { activeTheme } = useReality();
+  // Palette references for dynamic Reality Switch aesthetic
   const gold = {
-    accent: isDark ? '#D4AF37' : '#8A6508',
-    soft: isDark ? '#F5E6AB' : '#8A6A09',
-    wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-    border: isDark ? 'rgba(212,175,55,0.35)' : '#F0E1A8',
+    accent: isDark ? (activeTheme?.accent || '#D4AF37') : '#8A6508',
+    soft: isDark ? (activeTheme?.accentSoft || '#F5E6AB') : '#8A6A09',
+    wash: isDark ? (activeTheme?.accentWash || 'rgba(212,175,55,0.14)') : '#FEF9E7',
+    border: isDark ? (activeTheme?.borderStrong || 'rgba(212,175,55,0.35)') : '#F0E1A8',
   };
 
   const clusterColors = {

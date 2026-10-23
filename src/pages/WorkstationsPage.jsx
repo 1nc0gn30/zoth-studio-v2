@@ -36,6 +36,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { workstations } from '../data/workstations';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import SovereignFunnel from '../components/SovereignFunnel';
+import { useReality } from '../context/RealityContext';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -468,10 +469,11 @@ export default function WorkstationsPage() {
   const { status } = useStudioStatus();
   const swarmUp = Boolean(status?.services?.swarm?.up);
 
+  const { activeTheme } = useReality();
   const gold = {
-    accent: isDark ? '#D4AF37' : '#8A6508',
-    wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-    border: isDark ? 'rgba(212,175,55,0.28)' : 'rgba(184,134,11,0.25)',
+    accent: isDark ? (activeTheme?.accent || '#D4AF37') : '#8A6508',
+    wash: isDark ? (activeTheme?.accentWash || 'rgba(212,175,55,0.14)') : '#FEF9E7',
+    border: isDark ? (activeTheme?.border || 'rgba(212,175,55,0.28)') : 'rgba(184,134,11,0.25)',
   };
 
   // Precomputed band counts

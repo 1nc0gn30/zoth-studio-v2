@@ -47,6 +47,7 @@ import SovereignFunnel from '../components/SovereignFunnel';
 import ZothOSGodModeTool from '../components/tools/ZothOSGodModeTool';
 import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
 import { HeroReveal, HeroItem, ParallaxGlow, RevealOnScroll, StaggerChildren, StaggerItem } from '../components/MotionReveal';
+import { useReality } from '../context/RealityContext';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const qemu = 'qemu-system-x86_64 -enable-kvm -m 8192 -smp 4 -hda zoth-agent-os.qcow2';
@@ -312,11 +313,12 @@ export default function ZothOSPage() {
   const terminalEndRef = useRef(null);
   const terminalInputRef = useRef(null);
 
+  const { activeTheme } = useReality();
   const gold = {
-    accent: isDark ? '#D4AF37' : '#8A6508',
-    soft: isDark ? '#F5E6AB' : '#8A6A09',
-    wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-    border: isDark ? 'rgba(212,175,55,0.32)' : '#E2CE82',
+    accent: isDark ? (activeTheme?.accent || '#D4AF37') : '#8A6508',
+    soft: isDark ? (activeTheme?.accentSoft || '#F5E6AB') : '#8A6A09',
+    wash: isDark ? (activeTheme?.accentWash || 'rgba(212,175,55,0.14)') : '#FEF9E7',
+    border: isDark ? (activeTheme?.borderStrong || 'rgba(212,175,55,0.32)') : '#E2CE82',
     contrastText: '#08080B',
   };
 

@@ -35,6 +35,7 @@ import { useStudioStatus } from '../studio/useStudioStatus';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
+import { useReality } from '../context/RealityContext';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -344,13 +345,14 @@ export default function BridgesPage() {
   const { status } = useStudioStatus();
   const up = Boolean(status?.services?.bridge?.up);
 
+  const { activeTheme } = useReality();
   // Styling tokens
   const gold = {
-    accent: isDark ? '#D4AF37' : '#8A6508',
-    soft: isDark ? '#F5E6AB' : '#8A6A09',
-    wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-    border: isDark ? 'rgba(212,175,55,0.28)' : 'rgba(184,134,11,0.25)',
-    glow: isDark ? '0 0 16px rgba(212,175,55,0.35)' : '0 0 10px rgba(184,134,11,0.25)',
+    accent: isDark ? (activeTheme?.accent || '#D4AF37') : '#8A6508',
+    soft: isDark ? (activeTheme?.accentSoft || '#F5E6AB') : '#8A6A09',
+    wash: isDark ? (activeTheme?.accentWash || 'rgba(212,175,55,0.14)') : '#FEF9E7',
+    border: isDark ? (activeTheme?.border || 'rgba(212,175,55,0.28)') : 'rgba(184,134,11,0.25)',
+    glow: isDark ? `0 0 16px ${activeTheme?.accentGlow || 'rgba(212,175,55,0.35)'}` : '0 0 10px rgba(184,134,11,0.25)',
   };
 
   // Bridge daemon states

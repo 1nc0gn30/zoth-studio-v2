@@ -35,6 +35,7 @@ import VaultConsole from '../components/VaultConsole';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { microTools } from '../data/toolsData';
+import { useReality } from '../context/RealityContext';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -239,13 +240,14 @@ export default function HexStrikePage() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
-  // Strict gold-on-void styling tokens
+  const { activeTheme } = useReality();
+  // Dynamic Reality Switch styling tokens
   const gold = {
-    accent: isDark ? '#D4AF37' : '#8A6508',
-    soft: isDark ? '#F5E6AB' : '#8A6A09',
-    wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-    border: isDark ? 'rgba(212,175,55,0.28)' : '#E2CE82',
-    glow: isDark ? 'rgba(212,175,55,0.40)' : 'rgba(184,134,11,0.22)',
+    accent: isDark ? (activeTheme?.accent || '#D4AF37') : '#8A6508',
+    soft: isDark ? (activeTheme?.accentSoft || '#F5E6AB') : '#8A6A09',
+    wash: isDark ? (activeTheme?.accentWash || 'rgba(212,175,55,0.14)') : '#FEF9E7',
+    border: isDark ? (activeTheme?.border || 'rgba(212,175,55,0.28)') : '#E2CE82',
+    glow: isDark ? (activeTheme?.accentGlow || 'rgba(212,175,55,0.40)') : 'rgba(184,134,11,0.22)',
     emerald: isDark ? '#10B981' : '#047857',
     emeraldSoft: isDark ? '#34D399' : '#047857',
     emeraldWash: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF3',
