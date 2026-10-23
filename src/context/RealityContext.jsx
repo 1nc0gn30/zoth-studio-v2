@@ -177,6 +177,20 @@ export const REALITY_THEMES = {
 
 export const REALITY_ORDER = ['gold', 'matrix', 'ghost', 'cyan', 'incognito'];
 
+// Enrich each theme object with normalized alias fields so components using either
+// `reality.accent` or `activeTheme.primary` work seamlessly.
+Object.values(REALITY_THEMES).forEach((t) => {
+  t.primary = t.accent;
+  t.secondary = t.bot?.secondary || t.accentSoft;
+  t.bgVoid = t.bgDark;
+  t.border = t.accentBorder;
+  t.borderRadius = t.cardRadius;
+  t.shortLabel = t.shortName;
+  t.botName = t.bot?.name || 'AURUM-IX';
+  t.botTitle = t.bot?.title || 'Sovereign Companion';
+  t.cardGlow = `0 20px 60px rgba(0, 0, 0, 0.72), 0 0 36px ${t.accentWash}`;
+});
+
 const RealityContext = createContext(null);
 
 export function RealityProvider({ children }) {
@@ -244,9 +258,12 @@ export function RealityProvider({ children }) {
     () => ({
       realityId: activeReality.id,
       reality: activeReality,
+      activeTheme: activeReality,
       realities: REALITY_THEMES,
+      themes: REALITY_THEMES,
       realityOrder: REALITY_ORDER,
       setReality,
+      setRealityId: setReality,
       cycleReality,
     }),
     [activeReality]
@@ -261,9 +278,12 @@ export function useReality() {
     return {
       realityId: 'gold',
       reality: REALITY_THEMES.gold,
+      activeTheme: REALITY_THEMES.gold,
       realities: REALITY_THEMES,
+      themes: REALITY_THEMES,
       realityOrder: REALITY_ORDER,
       setReality: () => {},
+      setRealityId: () => {},
       cycleReality: () => {},
     };
   }
