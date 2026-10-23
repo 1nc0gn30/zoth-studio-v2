@@ -19,6 +19,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import ShieldIcon from '@mui/icons-material/Shield';
 import CodeIcon from '@mui/icons-material/Code';
+import { RealityMatrixShowcaseSection } from '../RealityZothBotHUD';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -699,6 +700,9 @@ nice -n ${niceLevel} qemu-system-x86_64 \\
           </Box>
         </Grid>
       </Grid>
+      <Box sx={{ px: { xs: 2, md: 3 }, pb: 1 }}>
+        <RealityMatrixShowcaseSection />
+      </Box>
     </Paper>
   );
 }
