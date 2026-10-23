@@ -51,6 +51,18 @@ const GLYPH_RAMPS = {
     label: 'Unicode Braille',
     chars: ' ⠁⠃⠇⠏⠟⠿⣿',
   },
+  atkinson: {
+    id: 'atkinson',
+    label: 'Atkinson (Mac 1984)',
+    chars: ' ·░▒▓█',
+    isDither: true,
+  },
+  floyd: {
+    id: 'floyd',
+    label: 'Floyd-Steinberg',
+    chars: ' ·░▒▓█',
+    isDither: true,
+  },
   blocks: {
     id: 'blocks',
     label: 'Block Density',
@@ -134,6 +146,12 @@ const SHADER_PRESETS = {
     subtitle: 'Relightable 3D SDF sovereign bust with Sobel directional edge contours',
     accent: '#38BDF8',
   },
+  audioReactive: {
+    id: 'audioReactive',
+    name: 'Audio Reactive Harmonics',
+    subtitle: 'Concentric shockwave rings & Lissajous phase matrix',
+    accent: '#C084FC',
+  },
 };
 
 const SLUG_DEFAULTS = {
@@ -152,6 +170,14 @@ function evaluateField(nx, ny, t, preset, warp, freq, lightPos) {
   const a = Math.atan2(y, x);
 
   let base = 0.5;
+
+  if (preset === 'audioReactive') {
+    const bassRings = Math.sin(r * 18 - t * 6) * 0.45;
+    const midStar = Math.cos(5 * a + t * 3.2) * Math.exp(-Math.abs(r - 0.55) * 4.8) * 0.55;
+    const center = Math.exp(-r * 3.2) * (0.5 + 0.5 * Math.sin(t * 8));
+    const sparkle = Math.sin(nx * 20 + t * 7) * Math.cos(ny * 20) * 0.22;
+    return Math.max(0, Math.min(1, 0.25 + bassRings * 0.35 + midStar * 0.4 + center * 0.45 + sparkle));
+  }
 
   if (preset === 'liquidChrome') {
     const dx = nx - lightPos.x;
@@ -235,6 +261,66 @@ function evaluateField(nx, ny, t, preset, warp, freq, lightPos) {
   const dLight = Math.hypot(nx - lightPos.x, ny - lightPos.y);
   const lightBoost = Math.exp(-dLight * 1.45) * 0.38;
   return Math.max(0, Math.min(1, base * 0.82 + lightBoost));
+}
+
+function runAtkinsonDither(lum, w, h, ramp) {
+  const K = ramp.length;
+  const maxK = K - 1;
+  const buf = new Float32Array(lum);
+  const out = new Array(w * h);
+
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const idx = y * w + x;
+      const oldVal = Math.max(0, Math.min(1, buf[idx]));
+      const k = Math.max(0, Math.min(maxK, Math.round(oldVal * maxK)));
+      const newVal = k / maxK;
+      out[idx] = ramp[k];
+
+      const err8 = (oldVal - newVal) * 0.125;
+      if (err8 === 0) continue;
+
+      if (x + 1 < w) buf[idx + 1] += err8;
+      if (x + 2 < w) buf[idx + 2] += err8;
+      if (y + 1 < h) {
+        if (x - 1 >= 0) buf[(y + 1) * w + (x - 1)] += err8;
+        buf[(y + 1) * w + x] += err8;
+        if (x + 1 < w) buf[(y + 1) * w + (x + 1)] += err8;
+      }
+      if (y + 2 < h) {
+        buf[(y + 2) * w + x] += err8;
+      }
+    }
+  }
+  return out;
+}
+
+function runFloydSteinbergDither(lum, w, h, ramp) {
+  const K = ramp.length;
+  const maxK = K - 1;
+  const buf = new Float32Array(lum);
+  const out = new Array(w * h);
+
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const idx = y * w + x;
+      const oldVal = Math.max(0, Math.min(1, buf[idx]));
+      const k = Math.max(0, Math.min(maxK, Math.round(oldVal * maxK)));
+      const newVal = k / maxK;
+      out[idx] = ramp[k];
+
+      const err = oldVal - newVal;
+      if (err === 0) continue;
+
+      if (x + 1 < w) buf[idx + 1] += err * (7 / 16);
+      if (y + 1 < h) {
+        if (x - 1 >= 0) buf[(y + 1) * w + (x - 1)] += err * (3 / 16);
+        buf[(y + 1) * w + x] += err * (5 / 16);
+        if (x + 1 < w) buf[(y + 1) * w + (x + 1)] += err * (1 / 16);
+      }
+    }
+  }
+  return out;
 }
 
 export default function AsciiMotionGodModeTool({ tool }) {
@@ -397,13 +483,20 @@ export default function AsciiMotionGodModeTool({ tool }) {
       const ansiRows = [];
       const captureText = frameCounter % 12 === 0;
 
+      let ditheredMap = null;
+      if (rampKey === 'atkinson') {
+        ditheredMap = runAtkinsonDither(lumGrid, cols, rows, ramp);
+      } else if (rampKey === 'floyd') {
+        ditheredMap = runFloydSteinbergDither(lumGrid, cols, rows, ramp);
+      }
+
       for (let r = 0; r < rows; r++) {
         let rowStr = '';
         let ansiStr = '';
         for (let c = 0; c < cols; c++) {
           const cellIdx = r * cols + c;
           const v = lumGrid[cellIdx];
-          let chGlyph = ramp[Math.min(ramp.length - 1, Math.max(0, Math.floor(v * ramp.length)))];
+          let chGlyph = ditheredMap ? ditheredMap[cellIdx] : ramp[Math.min(ramp.length - 1, Math.max(0, Math.floor(v * ramp.length)))];
           if (rampKey === 'bayer4') {
             const threshold = BAYER_4X4[r % 4][c % 4];
             const ditherVal = Math.max(0, Math.min(0.99, v + (threshold - 0.5) * 0.32));
@@ -549,6 +642,53 @@ ${textNodes}
     URL.revokeObjectURL(url);
     setCopiedMode('svg-download');
     setTimeout(() => setCopiedMode(null), 1800);
+  };
+
+  const [recordingVideo, setRecordingVideo] = useState(false);
+
+  const handleRecordVideo = (durationSec = 5.0) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    if (typeof MediaRecorder === 'undefined') {
+      alert('MediaRecorder is not supported in this browser.');
+      return;
+    }
+    setRecordingVideo(true);
+    const stream = canvas.captureStream(30);
+    let mimeType = 'video/webm;codecs=vp9';
+    if (!MediaRecorder.isTypeSupported(mimeType)) {
+      mimeType = MediaRecorder.isTypeSupported('video/webm') ? 'video/webm' : 'video/mp4';
+    }
+
+    const chunks = [];
+    let recorder = null;
+    try {
+      recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 4000000 });
+    } catch (e) {
+      recorder = new MediaRecorder(stream);
+    }
+
+    recorder.ondataavailable = (e) => {
+      if (e.data && e.data.size > 0) chunks.push(e.data);
+    };
+
+    recorder.onstop = () => {
+      setRecordingVideo(false);
+      const blob = new Blob(chunks, { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `zoth-studio-ascii-${preset}-${Date.now()}.webm`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    };
+
+    recorder.start(200);
+    setTimeout(() => {
+      if (recorder.state === 'recording') recorder.stop();
+    }, durationSec * 1000);
   };
 
   const copyPayload = (mode) => {
@@ -765,6 +905,22 @@ ${textNodes}
             }}
           >
             {copiedMode === 'svg-download' ? 'Downloaded' : 'Download SVG'}
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => handleRecordVideo(5.0)}
+            disabled={recordingVideo}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              color: recordingVideo ? '#F43F5E' : '#F59E0B',
+              borderColor: recordingVideo ? '#F43F5E' : 'rgba(245,158,11,0.45)',
+              bgcolor: recordingVideo ? 'rgba(244,63,94,0.15)' : 'rgba(245,158,11,0.1)',
+            }}
+          >
+            {recordingVideo ? '⏺ Rec 5s...' : 'Record WebM'}
           </Button>
           <Button
             size="small"
