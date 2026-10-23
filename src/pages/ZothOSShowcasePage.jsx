@@ -30,6 +30,7 @@ import {
 import SovereignFunnel from '../components/SovereignFunnel';
 import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
 import ZothOSGodModeTool from '../components/tools/ZothOSGodModeTool';
+import { RealityMatrixShowcaseSection } from '../components/RealityZothBotHUD';
 
 // Icons
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
@@ -379,6 +380,9 @@ export default function ZothOSShowcasePage() {
             </Box>
           </HeroItem>
         </HeroReveal>
+
+        {/* Interactive 5-Reality Switcher & Zoth Bot Showcase */}
+        <RealityMatrixShowcaseSection />
 
         {/* Quick Clone & Deployment Terminal Strip */}
         <Paper

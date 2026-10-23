@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
 import { Routes, Route, Navigate, useParams, useLocation } from 'react-router-dom';
-import { Box, ThemeProvider, CssBaseline, useTheme } from '@mui/material';
+import { Box, ThemeProvider, CssBaseline, useTheme, createTheme } from '@mui/material';
 import { theme as lightTheme, darkTheme } from './theme';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
@@ -10,6 +10,9 @@ import ErrorBoundary from './components/ErrorBoundary';
 import SEO from './components/SEO';
 import Footer from './components/Footer';
 import { IntroDirector, PageStage } from './motion/IntroDirector';
+import { RealityProvider, useReality } from './context/RealityContext';
+import RealityBackgroundCanvas from './components/RealityBackgroundCanvas';
+import RealityZothBotHUD from './components/RealityZothBotHUD';
 
 // Code-split route modules for instant initial load and on-demand streaming
 const SwarmPage = lazy(() => import('./pages/SwarmPage'));
@@ -121,19 +124,34 @@ function AppShell({ mode, onToggleTheme }) {
   // navbar, and navigating to another page recovers automatically.
   const { pathname: routePath } = useLocation();
   const theme = useTheme();
-  const dark = theme.palette.mode === 'dark';
+  const { reality } = useReality();
 
   return (
     <IntroDirector>
+    <RealityBackgroundCanvas />
     <Box
       sx={{
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: 'transparent',
         color: theme.palette.text.primary,
         position: 'relative',
         zIndex: 2,
+        '& .MuiPaper-root': {
+          borderRadius: reality.cardRadius,
+        },
+        '& .text-gradient-gold': {
+          backgroundImage: `linear-gradient(135deg, ${reality.accent} 0%, ${reality.accentSoft} 50%, ${reality.accent} 100%) !important`,
+        },
+        '& .MuiButton-containedPrimary': {
+          backgroundColor: `${reality.accent} !important`,
+          color: '#050609 !important',
+          borderRadius: reality.cardRadius,
+        },
+        '& .section-kicker': {
+          color: `${theme.palette.mode === 'dark' ? reality.accent : reality.accentLightMode} !important`,
+        },
       }}
     >
       <ScrollToTop />
@@ -195,9 +213,42 @@ function AppShell({ mode, onToggleTheme }) {
           </ErrorBoundary>
         </PageStage>
       </Box>
+      <RealityZothBotHUD />
       <Footer />
     </Box>
     </IntroDirector>
+  );
+}
+
+function RealityThemedApp({ mode, onToggleTheme }) {
+  const { reality } = useReality();
+  const isDark = mode === 'dark';
+
+  const activeTheme = useMemo(() => {
+    const base = isDark ? darkTheme : lightTheme;
+    return createTheme(base, {
+      palette: {
+        primary: {
+          main: isDark ? reality.accent : reality.accentLightMode,
+          light: reality.accentSoft,
+          dark: reality.accentLightMode,
+        },
+        background: {
+          default: isDark ? reality.bgDark : '#FFFFFF',
+          paper: isDark ? reality.cardBgDark : '#FFFFFF',
+        },
+      },
+      shape: {
+        borderRadius: parseInt(reality.cardRadius, 10) || 12,
+      },
+    });
+  }, [isDark, reality]);
+
+  return (
+    <ThemeProvider theme={activeTheme}>
+      <CssBaseline />
+      <AppShell mode={mode} onToggleTheme={onToggleTheme} />
+    </ThemeProvider>
   );
 }
 
@@ -226,16 +277,13 @@ export default function App() {
     }
   }, []);
 
-  const activeTheme = useMemo(() => (mode === 'dark' ? darkTheme : lightTheme), [mode]);
-
   const handleToggleTheme = () => {
     setMode((m) => (m === 'dark' ? 'light' : 'dark'));
   };
 
   return (
-    <ThemeProvider theme={activeTheme}>
-      <CssBaseline />
-      <AppShell mode={mode} onToggleTheme={handleToggleTheme} />
-    </ThemeProvider>
+    <RealityProvider>
+      <RealityThemedApp mode={mode} onToggleTheme={handleToggleTheme} />
+    </RealityProvider>
   );
 }
