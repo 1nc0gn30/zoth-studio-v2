@@ -373,7 +373,7 @@ export default function VisionKinematicsGodModeTool() {
                   onClick={cycleReality}
                   sx={{ fontFamily: mono, fontSize: '0.66rem', py: 0.2, color: activeTheme.primary, borderColor: activeTheme.border }}
                 >
-                  Trigger Pinch -> Cycle Reality
+                  Trigger Pinch → Cycle Reality
                 </Button>
               </Stack>
               <canvas
