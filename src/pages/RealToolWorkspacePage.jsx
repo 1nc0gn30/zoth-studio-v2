@@ -82,6 +82,7 @@ import RealityShaderForgeGodModeTool from '../components/tools/RealityShaderForg
 import AttackSurfaceSentinelGodModeTool from '../components/tools/AttackSurfaceSentinelGodModeTool';
 import VisionKinematicsGodModeTool from '../components/tools/VisionKinematicsGodModeTool';
 import SwarmCivilizationGodModeTool from '../components/tools/SwarmCivilizationGodModeTool';
+import CivicProcurementGodModeTool from '../components/tools/CivicProcurementGodModeTool';
 import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
 import {
   HeroReveal,
@@ -177,7 +178,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'yara-sigma-forge': YaraSigmaForgeGodModeTool,
   'reality-shader-forge': RealityShaderForgeGodModeTool,
   'anderson-security-sentinel': AttackSurfaceSentinelGodModeTool,
-  'city-desk': ZothFoundryGodModeTool,
+  'city-desk': CivicProcurementGodModeTool,
   'osint-scout-skill': SubSweepGodModeTool,
   'storefront-catalog': PodCommerceGodModeTool,
 };
