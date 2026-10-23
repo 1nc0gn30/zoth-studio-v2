@@ -79,6 +79,7 @@ import ZothFoundryGodModeTool from '../components/tools/ZothFoundryGodModeTool';
 import WebMcpInspectorGodModeTool from '../components/tools/WebMcpInspectorGodModeTool';
 import YaraSigmaForgeGodModeTool from '../components/tools/YaraSigmaForgeGodModeTool';
 import RealityShaderForgeGodModeTool from '../components/tools/RealityShaderForgeGodModeTool';
+import AttackSurfaceSentinelGodModeTool from '../components/tools/AttackSurfaceSentinelGodModeTool';
 import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
 import {
   HeroReveal,
@@ -114,8 +115,8 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'payload-entropy': PayloadEntropyGodModeTool,
   'ghidra-mcp-bridge': GhidraMcpGodModeTool,
   'ghidra-mcp': GhidraMcpGodModeTool,
-  'shodan-surface-sentinel': HexStrikeGodModeTool,
-  'shodan-sentinel': HexStrikeGodModeTool,
+  'shodan-surface-sentinel': AttackSurfaceSentinelGodModeTool,
+  'shodan-sentinel': AttackSurfaceSentinelGodModeTool,
   'adytum-alchemist-ai-workflow': AdytumPlannerGodModeTool,
   'azoth-archon-orchestrator': AzothArchonGodModeTool,
   'azoth-local-agent': AzothArchonGodModeTool,
@@ -173,7 +174,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'webmcp-protocol-inspector': WebMcpInspectorGodModeTool,
   'yara-sigma-forge': YaraSigmaForgeGodModeTool,
   'reality-shader-forge': RealityShaderForgeGodModeTool,
-  'anderson-security-sentinel': HexStrikeGodModeTool,
+  'anderson-security-sentinel': AttackSurfaceSentinelGodModeTool,
   'city-desk': ZothFoundryGodModeTool,
   'osint-scout-skill': SubSweepGodModeTool,
   'storefront-catalog': PodCommerceGodModeTool,
