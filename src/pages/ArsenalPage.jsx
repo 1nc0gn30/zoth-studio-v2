@@ -35,6 +35,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import { masterArsenal, arsenalStats } from '../data/arsenalData';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { useSovereignRuntime, isLocalRuntime } from '../utils/sovereignRuntime';
+import { useReality } from '../context/RealityContext';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -398,11 +399,12 @@ export default function ArsenalPage() {
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [search, setSearch] = useState('');
   const [viewMode, setViewMode] = useState('grid');
+  const { reality } = useReality();
 
   const gold = {
-    accent: isDark ? '#D4AF37' : '#8A6508',
-    wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-    border: isDark ? 'rgba(212,175,55,0.28)' : 'rgba(184,134,11,0.25)',
+    accent: isDark ? reality.accent : reality.accentLightMode,
+    wash: isDark ? reality.accentWash : '#FEF9E7',
+    border: isDark ? reality.accentBorder : 'rgba(184,134,11,0.25)',
   };
 
   // Filtered Assets
