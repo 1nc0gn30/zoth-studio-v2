@@ -29,6 +29,7 @@ import SEO from '../components/SEO';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { enclaveBinds, zeroEgressInvariants } from '../data/zeroEgress';
 import { microTools } from '../data/toolsData';
+import { useReality } from '../context/RealityContext';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -556,11 +557,12 @@ export default function AXPage() {
     setMcpTestResult(JSON.stringify(payloads[toolName] || payloads.stdp_memory_recall, null, 2));
   };
 
+  const { activeTheme } = useReality();
   const gold = {
-    accent: isDark ? '#D4AF37' : '#926A05',
-    soft: isDark ? '#F5E6AB' : '#715507',
-    wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-    border: isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.35)',
+    accent: isDark ? (activeTheme?.accent || '#D4AF37') : '#926A05',
+    soft: isDark ? (activeTheme?.accentSoft || '#F5E6AB') : '#715507',
+    wash: isDark ? (activeTheme?.accentWash || 'rgba(212,175,55,0.14)') : '#FEF9E7',
+    border: isDark ? (activeTheme?.borderStrong || 'rgba(212,175,55,0.35)') : 'rgba(184,134,11,0.35)',
   };
 
   const axSpec = {
