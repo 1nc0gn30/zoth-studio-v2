@@ -76,6 +76,9 @@ import AdytumPlannerGodModeTool from '../components/tools/AdytumPlannerGodModeTo
 import AzothArchonGodModeTool from '../components/tools/AzothArchonGodModeTool';
 import AgentVoiceCallGodModeTool from '../components/tools/AgentVoiceCallGodModeTool';
 import ZothFoundryGodModeTool from '../components/tools/ZothFoundryGodModeTool';
+import WebMcpInspectorGodModeTool from '../components/tools/WebMcpInspectorGodModeTool';
+import YaraSigmaForgeGodModeTool from '../components/tools/YaraSigmaForgeGodModeTool';
+import RealityShaderForgeGodModeTool from '../components/tools/RealityShaderForgeGodModeTool';
 import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
 import {
   HeroReveal,
@@ -167,6 +170,9 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'cyber-turtle-studio': AsciiMotionGodModeTool,
   'og-canvas-forge': AsciiMotionGodModeTool,
   'zoth-ascii-magic': AsciiMotionGodModeTool,
+  'webmcp-protocol-inspector': WebMcpInspectorGodModeTool,
+  'yara-sigma-forge': YaraSigmaForgeGodModeTool,
+  'reality-shader-forge': RealityShaderForgeGodModeTool,
   'anderson-security-sentinel': HexStrikeGodModeTool,
   'city-desk': ZothFoundryGodModeTool,
   'osint-scout-skill': SubSweepGodModeTool,
