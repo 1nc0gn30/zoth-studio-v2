@@ -356,6 +356,63 @@ export function studioMiddleware() {
         return;
       }
 
+      if (req.method === 'POST' && url.pathname === '/api/studio/bot/chat') {
+        const body = await readBody(req);
+        const userPrompt = String(body.message || '').trim();
+        if (!userPrompt) {
+          send(res, 400, { error: 'Message cannot be empty.' });
+          return;
+        }
+
+        const homeDir = os.homedir();
+        const modeFile = `${homeDir}/.config/zothos/current_mode`;
+        const charFile = `${homeDir}/.config/zothos/active_character.json`;
+        let mode = 'gold';
+        if (fs.existsSync(modeFile)) {
+          mode = fs.readFileSync(modeFile, 'utf8').trim() || 'gold';
+        }
+        let character = { name: 'Azoth Prime', glyph: '☿', color: '#FFD700', system_prompt: 'You are Azoth Prime, the sovereign alchemical AI architect of ZothOS.' };
+        if (fs.existsSync(charFile)) {
+          try {
+            character = JSON.parse(fs.readFileSync(charFile, 'utf8'));
+          } catch (_) {}
+        }
+
+        const systemPrompt = character.system_prompt || `You are ${character.name}, companion AI of ZothOS in ${mode} mode. Ground all answers in verifiable reality.`;
+        const history = Array.isArray(body.history) ? body.history : [];
+
+        const messages = [
+          { role: 'system', content: systemPrompt },
+          ...history.slice(-6),
+          { role: 'user', content: userPrompt },
+        ];
+
+        const result = await requestJson(11434, '/api/chat', {
+          method: 'POST',
+          timeout: 45000,
+          body: {
+            model: 'qwen2.5-coder:1.5b',
+            messages,
+            stream: false,
+            options: { temperature: 0.7, num_predict: 256 },
+          },
+        });
+
+        if (!result.up || !result.json?.message?.content) {
+          send(res, 503, { error: 'Local Ollama engine (:11434) not responding.' });
+          return;
+        }
+
+        send(res, 200, {
+          character: character.name,
+          glyph: character.glyph,
+          color: character.color,
+          mode,
+          reply: result.json.message.content.trim(),
+        });
+        return;
+      }
+
       if (req.method === 'GET' && url.pathname === '/api/studio/fleet') {
         send(res, 200, await probeFleet());
         return;
