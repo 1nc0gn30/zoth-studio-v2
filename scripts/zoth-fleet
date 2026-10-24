@@ -1,0 +1,301 @@
+#!/usr/bin/env python3
+"""
+ZothOS Sovereign Fleet Supervisor (zoth fleet up|down|status)
+Manages loopback services, health probes, and daemon lifecycles.
+Pure Python 3 standard library • Zero cloud egress • 127.0.0.1 only.
+"""
+
+import sys
+import os
+import json
+import time
+import socket
+import urllib.request
+import urllib.error
+import subprocess
+from concurrent.futures import ThreadPoolExecutor
+
+GOLD = '\033[38;2;212;175;55m'
+GREEN = '\033[32m'
+RED = '\033[31m'
+CYAN = '\033[36m'
+DIM = '\033[2m'
+BOLD = '\033[1m'
+RESET = '\033[0m'
+GRAY = '\033[90m'
+
+STATE_DIR = os.path.expanduser('~/.zoth')
+PID_FILE = os.path.join(STATE_DIR, 'fleet-pids.json')
+REGISTRY_PATH = os.path.expanduser('~/NullAITech/zoth-studio-v2/public/api/tools.json')
+
+def load_registry():
+    if os.path.exists(REGISTRY_PATH):
+        with open(REGISTRY_PATH, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return {'tools': []}
+
+def read_pids():
+    try:
+        with open(PID_FILE, 'r') as f:
+            return json.load(f)
+    except Exception:
+        return {}
+
+def write_pids(pids):
+    os.makedirs(STATE_DIR, exist_ok=True)
+    with open(PID_FILE, 'w') as f:
+        json.dump(pids, f, indent=2)
+
+def probe_tcp(port, timeout=0.35):
+    t0 = time.time()
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(timeout)
+        res = s.connect_ex(('127.0.0.1', port))
+        s.close()
+        latency = round((time.time() - t0) * 1000.0, 1)
+        return (res == 0, latency)
+    except Exception:
+        return (False, 0)
+
+def probe_http(port, path='/', timeout=0.5):
+    t0 = time.time()
+    url = f"http://127.0.0.1:{port}{path}"
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'ZothFleet/1.0'})
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            latency = round((time.time() - t0) * 1000.0, 1)
+            return (resp.status < 500, resp.status, latency)
+    except urllib.error.HTTPError as e:
+        latency = round((time.time() - t0) * 1000.0, 1)
+        return (True, e.code, latency)
+    except Exception:
+        return (False, 0, 0)
+
+def get_pid_for_port(port):
+    try:
+        out = subprocess.check_output(f"ss -tulpn 'sport = :{port}'", shell=True, text=True)
+        for line in out.splitlines():
+            if f":{port}" in line and "pid=" in line:
+                part = line.split("pid=")[1].split(",")[0]
+                return int(part)
+    except Exception:
+        pass
+    return None
+
+def status():
+    print(f"\n{GOLD}{BOLD}═════════════════════════════════════════════════════════════════════════════{RESET}")
+    print(f" {GOLD}{BOLD}ZOTH FLEET // SOVEREIGN LOOPBACK AUDIT{RESET}  {DIM}127.0.0.1 strict binding{RESET}")
+    print(f"{GOLD}{BOLD}═════════════════════════════════════════════════════════════════════════════{RESET}\n")
+
+    registry = load_registry()
+    tools = registry.get('tools', [])
+
+    # Core Hubs & Enclaves to probe
+    core_daemons = [
+        (3000, "Zoth Studio UI", "Hub", "/"),
+        (5173, "Zoth WebGen Vite", "Hub", "/"),
+        (8094, "Neuro-Memory UI", "Core", "/api/health"),
+        (8102, "Signal Bridge", "Core", "/api/health"),
+        (8110, "Budget Sentinel UI", "FinOps", "/api/status"),
+        (8111, "Budget Sentinel Proxy", "FinOps", "/"),
+        (8114, "Voice Call Cockpit", "Voice", "/"),
+        (8787, "Zoth Vault Daemon", "Security", "/"),
+        (8788, "Neuro-Memory REST API", "Core", "/api/health"),
+        (8790, "Swarm Daemon Multiplexer", "Swarm", "/api/swarm/status"),
+        (9393, "Zoth Civilization Hub", "Civ", "/"),
+        (9395, "Likeness Desk", "Studio", "/"),
+        (11434, "Ollama LLM Server", "Core", "/api/tags"),
+    ]
+
+    all_ports = []
+    seen_ports = set()
+
+    for p, name, band, path in core_daemons:
+        all_ports.append({'port': p, 'name': name, 'band': band, 'path': path, 'is_core': True})
+        seen_ports.add(p)
+
+    for t in tools:
+        p = t.get('port')
+        if p and p not in seen_ports:
+            all_ports.append({
+                'port': p,
+                'name': t.get('name', t.get('id')),
+                'band': t.get('category', 'Tool'),
+                'path': '/',
+                'is_core': False
+            })
+            seen_ports.add(p)
+
+    all_ports.sort(key=lambda x: x['port'])
+
+    def check_target(target):
+        is_up, rtt = probe_tcp(target['port'])
+        pid = get_pid_for_port(target['port']) if is_up else None
+        return (target, is_up, rtt, pid)
+
+    with ThreadPoolExecutor(max_workers=24) as pool:
+        results = list(pool.map(check_target, all_ports))
+
+    live_count = sum(1 for _, is_up, _, _ in results if is_up)
+    total_count = len(results)
+
+    print(f" {BOLD}{'PORT':<6} {'BAND':<14} {'DAEMON / SERVICE':<34} {'STATE':<10} {'RTT':<8} {'PID':<8}{RESET}")
+    print(f" {GRAY}{'─'*6} {'─'*14} {'─'*34} {'─'*10} {'─'*8} {'─'*8}{RESET}")
+
+    for target, is_up, rtt, pid in results:
+        port_str = f":{target['port']}"
+        band_str = target['band'][:13]
+        name_str = target['name'][:33]
+        state_str = f"{GREEN}● UP{RESET}    " if is_up else f"{GRAY}○ DARK{RESET}  "
+        rtt_str = f"{rtt}ms" if is_up else "-"
+        pid_str = str(pid) if pid else "-"
+        
+        # Highlight core
+        if target['is_core']:
+            port_fmt = f"{GOLD}{port_str:<6}{RESET}"
+        else:
+            port_fmt = f"{CYAN}{port_str:<6}{RESET}"
+
+        print(f" {port_fmt} {band_str:<14} {name_str:<34} {state_str} {rtt_str:<8} {pid_str:<8}")
+
+    print(f"\n{GOLD}═════════════════════════════════════════════════════════════════════════════{RESET}")
+    print(f" {BOLD}Fleet Tally:{RESET} {GREEN}{live_count}{RESET} / {total_count} daemons live on loopback")
+
+    # FinOps check
+    try:
+        with urllib.request.urlopen("http://127.0.0.1:8111/", timeout=0.6) as r:
+            b_info = json.loads(r.read().decode())
+            cb = b_info.get("circuit_breaker", {})
+            print(f" {BOLD}Budget Proxy :8111:{RESET} Breaker {GREEN}{cb.get('state')}{RESET} · Spend ${cb.get('current_spend_usd', 0.0):.6f} / ${cb.get('max_budget_usd', 5.0):.2f} ({cb.get('total_requests', 0)} requests)")
+    except Exception:
+        print(f" {BOLD}Budget Proxy :8111:{RESET} {RED}Unreachable{RESET}")
+
+    # Ollama check
+    try:
+        with urllib.request.urlopen("http://127.0.0.1:11434/api/ps", timeout=0.6) as r:
+            m_info = json.loads(r.read().decode())
+            loaded = [m.get('name') for m in m_info.get('models', [])]
+            if loaded:
+                print(f" {BOLD}Ollama Models Warm:{RESET} {GREEN}{', '.join(loaded)}{RESET}")
+            else:
+                print(f" {BOLD}Ollama Models Warm:{RESET} {RED}None (0 loaded in RAM){RESET}")
+    except Exception:
+        print(f" {BOLD}Ollama Server:{RESET} {RED}Unreachable{RESET}")
+
+    print(f"{GOLD}═════════════════════════════════════════════════════════════════════════════{RESET}\n")
+
+def up():
+    print(f"\n{GOLD}{BOLD}[*] Raising Zoth Sovereign Fleet...{RESET}")
+
+    # 1. Start core user systemd services
+    systemd_units = [
+        "zoth-studio.service",
+        "sovereign-agent-bridge.service",
+        "neuro-memory-rest.service",
+        "agent-voice-call.service"
+    ]
+    for unit in systemd_units:
+        try:
+            subprocess.run(["systemctl", "--user", "start", unit], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        except Exception:
+            pass
+
+    # 2. Warm local model if cold
+    try:
+        with urllib.request.urlopen("http://127.0.0.1:11434/api/ps", timeout=0.5) as r:
+            m_info = json.loads(r.read().decode())
+            if not m_info.get('models'):
+                print(f"{CYAN}[*] Warming qwen2.5-coder:1.5b in Ollama RAM...{RESET}")
+                payload = json.dumps({"model": "qwen2.5-coder:1.5b", "keep_alive": -1}).encode('utf-8')
+                req = urllib.request.Request("http://127.0.0.1:11434/api/generate", data=payload, headers={'Content-Type': 'application/json'})
+                urllib.request.urlopen(req, timeout=8)
+    except Exception:
+        pass
+
+    # 3. Raise static browser fleet on unique ports
+    registry = load_registry()
+    tools = registry.get('tools', [])
+    pids = read_pids()
+
+    base_tools_dir = os.path.expanduser('~/NullAITech')
+    studio_dist_tools = os.path.expanduser('~/NullAITech/zoth-studio-v2/dist/tools')
+
+    spawned = 0
+    for t in tools:
+        port = t.get('port')
+        tid = t.get('id')
+        if not port or port < 8080 or port > 8134:
+            continue
+        
+        # Check if already running
+        is_up, _ = probe_tcp(port, timeout=0.1)
+        if is_up:
+            continue
+
+        # Look for directory to serve: prefer NullAITech/<id>/public, then dist/tools/<id>
+        target_dir = None
+        cand_pub = os.path.join(base_tools_dir, tid, 'public')
+        cand_dist = os.path.join(studio_dist_tools, tid)
+        cand_repo = os.path.join(base_tools_dir, tid)
+
+        if os.path.exists(cand_pub):
+            target_dir = cand_pub
+        elif os.path.exists(cand_dist):
+            target_dir = cand_dist
+        elif os.path.exists(cand_repo):
+            target_dir = cand_repo
+
+        if not target_dir:
+            continue
+
+        cmd = [
+            "python3", "-m", "http.server", str(port),
+            "--bind", "127.0.0.1",
+            "--directory", target_dir
+        ]
+        log_path = os.path.join(STATE_DIR, f"{tid}.log")
+        with open(log_path, 'a') as log_f:
+            proc = subprocess.Popen(cmd, stdout=log_f, stderr=log_f, cwd=target_dir)
+            pids[tid] = {'pid': proc.pid, 'port': port}
+            spawned += 1
+
+    write_pids(pids)
+    time.sleep(1.2)
+    print(f"{GREEN}✔ Fleet launch complete: {spawned} browser daemons spawned.{RESET}\n")
+    status()
+
+def down():
+    print(f"\n{GOLD}{BOLD}[*] Bringing down managed fleet daemons...{RESET}")
+    pids = read_pids()
+    stopped = 0
+
+    for tid, rec in pids.items():
+        pid = rec.get('pid')
+        if pid:
+            try:
+                os.kill(pid, 15) # SIGTERM
+                stopped += 1
+            except ProcessLookupError:
+                pass
+            except Exception as e:
+                print(f"Error stopping {tid} (pid {pid}): {e}")
+
+    write_pids({})
+    print(f"{GREEN}✔ Stopped {stopped} fleet processes.{RESET}")
+    print(f"{DIM}Note: Core services (Studio, Ollama, Budget Sentinel) remain protected.{RESET}\n")
+
+def main():
+    cmd = sys.argv[1] if len(sys.argv) > 1 else 'status'
+    if cmd == 'up' or cmd == 'start':
+        up()
+    elif cmd == 'down' or cmd == 'stop':
+        down()
+    elif cmd == 'status' or cmd == 'probe':
+        status()
+    else:
+        print("Usage: zoth fleet {up|down|status}")
+        sys.exit(1)
+
+if __name__ == '__main__':
+    main()

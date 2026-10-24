@@ -1,7 +1,7 @@
 {
   "schema": "zoth/tools-static/v1",
   "generated_at": "2026-10-17T04:03:46.171Z",
-  "tool_count": 60,
+  "tool_count": 65,
   "tools": [
     {
       "id": "adytum-alchemist-ai-workflow",
@@ -17,7 +17,9 @@
         "node",
         "cli",
         "zero-egress"
-      ]
+      ],
+      "port": 8137,
+      "local_url": "http://127.0.0.1:8137"
     },
     {
       "id": "azoth-local-agent",
@@ -33,7 +35,9 @@
         "node",
         "cli",
         "zero-egress"
-      ]
+      ],
+      "port": 8138,
+      "local_url": "http://127.0.0.1:8138"
     },
     {
       "id": "sovereign-agent-bridge",
@@ -49,7 +53,9 @@
         "node",
         "cli",
         "zero-egress"
-      ]
+      ],
+      "port": 8102,
+      "local_url": "http://127.0.0.1:8102"
     },
     {
       "id": "neuro-memory-daemon",
@@ -67,7 +73,8 @@
         "node",
         "cli",
         "zero-egress"
-      ]
+      ],
+      "port": 8094
     },
     {
       "id": "zoth-os",
@@ -84,7 +91,9 @@
         "node",
         "cli",
         "zero-egress"
-      ]
+      ],
+      "port": 8787,
+      "local_url": "http://127.0.0.1:8787"
     },
     {
       "id": "vector-search-engine",
@@ -99,7 +108,8 @@
       "local_url": "http://127.0.0.1:8121",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8121
     },
     {
       "id": "deepsearch-research-agent",
@@ -114,7 +124,8 @@
       "local_url": "http://127.0.0.1:8122",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8122
     },
     {
       "id": "promptmaster-studio",
@@ -129,7 +140,8 @@
       "local_url": "http://127.0.0.1:8123",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8123
     },
     {
       "id": "hexstrike-arsenal",
@@ -145,7 +157,9 @@
         "node",
         "cli",
         "zero-egress"
-      ]
+      ],
+      "port": 8888,
+      "local_url": "http://127.0.0.1:8888"
     },
     {
       "id": "envguard-secrets-vault",
@@ -160,7 +174,8 @@
       "local_url": "http://127.0.0.1:8088",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8088
     },
     {
       "id": "jwt-inspector-guard",
@@ -175,7 +190,8 @@
       "local_url": "http://127.0.0.1:8124",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8124
     },
     {
       "id": "payload-entropy-studio",
@@ -189,7 +205,9 @@
       "live_url": "https://entropystudio.nullai.tech",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8080,
+      "local_url": "http://127.0.0.1:8080"
     },
     {
       "id": "web-security-guard",
@@ -198,12 +216,14 @@
       "category": "Security & Recon",
       "github": "https://github.com/1nc0gn30/web-security-guard",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/web-security-guard.git && cd web-security-guard && python3 -m http.server 8080 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/web-security-guard.git && cd web-security-guard && python3 -m http.server 8125 --directory public",
       "execution_type": "browser",
       "live_url": "https://securityguard.nullai.tech",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8125,
+      "local_url": "http://127.0.0.1:8125"
     },
     {
       "id": "polyglot-framework-exporter",
@@ -212,12 +232,14 @@
       "category": "Autonomous Web",
       "github": "https://github.com/1nc0gn30/polyglot-framework-exporter",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/polyglot-framework-exporter.git && cd polyglot-framework-exporter && python3 -m http.server 8080 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/polyglot-framework-exporter.git && cd polyglot-framework-exporter && python3 -m http.server 8126 --directory public",
       "execution_type": "browser",
       "live_url": "https://polyglot.nullai.tech",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8126,
+      "local_url": "http://127.0.0.1:8126"
     },
     {
       "id": "aeo-graph-engine",
@@ -226,12 +248,14 @@
       "category": "Autonomous Web",
       "github": "https://github.com/1nc0gn30/aeo-graph-engine",
       "version": "1.4.0",
-      "pull": "git clone https://github.com/1nc0gn30/aeo-graph-engine.git && cd aeo-graph-engine && python3 -m http.server 8080 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/aeo-graph-engine.git && cd aeo-graph-engine && python3 -m http.server 8127 --directory public",
       "execution_type": "browser",
       "live_url": "https://aeo-graph-engine.netlify.app",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8127,
+      "local_url": "http://127.0.0.1:8127"
     },
     {
       "id": "cwv-speed-engine",
@@ -240,12 +264,14 @@
       "category": "Autonomous Web",
       "github": "https://github.com/1nc0gn30/cwv-speed-engine",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/cwv-speed-engine.git && cd cwv-speed-engine && python3 -m http.server 8080 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/cwv-speed-engine.git && cd cwv-speed-engine && python3 -m http.server 8128 --directory public",
       "execution_type": "browser",
       "live_url": "https://cwv-speed-studio.netlify.app",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8128,
+      "local_url": "http://127.0.0.1:8128"
     },
     {
       "id": "vision-gesture-control",
@@ -260,7 +286,8 @@
       "local_url": "http://127.0.0.1:8089",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8089
     },
     {
       "id": "subsweep-lead-scanner",
@@ -275,7 +302,8 @@
       "local_url": "http://127.0.0.1:8090",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8090
     },
     {
       "id": "omnipost-social-engine",
@@ -290,7 +318,8 @@
       "local_url": "http://127.0.0.1:8091",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8091
     },
     {
       "id": "cron-rhythm-studio",
@@ -305,7 +334,8 @@
       "local_url": "http://127.0.0.1:8092",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8092
     },
     {
       "id": "certpath-roadmap-studio",
@@ -320,7 +350,8 @@
       "local_url": "http://127.0.0.1:8093",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8093
     },
     {
       "id": "pwa-manifest-builder",
@@ -335,7 +366,8 @@
       "local_url": "http://127.0.0.1:8100",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8100
     },
     {
       "id": "regex-droid-builder",
@@ -350,7 +382,8 @@
       "local_url": "http://127.0.0.1:8101",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8101
     },
     {
       "id": "schema-illustrator-studio",
@@ -359,13 +392,14 @@
       "category": "Autonomous Web",
       "github": "https://github.com/1nc0gn30/schema-illustrator-studio",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/schema-illustrator-studio.git && cd schema-illustrator-studio && python3 -m http.server 8102 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/schema-illustrator-studio.git && cd schema-illustrator-studio && python3 -m http.server 8099 --directory public",
       "execution_type": "browser",
       "live_url": "https://schemaillustrator.nullai.tech",
-      "local_url": "http://127.0.0.1:8102",
+      "local_url": "http://127.0.0.1:8099",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8099
     },
     {
       "id": "zoth-webgen",
@@ -381,7 +415,9 @@
         "node",
         "cli",
         "zero-egress"
-      ]
+      ],
+      "port": 5173,
+      "local_url": "http://127.0.0.1:5173"
     },
     {
       "id": "zoth-swarm-multiplexer",
@@ -397,7 +433,9 @@
         "node",
         "cli",
         "zero-egress"
-      ]
+      ],
+      "port": 8790,
+      "local_url": "http://127.0.0.1:8790"
     },
     {
       "id": "webmcp-protocol-inspector",
@@ -410,7 +448,9 @@
       "execution_type": "webgpu",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8136,
+      "local_url": "http://127.0.0.1:8136"
     },
     {
       "id": "anderson-security-sentinel",
@@ -425,7 +465,8 @@
       "local_url": "http://127.0.0.1:8103",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8103
     },
     {
       "id": "badge3d-coin-generator",
@@ -440,7 +481,8 @@
       "local_url": "http://127.0.0.1:8084",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8084
     },
     {
       "id": "robots-txt-auditor",
@@ -455,7 +497,8 @@
       "local_url": "http://127.0.0.1:8086",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8086
     },
     {
       "id": "city-desk",
@@ -470,7 +513,8 @@
       "local_url": "http://127.0.0.1:8087",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8087
     },
     {
       "id": "agent-egress-sentinel",
@@ -485,7 +529,8 @@
       "local_url": "http://127.0.0.1:8095",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8095
     },
     {
       "id": "agent-mock-twin",
@@ -500,7 +545,8 @@
       "local_url": "http://127.0.0.1:8097",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8097
     },
     {
       "id": "agent-prompt-firewall",
@@ -515,7 +561,8 @@
       "local_url": "http://127.0.0.1:8098",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8098
     },
     {
       "id": "agent-flight-recorder",
@@ -530,7 +577,8 @@
       "local_url": "http://127.0.0.1:8104",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8104
     },
     {
       "id": "agent-capsule-jail",
@@ -545,7 +593,8 @@
       "local_url": "http://127.0.0.1:8105",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8105
     },
     {
       "id": "agent-policy-auditor",
@@ -560,7 +609,8 @@
       "local_url": "http://127.0.0.1:8106",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8106
     },
     {
       "id": "etsy-pod-forge",
@@ -575,7 +625,8 @@
       "local_url": "http://127.0.0.1:8107",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8107
     },
     {
       "id": "etsy-connector",
@@ -590,7 +641,8 @@
       "local_url": "http://127.0.0.1:8108",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8108
     },
     {
       "id": "mcp-lens",
@@ -605,7 +657,8 @@
       "local_url": "http://127.0.0.1:8109",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8109
     },
     {
       "id": "agent-budget-sentinel",
@@ -620,7 +673,8 @@
       "local_url": "http://127.0.0.1:8110",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8110
     },
     {
       "id": "agent-gods-eye",
@@ -635,7 +689,8 @@
       "local_url": "http://127.0.0.1:8112",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8112
     },
     {
       "id": "shopify-connector",
@@ -650,7 +705,8 @@
       "local_url": "http://127.0.0.1:8113",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8113
     },
     {
       "id": "printify-connector",
@@ -665,7 +721,8 @@
       "local_url": "http://127.0.0.1:8115",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8115
     },
     {
       "id": "gelato-connector",
@@ -680,7 +737,8 @@
       "local_url": "http://127.0.0.1:8116",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8116
     },
     {
       "id": "agent-voice-call",
@@ -698,7 +756,8 @@
         "node",
         "cli",
         "zero-egress"
-      ]
+      ],
+      "port": 8114
     },
     {
       "id": "pod-smart-router",
@@ -713,7 +772,8 @@
       "local_url": "http://127.0.0.1:8117",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8117
     },
     {
       "id": "digital-asset-forge",
@@ -728,7 +788,8 @@
       "local_url": "http://127.0.0.1:8118",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8118
     },
     {
       "id": "pod-mockup-forge",
@@ -743,7 +804,8 @@
       "local_url": "http://127.0.0.1:8119",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8119
     },
     {
       "id": "pod-margin-sentinel",
@@ -758,7 +820,8 @@
       "local_url": "http://127.0.0.1:8120",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8120
     },
     {
       "id": "audiocipher-stego-engine",
@@ -773,7 +836,8 @@
       "local_url": "http://127.0.0.1:8096",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8096
     },
     {
       "id": "cyber-turtle-studio",
@@ -782,13 +846,14 @@
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/cyber-turtle-studio",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/cyber-turtle-studio.git && cd cyber-turtle-studio && python3 -m http.server 8080 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/cyber-turtle-studio.git && cd cyber-turtle-studio && python3 -m http.server 8129 --directory public",
       "execution_type": "browser",
       "live_url": "https://cyber-turtle-studio.netlify.app",
-      "local_url": "http://127.0.0.1:8080",
+      "local_url": "http://127.0.0.1:8129",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8129
     },
     {
       "id": "datamosh-glitch-studio",
@@ -803,7 +868,8 @@
       "local_url": "http://127.0.0.1:8081",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8081
     },
     {
       "id": "nexus-3d-scene-studio",
@@ -818,7 +884,8 @@
       "local_url": "http://127.0.0.1:8082",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8082
     },
     {
       "id": "ufo-sacred-geometry",
@@ -833,7 +900,8 @@
       "local_url": "http://127.0.0.1:8083",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8083
     },
     {
       "id": "likeness-desk",
@@ -850,7 +918,8 @@
         "node",
         "cli",
         "zero-egress"
-      ]
+      ],
+      "port": 9395
     },
     {
       "id": "osint-scout-skill",
@@ -865,7 +934,8 @@
       "local_url": "http://127.0.0.1:8085",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8085
     },
     {
       "id": "bolt.diy",
@@ -881,7 +951,9 @@
         "node",
         "cli",
         "zero-egress"
-      ]
+      ],
+      "port": 5174,
+      "local_url": "http://127.0.0.1:5174"
     },
     {
       "id": "zoth-civilization",
@@ -898,7 +970,8 @@
         "node",
         "cli",
         "zero-egress"
-      ]
+      ],
+      "port": 9393
     },
     {
       "id": "storefront-catalog",
@@ -912,7 +985,100 @@
       "live_url": "https://yourdigitalspace.nullai.tech",
       "runtimes": [
         "browser"
-      ]
+      ],
+      "port": 8135,
+      "local_url": "http://127.0.0.1:8135"
+    },
+    {
+      "id": "shodan-surface-sentinel",
+      "name": "Shodan Attack Surface Sentinel",
+      "description": "Zero-egress defensive asset auditor and InternetDB engine. Inspects open ports, CPE software stacks, and confirmed CVE exposures for your infrastructure.",
+      "category": "Security & Enclave",
+      "github": "https://github.com/1nc0gn30/shodan-surface-sentinel",
+      "version": "3.2.0",
+      "pull": "shodan myip && shodan host $(shodan myip)",
+      "execution_type": "browser",
+      "runtimes": [
+        "browser",
+        "zero-egress",
+        "webcrypto"
+      ],
+      "port": 8130,
+      "local_url": "http://127.0.0.1:8130",
+      "live_url": "https://zoth.nullai.tech/tools/shodan-surface-sentinel"
+    },
+    {
+      "id": "ghidra-mcp-bridge",
+      "name": "GhidraMCP Binary Reverse Engineering Bridge",
+      "description": "LaurieWired Ghidra Model Context Protocol bridge for autonomous binary decompilation, AST method analysis, and project variable annotation.",
+      "category": "Security & Enclave",
+      "github": "https://github.com/LaurieWired/GhidraMCP",
+      "version": "2.0.0",
+      "pull": "uvx --from git+https://github.com/LaurieWired/GhidraMCP ghidra-mcp --ghidra-server http://127.0.0.1:8131/",
+      "execution_type": "local_cli",
+      "runtimes": [
+        "python",
+        "mcp",
+        "ghidra",
+        "zero-egress"
+      ],
+      "port": 8131,
+      "local_url": "http://127.0.0.1:8131",
+      "live_url": "https://zoth.nullai.tech/tools/ghidra-mcp-bridge"
+    },
+    {
+      "id": "zoth-ascii-magic",
+      "name": "Zoth ASCII Magic Studio",
+      "description": "100% client-side Image/Video/3D-to-ASCII & Sub-Pixel Unicode Braille studio with Sobel directional edge detection (/\\|-), interactive 2D point relighting, CRT phosphor bloom, and 24-bit TrueColor ANSI/HTML/SVG exports.",
+      "category": "Media & 3D",
+      "github": "https://github.com/1nc0gn30/zoth-ascii-magic",
+      "version": "2.6.0",
+      "pull": "git clone https://github.com/1nc0gn30/zoth-ascii-magic.git && cd zoth-ascii-magic && python3 -m http.server 8132 --directory public",
+      "execution_type": "browser",
+      "runtimes": [
+        "browser",
+        "canvas2d",
+        "zero-egress"
+      ],
+      "port": 8132,
+      "local_url": "http://127.0.0.1:8132",
+      "live_url": "https://zoth-ascii-magic.netlify.app"
+    },
+    {
+      "id": "yara-sigma-forge",
+      "name": "YARA-X & Sigma Threat Rule Forge",
+      "description": "100% client-side YARA-X & Sigma threat detection compiler with 60fps byte-offset entropy radar, CVE-2024-4577 PHP-CGI / ELF64 memfd / AI Agent exfil signatures, and MITRE ATT&CK mapping.",
+      "category": "Security & Recon",
+      "github": "https://github.com/NullAITech/zoth-os",
+      "version": "3.2.0",
+      "pull": "zoth-yara-forge --emit-yara && zoth-yara-forge --scan /path/to/payload",
+      "execution_type": "browser",
+      "runtimes": [
+        "browser",
+        "yara-x",
+        "zero-egress"
+      ],
+      "port": 8133,
+      "local_url": "http://127.0.0.1:8133",
+      "live_url": "https://zoth.nullai.tech/tools/yara-sigma-forge"
+    },
+    {
+      "id": "reality-shader-forge",
+      "name": "Zoth Reality Shader & Theme Forge",
+      "description": "Interactive 60fps Reality Switch shader synthesizer and ZothOS desktop theme compiler. Customize the 5 Zoth Realities, preview Zoth Bot companions, and export KDE Plasma .colors, Alacritty .toml, and CSS tokens.",
+      "category": "Media & 3D",
+      "github": "https://github.com/NullAITech/zoth-studio-v2",
+      "version": "3.2.0",
+      "pull": "zoth-theme-forge --list && zoth-theme-forge --reality cyan --format kde",
+      "execution_type": "browser",
+      "runtimes": [
+        "browser",
+        "webgl",
+        "zero-egress"
+      ],
+      "port": 8134,
+      "local_url": "http://127.0.0.1:8134",
+      "live_url": "https://zoth.nullai.tech/tools/reality-shader-forge"
     }
   ]
 }

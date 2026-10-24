@@ -826,7 +826,7 @@ Runs local invariant verification before staging tools.`
 
                   <Typography variant="body1" color="text.secondary" paragraph>
                     Zoth Studio v2 is the air-gapped operator desk for sovereign AI agent development.
-                    Integrating 24 dedicated workstations, 25 in-browser micro-tools, Lucy Oracle STDP
+                    Integrating 43 dedicated workstations, 65 sovereign micro-tools, Lucy Oracle STDP
                     synaptic memory, 3-agent Byzantine consensus, and the Adytum Hardware Sanctum,
                     all execution runs strictly on physical hardware via local loopback enclaves (
                     <code>127.0.0.1</code>).
@@ -1740,7 +1740,7 @@ npm run preview`}
                   </Box>
 
                   <Typography variant="body1" color="text.secondary" paragraph>
-                    Essential operations for running Zoth Studio as an air-gapped desktop workstation, configuring local Ollama models with zero egress, and installing the 30 micro-tools into your global PATH.
+                    Essential operations for running Zoth Studio as an air-gapped desktop workstation, configuring local Ollama models with zero egress, and installing the 65 sovereign micro-tools into your global PATH.
                   </Typography>
 
                   {/* 1. Electron Desktop Workstation */}
@@ -1789,7 +1789,7 @@ export ZOTH_DEFAULT_MODEL="qwen2.5-coder:32b"`}
                     C. Installing Micro-Tools into /usr/local/bin
                   </Typography>
                   <Typography variant="body2" color="text.secondary" paragraph>
-                    Link any of the 30 micro-tools into your system PATH for immediate command-line execution:
+                    Link any of the 65 sovereign micro-tools into your system PATH for immediate command-line execution:
                   </Typography>
                   <CodeSnippet
                     title="GLOBAL PATH INSTALLATION"
@@ -1888,7 +1888,7 @@ curl -s https://zothos.nullai.tech/.well-known/mcp.json | jq .mcpServers`}
         <RevealOnScroll preset="fadeUp">
           <SovereignFunnel
             title="Install Zoth Studio v2 &amp; Sovereign Zoth OS"
-            subtitle="Full documentation and deployment pipeline for zero-telemetry development, local loopback enclaves, 24 workstations, and bare-metal OS hypervisors."
+            subtitle="Full documentation and deployment pipeline for zero-telemetry development, local loopback enclaves, 43 workstations, and bare-metal OS hypervisors."
             toolTitle="Option 1: Zero-Egress CLI Suite"
             toolTag="DOCS &amp; RUNTIME"
             toolDescription="Download the air-gapped documentation suite, offline CLI diagnostic toolbench, and local IPC verification harness."

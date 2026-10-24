@@ -51,6 +51,71 @@ function localModels(tags) {
     .filter((name) => name && !/cloud/i.test(name));
 }
 
+export async function probeFleet() {
+  const toolsJsonPath = fs.existsSync('~/NullAITech/zoth-studio-v2/dist/api/tools.json')
+    ? '~/NullAITech/zoth-studio-v2/dist/api/tools.json'
+    : '~/NullAITech/zoth-studio-v2/public/api/tools.json';
+  let tools = [];
+  try {
+    const raw = fs.readFileSync(toolsJsonPath, 'utf8');
+    tools = JSON.parse(raw).tools || [];
+  } catch (e) {
+    tools = [];
+  }
+
+  const corePorts = [
+    { port: 3000, name: 'Zoth Studio UI', category: 'Hub & Studio', isCore: true },
+    { port: 8094, name: 'Neuro-Memory Studio UI', category: 'Core Synaptic', isCore: true },
+    { port: 8788, name: 'Neuro-Memory REST API', category: 'Core Synaptic', isCore: true },
+    { port: 8102, name: 'Sovereign Signal Bridge', category: 'Core IPC', isCore: true },
+    { port: 8110, name: 'Agent Budget Sentinel UI', category: 'FinOps', isCore: true },
+    { port: 8111, name: 'Budget Sentinel Proxy', category: 'FinOps', isCore: true },
+    { port: 8114, name: 'Voice Call Cockpit', category: 'Voice Real-Time', isCore: true },
+    { port: 8787, name: 'Zoth Vault Daemon', category: 'Security Enclave', isCore: true },
+    { port: 11434, name: 'Ollama Model Server', category: 'Core LLM', isCore: true },
+  ];
+
+  const seenPorts = new Set(corePorts.map((c) => c.port));
+  const fleetList = [...corePorts];
+  for (const t of tools) {
+    if (t.port && !seenPorts.has(t.port)) {
+      seenPorts.add(t.port);
+      fleetList.push({
+        port: t.port,
+        id: t.id,
+        name: t.name,
+        category: t.category,
+        execution_type: t.execution_type,
+        isCore: false,
+      });
+    }
+  }
+
+  fleetList.sort((a, b) => a.port - b.port);
+
+  const results = await Promise.all(
+    fleetList.map(async (item) => {
+      const t0 = Date.now();
+      const res = await requestJson(item.port, '/', { method: 'GET', timeout: 350 });
+      return {
+        ...item,
+        up: res.up,
+        latencyMs: res.up ? Date.now() - t0 : 0,
+        statusCode: res.status || 0,
+      };
+    })
+  );
+
+  const live = results.filter((r) => r.up).length;
+  return {
+    checkedAt: new Date().toISOString(),
+    total: results.length,
+    live,
+    dark: results.length - live,
+    fleet: results,
+  };
+}
+
 export async function probeStatus() {
   const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama, vault, egress, mock, firewall, flight, capsule, policy, civ, webgen] = await Promise.all([
     requestJson(8094, '/health'),
@@ -244,6 +309,11 @@ export function studioMiddleware() {
     }
 
     try {
+      if (req.method === 'GET' && url.pathname === '/api/studio/fleet') {
+        send(res, 200, await probeFleet());
+        return;
+      }
+
       if (req.method === 'GET' && url.pathname === '/api/studio/status') {
         send(res, 200, await probeStatus());
         return;
