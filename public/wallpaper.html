@@ -11,8 +11,11 @@
       --gold: #D4AF37;
       --gold-bright: #FFD700;
       --ghost: #FF3355;
+      --ghost-purple: #A855F7;
       --matrix: #00FF9D;
+      --matrix-cyan: #00E5FF;
       --win11: #0078D4;
+      --win11-cyan: #38BDF8;
       --text: #F3F4F6;
       --dim: #9CA3AF;
       --mono: "JetBrains Mono", "Fira Code", monospace;
@@ -28,6 +31,7 @@
       font-family: var(--sans);
       color: var(--text);
       user-select: none;
+      cursor: none; /* Handled by custom avant-garde reticle */
     }
 
     #webgl-canvas {
@@ -40,24 +44,100 @@
       display: block;
     }
 
+    /* Avant-Garde Custom 3D Cursor Reticle */
+    #custom-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s, height 0.2s, opacity 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .reticle-core {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold-bright);
+      box-shadow: 0 0 12px var(--gold-bright);
+      transition: all 0.25s ease;
+    }
+
+    .reticle-ring {
+      position: absolute;
+      width: 38px;
+      height: 38px;
+      border: 1.5px dashed var(--gold);
+      border-radius: 50%;
+      animation: spin-slow 8s linear infinite;
+      box-shadow: 0 0 14px rgba(212, 175, 55, 0.4);
+      transition: all 0.25s ease;
+    }
+
+    .reticle-label {
+      position: absolute;
+      top: 26px;
+      left: 26px;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+      color: var(--gold-bright);
+      text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+      pointer-events: none;
+      transition: color 0.25s ease;
+    }
+
+    /* Reticle Mode Variations */
+    body.mode-gold .reticle-core { background: #FFD700; box-shadow: 0 0 14px #FFD700; }
+    body.mode-gold .reticle-ring { border: 1.5px dashed #D4AF37; box-shadow: 0 0 14px rgba(212, 175, 55, 0.45); }
+    body.mode-gold .reticle-label { color: #FFD700; }
+
+    body.mode-ghost .reticle-core { background: #FF3355; box-shadow: 0 0 14px #FF3355; border-radius: 2px; transform: rotate(45deg); }
+    body.mode-ghost .reticle-ring { border: 1.5px solid #FF3355; border-radius: 4px; animation: pulse-glitch 2s infinite ease-in-out; }
+    body.mode-ghost .reticle-label { color: #FF3355; }
+
+    body.mode-matrix .reticle-core { background: #00FF9D; box-shadow: 0 0 14px #00FF9D; border-radius: 0; }
+    body.mode-matrix .reticle-ring { border: 1px solid #00FF9D; border-radius: 0; border-style: double; border-width: 3px; }
+    body.mode-matrix .reticle-label { color: #00FF9D; }
+
+    body.mode-incognito .reticle-core { background: #38BDF8; box-shadow: 0 0 14px #38BDF8; }
+    body.mode-incognito .reticle-ring { border: 1.5px solid rgba(56, 189, 248, 0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+    body.mode-incognito .reticle-label { color: #38BDF8; }
+
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse-glitch {
+      0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.9; }
+      50% { transform: scale(1.15) rotate(180deg); opacity: 0.6; }
+    }
+
     /* Glassmorphic Floating HUD */
     .hud-panel {
       position: absolute;
       bottom: 24px;
       left: 24px;
       z-index: 10;
-      background: rgba(12, 14, 20, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(12, 14, 20, 0.78);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       border: 1px solid rgba(212, 175, 55, 0.25);
       border-radius: 14px;
       padding: 16px 20px;
       display: flex;
       flex-direction: column;
       gap: 12px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.65);
       transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      max-width: 440px;
+      max-width: 460px;
+      cursor: auto;
     }
 
     .hud-panel:hover {
@@ -73,26 +153,18 @@
     }
 
     .char-avatar-box {
-      width: 46px;
-      height: 46px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       border: 2px solid var(--gold);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 22px;
       background: rgba(0, 0, 0, 0.4);
-      box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+      box-shadow: 0 0 16px rgba(212, 175, 55, 0.35);
       transition: all 0.3s ease;
       flex-shrink: 0;
-    }
-
-    .char-avatar-img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      display: none;
     }
 
     .char-details {
@@ -187,7 +259,7 @@
       box-shadow: 0 0 12px rgba(0, 120, 212, 0.2);
     }
 
-    .mode-glyph { font-size: 14px; }
+    .mode-glyph { font-size: 15px; }
     .mode-label { font-size: 11px; font-family: var(--mono); font-weight: 600; }
 
     .hud-footer {
@@ -195,28 +267,32 @@
       align-items: center;
       justify-content: space-between;
       font-size: 11px;
-      font-family: var(--mono);
       color: var(--dim);
-      padding-top: 4px;
+      font-family: var(--mono);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 10px;
     }
 
     .hud-actions {
       display: flex;
-      gap: 8px;
+      align-items: center;
+      gap: 6px;
     }
 
     .hud-icon-btn {
-      background: none;
+      background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 6px;
-      color: var(--dim);
       padding: 4px 8px;
       font-size: 11px;
+      font-family: var(--mono);
+      color: var(--dim);
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
     }
 
-    .hud-icon-btn:hover {
+    .hud-icon-btn:hover, .hud-icon-btn.active {
+      background: rgba(255, 255, 255, 0.15);
       color: var(--text);
       border-color: rgba(255, 255, 255, 0.3);
     }
@@ -227,17 +303,19 @@
       top: 24px;
       right: 24px;
       z-index: 10;
-      background: rgba(12, 14, 20, 0.65);
-      backdrop-filter: blur(12px);
+      background: rgba(12, 14, 20, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 8px;
-      padding: 8px 14px;
+      padding: 8px 16px;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 18px;
       font-family: var(--mono);
       font-size: 11.5px;
       color: var(--dim);
+      cursor: auto;
     }
 
     .live-dot {
@@ -263,7 +341,7 @@
       width: 360px;
       max-height: calc(100vh - 48px);
       z-index: 20;
-      background: rgba(12, 14, 20, 0.85);
+      background: rgba(12, 14, 20, 0.88);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(212, 175, 55, 0.35);
@@ -275,6 +353,7 @@
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
       transform: translateX(390px);
       transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: auto;
     }
 
     .comms-drawer.open {
@@ -401,10 +480,16 @@
       font-family: var(--mono);
       color: var(--dim);
     }
-
   </style>
 </head>
-<body>
+<body class="mode-gold">
+
+  <!-- Custom 3D Cursor Reticle -->
+  <div id="custom-cursor">
+    <div class="reticle-core"></div>
+    <div class="reticle-ring"></div>
+    <div class="reticle-label" id="reticleLabel">☿ [GOLD: VORTEX ACTIVE]</div>
+  </div>
 
   <canvas id="webgl-canvas"></canvas>
 
@@ -412,8 +497,9 @@
   <div class="top-telemetry">
     <div style="display:flex; align-items:center; gap:6px;">
       <span class="live-dot" id="telemetryDot"></span>
-      <span id="telemetryStatus" style="color:var(--text); font-weight:600;">3D ENGINE LIVE</span>
+      <span id="telemetryStatus" style="color:var(--text); font-weight:600;">3D REALITY ENGINE</span>
     </div>
+    <div id="cursorCoordDisplay" style="color:var(--gold-bright);">X: 0.0 Y: 0.0</div>
     <div id="fpsCounter">60 FPS</div>
     <div id="timeClock">--:--:--</div>
   </div>
@@ -423,7 +509,6 @@
     <div class="character-card">
       <div class="char-avatar-box" id="avatarBox">
         <span id="avatarGlyph">☿</span>
-        <img id="avatarImg" class="char-avatar-img" alt="Zoth Bot Persona" />
       </div>
       <div class="char-details">
         <div class="char-name-row">
@@ -455,7 +540,7 @@
     </div>
 
     <div class="hud-footer">
-      <span>ZOTH REALITY ENGINE v3.2</span>
+      <span>ZOTH REALITY ENGINE v3.5 • 3D CURSOR FIELD</span>
       <div class="hud-actions">
         <button class="hud-icon-btn" id="btnDrone" title="Toggle Generative Ambient Drone [D]">🎵 DRONE: OFF</button>
         <button class="hud-icon-btn" id="btnCommsToggle" title="Toggle Neural Comms Link [C]">💬 COMMS [C]</button>
@@ -477,7 +562,7 @@
         glyph: "☿",
         color: "#FFD700",
         accent: "#D4AF37",
-        avatar: "/assets/avatars/azoth.png"
+        cursorDesc: "☿ [GOLD: VORTEX & ASTROLABE FOCUS]"
       },
       ghost: {
         name: "Ghostbyte",
@@ -486,7 +571,7 @@
         glyph: "👻",
         color: "#FF3355",
         accent: "#A855F7",
-        avatar: "/assets/avatars/ghostbyte.png"
+        cursorDesc: "👻 [GHOST: SINGULARITY & LASER TRACE]"
       },
       matrix: {
         name: "Lucy Netrunner",
@@ -495,7 +580,7 @@
         glyph: "🜂",
         color: "#00FF9D",
         accent: "#00E5FF",
-        avatar: "/assets/avatars/lucy.png"
+        cursorDesc: "🜂 [MATRIX: RAIN SHIELD & STDP BEAMS]"
       },
       incognito: {
         name: "Chameleon 11",
@@ -504,7 +589,7 @@
         glyph: "🪟",
         color: "#0078D4",
         accent: "#38BDF8",
-        avatar: "/assets/avatars/chameleon.png"
+        cursorDesc: "🪟 [WIN11: FLUENT SILK RIPPLE WAVE]"
       }
     };
 
@@ -525,7 +610,6 @@
       gain.connect(audioCtx.destination);
 
       if (mode === 'gold') {
-        // 432Hz harmonic bell
         osc.type = 'sine';
         osc.frequency.setValueAtTime(432, now);
         osc.frequency.exponentialRampToValueAtTime(864, now + 0.15);
@@ -535,7 +619,6 @@
         osc.start(now);
         osc.stop(now + 1.2);
       } else if (mode === 'ghost') {
-        // Sub-bass whoosh
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(140, now);
         osc.frequency.exponentialRampToValueAtTime(45, now + 0.6);
@@ -544,7 +627,6 @@
         osc.start(now);
         osc.stop(now + 0.7);
       } else if (mode === 'matrix') {
-        // Digital cyber chirp
         osc.type = 'square';
         osc.frequency.setValueAtTime(880, now);
         osc.frequency.setValueAtTime(1320, now + 0.08);
@@ -554,7 +636,6 @@
         osc.start(now);
         osc.stop(now + 0.45);
       } else if (mode === 'incognito') {
-        // Fluent 3-tone arpeggio
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(523.25, now);
         osc.frequency.setValueAtTime(659.25, now + 0.12);
@@ -580,7 +661,7 @@
     camera.position.set(0, 0, 32);
 
     // Dynamic Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.45);
     scene.add(ambientLight);
 
     const pointLight1 = new THREE.PointLight(0xFFD700, 2.5, 80);
@@ -590,6 +671,17 @@
     const pointLight2 = new THREE.PointLight(0xD4AF37, 1.8, 80);
     pointLight2.position.set(-16, -12, 15);
     scene.add(pointLight2);
+
+    // ── Dedicated Dynamic 3D Cursor Light & Probe ─────────────────────────
+    const cursorLight = new THREE.PointLight(0xFFD700, 4.5, 30);
+    cursorLight.position.set(0, 0, 8);
+    scene.add(cursorLight);
+
+    // 3D Cursor Reticle Beacon in World Space
+    const beaconGeo = new THREE.RingGeometry(0.3, 0.42, 24);
+    const beaconMat = new THREE.MeshBasicMaterial({ color: 0xFFD700, transparent: true, opacity: 0.9, side: THREE.DoubleSide });
+    const cursorBeaconMesh = new THREE.Mesh(beaconGeo, beaconMat);
+    scene.add(cursorBeaconMesh);
 
     // ── Object Groups for Each Reality Mode ────────────────────────────────
     const rootGroup = new THREE.Group();
@@ -619,7 +711,34 @@
       rings.push(ringMesh);
     }
 
-    // 2. GHOST MODE: Tor Onion Routing Mesh
+    // Gold Mode Cursor Trail: 100 Golden Celestial Stardust Particles
+    const goldTrailCount = 100;
+    const goldTrailGeo = new THREE.BufferGeometry();
+    const goldTrailPositions = new Float32Array(goldTrailCount * 3);
+    const goldTrailColors = new Float32Array(goldTrailCount * 3);
+    const goldTrailHistory = [];
+    for (let i = 0; i < goldTrailCount; i++) {
+      goldTrailHistory.push({ x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, life: 0 });
+      goldTrailPositions[i * 3] = 0;
+      goldTrailPositions[i * 3 + 1] = 0;
+      goldTrailPositions[i * 3 + 2] = 0;
+      goldTrailColors[i * 3] = 1.0;
+      goldTrailColors[i * 3 + 1] = 0.84;
+      goldTrailColors[i * 3 + 2] = 0.0;
+    }
+    goldTrailGeo.setAttribute('position', new THREE.BufferAttribute(goldTrailPositions, 3));
+    goldTrailGeo.setAttribute('color', new THREE.BufferAttribute(goldTrailColors, 3));
+    const goldTrailMat = new THREE.PointsMaterial({
+      size: 0.35,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.95,
+      blending: THREE.AdditiveBlending
+    });
+    const goldTrailPoints = new THREE.Points(goldTrailGeo, goldTrailMat);
+    goldGroup.add(goldTrailPoints);
+
+    // 2. GHOST MODE: Tor Onion Routing Mesh & Singularity Laser Tracers
     const ghostGroup = new THREE.Group();
     ghostGroup.visible = false;
     rootGroup.add(ghostGroup);
@@ -644,37 +763,72 @@
     const innerGhostMesh = new THREE.Mesh(innerIcosaGeo, innerGhostMat);
     ghostGroup.add(innerGhostMesh);
 
-    // 3. MATRIX MODE: Tumbling Voxel Code Cubes & Rain Columns
+    // Dynamic Crimson Laser Tracer Lines (Connecting Cursor Singularity to Icosahedron Nodes)
+    const ghostLaserLineCount = 12;
+    const ghostLaserGeo = new THREE.BufferGeometry();
+    const ghostLaserPositions = new Float32Array(ghostLaserLineCount * 2 * 3);
+    ghostLaserGeo.setAttribute('position', new THREE.BufferAttribute(ghostLaserPositions, 3));
+    const ghostLaserMat = new THREE.LineBasicMaterial({
+      color: 0xFF3355,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending
+    });
+    const ghostLaserLines = new THREE.LineSegments(ghostLaserGeo, ghostLaserMat);
+    ghostGroup.add(ghostLaserLines);
+
+    // 3. MATRIX MODE: Tumbling Voxel Code Cubes, Cascading Rain, & STDP Beams
     const matrixGroup = new THREE.Group();
     matrixGroup.visible = false;
     rootGroup.add(matrixGroup);
 
     const cubes = [];
     const cubeGeo = new THREE.BoxGeometry(1.2, 1.2, 1.2);
-    const cubeMat = new THREE.MeshStandardMaterial({
-      color: 0x00FF9D,
-      wireframe: true,
-      roughness: 0.1,
-      metalness: 0.95
-    });
 
-    for (let i = 0; i < 36; i++) {
-      const c = new THREE.Mesh(cubeGeo, cubeMat);
-      c.position.set(
-        (Math.random() - 0.5) * 28,
-        (Math.random() - 0.5) * 20,
-        (Math.random() - 0.5) * 15
+    for (let i = 0; i < 40; i++) {
+      const cMat = new THREE.MeshStandardMaterial({
+        color: 0x00FF9D,
+        emissive: 0x003318,
+        wireframe: true,
+        roughness: 0.1,
+        metalness: 0.95
+      });
+      const c = new THREE.Mesh(cubeGeo, cMat);
+      const basePos = new THREE.Vector3(
+        (Math.random() - 0.5) * 32,
+        (Math.random() - 0.5) * 22,
+        (Math.random() - 0.5) * 16
       );
+      c.position.copy(basePos);
       matrixGroup.add(c);
-      cubes.push({ mesh: c, rotSpeed: (Math.random() - 0.5) * 0.04 });
+      cubes.push({
+        mesh: c,
+        mat: cMat,
+        basePos: basePos.clone(),
+        rotSpeed: (Math.random() - 0.5) * 0.04,
+        connected: false
+      });
     }
+
+    // Matrix STDP Synaptic Laser Beams (Connecting Cursor to Nearest 4 Cubes)
+    const matrixBeamGeo = new THREE.BufferGeometry();
+    const matrixBeamPositions = new Float32Array(4 * 2 * 3);
+    matrixBeamGeo.setAttribute('position', new THREE.BufferAttribute(matrixBeamPositions, 3));
+    const matrixBeamMat = new THREE.LineBasicMaterial({
+      color: 0x00FF9D,
+      transparent: true,
+      opacity: 0.9,
+      blending: THREE.AdditiveBlending
+    });
+    const matrixBeamLines = new THREE.LineSegments(matrixBeamGeo, matrixBeamMat);
+    matrixGroup.add(matrixBeamLines);
 
     // 4. INCOGNITO / WIN11 MODE: Fluent Bloom Silk Ribbon Wave
     const win11Group = new THREE.Group();
     win11Group.visible = false;
     rootGroup.add(win11Group);
 
-    const planeGeo = new THREE.PlaneGeometry(36, 26, 48, 48);
+    const planeGeo = new THREE.PlaneGeometry(36, 26, 64, 64);
     const win11Mat = new THREE.MeshStandardMaterial({
       color: 0x0078D4,
       roughness: 0.35,
@@ -686,18 +840,27 @@
     win11Group.add(win11Mesh);
 
     // ── Global Ambient Starfield / Particle Cloud ──────────────────────────
-    const particleCount = 1800;
+    const particleCount = 2000;
     const particleGeo = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
+    const particleBasePositions = new Float32Array(particleCount * 3);
     const particleColors = new Float32Array(particleCount * 3);
 
     const cGold = new THREE.Color(0xFFD700);
     const cAmber = new THREE.Color(0xD4AF37);
 
     for (let i = 0; i < particleCount; i++) {
-      particlePositions[i * 3] = (Math.random() - 0.5) * 60;
-      particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 45;
-      particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 40;
+      const px = (Math.random() - 0.5) * 64;
+      const py = (Math.random() - 0.5) * 48;
+      const pz = (Math.random() - 0.5) * 40;
+
+      particlePositions[i * 3] = px;
+      particlePositions[i * 3 + 1] = py;
+      particlePositions[i * 3 + 2] = pz;
+
+      particleBasePositions[i * 3] = px;
+      particleBasePositions[i * 3 + 1] = py;
+      particleBasePositions[i * 3 + 2] = pz;
 
       const col = Math.random() > 0.4 ? cGold : cAmber;
       particleColors[i * 3] = col.r;
@@ -709,25 +872,42 @@
     particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
 
     const particleMat = new THREE.PointsMaterial({
-      size: 0.22,
+      size: 0.24,
       vertexColors: true,
       transparent: true,
-      opacity: 0.8
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending
     });
     const particleSystem = new THREE.Points(particleGeo, particleMat);
     scene.add(particleSystem);
 
-    // ── Mouse & Touch Parallax Interaction ─────────────────────────────────
-    let mouseX = 0, mouseY = 0;
-    let targetRotX = 0, targetRotY = 0;
+    // ── Raycasting & 3D Cursor Space Tracker ───────────────────────────────
+    const raycaster = new THREE.Raycaster();
+    const mouseVec2 = new THREE.Vector2(0, 0);
+    const cursorPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+    const cursorWorldPos = new THREE.Vector3(0, 0, 0);
+    const cursorSmoothPos = new THREE.Vector3(0, 0, 0);
+    const cursorVelocity = new THREE.Vector3(0, 0, 0);
+
+    let screenMouseX = window.innerWidth / 2;
+    let screenMouseY = window.innerHeight / 2;
+    let normMouseX = 0, normMouseY = 0;
     let isDragging = false;
     let prevMouseX = 0, prevMouseY = 0;
 
+    const customCursorEl = document.getElementById('custom-cursor');
+    const cursorCoordDisplay = document.getElementById('cursorCoordDisplay');
+    const reticleLabel = document.getElementById('reticleLabel');
+
     window.addEventListener('mousemove', (e) => {
-      const nx = (e.clientX / window.innerWidth) * 2 - 1;
-      const ny = -(e.clientY / window.innerHeight) * 2 + 1;
-      mouseX = nx;
-      mouseY = ny;
+      screenMouseX = e.clientX;
+      screenMouseY = e.clientY;
+      normMouseX = (e.clientX / window.innerWidth) * 2 - 1;
+      normMouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+
+      // Update Custom Reticle Position
+      customCursorEl.style.left = `${screenMouseX}px`;
+      customCursorEl.style.top = `${screenMouseY}px`;
 
       if (isDragging) {
         const dx = e.clientX - prevMouseX;
@@ -740,7 +920,7 @@
     });
 
     window.addEventListener('mousedown', (e) => {
-      if (e.target.closest('#hudPanel') || e.target.closest('.top-telemetry')) return;
+      if (e.target.closest('#hudPanel') || e.target.closest('.top-telemetry') || e.target.closest('#commsDrawer')) return;
       isDragging = true;
       prevMouseX = e.clientX;
       prevMouseY = e.clientY;
@@ -752,6 +932,9 @@
     async function setRealityMode(mode, triggerServer = true) {
       if (!CHARACTERS[mode]) return;
       currentMode = mode;
+
+      // Set Body class for custom cursor styling
+      document.body.className = `mode-${mode}`;
 
       // Update Active UI buttons
       document.querySelectorAll('.mode-btn').forEach(btn => {
@@ -768,6 +951,8 @@
       document.getElementById('avatarBox').style.boxShadow = `0 0 16px ${char.color}55`;
       document.getElementById('telemetryDot').style.background = char.color;
       document.getElementById('telemetryDot').style.boxShadow = `0 0 8px ${char.color}`;
+      reticleLabel.innerText = char.cursorDesc;
+      cursorCoordDisplay.style.color = char.color;
 
       // Update 3D Object Visibilities & Lighting
       goldGroup.visible = (mode === 'gold');
@@ -779,21 +964,29 @@
         scene.background.set(0x08080B);
         pointLight1.color.set(0xFFD700);
         pointLight2.color.set(0xD4AF37);
+        cursorLight.color.set(0xFFD700);
+        cursorBeaconMesh.material.color.set(0xFFD700);
         particleMat.color.set(0xFFD700);
       } else if (mode === 'ghost') {
         scene.background.set(0x06080D);
         pointLight1.color.set(0xFF3355);
         pointLight2.color.set(0xA855F7);
+        cursorLight.color.set(0xFF3355);
+        cursorBeaconMesh.material.color.set(0xFF3355);
         particleMat.color.set(0xFF3355);
       } else if (mode === 'matrix') {
         scene.background.set(0x040806);
         pointLight1.color.set(0x00FF9D);
         pointLight2.color.set(0x00E5FF);
+        cursorLight.color.set(0x00FF9D);
+        cursorBeaconMesh.material.color.set(0x00FF9D);
         particleMat.color.set(0x00FF9D);
       } else if (mode === 'incognito') {
         scene.background.set(0x0B1329);
         pointLight1.color.set(0x0078D4);
         pointLight2.color.set(0x38BDF8);
+        cursorLight.color.set(0x38BDF8);
+        cursorBeaconMesh.material.color.set(0x38BDF8);
         particleMat.color.set(0x38BDF8);
       }
 
@@ -822,6 +1015,7 @@
 
     // Keyboard Shortcuts
     window.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT') return;
       if (e.key === '1') setRealityMode('gold', true);
       else if (e.key === '2') setRealityMode('ghost', true);
       else if (e.key === '3') setRealityMode('matrix', true);
@@ -856,87 +1050,7 @@
     }
     setInterval(syncRealityFromOS, 2500);
 
-    // ── Animation Loop ─────────────────────────────────────────────────────
-    let clock = new THREE.Clock();
-    let frameCount = 0;
-    let lastFpsUpdate = performance.now();
-
-    function animate() {
-      requestAnimationFrame(animate);
-
-      const delta = clock.getDelta();
-      const time = clock.getElapsedTime();
-
-      // FPS tracking
-      frameCount++;
-      const now = performance.now();
-      if (now - lastFpsUpdate >= 1000) {
-        document.getElementById('fpsCounter').innerText = `${frameCount} FPS`;
-        frameCount = 0;
-        lastFpsUpdate = now;
-      }
-
-      // Parallax smooth camera damp
-      if (!isDragging) {
-        targetRotX = mouseY * 0.35;
-        targetRotY = mouseX * 0.45;
-        rootGroup.rotation.x += (targetRotX - rootGroup.rotation.x) * 0.04;
-        rootGroup.rotation.y += (targetRotY - rootGroup.rotation.y) * 0.04;
-      }
-
-      // Continuous Idle Rotations
-      if (currentMode === 'gold') {
-        goldTorus.rotation.x += 0.008;
-        goldTorus.rotation.y += 0.012;
-        rings.forEach((r, idx) => {
-          r.rotation.x += 0.004 * (idx % 2 === 0 ? 1 : -1);
-          r.rotation.y += 0.006 * (idx % 2 === 0 ? -1 : 1);
-        });
-      } else if (currentMode === 'ghost') {
-        ghostMesh.rotation.x -= 0.01;
-        ghostMesh.rotation.y += 0.015;
-        innerGhostMesh.rotation.x += 0.018;
-        innerGhostMesh.rotation.y -= 0.012;
-      } else if (currentMode === 'matrix') {
-        cubes.forEach((item) => {
-          item.mesh.rotation.x += item.rotSpeed;
-          item.mesh.rotation.y += item.rotSpeed * 1.5;
-        });
-      } else if (currentMode === 'incognito') {
-        // Parametric fabric wave
-        const pos = planeGeo.attributes.position;
-        for (let i = 0; i < pos.count; i++) {
-          const u = pos.getX(i);
-          const v = pos.getY(i);
-          const z = Math.sin(u * 0.3 + time * 1.8) * Math.cos(v * 0.3 + time * 1.4) * 2.2;
-          pos.setZ(i, z);
-        }
-        pos.needsUpdate = true;
-      }
-
-      // Slow particle field drift
-      particleSystem.rotation.y += 0.0006;
-      particleSystem.rotation.x += 0.0003;
-
-      renderer.render(scene, camera);
-    }
-
-    // Window Resize Handler
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    // Time Clock
-    function updateClock() {
-      document.getElementById('timeClock').innerText = new Date().toLocaleTimeString();
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-
-    // ── Generative Ambient Drone Engine & Audio Analyser ──────────────────
+    // ── Generative Ambient Drone Engine ────────────────────────────────────
     let droneActive = false;
     let droneOscs = [];
     let droneGain = null;
@@ -964,19 +1078,19 @@
       filter.connect(analyser);
       analyser.connect(audioCtx.destination);
 
-      let freqs = [108, 216, 432]; // Gold 432Hz Solfeggio
+      let freqs = [108, 216, 432];
       let oscType = "sine";
 
       if (mode === "ghost") {
-        freqs = [40, 80, 120]; // 40Hz Gamma sub
+        freqs = [40, 80, 120];
         oscType = "sawtooth";
         filter.frequency.setValueAtTime(320, audioCtx.currentTime);
       } else if (mode === "matrix") {
-        freqs = [55, 110, 220]; // Cyber techno sub
+        freqs = [55, 110, 220];
         oscType = "square";
         filter.frequency.setValueAtTime(450, audioCtx.currentTime);
       } else if (mode === "incognito") {
-        freqs = [146.83, 220, 293.66]; // D-major ambient wash
+        freqs = [146.83, 220, 293.66];
         oscType = "triangle";
         filter.frequency.setValueAtTime(800, audioCtx.currentTime);
       }
@@ -985,7 +1099,6 @@
         const osc = audioCtx.createOscillator();
         osc.type = oscType;
         osc.frequency.setValueAtTime(f, audioCtx.currentTime);
-        // Add subtle detune for rich alchemical beating
         osc.detune.setValueAtTime((idx - 1) * 3, audioCtx.currentTime);
         osc.connect(droneGain);
         osc.start();
@@ -1039,7 +1152,7 @@
       novaRadius = 0.1;
       const col = currentMode === "ghost" ? 0xFF3355 : (currentMode === "matrix" ? 0x00FF9D : (currentMode === "incognito" ? 0x38BDF8 : 0xFFD700));
       novaRings.forEach((r, idx) => {
-        r.position.set(mouseX * 12, mouseY * 12, 10);
+        r.position.copy(cursorSmoothPos);
         r.material.color.set(col);
         r.material.opacity = 0.9;
         r.scale.setScalar(0.1 + idx * 0.2);
@@ -1047,63 +1160,390 @@
       playModeCue(currentMode);
     });
 
-    // ── Neural Comms Drawer & Ollama Chat ──────────────────────────────────
+    // ── Animation Loop with 3D Cursor Tracking & Field Interaction ─────────
+    let clock = new THREE.Clock();
+    let frameCount = 0;
+    let lastFpsUpdate = performance.now();
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const delta = clock.getDelta();
+      const time = clock.getElapsedTime();
+
+      // FPS tracking
+      frameCount++;
+      const now = performance.now();
+      if (now - lastFpsUpdate >= 1000) {
+        document.getElementById('fpsCounter').innerText = `${frameCount} FPS`;
+        frameCount = 0;
+        lastFpsUpdate = now;
+      }
+
+      // ── 1. Raycast Cursor from Screen to 3D World Plane ────────────────────
+      mouseVec2.set(normMouseX, normMouseY);
+      raycaster.setFromCamera(mouseVec2, camera);
+      raycaster.ray.intersectPlane(cursorPlane, cursorWorldPos);
+
+      // Smooth follower & velocity computation
+      const prevX = cursorSmoothPos.x;
+      const prevY = cursorSmoothPos.y;
+      cursorSmoothPos.lerp(cursorWorldPos, 0.14);
+      cursorVelocity.set(cursorSmoothPos.x - prevX, cursorSmoothPos.y - prevY, 0);
+
+      // Update Cursor Light & 3D Beacon
+      cursorLight.position.set(cursorSmoothPos.x, cursorSmoothPos.y, 6.0);
+      cursorBeaconMesh.position.set(cursorSmoothPos.x, cursorSmoothPos.y, 0.5);
+      cursorBeaconMesh.rotation.z += 0.04;
+
+      // Coordinate HUD Update
+      cursorCoordDisplay.innerText = `X: ${cursorSmoothPos.x.toFixed(1)} Y: ${cursorSmoothPos.y.toFixed(1)}`;
+
+      // Camera parallax tilt
+      if (!isDragging) {
+        const targetRotX = normMouseY * 0.32;
+        const targetRotY = normMouseX * 0.42;
+        rootGroup.rotation.x += (targetRotX - rootGroup.rotation.x) * 0.04;
+        rootGroup.rotation.y += (targetRotY - rootGroup.rotation.y) * 0.04;
+      }
+
+      // ── 2. Mode-Specific 3D Cursor Field Physics ───────────────────────────
+      const pPos = particleGeo.attributes.position.array;
+
+      if (currentMode === 'gold') {
+        // GOLD MODE: Astrolabe Orientation + Golden Stardust Trail + Magnetic Vortex
+        goldTorus.rotation.x += 0.008;
+        goldTorus.rotation.y += 0.012;
+        rings.forEach((r, idx) => {
+          r.rotation.x += 0.004 * (idx % 2 === 0 ? 1 : -1);
+          r.rotation.y += 0.006 * (idx % 2 === 0 ? -1 : 1);
+        });
+
+        // Astrolabe sacred tilt faces cursor
+        goldGroup.rotation.x = THREE.MathUtils.lerp(goldGroup.rotation.x, normMouseY * 0.4, 0.06);
+        goldGroup.rotation.y = THREE.MathUtils.lerp(goldGroup.rotation.y, normMouseX * 0.5, 0.06);
+
+        // Update 100 Stardust Comet Trail Particles
+        // Spawn sparks at cursor
+        const spark = goldTrailHistory[frameCount % goldTrailCount];
+        spark.x = cursorSmoothPos.x + (Math.random() - 0.5) * 0.5;
+        spark.y = cursorSmoothPos.y + (Math.random() - 0.5) * 0.5;
+        spark.z = (Math.random() - 0.5) * 0.8;
+        spark.vx = cursorVelocity.x * 0.2 + (Math.random() - 0.5) * 0.08;
+        spark.vy = cursorVelocity.y * 0.2 + (Math.random() - 0.5) * 0.08;
+        spark.life = 1.0;
+
+        for (let i = 0; i < goldTrailCount; i++) {
+          const sp = goldTrailHistory[i];
+          if (sp.life > 0) {
+            sp.life -= 0.02;
+            sp.x += sp.vx;
+            sp.y += sp.vy;
+            goldTrailPositions[i * 3] = sp.x;
+            goldTrailPositions[i * 3 + 1] = sp.y;
+            goldTrailPositions[i * 3 + 2] = sp.z;
+            // Color shifts from bright white to gold to void
+            goldTrailColors[i * 3] = 1.0;
+            goldTrailColors[i * 3 + 1] = 0.7 + sp.life * 0.3;
+            goldTrailColors[i * 3 + 2] = sp.life * 0.5;
+          } else {
+            goldTrailPositions[i * 3] = -9999;
+          }
+        }
+        goldTrailGeo.attributes.position.needsUpdate = true;
+        goldTrailGeo.attributes.color.needsUpdate = true;
+
+        // Ambient Starfield: Magnetic Orbital Vortex around Cursor
+        for (let i = 0; i < particleCount; i++) {
+          const px = pPos[i * 3];
+          const py = pPos[i * 3 + 1];
+          const dx = px - cursorSmoothPos.x;
+          const dy = py - cursorSmoothPos.y;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist < 15.0 && dist > 0.4) {
+            const angle = Math.atan2(dy, dx) + 0.055;
+            const newDist = dist * 0.99;
+            pPos[i * 3] = cursorSmoothPos.x + Math.cos(angle) * newDist;
+            pPos[i * 3 + 1] = cursorSmoothPos.y + Math.sin(angle) * newDist;
+          } else {
+            // Restore back toward original coordinates gently
+            const bx = particleBasePositions[i * 3];
+            const by = particleBasePositions[i * 3 + 1];
+            pPos[i * 3] += (bx - px) * 0.015;
+            pPos[i * 3 + 1] += (by - py) * 0.015;
+          }
+        }
+        particleGeo.attributes.position.needsUpdate = true;
+
+      } else if (currentMode === 'ghost') {
+        // GHOST MODE: Gravitational Singularity Sink + Dynamic Crimson Laser Tracers
+        ghostMesh.rotation.x -= 0.01;
+        ghostMesh.rotation.y += 0.015;
+        innerGhostMesh.rotation.x += 0.018;
+        innerGhostMesh.rotation.y -= 0.012;
+
+        // Cybernetic Glitch Aberration when moving fast
+        if (cursorVelocity.length() > 0.18) {
+          ghostMesh.position.x = (Math.random() - 0.5) * 0.6;
+          ghostMesh.position.y = (Math.random() - 0.5) * 0.6;
+        } else {
+          ghostMesh.position.x = THREE.MathUtils.lerp(ghostMesh.position.x, 0, 0.1);
+          ghostMesh.position.y = THREE.MathUtils.lerp(ghostMesh.position.y, 0, 0.1);
+        }
+
+        // Singularity Gravitational Collapse (Particles pulled into Black Hole)
+        for (let i = 0; i < particleCount; i++) {
+          const px = pPos[i * 3];
+          const py = pPos[i * 3 + 1];
+          const dx = px - cursorSmoothPos.x;
+          const dy = py - cursorSmoothPos.y;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist < 18.0) {
+            if (dist < 1.1) {
+              // Collapse & respawn outward at perimeter
+              const burstAngle = Math.random() * Math.PI * 2;
+              pPos[i * 3] = cursorSmoothPos.x + Math.cos(burstAngle) * 22.0;
+              pPos[i * 3 + 1] = cursorSmoothPos.y + Math.sin(burstAngle) * 22.0;
+            } else {
+              // Accelerate inward toward singularity
+              pPos[i * 3] -= (dx / dist) * 0.28;
+              pPos[i * 3 + 1] -= (dy / dist) * 0.28;
+            }
+          } else {
+            const bx = particleBasePositions[i * 3];
+            const by = particleBasePositions[i * 3 + 1];
+            pPos[i * 3] += (bx - px) * 0.02;
+            pPos[i * 3 + 1] += (by - py) * 0.02;
+          }
+        }
+        particleGeo.attributes.position.needsUpdate = true;
+
+        // Dynamic Crimson Laser Tracers (Connect cursor to 12 icosahedron vertices)
+        const ghostVerts = icosaGeo.attributes.position;
+        const lPos = ghostLaserGeo.attributes.position.array;
+        for (let l = 0; l < ghostLaserLineCount; l++) {
+          const vIdx = (l * 4) % ghostVerts.count;
+          const vLocal = new THREE.Vector3(
+            ghostVerts.getX(vIdx),
+            ghostVerts.getY(vIdx),
+            ghostVerts.getZ(vIdx)
+          );
+          vLocal.applyEuler(ghostMesh.rotation).add(ghostMesh.position);
+
+          // Point A: Cursor
+          lPos[l * 6] = cursorSmoothPos.x;
+          lPos[l * 6 + 1] = cursorSmoothPos.y;
+          lPos[l * 6 + 2] = cursorSmoothPos.z;
+
+          // Point B: Vertex
+          lPos[l * 6 + 3] = vLocal.x;
+          lPos[l * 6 + 4] = vLocal.y;
+          lPos[l * 6 + 5] = vLocal.z;
+        }
+        ghostLaserGeo.attributes.position.needsUpdate = true;
+
+      } else if (currentMode === 'matrix') {
+        // MATRIX MODE: Rain Deflection Bubble + STDP Synaptic Beams to Voxel Cubes
+        // Sort cubes by distance to cursor
+        cubes.sort((a, b) => a.mesh.position.distanceTo(cursorSmoothPos) - b.mesh.position.distanceTo(cursorSmoothPos));
+
+        // Connect STDP Synaptic Laser Beams to Nearest 4 Cubes
+        const bPos = matrixBeamGeo.attributes.position.array;
+        for (let b = 0; b < 4; b++) {
+          const targetCube = cubes[b];
+          if (targetCube) {
+            // Point A: Cursor
+            bPos[b * 6] = cursorSmoothPos.x;
+            bPos[b * 6 + 1] = cursorSmoothPos.y;
+            bPos[b * 6 + 2] = cursorSmoothPos.z;
+
+            // Point B: Cube
+            bPos[b * 6 + 3] = targetCube.mesh.position.x;
+            bPos[b * 6 + 4] = targetCube.mesh.position.y;
+            bPos[b * 6 + 5] = targetCube.mesh.position.z;
+
+            // STDP Synaptic Spike: Emissive Flash & 4x Rotational Speed
+            targetCube.mat.emissive.set(0x00FF9D);
+            targetCube.mat.emissiveIntensity = 2.4;
+            targetCube.mesh.rotation.x += targetCube.rotSpeed * 4.0;
+            targetCube.mesh.rotation.y += targetCube.rotSpeed * 6.0;
+          }
+        }
+        matrixBeamGeo.attributes.position.needsUpdate = true;
+
+        // Update Remaining Cubes with Normal Rotation & Electromagnetic Cursor Repulsion
+        cubes.forEach((item, idx) => {
+          if (idx >= 4) {
+            item.mat.emissive.set(0x002211);
+            item.mat.emissiveIntensity = 0.5;
+            item.mesh.rotation.x += item.rotSpeed;
+            item.mesh.rotation.y += item.rotSpeed * 1.5;
+          }
+
+          // Repulsion Forcefield Shield around Cursor
+          const d = item.mesh.position.distanceTo(cursorSmoothPos);
+          if (d < 12.0) {
+            const repel = item.mesh.position.clone().sub(cursorSmoothPos).normalize();
+            item.mesh.position.addScaledVector(repel, (12.0 - d) * 0.12);
+          } else {
+            // Drift gently back toward base anchor
+            item.mesh.position.lerp(item.basePos, 0.02);
+          }
+        });
+
+        // Matrix Digital Rain Deflection (Particles part around cursor shield)
+        for (let i = 0; i < particleCount; i++) {
+          // Cascading downward fall
+          pPos[i * 3 + 1] -= 0.35;
+          if (pPos[i * 3 + 1] < -24) pPos[i * 3 + 1] = 24;
+
+          const px = pPos[i * 3];
+          const py = pPos[i * 3 + 1];
+          const dx = px - cursorSmoothPos.x;
+          const dy = py - cursorSmoothPos.y;
+          const dist = Math.hypot(dx, dy);
+
+          // Deflect around cursor bubble
+          if (dist < 11.0) {
+            const push = (11.0 - dist) * 0.22;
+            pPos[i * 3] += (dx / Math.max(0.1, dist)) * push;
+          }
+        }
+        particleGeo.attributes.position.needsUpdate = true;
+
+      } else if (currentMode === 'incognito') {
+        // INCOGNITO / WIN11 MODE: Fluent Parametric Silk Ribbon Interactive Ripple Wave
+        const pos = planeGeo.attributes.position;
+        const cursorLocal = win11Group.worldToLocal(cursorSmoothPos.clone());
+
+        for (let i = 0; i < pos.count; i++) {
+          const u = pos.getX(i);
+          const v = pos.getY(i);
+          const dist = Math.hypot(u - cursorLocal.x, v - cursorLocal.y);
+
+          // Base elegant undulating satin wave
+          let z = Math.sin(u * 0.22 + time * 1.6) * Math.cos(v * 0.22 + time * 1.3) * 2.0;
+
+          // Dynamic Physical Cursor Water Ripple Wave Displacement
+          if (dist < 18.0) {
+            z += Math.sin(dist * 1.6 - time * 8.0) * Math.exp(-dist * 0.22) * 3.8;
+          }
+          pos.setZ(i, z);
+        }
+        pos.needsUpdate = true;
+        planeGeo.computeVertexNormals();
+
+        // Ribbon flexes toward cursor smoothly
+        win11Group.rotation.x = THREE.MathUtils.lerp(win11Group.rotation.x, normMouseY * 0.2, 0.05);
+        win11Group.rotation.y = THREE.MathUtils.lerp(win11Group.rotation.y, normMouseX * 0.25, 0.05);
+      }
+
+      // Slow particle field drift
+      particleSystem.rotation.y += 0.0006;
+      particleSystem.rotation.x += 0.0003;
+
+      // Audio frequency modulation if drone is on
+      if (droneActive && analyser) {
+        analyser.getByteFrequencyData(freqData);
+        const bass = freqData[2] / 255.0;
+        const mid = freqData[12] / 255.0;
+        const high = freqData[28] / 255.0;
+
+        pointLight1.intensity = 2.2 + bass * 2.5;
+        particleMat.size = 0.24 + high * 0.22;
+
+        if (currentMode === "gold") {
+          goldTorus.scale.setScalar(1.0 + bass * 0.12);
+        } else if (currentMode === "ghost") {
+          ghostMesh.scale.setScalar(1.0 + mid * 0.15);
+        } else if (currentMode === "matrix") {
+          cubes.forEach((c, idx) => {
+            const f = freqData[idx % 32] / 255.0;
+            c.mesh.scale.setScalar(0.8 + f * 0.7);
+          });
+        } else if (currentMode === "incognito") {
+          win11Mesh.scale.setScalar(1.0 + bass * 0.08);
+        }
+      }
+
+      // Nova pulse animation
+      if (novaActive) {
+        novaRadius += 0.8;
+        novaRings.forEach((r, idx) => {
+          const sc = Math.max(0.1, novaRadius - idx * 2.5);
+          r.scale.setScalar(sc);
+          r.material.opacity = Math.max(0, 0.9 - (novaRadius / 35.0));
+        });
+        if (novaRadius > 35) {
+          novaActive = false;
+          novaRings.forEach(r => r.material.opacity = 0);
+        }
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    // Window Resize Handler
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Time Clock
+    function updateClock() {
+      document.getElementById('timeClock').innerText = new Date().toLocaleTimeString();
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // ── Neural Comms Drawer & Local Ollama Companion ───────────────────────
     const commsDrawer = document.getElementById("commsDrawer");
     const commsMessages = document.getElementById("commsMessages");
     const commsInput = document.getElementById("commsInput");
     const btnCommsSend = document.getElementById("btnCommsSend");
+    const commsBotName = document.getElementById("commsBotName");
+    const commsGlyph = document.getElementById("commsGlyph");
     const chkTTS = document.getElementById("chkTTS");
-    let chatHistory = [];
 
     function toggleComms() {
       commsDrawer.classList.toggle("open");
       if (commsDrawer.classList.contains("open")) {
+        const char = CHARACTERS[currentMode];
+        commsBotName.innerText = char.name;
+        commsGlyph.innerText = char.glyph;
         commsInput.focus();
-        updateCommsHeader();
       }
     }
 
-    function updateCommsHeader() {
-      const char = CHARACTERS[currentMode];
-      if (!char) return;
-      document.getElementById("commsGlyph").innerText = char.glyph;
-      document.getElementById("commsBotName").innerText = char.name;
-      document.getElementById("commsDrawer").style.borderColor = char.color + "66";
-      btnCommsSend.style.background = char.color;
-    }
-
     async function sendCommsMessage(text) {
-      const query = (text || commsInput.value).trim();
-      if (!query) return;
+      const msg = text || commsInput.value.trim();
+      if (!msg) return;
 
-      // Append User message
       const uBubble = document.createElement("div");
       uBubble.className = "msg-bubble msg-user";
-      uBubble.innerText = query;
+      uBubble.innerText = msg;
       commsMessages.appendChild(uBubble);
       commsInput.value = "";
       commsMessages.scrollTop = commsMessages.scrollHeight;
 
-      // Thinking indicator
       const bBubble = document.createElement("div");
       bBubble.className = "msg-bubble msg-bot";
-      bBubble.innerText = "Thinking...";
+      bBubble.innerText = "Connecting synaptic neural weights...";
       commsMessages.appendChild(bBubble);
       commsMessages.scrollTop = commsMessages.scrollHeight;
 
       try {
-        const res = await fetch("/api/studio/bot/chat", {
+        const res = await fetch("/api/studio/reality/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: query, mode: currentMode, history: chatHistory })
+          body: JSON.stringify({ message: msg, mode: currentMode })
         });
         const data = await res.json();
         if (data.reply) {
           bBubble.innerText = data.reply;
-          chatHistory.push({ role: "user", content: query });
-          chatHistory.push({ role: "assistant", content: data.reply });
-
-          // Voice Readout (TTS)
           if (chkTTS.checked && "speechSynthesis" in window) {
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(data.reply);
@@ -1141,50 +1581,6 @@
         if (droneActive) stopDrone(); else startDrone(currentMode);
       }
     });
-
-    // ── Hook Audio Reactivity into animate() ────────────────────────────────
-    const oldAnimate = animate;
-    animate = function() {
-      // Audio frequency modulation
-      if (droneActive && analyser) {
-        analyser.getByteFrequencyData(freqData);
-        const bass = freqData[2] / 255.0;
-        const mid = freqData[12] / 255.0;
-        const high = freqData[28] / 255.0;
-
-        pointLight1.intensity = 2.2 + bass * 2.5;
-        particleMat.size = 0.22 + high * 0.2;
-
-        if (currentMode === "gold") {
-          goldTorus.scale.setScalar(1.0 + bass * 0.12);
-        } else if (currentMode === "ghost") {
-          ghostMesh.scale.setScalar(1.0 + mid * 0.15);
-        } else if (currentMode === "matrix") {
-          cubes.forEach((c, idx) => {
-            const f = freqData[idx % 32] / 255.0;
-            c.mesh.scale.setScalar(0.8 + f * 0.7);
-          });
-        } else if (currentMode === "incognito") {
-          win11Mesh.scale.setScalar(1.0 + bass * 0.08);
-        }
-      }
-
-      // Nova pulse animation
-      if (novaActive) {
-        novaRadius += 0.8;
-        novaRings.forEach((r, idx) => {
-          const sc = Math.max(0.1, novaRadius - idx * 2.5);
-          r.scale.setScalar(sc);
-          r.material.opacity = Math.max(0, 0.9 - (novaRadius / 35.0));
-        });
-        if (novaRadius > 35) {
-          novaActive = false;
-          novaRings.forEach(r => r.material.opacity = 0);
-        }
-      }
-
-      oldAnimate();
-    };
 
     // Start Engine
     syncRealityFromOS();
