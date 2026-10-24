@@ -158,7 +158,6 @@ export default function ZothFoundryGodModeTool({ tool }) {
       workstation: slug,
       title: mode.title,
       operator: 'Neal Frazier (Neal Frazier Tech)',
-      directPhone: '(555) 555-0199',
       dispatchEmail: 'neal@nealfrazier.tech',
       gridMatrix: `${density} cols`,
       harmonicOrder: harmonic,

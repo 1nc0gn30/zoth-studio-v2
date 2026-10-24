@@ -140,12 +140,12 @@ function JwtInspectorWorkstation({ isDark, gold }) {
 function PayloadEntropyWorkstation({ isDark, gold }) {
   const PRESETS = {
     encrypted: 'U2FsdGVkX1+9bX4uYg781kNmOqVpRtWvYz1234567890abcdefghijklmnopqrstuvwxyz/+=!@#$%^&*()_+~`|}{[]:;?><,./128471928374192834719238471928347129384712983471928374',
-    webshell: '<?php @eval(base64_decode($_POST[\'zoth_cmd\'])); $c=gzinflate(base64_decode("SyxKz89Lz8nMS85PK0nNK8nMzUvPBwA=")); echo $c; ?>',
+    packed: 'ZOTH-PACKED-SAMPLE:01010111 repeating high-entropy demo bytes 7f8a9b0c1d2e3f405162738495a6b7c8d9e0f1 without an executable body.',
     plaintext: 'Zoth Studio v2 is an air-gapped sovereign development environment engineered for orchestrating autonomous AI agent pantheons with zero outbound telemetry.',
     json: '{\n  "status": "SOVEREIGN_NODE_ONLINE",\n  "version": "2.5.0",\n  "ports": [11434, 8094, 8787, 3000]\n}',
   };
 
-  const [inputVal, setInputVal] = useState(PRESETS.webshell);
+  const [inputVal, setInputVal] = useState(PRESETS.encrypted);
   const [entropy, setEntropy] = useState(0);
   const [byteDist, setByteDist] = useState([]);
   const [bench, setBench] = useState(null);

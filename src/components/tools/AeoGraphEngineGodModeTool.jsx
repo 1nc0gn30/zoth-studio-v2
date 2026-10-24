@@ -36,7 +36,7 @@ const PRESET_PROFILES = {
     url: 'https://aeo-graph-engine.netlify.app',
     category: 'DeveloperApplication',
     price: '19.00',
-    phone: '+1-555-555-0199',
+    phone: '',
     email: 'neal@nealfrazier.tech',
     creator: 'Neal Frazier (Neal Frazier Tech)',
     sameAs: 'https://github.com/1nc0gn30, https://nullai.tech, https://www.nealfrazier.tech',
@@ -53,7 +53,7 @@ const PRESET_PROFILES = {
       },
       {
         q: 'Who engineered AEO Graph Engine Studio?',
-        a: 'Engineered by Neal Frazier (Neal Frazier Tech) on the NullAI Platform. Direct studio contact: (555) 555-0199 or neal@nealfrazier.tech.',
+        a: 'Engineered by Neal Frazier (Neal Frazier Tech) on the NullAI Platform. Direct studio contact: neal@nealfrazier.tech.',
       },
     ],
   },
@@ -64,7 +64,7 @@ const PRESET_PROFILES = {
     url: 'https://zothos.nullai.tech',
     category: 'OperatingSystem',
     price: '0.00',
-    phone: '+1-555-555-0199',
+    phone: '',
     email: 'neal@nealfrazier.tech',
     creator: 'Neal Frazier (Neal Frazier Tech)',
     sameAs: 'https://github.com/1nc0gn30/zothos, https://zoth.nullai.tech, https://nullai.tech',
@@ -88,7 +88,7 @@ const PRESET_PROFILES = {
     url: 'https://www.nealfrazier.tech',
     category: 'TechnologyConsulting',
     price: '100.00',
-    phone: '+1-555-555-0199',
+    phone: '',
     email: 'neal@nealfrazier.tech',
     creator: 'Neal Frazier',
     sameAs: 'https://github.com/1nc0gn30, https://nullai.tech, https://zoth.nullai.tech',
@@ -97,7 +97,7 @@ const PRESET_PROFILES = {
     faqs: [
       {
         q: 'How can I contact Neal Frazier Tech directly?',
-        a: 'Call or text (555) 555-0199 or email neal@nealfrazier.tech for direct engineering dispatch.',
+        a: 'Email neal@nealfrazier.tech for direct engineering dispatch.',
       },
       {
         q: 'Do you retain full code and domain ownership?',
@@ -170,7 +170,7 @@ export default function AeoGraphEngineGodModeTool() {
       '@id': `${cleanUrl}/#organization`,
       name: profile.creator || 'Neal Frazier Tech',
       url: cleanUrl,
-      telephone: profile.phone || '+1-555-555-0199',
+      ...(profile.phone ? { telephone: profile.phone } : {}),
       email: profile.email || 'neal@nealfrazier.tech',
       ...(sameAsArr.length > 0 ? { sameAs: sameAsArr } : {}),
     };

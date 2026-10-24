@@ -298,7 +298,7 @@ export default function ZothOSShowcasePage() {
                 mb: 4,
               }}
             >
-              A bootable Linux operating system engineered by NullAI Tech. Combines the Kali and Parrot security arsenal with the Zoth Studio v2 suite. The shipped release is v3.2. Live users are zoth / azoth / root (password zoth). Ollama listens on 127.0.0.1. UFW starts default-deny and allows loopback, tailscale0, UDP 41641, and TCP 7890. The 152-server MCP catalog is present and all off. Skills load from ~/.gemini/config/skills.
+              A bootable Linux operating system engineered by NullAI Tech. Combines the Kali and Parrot security arsenal with the Zoth Studio v2 suite. The shipped release is v3.2. Live users are zoth, azoth, and root. Change the image default password before the host is reachable on a network. Ollama listens on 127.0.0.1. UFW starts default-deny and allows loopback, tailscale0, UDP 41641, and TCP 7890. The 152-server MCP catalog is present and all off. Skills load from ~/.gemini/config/skills.
             </Typography>
           </HeroItem>
           <HeroItem>

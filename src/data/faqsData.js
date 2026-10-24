@@ -296,14 +296,14 @@ The engine generates static HTML snapshots for all 72 studio routes—including 
     category: 'Security',
     keywords: ['security', 'headers', 'netlify', 'csp', 'x-frame-options', 'referrer-policy', 'permissions-policy', 'cache-control', 'zero-egress', 'isolation'],
     a: `In netlify.toml, production builds enforce strict defense-in-depth HTTP response headers:
-• Content-Security-Policy: Restricts frame ancestors to verified origins and eliminates external script injection.
+• Content-Security-Policy: default-src and script-src stay on this origin, with wasm-unsafe-eval for the WebGPU/WASM fallback, Google Fonts, Hugging Face model weights, and the loopback daemon ports the studio calls. frame-ancestors is this origin and *.nullai.tech.
 • X-Frame-Options: SAMEORIGIN (prevents clickjacking attacks).
 • X-Content-Type-Options: nosniff (mitigates MIME-type sniffing).
 • Referrer-Policy: strict-origin-when-cross-origin (prevents URL parameter leakage).
-• Permissions-Policy: camera=(), microphone=(), geolocation=() (disables invasive sensor APIs).
+• Permissions-Policy: camera=(self), microphone=(self), geolocation=() so the gesture workstation and voice station can use sensors, and geolocation stays off.
 • Static assets receive immutable caching headers for instant repeat visits.`,
-    summary: 'Strict CSP, SAMEORIGIN, nosniff, and zero sensor permissions ensure a hardened, tamper-proof runtime environment.',
-    oracleResponse: 'Hardened HTTP headers enforce frame isolation, strict MIME handling, zero sensor permissions, and immutable asset caching.',
+    summary: 'CSP, SAMEORIGIN, and nosniff harden the runtime. Camera and microphone stay same-origin for the studio; geolocation stays off.',
+    oracleResponse: 'Hardened HTTP headers enforce frame isolation, strict MIME handling, same-origin camera and microphone, and immutable asset caching.',
     jumpTargets: [
       { label: 'HexStrike Security Enclave', path: '/hexstrike', type: 'security' },
       { label: 'Deployment Specs', path: '/docs', type: 'doc' }
