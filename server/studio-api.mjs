@@ -309,6 +309,53 @@ export function studioMiddleware() {
     }
 
     try {
+      if (req.method === 'GET' && url.pathname === '/api/studio/reality') {
+        const homeDir = os.homedir();
+        const modeFile = `${homeDir}/.config/zothos/current_mode`;
+        const charFile = `${homeDir}/.config/zothos/active_character.json`;
+        let mode = 'gold';
+        if (fs.existsSync(modeFile)) {
+          mode = fs.readFileSync(modeFile, 'utf8').trim() || 'gold';
+        }
+        let character = null;
+        if (fs.existsSync(charFile)) {
+          try {
+            character = JSON.parse(fs.readFileSync(charFile, 'utf8'));
+          } catch (_) {}
+        }
+        send(res, 200, {
+          mode,
+          character,
+          allModes: ['gold', 'ghost', 'matrix', 'incognito'],
+        });
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/reality') {
+        const body = await readBody(req);
+        let requested = String(body.mode || '').toLowerCase().trim();
+        if (requested === 'win11' || requested === 'windows') requested = 'incognito';
+        if (requested === 'default' || requested === 'sanctum') requested = 'gold';
+        if (requested === 'stealth' || requested === 'amnesic') requested = 'ghost';
+        if (!['gold', 'ghost', 'matrix', 'incognito'].includes(requested)) {
+          send(res, 400, { error: 'Invalid mode. Allowed: gold, ghost, matrix, incognito' });
+          return;
+        }
+
+        exec(`/usr/local/bin/zoth-mode ${requested}`, (err, stdout, stderr) => {
+          if (err) {
+            console.error('zoth-mode exec error:', stderr || err.message);
+          }
+        });
+
+        send(res, 200, {
+          success: true,
+          mode: requested,
+          message: `Reality transformed to ${requested}`,
+        });
+        return;
+      }
+
       if (req.method === 'GET' && url.pathname === '/api/studio/fleet') {
         send(res, 200, await probeFleet());
         return;

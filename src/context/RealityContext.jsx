@@ -207,13 +207,20 @@ export function RealityProvider({ children }) {
     return 'gold';
   });
 
-  const setReality = (nextId) => {
+  const setReality = (nextId, syncOs = true) => {
     const resolved = REALITY_THEMES[nextId] ? nextId : 'gold';
     setRealityId(resolved);
     try {
       window.localStorage.setItem(STORAGE_KEY, resolved);
     } catch (_) {
       /* ignore */
+    }
+    if (syncOs && typeof window !== 'undefined') {
+      fetch('/api/studio/reality', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: resolved }),
+      }).catch(() => {});
     }
   };
 
@@ -222,6 +229,29 @@ export function RealityProvider({ children }) {
     const next = REALITY_ORDER[(idx + 1) % REALITY_ORDER.length];
     setReality(next);
   };
+
+  // Two-way synchronization with OS reality engine (/usr/local/bin/zoth-mode)
+  useEffect(() => {
+    let unmounted = false;
+    const syncFromOS = async () => {
+      try {
+        const res = await fetch('/api/studio/reality');
+        if (res.ok && !unmounted) {
+          const data = await res.json();
+          if (data?.mode && REALITY_THEMES[data.mode] && data.mode !== realityId) {
+            setReality(data.mode, false);
+          }
+        }
+      } catch (_) {}
+    };
+
+    syncFromOS();
+    const interval = setInterval(syncFromOS, 3000);
+    return () => {
+      unmounted = true;
+      clearInterval(interval);
+    };
+  }, [realityId]);
 
   const activeReality = REALITY_THEMES[realityId] || REALITY_THEMES.gold;
 

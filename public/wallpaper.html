@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZothOS 3D Interactive Reality Wallpaper // Sovereign Engine</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <style>
+    :root {
+      --bg: #08080B;
+      --gold: #D4AF37;
+      --gold-bright: #FFD700;
+      --ghost: #FF3355;
+      --matrix: #00FF9D;
+      --win11: #0078D4;
+      --text: #F3F4F6;
+      --dim: #9CA3AF;
+      --mono: "JetBrains Mono", "Fira Code", monospace;
+      --sans: system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg);
+      font-family: var(--sans);
+      color: var(--text);
+      user-select: none;
+    }
+
+    #webgl-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      display: block;
+    }
+
+    /* Glassmorphic Floating HUD */
+    .hud-panel {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      z-index: 10;
+      background: rgba(12, 14, 20, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(212, 175, 55, 0.25);
+      border-radius: 14px;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 440px;
+    }
+
+    .hud-panel:hover {
+      border-color: rgba(212, 175, 55, 0.5);
+    }
+
+    .character-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 12px;
+    }
+
+    .char-avatar-box {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      background: rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .char-avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .char-details {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .char-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .char-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gold-bright);
+      letter-spacing: 0.02em;
+    }
+
+    .char-tag {
+      font-size: 10px;
+      font-family: var(--mono);
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(212, 175, 55, 0.15);
+      color: var(--gold);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      text-transform: uppercase;
+    }
+
+    .char-title {
+      font-size: 11px;
+      color: var(--dim);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .modes-selector {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .mode-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 8px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      color: var(--dim);
+    }
+
+    .mode-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+    }
+
+    .mode-btn.active {
+      background: rgba(212, 175, 55, 0.15);
+      border-color: var(--gold);
+      color: var(--gold-bright);
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.2);
+    }
+
+    .mode-btn.active.mode-ghost {
+      background: rgba(255, 51, 85, 0.15);
+      border-color: var(--ghost);
+      color: var(--ghost);
+      box-shadow: 0 0 12px rgba(255, 51, 85, 0.2);
+    }
+
+    .mode-btn.active.mode-matrix {
+      background: rgba(0, 255, 157, 0.15);
+      border-color: var(--matrix);
+      color: var(--matrix);
+      box-shadow: 0 0 12px rgba(0, 255, 157, 0.2);
+    }
+
+    .mode-btn.active.mode-incognito {
+      background: rgba(0, 120, 212, 0.15);
+      border-color: var(--win11);
+      color: #38BDF8;
+      box-shadow: 0 0 12px rgba(0, 120, 212, 0.2);
+    }
+
+    .mode-glyph { font-size: 14px; }
+    .mode-label { font-size: 11px; font-family: var(--mono); font-weight: 600; }
+
+    .hud-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-family: var(--mono);
+      color: var(--dim);
+      padding-top: 4px;
+    }
+
+    .hud-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .hud-icon-btn {
+      background: none;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 6px;
+      color: var(--dim);
+      padding: 4px 8px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .hud-icon-btn:hover {
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Top right telemetry banner */
+    .top-telemetry {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      z-index: 10;
+      background: rgba(12, 14, 20, 0.65);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--dim);
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--matrix);
+      box-shadow: 0 0 8px var(--matrix);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.6; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.1); }
+      100% { opacity: 0.6; transform: scale(0.9); }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- Top Right Telemetry -->
+  <div class="top-telemetry">
+    <div style="display:flex; align-items:center; gap:6px;">
+      <span class="live-dot" id="telemetryDot"></span>
+      <span id="telemetryStatus" style="color:var(--text); font-weight:600;">3D ENGINE LIVE</span>
+    </div>
+    <div id="fpsCounter">60 FPS</div>
+    <div id="timeClock">--:--:--</div>
+  </div>
+
+  <!-- Bottom Left HUD -->
+  <div class="hud-panel" id="hudPanel">
+    <div class="character-card">
+      <div class="char-avatar-box" id="avatarBox">
+        <span id="avatarGlyph">☿</span>
+        <img id="avatarImg" class="char-avatar-img" alt="Zoth Bot Persona" />
+      </div>
+      <div class="char-details">
+        <div class="char-name-row">
+          <span class="char-name" id="charName">Azoth Prime</span>
+          <span class="char-tag" id="charTag">SOLAR ARCHITECT</span>
+        </div>
+        <span class="char-title" id="charTitle">Hermetic sovereignty, strategic foresight, and verifiable reality.</span>
+      </div>
+    </div>
+
+    <!-- Mode Selector Grid -->
+    <div class="modes-selector">
+      <button class="mode-btn active" data-mode="gold" id="btn-gold" title="Sovereign Gold Master (Azoth Sanctum)">
+        <span class="mode-glyph">🜀</span>
+        <span class="mode-label">GOLD</span>
+      </button>
+      <button class="mode-btn mode-ghost" data-mode="ghost" id="btn-ghost" title="NullAI Ghostmode Stealth (Tor-Cloaked)">
+        <span class="mode-glyph">👻</span>
+        <span class="mode-label">GHOST</span>
+      </button>
+      <button class="mode-btn mode-matrix" data-mode="matrix" id="btn-matrix" title="Hermetic Matrix Emerald (STDP Spikes)">
+        <span class="mode-glyph">🜂</span>
+        <span class="mode-label">MATRIX</span>
+      </button>
+      <button class="mode-btn mode-incognito" data-mode="incognito" id="btn-incognito" title="Covert Chameleon Disguise (Windows 11 Fluent)">
+        <span class="mode-glyph">🪟</span>
+        <span class="mode-label">WIN11</span>
+      </button>
+    </div>
+
+    <div class="hud-footer">
+      <span>ZOTH REALITY ENGINE v3.2</span>
+      <div class="hud-actions">
+        <button class="hud-icon-btn" id="btnAudio" title="Toggle Synthesized Audio Cues">🔊 SFX ON</button>
+        <button class="hud-icon-btn" id="btnFullscreen" title="Toggle Fullscreen">⛶ FULL</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import * as THREE from '/js/three.module.js';
+
+    // ── Global State & Character Profiles ──────────────────────────────────
+    const CHARACTERS = {
+      gold: {
+        name: "Azoth Prime",
+        tag: "SOLAR ARCHITECT",
+        title: "Hermetic sovereignty, strategic foresight, and verifiable reality.",
+        glyph: "☿",
+        color: "#FFD700",
+        accent: "#D4AF37",
+        avatar: "/assets/avatars/azoth.png"
+      },
+      ghost: {
+        name: "Ghostbyte",
+        tag: "AMNESIC SENTINEL",
+        title: "Tor-cloaked packet routing, RAM-only enclave, and zero telemetry.",
+        glyph: "👻",
+        color: "#FF3355",
+        accent: "#A855F7",
+        avatar: "/assets/avatars/ghostbyte.png"
+      },
+      matrix: {
+        name: "Lucy Netrunner",
+        tag: "STDP ORACLE",
+        title: "Biomorphic synaptic graph memory and matrix code infiltration.",
+        glyph: "🜂",
+        color: "#00FF9D",
+        accent: "#00E5FF",
+        avatar: "/assets/avatars/lucy.png"
+      },
+      incognito: {
+        name: "Chameleon 11",
+        tag: "FLUENT EXECUTIVE",
+        title: "Covert corporate operations, fluent aesthetics, and compliant guise.",
+        glyph: "🪟",
+        color: "#0078D4",
+        accent: "#38BDF8",
+        avatar: "/assets/avatars/chameleon.png"
+      }
+    };
+
+    let currentMode = 'gold';
+    let audioEnabled = true;
+
+    // ── Synthesized Procedural Audio Engine ────────────────────────────────
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playModeCue(mode) {
+      if (!audioEnabled || !audioCtx) return;
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (mode === 'gold') {
+        // 432Hz harmonic bell
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(432, now);
+        osc.frequency.exponentialRampToValueAtTime(864, now + 0.15);
+        osc.frequency.exponentialRampToValueAtTime(432, now + 0.9);
+        gain.gain.setValueAtTime(0.4, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+        osc.start(now);
+        osc.stop(now + 1.2);
+      } else if (mode === 'ghost') {
+        // Sub-bass whoosh
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.exponentialRampToValueAtTime(45, now + 0.6);
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+        osc.start(now);
+        osc.stop(now + 0.7);
+      } else if (mode === 'matrix') {
+        // Digital cyber chirp
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(880, now);
+        osc.frequency.setValueAtTime(1320, now + 0.08);
+        osc.frequency.setValueAtTime(1760, now + 0.16);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+        osc.start(now);
+        osc.stop(now + 0.45);
+      } else if (mode === 'incognito') {
+        // Fluent 3-tone arpeggio
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.12);
+        osc.frequency.setValueAtTime(783.99, now + 0.24);
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+        osc.start(now);
+        osc.stop(now + 0.8);
+      }
+    }
+
+    // ── Three.js Scene Setup ───────────────────────────────────────────────
+    const canvas = document.getElementById('webgl-canvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x08080B);
+
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 0, 32);
+
+    // Dynamic Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    scene.add(ambientLight);
+
+    const pointLight1 = new THREE.PointLight(0xFFD700, 2.5, 80);
+    pointLight1.position.set(12, 16, 20);
+    scene.add(pointLight1);
+
+    const pointLight2 = new THREE.PointLight(0xD4AF37, 1.8, 80);
+    pointLight2.position.set(-16, -12, 15);
+    scene.add(pointLight2);
+
+    // ── Object Groups for Each Reality Mode ────────────────────────────────
+    const rootGroup = new THREE.Group();
+    scene.add(rootGroup);
+
+    // 1. GOLD MODE: Central Astrolabe & Torus Knot
+    const goldGroup = new THREE.Group();
+    rootGroup.add(goldGroup);
+
+    const torusGeo = new THREE.TorusKnotGeometry(6.5, 1.4, 160, 32, 2, 3);
+    const goldMat = new THREE.MeshStandardMaterial({
+      color: 0xFFD700,
+      roughness: 0.25,
+      metalness: 0.92,
+      wireframe: false
+    });
+    const goldTorus = new THREE.Mesh(torusGeo, goldMat);
+    goldGroup.add(goldTorus);
+
+    // Sacred Astrolabe Rings
+    const rings = [];
+    for (let r = 9; r <= 14; r += 2.5) {
+      const ringGeo = new THREE.TorusGeometry(r, 0.08, 16, 100);
+      const ringMat = new THREE.MeshBasicMaterial({ color: 0xD4AF37, wireframe: true });
+      const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+      goldGroup.add(ringMesh);
+      rings.push(ringMesh);
+    }
+
+    // 2. GHOST MODE: Tor Onion Routing Mesh
+    const ghostGroup = new THREE.Group();
+    ghostGroup.visible = false;
+    rootGroup.add(ghostGroup);
+
+    const icosaGeo = new THREE.IcosahedronGeometry(7.5, 2);
+    const ghostMat = new THREE.MeshStandardMaterial({
+      color: 0xFF3355,
+      wireframe: true,
+      roughness: 0.2,
+      metalness: 0.8
+    });
+    const ghostMesh = new THREE.Mesh(icosaGeo, ghostMat);
+    ghostGroup.add(ghostMesh);
+
+    const innerIcosaGeo = new THREE.IcosahedronGeometry(4.8, 1);
+    const innerGhostMat = new THREE.MeshStandardMaterial({
+      color: 0xA855F7,
+      wireframe: true,
+      roughness: 0.3,
+      metalness: 0.9
+    });
+    const innerGhostMesh = new THREE.Mesh(innerIcosaGeo, innerGhostMat);
+    ghostGroup.add(innerGhostMesh);
+
+    // 3. MATRIX MODE: Tumbling Voxel Code Cubes & Rain Columns
+    const matrixGroup = new THREE.Group();
+    matrixGroup.visible = false;
+    rootGroup.add(matrixGroup);
+
+    const cubes = [];
+    const cubeGeo = new THREE.BoxGeometry(1.2, 1.2, 1.2);
+    const cubeMat = new THREE.MeshStandardMaterial({
+      color: 0x00FF9D,
+      wireframe: true,
+      roughness: 0.1,
+      metalness: 0.95
+    });
+
+    for (let i = 0; i < 36; i++) {
+      const c = new THREE.Mesh(cubeGeo, cubeMat);
+      c.position.set(
+        (Math.random() - 0.5) * 28,
+        (Math.random() - 0.5) * 20,
+        (Math.random() - 0.5) * 15
+      );
+      matrixGroup.add(c);
+      cubes.push({ mesh: c, rotSpeed: (Math.random() - 0.5) * 0.04 });
+    }
+
+    // 4. INCOGNITO / WIN11 MODE: Fluent Bloom Silk Ribbon Wave
+    const win11Group = new THREE.Group();
+    win11Group.visible = false;
+    rootGroup.add(win11Group);
+
+    const planeGeo = new THREE.PlaneGeometry(36, 26, 48, 48);
+    const win11Mat = new THREE.MeshStandardMaterial({
+      color: 0x0078D4,
+      roughness: 0.35,
+      metalness: 0.65,
+      wireframe: false,
+      side: THREE.DoubleSide
+    });
+    const win11Mesh = new THREE.Mesh(planeGeo, win11Mat);
+    win11Group.add(win11Mesh);
+
+    // ── Global Ambient Starfield / Particle Cloud ──────────────────────────
+    const particleCount = 1800;
+    const particleGeo = new THREE.BufferGeometry();
+    const particlePositions = new Float32Array(particleCount * 3);
+    const particleColors = new Float32Array(particleCount * 3);
+
+    const cGold = new THREE.Color(0xFFD700);
+    const cAmber = new THREE.Color(0xD4AF37);
+
+    for (let i = 0; i < particleCount; i++) {
+      particlePositions[i * 3] = (Math.random() - 0.5) * 60;
+      particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 45;
+      particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 40;
+
+      const col = Math.random() > 0.4 ? cGold : cAmber;
+      particleColors[i * 3] = col.r;
+      particleColors[i * 3 + 1] = col.g;
+      particleColors[i * 3 + 2] = col.b;
+    }
+
+    particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+    particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+
+    const particleMat = new THREE.PointsMaterial({
+      size: 0.22,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.8
+    });
+    const particleSystem = new THREE.Points(particleGeo, particleMat);
+    scene.add(particleSystem);
+
+    // ── Mouse & Touch Parallax Interaction ─────────────────────────────────
+    let mouseX = 0, mouseY = 0;
+    let targetRotX = 0, targetRotY = 0;
+    let isDragging = false;
+    let prevMouseX = 0, prevMouseY = 0;
+
+    window.addEventListener('mousemove', (e) => {
+      const nx = (e.clientX / window.innerWidth) * 2 - 1;
+      const ny = -(e.clientY / window.innerHeight) * 2 + 1;
+      mouseX = nx;
+      mouseY = ny;
+
+      if (isDragging) {
+        const dx = e.clientX - prevMouseX;
+        const dy = e.clientY - prevMouseY;
+        rootGroup.rotation.y += dx * 0.005;
+        rootGroup.rotation.x += dy * 0.005;
+        prevMouseX = e.clientX;
+        prevMouseY = e.clientY;
+      }
+    });
+
+    window.addEventListener('mousedown', (e) => {
+      if (e.target.closest('#hudPanel') || e.target.closest('.top-telemetry')) return;
+      isDragging = true;
+      prevMouseX = e.clientX;
+      prevMouseY = e.clientY;
+    });
+
+    window.addEventListener('mouseup', () => { isDragging = false; });
+
+    // ── Reality Mode Transition Controller ────────────────────────────────
+    async function setRealityMode(mode, triggerServer = true) {
+      if (!CHARACTERS[mode]) return;
+      currentMode = mode;
+
+      // Update Active UI buttons
+      document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+      });
+
+      // Update Character Card in HUD
+      const char = CHARACTERS[mode];
+      document.getElementById('charName').innerText = char.name;
+      document.getElementById('charTag').innerText = char.tag;
+      document.getElementById('charTitle').innerText = char.title;
+      document.getElementById('avatarGlyph').innerText = char.glyph;
+      document.getElementById('avatarBox').style.borderColor = char.color;
+      document.getElementById('avatarBox').style.boxShadow = `0 0 16px ${char.color}55`;
+      document.getElementById('telemetryDot').style.background = char.color;
+      document.getElementById('telemetryDot').style.boxShadow = `0 0 8px ${char.color}`;
+
+      // Update 3D Object Visibilities & Lighting
+      goldGroup.visible = (mode === 'gold');
+      ghostGroup.visible = (mode === 'ghost');
+      matrixGroup.visible = (mode === 'matrix');
+      win11Group.visible = (mode === 'incognito');
+
+      if (mode === 'gold') {
+        scene.background.set(0x08080B);
+        pointLight1.color.set(0xFFD700);
+        pointLight2.color.set(0xD4AF37);
+        particleMat.color.set(0xFFD700);
+      } else if (mode === 'ghost') {
+        scene.background.set(0x06080D);
+        pointLight1.color.set(0xFF3355);
+        pointLight2.color.set(0xA855F7);
+        particleMat.color.set(0xFF3355);
+      } else if (mode === 'matrix') {
+        scene.background.set(0x040806);
+        pointLight1.color.set(0x00FF9D);
+        pointLight2.color.set(0x00E5FF);
+        particleMat.color.set(0x00FF9D);
+      } else if (mode === 'incognito') {
+        scene.background.set(0x0B1329);
+        pointLight1.color.set(0x0078D4);
+        pointLight2.color.set(0x38BDF8);
+        particleMat.color.set(0x38BDF8);
+      }
+
+      playModeCue(mode);
+
+      // Notify Zoth Studio API & OS Reality Switcher
+      if (triggerServer) {
+        try {
+          await fetch('/api/studio/reality', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mode })
+          });
+        } catch (e) {
+          console.warn("Could not push reality change to OS:", e);
+        }
+      }
+    }
+
+    // Bind Mode Buttons
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        setRealityMode(btn.dataset.mode, true);
+      });
+    });
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '1') setRealityMode('gold', true);
+      else if (e.key === '2') setRealityMode('ghost', true);
+      else if (e.key === '3') setRealityMode('matrix', true);
+      else if (e.key === '4') setRealityMode('incognito', true);
+      else if (e.key.toLowerCase() === 'f') {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+        else document.exitFullscreen();
+      }
+    });
+
+    document.getElementById('btnFullscreen').addEventListener('click', () => {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    });
+
+    document.getElementById('btnAudio').addEventListener('click', (e) => {
+      audioEnabled = !audioEnabled;
+      e.target.innerText = audioEnabled ? '🔊 SFX ON' : '🔇 SFX MUTED';
+    });
+
+    // ── OS Reality Polling (Synchronize with terminal `zoth-mode`) ───────────
+    async function syncRealityFromOS() {
+      try {
+        const res = await fetch('/api/studio/reality');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.mode && data.mode !== currentMode) {
+            setRealityMode(data.mode, false);
+          }
+        }
+      } catch (e) {}
+    }
+    setInterval(syncRealityFromOS, 2500);
+
+    // ── Animation Loop ─────────────────────────────────────────────────────
+    let clock = new THREE.Clock();
+    let frameCount = 0;
+    let lastFpsUpdate = performance.now();
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const delta = clock.getDelta();
+      const time = clock.getElapsedTime();
+
+      // FPS tracking
+      frameCount++;
+      const now = performance.now();
+      if (now - lastFpsUpdate >= 1000) {
+        document.getElementById('fpsCounter').innerText = `${frameCount} FPS`;
+        frameCount = 0;
+        lastFpsUpdate = now;
+      }
+
+      // Parallax smooth camera damp
+      if (!isDragging) {
+        targetRotX = mouseY * 0.35;
+        targetRotY = mouseX * 0.45;
+        rootGroup.rotation.x += (targetRotX - rootGroup.rotation.x) * 0.04;
+        rootGroup.rotation.y += (targetRotY - rootGroup.rotation.y) * 0.04;
+      }
+
+      // Continuous Idle Rotations
+      if (currentMode === 'gold') {
+        goldTorus.rotation.x += 0.008;
+        goldTorus.rotation.y += 0.012;
+        rings.forEach((r, idx) => {
+          r.rotation.x += 0.004 * (idx % 2 === 0 ? 1 : -1);
+          r.rotation.y += 0.006 * (idx % 2 === 0 ? -1 : 1);
+        });
+      } else if (currentMode === 'ghost') {
+        ghostMesh.rotation.x -= 0.01;
+        ghostMesh.rotation.y += 0.015;
+        innerGhostMesh.rotation.x += 0.018;
+        innerGhostMesh.rotation.y -= 0.012;
+      } else if (currentMode === 'matrix') {
+        cubes.forEach((item) => {
+          item.mesh.rotation.x += item.rotSpeed;
+          item.mesh.rotation.y += item.rotSpeed * 1.5;
+        });
+      } else if (currentMode === 'incognito') {
+        // Parametric fabric wave
+        const pos = planeGeo.attributes.position;
+        for (let i = 0; i < pos.count; i++) {
+          const u = pos.getX(i);
+          const v = pos.getY(i);
+          const z = Math.sin(u * 0.3 + time * 1.8) * Math.cos(v * 0.3 + time * 1.4) * 2.2;
+          pos.setZ(i, z);
+        }
+        pos.needsUpdate = true;
+      }
+
+      // Slow particle field drift
+      particleSystem.rotation.y += 0.0006;
+      particleSystem.rotation.x += 0.0003;
+
+      renderer.render(scene, camera);
+    }
+
+    // Window Resize Handler
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Time Clock
+    function updateClock() {
+      document.getElementById('timeClock').innerText = new Date().toLocaleTimeString();
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Start Engine
+    syncRealityFromOS();
+    animate();
+  </script>
+</body>
+</html>
