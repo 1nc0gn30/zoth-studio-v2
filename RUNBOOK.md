@@ -227,3 +227,44 @@ The gate asserts:
 1. Zero port collisions across all 65 tools and 9 core hubs.
 2. Exact parity between `public/api/tools.json`, `dist/api/tools.json`, and `catalog.json`.
 3. Valid JSON schema and reachable local file paths.
+
+---
+
+## 8. Reality Switching System & Environment Engine
+
+ZothOS features an integrated reality engine that synchronizes the entire operating system, terminal themes, desktop app icons, 3D interactive wallpapers, and companion bot characters across 4 specialized profiles:
+
+| Mode ID | Reality Profile | Palette & Accent | Desktop Wallpaper | System App Icons | Konsole / Terminal Theme | Active Bot Character |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `gold` | **Sovereign Gold Master** | 24K Gold (`#FFD700`) & Obsidian | `zoth-gold-master.jpg` | `Zoth-Azoth-Gold` | `Zoth-Gold` (Gold OSC) | **Azoth Prime** (`☿`, Solar Architect) |
+| `ghost` | **NullAI Ghostmode Stealth** | Crimson (`#FF3355`) & Charcoal | `ghostmode-nullai.png` | `Zoth-Ghost-NullAI` | `Zoth-Ghost` (Crimson OSC) | **Ghostbyte** (`👻`, Amnesic Commander) |
+| `matrix` | **Hermetic Matrix Emerald** | Phosphor (`#00FF9D`) & Deep Black | `hermetic-matrix.png` | `Zoth-Hermetic-Matrix` | `Zoth-Matrix` (Phosphor OSC) | **Lucy Netrunner** (`🜂`, STDP Memory Oracle) |
+| `incognito` | **Covert Chameleon Disguise** | Azure (`#0078D4`) & Modern Fluent | `win11-bloom.jpg` | `breeze-dark` | `Zoth-Win11` (Fluent OSC) | **Chameleon 11** (`🪟`, Enterprise Assistant) |
+
+### Reality Engine Operations:
+- **CLI Mode Switcher**:
+  ```bash
+  # Interactive mode selector menu
+  zoth-mode
+
+  # Direct mode engagement
+  zoth-mode gold
+  zoth-mode ghost
+  zoth-mode matrix
+  zoth-mode incognito
+
+  # Quick toggle between Gold and Ghostmode
+  zoth-mode toggle
+  ```
+- **3D Interactive Wallpaper Engine**:
+  - Accessible in browser at `http://127.0.0.1:3000/wallpaper.html`
+  - Interactive WebGL / Three.js 3D canvas reacting to cursor position, clicks, and mouse drag.
+  - Launches via CLI:
+    ```bash
+    zoth-wallpaper             # Opens 3D interactive wallpaper window
+    zoth-wallpaper --fullscreen # Opens fullscreen 3D wallpaper
+    ```
+- **Two-Way Synchronization**:
+  - Web UI and OS communicate via `http://127.0.0.1:3000/api/studio/reality`.
+  - Switching reality in the terminal or `zoth-cockpit` updates the browser UI and 3D wallpaper in real time.
+  - Switching reality in Zoth Studio triggers the OS-level script (`zoth-mode`), immediately transforming desktop wallpapers, app icons, GTK themes, and Konsole windows.
