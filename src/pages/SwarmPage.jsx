@@ -35,6 +35,7 @@ import GavelIcon from '@mui/icons-material/Gavel';
 import { pantheonAgents, pantheonCadres } from '../data/pantheon';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
+import { useReality } from '../context/RealityContext';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -80,9 +81,10 @@ const ZERO_CLOUD_BADGES = [
 export default function SwarmPage() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#8A6508';
-  const goldSoft = isDark ? '#F5E6AB' : '#8A6A09';
-  const goldBorder = isDark ? 'rgba(212,175,55,0.28)' : '#E2CE82';
+  const { activeTheme } = useReality();
+  const gold = isDark ? (activeTheme?.accent || '#D4AF37') : '#8A6508';
+  const goldSoft = isDark ? (activeTheme?.accentSoft || '#F5E6AB') : '#8A6A09';
+  const goldBorder = isDark ? (activeTheme?.border || 'rgba(212,175,55,0.28)') : '#E2CE82';
   const voidBg = isDark ? '#08080B' : '#FFFFFF';
   const darkPaper = isDark ? '#0D0D14' : '#F8FAFC';
 

@@ -15,6 +15,8 @@ import {
   HeroReveal, HeroItem, GlowLine, RevealOnScroll,
   StaggerChildren, StaggerItem,
 } from '../components/MotionReveal';
+import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
+import ZothFoundryGodModeTool from '../components/tools/ZothFoundryGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -89,6 +91,23 @@ export default function WebGenShowcasePage() {
 
         <Box sx={{ mt: 4 }}>
           <DaemonStatusStrip />
+        </Box>
+
+        {/* ── 60FPS ASCII & Braille Motion Edit + Autonomous Site Foundry ── */}
+        <Box sx={{ mt: 5 }}>
+          <ToolMotionShowcase
+            tool={{
+              id: 'zoth-webgen',
+              name: 'Zoth WebGen Foundry',
+              category: 'Autonomous Web',
+              executionType: 'local_cli',
+              description: '6-Archetype Full-Stack Compiler with Schema.org AEO & Triple-Viewport Guardrails.',
+            }}
+            onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
+          />
+          <Box sx={{ mt: 4 }}>
+            <ZothFoundryGodModeTool tool={{ id: 'zoth-webgen', name: 'Zoth WebGen Foundry' }} />
+          </Box>
         </Box>
 
         {/* ── Feature Cards ── */}

@@ -14,6 +14,8 @@ import {
   StaggerChildren,
   StaggerItem,
 } from '../components/MotionReveal';
+import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
+import AeoGraphEngineGodModeTool from '../components/tools/AeoGraphEngineGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const GOLD = '#D4AF37';
@@ -78,6 +80,23 @@ export default function AXShowcasePage() {
             </Typography>
           </HeroItem>
         </HeroReveal>
+
+        {/* ── 60FPS ASCII & Braille Motion Edit + AEO & AX Semantic Graph Engine ── */}
+        <Box sx={{ mt: 5 }}>
+          <ToolMotionShowcase
+            tool={{
+              id: 'aeo-graph-engine',
+              name: 'AX & AEO Semantic Graph Engine',
+              category: 'Autonomous Web',
+              executionType: 'browser',
+              description: 'Answer Engine Optimization (AEO/GEO) & Agent Experience (AX) Schema.org JSON-LD @graph generator and MCP discovery hub.',
+            }}
+            onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
+          />
+          <Box sx={{ mt: 4 }}>
+            <AeoGraphEngineGodModeTool />
+          </Box>
+        </Box>
 
         {/* ── Feature Cards ── */}
         <RevealOnScroll preset="fadeUp" delay={0.15}>

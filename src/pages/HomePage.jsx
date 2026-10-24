@@ -32,6 +32,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import GoldenZLogo3D from '../components/GoldenZLogo3D';
 import MathPillarsGrid from '../components/MathPillarsGrid';
 import CompanyTicker from '../components/CompanyTicker';
+import AsciiMotionGodModeTool from '../components/tools/AsciiMotionGodModeTool';
 const WebGPUAIConsole = React.lazy(() => import('../components/WebGPUAIConsole'));
 const WebMCPConsole = React.lazy(() => import('../components/WebMCPConsole'));
 const SovereignFunnel = React.lazy(() => import('../components/SovereignFunnel'));
@@ -39,6 +40,8 @@ import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, Stagge
 import { microTools } from '../data/toolsData';
 import ToolOfferLine from '../components/ToolOfferLine';
 import { useStudioStatus } from '../studio/useStudioStatus';
+import { useReality } from '../context/RealityContext';
+import { RealityMatrixShowcaseSection } from '../components/RealityZothBotHUD';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -1444,11 +1447,12 @@ export default function HomePage() {
   const isDark = theme.palette.mode === 'dark';
   const published = microTools.filter((tool) => tool.published);
   const { status } = useStudioStatus();
+  const { reality } = useReality();
 
   const gold = {
-    accent: isDark ? '#D4AF37' : '#8A6508',
-    soft: isDark ? '#F5E6AB' : '#8A6A09',
-    wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
+    accent: isDark ? reality.accent : reality.accentLightMode,
+    soft: isDark ? reality.accentSoft : reality.accentLightMode,
+    wash: isDark ? reality.accentWash : '#FEF9E7',
   };
 
   return (
@@ -1808,6 +1812,9 @@ export default function HomePage() {
         </Box>
       </Paper>
 
+      {/* Interactive 5-Reality Switch Showcase (Backgrounds, Logos, Icons, Zoth Bots & UI Chrome) */}
+      <RealityMatrixShowcaseSection />
+
       {/* Feature Highlights Banner */}
       <Box
         sx={{
@@ -1968,6 +1975,11 @@ export default function HomePage() {
             />
           </Box>
         ))}
+      </Box>
+
+      {/* Interactive 60FPS ASCII & Braille Motion Synth Theater */}
+      <Box sx={{ mb: 8 }}>
+        <AsciiMotionGodModeTool />
       </Box>
 
       {/* Task 1: 5 Pillars Architecture Explorer (Right below Feature Highlights) */}

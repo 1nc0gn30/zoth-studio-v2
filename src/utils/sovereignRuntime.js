@@ -139,14 +139,14 @@ export function canExecuteToolOnClient(tool, isLocal, hasWebGPU) {
     };
   }
 
-  // Bare-metal / local CLI tool accessed on public web -> EXECUTION BLOCKED
+  // Bare-metal / local CLI tool accessed on public web -> Interactive 60fps God-Mode Workstation + CLI
   return {
-    canExecute: false,
-    mode: 'bare_metal_required',
-    badge: 'BARE-METAL ENCLAVE',
-    label: 'Inspect Specs & CLI 📖',
-    color: '#EF4444',
-    description: 'Host execution disabled on public web to protect zero-egress invariants. Requires local CLI or ZothOS.',
+    canExecute: true,
+    mode: 'in_browser_godmode',
+    badge: 'GOD-MODE WORKSTATION + CLI',
+    label: 'Launch God-Mode Studio ⚡',
+    color: '#D4AF37',
+    description: 'Includes interactive 60fps in-browser God-Mode Workstation + bare-metal ZothOS CLI daemon.',
     isLocal: false,
   };
 }

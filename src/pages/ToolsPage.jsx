@@ -23,6 +23,8 @@ import { microTools } from '../data/toolsData';
 import ToolOfferLine from '../components/ToolOfferLine';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
+import { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
+import AsciiMotionGodModeTool from '../components/tools/AsciiMotionGodModeTool';
 import { useSovereignRuntime, isLocalRuntime } from '../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -49,11 +51,11 @@ export default function ToolsPage() {
   });
   const searchRef = useRef(null);
   useEffect(() => {
-    const next = new URLSearchParams();
-    if (search) next.set('q', search);
-    if (selectedCat !== 'All') next.set('cat', selectedCat);
-    if (execFilter !== 'all') next.set('mode', execFilter);
-    if (pinnedOnly) next.set('pinned', '1');
+    const next = new URLSearchParams(params);
+    if (search) next.set('q', search); else next.delete('q');
+    if (selectedCat !== 'All') next.set('cat', selectedCat); else next.delete('cat');
+    if (execFilter !== 'all') next.set('mode', execFilter); else next.delete('mode');
+    if (pinnedOnly) next.set('pinned', '1'); else next.delete('pinned');
     if (next.toString() !== params.toString()) setParams(next, { replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, selectedCat, execFilter, pinnedOnly]);
@@ -96,9 +98,13 @@ export default function ToolsPage() {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  const isBrowserTool = (t) => t.executionType === 'webgpu' || t.executionType === 'browser';
+
   const filtered = microTools.filter((t) => {
     const matchesCat = selectedCat === 'All' || t.category === selectedCat;
-    const matchesExec = execFilter === 'all' || t.executionType === execFilter;
+    const matchesExec =
+      execFilter === 'all' ||
+      (execFilter === 'webgpu' ? isBrowserTool(t) : t.executionType === execFilter);
     const matchesSearch =
       t.name.toLowerCase().includes(search.toLowerCase()) ||
       t.description.toLowerCase().includes(search.toLowerCase()) ||
@@ -156,7 +162,7 @@ export default function ToolsPage() {
         </Box>
       </HeroReveal>
 
-      {/* Remote Host Air-Gap Lockout Banner */}
+      {/* Public Web God-Mode Workstation Status Banner */}
       {!isLocal && (
         <Paper
           elevation={0}
@@ -164,40 +170,41 @@ export default function ToolsPage() {
             p: 3,
             mb: 4,
             borderRadius: 3,
-            bgcolor: isDark ? 'rgba(239, 68, 68, 0.08)' : '#FEF2F2',
+            bgcolor: isDark ? 'rgba(16, 185, 129, 0.07)' : '#ECFDF5',
             border: '1.5px solid',
-            borderColor: isDark ? 'rgba(239, 68, 68, 0.45)' : '#FCA5A5',
+            borderColor: isDark ? 'rgba(16, 185, 129, 0.4)' : '#6EE7B7',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             flexWrap: 'wrap',
             gap: 2,
-            boxShadow: isDark ? '0 0 30px -8px rgba(239, 68, 68, 0.25)' : 'none',
+            boxShadow: isDark ? '0 0 30px -8px rgba(16, 185, 129, 0.22)' : 'none',
           }}
         >
           <Box sx={{ display: 'flex', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2, maxWidth: 760, flexWrap: { xs: 'wrap', sm: 'nowrap' } }}>
-            <Box sx={{ p: 1.2, borderRadius: 2, bgcolor: isDark ? 'rgba(239, 68, 68, 0.18)' : '#FEE2E2', color: '#EF4444', display: 'flex' }}>
-              <LockIcon sx={{ fontSize: 28 }} />
+            <Box sx={{ p: 1.2, borderRadius: 2, bgcolor: isDark ? 'rgba(16, 185, 129, 0.16)' : '#D1FAE5', color: '#10B981', display: 'flex' }}>
+              <FlashOnIcon sx={{ fontSize: 28 }} />
             </Box>
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 0.5 }}>
-                <Typography sx={{ fontFamily: mono, fontWeight: 850, fontSize: '0.86rem', color: '#EF4444' }}>
-                  REMOTE CLOUD HOST DETECTED — AIR-GAP ENCLAVE ACTIVE
+                <Typography sx={{ fontFamily: mono, fontWeight: 850, fontSize: '0.86rem', color: '#10B981' }}>
+                  ALL {microTools.length} GOD-MODE WORKSTATIONS & 60FPS ASCII MOTION SYNTHS UNLOCKED
                 </Typography>
                 <Chip
-                  label="DIRECT EXECUTION BLOCKED"
+                  label="100% ZERO-EGRESS CLIENT EXECUTION"
                   size="small"
                   sx={{
                     fontFamily: mono,
                     fontSize: '0.64rem',
                     fontWeight: 800,
-                    bgcolor: isDark ? '#1F2937' : '#E5E7EB',
-                    color: isDark ? '#FCA5A5' : '#991B1B',
+                    bgcolor: isDark ? 'rgba(212,175,55,0.16)' : '#FEF9E7',
+                    color: gold.accent,
+                    border: `1px solid ${gold.accent}44`,
                   }}
                 />
               </Box>
               <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.88rem', lineHeight: 1.6 }}>
-                You are accessing this catalog through a remote web host. Sovereign tools execute strictly against local hardware, kernel page-locking (<code>mlock</code>), and loopback sockets (<code>127.0.0.1</code>). To run tools, deploy <RouterLink to="/zoth-os" style={{ color: '#D4AF37', fontWeight: 700 }}>Zoth OS</RouterLink> or clone individual micro-repositories from <RouterLink to="/arsenal" style={{ color: 'var(--zs-mint)', fontWeight: 700 }}>The Sovereign Arsenal</RouterLink>.
+                Every repository in the catalog includes a dedicated <strong>60fps interactive God-Mode Workstation</strong> and <strong>ASCII/Braille Motion Showcase</strong> directly in your browser. For bare-metal kernel daemons (<code>127.0.0.1</code>) and local Ollama pipelines, boot <RouterLink to="/zoth-os" style={{ color: '#D4AF37', fontWeight: 700 }}>Zoth OS</RouterLink> or pull from <RouterLink to="/arsenal" style={{ color: 'var(--zs-mint)', fontWeight: 700 }}>The Sovereign Arsenal</RouterLink>.
               </Typography>
             </Box>
           </Box>
@@ -248,7 +255,7 @@ export default function ToolsPage() {
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr 1fr', sm: 'repeat(4, 1fr)' }, gap: 1.5, mb: 4 }}>
         {[
           ['Catalog', microTools.length],
-          ['In browser', microTools.filter((tool) => tool.executionType === 'webgpu').length],
+          ['In browser', microTools.filter(isBrowserTool).length],
           ['Local CLI', microTools.filter((tool) => tool.executionType === 'local_cli').length],
           ['Categories', categories.length - 1],
         ].map(([label, value]) => (
@@ -313,6 +320,11 @@ export default function ToolsPage() {
         </Box>
       </Paper>
 
+      {/* Interactive 60FPS Sovereign ASCII & Braille Motion Synth */}
+      <Box sx={{ mb: 5 }}>
+        <AsciiMotionGodModeTool />
+      </Box>
+
       {/* Filter & Search Bar */}
       <TextField
         fullWidth
@@ -350,7 +362,7 @@ export default function ToolsPage() {
         />
         <Chip
           icon={<FlashOnIcon sx={{ fontSize: '16px !important', color: execFilter === 'webgpu' ? (isDark ? '#08080B !important' : '#0F172A !important') : `${gold.accent} !important` }} />}
-          label={`In-Browser WebGPU (${microTools.filter((t) => t.executionType === 'webgpu').length})`}
+          label={`In-Browser Workstations (${microTools.filter(isBrowserTool).length})`}
           clickable
           onClick={() => setExecFilter('webgpu')}
           size="small"
@@ -411,7 +423,7 @@ export default function ToolsPage() {
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
         Showing <strong>{filtered.length}</strong> of <strong>{microTools.length}</strong> micro-tool repositories (
         <Box component="span" sx={{ color: gold.accent, fontWeight: 800 }}>
-          {microTools.filter((t) => t.executionType === 'webgpu').length} WebGPU In-Browser
+          {microTools.filter(isBrowserTool).length} In-Browser Workstations
         </Box>{' '}
         | {microTools.filter((t) => t.executionType === 'local_cli').length} Local CLI / Zoth OS)
       </Typography>
@@ -421,8 +433,9 @@ export default function ToolsPage() {
         <Grid container spacing={3}>
           {filtered.map((tool) => {
             const execEval = evaluateTool(tool);
-            const isWebGPU = tool.executionType === 'webgpu';
+            const isWebGPU = isBrowserTool(tool);
             const isExpanded = expanded.has(tool.id);
+            const catAccent = getCategoryMotionMeta(tool.category).accent;
             return (
               <Grid xs={12} sm={6} md={4} key={tool.id}>
                 <StaggerItem>
@@ -432,17 +445,17 @@ export default function ToolsPage() {
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'space-between',
-                      border: isWebGPU ? (isDark ? '1.5px solid #D4AF37' : '1.5px solid #B8860B') : `1px solid ${theme.palette.divider}`,
+                      border: `1px solid ${theme.palette.divider}`,
+                      borderTop: `2.5px solid ${catAccent}`,
                       bgcolor: theme.palette.background.paper,
-                      transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                      transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
                       position: 'relative',
+                      overflow: 'hidden',
                       '&:hover': {
-                        borderColor: gold.accent,
-                        boxShadow: isWebGPU
-                          ? (isDark ? '0 12px 32px rgba(212, 175, 55, 0.32)' : '0 12px 32px rgba(184, 134, 11, 0.22)')
-                          : isDark
-                            ? '0 8px 22px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,175,55,0.25), 0 0 20px -4px rgba(212,175,55,0.18)'
-                            : '0 8px 22px rgba(16,24,40,0.08), 0 0 16px -4px rgba(184,134,11,0.15)',
+                        borderColor: catAccent,
+                        boxShadow: isDark
+                          ? `0 12px 28px rgba(0,0,0,0.55), 0 0 22px -6px ${catAccent}44`
+                          : `0 10px 24px rgba(16,24,40,0.08), 0 0 18px -6px ${catAccent}33`,
                         transform: 'translateY(-3px)'
                       }
                     }}

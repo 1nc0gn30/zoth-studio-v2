@@ -102,12 +102,29 @@ export function IntroDirector({ children }) {
   const routeKey = intro ? intro.key : location.pathname;
 
   const [run, setRun] = useState(() => makeRun(intro, reduced, location.search, location.pathname));
+  const [replayNonce, setReplayNonce] = useState(0);
 
   // Route changed → arm a new run before paint so the new page never flashes.
   useLayoutEffect(() => {
     if (run.key !== routeKey) setRun(makeRun(intro, reduced, location.search, location.pathname));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routeKey]);
+
+  // Allow any tool or showcase button to trigger a live replay of the full cinema cut.
+  useEffect(() => {
+    const onReplay = () => {
+      if (!intro) return;
+      setReplayNonce((n) => n + 1);
+      setRun({
+        key: intro.key,
+        intro,
+        mode: 'full',
+        phase: 'intro',
+      });
+    };
+    window.addEventListener('zoth:replay-intro', onReplay);
+    return () => window.removeEventListener('zoth:replay-intro', onReplay);
+  }, [intro]);
 
   // Same render as a route change, before the layout effect lands: preview the run.
   const current = run.key === routeKey ? run : makeRun(intro, reduced, location.search, location.pathname);
@@ -134,10 +151,10 @@ export function IntroDirector({ children }) {
       {children}
       {showOverlay && (
         <IntroOverlay
-          key={current.key}
+          key={`${current.key}-${replayNonce}`}
           intro={current.intro}
           mode={current.mode}
-          enter={enter}
+          enter={enter || replayNonce > 0}
           onHandoff={() => handleHandoff(current.key)}
           onDone={() => handleDone(current.key)}
         />
@@ -162,19 +179,18 @@ export function PageStage({ children }) {
     <motion.div
       key={key}
       className="page-stage"
-      initial={phase === 'idle' ? false : { opacity: 0, y: 22, scale: 0.988, filter: 'blur(6px)' }}
+      initial={phase === 'idle' ? false : { opacity: 0, y: 22, scale: 0.988 }}
       animate={
         released
           ? {
               opacity: 1,
               y: 0,
               scale: 1,
-              filter: 'blur(0px)',
-              // Clear transform/filter afterwards so position:fixed descendants
+              // Clear transform afterwards so position:fixed descendants
               // (HUDs, modals, floating pets) are not trapped in this layer.
-              transitionEnd: { transform: 'none', filter: 'none' },
+              transitionEnd: { transform: 'none' },
             }
-          : { opacity: 0, y: 22, scale: 0.988, filter: 'blur(6px)' }
+          : { opacity: 0, y: 22, scale: 0.988 }
       }
       transition={{ duration: 0.9, ease: EASE_OUT_EXPO, delay: phase === 'handoff' ? 0.1 : 0 }}
       style={{ transformOrigin: '50% 35vh' }}

@@ -36,48 +36,6 @@ import SovereignFunnel from '../components/SovereignFunnel';
 import AirGapToolLockout from '../components/AirGapToolLockout';
 import WebMCPConsole from '../components/WebMCPConsole';
 import WebGPUToolWorkstation from '../components/tools/WebGPUToolWorkstation';
-import {
-  AdytumPlannerTool,
-  AzothArchonTool,
-  SovereignBridgeTool,
-  NeuroMemoryTool,
-  VectorSearchTool,
-  DeepSearchResearchTool,
-  PromptMasterTool,
-  HexStrikeTool,
-  EnvGuardVaultTool,
-  WebSecurityGuardTool,
-  AudioCipherStegoTool,
-  AeoGraphEngineTool,
-  CwvSpeedEngineTool,
-  SubSweepTool,
-  OmniPostSocialTool,
-  CronRhythmTool,
-  AgentEgressSentinelTool,
-  AgentMockTwinTool,
-  AgentPromptFirewallTool,
-  AgentFlightRecorderTool,
-  AgentCapsuleJailTool,
-  AgentPolicyAuditorTool,
-  PrintifyConnectorTool,
-  GelatoConnectorTool,
-  EtsyConnectorTool,
-  ShopifyConnectorTool,
-  EtsyPodForgeTool,
-  PodSmartRouterTool,
-  DigitalAssetForgeTool,
-  PodMockupForgeTool,
-  PodMarginSentinelTool,
-  AgentVoiceCallTool,
-  McpLensTool,
-  AgentBudgetSentinelTool,
-  AgentGodsEyeTool,
-  ZothWebgenLauncherTool,
-  ZothSwarmMultiplexerLauncherTool,
-  ZothCivilizationLauncherTool,
-  LikenessDeskTool,
-  BoltDiyTool,
-} from '../components/tools/EnclaveToolsSuite';
 import JwtInspectorGodModeTool from '../components/tools/JwtInspectorGodModeTool';
 import PayloadEntropyGodModeTool from '../components/tools/PayloadEntropyGodModeTool';
 import GhidraMcpGodModeTool from '../components/tools/GhidraMcpGodModeTool';
@@ -87,11 +45,62 @@ import RobotsTxtAuditorGodModeTool from '../components/tools/RobotsTxtAuditorGod
 import PwaManifestBuilderGodModeTool from '../components/tools/PwaManifestBuilderGodModeTool';
 import SchemaIllustratorGodModeTool from '../components/tools/SchemaIllustratorGodModeTool';
 import CertPathRoadmapGodModeTool from '../components/tools/CertPathRoadmapGodModeTool';
+import Badge3dCoinGodModeTool from '../components/tools/Badge3dCoinGodModeTool';
+import McpLensGodModeTool from '../components/tools/McpLensGodModeTool';
+import CwvSpeedEngineGodModeTool from '../components/tools/CwvSpeedEngineGodModeTool';
+import OmniPostSocialGodModeTool from '../components/tools/OmniPostSocialGodModeTool';
+import DeepSearchGodModeTool from '../components/tools/DeepSearchGodModeTool';
+import PromptMasterGodModeTool from '../components/tools/PromptMasterGodModeTool';
+import VectorSearchGodModeTool from '../components/tools/VectorSearchGodModeTool';
+import ZothOSGodModeTool from '../components/tools/ZothOSGodModeTool';
+import AgentCapsuleJailGodModeTool from '../components/tools/AgentCapsuleJailGodModeTool';
+import AgentGodsEyeGodModeTool from '../components/tools/AgentGodsEyeGodModeTool';
+import AgentMockTwinGodModeTool from '../components/tools/AgentMockTwinGodModeTool';
+import AgentPolicyAuditorGodModeTool from '../components/tools/AgentPolicyAuditorGodModeTool';
+import AudioCipherGodModeTool from '../components/tools/AudioCipherGodModeTool';
+import CronRhythmGodModeTool from '../components/tools/CronRhythmGodModeTool';
+import EnvGuardVaultGodModeTool from '../components/tools/EnvGuardVaultGodModeTool';
+import HexStrikeGodModeTool from '../components/tools/HexStrikeGodModeTool';
+import SubSweepGodModeTool from '../components/tools/SubSweepGodModeTool';
+import WebSecurityGuardGodModeTool from '../components/tools/WebSecurityGuardGodModeTool';
+import AeoGraphEngineGodModeTool from '../components/tools/AeoGraphEngineGodModeTool';
+import NeuroMemoryGodModeTool from '../components/tools/NeuroMemoryGodModeTool';
+import SovereignBridgeGodModeTool from '../components/tools/SovereignBridgeGodModeTool';
+import AgentEgressSentinelGodModeTool from '../components/tools/AgentEgressSentinelGodModeTool';
+import AgentPromptFirewallGodModeTool from '../components/tools/AgentPromptFirewallGodModeTool';
+import AgentFlightRecorderGodModeTool from '../components/tools/AgentFlightRecorderGodModeTool';
+import AgentBudgetSentinelGodModeTool from '../components/tools/AgentBudgetSentinelGodModeTool';
+import PodCommerceGodModeTool from '../components/tools/PodCommerceGodModeTool';
+import AsciiMotionGodModeTool from '../components/tools/AsciiMotionGodModeTool';
+import AdytumPlannerGodModeTool from '../components/tools/AdytumPlannerGodModeTool';
+import AzothArchonGodModeTool from '../components/tools/AzothArchonGodModeTool';
+import AgentVoiceCallGodModeTool from '../components/tools/AgentVoiceCallGodModeTool';
+import ZothFoundryGodModeTool from '../components/tools/ZothFoundryGodModeTool';
+import WebMcpInspectorGodModeTool from '../components/tools/WebMcpInspectorGodModeTool';
+import YaraSigmaForgeGodModeTool from '../components/tools/YaraSigmaForgeGodModeTool';
+import RealityShaderForgeGodModeTool from '../components/tools/RealityShaderForgeGodModeTool';
+import AttackSurfaceSentinelGodModeTool from '../components/tools/AttackSurfaceSentinelGodModeTool';
+import VisionKinematicsGodModeTool from '../components/tools/VisionKinematicsGodModeTool';
+import SwarmCivilizationGodModeTool from '../components/tools/SwarmCivilizationGodModeTool';
+import CivicProcurementGodModeTool from '../components/tools/CivicProcurementGodModeTool';
+import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
+import {
+  HeroReveal,
+  HeroItem,
+  GlowLine,
+  RevealOnScroll,
+  StaggerChildren,
+  StaggerItem,
+} from '../components/MotionReveal';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
+import { useReality } from '../context/RealityContext';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const ENCLAVE_TOOL_COMPONENTS = {
+  'zoth-os': ZothOSGodModeTool,
+  'badge3d-coin-generator': Badge3dCoinGodModeTool,
+  'badge3d-coin': Badge3dCoinGodModeTool,
   'certpath-roadmap-studio': CertPathRoadmapGodModeTool,
   'certpath-roadmap': CertPathRoadmapGodModeTool,
   'schema-illustrator-studio': SchemaIllustratorGodModeTool,
@@ -110,55 +119,69 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'payload-entropy': PayloadEntropyGodModeTool,
   'ghidra-mcp-bridge': GhidraMcpGodModeTool,
   'ghidra-mcp': GhidraMcpGodModeTool,
-  'shodan-surface-sentinel': HexStrikeTool,
-  'shodan-sentinel': HexStrikeTool,
-  'adytum-alchemist-ai-workflow': AdytumPlannerTool,
-  'azoth-archon-orchestrator': AzothArchonTool,
-  'azoth-local-agent': AzothArchonTool,
-  'sovereign-bridge-protocol': SovereignBridgeTool,
-  'sovereign-agent-bridge': SovereignBridgeTool,
-  'neuro-memory-service': NeuroMemoryTool,
-  'neuro-memory-daemon': NeuroMemoryTool,
-  'agent-egress-sentinel': AgentEgressSentinelTool,
-  'agent-mock-twin': AgentMockTwinTool,
-  'agent-prompt-firewall': AgentPromptFirewallTool,
-  'agent-flight-recorder': AgentFlightRecorderTool,
-  'agent-capsule-jail': AgentCapsuleJailTool,
-  'agent-policy-auditor': AgentPolicyAuditorTool,
-  'vector-search-engine': VectorSearchTool,
-  'deepsearch-research-agent': DeepSearchResearchTool,
-  'prompt-master-optimizer': PromptMasterTool,
-  'promptmaster-studio': PromptMasterTool,
-  'hexstrike-tactical-terminal': HexStrikeTool,
-  'hexstrike-arsenal': HexStrikeTool,
-  'envguard-secrets-vault': EnvGuardVaultTool,
-  'web-security-guard': WebSecurityGuardTool,
-  'audiocipher-stego-vault': AudioCipherStegoTool,
-  'audiocipher-stego-engine': AudioCipherStegoTool,
-  'aeo-graph-engine': AeoGraphEngineTool,
-  'cwv-speed-engine': CwvSpeedEngineTool,
-  'subsweep-lead-scanner': SubSweepTool,
-  'omnipost-social-engine': OmniPostSocialTool,
-  'cron-rhythm-studio': CronRhythmTool,
-  'printify-connector': PrintifyConnectorTool,
-  'gelato-connector': GelatoConnectorTool,
-  'etsy-connector': EtsyConnectorTool,
-  'shopify-connector': ShopifyConnectorTool,
-  'etsy-pod-forge': EtsyPodForgeTool,
-  'pod-smart-router': PodSmartRouterTool,
-  'digital-asset-forge': DigitalAssetForgeTool,
-  'pod-mockup-forge': PodMockupForgeTool,
-  'pod-margin-sentinel': PodMarginSentinelTool,
-  'agent-voice-call': AgentVoiceCallTool,
-  'mcp-lens': McpLensTool,
-  'agent-budget-sentinel': AgentBudgetSentinelTool,
-  'agent-gods-eye': AgentGodsEyeTool,
-  'zoth-webgen': ZothWebgenLauncherTool,
-  'zoth-swarm-multiplexer': ZothSwarmMultiplexerLauncherTool,
-  'zoth-civilization': ZothCivilizationLauncherTool,
-  'likeness-desk': LikenessDeskTool,
-  'bolt.diy': BoltDiyTool,
-  'bolt-diy': BoltDiyTool,
+  'shodan-surface-sentinel': AttackSurfaceSentinelGodModeTool,
+  'shodan-sentinel': AttackSurfaceSentinelGodModeTool,
+  'adytum-alchemist-ai-workflow': AdytumPlannerGodModeTool,
+  'azoth-archon-orchestrator': AzothArchonGodModeTool,
+  'azoth-local-agent': AzothArchonGodModeTool,
+  'sovereign-bridge-protocol': SovereignBridgeGodModeTool,
+  'sovereign-agent-bridge': SovereignBridgeGodModeTool,
+  'neuro-memory-service': NeuroMemoryGodModeTool,
+  'neuro-memory-daemon': NeuroMemoryGodModeTool,
+  'agent-egress-sentinel': AgentEgressSentinelGodModeTool,
+  'agent-mock-twin': AgentMockTwinGodModeTool,
+  'agent-prompt-firewall': AgentPromptFirewallGodModeTool,
+  'agent-flight-recorder': AgentFlightRecorderGodModeTool,
+  'agent-capsule-jail': AgentCapsuleJailGodModeTool,
+  'agent-policy-auditor': AgentPolicyAuditorGodModeTool,
+  'vector-search-engine': VectorSearchGodModeTool,
+  'deepsearch-research-agent': DeepSearchGodModeTool,
+  'prompt-master-optimizer': PromptMasterGodModeTool,
+  'promptmaster-studio': PromptMasterGodModeTool,
+  'hexstrike-tactical-terminal': HexStrikeGodModeTool,
+  'hexstrike-arsenal': HexStrikeGodModeTool,
+  'envguard-secrets-vault': EnvGuardVaultGodModeTool,
+  'web-security-guard': WebSecurityGuardGodModeTool,
+  'audiocipher-stego-vault': AudioCipherGodModeTool,
+  'audiocipher-stego-engine': AudioCipherGodModeTool,
+  'aeo-graph-engine': AeoGraphEngineGodModeTool,
+  'cwv-speed-engine': CwvSpeedEngineGodModeTool,
+  'subsweep-lead-scanner': SubSweepGodModeTool,
+  'omnipost-social-engine': OmniPostSocialGodModeTool,
+  'cron-rhythm-studio': CronRhythmGodModeTool,
+  'printify-connector': PodCommerceGodModeTool,
+  'gelato-connector': PodCommerceGodModeTool,
+  'etsy-connector': PodCommerceGodModeTool,
+  'shopify-connector': PodCommerceGodModeTool,
+  'etsy-pod-forge': PodCommerceGodModeTool,
+  'pod-smart-router': PodCommerceGodModeTool,
+  'digital-asset-forge': PodCommerceGodModeTool,
+  'pod-mockup-forge': PodCommerceGodModeTool,
+  'pod-margin-sentinel': PodCommerceGodModeTool,
+  'agent-voice-call': AgentVoiceCallGodModeTool,
+  'mcp-lens': McpLensGodModeTool,
+  'agent-budget-sentinel': AgentBudgetSentinelGodModeTool,
+  'agent-gods-eye': AgentGodsEyeGodModeTool,
+  'zoth-webgen': ZothFoundryGodModeTool,
+  'zoth-swarm-multiplexer': SwarmCivilizationGodModeTool,
+  'zoth-civilization': SwarmCivilizationGodModeTool,
+  'likeness-desk': VisionKinematicsGodModeTool,
+  'bolt.diy': ZothFoundryGodModeTool,
+  'bolt-diy': ZothFoundryGodModeTool,
+  'vision-gesture-control': VisionKinematicsGodModeTool,
+  'datamosh-glitch-studio': AsciiMotionGodModeTool,
+  'nexus-3d-scene-studio': AsciiMotionGodModeTool,
+  'ufo-sacred-geometry': AsciiMotionGodModeTool,
+  'cyber-turtle-studio': AsciiMotionGodModeTool,
+  'og-canvas-forge': AsciiMotionGodModeTool,
+  'zoth-ascii-magic': AsciiMotionGodModeTool,
+  'webmcp-protocol-inspector': WebMcpInspectorGodModeTool,
+  'yara-sigma-forge': YaraSigmaForgeGodModeTool,
+  'reality-shader-forge': RealityShaderForgeGodModeTool,
+  'anderson-security-sentinel': AttackSurfaceSentinelGodModeTool,
+  'city-desk': CivicProcurementGodModeTool,
+  'osint-scout-skill': SubSweepGodModeTool,
+  'storefront-catalog': PodCommerceGodModeTool,
 };
 
 export default function RealToolWorkspacePage() {
@@ -177,15 +200,15 @@ export default function RealToolWorkspacePage() {
   const execEval = evaluateTool(tool);
   const canRunClientSide = execEval.canExecute;
   const EnclaveToolComponent = ENCLAVE_TOOL_COMPONENTS[tool?.id];
-  // If the tool is client-side capable (WebGPU or WebMCP) and supported on client device, it is NEVER locked out!
-  // If the tool is bare-metal local_cli and on public web, it is locked out to prevent non-functional host execution.
-  const isLocked = !isLocal && !canRunClientSide && !unlockedPreview;
+  // Tools with dedicated 60fps in-browser God-Mode workstations or WebGPU/WASM engines are immediately interactive!
+  const isLocked = !isLocal && !canRunClientSide && !unlockedPreview && !EnclaveToolComponent;
+  const { reality } = useReality();
 
   const gold = {
-    accent: isDark ? '#D4AF37' : '#8A6508',
-    soft: isDark ? '#F5E6AB' : '#8A6A09',
-    wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-    border: isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.3)',
+    accent: isDark ? reality.accent : reality.accentLightMode,
+    soft: isDark ? reality.accentSoft : reality.accentLightMode,
+    wash: isDark ? reality.accentWash : '#FEF9E7',
+    border: isDark ? reality.accentBorder : 'rgba(184,134,11,0.3)',
   };
 
   const handleCopy = (text, setCopiedFn) => {
@@ -283,8 +306,8 @@ export default function RealToolWorkspacePage() {
         </Box>
       </Box>
 
-      {/* If Public Web and Bare-Metal Tool: Display Hardware Enclave Lockout */}
-      {!isLocal && !canRunClientSide && (
+      {/* If Public Web and Bare-Metal Tool without dedicated God-Mode Workstation: Display Hardware Enclave Lockout */}
+      {!isLocal && !canRunClientSide && !EnclaveToolComponent && (
         <AirGapToolLockout
           tool={tool}
           isUnlocked={unlockedPreview}
@@ -293,8 +316,8 @@ export default function RealToolWorkspacePage() {
         />
       )}
 
-      {/* If Public Web and WebGPU/WebMCP Tool: Display Active Client Compute HUD */}
-      {!isLocal && canRunClientSide && (
+      {/* If Public Web and Client/God-Mode Tool: Display Active Client Compute HUD */}
+      {!isLocal && (canRunClientSide || Boolean(EnclaveToolComponent)) && (
         <Paper
           elevation={0}
           sx={{
@@ -343,7 +366,7 @@ export default function RealToolWorkspacePage() {
             size="small"
             variant="contained"
             onClick={() => {
-              const el = document.getElementById('client-workstation-deck');
+              const el = document.getElementById('enclave-workstation-deck') || document.getElementById('client-workstation-deck');
               if (el) el.scrollIntoView({ behavior: 'smooth' });
             }}
             sx={{
@@ -411,259 +434,281 @@ export default function RealToolWorkspacePage() {
           position: 'relative',
         }}
       >
-      {/* Hero Dossier Header */}
-      <Paper
-        sx={{
-          p: { xs: 3, md: 4.5 },
-          mb: 5,
-          borderRadius: 3,
-          bgcolor: isDark ? '#08080B' : '#FFFFFF',
-          border: `1px solid ${gold.border}`,
-          boxShadow: isDark ? '0 12px 32px rgba(0,0,0,0.6), 0 0 20px -4px rgba(212,175,55,0.2)' : '0 4px 16px rgba(184,134,11,0.12)',
-        }}
-      >
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 3 }}>
-          <Box sx={{ maxWidth: 760 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5, flexWrap: 'wrap' }}>
-              <Chip
-                label={tool.category}
-                size="small"
-                sx={{
-                  bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#F1F5F9',
-                  color: theme.palette.text.primary,
-                  fontWeight: 700,
-                  fontSize: '0.75rem',
-                }}
-              />
-              <Chip
-                label={`v${tool.version || '1.0.0'}`}
-                size="small"
-                sx={{
-                  fontFamily: mono,
-                  bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#F1F5F9',
-                  color: gold.accent,
-                  fontWeight: 800,
-                  fontSize: '0.75rem',
-                }}
-              />
-              <Chip
-                label={tool.executionType === 'local_cli' ? 'LOCAL CLI & MCP DAEMON' : 'STANDALONE WASM RUNTIME'}
-                size="small"
-                sx={{
-                  fontFamily: mono,
-                  bgcolor: gold.wash,
-                  color: gold.soft,
-                  border: `1px solid ${gold.border}`,
-                  fontWeight: 800,
-                  fontSize: '0.72rem',
-                }}
-              />
-            </Box>
-            <Typography
-              variant="h3"
-              sx={{
-                fontWeight: 800,
-                letterSpacing: '-0.03em',
-                mb: 1.5,
-                color: theme.palette.text.primary,
-                fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' },
-                lineHeight: 1.15,
-                wordBreak: 'break-word',
-                overflowWrap: 'break-word',
-              }}
-            >
-              {tool.name}
-            </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ fontSize: '1.05rem', lineHeight: 1.65 }}>
-              {tool.description}
-            </Typography>
-            <ToolOfferLine tool={tool} isDark={isDark} />
-          </Box>
-
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: { xs: '100%', md: 'auto' }, flexShrink: 0, flexWrap: 'wrap' }}>
-            {tool.localPort && (
-              <Button
-                component="a"
-                href={tool.localUrl || `http://127.0.0.1:${tool.localPort}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="outlined"
-                endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
-                sx={{
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  fontSize: '0.8rem',
-                  borderColor: isDark ? 'rgba(52,211,153,0.45)' : '#A7F3D0',
-                  color: isDark ? '#34D399' : '#047857',
-                  bgcolor: isDark ? 'rgba(52,211,153,0.08)' : '#ECFDF3',
-                  '&:hover': { borderColor: '#34D399', bgcolor: isDark ? 'rgba(52,211,153,0.18)' : '#D1FAE5' },
-                }}
-              >
-                Local :{tool.localPort}
-              </Button>
-            )}
-            {tool.liveUrl && (
-              <Button
-                component="a"
-                href={tool.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="outlined"
-                endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
-                sx={{
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  fontSize: '0.8rem',
-                  borderColor: gold.border,
-                  color: gold.accent,
-                  '&:hover': { borderColor: gold.accent, bgcolor: gold.wash },
-                }}
-              >
-                Web Mirror ↗
-              </Button>
-            )}
-            {tool.id === 'neuro-memory-daemon' && (
-              <Button
-                component={RouterLink}
-                to="/memory"
-                variant="outlined"
-                startIcon={<MemoryIcon sx={{ fontSize: 16 }} />}
-                sx={{
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  fontSize: '0.8rem',
-                  borderColor: isDark ? 'rgba(192,132,252,0.45)' : '#E9D5FF',
-                  color: isDark ? '#C084FC' : '#7E22CE',
-                  bgcolor: isDark ? 'rgba(192,132,252,0.08)' : '#FAF5FF',
-                  '&:hover': { borderColor: '#C084FC', bgcolor: isDark ? 'rgba(192,132,252,0.18)' : '#F3E8FF' },
-                }}
-              >
-                3D Cosmic Nebula
-              </Button>
-            )}
-            {tool.github && (
-              <Button
-                component="a"
-                href={tool.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="outlined"
-                startIcon={<GitHubIcon />}
-                endIcon={<OpenInNewIcon sx={{ fontSize: 14 }} />}
-                sx={{
-                  fontWeight: 800,
-                  borderColor: gold.border,
-                  color: theme.palette.text.primary,
-                  '&:hover': { borderColor: gold.accent, bgcolor: gold.wash },
-                }}
-              >
-                GitHub Repository
-              </Button>
-            )}
-            {canRunClientSide ? (
-              <Button
-                variant="contained"
-                onClick={() => {
-                  const el = document.getElementById('client-workstation-deck');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }}
-                startIcon={<SpeedIcon />}
-                sx={{
-                  bgcolor: '#38BDF8',
-                  color: '#08080B',
-                  fontWeight: 800,
-                  boxShadow: '0 4px 16px rgba(56,189,248,0.3)',
-                  '&:hover': { bgcolor: '#7DD3FC' },
-                }}
-              >
-                Try In-Browser ⚡
-              </Button>
-            ) : EnclaveToolComponent && (isLocal || unlockedPreview) ? (
-              <Button
-                variant="contained"
-                onClick={() => {
-                  const el = document.getElementById('enclave-workstation-deck');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }}
-                startIcon={<TerminalIcon />}
-                sx={{
-                  bgcolor: isLocal ? '#10B981' : gold.accent,
-                  color: '#08080B',
-                  fontWeight: 800,
-                  boxShadow: isLocal ? '0 4px 16px rgba(16,185,129,0.3)' : '0 4px 16px rgba(212,175,55,0.3)',
-                  '&:hover': { bgcolor: isLocal ? '#34D399' : (isDark ? '#F5E6AB' : '#9A7008') },
-                }}
-              >
-                {isLocal ? 'Launch Enclave ⚡' : 'Inspect Simulator ⚡'}
-              </Button>
-            ) : (
-              <Button
-                component={RouterLink}
-                to="/zoth-os"
-                variant="contained"
-                startIcon={<LaunchIcon />}
-                sx={{
-                  bgcolor: gold.accent,
-                  color: '#08080B',
-                  fontWeight: 800,
-                  boxShadow: '0 4px 16px rgba(212,175,55,0.3)',
-                  '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#9A7008' },
-                }}
-              >
-                {isLocal ? 'Run in ZothOS' : 'Bare-Metal ZothOS'}
-              </Button>
-            )}
-          </Stack>
-        </Box>
-
-        {/* Quick Pull Terminal Command Strip */}
-        <Box
+      {/* Hero Dossier Header with Category-Coded GlowLine Seam & MotionReveal */}
+      <HeroReveal>
+        <Paper
           sx={{
-            mt: 3.5,
-            p: 1.8,
-            borderRadius: 2,
-            bgcolor: isDark ? '#040406' : '#F8FAFC',
-            border: `1px solid ${theme.palette.divider}`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 2,
-            flexWrap: 'wrap',
+            p: { xs: 3, md: 4.5 },
+            mb: 4,
+            borderRadius: 3,
+            bgcolor: isDark ? '#08080B' : '#FFFFFF',
+            border: `1px solid ${gold.border}`,
+            boxShadow: isDark ? '0 12px 32px rgba(0,0,0,0.6), 0 0 20px -4px rgba(212,175,55,0.2)' : '0 4px 16px rgba(184,134,11,0.12)',
+            position: 'relative',
+            overflow: 'hidden',
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0 }}>
-            <TerminalIcon sx={{ color: gold.accent, fontSize: 20 }} />
-            <Typography
+          <HeroItem>
+            <GlowLine
+              height={3}
+              color={getCategoryMotionMeta(tool.category).accent}
+              glowColor={`${getCategoryMotionMeta(tool.category).accent}66`}
+            />
+          </HeroItem>
+          <HeroItem>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, mt: 1 }}>
+              <Box sx={{ maxWidth: 920 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5, flexWrap: 'wrap' }}>
+                  <Chip
+                    label={tool.category}
+                    size="small"
+                    sx={{
+                      bgcolor: `${getCategoryMotionMeta(tool.category).accent}20`,
+                      color: getCategoryMotionMeta(tool.category).accent,
+                      border: `1px solid ${getCategoryMotionMeta(tool.category).accent}55`,
+                      fontWeight: 800,
+                      fontSize: '0.75rem',
+                    }}
+                  />
+                  <Chip
+                    label={`v${tool.version || '1.0.0'}`}
+                    size="small"
+                    sx={{
+                      fontFamily: mono,
+                      bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#F1F5F9',
+                      color: gold.accent,
+                      fontWeight: 800,
+                      fontSize: '0.75rem',
+                    }}
+                  />
+                  <Chip
+                    label={tool.executionType === 'local_cli' ? 'LOCAL CLI & MCP DAEMON' : '100% IN-BROWSER CLIENT ENGINE'}
+                    size="small"
+                    sx={{
+                      fontFamily: mono,
+                      bgcolor: gold.wash,
+                      color: gold.soft,
+                      border: `1px solid ${gold.border}`,
+                      fontWeight: 800,
+                      fontSize: '0.72rem',
+                    }}
+                  />
+                </Box>
+                <Typography
+                  variant="h3"
+                  sx={{
+                    fontWeight: 800,
+                    letterSpacing: '-0.03em',
+                    mb: 1.5,
+                    color: theme.palette.text.primary,
+                    fontSize: { xs: '1.75rem', sm: '2.35rem', md: '2.85rem' },
+                    lineHeight: 1.15,
+                  }}
+                >
+                  {tool.name}
+                </Typography>
+                <Typography variant="body1" color="text.secondary" sx={{ fontSize: '1.05rem', lineHeight: 1.65 }}>
+                  {tool.description}
+                </Typography>
+                <ToolOfferLine tool={tool} isDark={isDark} />
+              </Box>
+
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: '100%', flexWrap: 'wrap' }}>
+                {tool.localPort && (
+                  <Button
+                    component="a"
+                    href={tool.localUrl || `http://127.0.0.1:${tool.localPort}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="outlined"
+                    endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+                    sx={{
+                      fontWeight: 800,
+                      fontFamily: mono,
+                      fontSize: '0.8rem',
+                      borderColor: isDark ? 'rgba(52,211,153,0.45)' : '#A7F3D0',
+                      color: isDark ? '#34D399' : '#047857',
+                      bgcolor: isDark ? 'rgba(52,211,153,0.08)' : '#ECFDF3',
+                      '&:hover': { borderColor: '#34D399', bgcolor: isDark ? 'rgba(52,211,153,0.18)' : '#D1FAE5' },
+                    }}
+                  >
+                    Local :{tool.localPort}
+                  </Button>
+                )}
+                {tool.liveUrl && (
+                  <Button
+                    component="a"
+                    href={tool.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="outlined"
+                    endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+                    sx={{
+                      fontWeight: 800,
+                      fontFamily: mono,
+                      fontSize: '0.8rem',
+                      borderColor: gold.border,
+                      color: gold.accent,
+                      '&:hover': { borderColor: gold.accent, bgcolor: gold.wash },
+                    }}
+                  >
+                    Web Mirror ↗
+                  </Button>
+                )}
+                {tool.id === 'neuro-memory-daemon' && (
+                  <Button
+                    component={RouterLink}
+                    to="/memory"
+                    variant="outlined"
+                    startIcon={<MemoryIcon sx={{ fontSize: 16 }} />}
+                    sx={{
+                      fontWeight: 800,
+                      fontFamily: mono,
+                      fontSize: '0.8rem',
+                      borderColor: isDark ? 'rgba(192,132,252,0.45)' : '#E9D5FF',
+                      color: isDark ? '#C084FC' : '#7E22CE',
+                      bgcolor: isDark ? 'rgba(192,132,252,0.08)' : '#FAF5FF',
+                      '&:hover': { borderColor: '#C084FC', bgcolor: isDark ? 'rgba(192,132,252,0.18)' : '#F3E8FF' },
+                    }}
+                  >
+                    3D Cosmic Nebula
+                  </Button>
+                )}
+                {tool.github && (
+                  <Button
+                    component="a"
+                    href={tool.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="outlined"
+                    startIcon={<GitHubIcon />}
+                    endIcon={<OpenInNewIcon sx={{ fontSize: 14 }} />}
+                    sx={{
+                      fontWeight: 800,
+                      borderColor: gold.border,
+                      color: theme.palette.text.primary,
+                      '&:hover': { borderColor: gold.accent, bgcolor: gold.wash },
+                    }}
+                  >
+                    GitHub Repository
+                  </Button>
+                )}
+                {canRunClientSide ? (
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      const el = document.getElementById('enclave-workstation-deck') || document.getElementById('client-workstation-deck');
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    startIcon={<SpeedIcon />}
+                    sx={{
+                      bgcolor: '#38BDF8',
+                      color: '#08080B',
+                      fontWeight: 800,
+                      boxShadow: '0 4px 16px rgba(56,189,248,0.3)',
+                      '&:hover': { bgcolor: '#7DD3FC' },
+                    }}
+                  >
+                    Try In-Browser ⚡
+                  </Button>
+                ) : EnclaveToolComponent && (isLocal || unlockedPreview) ? (
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      const el = document.getElementById('enclave-workstation-deck');
+                      if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    startIcon={<TerminalIcon />}
+                    sx={{
+                      bgcolor: isLocal ? '#10B981' : gold.accent,
+                      color: '#08080B',
+                      fontWeight: 800,
+                      boxShadow: isLocal ? '0 4px 16px rgba(16,185,129,0.3)' : '0 4px 16px rgba(212,175,55,0.3)',
+                      '&:hover': { bgcolor: isLocal ? '#34D399' : (isDark ? '#F5E6AB' : '#9A7008') },
+                    }}
+                  >
+                    {isLocal ? 'Launch Enclave ⚡' : 'Inspect Simulator ⚡'}
+                  </Button>
+                ) : (
+                  <Button
+                    component={RouterLink}
+                    to="/zoth-os"
+                    variant="contained"
+                    startIcon={<LaunchIcon />}
+                    sx={{
+                      bgcolor: gold.accent,
+                      color: '#08080B',
+                      fontWeight: 800,
+                      boxShadow: '0 4px 16px rgba(212,175,55,0.3)',
+                      '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#9A7008' },
+                    }}
+                  >
+                    {isLocal ? 'Run in ZothOS' : 'Bare-Metal ZothOS'}
+                  </Button>
+                )}
+              </Stack>
+            </Box>
+          </HeroItem>
+
+          {/* Quick Pull Terminal Command Strip */}
+          <HeroItem>
+            <Box
               sx={{
-                fontFamily: mono,
-                fontSize: { xs: '0.78rem', sm: '0.88rem' },
-                color: isDark ? '#E2E8F0' : '#1E293B',
-                wordBreak: 'break-all',
+                mt: 3.5,
+                p: 1.8,
+                borderRadius: 2,
+                bgcolor: isDark ? '#040406' : '#F8FAFC',
+                border: `1px solid ${theme.palette.divider}`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 2,
+                flexWrap: 'wrap',
               }}
             >
-              {tool.pull || `git clone ${tool.github}.git`}
-            </Typography>
-          </Box>
-          <Tooltip title={copiedCmd ? 'Copied command!' : 'Copy to clipboard'}>
-            <Button
-              size="small"
-              variant="outlined"
-              onClick={() => handleCopy(tool.pull || `git clone ${tool.github}.git`, setCopiedCmd)}
-              startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 16 }} /> : <ContentCopyIcon sx={{ fontSize: 16 }} />}
-              sx={{
-                fontFamily: mono,
-                fontSize: '0.75rem',
-                fontWeight: 700,
-                borderColor: gold.border,
-                color: gold.soft,
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {copiedCmd ? 'Copied' : 'Copy Command'}
-            </Button>
-          </Tooltip>
-        </Box>
-      </Paper>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0 }}>
+                <TerminalIcon sx={{ color: gold.accent, fontSize: 20 }} />
+                <Typography
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: { xs: '0.78rem', sm: '0.88rem' },
+                    color: isDark ? '#E2E8F0' : '#1E293B',
+                    wordBreak: 'break-all',
+                  }}
+                >
+                  {tool.pull || `git clone ${tool.github}.git`}
+                </Typography>
+              </Box>
+              <Tooltip title={copiedCmd ? 'Copied command!' : 'Copy to clipboard'}>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={() => handleCopy(tool.pull || `git clone ${tool.github}.git`, setCopiedCmd)}
+                  startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 16 }} /> : <ContentCopyIcon sx={{ fontSize: 16 }} />}
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    borderColor: gold.border,
+                    color: gold.soft,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {copiedCmd ? 'Copied' : 'Copy Command'}
+                </Button>
+              </Tooltip>
+            </Box>
+          </HeroItem>
+        </Paper>
+      </HeroReveal>
+
+      {/* Interactive 15s Code-First Motion Edit & Kinetic Anchor Stage */}
+      <Box sx={{ mb: 4 }}>
+        <ToolMotionShowcase
+          tool={tool}
+          onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
+        />
+      </Box>
 
       {/* Interactive In-Browser Workstation (Mounted when tool has WebGPU/WASM client engine and no dedicated Enclave component) */}
       {canRunClientSide && tool.id !== 'webmcp-protocol-inspector' && !EnclaveToolComponent && (
@@ -672,8 +717,8 @@ export default function RealToolWorkspacePage() {
         </Box>
       )}
 
-      {/* Sovereign Enclave Microtool Workstation (Mounted when tool has an enclave component and either local node, preview unlocked, or client-side enabled) */}
-      {EnclaveToolComponent && (isLocal || unlockedPreview || canRunClientSide) && (
+      {/* Sovereign Enclave Microtool Workstation (Mounted for all tools with a dedicated 60fps God-Mode component) */}
+      {EnclaveToolComponent && (
         <Paper
           elevation={0}
           id="enclave-workstation-deck"
@@ -716,7 +761,7 @@ export default function RealToolWorkspacePage() {
               }}
             />
           </Box>
-          <EnclaveToolComponent />
+          <EnclaveToolComponent tool={tool} />
         </Paper>
       )}
 
