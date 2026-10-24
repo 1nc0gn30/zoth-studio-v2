@@ -86,47 +86,6 @@ return { leakedKeys: leaks, secure: leaks.length === 0 };`
   }
 ];
 
-// Worker code string for blob instantiation
-const WORKER_BLOB_CODE = `
-self.onmessage = function(e) {
-  const { code } = e.data;
-  const logs = [];
-  const virtualFs = {};
-
-  const fakeConsole = {
-    log: function(...args) { logs.push({ type: 'log', text: args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ') }); },
-    warn: function(...args) { logs.push({ type: 'warn', text: args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ') }); },
-    error: function(...args) { logs.push({ type: 'error', text: args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ') }); }
-  };
-
-  const fs = {
-    writeFile: function(name, content) { virtualFs[name] = content; logs.push({ type: 'fs', text: '[VFS] Created virtual scratch: ' + name }); },
-    readFile: function(name) { return virtualFs[name] || null; },
-    listFiles: function() { return Object.keys(virtualFs); }
-  };
-
-  // Block network egress primitives
-  ['fetch', 'XMLHttpRequest', 'WebSocket', 'importScripts', 'indexedDB'].forEach(function(k) {
-    try {
-      Object.defineProperty(self, k, {
-        get: function() { throw new Error('CAPSULE_SECURITY_VIOLATION: Egress primitive \\'' + k + '\\' is strictly blocked by sandbox boundary.'); }
-      });
-    } catch(err) {}
-  });
-
-  const startTime = performance.now();
-  try {
-    const fn = new Function('console', 'fs', 'env', code);
-    const result = fn(fakeConsole, fs, { NODE_ENV: 'capsule_jail', SANDBOX_ID: 'cap_sovereign_01' });
-    const elapsed = performance.now() - startTime;
-    self.postMessage({ success: true, logs: logs, result: result, elapsed: elapsed, virtualFs: virtualFs });
-  } catch (err) {
-    const elapsed = performance.now() - startTime;
-    self.postMessage({ success: false, error: err.message, stack: err.stack, logs: logs, elapsed: elapsed, virtualFs: virtualFs });
-  }
-};
-`;
-
 export function AgentCapsuleJailGodModeTool() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
@@ -210,9 +169,7 @@ export function AgentCapsuleJailGodModeTool() {
     }
 
     try {
-      const blob = new Blob([WORKER_BLOB_CODE], { type: 'application/javascript' });
-      const workerUrl = URL.createObjectURL(blob);
-      const worker = new Worker(workerUrl);
+      const worker = new Worker('/workers/capsule-worker.js');
       workerRef.current = worker;
 
       // Watchdog timeout to prevent infinite loops (e.g. while(true){})
@@ -236,7 +193,6 @@ export function AgentCapsuleJailGodModeTool() {
         timeoutIdRef.current = null;
         setExecuting(false);
         setExecResult(e.data);
-        URL.revokeObjectURL(workerUrl);
       };
 
       worker.onerror = (err) => {
@@ -250,7 +206,6 @@ export function AgentCapsuleJailGodModeTool() {
           logs: [{ type: 'error', text: err.message }],
           virtualFs: {}
         });
-        URL.revokeObjectURL(workerUrl);
       };
 
       worker.postMessage({ code: sandboxCode });

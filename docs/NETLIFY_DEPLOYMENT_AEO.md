@@ -77,12 +77,14 @@ The prerendering engine guarantees instant Time-To-First-Byte (TTFB) and crawlab
 ```
 
 ### Security & Caching Headers
-- **Security**:
+- **Security** (source of truth: `netlify.toml`):
   - `X-Frame-Options: SAMEORIGIN`
-  - `Content-Security-Policy: frame-ancestors 'self' https://zoth.nullai.tech https://*.nullai.tech http://127.0.0.1:* http://localhost:*`
+  - `Content-Security-Policy` locks `default-src` and `script-src` to `'self'`, allows `wasm-unsafe-eval` for the WebGPU/WASM fallback, Google Fonts, Hugging Face weight hosts, and the loopback daemon ports the studio calls. `frame-ancestors` is `'self'`, `https://zoth.nullai.tech`, and `https://*.nullai.tech`.
   - `X-Content-Type-Options: nosniff`
   - `Referrer-Policy: strict-origin-when-cross-origin`
-  - `Permissions-Policy: camera=(), microphone=(), geolocation=()`
+  - `Permissions-Policy: camera=(self), microphone=(self), geolocation=()` plus unused sensor APIs disabled. Camera and microphone stay on for the gesture workstation and voice station.
+  - `Strict-Transport-Security: max-age=31536000`
+  - `/workers/capsule-worker.js` is the only response whose CSP includes `'unsafe-eval'`.
 - **Asset Caching**:
   - Immutable 1-year cache (`Cache-Control: public, max-age=31536000, immutable`) for `/assets/*`, `/fonts/*`, `/brand/*`, `/mascot/*`, `/pets/*`.
 - **AEO Discovery Headers**:

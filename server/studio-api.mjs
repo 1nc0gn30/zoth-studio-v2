@@ -1,7 +1,8 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import os from 'node:os';
-import { exec } from 'node:child_process';
+import path from 'node:path';
+import { execFile } from 'node:child_process';
 
 function requestJson(port, urlPath, { method = 'GET', body = null, timeout = 900 } = {}) {
   return new Promise((resolve) => {
@@ -182,10 +183,21 @@ export async function probeStatus() {
   };
 }
 
+const MAX_BODY_BYTES = 256 * 1024;
+
 function readBody(req) {
   return new Promise((resolve, reject) => {
     const chunks = [];
-    req.on('data', (chunk) => chunks.push(chunk));
+    let size = 0;
+    req.on('data', (chunk) => {
+      size += chunk.length;
+      if (size > MAX_BODY_BYTES) {
+        reject(new Error('Request body is too large.'));
+        req.destroy();
+        return;
+      }
+      chunks.push(chunk);
+    });
     req.on('end', () => {
       const text = Buffer.concat(chunks).toString('utf8');
       if (!text) {
@@ -199,6 +211,46 @@ function readBody(req) {
       }
     });
     req.on('error', reject);
+  });
+}
+
+function homeDir() {
+  const home = os.homedir();
+  if (!home || home === '/') throw new Error('Home directory is not available.');
+  return home;
+}
+
+function conductorBin() {
+  const fromEnv = process.env.ZOTH_CONDUCTOR_BIN;
+  if (fromEnv && path.isAbsolute(fromEnv) && !fromEnv.includes('\0')) return fromEnv;
+  const candidates = [
+    path.join(homeDir(), 'NullAITech', 'bin', 'zoth-agent-conductor'),
+    '/usr/local/bin/zoth-agent-conductor',
+  ];
+  return candidates.find((candidate) => fs.existsSync(candidate)) || candidates[0];
+}
+
+function workspaceRoot() {
+  const fromEnv = process.env.ZOTH_WORKSPACE_ROOT;
+  if (fromEnv && !fromEnv.includes('\0')) return path.resolve(fromEnv);
+  return path.join(homeDir(), 'NullAITech');
+}
+
+export function resolveWorkspaceDir(input) {
+  const root = path.resolve(workspaceRoot());
+  const requested = input ? String(input) : path.join(root, 'zoth-studio-v2');
+  if (requested.includes('\0')) return null;
+  const candidate = path.isAbsolute(requested) ? path.resolve(requested) : path.resolve(root, requested);
+  const rel = path.relative(root, candidate);
+  if (rel.startsWith('..') || path.isAbsolute(rel)) return null;
+  return candidate;
+}
+
+function runFile(file, args, options) {
+  return new Promise((resolve) => {
+    execFile(file, args, { timeout: 6000, maxBuffer: 1024 * 1024, ...options }, (err, stdout, stderr) => {
+      resolve({ err, stdout: stdout || '', stderr: stderr || '' });
+    });
   });
 }
 
@@ -295,16 +347,16 @@ export function studioMiddleware() {
           uptime: Math.round(os.uptime()),
           audioDevice: 'ICH9 High Definition Audio (Active)',
           installedTools: {
-            claude: fs.existsSync('/usr/local/bin/claude') || fs.existsSync('/home/zoth/.local/bin/claude'),
-            opencode: fs.existsSync('/usr/local/bin/opencode') || fs.existsSync('/home/zoth/.local/bin/opencode'),
-            hermes: fs.existsSync('/home/zoth/.local/bin/hermes') || fs.existsSync('/usr/local/bin/hermes'),
-            cursor: fs.existsSync('/home/zoth/.local/bin/cursor-agent') || fs.existsSync('/usr/bin/cursor'),
-            zothos: fs.existsSync('/home/zoth/NullAITech/bin/zoth-agent-conductor') || fs.existsSync('/usr/local/bin/zoth-agent-conductor'),
-            grok: fs.existsSync('/home/zoth/.grok/bin/agent') || fs.existsSync('/usr/local/bin/grok'),
+            claude: fs.existsSync('/usr/local/bin/claude') || fs.existsSync(path.join(homeDir(), '.local', 'bin', 'claude')),
+            opencode: fs.existsSync('/usr/local/bin/opencode') || fs.existsSync(path.join(homeDir(), '.local', 'bin', 'opencode')),
+            hermes: fs.existsSync(path.join(homeDir(), '.local', 'bin', 'hermes')) || fs.existsSync('/usr/local/bin/hermes'),
+            cursor: fs.existsSync(path.join(homeDir(), '.local', 'bin', 'cursor-agent')) || fs.existsSync('/usr/bin/cursor'),
+            zothos: fs.existsSync(conductorBin()),
+            grok: fs.existsSync(path.join(homeDir(), '.grok', 'bin', 'agent')) || fs.existsSync('/usr/local/bin/grok'),
             burpsuite: fs.existsSync('/usr/bin/burpsuite'),
             bitwarden: fs.existsSync('/usr/local/bin/bw'),
             streamlit: fs.existsSync('/usr/local/bin/streamlit'),
-            netlify: fs.existsSync('/usr/local/bin/netlify') || fs.existsSync('/home/zoth/.local/bin/netlify'),
+            netlify: fs.existsSync('/usr/local/bin/netlify') || fs.existsSync(path.join(homeDir(), '.local', 'bin', 'netlify')),
             ollama: fs.existsSync('/usr/local/bin/ollama') || fs.existsSync('/usr/bin/ollama')
           }
         };
@@ -313,88 +365,119 @@ export function studioMiddleware() {
       }
 
       if (req.method === 'GET' && url.pathname === '/api/studio/agent/triad') {
-        exec('"/home/zoth/NullAITech/bin/zoth-agent-conductor" agents --json', { timeout: 6000 }, (err, stdout) => {
-          if (err) {
-            send(res, 500, { error: err.message });
-            return;
-          }
-          try {
-            send(res, 200, JSON.parse(stdout));
-          } catch {
-            send(res, 200, { raw: stdout });
-          }
-        });
+        const bin = conductorBin();
+        if (!fs.existsSync(bin)) {
+          send(res, 503, { error: 'Conductor is not installed on this host.' });
+          return;
+        }
+        const { err, stdout } = await runFile(bin, ['agents', '--json'], { timeout: 6000 });
+        if (err) {
+          send(res, 500, { error: 'Conductor agents query failed.' });
+          return;
+        }
+        try {
+          send(res, 200, JSON.parse(stdout));
+        } catch {
+          send(res, 200, { raw: stdout.slice(0, 4000) });
+        }
         return;
       }
 
       if (req.method === 'POST' && url.pathname === '/api/studio/agent/dispatch') {
         const body = await readBody(req);
         const engine = ['hermes', 'cursor', 'grok', 'ollama', 'zothos', 'auto'].includes(String(body.engine || 'auto')) ? String(body.engine || 'auto') : 'auto';
-        const promptText = String(body.prompt || 'Summarize workspace status').slice(0, 1200);
-        const dirPath = String(body.dir || '/home/zoth/NullAITech/zoth-studio-v2');
-        const modelName = String(body.model || 'qwen2.5-coder:1.5b').replace(/[^a-zA-Z0-9._:-]/g, '');
-        const dryRunFlag = body.dryRun ? '--dry-run' : '';
-        const safePrompt = JSON.stringify(promptText);
-        const safeDir = JSON.stringify(dirPath);
-        exec(`"/home/zoth/NullAITech/bin/zoth-agent-conductor" dispatch --engine ${engine} --model ${modelName} --dir ${safeDir} ${dryRunFlag} --json ${safePrompt}`, { timeout: 95000 }, (err, stdout, stderr) => {
-          try {
-            send(res, 200, JSON.parse(stdout));
-          } catch {
-            send(res, 200, {
-              success: !err,
-              engine,
-              output: stdout || stderr || (err ? err.message : ''),
-            });
-          }
-        });
+        const promptText = String(body.prompt || 'Summarize workspace status').replace(/\u0000/g, '').slice(0, 1200);
+        const dirPath = resolveWorkspaceDir(body.dir);
+        const modelName = String(body.model || 'qwen2.5-coder:1.5b').replace(/[^a-zA-Z0-9._:-]/g, '').slice(0, 80);
+        if (!dirPath || !modelName) {
+          send(res, 400, { error: 'Directory must stay inside the workspace root.' });
+          return;
+        }
+        const bin = conductorBin();
+        if (!fs.existsSync(bin)) {
+          send(res, 503, { error: 'Conductor is not installed on this host.' });
+          return;
+        }
+        const args = ['dispatch', '--engine', engine, '--model', modelName, '--dir', dirPath];
+        if (body.dryRun) args.push('--dry-run');
+        args.push('--json', promptText);
+        const { err, stdout, stderr } = await runFile(bin, args, { timeout: 95000 });
+        try {
+          send(res, 200, JSON.parse(stdout));
+        } catch {
+          send(res, 200, {
+            success: !err,
+            engine,
+            output: (stdout || stderr || 'Conductor returned no JSON.').slice(0, 4000),
+          });
+        }
         return;
       }
 
       if (req.method === 'POST' && url.pathname === '/api/studio/launch') {
         const body = await readBody(req);
         const tool = body.tool;
+        const home = homeDir();
         const allowedCommands = {
-          claude: 'xfce4-terminal --title="Claude CLI" -e "claude" &',
-          opencode: 'xfce4-terminal --title="OpenCode" -e "opencode" &',
-          hermes: 'xfce4-terminal --title="Hermes Agent" -e "/home/zoth/.local/bin/hermes" &',
-          cursor: 'xfce4-terminal --title="Cursor Agent" -e "/home/zoth/.local/bin/cursor-agent" &',
-          grok: 'xfce4-terminal --title="Grok Agent" -e "/home/zoth/.grok/bin/grok" &',
-          ollama: 'xfce4-terminal --title="Ollama Local LLM" -e "ollama run qwen2.5-coder:1.5b" &',
-          zothos: 'xfce4-terminal --title="ZothOS Conductor" -e "/home/zoth/NullAITech/bin/zoth-agent-conductor watch" &',
-          netlify: 'xfce4-terminal --title="Netlify CLI" -e "netlify" &',
-          burpsuite: 'burpsuite &',
-          bitwarden: 'xfce4-terminal --title="Bitwarden CLI" -e "bw" &',
-          streamlit: 'xfce4-terminal --title="Streamlit" -e "streamlit" &',
-          terminal: 'xfce4-terminal &',
-          arsenal: 'xfce4-terminal --title="Arsenal Provisioner" -e "zoth-arsenal-sync" &'
+          claude: ['xfce4-terminal', ['--title=Claude CLI', '-e', 'claude']],
+          opencode: ['xfce4-terminal', ['--title=OpenCode', '-e', 'opencode']],
+          hermes: ['xfce4-terminal', ['--title=Hermes Agent', '-e', path.join(home, '.local', 'bin', 'hermes')]],
+          cursor: ['xfce4-terminal', ['--title=Cursor Agent', '-e', path.join(home, '.local', 'bin', 'cursor-agent')]],
+          grok: ['xfce4-terminal', ['--title=Grok Agent', '-e', path.join(home, '.grok', 'bin', 'grok')]],
+          ollama: ['xfce4-terminal', ['--title=Ollama Local LLM', '-e', 'ollama run qwen2.5-coder:1.5b']],
+          zothos: ['xfce4-terminal', ['--title=ZothOS Conductor', '-e', `${conductorBin()} watch`]],
+          netlify: ['xfce4-terminal', ['--title=Netlify CLI', '-e', 'netlify']],
+          burpsuite: ['burpsuite', []],
+          bitwarden: ['xfce4-terminal', ['--title=Bitwarden CLI', '-e', 'bw']],
+          streamlit: ['xfce4-terminal', ['--title=Streamlit', '-e', 'streamlit']],
+          terminal: ['xfce4-terminal', []],
+          arsenal: ['xfce4-terminal', ['--title=Arsenal Provisioner', '-e', 'zoth-arsenal-sync']],
         };
-        if (allowedCommands[tool]) {
-          exec(allowedCommands[tool], (err) => {
-            if (err) console.error('[Zoth Studio] Launch error:', err);
+        const spec = allowedCommands[tool];
+        if (spec) {
+          const child = execFile(spec[0], spec[1], { detached: true, stdio: 'ignore' }, (err) => {
+            if (err && err.code !== 'ENOENT') console.error('[Zoth Studio] Launch error');
           });
+          child.unref();
           send(res, 200, { success: true, tool });
           return;
         }
-        send(res, 400, { error: 'Unknown or disallowed tool: ' + tool });
+        send(res, 400, { error: 'Unknown or disallowed tool.' });
         return;
       }
 
       if (req.method === 'POST' && url.pathname === '/api/studio/supervisor/boot') {
         const body = await readBody(req);
         const target = String(body.service || '').toLowerCase();
-        const homeDir = os.homedir() || '/home/zoth';
-        const bootMap = {
-          civilization: `ENABLE_KOKORO_VOICE=0 nohup node "${homeDir}/NullAITech/zoth-civilization/server.js" >/tmp/zoth-civ-supervisor.log 2>&1 &`,
-          webgen: `cd "${homeDir}/NullAITech/zoth-webgen" && nohup npm run dev -- --port 5173 >/tmp/zoth-webgen-supervisor.log 2>&1 &`,
-          daemons: `"${homeDir}/NullAITech/bin/zoth-agent-conductor" up >/tmp/zoth-daemons-supervisor.log 2>&1 && nohup node "${homeDir}/NullAITech/zoth-studio-v2/bin/zoth.js" up >>/tmp/zoth-daemons-supervisor.log 2>&1 &`,
-        };
-        if (!bootMap[target]) {
-          send(res, 400, { error: `Unknown service "${target}". Allowed: civilization, webgen, daemons.` });
+        const root = workspaceRoot();
+        if (!/^[\w./-]+$/.test(root)) {
+          send(res, 500, { error: 'Workspace root is not a usable path.' });
           return;
         }
-        exec(bootMap[target], (err) => {
-          if (err) console.error('[Zoth Supervisor] Boot error:', err);
+        const bootMap = {
+          civilization: ['node', [path.join(root, 'zoth-civilization', 'server.js')]],
+          webgen: ['npm', ['run', 'dev', '--', '--port', '5173']],
+          daemons: [conductorBin(), ['up']],
+        };
+        const spec = bootMap[target];
+        if (!spec) {
+          send(res, 400, { error: 'Unknown service. Allowed: civilization, webgen, daemons.' });
+          return;
+        }
+        const env = { ...process.env };
+        if (target === 'civilization') env.ENABLE_KOKORO_VOICE = '0';
+        const cwd = target === 'webgen' ? path.join(root, 'zoth-webgen') : root;
+        const child = execFile(spec[0], spec[1], { cwd, env, detached: true, stdio: 'ignore' }, (err) => {
+          if (err) console.error('[Zoth Supervisor] Boot error');
         });
+        child.unref();
+        if (target === 'daemons') {
+          const zoth = path.join(root, 'zoth-studio-v2', 'bin', 'zoth.js');
+          const extra = execFile(process.execPath, [zoth, 'up'], { detached: true, stdio: 'ignore' }, (err) => {
+            if (err) console.error('[Zoth Supervisor] Studio boot error');
+          });
+          extra.unref();
+        }
         await new Promise((r) => setTimeout(r, 1200));
         const status = await probeStatus();
         send(res, 200, {

@@ -16,6 +16,7 @@ __pycache__/
 .pytest_cache/
 
 # Local state & environment
+.netlify
 .env
 .env.*
 !.env.example

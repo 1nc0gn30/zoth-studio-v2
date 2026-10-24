@@ -1,1 +1,0 @@
-{"functions":[{"bundler":"nft","buildData":{"runtimeAPIVersion":1},"mainFile":"/home/zoth/NullAITech/zoth-studio-v2/netlify/functions/studio-api.js","name":"studio-api","priority":10,"path":"/home/zoth/NullAITech/zoth-studio-v2/.netlify/functions/studio-api.zip","runtime":"js"}],"system":{"arch":"x64","platform":"linux"},"timestamp":1792730652701,"version":1}

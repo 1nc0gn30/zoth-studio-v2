@@ -5187,7 +5187,7 @@ export function ZothWebgenLauncherTool() {
                 </Typography>
                 <Button
                   size="small"
-                  onClick={() => handleCopy(`cd /home/zoth/NullAITech/zoth-webgen && node cli.js --name ${appName} --framework ${framework} --archetype ${archetype}`, setCopiedCmd)}
+                  onClick={() => handleCopy(`cd ~/NullAITech/zoth-webgen && node cli.js --name ${appName} --framework ${framework} --archetype ${archetype}`, setCopiedCmd)}
                   startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
                   sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
                 >
@@ -5195,7 +5195,7 @@ export function ZothWebgenLauncherTool() {
                 </Button>
               </Box>
               <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
-                cd /home/zoth/NullAITech/zoth-webgen &amp;&amp; node cli.js --name {appName} --framework {framework} --archetype {archetype}
+                cd ~/NullAITech/zoth-webgen &amp;&amp; node cli.js --name {appName} --framework {framework} --archetype {archetype}
               </Typography>
             </Box>
 
@@ -5415,7 +5415,7 @@ export function ZothSwarmMultiplexerLauncherTool() {
                 </Typography>
                 <Button
                   size="small"
-                  onClick={() => handleCopy(`cd /home/zoth/NullAITech/zoth-swarm-multiplexer && node engine.js --swarm 21 --consensus ${quorum / 100}`, setCopiedCmd)}
+                  onClick={() => handleCopy(`cd ~/NullAITech/zoth-swarm-multiplexer && node engine.js --swarm 21 --consensus ${quorum / 100}`, setCopiedCmd)}
                   startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
                   sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
                 >
@@ -5423,7 +5423,7 @@ export function ZothSwarmMultiplexerLauncherTool() {
                 </Button>
               </Box>
               <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
-                cd /home/zoth/NullAITech/zoth-swarm-multiplexer &amp;&amp; node engine.js --swarm 21 --consensus {quorum / 100}
+                cd ~/NullAITech/zoth-swarm-multiplexer &amp;&amp; node engine.js --swarm 21 --consensus {quorum / 100}
               </Typography>
             </Box>
 
@@ -5594,7 +5594,7 @@ export function ZothCivilizationLauncherTool() {
                 </Typography>
                 <Button
                   size="small"
-                  onClick={() => handleCopy(`cd /home/zoth/NullAITech/zoth-civilization && ENABLE_KOKORO_VOICE=0 node server.js`, setCopiedCmd)}
+                  onClick={() => handleCopy(`cd ~/NullAITech/zoth-civilization && ENABLE_KOKORO_VOICE=0 node server.js`, setCopiedCmd)}
                   startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
                   sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
                 >
@@ -5602,7 +5602,7 @@ export function ZothCivilizationLauncherTool() {
                 </Button>
               </Box>
               <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
-                cd /home/zoth/NullAITech/zoth-civilization &amp;&amp; ENABLE_KOKORO_VOICE=0 node server.js
+                cd ~/NullAITech/zoth-civilization &amp;&amp; ENABLE_KOKORO_VOICE=0 node server.js
               </Typography>
             </Box>
 
@@ -5824,7 +5824,7 @@ export function LikenessDeskTool() {
                 </Typography>
                 <Button
                   size="small"
-                  onClick={() => handleCopy(`cd /home/zoth/NullAITech/likeness-desk && node server.js`, setCopiedCmd)}
+                  onClick={() => handleCopy(`cd ~/NullAITech/likeness-desk && node server.js`, setCopiedCmd)}
                   startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
                   sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.2 }}
                 >
@@ -5832,7 +5832,7 @@ export function LikenessDeskTool() {
                 </Button>
               </Box>
               <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
-                cd /home/zoth/NullAITech/likeness-desk &amp;&amp; node server.js
+                cd ~/NullAITech/likeness-desk &amp;&amp; node server.js
               </Typography>
             </Box>
 

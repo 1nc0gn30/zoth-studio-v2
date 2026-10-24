@@ -56,16 +56,29 @@
   status = 200
 
 # ── Global Security & Frame Headers ──
+# CSP sources are the ones the studio actually loads:
+#   fonts.googleapis.com / fonts.gstatic.com — index.html font stylesheet
+#   huggingface.co + LFS/Xet CDNs — in-browser Transformers.js weights (WebGPU, else WASM)
+#   loopback ports — Ollama, voice station, and the local daemon health checks
+#   api.producthunt.com — ZothOS showcase badge image
+#   wasm-unsafe-eval — WebGPU WASM fallback and ONNX runtime compilation
+#   blob workers — Transformers.js / ONNX threads
+# The capsule sandbox worker is a separate file so 'unsafe-eval' stays off the document.
+# Camera and microphone stay same-origin: the gesture workstation and voice station use them.
+# Loopback origins are not frame-ancestors; a local page must not embed the public site.
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "SAMEORIGIN"
-    Content-Security-Policy = "frame-ancestors 'self' https://zoth.nullai.tech https://*.nullai.tech http://127.0.0.1:* http://localhost:*"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://api.producthunt.com; media-src 'self' blob: mediastream:; connect-src 'self' https://huggingface.co https://cdn-lfs.huggingface.co https://cdn-lfs-us-1.huggingface.co https://cas-bridge.xethub.hf.co http://127.0.0.1:11434 http://localhost:11434 http://127.0.0.1:8114 http://localhost:8114 http://127.0.0.1:8098 http://localhost:8098 http://127.0.0.1:8104 http://localhost:8104 http://127.0.0.1:8115 http://localhost:8115 http://127.0.0.1:8116 http://localhost:8116 http://127.0.0.1:8108 http://localhost:8108 http://127.0.0.1:8113 http://localhost:8113 http://127.0.0.1:8107 http://localhost:8107 http://127.0.0.1:8117 http://localhost:8117 http://127.0.0.1:8118 http://localhost:8118 http://127.0.0.1:8119 http://localhost:8119 http://127.0.0.1:8120 http://localhost:8120 http://127.0.0.1:8109 http://localhost:8109 http://127.0.0.1:8110 http://localhost:8110; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'; frame-ancestors 'self' https://zoth.nullai.tech https://*.nullai.tech"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(self), microphone=(self), geolocation=()"
+    Permissions-Policy = "camera=(self), microphone=(self), geolocation=(), payment=(), usb=(), serial=(), bluetooth=(), hid=(), interest-cohort=()"
     Cross-Origin-Opener-Policy = "same-origin"
     Cross-Origin-Embedder-Policy = "credentialless"
+    Cross-Origin-Resource-Policy = "same-site"
+    Strict-Transport-Security = "max-age=31536000"
+    X-Permitted-Cross-Domain-Policies = "none"
 
 # ── Immutable Cache for Hashed Bundles & Media ──
 [[headers]]
@@ -144,4 +157,13 @@
     Access-Control-Allow-Origin = "*"
     Access-Control-Allow-Methods = "GET, OPTIONS"
     Cache-Control = "public, max-age=3600, must-revalidate"
+
+# Last matching CSP wins. This file is the only response allowed to compile
+# operator snippets; the document policy above does not include unsafe-eval.
+[[headers]]
+  for = "/workers/capsule-worker.js"
+  [headers.values]
+    Content-Security-Policy = "default-src 'none'; script-src 'self' 'unsafe-eval'; connect-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+    Cache-Control = "public, max-age=3600"
+    X-Content-Type-Options = "nosniff"
 
