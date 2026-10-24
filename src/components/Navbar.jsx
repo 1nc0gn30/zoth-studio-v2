@@ -31,6 +31,8 @@ import { workstations } from '../data/workstations';
 import { arsenalStats } from '../data/arsenalData';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 import { useStudioStatus } from '../studio/useStudioStatus';
+import { useReality } from '../context/RealityContext';
+import { RealityThemeIcon } from './RealityZothBotHUD';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -65,12 +67,13 @@ export default function Navbar({ mode, onToggleTheme }) {
   const navigate = useNavigate();
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
+  const { realityId, reality, cycleReality } = useReality();
 
   const borderColor = theme.palette.divider;
-  const brandColor = dark ? '#F5E6AB' : '#101828';
+  const brandColor = dark ? reality.accentSoft : '#101828';
   const navIdle = dark ? '#9CA3AF' : '#475467';
-  const navActive = dark ? '#D4AF37' : '#B8860B';
-  const goldAccent = dark ? '#D4AF37' : '#8A6508';
+  const navActive = dark ? reality.accent : reality.accentLightMode;
+  const goldAccent = dark ? reality.accent : reality.accentLightMode;
   const { isLocal, hasWebGPU, badgeLabel, badgeColor, badgeTooltip } = useSovereignRuntime();
   const { status: studioStatus } = useStudioStatus();
   const civSvc = studioStatus?.services?.civilization;
@@ -132,7 +135,7 @@ export default function Navbar({ mode, onToggleTheme }) {
         position: 'sticky',
         top: 0,
         background: dark
-          ? 'linear-gradient(180deg, rgba(14, 15, 22, 0.88) 0%, rgba(8, 8, 11, 0.82) 100%)'
+          ? reality.navGradientDark
           : 'linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(248, 249, 250, 0.90) 100%)',
         backdropFilter: 'blur(32px) saturate(190%)',
         WebkitBackdropFilter: 'blur(32px) saturate(190%)',
@@ -149,7 +152,7 @@ export default function Navbar({ mode, onToggleTheme }) {
           right: 0,
           height: '1px',
           background: dark
-            ? 'linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.2) 15%, rgba(212, 175, 55, 0.55) 50%, rgba(212, 175, 55, 0.2) 85%, transparent 100%)'
+            ? reality.seamGradient
             : 'linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.25) 15%, rgba(184, 134, 11, 0.45) 50%, rgba(212, 175, 55, 0.25) 85%, transparent 100%)',
           pointerEvents: 'none',
         },
@@ -197,45 +200,43 @@ export default function Navbar({ mode, onToggleTheme }) {
                   alignItems: 'center',
                   justifyContent: 'center',
                   p: 0.5,
-                  borderRadius: '12px',
-                  background: dark
-                    ? 'radial-gradient(circle at center, rgba(212, 175, 55, 0.22) 0%, rgba(212, 175, 55, 0.06) 55%, transparent 80%)'
-                    : 'radial-gradient(circle at center, rgba(212, 175, 55, 0.18) 0%, rgba(212, 175, 55, 0.04) 55%, transparent 80%)',
-                  border: `1px solid ${dark ? 'rgba(212, 175, 55, 0.25)' : 'rgba(212, 175, 55, 0.2)'}`,
-                  boxShadow: dark
-                    ? '0 0 14px rgba(212, 175, 55, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-                    : '0 0 10px rgba(212, 175, 55, 0.08), inset 0 1px 0 #FFFFFF',
+                  borderRadius: reality.cardRadius,
+                  background: `radial-gradient(circle at center, ${reality.accentWash} 0%, transparent 80%)`,
+                  border: `1px solid ${reality.accentBorder}`,
+                  boxShadow: `0 0 14px ${reality.accentWash}`,
                   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  '&::before': {
-                    content: '""',
-                    position: 'absolute',
-                    inset: -5,
-                    borderRadius: '16px',
-                    background: 'radial-gradient(circle at center, rgba(212, 175, 55, 0.28) 0%, rgba(212, 175, 55, 0.08) 50%, transparent 75%)',
-                    opacity: 0.6,
-                    filter: 'blur(8px)',
-                    transition: 'opacity 0.3s ease, transform 0.3s ease',
-                    pointerEvents: 'none',
-                  },
                 }}
               >
-                <GoldenZLogo3D size={38} />
+                <GoldenZLogo3D size={36} />
               </Box>
-              <Box>
+              <Box sx={{ minWidth: 0 }}>
                 <Typography
                   className="brand-title"
                   component="div"
                   sx={{
-                    fontFamily: '"Celtic Garamond", Georgia, serif',
-                    fontSize: { xs: '1.25rem', sm: '1.45rem', md: '1.55rem' },
-                    lineHeight: 1,
-                    letterSpacing: '0.02em',
+                    fontFamily: realityId === 'matrix' || realityId === 'ghost' ? mono : '"Celtic Garamond", Georgia, serif',
+                    fontSize: { xs: '0.98rem', sm: '1.32rem', md: '1.45rem' },
+                    lineHeight: 1.05,
+                    letterSpacing: realityId === 'matrix' || realityId === 'ghost' ? '0.04em' : '0.01em',
                     fontWeight: 700,
                     color: brandColor,
+                    whiteSpace: 'nowrap',
                     transition: 'color 0.25s ease, text-shadow 0.25s ease',
                   }}
                 >
-                  Zoth Studio
+                  {reality.logoTitle}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: '0.56rem',
+                    fontWeight: 800,
+                    letterSpacing: '0.14em',
+                    color: goldAccent,
+                    display: { xs: 'none', sm: 'block' },
+                  }}
+                >
+                  {reality.logoSubtitle} • {reality.bot.name}
                 </Typography>
               </Box>
             </Box>
@@ -264,7 +265,7 @@ export default function Navbar({ mode, onToggleTheme }) {
                 label={effectiveBadgeLabel}
                 size="small"
                 sx={{
-                  display: { xs: 'none', lg: 'inline-flex' },
+                  display: { xs: 'none', xl: 'inline-flex' },
                   bgcolor: dark ? `${badgeColor}18` : `${badgeColor}12`,
                   color: dark ? (isLocal ? '#6EE7B7' : '#7DD3FC') : (isLocal ? '#065F46' : '#0369A1'),
                   border: `1px solid ${dark ? `${badgeColor}44` : `${badgeColor}55`}`,
@@ -287,9 +288,9 @@ export default function Navbar({ mode, onToggleTheme }) {
           {/* Center: Desktop Navigation Bar */}
           <Box
             sx={{
-              display: { xs: 'none', xl: 'flex' },
+              display: { xs: 'none', lg: 'flex' },
               alignItems: 'center',
-              gap: 0.5,
+              gap: { lg: 0.25, xl: 0.5 },
               background: dark
                 ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 100%)'
                 : 'linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.04) 100%)',
@@ -314,13 +315,14 @@ export default function Navbar({ mode, onToggleTheme }) {
                   sx={{
                     position: 'relative',
                     overflow: 'hidden',
+                    whiteSpace: 'nowrap',
                     color: active ? navActive : navIdle,
                     fontWeight: active ? 800 : 600,
                     borderRadius: 9999,
-                    px: 1.5,
+                    px: { lg: 1.15, xl: 1.5 },
                     py: 0.65,
                     minWidth: 0,
-                    fontSize: '0.84rem',
+                    fontSize: { lg: '0.8rem', xl: '0.84rem' },
                     textTransform: 'none',
                     bgcolor: active
                       ? (dark ? 'rgba(212, 175, 55, 0.16)' : '#FEF9E7')
@@ -398,6 +400,7 @@ export default function Navbar({ mode, onToggleTheme }) {
                         label={item.badge}
                         size="small"
                         sx={{
+                          display: { xs: 'none', xl: 'inline-flex' },
                           height: 17,
                           minWidth: 20,
                           fontSize: '0.65rem',
@@ -670,6 +673,39 @@ export default function Navbar({ mode, onToggleTheme }) {
               NullAI
             </Button>
 
+            {/* Reality Switcher Pill */}
+            <Tooltip title={`Switch Reality Theme (Active: ${reality.name} • ${reality.bot.name} • Shift+R)`} arrow>
+              <Button
+                size="small"
+                onClick={cycleReality}
+                aria-label={`Switch Reality Theme (${reality.name})`}
+                sx={{
+                  color: dark ? reality.accentSoft : reality.accentLightMode,
+                  bgcolor: reality.accentWash,
+                  border: `1px solid ${reality.accentBorder}`,
+                  borderRadius: reality.cardRadius,
+                  px: { xs: 0.85, md: 1.3 },
+                  py: 0.65,
+                  minWidth: 0,
+                  gap: 0.7,
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                  fontWeight: 800,
+                  textTransform: 'none',
+                  '&:hover': {
+                    borderColor: reality.accent,
+                    bgcolor: reality.accent,
+                    color: '#050609',
+                  },
+                }}
+              >
+                <RealityThemeIcon mode={realityId} size={16} />
+                <Box component="span" sx={{ display: { xs: 'none', md: 'inline' } }}>
+                  {reality.shortName}
+                </Box>
+              </Button>
+            </Tooltip>
+
             {/* Theme Toggle */}
             <IconButton
               aria-label={dark ? 'Switch to light theme' : 'Switch to dark theme'}
@@ -697,13 +733,13 @@ export default function Navbar({ mode, onToggleTheme }) {
               {dark ? <LightModeIcon fontSize="small" /> : <DarkModeIcon fontSize="small" />}
             </IconButton>
 
-            {/* Mobile / Tablet / Laptop Menu Button (Shown on all screens < xl) */}
+            {/* Mobile / Tablet Menu Button (Shown on screens < lg) */}
             <IconButton
               color="inherit"
               onClick={handleDrawerToggle}
               aria-label="Open sovereign navigation drawer"
               sx={{
-                display: { xs: 'inline-flex', xl: 'none' },
+                display: { xs: 'inline-flex', lg: 'none' },
                 color: brandColor,
                 border: `1px solid ${borderColor}`,
                 borderRadius: '10px',

@@ -28,6 +28,9 @@ import {
   StaggerItem,
 } from '../components/MotionReveal';
 import SovereignFunnel from '../components/SovereignFunnel';
+import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
+import ZothOSGodModeTool from '../components/tools/ZothOSGodModeTool';
+import { RealityMatrixShowcaseSection } from '../components/RealityZothBotHUD';
 
 // Icons
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
@@ -265,22 +268,6 @@ export default function ZothOSShowcasePage() {
                   sx={{ width: 250, height: 54, display: 'block' }}
                 />
               </Box>
-              <Box
-                component="a"
-                href="https://www.producthunt.com/products/zothos/reviews/new?utm_source=badge-product_review&utm_medium=badge&utm_source=badge-zothos"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{ display: 'inline-flex', lineHeight: 0 }}
-              >
-                <Box
-                  component="img"
-                  src={`https://api.producthunt.com/widgets/embed-image/v1/product_review.svg?product_id=1333989&theme=${isDark ? 'dark' : 'light'}`}
-                  alt="ZOTHOS - Debian 13 + KDE Plasma 6 OS for AI agents and security | Product Hunt"
-                  width={250}
-                  height={54}
-                  sx={{ width: 250, height: 54, display: 'block' }}
-                />
-              </Box>
             </Box>
           </HeroItem>
           <HeroItem>
@@ -394,6 +381,9 @@ export default function ZothOSShowcasePage() {
           </HeroItem>
         </HeroReveal>
 
+        {/* Interactive 5-Reality Switcher & Zoth Bot Showcase */}
+        <RealityMatrixShowcaseSection />
+
         {/* Quick Clone & Deployment Terminal Strip */}
         <Paper
           elevation={0}
@@ -433,6 +423,24 @@ export default function ZothOSShowcasePage() {
             Copy Quickstart
           </Button>
         </Paper>
+
+        {/* Interactive 60FPS ASCII & Braille Motion Edit + ZothOS v3.2 Desktop Pillar Inspector */}
+        <Box sx={{ mb: 8 }}>
+          <ToolMotionShowcase
+            tool={{
+              id: 'zoth-os',
+              name: 'Zoth OS v3.2',
+              category: 'Swarm & Core',
+              executionType: 'local_cli',
+              localPort: 8094,
+              description: 'Debian 13 Trixie + KDE Plasma 6.3 sovereign AI distribution with 10 Root Flagships, 4 Desktop Pillar Folders, and 22 Loopback Daemons.',
+            }}
+            onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
+          />
+          <Box sx={{ mt: 4 }}>
+            <ZothOSGodModeTool />
+          </Box>
+        </Box>
 
         {/* 6 Key Pillars Grid */}
         <Box sx={{ mb: 10 }}>

@@ -1,13 +1,14 @@
 /**
  * Route → motion-edit intro map.
  *
- * Every route in App.jsx resolves to exactly one rendered clip in /public/intros
+ * Every route in App.jsx resolves to a rendered clip in /public/intros
  * (`<clip>-desktop.{webm,mp4}` + `<clip>-mobile.{webm,mp4}`). Docs sub-routes and
- * dynamic detail routes reuse their parent product's cut so the visual identity
- * of a product stays consistent across its showcase and its docs.
+ * dynamic detail routes reuse their parent product's cut or category-matched cut
+ * so the visual identity stays consistent across showcases, docs, and all 62 tools.
  *
  * `accent` drives the handoff seam + HUD chrome colour for that route.
  */
+import { microTools } from '../data/toolsData';
 
 export const ACCENTS = {
   gold: '#D4AF37',
@@ -65,6 +66,34 @@ function prettifySlug(slug) {
     .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+function resolveToolCategoryStyle(tool) {
+  if (!tool) return { clip: 'tools', accentKey: 'gold' };
+  if (tool.id === 'zoth-os') return { clip: 'zoth-os', accentKey: 'gold' };
+  const cat = (tool.category || '').toLowerCase();
+  if (cat.includes('security') || cat.includes('recon') || cat.includes('opsec') || cat.includes('enclave')) {
+    return { clip: 'hexstrike', accentKey: 'crimson' };
+  }
+  if (cat.includes('memory') || cat.includes('brain')) {
+    return { clip: 'memory', accentKey: 'purple' };
+  }
+  if (cat.includes('swarm') || cat.includes('core')) {
+    return { clip: 'swarm', accentKey: 'emerald' };
+  }
+  if (cat.includes('web') || cat.includes('growth') || cat.includes('seo')) {
+    return { clip: 'webgen', accentKey: 'sky' };
+  }
+  if (cat.includes('ai') || cat.includes('knowledge')) {
+    return { clip: 'consensus', accentKey: 'cyan' };
+  }
+  if (cat.includes('planning')) {
+    return { clip: 'adytum', accentKey: 'gold' };
+  }
+  if (cat.includes('voice') || cat.includes('commerce') || cat.includes('pod') || cat.includes('mcp')) {
+    return { clip: 'bridges', accentKey: 'emerald' };
+  }
+  return { clip: 'tools', accentKey: 'gold' };
+}
+
 /** Resolve the intro config for a pathname. Returns null for unknown routes. */
 export function resolveRouteIntro(pathname) {
   const path = pathname || '/';
@@ -72,19 +101,37 @@ export function resolveRouteIntro(pathname) {
   if (idx === -1) return null;
   const route = ROUTES[idx];
   let label = route.label;
-  if (route.dynamic) {
+  let kicker = route.kicker || 'Sovereign AI Workstation';
+  let clip = route.clip;
+  let accentKey = route.accent;
+
+  if (route.dynamic === 'toolId') {
+    const slug = path.replace(/\/$/, '').split('/').pop();
+    const matchedTool = microTools.find((t) => t.id === slug || t.repo === slug);
+    if (matchedTool) {
+      label = matchedTool.name;
+      const portTag = matchedTool.localPort ? ` · :${matchedTool.localPort}` : '';
+      kicker = `${matchedTool.category} · v${matchedTool.version || '2.5.0'}${portTag}`;
+      const style = resolveToolCategoryStyle(matchedTool);
+      clip = style.clip;
+      accentKey = style.accentKey;
+    } else if (slug) {
+      label = `${route.label} · ${prettifySlug(slug)}`;
+    }
+  } else if (route.dynamic) {
     const slug = path.replace(/\/$/, '').split('/').pop();
     if (slug) label = `${route.label} · ${prettifySlug(slug)}`;
   }
+
   return {
     key: path.replace(/\/$/, '') || '/',
-    clip: route.clip,
+    clip,
     label,
-    kicker: route.kicker || 'Sovereign AI Workstation',
-    index: String(INTRO_CLIPS.indexOf(route.clip) + 1).padStart(2, '0'),
+    kicker,
+    index: String(Math.max(1, INTRO_CLIPS.indexOf(clip) + 1)).padStart(2, '0'),
     total: String(INTRO_CLIPS.length).padStart(2, '0'),
-    accent: ACCENTS[route.accent] || ACCENTS.gold,
-    handoffLead: EARLY_HANDOFF_CLIPS.has(route.clip) ? EARLY_HANDOFF_LEAD_S : DEFAULT_HANDOFF_LEAD_S,
+    accent: ACCENTS[accentKey] || ACCENTS.gold,
+    handoffLead: EARLY_HANDOFF_CLIPS.has(clip) ? EARLY_HANDOFF_LEAD_S : DEFAULT_HANDOFF_LEAD_S,
   };
 }
 

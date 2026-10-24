@@ -65,8 +65,8 @@ export const siteConfig = {
       type: 'article',
     },
     '/tools': {
-      title: 'Sovereign Tool Arsenal // 30 Air-Gapped Micro-Tools & Repos',
-      description: 'Explore 30 standalone, schema-validated developer tools for website generation, social syndication, recon mapping, and 3D modeling.',
+      title: 'Sovereign Tool Arsenal // 62 Air-Gapped Micro-Tools & Workstations',
+      description: 'Explore 62 standalone, schema-validated developer tools and interactive God-Mode workstations with 15s code-first motion showcases.',
       keywords: 'developer tools, zoth webgen, omnipost, subsweep, payload entropy, air-gapped tools',
       type: 'article',
     },

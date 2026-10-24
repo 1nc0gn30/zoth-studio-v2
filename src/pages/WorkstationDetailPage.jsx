@@ -42,6 +42,7 @@ import { workstations } from '../data/workstations';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import ZothAIAssistant from '../components/ZothAIAssistant';
 import SovereignFunnel from '../components/SovereignFunnel';
+import { useReality } from '../context/RealityContext';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -1877,11 +1878,12 @@ function UniversalEnclaveConsole({ station }) {
   const isDark = theme.palette.mode === 'dark';
   const [copiedCli, setCopiedCli] = useState(false);
 
+  const { activeTheme } = useReality();
   const gold = {
-    accent: isDark ? '#D4AF37' : '#8A6508',
-    soft: isDark ? '#F5E6AB' : '#8A6A09',
-    wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-    border: isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)',
+    accent: isDark ? (activeTheme?.accent || '#D4AF37') : '#8A6508',
+    soft: isDark ? (activeTheme?.accentSoft || '#F5E6AB') : '#8A6A09',
+    wash: isDark ? (activeTheme?.accentWash || 'rgba(212,175,55,0.14)') : '#FEF9E7',
+    border: isDark ? (activeTheme?.border || 'rgba(212,175,55,0.3)') : 'rgba(184,134,11,0.25)',
   };
 
   const cliCommand = `git clone https://github.com/NullAITech/zoth-studio-v2.git && cd zoth-studio-v2 && ./zoth-cli workstation boot ${station.id}`;
@@ -2078,10 +2080,11 @@ export default function WorkstationDetailPage() {
     path: `/studio/${workstationId}.html`,
   };
 
+  const { activeTheme } = useReality();
   const gold = {
-    accent: isDark ? '#D4AF37' : '#8A6508',
-    wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-    border: isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)',
+    accent: isDark ? (activeTheme?.accent || '#D4AF37') : '#8A6508',
+    wash: isDark ? (activeTheme?.accentWash || 'rgba(212,175,55,0.14)') : '#FEF9E7',
+    border: isDark ? (activeTheme?.border || 'rgba(212,175,55,0.3)') : 'rgba(184,134,11,0.25)',
   };
 
   const [copiedCmd, setCopiedCmd] = useState('');
