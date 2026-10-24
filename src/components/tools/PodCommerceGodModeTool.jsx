@@ -104,7 +104,6 @@ export default function PodCommerceGodModeTool() {
           },
           dispatch_contact: {
             operator: 'Neal Frazier Tech',
-            phone: '+19482047987',
             email: 'neal@nealfrazier.tech',
           },
         },

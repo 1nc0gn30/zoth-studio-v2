@@ -177,7 +177,7 @@ export function AgentPolicyAuditorGodModeTool() {
   const [leases, setLeases] = useState([]);
   const [agentId, setAgentId] = useState('pantheon_archon_01');
   const [capability, setCapability] = useState('FS_WRITE');
-  const [targetScope, setTargetScope] = useState('/home/zoth/NullAITech/**');
+  const [targetScope, setTargetScope] = useState('~/NullAITech/**');
   const [ttlSeconds, setTtlSeconds] = useState(300);
   const [maxBudgetUsd, setMaxBudgetUsd] = useState(0.50);
 

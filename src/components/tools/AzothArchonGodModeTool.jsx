@@ -149,7 +149,7 @@ export default function AzothArchonGodModeTool() {
     return () => cancelAnimationFrame(raf);
   }, [selectedAgent, concurrency, running]);
 
-  const cliCommand = `nice -n 10 /home/zoth/NullAITech/bin/zoth-agent-conductor dispatch --engine ${selectedAgent} --dir /home/zoth/NullAITech "${taskPrompt.replace(/"/g, '\\"')}"`;
+  const cliCommand = `nice -n 10 ~/NullAITech/bin/zoth-agent-conductor dispatch --engine ${selectedAgent} --dir ~/NullAITech "${taskPrompt.replace(/"/g, '\\"')}"`;
 
   const copyCmd = () => {
     navigator.clipboard?.writeText(cliCommand);

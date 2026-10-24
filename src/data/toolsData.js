@@ -60,7 +60,7 @@ export const microTools = [
     executionType: 'local_cli',
     github: 'https://github.com/NullAITech/zoth-os',
     liveUrl: 'https://zothos.nullai.tech',
-    description: 'Debian 13 + KDE Plasma 6.3 sovereign AI distro. Kali + Parrot parity, Studio v2, Ollama on 127.0.0.1, 152 MCP servers all off. Eight named virtual desktops; zoth-workspaces puts a Samsung / DP monitor on its own screen. Live users zoth / azoth / root password zoth.',
+    description: 'Debian 13 + KDE Plasma 6.3 sovereign AI distro. Kali + Parrot parity, Studio v2, Ollama on 127.0.0.1, 152 MCP servers all off. Eight named virtual desktops; zoth-workspaces puts a Samsung / DP monitor on its own screen. Live users are zoth, azoth, and root. Change the image default password before the host is reachable on a network.',
     version: '3.2.0',
     pull: 'git clone https://github.com/NullAITech/zoth-os.git && cd zoth-os',
   },
@@ -977,7 +977,7 @@ export const microTools = [
     localPort: 9395,
     localUrl: 'http://127.0.0.1:9395',
     version: '1.0.0',
-    pull: 'cd /home/zoth/NullAITech/likeness-desk && python3 server.py',
+    pull: 'cd ~/NullAITech/likeness-desk && python3 server.py',
   },
   {
     id: 'osint-scout-skill',
@@ -1022,7 +1022,7 @@ export const microTools = [
     localPort: 9393,
     localUrl: 'http://127.0.0.1:9393',
     version: '1.0.0',
-    pull: 'cd /home/zoth/NullAITech/zoth-civilization && ENABLE_KOKORO_VOICE=0 node server.js',
+    pull: 'cd ~/NullAITech/zoth-civilization && ENABLE_KOKORO_VOICE=0 node server.js',
   },
   {
     id: 'storefront-catalog',

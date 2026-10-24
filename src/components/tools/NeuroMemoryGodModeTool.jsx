@@ -42,7 +42,7 @@ const INITIAL_MEMORIES = [
   {
     id: 'mem-03',
     tier: 'Episodic Trace',
-    content: 'Verified studio contact invariant: Neal Frazier (Neal Frazier Tech) • (948) 204-7987 • neal@nealfrazier.tech.',
+    content: 'Verified studio contact invariant: Neal Frazier (Neal Frazier Tech) • neal@nealfrazier.tech.',
     tags: ['identity', 'contact', 'invariant', 'nealfrazier'],
     salience: 0.99,
     ageHours: 0.5,
