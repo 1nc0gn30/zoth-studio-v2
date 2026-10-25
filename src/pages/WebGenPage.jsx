@@ -42,6 +42,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import WindowCarousel from '../components/WindowCarousel';
 import SovereignFunnel from '../components/SovereignFunnel';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
+import ZothBoltGodModeTool from '../components/tools/ZothBoltGodModeTool';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -2827,6 +2828,15 @@ wait $PID`;
           </Tabs>
         </Paper>
       )}
+
+      {/* =========================================================================
+          STAGE 00: ZOTH BOLT — MAIN FULL-STACK AI & MOTION ARCHITECT
+          ========================================================================= */}
+      <RevealOnScroll delay={0.05} preset="fadeUp">
+        <Box sx={{ mb: 5 }}>
+          <ZothBoltGodModeTool tool={{ id: 'bolt.diy', name: 'Zoth Bolt' }} />
+        </Box>
+      </RevealOnScroll>
 
       {/* =========================================================================
           STAGE 01: SPEC PROMPT FOUNDRY & STARTER ARCHETYPES

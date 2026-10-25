@@ -403,12 +403,12 @@
     },
     {
       "id": "zoth-webgen",
-      "name": "Zoth WebGen Foundry",
-      "description": "Published Python generator with 6 archetypes and an MCP server. A separate local site foundry keeps Grok CLI, Hermes, OpenCode, Cline, Aider, AGY, or Claude Code working until the site artifact is closed.",
+      "name": "Zoth QuickSite Starter",
+      "description": "Simple 3-step static template & 1-click Netlify launcher on 127.0.0.1:8092. Pick a ready-made template, preview live, and export HTML/ZIP or deploy to Netlify.",
       "category": "Autonomous Web",
       "github": "https://github.com/NullAITech/zoth-webgen",
-      "version": "2.0.0",
-      "pull": "git clone https://github.com/NullAITech/zoth-webgen.git && cd zoth-webgen && python3 webgen_engine.py --help",
+      "version": "2.5.0",
+      "pull": "git clone https://github.com/NullAITech/zoth-webgen.git && cd zoth-webgen && python3 server.py --port 8092",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -416,8 +416,8 @@
         "cli",
         "zero-egress"
       ],
-      "port": 5173,
-      "local_url": "http://127.0.0.1:5173"
+      "port": 8092,
+      "local_url": "http://127.0.0.1:8092"
     },
     {
       "id": "zoth-swarm-multiplexer",
@@ -939,11 +939,11 @@
     },
     {
       "id": "bolt.diy",
-      "name": "Zoth WebGen",
-      "description": "Local full-stack site foundry on 127.0.0.1:5173. GitHub 1nc0gn30/zoth-webgen. Local folder stays ~/NullAITech/bolt.diy. Launch with bolt-diy or zoth-webgen.",
+      "name": "Zoth Bolt",
+      "description": "Flagship Full-Stack AI Web & Motion Architect on 127.0.0.1:5173. Supports 23+ AI providers, local CLI agents (AGY, Hermes, Grok, Claude, OpenCode, Cline, Aider), 6 Motion Edit templates, 200k+ free SVG & 16-bit Pixel Art icons, MCP asset bridge, and live WebContainers.",
       "category": "Autonomous Web",
       "github": "https://github.com/1nc0gn30/zoth-webgen",
-      "version": "3.0.0",
+      "version": "3.5.0",
       "pull": "git clone https://github.com/1nc0gn30/zoth-webgen.git ~/NullAITech/bolt.diy && cd ~/NullAITech/bolt.diy && npm run dev",
       "execution_type": "local_cli",
       "runtimes": [
@@ -952,8 +952,8 @@
         "cli",
         "zero-egress"
       ],
-      "port": 5174,
-      "local_url": "http://127.0.0.1:5174"
+      "port": 5173,
+      "local_url": "http://127.0.0.1:5173"
     },
     {
       "id": "zoth-civilization",
@@ -1079,6 +1079,104 @@
       "port": 8134,
       "local_url": "http://127.0.0.1:8134",
       "live_url": "https://zoth.nullai.tech/tools/reality-shader-forge"
+    },
+    {
+      "id": "producthunt-connector",
+      "name": "Product Hunt Connector (zoth-ph)",
+      "description": "Local Zoth OS cockpit that diffs the ZOTHOS Product Hunt listing against live website/GitHub URLs, surfaces votes/ranks/comments, and serves a loopback dashboard on :8121.",
+      "category": "Commerce & POD",
+      "github": "https://github.com/1nc0gn30/producthunt-connector",
+      "version": "1.0.0",
+      "pull": "cd ~/NullAITech/producthunt-connector && zoth-ph serve",
+      "execution_type": "local_cli",
+      "runtimes": [
+        "python",
+        "cli",
+        "zero-egress"
+      ],
+      "port": 8121,
+      "local_url": "http://127.0.0.1:8121"
+    },
+    {
+      "id": "zoth-relay",
+      "name": "Zoth Relay (MCP Agent Bridge)",
+      "description": "Hardened local MCP/HTTP bridge so many AI agents share one ZothOS machine with per-agent tokens, path sandbox, command blocklist, rate limits, and audit trail on 127.0.0.1:8765.",
+      "category": "Swarm & Core",
+      "github": "https://github.com/1nc0gn30/zoth-relay",
+      "version": "0.5.0",
+      "pull": "cd ~/NullAITech/zoth-relay && sudo ./install.sh && zoth-relay agent list",
+      "execution_type": "local_cli",
+      "runtimes": [
+        "python",
+        "cli",
+        "zero-egress"
+      ],
+      "port": 8765,
+      "local_url": "http://127.0.0.1:8765/dashboard"
+    },
+    {
+      "id": "zela-glasses-guide",
+      "name": "Zela Glasses Guide",
+      "description": "Sovereign wearable AI mission coach for Ray-Ban Meta smart glasses over Tailscale \u2014 full-duplex guide stream via zoth-relay-mobile.",
+      "category": "Swarm & Core",
+      "github": "https://github.com/1nc0gn30/zoth-relay",
+      "version": "0.5.0",
+      "pull": "open https://zela-glasses-guide.netlify.app",
+      "execution_type": "browser",
+      "runtimes": [
+        "browser",
+        "zero-egress"
+      ],
+      "local_url": "https://zela-glasses-guide.netlify.app"
+    },
+    {
+      "id": "zoth-bot",
+      "name": "Zoth Bot Desktop Companion",
+      "description": "Local-first always-on 3D WebGL desk companion for Zoth OS with multi-harness neural engine and Security Ring authority.",
+      "category": "Swarm & Core",
+      "github": "https://github.com/1nc0gn30/zoth-bot",
+      "version": "1.0.0",
+      "pull": "cd ~/NullAITech/zoth-bot && npm start",
+      "execution_type": "local_cli",
+      "runtimes": [
+        "node",
+        "cli",
+        "zero-egress"
+      ]
+    },
+    {
+      "id": "zoth-bounty",
+      "name": "Zoth Bounty Research Hub",
+      "description": "Zero-false-positive security research & responsible disclosure workspace with loopback command center on :9494.",
+      "category": "Security & Enclave",
+      "github": "https://github.com/1nc0gn30/zoth-bounty",
+      "version": "1.0.0",
+      "pull": "cd ~/NullAITech/zoth-bounty && node server.js",
+      "execution_type": "local_cli",
+      "runtimes": [
+        "node",
+        "cli",
+        "zero-egress"
+      ],
+      "port": 9494,
+      "local_url": "http://127.0.0.1:9494"
+    },
+    {
+      "id": "zoth-scene-foundry",
+      "name": "Zoth Scene Foundry",
+      "description": "Procedural ZothOS-style ASCII + pixel-art scene engine \u2014 1000 deterministic scenes on :8823.",
+      "category": "Media & 3D",
+      "github": "https://github.com/1nc0gn30/zoth-scene-foundry",
+      "version": "1.0.0",
+      "pull": "cd ~/NullAITech/zoth-scene-foundry && python3 -m http.server 8823",
+      "execution_type": "browser",
+      "runtimes": [
+        "browser",
+        "node",
+        "zero-egress"
+      ],
+      "port": 8823,
+      "local_url": "http://127.0.0.1:8823/gallery.html"
     }
   ]
 }

@@ -7,6 +7,7 @@ Manages 21 autonomous Pantheon agents, harnesses, models, STDP synapses, and pro
 
 import sys
 import os
+from pathlib import Path
 import json
 import time
 import uuid
@@ -17,31 +18,34 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import threading
 
 DAEMON_PORT = 8790
-WORKSPACE_ROOT = "~"
+SWARM_BUS_PORT = 8989
+WORKSPACE_ROOT = str(
+    Path(os.environ.get("NULLAITECH_ROOT") or (Path(os.environ.get("HOME") or Path.home()) / "NullAITech"))
+)
 
 # 21 Canonical Pantheon Agents
 PANTHEON_AGENTS = [
     {"id": "AZOTH", "name": "Azoth Prime", "role": "Sovereign Alchemist & Prime Architect", "cadre": "Architects", "pet": "/pets/azoth-neon.jpg", "harness": "agy", "model": "claude-3-7-sonnet", "pwd": f"{WORKSPACE_ROOT}/zoth-studio-v2"},
     {"id": "NEXUS", "name": "Nexus Quantum", "role": "Lead Architect & Quantum Synthesis", "cadre": "Architects", "pet": "/mascot/antigravity.jpg", "harness": "agy", "model": "gemini-2.5-pro", "pwd": f"{WORKSPACE_ROOT}/zoth-studio-v2"},
-    {"id": "VIGIL", "name": "Vigil Arbiter", "role": "Cosmic Reasoner & AST Arbiter", "cadre": "Architects", "pet": "/mascot/grok.jpg", "harness": "hermes-agent", "model": "deepseek-r1:70b", "pwd": f"{WORKSPACE_ROOT}/zoth-micro-repos/NullAI-HexStrike-AI-Terminal"},
-    {"id": "MERCURY", "name": "Mercury Messenger", "role": "Tool-Calling Executor & Release Hardener", "cadre": "Architects", "pet": "/mascot/hermes.jpg", "harness": "hermes-agent", "model": "hermes-3:70b", "pwd": f"{WORKSPACE_ROOT}/zoth-micro-repos/neuro-memory-daemon"},
-    {"id": "GHOSTBYTE", "name": "Ghostbyte", "role": "Zero-Knowledge Vault Sentinel", "cadre": "Architects", "pet": "/pets/ghostbyte-neon.jpg", "harness": "codex", "model": "gpt-4.5", "pwd": f"{WORKSPACE_ROOT}/zoth-micro-repos/envguard-secrets-vault"},
-    {"id": "ATHENA", "name": "Athena Scholar", "role": "AEO Knowledge Architect", "cadre": "Architects", "pet": "/pets/athena-neon.jpg", "harness": "claude-code", "model": "claude-3-5-sonnet", "pwd": f"{WORKSPACE_ROOT}/zoth-micro-repos/aeo-graph-engine"},
+    {"id": "VIGIL", "name": "Vigil Arbiter", "role": "Cosmic Reasoner & AST Arbiter", "cadre": "Architects", "pet": "/mascot/grok.jpg", "harness": "hermes-agent", "model": "deepseek-r1:70b", "pwd": f"{WORKSPACE_ROOT}/NullAI-HexStrike-AI-Terminal"},
+    {"id": "MERCURY", "name": "Mercury Messenger", "role": "Tool-Calling Executor & Release Hardener", "cadre": "Architects", "pet": "/mascot/hermes.jpg", "harness": "hermes-agent", "model": "hermes-3:70b", "pwd": f"{WORKSPACE_ROOT}/neuro-memory-daemon"},
+    {"id": "GHOSTBYTE", "name": "Ghostbyte", "role": "Zero-Knowledge Vault Sentinel", "cadre": "Architects", "pet": "/pets/ghostbyte-neon.jpg", "harness": "codex", "model": "gpt-4.5", "pwd": f"{WORKSPACE_ROOT}/envguard-secrets-vault"},
+    {"id": "ATHENA", "name": "Athena Scholar", "role": "AEO Knowledge Architect", "cadre": "Architects", "pet": "/pets/athena-neon.jpg", "harness": "claude-code", "model": "claude-3-5-sonnet", "pwd": f"{WORKSPACE_ROOT}/aeo-graph-engine"},
     {"id": "CHRONOS", "name": "Chronos Temporal", "role": "Temporal DAG Sequencer & Git Navigator", "cadre": "Code", "pet": "/pets/chronos-neon.jpg", "harness": "opencode", "model": "qwen2.5-coder:32b", "pwd": f"{WORKSPACE_ROOT}/zoth-studio-v2"},
-    {"id": "DRACO", "name": "Draco Consensus", "role": "Multi-Model Consensus & Fusion Arbiter", "cadre": "Code", "pet": "/pets/draco-neon.jpg", "harness": "hermes-agent", "model": "deepseek-r1:70b", "pwd": f"{WORKSPACE_ROOT}/zoth-micro-repos/polyglot-framework-exporter"},
+    {"id": "DRACO", "name": "Draco Consensus", "role": "Multi-Model Consensus & Fusion Arbiter", "cadre": "Code", "pet": "/pets/draco-neon.jpg", "harness": "hermes-agent", "model": "deepseek-r1:70b", "pwd": f"{WORKSPACE_ROOT}/polyglot-framework-exporter"},
     {"id": "IGNIS", "name": "Ignis Refactor", "role": "Refactor Engine & Pipeline Finisher", "cadre": "Code", "pet": "/pets/ignis-neon.jpg", "harness": "claude-code", "model": "claude-3-7-sonnet", "pwd": f"{WORKSPACE_ROOT}/zoth-studio-v2"},
     {"id": "KAI", "name": "Kai Inspector", "role": "Workspace Inspector & Static Analysis", "cadre": "Code", "pet": "/pets/kai-neon.jpg", "harness": "agy", "model": "claude-3-5-sonnet", "pwd": f"{WORKSPACE_ROOT}/zoth-studio-v2"},
-    {"id": "LYCAN", "name": "Lycan Sentinel", "role": "OWASP Sentinel & Security Hardening", "cadre": "Security", "pet": "/pets/lycan-neon.jpg", "harness": "agy", "model": "claude-3-7-sonnet", "pwd": f"{WORKSPACE_ROOT}/zoth-micro-repos/NullAI-HexStrike-AI-Terminal"},
-    {"id": "ONYX", "name": "Onyx Auditor", "role": "Red-Team Threat Auditor", "cadre": "Security", "pet": "/pets/onyx-neon.jpg", "harness": "codex", "model": "gpt-4.5", "pwd": f"{WORKSPACE_ROOT}/zoth-micro-repos/web-security-guard"},
-    {"id": "SCORPIUS", "name": "Scorpius Gate", "role": "Zero-Day Gatekeeper", "cadre": "Security", "pet": "/pets/scorpius-neon.jpg", "harness": "opencode", "model": "deepseek-r1:70b", "pwd": f"{WORKSPACE_ROOT}/zoth-micro-repos/payload-entropy-studio"},
-    {"id": "PIXEL-SHIBA", "name": "Pixel Shiba", "role": "Argon2id Hardware Key Guardian", "cadre": "Security", "pet": "/pets/pixel-shiba-neon.jpg", "harness": "ollama", "model": "llama3.3:70b", "pwd": f"{WORKSPACE_ROOT}/zoth-micro-repos/jwt-inspector-guard"},
-    {"id": "KITSUNE", "name": "Kitsune Motion", "role": "Taste, Motion & Accessibility", "cadre": "Creative", "pet": "/pets/kitsune-neon.jpg", "harness": "claude-code", "model": "claude-3-7-sonnet", "pwd": f"{WORKSPACE_ROOT}/zoth-micro-repos/zoth-webgen"},
-    {"id": "LEVIATHAN", "name": "Leviathan Memory", "role": "Deep Tensor & Vector Memory Recall", "cadre": "Creative", "pet": "/pets/leviathan-neon.jpg", "harness": "hermes-agent", "model": "deepseek-r1:70b", "pwd": f"{WORKSPACE_ROOT}/zoth-micro-repos/vector-search-engine"},
-    {"id": "AQUILA", "name": "Aquila Mesh", "role": "Edge Dispatcher & Low-Latency Mesh", "cadre": "Creative", "pet": "/pets/aquila-neon.jpg", "harness": "agy", "model": "gemini-2.5-pro", "pwd": f"{WORKSPACE_ROOT}/zoth-micro-repos/cwv-speed-engine"},
-    {"id": "KRAKEN", "name": "Kraken Sniffer", "role": "ESP32 Serial Bridge & Packet Sniffer", "cadre": "Swarm", "pet": "/pets/kraken-neon.jpg", "harness": "opencode", "model": "qwen2.5-coder:32b", "pwd": f"{WORKSPACE_ROOT}/zoth-micro-repos/sovereign-agent-bridge"},
+    {"id": "LYCAN", "name": "Lycan Sentinel", "role": "OWASP Sentinel & Security Hardening", "cadre": "Security", "pet": "/pets/lycan-neon.jpg", "harness": "agy", "model": "claude-3-7-sonnet", "pwd": f"{WORKSPACE_ROOT}/NullAI-HexStrike-AI-Terminal"},
+    {"id": "ONYX", "name": "Onyx Auditor", "role": "Red-Team Threat Auditor", "cadre": "Security", "pet": "/pets/onyx-neon.jpg", "harness": "codex", "model": "gpt-4.5", "pwd": f"{WORKSPACE_ROOT}/web-security-guard"},
+    {"id": "SCORPIUS", "name": "Scorpius Gate", "role": "Zero-Day Gatekeeper", "cadre": "Security", "pet": "/pets/scorpius-neon.jpg", "harness": "opencode", "model": "deepseek-r1:70b", "pwd": f"{WORKSPACE_ROOT}/payload-entropy-studio"},
+    {"id": "PIXEL-SHIBA", "name": "Pixel Shiba", "role": "Argon2id Hardware Key Guardian", "cadre": "Security", "pet": "/pets/pixel-shiba-neon.jpg", "harness": "ollama", "model": "llama3.3:70b", "pwd": f"{WORKSPACE_ROOT}/jwt-inspector-guard"},
+    {"id": "KITSUNE", "name": "Kitsune Motion", "role": "Taste, Motion & Accessibility", "cadre": "Creative", "pet": "/pets/kitsune-neon.jpg", "harness": "claude-code", "model": "claude-3-7-sonnet", "pwd": f"{WORKSPACE_ROOT}/zoth-webgen"},
+    {"id": "LEVIATHAN", "name": "Leviathan Memory", "role": "Deep Tensor & Vector Memory Recall", "cadre": "Creative", "pet": "/pets/leviathan-neon.jpg", "harness": "hermes-agent", "model": "deepseek-r1:70b", "pwd": f"{WORKSPACE_ROOT}/vector-search-engine"},
+    {"id": "AQUILA", "name": "Aquila Mesh", "role": "Edge Dispatcher & Low-Latency Mesh", "cadre": "Creative", "pet": "/pets/aquila-neon.jpg", "harness": "agy", "model": "gemini-2.5-pro", "pwd": f"{WORKSPACE_ROOT}/cwv-speed-engine"},
+    {"id": "KRAKEN", "name": "Kraken Sniffer", "role": "ESP32 Serial Bridge & Packet Sniffer", "cadre": "Swarm", "pet": "/pets/kraken-neon.jpg", "harness": "opencode", "model": "qwen2.5-coder:32b", "pwd": f"{WORKSPACE_ROOT}/sovereign-agent-bridge"},
     {"id": "AETHER", "name": "Aether Overlord", "role": "Swarm Overlord & Peer Bus Synchronizer", "cadre": "Swarm", "pet": "/pets/aether-neon.jpg", "harness": "hermes-agent", "model": "hermes-3:70b", "pwd": f"{WORKSPACE_ROOT}/zoth-studio-v2"},
-    {"id": "PIXEL-NEKO", "name": "Pixel Neko", "role": "Tool Bench Librarian & Connector Bridge", "cadre": "Swarm", "pet": "/pets/pixel-neko-neon.jpg", "harness": "ollama", "model": "llama3.3:70b", "pwd": f"{WORKSPACE_ROOT}/zoth-micro-repos/nexus-3d-scene-studio"},
-    {"id": "RADICAL-MINION", "name": "Radical Minion", "role": "Fast-Loop Subagent Runner", "cadre": "Swarm", "pet": "/pets/radical-minion-neon.jpg", "harness": "agy", "model": "claude-3-5-sonnet", "pwd": f"{WORKSPACE_ROOT}/zoth-micro-repos/azoth-local-agent"},
+    {"id": "PIXEL-NEKO", "name": "Pixel Neko", "role": "Tool Bench Librarian & Connector Bridge", "cadre": "Swarm", "pet": "/pets/pixel-neko-neon.jpg", "harness": "ollama", "model": "llama3.3:70b", "pwd": f"{WORKSPACE_ROOT}/nexus-3d-scene-studio"},
+    {"id": "RADICAL-MINION", "name": "Radical Minion", "role": "Fast-Loop Subagent Runner", "cadre": "Swarm", "pet": "/pets/radical-minion-neon.jpg", "harness": "agy", "model": "claude-3-5-sonnet", "pwd": f"{WORKSPACE_ROOT}/azoth-local-agent"},
 ]
 
 # In-memory runtime state for all 21 agents
@@ -100,14 +104,17 @@ class SwarmHTTPHandler(BaseHTTPRequestHandler):
         self._set_headers(200)
 
     def do_GET(self):
-        if self.path == "/api/swarm/status" or self.path == "/":
+        if self.path in ("/api/swarm/status", "/status", "/health", "/api/health", "/"):
             self._set_headers(200)
             resp = {
+                "up": True,
+                "status": "ONLINE",
                 "daemon": "Zoth Swarm Multiplexer",
-                "version": "2.0.0",
-                "port": DAEMON_PORT,
+                "version": "2.5.0",
+                "port": self.server.server_port,
                 "airgap": True,
                 "agents_count": len(AGENT_POOL),
+                "agents": [a.to_dict() for a in AGENT_POOL.values()],
                 "uptime": time.time(),
             }
             self.wfile.write(json.dumps(resp).encode("utf-8"))
@@ -115,6 +122,11 @@ class SwarmHTTPHandler(BaseHTTPRequestHandler):
             self._set_headers(200)
             agents_data = [a.to_dict() for a in AGENT_POOL.values()]
             self.wfile.write(json.dumps(agents_data).encode("utf-8"))
+        elif self.path.startswith("/cadres/"):
+            cadre_name = self.path.split("/")[-1].lower()
+            matched = [a.to_dict() for a in AGENT_POOL.values() if a.cadre.lower() == cadre_name]
+            self._set_headers(200)
+            self.wfile.write(json.dumps({"cadre": cadre_name, "status": "ONLINE", "agents": matched}).encode("utf-8"))
         elif self.path.startswith("/api/swarm/agent/"):
             agent_id = self.path.split("/")[-1].upper()
             if agent_id in AGENT_POOL:
@@ -175,15 +187,25 @@ class SwarmHTTPHandler(BaseHTTPRequestHandler):
             self._set_headers(404)
             self.wfile.write(json.dumps({"error": "Endpoint not found"}).encode("utf-8"))
 
+    def log_message(self, format, *args):
+        pass
+
+class ReusableHTTPServer(HTTPServer):
+    allow_reuse_address = True
+
 def run_daemon():
-    server = HTTPServer(("127.0.0.1", DAEMON_PORT), SwarmHTTPHandler)
-    print(f"⚡ Zoth Swarm Daemon active on http://127.0.0.1:{DAEMON_PORT}")
+    server_primary = ReusableHTTPServer(("127.0.0.1", DAEMON_PORT), SwarmHTTPHandler)
+    server_bus = ReusableHTTPServer(("127.0.0.1", SWARM_BUS_PORT), SwarmHTTPHandler)
+    t = threading.Thread(target=server_bus.serve_forever, daemon=True)
+    t.start()
+    print(f"⚡ Zoth Swarm Daemon active on http://127.0.0.1:{DAEMON_PORT} and http://127.0.0.1:{SWARM_BUS_PORT}")
     print(f"✔ 21 Sovereign Agents initialized in memory matrix.")
     try:
-        server.serve_forever()
+        server_primary.serve_forever()
     except KeyboardInterrupt:
         print("\nShutdown signal received.")
-        server.server_close()
+        server_primary.server_close()
+        server_bus.server_close()
 
 if __name__ == "__main__":
     run_daemon()

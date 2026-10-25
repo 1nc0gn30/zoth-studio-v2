@@ -76,6 +76,7 @@ import AdytumPlannerGodModeTool from '../components/tools/AdytumPlannerGodModeTo
 import AzothArchonGodModeTool from '../components/tools/AzothArchonGodModeTool';
 import AgentVoiceCallGodModeTool from '../components/tools/AgentVoiceCallGodModeTool';
 import ZothFoundryGodModeTool from '../components/tools/ZothFoundryGodModeTool';
+import ZothBoltGodModeTool from '../components/tools/ZothBoltGodModeTool';
 import WebMcpInspectorGodModeTool from '../components/tools/WebMcpInspectorGodModeTool';
 import YaraSigmaForgeGodModeTool from '../components/tools/YaraSigmaForgeGodModeTool';
 import RealityShaderForgeGodModeTool from '../components/tools/RealityShaderForgeGodModeTool';
@@ -166,8 +167,17 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'zoth-swarm-multiplexer': SwarmCivilizationGodModeTool,
   'zoth-civilization': SwarmCivilizationGodModeTool,
   'likeness-desk': VisionKinematicsGodModeTool,
-  'bolt.diy': ZothFoundryGodModeTool,
-  'bolt-diy': ZothFoundryGodModeTool,
+  'bolt.diy': ZothBoltGodModeTool,
+  'bolt-diy': ZothBoltGodModeTool,
+  'zoth-bolt': ZothBoltGodModeTool,
+  'producthunt-connector': CivicProcurementGodModeTool,
+  'zoth-ph': CivicProcurementGodModeTool,
+  'zoth-relay': SovereignBridgeGodModeTool,
+  'zela-glasses-guide': VisionKinematicsGodModeTool,
+  'zoth-bot': AzothArchonGodModeTool,
+  'zoth-bounty': AttackSurfaceSentinelGodModeTool,
+  'zoth-scene-foundry': AsciiMotionGodModeTool,
+
   'vision-gesture-control': VisionKinematicsGodModeTool,
   'datamosh-glitch-studio': AsciiMotionGodModeTool,
   'nexus-3d-scene-studio': AsciiMotionGodModeTool,

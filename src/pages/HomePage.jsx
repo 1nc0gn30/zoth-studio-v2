@@ -1661,7 +1661,7 @@ export default function HomePage() {
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2.8 }}>
             {[
               { label: '⚡ WebGPU Shaders', to: '/arsenal' },
-              { label: '🛠️ Bolt.diy WebGen v2', to: '/webgen' },
+              { label: '⚡ Zoth Bolt AI & Motion Architect', to: '/webgen' },
               { label: '🧠 23 Pantheon Minds', to: '/swarm' },
               { label: '💿 ZothOS Live ISO', to: '/zoth-os' },
             ].map((pill) => (

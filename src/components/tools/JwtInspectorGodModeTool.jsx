@@ -605,7 +605,7 @@ export function JwtInspectorGodModeTool() {
                       </Typography>
                       <Chip label={f.severity} size="small" sx={{ fontFamily: mono, fontSize: '0.62rem', height: 18 }} />
                     </Stack>
-                    <Typography variant="body2" sx={{ color: dark ? '#CBD5E1' : '#334155', fontSize: '0.78rem' }}>
+                    <Typography variant="body2" sx={{ color: isDark ? '#CBD5E1' : '#334155', fontSize: '0.78rem' }}>
                       {f.text}
                     </Typography>
                   </Paper>

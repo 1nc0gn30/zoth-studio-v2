@@ -201,6 +201,7 @@ function AppShell({ mode, onToggleTheme }) {
               <Route path="/docs" element={<DocsPage />} />
               <Route path="/docs/math/:pillarId" element={<MathPillarDetailPage />} />
               <Route path="/docs/math" element={<MathPillarsPage />} />
+              <Route path="/math-pillars" element={<Navigate to="/docs/math" replace />} />
               <Route path="/faqs" element={<FaqsPage />} />
               <Route path="/ax" element={<AXShowcasePage />} />
               <Route path="/ax/docs" element={<AXPage />} />

@@ -100,7 +100,7 @@ export async function probeFleet() {
   const results = await Promise.all(
     fleetList.map(async (item) => {
       const t0 = Date.now();
-      const res = await requestJson(item.port, '/', { method: 'GET', timeout: 350 });
+      const res = await requestJson(item.port, '/', { method: 'GET', timeout: 1200 });
       return {
         ...item,
         up: res.up,
@@ -658,6 +658,39 @@ export function studioMiddleware() {
           gateOpened: /\[GATE OPENED\]/i.test(text),
           reflectionNeeded: /\[REFLECTION NEEDED\]/i.test(text),
         });
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/webgen/templates') {
+        const result = await requestJson(8092, '/api/production-templates', { timeout: 4000 });
+        if (!result.up || !result.json) {
+          send(res, 503, { error: 'Zoth WebGen Foundry daemon is not answering on 127.0.0.1:8092.' });
+          return;
+        }
+        send(res, 200, result.json);
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/webgen/presets') {
+        const qs = url.search || '';
+        const result = await requestJson(8092, `/api/presets${qs}`, { timeout: 4000 });
+        if (!result.up || !result.json) {
+          send(res, 503, { error: 'Zoth WebGen Foundry daemon is not answering on 127.0.0.1:8092.' });
+          return;
+        }
+        send(res, 200, result.json);
+        return;
+      }
+
+      if (req.method === 'POST' && (url.pathname === '/api/studio/webgen/oneshot' || url.pathname === '/api/studio/webgen/deploy')) {
+        const body = await readBody(req);
+        const upstream = url.pathname.endsWith('/deploy') ? '/api/deploy' : '/api/oneshot';
+        const result = await requestJson(8092, upstream, { method: 'POST', body, timeout: 60000 });
+        if (!result.up || !result.json) {
+          send(res, 503, { error: 'Zoth WebGen Foundry daemon (:8092) did not respond in time.' });
+          return;
+        }
+        send(res, result.status || 200, result.json);
         return;
       }
 
