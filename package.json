@@ -1,7 +1,7 @@
 {
   "name": "zoth-studio-v2",
   "private": true,
-  "version": "2.0.0",
+  "version": "2.1.0",
   "type": "module",
   "main": "main.cjs",
   "bin": {
@@ -19,7 +19,8 @@
     "serve": "node server/serve.mjs --port 3000",
     "test:serve": "node scripts/test-serve.mjs",
     "test": "python3 scripts/registry-check.py && node scripts/test-serve.mjs",
-    "registry:check": "python3 scripts/registry-check.py"
+    "registry:check": "python3 scripts/registry-check.py",
+    "build:release": "bash scripts/build-release-suite.sh"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",

@@ -1,7 +1,11 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import os from 'node:os';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { exec } from 'node:child_process';
+
+const STUDIO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 function requestJson(port, urlPath, { method = 'GET', body = null, timeout = 900 } = {}) {
   return new Promise((resolve) => {
@@ -52,9 +56,9 @@ function localModels(tags) {
 }
 
 export async function probeFleet() {
-  const toolsJsonPath = fs.existsSync('~/NullAITech/zoth-studio-v2/dist/api/tools.json')
-    ? '~/NullAITech/zoth-studio-v2/dist/api/tools.json'
-    : '~/NullAITech/zoth-studio-v2/public/api/tools.json';
+  const distTools = path.join(STUDIO_ROOT, 'dist', 'api', 'tools.json');
+  const pubTools = path.join(STUDIO_ROOT, 'public', 'api', 'tools.json');
+  const toolsJsonPath = fs.existsSync(distTools) ? distTools : pubTools;
   let tools = [];
   try {
     const raw = fs.readFileSync(toolsJsonPath, 'utf8');
@@ -133,7 +137,7 @@ export async function probeStatus() {
     requestJson(8105, '/api/stats'),
     requestJson(8106, '/api/stats'),
     requestJson(9393, '/api/status', { timeout: 1000 }),
-    requestJson(5173, '/', { timeout: 700 }),
+    requestJson(8092, '/api/status', { timeout: 700 }),
   ]);
 
   const memoryUp = memoryPrimary.up || memorySec.up;
@@ -239,8 +243,8 @@ export async function probeStatus() {
         } : null,
       },
       webgen: {
-        name: 'Zoth WebGen (Bolt.DIY)',
-        port: 5173,
+        name: 'Zoth WebGen Foundry (One-Shot + Netlify)',
+        port: 8092,
         up: webgen.up,
       },
     },
@@ -559,8 +563,8 @@ export function studioMiddleware() {
         const homeDir = os.homedir() || '~';
         const bootMap = {
           civilization: `ENABLE_KOKORO_VOICE=0 nohup node "${homeDir}/NullAITech/zoth-civilization/server.js" >/tmp/zoth-civ-supervisor.log 2>&1 &`,
-          webgen: `cd "${homeDir}/NullAITech/zoth-webgen" && nohup npm run dev -- --port 5173 >/tmp/zoth-webgen-supervisor.log 2>&1 &`,
-          daemons: `"${homeDir}/NullAITech/bin/zoth-agent-conductor" up >/tmp/zoth-daemons-supervisor.log 2>&1 && nohup node "${homeDir}/NullAITech/zoth-studio-v2/bin/zoth.js" up >>/tmp/zoth-daemons-supervisor.log 2>&1 &`,
+          webgen: `cd "${homeDir}/NullAITech/zoth-webgen" && nohup python3 server.py --port 8092 >/tmp/zoth-webgen-supervisor.log 2>&1 &`,
+          daemons: `"${homeDir}/NullAITech/bin/zoth-agent-conductor" up >/tmp/zoth-daemons-supervisor.log 2>&1 && nohup node "${STUDIO_ROOT}/bin/zoth.js" up >>/tmp/zoth-daemons-supervisor.log 2>&1 &`,
         };
         if (!bootMap[target]) {
           send(res, 400, { error: `Unknown service "${target}". Allowed: civilization, webgen, daemons.` });

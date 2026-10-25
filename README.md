@@ -16,6 +16,27 @@
 
 ---
 
+## ⬇️ Download Zoth Studio v2.1.0 (macOS, Windows & Linux Binaries)
+
+All official cross-platform desktop bundles and standalone native executables are published on the [**GitHub Releases page (`v2.1.0`)**](https://github.com/NullAITech/zoth-studio-v2/releases/tag/v2.1.0) and verified by [`SHA256SUMS.txt`](https://github.com/NullAITech/zoth-studio-v2/releases/download/v2.1.0/SHA256SUMS.txt):
+
+| Platform | Architecture | Package / Binary | Direct Download |
+| :--- | :--- | :--- | :--- |
+| **🍎 macOS** | Universal (`arm64` Apple Silicon + `x86_64` Intel) | **`Zoth Studio.app` Bundle (`.zip`)** | [`Zoth_Studio-v2.1.0-macOS-universal.zip`](https://github.com/NullAITech/zoth-studio-v2/releases/download/v2.1.0/Zoth_Studio-v2.1.0-macOS-universal.zip) |
+| **🍎 macOS** | Universal (`arm64` + `x86_64`) | **Portable Tarball (`.tar.gz`)** | [`zoth-studio-v2.1.0-macos-universal.tar.gz`](https://github.com/NullAITech/zoth-studio-v2/releases/download/v2.1.0/zoth-studio-v2.1.0-macos-universal.tar.gz) |
+| **🍎 macOS** | Apple Silicon (`M1/M2/M3/M4`) | **Native Mach-O Binary** | [`ZothStudio-macos-arm64`](https://github.com/NullAITech/zoth-studio-v2/releases/download/v2.1.0/ZothStudio-macos-arm64) |
+| **🍎 macOS** | Intel (`x86_64`) | **Native Mach-O Binary** | [`ZothStudio-macos-x86_64`](https://github.com/NullAITech/zoth-studio-v2/releases/download/v2.1.0/ZothStudio-macos-x86_64) |
+| **🪟 Windows** | Windows 10 / 11 (`x86_64`) | **Single-File Self-Extracting `.exe` Setup** | [`Zoth_Studio-v2.1.0-windows-x86_64-setup.exe`](https://github.com/NullAITech/zoth-studio-v2/releases/download/v2.1.0/Zoth_Studio-v2.1.0-windows-x86_64-setup.exe) |
+| **🪟 Windows** | Windows 10 / 11 (`x86_64`) | **Portable Windows Archive (`.zip`)** | [`zoth-studio-v2.1.0-windows-x86_64.zip`](https://github.com/NullAITech/zoth-studio-v2/releases/download/v2.1.0/zoth-studio-v2.1.0-windows-x86_64.zip) |
+| **🪟 Windows** | Windows 10 / 11 (`x86_64`) | **Native PE64 Executable (`.exe`)** | [`ZothStudio-windows-x86_64.exe`](https://github.com/NullAITech/zoth-studio-v2/releases/download/v2.1.0/ZothStudio-windows-x86_64.exe) |
+| **🐧 Linux** | Debian / Ubuntu / ZothOS / Kali (`amd64`) | **Debian Package (`.deb`)** | [`zoth-studio_2.1.0_amd64.deb`](https://github.com/NullAITech/zoth-studio-v2/releases/download/v2.1.0/zoth-studio_2.1.0_amd64.deb) |
+| **🐧 Linux** | Universal Linux (`x86_64`) | **AppImage (`.AppImage`)** | [`Zoth_Studio-v2.1.0-x86_64.AppImage`](https://github.com/NullAITech/zoth-studio-v2/releases/download/v2.1.0/Zoth_Studio-v2.1.0-x86_64.AppImage) |
+| **🐧 Linux** | Universal Linux (`x86_64`) | **Self-Extracting Installer (`.run`)** | [`zoth-studio-v2.1.0-linux-x86_64.run`](https://github.com/NullAITech/zoth-studio-v2/releases/download/v2.1.0/zoth-studio-v2.1.0-linux-x86_64.run) |
+| **🐧 Linux** | Universal Linux (`x86_64`) | **Portable Tarball (`.tar.gz`)** | [`zoth-studio-v2.1.0-linux-x86_64.tar.gz`](https://github.com/NullAITech/zoth-studio-v2/releases/download/v2.1.0/zoth-studio-v2.1.0-linux-x86_64.tar.gz) |
+| **🐧 Linux** | Universal Linux (`x86_64`) | **Native ELF64 Binary** | [`zoth-studio-linux-x86_64`](https://github.com/NullAITech/zoth-studio-v2/releases/download/v2.1.0/zoth-studio-linux-x86_64) |
+
+---
+
 ## Visual Gallery & Studio Tour
 
 Desktop and mobile captures, plus screen recordings of each route intro motion design, live on [/gallery](https://zoth.nullai.tech/gallery). Captures are preserved in [`public/studio-captures/`](public/studio-captures).
