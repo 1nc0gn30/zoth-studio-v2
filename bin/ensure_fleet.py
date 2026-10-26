@@ -143,6 +143,13 @@ FLEET_DAEMONS = [
         "/tmp/zoth-port-9494.log",
         {},
     ),
+    (
+        8145,
+        ["node", str(NULLAI / "zothos-lite" / "server.js")],
+        str(NULLAI / "zothos-lite"),
+        "/tmp/zoth-port-8145.log",
+        {},
+    ),
 ]
 
 
