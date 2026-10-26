@@ -39,7 +39,10 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import {
   INITIAL_OBSIDIAN_AUDIT,
   CANONICAL_WIKI_ARTICLES,
-  synthesizeClientWikiArticle
+  CANONICAL_CANVASES,
+  CANONICAL_BASES,
+  synthesizeClientWikiArticle,
+  generateProceduralCanvas
 } from '../data/obsidianWikiData';
 import MathPillarsGrid from '../components/MathPillarsGrid';
 import { useStudioStatus } from '../studio/useStudioStatus';
@@ -336,6 +339,21 @@ export default function MemoryPage() {
   const [obsidianSyncStatus, setObsidianSyncStatus] = useState(null);
   const [obsidianSpecMode, setObsidianSpecMode] = useState('canvas'); // 'canvas' | 'base' | 'markdown'
 
+  // JSON Canvas 1.0 State
+  const [canvasesList, setCanvasesList] = useState(CANONICAL_CANVASES);
+  const [activeCanvas, setActiveCanvas] = useState(CANONICAL_CANVASES[0]);
+  const [canvasViewMode, setCanvasViewMode] = useState('visual'); // 'visual' | 'json'
+  const [canvasTopic, setCanvasTopic] = useState('');
+  const [isGeneratingCanvas, setIsGeneratingCanvas] = useState(false);
+  const [canvasNotification, setCanvasNotification] = useState(null);
+  const [copiedCanvasJson, setCopiedCanvasJson] = useState(false);
+
+  // Obsidian Bases State
+  const [basesList, setBasesList] = useState(CANONICAL_BASES);
+  const [activeBase, setActiveBase] = useState(CANONICAL_BASES[0]);
+  const [baseViewMode, setBaseViewMode] = useState('inspect'); // 'inspect' | 'yaml'
+  const [copiedBaseYaml, setCopiedBaseYaml] = useState(false);
+
   const OBSIDIAN_AGENT_SKILLS = [
     {
       name: 'obsidian-markdown',
@@ -514,11 +532,73 @@ ${article.math_invariants || ''}
           }
         }
       } catch (_) {}
+
+      try {
+        const cRes = await fetch('http://127.0.0.1:8094/api/obsidian/canvases');
+        if (cRes.ok) {
+          const cData = await cRes.json();
+          if (active && cData && Array.isArray(cData.canvases) && cData.canvases.length > 0) {
+            setCanvasesList(prev => {
+              const liveNames = new Set(cData.canvases.map(c => c.name.toLowerCase()));
+              const clientAdded = prev.filter(c => !liveNames.has(c.name.toLowerCase()) && !CANONICAL_CANVASES.some(orig => orig.name.toLowerCase() === c.name.toLowerCase()));
+              return [...clientAdded, ...cData.canvases];
+            });
+          }
+        }
+      } catch (_) {}
+
+      try {
+        const bRes = await fetch('http://127.0.0.1:8094/api/obsidian/bases');
+        if (bRes.ok) {
+          const bData = await bRes.json();
+          if (active && bData && Array.isArray(bData.bases) && bData.bases.length > 0) {
+            setBasesList(bData.bases);
+          }
+        }
+      } catch (_) {}
     };
 
     fetchObsidian();
     return () => { active = false; };
   }, [activeTab]);
+
+  const handleGenerateCanvas = async () => {
+    const topic = (canvasTopic || '').trim();
+    if (!topic || isGeneratingCanvas) return;
+    setIsGeneratingCanvas(true);
+    setCanvasNotification(`Synthesizing JSON Canvas 1.0 spatial graph for "${topic}"...`);
+
+    let newCanvas = null;
+    try {
+      const res = await fetch('http://127.0.0.1:8094/api/obsidian/canvas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.canvas) {
+          newCanvas = data.canvas;
+        }
+      }
+    } catch (_) {}
+
+    if (!newCanvas) {
+      newCanvas = generateProceduralCanvas(topic);
+    }
+
+    setCanvasesList(prev => {
+      const filtered = prev.filter(c => c.name.toLowerCase() !== newCanvas.name.toLowerCase());
+      return [newCanvas, ...filtered];
+    });
+    setActiveCanvas(newCanvas);
+    setCanvasTopic('');
+    setIsGeneratingCanvas(false);
+    setCanvasNotification(`✦ Generated JSON Canvas [[${newCanvas.name}]] (${newCanvas.nodeCount} nodes, ${newCanvas.edgeCount} edges)`);
+    if (typeof playSynapticPulse === 'function') {
+      playSynapticPulse(0.98);
+    }
+  };
 
   const generateObsidianSpecOutput = () => {
     if (obsidianSpecMode === 'canvas') {
@@ -3391,6 +3471,739 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                     ) : null}
                   </Grid>
                 </Grid>
+              </Paper>
+
+              {/* Interactive JSON Canvas 1.0 2D Spatial Graph Viewer */}
+              <Paper
+                id="studio-canvas-visualizer"
+                sx={{
+                  p: { xs: 2.5, md: 3 },
+                  mb: 4,
+                  borderRadius: 2.5,
+                  border: '1.5px solid rgba(0,240,255,0.4)',
+                  bgcolor: isDark ? 'rgba(8,12,20,0.92)' : '#FFFFFF',
+                  backgroundImage: isDark
+                    ? 'radial-gradient(circle at 10% 90%, rgba(0,240,255,0.12) 0%, transparent 60%)'
+                    : 'none'
+                }}
+              >
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, flexWrap: 'wrap', gap: 2, mb: 2.5 }}>
+                  <Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                      <Chip
+                        icon={<HubIcon sx={{ fontSize: '0.9rem !important', color: '#00F0FF !important' }} />}
+                        label="JSON CANVAS 1.0 SPEC // SPATIAL ENGINE"
+                        size="small"
+                        sx={{
+                          bgcolor: 'rgba(0,240,255,0.14)',
+                          color: '#00F0FF',
+                          fontFamily: mono,
+                          fontWeight: 800,
+                          fontSize: '0.68rem',
+                          border: '1px solid rgba(0,240,255,0.35)'
+                        }}
+                      />
+                      <Chip
+                        label={`${canvasesList.length} CANVASES ACTIVE`}
+                        size="small"
+                        sx={{ bgcolor: gold.wash, color: gold.accent, fontFamily: mono, fontWeight: 700, fontSize: '0.68rem' }}
+                      />
+                    </Box>
+                    <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                      Interactive 2D JSON Canvas 1.0 Spatial Graph Viewer (.canvas)
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 720, mt: 0.5, fontSize: '0.82rem' }}>
+                      Infinite 2D spatial coordinate graph transpilations of Obsidian Second Brain knowledge maps, complete with group containers, markdown nodes, and directional cubic bezier edges.
+                    </Typography>
+                  </Box>
+
+                  {/* Procedural Canvas Generator Input & Button */}
+                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap', width: { xs: '100%', md: 'auto' } }}>
+                    <TextField
+                      id="studio-canvas-topic-input"
+                      size="small"
+                      placeholder="Enter canvas domain (e.g. Byzantine Arena)..."
+                      value={canvasTopic}
+                      onChange={(e) => setCanvasTopic(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === 'Enter') handleGenerateCanvas(); }}
+                      sx={{
+                        minWidth: { xs: '100%', sm: 260 },
+                        '& .MuiOutlinedInput-root': {
+                          fontFamily: mono,
+                          fontSize: '0.78rem',
+                          bgcolor: isDark ? '#05060A' : '#F1F5F9'
+                        }
+                      }}
+                    />
+                    <Button
+                      id="studio-canvas-gen-btn"
+                      variant="contained"
+                      onClick={handleGenerateCanvas}
+                      disabled={isGeneratingCanvas || !canvasTopic.trim()}
+                      startIcon={<AutoAwesomeIcon />}
+                      sx={{
+                        bgcolor: '#00F0FF',
+                        color: '#08080B',
+                        fontFamily: mono,
+                        fontWeight: 800,
+                        fontSize: '0.75rem',
+                        '&:hover': { bgcolor: '#38BDF8' }
+                      }}
+                    >
+                      {isGeneratingCanvas ? 'GENERATING…' : '✦ GENERATE CANVAS'}
+                    </Button>
+                  </Box>
+                </Box>
+
+                {canvasNotification && (
+                  <Alert
+                    severity="info"
+                    onClose={() => setCanvasNotification(null)}
+                    sx={{
+                      mb: 2,
+                      bgcolor: 'rgba(0,240,255,0.12)',
+                      color: '#00F0FF',
+                      border: '1px solid rgba(0,240,255,0.35)',
+                      fontFamily: mono,
+                      fontSize: '0.78rem'
+                    }}
+                  >
+                    {canvasNotification}
+                  </Alert>
+                )}
+
+                {/* Canvas File Selector Bar */}
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
+                  <Box sx={{ display: 'flex', gap: 0.8, flexWrap: 'wrap', alignItems: 'center' }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800, fontSize: '0.66rem' }}>
+                      CANVASES:
+                    </Typography>
+                    {canvasesList.map((c) => {
+                      const isSelected = activeCanvas?.name === c.name;
+                      return (
+                        <Chip
+                          key={c.name}
+                          id={`canvas-chip-${c.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
+                          label={c.name.replace('.canvas', '')}
+                          clickable
+                          onClick={() => setActiveCanvas(c)}
+                          sx={{
+                            fontFamily: mono,
+                            fontWeight: isSelected ? 800 : 600,
+                            fontSize: '0.7rem',
+                            bgcolor: isSelected ? 'rgba(0,240,255,0.2)' : (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'),
+                            color: isSelected ? '#00F0FF' : '#CBD5E1',
+                            border: isSelected ? '1px solid #00F0FF' : '1px solid transparent',
+                            '&:hover': { bgcolor: 'rgba(0,240,255,0.15)' }
+                          }}
+                        />
+                      );
+                    })}
+                  </Box>
+                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                    <Chip
+                      label={canvasViewMode === 'visual' ? 'Spatial 2D SVG' : 'Raw JSON Canvas'}
+                      clickable
+                      onClick={() => setCanvasViewMode(canvasViewMode === 'visual' ? 'json' : 'visual')}
+                      sx={{
+                        fontFamily: mono,
+                        fontWeight: 800,
+                        fontSize: '0.68rem',
+                        bgcolor: gold.wash,
+                        color: gold.accent,
+                        border: `1px solid ${gold.border}`
+                      }}
+                    />
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      onClick={() => {
+                        if (activeCanvas && typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+                          navigator.clipboard.writeText(activeCanvas.rawJson || JSON.stringify(activeCanvas, null, 2));
+                          setCopiedCanvasJson(true);
+                          setTimeout(() => setCopiedCanvasJson(false), 2000);
+                        }
+                      }}
+                      startIcon={copiedCanvasJson ? <CheckIcon /> : <ContentCopyIcon />}
+                      sx={{ fontSize: '0.68rem', fontFamily: mono, borderColor: gold.border, color: gold.accent, textTransform: 'none' }}
+                    >
+                      {copiedCanvasJson ? 'Copied' : 'Copy .canvas'}
+                    </Button>
+                  </Box>
+                </Box>
+
+                {/* Telemetry Summary Strip */}
+                <Box sx={{ display: 'flex', gap: 1.5, mb: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+                  <Chip
+                    label={`FILE: ${activeCanvas?.relPath || activeCanvas?.name}`}
+                    size="small"
+                    sx={{ height: 20, fontFamily: mono, fontSize: '0.62rem', fontWeight: 700, bgcolor: 'rgba(212,175,55,0.14)', color: gold.accent }}
+                  />
+                  <Chip
+                    label={`NODES: ${activeCanvas?.nodeCount || activeCanvas?.nodes?.length || 0}`}
+                    size="small"
+                    sx={{ height: 20, fontFamily: mono, fontSize: '0.62rem', fontWeight: 800, bgcolor: 'rgba(0,240,255,0.14)', color: '#00F0FF' }}
+                  />
+                  <Chip
+                    label={`EDGES: ${activeCanvas?.edgeCount || activeCanvas?.edges?.length || 0}`}
+                    size="small"
+                    sx={{ height: 20, fontFamily: mono, fontSize: '0.62rem', fontWeight: 800, bgcolor: 'rgba(168,85,247,0.16)', color: '#C084FC' }}
+                  />
+                  <Chip
+                    label={`GROUPS: ${activeCanvas?.groupCount || 0}`}
+                    size="small"
+                    sx={{ height: 20, fontFamily: mono, fontSize: '0.62rem', fontWeight: 800, bgcolor: 'rgba(52,211,153,0.14)', color: '#34D399' }}
+                  />
+                </Box>
+
+                {/* SVG Spatial Graph Renderer or Raw JSON */}
+                {canvasViewMode === 'visual' ? (
+                  <Box
+                    sx={{
+                      width: '100%',
+                      height: 480,
+                      borderRadius: 2,
+                      bgcolor: isDark ? '#05070D' : '#0B1120',
+                      border: '1px solid rgba(0,240,255,0.25)',
+                      overflow: 'hidden',
+                      position: 'relative'
+                    }}
+                  >
+                    {(() => {
+                      const nodes = activeCanvas?.nodes || [];
+                      const edges = activeCanvas?.edges || [];
+                      const nodeMap = new Map();
+                      nodes.forEach(n => nodeMap.set(n.id, n));
+
+                      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+                      nodes.forEach(n => {
+                        const nx = typeof n.x === 'number' ? n.x : 0;
+                        const ny = typeof n.y === 'number' ? n.y : 0;
+                        const nw = typeof n.width === 'number' ? n.width : 260;
+                        const nh = typeof n.height === 'number' ? n.height : 140;
+                        minX = Math.min(minX, nx);
+                        minY = Math.min(minY, ny);
+                        maxX = Math.max(maxX, nx + nw);
+                        maxY = Math.max(maxY, ny + nh);
+                      });
+
+                      if (!isFinite(minX)) {
+                        minX = -400; minY = -300; maxX = 400; maxY = 300;
+                      }
+                      const pad = 80;
+                      const vbW = Math.max(maxX - minX + pad * 2, 600);
+                      const vbH = Math.max(maxY - minY + pad * 2, 400);
+                      const vbX = minX - pad;
+                      const vbY = minY - pad;
+
+                      const getColorHex = (c) => {
+                        const map = {
+                          '1': '#EF4444',
+                          '2': '#F97316',
+                          '3': '#EAB308',
+                          '4': '#10B981',
+                          '5': '#00F0FF',
+                          '6': '#A855F7'
+                        };
+                        return map[String(c)] || '#C084FC';
+                      };
+
+                      const getAnchor = (node, side) => {
+                        if (!node) return { x: 0, y: 0 };
+                        const nx = typeof node.x === 'number' ? node.x : 0;
+                        const ny = typeof node.y === 'number' ? node.y : 0;
+                        const nw = typeof node.width === 'number' ? node.width : 260;
+                        const nh = typeof node.height === 'number' ? node.height : 140;
+                        if (side === 'left') return { x: nx, y: ny + nh / 2 };
+                        if (side === 'right') return { x: nx + nw, y: ny + nh / 2 };
+                        if (side === 'top') return { x: nx + nw / 2, y: ny };
+                        if (side === 'bottom') return { x: nx + nw / 2, y: ny + nh };
+                        return { x: nx + nw / 2, y: ny + nh / 2 };
+                      };
+
+                      return (
+                        <svg
+                          id="canvas-spatial-svg"
+                          viewBox={`${vbX} ${vbY} ${vbW} ${vbH}`}
+                          style={{ width: '100%', height: '100%', cursor: 'grab' }}
+                        >
+                          <defs>
+                            <pattern id="canvas-grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
+                              <circle cx="20" cy="20" r="1" fill="rgba(212,175,55,0.15)" />
+                            </pattern>
+                            {['1','2','3','4','5','6','default'].map(cid => (
+                              <marker
+                                key={cid}
+                                id={`arrow-${cid}`}
+                                viewBox="0 0 10 10"
+                                refX="8"
+                                refY="5"
+                                markerWidth="6"
+                                markerHeight="6"
+                                orient="auto-start-reverse"
+                              >
+                                <path d="M 0 1 L 10 5 L 0 9 z" fill={getColorHex(cid)} />
+                              </marker>
+                            ))}
+                          </defs>
+
+                          <rect x={vbX} y={vbY} width={vbW} height={vbH} fill="url(#canvas-grid-pattern)" />
+
+                          {/* Groups (Bounding Containers) */}
+                          {nodes.filter(n => n.type === 'group').map(g => {
+                            const col = getColorHex(g.color);
+                            return (
+                              <g key={g.id}>
+                                <rect
+                                  x={g.x}
+                                  y={g.y}
+                                  width={g.width || 300}
+                                  height={g.height || 200}
+                                  rx="12"
+                                  fill={`${col}10`}
+                                  stroke={col}
+                                  strokeWidth="1.8"
+                                  strokeDasharray="6,4"
+                                />
+                                <text
+                                  x={g.x + 16}
+                                  y={g.y + 24}
+                                  fill={col}
+                                  fontFamily={mono}
+                                  fontSize="13"
+                                  fontWeight="bold"
+                                >
+                                  {g.label || 'Group Container'}
+                                </text>
+                              </g>
+                            );
+                          })}
+
+                          {/* Edges (Cubic Bezier Curves) */}
+                          {edges.map(e => {
+                            const src = nodeMap.get(e.fromNode);
+                            const tgt = nodeMap.get(e.toNode);
+                            if (!src || !tgt) return null;
+                            const p1 = getAnchor(src, e.fromSide || 'right');
+                            const p2 = getAnchor(tgt, e.toSide || 'left');
+                            const dx = Math.abs(p2.x - p1.x) * 0.45;
+                            const dy = Math.abs(p2.y - p1.y) * 0.45;
+                            let cp1x = p1.x, cp1y = p1.y, cp2x = p2.x, cp2y = p2.y;
+                            if (e.fromSide === 'right') cp1x += dx;
+                            else if (e.fromSide === 'left') cp1x -= dx;
+                            else if (e.fromSide === 'bottom') cp1y += dy;
+                            else if (e.fromSide === 'top') cp1y -= dy;
+
+                            if (e.toSide === 'left') cp2x -= dx;
+                            else if (e.toSide === 'right') cp2x += dx;
+                            else if (e.toSide === 'top') cp2y -= dy;
+                            else if (e.toSide === 'bottom') cp2y += dy;
+
+                            const col = getColorHex(e.color || '5');
+                            const d = `M ${p1.x} ${p1.y} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
+                            const midX = (p1.x + p2.x) / 2;
+                            const midY = (p1.y + p2.y) / 2;
+
+                            return (
+                              <g key={e.id}>
+                                <path
+                                  d={d}
+                                  fill="none"
+                                  stroke={col}
+                                  strokeWidth="2.2"
+                                  markerEnd={`url(#arrow-${e.color || '5'})`}
+                                  opacity="0.85"
+                                />
+                                {e.label && (
+                                  <g>
+                                    <rect
+                                      x={midX - (e.label.length * 4)}
+                                      y={midY - 10}
+                                      width={e.label.length * 8}
+                                      height="18"
+                                      rx="4"
+                                      fill="#05070D"
+                                      stroke={col}
+                                      strokeWidth="0.8"
+                                    />
+                                    <text
+                                      x={midX}
+                                      y={midY + 3}
+                                      fill={col}
+                                      fontFamily={mono}
+                                      fontSize="10"
+                                      textAnchor="middle"
+                                      fontWeight="bold"
+                                    >
+                                      {e.label}
+                                    </text>
+                                  </g>
+                                )}
+                              </g>
+                            );
+                          })}
+
+                          {/* Nodes (Text / File) */}
+                          {nodes.filter(n => n.type !== 'group').map(n => {
+                            const col = getColorHex(n.color || '3');
+                            const nw = n.width || 260;
+                            const nh = n.height || 140;
+                            const firstLine = (n.text ? n.text.split('\n')[0].replace(/^[#\s*]+/, '') : (n.file ? n.file.split('/').pop() : 'Node')).substring(0, 28);
+                            const bodyPreview = (n.text ? n.text.split('\n').slice(1).join(' ').replace(/[*`_#>-]/g, '').trim() : (n.file || '')).substring(0, 75);
+
+                            return (
+                              <g key={n.id}>
+                                <rect
+                                  x={n.x}
+                                  y={n.y}
+                                  width={nw}
+                                  height={nh}
+                                  rx="10"
+                                  fill="#0B0F1A"
+                                  stroke={col}
+                                  strokeWidth="1.8"
+                                />
+                                <rect
+                                  x={n.x}
+                                  y={n.y}
+                                  width={nw}
+                                  height="26"
+                                  rx="10"
+                                  fill={`${col}22`}
+                                />
+                                <circle cx={n.x + 14} cy={n.y + 13} r="4" fill={col} />
+                                <text
+                                  x={n.x + 26}
+                                  y={n.y + 17}
+                                  fill={col}
+                                  fontFamily={mono}
+                                  fontSize="11"
+                                  fontWeight="bold"
+                                >
+                                  {n.type === 'file' ? '📄 FILE' : '📝 NOTE'} • {firstLine}
+                                </text>
+                                <foreignObject x={n.x + 12} y={n.y + 32} width={nw - 24} height={nh - 40}>
+                                  <div xmlns="http://www.w3.org/1999/xhtml" style={{
+                                    color: '#CBD5E1',
+                                    fontSize: '11px',
+                                    fontFamily: 'monospace',
+                                    lineHeight: '1.4',
+                                    overflow: 'hidden',
+                                    maxHeight: '100%',
+                                    wordBreak: 'break-word'
+                                  }}>
+                                    {bodyPreview || 'JSON Canvas node engram'}
+                                  </div>
+                                </foreignObject>
+                              </g>
+                            );
+                          })}
+                        </svg>
+                      );
+                    })()}
+                  </Box>
+                ) : (
+                  <Box
+                    component="pre"
+                    sx={{
+                      m: 0,
+                      p: 2,
+                      borderRadius: 2,
+                      bgcolor: isDark ? 'rgba(0,0,0,0.7)' : '#0F172A',
+                      border: '1px solid rgba(0,240,255,0.25)',
+                      fontFamily: mono,
+                      fontSize: '0.74rem',
+                      color: '#00F0FF',
+                      maxHeight: 480,
+                      overflowX: 'auto'
+                    }}
+                  >
+                    {activeCanvas?.rawJson || JSON.stringify(activeCanvas, null, 2)}
+                  </Box>
+                )}
+              </Paper>
+
+              {/* Interactive Obsidian Bases (.base) Database Inspector */}
+              <Paper
+                id="studio-bases-inspector"
+                sx={{
+                  p: { xs: 2.5, md: 3 },
+                  mb: 4,
+                  borderRadius: 2.5,
+                  border: '1.5px solid rgba(212,175,55,0.4)',
+                  bgcolor: isDark ? 'rgba(10,12,16,0.92)' : '#FFFFFF',
+                  backgroundImage: isDark
+                    ? 'radial-gradient(circle at 90% 90%, rgba(212,175,55,0.12) 0%, transparent 60%)'
+                    : 'none'
+                }}
+              >
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, flexWrap: 'wrap', gap: 2, mb: 2.5 }}>
+                  <Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                      <Chip
+                        icon={<StorageIcon sx={{ fontSize: '0.9rem !important', color: gold.accent }} />}
+                        label="OBSIDIAN BASES SPEC // YAML DATABASE"
+                        size="small"
+                        sx={{
+                          bgcolor: gold.wash,
+                          color: gold.accent,
+                          fontFamily: mono,
+                          fontWeight: 800,
+                          fontSize: '0.68rem',
+                          border: `1px solid ${gold.border}`
+                        }}
+                      />
+                      <Chip
+                        label={`${basesList.length} BASES ACTIVE`}
+                        size="small"
+                        sx={{ bgcolor: 'rgba(52,211,153,0.14)', color: '#34D399', fontFamily: mono, fontWeight: 700, fontSize: '0.68rem' }}
+                      />
+                    </Box>
+                    <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                      Interactive Obsidian Bases (.base) Database Inspector
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 720, mt: 0.5, fontSize: '0.82rem' }}>
+                      Database-style views, formulas, dynamic filters, and properties transpilations across your Obsidian Second Brain vaults.
+                    </Typography>
+                  </Box>
+
+                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                    <Chip
+                      label={baseViewMode === 'inspect' ? 'UI Inspector' : 'Raw YAML'}
+                      clickable
+                      onClick={() => setBaseViewMode(baseViewMode === 'inspect' ? 'yaml' : 'inspect')}
+                      sx={{
+                        fontFamily: mono,
+                        fontWeight: 800,
+                        fontSize: '0.68rem',
+                        bgcolor: 'rgba(0,240,255,0.14)',
+                        color: '#00F0FF',
+                        border: '1px solid rgba(0,240,255,0.3)'
+                      }}
+                    />
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      onClick={() => {
+                        if (activeBase && typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+                          navigator.clipboard.writeText(activeBase.rawYaml || '');
+                          setCopiedBaseYaml(true);
+                          setTimeout(() => setCopiedBaseYaml(false), 2000);
+                        }
+                      }}
+                      startIcon={copiedBaseYaml ? <CheckIcon /> : <ContentCopyIcon />}
+                      sx={{ fontSize: '0.68rem', fontFamily: mono, borderColor: gold.border, color: gold.accent, textTransform: 'none' }}
+                    >
+                      {copiedBaseYaml ? 'Copied' : 'Copy .base YAML'}
+                    </Button>
+                  </Box>
+                </Box>
+
+                {/* Bases File Selector Bar */}
+                <Box sx={{ display: 'flex', gap: 0.8, flexWrap: 'wrap', alignItems: 'center', mb: 2 }}>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800, fontSize: '0.66rem' }}>
+                    DATABASES:
+                  </Typography>
+                  {basesList.map((b) => {
+                    const isSelected = activeBase?.name === b.name;
+                    return (
+                      <Chip
+                        key={b.name}
+                        id={`base-chip-${b.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
+                        label={b.name.replace('.base', '')}
+                        clickable
+                        onClick={() => setActiveBase(b)}
+                        sx={{
+                          fontFamily: mono,
+                          fontWeight: isSelected ? 800 : 600,
+                          fontSize: '0.7rem',
+                          bgcolor: isSelected ? 'rgba(212,175,55,0.2)' : (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'),
+                          color: isSelected ? gold.accent : '#CBD5E1',
+                          border: isSelected ? `1px solid ${gold.accent}` : '1px solid transparent',
+                          '&:hover': { bgcolor: 'rgba(212,175,55,0.15)' }
+                        }}
+                      />
+                    );
+                  })}
+                </Box>
+
+                {/* Telemetry Summary Strip */}
+                <Box sx={{ display: 'flex', gap: 1.5, mb: 2.5, alignItems: 'center', flexWrap: 'wrap' }}>
+                  <Chip
+                    label={`PATH: ${activeBase?.relPath || activeBase?.name}`}
+                    size="small"
+                    sx={{ height: 20, fontFamily: mono, fontSize: '0.62rem', fontWeight: 700, bgcolor: 'rgba(0,240,255,0.12)', color: '#00F0FF' }}
+                  />
+                  <Chip
+                    label={`VIEWS: ${activeBase?.views?.length || 0} CONFIGURED`}
+                    size="small"
+                    sx={{ height: 20, fontFamily: mono, fontSize: '0.62rem', fontWeight: 800, bgcolor: 'rgba(212,175,55,0.14)', color: gold.accent }}
+                  />
+                  <Chip
+                    label={`FORMULAS: ${Object.keys(activeBase?.formulas || {}).length}`}
+                    size="small"
+                    sx={{ height: 20, fontFamily: mono, fontSize: '0.62rem', fontWeight: 800, bgcolor: 'rgba(232,121,249,0.14)', color: '#E879F9' }}
+                  />
+                  <Chip
+                    label={`PROPERTIES: ${Object.keys(activeBase?.properties || {}).length}`}
+                    size="small"
+                    sx={{ height: 20, fontFamily: mono, fontSize: '0.62rem', fontWeight: 800, bgcolor: 'rgba(52,211,153,0.14)', color: '#34D399' }}
+                  />
+                </Box>
+
+                {baseViewMode === 'inspect' ? (
+                  <Grid container spacing={2.5}>
+                    {/* Configured Views Panel */}
+                    <Grid xs={12} md={6}>
+                      <Paper
+                        sx={{
+                          p: 2,
+                          height: '100%',
+                          borderRadius: 2,
+                          border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : theme.palette.divider}`,
+                          bgcolor: isDark ? '#05070A' : '#F8FAFC'
+                        }}
+                      >
+                        <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.74rem', color: gold.accent, mb: 1.5 }}>
+                          📑 CONFIGURED VIEWS ({activeBase?.views?.length || 0})
+                        </Typography>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                          {(activeBase?.views || []).map((v, idx) => (
+                            <Box
+                              key={idx}
+                              sx={{
+                                p: 1.5,
+                                borderRadius: 1.5,
+                                bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#FFFFFF',
+                                border: '1px solid rgba(212,175,55,0.18)'
+                              }}
+                            >
+                              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                                <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.8rem', color: '#CBD5E1' }}>
+                                  {v.name || `View ${idx + 1}`}
+                                </Typography>
+                                <Chip
+                                  label={(v.type || 'table').toUpperCase()}
+                                  size="small"
+                                  sx={{
+                                    height: 18,
+                                    fontFamily: mono,
+                                    fontSize: '0.6rem',
+                                    fontWeight: 800,
+                                    bgcolor: v.type === 'cards' ? 'rgba(168,85,247,0.18)' : 'rgba(0,240,255,0.16)',
+                                    color: v.type === 'cards' ? '#C084FC' : '#00F0FF'
+                                  }}
+                                />
+                              </Box>
+                              <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.64rem', display: 'block', mb: 0.6 }}>
+                                Field Ordering:
+                              </Typography>
+                              <Box sx={{ display: 'flex', gap: 0.6, flexWrap: 'wrap' }}>
+                                {(v.order || []).map((field) => (
+                                  <Chip
+                                    key={field}
+                                    label={field}
+                                    size="small"
+                                    sx={{
+                                      height: 18,
+                                      fontSize: '0.6rem',
+                                      fontFamily: mono,
+                                      bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0',
+                                      color: isDark ? '#E2E8F0' : '#1E293B'
+                                    }}
+                                  />
+                                ))}
+                              </Box>
+                            </Box>
+                          ))}
+                        </Box>
+                      </Paper>
+                    </Grid>
+
+                    {/* Formulas & Properties Panel */}
+                    <Grid xs={12} md={6}>
+                      <Paper
+                        sx={{
+                          p: 2,
+                          height: '100%',
+                          borderRadius: 2,
+                          border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : theme.palette.divider}`,
+                          bgcolor: isDark ? '#05070A' : '#F8FAFC'
+                        }}
+                      >
+                        <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.74rem', color: '#00F0FF', mb: 1.5 }}>
+                          ⚡ FORMULAS &amp; COMPUTED LOGIC ({Object.keys(activeBase?.formulas || {}).length})
+                        </Typography>
+                        {Object.keys(activeBase?.formulas || {}).length > 0 ? (
+                          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mb: 2 }}>
+                            {Object.entries(activeBase.formulas).map(([key, expr]) => (
+                              <Box
+                                key={key}
+                                sx={{
+                                  p: 1.2,
+                                  borderRadius: 1.5,
+                                  bgcolor: isDark ? 'rgba(0,240,255,0.04)' : '#FFFFFF',
+                                  border: '1px solid rgba(0,240,255,0.18)'
+                                }}
+                              >
+                                <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.7rem', color: '#00F0FF' }}>
+                                  formula.{key}
+                                </Typography>
+                                <Typography component="code" sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#94A3B8', wordBreak: 'break-all' }}>
+                                  {String(expr)}
+                                </Typography>
+                              </Box>
+                            ))}
+                          </Box>
+                        ) : (
+                          <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', display: 'block', mb: 2 }}>
+                            No computed formulas declared in this specification.
+                          </Typography>
+                        )}
+
+                        <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.74rem', color: '#E879F9', mb: 1 }}>
+                          🎯 ACTIVE FILTER CONSTRAINTS
+                        </Typography>
+                        <Box
+                          component="pre"
+                          sx={{
+                            m: 0,
+                            p: 1.2,
+                            borderRadius: 1.5,
+                            bgcolor: isDark ? 'rgba(0,0,0,0.5)' : '#E2E8F0',
+                            border: '1px solid rgba(232,121,249,0.2)',
+                            fontFamily: mono,
+                            fontSize: '0.68rem',
+                            color: '#E879F9',
+                            maxHeight: 120,
+                            overflowY: 'auto'
+                          }}
+                        >
+                          {JSON.stringify(activeBase?.filters || {}, null, 2)}
+                        </Box>
+                      </Paper>
+                    </Grid>
+                  </Grid>
+                ) : (
+                  <Box
+                    component="pre"
+                    sx={{
+                      m: 0,
+                      p: 2,
+                      borderRadius: 2,
+                      bgcolor: isDark ? 'rgba(0,0,0,0.7)' : '#0F172A',
+                      border: `1px solid ${gold.border}`,
+                      fontFamily: mono,
+                      fontSize: '0.74rem',
+                      color: gold.accent,
+                      maxHeight: 480,
+                      overflowX: 'auto'
+                    }}
+                  >
+                    {activeBase?.rawYaml || '# No YAML representation available'}
+                  </Box>
+                )}
               </Paper>
 
               {/* 7 Official Obsidian Skills Grid */}
