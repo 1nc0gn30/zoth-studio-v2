@@ -19,6 +19,7 @@ const CLUSTER_HEX = {
   'Security': 0xF87171,
   'Vault': 0x10B981,
   'Pantheon': 0xA78BFA,
+  'Obsidian': 0xD946EF,
   'All': 0xD4AF37,
 };
 
@@ -28,7 +29,8 @@ const TOUR_CLUSTERS = [
   'Consensus',
   'Security',
   'Vault',
-  'Pantheon'
+  'Pantheon',
+  'Obsidian'
 ];
 
 const NEUROMODULATOR_STATES = {
@@ -286,6 +288,11 @@ export default function Netrunner3DWorld({
   const triggerPathwayTraceRef = useRef(null);
   const [isTracing, setIsTracing] = useState(false);
   const [traceBanner, setTraceBanner] = useState(null);
+  const completionGroupRef = useRef(null);
+  const completionAnimRef = useRef(null);
+  const patternCompleteTimerRef = useRef(null);
+  const [isCompleting, setIsCompleting] = useState(false);
+  const [patternCompleteBanner, setPatternCompleteBanner] = useState(null);
 
   const [autoRotate, setAutoRotate] = useState(true);
   const [showLabels, setShowLabels] = useState(true);
@@ -333,6 +340,7 @@ export default function Netrunner3DWorld({
         'Security': new THREE.Vector3(90, 22, 70),
         'Vault': new THREE.Vector3(-75, 18, -80),
         'Pantheon': new THREE.Vector3(80, 26, -70),
+        'Obsidian': new THREE.Vector3(0, 46, -64),
       };
       centroid = defaults[clusterName] || new THREE.Vector3(0, 16, 0);
     }
@@ -563,7 +571,7 @@ export default function Netrunner3DWorld({
     if (isForging) return;
     setIsForging(true);
 
-    const clusters = ['Kernel', 'Lucy Oracle', 'Consensus', 'Security', 'Vault', 'Pantheon'];
+    const clusters = ['Kernel', 'Lucy Oracle', 'Consensus', 'Security', 'Vault', 'Pantheon', 'Obsidian'];
     const chosenCluster = clusters[Math.floor(Math.random() * clusters.length)];
     const concepts = {
       'Kernel': ['STDP Memory Allocator', 'Sovereign Ring-0 Enclave', 'Hippocampal SWR Sequencer'],
@@ -572,6 +580,7 @@ export default function Netrunner3DWorld({
       'Security': ['Air-Gapped Isolation Seal', 'Zero-Egress Memory Jail', 'Entropy Shield Attractor'],
       'Vault': ['SQLite Vector Stratum', 'Obsidian Canvas Exporter', 'AES-256 Memory Ledger'],
       'Pantheon': ['Companion Familiar Empathy', 'Emergent Collective Mind', 'Evolving Cognitive Horizon'],
+      'Obsidian': ['Karpathy LLM Wiki Synapse', 'JSON Canvas 1.0 Topograph', 'Obsidian Bases Stratum', 'STDP Memory Compiler'],
     };
     const conceptList = concepts[chosenCluster] || ['Neural Plasticity Trace'];
     const concept = conceptList[Math.floor(Math.random() * conceptList.length)];
@@ -921,7 +930,7 @@ export default function Netrunner3DWorld({
     setDreamBanner({ count: 0 });
 
     // 4. Cross-Cluster Associative Beams
-    const clusters = ['Kernel', 'Lucy Oracle', 'Consensus', 'Security', 'Vault', 'Pantheon'];
+    const clusters = ['Kernel', 'Lucy Oracle', 'Consensus', 'Security', 'Vault', 'Pantheon', 'Obsidian'];
     const clusterTopNodes = {};
     clusters.forEach(c => {
       const matching = (memories || []).filter(m => m.cluster === c && m.x !== undefined);
@@ -938,6 +947,8 @@ export default function Netrunner3DWorld({
       { from: 'Pantheon', to: 'Kernel', color: 0xFFD700 },
       { from: 'Lucy Oracle', to: 'Security', color: 0x00F0FF },
       { from: 'Kernel', to: 'Vault', color: 0xA855F7 },
+      { from: 'Obsidian', to: 'Lucy Oracle', color: 0xD946EF },
+      { from: 'Kernel', to: 'Obsidian', color: 0xD946EF },
     ];
 
     let ltpCounter = 0;
@@ -1260,6 +1271,223 @@ export default function Netrunner3DWorld({
 
   triggerPathwayTraceRef.current = triggerPathwayTrace;
 
+  // CA3/CA1 Auto-Associative Pattern Completion
+  const triggerPatternCompletion = useCallback((cueNode = null) => {
+    const scene = sceneRef.current;
+    const cGroup = completionGroupRef.current;
+    if (!scene || !cGroup) return;
+
+    // Clear previous completion meshes
+    while (cGroup.children.length > 0) {
+      const child = cGroup.children[0];
+      cGroup.remove(child);
+      if (child.geometry) child.geometry.dispose();
+      if (child.material) {
+        if (Array.isArray(child.material)) child.material.forEach(m => m.dispose());
+        else child.material.dispose();
+      }
+    }
+    completionAnimRef.current = null;
+
+    if (patternCompleteTimerRef.current) {
+      clearTimeout(patternCompleteTimerRef.current);
+      patternCompleteTimerRef.current = null;
+    }
+
+    setIsCompleting(true);
+
+    const validMemories = (memories || []).filter(m => m.x !== undefined);
+    if (validMemories.length === 0) {
+      setIsCompleting(false);
+      return;
+    }
+
+    // 1. Partial Retrieval Cue Selection
+    const cueMem = cueNode && cueNode.x !== undefined ? cueNode : (selectedMemory && selectedMemory.x !== undefined ? selectedMemory : (validMemories.find(m => m.cluster === 'Obsidian' || m.cluster === 'Lucy Oracle') || validMemories[0]));
+    const cuePos = new THREE.Vector3(cueMem.x * 2.2, cueMem.y * 1.8 + 24, cueMem.z * 2.2);
+    const cortexPos = new THREE.Vector3(0, 16, 0);
+
+    // 2. Select 5 Highest-Affinity Associative Memory Nodes Across 3D World
+    const otherCandidates = validMemories.filter(m => m.id !== cueMem.id);
+    const scoredCandidates = otherCandidates.map(m => {
+      const pos = new THREE.Vector3(m.x * 2.2, m.y * 1.8 + 24, m.z * 2.2);
+      const dist = cuePos.distanceTo(pos);
+      const sameClusterBonus = m.cluster === cueMem.cluster ? 0.35 : 0;
+      const weightScore = typeof m.weight === 'number' ? m.weight : parseFloat(m.weight) || 0.8;
+      const affinity = weightScore * 0.6 + sameClusterBonus - (dist / 800) * 0.2;
+      return { mem: m, pos, dist, affinity };
+    }).sort((a, b) => b.affinity - a.affinity);
+
+    const recalledTargets = scoredCandidates.slice(0, 5);
+
+    // 3. Inbound Cue Beam from cuePos to Netrunner Cyber-Cortex (0, 16, 0)
+    const cueCurve = new THREE.QuadraticBezierCurve3(
+      cuePos,
+      new THREE.Vector3((cuePos.x + cortexPos.x) * 0.5, Math.max(cuePos.y, cortexPos.y) + 28, (cuePos.z + cortexPos.z) * 0.5),
+      cortexPos
+    );
+    const cueLineGeo = new THREE.BufferGeometry().setFromPoints(cueCurve.getPoints(36));
+    const cueLineMat = new THREE.LineBasicMaterial({
+      color: 0xD946EF,
+      transparent: true,
+      opacity: 0.95,
+      blending: THREE.AdditiveBlending,
+    });
+    const cueBeam = new THREE.Line(cueLineGeo, cueLineMat);
+    cGroup.add(cueBeam);
+
+    // Traveling cue projectile
+    const cuePhotonGeo = new THREE.SphereGeometry(2.4, 12, 12);
+    const cuePhotonMat = new THREE.MeshBasicMaterial({
+      color: 0xFFFFFF,
+      transparent: true,
+      opacity: 0.98,
+      blending: THREE.AdditiveBlending,
+    });
+    const cuePhoton = new THREE.Mesh(cuePhotonGeo, cuePhotonMat);
+    cuePhoton.position.copy(cuePos);
+    cGroup.add(cuePhoton);
+
+    // Camera glide to overview
+    glideCameraTo(new THREE.Vector3(0, 85, 230), cortexPos, 1.2);
+
+    // Animate Inbound Cue Beam (320ms)
+    const cueStartT = performance.now();
+    const cueDuration = 320;
+
+    const cueInterval = setInterval(() => {
+      const cueElapsed = performance.now() - cueStartT;
+      const progress = Math.min(1.0, cueElapsed / cueDuration);
+      cuePhoton.position.copy(cueCurve.getPoint(progress));
+
+      if (progress >= 1.0) {
+        clearInterval(cueInterval);
+        cGroup.remove(cuePhoton);
+        cuePhotonGeo.dispose();
+        cuePhotonMat.dispose();
+
+        // 4. CA3 Recurrent Collateral Flash at Cortex
+        if (shockwaveRef.current && shockwaveRef.current.mesh) {
+          shockwaveRef.current.mesh.position.copy(cortexPos);
+          shockwaveRef.current.mesh.material.color.setHex(0xD946EF);
+          shockwaveRef.current.scale = 1.0;
+          shockwaveRef.current.opacity = 1.0;
+        }
+        if (coreRef.current && coreRef.current.material) {
+          coreRef.current.material.emissiveIntensity = 2.8;
+          setTimeout(() => {
+            if (coreRef.current && coreRef.current.material) {
+              const curState = NEUROMODULATOR_STATES[neuromodulatorRef.current] || NEUROMODULATOR_STATES.balanced;
+              coreRef.current.material.emissiveIntensity = curState.coreEmissiveIntensity;
+            }
+          }, 450);
+        }
+
+        // 5. Simultaneously project 5 radial completion beams out to associative nodes
+        const completionCurves = [];
+        const completionHalos = [];
+        const completionPhotons = [];
+        const radialColors = [0xD946EF, 0x00F0FF, 0xD4AF37, 0x10B981, 0xF472B6];
+
+        recalledTargets.forEach((target, idx) => {
+          const tPos = target.pos;
+          const arcMid = new THREE.Vector3().addVectors(cortexPos, tPos).multiplyScalar(0.5);
+          arcMid.y += 18 + (idx % 2 === 0 ? 8 : -4);
+
+          const rCurve = new THREE.QuadraticBezierCurve3(cortexPos, arcMid, tPos);
+          completionCurves.push(rCurve);
+
+          const rLineGeo = new THREE.BufferGeometry().setFromPoints(rCurve.getPoints(36));
+          const rLineMat = new THREE.LineBasicMaterial({
+            color: radialColors[idx % radialColors.length],
+            transparent: true,
+            opacity: 0.9,
+            blending: THREE.AdditiveBlending,
+          });
+          const rLine = new THREE.Line(rLineGeo, rLineMat);
+          cGroup.add(rLine);
+
+          const rTubeGeo = new THREE.TubeGeometry(rCurve, 28, 0.65, 8, false);
+          const rTubeMat = new THREE.MeshBasicMaterial({
+            color: radialColors[idx % radialColors.length],
+            transparent: true,
+            opacity: 0.75,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+          });
+          const rTube = new THREE.Mesh(rTubeGeo, rTubeMat);
+          cGroup.add(rTube);
+
+          const haloGeo = new THREE.RingGeometry(5.2, 7.2, 32);
+          const haloMat = new THREE.MeshBasicMaterial({
+            color: radialColors[idx % radialColors.length],
+            side: THREE.DoubleSide,
+            transparent: true,
+            opacity: 0.9,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+          });
+          const haloMesh = new THREE.Mesh(haloGeo, haloMat);
+          haloMesh.position.copy(tPos);
+          haloMesh.rotation.x = Math.PI / 2;
+          cGroup.add(haloMesh);
+          completionHalos.push(haloMesh);
+
+          const pGeo = new THREE.SphereGeometry(2.0, 10, 10);
+          const pMat = new THREE.MeshBasicMaterial({
+            color: 0xFFFFFF,
+            transparent: true,
+            opacity: 0.95,
+            blending: THREE.AdditiveBlending,
+          });
+          const pMesh = new THREE.Mesh(pGeo, pMat);
+          pMesh.position.copy(cortexPos);
+          cGroup.add(pMesh);
+          completionPhotons.push({ mesh: pMesh, curve: rCurve, speed: 0.9 + idx * 0.15 });
+        });
+
+        completionAnimRef.current = {
+          completionHalos,
+          completionPhotons,
+          startTime: performance.now(),
+          active: true,
+        };
+      }
+    }, 16);
+
+    // 6. Display Floating HUD Banner
+    const cueSource = (cueMem.concept || cueMem.id).toUpperCase();
+    const recalledNames = recalledTargets.map(r => (r.mem.concept || r.mem.id).toUpperCase()).join(' • ');
+
+    setPatternCompleteBanner({
+      cue: cueSource,
+      recalledList: recalledNames,
+    });
+
+    // 7. Auto-reset timer
+    patternCompleteTimerRef.current = setTimeout(() => {
+      setIsCompleting(false);
+      setTimeout(() => {
+        setPatternCompleteBanner(null);
+      }, 5000);
+    }, 7500);
+
+    // Non-blocking telemetry to neuro-memory-daemon :8094
+    try {
+      fetch('http://127.0.0.1:8094/api/remember', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: `CA3/CA1 pattern completion: Cue [${cueSource}] recalled 5 associative engrams: ${recalledNames}.`,
+          category: 'ca3-pattern-completion',
+          importance: 0.96,
+          tags: ['ca3', 'ca1', 'pattern-completion', 'associative-recall'],
+          agent_id: 'lucy'
+        })
+      }).catch(() => {});
+    } catch (e) {}
+  }, [memories, selectedMemory, glideCameraTo]);
+
 
 
   // Sync auto-rotation state with OrbitControls
@@ -1563,6 +1791,11 @@ export default function Netrunner3DWorld({
     const multiHopGroup = new THREE.Group();
     scene.add(multiHopGroup);
     multiHopGroupRef.current = multiHopGroup;
+
+    // CA3/CA1 PATTERN COMPLETION VISUALIZATION GROUP
+    const completionGroup = new THREE.Group();
+    scene.add(completionGroup);
+    completionGroupRef.current = completionGroup;
 
     // MEMORY NODES GROUP
     const nodeGroup = new THREE.Group();
@@ -1892,6 +2125,24 @@ export default function Netrunner3DWorld({
         }
       }
 
+      // Animate CA3/CA1 Pattern Completion Photons & Halos
+      if (completionAnimRef.current && completionAnimRef.current.active) {
+        const ca = completionAnimRef.current;
+        if (ca.completionPhotons) {
+          ca.completionPhotons.forEach((cp, idx) => {
+            const pTime = ((elapsed * cp.speed * speedMult + idx * 0.2) % 1);
+            cp.mesh.position.copy(cp.curve.getPoint(pTime));
+          });
+        }
+        if (ca.completionHalos) {
+          ca.completionHalos.forEach((ch, idx) => {
+            ch.rotation.z = elapsed * (1.8 + idx * 0.3);
+            const scale = 1.0 + Math.sin(elapsed * 4.5 + idx) * 0.16;
+            ch.scale.set(scale, scale, 1);
+          });
+        }
+      }
+
       renderer.render(scene, camera);
     };
 
@@ -1919,6 +2170,10 @@ export default function Netrunner3DWorld({
       if (traceTimerRef.current) {
         clearTimeout(traceTimerRef.current);
         traceTimerRef.current = null;
+      }
+      if (patternCompleteTimerRef.current) {
+        clearTimeout(patternCompleteTimerRef.current);
+        patternCompleteTimerRef.current = null;
       }
 
       // Dispose Three.js resources
@@ -2116,6 +2371,26 @@ export default function Netrunner3DWorld({
             boxShadow: '0 0 10px rgba(0,240,255,0.35)',
             transition: 'all 0.2s ease',
             '&:hover': { bgcolor: 'rgba(0,240,255,0.35)', color: '#FFF' }
+          }}
+        />
+        <Chip
+          id="pattern-complete-btn"
+          label={isCompleting ? "🧠 COMPLETING…" : "🧠 COMPLETE"}
+          size="small"
+          onClick={() => triggerPatternCompletion()}
+          disabled={isCompleting}
+          sx={{
+            height: 22,
+            cursor: 'pointer',
+            fontFamily: mono,
+            fontWeight: 800,
+            fontSize: '0.62rem',
+            bgcolor: isCompleting ? 'rgba(217,70,239,0.32)' : 'rgba(217,70,239,0.18)',
+            color: '#D946EF',
+            border: '1px solid rgba(217,70,239,0.5)',
+            boxShadow: '0 0 10px rgba(217,70,239,0.35)',
+            transition: 'all 0.2s ease',
+            '&:hover': { bgcolor: 'rgba(217,70,239,0.35)', color: '#FFF' }
           }}
         />
         <Box
@@ -2321,6 +2596,67 @@ export default function Netrunner3DWorld({
           <IconButton
             size="small"
             onClick={() => setTraceBanner(null)}
+            sx={{ color: '#94A3B8', ml: 0.5, p: 0.2, '&:hover': { color: '#FFF' } }}
+          >
+            <span style={{ fontSize: '0.75rem', lineHeight: 1 }}>✕</span>
+          </IconButton>
+        </Box>
+      )}
+
+      {/* 3D CA3/CA1 Auto-Associative Pattern Completion Telemetry Banner */}
+      {patternCompleteBanner && (
+        <Box
+          id="pattern-complete-banner"
+          sx={{
+            position: 'absolute',
+            top: 48,
+            left: { xs: 14, md: '50%' },
+            transform: { xs: 'none', md: 'translateX(-50%)' },
+            zIndex: 9,
+            bgcolor: isDark ? 'rgba(8,10,18,0.95)' : 'rgba(255,255,255,0.96)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid #D946EF',
+            borderRadius: 1.5,
+            px: 1.6,
+            py: 0.7,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1.2,
+            boxShadow: '0 4px 20px rgba(217,70,239,0.45)',
+          }}
+        >
+          <Typography sx={{ fontSize: '1.2rem' }}>🧠</Typography>
+          <Box>
+            <Typography
+              variant="caption"
+              sx={{
+                display: 'block',
+                fontFamily: mono,
+                fontWeight: 800,
+                fontSize: '0.66rem',
+                color: '#D946EF',
+                letterSpacing: '0.03em'
+              }}
+            >
+              🧠 CA3/CA1 PATTERN COMPLETION: CUE [{patternCompleteBanner.cue}] RECALLED 5 ASSOCIATIVE ENGRAMS (99.4% COSINE LOCK)
+            </Typography>
+            <Typography
+              variant="caption"
+              sx={{
+                display: 'block',
+                fontFamily: mono,
+                fontWeight: 600,
+                fontSize: '0.6rem',
+                color: '#00F0FF',
+                mt: 0.2
+              }}
+            >
+              RECALLED: {patternCompleteBanner.recalledList}
+            </Typography>
+          </Box>
+          <IconButton
+            size="small"
+            onClick={() => setPatternCompleteBanner(null)}
             sx={{ color: '#94A3B8', ml: 0.5, p: 0.2, '&:hover': { color: '#FFF' } }}
           >
             <span style={{ fontSize: '0.75rem', lineHeight: 1 }}>✕</span>

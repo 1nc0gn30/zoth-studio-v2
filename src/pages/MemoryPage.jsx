@@ -258,6 +258,58 @@ export const INITIAL_SOVEREIGN_MEMORIES = [
     y: 80,
     z: 20,
   },
+  {
+    id: 'MEM-011',
+    concept: 'Karpathy LLM Wiki Index',
+    category: 'obsidian',
+    cluster: 'Obsidian',
+    weight: 0.97,
+    text: 'Karpathy LLM Wiki Index compiler: Synthesizes bi-directional Markdown wikilinks, auto-generated MOC table of contents, and STDP memory engrams.',
+    author: 'Lucy',
+    tags: ['obsidian', 'karpathy', 'wiki', 'second-brain'],
+    x: 0,
+    y: 46,
+    z: -64,
+  },
+  {
+    id: 'MEM-012',
+    concept: 'JSON Canvas 1.0 Topograph',
+    category: 'obsidian',
+    cluster: 'Obsidian',
+    weight: 0.94,
+    text: 'Interactive 2D/3D JSON Canvas 1.0 spatial graph exporter: Color-coded group boundaries, cubic bezier edges, and real-time node coordinates.',
+    author: 'Lucy',
+    tags: ['obsidian', 'canvas', 'spatial-graph'],
+    x: 22,
+    y: 52,
+    z: -56,
+  },
+  {
+    id: 'MEM-013',
+    concept: 'Obsidian Bases Relational Stratum',
+    category: 'obsidian',
+    cluster: 'Obsidian',
+    weight: 0.91,
+    text: 'Obsidian Bases (.base) database schema validator: Computed formula syntax, view transformations, and YAML schema auditing for 71 Sovereign Tools.',
+    author: 'Azoth',
+    tags: ['obsidian', 'bases', 'database', 'yaml'],
+    x: -24,
+    y: 48,
+    z: -70,
+  },
+  {
+    id: 'MEM-014',
+    concept: 'Bidirectional STDP Engram Vault',
+    category: 'obsidian',
+    cluster: 'Obsidian',
+    weight: 0.93,
+    text: 'Bidirectional vault synchronization: Maps Neuro-Memory SQLite vectors (:8094) directly to local Obsidian markdown frontmatter with SHA-256 integrity.',
+    author: 'Lucy',
+    tags: ['obsidian', 'stdp', 'vault', 'sync'],
+    x: -12,
+    y: 40,
+    z: -60,
+  },
 ];
 
 /* ==========================================================================
@@ -1072,6 +1124,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
     'Security': isDark ? '#F472B6' : '#BE185D',
     'Vault': isDark ? '#34D399' : '#047857',
     'Pantheon': isDark ? '#F59E0B' : '#D97706',
+    'Obsidian': isDark ? '#D946EF' : '#C026D3',
   };
 
   // Speech synthesis handler
@@ -2041,7 +2094,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                 <Paper sx={{ p: { xs: 2, md: 3 }, border: `1px solid ${theme.palette.divider}`, borderRadius: 3, bgcolor: isDark ? '#08080B' : theme.palette.background.paper, mb: 4 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1.5 }}>
                     <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                      {['All', 'Kernel', 'Lucy Oracle', 'Consensus', 'Security', 'Vault', 'Pantheon'].map((c) => (
+                      {['All', 'Kernel', 'Lucy Oracle', 'Consensus', 'Security', 'Vault', 'Pantheon', 'Obsidian'].map((c) => (
                         <Chip
                           key={c}
                           label={c}
