@@ -1225,6 +1225,213 @@ export default function ZothOSPage() {
           </Box>
         </RevealOnScroll>
 
+        {/* SECTION: ZothOS-Lite v1.0 (Amnesic 1-Bit Black & White Tails-Style Edition) */}
+        <RevealOnScroll preset="fadeUp" delay={0.28}>
+          <Box
+            sx={{
+              mb: 5,
+              mt: 3,
+              p: { xs: 2.5, md: 3.5 },
+              bgcolor: '#000000',
+              color: '#FFFFFF',
+              border: '2px solid #FFFFFF',
+              boxShadow: '6px 6px 0px #FFFFFF',
+              fontFamily: mono,
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: 1.5,
+                pb: 1.5,
+                mb: 2.5,
+                borderBottom: '1px solid #FFFFFF',
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
+                <Box
+                  sx={{
+                    px: 1.2,
+                    py: 0.4,
+                    bgcolor: '#FFFFFF',
+                    color: '#000000',
+                    fontWeight: 800,
+                    fontSize: '0.72rem',
+                    letterSpacing: '0.12em',
+                  }}
+                >
+                  ▓▒░ ZOTHOS-LITE v1.0 // TAILS-STYLE AMNESIC EDITION ░▒▓
+                </Box>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', color: '#FFFFFF', letterSpacing: '0.06em' }}>
+                  1-BIT BLACK & WHITE (#000000 / #FFFFFF) • BAYER 4x4 DITHER • UNICODE U+2800 BRAILLE
+                </Typography>
+              </Box>
+              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                <Button
+                  component="a"
+                  href="http://localhost:8145"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="small"
+                  sx={{
+                    bgcolor: '#FFFFFF',
+                    color: '#000000',
+                    fontFamily: mono,
+                    fontWeight: 800,
+                    fontSize: '0.72rem',
+                    borderRadius: 0,
+                    border: '1px solid #FFFFFF',
+                    px: 2,
+                    '&:hover': { bgcolor: '#000000', color: '#FFFFFF' },
+                  }}
+                >
+                  [ LAUNCH ZOTHOS-LITE WORKSTATION (:8145) ↗ ]
+                </Button>
+                <Button
+                  component="a"
+                  href="http://localhost:8140"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="small"
+                  sx={{
+                    bgcolor: '#000000',
+                    color: '#FFFFFF',
+                    fontFamily: mono,
+                    fontWeight: 800,
+                    fontSize: '0.72rem',
+                    borderRadius: 0,
+                    border: '1px solid #FFFFFF',
+                    px: 1.5,
+                    '&:hover': { bgcolor: '#FFFFFF', color: '#000000' },
+                  }}
+                >
+                  [ VAELOR L1 NODE (:8140) ↗ ]
+                </Button>
+              </Box>
+            </Box>
+
+            <Grid container spacing={2.5}>
+              <Grid xs={12} md={7}>
+                <Typography
+                  sx={{
+                    fontFamily: mono,
+                    fontWeight: 800,
+                    fontSize: { xs: '1.15rem', md: '1.4rem' },
+                    color: '#FFFFFF',
+                    letterSpacing: '0.04em',
+                    mb: 1,
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  Amnesic RAM-Only Security Workstation (`toram noswap`)
+                </Typography>
+                <Typography
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: '0.8rem',
+                    color: '#FFFFFF',
+                    lineHeight: 1.65,
+                    mb: 2,
+                  }}
+                >
+                  Designed like Tails OS for sovereign developers and cryptographic operators. Boots a minimal ~880 MB SquashFS image strictly into volatile RAM (`tmpfs`), enforces an `nftables` Tor transparent proxy kill-switch (`9050/9040`), randomizes hardware MAC addresses on link-up, and ships with the 6 Mandatory Zoth Security & Dev Tools pre-locked in RAM. Pull in any additional Zoth Studio or ZothOS tools on demand via `zoth-lite-pkg`.
+                </Typography>
+                <Grid container spacing={1}>
+                  {[
+                    { code: 'CORE-01', name: 'Zoth EnvGuard & Secret Firewall', desc: 'Pre-commit entropy scanner & zero-leakage .env RAM guard' },
+                    { code: 'CORE-02', name: 'GhostByte Metadata Stripper (mat2)', desc: 'Strips EXIF/GPS/PDF/Office metadata + SHA-256 & BLAKE2b digests' },
+                    { code: 'CORE-03', name: 'HexStrike Amnesic Auditor', desc: 'Offline static vulnerability auditor & local port verifier' },
+                    { code: 'CORE-04', name: 'Sovereign Tor & WireGuard Bridge', desc: 'Strict nftables egress kill-switch + per-stream Tor isolation' },
+                    { code: 'CORE-05', name: 'Vaelor L1 Air-Gapped Cold Signer', desc: 'Ed25519 deterministic keygen, offline tx signing & Braille RandomArt' },
+                    { code: 'CORE-06', name: 'Azoth Hardened Dev Suite', desc: 'Neovim + Rust/Go/Node/Python + Git GPG/SSH hardware signing' },
+                  ].map((core) => (
+                    <Grid xs={12} sm={6} key={core.code}>
+                      <Box
+                        sx={{
+                          p: 1.2,
+                          border: '1px solid #FFFFFF',
+                          bgcolor: '#000000',
+                          height: '100%',
+                        }}
+                      >
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.4 }}>
+                          <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 800, color: '#FFFFFF' }}>
+                            {core.name}
+                          </Typography>
+                          <Box sx={{ px: 0.6, bgcolor: '#FFFFFF', color: '#000000', fontSize: '0.62rem', fontWeight: 800 }}>
+                            {core.code}
+                          </Box>
+                        </Box>
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#FFFFFF', opacity: 0.85 }}>
+                          {core.desc}
+                        </Typography>
+                      </Box>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Grid>
+
+              <Grid xs={12} md={5}>
+                <Box
+                  sx={{
+                    p: 2,
+                    border: '1px solid #FFFFFF',
+                    bgcolor: '#000000',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                  }}
+                >
+                  <Box>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: '#FFFFFF', mb: 1, letterSpacing: '0.08em' }}>
+                      ┌─ ON-DEMAND MODULAR TOOL PULLER (zoth-lite-pkg) ─┐
+                    </Typography>
+                    <Box
+                      component="pre"
+                      sx={{
+                        m: 0,
+                        p: 1.5,
+                        border: '1px solid #FFFFFF',
+                        bgcolor: '#000000',
+                        color: '#FFFFFF',
+                        fontFamily: mono,
+                        fontSize: '0.7rem',
+                        lineHeight: 1.55,
+                        overflowX: 'auto',
+                      }}
+                    >
+{`$ zoth-lite-pkg status
+[::] ZOTHOS-LITE v1.0 // AMNESIC 1-BIT MONOTONE
+[::] Base RAM Usage : 412 MB (6 Core Locked)
+[::] Optional Pulled: 3 Modules (+236 MB tmpfs)
+
+# Pull only the tools you need into RAM:
+$ zoth-lite-pkg pull zoth-hermes-llm
+$ zoth-lite-pkg pull vaelor-node-cli
+$ zoth-lite-pkg pull obsidian-second-brain
+
+# Zero-trace panic wipe on shutdown:
+$ zoth-lite-pkg wipe-ram`}
+                    </Box>
+                  </Box>
+                  <Box sx={{ mt: 1.5, pt: 1.2, borderTop: '1px dashed #FFFFFF', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#FFFFFF' }}>
+                      ⣿ 2x4 BRAILLE ENTROPY: ⣠⣴⣾⣿⣾⣴⣠ • ISO: ~880 MB
+                    </Typography>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, color: '#FFFFFF' }}>
+                      100% OPEN ACCESS // ZERO PAYWALLS
+                    </Typography>
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+        </RevealOnScroll>
+
         {/* SECTION: Interactive Hardware Resource Dials */}
         <RevealOnScroll preset="fadeUp" delay={0.3}>
           <Box sx={{ mb: 5, mt: 3 }}>
