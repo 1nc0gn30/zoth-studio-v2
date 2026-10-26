@@ -208,6 +208,25 @@ export default function ZothBoltGodModeTool() {
     'Sovereign Dual-Rail Pricing & Output Paywall',
     'AEO Schema.org @graph & FAQ Accordion',
   ]);
+  const [visualEditMode, setVisualEditMode] = useState(false);
+  const [savedBuilds, setSavedBuilds] = useState(() => {
+    try {
+      const raw = localStorage.getItem('zoth_bolt_saved_vault');
+      return raw ? JSON.parse(raw) : [];
+    } catch (_) {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    function onVisualMessage(e) {
+      if (e?.data?.type === 'ZOTH_BOLT_VISUAL_EDIT' && typeof e.data.html === 'string') {
+        setResult((prev) => (prev ? { ...prev, html: e.data.html } : prev));
+      }
+    }
+    window.addEventListener('message', onVisualMessage);
+    return () => window.removeEventListener('message', onVisualMessage);
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -479,6 +498,77 @@ export default function ZothBoltGodModeTool() {
   }
 
   const auditReport = computeGuardrailAudit(result?.html);
+
+  function handleInstantThemeSwap(hexColor) {
+    if (!result?.html) return;
+    setAccent(hexColor);
+    const themeBlock = `<style id="zoth-live-theme">:root { --accent: ${hexColor} !important; --primary: ${hexColor} !important; } html, body { overflow-x: hidden; scroll-behavior: smooth; } h1 { font-size: clamp(2.1rem, 4.4vw, 3.6rem); }</style>`;
+    let updated = result.html;
+    if (updated.includes('id="zoth-live-theme"')) {
+      updated = updated.replace(/<style id="zoth-live-theme">[\s\S]*?<\/style>/i, themeBlock);
+    } else if (/<\/head>/i.test(updated)) {
+      updated = updated.replace(/<\/head>/i, `${themeBlock}\n</head>`);
+    }
+    setResult({ ...result, html: updated });
+  }
+
+  function handleSaveToVault() {
+    if (!result?.html) return;
+    const entry = {
+      id: `build-${Date.now()}`,
+      name: result.siteName || 'Zoth Bolt Build',
+      idea,
+      shader,
+      accent,
+      html: result.html,
+      savedAt: new Date().toLocaleTimeString(),
+    };
+    const next = [entry, ...savedBuilds.slice(0, 7)];
+    setSavedBuilds(next);
+    try {
+      localStorage.setItem('zoth_bolt_saved_vault', JSON.stringify(next));
+    } catch (_) {}
+  }
+
+  const previewHtmlWithVisualEditor = (() => {
+    if (!result?.html) return '';
+    if (!visualEditMode) return result.html;
+    const editorScript = `
+<script id="zoth-visual-editor-runtime">
+(function(){
+  const sel = 'h1,h2,h3,h4,p,button,a,span,li,strong,label';
+  document.addEventListener('mouseover', function(e){
+    const el = e.target.closest(sel);
+    if (el) { el.style.outline = '1.5px dashed #D4AF37'; el.style.cursor = 'text'; }
+  });
+  document.addEventListener('mouseout', function(e){
+    const el = e.target.closest(sel);
+    if (el && document.activeElement !== el) { el.style.outline = ''; }
+  });
+  document.addEventListener('click', function(e){
+    const el = e.target.closest(sel);
+    if (!el) return;
+    e.preventDefault();
+    e.stopPropagation();
+    el.contentEditable = 'true';
+    el.style.outline = '2px solid #10B981';
+    el.focus();
+  }, true);
+  document.addEventListener('focusout', function(e){
+    const el = e.target;
+    if (el && el.isContentEditable) {
+      el.removeAttribute('contenteditable');
+      el.style.outline = '';
+      const clone = document.documentElement.cloneNode(true);
+      const rt = clone.querySelector('#zoth-visual-editor-runtime');
+      if (rt) rt.remove();
+      window.parent.postMessage({ type: 'ZOTH_BOLT_VISUAL_EDIT', html: '<!DOCTYPE html>\\n' + clone.outerHTML }, '*');
+    }
+  });
+})();
+</script>`;
+    return result.html.replace(/<\/body>/i, `${editorScript}\n</body>`);
+  })();
 
   const previewWidth = viewport === 'mobile' ? '390px' : viewport === 'tablet' ? '768px' : '100%';
   const liveDeployUrl = result?.deploy?.liveUrl || result?.deploy?.deployUrl;
@@ -1345,6 +1435,45 @@ export default function ZothBoltGodModeTool() {
                 >
                   {copied ? 'Copied!' : 'Copy'}
                 </Button>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={handleSaveToVault}
+                  sx={{ fontFamily: mono, fontSize: '0.68rem', borderColor: 'rgba(16,185,129,0.45)', color: '#34D399', textTransform: 'none' }}
+                >
+                  💾 Save Vault
+                </Button>
+              </Box>
+            )}
+
+            {savedBuilds.length > 0 && (
+              <Box sx={{ pt: 0.5 }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.64rem', color: '#94A3B8', mb: 0.5 }}>
+                  💾 SAVED PERSONAL VAULT ({savedBuilds.length}):
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                  {savedBuilds.map((b) => (
+                    <Chip
+                      key={b.id}
+                      label={`${b.name} (${b.savedAt})`}
+                      size="small"
+                      onClick={() => {
+                        setIdea(b.idea);
+                        setShader(b.shader);
+                        setAccent(b.accent);
+                        setResult((prev) => ({ ...(prev || {}), siteName: b.name, matchedSource: 'Saved Vault', html: b.html }));
+                      }}
+                      sx={{
+                        fontFamily: mono,
+                        fontSize: '0.62rem',
+                        bgcolor: 'rgba(16,185,129,0.1)',
+                        color: '#A7F3D0',
+                        border: '1px solid rgba(16,185,129,0.3)',
+                        cursor: 'pointer',
+                      }}
+                    />
+                  ))}
+                </Box>
               </Box>
             )}
           </Box>
@@ -1384,7 +1513,47 @@ export default function ZothBoltGodModeTool() {
                   sx={{ fontFamily: mono, fontSize: '0.62rem', height: 20, bgcolor: 'rgba(212,175,55,0.14)', color: '#D4AF37' }}
                 />
               </Box>
-              <Box sx={{ display: 'flex', gap: 0.6, flexWrap: 'wrap' }}>
+              <Box sx={{ display: 'flex', gap: 0.6, flexWrap: 'wrap', alignItems: 'center' }}>
+                <Button
+                  size="small"
+                  onClick={() => setVisualEditMode((v) => !v)}
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: '0.66rem',
+                    py: 0.25,
+                    px: 1,
+                    textTransform: 'none',
+                    fontWeight: 800,
+                    color: visualEditMode ? '#08080B' : '#34D399',
+                    bgcolor: visualEditMode ? '#10B981' : 'rgba(16,185,129,0.12)',
+                    border: '1px solid rgba(16,185,129,0.45)',
+                  }}
+                >
+                  {visualEditMode ? '🎨 Click-to-Edit: ON (Click Any Text)' : '🎨 Click-to-Edit Mode'}
+                </Button>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, px: 0.8, py: 0.3, borderRadius: 1.5, bgcolor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                  {[
+                    { hex: '#D4AF37', label: 'Gold' },
+                    { hex: '#10B981', label: 'Emerald' },
+                    { hex: '#38BDF8', label: 'Cyan' },
+                    { hex: '#C084FC', label: 'Violet' },
+                    { hex: '#F97316', label: 'Amber' },
+                  ].map((sw) => (
+                    <Tooltip key={sw.hex} title={`Instant Theme Swap: ${sw.label}`}>
+                      <Box
+                        onClick={() => handleInstantThemeSwap(sw.hex)}
+                        sx={{
+                          width: 13,
+                          height: 13,
+                          borderRadius: '50%',
+                          bgcolor: sw.hex,
+                          border: accent === sw.hex ? '2px solid #FFF' : '1px solid rgba(255,255,255,0.3)',
+                          cursor: 'pointer',
+                        }}
+                      />
+                    </Tooltip>
+                  ))}
+                </Box>
                 {[
                   { id: 'desktop', label: 'Desktop', icon: <DesktopWindowsIcon sx={{ fontSize: 13 }} /> },
                   { id: 'tablet', label: 'Tablet', icon: <TabletMacIcon sx={{ fontSize: 13 }} /> },
@@ -1523,7 +1692,7 @@ export default function ZothBoltGodModeTool() {
                 ) : (
                   <iframe
                     title="Zoth Bolt Live Preview"
-                    srcDoc={result.html}
+                    srcDoc={previewHtmlWithVisualEditor}
                     style={{
                       width: previewWidth,
                       height: '100%',
