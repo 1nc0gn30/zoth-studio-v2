@@ -22,6 +22,15 @@ const CLUSTER_HEX = {
   'All': 0xD4AF37,
 };
 
+const TOUR_CLUSTERS = [
+  'Kernel',
+  'Lucy Oracle',
+  'Consensus',
+  'Security',
+  'Vault',
+  'Pantheon'
+];
+
 function getClusterHex(cluster) {
   return CLUSTER_HEX[cluster] || 0xD4AF37;
 }
@@ -186,12 +195,242 @@ export default function Netrunner3DWorld({
   const shockwaveRef = useRef(null);
   const ringsRef = useRef([]);
   const starsRef = useRef(null);
+  const pathwayGroupRef = useRef(null);
+  const pathwayDataRef = useRef(null);
+  const cameraGlideRef = useRef(null);
+  const tourStepRef = useRef(0);
+  const tourTimerRef = useRef(null);
 
   const [autoRotate, setAutoRotate] = useState(true);
   const [showLabels, setShowLabels] = useState(true);
   const [cameraMode, setCameraMode] = useState('orbit'); // 'orbit' | 'cortex' | 'matrix'
   const [hoveredMemory, setHoveredMemory] = useState(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
+  const [isTouring, setIsTouring] = useState(false);
+  const [tourCluster, setTourCluster] = useState(null);
+
+  // Smooth camera glide interpolation
+  const glideCameraTo = useCallback((targetPos, targetLook, duration = 1.4) => {
+    if (!cameraRef.current || !controlsRef.current) return;
+    cameraGlideRef.current = {
+      startPos: cameraRef.current.position.clone(),
+      endPos: targetPos.clone(),
+      startLook: controlsRef.current.target.clone(),
+      endLook: targetLook.clone(),
+      startTime: performance.now(),
+      duration: duration * 1000,
+      active: true,
+    };
+  }, []);
+
+  // Compute cluster 3D centroid from memory nodes
+  const getClusterVantage = useCallback((clusterName) => {
+    const matching = memories.filter(m => m.cluster === clusterName && m.x !== undefined);
+    let centroid;
+    if (matching.length > 0) {
+      const sum = matching.reduce((acc, m) => {
+        acc.x += m.x * 2.2;
+        acc.y += m.y * 1.8 + 24;
+        acc.z += m.z * 2.2;
+        return acc;
+      }, { x: 0, y: 0, z: 0 });
+      centroid = new THREE.Vector3(
+        sum.x / matching.length,
+        sum.y / matching.length,
+        sum.z / matching.length
+      );
+    } else {
+      const defaults = {
+        'Kernel': new THREE.Vector3(0, 24, -90),
+        'Lucy Oracle': new THREE.Vector3(0, 20, 0),
+        'Consensus': new THREE.Vector3(-90, 24, 60),
+        'Security': new THREE.Vector3(90, 22, 70),
+        'Vault': new THREE.Vector3(-75, 18, -80),
+        'Pantheon': new THREE.Vector3(80, 26, -70),
+      };
+      centroid = defaults[clusterName] || new THREE.Vector3(0, 16, 0);
+    }
+
+    let camPos;
+    if (clusterName === 'Lucy Oracle') {
+      camPos = new THREE.Vector3(0, 32, 105);
+    } else {
+      camPos = new THREE.Vector3(centroid.x + 35, centroid.y + 40, centroid.z + 120);
+    }
+    return { centroid, camPos };
+  }, [memories]);
+
+  // Execute continuous tour across memory clusters
+  const runTourStep = useCallback((stepIdx) => {
+    const clusterName = TOUR_CLUSTERS[stepIdx % TOUR_CLUSTERS.length];
+    setTourCluster(clusterName);
+    const { centroid, camPos } = getClusterVantage(clusterName);
+
+    glideCameraTo(camPos, centroid, 1.4);
+
+    if (shockwaveRef.current && shockwaveRef.current.mesh) {
+      shockwaveRef.current.mesh.position.copy(centroid);
+      shockwaveRef.current.scale = 1.0;
+      shockwaveRef.current.opacity = 0.85;
+    }
+
+    tourTimerRef.current = setTimeout(() => {
+      tourStepRef.current += 1;
+      runTourStep(tourStepRef.current);
+    }, 4800);
+  }, [getClusterVantage, glideCameraTo]);
+
+  const toggleTour = useCallback(() => {
+    if (isTouring) {
+      setIsTouring(false);
+      setTourCluster(null);
+      if (tourTimerRef.current) {
+        clearTimeout(tourTimerRef.current);
+        tourTimerRef.current = null;
+      }
+    } else {
+      setIsTouring(true);
+      tourStepRef.current = 0;
+      if (controlsRef.current) {
+        controlsRef.current.autoRotate = false;
+      }
+      runTourStep(0);
+    }
+  }, [isTouring, runTourStep]);
+
+  // Rebuild 3D Interactive Synaptic Pathway Beams: Selected Node -> Core (0, 16, 0) + Top 3 Nearest Neighbors
+  const rebuildPathwayBeams = useCallback((selectedMem) => {
+    const pGroup = pathwayGroupRef.current;
+    if (!pGroup) return;
+
+    while (pGroup.children.length > 0) {
+      const child = pGroup.children[0];
+      pGroup.remove(child);
+      if (child.geometry) child.geometry.dispose();
+      if (child.material) {
+        if (Array.isArray(child.material)) child.material.forEach(m => m.dispose());
+        else child.material.dispose();
+      }
+    }
+    pathwayDataRef.current = null;
+
+    if (!selectedMem || selectedMem.x === undefined) return;
+
+    const nodePos = new THREE.Vector3(
+      selectedMem.x * 2.2,
+      selectedMem.y * 1.8 + 24,
+      selectedMem.z * 2.2
+    );
+    const corePos = new THREE.Vector3(0, 16, 0);
+
+    // 1. High-luminance Gold Laser Beam directly to Central Netrunner Cyber-Cortex (0, 16, 0)
+    const coreLineGeo = new THREE.BufferGeometry().setFromPoints([nodePos, corePos]);
+    const coreLineMat = new THREE.LineBasicMaterial({
+      color: 0xFFD700,
+      transparent: true,
+      opacity: 0.95,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const coreLine = new THREE.Line(coreLineGeo, coreLineMat);
+    pGroup.add(coreLine);
+
+    // Cyan glowing aura beam to Core
+    const coreAuraMat = new THREE.LineBasicMaterial({
+      color: 0x00F0FF,
+      transparent: true,
+      opacity: 0.55,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const coreAuraLine = new THREE.Line(coreLineGeo, coreAuraMat);
+    pGroup.add(coreAuraLine);
+
+    // Traveling golden photon sphere along Core beam
+    const corePhotonGeo = new THREE.SphereGeometry(1.6, 12, 12);
+    const corePhotonMat = new THREE.MeshBasicMaterial({
+      color: 0xFFD700,
+      transparent: true,
+      opacity: 0.95,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const corePhoton = new THREE.Mesh(corePhotonGeo, corePhotonMat);
+    pGroup.add(corePhoton);
+
+    // 2. High-luminance Cyan Laser Beams to Top 3 Nearest Semantic Neighbors
+    const otherMemories = memories.filter(m => m.id !== selectedMem.id && m.x !== undefined);
+    const neighbors = otherMemories.map(m => {
+      const pos = new THREE.Vector3(m.x * 2.2, m.y * 1.8 + 24, m.z * 2.2);
+      return { memory: m, pos, dist: nodePos.distanceTo(pos) };
+    }).sort((a, b) => a.dist - b.dist).slice(0, 3);
+
+    const neighborPhotons = [];
+    const targetRings = [];
+    const neighborColors = [0x00F0FF, 0x38BDF8, 0xD4AF37];
+
+    neighbors.forEach((n, idx) => {
+      const beamGeo = new THREE.BufferGeometry().setFromPoints([nodePos, n.pos]);
+      const beamMat = new THREE.LineBasicMaterial({
+        color: neighborColors[idx] || 0x00F0FF,
+        transparent: true,
+        opacity: 0.9,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
+      const beamLine = new THREE.Line(beamGeo, beamMat);
+      pGroup.add(beamLine);
+
+      // Cyan aura line
+      const beamAuraMat = new THREE.LineBasicMaterial({
+        color: 0x00F0FF,
+        transparent: true,
+        opacity: 0.45,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
+      const beamAura = new THREE.Line(beamGeo, beamAuraMat);
+      pGroup.add(beamAura);
+
+      // Target highlight ring around neighbor node
+      const ringGeo = new THREE.RingGeometry(5.2, 6.4, 32);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: neighborColors[idx] || 0x00F0FF,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.8,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.position.copy(n.pos);
+      ring.rotation.x = Math.PI / 2;
+      pGroup.add(ring);
+      targetRings.push(ring);
+
+      // Traveling photon
+      const nPhotonGeo = new THREE.SphereGeometry(1.2, 8, 8);
+      const nPhotonMat = new THREE.MeshBasicMaterial({
+        color: neighborColors[idx] || 0x00F0FF,
+        transparent: true,
+        opacity: 0.9,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
+      const nPhoton = new THREE.Mesh(nPhotonGeo, nPhotonMat);
+      pGroup.add(nPhoton);
+      neighborPhotons.push({ mesh: nPhoton, p1: nodePos, p2: n.pos, speed: 0.75 + idx * 0.2 });
+    });
+
+    pathwayDataRef.current = {
+      corePhoton,
+      nodePos,
+      corePos,
+      neighborPhotons,
+      targetRings,
+      coreLineMat,
+    };
+  }, [memories]);
 
   // Sync auto-rotation state with OrbitControls
   const toggleAutoRotate = () => {
@@ -206,15 +445,31 @@ export default function Netrunner3DWorld({
 
   // Smoothly reset camera to default majestic vantage
   const resetCamera = useCallback(() => {
+    if (isTouring) {
+      setIsTouring(false);
+      setTourCluster(null);
+      if (tourTimerRef.current) {
+        clearTimeout(tourTimerRef.current);
+        tourTimerRef.current = null;
+      }
+    }
     if (!cameraRef.current || !controlsRef.current) return;
     setCameraMode('orbit');
     const controls = controlsRef.current;
     controls.target.set(0, 16, 0);
     cameraRef.current.position.set(0, 110, 380);
     controls.update();
-  }, []);
+  }, [isTouring]);
 
   const switchCameraPreset = useCallback((preset) => {
+    if (isTouring) {
+      setIsTouring(false);
+      setTourCluster(null);
+      if (tourTimerRef.current) {
+        clearTimeout(tourTimerRef.current);
+        tourTimerRef.current = null;
+      }
+    }
     if (!cameraRef.current || !controlsRef.current) return;
     setCameraMode(preset);
     const controls = controlsRef.current;
@@ -229,7 +484,7 @@ export default function Netrunner3DWorld({
       cameraRef.current.position.set(0, 110, 380);
     }
     controls.update();
-  }, []);
+  }, [isTouring]);
 
   // Smoothly center and focus on the currently selected memory node
   const focusSelectedNode = useCallback(() => {
@@ -467,6 +722,12 @@ export default function Netrunner3DWorld({
     scene.add(halo);
     haloMeshRef.current = halo;
 
+    // SYNAPTIC PATHWAY LASER BEAMS GROUP (Selected Node -> Netrunner Cyber-Cortex (0, 16, 0) + Top 3 Neighbors)
+    const pathwayGroup = new THREE.Group();
+    scene.add(pathwayGroup);
+    pathwayGroupRef.current = pathwayGroup;
+    rebuildPathwayBeams(selectedMemory);
+
     // MEMORY NODES GROUP
     const nodeGroup = new THREE.Group();
     scene.add(nodeGroup);
@@ -602,6 +863,14 @@ export default function Netrunner3DWorld({
       if (intersects.length > 0) {
         const hit = intersects[0].object;
         if (hit.userData?.memory) {
+          if (isTouring) {
+            setIsTouring(false);
+            setTourCluster(null);
+            if (tourTimerRef.current) {
+              clearTimeout(tourTimerRef.current);
+              tourTimerRef.current = null;
+            }
+          }
           if (shockwaveRef.current && shockwaveRef.current.mesh) {
             shockwaveRef.current.mesh.position.copy(hit.position);
             shockwaveRef.current.scale = 1.0;
@@ -702,6 +971,49 @@ export default function Netrunner3DWorld({
         pMesh.instanceMatrix.needsUpdate = true;
       }
 
+      // Smooth Camera Glide (during Tour mode or vantage transitions)
+      if (cameraGlideRef.current && cameraGlideRef.current.active) {
+        const g = cameraGlideRef.current;
+        const elapsedMs = performance.now() - g.startTime;
+        const progress = Math.min(1.0, elapsedMs / g.duration);
+        const ease = 0.5 - Math.cos(progress * Math.PI) / 2;
+
+        camera.position.lerpVectors(g.startPos, g.endPos, ease);
+        controls.target.lerpVectors(g.startLook, g.endLook, ease);
+        controls.update();
+
+        if (progress >= 1.0) {
+          g.active = false;
+        }
+      }
+
+      // Animate Synaptic Pathway Laser Beams & Photons
+      if (pathwayDataRef.current) {
+        const pd = pathwayDataRef.current;
+        if (pd.corePhoton) {
+          const tCore = (elapsed * 0.85) % 1;
+          pd.corePhoton.position.lerpVectors(pd.nodePos, pd.corePos, tCore);
+          const pScale = 1.0 + Math.sin(elapsed * 6) * 0.25;
+          pd.corePhoton.scale.set(pScale, pScale, pScale);
+        }
+        if (pd.coreLineMat) {
+          pd.coreLineMat.opacity = 0.85 + Math.sin(elapsed * 8) * 0.12;
+        }
+        if (pd.neighborPhotons) {
+          pd.neighborPhotons.forEach((np, i) => {
+            const tN = ((elapsed * np.speed + i * 0.33) % 1);
+            np.mesh.position.lerpVectors(np.p1, np.p2, tN);
+          });
+        }
+        if (pd.targetRings) {
+          pd.targetRings.forEach((tr, i) => {
+            tr.rotation.z = elapsed * (1.2 + i * 0.4);
+            const rScale = 1 + Math.sin(elapsed * 3.5 + i) * 0.12;
+            tr.scale.set(rScale, rScale, 1);
+          });
+        }
+      }
+
       renderer.render(scene, camera);
     };
 
@@ -713,6 +1025,11 @@ export default function Netrunner3DWorld({
       ro.disconnect();
       domEl.removeEventListener('pointermove', onPointerMove);
       domEl.removeEventListener('click', onClick);
+
+      if (tourTimerRef.current) {
+        clearTimeout(tourTimerRef.current);
+        tourTimerRef.current = null;
+      }
 
       // Dispose Three.js resources
       renderer.dispose();
@@ -737,6 +1054,11 @@ export default function Netrunner3DWorld({
       haloMeshRef.current.visible = false;
     }
   }, [selectedMemory]);
+
+  // Update synaptic pathway laser beams on selection change
+  useEffect(() => {
+    rebuildPathwayBeams(selectedMemory);
+  }, [selectedMemory, rebuildPathwayBeams]);
 
   useEffect(() => {
     if (!labelSpritesRef.current) return;
@@ -825,7 +1147,70 @@ export default function Netrunner3DWorld({
             border: '1px solid rgba(0,240,255,0.35)'
           }}
         />
+        <Chip
+          label={isTouring ? "■ TOUR" : "✦ TOUR"}
+          size="small"
+          onClick={toggleTour}
+          sx={{
+            height: 22,
+            cursor: 'pointer',
+            fontFamily: mono,
+            fontWeight: 800,
+            fontSize: '0.62rem',
+            bgcolor: isTouring ? 'rgba(0,240,255,0.25)' : 'transparent',
+            color: isTouring ? '#00F0FF' : '#94A3B8',
+            border: isTouring ? '1px solid #00F0FF' : '1px solid rgba(0,240,255,0.35)',
+            boxShadow: isTouring ? '0 0 10px rgba(0,240,255,0.45)' : 'none',
+            transition: 'all 0.2s ease',
+            '&:hover': {
+              bgcolor: isTouring ? 'rgba(0,240,255,0.35)' : 'rgba(0,240,255,0.12)',
+              color: '#00F0FF',
+            }
+          }}
+        />
       </Box>
+
+      {/* 3D Tour Narration Pill (Top Right, under HUD bar) */}
+      {isTouring && tourCluster && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 48,
+            right: 14,
+            zIndex: 6,
+            bgcolor: isDark ? 'rgba(8,10,18,0.92)' : 'rgba(255,255,255,0.95)',
+            backdropFilter: 'blur(10px)',
+            border: `1px solid #${getClusterHex(tourCluster).toString(16).padStart(6, '0')}`,
+            borderRadius: 1.5,
+            px: 1.2,
+            py: 0.5,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+            boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
+          }}
+        >
+          <Typography
+            variant="caption"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.65rem',
+              color: `#${getClusterHex(tourCluster).toString(16).padStart(6, '0')}`,
+            }}
+          >
+            ✦ TOUR: {tourCluster.toUpperCase()} CLUSTER
+          </Typography>
+          <Box
+            sx={{
+              width: 6,
+              height: 6,
+              borderRadius: '50%',
+              bgcolor: `#${getClusterHex(tourCluster).toString(16).padStart(6, '0')}`,
+            }}
+          />
+        </Box>
+      )}
 
       {/* Ambient Status Telemetry Badge (Top Left) */}
       <Box sx={{ position: 'absolute', top: 12, left: 14, zIndex: 4, display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -854,6 +1239,20 @@ export default function Netrunner3DWorld({
             fontSize: '0.65rem'
           }}
         />
+        {selectedMemory && (
+          <Chip
+            label="BEAM: 1 CORTEX + 3 NEIGHBORS"
+            size="small"
+            sx={{
+              bgcolor: 'rgba(212,175,55,0.18)',
+              color: '#FFD700',
+              border: '1px solid rgba(212,175,55,0.4)',
+              fontFamily: mono,
+              fontWeight: 700,
+              fontSize: '0.65rem'
+            }}
+          />
+        )}
       </Box>
 
       {/* Floating Hover HUD Tooltip */}
