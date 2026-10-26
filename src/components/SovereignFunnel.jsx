@@ -147,14 +147,14 @@ export default function SovereignFunnel({
         </Typography>
       </Box>
 
-      {/* Founding Member Commercial License & Dual Checkout Bar */}
+      {/* Open-Source Support — Buy Us a Coffee (Stripe or Solana Wallet) */}
       <Box
         sx={{
           mb: 3.5,
           p: { xs: 2, md: 2.5 },
           borderRadius: 2.5,
-          bgcolor: isDark ? 'rgba(212, 175, 55, 0.08)' : '#FEF9E7',
-          border: `1px solid ${gold}`,
+          bgcolor: isDark ? 'rgba(61, 255, 168, 0.06)' : '#F0FDF4',
+          border: `1px solid ${isDark ? 'rgba(61, 255, 168, 0.35)' : '#10B981'}`,
           display: 'flex',
           flexWrap: 'wrap',
           alignItems: 'center',
@@ -165,7 +165,7 @@ export default function SovereignFunnel({
         <Box sx={{ minWidth: 0, flex: '1 1 300px' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 0.5 }}>
             <Chip
-              label="✦ FOUNDING LIFETIME DEAL • 75% OFF"
+              label="✦ 100% FREE & OPEN ACCESS • ZERO PAYWALLS"
               size="small"
               sx={{
                 height: 22,
@@ -177,13 +177,9 @@ export default function SovereignFunnel({
                 border: '1px solid rgba(16, 185, 129, 0.4)',
               }}
             />
-            <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', fontWeight: 800, color: gold }}>
-              <span style={{ textDecoration: 'line-through', opacity: 0.65, marginRight: 6 }}>$79</span>
-              $19 LIFETIME PRO PASS
-            </Typography>
           </Box>
           <Typography variant="subtitle1" sx={{ fontWeight: 800, color: textPrimary, lineHeight: 1.3 }}>
-            Unlock Commercial Pro Exports, Unblurred Manifests &amp; Priority Sovereign Updates
+            All tools, exports, and local models are 100% unlocked. If this saves you time, buy us a coffee!
           </Typography>
         </Box>
 
@@ -191,33 +187,9 @@ export default function SovereignFunnel({
           <Button
             variant="contained"
             size="small"
-            href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
             target="_blank"
             rel="noopener noreferrer"
-            sx={{
-              background: '#635BFF',
-              color: '#FFFFFF',
-              fontFamily: mono,
-              fontWeight: 800,
-              fontSize: '0.76rem',
-              textTransform: 'none',
-              px: 2,
-              py: 0.9,
-              '&:hover': { background: '#4F46E5' },
-            }}
-          >
-            Card / Apple Pay ($19)
-          </Button>
-          <Button
-            variant="contained"
-            size="small"
-            onClick={() => {
-              if (typeof window !== 'undefined' && window.DePayWidgets && typeof window.DePayWidgets.Payment === 'function') {
-                window.DePayWidgets.Payment({ integration: '428790dd-7ad1-407c-8ecf-c048c77a4cb8' });
-              } else {
-                window.open('https://depay.com/pay?integration=428790dd-7ad1-407c-8ecf-c048c77a4cb8&receiver=GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK&amount=19', '_blank');
-              }
-            }}
             sx={{
               background: gold,
               color: isDark ? '#08080B' : '#FFFFFF',
@@ -230,144 +202,26 @@ export default function SovereignFunnel({
               '&:hover': { background: isDark ? '#F5E6AB' : '#6B4E06' },
             }}
           >
-            Pay with SOL ($19)
-          </Button>
-          <Button
-            id="vaelor-checkout-btn"
-            variant="contained"
-            size="small"
-            onClick={handleVaelorCheckout}
-            disabled={isSettlingVaelor}
-            sx={{
-              background: '#00F0FF',
-              color: '#08080B',
-              fontFamily: mono,
-              fontWeight: 800,
-              fontSize: '0.76rem',
-              textTransform: 'none',
-              px: 2,
-              py: 0.9,
-              border: '1px solid rgba(0, 240, 255, 0.4)',
-              boxShadow: '0 0 14px rgba(0, 240, 255, 0.25)',
-              '&:hover': { background: '#38BDF8', boxShadow: '0 0 20px rgba(0, 240, 255, 0.45)' },
-            }}
-          >
-            {isSettlingVaelor ? 'Settling 19 VLR...' : '◈ Pay 19 VLR ($0 Gas + 2.5% Cashback)'}
+            ☕ Buy Us a Coffee (Stripe)
           </Button>
           <Button
             variant="outlined"
             size="small"
-            href="https://buy.stripe.com/eVq14m5k16hW4Le0xWfw40M"
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              borderColor: gold,
-              color: goldHeading,
-              fontFamily: mono,
-              fontWeight: 800,
-              fontSize: '0.75rem',
-              textTransform: 'none',
-              px: 1.8,
-              py: 0.85,
-            }}
-          >
-            👑 All 44 Tools ($49)
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            href="https://buy.stripe.com/00w8wO6o50XC2D60xWfw40S"
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              borderColor: '#38BDF8',
-              color: '#38BDF8',
-              fontFamily: mono,
-              fontWeight: 800,
-              fontSize: '0.75rem',
-              textTransform: 'none',
-              px: 1.6,
-              py: 0.85,
-            }}
-          >
-            🤖 AI Receptionist ($299)
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            href="https://buy.stripe.com/3cIcN48wdbCgelOeoMfw40T"
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              borderColor: '#34D399',
-              color: '#34D399',
-              fontFamily: mono,
-              fontWeight: 800,
-              fontSize: '0.75rem',
-              textTransform: 'none',
-              px: 1.6,
-              py: 0.85,
-            }}
-          >
-            🚀 5-Page DFY ($499)
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            href="https://buy.stripe.com/14A28qdQxdKo7XqfsQfw40U"
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              borderColor: '#A78BFA',
-              color: '#A78BFA',
-              fontFamily: mono,
-              fontWeight: 800,
-              fontSize: '0.75rem',
-              textTransform: 'none',
-              px: 1.6,
-              py: 0.85,
-            }}
-          >
-            🛠️ Custom AI Swarm ($997)
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={() => handleCopy('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK', 'Phantom Solana Wallet Address')}
+            onClick={() => handleCopy('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK', 'Solana Wallet Address')}
             sx={{
               borderColor: '#14F195',
               color: '#14F195',
               fontFamily: mono,
               fontWeight: 800,
-              fontSize: '0.73rem',
+              fontSize: '0.74rem',
               textTransform: 'none',
-              px: 1.5,
+              px: 1.8,
               py: 0.85,
             }}
           >
-            📋 Copy SOL Address
+            ◎ Solana Tip: GG2eQb…dXoK (Copy)
           </Button>
         </Box>
-
-        {vaelorReceipt && (
-          <Alert
-            id="vaelor-receipt-banner"
-            severity="success"
-            onClose={() => setVaelorReceipt(null)}
-            sx={{
-              width: '100%',
-              mt: 2,
-              borderRadius: 2,
-              bgcolor: isDark ? 'rgba(0, 240, 255, 0.12)' : '#E0F2FE',
-              border: '1px solid #00F0FF',
-              color: isDark ? '#E0F2FE' : '#0369A1',
-              fontFamily: mono,
-              fontSize: '0.78rem'
-            }}
-          >
-            <strong>◈ Vaelor Smart Receipt Finalized:</strong> ID <code>{vaelorReceipt.id}</code> · 19 ◈ VLR Settled ($0 Gas) · 0.475 VLR (2.5%) Cashback Credited · BFT 5/5 Finality!
-          </Alert>
-        )}
       </Box>
 
       <Grid container spacing={3}>

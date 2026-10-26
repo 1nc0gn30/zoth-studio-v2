@@ -35,7 +35,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import HubIcon from '@mui/icons-material/Hub';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const STRIPE_URL = 'https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L';
+const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
 
 const RESEARCH_PRESETS = {
   stdp: {
@@ -104,7 +104,7 @@ export default function DeepSearchGodModeTool() {
 
   const [presetKey, setPresetKey] = useState('stdp');
   const [customQuery, setCustomQuery] = useState(RESEARCH_PRESETS.stdp.query);
-  const [isPro, setIsPro] = useState(false);
+  const [isPro, setIsPro] = useState(true);
   const [paywallOpen, setPaywallOpen] = useState(false);
   const [licenseInput, setLicenseInput] = useState('');
   const [copied, setCopied] = useState(false);
@@ -237,7 +237,7 @@ ${base.claims
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
           <Chip
             icon={<BoltIcon sx={{ color: '#08080B !important', fontSize: 16 }} />}
-            label={isPro ? '⭐ PRO ACTIVE · UNLIMITED DOSSIERS' : 'FOUNDING LIFETIME: $19 (REG $79)'}
+            label={isPro ? '⭐ PRO ACTIVE · UNLIMITED DOSSIERS' : '✦ 100% OPEN ACCESS'}
             size="small"
             sx={{ bgcolor: '#00F0FF', color: '#08080B', fontWeight: 900, fontFamily: mono }}
           />
@@ -255,7 +255,7 @@ ${base.claims
               rel="noopener noreferrer"
               sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.74rem' }}
             >
-              Unlock Pro ($19 Stripe)
+              ☕ Buy Us a Coffee (Stripe)
             </Button>
             <Button
               size="small"

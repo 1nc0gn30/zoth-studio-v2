@@ -262,7 +262,7 @@ export default function PwaManifestBuilderGodModeTool() {
   const isDark = theme.palette.mode === 'dark';
 
   // License State
-  const [isLicensed, setIsLicensed] = useState(false);
+  const [isLicensed, setIsLicensed] = useState(true);
   const [licenseModalOpen, setLicenseModalOpen] = useState(false);
   const [licenseKeyInput, setLicenseKeyInput] = useState('');
   const [licenseStatusMsg, setLicenseStatusMsg] = useState('');
@@ -633,7 +633,7 @@ self.addEventListener('fetch', (event) => {
           <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
             <Button
               variant="contained"
-              href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
+              href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
               target="_blank"
               rel="noopener noreferrer"
               sx={{

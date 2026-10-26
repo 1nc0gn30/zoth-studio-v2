@@ -102,6 +102,20 @@ FLEET_DAEMONS = [
         {},
     ),
     (
+        8140,
+        ["node", str(NULLAI / "vaelor-network" / "server.js")],
+        str(NULLAI / "vaelor-network"),
+        "/tmp/zoth-port-8140.log",
+        {},
+    ),
+    (
+        9393,
+        ["node", str(NULLAI / "zoth-civilization" / "server.js")],
+        str(NULLAI / "zoth-civilization"),
+        "/tmp/zoth-port-9393.log",
+        {},
+    ),
+    (
         9395,
         ["node", str(NULLAI / "likeness-desk" / "server.js")],
         str(NULLAI / "likeness-desk"),

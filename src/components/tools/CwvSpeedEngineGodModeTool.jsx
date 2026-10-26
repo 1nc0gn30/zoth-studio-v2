@@ -32,7 +32,7 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import CheckIcon from '@mui/icons-material/Check';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const STRIPE_URL = 'https://buy.stripe.com/00w14mdQxgWA3Ha5Sgfw40H';
+const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
 
 const SAMPLE_HTML = `<!DOCTYPE html>
 <html lang="en">
@@ -68,7 +68,7 @@ export default function CwvSpeedEngineGodModeTool() {
   const [optFontSwap, setOptFontSwap] = useState(true);
   const [optPreconnect, setOptPreconnect] = useState(true);
 
-  const [isPro, setIsPro] = useState(false);
+  const [isPro, setIsPro] = useState(true);
   const [paywallOpen, setPaywallOpen] = useState(false);
   const [licenseInput, setLicenseInput] = useState('');
   const [copied, setCopied] = useState(false);
@@ -318,7 +318,7 @@ export default function CwvSpeedEngineGodModeTool() {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
           <Chip
             icon={<BoltIcon sx={{ color: '#08080B !important', fontSize: 16 }} />}
-            label={isPro ? '⭐ PRO ACTIVE · UNLIMITED AST EXPORTS' : 'FOUNDING LIFETIME: $19 (REG $79)'}
+            label={isPro ? '⭐ PRO ACTIVE · UNLIMITED AST EXPORTS' : '✦ 100% OPEN ACCESS'}
             size="small"
             sx={{ bgcolor: '#10B981', color: '#08080B', fontWeight: 900, fontFamily: mono }}
           />
@@ -337,7 +337,7 @@ export default function CwvSpeedEngineGodModeTool() {
                 rel="noopener noreferrer"
                 sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.74rem' }}
               >
-                Unlock Pro ($19 Stripe)
+                ☕ Buy Us a Coffee (Stripe)
               </Button>
               <Button
                 size="small"
@@ -565,7 +565,7 @@ export default function CwvSpeedEngineGodModeTool() {
                         rel="noopener noreferrer"
                         sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.75rem' }}
                       >
-                        Unlock via Stripe ($19)
+                        ☕ Buy Us a Coffee (Stripe)
                       </Button>
                       <Button
                         variant="outlined"

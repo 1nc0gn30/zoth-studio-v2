@@ -7,34 +7,33 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
  * Renders nothing when the tool has no price and no live URL.
  */
 export default function ToolOfferLine({ tool, isDark }) {
-  if (!tool?.priceUsd && !tool?.liveUrl && !tool?.stripeUrl) return null;
+  if (!tool?.liveUrl) return null;
   const color = isDark ? '#F5E6AB' : '#8A6508';
-  const wash = isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7';
-  const border = isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.35)';
-  const stripeHref = tool?.stripeUrl || 'https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L';
-  const priceLabel = tool?.priceUsd ? `$${tool.priceUsd} Pro` : '$19 Pro';
+  const wash = isDark ? 'rgba(61,255,168,0.12)' : '#ECFDF5';
+  const border = isDark ? 'rgba(61,255,168,0.38)' : 'rgba(16,185,129,0.35)';
+  const coffeeHref = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
 
   return (
     <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center', mt: 1.2 }}>
       <Chip
         component="a"
-        href={stripeHref}
+        href={coffeeHref}
         target="_blank"
         rel="noopener noreferrer"
         clickable
-        label={`💳 ${priceLabel}`}
+        label="☕ Buy Us a Coffee"
         size="small"
         sx={{
           fontFamily: mono,
           fontWeight: 800,
           letterSpacing: '0.04em',
           bgcolor: wash,
-          color,
+          color: isDark ? '#3dffa8' : '#047857',
           border: `1px solid ${border}`,
           height: 24,
           textDecoration: 'none',
           '&:hover': {
-            bgcolor: isDark ? 'rgba(212,175,55,0.26)' : '#FDE68A',
+            bgcolor: isDark ? 'rgba(61,255,168,0.22)' : '#D1FAE5',
           },
         }}
       />
@@ -58,11 +57,6 @@ export default function ToolOfferLine({ tool, isDark }) {
         >
           Live app ↗
         </Button>
-      )}
-      {tool.priceNote && (
-        <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem', lineHeight: 1.4 }}>
-          {tool.priceNote}
-        </Typography>
       )}
     </Box>
   );

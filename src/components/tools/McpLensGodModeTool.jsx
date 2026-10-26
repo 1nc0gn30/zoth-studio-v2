@@ -187,7 +187,7 @@ export default function McpLensGodModeTool() {
   const [tokenStats, setTokenStats] = useState({ rawTokens: 0, minTokens: 0, savedPercent: 0 });
 
   // Pro State
-  const [isPro, setIsPro] = useState(false);
+  const [isPro, setIsPro] = useState(true);
   const [proModalOpen, setProModalOpen] = useState(false);
   const [licenseKeyInput, setLicenseKeyInput] = useState('');
   const [copied, setCopied] = useState(false);
@@ -404,7 +404,7 @@ export default function McpLensGodModeTool() {
             <>
               <Button
                 variant="contained"
-                href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
+                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
                 target="_blank"
                 rel="noopener noreferrer"
                 startIcon={<BoltIcon />}
@@ -916,7 +916,7 @@ export default function McpLensGodModeTool() {
                   <Stack direction="row" spacing={1.5}>
                     <Button
                       variant="contained"
-                      href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
+                      href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
                       target="_blank"
                       rel="noopener noreferrer"
                       sx={{ bgcolor: '#D4AF37', color: '#000', fontWeight: 800, fontFamily: mono }}

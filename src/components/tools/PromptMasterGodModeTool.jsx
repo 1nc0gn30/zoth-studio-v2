@@ -26,7 +26,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const STRIPE_URL = 'https://buy.stripe.com/cNiaEWaEldKo6Tm1C0fw40D';
+const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
 
 const DEFAULT_PROMPT = `Act as a senior autonomous systems engineer and security architect.
 Analyze the user's code repository and identify any SQL injection, SSRF, or hardcoded credential vulnerabilities.
@@ -39,7 +39,7 @@ export default function PromptMasterGodModeTool() {
 
   const [rawPrompt, setRawPrompt] = useState(DEFAULT_PROMPT);
   const [dialectTab, setDialectTab] = useState(0); // 0: Claude XML, 1: OpenAI JSON Schema, 2: DSPy Signature, 3: Ollama Modelfile
-  const [isPro, setIsPro] = useState(false);
+  const [isPro, setIsPro] = useState(true);
   const [paywallOpen, setPaywallOpen] = useState(false);
   const [licenseInput, setLicenseInput] = useState('');
   const [copied, setCopied] = useState(false);
@@ -214,7 +214,7 @@ ${claudeXml}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
           <Chip
             icon={<BoltIcon sx={{ color: '#08080B !important', fontSize: 16 }} />}
-            label={isPro ? '⭐ PRO ACTIVE · TRI-MODEL COMPILER UNLOCKED' : 'FOUNDING LIFETIME: $19 (REG $79)'}
+            label={isPro ? '⭐ PRO ACTIVE · TRI-MODEL COMPILER UNLOCKED' : '✦ 100% OPEN ACCESS'}
             size="small"
             sx={{ bgcolor: '#C084FC', color: '#08080B', fontWeight: 900, fontFamily: mono }}
           />
@@ -232,7 +232,7 @@ ${claudeXml}
               rel="noopener noreferrer"
               sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.74rem' }}
             >
-              Unlock Pro ($19 Stripe)
+              ☕ Buy Us a Coffee (Stripe)
             </Button>
             <Button
               size="small"

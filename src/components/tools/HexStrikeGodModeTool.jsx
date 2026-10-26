@@ -991,7 +991,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
                 <Button
                   variant="contained"
                   component="a"
-                  href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
+                  href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
                   target="_blank"
                   rel="noopener"
                   startIcon={<BoltIcon />}
@@ -1009,7 +1009,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
                 <Button
                   variant="outlined"
                   component="a"
-                  href="https://buy.stripe.com/fZu4gyaEleOsb9CdkIfw40K"
+                  href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
                   target="_blank"
                   rel="noopener"
                   sx={{
@@ -2202,7 +2202,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
                     fullWidth
                     variant="contained"
                     component="a"
-                    href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
+                    href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
                     target="_blank"
                     rel="noopener"
                     startIcon={<BoltIcon />}
@@ -2222,7 +2222,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
                     fullWidth
                     variant="outlined"
                     component="a"
-                    href="https://buy.stripe.com/fZu4gyaEleOsb9CdkIfw40K"
+                    href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
                     target="_blank"
                     rel="noopener"
                     sx={{

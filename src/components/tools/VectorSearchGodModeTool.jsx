@@ -30,7 +30,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const STRIPE_URL = 'https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L';
+const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
 
 const INITIAL_DOCS = [
   { id: 'vec_101', title: 'Byzantine Consensus Triangulation', text: 'Multi-model quorum verification across 3 independent LLM reasoning paths to eliminate hallucination drift.', x: 185, y: 55, layer: 2 },
@@ -50,7 +50,7 @@ export default function VectorSearchGodModeTool() {
   const [newDocText, setNewDocText] = useState('');
   const [rrfK, setRrfK] = useState(60);
   const [efSearch, setEfSearch] = useState(64);
-  const [isPro, setIsPro] = useState(false);
+  const [isPro, setIsPro] = useState(true);
   const [paywallOpen, setPaywallOpen] = useState(false);
   const [licenseInput, setLicenseInput] = useState('');
   const [copied, setCopied] = useState(false);
@@ -225,7 +225,7 @@ export default function VectorSearchGodModeTool() {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
           <Chip
             icon={<BoltIcon sx={{ color: '#08080B !important', fontSize: 16 }} />}
-            label={isPro ? '⭐ PRO ACTIVE · HNSW SNAPSHOT EXPORT UNLOCKED' : 'FOUNDING LIFETIME: $19 (REG $79)'}
+            label={isPro ? '⭐ PRO ACTIVE · HNSW SNAPSHOT EXPORT UNLOCKED' : '✦ 100% OPEN ACCESS'}
             size="small"
             sx={{ bgcolor: '#34D399', color: '#08080B', fontWeight: 900, fontFamily: mono }}
           />
@@ -243,7 +243,7 @@ export default function VectorSearchGodModeTool() {
               rel="noopener noreferrer"
               sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.74rem' }}
             >
-              Unlock Pro ($19 Stripe)
+              ☕ Buy Us a Coffee (Stripe)
             </Button>
             <Button
               size="small"

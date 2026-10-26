@@ -97,7 +97,7 @@ export default function VoiceStationPage() {
   const [copiedLink, setCopiedLink] = useState('');
 
   // Pro SaaS State
-  const [isPro, setIsPro] = useState(false);
+  const [isPro, setIsPro] = useState(true);
   const [licenseInput, setLicenseInput] = useState('');
   const [paywallOpen, setPaywallOpen] = useState(false);
 
@@ -429,14 +429,14 @@ export default function VoiceStationPage() {
               sx={{ bgcolor: '#D4AF37', color: '#08090E', fontWeight: 800, fontSize: '0.72rem' }}
             />
             <Typography variant="body2" sx={{ color: dark ? '#F3F4F6' : '#101828', fontSize: '0.88rem' }}>
-              <strong>Sovereign Live Voice Station:</strong> <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>$79</span> <span style={{ color: 'var(--zs-emerald)', fontWeight: 800 }}>$19 Lifetime</span> • Direct P2P audio, transcript debriefs, and multi-persona switching.
+              <strong>Sovereign Live Voice Station:</strong> <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>$79</span> <span style={{ color: 'var(--zs-emerald)', fontWeight: 800 }}>100% Free & Unlocked</span> • Direct P2P audio, transcript debriefs, and multi-persona switching.
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
             <Button
               variant="contained"
               size="small"
-              href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
+              href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
               target="_blank"
               rel="noopener"
               sx={{ bgcolor: '#D4AF37', color: '#08090E', fontWeight: 700, '&:hover': { bgcolor: '#F5E6AB' } }}
@@ -901,7 +901,7 @@ export default function VoiceStationPage() {
                   <Button
                     variant="contained"
                     size="small"
-                    href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
+                    href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
                     target="_blank"
                     rel="noopener"
                     sx={{ bgcolor: '#D4AF37', color: '#08090E', fontWeight: 700, mr: 1 }}
@@ -975,7 +975,7 @@ export default function VoiceStationPage() {
             <Button
               fullWidth
               variant="contained"
-              href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
+              href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
               target="_blank"
               rel="noopener"
               sx={{ bgcolor: '#D4AF37', color: '#08090E', fontWeight: 800, py: 1.2, mb: 1.5 }}

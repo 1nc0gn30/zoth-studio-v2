@@ -448,7 +448,7 @@ ${cronExpression} /usr/local/bin/zoth-agent-tick >> /var/log/zoth/rhythm.log 2>&
               <Button
                 variant="contained"
                 size="small"
-                href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
+                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
                 target="_blank"
                 rel="noreferrer"
                 startIcon={<BoltIcon />}
@@ -725,7 +725,7 @@ ${cronExpression} /usr/local/bin/zoth-agent-tick >> /var/log/zoth/rhythm.log 2>&
               <Button
                 variant="contained"
                 size="small"
-                href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
+                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
                 target="_blank"
                 rel="noreferrer"
                 sx={{ bgcolor: gold, color: '#000', fontWeight: 800 }}
@@ -735,7 +735,7 @@ ${cronExpression} /usr/local/bin/zoth-agent-tick >> /var/log/zoth/rhythm.log 2>&
               <Button
                 variant="outlined"
                 size="small"
-                href="https://depay.com"
+                href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
                 target="_blank"
                 rel="noreferrer"
                 sx={{ borderColor: cyan, color: cyan, fontWeight: 700 }}
