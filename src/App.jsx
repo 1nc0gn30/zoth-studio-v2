@@ -42,6 +42,7 @@ const AXShowcasePage = lazy(() => import('./pages/AXShowcasePage'));
 const GalleryPage = lazy(() => import('./pages/GalleryPage'));
 const VoiceStationPage = lazy(() => import('./pages/VoiceStationPage'));
 const AgoraPage = lazy(() => import('./pages/AgoraPage'));
+const VaelorPage = lazy(() => import('./pages/VaelorPage'));
 
 function RouteFallback() {
   const theme = useTheme();
@@ -207,6 +208,7 @@ function AppShell({ mode, onToggleTheme }) {
               <Route path="/ax/docs" element={<AXPage />} />
               <Route path="/gallery" element={<GalleryPage />} />
               <Route path="/agora" element={<AgoraPage />} />
+              <Route path="/vaelor" element={<VaelorPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
             <ShortcutsHelp />

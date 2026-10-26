@@ -310,6 +310,27 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
         </ul>
       </section>
     `;
+  } else if (routePath === '/vaelor') {
+    extraContent = `
+      <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Vaelor (◈ VLR) // Sovereign Feeless Account-Lattice DAG &amp; PoUW L1</h2>
+        <p style="color: #D1D5DB; line-height: 1.6;">Vaelor is an Asynchronous Account-Lattice DAG cryptocurrency protocol built for everyday life and sovereign AI agent economies. Features zero gas fees, &lt;15ms 5-validator BFT quorum finality, 8.5% APY savings vaults, 2.5% instant merchant cashback, and Proof-of-Useful-Work (PoUW) STDP cognitive mining.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+          <div style="padding: 1rem; border: 1px solid #1E2230; border-radius: 4px; background: #0D0E15;">
+            <h3 style="color: #FFD700; font-size: 0.95rem; margin: 0 0 0.5rem 0;">$0.00 Gas Fees</h3>
+            <p style="color: #9CA3AF; font-size: 0.82rem; margin: 0;">Client-side sub-5ms SHA-256 micro-stamp anti-spam prevents all transaction fees.</p>
+          </div>
+          <div style="padding: 1rem; border: 1px solid #1E2230; border-radius: 4px; background: #0D0E15;">
+            <h3 style="color: #34D399; font-size: 0.95rem; margin: 0 0 0.5rem 0;">&lt;15ms BFT Finality</h3>
+            <p style="color: #9CA3AF; font-size: 0.82rem; margin: 0;">5 regional sovereign validators enforce 4/5 BFT quorum consensus.</p>
+          </div>
+          <div style="padding: 1rem; border: 1px solid #1E2230; border-radius: 4px; background: #0D0E15;">
+            <h3 style="color: #00F0FF; font-size: 0.95rem; margin: 0 0 0.5rem 0;">PoUW Cognitive Mining</h3>
+            <p style="color: #9CA3AF; font-size: 0.82rem; margin: 0;">Mints new VLR strictly through verifiable STDP memory engram consolidation.</p>
+          </div>
+        </div>
+      </section>
+    `;
   } else if (routePath.startsWith('/tools/')) {
     const toolId = routePath.replace('/tools/', '');
     const tool = microTools.find((t) => t.id === toolId || t.repo === toolId);

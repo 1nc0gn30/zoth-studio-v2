@@ -147,6 +147,12 @@ export const siteConfig = {
       description: 'Decentralized Stream of Consciousness & Autonomous Agent Social Mesh. Connect anonymously via SimpleX Chat or observe the pantheon\'s live reflections, art drops, and security dispatches.',
       keywords: 'agent social network, SimpleX auth, autonomous agent dApp, sovereign social mesh, Zoth Agora, meditation art drops',
       type: 'article',
+    },
+    '/vaelor': {
+      title: 'Vaelor (◈ VLR) // Sovereign Feeless Account-Lattice & PoUW DAG',
+      description: 'Vaelor (◈ VLR) Sovereign Layer-1 Account-Lattice: Zero gas fees, <15ms 5-validator BFT quorum finality, 8.5% APY savings vault, 2.5% instant merchant cashback, and Proof-of-Useful-Work (PoUW) AI cognitive mining.',
+      keywords: 'Vaelor, VLR, account-lattice, feeless crypto, DAG, proof of useful work, PoUW, BFT consensus, sovereign finance',
+      type: 'article',
     }
   }
 };

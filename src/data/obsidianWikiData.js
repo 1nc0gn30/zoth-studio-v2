@@ -4279,3 +4279,302 @@ export function mineVaelorPouwFallback({ miner = '@zoth', taskType = 'STDP_VECTO
   };
 }
 
+export function createVaelorReceiptFallback({ buyer = '@citizen', merchant = '@sprig', amount = 15.0, memo = 'Feeless payment' } = {}) {
+  const ts = new Date().toISOString();
+  const randHex = (len = 64) => Array.from({ length: len }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+  const receiptId = 'rcp_' + randHex(16);
+  const cashbackVlr = +(amount * 0.025).toFixed(4);
+  const sendHash = randHex(64);
+  const receiveHash = randHex(64);
+
+  return {
+    ok: true,
+    receipt: {
+      id: receiptId,
+      buyerHandle: buyer,
+      merchantHandle: merchant,
+      grossTotalVlr: amount,
+      cashbackVlr,
+      netTotalVlr: +(amount - cashbackVlr).toFixed(4),
+      category: 'Food & Dining',
+      memo: memo || 'Feeless instant merchant transfer',
+      timestamp: ts,
+      items: [{ name: memo || 'Artisan Goods', qty: 1, unitPrice: amount }]
+    },
+    receiptBlock: {
+      hash: sendHash,
+      type: 'SEND',
+      amountVlr: amount,
+      finalityMs: 6.8,
+      gasFeeVlr: 0,
+      timestamp: ts,
+      quorumCertificate: {
+        blockHash: sendHash,
+        status: 'FINALIZED_BFT',
+        quorumSize: 5,
+        approvals: 5,
+        aggregateLatencyMs: 9.4,
+        validatorSignatures: [
+          { validatorId: "val-alpha-virginia", name: "US-East Sovereign Validator", flag: "🇺🇸", latencyMs: 1.55, verified: true },
+          { validatorId: "val-beta-frankfurt", name: "EU-Central Sovereign Validator", flag: "🇩🇪", latencyMs: 15.1, verified: true },
+          { validatorId: "val-gamma-tokyo", name: "Asia-East Sovereign Validator", flag: "🇯🇵", latencyMs: 22.7, verified: true },
+          { validatorId: "val-delta-zothos-local", name: "ZothOS Edge Micro-Validator", flag: "⚡", latencyMs: 0.44, verified: true },
+          { validatorId: "val-epsilon-nullai-core", name: "NullAI Sovereign Consensus Core", flag: "🌐", latencyMs: 1.04, verified: true }
+        ]
+      }
+    },
+    receiveBlock: {
+      hash: receiveHash,
+      type: 'RECEIVE',
+      amountVlr: amount,
+      finalityMs: 5.2,
+      gasFeeVlr: 0,
+      timestamp: ts
+    }
+  };
+}
+
+export function checkVaelorHandleSafetyFallback(handle) {
+  const norm = (handle || '').trim().toLowerCase();
+  const known = {
+    '@zoth': { name: 'Zoth Studio & ZothOS AI Engine', domain: 'zoth.nullai.tech', trustScore: 800, tier: 'SOVEREIGN PRIME' },
+    '@sprig': { name: 'Sprig Kitchen • 757 Local Merchant', domain: 'sprigkitchen.local', trustScore: 700, tier: 'PRIME' },
+    '@neal': { name: 'Neal Frazier (@1nc0gn30)', domain: 'nealfrazier.tech', trustScore: 760, tier: 'EXCELLENT' },
+    '@citizen': { name: 'Sovereign Demo Wallet (Passkey Ready)', domain: 'vaelor.local', trustScore: 738, tier: 'PRIME' },
+    '@treasury': { name: 'Vaelor Sovereign Treasury & Reserve', domain: 'vaelor.network', trustScore: 700, tier: 'PRIME' }
+  };
+
+  if (known[norm]) {
+    return {
+      ok: true,
+      handle: norm,
+      safety: {
+        safe: true,
+        isVerified: true,
+        riskLevel: 'VERIFIED_SAFE',
+        name: known[norm].name,
+        domain: known[norm].domain,
+        trustScore: known[norm].trustScore,
+        tier: known[norm].tier,
+        badge: '✓ Verified Sovereign Account'
+      }
+    };
+  }
+
+  // Check lookalike
+  const homoglyphs = [
+    { target: '@zoth', lookalikes: ['@z0th', '@zoth1', '@z0th_ai', '@z_oth'] },
+    { target: '@sprig', lookalikes: ['@spr1g', '@sprlg', '@sprig_bakery', '@spr1g_757'] },
+    { target: '@neal', lookalikes: ['@nea1', '@neall', '@neal_frazier', '@n3al'] }
+  ];
+
+  for (const h of homoglyphs) {
+    if (h.lookalikes.includes(norm) || (norm.length > 2 && norm.replace(/[0o1li]/g, '') === h.target.replace(/[0o1li]/g, ''))) {
+      return {
+        ok: true,
+        handle: norm,
+        safety: {
+          safe: false,
+          isVerified: false,
+          riskLevel: 'HIGH_LOOKALIKE_RISK',
+          warning: `Lookalike handle detected! Did you mean verified handle ${h.target}?`,
+          suggestedHandle: h.target,
+          attackType: 'HOMOGLYPH_SUBSTITUTION',
+          trustScore: 10
+        }
+      };
+    }
+  }
+
+  return {
+    ok: true,
+    handle: norm,
+    safety: {
+      safe: true,
+      isVerified: false,
+      riskLevel: 'UNVERIFIED_NEW_HANDLE',
+      warning: 'New unverified handle. Proceed with normal caution.',
+      trustScore: 50
+    }
+  };
+}
+
+export const VAELOR_22_COMPARISON_MATRIX = [
+  {
+    feature: "1. Transaction Gas Fees",
+    vaelor: "$0.00 Gas (Feeless client micro-stamp)",
+    visa: "2.5% - 3.5% Merchant Interchange",
+    bitcoin: "$2.00 - $60.00+ Mempool Bidding",
+    ethSol: "$0.01 - $25.00+ Fluctuating Gas",
+    vaelorWin: true
+  },
+  {
+    feature: "2. Finality & Settlement Latency",
+    vaelor: "<15ms 5/5 BFT Quorum Finality",
+    visa: "2 - 3 Business Days Batch Settlement",
+    bitcoin: "10 - 60 Minutes (6 Block Confirmations)",
+    ethSol: "400ms - 15 Seconds Block Confirmation",
+    vaelorWin: true
+  },
+  {
+    feature: "3. Human-Readable Addressing",
+    vaelor: "Native @human Handles (@neal, @zoth)",
+    visa: "16-Digit Card Number + Expiry + CVV",
+    bitcoin: "34-Character Base58 Hash (bc1p...)",
+    ethSol: "42-Character Hex Address (0x...)",
+    vaelorWin: true
+  },
+  {
+    feature: "4. Biometric Passkey / WebAuthn Wallets",
+    vaelor: "Native L1 WebAuthn / TouchID / FaceID",
+    visa: "Vulnerable SMS / OTP / 3DS Friction",
+    bitcoin: "Requires 12/24-Word Seed Phrase",
+    ethSol: "Requires Seed Phrase or Complex MPC",
+    vaelorWin: true
+  },
+  {
+    feature: "5. Layer-1 Protected-Pay Escrow",
+    vaelor: "Native 24-72h Auto Buyer Protection Window",
+    visa: "Slow 60-90 Day Manual Chargeback Rites",
+    bitcoin: "None (Transactions are Irreversible)",
+    ethSol: "Smart Contract Risk / Custodial DApps",
+    vaelorWin: true
+  },
+  {
+    feature: "6. Proof-of-Useful-Work (PoUW) AI Minting",
+    vaelor: "Verified AI Compute & STDP Engrams",
+    visa: "N/A (Central Bank Inflationary Debt)",
+    bitcoin: "Wasteful SHA-256 (120+ TWh/yr Burn)",
+    ethSol: "PoS Staking Oligopoly Wealth Capture",
+    vaelorWin: true
+  },
+  {
+    feature: "7. Instant Merchant Cashback",
+    vaelor: "2.5% Instant On-Chain Cashback",
+    visa: "1% - 1.5% Funded by Merchant Fees",
+    bitcoin: "None (0.00% Cashback)",
+    ethSol: "None (0.00% Cashback)",
+    vaelorWin: true
+  },
+  {
+    feature: "8. Native Recurring Subscriptions",
+    vaelor: "On-Chain Monthly Allowance Caps",
+    visa: "Vulnerable Merchant Auto-Debits",
+    bitcoin: "Incompatible (Manual Transfer Only)",
+    ethSol: "Vulnerable Infinite ERC-20 Approvals",
+    vaelorWin: true
+  },
+  {
+    feature: "9. Anti-Phishing Typosquatting Scanner",
+    vaelor: "Native Levenshtein & Homoglyph Sentinel",
+    visa: "Post-Fraud Reclamation Only",
+    bitcoin: "Zero Protection (Clipboard Hijackers)",
+    ethSol: "Zero Protection (Poisoned Zero-Value Tx)",
+    vaelorWin: true
+  },
+  {
+    feature: "10. Micro-Streaming Payments",
+    vaelor: "Real-Time Per-Second Balance Streaming",
+    visa: "Incompatible (Minimum Interchange Floor)",
+    bitcoin: "Incompatible (High Block Overhead)",
+    ethSol: "High Smart Contract Gas Overhead",
+    vaelorWin: true
+  },
+  {
+    feature: "11. Seedless Guardian Social Recovery",
+    vaelor: "2-of-3 Threshold Lattice Key Rotation",
+    visa: "Branch Visit / Government ID Verification",
+    bitcoin: "Lost Seed = Permanent Asset Loss",
+    ethSol: "Complex Smart Contract Multi-Sig Setup",
+    vaelorWin: true
+  },
+  {
+    feature: "12. 0% APR Revolving Credit Line",
+    vaelor: "PoUW Reputation & Staked Trust Credit",
+    visa: "24.99% - 29.99% Predatory Card APR",
+    bitcoin: "None (Overcollateralized CeFi Loan)",
+    ethSol: "Overcollateralized Liquidation Risk",
+    vaelorWin: true
+  },
+  {
+    feature: "13. Smart Itemized Receipts & Warranties",
+    vaelor: "Cryptographic L1 Receipt & Warranty Blocks",
+    visa: "Paper Thermal Slips / Incomplete PDFs",
+    bitcoin: "Plain Raw Satoshi Transfer",
+    ethSol: "Expensive ERC-721 NFT Token Minting",
+    vaelorWin: true
+  },
+  {
+    feature: "14. Split Group Tabs & Bill Splitting",
+    vaelor: "Decentralized Peer Splitting in 1-Click",
+    visa: "Requires Venmo/Splitwise Cloud Apps",
+    bitcoin: "Manual Independent Single Payments",
+    ethSol: "Multiple Separate Transaction Gas Fees",
+    vaelorWin: true
+  },
+  {
+    feature: "15. Native Inheritance & Estate Continuity",
+    vaelor: "Automated Inactivity Heartbeat Executor",
+    visa: "Probate Court & Asset Freezes (Months)",
+    bitcoin: "Lost to Graveyard upon Death",
+    ethSol: "Manual Custodial Will Smart Contracts",
+    vaelorWin: true
+  },
+  {
+    feature: "16. Dual Crypto & Fiat Cross-Bridge",
+    vaelor: "Native Feeless Swap Router Engine",
+    visa: "Predatory 3% - 5% FX Conversion Fees",
+    bitcoin: "Centralized CEX KYC Verification Gates",
+    ethSol: "Vulnerable Cross-Chain Bridges & Slippage",
+    vaelorWin: true
+  },
+  {
+    feature: "17. Byzantine Fault Tolerance (BFT)",
+    vaelor: "5/5 Multi-Region Validator Quorum",
+    visa: "Centralized Single-Point-of-Failure",
+    bitcoin: "Probabilistic Nakamoto Consensus",
+    ethSol: "Slashing Vulnerable PoS Validators",
+    vaelorWin: true
+  },
+  {
+    feature: "18. Head-of-Line Queue Blocking",
+    vaelor: "Zero (Asynchronous Account-Lattice DAG)",
+    visa: "Single Global Card Payment Gateway",
+    bitcoin: "Single Congested 1MB Block Queue",
+    ethSol: "Global MEV Priority Fee Bidding War",
+    vaelorWin: true
+  },
+  {
+    feature: "19. Thermal & Battery Efficiency",
+    vaelor: "<5ms Client SHA-256 Micro-Stamp (<0.1W)",
+    visa: "N/A (Card Terminal / Network Load)",
+    bitcoin: "Megawatt Mining Rigs Burning Coal",
+    ethSol: "Dedicated 32GB RAM Staking Hardware",
+    vaelorWin: true
+  },
+  {
+    feature: "20. Merchant Fee Intermediaries",
+    vaelor: "$0.00 Merchant Processing Fees",
+    visa: "Visa / Mastercard / Stripe 3% Cut",
+    bitcoin: "Centralized Payment Processors (BitPay)",
+    ethSol: "Third-Party Web3 Checkout Taxes",
+    vaelorWin: true
+  },
+  {
+    feature: "21. Sovereign Zero-Egress Operation",
+    vaelor: "Local Node (:8140) & Static Netlify",
+    visa: "Global Cloud Telemetry & Surveillance",
+    bitcoin: "Full Node Disk Overhead (600GB+)",
+    ethSol: "Infura / Alchemy Centralized RPC Risk",
+    vaelorWin: true
+  },
+  {
+    feature: "22. Triple Checkout Rail Integration",
+    vaelor: "Stripe + Solana DePay + Native ◈ VLR",
+    visa: "Traditional Credit / Debit Cards Only",
+    bitcoin: "Bitcoin Network Only",
+    ethSol: "EVM / Solana Ecosystem Only",
+    vaelorWin: true
+  }
+];
+
