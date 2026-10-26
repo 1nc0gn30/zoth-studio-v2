@@ -4,7 +4,7 @@ import {
   Box, Container, Typography, Chip, Paper, Button, TextField, InputAdornment,
   Table, TableBody, TableCell, TableHead, TableRow, Unstable_Grid2 as Grid,
   Tabs, Tab, Slider, LinearProgress, IconButton, Stack, Tooltip, Divider, Alert,
-  Dialog, DialogTitle, DialogContent, DialogActions, Snackbar
+  Dialog, DialogTitle, DialogContent, DialogActions, Snackbar, CircularProgress
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
@@ -36,11 +36,17 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import SyncIcon from '@mui/icons-material/Sync';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import VerifiedIcon from '@mui/icons-material/Verified';
+import BoltIcon from '@mui/icons-material/Bolt';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import CenterFocusStrongIcon from '@mui/icons-material/CenterFocusStrong';
 import {
   INITIAL_OBSIDIAN_AUDIT,
   CANONICAL_WIKI_ARTICLES,
   CANONICAL_CANVASES,
   CANONICAL_BASES,
+  FALLBACK_KNAP_TELEMETRY,
+  searchFallback,
+  renderKnapTelemetryFallback,
   synthesizeClientWikiArticle,
   generateProceduralCanvas
 } from '../data/obsidianWikiData';
@@ -310,6 +316,45 @@ export const INITIAL_SOVEREIGN_MEMORIES = [
     y: 40,
     z: -60,
   },
+  {
+    id: 'MEM-015',
+    concept: 'Vaelor Feeless Account-Lattice DAG',
+    category: 'consensus',
+    cluster: 'Consensus',
+    weight: 0.95,
+    text: 'Vaelor Account-Lattice L1 feeless DAG network consensus protocol active on loopback port 8140 with sub-20ms PoUW block finality and biometric passkey micro-chains.',
+    author: 'Athena',
+    tags: ['vaelor', 'consensus', 'account-lattice', 'pouw', 'dag'],
+    x: -50,
+    y: 20,
+    z: -60,
+  },
+  {
+    id: 'MEM-016',
+    concept: 'Netrunner Cyber-Cortex 3D Engine',
+    category: 'oracle',
+    cluster: 'Lucy Oracle',
+    weight: 0.97,
+    text: 'Netrunner Cyber-Cortex 3D spatial engine with biomorphic STDP synaptic plasticity, hippocampal replay, and real-time WebGL neural pathway tracing.',
+    author: 'Lucy',
+    tags: ['netrunner', 'cortex', 'stdp', '3d', 'webgl'],
+    x: 50,
+    y: -20,
+    z: 40,
+  },
+  {
+    id: 'MEM-017',
+    concept: 'Zero-Trust Supply Chain & VirusTotal Auditing',
+    category: 'security',
+    cluster: 'Security',
+    weight: 0.94,
+    text: 'Zero-Trust Supply Chain with Cosign Ed25519 cryptographic attestations and background VirusTotal hash auditing daemon for all production dependencies.',
+    author: 'Lycan',
+    tags: ['virustotal', 'security', 'cosign', 'zero-trust'],
+    x: -40,
+    y: 60,
+    z: -20,
+  },
 ];
 
 /* ==========================================================================
@@ -405,6 +450,17 @@ export default function MemoryPage() {
   const [activeBase, setActiveBase] = useState(CANONICAL_BASES[0]);
   const [baseViewMode, setBaseViewMode] = useState('inspect'); // 'inspect' | 'yaml'
   const [copiedBaseYaml, setCopiedBaseYaml] = useState(false);
+
+  // Unified Second Brain & STDP Cortex Search State
+  const [unifiedSearchQuery, setUnifiedSearchQuery] = useState('Vaelor');
+  const [unifiedSearchResults, setUnifiedSearchResults] = useState(() => searchFallback('Vaelor', INITIAL_SOVEREIGN_MEMORIES));
+  const [isSearchingUnified, setIsSearchingUnified] = useState(false);
+
+  // Live Knap Telemetry State
+  const [knapTelemetryNotes, setKnapTelemetryNotes] = useState(FALLBACK_KNAP_TELEMETRY);
+  const [activeKnapTab, setActiveKnapTab] = useState(0);
+  const [isRecompilingKnap, setIsRecompilingKnap] = useState(false);
+  const [knapCompilerOutput, setKnapCompilerOutput] = useState(null);
 
   const OBSIDIAN_AGENT_SKILLS = [
     {
@@ -608,6 +664,16 @@ ${article.math_invariants || ''}
           }
         }
       } catch (_) {}
+
+      try {
+        const tRes = await fetch('http://127.0.0.1:8094/api/obsidian/telemetry');
+        if (tRes.ok) {
+          const tData = await tRes.json();
+          if (active && tData && Array.isArray(tData.notes) && tData.notes.length > 0) {
+            setKnapTelemetryNotes(tData.notes);
+          }
+        }
+      } catch (_) {}
     };
 
     fetchObsidian();
@@ -649,6 +715,95 @@ ${article.math_invariants || ''}
     setCanvasNotification(`✦ Generated JSON Canvas [[${newCanvas.name}]] (${newCanvas.nodeCount} nodes, ${newCanvas.edgeCount} edges)`);
     if (typeof playSynapticPulse === 'function') {
       playSynapticPulse(0.98);
+    }
+  };
+
+  const handleUnifiedSearch = async (queryOverride) => {
+    const q = (queryOverride !== undefined ? queryOverride : unifiedSearchQuery).trim();
+    if (!q) return;
+    setIsSearchingUnified(true);
+    let results = null;
+    try {
+      const res = await fetch(`http://127.0.0.1:8094/api/obsidian/search?q=${encodeURIComponent(q)}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.ok) {
+          results = data;
+        }
+      }
+    } catch (_) {}
+
+    if (!results) {
+      results = searchFallback(q, memories.length > 0 ? memories : INITIAL_SOVEREIGN_MEMORIES);
+    } else {
+      const fallback = searchFallback(q, memories.length > 0 ? memories : INITIAL_SOVEREIGN_MEMORIES);
+      if ((!results.stdpMatches || results.stdpMatches.length === 0) && fallback.stdpMatches && fallback.stdpMatches.length > 0) {
+        results.stdpMatches = fallback.stdpMatches;
+        results.stdpCount = fallback.stdpMatches.length;
+      }
+      if ((!results.vaultMatches || results.vaultMatches.length === 0) && fallback.vaultMatches && fallback.vaultMatches.length > 0) {
+        results.vaultMatches = fallback.vaultMatches;
+        results.vaultCount = fallback.vaultMatches.length;
+      }
+    }
+
+    setUnifiedSearchResults(results);
+    setIsSearchingUnified(false);
+    if (typeof playSynapticPulse === 'function') {
+      playSynapticPulse(0.92);
+    }
+  };
+
+  const handleRecompileKnap = async (targetTemplate = 'all') => {
+    setIsRecompilingKnap(true);
+    let resData = null;
+    try {
+      const res = await fetch('http://127.0.0.1:8094/api/obsidian/render', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ template: targetTemplate })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.ok) {
+          resData = data;
+        }
+      }
+    } catch (_) {}
+
+    if (!resData) {
+      resData = renderKnapTelemetryFallback(targetTemplate);
+    }
+
+    if (resData.notes && Array.isArray(resData.notes)) {
+      setKnapTelemetryNotes(resData.notes);
+    }
+    setKnapCompilerOutput(resData.output || '✔ Knap structured telemetry compiler finished successfully.');
+    setIsRecompilingKnap(false);
+    if (typeof playSynapticPulse === 'function') {
+      playSynapticPulse(0.95);
+    }
+  };
+
+  const handleLocateInMemoryWorld = (stdpMatch) => {
+    const existing = memories.find(m => m.id === stdpMatch.id || m.title === stdpMatch.title || (m.tags && stdpMatch.tags && stdpMatch.tags.some(t => m.tags.includes(t))));
+    const target = existing || {
+      id: stdpMatch.id || `engram-${Date.now()}`,
+      title: stdpMatch.title || 'STDP Engram',
+      content: stdpMatch.content || '',
+      category: stdpMatch.category || 'semantic',
+      cluster: 'Obsidian',
+      importance: stdpMatch.importance || 0.9,
+      tags: stdpMatch.tags || ['obsidian', 'stdp'],
+      timestamp: new Date().toISOString()
+    };
+    setSelectedMemory(target);
+    setActiveTab(0);
+    if (typeof playSynapticPulse === 'function') {
+      playSynapticPulse(0.96);
+    }
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 380, behavior: 'smooth' });
     }
   };
 
@@ -4257,6 +4412,508 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                     {activeBase?.rawYaml || '# No YAML representation available'}
                   </Box>
                 )}
+              </Paper>
+
+              {/* ==========================================================================
+                  UNIFIED SECOND BRAIN & STDP CORTEX SEARCH (#studio-unified-search)
+                  ========================================================================== */}
+              <Paper
+                id="studio-unified-search"
+                sx={{
+                  p: { xs: 2, md: 3 },
+                  mb: 4,
+                  borderRadius: 3,
+                  border: `1px solid ${gold.border}`,
+                  bgcolor: isDark ? 'rgba(10,12,18,0.85)' : '#FFFFFF',
+                  boxShadow: isDark ? '0 8px 32px rgba(0,0,0,0.45)' : '0 4px 16px rgba(0,0,0,0.06)'
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 1.5 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                    <Box
+                      sx={{
+                        width: 38,
+                        height: 38,
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        bgcolor: gold.wash,
+                        border: `1px solid ${gold.border}`,
+                        color: gold.accent
+                      }}
+                    >
+                      <SearchIcon fontSize="small" />
+                    </Box>
+                    <Box>
+                      <Typography variant="h6" sx={{ fontWeight: 800, fontSize: '1.05rem', color: theme.palette.text.primary, display: 'flex', alignItems: 'center', gap: 1 }}>
+                        Unified Second Brain + STDP Cortex Search
+                        <Chip label="Cross-Substrate" size="small" sx={{ height: 20, fontSize: '0.66rem', fontWeight: 750, bgcolor: gold.wash, color: gold.accent, border: `1px solid ${gold.border}` }} />
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
+                        Cross-indexes Obsidian Second Brain notes (.md, .canvas, .base, telemetry) with biological STDP memory engrams (:8094).
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Chip
+                    label={`${(unifiedSearchResults?.vaultCount || 0) + (unifiedSearchResults?.stdpCount || 0)} Total Associations`}
+                    size="small"
+                    sx={{ fontWeight: 750, fontFamily: mono, fontSize: '0.72rem', bgcolor: isDark ? 'rgba(255,255,255,0.05)' : '#F1F5F9' }}
+                  />
+                </Box>
+
+                {/* Search Bar & Quick Query Chips */}
+                <Box sx={{ mb: 3 }}>
+                  <Box sx={{ display: 'flex', gap: 1.5, flexWrap: { xs: 'wrap', sm: 'nowrap' }, mb: 1.5 }}>
+                    <TextField
+                      id="studio-obsidian-search-input"
+                      fullWidth
+                      size="small"
+                      placeholder="Search vault notes, canvases, bases, or STDP biological engrams..."
+                      value={unifiedSearchQuery}
+                      onChange={(e) => setUnifiedSearchQuery(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          handleUnifiedSearch();
+                        }
+                      }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <SearchIcon fontSize="small" sx={{ color: gold.accent }} />
+                          </InputAdornment>
+                        ),
+                        sx: {
+                          fontFamily: mono,
+                          fontSize: '0.85rem',
+                          bgcolor: isDark ? 'rgba(0,0,0,0.4)' : '#F8FAFC',
+                          borderRadius: 2
+                        }
+                      }}
+                    />
+                    <Button
+                      id="studio-obsidian-search-btn"
+                      variant="contained"
+                      onClick={() => handleUnifiedSearch()}
+                      disabled={isSearchingUnified}
+                      sx={{
+                        minWidth: { xs: '100%', sm: 220 },
+                        fontWeight: 800,
+                        fontSize: '0.82rem',
+                        bgcolor: gold.accent,
+                        color: '#08080B',
+                        borderRadius: 2,
+                        textTransform: 'none',
+                        '&:hover': { bgcolor: gold.soft, color: '#08080B' }
+                      }}
+                    >
+                      {isSearchingUnified ? (
+                        <>
+                          <CircularProgress size={16} sx={{ color: '#08080B', mr: 1 }} />
+                          Searching...
+                        </>
+                      ) : (
+                        '🔍 SEARCH VAULT & CORTEX'
+                      )}
+                    </Button>
+                  </Box>
+
+                  {/* Quick-query chips */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+                    <Typography variant="caption" sx={{ fontWeight: 700, color: theme.palette.text.secondary, mr: 0.5 }}>
+                      Quick Queries:
+                    </Typography>
+                    {['Vaelor', 'VirusTotal', 'Netrunner', 'Hermes', 'STDP'].map((chip) => (
+                      <Chip
+                        key={chip}
+                        label={chip}
+                        size="small"
+                        clickable
+                        onClick={() => {
+                          setUnifiedSearchQuery(chip);
+                          handleUnifiedSearch(chip);
+                        }}
+                        sx={{
+                          fontWeight: 700,
+                          fontSize: '0.72rem',
+                          cursor: 'pointer',
+                          fontFamily: mono,
+                          bgcolor: unifiedSearchQuery.toLowerCase() === chip.toLowerCase() ? gold.wash : (isDark ? 'rgba(255,255,255,0.04)' : '#F1F5F9'),
+                          color: unifiedSearchQuery.toLowerCase() === chip.toLowerCase() ? gold.accent : theme.palette.text.primary,
+                          border: `1px solid ${unifiedSearchQuery.toLowerCase() === chip.toLowerCase() ? gold.border : theme.palette.divider}`,
+                          '&:hover': { bgcolor: gold.wash, color: gold.accent }
+                        }}
+                      />
+                    ))}
+                  </Box>
+                </Box>
+
+                {/* Dual-Pane Search Results */}
+                <Grid container spacing={2.5}>
+                  {/* Left Pane: Obsidian Vault Matches */}
+                  <Grid xs={12} md={6}>
+                    <Paper
+                      sx={{
+                        p: 2,
+                        borderRadius: 2.5,
+                        bgcolor: isDark ? 'rgba(0,0,0,0.35)' : '#F8FAFC',
+                        border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : theme.palette.divider}`,
+                        minHeight: 280,
+                        display: 'flex',
+                        flexDirection: 'column'
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 800, color: theme.palette.text.primary, display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <span>📝</span> Obsidian Vault Matches
+                        </Typography>
+                        <Chip
+                          label={`${unifiedSearchResults?.vaultCount || 0} notes`}
+                          size="small"
+                          sx={{ height: 20, fontSize: '0.68rem', fontWeight: 750, bgcolor: 'rgba(6,182,212,0.12)', color: '#06B6D4' }}
+                        />
+                      </Box>
+
+                      {(!unifiedSearchResults?.vaultMatches || unifiedSearchResults.vaultMatches.length === 0) ? (
+                        <Box sx={{ p: 3, textAlign: 'center', my: 'auto' }}>
+                          <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+                            No Obsidian vault notes matched "{unifiedSearchQuery}". Try a quick query chip above.
+                          </Typography>
+                        </Box>
+                      ) : (
+                        <Stack spacing={1.5} sx={{ maxHeight: 360, overflowY: 'auto', pr: 0.5 }}>
+                          {unifiedSearchResults.vaultMatches.map((vm, idx) => (
+                            <Box
+                              key={idx}
+                              sx={{
+                                p: 1.5,
+                                borderRadius: 2,
+                                bgcolor: isDark ? 'rgba(255,255,255,0.02)' : '#FFFFFF',
+                                border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0'}`,
+                                '&:hover': { borderColor: '#06B6D4' },
+                                transition: 'border-color 0.15s ease'
+                              }}
+                            >
+                              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                                <Typography variant="body2" sx={{ fontWeight: 750, color: theme.palette.text.primary }}>
+                                  {vm.title}
+                                </Typography>
+                                <Chip
+                                  label={vm.type || 'md'}
+                                  size="small"
+                                  sx={{
+                                    height: 18,
+                                    fontSize: '0.62rem',
+                                    fontWeight: 700,
+                                    textTransform: 'uppercase',
+                                    bgcolor: vm.type === 'canvas' ? 'rgba(236,72,153,0.12)' : (vm.type === 'base' ? 'rgba(16,185,129,0.12)' : 'rgba(6,182,212,0.12)'),
+                                    color: vm.type === 'canvas' ? '#EC4899' : (vm.type === 'base' ? '#10B981' : '#06B6D4')
+                                  }}
+                                />
+                              </Box>
+                              <Typography variant="caption" sx={{ display: 'block', color: theme.palette.text.secondary, fontFamily: mono, fontSize: '0.68rem', mb: 0.75 }}>
+                                {vm.relPath}
+                              </Typography>
+                              {vm.snippet && (
+                                <Typography variant="body2" sx={{ fontSize: '0.74rem', color: theme.palette.text.secondary, mb: 1, overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebKitLineClamp: 2, WebKitBoxOrient: 'vertical' }}>
+                                  {vm.snippet}
+                                </Typography>
+                              )}
+                              {vm.wikilinks && vm.wikilinks.length > 0 && (
+                                <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap', mt: 0.5 }}>
+                                  {vm.wikilinks.slice(0, 4).map((link, lIdx) => (
+                                    <Chip
+                                      key={lIdx}
+                                      label={`[[${link}]]`}
+                                      size="small"
+                                      sx={{
+                                        height: 18,
+                                        fontSize: '0.62rem',
+                                        fontFamily: mono,
+                                        bgcolor: isDark ? 'rgba(6,182,212,0.08)' : 'rgba(6,182,212,0.06)',
+                                        color: '#06B6D4',
+                                        border: '1px solid rgba(6,182,212,0.2)'
+                                      }}
+                                    />
+                                  ))}
+                                  {vm.wikilinks.length > 4 && (
+                                    <Typography variant="caption" sx={{ fontSize: '0.62rem', color: theme.palette.text.secondary, alignSelf: 'center' }}>
+                                      +{vm.wikilinks.length - 4} more
+                                    </Typography>
+                                  )}
+                                </Box>
+                              )}
+                            </Box>
+                          ))}
+                        </Stack>
+                      )}
+                    </Paper>
+                  </Grid>
+
+                  {/* Right Pane: STDP Cortex Engrams */}
+                  <Grid xs={12} md={6}>
+                    <Paper
+                      sx={{
+                        p: 2,
+                        borderRadius: 2.5,
+                        bgcolor: isDark ? 'rgba(0,0,0,0.35)' : '#F8FAFC',
+                        border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : theme.palette.divider}`,
+                        minHeight: 280,
+                        display: 'flex',
+                        flexDirection: 'column'
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 800, color: theme.palette.text.primary, display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <span>🧠</span> STDP Cortex Engrams
+                        </Typography>
+                        <Chip
+                          label={`${unifiedSearchResults?.stdpCount || 0} engrams`}
+                          size="small"
+                          sx={{ height: 20, fontSize: '0.68rem', fontWeight: 750, bgcolor: gold.wash, color: gold.accent }}
+                        />
+                      </Box>
+
+                      {(!unifiedSearchResults?.stdpMatches || unifiedSearchResults.stdpMatches.length === 0) ? (
+                        <Box sx={{ p: 3, textAlign: 'center', my: 'auto' }}>
+                          <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+                            No biological cortex engrams matched "{unifiedSearchQuery}". Try a query like "Vaelor", "Netrunner", or "Hermes".
+                          </Typography>
+                        </Box>
+                      ) : (
+                        <Stack spacing={1.5} sx={{ maxHeight: 360, overflowY: 'auto', pr: 0.5 }}>
+                          {unifiedSearchResults.stdpMatches.map((em, idx) => (
+                            <Box
+                              key={idx}
+                              sx={{
+                                p: 1.5,
+                                borderRadius: 2,
+                                bgcolor: isDark ? 'rgba(255,255,255,0.02)' : '#FFFFFF',
+                                border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0'}`,
+                                '&:hover': { borderColor: gold.accent },
+                                transition: 'border-color 0.15s ease'
+                              }}
+                            >
+                              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                  <Chip
+                                    label={em.category || 'memory'}
+                                    size="small"
+                                    sx={{
+                                      height: 18,
+                                      fontSize: '0.62rem',
+                                      fontWeight: 700,
+                                      bgcolor: gold.wash,
+                                      color: gold.accent
+                                    }}
+                                  />
+                                  <Chip
+                                    label={`Imp: ${Math.round((em.importance || 0.8) * 100)}%`}
+                                    size="small"
+                                    sx={{
+                                      height: 18,
+                                      fontSize: '0.62rem',
+                                      fontFamily: mono,
+                                      bgcolor: 'rgba(16,185,129,0.12)',
+                                      color: '#10B981'
+                                    }}
+                                  />
+                                </Box>
+                                <Button
+                                  size="small"
+                                  startIcon={<CenterFocusStrongIcon sx={{ fontSize: '0.9rem !important' }} />}
+                                  onClick={() => handleLocateInMemoryWorld(em)}
+                                  sx={{
+                                    py: 0.3,
+                                    px: 1,
+                                    fontSize: '0.68rem',
+                                    fontWeight: 750,
+                                    color: gold.accent,
+                                    border: `1px solid ${gold.border}`,
+                                    borderRadius: 1.5,
+                                    textTransform: 'none',
+                                    '&:hover': { bgcolor: gold.wash }
+                                  }}
+                                >
+                                  ✦ LOCATE IN 3D WORLD
+                                </Button>
+                              </Box>
+                              <Typography variant="body2" sx={{ fontSize: '0.74rem', color: theme.palette.text.secondary, mb: 1, overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebKitLineClamp: 2, WebKitBoxOrient: 'vertical' }}>
+                                {em.content || em.text}
+                              </Typography>
+                              {em.tags && em.tags.length > 0 && (
+                                <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
+                                  {em.tags.slice(0, 4).map((tag, tIdx) => (
+                                    <Chip
+                                      key={tIdx}
+                                      label={`#${tag}`}
+                                      size="small"
+                                      sx={{
+                                        height: 18,
+                                        fontSize: '0.62rem',
+                                        fontFamily: mono,
+                                        bgcolor: isDark ? 'rgba(255,255,255,0.05)' : '#F1F5F9'
+                                      }}
+                                    />
+                                  ))}
+                                </Box>
+                              )}
+                            </Box>
+                          ))}
+                        </Stack>
+                      )}
+                    </Paper>
+                  </Grid>
+                </Grid>
+              </Paper>
+
+              {/* ==========================================================================
+                  LIVE KNAP TELEMETRY COMPILER (#studio-knap-telemetry)
+                  ========================================================================== */}
+              <Paper
+                id="studio-knap-telemetry"
+                sx={{
+                  p: { xs: 2, md: 3 },
+                  mb: 4,
+                  borderRadius: 3,
+                  border: `1px solid ${gold.border}`,
+                  bgcolor: isDark ? 'rgba(10,12,18,0.85)' : '#FFFFFF',
+                  boxShadow: isDark ? '0 8px 32px rgba(0,0,0,0.45)' : '0 4px 16px rgba(0,0,0,0.06)'
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 1.5 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                    <Box
+                      sx={{
+                        width: 38,
+                        height: 38,
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        bgcolor: 'rgba(245,158,11,0.12)',
+                        border: '1px solid rgba(245,158,11,0.3)',
+                        color: '#F59E0B'
+                      }}
+                    >
+                      <BoltIcon fontSize="small" />
+                    </Box>
+                    <Box>
+                      <Typography variant="h6" sx={{ fontWeight: 800, fontSize: '1.05rem', color: theme.palette.text.primary, display: 'flex', alignItems: 'center', gap: 1 }}>
+                        Live Knap Structured Telemetry Compiler
+                        <Chip label="@kepano/knap" size="small" sx={{ height: 20, fontSize: '0.66rem', fontWeight: 750, bgcolor: 'rgba(245,158,11,0.12)', color: '#F59E0B', border: '1px solid rgba(245,158,11,0.3)' }} />
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
+                        Structured template engine synthesizing live daemon metrics (:8140 ledger, :8094 STDP substrate) into Obsidian 05-Telemetry/ notes.
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Button
+                    id="studio-knap-render-btn"
+                    variant="contained"
+                    onClick={() => handleRecompileKnap('all')}
+                    disabled={isRecompilingKnap}
+                    startIcon={isRecompilingKnap ? <CircularProgress size={16} sx={{ color: '#08080B' }} /> : <BoltIcon fontSize="small" />}
+                    sx={{
+                      fontWeight: 800,
+                      fontSize: '0.82rem',
+                      bgcolor: '#F59E0B',
+                      color: '#08080B',
+                      borderRadius: 2,
+                      textTransform: 'none',
+                      '&:hover': { bgcolor: '#D97706', color: '#08080B' }
+                    }}
+                  >
+                    {isRecompilingKnap ? 'Re-Compiling...' : '⚡ RE-COMPILE KNAP TELEMETRY'}
+                  </Button>
+                </Box>
+
+                {/* Telemetry Tabs */}
+                <Tabs
+                  value={activeKnapTab}
+                  onChange={(e, v) => setActiveKnapTab(v)}
+                  variant="scrollable"
+                  scrollButtons="auto"
+                  sx={{
+                    mb: 2,
+                    borderBottom: `1px solid ${theme.palette.divider}`,
+                    '& .MuiTab-root': { fontWeight: 750, minHeight: 44, fontSize: '0.84rem' },
+                    '& .Mui-selected': { color: '#F59E0B' },
+                    '& .MuiTabs-indicator': { bgcolor: '#F59E0B', height: 2.5 }
+                  }}
+                >
+                  <Tab label="◈ Vaelor Live Ledger Telemetry" />
+                  <Tab label="🧠 Neuro-Memory Cortex Telemetry" />
+                  <Tab label="🌙 Dream Consolidation & Synaptic Bridges" />
+                </Tabs>
+
+                {/* Active Telemetry Note Card */}
+                {(() => {
+                  const currentNote = knapTelemetryNotes.find((n, idx) => {
+                    if (activeKnapTab === 0) return n.title.includes('Vaelor');
+                    if (activeKnapTab === 1) return n.title.includes('Cortex') || n.title.includes('Neuro-Memory');
+                    if (activeKnapTab === 2) return n.title.includes('Dream') || n.title.includes('Bridges');
+                    return idx === activeKnapTab;
+                  }) || knapTelemetryNotes[0];
+
+                  if (!currentNote) return null;
+
+                  return (
+                    <Box>
+                      {/* Meta bar */}
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <Typography variant="subtitle2" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+                            {currentNote.title}
+                          </Typography>
+                          <Chip
+                            label={currentNote.relPath}
+                            size="small"
+                            sx={{ height: 20, fontSize: '0.66rem', fontFamily: mono, bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#F1F5F9' }}
+                          />
+                        </Box>
+                        <Typography variant="caption" sx={{ color: theme.palette.text.secondary, fontFamily: mono }}>
+                          Last Compiled: {currentNote.updated || 'Just now'}
+                        </Typography>
+                      </Box>
+
+                      {/* Content Preview */}
+                      <Box
+                        component="pre"
+                        sx={{
+                          m: 0,
+                          p: 2,
+                          borderRadius: 2,
+                          bgcolor: isDark ? 'rgba(0,0,0,0.65)' : '#0F172A',
+                          border: `1px solid ${isDark ? 'rgba(245,158,11,0.2)' : '#CBD5E1'}`,
+                          fontFamily: mono,
+                          fontSize: '0.74rem',
+                          color: '#FDE68A',
+                          maxHeight: 400,
+                          overflowY: 'auto',
+                          whiteSpace: 'pre-wrap',
+                          wordBreak: 'break-word',
+                          lineHeight: 1.6
+                        }}
+                      >
+                        {currentNote.content}
+                      </Box>
+
+                      {/* Knap compiler stdout / diagnostic feed */}
+                      {knapCompilerOutput && (
+                        <Box sx={{ mt: 2, p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(0,0,0,0.85)' : '#1E293B', border: '1px solid rgba(16,185,129,0.3)' }}>
+                          <Typography variant="caption" sx={{ display: 'block', fontWeight: 800, color: '#10B981', fontFamily: mono, mb: 0.5 }}>
+                            ✦ Knap Compiler Live Output (:8094)
+                          </Typography>
+                          <Typography variant="caption" component="pre" sx={{ m: 0, fontFamily: mono, fontSize: '0.7rem', color: '#A7F3D0', whiteSpace: 'pre-wrap' }}>
+                            {knapCompilerOutput}
+                          </Typography>
+                        </Box>
+                      )}
+                    </Box>
+                  );
+                })()}
               </Paper>
 
               {/* 7 Official Obsidian Skills Grid */}

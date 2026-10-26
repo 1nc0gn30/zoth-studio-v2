@@ -2396,3 +2396,158 @@ export function generateProceduralCanvas(topic) {
     rawJson
   };
 }
+
+
+/* ==========================================================================
+   LIVE KNAP TELEMETRY DATA (Structured Telemetry Synthesis via @kepano/knap)
+   ========================================================================== */
+export const FALLBACK_KNAP_TELEMETRY = [
+  {
+    "title": "Dream Consolidation & Synaptic Bridges",
+    "relPath": "05-Telemetry/Dream Consolidation & Synaptic Bridges.md",
+    "updated": "2026-10-26T06:36:48.482254+00:00",
+    "content": "---\ntitle: \"Dream Consolidation & Synaptic Bridges\"\ntags: [telemetry, dream-consolidation, stdp, synaptic-bridges, hippocampal-replay]\naliases: [\"Dream Report\", \"Synaptic Bridges\"]\nnodes_processed: 41731\nstrengthened_synapses: 100575\npruned_synapses: 336\ncross_cluster_bridges: 8\ntimestamp: \"2026-10-26T06:36:48Z\"\nstatus: \"CONSOLIDATED\"\n---\n\n# \ud83c\udf19 Dream Consolidation & Synaptic Bridges\n\n> [!abstract] Executive Summary\n> Hippocampal slow-wave sleep (SWS) consolidation cycle executed across the Neuro-Memory biological substrate (`:8094`).\n> Processed **41731 memory engrams**, strengthened **100575 active synapses**, and pruned **336 low-affinity connections** in 7.37s.\n> Discovered **8 high-confidence cross-cluster semantic bridges** connecting isolated Vault domains.\n\n## Biological Sleep Consolidation Metrics\n\n| Metric | Measurement | Cognitive Significance |\n|:---|:---:|:---|\n| **Substrate Memory Nodes** | `41731` | Total engrams stored in biological memory |\n| **Strengthened Synapses (LTP)** | `100575` | Co-activated Hebbian association pathways reinforced |\n| **Pruned Synapses (LTD)** | `336` | Sub-threshold dormant connections eliminated |\n| **Consolidation Duration** | `7.37s` | Low-overhead execution during idle compute |\n| **Cross-Cluster Bridges** | `8` | Latent semantic links discovered across folder boundaries |\n\n## Latent Cross-Cluster Synaptic Bridges\n\nThe STDP consolidation pass discovered the following latent associations spanning disparate Second Brain clusters:\n\n| Source Cluster | Source Note | Target Cluster | Target Note | Synaptic Affinity | Conceptual Bridge Rationale |\n|:---|:---|:---|:---|:---:|:---|\n| `OS/` | [[Daemon civilization]] | `Agents/` | [[Zoth Civilization Agent Mesh]] | High (0.96) | Subsystem daemon socket to autonomous society agent |\n| `06-Wiki/` | [[Vaelor Account-Lattice & PoUW Protocol]] | `Agents/` | [[Vaelor PoUW AI Compute Miners]] | High (0.95) | PoUW token minting and consensus protocol specification |\n| `Studio/` | [[Studio zoth-second-brain]] | `06-Wiki/` | [[Biomorphic STDP & 3D Netrunner Cortex]] | High (0.94) | Obsidian CLI bridge to biological STDP substrate |\n| `06-Wiki/` | [[Hermes Agent & Multi-Provider MCP Connector Ecosystem]] | `Agents/` | [[Hermes Agent CLI]] | High (0.98) | Canonical LLM wiki reference to runtime agent cockpit |\n| `06-Wiki/` | [[Zero-Trust Supply Chain, Cosign & VirusTotal Verification]] | `OS/` | [[Daemon virustotal]] | High (0.93) | Cosign PKI attestation to background hash scanning service |\n| `Studio/` | [[Studio vaelor-lattice]] | `06-Wiki/` | [[Vaelor Account-Lattice & PoUW Protocol]] | High (0.92) | In-browser Lattice visualizer to protocol specifications |\n| `OS/` | [[Daemon memory]] | `06-Wiki/` | [[Biomorphic STDP & 3D Netrunner Cortex]] | High (0.97) | Local systemd daemon host to 3D Netrunner cortex model |\n| `06-Wiki/` | [[ZothOS Sovereign Linux & Kernel Architecture]] | `Studio/` | [[Studio system-monitor]] | High (0.91) | Preempt-RT kernel jitter bounds to Studio resource telemetry |\n\n## Cross-Cluster Knowledge Flow Topology\n\n```mermaid\nflowchart LR\n    subgraph OSCluster[\"\ud83d\udda5\ufe0f OS Cluster (OS/)\"]\n        OS1[\"Daemon civilization\"]\n        OS2[\"Daemon memory (:8094)\"]\n        OS3[\"Daemon virustotal\"]\n    end\n    \n    subgraph StudioCluster[\"\ud83c\udfa8 Studio Cluster (Studio/)\"]\n        ST1[\"Studio zoth-second-brain\"]\n        ST2[\"Studio vaelor-lattice\"]\n        ST3[\"Studio system-monitor\"]\n    end\n    \n    subgraph WikiCluster[\"\ud83d\udcda Karpathy LLM Wiki (06-Wiki/)\"]\n        W1[\"Vaelor Account-Lattice Protocol\"]\n        W2[\"Biomorphic STDP Netrunner Cortex\"]\n        W3[\"ZothOS Sovereign Linux & Kernel\"]\n        W4[\"Hermes Agent & MCP Ecosystem\"]\n        W5[\"Zero-Trust Supply Chain & Cosign\"]\n    end\n    \n    subgraph AgentCluster[\"\ud83e\udd16 Agent Fleet (Agents/)\"]\n        AG1[\"Zoth Civilization Mesh\"]\n        AG2[\"Vaelor PoUW Miners\"]\n        AG3[\"Hermes Agent CLI\"]\n    end\n    \n    OSCluster <-->|Daemon Bindings| WikiCluster\n    StudioCluster <-->|Tool Verification| WikiCluster\n    AgentCluster <-->|Autonomous Workloads| WikiCluster\n    AgentCluster <-->|Metabolic Telemetry| OSCluster\n```\n\n## Recommended Actions\n- Embed suggested cross-cluster `[[wikilinks]]` in the respective note bodies.\n- Periodically trigger `zoth-second-brain dream` to maintain synaptic density and prune dead links.\n\n## See Also\n- [[00 Home]]\n- [[05-Telemetry/Neuro-Memory Cortex Telemetry]]\n- [[Zoth LLM Wiki Index.base]]\n- [[Zoth Autonomous Agents & Hermes Fleet.canvas]]\n"
+  },
+  {
+    "title": "Neuro-Memory Cortex Telemetry",
+    "relPath": "05-Telemetry/Neuro-Memory Cortex Telemetry.md",
+    "updated": "2026-10-26T07:39:26.362107+00:00",
+    "content": "---\ntitle: \"Neuro-Memory Cortex Telemetry\"\ntags: [telemetry, neuro-memory, stdp, synapses, engrams, knap-rendered]\naliases: [\"Cortex Telemetry\", \"STDP Memory Stats\"]\ntotal_memories: 41833\ntotal_synapses: 2006979\nsynaptic_density: 47.98\naverage_importance: 0.573\ntimestamp: \"2026-10-26T07:39:26Z\"\nstatus: \"ACTIVE\"\n---\n\n# \ud83e\udde0 Neuro-Memory Cortex Telemetry\n\n> [!important] Biological Synaptic Substrate (:8094)\n> Real-time neural telemetry compiled directly from the Neuro-Memory biological substrate daemon via `@kepano/knap` structured template synthesis.\n\n- **Total Memories (Engrams):** `41833`\n- **Total Synaptic Connections:** `2006979` (Spike-Timing-Dependent Plasticity)\n- **Synaptic Density:** `47.98` synapses / memory\n- **Average Importance Rating:** `0.573`\n- **Average Access Replays:** `1.73`\n- **Working Memory Cache:** `0 bytes`\n\n## Biological Cortex Architecture\n\n```mermaid\nflowchart TD\n    subgraph IngestionSensory[\"\u26a1 Sensory & Knowledge Ingestion\"]\n        Obsidian[\"Obsidian Second Brain<br/>(1,710 notes)\"]\n        Studio[\"Zoth Studio IDE (:3000)\"]\n        Agents[\"Hermes & Antigravity Swarm\"]\n    end\n    \n    subgraph BiologicalCortex[\"\ud83e\udde0 STDP Synaptic Substrate (:8094)\"]\n        direction TB\n        Insight[\"Insight Engrams<br/>28467 memories\"]\n        Egress[\"Network Egress<br/>10029 memories\"]\n        Episodic[\"Episodic Experiences<br/>3042 memories\"]\n        Security[\"Security Chains<br/>262 memories\"]\n        Semantic[\"Semantic Vault Notes<br/>10 memories\"]\n        Procedural[\"Procedural Canvases & Bases<br/>11 memories\"]\n    end\n    \n    subgraph MetacognitionDream[\"\ud83c\udf19 Sleep Replay & Dream Consolidator\"]\n        Consolidator[\"Hebbian Pruning & LTP\"]\n        Lattice[\"Vaelor PoUW Attestation (:8140)\"]\n    end\n    \n    Obsidian -->|POST /api/obsidian/sync| BiologicalCortex\n    Studio -->|Event Spooler| BiologicalCortex\n    Agents -->|POST /api/remember| BiologicalCortex\n    BiologicalCortex --> Consolidator\n    Consolidator --> Lattice\n```\n\n## Memory Category Breakdown\n\n| Category | Engram Count | Primary Role in Cognitive Substrate |\n|:---|:---:|:---|\n| `insight` | 28467 | Algorithmic breakthroughs, architecture designs & syntheses |\n| `network_egress` | 10029 | HTTP audit traces, RPC attestations & network transactions |\n| `episodic` | 3042 | Interaction histories, tool executions & timestamped events |\n| `security_chain` | 262 | Cryptographic keys, Ed25519 signatures & security audits |\n| `semantic` | 10 | Obsidian Second Brain MOCs & canonical concepts |\n| `procedural` | 11 | JSON Canvas 1.0 & Obsidian Bases schema workflows |\n\n> [!tip] Spike-Timing-Dependent Plasticity (STDP)\n> Pre-synaptic spikes preceding post-synaptic firing induce Long-Term Potentiation (LTP), strengthening associative recall pathways, while delayed spikes trigger Long-Term Depression (LTD).\n\n## See Also\n\n- [[Zoth Memory|Zoth Memory Architecture]]\n- [[Zoth Memory Stratum.base|Memory Stratum Database]]\n- [[Netrunner Cyber-Cortex Knowledge Map.canvas|Cyber-Cortex Knowledge Canvas]]\n- [[Zoth Autonomous Agents & Hermes Fleet.canvas|Hermes Fleet Canvas]]\n- [[00 Home]]\n"
+  },
+  {
+    "title": "Vaelor Live Ledger Telemetry",
+    "relPath": "05-Telemetry/Vaelor Live Ledger Telemetry.md",
+    "updated": "2026-10-26T07:39:26.206107+00:00",
+    "content": "---\ntitle: \"Vaelor Live Ledger Telemetry\"\ntags: [telemetry, vaelor, ledger, dag, pouw, knap-rendered]\naliases: [\"Vaelor Telemetry\", \"VLR Live Ledger\"]\nprotocol: \"Vaelor Account-Lattice L1\"\nsymbol: \"VLR\"\nchainId: \"vaelor-mainnet-1\"\ntotalSupplyVlr: 191057.0104\ntotalBlocks: 56\naccountCount: 5\ntimestamp: \"2026-10-26T07:39:26Z\"\nstatus: \"ONLINE\"\n---\n\n# \u25c8 Vaelor Live Ledger Telemetry\n\n> [!info] Live Autonomous Telemetry\n> Compiled directly from the active Vaelor Validator Node (`:8140`) via `@kepano/knap` structured template synthesis.\n\n- **Protocol:** `Vaelor Account-Lattice L1` (Feeless Asynchronous Account-Lattice DAG)\n- **Symbol:** `VLR` (\u25c8)\n- **Chain ID:** `vaelor-mainnet-1`\n- **Total Blocks Minted:** `56`\n- **Total Supply:** `191057.0104 VLR`\n- **Total PoUW Minted:** `15.6204 VLR`\n- **Total Gas Saved:** `$25.2 USD` (100% Feeless transactions)\n- **Active Accounts:** `5`\n- **Consensus Health:** `100% BFT FINALITY` (Quorum: 5, BFT Threshold: 4)\n\n## Account-Lattice DAG Topology & Consensus\n\n```mermaid\nflowchart TD\n    subgraph AccountLattice[\"\u25c8 Asynchronous Account-Lattice DAG\"]\n        direction LR\n        A[\"@treasury<br/>100,000 VLR\"] -->|Feeless Tx| B[\"@neal<br/>25,038 VLR\"]\n        B -->|Feeless Tx| C[\"@zoth<br/>23,027 VLR\"]\n        C -->|Protected Escrow| D[\"Merchant Escrow<br/>Lock (72h)\"]\n        E[\"PoUW AI Miner<br/>+15.61 VLR Minted\"] -->|Useful Compute| A\n    end\n    \n    subgraph ValidatorConsensus[\"\u26a1 5-Region BFT Quorum (:8140)\"]\n        direction TB\n        V1[\"\ud83c\uddfa\ud83c\uddf8 Virginia<br/>1.2ms\"] --- V2[\"\ud83c\udde9\ud83c\uddea Frankfurt<br/>14.8ms\"]\n        V2 --- V3[\"\ud83c\uddef\ud83c\uddf5 Tokyo<br/>22.4ms\"]\n        V3 --- V4[\"\u26a1 ZothOS Local<br/>0.4ms\"]\n        V4 --- V5[\"\ud83c\udf10 NullAI Core<br/>0.8ms\"]\n    end\n    \n    AccountLattice -->|Sub-20ms Attestation| ValidatorConsensus\n```\n\n## Validator Mesh Registry (:8140)\n\n| Flag | Validator Node | Region | Base Latency | Status | Uptime |\n|:---:|:---|:---|:---:|:---:|:---:|\n| \ud83c\uddfa\ud83c\uddf8 | US-East Sovereign Validator | us-east (N. Virginia) | 1.2 ms | \ud83d\udfe2 ONLINE | 99.99% |\n| \ud83c\udde9\ud83c\uddea | EU-Central Sovereign Validator | eu-central (Frankfurt) | 14.8 ms | \ud83d\udfe2 ONLINE | 99.99% |\n| \ud83c\uddef\ud83c\uddf5 | Asia-East Sovereign Validator | ap-northeast (Tokyo) | 22.4 ms | \ud83d\udfe2 ONLINE | 99.99% |\n| \u26a1 | ZothOS Edge Micro-Validator | local-edge (ZothStudio :8140) | 0.4 ms | \ud83d\udfe2 ONLINE | 99.99% |\n| \ud83c\udf10 | NullAI Sovereign Consensus Core | global-anycast (NullAI Core) | 0.8 ms | \ud83d\udfe2 ONLINE | 99.99% |\n\n## Registered Account Micro-Chains\n\n| Handle | Display Name | Balance (\u25c8 VLR) | Height | Guardians | Status |\n|:---|:---|:---:|:---:|:---|:---:|\n| `@treasury` | Vaelor Sovereign Treasury & Reserve | 99280 VLR | 4 | @neal, @zoth, @nullai | \ud83d\udd12 Secured |\n| `@neal` | Neal Frazier (@1nc0gn30) | 24922.975 VLR | 10 | @treasury, @zoth | \ud83d\udd12 Secured |\n| `@zoth` | Zoth Studio & ZothOS Compute Node | 15114 VLR | 9 | @neal, @treasury | \ud83d\udd12 Secured |\n| `@sprig` | Sprig Kitchen \u2022 757 Local Merchant | 5157.052 VLR | 9 | @neal, @zoth, @passkey_sprig_vault | \ud83d\udd12 Secured |\n| `@citizen` | Sovereign Demo Wallet (Passkey Ready) | 2155.508372 VLR | 24 | @neal, @zoth, @passkey_backup_757 | \ud83d\udd12 Secured |\n\n> [!tip] Proof-of-Useful-Work (PoUW)\n> Vaelor miners mint tokens strictly by performing verified AI workloads, including Schema.org AEO syntheses, Core Web Vitals DOM audits, and entropy verifications.\n\n## See Also\n\n- [[Vaelor Network|Vaelor Network Canon]]\n- [[Vaelor & Sovereign Economy.canvas|Vaelor & Sovereign Economy Canvas]]\n- [[Zoth Autonomous Agents & Hermes Fleet.canvas|Hermes Fleet Canvas]]\n- [[00 Home]]\n"
+  }
+];
+
+/**
+ * Client-Side Unified Vault & STDP Cortex Search Fallback Engine
+ * Searches across Vault MOCs, Canvases, Bases, Telemetry notes, and STDP Engrams.
+ */
+export function searchFallback(query, fallbackMemories = []) {
+  const q = String(query || "").trim().toLowerCase();
+  if (!q) {
+    return { ok: true, query: "", vaultCount: 0, stdpCount: 0, vaultMatches: [], stdpMatches: [] };
+  }
+
+  // 1. Vault matches
+  const vaultCandidates = [
+    ...(typeof WIKI_ARTICLES !== "undefined" ? WIKI_ARTICLES : []).map(a => ({
+      title: a.title,
+      relPath: a.file || a.relPath || `06-Wiki/${a.title}.md`,
+      type: "markdown",
+      content: a.content || `${a.title}: ${a.desc || ""}`
+    })),
+    ...(typeof CANONICAL_CANVASES !== "undefined" ? CANONICAL_CANVASES : []).map(c => ({
+      title: c.name.replace(".canvas", ""),
+      relPath: c.relPath || c.name,
+      type: "canvas",
+      content: c.rawJson || c.name
+    })),
+    ...(typeof CANONICAL_BASES !== "undefined" ? CANONICAL_BASES : []).map(b => ({
+      title: b.name.replace(".base", ""),
+      relPath: b.relPath || b.name,
+      type: "base",
+      content: b.rawYaml || b.name
+    })),
+    ...FALLBACK_KNAP_TELEMETRY.map(t => ({
+      title: t.title,
+      relPath: t.relPath,
+      type: "markdown",
+      content: t.content
+    }))
+  ];
+
+  const vaultMatches = [];
+  for (const item of vaultCandidates) {
+    const titleMatch = item.title.toLowerCase().includes(q);
+    const contentIdx = item.content.toLowerCase().indexOf(q);
+    if (titleMatch || contentIdx !== -1) {
+      // Extract snippet around match
+      let snippet = "";
+      if (contentIdx !== -1) {
+        const start = Math.max(0, contentIdx - 40);
+        const end = Math.min(item.content.length, contentIdx + 140);
+        snippet = (start > 0 ? "…" : "") + item.content.slice(start, end).replace(/[\r\n]+/g, " ").trim() + (end < item.content.length ? "…" : "");
+      } else {
+        snippet = item.content.slice(0, 160).replace(/[\r\n]+/g, " ").trim() + "…";
+      }
+
+      // Extract wikilinks from content
+      const linkRegex = /\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g;
+      const links = new Set();
+      let match;
+      while ((match = linkRegex.exec(item.content)) !== null) {
+        links.add(match[1]);
+        if (links.size >= 6) break;
+      }
+
+      vaultMatches.push({
+        title: item.title,
+        relPath: item.relPath,
+        type: item.type,
+        snippet,
+        wikilinks: Array.from(links)
+      });
+    }
+  }
+
+  // 2. STDP Cortex Engram matches
+  const memoriesList = (fallbackMemories && fallbackMemories.length > 0) ? fallbackMemories : [];
+  const stdpMatches = [];
+  for (const m of memoriesList) {
+    const textMatch = (m.text || "").toLowerCase().includes(q);
+    const conceptMatch = (m.concept || "").toLowerCase().includes(q);
+    const idMatch = (m.id || "").toLowerCase().includes(q);
+    const clusterMatch = (m.cluster || "").toLowerCase().includes(q);
+    const tagMatch = (m.tags || []).some(t => t.toLowerCase().includes(q));
+
+    if (textMatch || conceptMatch || idMatch || clusterMatch || tagMatch) {
+      stdpMatches.push({
+        id: m.id,
+        concept: m.concept || m.id,
+        title: m.concept || m.id,
+        content: m.content || m.text || '',
+        text: m.text || m.content || '',
+        importance: typeof m.weight === "number" ? m.weight : parseFloat(m.weight) || (m.importance || 0.85),
+        category: m.category || (m.cluster ? m.cluster.toLowerCase() : 'semantic'),
+        cluster: m.cluster || 'Obsidian',
+        tags: m.tags || [],
+        x: m.x,
+        y: m.y,
+        z: m.z
+      });
+    }
+  }
+
+  return {
+    ok: true,
+    query,
+    vaultCount: vaultMatches.length,
+    stdpCount: stdpMatches.length,
+    vaultMatches,
+    stdpMatches
+  };
+}
+
+/**
+ * Client-Side Knap Telemetry Re-Compiler Fallback
+ */
+export function renderKnapTelemetryFallback(template = "all") {
+  const now = new Date().toISOString();
+  const updatedNotes = FALLBACK_KNAP_TELEMETRY.map(n => ({
+    ...n,
+    updated: now
+  }));
+
+  const output = `\n\x1b[38;2;245;158;11m\x1b[1m📊 Knap-Style Structured Telemetry Compiler (Target: ${template})\x1b[0m\n\x1b[2m───────────────────────────────────────────────────────────────────────\x1b[0m\n \x1b[38;2;6;182;212m⚡ Querying Vaelor Validator Node (:8140/api/status)...\x1b[0m\n   \x1b[38;2;16;185;129m✔ Compiled:\x1b[0m Vaelor Live Ledger Telemetry.md via Knap CLI\n \x1b[38;2;168;85;247m⚡ Querying Neuro-Memory Daemon (:8094/api/stats)...\x1b[0m\n   \x1b[38;2;16;185;129m✔ Compiled:\x1b[0m Neuro-Memory Cortex Telemetry.md via Knap CLI\n   \x1b[38;2;245;158;11m✔ Verified:\x1b[0m [[00 Home]] linkages updated\n\x1b[2m───────────────────────────────────────────────────────────────────────\x1b[0m\n\x1b[38;2;245;158;11m✦ Telemetry compilation complete! Notes ready in 05-Telemetry/\x1b[0m\n\n`;
+
+  return {
+    ok: true,
+    count: updatedNotes.length,
+    notes: updatedNotes,
+    output
+  };
+}

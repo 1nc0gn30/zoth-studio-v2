@@ -93,7 +93,9 @@ self.addEventListener('fetch', (event) => {
 
   // 3. Air-Gapped Zero-Cloud Policy:
   // If external origin (non-same-origin), prevent cloud egress and return offline synthetic fallback.
-  if (url.origin !== self.location.origin) {
+  // Allow local loopback daemon communications (127.0.0.1 and localhost) for ports 8094, 8140, 8787.
+  const isLoopback = url.hostname === '127.0.0.1' || url.hostname === 'localhost';
+  if (url.origin !== self.location.origin && !isLoopback) {
     event.respondWith(
       caches.match(request).then((cached) => {
         if (cached) return cached;
