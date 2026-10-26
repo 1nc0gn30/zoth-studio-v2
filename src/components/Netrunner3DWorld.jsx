@@ -27,6 +27,43 @@ function getClusterHex(cluster) {
 }
 
 /**
+ * Creates a crisp 3D billboard text sprite for node labels
+ */
+function makeLabelSprite(text, hexColor = 0x00F0FF) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 112;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, 512, 112);
+
+  // Frosted pill background
+  ctx.fillStyle = 'rgba(6, 7, 11, 0.78)';
+  ctx.strokeStyle = '#' + hexColor.toString(16).padStart(6, '0');
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.roundRect(16, 18, 480, 76, 18);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.font = '700 28px "JetBrains Mono", monospace';
+  ctx.fillStyle = '#F8FAFC';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  const clean = String(text || '').length > 26 ? String(text).slice(0, 24) + '…' : String(text || '');
+  ctx.fillText(clean, 256, 56);
+
+  const tex = new THREE.CanvasTexture(canvas);
+  const mat = new THREE.SpriteMaterial({
+    map: tex,
+    transparent: true,
+    depthWrite: false,
+  });
+  const sprite = new THREE.Sprite(mat);
+  sprite.scale.set(34, 7.5, 1);
+  return sprite;
+}
+
+/**
  * Creates the glowing circular cyberspace grid canvas texture
  */
 function makeGridTexture(isDark) {
@@ -144,11 +181,15 @@ export default function Netrunner3DWorld({
   const pulseMeshRef = useRef(null);
   const haloMeshRef = useRef(null);
   const coreRef = useRef(null);
+  const coreWireRef = useRef(null);
+  const labelSpritesRef = useRef([]);
+  const shockwaveRef = useRef(null);
   const ringsRef = useRef([]);
   const starsRef = useRef(null);
 
   const [autoRotate, setAutoRotate] = useState(true);
   const [showLabels, setShowLabels] = useState(true);
+  const [cameraMode, setCameraMode] = useState('orbit'); // 'orbit' | 'cortex' | 'matrix'
   const [hoveredMemory, setHoveredMemory] = useState(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
 
@@ -166,9 +207,27 @@ export default function Netrunner3DWorld({
   // Smoothly reset camera to default majestic vantage
   const resetCamera = useCallback(() => {
     if (!cameraRef.current || !controlsRef.current) return;
+    setCameraMode('orbit');
     const controls = controlsRef.current;
     controls.target.set(0, 16, 0);
     cameraRef.current.position.set(0, 110, 380);
+    controls.update();
+  }, []);
+
+  const switchCameraPreset = useCallback((preset) => {
+    if (!cameraRef.current || !controlsRef.current) return;
+    setCameraMode(preset);
+    const controls = controlsRef.current;
+    if (preset === 'cortex') {
+      controls.target.set(0, 16, 0);
+      cameraRef.current.position.set(0, 28, 105);
+    } else if (preset === 'matrix') {
+      controls.target.set(0, 0, 0);
+      cameraRef.current.position.set(0, 440, 20);
+    } else {
+      controls.target.set(0, 16, 0);
+      cameraRef.current.position.set(0, 110, 380);
+    }
     controls.update();
   }, []);
 
@@ -286,16 +345,30 @@ export default function Netrunner3DWorld({
     addInlay(210, 0.32, 0x00F0FF, 0.3);
     addInlay(310, 0.25, 0xF472B6, 0.22);
 
-    // CENTRAL ORACLE CORE (Octahedron & Concentric Gimbal Rings)
+    // CENTRAL NETRUNNER CYBER-CORTEX & ORACLE CORE (Icosahedral Cortex + Spinal Column + Gimbal Rings)
     const coreGroup = new THREE.Group();
     coreGroup.position.set(0, 16, 0);
 
-    const coreMesh = new THREE.Mesh(
-      new THREE.OctahedronGeometry(6.5, 0),
-      new THREE.MeshStandardMaterial({
+    // Outer Wireframe Icosahedral Cortex Shell
+    const cortexWire = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(11.5, 2),
+      new THREE.MeshBasicMaterial({
         color: 0x00F0FF,
-        emissive: 0x00F0FF,
-        emissiveIntensity: isDark ? 0.6 : 0.3,
+        wireframe: true,
+        transparent: true,
+        opacity: isDark ? 0.38 : 0.25,
+        blending: THREE.AdditiveBlending
+      })
+    );
+    coreGroup.add(cortexWire);
+    coreWireRef.current = cortexWire;
+
+    const coreMesh = new THREE.Mesh(
+      new THREE.OctahedronGeometry(6.5, 1),
+      new THREE.MeshStandardMaterial({
+        color: 0xD4AF37,
+        emissive: 0xD4AF37,
+        emissiveIntensity: isDark ? 0.75 : 0.35,
         roughness: 0.2,
         metalness: 0.9,
         wireframe: false
@@ -303,6 +376,40 @@ export default function Netrunner3DWorld({
     );
     coreGroup.add(coreMesh);
     coreRef.current = coreMesh;
+
+    // Articulated Cybernetic Spinal Column descending to the Obsidian Floor
+    for (let s = 0; s < 6; s++) {
+      const rTop = 3.6 - s * 0.35;
+      const vertebra = new THREE.Mesh(
+        new THREE.CylinderGeometry(rTop, rTop * 0.85, 2.2, 16),
+        new THREE.MeshStandardMaterial({
+          color: s % 2 === 0 ? 0xD4AF37 : 0x00F0FF,
+          emissive: s % 2 === 0 ? 0xD4AF37 : 0x00F0FF,
+          emissiveIntensity: 0.45,
+          metalness: 0.85,
+          roughness: 0.25
+        })
+      );
+      vertebra.position.set(0, -14 - s * 5.2, 0);
+      coreGroup.add(vertebra);
+    }
+
+    // Expanding 3D Action Potential Shockwave Ring
+    const shockwaveMesh = new THREE.Mesh(
+      new THREE.RingGeometry(4, 6.5, 48),
+      new THREE.MeshBasicMaterial({
+        color: 0x00F0FF,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      })
+    );
+    shockwaveMesh.rotation.x = Math.PI / 2;
+    shockwaveMesh.position.set(0, 16, 0);
+    scene.add(shockwaveMesh);
+    shockwaveRef.current = { mesh: shockwaveMesh, scale: 1, opacity: 0 };
 
     // Lucy Sprite Hologram (if image available)
     const textureLoader = new THREE.TextureLoader();
@@ -365,6 +472,7 @@ export default function Netrunner3DWorld({
     scene.add(nodeGroup);
 
     const meshes = [];
+    const labels = [];
     const memoryPositions = [];
 
     memories.forEach((m) => {
@@ -390,9 +498,16 @@ export default function Netrunner3DWorld({
       nodeGroup.add(nodeMesh);
       meshes.push(nodeMesh);
 
+      const labelSprite = makeLabelSprite(m.concept || m.id, hex);
+      labelSprite.position.set(px, py + radius + 5.5, pz);
+      labelSprite.visible = showLabels;
+      nodeGroup.add(labelSprite);
+      labels.push(labelSprite);
+
       memoryPositions.push(new THREE.Vector3(px, py, pz));
     });
     nodeMeshesRef.current = meshes;
+    labelSpritesRef.current = labels;
 
     // SYNAPTIC LINKS (Lines connecting neighboring nodes)
     const linkPositions = [];
@@ -487,6 +602,11 @@ export default function Netrunner3DWorld({
       if (intersects.length > 0) {
         const hit = intersects[0].object;
         if (hit.userData?.memory) {
+          if (shockwaveRef.current && shockwaveRef.current.mesh) {
+            shockwaveRef.current.mesh.position.copy(hit.position);
+            shockwaveRef.current.scale = 1.0;
+            shockwaveRef.current.opacity = 0.9;
+          }
           onSelectMemory(hit.userData.memory);
         }
       }
@@ -527,10 +647,23 @@ export default function Netrunner3DWorld({
         starsRef.current.rotation.y = elapsed * 0.008;
       }
 
-      // Core octahedron smooth spinning
+      // Core octahedron & wireframe cortex shell smooth spinning
       if (coreRef.current) {
         coreRef.current.rotation.y = elapsed * 0.35;
         coreRef.current.rotation.x = Math.sin(elapsed * 0.4) * 0.2;
+      }
+      if (coreWireRef.current) {
+        coreWireRef.current.rotation.y = -elapsed * 0.22;
+        coreWireRef.current.rotation.z = Math.cos(elapsed * 0.3) * 0.15;
+      }
+
+      // Expanding 3D shockwave ring animation
+      if (shockwaveRef.current && shockwaveRef.current.opacity > 0) {
+        shockwaveRef.current.scale += 0.45;
+        shockwaveRef.current.opacity = Math.max(0, shockwaveRef.current.opacity - 0.025);
+        const sm = shockwaveRef.current.mesh;
+        sm.scale.set(shockwaveRef.current.scale, shockwaveRef.current.scale, 1);
+        sm.material.opacity = shockwaveRef.current.opacity;
       }
 
       // Gimbal rings counter-rotation
@@ -605,6 +738,13 @@ export default function Netrunner3DWorld({
     }
   }, [selectedMemory]);
 
+  useEffect(() => {
+    if (!labelSpritesRef.current) return;
+    labelSpritesRef.current.forEach((sp) => {
+      sp.visible = showLabels;
+    });
+  }, [showLabels]);
+
   return (
     <Box sx={{ position: 'relative', width: '100%', height, borderRadius: 2, overflow: 'hidden', border: '1px solid rgba(212,175,55,0.22)', bgcolor: isDark ? '#06070B' : '#EDF2F7' }}>
       
@@ -654,6 +794,37 @@ export default function Netrunner3DWorld({
             {showLabels ? <LabelIcon fontSize="small" /> : <LabelOffIcon fontSize="small" />}
           </IconButton>
         </Tooltip>
+
+        <Chip
+          label="CORTEX"
+          size="small"
+          onClick={() => switchCameraPreset(cameraMode === 'cortex' ? 'orbit' : 'cortex')}
+          sx={{
+            height: 22,
+            cursor: 'pointer',
+            fontFamily: mono,
+            fontWeight: 800,
+            fontSize: '0.62rem',
+            bgcolor: cameraMode === 'cortex' ? 'rgba(212,175,55,0.28)' : 'transparent',
+            color: cameraMode === 'cortex' ? '#D4AF37' : '#94A3B8',
+            border: '1px solid rgba(212,175,55,0.35)'
+          }}
+        />
+        <Chip
+          label="MATRIX"
+          size="small"
+          onClick={() => switchCameraPreset(cameraMode === 'matrix' ? 'orbit' : 'matrix')}
+          sx={{
+            height: 22,
+            cursor: 'pointer',
+            fontFamily: mono,
+            fontWeight: 800,
+            fontSize: '0.62rem',
+            bgcolor: cameraMode === 'matrix' ? 'rgba(0,240,255,0.22)' : 'transparent',
+            color: cameraMode === 'matrix' ? '#00F0FF' : '#94A3B8',
+            border: '1px solid rgba(0,240,255,0.35)'
+          }}
+        />
       </Box>
 
       {/* Ambient Status Telemetry Badge (Top Left) */}
