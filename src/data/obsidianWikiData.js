@@ -4963,3 +4963,142 @@ export function createVaelorGroupTabFallback(opts = {}) {
   };
 }
 
+export function rotateVaelorGuardianRecoveryFallback(opts = {}) {
+  const handle = opts.handle || '@citizen';
+  const approvals = opts.approvals || ['@neal', '@zoth'];
+  const reason = opts.reason || 'Biometric Passkey device rotation';
+  const newPub = '302a300506032b6570032100' + randHex(64);
+  const blockHash = randHex(64);
+  const ts = new Date().toISOString();
+
+  return {
+    ok: true,
+    account: {
+      handle,
+      displayName: 'Sovereign Demo Wallet (Passkey Ready)',
+      publicKeyHex: newPub,
+      guardians: ['@neal', '@zoth', '@passkey_backup_757'],
+      guardianThreshold: 2,
+      recoveryNonce: 3,
+      balanceVlr: 10956.0,
+      stakedBalanceVlr: 600.0
+    },
+    rotateBlock: {
+      hash: blockHash,
+      account: 'vlr1_' + randHex(32),
+      handle,
+      height: 80,
+      type: 'KEY_ROTATE',
+      data: {
+        newPublicKeyHex: newPub,
+        guardiansApproved: approvals,
+        reason,
+        preservedBalanceVlr: 10956.0,
+        rotatedAt: ts
+      },
+      finalityMs: 8.4,
+      gasFeeVlr: 0,
+      timestamp: ts,
+      quorumCertificate: {
+        blockHash,
+        status: 'FINALIZED_BFT',
+        quorumSize: 5,
+        approvals: 5,
+        bftThreshold: '4/5 (2f + 1)',
+        aggregateLatencyMs: 8.1
+      }
+    },
+    newPublicKeyHex: newPub,
+    guardiansApproved: approvals
+  };
+}
+
+export function pingVaelorInheritanceHeartbeatFallback(opts = {}) {
+  const planId = opts.planId || 'inh_neal_continuity_01';
+  const caller = opts.caller || '@sprig';
+  const blockHash = randHex(64);
+  const ts = new Date().toISOString();
+
+  return {
+    ok: true,
+    plan: {
+      id: planId,
+      owner: caller,
+      beneficiaries: [{ handle: '@neal', bps: 10000, pct: 100 }],
+      inactivityDays: 180,
+      lastActiveAt: ts,
+      unlocksAt: new Date(Date.now() + 180 * 86400000).toISOString(),
+      status: 'ACTIVE',
+      remainingDays: 180,
+      remainingMs: 180 * 86400000
+    },
+    heartbeatBlock: {
+      hash: blockHash,
+      account: 'vlr1_' + randHex(32),
+      handle: caller,
+      height: 81,
+      type: 'INHERITANCE_HEARTBEAT',
+      finalityMs: 9.1,
+      gasFeeVlr: 0,
+      timestamp: ts,
+      quorumCertificate: {
+        blockHash,
+        status: 'FINALIZED_BFT',
+        quorumSize: 5,
+        approvals: 5,
+        bftThreshold: '4/5 (2f + 1)',
+        aggregateLatencyMs: 8.14
+      }
+    }
+  };
+}
+
+export function sendVaelorShieldedTransferFallback(opts = {}) {
+  const from = opts.from || '@citizen';
+  const to = opts.to || '@neal';
+  const amountVlr = parseFloat(opts.amount || opts.amountVlr) || 25.0;
+  const memo = opts.memo || 'Confidential Institutional Settlement';
+  const commitment = 'cmt_' + randHex(64);
+  const viewKey = 'vk_' + randHex(48);
+  const blockHash = randHex(64);
+  const ts = new Date().toISOString();
+
+  return {
+    ok: true,
+    shieldedTransfer: {
+      id: 'shld_' + randHex(16),
+      commitment,
+      fromHandle: from,
+      toHandle: to,
+      publicAmount: '🔒 SHIELDED',
+      publicMemo: '🔒 Encrypted Stealth Payload',
+      amountVlr,
+      memo,
+      viewKey,
+      status: 'CONFIRMED',
+      timestamp: ts,
+      sendBlockHash: blockHash
+    },
+    viewKey,
+    commitment,
+    sendBlock: {
+      hash: blockHash,
+      account: 'vlr1_' + randHex(32),
+      handle: from,
+      height: 82,
+      type: 'SHIELDED_SEND',
+      finalityMs: 12.3,
+      gasFeeVlr: 0,
+      timestamp: ts,
+      quorumCertificate: {
+        blockHash,
+        status: 'FINALIZED_BFT',
+        quorumSize: 5,
+        approvals: 5,
+        bftThreshold: '4/5 (2f + 1)',
+        aggregateLatencyMs: 8.15
+      }
+    }
+  };
+}
+

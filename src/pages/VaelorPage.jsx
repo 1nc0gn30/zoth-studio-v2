@@ -29,6 +29,9 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import WavesIcon from '@mui/icons-material/Waves';
 import GroupsIcon from '@mui/icons-material/Groups';
 import PieChartIcon from '@mui/icons-material/PieChart';
+import LockResetIcon from '@mui/icons-material/LockReset';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import VaelorLatticeVisualizer from '../components/VaelorLatticeVisualizer';
 import SovereignFunnel from '../components/SovereignFunnel';
@@ -43,7 +46,10 @@ import {
   drawVaelorCreditFallback,
   callVaelorMcpFallback,
   createVaelorStreamFallback,
-  createVaelorGroupTabFallback
+  createVaelorGroupTabFallback,
+  rotateVaelorGuardianRecoveryFallback,
+  pingVaelorInheritanceHeartbeatFallback,
+  sendVaelorShieldedTransferFallback
 } from '../data/obsidianWikiData';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -482,6 +488,109 @@ export default function VaelorPage() {
 
     setGroupTabResult(resData);
     setIsSettlingGroupTab(false);
+  };
+
+  // Security & Continuity Workbench State
+  const [isRotatingKey, setIsRotatingKey] = useState(false);
+  const [keyRotateResult, setKeyRotateResult] = useState(null);
+
+  const [isPingingHeartbeat, setIsPingingHeartbeat] = useState(false);
+  const [heartbeatResult, setHeartbeatResult] = useState(null);
+
+  const [isSendingShielded, setIsSendingShielded] = useState(false);
+  const [shieldedResult, setShieldedResult] = useState(null);
+
+  const handleGuardianKeyRotation = async () => {
+    if (isRotatingKey) return;
+    setIsRotatingKey(true);
+    let resData = null;
+    try {
+      const res = await fetch('http://127.0.0.1:8140/api/accounts/recover', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          handle: '@citizen',
+          approvals: ['@neal', '@zoth'],
+          reason: 'Biometric Passkey device rotation'
+        })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json && json.ok) resData = json;
+      }
+    } catch (_) {}
+
+    if (!resData) {
+      resData = rotateVaelorGuardianRecoveryFallback({
+        handle: '@citizen',
+        approvals: ['@neal', '@zoth'],
+        reason: 'Biometric Passkey device rotation'
+      });
+    }
+
+    setKeyRotateResult(resData);
+    setIsRotatingKey(false);
+  };
+
+  const handlePingHeartbeat = async () => {
+    if (isPingingHeartbeat) return;
+    setIsPingingHeartbeat(true);
+    let resData = null;
+    try {
+      const res = await fetch('http://127.0.0.1:8140/api/inheritance/inh_a6c78f542216435e/heartbeat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ caller: '@sprig' })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json && json.ok) resData = json;
+      }
+    } catch (_) {}
+
+    if (!resData) {
+      resData = pingVaelorInheritanceHeartbeatFallback({
+        planId: 'inh_neal_continuity_01',
+        caller: '@sprig'
+      });
+    }
+
+    setHeartbeatResult(resData);
+    setIsPingingHeartbeat(false);
+  };
+
+  const handleSendShielded = async () => {
+    if (isSendingShielded) return;
+    setIsSendingShielded(true);
+    let resData = null;
+    try {
+      const res = await fetch('http://127.0.0.1:8140/api/shielded/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: '@citizen',
+          to: '@neal',
+          amount: 25.0,
+          memo: 'Confidential Institutional Settlement'
+        })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json && json.ok) resData = json;
+      }
+    } catch (_) {}
+
+    if (!resData) {
+      resData = sendVaelorShieldedTransferFallback({
+        from: '@citizen',
+        to: '@neal',
+        amount: 25.0,
+        memo: 'Confidential Institutional Settlement'
+      });
+    }
+
+    setShieldedResult(resData);
+    setIsSendingShielded(false);
   };
 
   return (
@@ -1824,6 +1933,357 @@ export default function VaelorPage() {
                         Split: <strong>{groupSplitShare} ◈ VLR × 4 members</strong> • Cashback: <strong>+{(selectedGroupPreset.totalAmount * 0.025).toFixed(3)} ◈ total rebate</strong>
                         <br />
                         Status: <strong>OPEN (Organizer Paid • 3 Micro-shares Authorized)</strong> • Gas Fee: <strong>$0.00</strong>
+                      </Typography>
+                    </Paper>
+                  )}
+                </Paper>
+              </Grid>
+            </Grid>
+          </Box>
+        </RevealOnScroll>
+
+        {/* ==========================================================================
+            SECTION: SEEDLESS GUARDIAN RECOVERY, DEAD-MAN'S SWITCH & SHIELDED WORKBENCH
+            ========================================================================== */}
+        <RevealOnScroll>
+          <Box id="vaelor-security-continuity-sim" sx={{ mb: 6 }}>
+            <Box sx={{ mb: 3 }}>
+              <Typography className="section-kicker">Sovereign Continuity &amp; Privacy</Typography>
+              <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif', mb: 1 }}>
+                Seedless Social Recovery, Dead-Man's Switch &amp; Shielded Privacy
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 880, fontSize: '0.94rem' }}>
+                Zero seed phrase vulnerability. Recover biometric passkeys via 2-of-3 multi-party social consensus, automate estate continuity via on-chain liveness switches, and settle confidential balances using zero-knowledge Pedersen commitments.
+              </Typography>
+            </Box>
+
+            <Grid container spacing={3}>
+              {/* CARD 1: SEEDLESS 2-OF-3 SOCIAL GUARDIAN RECOVERY */}
+              <Grid xs={12} md={4}>
+                <Paper
+                  sx={{
+                    p: { xs: 2.5, md: 3 },
+                    borderRadius: 3,
+                    border: `1.5px solid ${isDark ? 'rgba(56,189,248,0.45)' : 'rgba(56,189,248,0.6)'}`,
+                    bgcolor: isDark ? 'rgba(6,12,20,0.94)' : '#FFFFFF',
+                    boxShadow: isDark ? '0 12px 32px rgba(56,189,248,0.1)' : '0 6px 20px rgba(0,0,0,0.06)',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}
+                >
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <LockResetIcon sx={{ color: '#38BDF8', fontSize: '1.4rem' }} />
+                      <Typography variant="subtitle1" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif' }}>
+                        2-of-3 Social Recovery
+                      </Typography>
+                    </Box>
+                    <Chip
+                      label="Threshold: 2 of 3"
+                      size="small"
+                      sx={{ bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8', fontFamily: mono, fontWeight: 800, fontSize: '0.64rem' }}
+                    />
+                  </Box>
+
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2, fontSize: '0.8rem', lineHeight: 1.5 }}>
+                    Rotate compromised passkeys without seed phrases. Account handle <code>@citizen</code>, balances, and on-lattice credit history remain 100% intact.
+                  </Typography>
+
+                  {/* Designated Guardians List */}
+                  <Paper
+                    sx={{
+                      p: 1.5,
+                      mb: 2,
+                      borderRadius: 2,
+                      bgcolor: isDark ? '#020408' : '#F0F9FF',
+                      border: '1px solid rgba(56,189,248,0.2)'
+                    }}
+                  >
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.62rem', display: 'block', fontWeight: 800, mb: 0.8 }}>
+                      DESIGNATED SOCIAL GUARDIANS
+                    </Typography>
+                    <Stack spacing={0.6}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: '#38BDF8' }}>
+                          @neal (Founder Core)
+                        </Typography>
+                        <Chip label="Approved ✓" size="small" sx={{ height: 18, fontSize: '0.6rem', fontFamily: mono, bgcolor: 'rgba(16,185,129,0.15)', color: '#34D399' }} />
+                      </Box>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: '#38BDF8' }}>
+                          @zoth (Compute Node)
+                        </Typography>
+                        <Chip label="Approved ✓" size="small" sx={{ height: 18, fontSize: '0.6rem', fontFamily: mono, bgcolor: 'rgba(16,185,129,0.15)', color: '#34D399' }} />
+                      </Box>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8' }}>
+                          @passkey_backup_757
+                        </Typography>
+                        <Chip label="Standby" size="small" sx={{ height: 18, fontSize: '0.6rem', fontFamily: mono, bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0', color: '#94A3B8' }} />
+                      </Box>
+                    </Stack>
+                  </Paper>
+
+                  {/* Key Rotation Button */}
+                  <Button
+                    id="vaelor-guardian-btn"
+                    fullWidth
+                    variant="contained"
+                    onClick={handleGuardianKeyRotation}
+                    disabled={isRotatingKey}
+                    startIcon={isRotatingKey ? <CircularProgress size={16} sx={{ color: '#08080B' }} /> : <LockResetIcon />}
+                    sx={{
+                      bgcolor: '#38BDF8',
+                      color: '#08080B',
+                      fontWeight: 900,
+                      fontFamily: mono,
+                      fontSize: '0.78rem',
+                      py: 1.1,
+                      borderRadius: 2,
+                      '&:hover': { bgcolor: '#0284C7' },
+                      mb: 2
+                    }}
+                  >
+                    {isRotatingKey ? 'ROTATING ON LATTICE...' : `🔐 2-of-3 GUARDIAN KEY ROTATION`}
+                  </Button>
+
+                  {/* Recovery Result Card */}
+                  {keyRotateResult && (
+                    <Paper
+                      sx={{
+                        p: 1.5,
+                        borderRadius: 2,
+                        bgcolor: isDark ? 'rgba(12,24,18,0.9)' : 'rgba(240,253,244,0.95)',
+                        border: '1.5px solid #10B981',
+                        mt: 'auto'
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 0.6 }}>
+                        <CheckCircleIcon sx={{ color: '#10B981', fontSize: '1.0rem' }} />
+                        <Typography sx={{ fontFamily: mono, fontWeight: 900, fontSize: '0.74rem', color: '#10B981' }}>
+                          NEW KEY ROTATED • BALANCE PRESERVED
+                        </Typography>
+                      </Box>
+                      <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.7rem', color: isDark ? '#E2E8F0' : '#1E293B', lineHeight: 1.5 }}>
+                        New Ed25519 Pub: <code>{(keyRotateResult.newPublicKeyHex || '302a30..b02').slice(0, 16)}...</code>
+                        <br />
+                        Handle: <strong>@citizen (Unchanged)</strong> • Nonce: <strong>#{keyRotateResult.account?.recoveryNonce || 2}</strong>
+                        <br />
+                        Balance: <strong>{(keyRotateResult.account?.balanceVlr || 10956).toLocaleString()} ◈ VLR</strong> (Zero Seed Loss)
+                      </Typography>
+                    </Paper>
+                  )}
+                </Paper>
+              </Grid>
+
+              {/* CARD 2: DEAD-MAN'S SWITCH CONTINUITY & INHERITANCE */}
+              <Grid xs={12} md={4}>
+                <Paper
+                  sx={{
+                    p: { xs: 2.5, md: 3 },
+                    borderRadius: 3,
+                    border: `1.5px solid ${isDark ? 'rgba(232,121,249,0.45)' : 'rgba(232,121,249,0.6)'}`,
+                    bgcolor: isDark ? 'rgba(16,8,20,0.94)' : '#FFFFFF',
+                    boxShadow: isDark ? '0 12px 32px rgba(232,121,249,0.1)' : '0 6px 20px rgba(0,0,0,0.06)',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}
+                >
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <FavoriteIcon sx={{ color: '#E879F9', fontSize: '1.4rem' }} />
+                      <Typography variant="subtitle1" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif' }}>
+                        Dead-Man's Switch
+                      </Typography>
+                    </Box>
+                    <Chip
+                      label="180-Day Inactivity Vault"
+                      size="small"
+                      sx={{ bgcolor: 'rgba(232,121,249,0.15)', color: '#E879F9', fontFamily: mono, fontWeight: 800, fontSize: '0.64rem' }}
+                    />
+                  </Box>
+
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2, fontSize: '0.8rem', lineHeight: 1.5 }}>
+                    Decentralized estate bequest. If the owner account fails to broadcast on-lattice for 180 days, designated beneficiaries unlock the vault automatically.
+                  </Typography>
+
+                  {/* Continuity Plan Specs */}
+                  <Paper
+                    sx={{
+                      p: 1.5,
+                      mb: 2,
+                      borderRadius: 2,
+                      bgcolor: isDark ? '#050308' : '#FDF4FF',
+                      border: '1px solid rgba(232,121,249,0.2)'
+                    }}
+                  >
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.62rem', display: 'block', fontWeight: 800, mb: 0.8 }}>
+                      CONTINUITY BENEFICIARY SPEC
+                    </Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.6 }}>
+                      <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: '#E879F9' }}>
+                        Beneficiary: @neal
+                      </Typography>
+                      <Chip label="100% Bequest" size="small" sx={{ height: 18, fontSize: '0.6rem', fontFamily: mono, bgcolor: 'rgba(232,121,249,0.15)', color: '#E879F9' }} />
+                    </Box>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.66rem', display: 'block' }}>
+                      Timer Window: 180 Days • Inactivity Status: <strong>ACTIVE (ARMED)</strong>
+                    </Typography>
+                  </Paper>
+
+                  {/* Heartbeat Ping Button */}
+                  <Button
+                    id="vaelor-heartbeat-btn"
+                    fullWidth
+                    variant="contained"
+                    onClick={handlePingHeartbeat}
+                    disabled={isPingingHeartbeat}
+                    startIcon={isPingingHeartbeat ? <CircularProgress size={16} sx={{ color: '#08080B' }} /> : <FavoriteIcon />}
+                    sx={{
+                      bgcolor: '#E879F9',
+                      color: '#08080B',
+                      fontWeight: 900,
+                      fontFamily: mono,
+                      fontSize: '0.78rem',
+                      py: 1.1,
+                      borderRadius: 2,
+                      '&:hover': { bgcolor: '#D946EF' },
+                      mb: 2
+                    }}
+                  >
+                    {isPingingHeartbeat ? 'RESETTING TIMER...' : `💓 PING CONTINUITY HEARTBEAT`}
+                  </Button>
+
+                  {/* Heartbeat Result Card */}
+                  {heartbeatResult && (
+                    <Paper
+                      sx={{
+                        p: 1.5,
+                        borderRadius: 2,
+                        bgcolor: isDark ? 'rgba(12,24,18,0.9)' : 'rgba(240,253,244,0.95)',
+                        border: '1.5px solid #10B981',
+                        mt: 'auto'
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 0.6 }}>
+                        <CheckCircleIcon sx={{ color: '#10B981', fontSize: '1.0rem' }} />
+                        <Typography sx={{ fontFamily: mono, fontWeight: 900, fontSize: '0.74rem', color: '#10B981' }}>
+                          HEARTBEAT CONFIRMED (180 DAYS RESET)
+                        </Typography>
+                      </Box>
+                      <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.7rem', color: isDark ? '#E2E8F0' : '#1E293B', lineHeight: 1.5 }}>
+                        Heartbeat Block: <code>{(heartbeatResult.heartbeatBlock?.hash || '871102..').slice(0, 16)}...</code>
+                        <br />
+                        Plan: <code>{(heartbeatResult.plan?.id || 'inh_sprig..').slice(0, 16)}</code> • Timer: <strong>180 Days</strong>
+                        <br />
+                        Unlocks At: <code>{(heartbeatResult.plan?.unlocksAt || new Date(Date.now() + 180 * 86400000).toISOString()).split('T')[0]}</code>
+                      </Typography>
+                    </Paper>
+                  )}
+                </Paper>
+              </Grid>
+
+              {/* CARD 3: SHIELDED PEDERSEN COMMITMENT & SELECTIVE VIEW-KEY */}
+              <Grid xs={12} md={4}>
+                <Paper
+                  sx={{
+                    p: { xs: 2.5, md: 3 },
+                    borderRadius: 3,
+                    border: `1.5px solid ${isDark ? 'rgba(192,132,252,0.45)' : 'rgba(192,132,252,0.6)'}`,
+                    bgcolor: isDark ? 'rgba(12,8,22,0.94)' : '#FFFFFF',
+                    boxShadow: isDark ? '0 12px 32px rgba(192,132,252,0.1)' : '0 6px 20px rgba(0,0,0,0.06)',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}
+                >
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <VpnKeyIcon sx={{ color: '#C084FC', fontSize: '1.4rem' }} />
+                      <Typography variant="subtitle1" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif' }}>
+                        Shielded Pedersen Privacy
+                      </Typography>
+                    </Box>
+                    <Chip
+                      label="Zero Plaintext Leak"
+                      size="small"
+                      sx={{ bgcolor: 'rgba(192,132,252,0.15)', color: '#C084FC', fontFamily: mono, fontWeight: 800, fontSize: '0.64rem' }}
+                    />
+                  </Box>
+
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2, fontSize: '0.8rem', lineHeight: 1.5 }}>
+                    Confidential institutional settlements. Amounts are blinded with Pedersen commitments ($C = rG + vH$), decodable only by selective auditor view-keys.
+                  </Typography>
+
+                  {/* Shielded Transfer Specs */}
+                  <Paper
+                    sx={{
+                      p: 1.5,
+                      mb: 2,
+                      borderRadius: 2,
+                      bgcolor: isDark ? '#040206' : '#FAF5FF',
+                      border: '1px solid rgba(192,132,252,0.2)'
+                    }}
+                  >
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.62rem', display: 'block', fontWeight: 800, mb: 0.8 }}>
+                      INSTITUTIONAL SHIELDED PAYLOAD
+                    </Typography>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: '#C084FC', mb: 0.4 }}>
+                      @citizen → @neal (25.00 ◈ VLR)
+                    </Typography>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.66rem', display: 'block' }}>
+                      Payload: <code>🔒 Encrypted Stealth Payload</code> • Gas: $0.00
+                    </Typography>
+                  </Paper>
+
+                  {/* Mint Shielded Commitment Button */}
+                  <Button
+                    id="vaelor-shielded-btn"
+                    fullWidth
+                    variant="contained"
+                    onClick={handleSendShielded}
+                    disabled={isSendingShielded}
+                    startIcon={isSendingShielded ? <CircularProgress size={16} sx={{ color: '#08080B' }} /> : <VpnKeyIcon />}
+                    sx={{
+                      bgcolor: '#C084FC',
+                      color: '#08080B',
+                      fontWeight: 900,
+                      fontFamily: mono,
+                      fontSize: '0.78rem',
+                      py: 1.1,
+                      borderRadius: 2,
+                      '&:hover': { bgcolor: '#A855F7' },
+                      mb: 2
+                    }}
+                  >
+                    {isSendingShielded ? 'BLINDING COMMITMENT...' : `🛡️ MINT SHIELDED COMMITMENT & VIEW KEY`}
+                  </Button>
+
+                  {/* Shielded Result Card */}
+                  {shieldedResult && (
+                    <Paper
+                      sx={{
+                        p: 1.5,
+                        borderRadius: 2,
+                        bgcolor: isDark ? 'rgba(12,24,18,0.9)' : 'rgba(240,253,244,0.95)',
+                        border: '1.5px solid #10B981',
+                        mt: 'auto'
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 0.6 }}>
+                        <CheckCircleIcon sx={{ color: '#10B981', fontSize: '1.0rem' }} />
+                        <Typography sx={{ fontFamily: mono, fontWeight: 900, fontSize: '0.74rem', color: '#10B981' }}>
+                          PEDERSEN COMMITMENT ATTESTED (5/5 BFT)
+                        </Typography>
+                      </Box>
+                      <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.7rem', color: isDark ? '#E2E8F0' : '#1E293B', lineHeight: 1.5 }}>
+                        Commitment: <code>{(shieldedResult.commitment || 'cmt_f06400..').slice(0, 18)}...</code>
+                        <br />
+                        Auditor View-Key: <code>{(shieldedResult.viewKey || 'vk_0d742b..').slice(0, 18)}...</code>
+                        <br />
+                        Block: <code>{(shieldedResult.sendBlock?.hash || 'b000c2..').slice(0, 14)}...</code> (0 Plaintext Leak)
                       </Typography>
                     </Paper>
                   )}
