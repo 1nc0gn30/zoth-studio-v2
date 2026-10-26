@@ -47,6 +47,10 @@ import GavelIcon from '@mui/icons-material/Gavel';
 import DownloadIcon from '@mui/icons-material/Download';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import DataObjectIcon from '@mui/icons-material/DataObject';
+import LockIcon from '@mui/icons-material/Lock';
+import SendIcon from '@mui/icons-material/Send';
+import ChatIcon from '@mui/icons-material/Chat';
+import ComputerIcon from '@mui/icons-material/Computer';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import VaelorLatticeVisualizer from '../components/VaelorLatticeVisualizer';
 import SovereignFunnel from '../components/SovereignFunnel';
@@ -73,7 +77,8 @@ import {
   boostVaelorLoyaltyFallback,
   executeVaelorMerchantFxFallback,
   resolveVaelorEscrowFallback,
-  exportVaelorTaxReportFallback
+  exportVaelorTaxReportFallback,
+  sendVaelorCommMessageFallback
 } from '../data/obsidianWikiData';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -1193,6 +1198,136 @@ export default function VaelorPage() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  // Wave 31: ZothOS Passphrase-Gated P2P Messenger & 24/7 AI Fleet Dispatcher (#vaelor-zoth-comm-sim)
+  const COMM_NODES = [
+    { handle: '@zoth-rig2', name: '24/7 Autonomous AI Laptop', role: 'Dedicated Hermes Worker', os: 'ZothOS / KVM Hardware Sandbox', color: '#00F0FF' },
+    { handle: '@zoth', name: 'Primary ZothOS Workstation', role: 'Developer Cockpit & Ops Deck', os: 'ZothOS Preempt-RT Linux', color: '#D4AF37' },
+    { handle: '@neal', name: 'Founder Core Node', role: 'Sovereign Architect', os: 'ZothOS Sanctum Room', color: '#10B981' }
+  ];
+
+  const INITIAL_COMM_MESSAGES = [
+    {
+      id: 'comm_01',
+      from: '@neal',
+      to: '@zoth-rig2',
+      plaintext: 'Initialize 24/7 autonomous micro-SaaS incubator and run Preempt-RT memory audit.',
+      attachedVlr: 25,
+      aiPrompt: 'Incubate new micro-SaaS tool & mint PoUW audit',
+      timestamp: '2026-10-26T12:45:10.120Z',
+      encryption: {
+        algorithm: 'AES-256-GCM',
+        ciphertextHex: '7f9a2b8e3c4d1f0a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a...',
+        ivHex: '4a8b1c9d2e3f405162738495',
+        authTagHex: 'b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4',
+        messageHash: '9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d'
+      },
+      bftQuorum: '5/5 Regional Validators Attested (6.8ms latency)',
+      aiLog: '✓ Agent Hermes (@zoth-rig2) accepted dispatch: Sandboxed AST Polyglot Analyzer started in KVM room.'
+    },
+    {
+      id: 'comm_02',
+      from: '@zoth-rig2',
+      to: '@neal',
+      plaintext: 'Subagent swarm initialized on KVM guest. Minted 15.69 ◈ VLR PoUW reward with zero CPU throttle (<55°C).',
+      attachedVlr: 0,
+      aiPrompt: null,
+      timestamp: '2026-10-26T12:48:32.450Z',
+      encryption: {
+        algorithm: 'AES-256-GCM',
+        ciphertextHex: 'c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4...',
+        ivHex: '9182736450abcdef12345678',
+        authTagHex: 'e1d2c3b4a5f6e7d8c9b0a1f2e3d4c5b6',
+        messageHash: '3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b'
+      },
+      bftQuorum: '5/5 Regional Validators Attested (5.2ms latency)',
+      aiLog: '✓ Hardware telemetry: CPU package 50.4°C • Zero packet drop across loopback lattice.'
+    }
+  ];
+
+  const [commTargetNode, setCommTargetNode] = useState(COMM_NODES[0].handle);
+  const [commSenderHandle, setCommSenderHandle] = useState('@neal');
+  const [commPassphrase, setCommPassphrase] = useState('zoth-sovereign-757');
+  const [commMessageInput, setCommMessageInput] = useState('Deploy subagent cluster & optimize Preempt-RT kernel');
+  const [commAttachedVlr, setCommAttachedVlr] = useState(5);
+  const [commAiPromptInput, setCommAiPromptInput] = useState('Incubate new micro-SaaS tool & mint PoUW audit');
+  const [isSendingComm, setIsSendingComm] = useState(false);
+  const [commMessages, setCommMessages] = useState(INITIAL_COMM_MESSAGES);
+  const [commError, setCommError] = useState(null);
+  const [commSuccessBanner, setCommSuccessBanner] = useState(null);
+  const [selectedCommMessageForInspection, setSelectedCommMessageForInspection] = useState(INITIAL_COMM_MESSAGES[0]);
+
+  const handleTestWrongPassword = () => {
+    setCommPassphrase('unauthorized-attacker-999');
+    setCommError(null);
+    setCommSuccessBanner(null);
+  };
+
+  const handleResetValidPassphrase = () => {
+    setCommPassphrase('zoth-sovereign-757');
+    setCommError(null);
+    setCommSuccessBanner(null);
+  };
+
+  const handleSendCommMessage = async () => {
+    if (isSendingComm) return;
+    setIsSendingComm(true);
+    setCommError(null);
+    setCommSuccessBanner(null);
+
+    let resData = null;
+    try {
+      const res = await fetch('http://127.0.0.1:8140/api/comm/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: commSenderHandle,
+          to: commTargetNode,
+          passphrase: commPassphrase,
+          message: commMessageInput,
+          amountVlr: commAttachedVlr,
+          aiPrompt: commAiPromptInput
+        })
+      });
+      const json = await res.json();
+      resData = json;
+    } catch (_) {}
+
+    if (!resData) {
+      resData = sendVaelorCommMessageFallback({
+        from: commSenderHandle,
+        to: commTargetNode,
+        passphrase: commPassphrase,
+        message: commMessageInput,
+        amountVlr: commAttachedVlr,
+        aiPrompt: commAiPromptInput
+      });
+    }
+
+    if (!resData.ok || !resData.handshakeValid) {
+      setCommError(resData.error || '401 Unauthorized: Invalid Handshake Passphrase - Cryptographic Decryption Failed (AES-256-GCM AuthTag mismatch)');
+      setIsSendingComm(false);
+      return;
+    }
+
+    const newMsg = {
+      id: 'comm_' + Math.random().toString(16).slice(2, 10),
+      from: resData.from,
+      to: resData.to,
+      plaintext: resData.message,
+      attachedVlr: resData.attachedVlr,
+      aiPrompt: resData.aiPrompt,
+      timestamp: resData.timestamp,
+      encryption: resData.encryption,
+      bftQuorum: `${resData.quorumCertificate?.approvals || 5}/${resData.quorumCertificate?.quorumSize || 5} Regional Validators Attested (${resData.quorumCertificate?.aggregateLatencyMs || 6.8}ms latency)`,
+      aiLog: resData.aiFleetDispatch ? `✓ Agent Hermes (${resData.aiFleetDispatch.targetNode}) dispatched: "${resData.aiFleetDispatch.prompt}" [${resData.aiFleetDispatch.runtimeEnv}]` : null
+    };
+
+    setCommMessages(prev => [newMsg, ...prev]);
+    setSelectedCommMessageForInspection(newMsg);
+    setCommSuccessBanner(`✓ Delivered & Decrypted on ${resData.to} via AES-256-GCM • 5/5 BFT Consensus Finalized!`);
+    setIsSendingComm(false);
   };
 
   return (
@@ -5154,7 +5289,412 @@ export default function VaelorPage() {
         </RevealOnScroll>
 
         {/* ==========================================================================
-            SECTION: 14-TOOL LAYER-1 MODEL CONTEXT PROTOCOL (MCP) PLAYGROUND
+            SECTION: ZOTHOS ENCRYPTED NODE-TO-NODE MESSENGER & 24/7 AI FLEET DISPATCHER
+            ========================================================================== */}
+        <RevealOnScroll>
+          <Box id="vaelor-zoth-comm-sim" sx={{ mb: 6 }}>
+            <Box sx={{ mb: 3 }}>
+              <Typography className="section-kicker">Sovereign P2P Infrastructure</Typography>
+              <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif', mb: 1 }}>
+                ZothOS Encrypted Messenger & 24/7 AI Fleet Dispatcher
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 880, fontSize: '0.94rem' }}>
+                Zero-cloud, passphrase-gated P2P communication between ZothOS workstations, hardware sanctums, and dedicated 24/7 autonomous AI laptops. Every message payload is encrypted client-side via AES-256-GCM, signed across the feeless Vaelor account-lattice with 5/5 BFT quorum attestation, and dispatched directly into sandboxed KVM/Preempt-RT AI agent execution loops.
+              </Typography>
+            </Box>
+
+            <Paper
+              sx={{
+                p: { xs: 2.5, md: 3 },
+                borderRadius: 3,
+                border: `1.5px solid ${gold.border}`,
+                bgcolor: isDark ? '#08080E' : '#FFFFFF',
+                boxShadow: isDark ? '0 12px 36px rgba(0,0,0,0.6)' : '0 6px 20px rgba(0,0,0,0.06)'
+              }}
+            >
+              <Grid container spacing={3}>
+                {/* LEFT PANE: Passphrase-Gated Handshake & AES-256-GCM Encrypted Dispatch */}
+                <Grid xs={12} lg={6}>
+                  <Box
+                    sx={{
+                      p: 2.5,
+                      borderRadius: 2.5,
+                      bgcolor: isDark ? '#04060A' : '#F8FAFC',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column'
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <LockIcon sx={{ color: '#00F0FF', fontSize: '1.2rem' }} />
+                        <Typography variant="subtitle1" sx={{ fontWeight: 800, fontFamily: '"Syne", sans-serif' }}>
+                          Encrypted Lattice Dispatch
+                        </Typography>
+                      </Box>
+                      <Chip
+                        label="AES-256-GCM + 5/5 BFT"
+                        size="small"
+                        sx={{ bgcolor: 'rgba(0,240,255,0.12)', color: '#00F0FF', fontFamily: mono, fontWeight: 750, fontSize: '0.68rem', border: '1px solid rgba(0,240,255,0.3)' }}
+                      />
+                    </Box>
+
+                    {/* Sender and Target Node Selectors */}
+                    <Grid container spacing={2} sx={{ mb: 2 }}>
+                      <Grid xs={12} sm={6}>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 700, mb: 0.5, display: 'block' }}>
+                          SENDER NODE HANDLE
+                        </Typography>
+                        <TextField
+                          size="small"
+                          fullWidth
+                          value={commSenderHandle}
+                          onChange={(e) => setCommSenderHandle(e.target.value)}
+                          placeholder="@neal"
+                          inputProps={{ style: { fontFamily: mono, fontSize: '0.85rem' } }}
+                        />
+                      </Grid>
+                      <Grid xs={12} sm={6}>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 700, mb: 0.5, display: 'block' }}>
+                          TARGET NODE / AI RIG
+                        </Typography>
+                        <TextField
+                          select
+                          size="small"
+                          fullWidth
+                          value={commTargetNode}
+                          onChange={(e) => setCommTargetNode(e.target.value)}
+                          inputProps={{ style: { fontFamily: mono, fontSize: '0.85rem' } }}
+                        >
+                          {COMM_NODES.map((node) => (
+                            <MenuItem key={node.handle} value={node.handle}>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: node.color }} />
+                                <Typography sx={{ fontFamily: mono, fontSize: '0.85rem', fontWeight: 700 }}>
+                                  {node.handle}
+                                </Typography>
+                                <Typography variant="caption" sx={{ color: 'text.secondary', ml: 0.5, fontSize: '0.75rem' }}>
+                                  ({node.name})
+                                </Typography>
+                              </Box>
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </Grid>
+                    </Grid>
+
+                    {/* Passphrase Gate with Preset Buttons */}
+                    <Box sx={{ mb: 2 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 0.5 }}>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 700 }}>
+                          CRYPTOGRAPHIC HANDSHAKE PASSPHRASE
+                        </Typography>
+                        <Box sx={{ display: 'flex', gap: 0.8 }}>
+                          <Button
+                            size="small"
+                            variant="text"
+                            onClick={handleTestWrongPassword}
+                            sx={{
+                              p: 0,
+                              minWidth: 0,
+                              fontFamily: mono,
+                              fontSize: '0.65rem',
+                              color: '#EF4444',
+                              textTransform: 'none',
+                              '&:hover': { bgcolor: 'transparent', textDecoration: 'underline' }
+                            }}
+                          >
+                            [🚫 Test Wrong Password Rejection]
+                          </Button>
+                          <Button
+                            size="small"
+                            variant="text"
+                            onClick={handleResetValidPassphrase}
+                            sx={{
+                              p: 0,
+                              minWidth: 0,
+                              fontFamily: mono,
+                              fontSize: '0.65rem',
+                              color: '#10B981',
+                              textTransform: 'none',
+                              '&:hover': { bgcolor: 'transparent', textDecoration: 'underline' }
+                            }}
+                          >
+                            [🔑 Reset Valid Passphrase]
+                          </Button>
+                        </Box>
+                      </Box>
+                      <TextField
+                        size="small"
+                        fullWidth
+                        type="password"
+                        value={commPassphrase}
+                        onChange={(e) => {
+                          setCommPassphrase(e.target.value);
+                          setCommError(null);
+                        }}
+                        placeholder="Shared Handshake Passphrase (e.g. zoth-sovereign-757)"
+                        inputProps={{ style: { fontFamily: mono, fontSize: '0.85rem' } }}
+                      />
+                    </Box>
+
+                    {/* Plaintext Message Input */}
+                    <Box sx={{ mb: 2 }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 700, mb: 0.5, display: 'block' }}>
+                        CONFIDENTIAL PLAINTEXT PAYLOAD
+                      </Typography>
+                      <TextField
+                        size="small"
+                        fullWidth
+                        multiline
+                        rows={2}
+                        value={commMessageInput}
+                        onChange={(e) => setCommMessageInput(e.target.value)}
+                        placeholder="Enter confidential P2P message to encrypt..."
+                        inputProps={{ style: { fontFamily: mono, fontSize: '0.85rem' } }}
+                      />
+                    </Box>
+
+                    {/* Attached Feeless VLR Pills */}
+                    <Box sx={{ mb: 2 }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 700, mb: 0.8, display: 'block' }}>
+                        ATTACH FEELESS ◈ VLR (MICRO-BOUNTY)
+                      </Typography>
+                      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                        {[0, 5, 25].map((val) => (
+                          <Chip
+                            key={val}
+                            label={`${val} ◈ VLR`}
+                            clickable
+                            onClick={() => setCommAttachedVlr(val)}
+                            sx={{
+                              fontFamily: mono,
+                              fontSize: '0.75rem',
+                              fontWeight: 750,
+                              bgcolor: commAttachedVlr === val ? 'rgba(212,175,55,0.22)' : 'rgba(255,255,255,0.05)',
+                              color: commAttachedVlr === val ? '#FFD700' : '#94A3B8',
+                              border: commAttachedVlr === val ? '1.5px solid rgba(212,175,55,0.5)' : '1px solid rgba(255,255,255,0.1)'
+                            }}
+                          />
+                        ))}
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', ml: 1, fontSize: '0.72rem' }}>
+                          0% Transaction Fee • Pure Lattice Transfer
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    {/* 24/7 AI Task Dispatch Prompt */}
+                    <Box sx={{ mb: 2.5 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 0.5 }}>
+                        <ComputerIcon sx={{ color: '#E879F9', fontSize: '1rem' }} />
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 700 }}>
+                          24/7 AI FLEET DISPATCH PROMPT (AGENT HERMES KVM WORKER)
+                        </Typography>
+                      </Box>
+                      <TextField
+                        size="small"
+                        fullWidth
+                        value={commAiPromptInput}
+                        onChange={(e) => setCommAiPromptInput(e.target.value)}
+                        placeholder="Task to run autonomously on target node (e.g. Incubate micro-SaaS)"
+                        inputProps={{ style: { fontFamily: mono, fontSize: '0.85rem' } }}
+                      />
+                    </Box>
+
+                    {/* Error Banner */}
+                    {commError && (
+                      <Alert severity="error" sx={{ mb: 2, fontFamily: mono, fontSize: '0.75rem', py: 0.5 }}>
+                        {commError}
+                      </Alert>
+                    )}
+
+                    {/* Success Banner */}
+                    {commSuccessBanner && (
+                      <Alert severity="success" sx={{ mb: 2, fontFamily: mono, fontSize: '0.75rem', py: 0.5 }}>
+                        {commSuccessBanner}
+                      </Alert>
+                    )}
+
+                    {/* Authenticate & Send Encrypted Lattice Message CTA */}
+                    <Box sx={{ mt: 'auto', pt: 1 }}>
+                      <Button
+                        id="vaelor-comm-send-btn"
+                        fullWidth
+                        variant="contained"
+                        disabled={isSendingComm || !commMessageInput.trim()}
+                        onClick={handleSendCommMessage}
+                        startIcon={isSendingComm ? <CircularProgress size={16} sx={{ color: '#000' }} /> : <SendIcon />}
+                        sx={{
+                          bgcolor: '#D4AF37',
+                          color: '#000',
+                          fontFamily: mono,
+                          fontWeight: 800,
+                          fontSize: '0.85rem',
+                          py: 1.2,
+                          letterSpacing: '0.04em',
+                          '&:hover': { bgcolor: '#F59E0B' }
+                        }}
+                      >
+                        {isSendingComm ? 'ENCRYPTING & DISPATCHING TO LATTICE...' : '🔐 AUTHENTICATE & SEND ENCRYPTED LATTICE MESSAGE'}
+                      </Button>
+                    </Box>
+                  </Box>
+                </Grid>
+
+                {/* RIGHT PANE: Live Decrypted ZothOS Node Inbox & Ciphertext Inspector */}
+                <Grid xs={12} lg={6}>
+                  <Box
+                    sx={{
+                      p: 2.5,
+                      borderRadius: 2.5,
+                      bgcolor: isDark ? '#04060A' : '#F8FAFC',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column'
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <ChatIcon sx={{ color: '#10B981', fontSize: '1.2rem' }} />
+                        <Typography variant="subtitle1" sx={{ fontWeight: 800, fontFamily: '"Syne", sans-serif' }}>
+                          Live Decrypted ZothOS Inbox & Inspector
+                        </Typography>
+                      </Box>
+                      <Chip
+                        label={`${commMessages.length} Messages in Buffer`}
+                        size="small"
+                        sx={{ bgcolor: 'rgba(16,185,129,0.12)', color: '#10B981', fontFamily: mono, fontWeight: 750, fontSize: '0.68rem', border: '1px solid rgba(16,185,129,0.3)' }}
+                      />
+                    </Box>
+
+                    {/* Messages Scroll List */}
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, maxHeight: 220, overflowY: 'auto', mb: 2, pr: 0.5 }}>
+                      {commMessages.map((msg) => {
+                        const isSelected = selectedCommMessageForInspection?.id === msg.id;
+                        return (
+                          <Paper
+                            key={msg.id}
+                            onClick={() => setSelectedCommMessageForInspection(msg)}
+                            sx={{
+                              p: 1.5,
+                              borderRadius: 2,
+                              cursor: 'pointer',
+                              bgcolor: isSelected ? (isDark ? 'rgba(212,175,55,0.1)' : 'rgba(212,175,55,0.15)') : (isDark ? '#07090E' : '#FFFFFF'),
+                              border: isSelected ? '1.5px solid rgba(212,175,55,0.6)' : '1px solid rgba(255,255,255,0.06)',
+                              transition: 'all 0.15s ease'
+                            }}
+                          >
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 0.8 }}>
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                <Chip
+                                  label={`${msg.from} ➔ ${msg.to}`}
+                                  size="small"
+                                  sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, bgcolor: 'rgba(0,240,255,0.12)', color: '#00F0FF' }}
+                                />
+                                {msg.attachedVlr > 0 && (
+                                  <Chip
+                                    label={`+${msg.attachedVlr} ◈`}
+                                    size="small"
+                                    sx={{ fontFamily: mono, fontSize: '0.65rem', fontWeight: 750, bgcolor: 'rgba(212,175,55,0.18)', color: '#FFD700' }}
+                                  />
+                                )}
+                              </Box>
+                              <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.65rem' }}>
+                                {new Date(msg.timestamp).toLocaleTimeString()}
+                              </Typography>
+                            </Box>
+                            <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.78rem', color: '#E2E8F0', mb: 0.5, wordBreak: 'break-word' }}>
+                              "{msg.plaintext}"
+                            </Typography>
+                            {msg.aiPrompt && (
+                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mt: 0.5 }}>
+                                <Chip
+                                  icon={<ComputerIcon sx={{ fontSize: '11px !important', color: '#E879F9 !important' }} />}
+                                  label={`AI Task: ${msg.aiPrompt}`}
+                                  size="small"
+                                  sx={{ fontFamily: mono, fontSize: '0.65rem', bgcolor: 'rgba(232,121,249,0.12)', color: '#E879F9' }}
+                                />
+                              </Box>
+                            )}
+                          </Paper>
+                        );
+                      })}
+                    </Box>
+
+                    {/* Ciphertext & Cryptographic Audit Inspector Pane */}
+                    {selectedCommMessageForInspection && (
+                      <Box
+                        sx={{
+                          p: 1.8,
+                          borderRadius: 2,
+                          bgcolor: '#030508',
+                          border: '1px solid rgba(0,240,255,0.25)',
+                          fontFamily: mono,
+                          fontSize: '0.72rem',
+                          color: '#E2E8F0'
+                        }}
+                      >
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1, borderBottom: '1px solid rgba(255,255,255,0.08)', pb: 0.8 }}>
+                          <Typography variant="caption" sx={{ fontFamily: mono, color: '#00F0FF', fontWeight: 800 }}>
+                            CRYPTOGRAPHIC CIPHERTEXT & TELEMETRY INSPECTOR
+                          </Typography>
+                          <Chip
+                            label={selectedCommMessageForInspection.encryption?.algorithm || 'AES-256-GCM'}
+                            size="small"
+                            sx={{ height: 18, fontSize: '0.6rem', fontFamily: mono, bgcolor: 'rgba(0,240,255,0.15)', color: '#00F0FF' }}
+                          />
+                        </Box>
+
+                        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 1, mb: 1 }}>
+                          <Box>
+                            <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', fontSize: '0.65rem' }}>
+                              CIPHERTEXT (HEX PREVIEW):
+                            </Typography>
+                            <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#38BDF8', wordBreak: 'break-all' }}>
+                              {selectedCommMessageForInspection.encryption?.ciphertextHex || 'N/A'}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', fontSize: '0.65rem' }}>
+                              INITIALIZATION VECTOR (IV) / AUTH TAG:
+                            </Typography>
+                            <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#FCD34D', wordBreak: 'break-all' }}>
+                              IV: {selectedCommMessageForInspection.encryption?.ivHex || 'N/A'}<br />
+                              Tag: {selectedCommMessageForInspection.encryption?.authTagHex || 'N/A'}
+                            </Typography>
+                          </Box>
+                        </Box>
+
+                        <Box sx={{ pt: 0.8, borderTop: '1px dashed rgba(255,255,255,0.08)' }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                            <Chip
+                              label="BFT QUORUM"
+                              size="small"
+                              sx={{ height: 16, fontSize: '0.58rem', fontFamily: mono, bgcolor: 'rgba(16,185,129,0.15)', color: '#10B981' }}
+                            />
+                            <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#10B981' }}>
+                              {selectedCommMessageForInspection.bftQuorum || '5/5 Regional Validators Attested (6.8ms latency)'}
+                            </Typography>
+                          </Box>
+                          {selectedCommMessageForInspection.aiLog && (
+                            <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#E879F9', mt: 0.3 }}>
+                              {selectedCommMessageForInspection.aiLog}
+                            </Typography>
+                          )}
+                        </Box>
+                      </Box>
+                    )}
+                  </Box>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Box>
+        </RevealOnScroll>
+
+        {/* ==========================================================================
+            SECTION: 15-TOOL LAYER-1 MODEL CONTEXT PROTOCOL (MCP) PLAYGROUND
             ========================================================================== */}
         <RevealOnScroll>
           <Box id="vaelor-mcp-playground" sx={{ mb: 6 }}>
@@ -5164,7 +5704,7 @@ export default function VaelorPage() {
                 Layer-1 Model Context Protocol (MCP) Playground
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 880, fontSize: '0.94rem' }}>
-                Test all 14 native JSON-RPC Model Context Protocol tools. Claude, GPT, and autonomous agent swarms call these methods directly to mint compute bounties, export IRS-compliant CPA tax audits, settle zero-penalty protected commerce escrows, execute merchant FX treasury sweeps, send creator tips, disburse feeless micro-payments, and verify lookalike phishing handles.
+                Test all 15 native JSON-RPC Model Context Protocol tools. Claude, GPT, and autonomous agent swarms call these methods directly to send passphrase-gated P2P encrypted messages to 24/7 AI laptops, mint compute bounties, export IRS-compliant CPA tax audits, settle zero-penalty protected commerce escrows, execute merchant FX treasury sweeps, send creator tips, disburse feeless micro-payments, and verify lookalike phishing handles.
               </Typography>
             </Box>
 

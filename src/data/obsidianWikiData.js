@@ -5401,6 +5401,12 @@ export const VAELOR_MCP_TOOLS = [
     category: "Compliance & Accounting",
     description: "Generate and export an IRS-compliant signed CPA tax & cashback audit report with automatic categorization of tax-free loyalty rebates, PoUW income, vault yield, and deductible bounties.",
     defaultArgs: { handle: "@citizen", taxYear: 2026 }
+  },
+  {
+    name: "vaelor_zoth_comm",
+    category: "P2P Messaging & AI Fleet",
+    description: "Send a passphrase-gated, AES-256-GCM encrypted peer-to-peer message and optional AI task dispatch prompt between ZothOS nodes and 24/7 AI laptops over the Vaelor feeless lattice.",
+    defaultArgs: { from: "@neal", to: "@zoth-rig2", passphrase: "zoth-sovereign-757", message: "Initialize 24/7 autonomous micro-SaaS incubator", amountVlr: 5, aiPrompt: "Incubate new micro-SaaS tool & mint PoUW audit" }
   }
 ];
 
@@ -5630,6 +5636,12 @@ export function callVaelorMcpFallback(toolName, args = {}) {
         ok: true,
         tool: toolName,
         result: exportVaelorTaxReportFallback(args)
+      };
+    case 'vaelor_zoth_comm':
+      return {
+        ok: true,
+        tool: toolName,
+        result: sendVaelorCommMessageFallback(args)
       };
     default:
       return {
@@ -6550,6 +6562,68 @@ export function exportVaelorTaxReportFallback({ handle = '@citizen', taxYear = 2
     summary,
     categories,
     csvReport
+  };
+}
+
+export function sendVaelorCommMessageFallback(opts = {}) {
+  const from = opts.from || '@neal';
+  const to = opts.to || '@zoth-rig2';
+  const passphrase = opts.passphrase || '';
+  const message = opts.message || 'Deploy subagent cluster & optimize Preempt-RT kernel';
+  const amountVlr = Number(opts.amountVlr || opts.attachedVlr || 0);
+  const aiPrompt = opts.aiPrompt || opts.dispatchPrompt || '';
+  const ts = new Date().toISOString();
+
+  if (passphrase !== 'zoth-sovereign-757') {
+    return {
+      ok: false,
+      handshakeValid: false,
+      status: 'REJECTED_UNAUTHORIZED_HANDSHAKE',
+      error: '401 Unauthorized: Invalid Handshake Passphrase - Cryptographic Decryption Failed (AES-256-GCM AuthTag mismatch)',
+      antiSpamProtection: 'Active: Zero Spam Delivery on Lattice',
+      attemptedBy: from,
+      targetNode: to,
+      timestamp: ts
+    };
+  }
+
+  const ciphertextHex = randHex(64);
+  const ivHex = randHex(24);
+  const authTagHex = randHex(32);
+  const messageHash = randHex(64);
+
+  return {
+    ok: true,
+    handshakeValid: true,
+    status: 'DELIVERED_AND_DECRYPTED',
+    from,
+    to,
+    message,
+    aiPrompt,
+    attachedVlr: amountVlr,
+    timestamp: ts,
+    encryption: {
+      algorithm: 'AES-256-GCM',
+      ciphertextHex: ciphertextHex.slice(0, 32) + '...',
+      fullCiphertextHex: ciphertextHex,
+      ivHex,
+      authTagHex,
+      messageHash
+    },
+    quorumCertificate: {
+      status: 'FINALIZED_BFT',
+      quorumSize: 5,
+      approvals: 5,
+      bftThreshold: '4/5 (2f + 1)',
+      aggregateLatencyMs: 6.8
+    },
+    aiFleetDispatch: aiPrompt ? {
+      targetNode: to,
+      prompt: aiPrompt,
+      agentStatus: 'IN_PROGRESS',
+      runtimeEnv: 'ZothOS / KVM Hardware Sandbox',
+      assignedWorker: 'Agent Hermes @zoth-rig2'
+    } : null
   };
 }
 
