@@ -39,6 +39,10 @@ import AcUnitIcon from '@mui/icons-material/AcUnit';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import NfcIcon from '@mui/icons-material/Nfc';
+import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
+import LocalCafeIcon from '@mui/icons-material/LocalCafe';
+import DiamondIcon from '@mui/icons-material/Diamond';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import VaelorLatticeVisualizer from '../components/VaelorLatticeVisualizer';
 import SovereignFunnel from '../components/SovereignFunnel';
@@ -59,7 +63,10 @@ import {
   sendVaelorShieldedTransferFallback,
   postVaelorBountyFallback,
   spendVaelorSubaccountFallback,
-  issueVaelorVoucherFallback
+  issueVaelorVoucherFallback,
+  executeVaelorBridgeSwapFallback,
+  sendVaelorCreatorTipFallback,
+  boostVaelorLoyaltyFallback
 } from '../data/obsidianWikiData';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -810,6 +817,159 @@ export default function VaelorPage() {
 
     setVoucherResult(resData);
     setIsMintingVoucher(false);
+  };
+
+  // Wave 26: Cross-Chain Atomic Bridge State
+  const BRIDGE_PRESETS = [
+    { label: '100 ◈ ↔ $100.00 USD', fromAsset: 'VLR', toAsset: 'USD', fromAmount: 100, toAmount: 100, desc: 'Zero-spread 1:1 USD fiat settlement' },
+    { label: '250 ◈ ↔ 1.66 SOL', fromAsset: 'VLR', toAsset: 'SOL', fromAmount: 250, toAmount: 1.66, desc: 'Solana DePay bridge rail ($150.60/SOL)' },
+    { label: '500 ◈ ↔ 0.0052 BTC', fromAsset: 'VLR', toAsset: 'BTC', fromAmount: 500, toAmount: 0.0052, desc: 'Bitcoin L1 atomic settlement ($96,153/BTC)' }
+  ];
+  const [selectedBridgePreset, setSelectedBridgePreset] = useState(BRIDGE_PRESETS[0]);
+  const [isExecutingBridgeSwap, setIsExecutingBridgeSwap] = useState(false);
+  const [bridgeSwapResult, setBridgeSwapResult] = useState(null);
+
+  const handleExecuteBridgeSwap = async () => {
+    if (isExecutingBridgeSwap) return;
+    setIsExecutingBridgeSwap(true);
+    let resData = null;
+    try {
+      const quoteRes = await fetch('http://127.0.0.1:8140/api/bridge/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fromAsset: selectedBridgePreset.fromAsset,
+          toAsset: selectedBridgePreset.toAsset,
+          amount: selectedBridgePreset.fromAmount,
+          accountHandle: '@zoth'
+        })
+      });
+      if (quoteRes.ok) {
+        const quoteJson = await quoteRes.json();
+        if (quoteJson && quoteJson.ok && quoteJson.quote?.id) {
+          const swapRes = await fetch('http://127.0.0.1:8140/api/bridge/swap', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              quoteId: quoteJson.quote.id,
+              accountHandle: '@zoth',
+              depositTxHash: 'pi_atomic_' + Math.random().toString(16).slice(2, 10),
+              destinationAddress: 'vlr_bridge_dest_' + Math.random().toString(16).slice(2, 10)
+            })
+          });
+          if (swapRes.ok) {
+            const swapJson = await swapRes.json();
+            if (swapJson && swapJson.ok) resData = swapJson;
+          }
+        }
+      }
+    } catch (_) {}
+
+    if (!resData) {
+      resData = executeVaelorBridgeSwapFallback({
+        fromAsset: selectedBridgePreset.fromAsset,
+        toAsset: selectedBridgePreset.toAsset,
+        fromAmount: selectedBridgePreset.fromAmount,
+        accountHandle: '@zoth'
+      });
+    }
+
+    setBridgeSwapResult(resData);
+    setIsExecutingBridgeSwap(false);
+  };
+
+  // Wave 26: Creator Tip Jar & Patronage Badges State
+  const TIP_TIERS = [
+    { label: '✨ 5 ◈ SUPPORTER', tier: 'SUPPORTER', amount: 5, badge: 'SUPPORTER', emoji: '✨', desc: 'Back open-source compute micro-tasks' },
+    { label: '🌟 25 ◈ PATRON', tier: 'PATRON', amount: 25, badge: 'PATRON', emoji: '🌟', desc: 'Dedicated project patron badge & Discord role' },
+    { label: '👑 100 ◈ SOVEREIGN_BACKER', tier: 'SOVEREIGN_BACKER', amount: 100, badge: 'SOVEREIGN_BACKER', emoji: '👑', desc: 'Founding backer on consensus attestation wall' }
+  ];
+  const TIP_TARGETS = [
+    { handle: '@zoth', label: 'Zoth Studio & Compute Node', slug: 'zoth-os' },
+    { handle: '@sprig', label: 'Sprig Kitchen • Artisan POS', slug: 'sprig-pos' },
+    { handle: '@hatch', label: 'Hatch Sovereign Grants', slug: 'hatch-grants' }
+  ];
+  const [selectedTipTier, setSelectedTipTier] = useState(TIP_TIERS[1]);
+  const [selectedTipTarget, setSelectedTipTarget] = useState(TIP_TARGETS[0]);
+  const [isSendingCreatorTip, setIsSendingCreatorTip] = useState(false);
+  const [creatorTipResult, setCreatorTipResult] = useState(null);
+
+  const handleSendCreatorTip = async () => {
+    if (isSendingCreatorTip) return;
+    setIsSendingCreatorTip(true);
+    let resData = null;
+    try {
+      const res = await fetch('http://127.0.0.1:8140/api/tips/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: '@citizen',
+          creator: selectedTipTarget.handle,
+          amount: selectedTipTier.amount,
+          projectSlug: selectedTipTarget.slug,
+          message: `Sovereign ${selectedTipTier.tier} patron grant for ${selectedTipTarget.slug}`
+        })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json && json.ok) resData = json;
+      }
+    } catch (_) {}
+
+    if (!resData) {
+      resData = sendVaelorCreatorTipFallback({
+        from: '@citizen',
+        creator: selectedTipTarget.handle,
+        amount: selectedTipTier.amount,
+        projectSlug: selectedTipTarget.slug,
+        message: `Sovereign ${selectedTipTier.tier} patron grant for ${selectedTipTarget.slug}`
+      });
+    }
+
+    setCreatorTipResult(resData);
+    setIsSendingCreatorTip(false);
+  };
+
+  // Wave 26: Consumer Loyalty & Dynamic Cashback Multiplier State
+  const LOYALTY_TIERS = [
+    { id: 'BRONZE', name: 'BRONZE', pct: '2.5%', bps: 250, threshold: 0, desc: 'Base feeless merchant tier' },
+    { id: 'SILVER', name: 'SILVER', pct: '3.0%', bps: 300, threshold: 250, desc: 'Active consumer multiplier' },
+    { id: 'GOLD', name: 'GOLD', pct: '3.5%', bps: 350, threshold: 750, desc: 'Institutional trader rebate' },
+    { id: 'SOVEREIGN_DIAMOND', name: 'SOVEREIGN_DIAMOND', pct: '5.0%', bps: 500, threshold: 2000, desc: 'Maximum sovereign Diamond rebate' }
+  ];
+  const [activeLoyaltyTier, setActiveLoyaltyTier] = useState('SOVEREIGN_DIAMOND');
+  const [isBoostingLoyalty, setIsBoostingLoyalty] = useState(false);
+  const [loyaltyBoostResult, setLoyaltyBoostResult] = useState(null);
+
+  const handleBoostLoyaltyTier = async () => {
+    if (isBoostingLoyalty) return;
+    setIsBoostingLoyalty(true);
+    let resData = null;
+    try {
+      const res = await fetch('http://127.0.0.1:8140/api/loyalty/boost', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          handle: '@citizen',
+          stakeBoostVlr: 250
+        })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json && json.ok) resData = json;
+      }
+    } catch (_) {}
+
+    if (!resData) {
+      resData = boostVaelorLoyaltyFallback({
+        handle: '@citizen',
+        stakeBoostVlr: 250
+      });
+    }
+
+    setActiveLoyaltyTier('SOVEREIGN_DIAMOND');
+    setLoyaltyBoostResult(resData);
+    setIsBoostingLoyalty(false);
   };
 
   return (
@@ -3094,6 +3254,566 @@ export default function VaelorPage() {
                         PIN Lock Digest: <code>{(voucherResult.voucher?.pinHash || voucherResult.voucher?.secretHash || 'pin_4d898..').slice(0, 18)}...</code>
                         <br />
                         Redemption: <code>NFC / QR Ready (72-Hr Expiry • Offline Active)</code>
+                      </Typography>
+                    </Paper>
+                  )}
+                </Paper>
+              </Grid>
+            </Grid>
+          </Box>
+        </RevealOnScroll>
+
+        {/* ==========================================================================
+            SECTION: CROSS-CHAIN ATOMIC BRIDGE, CREATOR TIP JAR & LOYALTY MULTIPLIER SIM
+            ========================================================================== */}
+        <RevealOnScroll>
+          <Box id="vaelor-bridge-patronage-sim" sx={{ mb: 6 }}>
+            <Box sx={{ mb: 3 }}>
+              <Typography className="section-kicker">Cross-Chain &amp; Creator Economy</Typography>
+              <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif', mb: 1 }}>
+                Atomic Bridge, Feeless Creator Tip Jar &amp; Loyalty Cashback Ladder
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 880, fontSize: '0.94rem' }}>
+                Execute zero-slippage cross-chain swaps between ◈ VLR and USD, SOL, or BTC; send feeless micro-tips to open-source creators with dynamic supporter badges; and boost your wallet to the 5.00% Sovereign Diamond cashback tier.
+              </Typography>
+            </Box>
+
+            <Grid container spacing={3}>
+              {/* Card 1: Cross-Chain & Fiat Atomic Settlement Bridge */}
+              <Grid xs={12} lg={4}>
+                <Paper
+                  sx={{
+                    p: { xs: 2.5, md: 3 },
+                    borderRadius: 3,
+                    border: `1.5px solid ${gold.border}`,
+                    bgcolor: isDark ? '#08080E' : '#FFFFFF',
+                    boxShadow: isDark ? '0 12px 36px rgba(0,0,0,0.6)' : '0 6px 20px rgba(0,0,0,0.06)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100%'
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 2,
+                        bgcolor: gold.wash,
+                        border: `1px solid ${gold.border}`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      <CurrencyExchangeIcon sx={{ color: gold.accent, fontSize: '1.4rem' }} />
+                    </Box>
+                    <Box>
+                      <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: '"Syne", sans-serif', fontSize: '1.05rem', lineHeight: 1.2 }}>
+                        Atomic Cross-Chain Bridge
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono, fontSize: '0.72rem' }}>
+                        ◈ VLR ↔ USD / SOL / BTC
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5, fontSize: '0.85rem', flexGrow: 0 }}>
+                    Instant bidirectional settlement across fiat USD, Solana DePay, and Bitcoin rails with 0.00% spread guarantee for Zoth ecosystem accounts.
+                  </Typography>
+
+                  {/* Asset Pair Presets */}
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800, display: 'block', mb: 1, letterSpacing: '0.04em' }}>
+                      SELECT SETTLEMENT PAIR
+                    </Typography>
+                    <Stack spacing={1}>
+                      {BRIDGE_PRESETS.map((p) => {
+                        const isSelected = selectedBridgePreset.label === p.label;
+                        return (
+                          <Paper
+                            key={p.label}
+                            onClick={() => setSelectedBridgePreset(p)}
+                            sx={{
+                              p: 1.2,
+                              borderRadius: 2,
+                              cursor: 'pointer',
+                              border: `1px solid ${isSelected ? gold.accent : (isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)')}`,
+                              bgcolor: isSelected ? (isDark ? 'rgba(212,175,55,0.1)' : '#FEF9C3') : 'transparent',
+                              transition: 'all 0.2s ease',
+                              '&:hover': {
+                                borderColor: gold.accent,
+                                bgcolor: isDark ? 'rgba(212,175,55,0.06)' : '#FEF9C3'
+                              }
+                            }}
+                          >
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <Typography variant="subtitle2" sx={{ fontWeight: 800, fontSize: '0.82rem' }}>
+                                {p.label}
+                              </Typography>
+                              <Chip
+                                label="0.00% SPREAD"
+                                size="small"
+                                sx={{
+                                  fontFamily: mono,
+                                  fontWeight: 900,
+                                  bgcolor: isSelected ? gold.accent : (isDark ? 'rgba(16,185,129,0.15)' : '#DCFCE7'),
+                                  color: isSelected ? '#08080B' : '#10B981',
+                                  fontSize: '0.68rem',
+                                  height: 20
+                                }}
+                              />
+                            </Box>
+                            <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem', display: 'block', mt: 0.3 }}>
+                              {p.desc}
+                            </Typography>
+                          </Paper>
+                        );
+                      })}
+                    </Stack>
+                  </Box>
+
+                  {/* Bridge Specs Box */}
+                  <Box
+                    sx={{
+                      p: 1.5,
+                      borderRadius: 2,
+                      bgcolor: isDark ? 'rgba(0,0,0,0.4)' : '#F8FAFC',
+                      border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
+                      mb: 2.5
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.72rem' }}>
+                        Account Handle:
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: gold.accent, fontSize: '0.72rem' }}>
+                        @zoth (Sovereign Prime)
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.72rem' }}>
+                        Protocol Spread:
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: '#10B981', fontSize: '0.72rem' }}>
+                        0.00% (Guaranteed Zero Slippage)
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.72rem' }}>
+                        Execution Guarantee:
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: '#38BDF8', fontSize: '0.72rem' }}>
+                        HTLC Atomic Hash-Lock • 0 Gas
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Button
+                    id="vaelor-bridge-btn"
+                    variant="contained"
+                    fullWidth
+                    onClick={handleExecuteBridgeSwap}
+                    disabled={isExecutingBridgeSwap}
+                    startIcon={isExecutingBridgeSwap ? <CircularProgress size={16} color="inherit" /> : <CurrencyExchangeIcon />}
+                    sx={{
+                      py: 1.2,
+                      fontWeight: 900,
+                      fontFamily: mono,
+                      fontSize: '0.82rem',
+                      borderRadius: 2,
+                      bgcolor: gold.accent,
+                      color: '#08080B',
+                      boxShadow: `0 4px 16px ${gold.glow}`,
+                      '&:hover': {
+                        bgcolor: '#E5C158',
+                        boxShadow: `0 6px 20px ${gold.glow}`
+                      },
+                      mt: 'auto'
+                    }}
+                  >
+                    {isExecutingBridgeSwap ? 'Executing Swap...' : '🌉 Execute Atomic Cross-Chain Swap'}
+                  </Button>
+
+                  {/* Bridge Swap Result */}
+                  {bridgeSwapResult && (
+                    <Paper
+                      sx={{
+                        mt: 2,
+                        p: 1.5,
+                        borderRadius: 2,
+                        bgcolor: isDark ? 'rgba(16,185,129,0.08)' : '#ECFDF5',
+                        border: '1px solid rgba(16,185,129,0.3)'
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.8 }}>
+                        <CheckCircleIcon sx={{ color: '#10B981', fontSize: '1.1rem' }} />
+                        <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 900, color: '#10B981', fontSize: '0.76rem' }}>
+                          ATOMIC SWAP EXECUTED • 0% SPREAD
+                        </Typography>
+                      </Box>
+                      <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.7rem', color: isDark ? '#E2E8F0' : '#1E293B', lineHeight: 1.5 }}>
+                        Swap ID: <code>{bridgeSwapResult.swap?.id || 'swp_...'}</code>
+                        <br />
+                        Exchanged: <code>{selectedBridgePreset.fromAmount} ◈ VLR</code> ➔ <code>{selectedBridgePreset.toAmount} {selectedBridgePreset.toAsset}</code>
+                        <br />
+                        Spread: <code>0.00% Zero-Slippage Guaranteed</code>
+                        <br />
+                        Settlement: <code>{(bridgeSwapResult.swap?.settlementHash || bridgeSwapResult.block?.hash || 'pi_atomic_71a0..').slice(0, 18)}...</code>
+                        <br />
+                        Quorum: <code>5/5 Validators BFT Finalized</code>
+                      </Typography>
+                    </Paper>
+                  )}
+                </Paper>
+              </Grid>
+
+              {/* Card 2: Feeless Creator Tip Jar & Patronage Badges */}
+              <Grid xs={12} lg={4}>
+                <Paper
+                  sx={{
+                    p: { xs: 2.5, md: 3 },
+                    borderRadius: 3,
+                    border: `1.5px solid ${gold.border}`,
+                    bgcolor: isDark ? '#08080E' : '#FFFFFF',
+                    boxShadow: isDark ? '0 12px 36px rgba(0,0,0,0.6)' : '0 6px 20px rgba(0,0,0,0.06)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100%'
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 2,
+                        bgcolor: gold.wash,
+                        border: `1px solid ${gold.border}`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      <LocalCafeIcon sx={{ color: gold.accent, fontSize: '1.4rem' }} />
+                    </Box>
+                    <Box>
+                      <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: '"Syne", sans-serif', fontSize: '1.05rem', lineHeight: 1.2 }}>
+                        Feeless Creator Tip Jar
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono, fontSize: '0.72rem' }}>
+                        TIP_JAR_SEND • PATRONAGE BADGES
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2, fontSize: '0.85rem', flexGrow: 0 }}>
+                    Support open-source builders and public AI nodes directly with $0.00 gas fees. Automatically mints an on-chain Patronage Badge and disburses instant cashback.
+                  </Typography>
+
+                  {/* Creator Selection */}
+                  <Box sx={{ mb: 1.5 }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800, display: 'block', mb: 0.8, letterSpacing: '0.04em' }}>
+                      SELECT CREATOR TARGET
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                      {TIP_TARGETS.map((t) => {
+                        const isSelected = selectedTipTarget.handle === t.handle;
+                        return (
+                          <Chip
+                            key={t.handle}
+                            label={`${t.handle} (${t.slug})`}
+                            clickable
+                            onClick={() => setSelectedTipTarget(t)}
+                            sx={{
+                              fontFamily: mono,
+                              fontWeight: isSelected ? 900 : 600,
+                              fontSize: '0.72rem',
+                              bgcolor: isSelected ? gold.accent : (isDark ? 'rgba(255,255,255,0.05)' : '#F1F5F9'),
+                              color: isSelected ? '#08080B' : theme.palette.text.primary,
+                              border: `1px solid ${isSelected ? gold.accent : 'rgba(212,175,55,0.2)'}`
+                            }}
+                          />
+                        );
+                      })}
+                    </Box>
+                  </Box>
+
+                  {/* Patronage Tier Buttons */}
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800, display: 'block', mb: 0.8, letterSpacing: '0.04em' }}>
+                      SELECT PATRONAGE TIER
+                    </Typography>
+                    <Stack spacing={1}>
+                      {TIP_TIERS.map((tier) => {
+                        const isSelected = selectedTipTier.tier === tier.tier;
+                        return (
+                          <Paper
+                            key={tier.tier}
+                            onClick={() => setSelectedTipTier(tier)}
+                            sx={{
+                              p: 1.2,
+                              borderRadius: 2,
+                              cursor: 'pointer',
+                              border: `1px solid ${isSelected ? gold.accent : (isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)')}`,
+                              bgcolor: isSelected ? (isDark ? 'rgba(212,175,55,0.1)' : '#FEF9C3') : 'transparent',
+                              transition: 'all 0.2s ease',
+                              '&:hover': {
+                                borderColor: gold.accent,
+                                bgcolor: isDark ? 'rgba(212,175,55,0.06)' : '#FEF9C3'
+                              }
+                            }}
+                          >
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <Typography variant="subtitle2" sx={{ fontWeight: 800, fontSize: '0.82rem' }}>
+                                {tier.label}
+                              </Typography>
+                              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: '#10B981', fontSize: '0.72rem' }}>
+                                +{(tier.amount * 0.025).toFixed(3)} ◈ Rebate
+                              </Typography>
+                            </Box>
+                            <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.7rem', display: 'block', mt: 0.2 }}>
+                              {tier.desc}
+                            </Typography>
+                          </Paper>
+                        );
+                      })}
+                    </Stack>
+                  </Box>
+
+                  <Button
+                    id="vaelor-tipjar-btn"
+                    variant="contained"
+                    fullWidth
+                    onClick={handleSendCreatorTip}
+                    disabled={isSendingCreatorTip}
+                    startIcon={isSendingCreatorTip ? <CircularProgress size={16} color="inherit" /> : <LocalCafeIcon />}
+                    sx={{
+                      py: 1.2,
+                      fontWeight: 900,
+                      fontFamily: mono,
+                      fontSize: '0.82rem',
+                      borderRadius: 2,
+                      bgcolor: gold.accent,
+                      color: '#08080B',
+                      boxShadow: `0 4px 16px ${gold.glow}`,
+                      '&:hover': {
+                        bgcolor: '#E5C158',
+                        boxShadow: `0 6px 20px ${gold.glow}`
+                      },
+                      mt: 'auto'
+                    }}
+                  >
+                    {isSendingCreatorTip ? 'Disbursing Tip...' : '☕ Send Feeless Creator Tip'}
+                  </Button>
+
+                  {/* Creator Tip Result */}
+                  {creatorTipResult && (
+                    <Paper
+                      sx={{
+                        mt: 2,
+                        p: 1.5,
+                        borderRadius: 2,
+                        bgcolor: isDark ? 'rgba(212,175,55,0.08)' : '#FEF9C3',
+                        border: `1px solid ${gold.border}`
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.8 }}>
+                        <EmojiEventsIcon sx={{ color: gold.accent, fontSize: '1.1rem' }} />
+                        <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 900, color: gold.accent, fontSize: '0.76rem' }}>
+                          PATRONAGE BADGE MINTED • 0 GAS
+                        </Typography>
+                      </Box>
+                      <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.7rem', color: isDark ? '#E2E8F0' : '#1E293B', lineHeight: 1.5 }}>
+                        Tip ID: <code>{creatorTipResult.tip?.id || 'tip_...'}</code>
+                        <br />
+                        Patronage Badge: <strong>{creatorTipResult.badgeEmoji || selectedTipTier.emoji} {creatorTipResult.badge || selectedTipTier.badge}</strong>
+                        <br />
+                        Recipient: <code>{selectedTipTarget.handle}</code> ({selectedTipTier.amount} ◈ VLR)
+                        <br />
+                        Cashback Rebate: <code>+{(creatorTipResult.cashbackVlr || (selectedTipTier.amount * 0.025)).toFixed(4)} ◈ VLR (2.50%)</code>
+                        <br />
+                        Status: <code>5/5 Validators Finalized (0 gas fee)</code>
+                      </Typography>
+                    </Paper>
+                  )}
+                </Paper>
+              </Grid>
+
+              {/* Card 3: Sovereign Consumer Loyalty & Dynamic Cashback Multiplier */}
+              <Grid xs={12} lg={4}>
+                <Paper
+                  sx={{
+                    p: { xs: 2.5, md: 3 },
+                    borderRadius: 3,
+                    border: `1.5px solid ${gold.border}`,
+                    bgcolor: isDark ? '#08080E' : '#FFFFFF',
+                    boxShadow: isDark ? '0 12px 36px rgba(0,0,0,0.6)' : '0 6px 20px rgba(0,0,0,0.06)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100%'
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 2,
+                        bgcolor: gold.wash,
+                        border: `1px solid ${gold.border}`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      <DiamondIcon sx={{ color: gold.accent, fontSize: '1.4rem' }} />
+                    </Box>
+                    <Box>
+                      <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: '"Syne", sans-serif', fontSize: '1.05rem', lineHeight: 1.2 }}>
+                        Loyalty Cashback Ladder
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono, fontSize: '0.72rem' }}>
+                        2.5% → 5.0% DYNAMIC MULTIPLIER
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2, fontSize: '0.85rem', flexGrow: 0 }}>
+                    Climb the sovereign consumer loyalty ladder to scale from 2.50% base cashback up to the 5.00% Diamond tier across all merchant POS orders and creator tips.
+                  </Typography>
+
+                  {/* 4-Tier Ladder Visual */}
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800, display: 'block', mb: 1, letterSpacing: '0.04em' }}>
+                      CASHBACK TIER LADDER
+                    </Typography>
+                    <Stack spacing={1}>
+                      {LOYALTY_TIERS.map((tier) => {
+                        const isDiamond = tier.id === 'SOVEREIGN_DIAMOND';
+                        return (
+                          <Box
+                            key={tier.id}
+                            sx={{
+                              p: 1.2,
+                              borderRadius: 2,
+                              border: `1.5px solid ${isDiamond ? gold.accent : (isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)')}`,
+                              bgcolor: isDiamond ? (isDark ? 'rgba(212,175,55,0.12)' : '#FEF9C3') : 'transparent',
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center'
+                            }}
+                          >
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                              <Typography variant="caption" sx={{ fontSize: '1.0rem' }}>
+                                {isDiamond ? '💎' : tier.id === 'GOLD' ? '🥇' : tier.id === 'SILVER' ? '🥈' : '🥉'}
+                              </Typography>
+                              <Box>
+                                <Typography variant="subtitle2" sx={{ fontWeight: 800, fontSize: '0.8rem', lineHeight: 1.2 }}>
+                                  {tier.name.replace('_', ' ')}
+                                </Typography>
+                                <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.68rem' }}>
+                                  {tier.desc}
+                                </Typography>
+                              </Box>
+                            </Box>
+                            <Chip
+                              label={tier.pct}
+                              size="small"
+                              sx={{
+                                fontFamily: mono,
+                                fontWeight: 900,
+                                bgcolor: isDiamond ? gold.accent : (isDark ? 'rgba(255,255,255,0.08)' : '#E2E8F0'),
+                                color: isDiamond ? '#08080B' : theme.palette.text.primary,
+                                fontSize: '0.74rem',
+                                height: 22
+                              }}
+                            />
+                          </Box>
+                        );
+                      })}
+                    </Stack>
+                  </Box>
+
+                  {/* Active Wallet Callout */}
+                  <Box
+                    sx={{
+                      p: 1.5,
+                      borderRadius: 2,
+                      bgcolor: isDark ? 'rgba(0,0,0,0.4)' : '#F8FAFC',
+                      border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
+                      mb: 2.5
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.72rem' }}>
+                        Active Wallet:
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: gold.accent, fontSize: '0.72rem' }}>
+                        @citizen (Passkey Ready)
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.72rem' }}>
+                        Current Multiplier:
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#10B981', fontSize: '0.72rem' }}>
+                        5.00% SOVEREIGN_DIAMOND
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Button
+                    id="vaelor-loyalty-btn"
+                    variant="contained"
+                    fullWidth
+                    onClick={handleBoostLoyaltyTier}
+                    disabled={isBoostingLoyalty}
+                    startIcon={isBoostingLoyalty ? <CircularProgress size={16} color="inherit" /> : <DiamondIcon />}
+                    sx={{
+                      py: 1.2,
+                      fontWeight: 900,
+                      fontFamily: mono,
+                      fontSize: '0.82rem',
+                      borderRadius: 2,
+                      bgcolor: gold.accent,
+                      color: '#08080B',
+                      boxShadow: `0 4px 16px ${gold.glow}`,
+                      '&:hover': {
+                        bgcolor: '#E5C158',
+                        boxShadow: `0 6px 20px ${gold.glow}`
+                      },
+                      mt: 'auto'
+                    }}
+                  >
+                    {isBoostingLoyalty ? 'Boosting Tier...' : '💎 Boost Loyalty Cashback Tier'}
+                  </Button>
+
+                  {/* Loyalty Boost Result */}
+                  {loyaltyBoostResult && (
+                    <Paper
+                      sx={{
+                        mt: 2,
+                        p: 1.5,
+                        borderRadius: 2,
+                        bgcolor: isDark ? 'rgba(16,185,129,0.08)' : '#ECFDF5',
+                        border: '1px solid rgba(16,185,129,0.3)'
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.8 }}>
+                        <CheckCircleIcon sx={{ color: '#10B981', fontSize: '1.1rem' }} />
+                        <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 900, color: '#10B981', fontSize: '0.76rem' }}>
+                          LOYALTY TIER BOOSTED • DIAMOND ACTIVE
+                        </Typography>
+                      </Box>
+                      <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.7rem', color: isDark ? '#E2E8F0' : '#1E293B', lineHeight: 1.5 }}>
+                        Active Wallet: <code>{loyaltyBoostResult.handle || '@citizen'}</code>
+                        <br />
+                        Tier Status: <strong>💎 SOVEREIGN_DIAMOND (5.00% Max Cashback)</strong>
+                        <br />
+                        Rate Multiplier: <code>500 bps (2x Base Tier)</code>
+                        <br />
+                        Quorum Attestation: <code>5/5 Validators BFT Finalized</code>
                       </Typography>
                     </Paper>
                   )}
