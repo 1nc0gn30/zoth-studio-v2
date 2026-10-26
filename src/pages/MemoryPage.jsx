@@ -1243,7 +1243,7 @@ ${article.math_invariants || ''}
     }
     if (typeof transmitLucy === 'function') {
       try {
-        transmitLucy(`Exported portable Second Brain bundle (SHA-256: ${bundle.bundleSha256 ? bundle.bundleSha256.slice(0, 16) : 'VERIFIED'}...). ${bundle.totalNotes || 1721} notes, ${bundle.totalCanvases || 14} canvases, ${bundle.totalBases || 18} bases.`);
+        transmitLucy(`Exported portable Second Brain bundle (SHA-256: ${bundle.bundleSha256 ? bundle.bundleSha256.slice(0, 16) : 'VERIFIED'}...). ${bundle.totalNotes || 1723} notes, ${bundle.totalCanvases || 17} canvases, ${bundle.totalBases || 19} bases.`);
       } catch (_) {}
     }
   };
@@ -3924,7 +3924,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                         SPATIAL CANVASES
                       </Typography>
                       <Typography variant="subtitle2" sx={{ fontFamily: mono, color: '#00F0FF', fontWeight: 800, mt: 0.2 }}>
-                        {obsidianAudit.canvasesValid || 14}/{obsidianAudit.totalCanvases || 14} JSON Canvas 1.0
+                        {obsidianAudit.canvasesValid || 17}/{obsidianAudit.totalCanvases || 17} JSON Canvas 1.0
                       </Typography>
                       <Typography variant="caption" sx={{ color: '#64748B', fontSize: '0.62rem' }}>
                         Zero-corruption graphs
@@ -3938,7 +3938,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                         OBSIDIAN BASES
                       </Typography>
                       <Typography variant="subtitle2" sx={{ fontFamily: mono, color: '#D4AF37', fontWeight: 800, mt: 0.2 }}>
-                        {obsidianAudit.basesValid || 18}/{obsidianAudit.totalBases || 18} Obsidian Bases
+                        {obsidianAudit.basesValid || 19}/{obsidianAudit.totalBases || 19} Obsidian Bases
                       </Typography>
                       <Typography variant="caption" sx={{ color: '#64748B', fontSize: '0.62rem' }}>
                         YAML database views
@@ -5970,7 +5970,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
               </Paper>
 
               {/* ==========================================================================
-                  INTERACTIVE 15-TOOL MCP JSON-RPC PLAYGROUND (#studio-obsidian-mcp-playground)
+                  INTERACTIVE 21-TOOL MCP JSON-RPC PLAYGROUND (#studio-obsidian-mcp-playground)
                   ========================================================================== */}
               <Paper
                 id="studio-obsidian-mcp-playground"
@@ -6003,7 +6003,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                     </Box>
                     <Box>
                       <Typography variant="h6" sx={{ fontWeight: 800, fontSize: '1.05rem', color: theme.palette.text.primary, display: 'flex', alignItems: 'center', gap: 1 }}>
-                        Interactive 15-Tool MCP JSON-RPC Playground
+                        Interactive 21-Tool MCP JSON-RPC Playground
                         <Chip label="MCP 2024-11-05" size="small" sx={{ height: 20, fontSize: '0.66rem', fontWeight: 750, bgcolor: 'rgba(16,185,129,0.12)', color: '#10B981', border: '1px solid rgba(16,185,129,0.3)' }} />
                       </Typography>
                       <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>

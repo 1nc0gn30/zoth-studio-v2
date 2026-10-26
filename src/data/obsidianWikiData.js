@@ -6,14 +6,14 @@ export const INITIAL_OBSIDIAN_AUDIT = {
   score: 100,
   status: "PERFECT",
   healthGrade: "✦ PERFECT",
-  canvasesValid: 14,
-  totalCanvases: 14,
-  basesValid: 18,
-  totalBases: 18,
-  totalNotes: 1721,
-  totalWikilinks: 7973,
-  connectivityPct: 99.6,
-  wikiCount: 6,
+  canvasesValid: 17,
+  totalCanvases: 17,
+  basesValid: 19,
+  totalBases: 19,
+  totalNotes: 1723,
+  totalWikilinks: 7985,
+  connectivityPct: 99.8,
+  wikiCount: 13,
 };
 
 export const CANONICAL_WIKI_ARTICLES = [
@@ -215,6 +215,33 @@ export const CANONICAL_WIKI_ARTICLES = [
     "executive_summary": "**Byzantine Quorum & Epistemic Consensus** is the formal distributed validation framework governing Vaelor Layer-1 and sovereign agent collaboration. Operating across a 5-validator multi-region quorum with $2f+1=4$ BFT threshold, epistemic consensus guarantees mathematical determinism, sub-100ms finality, and zero double-spend anomalies across local-edge and cloud nodes.",
     "math_invariants": "### 1. BFT Quorum Threshold Equation\nFor validator set size $N = 5$ with fault tolerance $f = 1$:\n$$Q = 2f + 1 = 4 \\quad (80\\% \\text{ quorum threshold})$$\nFinality is attested when:\n$$\\sum_{v \\in V} \\mathbb{I}_{\\text{attested}}(v) \\ge 4$$\n\n### 2. Epistemic Agreement Entropy\nEpistemic entropy across divergent subagent proposals converges asymptotically:\n$$\\lim_{k \\to \\infty} H(\\mathcal{S}_k) = 0$$\n\n### 3. Multi-Region Validator Latency Bounds\nAggregate latency $\\Lambda$ for quorum attestation satisfies:\n$$\\Lambda = \\max_{v \\in Q} (t_{\\text{ping}}(v) + t_{\\text{sign}}(v)) < 50\\text{ ms}$$",
     "size": 3255
+  },
+  {
+    "id": "vaelor-layer1-complete-reference",
+    "title": "Vaelor Layer-1 Complete Reference",
+    "filename": "Vaelor-Layer1-Complete-Reference.md",
+    "path": "06-Wiki/Vaelor-Layer1-Complete-Reference.md",
+    "confidence": 0.99,
+    "stdp_engrams": 12,
+    "tags": [
+      "wiki",
+      "llm-synthesized",
+      "karpathy-wiki",
+      "vaelor",
+      "merchant-fx",
+      "account-lattice",
+      "pouw",
+      "bft-consensus",
+      "loyalty-cashback",
+      "atomic-bridge"
+    ],
+    "category": "LLM-Wiki",
+    "status": "CANONICAL",
+    "created": "2026-10-26T10:00:00Z",
+    "updated": "2026-10-26T10:00:00Z",
+    "executive_summary": "Comprehensive technical specification and operational ledger reference for **Vaelor Layer-1 (◈ VLR)**: an asynchronous Account-Lattice DAG featuring $0.00 gas fees forever, sub-20ms BFT finality across a 5-region validator quorum, Proof-of-Useful-Work (PoUW) biomorphic AI computation mining, Programmable Merchant FX Treasury Auto-Sweeps (1:1 USD Reserve, 8.5% APY Staked Savings, and Liquid VLR), Atomic Cross-Chain Bridges, and 5.0% Sovereign Loyalty Cashback.",
+    "math_invariants": "### 1. Account-Lattice Dual-State Cryptographic Transition\nFor account $A$ with micro-chain height $h$:\n$$S_{A, h} = \\mathcal{H}\\left(S_{A, h-1} \\mathbin{\\Vert} \\text{Block}_h \\mathbin{\\Vert} \\text{Nonce}_h\\right)$$\nWhere state transition requires valid Ed25519 signature $\\sigma_A$ and zero double-spend verification across the DAG lattice.\n\n### 2. Merchant FX Treasury Auto-Sweep Partition\nIncoming customer settlement $V_{\\text{in}}$ is partitioned according to merchant policy $\\mathbf{P} = (\\alpha_{\\text{usd}}, \\beta_{\\text{vault}}, \\gamma_{\\text{liquid}})$ where $\\alpha + \\beta + \\gamma = 1.0$:\n$$V_{\\text{USD}} = \\alpha_{\\text{usd}} \\cdot V_{\\text{in}}, \\quad V_{\\text{Vault}} = \\beta_{\\text{vault}} \\cdot V_{\\text{in}}, \\quad V_{\\text{Liquid}} = \\gamma_{\\text{liquid}} \\cdot V_{\\text{in}}$$\nWith guaranteed zero FX spread ($\\mathcal{S}_{\\text{FX}} = 0.00\\%$) and zero transaction gas fee ($G = \\$0.00$).\n\n### 3. PoUW Staking Yield & BFT Quorum Finality\nSavings vault continuous yield accrual satisfies:\n$$Y(t) = V_{\\text{staked}} \\cdot \\left(e^{r \\cdot \\Delta t} - 1\\right) \\quad (r = \\ln(1 + 0.085) \\approx 0.08158)$$\nValidated by Byzantine Fault Tolerant threshold $Q = 2f + 1 = 4$ signatures from 5 regional validators ($N=5, f=1$).",
+    "size": 9840
   }
 ];
 
@@ -1879,6 +1906,96 @@ export const CANONICAL_CANVASES = [
       }
     ],
     "rawJson": "{\n  \"nodes\": [\n    {\n      \"id\": \"group_sovereign_core\",\n      \"type\": \"group\",\n      \"x\": -480,\n      \"y\": -320,\n      \"width\": 980,\n      \"height\": 640,\n      \"label\": \"Zoth Sovereign Second Brain & STDP Memory Substrate\",\n      \"color\": \"3\"\n    },\n    {\n      \"id\": \"node_home_moc\",\n      \"type\": \"file\",\n      \"x\": -140,\n      \"y\": -60,\n      \"width\": 280,\n      \"height\": 140,\n      \"file\": \"00 Home.md\",\n      \"color\": \"3\"\n    },\n    {\n      \"id\": \"node_zoth_memory\",\n      \"type\": \"file\",\n      \"x\": -430,\n      \"y\": -250,\n      \"width\": 250,\n      \"height\": 140,\n      \"file\": \"Zoth Memory.md\",\n      \"color\": \"5\"\n    },\n    {\n      \"id\": \"node_zoth_studio\",\n      \"type\": \"file\",\n      \"x\": 190,\n      \"y\": -250,\n      \"width\": 260,\n      \"height\": 140,\n      \"file\": \"Zoth Studio.md\",\n      \"color\": \"4\"\n    },\n    {\n      \"id\": \"node_zoth_os\",\n      \"type\": \"file\",\n      \"x\": -430,\n      \"y\": 120,\n      \"width\": 250,\n      \"height\": 140,\n      \"file\": \"Zoth OS.md\",\n      \"color\": \"6\"\n    },\n    {\n      \"id\": \"node_vaelor_l1\",\n      \"type\": \"file\",\n      \"x\": 190,\n      \"y\": 120,\n      \"width\": 260,\n      \"height\": 140,\n      \"file\": \"Vaelor Network.md\",\n      \"color\": \"4\"\n    },\n    {\n      \"id\": \"node_stdp_formula\",\n      \"type\": \"text\",\n      \"x\": -140,\n      \"y\": -270,\n      \"width\": 280,\n      \"height\": 150,\n      \"color\": \"5\",\n      \"text\": \"### \\u26a1 STDP Synaptic Core (:8094)\\n$$\\\\Delta w = A_+ e^{-\\\\Delta t / \\\\tau_+}$$\\nBiomorphic vector consolidation + Netrunner 3D WebGL Cortex.\"\n    }\n  ],\n  \"edges\": [\n    {\n      \"id\": \"edge_home_memory\",\n      \"fromNode\": \"node_home_moc\",\n      \"fromSide\": \"left\",\n      \"toNode\": \"node_zoth_memory\",\n      \"toSide\": \"bottom\",\n      \"color\": \"5\",\n      \"label\": \"STDP Bus :8094\"\n    },\n    {\n      \"id\": \"edge_home_studio\",\n      \"fromNode\": \"node_home_moc\",\n      \"fromSide\": \"right\",\n      \"toNode\": \"node_zoth_studio\",\n      \"toSide\": \"bottom\",\n      \"color\": \"4\",\n      \"label\": \"73-Port Fleet\"\n    },\n    {\n      \"id\": \"edge_home_os\",\n      \"fromNode\": \"node_home_moc\",\n      \"fromSide\": \"left\",\n      \"toNode\": \"node_zoth_os\",\n      \"toSide\": \"top\",\n      \"color\": \"6\",\n      \"label\": \"Kernel Substrate\"\n    },\n    {\n      \"id\": \"edge_home_vaelor\",\n      \"fromNode\": \"node_home_moc\",\n      \"fromSide\": \"right\",\n      \"toNode\": \"node_vaelor_l1\",\n      \"toSide\": \"top\",\n      \"color\": \"3\",\n      \"label\": \"PoUW Minting :8140\"\n    },\n    {\n      \"id\": \"edge_stdp_home\",\n      \"fromNode\": \"node_stdp_formula\",\n      \"fromSide\": \"bottom\",\n      \"toNode\": \"node_home_moc\",\n      \"toSide\": \"top\",\n      \"color\": \"5\",\n      \"label\": \"Hebbian Recall\"\n    }\n  ]\n}"
+  },
+  {
+    "name": "Vaelor Layer-1 Complete Architecture.canvas",
+    "relPath": "Vaelor Layer-1 Complete Architecture.canvas",
+    "nodeCount": 24,
+    "edgeCount": 12,
+    "groupCount": 4,
+    "nodes": [
+      {
+        "id": "group_vlr_lattice",
+        "type": "group",
+        "x": -960,
+        "y": -650,
+        "width": 860,
+        "height": 560,
+        "label": "◈ Vaelor Account-Lattice DAG Core (:8140)",
+        "color": "4"
+      },
+      {
+        "id": "node_vlr_spec",
+        "type": "file",
+        "x": -920,
+        "y": -590,
+        "width": 380,
+        "height": 180,
+        "file": "06-Wiki/Vaelor-Layer1-Complete-Reference.md",
+        "color": "4"
+      },
+      {
+        "id": "node_vlr_lattice_text",
+        "type": "text",
+        "x": -510,
+        "y": -590,
+        "width": 380,
+        "height": 230,
+        "color": "5",
+        "text": "### ⛓️ Asynchronous Micro-Chain DAG\n- Zero gas fees forever ($0.00 gas).\n- Sub-20ms BFT finality across 5 regional validators.\n- Nonce SHA-256 micro-work stamp prevents network spam."
+      },
+      {
+        "id": "group_vlr_merchant_fx",
+        "type": "group",
+        "x": 0,
+        "y": -650,
+        "width": 860,
+        "height": 560,
+        "label": "⚡ Merchant FX Auto-Sweep & Treasury Engine",
+        "color": "3"
+      },
+      {
+        "id": "node_vlr_merchant_fx_text",
+        "type": "text",
+        "x": 40,
+        "y": -590,
+        "width": 380,
+        "height": 230,
+        "color": "3",
+        "text": "### 💵 Real-Time Treasury Allocation\n- **Zero FX Spread (0.00%)**: Instant 1:1 USD conversion.\n- **Savings Vault (8.5% APY)**: PoUW auto-staked allocation.\n- **Liquid VLR**: Instant micro-chain spendable balance."
+      },
+      {
+        "id": "node_vlr_savings_base",
+        "type": "file",
+        "x": 450,
+        "y": -590,
+        "width": 380,
+        "height": 180,
+        "file": "Vaelor Ecosystem & Patronage Ledger.base",
+        "color": "6"
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge_vlr_spec_fx",
+        "fromNode": "node_vlr_spec",
+        "fromSide": "right",
+        "toNode": "node_vlr_merchant_fx_text",
+        "toSide": "left",
+        "color": "3",
+        "label": "Settlement -> FX Split"
+      },
+      {
+        "id": "edge_vlr_fx_base",
+        "fromNode": "node_vlr_merchant_fx_text",
+        "fromSide": "right",
+        "toNode": "node_vlr_savings_base",
+        "toSide": "left",
+        "color": "6",
+        "label": "Ledger Sync"
+      }
+    ],
+    "rawJson": "{\n  \"nodes\": [\n    {\n      \"id\": \"group_vlr_lattice\",\n      \"type\": \"group\",\n      \"x\": -960,\n      \"y\": -650,\n      \"width\": 860,\n      \"height\": 560,\n      \"label\": \"◈ Vaelor Account-Lattice DAG Core (:8140)\",\n      \"color\": \"4\"\n    },\n    {\n      \"id\": \"node_vlr_spec\",\n      \"type\": \"file\",\n      \"x\": -920,\n      \"y\": -590,\n      \"width\": 380,\n      \"height\": 180,\n      \"file\": \"06-Wiki/Vaelor-Layer1-Complete-Reference.md\",\n      \"color\": \"4\"\n    },\n    {\n      \"id\": \"node_vlr_merchant_fx_text\",\n      \"type\": \"text\",\n      \"x\": 40,\n      \"y\": -590,\n      \"width\": 380,\n      \"height\": 230,\n      \"color\": \"3\",\n      \"text\": \"### 💵 Real-Time Treasury Allocation\\n- Zero FX Spread (0.00%): Instant 1:1 USD conversion.\\n- Savings Vault (8.5% APY): PoUW auto-staked allocation.\\n- Liquid VLR: Instant micro-chain spendable balance.\"\n    }\n  ],\n  \"edges\": [\n    {\n      \"id\": \"edge_vlr_spec_fx\",\n      \"fromNode\": \"node_vlr_spec\",\n      \"fromSide\": \"right\",\n      \"toNode\": \"node_vlr_merchant_fx_text\",\n      \"toSide\": \"left\",\n      \"color\": \"3\",\n      \"label\": \"Settlement -> FX Split\"\n    }\n  ]\n}"
   }
 ];
 
@@ -2300,6 +2417,67 @@ export const CANONICAL_BASES = [
       ]
     },
     "rawYaml": "filters:\n  and:\n    - 'file.ext == \"md\"'\n    - not:\n        - 'file.hasTag(\"archived\")'\n\nformulas:\n  word_estimate: '(file.size / 5).round(0)'\n  days_since_edit: '(now() - file.mtime).days.round(1)'\n  link_density: 'if(file.links, file.links.length, 0)'\n\nproperties:\n  file.name:\n    displayName: \"Second Brain Note\"\n  formula.word_estimate:\n    displayName: \"~Words\"\n  formula.link_density:\n    displayName: \"Wikilinks\"\n  formula.days_since_edit:\n    displayName: \"Days Since Edit\"\n\nviews:\n  - type: table\n    name: \"Second Brain Knowledge Graph\"\n    limit: 50\n    order:\n      - file.name\n      - file.folder\n      - formula.link_density\n      - formula.word_estimate\n      - formula.days_since_edit\n    summaries:\n      formula.word_estimate: Sum\n      formula.link_density: Average\n\n  - type: cards\n    name: \"MOC & Architecture Gallery\"\n    order:\n      - file.name\n      - file.tags\n      - formula.link_density\n"
+  },
+  {
+    "name": "Vaelor Ecosystem & Patronage Ledger.base",
+    "relPath": "Vaelor Ecosystem & Patronage Ledger.base",
+    "viewCount": 3,
+    "views": [
+      {
+        "type": "table",
+        "name": "Merchant Treasury Auto-Sweep Policy",
+        "limit": 50,
+        "order": [
+          "file.name",
+          "merchant",
+          "formula.usd_reserve_pct",
+          "formula.savings_vault_pct",
+          "formula.liquid_vlr_pct",
+          "formula.fx_spread_pct",
+          "formula.cashback_tier"
+        ]
+      },
+      {
+        "type": "cards",
+        "name": "Patronage & Creator Grants",
+        "order": [
+          "file.name",
+          "creator",
+          "badge",
+          "formula.patron_volume"
+        ]
+      },
+      {
+        "type": "table",
+        "name": "PoUW Computational Audit Log",
+        "order": [
+          "file.name",
+          "worker",
+          "task_type",
+          "reward_vlr",
+          "finality_status"
+        ]
+      }
+    ],
+    "formulas": {
+      "usd_reserve_pct": "if(usd_pct, usd_pct.toString() + '%', '70%')",
+      "savings_vault_pct": "if(vault_pct, vault_pct.toString() + '% (8.5% APY)', '20% (8.5% APY)')",
+      "liquid_vlr_pct": "if(liquid_pct, liquid_pct.toString() + '%', '10%')",
+      "fx_spread_pct": "'0.00% Feeless'",
+      "cashback_tier": "if(tier, tier, 'SOVEREIGN_DIAMOND (5.0%)')",
+      "patron_volume": "if(volume, volume.toString() + ' VLR', '150 VLR')"
+    },
+    "properties": {
+      "file.name": { "displayName": "Ledger Entry Note" },
+      "merchant": { "displayName": "Merchant Handle" },
+      "creator": { "displayName": "Creator Handle" },
+      "badge": { "displayName": "Patron Badge" },
+      "worker": { "displayName": "PoUW Worker" },
+      "task_type": { "displayName": "Useful Computation" },
+      "reward_vlr": { "displayName": "Mint Reward" },
+      "finality_status": { "displayName": "BFT Quorum" }
+    },
+    "rawYaml": "filters:\n  and:\n    - 'file.ext == \"md\"'\n    - file.hasTag(\"vaelor\")\n\nformulas:\n  usd_reserve_pct: 'if(usd_pct, usd_pct.toString() + \"%\", \"70%\")'\n  savings_vault_pct: 'if(vault_pct, vault_pct.toString() + \"% (8.5% APY)\", \"20% (8.5% APY)\")'\n  liquid_vlr_pct: 'if(liquid_pct, liquid_pct.toString() + \"%\", \"10%\")'\n  fx_spread_pct: \"'0.00% Feeless'\"\n  cashback_tier: \"if(tier, tier, 'SOVEREIGN_DIAMOND (5.0%)')\"\n\nproperties:\n  file.name:\n    displayName: \"Ledger Entry Note\"\n  merchant:\n    displayName: \"Merchant Handle\"\n  formula.usd_reserve_pct:\n    displayName: \"1:1 USD Reserve\"\n  formula.savings_vault_pct:\n    displayName: \"8.5% APY Vault\"\n  formula.liquid_vlr_pct:\n    displayName: \"Liquid VLR\"\n  formula.fx_spread_pct:\n    displayName: \"FX Spread\"\n\nviews:\n  - type: table\n    name: \"Merchant Treasury Auto-Sweep Policy\"\n    order:\n      - file.name\n      - merchant\n      - formula.usd_reserve_pct\n      - formula.savings_vault_pct\n      - formula.liquid_vlr_pct\n      - formula.fx_spread_pct\n"
   }
 ];
 
@@ -2833,6 +3011,12 @@ export const FALLBACK_MCP_TOOLS = [
     category: "Obsidian",
     description: "Safely write updated Obsidian Flavored Markdown to vault note and sync biomorphic STDP engram to daemon.",
     defaultArgs: { relPath: "00 Home.md", content: "# 00 Home\n\nUpdated via MCP note_write." }
+  },
+  {
+    name: "obsidian_vaelor_pouw",
+    category: "Vaelor L1",
+    description: "Submit a biomorphic Proof-of-Useful-Work (PoUW) audit task (STDP indexing, AST linting, Obsidian vault health) to mine feeless VLR on Vaelor Layer-1.",
+    defaultArgs: { action: "mine", miner: "@zoth", task_type: "STDP_OBSIDIAN_INDEXING" }
   }
 ];
 
@@ -3020,6 +3204,23 @@ export function callMcpToolFallback(toolName, args = {}) {
         }
       };
     }
+    case "obsidian_vaelor_pouw":
+      return {
+        jsonrpc: "2.0",
+        id: 1,
+        result: {
+          ok: true,
+          status: "POUW_MINTED",
+          action: args.action || "mine",
+          miner: args.miner || "@zoth",
+          task_type: args.task_type || "STDP_OBSIDIAN_INDEXING",
+          rewardVlr: 15.69,
+          blockHash: randHex(64),
+          bftQuorumApprovals: "5/5 Validators",
+          finalityLatencyMs: 7.2,
+          timestamp: ts
+        }
+      };
     default:
       return {
         jsonrpc: "2.0",
@@ -3454,6 +3655,80 @@ export const FALLBACK_BASES_RECORDS = {
           "formula.link_density": "49 links",
           "formula.days_since_edit": "0.5",
           "formula.status_badge": "🟢 Active"
+        }
+      }
+    ]
+  },
+  "Vaelor Ecosystem & Patronage Ledger.base": {
+    baseName: "Vaelor Ecosystem & Patronage Ledger.base",
+    relPath: "Vaelor Ecosystem & Patronage Ledger.base",
+    ok: true,
+    totalMatched: 4,
+    columns: [
+      { key: "file.name", label: "Ledger Note" },
+      { key: "merchant", label: "Merchant / Creator" },
+      { key: "formula.usd_reserve_pct", label: "1:1 USD Reserve" },
+      { key: "formula.savings_vault_pct", label: "8.5% APY Vault" },
+      { key: "formula.liquid_vlr_pct", label: "Liquid VLR" },
+      { key: "formula.fx_spread_pct", label: "FX Spread" },
+      { key: "formula.cashback_tier", label: "Cashback Tier" },
+      { key: "formula.status_badge", label: "Consensus Status" }
+    ],
+    rows: [
+      {
+        title: "Sprig Kitchen POS Auto-Sweep",
+        relPath: "Merchants/@sprig.md",
+        properties: {
+          "file.name": "@sprig.md",
+          "merchant": "@sprig (Sprig Kitchen)",
+          "formula.usd_reserve_pct": "70% USD Reserve ($140.00)",
+          "formula.savings_vault_pct": "20% Staked (40 ◈ VLR)",
+          "formula.liquid_vlr_pct": "10% Liquid (6,763 ◈ VLR)",
+          "formula.fx_spread_pct": "0.00% Zero-Spread",
+          "formula.cashback_tier": "SOVEREIGN_DIAMOND (5.0%)",
+          "formula.status_badge": "🟢 Finalized BFT"
+        }
+      },
+      {
+        title: "Zoth Studio Compute Treasury",
+        relPath: "Merchants/@zoth.md",
+        properties: {
+          "file.name": "@zoth.md",
+          "merchant": "@zoth (Compute & Studio)",
+          "formula.usd_reserve_pct": "40% USD Reserve ($210.00)",
+          "formula.savings_vault_pct": "40% Staked (15,000 ◈ VLR)",
+          "formula.liquid_vlr_pct": "20% Liquid (29,957 ◈ VLR)",
+          "formula.fx_spread_pct": "0.00% Zero-Spread",
+          "formula.cashback_tier": "SOVEREIGN_DIAMOND (5.0%)",
+          "formula.status_badge": "🟢 Finalized BFT"
+        }
+      },
+      {
+        title: "Hatch Grants Treasury Split",
+        relPath: "Merchants/@hatch.md",
+        properties: {
+          "file.name": "@hatch.md",
+          "merchant": "@hatch (Sovereign Grants)",
+          "formula.usd_reserve_pct": "50% USD Reserve ($500.00)",
+          "formula.savings_vault_pct": "30% Staked (3,000 ◈ VLR)",
+          "formula.liquid_vlr_pct": "20% Liquid (2,000 ◈ VLR)",
+          "formula.fx_spread_pct": "0.00% Zero-Spread",
+          "formula.cashback_tier": "GOLD (3.5%)",
+          "formula.status_badge": "🟢 Finalized BFT"
+        }
+      },
+      {
+        title: "Citizen Demo Patron Ledger",
+        relPath: "Citizens/@citizen.md",
+        properties: {
+          "file.name": "@citizen.md",
+          "merchant": "@citizen (Consumer Wallet)",
+          "formula.usd_reserve_pct": "0% USD Reserve",
+          "formula.savings_vault_pct": "10% Staked (1,100 ◈ VLR)",
+          "formula.liquid_vlr_pct": "90% Liquid (9,426 ◈ VLR)",
+          "formula.fx_spread_pct": "0.00% Zero-Spread",
+          "formula.cashback_tier": "SOVEREIGN_DIAMOND (5.0%)",
+          "formula.status_badge": "🟢 Finalized BFT"
         }
       }
     ]
@@ -4046,8 +4321,49 @@ export const FALLBACK_OFM_NOTES = {
       "abstract"
     ],
     "content": "---\ntitle: \"Biomorphic STDP & 3D Netrunner Cortex\"\ncreated: \"2026-10-26T06:30:16Z\"\nupdated: \"2026-10-26T06:30:16Z\"\ncategory: \"LLM-Wiki\"\ntags: [wiki, llm-synthesized, karpathy-wiki, neuro-memory, stdp, netrunner, cortex, synapses]\nstdp_engrams: 6\nconfidence: 0.99\nstatus: \"CANONICAL\"\n---\n\n# \ud83d\udcda Biomorphic STDP & 3D Netrunner Cortex\n\n> [!abstract] Executive Summary\n> The **Biomorphic STDP & 3D Netrunner Cortex** is the central biological cognitive substrate powering ZothOS and Zoth Studio (`:8094`). Operating on biological principles of **Spike-Timing-Dependent Plasticity (STDP)** and **Hebbian Learning**, the cortex continuously updates associative synaptic weights between 41,690+ cognitive engrams across semantic, episodic, insight, and security categories. Through an autonomous **Metacognitive Dream Loop** and real-time 3D Netrunner force-directed embedding, the substrate distills ambient developer actions into enduring mathematical intuition with zero telemetry data leakage.\n\n## Conceptual Architecture\n\n```mermaid\nflowchart LR\n    subgraph SensoryInputs[\"\u26a1 Sensory Ingestion Channels\"]\n        Obsidian[\"Obsidian Vault<br/>(1,714 notes)\"]\n        Studio[\"Zoth Studio IDE<br/>(/memory)\"]\n        Hermes[\"Hermes & Swarm<br/>Agents\"]\n    end\n    \n    subgraph NetrunnerCortex[\"\ud83e\udde0 3D Biological Cortex (:8094)\"]\n        direction TB\n        Engrams[\"41,692 Active Engrams<br/>(Semantic Vectors)\"]\n        Synapses[\"2,018,290 STDP Synapses<br/>(Hebbian Plasticity)\"]\n        Engrams --- Synapses\n    end\n    \n    subgraph CognitiveDynamics[\"\ud83c\udf19 Metacognition & Sleep Replay\"]\n        LTP[\"Hebbian LTP<br/>(Pre < Post Spike)\"]\n        LTD[\"Depression LTD<br/>(Post < Pre Spike)\"]\n        Replay[\"Dream Loop<br/>(Slow-Wave Consolidation)\"]\n    end\n    \n    SensoryInputs -->|POST /api/remember| NetrunnerCortex\n    NetrunnerCortex --> CognitiveDynamics\n    CognitiveDynamics -->|Pruned Knowledge| NetrunnerCortex\n```\n\n## Functional Taxonomy & Core Cognitive Subsystems\n\n### 1. Spike-Timing-Dependent Plasticity (STDP) Engine\nUnlike static vector embeddings that require computationally expensive full-corpus reindexing, the STDP engine continuously modulates individual synaptic connection weights in real-time based on the precise relative timing of cognitive spikes. Co-activated engrams strengthen their association pathways while dormant synapses undergo exponential decay.\n\n### 2. 3D Force-Directed Netrunner Cortex\nThe visual Netrunner workbench (`/memory`) renders memories in an interactive 3D WebGL force-directed space. Synaptic connections act as damped harmonic springs, pulling correlated engrams together into high-density conceptual constellations while orthogonal memories repel.\n\n### 3. Sleep Replay & Metacognitive Consolidation\nEmbedded in `neuro-memory.service`, the autonomous Dream Loop agent simulates mammalian slow-wave sleep (SWS). During idle system periods, episodic memory sequences are replayed at high temporal compression, consolidating transient observations into permanent architectural insights while pruning synaptic noise.\n\n### 4. Categorical Memory Stratum\nMemories are structured into distinct cognitive categories:\n- **`insight`:** High-order mathematical breakthroughs and architectural paradigms.\n- **`semantic`:** Obsidian Second Brain MOCs and canonical documentation.\n- **`episodic`:** Timestamped terminal workflows, CLI executions, and tool events.\n- **`security_chain`:** Ed25519 public keys, TLS fingerprints, and cryptographic receipts.\n- **`procedural`:** JSON Canvas 1.0 layouts and Obsidian Bases YAML specifications.\n\n## Key Mathematical Formulations & Technical Primitives\n\n### 1. Spike-Timing-Dependent Plasticity (STDP) Learning Rule\nFor a pre-synaptic spike at time $t_{\\text{pre}}$ and a post-synaptic spike at time $t_{\\text{post}}$, the synaptic weight modification $\\Delta w_{ij}$ is given by:\n$$\\Delta w_{ij} = \\begin{cases} A_+ \\exp\\left(-\\frac{\\Delta t}{\\tau_+}\\right) & \\text{if } \\Delta t > 0 \\quad (\\text{Long-Term Potentiation / LTP}) \\\\ -A_- \\exp\\left(\\frac{\\Delta t}{\\tau_-}\\right) & \\text{if } \\Delta t < 0 \\quad (\\text{Long-Term Depression / LTD}) \\end{cases}$$\nWhere $\\Delta t = t_{\\text{post}} - t_{\\text{pre}}$, $A_+ = 0.05$, $A_- = 0.025$, and $\\tau_+ = \\tau_- = 20\\text{ ms}$.\n\n### 2. Exponential Synaptic Weight Retention & Decay\nUnstimulated synapses experience continuous passive decay governed by decay constant $\\lambda$:\n$$w_{ij}(t) = w_{ij}(0) \\cdot \\exp(-\\lambda t) + \\sum_{k=1}^{M} \\Delta w_{ij}^{(k)}$$\nWith minimum weight clamp $w_{\\min} = 0.01$ and saturation threshold $w_{\\max} = 1.00$.\n\n### 3. 3D Force-Directed Spatial Equilibrium\nThe equilibrium position $\\mathbf{p}_i$ for node $i$ in $\\mathbb{R}^3$ satisfies:\n$$\\mathbf{F}_i = \\sum_{j \\neq i} \\frac{k_{\\text{rep}}^2}{\\|\\mathbf{p}_i - \\mathbf{p}_j\\|^2} \\hat{\\mathbf{r}}_{ij} - \\sum_{(i,j) \\in E} \\frac{\\|\\mathbf{p}_i - \\mathbf{p}_j\\|^2}{k_{\\text{att}}} \\cdot w_{ij} \\hat{\\mathbf{r}}_{ij} = \\mathbf{0}$$\n\n## Bidirectional Knowledge Graph Links\n\n### Obsidian Second Brain Notes\n- [[Zoth Memory]] \u2014 Canonical memory architecture, socket endpoints, and schema definitions\n- [[05-Telemetry/Neuro-Memory Cortex Telemetry]] \u2014 Live STDP engram counts and synapse metrics\n- [[Agents/Neuro-Memory Dream Consolidator]] \u2014 Autonomous sleep replay and engram pruning agent\n- [[Skills/Skill dream-loop]] \u2014 Dream loop execution skill\n- [[00 Home]] \u2014 Dashboard and master graph entrypoint\n\n### Visual Canvases\n- [[Netrunner Cyber-Cortex Knowledge Map.canvas]] \u2014 Procedural spatial map of the cyber-cortex\n- [[Zoth Second Brain.canvas]] \u2014 Master second brain spatial layout\n- [[Zoth Autonomous Agents & Hermes Fleet.canvas]] \u2014 Swarm agents memory interface\n\n### Database Registries\n- [[Zoth Memory Stratum.base]] \u2014 Database view of all memory categories and importance ratings\n- [[Zoth Fleet & Daemons.base]] \u2014 Health status for port :8094\n- [[Zoth Autonomous Agents.base]] \u2014 Autonomous agent fleet\n\n## STDP Synaptic Provenance & Vector Evidence\n\n| Memory ID | Category | Importance | Synaptic Tags | Excerpt |\n|:---|:---:|:---:|:---|:---|\n| `5a64e14c-78b` | `achievement` | 0.76 | `agent:antigravity`, `tools:site_guardrail`, `nebula:3d` | Antigravity sovereign nebula verification complete: 7-point guardrail passed, 3D WebGL WebApplication online.... |\n| `450e185b-c66` | `episodic` | 0.80 | `grok`, `agent` | Grok : [{'type': 'text', 'text': '<user_query>\\nhe ui sucks uimprove that plus make an insane qulaity 3d guy that looks... |\n| `56e2e2be-90c` | `episodic` | 0.80 | `grok`, `agent` | Grok : I\u2019ll rebuild the Zoth Bot UI and put a high-end 3D companion in it. First I\u2019m reading the design system and the c... |\n| `d60ed5cd-3f8` | `episodic` | 0.80 | `grok`, `agent` | Grok : 1\u2192--- name: game-assets description: >-   Game art and 3D models with the Imagine tools: sprites, sprite sheets,... |\n| `722227dc-41c` | `episodic` | 0.80 | `grok`, `agent` | Grok : The circle is the fallback photo \u2014 the GLB never loaded. Loosening CSP and sandbox so the 3D model can fetch.... |\n| `92549810-4e4` | `episodic` | 0.80 | `grok`, `agent` | Grok : The 3D model is loading. Camera was too close and the gray-punch was eating the coat. Reframing him and dropping... |\n\n## See Also\n\n- [[00 Home]]\n- [[Zoth LLM Wiki Index.base|Zoth LLM Wiki Index Database]]\n"
-  }
-};
+    },
+    "06-Wiki/Vaelor-Layer1-Complete-Reference.md": {
+      "ok": true,
+      "title": "Vaelor Layer-1 Complete Reference",
+      "relPath": "06-Wiki/Vaelor-Layer1-Complete-Reference.md",
+      "cluster": "06-Wiki",
+      "wordCount": 1140,
+      "frontmatter": {
+        "title": "Vaelor Layer-1 Complete Reference",
+        "created": "2026-10-26T10:00:00Z",
+        "updated": "2026-10-26T10:00:00Z",
+        "category": "LLM-Wiki",
+        "tags": [
+          "wiki",
+          "llm-synthesized",
+          "karpathy-wiki",
+          "vaelor",
+          "merchant-fx",
+          "account-lattice",
+          "pouw",
+          "bft-consensus",
+          "loyalty-cashback",
+          "atomic-bridge"
+        ],
+        "stdp_engrams": 12,
+        "confidence": 0.99,
+        "status": "CANONICAL"
+      },
+      "wikilinks": [
+        "Vaelor Network",
+        "05-Telemetry/Vaelor Live Ledger Telemetry",
+        "00 Home",
+        "Vaelor & Sovereign Economy.canvas",
+        "Vaelor Layer-1 Complete Architecture.canvas",
+        "Vaelor Ecosystem & Patronage Ledger.base",
+        "Zoth LLM Wiki Index.base"
+      ],
+      "callouts": [
+        "note"
+      ],
+      "content": "---\ntitle: \"Vaelor Layer-1 Complete Reference\"\ncreated: \"2026-10-26T10:00:00Z\"\nupdated: \"2026-10-26T10:00:00Z\"\ncategory: \"LLM-Wiki\"\ntags: [wiki, llm-synthesized, karpathy-wiki, vaelor, merchant-fx, account-lattice, pouw, bft-consensus, loyalty-cashback, atomic-bridge]\nstdp_engrams: 12\nconfidence: 0.99\nstatus: \"CANONICAL\"\n---\n\n# ◈ Vaelor Layer-1 Complete Reference\n\n> [!note] Executive Architecture\n> **Vaelor (◈ VLR)** is a next-generation Layer-1 feeless cryptocurrency architecture designed to eliminate blockchain transaction fees and mining energy waste on an asynchronous **Account-Lattice DAG**.\n\n## Core Pillars\n- **Zero Gas Fees ($0.00 Forever)**: Every account maintains its own micro-chain.\n- **Sub-20ms BFT Finality**: 5-region validator quorum with $2f+1=4$ consensus.\n- **Programmable Merchant FX Treasury Auto-Sweep**: Automatic real-time split across 1:1 USD Reserve, 8.5% APY Staked Savings, and Liquid VLR.\n- **Proof-of-Useful-Work (PoUW)**: Useful AI and STDP compute mining.\n- **Sovereign Patronage & Loyalty Cashback**: Up to 5.0% instant rebate on purchases.\n\n## Mathematical Formulations\n$$\\mathcal{S}_{\\text{FX}} = 0.00\\%, \\quad G = \\$0.00$$\n\n[[00 Home]] • [[06-Wiki/Vaelor Account-Lattice & PoUW Protocol]] • [[Vaelor & Sovereign Economy.canvas]]"
+    }
+  };
 
 export function getNoteFallback(pathOrTitle) {
   if (!pathOrTitle) return FALLBACK_OFM_NOTES['00 Home.md'];
@@ -4633,8 +4949,21 @@ export const VAELOR_MCP_TOOLS = [
   },
   {
     name: "vaelor_send_shielded",
+    category: "Privacy",
     description: "Execute a confidential shielded transfer using Pedersen Commitments with optional selective auditor view-key disclosure.",
     defaultArgs: { from: "@citizen", to: "@neal", amount: 100.0, memo: "Private sovereign settlement" }
+  },
+  {
+    name: "vaelor_send_creator_tip",
+    category: "Patronage",
+    description: "Send a feeless instant micro-tip to open-source creators/patrons with cryptographic badge tier attestation and 2.5% cashback rebate.",
+    defaultArgs: { from: "@citizen", creator: "@zoth", amount: 25.0, projectSlug: "zoth-os", message: "Sovereign AI patron" }
+  },
+  {
+    name: "vaelor_merchant_fx_checkout",
+    category: "Merchant FX",
+    description: "Execute programmable POS merchant FX checkout with automated treasury sweep (1:1 USD Reserve, 8.5% APY Staked Savings, and Liquid VLR) with 0.00% FX spread.",
+    defaultArgs: { buyer: "@citizen", merchant: "@sprig", amount: 50.0, memo: "POS Artisan Coffee & Provisions" }
   }
 ];
 
@@ -4840,6 +5169,18 @@ export function callVaelorMcpFallback(toolName, args = {}) {
           stealthAddress: "vlr_stealth_" + randHex(32),
           finalityMs: 14.2
         }
+      };
+    case 'vaelor_send_creator_tip':
+      return {
+        ok: true,
+        tool: toolName,
+        result: sendVaelorCreatorTipFallback(args)
+      };
+    case 'vaelor_merchant_fx_checkout':
+      return {
+        ok: true,
+        tool: toolName,
+        result: executeVaelorMerchantFxFallback(args)
       };
     default:
       return {
@@ -5464,6 +5805,83 @@ export function boostVaelorLoyaltyFallback(opts = {}) {
         approvals: 5,
         bftThreshold: '4/5 (2f + 1)',
         aggregateLatencyMs: 8.11
+      }
+    }
+  };
+}
+
+export function executeVaelorMerchantFxFallback(opts = {}) {
+  const buyer = opts.buyer || '@citizen';
+  const merchant = opts.merchant || '@sprig';
+  const amountVlr = parseFloat(opts.amount || opts.amountVlr) || 50.0;
+  const memo = opts.memo || 'Merchant FX checkout';
+
+  let usdPct = 70;
+  let vaultStakePct = 20;
+  let liquidVlrPct = 10;
+  if (merchant === '@zoth') {
+    usdPct = 40;
+    vaultStakePct = 40;
+    liquidVlrPct = 20;
+  } else if (merchant === '@hatch') {
+    usdPct = 50;
+    vaultStakePct = 30;
+    liquidVlrPct = 20;
+  } else if (opts.fxSplit) {
+    usdPct = opts.fxSplit.usdPct ?? usdPct;
+    vaultStakePct = opts.fxSplit.vaultStakePct ?? vaultStakePct;
+    liquidVlrPct = opts.fxSplit.liquidVlrPct ?? liquidVlrPct;
+  }
+
+  const usdAmount = +(amountVlr * (usdPct / 100)).toFixed(2);
+  const vaultStakeVlr = +(amountVlr * (vaultStakePct / 100)).toFixed(2);
+  const liquidVlr = +(amountVlr * (liquidVlrPct / 100)).toFixed(2);
+  const cashbackPct = 5.0;
+  const cashbackVlr = +(amountVlr * (cashbackPct / 100)).toFixed(4);
+  const settlementId = 'fx_' + randHex(16);
+  const blockHash = randHex(64);
+  const ts = new Date().toISOString();
+
+  return {
+    ok: true,
+    settlementId,
+    buyer,
+    merchant,
+    amountVlr,
+    fxSplit: {
+      usdPct,
+      vaultStakePct,
+      liquidVlrPct,
+      usdAmount,
+      vaultStakeVlr,
+      liquidVlr,
+      fxSpreadPct: 0.0
+    },
+    cashback: {
+      cashbackVlr,
+      cashbackPct,
+      cashbackBps: 500,
+      loyaltyTier: 'SOVEREIGN_DIAMOND'
+    },
+    merchantUsdReserve: usdAmount + 105.0,
+    merchantStakedVlr: vaultStakeVlr + 30.0,
+    merchantLiquidVlr: liquidVlr + 6750.0,
+    fxBlock: {
+      hash: blockHash,
+      account: 'vlr1_' + randHex(32),
+      handle: merchant,
+      height: 95,
+      type: 'MERCHANT_FX_SETTLE',
+      finalityMs: 6.8,
+      gasFeeVlr: 0,
+      timestamp: ts,
+      quorumCertificate: {
+        blockHash,
+        status: 'FINALIZED_BFT',
+        quorumSize: 5,
+        approvals: 5,
+        bftThreshold: '4/5 (2f + 1)',
+        aggregateLatencyMs: 8.09
       }
     }
   };

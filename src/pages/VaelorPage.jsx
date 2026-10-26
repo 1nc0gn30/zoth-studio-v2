@@ -66,7 +66,8 @@ import {
   issueVaelorVoucherFallback,
   executeVaelorBridgeSwapFallback,
   sendVaelorCreatorTipFallback,
-  boostVaelorLoyaltyFallback
+  boostVaelorLoyaltyFallback,
+  executeVaelorMerchantFxFallback
 } from '../data/obsidianWikiData';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -970,6 +971,79 @@ export default function VaelorPage() {
     setActiveLoyaltyTier('SOVEREIGN_DIAMOND');
     setLoyaltyBoostResult(resData);
     setIsBoostingLoyalty(false);
+  };
+
+  // Wave 27: Programmable Merchant FX Treasury Auto-Sweep State
+  const MERCHANT_FX_PRESETS = [
+    {
+      handle: '@sprig',
+      name: 'Sprig Kitchen • 757 Artisan Merchant',
+      badge: 'Merchant POS',
+      defaultAmount: 50,
+      memo: 'Artisan Matcha & Sourdough POS',
+      split: { usdPct: 70, vaultStakePct: 20, liquidVlrPct: 10, label: '70% USD / 20% Stake / 10% VLR' },
+      desc: 'High USD working capital for culinary inventory & 8.5% yield savings'
+    },
+    {
+      handle: '@zoth',
+      name: 'Zoth Studio & Compute Node',
+      badge: 'Sovereign Prime',
+      defaultAmount: 75,
+      memo: 'GPU Inference Quota & Subscriptions',
+      split: { usdPct: 40, vaultStakePct: 40, liquidVlrPct: 20, label: '40% USD / 40% Stake / 20% VLR' },
+      desc: 'Balanced compute growth: 40% APY savings vault + 40% fiat runway'
+    },
+    {
+      handle: '@hatch',
+      name: 'Hatch Sovereign Grants',
+      badge: 'Grants Treasury',
+      defaultAmount: 100,
+      memo: 'Sovereign AI Ecosystem Micro-Grant',
+      split: { usdPct: 50, vaultStakePct: 30, liquidVlrPct: 20, label: '50% USD / 30% Stake / 20% VLR' },
+      desc: 'Grant endowment sweep: 50% cash reserve + 30% yield accumulation'
+    }
+  ];
+
+  const [selectedMerchantFx, setSelectedMerchantFx] = useState(MERCHANT_FX_PRESETS[0]);
+  const [fxCheckoutAmount, setFxCheckoutAmount] = useState('50.00');
+  const [fxCheckoutMemo, setFxCheckoutMemo] = useState('Artisan Matcha & Sourdough POS');
+  const [isExecutingFxCheckout, setIsExecutingFxCheckout] = useState(false);
+  const [fxCheckoutResult, setFxCheckoutResult] = useState(null);
+
+  const handleExecuteMerchantFxCheckout = async () => {
+    if (isExecutingFxCheckout) return;
+    setIsExecutingFxCheckout(true);
+    const amt = parseFloat(fxCheckoutAmount) || selectedMerchantFx.defaultAmount;
+    let resData = null;
+    try {
+      const res = await fetch('http://127.0.0.1:8140/api/merchant-fx/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          buyer: '@citizen',
+          merchant: selectedMerchantFx.handle,
+          amount: amt,
+          memo: fxCheckoutMemo || selectedMerchantFx.memo
+        })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json && json.ok) resData = json;
+      }
+    } catch (_) {}
+
+    if (!resData) {
+      resData = executeVaelorMerchantFxFallback({
+        buyer: '@citizen',
+        merchant: selectedMerchantFx.handle,
+        amount: amt,
+        memo: fxCheckoutMemo || selectedMerchantFx.memo,
+        fxSplit: selectedMerchantFx.split
+      });
+    }
+
+    setFxCheckoutResult(resData);
+    setIsExecutingFxCheckout(false);
   };
 
   return (
@@ -3824,7 +3898,380 @@ export default function VaelorPage() {
         </RevealOnScroll>
 
         {/* ==========================================================================
-            SECTION: 10-TOOL LAYER-1 MODEL CONTEXT PROTOCOL (MCP) PLAYGROUND
+            SECTION: PROGRAMMABLE MERCHANT FX TREASURY AUTO-SWEEP SIMULATOR (#vaelor-merchant-fx-sim)
+            ========================================================================== */}
+        <RevealOnScroll>
+          <Box id="vaelor-merchant-fx-sim" sx={{ mb: 6 }}>
+            <Box sx={{ mb: 3 }}>
+              <Typography className="section-kicker">Treasury & Merchant Automation</Typography>
+              <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif', mb: 1 }}>
+                Programmable Merchant FX Treasury Auto-Sweep Simulator
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 880, fontSize: '0.94rem' }}>
+                Zero-spread (0.00% FX fee) real-time treasury allocation. Merchants automatically split incoming customer ◈ VLR payments across 1:1 USD Reserves, 8.5% APY Staked Savings Vaults, and Liquid VLR micro-chains without intermediary fees or delayed bank clearing.
+              </Typography>
+            </Box>
+
+            <Paper
+              sx={{
+                p: { xs: 2.5, md: 3.5 },
+                borderRadius: 3,
+                border: `1.5px solid ${gold.border}`,
+                bgcolor: isDark ? '#08080E' : '#FFFFFF',
+                boxShadow: isDark ? '0 12px 36px rgba(0,0,0,0.6)' : '0 6px 20px rgba(0,0,0,0.06)'
+              }}
+            >
+              {/* Preset Merchant Policies Selector */}
+              <Box sx={{ mb: 3 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800, display: 'block', mb: 1.2, letterSpacing: '0.05em' }}>
+                  SELECT MERCHANT TREASURY POLICY PRESET
+                </Typography>
+                <Grid container spacing={2}>
+                  {MERCHANT_FX_PRESETS.map((m) => {
+                    const isSelected = selectedMerchantFx.handle === m.handle;
+                    return (
+                      <Grid xs={12} sm={4} key={m.handle}>
+                        <Paper
+                          onClick={() => {
+                            setSelectedMerchantFx(m);
+                            setFxCheckoutAmount(m.defaultAmount.toFixed(2));
+                            setFxCheckoutMemo(m.memo);
+                          }}
+                          sx={{
+                            p: 2,
+                            borderRadius: 2,
+                            cursor: 'pointer',
+                            border: `1.5px solid ${isSelected ? '#FFD700' : (isDark ? 'rgba(255,255,255,0.08)' : '#E2E8F0')}`,
+                            bgcolor: isSelected ? (isDark ? 'rgba(212,175,55,0.12)' : 'rgba(212,175,55,0.08)') : (isDark ? '#05070B' : '#F8FAFC'),
+                            transition: 'all 0.2s ease',
+                            '&:hover': {
+                              borderColor: '#FFD700',
+                              transform: 'translateY(-2px)'
+                            }
+                          }}
+                        >
+                          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+                            <Typography sx={{ fontFamily: mono, fontWeight: 900, color: isSelected ? '#FFD700' : theme.palette.text.primary, fontSize: '0.9rem' }}>
+                              {m.handle}
+                            </Typography>
+                            <Chip
+                              label={m.badge}
+                              size="small"
+                              sx={{
+                                height: 20,
+                                fontSize: '0.62rem',
+                                fontWeight: 800,
+                                fontFamily: mono,
+                                bgcolor: isSelected ? '#FFD700' : 'rgba(255,255,255,0.08)',
+                                color: isSelected ? '#08080B' : '#94A3B8'
+                              }}
+                            />
+                          </Box>
+                          <Typography variant="caption" sx={{ display: 'block', color: theme.palette.text.secondary, mb: 1, fontSize: '0.74rem' }}>
+                            {m.name}
+                          </Typography>
+                          <Chip
+                            label={m.split.label}
+                            size="small"
+                            sx={{
+                              width: '100%',
+                              fontFamily: mono,
+                              fontSize: '0.66rem',
+                              fontWeight: 800,
+                              bgcolor: isSelected ? 'rgba(56,189,248,0.2)' : 'rgba(56,189,248,0.1)',
+                              color: '#38BDF8',
+                              border: '1px solid rgba(56,189,248,0.3)'
+                            }}
+                          />
+                        </Paper>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </Box>
+
+              {/* Checkout Interactive Workbench */}
+              <Grid container spacing={3}>
+                {/* Left Column: Input Form & Split Allocation Preview */}
+                <Grid xs={12} md={6}>
+                  <Paper
+                    sx={{
+                      p: 2.5,
+                      borderRadius: 2.5,
+                      bgcolor: isDark ? '#05070B' : '#F8FAFC',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                        <CurrencyExchangeIcon sx={{ color: '#FFD700', fontSize: '1.2rem' }} />
+                        <Typography sx={{ fontFamily: mono, fontWeight: 900, fontSize: '0.92rem', color: theme.palette.text.primary }}>
+                          Point-of-Sale Checkout Simulator
+                        </Typography>
+                      </Box>
+
+                      <Stack spacing={2} sx={{ mb: 2.5 }}>
+                        <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? '#080C14' : '#FFFFFF', border: '1px solid rgba(255,255,255,0.05)' }}>
+                          <Typography variant="caption" sx={{ color: '#94A3B8', fontFamily: mono, display: 'block', fontSize: '0.68rem' }}>
+                            BUYER WALLET
+                          </Typography>
+                          <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.84rem', color: '#10B981' }}>
+                            @citizen (Sovereign Demo Wallet • Passkey Ready)
+                          </Typography>
+                        </Box>
+
+                        <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? '#080C14' : '#FFFFFF', border: '1px solid rgba(255,255,255,0.05)' }}>
+                          <Typography variant="caption" sx={{ color: '#94A3B8', fontFamily: mono, display: 'block', fontSize: '0.68rem' }}>
+                            SETTLEMENT MERCHANT
+                          </Typography>
+                          <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.84rem', color: '#38BDF8' }}>
+                            {selectedMerchantFx.handle} ({selectedMerchantFx.name})
+                          </Typography>
+                        </Box>
+
+                        <TextField
+                          label="Payment Amount (◈ VLR)"
+                          type="number"
+                          size="small"
+                          fullWidth
+                          value={fxCheckoutAmount}
+                          onChange={(e) => setFxCheckoutAmount(e.target.value)}
+                          InputProps={{
+                            sx: { fontFamily: mono, fontWeight: 800, fontSize: '0.9rem' }
+                          }}
+                          InputLabelProps={{ sx: { fontFamily: mono, fontSize: '0.8rem' } }}
+                        />
+
+                        <TextField
+                          label="Invoice Memo / Reference"
+                          size="small"
+                          fullWidth
+                          value={fxCheckoutMemo}
+                          onChange={(e) => setFxCheckoutMemo(e.target.value)}
+                          InputProps={{
+                            sx: { fontFamily: mono, fontSize: '0.82rem' }
+                          }}
+                          InputLabelProps={{ sx: { fontFamily: mono, fontSize: '0.8rem' } }}
+                        />
+                      </Stack>
+
+                      {/* Split Allocation Preview Cards */}
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800, display: 'block', mb: 1, letterSpacing: '0.04em' }}>
+                        REAL-TIME AUTO-SWEEP ALLOCATION (0.00% SPREAD)
+                      </Typography>
+                      <Grid container spacing={1.5} sx={{ mb: 2.5 }}>
+                        <Grid xs={4}>
+                          <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(16,185,129,0.08)' : '#ECFDF5', border: '1px solid rgba(16,185,129,0.3)', textAlign: 'center' }}>
+                            <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981', fontWeight: 800, fontSize: '0.64rem', display: 'block' }}>
+                              1:1 USD RESERVE ({selectedMerchantFx.split.usdPct}%)
+                            </Typography>
+                            <Typography sx={{ fontFamily: mono, fontWeight: 900, color: '#10B981', fontSize: '0.88rem', mt: 0.3 }}>
+                              ${((parseFloat(fxCheckoutAmount) || 0) * (selectedMerchantFx.split.usdPct / 100)).toFixed(2)}
+                            </Typography>
+                            <Typography variant="caption" sx={{ color: '#64748B', fontSize: '0.58rem' }}>
+                              Instant Fiat
+                            </Typography>
+                          </Box>
+                        </Grid>
+                        <Grid xs={4}>
+                          <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(212,175,55,0.08)' : '#FEFCE8', border: '1px solid rgba(212,175,55,0.3)', textAlign: 'center' }}>
+                            <Typography variant="caption" sx={{ fontFamily: mono, color: '#D4AF37', fontWeight: 800, fontSize: '0.64rem', display: 'block' }}>
+                              8.5% APY VAULT ({selectedMerchantFx.split.vaultStakePct}%)
+                            </Typography>
+                            <Typography sx={{ fontFamily: mono, fontWeight: 900, color: '#D4AF37', fontSize: '0.88rem', mt: 0.3 }}>
+                              ◈ {((parseFloat(fxCheckoutAmount) || 0) * (selectedMerchantFx.split.vaultStakePct / 100)).toFixed(2)}
+                            </Typography>
+                            <Typography variant="caption" sx={{ color: '#64748B', fontSize: '0.58rem' }}>
+                              PoUW Yield
+                            </Typography>
+                          </Box>
+                        </Grid>
+                        <Grid xs={4}>
+                          <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(56,189,248,0.08)' : '#F0F9FF', border: '1px solid rgba(56,189,248,0.3)', textAlign: 'center' }}>
+                            <Typography variant="caption" sx={{ fontFamily: mono, color: '#38BDF8', fontWeight: 800, fontSize: '0.64rem', display: 'block' }}>
+                              LIQUID VLR ({selectedMerchantFx.split.liquidVlrPct}%)
+                            </Typography>
+                            <Typography sx={{ fontFamily: mono, fontWeight: 900, color: '#38BDF8', fontSize: '0.88rem', mt: 0.3 }}>
+                              ◈ {((parseFloat(fxCheckoutAmount) || 0) * (selectedMerchantFx.split.liquidVlrPct / 100)).toFixed(2)}
+                            </Typography>
+                            <Typography variant="caption" sx={{ color: '#64748B', fontSize: '0.58rem' }}>
+                              Working Capital
+                            </Typography>
+                          </Box>
+                        </Grid>
+                      </Grid>
+                    </Box>
+
+                    {/* Action Button */}
+                    <Button
+                      id="vaelor-fx-checkout-btn"
+                      variant="contained"
+                      fullWidth
+                      disabled={isExecutingFxCheckout}
+                      onClick={handleExecuteMerchantFxCheckout}
+                      sx={{
+                        py: 1.4,
+                        fontFamily: mono,
+                        fontWeight: 900,
+                        fontSize: '0.86rem',
+                        bgcolor: '#FFD700',
+                        color: '#08080B',
+                        borderRadius: 2,
+                        textTransform: 'none',
+                        boxShadow: '0 4px 18px rgba(255,215,0,0.35)',
+                        '&:hover': {
+                          bgcolor: '#E6C200',
+                          boxShadow: '0 6px 24px rgba(255,215,0,0.5)'
+                        }
+                      }}
+                    >
+                      {isExecutingFxCheckout ? (
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <CircularProgress size={16} sx={{ color: '#08080B' }} />
+                          <span>Routing 5/5 BFT Quorum FX Sweep...</span>
+                        </Box>
+                      ) : (
+                        '[⚡ Execute Auto-Split FX Checkout]'
+                      )}
+                    </Button>
+                  </Paper>
+                </Grid>
+
+                {/* Right Column: Live Treasury Audit & Cryptographic Settlement */}
+                <Grid xs={12} md={6}>
+                  <Paper
+                    sx={{
+                      p: 2.5,
+                      borderRadius: 2.5,
+                      bgcolor: isDark ? '#05070B' : '#F8FAFC',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <Box>
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <ShieldIcon sx={{ color: '#10B981', fontSize: '1.2rem' }} />
+                          <Typography sx={{ fontFamily: mono, fontWeight: 900, fontSize: '0.92rem', color: theme.palette.text.primary }}>
+                            L1 Settlement & Quorum Certificate
+                          </Typography>
+                        </Box>
+                        <Chip
+                          label="5/5 BFT ONLINE"
+                          size="small"
+                          sx={{ height: 20, fontSize: '0.62rem', fontWeight: 800, fontFamily: mono, bgcolor: 'rgba(16,185,129,0.15)', color: '#10B981', border: '1px solid rgba(16,185,129,0.3)' }}
+                        />
+                      </Box>
+
+                      {fxCheckoutResult ? (
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                          <Alert severity="success" sx={{ py: 0.5, fontFamily: mono, fontSize: '0.78rem', bgcolor: 'rgba(16,185,129,0.1)', color: '#10B981', border: '1px solid rgba(16,185,129,0.3)' }}>
+                            Settlement Finalized in 6.8ms • Zero Gas ($0.00) • 0.00% FX Spread
+                          </Alert>
+
+                          <Paper sx={{ p: 1.8, borderRadius: 2, bgcolor: isDark ? '#030508' : '#FFFFFF', border: '1px solid rgba(255,255,255,0.06)' }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                              <Typography variant="caption" sx={{ color: '#94A3B8', fontFamily: mono }}>
+                                SETTLEMENT ID:
+                              </Typography>
+                              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#FFD700' }}>
+                                {fxCheckoutResult.settlementId}
+                              </Typography>
+                            </Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                              <Typography variant="caption" sx={{ color: '#94A3B8', fontFamily: mono }}>
+                                MERCHANT SWEEP:
+                              </Typography>
+                              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#38BDF8' }}>
+                                {fxCheckoutResult.merchant}
+                              </Typography>
+                            </Box>
+                            <Divider sx={{ my: 1, borderColor: 'rgba(255,255,255,0.06)' }} />
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.6 }}>
+                              <Typography variant="caption" sx={{ color: '#94A3B8', fontFamily: mono }}>
+                                💵 1:1 USD Reserve Credited:
+                              </Typography>
+                              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#10B981' }}>
+                                +${fxCheckoutResult.fxSplit?.usdAmount?.toFixed(2)} (Total: ${fxCheckoutResult.merchantUsdReserve?.toFixed(2)})
+                              </Typography>
+                            </Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.6 }}>
+                              <Typography variant="caption" sx={{ color: '#94A3B8', fontFamily: mono }}>
+                                ⚡ 8.5% APY Staked Savings:
+                              </Typography>
+                              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#D4AF37' }}>
+                                +◈ {fxCheckoutResult.fxSplit?.vaultStakeVlr?.toFixed(2)} VLR (Total: ◈ {fxCheckoutResult.merchantStakedVlr?.toFixed(2)})
+                              </Typography>
+                            </Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.6 }}>
+                              <Typography variant="caption" sx={{ color: '#94A3B8', fontFamily: mono }}>
+                                🌊 Liquid Micro-Chain Spendable:
+                              </Typography>
+                              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#38BDF8' }}>
+                                +◈ {fxCheckoutResult.fxSplit?.liquidVlr?.toFixed(2)} VLR
+                              </Typography>
+                            </Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                              <Typography variant="caption" sx={{ color: '#94A3B8', fontFamily: mono }}>
+                                💎 Instant Buyer Cashback:
+                              </Typography>
+                              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#EC4899' }}>
+                                +◈ {fxCheckoutResult.cashback?.cashbackVlr?.toFixed(4)} VLR (5.00% SOVEREIGN_DIAMOND)
+                              </Typography>
+                            </Box>
+                          </Paper>
+
+                          <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? '#030508' : '#F1F5F9', border: '1px solid rgba(255,255,255,0.06)' }}>
+                            <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', display: 'block', mb: 0.5, fontSize: '0.64rem' }}>
+                              BYZANTINE QUORUM VALIDATOR SIGNATURES (5/5 ATTESTED)
+                            </Typography>
+                            <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#E2E8F0' : '#334155', display: 'block', fontSize: '0.62rem', wordBreak: 'break-all' }}>
+                              Block: {fxCheckoutResult.fxBlock?.hash || '905bbc367844234e50ba078afc57def1e7d4fbf8f15779ac4b742650d89def70'}
+                              <br />
+                              Validators: 🇺🇸 us-east • 🇩🇪 eu-central • 🇯🇵 ap-northeast • ⚡ edge-8140 • 🌐 nullai-core
+                            </Typography>
+                          </Box>
+                        </Box>
+                      ) : (
+                        <Box sx={{ p: 3, textAlign: 'center', my: 'auto' }}>
+                          <LocalAtmIcon sx={{ fontSize: '2.5rem', color: '#D4AF37', mb: 1, opacity: 0.8 }} />
+                          <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.88rem', color: theme.palette.text.primary, mb: 0.5 }}>
+                            Awaiting POS Checkout Trigger
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary" sx={{ display: 'block', maxWidth: 360, mx: 'auto', fontSize: '0.74rem' }}>
+                            Click <strong>[⚡ Execute Auto-Split FX Checkout]</strong> to simulate an instantaneous point-of-sale customer settlement with 0.00% FX spread and immediate 5/5 validator BFT quorum finality.
+                          </Typography>
+                        </Box>
+                      )}
+                    </Box>
+
+                    <Box sx={{ mt: 2, pt: 1.5, borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.66rem' }}>
+                        Protocol: Vaelor Account-Lattice L1 (:8140)
+                      </Typography>
+                      <Chip
+                        icon={<VerifiedIcon sx={{ fontSize: '0.75rem !important', color: '#10B981 !important' }} />}
+                        label="0.00% FX Spread Guaranteed"
+                        size="small"
+                        sx={{ height: 18, fontSize: '0.58rem', fontWeight: 800, fontFamily: mono, bgcolor: 'transparent', color: '#10B981' }}
+                      />
+                    </Box>
+                  </Paper>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Box>
+        </RevealOnScroll>
+
+        {/* ==========================================================================
+            SECTION: 12-TOOL LAYER-1 MODEL CONTEXT PROTOCOL (MCP) PLAYGROUND
             ========================================================================== */}
         <RevealOnScroll>
           <Box id="vaelor-mcp-playground" sx={{ mb: 6 }}>
@@ -3834,7 +4281,7 @@ export default function VaelorPage() {
                 Layer-1 Model Context Protocol (MCP) Playground
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 880, fontSize: '0.94rem' }}>
-                Test all 10 native JSON-RPC Model Context Protocol tools. Claude, GPT, and autonomous agent swarms call these methods directly to mint compute bounties, disburse feeless micro-payments, and verify lookalike phishing handles.
+                Test all 12 native JSON-RPC Model Context Protocol tools. Claude, GPT, and autonomous agent swarms call these methods directly to mint compute bounties, execute merchant FX treasury sweeps, send creator tips, disburse feeless micro-payments, and verify lookalike phishing handles.
               </Typography>
             </Box>
 
@@ -3850,7 +4297,7 @@ export default function VaelorPage() {
               {/* Tool Chips Selector */}
               <Box sx={{ mb: 3 }}>
                 <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800, display: 'block', mb: 1.2, letterSpacing: '0.05em' }}>
-                  SELECT LAYER-1 MCP TOOL (10 TOOLS AVAILABLE)
+                  SELECT LAYER-1 MCP TOOL ({VAELOR_MCP_TOOLS.length} TOOLS AVAILABLE)
                 </Typography>
                 <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                   {VAELOR_MCP_TOOLS.map((t) => {
