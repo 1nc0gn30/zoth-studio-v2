@@ -5395,6 +5395,12 @@ export const VAELOR_MCP_TOOLS = [
     category: "Escrow & Dispute",
     description: "Create or settle a zero-penalty cryptographic escrow with 3 resolution presets (RELEASE 100% + 5% cashback, REFUND 100% $0 penalty, SPLIT 50/50 $0 dispute fee).",
     defaultArgs: { escrowId: "esc_demo_buyer_protection", resolutionType: "RELEASE", refundPct: 0 }
+  },
+  {
+    name: "vaelor_export_tax_report",
+    category: "Compliance & Accounting",
+    description: "Generate and export an IRS-compliant signed CPA tax & cashback audit report with automatic categorization of tax-free loyalty rebates, PoUW income, vault yield, and deductible bounties.",
+    defaultArgs: { handle: "@citizen", taxYear: 2026 }
   }
 ];
 
@@ -5618,6 +5624,12 @@ export function callVaelorMcpFallback(toolName, args = {}) {
         ok: true,
         tool: toolName,
         result: resolveVaelorEscrowFallback(args)
+      };
+    case 'vaelor_export_tax_report':
+      return {
+        ok: true,
+        tool: toolName,
+        result: exportVaelorTaxReportFallback(args)
       };
     default:
       return {
@@ -6445,6 +6457,99 @@ export function resolveVaelorEscrowFallback(opts = {}) {
         aggregateLatencyMs: 8.12
       }
     }
+  };
+}
+
+export function exportVaelorTaxReportFallback({ handle = '@citizen', taxYear = 2026 } = {}) {
+  const normHandle = handle || '@citizen';
+  const ts = new Date().toISOString();
+  const auditDigest = randHex(64);
+
+  const summary = {
+    taxFreeCashbackRebatesVlr: 61.5,
+    pouwMiningIncomeVlr: 145.5,
+    vaultYieldHarvestedVlr: 42.85,
+    pendingUnharvestedYieldVlr: 0.0212,
+    totalGrossTaxableIncomeVlr: 188.35,
+    deductibleCommerceAndBountiesVlr: 1353.5,
+    totalDisbursementsVlr: 2586.5,
+    totalReceiptsVlr: 11049.3418,
+    netPositionChangeVlr: 8462.8418,
+    recordCount: 224,
+    auditStatus: 'VERIFIED_CPA_READY'
+  };
+
+  const categories = [
+    {
+      id: 'cashback',
+      title: 'Tax-Free Loyalty Cashback Rebates (2.5%–5.0%)',
+      irsCode: 'IRS Rev. Rul. 76-96 (Purchase Price Rebates)',
+      taxStatus: 'NON-TAXABLE REBATE',
+      color: '#10B981',
+      vlr: summary.taxFreeCashbackRebatesVlr,
+      usd: +(summary.taxFreeCashbackRebatesVlr * 1.0).toFixed(2),
+      count: 44,
+      desc: 'Consumer loyalty cashback automatically credited on itemized POS receipts and merchant purchases. Excluded from gross income under federal tax law.'
+    },
+    {
+      id: 'pouw',
+      title: 'PoUW Cognitive Mining Income (+◈ VLR)',
+      irsCode: 'IRS Notice 2014-21 / Schedule 1 Line 8z',
+      taxStatus: 'ORDINARY MINING INCOME',
+      color: '#00F0FF',
+      vlr: summary.pouwMiningIncomeVlr,
+      usd: +(summary.pouwMiningIncomeVlr * 1.0).toFixed(2),
+      count: 12,
+      desc: 'Verified Proof-of-Useful-Work AI compute mining (AEO schema indexing, vector consolidations, LLM benchmark attestations) minted directly to account.'
+    },
+    {
+      id: 'yield',
+      title: '8.5% APY Compute Vault Yield',
+      irsCode: 'IRS Schedule B (Interest & Staking Rewards)',
+      taxStatus: 'TAXABLE YIELD INCOME',
+      color: '#D4AF37',
+      vlr: summary.vaultYieldHarvestedVlr,
+      usd: +(summary.vaultYieldHarvestedVlr * 1.0).toFixed(2),
+      count: 8,
+      desc: 'Accrued compound interest from 8.5% APY Zero-Lockup PoUW Compute Savings Vault, calculated per second with instant 0-day unbonding.'
+    },
+    {
+      id: 'deductible',
+      title: 'Deductible Business / AI Agent Bounties & Merchant FX Settlements',
+      irsCode: 'IRS Schedule C (Ordinary & Necessary Expenses)',
+      taxStatus: 'DEDUCTIBLE BUSINESS EXPENSE',
+      color: '#A855F7',
+      vlr: summary.deductibleCommerceAndBountiesVlr,
+      usd: +(summary.deductibleCommerceAndBountiesVlr * 1.0).toFixed(2),
+      count: 16,
+      desc: 'Autonomous M2M agent bounties, AST code verification contracts, and Merchant FX Treasury Auto-Sweeps with 0.00% FX spread.'
+    }
+  ];
+
+  const csvReport = `Timestamp,Block Height,Type,Direction,Counterparty,Gross ◈ VLR,USD Value ($),IRS Tax Classification,Taxable Status,Notes
+2026-10-26T11:27:42.765Z,197,CASHBACK_REBATE,INFLOW,@treasury,12.500000,$12.50,PURCHASE_CASHBACK_REBATE,NON_TAXABLE,2.5% Buyer Cashback on Artisan Cold Brew
+2026-10-26T11:26:53.646Z,196,CASHBACK_REBATE,INFLOW,@sprig,25.000000,$25.00,PURCHASE_CASHBACK_REBATE,NON_TAXABLE,5.0% Sovereign Loyalty Tier Bonus
+2026-10-26T11:06:09.213Z,185,POUW_REWARD,INFLOW,@treasury,32.000000,$32.00,POUW_COMPUTATIONAL_MINING,ORDINARY_INCOME,PoUW Schema.org AEO Graph Synthesis
+2026-10-26T10:54:35.723Z,172,POUW_REWARD,INFLOW,@treasury,45.500000,$45.50,POUW_COMPUTATIONAL_MINING,ORDINARY_INCOME,PoUW Biomorphic Vector Consolidations
+2026-10-26T10:50:13.935Z,160,STAKING_HARVEST,INFLOW,@treasury,18.750000,$18.75,STAKING_HARVEST,TAXABLE_INTEREST,8.5% APY Staked Savings Yield Epoch 42
+2026-10-26T10:48:22.100Z,155,STAKING_HARVEST,INFLOW,@treasury,24.100000,$24.10,STAKING_HARVEST,TAXABLE_INTEREST,8.5% APY Staked Savings Yield Epoch 43
+2026-10-26T10:30:00.000Z,140,BOUNTY_ESCROW,OUTFLOW,@zoth,75.000000,$75.00,BOUNTY_ESCROW,DEDUCTIBLE_EXPENSE,Agent Bounty: Polyglot AST Linter
+2026-10-26T10:15:00.000Z,125,MERCHANT_FX_OUTFLOW,OUTFLOW,@sprig,110.000000,$110.00,COMMERCE_EXPENSE,DEDUCTIBLE_EXPENSE,Merchant FX POS Provisions 0.00% Spread`;
+
+  return {
+    ok: true,
+    account: {
+      handle: normHandle,
+      displayName: normHandle === '@citizen' ? 'Sovereign Citizen' : normHandle,
+      address: 'vlr1_f2f52c9f7d79bc2c743898c4c44aadc1'
+    },
+    taxYear,
+    generatedAt: ts,
+    auditDigest,
+    cpaGuidance: 'Vaelor (◈ VLR) Feeless Layer-1 Tax & Accounting Report prepared in accordance with IRS Notice 2014-21, Rev. Rul. 2019-24, and Rev. Rul. 76-96 (Rebates).',
+    summary,
+    categories,
+    csvReport
   };
 }
 

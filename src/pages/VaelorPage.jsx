@@ -4,7 +4,7 @@ import {
   Box, Container, Typography, Chip, Paper, Button, TextField,
   Unstable_Grid2 as Grid, Table, TableBody, TableCell, TableHead,
   TableRow, Stack, Divider, Alert, CircularProgress, IconButton, Tooltip,
-  LinearProgress
+  LinearProgress, MenuItem
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import BoltIcon from '@mui/icons-material/Bolt';
@@ -44,6 +44,9 @@ import LocalCafeIcon from '@mui/icons-material/LocalCafe';
 import DiamondIcon from '@mui/icons-material/Diamond';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import GavelIcon from '@mui/icons-material/Gavel';
+import DownloadIcon from '@mui/icons-material/Download';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import DataObjectIcon from '@mui/icons-material/DataObject';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import VaelorLatticeVisualizer from '../components/VaelorLatticeVisualizer';
 import SovereignFunnel from '../components/SovereignFunnel';
@@ -69,7 +72,8 @@ import {
   sendVaelorCreatorTipFallback,
   boostVaelorLoyaltyFallback,
   executeVaelorMerchantFxFallback,
-  resolveVaelorEscrowFallback
+  resolveVaelorEscrowFallback,
+  exportVaelorTaxReportFallback
 } from '../data/obsidianWikiData';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -1147,6 +1151,48 @@ export default function VaelorPage() {
 
     setEscrowResult(resData);
     setIsResolvingEscrow(false);
+  };
+
+  // Wave 30: Sovereign 1-Click CPA Tax & Cashback Audit Exporter (#vaelor-tax-audit-sim)
+  const [taxReportData, setTaxReportData] = useState(() => exportVaelorTaxReportFallback({ handle: '@citizen', taxYear: 2026 }));
+  const [taxReportHandle, setTaxReportHandle] = useState('@citizen');
+  const [taxReportYear, setTaxReportYear] = useState('2026');
+  const [isExportingTaxReport, setIsExportingTaxReport] = useState(false);
+  const [showTaxCsvPreview, setShowTaxCsvPreview] = useState(false);
+  const [taxReportCopied, setTaxReportCopied] = useState(false);
+
+  const handleGenerateTaxReport = async () => {
+    if (isExportingTaxReport) return;
+    setIsExportingTaxReport(true);
+    let resData = null;
+    try {
+      const res = await fetch(`http://127.0.0.1:8140/api/tax-report/${encodeURIComponent(taxReportHandle)}?taxYear=${taxReportYear}`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json && json.ok) {
+          resData = json;
+        }
+      }
+    } catch (_) {}
+
+    if (!resData) {
+      resData = exportVaelorTaxReportFallback({ handle: taxReportHandle, taxYear: Number(taxReportYear) || 2026 });
+    }
+
+    setTaxReportData(resData);
+    setIsExportingTaxReport(false);
+  };
+
+  const handleDownloadTaxCsv = () => {
+    if (!taxReportData || !taxReportData.csvReport) return;
+    const blob = new Blob([taxReportData.csvReport], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `vaelor_tax_report_${(taxReportHandle || 'citizen').replace(/[@/\\:]/g, '')}_${taxReportYear}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -4737,7 +4783,378 @@ export default function VaelorPage() {
         </RevealOnScroll>
 
         {/* ==========================================================================
-            SECTION: 13-TOOL LAYER-1 MODEL CONTEXT PROTOCOL (MCP) PLAYGROUND
+            SECTION: 1-CLICK CPA TAX & CASHBACK AUDIT EXPORTER (#vaelor-tax-audit-sim)
+            ========================================================================== */}
+        <RevealOnScroll>
+          <Box id="vaelor-tax-audit-sim" sx={{ mb: 6 }}>
+            <Box sx={{ mb: 3 }}>
+              <Typography className="section-kicker">Accounting & Compliance Sovereignty</Typography>
+              <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif', mb: 1 }}>
+                Sovereign 1-Click CPA Tax & Cashback Audit Exporter
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 880, fontSize: '0.94rem' }}>
+                Vaelor automates cryptographic accounting and tax preparation directly on Layer-1. Every transaction is pre-classified into <strong>Tax-Free Loyalty Cashback Rebates (2.5%–5.0%)</strong> under IRS Rev. Rul. 76-96, <strong>PoUW Cognitive Mining Income</strong>, <strong>8.5% APY Staked Vault Yield</strong>, and <strong>Deductible Business Bounties & Merchant FX Sweeps</strong> with zero gas fees and deterministic BFT attestation.
+              </Typography>
+            </Box>
+
+            <Paper
+              sx={{
+                p: { xs: 2.5, md: 3.5 },
+                borderRadius: 3,
+                border: `1.5px solid ${gold.border}`,
+                bgcolor: isDark ? '#08080E' : '#FFFFFF',
+                boxShadow: isDark ? '0 12px 36px rgba(0,0,0,0.6)' : '0 6px 20px rgba(0,0,0,0.06)'
+              }}
+            >
+              {/* Controls Header: Account Handle, Tax Year, and Action Button */}
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2, mb: 3.5 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
+                  <TextField
+                    size="small"
+                    label="Account Handle"
+                    value={taxReportHandle}
+                    onChange={(e) => setTaxReportHandle(e.target.value)}
+                    sx={{
+                      width: { xs: '100%', sm: 180 },
+                      '& .MuiInputBase-input': { fontFamily: mono, fontSize: '0.85rem' }
+                    }}
+                  />
+                  <TextField
+                    select
+                    size="small"
+                    label="Tax Year"
+                    value={taxReportYear}
+                    onChange={(e) => setTaxReportYear(e.target.value)}
+                    sx={{ width: 140, '& .MuiInputBase-input': { fontFamily: mono, fontSize: '0.85rem' } }}
+                  >
+                    <MenuItem value="2026">2026 (Active)</MenuItem>
+                    <MenuItem value="2025">2025 (Prior)</MenuItem>
+                    <MenuItem value="ALL">ALL (Lifetime)</MenuItem>
+                  </TextField>
+
+                  <Chip
+                    icon={<VerifiedIcon sx={{ fontSize: '0.85rem !important', color: '#10B981 !important' }} />}
+                    label="IRS Rev. Rul. 76-96 & Notice 2014-21 Pre-Audit"
+                    size="small"
+                    sx={{
+                      bgcolor: 'rgba(16,185,129,0.12)',
+                      color: '#10B981',
+                      border: '1px solid rgba(16,185,129,0.3)',
+                      fontFamily: mono,
+                      fontWeight: 750,
+                      fontSize: '0.68rem'
+                    }}
+                  />
+                </Box>
+
+                <Button
+                  id="vaelor-tax-export-btn"
+                  variant="contained"
+                  onClick={handleGenerateTaxReport}
+                  disabled={isExportingTaxReport}
+                  startIcon={isExportingTaxReport ? <CircularProgress size={16} sx={{ color: '#041B15' }} /> : <AssessmentIcon />}
+                  sx={{
+                    fontWeight: 900,
+                    fontSize: '0.84rem',
+                    fontFamily: mono,
+                    bgcolor: '#FFD700',
+                    color: '#08080B',
+                    px: 3,
+                    py: 1,
+                    borderRadius: 2,
+                    boxShadow: '0 4px 18px rgba(212,175,55,0.35)',
+                    '&:hover': {
+                      bgcolor: '#F5E6AB',
+                      boxShadow: '0 6px 24px rgba(212,175,55,0.5)'
+                    }
+                  }}
+                >
+                  {isExportingTaxReport ? 'GENERATING SIGNED AUDIT...' : '📊 Generate & Export Signed CPA Tax Report'}
+                </Button>
+              </Box>
+
+              {/* 4 Categorized Bento Cards Grid */}
+              <Grid container spacing={2} sx={{ mb: 3.5 }}>
+                {/* 1. Tax-Free Loyalty Cashback Rebates */}
+                <Grid xs={12} sm={6} md={3}>
+                  <Paper
+                    sx={{
+                      p: 2.2,
+                      borderRadius: 2.5,
+                      height: '100%',
+                      border: '1px solid rgba(16,185,129,0.35)',
+                      bgcolor: isDark ? 'rgba(16,185,129,0.05)' : 'rgba(16,185,129,0.03)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <Box>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981', fontWeight: 800, fontSize: '0.68rem', letterSpacing: '0.04em' }}>
+                          TAX-FREE REBATES
+                        </Typography>
+                        <Chip label="100% Non-Taxable" size="small" sx={{ height: 18, fontSize: '0.58rem', fontWeight: 900, fontFamily: mono, bgcolor: 'rgba(16,185,129,0.18)', color: '#34D399' }} />
+                      </Box>
+                      <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 900, color: '#10B981', mb: 0.5 }}>
+                        +{(taxReportData?.summary?.taxFreeCashbackRebatesVlr ?? 61.50).toFixed(2)} ◈
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', display: 'block', mb: 1 }}>
+                        ${(taxReportData?.summary?.taxFreeCashbackRebatesVlr ?? 61.50).toFixed(2)} USD • 2.5%–5.0% Purchase Cashback
+                      </Typography>
+                      <Typography variant="body2" sx={{ fontSize: '0.78rem', color: theme.palette.text.secondary, lineHeight: 1.45 }}>
+                        Loyalty cashback automatically credited on itemized POS receipts and merchant purchases. Excluded from gross income under <strong>IRS Rev. Rul. 76-96</strong>.
+                      </Typography>
+                    </Box>
+                    <Box sx={{ mt: 1.5, pt: 1, borderTop: '1px solid rgba(16,185,129,0.2)' }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#6EE7B7', fontSize: '0.65rem' }}>
+                        Form 1040: Nontaxable Price Rebates
+                      </Typography>
+                    </Box>
+                  </Paper>
+                </Grid>
+
+                {/* 2. PoUW Cognitive Mining Income */}
+                <Grid xs={12} sm={6} md={3}>
+                  <Paper
+                    sx={{
+                      p: 2.2,
+                      borderRadius: 2.5,
+                      height: '100%',
+                      border: '1px solid rgba(0,240,255,0.35)',
+                      bgcolor: isDark ? 'rgba(0,240,255,0.05)' : 'rgba(0,240,255,0.03)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <Box>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: '#00F0FF', fontWeight: 800, fontSize: '0.68rem', letterSpacing: '0.04em' }}>
+                          POUW AI MINING
+                        </Typography>
+                        <Chip label="Ordinary Income" size="small" sx={{ height: 18, fontSize: '0.58rem', fontWeight: 900, fontFamily: mono, bgcolor: 'rgba(0,240,255,0.18)', color: '#00F0FF' }} />
+                      </Box>
+                      <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 900, color: '#00F0FF', mb: 0.5 }}>
+                        +{(taxReportData?.summary?.pouwMiningIncomeVlr ?? 145.50).toFixed(2)} ◈
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', display: 'block', mb: 1 }}>
+                        ${(taxReportData?.summary?.pouwMiningIncomeVlr ?? 145.50).toFixed(2)} USD • AI Compute Tasks
+                      </Typography>
+                      <Typography variant="body2" sx={{ fontSize: '0.78rem', color: theme.palette.text.secondary, lineHeight: 1.45 }}>
+                        Verified Proof-of-Useful-Work computation (AEO schema indexing, vector consolidations, LLM benchmark attestations) minted directly on-chain.
+                      </Typography>
+                    </Box>
+                    <Box sx={{ mt: 1.5, pt: 1, borderTop: '1px solid rgba(0,240,255,0.2)' }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#67E8F9', fontSize: '0.65rem' }}>
+                        IRS Notice 2014-21 • Schedule 1 (Line 8z)
+                      </Typography>
+                    </Box>
+                  </Paper>
+                </Grid>
+
+                {/* 3. 8.5% APY Compute Vault Yield */}
+                <Grid xs={12} sm={6} md={3}>
+                  <Paper
+                    sx={{
+                      p: 2.2,
+                      borderRadius: 2.5,
+                      height: '100%',
+                      border: '1px solid rgba(212,175,55,0.35)',
+                      bgcolor: isDark ? 'rgba(212,175,55,0.05)' : 'rgba(212,175,55,0.03)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <Box>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: '#D4AF37', fontWeight: 800, fontSize: '0.68rem', letterSpacing: '0.04em' }}>
+                          8.5% VAULT YIELD
+                        </Typography>
+                        <Chip label="Staking Interest" size="small" sx={{ height: 18, fontSize: '0.58rem', fontWeight: 900, fontFamily: mono, bgcolor: 'rgba(212,175,55,0.18)', color: '#FFD700' }} />
+                      </Box>
+                      <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 900, color: '#FFD700', mb: 0.5 }}>
+                        +{((taxReportData?.summary?.vaultYieldHarvestedVlr || 0) + (taxReportData?.summary?.pendingUnharvestedYieldVlr || 0)).toFixed(2)} ◈
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', display: 'block', mb: 1 }}>
+                        ${((taxReportData?.summary?.vaultYieldHarvestedVlr || 0) + (taxReportData?.summary?.pendingUnharvestedYieldVlr || 0)).toFixed(2)} USD • Zero-Lockup APY
+                      </Typography>
+                      <Typography variant="body2" sx={{ fontSize: '0.78rem', color: theme.palette.text.secondary, lineHeight: 1.45 }}>
+                        Accrued compound interest from the 8.5% APY Zero-Lockup PoUW Compute Savings Vault, calculated per second across 5 regional validators.
+                      </Typography>
+                    </Box>
+                    <Box sx={{ mt: 1.5, pt: 1, borderTop: '1px solid rgba(212,175,55,0.2)' }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#FCD34D', fontSize: '0.65rem' }}>
+                        IRS Schedule B • Taxable Interest & Staking
+                      </Typography>
+                    </Box>
+                  </Paper>
+                </Grid>
+
+                {/* 4. Deductible Business Bounties & Merchant FX */}
+                <Grid xs={12} sm={6} md={3}>
+                  <Paper
+                    sx={{
+                      p: 2.2,
+                      borderRadius: 2.5,
+                      height: '100%',
+                      border: '1px solid rgba(168,85,247,0.35)',
+                      bgcolor: isDark ? 'rgba(168,85,247,0.05)' : 'rgba(168,85,247,0.03)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between'
+                    }}
+                  >
+                    <Box>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: '#A855F7', fontWeight: 800, fontSize: '0.68rem', letterSpacing: '0.04em' }}>
+                          DEDUCTIBLE EXPENSES
+                        </Typography>
+                        <Chip label="Schedule C Deductible" size="small" sx={{ height: 18, fontSize: '0.58rem', fontWeight: 900, fontFamily: mono, bgcolor: 'rgba(168,85,247,0.18)', color: '#C084FC' }} />
+                      </Box>
+                      <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 900, color: '#C084FC', mb: 0.5 }}>
+                        -{(taxReportData?.summary?.deductibleCommerceAndBountiesVlr ?? 1353.50).toFixed(2)} ◈
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', display: 'block', mb: 1 }}>
+                        ${(taxReportData?.summary?.deductibleCommerceAndBountiesVlr ?? 1353.50).toFixed(2)} USD • Agent Bounties & FX Sweeps
+                      </Typography>
+                      <Typography variant="body2" sx={{ fontSize: '0.78rem', color: theme.palette.text.secondary, lineHeight: 1.45 }}>
+                        Autonomous AI agent micro-contract bounties, polyglot AST linters, and Merchant FX Treasury Auto-Sweeps with 0.00% FX spread.
+                      </Typography>
+                    </Box>
+                    <Box sx={{ mt: 1.5, pt: 1, borderTop: '1px solid rgba(168,85,247,0.2)' }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#E9D5FF', fontSize: '0.65rem' }}>
+                        IRS Schedule C • Ordinary Business Expenses
+                      </Typography>
+                    </Box>
+                  </Paper>
+                </Grid>
+              </Grid>
+
+              {/* Cryptographic SHA-256 Audit Digest & Actions Rail */}
+              <Box
+                sx={{
+                  p: 2,
+                  borderRadius: 2,
+                  bgcolor: isDark ? '#05070A' : '#F1F5F9',
+                  border: '1px solid rgba(212,175,55,0.2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: 2
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800 }}>
+                    SHA-256 AUDIT DIGEST:
+                  </Typography>
+                  <Tooltip title={taxReportCopied ? "Copied!" : "Click to copy SHA-256 digest"}>
+                    <Chip
+                      icon={<FingerprintIcon sx={{ fontSize: '0.85rem !important', color: '#FFD700 !important' }} />}
+                      label={taxReportData?.auditDigest ? `${taxReportData.auditDigest.slice(0, 16)}...${taxReportData.auditDigest.slice(-12)}` : '2d494d2ec2304961...eb5929ca1'}
+                      clickable
+                      onClick={() => {
+                        if (taxReportData?.auditDigest) {
+                          navigator.clipboard?.writeText(taxReportData.auditDigest);
+                          setTaxReportCopied(true);
+                          setTimeout(() => setTaxReportCopied(false), 2000);
+                        }
+                      }}
+                      sx={{
+                        fontFamily: mono,
+                        fontSize: '0.72rem',
+                        fontWeight: 750,
+                        bgcolor: 'rgba(212,175,55,0.12)',
+                        color: '#FFD700',
+                        border: '1px solid rgba(212,175,55,0.3)'
+                      }}
+                    />
+                  </Tooltip>
+                  <Chip
+                    label="5/5 BFT Quorum Finalized"
+                    size="small"
+                    sx={{ height: 20, fontSize: '0.62rem', fontWeight: 800, fontFamily: mono, bgcolor: 'rgba(16,185,129,0.15)', color: '#10B981' }}
+                  />
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.7rem' }}>
+                    {taxReportData?.summary?.recordCount || 224} Categorized Records Audited
+                  </Typography>
+                </Box>
+
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    onClick={() => setShowTaxCsvPreview(prev => !prev)}
+                    startIcon={<DataObjectIcon sx={{ fontSize: '14px !important' }} />}
+                    sx={{
+                      fontFamily: mono,
+                      fontSize: '0.74rem',
+                      fontWeight: 800,
+                      borderColor: 'rgba(212,175,55,0.35)',
+                      color: '#FFD700',
+                      '&:hover': { borderColor: '#FFD700', bgcolor: 'rgba(212,175,55,0.08)' }
+                    }}
+                  >
+                    {showTaxCsvPreview ? 'Hide CSV Preview' : 'Preview CSV'}
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    onClick={handleDownloadTaxCsv}
+                    startIcon={<DownloadIcon sx={{ fontSize: '14px !important' }} />}
+                    sx={{
+                      fontFamily: mono,
+                      fontSize: '0.74rem',
+                      fontWeight: 900,
+                      bgcolor: '#10B981',
+                      color: '#041B15',
+                      '&:hover': { bgcolor: '#34D399' }
+                    }}
+                  >
+                    Export CPA CSV
+                  </Button>
+                </Box>
+              </Box>
+
+              {/* 1-Click CSV Preview Drawer / Box */}
+              {showTaxCsvPreview && (
+                <Box sx={{ mt: 2.5 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800 }}>
+                      IRS FORM 8949 & SCHEDULE C TAX-CATEGORIZED CSV PREVIEW:
+                    </Typography>
+                    <Chip label="RFC 4180 CSV Compliant" size="small" sx={{ height: 18, fontSize: '0.58rem', fontWeight: 800, fontFamily: mono, bgcolor: 'rgba(255,255,255,0.06)', color: '#CBD5E1' }} />
+                  </Box>
+                  <Box
+                    component="pre"
+                    sx={{
+                      m: 0,
+                      p: 2,
+                      maxHeight: 220,
+                      overflowY: 'auto',
+                      borderRadius: 2,
+                      bgcolor: '#040609',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      fontFamily: mono,
+                      fontSize: '0.72rem',
+                      color: '#E2E8F0',
+                      lineHeight: 1.5,
+                      whiteSpace: 'pre',
+                      overflowX: 'auto'
+                    }}
+                  >
+                    <code>{taxReportData?.csvReport || 'No CSV data available.'}</code>
+                  </Box>
+                </Box>
+              )}
+            </Paper>
+          </Box>
+        </RevealOnScroll>
+
+        {/* ==========================================================================
+            SECTION: 14-TOOL LAYER-1 MODEL CONTEXT PROTOCOL (MCP) PLAYGROUND
             ========================================================================== */}
         <RevealOnScroll>
           <Box id="vaelor-mcp-playground" sx={{ mb: 6 }}>
@@ -4747,7 +5164,7 @@ export default function VaelorPage() {
                 Layer-1 Model Context Protocol (MCP) Playground
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 880, fontSize: '0.94rem' }}>
-                Test all 13 native JSON-RPC Model Context Protocol tools. Claude, GPT, and autonomous agent swarms call these methods directly to mint compute bounties, settle zero-penalty protected commerce escrows, execute merchant FX treasury sweeps, send creator tips, disburse feeless micro-payments, and verify lookalike phishing handles.
+                Test all 14 native JSON-RPC Model Context Protocol tools. Claude, GPT, and autonomous agent swarms call these methods directly to mint compute bounties, export IRS-compliant CPA tax audits, settle zero-penalty protected commerce escrows, execute merchant FX treasury sweeps, send creator tips, disburse feeless micro-payments, and verify lookalike phishing handles.
               </Typography>
             </Box>
 

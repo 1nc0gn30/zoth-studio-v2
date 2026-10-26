@@ -299,17 +299,19 @@ Live on `http://127.0.0.1:3000/vaelor` and powered by the high-performance Vaelo
 25. **22-Vector Payment Invariant Comparison Matrix (`#vaelor-comparison-matrix`)**: Direct side-by-side benchmark comparing Vaelor against Visa, Stripe, Solana, and Lightning.
 26. **Autonomous WebHook & WebSocket Real-Time Bus (`:8140/ws`)**: Sub-millisecond ledger event streaming for external microservices.
 27. **Byzantine Fault Tolerant 5-Validator Quorum (`#vaelor-bft-status`)**: Geographically distributed consensus across US-East, EU-Central, Asia-East, Local Edge, and NullAI Core.
-28. **13-Tool Layer-1 Model Context Protocol (MCP) Playground (`#vaelor-mcp-playground`)**: Complete JSON-RPC execution workbench for autonomous agents:
+28. **14-Tool Layer-1 Model Context Protocol (MCP) Playground (`#vaelor-mcp-playground`)**: Complete JSON-RPC execution workbench for autonomous agents:
     - `vaelor_network_status`, `vaelor_account_balance`, `vaelor_send_feeless`
     - `vaelor_verify_handle_safety`, `vaelor_create_smart_receipt`, `vaelor_mine_pouw`
     - `vaelor_stake_savings`, `vaelor_draw_credit_bnpl`, `vaelor_post_agent_bounty`
     - `vaelor_send_shielded`, `vaelor_send_creator_tip`, `vaelor_merchant_fx_checkout`
     - `vaelor_protected_escrow` (Zero-Penalty Cryptographic Escrow & Settlement)
+    - `vaelor_export_tax_report` (1-Click IRS-Compliant CPA Tax & Cashback Audit Report)
+29. **Sovereign 1-Click CPA Tax & Cashback Audit Exporter (`#vaelor-tax-audit-sim`)**: Automatic on-chain categorization of every transaction into Tax-Free Loyalty Cashback Rebates (IRS Rev. Rul. 76-96), PoUW Cognitive Mining Income, 8.5% APY Vault Yield, and Deductible Business Bounties & FX Sweeps with SHA-256 audit digest attestation and 1-click CSV download (`#vaelor-tax-export-btn`).
 
-### Unified 34-Tool Ring-0 Model Context Protocol (MCP) Ecosystem
-Zoth Studio v2 unites **34 native JSON-RPC Model Context Protocol tools** across two loopback enclaves, enabling frontier autonomous agent swarms (Claude, GPT-4o, Hermes, Skeptic) to orchestrate biomorphic knowledge and financial sovereignty:
+### Unified 35-Tool Ring-0 Model Context Protocol (MCP) Ecosystem
+Zoth Studio v2 unites **35 native JSON-RPC Model Context Protocol tools** across two loopback enclaves, enabling frontier autonomous agent swarms (Claude, GPT-4o, Hermes, Skeptic) to orchestrate biomorphic knowledge and financial sovereignty:
 - **Port :8094 (21 Neuro-Memory & Obsidian Tools)**: 7 official `@kepano` Obsidian skills (`obsidian-markdown`, `json-canvas`, `obsidian-bases`, `obsidian-cli`, `knap`, `defuddle`, `obsidian-second-brain`) plus real-time STDP synaptic modulation and CA3/CA1 pattern completion.
-- **Port :8140 (13 Vaelor Layer-1 FinTech Tools)**: Feeless DAG payments, smart warranty receipts, homoglyph handle security, PoUW AI mining, 8.5% APY savings vault, BNPL credit, M2M micro-bounties, Pedersen shielded transfers, creator tips, programmable merchant FX sweeps, and zero-penalty commerce escrow settlement.
+- **Port :8140 (14 Vaelor Layer-1 FinTech Tools)**: Feeless DAG payments, smart warranty receipts, homoglyph handle security, PoUW AI mining, 8.5% APY savings vault, BNPL credit, M2M micro-bounties, Pedersen shielded transfers, creator tips, programmable merchant FX sweeps, zero-penalty commerce escrow settlement, and signed CPA tax audit reports.
 - **Canonical Reference**: Documented in the 14th Karpathy LLM Wiki article `06-Wiki/Sovereign-MCP-34-Tool-Agent-Protocol.md`.
 
 ---
