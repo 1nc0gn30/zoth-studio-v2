@@ -615,7 +615,7 @@ export default function MemoryPage() {
         return;
       }
     } catch (e) {}
-    setObsidianSyncStatus('Synced 1,723 Obsidian Vault notes, 18 JSON Canvases & 20 Obsidian Bases with local enclave.');
+    setObsidianSyncStatus('Synced 1,733 Obsidian Vault notes, 18 JSON Canvases & 20 Obsidian Bases with local enclave.');
     if (typeof playSynapticPulse === 'function') playSynapticPulse(0.9);
   };
 
@@ -1243,7 +1243,7 @@ ${article.math_invariants || ''}
     }
     if (typeof transmitLucy === 'function') {
       try {
-        transmitLucy(`Exported portable Second Brain bundle (SHA-256: ${bundle.bundleSha256 ? bundle.bundleSha256.slice(0, 16) : 'VERIFIED'}...). ${bundle.totalNotes || 1723} notes, ${bundle.totalCanvases || 18} canvases, ${bundle.totalBases || 20} bases.`);
+        transmitLucy(`Exported portable Second Brain bundle (SHA-256: ${bundle.bundleSha256 ? bundle.bundleSha256.slice(0, 16) : 'VERIFIED'}...). ${bundle.totalNotes || 1733} notes, ${bundle.totalCanvases || 18} canvases, ${bundle.totalBases || 20} bases.`);
       } catch (_) {}
     }
   };
@@ -3952,7 +3952,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                         EVERGREEN VAULT
                       </Typography>
                       <Typography variant="subtitle2" sx={{ fontFamily: mono, color: '#E879F9', fontWeight: 800, mt: 0.2 }}>
-                        {(obsidianAudit.totalNotes || 1723).toLocaleString()}+ Vault Notes
+                        {(obsidianAudit.totalNotes || 1733).toLocaleString()}+ Vault Notes
                       </Typography>
                       <Typography variant="caption" sx={{ color: '#64748B', fontSize: '0.62rem' }}>
                         Atomic knowledge files
@@ -3966,7 +3966,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                         WIKILINKS MESH
                       </Typography>
                       <Typography variant="subtitle2" sx={{ fontFamily: mono, color: '#38BDF8', fontWeight: 800, mt: 0.2 }}>
-                        {(obsidianAudit.totalWikilinks || 7985).toLocaleString()}+ Wikilinks
+                        {(obsidianAudit.totalWikilinks || 8122).toLocaleString()}+ Wikilinks
                       </Typography>
                       <Typography variant="caption" sx={{ color: '#64748B', fontSize: '0.62rem' }}>
                         Bidirectional citations
@@ -4072,7 +4072,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                     </Box>
                   </Box>
                   <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.68rem' }}>
-                    Deterministic Knowledge Artifact • 1,723 Notes • 18 Canvases • 20 Bases
+                    Deterministic Knowledge Artifact • 1,733 Notes • 18 Canvases • 20 Bases
                   </Typography>
                 </Box>
               </Paper>

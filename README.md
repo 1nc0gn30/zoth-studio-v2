@@ -237,11 +237,11 @@ Located in the **Obsidian Second Brain & Skills** tab of `MemoryPage.jsx` (`#tab
 
 ### Core Architectural Subsystems
 
-1. **Second Brain Doctor Health Audit (`#second-brain-doctor-audit`)**: Automated integrity auditor validating `100/100 ✦ PERFECT` health grade across 6 bento metrics: Spatial Canvases (`18/18 JSON Canvas 1.0`), Obsidian Bases (`20/20 YAML databases`), Evergreen Vault (`1,723+ Notes`), Wikilinks Mesh (`7,985+ Bidirectional citations`), Graph Topology (`100.0% Connectivity`, `0 Orphan notes`, `0 Broken links`), and Karpathy Wiki Articles (`13 Canonical engrams`).
-2. **Karpathy LLM Wiki Explorer & Synthesizer (`#studio-wiki-synth-btn`)**: Structured according to Andrej Karpathy's LLM Wiki paradigm. Displays 13 canonical Markdown articles in `06-Wiki/` with interactive client-side LLM synthesis for any custom topic, producing structured wikilink citations, mathematical equations, and STDP memory provenance tables.
+1. **Second Brain Doctor Health Audit (`#second-brain-doctor-audit`)**: Automated integrity auditor validating `100/100 ✦ PERFECT` health grade across 6 bento metrics: Spatial Canvases (`18/18 JSON Canvas 1.0`), Obsidian Bases (`20/20 YAML databases`), Evergreen Vault (`1,733+ Notes`), Wikilinks Mesh (`8,122+ Bidirectional citations`), Graph Topology (`100.0% Connectivity`, `0 Orphan notes`, `0 Broken links`), and Karpathy Wiki Articles (`14 Canonical engrams`).
+2. **Karpathy LLM Wiki Explorer & Synthesizer (`#studio-wiki-synth-btn`)**: Structured according to Andrej Karpathy's LLM Wiki paradigm. Displays 14 canonical Markdown articles in `06-Wiki/` (including the 14th canonical article `Sovereign-MCP-34-Tool-Agent-Protocol.md`) with interactive client-side LLM synthesis for any custom topic, producing structured wikilink citations, mathematical equations, and STDP memory provenance tables.
 3. **JSON Canvas 1.0 2D Spatial Graph Viewer (`#studio-canvas-visualizer`)**: Interactive SVG renderer and raw JSON editor for 18 infinite spatial canvases (including the supply-chain trust stack and Vaelor lattice). Displays text nodes, file cards, colored groups, and directional semantic edges with zero corruption. Includes procedural canvas generation (`#studio-canvas-gen-btn`).
 4. **Obsidian Bases Live Records Table (`#studio-bases-inspector`)**: Interactive YAML database inspector parsing 20 `.base` configurations (including tools, fleets, agents, memory stratum, and Vaelor patronage ledgers). Features dynamic formula columns (`formula.stdp_retention`, `wikilink_density`), active search filtering, summary aggregation pills, and live record inspection (`#studio-bases-live-records`).
-5. **Unified Vault + STDP Search Engine (`#studio-unified-search`)**: Cross-stratum associative search querying across 1,723+ local vault Markdown notes and 41,800+ STDP engrams with multi-dimensional cosine similarity matching (`#studio-obsidian-search-input` + `#studio-obsidian-search-btn`).
+5. **Unified Vault + STDP Search Engine (`#studio-unified-search`)**: Cross-stratum associative search querying across 1,733+ local vault Markdown notes and 41,800+ STDP engrams with multi-dimensional cosine similarity matching (`#studio-obsidian-search-input` + `#studio-obsidian-search-btn`).
 6. **Knap Live Telemetry Compiler (`#studio-knap-telemetry`)**: Demonstrates template-driven Markdown synthesis using the Knap engine. Transpiles Defuddle-extracted web data into Obsidian notes with YAML frontmatter, badges, and code snippets.
 7. **Top 10 Knowledge Graph Centrality Hubs (`#studio-obsidian-top-hubs`)**: Computes graph degree and betweenness centrality across the vault, identifying the top 10 foundational knowledge hubs (e.g., `00 Home`, `Vaelor Network`, `STDP Synaptic Plasticity`, `Zoth Trust & Supply Chain`).
 8. **21-Tool MCP JSON-RPC Playground (`#studio-obsidian-mcp-playground`)**: Interactive testing workbench for 21 Model Context Protocol tools spanning all 7 official `@kepano` Obsidian skills and local STDP memory substrates:
@@ -305,6 +305,12 @@ Live on `http://127.0.0.1:3000/vaelor` and powered by the high-performance Vaelo
     - `vaelor_stake_savings`, `vaelor_draw_credit_bnpl`, `vaelor_post_agent_bounty`
     - `vaelor_send_shielded`, `vaelor_send_creator_tip`, `vaelor_merchant_fx_checkout`
     - `vaelor_protected_escrow` (Zero-Penalty Cryptographic Escrow & Settlement)
+
+### Unified 34-Tool Ring-0 Model Context Protocol (MCP) Ecosystem
+Zoth Studio v2 unites **34 native JSON-RPC Model Context Protocol tools** across two loopback enclaves, enabling frontier autonomous agent swarms (Claude, GPT-4o, Hermes, Skeptic) to orchestrate biomorphic knowledge and financial sovereignty:
+- **Port :8094 (21 Neuro-Memory & Obsidian Tools)**: 7 official `@kepano` Obsidian skills (`obsidian-markdown`, `json-canvas`, `obsidian-bases`, `obsidian-cli`, `knap`, `defuddle`, `obsidian-second-brain`) plus real-time STDP synaptic modulation and CA3/CA1 pattern completion.
+- **Port :8140 (13 Vaelor Layer-1 FinTech Tools)**: Feeless DAG payments, smart warranty receipts, homoglyph handle security, PoUW AI mining, 8.5% APY savings vault, BNPL credit, M2M micro-bounties, Pedersen shielded transfers, creator tips, programmable merchant FX sweeps, and zero-penalty commerce escrow settlement.
+- **Canonical Reference**: Documented in the 14th Karpathy LLM Wiki article `06-Wiki/Sovereign-MCP-34-Tool-Agent-Protocol.md`.
 
 ---
 

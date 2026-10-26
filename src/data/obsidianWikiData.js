@@ -10,12 +10,12 @@ export const INITIAL_OBSIDIAN_AUDIT = {
   totalCanvases: 18,
   basesValid: 20,
   totalBases: 20,
-  totalNotes: 1723,
-  totalWikilinks: 7985,
+  totalNotes: 1733,
+  totalWikilinks: 8122,
   connectivityPct: 100.0,
   orphanNotes: 0,
   brokenLinks: 0,
-  wikiCount: 13,
+  wikiCount: 14,
 };
 
 export const CANONICAL_WIKI_ARTICLES = [
@@ -244,6 +244,135 @@ export const CANONICAL_WIKI_ARTICLES = [
     "executive_summary": "Comprehensive technical specification and operational ledger reference for **Vaelor Layer-1 (◈ VLR)**: an asynchronous Account-Lattice DAG featuring $0.00 gas fees forever, sub-20ms BFT finality across a 5-region validator quorum, Proof-of-Useful-Work (PoUW) biomorphic AI computation mining, Programmable Merchant FX Treasury Auto-Sweeps (1:1 USD Reserve, 8.5% APY Staked Savings, and Liquid VLR), Atomic Cross-Chain Bridges, and 5.0% Sovereign Loyalty Cashback.",
     "math_invariants": "### 1. Account-Lattice Dual-State Cryptographic Transition\nFor account $A$ with micro-chain height $h$:\n$$S_{A, h} = \\mathcal{H}\\left(S_{A, h-1} \\mathbin{\\Vert} \\text{Block}_h \\mathbin{\\Vert} \\text{Nonce}_h\\right)$$\nWhere state transition requires valid Ed25519 signature $\\sigma_A$ and zero double-spend verification across the DAG lattice.\n\n### 2. Merchant FX Treasury Auto-Sweep Partition\nIncoming customer settlement $V_{\\text{in}}$ is partitioned according to merchant policy $\\mathbf{P} = (\\alpha_{\\text{usd}}, \\beta_{\\text{vault}}, \\gamma_{\\text{liquid}})$ where $\\alpha + \\beta + \\gamma = 1.0$:\n$$V_{\\text{USD}} = \\alpha_{\\text{usd}} \\cdot V_{\\text{in}}, \\quad V_{\\text{Vault}} = \\beta_{\\text{vault}} \\cdot V_{\\text{in}}, \\quad V_{\\text{Liquid}} = \\gamma_{\\text{liquid}} \\cdot V_{\\text{in}}$$\nWith guaranteed zero FX spread ($\\mathcal{S}_{\\text{FX}} = 0.00\\%$) and zero transaction gas fee ($G = \\$0.00$).\n\n### 3. PoUW Staking Yield & BFT Quorum Finality\nSavings vault continuous yield accrual satisfies:\n$$Y(t) = V_{\\text{staked}} \\cdot \\left(e^{r \\cdot \\Delta t} - 1\\right) \\quad (r = \\ln(1 + 0.085) \\approx 0.08158)$$\nValidated by Byzantine Fault Tolerant threshold $Q = 2f + 1 = 4$ signatures from 5 regional validators ($N=5, f=1$).",
     "size": 9840
+  },
+  {
+    "id": "sovereign-mcp-34-tool-agent-protocol",
+    "title": "Sovereign MCP 34-Tool Agent Protocol",
+    "filename": "Sovereign-MCP-34-Tool-Agent-Protocol.md",
+    "path": "06-Wiki/Sovereign-MCP-34-Tool-Agent-Protocol.md",
+    "confidence": 0.99,
+    "stdp_engrams": 16,
+    "tags": [
+      "wiki",
+      "llm-synthesized",
+      "karpathy-wiki",
+      "mcp",
+      "agent-protocol",
+      "neuro-memory",
+      "vaelor",
+      "json-rpc",
+      "ring-0",
+      "stdp"
+    ],
+    "category": "LLM-Wiki",
+    "status": "CANONICAL",
+    "created": "2026-10-26T11:45:00Z",
+    "updated": "2026-10-26T11:45:00Z",
+    "executive_summary": "The **Sovereign MCP 34-Tool Agent Protocol** is the unified Ring-0 Model Context Protocol (MCP 2024-11-05 JSON-RPC 2.0) architecture powering Zoth Studio and the Sovereign Agent Fleet. It unifies 21 Neuro-Memory & Obsidian agent tools (:8094) and 13 Vaelor Layer-1 FinTech tools (:8140) under zero-egress, deterministic execution boundaries with mathematical STDP memory consolidation and cryptographic BFT finality.",
+    "math_invariants": "### 1. Dual-Port Unified JSON-RPC Routing Function\nLet $\\mathcal{T} = \\mathcal{T}_{\\text{Neuro}} \\cup \\mathcal{T}_{\\text{Vaelor}}$ with $|\\mathcal{T}| = 21 + 13 = 34$ tools.\nFor any inbound RPC invocation request $\\mathcal{R} = (m, \\mathbf{\\theta})$:\n$$\\mathcal{P}(\\mathcal{R}) = \\begin{cases} 8094 & \\text{if } m \\in \\mathcal{T}_{\\text{Neuro}} \\\\ 8140 & \\text{if } m \\in \\mathcal{T}_{\\text{Vaelor}} \\end{cases}$$\nWhere $\\mathcal{T}_{\\text{Neuro}} \\cap \\mathcal{T}_{\\text{Vaelor}} = \\emptyset$, guaranteeing zero-collision deterministic dispatch.\n\n### 2. Hebbian STDP Co-Invocation Synaptic Weight Update\nWhen tool pairs $(t_i, t_j)$ are chained across agent execution workflows with temporal separation $\\Delta t = t_j - t_i$:\n$$\\Delta W_{ij} = \\begin{cases} A_+ \\cdot \\exp\\left(-\\frac{\\Delta t}{\\tau_+}\\right) & \\text{if } \\Delta t > 0 \\\\ -A_- \\cdot \\exp\\left(\\frac{\\Delta t}{\\tau_-}\\right) & \\text{if } \\Delta t < 0 \\end{cases}$$\nWith causal potentiation factor $A_+ = 0.08$ and depression factor $A_- = 0.05$.\n\n### 3. Escrow & Settlement Zero-Fee Invariant\nFor any protected commerce transaction on lattice $V_{\\text{escrow}}$:\n$$\\text{PenaltyFee}(V_{\\text{escrow}}) = \\$0.00, \\quad \\text{DisputeFee}(V_{\\text{escrow}}) = \\$0.00, \\quad \\text{GasFee}(V_{\\text{escrow}}) = \\$0.00$$\nWhile ensuring $100\\%$ mathematical conservation of value:\n$$V_{\\text{merchant}} + V_{\\text{buyer\\_refund}} = V_{\\text{escrow}}$$",
+    "size": 8940
+  },
+  {
+    "id": "neuro-memory-20-tool-mcp-server-and-agent-connector-protocol",
+    "title": "Neuro-Memory 20-Tool MCP Server & Agent Connector Protocol",
+    "filename": "Neuro-Memory 20-Tool MCP Server & Agent Connector Protocol.md",
+    "path": "06-Wiki/Neuro-Memory 20-Tool MCP Server & Agent Connector Protocol.md",
+    "confidence": 0.99,
+    "stdp_engrams": 6,
+    "tags": [
+      "wiki",
+      "llm-synthesized",
+      "karpathy-wiki",
+      "neuro-memory",
+      "mcp",
+      "model-context-protocol",
+      "obsidian",
+      "tools",
+      "stdp"
+    ],
+    "category": "LLM-Wiki",
+    "status": "CANONICAL",
+    "created": "2026-10-26T05:19:00Z",
+    "updated": "2026-10-26T05:19:00Z",
+    "executive_summary": "The **Neuro-Memory 20-Tool MCP Server** (`neuro_memory_daemon.mcp_server`) is the open standard cognitive and knowledge bridge linking autonomous AI agents (Claude Desktop, Cursor IDE, Grok Bot, Hermes Agent) to the biomorphic **Spike-Timing-Dependent Plasticity (STDP)** memory substrate and the **1,729+ note Obsidian Second Brain Vault**. Implementing the **Model Context Protocol (MCP)** specification over dual transport layers (`stdio` JSON-RPC 2.0 and RESTful HTTP `:8094`), the server delivers a cohesive 20-tool suite spanning associative engram recall, memory consolidation, fixed-root confined note read/write, spatial JSON Canvas generation, database querying, doctor health audits, and portable cryptographic bundle attestation.",
+    "math_invariants": "### 1. Fixed-Root Path Confinement Invariant\nFor any note operation on path $P$, strict confinement within vault root $V_{\\text{root}}$ is enforced:\n$$\\text{realpath}(P) \\in \\text{subpaths}(V_{\\text{root}}) \\land \\neg \\text{contains}(P, \\text{\"..\"})$$\nGuaranteeing zero directory traversal vulnerabilities and zero unintended filesystem leakage.\n\n### 2. Synaptic Plasticity Tool Invocation Matrix\nAssociative link formation between executed tools follows Hebbian potentiation:\n$$W_{ij}^{(t+1)} = W_{ij}^{(t)} + \\eta \\cdot (a_i \\cdot a_j) - \\gamma \\cdot W_{ij}^{(t)}$$\nWhere $\\eta = 0.05$ is the synaptic learning rate and $\\gamma = 0.002$ is the decay quotient.",
+    "size": 8827
+  },
+  {
+    "id": "stdp-synaptic-memory-consolidation-and-hebbian-dream-wave",
+    "title": "STDP Synaptic Memory Consolidation & Hebbian Dream Wave",
+    "filename": "STDP Synaptic Memory Consolidation & Hebbian Dream Wave.md",
+    "path": "06-Wiki/STDP Synaptic Memory Consolidation & Hebbian Dream Wave.md",
+    "confidence": 0.99,
+    "stdp_engrams": 6,
+    "tags": [
+      "wiki",
+      "llm-synthesized",
+      "karpathy-wiki",
+      "neuro-memory",
+      "stdp",
+      "netrunner",
+      "cortex",
+      "synapses"
+    ],
+    "category": "LLM-Wiki",
+    "status": "CANONICAL",
+    "created": "2026-10-26T07:04:24Z",
+    "updated": "2026-10-26T07:04:24Z",
+    "executive_summary": "Biological principles of **Spike-Timing-Dependent Plasticity (STDP)** and **Hebbian Learning** govern memory consolidation across ZothOS. Operating through an autonomous **Metacognitive Dream Loop** and real-time 3D Netrunner force-directed embedding, the substrate distills ambient developer actions and agent executions into enduring mathematical intuition with zero telemetry data leakage.",
+    "math_invariants": "### 1. STDP Differential Weight Adjustment\n$$\\Delta w_{ij} = \\begin{cases} A_+ \\exp\\left(-\\frac{\\Delta t}{\\tau_+}\\right) & \\text{if } \\Delta t > 0 \\\\ -A_- \\exp\\left(\\frac{\\Delta t}{\\tau_-}\\right) & \\text{if } \\Delta t < 0 \\end{cases}$$\nWhere $A_+ = 0.05$, $A_- = 0.025$, and $\\tau_+ = \\tau_- = 20\\text{ ms}$.\n\n### 2. Exponential Synaptic Weight Retention & Decay\n$$w_{ij}(t) = w_{ij}(0) \\cdot \\exp(-\\lambda t) + \\sum_{k=1}^{M} \\Delta w_{ij}^{(k)}$$\nWith minimum weight clamp $w_{\\min} = 0.01$ and saturation threshold $w_{\\max} = 1.00$.",
+    "size": 7499
+  },
+  {
+    "id": "vaelor-privacy-shield-social-group-tabs-and-inheritance-vaults",
+    "title": "Vaelor Privacy Shield, Social Group Tabs & Inheritance Vaults",
+    "filename": "Vaelor Privacy Shield, Social Group Tabs & Inheritance Vaults.md",
+    "path": "06-Wiki/Vaelor Privacy Shield, Social Group Tabs & Inheritance Vaults.md",
+    "confidence": 0.99,
+    "stdp_engrams": 6,
+    "tags": [
+      "wiki",
+      "llm-synthesized",
+      "karpathy-wiki",
+      "vaelor",
+      "privacy",
+      "commitments",
+      "view-keys",
+      "group-tabs",
+      "inheritance"
+    ],
+    "category": "LLM-Wiki",
+    "status": "CANONICAL",
+    "created": "2026-10-26T05:19:00Z",
+    "updated": "2026-10-26T05:19:00Z",
+    "executive_summary": "**Vaelor (◈ VLR)** introduces zero-knowledge privacy and social coordination primitives directly into its Layer-1 feeless Account-Lattice DAG (:8140). The **Vaelor Privacy Shield** combines Pedersen-style SHA-256 value commitments (`cmt_...`) and selective disclosure view keys (`vk_...`) for non-custodial auditability without deanonymization. Complementing the privacy layer are native **Social Group Tabs** (`GROUP_TAB_SETTLE`) providing integer-exact zero-remainder bill settlement across multi-agent swarms and human cohorts, alongside sovereign **Inheritance Continuity Vaults** (`INHERITANCE_CLAIM`) featuring configurable dead-man's switch epochs, multi-beneficiary quorum disbursement, and zero custodial exposure.",
+    "math_invariants": "### 1. Pedersen Value Commitment Verification\nFor amount $v$ and blinding factor $r$:\n$$C(v, r) = v \\cdot G + r \\cdot H$$\nEnsuring complete confidentiality of transferred value while preserving mathematical verifiability without trusted setup.\n\n### 2. Zero-Remainder Tab Settlement\nFor group $G$ with participants $P_1, \\dots, P_k$ and expense sum $S$:\n$$\\sum_{i=1}^k \\Delta b_i = 0, \\quad \\Delta b_i = \\text{paid}_i - \\frac{S}{k}$$\nGuaranteed feeless atomic reconciliation.",
+    "size": 8395
+  },
+  {
+    "id": "vaelor-smart-receipts-sub-accounts-and-anti-phishing-directory",
+    "title": "Vaelor Smart Receipts, Sub-Accounts & Anti-Phishing Directory",
+    "filename": "Vaelor Smart Receipts, Sub-Accounts & Anti-Phishing Directory.md",
+    "path": "06-Wiki/Vaelor Smart Receipts, Sub-Accounts & Anti-Phishing Directory.md",
+    "confidence": 0.99,
+    "stdp_engrams": 6,
+    "tags": [
+      "wiki",
+      "llm-synthesized",
+      "karpathy-wiki",
+      "vaelor",
+      "smart-receipts",
+      "subaccounts",
+      "anti-phishing",
+      "security"
+    ],
+    "category": "LLM-Wiki",
+    "status": "CANONICAL",
+    "created": "2026-10-26T04:27:00Z",
+    "updated": "2026-10-26T04:27:00Z",
+    "executive_summary": "**Vaelor (◈ VLR)** incorporates sovereign commerce primitives into its Layer-1 feeless Account-Lattice DAG. Beyond basic value transfer, the protocol provides native **`SMART_RECEIPT`** itemized cryptographic proofs, **365-day on-chain warranties** with escrow disputation windows, **`SUBACCOUNT_SPEND`** hierarchical spending caps with 1-click kill switches for autonomous agents, and a real-time **Anti-Phishing Directory** utilizing Levenshtein distance metrics and Unicode homoglyph analysis to shield users and sovereign daemons from address spoofing.",
+    "math_invariants": "### 1. Itemized Merkle Receipt Hash\nFor receipt line items $L = \\{l_1, \\dots, l_n\\}$:\n$$H_{\\text{receipt}} = \\text{MerkleRoot}\\left(\\mathcal{H}(l_1), \\mathcal{H}(l_2), \\dots, \\mathcal{H}(l_n)\\right)$$\n\n### 2. Normalized Levenshtein Anti-Phishing Metric\n$$D_{\\text{norm}}(h_1, h_2) = \\frac{\\text{Levenshtein}(h_1, h_2)}{\\max(|h_1|, |h_2|)} < 0.25 \\implies \\text{Alert}(\\text{Phishing Risk})$$",
+    "size": 7774
   }
 ];
 
@@ -3202,11 +3331,12 @@ export function callMcpToolFallback(toolName, args = {}) {
           totalCanvases: 18,
           basesValid: 20,
           totalBases: 20,
-          totalNotes: 1723,
-          totalWikilinks: 7985,
+          totalNotes: 1733,
+          totalWikilinks: 8122,
           connectivityPct: 100.0,
           orphanNotes: 0,
           brokenLinks: 0,
+          wikiCount: 14,
           timestamp: ts
         }
       };
@@ -4093,15 +4223,16 @@ export const FALLBACK_PORTABLE_BUNDLE = {
   auditMetrics: {
     canvasesValid: 18,
     basesValid: 20,
-    totalNotes: 1723,
-    totalWikilinks: 7985,
+    totalNotes: 1733,
+    totalWikilinks: 8122,
     connectivityPct: 100.0,
     orphanNotes: 0,
-    brokenLinks: 0
+    brokenLinks: 0,
+    wikiCount: 14
   },
   canvasesCount: 18,
   basesCount: 20,
-  wikiArticlesCount: 13,
+  wikiArticlesCount: 14,
   topHubsCount: 10
 };
 
@@ -4611,6 +4742,51 @@ export const FALLBACK_OFM_NOTES = {
         "note"
       ],
       "content": "---\ntitle: \"Vaelor Layer-1 Complete Reference\"\ncreated: \"2026-10-26T10:00:00Z\"\nupdated: \"2026-10-26T10:00:00Z\"\ncategory: \"LLM-Wiki\"\ntags: [wiki, llm-synthesized, karpathy-wiki, vaelor, merchant-fx, account-lattice, pouw, bft-consensus, loyalty-cashback, atomic-bridge]\nstdp_engrams: 12\nconfidence: 0.99\nstatus: \"CANONICAL\"\n---\n\n# ◈ Vaelor Layer-1 Complete Reference\n\n> [!note] Executive Architecture\n> **Vaelor (◈ VLR)** is a next-generation Layer-1 feeless cryptocurrency architecture designed to eliminate blockchain transaction fees and mining energy waste on an asynchronous **Account-Lattice DAG**.\n\n## Core Pillars\n- **Zero Gas Fees ($0.00 Forever)**: Every account maintains its own micro-chain.\n- **Sub-20ms BFT Finality**: 5-region validator quorum with $2f+1=4$ consensus.\n- **Programmable Merchant FX Treasury Auto-Sweep**: Automatic real-time split across 1:1 USD Reserve, 8.5% APY Staked Savings, and Liquid VLR.\n- **Proof-of-Useful-Work (PoUW)**: Useful AI and STDP compute mining.\n- **Sovereign Patronage & Loyalty Cashback**: Up to 5.0% instant rebate on purchases.\n\n## Mathematical Formulations\n$$\\mathcal{S}_{\\text{FX}} = 0.00\\%, \\quad G = \\$0.00$$\n\n[[00 Home]] • [[06-Wiki/Vaelor Account-Lattice & PoUW Protocol]] • [[Vaelor & Sovereign Economy.canvas]]"
+    },
+    "06-Wiki/Sovereign-MCP-34-Tool-Agent-Protocol.md": {
+      "ok": true,
+      "title": "Sovereign MCP 34-Tool Agent Protocol",
+      "relPath": "06-Wiki/Sovereign-MCP-34-Tool-Agent-Protocol.md",
+      "cluster": "06-Wiki",
+      "wordCount": 1380,
+      "frontmatter": {
+        "title": "Sovereign MCP 34-Tool Agent Protocol",
+        "created": "2026-10-26T11:45:00Z",
+        "updated": "2026-10-26T11:45:00Z",
+        "category": "LLM-Wiki",
+        "tags": [
+          "wiki",
+          "llm-synthesized",
+          "karpathy-wiki",
+          "mcp",
+          "agent-protocol",
+          "neuro-memory",
+          "vaelor",
+          "json-rpc",
+          "ring-0",
+          "stdp"
+        ],
+        "stdp_engrams": 16,
+        "confidence": 0.99,
+        "status": "CANONICAL"
+      },
+      "wikilinks": [
+        "00 Home",
+        "Zoth Memory",
+        "Vaelor Network",
+        "06-Wiki/Vaelor-Layer1-Complete-Reference",
+        "06-Wiki/Biomorphic STDP & 3D Netrunner Cortex",
+        "06-Wiki/Obsidian Second Brain, JSON Canvas 1.0 & Bases Architecture",
+        "Sovereign MCP Tools & Agent Catalog.base",
+        "Zoth 71 Sovereign Tools.base",
+        "Vaelor & Sovereign Economy.canvas"
+      ],
+      "callouts": [
+        "abstract",
+        "tip",
+        "important"
+      ],
+      "content": "---\ntitle: \"Sovereign MCP 34-Tool Agent Protocol\"\ncreated: \"2026-10-26T11:45:00Z\"\nupdated: \"2026-10-26T11:45:00Z\"\ncategory: \"LLM-Wiki\"\ntags: [wiki, llm-synthesized, karpathy-wiki, mcp, agent-protocol, neuro-memory, vaelor, json-rpc, ring-0, stdp]\nstdp_engrams: 16\nconfidence: 0.99\nstatus: \"CANONICAL\"\n---\n\n# ⚡ Sovereign MCP 34-Tool Agent Protocol\n\n> [!abstract] Executive Summary\n> The **Sovereign MCP 34-Tool Agent Protocol** is the unified Ring-0 Model Context Protocol (MCP 2024-11-05 JSON-RPC 2.0) architectural runtime powering Zoth Studio and the Sovereign Agent Fleet. Operating across dual loopback enclaves—**Port :8094** (21 Neuro-Memory & Obsidian Skills Tools) and **Port :8140** (13 Vaelor Layer-1 FinTech Tools)—the protocol enables autonomous AI swarms (Claude, GPT, Hermes, Skeptic) to manipulate biomorphic memory substrates and execute feeless DAG financial operations with zero cloud data egress.\n\n## Unified 34-Tool Ring-0 Ecosystem\n\n```mermaid\nflowchart TB\n    subgraph Swarm[\"🤖 Autonomous Agent Fleet\"]\n        Hermes[\"Hermes Autonomous Agent\"]\n        Claude[\"Claude 3.7 / Opus Agent\"]\n        Zoth[\"Zoth Local Archon\"]\n    end\n\n    subgraph Router[\"⚡ Unified MCP JSON-RPC 2.0 Router\"]\n        Dispatch{\"Method Dispatcher\"}\n    end\n\n    subgraph NeuroMemory[\"🧠 Port :8094 · Neuro-Memory & Obsidian\"]\n        T_Obsidian[\"7 Official @kepano Skills<br/>(Markdown, Canvas, Bases, CLI, Knap, Defuddle, Second-Brain)\"]\n        T_STDP[\"STDP Synaptic Substrate<br/>(Synapse modulation, CA3 pattern completion)\"]\n    end\n\n    subgraph VaelorL1[\"◈ Port :8140 · Vaelor Layer-1 FinTech\"]\n        T_Fintech[\"13 Feeless DAG Tools<br/>(feeless send, smart receipts, PoUW mining, savings vault, BNPL credit, M2M bounties, shielded transfer, merchant FX sweep, protected escrow)\"]\n    end\n\n    Swarm -->|JSON-RPC 2.0| Dispatch\n    Dispatch -->|21 Tools| NeuroMemory\n    Dispatch -->|13 Tools| VaelorL1\n```\n\n## Dual-Port Subsystem Breakdown\n\n### Subsystem A: 21 Neuro-Memory & Obsidian Second Brain Tools (`:8094`)\n1. **`obsidian-markdown`**: `read_note`, `write_note`, `append_note`, `extract_wikilinks`\n2. **`json-canvas`**: `parse_canvas`, `add_canvas_node`, `connect_canvas_nodes`\n3. **`obsidian-bases`**: `query_base`, `update_base_record`, `calculate_base_formula`\n4. **`obsidian-cli`**: `vault_search`, `plugin_audit`, `health_check`\n5. **`knap`**: `render_template`, `compile_dataset`\n6. **`defuddle`**: `extract_markdown`, `clean_web_article`\n7. **`obsidian-second-brain`**: `stdp_memory_sync`, `synthesize_wiki_moc`, `verify_provenance`, `neuro_obsidian_vault_sync`\n\n### Subsystem B: 13 Vaelor Layer-1 FinTech Tools (`:8140`)\n1. `vaelor_network_status` — Real-time DAG circulating supply and 5-validator BFT quorum\n2. `vaelor_account_balance` — Liquid balance, staked savings, and credit limit\n3. `vaelor_send_feeless` — Feeless DAG micro-chain transfer (<20ms finality)\n4. `vaelor_verify_handle_safety` — Homoglyph & Levenshtein anti-phishing auditor\n5. `vaelor_create_smart_receipt` — Itemized 365-day warranty & 2.5% cashback receipt\n6. `vaelor_mine_pouw` — Proof-of-Useful-Work AI computational mining\n7. `vaelor_stake_savings` — Zero-lockup 8.5% APY compute savings vault\n8. `vaelor_draw_credit_bnpl` — 0% APR revolving credit & 30-day BNPL checkout\n9. `vaelor_post_agent_bounty` — Autonomous AI M2M micro-contract escrow\n10. `vaelor_send_shielded` — Pedersen commitment confidential shielded transfer\n11. `vaelor_send_creator_tip` — Instant micro-tipping with patron tier attestation\n12. `vaelor_merchant_fx_checkout` — Programmable treasury auto-sweep with 0.00% FX spread\n13. `vaelor_protected_escrow` — Zero-penalty commerce escrow settlement with 3 presets\n\n## Mathematical Invariants\n\n### 1. Unified Dispatch Determinism\n$$\\mathcal{P}(m) = 8094 \\cdot \\mathbb{I}_{m \\in \\mathcal{T}_{\\text{Neuro}}} + 8140 \\cdot \\mathbb{I}_{m \\in \\mathcal{T}_{\\text{Vaelor}}}$$\n\n### 2. Hebbian STDP Co-Invocation Plasticity\n$$\\Delta W_{ij} = A_+ \\exp\\left(-\\frac{\\Delta t}{\\tau_+}\\right) \\quad (\\Delta t > 0)$$\n\n## Bidirectional Wikilinks\n- [[00 Home]] • [[Zoth Memory]] • [[Vaelor Network]]\n- [[06-Wiki/Vaelor-Layer1-Complete-Reference]] • [[06-Wiki/Biomorphic STDP & 3D Netrunner Cortex]]\n- [[Sovereign MCP Tools & Agent Catalog.base]] • [[Zoth 71 Sovereign Tools.base]]"
     }
   };
 
