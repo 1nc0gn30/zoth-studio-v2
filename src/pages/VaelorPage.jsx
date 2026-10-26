@@ -27,6 +27,7 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import TerminalIcon from '@mui/icons-material/Terminal';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
+import VaelorLatticeVisualizer from '../components/VaelorLatticeVisualizer';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { HeroReveal, HeroItem, RevealOnScroll } from '../components/MotionReveal';
 import {
@@ -564,6 +565,15 @@ export default function VaelorPage() {
         <Box sx={{ mb: 4 }}>
           <DaemonStatusStrip />
         </Box>
+
+        {/* ==========================================================================
+            ACCOUNT-LATTICE DAG & 5-VALIDATOR BFT QUORUM 60FPS VISUALIZER
+            ========================================================================== */}
+        <RevealOnScroll>
+          <Box sx={{ mb: 5 }}>
+            <VaelorLatticeVisualizer />
+          </Box>
+        </RevealOnScroll>
 
         {/* ==========================================================================
             TWO INTERACTIVE SIMULATORS (TRANSFER & PHISHING)
