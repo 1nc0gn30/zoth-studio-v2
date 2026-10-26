@@ -22,12 +22,13 @@ import NetworkCheckIcon from '@mui/icons-material/NetworkCheck';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
+const DEMO_SIGNAL_RECIPIENT = '+1-555-555-0199';
 
 const INITIAL_CHANNELS = [
   {
     id: 'signal-primary',
     name: 'Signal Messenger',
-    endpoint: '+1-555-555-0199 • REST Daemon',
+    endpoint: `${DEMO_SIGNAL_RECIPIENT} • REST Daemon`,
     latencyMs: 12.4,
     status: 'HEALTHY',
     color: '#38BDF8',
@@ -72,7 +73,7 @@ export default function SovereignBridgeGodModeTool() {
 
   const [channels, setChannels] = useState(INITIAL_CHANNELS);
   const [selectedChannel, setSelectedChannel] = useState('signal-primary');
-  const [recipient, setRecipient] = useState('+1-555-555-0199');
+  const [recipient, setRecipient] = useState(DEMO_SIGNAL_RECIPIENT);
   const [payload, setPayload] = useState(
     'Sovereign Agent Bridge sync: Byzantine quorum verified across 5 encrypted transport adapters.'
   );
@@ -105,7 +106,7 @@ export default function SovereignBridgeGodModeTool() {
         ts: new Date().toISOString().slice(14, 21),
         tag: 'PING',
         color: '#38BDF8',
-        msg: 'Latency probe completed across Signal (+1-555-555-0199), SimpleX SMP, Matrix, Telegram, and HMAC pipe.',
+        msg: `Latency probe completed across Signal (${DEMO_SIGNAL_RECIPIENT}), SimpleX SMP, Matrix, Telegram, and HMAC pipe.`,
       },
       ...prev.slice(0, 11),
     ]);
@@ -413,7 +414,7 @@ export default function SovereignBridgeGodModeTool() {
                 }}
               >
                 <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#F5E6AB', fontWeight: 700 }}>
-                  MULTI-CHANNEL RELAY TOPOLOGY (+1-555-555-0199)
+                  MULTI-CHANNEL RELAY TOPOLOGY ({DEMO_SIGNAL_RECIPIENT})
                 </Typography>
                 <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#34D399' }}>
                   ZERO-EGRESS HMAC

@@ -6,6 +6,15 @@ import { fileURLToPath } from 'node:url';
 import { exec } from 'node:child_process';
 
 const STUDIO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const HOME_DIR = process.env.ZOTH_HOME || os.homedir();
+const NULLAITECH_ROOT = process.env.NULLAITECH_ROOT || path.join(HOME_DIR, 'NullAITech');
+const LOCAL_BIN = process.env.ZOTH_LOCAL_BIN || path.join(HOME_DIR, '.local', 'bin');
+const GROK_BIN_DIR = process.env.ZOTH_GROK_BIN_DIR || path.join(HOME_DIR, '.grok', 'bin');
+const CONDUCTOR_BIN = process.env.ZOTH_CONDUCTOR_BIN || path.join(NULLAITECH_ROOT, 'bin', 'zoth-agent-conductor');
+
+function shellQuote(value) {
+  return `'${String(value).replace(/'/g, `'\\''`)}'`;
+}
 
 function requestJson(port, urlPath, { method = 'GET', body = null, timeout = 900 } = {}) {
   return new Promise((resolve) => {
@@ -473,16 +482,16 @@ export function studioMiddleware() {
           uptime: Math.round(os.uptime()),
           audioDevice: 'ICH9 High Definition Audio (Active)',
           installedTools: {
-            claude: fs.existsSync('/usr/local/bin/claude') || fs.existsSync('~/.local/bin/claude'),
-            opencode: fs.existsSync('/usr/local/bin/opencode') || fs.existsSync('~/.local/bin/opencode'),
-            hermes: fs.existsSync('~/.local/bin/hermes') || fs.existsSync('/usr/local/bin/hermes'),
-            cursor: fs.existsSync('~/.local/bin/cursor-agent') || fs.existsSync('/usr/bin/cursor'),
-            zothos: fs.existsSync('~/NullAITech/bin/zoth-agent-conductor') || fs.existsSync('/usr/local/bin/zoth-agent-conductor'),
-            grok: fs.existsSync('~/.grok/bin/agent') || fs.existsSync('/usr/local/bin/grok'),
+            claude: fs.existsSync('/usr/local/bin/claude') || fs.existsSync(path.join(LOCAL_BIN, 'claude')),
+            opencode: fs.existsSync('/usr/local/bin/opencode') || fs.existsSync(path.join(LOCAL_BIN, 'opencode')),
+            hermes: fs.existsSync(path.join(LOCAL_BIN, 'hermes')) || fs.existsSync('/usr/local/bin/hermes'),
+            cursor: fs.existsSync(path.join(LOCAL_BIN, 'cursor-agent')) || fs.existsSync('/usr/bin/cursor'),
+            zothos: fs.existsSync(CONDUCTOR_BIN) || fs.existsSync('/usr/local/bin/zoth-agent-conductor'),
+            grok: fs.existsSync(path.join(GROK_BIN_DIR, 'agent')) || fs.existsSync('/usr/local/bin/grok'),
             burpsuite: fs.existsSync('/usr/bin/burpsuite'),
             bitwarden: fs.existsSync('/usr/local/bin/bw'),
             streamlit: fs.existsSync('/usr/local/bin/streamlit'),
-            netlify: fs.existsSync('/usr/local/bin/netlify') || fs.existsSync('~/.local/bin/netlify'),
+            netlify: fs.existsSync('/usr/local/bin/netlify') || fs.existsSync(path.join(LOCAL_BIN, 'netlify')),
             ollama: fs.existsSync('/usr/local/bin/ollama') || fs.existsSync('/usr/bin/ollama')
           }
         };
@@ -491,7 +500,7 @@ export function studioMiddleware() {
       }
 
       if (req.method === 'GET' && url.pathname === '/api/studio/agent/triad') {
-        exec('"~/NullAITech/bin/zoth-agent-conductor" agents --json', { timeout: 6000 }, (err, stdout) => {
+        exec(`${shellQuote(CONDUCTOR_BIN)} agents --json`, { timeout: 6000 }, (err, stdout) => {
           if (err) {
             send(res, 500, { error: err.message });
             return;
@@ -509,12 +518,12 @@ export function studioMiddleware() {
         const body = await readBody(req);
         const engine = ['hermes', 'cursor', 'grok', 'ollama', 'zothos', 'auto'].includes(String(body.engine || 'auto')) ? String(body.engine || 'auto') : 'auto';
         const promptText = String(body.prompt || 'Summarize workspace status').slice(0, 1200);
-        const dirPath = String(body.dir || '~/NullAITech/zoth-studio-v2');
+        const dirPath = String(body.dir || path.join(NULLAITECH_ROOT, 'zoth-studio-v2'));
         const modelName = String(body.model || 'qwen2.5-coder:1.5b').replace(/[^a-zA-Z0-9._:-]/g, '');
         const dryRunFlag = body.dryRun ? '--dry-run' : '';
         const safePrompt = JSON.stringify(promptText);
         const safeDir = JSON.stringify(dirPath);
-        exec(`"~/NullAITech/bin/zoth-agent-conductor" dispatch --engine ${engine} --model ${modelName} --dir ${safeDir} ${dryRunFlag} --json ${safePrompt}`, { timeout: 95000 }, (err, stdout, stderr) => {
+        exec(`${shellQuote(CONDUCTOR_BIN)} dispatch --engine ${engine} --model ${modelName} --dir ${safeDir} ${dryRunFlag} --json ${safePrompt}`, { timeout: 95000 }, (err, stdout, stderr) => {
           try {
             send(res, 200, JSON.parse(stdout));
           } catch {
@@ -534,11 +543,11 @@ export function studioMiddleware() {
         const allowedCommands = {
           claude: 'xfce4-terminal --title="Claude CLI" -e "claude" &',
           opencode: 'xfce4-terminal --title="OpenCode" -e "opencode" &',
-          hermes: 'xfce4-terminal --title="Hermes Agent" -e "~/.local/bin/hermes" &',
-          cursor: 'xfce4-terminal --title="Cursor Agent" -e "~/.local/bin/cursor-agent" &',
-          grok: 'xfce4-terminal --title="Grok Agent" -e "~/.grok/bin/grok" &',
+          hermes: `xfce4-terminal --title="Hermes Agent" -e ${shellQuote(path.join(LOCAL_BIN, 'hermes'))} &`,
+          cursor: `xfce4-terminal --title="Cursor Agent" -e ${shellQuote(path.join(LOCAL_BIN, 'cursor-agent'))} &`,
+          grok: `xfce4-terminal --title="Grok Agent" -e ${shellQuote(path.join(GROK_BIN_DIR, 'grok'))} &`,
           ollama: 'xfce4-terminal --title="Ollama Local LLM" -e "ollama run qwen2.5-coder:1.5b" &',
-          zothos: 'xfce4-terminal --title="ZothOS Conductor" -e "~/NullAITech/bin/zoth-agent-conductor watch" &',
+          zothos: `xfce4-terminal --title="ZothOS Conductor" -e ${shellQuote(`${CONDUCTOR_BIN} watch`)} &`,
           netlify: 'xfce4-terminal --title="Netlify CLI" -e "netlify" &',
           burpsuite: 'burpsuite &',
           bitwarden: 'xfce4-terminal --title="Bitwarden CLI" -e "bw" &',
@@ -560,11 +569,10 @@ export function studioMiddleware() {
       if (req.method === 'POST' && url.pathname === '/api/studio/supervisor/boot') {
         const body = await readBody(req);
         const target = String(body.service || '').toLowerCase();
-        const homeDir = os.homedir() || '~';
         const bootMap = {
-          civilization: `ENABLE_KOKORO_VOICE=0 nohup node "${homeDir}/NullAITech/zoth-civilization/server.js" >/tmp/zoth-civ-supervisor.log 2>&1 &`,
-          webgen: `cd "${homeDir}/NullAITech/zoth-webgen" && nohup python3 server.py --port 8092 >/tmp/zoth-webgen-supervisor.log 2>&1 &`,
-          daemons: `"${homeDir}/NullAITech/bin/zoth-agent-conductor" up >/tmp/zoth-daemons-supervisor.log 2>&1 && nohup node "${STUDIO_ROOT}/bin/zoth.js" up >>/tmp/zoth-daemons-supervisor.log 2>&1 &`,
+          civilization: `ENABLE_KOKORO_VOICE=0 nohup node ${shellQuote(path.join(NULLAITECH_ROOT, 'zoth-civilization', 'server.js'))} >/tmp/zoth-civ-supervisor.log 2>&1 &`,
+          webgen: `cd ${shellQuote(path.join(NULLAITECH_ROOT, 'zoth-webgen'))} && nohup python3 server.py --port 8092 >/tmp/zoth-webgen-supervisor.log 2>&1 &`,
+          daemons: `${shellQuote(CONDUCTOR_BIN)} up >/tmp/zoth-daemons-supervisor.log 2>&1 && nohup node ${shellQuote(path.join(STUDIO_ROOT, 'bin', 'zoth.js'))} up >>/tmp/zoth-daemons-supervisor.log 2>&1 &`,
         };
         if (!bootMap[target]) {
           send(res, 400, { error: `Unknown service "${target}". Allowed: civilization, webgen, daemons.` });

@@ -6,11 +6,12 @@
  */
 import http from 'node:http';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 
 const PORT = Number(process.env.ZOTH_CLASSIC_PORT || 8088);
 const ROOT = process.env.ZOTH_CLASSIC_ROOT
-  || '~/zoth-studio/core-app/public';
+  || path.join(os.homedir(), 'zoth-studio', 'core-app', 'public');
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',

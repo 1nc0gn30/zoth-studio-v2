@@ -20,13 +20,13 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
-const SAMPLE_ENV = `# Sovereign Agent Production Environment Secrets
-DATABASE_URL=postgresql://postgres:sovereign_pass_992@127.0.0.1:5432/zothos
-STRIPE_API_KEY=sk_live_51P8...sovereign_live_vault
+const SAMPLE_ENV = `# Demo fixture only. Replace every value before use.
+DATABASE_URL=postgresql://postgres:YOUR_DB_PASSWORD@127.0.0.1:5432/demo
+STRIPE_API_KEY=sk_test_YOUR_STRIPE_SECRET_KEY
 SOLANA_ADDRESS=DemoSoLanaAddress11111111111111111111111111111
-OLLAMA_TOKEN=sk-local-enclave-sovereign-09
-RESEND_API_KEY=re_1nc0gn30_sovereign_bridge
-JWT_SECRET=super_secret_argon2id_master_seed_2026`;
+OLLAMA_TOKEN=YOUR_OLLAMA_TOKEN
+RESEND_API_KEY=re_YOUR_RESEND_API_KEY
+JWT_SECRET=YOUR_JWT_SECRET`;
 
 export function EnvGuardVaultGodModeTool() {
   const theme = useTheme();
