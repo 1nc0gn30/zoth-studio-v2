@@ -448,7 +448,7 @@ ${cronExpression} /usr/local/bin/zoth-agent-tick >> /var/log/zoth/rhythm.log 2>&
               <Button
                 variant="contained"
                 size="small"
-                href="https://buy.stripe.com/fZebJ00V98DcbjafZ9"
+                href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
                 target="_blank"
                 rel="noreferrer"
                 startIcon={<BoltIcon />}
@@ -725,7 +725,7 @@ ${cronExpression} /usr/local/bin/zoth-agent-tick >> /var/log/zoth/rhythm.log 2>&
               <Button
                 variant="contained"
                 size="small"
-                href="https://buy.stripe.com/fZebJ00V98DcbjafZ9"
+                href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
                 target="_blank"
                 rel="noreferrer"
                 sx={{ bgcolor: gold, color: '#000', fontWeight: 800 }}

@@ -210,7 +210,7 @@ EOF
   - [City Desk Standalone HTML Bundle ($19)](https://buy.stripe.com/6oU7sK3bTcGk5Pia8wfw40N)
   - [AEO Knowledge Graph Engine Pro ($19)](https://buy.stripe.com/6oUbJ08wddKoa5y0xWfw40P)
   - [CWV Speed Studio Pro ($19)](https://buy.stripe.com/bJe00i13LbCg6Tm2G4fw40Q)
-  - [EnvGuard Secrets Linter Pro ($19)](https://buy.stripe.com/dRm14maElfSw3Haa8wfw40R)
+  - [EnvGuard Secrets Linter Pro ($19)](https://buy.stripe.com/00w00i13L8q4dhK1C0fw40R)
 - **Crypto / Solana Checkout**: Send SOL or USDC to `GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK` and email `contact@nealfrazier.tech`.
 
 ## Zero-Auth Machine-Readable JSON Web APIs for AI Agents & Tools (CORS `*` Enabled)

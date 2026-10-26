@@ -327,7 +327,7 @@ export function AgentCapsuleJailGodModeTool() {
               <Button
                 variant="contained"
                 size="small"
-                href="https://buy.stripe.com/fZebJ00V98DcbjafZ9"
+                href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
                 target="_blank"
                 rel="noreferrer"
                 startIcon={<BoltIcon />}
@@ -702,7 +702,7 @@ export function AgentCapsuleJailGodModeTool() {
               <Button
                 variant="contained"
                 size="small"
-                href="https://buy.stripe.com/fZebJ00V98DcbjafZ9"
+                href="https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L"
                 target="_blank"
                 rel="noreferrer"
                 sx={{ bgcolor: gold, color: '#000', fontWeight: 800 }}

@@ -276,7 +276,7 @@ Every single tool in the 62-tool catalog has a dedicated, production-ready inter
 
 Every tool adheres to the mandatory sovereign monetization architecture designed for the $100,000 treasury goal:
 - **Founding Member Sales Banner**: Eye-catching glassmorphic sales banner directly above every tool workspace offering $19 lifetime access (<del>$79 regular</del>) with urgent social proof.
-- **Dual Payment Rails**: Pre-wired Stripe Payment Links (`https://buy.stripe.com/7sI7sA8hM2X8eFG8ww`) and non-custodial Solana DePay checkout (`428790dd-7ad1-407c-8ecf-c048c77a4cb8`).
+- **Dual Payment Rails**: Pre-wired Stripe Payment Links (`https://buy.stripe.com/4gMfZg9AheOsdhKbcAfw40L`) and non-custodial Solana DePay checkout (`428790dd-7ad1-407c-8ecf-c048c77a4cb8`).
 - **Try-Before-You-Buy Value Realization**: Users interact with inputs, view real-time calculations, token costs, and AST feedback with zero fake work.
 - **Frosted Glass Output Paywall Blur**: Structural code, export manifests, and advanced dossiers are locked behind a frosted glass blur (`filter: blur(6px)`) with high-contrast unlock CTAs.
 - **Action Interceptors**: "Copy", "Export", and advanced mode clicks trigger the 6-checkpoint Pro Paywall Modal.
