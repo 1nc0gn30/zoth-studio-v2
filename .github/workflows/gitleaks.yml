@@ -1,0 +1,74 @@
+# Fail the job when gitleaks finds secrets or the PII patterns in .gitleaks.toml.
+# Runs on every pull request and every push (all branches, including main).
+#
+# gitleaks-action v3 is the current official action. v2 uses Node 20, which
+# GitHub-hosted runners dropped on 2026-09-16.
+#
+# NullAITech is an organization, so the action will not scan until a free
+# GITLEAKS_LICENSE secret exists (https://gitleaks.io). The directory scan
+# below uses the same v8.30.1 binary and .gitleaks.toml and always fails the
+# job on findings, including on fork pull requests where Actions secrets are
+# not available. When the license secret is set, a failing action fails the
+# job too (pull-request comments and commit-range scan).
+
+name: gitleaks
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  actions: write
+
+jobs:
+  scan:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Install gitleaks
+        run: |
+          set -euo pipefail
+          version=8.30.1
+          archive="gitleaks_${version}_linux_x64.tar.gz"
+          curl -sSfL -o "$archive" "https://github.com/gitleaks/gitleaks/releases/download/v${version}/${archive}"
+          echo "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  ${archive}" | sha256sum -c -
+          sudo tar -xzf "$archive" -C /usr/local/bin gitleaks
+          gitleaks version
+
+      - name: Scan current tree
+        run: |
+          set -euo pipefail
+          gitleaks dir --no-banner --redact=100 --config .gitleaks.toml --verbose .
+
+      - name: Official gitleaks action
+        id: gitleaks_action
+        continue-on-error: true
+        uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+          GITLEAKS_CONFIG: .gitleaks.toml
+          GITLEAKS_VERSION: "8.30.1"
+          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: "true"
+
+      - name: Fail when the official action reports findings
+        if: steps.gitleaks_action.outcome == 'failure'
+        env:
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+        run: |
+          set -euo pipefail
+          if [ -n "${GITLEAKS_LICENSE}" ]; then
+            echo "gitleaks-action failed. Findings fail this job."
+            exit 1
+          fi
+          echo "GITLEAKS_LICENSE is unset, so gitleaks-action exited before scanning."
+          echo "The directory scan above is the failing gate."
+          echo "Add the free organization license from https://gitleaks.io as Actions secret GITLEAKS_LICENSE to enable the action's pull-request comments."

@@ -1,0 +1,9 @@
+# Same rules as CI (.gitleaks.toml, gitleaks v8.30.1).
+#   pre-commit install
+#   pre-commit run gitleaks --all-files
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+        args: ["--config=.gitleaks.toml"]

@@ -1,0 +1,296 @@
+# Secret and PII rules for Zoth Studio.
+#
+# Added after the history scrub that removed a real Signal number, developer
+# machine paths, a disk UUID, and a SAMPLE_ENV line that labeled the public
+# receive address as SOLANA_PRIVATE_KEY. These rules fail CI if that material
+# is committed again. Default gitleaks credential rules still apply.
+#
+# Go's RE2 engine has no lookahead or lookbehind. Boundaries are written as
+# ordinary groups. minVersion matches the v8.30.1 binary pinned in CI and
+# .pre-commit-config.yaml.
+
+title = "Zoth Studio secret and PII hygiene"
+
+minVersion = "v8.30.1"
+
+[extend]
+useDefault = true
+
+# -----------------------------------------------------------------------------
+# Phones. The leaked Signal account was a 948-area number, both formatted and
+# as a compact 10-digit or leading-1 run (9482047987 / 19482047987).
+# Reserved fictional fixtures such as +1-555-555-0199 do not match this rule.
+# -----------------------------------------------------------------------------
+
+[[rules]]
+id = "us-phone-948-signal"
+description = "948-area US phone, including compact 10-digit and leading-1 Signal-account forms"
+regex = '''(?:^|[^A-Za-z0-9])((?:\+?1[\s.\-]?)?\(?948\)?(?:[\s.\-]?\d){7})(?:[^0-9]|$)'''
+secretGroup = 1
+keywords = ["948"]
+tags = ["pii", "phone", "signal"]
+
+[[rules.allowlists]]
+description = "Obvious dummy 948 numbers (repeated or sequential). The reserved 555-555-0199 fixture is a different area code and does not match this rule."
+regexTarget = "secret"
+regexes = [
+  '''948[\s.\-\(\)]*000[\s.\-]*0000''',
+  '''948[\s.\-\(\)]*111[\s.\-]*1111''',
+  '''948[\s.\-\(\)]*123[\s.\-]*4567''',
+  '''948[\s.\-\(\)]*999[\s.\-]*9999''',
+  '''948(?:[\s.\-\(\)]*0){7}''',
+  '''948(?:[\s.\-\(\)]*1){7}''',
+  '''948(?:[\s.\-\(\)]*5){7}''',
+]
+
+[[rules]]
+id = "signal-account-nanp"
+description = "Signal account or recipient assigned a NANP number. 555 fixtures and the reserved 555-01xx exchange are allowlisted."
+regex = '''(?i)(?:signal[_\s-]?account|signal[_\s-]?recipient).{0,80}?((?:\+?1[\s.\-]?)?\(?[2-9]\d{2}\)?[\s.\-]?\d{3}[\s.\-]?\d{4})'''
+secretGroup = 1
+keywords = [
+  "signal_account",
+  "signal-account",
+  "signal account",
+  "signal_recipient",
+  "signal-recipient",
+  "signal recipient",
+]
+tags = ["pii", "phone", "signal"]
+
+[[rules.allowlists]]
+description = "Reserved fictional numbers. +1-555-555-0199 is the demo fixture. NANP 555-0100 through 555-0199 are not real subscribers."
+regexTarget = "secret"
+regexes = [
+  '''(?i)(?:\+?1[\s.\-]?)?\(?555\)?[\s.\-]?\d{3}[\s.\-]?\d{4}''',
+  '''(?i)(?:\+?1[\s.\-]?)?\(?[2-9]\d{2}\)?[\s.\-]?555[\s.\-]?01\d{2}''',
+  '''(?i)(?:\+?1[\s.\-]?)?\(?[2-9]\d{2}\)?[\s.\-]?(?:0{3}|1{3})[\s.\-]?(?:0{4}|1{4})''',
+  '''(?i)(?:\+?1[\s.\-]?)?\(?[2-9]\d{2}\)?[\s.\-]?123[\s.\-]?4567''',
+]
+
+# -----------------------------------------------------------------------------
+# Machine paths. The upstream gitleaks allowlist treats a secret that is only
+# an absolute /home/... path as non-sensitive. secretGroup captures the
+# username token so /home/zoth is still reported.
+# -----------------------------------------------------------------------------
+
+[[rules]]
+id = "machine-home-zoth"
+description = "Developer home /home/zoth was removed in the history scrub and must not return"
+regex = '''/home/(zoth)\b'''
+secretGroup = 1
+keywords = ["/home/zoth"]
+tags = ["pii", "path"]
+
+[[rules]]
+id = "machine-media-neo"
+description = "Machine mount /media/neo/ must not be committed"
+regex = '''/media/neo/'''
+keywords = ["/media/neo/"]
+tags = ["pii", "path"]
+
+[[rules]]
+id = "disk-by-uuid-or-by-id"
+description = "Disk UUID, partuuid, or by-id hardware serial paths"
+regex = '''/dev/disk/by-(?:uuid|partuuid|id)/[^\s'"<>]{0,160}'''
+keywords = ["/dev/disk/by-"]
+tags = ["pii", "path", "hardware"]
+
+[[rules]]
+id = "scrubbed-disk-uuid-f2fdda77"
+description = "Disk UUID prefix removed in the history scrub"
+regex = '''f2fdda77'''
+keywords = ["f2fdda77"]
+tags = ["pii", "path", "hardware"]
+
+# -----------------------------------------------------------------------------
+# Solana. Fixtures must say SOLANA_ADDRESS=Demo... . A real-looking base58
+# value assigned to SOLANA_PRIVATE_KEY fails everywhere, including when the
+# value is the public receive address.
+# -----------------------------------------------------------------------------
+
+[[rules]]
+id = "solana-private-key-base58"
+description = "SOLANA_PRIVATE_KEY assigned a base58 value with enough entropy to be a real address or keypair"
+regex = '''(?i)SOLANA_PRIVATE_KEY\s*=\s*['"]?([1-9A-HJ-NP-Za-km-z]{32,88})'''
+secretGroup = 1
+entropy = 3.5
+keywords = ["SOLANA_PRIVATE_KEY"]
+tags = ["solana", "key"]
+
+[[rules]]
+id = "envguard-fixture-no-solana-private-key"
+description = "EnvGuard and sample-env files must not contain SOLANA_PRIVATE_KEY at all. Use SOLANA_ADDRESS and a Demo-prefixed fake."
+regex = '''SOLANA_PRIVATE_KEY'''
+path = '''(?i)(?:^|/)[^/]*(?:envguard|sample[-_.]?env)[^/]*$'''
+keywords = ["SOLANA_PRIVATE_KEY"]
+tags = ["solana", "fixture"]
+
+[[rules]]
+id = "sample-env-block-no-solana-private-key"
+description = "A SAMPLE_ENV assignment must not label any value SOLANA_PRIVATE_KEY"
+regex = '''SAMPLE_ENV\s*=\s*(?:`[^`]*SOLANA_PRIVATE_KEY|['"][^\r\n]*SOLANA_PRIVATE_KEY)'''
+keywords = ["SOLANA_PRIVATE_KEY", "SAMPLE_ENV"]
+tags = ["solana", "fixture"]
+
+[[rules]]
+id = "solana-public-receive-address-scope"
+description = "Public Solana receive address is allowed only on labeled payment and treasury surfaces"
+regex = '''GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK'''
+keywords = ["GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"]
+tags = ["solana", "treasury"]
+
+# GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK is the published receive
+# address for SOL and USDC checkout. It is not a signing key. Allow it only
+# where the UI or public catalog already shows it as a payable receiver:
+# Agora treasury, the DePay funnel, the public solanaWallet catalog, the
+# public llms checkout copy, and the tool pages that copy that same receiver
+# onto the clipboard. Do not extend this list for samples, EnvGuard fixtures,
+# or any SOLANA_PRIVATE_KEY assignment (that rule is separate and still fails).
+[[rules.allowlists]]
+description = "Intentional public receive address on labeled payment and treasury surfaces only."
+paths = [
+  '''(?:^|/)src/pages/AgoraPage\.jsx$''',
+  '''(?:^|/)src/components/SovereignFunnel\.jsx$''',
+  '''(?:^|/)src/components/tools/Badge3dCoinGodModeTool\.jsx$''',
+  '''(?:^|/)src/components/tools/CertPathRoadmapGodModeTool\.jsx$''',
+  '''(?:^|/)src/components/tools/PwaManifestBuilderGodModeTool\.jsx$''',
+  '''(?:^|/)src/components/tools/RobotsTxtAuditorGodModeTool\.jsx$''',
+  '''(?:^|/)src/components/tools/SchemaIllustratorGodModeTool\.jsx$''',
+  '''(?:^|/)public/api/index\.json$''',
+  '''(?:^|/)public/api/services\.json$''',
+  '''(?:^|/)public/llms\.txt$''',
+  '''(?:^|/)public/llms-full\.txt$''',
+  '''(?:^|/)public/\.well-known/llms\.txt$''',
+  '''(?:^|/)public/\.well-known/llms-full\.txt$''',
+]
+
+# The policy doc and this file quote banned path literals. This file also
+# names the receive address in the allowlist comment above. Neither file is a
+# checkout surface or a machine path. solana-private-key-base58 is intentionally
+# not listed, so a real key pasted here still fails.
+[[allowlists]]
+description = "Policy doc and gitleaks config quote the banned paths and, in this file only, the public receive address."
+targetRules = [
+  "machine-home-zoth",
+  "machine-media-neo",
+  "disk-by-uuid-or-by-id",
+  "scrubbed-disk-uuid-f2fdda77",
+  "solana-public-receive-address-scope",
+]
+paths = [
+  '''(?:^|/)docs/SECRET-HYGIENE\.md$''',
+  '''(?:^|/)\.gitleaks\.toml$''',
+]
+
+# Default gitleaks skips common images but not the studio capture binaries.
+[[allowlists]]
+description = "Published studio-capture binaries (mp4, webm, webp). Not a place for source or env fixtures."
+paths = [
+  '''(?i)\.(?:mp4|webm|webp)$''',
+]
+
+# Pre-existing product fixtures. Each allowlist is an exact secret, and the
+# in-app demos are also pinned to the file that ships them. A new credential
+# in one of these files still fails. YOUR_* is the placeholder convention
+# from SAMPLE_ENV and the Agora curl example.
+
+[[allowlists]]
+description = "Bearer YOUR_* in curl examples is a placeholder, not a token."
+targetRules = ["curl-auth-header"]
+regexTarget = "secret"
+regexes = ['''^YOUR_[A-Z0-9_]+$''']
+
+[[allowlists]]
+description = "Public jwt.io sample (sub 1234567890, John Doe, signature for the word secret)."
+targetRules = ["jwt"]
+regexTarget = "secret"
+regexes = [
+  '''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ\.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c$''',
+]
+
+[[allowlists]]
+description = "Same JWT inspector fixtures when generic-api-key classifies them. 8.30.1 flags the alg:none sample this way."
+targetRules = ["generic-api-key"]
+condition = "AND"
+regexTarget = "secret"
+paths = ['''(?:^|/)src/components/tools/JwtInspectorGodModeTool\.jsx$''']
+regexes = [
+  '''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiJ1c2VyX3NvdmVyZWlnbl85OTIxIiwibmFtZSI6Ik5lYWwgRnJhemllciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcyOTM4MjQwMCwiZXhwIjoxNzI5OTg3MjAwfQ\.S0tHqgU43Uv2tC1y93tM00nU_Y7L_eJk_tFqW6Qv8tY$''',
+  '''^eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0\.eyJzdWIiOiJhZG1pbl9ieXBhc3MiLCJyb2xlIjoic3VwZXJhZG1pbiIsImlhdCI6MTcyOTM4MjQwMH0\.$''',
+  '''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiJ1c2VyX2V4cGlyZWQiLCJyb2xlIjoidmlld2VyIiwiaWF0IjoxNjA5NDU5MjAwLCJleHAiOjE2MDk0NjI4MDB9\.iG8Y6lS1zD5U7X3M0aP2qR4tV6wX8zB0cE2gH4jL6nI$''',
+  '''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiJ1c2VyX2xlYWsiLCJlbWFpbCI6ImFkbWluQG51bGxhaS50ZWNoIiwiYXdzX2tleSI6IkFLSUFJT1NGT0ROTjdFWEFNUExFIiwic2VjcmV0X3NlZWQiOiJhbGNoZW15Xzc3OCJ9\.K_v7h9yX3Z1nQ0pL5jT8mR2wF4bV6cE9gA3dI5sO7tE$''',
+]
+
+[[allowlists]]
+description = "Unsigned demo tokens rendered by the JWT inspector workstation."
+targetRules = ["jwt"]
+condition = "AND"
+regexTarget = "secret"
+paths = ['''(?:^|/)src/components/tools/JwtInspectorGodModeTool\.jsx$''']
+regexes = [
+  '''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiJ1c2VyX3NvdmVyZWlnbl85OTIxIiwibmFtZSI6Ik5lYWwgRnJhemllciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcyOTM4MjQwMCwiZXhwIjoxNzI5OTg3MjAwfQ\.S0tHqgU43Uv2tC1y93tM00nU_Y7L_eJk_tFqW6Qv8tY$''',
+  '''^eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0\.eyJzdWIiOiJhZG1pbl9ieXBhc3MiLCJyb2xlIjoic3VwZXJhZG1pbiIsImlhdCI6MTcyOTM4MjQwMH0\.$''',
+  '''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiJ1c2VyX2V4cGlyZWQiLCJyb2xlIjoidmlld2VyIiwiaWF0IjoxNjA5NDU5MjAwLCJleHAiOjE2MDk0NjI4MDB9\.iG8Y6lS1zD5U7X3M0aP2qR4tV6wX8zB0cE2gH4jL6nI$''',
+  '''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiJ1c2VyX2xlYWsiLCJlbWFpbCI6ImFkbWluQG51bGxhaS50ZWNoIiwiYXdzX2tleSI6IkFLSUFJT1NGT0ROTjdFWEFNUExFIiwic2VjcmV0X3NlZWQiOiJhbGNoZW15Xzc3OCJ9\.K_v7h9yX3Z1nQ0pL5jT8mR2wF4bV6cE9gA3dI5sO7tE$''',
+]
+
+[[allowlists]]
+description = "Sample JWT embedded in the WebGPU JWT inspector workstation."
+targetRules = ["jwt"]
+condition = "AND"
+regexTarget = "secret"
+paths = ['''(?:^|/)src/components/tools/WebGPUToolWorkstation\.jsx$''']
+regexes = [
+  '''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiJ6b3RoLXNvdmVyZWlnbi1hZ2VudCIsInJvbGUiOiJhcmNob24tYWRtaW4iLCJpc3MiOiJ6b3RoLm51bGxhaS50ZWNoIiwiYXVkIjoic3dhcm0tbWVzaCIsImlhdCI6MTczODAwMDAwMCwiZXhwIjoyMDgwMDAwMDAwfQ\.K8z4jT9N0_mB2V8oP3wQ1rL9sU2vX5yZ7aB1cE3gH4k$''',
+]
+
+[[allowlists]]
+description = "WebMCP console sample token. The signature segment is the word signature."
+targetRules = ["generic-api-key"]
+condition = "AND"
+regexTarget = "secret"
+paths = ['''(?:^|/)src/components/WebMCPConsole\.jsx$''']
+regexes = [
+  '''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiJ6b3RoLWFnZW50IiwiZXhwIjoxNzk4Nzg5NjAwfQ\.signature$''',
+]
+
+[[allowlists]]
+description = "Truncated sampleTokenAnalyzed string in the WebGPU engine demo."
+targetRules = ["generic-api-key"]
+condition = "AND"
+regexTarget = "secret"
+paths = ['''(?:^|/)src/utils/webgpuEngine\.js$''']
+regexes = ['''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.\.\.$''']
+
+[[allowlists]]
+description = "localStorage key name for the Adytum plan UI, not a credential."
+targetRules = ["generic-api-key"]
+condition = "AND"
+regexTarget = "secret"
+paths = ['''(?:^|/)src/pages/AdytumPage\.jsx$''']
+regexes = ['''^zoth-adytum-plan-v1$''']
+
+[[allowlists]]
+description = "Audio-cipher stego sample payload. The value is a fixed demo string in that tool."
+targetRules = ["generic-api-key"]
+condition = "AND"
+regexTarget = "secret"
+paths = ['''(?:^|/)src/components/tools/AudioCipherGodModeTool\.jsx$''']
+regexes = ['''^zoth_sec_f99a38217bb4c009$''']
+
+[[allowlists]]
+description = "Regex-droid UUID fixture sitting next to the word token."
+targetRules = ["generic-api-key"]
+condition = "AND"
+regexTarget = "secret"
+paths = ['''(?:^|/)src/components/tools/RegexDroidGodModeTool\.jsx$''']
+regexes = ['''^302ed169-2fc4-4fe5-98e4-ebd229505405\.$''']
+
+[[allowlists]]
+description = "Truncated demo hex in the ZothOS installer transcript. The line is a public-key enrollment log, and the value ends in an ellipsis."
+targetRules = ["generic-api-key"]
+condition = "AND"
+regexTarget = "secret"
+paths = ['''(?:^|/)src/pages/ZothOSPage\.jsx$''']
+regexes = ['''^0x98f4a13d7c6b5420e11894dcb02e1763a8f94cb02e176\.\.\.$''']
