@@ -4578,3 +4578,271 @@ export const VAELOR_22_COMPARISON_MATRIX = [
   }
 ];
 
+export const VAELOR_MCP_TOOLS = [
+  {
+    name: "vaelor_network_status",
+    description: "Get real-time Vaelor Layer-1 network status, circulating supply, 5-validator BFT quorum status, 8.5% savings vault TVL, and total gas fees saved ($0.00 gas forever).",
+    defaultArgs: {}
+  },
+  {
+    name: "vaelor_account_balance",
+    description: "Inspect a Vaelor account's liquid balance, staked savings, credit profile, daily limits, and recent micro-blocks.",
+    defaultArgs: { handle: "@zoth" }
+  },
+  {
+    name: "vaelor_send_feeless",
+    description: "Execute an instant, feeless transfer on the Vaelor Account-Lattice DAG (<20ms finality, $0.00 gas fee).",
+    defaultArgs: { from: "@citizen", to: "@sprig", amount: 15.0, memo: "Matcha Latte & Artisan Sourdough" }
+  },
+  {
+    name: "vaelor_verify_handle_safety",
+    description: "Verify an @handle against the on-lattice merchant directory with homoglyph & Levenshtein anti-phishing defense.",
+    defaultArgs: { handle: "@z0th" }
+  },
+  {
+    name: "vaelor_create_smart_receipt",
+    description: "Mint an itemized cryptographic smart receipt with line items, 365-day warranty attestation, and instant 2.5% split cashback.",
+    defaultArgs: { buyer: "@citizen", merchant: "@sprig", items: [{ name: "Artisan Pastry", qty: 2, unitPrice: 6.50 }], memo: "Breakfast" }
+  },
+  {
+    name: "vaelor_mine_pouw",
+    description: "Mine new VLR by submitting a Proof-of-Useful-Work (PoUW) computational audit (AEO schema, Core Web Vitals, Security scan, LLM inference).",
+    defaultArgs: { worker: "@zoth", workType: "STDP_VECTOR_INDEXING", taskLabel: "STDP associative matrix consolidation" }
+  },
+  {
+    name: "vaelor_stake_savings",
+    description: "Deposit VLR into the 8.5% APY Zero-Lockup PoUW Compute Savings Vault with instant 0-day unbonding.",
+    defaultArgs: { handle: "@citizen", amount: 100.0, validatorId: "val-delta-zothos-local" }
+  },
+  {
+    name: "vaelor_draw_credit_bnpl",
+    description: "Draw from the 0% APR revolving credit facility / execute Buy-Now-Pay-Later (BNPL) checkout with 30-day grace period and instant merchant settlement.",
+    defaultArgs: { handle: "@citizen", amount: 50.0, recipient: "@sprig", memo: "30-Day BNPL Order" }
+  },
+  {
+    name: "vaelor_post_agent_bounty",
+    description: "Post an autonomous AI agent Machine-to-Machine (M2M) micro-contract bounty with cryptographic escrow and artifact verification.",
+    defaultArgs: { creator: "@zoth", title: "AST Polyglot Linter", rewardVlr: 25.0, category: "Code Analysis" }
+  },
+  {
+    name: "vaelor_send_shielded",
+    description: "Execute a confidential shielded transfer using Pedersen Commitments with optional selective auditor view-key disclosure.",
+    defaultArgs: { from: "@citizen", to: "@neal", amount: 100.0, memo: "Private sovereign settlement" }
+  }
+];
+
+export function stakeVaelorSavingsFallback({ handle = '@citizen', amount = 100.0, validatorId = 'val-delta-zothos-local' } = {}) {
+  const ts = new Date().toISOString();
+  const randHex = (len = 64) => Array.from({ length: len }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+  const hash = randHex(64);
+  const amt = parseFloat(amount) || 100.0;
+  const annualYield = +(amt * 0.085).toFixed(2);
+  const dailyYield = +(annualYield / 365).toFixed(4);
+
+  return {
+    ok: true,
+    stakedAmountVlr: amt,
+    totalStakedVlr: amt + 40000.0,
+    annualYieldVlr: annualYield,
+    dailyYieldVlr: dailyYield,
+    depositBlock: {
+      hash,
+      type: 'STAKE_DEPOSIT',
+      account: handle,
+      amountVlr: amt,
+      validatorId,
+      finalityMs: 4.8,
+      gasFeeVlr: 0,
+      timestamp: ts,
+      quorumCertificate: {
+        blockHash: hash,
+        status: 'FINALIZED_BFT',
+        quorumSize: 5,
+        approvals: 5,
+        aggregateLatencyMs: 8.2
+      }
+    }
+  };
+}
+
+export function drawVaelorCreditFallback({ handle = '@citizen', amount = 50.0, recipient = '@sprig', memo = '30-Day BNPL Settlement' } = {}) {
+  const ts = new Date().toISOString();
+  const randHex = (len = 64) => Array.from({ length: len }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+  const drawHash = randHex(64);
+  const receiveHash = randHex(64);
+  const amt = parseFloat(amount) || 50.0;
+
+  return {
+    ok: true,
+    drawnAmountVlr: amt,
+    recipient: recipient || '@sprig',
+    memo,
+    profile: {
+      handle,
+      creditScore: 835,
+      creditTier: 'SOVEREIGN PRIME',
+      creditLimitVlr: 20500.0,
+      availableCreditVlr: 20450.0,
+      gracePeriodDays: 30,
+      aprPct: 0.0
+    },
+    drawBlock: {
+      hash: drawHash,
+      type: 'CREDIT_DRAW',
+      account: handle,
+      amountVlr: amt,
+      recipient,
+      memo,
+      finalityMs: 6.2,
+      gasFeeVlr: 0,
+      timestamp: ts,
+      quorumCertificate: {
+        blockHash: drawHash,
+        status: 'FINALIZED_BFT',
+        quorumSize: 5,
+        approvals: 5,
+        aggregateLatencyMs: 7.9
+      }
+    },
+    receiveBlock: {
+      hash: receiveHash,
+      type: 'RECEIVE',
+      account: recipient,
+      amountVlr: amt,
+      timestamp: ts
+    }
+  };
+}
+
+export function callVaelorMcpFallback(toolName, args = {}) {
+  const ts = new Date().toISOString();
+  const randHex = (len = 64) => Array.from({ length: len }, () => Math.floor(Math.random() * 16).toString(16)).join('');
+
+  switch (toolName) {
+    case 'vaelor_network_status':
+      return {
+        ok: true,
+        tool: toolName,
+        result: {
+          protocol: "Vaelor Account-Lattice L1",
+          symbol: "VLR",
+          chainId: "vaelor-mainnet-1",
+          totalSupplyVlr: 191344.24,
+          totalBlocks: 140,
+          totalFeelessTxCount: 142,
+          gasFee: "$0.00 Feeless Forever",
+          activeValidators: 5,
+          bftQuorumStatus: "5/5 ONLINE (<15ms)",
+          savingsVaultTvlVlr: 40050.0,
+          stakingApyPct: 8.5,
+          totalGasSavedUsd: 63.9
+        }
+      };
+    case 'vaelor_account_balance':
+      return {
+        ok: true,
+        tool: toolName,
+        result: {
+          handle: args.handle || "@zoth",
+          address: "vlr1_2375452906ed06513246c18711531886",
+          liquidBalanceVlr: 29957.77,
+          stakedSavingsVlr: 15000.0,
+          creditScore: 835,
+          creditTier: "SOVEREIGN PRIME",
+          creditLimitVlr: 32092.5,
+          availableCreditVlr: 32092.5
+        }
+      };
+    case 'vaelor_send_feeless':
+      return {
+        ok: true,
+        tool: toolName,
+        result: {
+          status: "FINALIZED_BFT",
+          from: args.from || "@citizen",
+          to: args.to || "@sprig",
+          amountVlr: args.amount || 15.0,
+          gasFeeVlr: 0,
+          sendBlockHash: randHex(64),
+          receiveBlockHash: randHex(64),
+          cashbackEarnedVlr: +((args.amount || 15) * 0.025).toFixed(4),
+          finalityLatencyMs: 7.4
+        }
+      };
+    case 'vaelor_verify_handle_safety':
+      return {
+        ok: true,
+        tool: toolName,
+        result: checkVaelorHandleSafetyFallback(args.handle || "@z0th").safety
+      };
+    case 'vaelor_create_smart_receipt':
+      return {
+        ok: true,
+        tool: toolName,
+        result: createVaelorReceiptFallback({
+          buyer: args.buyer || "@citizen",
+          merchant: args.merchant || "@sprig",
+          amount: 25.0,
+          memo: args.memo || "Smart Receipt"
+        }).receipt
+      };
+    case 'vaelor_mine_pouw':
+      return {
+        ok: true,
+        tool: toolName,
+        result: {
+          status: "POUW_MINTED",
+          worker: args.worker || "@zoth",
+          workType: args.workType || "STDP_VECTOR_INDEXING",
+          rewardVlr: 15.69,
+          blockHash: randHex(64),
+          bftQuorumApprovals: "5/5 Validators",
+          finalityLatencyMs: 8.8
+        }
+      };
+    case 'vaelor_stake_savings':
+      return {
+        ok: true,
+        tool: toolName,
+        result: stakeVaelorSavingsFallback(args)
+      };
+    case 'vaelor_draw_credit_bnpl':
+      return {
+        ok: true,
+        tool: toolName,
+        result: drawVaelorCreditFallback(args)
+      };
+    case 'vaelor_post_agent_bounty':
+      return {
+        ok: true,
+        tool: toolName,
+        result: {
+          bountyId: "bty_" + randHex(12),
+          creator: args.creator || "@zoth",
+          title: args.title || "AST Polyglot Task",
+          rewardVlr: args.rewardVlr || 25.0,
+          status: "OPEN_ESCROW_FUNDED",
+          escrowLockHash: randHex(64)
+        }
+      };
+    case 'vaelor_send_shielded':
+      return {
+        ok: true,
+        tool: toolName,
+        result: {
+          status: "SHIELDED_FINALIZED",
+          commitmentHash: randHex(64),
+          rangeProofValid: true,
+          stealthAddress: "vlr_stealth_" + randHex(32),
+          finalityMs: 14.2
+        }
+      };
+    default:
+      return {
+        ok: true,
+        tool: toolName,
+        result: { message: `Execution completed for ${toolName}`, args, timestamp: ts }
+      };
+  }
+}
+
