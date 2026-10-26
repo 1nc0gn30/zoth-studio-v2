@@ -31,6 +31,74 @@ const TOUR_CLUSTERS = [
   'Pantheon'
 ];
 
+const NEUROMODULATOR_STATES = {
+  balanced: {
+    id: 'balanced',
+    label: 'BALANCED',
+    shortLabel: 'BALANCED',
+    colorHex: 0xD4AF37,
+    colorStr: '#D4AF37',
+    secondaryHex: 0x00F0FF,
+    secondaryStr: '#00F0FF',
+    coreEmissiveIntensity: 0.75,
+    speedMultiplier: 1.0,
+    ringSpeed: 1.0,
+    desc: 'Gold/Cyan equilibrium, baseline 1.0x synaptic velocity',
+  },
+  dopamine: {
+    id: 'dopamine',
+    label: '⚡ DOPAMINE',
+    shortLabel: 'DOPAMINE',
+    colorHex: 0xF59E0B,
+    colorStr: '#F59E0B',
+    secondaryHex: 0xFBBF24,
+    secondaryStr: '#FBBF24',
+    coreEmissiveIntensity: 1.6,
+    speedMultiplier: 2.2,
+    ringSpeed: 2.0,
+    desc: 'Radiant Gold, 2.2x synaptic velocity & reward plasticity surge',
+  },
+  norepinephrine: {
+    id: 'norepinephrine',
+    label: '🔥 NOREPINEPHRINE',
+    shortLabel: 'NOREPINEPHRINE',
+    colorHex: 0xF43F5E,
+    colorStr: '#F43F5E',
+    secondaryHex: 0xFB923C,
+    secondaryStr: '#FB923C',
+    coreEmissiveIntensity: 1.9,
+    speedMultiplier: 2.8,
+    ringSpeed: 3.0,
+    desc: 'Crimson/Orange, 3.0x rapid cortical rotation & alert vigilance',
+  },
+  acetylcholine: {
+    id: 'acetylcholine',
+    label: '🌊 ACETYLCHOLINE',
+    shortLabel: 'ACETYLCHOLINE',
+    colorHex: 0x06B6D4,
+    colorStr: '#06B6D4',
+    secondaryHex: 0x38BDF8,
+    secondaryStr: '#38BDF8',
+    coreEmissiveIntensity: 1.3,
+    speedMultiplier: 1.4,
+    ringSpeed: 1.3,
+    desc: 'Electric Cyan, deep synaptic focus & sharpened encoding beam',
+  },
+  serotonin: {
+    id: 'serotonin',
+    label: '💜 SEROTONIN',
+    shortLabel: 'SEROTONIN',
+    colorHex: 0xA855F7,
+    colorStr: '#A855F7',
+    secondaryHex: 0xC084FC,
+    secondaryStr: '#C084FC',
+    coreEmissiveIntensity: 1.0,
+    speedMultiplier: 0.6,
+    ringSpeed: 0.5,
+    desc: 'Deep Violet, 0.6x harmonic consolidation & dream-replay ripples',
+  },
+};
+
 function getClusterHex(cluster) {
   return CLUSTER_HEX[cluster] || 0xD4AF37;
 }
@@ -200,6 +268,13 @@ export default function Netrunner3DWorld({
   const cameraGlideRef = useRef(null);
   const tourStepRef = useRef(0);
   const tourTimerRef = useRef(null);
+  const sceneRef = useRef(null);
+  const nodeGroupRef = useRef(null);
+  const neuromodulatorRef = useRef('balanced');
+  const [neuromodulator, setNeuromodulator] = useState('balanced');
+  const [forgedNotification, setForgedNotification] = useState(null);
+  const [isForging, setIsForging] = useState(false);
+  const forgeTimerRef = useRef(null);
 
   const [autoRotate, setAutoRotate] = useState(true);
   const [showLabels, setShowLabels] = useState(true);
@@ -316,6 +391,10 @@ export default function Netrunner3DWorld({
 
     if (!selectedMem || selectedMem.x === undefined) return;
 
+    const curNState = NEUROMODULATOR_STATES[neuromodulatorRef.current] || NEUROMODULATOR_STATES.balanced;
+    const coreBeamColor = curNState.colorHex;
+    const auraBeamColor = curNState.secondaryHex;
+
     const nodePos = new THREE.Vector3(
       selectedMem.x * 2.2,
       selectedMem.y * 1.8 + 24,
@@ -326,7 +405,7 @@ export default function Netrunner3DWorld({
     // 1. High-luminance Gold Laser Beam directly to Central Netrunner Cyber-Cortex (0, 16, 0)
     const coreLineGeo = new THREE.BufferGeometry().setFromPoints([nodePos, corePos]);
     const coreLineMat = new THREE.LineBasicMaterial({
-      color: 0xFFD700,
+      color: coreBeamColor,
       transparent: true,
       opacity: 0.95,
       blending: THREE.AdditiveBlending,
@@ -337,7 +416,7 @@ export default function Netrunner3DWorld({
 
     // Cyan glowing aura beam to Core
     const coreAuraMat = new THREE.LineBasicMaterial({
-      color: 0x00F0FF,
+      color: auraBeamColor,
       transparent: true,
       opacity: 0.55,
       blending: THREE.AdditiveBlending,
@@ -432,6 +511,250 @@ export default function Netrunner3DWorld({
     };
   }, [memories]);
 
+  // Switch 5-State Neuromodulator Aura & Plasticity Velocity
+  const switchNeuromodulator = useCallback((mode) => {
+    const state = NEUROMODULATOR_STATES[mode] || NEUROMODULATOR_STATES.balanced;
+    setNeuromodulator(state.id);
+    neuromodulatorRef.current = state.id;
+
+    if (shockwaveRef.current && shockwaveRef.current.mesh) {
+      shockwaveRef.current.mesh.position.set(0, 16, 0);
+      shockwaveRef.current.mesh.material.color.setHex(state.colorHex);
+      shockwaveRef.current.scale = 1.0;
+      shockwaveRef.current.opacity = 0.95;
+    }
+
+    if (coreRef.current && coreRef.current.material) {
+      coreRef.current.material.color.setHex(state.colorHex);
+      coreRef.current.material.emissive.setHex(state.colorHex);
+      coreRef.current.material.emissiveIntensity = isDark ? state.coreEmissiveIntensity : state.coreEmissiveIntensity * 0.5;
+    }
+
+    if (coreWireRef.current && coreWireRef.current.material) {
+      coreWireRef.current.material.color.setHex(state.secondaryHex);
+    }
+
+    if (ringsRef.current) {
+      ringsRef.current.forEach((ring, idx) => {
+        if (ring.material) {
+          ring.material.color.setHex(idx % 2 === 0 ? state.colorHex : state.secondaryHex);
+        }
+      });
+    }
+
+    if (selectedMemory) {
+      rebuildPathwayBeams(selectedMemory);
+    }
+  }, [isDark, selectedMemory, rebuildPathwayBeams]);
+
+  // Real-time 3D Engram Birth Projectile & Slingshot Animation
+  const triggerForgeEngram = useCallback(() => {
+    if (isForging) return;
+    setIsForging(true);
+
+    const clusters = ['Kernel', 'Lucy Oracle', 'Consensus', 'Security', 'Vault', 'Pantheon'];
+    const chosenCluster = clusters[Math.floor(Math.random() * clusters.length)];
+    const concepts = {
+      'Kernel': ['STDP Memory Allocator', 'Sovereign Ring-0 Enclave', 'Hippocampal SWR Sequencer'],
+      'Lucy Oracle': ['Deepnet Breach Oracle', 'Trans-dimensional Synthesizer', 'Semantic Latency Buffer'],
+      'Consensus': ['Byzantine Paxos Engram', 'Validator Quorum Vector', 'Cryptographic Proof Trace'],
+      'Security': ['Air-Gapped Isolation Seal', 'Zero-Egress Memory Jail', 'Entropy Shield Attractor'],
+      'Vault': ['SQLite Vector Stratum', 'Obsidian Canvas Exporter', 'AES-256 Memory Ledger'],
+      'Pantheon': ['Companion Familiar Empathy', 'Emergent Collective Mind', 'Evolving Cognitive Horizon'],
+    };
+    const conceptList = concepts[chosenCluster] || ['Neural Plasticity Trace'];
+    const concept = conceptList[Math.floor(Math.random() * conceptList.length)];
+    const clusterHex = getClusterHex(chosenCluster);
+
+    const { centroid } = getClusterVantage(chosenCluster);
+    const targetPos = new THREE.Vector3(
+      centroid.x + (Math.random() - 0.5) * 35,
+      centroid.y + (Math.random() - 0.5) * 20,
+      centroid.z + (Math.random() - 0.5) * 35
+    );
+
+    const newMem = {
+      id: 'FORGED-' + Math.floor(1000 + Math.random() * 9000),
+      concept,
+      text: `${concept}: STDP engram synthesized directly into the ${chosenCluster} cluster stratum.`,
+      cluster: chosenCluster,
+      weight: parseFloat((0.88 + Math.random() * 0.1).toFixed(3)),
+      author: 'Lucy',
+      tags: ['forged', chosenCluster.toLowerCase(), 'engram'],
+      x: Math.round(targetPos.x / 2.2),
+      y: Math.round((targetPos.y - 24) / 1.8),
+      z: Math.round(targetPos.z / 2.2),
+    };
+
+    const scene = sceneRef.current;
+    if (!scene) {
+      setIsForging(false);
+      return;
+    }
+
+    const camPos = cameraRef.current ? cameraRef.current.position : new THREE.Vector3(0, 110, 380);
+    const inboundStart = new THREE.Vector3(camPos.x * 0.5, camPos.y + 40, camPos.z * 0.5);
+    const corePos = new THREE.Vector3(0, 16, 0);
+
+    // 1. Inbound Projectile to Core
+    const pGeo = new THREE.SphereGeometry(2.4, 12, 12);
+    const pMat = new THREE.MeshBasicMaterial({
+      color: 0xFFFFFF,
+      transparent: true,
+      opacity: 0.95,
+      blending: THREE.AdditiveBlending
+    });
+    const projectile = new THREE.Mesh(pGeo, pMat);
+    projectile.position.copy(inboundStart);
+    scene.add(projectile);
+
+    const inboundDuration = 480;
+    const startInboundT = performance.now();
+
+    const inboundInterval = setInterval(() => {
+      const elapsed = performance.now() - startInboundT;
+      const p = Math.min(1.0, elapsed / inboundDuration);
+      const ease = p * p;
+
+      projectile.position.lerpVectors(inboundStart, corePos, ease);
+
+      if (p >= 1.0) {
+        clearInterval(inboundInterval);
+        scene.remove(projectile);
+        pGeo.dispose();
+        pMat.dispose();
+
+        // 2. Cortical shockwave & flash at (0, 16, 0)
+        if (shockwaveRef.current && shockwaveRef.current.mesh) {
+          shockwaveRef.current.mesh.position.copy(corePos);
+          shockwaveRef.current.mesh.material.color.setHex(clusterHex);
+          shockwaveRef.current.scale = 1.0;
+          shockwaveRef.current.opacity = 1.0;
+        }
+        if (coreRef.current && coreRef.current.material) {
+          coreRef.current.material.emissiveIntensity = 2.4;
+          setTimeout(() => {
+            if (coreRef.current && coreRef.current.material) {
+              const curState = NEUROMODULATOR_STATES[neuromodulatorRef.current] || NEUROMODULATOR_STATES.balanced;
+              coreRef.current.material.emissiveIntensity = curState.coreEmissiveIntensity;
+            }
+          }, 400);
+        }
+
+        // 3. Outbound Slingshot to target cluster
+        const arcMid = new THREE.Vector3(
+          (corePos.x + targetPos.x) * 0.5,
+          Math.max(corePos.y, targetPos.y) + 40,
+          (corePos.z + targetPos.z) * 0.5
+        );
+        const slingshotCurve = new THREE.QuadraticBezierCurve3(corePos, arcMid, targetPos);
+
+        const outGeo = new THREE.SphereGeometry(2.2, 12, 12);
+        const outMat = new THREE.MeshBasicMaterial({
+          color: clusterHex,
+          transparent: true,
+          opacity: 0.95,
+          blending: THREE.AdditiveBlending
+        });
+        const outboundStar = new THREE.Mesh(outGeo, outMat);
+        outboundStar.position.copy(corePos);
+        scene.add(outboundStar);
+
+        const outboundDuration = 720;
+        const startOutT = performance.now();
+
+        const outboundInterval = setInterval(() => {
+          const outElapsed = performance.now() - startOutT;
+          const outP = Math.min(1.0, outElapsed / outboundDuration);
+          const outEase = 0.5 - Math.cos(outP * Math.PI) / 2;
+
+          outboundStar.position.copy(slingshotCurve.getPoint(outEase));
+
+          if (outP >= 1.0) {
+            clearInterval(outboundInterval);
+            scene.remove(outboundStar);
+            outGeo.dispose();
+            outMat.dispose();
+
+            // 4. Arrival shockwave at targetPos
+            if (shockwaveRef.current && shockwaveRef.current.mesh) {
+              shockwaveRef.current.mesh.position.copy(targetPos);
+              shockwaveRef.current.mesh.material.color.setHex(clusterHex);
+              shockwaveRef.current.scale = 1.0;
+              shockwaveRef.current.opacity = 0.9;
+            }
+
+            // Create permanent node mesh
+            const radius = Math.max(3.8, parseFloat(newMem.weight) * 5.2);
+            const nodeMesh = new THREE.Mesh(
+              new THREE.SphereGeometry(radius, 20, 20),
+              new THREE.MeshStandardMaterial({
+                color: clusterHex,
+                emissive: clusterHex,
+                emissiveIntensity: 0.85,
+                roughness: 0.25,
+                metalness: 0.75
+              })
+            );
+            nodeMesh.position.copy(targetPos);
+            nodeMesh.userData = { memory: newMem, originalScale: 1, baseRadius: radius };
+
+            if (nodeGroupRef.current) {
+              nodeGroupRef.current.add(nodeMesh);
+            } else {
+              scene.add(nodeMesh);
+            }
+            nodeMeshesRef.current.push(nodeMesh);
+
+            const labelSprite = makeLabelSprite(newMem.concept, clusterHex);
+            labelSprite.position.set(targetPos.x, targetPos.y + radius + 5.5, targetPos.z);
+            labelSprite.visible = showLabels;
+            if (nodeGroupRef.current) {
+              nodeGroupRef.current.add(labelSprite);
+            } else {
+              scene.add(labelSprite);
+            }
+            labelSpritesRef.current.push(labelSprite);
+
+            // Connect synaptic pathway beam & select memory
+            onSelectMemory(newMem);
+            rebuildPathwayBeams(newMem);
+
+            // Camera focus glide
+            const focusCam = new THREE.Vector3(targetPos.x + 35, targetPos.y + 25, targetPos.z + 65);
+            glideCameraTo(focusCam, targetPos, 1.4);
+
+            // Show HUD notification pill
+            setForgedNotification({ cluster: chosenCluster, concept, hex: clusterHex, clusterColor: clusterHex });
+            if (forgeTimerRef.current) clearTimeout(forgeTimerRef.current);
+            forgeTimerRef.current = setTimeout(() => {
+              setForgedNotification(null);
+            }, 3800);
+
+            setIsForging(false);
+
+            // Non-blocking dispatch to neuro-memory-daemon :8094
+            try {
+              fetch('http://127.0.0.1:8094/api/remember', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  text: `${concept} synthesized in Netrunner 3D World for ${chosenCluster} cluster.`,
+                  category: chosenCluster.toLowerCase(),
+                  importance: parseFloat(newMem.weight),
+                  tags: [chosenCluster.toLowerCase(), 'forged', 'stdp', 'netrunner'],
+                  agent_id: 'lucy'
+                })
+              }).catch(() => {});
+            } catch (e) {}
+          }
+        }, 16);
+      }
+    }, 16);
+  }, [isForging, getClusterVantage, glideCameraTo, onSelectMemory, rebuildPathwayBeams, showLabels]);
+
+
+
   // Sync auto-rotation state with OrbitControls
   const toggleAutoRotate = () => {
     setAutoRotate((prev) => {
@@ -508,6 +831,7 @@ export default function Netrunner3DWorld({
 
     // SCENE
     const scene = new THREE.Scene();
+    sceneRef.current = scene;
     scene.fog = new THREE.FogExp2(isDark ? 0x06070B : 0xEDF2F7, 0.0011);
 
     // CAMERA
@@ -731,6 +1055,7 @@ export default function Netrunner3DWorld({
     // MEMORY NODES GROUP
     const nodeGroup = new THREE.Group();
     scene.add(nodeGroup);
+    nodeGroupRef.current = nodeGroup;
 
     const meshes = [];
     const labels = [];
@@ -911,6 +1236,11 @@ export default function Netrunner3DWorld({
       // Controls damping
       controls.update();
 
+      // Neuromodulatory speed & rotation multipliers
+      const nState = NEUROMODULATOR_STATES[neuromodulatorRef.current] || NEUROMODULATOR_STATES.balanced;
+      const speedMult = nState.speedMultiplier;
+      const ringSpeedMult = nState.ringSpeed;
+
       // Starfield subtle slow rotation
       if (starsRef.current) {
         starsRef.current.rotation.y = elapsed * 0.008;
@@ -918,12 +1248,12 @@ export default function Netrunner3DWorld({
 
       // Core octahedron & wireframe cortex shell smooth spinning
       if (coreRef.current) {
-        coreRef.current.rotation.y = elapsed * 0.35;
-        coreRef.current.rotation.x = Math.sin(elapsed * 0.4) * 0.2;
+        coreRef.current.rotation.y = elapsed * 0.35 * ringSpeedMult;
+        coreRef.current.rotation.x = Math.sin(elapsed * 0.4 * ringSpeedMult) * 0.2;
       }
       if (coreWireRef.current) {
-        coreWireRef.current.rotation.y = -elapsed * 0.22;
-        coreWireRef.current.rotation.z = Math.cos(elapsed * 0.3) * 0.15;
+        coreWireRef.current.rotation.y = -elapsed * 0.22 * ringSpeedMult;
+        coreWireRef.current.rotation.z = Math.cos(elapsed * 0.3 * ringSpeedMult) * 0.15;
       }
 
       // Expanding 3D shockwave ring animation
@@ -938,7 +1268,7 @@ export default function Netrunner3DWorld({
       // Gimbal rings counter-rotation
       if (ringsRef.current) {
         ringsRef.current.forEach((ring, idx) => {
-          ring.rotation.z = elapsed * (0.2 + idx * 0.07) * (idx % 2 === 0 ? 1 : -1);
+          ring.rotation.z = elapsed * (0.2 + idx * 0.07) * (idx % 2 === 0 ? 1 : -1) * ringSpeedMult;
         });
       }
 
@@ -963,7 +1293,7 @@ export default function Netrunner3DWorld({
         const { mesh: pMesh, count: pCount, pairs } = pulseMeshRef.current;
         for (let i = 0; i < pCount; i++) {
           const pair = pairs[i % pairs.length];
-          const phase = ((elapsed * 0.4 + i * (1 / pCount)) % 1);
+          const phase = ((elapsed * 0.4 * speedMult + i * (1 / pCount)) % 1);
           dummyPos.lerpVectors(pair.p1, pair.p2, phase);
           dummyMat4.identity().setPosition(dummyPos);
           pMesh.setMatrixAt(i, dummyMat4);
@@ -991,9 +1321,9 @@ export default function Netrunner3DWorld({
       if (pathwayDataRef.current) {
         const pd = pathwayDataRef.current;
         if (pd.corePhoton) {
-          const tCore = (elapsed * 0.85) % 1;
+          const tCore = (elapsed * 0.85 * speedMult) % 1;
           pd.corePhoton.position.lerpVectors(pd.nodePos, pd.corePos, tCore);
-          const pScale = 1.0 + Math.sin(elapsed * 6) * 0.25;
+          const pScale = 1.0 + Math.sin(elapsed * 6 * speedMult) * 0.25;
           pd.corePhoton.scale.set(pScale, pScale, pScale);
         }
         if (pd.coreLineMat) {
@@ -1001,7 +1331,7 @@ export default function Netrunner3DWorld({
         }
         if (pd.neighborPhotons) {
           pd.neighborPhotons.forEach((np, i) => {
-            const tN = ((elapsed * np.speed + i * 0.33) % 1);
+            const tN = ((elapsed * np.speed * speedMult + i * 0.33) % 1);
             np.mesh.position.lerpVectors(np.p1, np.p2, tN);
           });
         }
@@ -1029,6 +1359,10 @@ export default function Netrunner3DWorld({
       if (tourTimerRef.current) {
         clearTimeout(tourTimerRef.current);
         tourTimerRef.current = null;
+      }
+      if (forgeTimerRef.current) {
+        clearTimeout(forgeTimerRef.current);
+        forgeTimerRef.current = null;
       }
 
       // Dispose Three.js resources
@@ -1168,6 +1502,26 @@ export default function Netrunner3DWorld({
             }
           }}
         />
+        <Chip
+          id="forge-engram-btn"
+          label={isForging ? "⚡ FORGING…" : "✦ FORGE"}
+          size="small"
+          onClick={triggerForgeEngram}
+          disabled={isForging}
+          sx={{
+            height: 22,
+            cursor: 'pointer',
+            fontFamily: mono,
+            fontWeight: 800,
+            fontSize: '0.62rem',
+            bgcolor: 'rgba(243,213,106,0.22)',
+            color: '#F3D56A',
+            border: '1px solid rgba(243,213,106,0.5)',
+            boxShadow: '0 0 10px rgba(243,213,106,0.3)',
+            transition: 'all 0.2s ease',
+            '&:hover': { bgcolor: 'rgba(243,213,106,0.35)', color: '#FFF' }
+          }}
+        />
       </Box>
 
       {/* 3D Tour Narration Pill (Top Right, under HUD bar) */}
@@ -1254,6 +1608,113 @@ export default function Netrunner3DWorld({
           />
         )}
       </Box>
+
+      {/* 5-State Neuromodulator Aura Switcher (Top Left, under telemetry badge) */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 46,
+          left: 14,
+          zIndex: 4,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 0.6,
+          bgcolor: isDark ? 'rgba(8,10,18,0.85)' : 'rgba(255,255,255,0.9)',
+          backdropFilter: 'blur(8px)',
+          border: '1px solid rgba(212,175,55,0.25)',
+          borderRadius: 1.5,
+          px: 1,
+          py: 0.4
+        }}
+      >
+        <Typography
+          variant="caption"
+          sx={{
+            fontFamily: mono,
+            fontWeight: 800,
+            fontSize: '0.62rem',
+            color: '#94A3B8',
+            letterSpacing: '0.05em',
+            mr: 0.5
+          }}
+        >
+          AURA:
+        </Typography>
+        {Object.entries(NEUROMODULATOR_STATES).map(([key, state]) => {
+          const isActive = neuromodulator === key;
+          return (
+            <Chip
+              key={key}
+              id={`neuromod-world-${key}`}
+              label={state.label}
+              size="small"
+              onClick={() => switchNeuromodulator(key)}
+              sx={{
+                height: 20,
+                cursor: 'pointer',
+                fontFamily: mono,
+                fontWeight: isActive ? 800 : 600,
+                fontSize: '0.6rem',
+                bgcolor: isActive ? state.colorHex + '33' : 'transparent',
+                color: isActive ? state.colorHex : '#94A3B8',
+                border: isActive ? `1px solid ${state.colorHex}` : '1px solid rgba(255,255,255,0.1)',
+                boxShadow: isActive ? `0 0 8px ${state.colorHex}55` : 'none',
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                  bgcolor: state.colorHex + '22',
+                  color: state.colorHex
+                }
+              }}
+            />
+          );
+        })}
+      </Box>
+
+      {/* Floating Engram Forged Pill */}
+      {forgedNotification && (() => {
+        const cHex = (forgedNotification.clusterColor || forgedNotification.hex || 0xD4AF37).toString(16).padStart(6, '0');
+        return (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 80,
+              left: 14,
+              zIndex: 6,
+              bgcolor: isDark ? 'rgba(8,10,18,0.92)' : 'rgba(255,255,255,0.95)',
+              backdropFilter: 'blur(10px)',
+              border: `1px solid #${cHex}`,
+              borderRadius: 1.5,
+              px: 1.2,
+              py: 0.6,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+              boxShadow: '0 4px 16px rgba(0,0,0,0.5)'
+            }}
+          >
+            <Box
+              sx={{
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                bgcolor: `#${cHex}`,
+                boxShadow: `0 0 10px #${cHex}`
+              }}
+            />
+            <Typography
+              variant="caption"
+              sx={{
+                fontFamily: mono,
+                fontWeight: 800,
+                fontSize: '0.68rem',
+                color: `#${cHex}`
+              }}
+            >
+              ✦ ENGRAM FORGED &rarr; [{(forgedNotification.cluster || '').toUpperCase()}] {forgedNotification.concept}
+            </Typography>
+          </Box>
+        );
+      })()}
 
       {/* Floating Hover HUD Tooltip */}
       {hoveredMemory && (

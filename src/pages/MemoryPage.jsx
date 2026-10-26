@@ -660,6 +660,32 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
     );
   };
 
+  // Synaptic pulse acoustic feedback
+  const playSynapticPulse = useCallback((weight = 0.8) => {
+    if (typeof window === 'undefined') return;
+    try {
+      let ctx = audioCtxRef.current;
+      if (!ctx && !isMuted) {
+        ctx = getOrCreateAudioGraph();
+      }
+      if (!ctx || ctx.state === 'suspended' || isMuted) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const baseFreq = carrierFreq || 432;
+      const numWeight = typeof weight === 'number' ? weight : parseFloat(weight) || 0.8;
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(baseFreq * (0.8 + numWeight * 0.4), ctx.currentTime);
+      gain.gain.setValueAtTime(0.04 * (volume || 0.2), ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.18);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.19);
+    } catch {
+      /* silent fallback */
+    }
+  }, [getOrCreateAudioGraph, isMuted, volume, carrierFreq]);
+
   /* ==========================================================================
      HOUSE RULE #2: INTERACTIVE EPISODIC MEMORY NODE CREATION
      - User types memory snippet
