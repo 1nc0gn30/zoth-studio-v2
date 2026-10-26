@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" width="100%" height="100%">
+  <defs>
+    <linearGradient id="stBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06070B"/>
+      <stop offset="50%" stop-color="#0C0F1A"/>
+      <stop offset="100%" stop-color="#080910"/>
+    </linearGradient>
+    <linearGradient id="stGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F5E6AB"/>
+      <stop offset="50%" stop-color="#D4AF37"/>
+      <stop offset="100%" stop-color="#8C6D1F"/>
+    </linearGradient>
+    <pattern id="stGrid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M 28 0 L 0 0 0 28" fill="none" stroke="rgba(212,175,55,0.06)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="360" rx="18" fill="url(#stBg)" stroke="#D4AF37" stroke-opacity="0.5" stroke-width="1.5"/>
+  <rect width="1200" height="360" rx="18" fill="url(#stGrid)"/>
+
+  <g transform="translate(52, 50)">
+    <rect width="84" height="84" rx="20" fill="url(#stGold)"/>
+    <polygon points="42,14 68,29 68,55 42,70 16,55 16,29" fill="none" stroke="#08080B" stroke-width="4"/>
+    <circle cx="42" cy="42" r="8" fill="#08080B"/>
+  </g>
+
+  <g transform="translate(158, 62)">
+    <rect x="0" y="-12" width="430" height="24" rx="12" fill="rgba(212,175,55,0.14)" stroke="#D4AF37" stroke-opacity="0.45"/>
+    <text x="14" y="4" fill="#F5E6AB" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700" letter-spacing="1.1">ZOTH STUDIO v2 // 71 TOOLS // 43 WORKSTATIONS // 73/73 LIVE FLEET</text>
+    <text x="0" y="40" fill="#FFFFFF" font-family="Syne, Space Grotesk, sans-serif" font-size="36" font-weight="800">ZOTH STUDIO v2 — SOVEREIGN AI COCKPIT</text>
+    <text x="0" y="66" fill="#CBD5E1" font-family="Inter, sans-serif" font-size="14">Zero-Egress Agentic Workstation Matrix, STDP Synaptic Memory, 3-Agent Byzantine Consensus &amp; Zoth Bolt (:5173) Web Architect</text>
+  </g>
+
+  <g transform="translate(52, 175)">
+    <rect x="0" y="0" width="262" height="135" rx="12" fill="#101320" stroke="#D4AF37" stroke-opacity="0.45"/>
+    <text x="20" y="30" fill="#D4AF37" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">REGISTRY GATE // PASS</text>
+    <text x="20" y="60" fill="#FFFFFF" font-family="Space Grotesk, sans-serif" font-size="24" font-weight="800">71 / 71 Tools</text>
+    <text x="20" y="84" fill="#94A3B8" font-family="JetBrains Mono, monospace" font-size="11">43 God-Mode Workstations</text>
+    <text x="20" y="104" fill="#94A3B8" font-family="JetBrains Mono, monospace" font-size="11">69 Loopback Ports (0 Collisions)</text>
+
+    <rect x="278" y="0" width="262" height="135" rx="12" fill="#101320" stroke="#10B981" stroke-opacity="0.45"/>
+    <text x="298" y="30" fill="#34D399" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">FLEET SUPERVISOR // ONLINE</text>
+    <text x="298" y="60" fill="#FFFFFF" font-family="Space Grotesk, sans-serif" font-size="24" font-weight="800">73 / 73 Live</text>
+    <text x="298" y="84" fill="#94A3B8" font-family="JetBrains Mono, monospace" font-size="11">ensure_fleet.py (:3000)</text>
+    <text x="298" y="104" fill="#94A3B8" font-family="JetBrains Mono, monospace" font-size="11">0 Dark Endpoints • Auto-Heal</text>
+
+    <rect x="556" y="0" width="262" height="135" rx="12" fill="#101320" stroke="#38BDF8" stroke-opacity="0.45"/>
+    <text x="576" y="30" fill="#38BDF8" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">WEBGEN COMBO // DUAL ENGINE</text>
+    <text x="576" y="60" fill="#FFFFFF" font-family="Space Grotesk, sans-serif" font-size="24" font-weight="800">Zoth Bolt :5173</text>
+    <text x="576" y="84" fill="#94A3B8" font-family="JetBrains Mono, monospace" font-size="11">+ QuickSite Starter (:8092)</text>
+    <text x="576" y="104" fill="#94A3B8" font-family="JetBrains Mono, monospace" font-size="11">Built on Open-Source bolt.diy</text>
+
+    <rect x="834" y="0" width="262" height="135" rx="12" fill="#101320" stroke="#C084FC" stroke-opacity="0.45"/>
+    <text x="854" y="30" fill="#C084FC" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700">COGNITIVE CORE // ENCLAVE</text>
+    <text x="854" y="60" fill="#FFFFFF" font-family="Space Grotesk, sans-serif" font-size="24" font-weight="800">21-Mind Swarm</text>
+    <text x="854" y="84" fill="#94A3B8" font-family="JetBrains Mono, monospace" font-size="11">Civ :9393 • Swarm Mux :8790</text>
+    <text x="854" y="104" fill="#94A3B8" font-family="JetBrains Mono, monospace" font-size="11">STDP Memory :8094 • Vault :8787</text>
+  </g>
+
+  <text x="600" y="340" text-anchor="middle" fill="#64748B" font-family="JetBrains Mono, monospace" font-size="11">
+    ZOTH.NULLAI.TECH  •  ENGINEERED BY NEAL FRAZIER TECH (@1nc0gn30)  •  NULLAI PLATFORM
+  </text>
+</svg>

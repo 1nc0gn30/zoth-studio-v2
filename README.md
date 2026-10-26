@@ -1,12 +1,18 @@
+<div align="center">
+  <img src="public/assets/zoth-studio-v2-hero.svg" alt="Zoth Studio v2 — 71 Sovereign Tools, 43 Workstations & 73/73 Live Fleet" width="100%" />
+</div>
+
+<br />
+
 # Zoth Studio v2
 
-> **Zero-Egress Sovereign Agent Development Studio, Workstation Cockpit & 62-Tool Matrix**  
-> *Client-side WebGPU acceleration, biomorphic STDP memory, 100% workstation coverage across all 62 ecosystem tools (dedicated God Mode workstations + sovereign enclaves), 130 prerendered static routes, 22 resident loopback daemons, 3-agent Byzantine consensus, dual checkout rails (Stripe + Solana DePay), and Argon2id cryptographic vault.*
+> **Zero-Egress Sovereign Agent Development Studio, Workstation Cockpit & 71-Tool Matrix**  
+> *Client-side WebGPU acceleration, biomorphic STDP memory, 100% workstation coverage across all 71 ecosystem tools (43 dedicated God Mode workstations + sovereign enclaves), 73/73 supervised fleet endpoints (`ensure_fleet.py`), Zoth Bolt (`:5173` — built on open-source `bolt.diy`) + Zoth QuickSite Starter (`:8092`), 3-agent Byzantine consensus, dual checkout rails (Stripe + Solana DePay), and Argon2id cryptographic vault.*
 
 [![Zero-Egress Guaranteed](https://img.shields.io/badge/Security-Zero--Egress%20Enclave-gold?style=flat-square)](#zero-egress-security-invariants)
 [![Netlify Deploy Ready](https://img.shields.io/badge/Deploy-Netlify%20Production-00C7B7?style=flat-square&logo=netlify)](#netlify-deployment-instructions)
-[![130 Prerendered Routes](https://img.shields.io/badge/AEO-130%20Static%20Routes-blueviolet?style=flat-square)](#prerendered-static-routes-130-total)
-[![100% Workstation Coverage](https://img.shields.io/badge/Workstations-62%2F62%20Covered%20(God%20Mode%20%2B%20Enclaves)-success?style=flat-square)](#100-dedicated-interactive-workstation-coverage)
+[![71 Sovereign Tools](https://img.shields.io/badge/Tools-71%2F71%20Verified%20Registry-blueviolet?style=flat-square)](#100-dedicated-interactive-workstation-coverage)
+[![73/73 Fleet Live](https://img.shields.io/badge/Fleet-73%2F73%20Supervised%20Ports-success?style=flat-square)](#100-dedicated-interactive-workstation-coverage)
 [![Vite 5.4](https://img.shields.io/badge/Build-Vite%205.4-purple?style=flat-square)](https://vitejs.dev)
 [![React 19.3](https://img.shields.io/badge/Framework-React%2019.3-blue?style=flat-square)](https://react.dev)
 [![MUI v5.15](https://img.shields.io/badge/UI-Material--UI%20v5.15-007FFF?style=flat-square)](https://mui.com)
