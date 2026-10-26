@@ -328,14 +328,14 @@
       "category": "Automation",
       "github": "https://github.com/1nc0gn30/cron-rhythm-studio",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/cron-rhythm-studio.git && cd cron-rhythm-studio && python3 -m http.server 8092 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/cron-rhythm-studio.git && cd cron-rhythm-studio && python3 -m http.server 5174 --directory public",
       "execution_type": "browser",
       "live_url": "https://cronrhythm.nullai.tech",
-      "local_url": "http://127.0.0.1:8092",
+      "local_url": "http://127.0.0.1:5174",
       "runtimes": [
         "browser"
       ],
-      "port": 8092
+      "port": 5174
     },
     {
       "id": "certpath-roadmap-studio",
@@ -1083,19 +1083,19 @@
     {
       "id": "producthunt-connector",
       "name": "Product Hunt Connector (zoth-ph)",
-      "description": "Local Zoth OS cockpit that diffs the ZOTHOS Product Hunt listing against live website/GitHub URLs, surfaces votes/ranks/comments, and serves a loopback dashboard on :8121.",
+      "description": "Local Zoth OS cockpit that diffs the ZOTHOS Product Hunt listing against live website/GitHub URLs, surfaces votes/ranks/comments, and serves a loopback dashboard on :8139.",
       "category": "Commerce & POD",
       "github": "https://github.com/1nc0gn30/producthunt-connector",
       "version": "1.0.0",
-      "pull": "cd ~/NullAITech/producthunt-connector && zoth-ph serve",
+      "pull": "cd ~/NullAITech/producthunt-connector && zoth-ph serve --port 8139",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
         "cli",
         "zero-egress"
       ],
-      "port": 8121,
-      "local_url": "http://127.0.0.1:8121"
+      "port": 8139,
+      "local_url": "http://127.0.0.1:8139"
     },
     {
       "id": "zoth-relay",

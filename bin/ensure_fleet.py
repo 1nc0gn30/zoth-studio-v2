@@ -108,6 +108,27 @@ FLEET_DAEMONS = [
         "/tmp/zoth-port-9395.log",
         {"LIKENESS_LAZY_GPU": "1"},
     ),
+    (
+        8139,
+        ["python3", "-m", "producthunt_connector.cli", "serve", "--port", "8139"],
+        str(NULLAI / "producthunt-connector"),
+        "/tmp/zoth-port-8139.log",
+        {"PYTHONPATH": str(NULLAI / "producthunt-connector" / "src")},
+    ),
+    (
+        8823,
+        threaded_http_cmd(8823, str(NULLAI / "zoth-scene-foundry")),
+        str(NULLAI / "zoth-scene-foundry"),
+        "/tmp/zoth-port-8823.log",
+        {},
+    ),
+    (
+        9494,
+        ["node", str(NULLAI / "zoth-bounty" / "server.js")],
+        str(NULLAI / "zoth-bounty"),
+        "/tmp/zoth-port-9494.log",
+        {},
+    ),
 ]
 
 
