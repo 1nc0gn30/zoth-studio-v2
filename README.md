@@ -268,7 +268,7 @@ Located in the **Obsidian Second Brain & Skills** tab of `MemoryPage.jsx` (`#tab
 
 Live on `http://127.0.0.1:3000/vaelor` and powered by the high-performance Vaelor daemon on `:8140`, this workstation delivers an end-to-end sovereign Layer-1 financial operating system designed for human operators, merchants, and autonomous AI agents:
 
-### 30 Sovereign FinTech Features
+### 32 Sovereign FinTech Features
 1. **60fps Account-Lattice DAG Visualizer (`<VaelorLatticeVisualizer />`)**: Real-time canvas rendering individual account micro-chains (`@citizen`, `@sprig`, `@zoth`, `@neal`, `@hatch`), cross-chain send/receive transactions, and 5-validator Byzantine Fault Tolerant (BFT) quorum attestations with sub-15ms finality.
 2. **Feeless Instant DAG Payments (`#vaelor-send-feeless`)**: Transact in under 20ms with $0.00 gas fees forever via asynchronous Nano-style account chains.
 3. **Itemized Cryptographic Smart Receipts (`#vaelor-create-receipt`)**: Mint tamper-proof JSON-LD and QR-verifiable smart receipts with automated 365-day warranty attestations and instant buyer cashback.
@@ -299,7 +299,7 @@ Live on `http://127.0.0.1:3000/vaelor` and powered by the high-performance Vaelo
 25. **22-Vector Payment Invariant Comparison Matrix (`#vaelor-comparison-matrix`)**: Direct side-by-side benchmark comparing Vaelor against Visa, Stripe, Solana, and Lightning.
 26. **Autonomous WebHook & WebSocket Real-Time Bus (`:8140/ws`)**: Sub-millisecond ledger event streaming for external microservices.
 27. **Byzantine Fault Tolerant 5-Validator Quorum (`#vaelor-bft-status`)**: Geographically distributed consensus across US-East, EU-Central, Asia-East, Local Edge, and NullAI Core.
-28. **15-Tool Layer-1 Model Context Protocol (MCP) Playground (`#vaelor-mcp-playground`)**: Complete JSON-RPC execution workbench for autonomous agents:
+28. **17-Tool Layer-1 Model Context Protocol (MCP) Playground (`#vaelor-mcp-playground`)**: Complete JSON-RPC execution workbench for autonomous agents:
     - `vaelor_network_status`, `vaelor_account_balance`, `vaelor_send_feeless`
     - `vaelor_verify_handle_safety`, `vaelor_create_smart_receipt`, `vaelor_mine_pouw`
     - `vaelor_stake_savings`, `vaelor_draw_credit_bnpl`, `vaelor_post_agent_bounty`
@@ -307,13 +307,21 @@ Live on `http://127.0.0.1:3000/vaelor` and powered by the high-performance Vaelo
     - `vaelor_protected_escrow` (Zero-Penalty Cryptographic Escrow & Settlement)
     - `vaelor_export_tax_report` (1-Click IRS-Compliant CPA Tax & Cashback Audit Report)
     - `vaelor_zoth_comm` (Passphrase-Gated AES-256-GCM P2P Lattice Messenger & AI Fleet Dispatcher)
+    - `vaelor_enterprise_audit_and_p2p` (Enterprise SHA-256 Binary Merkle State Root, fsync WAL Ledger Integrity Auditor, and P2P Cluster Mesh Delta Sync)
+    - `vaelor_multisig_treasury` (2-of-3 Institutional Multi-Sig Treasury Vault Proposal & HMAC-SHA256 Signed Webhook Dispatcher)
 29. **Sovereign 1-Click CPA Tax & Cashback Audit Exporter (`#vaelor-tax-audit-sim`)**: Automatic on-chain categorization of every transaction into Tax-Free Loyalty Cashback Rebates (IRS Rev. Rul. 76-96), PoUW Cognitive Mining Income, 8.5% APY Vault Yield, and Deductible Business Bounties & FX Sweeps with SHA-256 audit digest attestation and 1-click CSV download (`#vaelor-tax-export-btn`).
 30. **ZothOS Passphrase-Gated P2P Messenger & 24/7 AI Fleet Dispatcher (`#vaelor-zoth-comm-sim`)**: Client-side AES-256-GCM encrypted peer-to-peer communication between ZothOS workstations, hardware sanctums, and dedicated 24/7 autonomous AI laptops (`@zoth-rig2`, `@zoth`, `@neal`). Enforces PBKDF2/AES-256-GCM handshake authentication, zero-spam lattice gating, feeless micro-bounty attachments (`0/5/25 ◈ VLR`), and instant dispatch into sandboxed KVM/Preempt-RT agent execution loops.
+31. **Enterprise Institutional Infrastructure & Multi-Node Cluster Cockpit (`#vaelor-enterprise-cockpit`)**: 3-card institutional sovereign cluster management:
+    - **Card 1 (Binary Merkle State Root & Genesis-to-Head Chain Auditor)**: Live SHA-256 Binary Merkle State Root (`merkleStateRoot`), append-only Write-Ahead-Log (`vaelor_blocks.wal.jsonl`) fsync confirmation, 100.000000% atomic integer supply conservation invariant, and Prometheus `/metrics` telemetry with 1-click full chain audit button (`#vaelor-chain-audit-btn`) executing `GET /api/ledger/verify-integrity`.
+    - **Card 2 (Multi-Node P2P Gossip & 2-Laptop Cluster Sync — `zoth-node cluster`)**: P2P mesh visualization across `@zoth`, `@zoth-rig2`, and 5 regional BFT consensus validators with 1-line CLI join command (`zoth-node cluster join http://<peer-ip>:8140`) and interactive delta sync button (`#vaelor-p2p-sync-btn`) calling `GET /api/p2p/delta`.
+    - **Card 3 (2-of-3 Corporate Multi-Sig Treasury, Idempotency-Key & Signed HMAC Webhooks)**: Multi-signature institutional vault (`msig_zoth_foundation` — Signers: `@neal`, `@zoth`, `@sprig`) with cryptographic `Idempotency-Key` replay defense, `X-Vaelor-Signature: t=...,v1=hmac_sha256` webhook delivery, and 1-click proposal co-signing button (`#vaelor-multisig-btn`) executing `POST /api/multisig/approve`.
+32. **Unified 38-Tool Ring-0 Model Context Protocol (MCP) Ecosystem**: Native integration bridging all 21 Neuro-Memory & Obsidian tools (`:8094`) and 17 Vaelor Layer-1 FinTech tools (`:8140`) into a singular, air-gapped sovereign intelligence and transactional operating system.
 
-### Unified 36-Tool Ring-0 Model Context Protocol (MCP) Ecosystem
-Zoth Studio v2 unites **36 native JSON-RPC Model Context Protocol tools** across two loopback enclaves, enabling frontier autonomous agent swarms (Claude, GPT-4o, Hermes, Skeptic) to orchestrate biomorphic knowledge and financial sovereignty:
+### Unified 38-Tool Ring-0 Model Context Protocol (MCP) Ecosystem
+Zoth Studio v2 unites **38 native JSON-RPC Model Context Protocol tools** across two loopback enclaves, enabling frontier autonomous agent swarms (Claude, GPT-4o, Hermes, Skeptic) to orchestrate biomorphic knowledge and financial sovereignty:
 - **Port :8094 (21 Neuro-Memory & Obsidian Tools)**: 7 official `@kepano` Obsidian skills (`obsidian-markdown`, `json-canvas`, `obsidian-bases`, `obsidian-cli`, `knap`, `defuddle`, `obsidian-second-brain`) plus real-time STDP synaptic modulation and CA3/CA1 pattern completion.
-- **Port :8140 (15 Vaelor Layer-1 FinTech Tools)**: Feeless DAG payments, smart warranty receipts, homoglyph handle security, PoUW AI mining, 8.5% APY savings vault, BNPL credit, M2M micro-bounties, Pedersen shielded transfers, creator tips, programmable merchant FX sweeps, zero-penalty commerce escrow settlement, signed CPA tax audit reports, and passphrase-gated P2P encrypted messenger.
+- **Port :8140 (17 Vaelor Layer-1 FinTech Tools)**: Feeless DAG payments, smart warranty receipts, homoglyph handle security, PoUW AI mining, 8.5% APY savings vault, BNPL credit, M2M micro-bounties, Pedersen shielded transfers, creator tips, programmable merchant FX sweeps, zero-penalty commerce escrow settlement, signed CPA tax audit reports, passphrase-gated P2P encrypted messenger, binary Merkle state root integrity auditor & P2P cluster sync, and 2-of-3 institutional multi-sig treasury with HMAC webhooks.
+- **Canonical Reference**: Documented in the 14th Karpathy LLM Wiki article `06-Wiki/Sovereign-MCP-34-Tool-Agent-Protocol.md`.
 - **Canonical Reference**: Documented in the 14th Karpathy LLM Wiki article `06-Wiki/Sovereign-MCP-34-Tool-Agent-Protocol.md`.
 
 ---
