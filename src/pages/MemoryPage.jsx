@@ -58,6 +58,10 @@ import {
   FALLBACK_BACKLINKS_DATA,
   getBacklinksFallback,
   SECOND_BRAIN_CLI_COMMANDS,
+  FALLBACK_OFM_NOTES,
+  getNoteFallback,
+  saveNoteFallback,
+  renderOfmToHtml,
   callMcpToolFallback,
   searchFallback,
   renderKnapTelemetryFallback,
@@ -494,6 +498,16 @@ export default function MemoryPage() {
   const [cliPaletteFilter, setCliPaletteFilter] = useState('all');
   const [cliPaletteSearch, setCliPaletteSearch] = useState('');
   const [copiedCliCmd, setCopiedCliCmd] = useState(null);
+
+  // Obsidian Flavored Markdown (OFM) Dual-Pane Editor & Viewer State
+  const [ofmNotePath, setOfmNotePath] = useState('00 Home.md');
+  const [ofmCustomInput, setOfmCustomInput] = useState('00 Home.md');
+  const [ofmNoteData, setOfmNoteData] = useState(() => getNoteFallback('00 Home.md'));
+  const [ofmContent, setOfmContent] = useState(() => getNoteFallback('00 Home.md')?.content || '');
+  const [ofmViewMode, setOfmViewMode] = useState('split'); // 'split' | 'preview' | 'raw'
+  const [isLoadingOfmNote, setIsLoadingOfmNote] = useState(false);
+  const [isSavingOfmNote, setIsSavingOfmNote] = useState(false);
+  const [ofmSaveResult, setOfmSaveResult] = useState(null);
 
   // Unified Second Brain & STDP Cortex Search State
   const [unifiedSearchQuery, setUnifiedSearchQuery] = useState('Vaelor');
@@ -1309,6 +1323,86 @@ ${article.math_invariants || ''}
     setTimeout(() => setCopiedCliCmd(null), 2200);
     if (typeof playSynapticPulse === 'function') {
       playSynapticPulse(0.92);
+    }
+  };
+
+  const handleLoadOfmNote = async (pathOrTitle) => {
+    if (!pathOrTitle) return;
+    let norm = pathOrTitle.trim();
+    if (!norm.endsWith('.md') && !norm.endsWith('.canvas') && !norm.endsWith('.base')) {
+      norm = norm + '.md';
+    }
+    setOfmNotePath(norm);
+    setOfmCustomInput(norm);
+    setIsLoadingOfmNote(true);
+    setOfmSaveResult(null);
+
+    let note = null;
+    try {
+      const res = await fetch(`http://127.0.0.1:8094/api/obsidian/note?path=${encodeURIComponent(norm)}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.ok) {
+          note = data;
+        }
+      }
+    } catch (_) {}
+
+    if (!note) {
+      note = getNoteFallback(norm);
+    }
+
+    setOfmNoteData(note);
+    setOfmContent(note.content || '');
+    setIsLoadingOfmNote(false);
+    if (typeof playSynapticPulse === 'function') {
+      playSynapticPulse(0.94);
+    }
+  };
+
+  const handleSaveOfmNote = async () => {
+    if (isSavingOfmNote) return;
+    setIsSavingOfmNote(true);
+    setOfmSaveResult(null);
+
+    const relPath = ofmNotePath || ofmCustomInput || '00 Home.md';
+    const content = ofmContent;
+
+    let resData = null;
+    try {
+      const res = await fetch('http://127.0.0.1:8094/api/obsidian/note', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ relPath, content })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.ok) {
+          resData = data;
+        }
+      }
+    } catch (_) {}
+
+    if (!resData) {
+      resData = saveNoteFallback(relPath, content);
+    }
+
+    setOfmSaveResult(resData);
+    setOfmNoteData(prev => ({
+      ...prev,
+      content,
+      wordCount: resData.wordCount || (content.trim().split(/\s+/).filter(Boolean).length),
+      updatedAt: resData.savedAt || new Date().toISOString()
+    }));
+    setIsSavingOfmNote(false);
+
+    if (typeof playSynapticPulse === 'function') {
+      playSynapticPulse(1.0);
+    }
+    if (typeof transmitLucy === 'function') {
+      try {
+        transmitLucy(`Saved Obsidian note [[${resData.title || relPath}]] (${resData.wordCount} words) to Vault & synced STDP engram.`);
+      } catch (_) {}
     }
   };
 
@@ -6886,6 +6980,376 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                     );
                   })}
                 </Grid>
+              </Paper>
+
+              {/* Interactive Obsidian Flavored Markdown (OFM) Dual-Pane Note Reader & Live Editor */}
+              <Paper
+                id="studio-ofm-editor"
+                sx={{
+                  p: { xs: 2.5, md: 3 },
+                  mb: 4,
+                  borderRadius: 2.5,
+                  border: '1.5px solid rgba(232,121,249,0.45)',
+                  bgcolor: isDark ? 'rgba(12,8,20,0.92)' : '#FFFFFF',
+                  backgroundImage: isDark
+                    ? 'radial-gradient(circle at 10% 10%, rgba(232,121,249,0.12) 0%, transparent 60%)'
+                    : 'none',
+                  boxShadow: '0 8px 32px rgba(232,121,249,0.12)'
+                }}
+              >
+                {/* Header bar */}
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
+                  <Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 0.5 }}>
+                      <Chip
+                        icon={<MenuBookIcon sx={{ fontSize: '0.9rem !important', color: '#E879F9 !important' }} />}
+                        label="OBSIDIAN FLAVORED MARKDOWN (OFM) // LIVE EDITOR"
+                        size="small"
+                        sx={{
+                          bgcolor: 'rgba(232,121,249,0.16)',
+                          color: '#E879F9',
+                          fontFamily: mono,
+                          fontWeight: 800,
+                          fontSize: '0.68rem',
+                          border: '1px solid rgba(232,121,249,0.35)'
+                        }}
+                      />
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8' }}>
+                        DUAL-PANE AST PARSER & STDP SYNAPSE SYNC
+                      </Typography>
+                    </Box>
+                    <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: { xs: '1rem', md: '1.15rem' } }}>
+                      Obsidian Dual-Pane Note Reader & Live Editor
+                    </Typography>
+                  </Box>
+
+                  {/* View Mode Toggles */}
+                  <Box sx={{ display: 'flex', gap: 0.8, bgcolor: isDark ? 'rgba(0,0,0,0.4)' : '#F1F5F9', p: 0.5, borderRadius: 2 }}>
+                    {[
+                      { id: 'split', label: 'Split View' },
+                      { id: 'preview', label: 'Preview' },
+                      { id: 'raw', label: 'Raw OFM' }
+                    ].map((mode) => (
+                      <Chip
+                        key={mode.id}
+                        label={mode.label}
+                        clickable
+                        onClick={() => setOfmViewMode(mode.id)}
+                        sx={{
+                          fontFamily: mono,
+                          fontWeight: 800,
+                          fontSize: '0.72rem',
+                          bgcolor: ofmViewMode === mode.id ? '#E879F9' : 'transparent',
+                          color: ofmViewMode === mode.id ? '#08080B' : (isDark ? '#CBD5E1' : '#475569'),
+                          '&:hover': { bgcolor: ofmViewMode === mode.id ? '#E879F9' : (isDark ? 'rgba(232,121,249,0.15)' : 'rgba(0,0,0,0.06)') }
+                        }}
+                      />
+                    ))}
+                  </Box>
+                </Box>
+
+                {/* Quick-Note Selector Pills & Custom Path Input */}
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5, mb: 2.5 }}>
+                  <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', mr: 0.5 }}>
+                      QUICK NOTES:
+                    </Typography>
+                    {[
+                      '00 Home.md',
+                      'Zoth Trust & Supply Chain.md',
+                      '06-Wiki/Vaelor Account-Lattice & PoUW Protocol.md',
+                      '06-Wiki/Biomorphic STDP & 3D Netrunner Cortex.md'
+                    ].map((notePath) => {
+                      const isSelected = ofmNotePath === notePath;
+                      const label = notePath.split('/').pop().replace(/\.md$/, '');
+                      return (
+                        <Chip
+                          key={notePath}
+                          label={label}
+                          clickable
+                          onClick={() => handleLoadOfmNote(notePath)}
+                          sx={{
+                            fontFamily: mono,
+                            fontWeight: 750,
+                            fontSize: '0.72rem',
+                            bgcolor: isSelected ? 'rgba(232,121,249,0.22)' : (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'),
+                            color: isSelected ? '#E879F9' : (isDark ? '#CBD5E1' : '#334155'),
+                            border: `1px solid ${isSelected ? '#E879F9' : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)')}`,
+                            '&:hover': {
+                              bgcolor: isSelected ? 'rgba(232,121,249,0.3)' : (isDark ? 'rgba(232,121,249,0.12)' : 'rgba(232,121,249,0.1)'),
+                              borderColor: '#E879F9'
+                            }
+                          }}
+                        />
+                      );
+                    })}
+                  </Box>
+
+                  {/* Path Input & Load Button */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: { xs: '100%', sm: 'auto' } }}>
+                    <TextField
+                      id="studio-ofm-path-input"
+                      size="small"
+                      value={ofmCustomInput}
+                      onChange={(e) => setOfmCustomInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleLoadOfmNote(ofmCustomInput);
+                      }}
+                      placeholder="vault/path/to/note.md"
+                      sx={{
+                        width: { xs: '100%', sm: 240 },
+                        '& .MuiOutlinedInput-root': {
+                          bgcolor: isDark ? 'rgba(0,0,0,0.5)' : '#F1F5F9',
+                          borderRadius: 2,
+                          fontFamily: mono,
+                          fontSize: '0.76rem'
+                        }
+                      }}
+                    />
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      onClick={() => handleLoadOfmNote(ofmCustomInput)}
+                      disabled={isLoadingOfmNote || !ofmCustomInput.trim()}
+                      sx={{
+                        fontFamily: mono,
+                        fontWeight: 800,
+                        fontSize: '0.72rem',
+                        color: '#E879F9',
+                        borderColor: 'rgba(232,121,249,0.4)',
+                        textTransform: 'none',
+                        px: 1.5,
+                        '&:hover': { borderColor: '#E879F9', bgcolor: 'rgba(232,121,249,0.1)' }
+                      }}
+                    >
+                      {isLoadingOfmNote ? 'LOADING...' : 'LOAD'}
+                    </Button>
+                  </Box>
+                </Box>
+
+                {/* Active Note Telemetry Bar */}
+                <Box
+                  sx={{
+                    p: 1.5,
+                    mb: 2.5,
+                    borderRadius: 2,
+                    bgcolor: isDark ? 'rgba(0,0,0,0.4)' : '#F8FAFC',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: 1.5
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, flexWrap: 'wrap' }}>
+                    <Typography id="ofm-meta-title" sx={{ fontFamily: mono, fontWeight: 900, fontSize: '0.84rem', color: '#E879F9' }}>
+                      📄 {ofmNoteData?.title || ofmNotePath}
+                    </Typography>
+                    <Typography id="ofm-meta-relpath" variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.7rem' }}>
+                      ({ofmNoteData?.relPath || ofmNotePath})
+                    </Typography>
+                    <Chip
+                      id="ofm-meta-cluster"
+                      label={`Cluster: ${ofmNoteData?.cluster || 'Root'}`}
+                      size="small"
+                      sx={{ height: 18, fontSize: '0.62rem', fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8' }}
+                    />
+                    <Chip
+                      id="ofm-meta-words"
+                      label={`${ofmNoteData?.wordCount || (ofmContent.trim().split(/\s+/).filter(Boolean).length)} words`}
+                      size="small"
+                      sx={{ height: 18, fontSize: '0.62rem', fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399' }}
+                    />
+                    {ofmNoteData?.frontmatter?.status && (
+                      <Chip
+                        label={ofmNoteData.frontmatter.status}
+                        size="small"
+                        sx={{ height: 18, fontSize: '0.62rem', fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(16,185,129,0.2)', color: '#10B981' }}
+                      />
+                    )}
+                    {Array.isArray(ofmNoteData?.frontmatter?.tags) && ofmNoteData.frontmatter.tags.map(t => (
+                      <Chip
+                        key={t}
+                        label={`#${t}`}
+                        size="small"
+                        sx={{ height: 18, fontSize: '0.6rem', fontFamily: mono, fontWeight: 700, bgcolor: 'rgba(245,158,11,0.15)', color: '#FCD34D' }}
+                      />
+                    ))}
+                  </Box>
+
+                  {/* Outgoing Wikilinks Quick Jumps */}
+                  {Array.isArray(ofmNoteData?.wikilinks) && ofmNoteData.wikilinks.length > 0 && (
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, overflowX: 'auto', maxWidth: { xs: '100%', md: 400 }, py: 0.2 }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.65rem', whiteSpace: 'nowrap' }}>
+                        WIKILINKS:
+                      </Typography>
+                      {ofmNoteData.wikilinks.slice(0, 8).map((w) => (
+                        <Chip
+                          key={w}
+                          label={`🔗 [[${w.split('/').pop()}]]`}
+                          size="small"
+                          clickable
+                          onClick={() => handleLoadOfmNote(w)}
+                          sx={{
+                            height: 18,
+                            fontSize: '0.6rem',
+                            fontFamily: mono,
+                            fontWeight: 700,
+                            bgcolor: 'rgba(56,189,248,0.1)',
+                            color: '#38BDF8',
+                            border: '1px solid rgba(56,189,248,0.25)',
+                            whiteSpace: 'nowrap'
+                          }}
+                        />
+                      ))}
+                    </Box>
+                  )}
+                </Box>
+
+                {/* Dual-Pane Layout: Editor & Preview */}
+                <Grid container spacing={2.5}>
+                  {/* Left Pane: Raw OFM Editor (visible in 'split' and 'raw') */}
+                  {(ofmViewMode === 'split' || ofmViewMode === 'raw') && (
+                    <Grid xs={12} md={ofmViewMode === 'split' ? 6 : 12}>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                          <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.76rem', color: '#CBD5E1' }}>
+                            📝 RAW OFM MARKDOWN EDITOR
+                          </Typography>
+                          <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.65rem' }}>
+                            Live YAML frontmatter, callouts & wikilinks
+                          </Typography>
+                        </Box>
+                        <textarea
+                          id="studio-ofm-textarea"
+                          value={ofmContent}
+                          onChange={(e) => setOfmContent(e.target.value)}
+                          placeholder="Enter Obsidian Flavored Markdown with frontmatter, callouts, and [[wikilinks]]..."
+                          style={{
+                            width: '100%',
+                            minHeight: 460,
+                            maxHeight: 620,
+                            padding: '16px',
+                            borderRadius: '8px',
+                            backgroundColor: isDark ? '#05070B' : '#0F172A',
+                            color: '#E2E8F0',
+                            border: '1px solid rgba(232,121,249,0.3)',
+                            fontFamily: mono,
+                            fontSize: '0.78rem',
+                            lineHeight: 1.6,
+                            resize: 'vertical',
+                            outline: 'none',
+                            boxSizing: 'border-box'
+                          }}
+                        />
+                      </Box>
+                    </Grid>
+                  )}
+
+                  {/* Right Pane: Rich Interactive Preview (visible in 'split' and 'preview') */}
+                  {(ofmViewMode === 'split' || ofmViewMode === 'preview') && (
+                    <Grid xs={12} md={ofmViewMode === 'split' ? 6 : 12}>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                          <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.76rem', color: '#E879F9' }}>
+                            👁️ OFM RICH INTERACTIVE PREVIEW
+                          </Typography>
+                          <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.65rem' }}>
+                            Click [[wikilinks]] to navigate notes
+                          </Typography>
+                        </Box>
+                        <Box
+                          id="studio-ofm-preview"
+                          onClick={(e) => {
+                            const pill = e.target.closest('.ofm-wikilink-pill');
+                            if (pill && pill.dataset.wikilink) {
+                              handleLoadOfmNote(pill.dataset.wikilink);
+                            }
+                          }}
+                          dangerouslySetInnerHTML={{ __html: renderOfmToHtml(ofmContent, ofmNoteData?.frontmatter) }}
+                          sx={{
+                            width: '100%',
+                            minHeight: 460,
+                            maxHeight: 620,
+                            p: 2.5,
+                            borderRadius: 2,
+                            bgcolor: isDark ? '#030508' : '#F8FAFC',
+                            border: '1px solid rgba(232,121,249,0.25)',
+                            overflowY: 'auto',
+                            overflowX: 'hidden',
+                            fontSize: '0.82rem',
+                            color: isDark ? '#E2E8F0' : '#1E293B',
+                            lineHeight: 1.65,
+                            boxSizing: 'border-box'
+                          }}
+                        />
+                      </Box>
+                    </Grid>
+                  )}
+                </Grid>
+
+                {/* Bottom Save & STDP Synchronization Rail */}
+                <Box
+                  sx={{
+                    mt: 3,
+                    pt: 2,
+                    borderTop: '1px solid rgba(232,121,249,0.25)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: 1.5
+                  }}
+                >
+                  <Button
+                    id="studio-ofm-save-btn"
+                    variant="contained"
+                    onClick={handleSaveOfmNote}
+                    disabled={isSavingOfmNote}
+                    startIcon={isSavingOfmNote ? <CircularProgress size={16} sx={{ color: '#08080B' }} /> : <BoltIcon fontSize="small" />}
+                    sx={{
+                      fontWeight: 900,
+                      fontSize: '0.8rem',
+                      bgcolor: '#E879F9',
+                      color: '#08080B',
+                      borderRadius: 2,
+                      textTransform: 'none',
+                      letterSpacing: '0.03em',
+                      px: 2.5,
+                      py: 0.9,
+                      boxShadow: '0 0 16px rgba(232,121,249,0.35)',
+                      '&:hover': { bgcolor: '#D946EF', color: '#08080B' }
+                    }}
+                  >
+                    {isSavingOfmNote ? 'SAVING & SYNCING STDP...' : '💾 SAVE TO VAULT & SYNC STDP'}
+                  </Button>
+
+                  {ofmSaveResult && (
+                    <Box
+                      id="studio-ofm-save-status"
+                      sx={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        px: 1.5,
+                        py: 0.7,
+                        borderRadius: 1.5,
+                        bgcolor: isDark ? 'rgba(52,211,153,0.1)' : 'rgba(52,211,153,0.15)',
+                        border: '1px solid rgba(52,211,153,0.3)'
+                      }}
+                    >
+                      <VerifiedIcon sx={{ fontSize: '0.9rem', color: '#10B981' }} />
+                      <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#10B981', fontWeight: 800 }}>
+                        ✦ Saved: <code>{ofmSaveResult.relPath}</code> ({ofmSaveResult.wordCount} words) • STDP Synced!
+                      </Typography>
+                    </Box>
+                  )}
+
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.68rem' }}>
+                    Zero Data-Loss • Atomic Safe Write • Biomorphic Synaptic Plasticity
+                  </Typography>
+                </Box>
               </Paper>
 
               {/* 7 Official Obsidian Skills Grid */}

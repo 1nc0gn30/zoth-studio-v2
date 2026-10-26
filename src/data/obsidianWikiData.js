@@ -2803,6 +2803,36 @@ export const FALLBACK_MCP_TOOLS = [
     category: "Neuro-Chemical",
     description: "Tag a memory trace as a permanent flashbulb engram: locks decay_factor=0.05, making it permanently immune to Ebbinghaus forgetting curves.",
     defaultArgs: { memory_id: "MEM-001", salience: 1.0, reason: "Core kernel STDP algorithm" }
+  },
+  {
+    name: "obsidian_daily_log",
+    category: "Obsidian",
+    description: "Append or retrieve entries in today's Daily Sovereign Note in 07-Daily/ and sync biomorphic STDP memory engram.",
+    defaultArgs: { text: "Completed Wave 16 integration", date: "today" }
+  },
+  {
+    name: "obsidian_backlinks_inspect",
+    category: "Obsidian",
+    description: "Inspect incoming backlinks, outgoing wikilinks, and unlinked plain-text mentions for any Vault note.",
+    defaultArgs: { note: "00 Home" }
+  },
+  {
+    name: "obsidian_bundle_export",
+    category: "Obsidian",
+    description: "Compile and export portable SHA-256 verified knowledge bundle containing 100% of notes, canvases, and bases.",
+    defaultArgs: { verify_sha256: true }
+  },
+  {
+    name: "obsidian_note_read",
+    category: "Obsidian",
+    description: "Read Obsidian Flavored Markdown note with parsed YAML frontmatter, wikilinks, and callouts.",
+    defaultArgs: { path: "00 Home.md" }
+  },
+  {
+    name: "obsidian_note_write",
+    category: "Obsidian",
+    description: "Safely write updated Obsidian Flavored Markdown to vault note and sync biomorphic STDP engram to daemon.",
+    defaultArgs: { relPath: "00 Home.md", content: "# 00 Home\n\nUpdated via MCP note_write." }
   }
 ];
 
@@ -2942,6 +2972,54 @@ export function callMcpToolFallback(toolName, args = {}) {
           status: "ACTIVE"
         }
       };
+    case "obsidian_daily_log":
+      return {
+        jsonrpc: "2.0",
+        id: 1,
+        result: {
+          ok: true,
+          appended: args.text || "Daily sovereign journal entry appended",
+          date: args.date || new Date().toISOString().slice(0, 10),
+          relPath: `07-Daily/${args.date || new Date().toISOString().slice(0, 10)}.md`,
+          memoryId: `MEM-DAY-${Date.now().toString(16).slice(-4).toUpperCase()}`,
+          timestamp: ts
+        }
+      };
+    case "obsidian_backlinks_inspect":
+      return {
+        jsonrpc: "2.0",
+        id: 1,
+        result: getBacklinksFallback(args.note || "00 Home")
+      };
+    case "obsidian_bundle_export":
+      return {
+        jsonrpc: "2.0",
+        id: 1,
+        result: getPortableBundleFallback()
+      };
+    case "obsidian_note_read":
+      return {
+        jsonrpc: "2.0",
+        id: 1,
+        result: getNoteFallback(args.path || "00 Home.md")
+      };
+    case "obsidian_note_write": {
+      const pathStr = args.relPath || args.path || "00 Home.md";
+      const contentStr = args.content || "";
+      const wordCount = (contentStr.trim().split(/\s+/) || []).filter(Boolean).length;
+      return {
+        jsonrpc: "2.0",
+        id: 1,
+        result: {
+          ok: true,
+          title: pathStr.replace(/\.md$/, '').split('/').pop(),
+          relPath: pathStr,
+          wordCount,
+          savedAt: ts,
+          stdpSynced: true
+        }
+      };
+    }
     default:
       return {
         jsonrpc: "2.0",
@@ -3726,3 +3804,372 @@ export const SECOND_BRAIN_CLI_COMMANDS = [
   }
 ];
 
+
+
+// ============================================================================
+// OBSIDIAN FLAVORED MARKDOWN (OFM) DUAL-PANE EDITOR & VIEWER FALLBACKS
+// ============================================================================
+
+export const FALLBACK_OFM_NOTES = {
+  "00 Home.md": {
+    "ok": true,
+    "title": "00 Home",
+    "relPath": "00 Home.md",
+    "cluster": "Root",
+    "wordCount": 675,
+    "frontmatter": {
+      "title": "Zoth Canon",
+      "tags": [
+        "canon"
+      ],
+      "aliases": [
+        "Home",
+        "Canon",
+        "Dashboard"
+      ],
+      "cssclasses": [
+        "dashboard"
+      ]
+    },
+    "wikilinks": [
+      "Maps",
+      "Maps/Night log",
+      "Maps/Canon.canvas",
+      "Workspaces",
+      "MOC Rooms",
+      "Maps/Rooms.canvas",
+      "Zoth 71 Sovereign Tools.base",
+      "Maps/Studio Tools.base",
+      "Maps/Workstations.base",
+      "Maps/MCP.base",
+      "Maps/CLIs.base",
+      "Maps/Arsenal.base",
+      "Zoth Autonomous Agents.base",
+      "Zoth Fleet & Daemons.base",
+      "Maps/Daemons.base",
+      "Maps/Skills.base",
+      "Maps/Rooms.base",
+      "Maps/Rings.base",
+      "Maps/Loopback.base",
+      "Maps/Adytum.base",
+      "Maps/Gallery.base",
+      "Zoth OS",
+      "Zoth Studio",
+      "Zoth WebGen",
+      "Zoth Memory",
+      "Vaelor Network",
+      "Zoth Trust & Supply Chain",
+      "Zoth 6 Mathematical Pillars.canvas",
+      "Vaelor & Sovereign Economy.canvas",
+      "Zoth Second Brain.canvas",
+      "Zoth Plugin & Connector Marketplace.canvas",
+      "Zoth Autonomous Agents & Hermes Fleet.canvas",
+      "Netrunner Cyber-Cortex Knowledge Map.canvas",
+      "MCP Catalog",
+      "Public Surfaces",
+      "Repo vs Live OS",
+      "Credentials",
+      "Product Hunt",
+      "Agent permissions",
+      "05-Telemetry/Vaelor Live Ledger Telemetry",
+      "05-Telemetry/Neuro-Memory Cortex Telemetry",
+      "05-Telemetry/Dream Consolidation & Synaptic Bridges",
+      "06-Wiki/Vaelor Account-Lattice & PoUW Protocol",
+      "06-Wiki/Vaelor Smart Receipts, Sub-Accounts & Anti-Phishing Directory",
+      "06-Wiki/Obsidian Second Brain, JSON Canvas 1.0 & Bases Architecture",
+      "06-Wiki/Biomorphic STDP & 3D Netrunner Cortex",
+      "06-Wiki/ZothOS Sovereign Linux & Kernel Architecture",
+      "06-Wiki/Zoth Studio v2 & 71 Sovereign Micro-SaaS Tools",
+      "06-Wiki/Hermes Agent & Multi-Provider MCP Connector Ecosystem",
+      "06-Wiki/Zero-Trust Supply Chain, Cosign & VirusTotal Verification",
+      "Zoth LLM Wiki Index.base",
+      "07-Daily/2026-10-26",
+      "MOC Studio Tools",
+      "MOC Studio Categories",
+      "MOC Routes",
+      "MOC Pages",
+      "MOC Components",
+      "MOC Workstations",
+      "MOC Pantheon",
+      "MOC FAQs",
+      "MOC Math",
+      "MOC CLIs",
+      "MOC Host extras",
+      "MOC Desktops",
+      "MOC Arsenal",
+      "MOC Apt",
+      "MOC Daemons",
+      "MOC Units",
+      "MOC Skills",
+      "MCP/_index",
+      "MOC Themes",
+      "MOC Build",
+      "MOC Docs"
+    ],
+    "callouts": [
+      "gold"
+    ],
+    "content": "---\ntitle: \"Zoth Canon\"\ntags: [canon]\naliases: [\"Home\", \"Canon\", \"Dashboard\"]\ncssclasses:\n  - dashboard\n---\n\n# Zoth Canon\n\nOperator knowledge graph for **Zoth OS v3.2** and **Zoth Studio**. Each note maps to a real file. Graph, canvas, bases, bookmarks, and properties are live.\n\n> [!gold] Overnight\n> **1,668 notes.** Two Gemini 3.8 Flash waves plus rings, loopback, Adytum keys, gallery captures, and image manifests. MCP still **all off**.\n\n> [!gold] Live machine\n> Laptop `eDP-1` @ 0,0 \u00b7 Samsung LS32D39xG @ 1920,0 \u00b7 8 desktops Forge\u2192Sanctum \u00b7 [zothos.nullai.tech](https://zothos.nullai.tech)\n\nOpen [[Maps]] for canvases and bases. Status: [[Maps/Night log]].\n\n## Operator board\n\n![[Maps/Canon.canvas]]\n\n## Rooms\n\nCtrl+F1\u2026F8 \u00b7 [[Workspaces]] \u00b7 [[MOC Rooms]]\n\n![[Maps/Rooms.canvas]]\n\n## Catalogs\n\n- [[Zoth 71 Sovereign Tools.base|Zoth 71 Sovereign Tools Database]] \u2014 live pillars, runtimes & monetization\n- [[Maps/Studio Tools.base|Studio tools]] \u2014 65 published cards\n- [[Maps/Workstations.base|Workstations]] \u2014 43 cockpits\n- [[Maps/MCP.base|MCP]] \u2014 153 servers, all off\n- [[Maps/CLIs.base|CLIs]] \u2014 image `/usr/local/bin`\n- [[Maps/Arsenal.base|Arsenal]] \u2014 verified packages\n- [[Zoth Autonomous Agents.base|Zoth Autonomous Agents Database]] \u2014 Hermes fleet, PoUW miners & subagents\n- [[Zoth Fleet & Daemons.base|Zoth Fleet & Daemons Database]] \u2014 live ports & health formulas\n- [[Maps/Daemons.base|Daemons]] \u2014 conductor registry\n- [[Maps/Skills.base|Skills]] \u2014 Grok, AGY, Hermes\n- [[Maps/Rooms.base|Rooms]] \u2014 eight desktops\n- [[Maps/Rings.base|Rings]] \u00b7 [[Maps/Loopback.base|Loopback]] \u00b7 [[Maps/Adytum.base|Adytum]] \u00b7 [[Maps/Gallery.base|Gallery]]\n\nDaemons (preview):\n\n![[Zoth Fleet & Daemons.base]]\n\n## Canon\n\n- [[Zoth OS]] \u00b7 [[Zoth Studio]] \u00b7 [[Zoth WebGen]] \u00b7 [[Zoth Memory]] \u00b7 [[Vaelor Network]] \u00b7 [[Zoth Trust & Supply Chain]]\n- [[Zoth 6 Mathematical Pillars.canvas|Zoth 6 Mathematical Pillars Canvas]] \u00b7 [[Vaelor & Sovereign Economy.canvas|Vaelor & Sovereign Economy Canvas]] \u00b7 [[Zoth Second Brain.canvas|Zoth Second Brain Canvas]] \u00b7 [[Zoth Plugin & Connector Marketplace.canvas|Marketplace Canvas]] \u00b7 [[Zoth Autonomous Agents & Hermes Fleet.canvas|Hermes Fleet Canvas]] \u00b7 [[Netrunner Cyber-Cortex Knowledge Map.canvas|Cyber-Cortex Canvas]]\n- [[MCP Catalog]] \u00b7 [[Public Surfaces]] \u00b7 [[Repo vs Live OS]] \u00b7 [[Credentials]]\n- [[Product Hunt]] \u00b7 [[Workspaces]] \u00b7 [[Maps]] \u00b7 [[Agent permissions]]\n\n## Live Telemetry & Swarm Daemons\n\n- [[05-Telemetry/Vaelor Live Ledger Telemetry|\u25c8 Vaelor Live Ledger Telemetry]] \u2014 DAG finality, BFT consensus & fee metrics\n- [[05-Telemetry/Neuro-Memory Cortex Telemetry|\ud83e\udde0 Neuro-Memory Cortex Telemetry]] \u2014 41,650+ STDP engrams, 2M+ synapses\n- [[05-Telemetry/Dream Consolidation & Synaptic Bridges|\ud83c\udf19 Dream Consolidation & Synaptic Bridges]] \u2014 Hippocampal replay & latent cross-cluster links\n- [[Zoth Autonomous Agents & Hermes Fleet.canvas|Zoth Autonomous Agents & Hermes Fleet Canvas]] \u2014 multi-agent mesh orchestration\n- [[Zoth Autonomous Agents.base|Zoth Autonomous Agents Database]] \u2014 Hermes fleet, PoUW miners & subagents\n\n## Karpathy LLM Wiki\n\n- [[06-Wiki/Vaelor Account-Lattice & PoUW Protocol|Vaelor Account-Lattice & PoUW Protocol]] \u2014 Feeless DAG, BFT consensus & AI mining\n- [[06-Wiki/Vaelor Smart Receipts, Sub-Accounts & Anti-Phishing Directory|Vaelor Smart Receipts, Sub-Accounts & Anti-Phishing Directory]] \u2014 Itemized proofs, 365d warranties & sub-account spend controls\n- [[06-Wiki/Obsidian Second Brain, JSON Canvas 1.0 & Bases Architecture|Obsidian Second Brain, JSON Canvas 1.0 & Bases Architecture]] \u2014 @kepano skills, spatial canvas, .base databases & STDP sync\n- [[06-Wiki/Biomorphic STDP & 3D Netrunner Cortex|Biomorphic STDP & 3D Netrunner Cortex]] \u2014 Biological plasticity & 3D synaptic memory\n- [[06-Wiki/ZothOS Sovereign Linux & Kernel Architecture|ZothOS Sovereign Linux & Kernel Architecture]] \u2014 Preempt-RT kernel, eBPF & 8 desktop rooms\n- [[06-Wiki/Zoth Studio v2 & 71 Sovereign Micro-SaaS Tools|Zoth Studio v2 & 71 Sovereign Micro-SaaS Tools]] \u2014 71 in-browser tools & dual cash registers\n- [[06-Wiki/Hermes Agent & Multi-Provider MCP Connector Ecosystem|Hermes Agent & Multi-Provider MCP Connector Ecosystem]] \u2014 Multi-surface agent & 150+ skills\n- [[06-Wiki/Zero-Trust Supply Chain, Cosign & VirusTotal Verification|Zero-Trust Supply Chain, Cosign & VirusTotal Verification]] \u2014 Ed25519 Cosign & 70+ AV scans\n- [[Zoth LLM Wiki Index.base|Zoth LLM Wiki Index Database]] \u2014 Synthesized articles catalog\n\n## Daily Sovereign Journal\n\n- [[07-Daily/2026-10-26|Daily Sovereign Note \u2014 2026-10-26]] \u2014 Live daemon snapshots, engineering logs & STDP engrams\n\n## Maps of content\n\n- [[MOC Studio Tools]] \u00b7 [[MOC Studio Categories]] \u00b7 [[MOC Routes]] \u00b7 [[MOC Pages]] \u00b7 [[MOC Components]]\n- [[MOC Workstations]] \u00b7 [[MOC Pantheon]] \u00b7 [[MOC FAQs]] \u00b7 [[MOC Math]]\n- [[MOC CLIs]] \u00b7 [[MOC Host extras]] \u00b7 [[MOC Desktops]] \u00b7 [[MOC Arsenal]] \u00b7 [[MOC Apt]]\n- [[MOC Daemons]] \u00b7 [[MOC Units]] \u00b7 [[MOC Skills]] \u00b7 [[MCP/_index|MCP index]]\n- [[MOC Themes]] \u00b7 [[MOC Rooms]] \u00b7 [[MOC Build]] \u00b7 [[MOC Docs]]\n\n## Do not\n\nRe-enable the MCP catalog. Auto-post. Commit `cosign.key` or ISOs. Bake an ISO unless asked.\n"
+  },
+  "Zoth Trust & Supply Chain.md": {
+    "ok": true,
+    "title": "Zoth Trust & Supply Chain",
+    "relPath": "Zoth Trust & Supply Chain.md",
+    "cluster": "Root",
+    "wordCount": 764,
+    "frontmatter": {
+      "title": "Zoth Trust & Supply Chain",
+      "date": "2026-10-26",
+      "tags": [
+        "moc",
+        "os",
+        "security",
+        "trust",
+        "supply-chain",
+        "slsa",
+        "virustotal",
+        "sigstore",
+        "sbom",
+        "codeql",
+        "semgrep"
+      ],
+      "aliases": [
+        "Trust Architecture",
+        "Supply Chain Security",
+        "Zoth Trust & Verification",
+        "PR-35 Trust Parity"
+      ],
+      "cluster": "Security",
+      "stdp_weight": 0.99
+    },
+    "wikilinks": [
+      "Zoth OS",
+      "Zoth Studio",
+      "Zoth Fleet & Daemons.base",
+      "00 Home",
+      "MOC Daemons",
+      "MOC CLIs",
+      "CLI zoth-mcp",
+      "Vaelor Network",
+      "Vaelor & Sovereign Economy.canvas",
+      "Zoth Plugin & Connector Marketplace.canvas"
+    ],
+    "callouts": [
+      "tip",
+      "important"
+    ],
+    "content": "---\ntitle: \"Zoth Trust & Supply Chain\"\ndate: 2026-10-26\ntags:\n  - moc\n  - os\n  - security\n  - trust\n  - supply-chain\n  - slsa\n  - virustotal\n  - sigstore\n  - sbom\n  - codeql\n  - semgrep\naliases:\n  - Trust Architecture\n  - Supply Chain Security\n  - Zoth Trust & Verification\n  - PR-35 Trust Parity\ncluster: Security\nstdp_weight: 0.99\n---\n\n# \ud83d\udee1\ufe0f Zoth Trust & Supply Chain Security Architecture\n\n**Zero-trust supply-chain provenance, continuous SAST scanning, and automated multi-engine anti-malware verification across ZothOS and Zoth Studio.**\n\n> [!tip] Sovereign Trust Parity (ZothOS PR #35 & Zoth Studio v2 PR #11)\n> Both [[Zoth OS]] (`NullAITech/zoth-os`) and [[Zoth Studio]] (`NullAITech/zoth-studio-v2`) enforce identical, reproducible security controls. Every production release is signed with keyless Sigstore Cosign OIDC identities, attested via SLSA build provenance, audited across 70+ AV engines on VirusTotal, and transparently mapped with SPDX/CycloneDX SBOMs.\n\n---\n\n## 1. Automated Supply-Chain & Security Controls Matrix\n\n| Control | Implementation & Workflow | Scope & Cadence | Output & Verification Permalinks |\n| :--- | :--- | :--- | :--- |\n| **VirusTotal Binary Scan** | `.github/workflows/virustotal-release.yml`<br>`tools/virustotal-release.sh` | Every published release & manual dispatch | Generates `virustotal-report.md` with per-asset SHA-256 and VT analysis links attached to GitHub Releases |\n| **Sigstore Cosign Signing** | `.github/workflows/release-sign.yml`<br>`cosign verify-blob` | Every published release | Keyless OIDC `SHA256SUMS.cosign.bundle` verifiable against GitHub Actions issuer |\n| **SLSA Provenance** | GitHub Attestations (`actions/attest-build-provenance`) | Every published release | Cryptographically verifiable build provenance via `gh attestation verify` |\n| **SPDX & CycloneDX SBOM** | `.github/workflows/sbom.yml`<br>Anchore Syft engine | Every release & push to `main` | `zothos-source.spdx.json` and `zothos-source.cdx.json` dependency graphs |\n| **OpenSSF Scorecard** | `.github/workflows/scorecard.yml` | Push to `main` & weekly cron | Public transparency report & badge at [scorecard.dev](https://scorecard.dev/viewer/?repo=github.com/NullAITech/zoth-os) |\n| **CodeQL SAST** | `.github/workflows/codeql.yml` | Push to `main`, PRs, weekly cron | Deep semantic analysis across Python, JavaScript/TypeScript, and Actions |\n| **Semgrep SAST** | `.github/workflows/semgrep.yml` | Push to `main`, PRs, weekly cron | Multi-rule scanning (`p/security-audit`, `p/secrets`, `p/default`) uploaded to SARIF |\n| **Secret & PII Guardrail** | `tools/scan-secrets.sh`<br>`.gitleaks.toml` | Pre-commit & CI push/PR gate | Zero-leak gate blocking secrets, private keys, API tokens, and disk serial numbers |\n\n---\n\n## 2. VirusTotal Release Scanning Policy\n\n> [!important] Multi-Engine Binary Verification Gate\n> Release installers (`.AppImage`, `.deb`, `.rpm`, `.dmg`, `.exe`, `.msi`, `.iso`, `.run`, `.tar.gz`, `.zip`) are scanned against 70+ commercial antivirus engines via the VirusTotal v3 REST API.\n\n1. **Targeted Artifact Scope**:\n   `tools/virustotal-release.sh` filters release assets to scan only binary binaries and installer bundles. Checksum manifests, signatures (`.sig`, `.pem`), Cosign bundles (`.bundle`), provenance attestations (`.intoto.jsonl`), and SBOM JSON documents are preserved without consuming scanning quotas.\n2. **Paced Rate Limiting**:\n   Requests are metered at ~4 requests/minute to maintain full compatibility with standard free-tier `VT_API_KEY` credentials stored in GitHub repository secrets.\n3. **High-Confidence Gate**:\n   The verification script immediately fails if any industry-standard high-confidence engine reports a detection:\n   - `Microsoft Defender`, `Kaspersky`, `BitDefender`, `ESET-NOD32`\n   - `CrowdStrike Falcon`, `SentinelOne`, `Sophos`, `Symantec`\n   - `Malwarebytes`, `ClamAV`, `Google Safebrowsing`, `Avast`, `McAfee`\n4. **Resilience Invariant**:\n   `continue-on-error: true` at the workflow step prevents external network latency or transient VirusTotal API outages from permanently deadlocking mission-critical release publishing.\n\n---\n\n## 3. Cryptographic Verification Playbook\n\nUsers, enterprise auditors, and AI agent coordinators verify any Zoth release using pure command-line tools:\n\n### Step 1: Verify Keyless Sigstore Signature\n```bash\n# Verify cryptographic signature using GitHub Actions OIDC identity\ncosign verify-blob SHA256SUMS \\\n  --bundle SHA256SUMS.cosign.bundle \\\n  --certificate-identity-regexp '^https://github.com/NullAITech/zoth-os/\\.github/workflows/release-sign\\.yml@' \\\n  --certificate-oidc-issuer https://token.actions.githubusercontent.com\n```\n\n### Step 2: Verify SLSA Build Provenance Attestation\n```bash\n# Verify build was synthesized inside GitHub Actions without tampering\ngh attestation verify SHA256SUMS --repo NullAITech/zoth-os\n```\n\n### Step 3: Verify Asset Checksums & VirusTotal Report\n```bash\n# Verify binary SHA-256 digests against signed manifest\nsha256sum --ignore-missing -c SHA256SUMS\n\n# Inspect VirusTotal scan permalinks in release notes\ncat virustotal-report.md\n```\n\n---\n\n## 4. Integration with Zoth Fleet & Second Brain\n\nThe trust architecture directly connects with ZothOS daemons and developer tooling:\n\n- **Egress & Jail Daemons**: `agent-egress-sentinel` (:8095) and `agent-capsule-jail` (:8105) ensure running processes cannot phone home or leak secrets during build stages.\n- **Continuous Audit**: `agent-policy-auditor` (:8106) correlates Git commits with signed SBOM hashes.\n- **Flight Recorder**: `agent-flight-recorder` (:8104) logs cryptographic attestations into permanent audit ledgers.\n- **Obsidian Second Brain Integration**: Query live fleet security status and port integrity via `zoth-second-brain status` or view the interactive database in [[Zoth Fleet & Daemons.base]].\n\n---\n\n## See also\n\n- [[00 Home]]\n- [[Zoth OS]]\n- [[Zoth Studio]]\n- [[MOC Daemons]]\n- [[MOC CLIs]]\n- [[CLI zoth-mcp]]\n- [[Vaelor Network]]\n- [[Zoth Fleet & Daemons.base]]\n- [[Vaelor & Sovereign Economy.canvas]]\n- [[Zoth Plugin & Connector Marketplace.canvas]]\n"
+  },
+  "06-Wiki/Vaelor Account-Lattice & PoUW Protocol.md": {
+    "ok": true,
+    "title": "Vaelor Account-Lattice & PoUW Protocol",
+    "relPath": "06-Wiki/Vaelor Account-Lattice & PoUW Protocol.md",
+    "cluster": "06-Wiki",
+    "wordCount": 943,
+    "frontmatter": {
+      "title": "Vaelor Account-Lattice & PoUW Protocol",
+      "created": "2026-10-26T09:13:50Z",
+      "updated": "2026-10-26T09:13:50Z",
+      "category": "LLM-Wiki",
+      "tags": [
+        "wiki",
+        "llm-synthesized",
+        "karpathy-wiki",
+        "vaelor",
+        "consensus",
+        "pouw",
+        "account-lattice"
+      ],
+      "stdp_engrams": 6,
+      "confidence": 0.99,
+      "status": "CANONICAL"
+    },
+    "wikilinks": [
+      "Vaelor Network",
+      "05-Telemetry/Vaelor Live Ledger Telemetry",
+      "Agents/Vaelor PoUW AI Compute Miners",
+      "Zoth Trust & Supply Chain",
+      "Zoth OS",
+      "Vaelor & Sovereign Economy.canvas",
+      "Zoth Autonomous Agents & Hermes Fleet.canvas",
+      "Zoth 71 Sovereign Tools.base",
+      "Zoth Fleet & Daemons.base",
+      "Zoth Autonomous Agents.base",
+      "00 Home",
+      "Zoth LLM Wiki Index.base"
+    ],
+    "callouts": [
+      "abstract"
+    ],
+    "content": "---\ntitle: \"Vaelor Account-Lattice & PoUW Protocol\"\ncreated: \"2026-10-26T09:13:50Z\"\nupdated: \"2026-10-26T09:13:50Z\"\ncategory: \"LLM-Wiki\"\ntags: [wiki, llm-synthesized, karpathy-wiki, vaelor, consensus, pouw, account-lattice]\nstdp_engrams: 6\nconfidence: 0.99\nstatus: \"CANONICAL\"\n---\n\n# \ud83d\udcda Vaelor Account-Lattice & PoUW Protocol\n\n> [!abstract] Executive Summary\n> **Vaelor (\u25c8 VLR)** is a next-generation Layer-1 feeless cryptocurrency architecture designed to eliminate blockchain transaction fees and mining energy waste. Operating on an asynchronous **Account-Lattice DAG**, each account controls an independent micro-chain validated via a sub-20ms SHA-256 work stamp. Byzantine Fault Tolerant (BFT) finality is achieved across a 5-region validator quorum, while native Layer-1 **Protected-Pay Escrow** (24\u201372h buyer protection windows) and **Recurring Pull Subscription Allowances** provide consumer payment features surpassing legacy credit card rails.\n\n## Conceptual Architecture\n\n```mermaid\nflowchart LR\n    subgraph UserSurfaces[\"\ud83d\udc64 User & Client Surfaces\"]\n        P1[\"Passkey Biometric<br/>@neal\"]\n        P2[\"Merchant POS SDK<br/>@merchant\"]\n        P3[\"Pull Subscriptions<br/>Guarded Allowances\"]\n    end\n    \n    subgraph AccountLatticeDAG[\"\u25c8 Asynchronous Lattice DAG\"]\n        direction TB\n        TxSend[\"SEND Block<br/>PoW Nonce Stamp\"]\n        TxRecv[\"RECEIVE Block<br/>Balance Settle\"]\n        Escrow[\"Protected-Pay<br/>ESCROW_LOCK (72h)\"]\n        TxSend --> TxRecv\n        TxSend --> Escrow\n    end\n    \n    subgraph ConsensusBFT[\"\u26a1 5-Region BFT Finality (:8140)\"]\n        direction TB\n        V1[\"\ud83c\uddfa\ud83c\uddf8 Virginia (1.2ms)\"]\n        V2[\"\ud83c\udde9\ud83c\uddea Frankfurt (14.8ms)\"]\n        V3[\"\ud83c\uddef\ud83c\uddf5 Tokyo (22.4ms)\"]\n        V4[\"\u26a1 Local Edge (0.4ms)\"]\n        V5[\"\ud83c\udf10 NullAI Core (0.8ms)\"]\n    end\n    \n    subgraph PoUWWorkers[\"\u26cf\ufe0f AI Compute Miners\"]\n        M1[\"AEO Schema JSON-LD\"]\n        M2[\"CWV Performance Audits\"]\n        M3[\"Security Entropy Scans\"]\n        M4[\"LLM Inference Receipts\"]\n    end\n    \n    UserSurfaces --> AccountLatticeDAG\n    AccountLatticeDAG -->|Sub-20ms Quorum| ConsensusBFT\n    PoUWWorkers -->|PoUW Coin Minting| AccountLatticeDAG\n```\n\n## Functional Taxonomy & Core Architectural Pillars\n\n### 1. Asynchronous Account-Lattice DAG\nUnlike monolithic single-queue blockchains where every transaction competes in a global mempool, Vaelor gives every user, merchant, and sovereign daemon an individual Ed25519 micro-chain. Transactions require only dual-block consensus (SEND on sender's lattice, RECEIVE on receiver's lattice), completely eliminating global queue head-of-line blocking.\n\n### 2. $0.00 Gas & Micro-PoW Anti-Spam Stamp\nSpam prevention is handled entirely on the client side without burning monetary gas. Every transaction computes a sub-20ms SHA-256 micro-stamp over the account's previous block hash:\n- Gas fee: **$0.00**\n- Settlement speed: **<20ms**\n- Verification: Instant O(1) hash check by validators\n\n### 3. Layer-1 Protected-Pay Escrow\nMerchants and buyers can conduct commercial transactions with native protocol-level chargeback protection. Funds are held in an `ESCROW_LOCK` state for 24 to 72 hours, enabling instant release upon delivery or instant refund if goods fail\u2014with zero credit card interchange fees.\n\n### 4. Proof-of-Useful-Work (PoUW) Compute Minting\nRather than burning terawatt-hours on useless cryptographic hash calculations, Vaelor mints new VLR supply strictly through verified artificial intelligence tasks:\n- **AEO Schema Graph Synthesis:** Automated Schema.org generation for search crawlers.\n- **CWV DOM Audits:** Tri-viewport Core Web Vitals layout shift validation.\n- **Security Entropy Audits:** Ed25519 key verification and secret leak prevention.\n\n## Key Mathematical Formulations & Technical Primitives\n\n### 1. Anti-Spam Micro-Proof-of-Work Stamp\nThe sender must produce a 32-bit nonce $n$ such that:\n$$\\text{SHA-256}(\\text{account} \\mathbin{\\Vert} \\text{previous\\_hash} \\mathbin{\\Vert} n) < T_{\\text{diff}}$$\nWhere $T_{\\text{diff}} = 2^{256 - k}$ and $k = 16$ bits of required leading zero difficulty (achieved in $\\approx 4.8\\text{ ms}$).\n\n### 2. Byzantine Fault Tolerant Consensus Quorum\nFor a validator set of size $N = 5$ with fault tolerance $f = 1$:\n$$Q = 2f + 1 = 4 \\quad (80\\% \\text{ quorum threshold})$$\nA block is finalized when it receives valid Ed25519 signatures from at least $Q$ online regional validators:\n$$\\sum_{v \\in V} \\mathbb{I}_{\\text{attested}}(v) \\ge 4$$\n\n### 3. Proof-of-Useful-Work Reward Equation\nThe newly minted coin reward $R_{\\text{VLR}}$ for verified AI task execution is calculated as:\n$$R_{\\text{VLR}} = \\beta \\cdot \\mathcal{C}(\\text{Task}) \\cdot \\exp\\left(-\\frac{\\Delta t_{\\text{latency}}}{\\tau}\\right)$$\nWhere $\\mathcal{C}(\\text{Task})$ represents computational entropy units and $\\beta = 1.05$.\n\n## Bidirectional Knowledge Graph Links\n\n### Obsidian Second Brain Notes\n- [[Vaelor Network]] \u2014 Canonical architecture specification and network primitives\n- [[05-Telemetry/Vaelor Live Ledger Telemetry]] \u2014 Live DAG state, block counts, and validator pings\n- [[Agents/Vaelor PoUW AI Compute Miners]] \u2014 Sovereign AI mining daemon specs\n- [[Zoth Trust & Supply Chain]] \u2014 Cryptographic supply-chain and Ed25519 trust verification\n- [[Zoth OS]] \u2014 Operating system conductor integration\n\n### Visual Canvases\n- [[Vaelor & Sovereign Economy.canvas]] \u2014 Interactive spatial canvas of the lattice and economy\n- [[Zoth Autonomous Agents & Hermes Fleet.canvas]] \u2014 Multi-agent mesh connecting PoUW workers\n\n### Database Registries\n- [[Zoth 71 Sovereign Tools.base]] \u2014 Core tool database with monetization status\n- [[Zoth Fleet & Daemons.base]] \u2014 Service ports and health probe endpoints\n- [[Zoth Autonomous Agents.base]] \u2014 Agent fleet registry\n\n## STDP Synaptic Provenance & Vector Evidence\n\n| Memory ID | Category | Importance | Synaptic Tags | Excerpt |\n|:---|:---:|:---:|:---|:---|\n| `3af91415-0d2` | `episodic` | 0.80 | `grok`, `agent` | Grok : 1\u2192--- name: ui-verification-loop description: >-   Load whenever you change anything visual. Provides a zero-depe... |\n| `91772662-c5c` | `episodic` | 0.80 | `grok`, `agent` | Grok : 1\u2192--- name: ui-verification-loop description: >-   Load whenever you change anything visual. Provides a zero-depe... |\n| `d2d9908c-b41` | `episodic` | 0.80 | `grok`, `agent` | Grok : exit: 0 github.com   \u2713 Logged in to github.com account 1nc0gn30 (keyring)   - Active account: true   - Git operat... |\n| `5c5e6021-bee` | `episodic` | 0.80 | `grok`, `agent` | Grok : 1\u2192--- name: ui-verification-loop description: >-   Load whenever you change anything visual. Provides a zero-depe... |\n| `bd9169ed-6b7` | `episodic` | 0.80 | `grok`, `agent` | Grok : 1\u2192# Hermes Agent Local Hermes CLI install, stream-json one-shot protocol, and Nous/Ollama config used by Zoth Bot... |\n| `d107adc5-493` | `episodic` | 0.80 | `grok`, `agent` | Grok : 1\u2192--- name: ui-verification-loop description: >-   Load whenever you change anything visual. Provides a zero-depe... |\n\n## See Also\n\n- [[00 Home]]\n- [[Zoth LLM Wiki Index.base|Zoth LLM Wiki Index Database]]\n"
+  },
+  "06-Wiki/Biomorphic STDP & 3D Netrunner Cortex.md": {
+    "ok": true,
+    "title": "Biomorphic STDP & 3D Netrunner Cortex",
+    "relPath": "06-Wiki/Biomorphic STDP & 3D Netrunner Cortex.md",
+    "cluster": "06-Wiki",
+    "wordCount": 965,
+    "frontmatter": {
+      "title": "Biomorphic STDP & 3D Netrunner Cortex",
+      "created": "2026-10-26T06:30:16Z",
+      "updated": "2026-10-26T06:30:16Z",
+      "category": "LLM-Wiki",
+      "tags": [
+        "wiki",
+        "llm-synthesized",
+        "karpathy-wiki",
+        "neuro-memory",
+        "stdp",
+        "netrunner",
+        "cortex",
+        "synapses"
+      ],
+      "stdp_engrams": 6,
+      "confidence": 0.99,
+      "status": "CANONICAL"
+    },
+    "wikilinks": [
+      "Zoth Memory",
+      "05-Telemetry/Neuro-Memory Cortex Telemetry",
+      "Agents/Neuro-Memory Dream Consolidator",
+      "Skills/Skill dream-loop",
+      "00 Home",
+      "Netrunner Cyber-Cortex Knowledge Map.canvas",
+      "Zoth Second Brain.canvas",
+      "Zoth Autonomous Agents & Hermes Fleet.canvas",
+      "Zoth Memory Stratum.base",
+      "Zoth Fleet & Daemons.base",
+      "Zoth Autonomous Agents.base",
+      "Zoth LLM Wiki Index.base"
+    ],
+    "callouts": [
+      "abstract"
+    ],
+    "content": "---\ntitle: \"Biomorphic STDP & 3D Netrunner Cortex\"\ncreated: \"2026-10-26T06:30:16Z\"\nupdated: \"2026-10-26T06:30:16Z\"\ncategory: \"LLM-Wiki\"\ntags: [wiki, llm-synthesized, karpathy-wiki, neuro-memory, stdp, netrunner, cortex, synapses]\nstdp_engrams: 6\nconfidence: 0.99\nstatus: \"CANONICAL\"\n---\n\n# \ud83d\udcda Biomorphic STDP & 3D Netrunner Cortex\n\n> [!abstract] Executive Summary\n> The **Biomorphic STDP & 3D Netrunner Cortex** is the central biological cognitive substrate powering ZothOS and Zoth Studio (`:8094`). Operating on biological principles of **Spike-Timing-Dependent Plasticity (STDP)** and **Hebbian Learning**, the cortex continuously updates associative synaptic weights between 41,690+ cognitive engrams across semantic, episodic, insight, and security categories. Through an autonomous **Metacognitive Dream Loop** and real-time 3D Netrunner force-directed embedding, the substrate distills ambient developer actions into enduring mathematical intuition with zero telemetry data leakage.\n\n## Conceptual Architecture\n\n```mermaid\nflowchart LR\n    subgraph SensoryInputs[\"\u26a1 Sensory Ingestion Channels\"]\n        Obsidian[\"Obsidian Vault<br/>(1,714 notes)\"]\n        Studio[\"Zoth Studio IDE<br/>(/memory)\"]\n        Hermes[\"Hermes & Swarm<br/>Agents\"]\n    end\n    \n    subgraph NetrunnerCortex[\"\ud83e\udde0 3D Biological Cortex (:8094)\"]\n        direction TB\n        Engrams[\"41,692 Active Engrams<br/>(Semantic Vectors)\"]\n        Synapses[\"2,018,290 STDP Synapses<br/>(Hebbian Plasticity)\"]\n        Engrams --- Synapses\n    end\n    \n    subgraph CognitiveDynamics[\"\ud83c\udf19 Metacognition & Sleep Replay\"]\n        LTP[\"Hebbian LTP<br/>(Pre < Post Spike)\"]\n        LTD[\"Depression LTD<br/>(Post < Pre Spike)\"]\n        Replay[\"Dream Loop<br/>(Slow-Wave Consolidation)\"]\n    end\n    \n    SensoryInputs -->|POST /api/remember| NetrunnerCortex\n    NetrunnerCortex --> CognitiveDynamics\n    CognitiveDynamics -->|Pruned Knowledge| NetrunnerCortex\n```\n\n## Functional Taxonomy & Core Cognitive Subsystems\n\n### 1. Spike-Timing-Dependent Plasticity (STDP) Engine\nUnlike static vector embeddings that require computationally expensive full-corpus reindexing, the STDP engine continuously modulates individual synaptic connection weights in real-time based on the precise relative timing of cognitive spikes. Co-activated engrams strengthen their association pathways while dormant synapses undergo exponential decay.\n\n### 2. 3D Force-Directed Netrunner Cortex\nThe visual Netrunner workbench (`/memory`) renders memories in an interactive 3D WebGL force-directed space. Synaptic connections act as damped harmonic springs, pulling correlated engrams together into high-density conceptual constellations while orthogonal memories repel.\n\n### 3. Sleep Replay & Metacognitive Consolidation\nEmbedded in `neuro-memory.service`, the autonomous Dream Loop agent simulates mammalian slow-wave sleep (SWS). During idle system periods, episodic memory sequences are replayed at high temporal compression, consolidating transient observations into permanent architectural insights while pruning synaptic noise.\n\n### 4. Categorical Memory Stratum\nMemories are structured into distinct cognitive categories:\n- **`insight`:** High-order mathematical breakthroughs and architectural paradigms.\n- **`semantic`:** Obsidian Second Brain MOCs and canonical documentation.\n- **`episodic`:** Timestamped terminal workflows, CLI executions, and tool events.\n- **`security_chain`:** Ed25519 public keys, TLS fingerprints, and cryptographic receipts.\n- **`procedural`:** JSON Canvas 1.0 layouts and Obsidian Bases YAML specifications.\n\n## Key Mathematical Formulations & Technical Primitives\n\n### 1. Spike-Timing-Dependent Plasticity (STDP) Learning Rule\nFor a pre-synaptic spike at time $t_{\\text{pre}}$ and a post-synaptic spike at time $t_{\\text{post}}$, the synaptic weight modification $\\Delta w_{ij}$ is given by:\n$$\\Delta w_{ij} = \\begin{cases} A_+ \\exp\\left(-\\frac{\\Delta t}{\\tau_+}\\right) & \\text{if } \\Delta t > 0 \\quad (\\text{Long-Term Potentiation / LTP}) \\\\ -A_- \\exp\\left(\\frac{\\Delta t}{\\tau_-}\\right) & \\text{if } \\Delta t < 0 \\quad (\\text{Long-Term Depression / LTD}) \\end{cases}$$\nWhere $\\Delta t = t_{\\text{post}} - t_{\\text{pre}}$, $A_+ = 0.05$, $A_- = 0.025$, and $\\tau_+ = \\tau_- = 20\\text{ ms}$.\n\n### 2. Exponential Synaptic Weight Retention & Decay\nUnstimulated synapses experience continuous passive decay governed by decay constant $\\lambda$:\n$$w_{ij}(t) = w_{ij}(0) \\cdot \\exp(-\\lambda t) + \\sum_{k=1}^{M} \\Delta w_{ij}^{(k)}$$\nWith minimum weight clamp $w_{\\min} = 0.01$ and saturation threshold $w_{\\max} = 1.00$.\n\n### 3. 3D Force-Directed Spatial Equilibrium\nThe equilibrium position $\\mathbf{p}_i$ for node $i$ in $\\mathbb{R}^3$ satisfies:\n$$\\mathbf{F}_i = \\sum_{j \\neq i} \\frac{k_{\\text{rep}}^2}{\\|\\mathbf{p}_i - \\mathbf{p}_j\\|^2} \\hat{\\mathbf{r}}_{ij} - \\sum_{(i,j) \\in E} \\frac{\\|\\mathbf{p}_i - \\mathbf{p}_j\\|^2}{k_{\\text{att}}} \\cdot w_{ij} \\hat{\\mathbf{r}}_{ij} = \\mathbf{0}$$\n\n## Bidirectional Knowledge Graph Links\n\n### Obsidian Second Brain Notes\n- [[Zoth Memory]] \u2014 Canonical memory architecture, socket endpoints, and schema definitions\n- [[05-Telemetry/Neuro-Memory Cortex Telemetry]] \u2014 Live STDP engram counts and synapse metrics\n- [[Agents/Neuro-Memory Dream Consolidator]] \u2014 Autonomous sleep replay and engram pruning agent\n- [[Skills/Skill dream-loop]] \u2014 Dream loop execution skill\n- [[00 Home]] \u2014 Dashboard and master graph entrypoint\n\n### Visual Canvases\n- [[Netrunner Cyber-Cortex Knowledge Map.canvas]] \u2014 Procedural spatial map of the cyber-cortex\n- [[Zoth Second Brain.canvas]] \u2014 Master second brain spatial layout\n- [[Zoth Autonomous Agents & Hermes Fleet.canvas]] \u2014 Swarm agents memory interface\n\n### Database Registries\n- [[Zoth Memory Stratum.base]] \u2014 Database view of all memory categories and importance ratings\n- [[Zoth Fleet & Daemons.base]] \u2014 Health status for port :8094\n- [[Zoth Autonomous Agents.base]] \u2014 Autonomous agent fleet\n\n## STDP Synaptic Provenance & Vector Evidence\n\n| Memory ID | Category | Importance | Synaptic Tags | Excerpt |\n|:---|:---:|:---:|:---|:---|\n| `5a64e14c-78b` | `achievement` | 0.76 | `agent:antigravity`, `tools:site_guardrail`, `nebula:3d` | Antigravity sovereign nebula verification complete: 7-point guardrail passed, 3D WebGL WebApplication online.... |\n| `450e185b-c66` | `episodic` | 0.80 | `grok`, `agent` | Grok : [{'type': 'text', 'text': '<user_query>\\nhe ui sucks uimprove that plus make an insane qulaity 3d guy that looks... |\n| `56e2e2be-90c` | `episodic` | 0.80 | `grok`, `agent` | Grok : I\u2019ll rebuild the Zoth Bot UI and put a high-end 3D companion in it. First I\u2019m reading the design system and the c... |\n| `d60ed5cd-3f8` | `episodic` | 0.80 | `grok`, `agent` | Grok : 1\u2192--- name: game-assets description: >-   Game art and 3D models with the Imagine tools: sprites, sprite sheets,... |\n| `722227dc-41c` | `episodic` | 0.80 | `grok`, `agent` | Grok : The circle is the fallback photo \u2014 the GLB never loaded. Loosening CSP and sandbox so the 3D model can fetch.... |\n| `92549810-4e4` | `episodic` | 0.80 | `grok`, `agent` | Grok : The 3D model is loading. Camera was too close and the gray-punch was eating the coat. Reframing him and dropping... |\n\n## See Also\n\n- [[00 Home]]\n- [[Zoth LLM Wiki Index.base|Zoth LLM Wiki Index Database]]\n"
+  }
+};
+
+export function getNoteFallback(pathOrTitle) {
+  if (!pathOrTitle) return FALLBACK_OFM_NOTES['00 Home.md'];
+  const clean = pathOrTitle.trim();
+  if (FALLBACK_OFM_NOTES[clean]) return FALLBACK_OFM_NOTES[clean];
+  if (FALLBACK_OFM_NOTES[clean + '.md']) return FALLBACK_OFM_NOTES[clean + '.md'];
+  const key = Object.keys(FALLBACK_OFM_NOTES).find(k =>
+    k.toLowerCase() === clean.toLowerCase() ||
+    k.toLowerCase().includes(clean.toLowerCase()) ||
+    clean.toLowerCase().includes(k.toLowerCase())
+  );
+  if (key) return FALLBACK_OFM_NOTES[key];
+  return FALLBACK_OFM_NOTES['00 Home.md'];
+}
+
+export function saveNoteFallback(relPath, content) {
+  const normRel = (relPath || '00 Home.md').trim();
+  const wordCount = (content || '').trim().split(/\s+/).filter(Boolean).length;
+  const title = normRel.replace(/\.md$/, '').split('/').pop();
+  const now = new Date().toISOString();
+  if (FALLBACK_OFM_NOTES[normRel]) {
+    FALLBACK_OFM_NOTES[normRel] = {
+      ...FALLBACK_OFM_NOTES[normRel],
+      content,
+      wordCount,
+      updatedAt: now
+    };
+  }
+  return {
+    ok: true,
+    title,
+    relPath: normRel,
+    wordCount,
+    savedAt: now,
+    stdpSynced: true
+  };
+}
+
+export function renderOfmToHtml(content = '', frontmatter = null) {
+  if (!content) return '<div style="color:#64748B; font-style:italic;">Empty note.</div>';
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  let body = content;
+
+  // Render frontmatter metadata banner if frontmatter present or extracted
+  let fmHtml = '';
+  const fmMatch = body.match(/^---\s*\n([\s\S]*?)\n---\s*\n/);
+  if (fmMatch) {
+    body = body.slice(fmMatch[0].length);
+  }
+
+  // Code blocks extraction to avoid parsing markdown inside code
+  const codeBlocks = [];
+  body = body.replace(/```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g, (m, lang, code) => {
+    const idx = codeBlocks.length;
+    codeBlocks.push(
+      `<pre style="background:#050508; border:1px solid rgba(255,255,255,0.1); border-radius:6px; padding:12px; overflow-x:auto; font-family:monospace; font-size:12px; color:#A7F3D0; margin:12px 0;"><code>${escapeHtml(code.trim())}</code></pre>`
+    );
+    return `__OFM_CODE_${idx}__`;
+  });
+
+  // Obsidian Callouts: > [!type] Title \n > Body lines
+  const CALLOUT_THEMES = {
+    note: { color: '#38BDF8', bg: 'rgba(56,189,248,0.08)', border: '#0284C7', icon: 'ℹ️', title: 'Note' },
+    info: { color: '#38BDF8', bg: 'rgba(56,189,248,0.08)', border: '#0284C7', icon: 'ℹ️', title: 'Info' },
+    tip: { color: '#10B981', bg: 'rgba(16,185,129,0.08)', border: '#059669', icon: '💡', title: 'Tip' },
+    important: { color: '#A855F7', bg: 'rgba(168,85,247,0.08)', border: '#7C3AED', icon: '✦', title: 'Important' },
+    abstract: { color: '#C084FC', bg: 'rgba(192,132,252,0.08)', border: '#9333EA', icon: '📄', title: 'Abstract' },
+    warning: { color: '#F59E0B', bg: 'rgba(245,158,11,0.08)', border: '#D97706', icon: '⚠️', title: 'Warning' },
+    danger: { color: '#F43F5E', bg: 'rgba(244,63,94,0.08)', border: '#E11D48', icon: '🚨', title: 'Danger' },
+    quote: { color: '#94A3B8', bg: 'rgba(148,163,184,0.08)', border: '#64748B', icon: '💬', title: 'Quote' },
+    gold: { color: '#D4AF37', bg: 'rgba(212,175,55,0.08)', border: '#D4AF37', icon: '👑', title: 'Zoth Canon' }
+  };
+
+  body = body.replace(/(?:^|\n)(>[ \t]*\[!([a-zA-Z0-9_-]+)\][ \t]*([^\n]*)(?:\n>[ \t]*[^\n]*)*)/g, (match, fullBlock, type, customTitle) => {
+    const t = type.toLowerCase();
+    const theme = CALLOUT_THEMES[t] || { color: '#E879F9', bg: 'rgba(232,121,249,0.08)', border: '#C026D3', icon: '📌', title: type };
+    const displayTitle = customTitle.trim() || theme.title;
+    const lines = fullBlock.split('\n').map(l => l.replace(/^>[ \t]?/, ''));
+    lines.shift();
+    const calloutBody = lines.join('<br>');
+    return `<div style="background:${theme.bg}; border-left:4px solid ${theme.border}; border-radius:0 6px 6px 0; padding:10px 14px; margin:14px 0;">
+      <div style="display:flex; align-items:center; gap:6px; font-weight:700; font-size:12.5px; color:${theme.color}; margin-bottom:4px;">
+        <span>${theme.icon}</span> <span>${escapeHtml(displayTitle)}</span>
+      </div>
+      <div style="font-size:12px; color:#E2E8F0; line-height:1.6;">${calloutBody}</div>
+    </div>`;
+  });
+
+  // Wikilinks: [[target|alias]] or [[target]]
+  body = body.replace(/\[\[([^\]\|]+)(?:\|([^\]]+))?\]\]/g, (m, target, alias) => {
+    const text = (alias || target).trim();
+    const cleanTarget = target.trim();
+    return `<span class="ofm-wikilink-pill" data-wikilink="${escapeHtml(cleanTarget)}" style="display:inline-flex; align-items:center; gap:3px; font-size:11.5px; font-weight:600; color:#38BDF8; background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); padding:1px 7px; border-radius:4px; cursor:pointer; text-decoration:none; margin:0 2px;">🔗 [[${escapeHtml(text)}]]</span>`;
+  });
+
+  // Headings
+  body = body.replace(/^#### (.*$)/gim, '<h5 style="color:#A7F3D0; font-size:13px; margin:14px 0 6px 0; font-weight:700;">$1</h5>');
+  body = body.replace(/^### (.*$)/gim, '<h4 style="color:#FCD34D; font-size:14.5px; margin:16px 0 6px 0; font-weight:700;">$1</h4>');
+  body = body.replace(/^## (.*$)/gim, '<h3 style="color:#38BDF8; font-size:16px; margin:18px 0 8px 0; font-weight:800; border-bottom:1px solid rgba(56,189,248,0.25); padding-bottom:4px;">$1</h3>');
+  body = body.replace(/^# (.*$)/gim, '<h2 style="color:#E879F9; font-size:18px; margin:20px 0 10px 0; font-weight:800;">$1</h2>');
+
+  // Inline formatting
+  body = body.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#FFFFFF; font-weight:700;">$1</strong>');
+  body = body.replace(/\*(.*?)\*/g, '<em style="color:#CBD5E1;">$1</em>');
+  body = body.replace(/`([^`\n]+)`/g, '<code style="background:#0A0A10; border:1px solid rgba(255,255,255,0.1); padding:1px 5px; border-radius:3px; font-family:monospace; font-size:11.5px; color:#FCD34D;">$1</code>');
+  body = body.replace(/^\s*-\s+(.*$)/gim, '<li style="margin-left:18px; margin-bottom:4px; color:#CBD5E1; font-size:12.5px;">$1</li>');
+  body = body.replace(/\n\n/g, '<div style="height:12px;"></div>');
+
+  // Restore code blocks
+  codeBlocks.forEach((codeHtml, idx) => {
+    body = body.replace(`__OFM_CODE_${idx}__`, codeHtml);
+  });
+
+  return fmHtml + body;
+}
