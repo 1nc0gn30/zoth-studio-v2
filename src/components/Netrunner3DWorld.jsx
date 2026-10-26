@@ -275,6 +275,11 @@ export default function Netrunner3DWorld({
   const [forgedNotification, setForgedNotification] = useState(null);
   const [isForging, setIsForging] = useState(false);
   const forgeTimerRef = useRef(null);
+  const [salienceThreshold, setSalienceThreshold] = useState(0.0);
+  const salienceThresholdRef = useRef(0.0);
+  const [isDreaming, setIsDreaming] = useState(false);
+  const [dreamBanner, setDreamBanner] = useState(null);
+  const dreamTimerRef = useRef(null);
 
   const [autoRotate, setAutoRotate] = useState(true);
   const [showLabels, setShowLabels] = useState(true);
@@ -752,6 +757,268 @@ export default function Netrunner3DWorld({
       }
     }, 16);
   }, [isForging, getClusterVantage, glideCameraTo, onSelectMemory, rebuildPathwayBeams, showLabels]);
+
+  // Salience filter modulation across memory nodes and synaptic links
+  const applySalienceFilter = useCallback((threshold) => {
+    salienceThresholdRef.current = threshold;
+    const meshes = nodeMeshesRef.current || [];
+    meshes.forEach((mesh) => {
+      const m = mesh.userData?.memory;
+      if (!m || !mesh.material) return;
+      const weight = typeof m.weight === 'number' ? m.weight : parseFloat(m.weight) || 0.8;
+      const meets = weight >= threshold;
+      const baseScale = mesh.userData.originalScale || 1.0;
+      mesh.material.transparent = true;
+      if (meets) {
+        const boost = threshold > 0.05 ? 1.25 : 1.0;
+        mesh.scale.set(baseScale * boost, baseScale * boost, baseScale * boost);
+        mesh.material.opacity = 1.0;
+        mesh.material.emissiveIntensity = isDark ? 0.85 : 0.65;
+      } else {
+        const dim = Math.max(0.35, 0.85 - threshold * 0.45);
+        mesh.scale.set(baseScale * dim, baseScale * dim, baseScale * dim);
+        mesh.material.opacity = Math.max(0.12, 0.35 - threshold * 0.25);
+        mesh.material.emissiveIntensity = isDark ? 0.08 : 0.05;
+      }
+    });
+
+    if (linkLinesRef.current && linkLinesRef.current.material) {
+      linkLinesRef.current.material.transparent = true;
+      if (threshold > 0.1) {
+        linkLinesRef.current.material.opacity = Math.min(0.85, 0.35 + threshold * 0.5);
+      } else {
+        linkLinesRef.current.material.opacity = 0.35;
+      }
+    }
+  }, [isDark]);
+
+  const handleSalienceChange = useCallback((e) => {
+    const nextVal = parseFloat(e?.target?.value || 0);
+    setSalienceThreshold(nextVal);
+    applySalienceFilter(nextVal);
+  }, [applySalienceFilter]);
+
+  // 3D Hippocampal Dream Replay Wave & Cross-Cluster SWR Consolidation
+  const triggerDreamReplay = useCallback(() => {
+    if (isDreaming) return;
+    setIsDreaming(true);
+
+    const scene = sceneRef.current;
+    if (!scene) {
+      setIsDreaming(false);
+      return;
+    }
+
+    // 1. Panoramic Overview Camera Glide
+    glideCameraTo(new THREE.Vector3(0, 150, 340), new THREE.Vector3(0, 16, 0), 1.6);
+
+    // 2. Translucent Violet/Cyan Geodesic SWR Ripple Sphere + Dual Harmonic Rings
+    const swrGroup = new THREE.Group();
+    swrGroup.position.set(0, 16, 0);
+
+    const icoGeo = new THREE.IcosahedronGeometry(12, 2);
+    const icoMat = new THREE.MeshBasicMaterial({
+      color: 0xA855F7,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.9,
+      blending: THREE.AdditiveBlending,
+    });
+    const icoMesh = new THREE.Mesh(icoGeo, icoMat);
+    swrGroup.add(icoMesh);
+
+    const innerGeo = new THREE.SphereGeometry(10, 20, 20);
+    const innerMat = new THREE.MeshBasicMaterial({
+      color: 0x00F0FF,
+      transparent: true,
+      opacity: 0.35,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+    swrGroup.add(innerMesh);
+
+    const ringGeo1 = new THREE.RingGeometry(11, 14, 36);
+    const ringMat1 = new THREE.MeshBasicMaterial({
+      color: 0xA855F7,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending,
+    });
+    const ring1 = new THREE.Mesh(ringGeo1, ringMat1);
+    ring1.rotation.x = Math.PI / 3;
+    swrGroup.add(ring1);
+
+    const ringGeo2 = new THREE.RingGeometry(14, 17, 36);
+    const ringMat2 = new THREE.MeshBasicMaterial({
+      color: 0x00F0FF,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending,
+    });
+    const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
+    ring2.rotation.z = Math.PI / 4;
+    ring2.rotation.y = Math.PI / 6;
+    swrGroup.add(ring2);
+
+    scene.add(swrGroup);
+
+    // Shockwave burst at central Cyber-Cortex
+    if (shockwaveRef.current && shockwaveRef.current.mesh) {
+      shockwaveRef.current.mesh.position.set(0, 16, 0);
+      shockwaveRef.current.mesh.material.color.setHex(0xA855F7);
+      shockwaveRef.current.scale = 1.0;
+      shockwaveRef.current.opacity = 0.95;
+    }
+
+    // Expand ripple sphere outward across all 6 memory clusters
+    const waveDuration = 3200; // ms
+    const waveStartT = performance.now();
+    const maxScale = 24.0; // covers full cluster space
+
+    const waveInterval = setInterval(() => {
+      const elapsed = performance.now() - waveStartT;
+      const progress = Math.min(1.0, elapsed / waveDuration);
+      const ease = 0.5 - Math.cos(progress * Math.PI) / 2;
+
+      const curScale = 1.0 + ease * (maxScale - 1.0);
+      swrGroup.scale.set(curScale, curScale, curScale);
+
+      icoMesh.rotation.y += 0.015;
+      icoMesh.rotation.x += 0.008;
+      ring1.rotation.z += 0.02;
+      ring2.rotation.z -= 0.025;
+
+      const fade = Math.max(0.0, 1.0 - progress);
+      icoMat.opacity = 0.9 * fade;
+      innerMat.opacity = 0.35 * fade;
+      ringMat1.opacity = 0.85 * fade;
+      ringMat2.opacity = 0.85 * fade;
+
+      if (progress >= 1.0) {
+        clearInterval(waveInterval);
+        scene.remove(swrGroup);
+        icoGeo.dispose();
+        icoMat.dispose();
+        innerGeo.dispose();
+        innerMat.dispose();
+        ringGeo1.dispose();
+        ringMat1.dispose();
+        ringGeo2.dispose();
+        ringMat2.dispose();
+      }
+    }, 16);
+
+    // 3. Show HUD banner with live counter
+    setDreamBanner({ count: 0 });
+
+    // 4. Cross-Cluster Associative Beams
+    const clusters = ['Kernel', 'Lucy Oracle', 'Consensus', 'Security', 'Vault', 'Pantheon'];
+    const clusterTopNodes = {};
+    clusters.forEach(c => {
+      const matching = (memories || []).filter(m => m.cluster === c && m.x !== undefined);
+      matching.sort((a, b) => (b.weight || 0.8) - (a.weight || 0.8));
+      clusterTopNodes[c] = matching.slice(0, 2);
+    });
+
+    const crossPairs = [
+      { from: 'Kernel', to: 'Lucy Oracle', color: 0x00F0FF },
+      { from: 'Lucy Oracle', to: 'Consensus', color: 0xD4AF37 },
+      { from: 'Consensus', to: 'Security', color: 0xF43F5E },
+      { from: 'Security', to: 'Vault', color: 0xA855F7 },
+      { from: 'Vault', to: 'Pantheon', color: 0x10B981 },
+      { from: 'Pantheon', to: 'Kernel', color: 0xFFD700 },
+      { from: 'Lucy Oracle', to: 'Security', color: 0x00F0FF },
+      { from: 'Kernel', to: 'Vault', color: 0xA855F7 },
+    ];
+
+    let ltpCounter = 0;
+    const activeBeams = [];
+
+    crossPairs.forEach((pair, idx) => {
+      setTimeout(() => {
+        const fromNodes = clusterTopNodes[pair.from];
+        const toNodes = clusterTopNodes[pair.to];
+
+        const p1 = (fromNodes && fromNodes.length > 0)
+          ? new THREE.Vector3(fromNodes[0].x * 2.2, fromNodes[0].y * 1.8 + 24, fromNodes[0].z * 2.2)
+          : getClusterVantage(pair.from).centroid;
+
+        const p2 = (toNodes && toNodes.length > 0)
+          ? new THREE.Vector3(toNodes[0].x * 2.2, toNodes[0].y * 1.8 + 24, toNodes[0].z * 2.2)
+          : getClusterVantage(pair.to).centroid;
+
+        const mid = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5);
+        mid.y += 40;
+
+        const curve = new THREE.QuadraticBezierCurve3(p1, mid, p2);
+        const pts = curve.getPoints(24);
+        const lineGeo = new THREE.BufferGeometry().setFromPoints(pts);
+        const lineMat = new THREE.LineBasicMaterial({
+          color: pair.color,
+          transparent: true,
+          opacity: 0.95,
+          blending: THREE.AdditiveBlending,
+        });
+        const beamLine = new THREE.Line(lineGeo, lineMat);
+        scene.add(beamLine);
+
+        // Traveling photon
+        const photonGeo = new THREE.SphereGeometry(1.8, 10, 10);
+        const photonMat = new THREE.MeshBasicMaterial({
+          color: 0xFFFFFF,
+          transparent: true,
+          opacity: 0.95,
+          blending: THREE.AdditiveBlending,
+        });
+        const photon = new THREE.Mesh(photonGeo, photonMat);
+        photon.position.copy(p1);
+        scene.add(photon);
+
+        const pStartT = performance.now();
+        const pDur = 420;
+        const pInterval = setInterval(() => {
+          const pelapsed = performance.now() - pStartT;
+          const pp = Math.min(1.0, pelapsed / pDur);
+          photon.position.copy(curve.getPoint(pp));
+          if (pp >= 1.0) {
+            clearInterval(pInterval);
+            scene.remove(photon);
+            photonGeo.dispose();
+            photonMat.dispose();
+          }
+        }, 16);
+
+        ltpCounter += 3;
+        setDreamBanner({ count: ltpCounter });
+
+        activeBeams.push({ beamLine, lineGeo, lineMat });
+      }, 250 + idx * 220);
+    });
+
+    // Cleanup active beams and banner
+    if (dreamTimerRef.current) clearTimeout(dreamTimerRef.current);
+    dreamTimerRef.current = setTimeout(() => {
+      activeBeams.forEach(b => {
+        scene.remove(b.beamLine);
+        b.lineGeo.dispose();
+        b.lineMat.dispose();
+      });
+      activeBeams.length = 0;
+      setIsDreaming(false);
+
+      setTimeout(() => {
+        setDreamBanner(null);
+      }, 2600);
+    }, 250 + crossPairs.length * 220 + 1200);
+
+    // Non-blocking dispatch to neuro-memory-daemon :8094
+    try {
+      fetch('http://127.0.0.1:8094/api/consolidate', { method: 'POST' }).catch(() => {});
+    } catch (e) {}
+  }, [isDreaming, glideCameraTo, getClusterVantage, memories]);
 
 
 
@@ -1364,6 +1631,10 @@ export default function Netrunner3DWorld({
         clearTimeout(forgeTimerRef.current);
         forgeTimerRef.current = null;
       }
+      if (dreamTimerRef.current) {
+        clearTimeout(dreamTimerRef.current);
+        dreamTimerRef.current = null;
+      }
 
       // Dispose Three.js resources
       renderer.dispose();
@@ -1522,6 +1793,80 @@ export default function Netrunner3DWorld({
             '&:hover': { bgcolor: 'rgba(243,213,106,0.35)', color: '#FFF' }
           }}
         />
+        <Chip
+          id="dream-replay-btn"
+          label={isDreaming ? "🌙 REPLAYING…" : "🌙 DREAM"}
+          size="small"
+          onClick={triggerDreamReplay}
+          disabled={isDreaming}
+          sx={{
+            height: 22,
+            cursor: 'pointer',
+            fontFamily: mono,
+            fontWeight: 800,
+            fontSize: '0.62rem',
+            bgcolor: isDreaming ? 'rgba(168,85,247,0.32)' : 'rgba(168,85,247,0.18)',
+            color: '#C084FC',
+            border: '1px solid rgba(168,85,247,0.5)',
+            boxShadow: '0 0 10px rgba(168,85,247,0.35)',
+            transition: 'all 0.2s ease',
+            '&:hover': { bgcolor: 'rgba(168,85,247,0.35)', color: '#FFF' }
+          }}
+        />
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 0.6,
+            bgcolor: isDark ? 'rgba(8,10,18,0.75)' : 'rgba(255,255,255,0.85)',
+            border: '1px solid rgba(0,240,255,0.3)',
+            borderRadius: 1.5,
+            px: 0.8,
+            height: 22
+          }}
+        >
+          <Typography
+            variant="caption"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.58rem',
+              color: '#A855F7',
+              whiteSpace: 'nowrap'
+            }}
+          >
+            SALIENCE:
+          </Typography>
+          <input
+            id="world-salience-slider"
+            type="range"
+            min="0"
+            max="0.95"
+            step="0.05"
+            value={salienceThreshold}
+            onChange={handleSalienceChange}
+            onInput={handleSalienceChange}
+            style={{
+              width: 50,
+              height: 4,
+              accentColor: '#00F0FF',
+              cursor: 'pointer'
+            }}
+          />
+          <Typography
+            id="world-salience-val"
+            variant="caption"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.58rem',
+              color: '#00F0FF',
+              minWidth: 22
+            }}
+          >
+            {salienceThreshold.toFixed(2)}
+          </Typography>
+        </Box>
       </Box>
 
       {/* 3D Tour Narration Pill (Top Right, under HUD bar) */}
@@ -1563,6 +1908,57 @@ export default function Netrunner3DWorld({
               bgcolor: `#${getClusterHex(tourCluster).toString(16).padStart(6, '0')}`,
             }}
           />
+        </Box>
+      )}
+
+      {/* 3D Hippocampal Dream Replay Narration Banner */}
+      {dreamBanner && (
+        <Box
+          id="dream-replay-banner"
+          sx={{
+            position: 'absolute',
+            top: 48,
+            right: 14,
+            zIndex: 6,
+            bgcolor: isDark ? 'rgba(8,10,18,0.94)' : 'rgba(255,255,255,0.96)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid #A855F7',
+            borderRadius: 1.5,
+            px: 1.4,
+            py: 0.6,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1.2,
+            boxShadow: '0 4px 20px rgba(168,85,247,0.45)',
+          }}
+        >
+          <Typography sx={{ fontSize: '1.2rem' }}>🌙</Typography>
+          <Box>
+            <Typography
+              variant="caption"
+              sx={{
+                display: 'block',
+                fontFamily: mono,
+                fontWeight: 800,
+                fontSize: '0.65rem',
+                color: '#C084FC',
+                letterSpacing: '0.04em'
+              }}
+            >
+              🌙 SWR DREAM REPLAY: CONSOLIDATING CROSS-CLUSTER STDP ENGRAMS
+            </Typography>
+            <Typography
+              variant="caption"
+              sx={{
+                fontFamily: mono,
+                fontWeight: 700,
+                fontSize: '0.62rem',
+                color: '#00F0FF'
+              }}
+            >
+              LTP Pathways Strengthened: <strong style={{ color: '#FFD700' }}>+{dreamBanner.count}</strong>
+            </Typography>
+          </Box>
         </Box>
       )}
 
