@@ -143,6 +143,8 @@ def is_port_up(port: int) -> bool:
 def ensure_once(procs: dict) -> list:
     started = []
     for port, cmd, cwd, log_path, extra_env in FLEET_DAEMONS:
+        if port in procs and procs[port][0].poll() is None:
+            continue
         if not is_port_up(port):
             env = os.environ.copy()
             env.update(extra_env or {})

@@ -69,7 +69,7 @@ export default function DaemonStatusStrip() {
             borderColor: dark ? 'rgba(56,189,248,0.35)' : '#BAE6FD',
           }}
         />
-        <Tooltip title="On zoth.nullai.tech, in-browser WebGPU & WASM tools run directly in your browser. Heavy local engines (Zoth Civilization :9393, Zoth WebGen Bolt.DIY :5173, Swarm :8790, Neuro Memory :8094, Ollama :11434) execute on your local machine when you clone the repos or boot ZothOS.">
+        <Tooltip title="On zoth.nullai.tech, in-browser WebGPU & WASM tools run directly in your browser. Heavy local engines (Zoth Civilization :9393, Zoth Bolt :5173, Swarm :8790, Neuro Memory :8094, Ollama :11434) execute on your local machine when you clone the repos or boot ZothOS.">
           <Chip
             icon={<SecurityIcon sx={{ fontSize: '0.82rem !important', color: dark ? '#34D399' : '#047857' }} />}
             size="small"

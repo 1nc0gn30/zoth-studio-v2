@@ -398,6 +398,9 @@ export default function ZothBoltGodModeTool() {
           >
             Zoth Bolt — Full-Stack AI, Motion Edit &amp; Asset Architect
           </Typography>
+          <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#94A3B8', mt: 0.4 }}>
+            Supercharged for Zoth Studio &amp; ZothOS • Proudly built on the open-source <span style={{ color: '#D4AF37' }}>bolt.diy</span> foundation
+          </Typography>
         </Box>
 
         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>

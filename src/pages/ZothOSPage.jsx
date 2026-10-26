@@ -1174,7 +1174,7 @@ export default function ZothOSPage() {
                     folder: '01-AI-Agents-and-Dev',
                     count: '16 Apps',
                     title: 'AI Agents & Developer Workspaces',
-                    items: 'Aider, Cline, OpenCode, OpenAI Codex, Antigravity, Bolt.DIY, WebGen, Streamlit, Netlify, LazyDocker, Workspaces',
+                    items: 'Aider, Cline, OpenCode, OpenAI Codex, Antigravity, Zoth Bolt, QuickSite Starter, Streamlit, Netlify, LazyDocker, Workspaces',
                   },
                   {
                     folder: '02-Security-and-Privacy',
