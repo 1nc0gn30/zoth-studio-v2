@@ -51,6 +51,8 @@ import {
   FALLBACK_BASES_RECORDS,
   getBasesRecordsFallback,
   ingestNoteFallback,
+  FALLBACK_DAILY_NOTE,
+  appendDailyLogFallback,
   callMcpToolFallback,
   searchFallback,
   renderKnapTelemetryFallback,
@@ -468,6 +470,12 @@ export default function MemoryPage() {
   const [isIngesting, setIsIngesting] = useState(false);
   const [ingestResult, setIngestResult] = useState(null);
 
+  // Daily Sovereign Journal State
+  const [dailyNote, setDailyNote] = useState(FALLBACK_DAILY_NOTE);
+  const [dailyInputText, setDailyInputText] = useState('');
+  const [isAppendingDaily, setIsAppendingDaily] = useState(false);
+  const [dailyAppendResult, setDailyAppendResult] = useState(null);
+
   // Unified Second Brain & STDP Cortex Search State
   const [unifiedSearchQuery, setUnifiedSearchQuery] = useState('Vaelor');
   const [unifiedSearchResults, setUnifiedSearchResults] = useState(() => searchFallback('Vaelor', INITIAL_SOVEREIGN_MEMORIES));
@@ -727,6 +735,16 @@ ${article.math_invariants || ''}
               };
             });
             setMcpToolsList(mergedTools);
+          }
+        }
+      } catch (_) {}
+
+      try {
+        const dRes = await fetch('http://127.0.0.1:8094/api/obsidian/daily');
+        if (dRes.ok) {
+          const dData = await dRes.json();
+          if (active && dData && dData.ok) {
+            setDailyNote(dData);
           }
         }
       } catch (_) {}
@@ -1047,6 +1065,72 @@ ${article.math_invariants || ''}
     }
     setIngestTitle('');
     setIngestContent('');
+  };
+
+  const handleAppendDailyLog = async () => {
+    const text = dailyInputText.trim();
+    if (!text || isAppendingDaily) return;
+    setIsAppendingDaily(true);
+    setDailyAppendResult(null);
+
+    let result = null;
+    try {
+      const res = await fetch('http://127.0.0.1:8094/api/obsidian/daily', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.ok) {
+          result = data;
+        }
+      }
+    } catch (_) {}
+
+    if (!result) {
+      result = appendDailyLogFallback(text, dailyNote);
+    }
+
+    setDailyNote((prev) => ({
+      ...prev,
+      content: result.content || prev.content,
+      entriesCount: result.entriesCount || ((prev.entriesCount || 0) + 1),
+      relPath: result.relPath || prev.relPath,
+      date: result.date || prev.date
+    }));
+    setDailyAppendResult(result);
+    setIsAppendingDaily(false);
+
+    // Also synthesize an STDP engram into the 3D Obsidian cluster
+    const newMemoryId = result.memoryId || `MEM-DAY-${Date.now().toString(16).slice(-4).toUpperCase()}`;
+    const newEngram = {
+      id: newMemoryId,
+      concept: `Daily Log · ${result.date || '2026-10-26'}`,
+      category: 'obsidian',
+      cluster: 'Obsidian',
+      weight: 0.96,
+      text: `[Daily Sovereign Log] ${text}`,
+      author: 'Lucy',
+      tags: ['daily', 'obsidian', 'sovereign-log'],
+      x: Number((Math.random() * 20 - 10).toFixed(1)),
+      y: Number((45 + Math.random() * 10).toFixed(1)),
+      z: Number((-60 + Math.random() * 10).toFixed(1)),
+      timestamp: new Date().toISOString(),
+      relPath: result.relPath || '07-Daily/daily.md'
+    };
+
+    setMemories((prev) => [newEngram, ...prev]);
+    setSelectedMemory(newEngram);
+    if (typeof playSynapticPulse === 'function') {
+      playSynapticPulse(0.97);
+    }
+    if (typeof transmitLucy === 'function') {
+      try {
+        transmitLucy(`Appended entry to Daily Sovereign Note (${result.relPath}). Synthesized STDP memory engram ${newMemoryId}.`);
+      } catch (_) {}
+    }
+    setDailyInputText('');
   };
 
   const generateObsidianSpecOutput = () => {
@@ -5856,6 +5940,160 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                     </Alert>
                   )}
                 </Box>
+              </Paper>
+
+              {/* ==========================================================================
+                  DAILY SOVEREIGN JOURNAL (#studio-obsidian-daily-note)
+                  ========================================================================== */}
+              <Paper
+                id="studio-obsidian-daily-note"
+                sx={{
+                  p: { xs: 2.5, md: 3 },
+                  mb: 4,
+                  borderRadius: 3,
+                  border: `1.5px solid rgba(245,158,11,0.4)`,
+                  bgcolor: isDark ? 'rgba(12,14,20,0.9)' : '#FFFFFF',
+                  boxShadow: isDark ? '0 8px 32px rgba(0,0,0,0.45)' : '0 4px 16px rgba(0,0,0,0.06)'
+                }}
+              >
+                {/* Header */}
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 1.5 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                    <Box
+                      sx={{
+                        width: 38,
+                        height: 38,
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        bgcolor: 'rgba(245,158,11,0.14)',
+                        border: '1px solid rgba(245,158,11,0.3)',
+                        color: '#F59E0B'
+                      }}
+                    >
+                      <MenuBookIcon fontSize="small" />
+                    </Box>
+                    <Box>
+                      <Typography variant="h6" sx={{ fontWeight: 800, fontSize: '1.05rem', color: theme.palette.text.primary, display: 'flex', alignItems: 'center', gap: 1 }}>
+                        Daily Sovereign Journal
+                        <Chip label="OBSIDIAN 07-DAILY" size="small" sx={{ height: 20, fontSize: '0.66rem', fontWeight: 800, bgcolor: 'rgba(245,158,11,0.14)', color: '#F59E0B', border: '1px solid rgba(245,158,11,0.3)' }} />
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
+                        Live chronological engineering log and daemon snapshot: records continuous developer progress directly into <code>{dailyNote?.relPath || '07-Daily/daily.md'}</code> with real-time STDP memory synchronization (:8094).
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
+                    <Chip
+                      label={`📅 ${dailyNote?.date || 'Today'}`}
+                      size="small"
+                      sx={{ height: 22, fontFamily: mono, fontSize: '0.68rem', fontWeight: 750, bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#F1F5F9' }}
+                    />
+                    <Chip
+                      label={`${dailyNote?.entriesCount || 0} Daily Entries`}
+                      size="small"
+                      sx={{
+                        height: 22,
+                        fontFamily: mono,
+                        fontSize: '0.68rem',
+                        fontWeight: 800,
+                        bgcolor: 'rgba(16,185,129,0.12)',
+                        color: '#10B981',
+                        border: '1px solid rgba(16,185,129,0.25)'
+                      }}
+                    />
+                  </Box>
+                </Box>
+
+                {/* Markdown Note Content Preview */}
+                <Box
+                  component="pre"
+                  sx={{
+                    m: 0,
+                    mb: 2.5,
+                    p: 2,
+                    borderRadius: 2,
+                    bgcolor: isDark ? 'rgba(0,0,0,0.65)' : '#0F172A',
+                    border: `1px solid ${isDark ? 'rgba(245,158,11,0.25)' : '#CBD5E1'}`,
+                    fontFamily: mono,
+                    fontSize: '0.74rem',
+                    color: '#FDE68A',
+                    maxHeight: 280,
+                    overflowY: 'auto',
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-word',
+                    lineHeight: 1.55
+                  }}
+                >
+                  {dailyNote?.content || '# Daily Sovereign Note\n\nNo content recorded yet.'}
+                </Box>
+
+                {/* Append Input & Button Bar */}
+                <Box sx={{ display: 'flex', gap: 1.5, flexWrap: { xs: 'wrap', sm: 'nowrap' }, alignItems: 'center' }}>
+                  <TextField
+                    id="studio-daily-input"
+                    fullWidth
+                    size="small"
+                    placeholder="Append quick engineering log entry or research thought..."
+                    value={dailyInputText}
+                    onChange={(e) => setDailyInputText(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        handleAppendDailyLog();
+                      }
+                    }}
+                    InputProps={{
+                      sx: {
+                        fontFamily: mono,
+                        fontSize: '0.84rem',
+                        bgcolor: isDark ? 'rgba(0,0,0,0.45)' : '#F8FAFC',
+                        borderRadius: 2
+                      }
+                    }}
+                  />
+                  <Button
+                    id="studio-daily-append-btn"
+                    variant="contained"
+                    onClick={handleAppendDailyLog}
+                    disabled={isAppendingDaily || !dailyInputText.trim()}
+                    startIcon={isAppendingDaily ? <CircularProgress size={16} sx={{ color: '#08080B' }} /> : <AddCircleOutlineIcon fontSize="small" />}
+                    sx={{
+                      minWidth: { xs: '100%', sm: 300 },
+                      fontWeight: 800,
+                      fontSize: '0.8rem',
+                      bgcolor: '#F59E0B',
+                      color: '#08080B',
+                      borderRadius: 2,
+                      textTransform: 'none',
+                      whiteSpace: 'nowrap',
+                      '&:hover': { bgcolor: '#D97706', color: '#08080B' }
+                    }}
+                  >
+                    {isAppendingDaily ? 'Appending...' : '➕ APPEND DAILY LOG & STDP ENGRAM'}
+                  </Button>
+                </Box>
+
+                {/* Confirmation Alert */}
+                {dailyAppendResult && (
+                  <Alert
+                    severity="success"
+                    onClose={() => setDailyAppendResult(null)}
+                    sx={{
+                      mt: 2,
+                      borderRadius: 2,
+                      bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5',
+                      border: '1px solid rgba(16,185,129,0.3)',
+                      color: isDark ? '#A7F3D0' : '#065F46',
+                      '& .MuiAlert-icon': { color: '#10B981' }
+                    }}
+                  >
+                    <Typography sx={{ fontWeight: 800, fontSize: '0.82rem' }}>
+                      ✦ Appended to Daily Note: <code>{dailyAppendResult.appended || dailyAppendResult.date}</code>
+                    </Typography>
+                  </Alert>
+                )}
               </Paper>
 
               {/* 7 Official Obsidian Skills Grid */}

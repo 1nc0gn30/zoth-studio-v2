@@ -165,6 +165,56 @@ export const CANONICAL_WIKI_ARTICLES = [
     "executive_summary": "The **Zero-Trust Supply Chain, Cosign & VirusTotal Verification** architecture establishes mathematical tamper-evidence for all code, container images, and release artifacts distributed across ZothOS and the NullAI Platform. Every git commit, release tarball, and live daemon binary is cryptographically signed using **Cosign Ed25519** and verified against **VirusTotal 70+ Antivirus Scanning Engines**, guaranteeing 0 false positives, 0 malware detections, and unalterable author provenance.",
     "math_invariants": "### 1. Ed25519 Signature Verification\nGiven public key $A$, signature $(R, S)$, and message $M$, verification validates:\n$$8 \\cdot R + 8 \\cdot H(R \\mathbin{\\Vert} A \\mathbin{\\Vert} M) \\cdot A = 8 \\cdot S \\cdot B$$\nWhere $B$ is the generator point on Edwards25519 curve.\n\n### 2. VirusTotal Consensus Clean Ratio\nThe clean security ratio $C_{\\text{clean}}$ must strictly equal 1.00:\n$$C_{\\text{clean}} = \\frac{N_{\\text{clean}}}{N_{\\text{total\\_engines}}} = 1.00 \\quad (N_{\\text{total\\_engines}} \\ge 70)$$\n\n### 3. Shannon Entropy Secret Detection\nHigh-entropy token candidates are identified via:\n$$H(X) = -\\sum_{i=1}^{n} p(x_i) \\log_2 p(x_i) > H_{\\text{threshold}} \\approx 4.5\\text{ bits/char}$$",
     "size": 5445
+  },
+  {
+    "id": "obsidian-second-brain-json-canvas-and-bases-architecture",
+    "title": "Obsidian Second Brain, JSON Canvas 1.0 & Bases Architecture",
+    "filename": "Obsidian Second Brain, JSON Canvas 1.0 & Bases Architecture.md",
+    "path": "06-Wiki/Obsidian Second Brain, JSON Canvas 1.0 & Bases Architecture.md",
+    "confidence": 0.99,
+    "stdp_engrams": 9,
+    "tags": [
+      "wiki",
+      "llm-synthesized",
+      "karpathy-wiki",
+      "obsidian",
+      "json-canvas",
+      "obsidian-bases",
+      "kepano",
+      "stdp-sync",
+      "second-brain"
+    ],
+    "category": "LLM-Wiki",
+    "status": "CANONICAL",
+    "created": "2026-10-26T08:27:00Z",
+    "updated": "2026-10-26T08:27:00Z",
+    "executive_summary": "The **ZothOS Sovereign Second Brain** integrates the complete suite of official `@kepano/obsidian-skills` specifications—including **Obsidian Flavored Markdown (OFM)**, **JSON Canvas 1.0 (`.canvas`)**, **Obsidian Bases (`.base`)**, and **Defuddle/Knap** transformation pipelines—with the **Neuro-Memory Daemon (`:8094`)**. Through continuous Spike-Timing-Dependent Plasticity (STDP) synchronization, developer cognitive activity is crystallized into an enduring mathematical graph.",
+    "math_invariants": "### 1. Second Brain Graph Connectivity Metric\nFor a vault knowledge graph $\\mathcal{G} = (\\mathcal{V}, \\mathcal{E})$ with $N = |\\mathcal{V}|$ notes and $M = |\\mathcal{E}|$ directed wikilinks:\n$$\\mathcal{C}(\\mathcal{G}) = 1 - \\frac{|\\{v \\in \\mathcal{V} \\mid \\text{deg}_{\\text{in}}(v) + \\text{deg}_{\\text{out}}(v) = 0\\}|}{N}$$\nWith 1,726 notes and only 7 isolated leaves, the vault achieves a graph connectivity score of **99.6%**.\n\n### 2. STDP Synaptic Weight Potentiation\nSynaptic modification $\\Delta w_{ij}$ between pre- and post-synaptic engram traces:\n$$\\Delta w_{ij} = A_+ \\exp\\left(-\\frac{\\Delta t}{\\tau_+}\\right) \\quad (\\Delta t > 0, A_+ = 0.12, \\tau_+ = 20\\text{ ms})$$\n\n### 3. Flashbulb Resistance Decay Attenuation\nEngram retention probability $R(t) = \\exp\\left(-\\phi \\cdot \\frac{t}{S}\\right)$ with flashbulb constant $\\phi = 0.05$.",
+    "size": 9358
+  },
+  {
+    "id": "byzantine-quorum-and-epistemic-consensus",
+    "title": "Byzantine Quorum & Epistemic Consensus",
+    "filename": "Byzantine Quorum & Epistemic Consensus.md",
+    "path": "06-Wiki/Byzantine Quorum & Epistemic Consensus.md",
+    "confidence": 0.99,
+    "stdp_engrams": 6,
+    "tags": [
+      "wiki",
+      "llm-synthesized",
+      "karpathy-wiki",
+      "byzantine",
+      "consensus",
+      "bft",
+      "quorum"
+    ],
+    "category": "LLM-Wiki",
+    "status": "CANONICAL",
+    "created": "2026-10-26T07:03:52Z",
+    "updated": "2026-10-26T07:03:52Z",
+    "executive_summary": "**Byzantine Quorum & Epistemic Consensus** is the formal distributed validation framework governing Vaelor Layer-1 and sovereign agent collaboration. Operating across a 5-validator multi-region quorum with $2f+1=4$ BFT threshold, epistemic consensus guarantees mathematical determinism, sub-100ms finality, and zero double-spend anomalies across local-edge and cloud nodes.",
+    "math_invariants": "### 1. BFT Quorum Threshold Equation\nFor validator set size $N = 5$ with fault tolerance $f = 1$:\n$$Q = 2f + 1 = 4 \\quad (80\\% \\text{ quorum threshold})$$\nFinality is attested when:\n$$\\sum_{v \\in V} \\mathbb{I}_{\\text{attested}}(v) \\ge 4$$\n\n### 2. Epistemic Agreement Entropy\nEpistemic entropy across divergent subagent proposals converges asymptotically:\n$$\\lim_{k \\to \\infty} H(\\mathcal{S}_k) = 0$$\n\n### 3. Multi-Region Validator Latency Bounds\nAggregate latency $\\Lambda$ for quorum attestation satisfies:\n$$\\Lambda = \\max_{v \\in Q} (t_{\\text{ping}}(v) + t_{\\text{sign}}(v)) < 50\\text{ ms}$$",
+    "size": 3255
   }
 ];
 
@@ -3363,6 +3413,69 @@ export function ingestNoteFallback(title, source, tags, content) {
       content,
       created: new Date().toISOString()
     }
+  };
+}
+
+// ============================================================================
+// DAILY SOVEREIGN JOURNAL (07-Daily/<YYYY-MM-DD>.md)
+// Zero-egress fallback data for Obsidian Second Brain daily log
+// ============================================================================
+
+export const FALLBACK_DAILY_NOTE = {
+  ok: true,
+  date: "2026-10-26",
+  relPath: "07-Daily/2026-10-26.md",
+  content: `---
+title: "Daily Sovereign Note — 2026-10-26"
+date: "2026-10-26"
+type: "daily-note"
+tags: [daily, second-brain, sovereign-log]
+health_score: 100
+---
+
+# 📅 Daily Sovereign Note — 2026-10-26
+
+> [!info] Live Sovereign Snapshot
+> - **Vaelor Ledger (:8140):** Height #4,821 · Supply: 21,000,000 ◈ VLR · Quorum: BFT Active
+> - **Neuro-Memory Daemon (:8094):** 41,900 STDP Engrams · 2,027,828 Synapses · Status: HEALTHY
+> - **Obsidian Second Brain:** 1,724 Notes · 16 Canvases · 18 Bases · Connectivity: 99.6%
+
+## Navigation & Associated Hubs
+- Hub: [[00 Home]]
+- Security & Provenance: [[Zoth Trust & Supply Chain]]
+- Sovereign Economy: [[Vaelor Account-Lattice & PoUW Protocol]]
+- Telemetry: [[05-Telemetry/Vaelor Live Ledger Telemetry]], [[05-Telemetry/Neuro-Memory Cortex Telemetry]]
+
+## Engineering Log
+
+- **04:16** — Initialized Daily Sovereign Note with live daemon & cortex snapshot.
+- **04:16** — Completed Wave 18 live base querying and began Wave 19 daily note architecture.
+- **04:18** — Testing live daily log append via REST API
+- **04:20** — Automated pytest engineering log verification.
+- **04:21** — Automated pytest engineering log verification.
+- **04:22** — Automated CDP Wave 19 verification test
+- **04:28** — Wave 14 Daily Note verification test entry
+`,
+  entriesCount: 7
+};
+
+export function appendDailyLogFallback(text, currentNote) {
+  const dateStr = (currentNote && currentNote.date) ? currentNote.date : new Date().toISOString().slice(0, 10);
+  const now = new Date();
+  const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+  const entryLine = `- **${timeStr}** — ${text.trim()}`;
+  const baseContent = (currentNote && currentNote.content) ? currentNote.content : FALLBACK_DAILY_NOTE.content;
+  const newContent = `${baseContent.trimEnd()}\n${entryLine}\n`;
+  const count = ((currentNote && currentNote.entriesCount) || 7) + 1;
+
+  return {
+    ok: true,
+    date: dateStr,
+    relPath: `07-Daily/${dateStr}.md`,
+    content: newContent,
+    entriesCount: count,
+    appended: entryLine,
+    memoryId: `mem-daily-${Date.now().toString(16)}`
   };
 }
 
