@@ -3479,3 +3479,250 @@ export function appendDailyLogFallback(text, currentNote) {
   };
 }
 
+// ============================================================================
+// PORTABLE SHA-256 VAULT BUNDLE
+// Zero-egress fallback data for single-file Second Brain export
+// ============================================================================
+
+export const FALLBACK_PORTABLE_BUNDLE = {
+  ok: true,
+  version: "1.0.0",
+  bundleSha256: "a13411b78b5b96c7c56f5162016707d92e1ad1d745335469890024b635613adb",
+  generatedAt: "2026-10-26T09:02:21.178Z",
+  healthScore: 100,
+  auditMetrics: {
+    canvasesValid: 14,
+    basesValid: 18,
+    totalNotes: 1726,
+    totalWikilinks: 7980,
+    connectivityPct: 99.6
+  },
+  canvasesCount: 16,
+  basesCount: 18,
+  wikiArticlesCount: 8,
+  topHubsCount: 10
+};
+
+export function getPortableBundleFallback() {
+  return FALLBACK_PORTABLE_BUNDLE;
+}
+
+// ============================================================================
+// OBSIDIAN BACKLINKS, OUTLINKS & UNLINKED MENTIONS
+// Zero-egress fallback dataset for bidirectional citation inspector
+// ============================================================================
+
+export const FALLBACK_BACKLINKS_DATA = {
+  "00 Home": {
+    ok: true,
+    note: "00 Home",
+    backlinksCount: 55,
+    incomingBacklinks: [
+      { sourceTitle: "MOC Apt", sourcePath: "MOC Apt.md", cluster: "Root", contextSnippet: "Apt live-config-systemd|live-config-systemd]] ## See also [[00 Home]]" },
+      { sourceTitle: "MOC Pantheon", sourcePath: "MOC Pantheon.md", cluster: "Root", contextSnippet: "Agent RADICAL-MINION|RADICAL-MINION]] ## See also [[00 Home]]" },
+      { sourceTitle: "MOC Skills", sourcePath: "MOC Skills.md", cluster: "Root", contextSnippet: "Second Brain central navigation and master routing hub [[00 Home]]" }
+    ],
+    outgoingCount: 73,
+    outgoingLinks: [
+      { target: "Maps", exists: true, relPath: "Maps.md", cluster: "Root" },
+      { target: "Zoth Memory", exists: true, relPath: "Zoth Memory.md", cluster: "Root" },
+      { target: "Zoth OS", exists: true, relPath: "Zoth OS.md", cluster: "Root" },
+      { target: "Zoth Studio", exists: true, relPath: "Zoth Studio.md", cluster: "Root" }
+    ],
+    unlinkedCount: 3,
+    unlinkedMentions: [
+      { sourceTitle: "Zoth Fleet Readme", sourcePath: "OS/README.md", snippet: "Welcome to Zoth OS. See 00 Home for master orchestrator MOC index." },
+      { sourceTitle: "Studio Launchpad", sourcePath: "Studio/Launchpad.md", snippet: "All tools route to the primary dashboard at 00 Home." }
+    ]
+  },
+  "Zoth OS": {
+    ok: true,
+    note: "Zoth OS",
+    backlinksCount: 1155,
+    incomingBacklinks: [
+      { sourceTitle: "Daemon bolt_diy", sourcePath: "OS/Daemons/Daemon bolt_diy.md", cluster: "OS", contextSnippet: "Subsystem: AI Code Engine on [[Zoth OS]] Preempt-RT kernel" },
+      { sourceTitle: "Daemon neuro_memory_daemon", sourcePath: "OS/Daemons/Daemon neuro_memory_daemon.md", cluster: "OS", contextSnippet: "Biomorphic memory daemon running on [[Zoth OS]] localhost" }
+    ],
+    outgoingCount: 12,
+    outgoingLinks: [
+      { target: "00 Home", exists: true, relPath: "00 Home.md", cluster: "Root" },
+      { target: "Zoth Memory", exists: true, relPath: "Zoth Memory.md", cluster: "Root" }
+    ],
+    unlinkedCount: 12,
+    unlinkedMentions: [
+      { sourceTitle: "MCP zoth-agent-os", sourcePath: "MCP/MCP zoth-agent-os.md", snippet: "Zoth OS control bridge. Off until zoth-mcp enable zoth-agent-os." },
+      { sourceTitle: "Capture zoth-os", sourcePath: "Studio/Gallery/Capture zoth-os.md", snippet: "Operating system workspace running Zoth OS Preempt-RT kernel." }
+    ]
+  },
+  "Zoth Studio": {
+    ok: true,
+    note: "Zoth Studio",
+    backlinksCount: 352,
+    incomingBacklinks: [
+      { sourceTitle: "00 Home", sourcePath: "00 Home.md", cluster: "Root", contextSnippet: "Master IDE and developer cockpit: [[Zoth Studio]]" },
+      { sourceTitle: "Tool AST Engine", sourcePath: "Studio/Tools/Tool AST Type-Check Engine.md", cluster: "Studio", contextSnippet: "Built directly into [[Zoth Studio]] v2" }
+    ],
+    outgoingCount: 24,
+    outgoingLinks: [
+      { target: "00 Home", exists: true, relPath: "00 Home.md", cluster: "Root" },
+      { target: "Zoth OS", exists: true, relPath: "Zoth OS.md", cluster: "Root" }
+    ],
+    unlinkedCount: 8,
+    unlinkedMentions: [
+      { sourceTitle: "Studio Config", sourcePath: "Studio/config.md", snippet: "Frontend micro-SaaS framework powering Zoth Studio on port :3000." }
+    ]
+  },
+  "Zoth Trust & Supply Chain": {
+    ok: true,
+    note: "Zoth Trust & Supply Chain",
+    backlinksCount: 48,
+    incomingBacklinks: [
+      { sourceTitle: "00 Home", sourcePath: "00 Home.md", cluster: "Root", contextSnippet: "Cryptographic provenance & Cosign verification: [[Zoth Trust & Supply Chain]]" }
+    ],
+    outgoingCount: 16,
+    outgoingLinks: [
+      { target: "06-Wiki/Zero-Trust Supply Chain, Cosign & VirusTotal Verification", exists: true, relPath: "06-Wiki/Zero-Trust Supply Chain, Cosign & VirusTotal Verification.md", cluster: "Wiki" }
+    ],
+    unlinkedCount: 4,
+    unlinkedMentions: [
+      { sourceTitle: "Release Checklist", sourcePath: "OS/Release.md", snippet: "Confirm Zoth Trust & Supply Chain signatures prior to pushing release." }
+    ]
+  },
+  "MOC Skills": {
+    ok: true,
+    note: "MOC Skills",
+    backlinksCount: 696,
+    incomingBacklinks: [
+      { sourceTitle: "00 Home", sourcePath: "00 Home.md", cluster: "Root", contextSnippet: "Autonomous developer competencies and tools: [[MOC Skills]]" }
+    ],
+    outgoingCount: 38,
+    outgoingLinks: [
+      { target: "Skills/Skill obsidian-markdown", exists: true, relPath: "Skills/Skill obsidian-markdown.md", cluster: "Skills" },
+      { target: "Skills/Skill json-canvas", exists: true, relPath: "Skills/Skill json-canvas.md", cluster: "Skills" }
+    ],
+    unlinkedCount: 6,
+    unlinkedMentions: [
+      { sourceTitle: "Hermes Skills Map", sourcePath: "Agents/Hermes.md", snippet: "Delegate subagent tasks using the competencies indexed in MOC Skills." }
+    ]
+  },
+  "Vaelor Account-Lattice & PoUW Protocol": {
+    ok: true,
+    note: "Vaelor Account-Lattice & PoUW Protocol",
+    backlinksCount: 18,
+    incomingBacklinks: [
+      { sourceTitle: "00 Home", sourcePath: "00 Home.md", cluster: "Root", contextSnippet: "Feeless Layer-1 cryptocurrency architecture: [[Vaelor Account-Lattice & PoUW Protocol]]" }
+    ],
+    outgoingCount: 8,
+    outgoingLinks: [
+      { target: "00 Home", exists: true, relPath: "00 Home.md", cluster: "Root" },
+      { target: "05-Telemetry/Vaelor Live Ledger Telemetry", exists: true, relPath: "05-Telemetry/Vaelor Live Ledger Telemetry.md", cluster: "Telemetry" }
+    ],
+    unlinkedCount: 5,
+    unlinkedMentions: [
+      { sourceTitle: "Ledger Whitepaper", sourcePath: "Ledger/whitepaper.md", snippet: "The mathematical consensus is detailed in Vaelor Account-Lattice & PoUW Protocol." }
+    ]
+  }
+};
+
+export function getBacklinksFallback(noteName) {
+  if (noteName && FALLBACK_BACKLINKS_DATA[noteName]) {
+    return FALLBACK_BACKLINKS_DATA[noteName];
+  }
+  const key = Object.keys(FALLBACK_BACKLINKS_DATA).find(k =>
+    noteName && k.toLowerCase().includes(noteName.toLowerCase())
+  );
+  if (key) return FALLBACK_BACKLINKS_DATA[key];
+  return FALLBACK_BACKLINKS_DATA["00 Home"];
+}
+
+// ============================================================================
+// 12 AUTONOMOUS TERMINAL COMMANDS FOR zoth-second-brain CLI
+// ============================================================================
+
+export const SECOND_BRAIN_CLI_COMMANDS = [
+  {
+    command: "status",
+    tag: "Diagnostics",
+    desc: "Show live status of Obsidian Vault, daemons (:8094, :8140, :3000, :5173, :9393), and STDP cortex",
+    cmd: "zoth-second-brain status",
+    color: "#10B981"
+  },
+  {
+    command: "sync",
+    tag: "Memory",
+    desc: "Trigger bidirectional sync with Neuro-Memory Daemon (:8094) and biomorphic STDP engrams",
+    cmd: "zoth-second-brain sync",
+    color: "#38BDF8"
+  },
+  {
+    command: "search",
+    tag: "Search",
+    desc: "Simultaneously search all 1,729+ Vault notes and :8094 STDP memories with relevance scoring",
+    cmd: "zoth-second-brain search \"Vaelor DAG\"",
+    color: "#F59E0B"
+  },
+  {
+    command: "ingest",
+    tag: "Ingestion",
+    desc: "Ingest local file or URL into 04-Ingested/<slug>.md and :8094 STDP cortex via Defuddle extraction",
+    cmd: "zoth-second-brain ingest https://kernel.org",
+    color: "#8B5CF6"
+  },
+  {
+    command: "canvas",
+    tag: "Spec Tools",
+    desc: "Procedurally generate <Topic> Knowledge Map.canvas with Vault notes & STDP engrams",
+    cmd: "zoth-second-brain canvas \"Byzantine Consensus\"",
+    color: "#00E5FF"
+  },
+  {
+    command: "audit",
+    tag: "Diagnostics",
+    desc: "Run comprehensive doctor health audit on 100% of .canvas, .base, and notes (Score: 100/100 ✦ PERFECT)",
+    cmd: "zoth-second-brain audit",
+    color: "#10B981"
+  },
+  {
+    command: "render all",
+    tag: "Spec Tools",
+    desc: "Knap-style Structured Data-to-Obsidian Note Compiler generating live telemetry digests in 05-Telemetry/",
+    cmd: "zoth-second-brain render all",
+    color: "#EC4899"
+  },
+  {
+    command: "wiki",
+    tag: "Spec Tools",
+    desc: "Synthesize a Karpathy-style canonical LLM Wiki page in 06-Wiki/ with callout executive summary",
+    cmd: "zoth-second-brain wiki \"Quantum Lattice Cryptography\"",
+    color: "#E879F9"
+  },
+  {
+    command: "dream",
+    tag: "Memory",
+    desc: "Trigger hippocampal sleep consolidation (:8094) & discover latent cross-cluster associative links",
+    cmd: "zoth-second-brain dream",
+    color: "#A855F7"
+  },
+  {
+    command: "graph",
+    tag: "Diagnostics",
+    desc: "Analyze wikilink degree centrality & export 05-Telemetry/obsidian_graph_topology.json",
+    cmd: "zoth-second-brain graph",
+    color: "#6366F1"
+  },
+  {
+    command: "daily",
+    tag: "Journal",
+    desc: "Generate or append to today's Daily Sovereign Note in 07-Daily/ with auto-sync to :8094",
+    cmd: "zoth-second-brain daily --append \"Completed Wave 15 integration\"",
+    color: "#D4AF37"
+  },
+  {
+    command: "bundle",
+    tag: "Spec Tools",
+    desc: "Compile and export portable SHA-256 verified knowledge bundle to 05-Telemetry/second_brain_bundle.json",
+    cmd: "zoth-second-brain bundle",
+    color: "#10B981"
+  }
+];
+

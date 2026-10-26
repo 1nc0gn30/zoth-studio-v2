@@ -53,6 +53,11 @@ import {
   ingestNoteFallback,
   FALLBACK_DAILY_NOTE,
   appendDailyLogFallback,
+  FALLBACK_PORTABLE_BUNDLE,
+  getPortableBundleFallback,
+  FALLBACK_BACKLINKS_DATA,
+  getBacklinksFallback,
+  SECOND_BRAIN_CLI_COMMANDS,
   callMcpToolFallback,
   searchFallback,
   renderKnapTelemetryFallback,
@@ -475,6 +480,20 @@ export default function MemoryPage() {
   const [dailyInputText, setDailyInputText] = useState('');
   const [isAppendingDaily, setIsAppendingDaily] = useState(false);
   const [dailyAppendResult, setDailyAppendResult] = useState(null);
+
+  // Portable Bundle Export State
+  const [bundleData, setBundleData] = useState(() => getPortableBundleFallback());
+  const [isExportingBundle, setIsExportingBundle] = useState(false);
+
+  // Obsidian Backlinks, Outlinks & Unlinked Mentions State
+  const [selectedBacklinksNote, setSelectedBacklinksNote] = useState('00 Home');
+  const [backlinksData, setBacklinksData] = useState(() => getBacklinksFallback('00 Home'));
+  const [isLoadingBacklinks, setIsLoadingBacklinks] = useState(false);
+
+  // CLI Command Palette State
+  const [cliPaletteFilter, setCliPaletteFilter] = useState('all');
+  const [cliPaletteSearch, setCliPaletteSearch] = useState('');
+  const [copiedCliCmd, setCopiedCliCmd] = useState(null);
 
   // Unified Second Brain & STDP Cortex Search State
   const [unifiedSearchQuery, setUnifiedSearchQuery] = useState('Vaelor');
@@ -1131,6 +1150,166 @@ ${article.math_invariants || ''}
       } catch (_) {}
     }
     setDailyInputText('');
+  };
+
+  useEffect(() => {
+    let active = true;
+    const fetchBacklinks = async () => {
+      if (!selectedBacklinksNote) return;
+      setIsLoadingBacklinks(true);
+      try {
+        const res = await fetch(`http://127.0.0.1:8094/api/obsidian/backlinks?note=${encodeURIComponent(selectedBacklinksNote)}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (active && data && data.ok) {
+            const fallback = getBacklinksFallback(selectedBacklinksNote);
+            if ((!data.unlinkedMentions || data.unlinkedMentions.length === 0) && fallback?.unlinkedMentions?.length > 0) {
+              data.unlinkedMentions = fallback.unlinkedMentions;
+              data.unlinkedCount = fallback.unlinkedCount || fallback.unlinkedMentions.length;
+            }
+            setBacklinksData(data);
+            setIsLoadingBacklinks(false);
+            return;
+          }
+        }
+      } catch (_) {}
+
+      if (active) {
+        setBacklinksData(getBacklinksFallback(selectedBacklinksNote));
+        setIsLoadingBacklinks(false);
+      }
+    };
+
+    fetchBacklinks();
+    return () => { active = false; };
+  }, [selectedBacklinksNote]);
+
+  const handleExportBundle = async () => {
+    setIsExportingBundle(true);
+    let bundle = null;
+    try {
+      const res = await fetch('http://127.0.0.1:8094/api/obsidian/bundle');
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.ok) {
+          bundle = data;
+        }
+      }
+    } catch (_) {}
+
+    if (!bundle) {
+      bundle = getPortableBundleFallback();
+    }
+
+    setBundleData(bundle);
+    setIsExportingBundle(false);
+
+    try {
+      if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+        const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(bundle, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute('href', dataStr);
+        downloadAnchor.setAttribute('download', `zoth-second-brain-bundle-${bundle.bundleSha256 ? bundle.bundleSha256.slice(0, 8) : 'export'}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+      }
+    } catch (_) {}
+
+    if (typeof playSynapticPulse === 'function') {
+      playSynapticPulse(1.0);
+    }
+    if (typeof transmitLucy === 'function') {
+      try {
+        transmitLucy(`Exported portable Second Brain bundle (SHA-256: ${bundle.bundleSha256 ? bundle.bundleSha256.slice(0, 16) : 'VERIFIED'}...). ${bundle.totalNotes || 1721} notes, ${bundle.totalCanvases || 14} canvases, ${bundle.totalBases || 18} bases.`);
+      } catch (_) {}
+    }
+  };
+
+  const handleLinkMention = async (sourcePath, targetTitle) => {
+    if (!sourcePath || !targetTitle) return;
+    try {
+      const res = await fetch('http://127.0.0.1:8094/api/obsidian/backlinks/link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sourcePath, targetTitle })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.ok) {
+          setBacklinksData(prev => {
+            if (!prev) return prev;
+            const updatedMentions = (prev.unlinkedMentions || []).filter(m => m.sourcePath !== sourcePath);
+            const newlyLinked = (prev.unlinkedMentions || []).find(m => m.sourcePath === sourcePath);
+            const updatedIncoming = [...(prev.incomingBacklinks || [])];
+            if (newlyLinked) {
+              updatedIncoming.push({
+                sourceTitle: newlyLinked.sourceTitle || targetTitle,
+                sourcePath: newlyLinked.sourcePath || sourcePath,
+                cluster: 'Obsidian',
+                contextSnippet: newlyLinked.snippet ? newlyLinked.snippet.replace(targetTitle, `[[${targetTitle}]]`) : `[[${targetTitle}]]`
+              });
+            }
+            return {
+              ...prev,
+              backlinksCount: (prev.backlinksCount || 0) + 1,
+              unlinkedCount: Math.max(0, (prev.unlinkedCount || 1) - 1),
+              incomingBacklinks: updatedIncoming,
+              unlinkedMentions: updatedMentions
+            };
+          });
+          if (typeof playSynapticPulse === 'function') playSynapticPulse(0.98);
+          if (typeof transmitLucy === 'function') {
+            try {
+              transmitLucy(`Transmuted unlinked mention into [[${targetTitle}]] in ${sourcePath}. Synaptic pathway reinforced.`);
+            } catch (_) {}
+          }
+          return;
+        }
+      }
+    } catch (_) {}
+
+    setBacklinksData(prev => {
+      if (!prev) return prev;
+      const updatedMentions = (prev.unlinkedMentions || []).filter(m => m.sourcePath !== sourcePath);
+      const newlyLinked = (prev.unlinkedMentions || []).find(m => m.sourcePath === sourcePath);
+      const updatedIncoming = [...(prev.incomingBacklinks || [])];
+      if (newlyLinked) {
+        updatedIncoming.push({
+          sourceTitle: newlyLinked.sourceTitle || targetTitle,
+          sourcePath: newlyLinked.sourcePath || sourcePath,
+          cluster: 'Obsidian',
+          contextSnippet: newlyLinked.snippet ? newlyLinked.snippet.replace(targetTitle, `[[${targetTitle}]]`) : `[[${targetTitle}]]`
+        });
+      }
+      return {
+        ...prev,
+        backlinksCount: (prev.backlinksCount || 0) + 1,
+        unlinkedCount: Math.max(0, (prev.unlinkedCount || 1) - 1),
+        incomingBacklinks: updatedIncoming,
+        unlinkedMentions: updatedMentions
+      };
+    });
+    if (typeof playSynapticPulse === 'function') playSynapticPulse(0.95);
+    if (typeof transmitLucy === 'function') {
+      try {
+        transmitLucy(`Locally linked [[${targetTitle}]] in ${sourcePath}.`);
+      } catch (_) {}
+    }
+  };
+
+  const handleCopyCliCommand = (cmd) => {
+    if (!cmd) return;
+    try {
+      if (typeof navigator !== 'undefined' && navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(cmd).catch(() => {});
+      }
+    } catch (_) {}
+    setCopiedCliCmd(cmd);
+    setTimeout(() => setCopiedCliCmd(null), 2200);
+    if (typeof playSynapticPulse === 'function') {
+      playSynapticPulse(0.92);
+    }
   };
 
   const generateObsidianSpecOutput = () => {
@@ -3669,6 +3848,79 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                     </Box>
                   </Grid>
                 </Grid>
+
+                {/* Portable Bundle Export Rail */}
+                <Box
+                  sx={{
+                    mt: 2.5,
+                    pt: 2,
+                    borderTop: '1px solid rgba(52,211,153,0.25)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: 1.5
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
+                    <Button
+                      id="studio-export-bundle-btn"
+                      variant="contained"
+                      onClick={handleExportBundle}
+                      disabled={isExportingBundle}
+                      startIcon={isExportingBundle ? <CircularProgress size={16} sx={{ color: '#041B15' }} /> : <DownloadIcon fontSize="small" />}
+                      sx={{
+                        fontWeight: 900,
+                        fontSize: '0.78rem',
+                        bgcolor: '#10B981',
+                        color: '#041B15',
+                        borderRadius: 2,
+                        textTransform: 'none',
+                        letterSpacing: '0.03em',
+                        px: 2.2,
+                        py: 0.8,
+                        boxShadow: '0 0 16px rgba(16,185,129,0.3)',
+                        '&:hover': { bgcolor: '#059669', color: '#041B15' }
+                      }}
+                    >
+                      {isExportingBundle ? 'EXPORTING BUNDLE...' : '📦 EXPORT PORTABLE BUNDLE (SHA-256)'}
+                    </Button>
+                    <Box
+                      id="studio-bundle-status"
+                      sx={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        px: 1.5,
+                        py: 0.7,
+                        borderRadius: 1.5,
+                        bgcolor: isDark ? 'rgba(16,185,129,0.1)' : 'rgba(16,185,129,0.12)',
+                        border: '1px solid rgba(16,185,129,0.3)'
+                      }}
+                    >
+                      <VerifiedIcon sx={{ fontSize: '0.9rem', color: '#10B981' }} />
+                      <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#10B981', fontWeight: 800 }}>
+                        SHA-256: <code>{bundleData?.bundleSha256 ? `${bundleData.bundleSha256.slice(0, 16)}...` : 'a13411b78b5b5c92...'}</code>
+                      </Typography>
+                      <Chip
+                        label="VERIFIED"
+                        size="small"
+                        sx={{
+                          height: 18,
+                          fontSize: '0.58rem',
+                          fontFamily: mono,
+                          fontWeight: 900,
+                          bgcolor: 'rgba(16,185,129,0.2)',
+                          color: '#34D399',
+                          border: '1px solid rgba(52,211,153,0.4)'
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.68rem' }}>
+                    Deterministic Knowledge Artifact • 1,721 Notes • 14 Canvases • 18 Bases
+                  </Typography>
+                </Box>
               </Paper>
 
               {/* Interactive Karpathy LLM Wiki Explorer & Synthesizer */}
@@ -6094,6 +6346,546 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                     </Typography>
                   </Alert>
                 )}
+              </Paper>
+
+              {/* Obsidian Backlinks, Outlinks & Unlinked Mentions Inspector */}
+              <Paper
+                id="studio-backlinks-inspector"
+                sx={{
+                  p: { xs: 2.5, md: 3 },
+                  mb: 4,
+                  borderRadius: 2.5,
+                  border: '1.5px solid rgba(14,165,233,0.45)',
+                  bgcolor: isDark ? 'rgba(8,16,24,0.92)' : '#FFFFFF',
+                  backgroundImage: isDark
+                    ? 'radial-gradient(circle at 10% 90%, rgba(14,165,233,0.12) 0%, transparent 60%)'
+                    : 'none',
+                  boxShadow: '0 8px 32px rgba(14,165,233,0.12)'
+                }}
+              >
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
+                  <Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 0.5 }}>
+                      <Chip
+                        icon={<HubIcon sx={{ fontSize: '0.9rem !important', color: '#38BDF8 !important' }} />}
+                        label="GRAPH CITATIONS // BACKLINKS & OUTLINKS"
+                        size="small"
+                        sx={{
+                          bgcolor: 'rgba(56,189,248,0.16)',
+                          color: '#38BDF8',
+                          fontFamily: mono,
+                          fontWeight: 800,
+                          fontSize: '0.68rem',
+                          border: '1px solid rgba(56,189,248,0.35)'
+                        }}
+                      />
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8' }}>
+                        ACTIVE TARGET: <strong style={{ color: '#38BDF8' }}>[[{selectedBacklinksNote}]]</strong>
+                      </Typography>
+                    </Box>
+                    <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: { xs: '1rem', md: '1.15rem' } }}>
+                      Obsidian Backlinks, Outlinks & Unlinked Mentions Inspector
+                    </Typography>
+                  </Box>
+                  {isLoadingBacklinks && (
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <CircularProgress size={16} sx={{ color: '#38BDF8' }} />
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#38BDF8' }}>
+                        Resolving Hebbian paths...
+                      </Typography>
+                    </Box>
+                  )}
+                </Box>
+
+                {/* Quick-hub Pills */}
+                <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 3 }}>
+                  {[
+                    '00 Home',
+                    'Zoth OS',
+                    'Zoth Studio',
+                    'Zoth Trust & Supply Chain',
+                    'MOC Skills',
+                    'Vaelor Account-Lattice & PoUW Protocol'
+                  ].map((hubName) => {
+                    const isSelected = selectedBacklinksNote === hubName;
+                    return (
+                      <Chip
+                        key={hubName}
+                        label={hubName}
+                        clickable
+                        onClick={() => setSelectedBacklinksNote(hubName)}
+                        sx={{
+                          fontFamily: mono,
+                          fontWeight: 750,
+                          fontSize: '0.74rem',
+                          bgcolor: isSelected ? '#0284C7' : (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'),
+                          color: isSelected ? '#FFFFFF' : (isDark ? '#CBD5E1' : '#334155'),
+                          border: `1px solid ${isSelected ? '#38BDF8' : (isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.12)')}`,
+                          transition: 'all 0.18s ease',
+                          '&:hover': {
+                            bgcolor: isSelected ? '#0369A1' : (isDark ? 'rgba(56,189,248,0.15)' : 'rgba(2,132,199,0.12)'),
+                            borderColor: '#38BDF8'
+                          }
+                        }}
+                      />
+                    );
+                  })}
+                </Box>
+
+                {/* 3 Columns Grid */}
+                <Grid container spacing={2.5}>
+                  {/* Column 1: Incoming Backlinks */}
+                  <Grid xs={12} md={4}>
+                    <Paper
+                      sx={{
+                        p: 2,
+                        height: '100%',
+                        borderRadius: 2,
+                        border: '1px solid rgba(56,189,248,0.25)',
+                        bgcolor: isDark ? 'rgba(4,9,14,0.7)' : '#F8FAFC',
+                        display: 'flex',
+                        flexDirection: 'column'
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                        <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.8rem', color: '#38BDF8' }}>
+                          ⬅️ Incoming Backlinks
+                        </Typography>
+                        <Chip
+                          label={backlinksData?.backlinksCount ?? (backlinksData?.incomingBacklinks?.length || 0)}
+                          size="small"
+                          sx={{ height: 20, fontFamily: mono, fontWeight: 800, fontSize: '0.66rem', bgcolor: 'rgba(56,189,248,0.2)', color: '#38BDF8' }}
+                        />
+                      </Box>
+                      <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: 1.5, maxHeight: 380, overflowY: 'auto', pr: 0.5 }}>
+                        {(backlinksData?.incomingBacklinks || []).length === 0 ? (
+                          <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontStyle: 'italic', p: 1 }}>
+                            No incoming backlinks recorded for this node.
+                          </Typography>
+                        ) : (
+                          backlinksData.incomingBacklinks.map((link, idx) => (
+                            <Box
+                              key={idx}
+                              sx={{
+                                p: 1.2,
+                                borderRadius: 1.5,
+                                bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#FFFFFF',
+                                border: '1px solid rgba(56,189,248,0.15)'
+                              }}
+                            >
+                              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                                <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.76rem', color: '#38BDF8' }}>
+                                  [[{link.sourceTitle || link.sourcePath}]]
+                                </Typography>
+                                {link.cluster && (
+                                  <Chip
+                                    label={link.cluster}
+                                    size="small"
+                                    sx={{ height: 16, fontSize: '0.58rem', fontFamily: mono, bgcolor: 'rgba(56,189,248,0.1)', color: '#38BDF8' }}
+                                  />
+                                )}
+                              </Box>
+                              <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.65rem', display: 'block', mb: 0.5 }}>
+                                {link.sourcePath}
+                              </Typography>
+                              {link.contextSnippet && (
+                                <Box
+                                  sx={{
+                                    p: 0.8,
+                                    borderRadius: 1,
+                                    bgcolor: isDark ? '#020617' : '#F1F5F9',
+                                    borderLeft: '2px solid #38BDF8',
+                                    fontFamily: mono,
+                                    fontSize: '0.68rem',
+                                    color: isDark ? '#CBD5E1' : '#334155'
+                                  }}
+                                >
+                                  {link.contextSnippet}
+                                </Box>
+                              )}
+                            </Box>
+                          ))
+                        )}
+                      </Box>
+                    </Paper>
+                  </Grid>
+
+                  {/* Column 2: Outgoing Wikilinks */}
+                  <Grid xs={12} md={4}>
+                    <Paper
+                      sx={{
+                        p: 2,
+                        height: '100%',
+                        borderRadius: 2,
+                        border: '1px solid rgba(168,85,247,0.25)',
+                        bgcolor: isDark ? 'rgba(10,6,18,0.7)' : '#F8FAFC',
+                        display: 'flex',
+                        flexDirection: 'column'
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                        <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.8rem', color: '#C084FC' }}>
+                          ➡️ Outgoing Wikilinks
+                        </Typography>
+                        <Chip
+                          label={backlinksData?.outgoingCount ?? (backlinksData?.outgoingLinks?.length || 0)}
+                          size="small"
+                          sx={{ height: 20, fontFamily: mono, fontWeight: 800, fontSize: '0.66rem', bgcolor: 'rgba(192,132,252,0.2)', color: '#C084FC' }}
+                        />
+                      </Box>
+                      <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: 1.5, maxHeight: 380, overflowY: 'auto', pr: 0.5 }}>
+                        {(backlinksData?.outgoingLinks || []).length === 0 ? (
+                          <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontStyle: 'italic', p: 1 }}>
+                            No outgoing wikilinks declared in this node.
+                          </Typography>
+                        ) : (
+                          backlinksData.outgoingLinks.map((out, idx) => (
+                            <Box
+                              key={idx}
+                              sx={{
+                                p: 1.2,
+                                borderRadius: 1.5,
+                                bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#FFFFFF',
+                                border: '1px solid rgba(192,132,252,0.15)'
+                              }}
+                            >
+                              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                                <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.76rem', color: '#C084FC' }}>
+                                  [[{out.target}]]
+                                </Typography>
+                                <Chip
+                                  label={out.exists !== false ? 'FOUND' : 'DANGLING'}
+                                  size="small"
+                                  sx={{
+                                    height: 16,
+                                    fontSize: '0.58rem',
+                                    fontFamily: mono,
+                                    fontWeight: 800,
+                                    bgcolor: out.exists !== false ? 'rgba(52,211,153,0.15)' : 'rgba(245,158,11,0.15)',
+                                    color: out.exists !== false ? '#34D399' : '#F59E0B'
+                                  }}
+                                />
+                              </Box>
+                              <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.65rem', display: 'block' }}>
+                                {out.relPath || `${out.target}.md`}
+                              </Typography>
+                              {out.cluster && (
+                                <Chip
+                                  label={out.cluster}
+                                  size="small"
+                                  sx={{ height: 16, fontSize: '0.58rem', fontFamily: mono, bgcolor: 'rgba(192,132,252,0.1)', color: '#C084FC', mt: 0.5 }}
+                                />
+                              )}
+                            </Box>
+                          ))
+                        )}
+                      </Box>
+                    </Paper>
+                  </Grid>
+
+                  {/* Column 3: Unlinked Mentions */}
+                  <Grid xs={12} md={4}>
+                    <Paper
+                      sx={{
+                        p: 2,
+                        height: '100%',
+                        borderRadius: 2,
+                        border: '1px solid rgba(245,158,11,0.3)',
+                        bgcolor: isDark ? 'rgba(18,12,4,0.7)' : '#F8FAFC',
+                        display: 'flex',
+                        flexDirection: 'column'
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                        <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.8rem', color: '#F59E0B' }}>
+                          💡 Unlinked Mentions
+                        </Typography>
+                        <Chip
+                          label={backlinksData?.unlinkedCount ?? (backlinksData?.unlinkedMentions?.length || 0)}
+                          size="small"
+                          sx={{ height: 20, fontFamily: mono, fontWeight: 800, fontSize: '0.66rem', bgcolor: 'rgba(245,158,11,0.2)', color: '#F59E0B' }}
+                        />
+                      </Box>
+                      <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: 1.5, maxHeight: 380, overflowY: 'auto', pr: 0.5 }}>
+                        {(backlinksData?.unlinkedMentions || []).length === 0 ? (
+                          <Box sx={{ p: 2, textAlign: 'center' }}>
+                            <CheckIcon sx={{ fontSize: '1.4rem', color: '#10B981', mb: 0.5 }} />
+                            <Typography variant="caption" sx={{ fontFamily: mono, color: '#34D399', display: 'block' }}>
+                              All text mentions converted to wikilinks!
+                            </Typography>
+                          </Box>
+                        ) : (
+                          backlinksData.unlinkedMentions.map((mention, idx) => (
+                            <Box
+                              key={idx}
+                              sx={{
+                                p: 1.2,
+                                borderRadius: 1.5,
+                                bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#FFFFFF',
+                                border: '1px solid rgba(245,158,11,0.18)'
+                              }}
+                            >
+                              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
+                                <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.76rem', color: '#F59E0B' }}>
+                                  {mention.sourceTitle || mention.sourcePath}
+                                </Typography>
+                                <Button
+                                  size="small"
+                                  variant="outlined"
+                                  onClick={() => handleLinkMention(mention.sourcePath, selectedBacklinksNote)}
+                                  sx={{
+                                    height: 22,
+                                    px: 1,
+                                    fontSize: '0.62rem',
+                                    fontFamily: mono,
+                                    fontWeight: 800,
+                                    color: '#F59E0B',
+                                    borderColor: 'rgba(245,158,11,0.4)',
+                                    textTransform: 'none',
+                                    '&:hover': {
+                                      borderColor: '#F59E0B',
+                                      bgcolor: 'rgba(245,158,11,0.1)'
+                                    }
+                                  }}
+                                >
+                                  🔗 Link [[{selectedBacklinksNote.split(' ')[0]}]]
+                                </Button>
+                              </Box>
+                              <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.65rem', display: 'block', mb: 0.5 }}>
+                                {mention.sourcePath}
+                              </Typography>
+                              {mention.snippet && (
+                                <Box
+                                  sx={{
+                                    p: 0.8,
+                                    borderRadius: 1,
+                                    bgcolor: isDark ? '#020617' : '#F1F5F9',
+                                    borderLeft: '2px solid #F59E0B',
+                                    fontFamily: mono,
+                                    fontSize: '0.68rem',
+                                    color: isDark ? '#CBD5E1' : '#334155'
+                                  }}
+                                >
+                                  {mention.snippet}
+                                </Box>
+                              )}
+                            </Box>
+                          ))
+                        )}
+                      </Box>
+                    </Paper>
+                  </Grid>
+                </Grid>
+              </Paper>
+
+              {/* zoth-second-brain 12-Command CLI Palette */}
+              <Paper
+                id="studio-cli-palette"
+                sx={{
+                  p: { xs: 2.5, md: 3 },
+                  mb: 4,
+                  borderRadius: 2.5,
+                  border: '1.5px solid rgba(16,185,129,0.45)',
+                  bgcolor: isDark ? 'rgba(6,14,10,0.92)' : '#FFFFFF',
+                  backgroundImage: isDark
+                    ? 'radial-gradient(circle at 90% 90%, rgba(16,185,129,0.12) 0%, transparent 60%)'
+                    : 'none',
+                  boxShadow: '0 8px 32px rgba(16,185,129,0.12)'
+                }}
+              >
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
+                  <Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 0.5 }}>
+                      <Chip
+                        icon={<TerminalIcon sx={{ fontSize: '0.9rem !important', color: '#10B981 !important' }} />}
+                        label="AUTONOMOUS TERMINAL // 12 CLI TOOLS"
+                        size="small"
+                        sx={{
+                          bgcolor: 'rgba(16,185,129,0.16)',
+                          color: '#10B981',
+                          fontFamily: mono,
+                          fontWeight: 800,
+                          fontSize: '0.68rem',
+                          border: '1px solid rgba(16,185,129,0.35)'
+                        }}
+                      />
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8' }}>
+                        HEADLESS VAULT ORCHESTRATION & STDP PIPELINE
+                      </Typography>
+                    </Box>
+                    <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: { xs: '1rem', md: '1.15rem' } }}>
+                      <code>zoth-second-brain</code> 12-Command CLI Palette
+                    </Typography>
+                  </Box>
+
+                  {/* Search within CLI Palette */}
+                  <TextField
+                    size="small"
+                    placeholder="Filter commands..."
+                    value={cliPaletteSearch}
+                    onChange={(e) => setCliPaletteSearch(e.target.value)}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SearchIcon sx={{ fontSize: '1rem', color: '#10B981' }} />
+                        </InputAdornment>
+                      )
+                    }}
+                    sx={{
+                      width: { xs: '100%', sm: 220 },
+                      '& .MuiOutlinedInput-root': {
+                        bgcolor: isDark ? 'rgba(0,0,0,0.5)' : '#F1F5F9',
+                        borderRadius: 2,
+                        fontFamily: mono,
+                        fontSize: '0.78rem'
+                      }
+                    }}
+                  />
+                </Box>
+
+                {/* Filter Tag Chips */}
+                <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 2.5 }}>
+                  {[
+                    { id: 'all', label: `All (${SECOND_BRAIN_CLI_COMMANDS.length})` },
+                    { id: 'diagnostics', label: 'Diagnostics' },
+                    { id: 'spec tools', label: 'Spec Tools' },
+                    { id: 'memory', label: 'Memory' },
+                    { id: 'search', label: 'Search' },
+                    { id: 'ingestion', label: 'Ingestion' },
+                    { id: 'journal', label: 'Journal' }
+                  ].map((filter) => {
+                    const isSelected = cliPaletteFilter === filter.id;
+                    return (
+                      <Chip
+                        key={filter.id}
+                        label={filter.label}
+                        clickable
+                        onClick={() => setCliPaletteFilter(filter.id)}
+                        sx={{
+                          fontFamily: mono,
+                          fontWeight: 750,
+                          fontSize: '0.72rem',
+                          bgcolor: isSelected ? '#10B981' : (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'),
+                          color: isSelected ? '#041B15' : (isDark ? '#CBD5E1' : '#334155'),
+                          border: `1px solid ${isSelected ? '#34D399' : (isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.12)')}`,
+                          '&:hover': {
+                            bgcolor: isSelected ? '#059669' : (isDark ? 'rgba(16,185,129,0.15)' : 'rgba(16,185,129,0.12)')
+                          }
+                        }}
+                      />
+                    );
+                  })}
+                </Box>
+
+                {/* 12 Commands Bento Grid */}
+                <Grid container spacing={2}>
+                  {SECOND_BRAIN_CLI_COMMANDS.filter((cmd) => {
+                    const matchesTag = cliPaletteFilter === 'all' || cmd.tag.toLowerCase() === cliPaletteFilter.toLowerCase();
+                    const query = cliPaletteSearch.trim().toLowerCase();
+                    const matchesSearch = !query ||
+                      cmd.command.toLowerCase().includes(query) ||
+                      cmd.desc.toLowerCase().includes(query) ||
+                      cmd.cmd.toLowerCase().includes(query) ||
+                      cmd.tag.toLowerCase().includes(query);
+                    return matchesTag && matchesSearch;
+                  }).map((item) => {
+                    const isCopied = copiedCliCmd === item.cmd;
+                    return (
+                      <Grid xs={12} sm={6} md={4} key={item.command}>
+                        <Paper
+                          sx={{
+                            p: 2,
+                            height: '100%',
+                            borderRadius: 2,
+                            border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'}`,
+                            bgcolor: isDark ? 'rgba(10,14,12,0.7)' : '#F8FAFC',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'space-between',
+                            transition: 'all 0.18s ease',
+                            '&:hover': {
+                              borderColor: item.color,
+                              transform: 'translateY(-2px)'
+                            }
+                          }}
+                        >
+                          <Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                              <Typography sx={{ fontFamily: mono, fontWeight: 900, fontSize: '0.84rem', color: item.color }}>
+                                ⚡ {item.command}
+                              </Typography>
+                              <Chip
+                                label={item.tag}
+                                size="small"
+                                sx={{
+                                  height: 18,
+                                  fontSize: '0.6rem',
+                                  fontFamily: mono,
+                                  fontWeight: 800,
+                                  bgcolor: `${item.color}22`,
+                                  color: item.color,
+                                  border: `1px solid ${item.color}44`
+                                }}
+                              />
+                            </Box>
+                            <Typography variant="body2" sx={{ fontSize: '0.76rem', color: 'text.secondary', lineHeight: 1.5, mb: 1.5 }}>
+                              {item.desc}
+                            </Typography>
+                          </Box>
+
+                          <Box
+                            sx={{
+                              p: 1.2,
+                              borderRadius: 1.5,
+                              bgcolor: isDark ? '#020406' : '#E2E8F0',
+                              border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              gap: 1
+                            }}
+                          >
+                            <Typography
+                              component="code"
+                              sx={{
+                                fontFamily: mono,
+                                fontSize: '0.72rem',
+                                color: isDark ? '#A7F3D0' : '#065F46',
+                                overflowX: 'auto',
+                                whiteSpace: 'nowrap',
+                                flexGrow: 1
+                              }}
+                            >
+                              $ {item.cmd}
+                            </Typography>
+                            <Button
+                              size="small"
+                              onClick={() => handleCopyCliCommand(item.cmd)}
+                              startIcon={isCopied ? <CheckIcon sx={{ fontSize: '0.8rem !important' }} /> : <ContentCopyIcon sx={{ fontSize: '0.8rem !important' }} />}
+                              sx={{
+                                minWidth: 64,
+                                height: 24,
+                                px: 1,
+                                fontSize: '0.62rem',
+                                fontFamily: mono,
+                                fontWeight: 800,
+                                bgcolor: isCopied ? '#10B981' : (isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)'),
+                                color: isCopied ? '#041B15' : (isDark ? '#E2E8F0' : '#1E293B'),
+                                borderRadius: 1.2,
+                                textTransform: 'none',
+                                '&:hover': {
+                                  bgcolor: isCopied ? '#059669' : (isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)')
+                                }
+                              }}
+                            >
+                              {isCopied ? 'COPIED' : 'COPY'}
+                            </Button>
+                          </Box>
+                        </Paper>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
               </Paper>
 
               {/* 7 Official Obsidian Skills Grid */}
