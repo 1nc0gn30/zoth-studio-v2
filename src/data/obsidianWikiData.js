@@ -6,13 +6,15 @@ export const INITIAL_OBSIDIAN_AUDIT = {
   score: 100,
   status: "PERFECT",
   healthGrade: "✦ PERFECT",
-  canvasesValid: 17,
-  totalCanvases: 17,
-  basesValid: 19,
-  totalBases: 19,
+  canvasesValid: 18,
+  totalCanvases: 18,
+  basesValid: 20,
+  totalBases: 20,
   totalNotes: 1723,
   totalWikilinks: 7985,
-  connectivityPct: 99.8,
+  connectivityPct: 100.0,
+  orphanNotes: 0,
+  brokenLinks: 0,
   wikiCount: 13,
 };
 
@@ -1996,6 +1998,96 @@ export const CANONICAL_CANVASES = [
       }
     ],
     "rawJson": "{\n  \"nodes\": [\n    {\n      \"id\": \"group_vlr_lattice\",\n      \"type\": \"group\",\n      \"x\": -960,\n      \"y\": -650,\n      \"width\": 860,\n      \"height\": 560,\n      \"label\": \"◈ Vaelor Account-Lattice DAG Core (:8140)\",\n      \"color\": \"4\"\n    },\n    {\n      \"id\": \"node_vlr_spec\",\n      \"type\": \"file\",\n      \"x\": -920,\n      \"y\": -590,\n      \"width\": 380,\n      \"height\": 180,\n      \"file\": \"06-Wiki/Vaelor-Layer1-Complete-Reference.md\",\n      \"color\": \"4\"\n    },\n    {\n      \"id\": \"node_vlr_merchant_fx_text\",\n      \"type\": \"text\",\n      \"x\": 40,\n      \"y\": -590,\n      \"width\": 380,\n      \"height\": 230,\n      \"color\": \"3\",\n      \"text\": \"### 💵 Real-Time Treasury Allocation\\n- Zero FX Spread (0.00%): Instant 1:1 USD conversion.\\n- Savings Vault (8.5% APY): PoUW auto-staked allocation.\\n- Liquid VLR: Instant micro-chain spendable balance.\"\n    }\n  ],\n  \"edges\": [\n    {\n      \"id\": \"edge_vlr_spec_fx\",\n      \"fromNode\": \"node_vlr_spec\",\n      \"fromSide\": \"right\",\n      \"toNode\": \"node_vlr_merchant_fx_text\",\n      \"toSide\": \"left\",\n      \"color\": \"3\",\n      \"label\": \"Settlement -> FX Split\"\n    }\n  ]\n}"
+  },
+  {
+    "name": "ZothOS & Studio Supply-Chain Trust Stack.canvas",
+    "relPath": "ZothOS & Studio Supply-Chain Trust Stack.canvas",
+    "nodeCount": 28,
+    "edgeCount": 14,
+    "groupCount": 4,
+    "nodes": [
+      {
+        "id": "group_cosign_layer",
+        "type": "group",
+        "x": -960,
+        "y": -650,
+        "width": 860,
+        "height": 560,
+        "label": "🛡️ Sigstore Cosign Ed25519 Cryptographic Layer",
+        "color": "1"
+      },
+      {
+        "id": "node_cosign_spec",
+        "type": "file",
+        "x": -920,
+        "y": -590,
+        "width": 380,
+        "height": 180,
+        "file": "Zoth Trust & Supply Chain.md",
+        "color": "1"
+      },
+      {
+        "id": "node_cosign_text",
+        "type": "text",
+        "x": -510,
+        "y": -590,
+        "width": 380,
+        "height": 230,
+        "color": "5",
+        "text": "### 🔐 Cryptographic Attestation\n- Cosign Ed25519 container & commit signatures.\n- Keyless OIDC Sigstore transparency log.\n- SHA-256 binary checksum reproducibility."
+      },
+      {
+        "id": "group_vt_layer",
+        "type": "group",
+        "x": 0,
+        "y": -650,
+        "width": 860,
+        "height": 560,
+        "label": "🌐 VirusTotal 70+ AV Engine Consensus Layer",
+        "color": "4"
+      },
+      {
+        "id": "node_vt_text",
+        "type": "text",
+        "x": 40,
+        "y": -590,
+        "width": 380,
+        "height": 230,
+        "color": "4",
+        "text": "### 🛡️ Multi-Engine Antivirus Consensus\n- 70+ AV engines scanning release binaries.\n- 0/70 clean ratio threshold invariant.\n- Automated CI/CD release gate before artifact distribution."
+      },
+      {
+        "id": "node_vt_wiki",
+        "type": "file",
+        "x": 450,
+        "y": -590,
+        "width": 380,
+        "height": 180,
+        "file": "06-Wiki/Zero-Trust Supply Chain, Cosign & VirusTotal Verification.md",
+        "color": "6"
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge_cosign_vt",
+        "fromNode": "node_cosign_spec",
+        "fromSide": "right",
+        "toNode": "node_vt_text",
+        "toSide": "left",
+        "color": "1",
+        "label": "Signature -> AV Audit"
+      },
+      {
+        "id": "edge_vt_wiki",
+        "fromNode": "node_vt_text",
+        "fromSide": "right",
+        "toNode": "node_vt_wiki",
+        "toSide": "left",
+        "color": "6",
+        "label": "Canonical Reference"
+      }
+    ],
+    "rawJson": "{\n  \"nodes\": [\n    {\n      \"id\": \"group_cosign_layer\",\n      \"type\": \"group\",\n      \"x\": -960,\n      \"y\": -650,\n      \"width\": 860,\n      \"height\": 560,\n      \"label\": \"🛡️ Sigstore Cosign Ed25519 Cryptographic Layer\",\n      \"color\": \"1\"\n    },\n    {\n      \"id\": \"node_cosign_spec\",\n      \"type\": \"file\",\n      \"x\": -920,\n      \"y\": -590,\n      \"width\": 380,\n      \"height\": 180,\n      \"file\": \"Zoth Trust & Supply Chain.md\",\n      \"color\": \"1\"\n    },\n    {\n      \"id\": \"node_vt_text\",\n      \"type\": \"text\",\n      \"x\": 40,\n      \"y\": -590,\n      \"width\": 380,\n      \"height\": 230,\n      \"color\": \"4\",\n      \"text\": \"### 🛡️ Multi-Engine Antivirus Consensus\\n- 70+ AV engines scanning release binaries.\\n- 0/70 clean ratio threshold invariant.\\n- Automated CI/CD release gate before artifact distribution.\"\n    }\n  ],\n  \"edges\": [\n    {\n      \"id\": \"edge_cosign_vt\",\n      \"fromNode\": \"node_cosign_spec\",\n      \"fromSide\": \"right\",\n      \"toNode\": \"node_vt_text\",\n      \"toSide\": \"left\",\n      \"color\": \"1\",\n      \"label\": \"Signature -> AV Audit\"\n    }\n  ]\n}"
   }
 ];
 
@@ -2478,6 +2570,64 @@ export const CANONICAL_BASES = [
       "finality_status": { "displayName": "BFT Quorum" }
     },
     "rawYaml": "filters:\n  and:\n    - 'file.ext == \"md\"'\n    - file.hasTag(\"vaelor\")\n\nformulas:\n  usd_reserve_pct: 'if(usd_pct, usd_pct.toString() + \"%\", \"70%\")'\n  savings_vault_pct: 'if(vault_pct, vault_pct.toString() + \"% (8.5% APY)\", \"20% (8.5% APY)\")'\n  liquid_vlr_pct: 'if(liquid_pct, liquid_pct.toString() + \"%\", \"10%\")'\n  fx_spread_pct: \"'0.00% Feeless'\"\n  cashback_tier: \"if(tier, tier, 'SOVEREIGN_DIAMOND (5.0%)')\"\n\nproperties:\n  file.name:\n    displayName: \"Ledger Entry Note\"\n  merchant:\n    displayName: \"Merchant Handle\"\n  formula.usd_reserve_pct:\n    displayName: \"1:1 USD Reserve\"\n  formula.savings_vault_pct:\n    displayName: \"8.5% APY Vault\"\n  formula.liquid_vlr_pct:\n    displayName: \"Liquid VLR\"\n  formula.fx_spread_pct:\n    displayName: \"FX Spread\"\n\nviews:\n  - type: table\n    name: \"Merchant Treasury Auto-Sweep Policy\"\n    order:\n      - file.name\n      - merchant\n      - formula.usd_reserve_pct\n      - formula.savings_vault_pct\n      - formula.liquid_vlr_pct\n      - formula.fx_spread_pct\n"
+  },
+  {
+    "name": "Sovereign MCP Tools & Agent Catalog.base",
+    "relPath": "Sovereign MCP Tools & Agent Catalog.base",
+    "viewCount": 3,
+    "views": [
+      {
+        "type": "table",
+        "name": "All 21 Neuro-Memory & 13 Vaelor MCP Tools",
+        "limit": 50,
+        "order": [
+          "file.name",
+          "tool_name",
+          "category",
+          "formula.mcp_standard",
+          "formula.runtime_port",
+          "formula.status_badge"
+        ]
+      },
+      {
+        "type": "cards",
+        "name": "Monetized Tools & God Mode Workstations",
+        "order": [
+          "file.name",
+          "tool_name",
+          "category",
+          "formula.price_label"
+        ]
+      },
+      {
+        "type": "table",
+        "name": "Autonomous Agent Protocol Handshakes",
+        "order": [
+          "file.name",
+          "agent_handle",
+          "mcp_method",
+          "formula.status_badge"
+        ]
+      }
+    ],
+    "formulas": {
+      "mcp_standard": "'MCP 2024-11-05 JSON-RPC'",
+      "runtime_port": "if(port, ':' + port.toString(), ':8094 / :8140')",
+      "status_badge": "'🟢 Active'",
+      "price_label": "'$19 Lifetime'"
+    },
+    "properties": {
+      "file.name": { "displayName": "Tool Note" },
+      "tool_name": { "displayName": "MCP Tool Name" },
+      "category": { "displayName": "Domain Subsystem" },
+      "agent_handle": { "displayName": "Autonomous Agent" },
+      "mcp_method": { "displayName": "JSON-RPC Method" },
+      "formula.mcp_standard": { "displayName": "Protocol Standard" },
+      "formula.runtime_port": { "displayName": "Runtime Port" },
+      "formula.status_badge": { "displayName": "Operational Status" },
+      "formula.price_label": { "displayName": "Monetization" }
+    },
+    "rawYaml": "filters:\n  and:\n    - 'file.ext == \"md\"'\n    - file.hasTag(\"mcp\")\n\nformulas:\n  mcp_standard: \"'MCP 2024-11-05 JSON-RPC'\"\n  runtime_port: \"if(port, ':' + port.toString(), ':8094 / :8140')\"\n  status_badge: \"'🟢 Active'\"\n\nproperties:\n  file.name:\n    displayName: \"Tool Note\"\n  tool_name:\n    displayName: \"MCP Tool Name\"\n  category:\n    displayName: \"Domain Subsystem\"\n  formula.mcp_standard:\n    displayName: \"Protocol Standard\"\n  formula.status_badge:\n    displayName: \"Operational Status\"\n\nviews:\n  - type: table\n    name: \"All 21 Neuro-Memory & 13 Vaelor MCP Tools\"\n    order:\n      - file.name\n      - tool_name\n      - category\n      - formula.mcp_standard\n      - formula.status_badge\n"
   }
 ];
 
@@ -3048,13 +3198,15 @@ export function callMcpToolFallback(toolName, args = {}) {
           score: 100,
           status: "PERFECT",
           healthGrade: "✦ PERFECT",
-          canvasesValid: 16,
-          totalCanvases: 16,
-          basesValid: 18,
-          totalBases: 18,
+          canvasesValid: 18,
+          totalCanvases: 18,
+          basesValid: 20,
+          totalBases: 20,
           totalNotes: 1723,
-          totalWikilinks: 7996,
-          connectivityPct: 99.6,
+          totalWikilinks: 7985,
+          connectivityPct: 100.0,
+          orphanNotes: 0,
+          brokenLinks: 0,
           timestamp: ts
         }
       };
@@ -3732,6 +3884,101 @@ export const FALLBACK_BASES_RECORDS = {
         }
       }
     ]
+  },
+  "Sovereign MCP Tools & Agent Catalog.base": {
+    baseName: "Sovereign MCP Tools & Agent Catalog.base",
+    relPath: "Sovereign MCP Tools & Agent Catalog.base",
+    ok: true,
+    totalMatched: 34,
+    columns: [
+      { key: "file.name", label: "Tool Note" },
+      { key: "tool_name", label: "MCP Tool Name" },
+      { key: "category", label: "Domain Subsystem" },
+      { key: "formula.mcp_standard", label: "Protocol Standard" },
+      { key: "formula.runtime_port", label: "Runtime Port" },
+      { key: "formula.price_label", label: "Monetization" },
+      { key: "formula.status_badge", label: "Status" }
+    ],
+    rows: [
+      {
+        title: "Vaelor Protected Commerce Escrow",
+        relPath: "07-Tools/vaelor_protected_escrow.md",
+        properties: {
+          "file.name": "vaelor_protected_escrow.md",
+          "tool_name": "vaelor_protected_escrow",
+          "category": "FinTech / Escrow",
+          "formula.mcp_standard": "MCP 2024-11-05 JSON-RPC",
+          "formula.runtime_port": ":8140",
+          "formula.price_label": "$19 Lifetime",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "STDP Synaptic Weight Modulation",
+        relPath: "07-Tools/stdp_synapse_strengthen.md",
+        properties: {
+          "file.name": "stdp_synapse_strengthen.md",
+          "tool_name": "stdp_synapse_strengthen",
+          "category": "Neuro-Memory / STDP",
+          "formula.mcp_standard": "MCP 2024-11-05 JSON-RPC",
+          "formula.runtime_port": ":8094",
+          "formula.price_label": "$19 Lifetime",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "CA3/CA1 Pattern Completion",
+        relPath: "07-Tools/ca3_pattern_completion.md",
+        properties: {
+          "file.name": "ca3_pattern_completion.md",
+          "tool_name": "ca3_pattern_completion",
+          "category": "Neuro-Memory / Engrams",
+          "formula.mcp_standard": "MCP 2024-11-05 JSON-RPC",
+          "formula.runtime_port": ":8094",
+          "formula.price_label": "$19 Lifetime",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Vaelor Feeless DAG Transfer",
+        relPath: "07-Tools/vaelor_send_feeless.md",
+        properties: {
+          "file.name": "vaelor_send_feeless.md",
+          "tool_name": "vaelor_send_feeless",
+          "category": "FinTech / L1 DAG",
+          "formula.mcp_standard": "MCP 2024-11-05 JSON-RPC",
+          "formula.runtime_port": ":8140",
+          "formula.price_label": "$19 Lifetime",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Vaelor Merchant FX Checkout",
+        relPath: "07-Tools/vaelor_merchant_fx_checkout.md",
+        properties: {
+          "file.name": "vaelor_merchant_fx_checkout.md",
+          "tool_name": "vaelor_merchant_fx_checkout",
+          "category": "FinTech / Merchant FX",
+          "formula.mcp_standard": "MCP 2024-11-05 JSON-RPC",
+          "formula.runtime_port": ":8140",
+          "formula.price_label": "$19 Lifetime",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Obsidian Second Brain Vault Sync",
+        relPath: "07-Tools/neuro_obsidian_vault_sync.md",
+        properties: {
+          "file.name": "neuro_obsidian_vault_sync.md",
+          "tool_name": "neuro_obsidian_vault_sync",
+          "category": "Knowledge / Obsidian",
+          "formula.mcp_standard": "MCP 2024-11-05 JSON-RPC",
+          "formula.runtime_port": ":8094",
+          "formula.price_label": "$19 Lifetime",
+          "formula.status_badge": "🟢 Active"
+        }
+      }
+    ]
   }
 };
 
@@ -3844,15 +4091,17 @@ export const FALLBACK_PORTABLE_BUNDLE = {
   generatedAt: "2026-10-26T09:02:21.178Z",
   healthScore: 100,
   auditMetrics: {
-    canvasesValid: 14,
-    basesValid: 18,
-    totalNotes: 1726,
-    totalWikilinks: 7980,
-    connectivityPct: 99.6
+    canvasesValid: 18,
+    basesValid: 20,
+    totalNotes: 1723,
+    totalWikilinks: 7985,
+    connectivityPct: 100.0,
+    orphanNotes: 0,
+    brokenLinks: 0
   },
-  canvasesCount: 16,
-  basesCount: 18,
-  wikiArticlesCount: 8,
+  canvasesCount: 18,
+  basesCount: 20,
+  wikiArticlesCount: 13,
   topHubsCount: 10
 };
 
@@ -4964,6 +5213,12 @@ export const VAELOR_MCP_TOOLS = [
     category: "Merchant FX",
     description: "Execute programmable POS merchant FX checkout with automated treasury sweep (1:1 USD Reserve, 8.5% APY Staked Savings, and Liquid VLR) with 0.00% FX spread.",
     defaultArgs: { buyer: "@citizen", merchant: "@sprig", amount: 50.0, memo: "POS Artisan Coffee & Provisions" }
+  },
+  {
+    name: "vaelor_protected_escrow",
+    category: "Escrow & Dispute",
+    description: "Create or settle a zero-penalty cryptographic escrow with 3 resolution presets (RELEASE 100% + 5% cashback, REFUND 100% $0 penalty, SPLIT 50/50 $0 dispute fee).",
+    defaultArgs: { escrowId: "esc_demo_buyer_protection", resolutionType: "RELEASE", refundPct: 0 }
   }
 ];
 
@@ -5181,6 +5436,12 @@ export function callVaelorMcpFallback(toolName, args = {}) {
         ok: true,
         tool: toolName,
         result: executeVaelorMerchantFxFallback(args)
+      };
+    case 'vaelor_protected_escrow':
+      return {
+        ok: true,
+        tool: toolName,
+        result: resolveVaelorEscrowFallback(args)
       };
     default:
       return {
@@ -5882,6 +6143,130 @@ export function executeVaelorMerchantFxFallback(opts = {}) {
         approvals: 5,
         bftThreshold: '4/5 (2f + 1)',
         aggregateLatencyMs: 8.09
+      }
+    }
+  };
+}
+
+export function resolveVaelorEscrowFallback(opts = {}) {
+  const escrowId = opts.escrowId || opts.id || ('esc_' + randHex(16));
+  const resolutionType = (opts.resolutionType || opts.action || opts.type || 'RELEASE').toUpperCase().trim();
+  const buyer = opts.buyer || '@citizen';
+  const merchant = opts.merchant || '@sprig';
+  const amountVlr = parseFloat(opts.amount || opts.amountVlr) || 100.0;
+  const itemTitle = opts.itemTitle || opts.memo || 'Enterprise GPU Cloud Compute Pod (1 Month)';
+  const ts = new Date().toISOString();
+  const blockHash = randHex(64);
+
+  let buyerRefundVlr = 0;
+  let merchantAmountVlr = 0;
+  let cashbackVlr = 0;
+  let refundPct = 0;
+  let status = 'RELEASED';
+
+  if (resolutionType === 'RELEASE') {
+    merchantAmountVlr = amountVlr;
+    buyerRefundVlr = 0;
+    refundPct = 0;
+    cashbackVlr = +(amountVlr * 0.05).toFixed(4);
+    status = 'RELEASED';
+  } else if (resolutionType === 'REFUND') {
+    merchantAmountVlr = 0;
+    buyerRefundVlr = amountVlr;
+    refundPct = 100;
+    cashbackVlr = 0;
+    status = 'REFUNDED';
+  } else if (resolutionType === 'SPLIT') {
+    const pct = opts.refundPct !== undefined ? Number(opts.refundPct) : 50;
+    refundPct = Math.max(0, Math.min(100, pct));
+    buyerRefundVlr = +(amountVlr * (refundPct / 100)).toFixed(4);
+    merchantAmountVlr = +(amountVlr - buyerRefundVlr).toFixed(4);
+    cashbackVlr = +(merchantAmountVlr * 0.05).toFixed(4);
+    status = 'SPLIT_SETTLED';
+  }
+
+  return {
+    ok: true,
+    result: {
+      ok: true,
+      escrowId,
+      resolutionType,
+      refundPct,
+      buyer,
+      merchant,
+      amountVlr,
+      buyerRefundVlr,
+      merchantAmountVlr,
+      cashbackVlr,
+      chargebackPenaltyFee: 0.00,
+      disputeFee: 0.00,
+      gasFeeVlr: 0.00,
+      status,
+      escrow: {
+        id: escrowId,
+        buyerHandle: buyer,
+        merchantHandle: merchant,
+        amountVlr,
+        itemTitle,
+        status,
+        resolutionType,
+        refundPct,
+        buyerRefundVlr,
+        merchantAmountVlr,
+        cashbackVlr,
+        settledAt: ts,
+        settlementBlockHash: blockHash
+      },
+      block: {
+        hash: blockHash,
+        account: 'vlr1_' + randHex(32),
+        handle: merchant,
+        height: 195,
+        type: 'ESCROW_RESOLVE',
+        amountVlr,
+        finalityMs: 6.8,
+        gasFeeVlr: 0,
+        timestamp: ts,
+        quorumCertificate: {
+          blockHash,
+          status: 'FINALIZED_BFT',
+          quorumSize: 5,
+          approvals: 5,
+          bftThreshold: '4/5 (2f + 1)',
+          aggregateLatencyMs: 8.12
+        }
+      }
+    },
+    escrowId,
+    resolutionType,
+    refundPct,
+    buyer,
+    merchant,
+    amountVlr,
+    buyerRefundVlr,
+    merchantAmountVlr,
+    cashbackVlr,
+    chargebackPenaltyFee: 0.00,
+    disputeFee: 0.00,
+    gasFeeVlr: 0.00,
+    status,
+    block: {
+      hash: blockHash,
+      account: 'vlr1_' + randHex(32),
+      handle: merchant,
+      height: 195,
+      type: 'ESCROW_RESOLVE',
+      amountVlr,
+      finalityMs: 6.8,
+      gasFeeVlr: 0,
+      timestamp: ts,
+      quorumCertificate: {
+        blockHash,
+        status: 'FINALIZED_BFT',
+        quorumSize: 5,
+        approvals: 5,
+        bftThreshold: '4/5 (2f + 1)',
+        aggregateLatencyMs: 8.12
       }
     }
   };

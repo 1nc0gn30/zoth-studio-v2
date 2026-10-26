@@ -231,36 +231,80 @@ Anchored around the central Netrunner Cyber-Cortex at `(0, 16, 0)`, the manifold
 
 ---
 
-## Obsidian Second Brain, Karpathy LLM Wiki & 20-Tool MCP Hub (`/memory/docs`)
+## Obsidian Second Brain, Karpathy LLM Wiki & 21-Tool MCP Hub (`/memory/docs`)
 
-Located in the **Obsidian Second Brain & Skills** tab of `MemoryPage.jsx` (`#tab-obsidian-skills`), this comprehensive subsystem unifies local Obsidian knowledge vaults (`~/Documents/Obsidian Vault`), the Karpathy LLM-synthesized wiki architecture, the 7 official `@kepano` Obsidian agent skills, and a 20-tool Model Context Protocol (MCP) execution engine.
+Located in the **Obsidian Second Brain & Skills** tab of `MemoryPage.jsx` (`#tab-obsidian-skills`), this comprehensive subsystem unifies local Obsidian knowledge vaults (`~/Documents/Obsidian Vault`), the Karpathy LLM-synthesized wiki architecture, the 7 official `@kepano` Obsidian agent skills, and a 21-tool Model Context Protocol (MCP) execution engine.
 
 ### Core Architectural Subsystems
 
-1. **Second Brain Doctor Health Audit (`#second-brain-doctor-audit`)**: Automated integrity auditor validating 100/100 health grades across 6 bento metrics: Spatial Canvases (`14/14 JSON Canvas 1.0`), Obsidian Bases (`18/18 YAML databases`), Evergreen Vault (`1,721+ Notes`), Wikilinks Mesh (`7,973+ Bidirectional citations`), Graph Topology (`99.6% Connectivity`), and Karpathy Wiki Articles (`6 Canonical engrams`).
-2. **Karpathy LLM Wiki Explorer & Synthesizer (`#studio-wiki-synth-btn`)**: Structured according to Andrej Karpathy's LLM Wiki paradigm. Displays canonical Markdown articles in `06-Wiki/` with interactive client-side LLM synthesis for any custom topic, producing structured wikilink citations, mathematical equations, and STDP memory provenance tables.
-3. **JSON Canvas 1.0 2D Spatial Graph Viewer (`#studio-canvas-visualizer`)**: Interactive SVG renderer and raw JSON editor for infinite spatial canvases. Displays text nodes, file cards, colored groups, and directional semantic edges with zero corruption. Includes procedural canvas generation (`#studio-canvas-gen-btn`).
-4. **Obsidian Bases Live Records Table (`#studio-bases-inspector`)**: Interactive YAML database inspector parsing `.base` configurations. Features dynamic formula columns (`formula.stdp_retention`, `wikilink_density`), active search filtering, summary aggregation pills, and live record inspection (`#studio-bases-live-records`).
-5. **Unified Vault + STDP Search Engine (`#studio-unified-search`)**: Cross-stratum associative search querying across 1,721+ local vault Markdown notes and 41,800+ STDP engrams with multi-dimensional cosine similarity matching (`#studio-obsidian-search-input` + `#studio-obsidian-search-btn`).
+1. **Second Brain Doctor Health Audit (`#second-brain-doctor-audit`)**: Automated integrity auditor validating `100/100 ✦ PERFECT` health grade across 6 bento metrics: Spatial Canvases (`18/18 JSON Canvas 1.0`), Obsidian Bases (`20/20 YAML databases`), Evergreen Vault (`1,723+ Notes`), Wikilinks Mesh (`7,985+ Bidirectional citations`), Graph Topology (`100.0% Connectivity`, `0 Orphan notes`, `0 Broken links`), and Karpathy Wiki Articles (`13 Canonical engrams`).
+2. **Karpathy LLM Wiki Explorer & Synthesizer (`#studio-wiki-synth-btn`)**: Structured according to Andrej Karpathy's LLM Wiki paradigm. Displays 13 canonical Markdown articles in `06-Wiki/` with interactive client-side LLM synthesis for any custom topic, producing structured wikilink citations, mathematical equations, and STDP memory provenance tables.
+3. **JSON Canvas 1.0 2D Spatial Graph Viewer (`#studio-canvas-visualizer`)**: Interactive SVG renderer and raw JSON editor for 18 infinite spatial canvases (including the supply-chain trust stack and Vaelor lattice). Displays text nodes, file cards, colored groups, and directional semantic edges with zero corruption. Includes procedural canvas generation (`#studio-canvas-gen-btn`).
+4. **Obsidian Bases Live Records Table (`#studio-bases-inspector`)**: Interactive YAML database inspector parsing 20 `.base` configurations (including tools, fleets, agents, memory stratum, and Vaelor patronage ledgers). Features dynamic formula columns (`formula.stdp_retention`, `wikilink_density`), active search filtering, summary aggregation pills, and live record inspection (`#studio-bases-live-records`).
+5. **Unified Vault + STDP Search Engine (`#studio-unified-search`)**: Cross-stratum associative search querying across 1,723+ local vault Markdown notes and 41,800+ STDP engrams with multi-dimensional cosine similarity matching (`#studio-obsidian-search-input` + `#studio-obsidian-search-btn`).
 6. **Knap Live Telemetry Compiler (`#studio-knap-telemetry`)**: Demonstrates template-driven Markdown synthesis using the Knap engine. Transpiles Defuddle-extracted web data into Obsidian notes with YAML frontmatter, badges, and code snippets.
 7. **Top 10 Knowledge Graph Centrality Hubs (`#studio-obsidian-top-hubs`)**: Computes graph degree and betweenness centrality across the vault, identifying the top 10 foundational knowledge hubs (e.g., `00 Home`, `Vaelor Network`, `STDP Synaptic Plasticity`, `Zoth Trust & Supply Chain`).
-8. **20-Tool MCP JSON-RPC Playground (`#studio-obsidian-mcp-playground`)**: Interactive testing workbench for 20 Model Context Protocol tools spanning all 7 official `@kepano` Obsidian skills:
+8. **21-Tool MCP JSON-RPC Playground (`#studio-obsidian-mcp-playground`)**: Interactive testing workbench for 21 Model Context Protocol tools spanning all 7 official `@kepano` Obsidian skills and local STDP memory substrates:
    - `obsidian-markdown` (`read_note`, `write_note`, `append_note`, `extract_wikilinks`)
    - `json-canvas` (`parse_canvas`, `add_canvas_node`, `connect_canvas_nodes`)
    - `obsidian-bases` (`query_base`, `update_base_record`, `calculate_base_formula`)
    - `obsidian-cli` (`vault_search`, `plugin_audit`, `health_check`)
    - `knap` (`render_template`, `compile_dataset`)
    - `defuddle` (`extract_markdown`, `clean_web_article`)
-   - `obsidian-second-brain` (`stdp_memory_sync`, `synthesize_wiki_moc`, `verify_provenance`)
+   - `obsidian-second-brain` (`stdp_memory_sync`, `synthesize_wiki_moc`, `verify_provenance`, `neuro_obsidian_vault_sync`)
 9. **Note & Web Snippet Ingestor (`#studio-obsidian-ingest-panel`)**: Zero-loss atomic note ingestion pipeline (`#studio-obsidian-ingest-btn`). Accepts title, source, tags, and content, writes to the vault, and triggers automatic STDP engram indexing on `:8094`.
 10. **Daily Sovereign Journal (`#studio-obsidian-daily-note`)**: Automated logging interface appending timestamped operator thoughts and agent telemetry directly to `01-Daily/YYYY-MM-DD.md` (`#studio-daily-append-btn`).
 11. **Backlinks, Outlinks & Unlinked Mentions Inspector (`#studio-backlinks-inspector`)**: Bidirectional citation graph inspector analyzing any selected note. Displays incoming backlinks (`← INLINKS`), outgoing wikilinks (`→ OUTLINKS`), and unlinked text mentions with 1-click Auto-Linker injection (`#autolink-btn-*`).
 12. **12-Command CLI Palette (`#studio-cli-palette`)**: Searchable, filterable palette of essential headless command-line invocations covering Vault sync, Knap rendering, Defuddle scraping, JSON Canvas generation, and health audits.
 13. **Dual-Pane OFM Live Editor (`#studio-ofm-editor`)**: Real-time split-screen Markdown workbench (`#studio-ofm-textarea` + `#studio-ofm-preview`). Features custom note path loading (`#studio-ofm-path-input`), quick-note pills, live AST rendering of [[wikilinks]], callouts, and frontmatter, and atomic safe write-back (`#studio-ofm-save-btn`).
 14. **Vaelor (◈ VLR) Layer-1 Account-Lattice Hub & PoUW Cognitive Mining Bridge (`#studio-vaelor-lattice-hub`)**:
-    - **Layer-1 Telemetry Cards**: Live status from port `:8140` (with 100% zero-cloud fallback): `Circulating Supply` (191,157 ◈ VLR), `Total DAG Blocks` (98+ Blocks), `5/5 BFT Quorum Finality (<15ms)`, `8.5% APY Savings Vault`, `2.5% Instant Cashback`, and `$0.00 Gas`.
+    - **Layer-1 Telemetry Cards**: Live status from port `:8140` (with 100% zero-cloud fallback): `Circulating Supply` (197,200+ ◈ VLR), `Total DAG Blocks` (400+ Blocks), `5/5 BFT Quorum Finality (<15ms)`, `8.5% APY Savings Vault`, `2.5%–5.0% Instant Cashback`, and `$0.00 Gas`.
     - **PoUW Cognitive Mining (`#studio-vaelor-pouw-btn`)**: Proof-of-Useful-Work engine that verifies biomorphic STDP causal traces & associative graph engrams (`{ miner: "@zoth", taskType: "STDP_VECTOR_INDEXING" }`) and renders minted `POUW_MINT` block hashes, rewards, and 5-validator BFT quorum certificates in `#studio-vaelor-pouw-result`.
     - **Triple Sovereign Checkout Rails**: Seamlessly unifies Credit Cards / Apple Pay (Stripe), non-custodial Web3 crypto (Solana DePay), and feeless DAG account-lattice payments (Vaelor `◈ VLR`).
+
+---
+
+## Vaelor (◈ VLR) Layer-1 Sovereign FinTech Hub & Account-Lattice DAG (`/vaelor`)
+
+Live on `http://127.0.0.1:3000/vaelor` and powered by the high-performance Vaelor daemon on `:8140`, this workstation delivers an end-to-end sovereign Layer-1 financial operating system designed for human operators, merchants, and autonomous AI agents:
+
+### 28 Sovereign FinTech Features
+1. **60fps Account-Lattice DAG Visualizer (`<VaelorLatticeVisualizer />`)**: Real-time canvas rendering individual account micro-chains (`@citizen`, `@sprig`, `@zoth`, `@neal`, `@hatch`), cross-chain send/receive transactions, and 5-validator Byzantine Fault Tolerant (BFT) quorum attestations with sub-15ms finality.
+2. **Feeless Instant DAG Payments (`#vaelor-send-feeless`)**: Transact in under 20ms with $0.00 gas fees forever via asynchronous Nano-style account chains.
+3. **Itemized Cryptographic Smart Receipts (`#vaelor-create-receipt`)**: Mint tamper-proof JSON-LD and QR-verifiable smart receipts with automated 365-day warranty attestations and instant buyer cashback.
+4. **Homoglyph Anti-Phishing Safety Engine (`#vaelor-verify-handle`)**: Real-time Levenshtein and Unicode lookalike auditor preventing impersonation attacks on sovereign `@handles`.
+5. **Zero-Lockup 8.5% APY PoUW Compute Savings Vault (`#vaelor-stake-savings`)**: Deposit VLR into the high-yield PoUW validation pool with zero lockup periods and instant unbonding.
+6. **0% APR Revolving Credit Facility & 30-Day BNPL (`#vaelor-draw-credit`)**: Algorithmic credit lines with automatic merchant settlement and zero predatory interest.
+7. **Autonomous AI Agent Micro-Contract Bounties (`#vaelor-agent-bounties`)**: Autonomous machine-to-machine micro-escrows verifying SHA-256 computational artifacts before releasing funds.
+8. **Real-Time Payment Streaming Engine (`#vaelor-stream-sim`)**: Stream VLR per-second for live API compute metering, consulting, or rent with instant pause/cancel controls.
+9. **Automated Group Tab & Split Checkout (`#vaelor-group-tab-sim`)**: Zero-math shared bills with cryptographic split payments and aggregated diamond cashback.
+10. **Zero-Penalty Protected Commerce Escrow Simulator (`#vaelor-protected-escrow-sim`)**: Eliminates credit card $15–$25 chargeback extortion with 3 resolution presets:
+    - `✅ RELEASE (100% to Merchant + 5.0% Buyer Cashback)`
+    - `↩️ REFUND (100% to Buyer • $0.00 Chargeback Penalty to Merchant)`
+    - `⚖️ SPLIT (50% Buyer / 50% Merchant • $0.00 Dispute Fee)`
+11. **Programmable Merchant FX Treasury Auto-Sweep Simulator (`#vaelor-merchant-fx-sim`)**: 0.00% FX spread POS checkout routing funds across 1:1 USD Reserves, 8.5% APY Staked Savings, and Liquid VLR.
+12. **Pedersen Commitment Confidential Shielded Transfers (`#vaelor-shielded-transfer`)**: Cryptographic zero-knowledge privacy with selective auditor view-key disclosure.
+13. **Sub-Account Daily Spending Caps & AI Agent Scopes (`#vaelor-subaccount-spend`)**: Delegate constrained allowances to autonomous sub-agents with merchant whitelisting.
+14. **Offline Peer-Mesh Mesh Vouchers (`#vaelor-voucher-issue`)**: Off-grid PIN-protected value vouchers redeemable over LoRa and Bluetooth without active internet connectivity.
+15. **Cross-Chain Atomic Settlement Bridge (`#vaelor-bridge-swap`)**: Instant liquidity bridging across Ethereum, Solana, and Bitcoin with zero wrapping risks.
+16. **Open-Source Creator Tip Rails & Patron Tiers (`#vaelor-creator-tip`)**: Feeless instant micro-tipping with dynamic loyalty badges and automated patron grants.
+17. **Dynamic 4-Tier Loyalty System (`#vaelor-loyalty-boost`)**: Automated tier progression (Bronze, Silver, Gold, Sovereign Diamond) rewarding up to 5.0% instant cashback on all commerce.
+18. **Dead-Man's Cryptographic Inheritance Heartbeat (`#vaelor-inheritance-heartbeat`)**: Automated non-custodial asset succession triggered by customizable time-lock intervals.
+19. **Social Multi-Sig Guardian Recovery (`#vaelor-guardian-recovery`)**: Shamir secret sharing and 3-of-5 trusted contact key recovery eliminating lost seed phrases.
+20. **Proof-of-Useful-Work (PoUW) Compute Mining (`#vaelor-pouw-mining`)**: Useful computation minting validating AST parsing, AEO schemas, and STDP memory engrams.
+21. **Itemized 365-Day Warranty Proofs (`#vaelor-warranty-vault`)**: On-chain warranty attestations linked to consumer hardware serials.
+22. **Point-of-Sale NFC & QR Terminal (`#vaelor-pos-terminal`)**: Instant mobile merchant checkout with dynamic tip calculations and receipt printing.
+23. **Sovereign Merchant Directory (`#vaelor-merchant-directory`)**: Curated decentralized directory of verified merchants with cryptographic reputation scores.
+24. **DePay & Stripe Unified Gateway (`#vaelor-multirail-checkout`)**: Dual fiat credit card + Solana USDC + native VLR checkout rails.
+25. **22-Vector Payment Invariant Comparison Matrix (`#vaelor-comparison-matrix`)**: Direct side-by-side benchmark comparing Vaelor against Visa, Stripe, Solana, and Lightning.
+26. **Autonomous WebHook & WebSocket Real-Time Bus (`:8140/ws`)**: Sub-millisecond ledger event streaming for external microservices.
+27. **Byzantine Fault Tolerant 5-Validator Quorum (`#vaelor-bft-status`)**: Geographically distributed consensus across US-East, EU-Central, Asia-East, Local Edge, and NullAI Core.
+28. **13-Tool Layer-1 Model Context Protocol (MCP) Playground (`#vaelor-mcp-playground`)**: Complete JSON-RPC execution workbench for autonomous agents:
+    - `vaelor_network_status`, `vaelor_account_balance`, `vaelor_send_feeless`
+    - `vaelor_verify_handle_safety`, `vaelor_create_smart_receipt`, `vaelor_mine_pouw`
+    - `vaelor_stake_savings`, `vaelor_draw_credit_bnpl`, `vaelor_post_agent_bounty`
+    - `vaelor_send_shielded`, `vaelor_send_creator_tip`, `vaelor_merchant_fx_checkout`
+    - `vaelor_protected_escrow` (Zero-Penalty Cryptographic Escrow & Settlement)
 
 ---
 

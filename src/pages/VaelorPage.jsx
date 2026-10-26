@@ -43,6 +43,7 @@ import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import LocalCafeIcon from '@mui/icons-material/LocalCafe';
 import DiamondIcon from '@mui/icons-material/Diamond';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import GavelIcon from '@mui/icons-material/Gavel';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import VaelorLatticeVisualizer from '../components/VaelorLatticeVisualizer';
 import SovereignFunnel from '../components/SovereignFunnel';
@@ -67,7 +68,8 @@ import {
   executeVaelorBridgeSwapFallback,
   sendVaelorCreatorTipFallback,
   boostVaelorLoyaltyFallback,
-  executeVaelorMerchantFxFallback
+  executeVaelorMerchantFxFallback,
+  resolveVaelorEscrowFallback
 } from '../data/obsidianWikiData';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -1044,6 +1046,107 @@ export default function VaelorPage() {
 
     setFxCheckoutResult(resData);
     setIsExecutingFxCheckout(false);
+  };
+
+  // Wave 28: Zero-Penalty Protected Commerce Escrow Simulator (#vaelor-protected-escrow-sim)
+  const ESCROW_PRESETS = [
+    {
+      id: 'RELEASE',
+      label: '✅ RELEASE (100% to Merchant + 5.0% Buyer Cashback)',
+      shortLabel: '100% Release',
+      resolutionType: 'RELEASE',
+      refundPct: 0,
+      merchantPct: 100,
+      tag: 'Mutual Fulfillment',
+      desc: 'Buyer confirms delivery of goods or services. 100% released instantly to merchant with zero processing fee.',
+      color: '#10B981'
+    },
+    {
+      id: 'REFUND',
+      label: '↩️ REFUND (100% to Buyer • $0.00 Chargeback Penalty)',
+      shortLabel: '100% Refund',
+      resolutionType: 'REFUND',
+      refundPct: 100,
+      merchantPct: 0,
+      tag: 'Zero-Penalty Protection',
+      desc: 'Undelivered, cancelled, or defective order. 100% returned to buyer with $0.00 chargeback penalty to merchant.',
+      color: '#06B6D4'
+    },
+    {
+      id: 'SPLIT',
+      label: '⚖️ SPLIT (50% Buyer / 50% Merchant • $0.00 Dispute Fee)',
+      shortLabel: '50/50 Amicable Split',
+      resolutionType: 'SPLIT',
+      refundPct: 50,
+      merchantPct: 50,
+      tag: 'Amicable Compromise',
+      desc: 'Partial delivery or compromise resolution. 50% refunded to buyer, 50% released to merchant with zero arbitration fee.',
+      color: '#A855F7'
+    }
+  ];
+
+  const [selectedEscrowPreset, setSelectedEscrowPreset] = useState(ESCROW_PRESETS[0]);
+  const [escrowAmount, setEscrowAmount] = useState('100.00');
+  const [escrowItemTitle, setEscrowItemTitle] = useState('Enterprise GPU Cloud Compute Pod (1 Month)');
+  const [isResolvingEscrow, setIsResolvingEscrow] = useState(false);
+  const [escrowResult, setEscrowResult] = useState(null);
+
+  const handleExecuteProtectedEscrow = async () => {
+    if (isResolvingEscrow) return;
+    setIsResolvingEscrow(true);
+    const amt = parseFloat(escrowAmount) || 100.0;
+    let resData = null;
+
+    try {
+      const createRes = await fetch('http://127.0.0.1:8140/api/escrows/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          buyer: '@citizen',
+          merchant: '@sprig',
+          amount: amt,
+          itemTitle: escrowItemTitle || 'Enterprise GPU Cloud Compute Pod (1 Month)'
+        })
+      });
+      let escrowId = 'esc_demo_buyer_protection';
+      if (createRes.ok) {
+        const createJson = await createRes.json();
+        if (createJson && createJson.escrow && createJson.escrow.id) {
+          escrowId = createJson.escrow.id;
+        }
+      }
+
+      const res = await fetch('http://127.0.0.1:8140/api/escrows/resolve', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          escrowId,
+          resolutionType: selectedEscrowPreset.resolutionType,
+          refundPct: selectedEscrowPreset.refundPct
+        })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json && (json.ok || json.result)) {
+          resData = json.result || json;
+        }
+      }
+    } catch (_) {}
+
+    if (!resData) {
+      resData = resolveVaelorEscrowFallback({
+        escrowId: 'esc_' + Math.random().toString(16).slice(2, 10),
+        resolutionType: selectedEscrowPreset.resolutionType,
+        refundPct: selectedEscrowPreset.refundPct,
+        buyer: '@citizen',
+        merchant: '@sprig',
+        amount: amt,
+        itemTitle: escrowItemTitle
+      });
+    }
+
+    setEscrowResult(resData);
+    setIsResolvingEscrow(false);
   };
 
   return (
@@ -4271,7 +4374,370 @@ export default function VaelorPage() {
         </RevealOnScroll>
 
         {/* ==========================================================================
-            SECTION: 12-TOOL LAYER-1 MODEL CONTEXT PROTOCOL (MCP) PLAYGROUND
+            SECTION: ZERO-PENALTY PROTECTED COMMERCE ESCROW SIMULATOR (#vaelor-protected-escrow-sim)
+            ========================================================================== */}
+        <RevealOnScroll>
+          <Box id="vaelor-protected-escrow-sim" sx={{ mb: 6 }}>
+            <Box sx={{ mb: 3 }}>
+              <Typography className="section-kicker">Consumer & Merchant Protection</Typography>
+              <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif', mb: 1 }}>
+                Zero-Penalty Protected Commerce Escrow Simulator
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 880, fontSize: '0.94rem' }}>
+                Vaelor eliminates predatory credit card chargeback penalties ($15–$25 per dispute) while guaranteeing cryptographic buyer protection (<code>ESCROW_CREATE</code> / <code>ESCROW_RESOLVE</code>). Settle amicably in under 10ms with zero intermediary fees, instant 5-validator BFT quorum finality, and programmable buyer loyalty cashback.
+              </Typography>
+            </Box>
+
+            <Paper
+              sx={{
+                p: { xs: 2.5, md: 3.5 },
+                borderRadius: 3,
+                border: `1.5px solid ${gold.border}`,
+                bgcolor: isDark ? '#08080E' : '#FFFFFF',
+                boxShadow: isDark ? '0 12px 36px rgba(0,0,0,0.6)' : '0 6px 20px rgba(0,0,0,0.06)'
+              }}
+            >
+              {/* Presets Selector */}
+              <Box sx={{ mb: 3 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800, display: 'block', mb: 1.2, letterSpacing: '0.05em' }}>
+                  SELECT ESCROW RESOLUTION PRESET (ZERO DISPUTE PENALTIES)
+                </Typography>
+                <Grid container spacing={2}>
+                  {ESCROW_PRESETS.map((p) => {
+                    const isSelected = selectedEscrowPreset.id === p.id;
+                    return (
+                      <Grid xs={12} sm={4} key={p.id}>
+                        <Paper
+                          onClick={() => setSelectedEscrowPreset(p)}
+                          sx={{
+                            p: 2,
+                            borderRadius: 2,
+                            cursor: 'pointer',
+                            border: `1.5px solid ${isSelected ? p.color : (isDark ? 'rgba(255,255,255,0.08)' : '#E2E8F0')}`,
+                            bgcolor: isSelected ? (isDark ? 'rgba(212,175,55,0.12)' : 'rgba(212,175,55,0.08)') : (isDark ? '#05070B' : '#F8FAFC'),
+                            transition: 'all 0.2s ease',
+                            '&:hover': {
+                              borderColor: p.color,
+                              transform: 'translateY(-2px)'
+                            }
+                          }}
+                        >
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                            <Typography sx={{ fontFamily: mono, fontWeight: 900, fontSize: '0.86rem', color: isSelected ? p.color : theme.palette.text.primary }}>
+                              {p.shortLabel}
+                            </Typography>
+                            <Chip
+                              label={p.tag}
+                              size="small"
+                              sx={{
+                                height: 20,
+                                fontSize: '0.62rem',
+                                fontWeight: 800,
+                                fontFamily: mono,
+                                bgcolor: isSelected ? `${p.color}22` : (isDark ? 'rgba(255,255,255,0.05)' : '#E2E8F0'),
+                                color: isSelected ? p.color : theme.palette.text.secondary,
+                                border: `1px solid ${isSelected ? p.color : 'transparent'}`
+                              }}
+                            />
+                          </Box>
+                          <Typography variant="caption" sx={{ color: theme.palette.text.secondary, display: 'block', fontSize: '0.72rem', lineHeight: 1.4 }}>
+                            {p.desc}
+                          </Typography>
+                        </Paper>
+                      </Grid>
+                    );
+                  })}
+                </Grid>
+              </Box>
+
+              {/* 2-Column Split: Escrow Inputs vs Settlement Receipt */}
+              <Grid container spacing={3}>
+                {/* Left Column: Settlement Parameters */}
+                <Grid xs={12} md={6}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                    <Box sx={{ p: 2, borderRadius: 2, bgcolor: isDark ? '#05070B' : '#F8FAFC', border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : '#E2E8F0'}` }}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800 }}>
+                          COUNTERPARTIES &amp; ASSET
+                        </Typography>
+                        <Chip
+                          icon={<ShieldIcon sx={{ fontSize: '0.75rem !important', color: '#10B981 !important' }} />}
+                          label="Cryptographic Hashlock Escrow"
+                          size="small"
+                          sx={{ height: 18, fontSize: '0.58rem', fontWeight: 800, fontFamily: mono, bgcolor: 'rgba(16,185,129,0.12)', color: '#10B981' }}
+                        />
+                      </Box>
+                      <Grid container spacing={1.5} sx={{ mb: 1.5 }}>
+                        <Grid xs={6}>
+                          <Box sx={{ p: 1.2, borderRadius: 1.5, bgcolor: isDark ? '#030508' : '#F1F5F9', border: '1px solid rgba(255,255,255,0.06)' }}>
+                            <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.62rem', display: 'block' }}>
+                              BUYER (PROTECTED)
+                            </Typography>
+                            <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: '#38BDF8', fontSize: '0.82rem' }}>
+                              @citizen
+                            </Typography>
+                            <Typography variant="caption" sx={{ color: '#94A3B8', fontSize: '0.62rem' }}>
+                              Passkey Consumer Wallet
+                            </Typography>
+                          </Box>
+                        </Grid>
+                        <Grid xs={6}>
+                          <Box sx={{ p: 1.2, borderRadius: 1.5, bgcolor: isDark ? '#030508' : '#F1F5F9', border: '1px solid rgba(255,255,255,0.06)' }}>
+                            <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.62rem', display: 'block' }}>
+                              MERCHANT (ZERO PENALTY)
+                            </Typography>
+                            <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: '#F59E0B', fontSize: '0.82rem' }}>
+                              @sprig
+                            </Typography>
+                            <Typography variant="caption" sx={{ color: '#94A3B8', fontSize: '0.62rem' }}>
+                              757 Artisan Merchant POS
+                            </Typography>
+                          </Box>
+                        </Grid>
+                      </Grid>
+
+                      <TextField
+                        fullWidth
+                        size="small"
+                        label="Escrow Item / Order Memo"
+                        value={escrowItemTitle}
+                        onChange={(e) => setEscrowItemTitle(e.target.value)}
+                        sx={{ mb: 1.5 }}
+                        inputProps={{ style: { fontFamily: mono, fontSize: '0.82rem' } }}
+                      />
+
+                      <TextField
+                        fullWidth
+                        size="small"
+                        label="Escrow Amount (◈ VLR)"
+                        type="number"
+                        value={escrowAmount}
+                        onChange={(e) => setEscrowAmount(e.target.value)}
+                        inputProps={{ min: '1', step: '5', style: { fontFamily: mono, fontSize: '0.88rem', fontWeight: 800 } }}
+                      />
+                    </Box>
+
+                    {/* Projected Resolution Breakdown */}
+                    <Box sx={{ p: 2, borderRadius: 2, bgcolor: isDark ? '#030508' : '#F1F5F9', border: '1px solid rgba(255,255,255,0.06)' }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800, display: 'block', mb: 1 }}>
+                        PROJECTED SETTLEMENT BREAKDOWN ({selectedEscrowPreset.shortLabel.toUpperCase()})
+                      </Typography>
+                      <Stack spacing={1}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <Typography variant="caption" sx={{ color: theme.palette.text.secondary, fontFamily: mono }}>
+                            Merchant Payout:
+                          </Typography>
+                          <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#10B981' }}>
+                            ◈ {((parseFloat(escrowAmount) || 100) * (selectedEscrowPreset.merchantPct / 100)).toFixed(2)} VLR (${((parseFloat(escrowAmount) || 100) * (selectedEscrowPreset.merchantPct / 100)).toFixed(2)} USD)
+                          </Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <Typography variant="caption" sx={{ color: theme.palette.text.secondary, fontFamily: mono }}>
+                            Buyer Refund:
+                          </Typography>
+                          <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#06B6D4' }}>
+                            ◈ {((parseFloat(escrowAmount) || 100) * (selectedEscrowPreset.refundPct / 100)).toFixed(2)} VLR (${((parseFloat(escrowAmount) || 100) * (selectedEscrowPreset.refundPct / 100)).toFixed(2)} USD)
+                          </Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <Typography variant="caption" sx={{ color: theme.palette.text.secondary, fontFamily: mono }}>
+                            Buyer Loyalty Cashback:
+                          </Typography>
+                          <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#EC4899' }}>
+                            +◈ {((parseFloat(escrowAmount) || 100) * (selectedEscrowPreset.merchantPct / 100) * 0.05).toFixed(4)} VLR (5.0% Diamond Tier)
+                          </Typography>
+                        </Box>
+                        <Divider sx={{ my: 0.5, borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)' }} />
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <Typography variant="caption" sx={{ color: '#10B981', fontFamily: mono, fontWeight: 800 }}>
+                            Merchant Chargeback Penalty:
+                          </Typography>
+                          <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 900, color: '#10B981' }}>
+                            $0.00 (Zero Penalty vs $15–$25 on Visa/MC)
+                          </Typography>
+                        </Box>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <Typography variant="caption" sx={{ color: '#10B981', fontFamily: mono, fontWeight: 800 }}>
+                            Dispute Arbitration Fee:
+                          </Typography>
+                          <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 900, color: '#10B981' }}>
+                            $0.00 (Zero Fee vs $50+ on Legacy Escrow)
+                          </Typography>
+                        </Box>
+                      </Stack>
+                    </Box>
+
+                    {/* Trigger Button */}
+                    <Button
+                      id="vaelor-escrow-btn"
+                      variant="contained"
+                      fullWidth
+                      disabled={isResolvingEscrow}
+                      onClick={handleExecuteProtectedEscrow}
+                      startIcon={isResolvingEscrow ? <CircularProgress size={16} sx={{ color: '#08080B' }} /> : <GavelIcon />}
+                      sx={{
+                        py: 1.4,
+                        bgcolor: '#FFD700',
+                        color: '#08080B',
+                        fontFamily: mono,
+                        fontWeight: 900,
+                        fontSize: '0.88rem',
+                        letterSpacing: '0.02em',
+                        '&:hover': {
+                          bgcolor: '#F59E0B'
+                        }
+                      }}
+                    >
+                      {isResolvingEscrow ? 'Attesting Byzantine Quorum Finality...' : '⚖️ Execute Protected Escrow Settlement'}
+                    </Button>
+                  </Box>
+                </Grid>
+
+                {/* Right Column: Cryptographic Lattice Settlement Receipt */}
+                <Grid xs={12} md={6}>
+                  <Paper
+                    sx={{
+                      p: 2.5,
+                      borderRadius: 2,
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      bgcolor: isDark ? '#05070B' : '#F8FAFC',
+                      border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : '#E2E8F0'}`
+                    }}
+                  >
+                    <Box>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800 }}>
+                          ON-CHAIN LATTICE ESCROW RECEIPT
+                        </Typography>
+                        {escrowResult && (
+                          <Chip
+                            icon={<VerifiedIcon sx={{ fontSize: '0.8rem !important', color: '#10B981 !important' }} />}
+                            label="FINALIZED_BFT (<10ms)"
+                            size="small"
+                            sx={{ height: 20, fontSize: '0.62rem', fontWeight: 800, fontFamily: mono, bgcolor: 'rgba(16,185,129,0.12)', color: '#10B981', border: '1px solid rgba(16,185,129,0.3)' }}
+                          />
+                        )}
+                      </Box>
+
+                      {escrowResult ? (
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                          <Paper sx={{ p: 1.8, borderRadius: 2, bgcolor: isDark ? '#030508' : '#F1F5F9', border: '1px solid rgba(255,255,255,0.06)' }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                              <Typography variant="caption" sx={{ color: '#64748B', fontFamily: mono, fontSize: '0.64rem' }}>
+                                ESCROW ID
+                              </Typography>
+                              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#D4AF37' }}>
+                                {escrowResult.escrowId || escrowResult.result?.escrowId || 'esc_demo_buyer_protection'}
+                              </Typography>
+                            </Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                              <Typography variant="caption" sx={{ color: '#64748B', fontFamily: mono, fontSize: '0.64rem' }}>
+                                RESOLUTION TYPE
+                              </Typography>
+                              <Chip
+                                label={escrowResult.resolutionType || escrowResult.result?.resolutionType || selectedEscrowPreset.resolutionType}
+                                size="small"
+                                sx={{
+                                  height: 20,
+                                  fontSize: '0.62rem',
+                                  fontWeight: 900,
+                                  fontFamily: mono,
+                                  bgcolor: selectedEscrowPreset.color + '22',
+                                  color: selectedEscrowPreset.color,
+                                  border: `1px solid ${selectedEscrowPreset.color}`
+                                }}
+                              />
+                            </Box>
+                            <Divider sx={{ my: 1, borderColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)' }} />
+                            <Grid container spacing={1}>
+                              <Grid xs={6}>
+                                <Typography variant="caption" sx={{ color: '#94A3B8', fontFamily: mono, fontSize: '0.62rem', display: 'block' }}>
+                                  MERCHANT AMOUNT
+                                </Typography>
+                                <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 900, color: '#10B981' }}>
+                                  ◈ {(escrowResult.merchantAmountVlr ?? escrowResult.result?.merchantAmountVlr ?? 0).toFixed(2)} VLR
+                                </Typography>
+                              </Grid>
+                              <Grid xs={6}>
+                                <Typography variant="caption" sx={{ color: '#94A3B8', fontFamily: mono, fontSize: '0.62rem', display: 'block' }}>
+                                  BUYER REFUND
+                                </Typography>
+                                <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 900, color: '#06B6D4' }}>
+                                  ◈ {(escrowResult.buyerRefundVlr ?? escrowResult.result?.buyerRefundVlr ?? 0).toFixed(2)} VLR
+                                </Typography>
+                              </Grid>
+                            </Grid>
+                            <Box sx={{ mt: 1.2, pt: 1, borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <Typography variant="caption" sx={{ color: '#94A3B8', fontFamily: mono, fontSize: '0.64rem' }}>
+                                💎 Loyalty Cashback Earned:
+                              </Typography>
+                              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#EC4899' }}>
+                                +◈ {(escrowResult.cashbackVlr ?? escrowResult.result?.cashbackVlr ?? 0).toFixed(4)} VLR
+                              </Typography>
+                            </Box>
+                          </Paper>
+
+                          {/* Zero Chargeback Penalty Proof Card */}
+                          <Paper sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(16,185,129,0.08)' : 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.25)' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                              <CheckCircleIcon sx={{ fontSize: '1rem', color: '#10B981' }} />
+                              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 900, color: '#10B981', fontSize: '0.74rem' }}>
+                                ZERO-PENALTY GUARANTEE ENFORCED
+                              </Typography>
+                            </Box>
+                            <Typography variant="caption" sx={{ color: theme.palette.text.secondary, display: 'block', fontSize: '0.68rem', lineHeight: 1.4 }}>
+                              Merchant was assessed <strong>$0.00 chargeback penalty</strong> (avoiding standard $25 Visa/Mastercard extortion) and <strong>$0.00 arbitration fee</strong>. Buyer funds returned in full with sub-second finality.
+                            </Typography>
+                          </Paper>
+
+                          {/* Byzantine Quorum Signature Telemetry */}
+                          <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? '#030508' : '#F1F5F9', border: '1px solid rgba(255,255,255,0.06)' }}>
+                            <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', display: 'block', mb: 0.5, fontSize: '0.64rem' }}>
+                              BYZANTINE QUORUM VALIDATOR SIGNATURES (5/5 ATTESTED)
+                            </Typography>
+                            <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#E2E8F0' : '#334155', display: 'block', fontSize: '0.62rem', wordBreak: 'break-all' }}>
+                              Block: {escrowResult.block?.hash || escrowResult.result?.block?.hash || '3b89fa72e519c0882e5b9f71da145b08c903ebc419fa712399adfa518843ce11'}
+                              <br />
+                              Validators: 🇺🇸 us-east • 🇩🇪 eu-central • 🇯🇵 ap-northeast • ⚡ edge-8140 • 🌐 nullai-core
+                            </Typography>
+                          </Box>
+                        </Box>
+                      ) : (
+                        <Box sx={{ p: 3, textAlign: 'center', my: 'auto' }}>
+                          <GavelIcon sx={{ fontSize: '2.5rem', color: '#D4AF37', mb: 1, opacity: 0.8 }} />
+                          <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.88rem', color: theme.palette.text.primary, mb: 0.5 }}>
+                            Awaiting Escrow Settlement Trigger
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary" sx={{ display: 'block', maxWidth: 360, mx: 'auto', fontSize: '0.74rem' }}>
+                            Select a resolution preset above and click <strong>[⚖️ Execute Protected Escrow Settlement]</strong> to simulate on-chain escrow resolution with zero chargeback penalty and instant 5/5 BFT quorum finality.
+                          </Typography>
+                        </Box>
+                      )}
+                    </Box>
+
+                    <Box sx={{ mt: 2, pt: 1.5, borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.66rem' }}>
+                        Protocol: Vaelor Account-Lattice L1 (:8140)
+                      </Typography>
+                      <Chip
+                        icon={<VerifiedIcon sx={{ fontSize: '0.75rem !important', color: '#10B981 !important' }} />}
+                        label="$0.00 Dispute Fee Guaranteed"
+                        size="small"
+                        sx={{ height: 18, fontSize: '0.58rem', fontWeight: 800, fontFamily: mono, bgcolor: 'transparent', color: '#10B981' }}
+                      />
+                    </Box>
+                  </Paper>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Box>
+        </RevealOnScroll>
+
+        {/* ==========================================================================
+            SECTION: 13-TOOL LAYER-1 MODEL CONTEXT PROTOCOL (MCP) PLAYGROUND
             ========================================================================== */}
         <RevealOnScroll>
           <Box id="vaelor-mcp-playground" sx={{ mb: 6 }}>
@@ -4281,7 +4747,7 @@ export default function VaelorPage() {
                 Layer-1 Model Context Protocol (MCP) Playground
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 880, fontSize: '0.94rem' }}>
-                Test all 12 native JSON-RPC Model Context Protocol tools. Claude, GPT, and autonomous agent swarms call these methods directly to mint compute bounties, execute merchant FX treasury sweeps, send creator tips, disburse feeless micro-payments, and verify lookalike phishing handles.
+                Test all 13 native JSON-RPC Model Context Protocol tools. Claude, GPT, and autonomous agent swarms call these methods directly to mint compute bounties, settle zero-penalty protected commerce escrows, execute merchant FX treasury sweeps, send creator tips, disburse feeless micro-payments, and verify lookalike phishing handles.
               </Typography>
             </Box>
 

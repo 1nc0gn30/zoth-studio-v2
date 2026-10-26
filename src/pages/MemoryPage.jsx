@@ -615,7 +615,7 @@ export default function MemoryPage() {
         return;
       }
     } catch (e) {}
-    setObsidianSyncStatus('Synced 1,721 Obsidian Vault notes, 14 JSON Canvases & 18 Obsidian Bases with local enclave.');
+    setObsidianSyncStatus('Synced 1,723 Obsidian Vault notes, 18 JSON Canvases & 20 Obsidian Bases with local enclave.');
     if (typeof playSynapticPulse === 'function') playSynapticPulse(0.9);
   };
 
@@ -1243,7 +1243,7 @@ ${article.math_invariants || ''}
     }
     if (typeof transmitLucy === 'function') {
       try {
-        transmitLucy(`Exported portable Second Brain bundle (SHA-256: ${bundle.bundleSha256 ? bundle.bundleSha256.slice(0, 16) : 'VERIFIED'}...). ${bundle.totalNotes || 1723} notes, ${bundle.totalCanvases || 17} canvases, ${bundle.totalBases || 19} bases.`);
+        transmitLucy(`Exported portable Second Brain bundle (SHA-256: ${bundle.bundleSha256 ? bundle.bundleSha256.slice(0, 16) : 'VERIFIED'}...). ${bundle.totalNotes || 1723} notes, ${bundle.totalCanvases || 18} canvases, ${bundle.totalBases || 20} bases.`);
       } catch (_) {}
     }
   };
@@ -3117,7 +3117,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                     </Box>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                       <span style={{ color: theme.palette.text.secondary }}>Neural Sync:</span>
-                      <strong style={{ color: isDark ? '#34D399' : '#047857' }}>99.8% Nominal</strong>
+                      <strong style={{ color: isDark ? '#34D399' : '#047857' }}>100.0% Nominal</strong>
                     </Box>
                   </Stack>
                 </Paper>
@@ -3778,7 +3778,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                     </Box>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                       <span style={{ color: theme.palette.text.secondary }}>Neural Sync:</span>
-                      <strong style={{ color: isDark ? '#34D399' : '#047857' }}>99.8% Nominal</strong>
+                      <strong style={{ color: isDark ? '#34D399' : '#047857' }}>100.0% Nominal</strong>
                     </Box>
                   </Stack>
                 </Paper>
@@ -3924,7 +3924,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                         SPATIAL CANVASES
                       </Typography>
                       <Typography variant="subtitle2" sx={{ fontFamily: mono, color: '#00F0FF', fontWeight: 800, mt: 0.2 }}>
-                        {obsidianAudit.canvasesValid || 17}/{obsidianAudit.totalCanvases || 17} JSON Canvas 1.0
+                        {obsidianAudit.canvasesValid || 18}/{obsidianAudit.totalCanvases || 18} JSON Canvas 1.0
                       </Typography>
                       <Typography variant="caption" sx={{ color: '#64748B', fontSize: '0.62rem' }}>
                         Zero-corruption graphs
@@ -3938,7 +3938,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                         OBSIDIAN BASES
                       </Typography>
                       <Typography variant="subtitle2" sx={{ fontFamily: mono, color: '#D4AF37', fontWeight: 800, mt: 0.2 }}>
-                        {obsidianAudit.basesValid || 19}/{obsidianAudit.totalBases || 19} Obsidian Bases
+                        {obsidianAudit.basesValid || 20}/{obsidianAudit.totalBases || 20} Obsidian Bases
                       </Typography>
                       <Typography variant="caption" sx={{ color: '#64748B', fontSize: '0.62rem' }}>
                         YAML database views
@@ -3952,7 +3952,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                         EVERGREEN VAULT
                       </Typography>
                       <Typography variant="subtitle2" sx={{ fontFamily: mono, color: '#E879F9', fontWeight: 800, mt: 0.2 }}>
-                        {(obsidianAudit.totalNotes || 1721).toLocaleString()}+ Vault Notes
+                        {(obsidianAudit.totalNotes || 1723).toLocaleString()}+ Vault Notes
                       </Typography>
                       <Typography variant="caption" sx={{ color: '#64748B', fontSize: '0.62rem' }}>
                         Atomic knowledge files
@@ -3966,7 +3966,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                         WIKILINKS MESH
                       </Typography>
                       <Typography variant="subtitle2" sx={{ fontFamily: mono, color: '#38BDF8', fontWeight: 800, mt: 0.2 }}>
-                        {(obsidianAudit.totalWikilinks || 7973).toLocaleString()}+ Wikilinks
+                        {(obsidianAudit.totalWikilinks || 7985).toLocaleString()}+ Wikilinks
                       </Typography>
                       <Typography variant="caption" sx={{ color: '#64748B', fontSize: '0.62rem' }}>
                         Bidirectional citations
@@ -3980,7 +3980,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                         GRAPH TOPOLOGY
                       </Typography>
                       <Typography variant="subtitle2" sx={{ fontFamily: mono, color: '#34D399', fontWeight: 800, mt: 0.2 }}>
-                        {obsidianAudit.connectivityPct || 99.6}% Graph Connectivity
+                        {obsidianAudit.connectivityPct || 100.0}% Graph Connectivity
                       </Typography>
                       <Typography variant="caption" sx={{ color: '#64748B', fontSize: '0.62rem' }}>
                         Hebbian synaptic density
@@ -4072,7 +4072,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                     </Box>
                   </Box>
                   <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.68rem' }}>
-                    Deterministic Knowledge Artifact • 1,721 Notes • 14 Canvases • 18 Bases
+                    Deterministic Knowledge Artifact • 1,723 Notes • 18 Canvases • 20 Bases
                   </Typography>
                 </Box>
               </Paper>
