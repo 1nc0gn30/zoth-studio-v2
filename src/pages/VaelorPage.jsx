@@ -3,7 +3,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import {
   Box, Container, Typography, Chip, Paper, Button, TextField,
   Unstable_Grid2 as Grid, Table, TableBody, TableCell, TableHead,
-  TableRow, Stack, Divider, Alert, CircularProgress, IconButton, Tooltip
+  TableRow, Stack, Divider, Alert, CircularProgress, IconButton, Tooltip,
+  LinearProgress
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import BoltIcon from '@mui/icons-material/Bolt';
@@ -32,6 +33,12 @@ import PieChartIcon from '@mui/icons-material/PieChart';
 import LockResetIcon from '@mui/icons-material/LockReset';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
+import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
+import AcUnitIcon from '@mui/icons-material/AcUnit';
+import WhatshotIcon from '@mui/icons-material/Whatshot';
+import QrCodeIcon from '@mui/icons-material/QrCode';
+import NfcIcon from '@mui/icons-material/Nfc';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import VaelorLatticeVisualizer from '../components/VaelorLatticeVisualizer';
 import SovereignFunnel from '../components/SovereignFunnel';
@@ -49,7 +56,10 @@ import {
   createVaelorGroupTabFallback,
   rotateVaelorGuardianRecoveryFallback,
   pingVaelorInheritanceHeartbeatFallback,
-  sendVaelorShieldedTransferFallback
+  sendVaelorShieldedTransferFallback,
+  postVaelorBountyFallback,
+  spendVaelorSubaccountFallback,
+  issueVaelorVoucherFallback
 } from '../data/obsidianWikiData';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -591,6 +601,215 @@ export default function VaelorPage() {
 
     setShieldedResult(resData);
     setIsSendingShielded(false);
+  };
+
+  // Autonomous AI Agent M2M Bounty Exchange State
+  const BOUNTY_PRESETS = [
+    {
+      title: 'AEO Schema Audit',
+      reward: 25,
+      category: 'AI & Search',
+      proofType: 'SHA256_AST_PROOF',
+      description: 'Audit JSON-LD WebApplication schema and verify 0-lag crawl availability across GPTBot, ClaudeBot, and Googlebot.'
+    },
+    {
+      title: 'STDP Graph Indexing',
+      reward: 40,
+      category: 'Neural Memory',
+      proofType: 'COSINE_EMBEDDING_PROOF',
+      description: 'Compute directional synaptic LTP/LTD weight transitions on live 3D memory engrams.'
+    },
+    {
+      title: 'CodeQL Security Scan',
+      reward: 15,
+      category: 'Code Security',
+      proofType: 'SARIF_ATTESTATION_PROOF',
+      description: 'Execute static taint analysis and passkey cryptographic invariant checks.'
+    }
+  ];
+  const [selectedBountyPreset, setSelectedBountyPreset] = useState(BOUNTY_PRESETS[0]);
+  const [isPostingBounty, setIsPostingBounty] = useState(false);
+  const [bountyResult, setBountyResult] = useState(null);
+
+  const handlePostAndSettleBounty = async () => {
+    if (isPostingBounty) return;
+    setIsPostingBounty(true);
+    let resData = null;
+    try {
+      const postRes = await fetch('http://127.0.0.1:8140/api/bounties', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          poster: '@neal',
+          title: selectedBountyPreset.title,
+          category: selectedBountyPreset.category,
+          rewardAmount: selectedBountyPreset.reward,
+          requiredProofType: selectedBountyPreset.proofType,
+          description: selectedBountyPreset.description
+        })
+      });
+      if (postRes.ok) {
+        const postJson = await postRes.json();
+        if (postJson && postJson.ok && postJson.bounty?.id) {
+          const settleRes = await fetch(`http://127.0.0.1:8140/api/bounties/${postJson.bounty.id}/settle`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              claimant: '@zoth',
+              deliverableSummary: `Verified ${selectedBountyPreset.title} execution payload`,
+              deliverablePayload: JSON.stringify({ score: 100, proof: selectedBountyPreset.proofType, verifiedAt: new Date().toISOString() })
+            })
+          });
+          if (settleRes.ok) {
+            const settleJson = await settleRes.json();
+            if (settleJson && settleJson.ok) {
+              resData = {
+                ok: true,
+                bounty: settleJson.bounty,
+                settleBlock: settleJson.settleBlock,
+                postBlock: postJson.postBlock
+              };
+            }
+          }
+        }
+      }
+    } catch (_) {}
+
+    if (!resData) {
+      resData = postVaelorBountyFallback({
+        poster: '@neal',
+        claimant: '@zoth',
+        title: selectedBountyPreset.title,
+        category: selectedBountyPreset.category,
+        rewardAmount: selectedBountyPreset.reward,
+        requiredProofType: selectedBountyPreset.proofType,
+        description: selectedBountyPreset.description
+      });
+    }
+
+    setBountyResult(resData);
+    setIsPostingBounty(false);
+  };
+
+  // Delegated AI Virtual Card State
+  const [virtualCardData, setVirtualCardData] = useState({
+    id: 'sub_hermes_ai_01',
+    parentHandle: '@zoth',
+    subHandle: '@zoth.hermes01',
+    label: 'Hermes Autonomous AI Compute Agent',
+    dailyLimitVlr: 50.00,
+    spentTodayVlr: 12.50,
+    remainingTodayVlr: 37.50,
+    utilizationPct: 25,
+    isFrozen: false
+  });
+  const [isAuthorizingVirtualCard, setIsAuthorizingVirtualCard] = useState(false);
+  const [virtualCardSpendAmount, setVirtualCardSpendAmount] = useState('12.50');
+  const [virtualCardSpendResult, setVirtualCardSpendResult] = useState(null);
+  const [isVirtualCardFrozen, setIsVirtualCardFrozen] = useState(false);
+
+  const handleToggleVirtualCardFreeze = async () => {
+    const nextFrozen = !isVirtualCardFrozen;
+    setIsVirtualCardFrozen(nextFrozen);
+    setVirtualCardData(prev => ({ ...prev, isFrozen: nextFrozen }));
+    try {
+      await fetch('http://127.0.0.1:8140/api/subaccounts/sub_ff9bb625b5e313eb/freeze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ caller: '@zoth', frozen: nextFrozen })
+      });
+    } catch (_) {}
+  };
+
+  const handleAuthorizeVirtualCardSpend = async () => {
+    if (isAuthorizingVirtualCard || isVirtualCardFrozen) return;
+    setIsAuthorizingVirtualCard(true);
+    const amt = parseFloat(virtualCardSpendAmount) || 12.50;
+    let resData = null;
+    try {
+      const res = await fetch('http://127.0.0.1:8140/api/subaccounts/sub_ff9bb625b5e313eb/spend', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          recipient: '@sprig',
+          amount: amt,
+          memo: 'Hermes GPU inference quota',
+          category: 'AI & Compute'
+        })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json && json.ok) resData = json;
+      }
+    } catch (_) {}
+
+    if (!resData) {
+      resData = spendVaelorSubaccountFallback({
+        subAccountId: 'sub_hermes_ai_01',
+        parentHandle: '@zoth',
+        subHandle: '@zoth.hermes01',
+        label: 'Hermes Autonomous AI Compute Agent',
+        dailyLimitVlr: 50.00,
+        amount: amt,
+        recipient: '@sprig',
+        memo: 'Hermes GPU inference quota'
+      });
+    }
+
+    if (resData && resData.subAccount) {
+      setVirtualCardData(prev => ({
+        ...prev,
+        spentTodayVlr: resData.subAccount.spentTodayVlr !== undefined ? resData.subAccount.spentTodayVlr : +(prev.spentTodayVlr + amt).toFixed(2),
+        remainingTodayVlr: resData.remainingTodayVlr !== undefined ? resData.remainingTodayVlr : Math.max(0, +(prev.remainingTodayVlr - amt).toFixed(2)),
+        utilizationPct: resData.subAccount.utilizationPct !== undefined ? resData.subAccount.utilizationPct : Math.min(100, Math.round(((prev.spentTodayVlr + amt) / prev.dailyLimitVlr) * 100))
+      }));
+    }
+    setVirtualCardSpendResult(resData);
+    setIsAuthorizingVirtualCard(false);
+  };
+
+  // Offline Tap-to-Pay Bearer Voucher State
+  const [voucherAmount, setVoucherAmount] = useState('20.00');
+  const [voucherPin, setVoucherPin] = useState('7570');
+  const [voucherMemo, setVoucherMemo] = useState('Sub-surface peer mesh token');
+  const [isMintingVoucher, setIsMintingVoucher] = useState(false);
+  const [voucherResult, setVoucherResult] = useState(null);
+
+  const handleMintOfflineVoucher = async () => {
+    if (isMintingVoucher) return;
+    setIsMintingVoucher(true);
+    const amt = parseFloat(voucherAmount) || 20.0;
+    let resData = null;
+    try {
+      const res = await fetch('http://127.0.0.1:8140/api/vouchers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          issuer: '@neal',
+          amount: amt,
+          claimSecret: voucherPin,
+          memo: voucherMemo,
+          expiresInHours: 72
+        })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json && json.ok) resData = json;
+      }
+    } catch (_) {}
+
+    if (!resData) {
+      resData = issueVaelorVoucherFallback({
+        issuer: '@neal',
+        amount: amt,
+        claimSecret: voucherPin,
+        memo: voucherMemo,
+        expiresInHours: 72
+      });
+    }
+
+    setVoucherResult(resData);
+    setIsMintingVoucher(false);
   };
 
   return (
@@ -2284,6 +2503,597 @@ export default function VaelorPage() {
                         Auditor View-Key: <code>{(shieldedResult.viewKey || 'vk_0d742b..').slice(0, 18)}...</code>
                         <br />
                         Block: <code>{(shieldedResult.sendBlock?.hash || 'b000c2..').slice(0, 14)}...</code> (0 Plaintext Leak)
+                      </Typography>
+                    </Paper>
+                  )}
+                </Paper>
+              </Grid>
+            </Grid>
+          </Box>
+        </RevealOnScroll>
+
+        {/* ==========================================================================
+            SECTION: AI AGENT M2M BOUNTY, DELEGATED VIRTUAL CARDS & BEARER VOUCHER SIM
+            ========================================================================== */}
+        <RevealOnScroll>
+          <Box id="vaelor-agent-fintech-sim" sx={{ mb: 6 }}>
+            <Box sx={{ mb: 3 }}>
+              <Typography className="section-kicker">Autonomous Fintech &amp; Agent Economy</Typography>
+              <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif', mb: 1 }}>
+                AI M2M Bounties, Delegated Virtual Cards &amp; Offline Bearer Vouchers
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 880, fontSize: '0.94rem' }}>
+                Test machine-to-machine smart bounties settled with cryptographic SHA-256 AST proofs, manage spend-capped delegated sub-account virtual cards with 1-click freeze protection, and mint offline NFC/QR bearer vouchers operable without internet connectivity.
+              </Typography>
+            </Box>
+
+            <Grid container spacing={3}>
+              {/* Card 1: AI Agent M2M Micro-Contract & Bounty Exchange */}
+              <Grid xs={12} lg={4}>
+                <Paper
+                  sx={{
+                    p: { xs: 2.5, md: 3 },
+                    borderRadius: 3,
+                    border: `1.5px solid ${gold.border}`,
+                    bgcolor: isDark ? '#08080E' : '#FFFFFF',
+                    boxShadow: isDark ? '0 12px 36px rgba(0,0,0,0.6)' : '0 6px 20px rgba(0,0,0,0.06)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100%'
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 2,
+                        bgcolor: gold.wash,
+                        border: `1px solid ${gold.border}`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      <SmartToyIcon sx={{ color: gold.accent, fontSize: '1.4rem' }} />
+                    </Box>
+                    <Box>
+                      <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: '"Syne", sans-serif', fontSize: '1.05rem', lineHeight: 1.2 }}>
+                        M2M Bounty Exchange
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono, fontSize: '0.72rem' }}>
+                        BOUNTY_POST • BOUNTY_SETTLE
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5, fontSize: '0.85rem', flexGrow: 0 }}>
+                    AI agents post machine-to-machine task contracts with deterministic escrow rewards, settled automatically upon verifiable SHA-256 deliverable payload attestation.
+                  </Typography>
+
+                  {/* Preset Selector */}
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800, display: 'block', mb: 1, letterSpacing: '0.04em' }}>
+                      SELECT CONTRACT PRESET
+                    </Typography>
+                    <Stack spacing={1}>
+                      {BOUNTY_PRESETS.map((p) => {
+                        const isSelected = selectedBountyPreset.title === p.title;
+                        return (
+                          <Paper
+                            key={p.title}
+                            onClick={() => setSelectedBountyPreset(p)}
+                            sx={{
+                              p: 1.2,
+                              borderRadius: 2,
+                              cursor: 'pointer',
+                              border: `1px solid ${isSelected ? gold.accent : (isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)')}`,
+                              bgcolor: isSelected ? (isDark ? 'rgba(212,175,55,0.1)' : '#FEF9C3') : 'transparent',
+                              transition: 'all 0.2s ease',
+                              '&:hover': {
+                                borderColor: gold.accent,
+                                bgcolor: isDark ? 'rgba(212,175,55,0.06)' : '#FEF9C3'
+                              }
+                            }}
+                          >
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <Typography variant="subtitle2" sx={{ fontWeight: 800, fontSize: '0.82rem' }}>
+                                {p.title}
+                              </Typography>
+                              <Chip
+                                label={`${p.reward} ◈`}
+                                size="small"
+                                sx={{
+                                  fontFamily: mono,
+                                  fontWeight: 900,
+                                  bgcolor: isSelected ? gold.accent : (isDark ? 'rgba(255,255,255,0.08)' : '#E2E8F0'),
+                                  color: isSelected ? '#08080B' : theme.palette.text.primary,
+                                  fontSize: '0.72rem',
+                                  height: 20
+                                }}
+                              />
+                            </Box>
+                            <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem', display: 'block', mt: 0.3 }}>
+                              {p.description}
+                            </Typography>
+                          </Paper>
+                        );
+                      })}
+                    </Stack>
+                  </Box>
+
+                  {/* Contract Spec Box */}
+                  <Box
+                    sx={{
+                      p: 1.5,
+                      borderRadius: 2,
+                      bgcolor: isDark ? 'rgba(0,0,0,0.4)' : '#F8FAFC',
+                      border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
+                      mb: 2.5
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.72rem' }}>
+                        Poster:
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: gold.accent, fontSize: '0.72rem' }}>
+                        @neal (Founder Core)
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.72rem' }}>
+                        Settles To:
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: '#10B981', fontSize: '0.72rem' }}>
+                        @zoth (Autonomous Agent)
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.72rem' }}>
+                        Required Proof:
+                      </Typography>
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: '#38BDF8', fontSize: '0.72rem' }}>
+                        {selectedBountyPreset.proofType}
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Button
+                    id="vaelor-bounty-btn"
+                    variant="contained"
+                    fullWidth
+                    onClick={handlePostAndSettleBounty}
+                    disabled={isPostingBounty}
+                    startIcon={isPostingBounty ? <CircularProgress size={16} color="inherit" /> : <SmartToyIcon />}
+                    sx={{
+                      py: 1.2,
+                      fontWeight: 900,
+                      fontFamily: mono,
+                      fontSize: '0.82rem',
+                      borderRadius: 2,
+                      bgcolor: gold.accent,
+                      color: '#08080B',
+                      boxShadow: `0 4px 16px ${gold.glow}`,
+                      '&:hover': {
+                        bgcolor: '#E5C158',
+                        boxShadow: `0 6px 20px ${gold.glow}`
+                      },
+                      mt: 'auto'
+                    }}
+                  >
+                    {isPostingBounty ? 'Executing M2M Settle...' : '🤖 Post & Settle M2M Bounty'}
+                  </Button>
+
+                  {/* Bounty Execution Result */}
+                  {bountyResult && (
+                    <Paper
+                      sx={{
+                        mt: 2,
+                        p: 1.5,
+                        borderRadius: 2,
+                        bgcolor: isDark ? 'rgba(16,185,129,0.08)' : '#ECFDF5',
+                        border: '1px solid rgba(16,185,129,0.3)'
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.8 }}>
+                        <CheckCircleIcon sx={{ color: '#10B981', fontSize: '1.1rem' }} />
+                        <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 900, color: '#10B981', fontSize: '0.76rem' }}>
+                          M2M CONTRACT SETTLED • 0 FEE
+                        </Typography>
+                      </Box>
+                      <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.7rem', color: isDark ? '#E2E8F0' : '#1E293B', lineHeight: 1.5 }}>
+                        Bounty ID: <code>{bountyResult.bounty?.id || 'bty_...'}</code>
+                        <br />
+                        Proof: <code>{(bountyResult.bounty?.deliverableProofHash || 'prf_ef17c4..').slice(0, 18)}...</code> (AST Verified)
+                        <br />
+                        Feeless Reward: <code>{bountyResult.bounty?.rewardVlr || selectedBountyPreset.reward} ◈ VLR</code> → <code>@zoth</code>
+                        <br />
+                        BFT Quorum: <code>5/5 Validators Finalized</code>
+                      </Typography>
+                    </Paper>
+                  )}
+                </Paper>
+              </Grid>
+
+              {/* Card 2: Delegated AI & Team Virtual Cards */}
+              <Grid xs={12} lg={4}>
+                <Paper
+                  sx={{
+                    p: { xs: 2.5, md: 3 },
+                    borderRadius: 3,
+                    border: `1.5px solid ${gold.border}`,
+                    bgcolor: isDark ? '#08080E' : '#FFFFFF',
+                    boxShadow: isDark ? '0 12px 36px rgba(0,0,0,0.6)' : '0 6px 20px rgba(0,0,0,0.06)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100%'
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 2,
+                        bgcolor: gold.wash,
+                        border: `1px solid ${gold.border}`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      <CreditCardIcon sx={{ color: gold.accent, fontSize: '1.4rem' }} />
+                    </Box>
+                    <Box>
+                      <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: '"Syne", sans-serif', fontSize: '1.05rem', lineHeight: 1.2 }}>
+                        Delegated Virtual Cards
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono, fontSize: '0.72rem' }}>
+                        SUBACCOUNT_CREATE • SUBACCOUNT_SPEND
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2, fontSize: '0.85rem', flexGrow: 0 }}>
+                    Issue cryptographic child sub-accounts with strict daily spend allowances, policy rules, and instant 1-click sovereign freeze controls for autonomous agents.
+                  </Typography>
+
+                  {/* Virtual Card Graphic */}
+                  <Paper
+                    sx={{
+                      p: 2,
+                      borderRadius: 2.5,
+                      border: `1.5px solid ${isVirtualCardFrozen ? 'rgba(239,68,68,0.5)' : gold.border}`,
+                      background: isVirtualCardFrozen
+                        ? 'linear-gradient(135deg, #1e1014 0%, #11080b 100%)'
+                        : isDark
+                          ? 'linear-gradient(135deg, #13141f 0%, #0d0e14 100%)'
+                          : 'linear-gradient(135deg, #F8FAFC 0%, #E2E8F0 100%)',
+                      boxShadow: isVirtualCardFrozen
+                        ? '0 8px 24px rgba(239,68,68,0.2)'
+                        : `0 8px 24px ${gold.wash}`,
+                      mb: 2,
+                      position: 'relative',
+                      overflow: 'hidden'
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1.5 }}>
+                      <Box>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.68rem', letterSpacing: '0.05em' }}>
+                          DELEGATED VIRTUAL CARD
+                        </Typography>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif', fontSize: '0.9rem', color: theme.palette.text.primary }}>
+                          {virtualCardData.label}
+                        </Typography>
+                      </Box>
+                      <Chip
+                        label={isVirtualCardFrozen ? 'FROZEN' : 'ACTIVE'}
+                        size="small"
+                        icon={isVirtualCardFrozen ? <AcUnitIcon sx={{ fontSize: '0.85rem !important' }} /> : <CheckCircleIcon sx={{ fontSize: '0.85rem !important' }} />}
+                        sx={{
+                          fontFamily: mono,
+                          fontWeight: 900,
+                          fontSize: '0.68rem',
+                          height: 22,
+                          bgcolor: isVirtualCardFrozen ? 'rgba(239,68,68,0.2)' : 'rgba(16,185,129,0.2)',
+                          color: isVirtualCardFrozen ? '#EF4444' : '#10B981',
+                          border: `1px solid ${isVirtualCardFrozen ? '#EF4444' : '#10B981'}`
+                        }}
+                      />
+                    </Box>
+
+                    <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, fontSize: '0.82rem', color: gold.accent, mb: 1.2 }}>
+                      <code>sub_hermes_ai_01</code>
+                    </Typography>
+
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                      <Box>
+                        <Typography variant="caption" sx={{ color: '#94A3B8', fontSize: '0.68rem', display: 'block' }}>
+                          Parent Handle
+                        </Typography>
+                        <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: theme.palette.text.primary, fontSize: '0.78rem' }}>
+                          @zoth
+                        </Typography>
+                      </Box>
+                      <Box sx={{ textAlign: 'right' }}>
+                        <Typography variant="caption" sx={{ color: '#94A3B8', fontSize: '0.68rem', display: 'block' }}>
+                          Daily Limit / Remaining
+                        </Typography>
+                        <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: theme.palette.text.primary, fontSize: '0.78rem' }}>
+                          {virtualCardData.remainingTodayVlr.toFixed(2)} ◈ / {virtualCardData.dailyLimitVlr.toFixed(2)} ◈
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    {/* Progress Bar */}
+                    <Box sx={{ mb: 1 }}>
+                      <LinearProgress
+                        variant="determinate"
+                        value={virtualCardData.utilizationPct}
+                        sx={{
+                          height: 6,
+                          borderRadius: 3,
+                          bgcolor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
+                          '& .MuiLinearProgress-bar': {
+                            bgcolor: isVirtualCardFrozen ? '#EF4444' : virtualCardData.utilizationPct > 80 ? '#F59E0B' : '#10B981'
+                          }
+                        }}
+                      />
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 0.5 }}>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.65rem' }}>
+                          Utilization: {virtualCardData.utilizationPct}%
+                        </Typography>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.65rem' }}>
+                          Spent Today: {virtualCardData.spentTodayVlr.toFixed(2)} ◈
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </Paper>
+
+                  {/* Freeze Toggle & Spend Control */}
+                  <Box sx={{ display: 'flex', gap: 1.5, mb: 2 }}>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={handleToggleVirtualCardFreeze}
+                      startIcon={isVirtualCardFrozen ? <WhatshotIcon sx={{ color: '#F59E0B' }} /> : <AcUnitIcon sx={{ color: '#38BDF8' }} />}
+                      sx={{
+                        flex: 1,
+                        fontFamily: mono,
+                        fontSize: '0.75rem',
+                        fontWeight: 800,
+                        py: 0.8,
+                        borderColor: isVirtualCardFrozen ? '#F59E0B' : 'rgba(56,189,248,0.5)',
+                        color: isVirtualCardFrozen ? '#F59E0B' : '#38BDF8',
+                        '&:hover': {
+                          borderColor: isVirtualCardFrozen ? '#F59E0B' : '#38BDF8',
+                          bgcolor: isVirtualCardFrozen ? 'rgba(245,158,11,0.08)' : 'rgba(56,189,248,0.08)'
+                        }
+                      }}
+                    >
+                      {isVirtualCardFrozen ? 'Unfreeze Card' : 'Instant Freeze'}
+                    </Button>
+                    <TextField
+                      size="small"
+                      label="Spend (◈ VLR)"
+                      value={virtualCardSpendAmount}
+                      onChange={(e) => setVirtualCardSpendAmount(e.target.value)}
+                      disabled={isVirtualCardFrozen}
+                      sx={{
+                        width: 130,
+                        '& input': { fontFamily: mono, fontSize: '0.82rem', fontWeight: 700 }
+                      }}
+                    />
+                  </Box>
+
+                  <Button
+                    id="vaelor-subaccount-btn"
+                    variant="contained"
+                    fullWidth
+                    onClick={handleAuthorizeVirtualCardSpend}
+                    disabled={isAuthorizingVirtualCard || isVirtualCardFrozen}
+                    startIcon={isAuthorizingVirtualCard ? <CircularProgress size={16} color="inherit" /> : <CreditCardIcon />}
+                    sx={{
+                      py: 1.2,
+                      fontWeight: 900,
+                      fontFamily: mono,
+                      fontSize: '0.82rem',
+                      borderRadius: 2,
+                      bgcolor: isVirtualCardFrozen ? 'rgba(255,255,255,0.1)' : gold.accent,
+                      color: isVirtualCardFrozen ? 'text.disabled' : '#08080B',
+                      boxShadow: isVirtualCardFrozen ? 'none' : `0 4px 16px ${gold.glow}`,
+                      '&:hover': {
+                        bgcolor: '#E5C158',
+                        boxShadow: `0 6px 20px ${gold.glow}`
+                      },
+                      mt: 'auto'
+                    }}
+                  >
+                    {isAuthorizingVirtualCard ? 'Authorizing Spend...' : '💳 Authorize Capped Virtual Card Spend'}
+                  </Button>
+
+                  {/* Virtual Card Spend Result */}
+                  {virtualCardSpendResult && (
+                    <Paper
+                      sx={{
+                        mt: 2,
+                        p: 1.5,
+                        borderRadius: 2,
+                        bgcolor: isDark ? 'rgba(16,185,129,0.08)' : '#ECFDF5',
+                        border: '1px solid rgba(16,185,129,0.3)'
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.8 }}>
+                        <CheckCircleIcon sx={{ color: '#10B981', fontSize: '1.1rem' }} />
+                        <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 900, color: '#10B981', fontSize: '0.76rem' }}>
+                          SPEND AUTHORIZED • SUBACCOUNT
+                        </Typography>
+                      </Box>
+                      <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.7rem', color: isDark ? '#E2E8F0' : '#1E293B', lineHeight: 1.5 }}>
+                        Authorized: <code>{virtualCardSpendAmount} ◈ VLR</code> → <code>@sprig</code>
+                        <br />
+                        Remaining Allowance: <code>{virtualCardData.remainingTodayVlr.toFixed(2)} ◈</code> / <code>50.00 ◈ VLR</code>
+                        <br />
+                        Policy: <code>Category 'AI & Compute' Verified</code>
+                        <br />
+                        Status: <code>FINALIZED_BFT (0 gas fee)</code>
+                      </Typography>
+                    </Paper>
+                  )}
+                </Paper>
+              </Grid>
+
+              {/* Card 3: Offline Tap-to-Pay Cryptographic Bearer Voucher */}
+              <Grid xs={12} lg={4}>
+                <Paper
+                  sx={{
+                    p: { xs: 2.5, md: 3 },
+                    borderRadius: 3,
+                    border: `1.5px solid ${gold.border}`,
+                    bgcolor: isDark ? '#08080E' : '#FFFFFF',
+                    boxShadow: isDark ? '0 12px 36px rgba(0,0,0,0.6)' : '0 6px 20px rgba(0,0,0,0.06)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100%'
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5 }}>
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 2,
+                        bgcolor: gold.wash,
+                        border: `1px solid ${gold.border}`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                    >
+                      <ConfirmationNumberIcon sx={{ color: gold.accent, fontSize: '1.4rem' }} />
+                    </Box>
+                    <Box>
+                      <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: '"Syne", sans-serif', fontSize: '1.05rem', lineHeight: 1.2 }}>
+                        Offline Tap-to-Pay Voucher
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono, fontSize: '0.72rem' }}>
+                        VOUCHER_ISSUE • NFC / QR BEARER
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5, fontSize: '0.85rem', flexGrow: 0 }}>
+                    Mint cryptographic offline bearer vouchers redeemable via NFC tap or QR scan. Protected with an optional SHA-256 PIN digest operable without internet.
+                  </Typography>
+
+                  {/* Voucher Form Fields */}
+                  <Stack spacing={2} sx={{ mb: 2.5 }}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      label="Voucher Face Value (◈ VLR)"
+                      value={voucherAmount}
+                      onChange={(e) => setVoucherAmount(e.target.value)}
+                      sx={{
+                        '& input': { fontFamily: mono, fontSize: '0.82rem', fontWeight: 700 }
+                      }}
+                    />
+                    <Box sx={{ display: 'flex', gap: 1.5 }}>
+                      <TextField
+                        size="small"
+                        label="PIN Lock Digest"
+                        value={voucherPin}
+                        onChange={(e) => setVoucherPin(e.target.value)}
+                        sx={{
+                          width: '45%',
+                          '& input': { fontFamily: mono, fontSize: '0.82rem', fontWeight: 700 }
+                        }}
+                      />
+                      <TextField
+                        size="small"
+                        label="Memo / Purpose"
+                        value={voucherMemo}
+                        onChange={(e) => setVoucherMemo(e.target.value)}
+                        sx={{
+                          width: '55%',
+                          '& input': { fontFamily: mono, fontSize: '0.82rem' }
+                        }}
+                      />
+                    </Box>
+                  </Stack>
+
+                  {/* Offline Capability Banner */}
+                  <Box
+                    sx={{
+                      p: 1.5,
+                      borderRadius: 2,
+                      bgcolor: isDark ? 'rgba(0,0,0,0.4)' : '#F8FAFC',
+                      border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
+                      mb: 2.5
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                      <NfcIcon sx={{ color: gold.accent, fontSize: '1rem' }} />
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent, fontSize: '0.72rem' }}>
+                        AIR-GAPPED TAP-TO-PAY BEARER PROTOCOL
+                      </Typography>
+                    </Box>
+                    <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem', display: 'block', lineHeight: 1.4 }}>
+                      Issuer balance is locked into a bearer secret at issuance. Redeemable instantly over Bluetooth LE, NFC, or QR mesh.
+                    </Typography>
+                  </Box>
+
+                  <Button
+                    id="vaelor-voucher-btn"
+                    variant="contained"
+                    fullWidth
+                    onClick={handleMintOfflineVoucher}
+                    disabled={isMintingVoucher}
+                    startIcon={isMintingVoucher ? <CircularProgress size={16} color="inherit" /> : <ConfirmationNumberIcon />}
+                    sx={{
+                      py: 1.2,
+                      fontWeight: 900,
+                      fontFamily: mono,
+                      fontSize: '0.82rem',
+                      borderRadius: 2,
+                      bgcolor: gold.accent,
+                      color: '#08080B',
+                      boxShadow: `0 4px 16px ${gold.glow}`,
+                      '&:hover': {
+                        bgcolor: '#E5C158',
+                        boxShadow: `0 6px 20px ${gold.glow}`
+                      },
+                      mt: 'auto'
+                    }}
+                  >
+                    {isMintingVoucher ? 'Minting Voucher...' : '🎫 Mint Offline NFC / QR Bearer Voucher'}
+                  </Button>
+
+                  {/* Voucher Pass Result */}
+                  {voucherResult && (
+                    <Paper
+                      sx={{
+                        mt: 2,
+                        p: 1.5,
+                        borderRadius: 2,
+                        bgcolor: isDark ? 'rgba(212,175,55,0.08)' : '#FEF9C3',
+                        border: `1px solid ${gold.border}`
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.8 }}>
+                        <QrCodeIcon sx={{ color: gold.accent, fontSize: '1.1rem' }} />
+                        <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 900, color: gold.accent, fontSize: '0.76rem' }}>
+                          OFFLINE BEARER VOUCHER MINTED
+                        </Typography>
+                      </Box>
+                      <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.7rem', color: isDark ? '#E2E8F0' : '#1E293B', lineHeight: 1.5 }}>
+                        Voucher Code: <code>{voucherResult.voucher?.id || 'vch_...'}</code>
+                        <br />
+                        URI: <code>{(voucherResult.voucher?.uri || 'vaelor://voucher?id=vch_..').slice(0, 36)}...</code>
+                        <br />
+                        PIN Lock Digest: <code>{(voucherResult.voucher?.pinHash || voucherResult.voucher?.secretHash || 'pin_4d898..').slice(0, 18)}...</code>
+                        <br />
+                        Redemption: <code>NFC / QR Ready (72-Hr Expiry • Offline Active)</code>
                       </Typography>
                     </Paper>
                   )}

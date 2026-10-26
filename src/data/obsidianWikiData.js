@@ -4215,9 +4215,17 @@ export const VAELOR_NETWORK_FALLBACK = {
   ]
 };
 
+export function randHex(len = 64) {
+  let res = '';
+  const hex = '0123456789abcdef';
+  for (let i = 0; i < len; i++) {
+    res += hex[Math.floor(Math.random() * 16)];
+  }
+  return res;
+}
+
 export function mineVaelorPouwFallback({ miner = '@zoth', taskType = 'STDP_VECTOR_INDEXING' } = {}) {
   const ts = new Date().toISOString();
-  const randHex = (len = 64) => Array.from({ length: len }, () => Math.floor(Math.random() * 16).toString(16)).join('');
   const blockHash = randHex(64);
   const rewardVlr = 5.0;
 
@@ -4281,7 +4289,6 @@ export function mineVaelorPouwFallback({ miner = '@zoth', taskType = 'STDP_VECTO
 
 export function createVaelorReceiptFallback({ buyer = '@citizen', merchant = '@sprig', amount = 15.0, memo = 'Feeless payment' } = {}) {
   const ts = new Date().toISOString();
-  const randHex = (len = 64) => Array.from({ length: len }, () => Math.floor(Math.random() * 16).toString(16)).join('');
   const receiptId = 'rcp_' + randHex(16);
   const cashbackVlr = +(amount * 0.025).toFixed(4);
   const sendHash = randHex(64);
@@ -4633,7 +4640,6 @@ export const VAELOR_MCP_TOOLS = [
 
 export function stakeVaelorSavingsFallback({ handle = '@citizen', amount = 100.0, validatorId = 'val-delta-zothos-local' } = {}) {
   const ts = new Date().toISOString();
-  const randHex = (len = 64) => Array.from({ length: len }, () => Math.floor(Math.random() * 16).toString(16)).join('');
   const hash = randHex(64);
   const amt = parseFloat(amount) || 100.0;
   const annualYield = +(amt * 0.085).toFixed(2);
@@ -4667,7 +4673,6 @@ export function stakeVaelorSavingsFallback({ handle = '@citizen', amount = 100.0
 
 export function drawVaelorCreditFallback({ handle = '@citizen', amount = 50.0, recipient = '@sprig', memo = '30-Day BNPL Settlement' } = {}) {
   const ts = new Date().toISOString();
-  const randHex = (len = 64) => Array.from({ length: len }, () => Math.floor(Math.random() * 16).toString(16)).join('');
   const drawHash = randHex(64);
   const receiveHash = randHex(64);
   const amt = parseFloat(amount) || 50.0;
@@ -4716,7 +4721,6 @@ export function drawVaelorCreditFallback({ handle = '@citizen', amount = 50.0, r
 
 export function callVaelorMcpFallback(toolName, args = {}) {
   const ts = new Date().toISOString();
-  const randHex = (len = 64) => Array.from({ length: len }, () => Math.floor(Math.random() * 16).toString(16)).join('');
 
   switch (toolName) {
     case 'vaelor_network_status':
@@ -5101,4 +5105,202 @@ export function sendVaelorShieldedTransferFallback(opts = {}) {
     }
   };
 }
+
+export function postVaelorBountyFallback(opts = {}) {
+  const poster = opts.poster || opts.posterHandle || '@neal';
+  const claimant = opts.claimant || opts.claimantHandle || '@zoth';
+  const title = opts.title || 'AEO Schema Audit';
+  const category = opts.category || 'AI & Security';
+  const rewardVlr = parseFloat(opts.rewardAmount || opts.rewardAmountVlr) || 25.0;
+  const requiredProofType = opts.requiredProofType || 'SHA256_AST_PROOF';
+  const description = opts.description || 'Automated crawler indexation verification';
+  const bountyId = 'bty_' + randHex(16);
+  const postBlockHash = randHex(64);
+  const settleBlockHash = randHex(64);
+  const proofHash = 'prf_' + randHex(32);
+  const ts = new Date().toISOString();
+
+  return {
+    ok: true,
+    bounty: {
+      id: bountyId,
+      posterAddress: 'vlr1_' + randHex(32),
+      posterHandle: poster,
+      claimantAddress: 'vlr1_' + randHex(32),
+      claimantHandle: claimant,
+      title,
+      category,
+      description,
+      rewardVlr,
+      rewardVael: Math.round(rewardVlr * 1000000),
+      requiredProofType,
+      status: 'SETTLED',
+      deliverableSummary: `Verified ${title} execution payload`,
+      deliverableProofHash: proofHash,
+      postBlockHash,
+      settleBlockHash,
+      quorumStatus: 'FINALIZED_BFT',
+      createdAt: ts,
+      settledAt: ts
+    },
+    postBlock: {
+      hash: postBlockHash,
+      account: 'vlr1_' + randHex(32),
+      handle: poster,
+      height: 83,
+      type: 'BOUNTY_POST',
+      finalityMs: 6.8,
+      gasFeeVlr: 0,
+      timestamp: ts,
+      quorumCertificate: {
+        blockHash: postBlockHash,
+        status: 'FINALIZED_BFT',
+        quorumSize: 5,
+        approvals: 5,
+        bftThreshold: '4/5 (2f + 1)',
+        aggregateLatencyMs: 8.12
+      }
+    },
+    settleBlock: {
+      hash: settleBlockHash,
+      account: 'vlr1_' + randHex(32),
+      handle: claimant,
+      height: 84,
+      type: 'BOUNTY_SETTLE',
+      finalityMs: 7.4,
+      gasFeeVlr: 0,
+      timestamp: ts,
+      quorumCertificate: {
+        blockHash: settleBlockHash,
+        status: 'FINALIZED_BFT',
+        quorumSize: 5,
+        approvals: 5,
+        bftThreshold: '4/5 (2f + 1)',
+        aggregateLatencyMs: 8.14
+      }
+    }
+  };
+}
+
+export function spendVaelorSubaccountFallback(opts = {}) {
+  const subAccountId = opts.subAccountId || 'sub_hermes_ai_01';
+  const parentHandle = opts.parentHandle || '@zoth';
+  const subHandle = opts.subHandle || '@zoth.hermes01';
+  const label = opts.label || 'Hermes Autonomous AI Compute Agent';
+  const dailyLimitVlr = parseFloat(opts.dailyLimitVlr || opts.dailyLimit) || 50.0;
+  const amount = parseFloat(opts.amount || opts.amountVlr) || 12.5;
+  const recipient = opts.recipient || opts.toHandle || '@sprig';
+  const memo = opts.memo || 'Hermes GPU inference quota';
+  const category = opts.category || 'AI & Compute';
+  const blockHash = randHex(64);
+  const ts = new Date().toISOString();
+
+  const spentTodayVlr = 12.5;
+  const remainingTodayVlr = +(dailyLimitVlr - spentTodayVlr).toFixed(2);
+  const utilizationPct = Math.round((spentTodayVlr / dailyLimitVlr) * 100);
+
+  return {
+    ok: true,
+    remainingTodayVlr,
+    subAccount: {
+      id: subAccountId,
+      parentHandle,
+      parentAddress: 'vlr1_' + randHex(32),
+      subHandle,
+      label,
+      dailyLimitVlr,
+      spentTodayVlr,
+      remainingTodayVlr,
+      utilizationPct,
+      status: 'ACTIVE',
+      isFrozen: false,
+      allowedCategories: [category, 'ALL'],
+      spendCount: 1,
+      totalSpentVlr: spentTodayVlr,
+      createdAt: ts,
+      history: [
+        {
+          txHash: blockHash,
+          amountVlr: amount,
+          recipientHandle: recipient,
+          memo,
+          category,
+          timestamp: ts
+        }
+      ]
+    },
+    spendBlock: {
+      hash: blockHash,
+      account: 'vlr1_' + randHex(32),
+      handle: subHandle,
+      height: 85,
+      type: 'SUBACCOUNT_SPEND',
+      finalityMs: 6.2,
+      gasFeeVlr: 0,
+      timestamp: ts,
+      quorumCertificate: {
+        blockHash,
+        status: 'FINALIZED_BFT',
+        quorumSize: 5,
+        approvals: 5,
+        bftThreshold: '4/5 (2f + 1)',
+        aggregateLatencyMs: 8.09
+      }
+    }
+  };
+}
+
+export function issueVaelorVoucherFallback(opts = {}) {
+  const issuer = opts.issuer || '@neal';
+  const recipient = opts.recipient || '';
+  const amountVlr = parseFloat(opts.amount || opts.amountVlr) || 20.0;
+  const claimSecret = opts.claimSecret || opts.pin || '7570';
+  const memo = opts.memo || 'Sub-surface peer mesh token';
+  const hours = parseInt(opts.expiresInHours) || 72;
+  const voucherId = 'vch_' + randHex(16);
+  const pinHash = 'pin_' + randHex(32);
+  const blockHash = randHex(64);
+  const ts = new Date().toISOString();
+  const expiresAt = new Date(Date.now() + hours * 3600 * 1000).toISOString();
+  const uri = `vaelor://voucher?id=${voucherId}&amount=${amountVlr}&issuer=${issuer}`;
+
+  return {
+    ok: true,
+    voucher: {
+      id: voucherId,
+      issuerAddress: 'vlr1_' + randHex(32),
+      issuerHandle: issuer,
+      recipientHandle: recipient || null,
+      amountVlr,
+      amountVael: Math.round(amountVlr * 1000000),
+      pinHash,
+      secretHash: pinHash,
+      uri,
+      memo,
+      status: 'ACTIVE',
+      createdAt: ts,
+      expiresAt,
+      issueBlockHash: blockHash
+    },
+    issueBlock: {
+      hash: blockHash,
+      account: 'vlr1_' + randHex(32),
+      handle: issuer,
+      height: 86,
+      type: 'VOUCHER_ISSUE',
+      finalityMs: 5.9,
+      gasFeeVlr: 0,
+      timestamp: ts,
+      quorumCertificate: {
+        blockHash,
+        status: 'FINALIZED_BFT',
+        quorumSize: 5,
+        approvals: 5,
+        bftThreshold: '4/5 (2f + 1)',
+        aggregateLatencyMs: 8.11
+      }
+    }
+  };
+}
+
 
