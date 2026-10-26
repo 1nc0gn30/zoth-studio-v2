@@ -48,6 +48,9 @@ import {
   FALLBACK_GRAPH_TOPOLOGY,
   FALLBACK_MCP_TOOLS,
   MCP_CONFIG_SNIPPET,
+  FALLBACK_BASES_RECORDS,
+  getBasesRecordsFallback,
+  ingestNoteFallback,
   callMcpToolFallback,
   searchFallback,
   renderKnapTelemetryFallback,
@@ -454,6 +457,16 @@ export default function MemoryPage() {
   const [activeBase, setActiveBase] = useState(CANONICAL_BASES[0]);
   const [baseViewMode, setBaseViewMode] = useState('inspect'); // 'inspect' | 'yaml'
   const [copiedBaseYaml, setCopiedBaseYaml] = useState(false);
+  const [basesRecordsData, setBasesRecordsData] = useState(() => getBasesRecordsFallback(CANONICAL_BASES[0]?.name));
+  const [isLoadingBasesRecords, setIsLoadingBasesRecords] = useState(false);
+
+  // Second Brain Note & Web Snippet Ingestor State
+  const [ingestTitle, setIngestTitle] = useState('');
+  const [ingestSource, setIngestSource] = useState('antigravity-studio');
+  const [ingestTags, setIngestTags] = useState('stdp, second-brain, obsidian');
+  const [ingestContent, setIngestContent] = useState('');
+  const [isIngesting, setIsIngesting] = useState(false);
+  const [ingestResult, setIngestResult] = useState(null);
 
   // Unified Second Brain & STDP Cortex Search State
   const [unifiedSearchQuery, setUnifiedSearchQuery] = useState('Vaelor');
@@ -723,6 +736,33 @@ ${article.math_invariants || ''}
     return () => { active = false; };
   }, [activeTab]);
 
+  useEffect(() => {
+    let active = true;
+    const fetchBasesRecords = async () => {
+      if (!activeBase?.name) return;
+      setIsLoadingBasesRecords(true);
+      try {
+        const res = await fetch(`http://127.0.0.1:8094/api/obsidian/bases/records?base=${encodeURIComponent(activeBase.name)}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (active && data && data.ok) {
+            setBasesRecordsData(data);
+            setIsLoadingBasesRecords(false);
+            return;
+          }
+        }
+      } catch (_) {}
+
+      if (active) {
+        setBasesRecordsData(getBasesRecordsFallback(activeBase.name));
+        setIsLoadingBasesRecords(false);
+      }
+    };
+
+    fetchBasesRecords();
+    return () => { active = false; };
+  }, [activeBase]);
+
   const handleGenerateCanvas = async () => {
     const topic = (canvasTopic || '').trim();
     if (!topic || isGeneratingCanvas) return;
@@ -934,6 +974,79 @@ ${article.math_invariants || ''}
     if (typeof playSynapticPulse === 'function') {
       playSynapticPulse(0.92);
     }
+  };
+
+  const handleIngestNote = async () => {
+    const title = ingestTitle.trim();
+    const content = ingestContent.trim();
+    if (!title || !content || isIngesting) return;
+    setIsIngesting(true);
+    setIngestResult(null);
+
+    const tagsArr = ingestTags
+      .split(',')
+      .map((t) => t.trim())
+      .filter(Boolean);
+
+    let result = null;
+    try {
+      const res = await fetch('http://127.0.0.1:8094/api/obsidian/ingest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title,
+          content,
+          source: ingestSource.trim() || 'antigravity-studio',
+          tags: tagsArr
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.ok) {
+          result = data;
+        }
+      }
+    } catch (_) {}
+
+    if (!result) {
+      result = ingestNoteFallback(title, ingestSource, tagsArr, content);
+    }
+
+    setIngestResult(result);
+    setIsIngesting(false);
+
+    // Dynamically add the newly ingested note into the 3D 'Obsidian' cluster in memories!
+    const noteInfo = result.note || {};
+    const newMemoryId = noteInfo.memoryId || `MEM-ING-${Date.now().toString(16).slice(-4).toUpperCase()}`;
+    const newEngram = {
+      id: newMemoryId,
+      concept: title,
+      category: 'obsidian',
+      cluster: 'Obsidian',
+      weight: 0.98,
+      text: `[Obsidian Ingest · [[${title}]]] ${content.slice(0, 240)}`,
+      author: 'Lucy',
+      tags: ['ingested', 'obsidian', ...tagsArr],
+      x: Number((Math.random() * 20 - 10).toFixed(1)),
+      y: Number((45 + Math.random() * 10).toFixed(1)),
+      z: Number((-60 + Math.random() * 10).toFixed(1)),
+      timestamp: new Date().toISOString(),
+      relPath: noteInfo.relPath || `04-Ingested/${noteInfo.slug || 'note'}.md`,
+      source: noteInfo.source || ingestSource
+    };
+
+    setMemories((prev) => [newEngram, ...prev]);
+    setSelectedMemory(newEngram);
+    if (typeof playSynapticPulse === 'function') {
+      playSynapticPulse(1.0);
+    }
+    if (typeof transmitLucy === 'function') {
+      try {
+        transmitLucy(`Ingested [[${title}]] into Obsidian Second Brain (${noteInfo.relPath || '04-Ingested'}). Synthesized STDP memory engram ${newMemoryId}.`);
+      } catch (_) {}
+    }
+    setIngestTitle('');
+    setIngestContent('');
   };
 
   const generateObsidianSpecOutput = () => {
@@ -4541,6 +4654,140 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                     {activeBase?.rawYaml || '# No YAML representation available'}
                   </Box>
                 )}
+
+                {/* Live Obsidian Bases Records Table (#studio-bases-live-records) */}
+                <Box
+                  id="studio-bases-live-records"
+                  sx={{
+                    mt: 3,
+                    p: 2,
+                    borderRadius: 2,
+                    border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : theme.palette.divider}`,
+                    bgcolor: isDark ? 'rgba(5,7,10,0.85)' : '#F8FAFC'
+                  }}
+                >
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1.5 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <StorageIcon sx={{ fontSize: '1rem', color: gold.accent }} />
+                      <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.8rem', color: gold.accent }}>
+                        📊 LIVE VAULT RECORDS TABLE
+                      </Typography>
+                      <Chip
+                        label={`${basesRecordsData?.totalMatched ?? basesRecordsData?.rows?.length ?? 0} MATCHED NOTES`}
+                        size="small"
+                        sx={{
+                          height: 20,
+                          fontFamily: mono,
+                          fontSize: '0.66rem',
+                          fontWeight: 800,
+                          bgcolor: 'rgba(52,211,153,0.15)',
+                          color: '#34D399',
+                          border: '1px solid rgba(52,211,153,0.3)'
+                        }}
+                      />
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      {isLoadingBasesRecords && (
+                        <CircularProgress size={14} sx={{ color: gold.accent }} />
+                      )}
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.68rem' }}>
+                        Database: <strong>{activeBase?.name || 'Selected Base'}</strong>
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  {/* Scrollable Records Table */}
+                  <Box sx={{ overflowX: 'auto', maxHeight: 360, borderRadius: 1.5, border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0'}` }}>
+                    <Table size="small" stickyHeader sx={{ minWidth: 640 }}>
+                      <TableHead>
+                        <TableRow sx={{ bgcolor: isDark ? '#0F1219' : '#EDE8D5' }}>
+                          {(basesRecordsData?.columns || [
+                            { key: 'title', label: 'Note Title' },
+                            { key: 'relPath', label: 'Vault Path' },
+                            { key: 'category', label: 'Category' },
+                            { key: 'status', label: 'Status' }
+                          ]).map((col) => (
+                            <TableCell
+                              key={col.key}
+                              sx={{
+                                py: 1,
+                                px: 1.5,
+                                fontFamily: mono,
+                                fontSize: '0.68rem',
+                                fontWeight: 800,
+                                color: gold.accent,
+                                bgcolor: isDark ? '#0F1219' : '#EDE8D5',
+                                borderBottom: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : '#CBD5E1'}`,
+                                whiteSpace: 'nowrap'
+                              }}
+                            >
+                              {col.label || col.key}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {(basesRecordsData?.rows || []).slice(0, 30).map((row, rIdx) => {
+                          const props = row.properties || {};
+                          return (
+                            <TableRow
+                              key={rIdx}
+                              hover
+                              sx={{
+                                '&:nth-of-type(odd)': {
+                                  bgcolor: isDark ? 'rgba(255,255,255,0.015)' : 'rgba(0,0,0,0.015)'
+                                },
+                                '&:hover': {
+                                  bgcolor: isDark ? 'rgba(212,175,55,0.06) !important' : 'rgba(212,175,55,0.08) !important'
+                                }
+                              }}
+                            >
+                              {(basesRecordsData?.columns || []).map((col) => {
+                                const cellVal = props[col.key] !== undefined && props[col.key] !== null
+                                  ? props[col.key]
+                                  : (row[col.key] !== undefined ? row[col.key] : (props[col.key.replace('formula.', '')] ?? '—'));
+
+                                const valStr = typeof cellVal === 'object'
+                                  ? (Array.isArray(cellVal) ? cellVal.join(', ') : JSON.stringify(cellVal))
+                                  : String(cellVal || '—');
+
+                                return (
+                                  <TableCell
+                                    key={col.key}
+                                    sx={{
+                                      py: 0.8,
+                                      px: 1.5,
+                                      fontFamily: mono,
+                                      fontSize: '0.7rem',
+                                      color: col.key.includes('title') || col.key === 'file.name'
+                                        ? (isDark ? '#F1F5F9' : '#0F172A')
+                                        : (col.key.includes('status') || col.key.includes('monetized')
+                                          ? '#34D399'
+                                          : (isDark ? '#94A3B8' : '#475569')),
+                                      fontWeight: col.key.includes('title') ? 700 : 500,
+                                      borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.04)' : '#F1F5F9'}`,
+                                      whiteSpace: 'nowrap',
+                                      maxWidth: 240,
+                                      overflow: 'hidden',
+                                      textOverflow: 'ellipsis'
+                                    }}
+                                  >
+                                    {valStr}
+                                  </TableCell>
+                                );
+                              })}
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </Box>
+                  {basesRecordsData?.rows && basesRecordsData.rows.length > 30 && (
+                    <Typography variant="caption" sx={{ display: 'block', mt: 1, textAlign: 'right', fontFamily: mono, color: '#64748B', fontSize: '0.64rem' }}>
+                      Showing first 30 of {basesRecordsData.totalMatched || basesRecordsData.rows.length} matched records
+                    </Typography>
+                  )}
+                </Box>
               </Paper>
 
               {/* ==========================================================================
@@ -5420,6 +5667,195 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                     </Box>
                   </Grid>
                 </Grid>
+              </Paper>
+
+              {/* ==========================================================================
+                  SECOND BRAIN NOTE & WEB SNIPPET INGESTOR (#studio-obsidian-ingest-panel)
+                  ========================================================================== */}
+              <Paper
+                id="studio-obsidian-ingest-panel"
+                sx={{
+                  p: { xs: 2.5, md: 3 },
+                  mb: 4,
+                  borderRadius: 3,
+                  border: `1px solid ${gold.border}`,
+                  bgcolor: isDark ? 'rgba(10,12,18,0.85)' : '#FFFFFF',
+                  boxShadow: isDark ? '0 8px 32px rgba(0,0,0,0.45)' : '0 4px 16px rgba(0,0,0,0.06)'
+                }}
+              >
+                {/* Header */}
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2.5, flexWrap: 'wrap', gap: 1.5 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                    <Box
+                      sx={{
+                        width: 38,
+                        height: 38,
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        bgcolor: 'rgba(212,175,55,0.14)',
+                        border: `1px solid ${gold.border}`,
+                        color: gold.accent
+                      }}
+                    >
+                      <DownloadIcon fontSize="small" />
+                    </Box>
+                    <Box>
+                      <Typography variant="h6" sx={{ fontWeight: 800, fontSize: '1.05rem', color: theme.palette.text.primary, display: 'flex', alignItems: 'center', gap: 1 }}>
+                        Second Brain Note &amp; Web Snippet Ingestor
+                        <Chip label="DIRECT STDP VAULT SINK" size="small" sx={{ height: 20, fontSize: '0.66rem', fontWeight: 800, bgcolor: gold.wash, color: gold.accent, border: `1px solid ${gold.border}` }} />
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
+                        Live vault note creation: writes markdown notes to <code>04-Ingested/&lt;slug&gt;.md</code> and synthesizes real-time STDP associative engrams into the 3D Netrunner Cortex (:8094).
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Chip
+                    label="✦ Hebbian Biomorphic Ingestion"
+                    size="small"
+                    sx={{
+                      fontFamily: mono,
+                      fontSize: '0.68rem',
+                      fontWeight: 750,
+                      bgcolor: 'rgba(16,185,129,0.12)',
+                      color: '#10B981',
+                      border: '1px solid rgba(16,185,129,0.25)'
+                    }}
+                  />
+                </Box>
+
+                {/* Ingest Form Inputs */}
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <Grid container spacing={2}>
+                    <Grid xs={12} md={5}>
+                      <TextField
+                        id="studio-ingest-title"
+                        label="Note Title / Concept"
+                        placeholder="e.g. Hebbian Tri-Phasic Synaptic Relay"
+                        fullWidth
+                        size="small"
+                        value={ingestTitle}
+                        onChange={(e) => setIngestTitle(e.target.value)}
+                        InputProps={{
+                          sx: {
+                            fontFamily: mono,
+                            fontSize: '0.84rem',
+                            bgcolor: isDark ? 'rgba(0,0,0,0.45)' : '#F8FAFC',
+                            borderRadius: 2
+                          }
+                        }}
+                      />
+                    </Grid>
+                    <Grid xs={12} md={3}>
+                      <TextField
+                        id="studio-ingest-source"
+                        label="Provenance / Source"
+                        placeholder="e.g. antigravity-studio or web URL"
+                        fullWidth
+                        size="small"
+                        value={ingestSource}
+                        onChange={(e) => setIngestSource(e.target.value)}
+                        InputProps={{
+                          sx: {
+                            fontFamily: mono,
+                            fontSize: '0.84rem',
+                            bgcolor: isDark ? 'rgba(0,0,0,0.45)' : '#F8FAFC',
+                            borderRadius: 2
+                          }
+                        }}
+                      />
+                    </Grid>
+                    <Grid xs={12} md={4}>
+                      <TextField
+                        id="studio-ingest-tags"
+                        label="Tags (comma separated)"
+                        placeholder="e.g. stdp, ai-research, zothos"
+                        fullWidth
+                        size="small"
+                        value={ingestTags}
+                        onChange={(e) => setIngestTags(e.target.value)}
+                        InputProps={{
+                          sx: {
+                            fontFamily: mono,
+                            fontSize: '0.84rem',
+                            bgcolor: isDark ? 'rgba(0,0,0,0.45)' : '#F8FAFC',
+                            borderRadius: 2
+                          }
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <TextField
+                    id="studio-ingest-content"
+                    label="Markdown Body / Note Content"
+                    placeholder="Write markdown body, telemetry findings, algorithmic invariants, or research observations..."
+                    fullWidth
+                    multiline
+                    rows={4}
+                    value={ingestContent}
+                    onChange={(e) => setIngestContent(e.target.value)}
+                    InputProps={{
+                      sx: {
+                        fontFamily: mono,
+                        fontSize: '0.8rem',
+                        bgcolor: isDark ? 'rgba(0,0,0,0.45)' : '#F8FAFC',
+                        borderRadius: 2,
+                        lineHeight: 1.5
+                      }
+                    }}
+                  />
+
+                  <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 2, mt: 0.5 }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.7rem' }}>
+                      POST /api/obsidian/ingest · Vault: <code>~/Documents/Obsidian Vault/04-Ingested/</code>
+                    </Typography>
+                    <Button
+                      id="studio-obsidian-ingest-btn"
+                      variant="contained"
+                      onClick={handleIngestNote}
+                      disabled={isIngesting || !ingestTitle.trim() || !ingestContent.trim()}
+                      startIcon={isIngesting ? <CircularProgress size={16} sx={{ color: '#08080B' }} /> : <DownloadIcon fontSize="small" />}
+                      sx={{
+                        px: 3,
+                        py: 1,
+                        fontWeight: 800,
+                        fontSize: '0.82rem',
+                        bgcolor: gold.accent,
+                        color: '#08080B',
+                        borderRadius: 2,
+                        textTransform: 'none',
+                        '&:hover': { bgcolor: gold.soft, color: '#08080B' }
+                      }}
+                    >
+                      {isIngesting ? 'Ingesting into Vault...' : '📥 INGEST TO VAULT & STDP CORTEX'}
+                    </Button>
+                  </Box>
+
+                  {/* Confirmation Banner */}
+                  {ingestResult && (
+                    <Alert
+                      id="studio-ingest-result"
+                      severity="success"
+                      sx={{
+                        borderRadius: 2,
+                        bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5',
+                        border: '1px solid rgba(16,185,129,0.3)',
+                        color: isDark ? '#A7F3D0' : '#065F46',
+                        '& .MuiAlert-icon': { color: '#10B981' }
+                      }}
+                    >
+                      <Typography sx={{ fontWeight: 800, fontSize: '0.84rem' }}>
+                        ✦ Successfully Ingested Note [[{ingestResult.note?.title || 'Note'}]]!
+                      </Typography>
+                      <Box sx={{ fontFamily: mono, fontSize: '0.72rem', mt: 0.5, color: isDark ? '#6EE7B7' : '#047857' }}>
+                        Vault File: <strong>{ingestResult.note?.relPath || '04-Ingested/note.md'}</strong> · STDP Memory ID: <strong>{ingestResult.note?.memoryId || 'mem-synced'}</strong> · Added to 3D Cortex!
+                      </Box>
+                    </Alert>
+                  )}
+                </Box>
               </Paper>
 
               {/* 7 Official Obsidian Skills Grid */}

@@ -2906,3 +2906,463 @@ export function callMcpToolFallback(toolName, args = {}) {
       };
   }
 }
+
+// ============================================================================
+// FALLBACK OBSIDIAN BASES LIVE RECORDS
+// Zero-egress offline dataset for .base dynamic records table inspector
+// ============================================================================
+
+export const FALLBACK_BASES_RECORDS = {
+  "Zoth 71 Sovereign Tools.base": {
+    baseName: "Zoth 71 Sovereign Tools.base",
+    relPath: "Zoth 71 Sovereign Tools.base",
+    ok: true,
+    totalMatched: 71,
+    columns: [
+      { key: "file.name", label: "Tool Note" },
+      { key: "title", label: "Tool Name" },
+      { key: "category", label: "Category" },
+      { key: "formula.pillar_label", label: "Mathematical Pillar" },
+      { key: "formula.price_label", label: "Price" },
+      { key: "formula.monetized_badge", label: "Monetization" },
+      { key: "formula.runs_badge", label: "Runtime Engine" },
+      { key: "formula.status_badge", label: "Status" }
+    ],
+    rows: [
+      {
+        title: "AST Type-Check Engine",
+        relPath: "Studio/Tools/Tool AST Type-Check Engine.md",
+        properties: {
+          "file.name": "Tool AST Type-Check Engine.md",
+          "title": "AST Type-Check Engine",
+          "category": "Code Quality",
+          "formula.pillar_label": "Pillar IV: AST Verification",
+          "formula.price_label": "$19",
+          "formula.monetized_badge": "💎 Monetized ($19/$79)",
+          "formula.runs_badge": "🌐 Pure In-Browser",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Adytum Planner",
+        relPath: "Studio/Tools/Studio adytum-alchemist-ai-workflow.md",
+        properties: {
+          "file.name": "Studio adytum-alchemist-ai-workflow.md",
+          "title": "Adytum Planner",
+          "category": "Planning",
+          "formula.pillar_label": "Pillar IV: AST Verification",
+          "formula.price_label": "$19",
+          "formula.monetized_badge": "💎 Monetized ($19/$79)",
+          "formula.runs_badge": "💻 System CLI",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Token Efficiency Audit",
+        relPath: "Studio/Tools/Tool Token Efficiency Audit.md",
+        properties: {
+          "file.name": "Tool Token Efficiency Audit.md",
+          "title": "Token Efficiency Audit",
+          "category": "Optimization",
+          "formula.pillar_label": "Pillar I: Information Entropy",
+          "formula.price_label": "$19",
+          "formula.monetized_badge": "💎 Monetized ($19/$79)",
+          "formula.runs_badge": "🌐 Pure In-Browser",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Stripe DePay Gateway",
+        relPath: "Studio/Tools/Tool Stripe DePay Gateway.md",
+        properties: {
+          "file.name": "Tool Stripe DePay Gateway.md",
+          "title": "Stripe DePay Gateway",
+          "category": "Treasury",
+          "formula.pillar_label": "Pillar II: Convex Optimization",
+          "formula.price_label": "$19",
+          "formula.monetized_badge": "💎 Monetized ($19/$79)",
+          "formula.runs_badge": "🌐 Pure In-Browser",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "WebAssembly Profiler",
+        relPath: "Studio/Tools/Tool WebAssembly Profiler.md",
+        properties: {
+          "file.name": "Tool WebAssembly Profiler.md",
+          "title": "WebAssembly Profiler",
+          "category": "Performance",
+          "formula.pillar_label": "Pillar III: STDP Plasticity",
+          "formula.price_label": "$19",
+          "formula.monetized_badge": "💎 Monetized ($19/$79)",
+          "formula.runs_badge": "🟢 Node / Local",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Cosign Integrity Validator",
+        relPath: "Studio/Tools/Tool Cosign Integrity Validator.md",
+        properties: {
+          "file.name": "Tool Cosign Integrity Validator.md",
+          "title": "Cosign Integrity Validator",
+          "category": "Security",
+          "formula.pillar_label": "Pillar V: Zero-Trust Cryptography",
+          "formula.price_label": "$19",
+          "formula.monetized_badge": "💎 Monetized ($19/$79)",
+          "formula.runs_badge": "🌐 Pure In-Browser",
+          "formula.status_badge": "🟢 Active"
+        }
+      }
+    ]
+  },
+  "Zoth Fleet & Daemons.base": {
+    baseName: "Zoth Fleet & Daemons.base",
+    relPath: "Zoth Fleet & Daemons.base",
+    ok: true,
+    totalMatched: 26,
+    columns: [
+      { key: "file.name", label: "Daemon Note" },
+      { key: "title", label: "Service Identifier" },
+      { key: "formula.port_label", label: "Loopback Port" },
+      { key: "subsystem", label: "Subsystem" },
+      { key: "formula.status_badge", label: "Health Status" },
+      { key: "formula.core_badge", label: "Fleet Tier" }
+    ],
+    rows: [
+      {
+        title: "neuro-memory-daemon",
+        relPath: "OS/Daemons/Daemon neuro_memory_daemon.md",
+        properties: {
+          "file.name": "Daemon neuro_memory_daemon.md",
+          "title": "neuro-memory-daemon",
+          "formula.port_label": ":8094",
+          "subsystem": "STDP Cognitive Substrate",
+          "formula.status_badge": "🟢 Active",
+          "formula.core_badge": "⭐ Core Fleet"
+        }
+      },
+      {
+        title: "vaelor-pouw-miner",
+        relPath: "OS/Daemons/Daemon vaelor_pouw_miner.md",
+        properties: {
+          "file.name": "Daemon vaelor_pouw_miner.md",
+          "title": "vaelor-pouw-miner",
+          "formula.port_label": ":8140",
+          "subsystem": "L1 Feeless PoUW Ledger",
+          "formula.status_badge": "🟢 Active",
+          "formula.core_badge": "⭐ Core Fleet"
+        }
+      },
+      {
+        title: "zoth-studio-v2",
+        relPath: "OS/Daemons/Daemon zoth_studio_v2.md",
+        properties: {
+          "file.name": "Daemon zoth_studio_v2.md",
+          "title": "zoth-studio-v2",
+          "formula.port_label": ":3000",
+          "subsystem": "Sovereign Web Cockpit",
+          "formula.status_badge": "🟢 Active",
+          "formula.core_badge": "⭐ Core Fleet"
+        }
+      },
+      {
+        title: "bolt-diy",
+        relPath: "OS/Daemons/Daemon bolt_diy.md",
+        properties: {
+          "file.name": "Daemon bolt_diy.md",
+          "title": "bolt-diy",
+          "formula.port_label": ":5173",
+          "subsystem": "AI Code Engine",
+          "formula.status_badge": "🟢 Active",
+          "formula.core_badge": "⭐ Core Fleet"
+        }
+      },
+      {
+        title: "hermes-agent",
+        relPath: "OS/Daemons/Daemon hermes_agent.md",
+        properties: {
+          "file.name": "Daemon hermes_agent.md",
+          "title": "hermes-agent",
+          "formula.port_label": ":9393",
+          "subsystem": "Autonomous Agency Swarm",
+          "formula.status_badge": "🟢 Active",
+          "formula.core_badge": "⭐ Core Fleet"
+        }
+      },
+      {
+        title: "agent-budget-sentinel",
+        relPath: "OS/Daemons/Daemon budget_sentinel.md",
+        properties: {
+          "file.name": "Daemon budget_sentinel.md",
+          "title": "agent-budget-sentinel",
+          "formula.port_label": ":8110",
+          "subsystem": "Agent Mesh",
+          "formula.status_badge": "🟡 Standby",
+          "formula.core_badge": "📦 Service"
+        }
+      }
+    ]
+  },
+  "Zoth LLM Wiki Index.base": {
+    baseName: "Zoth LLM Wiki Index.base",
+    relPath: "Zoth LLM Wiki Index.base",
+    ok: true,
+    totalMatched: 8,
+    columns: [
+      { key: "file.name", label: "Wiki Article" },
+      { key: "title", label: "Canonical Topic" },
+      { key: "formula.confidence_pct", label: "Synthesis Confidence" },
+      { key: "formula.engram_badge", label: "STDP Associations" },
+      { key: "formula.status_badge", label: "Status" }
+    ],
+    rows: [
+      {
+        title: "Biomorphic STDP & 3D Netrunner Cortex",
+        relPath: "06-Wiki/Biomorphic STDP & 3D Netrunner Cortex.md",
+        properties: {
+          "file.name": "Biomorphic STDP & 3D Netrunner Cortex.md",
+          "title": "Biomorphic STDP & 3D Netrunner Cortex",
+          "formula.confidence_pct": "99%",
+          "formula.engram_badge": "🧠 6 Engrams",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Vaelor Account-Lattice & PoUW Protocol",
+        relPath: "06-Wiki/Vaelor Account-Lattice & PoUW Protocol.md",
+        properties: {
+          "file.name": "Vaelor Account-Lattice & PoUW Protocol.md",
+          "title": "Vaelor Account-Lattice & PoUW Protocol",
+          "formula.confidence_pct": "99%",
+          "formula.engram_badge": "🧠 6 Engrams",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "ZothOS Sovereign Linux & Kernel Architecture",
+        relPath: "06-Wiki/ZothOS Sovereign Linux & Kernel Architecture.md",
+        properties: {
+          "file.name": "ZothOS Sovereign Linux & Kernel Architecture.md",
+          "title": "ZothOS Sovereign Linux & Kernel Architecture",
+          "formula.confidence_pct": "99%",
+          "formula.engram_badge": "🧠 6 Engrams",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Zoth Studio v2 & 71 Sovereign Micro-SaaS Tools",
+        relPath: "06-Wiki/Zoth Studio v2 & 71 Sovereign Micro-SaaS Tools.md",
+        properties: {
+          "file.name": "Zoth Studio v2 & 71 Sovereign Micro-SaaS Tools.md",
+          "title": "Zoth Studio v2 & 71 Sovereign Micro-SaaS Tools",
+          "formula.confidence_pct": "99%",
+          "formula.engram_badge": "🧠 6 Engrams",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Hermes Agent & Multi-Provider MCP Connector Ecosystem",
+        relPath: "06-Wiki/Hermes Agent & Multi-Provider MCP Connector Ecosystem.md",
+        properties: {
+          "file.name": "Hermes Agent & Multi-Provider MCP Connector Ecosystem.md",
+          "title": "Hermes Agent & Multi-Provider MCP Connector Ecosystem",
+          "formula.confidence_pct": "99%",
+          "formula.engram_badge": "🧠 6 Engrams",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Zero-Trust Supply Chain, Cosign & VirusTotal Verification",
+        relPath: "06-Wiki/Zero-Trust Supply Chain, Cosign & VirusTotal Verification.md",
+        properties: {
+          "file.name": "Zero-Trust Supply Chain, Cosign & VirusTotal Verification.md",
+          "title": "Zero-Trust Supply Chain, Cosign & VirusTotal Verification",
+          "formula.confidence_pct": "99%",
+          "formula.engram_badge": "🧠 6 Engrams",
+          "formula.status_badge": "🟢 Active"
+        }
+      }
+    ]
+  },
+  "Zoth Autonomous Agents.base": {
+    baseName: "Zoth Autonomous Agents.base",
+    relPath: "Zoth Autonomous Agents.base",
+    ok: true,
+    totalMatched: 5,
+    columns: [
+      { key: "file.name", label: "Agent Spec Note" },
+      { key: "title", label: "Agent Name" },
+      { key: "role", label: "Cognitive Role" },
+      { key: "formula.runtime_badge", label: "Runtime" },
+      { key: "formula.stdp_link_badge", label: "STDP Link" },
+      { key: "formula.status_badge", label: "Status" }
+    ],
+    rows: [
+      {
+        title: "Antigravity Subagent Swarm",
+        relPath: "Agents/Antigravity Subagent Swarm.md",
+        properties: {
+          "file.name": "Antigravity Subagent Swarm.md",
+          "title": "Antigravity Subagent Swarm",
+          "role": "Concurrent Sovereign Subagent Task Execution & IPC Mesh",
+          "formula.runtime_badge": "Antigravity CLI / Orchestrator",
+          "formula.stdp_link_badge": "🧠 STDP Synced",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Lucy Metacognitive Copilot",
+        relPath: "Agents/Lucy Metacognitive Copilot.md",
+        properties: {
+          "file.name": "Lucy Metacognitive Copilot.md",
+          "title": "Lucy Metacognitive Copilot",
+          "role": "STDP Synaptic Weight Consolidation & Hebbian Memory",
+          "formula.runtime_badge": "Neuro-Memory Daemon :8094",
+          "formula.stdp_link_badge": "🧠 STDP Synced",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Hermes Multi-Provider Agent",
+        relPath: "Agents/Hermes Multi-Provider Agent.md",
+        properties: {
+          "file.name": "Hermes Multi-Provider Agent.md",
+          "title": "Hermes Multi-Provider Agent",
+          "role": "Autonomous Tool-Calling Agency & MCP Skills",
+          "formula.runtime_badge": "Hermes Daemon :9393",
+          "formula.stdp_link_badge": "🧠 STDP Synced",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Virgil System Monitor",
+        relPath: "Agents/Virgil System Monitor.md",
+        properties: {
+          "file.name": "Virgil System Monitor.md",
+          "title": "Virgil System Monitor",
+          "role": "Zero-Egress System Telemetry & Hardware Sentinel",
+          "formula.runtime_badge": "Systemd / eBPF",
+          "formula.stdp_link_badge": "🧠 STDP Synced",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Azoth Alchemical Synthesizer",
+        relPath: "Agents/Azoth Alchemical Synthesizer.md",
+        properties: {
+          "file.name": "Azoth Alchemical Synthesizer.md",
+          "title": "Azoth Alchemical Synthesizer",
+          "role": "Karpathy LLM Wiki Synthesis & Wikilink Topography",
+          "formula.runtime_badge": "Obsidian Second Brain",
+          "formula.stdp_link_badge": "🧠 STDP Synced",
+          "formula.status_badge": "🟢 Active"
+        }
+      }
+    ]
+  },
+  "Zoth Memory Stratum.base": {
+    baseName: "Zoth Memory Stratum.base",
+    relPath: "Zoth Memory Stratum.base",
+    ok: true,
+    totalMatched: 1725,
+    columns: [
+      { key: "file.name", label: "Second Brain Note" },
+      { key: "file.folder", label: "Folder" },
+      { key: "formula.link_density", label: "Wikilinks" },
+      { key: "formula.days_since_edit", label: "Days Since Edit" },
+      { key: "formula.status_badge", label: "Status" }
+    ],
+    rows: [
+      {
+        title: "Zoth Canon",
+        relPath: "00 Home.md",
+        properties: {
+          "file.name": "00 Home.md",
+          "file.folder": "Root MOC",
+          "formula.link_density": "84 links",
+          "formula.days_since_edit": "0.5",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Zoth Memory",
+        relPath: "Zoth Memory.md",
+        properties: {
+          "file.name": "Zoth Memory.md",
+          "file.folder": "Substrate",
+          "formula.link_density": "62 links",
+          "formula.days_since_edit": "0.5",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Zoth Studio",
+        relPath: "Zoth Studio.md",
+        properties: {
+          "file.name": "Zoth Studio.md",
+          "file.folder": "Studio",
+          "formula.link_density": "71 links",
+          "formula.days_since_edit": "0.5",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Zoth OS",
+        relPath: "Zoth OS.md",
+        properties: {
+          "file.name": "Zoth OS.md",
+          "file.folder": "OS",
+          "formula.link_density": "53 links",
+          "formula.days_since_edit": "0.5",
+          "formula.status_badge": "🟢 Active"
+        }
+      },
+      {
+        title: "Vaelor Network",
+        relPath: "Vaelor Network.md",
+        properties: {
+          "file.name": "Vaelor Network.md",
+          "file.folder": "Ledger",
+          "formula.link_density": "49 links",
+          "formula.days_since_edit": "0.5",
+          "formula.status_badge": "🟢 Active"
+        }
+      }
+    ]
+  }
+};
+
+export function getBasesRecordsFallback(baseName) {
+  if (baseName && FALLBACK_BASES_RECORDS[baseName]) {
+    return FALLBACK_BASES_RECORDS[baseName];
+  }
+  const key = Object.keys(FALLBACK_BASES_RECORDS).find(k =>
+    baseName && k.toLowerCase().includes(baseName.toLowerCase().replace('.base', ''))
+  );
+  if (key) return FALLBACK_BASES_RECORDS[key];
+  return FALLBACK_BASES_RECORDS["Zoth Fleet & Daemons.base"] || Object.values(FALLBACK_BASES_RECORDS)[0];
+}
+
+export function ingestNoteFallback(title, source, tags, content) {
+  const cleanTitle = (title || 'Ingested Second Brain Note').trim();
+  const slug = cleanTitle.toLowerCase().replace(/[^a-z0-9_-]/g, '-').replace(/^-+|-+$/g, '') || 'ingested-note';
+  const tagList = Array.isArray(tags)
+    ? tags
+    : String(tags || '').split(',').map(t => t.trim()).filter(Boolean);
+  const memoryId = `mem-stdp-${Date.now().toString(16)}`;
+
+  return {
+    ok: true,
+    note: {
+      title: cleanTitle,
+      slug,
+      relPath: `04-Ingested/${slug}.md`,
+      memoryId,
+      source: source || 'antigravity-studio',
+      tags: tagList.length > 0 ? tagList : ['ingested', 'obsidian', 'second-brain'],
+      content,
+      created: new Date().toISOString()
+    }
+  };
+}
+
