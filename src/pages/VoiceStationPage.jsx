@@ -436,12 +436,12 @@ export default function VoiceStationPage() {
             <Button
               variant="contained"
               size="small"
-              href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+              href="https://github.com/1nc0gn30/zoth-studio-v2"
               target="_blank"
               rel="noopener"
               sx={{ bgcolor: '#D4AF37', color: '#08090E', fontWeight: 700, '&:hover': { bgcolor: '#F5E6AB' } }}
             >
-              💳 Stripe ($19)
+              ☕ Buy Us a Coffee
             </Button>
             <Button
               variant="contained"
@@ -449,7 +449,7 @@ export default function VoiceStationPage() {
               onClick={() => setPaywallOpen(true)}
               sx={{ background: 'linear-gradient(135deg, #9945FF 0%, #14F195 100%)', color: '#08090E', fontWeight: 700 }}
             >
-              ⚡ Solana DePay
+              ◎ Solana Tip
             </Button>
             <Button
               variant="text"
@@ -893,7 +893,7 @@ export default function VoiceStationPage() {
                 >
                   <LockIcon sx={{ color: dark ? '#D4AF37' : '#8A6508', fontSize: '1.8rem', mb: 0.5 }} />
                   <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#FFFFFF', mb: 0.5 }}>
-                    Unlock Pro Voice Debriefs
+                    100% Open Voice Debriefs
                   </Typography>
                   <Typography variant="caption" sx={{ color: dark ? '#9CA3AF' : '#4B5563', display: 'block', mb: 1.5 }}>
                     Get unlimited transcript exports, Signal audio archiving, and memory sync.
@@ -901,12 +901,12 @@ export default function VoiceStationPage() {
                   <Button
                     variant="contained"
                     size="small"
-                    href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                    href="https://github.com/1nc0gn30/zoth-studio-v2"
                     target="_blank"
                     rel="noopener"
                     sx={{ bgcolor: '#D4AF37', color: '#08090E', fontWeight: 700, mr: 1 }}
                   >
-                    Unlock ($19)
+                    ☕ Buy Us a Coffee
                   </Button>
                   <Button
                     variant="outlined"
@@ -959,7 +959,7 @@ export default function VoiceStationPage() {
             </IconButton>
 
             <Typography variant="h5" sx={{ fontWeight: 800, color: '#FFFFFF', mb: 1, display: 'flex', alignItems: 'center', gap: 1 }}>
-              <span style={{ color: dark ? '#D4AF37' : '#8A6508' }}>★</span> Zoth Voice Pro License
+              <span style={{ color: dark ? '#D4AF37' : '#8A6508' }}>★</span> Zoth Open-Source Support
             </Typography>
             <Typography variant="body2" sx={{ color: '#9CA3AF', mb: 2 }}>
               Permanent lifetime access. Unlocks real-time debrief generators, multi-persona voice archiving, and SimpleX chat sync.
@@ -975,12 +975,12 @@ export default function VoiceStationPage() {
             <Button
               fullWidth
               variant="contained"
-              href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+              href="https://github.com/1nc0gn30/zoth-studio-v2"
               target="_blank"
               rel="noopener"
               sx={{ bgcolor: '#D4AF37', color: '#08090E', fontWeight: 800, py: 1.2, mb: 1.5 }}
             >
-              💳 Lifetime Pro Access via Stripe ($19)
+              ☕ Buy Us a Coffee via Stripe
             </Button>
 
             <Box sx={{ pt: 2, borderTop: '1px solid rgba(255,255,255,0.08)' }}>

@@ -84,7 +84,7 @@ export function PayloadEntropyGodModeTool() {
   const [copiedKey, setCopiedKey] = useState(null);
 
   // Pro State
-  const [isProLicensed, setIsProLicensed] = useState(false);
+  const [isProLicensed, setIsProLicensed] = useState(true);
   const [showPaywallModal, setShowPaywallModal] = useState(false);
   const [licenseKeyInput, setLicenseKeyInput] = useState('');
 
@@ -243,7 +243,7 @@ SecRule REQUEST_BODY "@rx .+" \\
           <Box>
             <Stack direction="row" spacing={1} alignItems="center">
               <Typography variant="subtitle1" sx={{ fontWeight: 800, color: gold }}>
-                Payload &amp; Entropy Studio: Threat Intelligence Engine
+                Payload & Entropy Studio: Threat Intelligence Engine
               </Typography>
               <Chip
                 size="small"
@@ -269,7 +269,7 @@ SecRule REQUEST_BODY "@rx .+" \\
               <Button
                 variant="contained"
                 size="small"
-                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                href="https://github.com/1nc0gn30/zoth-studio-v2"
                 target="_blank"
                 rel="noreferrer"
                 startIcon={<BoltIcon />}
@@ -280,7 +280,7 @@ SecRule REQUEST_BODY "@rx .+" \\
                   '&:hover': { bgcolor: '#B8860B' }
                 }}
               >
-                Unlock Pro $19
+                ☕ Buy Us a Coffee
               </Button>
               <Button
                 variant="outlined"
@@ -542,7 +542,7 @@ SecRule REQUEST_BODY "@rx .+" \\
           <Stack direction="row" spacing={1.5} alignItems="center">
             <ShieldIcon sx={{ color: gold }} />
             <Typography variant="h6" sx={{ fontWeight: 800, color: gold }}>
-              Payload &amp; Entropy Studio Pro License
+              Payload & Entropy Studio Pro License
             </Typography>
           </Stack>
         </DialogTitle>
@@ -553,7 +553,7 @@ SecRule REQUEST_BODY "@rx .+" \\
 
           <Paper sx={{ p: 2, mb: 3, bgcolor: goldSoft, border: `1px solid ${gold}`, borderRadius: 1.5 }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold, mb: 0.5 }}>
-              ⚡ Founding Member Pricing: $19 Lifetime (Regular $79)
+              ⚡ 100% Free & Open Access — Optional Community Support
             </Typography>
             <Typography variant="caption" sx={{ color: 'text.primary' }}>
               Instant license key issued upon checkout. Supported payment rails:
@@ -562,12 +562,12 @@ SecRule REQUEST_BODY "@rx .+" \\
               <Button
                 variant="contained"
                 size="small"
-                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                href="https://github.com/1nc0gn30/zoth-studio-v2"
                 target="_blank"
                 rel="noreferrer"
                 sx={{ bgcolor: gold, color: '#000', fontWeight: 800 }}
               >
-                Stripe Checkout ($19)
+                ☕ Buy Us a Coffee (Stripe)
               </Button>
               <Button
                 variant="outlined"

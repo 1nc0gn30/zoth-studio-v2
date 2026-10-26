@@ -348,7 +348,7 @@ export default function SwarmFrameJourney({ onEnterCockpit, onBackToFunnel }) {
                     <Stack spacing={2}>
                       <Box>
                         <Typography sx={{ fontWeight: 750, fontSize: '0.92rem', color: isDark ? '#FECACA' : '#991B1B' }}>
-                          ❌ Context Degradation &amp; Drift
+                          ❌ Context Degradation & Drift
                         </Typography>
                         <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
                           A single model asked to write ASTs, audit security, and design UI forgets earlier constraints as token depth passes 16k, introducing silent regressions.
@@ -356,7 +356,7 @@ export default function SwarmFrameJourney({ onEnterCockpit, onBackToFunnel }) {
                       </Box>
                       <Box>
                         <Typography sx={{ fontWeight: 750, fontSize: '0.92rem', color: isDark ? '#FECACA' : '#991B1B' }}>
-                          ❌ Cloud Egress &amp; Exfiltration Hazard
+                          ❌ Cloud Egress & Exfiltration Hazard
                         </Typography>
                         <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
                           Proprietary source code, environment secrets, and cryptographic keys are transmitted across public WAN endpoints to 3rd-party servers.
@@ -457,7 +457,7 @@ export default function SwarmFrameJourney({ onEnterCockpit, onBackToFunnel }) {
                   sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(212,175,55,0.12)', color: gold, mb: 1.5 }}
                 />
                 <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em', mb: 1 }}>
-                  The What: <span style={{ color: gold }}>The 21-Agent Pantheon &amp; 5 Cadres</span>
+                  The What: <span style={{ color: gold }}>The 21-Agent Pantheon & 5 Cadres</span>
                 </Typography>
                 <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 860, fontSize: '1rem', lineHeight: 1.6 }}>
                   The swarm is divided into 5 tactical cadres. Explore each cadre below to inspect its agents, roles, and assigned cognitive tasks.
@@ -583,7 +583,7 @@ export default function SwarmFrameJourney({ onEnterCockpit, onBackToFunnel }) {
                   endIcon={<ArrowForwardIcon />}
                   sx={{ fontFamily: mono, fontWeight: 750, bgcolor: gold, color: '#000000', '&:hover': { bgcolor: '#F5E6AB' } }}
                 >
-                  Next: The Hows &amp; Plumbing (Frame 03)
+                  Next: The Hows & Plumbing (Frame 03)
                 </Button>
               </Box>
             </Paper>
@@ -738,7 +738,7 @@ export default function SwarmFrameJourney({ onEnterCockpit, onBackToFunnel }) {
                 {activePhase === 1 && (
                   <Box>
                     <Typography variant="h6" sx={{ fontWeight: 800, color: gold, mb: 1 }}>
-                      Phase 1 (T+0ms): Input Ingestion &amp; Shannon Entropy Gate
+                      Phase 1 (T+0ms): Input Ingestion & Shannon Entropy Gate
                     </Typography>
                     <Typography variant="body2" color="text.secondary" paragraph>
                       Before any LLM sees the prompt, Sentinel evaluates the request against mathematical Shannon entropy limits:
@@ -794,7 +794,7 @@ export default function SwarmFrameJourney({ onEnterCockpit, onBackToFunnel }) {
                 {activePhase === 5 && (
                   <Box>
                     <Typography variant="h6" sx={{ fontWeight: 800, color: 'var(--zs-mint)', mb: 1 }}>
-                      Phase 5 (T+320ms): 2f+1 Quorum Ratification &amp; Disk Commit
+                      Phase 5 (T+320ms): 2f+1 Quorum Ratification & Disk Commit
                     </Typography>
                     <Typography variant="body2" color="text.secondary" paragraph>
                       A supermajority (15 of 21 agents) signs the SHA-256 Merkle root. Janus advances the Lamport epoch counter and commits the files to disk. The neuro-memory daemon records synaptic potentiations for future recall.

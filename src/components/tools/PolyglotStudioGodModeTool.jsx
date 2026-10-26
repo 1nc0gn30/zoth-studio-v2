@@ -256,7 +256,7 @@ export function PolyglotStudioGodModeTool() {
   const [copiedKey, setCopiedKey] = useState(null);
 
   // Pro State
-  const [isProLicensed, setIsProLicensed] = useState(false);
+  const [isProLicensed, setIsProLicensed] = useState(true);
   const [showPaywallModal, setShowPaywallModal] = useState(false);
   const [licenseKeyInput, setLicenseKeyInput] = useState('');
 
@@ -366,7 +366,7 @@ export function PolyglotStudioGodModeTool() {
                 <Button
                   variant="contained"
                   component="a"
-                  href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                  href="https://github.com/1nc0gn30/zoth-studio-v2"
                   target="_blank"
                   rel="noopener"
                   startIcon={<BoltIcon />}
@@ -384,7 +384,7 @@ export function PolyglotStudioGodModeTool() {
                 <Button
                   variant="outlined"
                   component="a"
-                  href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                  href="https://github.com/1nc0gn30/zoth-studio-v2"
                   target="_blank"
                   rel="noopener"
                   sx={{
@@ -668,7 +668,7 @@ export function PolyglotStudioGodModeTool() {
         }}
       >
         <DialogTitle sx={{ fontWeight: 800, fontFamily: mono, color: gold, pb: 1 }}>
-          ⭐ ACTIVATE PRO LICENSE
+          ✦ 100% OPEN ACCESS
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>

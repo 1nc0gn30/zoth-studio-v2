@@ -820,7 +820,7 @@ Runs local invariant verification before staging tools.`
                       sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
-                      1. Sovereign Architecture Overview &amp; Topology
+                      1. Sovereign Architecture Overview & Topology
                     </Typography>
                   </Box>
 
@@ -1185,7 +1185,7 @@ const task = await dispatcher.broadcastTask({
                       sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
-                      4. Signal Bridge &amp; Simplex E2EE Protocol
+                      4. Signal Bridge & Simplex E2EE Protocol
                     </Typography>
                   </Box>
 
@@ -1224,7 +1224,7 @@ cd tools/sovereign-agent-bridge && npm start`}
                       sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
-                      5. Argon2id Hardware Vault &amp; Adytum Sanctum
+                      5. Argon2id Hardware Vault & Adytum Sanctum
                     </Typography>
                   </Box>
 
@@ -1271,7 +1271,7 @@ console.log("Vault Encrypted Seal:", encryptedKey);`}
                       sx={{ bgcolor: 'rgba(0,240,255,0.12)', color: '#00F0FF', fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
-                      6. Lucy Cognitive Oracle &amp; Biomorphic STDP Synaptic Memory
+                      6. Lucy Cognitive Oracle & Biomorphic STDP Synaptic Memory
                     </Typography>
                   </Box>
 
@@ -1385,7 +1385,7 @@ console.log("Byzantine Consensus Verdict:", verdict.sealed ? "UNANIMOUS APPROVAL
                       sx={{ bgcolor: 'rgba(56,189,248,0.12)', color: 'var(--zs-sky)', fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
-                      8. Netlify Edge Deployment &amp; 71 Prerendered Routes
+                      8. Netlify Edge Deployment & 71 Prerendered Routes
                     </Typography>
                   </Box>
 
@@ -1459,7 +1459,7 @@ npm run preview`}
                       sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
-                      9. Zoth OS VM Setup &amp; USB Booting
+                      9. Zoth OS VM Setup & USB Booting
                     </Typography>
                   </Box>
 
@@ -1498,7 +1498,7 @@ npm run preview`}
                       sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
-                      10. CLI Command Cheat Sheet &amp; Health Audit
+                      10. CLI Command Cheat Sheet & Health Audit
                     </Typography>
                   </Box>
 
@@ -1671,7 +1671,7 @@ npm run preview`}
                       sx={{ bgcolor: 'rgba(52,211,153,0.14)', color: 'var(--zs-mint)', fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 750, color: textPrimary }}>
-                      12. Zero-Egress Enclave &amp; Shannon Entropy Gating
+                      12. Zero-Egress Enclave & Shannon Entropy Gating
                     </Typography>
                   </Box>
 
@@ -1735,7 +1735,7 @@ npm run preview`}
                       sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 750, color: textPrimary }}>
-                      14. Practical Developer Quickstart: Desktop, Ollama &amp; CLI Tools
+                      14. Practical Developer Quickstart: Desktop, Ollama & CLI Tools
                     </Typography>
                   </Box>
 
@@ -1830,7 +1830,7 @@ envguard --help`}
                       sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 750, color: textPrimary }}>
-                      15. Model Context Protocol (MCP 2025-03-26) &amp; Agent Experience (AX) Specification
+                      15. Model Context Protocol (MCP 2025-03-26) & Agent Experience (AX) Specification
                     </Typography>
                   </Box>
 
@@ -1887,10 +1887,10 @@ curl -s https://zothos.nullai.tech/.well-known/mcp.json | jq .mcpServers`}
         {/* Sovereign Installation Funnel */}
         <RevealOnScroll preset="fadeUp">
           <SovereignFunnel
-            title="Install Zoth Studio v2 &amp; Sovereign Zoth OS"
+            title="Install Zoth Studio v2 & Sovereign Zoth OS"
             subtitle="Full documentation and deployment pipeline for zero-telemetry development, local loopback enclaves, 43 workstations, and bare-metal OS hypervisors."
             toolTitle="Option 1: Zero-Egress CLI Suite"
-            toolTag="DOCS &amp; RUNTIME"
+            toolTag="DOCS & RUNTIME"
             toolDescription="Download the air-gapped documentation suite, offline CLI diagnostic toolbench, and local IPC verification harness."
             toolRepo="https://github.com/NullAITech/zoth-studio-v2"
             toolCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git && cd zoth-studio-v2 && npm install"

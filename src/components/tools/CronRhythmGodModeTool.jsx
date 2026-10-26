@@ -211,7 +211,7 @@ export function CronRhythmGodModeTool() {
   const [nextTriggers, setNextTriggers] = useState([]);
   const [activeHours, setActiveHours] = useState([]);
   const [copiedKey, setCopiedKey] = useState(null);
-  const [isProLicensed, setIsProLicensed] = useState(false);
+  const [isProLicensed, setIsProLicensed] = useState(true);
   const [showPaywallModal, setShowPaywallModal] = useState(false);
   const [licenseKeyInput, setLicenseKeyInput] = useState('');
   const [countdownText, setCountdownText] = useState('');
@@ -437,7 +437,7 @@ ${cronExpression} /usr/local/bin/zoth-agent-tick >> /var/log/zoth/rhythm.log 2>&
               />
             </Stack>
             <Typography variant="caption" color="text.secondary">
-              5-field POSIX &amp; Quartz cron parser, 24-hour radial execution clock, and systemd timer generator.
+              5-field POSIX & Quartz cron parser, 24-hour radial execution clock, and systemd timer generator.
             </Typography>
           </Box>
         </Stack>
@@ -448,7 +448,7 @@ ${cronExpression} /usr/local/bin/zoth-agent-tick >> /var/log/zoth/rhythm.log 2>&
               <Button
                 variant="contained"
                 size="small"
-                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                href="https://github.com/1nc0gn30/zoth-studio-v2"
                 target="_blank"
                 rel="noreferrer"
                 startIcon={<BoltIcon />}
@@ -459,7 +459,7 @@ ${cronExpression} /usr/local/bin/zoth-agent-tick >> /var/log/zoth/rhythm.log 2>&
                   '&:hover': { bgcolor: '#B8860B' }
                 }}
               >
-                Unlock Pro $19
+                ☕ Buy Us a Coffee
               </Button>
               <Button
                 variant="outlined"
@@ -629,7 +629,7 @@ ${cronExpression} /usr/local/bin/zoth-agent-tick >> /var/log/zoth/rhythm.log 2>&
                       #
                     </TableCell>
                     <TableCell sx={{ fontWeight: 800, fontFamily: mono, bgcolor: isDark ? voidDark : '#F8FAFC' }}>
-                      Execution Date &amp; Time (Local)
+                      Execution Date & Time (Local)
                     </TableCell>
                     <TableCell sx={{ fontWeight: 800, fontFamily: mono, bgcolor: isDark ? voidDark : '#F8FAFC' }}>
                       UTC Timestamp
@@ -716,7 +716,7 @@ ${cronExpression} /usr/local/bin/zoth-agent-tick >> /var/log/zoth/rhythm.log 2>&
 
           <Paper sx={{ p: 2, mb: 3, bgcolor: goldSoft, border: `1px solid ${gold}`, borderRadius: 1.5 }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold, mb: 0.5 }}>
-              ⚡ Founding Member Pricing: $19 Lifetime (Regular $79)
+              ⚡ 100% Free & Open Access — Optional Community Support
             </Typography>
             <Typography variant="caption" sx={{ color: 'text.primary' }}>
               Instant license key issued upon checkout. Supported payment rails:
@@ -725,12 +725,12 @@ ${cronExpression} /usr/local/bin/zoth-agent-tick >> /var/log/zoth/rhythm.log 2>&
               <Button
                 variant="contained"
                 size="small"
-                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                href="https://github.com/1nc0gn30/zoth-studio-v2"
                 target="_blank"
                 rel="noreferrer"
                 sx={{ bgcolor: gold, color: '#000', fontWeight: 800 }}
               >
-                Stripe Checkout ($19)
+                ☕ Buy Us a Coffee (Stripe)
               </Button>
               <Button
                 variant="outlined"

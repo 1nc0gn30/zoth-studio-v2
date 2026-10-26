@@ -172,7 +172,7 @@ export function GhidraMcpGodModeTool() {
   const [copiedKey, setCopiedKey] = useState(null);
 
   // Pro State
-  const [isProLicensed, setIsProLicensed] = useState(false);
+  const [isProLicensed, setIsProLicensed] = useState(true);
   const [showPaywallModal, setShowPaywallModal] = useState(false);
   const [licenseKeyInput, setLicenseKeyInput] = useState('');
 
@@ -276,7 +276,7 @@ export function GhidraMcpGodModeTool() {
                 <Button
                   variant="contained"
                   component="a"
-                  href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                  href="https://github.com/1nc0gn30/zoth-studio-v2"
                   target="_blank"
                   rel="noopener"
                   startIcon={<BoltIcon />}
@@ -294,7 +294,7 @@ export function GhidraMcpGodModeTool() {
                 <Button
                   variant="outlined"
                   component="a"
-                  href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                  href="https://github.com/1nc0gn30/zoth-studio-v2"
                   target="_blank"
                   rel="noopener"
                   sx={{
@@ -344,7 +344,7 @@ export function GhidraMcpGodModeTool() {
               </Box>
               <Box>
                 <Typography variant="h5" sx={{ fontWeight: 800, color: isDark ? '#FFF' : '#111827' }}>
-                  GhidraMCP <span style={{ color: cyan }}>Decompiler &amp; AST Engine</span>
+                  GhidraMCP <span style={{ color: cyan }}>Decompiler & AST Engine</span>
                 </Typography>
                 <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
                   LaurieWired Specification · Apache-2.0 · Localhost IPC Protocol
@@ -543,7 +543,7 @@ export function GhidraMcpGodModeTool() {
               {/* Annotation & Comments */}
               <Box sx={{ p: 2, bgcolor: voidDark, borderRadius: 2, border: '1px solid rgba(255,255,255,0.08)' }}>
                 <Typography variant="caption" sx={{ color: gold, fontWeight: 700, fontFamily: mono, display: 'block', mb: 1 }}>
-                  💬 GHIDRA ANNOTATIONS &amp; AGENT COMMENTS
+                  💬 GHIDRA ANNOTATIONS & AGENT COMMENTS
                 </Typography>
                 <Stack direction="row" spacing={1} sx={{ mb: 1.5 }}>
                   <TextField
@@ -615,7 +615,7 @@ export function GhidraMcpGodModeTool() {
           <Grid xs={12} md={6}>
             <Paper sx={{ p: 2.5, bgcolor: isDark ? '#10121A' : '#FFFFFF', border: `1px solid ${cardBorder}`, borderRadius: 2 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 1.5, color: emerald }}>
-                Dynamic Library Imports &amp; Linkages
+                Dynamic Library Imports & Linkages
               </Typography>
               <Stack spacing={1}>
                 {selectedProgram.imports.map((imp, idx) => (
@@ -637,7 +637,7 @@ export function GhidraMcpGodModeTool() {
       {activeTab === 2 && (
         <Paper sx={{ p: 2.5, bgcolor: isDark ? '#10121A' : '#FFFFFF', border: `1px solid ${cardBorder}`, borderRadius: 2.5 }}>
           <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 1, color: cyan }}>
-            LaurieWired GhidraMCP Agent Commands &amp; One-Liners
+            LaurieWired GhidraMCP Agent Commands & One-Liners
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
             Execute these commands directly in your terminal or register in any MCP-compatible agent environment:
@@ -700,7 +700,7 @@ export function GhidraMcpGodModeTool() {
         }}
       >
         <DialogTitle sx={{ fontWeight: 800, fontFamily: mono, color: gold, pb: 1 }}>
-          ⭐ ACTIVATE PRO LICENSE
+          ✦ 100% OPEN ACCESS
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>

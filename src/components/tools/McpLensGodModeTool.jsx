@@ -404,7 +404,7 @@ export default function McpLensGodModeTool() {
             <>
               <Button
                 variant="contained"
-                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                href="https://github.com/1nc0gn30/zoth-studio-v2"
                 target="_blank"
                 rel="noopener noreferrer"
                 startIcon={<BoltIcon />}
@@ -916,7 +916,7 @@ export default function McpLensGodModeTool() {
                   <Stack direction="row" spacing={1.5}>
                     <Button
                       variant="contained"
-                      href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                      href="https://github.com/1nc0gn30/zoth-studio-v2"
                       target="_blank"
                       rel="noopener noreferrer"
                       sx={{ bgcolor: '#D4AF37', color: '#000', fontWeight: 800, fontFamily: mono }}

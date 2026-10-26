@@ -789,7 +789,7 @@ export default function Navbar({ mode, onToggleTheme }) {
         anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
       >
         <Typography variant="caption" sx={{ px: 2, py: 1, display: 'block', fontWeight: 800, color: goldAccent, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: mono, fontSize: '0.7rem' }}>
-          Theory &amp; Specifications
+          Theory & Specifications
         </Typography>
         <Divider sx={{ mb: 1, opacity: 0.4, borderColor: dark ? 'rgba(212, 175, 55, 0.15)' : 'rgba(212, 175, 55, 0.2)' }} />
         {knowledgeItems.map((item) => {
@@ -1576,7 +1576,7 @@ export default function Navbar({ mode, onToggleTheme }) {
                 fontSize: '0.7rem',
               }}
             >
-              Knowledge &amp; Specs
+              Knowledge & Specs
             </Typography>
             <List dense>
               {knowledgeItems.map((item) => {

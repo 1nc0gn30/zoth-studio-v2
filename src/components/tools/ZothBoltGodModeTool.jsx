@@ -471,7 +471,7 @@ export default function ZothBoltGodModeTool() {
                 name: 'What payment and licensing options are supported?',
                 acceptedAnswer: {
                   '@type': 'Answer',
-                  text: 'Supports instant lifetime unlock via Stripe (Cards/Apple Pay) and Solana DePay with ?licensed=true client-side activation.',
+                  text: 'Supports instant lifetime unlock via Stripe (Cards/Apple Pay) and Solana Tip with ?licensed=true client-side activation.',
                 },
               },
             ],
@@ -488,7 +488,7 @@ export default function ZothBoltGodModeTool() {
     if (!/Neal Frazier Tech|1nc0gn30/i.test(patched) || !/Stripe|Solana|DePay|licensed/i.test(patched)) {
       const footerBar = `
 <section style="margin:24px auto;max-width:1120px;padding:14px 20px;border-radius:14px;background:rgba(17,20,32,0.92);border:1px solid rgba(212,175,55,0.4);color:#F8FAFC;font-family:monospace;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
-  <div><strong style="color:#D4AF37;">⚡ FOUNDING LIFETIME PRO ($19 <s style="opacity:.6">$79</s>)</strong> • Instant Stripe &amp; Solana DePay Unlock (<code>?licensed=true</code>)</div>
+  <div><strong style="color:#D4AF37;">⚡ FOUNDING LIFETIME PRO ($19 <s style="opacity:.6">$79</s>)</strong> • Instant Stripe & Solana Tip Unlock (<code>?licensed=true</code>)</div>
   <div style="font-size:12px;color:#94A3B8;">Engineered by <a href="https://github.com/1nc0gn30" style="color:#D4AF37;">Neal Frazier Tech (@1nc0gn30)</a> • <a href="https://nullai.tech" style="color:#38BDF8;">NullAI Platform</a></div>
 </section>`;
       patched = patched.replace(/<\/body>/i, `${footerBar}\n</body>`);
@@ -655,10 +655,10 @@ export default function ZothBoltGodModeTool() {
             variant="h5"
             sx={{ fontFamily: displayFont, fontWeight: 800, color: '#F5E6AB', letterSpacing: '0.02em' }}
           >
-            Zoth Bolt — Full-Stack AI, Motion Edit &amp; Asset Architect
+            Zoth Bolt — Full-Stack AI, Motion Edit & Asset Architect
           </Typography>
           <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#94A3B8', mt: 0.4 }}>
-            Supercharged for Zoth Studio &amp; ZothOS • Proudly built on the open-source <span style={{ color: '#D4AF37' }}>bolt.diy</span> foundation
+            Supercharged for Zoth Studio & ZothOS • Proudly built on the open-source <span style={{ color: '#D4AF37' }}>bolt.diy</span> foundation
           </Typography>
         </Box>
 
@@ -741,7 +741,7 @@ export default function ZothBoltGodModeTool() {
         <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2.5, mb: 2 }}>
           <Box sx={{ p: 2.5, borderRadius: 2.5, bgcolor: '#111420', border: '1px solid rgba(212,175,55,0.35)' }}>
             <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', fontWeight: 900, color: '#D4AF37', mb: 0.5 }}>
-              🔗 LIVE URL DECONSTRUCTOR &amp; REMIX ENGINE (SAME.NEW / V0 STYLE)
+              🔗 LIVE URL DECONSTRUCTOR & REMIX ENGINE (SAME.NEW / V0 STYLE)
             </Typography>
             <Typography sx={{ fontSize: '0.78rem', color: '#94A3B8', mb: 1.5 }}>
               Paste any public reference or competitor URL. Zoth Bolt extracts its headings, navigation, color hex swatches, and typography, then synthesizes an upgraded Awwwards redesign.
@@ -795,7 +795,7 @@ export default function ZothBoltGodModeTool() {
                   }}
                   sx={{ bgcolor: '#10B981', color: '#08080B', fontFamily: mono, fontWeight: 900, fontSize: '0.73rem', textTransform: 'none' }}
                 >
-                  ⚡ Clone &amp; Synthesize Upgraded Site Now
+                  ⚡ Clone & Synthesize Upgraded Site Now
                 </Button>
               </Box>
             )}
@@ -867,7 +867,7 @@ export default function ZothBoltGodModeTool() {
               }}
               sx={{ bgcolor: '#38BDF8', color: '#08080B', fontFamily: mono, fontWeight: 900, fontSize: '0.73rem', textTransform: 'none' }}
             >
-              ⚡ Compile {selectedSections.length}-Section Stack &amp; Synthesize
+              ⚡ Compile {selectedSections.length}-Section Stack & Synthesize
             </Button>
           </Box>
         </Box>
@@ -945,7 +945,7 @@ export default function ZothBoltGodModeTool() {
                     textTransform: 'none',
                   }}
                 >
-                  ⚡ Load Motion Template &amp; Synthesize
+                  ⚡ Load Motion Template & Synthesize
                 </Button>
               </Box>
             ))}
@@ -958,7 +958,7 @@ export default function ZothBoltGodModeTool() {
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
           <Box sx={{ p: 2, borderRadius: 2.5, bgcolor: '#111420', border: '1px solid rgba(212,175,55,0.25)' }}>
             <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', fontWeight: 800, color: '#F5E6AB', mb: 1.5 }}>
-              👾 BUILT-IN 16-BIT PIXEL ART SVGS &amp; MULTI-LAYERED VECTOR CRESTS (ZERO EXTERNAL DEPENDENCIES)
+              👾 BUILT-IN 16-BIT PIXEL ART SVGS & MULTI-LAYERED VECTOR CRESTS (ZERO EXTERNAL DEPENDENCIES)
             </Typography>
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr 1fr', sm: 'repeat(4, 1fr)' }, gap: 1.5 }}>
               {PIXEL_ART_SVGS.map((item) => (
@@ -1033,7 +1033,7 @@ export default function ZothBoltGodModeTool() {
           {/* Free Iconify 200k+ Search */}
           <Box sx={{ p: 2, borderRadius: 2.5, bgcolor: '#111420', border: '1px solid rgba(56,189,248,0.25)' }}>
             <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', fontWeight: 800, color: '#38BDF8', mb: 1.2 }}>
-              🔍 SEARCH 200,000+ FREE VECTOR &amp; PIXEL-ART ICONS (ICONIFY + DICEBEAR REST API)
+              🔍 SEARCH 200,000+ FREE VECTOR & PIXEL-ART ICONS (ICONIFY + DICEBEAR REST API)
             </Typography>
             <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1.5 }}>
               <Select
@@ -1045,7 +1045,7 @@ export default function ZothBoltGodModeTool() {
                 <MenuItem value="pixelarticons">Pixelarticons (8-Bit Pixel Art)</MenuItem>
                 <MenuItem value="lucide">Lucide (Clean Vector)</MenuItem>
                 <MenuItem value="ph">Phosphor (Editorial Vector)</MenuItem>
-                <MenuItem value="game-icons">Game-Icons (RPG &amp; Arcade)</MenuItem>
+                <MenuItem value="game-icons">Game-Icons (RPG & Arcade)</MenuItem>
                 <MenuItem value="simple-icons">Simple-Icons (Brand Logos)</MenuItem>
                 <MenuItem value="all">All 200,000+ Free Icons</MenuItem>
               </Select>
@@ -1105,7 +1105,7 @@ export default function ZothBoltGodModeTool() {
           <Box sx={{ p: 2, borderRadius: 2.5, bgcolor: '#111420', border: '1px solid rgba(16,185,129,0.3)' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
               <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: '#34D399' }}>
-                🔌 ZOTH BOLT MEDIA &amp; FULL-STACK MCP SERVER (zoth_bolt_search_free_icons · zoth_bolt_get_svg_pixel_library · zoth_bolt_list_motion_templates)
+                🔌 ZOTH BOLT MEDIA & FULL-STACK MCP SERVER (zoth_bolt_search_free_icons · zoth_bolt_get_svg_pixel_library · zoth_bolt_list_motion_templates)
               </Typography>
               <Button
                 size="small"
@@ -1214,7 +1214,7 @@ export default function ZothBoltGodModeTool() {
 
             <Box>
               <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: '#D4AF37', fontWeight: 800, mb: 0.6 }}>
-                HIGH-CRAFT SITE &amp; MOTION SPECIFICATION
+                HIGH-CRAFT SITE & MOTION SPECIFICATION
               </Typography>
               <TextField
                 fullWidth
@@ -1240,7 +1240,7 @@ export default function ZothBoltGodModeTool() {
             {/* Quick High-Craft Presets */}
             <Box>
               <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#94A3B8', mb: 0.6 }}>
-                INSTANT HIGH-CRAFT &amp; MOTION SEEDS:
+                INSTANT HIGH-CRAFT & MOTION SEEDS:
               </Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.6 }}>
                 {[

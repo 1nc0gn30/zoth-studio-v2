@@ -902,7 +902,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
           <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
             <Button
               variant="contained"
-              href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+              href="https://github.com/1nc0gn30/zoth-studio-v2"
               target="_blank"
               rel="noopener noreferrer"
               sx={{
@@ -933,7 +933,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
                 '&:hover': { borderColor: '#34D399', bgcolor: 'rgba(16,185,129,0.08)' },
               }}
             >
-              Solana DePay ⚡
+              Solana Tip ⚡
             </Button>
             <Button
               size="small"
@@ -1352,7 +1352,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
       >
         <DialogTitle sx={{ fontWeight: 800, fontFamily: mono, display: 'flex', alignItems: 'center', gap: 1 }}>
           <VpnKeyIcon sx={{ color: realityAccent }} />
-          Activate Pro License
+          100% Open Access
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>

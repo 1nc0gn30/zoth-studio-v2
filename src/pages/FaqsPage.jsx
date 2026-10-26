@@ -853,7 +853,7 @@ ${oracleResult.faq.a}`;
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
               <TerminalIcon sx={{ color: gold.accent }} />
               <Typography variant="subtitle1" sx={{ fontWeight: 800, color: isDark ? gold.soft : gold.accent }}>
-                Explore Interactive Workstations &amp; Shaders
+                Explore Interactive Workstations & Shaders
               </Typography>
             </Box>
             <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>

@@ -233,7 +233,7 @@ export default function AdytumPlannerGodModeTool() {
               />
             </Stack>
             <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mt: 0.3 }}>
-              Deterministic intention crystallization, 5-minute incubation timer &amp; local-model gate
+              Deterministic intention crystallization, 5-minute incubation timer & local-model gate
             </Typography>
           </Box>
         </Box>

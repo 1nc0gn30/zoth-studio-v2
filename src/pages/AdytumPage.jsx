@@ -1435,7 +1435,7 @@ export function AdytumEngine({ embedded = false }) {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mb: 0.5 }}>
                   <LockIcon sx={{ color: gold, fontSize: '1.6rem' }} />
                   <Typography variant="h5" sx={{ fontWeight: 900, color: textPrimary, letterSpacing: '-0.01em' }}>
-                    How &amp; Why Hardware Enclaves Function (Zero Cloud Egress)
+                    How & Why Hardware Enclaves Function (Zero Cloud Egress)
                   </Typography>
                 </Box>
                 <Typography variant="body2" sx={{ color: textSecondary, maxWidth: 840, lineHeight: 1.6 }}>
@@ -1499,7 +1499,7 @@ export function AdytumEngine({ embedded = false }) {
               </Typography>
               <Box sx={{ p: 1.2, mb: 2, bgcolor: dark ? '#040508' : '#FFFFFF', border: `1px solid ${divider}`, borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Typography sx={{ fontFamily: mono, fontSize: '0.8rem', color: dark ? '#38BDF8' : '#0369A1', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git &amp;&amp; cd adytum-alchemist-ai-workflow
+                  git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git && cd adytum-alchemist-ai-workflow
                 </Typography>
                 <IconButton aria-label="Copy to clipboard"
                   size="small"
@@ -1698,7 +1698,7 @@ export function AdytumEngine({ embedded = false }) {
               The 22 Major Arcana Tarot Grimoire Deck
             </Typography>
             <Typography variant="caption" sx={{ color: textSecondary }}>
-              Visual archetype cards mapped to transformer mechanisms &amp; distributed system invariants
+              Visual archetype cards mapped to transformer mechanisms & distributed system invariants
             </Typography>
           </Box>
 
@@ -1716,7 +1716,7 @@ export function AdytumEngine({ embedded = false }) {
                 '&:hover': { borderColor: goldLight, bgcolor: goldBg },
               }}
             >
-              Shuffle &amp; Draw Random Key
+              Shuffle & Draw Random Key
             </Button>
             <Button
               variant={deckViewMode === 'carousel' ? 'contained' : 'outlined'}
@@ -2103,7 +2103,7 @@ export function AdytumEngine({ embedded = false }) {
                 }}
               >
                 <Typography variant="caption" sx={{ display: 'block', color: dark ? goldLight : '#8A6A09', fontWeight: 750, mb: 0.5 }}>
-                  Cognitive Neuroscience &amp; Sovereign Architecture Doctrine:
+                  Cognitive Neuroscience & Sovereign Architecture Doctrine:
                 </Typography>
                 <Typography variant="caption" sx={{ display: 'block', color: textSecondary, lineHeight: 1.55 }}>
                   Immediate code generation triggers <em>cognitive fixation</em> and premature technical debt. The 300-second incubation pause activates the brain's Default Mode Network (diffuse-mode thinking), allowing your subconscious to reconcile latent invariants, detect edge-cases, and break free from initial implementation biases.

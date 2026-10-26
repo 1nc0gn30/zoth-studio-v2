@@ -186,7 +186,7 @@ export function AgentPolicyAuditorGodModeTool() {
   const [verifyResult, setVerifyResult] = useState(null);
 
   const [copiedKey, setCopiedKey] = useState(null);
-  const [isProLicensed, setIsProLicensed] = useState(false);
+  const [isProLicensed, setIsProLicensed] = useState(true);
   const [showPaywallModal, setShowPaywallModal] = useState(false);
   const [licenseKeyInput, setLicenseKeyInput] = useState('');
 
@@ -397,7 +397,7 @@ export function AgentPolicyAuditorGodModeTool() {
           <Box>
             <Stack direction="row" spacing={1} alignItems="center">
               <Typography variant="subtitle1" sx={{ fontWeight: 800, color: gold }}>
-                Agent Policy Auditor &amp; Capability Leaser
+                Agent Policy Auditor & Capability Leaser
               </Typography>
               <Chip
                 size="small"
@@ -423,7 +423,7 @@ export function AgentPolicyAuditorGodModeTool() {
               <Button
                 variant="contained"
                 size="small"
-                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                href="https://github.com/1nc0gn30/zoth-studio-v2"
                 target="_blank"
                 rel="noreferrer"
                 startIcon={<BoltIcon />}
@@ -434,7 +434,7 @@ export function AgentPolicyAuditorGodModeTool() {
                   '&:hover': { bgcolor: '#B8860B' }
                 }}
               >
-                Unlock Pro $19
+                ☕ Buy Us a Coffee
               </Button>
               <Button
                 variant="outlined"
@@ -562,7 +562,7 @@ export function AgentPolicyAuditorGodModeTool() {
 
                   {/* Findings Feed */}
                   <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: 'text.secondary' }}>
-                    IDENTIFIED VULNERABILITIES &amp; POLICY REMEDIATIONS ({auditReport.findings.length}):
+                    IDENTIFIED VULNERABILITIES & POLICY REMEDIATIONS ({auditReport.findings.length}):
                   </Typography>
 
                   <Box sx={{ maxHeight: 270, overflowY: 'auto', pr: 0.5 }}>
@@ -690,7 +690,7 @@ export function AgentPolicyAuditorGodModeTool() {
                       '&:hover': { bgcolor: '#B8860B' }
                     }}
                   >
-                    SIGN &amp; GRANT HMAC LEASE
+                    SIGN & GRANT HMAC LEASE
                   </Button>
                 </Stack>
               </Paper>
@@ -779,7 +779,7 @@ export function AgentPolicyAuditorGodModeTool() {
                   '&:hover': { bgcolor: '#059669' }
                 }}
               >
-                VERIFY CRYPTOGRAPHIC SIGNATURE &amp; TTL
+                VERIFY CRYPTOGRAPHIC SIGNATURE & TTL
               </Button>
             </Grid>
 
@@ -823,7 +823,7 @@ export function AgentPolicyAuditorGodModeTool() {
               ) : (
                 <Paper sx={{ p: 5, textAlign: 'center', bgcolor: isDark ? voidDark : '#F8FAFC', border: `1px dashed ${cardBorder}` }}>
                   <Typography variant="body2" sx={{ fontFamily: mono, color: 'text.secondary' }}>
-                    Paste a lease token and click &ldquo;VERIFY CRYPTOGRAPHIC SIGNATURE &amp; TTL&rdquo; to inspect integrity.
+                    Paste a lease token and click &ldquo;VERIFY CRYPTOGRAPHIC SIGNATURE & TTL&rdquo; to inspect integrity.
                   </Typography>
                 </Paper>
               )}
@@ -861,7 +861,7 @@ export function AgentPolicyAuditorGodModeTool() {
 
           <Paper sx={{ p: 2, mb: 3, bgcolor: goldSoft, border: `1px solid ${gold}`, borderRadius: 1.5 }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold, mb: 0.5 }}>
-              ⚡ Founding Member Pricing: $19 Lifetime (Regular $79)
+              ⚡ 100% Free & Open Access — Optional Community Support
             </Typography>
             <Typography variant="caption" sx={{ color: 'text.primary' }}>
               Instant license key issued upon checkout. Supported payment rails:
@@ -870,12 +870,12 @@ export function AgentPolicyAuditorGodModeTool() {
               <Button
                 variant="contained"
                 size="small"
-                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                href="https://github.com/1nc0gn30/zoth-studio-v2"
                 target="_blank"
                 rel="noreferrer"
                 sx={{ bgcolor: gold, color: '#000', fontWeight: 800 }}
               >
-                Stripe Checkout ($19)
+                ☕ Buy Us a Coffee (Stripe)
               </Button>
               <Button
                 variant="outlined"

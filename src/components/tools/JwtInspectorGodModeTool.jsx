@@ -111,7 +111,7 @@ export function JwtInspectorGodModeTool() {
   const [copiedKey, setCopiedKey] = useState(null);
 
   // Pro State
-  const [isProLicensed, setIsProLicensed] = useState(false);
+  const [isProLicensed, setIsProLicensed] = useState(true);
   const [showPaywallModal, setShowPaywallModal] = useState(false);
   const [licenseKeyInput, setLicenseKeyInput] = useState('');
 
@@ -381,7 +381,7 @@ export function JwtInspectorGodModeTool() {
               <Button
                 variant="contained"
                 size="small"
-                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                href="https://github.com/1nc0gn30/zoth-studio-v2"
                 target="_blank"
                 rel="noreferrer"
                 startIcon={<BoltIcon />}
@@ -392,7 +392,7 @@ export function JwtInspectorGodModeTool() {
                   '&:hover': { bgcolor: '#B8860B' }
                 }}
               >
-                Unlock Pro $19
+                ☕ Buy Us a Coffee
               </Button>
               <Button
                 variant="outlined"
@@ -465,7 +465,7 @@ export function JwtInspectorGodModeTool() {
           <Paper sx={{ p: 2, mb: 2, bgcolor: isDark ? surfaceDark : theme.palette.background.paper, border: `1px solid ${cardBorder}`, borderRadius: 2 }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
               <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: crimson }}>
-                HEADER: ALGORITHM &amp; TOKEN TYPE
+                HEADER: ALGORITHM & TOKEN TYPE
               </Typography>
               <Button
                 size="small"
@@ -487,7 +487,7 @@ export function JwtInspectorGodModeTool() {
           <Paper sx={{ p: 2, bgcolor: isDark ? surfaceDark : theme.palette.background.paper, border: `1px solid ${cardBorder}`, borderRadius: 2 }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
               <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: cyan }}>
-                PAYLOAD: DATA CLAIMS &amp; TIMESTAMPS
+                PAYLOAD: DATA CLAIMS & TIMESTAMPS
               </Typography>
               <Button
                 size="small"
@@ -578,7 +578,7 @@ export function JwtInspectorGodModeTool() {
           {/* Security Linter & Vulnerability Findings */}
           <Paper sx={{ p: 2.5, bgcolor: isDark ? surfaceDark : theme.palette.background.paper, border: `1px solid ${cardBorder}`, borderRadius: 2 }}>
             <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: 'text.secondary', mb: 1.5, display: 'block' }}>
-              SECURITY LINTER &amp; CVE SCANNER ({securityFindings.length} FINDINGS)
+              SECURITY LINTER & CVE SCANNER ({securityFindings.length} FINDINGS)
             </Typography>
 
             <Stack spacing={1}>
@@ -639,7 +639,7 @@ export function JwtInspectorGodModeTool() {
 
           <Paper sx={{ p: 2, mb: 3, bgcolor: goldSoft, border: `1px solid ${gold}`, borderRadius: 1.5 }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold, mb: 0.5 }}>
-              ⚡ Founding Member Pricing: $19 Lifetime (Regular $79)
+              ⚡ 100% Free & Open Access — Optional Community Support
             </Typography>
             <Typography variant="caption" sx={{ color: 'text.primary' }}>
               Instant license key issued upon checkout. Supported payment rails:
@@ -648,12 +648,12 @@ export function JwtInspectorGodModeTool() {
               <Button
                 variant="contained"
                 size="small"
-                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                href="https://github.com/1nc0gn30/zoth-studio-v2"
                 target="_blank"
                 rel="noreferrer"
                 sx={{ bgcolor: gold, color: '#000', fontWeight: 800 }}
               >
-                Stripe Checkout ($19)
+                ☕ Buy Us a Coffee (Stripe)
               </Button>
               <Button
                 variant="outlined"

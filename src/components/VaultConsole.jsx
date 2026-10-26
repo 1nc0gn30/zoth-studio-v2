@@ -91,7 +91,7 @@ export default function VaultConsole() {
           </Box>
           <Box>
             <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.2, color: theme.palette.text.primary }}>
-              Zero-Cloud Hardware Vault &amp; Entropy Auditor
+              Zero-Cloud Hardware Vault & Entropy Auditor
             </Typography>
             <Typography variant="caption" color="text.secondary" sx={{ display: 'block', maxWidth: 520 }}>
               Derive encryption keys and audit payload entropy client-side with Web Crypto.
@@ -182,7 +182,7 @@ export default function VaultConsole() {
             '&.Mui-disabled': { bgcolor: isDark ? 'rgba(212,175,55,0.2)' : 'rgba(0,0,0,0.12)', color: isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.26)' }
           }}
         >
-          Encrypt &amp; Derive Key
+          Encrypt & Derive Key
         </Button>
         <Button
           variant="outlined"

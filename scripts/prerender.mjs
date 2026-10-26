@@ -75,7 +75,7 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
   } else if (routePath === '/adytum') {
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Adytum Sanctum // Sovereign Key Management &amp; Zero-Egress Secrets</h2>
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Adytum Sanctum // Sovereign Key Management & Zero-Egress Secrets</h2>
         <p style="color: #D1D5DB; line-height: 1.6;">The Adytum Rite unifies ancient Hermetic principles with zero-egress hardware encryption. 22 Major Arcana keys (Key 0 The Fool to Key XXI The World) guide the software engineering lifecycle.</p>
         
         <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">Cryptographic Architecture</h3>
@@ -91,10 +91,10 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
     const agentsList = pantheonAgents.slice(0, 10).map((a) => `<li><strong>${a.id}</strong> (${a.role}) — Cadre: ${a.cadre}</li>`).join('');
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">21 Swarm Pantheon // Autonomous Agent Command &amp; IPC Topology</h2>
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">21 Swarm Pantheon // Autonomous Agent Command & IPC Topology</h2>
         <p style="color: #D1D5DB; line-height: 1.6;">Coordinate the 21 sovereign agents organized across five specialized operational cadres: Architects, Code, Security, Creative, and Swarm.</p>
 
-        <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">Pantheon Agents &amp; Roles</h3>
+        <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">Pantheon Agents & Roles</h3>
         <ul style="color: #9CA3AF; line-height: 1.8;">
           ${agentsList}
         </ul>
@@ -104,13 +104,13 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
   } else if (routePath === '/bridges') {
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Sovereign Bridges // E2EE Signal Mesh &amp; Loopback Bus Monitor</h2>
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Sovereign Bridges // E2EE Signal Mesh & Loopback Bus Monitor</h2>
         <p style="color: #D1D5DB; line-height: 1.6;">End-to-end encrypted inter-agent communication bus listening on port 8102. Simplex channels eliminate single-point-of-failure deadlocks across peer nodes.</p>
 
         <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">Core Sovereign Nodes</h3>
         <ul style="color: #9CA3AF; line-height: 1.8;">
           <li><strong>Azoth (Prime Architect):</strong> Port :8790 | Lead consensus coordinator</li>
-          <li><strong>Athena (Cognitive Arbiter):</strong> Socratic synthesis &amp; verification</li>
+          <li><strong>Athena (Cognitive Arbiter):</strong> Socratic synthesis & verification</li>
           <li><strong>Lucy (Synaptic Latent Stream):</strong> Port :8094 | STDP memory routing</li>
           <li><strong>Lycan (OWASP Enclave Sentinel):</strong> Port :8787 | Zero-egress sandbox enforcement</li>
         </ul>
@@ -140,8 +140,8 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
     `).join('');
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Workstations // 24 Studio Environments &amp; Interactive Consoles</h2>
-        <p style="color: #D1D5DB; line-height: 1.6;">Full directory of 24 native studio workstations organized across the 6 operational bands: Build, Observe, Security, Spatial, Studio, and Swarm &amp; Consensus.</p>
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Workstations // 24 Studio Environments & Interactive Consoles</h2>
+        <p style="color: #D1D5DB; line-height: 1.6;">Full directory of 24 native studio workstations organized across the 6 operational bands: Build, Observe, Security, Spatial, Studio, and Swarm & Consensus.</p>
         <ul style="line-height: 1.8; color: #E5E7EB; margin-top: 1rem;">
           ${stationList}
         </ul>
@@ -150,7 +150,7 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
   } else if (routePath === '/memory') {
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Lucy Cognitive Memory Hub &amp; Biomorphic STDP Matrix</h2>
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Lucy Cognitive Memory Hub & Biomorphic STDP Matrix</h2>
         <p style="color: #D1D5DB; line-height: 1.6;">Guardian: Lucy // Semantic Bus :8094 // Whitespace Cyberspace Stratum</p>
         <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">Spike-Timing-Dependent Plasticity (STDP) Equations</h3>
         <ul style="color: #9CA3AF; line-height: 1.8;">
@@ -178,7 +178,7 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
   } else if (routePath === '/webgen') {
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">WebGen // Autonomous Layout Foundry &amp; Polyglot Exporter</h2>
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">WebGen // Autonomous Layout Foundry & Polyglot Exporter</h2>
         <p style="color: #D1D5DB; line-height: 1.6;">Air-gapped layout generator and polyglot framework exporter for instant React, Vue 3, Svelte 5, and Solid.js components with zero cloud dependencies.</p>
         <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">5-Stage Generation Workflow</h3>
         <ol style="color: #9CA3AF; line-height: 1.8;">
@@ -186,16 +186,16 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
           <li><strong>Design System Tokens:</strong> Configure color palettes, typography hierarchies, and border radii.</li>
           <li><strong>Layout Blueprint:</strong> Reorder and toggle modular page sections (Hero, Features, Showcase, Pricing, CTA).</li>
           <li><strong>Live Component Sandbox:</strong> Real-time in-browser code compilation across React, Vue, Svelte, and Solid.js.</li>
-          <li><strong>Deployment &amp; Git Export:</strong> One-click Netlify production deployment and local git repository clone.</li>
+          <li><strong>Deployment & Git Export:</strong> One-click Netlify production deployment and local git repository clone.</li>
         </ol>
       </section>
     `;
   } else if (routePath === '/hexstrike') {
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">HexStrike // Cybersec Arsenal &amp; Threat Intelligence Terminal</h2>
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">HexStrike // Cybersec Arsenal & Threat Intelligence Terminal</h2>
         <p style="color: #D1D5DB; line-height: 1.6;">Air-gapped cybersecurity testing terminal, CVE matrix analyzer, and offensive security tooling operating inside local KVM sandboxes.</p>
-        <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">Security Invariants &amp; Capabilities</h3>
+        <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">Security Invariants & Capabilities</h3>
         <ul style="color: #9CA3AF; line-height: 1.8;">
           <li><strong>Deterministic Cryptographic Engine:</strong> Pure JS FIPS 180-4 compliant SHA-256 fallback.</li>
           <li><strong>CVE Threat Matrix:</strong> Comprehensive vulnerability analysis without sending queries to external networks.</li>
@@ -206,7 +206,7 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
   } else if (routePath === '/zoth-os') {
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Zoth OS // KVM Hypervisor Sandbox &amp; Bare-Metal Operating System</h2>
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Zoth OS // KVM Hypervisor Sandbox & Bare-Metal Operating System</h2>
         <p style="color: #D1D5DB; line-height: 1.6;">Hardware-isolated Linux virtualization, thin QEMU disk management, and edge dispatch inside air-gapped sovereign enclaves.</p>
         <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">Deployment Options</h3>
         <ul style="color: #9CA3AF; line-height: 1.8;">
@@ -219,7 +219,7 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
   } else if (routePath === '/docs') {
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Documentation // Zoth Architecture, Principles &amp; Five Enclave Binds</h2>
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Documentation // Zoth Architecture, Principles & Five Enclave Binds</h2>
         <p style="color: #D1D5DB; line-height: 1.6;">Complete architectural specifications and operational invariants governing the Zoth Studio v2 zero-egress runtime.</p>
         <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">Local Loopback Port Bindings</h3>
         <table style="width: 100%; border-collapse: collapse; margin-top: 0.5rem; color: #E5E7EB; font-size: 0.88rem;">
@@ -231,22 +231,22 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
           <tr style="border-bottom: 1px solid #141724;">
             <td style="padding: 0.5rem;"><code>127.0.0.1:3000</code></td>
             <td style="padding: 0.5rem;">Studio Client</td>
-            <td style="padding: 0.5rem;">React 19.3 MUI UI &amp; WebGPU Engine</td>
+            <td style="padding: 0.5rem;">React 19.3 MUI UI & WebGPU Engine</td>
           </tr>
           <tr style="border-bottom: 1px solid #141724;">
             <td style="padding: 0.5rem;"><code>127.0.0.1:8094</code></td>
             <td style="padding: 0.5rem;">Neuro Memory Daemon</td>
-            <td style="padding: 0.5rem;">STDP synaptic memory &amp; SQLite vec0 store</td>
+            <td style="padding: 0.5rem;">STDP synaptic memory & SQLite vec0 store</td>
           </tr>
           <tr style="border-bottom: 1px solid #141724;">
             <td style="padding: 0.5rem;"><code>127.0.0.1:8102</code></td>
             <td style="padding: 0.5rem;">Signal Bridge</td>
-            <td style="padding: 0.5rem;">E2EE simplex agent mesh &amp; Byzantine consensus bus</td>
+            <td style="padding: 0.5rem;">E2EE simplex agent mesh & Byzantine consensus bus</td>
           </tr>
           <tr style="border-bottom: 1px solid #141724;">
             <td style="padding: 0.5rem;"><code>127.0.0.1:8787</code></td>
             <td style="padding: 0.5rem;">Hardware Vault</td>
-            <td style="padding: 0.5rem;">Argon2id key derivation &amp; XChaCha20-Poly1305 enclave</td>
+            <td style="padding: 0.5rem;">Argon2id key derivation & XChaCha20-Poly1305 enclave</td>
           </tr>
           <tr style="border-bottom: 1px solid #141724;">
             <td style="padding: 0.5rem;"><code>127.0.0.1:8989</code></td>
@@ -256,7 +256,7 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
           <tr>
             <td style="padding: 0.5rem;"><code>127.0.0.1:11434</code></td>
             <td style="padding: 0.5rem;">Ollama Foundry</td>
-            <td style="padding: 0.5rem;">Zero-cloud local LLM &amp; GGUF inference</td>
+            <td style="padding: 0.5rem;">Zero-cloud local LLM & GGUF inference</td>
           </tr>
         </table>
       </section>
@@ -299,13 +299,13 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
   } else if (routePath === '/ax') {
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Agent Experience (AX) // Machine-Readable Entity Profile &amp; Endpoints</h2>
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Agent Experience (AX) // Machine-Readable Entity Profile & Endpoints</h2>
         <p style="color: #D1D5DB; line-height: 1.6;">Zoth Studio v2 exposes structured, token-optimized discovery endpoints designed for autonomous AI agents, LLM search engines, and web crawlers.</p>
         <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">Discovery Endpoints</h3>
         <ul style="color: #9CA3AF; line-height: 1.8;">
-          <li><a href="/llms.txt" style="color: #38BDF8;">/llms.txt</a> — Concise LLM Context &amp; Entity Profile (614 tokens)</li>
-          <li><a href="/llms-full.txt" style="color: #38BDF8;">/llms-full.txt</a> — Comprehensive Agent Grounding &amp; Capabilities Map (3,220 tokens)</li>
-          <li><a href="/robots.txt" style="color: #38BDF8;">/robots.txt</a> — AI Crawler &amp; Answer Engine Policy</li>
+          <li><a href="/llms.txt" style="color: #38BDF8;">/llms.txt</a> — Concise LLM Context & Entity Profile (614 tokens)</li>
+          <li><a href="/llms-full.txt" style="color: #38BDF8;">/llms-full.txt</a> — Comprehensive Agent Grounding & Capabilities Map (3,220 tokens)</li>
+          <li><a href="/robots.txt" style="color: #38BDF8;">/robots.txt</a> — AI Crawler & Answer Engine Policy</li>
           <li><a href="/sitemap.xml" style="color: #38BDF8;">/sitemap.xml</a> — Full static route sitemap</li>
         </ul>
       </section>
@@ -313,7 +313,7 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
   } else if (routePath === '/vaelor') {
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Vaelor (◈ VLR) // Sovereign Feeless Account-Lattice DAG &amp; PoUW L1</h2>
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Vaelor (◈ VLR) // Sovereign Feeless Account-Lattice DAG & PoUW L1</h2>
         <p style="color: #D1D5DB; line-height: 1.6;">Vaelor is an Asynchronous Account-Lattice DAG cryptocurrency protocol built for everyday life and sovereign AI agent economies. Features zero gas fees, &lt;15ms 5-validator BFT quorum finality, 8.5% APY savings vaults, 2.5% instant merchant cashback, and Proof-of-Useful-Work (PoUW) STDP cognitive mining.</p>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
           <div style="padding: 1rem; border: 1px solid #1E2230; border-radius: 4px; background: #0D0E15;">

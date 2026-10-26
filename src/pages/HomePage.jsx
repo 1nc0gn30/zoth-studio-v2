@@ -206,7 +206,7 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
         </Box>
         <Chip
           icon={<TerminalIcon sx={{ fontSize: '1rem !important', color: gold.accent }} />}
-          label="NPM &amp; NPX RUNTIME VERIFIED"
+          label="NPM & NPX RUNTIME VERIFIED"
           sx={{
             fontFamily: monoFont,
             fontWeight: 800,
@@ -1250,7 +1250,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
                 }}
               />
               <Typography sx={{ fontFamily: monoFont, fontSize: '0.74rem', fontWeight: 800, color: isDark ? gold.soft : gold.accent, letterSpacing: '0.1em', mb: 1.5 }}>
-                ARCHITECTURAL GUARANTEES &amp; INVARIANTS
+                ARCHITECTURAL GUARANTEES & INVARIANTS
               </Typography>
               <Stack spacing={1.3}>
                 {activePillar.invariants.map((inv, invIdx) => (
@@ -1999,9 +1999,9 @@ export default function HomePage() {
 
       {/* Section 1: Local AI Engine & Agent Protocol Console */}
       <Box sx={{ mb: 9, pt: 2 }}>
-        <Typography className="section-kicker">Local Hardware Acceleration &amp; Open Protocols</Typography>
+        <Typography className="section-kicker">Local Hardware Acceleration & Open Protocols</Typography>
         <Typography variant="h3" sx={{ fontWeight: 800, mb: 2, color: theme.palette.text.primary, letterSpacing: '-0.02em' }}>
-          On-Device AI Engine &amp; <span className="text-gradient-gold">Agent Protocol Console</span>
+          On-Device AI Engine & <span className="text-gradient-gold">Agent Protocol Console</span>
         </Typography>
         <Typography variant="body1" color="text.secondary" sx={{ mb: 4, maxWidth: 840, lineHeight: 1.65 }}>
           Run AI models and neural processing directly on your own computer’s graphics chip or processor. Test local inference, inspect agent tools, and dispatch tasks in real time.

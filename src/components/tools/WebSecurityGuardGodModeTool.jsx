@@ -203,10 +203,10 @@ ${enableHsts ? '        Strict-Transport-Security "max-age=31536000; includeSubD
               </Box>
               <Box>
                 <Typography variant="h5" sx={{ fontWeight: 800, letterSpacing: '-0.02em', color: isDark ? '#FFFFFF' : '#111827' }}>
-                  Web Security Guard <span style={{ color: emerald }}>&amp; Policy Auditor</span>
+                  Web Security Guard <span style={{ color: emerald }}>& Policy Auditor</span>
                 </Typography>
                 <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
-                  Perimeter Defense, HTTP Security Headers, Zero-Egress CSP &amp; Cross-Origin Isolation
+                  Perimeter Defense, HTTP Security Headers, Zero-Egress CSP & Cross-Origin Isolation
                 </Typography>
               </Box>
             </Stack>
@@ -226,7 +226,7 @@ ${enableHsts ? '        Strict-Transport-Security "max-age=31536000; includeSubD
               />
               <Chip
                 icon={<PublicIcon sx={{ fontSize: '0.9rem !important', color: `${gold} !important` }} />}
-                label="ANTI-CLICKJACKING &amp; COOP"
+                label="ANTI-CLICKJACKING & COOP"
                 size="small"
                 sx={{ bgcolor: goldSoft, color: gold, fontWeight: 700, fontFamily: mono, border: '1px solid rgba(212,175,55,0.3)' }}
               />

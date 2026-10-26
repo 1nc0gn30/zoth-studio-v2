@@ -30,7 +30,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
+const STRIPE_URL = 'https://github.com/1nc0gn30/zoth-studio-v2';
 
 const INITIAL_DOCS = [
   { id: 'vec_101', title: 'Byzantine Consensus Triangulation', text: 'Multi-model quorum verification across 3 independent LLM reasoning paths to eliminate hallucination drift.', x: 185, y: 55, layer: 2 },
@@ -230,7 +230,7 @@ export default function VectorSearchGodModeTool() {
             sx={{ bgcolor: '#34D399', color: '#08080B', fontWeight: 900, fontFamily: mono }}
           />
           <Typography variant="body2" sx={{ fontWeight: 700 }}>
-            In-Browser HNSW Skip-Graph, Okapi BM25 Lexical Engine &amp; Reciprocal Rank Fusion (RRF) Studio
+            In-Browser HNSW Skip-Graph, Okapi BM25 Lexical Engine & Reciprocal Rank Fusion (RRF) Studio
           </Typography>
         </Box>
         {!isPro && (
@@ -339,7 +339,7 @@ export default function VectorSearchGodModeTool() {
 
             <Paper sx={{ p: 2, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: isDark ? '#08080C' : '#FFFFFF', position: 'relative', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
               <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#D4AF37', mb: 1 }}>
-                SERIALIZED HNSW SNAPSHOT &amp; RRF TELEMETRY:
+                SERIALIZED HNSW SNAPSHOT & RRF TELEMETRY:
               </Typography>
               <Box
                 component="pre"
@@ -377,7 +377,7 @@ export default function VectorSearchGodModeTool() {
                 >
                   <LockIcon sx={{ fontSize: 30, color: '#D4AF37', mb: 0.5 }} />
                   <Typography variant="caption" sx={{ fontWeight: 800, color: '#FFF', mb: 1 }}>
-                    HNSW Index Snapshot &amp; FastMCP Exporter Locked
+                    HNSW Index Snapshot & FastMCP Exporter Locked
                   </Typography>
                   <Button
                     size="small"
@@ -385,7 +385,7 @@ export default function VectorSearchGodModeTool() {
                     onClick={() => setPaywallOpen(true)}
                     sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
                   >
-                    Unlock Pro ($19)
+                    ☕ Buy Us a Coffee
                   </Button>
                 </Box>
               )}

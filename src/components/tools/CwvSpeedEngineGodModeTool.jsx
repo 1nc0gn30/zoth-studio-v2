@@ -32,7 +32,7 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import CheckIcon from '@mui/icons-material/Check';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
+const STRIPE_URL = 'https://github.com/1nc0gn30/zoth-studio-v2';
 
 const SAMPLE_HTML = `<!DOCTYPE html>
 <html lang="en">
@@ -323,7 +323,7 @@ export default function CwvSpeedEngineGodModeTool() {
             sx={{ bgcolor: '#10B981', color: '#08080B', fontWeight: 900, fontFamily: mono }}
           />
           <Typography variant="body2" sx={{ fontWeight: 700, color: theme.palette.text.primary }}>
-            Client-Side DOM AST Speed Transformer, CLS Dimension Injector &amp; Lighthouse 100/100 Compiler
+            Client-Side DOM AST Speed Transformer, CLS Dimension Injector & Lighthouse 100/100 Compiler
           </Typography>
         </Box>
         <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
@@ -552,7 +552,7 @@ export default function CwvSpeedEngineGodModeTool() {
                   >
                     <LockIcon sx={{ fontSize: 36, color: '#D4AF37', mb: 1 }} />
                     <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#FFFFFF', mb: 0.5 }}>
-                      Transformed 100/100 HTML &amp; PWA Bundle Locked
+                      Transformed 100/100 HTML & PWA Bundle Locked
                     </Typography>
                     <Typography variant="caption" sx={{ color: '#CBD5E1', maxWidth: 340, mb: 2 }}>
                       Unlock full AST-transformed HTML copy, critical CSS inliner, and ServiceWorker speed bundle export for $19 lifetime.

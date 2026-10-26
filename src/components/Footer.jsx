@@ -480,7 +480,7 @@ export default function Footer() {
           {/* Column 4: Theory & Math Pillars */}
           <Grid xs={6} sm={3} lg={2}>
             <Typography variant="caption" sx={sectionHeadingStyle}>
-              Theory &amp; Math
+              Theory & Math
             </Typography>
             <Stack spacing={1.3}>
               {theoryAndDocs.map((item, idx) => (
@@ -604,7 +604,7 @@ export default function Footer() {
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
-            <span>© 2026 NullAI Tech &amp; Zoth Studio.</span>
+            <span>© 2026 NullAI Tech & Zoth Studio.</span>
             <Box component="span" sx={{ opacity: 0.35, fontSize: '0.7rem' }}>•</Box>
             <span>Released under Sovereign Apache 2.0 / MIT.</span>
             <Box component="span" sx={{ opacity: 0.35, fontSize: '0.7rem' }}>•</Box>

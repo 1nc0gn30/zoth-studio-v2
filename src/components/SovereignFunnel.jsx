@@ -187,7 +187,7 @@ export default function SovereignFunnel({
           <Button
             variant="contained"
             size="small"
-            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            href={studioRepo}
             target="_blank"
             rel="noopener noreferrer"
             sx={{
@@ -202,7 +202,7 @@ export default function SovereignFunnel({
               '&:hover': { background: isDark ? '#F5E6AB' : '#6B4E06' },
             }}
           >
-            ☕ Buy Us a Coffee (Stripe)
+            ★ Star on GitHub
           </Button>
           <Button
             variant="outlined"

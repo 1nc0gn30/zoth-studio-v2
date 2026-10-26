@@ -371,7 +371,7 @@ nice -n ${niceLevel} qemu-system-x86_64 \\
           <Box>
             <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
               <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: '#D4AF37', letterSpacing: '0.12em' }}>
-                ZOTH-OS v2.6 // RING-0 KERNEL &amp; ENCLAVE ARCHITECT
+                ZOTH-OS v2.6 // RING-0 KERNEL & ENCLAVE ARCHITECT
               </Typography>
               <Chip
                 label="22 DAEMONS VERIFIED"
@@ -401,7 +401,7 @@ nice -n ${niceLevel} qemu-system-x86_64 \\
               />
             </Stack>
             <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mt: 0.3 }}>
-              Interactive 4-Ring Loopback Topology, Hardened systemd Sandbox Synthesizer &amp; QEMU/KVM ISO Launcher
+              Interactive 4-Ring Loopback Topology, Hardened systemd Sandbox Synthesizer & QEMU/KVM ISO Launcher
             </Typography>
           </Box>
         </Box>
@@ -501,7 +501,7 @@ nice -n ${niceLevel} qemu-system-x86_64 \\
           {/* Daemon Matrix Grid */}
           <Box sx={{ p: 2, borderTop: '1px solid rgba(255,255,255,0.08)', bgcolor: '#07090F' }}>
             <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', fontWeight: 800, color: '#94A3B8', mb: 1.2, letterSpacing: '0.08em' }}>
-              SELECT LOOPBACK DAEMON TO INSPECT &amp; SYNTHESIZE UNIT FILE
+              SELECT LOOPBACK DAEMON TO INSPECT & SYNTHESIZE UNIT FILE
             </Typography>
             <Grid container spacing={1}>
               {visibleDaemons.map((d) => {

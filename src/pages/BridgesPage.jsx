@@ -1665,7 +1665,7 @@ export default function BridgesPage() {
         <Box sx={{ mb: 4 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
             <Box>
-              <Typography className="section-kicker">Cryptographic Envelope &amp; Ledger</Typography>
+              <Typography className="section-kicker">Cryptographic Envelope & Ledger</Typography>
               <Typography variant="h5" sx={{ fontWeight: 800 }}>
                 Zero-Egress Response Ledger
               </Typography>

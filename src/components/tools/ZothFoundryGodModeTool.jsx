@@ -91,7 +91,7 @@ export default function ZothFoundryGodModeTool() {
             startIcon={<BoltIcon />}
             sx={{ bgcolor: '#D4AF37', color: '#08080B', fontFamily: mono, fontWeight: 900, fontSize: '0.72rem', textTransform: 'none' }}
           >
-            Switch to Zoth Bolt (Main AI &amp; Motion Architect)
+            Switch to Zoth Bolt (Main AI & Motion Architect)
           </Button>
           <Button
             size="small"

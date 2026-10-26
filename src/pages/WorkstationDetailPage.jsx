@@ -238,7 +238,7 @@ function BrandWorkstation() {
       <Grid container spacing={3}>
         <Grid xs={12} md={7}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, mb: 3 }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1 }}>Alchemical Seals &amp; Vector Emblems</Typography>
+            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1 }}>Alchemical Seals & Vector Emblems</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
               High-resolution sovereign seals, vector geometry, and transparent SVG brandmarks ready for deployment.
             </Typography>
@@ -1347,7 +1347,7 @@ function Web3HubWorkstation() {
         <Grid xs={12} md={7}>
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, mb: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
-              <Typography variant="h6" sx={{ fontWeight: 800 }}>Air-Gapped Key &amp; Offline Signer</Typography>
+              <Typography variant="h6" sx={{ fontWeight: 800 }}>Air-Gapped Key & Offline Signer</Typography>
               <Button size="small" variant="contained" color="primary" onClick={handleGenKey} sx={{ fontWeight: 750 }}>
                 Generate Offline Ed25519 Key
               </Button>
@@ -1977,7 +1977,7 @@ function UniversalEnclaveConsole({ station }) {
             <Stack spacing={1.5}>
               <Paper sx={{ p: 1.5, bgcolor: isDark ? '#0D0D12' : '#F8FAFC', border: `1px solid ${theme.palette.divider}`, borderRadius: 1.5 }}>
                 <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold.accent, fontSize: '0.82rem', mb: 0.5 }}>
-                  🛡️ 1. Ring-0 Memory Isolation &amp; Zero Cloud Telemetry
+                  🛡️ 1. Ring-0 Memory Isolation & Zero Cloud Telemetry
                 </Typography>
                 <Typography variant="caption" color="text.secondary" sx={{ display: 'block', lineHeight: 1.5 }}>
                   AST diffs, proprietary codebase structures, and model generation weights are processed strictly in RAM with zero outbound HTTP requests.

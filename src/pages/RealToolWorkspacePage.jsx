@@ -1064,7 +1064,7 @@ export default function RealToolWorkspacePage() {
         <Box sx={{ mb: 6 }}>
           <Typography className="section-kicker">Interactive Sovereign Enclave</Typography>
           <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em', mb: 3, color: theme.palette.text.primary }}>
-            Live WebMCP Inspector &amp; Zoth OS Video Player
+            Live WebMCP Inspector & Zoth OS Video Player
           </Typography>
           <WebMCPConsole />
         </Box>

@@ -543,7 +543,7 @@ export default function WorkstationsPage() {
           </HeroItem>
           <HeroItem>
             <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', mb: 1, color: isDark ? '#EDEFF2' : '#101828', fontSize: { xs: '1.85rem', sm: '2.6rem', md: '3.4rem' }, lineHeight: 1.15, wordBreak: 'break-word', overflowWrap: 'break-word' }}>
-              Workstations &amp; <span className="text-gradient-gold">Cockpits</span>
+              Workstations & <span className="text-gradient-gold">Cockpits</span>
             </Typography>
           </HeroItem>
           <HeroItem>

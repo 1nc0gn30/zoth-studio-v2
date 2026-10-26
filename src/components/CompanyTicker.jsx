@@ -193,9 +193,9 @@ export default function CompanyTicker() {
     >
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
         <Typography variant="subtitle2" sx={{ fontWeight: 800, color: theme.palette.text.primary, letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: 1 }}>
-          ⚡ POWERED BY INDUSTRY-LEADING AI ENGINES, AGENT FRAMEWORKS &amp; COMPUTE
+          ⚡ POWERED BY INDUSTRY-LEADING AI ENGINES, AGENT FRAMEWORKS & COMPUTE
         </Typography>
-        <Chip label={`${partners.length} INTEGRATED AI &amp; DEV PARTNERS`} size="small" sx={{ bgcolor: goldSoft, color: gold, fontWeight: 700, fontSize: '0.75rem', border: `1px solid ${goldBorder}` }} />
+        <Chip label={`${partners.length} INTEGRATED AI & DEV PARTNERS`} size="small" sx={{ bgcolor: goldSoft, color: gold, fontWeight: 700, fontSize: '0.75rem', border: `1px solid ${goldBorder}` }} />
       </Box>
 
       {/* Clickable Partners Carousel Grid */}

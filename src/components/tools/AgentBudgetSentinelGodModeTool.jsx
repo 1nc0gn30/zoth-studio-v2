@@ -153,7 +153,7 @@ export default function AgentBudgetSentinelGodModeTool() {
         />
       </Stack>
       <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 400, mb: 3 }}>
-        Token Burn-Rate Governor &amp; <span style={{ color: '#34D399' }}>Zero-Cost Local Offload</span> Optimizer
+        Token Burn-Rate Governor & <span style={{ color: '#34D399' }}>Zero-Cost Local Offload</span> Optimizer
       </Typography>
 
       <Grid container spacing={3}>

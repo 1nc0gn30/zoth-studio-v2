@@ -680,7 +680,7 @@ export default function HexStrikePage() {
                   overflowWrap: 'break-word',
                 }}
               >
-                HexStrike Cyber-Security &amp; <span className="text-gradient-gold">Vault Suite</span>
+                HexStrike Cyber-Security & <span className="text-gradient-gold">Vault Suite</span>
               </Typography>
             </HeroItem>
             <HeroItem>
@@ -1237,7 +1237,7 @@ export default function HexStrikePage() {
             ==================================================================== */}
         <RevealOnScroll preset="slideRight" delay={0.3}>
         <Box sx={{ mb: 6 }} id="hexstrike-terminal-section">
-          <Typography className="section-kicker">Autonomous Security Enclave &amp; Architecture</Typography>
+          <Typography className="section-kicker">Autonomous Security Enclave & Architecture</Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 1 }}>
             <Typography variant="h5" sx={{ fontWeight: 800, display: 'flex', alignItems: 'center', gap: 1.2, color: theme.palette.text.primary }}>
               <TerminalIcon sx={{ color: gold.accent }} /> Why HexStrike Runs in an Isolated Local Enclave
@@ -1329,7 +1329,7 @@ export default function HexStrikePage() {
                 }}
               >
                 <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', color: isDark ? '#38BDF8' : '#0369A1', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  git clone https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal.git &amp;&amp; cd NullAI-HexStrike-AI-Terminal &amp;&amp; python3 hexstrike.py --audit
+                  git clone https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal.git && cd NullAI-HexStrike-AI-Terminal && python3 hexstrike.py --audit
                 </Typography>
                 <IconButton aria-label="Copy to clipboard"
                   size="small"

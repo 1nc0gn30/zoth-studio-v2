@@ -35,7 +35,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import HubIcon from '@mui/icons-material/Hub';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
+const STRIPE_URL = 'https://github.com/1nc0gn30/zoth-studio-v2';
 
 const RESEARCH_PRESETS = {
   stdp: {
@@ -242,7 +242,7 @@ ${base.claims
             sx={{ bgcolor: '#00F0FF', color: '#08080B', fontWeight: 900, fontFamily: mono }}
           />
           <Typography variant="body2" sx={{ fontWeight: 700 }}>
-            Tree-of-Thought Research DAG, Multi-Source Consensus Matrix &amp; Grounded BibTeX/Markdown Exporter
+            Tree-of-Thought Research DAG, Multi-Source Consensus Matrix & Grounded BibTeX/Markdown Exporter
           </Typography>
         </Box>
         {!isPro && (
@@ -278,8 +278,8 @@ ${base.claims
               <FormControl size="small" sx={{ minWidth: 210 }}>
                 <InputLabel>Research Corpus Track</InputLabel>
                 <Select value={presetKey} label="Research Corpus Track" onChange={(e) => handlePresetChange(e.target.value)}>
-                  <MenuItem value="stdp">Biomorphic STDP &amp; HNSW Memory</MenuItem>
-                  <MenuItem value="mcp">MCP Protocol &amp; Token Security</MenuItem>
+                  <MenuItem value="stdp">Biomorphic STDP & HNSW Memory</MenuItem>
+                  <MenuItem value="mcp">MCP Protocol & Token Security</MenuItem>
                 </Select>
               </FormControl>
               <Chip
@@ -391,7 +391,7 @@ ${base.claims
               >
                 <LockIcon sx={{ fontSize: 32, color: '#D4AF37', mb: 0.5 }} />
                 <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#FFF' }}>
-                  Full Citation Dossier &amp; BibTeX Export Locked
+                  Full Citation Dossier & BibTeX Export Locked
                 </Typography>
                 <Button
                   size="small"
@@ -399,7 +399,7 @@ ${base.claims
                   onClick={() => setPaywallOpen(true)}
                   sx={{ mt: 1, bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono }}
                 >
-                  Unlock Pro ($19)
+                  ☕ Buy Us a Coffee
                 </Button>
               </Box>
             )}

@@ -2698,7 +2698,7 @@ export default function Netrunner3DWorld({
                 mt: 0.2
               }}
             >
-              Exported Netrunner-3D-Substrate-Snapshot.json with all 3D [x,y,z] vector coordinates &amp; STDP weights.
+              Exported Netrunner-3D-Substrate-Snapshot.json with all 3D [x,y,z] vector coordinates & STDP weights.
             </Typography>
           </Box>
           <IconButton
@@ -2762,7 +2762,7 @@ export default function Netrunner3DWorld({
                   mt: 0.2
                 }}
               >
-                Position: {teleportBanner.pos} • Synaptic Beams to Cortex &amp; 3 Neighbors Active!
+                Position: {teleportBanner.pos} • Synaptic Beams to Cortex & 3 Neighbors Active!
               </Typography>
             )}
           </Box>
@@ -3183,7 +3183,7 @@ export default function Netrunner3DWorld({
       {/* Bottom Guidance Subtitle */}
       <Box sx={{ position: 'absolute', bottom: 10, left: 14, pointerEvents: 'none', zIndex: 4 }}>
         <Typography variant="caption" sx={{ color: isDark ? '#94A3B8' : '#64748B', fontFamily: mono, fontSize: '0.72rem' }}>
-          ◈ Drag to orbit • Scroll to zoom • Click node to select vector &amp; modulate synaptic tone
+          ◈ Drag to orbit • Scroll to zoom • Click node to select vector & modulate synaptic tone
         </Typography>
       </Box>
 

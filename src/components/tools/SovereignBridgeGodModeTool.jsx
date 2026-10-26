@@ -264,7 +264,7 @@ export default function SovereignBridgeGodModeTool() {
             />
           </Stack>
           <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 400 }}>
-            Signal, SimpleX, Matrix &amp; <span style={{ color: '#D4AF37' }}>Byzantine Consensus</span> Relay
+            Signal, SimpleX, Matrix & <span style={{ color: '#D4AF37' }}>Byzantine Consensus</span> Relay
           </Typography>
         </Box>
         <Stack direction="row" spacing={1}>
@@ -434,7 +434,7 @@ export default function SovereignBridgeGodModeTool() {
               }}
             >
               <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#94A3B8', mb: 1, fontWeight: 700 }}>
-                LIVE SSE TELEMETRY &amp; CLAIM-LOCK STREAM
+                LIVE SSE TELEMETRY & CLAIM-LOCK STREAM
               </Typography>
               <Stack spacing={1}>
                 {events.map((ev, i) => (

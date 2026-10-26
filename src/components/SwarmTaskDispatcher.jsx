@@ -147,7 +147,7 @@ export default function SwarmTaskDispatcher() {
           </Box>
           <Box>
             <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.2 }}>
-              Frontier Coding Triad &amp; 21-Pantheon Task Dispatcher
+              Frontier Coding Triad & 21-Pantheon Task Dispatcher
             </Typography>
             <Typography variant="caption" color="text.secondary" sx={{ fontFamily: mono }}>
               Unified orchestration across Hermes Agent, Cursor Agent CLI, and ZothOS Conductor

@@ -26,7 +26,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
+const STRIPE_URL = 'https://github.com/1nc0gn30/zoth-studio-v2';
 
 const DEFAULT_PROMPT = `Act as a senior autonomous systems engineer and security architect.
 Analyze the user's code repository and identify any SQL injection, SSRF, or hardcoded credential vulnerabilities.
@@ -344,7 +344,7 @@ ${claudeXml}
                     Compiled Multi-Model Prompt Artifact Locked
                   </Typography>
                   <Typography variant="caption" sx={{ color: '#CBD5E1', maxWidth: 320, mb: 1.5 }}>
-                    Unlock full Anthropic XML, OpenAI Strict Schema, DSPy &amp; Ollama Modelfile export ($19 lifetime).
+                    Unlock full Anthropic XML, OpenAI Strict Schema, DSPy & Ollama Modelfile export ($19 lifetime).
                   </Typography>
                   <Button
                     size="small"
@@ -352,7 +352,7 @@ ${claudeXml}
                     onClick={() => setPaywallOpen(true)}
                     sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono }}
                   >
-                    Unlock Pro ($19)
+                    ☕ Buy Us a Coffee
                   </Button>
                 </Box>
               )}

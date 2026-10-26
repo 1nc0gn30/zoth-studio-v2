@@ -1205,7 +1205,7 @@ export class STDPPlasticityEngineWASM {
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <FunctionsIcon sx={{ color: gold, fontSize: '1.6rem' }} />
               <Typography variant="h5" sx={{ fontWeight: 800, color: textPrimary, fontSize: { xs: '1.25rem', md: '1.5rem' } }}>
-                Mathematical Derivation &amp; Tier Formulations
+                Mathematical Derivation & Tier Formulations
               </Typography>
             </Box>
 

@@ -277,7 +277,7 @@ table inet zoth_agent_egress {
             />
           </Stack>
           <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 400 }}>
-            Autonomous Socket Interceptor &amp; <span style={{ color: '#EF4444' }}>Exfiltration Firewall</span>
+            Autonomous Socket Interceptor & <span style={{ color: '#EF4444' }}>Exfiltration Firewall</span>
           </Typography>
         </Box>
       </Stack>

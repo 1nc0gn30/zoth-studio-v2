@@ -203,7 +203,7 @@ export default function WebMCPConsole() {
           </Box>
           <Box>
             <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.2, color: theme.palette.text.primary }}>
-              WebMCP (Model Context Protocol) Suite &amp; Video Showcase
+              WebMCP (Model Context Protocol) Suite & Video Showcase
             </Typography>
             <Typography variant="caption" color="text.secondary">
               Anthropic MCP JSON-RPC 2.0 In-Browser Tool Inspector · Playable Zoth OS Bare-Metal Footage
@@ -272,7 +272,7 @@ export default function WebMCPConsole() {
         <Box>
           <Box sx={{ mb: 2 }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, color: goldSoft, mb: 0.5 }}>
-              Bare-Metal Zoth OS &amp; WebMCP Demonstration Video
+              Bare-Metal Zoth OS & WebMCP Demonstration Video
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Watch WebMCP tool calling, WebGPU tensor compilation, and zero-egress hardware isolation in action. Works both locally and on static web deployments.

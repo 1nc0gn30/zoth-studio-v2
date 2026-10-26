@@ -178,7 +178,7 @@ export default function AgentVoiceCallGodModeTool() {
           <Box>
             <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
               <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', fontWeight: 800, color: '#D4AF37', letterSpacing: '0.14em' }}>
-                FULL-DUPLEX AGENT VOICE &amp; ACOUSTIC BRIDGE
+                FULL-DUPLEX AGENT VOICE & ACOUSTIC BRIDGE
               </Typography>
               <Chip
                 label="WHISPER STT + PIPER ONNX"
@@ -195,7 +195,7 @@ export default function AgentVoiceCallGodModeTool() {
               />
             </Stack>
             <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mt: 0.3 }}>
-              60fps Braille acoustic spectrogram, Silero VAD gate &amp; WebSpeech synthesis test
+              60fps Braille acoustic spectrogram, Silero VAD gate & WebSpeech synthesis test
             </Typography>
           </Box>
         </Box>

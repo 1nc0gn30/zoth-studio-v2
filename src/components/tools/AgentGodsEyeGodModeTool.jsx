@@ -311,7 +311,7 @@ export function AgentGodsEyeGodModeTool() {
                   Agent God&rsquo;s Eye <span style={{ color: gold }}>Planetary OSINT Radar</span>
                 </Typography>
                 <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
-                  Global Internet Intelligence, Shodan Satellite Telemetry &amp; ICS Threat Sweeper
+                  Global Internet Intelligence, Shodan Satellite Telemetry & ICS Threat Sweeper
                 </Typography>
               </Box>
             </Stack>
@@ -693,7 +693,7 @@ export function AgentGodsEyeGodModeTool() {
                 </Grid>
 
                 <Typography variant="subtitle2" sx={{ fontWeight: 800, mt: 3, mb: 1 }}>
-                  Open Ports &amp; Listening Daemons
+                  Open Ports & Listening Daemons
                 </Typography>
                 <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
                   {selectedTarget.ports.map(p => (

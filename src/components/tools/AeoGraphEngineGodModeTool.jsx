@@ -430,7 +430,7 @@ export default function AeoGraphEngineGodModeTool() {
             />
           </Stack>
           <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 400, letterSpacing: '-0.01em' }}>
-            Deterministic Schema.org <span style={{ color: '#38BDF8' }}>@graph</span> &amp; AI Citation Compiler
+            Deterministic Schema.org <span style={{ color: '#38BDF8' }}>@graph</span> & AI Citation Compiler
           </Typography>
         </Box>
 
@@ -576,7 +576,7 @@ export default function AeoGraphEngineGodModeTool() {
                   onClick={addFaq}
                   sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#38BDF8' }}
                 >
-                  Add Q&amp;A Node
+                  Add Q&A Node
                 </Button>
               </Stack>
               <Stack spacing={1.25} sx={{ maxHeight: 230, overflowY: 'auto', pr: 0.5 }}>

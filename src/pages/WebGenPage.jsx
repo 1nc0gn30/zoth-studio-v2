@@ -2662,7 +2662,7 @@ wait $PID`;
               <TerminalIcon sx={{ color: gold, fontSize: '1.5rem' }} />
               <div>
                 <Typography variant="subtitle1" sx={{ fontWeight: 900, color: textPrimary, fontFamily: mono, display: 'flex', alignItems: 'center', gap: 1 }}>
-                  MICRO-REPO ARCHITECTURE &amp; MCP INTEGRATION
+                  MICRO-REPO ARCHITECTURE & MCP INTEGRATION
                   <Chip label="STANDALONE" size="small" sx={{ bgcolor: goldBg, color: gold, fontFamily: mono, fontWeight: 800, fontSize: '0.65rem' }} />
                 </Typography>
                 <Typography variant="caption" sx={{ color: textSecondary, fontFamily: mono, fontSize: '0.74rem' }}>
@@ -2858,7 +2858,7 @@ wait $PID`;
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2, mb: 2 }}>
             <Box>
               <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, display: 'flex', alignItems: 'center', gap: 1.2, color: textPrimary }}>
-                <AutoAwesomeIcon sx={{ color: gold }} /> 1. Spec Prompt Foundry &amp; Starter Archetypes
+                <AutoAwesomeIcon sx={{ color: gold }} /> 1. Spec Prompt Foundry & Starter Archetypes
               </Typography>
               <Typography variant="body2" sx={{ color: textSecondary }}>
                 Tap an archetype preset to seed the layout tokens or articulate a custom site specification.
@@ -2974,7 +2974,7 @@ wait $PID`;
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2, mb: 2 }}>
             <Box>
               <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, display: 'flex', alignItems: 'center', gap: 1.2, color: textPrimary }}>
-                <TuneIcon sx={{ color: gold }} /> 2. Design System Tokens, Slug &amp; Skills
+                <TuneIcon sx={{ color: gold }} /> 2. Design System Tokens, Slug & Skills
               </Typography>
               <Typography variant="body2" sx={{ color: textSecondary }}>
                 Configure your project slug identifier, aesthetic design token palette, and generation skill guides.
@@ -3111,7 +3111,7 @@ wait $PID`;
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2, mb: 2 }}>
             <Box>
               <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, display: 'flex', alignItems: 'center', gap: 1.2, color: textPrimary }}>
-                <RocketLaunchIcon sx={{ color: gold }} /> 3. Layout Blueprint &amp; Synthesis Engine
+                <RocketLaunchIcon sx={{ color: gold }} /> 3. Layout Blueprint & Synthesis Engine
               </Typography>
               <Typography variant="body2" sx={{ color: textSecondary }}>
                 Choose execution runtime, target exporter language, and launch compilation into the sneak-peek preview.
@@ -3415,7 +3415,7 @@ wait $PID`;
                 <Box sx={{ width: 11, height: 11, borderRadius: '50%', backgroundColor: '#27C93F' }} />
               </Box>
               <Typography variant="subtitle2" sx={{ color: dark ? goldLight : '#8A6A09', fontFamily: mono, fontWeight: 800, fontSize: '0.84rem' }}>
-                4. LIVE SANDBOX &amp; SNEAK-PEEK CONSOLE • {siteName.toUpperCase()} • {FRAMEWORKS.find(f => f.id === selectedFramework)?.name.toUpperCase()}
+                4. LIVE SANDBOX & SNEAK-PEEK CONSOLE • {siteName.toUpperCase()} • {FRAMEWORKS.find(f => f.id === selectedFramework)?.name.toUpperCase()}
               </Typography>
             </Box>
 
@@ -3507,7 +3507,7 @@ wait $PID`;
                 '& .MuiTabs-indicator': { backgroundColor: gold }
               }}
             >
-              <Tab icon={<VisibilityIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Live Sandbox &amp; Sneak-Peek" />
+              <Tab icon={<VisibilityIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Live Sandbox & Sneak-Peek" />
               <Tab icon={<CodeIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Generated Polyglot Code" />
               <Tab icon={<LayersIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Master Artifacts (Prompt / Blueprint / sh)" />
               <Tab icon={<AccountTreeIcon sx={{ fontSize: '1rem' }} />} iconPosition="start" label="Deterministic AST Inspector" />

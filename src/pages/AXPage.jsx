@@ -692,7 +692,7 @@ export default function AXPage() {
             overflowWrap: 'break-word',
           }}
         >
-          Agent Experience Directory &amp; <span className="text-gradient-gold">Machine Discovery</span>
+          Agent Experience Directory & <span className="text-gradient-gold">Machine Discovery</span>
         </Typography>
         </HeroItem>
         
@@ -1395,10 +1395,10 @@ export default function AXPage() {
             </Box>
             <Box>
               <Typography variant="h6" sx={{ fontWeight: 800, color: gold.accent, letterSpacing: '-0.01em' }}>
-                Model Context Protocol (MCP) Multi-IDE Synthesizer &amp; JSON-RPC 2.0 Inspector
+                Model Context Protocol (MCP) Multi-IDE Synthesizer & JSON-RPC 2.0 Inspector
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Generate zero-egress <code>mcpServers</code> manifests for Antigravity (AGY), Claude Code, Cursor &amp; Cline and test loopback JSON-RPC 2.0 calls.
+                Generate zero-egress <code>mcpServers</code> manifests for Antigravity (AGY), Claude Code, Cursor & Cline and test loopback JSON-RPC 2.0 calls.
               </Typography>
             </Box>
           </Box>

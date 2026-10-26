@@ -191,7 +191,7 @@ export default function WebGenShowcasePage() {
                 '&:hover': { bgcolor: '#0284C7', color: '#fff' },
               }}
             >
-              Launch In-Browser Compiler &amp; Docs
+              Launch In-Browser Compiler & Docs
             </Button>
             <Button
               component={RouterLink}

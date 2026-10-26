@@ -175,7 +175,7 @@ export default function AXShowcasePage() {
             <Button component={RouterLink} to="/ax/docs" variant="contained" size="large"
               sx={{ bgcolor: accent, color: '#000', fontFamily: mono, fontWeight: 700,
                 '&:hover': { bgcolor: dark ? '#E5C04B' : '#9A7209' } }}>
-              Launch Interactive AX &amp; MCP Powerhouse →
+              Launch Interactive AX & MCP Powerhouse →
             </Button>
             <Button component="a" href="/.well-known/mcp.json"
               target="_blank" rel="noopener noreferrer" variant="outlined" size="large"

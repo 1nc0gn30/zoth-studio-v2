@@ -580,7 +580,7 @@ export default function VaelorLatticeVisualizer() {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.4 }}>
             <MemoryIcon sx={{ color: '#FFD700', fontSize: '1.4rem' }} />
             <Typography variant="h6" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif', letterSpacing: '-0.01em' }}>
-              Asynchronous Account-Lattice DAG &amp; 5-Validator BFT Quorum
+              Asynchronous Account-Lattice DAG & 5-Validator BFT Quorum
             </Typography>
           </Box>
           <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.84rem' }}>

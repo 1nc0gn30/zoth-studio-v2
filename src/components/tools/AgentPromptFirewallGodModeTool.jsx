@@ -196,7 +196,7 @@ export default function AgentPromptFirewallGodModeTool() {
             />
           </Stack>
           <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 400 }}>
-            Constitutional Prompt Sanitizer &amp; <span style={{ color: '#F59E0B' }}>Indirect Tool-Poisoning</span> Guard
+            Constitutional Prompt Sanitizer & <span style={{ color: '#F59E0B' }}>Indirect Tool-Poisoning</span> Guard
           </Typography>
         </Box>
       </Stack>

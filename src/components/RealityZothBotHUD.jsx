@@ -422,7 +422,7 @@ export function RealityMatrixShowcaseSection() {
                 />
               </Stack>
               <Typography variant="h5" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                5-Reality Switcher — Interactive Backgrounds, Logos, Icons &amp; Zoth Bot Familiars
+                5-Reality Switcher — Interactive Backgrounds, Logos, Icons & Zoth Bot Familiars
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary', fontFamily: mono, fontSize: '0.78rem', mt: 0.4 }}>
                 💬 <strong>{reality.bot.name}:</strong> &ldquo;{reality.bot.greeting}&rdquo;

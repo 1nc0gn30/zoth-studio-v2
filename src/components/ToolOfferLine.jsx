@@ -11,17 +11,11 @@ export default function ToolOfferLine({ tool, isDark }) {
   const color = isDark ? '#F5E6AB' : '#8A6508';
   const wash = isDark ? 'rgba(61,255,168,0.12)' : '#ECFDF5';
   const border = isDark ? 'rgba(61,255,168,0.38)' : 'rgba(16,185,129,0.35)';
-  const coffeeHref = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
 
   return (
     <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center', mt: 1.2 }}>
       <Chip
-        component="a"
-        href={coffeeHref}
-        target="_blank"
-        rel="noopener noreferrer"
-        clickable
-        label="☕ Buy Us a Coffee"
+        label="✦ 100% Free & Open"
         size="small"
         sx={{
           fontFamily: mono,
@@ -31,10 +25,6 @@ export default function ToolOfferLine({ tool, isDark }) {
           color: isDark ? '#3dffa8' : '#047857',
           border: `1px solid ${border}`,
           height: 24,
-          textDecoration: 'none',
-          '&:hover': {
-            bgcolor: isDark ? 'rgba(61,255,168,0.22)' : '#D1FAE5',
-          },
         }}
       />
       {tool.liveUrl && (

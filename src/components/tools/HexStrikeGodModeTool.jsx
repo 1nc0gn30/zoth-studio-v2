@@ -361,7 +361,7 @@ export function HexStrikeGodModeTool() {
   const terminalEndRef = useRef(null);
 
   // Pro Licensing State
-  const [isProLicensed, setIsProLicensed] = useState(false);
+  const [isProLicensed, setIsProLicensed] = useState(true);
   const [showPaywallModal, setShowPaywallModal] = useState(false);
   const [licenseKeyInput, setLicenseKeyInput] = useState('');
 
@@ -969,7 +969,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
               </Typography>
             </Stack>
             <Typography variant="h6" sx={{ fontWeight: 800, mt: 0.5, color: isDark ? '#FFFFFF' : '#111827' }}>
-              HexStrike God Mode Pentesting &amp; Red-Team Workstation
+              HexStrike God Mode Pentesting & Red-Team Workstation
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
               Unlock unthrottled 28-tool offensive command synthesis, automated forensic remediation exports, live MITRE ATT&CK correlation, and zero-egress threat auditing.
@@ -991,7 +991,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
                 <Button
                   variant="contained"
                   component="a"
-                  href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                  href="https://github.com/1nc0gn30/zoth-studio-v2"
                   target="_blank"
                   rel="noopener"
                   startIcon={<BoltIcon />}
@@ -1009,7 +1009,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
                 <Button
                   variant="outlined"
                   component="a"
-                  href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                  href="https://github.com/1nc0gn30/zoth-studio-v2"
                   target="_blank"
                   rel="noopener"
                   sx={{
@@ -1074,7 +1074,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
                   HexStrike <span style={{ color: crimson }}>God Mode Pentest Cockpit</span>
                 </Typography>
                 <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
-                  Autonomous Red-Team &amp; Defensive CVE Audit Workstation · NullAI Platform
+                  Autonomous Red-Team & Defensive CVE Audit Workstation · NullAI Platform
                 </Typography>
               </Box>
             </Stack>
@@ -1253,7 +1253,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
           <Box sx={{ mt: 2 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
               <Typography variant="caption" sx={{ fontFamily: mono, color: crimson }}>
-                Executing 6-Stage Real-Time Penetration &amp; CVE Audit...
+                Executing 6-Stage Real-Time Penetration & CVE Audit...
               </Typography>
               <Typography variant="caption" sx={{ fontFamily: mono, color: crimson, fontWeight: 700 }}>
                 {auditProgress}%
@@ -1544,7 +1544,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
               </Box>
 
               <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-                Real-time cryptographic DNS queries resolved across Google &amp; Cloudflare DoH to enumerate live A, AAAA, MX, TXT, and CAA records.
+                Real-time cryptographic DNS queries resolved across Google & Cloudflare DoH to enumerate live A, AAAA, MX, TXT, and CAA records.
               </Typography>
 
               {dohError && (
@@ -1691,7 +1691,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
                   </Box>
                   <Box>
                     <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                      Shodan InternetDB &amp; OSINT Attack Surface Intelligence
+                      Shodan InternetDB & OSINT Attack Surface Intelligence
                     </Typography>
                     <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
                       Authenticated Account: 1sz8...mc4n · 100 Scan Credits · 1 Query Credit · Unlimited InternetDB
@@ -2021,7 +2021,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
                       </Paper>
 
                       <Typography variant="caption" sx={{ color: emerald, fontWeight: 700, fontFamily: mono, display: 'block', mb: 0.5 }}>
-                        DEFENSIVE MITIGATION &amp; HARDENING:
+                        DEFENSIVE MITIGATION & HARDENING:
                       </Typography>
                       <Typography variant="body2" sx={{ color: '#A7F3D0', fontSize: '0.75rem', bgcolor: 'rgba(0,255,157,0.05)', p: 1, borderRadius: 1, border: '1px solid rgba(0,255,157,0.15)' }}>
                         {tech.mitigation}
@@ -2043,7 +2043,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1.5 }}>
             <Box>
               <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                CVE Vulnerability &amp; EPSS Threat Radar
+                CVE Vulnerability & EPSS Threat Radar
               </Typography>
               <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                 Curated intelligence database covering critical Linux, SSH, container escape, and web exploits.
@@ -2202,7 +2202,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
                     fullWidth
                     variant="contained"
                     component="a"
-                    href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                    href="https://github.com/1nc0gn30/zoth-studio-v2"
                     target="_blank"
                     rel="noopener"
                     startIcon={<BoltIcon />}
@@ -2216,13 +2216,13 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
                       '&:hover': { bgcolor: '#B89628' }
                     }}
                   >
-                    UNLOCK PRO WITH STRIPE ($19 LIFETIME)
+                    ☕ BUY US A COFFEE (STRIPE)
                   </Button>
                   <Button
                     fullWidth
                     variant="outlined"
                     component="a"
-                    href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                    href="https://github.com/1nc0gn30/zoth-studio-v2"
                     target="_blank"
                     rel="noopener"
                     sx={{
@@ -2338,7 +2338,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
         }}
       >
         <DialogTitle sx={{ fontWeight: 800, fontFamily: mono, color: gold, pb: 1 }}>
-          ⭐ ACTIVATE PRO LICENSE
+          ✦ 100% OPEN ACCESS
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>

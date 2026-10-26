@@ -575,7 +575,7 @@ Scene Breakdown & Exact On-Screen Copy:
               textTransform: 'uppercase',
             }}
           >
-            15S ASCII &amp; CODE-FIRST MOTION EDIT · {meta.anchorName}
+            15S ASCII & CODE-FIRST MOTION EDIT · {meta.anchorName}
           </Typography>
           <Chip
             label={`SCENE ${activeScene.id}/06`}

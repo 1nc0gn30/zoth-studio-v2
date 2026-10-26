@@ -56,7 +56,7 @@ const SWARM_MISSIONS = [
   {
     id: 'full-stack-forge',
     label: 'Sovereign Micro-SaaS Build & Guardrail Audit',
-    objective: 'Architect zero-egress client engine, wire Stripe + Solana DePay rails, generate Schema.org JSON-LD, and pass triple-viewport check.',
+    objective: 'Architect zero-egress client engine, wire Stripe + Solana Tip rails, generate Schema.org JSON-LD, and pass triple-viewport check.',
     quorumRequired: 15,
   },
   {

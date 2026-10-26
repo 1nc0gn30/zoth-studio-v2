@@ -613,7 +613,7 @@ export default function AsciiMotionGodModeTool({ tool }) {
     const activePreset = SHADER_PRESETS[preset] || SHADER_PRESETS.torus4d;
     const accent = activePreset.accent || activeTheme?.accent || '#D4AF37';
     const escapeXml = (str) =>
-      str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      str.replace(/&/g, '&').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     const textNodes = lines
       .map((l, i) => `    <text x="16" y="${(i + 1) * lineHeight + 18}" fill="${accent}">${escapeXml(l)}</text>`)
       .join('\n');
@@ -781,7 +781,7 @@ ${textNodes}
           <Box>
             <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
               <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', fontWeight: 800, color: '#D4AF37', letterSpacing: '0.14em' }}>
-                ZOTH ASCII MAGIC &amp; BRAILLE SYNTH
+                ZOTH ASCII MAGIC & BRAILLE SYNTH
               </Typography>
               <Chip
                 label="SOBEL EDGE + 24-BIT ANSI"

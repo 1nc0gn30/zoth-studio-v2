@@ -1174,7 +1174,7 @@ function VisionGestureWorkstation({ isDark, gold }) {
                 <Grid xs={6}>
                   <Box sx={{ p: 1, borderRadius: 1, bgcolor: isDark ? '#090B12' : '#F1F5F9', border: `1px solid ${theme.palette.divider}` }}>
                     <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono, display: 'block', fontSize: '0.66rem' }}>
-                      LATENCY &amp; GFLOPS
+                      LATENCY & GFLOPS
                     </Typography>
                     <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent }}>
                       {webgpuMetrics ? `${webgpuMetrics.timeMs}ms · ${webgpuMetrics.gflops} GFLOPS` : '0.8ms · 48.2 GFLOPS'}
@@ -1387,11 +1387,11 @@ Disallow: /`
             <FormControl fullWidth size="small" sx={{ mb: 1.5 }}>
               <InputLabel>Simulated Bot / User-Agent</InputLabel>
               <Select value={testBot} label="Simulated Bot / User-Agent" onChange={(e) => setTestBot(e.target.value)}>
-                <MenuItem value="GPTBot">OpenAI GPTBot (Search &amp; Training)</MenuItem>
+                <MenuItem value="GPTBot">OpenAI GPTBot (Search & Training)</MenuItem>
                 <MenuItem value="ClaudeBot">Anthropic ClaudeBot</MenuItem>
                 <MenuItem value="PerplexityBot">Perplexity Answer Bot</MenuItem>
                 <MenuItem value="Googlebot">Googlebot (Web Indexing)</MenuItem>
-                <MenuItem value="Applebot">Applebot (Siri &amp; Spotlight)</MenuItem>
+                <MenuItem value="Applebot">Applebot (Siri & Spotlight)</MenuItem>
                 <MenuItem value="Bytespider">ByteDance Bytespider</MenuItem>
               </Select>
             </FormControl>
@@ -1431,7 +1431,7 @@ Disallow: /`
             <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: isDark ? '#040408' : '#F8FAFC', border: `1px solid ${gold.border}`, mt: 'auto' }}>
               <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-slate)', fontSize: '0.7rem', display: 'block' }}>
                 ✓ RFC 9309 Specification Compliant<br/>
-                ✓ SGE &amp; Perplexity AEO Graph Verified<br/>
+                ✓ SGE & Perplexity AEO Graph Verified<br/>
                 ✓ Zero Server Round-Trip (100% In-Browser)
               </Typography>
             </Box>
@@ -1575,7 +1575,7 @@ function Badge3dCoinWorkstation({ isDark, gold }) {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
         <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
-          Parametric 3D Coin &amp; Medallion CAD Engine · Watertight Manifold STL Export
+          Parametric 3D Coin & Medallion CAD Engine · Watertight Manifold STL Export
         </Typography>
         <Button
           size="small"
@@ -1593,7 +1593,7 @@ function Badge3dCoinWorkstation({ isDark, gold }) {
         <Grid xs={12} md={6}>
           <Paper sx={{ p: 2.5, bgcolor: isDark ? '#08080C' : '#FFFFFF', border: `1px solid ${gold.border}` }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold.accent, mb: 2 }}>
-              1. Coin Geometry &amp; Text Relief
+              1. Coin Geometry & Text Relief
             </Typography>
 
             <Typography variant="caption" sx={{ fontWeight: 700, display: 'block', mb: 0.5 }}>

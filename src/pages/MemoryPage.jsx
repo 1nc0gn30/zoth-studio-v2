@@ -2979,7 +2979,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                             LOCK STATUS: LOCAL DAEMON REQUIRED (:8094)
                           </Typography>
                           <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.3 }}>
-                            Live semantic queries and real-time context retrieval are locked in remote preview. Run the repo locally (<code>git clone https://github.com/NullAITech/zoth-studio-v2.git &amp;&amp; npx @nullaitech/zoth up</code>) to connect live LLMs and agent memory.
+                            Live semantic queries and real-time context retrieval are locked in remote preview. Run the repo locally (<code>git clone https://github.com/NullAITech/zoth-studio-v2.git && npx @nullaitech/zoth up</code>) to connect live LLMs and agent memory.
                           </Typography>
                         </Box>
                         <Chip
@@ -3819,7 +3819,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                     />
                   </Box>
                   <Typography variant="h5" sx={{ fontWeight: 800 }}>
-                    Obsidian Knowledge Graph &amp; Official Agent Skills Suite
+                    Obsidian Knowledge Graph & Official Agent Skills Suite
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 760, mt: 0.5 }}>
                     Bidirectional bridge uniting your local Obsidian Vault (Markdown MOCs, <code>.canvas</code> spatial maps, and <code>.base</code> YAML databases) with the Zoth STDP Neuro-Memory Daemon on port <code>:8094</code>.
@@ -4114,7 +4114,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                       />
                     </Box>
                     <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                      Autonomous Karpathy LLM Wiki Explorer &amp; Synthesizer
+                      Autonomous Karpathy LLM Wiki Explorer & Synthesizer
                     </Typography>
                     <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 720, mt: 0.5, fontSize: '0.82rem' }}>
                       Distills 41,690+ STDP cognitive engrams into canonical Obsidian Flavored Markdown articles with mathematical invariants, confidence scoring, and bidirectional wikilinks.
@@ -4348,7 +4348,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                           {/* Mathematical Invariants & Technical Formulations */}
                           <Box sx={{ mb: 2 }}>
                             <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.7rem', color: gold.accent, mb: 0.6, letterSpacing: '0.06em' }}>
-                              📐 MATHEMATICAL INVARIANTS &amp; TECHNICAL PRIMITIVES
+                              📐 MATHEMATICAL INVARIANTS & TECHNICAL PRIMITIVES
                             </Typography>
                             <Box
                               component="pre"
@@ -5073,7 +5073,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                         }}
                       >
                         <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.74rem', color: '#00F0FF', mb: 1.5 }}>
-                          ⚡ FORMULAS &amp; COMPUTED LOGIC ({Object.keys(activeBase?.formulas || {}).length})
+                          ⚡ FORMULAS & COMPUTED LOGIC ({Object.keys(activeBase?.formulas || {}).length})
                         </Typography>
                         {Object.keys(activeBase?.formulas || {}).length > 0 ? (
                           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mb: 2 }}>
@@ -6193,7 +6193,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                     </Box>
                     <Box>
                       <Typography variant="h6" sx={{ fontWeight: 800, fontSize: '1.05rem', color: theme.palette.text.primary, display: 'flex', alignItems: 'center', gap: 1 }}>
-                        Second Brain Note &amp; Web Snippet Ingestor
+                        Second Brain Note & Web Snippet Ingestor
                         <Chip label="DIRECT STDP VAULT SINK" size="small" sx={{ height: 20, fontSize: '0.66rem', fontWeight: 800, bgcolor: gold.wash, color: gold.accent, border: `1px solid ${gold.border}` }} />
                       </Typography>
                       <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
@@ -7456,7 +7456,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                       />
                     </Box>
                     <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, display: 'flex', alignItems: 'center', gap: 1 }}>
-                      ◈ Vaelor Sovereign Layer-1 &amp; PoUW Cognitive Mining Bridge
+                      ◈ Vaelor Sovereign Layer-1 & PoUW Cognitive Mining Bridge
                     </Typography>
                     <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 840, mt: 0.4 }}>
                       Feeless Asynchronous Account-Lattice DAG backed by 5-validator BFT consensus, sub-15ms finality, and Proof-of-Useful-Work (PoUW) cognitive minting for biomorphic STDP memory engrams.
@@ -7598,7 +7598,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                         <VerifiedIcon sx={{ color: '#10B981', fontSize: '1.15rem' }} />
                         <Typography sx={{ fontFamily: mono, fontWeight: 900, color: '#10B981', fontSize: '0.84rem' }}>
-                          ✓ POUW_MINT BLOCK FINALIZED &amp; BFT ATTESTED
+                          ✓ POUW_MINT BLOCK FINALIZED & BFT ATTESTED
                         </Typography>
                       </Box>
                       <Chip
@@ -7622,7 +7622,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                       <Grid xs={12} md={3}>
                         <Box sx={{ p: 1.2, borderRadius: 1.5, bgcolor: isDark ? '#05070A' : '#FFFFFF', border: '1px solid rgba(212,175,55,0.3)' }}>
                           <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.64rem', display: 'block' }}>
-                            MINER ACCOUNT &amp; BLOCK TYPE
+                            MINER ACCOUNT & BLOCK TYPE
                           </Typography>
                           <Typography sx={{ fontFamily: mono, color: '#FFD700', fontSize: '0.72rem', fontWeight: 800, mt: 0.3 }}>
                             @zoth • POUW_MINT
@@ -7855,7 +7855,7 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                     endIcon={<ArrowForwardIcon />}
                     sx={{ bgcolor: gold.accent, color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.78rem', '&:hover': { bgcolor: isDark ? gold.soft : '#9A7209' } }}
                   >
-                    View Complete STDP Proof &amp; Spec
+                    View Complete STDP Proof & Spec
                   </Button>
                   <Button
                     component={RouterLink}

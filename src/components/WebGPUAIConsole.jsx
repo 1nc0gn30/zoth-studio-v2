@@ -121,7 +121,7 @@ export default function WebGPUAIConsole() {
               Zoth-AI (Qwen 2.5 Coder) WebGPU Neural Engine
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              Direct in-browser token generation &amp; WGSL matrix shaders · 100% Zero-Egress on your device hardware
+              Direct in-browser token generation & WGSL matrix shaders · 100% Zero-Egress on your device hardware
             </Typography>
           </Box>
         </Box>

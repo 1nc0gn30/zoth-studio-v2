@@ -316,7 +316,7 @@ export function RegexDroidGodModeTool() {
   const [copiedKey, setCopiedKey] = useState(null);
 
   // Pro State
-  const [isProLicensed, setIsProLicensed] = useState(false);
+  const [isProLicensed, setIsProLicensed] = useState(true);
   const [showPaywallModal, setShowPaywallModal] = useState(false);
   const [licenseKeyInput, setLicenseKeyInput] = useState('');
 
@@ -407,11 +407,11 @@ export function RegexDroidGodModeTool() {
                 sx={{ bgcolor: gold, color: '#000', fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
               />
               <Typography variant="body2" sx={{ color: emerald, fontWeight: 700, fontFamily: mono }}>
-                AST BUILDER &amp; REDOS GUARDIAN
+                AST BUILDER & REDOS GUARDIAN
               </Typography>
             </Stack>
             <Typography variant="h6" sx={{ fontWeight: 800, mt: 0.5, color: isDark ? '#FFFFFF' : '#111827' }}>
-              Regex Droid Studio Pro · ReDoS Guardian &amp; Code Foundry
+              Regex Droid Studio Pro · ReDoS Guardian & Code Foundry
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
               100% in-browser visual AST tokenizer, static algorithmic ReDoS detector, multi-language code exporter, and catastrophic backtracking circuit breaker.
@@ -433,7 +433,7 @@ export function RegexDroidGodModeTool() {
                 <Button
                   variant="contained"
                   component="a"
-                  href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                  href="https://github.com/1nc0gn30/zoth-studio-v2"
                   target="_blank"
                   rel="noopener"
                   startIcon={<BoltIcon />}
@@ -451,7 +451,7 @@ export function RegexDroidGodModeTool() {
                 <Button
                   variant="outlined"
                   component="a"
-                  href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                  href="https://github.com/1nc0gn30/zoth-studio-v2"
                   target="_blank"
                   rel="noopener"
                   sx={{
@@ -501,7 +501,7 @@ export function RegexDroidGodModeTool() {
               </Box>
               <Box>
                 <Typography variant="h5" sx={{ fontWeight: 800, color: isDark ? '#FFF' : '#111827' }}>
-                  Regex Droid <span style={{ color: emerald }}>AST &amp; ReDoS Studio</span>
+                  Regex Droid <span style={{ color: emerald }}>AST & ReDoS Studio</span>
                 </Typography>
                 <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
                   Deterministic AST Deconstruction · Zero-Egress Engine · NullAI Platform
@@ -676,7 +676,7 @@ export function RegexDroidGodModeTool() {
           '& .MuiTabs-indicator': { bgcolor: emerald }
         }}
       >
-        <Tab icon={<PlayArrowIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="⚡ Live Matcher &amp; Testbed" />
+        <Tab icon={<PlayArrowIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="⚡ Live Matcher & Testbed" />
         <Tab icon={<CodeIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="🌳 AST Token Breakdown" />
         <Tab icon={<BoltIcon sx={{ fontSize: 18, mr: 0.5 }} />} iconPosition="start" label="🚀 Multi-Language Code Exporter" />
       </Tabs>
@@ -863,7 +863,7 @@ export function RegexDroidGodModeTool() {
                     fullWidth
                     variant="contained"
                     component="a"
-                    href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                    href="https://github.com/1nc0gn30/zoth-studio-v2"
                     target="_blank"
                     rel="noopener"
                     startIcon={<BoltIcon />}
@@ -934,7 +934,7 @@ export function RegexDroidGodModeTool() {
         }}
       >
         <DialogTitle sx={{ fontWeight: 800, fontFamily: mono, color: gold, pb: 1 }}>
-          ⭐ ACTIVATE PRO LICENSE
+          ✦ 100% OPEN ACCESS
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>

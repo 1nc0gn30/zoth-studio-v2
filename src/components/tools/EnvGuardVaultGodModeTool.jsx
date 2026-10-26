@@ -615,7 +615,7 @@ export function EnvGuardVaultGodModeTool() {
                   '&:hover': { bgcolor: '#059669', color: '#FFFFFF' }
                 }}
               >
-                AUTHENTICATE &amp; DECRYPT PAYLOAD
+                AUTHENTICATE & DECRYPT PAYLOAD
               </Button>
             </Paper>
           </Grid>
@@ -658,7 +658,7 @@ export function EnvGuardVaultGodModeTool() {
                   </pre>
                 ) : (
                   <Typography sx={{ color: 'text.secondary', fontFamily: mono, fontSize: '0.8rem', mt: 10, textAlign: 'center' }}>
-                    Provide envelope &amp; master passphrase, then click &ldquo;AUTHENTICATE &amp; DECRYPT&rdquo;.
+                    Provide envelope & master passphrase, then click &ldquo;AUTHENTICATE & DECRYPT&rdquo;.
                   </Typography>
                 )}
               </Paper>

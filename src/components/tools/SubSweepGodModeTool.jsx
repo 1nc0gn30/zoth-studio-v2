@@ -103,7 +103,7 @@ export function SubSweepGodModeTool() {
   const [selectedTarget, setSelectedTarget] = useState(null);
   const [enableShodan, setEnableShodan] = useState(true);
   const [copiedKey, setCopiedKey] = useState(null);
-  const [isProLicensed, setIsProLicensed] = useState(false);
+  const [isProLicensed, setIsProLicensed] = useState(true);
   const [showPaywallModal, setShowPaywallModal] = useState(false);
   const [licenseKeyInput, setLicenseKeyInput] = useState('');
   const [logs, setLogs] = useState([]);
@@ -436,7 +436,7 @@ export function SubSweepGodModeTool() {
           <Box>
             <Stack direction="row" spacing={1} alignItems="center">
               <Typography variant="subtitle1" sx={{ fontWeight: 800, color: gold }}>
-                SubSweep Apex Reconnaissance &amp; Attack Surface Studio
+                SubSweep Apex Reconnaissance & Attack Surface Studio
               </Typography>
               <Chip
                 size="small"
@@ -462,7 +462,7 @@ export function SubSweepGodModeTool() {
               <Button
                 variant="contained"
                 size="small"
-                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                href="https://github.com/1nc0gn30/zoth-studio-v2"
                 target="_blank"
                 rel="noreferrer"
                 startIcon={<BoltIcon />}
@@ -473,7 +473,7 @@ export function SubSweepGodModeTool() {
                   '&:hover': { bgcolor: '#B8860B' }
                 }}
               >
-                Unlock Pro $19
+                ☕ Buy Us a Coffee
               </Button>
               <Button
                 variant="outlined"
@@ -1048,7 +1048,7 @@ export function SubSweepGodModeTool() {
                 <Grid xs={12}>
                   <Paper sx={{ p: 2, bgcolor: isDark ? voidDark : '#F8FAFC', border: `1px solid ${cardBorder}`, borderRadius: 1.5 }}>
                     <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', mb: 1, display: 'block' }}>
-                      SHODAN INTERNETDB OPEN PORTS &amp; DISCOVERED SERVICES
+                      SHODAN INTERNETDB OPEN PORTS & DISCOVERED SERVICES
                     </Typography>
                     {selectedTarget.ports.length === 0 ? (
                       <Typography variant="body2" sx={{ fontFamily: mono, color: 'text.secondary' }}>
@@ -1142,7 +1142,7 @@ export function SubSweepGodModeTool() {
 
           <Paper sx={{ p: 2, mb: 3, bgcolor: goldSoft, border: `1px solid ${gold}`, borderRadius: 1.5 }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold, mb: 0.5 }}>
-              ⚡ Founding Member Pricing: $19 Lifetime (Regular $79)
+              ⚡ 100% Free & Open Access — Optional Community Support
             </Typography>
             <Typography variant="caption" sx={{ color: 'text.primary' }}>
               Instant license key issued upon checkout. Supported payment rails:
@@ -1151,12 +1151,12 @@ export function SubSweepGodModeTool() {
               <Button
                 variant="contained"
                 size="small"
-                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                href="https://github.com/1nc0gn30/zoth-studio-v2"
                 target="_blank"
                 rel="noreferrer"
                 sx={{ bgcolor: gold, color: '#000', fontWeight: 800 }}
               >
-                Stripe Checkout ($19)
+                ☕ Buy Us a Coffee (Stripe)
               </Button>
               <Button
                 variant="outlined"

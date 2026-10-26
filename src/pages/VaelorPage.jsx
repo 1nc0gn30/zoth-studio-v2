@@ -840,7 +840,7 @@ export default function VaelorPage() {
   // Wave 26: Cross-Chain Atomic Bridge State
   const BRIDGE_PRESETS = [
     { label: '100 ◈ ↔ $100.00 USD', fromAsset: 'VLR', toAsset: 'USD', fromAmount: 100, toAmount: 100, desc: 'Zero-spread 1:1 USD fiat settlement' },
-    { label: '250 ◈ ↔ 1.66 SOL', fromAsset: 'VLR', toAsset: 'SOL', fromAmount: 250, toAmount: 1.66, desc: 'Solana DePay bridge rail ($150.60/SOL)' },
+    { label: '250 ◈ ↔ 1.66 SOL', fromAsset: 'VLR', toAsset: 'SOL', fromAmount: 250, toAmount: 1.66, desc: 'Solana Tip bridge rail ($150.60/SOL)' },
     { label: '500 ◈ ↔ 0.0052 BTC', fromAsset: 'VLR', toAsset: 'BTC', fromAmount: 500, toAmount: 0.0052, desc: 'Bitcoin L1 atomic settlement ($96,153/BTC)' }
   ];
   const [selectedBridgePreset, setSelectedBridgePreset] = useState(BRIDGE_PRESETS[0]);
@@ -1668,7 +1668,7 @@ export default function VaelorPage() {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <SwapHorizIcon sx={{ color: '#34D399', fontSize: '1.4rem' }} />
                   <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: '"Syne", sans-serif' }}>
-                    Feeless Transfer &amp; Smart Receipt Simulator
+                    Feeless Transfer & Smart Receipt Simulator
                   </Typography>
                 </Box>
                 <Chip
@@ -1821,7 +1821,7 @@ export default function VaelorPage() {
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <CheckCircleIcon sx={{ color: '#10B981', fontSize: '1.2rem' }} />
                       <Typography sx={{ fontFamily: mono, fontWeight: 900, color: '#10B981', fontSize: '0.84rem' }}>
-                        ✓ Feeless Transfer Confirmed &amp; 5-Validator BFT Finalized (&lt;15ms)
+                        ✓ Feeless Transfer Confirmed & 5-Validator BFT Finalized (&lt;15ms)
                       </Typography>
                     </Box>
                     <Chip
@@ -1845,7 +1845,7 @@ export default function VaelorPage() {
                     <Grid xs={12} sm={6}>
                       <Box sx={{ p: 1, borderRadius: 1.5, bgcolor: isDark ? '#05070A' : '#FFFFFF', border: '1px solid rgba(212,175,55,0.25)' }}>
                         <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.62rem', display: 'block' }}>
-                          RECEIPT ID &amp; GAS FEE
+                          RECEIPT ID & GAS FEE
                         </Typography>
                         <Typography sx={{ fontFamily: mono, color: '#FFD700', fontSize: '0.76rem', fontWeight: 800, mt: 0.2 }}>
                           {transferResult.receipt?.id || 'rcp_001'} • Gas: $0.00 (0 VLR)
@@ -2036,9 +2036,9 @@ export default function VaelorPage() {
         <RevealOnScroll>
           <Box id="vaelor-vault-credit-sim" sx={{ mb: 6 }}>
             <Box sx={{ mb: 3 }}>
-              <Typography className="section-kicker">Autonomous Liquidity &amp; Lending</Typography>
+              <Typography className="section-kicker">Autonomous Liquidity & Lending</Typography>
               <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif', mb: 1 }}>
-                Zero-Lockup 8.5% APY Vault &amp; 30-Day Revolving Credit
+                Zero-Lockup 8.5% APY Vault & 30-Day Revolving Credit
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 880, fontSize: '0.94rem' }}>
                 Instant compound savings backed by real Proof-of-Useful-Work AI compute demand, paired with autonomous on-lattice underwriting: <strong>0% APR, 30-day grace period</strong>, and instant merchant settlement without credit bureaus.
@@ -2225,7 +2225,7 @@ export default function VaelorPage() {
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.8 }}>
                         <CheckCircleIcon sx={{ color: '#10B981', fontSize: '1.1rem' }} />
                         <Typography sx={{ fontFamily: mono, fontWeight: 900, fontSize: '0.78rem', color: '#10B981' }}>
-                          STAKE DEPOSITED &amp; FINALIZED (5/5 BFT)
+                          STAKE DEPOSITED & FINALIZED (5/5 BFT)
                         </Typography>
                       </Box>
                       <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#E2E8F0' : '#1E293B', lineHeight: 1.5 }}>
@@ -2415,9 +2415,9 @@ export default function VaelorPage() {
         <RevealOnScroll>
           <Box id="vaelor-stream-split-sim" sx={{ mb: 6 }}>
             <Box sx={{ mb: 3 }}>
-              <Typography className="section-kicker">Continuous Nano-Finance &amp; Social Commerce</Typography>
+              <Typography className="section-kicker">Continuous Nano-Finance & Social Commerce</Typography>
               <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif', mb: 1 }}>
-                Feeless Money Streaming &amp; Social Group Bill-Splitter
+                Feeless Money Streaming & Social Group Bill-Splitter
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 880, fontSize: '0.94rem' }}>
                 Continuous real-time nano-payments with <strong>$0.00 gas per tick</strong>, paired with automated multi-party group bill splitting and pro-rata <strong>2.5% instant cashback rebates</strong> for every participant.
@@ -2583,7 +2583,7 @@ export default function VaelorPage() {
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.8 }}>
                         <CheckCircleIcon sx={{ color: '#10B981', fontSize: '1.1rem' }} />
                         <Typography sx={{ fontFamily: mono, fontWeight: 900, fontSize: '0.78rem', color: '#10B981' }}>
-                          FEELSS STREAM ACTIVE &amp; DISBURSING (5/5 BFT)
+                          FEELSS STREAM ACTIVE & DISBURSING (5/5 BFT)
                         </Typography>
                       </Box>
                       <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#E2E8F0' : '#1E293B', lineHeight: 1.5 }}>
@@ -2776,9 +2776,9 @@ export default function VaelorPage() {
         <RevealOnScroll>
           <Box id="vaelor-security-continuity-sim" sx={{ mb: 6 }}>
             <Box sx={{ mb: 3 }}>
-              <Typography className="section-kicker">Sovereign Continuity &amp; Privacy</Typography>
+              <Typography className="section-kicker">Sovereign Continuity & Privacy</Typography>
               <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif', mb: 1 }}>
-                Seedless Social Recovery, Dead-Man's Switch &amp; Shielded Privacy
+                Seedless Social Recovery, Dead-Man's Switch & Shielded Privacy
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 880, fontSize: '0.94rem' }}>
                 Zero seed phrase vulnerability. Recover biometric passkeys via 2-of-3 multi-party social consensus, automate estate continuity via on-chain liveness switches, and settle confidential balances using zero-knowledge Pedersen commitments.
@@ -3127,9 +3127,9 @@ export default function VaelorPage() {
         <RevealOnScroll>
           <Box id="vaelor-agent-fintech-sim" sx={{ mb: 6 }}>
             <Box sx={{ mb: 3 }}>
-              <Typography className="section-kicker">Autonomous Fintech &amp; Agent Economy</Typography>
+              <Typography className="section-kicker">Autonomous Fintech & Agent Economy</Typography>
               <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif', mb: 1 }}>
-                AI M2M Bounties, Delegated Virtual Cards &amp; Offline Bearer Vouchers
+                AI M2M Bounties, Delegated Virtual Cards & Offline Bearer Vouchers
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 880, fontSize: '0.94rem' }}>
                 Test machine-to-machine smart bounties settled with cryptographic SHA-256 AST proofs, manage spend-capped delegated sub-account virtual cards with 1-click freeze protection, and mint offline NFC/QR bearer vouchers operable without internet connectivity.
@@ -3718,9 +3718,9 @@ export default function VaelorPage() {
         <RevealOnScroll>
           <Box id="vaelor-bridge-patronage-sim" sx={{ mb: 6 }}>
             <Box sx={{ mb: 3 }}>
-              <Typography className="section-kicker">Cross-Chain &amp; Creator Economy</Typography>
+              <Typography className="section-kicker">Cross-Chain & Creator Economy</Typography>
               <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif', mb: 1 }}>
-                Atomic Bridge, Feeless Creator Tip Jar &amp; Loyalty Cashback Ladder
+                Atomic Bridge, Feeless Creator Tip Jar & Loyalty Cashback Ladder
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 880, fontSize: '0.94rem' }}>
                 Execute zero-slippage cross-chain swaps between ◈ VLR and USD, SOL, or BTC; send feeless micro-tips to open-source creators with dynamic supporter badges; and boost your wallet to the 5.00% Sovereign Diamond cashback tier.
@@ -3768,7 +3768,7 @@ export default function VaelorPage() {
                   </Box>
 
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5, fontSize: '0.85rem', flexGrow: 0 }}>
-                    Instant bidirectional settlement across fiat USD, Solana DePay, and Bitcoin rails with 0.00% spread guarantee for Zoth ecosystem accounts.
+                    Instant bidirectional settlement across fiat USD, Solana Tip, and Bitcoin rails with 0.00% spread guarantee for Zoth ecosystem accounts.
                   </Typography>
 
                   {/* Asset Pair Presets */}
@@ -4730,7 +4730,7 @@ export default function VaelorPage() {
                     <Box sx={{ p: 2, borderRadius: 2, bgcolor: isDark ? '#05070B' : '#F8FAFC', border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : '#E2E8F0'}` }}>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
                         <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800 }}>
-                          COUNTERPARTIES &amp; ASSET
+                          COUNTERPARTIES & ASSET
                         </Typography>
                         <Chip
                           icon={<ShieldIcon sx={{ fontSize: '0.75rem !important', color: '#10B981 !important' }} />}

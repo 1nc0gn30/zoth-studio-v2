@@ -282,7 +282,7 @@ export default function ZothOSShowcasePage() {
                 mb: 2,
               }}
             >
-              The Sovereign AI &amp;{' '}
+              The Sovereign AI &{' '}
               <Box component="span" className="text-gradient-gold">
                 Offensive Security OS
               </Box>
@@ -336,7 +336,7 @@ export default function ZothOSShowcasePage() {
                   borderColor: goldBorder,
                 }}
               >
-                Launch Live Codex &amp; Dials →
+                Launch Live Codex & Dials →
               </Button>
               <Button
                 variant="outlined"
@@ -403,7 +403,7 @@ export default function ZothOSShowcasePage() {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <TerminalIcon sx={{ color: gold }} />
             <Typography sx={{ fontFamily: mono, fontSize: '0.85rem', color: goldSoft, fontWeight: 700, overflowWrap: 'anywhere' }}>
-              $ git clone https://github.com/NullAITech/zoth-os.git &amp;&amp; cd zoth-os
+              $ git clone https://github.com/NullAITech/zoth-os.git && cd zoth-os
             </Typography>
           </Box>
           <Button

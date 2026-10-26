@@ -209,7 +209,7 @@ export default function AgentFlightRecorderGodModeTool() {
             />
           </Stack>
           <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 400 }}>
-            Tamper-Evident <span style={{ color: '#38BDF8' }}>Merkle DAG</span> Trajectory &amp; Replay Debugger
+            Tamper-Evident <span style={{ color: '#38BDF8' }}>Merkle DAG</span> Trajectory & Replay Debugger
           </Typography>
         </Box>
       </Stack>

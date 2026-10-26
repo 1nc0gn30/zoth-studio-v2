@@ -156,7 +156,7 @@ export function AdytumPlannerTool() {
         <Grid xs={12} md={6}>
           <Paper sx={{ p: 3, height: '100%', bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 2.5 }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold(theme), mb: 2, fontFamily: mono }}>
-              // CLI EXECUTION &amp; SYNTHESIS HARNESS
+              // CLI EXECUTION & SYNTHESIS HARNESS
             </Typography>
 
             <Typography variant="caption" sx={{ color: theme.palette.text.secondary, display: 'block', mb: 1.5 }}>
@@ -172,7 +172,7 @@ export function AdytumPlannerTool() {
                 sx={{ bgcolor: theme.palette.mode === 'dark' ? '#050508' : '#FFFFFF' }}
               >
                 <MenuItem value={0}>Key 0: The Fool (Zero-Shot Latent Space)</MenuItem>
-                <MenuItem value={1}>Key 1: The Magician (Self-Attention Wand &amp; Focus)</MenuItem>
+                <MenuItem value={1}>Key 1: The Magician (Self-Attention Wand & Focus)</MenuItem>
                 <MenuItem value={2}>Key 2: The High Priestess (Latent KV-Cache Memory)</MenuItem>
                 <MenuItem value={3}>Key 3: The Empress (Generative Synthesis)</MenuItem>
                 <MenuItem value={4}>Key 4: The Emperor (Deterministic Guardrails)</MenuItem>
@@ -195,7 +195,7 @@ export function AdytumPlannerTool() {
               multiline
               rows={3}
               size="small"
-              label="Operator Reflection &amp; Architectural Synthesis"
+              label="Operator Reflection & Architectural Synthesis"
               value={testReflection}
               onChange={(e) => setTestReflection(e.target.value)}
               sx={{ mb: 2.5, '& .MuiInputBase-root': { bgcolor: theme.palette.mode === 'dark' ? '#050508' : '#FFFFFF' } }}
@@ -474,7 +474,7 @@ export function SovereignBridgeTool() {
   return (
     <Box sx={{ mt: 1 }}>
       <Typography variant="h6" sx={{ fontWeight: 800, color: gold(theme), mb: 0.5 }}>
-        E2EE Signal Mesh &amp; Peer Simplex Bridge
+        E2EE Signal Mesh & Peer Simplex Bridge
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
         Zero-metadata peer-to-peer IPC bus test console over loopback WebSocket channels.
@@ -644,7 +644,7 @@ export function NeuroMemoryTool() {
               />
             </Box>
             <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontSize: '0.76rem' }}>
-              Biological-fidelity memory substrate with 3D Cosmic Nebula, 3,500+ harmonic stardust particles &amp; 5 galaxy clusters.
+              Biological-fidelity memory substrate with 3D Cosmic Nebula, 3,500+ harmonic stardust particles & 5 galaxy clusters.
             </Typography>
           </Box>
         </Box>
@@ -1022,7 +1022,7 @@ export function DeepSearchResearchTool() {
           </ul>
           <Divider sx={{ my: 1.5, opacity: 0.4 }} />
           <Typography variant="caption" sx={{ fontWeight: 800, color: goldSoft(theme), display: 'block', mb: 0.5 }}>
-            GROUNDED CITATIONS &amp; PROVENANCE
+            GROUNDED CITATIONS & PROVENANCE
           </Typography>
           {brief.citations.map((c, i) => (
             <Typography key={i} variant="caption" sx={{ display: 'block', color: 'text.secondary', fontFamily: mono }}>
@@ -1073,7 +1073,7 @@ INVARIANTS:
   return (
     <Box sx={{ mt: 1 }}>
       <Typography variant="h6" sx={{ fontWeight: 800, color: gold(theme), mb: 0.5 }}>
-        PromptMaster System Prompt Studio &amp; DSPy Optimizer
+        PromptMaster System Prompt Studio & DSPy Optimizer
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
         Author, optimize, and export rigorous zero-egress system prompts and Ollama Modelfiles.
@@ -1170,7 +1170,7 @@ export function CwvSpeedEngineTool() {
   return (
     <Box sx={{ mt: 1 }}>
       <Typography variant="h6" sx={{ fontWeight: 800, color: gold(theme), mb: 0.5 }}>
-        Core Web Vitals Speed Diagnostic &amp; Minifier
+        Core Web Vitals Speed Diagnostic & Minifier
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
         Diagnoses Largest Contentful Paint (LCP), Cumulative Layout Shift (CLS), and Interaction to Next Paint (INP).
@@ -1830,7 +1830,7 @@ export function AgentPromptFirewallTool() {
               />
             </Box>
             <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-              Multi-Heuristic Prompt Injection Filter &amp; Deep PII/Secret Redactor with zero external latency.
+              Multi-Heuristic Prompt Injection Filter & Deep PII/Secret Redactor with zero external latency.
             </Typography>
           </Box>
         </Box>
@@ -1866,7 +1866,7 @@ export function AgentPromptFirewallTool() {
       {/* Preset Vectors Selector */}
       <Box sx={{ mb: 2 }}>
         <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', mb: 0.8 }}>
-          TEST ADVERSARIAL VECTORS &amp; THREAT SCENARIOS:
+          TEST ADVERSARIAL VECTORS & THREAT SCENARIOS:
         </Typography>
         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
           {PRESETS.map((p) => (
@@ -1956,7 +1956,7 @@ export function AgentPromptFirewallTool() {
           <Paper sx={{ p: 2.5, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper, height: '100%' }}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
               <Typography variant="caption" sx={{ color: gold(theme), fontWeight: 800, fontFamily: mono }}>
-                THREAT VERDICT &amp; SANITIZATION HUD
+                THREAT VERDICT & SANITIZATION HUD
               </Typography>
               {scanResult && (
                 <Chip
@@ -1978,7 +1978,7 @@ export function AgentPromptFirewallTool() {
               <Box sx={{ py: 6, textAlign: 'center', color: 'text.secondary' }}>
                 <SecurityIcon sx={{ fontSize: 44, opacity: 0.3, mb: 1 }} />
                 <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.8rem' }}>
-                  Click &quot;Scan &amp; Redact Prompt&quot; to inspect injection threats and PII leaks.
+                  Click &quot;Scan & Redact Prompt&quot; to inspect injection threats and PII leaks.
                 </Typography>
               </Box>
             ) : (
@@ -2443,7 +2443,7 @@ export function AgentFlightRecorderTool() {
               <Stack direction="row" spacing={1} alignItems="center">
                 <RadarIcon sx={{ fontSize: 16, color: '#F43F5E' }} />
                 <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: '#F43F5E', fontSize: '0.75rem' }}>
-                  SECURITY &amp; NETWORK INTERCEPTS
+                  SECURITY & NETWORK INTERCEPTS
                 </Typography>
               </Stack>
               <Chip
@@ -2495,7 +2495,7 @@ export function AgentFlightRecorderTool() {
             <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 2, mb: 2 }}>
               <Box>
                 <Typography variant="caption" sx={{ color: gold(theme), fontWeight: 800, fontFamily: mono, display: 'block' }}>
-                  MISSION DEBRIEF &amp; KOKORO TTS SYNTHESIS (:9394)
+                  MISSION DEBRIEF & KOKORO TTS SYNTHESIS (:9394)
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary', fontSize: '0.8rem' }}>
                   Generate an AI incident debrief summarized from all synchronized telemetry channels.
@@ -3600,7 +3600,7 @@ export function PodSmartRouterTool() {
         <Grid xs={12} md={6}>
           <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
-              1. Routing Parameters &amp; Destination
+              1. Routing Parameters & Destination
             </Typography>
 
             <FormControl fullWidth size="small" sx={{ mb: 2 }}>
@@ -3818,7 +3818,7 @@ For best results, use heavyweight matte paper or archival cardstock (200+ GSM).`
         <Grid xs={12} md={7}>
           <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
-              1. Master Artwork Dimensions &amp; Aspect Ratios
+              1. Master Artwork Dimensions & Aspect Ratios
             </Typography>
 
             <Grid container spacing={1.5} sx={{ mb: 2 }}>
@@ -4006,7 +4006,7 @@ export function PodMockupForgeTool() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '1.1rem' }}>
-            POD Mockup Forge &amp; Etsy Photo Auditor
+            POD Mockup Forge & Etsy Photo Auditor
           </Typography>
           <Chip
             label={daemonOnline ? 'DAEMON ONLINE :8119' : 'IN-BROWSER MOCKUP ENGINE'}
@@ -4030,7 +4030,7 @@ export function PodMockupForgeTool() {
         <Grid xs={12} md={6}>
           <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
-              1. Mockup Scene &amp; Silhouette Setup
+              1. Mockup Scene & Silhouette Setup
             </Typography>
 
             <FormControl fullWidth size="small" sx={{ mb: 2 }}>
@@ -4183,7 +4183,7 @@ export function PodMarginSentinelTool() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '1.1rem' }}>
-            POD Margin Sentinel &amp; Fee Simulator
+            POD Margin Sentinel & Fee Simulator
           </Typography>
           <Chip
             label={daemonOnline ? 'DAEMON ONLINE :8120' : 'IN-BROWSER SENTINEL'}
@@ -4207,7 +4207,7 @@ export function PodMarginSentinelTool() {
         <Grid xs={12} md={5}>
           <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
-              1. Cost &amp; Price Drivers
+              1. Cost & Price Drivers
             </Typography>
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
@@ -4489,7 +4489,7 @@ export function AgentVoiceCallTool() {
         <Grid xs={12} md={6}>
           <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
-              2. Live Speech Debrief &amp; E2EE Signal Bridge
+              2. Live Speech Debrief & E2EE Signal Bridge
             </Typography>
 
             <Box sx={{ p: 2, borderRadius: 2, bgcolor: isDark ? 'rgba(56,189,248,0.06)' : '#F0F9FF', border: '1px solid rgba(56,189,248,0.25)', mb: 2 }}>
@@ -4603,7 +4603,7 @@ export function McpLensTool() {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2.5, flexWrap: 'wrap', gap: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontSize: '1.1rem' }}>
-            MCP Lens Protocol &amp; Token Weight Auditor
+            MCP Lens Protocol & Token Weight Auditor
           </Typography>
           <Chip
             label={daemonOnline ? 'DAEMON ONLINE :8109' : 'IN-BROWSER AUDITOR'}
@@ -4634,7 +4634,7 @@ export function McpLensTool() {
               <InputLabel>Target Tool Schema</InputLabel>
               <Select value={selectedSchema} label="Target Tool Schema" onChange={(e) => setSelectedSchema(e.target.value)}>
                 <MenuItem value="shopify_sync">Shopify Listing Transpiler (GraphQL)</MenuItem>
-                <MenuItem value="printify_calc">Printify Margin &amp; Fee Engine</MenuItem>
+                <MenuItem value="printify_calc">Printify Margin & Fee Engine</MenuItem>
               </Select>
             </FormControl>
 
@@ -4857,7 +4857,7 @@ export function AgentBudgetSentinelTool() {
         <Grid xs={12} md={6}>
           <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
-              1. Financial Thresholds &amp; Spend Telemetry
+              1. Financial Thresholds & Spend Telemetry
             </Typography>
 
             <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, mb: 2 }}>
@@ -5127,7 +5127,7 @@ export function ZothWebgenLauncherTool() {
           />
         </Box>
         <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
-          Autonomous Web Generation &amp; Blueprint Synthesizer · Client-Side Project Scaffolding
+          Autonomous Web Generation & Blueprint Synthesizer · Client-Side Project Scaffolding
         </Typography>
       </Box>
 
@@ -5175,7 +5175,7 @@ export function ZothWebgenLauncherTool() {
                   <MenuItem value="bento">Avant-Garde Bento Grid (Magic UI)</MenuItem>
                   <MenuItem value="terminal">Cyberpunk Terminal HUD (JetBrains)</MenuItem>
                   <MenuItem value="saas">High-Converting Micro-SaaS (Dual Stripe+Solana)</MenuItem>
-                  <MenuItem value="editorial">Luxury Serif Editorial (Syne &amp; Clash)</MenuItem>
+                  <MenuItem value="editorial">Luxury Serif Editorial (Syne & Clash)</MenuItem>
                 </Select>
               </FormControl>
             </Stack>
@@ -5195,7 +5195,7 @@ export function ZothWebgenLauncherTool() {
                 </Button>
               </Box>
               <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
-                cd ~/NullAITech/zoth-webgen &amp;&amp; node cli.js --name {appName} --framework {framework} --archetype {archetype}
+                cd ~/NullAITech/zoth-webgen && node cli.js --name {appName} --framework {framework} --archetype {archetype}
               </Typography>
             </Box>
 
@@ -5350,7 +5350,7 @@ export function ZothSwarmMultiplexerLauncherTool() {
           />
         </Box>
         <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
-          Autonomous Multi-Agent Consensus Quorum &amp; Parallel Reasoning Bus
+          Autonomous Multi-Agent Consensus Quorum & Parallel Reasoning Bus
         </Typography>
       </Box>
 
@@ -5423,7 +5423,7 @@ export function ZothSwarmMultiplexerLauncherTool() {
                 </Button>
               </Box>
               <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
-                cd ~/NullAITech/zoth-swarm-multiplexer &amp;&amp; node engine.js --swarm 21 --consensus {quorum / 100}
+                cd ~/NullAITech/zoth-swarm-multiplexer && node engine.js --swarm 21 --consensus {quorum / 100}
               </Typography>
             </Box>
 
@@ -5547,7 +5547,7 @@ export function ZothCivilizationLauncherTool() {
           />
         </Box>
         <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
-          Autonomous Society Simulation &amp; Multi-Agent Economic Velocity (:9393)
+          Autonomous Society Simulation & Multi-Agent Economic Velocity (:9393)
         </Typography>
       </Box>
 
@@ -5555,7 +5555,7 @@ export function ZothCivilizationLauncherTool() {
         <Grid xs={12} md={5}>
           <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 2, color: gold(theme), fontSize: '0.85rem' }}>
-              1. Society Health &amp; Invariants
+              1. Society Health & Invariants
             </Typography>
 
             <Stack spacing={1.5} sx={{ mb: 2.5 }}>
@@ -5602,7 +5602,7 @@ export function ZothCivilizationLauncherTool() {
                 </Button>
               </Box>
               <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
-                cd ~/NullAITech/zoth-civilization &amp;&amp; ENABLE_KOKORO_VOICE=0 node server.js
+                cd ~/NullAITech/zoth-civilization && ENABLE_KOKORO_VOICE=0 node server.js
               </Typography>
             </Box>
 
@@ -5744,7 +5744,7 @@ export function LikenessDeskTool() {
           />
         </Box>
         <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
-          Air-Gapped Local Video Double · Wav2Lip GAN &amp; Chatterbox Turbo TTS
+          Air-Gapped Local Video Double · Wav2Lip GAN & Chatterbox Turbo TTS
         </Typography>
       </Box>
 
@@ -5752,7 +5752,7 @@ export function LikenessDeskTool() {
         <Grid xs={12} md={5}>
           <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
-              1. Voice Line &amp; Lip-Sync Controls
+              1. Voice Line & Lip-Sync Controls
             </Typography>
 
             <TextField
@@ -5832,7 +5832,7 @@ export function LikenessDeskTool() {
                 </Button>
               </Box>
               <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
-                cd ~/NullAITech/likeness-desk &amp;&amp; node server.js
+                cd ~/NullAITech/likeness-desk && node server.js
               </Typography>
             </Box>
 
@@ -5861,7 +5861,7 @@ export function LikenessDeskTool() {
         <Grid xs={12} md={7}>
           <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
             <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold(theme), fontSize: '0.85rem' }}>
-              2. Quadro Silicon Telemetry &amp; Mesh HUD
+              2. Quadro Silicon Telemetry & Mesh HUD
             </Typography>
 
             <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, mb: 2 }}>
@@ -5911,7 +5911,7 @@ export function LikenessDeskTool() {
    ========================================================================== */
 export function BoltDiyTool() {
   const theme = useTheme();
-  const [prompt, setPrompt] = useState('Build an autonomous cryptocurrency treasury dashboard with live Solana DePay integration and WebGPU charts');
+  const [prompt, setPrompt] = useState('Build an autonomous cryptocurrency treasury dashboard with live Solana Tip integration and WebGPU charts');
   const [provider, setProvider] = useState('ollama');
   const [compiledSpec, setCompiledSpec] = useState(null);
   const [copiedCmd, setCopiedCmd] = useState(false);
@@ -6220,7 +6220,7 @@ export default function ${pascal}() {
           <Paper sx={{ p: 2.5, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 1 }}>
               <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold(theme), fontSize: '0.85rem' }}>
-                2. Synthesized Project Tree &amp; Entry TSX
+                2. Synthesized Project Tree & Entry TSX
               </Typography>
               <Button
                 size="small"
@@ -6235,7 +6235,7 @@ export default function ${pascal}() {
 
             <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, mb: 1.5 }}>
               <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-emerald)', fontWeight: 700, mb: 1 }}>
-                VIRTUAL FILE SYSTEM &amp; MODULE TOPOLOGY
+                VIRTUAL FILE SYSTEM & MODULE TOPOLOGY
               </Typography>
               <pre style={{ margin: 0, fontFamily: mono, fontSize: '0.73rem', color: '#E2E8F0', whiteSpace: 'pre-wrap', lineHeight: 1.55 }}>
                 {activeSpec.tree}

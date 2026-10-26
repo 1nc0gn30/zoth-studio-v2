@@ -28,7 +28,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
+const STRIPE_URL = 'https://github.com/1nc0gn30/zoth-studio-v2';
 
 const DEFAULT_ESSAY = `Why modern AI agents fail in production: 90% of context bloat comes from unminified MCP tool schemas and cloud telemetry round-trips.
 
@@ -179,7 +179,7 @@ export default function OmniPostSocialGodModeTool() {
             sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 900, fontFamily: mono }}
           />
           <Typography variant="body2" sx={{ fontWeight: 700 }}>
-            Algorithmic Thread Splitter, X/LinkedIn/Bluesky Virality Scorer &amp; Multi-Channel JSON-RPC Dispatcher
+            Algorithmic Thread Splitter, X/LinkedIn/Bluesky Virality Scorer & Multi-Channel JSON-RPC Dispatcher
           </Typography>
         </Box>
         {!isPro && (
@@ -350,7 +350,7 @@ export default function OmniPostSocialGodModeTool() {
                   >
                     <LockIcon sx={{ fontSize: 34, color: '#D4AF37', mb: 1 }} />
                     <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#FFF', mb: 0.5 }}>
-                      Multi-Platform Campaign JSON &amp; Thread Exporter Locked
+                      Multi-Platform Campaign JSON & Thread Exporter Locked
                     </Typography>
                     <Button
                       size="small"
@@ -360,7 +360,7 @@ export default function OmniPostSocialGodModeTool() {
                       rel="noopener noreferrer"
                       sx={{ mt: 1, bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono }}
                     >
-                      Unlock Pro ($19 Lifetime)
+                      ☕ Buy Us a Coffee
                     </Button>
                   </Box>
                 )}
