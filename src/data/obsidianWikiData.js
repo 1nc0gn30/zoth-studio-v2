@@ -4846,3 +4846,120 @@ export function callVaelorMcpFallback(toolName, args = {}) {
   }
 }
 
+export function createVaelorStreamFallback(opts = {}) {
+  const sender = opts.sender || '@citizen';
+  const recipient = opts.recipient || '@sprig';
+  const totalAmountVlr = parseFloat(opts.totalAmount || opts.totalAmountVlr) || 50;
+  const ratePerSecondVlr = parseFloat(opts.ratePerSecondVlr) || 0.005;
+  const durationSeconds = parseInt(opts.durationSeconds) || Math.round(totalAmountVlr / ratePerSecondVlr) || 10000;
+  const memo = opts.memo || 'Feeless per-second stream';
+  const streamId = 'strm_' + randHex(16);
+  const blockHash = randHex(64);
+  const ts = new Date().toISOString();
+
+  return {
+    ok: true,
+    stream: {
+      id: streamId,
+      senderHandle: sender,
+      recipientHandle: recipient,
+      totalAmountVlr,
+      durationSeconds,
+      ratePerSecondVlr,
+      memo,
+      status: 'ACTIVE',
+      createdAt: ts,
+      startTime: ts,
+      endTime: new Date(Date.now() + durationSeconds * 1000).toISOString(),
+      claimedVlr: 0,
+      accruedVlr: 0.0001,
+      claimableVlr: 0.0001,
+      unstreamedVlr: totalAmountVlr,
+      progressPct: 0,
+      createBlockHash: blockHash
+    },
+    createBlock: {
+      hash: blockHash,
+      account: 'vlr1_' + randHex(32),
+      handle: sender,
+      height: 75,
+      type: 'STREAM_CREATE',
+      balanceAfterVlr: 11047.0,
+      finalityMs: 9.4,
+      gasFeeVlr: 0,
+      timestamp: ts,
+      quorumCertificate: {
+        blockHash,
+        status: 'FINALIZED_BFT',
+        quorumSize: 5,
+        approvals: 5,
+        bftThreshold: '4/5 (2f + 1)',
+        aggregateLatencyMs: 8.1
+      }
+    }
+  };
+}
+
+export function createVaelorGroupTabFallback(opts = {}) {
+  const organizer = opts.organizer || '@citizen';
+  const merchant = opts.merchant || '@sprig';
+  const title = opts.title || 'Founders Dinner';
+  const totalAmountVlr = parseFloat(opts.totalAmount || opts.totalAmountVlr) || 64;
+  const participants = opts.participantHandles || opts.participants || ['@zoth', '@neal', '@sprig', '@citizen'];
+  const shareVlr = +(totalAmountVlr / participants.length).toFixed(4);
+  const cashbackBps = opts.cashbackBps || 250;
+  const cashbackPct = cashbackBps / 100;
+  const totalCashbackVlr = +(totalAmountVlr * (cashbackBps / 10000)).toFixed(4);
+  const tabId = 'tab_' + randHex(16);
+  const blockHash = randHex(64);
+  const ts = new Date().toISOString();
+
+  return {
+    ok: true,
+    tab: {
+      id: tabId,
+      title,
+      organizer,
+      merchant,
+      totalAmountVlr,
+      totalVael: Math.round(totalAmountVlr * 1000000),
+      cashbackBps,
+      cashbackPct,
+      totalCashbackVlr,
+      status: 'OPEN',
+      createdAt: ts,
+      createBlockHash: blockHash,
+      participants: participants.map((p) => ({
+        handle: p,
+        shareVlr,
+        status: p === organizer ? 'PAID' : 'PENDING',
+        paidAt: p === organizer ? ts : null,
+        cashbackVlr: +(shareVlr * (cashbackBps / 10000)).toFixed(4)
+      })),
+      paidCount: 1,
+      totalParticipants: participants.length,
+      paidAmountVlr: shareVlr,
+      remainingAmountVlr: +(totalAmountVlr - shareVlr).toFixed(4),
+      percentComplete: Math.round((1 / participants.length) * 100)
+    },
+    createBlock: {
+      hash: blockHash,
+      account: 'vlr1_' + randHex(32),
+      handle: organizer,
+      height: 76,
+      type: 'GROUP_TAB_CREATE',
+      finalityMs: 8.2,
+      gasFeeVlr: 0,
+      timestamp: ts,
+      quorumCertificate: {
+        blockHash,
+        status: 'FINALIZED_BFT',
+        quorumSize: 5,
+        approvals: 5,
+        bftThreshold: '4/5 (2f + 1)',
+        aggregateLatencyMs: 8.15
+      }
+    }
+  };
+}
+

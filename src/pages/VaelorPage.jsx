@@ -26,6 +26,9 @@ import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import TerminalIcon from '@mui/icons-material/Terminal';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import WavesIcon from '@mui/icons-material/Waves';
+import GroupsIcon from '@mui/icons-material/Groups';
+import PieChartIcon from '@mui/icons-material/PieChart';
 import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import VaelorLatticeVisualizer from '../components/VaelorLatticeVisualizer';
 import SovereignFunnel from '../components/SovereignFunnel';
@@ -38,7 +41,9 @@ import {
   VAELOR_MCP_TOOLS,
   stakeVaelorSavingsFallback,
   drawVaelorCreditFallback,
-  callVaelorMcpFallback
+  callVaelorMcpFallback,
+  createVaelorStreamFallback,
+  createVaelorGroupTabFallback
 } from '../data/obsidianWikiData';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -348,6 +353,136 @@ export default function VaelorPage() {
   const calculatedCreditLimit = useMemo(() => {
     return 500 + Math.round(0.8 * stakedBalance) + 50;
   }, [stakedBalance]);
+
+  // Feeless Per-Second Money Streaming State
+  const STREAM_PRESETS = [
+    { label: 'AI Compute Cluster', rate: 0.005, unit: '0.005 ◈/sec', desc: '18.00 ◈/hr continuous inference' },
+    { label: 'Contractor Payroll', rate: 0.025, unit: '0.025 ◈/sec', desc: '90.00 ◈/hr per-second payout' },
+    { label: 'GPU Node Cluster', rate: 0.100, unit: '0.100 ◈/sec', desc: '360.00 ◈/hr H100 GPU compute' }
+  ];
+  const [selectedStreamPreset, setSelectedStreamPreset] = useState(STREAM_PRESETS[0]);
+  const [streamSender, setStreamSender] = useState('@citizen');
+  const [streamRecipient, setStreamRecipient] = useState('@sprig');
+  const [streamTotalAmount, setStreamTotalAmount] = useState('50.00');
+  const [streamAccrued, setStreamAccrued] = useState(0.000000);
+  const [isStreamingActive, setIsStreamingActive] = useState(true);
+  const [isLaunchingStream, setIsLaunchingStream] = useState(false);
+  const [streamResult, setStreamResult] = useState(null);
+
+  // Live rAF ticker for accrued VLR stream
+  useEffect(() => {
+    let animId;
+    let lastTime = performance.now();
+    const tick = (now) => {
+      const dt = (now - lastTime) / 1000;
+      lastTime = now;
+      if (isStreamingActive) {
+        setStreamAccrued((prev) => +(prev + selectedStreamPreset.rate * dt));
+      }
+      animId = requestAnimationFrame(tick);
+    };
+    animId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(animId);
+  }, [isStreamingActive, selectedStreamPreset]);
+
+  const handleLaunchStream = async () => {
+    if (isLaunchingStream) return;
+    setIsLaunchingStream(true);
+    const totalAmt = parseFloat(streamTotalAmount) || 50.0;
+    const duration = Math.round(totalAmt / selectedStreamPreset.rate) || 10000;
+    let resData = null;
+    try {
+      const res = await fetch('http://127.0.0.1:8140/api/streams', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sender: streamSender,
+          recipient: streamRecipient,
+          ratePerSecondVlr: selectedStreamPreset.rate,
+          totalAmount: totalAmt,
+          durationSeconds: duration,
+          memo: `Feeless stream: ${selectedStreamPreset.label}`
+        })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json && json.ok) resData = json;
+      }
+    } catch (_) {}
+
+    if (!resData) {
+      resData = createVaelorStreamFallback({
+        sender: streamSender,
+        recipient: streamRecipient,
+        ratePerSecondVlr: selectedStreamPreset.rate,
+        totalAmount: totalAmt,
+        durationSeconds: duration,
+        memo: `Feeless stream: ${selectedStreamPreset.label}`
+      });
+    }
+
+    setStreamResult(resData);
+    setIsLaunchingStream(false);
+  };
+
+  // Feeless Social Group Tab & Bill Splitter State
+  const GROUP_TAB_PRESETS = [
+    { title: 'Team Compute Cluster', totalAmount: 120, memo: 'Monthly GPU inference & hosting' },
+    { title: 'Founders Dinner', totalAmount: 64, memo: 'Sprig Kitchen artisan tasting' },
+    { title: 'Co-Op Server Rack', totalAmount: 240, memo: 'Local datacenter colocation rack' }
+  ];
+  const [selectedGroupPreset, setSelectedGroupPreset] = useState(GROUP_TAB_PRESETS[1]);
+  const [groupOrganizer, setGroupOrganizer] = useState('@citizen');
+  const [groupMerchant, setGroupMerchant] = useState('@sprig');
+  const [groupMembers, setGroupMembers] = useState(['@zoth', '@neal', '@sprig', '@citizen']);
+  const [isSettlingGroupTab, setIsSettlingGroupTab] = useState(false);
+  const [groupTabResult, setGroupTabResult] = useState(null);
+
+  const groupSplitShare = useMemo(() => {
+    return (selectedGroupPreset.totalAmount / groupMembers.length).toFixed(2);
+  }, [selectedGroupPreset, groupMembers]);
+
+  const groupCashbackPerMember = useMemo(() => {
+    return ((selectedGroupPreset.totalAmount * 0.025) / groupMembers.length).toFixed(3);
+  }, [selectedGroupPreset, groupMembers]);
+
+  const handleSettleGroupTab = async () => {
+    if (isSettlingGroupTab) return;
+    setIsSettlingGroupTab(true);
+    let resData = null;
+    try {
+      const res = await fetch('http://127.0.0.1:8140/api/grouptabs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          organizer: groupOrganizer,
+          merchant: groupMerchant,
+          title: selectedGroupPreset.title,
+          totalAmount: selectedGroupPreset.totalAmount,
+          participantHandles: groupMembers,
+          cashbackBps: 250
+        })
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json && json.ok) resData = json;
+      }
+    } catch (_) {}
+
+    if (!resData) {
+      resData = createVaelorGroupTabFallback({
+        organizer: groupOrganizer,
+        merchant: groupMerchant,
+        title: selectedGroupPreset.title,
+        totalAmount: selectedGroupPreset.totalAmount,
+        participants: groupMembers,
+        cashbackBps: 250
+      });
+    }
+
+    setGroupTabResult(resData);
+    setIsSettlingGroupTab(false);
+  };
 
   return (
     <Box sx={{ minHeight: '100vh', pb: 10, bgcolor: theme.palette.background.default, color: theme.palette.text.primary }}>
@@ -1328,6 +1463,367 @@ export default function VaelorPage() {
                         Recipient: <strong>{creditRecipient}</strong> • Disbursed: <strong>{creditDrawAmount} ◈ VLR</strong>
                         <br />
                         Grace Period: <strong>30 Days (0% APR)</strong> • Due: <code>{new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0]}</code>
+                      </Typography>
+                    </Paper>
+                  )}
+                </Paper>
+              </Grid>
+            </Grid>
+          </Box>
+        </RevealOnScroll>
+
+        {/* ==========================================================================
+            SECTION: FEELSS PER-SECOND MONEY STREAMING & SOCIAL GROUP BILL-SPLIT
+            ========================================================================== */}
+        <RevealOnScroll>
+          <Box id="vaelor-stream-split-sim" sx={{ mb: 6 }}>
+            <Box sx={{ mb: 3 }}>
+              <Typography className="section-kicker">Continuous Nano-Finance &amp; Social Commerce</Typography>
+              <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: '"Syne", sans-serif', mb: 1 }}>
+                Feeless Money Streaming &amp; Social Group Bill-Splitter
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 880, fontSize: '0.94rem' }}>
+                Continuous real-time nano-payments with <strong>$0.00 gas per tick</strong>, paired with automated multi-party group bill splitting and pro-rata <strong>2.5% instant cashback rebates</strong> for every participant.
+              </Typography>
+            </Box>
+
+            <Grid container spacing={3.5}>
+              {/* LEFT PANE: PER-SECOND MONEY STREAMING */}
+              <Grid xs={12} lg={6}>
+                <Paper
+                  sx={{
+                    p: { xs: 2.5, md: 3 },
+                    borderRadius: 3,
+                    border: `1.5px solid ${isDark ? 'rgba(56,189,248,0.45)' : 'rgba(56,189,248,0.6)'}`,
+                    bgcolor: isDark ? 'rgba(6,12,20,0.94)' : '#FFFFFF',
+                    boxShadow: isDark ? '0 12px 32px rgba(56,189,248,0.1)' : '0 6px 20px rgba(0,0,0,0.06)',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}
+                >
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <WavesIcon sx={{ color: '#38BDF8', fontSize: '1.4rem' }} />
+                      <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: '"Syne", sans-serif' }}>
+                        Feeless Per-Second Money Streaming
+                      </Typography>
+                    </Box>
+                    <Chip
+                      label="$0.00 Gas Per Tick"
+                      size="small"
+                      sx={{ bgcolor: 'rgba(56,189,248,0.15)', color: '#38BDF8', fontFamily: mono, fontWeight: 800, fontSize: '0.68rem' }}
+                    />
+                  </Box>
+
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2, fontSize: '0.84rem' }}>
+                    Stream ◈ VLR continuously by the millisecond for autonomous AI compute, contractor payroll, or GPU cluster time with zero gas fees per micro-increment.
+                  </Typography>
+
+                  {/* Rate Presets */}
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800, display: 'block', mb: 0.8, letterSpacing: '0.05em' }}>
+                      STREAMING RATE PRESETS
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 0.8, flexWrap: 'wrap' }}>
+                      {STREAM_PRESETS.map((p) => {
+                        const isSelected = selectedStreamPreset.label === p.label;
+                        return (
+                          <Chip
+                            key={p.label}
+                            label={`${p.unit} (${p.label.split(' ')[0]})`}
+                            clickable
+                            onClick={() => setSelectedStreamPreset(p)}
+                            sx={{
+                              fontFamily: mono,
+                              fontWeight: isSelected ? 900 : 700,
+                              fontSize: '0.72rem',
+                              bgcolor: isSelected ? '#38BDF8' : (isDark ? 'rgba(255,255,255,0.05)' : '#F1F5F9'),
+                              color: isSelected ? '#08080B' : theme.palette.text.primary,
+                              border: `1px solid ${isSelected ? '#38BDF8' : 'rgba(56,189,248,0.2)'}`
+                            }}
+                          />
+                        );
+                      })}
+                    </Box>
+                  </Box>
+
+                  {/* Live Accrued Counter Banner */}
+                  <Paper
+                    sx={{
+                      p: 2,
+                      mb: 2.5,
+                      borderRadius: 2,
+                      bgcolor: isDark ? '#020408' : '#F0F9FF',
+                      border: '1.5px solid rgba(56,189,248,0.3)',
+                      textAlign: 'center'
+                    }}
+                  >
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.65rem', display: 'block', fontWeight: 800, mb: 0.5 }}>
+                      REAL-TIME ACCRUED ◈ VLR (FEELSS SUB-SECOND TICKER)
+                    </Typography>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        fontFamily: mono,
+                        fontWeight: 900,
+                        color: '#34D399',
+                        letterSpacing: '0.04em',
+                        textShadow: '0 0 20px rgba(52,211,153,0.35)'
+                      }}
+                    >
+                      ◈ {streamAccrued.toFixed(6)}
+                    </Typography>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.66rem', display: 'block', mt: 0.5 }}>
+                      {selectedStreamPreset.unit} • {selectedStreamPreset.desc} • $0.00 Gas
+                    </Typography>
+                  </Paper>
+
+                  {/* Stream Sender & Recipient Pickers */}
+                  <Grid container spacing={2} sx={{ mb: 2 }}>
+                    <Grid xs={6}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 700, display: 'block', mb: 0.6 }}>
+                        SENDER ACCOUNT
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        size="small"
+                        value={streamSender}
+                        onChange={(e) => setStreamSender(e.target.value)}
+                        placeholder="@citizen"
+                        InputProps={{ sx: { fontFamily: mono, fontSize: '0.85rem' } }}
+                      />
+                    </Grid>
+                    <Grid xs={6}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 700, display: 'block', mb: 0.6 }}>
+                        RECIPIENT ACCOUNT
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        size="small"
+                        value={streamRecipient}
+                        onChange={(e) => setStreamRecipient(e.target.value)}
+                        placeholder="@sprig"
+                        InputProps={{ sx: { fontFamily: mono, fontSize: '0.85rem' } }}
+                      />
+                    </Grid>
+                  </Grid>
+
+                  {/* Launch Stream Button */}
+                  <Button
+                    id="vaelor-stream-btn"
+                    fullWidth
+                    variant="contained"
+                    onClick={handleLaunchStream}
+                    disabled={isLaunchingStream}
+                    startIcon={isLaunchingStream ? <CircularProgress size={16} sx={{ color: '#08080B' }} /> : <WavesIcon />}
+                    sx={{
+                      bgcolor: '#38BDF8',
+                      color: '#08080B',
+                      fontWeight: 900,
+                      fontFamily: mono,
+                      fontSize: '0.82rem',
+                      py: 1.2,
+                      borderRadius: 2,
+                      '&:hover': { bgcolor: '#0284C7' },
+                      mb: 2
+                    }}
+                  >
+                    {isLaunchingStream ? 'LAUNCHING STREAM ON LATTICE...' : `🌊 LAUNCH FEELSS STREAM (${selectedStreamPreset.unit})`}
+                  </Button>
+
+                  {/* Stream Result Card */}
+                  {streamResult && (
+                    <Paper
+                      sx={{
+                        p: 1.8,
+                        borderRadius: 2,
+                        bgcolor: isDark ? 'rgba(12,24,18,0.9)' : 'rgba(240,253,244,0.95)',
+                        border: '1.5px solid #10B981',
+                        mt: 'auto'
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.8 }}>
+                        <CheckCircleIcon sx={{ color: '#10B981', fontSize: '1.1rem' }} />
+                        <Typography sx={{ fontFamily: mono, fontWeight: 900, fontSize: '0.78rem', color: '#10B981' }}>
+                          FEELSS STREAM ACTIVE &amp; DISBURSING (5/5 BFT)
+                        </Typography>
+                      </Box>
+                      <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#E2E8F0' : '#1E293B', lineHeight: 1.5 }}>
+                        Stream ID: <code>{(streamResult.stream?.id || 'strm_9f82..').slice(0, 16)}</code> • Block: <code>{(streamResult.createBlock?.hash || '88a4..').slice(0, 14)}...</code>
+                        <br />
+                        Rate: <strong>{streamResult.stream?.ratePerSecondVlr || selectedStreamPreset.rate} ◈/sec</strong> • Total Cap: <strong>{streamResult.stream?.totalAmountVlr || 50} ◈ VLR</strong>
+                        <br />
+                        Recipient: <strong>{streamRecipient}</strong> • Claim Status: <strong>Instant Unilateral Claimable</strong>
+                      </Typography>
+                    </Paper>
+                  )}
+                </Paper>
+              </Grid>
+
+              {/* RIGHT PANE: SOCIAL GROUP TAB & BILL SPLITTER */}
+              <Grid xs={12} lg={6}>
+                <Paper
+                  sx={{
+                    p: { xs: 2.5, md: 3 },
+                    borderRadius: 3,
+                    border: `1.5px solid ${isDark ? 'rgba(245,158,11,0.45)' : 'rgba(245,158,11,0.6)'}`,
+                    bgcolor: isDark ? 'rgba(20,14,6,0.94)' : '#FFFFFF',
+                    boxShadow: isDark ? '0 12px 32px rgba(245,158,11,0.1)' : '0 6px 20px rgba(0,0,0,0.06)',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column'
+                  }}
+                >
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <GroupsIcon sx={{ color: '#F59E0B', fontSize: '1.4rem' }} />
+                      <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: '"Syne", sans-serif' }}>
+                        Feeless Social Group Bill-Splitter
+                      </Typography>
+                    </Box>
+                    <Chip
+                      label="2.5% Group Cashback"
+                      size="small"
+                      sx={{ bgcolor: 'rgba(245,158,11,0.15)', color: '#F59E0B', fontFamily: mono, fontWeight: 800, fontSize: '0.68rem' }}
+                    />
+                  </Box>
+
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2, fontSize: '0.84rem' }}>
+                    Create shared tabs for compute clusters, dinners, or hardware racks. Vaelor automatically collects equal micro-shares and credits <strong>2.5% instant cashback</strong> to all participants.
+                  </Typography>
+
+                  {/* Group Bill Presets */}
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800, display: 'block', mb: 0.8, letterSpacing: '0.05em' }}>
+                      GROUP BILL PRESETS
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 0.8, flexWrap: 'wrap' }}>
+                      {GROUP_TAB_PRESETS.map((p) => {
+                        const isSelected = selectedGroupPreset.title === p.title;
+                        return (
+                          <Chip
+                            key={p.title}
+                            label={`${p.title} — ${p.totalAmount} ◈`}
+                            clickable
+                            onClick={() => setSelectedGroupPreset(p)}
+                            sx={{
+                              fontFamily: mono,
+                              fontWeight: isSelected ? 900 : 700,
+                              fontSize: '0.72rem',
+                              bgcolor: isSelected ? '#F59E0B' : (isDark ? 'rgba(255,255,255,0.05)' : '#F1F5F9'),
+                              color: isSelected ? '#08080B' : theme.palette.text.primary,
+                              border: `1px solid ${isSelected ? '#F59E0B' : 'rgba(245,158,11,0.2)'}`
+                            }}
+                          />
+                        );
+                      })}
+                    </Box>
+                  </Box>
+
+                  {/* Bill Split Breakdown Box */}
+                  <Paper
+                    sx={{
+                      p: 2,
+                      mb: 2.5,
+                      borderRadius: 2,
+                      bgcolor: isDark ? '#080502' : '#FFFBEB',
+                      border: '1.5px solid rgba(245,158,11,0.3)'
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, flexWrap: 'wrap', gap: 1 }}>
+                      <Box>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.64rem', display: 'block', fontWeight: 800 }}>
+                          TOTAL INVOICE AMOUNT
+                        </Typography>
+                        <Typography variant="h6" sx={{ fontFamily: mono, fontWeight: 900, color: '#F59E0B' }}>
+                          {selectedGroupPreset.totalAmount}.00 ◈ VLR
+                        </Typography>
+                      </Box>
+                      <Box sx={{ textAlign: 'right' }}>
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.64rem', display: 'block', fontWeight: 800 }}>
+                          PER-MEMBER SHARE (4 WAYS)
+                        </Typography>
+                        <Typography variant="h6" sx={{ fontFamily: mono, fontWeight: 900, color: '#10B981' }}>
+                          {groupSplitShare} ◈ each
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    <Divider sx={{ my: 1, borderColor: isDark ? 'rgba(255,255,255,0.08)' : '#FDE68A' }} />
+
+                    {/* Member split badges */}
+                    <Box sx={{ display: 'flex', gap: 0.8, flexWrap: 'wrap', alignItems: 'center', mb: 0.5 }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.66rem' }}>
+                        Members:
+                      </Typography>
+                      {groupMembers.map((m) => (
+                        <Chip
+                          key={m}
+                          label={`${m} (${groupSplitShare} ◈)`}
+                          size="small"
+                          sx={{
+                            fontFamily: mono,
+                            fontSize: '0.66rem',
+                            fontWeight: 800,
+                            bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#FEF3C7',
+                            color: isDark ? '#FDE68A' : '#92400E'
+                          }}
+                        />
+                      ))}
+                    </Box>
+
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#34D399', fontSize: '0.68rem', display: 'block', fontWeight: 800, mt: 0.8 }}>
+                      ✦ Cashback Reward: +{groupCashbackPerMember} ◈ VLR minted per member (2.5% feeless rebate)
+                    </Typography>
+                  </Paper>
+
+                  {/* Settle Group Tab Button */}
+                  <Button
+                    id="vaelor-grouptab-btn"
+                    fullWidth
+                    variant="contained"
+                    onClick={handleSettleGroupTab}
+                    disabled={isSettlingGroupTab}
+                    startIcon={isSettlingGroupTab ? <CircularProgress size={16} sx={{ color: '#08080B' }} /> : <PieChartIcon />}
+                    sx={{
+                      bgcolor: '#F59E0B',
+                      color: '#08080B',
+                      fontWeight: 900,
+                      fontFamily: mono,
+                      fontSize: '0.82rem',
+                      py: 1.2,
+                      borderRadius: 2,
+                      '&:hover': { bgcolor: '#D97706' },
+                      mb: 2
+                    }}
+                  >
+                    {isSettlingGroupTab ? 'SPLITTING & ATTESTING ON LATTICE...' : `🍕 SETTLE GROUP TAB & MINT 2.5% CASHBACK`}
+                  </Button>
+
+                  {/* Group Tab Result Card */}
+                  {groupTabResult && (
+                    <Paper
+                      sx={{
+                        p: 1.8,
+                        borderRadius: 2,
+                        bgcolor: isDark ? 'rgba(12,24,18,0.9)' : 'rgba(240,253,244,0.95)',
+                        border: '1.5px solid #10B981',
+                        mt: 'auto'
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.8 }}>
+                        <CheckCircleIcon sx={{ color: '#10B981', fontSize: '1.1rem' }} />
+                        <Typography sx={{ fontFamily: mono, fontWeight: 900, fontSize: '0.78rem', color: '#10B981' }}>
+                          GROUP TAB SETTLED • 2.5% CASHBACK DISTRIBUTED (5/5 BFT)
+                        </Typography>
+                      </Box>
+                      <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#E2E8F0' : '#1E293B', lineHeight: 1.5 }}>
+                        Tab ID: <code>{(groupTabResult.tab?.id || 'tab_2f8e..').slice(0, 16)}</code> • Block: <code>{(groupTabResult.createBlock?.hash || '6cb7..').slice(0, 14)}...</code>
+                        <br />
+                        Split: <strong>{groupSplitShare} ◈ VLR × 4 members</strong> • Cashback: <strong>+{(selectedGroupPreset.totalAmount * 0.025).toFixed(3)} ◈ total rebate</strong>
+                        <br />
+                        Status: <strong>OPEN (Organizer Paid • 3 Micro-shares Authorized)</strong> • Gas Fee: <strong>$0.00</strong>
                       </Typography>
                     </Paper>
                   )}
