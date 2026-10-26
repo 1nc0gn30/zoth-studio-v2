@@ -2551,3 +2551,358 @@ export function renderKnapTelemetryFallback(template = "all") {
     output
   };
 }
+
+/* ==========================================================================
+   KNOWLEDGE GRAPH DEGREE CENTRALITY & TOP HUBS DATA
+   ========================================================================== */
+export const FALLBACK_GRAPH_TOPOLOGY = {
+  ok: true,
+  timestamp: "2026-10-26T07:39:59.930608+00:00",
+  totalNodes: 1752,
+  totalEdges: 7777,
+  connectivityPct: 99.6,
+  clusterDistribution: {
+    "OS": 812,
+    "Studio": 352,
+    "Skills": 346,
+    "MCP": 154,
+    "Root": 37,
+    "Maps": 22,
+    "Bases": 18,
+    "Canvases": 16,
+    "Wiki": 8,
+    "Agents": 5,
+    "Templates": 4,
+    "Telemetry": 3,
+    "Ingested": 1
+  },
+  topHubs: [
+    {
+      title: "Zoth OS",
+      relPath: "Zoth OS.md",
+      inDegree: 1154,
+      outDegree: 12,
+      totalDegree: 1166,
+      cluster: "Root"
+    },
+    {
+      title: "MOC Skills",
+      relPath: "MOC Skills.md",
+      inDegree: 350,
+      outDegree: 346,
+      totalDegree: 696,
+      cluster: "Root"
+    },
+    {
+      title: "MOC Arsenal",
+      relPath: "MOC Arsenal.md",
+      inDegree: 411,
+      outDegree: 214,
+      totalDegree: 625,
+      cluster: "Root"
+    },
+    {
+      title: "MOC Apt",
+      relPath: "MOC Apt.md",
+      inDegree: 190,
+      outDegree: 179,
+      totalDegree: 369,
+      cluster: "Root"
+    },
+    {
+      title: "Zoth Studio",
+      relPath: "Zoth Studio.md",
+      inDegree: 361,
+      outDegree: 7,
+      totalDegree: 368,
+      cluster: "Root"
+    },
+    {
+      title: "MOC CLIs",
+      relPath: "MOC CLIs.md",
+      inDegree: 158,
+      outDegree: 156,
+      totalDegree: 314,
+      cluster: "Root"
+    },
+    {
+      title: "MCP Catalog",
+      relPath: "MCP Catalog.md",
+      inDegree: 164,
+      outDegree: 54,
+      totalDegree: 218,
+      cluster: "Root"
+    },
+    {
+      title: "Arsenal kali",
+      relPath: "OS/Arsenal/Arsenal kali.md",
+      inDegree: 96,
+      outDegree: 98,
+      totalDegree: 194,
+      cluster: "OS"
+    },
+    {
+      title: "MOC Desktops",
+      relPath: "MOC Desktops.md",
+      inDegree: 89,
+      outDegree: 89,
+      totalDegree: 178,
+      cluster: "Root"
+    },
+    {
+      title: "CLI zoth-mcp",
+      relPath: "OS/CLIs/CLI zoth-mcp.md",
+      inDegree: 160,
+      outDegree: 4,
+      totalDegree: 164,
+      cluster: "OS"
+    }
+  ]
+};
+
+/* ==========================================================================
+   15-TOOL MCP REGISTRY & JSON-RPC PLAYGROUND DATA
+   ========================================================================== */
+export const FALLBACK_MCP_TOOLS = [
+  {
+    name: "obsidian_doctor_audit",
+    category: "Obsidian",
+    description: "Returns comprehensive Second Brain Doctor Health Audit verifying 100% of JSON Canvases, Obsidian Bases, Markdown notes, wikilinks, and top high-centrality hubs.",
+    defaultArgs: {}
+  },
+  {
+    name: "obsidian_vault_search",
+    category: "Obsidian",
+    description: "Searches across all 1,723+ Obsidian Vault notes, JSON Canvas files, Base databases, and :8094 biological STDP memory engrams.",
+    defaultArgs: { query: "Vaelor", limit: 5 }
+  },
+  {
+    name: "obsidian_wiki_synthesize",
+    category: "Obsidian",
+    description: "Synthesizes or retrieves a canonical Karpathy LLM Wiki article in 06-Wiki/<Topic>.md formatted with YAML frontmatter, executive callouts, and bidirectional wikilinks.",
+    defaultArgs: { topic: "Vaelor Account-Lattice & PoUW Protocol" }
+  },
+  {
+    name: "obsidian_canvas_generate",
+    category: "Obsidian",
+    description: "Procedurally generates a JSON Canvas 1.0 (.canvas) visual knowledge map and returns its nodes/edges summary.",
+    defaultArgs: { topic: "Zoth Neural Architecture" }
+  },
+  {
+    name: "memory_recall",
+    category: "Neuro-Memory",
+    description: "Pattern completion associative recall for a query cue. Traverses synaptic connections to retrieve associated memory nodes based on semantic resonance.",
+    defaultArgs: { query: "Lucy Oracle", top_k: 5, min_score: 0.1 }
+  },
+  {
+    name: "memory_store",
+    category: "Neuro-Memory",
+    description: "Store an episodic, semantic, procedural, or working memory in the neural substrate. Automatically computes associative term embeddings and forms synaptic connections.",
+    defaultArgs: { text: "Verified zero-egress enclave state on local port 8094", category: "episodic", importance: 0.95, tags: ["egress", "zero-trust"] }
+  },
+  {
+    name: "memory_consolidate",
+    category: "Neuro-Memory",
+    description: "Trigger hippocampal sleep consolidation replay pass. Reinforces co-activated synapses via Spike-Timing-Dependent Plasticity (STDP) and prunes dead links.",
+    defaultArgs: { decay_threshold: 0.15, max_replay_steps: 100 }
+  },
+  {
+    name: "memory_stats",
+    category: "Neuro-Memory",
+    description: "Retrieve comprehensive telemetry and metrics from the biomorphic memory substrate: engram counts, synaptic density, neuromodulator levels, and health status.",
+    defaultArgs: {}
+  },
+  {
+    name: "memory_search",
+    category: "Neuro-Memory",
+    description: "Full-text and tag filtered search with token relevance ranking across all stored memories in the substrate.",
+    defaultArgs: { query: "STDP", limit: 10 }
+  },
+  {
+    name: "memory_graph",
+    category: "Neuro-Memory",
+    description: "Return synaptic graph relationships as JSON, Mermaid diagram syntax, or ASCII representation.",
+    defaultArgs: { format: "json", max_nodes: 50 }
+  },
+  {
+    name: "memory_decay",
+    category: "Neuro-Memory",
+    description: "Apply biomorphic Ebbinghaus forgetting curve decay pass across all eligible memory engrams.",
+    defaultArgs: { elapsed_hours: 24 }
+  },
+  {
+    name: "memory_purge",
+    category: "Neuro-Memory",
+    description: "Prune dormant, low-affinity, or sub-threshold memory nodes from the substrate.",
+    defaultArgs: { threshold: 0.1, dry_run: true }
+  },
+  {
+    name: "neuro_neuromodulators",
+    category: "Neuro-Chemical",
+    description: "Retrieve chemical levels of Norepinephrine (arousal), Dopamine (RPE), Acetylcholine (encoding vs consolidation), and Serotonin (patience).",
+    defaultArgs: { task_complexity: 0.6 }
+  },
+  {
+    name: "neuro_neuromodulate_pulse",
+    category: "Neuro-Chemical",
+    description: "Inject a chemical pulse into the neuromodulatory system to shift arousal (NE), reward expectation (DA), or consolidation bias (ACh).",
+    defaultArgs: { ne_delta: 0.2, da_delta: 0.3, ach_delta: -0.1, serotonin_delta: 0.1 }
+  },
+  {
+    name: "neuro_flashbulb_tag",
+    category: "Neuro-Chemical",
+    description: "Tag a memory trace as a permanent flashbulb engram: locks decay_factor=0.05, making it permanently immune to Ebbinghaus forgetting curves.",
+    defaultArgs: { memory_id: "MEM-001", salience: 1.0, reason: "Core kernel STDP algorithm" }
+  }
+];
+
+export const MCP_CONFIG_SNIPPET = JSON.stringify({
+  mcpServers: {
+    "neuro-memory": {
+      command: "python3",
+      args: ["-m", "neuro_memory_daemon.mcp_server"],
+      env: {
+        MEMORY_DB_PATH: "/home/zoth/.zoth/memory.db",
+        OBSIDIAN_VAULT_PATH: "/home/zoth/Documents/Obsidian Vault"
+      }
+    },
+    "neuro-memory-http": {
+      url: "http://127.0.0.1:8094/sse"
+    }
+  }
+}, null, 2);
+
+export function callMcpToolFallback(toolName, args = {}) {
+  const ts = new Date().toISOString();
+  switch (toolName) {
+    case "obsidian_doctor_audit":
+      return {
+        jsonrpc: "2.0",
+        id: 1,
+        result: {
+          ok: true,
+          score: 100,
+          status: "PERFECT",
+          healthGrade: "✦ PERFECT",
+          canvasesValid: 16,
+          totalCanvases: 16,
+          basesValid: 18,
+          totalBases: 18,
+          totalNotes: 1723,
+          totalWikilinks: 7996,
+          connectivityPct: 99.6,
+          timestamp: ts
+        }
+      };
+    case "obsidian_vault_search":
+      return {
+        jsonrpc: "2.0",
+        id: 1,
+        result: {
+          ok: true,
+          query: args.query || "Vaelor",
+          count: 5,
+          matches: [
+            { title: "Vaelor Network", relPath: "Vaelor Network.md", type: "markdown", snippet: "Vaelor Account-Lattice L1 feeless DAG network consensus protocol..." },
+            { title: "Vaelor & Sovereign Economy", relPath: "Vaelor & Sovereign Economy.canvas", type: "canvas", snippet: "Vaelor Feeless Account-Lattice DAG Core (:8140)..." },
+            { title: "Vaelor Account-Lattice & PoUW Protocol", relPath: "06-Wiki/Vaelor Account-Lattice & PoUW Protocol.md", type: "markdown", snippet: "Canonical Karpathy Wiki note for Vaelor L1 DAG..." },
+            { title: "Vaelor Live Ledger Telemetry", relPath: "05-Telemetry/Vaelor Live Ledger Telemetry.md", type: "markdown", snippet: "Compiled directly from Vaelor Validator Node (:8140)..." },
+            { title: "Vaelor PoUW AI Compute Miners", relPath: "Agents/Vaelor PoUW AI Compute Miners.md", type: "markdown", snippet: "Autonomous AI compute miners minting VLR tokens..." }
+          ]
+        }
+      };
+    case "obsidian_wiki_synthesize":
+      return {
+        jsonrpc: "2.0",
+        id: 1,
+        result: {
+          ok: true,
+          topic: args.topic || "Obsidian Second Brain",
+          path: `06-Wiki/${args.topic || "Obsidian Second Brain"}.md`,
+          wikilinks: ["Zoth OS", "Zoth Studio", "Zoth Memory", "00 Home"],
+          status: "SYNTHESIZED",
+          timestamp: ts
+        }
+      };
+    case "obsidian_canvas_generate":
+      return {
+        jsonrpc: "2.0",
+        id: 1,
+        result: {
+          ok: true,
+          topic: args.topic || "Neural Topology",
+          canvasFile: `${args.topic || "Neural Topology"}.canvas`,
+          nodeCount: 12,
+          edgeCount: 16,
+          status: "GENERATED",
+          timestamp: ts
+        }
+      };
+    case "memory_recall":
+      return {
+        jsonrpc: "2.0",
+        id: 1,
+        result: {
+          ok: true,
+          query: args.query || "Lucy",
+          recalls: [
+            { id: "MEM-002", text: "Lucy Cognitive Memory Oracle active on loopback semantic channel :8094.", importance: 0.98, category: "oracle" },
+            { id: "MEM-008", text: "Whitespace Cyberspace construct initialized: Calm neural constellation rendering active.", importance: 0.95, category: "oracle" },
+            { id: "MEM-016", text: "Netrunner Cyber-Cortex 3D spatial engine with biomorphic STDP synaptic plasticity.", importance: 0.97, category: "oracle" }
+          ]
+        }
+      };
+    case "memory_store":
+      return {
+        jsonrpc: "2.0",
+        id: 1,
+        result: {
+          ok: true,
+          stored_id: `mem-${Date.now().toString(16)}`,
+          status: "STORED",
+          synapses_formed: 4,
+          timestamp: ts
+        }
+      };
+    case "memory_consolidate":
+      return {
+        jsonrpc: "2.0",
+        id: 1,
+        result: {
+          ok: true,
+          status: "CONSOLIDATED",
+          nodes_processed: 41731,
+          strengthened_synapses: 100575,
+          pruned_synapses: 336,
+          bridges_discovered: 8,
+          timestamp: ts
+        }
+      };
+    case "memory_stats":
+      return {
+        jsonrpc: "2.0",
+        id: 1,
+        result: {
+          ok: true,
+          total_memories: 41833,
+          total_synapses: 2006979,
+          synaptic_density: 47.98,
+          average_importance: 0.573,
+          working_memory_cache_bytes: 0,
+          status: "ACTIVE"
+        }
+      };
+    default:
+      return {
+        jsonrpc: "2.0",
+        id: 1,
+        result: {
+          ok: true,
+          tool: toolName,
+          status: "SUCCESS",
+          arguments: args,
+          timestamp: ts
+        }
+      };
+  }
+}

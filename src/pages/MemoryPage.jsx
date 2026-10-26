@@ -45,6 +45,10 @@ import {
   CANONICAL_CANVASES,
   CANONICAL_BASES,
   FALLBACK_KNAP_TELEMETRY,
+  FALLBACK_GRAPH_TOPOLOGY,
+  FALLBACK_MCP_TOOLS,
+  MCP_CONFIG_SNIPPET,
+  callMcpToolFallback,
   searchFallback,
   renderKnapTelemetryFallback,
   synthesizeClientWikiArticle,
@@ -462,6 +466,17 @@ export default function MemoryPage() {
   const [isRecompilingKnap, setIsRecompilingKnap] = useState(false);
   const [knapCompilerOutput, setKnapCompilerOutput] = useState(null);
 
+  // Knowledge Graph Centrality & Top Hubs State
+  const [graphTopology, setGraphTopology] = useState(FALLBACK_GRAPH_TOPOLOGY);
+
+  // 15-Tool MCP Playground State
+  const [mcpToolsList, setMcpToolsList] = useState(FALLBACK_MCP_TOOLS);
+  const [selectedMcpTool, setSelectedMcpTool] = useState(FALLBACK_MCP_TOOLS[0]);
+  const [mcpToolArgsText, setMcpToolArgsText] = useState(() => JSON.stringify(FALLBACK_MCP_TOOLS[0].defaultArgs, null, 2));
+  const [isExecutingMcp, setIsExecutingMcp] = useState(false);
+  const [mcpExecutionResult, setMcpExecutionResult] = useState(null);
+  const [copiedMcpConfig, setCopiedMcpConfig] = useState(false);
+
   const OBSIDIAN_AGENT_SKILLS = [
     {
       name: 'obsidian-markdown',
@@ -674,6 +689,34 @@ ${article.math_invariants || ''}
           }
         }
       } catch (_) {}
+
+      try {
+        const gRes = await fetch('http://127.0.0.1:8094/api/obsidian/graph');
+        if (gRes.ok) {
+          const gData = await gRes.json();
+          if (active && gData && gData.ok) {
+            setGraphTopology(gData);
+          }
+        }
+      } catch (_) {}
+
+      try {
+        const mRes = await fetch('http://127.0.0.1:8094/api/mcp/tools');
+        if (mRes.ok) {
+          const mData = await mRes.json();
+          if (active && mData && Array.isArray(mData.tools) && mData.tools.length > 0) {
+            const mergedTools = mData.tools.map(t => {
+              const fb = FALLBACK_MCP_TOOLS.find(f => f.name === t.name);
+              return {
+                ...t,
+                category: fb?.category || 'MCP',
+                defaultArgs: fb?.defaultArgs || {}
+              };
+            });
+            setMcpToolsList(mergedTools);
+          }
+        }
+      } catch (_) {}
     };
 
     fetchObsidian();
@@ -804,6 +847,92 @@ ${article.math_invariants || ''}
     }
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 380, behavior: 'smooth' });
+    }
+  };
+
+  const handleSelectMcpTool = (tool) => {
+    setSelectedMcpTool(tool);
+    const fb = FALLBACK_MCP_TOOLS.find(f => f.name === tool.name);
+    let defaultArgs = tool.defaultArgs || fb?.defaultArgs;
+    if ((!defaultArgs || Object.keys(defaultArgs).length === 0) && tool.inputSchema?.properties) {
+      defaultArgs = Object.fromEntries(
+        Object.entries(tool.inputSchema.properties).map(([k, v]) => [
+          k,
+          v.default !== undefined
+            ? v.default
+            : (v.type === 'string' ? (k === 'query' ? 'Vaelor' : (k === 'topic' ? 'Vaelor Account-Lattice & PoUW Protocol' : '')) : (v.type === 'number' || v.type === 'integer' ? 5 : (v.type === 'array' ? [] : {})))
+        ])
+      );
+    }
+    setMcpToolArgsText(JSON.stringify(defaultArgs || {}, null, 2));
+    setMcpExecutionResult(null);
+  };
+
+  const handleExecuteMcpTool = async () => {
+    if (!selectedMcpTool || isExecutingMcp) return;
+    setIsExecutingMcp(true);
+    let parsedArgs = {};
+    try {
+      parsedArgs = JSON.parse(mcpToolArgsText || '{}');
+    } catch (err) {
+      setMcpExecutionResult({
+        jsonrpc: '2.0',
+        id: 1,
+        error: { code: -32700, message: `Parse error in arguments JSON: ${err.message}` }
+      });
+      setIsExecutingMcp(false);
+      return;
+    }
+
+    let response = null;
+    const startTime = (typeof performance !== 'undefined' ? performance.now() : Date.now());
+    try {
+      const res = await fetch('http://127.0.0.1:8094/api/mcp/call', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: selectedMcpTool.name,
+          arguments: parsedArgs
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data) {
+          response = {
+            jsonrpc: '2.0',
+            id: 1,
+            result: data.result || data,
+            latencyMs: Math.round((typeof performance !== 'undefined' ? performance.now() : Date.now()) - startTime)
+          };
+        }
+      }
+    } catch (_) {}
+
+    if (!response) {
+      const fallbackRes = callMcpToolFallback(selectedMcpTool.name, parsedArgs);
+      response = {
+        ...fallbackRes,
+        latencyMs: Math.round((typeof performance !== 'undefined' ? performance.now() : Date.now()) - startTime)
+      };
+    }
+
+    setMcpExecutionResult(response);
+    setIsExecutingMcp(false);
+    if (typeof playSynapticPulse === 'function') {
+      playSynapticPulse(0.97);
+    }
+  };
+
+  const handleCopyMcpConfig = () => {
+    try {
+      if (typeof navigator !== 'undefined' && navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(MCP_CONFIG_SNIPPET).catch(() => {});
+      }
+    } catch (_) {}
+    setCopiedMcpConfig(true);
+    setTimeout(() => setCopiedMcpConfig(false), 2400);
+    if (typeof playSynapticPulse === 'function') {
+      playSynapticPulse(0.92);
     }
   };
 
@@ -4914,6 +5043,383 @@ ${(sample.tags || ['stdp', 'sovereign']).map(t => `  - ${t}`).join('\n')}
                     </Box>
                   );
                 })()}
+              </Paper>
+
+              {/* ==========================================================================
+                  KNOWLEDGE GRAPH DEGREE CENTRALITY & TOP HUBS (#studio-obsidian-top-hubs)
+                  ========================================================================== */}
+              <Paper
+                id="studio-obsidian-top-hubs"
+                sx={{
+                  p: { xs: 2, md: 3 },
+                  mb: 4,
+                  borderRadius: 3,
+                  border: `1px solid ${gold.border}`,
+                  bgcolor: isDark ? 'rgba(10,12,18,0.85)' : '#FFFFFF',
+                  boxShadow: isDark ? '0 8px 32px rgba(0,0,0,0.45)' : '0 4px 16px rgba(0,0,0,0.06)'
+                }}
+              >
+                {/* Header */}
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 1.5 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                    <Box
+                      sx={{
+                        width: 38,
+                        height: 38,
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        bgcolor: 'rgba(168,85,247,0.12)',
+                        border: '1px solid rgba(168,85,247,0.3)',
+                        color: '#A855F7'
+                      }}
+                    >
+                      <HubIcon fontSize="small" />
+                    </Box>
+                    <Box>
+                      <Typography variant="h6" sx={{ fontWeight: 800, fontSize: '1.05rem', color: theme.palette.text.primary, display: 'flex', alignItems: 'center', gap: 1 }}>
+                        Knowledge Graph Degree Centrality & Top Hubs
+                        <Chip label="Global Centrality" size="small" sx={{ height: 20, fontSize: '0.66rem', fontWeight: 750, bgcolor: 'rgba(168,85,247,0.12)', color: '#A855F7', border: '1px solid rgba(168,85,247,0.3)' }} />
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
+                        Topological degree centrality across {graphTopology.totalNodes || 1752} vault nodes and {graphTopology.totalEdges || 7777} wikilink edges. Measures citation authority and referencing density.
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                    <Chip label={`${graphTopology.totalNodes || 1752} Nodes`} size="small" sx={{ fontWeight: 750, fontFamily: mono, fontSize: '0.72rem' }} />
+                    <Chip label={`${graphTopology.totalEdges || 7777} Edges`} size="small" sx={{ fontWeight: 750, fontFamily: mono, fontSize: '0.72rem', bgcolor: 'rgba(6,182,212,0.1)', color: '#06B6D4' }} />
+                    <Chip label={`${graphTopology.connectivityPct || 99.6}% Connected`} size="small" sx={{ fontWeight: 750, fontFamily: mono, fontSize: '0.72rem', bgcolor: 'rgba(16,185,129,0.1)', color: '#10B981' }} />
+                  </Box>
+                </Box>
+
+                {/* Cluster Distribution Strip */}
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="caption" sx={{ display: 'block', fontWeight: 700, color: theme.palette.text.secondary, mb: 1, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    Cluster Node Distribution:
+                  </Typography>
+                  <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                    {Object.entries(graphTopology.clusterDistribution || {}).map(([cluster, count]) => {
+                      const colors = {
+                        OS: { bg: 'rgba(239,68,68,0.12)', border: 'rgba(239,68,68,0.3)', text: '#EF4444' },
+                        Studio: { bg: 'rgba(59,130,246,0.12)', border: 'rgba(59,130,246,0.3)', text: '#3B82F6' },
+                        Skills: { bg: 'rgba(236,72,153,0.12)', border: 'rgba(236,72,153,0.3)', text: '#EC4899' },
+                        MCP: { bg: 'rgba(16,185,129,0.12)', border: 'rgba(16,185,129,0.3)', text: '#10B981' },
+                        Maps: { bg: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.3)', text: '#F59E0B' },
+                        Wiki: { bg: 'rgba(168,85,247,0.12)', border: 'rgba(168,85,247,0.3)', text: '#A855F7' },
+                        Canvases: { bg: 'rgba(6,182,212,0.12)', border: 'rgba(6,182,212,0.3)', text: '#06B6D4' },
+                        Bases: { bg: 'rgba(139,92,246,0.12)', border: 'rgba(139,92,246,0.3)', text: '#8B5CF6' }
+                      };
+                      const c = colors[cluster] || { bg: 'rgba(255,255,255,0.05)', border: theme.palette.divider, text: theme.palette.text.primary };
+                      return (
+                        <Box
+                          key={cluster}
+                          sx={{
+                            px: 1.2,
+                            py: 0.6,
+                            borderRadius: 1.8,
+                            bgcolor: c.bg,
+                            border: `1px solid ${c.border}`,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 0.8
+                          }}
+                        >
+                          <Typography variant="caption" sx={{ fontWeight: 800, color: c.text, fontSize: '0.74rem' }}>
+                            {cluster}:
+                          </Typography>
+                          <Typography variant="caption" sx={{ fontWeight: 800, color: theme.palette.text.primary, fontFamily: mono, fontSize: '0.74rem' }}>
+                            {count}
+                          </Typography>
+                        </Box>
+                      );
+                    })}
+                  </Box>
+                </Box>
+
+                {/* Top 10 Hub Cards Grid */}
+                <Typography variant="caption" sx={{ display: 'block', fontWeight: 700, color: theme.palette.text.secondary, mb: 1.5, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  Top 10 Degree Centrality Hubs:
+                </Typography>
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(3, 1fr)', lg: 'repeat(5, 1fr)' },
+                    gap: 2
+                  }}
+                >
+                  {(graphTopology.topHubs || []).map((hub, idx) => {
+                    const isRank1 = idx === 0;
+                    const maxDegree = graphTopology.topHubs[0]?.totalDegree || 1166;
+                    const pct = Math.round(((hub.totalDegree || 0) / maxDegree) * 100);
+
+                    return (
+                      <Paper
+                        key={hub.title}
+                        sx={{
+                          p: 1.6,
+                          height: '100%',
+                          borderRadius: 2.5,
+                          bgcolor: isRank1 ? (isDark ? 'rgba(212,175,55,0.08)' : 'rgba(212,175,55,0.06)') : (isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC'),
+                          border: `1px solid ${isRank1 ? gold.accent : (isDark ? 'rgba(255,255,255,0.08)' : theme.palette.divider)}`,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                          transition: 'all 0.2s ease',
+                          '&:hover': {
+                            transform: 'translateY(-2px)',
+                            borderColor: gold.accent,
+                            boxShadow: isRank1 ? '0 4px 20px rgba(212,175,55,0.2)' : '0 4px 12px rgba(0,0,0,0.1)'
+                          }
+                        }}
+                      >
+                        <Box>
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                            <Chip
+                              label={isRank1 ? '👑 #1' : `#${idx + 1}`}
+                              size="small"
+                              sx={{
+                                height: 20,
+                                fontSize: '0.66rem',
+                                fontWeight: 800,
+                                bgcolor: isRank1 ? gold.accent : (isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0'),
+                                color: isRank1 ? '#08080B' : theme.palette.text.primary
+                              }}
+                            />
+                            <Chip
+                              label={hub.cluster || 'Vault'}
+                              size="small"
+                              sx={{ height: 18, fontSize: '0.6rem', fontFamily: mono, bgcolor: isDark ? 'rgba(255,255,255,0.04)' : '#F1F5F9' }}
+                            />
+                          </Box>
+
+                          <Typography variant="body2" sx={{ fontWeight: 800, color: theme.palette.text.primary, mb: 0.2, fontSize: '0.84rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {hub.title}
+                          </Typography>
+                          <Typography variant="caption" sx={{ display: 'block', color: theme.palette.text.secondary, fontFamily: mono, fontSize: '0.66rem', mb: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {hub.relPath}
+                          </Typography>
+                        </Box>
+
+                        <Box>
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', mb: 0.5 }}>
+                            <Typography variant="caption" sx={{ fontSize: '0.68rem', color: theme.palette.text.secondary }}>
+                              In: <strong style={{ color: '#06B6D4' }}>{hub.inDegree}</strong> · Out: <strong style={{ color: '#A855F7' }}>{hub.outDegree}</strong>
+                            </Typography>
+                            <Typography variant="caption" sx={{ fontWeight: 800, color: isRank1 ? gold.accent : theme.palette.text.primary, fontFamily: mono, fontSize: '0.78rem' }}>
+                              {hub.totalDegree.toLocaleString()} deg
+                            </Typography>
+                          </Box>
+                          <LinearProgress
+                            variant="determinate"
+                            value={pct}
+                            sx={{
+                              height: 4,
+                              borderRadius: 2,
+                              bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#E2E8F0',
+                              '& .MuiLinearProgress-bar': {
+                                bgcolor: isRank1 ? gold.accent : '#06B6D4',
+                                borderRadius: 2
+                              }
+                            }}
+                          />
+                        </Box>
+                      </Paper>
+                    );
+                  })}
+                </Box>
+              </Paper>
+
+              {/* ==========================================================================
+                  INTERACTIVE 15-TOOL MCP JSON-RPC PLAYGROUND (#studio-obsidian-mcp-playground)
+                  ========================================================================== */}
+              <Paper
+                id="studio-obsidian-mcp-playground"
+                sx={{
+                  p: { xs: 2, md: 3 },
+                  mb: 4,
+                  borderRadius: 3,
+                  border: `1px solid ${gold.border}`,
+                  bgcolor: isDark ? 'rgba(10,12,18,0.85)' : '#FFFFFF',
+                  boxShadow: isDark ? '0 8px 32px rgba(0,0,0,0.45)' : '0 4px 16px rgba(0,0,0,0.06)'
+                }}
+              >
+                {/* Header */}
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2, flexWrap: 'wrap', gap: 1.5 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                    <Box
+                      sx={{
+                        width: 38,
+                        height: 38,
+                        borderRadius: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        bgcolor: 'rgba(16,185,129,0.12)',
+                        border: '1px solid rgba(16,185,129,0.3)',
+                        color: '#10B981'
+                      }}
+                    >
+                      <TerminalIcon fontSize="small" />
+                    </Box>
+                    <Box>
+                      <Typography variant="h6" sx={{ fontWeight: 800, fontSize: '1.05rem', color: theme.palette.text.primary, display: 'flex', alignItems: 'center', gap: 1 }}>
+                        Interactive 15-Tool MCP JSON-RPC Playground
+                        <Chip label="MCP 2024-11-05" size="small" sx={{ height: 20, fontSize: '0.66rem', fontWeight: 750, bgcolor: 'rgba(16,185,129,0.12)', color: '#10B981', border: '1px solid rgba(16,185,129,0.3)' }} />
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: theme.palette.text.secondary }}>
+                        Live Model Context Protocol (JSON-RPC 2.0) harness connecting LLM agents (Claude, Cursor, Grok, Hermes) directly to Second Brain & biological memory.
+                      </Typography>
+                    </Box>
+                  </Box>
+
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={copiedMcpConfig ? <CheckIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
+                    onClick={handleCopyMcpConfig}
+                    sx={{
+                      fontWeight: 750,
+                      fontSize: '0.78rem',
+                      color: copiedMcpConfig ? '#10B981' : gold.accent,
+                      borderColor: copiedMcpConfig ? '#10B981' : gold.border,
+                      borderRadius: 2,
+                      textTransform: 'none',
+                      '&:hover': { bgcolor: gold.wash }
+                    }}
+                  >
+                    {copiedMcpConfig ? 'COPIED MCP CONFIG!' : '📋 COPY MCP CONFIG'}
+                  </Button>
+                </Box>
+
+                {/* Tool Selector Tabs / Pills */}
+                <Box sx={{ mb: 2.5 }}>
+                  <Typography variant="caption" sx={{ display: 'block', fontWeight: 700, color: theme.palette.text.secondary, mb: 1, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    Select MCP Tool ({mcpToolsList.length} Active Tools):
+                  </Typography>
+                  <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', maxHeight: 110, overflowY: 'auto', p: 0.5 }}>
+                    {mcpToolsList.map((t) => {
+                      const isSelected = selectedMcpTool?.name === t.name;
+                      return (
+                        <Chip
+                          key={t.name}
+                          label={t.name}
+                          clickable
+                          onClick={() => handleSelectMcpTool(t)}
+                          sx={{
+                            fontFamily: mono,
+                            fontSize: '0.72rem',
+                            fontWeight: isSelected ? 800 : 600,
+                            bgcolor: isSelected ? gold.wash : (isDark ? 'rgba(255,255,255,0.04)' : '#F1F5F9'),
+                            color: isSelected ? gold.accent : theme.palette.text.primary,
+                            border: `1px solid ${isSelected ? gold.accent : theme.palette.divider}`,
+                            '&:hover': { bgcolor: gold.wash, color: gold.accent }
+                          }}
+                        />
+                      );
+                    })}
+                  </Box>
+                </Box>
+
+                {/* Active Tool Spec & JSON-RPC Execution Box */}
+                <Grid container spacing={2.5}>
+                  {/* Left Column: Arguments Editor */}
+                  <Grid xs={12} md={6}>
+                    <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Typography variant="caption" sx={{ fontWeight: 750, color: theme.palette.text.primary }}>
+                        Arguments (JSON Payload):
+                      </Typography>
+                      <Chip
+                        label={selectedMcpTool?.category || 'MCP Tool'}
+                        size="small"
+                        sx={{ height: 18, fontSize: '0.62rem', fontWeight: 750, bgcolor: 'rgba(16,185,129,0.1)', color: '#10B981' }}
+                      />
+                    </Box>
+
+                    <Typography variant="body2" sx={{ fontSize: '0.76rem', color: theme.palette.text.secondary, mb: 1.5, minHeight: 38 }}>
+                      {selectedMcpTool?.description}
+                    </Typography>
+
+                    <TextField
+                      multiline
+                      rows={9}
+                      fullWidth
+                      value={mcpToolArgsText}
+                      onChange={(e) => setMcpToolArgsText(e.target.value)}
+                      InputProps={{
+                        sx: {
+                          fontFamily: mono,
+                          fontSize: '0.76rem',
+                          bgcolor: isDark ? 'rgba(0,0,0,0.5)' : '#F8FAFC',
+                          borderRadius: 2,
+                          color: '#A7F3D0'
+                        }
+                      }}
+                    />
+
+                    <Button
+                      id="studio-mcp-exec-btn"
+                      variant="contained"
+                      fullWidth
+                      onClick={handleExecuteMcpTool}
+                      disabled={isExecutingMcp}
+                      startIcon={isExecutingMcp ? <CircularProgress size={16} sx={{ color: '#08080B' }} /> : <PlayArrowIcon />}
+                      sx={{
+                        mt: 1.5,
+                        fontWeight: 800,
+                        fontSize: '0.84rem',
+                        bgcolor: '#10B981',
+                        color: '#08080B',
+                        borderRadius: 2,
+                        textTransform: 'none',
+                        '&:hover': { bgcolor: '#059669', color: '#08080B' }
+                      }}
+                    >
+                      {isExecutingMcp ? 'Executing Tool...' : '⚡ EXECUTE MCP TOOL'}
+                    </Button>
+                  </Grid>
+
+                  {/* Right Column: JSON-RPC 2.0 Response Viewer */}
+                  <Grid xs={12} md={6}>
+                    <Box sx={{ mb: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Typography variant="caption" sx={{ fontWeight: 750, color: theme.palette.text.primary }}>
+                        JSON-RPC 2.0 Response:
+                      </Typography>
+                      {mcpExecutionResult?.latencyMs !== undefined && (
+                        <Chip
+                          label={`${mcpExecutionResult.latencyMs} ms`}
+                          size="small"
+                          sx={{ height: 18, fontSize: '0.62rem', fontFamily: mono, bgcolor: 'rgba(6,182,212,0.1)', color: '#06B6D4' }}
+                        />
+                      )}
+                    </Box>
+
+                    <Box
+                      component="pre"
+                      sx={{
+                        m: 0,
+                        p: 2,
+                        borderRadius: 2,
+                        bgcolor: isDark ? 'rgba(0,0,0,0.65)' : '#0F172A',
+                        border: `1px solid ${isDark ? 'rgba(16,185,129,0.25)' : '#CBD5E1'}`,
+                        fontFamily: mono,
+                        fontSize: '0.72rem',
+                        color: '#34D399',
+                        height: 290,
+                        overflowY: 'auto',
+                        whiteSpace: 'pre-wrap',
+                        wordBreak: 'break-word',
+                        lineHeight: 1.5
+                      }}
+                    >
+                      {mcpExecutionResult
+                        ? JSON.stringify(mcpExecutionResult, null, 2)
+                        : `// Click "⚡ EXECUTE MCP TOOL" above to trigger call\n// Endpoint: POST /api/mcp/call (Zero-Cloud Verified)\n{\n  "jsonrpc": "2.0",\n  "status": "READY",\n  "tool": "${selectedMcpTool?.name || 'none'}"\n}`}
+                    </Box>
+                  </Grid>
+                </Grid>
               </Paper>
 
               {/* 7 Official Obsidian Skills Grid */}
