@@ -1875,7 +1875,7 @@ curl -s https://zoth.nullai.tech/.well-known/mcp.json | jq .mcpServers
 # Inspect A2A / Agent Experience (AX) capability card
 curl -s https://zoth.nullai.tech/.well-known/agent.json | jq .capabilities
 
-# Companion Bare-Metal Operating System (ZothOS v3.2) MCP Manifest
+# Companion Bare-Metal Operating System (ZothOS v3.3.0) MCP Manifest
 curl -s https://zothos.nullai.tech/.well-known/mcp.json | jq .mcpServers`}
                   />
                 </Paper>

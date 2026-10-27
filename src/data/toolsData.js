@@ -54,14 +54,14 @@ export const microTools = [
   {
     id: 'zoth-os',
     published: true,
-    name: 'Zoth OS v3.2',
+    name: 'Zoth OS v3.3.0',
     repo: 'zoth-os',
     category: 'Swarm & Core',
     executionType: 'local_cli',
     github: 'https://github.com/NullAITech/zoth-os',
     liveUrl: 'https://zothos.nullai.tech',
     description: 'Debian 13 + KDE Plasma 6.3 sovereign AI distro. Kali + Parrot parity, Studio v2, Ollama on 127.0.0.1, 152 MCP servers all off. Eight named virtual desktops; zoth-workspaces puts a Samsung / DP monitor on its own screen. Live users zoth / azoth / root password zoth.',
-    version: '3.2.0',
+    version: '3.3.0',
     pull: 'git clone https://github.com/NullAITech/zoth-os.git && cd zoth-os',
   },
   {

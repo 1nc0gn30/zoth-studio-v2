@@ -187,6 +187,26 @@ export default function SovereignFunnel({
           <Button
             variant="contained"
             size="small"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              background: '#FFDD00',
+              color: '#000000',
+              fontFamily: mono,
+              fontWeight: 850,
+              fontSize: '0.76rem',
+              textTransform: 'none',
+              px: 2,
+              py: 0.9,
+              '&:hover': { background: '#FFE642', color: '#000000' },
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            variant="contained"
+            size="small"
             href={studioRepo}
             target="_blank"
             rel="noopener noreferrer"

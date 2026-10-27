@@ -359,6 +359,52 @@ export default function ZothOSShowcasePage() {
               <Button
                 variant="outlined"
                 size="large"
+                href="https://github.com/1nc0gn30/chain-of-thoughts"
+                target="_blank"
+                rel="noopener noreferrer"
+                startIcon={<GitHubIcon />}
+                sx={{
+                  px: 3,
+                  py: 1.3,
+                  fontWeight: 750,
+                  fontFamily: mono,
+                  color: isDark ? '#38BDF8' : '#0369A1',
+                  borderColor: isDark ? 'rgba(56, 189, 248, 0.4)' : '#BAE6FD',
+                  bgcolor: isDark ? 'rgba(56, 189, 248, 0.08)' : '#F0F9FF',
+                  '&:hover': {
+                    borderColor: '#38BDF8',
+                    bgcolor: isDark ? 'rgba(56, 189, 248, 0.16)' : '#E0F2FE',
+                  },
+                }}
+              >
+                ◈ Chain of Thoughts
+              </Button>
+              <Button
+                variant="outlined"
+                size="large"
+                href="https://github.com/1nc0gn30/zothos-lite"
+                target="_blank"
+                rel="noopener noreferrer"
+                startIcon={<GitHubIcon />}
+                sx={{
+                  px: 3,
+                  py: 1.3,
+                  fontWeight: 750,
+                  fontFamily: mono,
+                  color: isDark ? '#FFFFFF' : '#0F172A',
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.3)' : '#0F172A',
+                  bgcolor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#F8FAFC',
+                  '&:hover': {
+                    borderColor: gold,
+                    bgcolor: isDark ? 'rgba(255, 255, 255, 0.12)' : '#F1F5F9',
+                  },
+                }}
+              >
+                ▓ ZothOS-Lite v1.0
+              </Button>
+              <Button
+                variant="outlined"
+                size="large"
                 href="https://github.com/NullAITech/zoth-os"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -555,7 +601,7 @@ export default function ZothOSShowcasePage() {
               <TableHead sx={{ bgcolor: isDark ? 'rgba(212, 175, 55, 0.08)' : '#FEF9E7' }}>
                 <TableRow>
                   <TableCell sx={{ fontFamily: mono, fontWeight: 800, color: textPrimary, fontSize: '0.85rem' }}>Capability</TableCell>
-                  <TableCell sx={{ fontFamily: mono, fontWeight: 900, color: gold, fontSize: '0.85rem' }}>Zoth OS v3.2</TableCell>
+                  <TableCell sx={{ fontFamily: mono, fontWeight: 900, color: gold, fontSize: '0.85rem' }}>Zoth OS v3.3.0</TableCell>
                   <TableCell sx={{ fontFamily: mono, fontWeight: 700, color: textSecondary, fontSize: '0.85rem' }}>Kali Linux</TableCell>
                   <TableCell sx={{ fontFamily: mono, fontWeight: 700, color: textSecondary, fontSize: '0.85rem' }}>Parrot OS</TableCell>
                   <TableCell sx={{ fontFamily: mono, fontWeight: 700, color: textSecondary, fontSize: '0.85rem' }}>Ubuntu</TableCell>

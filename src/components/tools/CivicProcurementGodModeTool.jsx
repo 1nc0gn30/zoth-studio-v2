@@ -147,7 +147,7 @@ export default function CivicProcurementGodModeTool() {
 **Solicitation**: ${activeRfp.solNumber} — ${activeRfp.title}
 **Region / Agency**: ${activeRfp.region}
 **NAICS Code**: ${activeRfp.naics}
-**Architecture**: ZothOS v3.2 Zero-Egress Sovereign Enclave (${activeTheme.name})
+**Architecture**: ZothOS v3.3.0 Zero-Egress Sovereign Enclave (${activeTheme.name})
 
 ## 1. Executive Summary & Technical Differentiation
 Neal Frazier Tech (@1nc0gn30 • 757tech.pro • nullai.tech) delivers air-gapped, zero-egress Linux & AI automation infrastructure engineered for municipal, defense, and enterprise enclaves. All LLM inference (Ollama 127.0.0.1:11434), YARA-X threat scanning, and FOIA document redaction execute 100% on-premises without external cloud telemetry.

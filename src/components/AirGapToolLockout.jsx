@@ -331,7 +331,7 @@ export default function AirGapToolLockout({
                   Option 1: Deploy Bare-Metal Zoth OS
                 </Typography>
                 <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6, mb: 2.5 }}>
-                  Flash zothos-3.2-amd64.iso or boot in QEMU/KVM. Product site zothos.nullai.tech. Live users zoth / azoth / root (password zoth). MCP catalog is 152 servers, all off.
+                  Flash zothos-3.3-amd64.iso or boot in QEMU/KVM. Product site zothos.nullai.tech. Live users zoth / azoth / root (password zoth). MCP catalog is 152 servers, all off.
                 </Typography>
               </Box>
 

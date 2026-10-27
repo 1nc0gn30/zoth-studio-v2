@@ -32,7 +32,7 @@ const STRIPE_URL = 'https://github.com/1nc0gn30/zoth-studio-v2';
 
 const DEFAULT_ESSAY = `Why modern AI agents fail in production: 90% of context bloat comes from unminified MCP tool schemas and cloud telemetry round-trips.
 
-We built Zoth Studio v2 and ZothOS v3.2 to run 62 sovereign developer tools 100% locally on 127.0.0.1 loopback sockets and WebGPU shaders.
+We built Zoth Studio v2 and ZothOS v3.3.0 to run 62 sovereign developer tools 100% locally on 127.0.0.1 loopback sockets and WebGPU shaders.
 
 1. Zero Cloud Egress: Every AST parser, Shannon entropy analyzer, and HNSW vector index runs directly inside your browser or bare-metal Linux enclave.
 

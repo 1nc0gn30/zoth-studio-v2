@@ -185,7 +185,7 @@ inactiveForeground=120,130,145`;
   }, [themeName, primaryHex, secondaryHex, bgVoidHex]);
 
   const alacrittyToml = useMemo(() => {
-    return `# ZothOS v3.2 Alacritty Reality Profile — ${themeName}
+    return `# ZothOS v3.3.0 Alacritty Reality Profile — ${themeName}
 # Companion Zoth Bot: ${activeTheme.botName} (${activeTheme.botTitle})
 
 [window]

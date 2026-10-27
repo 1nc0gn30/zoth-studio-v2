@@ -151,6 +151,8 @@ tags = ["solana", "treasury"]
 description = "Intentional public receive address on labeled payment and treasury surfaces only."
 paths = [
   '''(?:^|/)src/pages/AgoraPage\.jsx$''',
+  '''(?:^|/)src/pages/ZothOSPage\.jsx$''',
+  '''(?:^|/)src/pages/ZothOSShowcasePage\.jsx$''',
   '''(?:^|/)src/components/SovereignFunnel\.jsx$''',
   '''(?:^|/)src/components/tools/Badge3dCoinGodModeTool\.jsx$''',
   '''(?:^|/)src/components/tools/CertPathRoadmapGodModeTool\.jsx$''',

@@ -62,7 +62,7 @@ const RESEARCH_PRESETS = {
       {
         id: 'CLM-03',
         statement: 'Loopback-bound (127.0.0.1) SQLite WAL + HNSW memory tables achieve 0.74ms p95 lookup with zero external cloud egress.',
-        sources: ['Malkov & Yashunin (IEEE TPAMI)', 'ZothOS v3.2 Enclave Audit'],
+        sources: ['Malkov & Yashunin (IEEE TPAMI)', 'ZothOS v3.3.0 Enclave Audit'],
         confidence: 0.98,
       },
     ],
@@ -91,7 +91,7 @@ const RESEARCH_PRESETS = {
       {
         id: 'CLM-03',
         statement: 'Default-off MCP server registries (Ring 0–3) prevent unauthorized local filesystem or network escalation.',
-        sources: ['ZothOS v3.2 Security Architecture', 'Agent Policy Auditor :8106'],
+        sources: ['ZothOS v3.3.0 Security Architecture', 'Agent Policy Auditor :8106'],
         confidence: 0.99,
       },
     ],

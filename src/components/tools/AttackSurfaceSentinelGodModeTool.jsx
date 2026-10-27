@@ -30,9 +30,9 @@ const display = '"Syne", "Space Grotesk", system-ui, sans-serif';
 const SURFACE_PROFILES = [
   {
     id: 'zothos-enclave',
-    label: 'ZothOS v3.2 Default-Deny Enclave (Hardened)',
+    label: 'ZothOS v3.3.0 Default-Deny Enclave (Hardened)',
     targetIp: '127.0.0.1 / tailscale0',
-    rawManifest: `# ZothOS v3.2 Socket & Banner Snapshot
+    rawManifest: `# ZothOS v3.3.0 Socket & Banner Snapshot
 LISTEN 127.0.0.1:11434  ollama/0.5.7 (Zero-Egress Loopback)
 LISTEN 127.0.0.1:9050   tor/0.4.8.12 (SOCKS5 Amnesic Proxy)
 LISTEN 0.0.0.0:41641/udp wireguard/tailscale0 (Authenticated Mesh)
@@ -236,7 +236,7 @@ export default function AttackSurfaceSentinelGodModeTool() {
       .join('\n');
 
     return `#!/usr/bin/env bash
-# ZothOS v3.2 Zero-Egress UFW & nftables Perimeter Lockdown
+# ZothOS v3.3.0 Zero-Egress UFW & nftables Perimeter Lockdown
 # Synthesized by Shodan & Anderson Attack Surface Sentinel (${activeTheme.name})
 set -euo pipefail
 
@@ -259,7 +259,7 @@ sudo ufw status verbose`;
   const andersonThreatModelJson = useMemo(() => {
     return JSON.stringify(
       {
-        auditor: 'Shodan & Ross Anderson Security Sentinel v3.2',
+        auditor: 'Shodan & Ross Anderson Security Sentinel v3.3.0',
         realityProfile: activeTheme.id,
         postureScore: analysis.postureScore,
         grade: analysis.grade,
