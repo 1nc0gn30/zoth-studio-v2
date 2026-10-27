@@ -359,7 +359,7 @@ export default function ZothOSShowcasePage() {
               <Button
                 variant="outlined"
                 size="large"
-                href="https://github.com/1nc0gn30/chain-of-thoughts"
+                href="https://github.com/NullAITech/chain-of-thoughts"
                 target="_blank"
                 rel="noopener noreferrer"
                 startIcon={<GitHubIcon />}
@@ -382,7 +382,7 @@ export default function ZothOSShowcasePage() {
               <Button
                 variant="outlined"
                 size="large"
-                href="https://github.com/1nc0gn30/zothos-lite"
+                href="https://github.com/NullAITech/zothos-lite"
                 target="_blank"
                 rel="noopener noreferrer"
                 startIcon={<GitHubIcon />}

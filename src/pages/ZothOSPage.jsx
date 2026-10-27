@@ -908,7 +908,7 @@ export default function ZothOSPage() {
                     label="ZOTHOS-LITE v1.0 (:8145)"
                     size="small"
                     component="a"
-                    href="https://github.com/1nc0gn30/zothos-lite"
+                    href="https://github.com/NullAITech/zothos-lite"
                     target="_blank"
                     rel="noopener noreferrer"
                     clickable
@@ -925,7 +925,7 @@ export default function ZothOSPage() {
                     label="◈ CHAIN OF THOUGHTS (zoth-cot)"
                     size="small"
                     component="a"
-                    href="https://github.com/1nc0gn30/chain-of-thoughts"
+                    href="https://github.com/NullAITech/chain-of-thoughts"
                     target="_blank"
                     rel="noopener noreferrer"
                     clickable
@@ -992,7 +992,7 @@ export default function ZothOSPage() {
                 <Button
                   variant="outlined"
                   component="a"
-                  href="https://github.com/1nc0gn30/chain-of-thoughts"
+                  href="https://github.com/NullAITech/chain-of-thoughts"
                   target="_blank"
                   rel="noopener noreferrer"
                   startIcon={<GitHubIcon />}
@@ -1016,7 +1016,7 @@ export default function ZothOSPage() {
                 <Button
                   variant="outlined"
                   component="a"
-                  href="https://github.com/1nc0gn30/zothos-lite"
+                  href="https://github.com/NullAITech/zothos-lite"
                   target="_blank"
                   rel="noopener noreferrer"
                   startIcon={<GitHubIcon />}
@@ -1517,7 +1517,7 @@ export default function ZothOSPage() {
                 </Button>
                 <Button
                   component="a"
-                  href="https://github.com/1nc0gn30/chain-of-thoughts"
+                  href="https://github.com/NullAITech/chain-of-thoughts"
                   target="_blank"
                   rel="noopener noreferrer"
                   size="small"
@@ -1537,7 +1537,7 @@ export default function ZothOSPage() {
                 </Button>
                 <Button
                   component="a"
-                  href="https://github.com/1nc0gn30/zothos-lite"
+                  href="https://github.com/NullAITech/zothos-lite"
                   target="_blank"
                   rel="noopener noreferrer"
                   size="small"
