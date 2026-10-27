@@ -1,0 +1,104 @@
+#!/usr/bin/env node
+/**
+ * zoth-cot — Chain of Thoughts CLI (Cryptographic Merkle Working Memory DAG)
+ * Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform
+ */
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+
+const DATA_DIR = path.join(__dirname, '..', 'data');
+const STATE_FILE = path.join(DATA_DIR, 'cot_memory.json');
+
+function loadState() {
+  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+  if (fs.existsSync(STATE_FILE)) {
+    try {
+      return JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'));
+    } catch (_e) {}
+  }
+  const genesisHash = crypto.createHash('sha256').update('ZOTH-COT-GENESIS').digest('hex').slice(0, 12);
+  return {
+    headHash: genesisHash,
+    maxTurns: 24,
+    pinnedFacts: [
+      { id: 'fact-operator', category: 'IDENTITY', fact: 'Operator: Neal (@1nc0gn30) • Sovereign AI Workstation.', active: true, ts: new Date().toISOString() },
+      { id: 'fact-engine', category: 'ARCHITECTURE', fact: 'Chain of Thoughts (zoth-cot) Merkle DAG Working Memory Engine.', active: true, ts: new Date().toISOString() }
+    ],
+    messages: [],
+    nodes: [
+      {
+        id: 'N00',
+        hash: genesisHash,
+        parentHash: '000000000000',
+        prompt: '[GENESIS] Initialize Chain of Thoughts Working Memory DAG',
+        steps: {
+          recall: 'Loaded core semantic engrams.',
+          contextLink: 'Initialized 24-turn rolling context window.',
+          deduction: 'Armed multi-turn LLM router (Ollama + Cloud Providers).',
+          synthesis: 'Chain of Thoughts DAG online.'
+        },
+        mood: 'TACTICAL',
+        tokens: 64,
+        timestamp: new Date().toISOString()
+      }
+    ]
+  };
+}
+
+function saveState(state) {
+  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+  fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2), 'utf8');
+}
+
+const args = process.argv.slice(2);
+const cmd = args[0] || '--tree';
+const rest = args.slice(1).join(' ').trim();
+const state = loadState();
+
+if (cmd === '--pin' && rest) {
+  state.pinnedFacts.unshift({
+    id: 'fact-' + Date.now().toString(36),
+    category: 'PINNED',
+    fact: rest,
+    active: true,
+    ts: new Date().toISOString()
+  });
+  saveState(state);
+  console.log(`[◈ CoT] Pinned new working memory fact: "${rest}"`);
+} else if (cmd === '--clear') {
+  state.messages = [];
+  saveState(state);
+  console.log('[◈ CoT] Cleared rolling conversation turns (Pinned facts preserved).');
+} else if (cmd === '--recall' && rest) {
+  const q = rest.toLowerCase();
+  const facts = state.pinnedFacts.filter((f) => f.fact.toLowerCase().includes(q));
+  const nodes = state.nodes.filter((n) => JSON.stringify(n).toLowerCase().includes(q));
+  console.log(`╔══[ ◈ CoT RECALL QUERY: "${rest}" ]══════════════════════════════════════════╗`);
+  console.log(`║ Matched Facts (${facts.length}):`);
+  facts.forEach((f, i) => console.log(`║  [${i + 1}] [${f.category}] ${f.fact}`));
+  console.log(`║ Matched Thought Nodes (${nodes.length}):`);
+  nodes.forEach((n) => console.log(`║  • [${n.id} // ${n.hash}] ${n.prompt} -> ${n.steps?.synthesis || ''}`));
+  console.log('╚══════════════════════════════════════════════════════════════════════════════╝');
+  process.exit(0);
+}
+
+const lines = [
+  '╔══════════════════════════════════════════════════════════════════════════════╗',
+  `║ ◈ ZOTH CHAIN OF THOUGHTS (CoT) // WORKING MEMORY DAG (HEAD: ${state.headHash}) ║`,
+  '╠══════════════════════════════════════════════════════════════════════════════╣',
+  `║ PINNED SEMANTIC MEMORY FACTS (${state.pinnedFacts.length}):`,
+  ...state.pinnedFacts.slice(0, 8).map((f, i) => `║  [${i + 1}] [${f.category}] ${f.fact.slice(0, 64)}`),
+  '╠══════════════════════════════════════════════════════════════════════════════╣',
+  `║ CRYPTOGRAPHIC REASONING DAG NODES (${state.nodes.length} NODES • ${Math.floor(state.messages.length / 2)} TURNS):`,
+  ...state.nodes.slice(-8).map((n) => [
+    `║  ├─● [${n.id} // ${n.hash}] (◀ ${n.parentHash}) [${n.mood || 'TACTICAL'}]`,
+    `║  │   Prompt   : ${(n.prompt || '').slice(0, 58)}`,
+    `║  │   1.Recall : ${(n.steps?.recall || '').slice(0, 58)}`,
+    `║  │   2.Link   : ${(n.steps?.contextLink || '').slice(0, 58)}`,
+    `║  │   3.Deduct : ${(n.steps?.deduction || '').slice(0, 58)}`,
+    `║  │   4.Synth  : ${(n.steps?.synthesis || '').slice(0, 58)}`
+  ].join('\n')),
+  '╚══════════════════════════════════════════════════════════════════════════════╝'
+];
+console.log(lines.join('\n'));

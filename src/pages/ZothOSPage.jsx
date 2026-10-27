@@ -1292,6 +1292,46 @@ export default function ZothOSPage() {
                 </Button>
                 <Button
                   component="a"
+                  href="https://github.com/1nc0gn30/chain-of-thoughts"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="small"
+                  sx={{
+                    bgcolor: '#000000',
+                    color: '#FFFFFF',
+                    fontFamily: mono,
+                    fontWeight: 800,
+                    fontSize: '0.72rem',
+                    borderRadius: 0,
+                    border: '1px solid #FFFFFF',
+                    px: 1.5,
+                    '&:hover': { bgcolor: '#FFFFFF', color: '#000000' },
+                  }}
+                >
+                  [ ◈ CHAIN OF THOUGHTS REPO ↗ ]
+                </Button>
+                <Button
+                  component="a"
+                  href="https://github.com/1nc0gn30/zothos-lite"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  size="small"
+                  sx={{
+                    bgcolor: '#000000',
+                    color: '#FFFFFF',
+                    fontFamily: mono,
+                    fontWeight: 800,
+                    fontSize: '0.72rem',
+                    borderRadius: 0,
+                    border: '1px solid #FFFFFF',
+                    px: 1.5,
+                    '&:hover': { bgcolor: '#FFFFFF', color: '#000000' },
+                  }}
+                >
+                  [ ZOTHOS-LITE REPO ↗ ]
+                </Button>
+                <Button
+                  component="a"
                   href="http://localhost:8140"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -1337,7 +1377,7 @@ export default function ZothOSPage() {
                     mb: 2,
                   }}
                 >
-                  Designed like Tails OS for sovereign developers and cryptographic operators. Boots a minimal ~880 MB SquashFS image strictly into volatile RAM (`tmpfs`), enforces an `nftables` Tor transparent proxy kill-switch (`9050/9040`), randomizes hardware MAC addresses on link-up, and ships with the 6 Mandatory Zoth Security & Dev Tools pre-locked in RAM. Pull in any additional Zoth Studio or ZothOS tools on demand via `zoth-lite-pkg`.
+                  Designed like Tails OS for sovereign developers and cryptographic operators. Boots a minimal ~880 MB SquashFS image strictly into volatile RAM (`tmpfs`), enforces an `nftables` Tor transparent proxy kill-switch (`9050/9040`), randomizes hardware MAC addresses on link-up, and ships with the 6 Mandatory Zoth Security & Dev Tools + Chain of Thoughts (`zoth-cot`) + AZOTH Embodied Braille AI Agent pre-locked in RAM.
                 </Typography>
                 <Grid container spacing={1}>
                   {[
@@ -1347,6 +1387,8 @@ export default function ZothOSPage() {
                     { code: 'CORE-04', name: 'Sovereign Tor & WireGuard Bridge', desc: 'Strict nftables egress kill-switch + per-stream Tor isolation' },
                     { code: 'CORE-05', name: 'Vaelor L1 Air-Gapped Cold Signer', desc: 'Ed25519 deterministic keygen, offline tx signing & Braille RandomArt' },
                     { code: 'CORE-06', name: 'Azoth Hardened Dev Suite', desc: 'Neovim + Rust/Go/Node/Python + Git GPG/SSH hardware signing' },
+                    { code: 'CORE-07', name: '◈ Chain of Thoughts (zoth-cot)', desc: 'Multi-turn /api/chat context, auto fact extraction & SHA-256 Merkle DAG' },
+                    { code: 'CORE-08', name: 'AZOTH Embodied Braille AI + Kokoro', desc: '6 mood rigs, phoneme lip-sync, Kokoro 82M ONNX Neural TTS & mic STT' },
                   ].map((core) => (
                     <Grid xs={12} sm={6} key={core.code}>
                       <Box
@@ -1404,17 +1446,17 @@ export default function ZothOSPage() {
                         overflowX: 'auto',
                       }}
                     >
-{`$ zoth-lite-pkg status
-[::] ZOTHOS-LITE v1.0 // AMNESIC 1-BIT MONOTONE
-[::] Base RAM Usage : 412 MB (6 Core Locked)
-[::] Optional Pulled: 3 Modules (+236 MB tmpfs)
+{`$ zoth-cot status
+[◈] CHAIN OF THOUGHTS // WORKING MEMORY DAG
+[◈] Active Session : zoth-cot-default
+[◈] Thought Nodes  : 2 (N00 -> N01 -> N02)
+[◈] Pinned Facts   : 4 ([IDENTITY] codename: FALCON-7)
+
+$ zoth-cot pin TARGET_HOST "10.0.2.15 (QEMU Bridge)"
+[+] Pinned fact [MEMORY] TARGET_HOST = "10.0.2.15"
 
 # Pull only the tools you need into RAM:
 $ zoth-lite-pkg pull zoth-hermes-llm
-$ zoth-lite-pkg pull vaelor-node-cli
-$ zoth-lite-pkg pull obsidian-second-brain
-
-# Zero-trace panic wipe on shutdown:
 $ zoth-lite-pkg wipe-ram`}
                     </Box>
                   </Box>
