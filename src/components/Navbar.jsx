@@ -39,9 +39,10 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 // Flagship Primary Links
 const primaryNav = [
   { label: 'Arsenal', path: '/arsenal', badge: `${arsenalStats.total}` },
+  { label: 'Vaelor L1', path: '/vaelor', badge: 'DAG', pulse: true },
   { label: 'Agora', path: '/agora', badge: 'DAPP', pulse: true },
   { label: 'Voice Station', path: '/voice', badge: 'LIVE', pulse: true },
-  { label: 'Zoth OS', path: '/zoth-os', badge: 'OS', pulse: true },
+  { label: 'Zoth OS', path: '/zoth-os', badge: 'v3.3', pulse: true },
   { label: 'WebGen', path: '/webgen', badge: 'NEW' },
   { label: 'Swarm', path: '/swarm' },
   { label: 'HexStrike', path: '/hexstrike' },

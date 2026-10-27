@@ -264,11 +264,11 @@ export function GhidraMcpGodModeTool() {
           <Grid xs={12} md={5}>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} justifyContent="flex-end" alignItems="center">
               <Box sx={{ textAlign: { xs: 'center', sm: 'right' } }}>
-                <Typography variant="caption" sx={{ textDecoration: 'line-through', color: 'text.secondary', fontFamily: mono }}>
-                  $79.00 REGULAR
+                <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
+                  ZERO TELEMETRY • AIR-GAPPED
                 </Typography>
-                <Typography variant="h5" sx={{ fontWeight: 800, color: gold, fontFamily: mono }}>
-                  $19.00 <span style={{ fontSize: '0.75rem', color: '#94A3B8' }}>LIFETIME</span>
+                <Typography variant="h6" sx={{ fontWeight: 800, color: gold, fontFamily: mono }}>
+                  100% OPEN ACCESS
                 </Typography>
               </Box>
 
@@ -289,37 +289,10 @@ export function GhidraMcpGodModeTool() {
                     '&:hover': { bgcolor: '#B89628' }
                   }}
                 >
-                  STRIPE $19
-                </Button>
-                <Button
-                  variant="outlined"
-                  component="a"
-                  href="https://github.com/1nc0gn30/zoth-studio-v2"
-                  target="_blank"
-                  rel="noopener"
-                  sx={{
-                    borderColor: cyan,
-                    color: cyan,
-                    fontWeight: 800,
-                    fontFamily: mono,
-                    fontSize: '0.75rem',
-                    '&:hover': { bgcolor: cyanSoft }
-                  }}
-                >
-                  SOLANA DEPAY
+                  GITHUB SOURCE
                 </Button>
               </Stack>
             </Stack>
-
-            <Box sx={{ textAlign: { xs: 'center', sm: 'right' }, mt: 1 }}>
-              <Button
-                size="small"
-                onClick={() => setShowPaywallModal(true)}
-                sx={{ color: 'text.secondary', fontSize: '0.7rem', textDecoration: 'underline' }}
-              >
-                Already have a license key or receipt? Activate Pro
-              </Button>
-            </Box>
           </Grid>
         </Grid>
       </Paper>

@@ -89,13 +89,13 @@ const STORAGE_KEY = 'zoth-studio-theme';
 
 function getInitialMode() {
   try {
+    const params = new URLSearchParams(window.location.search);
+    const urlTheme = params.get('theme');
+    if (urlTheme === 'light' || urlTheme === 'dark') return urlTheme;
     const saved = window.localStorage.getItem(STORAGE_KEY);
     if (saved === 'light' || saved === 'dark') return saved;
   } catch (e) {
     /* ignore */
-  }
-  if (typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return 'dark';
   }
   return 'light';
 }
@@ -237,7 +237,7 @@ function RealityThemedApp({ mode, onToggleTheme }) {
           dark: reality.accentLightMode,
         },
         background: {
-          default: isDark ? reality.bgDark : '#FFFFFF',
+          default: isDark ? reality.bgDark : '#FAF8F3',
           paper: isDark ? reality.cardBgDark : '#FFFFFF',
         },
       },
@@ -245,6 +245,17 @@ function RealityThemedApp({ mode, onToggleTheme }) {
         borderRadius: parseInt(reality.cardRadius, 10) || 12,
       },
     });
+  }, [isDark, reality]);
+
+  useEffect(() => {
+    const bg = isDark ? reality.bgDark : '#FAF8F3';
+    const fg = isDark ? '#EDEFF2' : '#101828';
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    document.documentElement.style.setProperty('--zoth-page-bg', bg);
+    document.documentElement.style.setProperty('--zoth-page-fg', fg);
+    document.documentElement.style.backgroundColor = bg;
+    document.body.style.backgroundColor = bg;
+    document.body.style.color = fg;
   }, [isDark, reality]);
 
   return (

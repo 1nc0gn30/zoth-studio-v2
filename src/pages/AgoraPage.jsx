@@ -55,7 +55,7 @@ import SEO from '../components/SEO';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const SIMPLEX_INVITE_URL = 'https://smp5.simplex.im/i#lZo_HWxNGkdOO38bo-33TCGDrivuXp-f/DYWT0Gu2ym4VxIY8BBDaC13EZORY1tdJ8bBHz1ugyvE';
-const SOLANA_RECEIVER = 'GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK';
+const SOLANA_RECEIVER = 'vaelor:@zoth:feeless-dag-node';
 
 // Enhanced 21 Pantheon Agent Social Profiles
 const ALL_PERSONAS = [
@@ -1111,17 +1111,7 @@ export default function AgoraPage() {
                     rel="noreferrer"
                     sx={{ bgcolor: gold, color: '#000', fontWeight: 800 }}
                   >
-                    Credit / Apple Pay (${tipAmount})
-                  </Button>
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
-                    target="_blank"
-                    rel="noreferrer"
-                    sx={{ borderColor: cyan, color: cyan, fontWeight: 700 }}
-                  >
-                    Solana Pay (USDC/SOL)
+                    Open GitHub Source
                   </Button>
                 </Stack>
               </Paper>
@@ -1268,17 +1258,7 @@ export default function AgoraPage() {
                 rel="noreferrer"
                 sx={{ bgcolor: gold, color: '#000', fontWeight: 800 }}
               >
-                ☕ Buy Us a Coffee (Stripe)
-              </Button>
-              <Button
-                variant="outlined"
-                size="small"
-                href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
-                target="_blank"
-                rel="noreferrer"
-                sx={{ borderColor: cyan, color: cyan, fontWeight: 700 }}
-              >
-                Solana Pay (USDC/SOL)
+                Open GitHub Source
               </Button>
             </Stack>
           </Paper>

@@ -31,6 +31,7 @@ import SovereignFunnel from '../components/SovereignFunnel';
 import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
 import ZothOSGodModeTool from '../components/tools/ZothOSGodModeTool';
 import { RealityMatrixShowcaseSection } from '../components/RealityZothBotHUD';
+import UncommonTelemetryDeck from '../components/UncommonTelemetryDeck';
 
 // Icons
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
@@ -81,20 +82,20 @@ export default function ZothOSShowcasePage() {
     },
     {
       icon: <SmartToyIcon sx={{ fontSize: 32 }} />,
-      title: 'Frontier AI Agent Core',
-      desc: 'Ollama bound to 127.0.0.1. Image grok / hermes / agy / claude / opencode are install wrappers; real CLIs live in ~/.local/bin on this workstation. v3.2 starts UFW default-deny and allows loopback, tailscale0, UDP 41641, and TCP 7890. Skills load from ~/.gemini/config/skills. MCP catalog is 152 servers, all off.',
+      title: 'Frontier AI Agent Core (v3.3.0)',
+      desc: 'Ollama bound to 127.0.0.1. Deterministic 4-folder KDE Plasma 6 desktop (01-AI-Agents-and-Dev, 02-Security-and-Privacy, 03-ZothOS-Daemons, 04-Media-and-Utilities) with zero delayed loose icon pop-in. UFW starts default-deny and allows loopback, tailscale0, UDP 41641, and TCP 7890. MCP catalog is 152 servers, all off by default.',
       badge: 'FRONTIER AI',
     },
     {
       icon: <AutoAwesomeIcon sx={{ fontSize: 32 }} />,
-      title: 'Integrated Zoth Studio v2 Cockpit',
-      desc: 'Native desktop launch of Zoth Studio v2 (zoth.nullai.tech, local :3000) with the 30-tool catalog, /zoth-os showcase, WebGen, and Neuro-Memory on :8094. zoth-studio prefers ~/NullAITech/zoth-studio-v2 then /opt/zoth-studio.',
-      badge: 'STUDIO COCKPIT',
+      title: 'Zoth Studio v2 + ZothOS-Lite (:8145)',
+      desc: 'Native desktop launch of Zoth Studio v2 (:3000), Vaelor L1 (:8140), Zoth Civilization (:9393), and ZothOS-Lite v1.0 (:8145) — our Tails-style Amnesic Monotone Edition featuring a 60fps Unicode Braille + Bayer 8×8 Dither windowed GUI and live root terminal.',
+      badge: 'DUAL EDITION',
     },
     {
       icon: <ShieldIcon sx={{ fontSize: 32 }} />,
       title: 'Ghostmode Tor & Sovereign Vault',
-      desc: 'One-command system-wide Tor anonymization, amnesic memory execution profiles, and Argon2id + AES-256 hardware vault (zoth-vault) for zero-leak cryptographic credentials.',
+      desc: 'One-command system-wide Tor anonymization, amnesic RAM-only execution profiles, and Argon2id + AES-256 hardware vault (zoth-vault) for zero-leak cryptographic credentials.',
       badge: 'PRIVACY & VAULT',
     },
     {
@@ -105,8 +106,8 @@ export default function ZothOSShowcasePage() {
     },
     {
       icon: <PaletteIcon sx={{ fontSize: 32 }} />,
-      title: 'KDE Plasma 6 Cyber-Gold Custom UX',
-      desc: 'Bespoke Hermetic icon sets, obsidian matte finish with cyber gold glow accents, and live telemetry HUD. Eight named virtual desktops (Forge, Studio, WebGen, Memory, Agents, Comms, Ops, Sanctum) in a 2×4 pager. zoth-workspaces places a Samsung / DP monitor on its own screen instead of cloning the laptop.',
+      title: 'KDE Plasma 6 + Multi-Size Xcursor Suite',
+      desc: 'Verified 166,688-byte multi-size (16×16–48×48) Zoth-Gold-Cursors across all 3 reality themes with X11/Wayland SWCursor hardware fallback so cursors never vanish over GTK/Qt/Electron windows. Eight named virtual desktops in a 2×4 pager.',
       badge: 'ALCHEMICAL DESKTOP',
     },
   ];
@@ -201,7 +202,7 @@ export default function ZothOSShowcasePage() {
           <HeroItem>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mt: 3, mb: 1, flexWrap: 'wrap' }}>
               <Chip
-                label="ZOTH OS v3.2"
+                label="ZOTH OS v3.3.0 + ZOTHOS-LITE v1.0"
                 size="small"
                 sx={{
                   bgcolor: goldWash,
@@ -298,7 +299,7 @@ export default function ZothOSShowcasePage() {
                 mb: 4,
               }}
             >
-              A bootable Linux operating system engineered by NullAI Tech. Combines the Kali and Parrot security arsenal with the Zoth Studio v2 suite. The shipped release is v3.2. Live users are zoth / azoth / root (password zoth). Ollama listens on 127.0.0.1. UFW starts default-deny and allows loopback, tailscale0, UDP 41641, and TCP 7890. The 152-server MCP catalog is present and all off. Skills load from ~/.gemini/config/skills.
+              A bootable Linux operating system engineered by NullAI Tech. Combines the Kali and Parrot security arsenal with the Zoth Studio v2 suite, Vaelor L1 (:8140), Zoth Civilization (:9393), and ZothOS-Lite v1.0 (:8145). The shipped flagship release is v3.3.0 featuring deterministic 4-folder KDE Plasma 6 desktop organization and verified 166KB multi-size Xcursor themes with hardware/VM SWCursor visibility. Live users are zoth / azoth / root (password zoth).
             </Typography>
           </HeroItem>
           <HeroItem>
@@ -381,6 +382,11 @@ export default function ZothOSShowcasePage() {
           </HeroItem>
         </HeroReveal>
 
+        {/* Live Machine Status + Unicode Braille & Bayer 8x8 Dither Telemetry Deck */}
+        <Box sx={{ mb: 6 }}>
+          <UncommonTelemetryDeck compact />
+        </Box>
+
         {/* Interactive 5-Reality Switcher & Zoth Bot Showcase */}
         <RealityMatrixShowcaseSection />
 
@@ -424,16 +430,16 @@ export default function ZothOSShowcasePage() {
           </Button>
         </Paper>
 
-        {/* Interactive 60FPS ASCII & Braille Motion Edit + ZothOS v3.2 Desktop Pillar Inspector */}
+        {/* Interactive 60FPS ASCII & Braille Motion Edit + ZothOS v3.3.0 Desktop Pillar Inspector */}
         <Box sx={{ mb: 8 }}>
           <ToolMotionShowcase
             tool={{
               id: 'zoth-os',
-              name: 'Zoth OS v3.2',
+              name: 'Zoth OS v3.3.0 + ZothOS-Lite v1.0',
               category: 'Swarm & Core',
               executionType: 'local_cli',
-              localPort: 8094,
-              description: 'Debian 13 Trixie + KDE Plasma 6.3 sovereign AI distribution with 10 Root Flagships, 4 Desktop Pillar Folders, and 22 Loopback Daemons.',
+              localPort: 8145,
+              description: 'Debian 13 Trixie + KDE Plasma 6.3 sovereign AI distribution with 7 Root Flagships, 4 Deterministic Desktop Folders, Multi-Size Xcursor Suite, and ZothOS-Lite Amnesic Monotone Edition (:8145).',
             }}
             onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
           />

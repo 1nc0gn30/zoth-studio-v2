@@ -7,17 +7,17 @@
 # Zoth Studio v2
 
 > **Zero-Egress Sovereign Agent Development Studio, Workstation Cockpit & 71-Tool Matrix**  
-> *Client-side WebGPU acceleration, biomorphic STDP memory, 100% workstation coverage across all 71 ecosystem tools (43 dedicated God Mode workstations + sovereign enclaves), 73/73 supervised fleet endpoints (`ensure_fleet.py`), Zoth Bolt (`:5173` — built on open-source `bolt.diy`) + Zoth QuickSite Starter (`:8092`), 3-agent Byzantine consensus, dual checkout rails (Stripe + Solana Tip), and Argon2id cryptographic vault.*
+> *Client-side WebGPU acceleration, biomorphic STDP memory, 100% workstation coverage across all 71 ecosystem tools, 17 live supervised fleet daemons (`ensure_fleet.py`), Vaelor L1 DAG Blockchain (`:8140`), ZothOS v3.3.0 + ZothOS-Lite v1.0 (`:8145`), Zoth Civilization 3D (`:9393`), Zoth Bolt (`:5173`), 60fps Unicode `U+2800` Braille + Ordered Bayer 8×8 Dither Route Intros, Editorial Light/Dark Dual Theme (`#FAF8F3` Alabaster + `#070709` Void), 3-agent Byzantine consensus, and Argon2id cryptographic vault.*
 
 [![Zero-Egress Guaranteed](https://img.shields.io/badge/Security-Zero--Egress%20Enclave-gold?style=flat-square)](#zero-egress-security-invariants)
 [![Netlify Deploy Ready](https://img.shields.io/badge/Deploy-Netlify%20Production-00C7B7?style=flat-square&logo=netlify)](#netlify-deployment-instructions)
 [![71 Sovereign Tools](https://img.shields.io/badge/Tools-71%2F71%20Verified%20Registry-blueviolet?style=flat-square)](#100-dedicated-interactive-workstation-coverage)
-[![73/73 Fleet Live](https://img.shields.io/badge/Fleet-73%2F73%20Supervised%20Ports-success?style=flat-square)](#100-dedicated-interactive-workstation-coverage)
+[![17/17 Fleet Daemons](https://img.shields.io/badge/Fleet-17%2F17%20Supervised%20Daemons-success?style=flat-square)](#100-dedicated-interactive-workstation-coverage)
 [![Vite 5.4](https://img.shields.io/badge/Build-Vite%205.4-purple?style=flat-square)](https://vitejs.dev)
 [![React 19.3](https://img.shields.io/badge/Framework-React%2019.3-blue?style=flat-square)](https://react.dev)
 [![MUI v5.15](https://img.shields.io/badge/UI-Material--UI%20v5.15-007FFF?style=flat-square)](https://mui.com)
 [![WebGPU Acceleration](https://img.shields.io/badge/Compute-WebGPU%20WGSL%20%2B%20WASM-cyan?style=flat-square)](#webgpu--wasm-acceleration)
-[![Dual Checkout Rails](https://img.shields.io/badge/Monetization-Stripe%20%2B%20Solana%20DePay-gold?style=flat-square)](#high-converting-monetization-funnel)
+[![100% Open Access](https://img.shields.io/badge/Access-100%25%20Free%20%26%20Open-gold?style=flat-square)](#system-overview--core-philosophy)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
 ---
@@ -117,11 +117,11 @@ Desktop and mobile captures, plus screen recordings of each route intro motion d
         |                                     |                                     |
         v                                     v                                     v
 +-------------------------------+  +-------------------------------+  +-------------------------------+
-|     DUAL CHECKOUT REGISTERS   |  |    NETLIFY STATIC HOSTING     |  |   AEO / AX MACHINE DISCOVERY  |
-|  - Stripe Instant Links ($19) |  |  - 139 Prerendered Routes     |  |  - /llms.txt & /llms-full.txt |
-|  - Solana Tip Receiver      |  |  - Instant FCP (< 200ms)      |  |  - /ai.txt Crawler Policy     |
-|  - 1-Click License Unlock     |  |  - Strict CSP & Security      |  |  - /sitemap.xml (139 Entries) |
-|  - Frosted Glass Paywall Blur |  |  - Immutable Asset Caching    |  |  - Schema.org JSON-LD Graphs  |
+|  VAELOR L1 & ZOTHOS-LITE      |  |    NETLIFY STATIC HOSTING     |  |   AEO / AX MACHINE DISCOVERY  |
+|  - Vaelor DAG L1 (:8140)      |  |  - 139 Prerendered Routes     |  |  - /llms.txt & /llms-full.txt |
+|  - ZothOS-Lite GUI (:8145)    |  |  - Instant FCP (< 200ms)      |  |  - /ai.txt Crawler Policy     |
+|  - ZothOS v3.3.0 ISO Ready    |  |  - Strict CSP & Security      |  |  - /sitemap.xml (139 Entries) |
+|  - 100% Free & Open Access    |  |  - Immutable Asset Caching    |  |  - Schema.org JSON-LD Graphs  |
 +-------------------------------+  +-------------------------------+  +-------------------------------+
 ```
 
@@ -401,15 +401,11 @@ Every single tool in the 62-tool catalog has a dedicated, production-ready inter
 
 ---
 
-## High-Converting Monetization Funnel
+## 100% Open-Access Sovereign Architecture & Unicode Braille/Dither Motion Engine
 
-Every tool adheres to the mandatory sovereign monetization architecture designed for the $100,000 treasury goal:
-- **Founding Member Sales Banner**: Eye-catching glassmorphic sales banner directly above every tool workspace offering $19 lifetime access (<del>$79 regular</del>) with urgent social proof.
-- **Dual Payment Rails**: Pre-wired Stripe Payment Links (`https://github.com/1nc0gn30/zoth-studio-v2`) and non-custodial Solana Tip checkout (`428790dd-7ad1-407c-8ecf-c048c77a4cb8`).
-- **Try-Before-You-Buy Value Realization**: Users interact with inputs, view real-time calculations, token costs, and AST feedback with zero fake work.
-- **Frosted Glass Output Paywall Blur**: Structural code, export manifests, and advanced dossiers are locked behind a frosted glass blur (`filter: blur(6px)`) with high-contrast unlock CTAs.
-- **Action Interceptors**: "Copy", "Export", and advanced mode clicks trigger the 6-checkpoint Pro Paywall Modal.
-- **Instant Client-Side License Activation**: 1-click activation via URL params (`?licensed=true`) or receipt email/license key permanently stored in `localStorage`, dissolving blurs across visits.
+- **100% Free & Open-Access Tools**: Every workstation, exporter, PKZIP bundler, and diagnostic engine in Zoth Studio v2 is 100% unlocked by default with zero paywalls, zero blurs, and zero cloud telemetry.
+- **60fps Unicode `U+2800` Braille + Ordered Bayer 8×8 Dither Engine (`src/motion/AsciiBrailleDitherEngine.jsx`)**: Every route transition in `IntroDirector.jsx` and the interactive `UncommonTelemetryDeck.jsx` renders procedural 3D SDF geometries (`Astrolabe`, `ZothOS v3.3.0 Shield`, `Vaelor L1 DAG`, `STDP Synapse`, `HexStrike Radar`, `Byzantine Quorum`) at 2×4 sub-pixel Unicode Braille resolution with Ordered Bayer 8×8 dithering and character-scramble glyph decoding.
+- **Editorial Alabaster Light Mode + Obsidian Void Dark Mode**: Dynamic dual-theme architecture (`#FAF8F3` warm alabaster / `#FFFFFF` ivory cards in Light Mode, `#070709` obsidian void in Dark Mode) with zero FOUC and WCAG AAA contrast across all 5 reality themes.
 
 ---
 

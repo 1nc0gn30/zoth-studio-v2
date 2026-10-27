@@ -88,13 +88,34 @@ export default function RealityBackgroundCanvas() {
       ctx.scale(dpr, dpr);
       ctx.clearRect(0, 0, width, height);
 
-      const alphaScale = isDark ? 1 : 0.45;
+      const alphaScale = isDark ? 1 : 0.65;
+
+      // Subtle architectural coordinate & Braille watermark in Light Mode
+      if (!isDark) {
+        ctx.strokeStyle = 'rgba(138, 101, 8, 0.045)';
+        ctx.lineWidth = 1;
+        const step = 96;
+        for (let gx = step; gx < width; gx += step) {
+          ctx.beginPath();
+          ctx.moveTo(gx, 0);
+          ctx.lineTo(gx, height);
+          ctx.stroke();
+        }
+        for (let gy = step; gy < height; gy += step) {
+          ctx.beginPath();
+          ctx.moveTo(0, gy);
+          ctx.lineTo(width, gy);
+          ctx.stroke();
+        }
+      }
 
       if (realityId === 'gold') {
         // 1. SOVEREIGN GOLD MASTER: Sacred Orbital Rings, Constellation & Cursor Vortex
         const cx = width * 0.5;
         const cy = height * 0.42;
         const maxR = Math.min(width, height) * 0.42;
+        const ringColor = isDark ? '212, 175, 55' : '138, 101, 8';
+        const softColor = isDark ? '245, 230, 171' : '184, 134, 11';
 
         [0.38, 0.68, 0.98].forEach((frac, idx) => {
           ctx.save();
@@ -102,7 +123,7 @@ export default function RealityBackgroundCanvas() {
           ctx.rotate(t * (idx % 2 === 0 ? 0.08 : -0.06) + idx * 0.5);
           ctx.beginPath();
           ctx.ellipse(0, 0, maxR * frac, maxR * frac * 0.46, 0, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(212, 175, 55, ${0.09 * alphaScale})`;
+          ctx.strokeStyle = `rgba(${ringColor}, ${0.11 * alphaScale})`;
           ctx.lineWidth = 1;
           ctx.stroke();
           ctx.restore();
@@ -113,7 +134,7 @@ export default function RealityBackgroundCanvas() {
           if (tr.life > 0) {
             ctx.beginPath();
             ctx.arc(tr.x, tr.y, tr.life * 3.5, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 215, 0, ${tr.life * 0.4 * alphaScale})`;
+            ctx.fillStyle = `rgba(${ringColor}, ${tr.life * 0.4 * alphaScale})`;
             ctx.fill();
           }
         });
@@ -134,7 +155,7 @@ export default function RealityBackgroundCanvas() {
             ctx.beginPath();
             ctx.moveTo(n.x, n.y);
             ctx.lineTo(pointer.x, pointer.y);
-            ctx.strokeStyle = `rgba(245, 230, 171, ${(1 - distP / 180) * 0.28 * alphaScale})`;
+            ctx.strokeStyle = `rgba(${softColor}, ${(1 - distP / 180) * 0.32 * alphaScale})`;
             ctx.lineWidth = 1.2;
             ctx.stroke();
           }
@@ -142,8 +163,8 @@ export default function RealityBackgroundCanvas() {
           ctx.beginPath();
           ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
           ctx.fillStyle = i % 4 === 0
-            ? `rgba(245, 230, 171, ${0.38 * alphaScale})`
-            : `rgba(212, 175, 55, ${0.24 * alphaScale})`;
+            ? `rgba(${softColor}, ${0.42 * alphaScale})`
+            : `rgba(${ringColor}, ${0.28 * alphaScale})`;
           ctx.fill();
         });
 

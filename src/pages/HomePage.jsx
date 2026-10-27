@@ -42,6 +42,7 @@ import ToolOfferLine from '../components/ToolOfferLine';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import { useReality } from '../context/RealityContext';
 import { RealityMatrixShowcaseSection } from '../components/RealityZothBotHUD';
+import UncommonTelemetryDeck from '../components/UncommonTelemetryDeck';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -1661,9 +1662,10 @@ export default function HomePage() {
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2.8 }}>
             {[
               { label: '⚡ WebGPU Shaders', to: '/arsenal' },
-              { label: '⚡ Zoth Bolt AI & Motion Architect', to: '/webgen' },
-              { label: '🧠 23 Pantheon Minds', to: '/swarm' },
-              { label: '💿 ZothOS Live ISO', to: '/zoth-os' },
+              { label: '⚡ Zoth Bolt AI + Motion Architect', to: '/webgen' },
+              { label: '⛓️ Vaelor L1 DAG (:8140)', to: '/vaelor' },
+              { label: '🧠 23 Pantheon Minds (:9393)', to: '/swarm' },
+              { label: '💿 ZothOS v3.3.0 + Lite (:8145)', to: '/zoth-os' },
             ].map((pill) => (
               <Chip
                 key={pill.label}
@@ -1699,9 +1701,20 @@ export default function HomePage() {
               Try WebGen Builder
             </Button>
             <Button component={RouterLink} to="/zoth-os" variant="text" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2.2, '&:hover': { bgcolor: gold.wash, borderRadius: 2 } }}>
-              Zoth OS Distro →
+              ZothOS v3.3 + Lite →
             </Button>
-            <Button component={RouterLink} to="/?intro=1" variant="text" sx={{ fontFamily: mono, fontSize: '0.74rem', letterSpacing: '0.08em', color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2, border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.22)'}`, borderRadius: 999, '&:hover': { bgcolor: gold.wash, borderColor: gold.accent } }}>
+            <Button
+              onClick={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro', { detail: { mode: 'wipe' } }))}
+              variant="text"
+              sx={{ fontFamily: mono, fontSize: '0.74rem', letterSpacing: '0.08em', color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2, border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.22)'}`, borderRadius: 999, '&:hover': { bgcolor: gold.wash, borderColor: gold.accent } }}
+            >
+              ⣿ Replay Braille Intro
+            </Button>
+            <Button
+              onClick={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro', { detail: { mode: 'full' } }))}
+              variant="text"
+              sx={{ fontFamily: mono, fontSize: '0.74rem', letterSpacing: '0.08em', color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2, border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.22)'}`, borderRadius: 999, '&:hover': { bgcolor: gold.wash, borderColor: gold.accent } }}
+            >
               ▶ Replay Cinema Intro
             </Button>
           </Box>
@@ -1811,6 +1824,11 @@ export default function HomePage() {
           <GoldenZLogo3D size={{ xs: 240, md: 340 }} />
         </Box>
       </Paper>
+
+      {/* Live Machine Status + Unicode U+2800 Braille & Bayer 8x8 Dither Telemetry Deck */}
+      <Box sx={{ mb: 8 }}>
+        <UncommonTelemetryDeck />
+      </Box>
 
       {/* Interactive 5-Reality Switch Showcase (Backgrounds, Logos, Icons, Zoth Bots & UI Chrome) */}
       <RealityMatrixShowcaseSection />

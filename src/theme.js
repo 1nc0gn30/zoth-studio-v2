@@ -20,14 +20,14 @@ export const theme = createTheme({
       contrastText: '#FFFFFF',
     },
     background: {
-      default: '#FFFFFF',
+      default: '#FAF8F3',
       paper: '#FFFFFF',
     },
     text: {
       primary: '#101828',
       secondary: '#475467',
     },
-    divider: '#EAECF0',
+    divider: '#E6E1D6',
     success: {
       main: '#12B76A',
     },
@@ -54,7 +54,7 @@ export const theme = createTheme({
         // Accent text tokens: neon in dark mode, AA-safe (>=4.5:1 on white/tints) in light mode.
         ':root': { '--zs-sky': '#0369A1', '--zs-emerald': '#047857', '--zs-mint': '#047857', '--zs-slate': '#475569', '--zs-amber': '#B45309', '--zs-green': '#15803D' },
         body: {
-          backgroundColor: '#FFFFFF',
+          backgroundColor: '#FAF8F3',
           color: '#101828',
           '&::after': {
             content: '""',
@@ -63,11 +63,10 @@ export const theme = createTheme({
             pointerEvents: 'none',
             zIndex: 0,
             background:
-              'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.045) 0%, transparent 65%),' +
-              'radial-gradient(ellipse 60% 40% at 85% 90%, rgba(212,175,55,0.03) 0%, transparent 60%),' +
-              'radial-gradient(ellipse 50% 50% at 10% 80%, rgba(212,175,55,0.025) 0%, transparent 55%)',
-            opacity: 0.85,
-            mixBlendMode: 'soft-light',
+              'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(184,134,11,0.06) 0%, transparent 65%),' +
+              'radial-gradient(ellipse 60% 40% at 85% 90%, rgba(184,134,11,0.04) 0%, transparent 60%),' +
+              'radial-gradient(ellipse 50% 50% at 10% 80%, rgba(184,134,11,0.03) 0%, transparent 55%)',
+            opacity: 0.9,
           },
         },
         '.text-highlight-gold': {

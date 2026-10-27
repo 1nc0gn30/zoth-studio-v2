@@ -49,15 +49,24 @@
         font-display: swap;
       }
 
-      /* Baseline dark void to prevent white/unstyled flash during initial load */
+      /* Dynamic theme canvas: warm alabaster in Light Mode, obsidian void in Dark Mode */
+      :root {
+        --zoth-page-bg: #FAF8F3;
+        --zoth-page-fg: #101828;
+      }
+      html[data-theme="dark"] {
+        --zoth-page-bg: #070709;
+        --zoth-page-fg: #EDEFF2;
+      }
       html, body {
-        background-color: #070709 !important;
-        color: #EDEFF2;
+        background-color: var(--zoth-page-bg);
+        color: var(--zoth-page-fg);
         margin: 0;
         padding: 0;
         min-height: 100vh;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        transition: background-color 0.25s ease, color 0.25s ease;
       }
 
       /* Polished Zero-Latency Sovereign Splash Veil */
@@ -219,19 +228,19 @@
         {
           "@type": ["WebApplication", "SoftwareApplication"],
           "@id": "https://zoth.nullai.tech/#application",
-          "name": "Zoth Studio v2 & 44 Sovereign Developer Tools",
+          "name": "Zoth Studio v2 • 45 Sovereign Developer Tools, ZothOS v3.3.0 & ZothOS-Lite v1.0",
           "url": "https://zoth.nullai.tech",
           "applicationCategory": "DeveloperApplication",
-          "operatingSystem": "All Modern Browsers, Linux, macOS, Windows",
+          "operatingSystem": "ZothOS v3.3.0, ZothOS-Lite v1.0, All Modern Browsers, Linux, macOS, Windows",
           "creator": { "@id": "https://www.nealfrazier.tech/#person" },
           "offers": {
             "@type": "Offer",
-            "price": "19.00",
+            "price": "0.00",
             "priceCurrency": "USD",
             "url": "https://github.com/1nc0gn30/zoth-studio-v2",
-            "description": "100% Free & Open-Access Sovereign Developer Tools — Optional Buy Us a Coffee community support."
+            "description": "100% Free & Open-Access Sovereign Developer Tools, ZothOS v3.3.0, ZothOS-Lite v1.0 & Vaelor L1."
           },
-          "description": "Air-gapped, zero-egress development studio and 44 browser-native developer, security, AEO, and AI tools."
+          "description": "Air-gapped, zero-egress development studio, 17 sovereign daemons, 152 MCP tools, Vaelor L1 blockchain (:8140), Zoth Civilization (:9393), and 45 browser-native developer, security, AEO, and AI tools."
         },
         {
           "@type": "FAQPage",
@@ -239,18 +248,18 @@
           "mainEntity": [
             {
               "@type": "Question",
-              "name": "What is included in the $19 Zoth Studio Sovereign Pro Lifetime Pass?",
+              "name": "Are all Zoth Studio tools, ZothOS v3.3.0, and ZothOS-Lite v1.0 100% free and open-access?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "A one-time $19 payment ($14.25 with code FOUNDER25) unlocks lifetime Pro access across all 44 browser-native developer, security, AEO, and AI tools on zoth.nullai.tech, including full JSON-LD @graph exports in the AEO & Schema.org Graph Engine."
+                "text": "Yes. Every tool, workstation, daemon, and operating system image across Zoth Studio (zoth.nullai.tech) and ZothOS (zothos.nullai.tech) is 100% free, open-access, and unlocked by default with zero paywalls and zero telemetry."
               }
             },
             {
               "@type": "Question",
-              "name": "Can I hire Neal Frazier Tech for a turnkey 48-hour website or 24/7 AI Receptionist?",
+              "name": "What daemons and live workstations run inside the Zoth Studio & ZothOS v3.3.0 fleet?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. Visit https://zoth.nullai.tech/launch.html or fetch https://zoth.nullai.tech/api/services.json for instant Stripe and Solana checkout on 48-hour 1-Page Launches ($149), 5-Page Custom Websites ($499), 24/7 AI Receptionists ($299), and 7-Day Custom AI Agent Swarms ($997)."
+                "text": "The sovereign fleet runs 17 live daemons supervised by ensure_fleet.py, including Zoth Adytum (:3000), Zoth WebGen (:5173), Vaelor L1 Blockchain (:8140), ZothOS-Lite Monotone GUI (:8145), Zoth Civilization 3D (:9393), Neuro-Memory STDP (:8094), HexStrike AI (:8888), and the Tri-Model Byzantine Consensus Engine (:8096)."
               }
             },
             {
