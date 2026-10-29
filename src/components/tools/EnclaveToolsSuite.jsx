@@ -374,7 +374,7 @@ export function AzothArchonTool() {
         </Button>
       </Box>
 
-      <Paper sx={{ p: 2, bgcolor: darkPanel(theme), color: 'var(--zs-mint)', fontFamily: mono, fontSize: '0.82rem', height: 200, overflowY: 'auto', borderRadius: 2, border: `1px solid ${darkPanelBorder(theme)}` }}>
+      <Paper sx={{ p: 2, bgcolor: darkPanel(theme), color: '#34D399', fontFamily: mono, fontSize: '0.82rem', height: 200, overflowY: 'auto', borderRadius: 2, border: `1px solid ${darkPanelBorder(theme)}` }}>
         {logs.map((log, idx) => (
           <div key={idx} style={{ marginBottom: 4 }}>{log}</div>
         ))}
@@ -812,10 +812,10 @@ export function NeuroMemoryTool() {
           </Paper>
 
           {/* Hippocampal Pattern Completion Status */}
-          <Paper sx={{ p: 2, mt: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: darkPanel(theme), color: 'var(--zs-sky)', fontFamily: mono, fontSize: '0.78rem' }}>
+          <Paper sx={{ p: 2, mt: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: darkPanel(theme), color: '#38BDF8', fontFamily: mono, fontSize: '0.78rem' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
               <span style={{ color: '#D4AF37' }}>Hippocampal Indexing:</span>
-              <strong style={{ color: 'var(--zs-mint)' }}>CA3 / CA1 ACTIVE</strong>
+              <strong style={{ color: '#34D399' }}>CA3 / CA1 ACTIVE</strong>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
               <span>DLPFC Buffer:</span>
@@ -1601,14 +1601,14 @@ export function AgentEgressSentinelTool() {
             </TableContainer>
 
             {/* Telemetry Metrics Footer */}
-            <Paper sx={{ p: 1.8, mt: 2, bgcolor: darkPanel(theme), color: 'var(--zs-sky)', fontFamily: mono, fontSize: '0.76rem', borderRadius: 2 }}>
+            <Paper sx={{ p: 1.8, mt: 2, bgcolor: darkPanel(theme), color: '#38BDF8', fontFamily: mono, fontSize: '0.76rem', borderRadius: 2 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
                 <span style={{ color: '#D4AF37' }}>Throughput Monitored:</span>
                 <strong>4.82 MB (Zero Cloud Egress)</strong>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
                 <span>TLS ClientHello Sniffer:</span>
-                <span style={{ color: 'var(--zs-mint)' }}>ACTIVE (Zero Root CA)</span>
+                <span style={{ color: '#34D399' }}>ACTIVE (Zero Root CA)</span>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>Socket Audit (/proc/net/tcp):</span>
@@ -2387,15 +2387,15 @@ export function AgentFlightRecorderTool() {
           >
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5, pb: 1, borderBottom: '1px solid #1E2230' }}>
               <Stack direction="row" spacing={1} alignItems="center">
-                <TerminalIcon sx={{ fontSize: 16, color: 'var(--zs-sky)' }} />
-                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: 'var(--zs-sky)', fontSize: '0.75rem' }}>
+                <TerminalIcon sx={{ fontSize: 16, color: '#38BDF8' }} />
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: '#38BDF8', fontSize: '0.75rem' }}>
                   SYNCHRONIZED TERMINAL LOGS
                 </Typography>
               </Stack>
               <Chip
                 label={`${terminalLines.length} LINES`}
                 size="small"
-                sx={{ fontFamily: mono, fontSize: '0.65rem', height: 20, bgcolor: 'rgba(56, 189, 248, 0.15)', color: 'var(--zs-sky)' }}
+                sx={{ fontFamily: mono, fontSize: '0.65rem', height: 20, bgcolor: 'rgba(56, 189, 248, 0.15)', color: '#38BDF8' }}
               />
             </Box>
 
@@ -2475,7 +2475,7 @@ export function AgentFlightRecorderTool() {
                       <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, fontSize: '0.68rem', color: ev.source === 'prompt-firewall' ? '#EF4444' : '#38BDF8' }}>
                         {ev.source.toUpperCase()} • {ev.type}
                       </Typography>
-                      <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-slate)', fontSize: '0.65rem' }}>
+                      <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontSize: '0.65rem' }}>
                         {((ev.offset_ms ?? 0) / 1000).toFixed(2)}s
                       </Typography>
                     </Box>
@@ -2820,7 +2820,7 @@ export function PrintifyConnectorTool() {
                 {copiedCmd ? 'Copied' : 'Copy CLI'}
               </Button>
             </Box>
-            <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
               ./bin/printify-connector calculate-margins --blueprint {selectedBp} --retail {retailPrice}
             </Typography>
           </Paper>
@@ -2993,7 +2993,7 @@ export function GelatoConnectorTool() {
                 {copiedCmd ? 'Copied' : 'Copy CLI'}
               </Button>
             </Box>
-            <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
               ./bin/gelato-connector route-order --country {destCountry} --price {itemPrice}
             </Typography>
           </Paper>
@@ -3171,7 +3171,7 @@ export function EtsyConnectorTool() {
                 {copiedCmd ? 'Copied' : 'Copy CLI'}
               </Button>
             </Box>
-            <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
               ./bin/etsy-connector audit-seo --title &quot;{title.slice(0, 30)}...&quot;
             </Typography>
           </Paper>
@@ -3450,7 +3450,7 @@ export function EtsyPodForgeTool() {
                 {copiedCmd ? 'Copied' : 'Copy CLI'}
               </Button>
             </Box>
-            <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
               ./bin/etsy-pod-forge generate --archetype {archetype}
             </Typography>
           </Paper>
@@ -3660,7 +3660,7 @@ export function PodSmartRouterTool() {
                   {copiedCmd ? 'Copied' : 'Copy CLI'}
                 </Button>
               </Box>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
                 ./bin/pod-smart-router route --sku {productSku} --country {destCountry} --qty {quantity}
               </Typography>
             </Box>
@@ -3897,7 +3897,7 @@ For best results, use heavyweight matte paper or archival cardstock (200+ GSM).`
                   {copiedCmd ? 'Copied' : 'Copy CLI'}
                 </Button>
               </Box>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
                 ./bin/digital-asset-forge generate --width {artWidth} --height {artHeight} --ratios {selectedRatios.join(',')}
               </Typography>
             </Box>
@@ -4074,7 +4074,7 @@ export function PodMockupForgeTool() {
                   {copiedCmd ? 'Copied' : 'Copy CLI'}
                 </Button>
               </Box>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
                 ./bin/pod-mockup-forge render --product {silhouette} --scene {sceneBackdrop} --lighting {lighting}
               </Typography>
             </Box>
@@ -4251,7 +4251,7 @@ export function PodMarginSentinelTool() {
                   {copiedCmd ? 'Copied' : 'Copy CLI'}
                 </Button>
               </Box>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
                 ./bin/pod-margin-sentinel calculate --retail {retailPrice} --base {baseCost}
               </Typography>
             </Box>
@@ -4479,7 +4479,7 @@ export function AgentVoiceCallTool() {
                   {copiedCmd ? 'Copied' : 'Copy CLI'}
                 </Button>
               </Box>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
                 ./bin/agent-voice-call call --voice {selectedVoice}
               </Typography>
             </Box>
@@ -4667,7 +4667,7 @@ export function McpLensTool() {
                   {copiedCmd ? 'Copied' : 'Copy CLI'}
                 </Button>
               </Box>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
                 ./bin/mcp-lens sniff --port 8109
               </Typography>
             </Box>
@@ -4681,7 +4681,7 @@ export function McpLensTool() {
             </Typography>
 
             <Paper elevation={0} sx={{ p: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 1.5 }}>
-              <pre style={{ margin: 0, fontFamily: mono, fontSize: '0.68rem', color: 'var(--zs-sky)', overflowX: 'auto', whiteSpace: 'pre-wrap', maxHeight: 280 }}>
+              <pre style={{ margin: 0, fontFamily: mono, fontSize: '0.68rem', color: '#38BDF8', overflowX: 'auto', whiteSpace: 'pre-wrap', maxHeight: 280 }}>
                 {JSON.stringify(current.optimizedJson, null, 2)}
               </pre>
             </Paper>
@@ -4953,7 +4953,7 @@ export function AgentBudgetSentinelTool() {
                   {copiedCmd ? 'Copied' : 'Copy CLI'}
                 </Button>
               </Box>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
                 ./bin/agent-budget serve --web-port 8110 --proxy-port 8111
               </Typography>
             </Box>
@@ -5015,7 +5015,7 @@ export function AgentBudgetSentinelTool() {
               Simulate Ingress Request
             </Button>
 
-            <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-slate)', fontWeight: 700, display: 'block', mb: 0.5 }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 700, display: 'block', mb: 0.5 }}>
               RECENT INGRESS TRANSACTIONS:
             </Typography>
             <TableContainer component={Paper} elevation={0} sx={{ border: `1px solid ${theme.palette.divider}`, bgcolor: darkPanel(theme), borderRadius: 1.5, maxHeight: 160 }}>
@@ -5032,10 +5032,10 @@ export function AgentBudgetSentinelTool() {
                 <TableBody>
                   {recentEvents.map((ev) => (
                     <TableRow key={ev.id}>
-                      <TableCell sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.5, color: 'var(--zs-slate)' }}>{ev.time}</TableCell>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.5, color: '#94A3B8' }}>{ev.time}</TableCell>
                       <TableCell sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.5, color: '#E2E8F0' }}>{ev.model}</TableCell>
-                      <TableCell sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.5, color: 'var(--zs-sky)' }}>{ev.tokens}</TableCell>
-                      <TableCell sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.5, color: 'var(--zs-emerald)', fontWeight: 800 }}>{ev.cost}</TableCell>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.5, color: '#38BDF8' }}>{ev.tokens}</TableCell>
+                      <TableCell sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.5, color: '#10B981', fontWeight: 800 }}>{ev.cost}</TableCell>
                       <TableCell sx={{ fontFamily: mono, fontSize: '0.65rem', py: 0.5, color: ev.status === 'PASS' ? '#10B981' : '#F43F5E', fontWeight: 800 }}>
                         {ev.status}
                       </TableCell>
@@ -5194,7 +5194,7 @@ export function ZothWebgenLauncherTool() {
                   {copiedCmd ? 'Copied' : 'Copy CLI'}
                 </Button>
               </Box>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
                 cd ~/NullAITech/zoth-webgen && node cli.js --name {appName} --framework {framework} --archetype {archetype}
               </Typography>
             </Box>
@@ -5422,7 +5422,7 @@ export function ZothSwarmMultiplexerLauncherTool() {
                   {copiedCmd ? 'Copied' : 'Copy CLI'}
                 </Button>
               </Box>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
                 cd ~/NullAITech/zoth-swarm-multiplexer && node engine.js --swarm 21 --consensus {quorum / 100}
               </Typography>
             </Box>
@@ -5475,16 +5475,16 @@ export function ZothSwarmMultiplexerLauncherTool() {
                         <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: '#F8FAFC' }}>
                           {i + 1}. {agent.name}
                         </Typography>
-                        <Typography sx={{ fontFamily: mono, fontSize: '0.62rem', color: 'var(--zs-emerald)' }}>
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.62rem', color: '#10B981' }}>
                           {agent.ping}
                         </Typography>
                       </Box>
-                      <Typography sx={{ fontFamily: mono, fontSize: '0.65rem', color: 'var(--zs-slate)' }}>
+                      <Typography sx={{ fontFamily: mono, fontSize: '0.65rem', color: '#94A3B8' }}>
                         {agent.role}
                       </Typography>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.2 }}>
                         <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#10B981' }} />
-                        <Typography sx={{ fontFamily: mono, fontSize: '0.6rem', color: 'var(--zs-mint)', fontWeight: 700 }}>
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.6rem', color: '#34D399', fontWeight: 700 }}>
                           {agent.status}
                         </Typography>
                       </Box>
@@ -5560,7 +5560,7 @@ export function ZothCivilizationLauncherTool() {
 
             <Stack spacing={1.5} sx={{ mb: 2.5 }}>
               <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
-                <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-slate)', display: 'block' }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', display: 'block' }}>
                   ACTIVE CITIZEN POPULATION:
                 </Typography>
                 <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 900, color: gold(theme) }}>
@@ -5569,19 +5569,19 @@ export function ZothCivilizationLauncherTool() {
               </Box>
 
               <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
-                <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-slate)', display: 'block' }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', display: 'block' }}>
                   ECONOMIC VELOCITY:
                 </Typography>
-                <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 900, color: 'var(--zs-emerald)' }}>
+                <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 900, color: '#10B981' }}>
                   {velocity} ZOTH Credits / hr
                 </Typography>
               </Box>
 
               <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}` }}>
-                <Typography variant="caption" sx={{ fontFamily: mono, color: 'var(--zs-slate)', display: 'block' }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', display: 'block' }}>
                   THERMAL INVARIANT STATUS:
                 </Typography>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', color: 'var(--zs-sky)', fontWeight: 700 }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', color: '#38BDF8', fontWeight: 700 }}>
                   ✓ CPU &lt; 50°C · Fans 0 RPM · Kokoro Standby
                 </Typography>
               </Box>
@@ -5601,7 +5601,7 @@ export function ZothCivilizationLauncherTool() {
                   {copiedCmd ? 'Copied' : 'Copy CLI'}
                 </Button>
               </Box>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
                 cd ~/NullAITech/zoth-civilization && ENABLE_KOKORO_VOICE=0 node server.js
               </Typography>
             </Box>
@@ -5831,7 +5831,7 @@ export function LikenessDeskTool() {
                   {copiedCmd ? 'Copied' : 'Copy CLI'}
                 </Button>
               </Box>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
                 cd ~/NullAITech/likeness-desk && node server.js
               </Typography>
             </Box>
@@ -5865,7 +5865,7 @@ export function LikenessDeskTool() {
             </Typography>
 
             <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, mb: 2 }}>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-sky)', fontWeight: 700, mb: 1 }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#38BDF8', fontWeight: 700, mb: 1 }}>
                 HARDWARE ACCELERATION SPECIFICATION
               </Typography>
               <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', color: '#CBD5E1', lineHeight: 1.6 }}>
@@ -5878,7 +5878,7 @@ export function LikenessDeskTool() {
             </Box>
 
             <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, textAlign: 'center' }}>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', mb: 1 }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8', mb: 1 }}>
                 LIP-SYNC RENDER STATE
               </Typography>
               {done ? (
@@ -5886,7 +5886,7 @@ export function LikenessDeskTool() {
                   <Typography sx={{ fontFamily: mono, fontSize: '0.8rem', color: successFg(theme), fontWeight: 800 }}>
                     ✓ 15-SECOND VIDEO DOUBLE CLIP COMPILED
                   </Typography>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'var(--zs-slate)', mt: 0.5 }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: '#94A3B8', mt: 0.5 }}>
                     Generated with 68-point facial landmark alignment. Ready at data/output.mp4
                   </Typography>
                 </Box>
@@ -6144,7 +6144,7 @@ export default function ${pascal}() {
                   {copiedCmd ? 'Copied' : 'Copy CLI'}
                 </Button>
               </Box>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)', wordBreak: 'break-all' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#38BDF8', fontWeight: 600, wordBreak: 'break-all' }}>
                 {isLocalHost
                   ? 'cd ~/NullAITech/bolt.diy && pnpm run dev'
                   : 'git clone https://github.com/1nc0gn30/zoth-webgen.git && cd zoth-webgen && pnpm run dev'}
@@ -6234,7 +6234,7 @@ export default function ${pascal}() {
             </Box>
 
             <Box sx={{ p: 2, borderRadius: 2, bgcolor: darkPanel(theme), border: `1px solid ${darkPanelBorder(theme)}`, mb: 1.5 }}>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-emerald)', fontWeight: 700, mb: 1 }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#10B981', fontWeight: 700, mb: 1 }}>
                 VIRTUAL FILE SYSTEM & MODULE TOPOLOGY
               </Typography>
               <pre style={{ margin: 0, fontFamily: mono, fontSize: '0.73rem', color: '#E2E8F0', whiteSpace: 'pre-wrap', lineHeight: 1.55 }}>

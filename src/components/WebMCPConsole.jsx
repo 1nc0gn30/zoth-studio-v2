@@ -339,11 +339,19 @@ export default function WebMCPConsole() {
                   <Typography variant="body2" sx={{ color: '#E2E8F0', mb: 2, lineHeight: 1.6 }}>
                     {demoChapters[simStep].desc}
                   </Typography>
-                  <Box sx={{ p: 1.5, bgcolor: '#06060A', borderRadius: 1.5, border: '1px dashed rgba(255,255,255,0.1)' }}>
-                    <Typography variant="caption" sx={{ color: 'var(--zs-emerald)', display: 'block', mb: 0.5 }}>
+                  <Box sx={{ p: 2, bgcolor: '#05050A', borderRadius: 2, border: '1px solid rgba(212,175,55,0.3)', boxShadow: 'inset 0 1px 4px rgba(0,0,0,0.6)' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, pb: 0.75, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                      <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#EF4444' }} />
+                      <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#F59E0B' }} />
+                      <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: '#10B981' }} />
+                      <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: '#94A3B8', ml: 0.5, fontWeight: 700 }}>
+                        kernel-ipc-terminal (tty: local-loopback)
+                      </Typography>
+                    </Box>
+                    <Typography variant="caption" sx={{ color: '#34D399', display: 'block', mb: 0.5, fontWeight: 700, textShadow: '0 0 8px rgba(52,211,153,0.35)', wordBreak: 'break-all' }}>
                       $ [ZOTH-KERNEL-IPC] webmcp_bridge --transport sse --port 8094 --bind 127.0.0.1
                     </Typography>
-                    <Typography variant="caption" sx={{ color: 'var(--zs-slate)', display: 'block' }}>
+                    <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', fontWeight: 600, wordBreak: 'break-all' }}>
                       &gt; Tools registered: 30 sovereign tools · WebGPU acceleration enabled · Zero egress telemetry: OK
                     </Typography>
                   </Box>

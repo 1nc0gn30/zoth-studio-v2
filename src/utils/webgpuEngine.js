@@ -321,19 +321,22 @@ let inBrowserPipelinePromise = null;
  * Execute client-side LLM inference directly in-browser using WebGPU via @huggingface/transformers.
  * Falls back to WebAssembly CPU SIMD if WebGPU is not supported.
  */
-export async function runInBrowserWebGPUModel({ prompt, systemPrompt, maxTokens = 64, onProgress, onToken }) {
+export async function runInBrowserWebGPUModel({ prompt, systemPrompt, maxTokens = 192, onProgress, onToken }) {
   const startTime = performance.now();
   const userQuery = String(prompt || '').trim();
-  const device = navigator.gpu ? 'webgpu' : 'wasm';
+  const device = typeof navigator !== 'undefined' && navigator.gpu ? 'webgpu' : 'wasm';
   const modelId = 'onnx-community/Qwen2.5-0.5B-Instruct';
 
+  const { pipeline, env, TextStreamer } = await import('@huggingface/transformers');
+  env.allowLocalModels = false;
+
   if (!inBrowserPipelinePromise) {
-    const { pipeline, env } = await import('@huggingface/transformers');
-    env.allowLocalModels = false;
     inBrowserPipelinePromise = pipeline('text-generation', modelId, {
       dtype: 'q4',
       device,
-      progress_callback: onProgress,
+      progress_callback: (prog) => {
+        if (onProgress) onProgress(prog);
+      },
     });
   }
 
@@ -344,14 +347,61 @@ export async function runInBrowserWebGPUModel({ prompt, systemPrompt, maxTokens 
     { role: 'user', content: userQuery }
   ];
 
+  let accumulated = '';
+  let streamer = null;
+  if (TextStreamer && generator.tokenizer) {
+    try {
+      streamer = new TextStreamer(generator.tokenizer, {
+        skip_prompt: true,
+        skip_special_tokens: true,
+        callback_function: (piece) => {
+          accumulated += piece;
+          if (onToken) onToken(accumulated);
+        }
+      });
+    } catch (e) {
+      console.warn('TextStreamer initialization bypassed:', e);
+    }
+  }
+
   const output = await generator(messages, {
     max_new_tokens: maxTokens,
     do_sample: false,
     temperature: 0.2,
+    ...(streamer ? { streamer } : {})
   });
 
-  const fullText = (output?.[0]?.generated_text?.[1]?.content || output?.[0]?.generated_text || '').trim();
-  if (onToken) onToken(fullText);
+  // Extract the assistant's response from the conversation output
+  const genArray = output?.[0]?.generated_text;
+  let fullText = '';
+  if (Array.isArray(genArray)) {
+    // In chat mode, the assistant reply is appended as the last element of the array
+    for (let i = genArray.length - 1; i >= 0; i--) {
+      if (genArray[i]?.role === 'assistant' && genArray[i]?.content) {
+        fullText = genArray[i].content.trim();
+        break;
+      }
+    }
+    if (!fullText && genArray.length > 0) {
+      const last = genArray[genArray.length - 1];
+      fullText = (last?.content || String(last || '')).trim();
+    }
+  } else if (typeof genArray === 'string') {
+    const splitMatch = genArray.split(/<\|im_start\|>assistant\s*/i);
+    if (splitMatch.length > 1) {
+      fullText = splitMatch[splitMatch.length - 1].replace(/<\|im_end\|>.*$/s, '').trim();
+    } else {
+      fullText = genArray.trim();
+    }
+  }
+
+  if (!fullText && accumulated) {
+    fullText = accumulated.trim();
+  }
+
+  if (onToken && fullText) {
+    onToken(fullText);
+  }
 
   const elapsedMs = Math.max(1, performance.now() - startTime).toFixed(1);
   const words = fullText.split(/\s+/).filter(Boolean).length;
@@ -378,7 +428,7 @@ export async function runInBrowserWebGPUModel({ prompt, systemPrompt, maxTokens 
  * - 'in-browser-webgpu': Runs Qwen 2.5 0.5B directly in the browser via WebGPU & Transformers.js.
  * - 'zoth-ai' / 'zoth-ai-micro': Probes local Ollama (127.0.0.1:11434). If offline, returns honest hardware verification.
  */
-export async function runZothAIModel({ prompt, systemPrompt, model = 'in-browser-webgpu', maxTokens = 128, onProgress, onToken }) {
+export async function runZothAIModel({ prompt, systemPrompt, model = 'in-browser-webgpu', maxTokens = 192, onProgress, onToken }) {
   const startTime = performance.now();
   const userQuery = String(prompt || '').trim();
 

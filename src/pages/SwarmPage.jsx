@@ -1154,6 +1154,8 @@ export default function SwarmPage() {
           {/* Animated Heartbeat EKG Waveform Visualizer */}
           <RevealOnScroll preset="scaleUp">
           <Box
+            className="terminal-surface"
+            data-terminal="true"
             sx={{
               p: 2.5,
               mb: 3,
@@ -1184,7 +1186,7 @@ export default function SwarmPage() {
               <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: '#F5E6AB', fontWeight: 700 }}>
                 {daemonState.up ? '● LIVE SWARM TELEMETRY: 21 THREADS SYNCED' : '● SWARM CADRE SIMULATOR (STANDBY)'}
               </Typography>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: 'var(--zs-slate)' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#94A3B8' }}>
                 {daemonState.up ? `Interval: ${heartbeatRate}ms · Jitter: ±0.02ms` : 'Status: Daemon Offline'}
               </Typography>
             </Box>
@@ -1211,10 +1213,10 @@ export default function SwarmPage() {
             </Box>
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1, position: 'relative', zIndex: 1 }}>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-slate)' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8' }}>
                 STREAM TRANSPORT: {daemonState.up ? 'HTTP/1.1 & SSE · 127.0.0.1:8989 (ACTIVE)' : 'OFFLINE · RUN NPX ZOTH UP TO STREAM'}
               </Typography>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'var(--zs-mint)', fontWeight: 800 }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#34D399', fontWeight: 800 }}>
                 EGRESS: 0 BYTES (AIR-GAPPED LOCAL HOST)
               </Typography>
             </Box>
@@ -1420,7 +1422,10 @@ export default function SwarmPage() {
 
           {/* Real-Time Ping Audit Console */}
           <RevealOnScroll preset="fadeUp" delay={0.4}>
-          <Box sx={{ p: 2, bgcolor: isDark ? '#050508' : '#0F172A', borderRadius: 2, border: '1px solid', borderColor: isDark ? 'rgba(212,175,55,0.2)' : '#1E293B' }}>
+          <Box
+            className="terminal-surface"
+            data-terminal="true"
+            sx={{ p: 2, bgcolor: isDark ? '#050508' : '#0F172A', borderRadius: 2, border: '1px solid', borderColor: isDark ? 'rgba(212,175,55,0.2)' : '#1E293B' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.2 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <TerminalIcon sx={{ fontSize: '1rem', color: '#D4AF37' }} />
@@ -1431,17 +1436,17 @@ export default function SwarmPage() {
               <Chip
                 label="AIR-GAP VERIFIED"
                 size="small"
-                sx={{ fontFamily: mono, fontSize: '0.65rem', fontWeight: 800, bgcolor: 'rgba(52,211,153,0.14)', color: 'var(--zs-mint)' }}
+                sx={{ fontFamily: mono, fontSize: '0.65rem', fontWeight: 800, bgcolor: 'rgba(52,211,153,0.14)', color: '#34D399' }}
               />
             </Box>
 
             <Box sx={{ maxHeight: 130, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 0.5 }}>
               {pingLogs.map((log) => (
-                <Typography key={log.id} sx={{ fontFamily: mono, fontSize: '0.74rem', color: 'var(--zs-slate)', lineHeight: 1.4 }}>
-                  <span style={{ color: '#64748B' }}>[{log.time}]</span>{' '}
+                <Typography key={log.id} sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#CBD5E1', lineHeight: 1.4 }}>
+                  <span style={{ color: '#94A3B8' }}>[{log.time}]</span>{' '}
                   <span style={{ color: getCadreColor(log.cadre, true), fontWeight: 700 }}>PING {log.cadre}</span>{' '}
-                  <span style={{ color: '#64748B' }}>-&gt; {log.socket}:</span>{' '}
-                  <span style={{ color: 'var(--zs-mint)', fontWeight: 700 }}>rtt={log.rtt}</span>{' '}
+                  <span style={{ color: '#94A3B8' }}>-&gt; {log.socket}:</span>{' '}
+                  <span style={{ color: '#34D399', fontWeight: 700 }}>rtt={log.rtt}</span>{' '}
                   <span style={{ color: '#F5E6AB' }}>status={log.status}</span>
                 </Typography>
               ))}

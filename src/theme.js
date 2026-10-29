@@ -54,7 +54,7 @@ export const theme = createTheme({
         // Accent text tokens: neon in dark mode, AA-safe (>=4.5:1 on white/tints) in light mode.
         ':root': { '--zs-sky': '#0369A1', '--zs-emerald': '#047857', '--zs-mint': '#047857', '--zs-slate': '#475569', '--zs-amber': '#B45309', '--zs-green': '#15803D' },
         // Terminal surfaces & code containers ALWAYS require luminescent neon phosphors (>7.5:1 AAA contrast) regardless of light or dark theme
-        '[data-terminal="true"], .terminal-surface, .terminal-window, .terminal-box, pre, code, .terminal-screen': {
+        '[data-terminal="true"], .terminal-surface, .terminal-window, .terminal-box, .terminal-pane, .console-box, .dark-panel, [data-dark-panel="true"], pre, code, .terminal-screen': {
           '--zs-sky': '#38BDF8 !important',
           '--zs-emerald': '#10B981 !important',
           '--zs-mint': '#34D399 !important',

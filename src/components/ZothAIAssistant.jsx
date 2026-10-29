@@ -96,7 +96,22 @@ export default function ZothAIAssistant({ toolName, actions = [], accent = '#D4A
         ],
         { max_new_tokens: 64, do_sample: false, temperature: 0 }
       );
-      const raw = (out?.[0]?.generated_text?.[1]?.content || out?.[0]?.generated_text || '').trim();
+      const genList = out?.[0]?.generated_text;
+      let raw = '';
+      if (Array.isArray(genList)) {
+        for (let i = genList.length - 1; i >= 0; i--) {
+          if (genList[i]?.role === 'assistant' && genList[i]?.content) {
+            raw = genList[i].content.trim();
+            break;
+          }
+        }
+        if (!raw && genList.length > 0) {
+          raw = (genList[genList.length - 1]?.content || String(genList[genList.length - 1] || '')).trim();
+        }
+      } else if (typeof genList === 'string') {
+        const splitMatch = genList.split(/<\|im_start\|>assistant\s*/i);
+        raw = (splitMatch.length > 1 ? splitMatch[splitMatch.length - 1].replace(/<\|im_end\|>.*$/s, '') : genList).trim();
+      }
       const jsonMatch = raw.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
         pushLog({ type: 'ai', text: raw.slice(0, 200) });

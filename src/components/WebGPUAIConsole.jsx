@@ -55,6 +55,7 @@ export default function WebGPUAIConsole() {
   const [streamingText, setStreamingText] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationMeta, setGenerationMeta] = useState(null);
+  const [modelLoadingProgress, setModelLoadingProgress] = useState(null);
   const [copied, setCopied] = useState(false);
 
   // Netlify Blobs Community Stream Leaderboard State
@@ -122,22 +123,38 @@ export default function WebGPUAIConsole() {
     setIsGenerating(true);
     setStreamingText('');
     setGenerationMeta(null);
+    setModelLoadingProgress(null);
 
     try {
       const result = await runZothAIModel({
         prompt: prompt.trim(),
         model: selectedModel,
+        onProgress: (prog) => {
+          if (prog?.status === 'progress') {
+            const rawFile = prog.file ? String(prog.file).split('/').pop() : 'model.onnx';
+            setModelLoadingProgress({
+              file: rawFile,
+              progress: Math.min(100, Math.round(prog.progress ?? 0)),
+            });
+          } else if (prog?.status === 'done' || prog?.status === 'ready') {
+            setModelLoadingProgress(null);
+          }
+        },
         onToken: (accumulated) => {
+          setModelLoadingProgress(null);
           setStreamingText(accumulated);
         },
       });
       if (result.isLocked) {
         setStreamingText(result.message);
+      } else if (result.fullText && !streamingText) {
+        setStreamingText(result.fullText);
       }
       setGenerationMeta(result);
     } catch (err) {
       setStreamingText(`[Execution Error] ${err.message || 'WebGPU compute pass failed'}`);
     } finally {
+      setModelLoadingProgress(null);
       setIsGenerating(false);
     }
   };
@@ -516,6 +533,30 @@ export default function WebGPUAIConsole() {
           </Stack>
         </Box>
       </Box>
+
+      {/* Model Loading / Shader Compilation Progress Bar */}
+      {modelLoadingProgress && (
+        <Box sx={{ mt: 3, p: 2, bgcolor: isDark ? '#05050A' : '#F1F5F9', borderRadius: 2, border: `1px solid ${isDark ? 'rgba(56,189,248,0.3)' : '#CBD5E1'}` }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, color: '#38BDF8', fontWeight: 700 }}>
+              ⚡ Compiling WebGPU Shader Pipeline & Loading ONNX Weights ({modelLoadingProgress.file})...
+            </Typography>
+            <Typography variant="caption" sx={{ fontFamily: mono, color: '#10B981', fontWeight: 800 }}>
+              {modelLoadingProgress.progress}%
+            </Typography>
+          </Box>
+          <LinearProgress
+            variant="determinate"
+            value={modelLoadingProgress.progress}
+            sx={{
+              height: 6,
+              borderRadius: 3,
+              bgcolor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
+              '& .MuiLinearProgress-bar': { bgcolor: gold }
+            }}
+          />
+        </Box>
+      )}
 
       {/* Real-time Streaming Output Console */}
       {(streamingText || isGenerating) && (
