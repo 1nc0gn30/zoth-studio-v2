@@ -76,7 +76,7 @@ export default function ZothOSShowcasePage() {
   const features = [
     {
       icon: <SecurityIcon sx={{ fontSize: 32 }} />,
-      title: 'Dual Parity Cyber Arsenal (175+ Tools)',
+      title: 'Kali and Parrot security tools',
       desc: 'Complete Kali Linux and Parrot Security parity out of the box. Pre-configured Burp Suite, Caido, Nmap, Metasploit, Recon-ng, Wireshark, and NullAI HexStrike Terminal with zero setup friction.',
       badge: 'OFFENSIVE SEC',
     },
@@ -115,7 +115,7 @@ export default function ZothOSShowcasePage() {
   const comparisonRows = [
     {
       feature: 'Offensive Security & Pentesting',
-      zoth: '175+ Curated Tools (Kali + Parrot Parity)',
+      zoth: 'Kali and Parrot security tools',
       kali: '150+ Tools',
       parrot: '150+ Tools',
       ubuntu: 'None (Manual install)',

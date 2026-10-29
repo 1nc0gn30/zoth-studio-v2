@@ -1091,7 +1091,7 @@ export default function ZothOSPage() {
               100% Sovereign, Free & Unlocked by Default
             </Typography>
             <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontSize: '0.85rem', lineHeight: 1.55 }}>
-              All ISO images, KVM appliances, 175+ security tools, and local LLM wrappers are 100% free with zero paywalls, zero license keys, and zero subscriptions. If ZothOS saves you time, support independent engineering with a coffee or Solana tip!
+              All ISO images, KVM appliances, Kali and Parrot security tools, and local LLM wrappers are 100% free with zero paywalls, zero license keys, and zero subscriptions. If ZothOS saves you time, support independent engineering with a coffee or Solana tip!
             </Typography>
           </Box>
 
