@@ -28,7 +28,7 @@ const RFP_OPPORTUNITIES = [
     id: 'hr-757-cyber',
     region: 'Hampton Roads (757) Municipal Enclave',
     solNumber: 'RFP-757-2026-CYBER-09',
-    title: 'Zero-Trust Municipal Endpoint & Air-Gapped AI Document Triage',
+    title: 'Zero-Trust Municipal Endpoint & Offline-Capable AI Document Triage',
     naics: '541512 (Computer Systems Design Services)',
     ceilingUsd: 185000,
     complianceRequired: ['NIST SP 800-171', 'CJIS Security Policy v5.9', 'Virginia VITA SEC530'],
@@ -150,7 +150,7 @@ export default function CivicProcurementGodModeTool() {
 **Architecture**: ZothOS v3.3.0 Zero-Egress Sovereign Enclave (${activeTheme.name})
 
 ## 1. Executive Summary & Technical Differentiation
-Neal Frazier Tech (@1nc0gn30 • 757tech.pro • nullai.tech) delivers air-gapped, zero-egress Linux & AI automation infrastructure engineered for municipal, defense, and enterprise enclaves. All LLM inference (Ollama 127.0.0.1:11434), YARA-X threat scanning, and FOIA document redaction execute 100% on-premises without external cloud telemetry.
+Neal Frazier Tech (@1nc0gn30 • 757tech.pro • nullai.tech) delivers offline-capable, zero-egress Linux & AI automation infrastructure engineered for municipal, defense, and enterprise enclaves. All LLM inference (Ollama 127.0.0.1:11434), YARA-X threat scanning, and FOIA document redaction execute 100% on-premises without external cloud telemetry.
 
 ## 2. Compliance & Security Matrix
 ${activeRfp.complianceRequired.map((c) => `- [x] **${c}** — Verified via ZothOS Ring-0 / Ring-2 enclave isolation & default-deny UFW posture.`).join('\n')}

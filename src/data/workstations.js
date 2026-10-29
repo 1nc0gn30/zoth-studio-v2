@@ -26,7 +26,7 @@ export const workstations = [
     path: "/studio/ide.html",
     band: "Build",
     type: "cockpit",
-    description: "Air-gapped full code editor, AST syntax inspection, and multi-agent pair programming.",
+    description: "Offline-capable full code editor, AST syntax inspection, and multi-agent pair programming.",
     alsoInApp: "/workstations/ide"
   },
   {
@@ -413,7 +413,7 @@ export const workstations = [
     path: "/studio/hexstrike.html",
     band: "Security",
     type: "enclave_daemon",
-    description: "Air-gapped security sentinel with Shannon entropy audit, CVE matrix, and exploit sandbox.",
+    description: "Offline-capable security sentinel with Shannon entropy audit, CVE matrix, and exploit sandbox.",
     alsoInApp: "/hexstrike"
   },
   {

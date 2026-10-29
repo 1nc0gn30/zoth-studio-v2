@@ -22,7 +22,7 @@ const HERMETIC_KEYS = [
   { key: 0, arcana: '0 · The Fool (Aleph)', phase: 'Zero-State Intention', gate: 'Air / Pneuma', prompt: 'Strip all inherited assumptions; define the irreducible sovereign objective.' },
   { key: 1, arcana: 'I · The Magician (Beth)', phase: 'Tool & Will Alignment', gate: 'Mercury / Logos', prompt: 'Bind local CLI tools, MCP endpoints, and hardware compute to the single intention.' },
   { key: 7, arcana: 'VII · The Chariot (Cheth)', phase: 'Deterministic Execution Vector', gate: 'Cancer / Armor', prompt: 'Lock the execution harness into a bounded, zero-drift trajectory with verify gates.' },
-  { key: 9, arcana: 'IX · The Hermit (Yod)', phase: 'Air-Gapped Incubation', gate: 'Virgo / Lantern', prompt: 'Isolate the reasoning loop inside loopback silicon (127.0.0.1) with zero external egress.' },
+  { key: 9, arcana: 'IX · The Hermit (Yod)', phase: 'Offline-Capable Incubation', gate: 'Virgo / Lantern', prompt: 'Isolate the reasoning loop inside loopback silicon (127.0.0.1) with zero external egress.' },
   { key: 11, arcana: 'XI · Justice (Lamed)', phase: 'Invariant Equilibrium Audit', gate: 'Libra / Scales', prompt: 'Verify mathematical invariants, memory safety, and cryptographic proofs before commit.' },
   { key: 21, arcana: 'XXI · The World (Tau)', phase: 'Manifestation & Seal', gate: 'Saturn / Crown', prompt: 'Seal the compiled artifact, emit deterministic SHA-256 manifest, and close the rite.' },
 ];

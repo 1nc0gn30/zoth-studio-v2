@@ -86,7 +86,7 @@ Decoupled and responsive, the 24 workstations provide full operational environme
 - **Intelligence & Models**: AI Model Foundry, DeepSearch Research Agent, PromptMaster Studio, Session Chronicle, Agent Experience Powerhouse (`/ax`).
 
 ### 1.2 30 Authentic Sovereign Micro-Tools
-Zero-network developer utilities built for air-gapped security:
+Developer utilities that run locally with no network calls:
 1. `adytum-alchemist-ai-workflow` - 22-key hermetic planning rite and incubation gate.
 2. `azoth-local-agent` - Archon core orchestrator for local zero-telemetry task dispatching.
 3. `sovereign-agent-bridge` - E2EE WebSocket signal protocol and Simplex peer mesh IPC communicator.
@@ -95,7 +95,7 @@ Zero-network developer utilities built for air-gapped security:
 6. `deepsearch-research-agent` - Autonomous multi-source research agent with grounded inline citations.
 7. `promptmaster-studio` - In-browser prompt optimizer. Pro is $19, and the live page has a free plan.
 8. `hexstrike-arsenal` - Autonomous penetration audit suite, CVE matrix inspector, and exploit payload lab.
-9. `envguard-secrets-vault` - Argon2id + AES-256-GCM hardware vault for zero-cloud secret storage. Live app is $29.
+9. `envguard-secrets-vault` - Argon2id + AES-256-GCM software vault for local secret storage. Live app is $29. <!-- TODO: verify price -->
 10. `jwt-inspector-guard` - In-browser JWT token decoder, cryptographic signature validator, and claim auditor.
 11. `payload-entropy-studio` - In-browser Shannon entropy analysis tool for detecting obfuscated payloads.
 12. `web-security-guard` - Security headers auditor, CSP validator, and WAF protection scanner.

@@ -91,7 +91,7 @@ const BAND_CONFIG = {
     border: 'rgba(248, 113, 113, 0.35)',
     lightBorder: '#FECACA',
     icon: SecurityIcon,
-    description: 'Shannon entropy monitors, threat simulation & air-gapped web3 bridges',
+    description: 'Shannon entropy monitors, threat simulation & offline-capable web3 bridges',
     svgPos: { x: 460, y: 405 },
   },
   'Spatial': {

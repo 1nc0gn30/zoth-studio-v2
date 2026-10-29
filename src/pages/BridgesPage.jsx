@@ -1775,7 +1775,7 @@ export default function BridgesPage() {
             {ledgerTab === 'telemetry' && (
               <Box>
                 <Typography variant="caption" sx={{ color: '#F5E6AB', fontWeight: 800, mb: 1.5, display: 'block' }}>
-                  RECENT SOVEREIGN MESH PACKET HISTORY (ZERO-EGRESS AIR-GAPPED IPC):
+                  RECENT SOVEREIGN MESH PACKET HISTORY (LOCAL-FIRST IPC):
                 </Typography>
                 <Box component="table" sx={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.78rem' }}>
                   <thead>

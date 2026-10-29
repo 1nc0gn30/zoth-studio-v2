@@ -40,7 +40,7 @@ const CRAWLER_AGENTS = [
   { id: 'PerplexityBot/1.0', name: 'PerplexityBot/1.0', vendor: 'Perplexity AI Search', ip: '127.0.0.1 (Loopback Gateway)' },
   { id: 'DeepSeek-R1-Agent', name: 'DeepSeek-R1-Agent', vendor: 'DeepSeek Reasoning Core', ip: '127.0.0.1 (Loopback Gateway)' },
   { id: 'OpenClaw', name: 'OpenClaw', vendor: 'Open-Source Autonomous Crawler', ip: '127.0.0.1 (Loopback Gateway)' },
-  { id: 'Local Pantheon Agent', name: 'Local Pantheon Agent', vendor: 'Zoth Air-Gapped Archon', ip: '127.0.0.1 (Internal Bus)' },
+  { id: 'Local Pantheon Agent', name: 'Local Pantheon Agent', vendor: 'Zoth Offline-Capable Archon', ip: '127.0.0.1 (Internal Bus)' },
 ];
 
 // 2. Discovery Endpoints with full live samples and token stats
@@ -55,12 +55,12 @@ const DISCOVERY_ENDPOINTS = [
     content: `# Zoth Studio v2 — LLM & Autonomous Agent Profile
 
 > Entity: Zoth Studio (NullAI Tech)
-> System Type: Zero-Egress Air-Gapped Sovereign AI Agent Studio
+> System Type: Zero-Egress Offline-Capable Sovereign AI Agent Studio
 > Canonical URL: https://zoth.nullai.tech
 > Repository: https://github.com/NullAITech/zoth-studio-v2
 
 ## Core Identity & Mission
-Zoth Studio v2 is an air-gapped, zero-egress development studio designed for orchestrating autonomous AI agent pantheons, local LLMs, and biomorphic synaptic memory matrices. All prompts, secrets, and weights execute strictly on local loopback enclaves with zero cloud telemetry or data leakage.
+Zoth Studio v2 is an offline-capable, zero-egress development studio designed for orchestrating autonomous AI agent pantheons, local LLMs, and biomorphic synaptic memory matrices. All prompts, secrets, and weights execute strictly on local loopback enclaves with zero cloud telemetry or data leakage.
 
 ## Architecture & Enclave Binds
 - Loopback UI: http://127.0.0.1:3000 (React 19.3 + MUI v5 SPA)
@@ -77,7 +77,7 @@ Zoth Studio v2 is an air-gapped, zero-egress development studio designed for orc
 - Function: Guides the sovereign agent pantheon through the Whitespace Cyberspace memory stratum.
 - Memory Law: Spike-Timing-Dependent Plasticity (STDP) adjusts synaptic weights (dw = A+ * exp(-dt/tau)). Frequent queries reinforce memories; stale vectors decay logarithmically.
 
-## 24 Studio Workstations & 25 Tools
+## 43 Studio Workstations & 71 Tools
 - Build: Agent Composer (DAG builder), AX Powerhouse, IDE Code Foundry, Edge Forge, Tool Bench, WebGen.
 - Security: HexStrike CVE matrix, Web3 Sovereign Solana Bridge, SubSweep lead scanner, Adytum Key Sanctum.
 - Swarm & Consensus: 3-Agent Byzantine Triangulation (Socratic AST debate), Swarm NOC, Cockpit radar, Signal Bridge.
@@ -118,7 +118,7 @@ SECTION 1: PANTHEON AGENT TOPOLOGY & ARCHITECTURE
   * Sol-Chronicle: Persistent local telemetry and AST diff changelog recorder.
 
 ================================================================================
-SECTION 2: ZERO-EGRESS AIR-GAPPED AUDIT INVARIANTS
+SECTION 2: LOCAL-FIRST AUDIT INVARIANTS
 ================================================================================
 1. Zero outbound TCP/UDP sockets to non-loopback IP ranges.
 2. Complete absence of third-party telemetry scripts, Google Fonts, and CDNs.
@@ -325,10 +325,10 @@ const TASK_PRESETS = [
 ];
 
 function synthesizeSovereignDirective(customTask) {
-  const goal = customTask.trim() || 'Execute sovereign developer directives within the air-gapped Zoth Studio enclave.';
+  const goal = customTask.trim() || 'Execute sovereign developer directives within the offline-capable Zoth Studio enclave.';
 
   return `### SYSTEM DIRECTIVE: ZOTH ZERO-EGRESS SOVEREIGN AGENT PROTOCOL v2.0
-CLASSIFICATION: AIR-GAPPED LOCAL LOOPBACK ENCLAVE // STRICT AUTONOMOUS DIRECTIVE
+CLASSIFICATION: OFFLINE-CAPABLE LOCAL LOOPBACK ENCLAVE // STRICT AUTONOMOUS DIRECTIVE
 ORACLE CODEC: 8094 // LUCY COGNITIVE ORACLE SEMANTIC BUS
 AUTHORITY: NullAI Tech / Zoth Studio Architecture Guild
 
@@ -340,7 +340,7 @@ ${goal}
 ================================================================================
 2. NON-NEGOTIABLE ZERO-EGRESS ARCHITECTURAL INVARIANTS
 ================================================================================
-You are operating within an air-gapped, zero-egress developer enclave. You are
+You are operating within an offline-capable, zero-egress developer enclave. You are
 strictly bound by the following OWASP Zero-Egress Invariants:
 - INVARIANT 01 [AIR-GAP]: ZERO OUTBOUND EGRESS — Never initiate external HTTP/HTTPS
   sockets, DNS lookups, cloud telemetry, or tracking beacons. All socket operations
@@ -698,7 +698,7 @@ export default function AXPage() {
         
         <HeroItem>
         <Typography color="text.secondary" sx={{ maxWidth: 880, fontSize: '1.05rem', lineHeight: 1.65 }}>
-          Standardized machine-readable ontology, crawler simulation playground, and sovereign prompt compiler designed for autonomous AI agents (ChatGPT, Claude, Perplexity, DeepSeek, OpenClaw, Ollama) interacting with air-gapped Zoth Studio enclaves.
+          Standardized machine-readable ontology, crawler simulation playground, and sovereign prompt compiler designed for autonomous AI agents (ChatGPT, Claude, Perplexity, DeepSeek, OpenClaw, Ollama) interacting with offline-capable Zoth Studio enclaves.
         </Typography>
         </HeroItem>
       </Box>
@@ -1063,7 +1063,7 @@ export default function AXPage() {
               <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
                   <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold.accent, letterSpacing: '0.03em' }}>
-                    ZERO-EGRESS AIR-GAPPED VERIFIED SEAL
+                    LOCAL-FIRST VERIFIED SEAL
                   </Typography>
                   <Chip
                     label="PROBE CERTIFIED"
@@ -1142,7 +1142,7 @@ export default function AXPage() {
           >
             <div>HTTP/1.1 200 OK</div>
             <div>Date: Thu, 24 Sep 2026 04:26:42 GMT</div>
-            <div>Server: Zoth-Zero-Egress-Enclave/2.0 (Linux x86_64 air-gapped)</div>
+            <div>Server: Zoth-Zero-Egress-Enclave/2.0 (Linux x86_64 offline-capable)</div>
             <div style={{ color: isDark ? '#10B981' : '#34D399', fontWeight: 700 }}>Access-Control-Allow-Origin: *</div>
             <div>Content-Type: {currentEndpointData.mime}</div>
             <div>Content-Length: {currentEndpointData.sizeBytes} bytes</div>
@@ -1326,7 +1326,7 @@ export default function AXPage() {
                 }}
               />
               <Chip
-                label="Invariants: OWASP Air-Gapped Strict"
+                label="Invariants: OWASP Offline-Capable Strict"
                 size="small"
                 sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.1)' : '#ECFDF5', color: isDark ? '#10B981' : '#047857', fontWeight: 700, fontSize: '0.72rem', border: isDark ? 'none' : '1px solid #A7F3D0' }}
               />
@@ -1620,7 +1620,7 @@ export default function AXPage() {
       {/* Sovereign Installation Funnel */}
       <SovereignFunnel
         title="Deploy Agent Experience (AX) Engine Locally"
-        subtitle="Zero-egress machine discovery ontology, automated prompt compiler, and local crawler simulation for air-gapped sovereign intelligence."
+        subtitle="Zero-egress machine discovery ontology, automated prompt compiler, and local crawler simulation for offline-capable sovereign intelligence."
         toolTitle="Option 1: Sovereign Agent Bridge Micro-Repo"
         toolTag="AX ONTOLOGY"
         toolDescription="Standalone zero-egress ontology and agent communication protocol for local model instruction routing and machine-readable schema validation."

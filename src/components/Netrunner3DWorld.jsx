@@ -712,7 +712,7 @@ export default function Netrunner3DWorld({
       'Kernel': ['STDP Memory Allocator', 'Sovereign Ring-0 Enclave', 'Hippocampal SWR Sequencer'],
       'Lucy Oracle': ['Deepnet Breach Oracle', 'Trans-dimensional Synthesizer', 'Semantic Latency Buffer'],
       'Consensus': ['Byzantine Paxos Engram', 'Validator Quorum Vector', 'Cryptographic Proof Trace'],
-      'Security': ['Air-Gapped Isolation Seal', 'Zero-Egress Memory Jail', 'Entropy Shield Attractor'],
+      'Security': ['Offline-Capable Isolation Seal', 'Zero-Egress Memory Jail', 'Entropy Shield Attractor'],
       'Vault': ['SQLite Vector Stratum', 'Obsidian Canvas Exporter', 'AES-256 Memory Ledger'],
       'Pantheon': ['Companion Familiar Empathy', 'Emergent Collective Mind', 'Evolving Cognitive Horizon'],
       'Obsidian': ['Karpathy LLM Wiki Synapse', 'JSON Canvas 1.0 Topograph', 'Obsidian Bases Stratum', 'STDP Memory Compiler'],

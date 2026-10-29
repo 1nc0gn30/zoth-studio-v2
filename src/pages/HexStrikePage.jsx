@@ -171,7 +171,7 @@ const PRIMARY_PORTS = [
   { port: 8989, name: 'Swarm Multiplexer', service: 'SSE Cadres & Telemetry', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.15ms', pid: 'pid:4821 [local]' },
   { port: 8790, name: 'Azoth Local Archon Agent', service: 'Autonomous Local Orchestrator', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.10ms', pid: 'pid:4823 [local]' },
   { port: 8787, name: 'Hardware Secrets Vault', service: 'Argon2id + AES-256-GCM', protocol: 'TCP/RPC', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.14ms', pid: 'pid:4824 [local]' },
-  { port: 11434, name: 'Ollama Local LLM', service: 'Air-Gapped Neural Inference', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.22ms', pid: 'pid:4901 [local]' },
+  { port: 11434, name: 'Ollama Local LLM', service: 'Offline-Capable Neural Inference', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.22ms', pid: 'pid:4901 [local]' },
   { port: 3000, name: 'Zoth Studio v2 UI', service: 'Sovereign Web Console', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.05ms', pid: 'pid:5102 [local]' },
   { port: 8080, name: 'Local Proxy Bridge', service: 'CORS Blackhole Sanitizer', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.11ms', pid: 'pid:5115 [local]' },
   { port: 9090, name: 'Telemetry Blackhole', service: 'Zero-Egress Metrics Sink', protocol: 'TCP/HTTP', status: 'SECURE / ENCLAVE-BOUND', bind: '127.0.0.1', wan: 'BLOCKED', latency: '0.09ms', pid: 'pid:5120 [local]' },
@@ -369,7 +369,7 @@ export default function HexStrikePage() {
       );
     } else if (cmd === 'cve audit') {
       newLogs.push(
-        { type: 'out', text: '[+] DISPATCHING DEEP CVE AUDIT ENGINE [127.0.0.1 / AIR-GAPPED]...' },
+        { type: 'out', text: '[+] DISPATCHING DEEP CVE AUDIT ENGINE [127.0.0.1 / OFFLINE-CAPABLE]...' },
         { type: 'out', text: '[+] Scanned 1,420 local packages, binary bridges, and wasm runtimes.' },
         { type: 'gold', text: '    • CVE-2024-3094 (xz upstream backdoor): IMMUNE (Static Musl Enclave)' },
         { type: 'gold', text: '    • CVE-2023-4863 (libwebp heap overflow): PATCHED (v1.3.2 Enforced)' },
@@ -419,7 +419,7 @@ export default function HexStrikePage() {
     } else if (cmd === 'status') {
       newLogs.push(
         { type: 'out', text: '[+] ENCLAVE SECURITY POSTURE: HARDENED (98/100)' },
-        { type: 'out', text: '    • Egress State     : ZERO-EGRESS AIR-GAPPED (0.00 KB/s WAN)' },
+        { type: 'out', text: '    • Egress State     : LOCAL-FIRST (0.00 KB/s WAN)' },
         { type: 'out', text: '    • Socket Isolation : 64/64 ports bound to 127.0.0.1' },
         { type: 'out', text: '    • Cipher Spec      : AES-256-GCM + Argon2id (m=64MB, t=3, p=4)' },
         { type: 'out', text: '    • Hardware Root    : TPM 2.0 PCR-7 Key Seal Active' }
@@ -636,7 +636,7 @@ export default function HexStrikePage() {
               />
               <Chip
                 icon={<VerifiedUserIcon sx={{ fontSize: '1rem !important', color: gold.accent }} />}
-                label="ZERO-EGRESS AIR-GAPPED"
+                label="LOCAL-FIRST"
                 size="small"
                 sx={{
                   bgcolor: gold.wash,
@@ -820,7 +820,7 @@ export default function HexStrikePage() {
               </Box>
 
               <Typography variant="caption" sx={{ mt: 1.5, fontFamily: mono, color: theme.palette.text.secondary, textAlign: 'center' }}>
-                0 Exposed WAN Sockets • 0 Active CVEs • Air-Gapped
+                0 Exposed WAN Sockets • 0 Active CVEs • Offline-Capable
               </Typography>
             </Grid>
 
@@ -843,7 +843,7 @@ export default function HexStrikePage() {
                 <Box sx={{ flexGrow: 1 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 0.5, flexWrap: 'wrap', gap: 1 }}>
                     <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold.emeraldSoft, fontFamily: mono }}>
-                      ZERO-EGRESS VERIFIED (Air-Gapped Loopback Enclave)
+                      ZERO-EGRESS VERIFIED (Offline-Capable Loopback Enclave)
                     </Typography>
                     <Chip
                       label="CONFIRMED 0.00 KB/s WAN"
@@ -1243,7 +1243,7 @@ export default function HexStrikePage() {
               <TerminalIcon sx={{ color: gold.accent }} /> Why HexStrike Runs in an Isolated Local Enclave
             </Typography>
             <Chip
-              label="ZERO-EGRESS AIR-GAPPED INVARIANT"
+              label="LOCAL-FIRST INVARIANT"
               size="small"
               sx={{ fontFamily: mono, bgcolor: isDark ? '#08080B' : '#0F172A', color: isDark ? gold.soft : '#F5E6AB', border: `1px solid ${gold.border}`, fontWeight: 750 }}
             />

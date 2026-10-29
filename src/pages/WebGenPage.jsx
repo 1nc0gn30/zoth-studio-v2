@@ -188,7 +188,7 @@ export default function SovereignDashboard() {
           { label: 'Cluster Latency', value: latency, icon: Activity, change: '-4.2ms', status: 'optimal' },
           { label: 'AST Seal Hash', value: '0x8F4A...3B21', icon: ShieldCheck, change: 'Verified', status: 'verified' },
           { label: 'Swarm Nodes', value: '6 / 6 Online', icon: Cpu, change: '100% Health', status: 'optimal' },
-          { label: 'Zero-Egress Security', value: '0 Bytes Out', icon: Terminal, change: 'Air-Gapped', status: 'optimal' },
+          { label: 'Zero-Egress Security', value: '0 Bytes Out', icon: Terminal, change: 'Offline-Capable', status: 'optimal' },
         ].map((kpi, idx) => (
           <div key={idx} className="bg-[#12131C] border border-[#D4AF37]/20 rounded-2xl p-5 hover:border-[#D4AF37]/60 transition duration-300 shadow-xl group">
             <div className="flex justify-between items-center mb-3">
@@ -260,7 +260,7 @@ const metrics = [
   { label: 'Cluster Latency', value: clusterLatency, status: '12.4ms' },
   { label: 'AST Seal Hash', value: '0x8F4A...3B21', status: 'Cryptographic' },
   { label: 'Swarm Nodes', value: '6 / 6 Online', status: 'Autonomous' },
-  { label: 'Zero-Egress', value: '0 B Egress', status: 'Air-Gapped' }
+  { label: 'Zero-Egress', value: '0 B Egress', status: 'Offline-Capable' }
 ];
 ---
 
@@ -376,7 +376,7 @@ const title = ref('Sovereign SaaS Dashboard');
 const metrics = ref([
   { label: 'Cluster Latency', val: '12.4ms', status: 'Optimal' },
   { label: 'AST Seal Hash', val: '0x8F4A...3B21', status: 'Cryptographic' },
-  { label: 'Zero-Egress', val: '0 Bytes Out', status: 'Air-Gapped' }
+  { label: 'Zero-Egress', val: '0 Bytes Out', status: 'Offline-Capable' }
 ]);
 
 function refreshMetrics() {
@@ -434,7 +434,7 @@ export default function SovereignDashboard() {
         <div class="bg-[#12131C] border border-[#D4AF37]/20 rounded-2xl p-5">
           <span class="text-xs font-mono text-slate-400 uppercase">ZERO-EGRESS</span>
           <div class="text-2xl font-black text-white font-mono mt-2">0 Bytes Out</div>
-          <span class="text-xs font-semibold text-[#10B981] mt-1 inline-block">● Air-Gapped</span>
+          <span class="text-xs font-semibold text-[#10B981] mt-1 inline-block">● Offline-Capable</span>
         </div>
       </div>
     </div>
@@ -521,7 +521,7 @@ export default function CyberpunkPortfolio() {
           <p className="text-slate-400 text-xs mt-1">Autonomous Agent Systems • Rust & WASM High-Frequency Synthesizer</p>
         </div>
         <div className="text-xs text-[#10B981] font-bold px-3 py-1 bg-[#10B981]/10 border border-[#10B981]/30 rounded">
-          ● LATENCY: 3.8ms // AIR-GAPPED
+          ● LATENCY: 3.8ms // OFFLINE-CAPABLE
         </div>
       </header>
 
@@ -1177,7 +1177,7 @@ const solPrice = "1.25 SOL";
 <html lang="en" class="bg-[#08080B] text-slate-100 font-sans">
   <body class="p-8 max-w-2xl mx-auto">
     <header class="border-b border-[#D4AF37]/30 pb-4 mb-6">
-      <span class="text-xs font-mono text-[#D4AF37] font-bold">SOLANA AIR-GAPPED MINT</span>
+      <span class="text-xs font-mono text-[#D4AF37] font-bold">SOLANA OFFLINE-CAPABLE MINT</span>
       <h1 class="text-3xl font-black text-white mt-1">Sovereign Mint Deck</h1>
     </header>
     <div class="bg-[#12131C] border border-[#D4AF37]/30 p-8 rounded-3xl text-center">
@@ -1634,7 +1634,7 @@ function generateStandaloneHtml(templateName) {
       <div class="card">
         <div class="card-title">Cryptographic Seal</div>
         <div class="card-metric" style="color: var(--emerald); font-size: 24px;">0x8F4A...3B21</div>
-        <div class="card-status">● AIR-GAPPED VERIFIED</div>
+        <div class="card-status">● OFFLINE-CAPABLE VERIFIED</div>
       </div>
       <div class="card">
         <div class="card-title">Egress Packet Audit</div>
@@ -1942,7 +1942,7 @@ TARGET ARCHETYPE: ${tpl.name.toUpperCase()}
 CATEGORY: ${tpl.tag}
 FRAMEWORK: ${currentFw.name.toUpperCase()} (${currentFw.badge})
 DESIGN THEME: ${THEMES.find(t => t.id === selectedTheme)?.name || 'Sovereign Imperial Gold'}
-SECURITY SPEC: OWASP TOP 10 HARDENED, CONTENT-SECURITY-POLICY STRICT (AIR-GAPPED)
+SECURITY SPEC: OWASP TOP 10 HARDENED, CONTENT-SECURITY-POLICY STRICT (OFFLINE-CAPABLE)
 A11Y STANDARD: WCAG 2.2 AAA COMPLIANT
 ACTIVE SKILLS: ${selectedSkills.join(', ').toUpperCase()}
 
@@ -2022,7 +2022,7 @@ wait $PID`;
 ## System Overview
 - **Archetype**: ${tpl.name}
 - **Framework**: ${currentFw.name}
-- **Security Standard**: Air-gapped, zero-cloud egress, deterministic WASM AST.
+- **Security Standard**: Offline-capable, zero-cloud egress, deterministic WASM AST.
 - **A11y**: WCAG 2.2 AAA certified.
 
 ## Core Capabilities

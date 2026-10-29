@@ -142,7 +142,7 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             ]),
         { type: 'empty', text: '' },
         { type: 'cyan', text: 'Sovereign Tool Repositories: 25/25 verified on disk' },
-        { type: 'gold', text: 'OWASP Zero-Egress Invariant: 0 outbound connections detected. Host air-gapped.' },
+        { type: 'gold', text: 'OWASP Zero-Egress Invariant: 0 outbound connections detected. Host offline-capable.' },
       ],
     },
     pull: {
@@ -152,7 +152,7 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
       cmd: `npx @nullaitech/zoth pull ${selectedTool}`,
       lines: [
         { type: 'command', text: `$ npx @nullaitech/zoth pull ${selectedTool}` },
-        { type: 'dim', text: `Zoth CLI 2.0.0 · fetching air-gapped repository: ${selectedTool}...` },
+        { type: 'dim', text: `Zoth CLI 2.0.0 · fetching offline-capable repository: ${selectedTool}...` },
         { type: 'empty', text: '' },
         { type: 'cyan', text: `Cloning repository: ${selectedTool} from @NullAITech` },
         { type: 'success', text: `✔ Created ./tools/${selectedTool}` },
@@ -679,7 +679,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
         'All 25 authentic tools are unified directly into Zoth Studio v2. They render with the native gold-on-void design system, zero external runtime dependency, and immediate interactive execution across Security & Recon, Swarm & Core, Developer Velocity, Memory & Cognitive, and Crypto & Identity.',
       metrics: [
         { label: 'Total Arsenal Tools', value: '25 Sovereign', desc: '100% Client-Side Native' },
-        { label: 'Loopback Enclaves', value: ':8989 / :8094', desc: 'Air-Gapped Process Isolation' },
+        { label: 'Loopback Enclaves', value: ':8989 / :8094', desc: 'Offline-Capable Process Isolation' },
         { label: 'Runtime Egress', value: '0.00 KB', desc: 'OWASP Zero-Egress Compliant' },
         { label: 'Cadres Supported', value: '5 Tactical', desc: 'Security, Swarm, Velocity, Memory, Crypto' },
       ],
@@ -728,7 +728,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
         'Zero localStorage, sessionStorage, or cookie exfiltration',
         'WebGPU tensor matrix acceleration with WASM SIMD 128-bit fallback',
         'Self-contained single-page execution with copyable CLI pull hooks',
-        'Air-gapped verification against open-source GitHub repositories',
+        'Offline-capable verification against open-source GitHub repositories',
       ],
       specs: [
         { label: 'Execution Tier', value: 'Client WebGPU WGSL + WASM' },
@@ -777,7 +777,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
       ],
       specs: [
         { label: 'Memory Architecture', value: 'Client-Side HNSW + STDP Worker' },
-        { label: 'Protocol', value: 'Local Air-Gapped IPC / WASM' },
+        { label: 'Protocol', value: 'Local Offline-Capable IPC / WASM' },
         { label: 'Recall Latency', value: '< 1.2ms Local Retrieval' },
         { label: 'Persistence Format', value: 'Local Encrypted JSON State' },
       ],
@@ -844,7 +844,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
       title: 'Adytum Vault: Argon2id Hardware Sanctum',
       subtitle: 'Zero-Knowledge Memory-Hard Cryptographic Key Derivation & Incubation Rite',
       description:
-        'Air-gapped cryptographic sanctum. Derives high-entropy master keys using memory-hard Argon2id (t=3, m=64MB, p=4) and protects operator secrets at rest with XChaCha20-Poly1305 authenticated encryption and WebCrypto primitives.',
+        'Offline-capable cryptographic sanctum. Derives high-entropy master keys using memory-hard Argon2id (t=3, m=64MB, p=4) and protects operator secrets at rest with XChaCha20-Poly1305 authenticated encryption and WebCrypto primitives.',
       metrics: [
         { label: 'Cryptographic Engine', value: 'Argon2id + WebCrypto', desc: 'In-Browser Enclave' },
         {
@@ -859,7 +859,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
         'Zero-knowledge key derivation with side-channel immune memory hardness',
         '5-Minute (300s) incubation rite enforces tamper-resistant cryptographic patience',
         'Sodium mprotect page locking prevents cold-boot memory dumps',
-        'Completely air-gapped from external networks; loopback only',
+        'Completely offline-capable from external networks; loopback only',
       ],
       specs: [
         { label: 'Sanctum Binary', value: 'Rust target/release/zoth-vault' },
@@ -893,7 +893,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
             5 Pillars <span className="text-gradient-gold">Architecture Explorer</span>
           </Typography>
           <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 780, lineHeight: 1.65 }}>
-            Interactive blueprint of Zoth Studio v2 sovereign foundations: offline workstations, standalone micro-tools, biological neuro memory, quorum consensus, and air-gapped cryptographic vaults.
+            Interactive blueprint of Zoth Studio v2 sovereign foundations: offline workstations, standalone micro-tools, biological neuro memory, quorum consensus, and offline-capable cryptographic vaults.
           </Typography>
         </Box>
         <Chip

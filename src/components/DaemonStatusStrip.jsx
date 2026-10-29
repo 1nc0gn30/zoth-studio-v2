@@ -51,7 +51,7 @@ export default function DaemonStatusStrip() {
     }
   };
 
-  // When viewed on public website (zoth.nullai.tech), daemons run air-gapped on the operator's bare-metal node
+  // When viewed on public website (zoth.nullai.tech), daemons run offline-capable on the operator's bare-metal node
   if (!isLocal) {
     return (
       <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1, mb: 3 }}>

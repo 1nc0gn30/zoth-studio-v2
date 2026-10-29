@@ -259,7 +259,7 @@ export default function ZothOSPage() {
     {
       id: 'bitwarden',
       name: 'Bitwarden CLI',
-      desc: 'Air-Gapped Encrypted Password & Secrets Vault',
+      desc: 'Offline-Capable Encrypted Password & Secrets Vault',
       icon: LockIcon,
       installed: hostInfo?.installedTools?.bitwarden,
       tag: 'CREDENTIAL VAULT',
@@ -302,7 +302,7 @@ export default function ZothOSPage() {
       type: 'system',
       text: [
         'ZOTH SOVEREIGN OS v3.3.0-RELEASE (x86_64 Hardened Microkernel)',
-        'Built with Zero-Egress Invariant & Air-Gapped Cryptographic Enclaves.',
+        'Built with Zero-Egress Invariant & Offline-Capable Cryptographic Enclaves.',
         'Type "help" to inspect commands or execute "zoth boot --kvm" to run virtual boot sequence.',
       ].join('\n'),
     },
@@ -684,7 +684,7 @@ export default function ZothOSPage() {
           '  ollama list                   Display local quantized models registered in sandbox',
           '  cat /etc/zoth/invariants.conf Print sovereign security manifest & network policy',
           '  free -h                       Display hardware RAM buffer, KVM heap, & swap status',
-          '  ls -la /enclaves              Inspect air-gapped cryptographic filesystem mounts',
+          '  ls -la /enclaves              Inspect offline-capable cryptographic filesystem mounts',
           '  clear                         Clear terminal screen buffer',
         ].join('\n'),
       });
@@ -880,7 +880,7 @@ export default function ZothOSPage() {
                 <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1.5, alignItems: 'center' }}>
                   <Chip
                     icon={<SecurityIcon style={{ fontSize: 16, color: gold.accent }} />}
-                    label="SOVEREIGN LOCAL OPERATING SYSTEM // AIR-GAPPED KERNEL"
+                    label="SOVEREIGN LOCAL OPERATING SYSTEM // OFFLINE-CAPABLE KERNEL"
                     size="small"
                     sx={{
                       bgcolor: gold.wash,
@@ -1225,7 +1225,7 @@ export default function ZothOSPage() {
                     </Typography>
                     <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
                       {hostInfo?.isZothOS
-                        ? 'Air-gapped hardware microkernel & zero-egress packet filter active'
+                        ? 'Offline-capable hardware microkernel & zero-egress packet filter active'
                         : 'Operating in offline browser preview mode — full telemetry active on ZothOS'}
                     </Typography>
                   </Box>
@@ -1610,7 +1610,7 @@ export default function ZothOSPage() {
                     { code: 'CORE-02', name: 'GhostByte Metadata Stripper (mat2)', desc: 'Strips EXIF/GPS/PDF/Office metadata + SHA-256 & BLAKE2b digests' },
                     { code: 'CORE-03', name: 'HexStrike Amnesic Auditor', desc: 'Offline static vulnerability auditor & local port verifier' },
                     { code: 'CORE-04', name: 'Sovereign Tor & WireGuard Bridge', desc: 'Strict nftables egress kill-switch + per-stream Tor isolation' },
-                    { code: 'CORE-05', name: 'Vaelor L1 Air-Gapped Cold Signer', desc: 'Ed25519 deterministic keygen, offline tx signing & Braille RandomArt' },
+                    { code: 'CORE-05', name: 'Vaelor L1 Offline-Capable Cold Signer', desc: 'Ed25519 deterministic keygen, offline tx signing & Braille RandomArt' },
                     { code: 'CORE-06', name: 'Azoth Hardened Dev Suite', desc: 'Neovim + Rust/Go/Node/Python + Git GPG/SSH hardware signing' },
                     { code: 'CORE-07', name: '◈ Chain of Thoughts (zoth-cot)', desc: 'Multi-turn /api/chat context, auto fact extraction & SHA-256 Merkle DAG' },
                     { code: 'CORE-08', name: 'AZOTH Embodied Braille AI + Kokoro', desc: '6 mood rigs, phoneme lip-sync, Kokoro 82M ONNX Neural TTS & mic STT' },
@@ -2399,7 +2399,7 @@ $ zoth-lite-pkg wipe-ram`}
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                   <TerminalIcon sx={{ color: gold.accent }} />
                   <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                    Air-Gapped Privacy
+                    Offline-Capable Privacy
                   </Typography>
                 </Box>
                 <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.55 }}>
@@ -2797,7 +2797,7 @@ $ zoth-lite-pkg wipe-ram`}
         <RevealOnScroll preset="fadeUp" delay={0.6}>
           <SovereignFunnel
             title="Deploy Sovereign Zoth OS to Hardware"
-            subtitle="Zero-telemetry air-gapped operating system kernel for autonomous agent swarms, hardware enclave encryption, and memory vaults."
+            subtitle="Zero-telemetry offline-capable operating system kernel for autonomous agent swarms, hardware enclave encryption, and memory vaults."
             toolTitle="Option 1: Zoth CLI & Bootable ISO"
             toolTag="CLI & BARE METAL"
             toolDescription="Download and flash bootable Zoth OS image (zothos-3.3-amd64.iso) for direct bare-metal deployment, or check your machine with the Zoth CLI."

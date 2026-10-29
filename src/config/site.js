@@ -13,7 +13,7 @@ export const siteConfig = {
   legalName: 'NullAI Tech',
   url: 'https://zoth.nullai.tech',
   tagline: 'Zero-Egress Sovereign Agent Development Studio & Pantheon Matrix',
-  description: 'Zoth Studio v2 is an air-gapped, zero-egress development environment for autonomous AI agents, featuring biomorphic STDP memory, Lucy Netrunner Oracle, Byzantine consensus triangulation, sovereign developer cockpits, and 30 micro-tools.',
+  description: 'Zoth Studio v2 is a local-first, offline-capable development environment for autonomous AI agents, featuring biomorphic STDP memory, Lucy Netrunner Oracle, Byzantine consensus triangulation, sovereign developer cockpits, and 71 micro-tools (59 with public repos).',
   author: 'NullAI Tech',
   twitterHandle: '@NullAITech',
   githubUrl: 'https://github.com/NullAITech/zoth-studio-v2',
@@ -29,7 +29,7 @@ export const siteConfig = {
     'local LLM orchestration',
     'Ollama model foundry',
     'autonomous agent DAG composer',
-    'air-gapped AI workspace',
+    'offline-capable AI workspace',
     'React MUI studio v2',
     'Zoth Studio'
   ],
@@ -37,7 +37,7 @@ export const siteConfig = {
     '/': {
       title: 'Zoth Studio // Sovereign Agent Development Studio & Pantheon Matrix',
       description: 'Zero-egress development studio for autonomous AI agent pantheons, local model orchestration, and hardware-secured sovereign intelligence.',
-      keywords: 'Zoth Studio, sovereign AI, agent pantheon, zero egress studio, air-gapped agent development',
+      keywords: 'Zoth Studio, sovereign AI, agent pantheon, zero egress studio, offline-capable agent development',
       type: 'website',
     },
     '/adytum': {
@@ -60,14 +60,14 @@ export const siteConfig = {
     },
     '/arsenal': {
       title: 'The Sovereign Arsenal // Unified Command Matrix & Developer Catalog',
-      description: 'Unified master directory consolidating 47 sovereign assets: air-gapped developer cockpits, standalone micro-tools, and hardware enclaves.',
+      description: 'Unified master directory consolidating 47 sovereign assets: offline-capable developer cockpits, standalone micro-tools, and hardware enclaves.',
       keywords: 'sovereign arsenal, zoth catalog, developer cockpits, sovereign micro tools, hardware enclaves',
       type: 'article',
     },
     '/tools': {
-      title: 'Sovereign Tool Arsenal // 62 Air-Gapped Micro-Tools & Workstations',
+      title: 'Sovereign Tool Arsenal // 62 Offline-Capable Micro-Tools & Workstations',
       description: 'Explore 62 standalone, schema-validated developer tools and interactive God-Mode workstations with 15s code-first motion showcases.',
-      keywords: 'developer tools, zoth webgen, omnipost, subsweep, payload entropy, air-gapped tools',
+      keywords: 'developer tools, zoth webgen, omnipost, subsweep, payload entropy, offline-capable tools',
       type: 'article',
     },
     '/workstations': {
@@ -172,7 +172,7 @@ export function getRouteMeta(path = '/') {
     if (tool) {
       return {
         title: `${tool.name} // Zoth Sovereign Developer Tool`,
-        description: `${tool.description} Schema-validated air-gapped utility running inside Zoth Studio v2.`,
+        description: `${tool.description} Schema-validated offline-capable utility running inside Zoth Studio v2.`,
         keywords: `${tool.name}, ${(tool.tags || [tool.category, tool.executionType]).filter(Boolean).join(', ')}, Zoth Studio tool, zero-egress developer utility`,
         type: 'article'
       };
@@ -187,7 +187,7 @@ export function getRouteMeta(path = '/') {
       return {
         title: `${station.name} // Zoth Studio Workstation`,
         description: `Sovereign interactive workstation for ${station.name} (${station.band}). Decoupled and rendered directly in Zoth Studio v2.`,
-        keywords: `${station.name}, ${station.band}, Zoth workstation, air-gapped console`,
+        keywords: `${station.name}, ${station.band}, Zoth workstation, offline-capable console`,
         type: 'article'
       };
     }

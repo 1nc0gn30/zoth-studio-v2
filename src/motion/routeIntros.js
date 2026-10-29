@@ -4,7 +4,7 @@
  * Every route in App.jsx resolves to a rendered clip in /public/intros
  * (`<clip>-desktop.{webm,mp4}` + `<clip>-mobile.{webm,mp4}`). Docs sub-routes and
  * dynamic detail routes reuse their parent product's cut or category-matched cut
- * so the visual identity stays consistent across showcases, docs, and all 62 tools.
+ * so the visual identity stays consistent across showcases, docs, and all 71 tools.
  *
  * `accent` drives the handoff seam + HUD chrome colour for that route.
  */

@@ -275,7 +275,7 @@ export default function DocsPage() {
       },
       {
         id: 'sec-workstations',
-        title: '13. Sovereign Arsenal Architecture (25 Tools)',
+        title: '13. Sovereign Arsenal Architecture (71 tools, 59 with public repos)',
         topics: ['Enclaves & Netlify'],
         kicker: 'ARSENAL TOPOLOGY'
       },
@@ -398,7 +398,7 @@ Runs local invariant verification before staging tools.`
                 />
                 <Chip
                   icon={<HubIcon sx={{ fontSize: '14px !important', color: `${textSecondary} !important` }} />}
-                  label="24 WORKSTATIONS & 25 TOOLS"
+                  label="71 TOOLS · 59 PUBLIC REPOS"
                   size="small"
                   sx={{
                     bgcolor: dark ? '#14141E' : '#F2F4F7',
@@ -470,7 +470,7 @@ Runs local invariant verification before staging tools.`
                   mb: 3
                 }}
               >
-                Comprehensive architectural blueprint for Zoth Studio v2: air-gapped agent orchestration,
+                Comprehensive architectural blueprint for Zoth Studio v2: local-first agent orchestration,
                 biomorphic STDP synaptic memory, Lucy Cognitive Oracle, 3-agent Byzantine consensus,
                 Adytum Hardware Sanctum, and production Netlify deployment with 72 prerendered static routes.
               </Typography>
@@ -825,8 +825,8 @@ Runs local invariant verification before staging tools.`
                   </Box>
 
                   <Typography variant="body1" color="text.secondary" paragraph>
-                    Zoth Studio v2 is the air-gapped operator desk for sovereign AI agent development.
-                    Integrating 43 dedicated workstations, 65 sovereign micro-tools, Lucy Oracle STDP
+                    Zoth Studio v2 is the local-first operator desk (it can run offline) for sovereign AI agent development.
+                    Integrating 43 dedicated workstations, 71 micro-tools, Lucy Oracle STDP
                     synaptic memory, 3-agent Byzantine consensus, and the Adytum Hardware Sanctum,
                     all execution runs strictly on physical hardware via local loopback enclaves (
                     <code>127.0.0.1</code>).
@@ -971,7 +971,7 @@ npm run dev`}
 
                   <Typography variant="body1" color="text.secondary" paragraph>
                     Published micro-tools clone cleanly with <code>npm run zoth -- pull &lt;repo-name&gt;</code>.
-                    Each micro-tool operates air-gapped with zero telemetry.
+                    Micro-tools run in your browser with no telemetry; most make no network calls.
                   </Typography>
 
                   {/* Grid of Micro Tools */}
@@ -1740,7 +1740,7 @@ npm run preview`}
                   </Box>
 
                   <Typography variant="body1" color="text.secondary" paragraph>
-                    Essential operations for running Zoth Studio as an air-gapped desktop workstation, configuring local Ollama models with zero egress, and installing the 65 sovereign micro-tools into your global PATH.
+                    Essential operations for running Zoth Studio as a local-first desktop workstation that can run offline, configuring local Ollama models, and installing the Studio micro-tools into your global PATH.
                   </Typography>
 
                   {/* 1. Electron Desktop Workstation */}
@@ -1767,7 +1767,7 @@ npm run electron:build`}
                     B. Configuring Local Ollama Models with Studio Tools
                   </Typography>
                   <Typography variant="body2" color="text.secondary" paragraph>
-                    All 25 tools automatically connect to your local Ollama engine at <code>http://localhost:11434</code> without external cloud egress:
+                    Tools with AI features can use a local Ollama engine at <code>http://localhost:11434</code>:
                   </Typography>
                   <CodeSnippet
                     title="LOCAL OLLAMA SETUP & CONFIGURATION"
@@ -1789,7 +1789,7 @@ export ZOTH_DEFAULT_MODEL="qwen2.5-coder:32b"`}
                     C. Installing Micro-Tools into /usr/local/bin
                   </Typography>
                   <Typography variant="body2" color="text.secondary" paragraph>
-                    Link any of the 65 sovereign micro-tools into your system PATH for immediate command-line execution:
+                    Link any of the 71 micro-tools into your system PATH for immediate command-line execution:
                   </Typography>
                   <CodeSnippet
                     title="GLOBAL PATH INSTALLATION"
@@ -1891,7 +1891,7 @@ curl -s https://zothos.nullai.tech/.well-known/mcp.json | jq .mcpServers`}
             subtitle="Full documentation and deployment pipeline for zero-telemetry development, local loopback enclaves, 43 workstations, and bare-metal OS hypervisors."
             toolTitle="Option 1: Zero-Egress CLI Suite"
             toolTag="DOCS & RUNTIME"
-            toolDescription="Download the air-gapped documentation suite, offline CLI diagnostic toolbench, and local IPC verification harness."
+            toolDescription="Download the offline documentation suite, offline CLI diagnostic toolbench, and local IPC verification harness."
             toolRepo="https://github.com/NullAITech/zoth-studio-v2"
             toolCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git && cd zoth-studio-v2 && npm install"
             sx={{ mt: 6 }}

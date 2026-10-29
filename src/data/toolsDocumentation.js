@@ -262,7 +262,7 @@ export const toolsDocumentation = {
   },
 
   'hexstrike-arsenal': {
-    whyUse: 'Air-gapped offensive security and penetration testing terminal. Performs autonomous CVE analysis, binary header disassembly, and exploit mitigation audits.',
+    whyUse: 'Offline-capable offensive security and penetration testing terminal. Performs autonomous CVE analysis, binary header disassembly, and exploit mitigation audits.',
     problemSolved: 'Replaces expensive proprietary vulnerability scanners that transmit sensitive internal IP addresses, ports, and code vulnerabilities to cloud aggregators.',
     architecture: 'C / Python hybrid CLI utility integrated with Nmap, Radare2, and custom Python vulnerability heuristic analyzers.',
     aiAgentProtocol: {
@@ -716,7 +716,7 @@ export const toolsDocumentation = {
       'Anthropic MCP JSON-RPC 2.0 protocol compliance',
       'Interactive in-browser tools/list and tools/call dispatcher',
       'Zoth OS bare-metal demonstration video player',
-      'Air-gapped loopback SSE transport (127.0.0.1:8094)',
+      'Offline-capable loopback SSE transport (127.0.0.1:8094)',
       '100% zero outbound network telemetry'
     ]
   },

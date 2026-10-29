@@ -3644,7 +3644,7 @@ export default function VaelorPage() {
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
                       <NfcIcon sx={{ color: gold.accent, fontSize: '1rem' }} />
                       <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent, fontSize: '0.72rem' }}>
-                        AIR-GAPPED TAP-TO-PAY BEARER PROTOCOL
+                        OFFLINE-CAPABLE TAP-TO-PAY BEARER PROTOCOL
                       </Typography>
                     </Box>
                     <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.72rem', display: 'block', lineHeight: 1.4 }}>

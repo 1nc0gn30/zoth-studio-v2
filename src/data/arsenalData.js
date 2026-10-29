@@ -2,7 +2,7 @@
  * Zoth Studio v2 - Sovereign Master Arsenal & Unified Catalog
  *
  * Consolidates the 25 curated sovereign tools and micro-repositories into a single
- * air-gapped catalog with real GitHub references and zero localhost port traps.
+ * offline-capable catalog with real GitHub references and zero localhost port traps.
  */
 
 import { microTools } from './toolsData';

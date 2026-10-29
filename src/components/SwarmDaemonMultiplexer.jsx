@@ -332,7 +332,7 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
                 )}
               </Box>
               <Typography variant="caption" sx={{ color: isDark ? '#9CA3AF' : '#475467', fontFamily: mono }}>
-                ZERO-EGRESS AIR-GAPPED PROCESS MULTIPLEXER // WORKSPACE HARNESS
+                LOCAL-FIRST PROCESS MULTIPLEXER // WORKSPACE HARNESS
               </Typography>
             </Box>
           </Box>

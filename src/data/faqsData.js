@@ -9,15 +9,15 @@ export const FAQS_DATA = [
     id: 'zero-egress-invariant',
     q: 'What is the Zero-Egress Invariant architecture and how does Zoth Studio guarantee privacy?',
     category: 'Architecture',
-    keywords: ['zero-egress', 'zero egress', 'invariant', 'privacy', 'telemetry', 'air-gapped', 'client-side', 'security', 'isolation', 'tracking'],
+    keywords: ['zero-egress', 'zero egress', 'invariant', 'privacy', 'telemetry', 'offline-capable', 'client-side', 'security', 'isolation', 'tracking'],
     a: `The Zero-Egress Invariant is Zoth Studio v2's foundational security axiom: all code transformations, token embeddings, cryptographic key derivations, and multi-agent state deliberations run strictly client-side on the operator's local machine.
 
-No telemetry beacons, cloud analytics, tracking pixels, or data exfiltration routes exist within the studio. Prompts, syntax trees, secrets, and tool outputs never leave the local environment under any operational circumstance, making the studio safe for proprietary code, security audits, and air-gapped environments.`,
+No telemetry beacons, cloud analytics, tracking pixels, or data exfiltration routes exist within the studio. Prompts, syntax trees, secrets, and tool outputs never leave the local environment under any operational circumstance, making the studio safe for proprietary code, security audits, and offline-capable environments.`,
     summary: 'Zero-Egress guarantees that 100% of code execution, model inference, and state mutations stay local. No external servers or third-party telemetry beacons are permitted.',
     oracleResponse: 'Zero-Egress is absolute: 100% of prompt context, token emission, and agent state is computed locally on client hardware with zero outbound network calls.',
     jumpTargets: [
       { label: 'HexStrike Security Auditor', path: '/hexstrike', type: 'security' },
-      { label: 'Sovereign Arsenal (25 Tools)', path: '/arsenal', type: 'arsenal' },
+      { label: 'Sovereign Arsenal (71 Tools)', path: '/arsenal', type: 'arsenal' },
       { label: 'Architecture Documentation', path: '/docs', type: 'doc' }
     ]
   },
@@ -35,8 +35,8 @@ Rather than relying on remote APIs or cloud backend containers, each tool harnes
 • Web Workers for non-blocking multi-agent dialectic simulation and AST parsing.
 
 Tools launch instantly in < 16ms with zero server latency.`,
-    summary: 'The 25 tools run client-side via WebGPU, WASM, and WebCrypto. Each tool can be launched instantly with < 16ms latency and zero server round-trips.',
-    oracleResponse: 'All 25 tools execute client-side using browser-native WebGPU, WASM, and WebCrypto pipelines, delivering instant zero-latency utility without backend servers.',
+    summary: 'The 71 tools run client-side via WebGPU, WASM, and WebCrypto. Each tool can be launched instantly with < 16ms latency and zero server round-trips.',
+    oracleResponse: 'All 71 tools execute client-side using browser-native WebGPU, WASM, and WebCrypto pipelines, delivering instant zero-latency utility without backend servers.',
     jumpTargets: [
       { label: 'Explore Sovereign Arsenal', path: '/arsenal', type: 'arsenal' },
       { label: 'Vision Gesture Engine', path: '/tools/vision-gesture-control', type: 'tools' }
@@ -182,8 +182,8 @@ Every proposed code transformation computes a deterministic SHA-256 Merkle trie 
 3. Developer Velocity: WebGen reactive generator, SVG schematic composer, Regex Droid debugger, and WCAG contrast analyzer.
 4. Memory & Cognitive: STDP biomorphic memory matrix, 3D manifold visualizer, and semantic cluster explorer.
 5. Crypto & Identity: Argon2id secrets vault, Ed25519 identity generator, and zero-knowledge proof verifiers.`,
-    summary: '25 tools grouped into 5 dedicated cadres: Security, Swarm, Developer Velocity, Memory, and Cryptography.',
-    oracleResponse: 'The 25 tools are structured across 5 distinct tactical cadres: Security & Recon, Swarm & Core, Developer Velocity, Memory & Cognitive, and Crypto & Identity.',
+    summary: '71 tools grouped into 5 dedicated cadres: Security, Swarm, Developer Velocity, Memory, and Cryptography.',
+    oracleResponse: 'The 71 tools are structured across 5 distinct tactical cadres: Security & Recon, Swarm & Core, Developer Velocity, Memory & Cognitive, and Crypto & Identity.',
     jumpTargets: [
       { label: 'Sovereign Arsenal Matrix', path: '/arsenal', type: 'arsenal' },
       { label: 'Workstations Catalog', path: '/workstations', type: 'workstations' }
@@ -200,7 +200,7 @@ When executing vector embeddings, cosine similarities, or quantized neural matmu
     summary: 'WGSL compute shaders dispatch parallel workgroups directly to client GPU VRAM for instantaneous local matrix operations.',
     oracleResponse: 'Native WGSL compute shaders execute tensor matmuls directly in client GPU VRAM, achieving hardware performance with zero server egress.',
     jumpTargets: [
-      { label: 'Unified Arsenal (25 Tools)', path: '/arsenal', type: 'arsenal' },
+      { label: 'Unified Arsenal (71 Tools)', path: '/arsenal', type: 'arsenal' },
       { label: 'Vision Gesture Control', path: '/tools/vision-gesture-control', type: 'tools' }
     ]
   },
@@ -218,7 +218,7 @@ All three computational tiers produce bit-identical deterministic outputs, ensur
     summary: 'Seamless three-tier fallback: WebGPU WGSL → WASM SIMD 128-bit → CPU Web Workers.',
     oracleResponse: 'Autonomous fallback cascades from WebGPU WGSL to WASM SIMD 128-bit and multi-threaded CPU workers, guaranteeing 100% offline availability.',
     jumpTargets: [
-      { label: 'Unified Arsenal (25 Tools)', path: '/arsenal', type: 'arsenal' },
+      { label: 'Unified Arsenal (71 Tools)', path: '/arsenal', type: 'arsenal' },
       { label: 'WebGen Workspace', path: '/webgen', type: 'tools' }
     ]
   },
@@ -235,10 +235,10 @@ External agent environments (such as Claude Code, Hermes Agent, Cursor, or local
 • resources/read: Inspects local memory states or architectural specifications.
 
 All tool executions remain contained within the local client runtime without external network leakage.`,
-    summary: 'Standard MCP interface allows external AI agents to discover and invoke Zoth Studio\'s 25 tools via validated JSON-Schema contracts.',
+    summary: 'Standard MCP interface allows external AI agents to discover and invoke Zoth Studio\'s 71 tools via validated JSON-Schema contracts.',
     oracleResponse: 'Full MCP standard compliance allows external agents to discover and execute sovereign studio tools via schema-validated interfaces.',
     jumpTargets: [
-      { label: 'Unified Arsenal (25 Tools)', path: '/arsenal', type: 'arsenal' },
+      { label: 'Unified Arsenal (71 Tools)', path: '/arsenal', type: 'arsenal' },
       { label: 'Signal Bridge Workspace', path: '/tools/sovereign-agent-bridge', type: 'bus' }
     ]
   },
@@ -261,14 +261,14 @@ Agents transmit typed messages across unidirectional event channels, signing pay
     id: 'offline-pwa-service-worker',
     q: 'Can Zoth Studio run completely offline without an internet connection?',
     category: 'CLI & Deployment',
-    keywords: ['offline', 'air-gapped', 'pwa', 'cache', 'service worker', 'local', 'disconnected'],
+    keywords: ['offline', 'offline-capable', 'pwa', 'cache', 'service worker', 'local', 'disconnected'],
     a: `Yes. Zoth Studio is built from the ground up for sovereign, offline-first reliability.
 
 Once loaded or saved locally:
-• All 30 micro-tools, WGSL shaders, UI icons, and CSS stylesheets are bundled directly into static assets without third-party CDN links.
+• All 71 micro-tools, WGSL shaders, UI icons, and CSS stylesheets are bundled directly into static assets without third-party CDN links.
 • Static routing and state persistence rely entirely on browser-native storage (IndexedDB, Web Crypto, and local caches).
 • No remote API tokens or internet connections are required to run security audits, compile regexes, test WCAG contrast, or simulate multi-agent consensus.`,
-    summary: '100% offline-first architecture with local asset caching, zero CDN dependencies, and air-gapped readiness.',
+    summary: '100% offline-first architecture with local asset caching, zero CDN dependencies, and offline-capable readiness.',
     oracleResponse: 'Zoth Studio operates 100% offline with bundled assets and local storage, requiring zero external internet connection for all core tools.',
     jumpTargets: [
       { label: 'HexStrike Security Enclave', path: '/hexstrike', type: 'security' },

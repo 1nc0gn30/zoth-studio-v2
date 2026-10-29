@@ -39,7 +39,7 @@ const AUDIT_RULES = [
       return /bash|shell|terminal|exec|command|run_command|spawn|system/i.test(name) ||
              /execute.*(?:shell|command|terminal|bash)/i.test(desc);
     },
-    message: 'Tool enables arbitrary host shell execution without air-gapped process jail boundaries.',
+    message: 'Tool enables arbitrary host shell execution without offline-capable process jail boundaries.',
     remediation: 'Confine execution using Agent Capsule Jail (:8105) or restrict allowable commands.'
   },
   {

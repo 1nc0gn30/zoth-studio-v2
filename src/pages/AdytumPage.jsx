@@ -2362,7 +2362,7 @@ export function AdytumEngine({ embedded = false }) {
       <RevealOnScroll preset="fadeUp">
       <SovereignFunnel
         title="Deploy Adytum Alchemist & Sovereign Tools Locally"
-        subtitle="Adytum Alchemist and the entire Zoth Studio suite are designed for 100% offline, zero-cloud execution. Run the standalone Adytum CLI package on your machine, clone the full Zoth Studio v2 cockpit, or boot the air-gapped bare-metal Zoth OS."
+        subtitle="Adytum Alchemist and the entire Zoth Studio suite are designed for 100% offline, zero-cloud execution. Run the standalone Adytum CLI package on your machine, clone the full Zoth Studio v2 cockpit, or boot the offline-capable bare-metal Zoth OS."
         toolTitle="Option 1: Adytum CLI Micro-Repo"
         toolTag="STANDALONE"
         toolDescription="Dedicated standalone repository with offline 22-Key planning rite, automated incubation clocks, and cryptographic SHA-256 seal stamp generators."

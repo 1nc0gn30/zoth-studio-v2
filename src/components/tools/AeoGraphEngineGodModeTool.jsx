@@ -69,7 +69,7 @@ const PRESET_PROFILES = {
     creator: 'Neal Frazier (Neal Frazier Tech)',
     sameAs: 'https://github.com/1nc0gn30/zothos, https://zoth.nullai.tech, https://nullai.tech',
     description:
-      'Debian 12 Bookworm live workstation pre-wired with 22 loopback AI daemons, 71 desktop launchers across 4 tactical pillars, and air-gapped cryptographic telemetry.',
+      'Debian 12 Bookworm live workstation pre-wired with 22 loopback AI daemons, 71 desktop launchers across 4 tactical pillars, and offline-capable cryptographic telemetry.',
     faqs: [
       {
         q: 'What is included in the ZothOS desktop architecture?',

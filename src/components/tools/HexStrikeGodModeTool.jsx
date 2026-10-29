@@ -143,7 +143,7 @@ const MITRE_TACTICS = [
     id: 'TA0040',
     name: 'Impact',
     techniques: [
-      { id: 'T1486', name: 'Data Encrypted for Impact', sub: 'T1486 Ransomware', severity: 'Critical', desc: 'Unauthorized symmetric encryption of persistent system volumes or database stores.', cmd: 'openssl enc -aes-256-cbc -salt -in data.db -out data.db.enc', mitigation: 'Immutable append-only snapshots (ZFS / Btrfs) and offline air-gapped backups.' },
+      { id: 'T1486', name: 'Data Encrypted for Impact', sub: 'T1486 Ransomware', severity: 'Critical', desc: 'Unauthorized symmetric encryption of persistent system volumes or database stores.', cmd: 'openssl enc -aes-256-cbc -salt -in data.db -out data.db.enc', mitigation: 'Immutable append-only snapshots (ZFS / Btrfs) and offline offline-capable backups.' },
     ]
   },
 ];
@@ -351,7 +351,7 @@ export function HexStrikeGodModeTool() {
   const [cmdInput, setCmdInput] = useState('');
   const [terminalHistory, setTerminalHistory] = useState([
     '◈ [HEXSTRIKE-GODMODE-v3.2] Tactical Offensive Security & Vulnerability Cockpit initialized.',
-    '◈ Tri-Ring Security Hierarchy: RING_0_SOVEREIGN · Air-Gapped Localhost Enclave Active.',
+    '◈ Tri-Ring Security Hierarchy: RING_0_SOVEREIGN · Offline-Capable Localhost Enclave Active.',
     '◈ Connected Arsenal: 28 Battle-Tested Tools · 14 MITRE ATT&CK Tactics · Live DoH & Shodan OSINT.',
     '◈ Shodan Credentials: Authenticated Account Linked (Scan credits: 100, Query credits: 1, InternetDB: Unmetered).',
     'Type "help" to display operational commands or click "Run Full Audit".'
@@ -1068,7 +1068,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
               />
               <Chip
                 icon={<LockIcon sx={{ fontSize: '0.9rem !important', color: `${emerald} !important` }} />}
-                label="AIR-GAPPED 127.0.0.1 ENCLAVE"
+                label="OFFLINE-CAPABLE 127.0.0.1 ENCLAVE"
                 size="small"
                 sx={{ bgcolor: 'rgba(0,255,157,0.1)', color: emerald, fontWeight: 700, fontFamily: mono, border: '1px solid rgba(0,255,157,0.3)' }}
               />

@@ -368,7 +368,7 @@ export function EnvGuardVaultGodModeTool() {
                     MEMORY
                   </Typography>
                   <Typography variant="h5" sx={{ fontWeight: 800, color: cyan, fontFamily: mono }}>
-                    AIR-GAPPED
+                    OFFLINE-CAPABLE
                   </Typography>
                   <Typography variant="caption" sx={{ color: cyan, fontSize: '0.65rem' }}>
                     ZERO EGRESS

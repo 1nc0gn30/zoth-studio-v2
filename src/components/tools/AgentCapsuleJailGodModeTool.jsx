@@ -377,7 +377,7 @@ export function AgentCapsuleJailGodModeTool() {
                 ISOLATED CAPSULE WORKER SCRIPT
               </Typography>
               <Chip
-                label="AIR-GAPPED WORKER"
+                label="OFFLINE-CAPABLE WORKER"
                 size="small"
                 sx={{ fontFamily: mono, fontSize: '0.68rem', bgcolor: emeraldSoft, color: emerald, fontWeight: 800 }}
               />
@@ -463,7 +463,7 @@ export function AgentCapsuleJailGodModeTool() {
                 '&:hover': { bgcolor: '#059669' }
               }}
             >
-              {executing ? 'RUNNING IN AIR-GAPPED WORKER...' : 'EXECUTE INSIDE CAPSULE JAIL'}
+              {executing ? 'RUNNING IN OFFLINE-CAPABLE WORKER...' : 'EXECUTE INSIDE CAPSULE JAIL'}
             </Button>
           </Paper>
         </Grid>

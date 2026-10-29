@@ -186,12 +186,12 @@ Architect a lock-free circular ring-buffer with SIMD-accelerated exponential vec
   },
   {
     id: 'airgap-key-derivation',
-    title: 'Air-Gapped Hardware Key Derivation',
+    title: 'Offline-Capable Hardware Key Derivation',
     badge: 'CRYPTOGRAPHY',
     description: 'Deterministic Shamir seed splitting across isolated memory banks with zero side-channel leakage.',
     defaultConfidence: 98.7,
-    proposal: `PROPOSAL: AIR-GAPPED-HARDWARE-KEY-DERIVATION
-Deploy an air-gapped cryptographic signing enclave utilizing SHA-256 HKDF (RFC 5869) and Ed25519 deterministic key derivation. Master seed shards are distributed across isolated non-contiguous hardware registers with constant-time modular arithmetic to prevent physical side-channel power analysis during multi-agent consensus ballot signing.`,
+    proposal: `PROPOSAL: OFFLINE-CAPABLE-HARDWARE-KEY-DERIVATION
+Deploy an offline-capable cryptographic signing enclave utilizing SHA-256 HKDF (RFC 5869) and Ed25519 deterministic key derivation. Master seed shards are distributed across isolated non-contiguous hardware registers with constant-time modular arithmetic to prevent physical side-channel power analysis during multi-agent consensus ballot signing.`,
     rounds: [
       {
         round: 1,
@@ -201,7 +201,7 @@ Deploy an air-gapped cryptographic signing enclave utilizing SHA-256 HKDF (RFC 5
             speaker: 'AZOTH',
             role: 'Proponent',
             avatar: '/pets/azoth-neon.jpg',
-            argument: 'The air-gapped enclave ingests high-entropy seed generated via local hardware TRNG (/dev/hwrng) and derives ephemeral consensus session keys using HKDF-Expand with domain separation tag: "ZOTH-CONSENSUS-V2-BALLOT". Keys reside purely in pinned, zeroized RAM (mlock) and are scrubbed using explicit bzero compiler barriers immediately after generating the Ed25519 Schnorr signature.',
+            argument: 'The offline-capable enclave ingests high-entropy seed generated via local hardware TRNG (/dev/hwrng) and derives ephemeral consensus session keys using HKDF-Expand with domain separation tag: "ZOTH-CONSENSUS-V2-BALLOT". Keys reside purely in pinned, zeroized RAM (mlock) and are scrubbed using explicit bzero compiler barriers immediately after generating the Ed25519 Schnorr signature.',
             metric: 'Entropy: /dev/hwrng | Key Derivation: HKDF-SHA256 | Signature: Ed25519',
             stance: 'PROPOSED',
           },
@@ -744,7 +744,7 @@ export default function ConsensusPage() {
       header: {
         system: 'ZOTH STUDIO SOVEREIGN CONSENSUS ARENA',
         protocol: 'ZOTH-BYZANTINE-SOCRATIC-V2',
-        environment: 'ZERO-EGRESS AIR-GAPPED SIMULATION',
+        environment: 'LOCAL-FIRST SIMULATION',
         timestamp: new Date().toISOString(),
         sha256_hash_stamp: verdictSha256,
         verdict_status: 'SUPERMAJORITY_RATIFIED',
@@ -832,7 +832,7 @@ export default function ConsensusPage() {
               />
               <Chip
                 icon={<LockIcon sx={{ fontSize: '0.95rem !important', color: gold.accent }} />}
-                label="AIR-GAPPED SOVEREIGN ARENA"
+                label="OFFLINE-CAPABLE SOVEREIGN ARENA"
                 size="small"
                 sx={{
                   bgcolor: isDark ? '#08080B' : '#F1F5F9',
@@ -853,7 +853,7 @@ export default function ConsensusPage() {
           <HeroItem>
             <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 880, lineHeight: 1.65, fontSize: '1.05rem', position: 'relative', zIndex: 1 }}>
               Orchestrate multi-agent dialectic debates governed by Byzantine fault-tolerant quorum mathematics.
-              When the backend bridge is unreachable, this arena automatically activates an <span className="text-highlight-gold">air-gapped zero-egress simulation fallback</span> that evaluates architectural propositions across <span className="text-highlight-gold">Azoth (Proponent)</span>, <span className="text-highlight-gold">Kai (Skeptic)</span>, and <span className="text-highlight-gold">Draco (Arbitrator)</span> with SHA-256 signed verdicts.
+              When the backend bridge is unreachable, this arena automatically activates an <span className="text-highlight-gold">offline-capable zero-egress simulation fallback</span> that evaluates architectural propositions across <span className="text-highlight-gold">Azoth (Proponent)</span>, <span className="text-highlight-gold">Kai (Skeptic)</span>, and <span className="text-highlight-gold">Draco (Arbitrator)</span> with SHA-256 signed verdicts.
             </Typography>
           </HeroItem>
         </Box>

@@ -851,7 +851,7 @@ export default function SwarmFrameJourney({ onEnterCockpit, onBackToFunnel }) {
               {/* Status Chips */}
               <Stack direction="row" spacing={1.5} flexWrap="wrap" sx={{ mb: 3 }}>
                 <Chip label="21-AGENT TOPOLOGY" size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(212,175,55,0.18)', color: gold }} />
-                <Chip label="AIR-GAPPED ARCHITECTURE" size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(52,211,153,0.15)', color: 'var(--zs-mint)' }} />
+                <Chip label="OFFLINE-CAPABLE ARCHITECTURE" size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(52,211,153,0.15)', color: 'var(--zs-mint)' }} />
                 <Chip label="ZERO CLOUD EGRESS" size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: 'rgba(52,211,153,0.12)', color: 'var(--zs-mint)' }} />
               </Stack>
 

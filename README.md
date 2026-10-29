@@ -96,7 +96,7 @@ Desktop and mobile captures, plus screen recordings of each route intro motion d
 +-------------------------------+  +-------------------------------+  +-------------------------------+
 |     62 DEDICATED WORKSTATIONS |  |  22 ENCLAVE LOOPBACK DAEMONS  |  |      STDP NEURO MEMORY        |
 |  - In-Browser God Mode Engines|  |  - Ports 8094-8120, 9393, 5225|  |  - Hebbian LTP / LTD Learning |
-|  - 36 Sovereign Enclaves      |  |  - Zero-Cloud SNI Proxy       |  |  - 3D Synaptic Manifold       |
+|  - 71 Tools (59 public repos) |  |  - Zero-Cloud SNI Proxy       |  |  - 3D Synaptic Manifold       |
 |  - 100% Native Tool Coverage  |  |  - Full Forensics Flight Rec  |  |  - Exponential Weight Decay   |
 |  - Real Client Utility        |  |  - Multi-Channel POD Routers  |  |  - Local Vector Clustering    |
 |  - Zero Broken Dependencies   |  |  - Planetary Recon Radar      |  |  - Pure Client Memory State   |
@@ -112,7 +112,7 @@ Desktop and mobile captures, plus screen recordings of each route intro motion d
 |  - Proposer Agent (AST Diff)  |  |  - Client WebCrypto Enclave   |  |  - 100% Client-Side Execution |
 |  - Skeptic Agent (Evaluation) |  |  - Memory-Hard Argon2id KDF   |  |  - Zero Cloud Telemetry       |
 |  - Auditor Agent (Synthesis)  |  |  - Authenticated AEAD Cipher  |  |  - No Remote Analytics Trackers|
-|  - 2/3 Supermajority Seal     |  |  - Local Key Zeroization      |  |  - Air-Gapped Safe            |
+|  - 2/3 Supermajority Seal     |  |  - Local Key Zeroization      |  |  - Offline-Capable            |
 +-------------------------------+  +-------------------------------+  +-------------------------------+
         |                                     |                                     |
         v                                     v                                     v
@@ -315,7 +315,7 @@ Live on `http://127.0.0.1:3000/vaelor` and powered by the high-performance Vaelo
     - **Card 1 (Binary Merkle State Root & Genesis-to-Head Chain Auditor)**: Live SHA-256 Binary Merkle State Root (`merkleStateRoot`), append-only Write-Ahead-Log (`vaelor_blocks.wal.jsonl`) fsync confirmation, 100.000000% atomic integer supply conservation invariant, and Prometheus `/metrics` telemetry with 1-click full chain audit button (`#vaelor-chain-audit-btn`) executing `GET /api/ledger/verify-integrity`.
     - **Card 2 (Multi-Node P2P Gossip & 2-Laptop Cluster Sync — `zoth-node cluster`)**: P2P mesh visualization across `@zoth`, `@zoth-rig2`, and 5 regional BFT consensus validators with 1-line CLI join command (`zoth-node cluster join http://<peer-ip>:8140`) and interactive delta sync button (`#vaelor-p2p-sync-btn`) calling `GET /api/p2p/delta`.
     - **Card 3 (2-of-3 Corporate Multi-Sig Treasury, Idempotency-Key & Signed HMAC Webhooks)**: Multi-signature institutional vault (`msig_zoth_foundation` — Signers: `@neal`, `@zoth`, `@sprig`) with cryptographic `Idempotency-Key` replay defense, `X-Vaelor-Signature: t=...,v1=hmac_sha256` webhook delivery, and 1-click proposal co-signing button (`#vaelor-multisig-btn`) executing `POST /api/multisig/approve`.
-32. **Unified 38-Tool Ring-0 Model Context Protocol (MCP) Ecosystem**: Native integration bridging all 21 Neuro-Memory & Obsidian tools (`:8094`) and 17 Vaelor Layer-1 FinTech tools (`:8140`) into a singular, air-gapped sovereign intelligence and transactional operating system.
+32. **Unified 38-Tool Ring-0 Model Context Protocol (MCP) Ecosystem**: Native integration bridging all 21 Neuro-Memory & Obsidian tools (`:8094`) and 17 Vaelor Layer-1 FinTech tools (`:8140`) into a single local-first (offline-capable) sovereign intelligence and transactional operating system.
 
 ### Unified 38-Tool Ring-0 Model Context Protocol (MCP) Ecosystem
 Zoth Studio v2 unites **38 native JSON-RPC Model Context Protocol tools** across two loopback enclaves, enabling frontier autonomous agent swarms (Claude, GPT-4o, Hermes, Skeptic) to orchestrate biomorphic knowledge and financial sovereignty:
@@ -369,7 +369,7 @@ Every single tool in the 62-tool catalog has a dedicated, production-ready inter
 5. **`vector-search-engine`** (`/tools/vector-search-engine`): Local HNSW graph index and BM25 hybrid vector search engine for zero-latency semantic similarity.
 6. **`deepsearch-research-agent`** (`/tools/deepsearch-research-agent`): Multi-source autonomous research agent synthesizing comprehensive technical dossiers with grounded citations.
 7. **`promptmaster-studio`** (`/tools/promptmaster-studio`): In-browser prompt optimizer with real-time AST linting, token cost estimations, and few-shot formatting. Live at `promptmaster-studio.netlify.app`.
-8. **`hexstrike-arsenal`** (`/tools/hexstrike-arsenal`): Autonomous penetration testing suite inspecting CVE matrices and executing air-gapped security audits.
+8. **`hexstrike-arsenal`** (`/tools/hexstrike-arsenal`): Autonomous penetration testing suite inspecting CVE matrices and running local security audits.
 9. **`envguard-secrets-vault`** (`/tools/envguard-secrets-vault`): Hardware-secured secrets manager deriving keys via Argon2id and encrypting `.env` parameters via AES-256-GCM. Live at `envguard-vault.netlify.app`.
 10. **`aeo-graph-engine`** (`/tools/aeo-graph-engine`): Answer Engine Optimization knowledge graph builder generating multi-entity Schema.org JSON-LD graphs. Live at `aeo-graph-engine.netlify.app`.
 11. **`cwv-speed-engine`** (`/tools/cwv-speed-engine`): Core Web Vitals diagnostic engine calculating LCP, CLS, and INP metrics. Live at `cwv-speed-studio.netlify.app`.

@@ -292,7 +292,7 @@ export default function Footer() {
                 >
                   NullAI Tech
                 </Link>
-                . Air-gapped neural memory, Byzantine multi-agent consensus, and local WebGPU / WASM execution with zero external cloud egress.
+                . Offline-capable neural memory, Byzantine multi-agent consensus, and local WebGPU / WASM execution with zero external cloud egress.
               </Typography>
 
               {/* Status Badges — elevated, animated pulse */}
@@ -651,7 +651,7 @@ export default function Footer() {
                 fontWeight: 600,
               }}
             >
-              <span>AIR-GAPPED ZERO-EGRESS HARDWARE</span>
+              <span>OFFLINE-CAPABLE ZERO-EGRESS HARDWARE</span>
             </Box>
             <Box component="span" sx={{ opacity: 0.35, fontSize: '0.7rem' }}>•</Box>
             <Box

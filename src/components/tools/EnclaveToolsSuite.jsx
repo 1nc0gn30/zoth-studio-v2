@@ -227,7 +227,7 @@ export function AdytumPlannerTool() {
               <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold(theme), fontFamily: mono }}>
                 // EVALUATION TELEMETRY DECK
               </Typography>
-              <Chip label="AIR-GAPPED WASM" size="small" sx={{ bgcolor: successBg(theme), color: successFg(theme), fontWeight: 800, fontSize: '0.65rem', fontFamily: mono }} />
+              <Chip label="OFFLINE-CAPABLE WASM" size="small" sx={{ bgcolor: successBg(theme), color: successFg(theme), fontWeight: 800, fontSize: '0.65rem', fontFamily: mono }} />
             </Box>
 
             <Box sx={{ p: 2, flexGrow: 1, bgcolor: theme.palette.mode === 'dark' ? '#050508' : '#F1F5F9', border: `1px solid ${darkPanelBorder(theme)}`, borderRadius: 2, fontFamily: mono, fontSize: '0.8rem', color: theme.palette.text.primary, mb: 2 }}>
@@ -289,7 +289,7 @@ export function AzothArchonTool() {
   const [running, setRunning] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [logs, setLogs] = useState([
-    '[Client Sandbox] Archon Orchestrator ready in air-gapped evaluation mode',
+    '[Client Sandbox] Archon Orchestrator ready in offline-capable evaluation mode',
     '[Archon] Subagent delegation roles active: Athena (Lexer), Vulcan (Transpiler), Cerberus (Sentinel)'
   ]);
 
@@ -323,7 +323,7 @@ export function AzothArchonTool() {
 
       setTimeout(() => {
         setActiveStep(4);
-        setLogs((prev) => [...prev, '[Cerberus] Network boundary verified: 0 outbound packets, 100% in-browser air-gapped']);
+        setLogs((prev) => [...prev, '[Cerberus] Network boundary verified: 0 outbound packets, 100% in-browser offline-capable']);
         setLogs((prev) => [...prev, '[Archon] Evaluation complete. (Bare-metal OS subagent execution requires local daemon: npx @nullaitech/zoth pull azoth-local-agent)']);
         setRunning(false);
       }, 1200);
@@ -1051,7 +1051,7 @@ PARAMETER temperature 0.70
 PARAMETER top_p 0.90
 SYSTEM """
 ROLE: ${role}
-ENVIRONMENT: Zero-Egress Air-Gapped Local Silicon (127.0.0.1)
+ENVIRONMENT: Zero-Egress Offline-Capable Local Silicon (127.0.0.1)
 OPTIMIZATION: ${dspy ? 'DSPy MIPROv2 Telemetry-Free Exemplars' : 'Standard Baseline'}
 
 INVARIANTS:
@@ -2560,7 +2560,7 @@ export function AgentFlightRecorderTool() {
 
 /* ==========================================================================
    TOOL 20: Agent Capsule Jail (agent-capsule-jail)
-   Features: Real Web Worker Air-Gapped Sandbox, Virtual Disk & Watchdog Killer
+   Features: Real Web Worker Offline-Capable Sandbox, Virtual Disk & Watchdog Killer
    ========================================================================== */
 export function AgentCapsuleJailTool() {
   return <AgentCapsuleJailGodModeTool />;
@@ -5744,7 +5744,7 @@ export function LikenessDeskTool() {
           />
         </Box>
         <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontSize: '0.75rem' }}>
-          Air-Gapped Local Video Double · Wav2Lip GAN & Chatterbox Turbo TTS
+          Offline-Capable Local Video Double · Wav2Lip GAN & Chatterbox Turbo TTS
         </Typography>
       </Box>
 

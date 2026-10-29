@@ -265,7 +265,7 @@ export function GhidraMcpGodModeTool() {
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} justifyContent="flex-end" alignItems="center">
               <Box sx={{ textAlign: { xs: 'center', sm: 'right' } }}>
                 <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
-                  ZERO TELEMETRY • AIR-GAPPED
+                  ZERO TELEMETRY • OFFLINE-CAPABLE
                 </Typography>
                 <Typography variant="h6" sx={{ fontWeight: 800, color: gold, fontFamily: mono }}>
                   100% OPEN ACCESS

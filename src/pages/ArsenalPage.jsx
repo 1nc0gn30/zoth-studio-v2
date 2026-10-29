@@ -464,7 +464,7 @@ export default function ArsenalPage() {
                   }}
                 />
                 <Chip
-                  label="AIR-GAPPED MATRIX"
+                  label="OFFLINE-CAPABLE MATRIX"
                   size="small"
                   sx={{
                     bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5',
