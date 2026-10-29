@@ -222,13 +222,15 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
       {/* Terminal Window Box */}
       <Paper
         elevation={0}
+        className="terminal-window terminal-surface"
+        data-terminal="true"
         sx={{
           borderRadius: { xs: 2.5, md: 3.5 },
           overflow: 'hidden',
           maxWidth: '100%',
           boxSizing: 'border-box',
           border: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)'}`,
-          bgcolor: isDark ? '#050508' : '#0F172A',
+          bgcolor: isDark ? '#050508' : '#0B1120',
           boxShadow: isDark
             ? '0 20px 48px rgba(0,0,0,0.7), 0 0 24px rgba(212,175,55,0.08)'
             : '0 20px 48px rgba(15,23,42,0.18)',
@@ -587,11 +589,17 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             }
             if (line.type === 'command') {
               return (
-                <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5, flexWrap: 'wrap', position: 'relative', zIndex: 2, maxWidth: '100%', wordBreak: 'break-word' }}>
-                  <Typography component="span" sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#D4AF37', fontWeight: 800, textShadow: isDark ? '0 0 6px rgba(212,175,55,0.4)' : 'none' }}>
-                    user@zoth-metal:~
+                <Box key={idx} sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 0.5, flexWrap: 'wrap', position: 'relative', zIndex: 2, maxWidth: '100%', wordBreak: 'break-word' }}>
+                  <Typography component="span" sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#38BDF8', fontWeight: 800 }}>
+                    user@zoth-metal:
                   </Typography>
-                  <Typography component="span" sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#FFFFFF', fontWeight: 800, textShadow: isDark ? '0 0 6px rgba(255,255,255,0.3)' : 'none', wordBreak: 'break-all' }}>
+                  <Typography component="span" sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#D4AF37', fontWeight: 800 }}>
+                    ~
+                  </Typography>
+                  <Typography component="span" sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#34D399', fontWeight: 800, mr: 0.75 }}>
+                    $
+                  </Typography>
+                  <Typography component="span" sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#FFFFFF', fontWeight: 800, textShadow: '0 0 8px rgba(255,255,255,0.4)', wordBreak: 'break-all' }}>
                     {activeData.cmd}
                   </Typography>
                   <Box
@@ -614,34 +622,34 @@ function CliTerminalSimulator({ gold, isDark, monoFont }) {
             }
             if (line.type === 'dim') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: 'var(--zs-slate)', position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 4px rgba(100,116,139,0.2)' : 'none', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#94A3B8', position: 'relative', zIndex: 2, whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
                   {line.text}
                 </Typography>
               );
             }
             if (line.type === 'success') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: 'var(--zs-mint)', fontWeight: 600, position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 6px rgba(52,211,153,0.3)' : 'none', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#34D399', fontWeight: 650, position: 'relative', zIndex: 2, textShadow: '0 0 8px rgba(52,211,153,0.3)', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
                   {line.text}
                 </Typography>
               );
             }
             if (line.type === 'cyan') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: 'var(--zs-sky)', fontWeight: 600, position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 6px rgba(56,189,248,0.3)' : 'none', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#38BDF8', fontWeight: 650, position: 'relative', zIndex: 2, textShadow: '0 0 8px rgba(56,189,248,0.3)', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
                   {line.text}
                 </Typography>
               );
             }
             if (line.type === 'gold') {
               return (
-                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#F5E6AB', fontWeight: 750, mt: 0.5, position: 'relative', zIndex: 2, textShadow: isDark ? '0 0 8px rgba(245,230,171,0.45)' : '0 0 6px rgba(245,230,171,0.2)', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
+                <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#FDE047', fontWeight: 750, mt: 0.5, position: 'relative', zIndex: 2, textShadow: '0 0 8px rgba(253,224,71,0.4)', whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
                   {line.text}
                 </Typography>
               );
             }
             return (
-              <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#EDEFF2', position: 'relative', zIndex: 2, whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
+              <Typography key={idx} sx={{ fontFamily: monoFont, fontSize: 'inherit', color: '#F1F5F9', position: 'relative', zIndex: 2, whiteSpace: { xs: 'pre-wrap', md: 'pre' }, wordBreak: 'break-word', overflowWrap: 'anywhere', maxWidth: '100%' }}>
                 {line.text}
               </Typography>
             );

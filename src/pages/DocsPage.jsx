@@ -107,7 +107,7 @@ function CodeSnippet({ title, code, language = 'bash' }) {
             onClick={handleCopy}
             startIcon={
               copied ? (
-                <CheckIcon sx={{ fontSize: '14px !important', color: 'var(--zs-mint)' }} />
+                <CheckIcon sx={{ fontSize: '14px !important', color: '#34D399' }} />
               ) : (
                 <ContentCopyIcon sx={{ fontSize: '14px !important' }} />
               )

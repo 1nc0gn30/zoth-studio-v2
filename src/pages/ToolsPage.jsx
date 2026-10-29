@@ -677,10 +677,10 @@ export default function ToolsPage() {
                   Pull isolated zero-egress single-purpose micro-engines without spinning up the entire studio workspace.
                 </Typography>
                 <Box sx={{ p: 1.2, mb: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: 'var(--zs-sky)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: '#38BDF8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     npx @nullaitech/zoth pull &lt;tool-id&gt;
                   </Typography>
-                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('npx @nullaitech/zoth pull adytum-alchemist-ai-workflow', 'cli-funnel')} sx={{ color: 'var(--zs-slate)', '&:hover': { color: '#FFF' } }}>
+                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('npx @nullaitech/zoth pull adytum-alchemist-ai-workflow', 'cli-funnel')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
                     <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
                   </IconButton>
                 </Box>
@@ -710,7 +710,7 @@ export default function ToolsPage() {
                   <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: gold.accent, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     git clone https://github.com/NullAITech/zoth-studio-v2.git
                   </Typography>
-                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('git clone https://github.com/NullAITech/zoth-studio-v2.git', 'studio-funnel')} sx={{ color: 'var(--zs-slate)', '&:hover': { color: '#FFF' } }}>
+                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('git clone https://github.com/NullAITech/zoth-studio-v2.git', 'studio-funnel')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
                     <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
                   </IconButton>
                 </Box>
@@ -740,10 +740,10 @@ export default function ToolsPage() {
                   Alchemical Linux OS based on KDE Plasma 6 with Kali/Parrot security arsenal, 10 Ollama models, and Tor Ghostmode.
                 </Typography>
                 <Box sx={{ p: 1.2, mb: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: 'var(--zs-mint)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: '#34D399', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     zoth-os-install --bare-metal
                   </Typography>
-                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('zoth-os-install --bare-metal', 'os-funnel')} sx={{ color: 'var(--zs-slate)', '&:hover': { color: '#FFF' } }}>
+                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('zoth-os-install --bare-metal', 'os-funnel')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
                     <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
                   </IconButton>
                 </Box>

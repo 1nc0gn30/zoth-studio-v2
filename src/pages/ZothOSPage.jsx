@@ -2277,7 +2277,7 @@ $ zoth-lite-pkg wipe-ram`}
                 if (item.type === 'input') {
                   return (
                     <Box key={item.id} sx={{ display: 'flex', alignItems: 'baseline', mt: 1.2, mb: 0.5 }}>
-                      <Typography component="span" sx={{ color: 'var(--zs-mint)', fontWeight: 800, fontFamily: mono, mr: 0.8 }}>
+                      <Typography component="span" sx={{ color: '#34D399', fontWeight: 800, fontFamily: mono, mr: 0.8 }}>
                         operator@zoth-os
                       </Typography>
                       <Typography component="span" sx={{ color: '#D4AF37', fontWeight: 800, fontFamily: mono, mr: 0.8 }}>

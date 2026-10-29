@@ -1110,7 +1110,7 @@ export default function AXPage() {
           >
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
               <TerminalIcon sx={{ fontSize: '1rem', color: gold.accent }} />
-              <span style={{ color: 'var(--zs-slate)' }}>$</span>
+              <span style={{ color: '#94A3B8' }}>$</span>
               <span style={{ color: isDark ? '#34D399' : '#4ADE80', fontWeight: 750 }}>curl</span>
               <span>-s -H &quot;User-Agent: {selectedAgent}&quot; http://127.0.0.1:3000{selectedEndpoint}</span>
             </Box>
@@ -1120,7 +1120,7 @@ export default function AXPage() {
                 onClick={() => {
                   navigator.clipboard.writeText(`curl -s -H "User-Agent: ${selectedAgent}" http://127.0.0.1:3000${selectedEndpoint}`);
                 }}
-                sx={{ color: 'var(--zs-slate)', '&:hover': { color: '#FFFFFF' } }}
+                sx={{ color: '#94A3B8', '&:hover': { color: '#FFFFFF' } }}
               >
                 <ContentCopyIcon sx={{ fontSize: '0.85rem' }} />
               </IconButton>

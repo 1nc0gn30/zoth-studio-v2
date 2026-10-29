@@ -439,7 +439,7 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
                   fontFamily: mono,
                   fontSize: '0.82rem',
                   bgcolor: terminalBg,
-                  color: isDark ? '#E5E7EB' : '#101828',
+                  color: '#F8FAFC',
                   borderRadius: 1.5,
                   '& fieldset': { borderColor: borderCol },
                   '&:hover fieldset': { borderColor: gold },
@@ -704,14 +704,14 @@ export default function SwarmDaemonMultiplexer({ embedded = false }) {
                   {state.logs.map((log, lIdx) => {
                     if (log.type === 'system') {
                       return (
-                        <Box key={lIdx} sx={{ color: isDark ? '#60A5FA' : '#2563EB', fontSize: '0.70rem' }}>
+                        <Box key={lIdx} sx={{ color: '#60A5FA', fontSize: '0.70rem' }}>
                           ⚡ {log.text}
                         </Box>
                       );
                     }
                     if (log.type === 'thought') {
                       return (
-                        <Box key={lIdx} sx={{ color: isDark ? '#A78BFA' : '#7C3AED', fontStyle: 'italic', opacity: 0.9 }}>
+                        <Box key={lIdx} sx={{ color: '#C4B5FD', fontStyle: 'italic', opacity: 0.9 }}>
                           💭 &lt;thought&gt; {log.text}
                         </Box>
                       );
