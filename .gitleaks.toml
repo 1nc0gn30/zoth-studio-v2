@@ -155,6 +155,7 @@ paths = [
   '''(?:^|/)src/pages/ZothOSShowcasePage\.jsx$''',
   '''(?:^|/)src/components/SovereignFunnel\.jsx$''',
   '''(?:^|/)src/components/tools/Badge3dCoinGodModeTool\.jsx$''',
+  '''(?:^|/)src/data/obsidianWikiData\.js$''',
   '''(?:^|/)src/components/tools/CertPathRoadmapGodModeTool\.jsx$''',
   '''(?:^|/)src/components/tools/PwaManifestBuilderGodModeTool\.jsx$''',
   '''(?:^|/)src/components/tools/RobotsTxtAuditorGodModeTool\.jsx$''',
