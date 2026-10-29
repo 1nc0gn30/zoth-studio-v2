@@ -42,12 +42,19 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const primaryNav = [
   { label: 'Arsenal', path: '/arsenal', badge: `${arsenalStats.total}` },
   { label: 'Vaelor L1', path: '/vaelor', badge: 'DAG', pulse: true },
-  { label: 'Agora', path: '/agora', badge: 'DAPP', pulse: true },
   { label: 'Voice Station', path: '/voice', badge: 'LIVE', pulse: true },
   { label: 'Zoth OS', path: '/zoth-os', badge: 'v3.3', pulse: true },
   { label: 'WebGen', path: '/webgen', badge: 'NEW' },
-  { label: 'Swarm', path: '/swarm' },
-  { label: 'HexStrike', path: '/hexstrike' },
+  { label: 'Agora', path: '/agora', badge: 'DAPP', pulse: true, wideOnly: true },
+  { label: 'Swarm', path: '/swarm', wideOnly: true },
+  { label: 'HexStrike', path: '/hexstrike', wideOnly: true },
+];
+
+// Secondary Ecosystem Apps (shown in More menu on standard laptops)
+const ecosystemSecondaryItems = [
+  { label: 'Agora DApp', path: '/agora', desc: 'Sovereign decentralized agent marketplace', icon: <HubIcon fontSize="small" sx={{ color: '#D4AF37' }} /> },
+  { label: 'Swarm Pantheon', path: '/swarm', desc: '21 autonomous agent terminals & multiplexer', icon: <TerminalIcon fontSize="small" sx={{ color: '#38BDF8' }} /> },
+  { label: 'HexStrike Enclave', path: '/hexstrike', desc: 'Cybersecurity defense & vulnerability hunter', icon: <SecurityIcon fontSize="small" sx={{ color: '#EF4444' }} /> },
 ];
 
 // Knowledge Dropdown
@@ -160,10 +167,11 @@ export default function Navbar({ mode, onToggleTheme }) {
             : 'linear-gradient(90deg, transparent 0%, rgba(212, 175, 55, 0.25) 15%, rgba(184, 134, 11, 0.45) 50%, rgba(212, 175, 55, 0.25) 85%, transparent 100%)',
           pointerEvents: 'none',
         },
+        overflowX: 'clip',
       }}
     >
-      <Container maxWidth="xl">
-        <Toolbar disableGutters sx={{ justifyContent: 'space-between', height: 72, gap: 1 }}>
+      <Container maxWidth={false} sx={{ maxWidth: '1720px', px: { xs: 1.5, sm: 2, md: 3 } }}>
+        <Toolbar disableGutters sx={{ justifyContent: 'space-between', height: 72, gap: { xs: 0.75, sm: 1.25, lg: 1.5 }, flexWrap: 'nowrap', minWidth: 0 }}>
 
           {/* Left: Brand Logo & Status */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexShrink: 0 }}>
@@ -245,8 +253,8 @@ export default function Navbar({ mode, onToggleTheme }) {
               </Box>
             </Box>
 
-            {/* Dynamic Sovereign Runtime Status Pill */}
-            <Tooltip title={effectiveBadgeTooltip} arrow>
+            {/* Netlify Platform Architecture Showcase & Sovereign Runtime Pill */}
+            <Tooltip title={`⚡ Netlify Edge Active · ${effectiveBadgeTooltip} · Click to open Enclave Diagnostics`} arrow>
               <Chip
                 icon={
                   <Box
@@ -254,49 +262,23 @@ export default function Navbar({ mode, onToggleTheme }) {
                       width: 7,
                       height: 7,
                       borderRadius: '50%',
-                      bgcolor: badgeColor,
-                      boxShadow: `0 0 8px ${badgeColor}, 0 0 2px ${badgeColor}`,
+                      bgcolor: '#00AD9F',
+                      boxShadow: '0 0 8px #00AD9F, 0 0 2px #00AD9F',
                       ml: '6px !important',
                       animation: 'statusDotPulse 2.5s infinite ease-in-out',
                       '@keyframes statusDotPulse': {
                         '0%': { opacity: 0.8, transform: 'scale(0.95)' },
-                        '50%': { opacity: 1, transform: 'scale(1.2)', boxShadow: `0 0 12px ${badgeColor}, 0 0 4px ${badgeColor}` },
+                        '50%': { opacity: 1, transform: 'scale(1.2)', boxShadow: '0 0 12px #00AD9F, 0 0 4px #00AD9F' },
                         '100%': { opacity: 0.8, transform: 'scale(0.95)' },
                       },
                     }}
                   />
                 }
-                label={effectiveBadgeLabel}
-                size="small"
-                sx={{
-                  display: { xs: 'none', xl: 'inline-flex' },
-                  bgcolor: dark ? `${badgeColor}18` : `${badgeColor}12`,
-                  color: dark ? (isLocal ? '#6EE7B7' : '#7DD3FC') : (isLocal ? '#065F46' : '#0369A1'),
-                  border: `1px solid ${dark ? `${badgeColor}44` : `${badgeColor}55`}`,
-                  boxShadow: dark ? 'inset 0 1px 0 rgba(255, 255, 255, 0.05)' : 'none',
-                  fontWeight: 800,
-                  fontSize: '0.68rem',
-                  fontFamily: mono,
-                  height: 22,
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                  '&:hover': {
-                    borderColor: badgeColor,
-                    bgcolor: dark ? `${badgeColor}25` : `${badgeColor}20`,
-                  },
-                }}
-              />
-            </Tooltip>
-
-            {/* Netlify Platform Architecture Showcase Launcher */}
-            <Tooltip title="Inspect live Netlify Edge POP telemetry, Netlify Blobs & 140 prerendered routes">
-              <Chip
-                icon={<CloudQueueIcon sx={{ fontSize: '13px !important', color: '#00AD9F !important' }} />}
                 label="⚡ NETLIFY EDGE"
                 size="small"
                 onClick={() => setNetlifyOpen(true)}
                 sx={{
-                  display: { xs: 'none', lg: 'inline-flex' },
+                  display: { xs: 'none', md: 'inline-flex' },
                   bgcolor: dark ? 'rgba(0,173,159,0.14)' : '#F0FDFA',
                   color: dark ? '#5EEAD4' : '#0F766E',
                   border: `1px solid ${dark ? 'rgba(0,173,159,0.4)' : 'rgba(0,173,159,0.5)'}`,
@@ -322,11 +304,13 @@ export default function Navbar({ mode, onToggleTheme }) {
             sx={{
               display: { xs: 'none', lg: 'flex' },
               alignItems: 'center',
-              gap: { lg: 0.25, xl: 0.5 },
+              gap: { lg: 0.15, xl: 0.35 },
+              flexShrink: 1,
+              minWidth: 0,
               background: dark
                 ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.015) 100%)'
                 : 'linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, rgba(0, 0, 0, 0.04) 100%)',
-              p: '4px 6px',
+              p: '3px 5px',
               borderRadius: 9999,
               border: `1px solid ${dark ? 'rgba(212, 175, 55, 0.15)' : 'rgba(0, 0, 0, 0.08)'}`,
               boxShadow: dark
@@ -345,16 +329,17 @@ export default function Navbar({ mode, onToggleTheme }) {
                   component={RouterLink}
                   to={item.path}
                   sx={{
+                    display: item.wideOnly ? { xs: 'none', '2xl': 'inline-flex' } : 'inline-flex',
                     position: 'relative',
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
                     color: active ? navActive : navIdle,
                     fontWeight: active ? 800 : 600,
                     borderRadius: 9999,
-                    px: { lg: 1.15, xl: 1.5 },
-                    py: 0.65,
+                    px: { lg: 0.95, xl: 1.25 },
+                    py: 0.55,
                     minWidth: 0,
-                    fontSize: { lg: '0.8rem', xl: '0.84rem' },
+                    fontSize: { lg: '0.76rem', xl: '0.80rem' },
                     textTransform: 'none',
                     bgcolor: active
                       ? (dark ? 'rgba(212, 175, 55, 0.16)' : '#FEF9E7')
@@ -408,12 +393,12 @@ export default function Navbar({ mode, onToggleTheme }) {
                     },
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, position: 'relative', zIndex: 1 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.65, position: 'relative', zIndex: 1 }}>
                     {item.pulse && (
                       <Box
                         sx={{
-                          width: 6,
-                          height: 6,
+                          width: 5,
+                          height: 5,
                           borderRadius: '50%',
                           bgcolor: goldAccent,
                           boxShadow: `0 0 8px ${goldAccent}, 0 0 2px ${goldAccent}`,
@@ -432,10 +417,10 @@ export default function Navbar({ mode, onToggleTheme }) {
                         label={item.badge}
                         size="small"
                         sx={{
-                          display: { xs: 'none', xl: 'inline-flex' },
-                          height: 17,
-                          minWidth: 20,
-                          fontSize: '0.65rem',
+                          display: { xs: 'none', '2xl': 'inline-flex' },
+                          height: 16,
+                          minWidth: 18,
+                          fontSize: '0.62rem',
                           fontFamily: mono,
                           fontWeight: 700,
                           letterSpacing: '0.02em',
@@ -451,8 +436,8 @@ export default function Navbar({ mode, onToggleTheme }) {
                           boxShadow: active
                             ? `0 0 8px ${dark ? 'rgba(212, 175, 55, 0.45)' : 'rgba(184, 134, 11, 0.35)'}`
                             : 'none',
-                          borderRadius: '6px',
-                          px: 0.5,
+                          borderRadius: '5px',
+                          px: 0.4,
                           transition: 'all 0.22s cubic-bezier(0.4, 0, 0.2, 1)',
                           '.MuiButtonBase-root:hover &': {
                             bgcolor: active
@@ -471,14 +456,14 @@ export default function Navbar({ mode, onToggleTheme }) {
               );
             })}
 
-            {/* Knowledge Dropdown Trigger */}
+            {/* Knowledge / More Dropdown Trigger */}
             <Button
               onClick={handleOpenKnowledge}
               endIcon={
                 <KeyboardArrowDownIcon
                   className="dropdown-icon"
                   sx={{
-                    fontSize: '18px !important',
+                    fontSize: '17px !important',
                     transform: knowledgeAnchor ? 'rotate(180deg)' : 'none',
                     transition: 'transform 0.24s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s ease',
                   }}
@@ -488,10 +473,10 @@ export default function Navbar({ mode, onToggleTheme }) {
                 color: isKnowledgeActive ? navActive : navIdle,
                 fontWeight: isKnowledgeActive ? 800 : 600,
                 borderRadius: 9999,
-                px: 1.5,
-                py: 0.65,
+                px: { lg: 1.05, xl: 1.35 },
+                py: 0.55,
                 minWidth: 0,
-                fontSize: '0.84rem',
+                fontSize: { lg: '0.76rem', xl: '0.80rem' },
                 textTransform: 'none',
                 bgcolor: isKnowledgeActive
                   ? (dark ? 'rgba(212, 175, 55, 0.16)' : '#FEF9E7')
@@ -529,20 +514,21 @@ export default function Navbar({ mode, onToggleTheme }) {
                 },
               }}
             >
-              Knowledge
+              <Box component="span" sx={{ display: { xs: 'none', '2xl': 'inline' } }}>Knowledge</Box>
+              <Box component="span" sx={{ display: { xs: 'inline', '2xl': 'none' } }}>More</Box>
             </Button>
           </Box>
 
           {/* Right Action Buttons */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.75, sm: 1.25 }, flexShrink: 0 }}>
-            {/* Universal Swarm Daemon 21-Terminal Trigger: Compact Icon on Tablets / Small Laptops (< xl) */}
+            {/* Universal Swarm Daemon 21-Terminal Trigger: Compact Icon on Tablets / Standard Desktops (< 2xl) */}
             <IconButton
               size="small"
               onClick={() => setSwarmDaemonOpen(true)}
               aria-label="Open 21 Swarm Matrix (Ctrl+~)"
               title="Open 21 Swarm Matrix (Ctrl+~)"
               sx={{
-                display: { xs: 'none', sm: 'inline-flex', xl: 'none' },
+                display: { xs: 'none', sm: 'inline-flex', '2xl': 'none' },
                 color: '#08080B',
                 bgcolor: goldAccent,
                 border: `1px solid ${goldAccent}`,
@@ -560,13 +546,13 @@ export default function Navbar({ mode, onToggleTheme }) {
               <TerminalIcon fontSize="small" />
             </IconButton>
 
-            {/* Universal Swarm Daemon 21-Terminal Trigger: Full Pill Button for Large Desktop (>= xl) */}
+            {/* Universal Swarm Daemon 21-Terminal Trigger: Full Pill Button for Ultra-Wide Desktop (>= 2xl) */}
             <Button
               size="small"
               onClick={() => setSwarmDaemonOpen(true)}
               startIcon={<TerminalIcon sx={{ color: '#08080B', fontSize: '17px !important' }} />}
               sx={{
-                display: { xs: 'none', xl: 'inline-flex' },
+                display: { xs: 'none', '2xl': 'inline-flex' },
                 color: '#08080B',
                 bgcolor: goldAccent,
                 borderRadius: 9999,
@@ -588,14 +574,14 @@ export default function Navbar({ mode, onToggleTheme }) {
               SWARM [21]
             </Button>
 
-            {/* Quick Command Palette Search Button: Compact Icon for Mobile / Tablet / Laptop (< xl) */}
+            {/* Quick Command Palette Search Button: Compact Icon for Screens (< 2xl) */}
             <IconButton
               size="small"
               onClick={() => setPaletteOpen(true)}
               aria-label="Search studio (⌘K)"
               title="Search studio capabilities (⌘K)"
               sx={{
-                display: { xs: 'inline-flex', xl: 'none' },
+                display: { xs: 'inline-flex', '2xl': 'none' },
                 color: goldAccent,
                 border: `1px solid ${dark ? 'rgba(212, 175, 55, 0.28)' : 'rgba(212, 175, 55, 0.22)'}`,
                 background: dark ? 'rgba(212, 175, 55, 0.08)' : 'rgba(212, 175, 55, 0.06)',
@@ -614,7 +600,7 @@ export default function Navbar({ mode, onToggleTheme }) {
               <SearchIcon fontSize="small" />
             </IconButton>
 
-            {/* Quick Command Palette Search Button: Full Search Bar for Large Desktop (>= xl) */}
+            {/* Quick Command Palette Search Button: Full Search Bar for Ultra-Wide Desktop (>= 2xl) */}
             <Button
               size="small"
               onClick={() => setPaletteOpen(true)}
@@ -643,7 +629,7 @@ export default function Navbar({ mode, onToggleTheme }) {
                 />
               }
               sx={{
-                display: { xs: 'none', xl: 'inline-flex' },
+                display: { xs: 'none', '2xl': 'inline-flex' },
                 color: navIdle,
                 bgcolor: dark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.04)',
                 border: `1px solid ${dark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'}`,
@@ -673,7 +659,7 @@ export default function Navbar({ mode, onToggleTheme }) {
               Search studio...
             </Button>
 
-            {/* NullAI External Link (Large Desktop >= xl) */}
+            {/* NullAI External Link (Ultra-Wide Desktop >= 2xl) */}
             <Button
               variant="contained"
               color="primary"
@@ -682,7 +668,7 @@ export default function Navbar({ mode, onToggleTheme }) {
               rel="noopener noreferrer"
               startIcon={<Box component="img" src="/brand/ghostbyte-dark.png" alt="Ghostbyte Brand Logo" sx={{ height: 20, width: 'auto' }} />}
               sx={{
-                display: { xs: 'none', xl: 'inline-flex' },
+                display: { xs: 'none', '2xl': 'inline-flex' },
                 fontWeight: 800,
                 px: 2,
                 py: 0.7,
@@ -732,7 +718,7 @@ export default function Navbar({ mode, onToggleTheme }) {
                 }}
               >
                 <RealityThemeIcon mode={realityId} size={16} />
-                <Box component="span" sx={{ display: { xs: 'none', md: 'inline' } }}>
+                <Box component="span" sx={{ display: { xs: 'none', '2xl': 'inline' } }}>
                   {reality.shortName}
                 </Box>
               </Button>
@@ -820,6 +806,52 @@ export default function Navbar({ mode, onToggleTheme }) {
         transformOrigin={{ horizontal: 'center', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
       >
+        {/* Apps Section on screens < 2xl */}
+        <Box sx={{ display: { xs: 'block', '2xl': 'none' }, mb: 1 }}>
+          <Typography variant="caption" sx={{ px: 2, py: 0.75, display: 'block', fontWeight: 800, color: goldAccent, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: mono, fontSize: '0.7rem' }}>
+            Sovereign Ecosystem Apps
+          </Typography>
+          <Divider sx={{ mb: 1, opacity: 0.4, borderColor: dark ? 'rgba(212, 175, 55, 0.15)' : 'rgba(212, 175, 55, 0.2)' }} />
+          {ecosystemSecondaryItems.map((item) => {
+            const selected = location.pathname.startsWith(item.path);
+            return (
+              <MenuItem
+                key={item.path}
+                component={RouterLink}
+                to={item.path}
+                onClick={handleCloseKnowledge}
+                selected={selected}
+                sx={{
+                  borderRadius: '10px',
+                  py: 1,
+                  px: 1.5,
+                  mb: 0.5,
+                  whiteSpace: 'normal',
+                  alignItems: 'flex-start',
+                  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                  border: selected ? `1px solid ${dark ? 'rgba(212, 175, 55, 0.35)' : '#F0E1A8'}` : '1px solid transparent',
+                  '&.Mui-selected': { bgcolor: dark ? 'rgba(212, 175, 55, 0.15)' : '#FEF9E7' },
+                  '&:hover': {
+                    bgcolor: selected ? (dark ? 'rgba(212, 175, 55, 0.22)' : '#FDF4D4') : (dark ? 'rgba(212, 175, 55, 0.08)' : 'rgba(212, 175, 55, 0.05)'),
+                    transform: 'translateX(4px)',
+                  },
+                }}
+              >
+                <ListItemIcon sx={{ minWidth: 36, mt: 0.25 }}>{item.icon}</ListItemIcon>
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  <Typography variant="body2" sx={{ fontWeight: 700, color: selected ? goldAccent : (dark ? '#F3F4F6' : '#111827'), whiteSpace: 'normal' }}>
+                    {item.label}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: dark ? '#9CA3AF' : '#6B7280', display: 'block', fontSize: '0.74rem', whiteSpace: 'normal', wordBreak: 'break-word', lineHeight: 1.35, mt: 0.25 }}>
+                    {item.desc}
+                  </Typography>
+                </Box>
+              </MenuItem>
+            );
+          })}
+          <Divider sx={{ my: 1, opacity: 0.4, borderColor: dark ? 'rgba(212, 175, 55, 0.15)' : 'rgba(212, 175, 55, 0.2)' }} />
+        </Box>
+
         <Typography variant="caption" sx={{ px: 2, py: 1, display: 'block', fontWeight: 800, color: goldAccent, letterSpacing: '0.08em', textTransform: 'uppercase', fontFamily: mono, fontSize: '0.7rem' }}>
           Theory & Specifications
         </Typography>
