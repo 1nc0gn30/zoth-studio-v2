@@ -238,7 +238,7 @@ export default function ZothOSShowcasePage() {
                 }}
               />
               <Chip
-                label="152 MCP CATALOG (ALL OFF)"
+                label="163 MCP CATALOG (ALL OFF)"
                 size="small"
                 sx={{
                   bgcolor: isDark ? 'rgba(248, 113, 113, 0.12)' : '#FEF2F2',

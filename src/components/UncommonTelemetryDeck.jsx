@@ -474,7 +474,7 @@ export default function UncommonTelemetryDeck({ compact = false }) {
             <Grid item xs={12} sm={6}>
               <SplitFlapTile
                 label="OPEN-ACCESS ARSENAL"
-                value="152 MCP · 71 TOOLS"
+                value="163 MCP · 71 TOOLS"
                 sub="100% Free + Unlocked Client-Side AST, Security, AEO + AI Workstations"
                 dark={dark}
                 to="/arsenal"

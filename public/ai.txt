@@ -1,5 +1,5 @@
 # ai.txt — AI Crawler, Answer Engine (AEO) & Autonomous Agent Directives
-# Site: Zoth Studio v2 & 44-Tool Sovereign Pro Workstation (https://zoth.nullai.tech)
+# Site: Zoth Studio v2 & 71 Studio Tools (https://zoth.nullai.tech)
 # Principal Architect: Neal Frazier (@1nc0gn30) — Neal Frazier Tech & NullAI
 # Contact: contact@nealfrazier.tech
 

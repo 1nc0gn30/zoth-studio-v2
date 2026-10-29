@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.4.0",
-  "site": "Zoth Studio v2 & 44-Tool Sovereign Pro Workstation",
+  "site": "Zoth Studio v2 & 71 Studio Tools",
   "baseUrl": "https://zoth.nullai.tech",
   "architect": {
     "name": "Neal Frazier",
@@ -35,7 +35,7 @@
     {
       "name": "Zoth Studio v2",
       "url": "https://zoth.nullai.tech",
-      "role": "Zero-Egress AI Studio & 44-Tool Browser Workstation"
+      "role": "Zero-Egress AI Studio & 71 Studio Tools"
     },
     {
       "name": "ZothOS Linux v3.2",
@@ -48,7 +48,7 @@
       "role": "Hampton Roads B2B IT, Web Design & AI Automation Agency"
     },
     {
-      "name": "Sovereign 44-Tool Catalog",
+      "name": "Sovereign 71-Tool Catalog",
       "url": "https://1nc0gn30.github.io",
       "role": "Interactive Storefront & Custom Engineering Solutions"
     },

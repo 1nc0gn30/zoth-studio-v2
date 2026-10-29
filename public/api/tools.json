@@ -1,7 +1,7 @@
 {
   "schema": "zoth/tools-static/v1",
   "generated_at": "2026-10-17T04:03:46.171Z",
-  "tool_count": 65,
+  "tool_count": 71,
   "tools": [
     {
       "id": "adytum-alchemist-ai-workflow",
@@ -79,7 +79,7 @@
     {
       "id": "zoth-os",
       "name": "Zoth OS v3.2",
-      "description": "Debian 13 + KDE Plasma 6.3 sovereign AI distro. Kali + Parrot parity, Studio v2, Ollama on 127.0.0.1, 152 MCP servers all off. Eight named virtual desktops; zoth-workspaces puts a Samsung / DP monitor on its own screen. Live users zoth / azoth / root password zoth.",
+      "description": "Debian 13 + KDE Plasma 6.3 sovereign AI distro. Kali + Parrot parity, Studio v2, Ollama on 127.0.0.1, 163 MCP servers all off. Eight named virtual desktops; zoth-workspaces puts a Samsung / DP monitor on its own screen. Live users zoth / azoth / root password zoth.",
       "category": "Swarm & Core",
       "github": "https://github.com/NullAITech/zoth-os",
       "version": "3.2.0",
@@ -924,7 +924,7 @@
     {
       "id": "osint-scout-skill",
       "name": "Domain Intel OSINT Scout",
-      "description": "100% in-browser passive domain intelligence & attack surface reconnaissance engine auditing Certificate Transparency logs, DoH DNS records, and SPF/DMARC posture with dual Stripe + Solana rails ($19).",
+      "description": "100% in-browser passive domain intelligence & attack surface reconnaissance engine auditing Certificate Transparency logs, DoH DNS records, and SPF/DMARC posture — free to use; optional tips welcome.",
       "category": "Security & Recon",
       "github": "https://github.com/NullAITech/osint-scout-skill",
       "version": "2.5.0",
@@ -1117,7 +1117,7 @@
     {
       "id": "zela-glasses-guide",
       "name": "Zela Glasses Guide",
-      "description": "Sovereign wearable AI mission coach for Ray-Ban Meta smart glasses over Tailscale \u2014 full-duplex guide stream via zoth-relay-mobile.",
+      "description": "Sovereign wearable AI mission coach for Ray-Ban Meta smart glasses over Tailscale — full-duplex guide stream via zoth-relay-mobile.",
       "category": "Swarm & Core",
       "github": "https://github.com/1nc0gn30/zoth-relay",
       "version": "0.5.0",
@@ -1164,7 +1164,7 @@
     {
       "id": "zoth-scene-foundry",
       "name": "Zoth Scene Foundry",
-      "description": "Procedural ZothOS-style ASCII + pixel-art scene engine \u2014 1000 deterministic scenes on :8823.",
+      "description": "Procedural ZothOS-style ASCII + pixel-art scene engine — 1000 deterministic scenes on :8823.",
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/zoth-scene-foundry",
       "version": "1.0.0",

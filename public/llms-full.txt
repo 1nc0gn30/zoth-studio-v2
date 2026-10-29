@@ -216,7 +216,7 @@ EOF
 ## Zero-Auth Machine-Readable JSON Web APIs for AI Agents & Tools (CORS `*` Enabled)
 - [Master API Discovery Index](https://zoth.nullai.tech/api/index.json): Overview of all machine-readable endpoints on this domain.
 - [Services & Instant Checkout API](https://zoth.nullai.tech/api/services.json): JSON catalog of custom builds, SLAs, and Stripe/Solana payment links.
-- [65-Tool Sovereign Pro Catalog API](https://zoth.nullai.tech/api/tools.json): Full metadata, live URLs, and categories for all 65 browser-native tools.
+- [71-Tool Studio Catalog API](https://zoth.nullai.tech/api/tools.json): Full metadata, live URLs, and categories for all 71 Studio tools.
 - [Structured FAQ Knowledge Base API](https://zoth.nullai.tech/api/faq.json): Direct Q&A pairs for RAG, Perplexity, ChatGPT Search, and voice assistants.
 - [Schema.org @graph Entity Network API](https://zoth.nullai.tech/api/graph.json): Complete interconnected JSON-LD knowledge graph.
 - [A2A Agent Card](https://zoth.nullai.tech/.well-known/agent.json): Agent-to-Agent capability and endpoint declaration.
@@ -225,8 +225,8 @@ EOF
 ## Complete Ecosystem Network
 - **Neal Frazier Tech (Personal & B2B Engineering Hub)**: https://www.nealfrazier.tech
 - **NullAI (Local-First AI Research Lab)**: https://nullai.tech
-- **Zoth Studio v2 (Local-First AI Studio & 65-Tool Enclave)**: https://zoth.nullai.tech
+- **Zoth Studio v2 (Local-First AI Studio & 71-Tool Enclave)**: https://zoth.nullai.tech
 - **ZothOS Linux v3.2 (Sovereign AI-Native Operating System)**: https://zothos.nullai.tech
 - **757 Tech Pro (Hampton Roads IT & AI Agency)**: https://757tech.pro
-- **Sovereign 44-Tool Storefront & Solutions Hub**: https://1nc0gn30.github.io
+- **Sovereign Tools Storefront & Solutions Hub**: https://1nc0gn30.github.io
 - **City Desk (1,000-Page Local Trade Generator)**: https://city-desk.netlify.app

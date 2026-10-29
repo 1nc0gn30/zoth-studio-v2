@@ -102,7 +102,7 @@ export const siteConfig = {
     },
     '/zoth-os': {
       title: 'Zoth OS v3.3.0 // Debian 13 + KDE Plasma 6 Sovereign AI Distro',
-      description: 'Bootable Debian 13 + KDE Plasma 6.3 OS. Kali + Parrot parity, Zoth Studio v2, Ollama on 127.0.0.1, 152 MCP servers all off. Product site zothos.nullai.tech.',
+      description: 'Bootable Debian 13 + KDE Plasma 6.3 OS. Kali + Parrot parity, Zoth Studio v2, Ollama on 127.0.0.1, 163 MCP servers all off. Product site zothos.nullai.tech.',
       keywords: 'Zoth OS, ZOTHOS, Debian 13, KDE Plasma 6, Kali, Parrot, sovereign AI OS',
       type: 'article',
     },

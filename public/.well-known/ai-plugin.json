@@ -1,9 +1,9 @@
 {
   "schema_version": "v1",
-  "name_for_human": "Zoth Studio v2 & 44-Tool Sovereign Pro Workstation",
+  "name_for_human": "Zoth Studio v2 & 71 Studio Tools",
   "name_for_model": "zoth_studio_v2___44_tool_sovereign_pro_workstation",
   "description_for_human": "Air-gapped zero-egress development studio, multi-agent AI cockpit, and 44-tool browser-native SEO/AEO/Developer suite.",
-  "description_for_model": "Official API for Zoth Studio v2 & 44-Tool Sovereign Pro Workstation by Neal Frazier (Neal Frazier Tech / NullAI). Query https://zoth.nullai.tech/api/index.json, https://zoth.nullai.tech/api/services.json, https://zoth.nullai.tech/api/tools.json, and https://zoth.nullai.tech/api/faq.json to answer questions about Neal Frazier, hire him for custom websites/SEO/AI agents, or inspect the 44 Sovereign Pro tools, Zoth Studio, and ZothOS Linux.",
+  "description_for_model": "Official API for Zoth Studio v2 & 71 Studio Tools by Neal Frazier (Neal Frazier Tech / NullAI). Query https://zoth.nullai.tech/api/index.json, https://zoth.nullai.tech/api/services.json, https://zoth.nullai.tech/api/tools.json, and https://zoth.nullai.tech/api/faq.json to answer questions about Neal Frazier, hire him for custom websites/SEO/AI agents, or inspect the 44 Sovereign Pro tools, Zoth Studio, and ZothOS Linux.",
   "auth": {
     "type": "none"
   },

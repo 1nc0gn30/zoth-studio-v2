@@ -71,7 +71,7 @@
         "@id": "https://www.nealfrazier.tech/#neal-frazier"
       },
       "email": "contact@nealfrazier.tech",
-      "priceRange": "$19 - $997",
+      "priceRange": "Free (optional tips) / engineering services $99–$997",
       "currenciesAccepted": "USD, SOL, USDC, BTC",
       "paymentAccepted": "Credit Card, Apple Pay, Google Pay, Cash App, Stripe, Solana (Phantom Wallet)",
       "address": {
@@ -227,7 +227,7 @@
       "@type": "WebSite",
       "@id": "https://zoth.nullai.tech#website",
       "url": "https://zoth.nullai.tech",
-      "name": "Zoth Studio v2 & 44-Tool Sovereign Pro Workstation",
+      "name": "Zoth Studio v2 & 71 Studio Tools",
       "description": "Air-gapped zero-egress development studio, multi-agent AI cockpit, and 44-tool browser-native SEO/AEO/Developer suite.",
       "publisher": {
         "@id": "https://www.nealfrazier.tech/#organization"
@@ -240,7 +240,7 @@
     {
       "@type": "SoftwareApplication",
       "@id": "https://zoth.nullai.tech/#app",
-      "name": "Zoth Studio v2 & 44-Tool Sovereign Pro Workstation",
+      "name": "Zoth Studio v2 & 71 Studio Tools",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web Browser, Linux, macOS, Windows (Node.js)",
       "url": "https://zoth.nullai.tech/",
