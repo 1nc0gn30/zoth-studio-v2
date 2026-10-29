@@ -7,10 +7,19 @@
   command = "npm run build"
   publish = "dist"
   functions = "netlify/functions"
+  edge_functions = "netlify/edge-functions"
 
 [build.environment]
   NODE_VERSION = "20"
   NPM_FLAGS = "--no-audit"
+
+[images]
+  remote_images = ["https://zoth.nullai.tech/.*", "https://*.nullai.tech/.*"]
+
+# ── Netlify Edge Functions (Ultra-Low Latency Edge Telemetry) ──
+[[edge_functions]]
+  function = "edge-telemetry"
+  path = "/api/edge/*"
 
 [build.processing]
   skip_processing = false

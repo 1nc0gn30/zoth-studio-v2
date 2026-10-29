@@ -23,9 +23,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import FlashOnIcon from '@mui/icons-material/FlashOn';
 import OndemandVideoIcon from '@mui/icons-material/OndemandVideo';
+import CloudQueueIcon from '@mui/icons-material/CloudQueue';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import GoldenZLogo3D from './GoldenZLogo3D';
 const SwarmDaemonMultiplexer = React.lazy(() => import('./SwarmDaemonMultiplexer'));
+import NetlifyShowcaseDialog from './NetlifyShowcaseDialog';
 import { microTools } from '../data/toolsData';
 import { workstations } from '../data/workstations';
 import { arsenalStats } from '../data/arsenalData';
@@ -62,6 +64,7 @@ export default function Navbar({ mode, onToggleTheme }) {
   const [knowledgeAnchor, setKnowledgeAnchor] = useState(null);
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [swarmDaemonOpen, setSwarmDaemonOpen] = useState(false);
+  const [netlifyOpen, setNetlifyOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const location = useLocation();
@@ -275,11 +278,39 @@ export default function Navbar({ mode, onToggleTheme }) {
                   fontSize: '0.68rem',
                   fontFamily: mono,
                   height: 22,
-                  cursor: 'default',
+                  cursor: 'pointer',
                   transition: 'all 0.2s ease',
                   '&:hover': {
                     borderColor: badgeColor,
                     bgcolor: dark ? `${badgeColor}25` : `${badgeColor}20`,
+                  },
+                }}
+              />
+            </Tooltip>
+
+            {/* Netlify Platform Architecture Showcase Launcher */}
+            <Tooltip title="Inspect live Netlify Edge POP telemetry, Netlify Blobs & 140 prerendered routes">
+              <Chip
+                icon={<CloudQueueIcon sx={{ fontSize: '13px !important', color: '#00AD9F !important' }} />}
+                label="⚡ NETLIFY EDGE"
+                size="small"
+                onClick={() => setNetlifyOpen(true)}
+                sx={{
+                  display: { xs: 'none', lg: 'inline-flex' },
+                  bgcolor: dark ? 'rgba(0,173,159,0.14)' : '#F0FDFA',
+                  color: dark ? '#5EEAD4' : '#0F766E',
+                  border: `1px solid ${dark ? 'rgba(0,173,159,0.4)' : 'rgba(0,173,159,0.5)'}`,
+                  fontWeight: 800,
+                  fontSize: '0.66rem',
+                  fontFamily: mono,
+                  height: 22,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    borderColor: '#00AD9F',
+                    bgcolor: dark ? 'rgba(0,173,159,0.28)' : '#CCFBF1',
+                    transform: 'translateY(-1px)',
+                    boxShadow: '0 0 10px rgba(0,173,159,0.3)',
                   },
                 }}
               />
@@ -1742,6 +1773,9 @@ export default function Navbar({ mode, onToggleTheme }) {
           </React.Suspense>
         </DialogContent>
       </Dialog>
+
+      {/* Netlify Community Stream Platform Architecture Showcase Dialog */}
+      <NetlifyShowcaseDialog open={netlifyOpen} onClose={() => setNetlifyOpen(false)} />
     </AppBar>
   );
 }

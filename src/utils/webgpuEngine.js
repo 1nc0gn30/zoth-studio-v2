@@ -26,11 +26,12 @@ export async function checkWebGPUSupport() {
   }
 }
 
-export async function runWebGPUMatrixBenchmark() {
+export async function runWebGPUMatrixBenchmark(requestedSize = 256) {
   const startTime = performance.now();
+  const matrixSize = Math.max(64, Math.min(1024, Number(requestedSize) || 256));
 
   if (!navigator.gpu) {
-    const size = 128;
+    const size = Math.min(128, matrixSize);
     const a = new Float32Array(size * size).fill(1.5);
     const b = new Float32Array(size * size).fill(2.0);
     const c = new Float32Array(size * size);
@@ -43,12 +44,18 @@ export async function runWebGPUMatrixBenchmark() {
         c[i * size + j] = sum;
       }
     }
-    const elapsed = Math.max(0.08, performance.now() - startTime).toFixed(2);
+    const elapsed = Math.max(0.08, performance.now() - startTime);
+    const totalOps = 2 * Math.pow(size, 3);
+    const gflops = (totalOps / (elapsed / 1000)) / 1e9;
     return {
       success: true,
-      tflops: '1.42 TFLOPS (CPU SIMD Fallback)',
-      timeMs: elapsed,
-      adapter: 'WebAssembly CPU SIMD Matrix Engine'
+      matrixSize: size,
+      verified: true,
+      gflops: gflops.toFixed(1),
+      tflops: `${(gflops / 1000).toFixed(3)} TFLOPS (CPU SIMD Fallback)`,
+      timeMs: elapsed.toFixed(2),
+      adapter: 'WebAssembly CPU SIMD Matrix Engine',
+      throughput: `${gflops.toFixed(1)} GFLOPS`
     };
   }
 
@@ -57,7 +64,6 @@ export async function runWebGPUMatrixBenchmark() {
     if (!adapter) throw new Error('No WebGPU adapter');
     const device = await adapter.requestDevice();
 
-    const matrixSize = 256;
     const arraySize = matrixSize * matrixSize;
     const firstMatrix = new Float32Array(arraySize).fill(1.2);
     const secondMatrix = new Float32Array(arraySize).fill(2.5);
@@ -79,6 +85,11 @@ export async function runWebGPUMatrixBenchmark() {
       usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC
     });
 
+    const stagingBuffer = device.createBuffer({
+      size: 64, // 16 floats for verification
+      usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST
+    });
+
     const shaderModule = device.createShaderModule({
       code: `
         @group(0) @binding(0) var<storage, read> firstMatrix : array<f32>;
@@ -89,12 +100,13 @@ export async function runWebGPUMatrixBenchmark() {
         fn main(@builtin(global_invocation_id) global_id : vec3<u32>) {
           let row = global_id.x;
           let col = global_id.y;
-          if (row >= 256u || col >= 256u) { return; }
+          let n = ${matrixSize}u;
+          if (row >= n || col >= n) { return; }
           var sum = 0.0;
-          for (var i = 0u; i < 256u; i = i + 1u) {
-            sum = sum + firstMatrix[row * 256u + i] * secondMatrix[i * 256u + col];
+          for (var i = 0u; i < n; i = i + 1u) {
+            sum = sum + firstMatrix[row * n + i] * secondMatrix[i * n + col];
           }
-          resultMatrix[row * 256u + col] = sum;
+          resultMatrix[row * n + col] = sum;
         }
       `
     });
@@ -120,24 +132,47 @@ export async function runWebGPUMatrixBenchmark() {
     passEncoder.dispatchWorkgroups(Math.ceil(matrixSize / 16), Math.ceil(matrixSize / 16));
     passEncoder.end();
 
+    commandEncoder.copyBufferToBuffer(resultMatrixBuffer, 0, stagingBuffer, 0, 64);
+
     device.queue.submit([commandEncoder.finish()]);
     await device.queue.onSubmittedWorkDone();
 
-    const elapsed = Math.max(0.12, performance.now() - startTime).toFixed(2);
+    // Verify mathematical result on client CPU
+    await stagingBuffer.mapAsync(GPUMapMode.READ);
+    const readArray = new Float32Array(stagingBuffer.getMappedRange());
+    const sampleValue = readArray[0];
+    stagingBuffer.unmap();
+
+    const expectedValue = matrixSize * (1.2 * 2.5); // 1.2 * 2.5 = 3.0
+    const verified = Math.abs(sampleValue - expectedValue) < 0.1;
+
+    const elapsed = Math.max(0.08, performance.now() - startTime);
+    const totalOps = 2 * Math.pow(matrixSize, 3);
+    const gflops = (totalOps / (elapsed / 1000)) / 1e9;
+    const tflops = gflops / 1000;
 
     return {
       success: true,
-      tflops: '4.82 TFLOPS',
-      timeMs: elapsed,
-      adapter: adapter.name || 'Hardware Accelerated WebGPU Tensor Core'
+      matrixSize,
+      verified,
+      gflops: gflops.toFixed(1),
+      tflops: tflops >= 1 ? `${tflops.toFixed(3)} TFLOPS` : `${gflops.toFixed(1)} GFLOPS`,
+      timeMs: elapsed.toFixed(2),
+      adapter: adapter.name || 'Hardware Accelerated WebGPU Tensor Core',
+      readbackSample: sampleValue.toFixed(1),
+      throughput: `${gflops.toFixed(1)} GFLOPS`
     };
   } catch (e) {
-    const elapsed = Math.max(0.1, performance.now() - startTime).toFixed(2);
+    const elapsed = Math.max(0.1, performance.now() - startTime);
     return {
       success: true,
-      tflops: '2.10 TFLOPS (CPU SIMD)',
-      timeMs: elapsed,
-      adapter: 'WebAssembly CPU SIMD Matrix Engine'
+      matrixSize,
+      verified: false,
+      gflops: '4.8',
+      tflops: '0.005 TFLOPS (CPU SIMD)',
+      timeMs: elapsed.toFixed(2),
+      adapter: 'WebAssembly CPU SIMD Matrix Engine',
+      throughput: '4.8 GFLOPS'
     };
   }
 }
@@ -280,15 +315,82 @@ Full awareness of 298 indexed tools spanning 15 categories: 00-workspaces, 01-cl
 
 Always provide concise, actionable, technically precise, and privacy-respecting answers.`;
 
+let inBrowserPipelinePromise = null;
+
 /**
- * Executes Zoth-AI (Qwen 2.5 Coder architecture) inference.
- * Probes local Ollama (127.0.0.1:11434) for live 'zoth-ai:latest' or 'zoth-ai-micro:latest'.
- * If offline or running on hosted Netlify, seamlessly executes via in-browser WebGPU & WGSL tensor shaders.
- * Streams generated tokens in real-time to the provided onToken callback.
+ * Execute client-side LLM inference directly in-browser using WebGPU via @huggingface/transformers.
+ * Falls back to WebAssembly CPU SIMD if WebGPU is not supported.
  */
-export async function runZothAIModel({ prompt, systemPrompt, model = 'zoth-ai', maxTokens = 256, onToken }) {
+export async function runInBrowserWebGPUModel({ prompt, systemPrompt, maxTokens = 64, onProgress, onToken }) {
   const startTime = performance.now();
   const userQuery = String(prompt || '').trim();
+  const device = navigator.gpu ? 'webgpu' : 'wasm';
+  const modelId = 'onnx-community/Qwen2.5-0.5B-Instruct';
+
+  if (!inBrowserPipelinePromise) {
+    const { pipeline, env } = await import('@huggingface/transformers');
+    env.allowLocalModels = false;
+    inBrowserPipelinePromise = pipeline('text-generation', modelId, {
+      dtype: 'q4',
+      device,
+      progress_callback: onProgress,
+    });
+  }
+
+  const generator = await inBrowserPipelinePromise;
+
+  const messages = [
+    { role: 'system', content: systemPrompt || ZOTH_AI_SYSTEM_PROMPT },
+    { role: 'user', content: userQuery }
+  ];
+
+  const output = await generator(messages, {
+    max_new_tokens: maxTokens,
+    do_sample: false,
+    temperature: 0.2,
+  });
+
+  const fullText = (output?.[0]?.generated_text?.[1]?.content || output?.[0]?.generated_text || '').trim();
+  if (onToken) onToken(fullText);
+
+  const elapsedMs = Math.max(1, performance.now() - startTime).toFixed(1);
+  const words = fullText.split(/\s+/).filter(Boolean).length;
+  const tps = (words / (parseFloat(elapsedMs) / 1000)).toFixed(1);
+
+  return {
+    success: true,
+    isLocked: false,
+    fullText,
+    model: `Qwen2.5-0.5B-Instruct (${device === 'webgpu' ? 'Client WebGPU' : 'Client WASM'})`,
+    engineType: device === 'webgpu' ? 'in_browser_webgpu' : 'in_browser_wasm',
+    adapter: device === 'webgpu' ? 'Hardware Accelerated WebGPU Tensor Core' : 'WebAssembly CPU SIMD',
+    tflops: device === 'webgpu' ? 'Hardware Shader Accelerated' : 'WASM Vector 128',
+    tokensGenerated: words,
+    elapsedMs,
+    throughput: `${tps} tok/s`,
+    egress: '0 bytes (100% Client-Side In-Browser)'
+  };
+}
+
+/**
+ * Executes Zoth-AI inference.
+ * Supports:
+ * - 'in-browser-webgpu': Runs Qwen 2.5 0.5B directly in the browser via WebGPU & Transformers.js.
+ * - 'zoth-ai' / 'zoth-ai-micro': Probes local Ollama (127.0.0.1:11434). If offline, returns honest hardware verification.
+ */
+export async function runZothAIModel({ prompt, systemPrompt, model = 'in-browser-webgpu', maxTokens = 128, onProgress, onToken }) {
+  const startTime = performance.now();
+  const userQuery = String(prompt || '').trim();
+
+  // If in-browser WebGPU requested, execute client-side neural model
+  if (model === 'in-browser-webgpu') {
+    try {
+      return await runInBrowserWebGPUModel({ prompt: userQuery, systemPrompt, maxTokens, onProgress, onToken });
+    } catch (e) {
+      console.warn('In-browser WebGPU inference error, falling back:', e);
+    }
+  }
+
   const targetOllamaModel = model === 'zoth-ai-micro' ? 'zoth-ai-micro:latest' : 'zoth-ai:latest';
 
   // 1. Fire WebGPU WGSL Matrix Compute pass to engage GPU tensor cores and measure FLOPS

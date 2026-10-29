@@ -47,24 +47,74 @@ export default function WebGPUAIConsole() {
   const [status, setStatus] = useState(null);
   const [benchmarking, setBenchmarking] = useState(false);
   const [benchResult, setBenchResult] = useState(null);
+  const [matrixSize, setMatrixSize] = useState(256);
 
   // Zoth-AI Model Interactive Runner State
-  const [selectedModel, setSelectedModel] = useState('zoth-ai'); // 'zoth-ai' | 'zoth-ai-micro'
+  const [selectedModel, setSelectedModel] = useState('in-browser-webgpu'); // 'in-browser-webgpu' | 'zoth-ai' | 'zoth-ai-micro'
   const [prompt, setPrompt] = useState('Explain Zoth 3-Tier Architecture');
   const [streamingText, setStreamingText] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationMeta, setGenerationMeta] = useState(null);
   const [copied, setCopied] = useState(false);
 
+  // Netlify Blobs Community Stream Leaderboard State
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [submittingToBlobs, setSubmittingToBlobs] = useState(false);
+  const [blobsRecorded, setBlobsRecorded] = useState(false);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
+
   useEffect(() => {
     checkWebGPUSupport().then(setStatus);
+    loadLeaderboard();
   }, []);
 
-  const handleRunBenchmark = async () => {
+  const loadLeaderboard = async () => {
+    try {
+      const res = await fetch('/api/studio/benchmarks');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data.benchmarks)) {
+          setLeaderboard(data.benchmarks);
+        }
+      }
+    } catch {}
+  };
+
+  const handleRunBenchmark = async (size = matrixSize) => {
     setBenchmarking(true);
-    const res = await runWebGPUMatrixBenchmark();
+    setBlobsRecorded(false);
+    const res = await runWebGPUMatrixBenchmark(size);
     setBenchResult(res);
     setBenchmarking(false);
+  };
+
+  const handlePublishToNetlifyBlobs = async () => {
+    if (!benchResult || submittingToBlobs) return;
+    setSubmittingToBlobs(true);
+    try {
+      const res = await fetch('/api/studio/benchmarks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          adapter: benchResult.adapter,
+          matrixSize: benchResult.matrixSize,
+          gflops: benchResult.gflops,
+          tflops: benchResult.tflops,
+          timeMs: benchResult.timeMs,
+          verified: benchResult.verified,
+          userTag: 'Netlify Stream Guest'
+        })
+      });
+      if (res.ok) {
+        setBlobsRecorded(true);
+        await loadLeaderboard();
+        setShowLeaderboard(true);
+      }
+    } catch (e) {
+      console.warn('Blobs submission failed:', e);
+    } finally {
+      setSubmittingToBlobs(false);
+    }
   };
 
   const handleRunZothAI = async () => {
@@ -171,9 +221,14 @@ export default function WebGPUAIConsole() {
         <Grid xs={12} sm={4}>
           <Card sx={{ bgcolor: isDark ? '#08080B' : '#F9FAFB', border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
             <CardContent sx={{ py: 2 }}>
-              <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>Compute Throughput</Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                Compute Throughput {benchResult ? `(${benchResult.matrixSize}×${benchResult.matrixSize})` : ''}
+              </Typography>
               <Typography variant="h5" sx={{ fontWeight: 800, color: gold, mt: 0.5, fontFamily: mono }}>
-                {benchResult?.tflops || (status?.supported ? '4.82 TFLOPS' : '1.42 TFLOPS')}
+                {benchResult ? `${benchResult.gflops} GFLOPS` : (status?.supported ? '4.82 TFLOPS' : '1.42 TFLOPS')}
+              </Typography>
+              <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono, fontSize: '0.66rem' }}>
+                {benchResult ? benchResult.tflops : (status?.supported ? 'Direct WGSL Shaders' : 'WASM Vector 128')}
               </Typography>
             </CardContent>
           </Card>
@@ -181,14 +236,143 @@ export default function WebGPUAIConsole() {
         <Grid xs={12} sm={4}>
           <Card sx={{ bgcolor: isDark ? '#08080B' : '#F9FAFB', border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
             <CardContent sx={{ py: 2 }}>
-              <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>WGSL Shader Latency</Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>WGSL Latency & Integrity</Typography>
               <Typography variant="h5" sx={{ fontWeight: 800, color: 'var(--zs-emerald)', mt: 0.5, fontFamily: mono }}>
                 {benchResult ? `${benchResult.timeMs} ms` : '0.14 ms'}
+              </Typography>
+              <Typography variant="caption" sx={{ color: benchResult?.verified ? '#10B981' : goldSoft, fontFamily: mono, fontSize: '0.66rem', fontWeight: 700 }}>
+                {benchResult ? (benchResult.verified ? '✓ Math Verified (C = A × B)' : 'Unverified') : 'Hardware Tensor Matmul'}
               </Typography>
             </CardContent>
           </Card>
         </Grid>
       </Grid>
+
+      {/* Dynamic Dimension & Netlify Blobs Controls */}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2, flexWrap: 'wrap' }}>
+        <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 750, color: goldSoft, textTransform: 'uppercase' }}>
+          Matrix Dimension:
+        </Typography>
+        {[128, 256, 512, 1024].map((size) => (
+          <Chip
+            key={size}
+            label={`${size}×${size}`}
+            size="small"
+            clickable
+            onClick={() => {
+              setMatrixSize(size);
+              handleRunBenchmark(size);
+            }}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.72rem',
+              fontWeight: matrixSize === size ? 800 : 600,
+              bgcolor: matrixSize === size ? gold : (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'),
+              color: matrixSize === size ? '#08080B' : theme.palette.text.primary,
+              border: `1px solid ${matrixSize === size ? gold : 'transparent'}`,
+            }}
+          />
+        ))}
+
+        <Box sx={{ ml: 'auto', display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
+          {benchResult && (
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={handlePublishToNetlifyBlobs}
+              disabled={submittingToBlobs || blobsRecorded}
+              sx={{
+                fontFamily: mono,
+                fontSize: '0.72rem',
+                fontWeight: 800,
+                borderColor: blobsRecorded ? '#10B981' : gold,
+                color: blobsRecorded ? '#10B981' : gold,
+                '&:hover': { borderColor: goldSoft, bgcolor: goldWash },
+              }}
+            >
+              {blobsRecorded ? '✓ Published to Netlify Blobs' : submittingToBlobs ? 'Recording…' : 'Publish to Netlify Blobs Ledger'}
+            </Button>
+          )}
+
+          <Button
+            size="small"
+            variant="text"
+            onClick={() => setShowLeaderboard(!showLeaderboard)}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.72rem',
+              fontWeight: 750,
+              color: goldSoft,
+            }}
+          >
+            {showLeaderboard ? 'Hide Leaderboard' : `Community Leaderboard (${leaderboard.length})`}
+          </Button>
+        </Box>
+      </Box>
+
+      {/* Collapsible Netlify Blobs Community Stream Leaderboard */}
+      {showLeaderboard && (
+        <Paper
+          sx={{
+            p: 2,
+            mb: 2.5,
+            bgcolor: darkPanel,
+            border: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : '#CBD5E1'}`,
+            borderRadius: 2,
+          }}
+        >
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: goldSoft, textTransform: 'uppercase' }}>
+              ⚡ Live Netlify Blobs State Store: Community WebGPU Leaderboard
+            </Typography>
+            <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.66rem', color: 'text.secondary' }}>
+              Zero-Database Edge Persistence (@netlify/blobs)
+            </Typography>
+          </Box>
+          <Stack spacing={1}>
+            {leaderboard.length === 0 ? (
+              <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>
+                No entries recorded yet. Run a benchmark and click "Publish to Netlify Blobs Ledger" to log your GPU!
+              </Typography>
+            ) : (
+              leaderboard.slice(0, 5).map((entry, idx) => (
+                <Box
+                  key={entry.id || idx}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    py: 0.75,
+                    px: 1.5,
+                    borderRadius: 1,
+                    bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#F1F5F9',
+                    fontFamily: mono,
+                    fontSize: '0.74rem',
+                  }}
+                >
+                  <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                    <Typography component="span" sx={{ fontWeight: 800, color: gold, fontSize: '0.74rem' }}>
+                      #{idx + 1}
+                    </Typography>
+                    <Typography component="span" sx={{ fontWeight: 700, color: theme.palette.text.primary, fontSize: '0.74rem' }}>
+                      {entry.adapter}
+                    </Typography>
+                    <Chip label={`${entry.matrixSize}×${entry.matrixSize}`} size="small" sx={{ height: 18, fontSize: '0.6rem', fontFamily: mono }} />
+                  </Box>
+                  <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
+                    <Typography component="span" sx={{ fontWeight: 800, color: '#10B981', fontSize: '0.76rem' }}>
+                      {entry.gflops} GFLOPS
+                    </Typography>
+                    <Typography component="span" sx={{ color: 'text.secondary', fontSize: '0.66rem' }}>
+                      {entry.timeMs}ms
+                    </Typography>
+                  </Box>
+                </Box>
+              ))
+            )}
+          </Stack>
+        </Paper>
+      )}
 
       <Divider sx={{ my: 2.5, opacity: 0.5 }} />
 
@@ -202,10 +386,24 @@ export default function WebGPUAIConsole() {
         {/* Model Substrate Selector */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5, flexWrap: 'wrap' }}>
           <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 750, color: goldSoft, textTransform: 'uppercase' }}>
-            Model:
+            Inference Substrate:
           </Typography>
           <Chip
-            label="⚡ Zoth-AI 1.5B (Flagship Qwen 2.5 Coder)"
+            label="⚡ In-Browser WebGPU (Qwen 2.5 0.5B ONNX · Zero Server)"
+            size="small"
+            clickable
+            onClick={() => setSelectedModel('in-browser-webgpu')}
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              bgcolor: selectedModel === 'in-browser-webgpu' ? gold : (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'),
+              color: selectedModel === 'in-browser-webgpu' ? '#08080B' : theme.palette.text.primary,
+              border: `1px solid ${selectedModel === 'in-browser-webgpu' ? gold : 'transparent'}`,
+            }}
+          />
+          <Chip
+            label="🖥️ Local Ollama (Qwen 2.5 Coder 1.5B · :11434)"
             size="small"
             clickable
             onClick={() => setSelectedModel('zoth-ai')}
@@ -219,7 +417,7 @@ export default function WebGPUAIConsole() {
             }}
           />
           <Chip
-            label="⚡ Zoth-AI-Micro 360M (SmolLM2 Edge Ultra-Light)"
+            label="🖥️ Local SmolLM2 Micro (:11434)"
             size="small"
             clickable
             onClick={() => setSelectedModel('zoth-ai-micro')}
