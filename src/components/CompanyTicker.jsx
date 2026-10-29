@@ -149,7 +149,7 @@ const SvgLogos = {
 const partners = [
   { name: 'Google DeepMind', category: 'AI Model Engine', url: 'https://ai.google', color: '#4285F4', logoKey: 'deepmind' },
   { name: 'xAI Grok', category: 'Dialectic Synthesizer', url: 'https://x.ai', color: '#1DA1F2', logoKey: 'grok' },
-  { name: 'Nous Research', category: 'Hermes Subagent', url: 'https://nousresearch.com', color: '#C084FC', logoKey: 'nous' },
+  { name: 'Nous Hermes Agent', category: 'Official Zoth Plugin', url: 'https://hermes-agent.nousresearch.com/docs/plugins/zoth', color: '#C084FC', logoKey: 'nous' },
   { name: 'OpenAI', category: 'LLM Orchestrator', url: 'https://openai.com', color: '#10A37F', logoKey: 'openai' },
   { name: 'Anthropic', category: 'Claude Intelligence', url: 'https://anthropic.com', color: '#D97706', logoKey: 'anthropic' },
   { name: 'Meta Llama', category: 'Open Weights LLM', url: 'https://ai.meta.com', color: '#0668E1', logoKey: 'meta' },

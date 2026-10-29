@@ -1661,6 +1661,7 @@ export default function HomePage() {
           {/* Sovereign Runtime Architecture Pills */}
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 2.8 }}>
             {[
+              { label: '👑 Hermes Agent Plugin Docs', href: 'https://hermes-agent.nousresearch.com/docs/plugins/zoth', external: true },
               { label: '⚡ WebGPU Shaders', to: '/arsenal' },
               { label: '⚡ Zoth Bolt AI + Motion Architect', to: '/webgen' },
               { label: '⛓️ Vaelor L1 DAG (:8140)', to: '/vaelor' },
@@ -1669,8 +1670,8 @@ export default function HomePage() {
             ].map((pill) => (
               <Chip
                 key={pill.label}
-                component={RouterLink}
-                to={pill.to}
+                component={pill.external ? 'a' : RouterLink}
+                {...(pill.external ? { href: pill.href, target: '_blank', rel: 'noopener noreferrer' } : { to: pill.to })}
                 clickable
                 label={pill.label}
                 size="small"
@@ -1679,13 +1680,21 @@ export default function HomePage() {
                   fontSize: '0.7rem',
                   fontWeight: 700,
                   letterSpacing: '0.04em',
-                  bgcolor: isDark ? 'rgba(212,175,55,0.09)' : '#FEF9E7',
-                  color: isDark ? gold.soft : gold.accent,
-                  border: `1px solid ${isDark ? 'rgba(212,175,55,0.32)' : 'rgba(184,134,11,0.28)'}`,
+                  bgcolor: pill.external
+                    ? (isDark ? 'rgba(192,132,252,0.14)' : '#FAF5FF')
+                    : (isDark ? 'rgba(212,175,55,0.09)' : '#FEF9E7'),
+                  color: pill.external
+                    ? (isDark ? '#C084FC' : '#7E22CE')
+                    : (isDark ? gold.soft : gold.accent),
+                  border: `1px solid ${pill.external
+                    ? (isDark ? 'rgba(192,132,252,0.38)' : 'rgba(192,132,252,0.5)')
+                    : (isDark ? 'rgba(212,175,55,0.32)' : 'rgba(184,134,11,0.28)')}`,
                   transition: 'all 0.2s ease',
                   '&:hover': {
-                    bgcolor: isDark ? 'rgba(212,175,55,0.18)' : '#FDF2C6',
-                    borderColor: gold.accent,
+                    bgcolor: pill.external
+                      ? (isDark ? 'rgba(192,132,252,0.25)' : '#F3E8FF')
+                      : (isDark ? 'rgba(212,175,55,0.18)' : '#FDF2C6'),
+                    borderColor: pill.external ? '#C084FC' : gold.accent,
                     transform: 'translateY(-1px)',
                   },
                 }}

@@ -190,6 +190,16 @@ export default function NetlifyShowcaseDialog({ open, onClose }) {
             size="small"
             sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.68rem', bgcolor: isDark ? 'rgba(168,85,247,0.12)' : '#FAF5FF', color: '#9333EA', border: '1px solid rgba(168,85,247,0.3)' }}
           />
+          <Chip
+            component="a"
+            href="https://hermes-agent.nousresearch.com/docs/plugins/zoth"
+            target="_blank"
+            rel="noopener noreferrer"
+            clickable
+            label="👑 NOUS HERMES AGENT PLUGIN"
+            size="small"
+            sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.68rem', bgcolor: isDark ? 'rgba(192,132,252,0.14)' : '#FAF5FF', color: isDark ? '#C084FC' : '#7E22CE', border: '1px solid rgba(192,132,252,0.38)' }}
+          />
         </Stack>
 
         {/* Live Netlify Edge Diagnostics */}
