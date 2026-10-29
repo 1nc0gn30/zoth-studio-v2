@@ -488,7 +488,7 @@ export default function ZothBoltGodModeTool() {
     if (!/Neal Frazier Tech|1nc0gn30/i.test(patched) || !/Stripe|Solana|DePay|licensed/i.test(patched)) {
       const footerBar = `
 <section style="margin:24px auto;max-width:1120px;padding:14px 20px;border-radius:14px;background:rgba(17,20,32,0.92);border:1px solid rgba(212,175,55,0.4);color:#F8FAFC;font-family:monospace;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
-  <div><strong style="color:#D4AF37;">⚡ FOUNDING LIFETIME PRO ($19 <s style="opacity:.6">$79</s>)</strong> • Instant Stripe & Solana Tip Unlock (<code>?licensed=true</code>)</div>
+  <div><strong style="color:#D4AF37;">✦ 100% FREE & OPEN ACCESS</strong> • Optional Stripe & Solana tips</div>
   <div style="font-size:12px;color:#94A3B8;">Engineered by <a href="https://github.com/1nc0gn30" style="color:#D4AF37;">Neal Frazier Tech (@1nc0gn30)</a> • <a href="https://nullai.tech" style="color:#38BDF8;">NullAI Platform</a></div>
 </section>`;
       patched = patched.replace(/<\/body>/i, `${footerBar}\n</body>`);

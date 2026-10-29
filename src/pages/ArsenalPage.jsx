@@ -739,7 +739,7 @@ export default function ArsenalPage() {
               <TextField
                 fullWidth
                 size="small"
-                placeholder="Search 30 sovereign tools by name, ID, or description..."
+                placeholder="Search 71 Studio tools by name, ID, or description..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 InputProps={{

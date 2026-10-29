@@ -314,7 +314,7 @@ export default function RobotsTxtAuditorGodModeTool() {
         setLicenseStatusMsg('');
       }, 1200);
     } else {
-      setLicenseStatusMsg('⚠️ Please enter a valid license key or receipt order ID.');
+      setLicenseStatusMsg('Everything is already free. No key needed.');
     }
   };
 
@@ -424,10 +424,10 @@ export default function RobotsTxtAuditorGodModeTool() {
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
                 <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                  Founding Member Pass — Lifetime Access
+                  Free & Open Access
                 </Typography>
                 <Chip
-                  label="68% OFF · $19 LIFETIME"
+                  label="FREE · OPTIONAL TIP"
                   size="small"
                   sx={{
                     bgcolor: '#10B981',
@@ -439,7 +439,7 @@ export default function RobotsTxtAuditorGodModeTool() {
                 />
               </Box>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 0.3 }}>
-                Regular <span style={{ textDecoration: 'line-through' }}>$79</span>. RFC 9309 AST validator, AI crawler drift shield, unthrottled exports, and automated robots.txt synthesis.
+                Free to use. RFC 9309 AST validator, AI crawler drift shield, unthrottled exports, and automated robots.txt synthesis.
               </Typography>
             </Box>
           </Box>
@@ -459,7 +459,7 @@ export default function RobotsTxtAuditorGodModeTool() {
                 '&:hover': { bgcolor: '#F5E6AB' },
               }}
             >
-              Stripe $19 USD 💳
+              Optional tip (Stripe) 💳
             </Button>
             <Button
               variant="outlined"
@@ -490,7 +490,7 @@ export default function RobotsTxtAuditorGodModeTool() {
                 '&:hover': { color: '#D4AF37' },
               }}
             >
-              Activate Key
+              Say Thanks
             </Button>
           </Stack>
         </Paper>
@@ -556,7 +556,7 @@ export default function RobotsTxtAuditorGodModeTool() {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           {isLicensed ? (
             <Chip
-              label="⭐ PRO ACTIVE"
+              label="✦ 100% FREE & OPEN ACCESS"
               size="small"
               sx={{
                 bgcolor: 'rgba(16,185,129,0.15)',
@@ -904,10 +904,10 @@ export default function RobotsTxtAuditorGodModeTool() {
             <LockIcon sx={{ fontSize: 32 }} />
           </Box>
           <Typography variant="h6" sx={{ fontWeight: 800, mb: 1 }}>
-            Unlock Pro Drift Shield & Instant CI/CD Export
+            Drift Shield & Instant CI/CD Export (free)
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 580, mx: 'auto', mb: 3 }}>
-            Activate your Founding Member License for <strong>$19 lifetime</strong> to unlock 1-click clipboard export, automatic RFC 9309 drift monitoring, and unthrottled search crawler simulations.
+            Free for everyone: 1-click clipboard export, automatic RFC 9309 drift monitoring, and unthrottled search crawler simulations.
           </Typography>
 
           <Stack direction="row" spacing={2} justifyContent="center" flexWrap="wrap">
@@ -940,7 +940,7 @@ export default function RobotsTxtAuditorGodModeTool() {
                 px: 2.5,
               }}
             >
-              Have a License Key?
+              Want to leave a tip?
             </Button>
           </Stack>
         </Paper>
@@ -969,7 +969,7 @@ export default function RobotsTxtAuditorGodModeTool() {
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Enter your receipt order ID, Stripe email, or custom license key to immediately unlock all features.
+            Everything is already unlocked and free to use. Tips are optional and unlock nothing extra.
           </Typography>
           <TextField
             fullWidth

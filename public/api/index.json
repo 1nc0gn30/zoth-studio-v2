@@ -125,19 +125,6 @@
       "promoCode": "FOUNDER25 (25% off)",
       "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
       "description": "Bespoke multi-agent AI workflow, custom Model Context Protocol (MCP) server for Claude/Cursor/Antigravity, autonomous lead/ops pipeline, or full-stack web application engineered by Neal Frazier Tech."
-    },
-    {
-      "id": "sovereign-pro-bundle-49",
-      "name": "All-Access Sovereign Pro Bundle (Lifetime Pro License to All 44 Tools)",
-      "priceUsd": 49,
-      "regularPriceUsd": 299,
-      "billingModel": "One-Time Lifetime License ($0/month)",
-      "deliverySla": "Instant Browser Activation (?licensed=true)",
-      "stripeCheckoutUrl": "https://github.com/1nc0gn30/zoth-studio-v2",
-      "landingUrl": "https://1nc0gn30.github.io/",
-      "promoCode": "FOUNDER25 (25% off)",
-      "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
-      "description": "Unlocks unlimited production exports, full source code downloads, and unblurred outputs across all 44 browser-native SEO, AEO, Core Web Vitals, Cybersecurity, AI Agent Governance, and E-Commerce tools."
     }
   ]
 }

@@ -12,7 +12,7 @@
         |                                     |                                     |
         v                                     v                                     v
 +-------------------------------+  +-------------------------------+  +-------------------------------+
-|       24 WORKSTATIONS         |  |      25 IN-BROWSER TOOLS      |  |    LUCY COGNITIVE ORACLE      |
+|       43 WORKSTATIONS         |  |   71 STUDIO TOOLS (54 IN-BR.) |  |    LUCY COGNITIVE ORACLE      |
 |  - Multi-Agent DAG Composer   |  |  - JWT Inspector Guard        |  |  - Semantic Bus :8094         |
 |  - Brand Alchemical Seals     |  |  - Payload Entropy Studio     |  |  - STDP Synaptic Plasticity   |
 |  - Sovereign Code IDE         |  |  - Polyglot Exporter          |  |  - Whitespace 3D Constellation|
@@ -38,7 +38,7 @@
 flowchart TD
     subgraph UI_Layer["Frontend Presentation Layer"]
         UI["React 19.3 + MUI v5 SPA<br/>Gold-on-Void Aesthetic (#D4AF37 on #08080B)"]
-        WS["24 Sovereign Workstations"]
+        WS["43 Sovereign Workstations"]
         Tools["25 Standalone In-Browser Tools"]
         UI --> WS
         UI --> Tools
@@ -74,8 +74,8 @@ flowchart TD
 
 ## 1. Five Core Subsystems
 
-### 1.1 24 Sovereign Workstations
-Decoupled and responsive, the 24 workstations provide full operational environments across 7 operational disciplines:
+### 1.1 43 Sovereign Workstations
+Decoupled and responsive, the 43 workstations provide full operational environments across 7 operational disciplines:
 - **Agent Coordination**: Multi-Agent DAG Composer, 21-Agent Pantheon Swarm (`/swarm`), Operator Mission Control, Simplex Signal Bridge (`/bridges`), Swarm Bus Monitor.
 - **Memory & Neural**: Lucy Cognitive Memory (`/memory`), STDP Synaptic Lab.
 - **Consensus & Logic**: Byzantine Consensus Arena (`/consensus`), Multi-Model Fusion Arena, Six Math Pillars Academy (`/docs#sec-math`).
@@ -93,14 +93,14 @@ Developer utilities that run locally with no network calls:
 4. `neuro-memory-daemon` - STDP biomorphic memory vector engine & cross-session recall on loopback :8094.
 5. `vector-search-engine` - Local HNSW vector index engine for fast zero-latency semantic similarity search.
 6. `deepsearch-research-agent` - Autonomous multi-source research agent with grounded inline citations.
-7. `promptmaster-studio` - In-browser prompt optimizer. Pro is $19, and the live page has a free plan.
+7. `promptmaster-studio` - In-browser prompt optimizer. Free to use.
 8. `hexstrike-arsenal` - Autonomous penetration audit suite, CVE matrix inspector, and exploit payload lab.
-9. `envguard-secrets-vault` - Argon2id + AES-256-GCM software vault for local secret storage. Live app is $29. <!-- TODO: verify price -->
+9. `envguard-secrets-vault` - Argon2id + AES-256-GCM software vault for local secret storage. Free to use.
 10. `jwt-inspector-guard` - In-browser JWT token decoder, cryptographic signature validator, and claim auditor.
 11. `payload-entropy-studio` - In-browser Shannon entropy analysis tool for detecting obfuscated payloads.
 12. `web-security-guard` - Security headers auditor, CSP validator, and WAF protection scanner.
 13. `polyglot-framework-exporter` - In-browser exporter from React/JSX to HTML/CSS, Vue, Svelte, and Solid.js.
-14. `aeo-graph-engine` - Answer Engine Optimization knowledge graph builder and Schema.org entity linker. Live app is $49.
+14. `aeo-graph-engine` - Answer Engine Optimization knowledge graph builder and Schema.org entity linker. Free to use.
 15. `cwv-speed-engine` - Core Web Vitals LCP, CLS, and INP diagnostic engine and asset minifier. Live app is $39.
 16. `vision-gesture-control` - In-browser MediaPipe webcam hand-gesture recognition interface controller.
 17. `subsweep-lead-scanner` - Subdomain recon scanner and OSINT lead enrichment engine.
@@ -114,8 +114,8 @@ Developer utilities that run locally with no network calls:
 25. `zoth-swarm-multiplexer` - 21-terminal autonomous agent multiplexer daemon with hot-swappable harnesses.
 26. `webmcp-protocol-inspector` - In-browser MCP JSON-RPC inspector and tool schema dispatcher.
 27. `anderson-security-sentinel` - RF sentinel with angle-of-arrival tracking. Its dashboard port is TCP 7890.
-28. `badge3d-coin-generator` - Browser 3D coin, medallion, and relief badge generator. Live checkout is $19. The page also lists $79 regular.
-29. `robots-txt-auditor` - Robots.txt and frontier-crawler auditor. Live app is $19.
+28. `badge3d-coin-generator` - Browser 3D coin, medallion, and relief badge generator. Free to use.
+29. `robots-txt-auditor` - Robots.txt and frontier-crawler auditor. Free to use.
 30. `city-desk` - One studio writes the finished page for a trade and a city. Boise painters $800, plumbers $900, HVAC $1,100. Those are the page price, not a job quote.
 
 ### 1.3 Lucy Cognitive Oracle & STDP Synaptic Memory

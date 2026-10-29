@@ -23,7 +23,7 @@ No telemetry beacons, cloud analytics, tracking pixels, or data exfiltration rou
   },
   {
     id: 'client-side-micro-tools',
-    q: 'How do the 30 sovereign tools execute in the browser without server dependencies?',
+    q: 'How do the 71 Studio tools execute in the browser without server dependencies?',
     category: 'Architecture',
     keywords: ['micro-tools', 'standalone', 'tools', 'browser', 'client-side', 'execution', 'webgpu', 'wasm', 'webcrypto', 'zero server'],
     a: `All 25 authentic tools in Zoth Studio v2 are engineered as standalone, client-executable micro-applications bundled into the Vite production distribution.
@@ -172,10 +172,10 @@ Every proposed code transformation computes a deterministic SHA-256 Merkle trie 
   },
   {
     id: 'tactical-cadres-organization',
-    q: 'What are the 5 Tactical Cadres and how are the 30 sovereign tools categorized?',
+    q: 'What are the 5 Tactical Cadres and how are the 71 Studio tools categorized?',
     category: 'Architecture',
     keywords: ['cadres', '5 cadres', 'categories', 'tools', 'security', 'swarm', 'velocity', 'memory', 'crypto', 'arsenal'],
-    a: `The studio organizes its 30 sovereign tools into 5 tactical domains:
+    a: `The studio organizes its 71 Studio tools into 5 tactical domains:
 
 1. Security & Recon: HexStrike vulnerability auditor, SubSweep subdomain scanner, EnvGuard secrets detector, and CyberChef format processor.
 2. Swarm & Core: 21-Agent telemetry radar, Byzantine consensus chamber, and sovereign agent communication bridge.
@@ -230,7 +230,7 @@ All three computational tiers produce bit-identical deterministic outputs, ensur
     a: `Zoth Studio implements the Anthropic Model Context Protocol (MCP) specification to bridge tools with external agent frameworks.
 
 External agent environments (such as Claude Code, Hermes Agent, Cursor, or local agents) can connect to the studio interface:
-• tools/list: Discovers all 30 sovereign tools with complete input parameter schemas.
+• tools/list: Discovers all 71 Studio tools with complete input parameter schemas.
 • tools/call: Dispatches execution requests against validated JSON-Schema contracts.
 • resources/read: Inspects local memory states or architectural specifications.
 
@@ -282,7 +282,7 @@ Once loaded or saved locally:
     keywords: ['netlify', 'prerender', 'static', 'routes', '72', 'aeo', 'seo', 'schema.org', 'json-ld', 'crawler', 'scripts/prerender.mjs', 'build'],
     a: `Netlify production deployments compile with an automated prerendering pipeline (npm run build -> vite build && node scripts/prerender.mjs).
 
-The engine generates static HTML snapshots for all 72 studio routes—including 26 sovereign tools, interactive flagship workspaces, and 6 math academy pillars. Each snapshot embeds structured Schema.org JSON-LD graphs (FAQPage, SoftwareApplication, TechArticle) and rich semantic DOM structures, providing instant First Contentful Paint (< 200ms) and comprehensive Answer Engine Optimization (AEO).`,
+The engine generates static HTML snapshots for all 72 studio routes—including 71 Studio tools, interactive flagship workspaces, and 6 math academy pillars. Each snapshot embeds structured Schema.org JSON-LD graphs (FAQPage, SoftwareApplication, TechArticle) and rich semantic DOM structures, providing instant First Contentful Paint (< 200ms) and comprehensive Answer Engine Optimization (AEO).`,
     summary: 'Prerenders 72 static route shells with structured Schema.org JSON-LD for instant load times and search crawler indexing.',
     oracleResponse: '72 static route shells are pre-compiled with embedded Schema.org graphs and semantic metadata, enabling instant load times and authoritative AEO indexing.',
     jumpTargets: [

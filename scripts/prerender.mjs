@@ -406,8 +406,8 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
               <li><a href="/memory" style="color: #D4AF37; text-decoration: underline;">Lucy Cognitive Memory</a></li>
               <li><a href="/swarm" style="color: #D4AF37; text-decoration: underline;">21 Swarm Pantheon</a></li>
               <li><a href="/bridges" style="color: #D4AF37; text-decoration: underline;">Signal Bridge (:8102)</a></li>
-              <li><a href="/tools" style="color: #D4AF37; text-decoration: underline;">25 Micro-Tools</a></li>
-              <li><a href="/workstations" style="color: #D4AF37; text-decoration: underline;">24 Workstations</a></li>
+              <li><a href="/tools" style="color: #D4AF37; text-decoration: underline;">71 Studio Tools</a></li>
+              <li><a href="/workstations" style="color: #D4AF37; text-decoration: underline;">43 Workstations</a></li>
               <li><a href="/consensus" style="color: #D4AF37; text-decoration: underline;">Consensus Battle Arena</a></li>
               <li><a href="/webgen" style="color: #D4AF37; text-decoration: underline;">WebGen Foundry</a></li>
               <li><a href="/hexstrike" style="color: #D4AF37; text-decoration: underline;">HexStrike Cybersec</a></li>

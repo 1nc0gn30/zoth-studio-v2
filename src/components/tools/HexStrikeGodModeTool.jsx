@@ -960,7 +960,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
           <Grid xs={12} md={7}>
             <Stack direction="row" spacing={1.5} alignItems="center">
               <Chip
-                label="⚡ FOUNDING MEMBER DEAL"
+                label="⚡ FREE & OPEN ACCESS"
                 size="small"
                 sx={{ bgcolor: gold, color: '#000', fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
               />
@@ -1054,7 +1054,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
             <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mt: 1 }}>
               <Chip
                 icon={isProLicensed ? <CheckCircleIcon sx={{ fontSize: '0.9rem !important', color: `${emerald} !important` }} /> : <LockIcon sx={{ fontSize: '0.9rem !important', color: `${gold} !important` }} />}
-                label={isProLicensed ? "⭐ PRO ACTIVE" : "FOUNDING PASS ($19)"}
+                label={isProLicensed ? "✦ 100% FREE & OPEN ACCESS" : "FREE & OPEN ACCESS"}
                 size="small"
                 onClick={() => !isProLicensed && setShowPaywallModal(true)}
                 sx={{
@@ -2208,7 +2208,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
                       '&:hover': { bgcolor: crimsonSoft }
                     }}
                   >
-                    PAY VIA SOLANA DEPAY ($19)
+                    OPTIONAL SOLANA TIP
                   </Button>
                 </Stack>
 
@@ -2315,7 +2315,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-            Enter your Stripe receipt email, transaction hash, or license key to permanently activate HexStrike God Mode on this machine:
+            Everything is already unlocked and free to use. Tips are optional and unlock nothing extra.
           </Typography>
           <TextField
             fullWidth

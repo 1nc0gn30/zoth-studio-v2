@@ -1780,7 +1780,7 @@ function HubWorkstationConsole({ station }) {
     },
     'tool-nexus': {
       title: 'Zoth Tool Nexus Workstation',
-      desc: 'Unified launcher for all 21 sovereign tools and hardware micro-utilities.',
+      desc: 'Unified launcher for all 71 Studio tools and hardware micro-utilities.',
       target: '/arsenal',
       badge: 'Tool Nexus',
       stats: [{ label: 'Total Tools', val: '21 Native Tools' }, { label: 'Execution', val: 'In-Browser / Web Crypto' }, { label: 'Status', val: 'All Active' }],

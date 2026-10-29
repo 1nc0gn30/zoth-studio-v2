@@ -38,7 +38,7 @@ We built Zoth Studio v2 and ZothOS v3.3.0 to run 62 sovereign developer tools 10
 
 2. Tri-Agent Sovereign Conductor: Dispatch tasks across Hermes Agent, Grok CLI, and local Ollama 1.5B with automatic <60°C laptop thermal throttling.
 
-3. Try all 62 workstations live: https://zoth.nullai.tech`;
+3. Try all 43 workstations live: https://zoth.nullai.tech`;
 
 export default function OmniPostSocialGodModeTool() {
   const theme = useTheme();
@@ -174,7 +174,7 @@ export default function OmniPostSocialGodModeTool() {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
           <Chip
             icon={<BoltIcon sx={{ color: '#08080B !important', fontSize: 16 }} />}
-            label={isPro ? '⭐ PRO ACTIVE · OMNI-CHANNEL UNLOCKED' : '✦ 100% OPEN ACCESS'}
+            label={isPro ? '✦ 100% FREE & OPEN ACCESS' : '✦ 100% OPEN ACCESS'}
             size="small"
             sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 900, fontFamily: mono }}
           />
@@ -201,7 +201,7 @@ export default function OmniPostSocialGodModeTool() {
               startIcon={<VpnKeyIcon sx={{ fontSize: 14 }} />}
               sx={{ borderColor: '#D4AF37', color: isDark ? '#F5E6AB' : '#8A6508', fontFamily: mono, fontSize: '0.72rem', fontWeight: 700 }}
             >
-              Activate Key
+              Say Thanks
             </Button>
           </Stack>
         )}
@@ -383,7 +383,7 @@ export default function OmniPostSocialGodModeTool() {
       </Grid>
 
       <Dialog open={paywallOpen} onClose={() => setPaywallOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ fontWeight: 900 }}>Unlock OmniPost Social Engine Pro ($19 Lifetime)</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 900 }}>Support OmniPost Social Engine (optional tip)</DialogTitle>
         <DialogContent dividers>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             Unlock 1-click multi-network thread export, MCP social scheduler payloads, and unlimited virality audits.
@@ -396,14 +396,14 @@ export default function OmniPostSocialGodModeTool() {
             rel="noopener noreferrer"
             sx={{ mb: 2, bgcolor: '#D4AF37', color: '#08080B', fontWeight: 900 }}
           >
-            Pay $19 via Stripe (Instant Unlock)
+            Leave an optional tip via Stripe
           </Button>
           <Divider sx={{ my: 1.5 }} />
           <Stack direction="row" spacing={1}>
             <TextField
               fullWidth
               size="small"
-              placeholder="Enter receipt email or license key..."
+              placeholder="Optional: your name or a note"
               value={licenseInput}
               onChange={(e) => setLicenseInput(e.target.value)}
             />

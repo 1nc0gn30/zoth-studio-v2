@@ -673,7 +673,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
       tabLabel: '1. Sovereign Arsenal (25 Authentic Tools)',
       shortTitle: 'Arsenal',
       badge: 'UNIFIED ARSENAL',
-      title: '25 Sovereign Tools & Interactive Workspaces',
+      title: '71 Studio Tools & Interactive Workspaces',
       subtitle: 'Zero-Egress In-Browser Multi-Agent Execution Matrix',
       description:
         'All 25 authentic tools are unified directly into Zoth Studio v2. They render with the native gold-on-void design system, zero external runtime dependency, and immediate interactive execution across Security & Recon, Swarm & Core, Developer Velocity, Memory & Cognitive, and Crypto & Identity.',
@@ -747,7 +747,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
         icon: <LaunchIcon />,
       },
       icon: <FlashOnIcon sx={{ fontSize: 32, color: gold.accent }} />,
-      featuredChip: '25 SOVEREIGN TOOLS',
+      featuredChip: '71 STUDIO TOOLS',
     },
     {
       id: 'stdp-memory',

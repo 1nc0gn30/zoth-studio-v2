@@ -225,7 +225,7 @@ export default function VectorSearchGodModeTool() {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
           <Chip
             icon={<BoltIcon sx={{ color: '#08080B !important', fontSize: 16 }} />}
-            label={isPro ? '⭐ PRO ACTIVE · HNSW SNAPSHOT EXPORT UNLOCKED' : '✦ 100% OPEN ACCESS'}
+            label={isPro ? '✦ 100% FREE & OPEN ACCESS' : '✦ 100% OPEN ACCESS'}
             size="small"
             sx={{ bgcolor: '#34D399', color: '#08080B', fontWeight: 900, fontFamily: mono }}
           />
@@ -252,7 +252,7 @@ export default function VectorSearchGodModeTool() {
               startIcon={<VpnKeyIcon sx={{ fontSize: 14 }} />}
               sx={{ borderColor: '#34D399', color: isDark ? '#34D399' : '#047857', fontFamily: mono, fontSize: '0.72rem', fontWeight: 700 }}
             >
-              Activate Key
+              Say Thanks
             </Button>
           </Stack>
         )}
@@ -404,7 +404,7 @@ export default function VectorSearchGodModeTool() {
       </Grid>
 
       <Dialog open={paywallOpen} onClose={() => setPaywallOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ fontWeight: 900 }}>Unlock Vector Search Engine Pro ($19 Lifetime)</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 900 }}>Support Vector Search Engine (optional tip)</DialogTitle>
         <DialogContent dividers>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             Unlock serialized HNSW index exports, FastMCP Python server templates, and unlimited custom vector ingestion.
@@ -417,14 +417,14 @@ export default function VectorSearchGodModeTool() {
             rel="noopener noreferrer"
             sx={{ mb: 2, bgcolor: '#D4AF37', color: '#08080B', fontWeight: 900 }}
           >
-            Pay $19 via Stripe (Instant Unlock)
+            Leave an optional tip via Stripe
           </Button>
           <Divider sx={{ my: 1.5 }} />
           <Stack direction="row" spacing={1}>
             <TextField
               fullWidth
               size="small"
-              placeholder="Enter receipt email or license key..."
+              placeholder="Optional: your name or a note"
               value={licenseInput}
               onChange={(e) => setLicenseInput(e.target.value)}
             />

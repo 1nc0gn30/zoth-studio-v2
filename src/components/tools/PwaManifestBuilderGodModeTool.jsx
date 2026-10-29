@@ -316,7 +316,7 @@ export default function PwaManifestBuilderGodModeTool() {
         setLicenseStatusMsg('');
       }, 1200);
     } else {
-      setLicenseStatusMsg('⚠️ Please enter a valid license key or receipt order ID.');
+      setLicenseStatusMsg('Everything is already free. No key needed.');
     }
   };
 
@@ -610,10 +610,10 @@ self.addEventListener('fetch', (event) => {
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
                 <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                  PWA Manifest Studio Pro — Lifetime Founding Pass
+                  PWA Manifest Studio — Free & Open Access
                 </Typography>
                 <Chip
-                  label="68% OFF · $19 LIFETIME"
+                  label="FREE · OPTIONAL TIP"
                   size="small"
                   sx={{
                     bgcolor: '#10B981',
@@ -625,7 +625,7 @@ self.addEventListener('fetch', (event) => {
                 />
               </Box>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 0.3 }}>
-                Regular <span style={{ textDecoration: 'line-through' }}>$79</span>. W3C manifest generator, offline service worker synthesis, client-side PKZIP exporter, and device previews.
+                Free to use. W3C manifest generator, offline service worker synthesis, client-side PKZIP exporter, and device previews.
               </Typography>
             </Box>
           </Box>
@@ -645,7 +645,7 @@ self.addEventListener('fetch', (event) => {
                 '&:hover': { bgcolor: '#F5E6AB' },
               }}
             >
-              Stripe $19 USD 💳
+              Optional tip (Stripe) 💳
             </Button>
             <Button
               variant="outlined"
@@ -676,7 +676,7 @@ self.addEventListener('fetch', (event) => {
                 '&:hover': { color: '#D4AF37' },
               }}
             >
-              Activate Key
+              Say Thanks
             </Button>
           </Stack>
         </Paper>
@@ -740,7 +740,7 @@ self.addEventListener('fetch', (event) => {
 
           {isLicensed ? (
             <Chip
-              label="⭐ PRO ACTIVE"
+              label="✦ 100% FREE & OPEN ACCESS"
               size="small"
               sx={{
                 bgcolor: 'rgba(16,185,129,0.15)',
@@ -1301,7 +1301,7 @@ self.addEventListener('fetch', (event) => {
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Enter your receipt order ID, Stripe email, or custom license key to immediately unlock all features.
+            Everything is already unlocked and free to use. Tips are optional and unlock nothing extra.
           </Typography>
           <TextField
             fullWidth

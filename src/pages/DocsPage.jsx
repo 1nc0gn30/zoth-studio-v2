@@ -866,7 +866,7 @@ Runs local invariant verification before staging tools.`
                       }}
                     >
                       {[
-                        { icon: <CodeIcon sx={{ mb: 0.5, color: dark ? '#79C0FF' : '#0969DA' }} />, title: '25 Sovereign Tools', desc: 'DAG Composer, IDE & Foundry' },
+                        { icon: <CodeIcon sx={{ mb: 0.5, color: dark ? '#79C0FF' : '#0969DA' }} />, title: '71 Studio Tools', desc: 'DAG Composer, IDE & Foundry' },
                         { icon: <MemoryIcon sx={{ mb: 0.5, color: dark ? '#00F0FF' : '#0891B2' }} />, title: 'Lucy Cognitive Oracle', desc: 'STDP Synaptic Plasticity (:8094)' },
                         { icon: <GavelIcon sx={{ mb: 0.5, color: dark ? '#C084FC' : '#7C3AED' }} />, title: '3-Agent Byzantine', desc: 'Triadic AST Socratic Debate' },
                         { icon: <ShieldIcon sx={{ mb: 0.5, color: dark ? '#34D399' : '#047857' }} />, title: 'Zero-Egress Invariants', desc: 'Shannon Entropy & Loopback' },
@@ -1708,7 +1708,7 @@ npm run preview`}
                   </Box>
 
                   <Typography variant="body1" color="text.secondary" paragraph>
-                    Comprehensive interactive index of all 30 sovereign tools and workspaces across agent
+                    Comprehensive interactive index of all 71 Studio tools and workspaces across agent
                     coordination, neural memory, Byzantine consensus, code development, and hardware
                     sanctum domains.
                   </Typography>

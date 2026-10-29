@@ -577,7 +577,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
         setLicenseStatusMsg('');
       }, 1200);
     } else {
-      setLicenseStatusMsg('⚠️ Please enter a valid license key or receipt order ID.');
+      setLicenseStatusMsg('Everything is already free. No key needed.');
     }
   };
 
@@ -879,10 +879,10 @@ export default function Badge3dCoinGodModeTool({ tool }) {
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
                 <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                  Badge3D Coin Studio Pro — Lifetime Founding Pass
+                  Badge3D Coin Studio — Free & Open Access
                 </Typography>
                 <Chip
-                  label="68% OFF · $19 LIFETIME"
+                  label="FREE · OPTIONAL TIP"
                   size="small"
                   sx={{
                     bgcolor: '#10B981',
@@ -894,7 +894,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
                 />
               </Box>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 0.3 }}>
-                Regular <span style={{ textDecoration: 'line-through' }}>$79</span>. WebGL 3D coin studio, PBR metallic shaders, watertight CNC/3D print binary STL export, and 4K renders.
+                Free to use. WebGL 3D coin studio, PBR metallic shaders, watertight CNC/3D print binary STL export, and 4K renders.
               </Typography>
             </Box>
           </Box>
@@ -914,7 +914,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
                 '&:hover': { bgcolor: '#F5E6AB' },
               }}
             >
-              Stripe $19 USD 💳
+              Optional tip (Stripe) 💳
             </Button>
             <Button
               variant="outlined"
@@ -949,7 +949,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
                 '&:hover': { color: realityAccent },
               }}
             >
-              Activate Key
+              Say Thanks
             </Button>
           </Stack>
         </Paper>
@@ -1129,7 +1129,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
                 Relief Coin & Medallion Parameters
               </Typography>
               <Chip
-                label={isLicensed ? '⭐ PRO ACTIVE' : 'FREE TIER'}
+                label={isLicensed ? '✦ 100% FREE & OPEN ACCESS' : 'FREE & OPEN ACCESS'}
                 size="small"
                 sx={{
                   bgcolor: isLicensed ? 'rgba(16,185,129,0.15)' : 'rgba(212,175,55,0.15)',
@@ -1356,7 +1356,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Enter your receipt order ID, Stripe email, or custom license key to immediately unlock watertight STL CNC exports and 4K renders.
+            Everything is already unlocked and free to use. Tips are optional and unlock nothing extra.
           </Typography>
           <TextField
             fullWidth

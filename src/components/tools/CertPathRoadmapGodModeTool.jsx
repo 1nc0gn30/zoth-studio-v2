@@ -131,7 +131,7 @@ export default function CertPathRoadmapGodModeTool() {
         setLicenseStatusMsg('');
       }, 1200);
     } else {
-      setLicenseStatusMsg('⚠️ Please enter a valid license key or receipt order ID.');
+      setLicenseStatusMsg('Everything is already free. No key needed.');
     }
   };
 
@@ -270,10 +270,10 @@ export default function CertPathRoadmapGodModeTool() {
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
                 <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                  CertPath Roadmap Pro — Lifetime Founding Pass
+                  CertPath Roadmap — Free & Open Access
                 </Typography>
                 <Chip
-                  label="68% OFF · $19 LIFETIME"
+                  label="FREE · OPTIONAL TIP"
                   size="small"
                   sx={{
                     bgcolor: '#10B981',
@@ -285,7 +285,7 @@ export default function CertPathRoadmapGodModeTool() {
                 />
               </Box>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 0.3 }}>
-                Regular <span style={{ textDecoration: 'line-through' }}>$79</span>. Prerequisite DAG solver for 137 certifications, career track planners, side-by-side matrices, and study roadmap exports.
+                Free to use. Prerequisite DAG solver for 137 certifications, career track planners, side-by-side matrices, and study roadmap exports.
               </Typography>
             </Box>
           </Box>
@@ -305,7 +305,7 @@ export default function CertPathRoadmapGodModeTool() {
                 '&:hover': { bgcolor: '#F5E6AB' },
               }}
             >
-              Stripe $19 USD 💳
+              Optional tip (Stripe) 💳
             </Button>
             <Button
               variant="outlined"
@@ -336,7 +336,7 @@ export default function CertPathRoadmapGodModeTool() {
                 '&:hover': { color: '#D4AF37' },
               }}
             >
-              Activate Key
+              Say Thanks
             </Button>
           </Stack>
         </Paper>
@@ -377,7 +377,7 @@ export default function CertPathRoadmapGodModeTool() {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           {isLicensed ? (
             <Chip
-              label="⭐ PRO ACTIVE"
+              label="✦ 100% FREE & OPEN ACCESS"
               size="small"
               sx={{
                 bgcolor: 'rgba(16,185,129,0.15)',
@@ -832,7 +832,7 @@ export default function CertPathRoadmapGodModeTool() {
                       '&:hover': { bgcolor: '#F5E6AB' },
                     }}
                   >
-                    Unlock Study Roadmap ($19)
+                    Optional tip
                   </Button>
                 </Box>
               )}
@@ -864,7 +864,7 @@ export default function CertPathRoadmapGodModeTool() {
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Enter your receipt order ID, Stripe email, or custom license key to immediately unlock all features.
+            Everything is already unlocked and free to use. Tips are optional and unlock nothing extra.
           </Typography>
           <TextField
             fullWidth

@@ -371,7 +371,7 @@ export default function McpLensGodModeTool() {
         <Box>
           <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 0.8 }}>
             <Chip
-              label={isPro ? "⭐ PRO ACTIVE · UNLIMITED ENCLAVE" : "FOUNDING MEMBER LIFETIME PASS · $19"}
+              label={isPro ? "✦ 100% FREE & OPEN ACCESS" : "FREE & OPEN ACCESS"}
               size="small"
               sx={{
                 bgcolor: isPro ? '#22C55E' : '#D4AF37',
@@ -417,7 +417,7 @@ export default function McpLensGodModeTool() {
                   px: 2.5
                 }}
               >
-                Get Pro Pass ($19)
+                Optional tip
               </Button>
               <Button
                 variant="outlined"
@@ -921,7 +921,7 @@ export default function McpLensGodModeTool() {
                       rel="noopener noreferrer"
                       sx={{ bgcolor: '#D4AF37', color: '#000', fontWeight: 800, fontFamily: mono }}
                     >
-                      Unlock for $19
+                      Optional tip
                     </Button>
                     <Button
                       variant="outlined"

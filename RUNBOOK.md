@@ -3,7 +3,7 @@
 > **Classification**: Sovereign Local Autonomous Infrastructure  
 > **Host**: Debian 13 (trixie) | Intel Xeon E-2176M (6c/12t) | 32 GB DDR4 | NVIDIA GP107GLM [Quadro P1000 Mobile 4GB]  
 > **Security Boundary**: Zero-Egress Invariant — strictly `127.0.0.1` loopback bindings only. Never `0.0.0.0`.  
-> **Registry Truth**: `~/NullAITech/zoth-studio-v2/public/api/tools.json` (65 tools, 0 port collisions)  
+> **Registry Truth**: `~/NullAITech/zoth-studio-v2/public/api/tools.json` (71 tools, 0 port collisions)  
 
 ---
 
@@ -14,7 +14,7 @@ ZothOS operates as a sovereign, zero-external-dependency local developer and age
 ```
                     +-------------------------------------------------------------+
                     |             Zoth Studio Hub (127.0.0.1:3000)                |
-                    |        Vite / React SPA - 43 Workstations / 65 Tools        |
+                    |        Vite / React SPA - 43 Workstations / 71 Tools        |
                     +------------------------------+------------------------------+
                                                    |
                    +-------------------------------+-------------------------------+
@@ -48,7 +48,7 @@ ZothOS operates as a sovereign, zero-external-dependency local developer and age
 
 ---
 
-## 2. Complete Port Directory (65 Tools + Core Daemons)
+## 2. Complete Port Directory (71 Tools + Core Daemons)
 
 Every tool has an assigned, unique loopback port verified by `registry-check`.
 
@@ -224,7 +224,7 @@ Before making commits or modifying tool definitions:
 registry-check
 ```
 The gate asserts:
-1. Zero port collisions across all 65 tools and 9 core hubs.
+1. Zero port collisions across all 71 tools and 9 core hubs.
 2. Exact parity between `public/api/tools.json`, `dist/api/tools.json`, and `catalog.json`.
 3. Valid JSON schema and reachable local file paths.
 

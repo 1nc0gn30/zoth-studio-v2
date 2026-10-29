@@ -214,7 +214,7 @@ ${claudeXml}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
           <Chip
             icon={<BoltIcon sx={{ color: '#08080B !important', fontSize: 16 }} />}
-            label={isPro ? '⭐ PRO ACTIVE · TRI-MODEL COMPILER UNLOCKED' : '✦ 100% OPEN ACCESS'}
+            label={isPro ? '✦ 100% FREE & OPEN ACCESS' : '✦ 100% OPEN ACCESS'}
             size="small"
             sx={{ bgcolor: '#C084FC', color: '#08080B', fontWeight: 900, fontFamily: mono }}
           />
@@ -241,7 +241,7 @@ ${claudeXml}
               startIcon={<VpnKeyIcon sx={{ fontSize: 14 }} />}
               sx={{ borderColor: '#C084FC', color: isDark ? '#C084FC' : '#7E22CE', fontFamily: mono, fontSize: '0.72rem', fontWeight: 700 }}
             >
-              Activate Key
+              Say Thanks
             </Button>
           </Stack>
         )}
@@ -344,7 +344,7 @@ ${claudeXml}
                     Compiled Multi-Model Prompt Artifact Locked
                   </Typography>
                   <Typography variant="caption" sx={{ color: '#CBD5E1', maxWidth: 320, mb: 1.5 }}>
-                    Unlock full Anthropic XML, OpenAI Strict Schema, DSPy & Ollama Modelfile export ($19 lifetime).
+                    Unlock full Anthropic XML, OpenAI Strict Schema, DSPy & Ollama Modelfile export (free).
                   </Typography>
                   <Button
                     size="small"
@@ -372,10 +372,10 @@ ${claudeXml}
       </Grid>
 
       <Dialog open={paywallOpen} onClose={() => setPaywallOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ fontWeight: 900 }}>Unlock PromptMaster Studio Pro ($19 Lifetime)</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 900 }}>Support PromptMaster Studio (optional tip)</DialogTitle>
         <DialogContent dividers>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Get lifetime access to multi-model AST prompt transpilation (Claude XML, OpenAI JSON Schema, DSPy Signatures, and Ollama Modelfiles).
+            Free multi-model AST prompt transpilation (Claude XML, OpenAI JSON Schema, DSPy Signatures, and Ollama Modelfiles).
           </Typography>
           <Button
             fullWidth
@@ -385,14 +385,14 @@ ${claudeXml}
             rel="noopener noreferrer"
             sx={{ mb: 2, bgcolor: '#D4AF37', color: '#08080B', fontWeight: 900 }}
           >
-            Pay $19 via Stripe (Instant Unlock)
+            Leave an optional tip via Stripe
           </Button>
           <Divider sx={{ my: 1.5 }} />
           <Stack direction="row" spacing={1}>
             <TextField
               fullWidth
               size="small"
-              placeholder="Enter receipt email or license key..."
+              placeholder="Optional: your name or a note"
               value={licenseInput}
               onChange={(e) => setLicenseInput(e.target.value)}
             />

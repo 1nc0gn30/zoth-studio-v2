@@ -391,9 +391,9 @@ export default function VoiceStationPage() {
       setIsPro(true);
       localStorage.setItem('zoth_voice_pro_licensed', 'true');
       setPaywallOpen(false);
-      alert('🎉 Zoth Sovereign Pro License Activated!');
+      alert('🎉 Thanks for the tip!');
     } else {
-      alert('Invalid license key. Please check your Stripe or Solana receipt.');
+      alert('Everything is already free. No key needed.');
     }
   };
 
@@ -424,12 +424,12 @@ export default function VoiceStationPage() {
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
             <Chip
-              label="FOUNDING ACCESS"
+              label="FREE ACCESS"
               size="small"
               sx={{ bgcolor: '#D4AF37', color: '#08090E', fontWeight: 800, fontSize: '0.72rem' }}
             />
             <Typography variant="body2" sx={{ color: dark ? '#F3F4F6' : '#101828', fontSize: '0.88rem' }}>
-              <strong>Sovereign Live Voice Station:</strong> <span style={{ textDecoration: 'line-through', opacity: 0.6 }}>$79</span> <span style={{ color: 'var(--zs-emerald)', fontWeight: 800 }}>100% Free & Unlocked</span> • Direct P2P audio, transcript debriefs, and multi-persona switching.
+              <strong>Sovereign Live Voice Station:</strong> <span style={{ color: 'var(--zs-emerald)', fontWeight: 800 }}>100% Free & Unlocked</span> • Direct P2P audio, transcript debriefs, and multi-persona switching.
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
@@ -457,7 +457,7 @@ export default function VoiceStationPage() {
               onClick={() => setPaywallOpen(true)}
               sx={{ color: dark ? '#D4AF37' : '#8A6508', textDecoration: 'underline', fontSize: '0.8rem' }}
             >
-              Activate Key
+              Say Thanks
             </Button>
           </Box>
         </Paper>
@@ -495,7 +495,7 @@ export default function VoiceStationPage() {
                 }}
               />
               <Chip
-                label={isPro ? "⭐ PRO ACTIVE" : "COMMUNITY EDITION"}
+                label={isPro ? "✦ 100% FREE & OPEN ACCESS" : "COMMUNITY EDITION"}
                 size="small"
                 sx={{
                   fontFamily: mono,
@@ -962,7 +962,7 @@ export default function VoiceStationPage() {
               <span style={{ color: dark ? '#D4AF37' : '#8A6508' }}>★</span> Zoth Open-Source Support
             </Typography>
             <Typography variant="body2" sx={{ color: '#9CA3AF', mb: 2 }}>
-              Permanent lifetime access. Unlocks real-time debrief generators, multi-persona voice archiving, and SimpleX chat sync.
+              Everything is already free. Optional tip supports real-time debrief generators, multi-persona voice archiving, and SimpleX chat sync.
             </Typography>
 
             <Stack spacing={1} sx={{ mb: 3 }}>
@@ -985,7 +985,7 @@ export default function VoiceStationPage() {
 
             <Box sx={{ pt: 2, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
               <Typography variant="caption" sx={{ color: '#9CA3AF', display: 'block', mb: 1 }}>
-                Already have a license key or receipt email?
+                Optional note with your tip
               </Typography>
               <Box sx={{ display: 'flex', gap: 1 }}>
                 <TextField

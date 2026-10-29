@@ -318,7 +318,7 @@ export default function CwvSpeedEngineGodModeTool() {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
           <Chip
             icon={<BoltIcon sx={{ color: '#08080B !important', fontSize: 16 }} />}
-            label={isPro ? '⭐ PRO ACTIVE · UNLIMITED AST EXPORTS' : '✦ 100% OPEN ACCESS'}
+            label={isPro ? '✦ 100% FREE & OPEN ACCESS' : '✦ 100% OPEN ACCESS'}
             size="small"
             sx={{ bgcolor: '#10B981', color: '#08080B', fontWeight: 900, fontFamily: mono }}
           />
@@ -346,8 +346,8 @@ export default function CwvSpeedEngineGodModeTool() {
                 startIcon={<VpnKeyIcon sx={{ fontSize: 14 }} />}
                 sx={{ borderColor: '#10B981', color: isDark ? '#34D399' : '#047857', fontFamily: mono, fontSize: '0.72rem', fontWeight: 700 }}
               >
-                Activate Key
-              </Button>
+              Say Thanks
+            </Button>
             </>
           )}
         </Stack>
@@ -555,7 +555,7 @@ export default function CwvSpeedEngineGodModeTool() {
                       Transformed 100/100 HTML & PWA Bundle Locked
                     </Typography>
                     <Typography variant="caption" sx={{ color: '#CBD5E1', maxWidth: 340, mb: 2 }}>
-                      Unlock full AST-transformed HTML copy, critical CSS inliner, and ServiceWorker speed bundle export for $19 lifetime.
+                      Full AST-transformed HTML copy, critical CSS inliner, and ServiceWorker speed bundle export is free to use.
                     </Typography>
                     <Stack direction="row" spacing={1.5}>
                       <Button
@@ -606,10 +606,10 @@ export default function CwvSpeedEngineGodModeTool() {
 
       {/* Pro Paywall & License Activation Modal */}
       <Dialog open={paywallOpen} onClose={() => setPaywallOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ fontWeight: 900 }}>Unlock CWV Speed Engine Pro ($19 Lifetime)</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 900 }}>Support CWV Speed Engine (optional tip)</DialogTitle>
         <DialogContent dividers>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Get lifetime access to unlimited DOM AST speed transformations, CLS dimension injection, and ServiceWorker bundle exports.
+            Free, unlimited DOM AST speed transformations, CLS dimension injection, and ServiceWorker bundle exports.
           </Typography>
           <Stack spacing={1} sx={{ mb: 2.5 }}>
             {[
@@ -633,7 +633,7 @@ export default function CwvSpeedEngineGodModeTool() {
               rel="noopener noreferrer"
               sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 900 }}
             >
-              Pay $19 via Stripe (Card / Apple Pay)
+              Leave an optional tip via Stripe
             </Button>
           </Stack>
           <Divider sx={{ my: 2 }} />
@@ -644,7 +644,7 @@ export default function CwvSpeedEngineGodModeTool() {
             <TextField
               fullWidth
               size="small"
-              placeholder="Enter receipt email or license key..."
+              placeholder="Optional: your name or a note"
               value={licenseInput}
               onChange={(e) => setLicenseInput(e.target.value)}
             />

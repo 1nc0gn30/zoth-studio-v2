@@ -237,7 +237,7 @@ ${base.claims
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
           <Chip
             icon={<BoltIcon sx={{ color: '#08080B !important', fontSize: 16 }} />}
-            label={isPro ? '⭐ PRO ACTIVE · UNLIMITED DOSSIERS' : '✦ 100% OPEN ACCESS'}
+            label={isPro ? '✦ 100% FREE & OPEN ACCESS' : '✦ 100% OPEN ACCESS'}
             size="small"
             sx={{ bgcolor: '#00F0FF', color: '#08080B', fontWeight: 900, fontFamily: mono }}
           />
@@ -264,7 +264,7 @@ ${base.claims
               startIcon={<VpnKeyIcon sx={{ fontSize: 14 }} />}
               sx={{ borderColor: '#00F0FF', color: isDark ? '#00F0FF' : '#0E7490', fontFamily: mono, fontSize: '0.72rem', fontWeight: 700 }}
             >
-              Activate Key
+              Say Thanks
             </Button>
           </Stack>
         )}
@@ -417,7 +417,7 @@ ${base.claims
       </Grid>
 
       <Dialog open={paywallOpen} onClose={() => setPaywallOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ fontWeight: 900 }}>Unlock DeepSearch Research Agent Pro ($19 Lifetime)</DialogTitle>
+        <DialogTitle sx={{ fontWeight: 900 }}>Support DeepSearch Research Agent (optional tip)</DialogTitle>
         <DialogContent dividers>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             Unlock unlimited Tree-of-Thought research dossiers, BibTeX citation exports, and local MCP agent connectors.
@@ -430,14 +430,14 @@ ${base.claims
             rel="noopener noreferrer"
             sx={{ mb: 2, bgcolor: '#D4AF37', color: '#08080B', fontWeight: 900 }}
           >
-            Pay $19 via Stripe (Instant Unlock)
+            Leave an optional tip via Stripe
           </Button>
           <Divider sx={{ my: 1.5 }} />
           <Stack direction="row" spacing={1}>
             <TextField
               fullWidth
               size="small"
-              placeholder="Enter receipt email or license key..."
+              placeholder="Optional: your name or a note"
               value={licenseInput}
               onChange={(e) => setLicenseInput(e.target.value)}
             />

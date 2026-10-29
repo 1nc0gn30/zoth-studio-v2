@@ -544,7 +544,7 @@ export default function SchemaIllustratorGodModeTool() {
         setLicenseStatusMsg('');
       }, 1200);
     } else {
-      setLicenseStatusMsg('⚠️ Please enter a valid license key or receipt order ID.');
+      setLicenseStatusMsg('Everything is already free. No key needed.');
     }
   };
 
@@ -663,10 +663,10 @@ export default function SchemaIllustratorGodModeTool() {
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
                 <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                  Schema Illustrator Pro — Lifetime Founding Pass
+                  Schema Illustrator — Free & Open Access
                 </Typography>
                 <Chip
-                  label="68% OFF · $19 LIFETIME"
+                  label="FREE · OPTIONAL TIP"
                   size="small"
                   sx={{
                     bgcolor: '#10B981',
@@ -678,7 +678,7 @@ export default function SchemaIllustratorGodModeTool() {
                 />
               </Box>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 0.3 }}>
-                Regular <span style={{ textDecoration: 'line-through' }}>$79</span>. Universal ERD visualizer, multi-dialect transpiler (TypeScript, Pydantic, Prisma, SQL, Mermaid), and complexity auditor.
+                Free to use. Universal ERD visualizer, multi-dialect transpiler (TypeScript, Pydantic, Prisma, SQL, Mermaid), and complexity auditor.
               </Typography>
             </Box>
           </Box>
@@ -698,7 +698,7 @@ export default function SchemaIllustratorGodModeTool() {
                 '&:hover': { bgcolor: '#F5E6AB' },
               }}
             >
-              Stripe $19 USD 💳
+              Optional tip (Stripe) 💳
             </Button>
             <Button
               variant="outlined"
@@ -729,7 +729,7 @@ export default function SchemaIllustratorGodModeTool() {
                 '&:hover': { color: '#D4AF37' },
               }}
             >
-              Activate Key
+              Say Thanks
             </Button>
           </Stack>
         </Paper>
@@ -788,7 +788,7 @@ export default function SchemaIllustratorGodModeTool() {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           {isLicensed ? (
             <Chip
-              label="⭐ PRO ACTIVE"
+              label="✦ 100% FREE & OPEN ACCESS"
               size="small"
               sx={{
                 bgcolor: 'rgba(16,185,129,0.15)',
@@ -1091,7 +1091,7 @@ export default function SchemaIllustratorGodModeTool() {
                             '&:hover': { bgcolor: '#F5E6AB' },
                           }}
                         >
-                          Unlock $19 💳
+                          Optional tip 💳
                         </Button>
                         <Button
                           variant="outlined"
@@ -1175,7 +1175,7 @@ export default function SchemaIllustratorGodModeTool() {
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Enter your receipt order ID, Stripe email, or custom license key to immediately unlock all features.
+            Everything is already unlocked and free to use. Tips are optional and unlock nothing extra.
           </Typography>
           <TextField
             fullWidth

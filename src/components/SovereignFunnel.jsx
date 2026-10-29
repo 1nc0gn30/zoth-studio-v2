@@ -47,7 +47,7 @@ export default function SovereignFunnel({
         body: JSON.stringify({
           buyer: '@citizen',
           merchant: '@zoth',
-          items: [{ name: 'Zoth Studio Pro Lifetime License', qty: 1, unitPriceVlr: 19, price: 19 }],
+          items: [{ name: 'Optional Zoth Studio Tip', qty: 1, unitPriceVlr: 19, price: 19 }],
           cashbackBps: 250,
           category: 'Software & SaaS',
           warrantyDays: 365

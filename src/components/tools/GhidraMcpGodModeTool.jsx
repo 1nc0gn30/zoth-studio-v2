@@ -245,7 +245,7 @@ export function GhidraMcpGodModeTool() {
           <Grid xs={12} md={7}>
             <Stack direction="row" spacing={1.5} alignItems="center">
               <Chip
-                label="⚡ FOUNDING PASS"
+                label="⚡ FREE & OPEN"
                 size="small"
                 sx={{ bgcolor: gold, color: '#000', fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
               />
@@ -328,7 +328,7 @@ export function GhidraMcpGodModeTool() {
             <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mt: 1.5 }}>
               <Chip
                 icon={isProLicensed ? <CheckCircleIcon sx={{ fontSize: '0.9rem !important', color: `${emerald} !important` }} /> : <LockIcon sx={{ fontSize: '0.9rem !important', color: `${gold} !important` }} />}
-                label={isProLicensed ? "⭐ PRO ACTIVE" : "FOUNDING PASS ($19)"}
+                label={isProLicensed ? "✦ 100% FREE & OPEN ACCESS" : "FREE & OPEN ACCESS"}
                 size="small"
                 onClick={() => !isProLicensed && setShowPaywallModal(true)}
                 sx={{
@@ -677,7 +677,7 @@ export function GhidraMcpGodModeTool() {
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-            Enter your receipt email or license key to permanently unlock all advanced reverse-engineering exports:
+            Everything is already unlocked and free to use. Tips are optional and unlock nothing extra.
           </Typography>
           <TextField
             fullWidth

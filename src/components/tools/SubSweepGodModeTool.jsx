@@ -440,7 +440,7 @@ export function SubSweepGodModeTool() {
               </Typography>
               <Chip
                 size="small"
-                label={isProLicensed ? '⭐ PRO ACTIVE' : 'FOUNDING PASS $19'}
+                label={isProLicensed ? '✦ 100% FREE & OPEN ACCESS' : 'FREE & OPEN ACCESS'}
                 sx={{
                   bgcolor: isProLicensed ? emeraldSoft : crimsonSoft,
                   color: isProLicensed ? emerald : crimson,
@@ -1145,7 +1145,7 @@ export function SubSweepGodModeTool() {
               ⚡ 100% Free & Open Access — Optional Community Support
             </Typography>
             <Typography variant="caption" sx={{ color: 'text.primary' }}>
-              Instant license key issued upon checkout. Supported payment rails:
+              Everything here is free to use. Optional tips are welcome via:
             </Typography>
             <Stack direction="row" spacing={1.5} sx={{ mt: 1.5 }}>
               <Button
@@ -1174,7 +1174,7 @@ export function SubSweepGodModeTool() {
           <TextField
             fullWidth
             size="small"
-            label="Already have a License Key or Receipt Email?"
+            label="Optional note with your tip"
             value={licenseKeyInput}
             onChange={(e) => setLicenseKeyInput(e.target.value)}
             placeholder="e.g. SUB-PRO-XXXX-XXXX"

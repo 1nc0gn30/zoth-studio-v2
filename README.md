@@ -131,7 +131,7 @@ Desktop and mobile captures, plus screen recordings of each route intro motion d
 flowchart TD
     subgraph Client["Zoth Studio v2 Client Runtime (React 19.3)"]
         UI["Operator Deck UI<br/>Vite + React 19.3 + MUI v5"]
-        WS["59 Dedicated Workstations (100% Coverage)<br/>23 In-Browser WebGPU/Client + 36 Sovereign Enclaves"]
+        WS["71 Studio tools, each with a dedicated workstation (59 with public repos)<br/>54 in-browser + 17 local CLI"]
         Tools["Real Working Utilities<br/>WebGPU Shaders, 3D Canvas, AST Linters, DoH OSINT"]
         UI --> WS
         UI --> Tools

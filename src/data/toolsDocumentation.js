@@ -227,7 +227,7 @@ export const toolsDocumentation = {
   },
 
   'promptmaster-studio': {
-    whyUse: 'In-browser prompt optimizer. A rough prompt is linted, scored, and rewritten without leaving the browser. Pro is $19. The live page also has a free plan.',
+    whyUse: 'In-browser prompt optimizer. A rough prompt is linted, scored, and rewritten without leaving the browser. Free to use.',
     problemSolved: 'Keeps the prompt on the machine. AST linting, scoring, and multi-model token costs run in the browser and are not sent to a third-party server.',
     architecture: 'The live app at promptmaster-studio.netlify.app is browser JavaScript. The published repo also documents a Python standard-library CLI. It is not a DSPy template store.',
     aiAgentProtocol: {
@@ -256,7 +256,7 @@ export const toolsDocumentation = {
       'In-browser AST lint, score, and rewrite',
       'Token budget for the models named on the live page',
       'Prompt stays in the browser',
-      'Pro is $19. A free plan is on the live page',
+      'Free to use',
       'Published repo also documents a local Python CLI'
     ]
   },
@@ -758,7 +758,7 @@ export const toolsDocumentation = {
   },
 
   'badge3d-coin-generator': {
-    whyUse: 'Browser 3D coin, medallion, and relief badge generator. Live checkout is $19. The page also lists $79 regular.',
+    whyUse: 'Browser 3D coin, medallion, and relief badge generator. Free to use.',
     problemSolved: 'Mints a 3D coin in the browser and exports a mesh. The live page takes a card checkout and also lists a Solana rail.',
     architecture: 'Vanilla Three.js and WebGL canvas with parametric edge-milling geometry and STL/OBJ/GLB 3D export.',
     aiAgentProtocol: {

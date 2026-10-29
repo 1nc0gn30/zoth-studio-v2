@@ -402,7 +402,7 @@ export function RegexDroidGodModeTool() {
           <Grid xs={12} md={7}>
             <Stack direction="row" spacing={1.5} alignItems="center">
               <Chip
-                label="⚡ FOUNDING PASS"
+                label="⚡ FREE & OPEN"
                 size="small"
                 sx={{ bgcolor: gold, color: '#000', fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
               />
@@ -484,7 +484,7 @@ export function RegexDroidGodModeTool() {
             <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mt: 1.5 }}>
               <Chip
                 icon={isProLicensed ? <CheckCircleIcon sx={{ fontSize: '0.9rem !important', color: `${emerald} !important` }} /> : <LockIcon sx={{ fontSize: '0.9rem !important', color: `${gold} !important` }} />}
-                label={isProLicensed ? "⭐ PRO ACTIVE" : "FOUNDING PASS ($19)"}
+                label={isProLicensed ? "✦ 100% FREE & OPEN ACCESS" : "FREE & OPEN ACCESS"}
                 size="small"
                 onClick={() => !isProLicensed && setShowPaywallModal(true)}
                 sx={{
@@ -829,7 +829,7 @@ export function RegexDroidGodModeTool() {
                   Unlock Multi-Language Code Foundry
                 </Typography>
                 <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2.5, lineHeight: 1.6 }}>
-                  Export production-ready, ReDoS-immunized regex code snippets across Python, Rust, Go, and TypeScript with 1-click lifetime access.
+                  Export production-ready, ReDoS-immunized regex code snippets across Python, Rust, Go, and TypeScript. Free to use.
                 </Typography>
                 <Stack spacing={1.5} sx={{ mb: 2 }}>
                   <Button
@@ -842,7 +842,7 @@ export function RegexDroidGodModeTool() {
                     startIcon={<BoltIcon />}
                     sx={{ bgcolor: gold, color: '#000', fontWeight: 800, fontFamily: mono, py: 1.2, '&:hover': { bgcolor: '#B89628' } }}
                   >
-                    UNLOCK PRO WITH STRIPE ($19)
+                    OPTIONAL TIP WITH STRIPE
                   </Button>
                 </Stack>
                 <Button
@@ -911,7 +911,7 @@ export function RegexDroidGodModeTool() {
         </DialogTitle>
         <DialogContent>
           <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-            Enter your Stripe receipt email or license key to unlock Regex Droid Pro:
+            Everything is already unlocked and free to use. Tips are optional and unlock nothing extra.
           </Typography>
           <TextField
             fullWidth
