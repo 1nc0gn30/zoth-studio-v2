@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/assets/zoth-studio-v2-hero.svg" alt="Zoth Studio v2 — 71 Sovereign Tools, 43 Workstations & 73/73 Live Fleet" width="100%" />
+  <img src="public/assets/zoth-studio-v2-hero.svg" alt="Zoth Studio v2 — 71 Sovereign Tools, 43 Workstations & 23 Loopback Daemons" width="100%" />
 </div>
 
 <br />
@@ -12,7 +12,7 @@
 [![Zero-Egress Guaranteed](https://img.shields.io/badge/Security-Zero--Egress%20Enclave-gold?style=flat-square)](#zero-egress-security-invariants)
 [![Netlify Deploy Ready](https://img.shields.io/badge/Deploy-Netlify%20Production-00C7B7?style=flat-square&logo=netlify)](#netlify-deployment-instructions)
 [![71 Sovereign Tools](https://img.shields.io/badge/Tools-71%2F71%20Verified%20Registry-blueviolet?style=flat-square)](#100-dedicated-interactive-workstation-coverage)
-[![17/17 Fleet Daemons](https://img.shields.io/badge/Fleet-17%2F17%20Supervised%20Daemons-success?style=flat-square)](#100-dedicated-interactive-workstation-coverage)
+[![23 Loopback Daemons](https://img.shields.io/badge/Loopback-23%20Daemons-success?style=flat-square)](#100-dedicated-interactive-workstation-coverage)
 [![Vite 5.4](https://img.shields.io/badge/Build-Vite%205.4-purple?style=flat-square)](https://vitejs.dev)
 [![React 19.3](https://img.shields.io/badge/Framework-React%2019.3-blue?style=flat-square)](https://react.dev)
 [![MUI v5.15](https://img.shields.io/badge/UI-Material--UI%20v5.15-007FFF?style=flat-square)](https://mui.com)
@@ -131,7 +131,7 @@ Desktop and mobile captures, plus screen recordings of each route intro motion d
 flowchart TD
     subgraph Client["Zoth Studio v2 Client Runtime (React 19.3)"]
         UI["Operator Deck UI<br/>Vite + React 19.3 + MUI v5"]
-        WS["71 Studio tools, each with a dedicated workstation (59 with public repos)<br/>54 in-browser + 17 local CLI"]
+        WS["71 Studio tools across 43 workstations (59 with public source)<br/>54 in-browser + 17 local CLI"]
         Tools["Real Working Utilities<br/>WebGPU Shaders, 3D Canvas, AST Linters, DoH OSINT"]
         UI --> WS
         UI --> Tools
@@ -455,7 +455,7 @@ zoth-studio-v2/
 ├── src/
 │   ├── components/             # Reusable UI components (CinematicIntro, Navbar, Footer, etc.)
 │   │   ├── tools/
-│   │   │   ├── WebGPUToolWorkstation.jsx  # 23 In-Browser WebGPU/Client Workstations
+│   │   │   ├── WebGPUToolWorkstation.jsx  # In-browser WebGPU/client workstations (43 total workstations)
 │   │   │   └── EnclaveToolsSuite.jsx      # 36 Sovereign Enclave Workstations
 │   ├── data/
 │   │   ├── toolsData.js        # Master 59-tool catalog definition

@@ -71,14 +71,14 @@ const PRESET_PROFILES = {
     creator: 'Neal Frazier (Neal Frazier Tech)',
     sameAs: 'https://github.com/1nc0gn30/zothos, https://zoth.nullai.tech, https://nullai.tech',
     description:
-      'Debian 12 Bookworm live workstation pre-wired with 22 loopback AI daemons, 71 desktop launchers across 4 tactical pillars, and offline-capable cryptographic telemetry.',
+      'Debian 12 Bookworm live workstation pre-wired with 23 loopback AI daemons, 71 desktop launchers across 4 tactical pillars, and offline-capable cryptographic telemetry.',
     faqs: [
       {
         q: 'What is included in the ZothOS desktop architecture?',
         a: '10 Root Flagship launchers plus 4 categorized folders (AI Agents & Dev, Security & Privacy, ZothOS Daemons, Media & Utilities) managed by zoth-control-center.',
       },
       {
-        q: 'How are the 22 local AI daemons orchestrated?',
+        q: 'How are the 23 local AI daemons orchestrated?',
         a: 'Through the ZothOS Sovereign Conductor on loopback ports :8094–:8121 and :9393 with strict <60°C thermal governor protection.',
       },
     ],

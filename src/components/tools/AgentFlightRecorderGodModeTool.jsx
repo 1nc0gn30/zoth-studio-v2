@@ -55,7 +55,7 @@ const INITIAL_STEPS = [
     step: 3,
     actor: 'egress-sentinel',
     action: 'SOCKET_VERIFY',
-    payload: 'All 22 local daemons bound strictly to 127.0.0.1 loopback',
+    payload: 'All 23 local daemons bound strictly to 127.0.0.1 loopback',
   },
   {
     step: 4,

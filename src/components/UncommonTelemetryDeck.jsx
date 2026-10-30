@@ -208,7 +208,7 @@ export default function UncommonTelemetryDeck({ compact = false }) {
               }}
             />
             <Chip
-              label="MACHINE TELEMETRY · 17/17 DAEMONS ACTIVE"
+              label="MACHINE TELEMETRY · 23 LOOPBACK DAEMONS (LOCAL)"
               size="small"
               sx={{
                 fontFamily: mono,
@@ -465,7 +465,7 @@ export default function UncommonTelemetryDeck({ compact = false }) {
             <Grid item xs={12} sm={6}>
               <SplitFlapTile
                 label="FLEET SUPERVISOR"
-                value="17 / 17 DAEMONS"
+                value="23 LOOPBACK DAEMONS"
                 sub="Adytum :3000 · WebGen :5173 · Memory :8094 · Consensus :8096 · HexStrike :8888"
                 dark={dark}
                 to="/bridges"
@@ -475,7 +475,7 @@ export default function UncommonTelemetryDeck({ compact = false }) {
               <SplitFlapTile
                 label="OPEN-ACCESS ARSENAL"
                 value="163 MCP · 71 TOOLS"
-                sub="100% Free + Unlocked Client-Side AST, Security, AEO + AI Workstations"
+                sub="100% Free: Client-Side AST, Security, AEO + AI Workstations"
                 dark={dark}
                 to="/arsenal"
               />

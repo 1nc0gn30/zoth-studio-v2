@@ -98,7 +98,7 @@ export default function SwarmTaskDispatcher() {
   }, []);
 
   const steps = [
-    { agent: 'ZOTHOS CONDUCTOR', action: 'Verifying 22 loopback enclave daemons (:8094–:8121) & zero-egress seal...', status: 'DONE' },
+    { agent: 'ZOTHOS CONDUCTOR', action: 'Verifying 23 loopback enclave daemons (:8094–:8121) & zero-egress seal...', status: 'DONE' },
     { agent: 'HERMES AGENT', action: 'Loading ~/.gemini/config/skills & decomposing work order into AST tasks...', status: 'IN_PROGRESS' },
     { agent: 'CURSOR AGENT', action: 'Synthesizing multi-file implementation & running static type verification...', status: 'PENDING' },
     { agent: 'NEURO-MEM (:8094)', action: 'Consolidating episodic trace into HNSW vector index & STDP synapse graph...', status: 'PENDING' },
