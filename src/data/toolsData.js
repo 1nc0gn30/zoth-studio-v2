@@ -799,7 +799,7 @@ export const microTools = [
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     depay: false,
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/gelato-connector.git && cd gelato-connector && ./bin/gelato-connector serve --port 8116',
+    pull: 'git clone https://github.com/1nc0gn30/gelato-connector.git && cd gelato-connector && python3 server.py --port 8116  # or: gelato-connector status',
   },
   {
     id: 'agent-voice-call',
