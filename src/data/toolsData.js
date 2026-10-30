@@ -875,7 +875,7 @@ export const microTools = [
     localPort: 8119,
     localUrl: 'http://127.0.0.1:8119',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/pod-mockup-forge.git && cd pod-mockup-forge && ./bin/pod-mockup-forge server --port 8119',
+    pull: 'git clone https://github.com/1nc0gn30/pod-mockup-forge.git && cd pod-mockup-forge && python3 server.py --port 8119  # or: pod-mockup-forge status',
   },
   {
     id: 'pod-margin-sentinel',
