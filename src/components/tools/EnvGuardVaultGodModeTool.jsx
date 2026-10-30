@@ -17,6 +17,8 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -310,6 +312,15 @@ export function EnvGuardVaultGodModeTool() {
           boxShadow: isDark ? '0 12px 32px rgba(212, 175, 55, 0.12)' : '0 8px 24px rgba(0,0,0,0.06)'
         }}
       >
+        <SovereignEyebrow accent="#D4AF37" right="Security & Recon">
+          {"envguard-secrets-vault"}
+        </SovereignEyebrow>
+        <SovereignBand
+          seed={"envguard-secrets-vault"}
+          eyebrow={"Security & Recon"}
+          caption={"EnvGuard Secrets Vault"}
+          label={"EnvGuard Secrets Vault — Zoth sovereign visualisation"}
+        />
         <Grid container spacing={2} alignItems="center">
           <Grid xs={12} md={7}>
             <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1 }}>

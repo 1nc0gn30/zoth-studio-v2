@@ -30,6 +30,8 @@ import DownloadIcon from '@mui/icons-material/Download';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import CheckIcon from '@mui/icons-material/Check';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
@@ -266,20 +268,12 @@ export default function CwvSpeedEngineGodModeTool() {
   }, [analysis.score, isDark]);
 
   const handleCopyOutput = () => {
-    if (!isPro) {
-      setPaywallOpen(true);
-      return;
-    }
     navigator.clipboard?.writeText(analysis.transformed);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleDownloadBundle = () => {
-    if (!isPro) {
-      setPaywallOpen(true);
-      return;
-    }
     const blob = new Blob([analysis.transformed], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -354,6 +348,15 @@ export default function CwvSpeedEngineGodModeTool() {
       </Paper>
 
       {/* Top Telemetry Dials */}
+      <SovereignEyebrow accent="#38BDF8" right="Autonomous Web">
+        {"cwv-speed-engine"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"cwv-speed-engine"}
+        eyebrow={"Autonomous Web"}
+        caption={"CWV Speed Engine"}
+        label={"CWV Speed Engine — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={2.5}>
         <Grid xs={12} md={4}>
           <Paper

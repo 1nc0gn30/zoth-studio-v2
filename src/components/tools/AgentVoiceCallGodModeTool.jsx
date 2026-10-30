@@ -14,6 +14,8 @@ import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -236,6 +238,15 @@ export default function AgentVoiceCallGodModeTool() {
         </Stack>
       </Box>
 
+      <SovereignEyebrow accent="#D4AF37" right="Voice & Real-Time">
+        {"agent-voice-call"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"agent-voice-call"}
+        eyebrow={"Voice & Real-Time"}
+        caption={"Agent Voice Call"}
+        label={"Agent Voice Call — Zoth sovereign visualisation"}
+      />
       <Grid container>
         <Grid xs={12} md={7} sx={{ borderRight: { md: '1px solid rgba(255,255,255,0.08)' }, bgcolor: '#05060A' }}>
           <Box sx={{ width: '100%', height: 340 }}>

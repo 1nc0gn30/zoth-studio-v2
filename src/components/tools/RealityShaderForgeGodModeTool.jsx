@@ -21,6 +21,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import DownloadIcon from '@mui/icons-material/Download';
 import { useReality, REALITY_ORDER } from '../../context/RealityContext';
 import { ZothBotCharacterCanvas, RealityThemeIcon } from '../RealityZothBotHUD';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow, titleBaseSx, ledeSx } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Syne", "Space Grotesk", system-ui, sans-serif';
@@ -264,6 +266,15 @@ white   = "#F5F0E8"`;
         boxShadow: `0 20px 60px rgba(0,0,0,0.7), 0 0 36px ${primaryHex}22`,
       }}
     >
+      <SovereignEyebrow accent="#38BDF8" right="Media & 3D">
+        {"reality-shader-forge"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"reality-shader-forge"}
+        eyebrow={"Media & 3D"}
+        caption={"Zoth Reality Shader & Theme Forge"}
+        label={"Zoth Reality Shader & Theme Forge — Zoth sovereign visualisation"}
+      />
       {/* Top Header & Live 5-Reality Selector */}
       <Stack
         direction={{ xs: 'column', md: 'row' }}
@@ -299,10 +310,10 @@ white   = "#F5F0E8"`;
               }}
             />
           </Stack>
-          <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 800 }}>
+          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 800 }}>
             Zoth Reality Shader & Desktop Theme Forge
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.4 }}>
+          <Typography variant="body2" sx={{ ...ledeSx, color: 'text.secondary', mt: 0.4 }}>
             Switch between the 5 Zoth Realities, tune 60fps shader physics and Zoth Bot avatars, and export KDE Plasma <code>.colors</code>, Alacritty <code>.toml</code>, and CSS tokens.
           </Typography>
         </Box>

@@ -22,6 +22,8 @@ import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturi
 import ScaleIcon from '@mui/icons-material/Scale';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import { useReality } from '../../context/RealityContext';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -839,6 +841,15 @@ export default function Badge3dCoinGodModeTool({ tool }) {
 
   return (
     <Box sx={{ width: '100%' }}>
+      <SovereignEyebrow accent="#D4AF37" right="Media & 3D">
+        {"badge3d-coin-generator"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"badge3d-coin-generator"}
+        eyebrow={"Media & 3D"}
+        caption={"Badge3D Coin Generator"}
+        label={"Badge3D Coin Generator — Zoth sovereign visualisation"}
+      />
       {/* --------------------------------------------------------------------- */}
       {/* HIGH-CONVERTING SALES BANNER ABOVE MAIN SECTION                       */}
       {/* --------------------------------------------------------------------- */}

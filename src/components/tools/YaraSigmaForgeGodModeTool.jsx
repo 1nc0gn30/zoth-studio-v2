@@ -23,6 +23,8 @@ import RadarIcon from '@mui/icons-material/Radar';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { useReality } from '../../context/RealityContext';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow, titleBaseSx, ledeSx } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Syne", "Space Grotesk", system-ui, sans-serif';
@@ -345,10 +347,10 @@ level: ${presetMeta.severity.toLowerCase()}`;
               }}
             />
           </Stack>
-          <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 800 }}>
+          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 800 }}>
             YARA-X & Sigma Rule Compiler + Live Byte-Offset Scanner
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.4 }}>
+          <Typography variant="body2" sx={{ ...ledeSx, color: 'text.secondary', mt: 0.4 }}>
             Synthesize production YARA & Sigma signatures, inspect CVE exploit payloads in-browser with zero egress, and map detections to MITRE ATT&CK.
           </Typography>
         </Box>
@@ -416,6 +418,15 @@ level: ${presetMeta.severity.toLowerCase()}`;
         />
       </Box>
 
+      <SovereignEyebrow accent="#D4AF37" right="Security & Recon">
+        {"yara-sigma-forge"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"yara-sigma-forge"}
+        eyebrow={"Security & Recon"}
+        caption={"YARA-X & Sigma Threat Rule Forge"}
+        label={"YARA-X & Sigma Threat Rule Forge — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={2.5}>
         {/* Left Column: Payload Buffer & Pattern Editor */}
         <Grid xs={12} md={6}>

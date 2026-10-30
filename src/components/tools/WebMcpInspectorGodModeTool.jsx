@@ -26,6 +26,8 @@ import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import HubIcon from '@mui/icons-material/Hub';
 import { useReality } from '../../context/RealityContext';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow, titleBaseSx, ledeSx } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Syne", "Space Grotesk", system-ui, sans-serif';
@@ -528,10 +530,10 @@ export function registerSovereignWebMcpTool() {
               }}
             />
           </Stack>
-          <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 800, letterSpacing: '-0.02em' }}>
+          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 800, letterSpacing: '-0.02em' }}>
             WebMCP Protocol Inspector & Schema Security Firewall
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.4 }}>
+          <Typography variant="body2" sx={{ ...ledeSx, color: 'text.secondary', mt: 0.4 }}>
             Validate W3C <code>navigator.modelContext</code> & Anthropic MCP tool schemas, simulate JSON-RPC 2.0 wire frames, and audit Ring-level parameter safety in real time.
           </Typography>
         </Box>
@@ -602,6 +604,15 @@ export function registerSovereignWebMcpTool() {
         </Box>
       </Box>
 
+      <SovereignEyebrow accent="#D4AF37" right="AI & Knowledge">
+        {"webmcp-protocol-inspector"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"webmcp-protocol-inspector"}
+        eyebrow={"AI & Knowledge"}
+        caption={"WebMCP Protocol Suite"}
+        label={"WebMCP Protocol Suite — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={2.5}>
         {/* Left Column: Tool Schema & Test Arguments Editor */}
         <Grid xs={12} md={6}>

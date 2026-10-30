@@ -43,6 +43,8 @@ import TouchAppIcon from '@mui/icons-material/TouchApp';
 import CenterFocusStrongIcon from '@mui/icons-material/CenterFocusStrong';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { runWebGPUMatrixBenchmark } from '../../utils/webgpuEngine';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -217,6 +219,15 @@ function PayloadEntropyWorkstation({ isDark, gold }) {
         sx={{ '& .MuiInputBase-input': { fontFamily: mono, fontSize: '0.8rem' } }}
       />
 
+      <SovereignEyebrow accent="#34D399" right="Zoth Studio">
+        {"web-gputool-workstation"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"web-gputool-workstation"}
+        eyebrow={"Zoth Studio"}
+        caption={"Web GPUTool Workstation"}
+        label={"Web GPUTool Workstation — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={2}>
         <Grid xs={12} sm={4}>
           <Paper sx={{ p: 2, bgcolor: isDark ? '#040408' : '#F8FAFC', border: `1px solid ${gold.border}` }}>

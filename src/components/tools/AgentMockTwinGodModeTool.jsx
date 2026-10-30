@@ -22,6 +22,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import SpeedIcon from '@mui/icons-material/Speed';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -411,6 +413,15 @@ ${cassettes
       </Paper>
 
       {/* KPI Metric Strip */}
+      <SovereignEyebrow accent="#D4AF37" right="Simulation & Testing">
+        {"agent-mock-twin"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"agent-mock-twin"}
+        eyebrow={"Simulation & Testing"}
+        caption={"Agent Mock Twin"}
+        label={"Agent Mock Twin — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={2} sx={{ mb: 3 }}>
         <Grid xs={6} md={3}>
           <Card sx={{ bgcolor: isDark ? surfaceDark : theme.palette.background.paper, border: `1px solid ${cardBorder}`, borderRadius: 2 }}>

@@ -23,6 +23,8 @@ import BoltIcon from '@mui/icons-material/Bolt';
 import KeyIcon from '@mui/icons-material/VpnKey';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const MAGIC_HEADER = 'ZOTHSTEG'; // 8-byte identification header
@@ -622,6 +624,15 @@ export function AudioCipherGodModeTool() {
       </Paper>
 
       {/* Main Interactive Workstation */}
+      <SovereignEyebrow accent="#34D399" right="Zoth Studio">
+        {"audiocipher-stego-vault"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"audiocipher-stego-vault"}
+        eyebrow={"Zoth Studio"}
+        caption={"Audio Cipher"}
+        label={"Audio Cipher — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={3}>
         {/* Left Column: Carrier Wave Control & Audio Spectrum Canvas */}
         <Grid xs={12} lg={5}>

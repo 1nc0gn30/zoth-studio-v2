@@ -20,6 +20,8 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import TerminalIcon from '@mui/icons-material/Terminal';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DownloadIcon from '@mui/icons-material/Download';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -365,6 +367,15 @@ export default function AzothArchonGodModeTool() {
       </Box>
 
       {/* Main Grid Workstation */}
+      <SovereignEyebrow accent="#38BDF8" right="Zoth Studio">
+        {"azoth-archon-orchestrator"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"azoth-archon-orchestrator"}
+        eyebrow={"Zoth Studio"}
+        caption={"Azoth Archon"}
+        label={"Azoth Archon — Zoth sovereign visualisation"}
+      />
       <Grid container>
         {/* Left: Interactive Canvas & Subagent Selector */}
         <Grid xs={12} md={7} sx={{ borderRight: { md: '1px solid rgba(255,255,255,0.08)' }, bgcolor: '#05060B' }}>

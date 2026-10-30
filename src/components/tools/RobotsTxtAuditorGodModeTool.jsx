@@ -18,6 +18,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import SpeedIcon from '@mui/icons-material/Speed';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -384,6 +386,15 @@ export default function RobotsTxtAuditorGodModeTool() {
 
   return (
     <Box sx={{ width: '100%' }}>
+      <SovereignEyebrow accent="#38BDF8" right="Growth & SEO">
+        {"robots-txt-auditor"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"robots-txt-auditor"}
+        eyebrow={"Growth & SEO"}
+        caption={"Robots.txt & AEO Auditor"}
+        label={"Robots.txt & AEO Auditor — Zoth sovereign visualisation"}
+      />
       {/* --------------------------------------------------------------------- */}
       {/* HIGH-CONVERTING SALES BANNER ABOVE MAIN SECTION                       */}
       {/* --------------------------------------------------------------------- */}

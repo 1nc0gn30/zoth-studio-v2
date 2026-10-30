@@ -23,6 +23,8 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
 import DownloadIcon from '@mui/icons-material/Download';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -425,6 +427,15 @@ export default function SovereignBridgeGodModeTool() {
       </Box>
 
       {/* Main Grid Content */}
+      <SovereignEyebrow accent="#38BDF8" right="Zoth Studio">
+        {"sovereign-bridge-protocol"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"sovereign-bridge-protocol"}
+        eyebrow={"Zoth Studio"}
+        caption={"Sovereign Bridge"}
+        label={"Sovereign Bridge — Zoth sovereign visualisation"}
+      />
       <Grid container sx={{ p: 2.5 }} spacing={2.5}>
         {/* Left: Dispatch Panel & Channels */}
         <Grid xs={12} md={6}>

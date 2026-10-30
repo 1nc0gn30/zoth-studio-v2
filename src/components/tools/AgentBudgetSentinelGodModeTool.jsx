@@ -14,6 +14,8 @@ import { useTheme } from '@mui/material/styles';
 import SavingsIcon from '@mui/icons-material/Savings';
 import BoltIcon from '@mui/icons-material/Bolt';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow, titleBaseSx } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -156,7 +158,7 @@ export default function AgentBudgetSentinelGodModeTool() {
               }}
             />
           </Stack>
-          <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 400 }}>
+          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 400 }}>
             Token Burn-Rate Governor & <span style={{ color: '#34D399' }}>Zero-Cost Local Offload</span> Optimizer
           </Typography>
         </Box>
@@ -187,6 +189,15 @@ export default function AgentBudgetSentinelGodModeTool() {
         </Button>
       </Stack>
 
+      <SovereignEyebrow accent="#34D399" right="Security & Network">
+        {"agent-budget-sentinel"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"agent-budget-sentinel"}
+        eyebrow={"Security & Network"}
+        caption={"Agent Budget Sentinel"}
+        label={"Agent Budget Sentinel — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={3}>
         <Grid xs={12} md={5}>
           <Stack spacing={2}>

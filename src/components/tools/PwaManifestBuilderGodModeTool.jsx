@@ -20,6 +20,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import LayersIcon from '@mui/icons-material/Layers';
 import OfflineBoltIcon from '@mui/icons-material/OfflineBolt';
 import PaletteIcon from '@mui/icons-material/Palette';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -570,6 +572,15 @@ self.addEventListener('fetch', (event) => {
 
   return (
     <Box sx={{ width: '100%' }}>
+      <SovereignEyebrow accent="#38BDF8" right="Autonomous Web">
+        {"pwa-manifest-builder"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"pwa-manifest-builder"}
+        eyebrow={"Autonomous Web"}
+        caption={"PWA Manifest Studio"}
+        label={"PWA Manifest Studio — Zoth sovereign visualisation"}
+      />
       {/* --------------------------------------------------------------------- */}
       {/* HIGH-CONVERTING SALES BANNER ABOVE MAIN SECTION                       */}
       {/* --------------------------------------------------------------------- */}

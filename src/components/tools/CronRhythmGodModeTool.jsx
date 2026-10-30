@@ -19,6 +19,8 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CodeIcon from '@mui/icons-material/Code';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import TimerIcon from '@mui/icons-material/Timer';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -211,22 +213,10 @@ export function CronRhythmGodModeTool() {
   const [nextTriggers, setNextTriggers] = useState([]);
   const [activeHours, setActiveHours] = useState([]);
   const [copiedKey, setCopiedKey] = useState(null);
-  const [isProLicensed, setIsProLicensed] = useState(true);
-  const [showPaywallModal, setShowPaywallModal] = useState(false);
-  const [licenseKeyInput, setLicenseKeyInput] = useState('');
   const [countdownText, setCountdownText] = useState('');
 
   // Radial 24-Hour Sequencer Canvas
   const canvasRef = useRef(null);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('licensed') === 'true' || localStorage.getItem('zoth_studio_pro_license') === 'active') {
-        setIsProLicensed(true);
-      }
-    }
-  }, []);
 
   // Update schedule & active hours when expression changes
   useEffect(() => {
@@ -359,14 +349,6 @@ export function CronRhythmGodModeTool() {
     }
   };
 
-  const handleActivateLicense = () => {
-    if (licenseKeyInput.trim().length > 6) {
-      localStorage.setItem('zoth_studio_pro_license', 'active');
-      setIsProLicensed(true);
-      setShowPaywallModal(false);
-    }
-  };
-
   // Generate systemd timer calendar format
   const generateSystemdTimer = () => {
     return `[Unit]
@@ -426,10 +408,10 @@ ${cronExpression} /usr/local/bin/zoth-agent-tick >> /var/log/zoth/rhythm.log 2>&
               </Typography>
               <Chip
                 size="small"
-                label={isProLicensed ? '✦ 100% FREE & OPEN ACCESS' : 'FREE & OPEN ACCESS'}
+                label="✦ 100% FREE & OPEN ACCESS"
                 sx={{
-                  bgcolor: isProLicensed ? emeraldSoft : crimsonSoft,
-                  color: isProLicensed ? emerald : crimson,
+                  bgcolor: emeraldSoft,
+                  color: emerald,
                   fontWeight: 800,
                   fontSize: '0.72rem',
                   fontFamily: mono
@@ -442,42 +424,28 @@ ${cronExpression} /usr/local/bin/zoth-agent-tick >> /var/log/zoth/rhythm.log 2>&
           </Box>
         </Stack>
 
-        <Stack direction="row" spacing={1.5}>
-          {!isProLicensed ? (
-            <>
-              <Button
-                variant="contained"
-                size="small"
-                href="https://github.com/1nc0gn30/zoth-studio-v2"
-                target="_blank"
-                rel="noreferrer"
-                startIcon={<BoltIcon />}
-                sx={{
-                  bgcolor: gold,
-                  color: '#000',
-                  fontWeight: 800,
-                  '&:hover': { bgcolor: '#B8860B' }
-                }}
-              >
-                ☕ Buy Us a Coffee
-              </Button>
-              <Button
-                variant="outlined"
-                size="small"
-                onClick={() => setShowPaywallModal(true)}
-                startIcon={<KeyIcon />}
-                sx={{ borderColor: gold, color: gold, fontWeight: 700 }}
-              >
-                Enter Key
-              </Button>
-            </>
-          ) : (
-            <Chip
-              icon={<CheckCircleIcon style={{ color: emerald }} />}
-              label="UNLIMITED SYSTEMD EXPORTS UNLOCKED"
-              sx={{ bgcolor: emeraldSoft, color: emerald, fontWeight: 800, fontFamily: mono }}
-            />
-          )}
+        <Stack direction="row" spacing={1.5} alignItems="center">
+          <Button
+            variant="contained"
+            size="small"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noreferrer"
+            startIcon={<BoltIcon />}
+            sx={{
+              bgcolor: gold,
+              color: '#000',
+              fontWeight: 800,
+              '&:hover': { bgcolor: '#B8860B' }
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Chip
+            icon={<CheckCircleIcon style={{ color: emerald }} />}
+            label="UNLIMITED SYSTEMD EXPORTS UNLOCKED"
+            sx={{ bgcolor: emeraldSoft, color: emerald, fontWeight: 800, fontFamily: mono }}
+          />
         </Stack>
       </Paper>
 
@@ -491,6 +459,15 @@ ${cronExpression} /usr/local/bin/zoth-agent-tick >> /var/log/zoth/rhythm.log 2>&
           borderRadius: 2
         }}
       >
+        <SovereignEyebrow accent="#D4AF37" right="Automation">
+          {"cron-rhythm-studio"}
+        </SovereignEyebrow>
+        <SovereignBand
+          seed={"cron-rhythm-studio"}
+          eyebrow={"Automation"}
+          caption={"CronRhythm Studio"}
+          label={"CronRhythm Studio — Zoth sovereign visualisation"}
+        />
         <Grid container spacing={2} alignItems="center">
           <Grid xs={12} md={6}>
             <TextField
@@ -686,91 +663,6 @@ ${cronExpression} /usr/local/bin/zoth-agent-tick >> /var/log/zoth/rhythm.log 2>&
           </Paper>
         </Grid>
       </Grid>
-
-      {/* Pro Monetization Modal */}
-      <Dialog
-        open={showPaywallModal}
-        onClose={() => setShowPaywallModal(false)}
-        maxWidth="sm"
-        fullWidth
-        PaperProps={{
-          sx: {
-            bgcolor: isDark ? surfaceDark : theme.palette.background.paper,
-            border: `1px solid ${gold}`,
-            borderRadius: 2
-          }
-        }}
-      >
-        <DialogTitle sx={{ pb: 1, borderBottom: `1px solid ${cardBorder}` }}>
-          <Stack direction="row" spacing={1.5} alignItems="center">
-            <ShieldIcon sx={{ color: gold }} />
-            <Typography variant="h6" sx={{ fontWeight: 800, color: gold }}>
-              CronRhythm 100% Free & Open Access — Community Support
-            </Typography>
-          </Stack>
-        </DialogTitle>
-        <DialogContent sx={{ mt: 2 }}>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Unlock automated enterprise task sync, multi-platform systemd service generation, and distributed agent rhythm triggers.
-          </Typography>
-
-          <Paper sx={{ p: 2, mb: 3, bgcolor: goldSoft, border: `1px solid ${gold}`, borderRadius: 1.5 }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold, mb: 0.5 }}>
-              ⚡ 100% Free & Open Access — Optional Community Support
-            </Typography>
-            <Typography variant="caption" sx={{ color: 'text.primary' }}>
-              Everything here is free to use. Optional tips are welcome via:
-            </Typography>
-            <Stack direction="row" spacing={1.5} sx={{ mt: 1.5 }}>
-              <Button
-                variant="contained"
-                size="small"
-                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
-                target="_blank"
-                rel="noreferrer"
-                sx={{ bgcolor: gold, color: '#000', fontWeight: 800 }}
-              >
-                ☕ Buy Us a Coffee (Stripe)
-              </Button>
-              <Button
-                variant="outlined"
-                size="small"
-                href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
-                target="_blank"
-                rel="noreferrer"
-                sx={{ borderColor: cyan, color: cyan, fontWeight: 700 }}
-              >
-                Solana Pay (USDC/SOL)
-              </Button>
-            </Stack>
-          </Paper>
-
-          <TextField
-            fullWidth
-            size="small"
-            label="Optional note with your tip"
-            value={licenseKeyInput}
-            onChange={(e) => setLicenseKeyInput(e.target.value)}
-            placeholder="e.g. CRON-PRO-XXXX-XXXX"
-            InputProps={{
-              sx: { fontFamily: mono }
-            }}
-          />
-        </DialogContent>
-        <DialogActions sx={{ p: 2, borderTop: `1px solid ${cardBorder}` }}>
-          <Button onClick={() => setShowPaywallModal(false)} sx={{ color: 'text.secondary', fontFamily: mono }}>
-            CANCEL
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleActivateLicense}
-            disabled={licenseKeyInput.trim().length < 6}
-            sx={{ bgcolor: emerald, color: '#000', fontWeight: 800, fontFamily: mono }}
-          >
-            ACTIVATE PRO
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

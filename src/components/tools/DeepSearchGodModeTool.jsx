@@ -33,6 +33,8 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import CheckIcon from '@mui/icons-material/Check';
 import HubIcon from '@mui/icons-material/Hub';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
@@ -271,6 +273,15 @@ ${base.claims
       </Paper>
 
       {/* Query Controls & Research DAG Canvas */}
+      <SovereignEyebrow accent="#38BDF8" right="AI & Knowledge">
+        {"deepsearch-research-agent"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"deepsearch-research-agent"}
+        eyebrow={"AI & Knowledge"}
+        caption={"DeepSearch Research Agent & Studio"}
+        label={"DeepSearch Research Agent & Studio — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={3}>
         <Grid xs={12} md={7}>
           <Paper sx={{ p: 2.5, height: '100%', borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: isDark ? '#08080C' : '#FFFFFF' }}>

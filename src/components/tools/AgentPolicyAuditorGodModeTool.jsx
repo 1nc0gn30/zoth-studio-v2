@@ -21,6 +21,8 @@ import TimerIcon from '@mui/icons-material/Timer';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RuleIcon from '@mui/icons-material/Rule';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -654,6 +656,15 @@ export function AgentPolicyAuditorGodModeTool() {
                     InputProps={{ sx: { fontFamily: mono, fontSize: '0.8rem' } }}
                   />
 
+                  <SovereignEyebrow accent="#34D399" right="Security & Enclave">
+                    {"agent-policy-auditor"}
+                  </SovereignEyebrow>
+                  <SovereignBand
+                    seed={"agent-policy-auditor"}
+                    eyebrow={"Security & Enclave"}
+                    caption={"Agent Policy Auditor"}
+                    label={"Agent Policy Auditor — Zoth sovereign visualisation"}
+                  />
                   <Grid container spacing={2}>
                     <Grid xs={6}>
                       <TextField

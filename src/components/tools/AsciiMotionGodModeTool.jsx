@@ -19,6 +19,8 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import DownloadIcon from '@mui/icons-material/Download';
 import { useReality } from '../../context/RealityContext';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -942,6 +944,15 @@ ${textNodes}
       </Box>
 
       {/* Main Grid */}
+      <SovereignEyebrow accent="#38BDF8" right="Zoth Studio">
+        {"zoth-scene-foundry"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"zoth-scene-foundry"}
+        eyebrow={"Zoth Studio"}
+        caption={"Ascii Motion"}
+        label={"Ascii Motion — Zoth sovereign visualisation"}
+      />
       <Grid container>
         <Grid xs={12} md={8} sx={{ borderRight: { md: '1px solid rgba(255,255,255,0.08)' }, bgcolor: '#050508' }}>
           <Box

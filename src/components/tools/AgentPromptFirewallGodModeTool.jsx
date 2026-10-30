@@ -15,6 +15,8 @@ import SecurityIcon from '@mui/icons-material/Security';
 import GppBadIcon from '@mui/icons-material/GppBad';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow, titleBaseSx } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -196,7 +198,7 @@ export default function AgentPromptFirewallGodModeTool() {
               }}
             />
           </Stack>
-          <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 400 }}>
+          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 400 }}>
             Constitutional Prompt Sanitizer & <span style={{ color: '#F59E0B' }}>Indirect Tool-Poisoning</span> Guard
           </Typography>
         </Box>
@@ -211,6 +213,15 @@ export default function AgentPromptFirewallGodModeTool() {
         </Button>
       </Stack>
 
+      <SovereignEyebrow accent="#34D399" right="Security & Network">
+        {"agent-prompt-firewall"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"agent-prompt-firewall"}
+        eyebrow={"Security & Network"}
+        caption={"Agent Prompt Firewall"}
+        label={"Agent Prompt Firewall — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={3}>
         <Grid xs={12} md={6}>
           <Stack spacing={2}>

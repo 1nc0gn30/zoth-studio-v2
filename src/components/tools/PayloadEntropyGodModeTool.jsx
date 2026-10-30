@@ -19,6 +19,8 @@ import CodeIcon from '@mui/icons-material/Code';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import BugReportIcon from '@mui/icons-material/BugReport';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -303,6 +305,15 @@ SecRule REQUEST_BODY "@rx .+" \\
       </Paper>
 
       {/* KPI Metric Strip */}
+      <SovereignEyebrow accent="#38BDF8" right="Security & Recon">
+        {"payload-entropy-studio"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"payload-entropy-studio"}
+        eyebrow={"Security & Recon"}
+        caption={"Payload Entropy Studio"}
+        label={"Payload Entropy Studio — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={2} sx={{ mb: 3 }}>
         <Grid xs={6} md={3}>
           <Card sx={{ bgcolor: isDark ? surfaceDark : theme.palette.background.paper, border: `1px solid ${cardBorder}`, borderRadius: 2 }}>

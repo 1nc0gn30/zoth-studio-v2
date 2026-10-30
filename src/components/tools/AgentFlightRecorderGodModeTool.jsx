@@ -15,6 +15,8 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ReplayIcon from '@mui/icons-material/Replay';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow, titleBaseSx } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -209,7 +211,7 @@ export default function AgentFlightRecorderGodModeTool() {
               }}
             />
           </Stack>
-          <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 400 }}>
+          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 400 }}>
             Tamper-Evident <span style={{ color: '#38BDF8' }}>Merkle DAG</span> Trajectory & Replay Debugger
           </Typography>
         </Box>
@@ -224,6 +226,15 @@ export default function AgentFlightRecorderGodModeTool() {
         </Button>
       </Stack>
 
+      <SovereignEyebrow accent="#38BDF8" right="Forensics & Telemetry">
+        {"agent-flight-recorder"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"agent-flight-recorder"}
+        eyebrow={"Forensics & Telemetry"}
+        caption={"Agent Flight Recorder"}
+        label={"Agent Flight Recorder — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={3}>
         <Grid xs={12} md={6}>
           <Stack spacing={1.5}>

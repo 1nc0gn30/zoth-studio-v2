@@ -16,6 +16,8 @@ import PsychologyIcon from '@mui/icons-material/Psychology';
 import BoltIcon from '@mui/icons-material/Bolt';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow, titleBaseSx } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -290,7 +292,7 @@ export default function NeuroMemoryGodModeTool() {
               }}
             />
           </Stack>
-          <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 400 }}>
+          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 400 }}>
             Hybrid Vector + BM25 + <span style={{ color: '#C084FC' }}>Ebbinghaus STDP</span> Recall Engine
           </Typography>
         </Box>
@@ -305,6 +307,15 @@ export default function NeuroMemoryGodModeTool() {
         </Button>
       </Stack>
 
+      <SovereignEyebrow accent="#38BDF8" right="Zoth Studio">
+        {"neuro-memory-service"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"neuro-memory-service"}
+        eyebrow={"Zoth Studio"}
+        caption={"Neuro Memory"}
+        label={"Neuro Memory — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={3}>
         {/* Left Column: Query + Weights + Ingest */}
         <Grid xs={12} md={5}>

@@ -19,6 +19,8 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
 import DownloadIcon from '@mui/icons-material/Download';
 import { useReality } from '../../context/RealityContext';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Syne", "Space Grotesk", system-ui, sans-serif';
@@ -307,6 +309,15 @@ export default function VisionKinematicsGodModeTool({ tool }) {
         boxShadow: activeTheme.cardGlow,
       }}
     >
+      <SovereignEyebrow accent="#D4AF37" right="Voice & Real-Time">
+        {"likeness-desk"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"likeness-desk"}
+        eyebrow={"Voice & Real-Time"}
+        caption={"Likeness Desk (AI Video Double)"}
+        label={"Likeness Desk (AI Video Double) — Zoth sovereign visualisation"}
+      />
       {/* Header */}
       <Stack
         direction={{ xs: 'column', md: 'row' }}

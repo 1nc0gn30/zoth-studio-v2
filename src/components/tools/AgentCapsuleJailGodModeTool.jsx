@@ -22,6 +22,8 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import SecurityIcon from '@mui/icons-material/Security';
 import BlockIcon from '@mui/icons-material/Block';
 import SpeedIcon from '@mui/icons-material/Speed';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -361,6 +363,15 @@ export function AgentCapsuleJailGodModeTool() {
       </Paper>
 
       {/* Main Sandbox Interactive Workspace */}
+      <SovereignEyebrow accent="#38BDF8" right="Security & Enclave">
+        {"agent-capsule-jail"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"agent-capsule-jail"}
+        eyebrow={"Security & Enclave"}
+        caption={"Agent Capsule Jail"}
+        label={"Agent Capsule Jail — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={3}>
         {/* Left Column: Code Editor & Quotas */}
         <Grid xs={12} lg={6}>

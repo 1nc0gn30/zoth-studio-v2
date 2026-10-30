@@ -26,6 +26,8 @@ import DownloadIcon from '@mui/icons-material/Download';
 import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import BrushIcon from '@mui/icons-material/Brush';
 import { useReality } from '../../context/RealityContext';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow, titleBaseSx, ledeSx } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -454,6 +456,15 @@ export default function PodCommerceGodModeTool({ tool }) {
         boxShadow: isDark ? '0 24px 60px rgba(0,0,0,0.65)' : '0 12px 32px rgba(15,23,42,0.06)',
       }}
     >
+      <SovereignEyebrow accent="#34D399" right="Commerce & MCP">
+        {"printify-connector"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"printify-connector"}
+        eyebrow={"Commerce & MCP"}
+        caption={"Printify Connector"}
+        label={"Printify Connector — Zoth sovereign visualisation"}
+      />
       <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap sx={{ mb: 1 }}>
         <Chip
           icon={<LocalShippingIcon sx={{ fontSize: '0.95rem !important', color: '#34D399 !important' }} />}
@@ -506,7 +517,7 @@ export default function PodCommerceGodModeTool({ tool }) {
         />
       </Stack>
 
-      <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 400, mb: 2 }}>
+      <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 400, mb: 2 }}>
         {tool?.name || 'Autonomous Printify × Gelato × Shopify × Etsy'} —{' '}
         <span style={{ color: '#34D399' }}>Margin, SEO & 300-DPI Asset Forge</span>
       </Typography>
@@ -558,7 +569,7 @@ export default function PodCommerceGodModeTool({ tool }) {
               </FormControl>
 
               <Box>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem' }}>
+                <Typography sx={{ ...ledeSx, fontFamily: mono, fontSize: '0.72rem' }}>
                   Unit Retail Price: ${retailPrice} USD
                 </Typography>
                 <Slider min={15} max={95} step={1} value={retailPrice} onChange={(_, v) => setRetailPrice(v)} sx={{ color: '#34D399' }} />

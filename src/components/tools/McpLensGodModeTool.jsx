@@ -24,6 +24,8 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import CompressIcon from '@mui/icons-material/Compress';
 import StorageIcon from '@mui/icons-material/Storage';
 import LanIcon from '@mui/icons-material/Lan';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -627,6 +629,15 @@ export default function McpLensGodModeTool() {
                 <PlayArrowIcon sx={{ fontSize: 18, color: '#D4AF37' }} />
                 Simulate & Inject JSON-RPC Frame
               </Typography>
+              <SovereignEyebrow accent="#D4AF37" right="Simulation & Testing">
+                {"mcp-lens"}
+              </SovereignEyebrow>
+              <SovereignBand
+                seed={"mcp-lens"}
+                eyebrow={"Simulation & Testing"}
+                caption={"MCP Lens"}
+                label={"MCP Lens — Zoth sovereign visualisation"}
+              />
               <Grid container spacing={2}>
                 <Grid xs={12} sm={4}>
                   <FormControl fullWidth size="small">

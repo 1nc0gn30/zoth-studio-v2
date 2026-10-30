@@ -31,6 +31,8 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import LanguageIcon from '@mui/icons-material/Language';
 import RouterIcon from '@mui/icons-material/Router';
 import BoltIcon from '@mui/icons-material/Bolt';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -956,6 +958,15 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
           boxShadow: isDark ? '0 12px 32px rgba(212, 175, 55, 0.15)' : '0 8px 24px rgba(0,0,0,0.06)'
         }}
       >
+        <SovereignEyebrow accent="#34D399" right="Zoth Studio">
+          {"hexstrike-tactical-terminal"}
+        </SovereignEyebrow>
+        <SovereignBand
+          seed={"hexstrike-tactical-terminal"}
+          eyebrow={"Zoth Studio"}
+          caption={"Hex Strike"}
+          label={"Hex Strike — Zoth sovereign visualisation"}
+        />
         <Grid container spacing={2} alignItems="center">
           <Grid xs={12} md={7}>
             <Stack direction="row" spacing={1.5} alignItems="center">

@@ -18,6 +18,8 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow, titleBaseSx } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -276,12 +278,21 @@ table inet zoth_agent_egress {
               }}
             />
           </Stack>
-          <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 400 }}>
+          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 400 }}>
             Autonomous Socket Interceptor & <span style={{ color: '#EF4444' }}>Exfiltration Firewall</span>
           </Typography>
         </Box>
       </Stack>
 
+      <SovereignEyebrow accent="#38BDF8" right="Security & Network">
+        {"agent-egress-sentinel"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"agent-egress-sentinel"}
+        eyebrow={"Security & Network"}
+        caption={"Agent Egress Sentinel"}
+        label={"Agent Egress Sentinel — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={3}>
         <Grid xs={12} md={6}>
           <Stack spacing={2}>

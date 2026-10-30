@@ -29,6 +29,8 @@ import BoltIcon from '@mui/icons-material/Bolt';
 import MovieFilterIcon from '@mui/icons-material/MovieFilter';
 import ExtensionIcon from '@mui/icons-material/Extension';
 import TerminalIcon from '@mui/icons-material/Terminal';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow, titleBaseSx, ledeSx } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", monospace';
 const displayFont = '"Space Grotesk", "Cinzel", sans-serif';
@@ -599,6 +601,15 @@ export default function ZothBoltGodModeTool() {
         color: '#F8FAFC',
       }}
     >
+      <SovereignEyebrow accent="#D4AF37" right="Autonomous Web">
+        {"bolt.diy"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"bolt.diy"}
+        eyebrow={"Autonomous Web"}
+        caption={"Zoth Bolt"}
+        label={"Zoth Bolt — Zoth sovereign visualisation"}
+      />
       {/* Top Header Strip */}
       <Box
         sx={{
@@ -653,11 +664,11 @@ export default function ZothBoltGodModeTool() {
           </Box>
           <Typography
             variant="h5"
-            sx={{ fontFamily: displayFont, fontWeight: 800, color: '#F5E6AB', letterSpacing: '0.02em' }}
+            sx={{ ...titleBaseSx, fontFamily: displayFont, fontWeight: 800, color: '#F5E6AB', letterSpacing: '0.02em' }}
           >
             Zoth Bolt — Full-Stack AI, Motion Edit & Asset Architect
           </Typography>
-          <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#94A3B8', mt: 0.4 }}>
+          <Typography sx={{ ...ledeSx, fontFamily: mono, fontSize: '0.68rem', color: '#94A3B8', mt: 0.4 }}>
             Supercharged for Zoth Studio & ZothOS • Proudly built on the open-source <span style={{ color: '#D4AF37' }}>bolt.diy</span> foundation
           </Typography>
         </Box>

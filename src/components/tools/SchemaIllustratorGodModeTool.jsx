@@ -19,6 +19,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import StorageIcon from '@mui/icons-material/Storage';
 import TransformIcon from '@mui/icons-material/Transform';
 import SpeedIcon from '@mui/icons-material/Speed';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -623,6 +625,15 @@ export default function SchemaIllustratorGodModeTool() {
 
   return (
     <Box sx={{ width: '100%' }}>
+      <SovereignEyebrow accent="#34D399" right="Autonomous Web">
+        {"schema-illustrator-studio"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"schema-illustrator-studio"}
+        eyebrow={"Autonomous Web"}
+        caption={"Schema Illustrator Studio"}
+        label={"Schema Illustrator Studio — Zoth sovereign visualisation"}
+      />
       {/* --------------------------------------------------------------------- */}
       {/* HIGH-CONVERTING SALES BANNER ABOVE MAIN SECTION                       */}
       {/* --------------------------------------------------------------------- */}

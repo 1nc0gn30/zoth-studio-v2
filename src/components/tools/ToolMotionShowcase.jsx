@@ -20,6 +20,8 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
 import MovieFilterIcon from '@mui/icons-material/MovieFilter';
 import TerminalIcon from '@mui/icons-material/Terminal';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -549,6 +551,15 @@ Scene Breakdown & Exact On-Screen Copy:
           : `0 10px 28px rgba(15,23,42,0.18)`,
       }}
     >
+      <SovereignEyebrow accent="#D4AF37" right="Zoth Studio">
+        {"tool-motion-showcase"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"tool-motion-showcase"}
+        eyebrow={"Zoth Studio"}
+        caption={"Tool Motion Showcase"}
+        label={"Tool Motion Showcase — Zoth sovereign visualisation"}
+      />
       {/* Top Cinema Control Bar */}
       <Box
         sx={{

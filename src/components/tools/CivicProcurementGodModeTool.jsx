@@ -20,6 +20,8 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
 import DownloadIcon from '@mui/icons-material/Download';
 import { useReality } from '../../context/RealityContext';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Syne", "Space Grotesk", system-ui, sans-serif';
@@ -302,6 +304,15 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
         boxShadow: activeTheme.cardGlow,
       }}
     >
+      <SovereignEyebrow accent="#38BDF8" right="Commerce & POD">
+        {"producthunt-connector"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"producthunt-connector"}
+        eyebrow={"Commerce & POD"}
+        caption={"Product Hunt Connector (zoth-ph)"}
+        label={"Product Hunt Connector (zoth-ph) — Zoth sovereign visualisation"}
+      />
       {/* Header */}
       <Stack
         direction={{ xs: 'column', md: 'row' }}

@@ -20,6 +20,8 @@ import PauseIcon from '@mui/icons-material/Pause';
 import ShieldIcon from '@mui/icons-material/Shield';
 import CodeIcon from '@mui/icons-material/Code';
 import { RealityMatrixShowcaseSection } from '../RealityZothBotHUD';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -442,6 +444,15 @@ nice -n ${niceLevel} qemu-system-x86_64 \\
       </Box>
 
       {/* Main Split Workstation */}
+      <SovereignEyebrow accent="#D4AF37" right="Swarm & Core">
+        {"zoth-os"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"zoth-os"}
+        eyebrow={"Swarm & Core"}
+        caption={"Zoth OS v3.3.0"}
+        label={"Zoth OS v3.3.0 — Zoth sovereign visualisation"}
+      />
       <Grid container>
         {/* Left Column: 60fps Ring-0 Topology Canvas + Daemon Selector */}
         <Grid xs={12} md={7} sx={{ borderRight: { md: '1px solid rgba(255,255,255,0.08)' }, bgcolor: '#05060A' }}>

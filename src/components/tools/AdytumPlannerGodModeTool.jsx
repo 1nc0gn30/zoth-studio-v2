@@ -22,6 +22,8 @@ import TerminalIcon from '@mui/icons-material/Terminal';
 import DownloadIcon from '@mui/icons-material/Download';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -538,6 +540,15 @@ export default function AdytumPlannerGodModeTool() {
         </Stack>
       </Box>
 
+      <SovereignEyebrow accent="#34D399" right="Planning">
+        {"adytum-alchemist-ai-workflow"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"adytum-alchemist-ai-workflow"}
+        eyebrow={"Planning"}
+        caption={"Adytum Planner"}
+        label={"Adytum Planner — Zoth sovereign visualisation"}
+      />
       <Grid container>
         {/* Left Column: Tree of Life Canvas + Active BOTA Tarot Card + All 22 Keys */}
         <Grid xs={12} md={6} sx={{ borderRight: { md: '1px solid rgba(255,255,255,0.08)' }, bgcolor: '#050509' }}>

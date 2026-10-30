@@ -26,6 +26,8 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import HistoryIcon from '@mui/icons-material/History';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useReality } from '../../context/RealityContext';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -550,6 +552,15 @@ ${JSON.stringify(
         </Stack>
       </Stack>
 
+      <SovereignEyebrow accent="#38BDF8" right="Zoth Studio">
+        {"sovereign-tool-output-workbench"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"sovereign-tool-output-workbench"}
+        eyebrow={"Zoth Studio"}
+        caption={"Sovereign Tool Output Workbench"}
+        label={"Sovereign Tool Output Workbench — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={2.5}>
         {/* Left Pane: Live Custom Input & Telemetry Strip */}
         <Grid xs={12} md={5}>

@@ -28,6 +28,8 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import CheckIcon from '@mui/icons-material/Check';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
@@ -258,6 +260,15 @@ export default function VectorSearchGodModeTool() {
         )}
       </Paper>
 
+      <SovereignEyebrow accent="#D4AF37" right="Swarm & Core">
+        {"vector-search-engine"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"vector-search-engine"}
+        eyebrow={"Swarm & Core"}
+        caption={"Vector Search Engine & Studio"}
+        label={"Vector Search Engine & Studio — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={3}>
         {/* Left: Hybrid Search Query, RRF Controls & Ranked Table */}
         <Grid xs={12} md={7}>

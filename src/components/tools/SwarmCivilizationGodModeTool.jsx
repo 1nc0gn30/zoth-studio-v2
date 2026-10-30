@@ -24,6 +24,8 @@ import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { useReality } from '../../context/RealityContext';
 import { ZothBotCharacterCanvas } from '../RealityZothBotHUD';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow, titleBaseSx, ledeSx } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Syne", "Space Grotesk", system-ui, sans-serif';
@@ -255,6 +257,15 @@ rings:
         boxShadow: activeTheme.cardGlow,
       }}
     >
+      <SovereignEyebrow accent="#D4AF37" right="Swarm & Core">
+        {"zoth-swarm-multiplexer"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"zoth-swarm-multiplexer"}
+        eyebrow={"Swarm & Core"}
+        caption={"21-Agent Swarm Multiplexer"}
+        label={"21-Agent Swarm Multiplexer — Zoth sovereign visualisation"}
+      />
       {/* Header */}
       <Stack
         direction={{ xs: 'column', md: 'row' }}
@@ -291,10 +302,10 @@ rings:
               }}
             />
           </Stack>
-          <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 800 }}>
+          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 800 }}>
             21-Agent Swarm Multiplexer & Byzantine Civilization Hub
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.4 }}>
+          <Typography variant="body2" sx={{ ...ledeSx, color: 'text.secondary', mt: 0.4 }}>
             Orchestrate the 3 concentric Pantheon rings, simulate Byzantine fault tolerance (<code>N = 3f + 1</code>), and export deterministic swarm topologies.
           </Typography>
         </Box>

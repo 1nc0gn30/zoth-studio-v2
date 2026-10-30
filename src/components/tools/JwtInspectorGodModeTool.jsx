@@ -20,6 +20,8 @@ import BugReportIcon from '@mui/icons-material/BugReport';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import TimerIcon from '@mui/icons-material/Timer';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -458,6 +460,15 @@ export function JwtInspectorGodModeTool() {
       </Paper>
 
       {/* Main 2-Column Inspector Grid */}
+      <SovereignEyebrow accent="#D4AF37" right="Security & Recon">
+        {"jwt-inspector-guard"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"jwt-inspector-guard"}
+        eyebrow={"Security & Recon"}
+        caption={"JWT Inspector Guard"}
+        label={"JWT Inspector Guard — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={3}>
         {/* Left: Decoded Header & Decoded Payload */}
         <Grid xs={12} lg={6}>

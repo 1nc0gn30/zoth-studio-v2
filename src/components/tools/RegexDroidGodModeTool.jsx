@@ -18,6 +18,8 @@ import BoltIcon from '@mui/icons-material/Bolt';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -398,6 +400,15 @@ export function RegexDroidGodModeTool() {
           boxShadow: isDark ? '0 12px 32px rgba(212, 175, 55, 0.15)' : '0 8px 24px rgba(0,0,0,0.06)'
         }}
       >
+        <SovereignEyebrow accent="#34D399" right="Automation">
+          {"regex-droid-builder"}
+        </SovereignEyebrow>
+        <SovereignBand
+          seed={"regex-droid-builder"}
+          eyebrow={"Automation"}
+          caption={"Regex Droid Studio"}
+          label={"Regex Droid Studio — Zoth sovereign visualisation"}
+        />
         <Grid container spacing={2} alignItems="center">
           <Grid xs={12} md={7}>
             <Stack direction="row" spacing={1.5} alignItems="center">

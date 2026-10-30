@@ -332,7 +332,7 @@ export const microTools = [
     depay: false,
     description: 'High-precision cron AST parser, 24x7 rhythm heatmap, countdown timeline, multi-dialect transpiler across K8s, GitHub Actions, AWS EventBridge, and Systemd with procedural chronometer brand media and dual Stripe + Solana rails.',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/cron-rhythm-studio.git && cd cron-rhythm-studio && python3 -m http.server 5174 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/cron-rhythm-studio.git && cd cron-rhythm-studio && python3 server.py --port 5174',
   },
   {
     id: 'certpath-roadmap-studio',

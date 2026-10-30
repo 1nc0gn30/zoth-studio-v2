@@ -24,6 +24,8 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import CheckIcon from '@mui/icons-material/Check';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
@@ -225,6 +227,15 @@ ${claudeXml}
         </Stack>
       </Paper>
 
+      <SovereignEyebrow accent="#38BDF8" right="Zoth Studio">
+        {"prompt-master-optimizer"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"prompt-master-optimizer"}
+        eyebrow={"Zoth Studio"}
+        caption={"Prompt Master"}
+        label={"Prompt Master — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={3}>
         {/* Left: Raw Prompt Editor & AST Diagnostics */}
         <Grid xs={12} md={6}>

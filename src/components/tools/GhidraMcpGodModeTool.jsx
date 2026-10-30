@@ -20,6 +20,8 @@ import BoltIcon from '@mui/icons-material/Bolt';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import SettingsEthernetIcon from '@mui/icons-material/SettingsEthernet';
 import SecurityIcon from '@mui/icons-material/Security';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -241,6 +243,15 @@ export function GhidraMcpGodModeTool() {
           boxShadow: isDark ? '0 12px 32px rgba(212, 175, 55, 0.15)' : '0 8px 24px rgba(0,0,0,0.06)'
         }}
       >
+        <SovereignEyebrow accent="#38BDF8" right="Security & Enclave">
+          {"ghidra-mcp-bridge"}
+        </SovereignEyebrow>
+        <SovereignBand
+          seed={"ghidra-mcp-bridge"}
+          eyebrow={"Security & Enclave"}
+          caption={"GhidraMCP Binary Reverse Engineering Bridge"}
+          label={"GhidraMCP Binary Reverse Engineering Bridge — Zoth sovereign visualisation"}
+        />
         <Grid container spacing={2} alignItems="center">
           <Grid xs={12} md={7}>
             <Stack direction="row" spacing={1.5} alignItems="center">

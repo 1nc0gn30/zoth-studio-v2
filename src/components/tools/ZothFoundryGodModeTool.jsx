@@ -19,6 +19,8 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import DownloadIcon from '@mui/icons-material/Download';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import BoltIcon from '@mui/icons-material/Bolt';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow, titleBaseSx } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -247,6 +249,15 @@ export default function ZothFoundryGodModeTool() {
         color: '#F8FAFC',
       }}
     >
+      <SovereignEyebrow accent="#D4AF37" right="Autonomous Web">
+        {"zoth-webgen"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"zoth-webgen"}
+        eyebrow={"Autonomous Web"}
+        caption={"Zoth QuickSite Starter"}
+        label={"Zoth QuickSite Starter — Zoth sovereign visualisation"}
+      />
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
         <Box>
           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5, flexWrap: 'wrap' }}>
@@ -261,7 +272,7 @@ export default function ZothFoundryGodModeTool() {
               sx={{ fontFamily: mono, fontSize: '0.64rem', fontWeight: 800, bgcolor: 'rgba(52,211,153,0.14)', color: '#34D399' }}
             />
           </Stack>
-          <Typography variant="h6" sx={{ fontFamily: display, fontWeight: 400, color: '#F5E6AB' }}>
+          <Typography variant="h6" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 400, color: '#F5E6AB' }}>
             Zoth QuickSite Starter Foundry
           </Typography>
         </Box>

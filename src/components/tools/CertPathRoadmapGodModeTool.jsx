@@ -23,6 +23,8 @@ import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import TimelineIcon from '@mui/icons-material/Timeline';
 
 import rawCertsData from '../../data/certsData.json';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -230,6 +232,15 @@ export default function CertPathRoadmapGodModeTool() {
 
   return (
     <Box sx={{ width: '100%' }}>
+      <SovereignEyebrow accent="#D4AF37" right="Automation">
+        {"certpath-roadmap-studio"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"certpath-roadmap-studio"}
+        eyebrow={"Automation"}
+        caption={"CertPath Roadmap Studio"}
+        label={"CertPath Roadmap Studio — Zoth sovereign visualisation"}
+      />
       {/* --------------------------------------------------------------------- */}
       {/* HIGH-CONVERTING SALES BANNER ABOVE MAIN SECTION                       */}
       {/* --------------------------------------------------------------------- */}

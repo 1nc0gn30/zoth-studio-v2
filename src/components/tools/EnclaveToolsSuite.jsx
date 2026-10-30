@@ -48,6 +48,8 @@ import AgentPolicyAuditorGodModeTool from './AgentPolicyAuditorGodModeTool';
 import AeoGraphEngineGodModeTool from './AeoGraphEngineGodModeTool';
 import NeuroMemoryGodModeTool from './NeuroMemoryGodModeTool';
 import SovereignBridgeGodModeTool from './SovereignBridgeGodModeTool';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 const gold = (t) => (t.palette.mode === 'dark' ? '#D4AF37' : '#B8860B');
@@ -151,6 +153,15 @@ export function AdytumPlannerTool() {
       </Paper>
 
       {/* Simulator Grid */}
+      <SovereignEyebrow accent="#38BDF8" right="Zoth Studio">
+        {"enclave-tools-suite"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"enclave-tools-suite"}
+        eyebrow={"Zoth Studio"}
+        caption={"Enclave Tools Suite"}
+        label={"Enclave Tools Suite — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={3}>
         {/* Left: CLI Parameters & Execution */}
         <Grid xs={12} md={6}>

@@ -23,6 +23,8 @@ import DownloadIcon from '@mui/icons-material/Download';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { useReality } from '../../context/RealityContext';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow, titleBaseSx, ledeSx } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Syne", "Space Grotesk", system-ui, sans-serif';
@@ -401,10 +403,10 @@ ${topFinding.remediation}`;
               }}
             />
           </Stack>
-          <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 800 }}>
+          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 800 }}>
             Attack Surface CPE/CVE Fingerprinter & UFW Hardening Synthesizer
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.4 }}>
+          <Typography variant="body2" sx={{ ...ledeSx, color: 'text.secondary', mt: 0.4 }}>
             Audit socket bindings and service banners against CPE 2.3 / CVSS v3.1 advisories and Ross Anderson Security Engineering threat models.
           </Typography>
         </Box>
@@ -453,6 +455,15 @@ ${topFinding.remediation}`;
         />
       </Box>
 
+      <SovereignEyebrow accent="#D4AF37" right="Security & Enclave">
+        {"shodan-surface-sentinel"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"shodan-surface-sentinel"}
+        eyebrow={"Security & Enclave"}
+        caption={"Shodan Attack Surface Sentinel"}
+        label={"Shodan Attack Surface Sentinel — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={2.5}>
         {/* Left Column: Socket / Banner Manifest Input */}
         <Grid xs={12} md={5}>
