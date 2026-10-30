@@ -262,6 +262,11 @@ export default function ZothFoundryGodModeTool() {
         <Box>
           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5, flexWrap: 'wrap' }}>
             <Chip
+              label="✦ 100% FREE & OPEN ACCESS"
+              size="small"
+              sx={{ fontFamily: mono, fontSize: '0.66rem', fontWeight: 800, bgcolor: 'rgba(16,185,129,0.15)', color: '#10B981', border: '1px solid #10B981' }}
+            />
+            <Chip
               label="SIMPLE 3-STEP STATIC LAUNCHER (:8092 + CLIENT ENGINE)"
               size="small"
               sx={{ fontFamily: mono, fontSize: '0.66rem', fontWeight: 800, bgcolor: 'rgba(212,175,55,0.15)', color: '#D4AF37' }}
@@ -277,6 +282,40 @@ export default function ZothFoundryGodModeTool() {
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+          <Button
+            size="small"
+            variant="contained"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              bgcolor: '#D4AF37',
+              color: '#08080B',
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              fontFamily: mono,
+              textTransform: 'none',
+              '&:hover': { bgcolor: '#F5E6AB' },
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
+            sx={{
+              borderColor: '#10B981',
+              color: '#10B981',
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              fontFamily: mono,
+              textTransform: 'none',
+              '&:hover': { borderColor: '#34D399', bgcolor: 'rgba(16,185,129,0.08)' },
+            }}
+          >
+            ◎ Solana Tip
+          </Button>
           <Button
             size="small"
             variant="outlined"
