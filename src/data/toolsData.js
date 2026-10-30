@@ -761,7 +761,7 @@ export const microTools = [
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     depay: false,
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/shopify-connector.git && cd shopify-connector && ./bin/shopify-connector serve --port 8113',
+    pull: 'git clone https://github.com/1nc0gn30/shopify-connector.git && cd shopify-connector && python3 server.py --port 8113  # or: shopify-connector status',
   },
   {
     id: 'printify-connector',
