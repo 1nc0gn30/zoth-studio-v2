@@ -76,7 +76,16 @@ export default function AgentPromptFirewallGodModeTool() {
   const isDark = theme.palette.mode === 'dark';
 
   const [inputPrompt, setInputPrompt] = useState(ATTACK_PRESETS[0].prompt);
+  const [copiedKey, setCopiedKey] = useState(null);
   const canvasRef = useRef(null);
+
+  const handleCopy = (text, key) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedKey(key);
+      setTimeout(() => setCopiedKey(null), 2000);
+    }
+  };
 
   const analysis = useMemo(() => {
     const matched = [];
@@ -202,15 +211,48 @@ export default function AgentPromptFirewallGodModeTool() {
             Constitutional Prompt Sanitizer & <span style={{ color: '#F59E0B' }}>Indirect Tool-Poisoning</span> Guard
           </Typography>
         </Box>
-        <Button
-          size="small"
-          variant="outlined"
-          startIcon={<ContentCopyIcon />}
-          onClick={() => navigator.clipboard?.writeText(JSON.stringify(analysis, null, 2))}
-          sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#F59E0B', borderColor: 'rgba(245,158,11,0.4)' }}
-        >
-          Export WAF Verdict JSON
-        </Button>
+        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+          <Button
+            size="small"
+            variant="contained"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noreferrer"
+            sx={{
+              bgcolor: '#D4AF37',
+              color: '#000',
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              fontFamily: mono,
+              '&:hover': { bgcolor: '#B8860B' }
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => handleCopy('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK', 'solTip')}
+            sx={{
+              borderColor: '#38BDF8',
+              color: '#38BDF8',
+              fontWeight: 700,
+              fontSize: '0.72rem',
+              fontFamily: mono
+            }}
+          >
+            {copiedKey === 'solTip' ? 'COPIED SOL!' : '◎ TIP SOL'}
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            startIcon={<ContentCopyIcon />}
+            onClick={() => handleCopy(JSON.stringify(analysis, null, 2), 'wafJson')}
+            sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#F59E0B', borderColor: 'rgba(245,158,11,0.4)' }}
+          >
+            {copiedKey === 'wafJson' ? 'COPIED WAF JSON' : 'Export WAF Verdict'}
+          </Button>
+        </Stack>
       </Stack>
 
       <SovereignEyebrow accent="#34D399" right="Security & Network">
