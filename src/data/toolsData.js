@@ -856,7 +856,7 @@ export const microTools = [
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     depay: false,
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/digital-asset-forge.git && cd digital-asset-forge && ./bin/digital-asset-forge server --port 8118',
+    pull: 'git clone https://github.com/1nc0gn30/digital-asset-forge.git && cd digital-asset-forge && python3 server.py --port 8118  # or: digital-asset-forge status',
   },
   {
     id: 'pod-mockup-forge',
