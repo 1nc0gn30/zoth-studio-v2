@@ -370,7 +370,7 @@ export const microTools = [
     depay: false,
     description: '100% in-browser Progressive Web App manifest generator, ServiceWorker compiler, offline cache architect, and production PWA ZIP bundle exporter with 100% free & open-access with optional Buy Us a Coffee & Solana tip support.',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/pwa-manifest-builder.git && cd pwa-manifest-builder && python3 -m http.server 8100 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/pwa-manifest-builder.git && cd pwa-manifest-builder && python3 server.py --port 8100',
   },
   {
     id: 'regex-droid-builder',
