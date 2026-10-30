@@ -665,7 +665,7 @@ export const microTools = [
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     depay: false,
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/etsy-pod-forge.git && cd etsy-pod-forge && python3 -m http.server 8107 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/etsy-pod-forge.git && cd etsy-pod-forge && python3 server.py --port 8107  # or: etsy-pod-forge status',
   },
   {
     id: 'etsy-connector',

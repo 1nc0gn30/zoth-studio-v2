@@ -456,15 +456,80 @@ export default function PodCommerceGodModeTool({ tool }) {
         boxShadow: isDark ? '0 24px 60px rgba(0,0,0,0.65)' : '0 12px 32px rgba(15,23,42,0.06)',
       }}
     >
-      <SovereignEyebrow accent="#34D399" right="Commerce & MCP">
-        {"printify-connector"}
+      <SovereignEyebrow accent="#34D399" right={tool?.category || "Commerce & POD"}>
+        {toolId}
       </SovereignEyebrow>
       <SovereignBand
-        seed={"printify-connector"}
-        eyebrow={"Commerce & MCP"}
-        caption={"Printify Connector"}
-        label={"Printify Connector — Zoth sovereign visualisation"}
+        seed={toolId}
+        eyebrow={tool?.category || "Commerce & POD"}
+        caption={tool?.name || "Etsy POD Forge"}
+        label={`${tool?.name || "Etsy POD Forge"} — Zoth sovereign visualisation`}
       />
+
+      {/* Sovereign Support & Access Bar */}
+      <Stack
+        direction="row"
+        spacing={1.5}
+        alignItems="center"
+        justifyContent="space-between"
+        flexWrap="wrap"
+        useFlexGap
+        sx={{
+          p: 1.5,
+          mb: 2.5,
+          borderRadius: 2,
+          bgcolor: isDark ? 'rgba(212,175,55,0.08)' : '#FFFDF0',
+          border: '1px solid rgba(212,175,55,0.3)',
+        }}
+      >
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Chip
+            size="small"
+            label="✦ 100% FREE & OPEN ACCESS"
+            sx={{
+              bgcolor: 'rgba(52,211,153,0.15)',
+              color: '#34D399',
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              fontFamily: mono,
+            }}
+          />
+          <Typography variant="caption" sx={{ color: 'text.secondary', fontFamily: mono }}>
+            Autonomous 300 DPI Canvas Generator & Etsy POD Architecture
+          </Typography>
+        </Stack>
+        <Stack direction="row" spacing={1.5}>
+          <Button
+            variant="contained"
+            size="small"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noreferrer"
+            sx={{
+              bgcolor: '#D4AF37',
+              color: '#000',
+              fontWeight: 800,
+              fontFamily: mono,
+              '&:hover': { bgcolor: '#B8860B' }
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => {
+              if (navigator.clipboard) {
+                navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+                alert('Solana Tip Address copied to clipboard: GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+              }
+            }}
+            sx={{ borderColor: '#38BDF8', color: '#38BDF8', fontWeight: 700, fontFamily: mono }}
+          >
+            ◎ Solana Tip
+          </Button>
+        </Stack>
+      </Stack>
       <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap sx={{ mb: 1 }}>
         <Chip
           icon={<LocalShippingIcon sx={{ fontSize: '0.95rem !important', color: '#34D399 !important' }} />}
