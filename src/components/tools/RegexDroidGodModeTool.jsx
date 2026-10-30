@@ -317,32 +317,6 @@ export function RegexDroidGodModeTool() {
   const [activeTab, setActiveTab] = useState(0);
   const [copiedKey, setCopiedKey] = useState(null);
 
-  // Pro State
-  const [isProLicensed, setIsProLicensed] = useState(true);
-  const [showPaywallModal, setShowPaywallModal] = useState(false);
-  const [licenseKeyInput, setLicenseKeyInput] = useState('');
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('licensed') === 'true' || urlParams.get('pro') === 'true') {
-        localStorage.setItem('regex_droid_pro_licensed', 'true');
-        setIsProLicensed(true);
-      } else {
-        const stored = localStorage.getItem('regex_droid_pro_licensed');
-        if (stored === 'true') setIsProLicensed(true);
-      }
-    }
-  }, []);
-
-  const handleActivateLicense = () => {
-    if (licenseKeyInput.trim().length >= 6) {
-      localStorage.setItem('regex_droid_pro_licensed', 'true');
-      setIsProLicensed(true);
-      setShowPaywallModal(false);
-    }
-  };
-
   const handleCopy = (text, key) => {
     navigator.clipboard.writeText(text);
     setCopiedKey(key);
@@ -494,17 +468,16 @@ export function RegexDroidGodModeTool() {
             </Stack>
             <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mt: 1.5 }}>
               <Chip
-                icon={isProLicensed ? <CheckCircleIcon sx={{ fontSize: '0.9rem !important', color: `${emerald} !important` }} /> : <LockIcon sx={{ fontSize: '0.9rem !important', color: `${gold} !important` }} />}
-                label={isProLicensed ? "✦ 100% FREE & OPEN ACCESS" : "FREE & OPEN ACCESS"}
+                icon={<CheckCircleIcon sx={{ fontSize: '0.9rem !important', color: `${emerald} !important` }} />}
+                label="✦ 100% FREE & OPEN ACCESS"
                 size="small"
-                onClick={() => !isProLicensed && setShowPaywallModal(true)}
                 sx={{
-                  bgcolor: isProLicensed ? emeraldSoft : goldSoft,
-                  color: isProLicensed ? emerald : gold,
+                  bgcolor: emeraldSoft,
+                  color: emerald,
                   fontWeight: 800,
                   fontFamily: mono,
-                  border: `1px solid ${isProLicensed ? emeraldBorder : goldBorder}`,
-                  cursor: isProLicensed ? 'default' : 'pointer'
+                  border: `1px solid ${emeraldBorder}`,
+                  cursor: 'default'
                 }}
               />
               <Chip
@@ -526,6 +499,40 @@ export function RegexDroidGodModeTool() {
           </Grid>
 
           <Grid xs={12} md={5}>
+            <Stack direction="row" spacing={1.5} alignItems="center" justifyContent={{ xs: 'flex-start', md: 'flex-end' }} sx={{ mb: 1.5 }}>
+              <Button
+                size="small"
+                variant="contained"
+                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  bgcolor: '#D4AF37',
+                  color: '#08080B',
+                  fontWeight: 800,
+                  fontSize: '0.78rem',
+                  fontFamily: mono,
+                  '&:hover': { bgcolor: '#F5E6AB' },
+                }}
+              >
+                ☕ Buy Us a Coffee
+              </Button>
+              <Button
+                size="small"
+                variant="outlined"
+                href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
+                sx={{
+                  borderColor: '#10B981',
+                  color: '#10B981',
+                  fontWeight: 800,
+                  fontSize: '0.78rem',
+                  fontFamily: mono,
+                  '&:hover': { borderColor: '#34D399', bgcolor: 'rgba(16,185,129,0.08)' },
+                }}
+              >
+                ◎ Solana Tip
+              </Button>
+            </Stack>
             <FormControl fullWidth size="small">
               <InputLabel sx={{ fontFamily: mono, fontSize: '0.8rem' }}>Load Curated Preset</InputLabel>
               <Select
@@ -787,169 +794,38 @@ export function RegexDroidGodModeTool() {
       )}
 
       {/* =====================================================================
-          TAB 2: MULTI-LANGUAGE CODE EXPORTER (PAYWALLED)
+          TAB 2: MULTI-LANGUAGE CODE EXPORTER (100% UNLOCKED)
           ===================================================================== */}
       {activeTab === 2 && (
-        <Box sx={{ position: 'relative' }}>
-          {!isProLicensed && (
-            <Box
-              sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                zIndex: 10,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backdropFilter: 'blur(8px)',
-                bgcolor: 'rgba(8, 8, 11, 0.72)',
-                borderRadius: 3,
-                p: 3
-              }}
-            >
-              <Paper
-                sx={{
-                  p: { xs: 2.5, md: 3.5 },
-                  maxWidth: 500,
-                  textAlign: 'center',
-                  borderRadius: 3,
-                  bgcolor: isDark ? '#10121A' : '#FFFFFF',
-                  border: `1px solid ${goldBorder}`,
-                  boxShadow: '0 20px 48px rgba(0,0,0,0.8)'
-                }}
-              >
-                <Box
-                  sx={{
-                    width: 52,
-                    height: 52,
-                    borderRadius: '50%',
-                    bgcolor: goldSoft,
-                    color: gold,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    mx: 'auto',
-                    mb: 2
-                  }}
-                >
-                  <LockIcon sx={{ fontSize: 28 }} />
-                </Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, mb: 1 }}>
-                  Unlock Multi-Language Code Foundry
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2.5, lineHeight: 1.6 }}>
-                  Export production-ready, ReDoS-immunized regex code snippets across Python, Rust, Go, and TypeScript. Free to use.
-                </Typography>
-                <Stack spacing={1.5} sx={{ mb: 2 }}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    component="a"
-                    href="https://github.com/1nc0gn30/zoth-studio-v2"
-                    target="_blank"
-                    rel="noopener"
-                    startIcon={<BoltIcon />}
-                    sx={{ bgcolor: gold, color: '#000', fontWeight: 800, fontFamily: mono, py: 1.2, '&:hover': { bgcolor: '#B89628' } }}
-                  >
-                    OPTIONAL TIP WITH STRIPE
-                  </Button>
-                </Stack>
-                <Button
-                  size="small"
-                  onClick={() => setShowPaywallModal(true)}
-                  sx={{ color: 'text.secondary', fontSize: '0.72rem', textDecoration: 'underline' }}
-                >
-                  Already purchased? Enter receipt key
-                </Button>
-              </Paper>
-            </Box>
-          )}
-
-          <Paper
-            sx={{
-              p: 2.5,
-              borderRadius: 2.5,
-              bgcolor: isDark ? '#10121A' : '#FFFFFF',
-              border: `1px solid ${cardBorder}`,
-              filter: isProLicensed ? 'none' : 'blur(5px)',
-              pointerEvents: isProLicensed ? 'auto' : 'none'
-            }}
-          >
-            <Grid container spacing={2}>
-              {Object.entries(codeSnippets).map(([lang, code]) => (
-                <Grid xs={12} md={6} key={lang}>
-                  <Paper sx={{ p: 2, bgcolor: voidDark, borderRadius: 2, border: '1px solid rgba(255,255,255,0.08)' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                      <Typography sx={{ fontFamily: mono, fontSize: '0.8rem', fontWeight: 800, color: gold }}>
-                        {lang.toUpperCase()}
-                      </Typography>
-                      <IconButton size="small" onClick={() => handleCopy(code, lang)} sx={{ color: '#94A3B8' }}>
-                        {copiedKey === lang ? <CheckCircleIcon sx={{ fontSize: 14, color: emerald }} /> : <ContentCopyIcon sx={{ fontSize: 14 }} />}
-                      </IconButton>
-                    </Box>
-                    <pre style={{ margin: 0, fontFamily: mono, fontSize: '0.72rem', color: '#E2E8F0', lineHeight: 1.5, maxHeight: 180, overflowY: 'auto' }}>
-                      {code}
-                    </pre>
-                  </Paper>
-                </Grid>
-              ))}
-            </Grid>
-          </Paper>
-        </Box>
-      )}
-
-      {/* =====================================================================
-          PRO ACTIVATION DIALOG
-          ===================================================================== */}
-      <Dialog
-        open={showPaywallModal}
-        onClose={() => setShowPaywallModal(false)}
-        maxWidth="xs"
-        fullWidth
-        PaperProps={{
-          sx: {
+        <Paper
+          sx={{
+            p: 2.5,
+            borderRadius: 2.5,
             bgcolor: isDark ? '#10121A' : '#FFFFFF',
-            border: `1px solid ${goldBorder}`,
-            borderRadius: 3,
-            p: 1
-          }
-        }}
-      >
-        <DialogTitle sx={{ fontWeight: 800, fontFamily: mono, color: gold, pb: 1 }}>
-          ✦ 100% OPEN ACCESS
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-            Everything is already unlocked and free to use. Tips are optional and unlock nothing extra.
-          </Typography>
-          <TextField
-            fullWidth
-            size="small"
-            placeholder="e.g. REGEX-PRO-2026-XXXX or neal@..."
-            value={licenseKeyInput}
-            onChange={(e) => setLicenseKeyInput(e.target.value)}
-            InputProps={{
-              startAdornment: <InputAdornment position="start"><VpnKeyIcon sx={{ color: gold, fontSize: 18 }} /></InputAdornment>,
-              sx: { fontFamily: mono, fontSize: '0.82rem' }
-            }}
-          />
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={() => setShowPaywallModal(false)} sx={{ color: 'text.secondary', fontFamily: mono }}>
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleActivateLicense}
-            disabled={licenseKeyInput.trim().length < 6}
-            sx={{ bgcolor: gold, color: '#000', fontWeight: 800, fontFamily: mono }}
-          >
-            ACTIVATE PRO
-          </Button>
-        </DialogActions>
-      </Dialog>
+            border: `1px solid ${cardBorder}`
+          }}
+        >
+          <Grid container spacing={2}>
+            {Object.entries(codeSnippets).map(([lang, code]) => (
+              <Grid xs={12} md={6} key={lang}>
+                <Paper sx={{ p: 2, bgcolor: voidDark, borderRadius: 2, border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.8rem', fontWeight: 800, color: gold }}>
+                      {lang.toUpperCase()}
+                    </Typography>
+                    <IconButton size="small" onClick={() => handleCopy(code, lang)} sx={{ color: '#94A3B8' }}>
+                      {copiedKey === lang ? <CheckCircleIcon sx={{ fontSize: 14, color: emerald }} /> : <ContentCopyIcon sx={{ fontSize: 14 }} />}
+                    </IconButton>
+                  </Box>
+                  <pre style={{ margin: 0, fontFamily: mono, fontSize: '0.72rem', color: '#E2E8F0', lineHeight: 1.5, maxHeight: 180, overflowY: 'auto' }}>
+                    {code}
+                  </pre>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Paper>
+      )}
     </Box>
   );
 }

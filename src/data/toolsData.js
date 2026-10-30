@@ -389,7 +389,7 @@ export const microTools = [
     depay: false,
     description: '100% in-browser visual regular expression builder, AST breakdown, railroad vector diagrams, multi-language code generator, and static ReDoS vulnerability guardian with 100% free & open-access with optional Buy Us a Coffee & Solana tip support.',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/regex-droid-builder.git && cd regex-droid-builder && python3 -m http.server 8101 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/regex-droid-builder.git && cd regex-droid-builder && python3 server.py --port 8101',
   },
   {
     id: 'schema-illustrator-studio',
