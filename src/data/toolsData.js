@@ -408,7 +408,7 @@ export const microTools = [
     depay: false,
     description: '100% in-browser visual database ERD studio and schema transpiler (TypeScript, Pydantic, Prisma, SQL DDL, GraphQL) with 100% free & open-access with optional Buy Us a Coffee & Solana tip support.',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/schema-illustrator-studio.git && cd schema-illustrator-studio && python3 -m http.server 8099 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/schema-illustrator-studio.git && cd schema-illustrator-studio && python3 server.py --port 8099',
   },
   {
     id: 'zoth-webgen',
