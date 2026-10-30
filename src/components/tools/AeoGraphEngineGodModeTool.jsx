@@ -24,6 +24,8 @@ import VerifiedIcon from '@mui/icons-material/Verified';
 import HubIcon from '@mui/icons-material/Hub';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow, titleBaseSx } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -35,7 +37,7 @@ const PRESET_PROFILES = {
     name: 'AEO Graph Engine Studio',
     url: 'https://aeo-graph-engine.netlify.app',
     category: 'DeveloperApplication',
-    price: '19.00',
+    price: '0.00',
     phone: '+1-555-555-0199',
     email: 'neal@nealfrazier.tech',
     creator: 'Neal Frazier (Neal Frazier Tech)',
@@ -429,7 +431,7 @@ export default function AeoGraphEngineGodModeTool() {
               }}
             />
           </Stack>
-          <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 400, letterSpacing: '-0.01em' }}>
+          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 400, letterSpacing: '-0.01em' }}>
             Deterministic Schema.org <span style={{ color: '#38BDF8' }}>@graph</span> & AI Citation Compiler
           </Typography>
         </Box>
@@ -451,6 +453,15 @@ export default function AeoGraphEngineGodModeTool() {
         </FormControl>
       </Stack>
 
+      <SovereignEyebrow accent="#D4AF37" right="Autonomous Web">
+        {"aeo-graph-engine"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"aeo-graph-engine"}
+        eyebrow={"Autonomous Web"}
+        caption={"AEO Graph Engine & Studio"}
+        label={"AEO Graph Engine & Studio — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={3}>
         {/* Left Column: Entity Graph Editor */}
         <Grid xs={12} md={6}>
