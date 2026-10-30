@@ -492,7 +492,7 @@ export const microTools = [
     localPort: 8084,
     localUrl: 'http://127.0.0.1:8084',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/badge3d-coin-generator.git && cd badge3d-coin-generator && python3 -m http.server 8084 --directory public',
+    pull: 'python3 server.py --port 8084  # or: badge3d --status',
   },
   {
     id: 'robots-txt-auditor',

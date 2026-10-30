@@ -812,12 +812,6 @@ export default function Badge3dCoinGodModeTool({ tool }) {
 
   // Real Client-Side Watertight CNC STL Export
   const handleExportSTL = () => {
-    if (!isLicensed) {
-      playClink(audioEnabled, 480);
-      setLicenseModalOpen(true);
-      return;
-    }
-
     playClink(audioEnabled, 1800);
     if (!coinGroupRef.current) return;
 
@@ -850,121 +844,107 @@ export default function Badge3dCoinGodModeTool({ tool }) {
         caption={"Badge3D Coin Generator"}
         label={"Badge3D Coin Generator — Zoth sovereign visualisation"}
       />
-      {/* --------------------------------------------------------------------- */}
-      {/* HIGH-CONVERTING SALES BANNER ABOVE MAIN SECTION                       */}
-      {/* --------------------------------------------------------------------- */}
-      {!isLicensed && (
-        <Paper
-          elevation={0}
-          sx={{
-            mb: 3,
-            p: { xs: 2, sm: 2.5 },
-            borderRadius: 2.5,
-            background: isDark
-              ? `linear-gradient(135deg, ${realityAccent}18 0%, rgba(15,16,24,0.85) 100%)`
-              : 'linear-gradient(135deg, #FEF9E7 0%, #FFFBEB 100%)',
-            border: `1.5px solid ${realityAccent}55`,
-            boxShadow: `0 8px 32px ${realityAccent}18`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 2,
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Box
-              sx={{
-                width: 44,
-                height: 44,
-                borderRadius: 2,
-                bgcolor: `${realityAccent}22`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: realityAccent,
-              }}
-            >
-              <ViewInArIcon sx={{ fontSize: 26 }} />
-            </Box>
-            <Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                  Badge3D Coin Studio — Free & Open Access
-                </Typography>
-                <Chip
-                  label="FREE · OPTIONAL TIP"
-                  size="small"
-                  sx={{
-                    bgcolor: '#10B981',
-                    color: '#08080B',
-                    fontWeight: 800,
-                    fontSize: '0.68rem',
-                    fontFamily: mono,
-                  }}
-                />
-              </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.3 }}>
-                Free to use. WebGL 3D coin studio, PBR metallic shaders, watertight CNC/3D print binary STL export, and 4K renders.
-              </Typography>
-            </Box>
-          </Box>
+      {/* Sovereign 100% Free Open Access & Tip Bar */}
+      <Paper
+        elevation={0}
+        sx={{
+          mb: 3,
+          p: { xs: 1.5, sm: 2 },
+          borderRadius: 2,
+          bgcolor: isDark ? 'rgba(9, 11, 17, 0.9)' : '#FFFBEB',
+          border: `1px solid ${realityAccent}44`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 1.5,
+        }}
+      >
+        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+          <Chip
+            label="✦ 100% FREE & OPEN ACCESS"
+            size="small"
+            sx={{
+              bgcolor: 'rgba(16,185,129,0.15)',
+              color: '#10B981',
+              fontWeight: 800,
+              fontSize: '0.68rem',
+              fontFamily: mono,
+              border: '1px solid rgba(16,185,129,0.3)',
+            }}
+          />
+          <Chip
+            label="ZERO PAYWALLS · LOCAL DAEMON :8084"
+            size="small"
+            sx={{
+              bgcolor: 'rgba(212,175,55,0.12)',
+              color: '#F5E6AB',
+              fontWeight: 700,
+              fontSize: '0.68rem',
+              fontFamily: mono,
+            }}
+          />
+        </Stack>
 
-          <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
-            <Button
-              variant="contained"
-              href="https://github.com/1nc0gn30/zoth-studio-v2"
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{
-                bgcolor: realityAccent,
-                color: '#08080B',
-                fontWeight: 800,
-                fontSize: '0.82rem',
-                fontFamily: mono,
-                '&:hover': { bgcolor: '#F5E6AB' },
-              }}
-            >
-              Optional tip (Stripe) 💳
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                const sol = 'GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK';
-                navigator.clipboard?.writeText(sol);
-                playClink(audioEnabled, 1100);
-                alert('Solana Receiver Address copied: ' + sol);
-              }}
-              sx={{
-                borderColor: '#10B981',
-                color: '#10B981',
-                fontWeight: 800,
-                fontSize: '0.82rem',
-                fontFamily: mono,
-                '&:hover': { borderColor: '#34D399', bgcolor: 'rgba(16,185,129,0.08)' },
-              }}
-            >
-              Solana Tip ⚡
-            </Button>
-            <Button
-              size="small"
-              onClick={() => {
-                playClink(audioEnabled, 900);
-                setLicenseModalOpen(true);
-              }}
-              startIcon={<VpnKeyIcon sx={{ fontSize: 16 }} />}
-              sx={{
-                color: theme.palette.text.secondary,
-                fontSize: '0.78rem',
-                fontFamily: mono,
-                '&:hover': { color: realityAccent },
-              }}
-            >
-              Say Thanks
-            </Button>
-          </Stack>
-        </Paper>
-      )}
+        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+          <Button
+            size="small"
+            variant="contained"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              bgcolor: '#D4AF37',
+              color: '#08080B',
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              fontFamily: mono,
+              textTransform: 'none',
+              '&:hover': { bgcolor: '#F5E6AB' },
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
+            onClick={(e) => {
+              if (navigator.clipboard) {
+                navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+              }
+            }}
+            sx={{
+              borderColor: 'rgba(20,241,149,0.5)',
+              color: '#14F195',
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              fontFamily: mono,
+              textTransform: 'none',
+              '&:hover': { borderColor: '#14F195', bgcolor: 'rgba(20,241,149,0.1)' },
+            }}
+          >
+            ◎ Tip SOL
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            href="http://127.0.0.1:8084"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              borderColor: realityAccent,
+              color: realityAccent,
+              fontWeight: 700,
+              fontSize: '0.72rem',
+              fontFamily: mono,
+              textTransform: 'none',
+            }}
+          >
+            Local Workstation :8084 ↗
+          </Button>
+        </Stack>
+      </Paper>
 
       {/* --------------------------------------------------------------------- */}
       {/* MAIN TWO-PANE WORKSPACE: LEFT 3D STAGE & RIGHT CONTROLS               */}
