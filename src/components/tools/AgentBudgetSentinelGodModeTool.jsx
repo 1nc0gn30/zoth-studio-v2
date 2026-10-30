@@ -162,31 +162,68 @@ export default function AgentBudgetSentinelGodModeTool() {
             Token Burn-Rate Governor & <span style={{ color: '#34D399' }}>Zero-Cost Local Offload</span> Optimizer
           </Typography>
         </Box>
-        <Button
-          size="small"
-          variant="outlined"
-          startIcon={<ContentCopyIcon />}
-          onClick={() =>
-            navigator.clipboard?.writeText(
-              JSON.stringify(
-                {
-                  schema: 'zoth/finops-budget-sentinel/v1',
-                  dailyCalls,
-                  avgInputTokens,
-                  avgOutputTokens,
-                  hardCapUsd,
-                  localOffloadPct,
-                  projections,
-                },
-                null,
-                2
+        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+          <Button
+            size="small"
+            variant="contained"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.72rem',
+              bgcolor: '#D4AF37',
+              color: '#08080B',
+              fontWeight: 800,
+              '&:hover': { bgcolor: '#F5E6AB' },
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => {
+              if (navigator.clipboard) {
+                navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+              }
+            }}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.72rem',
+              color: '#14F195',
+              borderColor: 'rgba(20,241,149,0.4)',
+              bgcolor: 'rgba(20,241,149,0.08)',
+            }}
+          >
+            ◎ Solana Tip
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            startIcon={<ContentCopyIcon />}
+            onClick={() =>
+              navigator.clipboard?.writeText(
+                JSON.stringify(
+                  {
+                    schema: 'zoth/finops-budget-sentinel/v1',
+                    dailyCalls,
+                    avgInputTokens,
+                    avgOutputTokens,
+                    hardCapUsd,
+                    localOffloadPct,
+                    projections,
+                  },
+                  null,
+                  2
+                )
               )
-            )
-          }
-          sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#34D399', borderColor: 'rgba(52,211,153,0.4)' }}
-        >
-          Export FinOps Policy JSON
-        </Button>
+            }
+            sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#34D399', borderColor: 'rgba(52,211,153,0.4)' }}
+          >
+            Export FinOps Policy JSON
+          </Button>
+        </Stack>
       </Stack>
 
       <SovereignEyebrow accent="#34D399" right="Security & Network">

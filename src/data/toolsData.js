@@ -723,7 +723,7 @@ export const microTools = [
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     depay: false,
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/agent-budget-sentinel.git && cd agent-budget-sentinel && ./bin/agent-budget serve --web-port 8110 --proxy-port 8111',
+    pull: 'git clone https://github.com/1nc0gn30/agent-budget-sentinel.git && cd agent-budget-sentinel && python3 server.py --web-port 8110 --proxy-port 8111  # or: agent-budget status',
   },
   {
     id: 'agent-gods-eye',
