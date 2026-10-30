@@ -323,42 +323,41 @@ export function AgentCapsuleJailGodModeTool() {
           </Box>
         </Stack>
 
-        <Stack direction="row" spacing={1.5}>
-          {!isProLicensed ? (
-            <>
-              <Button
-                variant="contained"
-                size="small"
-                href="https://github.com/1nc0gn30/zoth-studio-v2"
-                target="_blank"
-                rel="noreferrer"
-                startIcon={<BoltIcon />}
-                sx={{
-                  bgcolor: gold,
-                  color: '#000',
-                  fontWeight: 800,
-                  '&:hover': { bgcolor: '#B8860B' }
-                }}
-              >
-                ☕ Buy Us a Coffee
-              </Button>
-              <Button
-                variant="outlined"
-                size="small"
-                onClick={() => setShowPaywallModal(true)}
-                startIcon={<KeyIcon />}
-                sx={{ borderColor: gold, color: gold, fontWeight: 700 }}
-              >
-                Enter Key
-              </Button>
-            </>
-          ) : (
-            <Chip
-              icon={<CheckCircleIcon style={{ color: emerald }} />}
-              label="UNLIMITED JAIL EXECUTION UNLOCKED"
-              sx={{ bgcolor: emeraldSoft, color: emerald, fontWeight: 800, fontFamily: mono }}
-            />
-          )}
+        <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
+          <Chip
+            icon={<CheckCircleIcon style={{ color: emerald }} />}
+            label="UNLIMITED JAIL EXECUTION UNLOCKED"
+            sx={{ bgcolor: emeraldSoft, color: emerald, fontWeight: 800, fontFamily: mono }}
+          />
+          <Button
+            variant="contained"
+            size="small"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noreferrer"
+            startIcon={<BoltIcon />}
+            sx={{
+              bgcolor: gold,
+              color: '#000',
+              fontWeight: 800,
+              '&:hover': { bgcolor: '#B8860B' }
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => {
+              if (navigator.clipboard) {
+                navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+                alert('Solana Tip Address copied to clipboard: GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+              }
+            }}
+            sx={{ borderColor: cyan, color: cyan, fontWeight: 700, fontFamily: mono }}
+          >
+            ◎ Solana Tip
+          </Button>
         </Stack>
       </Paper>
 
