@@ -17,6 +17,8 @@ import BoltIcon from '@mui/icons-material/Bolt';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import TerminalIcon from '@mui/icons-material/Terminal';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -301,10 +303,6 @@ export function PolyglotStudioGodModeTool() {
 
   // In-Browser ZIP Download Handler
   const handleDownloadZip = () => {
-    if (!isProLicensed) {
-      setShowPaywallModal(true);
-      return;
-    }
     const zipBlob = createZipArchive(generatedFiles);
     const url = URL.createObjectURL(zipBlob);
     const a = document.createElement('a');
@@ -331,6 +329,15 @@ export function PolyglotStudioGodModeTool() {
           boxShadow: isDark ? '0 12px 32px rgba(212, 175, 55, 0.15)' : '0 8px 24px rgba(0,0,0,0.06)'
         }}
       >
+        <SovereignEyebrow accent="#38BDF8" right="Autonomous Web">
+          {"polyglot-framework-exporter"}
+        </SovereignEyebrow>
+        <SovereignBand
+          seed={"polyglot-framework-exporter"}
+          eyebrow={"Autonomous Web"}
+          caption={"Polyglot Framework Exporter"}
+          label={"Polyglot Framework Exporter — Zoth sovereign visualisation"}
+        />
         <Grid container spacing={2} alignItems="center">
           <Grid xs={12} md={7}>
             <Stack direction="row" spacing={1.5} alignItems="center">

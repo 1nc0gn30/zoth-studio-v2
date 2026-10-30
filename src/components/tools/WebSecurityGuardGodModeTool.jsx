@@ -17,6 +17,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import PolicyIcon from '@mui/icons-material/Policy';
 import LockIcon from '@mui/icons-material/Lock';
 import PublicIcon from '@mui/icons-material/Public';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -186,6 +188,15 @@ ${enableHsts ? '        Strict-Transport-Security "max-age=31536000; includeSubD
           boxShadow: isDark ? '0 12px 32px rgba(0, 255, 157, 0.12)' : '0 8px 24px rgba(0,0,0,0.06)'
         }}
       >
+        <SovereignEyebrow accent="#38BDF8" right="Security & Recon">
+          {"web-security-guard"}
+        </SovereignEyebrow>
+        <SovereignBand
+          seed={"web-security-guard"}
+          eyebrow={"Security & Recon"}
+          caption={"Web Security Guard"}
+          label={"Web Security Guard — Zoth sovereign visualisation"}
+        />
         <Grid container spacing={2} alignItems="center">
           <Grid xs={12} md={7}>
             <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1 }}>
