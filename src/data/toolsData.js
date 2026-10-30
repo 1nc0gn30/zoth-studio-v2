@@ -275,7 +275,7 @@ export const microTools = [
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     description: '100% in-browser touchless gesture control, 21-joint 3D hand tracking, spatial air drawing, and Model Context Protocol (MCP) agent connectivity with 100% free & open-access with optional Buy Us a Coffee & Solana tip support.',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/vision-gesture-control.git && cd vision-gesture-control && python3 -m http.server 8089 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/vision-gesture-control.git && cd vision-gesture-control && python3 server.py --port 8089',
   },
   {
     id: 'subsweep-lead-scanner',
