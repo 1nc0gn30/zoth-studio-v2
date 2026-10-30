@@ -334,10 +334,6 @@ export default function McpLensGodModeTool() {
   };
 
   const handleExportJson = () => {
-    if (!isPro) {
-      setProModalOpen(true);
-      return;
-    }
     const blob = new Blob([JSON.stringify(frames, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -402,46 +398,40 @@ export default function McpLensGodModeTool() {
         </Box>
 
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: { xs: '100%', md: 'auto' } }}>
-          {!isPro ? (
-            <>
-              <Button
-                variant="contained"
-                href="https://github.com/1nc0gn30/zoth-studio-v2"
-                target="_blank"
-                rel="noopener noreferrer"
-                startIcon={<BoltIcon />}
-                sx={{
-                  bgcolor: '#D4AF37',
-                  color: '#000',
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  '&:hover': { bgcolor: '#F5E6AB' },
-                  px: 2.5
-                }}
-              >
-                Optional tip
-              </Button>
-              <Button
-                variant="outlined"
-                onClick={() => setProModalOpen(true)}
-                startIcon={<VpnKeyIcon />}
-                sx={{
-                  borderColor: 'rgba(212,175,55,0.5)',
-                  color: isDark ? '#D4AF37' : '#8A6508',
-                  fontFamily: mono,
-                  fontWeight: 700
-                }}
-              >
-                Enter Key
-              </Button>
-            </>
-          ) : (
-            <Chip
-              icon={<CheckCircleIcon sx={{ color: '#000 !important' }} />}
-              label="LICENSED RECIPIENT"
-              sx={{ bgcolor: '#22C55E', color: '#000', fontWeight: 800, fontFamily: mono, px: 1 }}
-            />
-          )}
+          <Button
+            variant="contained"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              bgcolor: '#D4AF37',
+              color: '#08080B',
+              fontWeight: 800,
+              fontFamily: mono,
+              '&:hover': { bgcolor: '#F5E6AB' },
+              px: 2
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              if (navigator.clipboard) {
+                navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+              }
+            }}
+            sx={{
+              borderColor: '#14F195',
+              color: '#14F195',
+              bgcolor: 'rgba(20,241,149,0.08)',
+              fontFamily: mono,
+              fontWeight: 700,
+              fontSize: '0.78rem'
+            }}
+          >
+            ◎ Solana Tip (GG2e...dXoK)
+          </Button>
         </Stack>
       </Paper>
 
@@ -889,61 +879,13 @@ export default function McpLensGodModeTool() {
                   fontSize: '0.75rem',
                   overflowY: 'auto',
                   maxHeight: 380,
-                  filter: isPro ? 'none' : 'blur(5px)',
-                  transition: 'filter 0.3s ease'
+                  filter: 'none'
                 }}
               >
                 <pre style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
                   {minifiedSchema || '// Click "Run Token Minifier" to optimize'}
                 </pre>
               </Box>
-
-              {/* Frosted Glass Paywall Lock Overlay if Not Pro */}
-              {!isPro && (
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    inset: 0,
-                    m: 2.5,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: 2,
-                    background: isDark ? 'rgba(10,10,15,0.78)' : 'rgba(255,255,255,0.85)',
-                    backdropFilter: 'blur(8px)',
-                    zIndex: 2,
-                    p: 3,
-                    textAlign: 'center'
-                  }}
-                >
-                  <LockIcon sx={{ fontSize: 36, color: '#D4AF37', mb: 1 }} />
-                  <Typography variant="h6" sx={{ fontFamily: mono, fontWeight: 800, mb: 0.5 }}>
-                    Pro Optimizer Output Locked
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary', maxWidth: 360, mb: 2 }}>
-                    Unlock one-click copy, automated system prompt injection, and batch multi-server minification.
-                  </Typography>
-                  <Stack direction="row" spacing={1.5}>
-                    <Button
-                      variant="contained"
-                      href="https://github.com/1nc0gn30/zoth-studio-v2"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{ bgcolor: '#D4AF37', color: '#000', fontWeight: 800, fontFamily: mono }}
-                    >
-                      Optional tip
-                    </Button>
-                    <Button
-                      variant="outlined"
-                      onClick={() => setProModalOpen(true)}
-                      sx={{ borderColor: 'rgba(212,175,55,0.5)', color: '#D4AF37', fontFamily: mono }}
-                    >
-                      Enter Key
-                    </Button>
-                  </Stack>
-                </Box>
-              )}
             </Paper>
           </Grid>
         </Grid>
