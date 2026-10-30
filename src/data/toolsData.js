@@ -313,7 +313,7 @@ export const microTools = [
     depay: false,
     description: '100% in-browser social content formatting, viral thread splitter, virality scoring, MCP AI agent client hub, and procedural omni-beacon brand media with dual Stripe + Solana rails.',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/omnipost-social-engine.git && cd omnipost-social-engine && python3 -m http.server 8091 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/omnipost-social-engine.git && cd omnipost-social-engine && python3 server.py --port 8091',
   },
   {
     id: 'cron-rhythm-studio',

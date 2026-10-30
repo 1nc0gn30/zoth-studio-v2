@@ -26,6 +26,8 @@ import DownloadIcon from '@mui/icons-material/Download';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import CheckIcon from '@mui/icons-material/Check';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
@@ -136,10 +138,6 @@ export default function OmniPostSocialGodModeTool() {
   }, [rawContent]);
 
   const handleCopyAll = () => {
-    if (!isPro) {
-      setPaywallOpen(true);
-      return;
-    }
     navigator.clipboard?.writeText(analysis.exportBundle);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -207,6 +205,15 @@ export default function OmniPostSocialGodModeTool() {
         )}
       </Paper>
 
+      <SovereignEyebrow accent="#38BDF8" right="Automation">
+        {"omnipost-social-engine"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"omnipost-social-engine"}
+        eyebrow={"Automation"}
+        caption={"OmniPost Social Engine"}
+        label={"OmniPost Social Engine — Zoth sovereign visualisation"}
+      />
       <Grid container spacing={3}>
         {/* Left: Long-Form Composer & Algorithmic Virality Audit */}
         <Grid xs={12} md={6}>
@@ -327,43 +334,12 @@ export default function OmniPostSocialGodModeTool() {
                     fontSize: '0.73rem',
                     overflowX: 'auto',
                     maxHeight: 280,
-                    filter: isPro ? 'none' : 'blur(6px)',
-                    userSelect: isPro ? 'auto' : 'none',
+                    filter: 'none',
+                    userSelect: 'auto',
                   }}
                 >
                   {analysis.exportBundle}
                 </Box>
-                {!isPro && (
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      inset: 0,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      bgcolor: 'rgba(8,8,12,0.58)',
-                      borderRadius: 2,
-                      p: 2,
-                      textAlign: 'center',
-                    }}
-                  >
-                    <LockIcon sx={{ fontSize: 34, color: '#D4AF37', mb: 1 }} />
-                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#FFF', mb: 0.5 }}>
-                      Multi-Platform Campaign JSON & Thread Exporter Locked
-                    </Typography>
-                    <Button
-                      size="small"
-                      variant="contained"
-                      href={STRIPE_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      sx={{ mt: 1, bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono }}
-                    >
-                      ☕ Buy Us a Coffee
-                    </Button>
-                  </Box>
-                )}
               </Box>
             )}
 
@@ -381,41 +357,6 @@ export default function OmniPostSocialGodModeTool() {
           </Paper>
         </Grid>
       </Grid>
-
-      <Dialog open={paywallOpen} onClose={() => setPaywallOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ fontWeight: 900 }}>Support OmniPost Social Engine (optional tip)</DialogTitle>
-        <DialogContent dividers>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Unlock 1-click multi-network thread export, MCP social scheduler payloads, and unlimited virality audits.
-          </Typography>
-          <Button
-            fullWidth
-            variant="contained"
-            href={STRIPE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{ mb: 2, bgcolor: '#D4AF37', color: '#08080B', fontWeight: 900 }}
-          >
-            Leave an optional tip via Stripe
-          </Button>
-          <Divider sx={{ my: 1.5 }} />
-          <Stack direction="row" spacing={1}>
-            <TextField
-              fullWidth
-              size="small"
-              placeholder="Optional: your name or a note"
-              value={licenseInput}
-              onChange={(e) => setLicenseInput(e.target.value)}
-            />
-            <Button variant="contained" onClick={handleActivateLicense} sx={{ bgcolor: '#10B981', color: '#08080B', fontWeight: 800 }}>
-              Activate
-            </Button>
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setPaywallOpen(false)}>Close</Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }
