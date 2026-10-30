@@ -123,7 +123,7 @@ export default function AgentVoiceCallGodModeTool() {
   const payloadConfig = JSON.stringify(
     {
       service: 'agent-voice-call',
-      bind: '127.0.0.1:8109',
+      bind: '127.0.0.1:8114',
       sttEngine: 'whisper.cpp (ggml-base.en-q5_1)',
       ttsEngine: activeVoice.label,
       vadGate: vadThreshold,
@@ -205,6 +205,41 @@ export default function AgentVoiceCallGodModeTool() {
         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
           <Button
             size="small"
+            variant="contained"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              bgcolor: '#D4AF37',
+              color: '#060609',
+              '&:hover': { bgcolor: '#F5E6AB' },
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => {
+              if (navigator.clipboard) {
+                navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+              }
+            }}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              color: '#14F195',
+              borderColor: 'rgba(20,241,149,0.4)',
+              '&:hover': { borderColor: '#14F195', bgcolor: 'rgba(20,241,149,0.08)' },
+            }}
+          >
+            ◎ Solana Tip
+          </Button>
+          <Button
+            size="small"
             variant="outlined"
             onClick={speakInBrowser}
             startIcon={<VolumeUpIcon sx={{ fontSize: 15 }} />}
@@ -228,9 +263,9 @@ export default function AgentVoiceCallGodModeTool() {
               fontFamily: mono,
               fontSize: '0.7rem',
               fontWeight: 800,
-              bgcolor: '#D4AF37',
+              bgcolor: '#38BDF8',
               color: '#060609',
-              '&:hover': { bgcolor: '#F5E6AB' },
+              '&:hover': { bgcolor: '#7DD3FC' },
             }}
           >
             {copied ? 'Copied' : 'Copy SIP/Voice Config'}
