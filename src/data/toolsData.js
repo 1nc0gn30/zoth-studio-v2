@@ -599,7 +599,7 @@ export const microTools = [
     category: 'Forensics & Telemetry',
     executionType: 'browser',
     github: 'https://github.com/1nc0gn30/agent-flight-recorder',
-    description: 'Black box flight recorder & time-scrubbing telemetry forensics hub for AI agents with 4-mipmap ICO, standard license badge, offline incident bundle export, and dual Stripe + Solana rails.',
+    description: 'Black box flight recorder & time-scrubbing telemetry forensics hub for AI agents with synchronized terminal stream, egress graph, memory engrams, and 100% free open access.',
     localPort: 8104,
     localUrl: 'http://127.0.0.1:8104',
     liveUrl: 'https://flight.nullai.tech',
@@ -608,7 +608,7 @@ export const microTools = [
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     depay: false,
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/agent-flight-recorder.git && cd agent-flight-recorder && python3 -m http.server 8104 --directory public',
+    pull: 'python3 server.py --port 8104  # or: agent-flight --status',
   },
   {
     id: 'agent-capsule-jail',

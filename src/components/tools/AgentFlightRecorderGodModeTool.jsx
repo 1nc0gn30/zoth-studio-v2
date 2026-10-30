@@ -74,8 +74,17 @@ export default function AgentFlightRecorderGodModeTool() {
   const [newActor, setNewActor] = useState('grok-cli');
   const [newAction, setNewAction] = useState('TOOL_CALL_VERIFY');
   const [newPayload, setNewPayload] = useState('Executed deterministic test suite in 180ms with 0 warnings');
+  const [copiedKey, setCopiedKey] = useState(null);
 
   const canvasRef = useRef(null);
+
+  const handleCopy = (text, key) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedKey(key);
+      setTimeout(() => setCopiedKey(null), 2000);
+    }
+  };
 
   const merkleChain = steps.reduce((acc, s, idx) => {
     const prevHash = idx === 0 ? '0x0000000000000000' : acc[idx - 1].hash;
@@ -215,15 +224,48 @@ export default function AgentFlightRecorderGodModeTool() {
             Tamper-Evident <span style={{ color: '#38BDF8' }}>Merkle DAG</span> Trajectory & Replay Debugger
           </Typography>
         </Box>
-        <Button
-          size="small"
-          variant="outlined"
-          startIcon={<ContentCopyIcon />}
-          onClick={() => navigator.clipboard?.writeText(JSON.stringify(merkleChain, null, 2))}
-          sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#38BDF8', borderColor: 'rgba(56,189,248,0.4)' }}
-        >
-          Export Merkle Ledger JSON
-        </Button>
+        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+          <Button
+            size="small"
+            variant="contained"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noreferrer"
+            sx={{
+              bgcolor: '#D4AF37',
+              color: '#000',
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              fontFamily: mono,
+              '&:hover': { bgcolor: '#B8860B' }
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => handleCopy('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK', 'solTip')}
+            sx={{
+              borderColor: '#38BDF8',
+              color: '#38BDF8',
+              fontWeight: 700,
+              fontSize: '0.72rem',
+              fontFamily: mono
+            }}
+          >
+            {copiedKey === 'solTip' ? 'COPIED SOL!' : '◎ TIP SOL'}
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            startIcon={<ContentCopyIcon />}
+            onClick={() => handleCopy(JSON.stringify(merkleChain, null, 2), 'merkleJson')}
+            sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#38BDF8', borderColor: 'rgba(56,189,248,0.4)' }}
+          >
+            {copiedKey === 'merkleJson' ? 'COPIED LEDGER' : 'Export Merkle Ledger'}
+          </Button>
+        </Stack>
       </Stack>
 
       <SovereignEyebrow accent="#38BDF8" right="Forensics & Telemetry">
