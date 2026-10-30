@@ -347,6 +347,44 @@ export function AgentGodsEyeGodModeTool() {
                 sx={{ bgcolor: crimsonSoft, color: crimson, fontWeight: 700, fontFamily: mono, border: '1px solid rgba(255,51,85,0.3)' }}
               />
             </Stack>
+
+            <Stack direction="row" spacing={1} sx={{ mt: 1.5 }} alignItems="center" flexWrap="wrap">
+              <Button
+                size="small"
+                variant="contained"
+                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                  bgcolor: '#D4AF37',
+                  color: '#08080B',
+                  fontWeight: 800,
+                  '&:hover': { bgcolor: '#F5E6AB' },
+                }}
+              >
+                ☕ Buy Us a Coffee
+              </Button>
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={() => {
+                  if (navigator.clipboard) {
+                    navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+                  }
+                }}
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                  color: '#14F195',
+                  borderColor: 'rgba(20,241,149,0.4)',
+                  '&:hover': { borderColor: '#14F195', bgcolor: 'rgba(20,241,149,0.08)' },
+                }}
+              >
+                ◎ Solana Tip
+              </Button>
+            </Stack>
           </Grid>
 
           <Grid xs={12} md={5}>

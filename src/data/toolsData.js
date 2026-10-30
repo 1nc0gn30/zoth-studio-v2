@@ -742,7 +742,7 @@ export const microTools = [
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     depay: false,
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/agent-gods-eye.git && cd agent-gods-eye && ./bin/agent-gods-eye serve --port 8112',
+    pull: 'git clone https://github.com/1nc0gn30/agent-gods-eye.git && cd agent-gods-eye && python3 server.py --port 8112  # or: agent-gods-eye status',
   },
   {
     id: 'shopify-connector',
