@@ -507,6 +507,18 @@ export function registerSovereignWebMcpTool() {
               }}
             />
             <Chip
+              label="100% FREE & OPEN ACCESS"
+              size="small"
+              sx={{
+                bgcolor: 'rgba(16,185,129,0.14)',
+                color: '#10B981',
+                border: '1px solid rgba(16,185,129,0.35)',
+                fontFamily: mono,
+                fontWeight: 800,
+                fontSize: '0.68rem',
+              }}
+            />
+            <Chip
               label={`SCHEMA GRADE: ${audit.grade} (${audit.score}/100)`}
               size="small"
               sx={{
@@ -539,6 +551,45 @@ export function registerSovereignWebMcpTool() {
         </Box>
 
         <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', useFlexGap: true }}>
+          <Button
+            size="small"
+            variant="contained"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              bgcolor: '#D4AF37',
+              color: '#08080B',
+              fontWeight: 800,
+              fontSize: '0.7rem',
+              fontFamily: mono,
+              textTransform: 'none',
+              '&:hover': { bgcolor: '#F5E6AB' },
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
+            onClick={(e) => {
+              if (navigator.clipboard) {
+                navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+              }
+            }}
+            sx={{
+              borderColor: 'rgba(20,241,149,0.5)',
+              color: '#14F195',
+              fontWeight: 800,
+              fontSize: '0.7rem',
+              fontFamily: mono,
+              textTransform: 'none',
+              '&:hover': { borderColor: '#14F195', bgcolor: 'rgba(20,241,149,0.1)' },
+            }}
+          >
+            ◎ Tip SOL
+          </Button>
           {PRESET_SCHEMAS.map((preset) => (
             <Button
               key={preset.id}

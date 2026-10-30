@@ -452,7 +452,7 @@ export const microTools = [
     github: 'https://github.com/NullAITech/zoth-studio-v2',
     description: 'In-browser Model Context Protocol (MCP) JSON-RPC 2.0 inspector, tool schema dispatcher, and Zoth OS bare-metal video showcase.',
     version: '1.0.0',
-    pull: 'webmcp-protocol-inspector --help  # or: git clone https://github.com/NullAITech/webmcp-protocol-inspector.git',
+    pull: 'python3 server.py --port 8142  # or: webmcp-protocol-inspector --status',
     localPort: 8142,
     localUrl: 'http://127.0.0.1:8142',
   },
