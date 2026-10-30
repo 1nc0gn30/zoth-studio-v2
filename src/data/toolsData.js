@@ -837,7 +837,7 @@ export const microTools = [
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     depay: false,
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/pod-smart-router.git && cd pod-smart-router && ./bin/pod-smart-router server --port 8117',
+    pull: 'git clone https://github.com/1nc0gn30/pod-smart-router.git && cd pod-smart-router && python3 server.py --port 8117  # or: pod-smart-router status',
   },
   {
     id: 'digital-asset-forge',
