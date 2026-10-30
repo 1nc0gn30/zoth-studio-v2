@@ -373,42 +373,43 @@ ${cassettes
           </Box>
         </Stack>
 
-        <Stack direction="row" spacing={1.5}>
-          {!isProLicensed ? (
-            <>
-              <Button
-                variant="contained"
-                size="small"
-                href="https://github.com/1nc0gn30/zoth-studio-v2"
-                target="_blank"
-                rel="noreferrer"
-                startIcon={<BoltIcon />}
-                sx={{
-                  bgcolor: gold,
-                  color: '#000',
-                  fontWeight: 800,
-                  '&:hover': { bgcolor: '#B8860B' }
-                }}
-              >
-                ☕ Buy Us a Coffee
-              </Button>
-              <Button
-                variant="outlined"
-                size="small"
-                onClick={() => setShowPaywallModal(true)}
-                startIcon={<KeyIcon />}
-                sx={{ borderColor: gold, color: gold, fontWeight: 700 }}
-              >
-                Enter Key
-              </Button>
-            </>
-          ) : (
-            <Chip
-              icon={<CheckCircleIcon style={{ color: emerald }} />}
-              label="UNLIMITED CASSETTE STORAGE UNLOCKED"
-              sx={{ bgcolor: emeraldSoft, color: emerald, fontWeight: 800, fontFamily: mono }}
-            />
-          )}
+        <Stack direction="row" spacing={1.5} alignItems="center">
+          <Chip
+            icon={<CheckCircleIcon style={{ color: emerald }} />}
+            label="100% UNLOCKED & ACTIVE"
+            sx={{ bgcolor: emeraldSoft, color: emerald, fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
+          />
+          <Button
+            variant="contained"
+            size="small"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noreferrer"
+            startIcon={<BoltIcon />}
+            sx={{
+              bgcolor: gold,
+              color: '#000',
+              fontWeight: 800,
+              fontSize: '0.75rem',
+              '&:hover': { bgcolor: '#B8860B' }
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => handleCopy('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK', 'solTip')}
+            sx={{
+              borderColor: cyan,
+              color: cyan,
+              fontWeight: 700,
+              fontSize: '0.75rem',
+              fontFamily: mono
+            }}
+          >
+            {copiedKey === 'solTip' ? 'COPIED SOL!' : '◎ TIP SOL'}
+          </Button>
         </Stack>
       </Paper>
 
@@ -777,91 +778,6 @@ ${cassettes
           </Grid>
         )}
       </Paper>
-
-      {/* Pro Monetization Modal */}
-      <Dialog
-        open={showPaywallModal}
-        onClose={() => setShowPaywallModal(false)}
-        maxWidth="sm"
-        fullWidth
-        PaperProps={{
-          sx: {
-            bgcolor: isDark ? surfaceDark : theme.palette.background.paper,
-            border: `1px solid ${gold}`,
-            borderRadius: 2
-          }
-        }}
-      >
-        <DialogTitle sx={{ pb: 1, borderBottom: `1px solid ${cardBorder}` }}>
-          <Stack direction="row" spacing={1.5} alignItems="center">
-            <ShieldIcon sx={{ color: gold }} />
-            <Typography variant="h6" sx={{ fontWeight: 800, color: gold }}>
-              Agent Mock Twin 100% Free & Open Access — Community Support
-            </Typography>
-          </Stack>
-        </DialogTitle>
-        <DialogContent sx={{ mt: 2 }}>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Unlock unlimited cloud cassette syncing, automated continuous integration (CI) mock bridges, and enterprise chaos simulation injectors.
-          </Typography>
-
-          <Paper sx={{ p: 2, mb: 3, bgcolor: goldSoft, border: `1px solid ${gold}`, borderRadius: 1.5 }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold, mb: 0.5 }}>
-              ⚡ 100% Free & Open Access — Optional Community Support
-            </Typography>
-            <Typography variant="caption" sx={{ color: 'text.primary' }}>
-              Everything here is free to use. Optional tips are welcome via:
-            </Typography>
-            <Stack direction="row" spacing={1.5} sx={{ mt: 1.5 }}>
-              <Button
-                variant="contained"
-                size="small"
-                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
-                target="_blank"
-                rel="noreferrer"
-                sx={{ bgcolor: gold, color: '#000', fontWeight: 800 }}
-              >
-                ☕ Buy Us a Coffee (Stripe)
-              </Button>
-              <Button
-                variant="outlined"
-                size="small"
-                href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
-                target="_blank"
-                rel="noreferrer"
-                sx={{ borderColor: cyan, color: cyan, fontWeight: 700 }}
-              >
-                Solana Pay (USDC/SOL)
-              </Button>
-            </Stack>
-          </Paper>
-
-          <TextField
-            fullWidth
-            size="small"
-            label="Optional note with your tip"
-            value={licenseKeyInput}
-            onChange={(e) => setLicenseKeyInput(e.target.value)}
-            placeholder="e.g. MOCK-PRO-XXXX-XXXX"
-            InputProps={{
-              sx: { fontFamily: mono }
-            }}
-          />
-        </DialogContent>
-        <DialogActions sx={{ p: 2, borderTop: `1px solid ${cardBorder}` }}>
-          <Button onClick={() => setShowPaywallModal(false)} sx={{ color: 'text.secondary', fontFamily: mono }}>
-            CANCEL
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleActivateLicense}
-            disabled={licenseKeyInput.trim().length < 6}
-            sx={{ bgcolor: emerald, color: '#000', fontWeight: 800, fontFamily: mono }}
-          >
-            ACTIVATE PRO
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

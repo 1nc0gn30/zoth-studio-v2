@@ -560,7 +560,7 @@ export const microTools = [
     category: 'Simulation & Testing',
     executionType: 'browser',
     github: 'https://github.com/1nc0gn30/agent-mock-twin',
-    description: 'Autonomous offline API mock server & deterministic replay twin for AI agents ($0 token spend in CI/CD) with 4-mipmap ICO, standard license badge, Pro Docker export, and dual Stripe + Solana rails.',
+    description: 'Autonomous offline API mock server & deterministic replay twin for AI agents ($0 token spend in CI/CD) with OpenAPI/HAR ingestion, Python standard library backend, and 100% free open access.',
     localPort: 8097,
     localUrl: 'http://127.0.0.1:8097',
     liveUrl: 'https://agent-mock.nullai.tech',
@@ -569,7 +569,7 @@ export const microTools = [
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     depay: false,
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/agent-mock-twin.git && cd agent-mock-twin && python3 -m http.server 8097 --directory public',
+    pull: 'python3 server.py --port 8097  # or: agent-mock --status',
   },
   {
     id: 'agent-prompt-firewall',
