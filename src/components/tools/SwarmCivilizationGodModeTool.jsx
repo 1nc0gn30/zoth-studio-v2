@@ -277,6 +277,18 @@ rings:
         <Box>
           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.75, flexWrap: 'wrap', useFlexGap: true }}>
             <Chip
+              label="✦ 100% FREE & OPEN ACCESS"
+              size="small"
+              sx={{
+                bgcolor: 'rgba(16,185,129,0.15)',
+                color: '#10B981',
+                border: '1px solid #10B981',
+                fontFamily: mono,
+                fontWeight: 800,
+                fontSize: '0.68rem',
+              }}
+            />
+            <Chip
               icon={<HubIcon sx={{ fontSize: '0.95rem !important', color: `${activeTheme.primary} !important` }} />}
               label="21-AGENT PANTHEON SWARM & CIVILIZATION MULTIPLEXER"
               size="small"
@@ -310,7 +322,41 @@ rings:
           </Typography>
         </Box>
 
-        <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', useFlexGap: true }}>
+        <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', useFlexGap: true, alignItems: 'center' }}>
+          <Button
+            size="small"
+            variant="contained"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              bgcolor: '#D4AF37',
+              color: '#08080B',
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              fontFamily: mono,
+              textTransform: 'none',
+              '&:hover': { bgcolor: '#F5E6AB' },
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
+            sx={{
+              borderColor: '#10B981',
+              color: '#10B981',
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              fontFamily: mono,
+              textTransform: 'none',
+              '&:hover': { borderColor: '#34D399', bgcolor: 'rgba(16,185,129,0.08)' },
+            }}
+          >
+            ◎ Solana Tip
+          </Button>
           {SWARM_MISSIONS.map((m) => (
             <Button
               key={m.id}
