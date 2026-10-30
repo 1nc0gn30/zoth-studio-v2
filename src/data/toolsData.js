@@ -511,7 +511,7 @@ export const microTools = [
     localPort: 8086,
     localUrl: 'http://127.0.0.1:8086',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/robots-txt-auditor.git && cd robots-txt-auditor && python3 -m http.server 8086 --directory public',
+    pull: 'python3 server.py --port 8086  # or: robots-txt --status',
   },
   {
     id: 'city-desk',
