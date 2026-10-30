@@ -780,7 +780,7 @@ export const microTools = [
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     depay: false,
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/printify-connector.git && cd printify-connector && ./bin/printify-connector serve --port 8115',
+    pull: 'git clone https://github.com/1nc0gn30/printify-connector.git && cd printify-connector && python3 server.py --port 8115  # or: printify-connector status',
   },
   {
     id: 'gelato-connector',
