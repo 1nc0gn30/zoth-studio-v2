@@ -894,7 +894,7 @@ export const microTools = [
     localPort: 8120,
     localUrl: 'http://127.0.0.1:8120',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/pod-margin-sentinel.git && cd pod-margin-sentinel && ./bin/pod-margin-sentinel server --port 8120',
+    pull: 'git clone https://github.com/1nc0gn30/pod-margin-sentinel.git && cd pod-margin-sentinel && python3 server.py --port 8120  # or: pod-margin-sentinel status',
   },
   {
     id: 'audiocipher-stego-engine',
