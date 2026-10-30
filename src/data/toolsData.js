@@ -458,7 +458,7 @@ export const microTools = [
   },
   {
     id: 'anderson-security-sentinel',
-    published: false,
+    published: true,
     name: 'Anderson Security Sentinel',
     repo: 'anderson-security-sentinel',
     category: 'Security & OpSec',
@@ -473,7 +473,7 @@ export const microTools = [
     depay: false,
     description: 'Autonomous biometric laptop perimeter defense, WiFi X-Ray RF tomography, USB tripwire guard, and thermal FLIR optics with 100% free & open-access with optional Buy Us a Coffee & Solana tip support.',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/anderson-security-sentinel.git && cd anderson-security-sentinel && python3 -m http.server 8103 --directory public',
+    pull: 'python3 server.py --port 8103  # or: anderson-security-sentinel --status',
   },
   {
     id: 'badge3d-coin-generator',
