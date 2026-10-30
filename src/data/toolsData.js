@@ -530,7 +530,7 @@ export const microTools = [
     localUrl: 'http://127.0.0.1:8087',
     description: 'One studio writes the finished page for a trade and a city. 1,000 localized service pages across 20 trades and 50 mid-size cities with live customizer, multi-mipmap ICO, Pro bundle export, and 100% free & open-access with optional Buy Us a Coffee & Solana tip support.',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/city-desk.git && cd city-desk && node build.js && python3 -m http.server 8087 --directory site',
+    pull: 'python3 server.py --port 8087  # or: city-desk --status',
   },
   {
     id: 'agent-egress-sentinel',
