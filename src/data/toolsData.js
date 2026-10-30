@@ -294,7 +294,7 @@ export const microTools = [
     depay: false,
     description: '100% in-browser OSINT reconnaissance, passive DNS discovery, tech stack fingerprinting, OSINT radar brand media, and executive lead intelligence with zero cloud egress.',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/subsweep-lead-scanner.git && cd subsweep-lead-scanner && python3 -m http.server 8090 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/subsweep-lead-scanner.git && cd subsweep-lead-scanner && python3 server.py --port 8090',
   },
   {
     id: 'omnipost-social-engine',

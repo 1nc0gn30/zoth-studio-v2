@@ -25,6 +25,8 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import TerminalIcon from '@mui/icons-material/Terminal';
 import BoltIcon from '@mui/icons-material/Bolt';
 import KeyIcon from '@mui/icons-material/VpnKey';
+import SovereignBand from '../sovereign/SovereignBand.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -321,10 +323,6 @@ export function SubSweepGodModeTool() {
   // Export Capabilities
   // ---------------------------------------------------------------------------
   const handleExportCSV = () => {
-    if (!isProLicensed) {
-      setShowPaywallModal(true);
-      return;
-    }
     const headers = ['Subdomain', 'Status', 'IP Address', 'CNAME', 'Open Ports', 'CVEs', 'Risk Level', 'Risk Score'];
     const rows = results.map((r) => [
       r.fqdn,
@@ -347,10 +345,6 @@ export function SubSweepGodModeTool() {
   };
 
   const handleExportJSON = () => {
-    if (!isProLicensed) {
-      setShowPaywallModal(true);
-      return;
-    }
     const blob = new Blob([JSON.stringify({ target: targetDomain, scannedAt: new Date().toISOString(), results }, null, 2)], {
       type: 'application/json'
     });
@@ -363,10 +357,6 @@ export function SubSweepGodModeTool() {
   };
 
   const handleExportMarkdown = () => {
-    if (!isProLicensed) {
-      setShowPaywallModal(true);
-      return;
-    }
     const liveItems = results.filter((r) => r.isLive);
     let md = `# SubSweep Perimeter Reconnaissance Audit: ${targetDomain}\n\n`;
     md += `**Generated**: ${new Date().toUTCString()}\n`;
@@ -505,6 +495,15 @@ export function SubSweepGodModeTool() {
           borderRadius: 2
         }}
       >
+        <SovereignEyebrow accent="#38BDF8" right="Security & Recon">
+          {"subsweep-lead-scanner"}
+        </SovereignEyebrow>
+        <SovereignBand
+          seed={"subsweep-lead-scanner"}
+          eyebrow={"Security & Recon"}
+          caption={"SubSweep Lead Scanner"}
+          label={"SubSweep Lead Scanner — Zoth sovereign visualisation"}
+        />
         <Grid container spacing={2} alignItems="center">
           <Grid xs={12} md={5}>
             <TextField
