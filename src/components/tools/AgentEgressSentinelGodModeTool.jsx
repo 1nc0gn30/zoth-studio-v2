@@ -232,17 +232,96 @@ table inet zoth_agent_egress {
   };
 
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        p: { xs: 2.5, md: 3.5 },
-        mb: 4,
-        borderRadius: 3,
-        bgcolor: isDark ? 'rgba(12,10,14,0.92)' : '#FFFFFF',
-        border: `1px solid ${isDark ? 'rgba(239,68,68,0.35)' : 'rgba(220,38,38,0.28)'}`,
-        boxShadow: isDark ? '0 24px 60px rgba(0,0,0,0.65)' : '0 12px 32px rgba(15,23,42,0.06)',
-      }}
-    >
+    <Box sx={{ width: '100%' }}>
+      <SovereignEyebrow accent="#EF4444" right="Security & Network">
+        {"agent-egress-sentinel"}
+      </SovereignEyebrow>
+      <SovereignBand
+        seed={"agent-egress-sentinel"}
+        eyebrow={"Security & Network"}
+        caption={"Agent Egress Sentinel // TLS SNI Sniffer & Kinetic Radar"}
+        label={"Agent Egress Sentinel — Zoth sovereign visualisation"}
+      />
+      {/* Sovereign Support & Tip Bar */}
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        alignItems="center"
+        justifyContent="space-between"
+        spacing={2}
+        sx={{
+          p: 1.5,
+          mb: 2.5,
+          borderRadius: 2,
+          bgcolor: 'rgba(239, 68, 68, 0.08)',
+          border: '1px solid rgba(212, 175, 55, 0.3)',
+        }}
+      >
+        <Stack direction="row" spacing={1} alignItems="center">
+          <Chip
+            label="✦ 100% FREE & OPEN ACCESS"
+            size="small"
+            sx={{
+              bgcolor: '#10B981',
+              color: '#05070B',
+              fontWeight: 800,
+              fontFamily: mono,
+              fontSize: '0.68rem',
+            }}
+          />
+          <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#D4AF37' }}>
+            Zero Paywalls · Autonomous Network Interceptor & Kernel Quarantine
+          </Typography>
+        </Stack>
+        <Stack direction="row" spacing={1}>
+          <Button
+            size="small"
+            variant="contained"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              bgcolor: '#D4AF37',
+              color: '#05070B',
+              fontFamily: mono,
+              fontSize: '0.72rem',
+              fontWeight: 800,
+              '&:hover': { bgcolor: '#F5E6AB' },
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => {
+              const sol = 'GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK';
+              navigator.clipboard?.writeText(sol);
+              alert('Solana Tip Address copied: ' + sol);
+            }}
+            sx={{
+              borderColor: '#10B981',
+              color: '#10B981',
+              fontFamily: mono,
+              fontSize: '0.72rem',
+              fontWeight: 800,
+            }}
+          >
+            Solana Tip ⚡
+          </Button>
+        </Stack>
+      </Stack>
+
+      <Paper
+        elevation={0}
+        sx={{
+          p: { xs: 2.5, md: 3.5 },
+          mb: 4,
+          borderRadius: 3,
+          bgcolor: isDark ? 'rgba(12,10,14,0.92)' : '#FFFFFF',
+          border: `1px solid ${isDark ? 'rgba(239,68,68,0.35)' : 'rgba(220,38,38,0.28)'}`,
+          boxShadow: isDark ? '0 24px 60px rgba(0,0,0,0.65)' : '0 12px 32px rgba(15,23,42,0.06)',
+        }}
+      >
       <Stack
         direction={{ xs: 'column', md: 'row' }}
         justifyContent="space-between"
@@ -495,5 +574,6 @@ table inet zoth_agent_egress {
         </Grid>
       </Grid>
     </Paper>
+    </Box>
   );
 }
