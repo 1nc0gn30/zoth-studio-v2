@@ -91,12 +91,6 @@ export default function CertPathRoadmapGodModeTool() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
-  // License State
-  const [isLicensed, setIsLicensed] = useState(true);
-  const [licenseModalOpen, setLicenseModalOpen] = useState(false);
-  const [licenseKeyInput, setLicenseKeyInput] = useState('');
-  const [licenseStatusMsg, setLicenseStatusMsg] = useState('');
-
   // Tool State
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -104,38 +98,6 @@ export default function CertPathRoadmapGodModeTool() {
   const [viewTab, setViewTab] = useState(0); // 0: DAG Pathway Explorer, 1: Career Track Solver, 2: Cert Comparison
   const [compareCertId, setCompareCertId] = useState('gcp-pca');
   const [copiedPlan, setCopiedPlan] = useState(false);
-
-  // License detection
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const paramLicensed = urlParams.get('licensed') === 'true' || urlParams.get('session_id') !== null;
-    const localLicensed = localStorage.getItem('pro_licensed') === 'true' ||
-                          localStorage.getItem('certpath_pro_licensed') === 'true';
-
-    if (paramLicensed || localLicensed) {
-      setIsLicensed(true);
-      if (paramLicensed) {
-        localStorage.setItem('certpath_pro_licensed', 'true');
-        localStorage.setItem('pro_licensed', 'true');
-      }
-    }
-  }, []);
-
-  const handleActivateLicense = () => {
-    const clean = licenseKeyInput.trim();
-    if (clean.length >= 4 || clean.toUpperCase().includes('CERTPATH') || clean.toUpperCase().includes('PRO') || clean.includes('@')) {
-      setIsLicensed(true);
-      localStorage.setItem('certpath_pro_licensed', 'true');
-      localStorage.setItem('pro_licensed', 'true');
-      setLicenseStatusMsg('⭐ License successfully activated! All CertPath features unlocked.');
-      setTimeout(() => {
-        setLicenseModalOpen(false);
-        setLicenseStatusMsg('');
-      }, 1200);
-    } else {
-      setLicenseStatusMsg('Everything is already free. No key needed.');
-    }
-  };
 
   // Certs Map index
   const certMap = useMemo(() => {
@@ -219,10 +181,6 @@ export default function CertPathRoadmapGodModeTool() {
   }, [selectedCert, prereqChain, certMap]);
 
   const handleCopyPlan = () => {
-    if (!isLicensed) {
-      setLicenseModalOpen(true);
-      return;
-    }
     if (navigator?.clipboard?.writeText) {
       navigator.clipboard.writeText(studyPlanMarkdown);
       setCopiedPlan(true);
@@ -242,116 +200,76 @@ export default function CertPathRoadmapGodModeTool() {
         label={"CertPath Roadmap Studio — Zoth sovereign visualisation"}
       />
       {/* --------------------------------------------------------------------- */}
-      {/* HIGH-CONVERTING SALES BANNER ABOVE MAIN SECTION                       */}
+      {/* SUPPORT & ACCESS BAR                                                  */}
       {/* --------------------------------------------------------------------- */}
-      {!isLicensed && (
-        <Paper
-          elevation={0}
-          sx={{
-            mb: 3,
-            p: { xs: 2, sm: 2.5 },
-            borderRadius: 2.5,
-            background: isDark
-              ? 'linear-gradient(135deg, rgba(212,175,55,0.12) 0%, rgba(16,185,129,0.08) 100%)'
-              : 'linear-gradient(135deg, #FEF9E7 0%, #ECFDF5 100%)',
-            border: '1.5px solid rgba(212,175,55,0.4)',
-            boxShadow: '0 8px 32px rgba(212,175,55,0.15)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 2,
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Box
-              sx={{
-                width: 44,
-                height: 44,
-                borderRadius: 2,
-                bgcolor: 'rgba(212,175,55,0.2)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#D4AF37',
-              }}
-            >
-              <SchoolIcon sx={{ fontSize: 26 }} />
-            </Box>
-            <Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                  CertPath Roadmap — Free & Open Access
-                </Typography>
-                <Chip
-                  label="FREE · OPTIONAL TIP"
-                  size="small"
-                  sx={{
-                    bgcolor: '#10B981',
-                    color: '#08080B',
-                    fontWeight: 800,
-                    fontSize: '0.68rem',
-                    fontFamily: mono,
-                  }}
-                />
-              </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.3 }}>
-                Free to use. Prerequisite DAG solver for 137 certifications, career track planners, side-by-side matrices, and study roadmap exports.
-              </Typography>
-            </Box>
-          </Box>
-
-          <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
-            <Button
-              variant="contained"
-              href="https://github.com/1nc0gn30/zoth-studio-v2"
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{
-                bgcolor: '#D4AF37',
-                color: '#08080B',
-                fontWeight: 800,
-                fontSize: '0.82rem',
-                fontFamily: mono,
-                '&:hover': { bgcolor: '#F5E6AB' },
-              }}
-            >
-              Optional tip (Stripe) 💳
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={() => {
-                const sol = 'GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK';
-                navigator.clipboard?.writeText(sol);
-                alert('Solana Receiver Address copied: ' + sol);
-              }}
-              sx={{
-                borderColor: '#10B981',
-                color: '#10B981',
-                fontWeight: 800,
-                fontSize: '0.82rem',
-                fontFamily: mono,
-                '&:hover': { borderColor: '#34D399', bgcolor: 'rgba(16,185,129,0.08)' },
-              }}
-            >
-              Solana Tip ⚡
-            </Button>
-            <Button
-              size="small"
-              onClick={() => setLicenseModalOpen(true)}
-              startIcon={<VpnKeyIcon sx={{ fontSize: 16 }} />}
-              sx={{
-                color: theme.palette.text.secondary,
-                fontSize: '0.78rem',
-                fontFamily: mono,
-                '&:hover': { color: '#D4AF37' },
-              }}
-            >
-              Say Thanks
-            </Button>
-          </Stack>
-        </Paper>
-      )}
+      <Paper
+        elevation={0}
+        sx={{
+          mb: 3,
+          p: { xs: 1.5, sm: 2 },
+          borderRadius: 2,
+          background: isDark ? 'rgba(212,175,55,0.05)' : '#FEF9E7',
+          border: '1px solid rgba(212,175,55,0.3)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 2,
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <SchoolIcon sx={{ color: '#D4AF37' }} />
+          <Typography variant="subtitle2" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
+            CertPath Roadmap Studio — 137 Credentials & Prerequisite DAG
+          </Typography>
+          <Chip
+            label="✦ 100% FREE & OPEN ACCESS"
+            size="small"
+            sx={{
+              bgcolor: 'rgba(16,185,129,0.15)',
+              color: '#10B981',
+              fontWeight: 800,
+              fontFamily: mono,
+              fontSize: '0.72rem',
+              border: '1px solid #10B981',
+            }}
+          />
+        </Box>
+        <Stack direction="row" spacing={1.5} alignItems="center">
+          <Button
+            size="small"
+            variant="contained"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              bgcolor: '#D4AF37',
+              color: '#08080B',
+              fontWeight: 800,
+              fontSize: '0.78rem',
+              fontFamily: mono,
+              '&:hover': { bgcolor: '#F5E6AB' },
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
+            sx={{
+              borderColor: '#10B981',
+              color: '#10B981',
+              fontWeight: 800,
+              fontSize: '0.78rem',
+              fontFamily: mono,
+              '&:hover': { borderColor: '#34D399', bgcolor: 'rgba(16,185,129,0.08)' },
+            }}
+          >
+            ◎ Solana Tip
+          </Button>
+        </Stack>
+      </Paper>
 
       {/* --------------------------------------------------------------------- */}
       {/* FILTER CONTROLS & SEARCH BAR                                          */}
@@ -386,33 +304,18 @@ export default function CertPathRoadmapGodModeTool() {
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          {isLicensed ? (
-            <Chip
-              label="✦ 100% FREE & OPEN ACCESS"
-              size="small"
-              sx={{
-                bgcolor: 'rgba(16,185,129,0.15)',
-                color: '#10B981',
-                fontWeight: 800,
-                fontFamily: mono,
-                fontSize: '0.72rem',
-                border: '1px solid #10B981',
-              }}
-            />
-          ) : (
-            <Chip
-              label="FREE EVALUATION"
-              size="small"
-              sx={{
-                bgcolor: isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7',
-                color: '#D4AF37',
-                fontWeight: 800,
-                fontFamily: mono,
-                fontSize: '0.72rem',
-                border: '1px solid rgba(212,175,55,0.3)',
-              }}
-            />
-          )}
+          <Chip
+            label="✦ 100% UNLOCKED"
+            size="small"
+            sx={{
+              bgcolor: 'rgba(16,185,129,0.15)',
+              color: '#10B981',
+              fontWeight: 800,
+              fontFamily: mono,
+              fontSize: '0.72rem',
+              border: '1px solid #10B981',
+            }}
+          />
         </Box>
       </Box>
 
@@ -809,116 +712,15 @@ export default function CertPathRoadmapGodModeTool() {
                   fontSize: '0.74rem',
                   lineHeight: 1.5,
                   whiteSpace: 'pre-wrap',
-                  filter: !isLicensed ? 'blur(5px)' : 'none',
-                  userSelect: !isLicensed ? 'none' : 'text',
                   maxHeight: 180,
                 }}
               >
                 {studyPlanMarkdown}
               </Box>
-
-              {!isLicensed && (
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    inset: 0,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    bgcolor: 'rgba(0,0,0,0.3)',
-                    borderRadius: 2,
-                  }}
-                >
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={() => setLicenseModalOpen(true)}
-                    startIcon={<LockIcon />}
-                    sx={{
-                      bgcolor: '#D4AF37',
-                      color: '#08080B',
-                      fontWeight: 800,
-                      fontFamily: mono,
-                      fontSize: '0.72rem',
-                      '&:hover': { bgcolor: '#F5E6AB' },
-                    }}
-                  >
-                    Optional tip
-                  </Button>
-                </Box>
-              )}
             </Box>
           </Paper>
         </Grid>
       </Grid>
-
-      {/* --------------------------------------------------------------------- */}
-      {/* LICENSE ACTIVATION DIALOG                                             */}
-      {/* --------------------------------------------------------------------- */}
-      <Dialog
-        open={licenseModalOpen}
-        onClose={() => setLicenseModalOpen(false)}
-        maxWidth="xs"
-        fullWidth
-        PaperProps={{
-          sx: {
-            bgcolor: isDark ? '#0D0D12' : '#FFFFFF',
-            border: '1px solid rgba(212,175,55,0.4)',
-            borderRadius: 3,
-            p: 1,
-          },
-        }}
-      >
-        <DialogTitle sx={{ fontWeight: 800, fontFamily: mono, display: 'flex', alignItems: 'center', gap: 1 }}>
-          <VpnKeyIcon sx={{ color: '#D4AF37' }} />
-          100% Open Access
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Everything is already unlocked and free to use. Tips are optional and unlock nothing extra.
-          </Typography>
-          <TextField
-            fullWidth
-            autoFocus
-            size="small"
-            placeholder="e.g. CERTPATH-PRO-XXXX or receipt email"
-            value={licenseKeyInput}
-            onChange={(e) => setLicenseKeyInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') handleActivateLicense();
-            }}
-            InputProps={{
-              sx: { fontFamily: mono, fontSize: '0.88rem' }
-            }}
-          />
-          {licenseStatusMsg && (
-            <Alert
-              severity={licenseStatusMsg.includes('⭐') ? 'success' : 'warning'}
-              sx={{ mt: 2, fontFamily: mono, fontSize: '0.78rem' }}
-            >
-              {licenseStatusMsg}
-            </Alert>
-          )}
-        </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <Button onClick={() => setLicenseModalOpen(false)} sx={{ color: 'text.secondary', fontFamily: mono }}>
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleActivateLicense}
-            sx={{
-              bgcolor: '#D4AF37',
-              color: '#08080B',
-              fontWeight: 800,
-              fontFamily: mono,
-              '&:hover': { bgcolor: '#F5E6AB' },
-            }}
-          >
-            Activate Now
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

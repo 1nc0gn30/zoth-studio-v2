@@ -351,7 +351,7 @@ export const microTools = [
     depay: false,
     description: '100% in-browser certification DAG solver, career roadmap planner, and study guide generator with 137 credentials, procedural DAG brand media, and dual Stripe + Solana rails.',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/certpath-roadmap-studio.git && cd certpath-roadmap-studio && python3 -m http.server 8093 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/certpath-roadmap-studio.git && cd certpath-roadmap-studio && python3 server.py --port 8093',
   },
   {
     id: 'pwa-manifest-builder',
