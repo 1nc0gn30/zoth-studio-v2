@@ -528,7 +528,7 @@ function TitleCard({ intro, handing, dark, text }) {
           </>
         )}
         <span style={{ opacity: 0.4 }}>·</span>
-        <span style={{ opacity: 0.85 }}>⣿ U+2800 DITHER</span>
+        <span style={{ opacity: 0.85 }}>{intro.brailleBadge || '⣿ U+2800 DITHER'}</span>
       </div>
       <div
         style={{
@@ -609,7 +609,7 @@ function IntroHud({ intro, progress, handing, onSkip }) {
         <span style={{ opacity: 0.35 }}>·</span>
         <span>{scrambledLabel}</span>
         <span style={{ opacity: 0.35 }}>·</span>
-        <span style={{ color: intro.accent, opacity: 0.9 }}>⣿ BRAILLE · BAYER 8×8</span>
+        <span style={{ color: intro.accent, opacity: 0.9 }}>{intro.brailleBadge || '⣿ BRAILLE · BAYER 8×8'}</span>
       </div>
 
       <button

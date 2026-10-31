@@ -22,6 +22,12 @@ import MovieFilterIcon from '@mui/icons-material/MovieFilter';
 import TerminalIcon from '@mui/icons-material/Terminal';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
+import {
+  sampleProceduralSDF,
+  resolveToolBrailleShape,
+  SHAPE_DESCRIPTORS,
+  renderBrailleDitherLines,
+} from '../../motion/AsciiBrailleDitherEngine';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -148,7 +154,18 @@ function sampleArchetypeField(nx, ny, t, archetype) {
 export default function ToolMotionShowcase({ tool, onReplayRouteIntro }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const meta = useMemo(() => getCategoryMotionMeta(tool?.category), [tool?.category]);
+  const meta = useMemo(() => {
+    const base = getCategoryMotionMeta(tool?.category);
+    const brailleShape = resolveToolBrailleShape(tool);
+    const desc = SHAPE_DESCRIPTORS[brailleShape] || SHAPE_DESCRIPTORS.astrolabe;
+    return {
+      ...base,
+      brailleShape,
+      anchorName: desc.name,
+      formula: desc.formula,
+      badge: desc.badge,
+    };
+  }, [tool]);
 
   const [playing, setPlaying] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
@@ -296,7 +313,10 @@ Scene Breakdown & Exact On-Screen Copy:
             for (let gy = 18; gy < h - 18; gy += stepY) {
               const nx = (gx - cx) / R;
               const ny = (gy - cy) / R;
-              const val = sampleArchetypeField(nx, ny, t, meta.archetype);
+              const val = Math.max(
+                sampleProceduralSDF(meta.brailleShape || 'astrolabe', nx * 0.72, ny * 0.72, t),
+                sampleArchetypeField(nx, ny, t, meta.archetype) * 0.65
+              );
               if (val > 0.14) {
                 const ramp = mode === 'ascii' ? ASCII_RAMP : BRAILLE_RAMP;
                 const charIdx = Math.min(ramp.length - 1, Math.floor(val * ramp.length));
@@ -511,27 +531,21 @@ Scene Breakdown & Exact On-Screen Copy:
 
   const handleCopyAsciiSnapshot = () => {
     const t = timeRef.current;
-    const cols = 44;
-    const rows = 15;
+    const ditherRows = renderBrailleDitherLines({
+      cols: 52,
+      rows: 14,
+      shape: meta.brailleShape || 'astrolabe',
+      t,
+      mode: 'hybrid',
+    });
     const lines = [
       `╔════════════════════════════════════════════════════════╗`,
       `║ ${(tool?.name || 'ZOTH SOVEREIGN TOOL').toUpperCase().padEnd(54, ' ')} ║`,
-      `║ ${activeScene.kicker.padEnd(54, ' ')} ║`,
+      `║ ${(meta.formula || activeScene.kicker).slice(0, 54).padEnd(54, ' ')} ║`,
       `╠════════════════════════════════════════════════════════╣`,
+      ...ditherRows.map((r) => `║ ${r.padEnd(54, ' ')} ║`),
+      `╚════════════════════════════════════════════════════════╝`,
     ];
-    for (let r = 0; r < rows; r++) {
-      let rowStr = '║ ';
-      for (let c = 0; c < cols; c++) {
-        const nx = (c - cols / 2) / (cols * 0.32);
-        const ny = (r - rows / 2) / (rows * 0.38);
-        const v = sampleArchetypeField(nx, ny, t, meta.archetype);
-        const idx = Math.min(ASCII_RAMP.length - 1, Math.floor(v * ASCII_RAMP.length));
-        rowStr += ASCII_RAMP[idx];
-      }
-      rowStr = rowStr.padEnd(57, ' ') + '║';
-      lines.push(rowStr);
-    }
-    lines.push(`╚════════════════════════════════════════════════════════╝`);
     navigator.clipboard?.writeText(lines.join('\n'));
     setCopiedAscii(true);
     setTimeout(() => setCopiedAscii(false), 2000);

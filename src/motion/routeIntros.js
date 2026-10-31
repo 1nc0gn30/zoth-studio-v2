@@ -9,6 +9,7 @@
  * `accent` drives the handoff seam + HUD chrome colour for that route.
  */
 import { microTools } from '../data/toolsData';
+import { resolveToolBrailleShape, SHAPE_DESCRIPTORS } from './AsciiBrailleDitherEngine';
 
 export const ACCENTS = {
   gold: '#D4AF37',
@@ -105,6 +106,7 @@ export function resolveRouteIntro(pathname) {
   let kicker = route.kicker || 'Sovereign AI Workstation';
   let clip = route.clip;
   let accentKey = route.accent;
+  let brailleShape = route.brailleShape || 'astrolabe';
 
   if (route.dynamic === 'toolId') {
     const slug = path.replace(/\/$/, '').split('/').pop();
@@ -116,20 +118,27 @@ export function resolveRouteIntro(pathname) {
       const style = resolveToolCategoryStyle(matchedTool);
       clip = style.clip;
       accentKey = style.accentKey;
+      brailleShape = resolveToolBrailleShape(matchedTool);
     } else if (slug) {
       label = `${route.label} · ${prettifySlug(slug)}`;
+      brailleShape = resolveToolBrailleShape({ id: slug });
     }
   } else if (route.dynamic) {
     const slug = path.replace(/\/$/, '').split('/').pop();
     if (slug) label = `${route.label} · ${prettifySlug(slug)}`;
   }
 
+  const descriptor = SHAPE_DESCRIPTORS[brailleShape] || SHAPE_DESCRIPTORS.astrolabe;
+
   return {
     key: path.replace(/\/$/, '') || '/',
     clip,
     label,
     kicker,
-    brailleShape: route.brailleShape || 'astrolabe',
+    brailleShape,
+    brailleName: descriptor.name,
+    brailleFormula: descriptor.formula,
+    brailleBadge: descriptor.badge,
     index: String(Math.max(1, INTRO_CLIPS.indexOf(clip) + 1)).padStart(2, '0'),
     total: String(INTRO_CLIPS.length).padStart(2, '0'),
     accent: ACCENTS[accentKey] || ACCENTS.gold,
