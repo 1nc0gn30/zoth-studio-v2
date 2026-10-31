@@ -947,11 +947,11 @@ export const microTools = [
     priceCents: 0,
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     depay: false,
-    description: '100% in-browser parametric video datamosh synthesizer, H.264 I-frame drop corruption, CRT scanlines, procedural cassette brand media, and live camera mosh buffer with dual Stripe + Solana rails.',
+    description: '100% in-browser parametric video datamosh synthesizer, H.264 I-frame drop corruption, CRT scanlines, procedural cassette brand media, and live camera mosh buffer with zero paywalls.',
     localPort: 8081,
     localUrl: 'http://127.0.0.1:8081',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/datamosh-glitch-studio.git && cd datamosh-glitch-studio && python3 -m http.server 8081 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/datamosh-glitch-studio.git && cd datamosh-glitch-studio && python3 -m datamosh_glitch_studio.cli serve --port 8081  # or: datamosh-glitch-studio --status',
   },
   {
     id: 'nexus-3d-scene-studio',

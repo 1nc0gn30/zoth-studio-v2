@@ -60,6 +60,7 @@ import AgentMockTwinGodModeTool from '../components/tools/AgentMockTwinGodModeTo
 import AgentPolicyAuditorGodModeTool from '../components/tools/AgentPolicyAuditorGodModeTool';
 import AudioCipherGodModeTool from '../components/tools/AudioCipherGodModeTool';
 import CyberTurtleGodModeTool from '../components/tools/CyberTurtleGodModeTool';
+import DatamoshGlitchGodModeTool from '../components/tools/DatamoshGlitchGodModeTool';
 import CronRhythmGodModeTool from '../components/tools/CronRhythmGodModeTool';
 import EnvGuardVaultGodModeTool from '../components/tools/EnvGuardVaultGodModeTool';
 import HexStrikeGodModeTool from '../components/tools/HexStrikeGodModeTool';
@@ -182,7 +183,8 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'zoth-scene-foundry': AsciiMotionGodModeTool,
 
   'vision-gesture-control': VisionKinematicsGodModeTool,
-  'datamosh-glitch-studio': AsciiMotionGodModeTool,
+  'datamosh-glitch-studio': DatamoshGlitchGodModeTool,
+  'datamosh-studio': DatamoshGlitchGodModeTool,
   'nexus-3d-scene-studio': AsciiMotionGodModeTool,
   'ufo-sacred-geometry': AsciiMotionGodModeTool,
   'cyber-turtle-studio': CyberTurtleGodModeTool,
