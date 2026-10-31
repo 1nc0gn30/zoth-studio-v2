@@ -2,13 +2,6 @@
   "schemaVersion": "2.4.0",
   "site": "Zoth Studio v2 & 71 Studio Tools",
   "baseUrl": "https://zoth.nullai.tech",
-  "architect": {
-    "name": "1nc0gn30",
-    "entity": "NullAI",
-    "github": "https://github.com/1nc0gn30",
-    "email": "contact@nullai.tech",
-    "location": "Virginia Beach, VA (757 Hampton Roads) & Nationwide"
-  },
   "endpoints": {
     "llmsTxt": "https://zoth.nullai.tech/llms.txt",
     "llmsFullTxt": "https://zoth.nullai.tech/llms-full.txt",
@@ -25,37 +18,17 @@
     {
       "name": "NullAI",
       "url": "https://nullai.tech",
-      "role": "Principal Full-Stack Web, Local SEO/AEO & AI Systems Consultancy"
+      "role": "Independent software lab"
     },
     {
-      "name": "NullAI Lab",
-      "url": "https://nullai.tech",
-      "role": "Local-First AI Software Lab & Research Hub"
-    },
-    {
-      "name": "Zoth Studio v2",
+      "name": "Zoth Studio",
       "url": "https://zoth.nullai.tech",
-      "role": "Zero-Egress AI Studio & 71 Studio Tools"
+      "role": "Local-first AI studio: 71 tools, 43 workstations"
     },
     {
-      "name": "ZothOS Linux v3.2",
+      "name": "ZothOS",
       "url": "https://zothos.nullai.tech",
-      "role": "Sovereign AI-Native Debian Trixie + KDE Plasma 6.3 Wayland OS"
-    },
-    {
-      "name": "757 Tech Pro",
-      "url": "https://757tech.pro",
-      "role": "Hampton Roads B2B IT, Web Design & AI Automation Agency"
-    },
-    {
-      "name": "Sovereign 71-Tool Catalog",
-      "url": "https://1nc0gn30.github.io",
-      "role": "Interactive Storefront & Custom Engineering Solutions"
-    },
-    {
-      "name": "City Desk",
-      "url": "https://city-desk.netlify.app",
-      "role": "1,000-Page Deterministic Local Trade Website Engine"
+      "role": "Linux distribution with 23 loopback daemons"
     }
   ],
   "featuredOffers": [
@@ -126,5 +99,16 @@
       "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
       "description": "Bespoke multi-agent AI workflow, custom Model Context Protocol (MCP) server for Claude/Cursor/Antigravity, autonomous lead/ops pipeline, or full-stack web application engineered by NullAI."
     }
-  ]
+  ],
+  "publisher": {
+    "name": "NullAI",
+    "alternateName": "1nc0gn30",
+    "url": "https://nullai.tech",
+    "email": "contact@nullai.tech",
+    "sameAs": [
+      "https://x.com/1nc0gn30",
+      "https://github.com/NullAITech",
+      "https://github.com/1nc0gn30"
+    ]
+  }
 }
