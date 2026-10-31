@@ -62,6 +62,7 @@ import AudioCipherGodModeTool from '../components/tools/AudioCipherGodModeTool';
 import CyberTurtleGodModeTool from '../components/tools/CyberTurtleGodModeTool';
 import DatamoshGlitchGodModeTool from '../components/tools/DatamoshGlitchGodModeTool';
 import Nexus3DGodModeTool from '../components/tools/Nexus3DGodModeTool';
+import UfoSacredGeometryGodModeTool from '../components/tools/UfoSacredGeometryGodModeTool';
 import CronRhythmGodModeTool from '../components/tools/CronRhythmGodModeTool';
 import EnvGuardVaultGodModeTool from '../components/tools/EnvGuardVaultGodModeTool';
 import HexStrikeGodModeTool from '../components/tools/HexStrikeGodModeTool';
@@ -189,7 +190,8 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'nexus-3d-scene-studio': Nexus3DGodModeTool,
   'nexus-3d': Nexus3DGodModeTool,
   'nexus-3d-studio': Nexus3DGodModeTool,
-  'ufo-sacred-geometry': AsciiMotionGodModeTool,
+  'ufo-sacred-geometry': UfoSacredGeometryGodModeTool,
+  'ufo-geometry': UfoSacredGeometryGodModeTool,
   'cyber-turtle-studio': CyberTurtleGodModeTool,
   'og-canvas-forge': AsciiMotionGodModeTool,
   'zoth-ascii-magic': AsciiMotionGodModeTool,

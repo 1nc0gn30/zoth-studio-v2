@@ -989,7 +989,7 @@ export const microTools = [
     localPort: 8083,
     localUrl: 'http://127.0.0.1:8083',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/ufo-sacred-geometry.git && cd ufo-sacred-geometry && python3 -m http.server 8083 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/ufo-sacred-geometry.git && cd ufo-sacred-geometry && python3 -m ufo_sacred_geometry.cli serve --port 8083  # or: ufo-sacred-geometry --status',
   },
   {
     id: 'likeness-desk',
