@@ -76,7 +76,7 @@ const PORT_SERVICES = {
   27017: 'MongoDB (Unauth Risk)'
 };
 
-export function SubSweepGodModeTool() {
+export function SubSweepGodModeTool({ tool } = {}) {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
@@ -496,13 +496,13 @@ export function SubSweepGodModeTool() {
         }}
       >
         <SovereignEyebrow accent="#38BDF8" right="Security & Recon">
-          {"subsweep-lead-scanner"}
+          {tool?.id || "subsweep-lead-scanner"}
         </SovereignEyebrow>
         <SovereignBand
-          seed={"subsweep-lead-scanner"}
+          seed={tool?.id || "subsweep-lead-scanner"}
           eyebrow={"Security & Recon"}
-          caption={"SubSweep Lead Scanner"}
-          label={"SubSweep Lead Scanner — Zoth sovereign visualisation"}
+          caption={tool?.name || "SubSweep Lead Scanner"}
+          label={`${tool?.name || "SubSweep Lead Scanner"} — Zoth sovereign visualisation`}
         />
         <Grid container spacing={2} alignItems="center">
           <Grid xs={12} md={5}>

@@ -1026,7 +1026,7 @@ export const microTools = [
     localPort: 8085,
     localUrl: 'http://127.0.0.1:8085',
     version: '2.5.0',
-    pull: 'git clone https://github.com/NullAITech/osint-scout-skill.git && cd osint-scout-skill && python3 -m http.server 8085 --directory public',
+    pull: 'git clone https://github.com/NullAITech/osint-scout-skill.git && cd osint-scout-skill && python3 server.py --port 8085  # or: osint-scout --status',
   },
   {
     id: 'bolt.diy',
