@@ -1048,7 +1048,7 @@ export const microTools = [
   },
   {
     id: 'zoth-civilization',
-    published: false,
+    published: true,
     name: 'Zoth Civilization Hub',
     repo: 'zoth-civilization',
     category: 'Swarm & Core',
@@ -1057,8 +1057,9 @@ export const microTools = [
     description: 'The living heart of the 21-agent society. Runs the GameBoy pixel world simulation, Adytum Initiation Deck, and meditation art catalog.',
     localPort: 9393,
     localUrl: 'http://127.0.0.1:9393',
-    version: '1.0.0',
-    pull: 'cd ~/NullAITech/zoth-civilization && ENABLE_KOKORO_VOICE=0 node server.js',
+    version: '2.5.0',
+    pricing: '100% Free & Open-Access',
+    pull: 'cd ~/NullAITech/zoth-civilization && ENABLE_KOKORO_VOICE=0 node server.js  # or: zoth-civ status',
   },
   {
     id: 'storefront-catalog',
