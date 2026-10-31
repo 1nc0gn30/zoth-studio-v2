@@ -63,6 +63,7 @@ import CyberTurtleGodModeTool from '../components/tools/CyberTurtleGodModeTool';
 import DatamoshGlitchGodModeTool from '../components/tools/DatamoshGlitchGodModeTool';
 import Nexus3DGodModeTool from '../components/tools/Nexus3DGodModeTool';
 import UfoSacredGeometryGodModeTool from '../components/tools/UfoSacredGeometryGodModeTool';
+import LikenessDeskGodModeTool from '../components/tools/LikenessDeskGodModeTool';
 import CronRhythmGodModeTool from '../components/tools/CronRhythmGodModeTool';
 import EnvGuardVaultGodModeTool from '../components/tools/EnvGuardVaultGodModeTool';
 import HexStrikeGodModeTool from '../components/tools/HexStrikeGodModeTool';
@@ -172,7 +173,8 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'zoth-webgen': ZothFoundryGodModeTool,
   'zoth-swarm-multiplexer': SwarmCivilizationGodModeTool,
   'zoth-civilization': SwarmCivilizationGodModeTool,
-  'likeness-desk': VisionKinematicsGodModeTool,
+  'likeness-desk': LikenessDeskGodModeTool,
+  'likeness': LikenessDeskGodModeTool,
   'bolt.diy': ZothBoltGodModeTool,
   'bolt-diy': ZothBoltGodModeTool,
   'zoth-bolt': ZothBoltGodModeTool,
