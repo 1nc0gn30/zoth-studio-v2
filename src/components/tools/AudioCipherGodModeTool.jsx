@@ -234,11 +234,6 @@ export function AudioCipherGodModeTool() {
   const [audioStats, setAudioStats] = useState(null);
   const [copiedKey, setCopiedKey] = useState(null);
 
-  // Pro Licensing & Paywall Modal
-  const [isProLicensed, setIsProLicensed] = useState(true);
-  const [showPaywallModal, setShowPaywallModal] = useState(false);
-  const [licenseKeyInput, setLicenseKeyInput] = useState('');
-
   // Audio Context & Canvas Refs
   const canvasRef = useRef(null);
   const audioContextRef = useRef(null);
@@ -249,12 +244,6 @@ export function AudioCipherGodModeTool() {
   // Initial carrier audio synthesis
   useEffect(() => {
     generateNewCarrier(carrierDuration, carrierFreq);
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('licensed') === 'true' || localStorage.getItem('zoth_studio_pro_license') === 'active') {
-        setIsProLicensed(true);
-      }
-    }
     return () => {
       stopPlayback();
       if (audioContextRef.current) {
@@ -262,14 +251,6 @@ export function AudioCipherGodModeTool() {
       }
     };
   }, []);
-
-  const handleActivateLicense = () => {
-    if (licenseKeyInput.trim().length > 6) {
-      localStorage.setItem('zoth_studio_pro_license', 'active');
-      setIsProLicensed(true);
-      setShowPaywallModal(false);
-    }
-  };
 
   const handleCopy = (text, key) => {
     if (navigator?.clipboard?.writeText) {
@@ -512,10 +493,6 @@ export function AudioCipherGodModeTool() {
   // Action: Download Steganographic WAV File
   // ---------------------------------------------------------------------------
   const handleDownloadWav = () => {
-    if (!isProLicensed) {
-      setShowPaywallModal(true);
-      return;
-    }
     if (!activeAudioBuffer) return;
 
     const blob = new Blob([activeAudioBuffer], { type: 'audio/wav' });
@@ -531,7 +508,7 @@ export function AudioCipherGodModeTool() {
 
   return (
     <Box sx={{ mt: 1 }}>
-      {/* Monetization Funnel Banner */}
+      {/* Sovereign Support Banner */}
       <Paper
         sx={{
           p: 2,
@@ -568,10 +545,10 @@ export function AudioCipherGodModeTool() {
               </Typography>
               <Chip
                 size="small"
-                label={isProLicensed ? '✦ 100% FREE & OPEN ACCESS' : 'FREE & OPEN ACCESS'}
+                label="✦ 100% FREE & OPEN ACCESS"
                 sx={{
-                  bgcolor: isProLicensed ? emeraldSoft : crimsonSoft,
-                  color: isProLicensed ? emerald : crimson,
+                  bgcolor: emeraldSoft,
+                  color: emerald,
                   fontWeight: 800,
                   fontSize: '0.72rem',
                   fontFamily: mono
@@ -584,42 +561,41 @@ export function AudioCipherGodModeTool() {
           </Box>
         </Stack>
 
-        <Stack direction="row" spacing={1.5}>
-          {!isProLicensed ? (
-            <>
-              <Button
-                variant="contained"
-                size="small"
-                href="https://github.com/1nc0gn30/zoth-studio-v2"
-                target="_blank"
-                rel="noreferrer"
-                startIcon={<BoltIcon />}
-                sx={{
-                  bgcolor: gold,
-                  color: '#000',
-                  fontWeight: 800,
-                  '&:hover': { bgcolor: '#B8860B' }
-                }}
-              >
-                ☕ Buy Us a Coffee
-              </Button>
-              <Button
-                variant="outlined"
-                size="small"
-                onClick={() => setShowPaywallModal(true)}
-                startIcon={<KeyIcon />}
-                sx={{ borderColor: gold, color: gold, fontWeight: 700 }}
-              >
-                Enter Key
-              </Button>
-            </>
-          ) : (
-            <Chip
-              icon={<CheckCircleIcon style={{ color: emerald }} />}
-              label="UNLIMITED STEGO WAV EXPORT UNLOCKED"
-              sx={{ bgcolor: emeraldSoft, color: emerald, fontWeight: 800, fontFamily: mono }}
-            />
-          )}
+        <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
+          <Button
+            variant="contained"
+            size="small"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noopener noreferrer"
+            startIcon={<BoltIcon />}
+            sx={{
+              bgcolor: gold,
+              color: '#08080B',
+              fontWeight: 800,
+              fontSize: '0.8rem',
+              '&:hover': { bgcolor: '#B8860B' }
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
+            href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              borderColor: 'rgba(20,241,149,0.45)',
+              color: '#14F195',
+              bgcolor: 'rgba(20,241,149,0.08)',
+              fontWeight: 800,
+              fontSize: '0.8rem',
+              '&:hover': { borderColor: '#14F195', bgcolor: 'rgba(20,241,149,0.16)' }
+            }}
+          >
+            ◎ Solana Tip
+          </Button>
         </Stack>
       </Paper>
 
@@ -946,90 +922,6 @@ export function AudioCipherGodModeTool() {
         </Grid>
       </Grid>
 
-      {/* Pro Monetization Modal */}
-      <Dialog
-        open={showPaywallModal}
-        onClose={() => setShowPaywallModal(false)}
-        maxWidth="sm"
-        fullWidth
-        PaperProps={{
-          sx: {
-            bgcolor: isDark ? surfaceDark : theme.palette.background.paper,
-            border: `1px solid ${gold}`,
-            borderRadius: 2
-          }
-        }}
-      >
-        <DialogTitle sx={{ pb: 1, borderBottom: `1px solid ${cardBorder}` }}>
-          <Stack direction="row" spacing={1.5} alignItems="center">
-            <ShieldIcon sx={{ color: gold }} />
-            <Typography variant="h6" sx={{ fontWeight: 800, color: gold }}>
-              AudioCipher 100% Free & Open Access — Community Support
-            </Typography>
-          </Stack>
-        </DialogTitle>
-        <DialogContent sx={{ mt: 2 }}>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Unlock unlimited steganographic WAV exports, external audio carrier modulation, and high-density bitstream embedding.
-          </Typography>
-
-          <Paper sx={{ p: 2, mb: 3, bgcolor: goldSoft, border: `1px solid ${gold}`, borderRadius: 1.5 }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold, mb: 0.5 }}>
-              ⚡ 100% Free & Open Access — Optional Community Support
-            </Typography>
-            <Typography variant="caption" sx={{ color: 'text.primary' }}>
-              Everything here is free to use. Optional tips are welcome via:
-            </Typography>
-            <Stack direction="row" spacing={1.5} sx={{ mt: 1.5 }}>
-              <Button
-                variant="contained"
-                size="small"
-                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
-                target="_blank"
-                rel="noreferrer"
-                sx={{ bgcolor: gold, color: '#000', fontWeight: 800 }}
-              >
-                ☕ Buy Us a Coffee (Stripe)
-              </Button>
-              <Button
-                variant="outlined"
-                size="small"
-                href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
-                target="_blank"
-                rel="noreferrer"
-                sx={{ borderColor: cyan, color: cyan, fontWeight: 700 }}
-              >
-                Solana Pay (USDC/SOL)
-              </Button>
-            </Stack>
-          </Paper>
-
-          <TextField
-            fullWidth
-            size="small"
-            label="Optional note with your tip"
-            value={licenseKeyInput}
-            onChange={(e) => setLicenseKeyInput(e.target.value)}
-            placeholder="e.g. AUDIO-PRO-XXXX-XXXX"
-            InputProps={{
-              sx: { fontFamily: mono }
-            }}
-          />
-        </DialogContent>
-        <DialogActions sx={{ p: 2, borderTop: `1px solid ${cardBorder}` }}>
-          <Button onClick={() => setShowPaywallModal(false)} sx={{ color: 'text.secondary', fontFamily: mono }}>
-            CANCEL
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleActivateLicense}
-            disabled={licenseKeyInput.trim().length < 6}
-            sx={{ bgcolor: emerald, color: '#000', fontWeight: 800, fontFamily: mono }}
-          >
-            ACTIVATE PRO
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

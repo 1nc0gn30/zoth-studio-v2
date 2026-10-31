@@ -913,7 +913,7 @@ export const microTools = [
     localPort: 8096,
     localUrl: 'http://127.0.0.1:8096',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/audiocipher-stego-engine.git && cd audiocipher-stego-engine && python3 -m audiocipher_stego_engine.cli serve --port 8096',
+    pull: 'git clone https://github.com/1nc0gn30/audiocipher-stego-engine.git && cd audiocipher-stego-engine && python3 -m audiocipher_stego_engine.cli serve --port 8096  # or: audiocipher-stego-engine --status',
   },
   {
     id: 'cyber-turtle-studio',
