@@ -90,6 +90,7 @@ import AttackSurfaceSentinelGodModeTool from '../components/tools/AttackSurfaceS
 import VisionKinematicsGodModeTool from '../components/tools/VisionKinematicsGodModeTool';
 import SwarmCivilizationGodModeTool from '../components/tools/SwarmCivilizationGodModeTool';
 import CivicProcurementGodModeTool from '../components/tools/CivicProcurementGodModeTool';
+import PixelCastGodModeTool from '../components/tools/PixelCastGodModeTool';
 import SovereignToolOutputWorkbench from '../components/tools/SovereignToolOutputWorkbench';
 import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
 import {
@@ -204,6 +205,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'city-desk': CivicProcurementGodModeTool,
   'osint-scout-skill': SubSweepGodModeTool,
   'storefront-catalog': PodCommerceGodModeTool,
+  'pixel-cast': PixelCastGodModeTool,
 
   // Studio Cockpit & Workstation IDs (from workstations.js)
   'cockpit': SwarmCivilizationGodModeTool,

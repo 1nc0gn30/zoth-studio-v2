@@ -10,6 +10,44 @@
  */
 
 export const toolsDocumentation = {
+  'pixel-cast': {
+    whyUse: 'Enables instant, zero-latency Google Pixel screen mirroring, camera lens streaming, and hardware bridge to ZothOS desktop over private Tailscale mesh networks. Eliminates third-party cloud streaming relays, physical cable tethering, and complex wireless pairing friction.',
+    problemSolved: 'Replaces proprietary casting apps and broken mobile WebRTC restrictions with sovereign local ADB tunnels and Scrcpy 5.0.1 hardware-accelerated video decoding. Solves dynamic wireless debugging port hunting through automated mesh discovery.',
+    architecture: 'Python 3.12 FastAPI / WebSocket runtime orchestrated alongside scrcpy 5.0.1 and adb. Communicates over authenticated WireGuard / Tailscale tunnels on port 8148 with direct display output on Wayland (:0) and browser canvases.',
+    aiAgentProtocol: {
+      mcpTool: 'pixel_cast_orchestrate',
+      description: 'Discover Tailscale Android devices, query battery/thermal health, and launch 60fps desktop screen mirror or capture screenshots.',
+      cliExample: 'pixel-cast status --json && pixel-cast stream --bitrate 8M --max-size 1080',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          action: { type: 'string', enum: ['status', 'stream', 'screenshot', 'connect', 'battery', 'key'], description: 'Action to execute' },
+          target_ip: { type: 'string', description: 'Tailscale IP address of Google Pixel' },
+          bitrate: { type: 'string', default: '8M', description: 'Video encoding bitrate' }
+        },
+        required: ['action']
+      },
+      outputSchema: {
+        success: 'boolean',
+        pixel: { hostname: 'string', ip: 'string', ping_ms: 'number' },
+        battery: { percent: 'number', charging: 'boolean', temperature_c: 'number' }
+      }
+    },
+    quickstart: [
+      'pixel-cast status',
+      'pixel-cast connect',
+      'pixel-cast stream',
+      '# Open workstation at http://127.0.0.1:8148 or http://100.106.132.5:8148'
+    ],
+    features: [
+      'Autonomous Tailscale Mesh discovery detecting Google Pixel 10 Pro with live latency ping',
+      'Hardware-accelerated 60fps Scrcpy 5.0.1 video mirror with Opus low-latency audio forwarding',
+      'Remote Hardware Navigation HUD: Home, Back, Recents, Power/Wake, and Volume control',
+      'Fast Keyboard Typer & Bidirectional Clipboard synchronization',
+      'Instant QR Code generator for mobile companion camera streaming & file drops',
+      'Battery, charging state, voltage, and thermal temperature telemetry monitor'
+    ]
+  },
   'adytum-alchemist-ai-workflow': {
     whyUse: 'Eliminates aimless prompt iteration by enforcing the 22-key Hermetic Planning Rite. Guarantees deterministic intention formulation, compulsory incubation phases, and local LLM gatekeeper validation before a single line of production code is written.',
     problemSolved: 'Replaces unstructured, error-prone conversational prompt churn with an immutable 22-step architectural contract that validates requirements, edge cases, and test criteria upfront.',
