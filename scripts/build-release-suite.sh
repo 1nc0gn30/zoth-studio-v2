@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ==============================================================================
 # Zoth Studio v2 — Cross-Platform Release Binary & Package Suite Builder
-# Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform
+# Engineered by 1nc0gn30 • NullAI Platform
 #
 # Builds native binaries & full application packages for:
 #   - Linux   (.deb, .AppImage, .run, .tar.gz, ELF64 binary)
@@ -134,7 +134,7 @@ Version: ${VERSION}
 Section: devel
 Priority: optional
 Architecture: amd64
-Maintainer: Neal Frazier Tech <team@nullai.tech>
+Maintainer: NullAI <team@nullai.tech>
 Homepage: https://zoth.nullai.tech
 Recommends: nodejs, python3
 Description: Zoth Studio v2 — Sovereign Air-Gapped AI Development Studio & Operator Cockpit
@@ -319,7 +319,7 @@ EOF
 cat << EOF > "$WIN_ROOT/README-WINDOWS.txt"
 ==============================================================================
 ZOTH STUDIO v${VERSION} — WINDOWS (x86_64) QUICK START
-Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform
+Engineered by 1nc0gn30 • NullAI Platform
 ==============================================================================
 
 1. Double-click "ZothStudio.exe" (or "zoth.bat") to launch Zoth Studio.

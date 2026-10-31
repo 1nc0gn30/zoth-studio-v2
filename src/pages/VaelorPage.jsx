@@ -93,7 +93,7 @@ const PRESET_ACCOUNTS = [
   { handle: '@citizen', name: 'Sovereign Demo Wallet', balance: 4750.50, badge: 'Passkey Ready' },
   { handle: '@sprig', name: 'Sprig Kitchen • 757 Artisan Merchant', balance: 5157.05, badge: 'Merchant POS' },
   { handle: '@zoth', name: 'Zoth Studio & Compute Node', balance: 29957.77, badge: 'Sovereign Prime' },
-  { handle: '@neal', name: 'Neal Frazier (@1nc0gn30)', balance: 25000.00, badge: 'Founder Core' }
+  { handle: '@neal', name: '1nc0gn30', balance: 25000.00, badge: 'Founder Core' }
 ];
 
 const VALIDATORS = [

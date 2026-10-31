@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0",
   "name": "Zoth Studio v2 & 71 Studio Tools — Sovereign AI & Web Systems Agent",
-  "description": "Air-gapped zero-egress development studio, multi-agent AI cockpit, and 44-tool browser-native SEO/AEO/Developer suite. Engineered by Neal Frazier (Neal Frazier Tech / NullAI). Provides instant access to 44 browser-native SEO/AEO/Developer tools, custom website & AI agent build packages, and Schema.org entity graphs.",
+  "description": "Air-gapped zero-egress development studio, multi-agent AI cockpit, and 44-tool browser-native SEO/AEO/Developer suite. Engineered by 1nc0gn30 (NullAI). Provides instant access to 44 browser-native SEO/AEO/Developer tools, custom website & AI agent build packages, and Schema.org entity graphs.",
   "url": "https://zoth.nullai.tech",
   "provider": {
-    "organization": "Neal Frazier Tech & NullAI",
-    "author": "Neal Frazier",
-    "url": "https://www.nealfrazier.tech",
-    "email": "contact@nealfrazier.tech"
+    "organization": "NullAI",
+    "author": "1nc0gn30",
+    "url": "https://nullai.tech",
+    "email": "contact@nullai.tech"
   },
   "capabilities": {
     "streaming": false,

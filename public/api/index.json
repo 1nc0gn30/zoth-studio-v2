@@ -3,10 +3,10 @@
   "site": "Zoth Studio v2 & 71 Studio Tools",
   "baseUrl": "https://zoth.nullai.tech",
   "architect": {
-    "name": "Neal Frazier",
-    "entity": "Neal Frazier Tech / NullAI",
+    "name": "1nc0gn30",
+    "entity": "NullAI",
     "github": "https://github.com/1nc0gn30",
-    "email": "contact@nealfrazier.tech",
+    "email": "contact@nullai.tech",
     "location": "Virginia Beach, VA (757 Hampton Roads) & Nationwide"
   },
   "endpoints": {
@@ -23,8 +23,8 @@
   },
   "ecosystem": [
     {
-      "name": "Neal Frazier Tech",
-      "url": "https://www.nealfrazier.tech",
+      "name": "NullAI",
+      "url": "https://nullai.tech",
       "role": "Principal Full-Stack Web, Local SEO/AEO & AI Systems Consultancy"
     },
     {
@@ -124,7 +124,7 @@
       "landingUrl": "https://1nc0gn30.github.io/solutions/custom-ai-swarm-997.html",
       "promoCode": "FOUNDER25 (25% off)",
       "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
-      "description": "Bespoke multi-agent AI workflow, custom Model Context Protocol (MCP) server for Claude/Cursor/Antigravity, autonomous lead/ops pipeline, or full-stack web application engineered by Neal Frazier Tech."
+      "description": "Bespoke multi-agent AI workflow, custom Model Context Protocol (MCP) server for Claude/Cursor/Antigravity, autonomous lead/ops pipeline, or full-stack web application engineered by NullAI."
     }
   ]
 }

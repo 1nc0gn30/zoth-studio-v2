@@ -1,6 +1,6 @@
 // Zoth Studio v2 — Native Cross-Platform Desktop & CLI Binary (Linux, macOS, Windows)
 // Supports standalone single-file self-extracting payload (__ZOTH_ZIP_PAYLOAD__)
-// Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform
+// Engineered by 1nc0gn30 • NullAI Platform
 package main
 
 import (

@@ -1,13 +1,13 @@
 {
   "mcpVersion": "2025-03-26",
-  "name": "nealfrazier-nullai-zoth-ecosystem",
+  "name": "nullai-zoth-ecosystem",
   "version": "2.4.0",
-  "description": "Official Model Context Protocol (MCP) & Web API discovery manifest for Neal Frazier Tech (nealfrazier.tech), NullAI (nullai.tech), Zoth Studio (zoth.nullai.tech), and ZothOS Linux (zothos.nullai.tech).",
+  "description": "Official Model Context Protocol (MCP) & Web API discovery manifest for NullAI (nullai.tech), NullAI (nullai.tech), Zoth Studio (zoth.nullai.tech), and ZothOS Linux (zothos.nullai.tech).",
   "homepage": "https://zoth.nullai.tech",
   "author": {
-    "name": "Neal Frazier",
-    "email": "contact@nealfrazier.tech",
-    "url": "https://www.nealfrazier.tech"
+    "name": "1nc0gn30",
+    "email": "contact@nullai.tech",
+    "url": "https://nullai.tech"
   },
   "resources": [
     {

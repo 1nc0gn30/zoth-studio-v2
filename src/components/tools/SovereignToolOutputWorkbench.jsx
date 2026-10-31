@@ -378,7 +378,7 @@ ${tool?.pull || `npx @nullaitech/zoth run ${tool?.id || 'tool'}`} --json
 \`\`\`
 
 ---
-*Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform*`;
+*Engineered by 1nc0gn30 • NullAI Platform*`;
   }, [tool, sha256Hex, inputText, diagnostics]);
 
   const cliAndSdkSnippet = useMemo(() => {

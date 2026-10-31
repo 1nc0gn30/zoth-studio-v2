@@ -239,7 +239,7 @@ export default function ToolMotionShowcase({ tool, onReplayRouteIntro }) {
         end: 15.0,
         kicker: 'SCENE 06 · RESOLVE LOCKUP',
         headline: (tool?.name || 'Zoth Tool').toUpperCase(),
-        sub: `Engineered by Neal Frazier Tech (@1nc0gn30) • zoth.nullai.tech/tools/${tool?.id || ''}`,
+        sub: `Engineered by 1nc0gn30 • zoth.nullai.tech/tools/${tool?.id || ''}`,
       },
     ];
   }, [tool, meta]);

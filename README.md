@@ -475,6 +475,6 @@ zoth-studio-v2/
 
 ## License
 
-Copyright © 2026 Neal Frazier Tech / NullAI Platform. All rights reserved.  
-Engineered by Neal Frazier ([@1nc0gn30](https://github.com/1nc0gn30)).  
+Copyright © 2026 NullAI Platform. All rights reserved.  
+Engineered by 1nc0gn30 ([@1nc0gn30](https://github.com/1nc0gn30)).  
 Licensed under the [MIT License](LICENSE).

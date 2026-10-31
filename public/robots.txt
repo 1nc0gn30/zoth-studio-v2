@@ -1,5 +1,5 @@
 # Sovereign SEO, AEO & AI Agent Discovery Policy — https://zoth.nullai.tech
-# Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform
+# Engineered by 1nc0gn30 • NullAI Platform
 
 User-agent: *
 Allow: /

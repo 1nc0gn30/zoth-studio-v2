@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * zoth-cot — Chain of Thoughts CLI (Cryptographic Merkle Working Memory DAG)
- * Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform
+ * Engineered by 1nc0gn30 • NullAI Platform
  */
 const fs = require('fs');
 const path = require('path');

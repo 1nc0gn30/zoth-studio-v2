@@ -362,7 +362,7 @@ export default function NetlifyShowcaseDialog({ open, onClose }) {
 
       <DialogActions sx={{ p: 2, borderTop: `1px solid ${theme.palette.divider}` }}>
         <Typography variant="caption" sx={{ color: theme.palette.text.secondary, fontFamily: mono, mr: 'auto', fontSize: '0.68rem' }}>
-          Engineered by Neal Frazier Tech (@1nc0gn30) · NullAI Platform
+          Engineered by 1nc0gn30 · NullAI Platform
         </Typography>
         <Button onClick={onClose} sx={{ color: gold, fontWeight: 800, fontFamily: mono, fontSize: '0.78rem' }}>
           Close Enclave Deck

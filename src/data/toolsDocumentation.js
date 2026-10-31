@@ -835,7 +835,7 @@ export const toolsDocumentation = {
     aiAgentProtocol: {
       mcpTool: 'robots_txt_audit',
       description: 'Audit robots.txt directives and report crawler accessibility scores.',
-      cliExample: 'robots-audit scan https://nealfrazier.tech/robots.txt',
+      cliExample: 'robots-audit scan https://nullai.tech/robots.txt',
       inputSchema: {
         type: 'object',
         properties: {

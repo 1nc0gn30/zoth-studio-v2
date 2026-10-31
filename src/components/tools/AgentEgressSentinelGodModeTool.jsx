@@ -105,7 +105,7 @@ export default function AgentEgressSentinelGodModeTool() {
     const isMetadata = host.includes('169.254.169.254') || host.includes('metadata.google');
     const isAllowedDomain =
       !strictLoopbackOnly &&
-      (host.includes('github.com') || host.includes('nullai.tech') || host.includes('nealfrazier.tech'));
+      (host.includes('github.com') || host.includes('nullai.tech') || host.includes('nullai.tech'));
 
     let verdict = 'ALLOWED';
     let reason = 'Matched verified domain allowlist & payload entropy < 4.6 bits/byte';

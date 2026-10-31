@@ -327,7 +327,7 @@ export default function RealToolWorkspacePage() {
       `BAYER 4x4   : ░▒▓█▓▒░  REALITY=${reality?.id || 'aurum'} DENSITY=${realityParams?.density || 50}%`,
       `CLI / PULL  : ${tool.pull || `npx @nullaitech/zoth pull ${tool.id}`}`,
       `--------------------------------------------------------------------`,
-      `Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform`,
+      `Engineered by 1nc0gn30 • NullAI Platform`,
     ];
     const fontSize = 13;
     const lineHeight = 20;

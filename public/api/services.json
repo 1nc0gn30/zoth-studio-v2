@@ -1,7 +1,7 @@
 {
-  "provider": "Neal Frazier Tech & NullAI Platform",
-  "architect": "Neal Frazier (@1nc0gn30)",
-  "contactEmail": "contact@nealfrazier.tech",
+  "provider": "NullAI Platform",
+  "architect": "1nc0gn30",
+  "contactEmail": "contact@nullai.tech",
   "promoCode": {
     "code": "FOUNDER25",
     "discountPercent": 25
@@ -73,7 +73,7 @@
       "landingUrl": "https://1nc0gn30.github.io/solutions/custom-ai-swarm-997.html",
       "promoCode": "FOUNDER25 (25% off)",
       "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
-      "description": "Bespoke multi-agent AI workflow, custom Model Context Protocol (MCP) server for Claude/Cursor/Antigravity, autonomous lead/ops pipeline, or full-stack web application engineered by Neal Frazier Tech."
+      "description": "Bespoke multi-agent AI workflow, custom Model Context Protocol (MCP) server for Claude/Cursor/Antigravity, autonomous lead/ops pipeline, or full-stack web application engineered by NullAI."
     }
   ]
 }
