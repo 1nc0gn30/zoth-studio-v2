@@ -121,6 +121,12 @@
     <priority>0.70</priority>
   </url>
   <url>
+    <loc>https://zoth.nullai.tech/tools/pixel-cast</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://zoth.nullai.tech/tools/adytum-alchemist-ai-workflow</loc>
     <lastmod>2026-10-31</lastmod>
     <changefreq>weekly</changefreq>
