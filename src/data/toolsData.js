@@ -1288,17 +1288,23 @@ export const microTools = [
   },
   {
     id: 'zoth-scene-foundry',
-    published: false,
+    published: true,
     name: 'Zoth Scene Foundry',
     repo: 'zoth-scene-foundry',
     category: 'Media & 3D',
     executionType: 'browser',
     github: 'https://github.com/1nc0gn30/zoth-scene-foundry',
+    liveUrl: 'https://zoth.nullai.tech/tools/zoth-scene-foundry',
+    priceUsd: '0',
+    priceCents: 0,
+    stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
+    pricing: '100% Free & Open-Access',
+    depay: false,
     description: 'Procedural ZothOS-style ASCII + pixel-art scene engine — 1000 deterministic scenes with Bayer dither, tube palettes, and three.js AsciiEffect stage on :8823.',
     localPort: 8823,
-    localUrl: 'http://127.0.0.1:8823/gallery.html',
+    localUrl: 'http://127.0.0.1:8823',
     version: '1.0.0',
-    pull: 'cd ~/NullAITech/zoth-scene-foundry && python3 -m http.server 8823',
+    pull: 'cd ~/NullAITech/zoth-scene-foundry && python3 server.py --port 8823  # or: zoth-scene-foundry --status',
   }
 ];
 
