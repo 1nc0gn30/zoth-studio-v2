@@ -932,7 +932,7 @@ export const microTools = [
     localPort: 8129,
     localUrl: 'http://127.0.0.1:8129',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/cyber-turtle-studio.git && cd cyber-turtle-studio && python3 -m http.server 8129 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/cyber-turtle-studio.git && cd cyber-turtle-studio && python3 -m cyber_turtle_studio.cli serve --port 8129  # or: cyber-turtle-studio --status',
   },
   {
     id: 'datamosh-glitch-studio',

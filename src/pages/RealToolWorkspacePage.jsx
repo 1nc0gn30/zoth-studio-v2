@@ -59,6 +59,7 @@ import AgentGodsEyeGodModeTool from '../components/tools/AgentGodsEyeGodModeTool
 import AgentMockTwinGodModeTool from '../components/tools/AgentMockTwinGodModeTool';
 import AgentPolicyAuditorGodModeTool from '../components/tools/AgentPolicyAuditorGodModeTool';
 import AudioCipherGodModeTool from '../components/tools/AudioCipherGodModeTool';
+import CyberTurtleGodModeTool from '../components/tools/CyberTurtleGodModeTool';
 import CronRhythmGodModeTool from '../components/tools/CronRhythmGodModeTool';
 import EnvGuardVaultGodModeTool from '../components/tools/EnvGuardVaultGodModeTool';
 import HexStrikeGodModeTool from '../components/tools/HexStrikeGodModeTool';
@@ -184,7 +185,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'datamosh-glitch-studio': AsciiMotionGodModeTool,
   'nexus-3d-scene-studio': AsciiMotionGodModeTool,
   'ufo-sacred-geometry': AsciiMotionGodModeTool,
-  'cyber-turtle-studio': AsciiMotionGodModeTool,
+  'cyber-turtle-studio': CyberTurtleGodModeTool,
   'og-canvas-forge': AsciiMotionGodModeTool,
   'zoth-ascii-magic': AsciiMotionGodModeTool,
   'webmcp-protocol-inspector': WebMcpInspectorGodModeTool,
