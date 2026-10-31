@@ -966,11 +966,11 @@ export const microTools = [
     priceCents: 0,
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     depay: false,
-    description: '100% in-browser WebGL mathematical 3D geometry engine, 4D Tesseract, parametric surfaces, FastMCP server, procedural tesseract brand media, and precision OBJ/STL mesh exporters with dual Stripe + Solana rails.',
+    description: '100% in-browser WebGL mathematical 3D geometry engine, 4D Tesseract, parametric surfaces, FastMCP server, procedural tesseract brand media, and precision OBJ/STL mesh exporters with zero paywalls.',
     localPort: 8082,
     localUrl: 'http://127.0.0.1:8082',
     version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/nexus-3d-scene-studio.git && cd nexus-3d-scene-studio && python3 -m http.server 8082 --directory public',
+    pull: 'git clone https://github.com/1nc0gn30/nexus-3d-scene-studio.git && cd nexus-3d-scene-studio && python3 -m nexus_3d_scene_studio.cli serve --port 8082  # or: nexus-3d-scene-studio --status',
   },
   {
     id: 'ufo-sacred-geometry',
