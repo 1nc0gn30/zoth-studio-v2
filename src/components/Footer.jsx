@@ -29,15 +29,15 @@ export default function Footer() {
     { label: 'Byzantine Consensus Arena', to: '/consensus' },
     { label: 'Adytum Sanctum (22 Keys)', to: '/adytum' },
     { label: 'HexStrike Cybersec Terminal', to: '/hexstrike' },
-    { label: 'Zoth OS v3.3.0', to: '/zoth-os' },
+    { label: 'Zoth OS v3.4.0', to: '/zoth-os' },
     { label: '21 Swarm Pantheon', to: '/swarm' },
-    { label: 'Workstations Matrix (24)', to: '/workstations' },
+    { label: 'Workstations Matrix (43)', to: '/workstations' },
     { label: 'Sovereign Arsenal Hub', to: '/arsenal' },
   ];
 
   const toolsAndRepos = [
-    { label: 'Sovereign Arsenal (All)', to: '/arsenal' },
-    { label: 'Micro-Tools Registry (25)', to: '/tools' },
+    { label: 'Sovereign Arsenal (All 72)', to: '/arsenal' },
+    { label: 'Micro-Tools Registry (72)', to: '/tools' },
     { label: 'Enclave Bridges (IPC Mesh)', to: '/bridges' },
     { label: 'Zoth Studio v2 Repo', href: 'https://github.com/NullAITech/zoth-studio-v2', external: true },
     { label: 'NullAI Tech GitHub Org', href: 'https://github.com/NullAITech', external: true },

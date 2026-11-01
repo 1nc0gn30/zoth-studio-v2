@@ -343,7 +343,7 @@ export function CronRhythmGodModeTool() {
 
   const handleCopy = (text, key) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedKey(key);
       setTimeout(() => setCopiedKey(null), 2000);
     }

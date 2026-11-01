@@ -12,7 +12,7 @@
         |                                     |                                     |
         v                                     v                                     v
 +-------------------------------+  +-------------------------------+  +-------------------------------+
-|       43 WORKSTATIONS         |  |   71 STUDIO TOOLS (54 IN-BR.) |  |    LUCY COGNITIVE ORACLE      |
+|       43 WORKSTATIONS         |  |   72 STUDIO TOOLS (53 IN-BR.) |  |    LUCY COGNITIVE ORACLE      |
 |  - Multi-Agent DAG Composer   |  |  - JWT Inspector Guard        |  |  - Semantic Bus :8094         |
 |  - Brand Alchemical Seals     |  |  - Payload Entropy Studio     |  |  - STDP Synaptic Plasticity   |
 |  - Sovereign Code IDE         |  |  - Polyglot Exporter          |  |  - Whitespace 3D Constellation|
@@ -168,9 +168,9 @@ All components must satisfy the formal Zero-Egress Security Invariants:
 ## 4. Netlify Deployment & Machine-Readable Discovery
 
 - **Build Pipeline**: `npm run build` runs `vite build && node scripts/prerender.mjs`.
-- **72 Prerendered Static Routes**: Static HTML entry points pre-generated with route-specific `<title>`, Open Graph metadata, Schema.org JSON-LD, and `<noscript>` fallbacks.
+- **141 Prerendered Static Routes**: Static HTML entry points pre-generated with route-specific `<title>`, Open Graph metadata, Schema.org JSON-LD, and `<noscript>` fallbacks.
 - **Machine-Readable Discovery Endpoints**:
   - `/llms.txt`: Plain-text markdown fact sheet (< 5 KB) for LLM agents.
   - `/llms-full.txt`: Full architecture and knowledge graph for autonomous reasoning engines.
   - `/ai.txt`: Autonomous crawler policy allowing ethical grounding and indexing.
-  - `/sitemap.xml`: Complete inventory of all 72 static routes.
+  - `/sitemap.xml`: Complete inventory of all 141 static routes.

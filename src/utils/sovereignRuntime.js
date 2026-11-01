@@ -161,7 +161,7 @@ export function useSovereignRuntime() {
       runtimeMode = 'public_standard';
       badgeLabel = '100% FREE · OPEN ACCESS';
       badgeColor = '#10B981';
-      badgeTooltip = '100% Free & Open Access. All 71 interactive God-Mode Workstations unlocked in-browser.';
+      badgeTooltip = '100% Free & Open Access. All 72 interactive God-Mode Workstations unlocked in-browser.';
     }
   }
 

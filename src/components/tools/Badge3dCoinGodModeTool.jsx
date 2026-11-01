@@ -549,6 +549,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
   const rendererRef = useRef(null);
   const coinGroupRef = useRef(null);
   const animFrameIdRef = useRef(null);
+  const fallbackCanvasRef = useRef(null);
 
   // License detection
   useEffect(() => {
@@ -610,15 +611,52 @@ export default function Badge3dCoinGodModeTool({ tool }) {
     camera.position.set(0, 26, 46);
     camera.lookAt(0, 0, 0);
 
+    // Coin Group initialized unconditionally so STL & mass calculations always work
+    const coinGroup = new THREE.Group();
+    scene.add(coinGroup);
+    coinGroupRef.current = coinGroup;
+
+    // Check WebGL availability before initializing THREE.WebGLRenderer
+    const testCvs = document.createElement('canvas');
+    const gl = testCvs.getContext('webgl') || testCvs.getContext('experimental-webgl');
+    if (!gl) {
+      const fb = document.createElement('canvas');
+      fb.width = width;
+      fb.height = height;
+      fb.style.width = '100%';
+      fb.style.height = `${height}px`;
+      fb.style.display = 'block';
+      container.innerHTML = '';
+      container.appendChild(fb);
+      fallbackCanvasRef.current = fb;
+      return () => {
+        fallbackCanvasRef.current = null;
+      };
+    }
+
     // Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    rendererRef.current = renderer;
-    container.innerHTML = '';
-    container.appendChild(renderer.domElement);
+    let renderer = null;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      rendererRef.current = renderer;
+      container.innerHTML = '';
+      container.appendChild(renderer.domElement);
+    } catch (e) {
+      const fb = document.createElement('canvas');
+      fb.width = width;
+      fb.height = height;
+      fb.style.width = '100%';
+      fb.style.height = `${height}px`;
+      fb.style.display = 'block';
+      container.innerHTML = '';
+      container.appendChild(fb);
+      fallbackCanvasRef.current = fb;
+      return;
+    }
 
     // Studio Lighting Environment
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
@@ -636,11 +674,6 @@ export default function Badge3dCoinGodModeTool({ tool }) {
     const rimLight = new THREE.DirectionalLight(0xffffff, 1.6);
     rimLight.position.set(0, -32, -32);
     scene.add(rimLight);
-
-    // Coin Group
-    const coinGroup = new THREE.Group();
-    scene.add(coinGroup);
-    coinGroupRef.current = coinGroup;
 
     // Animation Loop
     let angle = 0;
@@ -795,6 +828,101 @@ export default function Badge3dCoinGodModeTool({ tool }) {
       });
     } catch (err) {}
 
+    // Render 2.5D PBR Metallic Coin onto fallbackCanvasRef if active
+    if (fallbackCanvasRef.current) {
+      const fb = fallbackCanvasRef.current;
+      const ctx = fb.getContext('2d');
+      if (ctx) {
+        const w = fb.width;
+        const h = fb.height;
+        ctx.fillStyle = isDark ? '#06070B' : '#F1F5F9';
+        ctx.fillRect(0, 0, w, h);
+
+        // Subtle CAD grid
+        ctx.strokeStyle = isDark ? 'rgba(212,175,55,0.08)' : 'rgba(15,23,42,0.06)';
+        ctx.lineWidth = 1;
+        for (let gx = 0; gx < w; gx += 28) {
+          ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, h); ctx.stroke();
+        }
+        for (let gy = 0; gy < h; gy += 28) {
+          ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(w, gy); ctx.stroke();
+        }
+
+        const cx = w / 2;
+        const cy = h / 2 - 8;
+        const R = Math.min(w, h) * 0.34 * (radius / 16);
+        const depthPx = Math.max(10, thickness * 4.2);
+        const hexColor = '#' + (matConfig.color || 0xffd700).toString(16).padStart(6, '0');
+
+        const tracePoly = (x, y, rad) => {
+          ctx.beginPath();
+          let sides = 0;
+          if (shape === 'hexagon') sides = 6;
+          else if (shape === 'octagon') sides = 8;
+          else if (shape === 'decagon') sides = 10;
+          else if (shape === 'dodecagon') sides = 12;
+          if (sides > 0) {
+            for (let i = 0; i < sides; i++) {
+              const a = (i / sides) * Math.PI * 2 - Math.PI / 2;
+              const px = x + Math.cos(a) * rad;
+              const py = y + Math.sin(a) * rad;
+              if (i === 0) ctx.moveTo(px, py);
+              else ctx.lineTo(px, py);
+            }
+            ctx.closePath();
+          } else {
+            ctx.arc(x, y, rad, 0, Math.PI * 2);
+          }
+        };
+
+        // Extruded rim stack
+        for (let d = depthPx; d >= 1; d -= 1.5) {
+          tracePoly(cx + d * 0.35, cy + d * 0.72, R);
+          ctx.fillStyle = d % 3 === 0 ? 'rgba(15, 23, 42, 0.85)' : hexColor;
+          ctx.fill();
+        }
+
+        // Main coin face
+        tracePoly(cx, cy, R);
+        const faceGrad = ctx.createRadialGradient(cx - R * 0.3, cy - R * 0.3, 12, cx, cy, R);
+        faceGrad.addColorStop(0, '#FFFFFF');
+        faceGrad.addColorStop(0.28, hexColor);
+        faceGrad.addColorStop(0.85, hexColor);
+        faceGrad.addColorStop(1, '#111827');
+        ctx.fillStyle = wireframe ? '#090D16' : faceGrad;
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = wireframe ? '#38BDF8' : hexColor;
+        ctx.stroke();
+
+        // Draw procedural bump/relief texture inside coin face
+        if (obverseTex && obverseTex.image && !wireframe) {
+          ctx.save();
+          tracePoly(cx, cy, R * 0.91);
+          ctx.clip();
+          ctx.globalAlpha = 0.82;
+          ctx.drawImage(obverseTex.image, cx - R * 0.91, cy - R * 0.91, R * 1.82, R * 1.82);
+          ctx.restore();
+        }
+
+        if (wireframe) {
+          ctx.strokeStyle = 'rgba(56, 189, 248, 0.55)';
+          ctx.lineWidth = 1;
+          [R * 0.3, R * 0.6, R * 0.88].forEach(rr => {
+            tracePoly(cx, cy, rr);
+            ctx.stroke();
+          });
+          for (let i = 0; i < 24; i++) {
+            const a = (i / 24) * Math.PI * 2;
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
   }, [materialKey, crestKey, shape, radius, thickness, serrations, obverseText, reverseText, wireframe, bumpScale, realityBot, realityAccent]);
 
   // Export 4K PNG Snapshot
@@ -911,7 +1039,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
             href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
             onClick={(e) => {
               if (navigator.clipboard) {
-                navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+                navigator.clipboard?.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK')?.catch?.(() => {});
               }
             }}
             sx={{

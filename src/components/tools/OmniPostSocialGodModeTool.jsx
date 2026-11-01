@@ -34,7 +34,7 @@ const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
 
 const DEFAULT_ESSAY = `Why modern AI agents fail in production: 90% of context bloat comes from unminified MCP tool schemas and cloud telemetry round-trips.
 
-We built Zoth Studio v2 and ZothOS v3.3.0 to run 62 sovereign developer tools 100% locally on 127.0.0.1 loopback sockets and WebGPU shaders.
+We built Zoth Studio v2 and ZothOS v3.4.0 to run 72 sovereign developer tools 100% locally on 127.0.0.1 loopback sockets and WebGPU shaders.
 
 1. Zero Cloud Egress: Every AST parser, Shannon entropy analyzer, and HNSW vector index runs directly inside your browser or bare-metal Linux enclave.
 
@@ -48,22 +48,7 @@ export default function OmniPostSocialGodModeTool() {
 
   const [rawContent, setRawContent] = useState(DEFAULT_ESSAY);
   const [platformTab, setPlatformTab] = useState(0); // 0: X Thread, 1: LinkedIn, 2: Bluesky, 3: MCP Payload
-  const [isPro, setIsPro] = useState(true);
-  const [paywallOpen, setPaywallOpen] = useState(false);
-  const [licenseInput, setLicenseInput] = useState('');
   const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('licensed') === 'true' || localStorage.getItem('omnipost_pro_active') === 'true' || localStorage.getItem('pro_licensed') === 'true') {
-        setIsPro(true);
-        localStorage.setItem('omnipost_pro_active', 'true');
-      }
-    } catch {
-      // ignore
-    }
-  }, []);
 
   // Real Client-Side Thread Splitter & Virality Scorer
   const analysis = useMemo(() => {
@@ -143,18 +128,8 @@ export default function OmniPostSocialGodModeTool() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleActivateLicense = () => {
-    if (licenseInput.trim().length >= 4) {
-      localStorage.setItem('omnipost_pro_active', 'true');
-      localStorage.setItem('pro_licensed', 'true');
-      setIsPro(true);
-      setPaywallOpen(false);
-    }
-  };
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      {/* Sales Funnel Banner */}
       <Paper
         elevation={0}
         sx={{
@@ -172,7 +147,7 @@ export default function OmniPostSocialGodModeTool() {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
           <Chip
             icon={<BoltIcon sx={{ color: '#08080B !important', fontSize: 16 }} />}
-            label={isPro ? '✦ 100% FREE & OPEN ACCESS' : '✦ 100% OPEN ACCESS'}
+            label="✦ 100% FREE & OPEN ACCESS"
             size="small"
             sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 900, fontFamily: mono }}
           />
@@ -180,29 +155,6 @@ export default function OmniPostSocialGodModeTool() {
             Algorithmic Thread Splitter, X/LinkedIn/Bluesky Virality Scorer & Multi-Channel JSON-RPC Dispatcher
           </Typography>
         </Box>
-        {!isPro && (
-          <Stack direction="row" spacing={1}>
-            <Button
-              size="small"
-              variant="contained"
-              href={STRIPE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.74rem' }}
-            >
-              ☕ Buy Us a Coffee (Stripe)
-            </Button>
-            <Button
-              size="small"
-              variant="outlined"
-              onClick={() => setPaywallOpen(true)}
-              startIcon={<VpnKeyIcon sx={{ fontSize: 14 }} />}
-              sx={{ borderColor: '#D4AF37', color: isDark ? '#F5E6AB' : '#8A6508', fontFamily: mono, fontSize: '0.72rem', fontWeight: 700 }}
-            >
-              Say Thanks
-            </Button>
-          </Stack>
-        )}
       </Paper>
 
       <SovereignEyebrow accent="#38BDF8" right="Automation">

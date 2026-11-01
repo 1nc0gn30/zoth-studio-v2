@@ -1281,6 +1281,1890 @@ export const toolsDocumentation = {
       'Interactive Web Radar Deck on port 8110 with live SSE transaction feed and test harness',
       'Zero external dependencies (100% Python standard library)'
     ]
+  },
+  "zoth-os": {
+      "whyUse": "Debian 13 + KDE Plasma 6.3 sovereign AI distro. Kali + Parrot parity, Studio v2, Ollama on 127.0.0.1, 163 MCP servers all off. Eight named virtual desktops; zoth-workspaces puts a Samsung / DP monitor on its own screen. Live users zoth / azoth / root password zoth. Built for human operators and autonomous AI agents requiring zero-egress swarm & core execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Zoth OS v3.4.0 workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "Sovereign local daemon & CLI workstation bound to 127.0.0.1:8137 with zero outbound telemetry and native ZothOS CLI binary (/usr/local/bin/zoth-os).",
+      "aiAgentProtocol": {
+          "mcpTool": "zoth_os_execute",
+          "description": "Execute Zoth OS v3.4.0 operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "zoth-os --help && zoth-os --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Zoth OS v3.4.0"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "zoth-os",
+              "port": 8137,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "zoth-os --help",
+          "zoth-os --json",
+          "zoth-os-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8137 or Studio route /tools/zoth-os"
+      ],
+      "features": [
+          "True Multi-Turn /api/chat Context Assembly \u2014 Injects pinned semantic facts + rolling 16-turn dialogue history into every model turn.",
+          "Instant Client Utility \u2014 AST linting, Web Crypto SHA-384 hashing, L-System generation, and DoH reconnaissance execute 100% in the browser.",
+          "Bridge Command \u2014 uvx --from git+https://github.com/LaurieWired/GhidraMCP ghidra-mcp --ghidra-server http://127.0.0.1:8080/",
+          "Zoth Studio Enclave \u2014 Paired with the interactive in-browser C pseudocode decompiler in GhidraMcpGodModeTool.jsx.",
+          "System CLI & MCP \u2014 /opt/zothos-ai-env/bin/shodan pre-initialized; MCP server running via @burtthecoder/mcp-shodan."
+      ]
+  },
+  "certpath-roadmap-studio": {
+      "whyUse": "100% in-browser certification DAG solver, career roadmap planner, and study guide generator with 137 credentials, procedural DAG brand media, and dual Stripe + Solana rails. Built for human operators and autonomous AI agents requiring zero-egress automation execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for CertPath Roadmap Studio workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Automation) with standalone loopback workstation on 127.0.0.1:8093 and ZothOS CLI wrapper (/usr/local/bin/certpath-roadmap-studio).",
+      "aiAgentProtocol": {
+          "mcpTool": "certpath_roadmap_studio_execute",
+          "description": "Execute CertPath Roadmap Studio operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "certpath-roadmap-studio --help && certpath-roadmap-studio --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on CertPath Roadmap Studio"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "certpath-roadmap-studio",
+              "port": 8093,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "certpath-roadmap-studio --help",
+          "certpath-roadmap-studio --json",
+          "certpath-roadmap-studio-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8093 or Studio route /tools/certpath-roadmap-studio"
+      ],
+      "features": [
+          "\ud83e\udd16 FastMCP Model Context Protocol Server \u2014 Direct stdio JSON-RPC 2.0 integration for Claude Desktop, Cursor, and Cline.",
+          "\ud83d\udee1\ufe0f 100% Pure Python Standard Library \u2014 Zero third-party runtime dependencies. Compatible with Python 3.9\u20133.13 across Linux, macOS, Windows, and Termux.",
+          "Pure Client Execution \u2014 100% in-browser AST & DAG traversal with zero broken cloud APIs or external backend requirements.",
+          "Console Errors \u2014 0 console errors across all test paths."
+      ]
+  },
+  "pwa-manifest-builder": {
+      "whyUse": "100% in-browser Progressive Web App manifest generator, ServiceWorker compiler, offline cache architect, and production PWA ZIP bundle exporter. Free to use; tips optional. Built for human operators and autonomous AI agents requiring zero-egress autonomous web execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for PWA Manifest Studio workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Autonomous Web) with standalone loopback workstation on 127.0.0.1:8100 and ZothOS CLI wrapper (/usr/local/bin/pwa-manifest-builder).",
+      "aiAgentProtocol": {
+          "mcpTool": "pwa_manifest_builder_execute",
+          "description": "Execute PWA Manifest Studio operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "pwa-manifest-builder --help && pwa-manifest-builder --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on PWA Manifest Studio"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "pwa-manifest-builder",
+              "port": 8100,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "pwa-manifest-builder --help",
+          "pwa-manifest-builder --json",
+          "pwa-manifest-builder-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8100 or Studio route /tools/pwa-manifest-builder"
+      ],
+      "features": [
+          "100% in-browser Progressive Web App manifest generator, ServiceWorker compiler, offline cache architect, and production PWA ZIP bundle exporter. Free to use; tips optional.",
+          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/pwa-manifest-builder) and standalone server on http://127.0.0.1:8100",
+          "Native ZothOS CLI binary (/usr/local/bin/pwa-manifest-builder) and 60fps Unicode U+2800 Braille TUI (pwa-manifest-builder-tui)",
+          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
+          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+      ]
+  },
+  "regex-droid-builder": {
+      "whyUse": "100% in-browser visual regular expression builder, AST breakdown, railroad vector diagrams, multi-language code generator, and static ReDoS vulnerability guardian. Free to use; tips optional. Built for human operators and autonomous AI agents requiring zero-egress automation execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Regex Droid Studio workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Automation) with standalone loopback workstation on 127.0.0.1:8101 and ZothOS CLI wrapper (/usr/local/bin/regex-droid-builder).",
+      "aiAgentProtocol": {
+          "mcpTool": "regex_droid_builder_execute",
+          "description": "Execute Regex Droid Studio operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "regex-droid-builder --help && regex-droid-builder --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Regex Droid Studio"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "regex-droid-builder",
+              "port": 8101,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "regex-droid-builder --help",
+          "regex-droid-builder --json",
+          "regex-droid-builder-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8101 or Studio route /tools/regex-droid-builder"
+      ],
+      "features": [
+          "AST Decomposition \u2014 Deconstructs any regex pattern into an Abstract Syntax Tree (AST) with plain-English token explanations.",
+          "Static ReDoS Audit \u2014 Detects catastrophic polynomial and exponential backtracking risks before production deployment.",
+          "Canonical DFA Minimization \u2014 Applies Hopcroft and Moore minimization algorithms to reduce state automata complexity.",
+          "Formal Verification \u2014 Verifies language equivalence and subset containment between two patterns with counterexample generation.",
+          "Multi-Language Code Generation \u2014 Emits copy-paste ready implementations in Python, JavaScript/TypeScript, Rust, Go, Java, and C#."
+      ]
+  },
+  "schema-illustrator-studio": {
+      "whyUse": "100% in-browser visual database ERD studio and schema transpiler (TypeScript, Pydantic, Prisma, SQL DDL, GraphQL). Free to use; tips optional. Built for human operators and autonomous AI agents requiring zero-egress autonomous web execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Schema Illustrator Studio workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Autonomous Web) with standalone loopback workstation on 127.0.0.1:8099 and ZothOS CLI wrapper (/usr/local/bin/schema-illustrator-studio).",
+      "aiAgentProtocol": {
+          "mcpTool": "schema_illustrator_studio_execute",
+          "description": "Execute Schema Illustrator Studio operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "schema-illustrator-studio --help && schema-illustrator-studio --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Schema Illustrator Studio"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "schema-illustrator-studio",
+              "port": 8099,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "schema-illustrator-studio --help",
+          "schema-illustrator-studio --json",
+          "schema-illustrator-studio-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8099 or Studio route /tools/schema-illustrator-studio"
+      ],
+      "features": [
+          "100% in-browser visual database ERD studio and schema transpiler (TypeScript, Pydantic, Prisma, SQL DDL, GraphQL). Free to use; tips optional.",
+          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/schema-illustrator-studio) and standalone server on http://127.0.0.1:8099",
+          "Native ZothOS CLI binary (/usr/local/bin/schema-illustrator-studio) and 60fps Unicode U+2800 Braille TUI (schema-illustrator-studio-tui)",
+          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
+          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+      ]
+  },
+  "zoth-webgen": {
+      "whyUse": "Simple 3-step static template & 1-click Netlify launcher on 127.0.0.1:8092. Pick a ready-made template, preview live, and export HTML/ZIP or deploy to Netlify. Built for human operators and autonomous AI agents requiring zero-egress autonomous web execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Zoth QuickSite Starter workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "Sovereign local daemon & CLI workstation bound to 127.0.0.1:8092 with zero outbound telemetry and native ZothOS CLI binary (/usr/local/bin/zoth-webgen).",
+      "aiAgentProtocol": {
+          "mcpTool": "zoth_webgen_execute",
+          "description": "Execute Zoth QuickSite Starter operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "zoth-webgen --help && zoth-webgen --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Zoth QuickSite Starter"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "zoth-webgen",
+              "port": 8092,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "zoth-webgen --help",
+          "zoth-webgen --json",
+          "zoth-webgen-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8092 or Studio route /tools/zoth-webgen"
+      ],
+      "features": [
+          "Simple 3-step static template & 1-click Netlify launcher on 127.0.0.1:8092. Pick a ready-made template, preview live, and export HTML/ZIP or deploy to Netlify.",
+          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/zoth-webgen) and standalone server on http://127.0.0.1:8092",
+          "Native ZothOS CLI binary (/usr/local/bin/zoth-webgen) and 60fps Unicode U+2800 Braille TUI (zoth-webgen-tui)",
+          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
+          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+      ]
+  },
+  "zoth-swarm-multiplexer": {
+      "whyUse": "21-terminal autonomous agent multiplexer daemon with hot-swappable AI harnesses, PWD control, and SSE telemetry. Built for human operators and autonomous AI agents requiring zero-egress swarm & core execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for 21-Agent Swarm Multiplexer workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "Sovereign local daemon & CLI workstation bound to 127.0.0.1:8141 with zero outbound telemetry and native ZothOS CLI binary (/usr/local/bin/zoth-swarm-multiplexer).",
+      "aiAgentProtocol": {
+          "mcpTool": "zoth_swarm_multiplexer_execute",
+          "description": "Execute 21-Agent Swarm Multiplexer operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "zoth-swarm-multiplexer --help && zoth-swarm-multiplexer --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on 21-Agent Swarm Multiplexer"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "zoth-swarm-multiplexer",
+              "port": 8141,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "zoth-swarm-multiplexer --help",
+          "zoth-swarm-multiplexer --json",
+          "zoth-swarm-multiplexer-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8141 or Studio route /tools/zoth-swarm-multiplexer"
+      ],
+      "features": [
+          "21 Pantheon Terminals \u2014 Concurrent live interactive terminal multiplexer with independent PWD contexts and process IDs.",
+          "Dynamic Model Routing \u2014 Direct instructions to Sonnet 3.7, DeepSeek R1, Qwen 2.5 Coder, Llama 3.3, or GPT-4.5 on the fly.",
+          "STDP Synaptic Memory Matrix \u2014 Bidirectional synchronization with neuro-memory-daemon (:8788) with live Long-Term Potentiation (LTP) synaptic reinforcement.",
+          "Real-Time Telemetry & SSE \u2014 Streams live execution logs and status transitions over Server-Sent Events (/stream).",
+          "- **Hermes Agent** (hermes-agent)"
+      ]
+  },
+  "agent-gods-eye": {
+      "whyUse": "Autonomous zero-dependency Shodan OSINT tactical radar, 3D kinetic planetary attack surface reconnaissance, and threat scoring. Built for human operators and autonomous AI agents requiring zero-egress security & recon execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Agent God's Eye workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Security & Recon) with standalone loopback workstation on 127.0.0.1:8112 and ZothOS CLI wrapper (/usr/local/bin/agent-gods-eye).",
+      "aiAgentProtocol": {
+          "mcpTool": "agent_gods_eye_execute",
+          "description": "Execute Agent God's Eye operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "agent-gods-eye --help && agent-gods-eye --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Agent God's Eye"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "agent-gods-eye",
+              "port": 8112,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "agent-gods-eye --help",
+          "agent-gods-eye --json",
+          "agent-gods-eye-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8112 or Studio route /tools/agent-gods-eye"
+      ],
+      "features": [
+          "Autonomous zero-dependency Shodan OSINT tactical radar, 3D kinetic planetary attack surface reconnaissance, and threat scoring.",
+          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/agent-gods-eye) and standalone server on http://127.0.0.1:8112",
+          "Native ZothOS CLI binary (/usr/local/bin/agent-gods-eye) and 60fps Unicode U+2800 Braille TUI (agent-gods-eye-tui)",
+          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
+          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+      ]
+  },
+  "shopify-connector": {
+      "whyUse": "Shopify GraphQL Admin API & POD sync engine with 1-click Etsy listing transpiler, net profit simulator, and Antigravity MCP suite. Built for human operators and autonomous AI agents requiring zero-egress commerce & mcp execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Shopify Connector workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Commerce & MCP) with standalone loopback workstation on 127.0.0.1:8113 and ZothOS CLI wrapper (/usr/local/bin/shopify-connector).",
+      "aiAgentProtocol": {
+          "mcpTool": "shopify_connector_execute",
+          "description": "Execute Shopify Connector operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "shopify-connector --help && shopify-connector --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Shopify Connector"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "shopify-connector",
+              "port": 8113,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "shopify-connector --help",
+          "shopify-connector --json",
+          "shopify-connector-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8113 or Studio route /tools/shopify-connector"
+      ],
+      "features": [
+          "Shopify GraphQL Admin API & POD sync engine with 1-click Etsy listing transpiler, net profit simulator, and Antigravity MCP suite.",
+          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/shopify-connector) and standalone server on http://127.0.0.1:8113",
+          "Native ZothOS CLI binary (/usr/local/bin/shopify-connector) and 60fps Unicode U+2800 Braille TUI (shopify-connector-tui)",
+          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
+          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+      ]
+  },
+  "printify-connector": {
+      "whyUse": "Autonomous zero-dependency Printify Open API v1 connector, 20% Premium margin calculator, artwork DPI auditor, and Antigravity MCP suite. Built for human operators and autonomous AI agents requiring zero-egress commerce & mcp execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Printify Connector workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Commerce & MCP) with standalone loopback workstation on 127.0.0.1:8115 and ZothOS CLI wrapper (/usr/local/bin/printify-connector).",
+      "aiAgentProtocol": {
+          "mcpTool": "printify_connector_execute",
+          "description": "Execute Printify Connector operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "printify-connector --help && printify-connector --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Printify Connector"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "printify-connector",
+              "port": 8115,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "printify-connector --help",
+          "printify-connector --json",
+          "printify-connector-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8115 or Studio route /tools/printify-connector"
+      ],
+      "features": [
+          "Autonomous zero-dependency Printify Open API v1 connector, 20% Premium margin calculator, artwork DPI auditor, and Antigravity MCP suite.",
+          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/printify-connector) and standalone server on http://127.0.0.1:8115",
+          "Native ZothOS CLI binary (/usr/local/bin/printify-connector) and 60fps Unicode U+2800 Braille TUI (printify-connector-tui)",
+          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
+          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+      ]
+  },
+  "gelato-connector": {
+      "whyUse": "Autonomous zero-dependency Gelato Open API v2 connector, localized 32-country print routing optimizer, multi-currency margin engine, and Antigravity MCP suite. Built for human operators and autonomous AI agents requiring zero-egress commerce & mcp execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Gelato Connector workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Commerce & MCP) with standalone loopback workstation on 127.0.0.1:8116 and ZothOS CLI wrapper (/usr/local/bin/gelato-connector).",
+      "aiAgentProtocol": {
+          "mcpTool": "gelato_connector_execute",
+          "description": "Execute Gelato Connector operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "gelato-connector --help && gelato-connector --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Gelato Connector"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "gelato-connector",
+              "port": 8116,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "gelato-connector --help",
+          "gelato-connector --json",
+          "gelato-connector-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8116 or Studio route /tools/gelato-connector"
+      ],
+      "features": [
+          "Zero Customs Duties & Tariffs \u2014 Eliminates European and UK import duties and VAT clearance delays by manufacturing directly within domestic trade borders.",
+          "Multi-Currency Margin Simulator \u2014 Full formula profit modeling across USD ($), EUR (\u20ac), and GBP (\u00a3) for Etsy, Shopify, and Direct transactions.",
+          "Museum-Grade Print Auditor \u2014 Validates image dimensions, 300+ DPI resolution, and bleed area tolerances (e.g. 3mm on Acrylic/Aluminum, 5mm on Wood Canvas).",
+          "100% Free & Open-Access \u2014 Zero paywalls, zero license locks, zero telemetry leaks."
+      ]
+  },
+  "agent-voice-call": {
+      "whyUse": "Autonomous sovereign real-time voice cockpit, live audio WebSocket streaming, multi-persona voice synthesizer, and zero-telemetry call protocol. Built for human operators and autonomous AI agents requiring zero-egress voice & real-time execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Agent Voice Call workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Voice & Real-Time) with standalone loopback workstation on 127.0.0.1:8114 and ZothOS CLI wrapper (/usr/local/bin/agent-voice-call).",
+      "aiAgentProtocol": {
+          "mcpTool": "agent_voice_call_execute",
+          "description": "Execute Agent Voice Call operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "agent-voice-call --help && agent-voice-call --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Agent Voice Call"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "agent-voice-call",
+              "port": 8114,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "agent-voice-call --help",
+          "agent-voice-call --json",
+          "agent-voice-call-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8114 or Studio route /tools/agent-voice-call"
+      ],
+      "features": [
+          "Kokoro TTS Engine Integration \u2014 Hardware-accelerated local text-to-speech synthesis running on port 9394 with natural speech rhythm and zero cloud telemetry.",
+          "WebSocket Audio Streaming \u2014 High-fidelity chunked audio streaming with live waveform spectrums and real-time STT transcripts.",
+          "1-Click Call Link Dispatcher \u2014 Generates instant secure calling links compatible with Signal, SimpleX, or standalone web browsers.",
+          "100% Free & Open-Access \u2014 Zero paywalls, zero license locks, zero telemetry leaks."
+      ]
+  },
+  "pod-smart-router": {
+      "whyUse": "Multi-channel POD order router dynamically comparing Printify (:8115) and Gelato (:8116) on landed cost, domestic proximity, delivery speed, and tariff avoidance. Built for human operators and autonomous AI agents requiring zero-egress commerce & mcp execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for POD Smart Router workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Commerce & MCP) with standalone loopback workstation on 127.0.0.1:8117 and ZothOS CLI wrapper (/usr/local/bin/pod-smart-router).",
+      "aiAgentProtocol": {
+          "mcpTool": "pod_smart_router_execute",
+          "description": "Execute POD Smart Router operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "pod-smart-router --help && pod-smart-router --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on POD Smart Router"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "pod-smart-router",
+              "port": 8117,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "pod-smart-router --help",
+          "pod-smart-router --json",
+          "pod-smart-router-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8117 or Studio route /tools/pod-smart-router"
+      ],
+      "features": [
+          "Multi-channel POD order router dynamically comparing Printify (:8115) and Gelato (:8116) on landed cost, domestic proximity, delivery speed, and tariff avoidance.",
+          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/pod-smart-router) and standalone server on http://127.0.0.1:8117",
+          "Native ZothOS CLI binary (/usr/local/bin/pod-smart-router) and 60fps Unicode U+2800 Braille TUI (pod-smart-router-tui)",
+          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
+          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+      ]
+  },
+  "digital-asset-forge": {
+      "whyUse": "High-Res 300 DPI multi-ratio wall art pack generator (2:3, 3:4, 4:5, 11:14, ISO) for Etsy & Shopify digital downloads (98% margin) with 20MB multi-zip splitting. Built for human operators and autonomous AI agents requiring zero-egress commerce & mcp execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Digital Asset Forge workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Commerce & MCP) with standalone loopback workstation on 127.0.0.1:8118 and ZothOS CLI wrapper (/usr/local/bin/digital-asset-forge).",
+      "aiAgentProtocol": {
+          "mcpTool": "digital_asset_forge_execute",
+          "description": "Execute Digital Asset Forge operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "digital-asset-forge --help && digital-asset-forge --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Digital Asset Forge"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "digital-asset-forge",
+              "port": 8118,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "digital-asset-forge --help",
+          "digital-asset-forge --json",
+          "digital-asset-forge-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8118 or Studio route /tools/digital-asset-forge"
+      ],
+      "features": [
+          "High-Res 300 DPI multi-ratio wall art pack generator (2:3, 3:4, 4:5, 11:14, ISO) for Etsy & Shopify digital downloads (98% margin) with 20MB multi-zip splitting.",
+          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/digital-asset-forge) and standalone server on http://127.0.0.1:8118",
+          "Native ZothOS CLI binary (/usr/local/bin/digital-asset-forge) and 60fps Unicode U+2800 Braille TUI (digital-asset-forge-tui)",
+          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
+          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+      ]
+  },
+  "pod-mockup-forge": {
+      "whyUse": "Autonomous photorealistic mockup studio with 60fps Lumen Matrix, fabric ink blending, and Etsy 2026 photo standards compliance auditor. Built for human operators and autonomous AI agents requiring zero-egress commerce & mcp execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for POD Mockup Forge workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Commerce & MCP) with standalone loopback workstation on 127.0.0.1:8119 and ZothOS CLI wrapper (/usr/local/bin/pod-mockup-forge).",
+      "aiAgentProtocol": {
+          "mcpTool": "pod_mockup_forge_execute",
+          "description": "Execute POD Mockup Forge operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "pod-mockup-forge --help && pod-mockup-forge --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on POD Mockup Forge"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "pod-mockup-forge",
+              "port": 8119,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "pod-mockup-forge --help",
+          "pod-mockup-forge --json",
+          "pod-mockup-forge-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8119 or Studio route /tools/pod-mockup-forge"
+      ],
+      "features": [
+          "Autonomous photorealistic mockup studio with 60fps Lumen Matrix, fabric ink blending, and Etsy 2026 photo standards compliance auditor.",
+          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/pod-mockup-forge) and standalone server on http://127.0.0.1:8119",
+          "Native ZothOS CLI binary (/usr/local/bin/pod-mockup-forge) and 60fps Unicode U+2800 Braille TUI (pod-mockup-forge-tui)",
+          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
+          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+      ]
+  },
+  "pod-margin-sentinel": {
+      "whyUse": "Autonomous real-time profit sentinel, break-even solver, and 2026 fee simulator across Etsy (Organic & 15% Ads), Shopify, and TikTok Shop. Built for human operators and autonomous AI agents requiring zero-egress commerce & mcp execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for POD Margin Sentinel workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Commerce & MCP) with standalone loopback workstation on 127.0.0.1:8120 and ZothOS CLI wrapper (/usr/local/bin/pod-margin-sentinel).",
+      "aiAgentProtocol": {
+          "mcpTool": "pod_margin_sentinel_execute",
+          "description": "Execute POD Margin Sentinel operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "pod-margin-sentinel --help && pod-margin-sentinel --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on POD Margin Sentinel"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "pod-margin-sentinel",
+              "port": 8120,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "pod-margin-sentinel --help",
+          "pod-margin-sentinel --json",
+          "pod-margin-sentinel-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8120 or Studio route /tools/pod-margin-sentinel"
+      ],
+      "features": [
+          "Autonomous real-time profit sentinel, break-even solver, and 2026 fee simulator across Etsy (Organic & 15% Ads), Shopify, and TikTok Shop.",
+          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/pod-margin-sentinel) and standalone server on http://127.0.0.1:8120",
+          "Native ZothOS CLI binary (/usr/local/bin/pod-margin-sentinel) and 60fps Unicode U+2800 Braille TUI (pod-margin-sentinel-tui)",
+          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
+          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+      ]
+  },
+  "audiocipher-stego-engine": {
+      "whyUse": "100% in-browser acoustic cryptography, PCM audio LSB steganography, DTMF Goertzel decoder, ITU Morse synthesizer, and ultrasonic BFSK air-gap modem. Built for human operators and autonomous AI agents requiring zero-egress security & opsec execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for AudioCipher Stego Studio workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Security & OpSec) with standalone loopback workstation on 127.0.0.1:8096 and ZothOS CLI wrapper (/usr/local/bin/audiocipher-stego-engine).",
+      "aiAgentProtocol": {
+          "mcpTool": "audiocipher_stego_engine_execute",
+          "description": "Execute AudioCipher Stego Studio operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "audiocipher-stego-engine --help && audiocipher-stego-engine --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on AudioCipher Stego Studio"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "audiocipher-stego-engine",
+              "port": 8096,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "audiocipher-stego-engine --help",
+          "audiocipher-stego-engine --json",
+          "audiocipher-stego-engine-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8096 or Studio route /tools/audiocipher-stego-engine"
+      ],
+      "features": [
+          "100% in-browser acoustic cryptography, PCM audio LSB steganography, DTMF Goertzel decoder, ITU Morse synthesizer, and ultrasonic BFSK air-gap modem.",
+          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/audiocipher-stego-engine) and standalone server on http://127.0.0.1:8096",
+          "Native ZothOS CLI binary (/usr/local/bin/audiocipher-stego-engine) and 60fps Unicode U+2800 Braille TUI (audiocipher-stego-engine-tui)",
+          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
+          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+      ]
+  },
+  "cyber-turtle-studio": {
+      "whyUse": "100% in-browser L-System fractal synthesizer, turtle geometry studio, and physical CNC pen-plotter G-Code and SVG vector exporter. Free to use; tips optional. Built for human operators and autonomous AI agents requiring zero-egress media & 3d execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Cyber Turtle Studio workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Media & 3D) with standalone loopback workstation on 127.0.0.1:8129 and ZothOS CLI wrapper (/usr/local/bin/cyber-turtle-studio).",
+      "aiAgentProtocol": {
+          "mcpTool": "cyber_turtle_studio_execute",
+          "description": "Execute Cyber Turtle Studio operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "cyber-turtle-studio --help && cyber-turtle-studio --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Cyber Turtle Studio"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "cyber-turtle-studio",
+              "port": 8129,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "cyber-turtle-studio --help",
+          "cyber-turtle-studio --json",
+          "cyber-turtle-studio-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8129 or Studio route /tools/cyber-turtle-studio"
+      ],
+      "features": [
+          "Zero Runtime Dependencies \u2014 100% Pure Python standard library implementation compatible with Python 3.9 through 3.13 on Linux, macOS, Windows, and Termux.",
+          "Multi-Format Exporters \u2014 ",
+          "High-Resolution Terminal Braille \u2014 2x4 subpixel Unicode Braille matrix rendering (U+2800..U+28FF) with 24-bit TrueColor ANSI styling.",
+          "Movement \u2014 fd <dist>, bk <dist>, goto <x> <y>",
+          "Rotation \u2014 rt <angle_deg>, lt <angle_deg>, setheading <deg>"
+      ]
+  },
+  "datamosh-glitch-studio": {
+      "whyUse": "100% in-browser parametric video datamosh synthesizer, H.264 I-frame drop corruption, CRT scanlines, procedural cassette brand media, and live camera mosh buffer with zero paywalls. Built for human operators and autonomous AI agents requiring zero-egress media & 3d execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Datamosh Glitch Studio workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Media & 3D) with standalone loopback workstation on 127.0.0.1:8081 and ZothOS CLI wrapper (/usr/local/bin/datamosh-glitch-studio).",
+      "aiAgentProtocol": {
+          "mcpTool": "datamosh_glitch_studio_execute",
+          "description": "Execute Datamosh Glitch Studio operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "datamosh-glitch-studio --help && datamosh-glitch-studio --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Datamosh Glitch Studio"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "datamosh-glitch-studio",
+              "port": 8081,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "datamosh-glitch-studio --help",
+          "datamosh-glitch-studio --json",
+          "datamosh-glitch-studio-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8081 or Studio route /tools/datamosh-glitch-studio"
+      ],
+      "features": [
+          "100% in-browser parametric video datamosh synthesizer, H.264 I-frame drop corruption, CRT scanlines, procedural cassette brand media, and live camera mosh buffer with zero paywalls.",
+          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/datamosh-glitch-studio) and standalone server on http://127.0.0.1:8081",
+          "Native ZothOS CLI binary (/usr/local/bin/datamosh-glitch-studio) and 60fps Unicode U+2800 Braille TUI (datamosh-glitch-studio-tui)",
+          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
+          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+      ]
+  },
+  "nexus-3d-scene-studio": {
+      "whyUse": "100% in-browser WebGL mathematical 3D geometry engine, 4D Tesseract, parametric surfaces, FastMCP server, procedural tesseract brand media, and precision OBJ/STL mesh exporters with zero paywalls. Built for human operators and autonomous AI agents requiring zero-egress media & 3d execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Nexus 3D Scene Studio workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Media & 3D) with standalone loopback workstation on 127.0.0.1:8082 and ZothOS CLI wrapper (/usr/local/bin/nexus-3d-scene-studio).",
+      "aiAgentProtocol": {
+          "mcpTool": "nexus_3d_scene_studio_execute",
+          "description": "Execute Nexus 3D Scene Studio operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "nexus-3d-scene-studio --help && nexus-3d-scene-studio --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Nexus 3D Scene Studio"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "nexus-3d-scene-studio",
+              "port": 8082,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "nexus-3d-scene-studio --help",
+          "nexus-3d-scene-studio --json",
+          "nexus-3d-scene-studio-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8082 or Studio route /tools/nexus-3d-scene-studio"
+      ],
+      "features": [
+          "100% in-browser WebGL mathematical 3D geometry engine, 4D Tesseract, parametric surfaces, FastMCP server, procedural tesseract brand media, and precision OBJ/STL mesh exporters with zero paywalls.",
+          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/nexus-3d-scene-studio) and standalone server on http://127.0.0.1:8082",
+          "Native ZothOS CLI binary (/usr/local/bin/nexus-3d-scene-studio) and 60fps Unicode U+2800 Braille TUI (nexus-3d-scene-studio-tui)",
+          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
+          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+      ]
+  },
+  "ufo-sacred-geometry": {
+      "whyUse": "100% in-browser sacred geometry synthesizer, crop circle agro-glyph CAD generator, procedural Metatron brand media, and AutoCAD DXF, Wavefront OBJ, and vector SVG exporter with dual Stripe + Solana rails. Built for human operators and autonomous AI agents requiring zero-egress media & 3d execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for UFO Sacred Geometry Studio workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Media & 3D) with standalone loopback workstation on 127.0.0.1:8083 and ZothOS CLI wrapper (/usr/local/bin/ufo-sacred-geometry).",
+      "aiAgentProtocol": {
+          "mcpTool": "ufo_sacred_geometry_execute",
+          "description": "Execute UFO Sacred Geometry Studio operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "ufo-sacred-geometry --help && ufo-sacred-geometry --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on UFO Sacred Geometry Studio"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "ufo-sacred-geometry",
+              "port": 8083,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "ufo-sacred-geometry --help",
+          "ufo-sacred-geometry --json",
+          "ufo-sacred-geometry-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8083 or Studio route /tools/ufo-sacred-geometry"
+      ],
+      "features": [
+          "Pure Python 3 Standard Library \u2014 Zero third-party runtime dependencies (math, json, dataclasses, http.server, urllib, pathlib).",
+          "Multi-Format CAD / CAM Exporters \u2014 ",
+          "SVG \u2014 Vector graphics with glowing neon drop-shadow filters (feGaussianBlur), layer groups (<g id=\"...\">), and 6 color themes.",
+          "JSON AST \u2014 Serialized node tree with bounding boxes, layer styles, and parameters.",
+          "Golden Ratio ($\\Phi$) \u2014 "
+      ]
+  },
+  "likeness-desk": {
+      "whyUse": "Local video double on GPU; Chatterbox Turbo voice cloning and Wav2Lip photorealistic mouth animation on Quadro P1000 with zero cloud leakage. Built for human operators and autonomous AI agents requiring zero-egress voice & real-time execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Likeness Desk (AI Video Double) workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "Sovereign local daemon & CLI workstation bound to 127.0.0.1:9395 with zero outbound telemetry and native ZothOS CLI binary (/usr/local/bin/likeness-desk).",
+      "aiAgentProtocol": {
+          "mcpTool": "likeness_desk_execute",
+          "description": "Execute Likeness Desk (AI Video Double) operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "likeness-desk --help && likeness-desk --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Likeness Desk (AI Video Double)"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "likeness-desk",
+              "port": 9395,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "likeness-desk --help",
+          "likeness-desk --json",
+          "likeness-desk-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:9395 or Studio route /tools/likeness-desk"
+      ],
+      "features": [
+          "- **100% Zero-Egress Client & Local Enclave Execution**",
+          "- **Real-Time Interactive Telemetry & AST Verification**",
+          "- **Native Zoth Studio v2 & ZothOS v3.4 Integration**",
+          "Zero-Egress Sovereign Guarantee \u2014 Executes locally in-browser or on your loopback enclave (127.0.0.1:9395) with zero cloud telemetry.",
+          "Triple-Viewport Responsive UI \u2014 Verified across Mobile (375px), Tablet (768px), and Desktop (1280px+) viewports."
+      ]
+  },
+  "osint-scout-skill": {
+      "whyUse": "100% in-browser passive domain intelligence & attack surface reconnaissance engine auditing Certificate Transparency logs, DoH DNS records, and SPF/DMARC posture \u2014 free to use; optional tips welcome. Built for human operators and autonomous AI agents requiring zero-egress security & recon execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Domain Intel OSINT Scout workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Security & Recon) with standalone loopback workstation on 127.0.0.1:8085 and ZothOS CLI wrapper (/usr/local/bin/osint-scout-skill).",
+      "aiAgentProtocol": {
+          "mcpTool": "osint_scout_skill_execute",
+          "description": "Execute Domain Intel OSINT Scout operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "osint-scout-skill --help && osint-scout-skill --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Domain Intel OSINT Scout"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "osint-scout-skill",
+              "port": 8085,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "osint-scout-skill --help",
+          "osint-scout-skill --json",
+          "osint-scout-skill-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8085 or Studio route /tools/osint-scout-skill"
+      ],
+      "features": [
+          "100% in-browser passive domain intelligence & attack surface reconnaissance engine auditing Certificate Transparency logs, DoH DNS records, and SPF/DMARC posture \u2014 free to use; optional tips welcome.",
+          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/osint-scout-skill) and standalone server on http://127.0.0.1:8085",
+          "Native ZothOS CLI binary (/usr/local/bin/osint-scout-skill) and 60fps Unicode U+2800 Braille TUI (osint-scout-skill-tui)",
+          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
+          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+      ]
+  },
+  "bolt.diy": {
+      "whyUse": "Flagship Full-Stack AI Web & Motion Architect on 127.0.0.1:5173. Supports 23+ AI providers, local CLI agents (AGY, Hermes, Grok, Claude, OpenCode, Cline, Aider), 6 Motion Edit templates, 200k+ free SVG & 16-bit Pixel Art icons, MCP asset bridge, and live WebContainers. Built for human operators and autonomous AI agents requiring zero-egress autonomous web execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Zoth Bolt workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "Sovereign local daemon & CLI workstation bound to 127.0.0.1:5173 with zero outbound telemetry and native ZothOS CLI binary (/usr/local/bin/bolt.diy).",
+      "aiAgentProtocol": {
+          "mcpTool": "bolt_diy_execute",
+          "description": "Execute Zoth Bolt operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "bolt.diy --help && bolt.diy --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Zoth Bolt"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "bolt.diy",
+              "port": 5173,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "bolt.diy --help",
+          "bolt.diy --json",
+          "bolt.diy-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:5173 or Studio route /tools/bolt.diy"
+      ],
+      "features": [
+          "Local Model Servers \u2014 Ollama (127.0.0.1:11434), LM Studio, OpenAI-like local endpoints.",
+          "Local Sovereign CLI Agents (ZothLocal Provider) \u2014 ",
+          "Live Iconify Search \u2014 200,000+ free SVG icons across pixelarticons, lucide, ph, game-icons, and simple-icons",
+          "Built-In 16x16 Pixel Art SVGs \u2014 Sovereign Crown, Golden Bolt, Aegis Shield, Pixel Potion, Relic Blade, Autonomous Bot, Emerald Gem, Pixel Flame",
+          "Multi-Layer Vector Crests \u2014 Alchemical Hex-Core, Botanical Emerald Seal, Nocturnal Velvet Crest, Isometric Compute Cube"
+      ]
+  },
+  "zoth-civilization": {
+      "whyUse": "The living heart of the 21-agent society. Runs the GameBoy pixel world simulation, Adytum Initiation Deck, and meditation art catalog. Built for human operators and autonomous AI agents requiring zero-egress swarm & core execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Zoth Civilization Hub workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "Sovereign local daemon & CLI workstation bound to 127.0.0.1:9393 with zero outbound telemetry and native ZothOS CLI binary (/usr/local/bin/zoth-civilization).",
+      "aiAgentProtocol": {
+          "mcpTool": "zoth_civilization_execute",
+          "description": "Execute Zoth Civilization Hub operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "zoth-civilization --help && zoth-civilization --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Zoth Civilization Hub"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "zoth-civilization",
+              "port": 9393,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "zoth-civilization --help",
+          "zoth-civilization --json",
+          "zoth-civilization-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:9393 or Studio route /tools/zoth-civilization"
+      ],
+      "features": [
+          "Video Showreel (MP4) \u2014 public/assets/zoth-civilization-motion-edit.mp4(public/assets/zoth-civilization-motion-edit.mp4)",
+          "Video Showreel (WebM) \u2014 public/assets/zoth-civilization-motion-edit.webm(public/assets/zoth-civilization-motion-edit.webm)",
+          "Motion Graphics Blueprint & Prompt \u2014 prompts/motion_graphics_showreel.md(prompts/motion_graphics_showreel.md)",
+          "* **Websites & Frontend UIs** $\\rightarrow$ Alchemical Villas, Houses, and Palaces.",
+          "* **CLI Engines, AST Parsers & Refactors** $\\rightarrow$ Blacksmith Foundries and Workshops."
+      ]
+  },
+  "storefront-catalog": {
+      "whyUse": "10 master Etsy Print-on-Demand products optimized for 55+ demographic with 62.6% blended profit margin, 13/13 tag sets, and 100% free & open-access with optional Buy Us a Coffee & Solana tip support. Built for human operators and autonomous AI agents requiring zero-egress commerce & pod execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for YourDigitalSpace POD Showcase workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "Sovereign local daemon & CLI workstation bound to 127.0.0.1:8143 with zero outbound telemetry and native ZothOS CLI binary (/usr/local/bin/storefront-catalog).",
+      "aiAgentProtocol": {
+          "mcpTool": "storefront_catalog_execute",
+          "description": "Execute YourDigitalSpace POD Showcase operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "storefront-catalog --help && storefront-catalog --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on YourDigitalSpace POD Showcase"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "storefront-catalog",
+              "port": 8143,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "storefront-catalog --help",
+          "storefront-catalog --json",
+          "storefront-catalog-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8143 or Studio route /tools/storefront-catalog"
+      ],
+      "features": [
+          "10 Verified Etsy POD Products \u2014 Complete titles, 13/13 long-tail SEO tag sets, pricing matrices, and copy blocks.",
+          "300 DPI Print Canvases & Mockups \u2014 Transparent print-ready artwork and photorealistic mockups.",
+          "Direct Printify API Payloads \u2014 1-click JSON payloads ready for Printify API or the Zoth Etsy Connector MCP bridge.",
+          "Interactive Financial Engine \u2014 Real-time margin calculator projecting daily orders, monthly gross, and horizon to $100K net.",
+          "100% Free & Open-Access \u2014 Zero paywalls, zero license modals, zero blur locks."
+      ]
+  },
+  "shodan-surface-sentinel": {
+      "whyUse": "Zero-egress defensive asset auditor and InternetDB engine. Inspects open ports, CPE software stacks, and confirmed CVE exposures for your infrastructure. Built for human operators and autonomous AI agents requiring zero-egress security & enclave execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Shodan Attack Surface Sentinel workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "Sovereign local daemon & CLI workstation bound to 127.0.0.1:8130 with zero outbound telemetry and native ZothOS CLI binary (/usr/local/bin/shodan-surface-sentinel).",
+      "aiAgentProtocol": {
+          "mcpTool": "shodan_surface_sentinel_execute",
+          "description": "Execute Shodan Attack Surface Sentinel operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "shodan-surface-sentinel --help && shodan-surface-sentinel --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Shodan Attack Surface Sentinel"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "shodan-surface-sentinel",
+              "port": 8130,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "shodan-surface-sentinel --help",
+          "shodan-surface-sentinel --json",
+          "shodan-surface-sentinel-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8130 or Studio route /tools/shodan-surface-sentinel"
+      ],
+      "features": [
+          "InternetDB Exposure Audit \u2014 Passively queries Shodan InternetDB with zero intrusive scanning or active probing packets.",
+          "Port & Service Fingerprinting \u2014 Identifies open edge ports and maps recognized services (SSH, HTTP, HTTPS, FastCGI, Docker, Ollama-AI).",
+          "CPE Component Mapping \u2014 Extracts Common Platform Enumeration (CPE) software stacks to isolate vulnerable legacy software.",
+          "Confirmed CVE Exposure Detection \u2014 Cross-references open ports and components with verified CVE vulnerability lists.",
+          "Local Enclave Inspection \u2014 Safely inspects loopback addresses (127.0.0.1) and private RFC1918 networks."
+      ]
+  },
+  "ghidra-mcp-bridge": {
+      "whyUse": "LaurieWired Ghidra Model Context Protocol bridge for autonomous binary decompilation, AST method analysis, and project variable annotation. Built for human operators and autonomous AI agents requiring zero-egress security & enclave execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for GhidraMCP Binary Reverse Engineering Bridge workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "Sovereign local daemon & CLI workstation bound to 127.0.0.1:8131 with zero outbound telemetry and native ZothOS CLI binary (/usr/local/bin/ghidra-mcp-bridge).",
+      "aiAgentProtocol": {
+          "mcpTool": "ghidra_mcp_bridge_execute",
+          "description": "Execute GhidraMCP Binary Reverse Engineering Bridge operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "ghidra-mcp-bridge --help && ghidra-mcp-bridge --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on GhidraMCP Binary Reverse Engineering Bridge"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "ghidra-mcp-bridge",
+              "port": 8131,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "ghidra-mcp-bridge --help",
+          "ghidra-mcp-bridge --json",
+          "ghidra-mcp-bridge-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8131 or Studio route /tools/ghidra-mcp-bridge"
+      ],
+      "features": [
+          "Autonomous Decompilation \u2014 Exposes NSA Ghidra decompiler engine to LLMs and autonomous coding agents with zero cloud egress.",
+          "AST Method & Symbol Inspection \u2014 Enumerates functions, data sections, and cross-references (XREFs) across x86_64, ARM, and MIPS binaries.",
+          "Variable & Stack Annotation \u2014 Real-time renaming of decompiled variables and types directly synchronized back to Ghidra project files.",
+          "Dual-Pane Workstation \u2014 Side-by-side native assembly instruction streams and syntax-highlighted C pseudocode.",
+          "JSON-RPC 2.0 MCP Protocol \u2014 Native compatibility with Claude Code, Cursor, AGY, and Zoth Studio agents."
+      ]
+  },
+  "zoth-ascii-magic": {
+      "whyUse": "100% client-side Image/Video/3D-to-ASCII & Sub-Pixel Unicode Braille studio with Sobel directional edge detection (/\\\\|-), interactive 2D point relighting, CRT phosphor bloom, and 24-bit TrueColor ANSI/HTML/SVG exports. Built for human operators and autonomous AI agents requiring zero-egress media & 3d execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Zoth ASCII Magic Studio workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Media & 3D) with standalone loopback workstation on 127.0.0.1:8132 and ZothOS CLI wrapper (/usr/local/bin/zoth-ascii-magic).",
+      "aiAgentProtocol": {
+          "mcpTool": "zoth_ascii_magic_execute",
+          "description": "Execute Zoth ASCII Magic Studio operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "zoth-ascii-magic --help && zoth-ascii-magic --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Zoth ASCII Magic Studio"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "zoth-ascii-magic",
+              "port": 8132,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "zoth-ascii-magic --help",
+          "zoth-ascii-magic --json",
+          "zoth-ascii-magic-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8132 or Studio route /tools/zoth-ascii-magic"
+      ],
+      "features": [
+          "Ordered Bayer Dithering \u2014 Bayer 4\u00d74 and 8\u00d78 dither matrices for silky 1-bit or multi-level luminance gradients.",
+          "Sub-Pixel 2\u00d74 Unicode Braille \u2014 Dense sub-pixel packing into Unicode Braille space (U+2800 to U+28FF).",
+          "Directional Sobel Edge Contours \u2014 Real-time convolution filter calculating luminance gradients and injecting contour glyphs (/, \\, |, -).",
+          "Interactive 2D Point Relighting \u2014 Dynamic drag-and-drop light source with real-time specular highlights and rim lighting.",
+          "Full Spectrum CRT Phosphors \u2014 Sovereign Gold, Amber P3, Emerald P1, Cyber Cyan, Ghost Crimson, and Quantum Neon tubes."
+      ]
+  },
+  "yara-sigma-forge": {
+      "whyUse": "100% client-side YARA-X & Sigma threat detection compiler with 60fps byte-offset entropy radar, CVE-2024-4577 PHP-CGI / ELF64 memfd / AI Agent exfil signatures, and MITRE ATT&CK mapping. Built for human operators and autonomous AI agents requiring zero-egress security & recon execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for YARA-X & Sigma Threat Rule Forge workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Security & Recon) with standalone loopback workstation on 127.0.0.1:8133 and ZothOS CLI wrapper (/usr/local/bin/yara-sigma-forge).",
+      "aiAgentProtocol": {
+          "mcpTool": "yara_sigma_forge_execute",
+          "description": "Execute YARA-X & Sigma Threat Rule Forge operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "yara-sigma-forge --help && yara-sigma-forge --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on YARA-X & Sigma Threat Rule Forge"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "yara-sigma-forge",
+              "port": 8133,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "yara-sigma-forge --help",
+          "yara-sigma-forge --json",
+          "yara-sigma-forge-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8133 or Studio route /tools/yara-sigma-forge"
+      ],
+      "features": [
+          "100% client-side YARA-X & Sigma threat detection compiler with 60fps byte-offset entropy radar, CVE-2024-4577 PHP-CGI / ELF64 memfd / AI Agent exfil signatures, and MITRE ATT&CK mapping.",
+          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/yara-sigma-forge) and standalone server on http://127.0.0.1:8133",
+          "Native ZothOS CLI binary (/usr/local/bin/yara-sigma-forge) and 60fps Unicode U+2800 Braille TUI (yara-sigma-forge-tui)",
+          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
+          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+      ]
+  },
+  "reality-shader-forge": {
+      "whyUse": "Interactive 60fps Reality Switch shader synthesizer and ZothOS desktop theme compiler. Customize the 5 Zoth Realities, preview Zoth Bot companions, and export KDE Plasma .colors, Alacritty .toml, and CSS tokens. Built for human operators and autonomous AI agents requiring zero-egress media & 3d execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Zoth Reality Shader & Theme Forge workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Media & 3D) with standalone loopback workstation on 127.0.0.1:8134 and ZothOS CLI wrapper (/usr/local/bin/reality-shader-forge).",
+      "aiAgentProtocol": {
+          "mcpTool": "reality_shader_forge_execute",
+          "description": "Execute Zoth Reality Shader & Theme Forge operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "reality-shader-forge --help && reality-shader-forge --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Zoth Reality Shader & Theme Forge"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "reality-shader-forge",
+              "port": 8134,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "reality-shader-forge --help",
+          "reality-shader-forge --json",
+          "reality-shader-forge-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8134 or Studio route /tools/reality-shader-forge"
+      ],
+      "features": [
+          "Interactive 60fps Reality Switch shader synthesizer and ZothOS desktop theme compiler. Customize the 5 Zoth Realities, preview Zoth Bot companions, and export KDE Plasma .colors, Alacritty .toml, and CSS tokens.",
+          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/reality-shader-forge) and standalone server on http://127.0.0.1:8134",
+          "Native ZothOS CLI binary (/usr/local/bin/reality-shader-forge) and 60fps Unicode U+2800 Braille TUI (reality-shader-forge-tui)",
+          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
+          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+      ]
+  },
+  "producthunt-connector": {
+      "whyUse": "Local Zoth OS cockpit that diffs the ZOTHOS Product Hunt listing against live website/GitHub URLs, surfaces votes/ranks/comments, and serves a loopback dashboard on :8139. Token stays in ~/.config/zothos/producthunt.secret.json. Built for human operators and autonomous AI agents requiring zero-egress commerce & pod execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Product Hunt Connector (zoth-ph) workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "Sovereign local daemon & CLI workstation bound to 127.0.0.1:8139 with zero outbound telemetry and native ZothOS CLI binary (/usr/local/bin/producthunt-connector).",
+      "aiAgentProtocol": {
+          "mcpTool": "producthunt_connector_execute",
+          "description": "Execute Product Hunt Connector (zoth-ph) operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "producthunt-connector --help && producthunt-connector --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Product Hunt Connector (zoth-ph)"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "producthunt-connector",
+              "port": 8139,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "producthunt-connector --help",
+          "producthunt-connector --json",
+          "producthunt-connector-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8139 or Studio route /tools/producthunt-connector"
+      ],
+      "features": [
+          "Zero-Egress Security Model \u2014 Read-only listing verification. It never auto-posts comments, upvotes, or modifies live accounts.",
+          "URL Drift Sentinel \u2014 Detects discrepancies between desired canonical domains (zothos.nullai.tech, GitHub release tags) and the Product Hunt public listing.",
+          "Real-Time Telemetry \u2014 Surfaces live upvote counts, comments, review sentiment, and weekly/monthly ranks.",
+          "Official Badge Generation \u2014 Generates embeddable light/dark featured and review badge markup.",
+          "Local Web Cockpit \u2014 In-browser control panel on port :8139 for reviewing telemetry and comments."
+      ]
+  },
+  "zoth-relay": {
+      "whyUse": "Hardened local MCP/HTTP bridge so many AI agents share one ZothOS machine with per-agent tokens, path sandbox, command blocklist, rate limits, and audit trail on 127.0.0.1:8765. Built for human operators and autonomous AI agents requiring zero-egress swarm & core execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Zoth Relay (MCP Agent Bridge) workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "Sovereign local daemon & CLI workstation bound to 127.0.0.1:8765 with zero outbound telemetry and native ZothOS CLI binary (/usr/local/bin/zoth-relay).",
+      "aiAgentProtocol": {
+          "mcpTool": "zoth_relay_execute",
+          "description": "Execute Zoth Relay (MCP Agent Bridge) operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "zoth-relay --help && zoth-relay --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Zoth Relay (MCP Agent Bridge)"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "zoth-relay",
+              "port": 8765,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "zoth-relay --help",
+          "zoth-relay --json",
+          "zoth-relay-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8765 or Studio route /tools/zoth-relay"
+      ],
+      "features": [
+          "Hardened local MCP/HTTP bridge so many AI agents share one ZothOS machine with per-agent tokens, path sandbox, command blocklist, rate limits, and audit trail on 127.0.0.1:8765.",
+          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/zoth-relay) and standalone server on http://127.0.0.1:8765",
+          "Native ZothOS CLI binary (/usr/local/bin/zoth-relay) and 60fps Unicode U+2800 Braille TUI (zoth-relay-tui)",
+          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
+          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+      ]
+  },
+  "zela-glasses-guide": {
+      "whyUse": "Sovereign wearable AI mission coach for Ray-Ban Meta smart glasses over Tailscale \u2014 full-duplex WebSocket guide stream, Moondream vision, AGY coaching, and Kokoro TTS via zoth-relay-mobile. Built for human operators and autonomous AI agents requiring zero-egress swarm & core execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Zela Glasses Guide workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Swarm & Core) with standalone loopback workstation on 127.0.0.1:8144 and ZothOS CLI wrapper (/usr/local/bin/zela-glasses-guide).",
+      "aiAgentProtocol": {
+          "mcpTool": "zela_glasses_guide_execute",
+          "description": "Execute Zela Glasses Guide operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "zela-glasses-guide --help && zela-glasses-guide --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Zela Glasses Guide"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "zela-glasses-guide",
+              "port": 8144,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "zela-glasses-guide --help",
+          "zela-glasses-guide --json",
+          "zela-glasses-guide-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8144 or Studio route /tools/zela-glasses-guide"
+      ],
+      "features": [
+          "Full-Duplex Encrypted Stream \u2014 Connect Ray-Ban Meta Smart Glasses to your Linux workstation over Tailscale WireGuard (100.106.132.5:8766/v1/guide/stream).",
+          "Local Moondream Vision \u2014 1.34s ask-to-say latency with edge frame captioning via local Ollama (moondream).",
+          "Persistent AGY Session Rolling \u2014 Pre-warmed spare AGY session rolling with low-effort sub-second prompt caching.",
+          "24kHz Kokoro ONNX Neural TTS \u2014 Studio-quality voice synthesis (af_heart) running 100% in local volatile RAM.",
+          "100% Unlocked \u2014 Zero blur locks, zero license modals, zero paywalls."
+      ]
+  },
+  "zoth-bot": {
+      "whyUse": "Local-first always-on 3D WebGL desk companion for Zoth OS \u2014 multi-harness neural engine (Grok/Hermes/Ollama), Security Ring authority, MCP hub, summoned with Ctrl+Shift+Space. Built for human operators and autonomous AI agents requiring zero-egress swarm & core execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Zoth Bot Desktop Companion workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "Sovereign local daemon & CLI workstation bound to 127.0.0.1:8146 with zero outbound telemetry and native ZothOS CLI binary (/usr/local/bin/zoth-bot).",
+      "aiAgentProtocol": {
+          "mcpTool": "zoth_bot_execute",
+          "description": "Execute Zoth Bot Desktop Companion operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "zoth-bot --help && zoth-bot --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Zoth Bot Desktop Companion"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "zoth-bot",
+              "port": 8146,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "zoth-bot --help",
+          "zoth-bot --json",
+          "zoth-bot-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8146 or Studio route /tools/zoth-bot"
+      ],
+      "features": [
+          "Dual-Mode Window (main.js) \u2014 ",
+          "Compact Orb (220\u00d7220) \u2014 Frameless, draggable circular desk orb with live status dot.",
+          "100% Offline Self-Hosted Typography (renderer/fonts/) \u2014 Bundled .woff2 fonts for Syne (700/800), Space Grotesk (400\u2013700), and JetBrains Mono (400\u2013600).",
+          "Grok (xAI Grok CLI) \u2014 Streams NDJSON (--output-format streaming-json) with full agentic tool use (grok-4.7, grok-4.7-build-fast, grok-4.6, grok-4.5).",
+          "Copilot (Hermes Copilot) \u2014 Routes through Hermes Copilot provider."
+      ]
+  },
+  "zoth-bounty": {
+      "whyUse": "Zero-false-positive security research & responsible disclosure workspace tracking Ongoing / Pending / Completed audits with a loopback command center on :9494. Built for human operators and autonomous AI agents requiring zero-egress security & enclave execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Zoth Bounty Research Hub workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "Sovereign local daemon & CLI workstation bound to 127.0.0.1:9494 with zero outbound telemetry and native ZothOS CLI binary (/usr/local/bin/zoth-bounty).",
+      "aiAgentProtocol": {
+          "mcpTool": "zoth_bounty_execute",
+          "description": "Execute Zoth Bounty Research Hub operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "zoth-bounty --help && zoth-bounty --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Zoth Bounty Research Hub"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "zoth-bounty",
+              "port": 9494,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "zoth-bounty --help",
+          "zoth-bounty --json",
+          "zoth-bounty-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:9494 or Studio route /tools/zoth-bounty"
+      ],
+      "features": [
+          "Web Command Center \u2014 http://localhost:9494 (node server.js)",
+          "Policy \u2014 Zero False Positives \u2014 Only 100% source-verified, reproducible vulnerabilities with defensive patches are promoted to Pending/Disclosed.",
+          "Thermal Governance \u2014 Cool-Running Static Audit Mode (Target CPU < 60\u00b0C, Max Burst < 70\u00b0C, nice -n 19 ionice -c 3 on all scanners).",
+          "- **ZB-2026-001 Arbitrary Host File Disclosure via dereference: true Symlink Following in copyDir & npx skills use** (vercel-labs/skills \u00b7 High (CVSS 7.5))",
+          "- **ZB-2026-005 Security Audit of cloudflare/vinext (SSR, Server Actions, Image Optimization & Middleware)** (cloudflare/vinext \u00b7 Cleared (Hardened))"
+      ]
+  },
+  "zoth-scene-foundry": {
+      "whyUse": "Procedural ZothOS-style ASCII + pixel-art scene engine \u2014 1000 deterministic scenes with Bayer dither, tube palettes, and three.js AsciiEffect stage on :8823. Built for human operators and autonomous AI agents requiring zero-egress media & 3d execution without cloud SaaS lock-in.",
+      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Zoth Scene Foundry workflows by running 100% locally on ZothOS and in the browser.",
+      "architecture": "100% client-side in-browser execution engine (Media & 3D) with standalone loopback workstation on 127.0.0.1:8823 and ZothOS CLI wrapper (/usr/local/bin/zoth-scene-foundry).",
+      "aiAgentProtocol": {
+          "mcpTool": "zoth_scene_foundry_execute",
+          "description": "Execute Zoth Scene Foundry operations via JSON-RPC / MCP or ZothOS CLI.",
+          "cliExample": "zoth-scene-foundry --help && zoth-scene-foundry --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "action": {
+                      "type": "string",
+                      "enum": [
+                          "status",
+                          "run",
+                          "audit",
+                          "export"
+                      ],
+                      "description": "Operation to run on Zoth Scene Foundry"
+                  },
+                  "target": {
+                      "type": "string",
+                      "description": "Primary target payload or parameter"
+                  }
+              },
+              "required": [
+                  "action"
+              ]
+          },
+          "outputSchema": {
+              "status": "ONLINE | SUCCESS",
+              "tool": "zoth-scene-foundry",
+              "port": 8823,
+              "results": "object"
+          }
+      },
+      "quickstart": [
+          "zoth-scene-foundry --help",
+          "zoth-scene-foundry --json",
+          "zoth-scene-foundry-tui --status",
+          "# Open standalone workstation at http://127.0.0.1:8823 or Studio route /tools/zoth-scene-foundry"
+      ],
+      "features": [
+          "1000 Cataloged Deterministic Scenes \u2014 Full procedural gallery browsing at /gallery.html with real-time field filters and tube palette selectors.",
+          "Ordered Bayer Dithering \u2014 Authentic retro monochrome and multi-shade matrix rendering directly in the browser canvas.",
+          "Cathode Tube Color Profiles \u2014 Aurum Gold, Retro Amber, Cyber Cyan, Sovereign Emerald, and Ghost Crimson.",
+          "Three.js AsciiEffect Stage \u2014 Real-time 3D geometry rendered as ASCII character grids at 60 FPS.",
+          "100% Client-Side Synthesis \u2014 Zero external network egress, no telemetry, no tracking."
+      ]
   }
 };
 

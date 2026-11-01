@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * ZOTH ARSENAL & HERMES INTEGRATION VERIFIER (71 Tools Comprehensive Sentinel)
+ * ZOTH ARSENAL & HERMES INTEGRATION VERIFIER (72 Tools Comprehensive Sentinel)
  * 
  * Verifies:
- *  1. Registry Integrity (all 71 tools defined with valid JSON schema).
+ *  1. Registry Integrity (all 72 tools defined with valid JSON schema).
  *  2. Prerendered Static HTML Route Existence for every single tool (/tools/:id).
  *  3. GitHub Repository & Hermes Clone Source Health (valid git URL, zero 404s).
  *  4. Port Uniqueness & Air-Gap Execution Mode (client-side vs daemon loopback).
@@ -65,7 +65,7 @@ async function checkUrlStatus(urlStr) {
 
 async function main() {
   console.log(`\n${C.bold}${C.gold}══════════════════════════════════════════════════════════════════════════════════════${C.reset}`);
-  console.log(`${C.bold}${C.gold}        ZOTH STUDIO v2 & HERMES PLUGIN — 71-TOOL FULL ARSENAL AUDITOR         ${C.reset}`);
+  console.log(`${C.bold}${C.gold}        ZOTH STUDIO v2 & HERMES PLUGIN — 72-TOOL FULL ARSENAL AUDITOR         ${C.reset}`);
   console.log(`${C.bold}${C.gold}══════════════════════════════════════════════════════════════════════════════════════${C.reset}\n`);
 
   if (!fs.existsSync(toolsJsonPath)) {
@@ -77,7 +77,7 @@ async function main() {
   const data = JSON.parse(raw);
   const tools = data.tools || [];
 
-  console.log(`Auditing ${C.bold}${tools.length}${C.reset} tools across all 17 cadres...\n`);
+  console.log(`Auditing ${C.bold}${tools.length}${C.reset} tools across all 18 cadres...\n`);
 
   let passedRoutes = 0;
   let passedSchemas = 0;
@@ -115,7 +115,7 @@ async function main() {
     const portBadge = t.port ? `${C.cyan}:${t.port}${C.reset}` : `${C.dim}NO-PORT${C.reset}`;
     const modeBadge = `${C.yellow}[${t.execution_type}]${C.reset}`;
 
-    console.log(`  [${num}/71] ${statusMark} ${portBadge.padEnd(16)} ${modeBadge.padEnd(20)} ${C.bold}${t.name.padEnd(35)}${C.reset}`);
+    console.log(`  [${num}/${tools.length}] ${statusMark} ${portBadge.padEnd(16)} ${modeBadge.padEnd(20)} ${C.bold}${t.name.padEnd(35)}${C.reset}`);
   }
 
   console.log(`\n${C.bold}══════════════════════════════════════════════════════════════════════════════════════${C.reset}`);
@@ -141,7 +141,7 @@ async function main() {
     }
     process.exit(1);
   } else {
-    console.log(`\n${C.bold}${C.green}>>> ALL 71 TOOLS VERIFIED: 100% OPERATIONAL INTEGRITY FOR STUDIO & HERMES <<<${C.reset}\n`);
+    console.log(`\n${C.bold}${C.green}>>> ALL ${tools.length} TOOLS VERIFIED: 100% OPERATIONAL INTEGRITY FOR STUDIO & HERMES <<<${C.reset}\n`);
     process.exit(0);
   }
 }

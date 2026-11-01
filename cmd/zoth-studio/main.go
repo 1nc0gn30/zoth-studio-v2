@@ -22,7 +22,7 @@ import (
 	"time"
 )
 
-const Version = "2.1.0"
+const Version = "2.2.0"
 const ZipMarker = "__ZOTH_ZIP_PAYLOAD__"
 
 func extractAppendedZipIfPresent() string {

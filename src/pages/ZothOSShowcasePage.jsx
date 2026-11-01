@@ -82,14 +82,14 @@ export default function ZothOSShowcasePage() {
     },
     {
       icon: <SmartToyIcon sx={{ fontSize: 32 }} />,
-      title: 'Frontier AI Agent Core (v3.3.0)',
-      desc: 'Ollama bound to 127.0.0.1. Deterministic 4-folder KDE Plasma 6 desktop (01-AI-Agents-and-Dev, 02-Security-and-Privacy, 03-ZothOS-Daemons, 04-Media-and-Utilities) with zero delayed loose icon pop-in. UFW starts default-deny and allows loopback, tailscale0, UDP 41641, and TCP 7890. MCP catalog is 152 servers, all off by default.',
+      title: 'Frontier AI Agent Core (v3.4.0)',
+      desc: 'Ollama bound to 127.0.0.1. Deterministic 4-folder KDE Plasma 6 desktop (01-AI-Agents-and-Dev, 02-Security-and-Privacy, 03-ZothOS-Daemons, 04-Media-and-Utilities) with zero delayed loose icon pop-in. UFW starts default-deny and allows loopback, tailscale0, UDP 41641, and TCP 7890. MCP catalog is 163 servers, all off by default.',
       badge: 'FRONTIER AI',
     },
     {
       icon: <AutoAwesomeIcon sx={{ fontSize: 32 }} />,
       title: 'Zoth Studio v2 + ZothOS-Lite (:8145)',
-      desc: 'Native desktop launch of Zoth Studio v2 (:3000), Vaelor L1 (:8140), Zoth Civilization (:9393), and ZothOS-Lite v1.0 (:8145) — our Tails-style Amnesic Monotone Edition featuring a 60fps Unicode Braille + Bayer 8×8 Dither windowed GUI and live root terminal.',
+      desc: 'Native desktop launch of Zoth Studio v2 (:3000), Vaelor L1 (:8140), Zoth Civilization (:9393), and ZothOS-Lite v1.1 (:8145) — our Tails-style Amnesic Monotone Edition featuring a 60fps Unicode Braille + Bayer 8×8 Dither windowed GUI and live root terminal.',
       badge: 'DUAL EDITION',
     },
     {
@@ -122,7 +122,7 @@ export default function ZothOSShowcasePage() {
     },
     {
       feature: 'Frontier AI Coding Agents',
-      zoth: 'Install wrappers on ISO; Ollama on 127.0.0.1; MCP 152 all off',
+      zoth: 'Install wrappers on ISO; Ollama on 127.0.0.1; MCP 163 all off',
       kali: 'None',
       parrot: 'None',
       ubuntu: 'None',
@@ -202,7 +202,7 @@ export default function ZothOSShowcasePage() {
           <HeroItem>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mt: 3, mb: 1, flexWrap: 'wrap' }}>
               <Chip
-                label="ZOTH OS v3.3.0 + ZOTHOS-LITE v1.0"
+                label="ZOTH OS v3.4.0 + ZOTHOS-LITE v1.1"
                 size="small"
                 sx={{
                   bgcolor: goldWash,
@@ -299,7 +299,7 @@ export default function ZothOSShowcasePage() {
                 mb: 4,
               }}
             >
-              A bootable Linux operating system engineered by NullAI Tech. Combines the Kali and Parrot security arsenal with the Zoth Studio v2 suite, Vaelor L1 (:8140), Zoth Civilization (:9393), and ZothOS-Lite v1.0 (:8145). The shipped flagship release is v3.3.0 featuring deterministic 4-folder KDE Plasma 6 desktop organization and verified 166KB multi-size Xcursor themes with hardware/VM SWCursor visibility. Live users are zoth / azoth / root (password zoth).
+              A bootable Linux operating system engineered by NullAI Tech. Combines the Kali and Parrot security arsenal with the Zoth Studio v2 suite, Vaelor L1 (:8140), Zoth Civilization (:9393), and ZothOS-Lite v1.1 (:8145). The shipped flagship release is v3.4.0 featuring deterministic 4-folder KDE Plasma 6 desktop organization and verified 166KB multi-size Xcursor themes with hardware/VM SWCursor visibility. Live users are zoth / azoth / root (password zoth).
             </Typography>
           </HeroItem>
           <HeroItem>
@@ -400,7 +400,7 @@ export default function ZothOSShowcasePage() {
                   },
                 }}
               >
-                ▓ ZothOS-Lite v1.0
+                ▓ ZothOS-Lite v1.1
               </Button>
               <Button
                 variant="outlined"
@@ -476,12 +476,12 @@ export default function ZothOSShowcasePage() {
           </Button>
         </Paper>
 
-        {/* Interactive 60FPS ASCII & Braille Motion Edit + ZothOS v3.3.0 Desktop Pillar Inspector */}
+        {/* Interactive 60FPS ASCII & Braille Motion Edit + ZothOS v3.4.0 Desktop Pillar Inspector */}
         <Box sx={{ mb: 8 }}>
           <ToolMotionShowcase
             tool={{
               id: 'zoth-os',
-              name: 'Zoth OS v3.3.0 + ZothOS-Lite v1.0',
+              name: 'Zoth OS v3.4.0 + ZothOS-Lite v1.1',
               category: 'Swarm & Core',
               executionType: 'local_cli',
               localPort: 8145,
@@ -601,7 +601,7 @@ export default function ZothOSShowcasePage() {
               <TableHead sx={{ bgcolor: isDark ? 'rgba(212, 175, 55, 0.08)' : '#FEF9E7' }}>
                 <TableRow>
                   <TableCell sx={{ fontFamily: mono, fontWeight: 800, color: textPrimary, fontSize: '0.85rem' }}>Capability</TableCell>
-                  <TableCell sx={{ fontFamily: mono, fontWeight: 900, color: gold, fontSize: '0.85rem' }}>Zoth OS v3.3.0</TableCell>
+                  <TableCell sx={{ fontFamily: mono, fontWeight: 900, color: gold, fontSize: '0.85rem' }}>Zoth OS v3.4.0</TableCell>
                   <TableCell sx={{ fontFamily: mono, fontWeight: 700, color: textSecondary, fontSize: '0.85rem' }}>Kali Linux</TableCell>
                   <TableCell sx={{ fontFamily: mono, fontWeight: 700, color: textSecondary, fontSize: '0.85rem' }}>Parrot OS</TableCell>
                   <TableCell sx={{ fontFamily: mono, fontWeight: 700, color: textSecondary, fontSize: '0.85rem' }}>Ubuntu</TableCell>

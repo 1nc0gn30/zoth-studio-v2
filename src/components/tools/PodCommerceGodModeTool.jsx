@@ -172,7 +172,7 @@ export default function PodCommerceGodModeTool({ tool }) {
       variables: {
         input: {
           title: listingTitle.trim(),
-          vendor: 'Neal Frazier Tech • Sovereign Atelier',
+          vendor: '1nc0gn30 • NullAI • Sovereign Atelier',
           productType: 'Print-on-Demand Apparel',
           tags: validTags,
           variants: [
@@ -237,7 +237,7 @@ export default function PodCommerceGodModeTool({ tool }) {
             net_margin_pct: `${winner.marginPct}%`,
           },
           shopify_graphql_transpiled: seoAudit.shopifyGraphqlPayload.variables,
-          operator: 'Neal Frazier Tech (@1nc0gn30)',
+          operator: '1nc0gn30 (@1nc0gn30)',
         },
         null,
         2
@@ -520,7 +520,7 @@ export default function PodCommerceGodModeTool({ tool }) {
             size="small"
             onClick={() => {
               if (navigator.clipboard) {
-                navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+                navigator.clipboard?.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK')?.catch?.(() => {});
                 alert('Solana Tip Address copied to clipboard: GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
               }
             }}

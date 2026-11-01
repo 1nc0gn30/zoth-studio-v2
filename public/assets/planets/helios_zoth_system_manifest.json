@@ -1,0 +1,315 @@
+{
+  "system_name": "Helios-Zoth Interplanetary Sector",
+  "engineered_by": "1nc0gn30 (@1nc0gn30) \u2022 NullAI Platform",
+  "generated_at": "2026-11-01T05:14:20Z",
+  "pipeline": "ComfyUI (FLUX.1-schnell + 4x-UltraSharp + LTX-Video 2B) + Headless Blender 4.0.2",
+  "planets": [
+    {
+      "id": "zoth_prime",
+      "name": "Zoth Prime",
+      "subtitle": "Imperial Sovereign Capital & Terraform Nexus",
+      "biome": "Golden-Emerald Continental Core",
+      "orbit_radius": 0,
+      "radius_scale": 1.0,
+      "atmo_color": "#38bdf8",
+      "accent_color": "#D4AF37",
+      "ring_type": "kepler_station",
+      "moons": 1,
+      "population": "142 Autonomous Citizens",
+      "specialization": "Sovereign Governance, Neural Council & Prime Shipyard",
+      "colonies": [
+        {
+          "id": "colony_capital",
+          "name": "Zoth Capital",
+          "lat": 20.0,
+          "lon": 0.0,
+          "color": "#f59e0b"
+        },
+        {
+          "id": "colony_nova_zoth",
+          "name": "Nova Zoth",
+          "lat": -14.0,
+          "lon": 72.0,
+          "color": "#22d3ee"
+        },
+        {
+          "id": "colony_sol_crypta",
+          "name": "Sol Crypta",
+          "lat": 34.0,
+          "lon": -118.0,
+          "color": "#a78bfa"
+        },
+        {
+          "id": "colony_adytum_grove",
+          "name": "Adytum Grove",
+          "lat": -32.0,
+          "lon": -42.0,
+          "color": "#34d399"
+        },
+        {
+          "id": "colony_hex_bastion",
+          "name": "Hex Bastion",
+          "lat": 48.0,
+          "lon": 135.0,
+          "color": "#f97316"
+        }
+      ],
+      "texture_prompt": "Equirectangular 360 seamless planetary surface map texture of Zoth Prime, lush emerald-teal deep oceans, dark obsidian tectonic continents veined with glowing golden #D4AF37 cybernetic highway networks and illuminated megacity clusters, top-down satellite albedo projection, ultra-detailed 8k planetary cartography, no borders, edge-to-edge texture",
+      "video_prompt": "Cinematic orbital spacecraft flyby over Zoth Prime, glowing golden cybernetic megacities on dark obsidian continents surrounded by emerald oceans and a rotating golden orbital ring in deep space, volumetric atmospheric glow, 60fps sci-fi cinema",
+      "texture_url": "/assets/planets/zoth_prime_texture.jpg",
+      "glb_url": "/assets/planets/zoth_prime.glb",
+      "flyby_webp_url": "/assets/planets/zoth_prime_flyby.webp",
+      "flyby_mp4_url": "/assets/planets/zoth_prime_flyby.mp4"
+    },
+    {
+      "id": "aethelgard",
+      "name": "Aethelgard",
+      "subtitle": "Cryo-Crystalline Quantum Compute Vault",
+      "biome": "Sub-Zero Nitrogen Glaciers & Cyan Cryo-Arrays",
+      "orbit_radius": 420,
+      "radius_scale": 0.88,
+      "atmo_color": "#22d3ee",
+      "accent_color": "#38bdf8",
+      "ring_type": "cryo_hex_ring",
+      "moons": 2,
+      "population": "64 Quantum Architect Agents",
+      "specialization": "Zero-Kelvin LLM Weights Storage, ZK-STARK Proving & Cryo-Inference",
+      "colonies": [
+        {
+          "id": "colony_frost_spire",
+          "name": "Frost Spire Zero",
+          "lat": 28.0,
+          "lon": 15.0,
+          "color": "#22d3ee"
+        },
+        {
+          "id": "colony_cryo_vault",
+          "name": "Kelvin Tensor Vault",
+          "lat": -22.0,
+          "lon": 95.0,
+          "color": "#38bdf8"
+        },
+        {
+          "id": "colony_borealis_gate",
+          "name": "Borealis Relay",
+          "lat": 52.0,
+          "lon": -80.0,
+          "color": "#818cf8"
+        },
+        {
+          "id": "colony_glacier_synapse",
+          "name": "Glacier Synapse",
+          "lat": -40.0,
+          "lon": -140.0,
+          "color": "#67e8f9"
+        }
+      ],
+      "texture_prompt": "Equirectangular 360 seamless planetary surface map texture of an icy cybernetic planet Aethelgard, fractured cobalt glacial ice sheets, liquid nitrogen seas, glowing cyan #22d3ee crystalline trenches and hexagonal superconducting quantum server megastructures, satellite planetary map projection, 8k",
+      "video_prompt": "Slow orbital camera flyby over icy planet Aethelgard, glowing cyan crystalline canyons cutting through blue glaciers with shimmering aurora borealis in the upper atmosphere and twin icy moons in space",
+      "texture_url": "/assets/planets/aethelgard_texture.jpg",
+      "glb_url": "/assets/planets/aethelgard.glb",
+      "flyby_webp_url": "/assets/planets/aethelgard_flyby.webp",
+      "flyby_mp4_url": "/assets/planets/aethelgard_flyby.mp4"
+    },
+    {
+      "id": "pyros_foundry",
+      "name": "Pyros Foundry",
+      "subtitle": "Tectonic Magma Forge & Heavy Silicon Smelter",
+      "biome": "Obsidian Basalt Crust & Molten Caldera Rivers",
+      "orbit_radius": 760,
+      "radius_scale": 0.95,
+      "atmo_color": "#f97316",
+      "accent_color": "#ef4444",
+      "ring_type": "solar_smelter_belt",
+      "moons": 1,
+      "population": "88 Foundry & Hardware Agents",
+      "specialization": "Autonomous Wafer Lithography, Geothermal Dyson Collectors & Mecha Chassis Forging",
+      "colonies": [
+        {
+          "id": "colony_vulcan_core",
+          "name": "Vulcan Lithography Core",
+          "lat": 12.0,
+          "lon": -30.0,
+          "color": "#f97316"
+        },
+        {
+          "id": "colony_magma_anvil",
+          "name": "Magma Anvil",
+          "lat": -28.0,
+          "lon": 60.0,
+          "color": "#ef4444"
+        },
+        {
+          "id": "colony_obsidian_citadel",
+          "name": "Obsidian Bastion",
+          "lat": 42.0,
+          "lon": 110.0,
+          "color": "#fbbf24"
+        },
+        {
+          "id": "colony_helios_kiln",
+          "name": "Helios Kiln",
+          "lat": -15.0,
+          "lon": -125.0,
+          "color": "#fb923c"
+        }
+      ],
+      "texture_prompt": "Equirectangular 360 seamless planetary surface map texture of volcanic forge planet Pyros, black carbon-obsidian tectonic plates cracked with glowing molten orange-gold lava rivers, circular industrial caldera foundries and geothermal energy grids, top-down satellite texture map, 8k",
+      "video_prompt": "Cinematic orbital flyby over volcanic forge planet Pyros, rivers of glowing molten gold and orange magma flowing between dark metallic megastructure foundries under a glowing amber atmosphere in space",
+      "texture_url": "/assets/planets/pyros_foundry_texture.jpg",
+      "glb_url": "/assets/planets/pyros_foundry.glb",
+      "flyby_webp_url": "/assets/planets/pyros_foundry_flyby.webp",
+      "flyby_mp4_url": "/assets/planets/pyros_foundry_flyby.mp4"
+    },
+    {
+      "id": "vaelor_oceanus",
+      "name": "Vaelor Oceanus",
+      "subtitle": "Bioluminescent Pelagic Synapse & Bio-Compute World",
+      "biome": "Abyssal Bioluminescent Archipelagos & Hydro-Domes",
+      "orbit_radius": 1120,
+      "radius_scale": 1.08,
+      "atmo_color": "#10b981",
+      "accent_color": "#34d399",
+      "ring_type": "orbital_hydro_halo",
+      "moons": 3,
+      "population": "96 Bio-Synthetic & Neuro Agents",
+      "specialization": "Wetware STDP Memory Engrams, Oceanic Wave-Compute & Synthetic Ecology",
+      "colonies": [
+        {
+          "id": "colony_pelagic_nexus",
+          "name": "Pelagic Nexus",
+          "lat": 8.0,
+          "lon": 45.0,
+          "color": "#10b981"
+        },
+        {
+          "id": "colony_coral_synapse",
+          "name": "Coral Synapse Reef",
+          "lat": -24.0,
+          "lon": -70.0,
+          "color": "#2dd4bf"
+        },
+        {
+          "id": "colony_abyssal_dome",
+          "name": "Abyssal Trench Dome",
+          "lat": 36.0,
+          "lon": 140.0,
+          "color": "#34d399"
+        },
+        {
+          "id": "colony_nautilus_port",
+          "name": "Nautilus Starport",
+          "lat": -45.0,
+          "lon": 20.0,
+          "color": "#06b6d4"
+        }
+      ],
+      "texture_prompt": "Equirectangular 360 seamless planetary surface map texture of oceanic archipelago world Vaelor, deep indigo-emerald oceans filled with glowing bioluminescent turquoise coral reefs, circular floating golden hydro-dome cities and spiral atolls, satellite planetary albedo map, 8k",
+      "video_prompt": "Orbital flyby over bioluminescent water planet Vaelor Oceanus, glowing emerald and turquoise spiral reefs shining through deep blue oceans with floating golden ring cities and atmospheric clouds",
+      "texture_url": "/assets/planets/vaelor_oceanus_texture.jpg",
+      "glb_url": "/assets/planets/vaelor_oceanus.glb",
+      "flyby_webp_url": "/assets/planets/vaelor_oceanus_flyby.webp",
+      "flyby_mp4_url": "/assets/planets/vaelor_oceanus_flyby.mp4"
+    },
+    {
+      "id": "chronos_citadel",
+      "name": "Chronos Citadel",
+      "subtitle": "Ringed Jovian Gas Giant & Orbital Dyson Shipyard",
+      "biome": "Metallic Hydrogen Storm Bands & Golden Planetary Rings",
+      "orbit_radius": 1560,
+      "radius_scale": 1.38,
+      "atmo_color": "#a855f7",
+      "accent_color": "#e879f9",
+      "ring_type": "jovian_grand_rings",
+      "moons": 4,
+      "population": "118 Fleet & Time-Series Agents",
+      "specialization": "He-3 Fusion Extraction, Interplanetary Warp Gate Calibration & Deep-Space Fleet Yard",
+      "colonies": [
+        {
+          "id": "colony_chronos_ring",
+          "name": "Chronos Ring Dock Alpha",
+          "lat": 0.0,
+          "lon": 0.0,
+          "color": "#e879f9"
+        },
+        {
+          "id": "colony_jovian_eye",
+          "name": "Aeon Vortex Station",
+          "lat": -18.0,
+          "lon": 88.0,
+          "color": "#a855f7"
+        },
+        {
+          "id": "colony_titan_yard",
+          "name": "Titan Orbital Shipyard",
+          "lat": 30.0,
+          "lon": -105.0,
+          "color": "#c084fc"
+        },
+        {
+          "id": "colony_he3_harvester",
+          "name": "Helium-3 Cloud Spire",
+          "lat": 15.0,
+          "lon": 170.0,
+          "color": "#f0abfc"
+        }
+      ],
+      "texture_prompt": "Equirectangular 360 seamless planetary texture map of a majestic gas giant planet Chronos, swirling turbulent atmospheric bands of royal indigo, violet, obsidian and metallic liquid gold, glowing anticyclonic electrical vortex storms, Cassini spacecraft photography style, 8k",
+      "video_prompt": "Majestic spacecraft flyby past ringed gas giant planet Chronos Citadel, massive shimmering golden and ice planetary rings casting shadows over swirling violet and gold atmospheric storm bands in space",
+      "texture_url": "/assets/planets/chronos_citadel_texture.jpg",
+      "glb_url": "/assets/planets/chronos_citadel.glb",
+      "flyby_webp_url": "/assets/planets/chronos_citadel_flyby.webp",
+      "flyby_mp4_url": "/assets/planets/chronos_citadel_flyby.mp4"
+    },
+    {
+      "id": "nebula_sanctum",
+      "name": "Nebula Sanctum",
+      "subtitle": "Hermetic Aether Monolith & Outer Rim Observatory",
+      "biome": "Iridescent Crystalline Crust & Zero-Point Aether Fissures",
+      "orbit_radius": 2040,
+      "radius_scale": 0.92,
+      "atmo_color": "#f43f5e",
+      "accent_color": "#fb7185",
+      "ring_type": "monolith_relay_array",
+      "moons": 2,
+      "population": "76 Hermetic Research & Red-Team Agents",
+      "specialization": "Adversarial Security Sandbox, Deep-Space Signal Telemetry & Autonomous Self-Evolution",
+      "colonies": [
+        {
+          "id": "colony_hermes_monolith",
+          "name": "Hermes Prime Monolith",
+          "lat": 22.0,
+          "lon": -15.0,
+          "color": "#f43f5e"
+        },
+        {
+          "id": "colony_aether_observatory",
+          "name": "Outer Rim Array",
+          "lat": -35.0,
+          "lon": 110.0,
+          "color": "#fb7185"
+        },
+        {
+          "id": "colony_null_sanctum",
+          "name": "NullAI Citadel",
+          "lat": 48.0,
+          "lon": 65.0,
+          "color": "#fda4af"
+        },
+        {
+          "id": "colony_void_gate",
+          "name": "Interstellar Warp Gate",
+          "lat": -10.0,
+          "lon": -150.0,
+          "color": "#e11d48"
+        }
+      ],
+      "texture_prompt": "Equirectangular 360 seamless planetary surface map texture of exotic outer-rim planet Nebula Sanctum, dark iridescent bismuth-like geometric terrain, glowing crimson-magenta and gold sacred geometry energy ley-lines and ancient monolith arrays, top-down satellite cartography, 8k",
+      "video_prompt": "Cinematic flyby over mysterious outer-rim planet Nebula Sanctum, geometric obsidian monoliths and glowing magenta-gold energy conduits across the planetary crust with a cosmic nebula in background",
+      "texture_url": "/assets/planets/nebula_sanctum_texture.jpg",
+      "glb_url": "/assets/planets/nebula_sanctum.glb",
+      "flyby_webp_url": "/assets/planets/nebula_sanctum_flyby.webp",
+      "flyby_mp4_url": "/assets/planets/nebula_sanctum_flyby.mp4"
+    }
+  ]
+}

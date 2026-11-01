@@ -328,7 +328,7 @@ export default function McpLensGodModeTool() {
   }, [frames, methodFilter, searchQuery]);
 
   const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
+    navigator.clipboard?.writeText(text)?.catch?.(() => {});
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -418,7 +418,7 @@ export default function McpLensGodModeTool() {
             variant="outlined"
             onClick={() => {
               if (navigator.clipboard) {
-                navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+                navigator.clipboard?.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK')?.catch?.(() => {});
               }
             }}
             sx={{

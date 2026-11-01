@@ -77,7 +77,7 @@ Zoth Studio v2 is an offline-capable, zero-egress development studio designed fo
 - Function: Guides the sovereign agent pantheon through the Whitespace Cyberspace memory stratum.
 - Memory Law: Spike-Timing-Dependent Plasticity (STDP) adjusts synaptic weights (dw = A+ * exp(-dt/tau)). Frequent queries reinforce memories; stale vectors decay logarithmically.
 
-## 43 Studio Workstations & 71 Tools
+## 43 Studio Workstations & 72 Tools
 - Build: Agent Composer (DAG builder), AX Powerhouse, IDE Code Foundry, Edge Forge, Tool Bench, WebGen.
 - Security: HexStrike CVE matrix, Web3 Sovereign Solana Bridge, SubSweep lead scanner, Adytum Key Sanctum.
 - Swarm & Consensus: 3-Agent Byzantine Triangulation (Socratic AST debate), Swarm NOC, Cockpit radar, Signal Bridge.
@@ -129,10 +129,10 @@ SECTION 2: LOCAL-FIRST AUDIT INVARIANTS
 ================================================================================
 SECTION 3: MACHINE-READABLE CONTRACTS & TOOL SCHEMAS
 ================================================================================
-- Tool Index API: /api/tools.json (30 sovereign CLI tools and micro-repos)
+- Tool Index API: /api/tools.json (72 sovereign CLI & browser tools and micro-repos)
 - MCP Schemas: /api/netlify-ax-mcp.json (Model Context Protocol endpoints)
 - Agent Crawler Rules: /ai.txt
-- Full XML Route Index: /sitemap.xml (72 static routes)`
+- Full XML Route Index: /sitemap.xml (141 static routes)`
   },
   {
     endpoint: '/ai.txt',
@@ -177,7 +177,7 @@ netlify-mcp-api: https://zoth.nullai.tech/api/netlify-ax-mcp.json`
     endpoint: '/sitemap.xml',
     label: '/sitemap.xml',
     mime: 'application/xml; charset=utf-8',
-    description: 'Synchronized XML Index (72 Routes)',
+    description: 'Synchronized XML Index (141 Routes)',
     tokens: 3730,
     sizeBytes: 14930,
     content: `<?xml version="1.0" encoding="UTF-8"?>

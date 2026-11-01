@@ -284,7 +284,7 @@ export function PolyglotStudioGodModeTool() {
   };
 
   const handleCopy = (text, key) => {
-    navigator.clipboard.writeText(text);
+    navigator.clipboard?.writeText(text)?.catch?.(() => {});
     setCopiedKey(key);
     setTimeout(() => setCopiedKey(null), 2000);
   };

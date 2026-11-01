@@ -818,7 +818,7 @@ export default function VoiceStationPage() {
                       SimpleX P2P Chat
                     </Typography>
                     <Typography variant="caption" sx={{ color: dark ? '#9CA3AF' : '#4B5563', fontFamily: mono }}>
-                      @neal • Zero-Metadata E2EE Socket
+                      @1nc0gn30 • Zero-Metadata E2EE Socket
                     </Typography>
                   </Box>
                   <IconButton aria-label="Copy /voice command"

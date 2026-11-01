@@ -32,9 +32,9 @@ const display = '"Syne", "Space Grotesk", system-ui, sans-serif';
 const SURFACE_PROFILES = [
   {
     id: 'zothos-enclave',
-    label: 'ZothOS v3.3.0 Default-Deny Enclave (Hardened)',
+    label: 'ZothOS v3.4.0 Default-Deny Enclave (Hardened)',
     targetIp: '127.0.0.1 / tailscale0',
-    rawManifest: `# ZothOS v3.3.0 Socket & Banner Snapshot
+    rawManifest: `# ZothOS v3.4.0 Socket & Banner Snapshot
 LISTEN 127.0.0.1:11434  ollama/0.5.7 (Zero-Egress Loopback)
 LISTEN 127.0.0.1:9050   tor/0.4.8.12 (SOCKS5 Amnesic Proxy)
 LISTEN 0.0.0.0:41641/udp wireguard/tailscale0 (Authenticated Mesh)
@@ -254,7 +254,7 @@ export default function AttackSurfaceSentinelGodModeTool({ tool }) {
       .join('\n');
 
     return `#!/usr/bin/env bash
-# ZothOS v3.3.0 Zero-Egress UFW & nftables Perimeter Lockdown
+# ZothOS v3.4.0 Zero-Egress UFW & nftables Perimeter Lockdown
 # Synthesized by Shodan & Anderson Attack Surface Sentinel (${activeTheme.name})
 set -euo pipefail
 
@@ -277,7 +277,7 @@ sudo ufw status verbose`;
   const andersonThreatModelJson = useMemo(() => {
     return JSON.stringify(
       {
-        auditor: 'Shodan & Ross Anderson Security Sentinel v3.3.0',
+        auditor: 'Shodan & Ross Anderson Security Sentinel v3.4.0',
         realityProfile: activeTheme.id,
         postureScore: analysis.postureScore,
         grade: analysis.grade,
@@ -339,7 +339,7 @@ ${topFinding.remediation}`;
 
   const handleCopy = (txt) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(txt);
+      navigator.clipboard?.writeText(txt)?.catch?.(() => {});
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -415,10 +415,10 @@ ${topFinding.remediation}`;
               }}
             />
           </Stack>
-          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 800 }}>
+          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 800, color: '#F8FAFC' }}>
             Attack Surface CPE/CVE Fingerprinter & UFW Hardening Synthesizer
           </Typography>
-          <Typography variant="body2" sx={{ ...ledeSx, color: 'text.secondary', mt: 0.4 }}>
+          <Typography variant="body2" sx={{ ...ledeSx, color: '#CBD5E1', mt: 0.4 }}>
             Audit socket bindings and service banners against CPE 2.3 / CVSS v3.1 advisories and Ross Anderson Security Engineering threat models.
           </Typography>
         </Box>
@@ -448,7 +448,7 @@ ${topFinding.remediation}`;
             href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
             onClick={(e) => {
               if (navigator.clipboard) {
-                navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+                navigator.clipboard?.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK')?.catch?.(() => {});
               }
             }}
             sx={{
@@ -533,6 +533,7 @@ ${topFinding.remediation}`;
                 fontFamily: mono,
                 fontSize: '0.75rem',
                 bgcolor: '#06080D',
+                color: '#E2E8F0',
                 borderRadius: 1.5,
               },
             }}
@@ -541,7 +542,7 @@ ${topFinding.remediation}`;
 
         {/* Right Column: CPE/CVE Findings, UFW Lockdown Script, Anderson JSON */}
         <Grid xs={12} md={7}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'rgba(255,255,255,0.12)', mb: 2 }}>
             <Tabs
               value={activeTab}
               onChange={(_, v) => setActiveTab(v)}
@@ -555,6 +556,10 @@ ${topFinding.remediation}`;
                   fontSize: '0.72rem',
                   fontWeight: 700,
                   textTransform: 'none',
+                  color: '#94A3B8',
+                  '&.Mui-selected': {
+                    color: activeTheme.primary,
+                  },
                 },
               }}
             >
@@ -569,7 +574,7 @@ ${topFinding.remediation}`;
             <Stack spacing={1.5}>
               <Box sx={{ p: 1.5, borderRadius: 1.5, bgcolor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}>
                 <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.75 }}>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.73rem', fontWeight: 700 }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.73rem', fontWeight: 700, color: '#E2E8F0' }}>
                     ZERO-EGRESS PERIMETER INTEGRITY
                   </Typography>
                   <Typography sx={{ fontFamily: mono, fontSize: '0.73rem', fontWeight: 800, color: analysis.postureScore >= 80 ? '#10B981' : '#F43F5E' }}>
@@ -611,7 +616,7 @@ ${topFinding.remediation}`;
                     <Typography variant="caption" sx={{ fontFamily: mono, color: activeTheme.primary, display: 'block', mt: 0.25 }}>
                       CPE: {exp.cpe}
                     </Typography>
-                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.35 }}>
+                    <Typography variant="caption" sx={{ color: '#CBD5E1', display: 'block', mt: 0.35 }}>
                       <strong>Anderson Threat Vector:</strong> {exp.andersonVector}
                     </Typography>
                     <Typography variant="caption" sx={{ color: '#A7F3D0', display: 'block', mt: 0.25 }}>
@@ -657,6 +662,7 @@ ${topFinding.remediation}`;
                   m: 0,
                   borderRadius: 1.5,
                   bgcolor: '#05070B',
+                  color: '#E2E8F0',
                   border: `1px solid ${activeTheme.border}`,
                   fontFamily: mono,
                   fontSize: '0.73rem',
@@ -703,6 +709,7 @@ ${topFinding.remediation}`;
                   m: 0,
                   borderRadius: 1.5,
                   bgcolor: '#05070B',
+                  color: '#E2E8F0',
                   border: `1px solid ${activeTheme.border}`,
                   fontFamily: mono,
                   fontSize: '0.73rem',
@@ -749,6 +756,7 @@ ${topFinding.remediation}`;
                   m: 0,
                   borderRadius: 1.5,
                   bgcolor: '#05070B',
+                  color: '#E2E8F0',
                   border: `1px solid ${activeTheme.border}`,
                   fontFamily: mono,
                   fontSize: '0.73rem',

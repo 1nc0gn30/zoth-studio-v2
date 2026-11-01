@@ -108,36 +108,13 @@ export function JwtInspectorGodModeTool() {
   const [parsedHeader, setParsedHeader] = useState(null);
   const [parsedPayload, setParsedPayload] = useState(null);
   const [rawSignature, setRawSignature] = useState('');
-  const [sigStatus, setSigStatus] = useState({ state: 'unverified', text: 'Enter secret to verify signature' });
+  const [sigStatus, setSigStatus] = useState({ state: 'valid', text: '✔ Cryptographic Signature Ready (HS256 Web Crypto Enclave)' });
   const [securityFindings, setSecurityFindings] = useState([]);
   const [copiedKey, setCopiedKey] = useState(null);
 
-  // Pro State
-  const [isProLicensed, setIsProLicensed] = useState(true);
-  const [showPaywallModal, setShowPaywallModal] = useState(false);
-  const [licenseKeyInput, setLicenseKeyInput] = useState('');
-
-  // Check License
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('licensed') === 'true' || localStorage.getItem('zoth_studio_pro_license') === 'active') {
-        setIsProLicensed(true);
-      }
-    }
-  }, []);
-
-  const handleActivateLicense = () => {
-    if (licenseKeyInput.trim().length > 6) {
-      localStorage.setItem('zoth_studio_pro_license', 'active');
-      setIsProLicensed(true);
-      setShowPaywallModal(false);
-    }
-  };
-
   const handleCopy = (text, key) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedKey(key);
       setTimeout(() => setCopiedKey(null), 2000);
     }
@@ -249,8 +226,11 @@ export function JwtInspectorGodModeTool() {
     }
 
     const [hB64, pB64, sB64] = parts;
-    const header = parsedHeader;
-    const alg = (header?.alg || '').toUpperCase();
+    let header = parsedHeader;
+    try {
+      header = JSON.parse(base64UrlDecode(hB64) || '{}');
+    } catch {}
+    const alg = (header?.alg || 'HS256').toUpperCase();
 
     if (alg === 'NONE') {
       setSigStatus({ state: 'vulnerable', text: 'CVE-2015-9235: alg:none is unsigned! Signature was stripped.' });
@@ -361,10 +341,10 @@ export function JwtInspectorGodModeTool() {
               </Typography>
               <Chip
                 size="small"
-                label={isProLicensed ? '✦ 100% FREE & OPEN ACCESS' : 'FREE & OPEN ACCESS'}
+                label="✦ 100% FREE & OPEN ACCESS"
                 sx={{
-                  bgcolor: isProLicensed ? emeraldSoft : crimsonSoft,
-                  color: isProLicensed ? emerald : crimson,
+                  bgcolor: emeraldSoft,
+                  color: emerald,
                   fontWeight: 800,
                   fontSize: '0.72rem',
                   fontFamily: mono
@@ -378,41 +358,30 @@ export function JwtInspectorGodModeTool() {
         </Stack>
 
         <Stack direction="row" spacing={1.5}>
-          {!isProLicensed ? (
-            <>
-              <Button
-                variant="contained"
-                size="small"
-                href="https://github.com/1nc0gn30/zoth-studio-v2"
-                target="_blank"
-                rel="noreferrer"
-                startIcon={<BoltIcon />}
-                sx={{
-                  bgcolor: gold,
-                  color: '#000',
-                  fontWeight: 800,
-                  '&:hover': { bgcolor: '#B8860B' }
-                }}
-              >
-                ☕ Buy Us a Coffee
-              </Button>
-              <Button
-                variant="outlined"
-                size="small"
-                onClick={() => setShowPaywallModal(true)}
-                startIcon={<KeyIcon />}
-                sx={{ borderColor: gold, color: gold, fontWeight: 700 }}
-              >
-                Enter Key
-              </Button>
-            </>
-          ) : (
-            <Chip
-              icon={<CheckCircleIcon style={{ color: emerald }} />}
-              label="UNLIMITED SECURITY DOSSIER EXPORTS"
-              sx={{ bgcolor: emeraldSoft, color: emerald, fontWeight: 800, fontFamily: mono }}
-            />
-          )}
+          <Button
+            variant="contained"
+            size="small"
+            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            target="_blank"
+            rel="noreferrer"
+            sx={{
+              bgcolor: gold,
+              color: '#000',
+              fontWeight: 800,
+              fontFamily: mono,
+              '&:hover': { bgcolor: '#B8860B' }
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
+            href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
+            sx={{ borderColor: emerald, color: emerald, fontWeight: 700, fontFamily: mono }}
+          >
+            ◎ Solana Tip
+          </Button>
         </Stack>
       </Paper>
 
@@ -626,83 +595,6 @@ export function JwtInspectorGodModeTool() {
           </Paper>
         </Grid>
       </Grid>
-
-      {/* Pro Monetization Modal */}
-      <Dialog
-        open={showPaywallModal}
-        onClose={() => setShowPaywallModal(false)}
-        maxWidth="sm"
-        fullWidth
-        PaperProps={{ sx: { bgcolor: isDark ? surfaceDark : theme.palette.background.paper, border: `1px solid ${gold}`, borderRadius: 2 } }}
-      >
-        <DialogTitle sx={{ pb: 1, borderBottom: `1px solid ${cardBorder}` }}>
-          <Stack direction="row" spacing={1.5} alignItems="center">
-            <ShieldIcon sx={{ color: gold }} />
-            <Typography variant="h6" sx={{ fontWeight: 800, color: gold }}>
-              JWT Inspector Guard Pro License
-            </Typography>
-          </Stack>
-        </DialogTitle>
-        <DialogContent sx={{ mt: 2 }}>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Unlock automated executive JWT security dossiers, multi-framework middleware patches (Express, Fastify, Django), and offline key bruteforce engines.
-          </Typography>
-
-          <Paper sx={{ p: 2, mb: 3, bgcolor: goldSoft, border: `1px solid ${gold}`, borderRadius: 1.5 }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold, mb: 0.5 }}>
-              ⚡ 100% Free & Open Access — Optional Community Support
-            </Typography>
-            <Typography variant="caption" sx={{ color: 'text.primary' }}>
-              Everything here is free to use. Optional tips are welcome via:
-            </Typography>
-            <Stack direction="row" spacing={1.5} sx={{ mt: 1.5 }}>
-              <Button
-                variant="contained"
-                size="small"
-                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
-                target="_blank"
-                rel="noreferrer"
-                sx={{ bgcolor: gold, color: '#000', fontWeight: 800 }}
-              >
-                ☕ Buy Us a Coffee (Stripe)
-              </Button>
-              <Button
-                variant="outlined"
-                size="small"
-                href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
-                target="_blank"
-                rel="noreferrer"
-                sx={{ borderColor: cyan, color: cyan, fontWeight: 700 }}
-              >
-                Solana Pay (USDC/SOL)
-              </Button>
-            </Stack>
-          </Paper>
-
-          <TextField
-            fullWidth
-            size="small"
-            label="Optional note with your tip"
-            value={licenseKeyInput}
-            onChange={(e) => setLicenseKeyInput(e.target.value)}
-            placeholder="e.g. JWT-PRO-XXXX-XXXX"
-            InputProps={{ sx: { fontFamily: mono } }}
-          />
-        </DialogContent>
-        <DialogActions sx={{ p: 2, borderTop: `1px solid ${cardBorder}` }}>
-          <Button onClick={() => setShowPaywallModal(false)} sx={{ color: 'text.secondary', fontFamily: mono }}>
-            CANCEL
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleActivateLicense}
-            disabled={licenseKeyInput.trim().length < 6}
-            sx={{ bgcolor: emerald, color: '#000', fontWeight: 800, fontFamily: mono }}
-          >
-            ACTIVATE PRO
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

@@ -367,10 +367,10 @@ export function HexStrikeGodModeTool() {
   const [showPaywallModal, setShowPaywallModal] = useState(false);
   const [licenseKeyInput, setLicenseKeyInput] = useState('');
 
-  // Auto-scroll terminal
+  // Auto-scroll terminal inside its own container without moving the window
   useEffect(() => {
-    if (terminalEndRef.current) {
-      terminalEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (terminalEndRef.current && terminalEndRef.current.parentElement) {
+      terminalEndRef.current.parentElement.scrollTop = terminalEndRef.current.parentElement.scrollHeight;
     }
   }, [terminalHistory]);
 
@@ -397,7 +397,7 @@ export function HexStrikeGodModeTool() {
   };
 
   const handleCopy = (text, key) => {
-    navigator.clipboard.writeText(text);
+    navigator.clipboard?.writeText(text)?.catch?.(() => {});
     setCopiedKey(key);
     setTimeout(() => setCopiedKey(null), 2000);
   };
@@ -976,7 +976,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
                 sx={{ bgcolor: gold, color: '#000', fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
               />
               <Typography variant="body2" sx={{ color: crimson, fontWeight: 700, fontFamily: mono }}>
-                SAVE 76% TODAY
+                SOVEREIGN RED-TEAM ARSENAL
               </Typography>
             </Stack>
             <Typography variant="h6" sx={{ fontWeight: 800, mt: 0.5, color: isDark ? '#FFFFFF' : '#111827' }}>

@@ -21,7 +21,7 @@ Any `SOLANA_PRIVATE_KEY` inside an EnvGuard file, a sample-env file, or a `SAMPL
 
 ## Public receive address
 
-The treasury receive address named in the allowlist comment in `.gitleaks.toml` is public payment information. It may appear only on the labeled checkout and treasury surfaces already listed there: Agora, the DePay funnel, the public `solanaWallet` catalog, the public llms checkout copy, and the tool pages that copy that same receiver. Do not add it to new files, and do not assign it to `SOLANA_PRIVATE_KEY`.
+The treasury receive address named in the allowlist comment in `.gitleaks.toml` is public payment information. It may appear only on the labeled checkout and treasury surfaces already listed there: Agora, the Solana Tip funnel, the public `solanaWallet` catalog, the public llms checkout copy, and the tool pages that copy that same receiver. Do not add it to new files, and do not assign it to `SOLANA_PRIVATE_KEY`.
 
 ## Run the scan locally
 

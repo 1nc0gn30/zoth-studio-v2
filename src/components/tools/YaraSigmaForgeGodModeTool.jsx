@@ -232,7 +232,7 @@ export default function YaraSigmaForgeGodModeTool() {
 
     return `rule ${ruleName.replace(/[^a-zA-Z0-9_]/g, '_')} {
     meta:
-        author = "Neal Frazier Tech (@1nc0gn30) • ZothOS YARA-Sigma Forge"
+        author = "1nc0gn30 (@1nc0gn30) • ZothOS YARA-Sigma Forge"
         severity = "${presetMeta.severity}"
         mitre_attack = "${presetMeta.mitre.join(', ')}"
         reality_profile = "${activeTheme.id}"
@@ -250,7 +250,7 @@ ${stringLines}
 id: zoth-sigma-${selectedPresetId}
 status: production
 description: Deterministic Sigma detection rule synthesized by Zoth Studio v2 YARA-Sigma Forge
-author: Neal Frazier Tech (@1nc0gn30)
+author: 1nc0gn30 (@1nc0gn30)
 date: ${new Date().toISOString().slice(0, 10)}
 logsource:
   category: webserver_and_process_creation
@@ -272,7 +272,7 @@ level: ${presetMeta.severity.toLowerCase()}`;
 
   const handleCopy = (txt) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(txt);
+      navigator.clipboard?.writeText(txt)?.catch?.(() => {});
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }

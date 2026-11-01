@@ -53,7 +53,7 @@ import { useReality } from '../context/RealityContext';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const qemu = 'qemu-system-x86_64 -enable-kvm -m 8192 -smp 4 -hda zoth-agent-os.qcow2';
-const isoCmd = 'sudo dd if=zothos-3.3-amd64.iso of=/dev/sdX status=progress bs=4M conv=fdatasync';
+const isoCmd = 'sudo dd if=zothos-3.4-amd64.iso of=/dev/sdX status=progress bs=4M conv=fdatasync';
 const microRunnerCmd = 'npx @nullaitech/zoth status';
 const gitCloneCmd = 'git clone https://github.com/NullAITech/zoth-os.git && cd zoth-os';
 
@@ -301,7 +301,7 @@ export default function ZothOSPage() {
       id: 1,
       type: 'system',
       text: [
-        'ZOTH SOVEREIGN OS v3.3.0-RELEASE (x86_64 Hardened Microkernel)',
+        'ZOTH SOVEREIGN OS v3.4.0-RELEASE (x86_64 Hardened Microkernel)',
         'Built with Zero-Egress Invariant & Offline-Capable Cryptographic Enclaves.',
         'Type "help" to inspect commands or execute "zoth boot --kvm" to run virtual boot sequence.',
       ].join('\n'),
@@ -564,7 +564,7 @@ export default function ZothOSPage() {
     return {
       $schema: 'https://zoth.io/schemas/bootloader-manifest-v2.json',
       os_name: 'ZothOS Sovereign Distribution',
-      version: '3.3.0',
+      version: '3.4.0',
       target_architecture: 'x86_64',
       kernel_build: 'vmlinuz-6.8.0-zoth-hardened-x86_64',
       initrd_image: 'initrd.img-6.8.0-zoth-hardened',
@@ -672,7 +672,7 @@ export default function ZothOSPage() {
         id: Date.now() + 1,
         type: 'output',
         text: [
-          'Zoth OS Sovereign Micro-Kernel Diagnostic CLI v3.3.0',
+          'Zoth OS Sovereign Micro-Kernel Diagnostic CLI v3.4.0',
           'Usage: [command] [options...]',
           '',
           'Available diagnostic commands:',
@@ -893,7 +893,7 @@ export default function ZothOSPage() {
                     }}
                   />
                   <Chip
-                    label="ZOTH OS v3.3.0"
+                    label="ZOTH OS v3.4.0"
                     size="small"
                     sx={{
                       bgcolor: isDark ? 'rgba(34, 197, 94, 0.15)' : '#DCFCE7',
@@ -905,7 +905,7 @@ export default function ZothOSPage() {
                     }}
                   />
                   <Chip
-                    label="ZOTHOS-LITE v1.0 (:8145)"
+                    label="ZOTHOS-LITE v1.1 (:8145)"
                     size="small"
                     component="a"
                     href="https://github.com/NullAITech/zothos-lite"
@@ -957,7 +957,7 @@ export default function ZothOSPage() {
               </HeroItem>
               <HeroItem>
                 <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 760, lineHeight: 1.65, fontSize: '1.02rem' }}>
-                  The shipped flagship release is <strong>v3.3.0</strong>, showcased alongside <strong>ZothOS-Lite v1.0</strong> (Amnesic Monotone Edition on <code>:8145</code>) and <strong>Chain of Thoughts (<code>zoth-cot</code>)</strong>. Zoth OS is a custom Linux distribution engineered to run Zoth Studio, Ollama, all micro-tools, and the local memory daemon out-of-the-box with zero setup hassle. Flashed to bare metal or run via QEMU/KVM, it guarantees <span className="text-highlight-gold">100% Zero-Telemetry Local Operation</span>.
+                  The shipped flagship release is <strong>v3.4.0</strong>, showcased alongside <strong>ZothOS-Lite v1.1</strong> (Amnesic Monotone Edition on <code>:8145</code>) and <strong>Chain of Thoughts (<code>zoth-cot</code>)</strong>. Zoth OS is a custom Linux distribution engineered to run Zoth Studio, Ollama, all micro-tools, and the local memory daemon out-of-the-box with zero setup hassle. Flashed to bare metal or run via QEMU/KVM, it guarantees <span className="text-highlight-gold">100% Zero-Telemetry Local Operation</span>.
                 </Typography>
               </HeroItem>
             </Box>
@@ -1074,7 +1074,7 @@ export default function ZothOSPage() {
                 }}
               />
               <Chip
-                label="ZOTHOS v3.3.0 + ZOTHOS-LITE v1.0"
+                label="ZOTHOS v3.4.0 + ZOTHOS-LITE v1.1"
                 size="small"
                 sx={{
                   height: 22,
@@ -1173,12 +1173,12 @@ export default function ZothOSPage() {
           <DaemonStatusStrip />
         </Box>
 
-        {/* 60FPS ASCII & Braille Motion Edit + Interactive ZothOS v3.3.0 Desktop Pillar Inspector */}
+        {/* 60FPS ASCII & Braille Motion Edit + Interactive ZothOS v3.4.0 Desktop Pillar Inspector */}
         <Box sx={{ mb: 5 }}>
           <ToolMotionShowcase
             tool={{
               id: 'zoth-os',
-              name: 'Zoth OS v3.3.0 + ZothOS-Lite v1.0',
+              name: 'Zoth OS v3.4.0 + ZothOS-Lite v1.1',
               category: 'Swarm & Core',
               executionType: 'local_cli',
               localPort: 8094,
@@ -1301,7 +1301,7 @@ export default function ZothOSPage() {
                 Native ZothOS Application & CLI Launchpad
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                v3.3.0 is the shipped image. UFW starts default-deny and allows loopback, tailscale0, UDP 41641, and TCP 7890. Ollama listens on 127.0.0.1. Skills load from ~/.gemini/config/skills. Grok CLI, Cline, Aider, and AGY are on the image. This launchpad only starts shells the studio host already recognizes. The OpenCode button opens the OS menu entry. The OpenCode CLI runs only when that CLI is installed.
+                v3.4.0 is the shipped image. UFW starts default-deny and allows loopback, tailscale0, UDP 41641, and TCP 7890. Ollama listens on 127.0.0.1. Skills load from ~/.gemini/config/skills. Grok CLI, Cline, Aider, and AGY are on the image. This launchpad only starts shells the studio host already recognizes. The OpenCode button opens the OS menu entry. The OpenCode CLI runs only when that CLI is installed.
               </Typography>
             </Box>
 
@@ -1386,18 +1386,18 @@ export default function ZothOSPage() {
 
             {/* Consolidated 4-Pillar Desktop App Architecture */}
             <Box sx={{ mt: 4 }}>
-              <Typography className="section-kicker">Digestible Desktop Architecture (v3.3.0 Consolidated)</Typography>
+              <Typography className="section-kicker">Digestible Desktop Architecture (v3.4.0 Consolidated)</Typography>
               <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, letterSpacing: '-0.02em', mb: 0.5 }}>
-                10 Root Flagships + 4 Consolidated Desktop Pillars
+                7 Root Flagships + 4 Consolidated Desktop Pillars (83 Launchers)
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                All 81 sovereign applications on ZothOS are organized into 10 primary desktop flagships and 4 clean desktop folders, managed via the unified <code>zoth-control-center</code> v2.0 hub.
+                All 83 sovereign desktop launchers on ZothOS v3.4.0 are organized into 7 primary desktop flagships and 4 deterministic desktop folders (76 folder launchers), managed via the unified <code>zoth-control-center</code> hub.
               </Typography>
               <Grid container spacing={2}>
                 {[
                   {
                     folder: '01-AI-Agents-and-Dev',
-                    count: '16 Apps',
+                    count: '20 Apps',
                     title: 'AI Agents & Developer Workspaces',
                     items: 'Aider, Cline, OpenCode, OpenAI Codex, Antigravity, Zoth Bolt, QuickSite Starter, Streamlit, Netlify, LazyDocker, Workspaces',
                   },
@@ -1409,7 +1409,7 @@ export default function ZothOSPage() {
                   },
                   {
                     folder: '03-ZothOS-Daemons',
-                    count: '17 Apps',
+                    count: '18 Apps',
                     title: 'Loopback Enclave Daemons & Telemetry',
                     items: 'Agent Conductor, Agent HUD, Sentinel AI, Neuro-Memory, Egress Sentinel, Prompt Firewall, Capsule Jail, Flight Recorder, Mock Twin, Budget Sentinel',
                   },
@@ -1417,7 +1417,7 @@ export default function ZothOSPage() {
                     folder: '04-Media-and-Utilities',
                     count: '19 Apps',
                     title: 'Media, Knowledge & System Utilities',
-                    items: 'Obsidian Canon, Yazi Navigator, Desktop Pet HUD, Reality Switcher, Matrix Rain, Hermetic Audio, Maya Studio, Math Pillar, Web3 Solana',
+                    items: 'Obsidian Canon, Yazi Navigator, Desktop Pet HUD, Reality Switcher, Matrix Rain, Hermetic Audio, Maya Studio, Math Pillar, Solana Tip Vault',
                   },
                 ].map((pillar) => (
                   <Grid xs={12} sm={6} md={3} key={pillar.folder}>
@@ -1450,7 +1450,7 @@ export default function ZothOSPage() {
           </Box>
         </RevealOnScroll>
 
-        {/* SECTION: ZothOS-Lite v1.0 (Amnesic 1-Bit Black & White Tails-Style Edition) */}
+        {/* SECTION: ZothOS-Lite v1.1 (Amnesic 1-Bit Black & White Tails-Style Edition) */}
         <RevealOnScroll preset="fadeUp" delay={0.28}>
           <Box
             sx={{
@@ -1488,7 +1488,7 @@ export default function ZothOSPage() {
                     letterSpacing: '0.12em',
                   }}
                 >
-                  ▓▒░ ZOTHOS-LITE v1.0 // TAILS-STYLE AMNESIC EDITION ░▒▓
+                  ▓▒░ ZOTHOS-LITE v1.1 // TAILS-STYLE AMNESIC EDITION ░▒▓
                 </Box>
                 <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', color: '#FFFFFF', letterSpacing: '0.06em' }}>
                   1-BIT BLACK & WHITE (#000000 / #FFFFFF) • BAYER 4x4 DITHER • UNICODE U+2800 BRAILLE
@@ -2800,7 +2800,7 @@ $ zoth-lite-pkg wipe-ram`}
             subtitle="Zero-telemetry offline-capable operating system kernel for autonomous agent swarms, hardware enclave encryption, and memory vaults."
             toolTitle="Option 1: Zoth CLI & Bootable ISO"
             toolTag="CLI & BARE METAL"
-            toolDescription="Download and flash bootable Zoth OS image (zothos-3.3-amd64.iso) for direct bare-metal deployment, or check your machine with the Zoth CLI."
+            toolDescription="Download and flash bootable Zoth OS image (zothos-3.4-amd64.iso) for direct bare-metal deployment, or check your machine with the Zoth CLI."
             toolRepo="https://github.com/NullAITech/zoth-os"
             toolCommand="npx @nullaitech/zoth status"
             osRepo="https://github.com/NullAITech/zoth-os"
@@ -2853,7 +2853,7 @@ $ zoth-lite-pkg wipe-ram`}
           </Box>
 
           <Typography variant="body2" sx={{ color: isDark ? '#94A3B8' : '#CBD5E1', mb: 2 }}>
-            This dialog is a studio preview of the bootloader manifest. The hashes here are not the signed v3.3.0 release attestation.
+            This dialog is a studio preview of the bootloader manifest. The hashes here are not the signed v3.4.0 release attestation.
           </Typography>
 
           <Box

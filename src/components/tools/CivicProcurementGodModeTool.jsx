@@ -72,8 +72,8 @@ export default function CivicProcurementGodModeTool({ tool }) {
   const [copied, setCopied] = useState(false);
 
   // Product Hunt Launch Kit State
-  const [phProductName, setPhProductName] = useState('Zoth Studio v2.1 — Sovereign AI Arsenal');
-  const [phTagline, setPhTagline] = useState('71 zero-egress developer tools & WebGPU workstations in browser');
+  const [phProductName, setPhProductName] = useState('Zoth Studio v2.2 — Sovereign AI Arsenal');
+  const [phTagline, setPhTagline] = useState('72 zero-egress developer tools & WebGPU workstations in browser');
   const [phTopics, setPhTopics] = useState('Developer Tools, Artificial Intelligence, Open Source, Privacy');
   const [phFirst4HrUpvotes, setPhFirst4HrUpvotes] = useState(185);
 
@@ -130,7 +130,7 @@ export default function CivicProcurementGodModeTool({ tool }) {
 ---
 
 ## 1. Maker's First Comment (Post at 12:01 AM PST)
-Hey Product Hunt! 👋 I'm Neal Frazier (@1nc0gn30), founder of Neal Frazier Tech & the NullAI Platform.
+Hey Product Hunt! 👋 I'm 1nc0gn30 (@1nc0gn30), founder of 1nc0gn30 • NullAI & the NullAI Platform.
 
 Today we're thrilled to launch **${phProductName}** — ${phTagline}.
 
@@ -235,14 +235,14 @@ Would love your feedback on which workstation you try first!`;
   }, [activeTheme, bidMath, activeTab, phFirst4HrUpvotes, phMetrics]);
 
   const capabilityStatementMd = useMemo(() => {
-    return `# CAPABILITY STATEMENT — NEAL FRAZIER TECH / 757 TECH PRO
+    return `# CAPABILITY STATEMENT — 1NC0GN30 • NULLAI / 757 TECH PRO
 **Solicitation**: ${activeRfp.solNumber} — ${activeRfp.title}
 **Region / Agency**: ${activeRfp.region}
 **NAICS Code**: ${activeRfp.naics}
-**Architecture**: ZothOS v3.3.0 Zero-Egress Sovereign Enclave (${activeTheme.name})
+**Architecture**: ZothOS v3.4.0 Zero-Egress Sovereign Enclave (${activeTheme.name})
 
 ## 1. Executive Summary & Technical Differentiation
-Neal Frazier Tech (@1nc0gn30 • 757tech.pro • nullai.tech) delivers offline-capable, zero-egress Linux & AI automation infrastructure engineered for municipal, defense, and enterprise enclaves. All LLM inference (Ollama 127.0.0.1:11434), YARA-X threat scanning, and FOIA document redaction execute 100% on-premises without external cloud telemetry.
+1nc0gn30 • NullAI (@1nc0gn30 • 757tech.pro • nullai.tech) delivers offline-capable, zero-egress Linux & AI automation infrastructure engineered for municipal, defense, and enterprise enclaves. All LLM inference (Ollama 127.0.0.1:11434), YARA-X threat scanning, and FOIA document redaction execute 100% on-premises without external cloud telemetry.
 
 ## 2. Compliance & Security Matrix
 ${activeRfp.complianceRequired.map((c) => `- [x] **${c}** — Verified via ZothOS Ring-0 / Ring-2 enclave isolation & default-deny UFW posture.`).join('\n')}
@@ -258,14 +258,14 @@ ${activeRfp.complianceRequired.map((c) => `- [x] **${c}** — Verified via ZothO
 
 Dear FOIA Officer / Procurement Records Custodian (${activeRfp.region}),
 
-Pursuant to the Virginia Freedom of Information Act (Va. Code § 2.2-3700 et seq.), Neal Frazier Tech requests electronic copies of:
+Pursuant to the Virginia Freedom of Information Act (Va. Code § 2.2-3700 et seq.), 1nc0gn30 • NullAI requests electronic copies of:
 1. The current incumbent contract, statement of work (SOW), and pricing schedule associated with ${activeRfp.solNumber} (${activeRfp.title}).
 2. Any evaluation scoring matrices or technical addendum records from the prior award cycle.
 
 Please deliver responsive records electronically in PDF or CSV format.
 
 Respectfully submitted,
-Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
+1nc0gn30 • 1nc0gn30 • NullAI (757tech.pro / nullai.tech)`;
   }, [activeRfp]);
 
   const activeDoc =
@@ -273,7 +273,7 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
 
   const handleCopy = () => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(activeDoc);
+      navigator.clipboard?.writeText(activeDoc)?.catch?.(() => {});
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -431,12 +431,12 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
               }}
             />
           </Stack>
-          <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 800 }}>
+          <Typography variant="h5" sx={{ fontFamily: display, fontWeight: 800, color: '#F5F0E8' }}>
             {isProductHuntMode
               ? 'Product Hunt Launch Command, Tagline Scorer & Maker Kit Forge'
               : 'City Desk Civic Procurement & GovTech Proposal Forge'}
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.4 }}>
+          <Typography variant="body2" sx={{ color: '#94A3B8', mt: 0.4 }}>
             {isProductHuntMode
               ? 'Optimize 60-character taglines, simulate 24h PST upvote velocity, and export your complete Maker Comment & Ship kit.'
               : 'Model Firm-Fixed-Price (FFP) GovTech bids, verify NIST 800-171 / VITA / CMMC compliance, and export Capability Statements & VFOIA requests.'}
@@ -497,7 +497,8 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
                 label="Product Launch Name"
                 value={phProductName}
                 onChange={(e) => setPhProductName(e.target.value)}
-                InputProps={{ sx: { fontFamily: mono, fontSize: '0.78rem' } }}
+                InputLabelProps={{ sx: { color: '#94A3B8', fontFamily: mono, fontSize: '0.75rem' } }}
+                InputProps={{ sx: { fontFamily: mono, fontSize: '0.78rem', color: '#F5F0E8', bgcolor: '#06080E', '& fieldset': { borderColor: 'rgba(255,255,255,0.22)' } } }}
               />
               <TextField
                 fullWidth
@@ -505,7 +506,8 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
                 label={`60-Char Tagline (${phMetrics.taglineLen}/60 chars — Score: ${phMetrics.taglineScore}/100)`}
                 value={phTagline}
                 onChange={(e) => setPhTagline(e.target.value)}
-                InputProps={{ sx: { fontFamily: mono, fontSize: '0.76rem' } }}
+                InputLabelProps={{ sx: { color: '#94A3B8', fontFamily: mono, fontSize: '0.75rem' } }}
+                InputProps={{ sx: { fontFamily: mono, fontSize: '0.76rem', color: '#F5F0E8', bgcolor: '#06080E', '& fieldset': { borderColor: 'rgba(255,255,255,0.22)' } } }}
               />
               <TextField
                 fullWidth
@@ -513,10 +515,11 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
                 label="Launch Topics"
                 value={phTopics}
                 onChange={(e) => setPhTopics(e.target.value)}
-                InputProps={{ sx: { fontFamily: mono, fontSize: '0.76rem' } }}
+                InputLabelProps={{ sx: { color: '#94A3B8', fontFamily: mono, fontSize: '0.75rem' } }}
+                InputProps={{ sx: { fontFamily: mono, fontSize: '0.76rem', color: '#F5F0E8', bgcolor: '#06080E', '& fieldset': { borderColor: 'rgba(255,255,255,0.22)' } } }}
               />
-              <Box sx={{ p: 2, borderRadius: 2, bgcolor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary', mb: 0.5 }}>
+              <Box sx={{ p: 2, borderRadius: 2, bgcolor: '#06080E', border: '1px solid rgba(255,255,255,0.14)' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: '#CBD5E1', mb: 0.5 }}>
                   FIRST 4-HOUR PST UPVOTE VELOCITY ({phFirst4HrUpvotes} upvotes)
                 </Typography>
                 <Slider
@@ -543,10 +546,10 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
                 <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: activeTheme.primary, fontWeight: 800 }}>
                   {activeRfp.solNumber} • {activeRfp.region}
                 </Typography>
-                <Typography variant="subtitle1" sx={{ fontWeight: 800, mt: 0.5 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 800, mt: 0.5, color: '#F5F0E8' }}>
                   {activeRfp.title}
                 </Typography>
-                <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', display: 'block', mt: 0.5 }}>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', display: 'block', mt: 0.5 }}>
                   NAICS: {activeRfp.naics} • Ceiling: ${activeRfp.ceilingUsd.toLocaleString()}
                 </Typography>
                 <Stack direction="row" spacing={0.75} sx={{ mt: 1.25, flexWrap: 'wrap', useFlexGap: true }}>
@@ -571,11 +574,11 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
                 sx={{
                   p: 2,
                   borderRadius: 2,
-                  bgcolor: 'rgba(255,255,255,0.02)',
-                  border: '1px solid rgba(255,255,255,0.08)',
+                  bgcolor: '#06080E',
+                  border: '1px solid rgba(255,255,255,0.14)',
                 }}
               >
-                <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary', mb: 0.5 }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: '#CBD5E1', mb: 0.5 }}>
                   ENGINEERING HOURS ({engineeringHours} hrs)
                 </Typography>
                 <Slider
@@ -587,7 +590,7 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
                   sx={{ color: activeTheme.primary, mb: 1.5 }}
                 />
 
-                <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary', mb: 0.5 }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: '#CBD5E1', mb: 0.5 }}>
                   BLENDED SOVEREIGN RATE ($${hourlyRateUsd}/hr)
                 </Typography>
                 <Slider
@@ -599,7 +602,7 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
                   sx={{ color: activeTheme.primary, mb: 1.5 }}
                 />
 
-                <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: 'text.secondary', mb: 0.5 }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: '#CBD5E1', mb: 0.5 }}>
                   ENCLAVE HARDWARE & SUPPORT RESERVE ($${infraReserveUsd.toLocaleString()})
                 </Typography>
                 <Slider
@@ -617,7 +620,7 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
 
         {/* Right Column: Deliverable Output Generator */}
         <Grid xs={12} md={7}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'rgba(255,255,255,0.14)', mb: 2 }}>
             <Tabs
               value={activeTab}
               onChange={(_, v) => setActiveTab(v)}
@@ -625,13 +628,17 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
               scrollButtons="auto"
               sx={{
                 minHeight: 38,
+                color: '#CBD5E1',
                 '& .MuiTab-root': {
                   minHeight: 38,
                   fontFamily: mono,
                   fontSize: '0.72rem',
                   fontWeight: 700,
                   textTransform: 'none',
+                  color: '#94A3B8',
+                  '&.Mui-selected': { color: activeTheme.primary },
                 },
+                '& .MuiTabs-indicator': { backgroundColor: activeTheme.primary },
               }}
             >
               <Tab icon={<DescriptionIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="Capability Statement (.md)" />
@@ -641,7 +648,7 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
           </Box>
 
           <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1, flexWrap: 'wrap', gap: 1 }}>
-            <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'text.secondary' }}>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#CBD5E1' }}>
               {activeTab === 2
                 ? `Forecast: ${phMetrics.projected24hUpvotes} Upvotes · ${phMetrics.rankPrediction}`
                 : `FFP Bid: $${bidMath.totalBid.toLocaleString()} • Net Margin: $${bidMath.netMarginUsd.toLocaleString()} (${bidMath.netMarginPct}%)`}
@@ -675,6 +682,7 @@ Neal Frazier • Neal Frazier Tech (757tech.pro / nullai.tech)`;
               m: 0,
               borderRadius: 1.5,
               bgcolor: '#05070B',
+              color: '#F5F0E8',
               border: `1px solid ${activeTheme.border}`,
               fontFamily: mono,
               fontSize: '0.73rem',

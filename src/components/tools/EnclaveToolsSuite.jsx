@@ -1076,7 +1076,7 @@ INVARIANTS:
     ast_output = dspy.OutputField(desc="Synthesized AST modification")`;
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(promptText);
+    navigator.clipboard?.writeText(promptText)?.catch?.(() => {});
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -1788,7 +1788,7 @@ export function AgentPromptFirewallTool() {
   const handleCopySanitized = () => {
     if (!scanResult) return;
     const text = scanResult.sanitized_prompt || scanResult.redaction?.redacted_text || promptText;
-    navigator.clipboard.writeText(text);
+    navigator.clipboard?.writeText(text)?.catch?.(() => {});
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -2637,7 +2637,7 @@ export function PrintifyConnectorTool() {
 
   const handleCopyCli = (text) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedCmd(true);
       setTimeout(() => setCopiedCmd(false), 2000);
     }
@@ -2873,7 +2873,7 @@ export function GelatoConnectorTool() {
 
   const handleCopyCli = (text) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedCmd(true);
       setTimeout(() => setCopiedCmd(false), 2000);
     }
@@ -3057,7 +3057,7 @@ export function EtsyConnectorTool() {
 
   const handleCopyCli = (text) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedCmd(true);
       setTimeout(() => setCopiedCmd(false), 2000);
     }
@@ -3207,7 +3207,7 @@ export function ShopifyConnectorTool() {
   const graphQlPayload = JSON.stringify({
     input: {
       title: inputTitle,
-      descriptionHtml: `<p><strong>${inputTitle}</strong></p><ul><li>Direct-to-Garment premium print</li><li>100% preshrunk ring-spun cotton</li><li>Sovereign aesthetic engineered by Neal Frazier Tech</li></ul>`,
+      descriptionHtml: `<p><strong>${inputTitle}</strong></p><ul><li>Direct-to-Garment premium print</li><li>100% preshrunk ring-spun cotton</li><li>Sovereign aesthetic engineered by 1nc0gn30 • NullAI</li></ul>`,
       tags: shopifyTags,
       productType: 'Apparel',
       vendor: 'NullAI Tech',
@@ -3224,7 +3224,7 @@ export function ShopifyConnectorTool() {
 
   const handleCopyCli = (text) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedCmd(true);
       setTimeout(() => setCopiedCmd(false), 2000);
     }
@@ -3373,7 +3373,7 @@ export function EtsyPodForgeTool() {
 
   const handleCopyCli = (text) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedCmd(true);
       setTimeout(() => setCopiedCmd(false), 2000);
     }
@@ -3576,7 +3576,7 @@ export function PodSmartRouterTool() {
 
   const handleCopyCli = (text) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedCmd(true);
       setTimeout(() => setCopiedCmd(false), 2000);
     }
@@ -3786,7 +3786,7 @@ export function DigitalAssetForgeTool() {
 
   const handleCopy = (text, setFn) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setFn(true);
       setTimeout(() => setFn(false), 2000);
     }
@@ -4006,7 +4006,7 @@ export function PodMockupForgeTool() {
 
   const handleCopy = (text) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedCmd(true);
       setTimeout(() => setCopiedCmd(false), 2000);
     }
@@ -4183,7 +4183,7 @@ export function PodMarginSentinelTool() {
 
   const handleCopy = (text) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedCmd(true);
       setTimeout(() => setCopiedCmd(false), 2000);
     }
@@ -4388,7 +4388,7 @@ export function AgentVoiceCallTool() {
 
   const handleCopy = (text) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedCmd(true);
       setTimeout(() => setCopiedCmd(false), 2000);
     }
@@ -4603,7 +4603,7 @@ export function McpLensTool() {
 
   const handleCopy = (text) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedCmd(true);
       setTimeout(() => setCopiedCmd(false), 2000);
     }
@@ -4819,7 +4819,7 @@ export function AgentBudgetSentinelTool() {
 
   const handleCopy = (text) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedCmd(true);
       setTimeout(() => setCopiedCmd(false), 2000);
     }
@@ -5104,14 +5104,14 @@ export function ZothWebgenLauncherTool() {
   const [activeFile, setActiveFile] = useState('App.tsx');
 
   const files = {
-    'App.tsx': `import React from 'react';\n\nexport default function App() {\n  return (\n    <main className="min-h-screen bg-[#08080B] text-white p-6 md:p-12">\n      <header className="max-w-6xl mx-auto flex justify-between items-center mb-10">\n        <div className="flex items-center gap-3">\n          <span className="w-3.5 h-3.5 rounded-full bg-[#D4AF37] shadow-[0_0_12px_#D4AF37]" />\n          <h1 className="text-xl font-bold tracking-tight">${appName}</h1>\n        </div>\n        <div className="text-xs font-mono text-[#D4AF37] px-3 py-1 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10">\n          ARCHETYPE: ${archetype.toUpperCase()}\n        </div>\n      </header>\n      <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">\n        <div className="p-6 rounded-2xl bg-[#0D0E15] border border-white/10 hover:border-[#D4AF37]/40 transition">\n          <h3 className="font-bold text-lg mb-2 text-[#D4AF37]">Zero Cloud Egress</h3>\n          <p className="text-sm text-gray-400">All compute, state, and cryptographic signatures execute client-side.</p>\n        </div>\n        <div className="p-6 rounded-2xl bg-[#0D0E15] border border-white/10 hover:border-[#D4AF37]/40 transition">\n          <h3 className="font-bold text-lg mb-2 text-[#38BDF8]">Avant-Garde Commodities</h3>\n          <p className="text-sm text-gray-400">Conic border beams, aurora gradients, and tactile Bento layout primitives.</p>\n        </div>\n        <div className="p-6 rounded-2xl bg-[#0D0E15] border border-white/10 hover:border-[#D4AF37]/40 transition">\n          <h3 className="font-bold text-lg mb-2 text-[#10B981]">Dual Cash Registers</h3>\n          <p className="text-sm text-gray-400">Pre-wired Stripe payment links and DePay Solana non-custodial checkout.</p>\n        </div>\n      </section>\n    </main>\n  );\n}`,
+    'App.tsx': `import React from 'react';\n\nexport default function App() {\n  return (\n    <main className="min-h-screen bg-[#08080B] text-white p-6 md:p-12">\n      <header className="max-w-6xl mx-auto flex justify-between items-center mb-10">\n        <div className="flex items-center gap-3">\n          <span className="w-3.5 h-3.5 rounded-full bg-[#D4AF37] shadow-[0_0_12px_#D4AF37]" />\n          <h1 className="text-xl font-bold tracking-tight">${appName}</h1>\n        </div>\n        <div className="text-xs font-mono text-[#D4AF37] px-3 py-1 rounded-full border border-[#D4AF37]/30 bg-[#D4AF37]/10">\n          ARCHETYPE: ${archetype.toUpperCase()}\n        </div>\n      </header>\n      <section className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">\n        <div className="p-6 rounded-2xl bg-[#0D0E15] border border-white/10 hover:border-[#D4AF37]/40 transition">\n          <h3 className="font-bold text-lg mb-2 text-[#D4AF37]">Zero Cloud Egress</h3>\n          <p className="text-sm text-gray-400">All compute, state, and cryptographic signatures execute client-side.</p>\n        </div>\n        <div className="p-6 rounded-2xl bg-[#0D0E15] border border-white/10 hover:border-[#D4AF37]/40 transition">\n          <h3 className="font-bold text-lg mb-2 text-[#38BDF8]">Avant-Garde Commodities</h3>\n          <p className="text-sm text-gray-400">Conic border beams, aurora gradients, and tactile Bento layout primitives.</p>\n        </div>\n        <div className="p-6 rounded-2xl bg-[#0D0E15] border border-white/10 hover:border-[#D4AF37]/40 transition">\n          <h3 className="font-bold text-lg mb-2 text-[#10B981]">Dual Cash Registers</h3>\n          <p className="text-sm text-gray-400">Pre-wired Stripe payment links and Solana Tip Solana non-custodial checkout.</p>\n        </div>\n      </section>\n    </main>\n  );\n}`,
     'package.json': `{\n  "name": "${appName}",\n  "version": "1.0.0",\n  "private": true,\n  "type": "module",\n  "scripts": {\n    "dev": "vite",\n    "build": "vite build",\n    "preview": "vite preview"\n  },\n  "dependencies": {\n    "react": "^19.0.0",\n    "react-dom": "^19.0.0",\n    "lucide-react": "^0.460.0"\n  },\n  "devDependencies": {\n    "@vitejs/plugin-react": "^4.3.4",\n    "tailwindcss": "^3.4.15",\n    "vite": "^6.0.0"\n  }\n}`,
     'netlify.toml': `[build]\n  publish = "dist"\n  command = "npm run build"\n\n[[redirects]]\n  from = "/*"\n  to = "/index.html"\n  status = 200\n\n[[headers]]\n  for = "/*"\n  [headers.values]\n    X-Frame-Options = "SAMEORIGIN"\n    X-Content-Type-Options = "nosniff"\n    Referrer-Policy = "strict-origin-when-cross-origin"`
   };
 
   const handleCopy = (text, setFn) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setFn(true);
       setTimeout(() => setFn(false), 2000);
     }
@@ -5334,7 +5334,7 @@ export function ZothSwarmMultiplexerLauncherTool() {
 
   const handleCopy = (text, setFn) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setFn(true);
       setTimeout(() => setFn(false), 2000);
     }
@@ -5531,7 +5531,7 @@ export function ZothCivilizationLauncherTool() {
 
   const handleCopy = (text, setFn) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setFn(true);
       setTimeout(() => setFn(false), 2000);
     }
@@ -5728,7 +5728,7 @@ export function LikenessDeskTool() {
 
   const handleCopy = (text, setFn) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setFn(true);
       setTimeout(() => setFn(false), 2000);
     }
@@ -5977,13 +5977,13 @@ export function BoltDiyTool() {
     const words = clean.replace(/[^a-zA-Z0-9\s]/g, '').split(/\s+/).filter(Boolean);
     const slug = (words.slice(0, 3).join('-') || 'zoth-app').toLowerCase();
     const pascal = (words.slice(0, 3).map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join('') || 'SovereignApp');
-    const hasWeb3 = /solana|depay|crypto|wallet|mint|web3|token|treasury/i.test(clean);
+    const hasWeb3 = /solana|crypto|wallet|mint|web3|token|treasury/i.test(clean);
     const hasGpu = /webgpu|shader|3d|three|canvas|chart|graph/i.test(clean);
     const hasAuth = /auth|login|jwt|session|vault|key/i.test(clean);
 
     const modules = [
       `${pascal}Header.tsx`,
-      hasWeb3 ? 'SolanaDePayRail.tsx' : 'TelemetryKpiGrid.tsx',
+      hasWeb3 ? 'SolanaSupportRail.tsx' : 'TelemetryKpiGrid.tsx',
       hasGpu ? 'WebGPUViewportCanvas.tsx' : 'InteractiveWorkspace.tsx',
       hasAuth ? 'ZeroEgressVaultGuard.tsx' : 'ExportBundleModal.tsx',
     ];
@@ -6050,7 +6050,7 @@ export default function ${pascal}() {
 
   const handleCopy = (text, setFn) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setFn(true);
       setTimeout(() => setFn(false), 2000);
     }

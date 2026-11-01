@@ -455,7 +455,7 @@ export function registerSovereignWebMcpTool() {
 
   const handleCopyExport = (text) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedCode(true);
       setTimeout(() => setCopiedCode(false), 2000);
     }
@@ -575,7 +575,7 @@ export function registerSovereignWebMcpTool() {
             href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
             onClick={(e) => {
               if (navigator.clipboard) {
-                navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+                navigator.clipboard?.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK')?.catch?.(() => {});
               }
             }}
             sx={{

@@ -281,7 +281,7 @@ export default function VisionKinematicsGodModeTool({ tool }) {
 
   const handleCopy = () => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(exportedConfigJson);
+      navigator.clipboard?.writeText(exportedConfigJson)?.catch?.(() => {});
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }

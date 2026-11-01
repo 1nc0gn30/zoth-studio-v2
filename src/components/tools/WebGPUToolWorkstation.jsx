@@ -3382,14 +3382,14 @@ function OsintScoutWorkstation({ isDark, gold }) {
       score: 95,
       subs: ['zoth.nullai.tech', 'studio.nullai.tech', 'api.nullai.tech', 'cdn.nullai.tech']
     },
-    'nealfrazier.tech': {
+    'nullai.tech': {
       a: ['76.76.21.21'],
       ns: ['ns1.vercel-dns.com', 'ns2.vercel-dns.com'],
-      mx: ['10 mail.nealfrazier.tech'],
+      mx: ['10 mail.nullai.tech'],
       spf: 'v=spf1 include:_spf.google.com ~all',
       dmarc: 'v=DMARC1; p=reject; sp=reject;',
       score: 98,
-      subs: ['www.nealfrazier.tech', 'hub.nealfrazier.tech']
+      subs: ['www.nullai.tech', 'hub.nullai.tech']
     },
     'default': {
       a: ['104.18.22.45', '104.18.23.45'],
@@ -3436,7 +3436,7 @@ function OsintScoutWorkstation({ isDark, gold }) {
       </Box>
 
       <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
-        {['nullai.tech', 'nealfrazier.tech', 'github.com'].map((d) => (
+        {['nullai.tech', 'nullai.tech', 'github.com'].map((d) => (
           <Chip key={d} label={d} size="small" onClick={() => setDomain(d)} sx={{ fontFamily: mono, cursor: 'pointer', bgcolor: isDark ? '#14141E' : '#E2E8F0' }} />
         ))}
       </Box>
@@ -3544,7 +3544,7 @@ function StorefrontCatalogWorkstation({ isDark, gold }) {
   const p = PRODUCTS[selectedProduct];
 
   const handleCopyTags = () => {
-    navigator.clipboard.writeText(p.tags.join(', '));
+    navigator.clipboard?.writeText(p.tags.join(', '))?.catch?.(() => {});
     setCopiedTags(true);
     setTimeout(() => setCopiedTags(false), 2000);
   };

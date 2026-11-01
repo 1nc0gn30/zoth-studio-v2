@@ -15,7 +15,7 @@ const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
 
 const SHAPES = [
   { id: 'astrolabe', label: 'Astrolabe SDF', sub: 'Orbital Armillary' },
-  { id: 'shield', label: 'ZothOS v3.3 Shield', sub: 'Kernel + Tor Onion' },
+  { id: 'shield', label: 'ZothOS v3.4 Shield', sub: 'Kernel + Tor Onion' },
   { id: 'dag', label: 'Vaelor L1 DAG', sub: '100-Agent PoUW' },
   { id: 'synapse', label: 'STDP Synapse', sub: 'Biomorphic Memory' },
   { id: 'hex', label: 'HexStrike Radar', sub: '28 Red-Team Modules' },
@@ -429,7 +429,7 @@ export default function UncommonTelemetryDeck({ compact = false }) {
             <Grid item xs={12} sm={6}>
               <SplitFlapTile
                 label="PRIMARY DISTRO · ISO READY"
-                value="ZOTHOS v3.3.0"
+                value="ZOTHOS v3.4.0"
                 sub="Debian 13 Trixie · KDE Plasma 6 · 4-Folder Deterministic Desktop + Multi-Size Xcursor"
                 dark={dark}
                 to="/zoth-os"
@@ -438,7 +438,7 @@ export default function UncommonTelemetryDeck({ compact = false }) {
             <Grid item xs={12} sm={6}>
               <SplitFlapTile
                 label="AMNESIC MONOTONE OS"
-                value="ZOTHOS-LITE v1.0"
+                value="ZOTHOS-LITE v1.1"
                 sub="Tails-Style RAM-Only OS · 60fps Braille + Bayer Dither Windowed GUI (:8145)"
                 dark={dark}
                 to="/zoth-os"
@@ -474,7 +474,7 @@ export default function UncommonTelemetryDeck({ compact = false }) {
             <Grid item xs={12} sm={6}>
               <SplitFlapTile
                 label="OPEN-ACCESS ARSENAL"
-                value="163 MCP · 71 TOOLS"
+                value="163 MCP · 72 TOOLS"
                 sub="100% Free: Client-Side AST, Security, AEO + AI Workstations"
                 dark={dark}
                 to="/arsenal"

@@ -1,8 +1,28 @@
 {
   "schema": "zoth/tools-static/v1",
-  "generated_at": "2026-10-30T02:37:01.000Z",
-  "tool_count": 71,
+  "generated_at": "2026-11-01T14:59:00.000Z",
+  "tool_count": 72,
   "tools": [
+    {
+      "id": "pixel-cast",
+      "name": "PixelCast",
+      "description": "Ultra-low latency Google Pixel screenshare, camera bridge, and sovereign wireless ADB mirroring workstation over Tailscale mesh.",
+      "category": "Hardware & OS",
+      "github": "https://github.com/1nc0gn30/pixel-cast",
+      "published": true,
+      "studio_url": "https://zoth.nullai.tech/tools/pixel-cast/",
+      "version": "1.0.0",
+      "pull": "pixel-cast --help  # or: git clone https://github.com/1nc0gn30/pixel-cast.git",
+      "execution_type": "local_cli",
+      "runtimes": [
+        "python",
+        "node",
+        "cli",
+        "zero-egress"
+      ],
+      "port": 8148,
+      "local_url": "http://127.0.0.1:8148"
+    },
     {
       "id": "adytum-alchemist-ai-workflow",
       "name": "Adytum Planner",
@@ -12,7 +32,7 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/adytum-alchemist-ai-workflow/",
       "version": "1.0.0",
-      "pull": "npx @nullaitech/zoth pull adytum-alchemist-ai-workflow",
+      "pull": "adytum-alchemist-ai-workflow --help  # or: git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -20,8 +40,8 @@
         "cli",
         "zero-egress"
       ],
-      "port": 8137,
-      "local_url": "http://127.0.0.1:8137"
+      "port": 8135,
+      "local_url": "http://127.0.0.1:8135"
     },
     {
       "id": "azoth-local-agent",
@@ -32,7 +52,7 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/azoth-local-agent/",
       "version": "3.0.0",
-      "pull": "npx @nullaitech/zoth pull azoth-local-agent",
+      "pull": "azoth-local-agent --help  # or: git clone https://github.com/NullAITech/azoth-local-agent.git",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -40,8 +60,8 @@
         "cli",
         "zero-egress"
       ],
-      "port": 8138,
-      "local_url": "http://127.0.0.1:8138"
+      "port": 8136,
+      "local_url": "http://127.0.0.1:8136"
     },
     {
       "id": "sovereign-agent-bridge",
@@ -52,7 +72,7 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/sovereign-agent-bridge/",
       "version": "3.2.0",
-      "pull": "npx @nullaitech/zoth pull sovereign-agent-bridge",
+      "pull": "sovereign-agent-bridge --help  # or: git clone https://github.com/NullAITech/sovereign-agent-bridge.git",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -85,13 +105,13 @@
     },
     {
       "id": "zoth-os",
-      "name": "Zoth OS v3.3.0",
+      "name": "Zoth OS v3.4.0",
       "description": "Debian 13 + KDE Plasma 6.3 sovereign AI distro. Kali + Parrot parity, Studio v2, Ollama on 127.0.0.1, 163 MCP servers all off. Eight named virtual desktops; zoth-workspaces puts a Samsung / DP monitor on its own screen. Live users zoth / azoth / root password zoth.",
       "category": "Swarm & Core",
       "github": "https://github.com/NullAITech/zoth-os",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/zoth-os/",
-      "version": "3.3.0",
+      "version": "3.4.0",
       "pull": "git clone https://github.com/NullAITech/zoth-os.git && cd zoth-os",
       "execution_type": "local_cli",
       "runtimes": [
@@ -100,8 +120,8 @@
         "cli",
         "zero-egress"
       ],
-      "port": 8787,
-      "local_url": "http://127.0.0.1:8787"
+      "port": 8137,
+      "local_url": "http://127.0.0.1:8137"
     },
     {
       "id": "vector-search-engine",
@@ -115,7 +135,10 @@
       "pull": "git clone https://github.com/1nc0gn30/vector-search-engine.git && cd vector-search-engine && python3 -m http.server 8121 --directory public",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8121,
       "local_url": "http://127.0.0.1:8121"
@@ -132,7 +155,10 @@
       "pull": "git clone https://github.com/1nc0gn30/deepsearch-research-agent.git && cd deepsearch-research-agent && python3 -m http.server 8122 --directory public",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8122,
       "local_url": "http://127.0.0.1:8122"
@@ -149,7 +175,10 @@
       "pull": "git clone https://github.com/1nc0gn30/promptmaster-studio.git && cd promptmaster-studio && python3 -m http.server 8123 --directory public",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8123,
       "local_url": "http://127.0.0.1:8123"
@@ -163,7 +192,7 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/hexstrike-arsenal/",
       "version": "3.1.0",
-      "pull": "npx @nullaitech/zoth pull hexstrike-arsenal",
+      "pull": "hexstrike-arsenal --help  # or: git clone https://github.com/NullAITech/hexstrike-arsenal.git",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -171,8 +200,8 @@
         "cli",
         "zero-egress"
       ],
-      "port": 8888,
-      "local_url": "http://127.0.0.1:8888"
+      "port": 8138,
+      "local_url": "http://127.0.0.1:8138"
     },
     {
       "id": "envguard-secrets-vault",
@@ -186,7 +215,10 @@
       "pull": "git clone https://github.com/1nc0gn30/envguard-secrets-vault.git && cd envguard-secrets-vault && python3 -m http.server 8088 --directory public",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8088,
       "local_url": "http://127.0.0.1:8088"
@@ -203,7 +235,10 @@
       "pull": "git clone https://github.com/1nc0gn30/jwt-inspector-guard.git && cd jwt-inspector-guard && python3 -m http.server 8124 --directory public",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8124,
       "local_url": "http://127.0.0.1:8124"
@@ -211,7 +246,7 @@
     {
       "id": "payload-entropy-studio",
       "name": "Payload Entropy Studio",
-      "description": "100% in-browser Shannon entropy waveform visualizer, 32-byte sliding window, recursive payload deobfuscator, automated multi-engine WAF rule generator, Shannon waveform brand media, and dual Stripe + Solana checkout rails.",
+      "description": "100% in-browser Shannon entropy waveform visualizer, 32-byte sliding window, recursive payload deobfuscator, automated multi-engine WAF rule generator, Shannon waveform brand media, and 100% free & open-access with optional Buy Us a Coffee & Solana tip support.",
       "category": "Security & Recon",
       "github": "https://github.com/1nc0gn30/payload-entropy-studio",
       "published": true,
@@ -220,7 +255,10 @@
       "pull": "git clone https://github.com/1nc0gn30/payload-entropy-studio.git && cd payload-entropy-studio && python3 -m http.server 8080 --directory public",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8080,
       "local_url": "http://127.0.0.1:8080"
@@ -228,7 +266,7 @@
     {
       "id": "web-security-guard",
       "name": "Web Security Guard",
-      "description": "100% in-browser security headers auditor, TLS cert inspector, CSP Level 3 generator, native Web Crypto SHA-384 SRI hasher, security defense shield brand media, and dual Stripe + Solana checkout rails.",
+      "description": "100% in-browser security headers auditor, TLS cert inspector, CSP Level 3 generator, native Web Crypto SHA-384 SRI hasher, security defense shield brand media, and 100% free & open-access with optional Buy Us a Coffee & Solana tip support.",
       "category": "Security & Recon",
       "github": "https://github.com/1nc0gn30/web-security-guard",
       "published": true,
@@ -237,7 +275,10 @@
       "pull": "git clone https://github.com/1nc0gn30/web-security-guard.git && cd web-security-guard && python3 -m http.server 8125 --directory public",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8125,
       "local_url": "http://127.0.0.1:8125"
@@ -254,7 +295,10 @@
       "pull": "git clone https://github.com/1nc0gn30/polyglot-framework-exporter.git && cd polyglot-framework-exporter && python3 -m http.server 8126 --directory public",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8126,
       "local_url": "http://127.0.0.1:8126"
@@ -271,7 +315,10 @@
       "pull": "git clone https://github.com/1nc0gn30/aeo-graph-engine.git && cd aeo-graph-engine && python3 -m http.server 8127 --directory public",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8127,
       "local_url": "http://127.0.0.1:8127"
@@ -279,7 +326,7 @@
     {
       "id": "cwv-speed-engine",
       "name": "CWV Speed Engine",
-      "description": "100% in-browser Core Web Vitals diagnostic engine, client DOM AST speed transformer, PWA manifest builder, tachometer gauge brand media, and dual Stripe + Solana checkout rails.",
+      "description": "100% in-browser Core Web Vitals diagnostic engine, client DOM AST speed transformer, PWA manifest builder, tachometer gauge brand media, and 100% free & open-access with optional Buy Us a Coffee & Solana tip support.",
       "category": "Autonomous Web",
       "github": "https://github.com/1nc0gn30/cwv-speed-engine",
       "published": true,
@@ -288,7 +335,10 @@
       "pull": "git clone https://github.com/1nc0gn30/cwv-speed-engine.git && cd cwv-speed-engine && python3 -m http.server 8128 --directory public",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8128,
       "local_url": "http://127.0.0.1:8128"
@@ -296,16 +346,19 @@
     {
       "id": "vision-gesture-control",
       "name": "Vision Gesture Control",
-      "description": "100% in-browser touchless gesture control, 21-joint 3D hand tracking, spatial air drawing, and Model Context Protocol (MCP) agent connectivity with dual Stripe + Solana checkout rails.",
+      "description": "100% in-browser touchless gesture control, 21-joint 3D hand tracking, spatial air drawing, and Model Context Protocol (MCP) agent connectivity. Free to use; tips optional.",
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/vision-gesture-control",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/vision-gesture-control/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/vision-gesture-control.git && cd vision-gesture-control && python3 -m http.server 8089 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/vision-gesture-control.git && cd vision-gesture-control && python3 server.py --port 8089",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8089,
       "local_url": "http://127.0.0.1:8089"
@@ -319,10 +372,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/subsweep-lead-scanner/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/subsweep-lead-scanner.git && cd subsweep-lead-scanner && python3 -m http.server 8090 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/subsweep-lead-scanner.git && cd subsweep-lead-scanner && python3 server.py --port 8090",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8090,
       "local_url": "http://127.0.0.1:8090"
@@ -336,10 +392,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/omnipost-social-engine/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/omnipost-social-engine.git && cd omnipost-social-engine && python3 -m http.server 8091 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/omnipost-social-engine.git && cd omnipost-social-engine && python3 server.py --port 8091",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8091,
       "local_url": "http://127.0.0.1:8091"
@@ -353,10 +412,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/cron-rhythm-studio/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/cron-rhythm-studio.git && cd cron-rhythm-studio && python3 -m http.server 5174 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/cron-rhythm-studio.git && cd cron-rhythm-studio && python3 server.py --port 5174",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 5174,
       "local_url": "http://127.0.0.1:5174"
@@ -370,10 +432,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/certpath-roadmap-studio/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/certpath-roadmap-studio.git && cd certpath-roadmap-studio && python3 -m http.server 8093 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/certpath-roadmap-studio.git && cd certpath-roadmap-studio && python3 server.py --port 8093",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8093,
       "local_url": "http://127.0.0.1:8093"
@@ -381,16 +446,19 @@
     {
       "id": "pwa-manifest-builder",
       "name": "PWA Manifest Studio",
-      "description": "100% in-browser Progressive Web App manifest generator, ServiceWorker compiler, offline cache architect, and production PWA ZIP bundle exporter with dual Stripe + Solana checkout rails.",
+      "description": "100% in-browser Progressive Web App manifest generator, ServiceWorker compiler, offline cache architect, and production PWA ZIP bundle exporter. Free to use; tips optional.",
       "category": "Autonomous Web",
       "github": "https://github.com/1nc0gn30/pwa-manifest-builder",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/pwa-manifest-builder/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/pwa-manifest-builder.git && cd pwa-manifest-builder && python3 -m http.server 8100 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/pwa-manifest-builder.git && cd pwa-manifest-builder && python3 server.py --port 8100",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8100,
       "local_url": "http://127.0.0.1:8100"
@@ -398,16 +466,19 @@
     {
       "id": "regex-droid-builder",
       "name": "Regex Droid Studio",
-      "description": "100% in-browser visual regular expression builder, AST breakdown, railroad vector diagrams, multi-language code generator, and static ReDoS vulnerability guardian with dual Stripe + Solana checkout rails.",
+      "description": "100% in-browser visual regular expression builder, AST breakdown, railroad vector diagrams, multi-language code generator, and static ReDoS vulnerability guardian. Free to use; tips optional.",
       "category": "Automation",
       "github": "https://github.com/1nc0gn30/regex-droid-builder",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/regex-droid-builder/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/regex-droid-builder.git && cd regex-droid-builder && python3 -m http.server 8101 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/regex-droid-builder.git && cd regex-droid-builder && python3 server.py --port 8101",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8101,
       "local_url": "http://127.0.0.1:8101"
@@ -415,16 +486,19 @@
     {
       "id": "schema-illustrator-studio",
       "name": "Schema Illustrator Studio",
-      "description": "100% in-browser visual database ERD studio and schema transpiler (TypeScript, Pydantic, Prisma, SQL DDL, GraphQL) with dual Stripe + Solana checkout rails.",
+      "description": "100% in-browser visual database ERD studio and schema transpiler (TypeScript, Pydantic, Prisma, SQL DDL, GraphQL). Free to use; tips optional.",
       "category": "Autonomous Web",
       "github": "https://github.com/1nc0gn30/schema-illustrator-studio",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/schema-illustrator-studio/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/schema-illustrator-studio.git && cd schema-illustrator-studio && python3 -m http.server 8099 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/schema-illustrator-studio.git && cd schema-illustrator-studio && python3 server.py --port 8099",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8099,
       "local_url": "http://127.0.0.1:8099"
@@ -458,7 +532,7 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/zoth-swarm-multiplexer/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/NullAITech/zoth-swarm-multiplexer.git && cd zoth-swarm-multiplexer && python3 swarm_cli.py status",
+      "pull": "git clone https://github.com/NullAITech/zoth-swarm-multiplexer.git && cd zoth-swarm-multiplexer && python3 server.py --port 8141",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -466,8 +540,8 @@
         "cli",
         "zero-egress"
       ],
-      "port": 8790,
-      "local_url": "http://127.0.0.1:8790"
+      "port": 8141,
+      "local_url": "http://127.0.0.1:8141"
     },
     {
       "id": "webmcp-protocol-inspector",
@@ -478,27 +552,33 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/webmcp-protocol-inspector/",
       "version": "1.0.0",
-      "pull": "npx @nullaitech/zoth pull webmcp-protocol-inspector",
+      "pull": "python3 server.py --port 8142  # or: webmcp-protocol-inspector --status",
       "execution_type": "webgpu",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
-      "port": 8136,
-      "local_url": "http://127.0.0.1:8136"
+      "port": 8142,
+      "local_url": "http://127.0.0.1:8142"
     },
     {
       "id": "anderson-security-sentinel",
       "name": "Anderson Security Sentinel",
-      "description": "Autonomous biometric laptop perimeter defense, WiFi X-Ray RF tomography, USB tripwire guard, and thermal FLIR optics with dual Stripe + Solana checkout rails.",
+      "description": "Autonomous biometric laptop perimeter defense, WiFi X-Ray RF tomography, USB tripwire guard, and thermal FLIR optics. Free to use; tips optional.",
       "category": "Security & OpSec",
       "github": "https://github.com/1nc0gn30/anderson-security-sentinel",
-      "published": false,
+      "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/anderson-security-sentinel/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/anderson-security-sentinel.git && cd anderson-security-sentinel && python3 -m http.server 8103 --directory public",
+      "pull": "python3 server.py --port 8103  # or: anderson-security-sentinel --status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8103,
       "local_url": "http://127.0.0.1:8103"
@@ -506,16 +586,19 @@
     {
       "id": "badge3d-coin-generator",
       "name": "Badge3D Coin Generator",
-      "description": "100% in-browser WebGL 3D coin, medallion, and relief badge generator with real-time PBR metallic shaders, watertight STL/OBJ export, and dual Stripe + Solana checkout rails.",
+      "description": "100% in-browser WebGL 3D coin, medallion, and relief badge generator with real-time PBR metallic shaders, watertight STL/OBJ export, and 100% free & open-access with optional Buy Us a Coffee & Solana tip support.",
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/badge3d-coin-generator",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/badge3d-coin-generator/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/badge3d-coin-generator.git && cd badge3d-coin-generator && python3 -m http.server 8084 --directory public",
+      "pull": "python3 server.py --port 8084  # or: badge3d --status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8084,
       "local_url": "http://127.0.0.1:8084"
@@ -523,16 +606,19 @@
     {
       "id": "robots-txt-auditor",
       "name": "Robots.txt & AEO Auditor",
-      "description": "100% in-browser RFC 9309 robots.txt parser, AI crawler simulator (Googlebot, GPTBot, ClaudeBot, PerplexityBot, Applebot), Pro Drift Shield, and dual Stripe + Solana checkout rails.",
+      "description": "100% in-browser RFC 9309 robots.txt parser, AI crawler simulator (Googlebot, GPTBot, ClaudeBot, PerplexityBot, Applebot), Pro Drift Shield, and 100% free & open-access with optional Buy Us a Coffee & Solana tip support.",
       "category": "Growth & SEO",
       "github": "https://github.com/1nc0gn30/robots-txt-auditor",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/robots-txt-auditor/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/robots-txt-auditor.git && cd robots-txt-auditor && python3 -m http.server 8086 --directory public",
+      "pull": "python3 server.py --port 8086  # or: robots-txt --status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8086,
       "local_url": "http://127.0.0.1:8086"
@@ -540,16 +626,19 @@
     {
       "id": "city-desk",
       "name": "City Desk",
-      "description": "One studio writes the finished page for a trade and a city. 1,000 localized service pages across 20 trades and 50 mid-size cities with live customizer, multi-mipmap ICO, Pro bundle export, and dual Stripe + Solana checkout rails.",
+      "description": "One studio writes the finished page for a trade and a city. 1,000 localized service pages across 20 trades and 50 mid-size cities with live customizer, multi-mipmap ICO, Pro bundle export, and 100% free & open-access with optional Buy Us a Coffee & Solana tip support.",
       "category": "Growth & SEO",
       "github": "https://github.com/1nc0gn30/city-desk",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/city-desk/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/city-desk.git && cd city-desk && node build.js && python3 -m http.server 8087 --directory site",
+      "pull": "python3 server.py --port 8087  # or: city-desk --status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8087,
       "local_url": "http://127.0.0.1:8087"
@@ -557,16 +646,19 @@
     {
       "id": "agent-egress-sentinel",
       "name": "Agent Egress Sentinel",
-      "description": "Autonomous zero-dependency network interceptor, TLS SNI sniffer, kinetic egress radar, and kernel quarantine with dual Stripe + Solana rails.",
+      "description": "Autonomous zero-dependency network interceptor, TLS SNI sniffer, kinetic egress radar, and kernel quarantine. Free to use; tips optional.",
       "category": "Security & Network",
       "github": "https://github.com/1nc0gn30/agent-egress-sentinel",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/agent-egress-sentinel/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/agent-egress-sentinel.git && cd agent-egress-sentinel && python3 -m http.server 8095 --directory public",
+      "pull": "python3 server.py --web-port 8095 --proxy-port 8195  # or: agent-egress --status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8095,
       "local_url": "http://127.0.0.1:8095"
@@ -574,16 +666,19 @@
     {
       "id": "agent-mock-twin",
       "name": "Agent Mock Twin",
-      "description": "Autonomous offline API mock server & deterministic replay twin for AI agents ($0 token spend in CI/CD) with 4-mipmap ICO, standard license badge, Pro Docker export, and dual Stripe + Solana rails.",
+      "description": "Autonomous offline API mock server & deterministic replay twin for AI agents ($0 token spend in CI/CD) with OpenAPI/HAR ingestion, Python standard library backend, and 100% free open access.",
       "category": "Simulation & Testing",
       "github": "https://github.com/1nc0gn30/agent-mock-twin",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/agent-mock-twin/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/agent-mock-twin.git && cd agent-mock-twin && python3 -m http.server 8097 --directory public",
+      "pull": "python3 server.py --port 8097  # or: agent-mock --status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8097,
       "local_url": "http://127.0.0.1:8097"
@@ -591,16 +686,19 @@
     {
       "id": "agent-prompt-firewall",
       "name": "Agent Prompt Firewall",
-      "description": "Autonomous inline prompt injection defense, PII redactor, and threat radar for AI agents ($0 token leak) with 4-mipmap ICO, standard license badge, SOC-2 audit export, and dual Stripe + Solana rails.",
+      "description": "Autonomous inline prompt injection defense, PII redactor, and threat radar for AI agents ($0 token leak) with real-time SSE stream, AST de-obfuscation, and 100% free open access.",
       "category": "Security & Network",
       "github": "https://github.com/1nc0gn30/agent-prompt-firewall",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/agent-prompt-firewall/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/agent-prompt-firewall.git && cd agent-prompt-firewall && python3 -m http.server 8098 --directory public",
+      "pull": "python3 server.py --web-port 8098 --proxy-port 8198  # or: agent-firewall --status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8098,
       "local_url": "http://127.0.0.1:8098"
@@ -608,16 +706,19 @@
     {
       "id": "agent-flight-recorder",
       "name": "Agent Flight Recorder",
-      "description": "Black box flight recorder & time-scrubbing telemetry forensics hub for AI agents with 4-mipmap ICO, standard license badge, offline incident bundle export, and dual Stripe + Solana rails.",
+      "description": "Black box flight recorder & time-scrubbing telemetry forensics hub for AI agents with synchronized terminal stream, egress graph, memory engrams, and 100% free open access.",
       "category": "Forensics & Telemetry",
       "github": "https://github.com/1nc0gn30/agent-flight-recorder",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/agent-flight-recorder/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/agent-flight-recorder.git && cd agent-flight-recorder && python3 -m http.server 8104 --directory public",
+      "pull": "python3 server.py --port 8104  # or: agent-flight --status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8104,
       "local_url": "http://127.0.0.1:8104"
@@ -631,10 +732,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/agent-capsule-jail/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/agent-capsule-jail.git && cd agent-capsule-jail && python3 -m http.server 8105 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/agent-capsule-jail.git && cd agent-capsule-jail && python3 server.py --port 8105  # or: agent-capsule --status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8105,
       "local_url": "http://127.0.0.1:8105"
@@ -648,10 +752,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/agent-policy-auditor/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/agent-policy-auditor.git && cd agent-policy-auditor && python3 -m http.server 8106 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/agent-policy-auditor.git && cd agent-policy-auditor && python3 server.py --port 8106  # or: agent-policy status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8106,
       "local_url": "http://127.0.0.1:8106"
@@ -659,16 +766,19 @@
     {
       "id": "etsy-pod-forge",
       "name": "Etsy POD Forge",
-      "description": "Autonomous 300 DPI canvas generator, photorealistic mockup engine, and Etsy SEO listing synthesizer with dual Stripe + Solana checkout rails.",
+      "description": "Autonomous 300 DPI canvas generator, photorealistic mockup engine, and Etsy SEO listing synthesizer. Free to use; tips optional.",
       "category": "Commerce & POD",
       "github": "https://github.com/1nc0gn30/etsy-pod-forge",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/etsy-pod-forge/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/etsy-pod-forge.git && cd etsy-pod-forge && python3 -m http.server 8107 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/etsy-pod-forge.git && cd etsy-pod-forge && python3 server.py --port 8107  # or: etsy-pod-forge status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8107,
       "local_url": "http://127.0.0.1:8107"
@@ -682,10 +792,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/etsy-connector/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/etsy-connector.git && cd etsy-connector && python3 -m http.server 8108 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/etsy-connector.git && cd etsy-connector && python3 server.py --port 8108  # or: etsy-connector --status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8108,
       "local_url": "http://127.0.0.1:8108"
@@ -699,10 +812,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/mcp-lens/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/mcp-lens.git && cd mcp-lens && python3 -m http.server 8109 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/mcp-lens.git && cd mcp-lens && python3 server.py --port 8109  # or: mcp-lens --status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8109,
       "local_url": "http://127.0.0.1:8109"
@@ -716,10 +832,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/agent-budget-sentinel/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/agent-budget-sentinel.git && cd agent-budget-sentinel && ./bin/agent-budget serve --web-port 8110 --proxy-port 8111",
+      "pull": "git clone https://github.com/1nc0gn30/agent-budget-sentinel.git && cd agent-budget-sentinel && python3 server.py --web-port 8110 --proxy-port 8111  # or: agent-budget status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8110,
       "local_url": "http://127.0.0.1:8110"
@@ -733,10 +852,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/agent-gods-eye/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/agent-gods-eye.git && cd agent-gods-eye && ./bin/agent-gods-eye serve --port 8112",
+      "pull": "git clone https://github.com/1nc0gn30/agent-gods-eye.git && cd agent-gods-eye && python3 server.py --port 8112  # or: agent-gods-eye status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8112,
       "local_url": "http://127.0.0.1:8112"
@@ -750,10 +872,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/shopify-connector/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/shopify-connector.git && cd shopify-connector && ./bin/shopify-connector serve --port 8113",
+      "pull": "git clone https://github.com/1nc0gn30/shopify-connector.git && cd shopify-connector && python3 server.py --port 8113  # or: shopify-connector status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8113,
       "local_url": "http://127.0.0.1:8113"
@@ -767,10 +892,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/printify-connector/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/printify-connector.git && cd printify-connector && ./bin/printify-connector serve --port 8115",
+      "pull": "git clone https://github.com/1nc0gn30/printify-connector.git && cd printify-connector && python3 server.py --port 8115  # or: printify-connector status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8115,
       "local_url": "http://127.0.0.1:8115"
@@ -784,10 +912,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/gelato-connector/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/gelato-connector.git && cd gelato-connector && ./bin/gelato-connector serve --port 8116",
+      "pull": "git clone https://github.com/1nc0gn30/gelato-connector.git && cd gelato-connector && python3 server.py --port 8116  # or: gelato-connector status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8116,
       "local_url": "http://127.0.0.1:8116"
@@ -798,14 +929,14 @@
       "description": "Autonomous sovereign real-time voice cockpit, live audio WebSocket streaming, multi-persona voice synthesizer, and zero-telemetry call protocol.",
       "category": "Voice & Real-Time",
       "github": "https://github.com/1nc0gn30/agent-voice-call",
-      "published": false,
+      "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/agent-voice-call/",
-      "version": "1.0.0",
-      "pull": "git clone https://github.com/1nc0gn30/agent-voice-call.git && cd agent-voice-call && ./bin/agent-voice-call serve --port 8114",
-      "execution_type": "local_cli",
+      "version": "2.5.0",
+      "pull": "git clone https://github.com/1nc0gn30/agent-voice-call.git && cd agent-voice-call && python3 server.py --port 8114  # or: agent-voice-call status",
+      "execution_type": "browser",
       "runtimes": [
-        "python",
-        "node",
+        "browser",
+        "webgpu",
         "cli",
         "zero-egress"
       ],
@@ -821,10 +952,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/pod-smart-router/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/pod-smart-router.git && cd pod-smart-router && ./bin/pod-smart-router server --port 8117",
+      "pull": "git clone https://github.com/1nc0gn30/pod-smart-router.git && cd pod-smart-router && python3 server.py --port 8117  # or: pod-smart-router status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8117,
       "local_url": "http://127.0.0.1:8117"
@@ -838,10 +972,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/digital-asset-forge/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/digital-asset-forge.git && cd digital-asset-forge && ./bin/digital-asset-forge server --port 8118",
+      "pull": "git clone https://github.com/1nc0gn30/digital-asset-forge.git && cd digital-asset-forge && python3 server.py --port 8118  # or: digital-asset-forge status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8118,
       "local_url": "http://127.0.0.1:8118"
@@ -855,10 +992,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/pod-mockup-forge/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/pod-mockup-forge.git && cd pod-mockup-forge && ./bin/pod-mockup-forge server --port 8119",
+      "pull": "git clone https://github.com/1nc0gn30/pod-mockup-forge.git && cd pod-mockup-forge && python3 server.py --port 8119  # or: pod-mockup-forge status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8119,
       "local_url": "http://127.0.0.1:8119"
@@ -872,10 +1012,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/pod-margin-sentinel/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/pod-margin-sentinel.git && cd pod-margin-sentinel && ./bin/pod-margin-sentinel server --port 8120",
+      "pull": "git clone https://github.com/1nc0gn30/pod-margin-sentinel.git && cd pod-margin-sentinel && python3 server.py --port 8120  # or: pod-margin-sentinel status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8120,
       "local_url": "http://127.0.0.1:8120"
@@ -889,10 +1032,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/audiocipher-stego-engine/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/audiocipher-stego-engine.git && cd audiocipher-stego-engine && python3 -m audiocipher_stego_engine.cli serve --port 8096",
+      "pull": "git clone https://github.com/1nc0gn30/audiocipher-stego-engine.git && cd audiocipher-stego-engine && python3 -m audiocipher_stego_engine.cli serve --port 8096  # or: audiocipher-stego-engine --status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8096,
       "local_url": "http://127.0.0.1:8096"
@@ -900,16 +1046,19 @@
     {
       "id": "cyber-turtle-studio",
       "name": "Cyber Turtle Studio",
-      "description": "100% in-browser L-System fractal synthesizer, turtle geometry studio, and physical CNC pen-plotter G-Code and SVG vector exporter with dual Stripe + Solana checkout rails.",
+      "description": "100% in-browser L-System fractal synthesizer, turtle geometry studio, and physical CNC pen-plotter G-Code and SVG vector exporter. Free to use; tips optional.",
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/cyber-turtle-studio",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/cyber-turtle-studio/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/cyber-turtle-studio.git && cd cyber-turtle-studio && python3 -m http.server 8129 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/cyber-turtle-studio.git && cd cyber-turtle-studio && python3 -m cyber_turtle_studio.cli serve --port 8129  # or: cyber-turtle-studio --status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8129,
       "local_url": "http://127.0.0.1:8129"
@@ -917,16 +1066,19 @@
     {
       "id": "datamosh-glitch-studio",
       "name": "Datamosh Glitch Studio",
-      "description": "100% in-browser parametric video datamosh synthesizer, H.264 I-frame drop corruption, CRT scanlines, procedural cassette brand media, and live camera mosh buffer with dual Stripe + Solana rails.",
+      "description": "100% in-browser parametric video datamosh synthesizer, H.264 I-frame drop corruption, CRT scanlines, procedural cassette brand media, and live camera mosh buffer with zero paywalls.",
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/datamosh-glitch-studio",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/datamosh-glitch-studio/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/datamosh-glitch-studio.git && cd datamosh-glitch-studio && python3 -m http.server 8081 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/datamosh-glitch-studio.git && cd datamosh-glitch-studio && python3 -m datamosh_glitch_studio.cli serve --port 8081  # or: datamosh-glitch-studio --status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8081,
       "local_url": "http://127.0.0.1:8081"
@@ -934,16 +1086,19 @@
     {
       "id": "nexus-3d-scene-studio",
       "name": "Nexus 3D Scene Studio",
-      "description": "100% in-browser WebGL mathematical 3D geometry engine, 4D Tesseract, parametric surfaces, FastMCP server, procedural tesseract brand media, and precision OBJ/STL mesh exporters with dual Stripe + Solana rails.",
+      "description": "100% in-browser WebGL mathematical 3D geometry engine, 4D Tesseract, parametric surfaces, FastMCP server, procedural tesseract brand media, and precision OBJ/STL mesh exporters with zero paywalls.",
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/nexus-3d-scene-studio",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/nexus-3d-scene-studio/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/nexus-3d-scene-studio.git && cd nexus-3d-scene-studio && python3 -m http.server 8082 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/nexus-3d-scene-studio.git && cd nexus-3d-scene-studio && python3 -m nexus_3d_scene_studio.cli serve --port 8082  # or: nexus-3d-scene-studio --status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8082,
       "local_url": "http://127.0.0.1:8082"
@@ -957,10 +1112,13 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/ufo-sacred-geometry/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/ufo-sacred-geometry.git && cd ufo-sacred-geometry && python3 -m http.server 8083 --directory public",
+      "pull": "git clone https://github.com/1nc0gn30/ufo-sacred-geometry.git && cd ufo-sacred-geometry && python3 -m ufo_sacred_geometry.cli serve --port 8083  # or: ufo-sacred-geometry --status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8083,
       "local_url": "http://127.0.0.1:8083"
@@ -971,10 +1129,10 @@
       "description": "Local video double on GPU; Chatterbox Turbo voice cloning and Wav2Lip photorealistic mouth animation on Quadro P1000 with zero cloud leakage.",
       "category": "Voice & Real-Time",
       "github": "https://github.com/1nc0gn30/likeness-desk",
-      "published": false,
+      "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/likeness-desk/",
-      "version": "1.0.0",
-      "pull": "cd ~/NullAITech/likeness-desk && python3 server.py",
+      "version": "2.5.0",
+      "pull": "cd ~/NullAITech/likeness-desk && node server.js  # or: likeness-desk --status",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -988,16 +1146,19 @@
     {
       "id": "osint-scout-skill",
       "name": "Domain Intel OSINT Scout",
-      "description": "100% in-browser passive domain intelligence & attack surface reconnaissance engine auditing Certificate Transparency logs, DoH DNS records, and SPF/DMARC posture — free to use; optional tips welcome.",
+      "description": "100% in-browser passive domain intelligence & attack surface reconnaissance engine auditing Certificate Transparency logs, DoH DNS records, and SPF/DMARC posture \u2014 free to use; optional tips welcome.",
       "category": "Security & Recon",
       "github": "https://github.com/NullAITech/osint-scout-skill",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/osint-scout-skill/",
       "version": "2.5.0",
-      "pull": "git clone https://github.com/NullAITech/osint-scout-skill.git && cd osint-scout-skill && python3 -m http.server 8085 --directory public",
+      "pull": "git clone https://github.com/NullAITech/osint-scout-skill.git && cd osint-scout-skill && python3 server.py --port 8085  # or: osint-scout --status",
       "execution_type": "browser",
       "runtimes": [
-        "browser"
+        "browser",
+        "webgpu",
+        "cli",
+        "zero-egress"
       ],
       "port": 8085,
       "local_url": "http://127.0.0.1:8085"
@@ -1011,7 +1172,7 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/bolt.diy/",
       "version": "3.5.0",
-      "pull": "git clone https://github.com/stackblitz-labs/bolt.diy.git ~/NullAITech/bolt.diy && cd ~/NullAITech/bolt.diy && npm run dev",
+      "pull": "cd ~/NullAITech/bolt.diy && python3 server.py --port 5173  # or: bolt.diy --status",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -1028,10 +1189,10 @@
       "description": "The living heart of the 21-agent society. Runs the GameBoy pixel world simulation, Adytum Initiation Deck, and meditation art catalog.",
       "category": "Swarm & Core",
       "github": "https://github.com/1nc0gn30/zoth-civilization",
-      "published": false,
+      "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/zoth-civilization/",
-      "version": "1.0.0",
-      "pull": "cd ~/NullAITech/zoth-civilization && ENABLE_KOKORO_VOICE=0 node server.js",
+      "version": "2.5.0",
+      "pull": "cd ~/NullAITech/zoth-civilization && ENABLE_KOKORO_VOICE=0 node server.js  # or: zoth-civ status",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -1045,19 +1206,22 @@
     {
       "id": "storefront-catalog",
       "name": "YourDigitalSpace POD Showcase",
-      "description": "10 master Etsy Print-on-Demand products optimized for 55+ demographic with 62.6% blended profit margin, 13/13 tag sets, and dual Stripe + Solana checkout rails.",
+      "description": "10 master Etsy Print-on-Demand products optimized for 55+ demographic with 62.6% blended profit margin, 13/13 tag sets, and 100% free & open-access with optional Buy Us a Coffee & Solana tip support.",
       "category": "Commerce & POD",
       "github": "https://github.com/1nc0gn30/storefront-catalog",
-      "published": false,
+      "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/storefront-catalog/",
-      "version": "1.0.0",
-      "pull": "git clone https://github.com/1nc0gn30/storefront-catalog.git && cd storefront-catalog && python3 build_showcase.py",
-      "execution_type": "browser",
+      "version": "2.5.0",
+      "pull": "cd ~/NullAITech/storefront-catalog && python3 server.py --port 8143  # or: storefront-catalog --status",
+      "execution_type": "local_cli",
       "runtimes": [
-        "browser"
+        "python",
+        "node",
+        "cli",
+        "zero-egress"
       ],
-      "port": 8135,
-      "local_url": "http://127.0.0.1:8135"
+      "port": 8143,
+      "local_url": "http://127.0.0.1:8143"
     },
     {
       "id": "shodan-surface-sentinel",
@@ -1065,15 +1229,16 @@
       "description": "Zero-egress defensive asset auditor and InternetDB engine. Inspects open ports, CPE software stacks, and confirmed CVE exposures for your infrastructure.",
       "category": "Security & Enclave",
       "github": "https://github.com/1nc0gn30/shodan-surface-sentinel",
-      "published": false,
+      "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/shodan-surface-sentinel/",
-      "version": "3.2.0",
-      "pull": "shodan myip && shodan host $(shodan myip)",
-      "execution_type": "browser",
+      "version": "3.5.0",
+      "pull": "cd ~/NullAITech/shodan-surface-sentinel && python3 server.py --port 8130  # or: shodan-sentinel scan 1.1.1.1",
+      "execution_type": "local_cli",
       "runtimes": [
-        "browser",
-        "zero-egress",
-        "webcrypto"
+        "python",
+        "node",
+        "cli",
+        "zero-egress"
       ],
       "port": 8130,
       "local_url": "http://127.0.0.1:8130"
@@ -1086,13 +1251,13 @@
       "github": "https://github.com/LaurieWired/GhidraMCP",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/ghidra-mcp-bridge/",
-      "version": "2.0.0",
-      "pull": "uvx --from git+https://github.com/LaurieWired/GhidraMCP ghidra-mcp --ghidra-server http://127.0.0.1:8080/",
+      "version": "3.5.0",
+      "pull": "cd ~/NullAITech/ghidra-mcp-bridge && python3 server.py --port 8131  # or: ghidra-bridge decompile zoth-vault-daemon main",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
-        "mcp",
-        "ghidra",
+        "node",
+        "cli",
         "zero-egress"
       ],
       "port": 8131,
@@ -1101,17 +1266,18 @@
     {
       "id": "zoth-ascii-magic",
       "name": "Zoth ASCII Magic Studio",
-      "description": "100% client-side Image/Video/3D-to-ASCII & Sub-Pixel Unicode Braille studio with Sobel directional edge detection (/\\|-), interactive 2D point relighting, CRT phosphor bloom, and 24-bit TrueColor ANSI/HTML/SVG exports.",
+      "description": "100% client-side Image/Video/3D-to-ASCII & Sub-Pixel Unicode Braille studio with Sobel directional edge detection (/\\\\|-), interactive 2D point relighting, CRT phosphor bloom, and 24-bit TrueColor ANSI/HTML/SVG exports.",
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/zoth-ascii-magic",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/zoth-ascii-magic/",
-      "version": "2.6.0",
-      "pull": "git clone https://github.com/1nc0gn30/zoth-ascii-magic.git && cd zoth-ascii-magic && zoth-ascii-magic --serve 8132",
+      "version": "2.7.0",
+      "pull": "cd ~/NullAITech/zoth-ascii-magic && python3 server.py --port 8132  # or: zoth-ascii-magic --preset merkaba --mode braille",
       "execution_type": "browser",
       "runtimes": [
         "browser",
-        "canvas2d",
+        "webgpu",
+        "cli",
         "zero-egress"
       ],
       "port": 8132,
@@ -1122,15 +1288,16 @@
       "name": "YARA-X & Sigma Threat Rule Forge",
       "description": "100% client-side YARA-X & Sigma threat detection compiler with 60fps byte-offset entropy radar, CVE-2024-4577 PHP-CGI / ELF64 memfd / AI Agent exfil signatures, and MITRE ATT&CK mapping.",
       "category": "Security & Recon",
-      "github": "https://github.com/NullAITech/zoth-os",
-      "published": false,
+      "github": "https://github.com/1nc0gn30/yara-sigma-forge",
+      "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/yara-sigma-forge/",
-      "version": "3.2.0",
-      "pull": "zoth-yara-forge --emit-yara && zoth-yara-forge --scan /path/to/payload",
+      "version": "3.4.0",
+      "pull": "cd ~/NullAITech/yara-sigma-forge && python3 server.py --port 8133  # or: yara-sigma-forge --scan sample.bin",
       "execution_type": "browser",
       "runtimes": [
         "browser",
-        "yara-x",
+        "webgpu",
+        "cli",
         "zero-egress"
       ],
       "port": 8133,
@@ -1141,15 +1308,16 @@
       "name": "Zoth Reality Shader & Theme Forge",
       "description": "Interactive 60fps Reality Switch shader synthesizer and ZothOS desktop theme compiler. Customize the 5 Zoth Realities, preview Zoth Bot companions, and export KDE Plasma .colors, Alacritty .toml, and CSS tokens.",
       "category": "Media & 3D",
-      "github": "https://github.com/NullAITech/zoth-studio-v2",
-      "published": false,
+      "github": "https://github.com/1nc0gn30/reality-shader-forge",
+      "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/reality-shader-forge/",
-      "version": "3.2.0",
-      "pull": "zoth-theme-forge --list && zoth-theme-forge --reality cyan --format kde",
+      "version": "3.4.0",
+      "pull": "cd ~/NullAITech/reality-shader-forge && python3 server.py --port 8134  # or: reality-forge --reality gold --format kde",
       "execution_type": "browser",
       "runtimes": [
         "browser",
-        "webgl",
+        "webgpu",
+        "cli",
         "zero-egress"
       ],
       "port": 8134,
@@ -1161,13 +1329,14 @@
       "description": "Local Zoth OS cockpit that diffs the ZOTHOS Product Hunt listing against live website/GitHub URLs, surfaces votes/ranks/comments, and serves a loopback dashboard on :8139. Token stays in ~/.config/zothos/producthunt.secret.json.",
       "category": "Commerce & POD",
       "github": "https://github.com/1nc0gn30/producthunt-connector",
-      "published": false,
+      "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/producthunt-connector/",
-      "version": "1.0.0",
-      "pull": "cd ~/NullAITech/producthunt-connector && zoth-ph serve --port 8139",
+      "version": "1.1.0",
+      "pull": "cd ~/NullAITech/producthunt-connector && python3 server.py --port 8139  # or: zoth-ph status",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
+        "node",
         "cli",
         "zero-egress"
       ],
@@ -1180,13 +1349,14 @@
       "description": "Hardened local MCP/HTTP bridge so many AI agents share one ZothOS machine with per-agent tokens, path sandbox, command blocklist, rate limits, and audit trail on 127.0.0.1:8765.",
       "category": "Swarm & Core",
       "github": "https://github.com/1nc0gn30/zoth-relay",
-      "published": false,
+      "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/zoth-relay/",
       "version": "0.5.0",
-      "pull": "cd ~/NullAITech/zoth-relay && sudo ./install.sh && zoth-relay agent list",
+      "pull": "sudo systemctl status zoth-relay  # or: zoth-relay agent list",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
+        "node",
         "cli",
         "zero-egress"
       ],
@@ -1196,36 +1366,42 @@
     {
       "id": "zela-glasses-guide",
       "name": "Zela Glasses Guide",
-      "description": "Sovereign wearable AI mission coach for Ray-Ban Meta smart glasses over Tailscale — full-duplex WebSocket guide stream, Moondream vision, AGY coaching, and Kokoro TTS via zoth-relay-mobile.",
+      "description": "Sovereign wearable AI mission coach for Ray-Ban Meta smart glasses over Tailscale \u2014 full-duplex WebSocket guide stream, Moondream vision, AGY coaching, and Kokoro TTS via zoth-relay-mobile.",
       "category": "Swarm & Core",
       "github": "https://github.com/1nc0gn30/zela-glasses-guide",
-      "published": false,
+      "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/zela-glasses-guide/",
       "version": "0.5.0",
-      "pull": "open https://zela-glasses-guide.netlify.app",
+      "pull": "cd ~/NullAITech/zela-glasses-guide && python3 server.py --port 8144  # or: zela-glasses-guide --status",
       "execution_type": "browser",
       "runtimes": [
         "browser",
+        "webgpu",
+        "cli",
         "zero-egress"
       ],
-      "local_url": "https://zela-glasses-guide.netlify.app"
+      "port": 8144,
+      "local_url": "http://127.0.0.1:8144"
     },
     {
       "id": "zoth-bot",
       "name": "Zoth Bot Desktop Companion",
-      "description": "Local-first always-on 3D WebGL desk companion for Zoth OS — multi-harness neural engine (Grok/Hermes/Ollama), Security Ring authority, MCP hub, summoned with Ctrl+Shift+Space.",
+      "description": "Local-first always-on 3D WebGL desk companion for Zoth OS \u2014 multi-harness neural engine (Grok/Hermes/Ollama), Security Ring authority, MCP hub, summoned with Ctrl+Shift+Space.",
       "category": "Swarm & Core",
       "github": "https://github.com/1nc0gn30/zoth-bot",
-      "published": false,
+      "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/zoth-bot/",
       "version": "1.0.0",
-      "pull": "cd ~/NullAITech/zoth-bot && npm start",
+      "pull": "cd ~/NullAITech/zoth-bot && python3 server.py --port 8146  # or: zoth-bot --status",
       "execution_type": "local_cli",
       "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
-      ]
+      ],
+      "port": 8146,
+      "local_url": "http://127.0.0.1:8146"
     },
     {
       "id": "zoth-bounty",
@@ -1233,12 +1409,13 @@
       "description": "Zero-false-positive security research & responsible disclosure workspace tracking Ongoing / Pending / Completed audits with a loopback command center on :9494.",
       "category": "Security & Enclave",
       "github": "https://github.com/1nc0gn30/zoth-bounty",
-      "published": false,
+      "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/zoth-bounty/",
       "version": "1.0.0",
-      "pull": "cd ~/NullAITech/zoth-bounty && node server.js",
+      "pull": "cd ~/NullAITech/zoth-bounty && node server.js  # or: zoth-bounty --status",
       "execution_type": "local_cli",
       "runtimes": [
+        "python",
         "node",
         "cli",
         "zero-egress"
@@ -1249,21 +1426,22 @@
     {
       "id": "zoth-scene-foundry",
       "name": "Zoth Scene Foundry",
-      "description": "Procedural ZothOS-style ASCII + pixel-art scene engine — 1000 deterministic scenes with Bayer dither, tube palettes, and three.js AsciiEffect stage on :8823.",
+      "description": "Procedural ZothOS-style ASCII + pixel-art scene engine \u2014 1000 deterministic scenes with Bayer dither, tube palettes, and three.js AsciiEffect stage on :8823.",
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/zoth-scene-foundry",
-      "published": false,
+      "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/zoth-scene-foundry/",
       "version": "1.0.0",
-      "pull": "cd ~/NullAITech/zoth-scene-foundry && python3 -m http.server 8823",
+      "pull": "cd ~/NullAITech/zoth-scene-foundry && python3 server.py --port 8823  # or: zoth-scene-foundry --status",
       "execution_type": "browser",
       "runtimes": [
         "browser",
-        "node",
+        "webgpu",
+        "cli",
         "zero-egress"
       ],
       "port": 8823,
-      "local_url": "http://127.0.0.1:8823/gallery.html"
+      "local_url": "http://127.0.0.1:8823"
     }
   ]
 }

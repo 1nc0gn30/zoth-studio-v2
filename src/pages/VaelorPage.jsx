@@ -93,7 +93,7 @@ const PRESET_ACCOUNTS = [
   { handle: '@citizen', name: 'Sovereign Demo Wallet', balance: 4750.50, badge: 'Passkey Ready' },
   { handle: '@sprig', name: 'Sprig Kitchen • 757 Artisan Merchant', balance: 5157.05, badge: 'Merchant POS' },
   { handle: '@zoth', name: 'Zoth Studio & Compute Node', balance: 29957.77, badge: 'Sovereign Prime' },
-  { handle: '@neal', name: '1nc0gn30', balance: 25000.00, badge: 'Founder Core' }
+  { handle: '@1nc0gn30', name: '1nc0gn30', balance: 25000.00, badge: 'Founder Core' }
 ];
 
 const VALIDATORS = [
@@ -475,7 +475,7 @@ export default function VaelorPage() {
   const [selectedGroupPreset, setSelectedGroupPreset] = useState(GROUP_TAB_PRESETS[1]);
   const [groupOrganizer, setGroupOrganizer] = useState('@citizen');
   const [groupMerchant, setGroupMerchant] = useState('@sprig');
-  const [groupMembers, setGroupMembers] = useState(['@zoth', '@neal', '@sprig', '@citizen']);
+  const [groupMembers, setGroupMembers] = useState(['@zoth', '@1nc0gn30', '@sprig', '@citizen']);
   const [isSettlingGroupTab, setIsSettlingGroupTab] = useState(false);
   const [groupTabResult, setGroupTabResult] = useState(null);
 
@@ -545,7 +545,7 @@ export default function VaelorPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           handle: '@citizen',
-          approvals: ['@neal', '@zoth'],
+          approvals: ['@1nc0gn30', '@zoth'],
           reason: 'Biometric Passkey device rotation'
         })
       });
@@ -558,7 +558,7 @@ export default function VaelorPage() {
     if (!resData) {
       resData = rotateVaelorGuardianRecoveryFallback({
         handle: '@citizen',
-        approvals: ['@neal', '@zoth'],
+        approvals: ['@1nc0gn30', '@zoth'],
         reason: 'Biometric Passkey device rotation'
       });
     }
@@ -604,7 +604,7 @@ export default function VaelorPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           from: '@citizen',
-          to: '@neal',
+          to: '@1nc0gn30',
           amount: 25.0,
           memo: 'Confidential Institutional Settlement'
         })
@@ -618,7 +618,7 @@ export default function VaelorPage() {
     if (!resData) {
       resData = sendVaelorShieldedTransferFallback({
         from: '@citizen',
-        to: '@neal',
+        to: '@1nc0gn30',
         amount: 25.0,
         memo: 'Confidential Institutional Settlement'
       });
@@ -665,7 +665,7 @@ export default function VaelorPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          poster: '@neal',
+          poster: '@1nc0gn30',
           title: selectedBountyPreset.title,
           category: selectedBountyPreset.category,
           rewardAmount: selectedBountyPreset.reward,
@@ -702,7 +702,7 @@ export default function VaelorPage() {
 
     if (!resData) {
       resData = postVaelorBountyFallback({
-        poster: '@neal',
+        poster: '@1nc0gn30',
         claimant: '@zoth',
         title: selectedBountyPreset.title,
         category: selectedBountyPreset.category,
@@ -810,7 +810,7 @@ export default function VaelorPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          issuer: '@neal',
+          issuer: '@1nc0gn30',
           amount: amt,
           claimSecret: voucherPin,
           memo: voucherMemo,
@@ -825,7 +825,7 @@ export default function VaelorPage() {
 
     if (!resData) {
       resData = issueVaelorVoucherFallback({
-        issuer: '@neal',
+        issuer: '@1nc0gn30',
         amount: amt,
         claimSecret: voucherPin,
         memo: voucherMemo,
@@ -1210,13 +1210,13 @@ export default function VaelorPage() {
   const COMM_NODES = [
     { handle: '@zoth-rig2', name: '24/7 Autonomous AI Laptop', role: 'Dedicated Hermes Worker', os: 'ZothOS / KVM Hardware Sandbox', color: '#00F0FF' },
     { handle: '@zoth', name: 'Primary ZothOS Workstation', role: 'Developer Cockpit & Ops Deck', os: 'ZothOS Preempt-RT Linux', color: '#D4AF37' },
-    { handle: '@neal', name: 'Founder Core Node', role: 'Sovereign Architect', os: 'ZothOS Sanctum Room', color: '#10B981' }
+    { handle: '@1nc0gn30', name: 'Founder Core Node', role: 'Sovereign Architect', os: 'ZothOS Sanctum Room', color: '#10B981' }
   ];
 
   const INITIAL_COMM_MESSAGES = [
     {
       id: 'comm_01',
-      from: '@neal',
+      from: '@1nc0gn30',
       to: '@zoth-rig2',
       plaintext: 'Initialize 24/7 autonomous micro-SaaS incubator and run Preempt-RT memory audit.',
       attachedVlr: 25,
@@ -1235,7 +1235,7 @@ export default function VaelorPage() {
     {
       id: 'comm_02',
       from: '@zoth-rig2',
-      to: '@neal',
+      to: '@1nc0gn30',
       plaintext: 'Subagent swarm initialized on KVM guest. Minted 15.69 ◈ VLR PoUW reward with zero CPU throttle (<55°C).',
       attachedVlr: 0,
       aiPrompt: null,
@@ -1253,7 +1253,7 @@ export default function VaelorPage() {
   ];
 
   const [commTargetNode, setCommTargetNode] = useState(COMM_NODES[0].handle);
-  const [commSenderHandle, setCommSenderHandle] = useState('@neal');
+  const [commSenderHandle, setCommSenderHandle] = useState('@1nc0gn30');
   const [commPassphrase, setCommPassphrase] = useState('zoth-sovereign-757');
   const [commMessageInput, setCommMessageInput] = useState('Deploy subagent cluster & optimize Preempt-RT kernel');
   const [commAttachedVlr, setCommAttachedVlr] = useState(5);
@@ -1922,7 +1922,7 @@ export default function VaelorPage() {
                     { h: '@z0th', label: '@z0th (Spoofing Zero)', safe: false },
                     { h: '@sprig', label: '@sprig (Authentic)', safe: true },
                     { h: '@spr1g', label: '@spr1g (Spoofing One)', safe: false },
-                    { h: '@neal', label: '@neal (Authentic)', safe: true },
+                    { h: '@1nc0gn30', label: '@1nc0gn30 (Authentic)', safe: true },
                     { h: '@nea1', label: '@nea1 (Spoofing One)', safe: false }
                   ].map((p) => (
                     <Chip
@@ -2834,7 +2834,7 @@ export default function VaelorPage() {
                     <Stack spacing={0.6}>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: '#38BDF8' }}>
-                          @neal (Founder Core)
+                          @1nc0gn30 (Founder Core)
                         </Typography>
                         <Chip label="Approved ✓" size="small" sx={{ height: 18, fontSize: '0.6rem', fontFamily: mono, bgcolor: 'rgba(16,185,129,0.15)', color: '#34D399' }} />
                       </Box>
@@ -2952,7 +2952,7 @@ export default function VaelorPage() {
                     </Typography>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.6 }}>
                       <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: '#E879F9' }}>
-                        Beneficiary: @neal
+                        Beneficiary: @1nc0gn30
                       </Typography>
                       <Chip label="100% Bequest" size="small" sx={{ height: 18, fontSize: '0.6rem', fontFamily: mono, bgcolor: 'rgba(232,121,249,0.15)', color: '#E879F9' }} />
                     </Box>
@@ -3059,7 +3059,7 @@ export default function VaelorPage() {
                       INSTITUTIONAL SHIELDED PAYLOAD
                     </Typography>
                     <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: '#C084FC', mb: 0.4 }}>
-                      @citizen → @neal (25.00 ◈ VLR)
+                      @citizen → @1nc0gn30 (25.00 ◈ VLR)
                     </Typography>
                     <Typography variant="caption" sx={{ fontFamily: mono, color: '#64748B', fontSize: '0.66rem', display: 'block' }}>
                       Payload: <code>🔒 Encrypted Stealth Payload</code> • Gas: $0.00
@@ -3246,7 +3246,7 @@ export default function VaelorPage() {
                         Poster:
                       </Typography>
                       <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: gold.accent, fontSize: '0.72rem' }}>
-                        @neal (Founder Core)
+                        @1nc0gn30 (Founder Core)
                       </Typography>
                     </Box>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
@@ -5442,7 +5442,7 @@ export default function VaelorPage() {
                           fullWidth
                           value={commSenderHandle}
                           onChange={(e) => setCommSenderHandle(e.target.value)}
-                          placeholder="@neal"
+                          placeholder="@1nc0gn30"
                           inputProps={{ style: { fontFamily: mono, fontSize: '0.85rem' } }}
                         />
                       </Grid>
@@ -6046,8 +6046,8 @@ export default function VaelorPage() {
 
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, mb: 1 }}>
                       <Typography variant="caption" sx={{ color: '#64748B', fontSize: '0.7rem' }}>CO-SIGNERS:</Typography>
-                      {['@neal', '@zoth', '@sprig'].map((s) => {
-                        const approved = (multisigData?.approvedBy || ['@neal', '@zoth']).includes(s);
+                      {['@1nc0gn30', '@zoth', '@sprig'].map((s) => {
+                        const approved = (multisigData?.approvedBy || ['@1nc0gn30', '@zoth']).includes(s);
                         return (
                           <Chip
                             key={s}

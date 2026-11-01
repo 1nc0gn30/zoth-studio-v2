@@ -450,8 +450,8 @@ nice -n ${niceLevel} qemu-system-x86_64 \\
       <SovereignBand
         seed={"zoth-os"}
         eyebrow={"Swarm & Core"}
-        caption={"Zoth OS v3.3.0"}
-        label={"Zoth OS v3.3.0 — Zoth sovereign visualisation"}
+        caption={"Zoth OS v3.4.0"}
+        label={"Zoth OS v3.4.0 — Zoth sovereign visualisation"}
       />
       <Grid container>
         {/* Left Column: 60fps Ring-0 Topology Canvas + Daemon Selector */}

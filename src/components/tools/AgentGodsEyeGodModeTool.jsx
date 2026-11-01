@@ -160,7 +160,7 @@ export function AgentGodsEyeGodModeTool() {
 
   const handleCopy = (text, key) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedKey(key);
       setTimeout(() => setCopiedKey(null), 2000);
     }
@@ -371,7 +371,7 @@ export function AgentGodsEyeGodModeTool() {
                 variant="outlined"
                 onClick={() => {
                   if (navigator.clipboard) {
-                    navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+                    navigator.clipboard?.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK')?.catch?.(() => {});
                   }
                 }}
                 sx={{

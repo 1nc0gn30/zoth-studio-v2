@@ -4,7 +4,7 @@
  * Every route in App.jsx resolves to a rendered clip in /public/intros
  * (`<clip>-desktop.{webm,mp4}` + `<clip>-mobile.{webm,mp4}`). Docs sub-routes and
  * dynamic detail routes reuse their parent product's cut or category-matched cut
- * so the visual identity stays consistent across showcases, docs, and all 71 tools.
+ * so the visual identity stays consistent across showcases, docs, and all 72 tools.
  *
  * `accent` drives the handoff seam + HUD chrome colour for that route.
  */
@@ -42,8 +42,8 @@ const ROUTES = [
   { match: /^\/webgen\/?$/, clip: 'webgen', label: 'Zoth Bolt', kicker: 'Full-Stack AI + Motion Architect · :5173', accent: 'sky', brailleShape: 'grid' },
   { match: /^\/hexstrike\/docs\/?$/, clip: 'hexstrike', label: 'HexStrike · Docs', kicker: 'Offensive Security Manual', accent: 'crimson', brailleShape: 'hex' },
   { match: /^\/hexstrike\/?$/, clip: 'hexstrike', label: 'HexStrike AI', kicker: 'Offensive Security Suite · :8888', accent: 'crimson', brailleShape: 'hex' },
-  { match: /^\/zoth-os\/docs\/?$/, clip: 'zoth-os', label: 'ZothOS · Docs', kicker: 'System + ISO Architecture v3.3.0', accent: 'gold', brailleShape: 'shield' },
-  { match: /^\/zoth-os\/?$/, clip: 'zoth-os', label: 'ZothOS Linux', kicker: 'ZothOS v3.3.0 + ZothOS-Lite v1.0', accent: 'gold', brailleShape: 'shield' },
+  { match: /^\/zoth-os\/docs\/?$/, clip: 'zoth-os', label: 'ZothOS · Docs', kicker: 'System + ISO Architecture v3.4.0', accent: 'gold', brailleShape: 'shield' },
+  { match: /^\/zoth-os\/?$/, clip: 'zoth-os', label: 'ZothOS Linux', kicker: 'ZothOS v3.4.0 + ZothOS-Lite v1.1', accent: 'gold', brailleShape: 'shield' },
   { match: /^\/docs\/math\/[^/]+\/?$/, clip: 'docs-math', label: 'Math Pillar', kicker: 'Formal Mathematical Proof', accent: 'gold', dynamic: 'pillarId', brailleShape: 'astrolabe' },
   { match: /^\/docs\/math\/?$/, clip: 'docs-math', label: 'Six Math Pillars', kicker: 'Formal Foundations', accent: 'gold', brailleShape: 'astrolabe' },
   { match: /^\/docs\/?$/, clip: 'docs', label: 'Documentation', kicker: 'System Specifications', accent: 'gold', brailleShape: 'shield' },

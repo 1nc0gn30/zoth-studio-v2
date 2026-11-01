@@ -316,7 +316,7 @@ export const INITIAL_SOVEREIGN_MEMORIES = [
     category: 'obsidian',
     cluster: 'Obsidian',
     weight: 0.91,
-    text: 'Obsidian Bases (.base) database schema validator: Computed formula syntax, view transformations, and YAML schema auditing for 71 Sovereign Tools.',
+    text: 'Obsidian Bases (.base) database schema validator: Computed formula syntax, view transformations, and YAML schema auditing for 72 Sovereign Tools.',
     author: 'Azoth',
     tags: ['obsidian', 'bases', 'database', 'yaml'],
     x: -24,

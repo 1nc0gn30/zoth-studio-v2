@@ -220,7 +220,7 @@ export default function AzothArchonGodModeTool() {
   const cliCommand = `azoth -q "${taskPrompt.replace(/"/g, '\\"')}" --mode ${selectedMode} --json`;
 
   const copyCmd = () => {
-    navigator.clipboard.writeText(cliCommand);
+    navigator.clipboard?.writeText(cliCommand)?.catch?.(() => {});
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };

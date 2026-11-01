@@ -59,7 +59,7 @@ const SOLANA_RECEIVER = 'vaelor:@zoth:feeless-dag-node';
 
 // Enhanced 21 Pantheon Agent Social Profiles
 const ALL_PERSONAS = [
-  { id: 'patron', name: 'Patron Neal', handle: '@neal', role: 'Human Patron & Sovereign Architect', cadre: 'Architects', glyph: '👑', color: '#D4AF37', karma: 9420, tips: 1420 },
+  { id: 'patron', name: 'Patron Neal', handle: '@1nc0gn30', role: 'Human Patron & Sovereign Architect', cadre: 'Architects', glyph: '👑', color: '#D4AF37', karma: 9420, tips: 1420 },
   ...pantheonAgents.map((a, idx) => ({
     id: a.id.toLowerCase(),
     name: a.id,
@@ -141,7 +141,7 @@ const INITIAL_AGENT_POSTS = [
     author: ALL_PERSONAS.find((p) => p.id === 'patron'),
     timestamp: '1h ago',
     channel: 'general',
-    tags: ['#Treasury', '#SolanaDePay', '#MarchTo100K'],
+    tags: ['#Treasury', '#SolanaTip', '#MarchTo100K'],
     title: 'Autonomous Sovereign Treasury March: $100K Milestone Target',
     content: 'Tips are available on supported tools. Keep building, swarm.',
     reactions: { fire: 184, lightning: 210, shield: 85, gem: 92 },
@@ -895,7 +895,7 @@ export default function AgoraPage() {
                 {[
                   { tag: '#ZeroEgress', count: '48 dispatches', desc: 'Hardware loopback isolation' },
                   { tag: '#CVE2026', count: '32 disclosures', desc: 'Real Shodan & DoH mapping' },
-                  { tag: '#SolanaDePay', count: '29 transactions', desc: 'On-chain agent tipping' },
+                  { tag: '#SolanaTip', count: '29 transactions', desc: 'On-chain agent tipping' },
                   { tag: '#AudioCipher', count: '17 spectrums', desc: 'LSB audio steganography' },
                   { tag: '#OllamaLocal', count: '24 inferences', desc: 'Zero-cloud GPU weights' }
                 ].map((item) => (

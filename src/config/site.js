@@ -13,7 +13,7 @@ export const siteConfig = {
   legalName: 'NullAI Tech',
   url: 'https://zoth.nullai.tech',
   tagline: 'Zero-Egress Sovereign Agent Development Studio & Pantheon Matrix',
-  description: 'Zoth Studio v2 is a local-first, offline-capable development environment for autonomous AI agents, featuring biomorphic STDP memory, Lucy Netrunner Oracle, Byzantine consensus triangulation, sovereign developer cockpits, and 71 micro-tools (59 with public repos).',
+  description: 'Zoth Studio v2 is a local-first, offline-capable development environment for autonomous AI agents, featuring biomorphic STDP memory, Lucy Netrunner Oracle, Byzantine consensus triangulation, sovereign developer cockpits, and 72 micro-tools (72 with public repos).',
   author: 'NullAI Tech',
   twitterHandle: '@NullAITech',
   githubUrl: 'https://github.com/NullAITech/zoth-studio-v2',
@@ -65,8 +65,8 @@ export const siteConfig = {
       type: 'article',
     },
     '/tools': {
-      title: 'Sovereign Tool Arsenal // 62 Offline-Capable Micro-Tools & Workstations',
-      description: 'Explore 62 standalone, schema-validated developer tools and interactive God-Mode workstations with 15s code-first motion showcases.',
+      title: 'Sovereign Tool Arsenal // 72 Offline-Capable Micro-Tools & Workstations',
+      description: 'Explore 72 standalone, schema-validated developer tools and interactive God-Mode workstations with 15s code-first motion showcases.',
       keywords: 'developer tools, zoth webgen, omnipost, subsweep, payload entropy, offline-capable tools',
       type: 'article',
     },
@@ -101,7 +101,7 @@ export const siteConfig = {
       type: 'article',
     },
     '/zoth-os': {
-      title: 'Zoth OS v3.3.0 // Debian 13 + KDE Plasma 6 Sovereign AI Distro',
+      title: 'Zoth OS v3.4.0 // Debian 13 + KDE Plasma 6 Sovereign AI Distro',
       description: 'Bootable Debian 13 + KDE Plasma 6.3 OS. Kali + Parrot parity, Zoth Studio v2, Ollama on 127.0.0.1, 163 MCP servers all off. Product site zothos.nullai.tech.',
       keywords: 'Zoth OS, ZOTHOS, Debian 13, KDE Plasma 6, Kali, Parrot, sovereign AI OS',
       type: 'article',
@@ -421,7 +421,7 @@ export function generateSchemaGraph(path = '/') {
     graph.push({
       '@type': 'SoftwareApplication',
       '@id': `${fullUrl}#os-application`,
-      'name': 'Zoth OS v3.3.0 Sovereign AI Linux Distro',
+      'name': 'Zoth OS v3.4.0 Sovereign AI Linux Distro',
       'applicationCategory': 'OperatingSystem',
       'operatingSystem': 'Linux',
       'description': routeMeta.description,

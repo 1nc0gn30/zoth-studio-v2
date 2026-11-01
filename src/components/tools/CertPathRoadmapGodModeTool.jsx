@@ -36,42 +36,42 @@ const CAREER_ROLES = [
     id: 'cloud_security_architect',
     title: 'Cloud Security Architect',
     desc: 'Zero-trust multi-cloud infrastructure and governance.',
-    certs: ['net-plus', 'sec-plus', 'aws-csaa', 'aws-sec-spec', 'gcp-pca', 'ccsp'],
+    certs: ['soft-comptia-network-plus', 'cyber-sec-plus', 'cloud-aws-solutions-arch', 'cloud-aws-security-specialty', 'cloud-gcp-architect', 'cyber-ccsp'],
     category: 'Cyber Security'
   },
   {
     id: 'ai_ml_engineer',
     title: 'AI & ML Engineer',
     desc: 'Deploy and monitor scalable LLMs and ML pipelines.',
-    certs: ['python-pcap', 'ds-ibm-data-science', 'ai-tf-developer', 'aws-mla', 'gcp-pde'],
+    certs: ['soft-python-pcap', 'ai-ml-specialization', 'ai-tensorflow-dev', 'ai-aws-ml-specialty', 'ai-google-ml', 'ai-deep-learning'],
     category: 'AI Development'
   },
   {
     id: 'fullstack_devops_lead',
     title: 'Full-Stack DevOps Lead',
     desc: 'CI/CD orchestration, Kubernetes clusters, and microservices.',
-    certs: ['web-html-css', 'web-js-algorithms', 'linux-lpic1', 'k8s-cka', 'hashi-terraform-assoc', 'aws-dop'],
+    certs: ['web-html-css', 'web-js-algorithms', 'soft-lpic1', 'cloud-cka', 'cloud-terraform-associate', 'cloud-aws-devops-pro'],
     category: 'Cloud Computing'
   },
   {
     id: 'penetration_tester',
     title: 'Penetration Tester / Red Team',
     desc: 'Offensive security, network exploitation, and vulnerability assessment.',
-    certs: ['net-plus', 'sec-plus', 'pentest-plus', 'ejpt', 'oscp'],
+    certs: ['soft-comptia-network-plus', 'cyber-sec-plus', 'cyber-pentest-plus', 'cyber-ejpt', 'cyber-htb-cpst', 'cyber-oscp'],
     category: 'Cyber Security'
   },
   {
     id: 'data_platform_architect',
     title: 'Data Platform Architect',
     desc: 'Data lakes, real-time analytics, and enterprise ETL pipelines.',
-    certs: ['sql-standalone', 'data-dbt-cert', 'snowflake-snowpro-core', 'databricks-de-assoc', 'aws-das'],
+    certs: ['data-google-analytics', 'data-dbt-analytics', 'data-snowpro-core', 'data-databricks-de', 'data-gcp-data-engineer', 'data-databricks-de-pro'],
     category: 'Data Science'
   },
   {
     id: 'soc_analyst',
     title: 'SOC & Incident Response Analyst',
     desc: 'Threat hunting, telemetry analysis, and incident remediation.',
-    certs: ['a-plus', 'net-plus', 'sec-plus', 'cysa-plus', 'splunk-core-power-user'],
+    certs: ['google-cybersecurity', 'soft-comptia-network-plus', 'cyber-sec-plus', 'cyber-cysa-plus', 'cyber-gsec', 'cyber-cissp'],
     category: 'Cyber Security'
   }
 ];
@@ -94,9 +94,9 @@ export default function CertPathRoadmapGodModeTool() {
   // Tool State
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCertId, setSelectedCertId] = useState('aws-csaa');
+  const [selectedCertId, setSelectedCertId] = useState('cloud-aws-solutions-arch');
   const [viewTab, setViewTab] = useState(0); // 0: DAG Pathway Explorer, 1: Career Track Solver, 2: Cert Comparison
-  const [compareCertId, setCompareCertId] = useState('gcp-pca');
+  const [compareCertId, setCompareCertId] = useState('cloud-gcp-architect');
   const [copiedPlan, setCopiedPlan] = useState(false);
 
   // Certs Map index
@@ -182,7 +182,7 @@ export default function CertPathRoadmapGodModeTool() {
 
   const handleCopyPlan = () => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(studyPlanMarkdown);
+      navigator.clipboard?.writeText(studyPlanMarkdown)?.catch?.(() => {});
       setCopiedPlan(true);
       setTimeout(() => setCopiedPlan(false), 2000);
     }
@@ -498,7 +498,7 @@ export default function CertPathRoadmapGodModeTool() {
 
             {/* TAB 2: CERT COMPARISON */}
             {viewTab === 2 && (
-              <Box sx={{ flex: 1, overflowY: 'auto', maxHeight: 460 }}>
+              <Box sx={{ flex: 1, overflowY: 'auto', maxHeight: 460, pt: 1 }}>
                 <Grid container spacing={2} sx={{ mb: 2 }}>
                   <Grid xs={6}>
                     <FormControl size="small" fullWidth>
@@ -509,7 +509,7 @@ export default function CertPathRoadmapGodModeTool() {
                         onChange={(e) => setSelectedCertId(e.target.value)}
                         sx={{ fontFamily: mono, fontSize: '0.82rem' }}
                       >
-                        {rawCertsData.slice(0, 40).map(c => (
+                        {rawCertsData.map(c => (
                           <MenuItem key={c.id} value={c.id} sx={{ fontFamily: mono, fontSize: '0.8rem' }}>
                             {c.title} ({c.provider})
                           </MenuItem>
@@ -526,7 +526,7 @@ export default function CertPathRoadmapGodModeTool() {
                         onChange={(e) => setCompareCertId(e.target.value)}
                         sx={{ fontFamily: mono, fontSize: '0.82rem' }}
                       >
-                        {rawCertsData.slice(0, 40).map(c => (
+                        {rawCertsData.map(c => (
                           <MenuItem key={c.id} value={c.id} sx={{ fontFamily: mono, fontSize: '0.8rem' }}>
                             {c.title} ({c.provider})
                           </MenuItem>

@@ -204,18 +204,18 @@ export function AudioCipherGodModeTool() {
   const isDark = theme.palette.mode === 'dark';
 
   // Aesthetic Tokens
-  const emerald = '#00FF9D';
-  const emeraldSoft = 'rgba(0, 255, 157, 0.12)';
-  const gold = '#D4AF37';
-  const goldSoft = 'rgba(212, 175, 55, 0.14)';
-  const crimson = '#FF3355';
-  const crimsonSoft = 'rgba(255, 51, 85, 0.12)';
-  const cyan = '#38BDF8';
-  const cyanSoft = 'rgba(56, 189, 248, 0.12)';
+  const emerald = isDark ? '#00FF9D' : '#059669';
+  const emeraldSoft = isDark ? 'rgba(0, 255, 157, 0.12)' : 'rgba(5, 150, 105, 0.12)';
+  const gold = isDark ? '#D4AF37' : '#9A7209';
+  const goldSoft = isDark ? 'rgba(212, 175, 55, 0.14)' : 'rgba(154, 114, 9, 0.12)';
+  const crimson = isDark ? '#FF3355' : '#DC2626';
+  const crimsonSoft = isDark ? 'rgba(255, 51, 85, 0.12)' : 'rgba(220, 38, 38, 0.10)';
+  const cyan = isDark ? '#38BDF8' : '#0284C7';
+  const cyanSoft = isDark ? 'rgba(56, 189, 248, 0.12)' : 'rgba(2, 132, 199, 0.12)';
   const amber = '#F59E0B';
   const voidDark = '#08080B';
   const surfaceDark = '#10121A';
-  const cardBorder = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)';
+  const cardBorder = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.12)';
 
   // Operational State
   const [activeTab, setActiveTab] = useState(0); // 0: Encode/Embed, 1: Decode/Extract
@@ -252,9 +252,66 @@ export function AudioCipherGodModeTool() {
     };
   }, []);
 
+  // Render static harmonic spectrum + waveform preview when idle
+  useEffect(() => {
+    if (isPlaying) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width;
+    const h = canvas.height;
+    ctx.fillStyle = '#08080B';
+    ctx.fillRect(0, 0, w, h);
+
+    // Subtle grid
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    for (let y = 28; y < h; y += 28) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(w, y);
+      ctx.stroke();
+    }
+
+    // Harmonic spectrum bars
+    const numBars = 48;
+    const barW = (w - numBars * 2) / numBars;
+    for (let i = 0; i < numBars; i++) {
+      const freqRatio = i / numBars;
+      const p1 = Math.exp(-Math.pow((freqRatio - 0.18) * 9, 2));
+      const p2 = Math.exp(-Math.pow((freqRatio - 0.24) * 11, 2)) * 0.65;
+      const p3 = Math.exp(-Math.pow((freqRatio - 0.30) * 12, 2)) * 0.45;
+      const lsbFloor = hasStegoEmbedded ? 0.12 + 0.08 * Math.sin(i * 1.7) : 0.04;
+      const amp = Math.min(1, p1 + p2 + p3 + lsbFloor);
+      const bh = Math.max(4, amp * (h - 24));
+      const grad = ctx.createLinearGradient(0, h, 0, 0);
+      if (hasStegoEmbedded) {
+        grad.addColorStop(0, '#D4AF37');
+        grad.addColorStop(1, '#00FF9D');
+      } else {
+        grad.addColorStop(0, '#38BDF8');
+        grad.addColorStop(1, '#6366F1');
+      }
+      ctx.fillStyle = grad;
+      ctx.fillRect(i * (barW + 2), h - bh, barW, bh);
+    }
+
+    // Time-domain carrier sine overlay
+    ctx.strokeStyle = hasStegoEmbedded ? '#00FF9D' : '#38BDF8';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    for (let x = 0; x < w; x++) {
+      const t = (x / w) * Math.PI * 8;
+      const y = 34 + Math.sin(t) * 14 + Math.sin(t * 1.25) * 6;
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }, [activeAudioBuffer, hasStegoEmbedded, isPlaying, carrierFreq]);
+
   const handleCopy = (text, key) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedKey(key);
       setTimeout(() => setCopiedKey(null), 2000);
     }

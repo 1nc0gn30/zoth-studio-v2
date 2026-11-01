@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.4.0",
-  "site": "Zoth Studio v2 & 71 Studio Tools",
+  "site": "Zoth Studio v2 & 72 Studio Tools",
   "baseUrl": "https://zoth.nullai.tech",
   "endpoints": {
     "llmsTxt": "https://zoth.nullai.tech/llms.txt",
@@ -23,7 +23,7 @@
     {
       "name": "Zoth Studio",
       "url": "https://zoth.nullai.tech",
-      "role": "Local-first AI studio: 71 tools, 43 workstations"
+      "role": "Local-first AI studio: 72 tools, 43 workstations"
     },
     {
       "name": "ZothOS",

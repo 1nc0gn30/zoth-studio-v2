@@ -176,7 +176,7 @@ export default function SovereignBridgeGodModeTool() {
   const cliCommand = `sovereign-agent-bridge send --channel ${selectedChannel} --to "${recipient}" --msg "${payload.replace(/"/g, '\\"')}" --json`;
 
   const copyCmd = () => {
-    navigator.clipboard.writeText(cliCommand);
+    navigator.clipboard?.writeText(cliCommand)?.catch?.(() => {});
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -451,7 +451,7 @@ export default function SovereignBridgeGodModeTool() {
                   onClick={() => {
                     setSelectedChannel(ch.id);
                     if (ch.id === 'signal') setRecipient(DEMO_SIGNAL_RECIPIENT);
-                    else if (ch.id === 'simplex') setRecipient('simplex:@neal');
+                    else if (ch.id === 'simplex') setRecipient('simplex:@1nc0gn30');
                     else if (ch.id === 'matrix') setRecipient('!room_id:matrix.org');
                     else if (ch.id === 'telegram') setRecipient('@chat_id');
                     else setRecipient('http://127.0.0.1:8102/webhook');

@@ -187,7 +187,7 @@ inactiveForeground=120,130,145`;
   }, [themeName, primaryHex, secondaryHex, bgVoidHex]);
 
   const alacrittyToml = useMemo(() => {
-    return `# ZothOS v3.3.0 Alacritty Reality Profile — ${themeName}
+    return `# ZothOS v3.4.0 Alacritty Reality Profile — ${themeName}
 # Companion Zoth Bot: ${activeTheme.botName} (${activeTheme.botTitle})
 
 [window]
@@ -238,7 +238,7 @@ white   = "#F5F0E8"`;
 
   const handleCopy = () => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(activeExportText);
+      navigator.clipboard?.writeText(activeExportText)?.catch?.(() => {});
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -310,10 +310,10 @@ white   = "#F5F0E8"`;
               }}
             />
           </Stack>
-          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 800 }}>
+          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 800, color: '#F5F0E8' }}>
             Zoth Reality Shader & Desktop Theme Forge
           </Typography>
-          <Typography variant="body2" sx={{ ...ledeSx, color: 'text.secondary', mt: 0.4 }}>
+          <Typography variant="body2" sx={{ ...ledeSx, color: '#94A3B8', mt: 0.4 }}>
             Switch between the 5 Zoth Realities, tune 60fps shader physics and Zoth Bot avatars, and export KDE Plasma <code>.colors</code>, Alacritty <code>.toml</code>, and CSS tokens.
           </Typography>
         </Box>
@@ -398,7 +398,7 @@ white   = "#F5F0E8"`;
                     <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: primaryHex }}>
                       {activeTheme.botName}
                     </Typography>
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.62rem', color: 'text.secondary' }}>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.62rem', color: '#94A3B8' }}>
                       {activeTheme.botTitle}
                     </Typography>
                   </Box>
@@ -412,13 +412,13 @@ white   = "#F5F0E8"`;
               sx={{
                 p: 2,
                 borderRadius: 2,
-                bgcolor: 'rgba(255,255,255,0.02)',
-                border: '1px solid rgba(255,255,255,0.08)',
+                bgcolor: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.1)',
               }}
             >
               <Grid container spacing={2}>
                 <Grid xs={12} sm={4}>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: 'text.secondary', mb: 0.5 }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#94A3B8', mb: 0.5 }}>
                     PRIMARY ACCENT HEX
                   </Typography>
                   <TextField
@@ -426,11 +426,11 @@ white   = "#F5F0E8"`;
                     fullWidth
                     value={primaryHex}
                     onChange={(e) => setPrimaryHex(e.target.value)}
-                    sx={{ '& input': { fontFamily: mono, fontSize: '0.75rem', color: primaryHex } }}
+                    sx={{ '& input': { fontFamily: mono, fontSize: '0.75rem', color: primaryHex }, '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.2)' } }}
                   />
                 </Grid>
                 <Grid xs={12} sm={4}>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: 'text.secondary', mb: 0.5 }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#94A3B8', mb: 0.5 }}>
                     SECONDARY ACCENT HEX
                   </Typography>
                   <TextField
@@ -438,11 +438,11 @@ white   = "#F5F0E8"`;
                     fullWidth
                     value={secondaryHex}
                     onChange={(e) => setSecondaryHex(e.target.value)}
-                    sx={{ '& input': { fontFamily: mono, fontSize: '0.75rem', color: secondaryHex } }}
+                    sx={{ '& input': { fontFamily: mono, fontSize: '0.75rem', color: secondaryHex }, '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.2)' } }}
                   />
                 </Grid>
                 <Grid xs={12} sm={4}>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: 'text.secondary', mb: 0.5 }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#94A3B8', mb: 0.5 }}>
                     VOID CANVAS HEX
                   </Typography>
                   <TextField
@@ -450,12 +450,12 @@ white   = "#F5F0E8"`;
                     fullWidth
                     value={bgVoidHex}
                     onChange={(e) => setBgVoidHex(e.target.value)}
-                    sx={{ '& input': { fontFamily: mono, fontSize: '0.75rem' } }}
+                    sx={{ '& input': { fontFamily: mono, fontSize: '0.75rem', color: '#F5F0E8' }, '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.2)' } }}
                   />
                 </Grid>
 
                 <Grid xs={12} sm={4}>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: 'text.secondary' }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#94A3B8' }}>
                     SHADER VELOCITY ({particleSpeed.toFixed(1)}x)
                   </Typography>
                   <Slider
@@ -468,7 +468,7 @@ white   = "#F5F0E8"`;
                   />
                 </Grid>
                 <Grid xs={12} sm={4}>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: 'text.secondary' }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#94A3B8' }}>
                     CONSTELLATION NODES ({nodeDensity})
                   </Typography>
                   <Slider
@@ -481,7 +481,7 @@ white   = "#F5F0E8"`;
                   />
                 </Grid>
                 <Grid xs={12} sm={4}>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: 'text.secondary' }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#94A3B8' }}>
                     CHROME RADIUS ({cornerRadius}px)
                   </Typography>
                   <Slider
@@ -500,7 +500,7 @@ white   = "#F5F0E8"`;
 
         {/* Right Column: Compiled ZothOS & Studio Theme Artifacts */}
         <Grid xs={12} md={6}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
+          <Box sx={{ borderBottom: '1px solid rgba(255,255,255,0.12)', mb: 2 }}>
             <Tabs
               value={activeTab}
               onChange={(_, v) => setActiveTab(v)}
@@ -514,6 +514,13 @@ white   = "#F5F0E8"`;
                   fontSize: '0.72rem',
                   fontWeight: 700,
                   textTransform: 'none',
+                  color: '#94A3B8',
+                  '&.Mui-selected': {
+                    color: primaryHex,
+                  },
+                },
+                '& .MuiTabs-indicator': {
+                  backgroundColor: primaryHex,
                 },
               }}
             >
@@ -524,7 +531,7 @@ white   = "#F5F0E8"`;
           </Box>
 
           <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1, flexWrap: 'wrap', gap: 1 }}>
-            <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'text.secondary' }}>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8' }}>
               Compiled Artifact (`zoth-{realityId}-theme.{activeExportExt}`)
             </Typography>
             <Stack direction="row" spacing={1}>
@@ -556,6 +563,7 @@ white   = "#F5F0E8"`;
               m: 0,
               borderRadius: 1.5,
               bgcolor: '#05070B',
+              color: '#E2E8F0',
               border: `1px solid ${primaryHex}44`,
               fontFamily: mono,
               fontSize: '0.73rem',

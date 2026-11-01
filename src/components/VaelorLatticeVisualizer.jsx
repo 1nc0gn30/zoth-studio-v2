@@ -23,7 +23,7 @@ const ACCOUNTS = [
   { handle: '@sprig', role: 'Merchant POS', color: '#34D399', blocks: 38 },
   { handle: '@hatch', role: 'Agent Workspace', color: '#38BDF8', blocks: 14 },
   { handle: '@citizen', role: 'Passkey Wallet', color: '#E879F9', blocks: 68 },
-  { handle: '@neal', role: 'Founder Core', color: '#F59E0B', blocks: 24 }
+  { handle: '@1nc0gn30', role: 'Founder Core', color: '#F59E0B', blocks: 24 }
 ];
 
 export default function VaelorLatticeVisualizer() {
@@ -167,9 +167,9 @@ export default function VaelorLatticeVisualizer() {
       lastEvent: `[PEDERSEN ZK] Confidential cmt_${cmtHash}.. attested with auditor view-key vk_757 (zero plaintext disclosure)`
     }));
 
-    // Spawn shielded cryptochrome packet from @neal to @citizen
+    // Spawn shielded cryptochrome packet from @1nc0gn30 to @citizen
     simStateRef.current.packets.push({
-      fromHandle: '@neal',
+      fromHandle: '@1nc0gn30',
       toHandle: '@citizen',
       progress: 0,
       duration: 65,

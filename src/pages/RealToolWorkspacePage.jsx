@@ -131,6 +131,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'shodan-surface-sentinel': AttackSurfaceSentinelGodModeTool,
   'shodan-sentinel': AttackSurfaceSentinelGodModeTool,
   'adytum-alchemist-ai-workflow': AdytumPlannerGodModeTool,
+  'adytum-alchemist': AdytumPlannerGodModeTool,
   'azoth-archon-orchestrator': AzothArchonGodModeTool,
   'azoth-local-agent': AzothArchonGodModeTool,
   'sovereign-bridge-protocol': SovereignBridgeGodModeTool,
@@ -235,6 +236,8 @@ const ENCLAVE_TOOL_COMPONENTS = {
 };
 
 const WORKSTATION_TOOL_ALIASES = {
+  'adytum-alchemist': 'adytum-alchemist-ai-workflow',
+  'adytum': 'adytum-alchemist-ai-workflow',
   'webgen': 'zoth-webgen',
   'omnipost': 'omnipost-social-engine',
   'subsweep': 'subsweep-lead-scanner',
@@ -266,7 +269,7 @@ export default function RealToolWorkspacePage() {
     github: 'https://github.com/NullAITech/zoth-studio-v2',
     liveUrl: `https://zoth.nullai.tech/tools/${wsEntry.id}`,
     description: wsEntry.description || 'Zero-egress sovereign workstation integrated into Zoth Studio v2.',
-    version: '2.1.0',
+    version: '2.2.0',
     pull: wsEntry.pullCommand || 'npx @nullaitech/zoth studio',
   } : null);
   const docs = getToolDocumentation(tool);
@@ -319,7 +322,7 @@ export default function RealToolWorkspacePage() {
     const lines = [
       `UNCOMMON WEB (webdev.teknium.io) x ZOTH STUDIO TELEMETRY CARD`,
       `--------------------------------------------------------------------`,
-      `TOOL ID     : ${tool.id}  [v${tool.version || '2.1.0'}]`,
+      `TOOL ID     : ${tool.id}  [v${tool.version || '2.2.0'}]`,
       `NAME        : ${tool.name}`,
       `CATEGORY    : ${tool.category || 'Sovereign Arsenal'}`,
       `EXECUTION   : ${tool.executionType === 'local_cli' ? 'LOCAL CLI + IN-BROWSER WORKBENCH' : '100% CLIENT-SIDE IN-BROWSER ENGINE'}`,

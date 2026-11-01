@@ -77,7 +77,7 @@ function getPresetsForTool(tool) {
       },
       {
         label: 'Perimeter Socket & CVE Dump',
-        input: `LISTEN 127.0.0.1:11434 ollama/0.5.7 (Loopback Enclave)\nLISTEN 0.0.0.0:2375 docker-engine/24.0.5 (WARN: Unauthenticated TCP)\nLISTEN 127.0.0.1:8094 neuro-memory-daemon/3.3.0 (STDP Active)`,
+        input: `LISTEN 127.0.0.1:11434 ollama/0.5.7 (Loopback Enclave)\nLISTEN 0.0.0.0:2375 docker-engine/24.0.5 (WARN: Unauthenticated TCP)\nLISTEN 127.0.0.1:8094 neuro-memory-daemon/3.4.0 (STDP Active)`,
       },
       {
         label: 'Zero-Trust Policy JSON',

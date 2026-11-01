@@ -228,7 +228,7 @@ export function AgentPolicyAuditorGodModeTool() {
 
   const handleCopy = (text, key) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedKey(key);
       setTimeout(() => setCopiedKey(null), 2000);
     }
@@ -446,7 +446,7 @@ export function AgentPolicyAuditorGodModeTool() {
             size="small"
             onClick={() => {
               if (navigator.clipboard) {
-                navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+                navigator.clipboard?.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK')?.catch?.(() => {});
                 alert('Solana Tip Address copied to clipboard: GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
               }
             }}

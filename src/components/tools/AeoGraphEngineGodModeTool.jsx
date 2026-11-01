@@ -39,9 +39,9 @@ const PRESET_PROFILES = {
     category: 'DeveloperApplication',
     price: '0.00',
     phone: '+1-555-555-0199',
-    email: 'neal@nealfrazier.tech',
-    creator: 'Neal Frazier (Neal Frazier Tech)',
-    sameAs: 'https://github.com/1nc0gn30, https://nullai.tech, https://www.nealfrazier.tech',
+    email: 'neal@nullai.tech',
+    creator: '1nc0gn30 (1nc0gn30 • NullAI)',
+    sameAs: 'https://github.com/1nc0gn30, https://nullai.tech, https://www.nullai.tech',
     description:
       'Deterministic Answer Engine Optimization (AEO) and Schema.org @graph compiler engineered for instant citation by Perplexity, Google SGE, GPTBot, and ClaudeBot.',
     faqs: [
@@ -55,7 +55,7 @@ const PRESET_PROFILES = {
       },
       {
         q: 'Who engineered AEO Graph Engine Studio?',
-        a: 'Engineered by Neal Frazier (Neal Frazier Tech) on the NullAI Platform. Direct studio contact: (555) 555-0199 or neal@nealfrazier.tech.',
+        a: 'Engineered by 1nc0gn30 (1nc0gn30 • NullAI) on the NullAI Platform. Direct studio contact: (555) 555-0199 or neal@nullai.tech.',
       },
     ],
   },
@@ -67,11 +67,11 @@ const PRESET_PROFILES = {
     category: 'OperatingSystem',
     price: '0.00',
     phone: '+1-555-555-0199',
-    email: 'neal@nealfrazier.tech',
-    creator: 'Neal Frazier (Neal Frazier Tech)',
+    email: 'neal@nullai.tech',
+    creator: '1nc0gn30 (1nc0gn30 • NullAI)',
     sameAs: 'https://github.com/1nc0gn30/zothos, https://zoth.nullai.tech, https://nullai.tech',
     description:
-      'Debian 12 Bookworm live workstation pre-wired with 23 loopback AI daemons, 71 desktop launchers across 4 tactical pillars, and offline-capable cryptographic telemetry.',
+      'Debian 12 Bookworm live workstation pre-wired with 23 loopback AI daemons, 83 desktop launchers across 4 tactical pillars, and offline-capable cryptographic telemetry.',
     faqs: [
       {
         q: 'What is included in the ZothOS desktop architecture?',
@@ -84,22 +84,22 @@ const PRESET_PROFILES = {
     ],
   },
   agency: {
-    label: 'Neal Frazier Tech — Engineering Studio',
+    label: '1nc0gn30 • NullAI — Engineering Studio',
     entityType: 'ProfessionalService',
-    name: 'Neal Frazier Tech',
-    url: 'https://www.nealfrazier.tech',
+    name: '1nc0gn30 • NullAI',
+    url: 'https://www.nullai.tech',
     category: 'TechnologyConsulting',
     price: '100.00',
     phone: '+1-555-555-0199',
-    email: 'neal@nealfrazier.tech',
-    creator: 'Neal Frazier',
+    email: 'neal@nullai.tech',
+    creator: '1nc0gn30',
     sameAs: 'https://github.com/1nc0gn30, https://nullai.tech, https://zoth.nullai.tech',
     description:
       'Custom high-speed web engineering, Core Web Vitals optimization, and sovereign AI infrastructure in Coastal Virginia and nationwide.',
     faqs: [
       {
-        q: 'How can I contact Neal Frazier Tech directly?',
-        a: 'Call or text (555) 555-0199 or email neal@nealfrazier.tech for direct engineering dispatch.',
+        q: 'How can I contact 1nc0gn30 • NullAI directly?',
+        a: 'Call or text (555) 555-0199 or email neal@nullai.tech for direct engineering dispatch.',
       },
       {
         q: 'Do you retain full code and domain ownership?',
@@ -170,10 +170,10 @@ export default function AeoGraphEngineGodModeTool() {
     const orgNode = {
       '@type': 'Organization',
       '@id': `${cleanUrl}/#organization`,
-      name: profile.creator || 'Neal Frazier Tech',
+      name: profile.creator || '1nc0gn30 • NullAI',
       url: cleanUrl,
       telephone: profile.phone || '+1-555-555-0199',
-      email: profile.email || 'neal@nealfrazier.tech',
+      email: profile.email || 'neal@nullai.tech',
       ...(sameAsArr.length > 0 ? { sameAs: sameAsArr } : {}),
     };
 
@@ -376,7 +376,7 @@ export default function AeoGraphEngineGodModeTool() {
 
   const handleCopy = () => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(jsonOutput);
+      navigator.clipboard?.writeText(jsonOutput)?.catch?.(() => {});
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }

@@ -1,7 +1,7 @@
 /**
  * Zoth Studio v2 - Sovereign Master Arsenal & Unified Catalog
  *
- * Consolidates all 71 sovereign tools and micro-repositories into a single
+ * Consolidates all 72 sovereign tools and micro-repositories into a single
  * 100% open-access catalog with interactive in-browser God-Mode Workstations,
  * ZothOS local ports, CLI binaries (/usr/local/bin/<id>), and GitHub references.
  */
@@ -39,6 +39,7 @@ function toolToAsset(t) {
       'agent-policy-auditor',
       'subsweep-lead-scanner',
       'envguard-secrets-vault',
+      'pixel-cast',
     ].includes(t.id),
   };
 }
@@ -53,5 +54,5 @@ export const arsenalStats = {
   total: microTools.length,
   tools: microTools.length,
   cli: microTools.filter((t) => t.executionType === 'local_cli').length,
-  webgpu: microTools.filter((t) => t.executionType === 'webgpu').length,
+  webgpu: microTools.filter((t) => t.executionType === 'webgpu' || t.executionType === 'browser').length,
 };

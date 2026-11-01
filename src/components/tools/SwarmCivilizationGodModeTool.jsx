@@ -229,7 +229,7 @@ rings:
 
   const handleCopy = () => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(swarmYamlExport);
+      navigator.clipboard?.writeText(swarmYamlExport)?.catch?.(() => {});
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Zoth Studio v2 combines a modern React 19.3 Single-Page Application (SPA) with a build-time static prerendering engine. This produces a production build optimized for **Netlify Edge** deployment, featuring 72 prerendered static routes, full Answer Engine Optimization (AEO), Agent Experience (AX) discovery endpoints, and strict security headers.
+Zoth Studio v2 combines a modern React 19.3 Single-Page Application (SPA) with a build-time static prerendering engine. This produces a production build optimized for **Netlify Edge** deployment, featuring 141 prerendered static routes, full Answer Engine Optimization (AEO), Agent Experience (AX) discovery endpoints, and strict security headers.
 
 ---
 
@@ -23,7 +23,7 @@ Under the hood, `npm run build` triggers a two-stage compilation pipeline:
 
 ---
 
-## 2. The 72 Prerendered Static Routes
+## 2. The 141 Prerendered Static Routes
 
 The prerendering engine guarantees instant Time-To-First-Byte (TTFB) and crawlability for search engines (Google, Bing) and AI answer engines (ChatGPT, Claude, Perplexity):
 
@@ -95,6 +95,6 @@ The prerendering engine guarantees instant Time-To-First-Byte (TTFB) and crawlab
 1. **`/llms.txt`**: Standardized, compact plain-text specification for rapid grounding by AI assistants and autonomous agents.
 2. **`/llms-full.txt`**: Exhaustive system manual with complete schema definitions and enclave security proofs.
 3. **`/ai.txt`**: Explicit AI crawling, training, and grounding permissions policy.
-4. **`/sitemap.xml`**: Synchronized XML sitemap cataloging all 72 static routes with priority mappings.
+4. **`/sitemap.xml`**: Synchronized XML sitemap cataloging all 141 static routes with priority mappings.
 5. **`/robots.txt`**: Robot exclusion protocol with explicit `Allow` directives for AI bots (`GPTBot`, `Claude-Web`, `PerplexityBot`).
 6. **`/api/ax/manifest.json`**: Agent Experience machine discovery manifest.

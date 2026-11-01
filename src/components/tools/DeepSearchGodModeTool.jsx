@@ -64,7 +64,7 @@ const RESEARCH_PRESETS = {
       {
         id: 'CLM-03',
         statement: 'Loopback-bound (127.0.0.1) SQLite WAL + HNSW memory tables achieve 0.74ms p95 lookup with zero external cloud egress.',
-        sources: ['Malkov & Yashunin (IEEE TPAMI)', 'ZothOS v3.3.0 Enclave Audit'],
+        sources: ['Malkov & Yashunin (IEEE TPAMI)', 'ZothOS v3.4.0 Enclave Audit'],
         confidence: 0.98,
       },
     ],
@@ -93,7 +93,7 @@ const RESEARCH_PRESETS = {
       {
         id: 'CLM-03',
         statement: 'Default-off MCP server registries (Ring 0–3) prevent unauthorized local filesystem or network escalation.',
-        sources: ['ZothOS v3.3.0 Security Architecture', 'Agent Policy Auditor :8106'],
+        sources: ['ZothOS v3.4.0 Security Architecture', 'Agent Policy Auditor :8106'],
         confidence: 0.99,
       },
     ],
@@ -379,41 +379,10 @@ ${base.claims
                 flexGrow: 1,
                 maxHeight: 210,
                 overflowY: 'auto',
-                filter: isPro ? 'none' : 'blur(6px)',
-                userSelect: isPro ? 'auto' : 'none',
               }}
             >
               {synthesis.markdownDossier}
             </Box>
-            {!isPro && (
-              <Box
-                sx={{
-                  position: 'absolute',
-                  inset: 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  bgcolor: 'rgba(8,8,12,0.58)',
-                  borderRadius: 2.5,
-                  p: 2,
-                  textAlign: 'center',
-                }}
-              >
-                <LockIcon sx={{ fontSize: 32, color: '#D4AF37', mb: 0.5 }} />
-                <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#FFF' }}>
-                  Full Citation Dossier & BibTeX Export Locked
-                </Typography>
-                <Button
-                  size="small"
-                  variant="contained"
-                  onClick={() => setPaywallOpen(true)}
-                  sx={{ mt: 1, bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono }}
-                >
-                  ☕ Buy Us a Coffee
-                </Button>
-              </Box>
-            )}
             <Button
               fullWidth
               variant="contained"
@@ -426,41 +395,6 @@ ${base.claims
           </Paper>
         </Grid>
       </Grid>
-
-      <Dialog open={paywallOpen} onClose={() => setPaywallOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ fontWeight: 900 }}>Support DeepSearch Research Agent (optional tip)</DialogTitle>
-        <DialogContent dividers>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Unlock unlimited Tree-of-Thought research dossiers, BibTeX citation exports, and local MCP agent connectors.
-          </Typography>
-          <Button
-            fullWidth
-            variant="contained"
-            href={STRIPE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{ mb: 2, bgcolor: '#D4AF37', color: '#08080B', fontWeight: 900 }}
-          >
-            Leave an optional tip via Stripe
-          </Button>
-          <Divider sx={{ my: 1.5 }} />
-          <Stack direction="row" spacing={1}>
-            <TextField
-              fullWidth
-              size="small"
-              placeholder="Optional: your name or a note"
-              value={licenseInput}
-              onChange={(e) => setLicenseInput(e.target.value)}
-            />
-            <Button variant="contained" onClick={handleActivateLicense} sx={{ bgcolor: '#10B981', color: '#08080B', fontWeight: 800 }}>
-              Activate
-            </Button>
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setPaywallOpen(false)}>Close</Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

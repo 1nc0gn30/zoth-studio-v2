@@ -81,7 +81,7 @@ export default function AgentPromptFirewallGodModeTool() {
 
   const handleCopy = (text, key) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard?.writeText(text)?.catch?.(() => {});
       setCopiedKey(key);
       setTimeout(() => setCopiedKey(null), 2000);
     }
@@ -278,8 +278,8 @@ export default function AgentPromptFirewallGodModeTool() {
                     fontFamily: mono,
                     fontSize: '0.68rem',
                     textTransform: 'none',
-                    color: '#F5E6AB',
-                    borderColor: 'rgba(212,175,55,0.32)',
+                    color: isDark ? '#F5E6AB' : '#92400E',
+                    borderColor: isDark ? 'rgba(212,175,55,0.32)' : 'rgba(180,83,9,0.45)',
                   }}
                 >
                   {p.label}

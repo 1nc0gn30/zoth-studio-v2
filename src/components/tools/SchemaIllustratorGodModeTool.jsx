@@ -550,7 +550,7 @@ export default function SchemaIllustratorGodModeTool() {
 
   const handleCopyCode = () => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(transpiledCode);
+      navigator.clipboard?.writeText(transpiledCode)?.catch?.(() => {});
       setCopiedCode(true);
       setTimeout(() => setCopiedCode(false), 2000);
     }

@@ -185,7 +185,7 @@ export default function AgentBudgetSentinelGodModeTool() {
             variant="outlined"
             onClick={() => {
               if (navigator.clipboard) {
-                navigator.clipboard.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
+                navigator.clipboard?.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK')?.catch?.(() => {});
               }
             }}
             sx={{
@@ -217,7 +217,7 @@ export default function AgentBudgetSentinelGodModeTool() {
                   null,
                   2
                 )
-              )
+              )?.catch?.(() => {})
             }
             sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#34D399', borderColor: 'rgba(52,211,153,0.4)' }}
           >

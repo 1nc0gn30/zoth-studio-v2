@@ -515,7 +515,7 @@ export default function ArsenalPage() {
             <Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 0.5 }}>
                 <Typography sx={{ fontFamily: mono, fontWeight: 850, fontSize: '0.86rem', color: isDark ? '#34D399' : '#047857' }}>
-                  ✦ 100% FREE & OPEN ACCESS — ALL 71 TOOLS UNLOCKED IN-BROWSER & INSTALLED IN ZOTHOS
+                  ✦ 100% FREE & OPEN ACCESS — ALL 72 TOOLS UNLOCKED IN-BROWSER & INSTALLED IN ZOTHOS
                 </Typography>
                 <Chip
                   label="ZERO PAYWALLS"
@@ -727,7 +727,7 @@ export default function ArsenalPage() {
               <TextField
                 fullWidth
                 size="small"
-                placeholder="Search 71 Studio tools by name, ID, or description..."
+                placeholder="Search 72 Studio tools by name, ID, or description..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 InputProps={{

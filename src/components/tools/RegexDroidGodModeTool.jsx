@@ -31,7 +31,7 @@ const PRESETS = [
     id: "email",
     name: "Email Address (RFC 5322)",
     category: "Web & Identifiers",
-    pattern: "^[\\w.+-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$",
+    pattern: "[\\w.+-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}",
     flags: "g",
     testText: "Contact us at neal@nullai.tech or test.user+demo@example.co.uk for inquiries. Invalid: user@invalid"
   },
@@ -318,7 +318,7 @@ export function RegexDroidGodModeTool() {
   const [copiedKey, setCopiedKey] = useState(null);
 
   const handleCopy = (text, key) => {
-    navigator.clipboard.writeText(text);
+    navigator.clipboard?.writeText(text)?.catch?.(() => {});
     setCopiedKey(key);
     setTimeout(() => setCopiedKey(null), 2000);
   };
@@ -574,7 +574,7 @@ export function RegexDroidGodModeTool() {
               InputProps={{
                 startAdornment: <InputAdornment position="start"><Typography sx={{ color: cyan, fontFamily: mono, fontWeight: 700 }}>/</Typography></InputAdornment>,
                 endAdornment: <InputAdornment position="end"><Typography sx={{ color: cyan, fontFamily: mono, fontWeight: 700 }}>/{flags}</Typography></InputAdornment>,
-                sx: { fontFamily: mono, fontSize: '0.9rem', color: '#F8FAFC' }
+                sx: { fontFamily: mono, fontSize: '0.9rem', color: isDark ? '#F8FAFC' : '#111827' }
               }}
             />
           </Grid>

@@ -241,7 +241,7 @@ export default function LikenessDeskGodModeTool() {
   };
 
   const handleCopyCli = () => {
-    navigator.clipboard.writeText(`likeness speak "${speechPrompt}"`);
+    navigator.clipboard?.writeText(`likeness speak "${speechPrompt}"`)?.catch?.(() => {});
     setCopiedKey('cli');
     setTimeout(() => setCopiedKey(null), 2000);
   };

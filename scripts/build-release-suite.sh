@@ -11,7 +11,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-VERSION="${ZOTH_VERSION:-2.1.0}"
+VERSION="${ZOTH_VERSION:-2.2.0}"
 OUT_DIR="$ROOT/release-artifacts"
 STAGE_ROOT="$(mktemp -d -t zoth-studio-v2-release-XXXXXX)"
 trap 'rm -rf "$STAGE_ROOT"' EXIT

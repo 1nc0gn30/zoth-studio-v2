@@ -24,6 +24,7 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
+import { SovereignGLBViewport, ADYTUM_22_TAROT_KEYS } from '../A100SovereignFoundryShowcase.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -372,13 +373,13 @@ export default function AdytumPlannerGodModeTool() {
   }, [projectName, activeKey, audit, incubationDepth, intention]);
 
   const copyJson = () => {
-    navigator.clipboard?.writeText(artifactJson);
+    try { navigator.clipboard?.writeText(artifactJson)?.catch?.(() => {}); } catch {}
     setCopiedJson(true);
     setTimeout(() => setCopiedJson(false), 1800);
   };
 
   const copyMarkdown = () => {
-    navigator.clipboard?.writeText(markdownPrd);
+    try { navigator.clipboard?.writeText(markdownPrd)?.catch?.(() => {}); } catch {}
     setCopiedMd(true);
     setTimeout(() => setCopiedMd(false), 1800);
   };
@@ -556,43 +557,102 @@ export default function AdytumPlannerGodModeTool() {
             <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />
           </Box>
 
-          {/* Active BOTA Tarot Card Preview Strip */}
-          <Box
-            sx={{
-              p: 1.5,
-              borderTop: '1px solid rgba(255,255,255,0.08)',
-              bgcolor: '#080811',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2,
-            }}
-          >
-            <Box
-              component="img"
-              src={TAROT_IMAGES[activeKey.key] || '/tarot/fool.jpg'}
-              alt={`${activeKey.arcana} Canonical BOTA Tarot Card`}
-              sx={{
-                width: 66,
-                height: 112,
-                objectFit: 'cover',
-                borderRadius: 1.5,
-                border: '1px solid rgba(212,175,55,0.5)',
-                boxShadow: '0 8px 20px rgba(0,0,0,0.65)',
-                flexShrink: 0,
-              }}
-            />
-            <Box sx={{ minWidth: 0 }}>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 800, color: '#D4AF37' }}>
-                {activeKey.arcana} — {activeKey.phase}
-              </Typography>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: '#F5E6AB', display: 'block', mt: 0.2 }}>
-                Hebrew Letter: {activeKey.letter} (Gematria: {activeKey.gematria}) • Gate: {activeKey.gate}
-              </Typography>
-              <Typography variant="body2" sx={{ color: '#CBD5E1', fontSize: '0.75rem', mt: 0.5, lineHeight: 1.45 }}>
-                {activeKey.prompt}
-              </Typography>
-            </Box>
-          </Box>
+          {/* Active BOTA Tarot Card Preview Strip + 3D .GLB Diorama & Arcane Video Loop */}
+          {(() => {
+            const tarot3dMeta = ADYTUM_22_TAROT_KEYS[activeKey.key] || ADYTUM_22_TAROT_KEYS[0];
+            return (
+              <Box
+                sx={{
+                  p: 1.5,
+                  borderTop: '1px solid rgba(255,255,255,0.08)',
+                  bgcolor: '#080811',
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1.5 }}>
+                  <Box
+                    component="img"
+                    src={tarot3dMeta.hdImageUrl || TAROT_IMAGES[activeKey.key] || '/tarot/fool.jpg'}
+                    alt={`${activeKey.arcana} 4K Illuminated Tarot Card`}
+                    sx={{
+                      width: 72,
+                      height: 116,
+                      objectFit: 'cover',
+                      borderRadius: 1.5,
+                      border: `1px solid ${tarot3dMeta.primaryColor}`,
+                      boxShadow: '0 8px 20px rgba(0,0,0,0.65)',
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Box sx={{ minWidth: 0, flex: 1 }}>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 800, color: tarot3dMeta.primaryColor }}>
+                      {activeKey.arcana} — {activeKey.phase}
+                    </Typography>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#F5E6AB', display: 'block', mt: 0.2 }}>
+                      Hebrew Letter: {activeKey.letter} (Gematria: {activeKey.gematria}) • Gate: {activeKey.gate}
+                    </Typography>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: tarot3dMeta.secondaryColor, display: 'block', mt: 0.2, fontWeight: 800 }}>
+                      ⚡ RPG Spell: {tarot3dMeta.spellName} (PWR {tarot3dMeta.spellPower}) • Guardian: {tarot3dMeta.guardianAgent} ({tarot3dMeta.guardianPet})
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#CBD5E1', fontSize: '0.75rem', mt: 0.5, lineHeight: 1.45 }}>
+                      {activeKey.prompt}
+                    </Typography>
+                  </Box>
+                </Box>
+                <Grid container spacing={1.5}>
+                  <Grid xs={12} sm={7}>
+                    <SovereignGLBViewport
+                      glbUrl={tarot3dMeta.glbUrl}
+                      posterUrl={tarot3dMeta.hdImageUrl}
+                      primaryColor={tarot3dMeta.primaryColor}
+                      secondaryColor={tarot3dMeta.secondaryColor}
+                      badgeText={`KEY ${tarot3dMeta.roman} 3D DIORAMA .GLB`}
+                      subtitleText={`${tarot3dMeta.guardianAgent} • ${tarot3dMeta.spellName}`}
+                      mode="tarot"
+                      height={195}
+                    />
+                  </Grid>
+                  <Grid xs={12} sm={5}>
+                    <Box
+                      sx={{
+                        position: 'relative',
+                        height: 195,
+                        borderRadius: 2.5,
+                        overflow: 'hidden',
+                        border: `1px solid ${tarot3dMeta.secondaryColor}55`,
+                        bgcolor: '#05070E',
+                      }}
+                    >
+                      <video
+                        key={tarot3dMeta.videoUrl}
+                        src={tarot3dMeta.videoUrl}
+                        poster={tarot3dMeta.hdImageUrl}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      />
+                      <Chip
+                        label="LTX-VIDEO 2B ARCANE LOOP"
+                        size="small"
+                        sx={{
+                          position: 'absolute',
+                          bottom: 8,
+                          left: 8,
+                          fontFamily: mono,
+                          fontSize: '0.58rem',
+                          fontWeight: 800,
+                          height: 20,
+                          bgcolor: 'rgba(5,7,14,0.85)',
+                          color: tarot3dMeta.secondaryColor,
+                        }}
+                      />
+                    </Box>
+                  </Grid>
+                </Grid>
+              </Box>
+            );
+          })()}
 
           <Box
             sx={{

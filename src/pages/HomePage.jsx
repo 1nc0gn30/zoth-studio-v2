@@ -43,6 +43,7 @@ import { useStudioStatus } from '../studio/useStudioStatus';
 import { useReality } from '../context/RealityContext';
 import { RealityMatrixShowcaseSection } from '../components/RealityZothBotHUD';
 import UncommonTelemetryDeck from '../components/UncommonTelemetryDeck';
+import A100SovereignFoundryShowcase from '../components/A100SovereignFoundryShowcase';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -673,7 +674,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
       tabLabel: '1. Sovereign Arsenal (25 Authentic Tools)',
       shortTitle: 'Arsenal',
       badge: 'UNIFIED ARSENAL',
-      title: '71 Studio Tools & Interactive Workspaces',
+      title: '72 Studio Tools & Interactive Workspaces',
       subtitle: 'Zero-Egress In-Browser Multi-Agent Execution Matrix',
       description:
         'All 25 authentic tools are unified directly into Zoth Studio v2. They render with the native gold-on-void design system, zero external runtime dependency, and immediate interactive execution across Security & Recon, Swarm & Core, Developer Velocity, Memory & Cognitive, and Crypto & Identity.',
@@ -747,7 +748,7 @@ function ArchitecturePillarsExplorer({ gold, isDark, monoFont, status }) {
         icon: <LaunchIcon />,
       },
       icon: <FlashOnIcon sx={{ fontSize: 32, color: gold.accent }} />,
-      featuredChip: '71 STUDIO TOOLS',
+      featuredChip: '72 STUDIO TOOLS',
     },
     {
       id: 'stdp-memory',
@@ -1674,7 +1675,7 @@ export default function HomePage() {
               { label: '⚡ Zoth Bolt AI + Motion Architect', to: '/webgen' },
               { label: '⛓️ Vaelor L1 DAG (:8140)', to: '/vaelor' },
               { label: '🧠 23 Pantheon Minds (:9393)', to: '/swarm' },
-              { label: '💿 ZothOS v3.3.0 + Lite (:8145)', to: '/zoth-os' },
+              { label: '💿 ZothOS v3.4.0 + Lite (:8145)', to: '/zoth-os' },
             ].map((pill) => (
               <Chip
                 key={pill.label}
@@ -1718,7 +1719,7 @@ export default function HomePage() {
               Try WebGen Builder
             </Button>
             <Button component={RouterLink} to="/zoth-os" variant="text" sx={{ color: isDark ? gold.soft : gold.accent, fontWeight: 800, px: 2.2, '&:hover': { bgcolor: gold.wash, borderRadius: 2 } }}>
-              ZothOS v3.3 + Lite →
+              ZothOS v3.4 + Lite →
             </Button>
             <Button
               onClick={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro', { detail: { mode: 'wipe' } }))}
@@ -1841,6 +1842,9 @@ export default function HomePage() {
           <GoldenZLogo3D size={{ xs: 240, md: 340 }} />
         </Box>
       </Paper>
+
+      {/* Flagship A100 80GB Sovereign Foundry: 6-Planet Helios-Zoth 3D System • 21 Pantheon Quad-Engine • 22-Key 3D Tarot Sanctum */}
+      <A100SovereignFoundryShowcase />
 
       {/* Live Machine Status + Unicode U+2800 Braille & Bayer 8x8 Dither Telemetry Deck */}
       <Box sx={{ mb: 8 }}>

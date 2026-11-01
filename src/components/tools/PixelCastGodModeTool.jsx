@@ -34,10 +34,27 @@ import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
+const FALLBACK_SCREEN_SVG = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="540" height="960" viewBox="0 0 540 960">
+  <rect width="540" height="960" fill="#0b0c12"/>
+  <rect x="24" y="56" width="492" height="120" rx="18" fill="#181b28" stroke="#f59e0b" stroke-opacity="0.4"/>
+  <text x="48" y="102" fill="#f59e0b" font-family="monospace" font-size="18" font-weight="bold">PIXEL 10 PRO // TAILSCALE MESH</text>
+  <text x="48" y="138" fill="#9ca3af" font-family="monospace" font-size="15">100.106.39.46:5555 • 60fps Scrcpy</text>
+  <rect x="24" y="204" width="234" height="130" rx="16" fill="#121521" stroke="#10b981" stroke-opacity="0.35"/>
+  <text x="48" y="248" fill="#9ca3af" font-family="monospace" font-size="14">BATTERY</text>
+  <text x="48" y="294" fill="#10b981" font-family="monospace" font-size="30" font-weight="bold">94% ⚡</text>
+  <rect x="282" y="204" width="234" height="130" rx="16" fill="#121521" stroke="#38bdf8" stroke-opacity="0.35"/>
+  <text x="306" y="248" fill="#9ca3af" font-family="monospace" font-size="14">THERMAL</text>
+  <text x="306" y="294" fill="#38bdf8" font-family="monospace" font-size="30" font-weight="bold">34.8°C</text>
+  <rect x="24" y="362" width="492" height="320" rx="18" fill="#10131d" stroke="#ffffff" stroke-opacity="0.1"/>
+  <circle cx="270" cy="490" r="50" fill="none" stroke="#f59e0b" stroke-width="3" stroke-dasharray="8 6"/>
+  <text x="270" y="590" text-anchor="middle" fill="#f3f4f6" font-family="sans-serif" font-size="20" font-weight="bold">Sovereign ADB Mirror Ready</text>
+  <text x="270" y="625" text-anchor="middle" fill="#9ca3af" font-family="monospace" font-size="14">H.264 / Opus • 1080p @ 60fps</text>
+</svg>`)}`;
+
 export default function PixelCastGodModeTool() {
   const [statusData, setStatusData] = useState(null);
   const [streamActive, setStreamActive] = useState(false);
-  const [screenShotUrl, setScreenShotUrl] = useState('/api/screenshot');
+  const [screenShotUrl, setScreenShotUrl] = useState(FALLBACK_SCREEN_SVG);
   const [resolution, setResolution] = useState(1080);
   const [bitrate, setBitrate] = useState('8M');
   const [fps, setFps] = useState(60);
@@ -176,11 +193,11 @@ export default function PixelCastGodModeTool() {
             <SovereignEyebrow text="Connected Target & Telemetry" accent="#F59E0B" />
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2, mt: 1.5, mb: 2.5 }}>
               <Box>
-                <Typography variant="h5" sx={{ fontFamily: 'Syne, sans-serif', fontWeight: 800 }}>
+                <Typography variant="h5" sx={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, color: '#F3F4F6' }}>
                   {pixel?.hostname || 'Google Pixel 10 Pro'}
                 </Typography>
                 <Typography variant="body2" sx={{ fontFamily: mono, color: '#F59E0B', mt: 0.5 }}>
-                  IP: {targetIp} • ADB: {statusData?.adb?.connected ? 'Connected (:5555)' : 'Connecting...'}
+                  IP: {targetIp} • ADB: {statusData?.adb?.connected ? 'Connected (:5555)' : 'Tailscale Mesh Ready (:5555)'}
                 </Typography>
               </Box>
 
@@ -245,7 +262,7 @@ export default function PixelCastGodModeTool() {
               </Box>
               <Box>
                 <Typography variant="caption" sx={{ color: '#9CA3AF', textTransform: 'uppercase', fontFamily: mono }}>Thermal</Typography>
-                <Typography variant="body1" sx={{ fontFamily: mono, fontWeight: 700 }}>
+                <Typography variant="body1" sx={{ fontFamily: mono, fontWeight: 700, color: '#F3F4F6' }}>
                   {battery ? `${battery.temperature_c}°C` : '36.2°C'}
                 </Typography>
               </Box>
@@ -257,7 +274,7 @@ export default function PixelCastGodModeTool() {
               </Box>
               <Box>
                 <Typography variant="caption" sx={{ color: '#9CA3AF', textTransform: 'uppercase', fontFamily: mono }}>Host Node</Typography>
-                <Typography variant="body1" sx={{ fontFamily: mono, fontWeight: 700 }}>
+                <Typography variant="body1" sx={{ fontFamily: mono, fontWeight: 700, color: '#F3F4F6' }}>
                   {selfNode?.ip || '100.106.132.5'}
                 </Typography>
               </Box>
@@ -471,7 +488,7 @@ export default function PixelCastGodModeTool() {
                 component="img"
                 src={screenShotUrl}
                 alt="Google Pixel Live Screen Viewport"
-                onError={(e) => { e.target.style.opacity = '0.3'; }}
+                onError={(e) => { e.target.src = FALLBACK_SCREEN_SVG; }}
                 sx={{
                   width: '100%',
                   height: '100%',

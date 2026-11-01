@@ -337,7 +337,7 @@ export default function ZothBoltGodModeTool() {
 
   function handleCopyHtml() {
     if (!result?.html) return;
-    navigator.clipboard.writeText(result.html);
+    navigator.clipboard?.writeText(result.html)?.catch?.(() => {});
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
@@ -407,13 +407,13 @@ export default function ZothBoltGodModeTool() {
       },
       {
         id: 'attribution',
-        label: 'Sovereign Attribution (Neal Frazier Tech)',
-        pass: /Neal Frazier Tech|1nc0gn30|NullAI/i.test(html),
+        label: 'Sovereign Attribution (1nc0gn30 • NullAI)',
+        pass: /1nc0gn30 • NullAI|1nc0gn30|NullAI/i.test(html),
       },
       {
         id: 'monetization',
         label: 'Dual-Rail Stripe + Solana & ?licensed=true',
-        pass: /Stripe|Solana|DePay|licensed/i.test(html),
+        pass: /Stripe|Solana|licensed/i.test(html),
       },
     ];
     const passed = checks.filter((c) => c.pass).length;
@@ -437,7 +437,7 @@ export default function ZothBoltGodModeTool() {
     if (!/og:title/i.test(patched)) {
       headAdditions.push(
         `<meta property="og:title" content="${siteTitle}" />`,
-        `<meta property="og:description" content="Engineered with Zoth Bolt by Neal Frazier Tech (@1nc0gn30) • NullAI Platform." />`,
+        `<meta property="og:description" content="Engineered with Zoth Bolt by 1nc0gn30 (@1nc0gn30) • NullAI Platform." />`,
         `<meta property="og:type" content="website" />`,
         `<meta property="og:image" content="https://zoth.nullai.tech/og-banner.png" />`,
         `<meta name="twitter:card" content="summary_large_image" />`,
@@ -455,7 +455,7 @@ export default function ZothBoltGodModeTool() {
             applicationCategory: 'DeveloperApplication',
             operatingSystem: 'All',
             offers: { '@type': 'Offer', price: '19.00', priceCurrency: 'USD' },
-            creator: { '@type': 'Organization', name: 'Neal Frazier Tech', url: 'https://nullai.tech' },
+            creator: { '@type': 'Organization', name: '1nc0gn30 • NullAI', url: 'https://nullai.tech' },
           },
           {
             '@type': 'FAQPage',
@@ -487,11 +487,11 @@ export default function ZothBoltGodModeTool() {
     }
 
     // 3. Inject Sovereign Attribution + Dual-Rail Monetization Bar if missing
-    if (!/Neal Frazier Tech|1nc0gn30/i.test(patched) || !/Stripe|Solana|DePay|licensed/i.test(patched)) {
+    if (!/1nc0gn30 • NullAI|1nc0gn30/i.test(patched) || !/Stripe|Solana|licensed/i.test(patched)) {
       const footerBar = `
 <section style="margin:24px auto;max-width:1120px;padding:14px 20px;border-radius:14px;background:rgba(17,20,32,0.92);border:1px solid rgba(212,175,55,0.4);color:#F8FAFC;font-family:monospace;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
   <div><strong style="color:#D4AF37;">✦ 100% FREE & OPEN ACCESS</strong> • Optional Stripe & Solana tips</div>
-  <div style="font-size:12px;color:#94A3B8;">Engineered by <a href="https://github.com/1nc0gn30" style="color:#D4AF37;">Neal Frazier Tech (@1nc0gn30)</a> • <a href="https://nullai.tech" style="color:#38BDF8;">NullAI Platform</a></div>
+  <div style="font-size:12px;color:#94A3B8;">Engineered by <a href="https://github.com/1nc0gn30" style="color:#D4AF37;">1nc0gn30 (@1nc0gn30)</a> • <a href="https://nullai.tech" style="color:#38BDF8;">NullAI Platform</a></div>
 </section>`;
       patched = patched.replace(/<\/body>/i, `${footerBar}\n</body>`);
     }
@@ -1024,7 +1024,7 @@ export default function ZothBoltGodModeTool() {
                     <Button
                       size="small"
                       variant="outlined"
-                      onClick={() => navigator.clipboard.writeText(item.svg)}
+                      onClick={() => navigator.clipboard?.writeText(item.svg)?.catch?.(() => {})}
                       sx={{
                         fontFamily: mono,
                         fontSize: '0.65rem',
@@ -1121,7 +1121,7 @@ export default function ZothBoltGodModeTool() {
               <Button
                 size="small"
                 variant="outlined"
-                onClick={() => navigator.clipboard.writeText(mcpSnippet)}
+                onClick={() => navigator.clipboard?.writeText(mcpSnippet)?.catch?.(() => {})}
                 sx={{ fontFamily: mono, fontSize: '0.68rem', borderColor: '#34D399', color: '#34D399', textTransform: 'none' }}
               >
                 Copy MCP JSON

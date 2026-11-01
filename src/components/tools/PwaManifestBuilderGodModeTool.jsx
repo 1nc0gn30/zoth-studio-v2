@@ -485,7 +485,7 @@ self.addEventListener('fetch', (event) => {
 
   const handleCopyCode = () => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(getActiveCode());
+      navigator.clipboard?.writeText(getActiveCode())?.catch?.(() => {});
       setCopiedCode(true);
       setTimeout(() => setCopiedCode(false), 2000);
     }

@@ -317,7 +317,7 @@ export default function RobotsTxtAuditorGodModeTool() {
 
   const handleCopy = () => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(robotsContent);
+      navigator.clipboard?.writeText(robotsContent)?.catch?.(() => {});
       setCopiedCode(true);
       setTimeout(() => setCopiedCode(false), 2000);
     }
