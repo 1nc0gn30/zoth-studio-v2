@@ -32,6 +32,7 @@ import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
 import ZothOSGodModeTool from '../components/tools/ZothOSGodModeTool';
 import { RealityMatrixShowcaseSection } from '../components/RealityZothBotHUD';
 import UncommonTelemetryDeck from '../components/UncommonTelemetryDeck';
+import ZothosAsciiLogo from '../components/ZothosAsciiLogo';
 
 // Icons
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
@@ -194,13 +195,19 @@ export default function ZothOSShowcasePage() {
     <>
 
       <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 4, md: 7 } }}>
-        {/* Hero Section */}
-        <HeroReveal>
-          <HeroItem>
+        {/* Hero Section with 60FPS 3D Volumetric ZOTHOS Logo Turntable */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: 'minmax(0, 1fr)', lg: 'minmax(0, 1.15fr) minmax(0, 0.85fr)' },
+            gap: { xs: 3.5, lg: 4 },
+            alignItems: 'center',
+            mb: 5,
+          }}
+        >
+          <Box sx={{ minWidth: 0 }}>
             <GlowLine color={gold} glowColor="rgba(212, 175, 55, 0.4)" />
-          </HeroItem>
-          <HeroItem>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mt: 3, mb: 1, flexWrap: 'wrap' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mt: 3, mb: 1, flexWrap: 'wrap' }}>
               <Chip
                 label="ZOTH OS v3.4.0 + ZOTHOS-LITE v1.1"
                 size="small"
@@ -250,9 +257,7 @@ export default function ZothOSShowcasePage() {
                 }}
               />
             </Box>
-          </HeroItem>
-          <HeroItem>
-            <Box sx={{ mt: 2, mb: 1, display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1.5 }}>
+            <Box sx={{ mt: 2, mb: 1.5, display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1.5 }}>
               <Box
                 component="a"
                 href="https://www.producthunt.com/products/zothos?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-zothos-2"
@@ -270,15 +275,13 @@ export default function ZothOSShowcasePage() {
                 />
               </Box>
             </Box>
-          </HeroItem>
-          <HeroItem>
             <Typography
               variant="h1"
               sx={{
-                fontSize: { xs: '2.4rem', sm: '3.6rem', md: '4.8rem' },
+                fontSize: { xs: '2.1rem', sm: '3.1rem', md: '3.6rem' },
                 fontWeight: 900,
                 color: textPrimary,
-                lineHeight: 1.05,
+                lineHeight: 1.06,
                 letterSpacing: '-0.025em',
                 mb: 2,
               }}
@@ -288,33 +291,29 @@ export default function ZothOSShowcasePage() {
                 Offensive Security OS
               </Box>
             </Typography>
-          </HeroItem>
-          <HeroItem>
             <Typography
               sx={{
                 color: textSecondary,
-                fontSize: { xs: '1.05rem', md: '1.25rem' },
-                lineHeight: 1.7,
-                maxWidth: 820,
-                mb: 4,
+                fontSize: { xs: '0.98rem', md: '1.08rem' },
+                lineHeight: 1.65,
+                maxWidth: 680,
+                mb: 3,
               }}
             >
-              A bootable Linux operating system engineered by NullAI Tech. Combines the Kali and Parrot security arsenal with the Zoth Studio v2 suite, Vaelor L1 (:8140), Zoth Civilization (:9393), and ZothOS-Lite v1.1 (:8145). The shipped flagship release is v3.4.0 featuring deterministic 4-folder KDE Plasma 6 desktop organization and verified 166KB multi-size Xcursor themes with hardware/VM SWCursor visibility. Live users are zoth / azoth / root (password zoth).
+              A bootable Linux operating system engineered by NullAI. Combines the Kali and Parrot security arsenal with the Zoth Studio v2 suite, Vaelor L1 (:8140), Zoth Civilization (:9393), and ZothOS-Lite v1.1 (:8145). The shipped flagship release is v3.4.0 featuring deterministic 4-folder KDE Plasma 6 desktop organization and verified 166KB multi-size Xcursor themes with hardware/VM SWCursor visibility.
             </Typography>
-          </HeroItem>
-          <HeroItem>
-            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center', mb: 5 }}>
+            <Box sx={{ display: 'flex', gap: 1.4, flexWrap: 'wrap', alignItems: 'center' }}>
               <Button
                 variant="contained"
                 color="primary"
-                size="large"
+                size="medium"
                 href="https://zothos.nullai.tech"
                 target="_blank"
                 rel="noopener noreferrer"
                 startIcon={<LaunchIcon />}
                 sx={{
-                  px: 3.2,
-                  py: 1.3,
+                  px: 2.5,
+                  py: 1.1,
                   fontWeight: 800,
                   fontFamily: mono,
                   boxShadow: `0 4px 20px ${isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.3)'}`,
@@ -325,13 +324,13 @@ export default function ZothOSShowcasePage() {
               <Button
                 variant="outlined"
                 color="primary"
-                size="large"
+                size="medium"
                 component={RouterLink}
                 to="/zoth-os/docs"
                 startIcon={<TerminalIcon />}
                 sx={{
-                  px: 3.5,
-                  py: 1.3,
+                  px: 2.5,
+                  py: 1.1,
                   fontWeight: 800,
                   fontFamily: mono,
                   borderColor: goldBorder,
@@ -341,92 +340,49 @@ export default function ZothOSShowcasePage() {
               </Button>
               <Button
                 variant="outlined"
-                color="primary"
-                size="large"
-                component={RouterLink}
-                to="/arsenal"
-                startIcon={<RocketLaunchIcon />}
-                sx={{
-                  px: 3.2,
-                  py: 1.3,
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  borderColor: goldBorder,
-                }}
-              >
-                Explore Studio Arsenal
-              </Button>
-              <Button
-                variant="outlined"
-                size="large"
-                href="https://github.com/NullAITech/chain-of-thoughts"
+                size="medium"
+                href="https://github.com/1nc0gn30/chain-of-thoughts"
                 target="_blank"
                 rel="noopener noreferrer"
                 startIcon={<GitHubIcon />}
                 sx={{
-                  px: 3,
-                  py: 1.3,
+                  px: 2.2,
+                  py: 1.1,
                   fontWeight: 750,
                   fontFamily: mono,
                   color: isDark ? '#38BDF8' : '#0369A1',
                   borderColor: isDark ? 'rgba(56, 189, 248, 0.4)' : '#BAE6FD',
                   bgcolor: isDark ? 'rgba(56, 189, 248, 0.08)' : '#F0F9FF',
-                  '&:hover': {
-                    borderColor: '#38BDF8',
-                    bgcolor: isDark ? 'rgba(56, 189, 248, 0.16)' : '#E0F2FE',
-                  },
                 }}
               >
                 ◈ Chain of Thoughts
               </Button>
               <Button
                 variant="outlined"
-                size="large"
-                href="https://github.com/NullAITech/zothos-lite"
+                size="medium"
+                href="https://github.com/1nc0gn30/zothos-lite"
                 target="_blank"
                 rel="noopener noreferrer"
                 startIcon={<GitHubIcon />}
                 sx={{
-                  px: 3,
-                  py: 1.3,
+                  px: 2.2,
+                  py: 1.1,
                   fontWeight: 750,
                   fontFamily: mono,
                   color: isDark ? '#FFFFFF' : '#0F172A',
                   borderColor: isDark ? 'rgba(255, 255, 255, 0.3)' : '#0F172A',
                   bgcolor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#F8FAFC',
-                  '&:hover': {
-                    borderColor: gold,
-                    bgcolor: isDark ? 'rgba(255, 255, 255, 0.12)' : '#F1F5F9',
-                  },
                 }}
               >
                 ▓ ZothOS-Lite v1.1
               </Button>
-              <Button
-                variant="outlined"
-                size="large"
-                href="https://github.com/NullAITech/zoth-os"
-                target="_blank"
-                rel="noopener noreferrer"
-                startIcon={<GitHubIcon />}
-                sx={{
-                  px: 3,
-                  py: 1.3,
-                  fontWeight: 750,
-                  fontFamily: mono,
-                  color: textPrimary,
-                  borderColor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)',
-                  '&:hover': {
-                    borderColor: gold,
-                    bgcolor: goldWash,
-                  },
-                }}
-              >
-                Source Repo
-              </Button>
             </Box>
-          </HeroItem>
-        </HeroReveal>
+          </Box>
+
+          <Box sx={{ minWidth: 0, width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <ZothosAsciiLogo size="hero" />
+          </Box>
+        </Box>
 
         {/* Live Machine Status + Unicode Braille & Bayer 8x8 Dither Telemetry Deck */}
         <Box sx={{ mb: 6 }}>
