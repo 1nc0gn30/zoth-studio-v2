@@ -693,7 +693,7 @@ export function GhidraMcpGodModeTool() {
           <TextField
             fullWidth
             size="small"
-            placeholder="e.g. GHIDRA-PRO-2026-XXXX or neal@..."
+            placeholder="e.g. GHIDRA-PRO-2026-XXXX or dev@..."
             value={licenseKeyInput}
             onChange={(e) => setLicenseKeyInput(e.target.value)}
             InputProps={{

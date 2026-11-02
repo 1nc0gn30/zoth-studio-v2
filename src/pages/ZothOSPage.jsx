@@ -48,6 +48,7 @@ import DaemonStatusStrip from '../components/DaemonStatusStrip';
 import SovereignFunnel from '../components/SovereignFunnel';
 import ZothOSGodModeTool from '../components/tools/ZothOSGodModeTool';
 import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
+import ZothosAsciiLogo from '../components/ZothosAsciiLogo';
 import { HeroReveal, HeroItem, ParallaxGlow, RevealOnScroll, StaggerChildren, StaggerItem } from '../components/MotionReveal';
 import { useReality } from '../context/RealityContext';
 
@@ -1173,6 +1174,11 @@ export default function ZothOSPage() {
           <DaemonStatusStrip />
         </Box>
 
+        {/* 60FPS Unicode U+2800 Braille + 3D Lattice + Bayer Dither Volumetric ZOTHOS Logo Turntable */}
+        <Box sx={{ mb: 4, display: 'flex', justifyContent: 'center' }}>
+          <ZothosAsciiLogo size="hero" />
+        </Box>
+
         {/* 60FPS ASCII & Braille Motion Edit + Interactive ZothOS v3.4.0 Desktop Pillar Inspector */}
         <Box sx={{ mb: 5 }}>
           <ToolMotionShowcase
@@ -1456,12 +1462,16 @@ export default function ZothOSPage() {
             sx={{
               mb: 5,
               mt: 3,
-              p: { xs: 2.5, md: 3.5 },
+              p: { xs: 2, sm: 2.5, md: 3.5 },
               bgcolor: '#000000',
               color: '#FFFFFF',
               border: '2px solid #FFFFFF',
-              boxShadow: '6px 6px 0px #FFFFFF',
+              boxShadow: '0 16px 40px -10px rgba(0,0,0,0.65), inset 0 0 0 1px rgba(255,255,255,0.35)',
               fontFamily: mono,
+              maxWidth: '100%',
+              width: '100%',
+              boxSizing: 'border-box',
+              overflow: 'hidden',
             }}
           >
             <Box
@@ -1474,9 +1484,11 @@ export default function ZothOSPage() {
                 pb: 1.5,
                 mb: 2.5,
                 borderBottom: '1px solid #FFFFFF',
+                minWidth: 0,
+                maxWidth: '100%',
               }}
             >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', minWidth: 0, maxWidth: '100%' }}>
                 <Box
                   sx={{
                     px: 1.2,
@@ -1484,17 +1496,20 @@ export default function ZothOSPage() {
                     bgcolor: '#FFFFFF',
                     color: '#000000',
                     fontWeight: 800,
-                    fontSize: '0.72rem',
-                    letterSpacing: '0.12em',
+                    fontSize: '0.7rem',
+                    letterSpacing: '0.08em',
+                    maxWidth: '100%',
+                    overflowWrap: 'anywhere',
+                    wordBreak: 'break-word',
                   }}
                 >
                   ▓▒░ ZOTHOS-LITE v1.1 // TAILS-STYLE AMNESIC EDITION ░▒▓
                 </Box>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', color: '#FFFFFF', letterSpacing: '0.06em' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.73rem', color: '#FFFFFF', letterSpacing: '0.04em', overflowWrap: 'anywhere', wordBreak: 'break-word', minWidth: 0 }}>
                   1-BIT BLACK & WHITE (#000000 / #FFFFFF) • BAYER 4x4 DITHER • UNICODE U+2800 BRAILLE
                 </Typography>
               </Box>
-              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+              <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', minWidth: 0, maxWidth: '100%' }}>
                 <Button
                   component="a"
                   href="http://localhost:8145"
@@ -1506,10 +1521,12 @@ export default function ZothOSPage() {
                     color: '#000000',
                     fontFamily: mono,
                     fontWeight: 800,
-                    fontSize: '0.72rem',
+                    fontSize: '0.7rem',
                     borderRadius: 0,
                     border: '1px solid #FFFFFF',
-                    px: 2,
+                    px: 1.5,
+                    maxWidth: '100%',
+                    whiteSpace: 'normal',
                     '&:hover': { bgcolor: '#000000', color: '#FFFFFF' },
                   }}
                 >
@@ -1526,10 +1543,12 @@ export default function ZothOSPage() {
                     color: '#FFFFFF',
                     fontFamily: mono,
                     fontWeight: 800,
-                    fontSize: '0.72rem',
+                    fontSize: '0.7rem',
                     borderRadius: 0,
                     border: '1px solid #FFFFFF',
                     px: 1.5,
+                    maxWidth: '100%',
+                    whiteSpace: 'normal',
                     '&:hover': { bgcolor: '#FFFFFF', color: '#000000' },
                   }}
                 >
@@ -1546,10 +1565,12 @@ export default function ZothOSPage() {
                     color: '#FFFFFF',
                     fontFamily: mono,
                     fontWeight: 800,
-                    fontSize: '0.72rem',
+                    fontSize: '0.7rem',
                     borderRadius: 0,
                     border: '1px solid #FFFFFF',
                     px: 1.5,
+                    maxWidth: '100%',
+                    whiteSpace: 'normal',
                     '&:hover': { bgcolor: '#FFFFFF', color: '#000000' },
                   }}
                 >
@@ -1566,10 +1587,12 @@ export default function ZothOSPage() {
                     color: '#FFFFFF',
                     fontFamily: mono,
                     fontWeight: 800,
-                    fontSize: '0.72rem',
+                    fontSize: '0.7rem',
                     borderRadius: 0,
                     border: '1px solid #FFFFFF',
                     px: 1.5,
+                    maxWidth: '100%',
+                    whiteSpace: 'normal',
                     '&:hover': { bgcolor: '#FFFFFF', color: '#000000' },
                   }}
                 >
@@ -1578,17 +1601,27 @@ export default function ZothOSPage() {
               </Box>
             </Box>
 
-            <Grid container spacing={2.5}>
-              <Grid xs={12} md={7}>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: { xs: 'minmax(0, 1fr)', md: 'minmax(0, 7fr) minmax(0, 5fr)' },
+                gap: 2.5,
+                minWidth: 0,
+                maxWidth: '100%',
+              }}
+            >
+              <Box sx={{ minWidth: 0, maxWidth: '100%' }}>
                 <Typography
                   sx={{
                     fontFamily: mono,
                     fontWeight: 800,
-                    fontSize: { xs: '1.15rem', md: '1.4rem' },
+                    fontSize: { xs: '1.08rem', md: '1.35rem' },
                     color: '#FFFFFF',
-                    letterSpacing: '0.04em',
+                    letterSpacing: '0.03em',
                     mb: 1,
                     textTransform: 'uppercase',
+                    overflowWrap: 'anywhere',
+                    wordBreak: 'break-word',
                   }}
                 >
                   Amnesic RAM-Only Security Workstation (`toram noswap`)
@@ -1600,11 +1633,21 @@ export default function ZothOSPage() {
                     color: '#FFFFFF',
                     lineHeight: 1.65,
                     mb: 2,
+                    overflowWrap: 'anywhere',
+                    wordBreak: 'break-word',
                   }}
                 >
                   Designed like Tails OS for sovereign developers and cryptographic operators. Boots a minimal ~880 MB SquashFS image strictly into volatile RAM (`tmpfs`), enforces an `nftables` Tor transparent proxy kill-switch (`9050/9040`), randomizes hardware MAC addresses on link-up, and ships with the 6 Mandatory Zoth Security & Dev Tools + Chain of Thoughts (`zoth-cot`) + AZOTH Embodied Braille AI Agent pre-locked in RAM.
                 </Typography>
-                <Grid container spacing={1}>
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: { xs: 'minmax(0, 1fr)', sm: 'repeat(2, minmax(0, 1fr))' },
+                    gap: 1,
+                    minWidth: 0,
+                    maxWidth: '100%',
+                  }}
+                >
                   {[
                     { code: 'CORE-01', name: 'Zoth EnvGuard & Secret Firewall', desc: 'Pre-commit entropy scanner & zero-leakage .env RAM guard' },
                     { code: 'CORE-02', name: 'GhostByte Metadata Stripper (mat2)', desc: 'Strips EXIF/GPS/PDF/Office metadata + SHA-256 & BLAKE2b digests' },
@@ -1615,62 +1658,70 @@ export default function ZothOSPage() {
                     { code: 'CORE-07', name: '◈ Chain of Thoughts (zoth-cot)', desc: 'Multi-turn /api/chat context, auto fact extraction & SHA-256 Merkle DAG' },
                     { code: 'CORE-08', name: 'AZOTH Embodied Braille AI + Kokoro', desc: '6 mood rigs, phoneme lip-sync, Kokoro 82M ONNX Neural TTS & mic STT' },
                   ].map((core) => (
-                    <Grid xs={12} sm={6} key={core.code}>
-                      <Box
-                        sx={{
-                          p: 1.2,
-                          border: '1px solid #FFFFFF',
-                          bgcolor: '#000000',
-                          height: '100%',
-                        }}
-                      >
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.4 }}>
-                          <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 800, color: '#FFFFFF' }}>
-                            {core.name}
-                          </Typography>
-                          <Box sx={{ px: 0.6, bgcolor: '#FFFFFF', color: '#000000', fontSize: '0.62rem', fontWeight: 800 }}>
-                            {core.code}
-                          </Box>
-                        </Box>
-                        <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#FFFFFF', opacity: 0.85 }}>
-                          {core.desc}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Grid>
-
-              <Grid xs={12} md={5}>
-                <Box
-                  sx={{
-                    p: 2,
-                    border: '1px solid #FFFFFF',
-                    bgcolor: '#000000',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <Box>
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: '#FFFFFF', mb: 1, letterSpacing: '0.08em' }}>
-                      ┌─ ON-DEMAND MODULAR TOOL PULLER (zoth-lite-pkg) ─┐
-                    </Typography>
                     <Box
-                      component="pre"
+                      key={core.code}
                       sx={{
-                        m: 0,
-                        p: 1.5,
+                        p: 1.2,
                         border: '1px solid #FFFFFF',
                         bgcolor: '#000000',
-                        color: '#FFFFFF',
-                        fontFamily: mono,
-                        fontSize: '0.7rem',
-                        lineHeight: 1.55,
-                        overflowX: 'auto',
+                        minWidth: 0,
+                        maxWidth: '100%',
+                        boxSizing: 'border-box',
                       }}
                     >
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 0.5, mb: 0.4, minWidth: 0 }}>
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 800, color: '#FFFFFF', overflowWrap: 'anywhere', wordBreak: 'break-word', minWidth: 0, flex: 1 }}>
+                          {core.name}
+                        </Typography>
+                        <Box sx={{ px: 0.6, bgcolor: '#FFFFFF', color: '#000000', fontSize: '0.6rem', fontWeight: 800, flexShrink: 0 }}>
+                          {core.code}
+                        </Box>
+                      </Box>
+                      <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#FFFFFF', opacity: 0.85, overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
+                        {core.desc}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+
+              <Box
+                sx={{
+                  p: { xs: 1.5, sm: 2 },
+                  border: '1px solid #FFFFFF',
+                  bgcolor: '#000000',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  minWidth: 0,
+                  maxWidth: '100%',
+                  boxSizing: 'border-box',
+                  overflow: 'hidden',
+                }}
+              >
+                <Box sx={{ minWidth: 0, maxWidth: '100%' }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.73rem', fontWeight: 800, color: '#FFFFFF', mb: 1, letterSpacing: '0.06em', overflowWrap: 'anywhere' }}>
+                    ┌─ ON-DEMAND MODULAR TOOL PULLER (zoth-lite-pkg) ─┐
+                  </Typography>
+                  <Box
+                    component="pre"
+                    sx={{
+                      m: 0,
+                      p: 1.4,
+                      border: '1px solid #FFFFFF',
+                      bgcolor: '#000000',
+                      color: '#FFFFFF',
+                      fontFamily: mono,
+                      fontSize: '0.68rem',
+                      lineHeight: 1.55,
+                      minWidth: 0,
+                      maxWidth: '100%',
+                      boxSizing: 'border-box',
+                      whiteSpace: 'pre-wrap',
+                      wordBreak: 'break-word',
+                      overflowWrap: 'anywhere',
+                    }}
+                  >
 {`$ zoth-cot status
 [◈] CHAIN OF THOUGHTS // WORKING MEMORY DAG
 [◈] Active Session : zoth-cot-default
@@ -1683,19 +1734,18 @@ $ zoth-cot pin TARGET_HOST "10.0.2.15 (QEMU Bridge)"
 # Pull only the tools you need into RAM:
 $ zoth-lite-pkg pull zoth-hermes-llm
 $ zoth-lite-pkg wipe-ram`}
-                    </Box>
-                  </Box>
-                  <Box sx={{ mt: 1.5, pt: 1.2, borderTop: '1px dashed #FFFFFF', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#FFFFFF' }}>
-                      ⣿ 2x4 BRAILLE ENTROPY: ⣠⣴⣾⣿⣾⣴⣠ • ISO: ~880 MB
-                    </Typography>
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, color: '#FFFFFF' }}>
-                      100% OPEN ACCESS // ZERO PAYWALLS
-                    </Typography>
                   </Box>
                 </Box>
-              </Grid>
-            </Grid>
+                <Box sx={{ mt: 1.5, pt: 1.2, borderTop: '1px dashed #FFFFFF', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1, minWidth: 0 }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#FFFFFF', overflowWrap: 'anywhere' }}>
+                    ⣿ 2x4 BRAILLE ENTROPY: ⣠⣴⣾⣿⣾⣴⣠ • ISO: ~880 MB
+                  </Typography>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', fontWeight: 800, color: '#FFFFFF' }}>
+                    100% OPEN ACCESS // ZERO PAYWALLS
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
           </Box>
         </RevealOnScroll>
 

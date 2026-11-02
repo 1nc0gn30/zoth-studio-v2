@@ -4508,7 +4508,7 @@ export function AgentVoiceCallTool() {
                 LIVE AGENT TRANSCRIPT FEED
               </Typography>
               <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', color: isDark ? '#E2E8F0' : '#1E293B', fontStyle: 'italic', mb: 1 }}>
-                &ldquo;I am on the line, Neal. Tap the mic or speak naturally—I am listening.&rdquo;
+                &ldquo;I am on the line, 1nc0gn30. Tap the mic or speak naturally—I am listening.&rdquo;
               </Typography>
               <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                 <Chip label="Latency: 42ms" size="small" sx={{ fontFamily: mono, height: 18, fontSize: '0.6rem' }} />

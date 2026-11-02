@@ -61,7 +61,7 @@ export default function VoiceStationPage() {
   const [turns, setTurns] = useState([
     {
       speaker: 'Azoth',
-      text: 'Voice Station online, Neal. Select any persona or speak naturally into the mic—I am listening.',
+      text: 'Voice Station online, 1nc0gn30. Select any persona or speak naturally into the mic—I am listening.',
       time: '00:00',
       latency: '24ms',
       isAgent: true,
@@ -249,7 +249,7 @@ export default function VoiceStationPage() {
     setIsProcessing(true);
 
     const userTurn = {
-      speaker: 'Neal',
+      speaker: '1nc0gn30',
       text: text,
       time: formatTime(callTimer),
       isAgent: false,

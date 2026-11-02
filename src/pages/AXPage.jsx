@@ -149,7 +149,7 @@ SECTION 3: MACHINE-READABLE CONTRACTS & TOOL SCHEMAS
 
 # ── Identity & Core Metadata ──
 site: https://zoth.nullai.tech
-publisher: NullAI Tech / 757tech
+publisher: NullAI
 founding-team: Zoth Studio Team (https://nullai.tech)
 software-name: Zoth Studio
 version: 2.0.0

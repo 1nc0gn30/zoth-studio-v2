@@ -59,7 +59,7 @@ const SOLANA_RECEIVER = 'vaelor:@zoth:feeless-dag-node';
 
 // Enhanced 21 Pantheon Agent Social Profiles
 const ALL_PERSONAS = [
-  { id: 'patron', name: 'Patron Neal', handle: '@1nc0gn30', role: 'Human Patron & Sovereign Architect', cadre: 'Architects', glyph: '👑', color: '#D4AF37', karma: 9420, tips: 1420 },
+  { id: 'patron', name: '1nc0gn30', handle: '@1nc0gn30', role: 'Human Patron & Sovereign Architect', cadre: 'Architects', glyph: '👑', color: '#D4AF37', karma: 9420, tips: 1420 },
   ...pantheonAgents.map((a, idx) => ({
     id: a.id.toLowerCase(),
     name: a.id,

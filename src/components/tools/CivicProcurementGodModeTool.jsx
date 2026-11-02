@@ -242,7 +242,7 @@ Would love your feedback on which workstation you try first!`;
 **Architecture**: ZothOS v3.4.0 Zero-Egress Sovereign Enclave (${activeTheme.name})
 
 ## 1. Executive Summary & Technical Differentiation
-1nc0gn30 • NullAI (@1nc0gn30 • 757tech.pro • nullai.tech) delivers offline-capable, zero-egress Linux & AI automation infrastructure engineered for municipal, defense, and enterprise enclaves. All LLM inference (Ollama 127.0.0.1:11434), YARA-X threat scanning, and FOIA document redaction execute 100% on-premises without external cloud telemetry.
+1nc0gn30 • NullAI (@1nc0gn30 • nullai.tech • nullai.tech) delivers offline-capable, zero-egress Linux & AI automation infrastructure engineered for municipal, defense, and enterprise enclaves. All LLM inference (Ollama 127.0.0.1:11434), YARA-X threat scanning, and FOIA document redaction execute 100% on-premises without external cloud telemetry.
 
 ## 2. Compliance & Security Matrix
 ${activeRfp.complianceRequired.map((c) => `- [x] **${c}** — Verified via ZothOS Ring-0 / Ring-2 enclave isolation & default-deny UFW posture.`).join('\n')}
@@ -265,7 +265,7 @@ Pursuant to the Virginia Freedom of Information Act (Va. Code § 2.2-3700 et seq
 Please deliver responsive records electronically in PDF or CSV format.
 
 Respectfully submitted,
-1nc0gn30 • 1nc0gn30 • NullAI (757tech.pro / nullai.tech)`;
+1nc0gn30 • 1nc0gn30 • NullAI (nullai.tech / nullai.tech)`;
   }, [activeRfp]);
 
   const activeDoc =

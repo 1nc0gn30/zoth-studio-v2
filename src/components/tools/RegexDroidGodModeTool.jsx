@@ -33,7 +33,7 @@ const PRESETS = [
     category: "Web & Identifiers",
     pattern: "[\\w.+-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}",
     flags: "g",
-    testText: "Contact us at neal@nullai.tech or test.user+demo@example.co.uk for inquiries. Invalid: user@invalid"
+    testText: "Contact us at 1nc0gn30@nullai.tech or test.user+demo@example.co.uk for inquiries. Invalid: user@invalid"
   },
   {
     id: "url",

@@ -39,7 +39,7 @@ const PRESET_PROFILES = {
     category: 'DeveloperApplication',
     price: '0.00',
     phone: '+1-555-555-0199',
-    email: 'neal@nullai.tech',
+    email: '1nc0gn30@nullai.tech',
     creator: '1nc0gn30 (1nc0gn30 • NullAI)',
     sameAs: 'https://github.com/1nc0gn30, https://nullai.tech, https://www.nullai.tech',
     description:
@@ -55,7 +55,7 @@ const PRESET_PROFILES = {
       },
       {
         q: 'Who engineered AEO Graph Engine Studio?',
-        a: 'Engineered by 1nc0gn30 (1nc0gn30 • NullAI) on the NullAI Platform. Direct studio contact: (555) 555-0199 or neal@nullai.tech.',
+        a: 'Engineered by 1nc0gn30 (1nc0gn30 • NullAI) on the NullAI Platform. Direct studio contact: (555) 555-0199 or 1nc0gn30@nullai.tech.',
       },
     ],
   },
@@ -67,7 +67,7 @@ const PRESET_PROFILES = {
     category: 'OperatingSystem',
     price: '0.00',
     phone: '+1-555-555-0199',
-    email: 'neal@nullai.tech',
+    email: '1nc0gn30@nullai.tech',
     creator: '1nc0gn30 (1nc0gn30 • NullAI)',
     sameAs: 'https://github.com/1nc0gn30/zothos, https://zoth.nullai.tech, https://nullai.tech',
     description:
@@ -91,7 +91,7 @@ const PRESET_PROFILES = {
     category: 'TechnologyConsulting',
     price: '100.00',
     phone: '+1-555-555-0199',
-    email: 'neal@nullai.tech',
+    email: '1nc0gn30@nullai.tech',
     creator: '1nc0gn30',
     sameAs: 'https://github.com/1nc0gn30, https://nullai.tech, https://zoth.nullai.tech',
     description:
@@ -99,7 +99,7 @@ const PRESET_PROFILES = {
     faqs: [
       {
         q: 'How can I contact 1nc0gn30 • NullAI directly?',
-        a: 'Call or text (555) 555-0199 or email neal@nullai.tech for direct engineering dispatch.',
+        a: 'Call or text (555) 555-0199 or email 1nc0gn30@nullai.tech for direct engineering dispatch.',
       },
       {
         q: 'Do you retain full code and domain ownership?',
@@ -173,7 +173,7 @@ export default function AeoGraphEngineGodModeTool() {
       name: profile.creator || '1nc0gn30 • NullAI',
       url: cleanUrl,
       telephone: profile.phone || '+1-555-555-0199',
-      email: profile.email || 'neal@nullai.tech',
+      email: profile.email || '1nc0gn30@nullai.tech',
       ...(sameAsArr.length > 0 ? { sameAs: sameAsArr } : {}),
     };
 

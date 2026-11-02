@@ -22,7 +22,7 @@ function loadState() {
     headHash: genesisHash,
     maxTurns: 24,
     pinnedFacts: [
-      { id: 'fact-operator', category: 'IDENTITY', fact: 'Operator: Neal (@1nc0gn30) • Sovereign AI Workstation.', active: true, ts: new Date().toISOString() },
+      { id: 'fact-operator', category: 'IDENTITY', fact: 'Operator: 1nc0gn30 (@1nc0gn30) • Sovereign AI Workstation.', active: true, ts: new Date().toISOString() },
       { id: 'fact-engine', category: 'ARCHITECTURE', fact: 'Chain of Thoughts (zoth-cot) Merkle DAG Working Memory Engine.', active: true, ts: new Date().toISOString() }
     ],
     messages: [],

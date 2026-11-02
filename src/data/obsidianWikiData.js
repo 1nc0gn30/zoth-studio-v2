@@ -5113,7 +5113,7 @@ export function checkVaelorHandleSafetyFallback(handle) {
   const homoglyphs = [
     { target: '@zoth', lookalikes: ['@z0th', '@zoth1', '@z0th_ai', '@z_oth'] },
     { target: '@sprig', lookalikes: ['@spr1g', '@sprlg', '@sprig_bakery', '@spr1g_757'] },
-    { target: '@1nc0gn30', lookalikes: ['@nea1', '@1nc0gn30l', '@1nc0gn30_frazier', '@n3al'] }
+    { target: '@1nc0gn30', lookalikes: ['@1nc0gn3o', '@inc0gn30', '@1nc0gn30_ai', '@1nc0gn30_'] }
   ];
 
   for (const h of homoglyphs) {
@@ -5844,7 +5844,7 @@ export function rotateVaelorGuardianRecoveryFallback(opts = {}) {
 }
 
 export function pingVaelorInheritanceHeartbeatFallback(opts = {}) {
-  const planId = opts.planId || 'inh_neal_continuity_01';
+  const planId = opts.planId || 'inh_1nc0gn30_continuity_01';
   const caller = opts.caller || '@sprig';
   const blockHash = randHex(64);
   const ts = new Date().toISOString();

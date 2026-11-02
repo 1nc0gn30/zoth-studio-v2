@@ -585,7 +585,7 @@ export default function VaelorPage() {
 
     if (!resData) {
       resData = pingVaelorInheritanceHeartbeatFallback({
-        planId: 'inh_neal_continuity_01',
+        planId: 'inh_1nc0gn30_continuity_01',
         caller: '@sprig'
       });
     }

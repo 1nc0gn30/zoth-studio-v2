@@ -45,7 +45,7 @@ const INITIAL_MEMORIES = [
     id: 'mem-03',
     tier: 'Episodic Trace',
     content: 'Verified studio contact invariant: 1nc0gn30 (NullAI) • NullAI Platform • contact@nullai.tech.',
-    tags: ['identity', 'contact', 'invariant', 'nealfrazier'],
+    tags: ['identity', 'contact', 'invariant', '1nc0gn30'],
     salience: 0.99,
     ageHours: 0.5,
     recalls: 21,

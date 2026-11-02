@@ -2331,7 +2331,7 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
           <TextField
             fullWidth
             size="small"
-            placeholder="e.g. HEX-PRO-2026-XXXX or neal@..."
+            placeholder="e.g. HEX-PRO-2026-XXXX or dev@..."
             value={licenseKeyInput}
             onChange={(e) => setLicenseKeyInput(e.target.value)}
             InputProps={{
