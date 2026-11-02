@@ -864,184 +864,177 @@ export default function ZothOSPage() {
       </ParallaxGlow>
 
       <Box sx={{ position: 'relative', zIndex: 1 }}>
-        {/* Header with Export Manifest Action */}
-        <HeroReveal>
-          <Box
-            sx={{
-              mb: 4,
-              display: 'flex',
-              flexDirection: { xs: 'column', md: 'row' },
-              justifyContent: 'space-between',
-              alignItems: { xs: 'flex-start', md: 'flex-end' },
-              gap: 2,
-            }}
-          >
-            <Box>
-              <HeroItem>
-                <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1.5, alignItems: 'center' }}>
-                  <Chip
-                    icon={<SecurityIcon style={{ fontSize: 16, color: gold.accent }} />}
-                    label="SOVEREIGN LOCAL OPERATING SYSTEM // OFFLINE-CAPABLE KERNEL"
-                    size="small"
-                    sx={{
-                      bgcolor: gold.wash,
-                      color: gold.soft,
-                      border: `1px solid ${gold.border}`,
-                      fontWeight: 800,
-                      letterSpacing: '0.04em',
-                      height: 'auto',
-                      '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 },
-                    }}
-                  />
-                  <Chip
-                    label="ZOTH OS v3.4.0"
-                    size="small"
-                    sx={{
-                      bgcolor: isDark ? 'rgba(34, 197, 94, 0.15)' : '#DCFCE7',
-                      color: isDark ? '#34D399' : '#047857',
-                      border: '1px solid rgba(34, 197, 94, 0.4)',
-                      fontWeight: 800,
-                      fontFamily: mono,
-                      fontSize: '0.72rem',
-                    }}
-                  />
-                  <Chip
-                    label="ZOTHOS-LITE v1.1 (:8145)"
-                    size="small"
-                    component="a"
-                    href="https://github.com/NullAITech/zothos-lite"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    clickable
-                    sx={{
-                      bgcolor: isDark ? 'rgba(255, 255, 255, 0.1)' : '#0F172A',
-                      color: '#FFFFFF',
-                      border: '1px solid rgba(255, 255, 255, 0.3)',
-                      fontWeight: 800,
-                      fontFamily: mono,
-                      fontSize: '0.72rem',
-                    }}
-                  />
-                  <Chip
-                    label="◈ CHAIN OF THOUGHTS (zoth-cot)"
-                    size="small"
-                    component="a"
-                    href="https://github.com/NullAITech/chain-of-thoughts"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    clickable
-                    sx={{
-                      bgcolor: isDark ? 'rgba(56, 189, 248, 0.15)' : '#E0F2FE',
-                      color: isDark ? '#38BDF8' : '#0369A1',
-                      border: '1px solid rgba(56, 189, 248, 0.4)',
-                      fontWeight: 800,
-                      fontFamily: mono,
-                      fontSize: '0.72rem',
-                    }}
-                  />
-                </Box>
-              </HeroItem>
-              <HeroItem>
-                <Typography
-                  variant="h3"
-                  sx={{
-                    fontWeight: 800,
-                    letterSpacing: '-0.03em',
-                    mb: 1.5,
-                    color: theme.palette.text.primary,
-                    fontSize: { xs: '1.75rem', sm: '2.35rem', md: '2.95rem' },
-                    lineHeight: 1.15,
-                  }}
-                >
-                  Zoth OS: Sovereign <span className="text-gradient-gold">Agent Operating System</span>
-                </Typography>
-              </HeroItem>
-              <HeroItem>
-                <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 760, lineHeight: 1.65, fontSize: '1.02rem' }}>
-                  The shipped flagship release is <strong>v3.4.0</strong>, showcased alongside <strong>ZothOS-Lite v1.1</strong> (Amnesic Monotone Edition on <code>:8145</code>) and <strong>Chain of Thoughts (<code>zoth-cot</code>)</strong>. Zoth OS is a custom Linux distribution engineered to run Zoth Studio, Ollama, all micro-tools, and the local memory daemon out-of-the-box with zero setup hassle. Flashed to bare metal or run via QEMU/KVM, it guarantees <span className="text-highlight-gold">100% Zero-Telemetry Local Operation</span>.
-                </Typography>
-              </HeroItem>
+        {/* Header with Export Manifest Action + 60FPS 3D Volumetric ZOTHOS Logo Turntable */}
+        <Box
+          sx={{
+            mb: 4,
+            display: 'grid',
+            gridTemplateColumns: { xs: 'minmax(0, 1fr)', lg: 'minmax(0, 1.15fr) minmax(0, 0.85fr)' },
+            gap: { xs: 3, lg: 4 },
+            alignItems: 'center',
+          }}
+        >
+          <Box sx={{ minWidth: 0 }}>
+            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1.5, alignItems: 'center' }}>
+              <Chip
+                icon={<SecurityIcon style={{ fontSize: 16, color: gold.accent }} />}
+                label="SOVEREIGN LOCAL OPERATING SYSTEM // OFFLINE-CAPABLE KERNEL"
+                size="small"
+                sx={{
+                  bgcolor: gold.wash,
+                  color: gold.soft,
+                  border: `1px solid ${gold.border}`,
+                  fontWeight: 800,
+                  letterSpacing: '0.04em',
+                  height: 'auto',
+                  '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 },
+                }}
+              />
+              <Chip
+                label="ZOTH OS v3.4.0"
+                size="small"
+                sx={{
+                  bgcolor: isDark ? 'rgba(34, 197, 94, 0.15)' : '#DCFCE7',
+                  color: isDark ? '#34D399' : '#047857',
+                  border: '1px solid rgba(34, 197, 94, 0.4)',
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                }}
+              />
+              <Chip
+                label="ZOTHOS-LITE v1.1 (:8145)"
+                size="small"
+                component="a"
+                href="https://github.com/1nc0gn30/zothos-lite"
+                target="_blank"
+                rel="noopener noreferrer"
+                clickable
+                sx={{
+                  bgcolor: isDark ? 'rgba(255, 255, 255, 0.1)' : '#0F172A',
+                  color: '#FFFFFF',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                }}
+              />
+              <Chip
+                label="◈ CHAIN OF THOUGHTS (zoth-cot)"
+                size="small"
+                component="a"
+                href="https://github.com/1nc0gn30/chain-of-thoughts"
+                target="_blank"
+                rel="noopener noreferrer"
+                clickable
+                sx={{
+                  bgcolor: isDark ? 'rgba(56, 189, 248, 0.15)' : '#E0F2FE',
+                  color: isDark ? '#38BDF8' : '#0369A1',
+                  border: '1px solid rgba(56, 189, 248, 0.4)',
+                  fontWeight: 800,
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                }}
+              />
             </Box>
+            <Typography
+              variant="h3"
+              sx={{
+                fontWeight: 800,
+                letterSpacing: '-0.03em',
+                mb: 1.5,
+                color: theme.palette.text.primary,
+                fontSize: { xs: '1.75rem', sm: '2.35rem', md: '2.85rem' },
+                lineHeight: 1.15,
+              }}
+            >
+              Zoth OS: Sovereign <span className="text-gradient-gold">Agent Operating System</span>
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 680, lineHeight: 1.65, fontSize: '1.0rem', mb: 2.5 }}>
+              The shipped flagship release is <strong>v3.4.0</strong>, showcased alongside <strong>ZothOS-Lite v1.1</strong> (Amnesic Monotone Edition on <code>:8145</code>) and <strong>Chain of Thoughts (<code>zoth-cot</code>)</strong>. Zoth OS is a custom Linux distribution engineered to run Zoth Studio, Ollama, all micro-tools, and the local memory daemon out-of-the-box with zero setup hassle. Flashed to bare metal or run via QEMU/KVM, it guarantees <span className="text-highlight-gold">100% Zero-Telemetry Local Operation</span>.
+            </Typography>
 
             {/* Export Manifest & Fast Navigation Buttons */}
-            <HeroItem>
-              <Box sx={{ display: 'flex', gap: 1.2, flexWrap: 'wrap', alignItems: 'center' }}>
-                <Button
-                  variant="contained"
-                  startIcon={<DownloadIcon />}
-                  onClick={handleExportManifest}
-                  sx={{
-                    px: 2.8,
-                    py: 1.2,
-                    fontWeight: 800,
-                    fontSize: '0.86rem',
-                    letterSpacing: '0.02em',
-                    whiteSpace: 'nowrap',
-                    bgcolor: gold.accent,
-                    color: '#08080B',
-                    boxShadow: '0 4px 18px rgba(212, 175, 55, 0.35)',
-                    border: `1px solid ${gold.accent}`,
-                    '&:hover': {
-                      bgcolor: isDark ? '#F5E6AB' : '#9A7008',
-                      color: isDark ? '#08080B' : '#FFFFFF',
-                      boxShadow: '0 6px 24px rgba(212, 175, 55, 0.5)',
-                    },
-                  }}
-                >
-                  Export OS ISO Bootloader Manifest
-                </Button>
-                <Button
-                  variant="outlined"
-                  component="a"
-                  href="https://github.com/NullAITech/chain-of-thoughts"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  startIcon={<GitHubIcon />}
-                  sx={{
-                    px: 2,
-                    py: 1.2,
-                    fontWeight: 750,
-                    fontFamily: mono,
-                    fontSize: '0.78rem',
-                    borderColor: isDark ? 'rgba(56, 189, 248, 0.4)' : '#BAE6FD',
-                    color: isDark ? '#38BDF8' : '#0369A1',
-                    bgcolor: isDark ? 'rgba(56, 189, 248, 0.08)' : '#F0F9FF',
-                    '&:hover': {
-                      borderColor: '#38BDF8',
-                      bgcolor: isDark ? 'rgba(56, 189, 248, 0.16)' : '#E0F2FE',
-                    },
-                  }}
-                >
-                  ◈ zoth-cot
-                </Button>
-                <Button
-                  variant="outlined"
-                  component="a"
-                  href="https://github.com/NullAITech/zothos-lite"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  startIcon={<GitHubIcon />}
-                  sx={{
-                    px: 2,
-                    py: 1.2,
-                    fontWeight: 750,
-                    fontFamily: mono,
-                    fontSize: '0.78rem',
-                    borderColor: isDark ? 'rgba(255, 255, 255, 0.3)' : '#0F172A',
-                    color: isDark ? '#FFFFFF' : '#0F172A',
-                    bgcolor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#F8FAFC',
-                    '&:hover': {
-                      borderColor: gold.accent,
-                      bgcolor: isDark ? 'rgba(255, 255, 255, 0.12)' : '#F1F5F9',
-                    },
-                  }}
-                >
-                  ▓ zothos-lite
-                </Button>
-              </Box>
-            </HeroItem>
+            <Box sx={{ display: 'flex', gap: 1.2, flexWrap: 'wrap', alignItems: 'center' }}>
+              <Button
+                variant="contained"
+                startIcon={<DownloadIcon />}
+                onClick={handleExportManifest}
+                sx={{
+                  px: 2.4,
+                  py: 1.1,
+                  fontWeight: 800,
+                  fontSize: '0.84rem',
+                  letterSpacing: '0.02em',
+                  whiteSpace: 'nowrap',
+                  bgcolor: gold.accent,
+                  color: '#08080B',
+                  boxShadow: '0 4px 18px rgba(212, 175, 55, 0.35)',
+                  border: `1px solid ${gold.accent}`,
+                  '&:hover': {
+                    bgcolor: isDark ? '#F5E6AB' : '#9A7008',
+                    color: isDark ? '#08080B' : '#FFFFFF',
+                    boxShadow: '0 6px 24px rgba(212, 175, 55, 0.5)',
+                  },
+                }}
+              >
+                Export OS ISO Bootloader Manifest
+              </Button>
+              <Button
+                variant="outlined"
+                component="a"
+                href="https://github.com/1nc0gn30/chain-of-thoughts"
+                target="_blank"
+                rel="noopener noreferrer"
+                startIcon={<GitHubIcon />}
+                sx={{
+                  px: 1.8,
+                  py: 1.1,
+                  fontWeight: 750,
+                  fontFamily: mono,
+                  fontSize: '0.78rem',
+                  borderColor: isDark ? 'rgba(56, 189, 248, 0.4)' : '#BAE6FD',
+                  color: isDark ? '#38BDF8' : '#0369A1',
+                  bgcolor: isDark ? 'rgba(56, 189, 248, 0.08)' : '#F0F9FF',
+                  '&:hover': {
+                    borderColor: '#38BDF8',
+                    bgcolor: isDark ? 'rgba(56, 189, 248, 0.16)' : '#E0F2FE',
+                  },
+                }}
+              >
+                ◈ zoth-cot
+              </Button>
+              <Button
+                variant="outlined"
+                component="a"
+                href="https://github.com/1nc0gn30/zothos-lite"
+                target="_blank"
+                rel="noopener noreferrer"
+                startIcon={<GitHubIcon />}
+                sx={{
+                  px: 1.8,
+                  py: 1.1,
+                  fontWeight: 750,
+                  fontFamily: mono,
+                  fontSize: '0.78rem',
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.3)' : '#0F172A',
+                  color: isDark ? '#FFFFFF' : '#0F172A',
+                  bgcolor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#F8FAFC',
+                  '&:hover': {
+                    borderColor: gold.accent,
+                    bgcolor: isDark ? 'rgba(255, 255, 255, 0.12)' : '#F1F5F9',
+                  },
+                }}
+              >
+                ▓ zothos-lite
+              </Button>
+            </Box>
           </Box>
-        </HeroReveal>
+
+          <Box sx={{ minWidth: 0, width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <ZothosAsciiLogo size="hero" />
+          </Box>
+        </Box>
 
         {/* 100% Free & Open-Access Support Bar (Zero Paywalls + Buy Us a Coffee + Solana Tip) */}
         <Box
@@ -1172,11 +1165,6 @@ export default function ZothOSPage() {
 
         <Box sx={{ mb: 4 }}>
           <DaemonStatusStrip />
-        </Box>
-
-        {/* 60FPS Unicode U+2800 Braille + 3D Lattice + Bayer Dither Volumetric ZOTHOS Logo Turntable */}
-        <Box sx={{ mb: 4, display: 'flex', justifyContent: 'center' }}>
-          <ZothosAsciiLogo size="hero" />
         </Box>
 
         {/* 60FPS ASCII & Braille Motion Edit + Interactive ZothOS v3.4.0 Desktop Pillar Inspector */}
