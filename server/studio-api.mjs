@@ -21,7 +21,7 @@ let LOCAL_BENCHMARKS = [
     tflops: '0.143 TFLOPS',
     timeMs: '3.75',
     verified: true,
-    userTag: 'Neal @ Netlify Stream',
+    userTag: '1nc0gn30 @ Netlify Stream',
     timestamp: new Date().toISOString()
   },
   {
