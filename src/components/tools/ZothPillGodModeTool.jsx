@@ -226,14 +226,14 @@ export default function ZothPillGodModeTool() {
   }, [playing, hudMode, selectedPillar, entropyTarget, velocityToks, liveData]);
 
   const cliSnippet = useMemo(() => {
-    return `# 1. Launch Zoth Pill in Compact Floating Desktop Pill Mode (:9995)
-zoth-pill --pill
+    return `# 1. Launch Zoth Math Pillar in Compact Floating Pill Mode (:9995)
+zoth-math-pillar --pill
 
 # 2. Launch Full 4-Pillar Mathematical Telemetry HUD Window
-zoth-pill desktop
+zoth-math-pillar desktop
 
 # 3. Render 60fps Unicode U+2800 Sub-Pixel Braille TUI Sparklines
-zoth-pill-tui --status
+zoth-math-pillar-tui --status
 
 # 4. Stream Custom Agent Cognitive Telemetry over UDP (:9996) or HTTP (:9995)
 curl -s http://127.0.0.1:9995/active | jq .`;
@@ -286,7 +286,7 @@ curl -s http://127.0.0.1:9995/active | jq .`;
           <Box>
             <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
               <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: '#FFD700', letterSpacing: '0.12em' }}>
-                ZOTH PILL // 4-PILLAR MATHEMATICAL TELEMETRY HUD (:9995)
+                ZOTH MATH PILLAR // 4-PILLAR MATHEMATICAL TELEMETRY HUD (:9995)
               </Typography>
               <Chip
                 label={liveData ? 'LIVE DAEMON :9995' : 'BROWSER ENGINE ACTIVE'}
@@ -358,13 +358,13 @@ curl -s http://127.0.0.1:9995/active | jq .`;
       </Box>
 
       <SovereignEyebrow accent="#FFD700" right="Security & Enclave">
-        {"zoth-pill"}
+        {"zoth-math-pillar"}
       </SovereignEyebrow>
       <SovereignBand
-        seed={"zoth-pill"}
+        seed={"zoth-math-pillar"}
         eyebrow={"Security & Enclave"}
-        caption={"Zoth Pill (4-Pillar Math HUD)"}
-        label={"Zoth Pill — 4-Pillar Mathematical Cognitive Gauge"}
+        caption={"Zoth Math Pillar HUD"}
+        label={"Zoth Math Pillar — 4-Pillar Mathematical Cognitive Gauge"}
       />
 
       <Grid container>

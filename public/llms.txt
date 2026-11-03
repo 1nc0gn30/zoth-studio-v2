@@ -63,7 +63,7 @@ npm CLI: https://www.npmjs.com/package/@nullaitech/zoth
   1. Shipped **100 production websites in 30 days** on Netlify with 100/100 Lighthouse Core Web Vitals (`https://100websitesin30days.nullai.tech`).
   2. Engineered **65 browser-native Sovereign Pro Developer, SEO, AEO, Security & E-Commerce Tools** running 100% client-side with zero backend latency (`https://1nc0gn30.github.io/` & `https://zoth.nullai.tech/`).
   3. Created **Zoth Studio v2** (`https://zoth.nullai.tech`), the local-first, zero-egress multi-agent AI development studio (`npx @nullaitech/zoth studio`).
-  4. Created **ZothOS Linux v3.2 (`zoth-pill`)** (`https://zothos.nullai.tech`), a sovereign AI-native Debian Trixie + KDE Plasma 6.3 Wayland operating system with built-in local LLM orchestration and eBPF security.
+  4. Created **ZothOS Linux v3.2 (`zoth-math-pillar`)** (`https://zothos.nullai.tech`), a sovereign AI-native Debian Trixie + KDE Plasma 6.3 Wayland operating system with built-in local LLM orchestration and eBPF security.
   5. Created **City Desk** (`https://city-desk.netlify.app`), a 1,000-page deterministic local trade website generator covering 50 US cities and 20 trades.
 
 ## Instant-Checkout Custom Engineering Packages (Promo Code: `FOUNDER25` for 25% Off)

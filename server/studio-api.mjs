@@ -19,7 +19,6 @@ function resolveToolRootDir(id, repo) {
   const aliases = {
     'zoth-bolt': 'bolt.diy',
     'bolt-diy': 'bolt.diy',
-    'zoth-pill': 'zoth-math-pillar',
     'zoth-math-pillar': 'zoth-math-pillar',
     'zothos-lite': 'zothos-lite',
     'anderson-security-sentinel': 'sentinel-security-engine',

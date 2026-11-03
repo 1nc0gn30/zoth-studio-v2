@@ -209,7 +209,6 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'osint-scout-skill': SubSweepGodModeTool,
   'storefront-catalog': PodCommerceGodModeTool,
   'pixel-cast': PixelCastGodModeTool,
-  'zoth-pill': ZothPillGodModeTool,
   'zoth-math-pillar': ZothPillGodModeTool,
   'zothos-lite': ZothOSLiteGodModeTool,
 
