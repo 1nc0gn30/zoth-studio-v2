@@ -73,7 +73,7 @@ function getPresetsForTool(tool) {
     return [
       {
         label: 'Production .env Manifest',
-        input: `DATABASE_URL=postgresql://sovereign:v9Kx#2mP9qL@127.0.0.1:5432/enclave\nENCLAVE_API_KEY=zoth_enclave_demo_token_9a8b7c6d5e4f\nJWT_SIGNING_SECRET=f8a9d2c4e6b1039876543210fedcba9876543210abcdef\nZOTH_ZERO_EGRESS=true`,
+        input: `DATABASE_URL=postgresql://sovereign:v9Kx#2mP9qL@127.0.0.1:5432/enclave\nENCLAVE_API_KEY=zoth_enclave_demo_token_9a8b7c6d5e4f\nJWT_SIGNING_SECRET=YOUR_JWT_SIGNING_SECRET_PLACEHOLDER\nZOTH_ZERO_EGRESS=true`,
       },
       {
         label: 'Perimeter Socket & CVE Dump',

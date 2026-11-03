@@ -615,7 +615,7 @@ export default function AsciiMotionGodModeTool({ tool }) {
     const activePreset = SHADER_PRESETS[preset] || SHADER_PRESETS.torus4d;
     const accent = activePreset.accent || activeTheme?.accent || '#D4AF37';
     const escapeXml = (str) =>
-      str.replace(/&/g, '&').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+      str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     const textNodes = lines
       .map((l, i) => `    <text x="16" y="${(i + 1) * lineHeight + 18}" fill="${accent}">${escapeXml(l)}</text>`)
       .join('\n');

@@ -3337,8 +3337,8 @@ export const MCP_CONFIG_SNIPPET = JSON.stringify({
       command: "python3",
       args: ["-m", "neuro_memory_daemon.mcp_server"],
       env: {
-        MEMORY_DB_PATH: "/home/zoth/.zoth/memory.db",
-        OBSIDIAN_VAULT_PATH: "/home/zoth/Documents/Obsidian Vault"
+        MEMORY_DB_PATH: "~/.zoth/memory.db",
+        OBSIDIAN_VAULT_PATH: "~/Documents/Obsidian Vault"
       }
     },
     "neuro-memory-http": {
@@ -4865,7 +4865,7 @@ export function renderOfmToHtml(content = '', frontmatter = null) {
   function escapeHtml(str) {
     if (!str) return '';
     return str
-      .replace(/&/g, '&')
+      .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
@@ -5450,7 +5450,7 @@ export const VAELOR_MCP_TOOLS = [
     name: "vaelor_multisig_treasury",
     category: "Institutional Governance & Webhooks",
     description: "Create, co-sign, and execute 2-of-3 corporate multi-sig treasury proposals with Idempotency-Key replay protection and HMAC-SHA256 signed webhook dispatch for institutional CFOs and enterprise governance.",
-    defaultArgs: { proposalId: "prop_zoth_corp_2026_q4", signerHandle: "@zoth", idempotencyKey: "idem_9f8a2b3c4d5e" }
+    defaultArgs: { proposalId: "prop_zoth_corp_2026_q4", signerHandle: "@zoth", idempotencyKey: "demo_idem_key" }
   }
 ];
 
@@ -6743,7 +6743,7 @@ export function syncVaelorPeerDeltaFallback({ peerNode = 'http://127.0.0.1:8140'
 export function approveVaelorMultisigFallback({
   proposalId = 'prop_zoth_corp_2026_q4',
   signerHandle = '@zoth',
-  idempotencyKey = 'idem_9f8a2b3c4d5e'
+  idempotencyKey = 'demo_idem_key'
 } = {}) {
   const ts = new Date().toISOString();
   const sigHmac = randHex(64);
@@ -6758,7 +6758,7 @@ export function approveVaelorMultisigFallback({
     status: "EXECUTED_AND_DISPATCHED",
     amountVlr: 2500,
     purpose: "Q4 Sovereign R&D & KVM Fleet Grant",
-    idempotencyKey: idempotencyKey || "idem_9f8a2b3c4d5e",
+    idempotencyKey: idempotencyKey || "demo_idem_key",
     webhookDispatch: {
       targetUrl: "https://webhook.nullai.tech/v1/treasury",
       signatureHeader: `t=${Math.floor(Date.now() / 1000)},v1=${sigHmac}`,

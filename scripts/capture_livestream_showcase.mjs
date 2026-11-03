@@ -2,10 +2,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 
-const require = createRequire('/home/zoth/.npm/_npx/381cec31605a419a/node_modules/playwright');
+const require = createRequire('${process.env.HOME || "~"}/.npm/_npx/381cec31605a419a/node_modules/playwright');
 const { chromium } = require('playwright');
 
-const outDir = '/home/zoth/.gemini/antigravity-cli/brain/3f3b8fa6-039f-4fd9-b9d1-f9a5b50a4d8b';
+const outDir = '${process.env.HOME || "~"}/.gemini/antigravity-cli/brain/3f3b8fa6-039f-4fd9-b9d1-f9a5b50a4d8b';
 if (!fs.existsSync(outDir)) {
   fs.mkdirSync(outDir, { recursive: true });
 }

@@ -152,6 +152,10 @@ description = "Intentional public receive address on labeled payment and treasur
 paths = [
   '''(?:^|/)src/pages/AgoraPage\.jsx$''',
   '''(?:^|/)src/pages/ZothOSPage\.jsx$''',
+  '''(?:^|/)src/pages/ArsenalPage\.jsx$''',
+  '''(?:^|/)src/components/ToolOfferLine\.jsx$''',
+  '''(?:^|/)src/components/tools/.*GodModeTool\.jsx$''',
+  '''(?:^|/)RELEASE_NOTES_v2\.2\.0\.md$''',
   '''(?:^|/)src/pages/ZothOSShowcasePage\.jsx$''',
   '''(?:^|/)src/components/SovereignFunnel\.jsx$''',
   '''(?:^|/)src/components/tools/Badge3dCoinGodModeTool\.jsx$''',

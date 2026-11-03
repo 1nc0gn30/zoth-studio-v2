@@ -1226,7 +1226,7 @@ export default function VaelorPage() {
         algorithm: 'AES-256-GCM',
         ciphertextHex: '7f9a2b8e3c4d1f0a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a...',
         ivHex: '4a8b1c9d2e3f405162738495',
-        authTagHex: 'b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4',
+        authTagHex: '00000000000000000000000000000001',
         messageHash: '9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d'
       },
       bftQuorum: '5/5 Regional Validators Attested (6.8ms latency)',
@@ -1244,7 +1244,7 @@ export default function VaelorPage() {
         algorithm: 'AES-256-GCM',
         ciphertextHex: 'c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4...',
         ivHex: '9182736450abcdef12345678',
-        authTagHex: 'e1d2c3b4a5f6e7d8c9b0a1f2e3d4c5b6',
+        authTagHex: '00000000000000000000000000000002',
         messageHash: '3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b'
       },
       bftQuorum: '5/5 Regional Validators Attested (5.2ms latency)',
@@ -1405,7 +1405,7 @@ export default function VaelorPage() {
         body: JSON.stringify({
           proposalId: 'prop_zoth_corp_2026_q4',
           signerHandle: multisigSigner,
-          idempotencyKey: 'idem_9f8a2b3c4d5e'
+          idempotencyKey: 'demo_idem_key'
         })
       });
       const json = await res.json();
@@ -6070,7 +6070,7 @@ export default function VaelorPage() {
                       REPLAY PROTECTION IDEMPOTENCY KEY:
                     </Typography>
                     <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#38BDF8', mb: 1 }}>
-                      {multisigData?.idempotencyKey || 'idem_9f8a2b3c4d5e'}
+                      {multisigData?.idempotencyKey || 'demo_idem_key'}
                     </Typography>
 
                     <Typography variant="caption" sx={{ fontFamily: mono, color: '#94A3B8', fontWeight: 800, display: 'block', mb: 0.4 }}>
