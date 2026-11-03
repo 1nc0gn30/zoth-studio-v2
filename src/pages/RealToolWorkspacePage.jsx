@@ -91,6 +91,8 @@ import VisionKinematicsGodModeTool from '../components/tools/VisionKinematicsGod
 import SwarmCivilizationGodModeTool from '../components/tools/SwarmCivilizationGodModeTool';
 import CivicProcurementGodModeTool from '../components/tools/CivicProcurementGodModeTool';
 import PixelCastGodModeTool from '../components/tools/PixelCastGodModeTool';
+import ZothPillGodModeTool from '../components/tools/ZothPillGodModeTool';
+import ZothOSLiteGodModeTool from '../components/tools/ZothOSLiteGodModeTool';
 import SovereignToolOutputWorkbench from '../components/tools/SovereignToolOutputWorkbench';
 import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
 import {
@@ -207,6 +209,9 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'osint-scout-skill': SubSweepGodModeTool,
   'storefront-catalog': PodCommerceGodModeTool,
   'pixel-cast': PixelCastGodModeTool,
+  'zoth-pill': ZothPillGodModeTool,
+  'zoth-math-pillar': ZothPillGodModeTool,
+  'zothos-lite': ZothOSLiteGodModeTool,
 
   // Studio Cockpit & Workstation IDs (from workstations.js)
   'cockpit': SwarmCivilizationGodModeTool,
