@@ -1,0 +1,42 @@
+name: VirusTotal Release Scan
+# Scans release binary/installer assets with VirusTotal API v3, generates
+# virustotal-report.md, and attaches it to the GitHub Release.
+# See docs/TRUST.md for policy and verification details.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to scan on VirusTotal
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  virustotal:
+    name: VirusTotal binary scan
+    runs-on: ubuntu-24.04
+    continue-on-error: true
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      GH_TOKEN: ${{ github.token }}
+      VT_API_KEY: ${{ secrets.VT_API_KEY }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Scan release binaries and upload virustotal-report.md
+        run: bash tools/virustotal-release.sh
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: virustotal-report
+          path: virustotal-report.md
+          retention-days: 30

@@ -1,0 +1,31 @@
+name: Semgrep
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '7 5 * * 2'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  semgrep:
+    runs-on: ubuntu-24.04
+    permissions:
+      security-events: write
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install Semgrep (pinned)
+        run: python3 -m pip install --user 'semgrep==1.179.0'
+      - name: Scan
+        run: |
+          ~/.local/bin/semgrep scan --config p/security-audit --config p/secrets --config p/default \
+            --exclude dist --exclude build --exclude '**/vendor/**' --exclude '*.min.js' --max-target-bytes 1000000 \
+            --sarif --output semgrep.sarif || true
+      - uses: github/codeql-action/upload-sarif@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3
+        with:
+          sarif_file: semgrep.sarif
+          category: semgrep

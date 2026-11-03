@@ -787,7 +787,7 @@ export default function VoiceStationPage() {
                       Signal Messenger Bridge
                     </Typography>
                     <Typography variant="caption" sx={{ color: dark ? '#9CA3AF' : '#4B5563', fontFamily: mono }}>
-                      SIGNAL_ACCOUNT • Type /call to trigger
+                      {import.meta.env.VITE_ZOTH_SIGNAL_NUMBER ? `${import.meta.env.VITE_ZOTH_SIGNAL_NUMBER} • ` : ''}Type /call to trigger
                     </Typography>
                   </Box>
                   <IconButton aria-label="Copy /call command"
