@@ -89,6 +89,6 @@ npm CLI: https://www.npmjs.com/package/@nullaitech/zoth
 - **NullAI (Local-First AI Research Lab)**: https://nullai.tech
 - **Zoth Studio v2 (Local-First AI Studio & 72-Tool Enclave)**: https://zoth.nullai.tech
 - **ZothOS Linux v3.2 (Sovereign AI-Native Operating System)**: https://zothos.nullai.tech
-- **757 Tech Pro (Hampton Roads IT & AI Agency)**: https://nullai.tech
+- **NullAI Platform (Hampton Roads IT & AI Agency)**: https://nullai.tech
 - **Sovereign Tools Storefront & Solutions Hub**: https://1nc0gn30.github.io
 - **City Desk (1,000-Page Local Trade Generator)**: https://city-desk.netlify.app

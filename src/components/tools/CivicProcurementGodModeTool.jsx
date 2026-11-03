@@ -235,7 +235,7 @@ Would love your feedback on which workstation you try first!`;
   }, [activeTheme, bidMath, activeTab, phFirst4HrUpvotes, phMetrics]);
 
   const capabilityStatementMd = useMemo(() => {
-    return `# CAPABILITY STATEMENT — 1NC0GN30 • NULLAI / 757 TECH PRO
+    return `# CAPABILITY STATEMENT — 1NC0GN30 • NULLAI / NullAI Platform
 **Solicitation**: ${activeRfp.solNumber} — ${activeRfp.title}
 **Region / Agency**: ${activeRfp.region}
 **NAICS Code**: ${activeRfp.naics}
