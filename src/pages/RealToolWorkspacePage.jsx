@@ -238,6 +238,9 @@ const ENCLAVE_TOOL_COMPONENTS = {
 const WORKSTATION_TOOL_ALIASES = {
   'adytum-alchemist': 'adytum-alchemist-ai-workflow',
   'adytum': 'adytum-alchemist-ai-workflow',
+  'bolt.diy': 'zoth-bolt',
+  'bolt-diy': 'zoth-bolt',
+  'bolt': 'zoth-bolt',
   'webgen': 'zoth-webgen',
   'omnipost': 'omnipost-social-engine',
   'subsweep': 'subsweep-lead-scanner',
@@ -254,7 +257,10 @@ export default function RealToolWorkspacePage() {
 
   const [copiedCmd, setCopiedCmd] = useState(false);
   const [copiedMcp, setCopiedMcp] = useState(false);
+  const [copiedElectronCmd, setCopiedElectronCmd] = useState(false);
+  const [copiedTuiCmd, setCopiedTuiCmd] = useState(false);
   const [unlockedPreview, setUnlockedPreview] = useState(false);
+  const [localViewMode, setLocalViewMode] = useState('webapp');
 
   const { isLocal, hasWebGPU, evaluateTool } = useSovereignRuntime();
   const resolvedToolId = WORKSTATION_TOOL_ALIASES[toolId] || toolId;
@@ -658,7 +664,7 @@ export default function RealToolWorkspacePage() {
               </Box>
 
               <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: '100%', flexWrap: 'wrap' }}>
-                {tool.localPort && (
+                {isLocal && tool.localPort && (
                   <Button
                     component="a"
                     href={tool.localUrl || `http://127.0.0.1:${tool.localPort}`}
@@ -676,7 +682,43 @@ export default function RealToolWorkspacePage() {
                       '&:hover': { borderColor: '#34D399', bgcolor: isDark ? 'rgba(52,211,153,0.18)' : '#D1FAE5' },
                     }}
                   >
-                    Local :{tool.localPort}
+                    Local Web App :{tool.localPort}
+                  </Button>
+                )}
+                {isLocal && tool.localPort && (
+                  <Button
+                    variant="outlined"
+                    onClick={() => handleCopy(`${tool.id} desktop`, setCopiedElectronCmd)}
+                    startIcon={copiedElectronCmd ? <CheckIcon sx={{ fontSize: 15 }} /> : <LaunchIcon sx={{ fontSize: 15 }} />}
+                    sx={{
+                      fontWeight: 800,
+                      fontFamily: mono,
+                      fontSize: '0.78rem',
+                      borderColor: isDark ? 'rgba(56,189,248,0.45)' : '#BAE6FD',
+                      color: isDark ? '#38BDF8' : '#0369A1',
+                      bgcolor: isDark ? 'rgba(56,189,248,0.08)' : '#F0F9FF',
+                      '&:hover': { borderColor: '#38BDF8', bgcolor: isDark ? 'rgba(56,189,248,0.16)' : '#E0F2FE' },
+                    }}
+                  >
+                    {copiedElectronCmd ? `Copied: ${tool.id} desktop` : `Electron App (${tool.id} desktop)`}
+                  </Button>
+                )}
+                {isLocal && tool.localPort && (
+                  <Button
+                    variant="outlined"
+                    onClick={() => handleCopy(`${tool.id}-tui --status`, setCopiedTuiCmd)}
+                    startIcon={copiedTuiCmd ? <CheckIcon sx={{ fontSize: 15 }} /> : <TerminalIcon sx={{ fontSize: 15 }} />}
+                    sx={{
+                      fontWeight: 800,
+                      fontFamily: mono,
+                      fontSize: '0.78rem',
+                      borderColor: gold.border,
+                      color: gold.accent,
+                      bgcolor: gold.wash,
+                      '&:hover': { borderColor: gold.accent },
+                    }}
+                  >
+                    {copiedTuiCmd ? `Copied: ${tool.id}-tui` : `Braille TUI (${tool.id}-tui)`}
                   </Button>
                 )}
                 {tool.liveUrl && (
@@ -846,8 +888,119 @@ export default function RealToolWorkspacePage() {
         </Paper>
       </HeroReveal>
 
+      {/* LOCAL-ONLY: Unlock Full Standalone Web App (Matching Electron Desktop App) — NEVER rendered on public web */}
+      {isLocal && tool.localPort && (
+        <Paper
+          elevation={0}
+          id="local-webapp-workstation-deck"
+          sx={{
+            p: { xs: 2, md: 3 },
+            mb: 4,
+            borderRadius: 3,
+            bgcolor: isDark ? '#070B0E' : '#F8FAFC',
+            border: '1.5px solid rgba(16, 185, 129, 0.45)',
+            boxShadow: isDark ? '0 16px 40px rgba(0,0,0,0.65), 0 0 24px -4px rgba(16,185,129,0.22)' : '0 4px 20px rgba(16,185,129,0.12)',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Box sx={{ p: 1, borderRadius: 2, bgcolor: isDark ? 'rgba(16,185,129,0.16)' : '#DCFCE7', color: '#10B981', display: 'flex' }}>
+                <LaunchIcon sx={{ fontSize: 22 }} />
+              </Box>
+              <Box>
+                <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
+                  {tool.name} — Unlocked Local Web App &amp; Electron Engine (:{tool.localPort})
+                </Typography>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: '#34D399', fontWeight: 700 }}>
+                  LOCALHOST ONLY (127.0.0.1:{tool.localPort}) · 100% ELECTRON DESKTOP APP PARITY · NEVER EXPOSED ON PUBLIC WEB
+                </Typography>
+              </Box>
+            </Box>
+            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+              <Button
+                size="small"
+                variant={localViewMode === 'webapp' ? 'contained' : 'outlined'}
+                onClick={() => setLocalViewMode('webapp')}
+                sx={{
+                  fontFamily: mono,
+                  fontWeight: 800,
+                  fontSize: '0.72rem',
+                  bgcolor: localViewMode === 'webapp' ? '#10B981' : 'transparent',
+                  color: localViewMode === 'webapp' ? '#04130D' : '#34D399',
+                  borderColor: 'rgba(16,185,129,0.45)',
+                  '&:hover': { bgcolor: localViewMode === 'webapp' ? '#34D399' : 'rgba(16,185,129,0.12)' },
+                }}
+              >
+                🟢 Live Web App (:{tool.localPort})
+              </Button>
+              {(EnclaveToolComponent || canRunClientSide) && (
+                <Button
+                  size="small"
+                  variant={localViewMode === 'enclave' ? 'contained' : 'outlined'}
+                  onClick={() => setLocalViewMode('enclave')}
+                  sx={{
+                    fontFamily: mono,
+                    fontWeight: 800,
+                    fontSize: '0.72rem',
+                    bgcolor: localViewMode === 'enclave' ? gold.accent : 'transparent',
+                    color: localViewMode === 'enclave' ? '#08080B' : gold.accent,
+                    borderColor: gold.border,
+                  }}
+                >
+                  ⚡ Studio God-Mode Deck
+                </Button>
+              )}
+              <Button
+                size="small"
+                component="a"
+                href={tool.localUrl || `http://127.0.0.1:${tool.localPort}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="outlined"
+                endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+                sx={{
+                  fontFamily: mono,
+                  fontWeight: 800,
+                  fontSize: '0.72rem',
+                  borderColor: 'rgba(56,189,248,0.45)',
+                  color: '#38BDF8',
+                }}
+              >
+                Popout Full Window
+              </Button>
+            </Stack>
+          </Box>
+
+          {localViewMode === 'webapp' && (
+            <Box
+              sx={{
+                width: '100%',
+                height: { xs: 560, md: 760 },
+                borderRadius: 2,
+                overflow: 'hidden',
+                border: '1px solid rgba(16,185,129,0.35)',
+                bgcolor: '#08080B',
+              }}
+            >
+              <Box
+                component="iframe"
+                src={tool.localUrl || `http://127.0.0.1:${tool.localPort}`}
+                title={`${tool.name} Local Sovereign Web Application (:${tool.localPort})`}
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  border: 0,
+                  display: 'block',
+                  bgcolor: '#08080B',
+                }}
+              />
+            </Box>
+          )}
+        </Paper>
+      )}
+
       {/* Interactive In-Browser Workstation — Placed ABOVE THE FOLD immediately after the Hero Header */}
-      {canRunClientSide && tool.id !== 'webmcp-protocol-inspector' && !EnclaveToolComponent && (
+      {canRunClientSide && tool.id !== 'webmcp-protocol-inspector' && !EnclaveToolComponent && (!isLocal || !tool.localPort || localViewMode === 'enclave') && (
         <Box id="client-workstation-deck" sx={{ mb: 4 }}>
           <WebGPUToolWorkstation tool={tool} />
           <SovereignToolOutputWorkbench tool={tool} />
@@ -855,7 +1008,7 @@ export default function RealToolWorkspacePage() {
       )}
 
       {/* Sovereign Enclave Microtool Workstation (Mounted for all tools with a dedicated 60fps God-Mode component) */}
-      {EnclaveToolComponent && (
+      {EnclaveToolComponent && (!isLocal || !tool.localPort || localViewMode === 'enclave') && (
         <Paper
           elevation={0}
           id="enclave-workstation-deck"
