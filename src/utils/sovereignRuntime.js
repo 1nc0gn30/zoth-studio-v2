@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react';
 
 export function isLocalRuntime() {
-  if (typeof window === 'undefined') return true;
+  if (typeof window === 'undefined') return false;
   const search = window.location.search || '';
   if (search.includes('mock_remote=true') || search.includes('remote=1')) {
     return false;
@@ -13,14 +13,14 @@ export function isLocalRuntime() {
   if (search.includes('mock_local=true') || search.includes('local=1')) {
     return true;
   }
-  try {
-    if (localStorage.getItem('zothos_local_detected') === 'true') {
-      return true;
-    }
-  } catch {
-    // ignore
+  const hostname = (window.location.hostname || '').toLowerCase();
+  if (
+    hostname.includes('nullai.tech') ||
+    hostname.includes('netlify.app') ||
+    hostname.includes('github.io')
+  ) {
+    return false;
   }
-  const hostname = window.location.hostname;
   return (
     hostname === 'localhost' ||
     hostname === '127.0.0.1' ||
@@ -73,31 +73,7 @@ export async function detectWebGPU() {
 let loopbackCheckPromise = null;
 
 export async function detectZothOSLoopback() {
-  if (typeof window === 'undefined') return true;
-  if (isLocalRuntime()) return true;
-  if (!loopbackCheckPromise) {
-    loopbackCheckPromise = (async () => {
-      const ports = [8094, 8121, 8092, 3000];
-      for (const p of ports) {
-        try {
-          const ctrl = new AbortController();
-          const tid = setTimeout(() => ctrl.abort(), 450);
-          await fetch(`http://127.0.0.1:${p}/`, { mode: 'no-cors', signal: ctrl.signal });
-          clearTimeout(tid);
-          try {
-            localStorage.setItem('zothos_local_detected', 'true');
-          } catch {
-            // ignore
-          }
-          return true;
-        } catch {
-          // try next port
-        }
-      }
-      return false;
-    })();
-  }
-  return loopbackCheckPromise;
+  return isLocalRuntime();
 }
 
 export function canExecuteToolOnClient(tool, isLocal, hasWebGPU) {
@@ -136,9 +112,6 @@ export function useSovereignRuntime() {
 
   useEffect(() => {
     setIsLocal(isLocalRuntime());
-    detectZothOSLoopback().then((foundLocal) => {
-      if (foundLocal) setIsLocal(true);
-    });
     detectWebGPU().then((res) => {
       setHasWebGPU(res.supported);
       setGpuDetails(res);
