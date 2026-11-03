@@ -261,6 +261,8 @@ export default function RealToolWorkspacePage() {
   const [copiedTuiCmd, setCopiedTuiCmd] = useState(false);
   const [unlockedPreview, setUnlockedPreview] = useState(false);
   const [localViewMode, setLocalViewMode] = useState('webapp');
+  const [localWebAppReady, setLocalWebAppReady] = useState(false);
+  const [iframeKey, setIframeKey] = useState(0);
 
   const { isLocal, hasWebGPU, evaluateTool } = useSovereignRuntime();
   const resolvedToolId = WORKSTATION_TOOL_ALIASES[toolId] || toolId;
@@ -278,6 +280,33 @@ export default function RealToolWorkspacePage() {
     version: '2.2.0',
     pull: wsEntry.pullCommand || 'npx @nullaitech/zoth studio',
   } : null);
+
+  React.useEffect(() => {
+    if (!isLocal || !tool?.localPort) {
+      setLocalWebAppReady(false);
+      return undefined;
+    }
+    let cancelled = false;
+    setLocalWebAppReady(false);
+    fetch('/api/studio/tool/wake', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: tool.id, repo: tool.repo, port: tool.localPort }),
+    })
+      .then((r) => r.json())
+      .then(() => {
+        if (!cancelled) {
+          setLocalWebAppReady(true);
+          setIframeKey((k) => k + 1);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLocalWebAppReady(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [isLocal, tool?.id, tool?.repo, tool?.localPort]);
   const docs = getToolDocumentation(tool);
   const execEval = evaluateTool(tool);
   const canRunClientSide = execEval.canExecute;
@@ -982,18 +1011,27 @@ export default function RealToolWorkspacePage() {
                 bgcolor: '#08080B',
               }}
             >
-              <Box
-                component="iframe"
-                src={tool.localUrl || `http://127.0.0.1:${tool.localPort}`}
-                title={`${tool.name} Local Sovereign Web Application (:${tool.localPort})`}
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  border: 0,
-                  display: 'block',
-                  bgcolor: '#08080B',
-                }}
-              />
+              {localWebAppReady ? (
+                <Box
+                  key={iframeKey}
+                  component="iframe"
+                  src={tool.localUrl || `http://127.0.0.1:${tool.localPort}`}
+                  title={`${tool.name} Local Sovereign Web Application (:${tool.localPort})`}
+                  sx={{
+                    width: '100%',
+                    height: '100%',
+                    border: 0,
+                    display: 'block',
+                    bgcolor: '#08080B',
+                  }}
+                />
+              ) : (
+                <Box sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Typography sx={{ fontFamily: mono, color: '#34D399', fontSize: '0.84rem', fontWeight: 700 }}>
+                    ⚡ Waking Sovereign Daemon on 127.0.0.1:{tool.localPort} (LRU Memory-Safe Pool)...
+                  </Typography>
+                </Box>
+              )}
             </Box>
           )}
         </Paper>

@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { exec } from 'node:child_process';
+import { exec, spawn } from 'node:child_process';
 
 const STUDIO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOME_DIR = process.env.ZOTH_HOME || os.homedir();
@@ -11,6 +11,87 @@ const NULLAITECH_ROOT = process.env.NULLAITECH_ROOT || path.join(HOME_DIR, 'Null
 const LOCAL_BIN = process.env.ZOTH_LOCAL_BIN || path.join(HOME_DIR, '.local', 'bin');
 const GROK_BIN_DIR = process.env.ZOTH_GROK_BIN_DIR || path.join(HOME_DIR, '.grok', 'bin');
 const CONDUCTOR_BIN = process.env.ZOTH_CONDUCTOR_BIN || path.join(NULLAITECH_ROOT, 'bin', 'zoth-agent-conductor');
+
+const ON_DEMAND_PROCS = [];
+const MAX_ON_DEMAND_PROCS = 4;
+
+function resolveToolRootDir(id, repo) {
+  const aliases = {
+    'zoth-bolt': 'bolt.diy',
+    'bolt-diy': 'bolt.diy',
+    'anderson-security-sentinel': 'sentinel-security-engine',
+    'hexstrike': 'hexstrike-arsenal',
+    'polyglot-studio': 'polyglot-framework-exporter',
+    'schema-illustrator': 'schema-illustrator-studio',
+  };
+  const candidates = [
+    aliases[id],
+    aliases[repo],
+    repo,
+    id,
+    id ? `ai-${id}` : '',
+    id ? `${id}-ai` : '',
+    repo ? `ai-${repo}` : '',
+    repo ? `${repo}-ai` : '',
+  ].filter(Boolean);
+  for (const name of candidates) {
+    if (!/^[a-zA-Z0-9._-]+$/.test(name)) continue;
+    for (const base of [NULLAITECH_ROOT, '/opt']) {
+      const dir = path.join(base, name);
+      if (fs.existsSync(dir) && fs.statSync(dir).isDirectory()) {
+        return dir;
+      }
+    }
+  }
+  return null;
+}
+
+function spawnOnDemandTool(id, rootDir, port) {
+  while (ON_DEMAND_PROCS.length >= MAX_ON_DEMAND_PROCS) {
+    const oldest = ON_DEMAND_PROCS.shift();
+    if (oldest?.child?.pid) {
+      try { process.kill(-oldest.child.pid, 'SIGTERM'); } catch {}
+      try { oldest.child.kill('SIGTERM'); } catch {}
+    }
+  }
+
+  const env = { ...process.env, PORT: String(port), PYTHONUNBUFFERED: '1' };
+  let cmd = 'python3';
+  let args = ['server.py', '--port', String(port)];
+
+  if (fs.existsSync(path.join(rootDir, 'server.js'))) {
+    cmd = 'node';
+    args = ['server.js', '--port', String(port)];
+  } else if (fs.existsSync(path.join(rootDir, 'server.py'))) {
+    cmd = 'python3';
+    args = ['server.py', '--port', String(port)];
+  } else if (fs.existsSync(path.join(rootDir, 'zoth_relay', 'server.py'))) {
+    cmd = 'python3';
+    args = ['-m', 'zoth_relay.server', '--port', String(port)];
+  } else if (fs.existsSync(path.join(rootDir, 'src'))) {
+    const srcDir = path.join(rootDir, 'src');
+    const pkgs = fs.readdirSync(srcDir).filter((d) => fs.existsSync(path.join(srcDir, d, 'cli.py')));
+    if (pkgs.length > 0) {
+      env.PYTHONPATH = env.PYTHONPATH ? `${srcDir}:${env.PYTHONPATH}` : srcDir;
+      args = ['-m', `${pkgs[0]}.cli`, 'serve', '--port', String(port)];
+    }
+  } else {
+    const staticDir = ['public', 'dist', '.']
+      .map((d) => path.join(rootDir, d))
+      .find((d) => fs.existsSync(path.join(d, 'index.html'))) || rootDir;
+    cmd = 'python3';
+    args = ['-m', 'http.server', String(port), '--bind', '127.0.0.1', '--directory', staticDir];
+  }
+
+  const child = spawn(cmd, args, {
+    cwd: rootDir,
+    stdio: 'ignore',
+    detached: true,
+    env,
+  });
+  child.unref();
+  ON_DEMAND_PROCS.push({ id, port, child, startedAt: Date.now() });
+}
 
 let LOCAL_BENCHMARKS = [
   {
@@ -812,6 +893,39 @@ export function studioMiddleware() {
           return;
         }
         send(res, result.status || 200, result.json || {});
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/tool/wake') {
+        const body = await readBody(req);
+        const id = String(body.id || '').trim();
+        const repo = String(body.repo || '').trim();
+        const port = Number(body.port || 0);
+        if (!port || port < 5000 || port > 9999) {
+          send(res, 400, { error: 'Invalid tool port.' });
+          return;
+        }
+        const initialCheck = await requestJson(port, '/', { method: 'GET', timeout: 450 });
+        if (initialCheck.up) {
+          send(res, 200, { up: true, port, spawned: false, activeOnDemand: ON_DEMAND_PROCS.length });
+          return;
+        }
+        const rootDir = resolveToolRootDir(id, repo);
+        if (!rootDir) {
+          send(res, 404, { up: false, port, error: `Tool directory not found for ${id || repo}` });
+          return;
+        }
+        spawnOnDemandTool(id || repo, rootDir, port);
+        let ready = false;
+        for (let i = 0; i < 16; i++) {
+          await new Promise((r) => setTimeout(r, 150));
+          const check = await requestJson(port, '/', { method: 'GET', timeout: 350 });
+          if (check.up) {
+            ready = true;
+            break;
+          }
+        }
+        send(res, 200, { up: ready, port, spawned: true, activeOnDemand: ON_DEMAND_PROCS.length });
         return;
       }
 
