@@ -17,6 +17,8 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow, titleBaseSx } from '../sovereign/typography.jsx';
 
+import SovereignTutorialModal from '../SovereignTutorialModal.jsx';
+
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
 
@@ -31,6 +33,7 @@ export default function AgentBudgetSentinelGodModeTool() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
+  const [tutorialOpen, setTutorialOpen] = useState(false);
   const [dailyCalls, setDailyCalls] = useState(1200);
   const [avgInputTokens, setAvgInputTokens] = useState(3500);
   const [avgOutputTokens, setAvgOutputTokens] = useState(900);
@@ -163,6 +166,22 @@ export default function AgentBudgetSentinelGodModeTool() {
           </Typography>
         </Box>
         <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+          <Button
+            size="small"
+            variant="contained"
+            onClick={() => setTutorialOpen(true)}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.72rem',
+              fontWeight: 800,
+              bgcolor: '#34D399',
+              color: '#041016',
+              boxShadow: '0 0 16px rgba(52,211,153,0.35)',
+              '&:hover': { bgcolor: '#10B981', color: '#fff' },
+            }}
+          >
+            ✨ Quick Tutorial
+          </Button>
           <Button
             size="small"
             variant="contained"
@@ -345,6 +364,32 @@ export default function AgentBudgetSentinelGodModeTool() {
           </Stack>
         </Grid>
       </Grid>
+
+      <SovereignTutorialModal
+        toolId="agent-budget-sentinel"
+        toolName="Agent Budget Sentinel"
+        tagline="Stop your AI agents from burning through your wallet!"
+        accentColor="#34D399"
+        open={tutorialOpen}
+        onClose={() => setTutorialOpen(false)}
+        steps={[
+          {
+            icon: "🪙",
+            title: "What is an AI Budget?",
+            desc: "Every time an AI model thinks or writes code, it consumes 'tokens' which can cost real money. If an agent gets stuck in an infinite loop, it could spend hundreds of dollars while you sleep!"
+          },
+          {
+            icon: "🛑",
+            title: "Set a Daily Hard Cap",
+            desc: "Use the sliders to set a maximum limit (like $10/day). If your agents hit this limit, the circuit breaker instantly trips and pauses all requests."
+          },
+          {
+            icon: "💻",
+            title: "100% Free Local Offload",
+            desc: "Slide the 'Local Offload' bar up to route simple questions to free local models running on your machine (like Ollama), keeping your bills at $0.00."
+          }
+        ]}
+      />
     </Paper>
   );
 }
