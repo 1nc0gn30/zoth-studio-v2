@@ -1398,6 +1398,25 @@ export const microTools = [
     localUrl: 'http://127.0.0.1:8145',
     version: '1.1.0',
     pull: 'zothos-lite desktop  # or: zothos-lite-tui | zothos-lite --status',
+  },
+  {
+    id: 'zothnet',
+    published: true,
+    name: 'ZothNet (Sovereign Darknet Mesh)',
+    repo: 'zothnet',
+    category: 'Swarm & Core',
+    executionType: 'local_cli',
+    github: 'https://github.com/1nc0gn30/zothnet',
+    liveUrl: 'https://zoth.nullai.tech/tools/zothnet',
+    priceUsd: '0',
+    priceCents: 0,
+    stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
+    pricing: '100% Free & Open-Access',
+    description: 'Autonomous zero-DNS darknet mesh with Sphinx 1,280B onion mixnet, Vaelor feeless L1 DAG, Kademlia DHT alpha=3, RFC 5389 STUN NAT traversal, and CAS parallel swarm on :9900 and UDP :42069.',
+    localPort: 9900,
+    localUrl: 'http://127.0.0.1:9900',
+    version: '1.2.0',
+    pull: 'zothnet run --alias "Studio-Node"  # or: zothnet status --json | zothnet mcp',
   }
 ];
 

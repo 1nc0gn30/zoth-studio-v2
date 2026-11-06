@@ -93,6 +93,7 @@ import CivicProcurementGodModeTool from '../components/tools/CivicProcurementGod
 import PixelCastGodModeTool from '../components/tools/PixelCastGodModeTool';
 import ZothPillGodModeTool from '../components/tools/ZothPillGodModeTool';
 import ZothOSLiteGodModeTool from '../components/tools/ZothOSLiteGodModeTool';
+import ZothnetGodModeTool from '../components/tools/ZothnetGodModeTool';
 import SovereignToolOutputWorkbench from '../components/tools/SovereignToolOutputWorkbench';
 import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
 import {
@@ -211,6 +212,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'pixel-cast': PixelCastGodModeTool,
   'zoth-math-pillar': ZothPillGodModeTool,
   'zothos-lite': ZothOSLiteGodModeTool,
+  'zothnet': ZothnetGodModeTool,
 
   // Studio Cockpit & Workstation IDs (from workstations.js)
   'cockpit': SwarmCivilizationGodModeTool,
