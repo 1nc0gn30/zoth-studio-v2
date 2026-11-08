@@ -776,6 +776,56 @@ export default function SovereignBridgeGodModeTool() {
                 </Stack>
               </Grid>
 
+              {/* Mandatory AI Tool Gatekeeper Policy Strip */}
+              <Grid xs={12}>
+                <Box
+                  sx={{
+                    p: 1.4,
+                    borderRadius: 2,
+                    bgcolor: 'rgba(255,255,255,0.025)',
+                    border: '1px solid rgba(212,175,55,0.28)',
+                  }}
+                >
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.73rem', fontWeight: 800, color: '#F5E6AB' }}>
+                      🛡️ SOVEREIGN BRIDGE AI TOOL GATEKEEPER (MANDATORY BRIDGE CONNECTION — CLICK TO LOCK / ALLOW)
+                    </Typography>
+                    <Chip
+                      label={`${(agentMesh?.tool_policies || []).filter((p) => p.enabled).length}/${(agentMesh?.tool_policies || []).length} ALLOWED VIA BRIDGE`}
+                      size="small"
+                      sx={{ height: 20, fontFamily: mono, fontSize: '0.62rem', bgcolor: 'rgba(52,211,153,0.16)', color: '#34D399' }}
+                    />
+                  </Stack>
+                  <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+                    {(agentMesh?.tool_policies || []).map((p) => (
+                      <Chip
+                        key={p.tool_name}
+                        onClick={async () => {
+                          try {
+                            await fetch('http://127.0.0.1:8102/api/agents/policy', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ tool_name: p.tool_name, enabled: !p.enabled }),
+                            });
+                            fetchLiveState();
+                          } catch {}
+                        }}
+                        label={`${p.tool_name.toUpperCase()} • ${p.enabled ? 'VIA BRIDGE' : 'LOCKED'} (Runs: ${p.total_runs})`}
+                        sx={{
+                          fontFamily: mono,
+                          fontSize: '0.66rem',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          bgcolor: p.enabled ? 'rgba(52,211,153,0.12)' : 'rgba(248,113,113,0.18)',
+                          color: p.enabled ? '#34D399' : '#F87171',
+                          border: `1px solid ${p.enabled ? 'rgba(52,211,153,0.35)' : 'rgba(248,113,113,0.45)'}`,
+                        }}
+                      />
+                    ))}
+                  </Stack>
+                </Box>
+              </Grid>
+
               {/* Cross-Agent Handoff Dispatcher */}
               <Grid xs={12} md={5}>
                 <Stack spacing={1.2} sx={{ p: 1.5, borderRadius: 2, bgcolor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)' }}>
