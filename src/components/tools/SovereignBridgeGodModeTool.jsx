@@ -85,6 +85,12 @@ export default function SovereignBridgeGodModeTool() {
   );
   const [copied, setCopied] = useState(false);
   const [bridgeOnline, setBridgeOnline] = useState(true);
+  const [agentMesh, setAgentMesh] = useState(null);
+  const [busTarget, setBusTarget] = useState('muse-wonder-1.0 (01a1b743)');
+  const [busSubject, setBusSubject] = useState('Parallel Video Batch & Bridge Sync');
+  const [busBody, setBusBody] = useState(
+    'Completed Batches 7-12 (-14 LUFS commercials, 140 BPM edits & comedic reels). Ready for next coordinated wave.'
+  );
   const [events, setEvents] = useState([
     {
       ts: '00:00.0',
@@ -108,12 +114,50 @@ export default function SovereignBridgeGodModeTool() {
 
   const canvasRef = useRef(null);
 
+  const fetchAgentMesh = async () => {
+    try {
+      const r = await fetch('http://127.0.0.1:8102/api/agents/live');
+      if (r.ok) {
+        const d = await r.json();
+        setAgentMesh(d);
+      }
+    } catch {}
+  };
+
   useEffect(() => {
     fetch('http://127.0.0.1:8102/api/health')
       .then((r) => r.json())
       .then((d) => setBridgeOnline(d?.status === 'ok' || d?.status === 'HEALTHY'))
       .catch(() => setBridgeOnline(false));
+    fetchAgentMesh();
+    const id = setInterval(fetchAgentMesh, 5000);
+    return () => clearInterval(id);
   }, []);
+
+  const handleSendAgentBus = async () => {
+    try {
+      const res = await fetch('http://127.0.0.1:8102/api/agents/message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sender: 'antigravity-lead (ab434014)',
+          recipient: busTarget,
+          subject: busSubject,
+          body: busBody,
+        }),
+      });
+      if (res.ok) fetchAgentMesh();
+    } catch {}
+    setEvents((prev) => [
+      {
+        ts: new Date().toISOString().substring(14, 22),
+        tag: 'HANDOFF',
+        color: '#D4AF37',
+        msg: `Cross-Agent Bus -> ${busTarget}: ${busSubject}`,
+      },
+      ...prev.slice(0, 7),
+    ]);
+  };
 
   const handlePingAll = async () => {
     try {
@@ -634,6 +678,155 @@ export default function SovereignBridgeGodModeTool() {
               </Stack>
             </Box>
           </Stack>
+        </Grid>
+
+        {/* Full-Width Row: Live Cross-Agent Mesh Radar (Muse, Antigravity, Hermes & Bus) */}
+        <Grid xs={12}>
+          <Box
+            sx={{
+              p: 2,
+              borderRadius: 2.5,
+              bgcolor: '#05070D',
+              border: '1px solid rgba(212,175,55,0.35)',
+            }}
+          >
+            <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={1} sx={{ mb: 1.5 }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 900, color: '#F5E6AB' }}>
+                ⚡ LIVE CROSS-AGENT MESH RADAR (META MUSE • GOOGLE ANTIGRAVITY • HERMES • SHARED BUS)
+              </Typography>
+              <Chip
+                label={
+                  agentMesh?.summary
+                    ? `${agentMesh.summary.muse_sessions_count} MUSE • ${agentMesh.summary.antigravity_sessions_count} AGY • ${agentMesh.summary.mastered_videos_count} MASTERED MP4s`
+                    : 'SCANNING LOCAL SESSIONS...'
+                }
+                size="small"
+                sx={{
+                  height: 20,
+                  fontFamily: mono,
+                  fontSize: '0.64rem',
+                  fontWeight: 800,
+                  bgcolor: 'rgba(52,211,153,0.14)',
+                  color: '#34D399',
+                  border: '1px solid rgba(52,211,153,0.35)',
+                }}
+              />
+            </Stack>
+
+            <Grid container spacing={2}>
+              {/* Active Agent Cards */}
+              <Grid xs={12} md={7}>
+                <Stack spacing={1.2}>
+                  {(agentMesh?.muse_sessions || []).slice(0, 2).map((m) => (
+                    <Box
+                      key={m.session_id}
+                      sx={{
+                        p: 1.2,
+                        borderRadius: 2,
+                        bgcolor: 'rgba(212,175,55,0.06)',
+                        borderLeft: '3px solid #D4AF37',
+                        border: '1px solid rgba(212,175,55,0.2)',
+                      }}
+                    >
+                      <Stack direction="row" justifyContent="space-between" alignItems="center">
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 800, color: '#F5E6AB' }}>
+                          [MUSE] {m.short_id} • {m.model}
+                        </Typography>
+                        <Chip
+                          label={`${m.status} • PID ${m.pid || 'IDLE'} • ${m.subagents_spawned} SUBAGENTS`}
+                          size="small"
+                          sx={{ height: 18, fontFamily: mono, fontSize: '0.6rem', bgcolor: 'rgba(212,175,55,0.18)', color: '#F5E6AB' }}
+                        />
+                      </Stack>
+                      {(m.todos || []).slice(0, 3).map((td, idx) => (
+                        <Typography key={idx} sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#94A3B8', mt: 0.3 }}>
+                          ✓ [{td.status}] {td.text}
+                        </Typography>
+                      ))}
+                    </Box>
+                  ))}
+
+                  {(agentMesh?.antigravity_sessions || []).slice(0, 2).map((a) => (
+                    <Box
+                      key={a.session_id}
+                      sx={{
+                        p: 1.2,
+                        borderRadius: 2,
+                        bgcolor: 'rgba(56,189,248,0.06)',
+                        border: '1px solid rgba(56,189,248,0.22)',
+                      }}
+                    >
+                      <Stack direction="row" justifyContent="space-between" alignItems="center">
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 800, color: '#38BDF8' }}>
+                          [ANTIGRAVITY] {a.short_id} • Step {a.step_index}
+                        </Typography>
+                        <Chip
+                          label={`${a.status} • ${a.last_active_ago_sec}s ago`}
+                          size="small"
+                          sx={{ height: 18, fontFamily: mono, fontSize: '0.6rem', bgcolor: 'rgba(56,189,248,0.18)', color: '#38BDF8' }}
+                        />
+                      </Stack>
+                      {a.recent_tools?.length > 0 && (
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#E2E8F0', mt: 0.3 }}>
+                          Tool: {a.recent_tools[a.recent_tools.length - 1].name} → {a.recent_tools[a.recent_tools.length - 1].args.slice(0, 75)}
+                        </Typography>
+                      )}
+                    </Box>
+                  ))}
+                </Stack>
+              </Grid>
+
+              {/* Cross-Agent Handoff Dispatcher */}
+              <Grid xs={12} md={5}>
+                <Stack spacing={1.2} sx={{ p: 1.5, borderRadius: 2, bgcolor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: '#34D399' }}>
+                    POST CROSS-AGENT HANDOFF (MUSE ↔ AGY ↔ HERMES)
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="Target Agent"
+                    value={busTarget}
+                    onChange={(e) => setBusTarget(e.target.value)}
+                    sx={{ '& .MuiInputBase-root': { fontFamily: mono, fontSize: '0.72rem', color: '#E2E8F0' } }}
+                  />
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="Subject"
+                    value={busSubject}
+                    onChange={(e) => setBusSubject(e.target.value)}
+                    sx={{ '& .MuiInputBase-root': { fontFamily: mono, fontSize: '0.72rem', color: '#E2E8F0' } }}
+                  />
+                  <TextField
+                    fullWidth
+                    multiline
+                    rows={2}
+                    size="small"
+                    label="Handoff Message & Artifact Paths"
+                    value={busBody}
+                    onChange={(e) => setBusBody(e.target.value)}
+                    sx={{ '& .MuiInputBase-root': { fontFamily: mono, fontSize: '0.72rem', color: '#E2E8F0' } }}
+                  />
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={handleSendAgentBus}
+                    sx={{
+                      bgcolor: '#34D399',
+                      color: '#05070D',
+                      fontFamily: mono,
+                      fontWeight: 800,
+                      fontSize: '0.72rem',
+                      '&:hover': { bgcolor: '#6EE7B7' },
+                    }}
+                  >
+                    Post Handoff to Shared Agent Bus
+                  </Button>
+                </Stack>
+              </Grid>
+            </Grid>
+          </Box>
         </Grid>
       </Grid>
 

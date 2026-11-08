@@ -362,39 +362,12 @@ export function HexStrikeGodModeTool() {
   const [historyIndex, setHistoryIndex] = useState(-1);
   const terminalEndRef = useRef(null);
 
-  // Pro Licensing State
-  const [isProLicensed, setIsProLicensed] = useState(true);
-  const [showPaywallModal, setShowPaywallModal] = useState(false);
-  const [licenseKeyInput, setLicenseKeyInput] = useState('');
-
   // Auto-scroll terminal inside its own container without moving the window
   useEffect(() => {
     if (terminalEndRef.current && terminalEndRef.current.parentElement) {
       terminalEndRef.current.parentElement.scrollTop = terminalEndRef.current.parentElement.scrollHeight;
     }
   }, [terminalHistory]);
-
-  // Check Pro License on mount
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('licensed') === 'true' || urlParams.get('pro') === 'true') {
-        localStorage.setItem('hexstrike_pro_licensed', 'true');
-        setIsProLicensed(true);
-      } else {
-        const stored = localStorage.getItem('hexstrike_pro_licensed');
-        if (stored === 'true') setIsProLicensed(true);
-      }
-    }
-  }, []);
-
-  const handleActivateLicense = () => {
-    if (licenseKeyInput.trim().length >= 6) {
-      localStorage.setItem('hexstrike_pro_licensed', 'true');
-      setIsProLicensed(true);
-      setShowPaywallModal(false);
-    }
-  };
 
   const handleCopy = (text, key) => {
     navigator.clipboard?.writeText(text)?.catch?.(() => {});
@@ -1064,17 +1037,16 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
             </Stack>
             <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mt: 1 }}>
               <Chip
-                icon={isProLicensed ? <CheckCircleIcon sx={{ fontSize: '0.9rem !important', color: `${emerald} !important` }} /> : <LockIcon sx={{ fontSize: '0.9rem !important', color: `${gold} !important` }} />}
-                label={isProLicensed ? "✦ 100% FREE & OPEN ACCESS" : "FREE & OPEN ACCESS"}
+                icon={<CheckCircleIcon sx={{ fontSize: '0.9rem !important', color: `${emerald} !important` }} />}
+                label="✦ 100% FREE & OPEN ACCESS"
                 size="small"
-                onClick={() => !isProLicensed && setShowPaywallModal(true)}
                 sx={{
-                  bgcolor: isProLicensed ? emeraldSoft : goldSoft,
-                  color: isProLicensed ? emerald : gold,
+                  bgcolor: emeraldSoft,
+                  color: emerald,
                   fontWeight: 800,
                   fontFamily: mono,
-                  border: `1px solid ${isProLicensed ? emeraldBorder : goldBorder}`,
-                  cursor: isProLicensed ? 'default' : 'pointer'
+                  border: `1px solid ${emeraldBorder}`,
+                  cursor: 'default'
                 }}
               />
               <Chip
@@ -2127,122 +2099,13 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
           ===================================================================== */}
       {activeTab === 6 && (
         <Box sx={{ position: 'relative' }}>
-          {/* Frosted Glass Paywall Overlay for Unlicensed Users */}
-          {!isProLicensed && (
-            <Box
-              sx={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                zIndex: 10,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backdropFilter: 'blur(8px)',
-                bgcolor: 'rgba(8, 8, 11, 0.72)',
-                borderRadius: 3,
-                p: 3
-              }}
-            >
-              <Paper
-                sx={{
-                  p: { xs: 2.5, md: 3.5 },
-                  maxWidth: 520,
-                  textAlign: 'center',
-                  borderRadius: 3,
-                  bgcolor: isDark ? '#10121A' : '#FFFFFF',
-                  border: `1px solid ${goldBorder}`,
-                  boxShadow: '0 20px 48px rgba(0,0,0,0.8)'
-                }}
-              >
-                <Box
-                  sx={{
-                    width: 52,
-                    height: 52,
-                    borderRadius: '50%',
-                    bgcolor: goldSoft,
-                    color: gold,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    mx: 'auto',
-                    mb: 2
-                  }}
-                >
-                  <LockIcon sx={{ fontSize: 28 }} />
-                </Box>
-
-                <Typography variant="h5" sx={{ fontWeight: 800, color: isDark ? '#FFF' : '#111827', mb: 1 }}>
-                  Unlock Full Executive Pentest Report
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2.5, lineHeight: 1.6 }}>
-                  Export client-ready PDF/Markdown executive reports, raw JSON vulnerability feeds, compliance matrices, and automated remediation scripts.
-                </Typography>
-
-                <Stack spacing={1.5} sx={{ mb: 3 }}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    component="a"
-                    href="https://github.com/1nc0gn30/zoth-studio-v2"
-                    target="_blank"
-                    rel="noopener"
-                    startIcon={<BoltIcon />}
-                    sx={{
-                      bgcolor: gold,
-                      color: '#000',
-                      fontWeight: 800,
-                      fontFamily: mono,
-                      py: 1.2,
-                      fontSize: '0.85rem',
-                      '&:hover': { bgcolor: '#B89628' }
-                    }}
-                  >
-                    ☕ BUY US A COFFEE (STRIPE)
-                  </Button>
-                  <Button
-                    fullWidth
-                    variant="outlined"
-                    component="a"
-                    href="https://github.com/1nc0gn30/zoth-studio-v2"
-                    target="_blank"
-                    rel="noopener"
-                    sx={{
-                      borderColor: crimson,
-                      color: crimson,
-                      fontWeight: 800,
-                      fontFamily: mono,
-                      py: 1.2,
-                      fontSize: '0.85rem',
-                      '&:hover': { bgcolor: crimsonSoft }
-                    }}
-                  >
-                    OPTIONAL SOLANA TIP
-                  </Button>
-                </Stack>
-
-                <Button
-                  size="small"
-                  onClick={() => setShowPaywallModal(true)}
-                  sx={{ color: 'text.secondary', fontSize: '0.75rem', textDecoration: 'underline' }}
-                >
-                  100% Free & Open Access — Optional Buy Us a Coffee or Solana Tip
-                </Button>
-              </Paper>
-            </Box>
-          )}
-
-          {/* Under-the-Hood Report Workspace (Blurred if not licensed) */}
+          {/* Executive Security Audit Report (100% Free & Open Access) */}
           <Paper
             sx={{
               p: 3,
               borderRadius: 3,
               bgcolor: isDark ? '#10121A' : '#FFFFFF',
-              border: `1px solid ${cardBorder}`,
-              filter: isProLicensed ? 'none' : 'blur(5px)',
-              pointerEvents: isProLicensed ? 'auto' : 'none'
+              border: `1px solid ${cardBorder}`
             }}
           >
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
@@ -2303,61 +2166,6 @@ ${OFFENSIVE_ARSENAL[4].cmd(targetScope)}
           </Paper>
         </Box>
       )}
-
-      {/* =====================================================================
-          PRO ACTIVATION DIALOG
-          ===================================================================== */}
-      <Dialog
-        open={showPaywallModal}
-        onClose={() => setShowPaywallModal(false)}
-        maxWidth="xs"
-        fullWidth
-        PaperProps={{
-          sx: {
-            bgcolor: isDark ? '#10121A' : '#FFFFFF',
-            border: `1px solid ${goldBorder}`,
-            borderRadius: 3,
-            p: 1
-          }
-        }}
-      >
-        <DialogTitle sx={{ fontWeight: 800, fontFamily: mono, color: gold, pb: 1 }}>
-          ✦ 100% OPEN ACCESS
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-            Everything is already unlocked and free to use. Tips are optional and unlock nothing extra.
-          </Typography>
-          <TextField
-            fullWidth
-            size="small"
-            placeholder="e.g. HEX-PRO-2026-XXXX or dev@..."
-            value={licenseKeyInput}
-            onChange={(e) => setLicenseKeyInput(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <VpnKeyIcon sx={{ color: gold, fontSize: 18 }} />
-                </InputAdornment>
-              ),
-              sx: { fontFamily: mono, fontSize: '0.82rem' }
-            }}
-          />
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={() => setShowPaywallModal(false)} sx={{ color: 'text.secondary', fontFamily: mono }}>
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleActivateLicense}
-            disabled={licenseKeyInput.trim().length < 6}
-            sx={{ bgcolor: gold, color: '#000', fontWeight: 800, fontFamily: mono }}
-          >
-            ACTIVATE PRO
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

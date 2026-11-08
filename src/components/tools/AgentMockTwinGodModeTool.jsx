@@ -133,18 +133,11 @@ export function AgentMockTwinGodModeTool() {
   const [chaosFailureType, setChaosFailureType] = useState('429'); // 429, 500, 504
   const [simulatedLatency, setSimulatedLatency] = useState(25); // ms
   const [copiedKey, setCopiedKey] = useState(null);
-  const [isProLicensed, setIsProLicensed] = useState(true);
-  const [showPaywallModal, setShowPaywallModal] = useState(false);
-  const [licenseKeyInput, setLicenseKeyInput] = useState('');
 
   // Persist cassettes in localStorage
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('zoth_mock_cassettes', JSON.stringify(cassettes));
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('licensed') === 'true' || localStorage.getItem('zoth_studio_pro_license') === 'active') {
-        setIsProLicensed(true);
-      }
     }
   }, [cassettes]);
 
@@ -357,10 +350,10 @@ ${cassettes
               </Typography>
               <Chip
                 size="small"
-                label={isProLicensed ? '✦ 100% FREE & OPEN ACCESS' : 'FREE & OPEN ACCESS'}
+                label="✦ 100% FREE & OPEN ACCESS"
                 sx={{
-                  bgcolor: isProLicensed ? emeraldSoft : crimsonSoft,
-                  color: isProLicensed ? emerald : crimson,
+                  bgcolor: emeraldSoft,
+                  color: emerald,
                   fontWeight: 800,
                   fontSize: '0.72rem',
                   fontFamily: mono

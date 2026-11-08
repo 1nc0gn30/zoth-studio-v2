@@ -173,32 +173,6 @@ export function GhidraMcpGodModeTool() {
   const [annotatedComments, setAnnotatedComments] = useState({});
   const [copiedKey, setCopiedKey] = useState(null);
 
-  // Pro State
-  const [isProLicensed, setIsProLicensed] = useState(true);
-  const [showPaywallModal, setShowPaywallModal] = useState(false);
-  const [licenseKeyInput, setLicenseKeyInput] = useState('');
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('licensed') === 'true' || urlParams.get('pro') === 'true') {
-        localStorage.setItem('ghidra_pro_licensed', 'true');
-        setIsProLicensed(true);
-      } else {
-        const stored = localStorage.getItem('ghidra_pro_licensed');
-        if (stored === 'true') setIsProLicensed(true);
-      }
-    }
-  }, []);
-
-  const handleActivateLicense = () => {
-    if (licenseKeyInput.trim().length >= 6) {
-      localStorage.setItem('ghidra_pro_licensed', 'true');
-      setIsProLicensed(true);
-      setShowPaywallModal(false);
-    }
-  };
-
   const handleCopy = (text, key) => {
     navigator.clipboard?.writeText(text)?.catch?.(() => {});
     setCopiedKey(key);
@@ -338,17 +312,16 @@ export function GhidraMcpGodModeTool() {
 
             <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mt: 1.5 }}>
               <Chip
-                icon={isProLicensed ? <CheckCircleIcon sx={{ fontSize: '0.9rem !important', color: `${emerald} !important` }} /> : <LockIcon sx={{ fontSize: '0.9rem !important', color: `${gold} !important` }} />}
-                label={isProLicensed ? "✦ 100% FREE & OPEN ACCESS" : "FREE & OPEN ACCESS"}
+                icon={<CheckCircleIcon sx={{ fontSize: '0.9rem !important', color: `${emerald} !important` }} />}
+                label="✦ 100% FREE & OPEN ACCESS"
                 size="small"
-                onClick={() => !isProLicensed && setShowPaywallModal(true)}
                 sx={{
-                  bgcolor: isProLicensed ? emeraldSoft : goldSoft,
-                  color: isProLicensed ? emerald : gold,
+                  bgcolor: emeraldSoft,
+                  color: emerald,
                   fontWeight: 800,
                   fontFamily: mono,
-                  border: `1px solid ${isProLicensed ? emeraldBorder : goldBorder}`,
-                  cursor: isProLicensed ? 'default' : 'pointer'
+                  border: `1px solid ${emeraldBorder}`,
+                  cursor: 'default'
                 }}
               />
               <Chip
@@ -665,61 +638,6 @@ export function GhidraMcpGodModeTool() {
           </Grid>
         </Paper>
       )}
-
-      {/* =====================================================================
-          PRO ACTIVATION DIALOG
-          ===================================================================== */}
-      <Dialog
-        open={showPaywallModal}
-        onClose={() => setShowPaywallModal(false)}
-        maxWidth="xs"
-        fullWidth
-        PaperProps={{
-          sx: {
-            bgcolor: isDark ? '#10121A' : '#FFFFFF',
-            border: `1px solid ${goldBorder}`,
-            borderRadius: 3,
-            p: 1
-          }
-        }}
-      >
-        <DialogTitle sx={{ fontWeight: 800, fontFamily: mono, color: gold, pb: 1 }}>
-          ✦ 100% OPEN ACCESS
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-            Everything is already unlocked and free to use. Tips are optional and unlock nothing extra.
-          </Typography>
-          <TextField
-            fullWidth
-            size="small"
-            placeholder="e.g. GHIDRA-PRO-2026-XXXX or dev@..."
-            value={licenseKeyInput}
-            onChange={(e) => setLicenseKeyInput(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <VpnKeyIcon sx={{ color: gold, fontSize: 18 }} />
-                </InputAdornment>
-              ),
-              sx: { fontFamily: mono, fontSize: '0.82rem' }
-            }}
-          />
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button onClick={() => setShowPaywallModal(false)} sx={{ color: 'text.secondary', fontFamily: mono }}>
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleActivateLicense}
-            disabled={licenseKeyInput.trim().length < 6}
-            sx={{ bgcolor: gold, color: '#000', fontWeight: 800, fontFamily: mono }}
-          >
-            ACTIVATE PRO
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

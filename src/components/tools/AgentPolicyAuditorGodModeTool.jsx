@@ -188,20 +188,11 @@ export function AgentPolicyAuditorGodModeTool() {
   const [verifyResult, setVerifyResult] = useState(null);
 
   const [copiedKey, setCopiedKey] = useState(null);
-  const [isProLicensed, setIsProLicensed] = useState(true);
-  const [showPaywallModal, setShowPaywallModal] = useState(false);
-  const [licenseKeyInput, setLicenseKeyInput] = useState('');
 
   // Enclave Master Signing Key (in-memory)
   const masterKey = 'sovereign_enclave_hmac_master_seed_2026';
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('licensed') === 'true' || localStorage.getItem('zoth_studio_pro_license') === 'active') {
-        setIsProLicensed(true);
-      }
-    }
     // Run initial audit on load
     handleRunAudit();
   }, []);
@@ -217,14 +208,6 @@ export function AgentPolicyAuditorGodModeTool() {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
-
-  const handleActivateLicense = () => {
-    if (licenseKeyInput.trim().length > 6) {
-      localStorage.setItem('zoth_studio_pro_license', 'active');
-      setIsProLicensed(true);
-      setShowPaywallModal(false);
-    }
-  };
 
   const handleCopy = (text, key) => {
     if (navigator?.clipboard?.writeText) {
@@ -403,10 +386,10 @@ export function AgentPolicyAuditorGodModeTool() {
               </Typography>
               <Chip
                 size="small"
-                label={isProLicensed ? '✦ 100% FREE & OPEN ACCESS' : 'FREE & OPEN ACCESS'}
+                label="✦ 100% FREE & OPEN ACCESS"
                 sx={{
-                  bgcolor: isProLicensed ? emeraldSoft : crimsonSoft,
-                  color: isProLicensed ? emerald : crimson,
+                  bgcolor: emeraldSoft,
+                  color: emerald,
                   fontWeight: 800,
                   fontSize: '0.72rem',
                   fontFamily: mono
@@ -841,91 +824,6 @@ export function AgentPolicyAuditorGodModeTool() {
           </Grid>
         )}
       </Paper>
-
-      {/* Pro Monetization Modal */}
-      <Dialog
-        open={showPaywallModal}
-        onClose={() => setShowPaywallModal(false)}
-        maxWidth="sm"
-        fullWidth
-        PaperProps={{
-          sx: {
-            bgcolor: isDark ? surfaceDark : theme.palette.background.paper,
-            border: `1px solid ${gold}`,
-            borderRadius: 2
-          }
-        }}
-      >
-        <DialogTitle sx={{ pb: 1, borderBottom: `1px solid ${cardBorder}` }}>
-          <Stack direction="row" spacing={1.5} alignItems="center">
-            <ShieldIcon sx={{ color: gold }} />
-            <Typography variant="h6" sx={{ fontWeight: 800, color: gold }}>
-              Agent Policy Auditor 100% Free & Open Access — Community Support
-            </Typography>
-          </Stack>
-        </DialogTitle>
-        <DialogContent sx={{ mt: 2 }}>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Unlock automated enterprise MCP policy enforcement, multi-agent capability lease broadcasting, and continuous compliance audit reports.
-          </Typography>
-
-          <Paper sx={{ p: 2, mb: 3, bgcolor: goldSoft, border: `1px solid ${gold}`, borderRadius: 1.5 }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold, mb: 0.5 }}>
-              ⚡ 100% Free & Open Access — Optional Community Support
-            </Typography>
-            <Typography variant="caption" sx={{ color: 'text.primary' }}>
-              Everything here is free to use. Optional tips are welcome via:
-            </Typography>
-            <Stack direction="row" spacing={1.5} sx={{ mt: 1.5 }}>
-              <Button
-                variant="contained"
-                size="small"
-                href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
-                target="_blank"
-                rel="noreferrer"
-                sx={{ bgcolor: gold, color: '#000', fontWeight: 800 }}
-              >
-                ☕ Buy Us a Coffee (Stripe)
-              </Button>
-              <Button
-                variant="outlined"
-                size="small"
-                href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
-                target="_blank"
-                rel="noreferrer"
-                sx={{ borderColor: cyan, color: cyan, fontWeight: 700 }}
-              >
-                Solana Pay (USDC/SOL)
-              </Button>
-            </Stack>
-          </Paper>
-
-          <TextField
-            fullWidth
-            size="small"
-            label="Optional note with your tip"
-            value={licenseKeyInput}
-            onChange={(e) => setLicenseKeyInput(e.target.value)}
-            placeholder="e.g. POLICY-PRO-XXXX-XXXX"
-            InputProps={{
-              sx: { fontFamily: mono }
-            }}
-          />
-        </DialogContent>
-        <DialogActions sx={{ p: 2, borderTop: `1px solid ${cardBorder}` }}>
-          <Button onClick={() => setShowPaywallModal(false)} sx={{ color: 'text.secondary', fontFamily: mono }}>
-            CANCEL
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleActivateLicense}
-            disabled={licenseKeyInput.trim().length < 6}
-            sx={{ bgcolor: emerald, color: '#000', fontWeight: 800, fontFamily: mono }}
-          >
-            ACTIVATE PRO
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

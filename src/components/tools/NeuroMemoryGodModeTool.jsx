@@ -68,6 +68,42 @@ const INITIAL_MEMORIES = [
     ageHours: 32.0,
     recalls: 4,
   },
+  {
+    id: 'mem-06',
+    tier: 'Semantic Vault',
+    content: 'ZothNet v1.2.2 (zothnet.nullai.tech, zml.nullai.tech): 1,280B Sphinx Mixnet, Vaelor L1 feeless DAG, Broadcast Mesh, 5 Regular Joe scenarios, and Android 17 PIE APK (tech.nullai.zothnet) on Moto G 2025 & VPS relays.',
+    tags: ['zothnet', 'zml', 'sphinx-mixnet', 'vaelor', 'android-17', 'mesh'],
+    salience: 0.99,
+    ageHours: 0.2,
+    recalls: 28,
+  },
+  {
+    id: 'mem-07',
+    tier: 'Semantic Vault',
+    content: 'ZothOS v3.4 & ZothOS-Lite (zothos.nullai.tech): A100 Desktop Hardening, SquashFS desktop determinism, KDE Plasma 6 & XFCE4, Xcursor binary integrity, and amnesic toram boot hygiene.',
+    tags: ['zothos', 'zothos-lite', 'a100-hardening', 'squashfs', 'xcursor', 'toram'],
+    salience: 0.98,
+    ageHours: 0.4,
+    recalls: 24,
+  },
+  {
+    id: 'mem-08',
+    tier: 'Semantic Vault',
+    content: 'World of Zoth (world-of-zoth.apk) & Zoth Civilization (:8120): Pantheon 21 RPG Ability Engine (84 Q/W/E/R abilities), 8-Planet 3D Star System, and Adytum 22 Tarot 3D Diorama Engine (/adytum).',
+    tags: ['world-of-zoth', 'zoth-civilization', 'pantheon-21', 'adytum-22', '3d-worlds'],
+    salience: 0.97,
+    ageHours: 0.6,
+    recalls: 19,
+  },
+  {
+    id: 'mem-09',
+    tier: 'Semantic Vault',
+    content: '1nc0gn30 Sovereign Hub (1nc0gn30.si, nealfrazier.tech, nullai.tech) & 7-APK Master Roadmap (F-Droid & Google Play): ZothNet, ZothTerm, Zoth-Cursorz, World of Zoth, Spotter / FieldKit, Zoth-Bot Wear OS, and Zoth Signal Bridge.',
+    tags: ['1nc0gn30', 'apk', 'fdroid', 'play-store', 'roadmap', 'obsidian'],
+    salience: 0.98,
+    ageHours: 0.3,
+    recalls: 22,
+  },
 ];
 
 export default function NeuroMemoryGodModeTool() {

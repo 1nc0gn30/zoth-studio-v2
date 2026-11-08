@@ -375,6 +375,71 @@ export const INITIAL_SOVEREIGN_MEMORIES = [
     y: 60,
     z: -20,
   },
+  {
+    id: 'MEM-018',
+    concept: 'ZothNet v1.2.2 & ZML Sovereign Mesh',
+    category: 'obsidian',
+    cluster: 'Obsidian',
+    weight: 0.99,
+    text: 'ZothNet v1.2.2 (zothnet.nullai.tech, zml.nullai.tech): 1,280B Sphinx Mixnet onion packets, Vaelor L1 feeless DAG, Broadcast Mesh channels & quick signals, 5 Regular Joe First Flight scenarios, and Android 17 PIE APK (tech.nullai.zothnet) across Moto G 2025 & VPS relay nodes.',
+    author: 'Lucy',
+    tags: ['zothnet', 'zml', 'sphinx-mixnet', 'android-17', 'vaelor', 'mesh'],
+    x: 68,
+    y: -15,
+    z: -42,
+  },
+  {
+    id: 'MEM-019',
+    concept: 'ZothOS v3.4 & ZothOS-Lite A100 Desktop',
+    category: 'kernel',
+    cluster: 'Kernel',
+    weight: 0.98,
+    text: 'ZothOS v3.4 & ZothOS-Lite (zothos.nullai.tech): A100 Desktop Hardening, SquashFS desktop launcher determinism, KDE Plasma 6 & XFCE4 across 8 rooms, Xcursor binary magic integrity, SWCursor / KWIN_FORCE_SW_CURSOR=1, and amnesic toram boot hygiene.',
+    author: 'Azoth',
+    tags: ['zothos', 'zothos-lite', 'a100-hardening', 'squashfs', 'xcursor', 'toram'],
+    x: -22,
+    y: -58,
+    z: 36,
+  },
+  {
+    id: 'MEM-020',
+    concept: 'World of Zoth, Zoth Civilization & Pantheon 21',
+    category: 'pantheon',
+    cluster: 'Pantheon',
+    weight: 0.98,
+    text: 'World of Zoth (world-of-zoth.apk) & Zoth Civilization (:8120): Pantheon 21 Character & RPG Ability Engine (84 Q/W/E/R abilities, 21x21 synergy matrix) and A100 8-Planet 3D Star System (SOLARIS-PRIME through SANCTUM-OMEGA).',
+    author: 'Athena',
+    tags: ['world-of-zoth', 'zoth-civilization', 'pantheon-21', '3d-worlds', 'apk'],
+    x: 42,
+    y: 54,
+    z: 32,
+  },
+  {
+    id: 'MEM-021',
+    concept: 'Adytum 22 Tarot 3D Diorama & Game Engine',
+    category: 'oracle',
+    cluster: 'Lucy Oracle',
+    weight: 0.97,
+    text: 'Adytum 22 Tarot 3D Diorama & Video-Game Engine (/adytum in Zoth Studio v2 :3000): 22 Major Arcana interactive WebGL dioramas, procedural GLSL shaders, and playable alchemical trials.',
+    author: 'Lucy',
+    tags: ['adytum-22', 'tarot', '3d-diorama', 'webgl', 'zoth-studio'],
+    x: 88,
+    y: 28,
+    z: -18,
+  },
+  {
+    id: 'MEM-022',
+    concept: '1nc0gn30 Sovereign Hub & 7-APK Master Roadmap',
+    category: 'obsidian',
+    cluster: 'Obsidian',
+    weight: 0.99,
+    text: '1nc0gn30 Sovereign Hub (1nc0gn30.si, nealfrazier.tech, nullai.tech) & 7-APK F-Droid / Google Play Roadmap: ZothNet, ZothTerm, Zoth-Cursorz, World of Zoth, Spotter / FieldKit, Zoth-Bot Wear OS, and Zoth Signal Bridge.',
+    author: 'Onyx',
+    tags: ['1nc0gn30', 'apk', 'fdroid', 'play-store', 'roadmap', 'obsidian'],
+    x: -56,
+    y: 44,
+    z: -48,
+  },
 ];
 
 /* ==========================================================================
@@ -711,8 +776,9 @@ ${article.math_invariants || ''}
           if (active && wData && Array.isArray(wData.articles) && wData.articles.length > 0) {
             setWikiArticles(prev => {
               const liveTitles = new Set(wData.articles.map(a => a.title.toLowerCase()));
+              const canonicalKeep = CANONICAL_WIKI_ARTICLES.filter(c => !liveTitles.has(c.title.toLowerCase()));
               const clientAdded = prev.filter(a => !liveTitles.has(a.title.toLowerCase()) && !CANONICAL_WIKI_ARTICLES.some(c => c.title.toLowerCase() === a.title.toLowerCase()));
-              return [...clientAdded, ...wData.articles];
+              return [...clientAdded, ...canonicalKeep, ...wData.articles];
             });
           }
         }

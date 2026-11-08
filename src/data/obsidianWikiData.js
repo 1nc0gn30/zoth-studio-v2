@@ -6,34 +6,98 @@ export const INITIAL_OBSIDIAN_AUDIT = {
   score: 100,
   status: "PERFECT",
   healthGrade: "✦ PERFECT",
-  canvasesValid: 19,
-  totalCanvases: 19,
-  basesValid: 22,
-  totalBases: 22,
-  totalNotes: 1768,
-  totalWikilinks: 8450,
+  canvasesValid: 20,
+  totalCanvases: 20,
+  basesValid: 24,
+  totalBases: 24,
+  totalNotes: 1779,
+  totalWikilinks: 8912,
   connectivityPct: 100.0,
   orphanNotes: 0,
   brokenLinks: 0,
-  wikiCount: 16,
+  wikiCount: 20,
 };
 
 export const CANONICAL_WIKI_ARTICLES = [
   {
-    "id": "zoth-3d-worlds-pantheon21-adytum22",
-    "title": "8-Planet 3D Star System, Pantheon 21 RPG & Adytum 22 Tarot Engine",
+    "id": "zothnet-v122-and-zml-sovereign-mesh",
+    "title": "ZothNet v1.2.2 & ZML Sovereign Mesh",
+    "filename": "ZothNet v1.2.2 & ZML Sovereign Mesh.md",
+    "path": "06-Wiki/ZothNet v1.2.2 & ZML Sovereign Mesh.md",
+    "confidence": 0.99,
+    "stdp_engrams": 12,
+    "tags": ["wiki", "llm-synthesized", "karpathy-wiki", "zothnet", "zml", "sphinx-mixnet", "vaelor", "android-17", "mesh"],
+    "category": "LLM-Wiki",
+    "status": "CANONICAL",
+    "created": "2026-11-06T20:00:00Z",
+    "updated": "2026-11-06T21:30:00Z",
+    "executive_summary": "**ZothNet v1.2.2 (`zothnet.nullai.tech` · `zml.nullai.tech`)** is the post-censorship, metadata-resistant sovereign mesh and communication layer of the NullAI / ZothOS ecosystem. It combines a fixed **1,280-byte Sphinx Mixnet** onion packet transport, **Zoth Markup Language (`zml.nullai.tech`)** low-bandwidth semantic documents, **Vaelor L1 feeless Account-Lattice DAG** micro-settlements, **Broadcast Mesh** channels & 1-tap quick signals, **5 'Regular Joe' First Flight scenarios** (Family Emergency Check-In, Neighborhood Power Outage Mesh, Private Medical/Legal Drop, Festival/Off-Grid Group Compass, Censorship-Resistant Local News Feed), and a production **Android 17 PIE APK (`tech.nullai.zothnet`)** deployed across **Moto G 2025** hardware edge phones and multi-region VPS relay nodes.",
+    "math_invariants": "### 1. Fixed 1,280-Byte Sphinx Mixnet Cell Indistinguishability\nEvery ZothNet packet $P_k$ across hop $h \\in \\{1, \\dots, L\\}$ is padded and wrapped in nested ChaCha20-Poly1305 + X25519 Sphinx headers to guarantee zero size-correlation leakage:\n$$\\|P_k\\|_h \\equiv 1280\\text{ Bytes}, \\quad \\forall k, h$$\n\n### 2. Multi-Hop Relay Anonymity Entropy\nAcross Moto G 2025 mobile edge relays and $R$ VPS mixnodes, routing path entropy satisfies:\n$$H(\\mathcal{R}) = -\\sum_{r=1}^{R} p_r \\log_2 p_r = \\log_2(R) \\ge 4.0\\text{ bits/hop}$$",
+    "size": 9420
+  },
+  {
+    "id": "zothos-v34-and-zothos-lite-a100-desktop",
+    "title": "ZothOS v3.4 & ZothOS-Lite A100 Desktop",
+    "filename": "ZothOS v3.4 & ZothOS-Lite A100 Desktop.md",
+    "path": "06-Wiki/ZothOS v3.4 & ZothOS-Lite A100 Desktop.md",
+    "confidence": 0.99,
+    "stdp_engrams": 10,
+    "tags": ["wiki", "llm-synthesized", "karpathy-wiki", "zothos", "zothos-lite", "a100-hardening", "squashfs", "kde-plasma-6", "xfce", "xcursor", "toram"],
+    "category": "LLM-Wiki",
+    "status": "CANONICAL",
+    "created": "2026-11-06T20:05:00Z",
+    "updated": "2026-11-06T21:30:00Z",
+    "executive_summary": "**ZothOS v3.4** and **ZothOS-Lite (`zothos.nullai.tech`)** deliver a hardened, zero-egress Linux workstation across bare-metal Debian Live SquashFS boots, QEMU/KVM hypervisors, and instant WebGL/WASM browser sessions. Engineered under the **A100 Desktop Hardening Protocol**, v3.4 enforces deterministic `~/Desktop/*.desktop` population across **KDE Plasma 6** and **XFCE4**, binary magic header verification (`Xcur`) for all **Xcursor** themes, `SWCursor` / `KWIN_FORCE_SW_CURSOR=1` pointer visibility, and amnesic `toram` RAM-disk boot hygiene with `<60°C` `zoth-thermal-guard` governance.",
+    "math_invariants": "### 1. Xcursor Binary Header & Checksum Invariant\nEvery compiled cursor binary $C_i$ in `/usr/share/icons/zoth-cursorz/cursors/` must satisfy:\n$$\\text{Magic}(C_i[0..3]) \\equiv \\texttt{0x58637572}\\ (\\text{\"Xcur\"}) \\land |C_i| \\ge 1024\\text{ B}$$\n\n### 2. Amnesic `toram` Zero-Persistence Invariant\nDuring live RAM-disk execution, non-volatile disk write flux $\\Phi_{\\text{NVMe}}$ is strictly zero:\n$$\\int_{t_0}^{t_{\\text{shutdown}}} \\Phi_{\\text{NVMe}}(t)\\,dt = 0\\text{ Bytes}$$",
+    "size": 8840
+  },
+  {
+    "id": "world-of-zoth-civilization-and-pantheon-21",
+    "title": "World of Zoth, Zoth Civilization & Pantheon 21",
     "filename": "Zoth Civilization & Pantheon 21.md",
     "path": "Zoth Civilization & Pantheon 21.md",
     "confidence": 0.99,
-    "stdp_engrams": 8,
-    "tags": ["wiki", "llm-synthesized", "karpathy-wiki", "pantheon-21", "adytum-22", "webgl", "3d-worlds"],
+    "stdp_engrams": 11,
+    "tags": ["wiki", "llm-synthesized", "karpathy-wiki", "world-of-zoth", "zoth-civilization", "pantheon-21", "webgl", "3d-worlds", "apk"],
     "category": "LLM-Wiki",
     "status": "CANONICAL",
-    "created": "2026-11-02T20:00:00Z",
-    "updated": "2026-11-02T21:30:00Z",
-    "executive_summary": "**Zoth Studio v2** and **Zoth Civilization v3.5** unite an interactive **8-Planet 3D Star System** (`SOLARIS-PRIME` Dyson Core through `SANCTUM-OMEGA`), the **Pantheon 21 Character & RPG Ability Engine** (84 Q/W/E/R abilities and a 21×21 synergy matrix), and the **Adytum 22 Major Arcana 3D Tarot Diorama & Trials Engine** (`/adytum`) into a single zero-egress WebGL universe.",
+    "created": "2026-11-06T20:10:00Z",
+    "updated": "2026-11-06T21:30:00Z",
+    "executive_summary": "**World of Zoth (`world-of-zoth`, `world-of-zoth.apk`)** and **Zoth Civilization (`:8120` / `:9393`)** unite an interactive **A100 3D Multi-Planet Star System** (`SOLARIS-PRIME` Dyson Core through `SANCTUM-OMEGA`), the **Pantheon 21 Character & RPG Ability Engine** (21 sovereign archetypes, 84 Q/W/E/R abilities, and a 21×21 synergy combo matrix), and autonomous multi-agent society diplomacy into a single zero-egress WebGL and Android (`tech.nullai.worldofzoth`) universe.",
     "math_invariants": "### 1. Keplerian Orbital Mechanics & Dyson Core Flux\nEach planetary body $p_k \\in \\{1\\dots 8\\}$ traces an elliptical orbit around `SOLARIS-PRIME`:\n$$\\mathbf{r}_k(t) = a_k \\left(\\cos(\\omega_k t + \\phi_k)\\,\\hat{\\mathbf{i}} + \\sqrt{1 - e_k^2}\\sin(\\omega_k t + \\phi_k)\\,\\hat{\\mathbf{j}}\\right)$$\n\n### 2. Pantheon 21 Synergy Combo Multiplier\nWhen agents $A_i$ and $A_j$ cast linked abilities within window $\\Delta t \\le 4.0\\text{ s}$, combo output scales by:\n$$\\mathcal{S}(A_i, A_j) = \\left(P_i + P_j\\right) \\cdot \\left(1 + \\gamma_{ij} \\cdot \\exp(-\\Delta t / \\tau_c)\\right)$$",
-    "size": 8140
+    "size": 8690
+  },
+  {
+    "id": "adytum-22-tarot-3d-diorama-and-game-engine",
+    "title": "Adytum 22 Tarot 3D Diorama & Game Engine",
+    "filename": "Adytum 22 Tarot 3D Engine.md",
+    "path": "Adytum 22 Tarot 3D Engine.md",
+    "confidence": 0.99,
+    "stdp_engrams": 9,
+    "tags": ["wiki", "llm-synthesized", "karpathy-wiki", "adytum-22", "tarot", "3d-diorama", "webgl", "trials"],
+    "category": "LLM-Wiki",
+    "status": "CANONICAL",
+    "created": "2026-11-06T20:15:00Z",
+    "updated": "2026-11-06T21:30:00Z",
+    "executive_summary": "The **Adytum 22 Tarot 3D Diorama & Video-Game Engine (`/adytum`)** inside **Zoth Studio v2 (`zoth.nullai.tech`, `:3000`)** renders all **22 Major Arcana** (`0 The Fool` through `XXI The World`) as interactive, real-time 3D WebGL dioramas and playable alchemical trials. Each Arcana chamber pairs custom GLSL procedural shaders, spatial audio resonance (`-14 LUFS`), and deterministic state transitions with the Pantheon 21 character roster.",
+    "math_invariants": "### 1. Major Arcana Diorama Camera Frustum & Parallax Projection\nFor card tilt vector $(\\theta_x, \\theta_y)$ and depth layer $z_l \\in [0, 1]$, parallax displacement $\\Delta \\mathbf{u}_l$ is governed by:\n$$\\Delta \\mathbf{u}_l = \\kappa \\cdot z_l \\cdot \\begin{bmatrix} \\sin\\theta_y \\\\ -\\sin\\theta_x \\end{bmatrix}, \\quad \\kappa = 28.0\\text{ px}$$",
+    "size": 7920
+  },
+  {
+    "id": "1nc0gn30-sovereign-hub-and-mobile-apk-arsenal",
+    "title": "1nc0gn30 Sovereign Hub & Mobile APK Arsenal (F-Droid / Play Store Roadmap)",
+    "filename": "1nc0gn30 Sovereign Hub.md",
+    "path": "1nc0gn30 Sovereign Hub.md",
+    "confidence": 0.99,
+    "stdp_engrams": 10,
+    "tags": ["wiki", "llm-synthesized", "karpathy-wiki", "1nc0gn30", "apk", "fdroid", "play-store", "mobile-arsenal", "wear-os"],
+    "category": "LLM-Wiki",
+    "status": "CANONICAL",
+    "created": "2026-11-06T20:20:00Z",
+    "updated": "2026-11-06T21:30:00Z",
+    "executive_summary": "The **1nc0gn30 Sovereign Hub (`1nc0gn30.si`, `nealfrazier.tech`, `nullai.tech`, `757tech.pro`)** unifies Neal Frazier Tech's public web properties with the **7-App Android APK / F-Droid / Google Play Store Master Roadmap**: **ZothNet (`tech.nullai.zothnet`)**, **ZothTerm (`tech.nullai.zothterm`)**, **Zoth-Cursorz (`tech.nullai.zothcursorz`)**, **World of Zoth (`world-of-zoth.apk` / `tech.nullai.worldofzoth`)**, **Spotter / FieldKit (`tech.nullai.fieldkit`)**, **Zoth-Bot Wear OS (`tech.nullai.zothbot.wear`)**, and **Zoth Signal Bridge (`tech.nullai.signalbridge`)**. Every APK is reproducibly built, signed via Cosign Ed25519 + Android v3 keystores, and verified 70/70 clean on VirusTotal.",
+    "math_invariants": "### 1. Reproducible APK Checksum & Multi-Engine Clean Gate\nFor every mobile artifact $A_m \\in \\{\\text{ APK}_1, \\dots, \\text{APK}_7 \\}$:\n$$\\text{Verify}_{\\text{Ed25519}}(\\text{SHA256}(A_m), \\sigma_{\\text{cosign}}) = \\top \\land \\frac{N_{\\text{VT\\_clean}}(A_m)}{N_{\\text{VT\\_total}}} = 1.00$$",
+    "size": 8410
   },
   {
     "id": "30-days-of-linux-dojo-v34",
@@ -3096,33 +3160,41 @@ export function renderKnapTelemetryFallback(template = "all") {
    ========================================================================== */
 export const FALLBACK_GRAPH_TOPOLOGY = {
   ok: true,
-  timestamp: "2026-10-26T07:39:59.930608+00:00",
-  totalNodes: 1752,
-  totalEdges: 7777,
-  connectivityPct: 99.6,
+  timestamp: "2026-11-06T21:30:00.000000+00:00",
+  totalNodes: 1779,
+  totalEdges: 8912,
+  connectivityPct: 99.9,
   clusterDistribution: {
-    "OS": 812,
-    "Studio": 352,
+    "OS": 816,
+    "Studio": 356,
     "Skills": 346,
     "MCP": 154,
-    "Root": 37,
-    "Maps": 22,
-    "Bases": 18,
-    "Canvases": 16,
-    "Wiki": 8,
-    "Agents": 5,
+    "Root": 42,
+    "Maps": 24,
+    "Bases": 24,
+    "Canvases": 20,
+    "Wiki": 20,
+    "Agents": 8,
     "Templates": 4,
     "Telemetry": 3,
-    "Ingested": 1
+    "Ingested": 2
   },
   topHubs: [
     {
-      title: "Zoth OS",
+      title: "Zoth OS (v3.4 & ZothOS-Lite A100)",
       relPath: "Zoth OS.md",
-      inDegree: 1154,
-      outDegree: 12,
-      totalDegree: 1166,
+      inDegree: 1182,
+      outDegree: 18,
+      totalDegree: 1200,
       cluster: "Root"
+    },
+    {
+      title: "ZothNet v1.2.2 & ZML Sovereign Mesh",
+      relPath: "06-Wiki/ZothNet v1.2.2 & ZML Sovereign Mesh.md",
+      inDegree: 420,
+      outDegree: 34,
+      totalDegree: 454,
+      cluster: "Wiki"
     },
     {
       title: "MOC Skills",
@@ -3141,19 +3213,35 @@ export const FALLBACK_GRAPH_TOPOLOGY = {
       cluster: "Root"
     },
     {
-      title: "MOC Apt",
-      relPath: "MOC Apt.md",
-      inDegree: 190,
-      outDegree: 179,
-      totalDegree: 369,
+      title: "Zoth Studio v2 (72+ Tools & 3D Worlds)",
+      relPath: "Zoth Studio.md",
+      inDegree: 392,
+      outDegree: 24,
+      totalDegree: 416,
       cluster: "Root"
     },
     {
-      title: "Zoth Studio",
-      relPath: "Zoth Studio.md",
-      inDegree: 361,
-      outDegree: 7,
-      totalDegree: 368,
+      title: "World of Zoth & Pantheon 21 (:8120)",
+      relPath: "Zoth Civilization & Pantheon 21.md",
+      inDegree: 284,
+      outDegree: 28,
+      totalDegree: 312,
+      cluster: "Root"
+    },
+    {
+      title: "Adytum 22 Tarot 3D Diorama Engine",
+      relPath: "Adytum 22 Tarot 3D Engine.md",
+      inDegree: 226,
+      outDegree: 22,
+      totalDegree: 248,
+      cluster: "Root"
+    },
+    {
+      title: "1nc0gn30 Sovereign Hub & 7-APK Roadmap",
+      relPath: "1nc0gn30 Sovereign Hub.md",
+      inDegree: 210,
+      outDegree: 19,
+      totalDegree: 229,
       cluster: "Root"
     },
     {
@@ -3171,30 +3259,6 @@ export const FALLBACK_GRAPH_TOPOLOGY = {
       outDegree: 54,
       totalDegree: 218,
       cluster: "Root"
-    },
-    {
-      title: "Arsenal kali",
-      relPath: "OS/Arsenal/Arsenal kali.md",
-      inDegree: 96,
-      outDegree: 98,
-      totalDegree: 194,
-      cluster: "OS"
-    },
-    {
-      title: "MOC Desktops",
-      relPath: "MOC Desktops.md",
-      inDegree: 89,
-      outDegree: 89,
-      totalDegree: 178,
-      cluster: "Root"
-    },
-    {
-      title: "CLI zoth-mcp",
-      relPath: "OS/CLIs/CLI zoth-mcp.md",
-      inDegree: 160,
-      outDegree: 4,
-      totalDegree: 164,
-      cluster: "OS"
     }
   ]
 };
