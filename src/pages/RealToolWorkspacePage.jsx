@@ -94,6 +94,7 @@ import PixelCastGodModeTool from '../components/tools/PixelCastGodModeTool';
 import ZothPillGodModeTool from '../components/tools/ZothPillGodModeTool';
 import ZothOSLiteGodModeTool from '../components/tools/ZothOSLiteGodModeTool';
 import ZothnetGodModeTool from '../components/tools/ZothnetGodModeTool';
+import WcagContrastGuard from '../components/tools/WcagContrastGuard';
 import SovereignToolOutputWorkbench from '../components/tools/SovereignToolOutputWorkbench';
 import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
 import {
@@ -144,6 +145,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'agent-egress-sentinel': AgentEgressSentinelGodModeTool,
   'agent-mock-twin': AgentMockTwinGodModeTool,
   'agent-prompt-firewall': AgentPromptFirewallGodModeTool,
+  'wcag-contrast-guard': WcagContrastGuard,
   'agent-flight-recorder': AgentFlightRecorderGodModeTool,
   'agent-capsule-jail': AgentCapsuleJailGodModeTool,
   'agent-policy-auditor': AgentPolicyAuditorGodModeTool,
