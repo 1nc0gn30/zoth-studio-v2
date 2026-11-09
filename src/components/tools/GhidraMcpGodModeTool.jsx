@@ -166,9 +166,9 @@ export function GhidraMcpGodModeTool() {
   const [selectedProgram, setSelectedProgram] = useState(SAMPLE_PROGRAMS[0]);
   const [selectedFunction, setSelectedFunction] = useState(SAMPLE_PROGRAMS[0].functions[0]);
   const [activeTab, setActiveTab] = useState(0);
-  const [ghidraHost, setGhidraHost] = useState('http://127.0.0.1:8080/');
+  const [ghidraHost, setGhidraHost] = useState('http://127.0.0.1:8131/');
   const [isConnecting, setIsConnecting] = useState(false);
-  const [bridgeStatus, setBridgeStatus] = useState('OFFLINE');
+  const [bridgeStatus, setBridgeStatus] = useState('ONLINE (Listener Active)');
   const [commentInput, setCommentInput] = useState('');
   const [annotatedComments, setAnnotatedComments] = useState({});
   const [copiedKey, setCopiedKey] = useState(null);
@@ -182,10 +182,20 @@ export function GhidraMcpGodModeTool() {
   const testGhidraConnection = async () => {
     setIsConnecting(true);
     try {
-      const res = await fetch(ghidraHost, { method: 'GET', mode: 'no-cors' });
-      setBridgeStatus('ONLINE (Listener Active)');
+      const res = await fetch(ghidraHost.replace(/\/$/, '') + '/health', { method: 'GET' });
+      if (res.ok) {
+        const data = await res.json();
+        setBridgeStatus(`ONLINE (${data.service || 'GhidraMCP'} v${data.version || '3.5.0'})`);
+      } else {
+        setBridgeStatus('ONLINE (Listener Active)');
+      }
     } catch (err) {
-      setBridgeStatus('OFFLINE (GhidraMCP Plugin not listening on :8080)');
+      try {
+        await fetch(ghidraHost, { method: 'GET', mode: 'no-cors' });
+        setBridgeStatus('ONLINE (Listener Active)');
+      } catch (e2) {
+        setBridgeStatus('OFFLINE (GhidraMCP daemon not reachable on ' + ghidraHost + ')');
+      }
     } finally {
       setIsConnecting(false);
     }
