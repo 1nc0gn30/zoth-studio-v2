@@ -95,6 +95,7 @@ import ZothPillGodModeTool from '../components/tools/ZothPillGodModeTool';
 import ZothOSLiteGodModeTool from '../components/tools/ZothOSLiteGodModeTool';
 import ZothnetGodModeTool from '../components/tools/ZothnetGodModeTool';
 import WcagContrastGuard from '../components/tools/WcagContrastGuard';
+import ZothOsintGodModeTool from '../components/tools/ZothOsintGodModeTool';
 import SovereignToolOutputWorkbench from '../components/tools/SovereignToolOutputWorkbench';
 import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
 import {
@@ -177,6 +178,8 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'mcp-lens': McpLensGodModeTool,
   'agent-budget-sentinel': AgentBudgetSentinelGodModeTool,
   'agent-gods-eye': AgentGodsEyeGodModeTool,
+  'zoth-osint': ZothOsintGodModeTool,
+  'osint-scout-skill': ZothOsintGodModeTool,
   'zoth-webgen': ZothFoundryGodModeTool,
   'zoth-swarm-multiplexer': SwarmCivilizationGodModeTool,
   'zoth-civilization': SwarmCivilizationGodModeTool,

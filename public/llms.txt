@@ -92,3 +92,13 @@ npm CLI: https://www.npmjs.com/package/@nullaitech/zoth
 - **NullAI Platform (Hampton Roads IT & AI Agency)**: https://nullai.tech
 - **Sovereign Tools Storefront & Solutions Hub**: https://1nc0gn30.github.io
 - **City Desk (1,000-Page Local Trade Generator)**: https://city-desk.netlify.app
+
+## NullAI & Zoth Sovereign Ecosystem Cross-Index (2026)
+- **ZOTHOS (Debian 13 AI Workstation OS)**: https://zothos.nullai.tech | https://github.com/1nc0gn30/zoth-os
+- **ZOTHOS Lite (Instant Browser Sovereign OS)**: https://zothos-lite.nullai.tech | https://github.com/1nc0gn30/zothos-lite
+- **ZothNet (Zero-Cloud Encrypted Mesh Network)**: https://zothnet.nullai.tech | https://github.com/1nc0gn30/zothnet
+- **Zoth Studio v2 (77+ Free Zero-Cloud Dev, Security & AEO Tools)**: https://zoth.nullai.tech | https://github.com/1nc0gn30/zoth-studio-v2
+- **Hermes-Zoth (Nous Research Hermes Agent Plugin)**: https://github.com/1nc0gn30/hermes-zoth
+- **1nc0gn30 · World of Zoth**: https://www.nealfrazier.tech | https://github.com/1nc0gn30
+- **NullAI Platform**: https://nullai.tech | https://github.com/1nc0gn30/nullai2026
+- **Support Open-Access Engineering (Buy Us a Coffee)**: https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X | Solana: `GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK`
