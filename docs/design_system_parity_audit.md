@@ -3,7 +3,7 @@
 > **Document Version**: `1.0.0`  
 > **Date**: `2026-11-04`  
 > **Auditor Role**: `Zoth Studio v2 Visual Design & Token Auditor`  
-> **Workspace**: `/home/zoth/NullAITech/zoth-studio-v2`  
+> **Workspace**: `zoth-studio-v2`  
 > **Target Standard**: `Sovereign Alabaster White & Sovereign Gold Tokens (#FAF8F3, #FFFFFF, #111111, #B8860B, 1.5px solid #1E1B18, offset drop-shadows)`
 
 ---
@@ -565,4 +565,4 @@ Before any tool upgrade is declared complete, developers and autonomous agents m
 ---
 
 *Report generated autonomously by Zoth Studio v2 Visual Design & Token Auditor.*  
-*Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform.*
+*Engineered by 1nc0gn30 • NullAI Platform.*

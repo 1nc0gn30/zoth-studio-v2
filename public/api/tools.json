@@ -1,7 +1,7 @@
 {
   "schema": "zoth/tools-static/v1",
-  "generated_at": "2026-11-01T14:59:00.000Z",
-  "tool_count": 72,
+  "generated_at": "2026-11-10T16:44:33.000Z",
+  "tool_count": 77,
   "tools": [
     {
       "id": "pixel-cast",
@@ -568,7 +568,7 @@
       "name": "Anderson Security Sentinel",
       "description": "Autonomous biometric laptop perimeter defense, WiFi X-Ray RF tomography, USB tripwire guard, and thermal FLIR optics. Free to use; tips optional.",
       "category": "Security & OpSec",
-      "github": "https://github.com/1nc0gn30/anderson-security-sentinel",
+      "github": "https://github.com/1nc0gn30/sentinel-security-engine",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/anderson-security-sentinel/",
       "version": "2.5.0",
@@ -702,6 +702,26 @@
       ],
       "port": 8098,
       "local_url": "http://127.0.0.1:8098"
+    },
+    {
+      "id": "wcag-contrast-guard",
+      "name": "WCAG & APCA Contrast Guard Studio",
+      "description": "WCAG 2.2 Level AA/AAA, APCA contrast algorithm, colorblindness simulation, focus indicators, and harmonic palette generation.",
+      "category": "accessibility",
+      "github": "https://github.com/1nc0gn30/wcag-contrast-guard",
+      "published": true,
+      "studio_url": "https://zoth.nullai.tech/tools/wcag-contrast-guard/",
+      "version": "2.5.0",
+      "pull": "python3 -m wcag_contrast_guard.ui_server --port 8150  # or: wcag-contrast-guard --status",
+      "execution_type": "browser",
+      "runtimes": [
+        "python",
+        "node",
+        "cli",
+        "zero-egress"
+      ],
+      "port": 8150,
+      "local_url": "http://127.0.0.1:8150"
     },
     {
       "id": "agent-flight-recorder",
@@ -845,7 +865,7 @@
     },
     {
       "id": "agent-gods-eye",
-      "name": "Agent God's Eye",
+      "name": "Agent God",
       "description": "Autonomous zero-dependency Shodan OSINT tactical radar, 3D kinetic planetary attack surface reconnaissance, and threat scoring.",
       "category": "Security & Recon",
       "github": "https://github.com/1nc0gn30/agent-gods-eye",
@@ -1164,15 +1184,35 @@
       "local_url": "http://127.0.0.1:8085"
     },
     {
-      "id": "bolt.diy",
-      "name": "Zoth Bolt",
-      "description": "Flagship Full-Stack AI Web & Motion Architect on 127.0.0.1:5173. Supports 23+ AI providers, local CLI agents (AGY, Hermes, Grok, Claude, OpenCode, Cline, Aider), 6 Motion Edit templates, 200k+ free SVG & 16-bit Pixel Art icons, MCP asset bridge, and live WebContainers.",
-      "category": "Autonomous Web",
-      "github": "https://github.com/stackblitz-labs/bolt.diy",
+      "id": "zoth-osint",
+      "name": "Zoth OSINT Workstation & Masterclass",
+      "description": "Sovereign OSINT investigation workstation, 10-module interactive masterclass, subdomain takeover auditing across 23+ SaaS fingerprints, zero-knowledge HIBP k-anonymity breach intel, and MITRE ATT&CK CTI matrix mapping with STIX 2.1 & Obsidian Canvas export.",
+      "category": "Security & Recon",
+      "github": "https://github.com/1nc0gn30/zoth-osint",
       "published": true,
-      "studio_url": "https://zoth.nullai.tech/tools/bolt.diy/",
+      "studio_url": "https://zoth.nullai.tech/tools/zoth-osint/",
+      "version": "4.0.0",
+      "pull": "cd ~/NullAITech/zoth-osint && python3 server.py --host 127.0.0.1 --port 8149  # or: zoth-osint --help",
+      "execution_type": "hybrid",
+      "runtimes": [
+        "python",
+        "node",
+        "cli",
+        "zero-egress"
+      ],
+      "port": 8149,
+      "local_url": "http://127.0.0.1:8149"
+    },
+    {
+      "id": "zoth-bolt",
+      "name": "Zoth Bolt",
+      "description": "Flagship Sovereign Full-Stack AI Web & Motion Architect (Zoth Bolt / bolt.diy) on 127.0.0.1:5173. Supports 19+ AI providers, local Ollama & CLI agents (AGY, Hermes, Grok, Claude, OpenCode, Cline, Aider), 6 Motion Edit templates, 200k+ SVG & Pixel Art icons, TUI (`zoth-bolt-tui`), and Electron Desktop app (`zoth-bolt desktop`).",
+      "category": "Autonomous Web",
+      "github": "https://github.com/1nc0gn30/zoth-webgen",
+      "published": true,
+      "studio_url": "https://zoth.nullai.tech/tools/zoth-bolt/",
       "version": "3.5.0",
-      "pull": "cd ~/NullAITech/bolt.diy && python3 server.py --port 5173  # or: bolt.diy --status",
+      "pull": "zoth-bolt dev  # or: zoth-bolt desktop | zoth-bolt-tui | zoth-bolt --status",
       "execution_type": "local_cli",
       "runtimes": [
         "python",
@@ -1442,6 +1482,66 @@
       ],
       "port": 8823,
       "local_url": "http://127.0.0.1:8823"
+    },
+    {
+      "id": "zoth-math-pillar",
+      "name": "Zoth Math Pillar HUD",
+      "description": "Real-time 4-Pillar Mathematical Security & Compute Telemetry HUD (L0 Kernel Hardware, L1 Crypto Vault, L2 Network Enclave, L3 Agent Runtime) with Compact Pill mode, Electron desktop overlay, and Braille TUI.",
+      "category": "Security & Enclave",
+      "github": "https://github.com/1nc0gn30/zoth-os/tree/main/config/includes.chroot/opt/zoth-math-pillar",
+      "published": true,
+      "studio_url": "https://zoth.nullai.tech/tools/zoth-math-pillar/",
+      "version": "2.0.0",
+      "pull": "zoth-math-pillar desktop  # or: zoth-math-pillar --pill | zoth-math-pillar-tui | zoth-math-pillar --status",
+      "execution_type": "local_cli",
+      "runtimes": [
+        "python",
+        "node",
+        "cli",
+        "zero-egress"
+      ],
+      "port": 9995,
+      "local_url": "http://127.0.0.1:9995"
+    },
+    {
+      "id": "zothos-lite",
+      "name": "ZothOS-Lite v1.1 (Amnesic Monotone OS)",
+      "description": "1-Bit Monotone Amnesic Security & AI Workstation (toram noswap) with AZOTH Embodied Braille AI, A100 80GB Foundry, 21 Pantheon Agent Rigs, 6 Helios-Zoth Planets, 22 Adytum Tarot 3D Dioramas, and 45 Kali/Parrot CLI Tools on :8145.",
+      "category": "Hardware & OS",
+      "github": "https://github.com/1nc0gn30/zothos-lite",
+      "published": true,
+      "studio_url": "https://zoth.nullai.tech/tools/zothos-lite/",
+      "version": "1.1.0",
+      "pull": "zothos-lite desktop  # or: zothos-lite-tui | zothos-lite --status",
+      "execution_type": "local_cli",
+      "runtimes": [
+        "python",
+        "node",
+        "cli",
+        "zero-egress"
+      ],
+      "port": 8145,
+      "local_url": "http://127.0.0.1:8145"
+    },
+    {
+      "id": "zothnet",
+      "name": "ZothNet (Sovereign Darknet Mesh)",
+      "description": "Autonomous zero-DNS darknet mesh with Sphinx 1,280B onion mixnet, Vaelor feeless L1 DAG, Kademlia DHT alpha=3, RFC 5389 STUN NAT traversal, and CAS parallel swarm on :9900 and UDP :42069.",
+      "category": "Swarm & Core",
+      "github": "https://github.com/1nc0gn30/zothnet",
+      "published": true,
+      "studio_url": "https://zoth.nullai.tech/tools/zothnet/",
+      "version": "1.2.0",
+      "pull": "zothnet run --alias ",
+      "execution_type": "local_cli",
+      "runtimes": [
+        "python",
+        "node",
+        "cli",
+        "zero-egress"
+      ],
+      "port": 9900,
+      "local_url": "http://127.0.0.1:9900"
     }
   ]
 }

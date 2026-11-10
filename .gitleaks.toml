@@ -154,7 +154,7 @@ paths = [
   '''(?:^|/)src/pages/ZothOSPage\.jsx$''',
   '''(?:^|/)src/pages/ArsenalPage\.jsx$''',
   '''(?:^|/)src/components/ToolOfferLine\.jsx$''',
-  '''(?:^|/)src/components/tools/.*GodModeTool\.jsx$''',
+  '''(?:^|/)src/components/tools/.*\.jsx$''',
   '''(?:^|/)RELEASE_NOTES_v2\.2\.0\.md$''',
   '''(?:^|/)src/pages/ZothOSShowcasePage\.jsx$''',
   '''(?:^|/)src/components/SovereignFunnel\.jsx$''',

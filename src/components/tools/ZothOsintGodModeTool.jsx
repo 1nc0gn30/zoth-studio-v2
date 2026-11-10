@@ -506,7 +506,7 @@ export default function ZothOsintGodModeTool({ tool, manifest }) {
                 MCP SERVER STDIO COMMAND:
               </Typography>
               <Typography variant="body2" sx={{ fontFamily: mono, color: '#fff' }}>
-                python3 /home/zoth/NullAITech/zoth-osint/mcp_server.py
+                python3 -m zoth_osint.mcp_server
               </Typography>
             </Box>
           </Stack>
@@ -517,7 +517,7 @@ export default function ZothOsintGodModeTool({ tool, manifest }) {
       <Box sx={{ mt: 3, pt: 2, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="space-between" alignItems="center">
           <Typography variant="caption" sx={{ fontFamily: mono, color: '#777' }}>
-            Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform • 100% Free & Open-Access
+            Engineered by 1nc0gn30 • NullAI Platform • 100% Free & Open-Access
           </Typography>
           <Stack direction="row" spacing={1.5} alignItems="center">
             <Button
