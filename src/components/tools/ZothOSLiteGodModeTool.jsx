@@ -14,29 +14,28 @@ import CheckIcon from '@mui/icons-material/Check';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import CodeIcon from '@mui/icons-material/Code';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
-const DESKTOP_SCENES = [
-  { id: 'torus-monolith', name: 'Torus Monolith (1-Bit Bayer 8x8)', glyph: '⣿', desc: 'Tails-style RAM-only (`toram noswap`) 1-Bit monotone ASCII & Braille desktop.' },
-  { id: 'helios-planets', name: 'Helios-Zoth 6-Planet System', glyph: '🪐', desc: '6 procedural GLB planetary worlds with real-time orbital mechanics.' },
-  { id: 'tarot-sanctum', name: 'Adytum 22 Tarot 3D Sanctum', glyph: '🃏', desc: '22 Hermetic Arcana 3D dioramas paired with the 21 Pantheon Agent Rigs.' },
-  { id: 'cyber-cathedral', name: 'A100 80GB Foundry Cathedral', glyph: '⚡', desc: 'Local qwen3.8:27b + gemma3:27b + FLUX.1 + LTX-Video 2B compute enclave.' },
+const OS_PILLARS = [
+  { id: 'amnesic', name: 'Amnesic RAM Hygiene', glyph: '🛡️', desc: 'Debian 13 boots via toram noswap. Boot USB unmounts; power-off wipes RAM with 0 trace.' },
+  { id: 'persistence', name: 'USB & Cloud Persistence', glyph: '💾', desc: 'Auto-mounts external SSDs at /media/$USER/*. Syncs to cloud drives via rclone.' },
+  { id: 'ai-swarm', name: '42+ Model Universal AI', glyph: '🤖', desc: 'Universal AI execution on Intel, AMD, NVIDIA, or CPU across 8 major frontier providers.' },
+  { id: 'zothnet', name: 'ZothNet Encrypted Mesh', glyph: '🌐', desc: 'Zero-centralization P2P communication via WireGuard, Yggdrasil, and onion routing.' },
 ];
 
-const CORE_PACKAGES = [
-  { id: 'envguard', bin: 'zoth-envguard', name: 'EnvGuard Secrets Vault', role: 'AES-256-GCM .env vault & Shannon scanner' },
-  { id: 'ghostbyte', bin: 'zoth-ghostbyte', name: 'GhostByte RAM Enclave', role: 'Volatile tmpfs + mat2 metadata shredder' },
-  { id: 'hexstrike', bin: 'zoth-hexstrike', name: 'HexStrike Net Sentinel', role: 'ELF PIE/RELRO auditor + Tor kill-switch' },
-  { id: 'vaelor', bin: 'zoth-node-lite', name: 'Vaelor L1 Cold Signer', role: 'Ed25519 air-gapped lattice cold wallet' },
-  { id: 'cot', bin: 'zoth-cot', name: 'Chain-of-Thoughts DAG', role: 'Deterministic local reasoning & MCP server' },
-  { id: 'kali-parrot', bin: 'anonsurf / checksec', name: '45 Kali/Parrot CLI Tools', role: 'Pre-armed offensive & defensive binary suite' },
+const DEV_TOOLS = [
+  { id: 'swarm', name: 'Multi-Model Swarm Console', role: 'Run 42+ frontier models across 8 providers with client-side key encryption.' },
+  { id: 'image-viewer', name: 'Precision Image Viewer', role: 'In-browser zoom, pan, rotation, brightness/contrast filters, and EXIF extraction.' },
+  { id: 'av-player', name: 'Precision AV Player', role: 'Frame-accurate scrubbing, 32-band real-time audio spectrum, and snapshot export.' },
+  { id: 'packager', name: 'Storage & Cloud Packager', role: 'Client-side zero-dependency PKZIP compressor with SHA256 integrity manifest.' },
 ];
 
 export default function ZothOSLiteGodModeTool() {
-  const [selectedScene, setSelectedScene] = useState(DESKTOP_SCENES[0]);
+  const [selectedPillar, setSelectedPillar] = useState(OS_PILLARS[0]);
   const [playing, setPlaying] = useState(true);
   const [copiedKey, setCopiedKey] = useState(null);
   const [liveStatus, setLiveStatus] = useState(null);
@@ -87,8 +86,8 @@ export default function ZothOSLiteGodModeTool() {
       ctx.save();
       ctx.scale(dpr, dpr);
 
-      // Pure 1-Bit Monotone Black & Crisp Ivory Dither Aesthetic
-      ctx.fillStyle = '#030305';
+      // Monotone Black & Crisp Cyan/Ivory Dither Aesthetic
+      ctx.fillStyle = '#05070D';
       ctx.fillRect(0, 0, cw, ch);
 
       const cx = cw * 0.5;
@@ -99,31 +98,31 @@ export default function ZothOSLiteGodModeTool() {
       ctx.textBaseline = 'middle';
       const glyphs = ' .:-=+*#%@⣿';
 
-      const R1 = 68;
-      const R2 = 32;
+      const R1 = 70;
+      const R2 = 34;
       for (let rx = -140; rx <= 140; rx += 14) {
         for (let ry = -95; ry <= 95; ry += 14) {
           const d = Math.hypot(rx, ry);
-          const ringWave = Math.cos((d - R1) * 0.085 - t * 2.4) * Math.exp(-Math.abs(d - R1) / (R2 * 1.4));
+          const ringWave = Math.cos((d - R1) * 0.085 - t * 2.2) * Math.exp(-Math.abs(d - R1) / (R2 * 1.4));
           const val = Math.max(0, Math.min(1, (ringWave + 0.55) * 0.75));
           const gIdx = Math.floor(val * (glyphs.length - 1));
           if (gIdx > 1) {
-            ctx.fillStyle = gIdx > 7 ? '#F8FAFC' : 'rgba(226, 232, 240, 0.48)';
+            ctx.fillStyle = gIdx > 7 ? '#38BDF8' : 'rgba(226, 232, 240, 0.42)';
             ctx.fillText(glyphs[gIdx], cx + rx, cy + ry);
           }
         }
       }
 
       // Top Monotone Taskbar
-      ctx.fillStyle = '#0F1117';
+      ctx.fillStyle = '#0F172A';
       ctx.fillRect(0, 0, cw, 28);
       ctx.font = `700 10px ${mono}`;
       ctx.fillStyle = '#F8FAFC';
       ctx.textAlign = 'left';
-      ctx.fillText(`⣿ ZOTHOS-LITE v1.1 (TORAM NOSWAP) // SCENE: ${selectedScene.id.toUpperCase()}`, 12, 16);
-      ctx.fillStyle = '#34D399';
+      ctx.fillText(`⣿ ZOTHOS-LITE v1.2 (TORAM NOSWAP) // TOPIC: ${selectedPillar.id.toUpperCase()}`, 12, 16);
+      ctx.fillStyle = '#38BDF8';
       ctx.textAlign = 'right';
-      ctx.fillText(liveStatus ? 'ENCLAVE :8145 ONLINE' : 'THERMAL GUARD <80°C ARMED', cw - 12, 16);
+      ctx.fillText(liveStatus ? 'DAEMON :8145 ONLINE • 42 AI MODELS' : 'UNIVERSAL HARDWARE ARMED', cw - 12, 16);
 
       ctx.restore();
       raf = requestAnimationFrame(render);
@@ -131,20 +130,21 @@ export default function ZothOSLiteGodModeTool() {
 
     raf = requestAnimationFrame(render);
     return () => cancelAnimationFrame(raf);
-  }, [playing, selectedScene, liveStatus]);
+  }, [playing, selectedPillar, liveStatus]);
 
   const cliSnippet = useMemo(() => {
-    return `# 1. Launch ZothOS-Lite v1.1 Native Electron Workstation (:8145)
-zothos-lite desktop
-
-# 2. Query Live A100 80GB Foundry, 21 Pantheon Agents, 6 Planets & 22 Tarot Keys
+    return `# 1. Query Universal Amnesic OS Status & Hardware Compatibility
 zothos-lite --status
-zothos-lite --pantheon
-zothos-lite --planets
-zothos-lite --tarot
 
-# 3. Run Unicode U+2800 Sub-Pixel Braille TUI & Benchmark Harness
-zothos-lite-tui --status`;
+# 2. List 42+ Supported AI Models Across 8 Frontier Providers
+zothos-lite --models
+zothos-lite --providers
+
+# 3. Read Amnesic & External Persistence Operating Guide
+zothos-lite --guide
+
+# 4. List Built-In In-Browser Dev Utilities
+zothos-lite --tools`;
   }, []);
 
   const handleCopy = (key, text) => {
@@ -159,8 +159,8 @@ zothos-lite-tui --status`;
       sx={{
         borderRadius: 3,
         overflow: 'hidden',
-        bgcolor: '#050608',
-        border: '1px solid rgba(248, 250, 252, 0.28)',
+        bgcolor: '#05070D',
+        border: '1px solid rgba(56, 189, 248, 0.25)',
         boxShadow: '0 20px 60px rgba(0,0,0,0.85)',
         mb: 4,
       }}
@@ -169,8 +169,8 @@ zothos-lite-tui --status`;
         sx={{
           px: { xs: 2, md: 3 },
           py: 2,
-          borderBottom: '1px solid rgba(255,255,255,0.1)',
-          bgcolor: '#0A0C10',
+          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          bgcolor: '#0B0F19',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -183,9 +183,9 @@ zothos-lite-tui --status`;
             sx={{
               p: 1,
               borderRadius: 2,
-              bgcolor: 'rgba(248,250,252,0.1)',
-              border: '1px solid rgba(248,250,252,0.35)',
-              color: '#F8FAFC',
+              bgcolor: 'rgba(56, 189, 248, 0.1)',
+              border: '1px solid rgba(56, 189, 248, 0.35)',
+              color: '#38BDF8',
               display: 'flex',
             }}
           >
@@ -194,29 +194,46 @@ zothos-lite-tui --status`;
           <Box>
             <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
               <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: '#F8FAFC', letterSpacing: '0.1em' }}>
-                ZOTHOS-LITE v1.1 // 1-BIT MONOTONE AMNESIC WORKSTATION (:8145)
+                ZOTHOS-LITE v1.2 // UNIVERSAL AMNESIC SECURITY OS (:8145)
               </Typography>
               <Chip
-                label="21 PANTHEON • 6 PLANETS • 22 TAROT"
+                label="42+ MODELS • 8 PROVIDERS • UNIVERSAL x86_64"
                 size="small"
                 sx={{
                   height: 20,
                   fontFamily: mono,
                   fontSize: '0.62rem',
                   fontWeight: 800,
-                  bgcolor: 'rgba(52,211,153,0.15)',
-                  color: '#34D399',
-                  border: '1px solid rgba(52,211,153,0.35)',
+                  bgcolor: 'rgba(56, 189, 248, 0.15)',
+                  color: '#38BDF8',
+                  border: '1px solid rgba(56, 189, 248, 0.35)',
                 }}
               />
             </Stack>
             <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mt: 0.3 }}>
-              Tails-Style RAM-Only Security OS (`toram noswap`), AZOTH Embodied Braille AI, A100 80GB Foundry & 45 Kali/Parrot CLI Tools
+              Tails-Style RAM Security (`toram noswap`), 4 Dev Utilities, ZothNet P2P Mesh & Universal Hardware
             </Typography>
           </Box>
         </Box>
 
         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          <Button
+            size="small"
+            variant="outlined"
+            href="https://zothos-lite.nullai.tech"
+            target="_blank"
+            rel="noopener noreferrer"
+            endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              color: '#38BDF8',
+              borderColor: 'rgba(56, 189, 248, 0.4)',
+            }}
+          >
+            Live Site
+          </Button>
           <Button
             size="small"
             variant="outlined"
@@ -230,7 +247,7 @@ zothos-lite-tui --status`;
               borderColor: 'rgba(255,255,255,0.2)',
             }}
           >
-            {playing ? 'Pause Dither' : 'Resume Dither'}
+            {playing ? 'Pause' : 'Resume'}
           </Button>
           <Button
             size="small"
@@ -241,52 +258,53 @@ zothos-lite-tui --status`;
               fontFamily: mono,
               fontSize: '0.7rem',
               fontWeight: 800,
-              bgcolor: '#F8FAFC',
-              color: '#050608',
-              '&:hover': { bgcolor: '#E2E8F0' },
+              bgcolor: '#38BDF8',
+              color: '#05070D',
+              '&:hover': { bgcolor: '#7DD3FC' },
             }}
           >
-            {copiedKey === 'cli' ? 'Copied CLI' : 'Copy ZothOS-Lite CLI'}
+            {copiedKey === 'cli' ? 'Copied CLI' : 'Copy CLI Commands'}
           </Button>
         </Stack>
       </Box>
 
-      <SovereignEyebrow accent="#F8FAFC" right="Hardware & OS">
+      <SovereignEyebrow accent="#38BDF8" right="Hardware & OS">
         {"zothos-lite"}
       </SovereignEyebrow>
       <SovereignBand
         seed={"zothos-lite"}
         eyebrow={"Hardware & OS"}
-        caption={"ZothOS-Lite v1.1 (Amnesic Monotone OS)"}
-        label={"ZothOS-Lite v1.1 — 1-Bit Monotone Amnesic Workstation"}
+        caption={"ZothOS-Lite v1.2 (Universal Sovereign OS)"}
+        label={"ZothOS-Lite v1.2 — Universal Amnesic Security OS & AI Swarm"}
       />
 
       <Grid container>
-        <Grid xs={12} md={7} sx={{ borderRight: { md: '1px solid rgba(255,255,255,0.08)' }, bgcolor: '#030305' }}>
-          <Box sx={{ width: '100%', height: { xs: 280, sm: 340 } }}>
+        <Grid xs={12} md={7} sx={{ borderRight: { md: '1px solid rgba(255,255,255,0.08)' }, bgcolor: '#05070D' }}>
+          <Box sx={{ width: '100%', height: { xs: 260, sm: 320 } }}>
             <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />
           </Box>
 
-          <Box sx={{ p: 2, borderTop: '1px solid rgba(255,255,255,0.08)', bgcolor: '#07090F' }}>
+          <Box sx={{ p: 2, borderTop: '1px solid rgba(255,255,255,0.08)', bgcolor: '#090D18' }}>
             <Grid container spacing={1.5}>
-              {DESKTOP_SCENES.map((s) => {
-                const active = selectedScene.id === s.id;
+              {OS_PILLARS.map((s) => {
+                const active = selectedPillar.id === s.id;
                 return (
                   <Grid xs={12} sm={6} key={s.id}>
                     <Box
-                      onClick={() => setSelectedScene(s)}
+                      onClick={() => setSelectedPillar(s)}
                       sx={{
                         p: 1.3,
                         borderRadius: 1.5,
                         cursor: 'pointer',
-                        bgcolor: active ? 'rgba(248,250,252,0.1)' : 'rgba(255,255,255,0.02)',
-                        border: active ? '1px solid #F8FAFC' : '1px solid rgba(255,255,255,0.08)',
+                        bgcolor: active ? 'rgba(56, 189, 248, 0.12)' : 'rgba(255,255,255,0.02)',
+                        border: active ? '1px solid #38BDF8' : '1px solid rgba(255,255,255,0.08)',
+                        transition: 'all 0.15s ease',
                       }}
                     >
-                      <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 800, color: '#F8FAFC' }}>
+                      <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: active ? '#38BDF8' : '#F8FAFC' }}>
                         {s.glyph} {s.name}
                       </Typography>
-                      <Typography sx={{ fontSize: '0.68rem', color: '#94A3B8', mt: 0.4 }}>
+                      <Typography sx={{ fontSize: '0.67rem', color: '#94A3B8', mt: 0.4, lineHeight: 1.4 }}>
                         {s.desc}
                       </Typography>
                     </Box>
@@ -297,33 +315,26 @@ zothos-lite-tui --status`;
           </Box>
         </Grid>
 
-        <Grid xs={12} md={5} sx={{ p: 2.5, bgcolor: '#090B10', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 2 }}>
+        <Grid xs={12} md={5} sx={{ p: 2.5, bgcolor: '#090D18', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 2 }}>
           <Box>
-            <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, color: '#F8FAFC', mb: 1.2 }}>
-              CORE IMMUTABLE SECURITY & AI PACKAGES
+            <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, color: '#38BDF8', mb: 1.2, letterSpacing: '0.08em' }}>
+              4 IN-BROWSER ZERO-BLOAT DEV UTILITIES
             </Typography>
             <Stack spacing={1}>
-              {CORE_PACKAGES.map((pkg) => (
+              {DEV_TOOLS.map((pkg) => (
                 <Box
                   key={pkg.id}
                   sx={{
-                    p: 1,
+                    p: 1.1,
                     borderRadius: 1.5,
                     bgcolor: 'rgba(255,255,255,0.02)',
                     border: '1px solid rgba(255,255,255,0.07)',
                   }}
                 >
-                  <Stack direction="row" justifyContent="space-between" alignItems="center">
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, color: '#F8FAFC' }}>
-                      {pkg.name}
-                    </Typography>
-                    <Chip
-                      label={pkg.bin}
-                      size="small"
-                      sx={{ height: 18, fontFamily: mono, fontSize: '0.58rem', bgcolor: 'rgba(248,250,252,0.1)', color: '#E2E8F0' }}
-                    />
-                  </Stack>
-                  <Typography sx={{ fontSize: '0.65rem', color: '#94A3B8', mt: 0.2 }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 800, color: '#F8FAFC' }}>
+                    {pkg.name}
+                  </Typography>
+                  <Typography sx={{ fontSize: '0.65rem', color: '#94A3B8', mt: 0.2, lineHeight: 1.35 }}>
                     {pkg.role}
                   </Typography>
                 </Box>
@@ -331,16 +342,16 @@ zothos-lite-tui --status`;
             </Stack>
           </Box>
 
-          <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: '#05060A', border: '1px solid rgba(248,250,252,0.25)' }}>
+          <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: '#05070D', border: '1px solid rgba(56, 189, 248, 0.25)' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.64rem', color: '#F8FAFC', fontWeight: 800 }}>
-                ZOTHOS-LITE CLI & TUI COMMANDS
+              <Typography sx={{ fontFamily: mono, fontSize: '0.64rem', color: '#38BDF8', fontWeight: 800 }}>
+                ZOTHOS-LITE CLI COMMANDS
               </Typography>
               <Button
                 size="small"
                 onClick={() => handleCopy('inline', cliSnippet)}
                 startIcon={copiedKey === 'inline' ? <CheckIcon sx={{ fontSize: 13 }} /> : <CodeIcon sx={{ fontSize: 13 }} />}
-                sx={{ fontFamily: mono, fontSize: '0.62rem', color: '#34D399', py: 0 }}
+                sx={{ fontFamily: mono, fontSize: '0.62rem', color: '#38BDF8', py: 0 }}
               >
                 {copiedKey === 'inline' ? 'Copied' : 'Copy'}
               </Button>
