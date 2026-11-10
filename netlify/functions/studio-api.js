@@ -87,12 +87,6 @@ let COMMUNITY_BENCHMARKS = [
 ];
 
 async function getBlobsStore() {
-  try {
-    const blobs = await import('@netlify/blobs');
-    if (blobs && typeof blobs.getStore === 'function') {
-      return blobs.getStore({ name: 'webgpu-benchmarks', consistency: 'strong' });
-    }
-  } catch {}
   return null;
 }
 

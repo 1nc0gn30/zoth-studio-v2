@@ -13,6 +13,9 @@
   NODE_VERSION = "20"
   NPM_FLAGS = "--no-audit"
 
+[functions]
+  node_bundler = "esbuild"
+
 [images]
   remote_images = ["https://zoth.nullai.tech/.*", "https://*.nullai.tech/.*"]
 
