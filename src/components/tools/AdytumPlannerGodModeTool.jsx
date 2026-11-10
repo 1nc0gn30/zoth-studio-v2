@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { isLocalRuntime } from '../../utils/sovereignRuntime';
 import {
   Box,
   Paper,
@@ -458,6 +459,7 @@ export default function AdytumPlannerGodModeTool() {
         </Box>
 
         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+          {isLocalRuntime() && (
           <Button
             size="small"
             variant="outlined"
@@ -477,6 +479,7 @@ export default function AdytumPlannerGodModeTool() {
           >
             Open :8135 Workstation
           </Button>
+          )}
           <Button
             size="small"
             variant="outlined"

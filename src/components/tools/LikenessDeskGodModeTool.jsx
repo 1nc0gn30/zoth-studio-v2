@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { isLocalRuntime } from '../../utils/sovereignRuntime';
 import {
   Box,
   Paper,
@@ -317,6 +318,7 @@ export default function LikenessDeskGodModeTool() {
                 border: `1px solid ${pipelineStatus.online ? emerald : 'rgba(255,255,255,0.1)'}`
               }}
             />
+            {isLocalRuntime() && (
             <Button
               variant="outlined"
               size="small"
@@ -331,6 +333,7 @@ export default function LikenessDeskGodModeTool() {
             >
               Standalone :9395 ↗
             </Button>
+            )}
           </Stack>
         </Stack>
 

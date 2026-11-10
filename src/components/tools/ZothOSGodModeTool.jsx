@@ -67,8 +67,9 @@ const SOVEREIGN_DAEMONS = [
   { id: 'zoth-ascii-magic', name: 'Zoth ASCII Magic Synth', port: 8089, ring: 'ring3', cmd: '/usr/local/bin/zoth-ascii-magic --serve 8089', category: 'ASCII & Braille', memMb: 29 },
   { id: 'ghidra-mcp', name: 'GhidraMCP Binary Bridge', port: 8080, ring: 'ring1', cmd: '/usr/local/bin/ghidra-mcp --ghidra-server 127.0.0.1:8080', category: 'Reverse Eng', memMb: 112 },
   { id: 'agent-gods-eye', name: "Agent God's Eye Radar", port: 8112, ring: 'ring0', cmd: '/usr/local/bin/agent-gods-eye serve --port 8112', category: 'OSINT Recon', memMb: 46 },
-  { id: 'zoth-civilization', name: 'Zoth Civilization 21-Agent', port: 9393, ring: 'ring2', cmd: '/usr/local/bin/zoth-civilization --no-voice', category: 'Society Sim', memMb: 84 },
+  { id: 'zoth-civilization', name: 'Zoth Civilization v3.0 (23-Agent)', port: 9393, ring: 'ring2', cmd: '/usr/local/bin/zoth-civilization --no-voice', category: 'Society Sim', memMb: 84 },
   { id: 'pod-smart-router', name: 'POD Smart Router', port: 8117, ring: 'ring3', cmd: '/usr/local/bin/pod-smart-router server --port 8117', category: 'Commerce Engine', memMb: 32 },
+  { id: 'zothos-lite', name: 'ZothOS-Lite Amnesic (:8145)', port: 8145, ring: 'ring0', cmd: '/usr/local/bin/zothos-lite --status', category: 'Amnesic Monotone', memMb: 26 },
 ];
 
 export default function ZothOSGodModeTool() {
@@ -251,7 +252,7 @@ export default function ZothOSGodModeTool() {
       ctx.fillStyle = '#D4AF37';
       ctx.textAlign = 'left';
       ctx.fillText(
-        `ZOTH-OS v2.6 KERNEL ENCLAVE // ISOLATION: ${isolationMode.toUpperCase()} // THERMALS: 44.0°C (CAP ${thermalCap}°C)`,
+        `ZOTH-OS v3.4.0 KERNEL ENCLAVE // ISOLATION: ${isolationMode.toUpperCase()} // THERMALS: 44.0°C (CAP ${thermalCap}°C)`,
         12,
         16
       );
@@ -314,12 +315,12 @@ Categories=System;Security;Development;X-ZothOS;
 StartupNotify=true`;
     }
 
-    return `# ZothOS v2.6 Sovereign Live ISO — Hardware-Accelerated QEMU/KVM Enclave Launch
+    return `# ZothOS v3.4.0 Sovereign Live ISO — Hardware-Accelerated QEMU/KVM Enclave Launch
 nice -n ${niceLevel} qemu-system-x86_64 \\
-  -name "ZothOS-v2.6-Sovereign-Enclave" \\
+  -name "ZothOS-v3.4.0-Sovereign-Enclave" \\
   -enable-kvm -machine q35,accel=kvm \\
   -cpu host -smp ${qemuCores} -m ${qemuRamGb}G \\
-  -cdrom ~/NullAITech/zoth-os/zoth-os-v2.6-amd64.iso \\
+  -cdrom ~/NullAITech/zoth-os/zoth-os-v3.4.0-amd64.iso \\
   -boot d -vga virtio -display gtk,gl=on \\
   -netdev user,id=loop0,restrict=${isolationMode === 'airgap' ? 'on' : 'off'},hostfwd=tcp:127.0.0.1:${d.port}-:${d.port},hostfwd=tcp:127.0.0.1:8088-:8088 \\
   -device virtio-net-pci,netdev=loop0`;
@@ -329,6 +330,17 @@ nice -n ${niceLevel} qemu-system-x86_64 \\
     navigator.clipboard?.writeText(text);
     setCopiedKey(key);
     setTimeout(() => setCopiedKey(null), 1800);
+  };
+
+  const handleDownloadUnit = () => {
+    const ext = outputTab === 'systemd' ? 'service' : outputTab === 'desktop' ? 'desktop' : 'sh';
+    const blob = new Blob([generatedPayload], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${selectedDaemon.id}-zothos-v3.4.0.${ext}`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -373,10 +385,10 @@ nice -n ${niceLevel} qemu-system-x86_64 \\
           <Box>
             <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
               <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: '#D4AF37', letterSpacing: '0.12em' }}>
-                ZOTH-OS v2.6 // RING-0 KERNEL & ENCLAVE ARCHITECT
+                ZOTH-OS v3.4.0 // RING-0 KERNEL & ENCLAVE ARCHITECT
               </Typography>
               <Chip
-                label="22 DAEMONS VERIFIED"
+                label="23 DAEMONS VERIFIED"
                 size="small"
                 sx={{
                   height: 20,
@@ -389,7 +401,7 @@ nice -n ${niceLevel} qemu-system-x86_64 \\
                 }}
               />
               <Chip
-                label="DEBIAN BOOKWORM LIVE-BUILD"
+                label="DEBIAN LIVE + KDE PLASMA 6"
                 size="small"
                 sx={{
                   height: 20,
@@ -423,6 +435,36 @@ nice -n ${niceLevel} qemu-system-x86_64 \\
             }}
           >
             {playing ? 'Freeze Ring Telemetry' : 'Resume Telemetry'}
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            href="https://zothos.nullai.tech"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              color: '#38BDF8',
+              borderColor: 'rgba(56,189,248,0.35)',
+            }}
+          >
+            zothos.nullai.tech ↗
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={handleDownloadUnit}
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              fontWeight: 800,
+              color: '#34D399',
+              borderColor: 'rgba(52,211,153,0.4)',
+            }}
+          >
+            Download Unit
           </Button>
           <Button
             size="small"

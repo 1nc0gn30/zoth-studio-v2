@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { isLocalRuntime } from '../../utils/sovereignRuntime';
 import {
   Box,
   Paper,
@@ -275,6 +276,7 @@ export default function ZothnetGodModeTool() {
             >
               Refresh
             </Button>
+            {isLocalRuntime() && (
             <Button
               variant="contained"
               size="small"
@@ -285,6 +287,7 @@ export default function ZothnetGodModeTool() {
             >
               Native Deck (:9900)
             </Button>
+            )}
           </Stack>
         </Stack>
       </Box>
@@ -655,11 +658,12 @@ zothnet status --json`}
                       variant="outlined"
                       size="small"
                       startIcon={<CodeIcon />}
-                      href="https://github.com/1nc0gn30/zothnet"
+                      href="https://zothnet.nullai.tech"
                       target="_blank"
+                      rel="noopener noreferrer"
                       sx={{ borderColor: dark ? 'rgba(255,255,255,0.3)' : '#666', color: 'inherit' }}
                     >
-                      GitHub Repo
+                      zothnet.nullai.tech ↗
                     </Button>
                   </Stack>
                 </Stack>

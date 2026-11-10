@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { isLocalRuntime } from '../../utils/sovereignRuntime';
 import {
   Box, Typography, Paper, Chip, Button, Unstable_Grid2 as Grid, Stack, TextField,
   Card, CardContent, IconButton, Tooltip, Alert, Dialog,
@@ -1054,6 +1055,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
           >
             ◎ Tip SOL
           </Button>
+          {isLocalRuntime() && (
           <Button
             size="small"
             variant="outlined"
@@ -1071,6 +1073,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
           >
             Local Workstation :8084 ↗
           </Button>
+          )}
         </Stack>
       </Paper>
 

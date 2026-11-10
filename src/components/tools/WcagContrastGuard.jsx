@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { isLocalRuntime } from '../../utils/sovereignRuntime';
 import {
   Box,
   Paper,
@@ -221,6 +222,7 @@ export default function WcagContrastGuard() {
           >
             {copiedKey === 'wcagJson' ? 'COPIED JSON' : 'Export JSON'}
           </Button>
+          {isLocalRuntime() && (
           <Button
             size="small"
             variant="contained"
@@ -233,6 +235,7 @@ export default function WcagContrastGuard() {
           >
             Launch Standalone (:8150)
           </Button>
+          )}
         </Stack>
       </Stack>
 

@@ -438,10 +438,10 @@ export default function UncommonTelemetryDeck({ compact = false }) {
             <Grid item xs={12} sm={6}>
               <SplitFlapTile
                 label="AMNESIC MONOTONE OS"
-                value="ZOTHOS-LITE v1.1"
-                sub="Tails-Style RAM-Only OS · 60fps Braille + Bayer Dither Windowed GUI (:8145)"
+                value="ZOTHOS-LITE v1.2"
+                sub="Tails-Style RAM-Only Monotone OS (#F7F7F4 / #000000) · 56 Curated Models Across 8 Providers"
                 dark={dark}
-                to="/zoth-os"
+                to="/tools/zothos-lite"
               />
             </Grid>
             <Grid item xs={12} sm={6}>

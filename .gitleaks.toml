@@ -224,7 +224,7 @@ condition = "AND"
 regexTarget = "secret"
 paths = ['''(?:^|/)src/components/tools/JwtInspectorGodModeTool\.jsx$''']
 regexes = [
-  '''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiJ1c2VyX3NvdmVyZWlnbl85OTIxIiwibmFtZSI6Ik5lYWwgRnJhemllciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcyOTM4MjQwMCwiZXhwIjoxNzI5OTg3MjAwfQ\.S0tHqgU43Uv2tC1y93tM00nU_Y7L_eJk_tFqW6Qv8tY$''',
+  '''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiJ1c2VyX3NvdmVyZWlnbl85OTIxIiwibmFtZSI6IjFuYzBnbjMwIiwib3JnIjoiTnVsbEFJIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI5MzgyNDAwLCJleHAiOjE4OTM0NTYwMDB9\.43Nv0NohcGAqTUCxiqpJxApl7uXKWtIEzZPlqNkRnvI$''',
   '''^eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0\.eyJzdWIiOiJhZG1pbl9ieXBhc3MiLCJyb2xlIjoic3VwZXJhZG1pbiIsImlhdCI6MTcyOTM4MjQwMH0\.$''',
   '''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiJ1c2VyX2V4cGlyZWQiLCJyb2xlIjoidmlld2VyIiwiaWF0IjoxNjA5NDU5MjAwLCJleHAiOjE2MDk0NjI4MDB9\.iG8Y6lS1zD5U7X3M0aP2qR4tV6wX8zB0cE2gH4jL6nI$''',
   '''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiJ1c2VyX2xlYWsiLCJlbWFpbCI6ImFkbWluQG51bGxhaS50ZWNoIiwiYXdzX2tleSI6IkFLSUFJT1NGT0ROTjdFWEFNUExFIiwic2VjcmV0X3NlZWQiOiJhbGNoZW15Xzc3OCJ9\.K_v7h9yX3Z1nQ0pL5jT8mR2wF4bV6cE9gA3dI5sO7tE$''',
@@ -237,7 +237,7 @@ condition = "AND"
 regexTarget = "secret"
 paths = ['''(?:^|/)src/components/tools/JwtInspectorGodModeTool\.jsx$''']
 regexes = [
-  '''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiJ1c2VyX3NvdmVyZWlnbl85OTIxIiwibmFtZSI6Ik5lYWwgRnJhemllciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcyOTM4MjQwMCwiZXhwIjoxNzI5OTg3MjAwfQ\.S0tHqgU43Uv2tC1y93tM00nU_Y7L_eJk_tFqW6Qv8tY$''',
+  '''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiJ1c2VyX3NvdmVyZWlnbl85OTIxIiwibmFtZSI6IjFuYzBnbjMwIiwib3JnIjoiTnVsbEFJIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI5MzgyNDAwLCJleHAiOjE4OTM0NTYwMDB9\.43Nv0NohcGAqTUCxiqpJxApl7uXKWtIEzZPlqNkRnvI$''',
   '''^eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0\.eyJzdWIiOiJhZG1pbl9ieXBhc3MiLCJyb2xlIjoic3VwZXJhZG1pbiIsImlhdCI6MTcyOTM4MjQwMH0\.$''',
   '''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiJ1c2VyX2V4cGlyZWQiLCJyb2xlIjoidmlld2VyIiwiaWF0IjoxNjA5NDU5MjAwLCJleHAiOjE2MDk0NjI4MDB9\.iG8Y6lS1zD5U7X3M0aP2qR4tV6wX8zB0cE2gH4jL6nI$''',
   '''^eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJzdWIiOiJ1c2VyX2xlYWsiLCJlbWFpbCI6ImFkbWluQG51bGxhaS50ZWNoIiwiYXdzX2tleSI6IkFLSUFJT1NGT0ROTjdFWEFNUExFIiwic2VjcmV0X3NlZWQiOiJhbGNoZW15Xzc3OCJ9\.K_v7h9yX3Z1nQ0pL5jT8mR2wF4bV6cE9gA3dI5sO7tE$''',

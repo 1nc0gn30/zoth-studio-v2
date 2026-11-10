@@ -802,7 +802,11 @@ export default function RealToolWorkspacePage() {
                 {tool.github && (
                   <Button
                     component="a"
-                    href={tool.github}
+                    href={
+                      ['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(tool.id)
+                        ? 'https://github.com/NullAITech/zoth-studio-v2'
+                        : tool.github
+                    }
                     target="_blank"
                     rel="noopener noreferrer"
                     variant="outlined"
@@ -901,14 +905,14 @@ export default function RealToolWorkspacePage() {
                     wordBreak: 'break-all',
                   }}
                 >
-                  {tool.pull || `git clone ${tool.github}.git`}
+                  {tool.pull || `git clone ${['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(tool.id) ? 'https://github.com/NullAITech/zoth-studio-v2' : tool.github}.git`}
                 </Typography>
               </Box>
               <Tooltip title={copiedCmd ? 'Copied command!' : 'Copy to clipboard'}>
                 <Button
                   size="small"
                   variant="outlined"
-                  onClick={() => handleCopy(tool.pull || `git clone ${tool.github}.git`, setCopiedCmd)}
+                  onClick={() => handleCopy(tool.pull || `git clone ${['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(tool.id) ? 'https://github.com/NullAITech/zoth-studio-v2' : tool.github}.git`, setCopiedCmd)}
                   startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 16 }} /> : <ContentCopyIcon sx={{ fontSize: 16 }} />}
                   sx={{
                     fontFamily: mono,
@@ -1499,8 +1503,8 @@ export default function RealToolWorkspacePage() {
           subtitle={`Choose between pulling this standalone micro-tool repository, running it natively inside Zoth Studio, or booting ZothOS where all ${microTools.length} sovereign tools are pre-configured.`}
           toolTitle={tool.name}
           toolDescription={tool.description}
-          toolRepo={tool.github}
-          toolCommand={tool.pull || `git clone ${tool.github}.git`}
+          toolRepo={['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(tool.id) ? 'https://github.com/NullAITech/zoth-studio-v2' : tool.github}
+          toolCommand={tool.pull || `git clone ${['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(tool.id) ? 'https://github.com/NullAITech/zoth-studio-v2' : tool.github}.git`}
         />
       </Box>
       </Box>

@@ -25,6 +25,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import DownloadIcon from '@mui/icons-material/Download';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
+import { isLocalRuntime } from '../../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -73,18 +74,21 @@ const INITIAL_CHANNELS = [
   },
 ];
 
-export default function SovereignBridgeGodModeTool() {
+export default function SovereignBridgeGodModeTool({ tool }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
+  const isZothRelay = (tool?.id || '') === 'zoth-relay';
 
   const [channels, setChannels] = useState(INITIAL_CHANNELS);
-  const [selectedChannel, setSelectedChannel] = useState('signal');
-  const [recipient, setRecipient] = useState(DEMO_SIGNAL_RECIPIENT);
+  const [selectedChannel, setSelectedChannel] = useState(isZothRelay ? 'webhook' : 'signal');
+  const [recipient, setRecipient] = useState(isZothRelay ? 'http://127.0.0.1:8131/relay/hmac' : DEMO_SIGNAL_RECIPIENT);
   const [payload, setPayload] = useState(
-    'Sovereign Agent Bridge sync: Byzantine quorum verified across 5 encrypted transport adapters.'
+    isZothRelay
+      ? 'Zoth Relay HMAC-SHA256 encrypted webhook frame: zero-DNS loopback tunnel verified.'
+      : 'Sovereign Agent Bridge sync: Byzantine quorum verified across 5 encrypted transport adapters.'
   );
   const [copied, setCopied] = useState(false);
-  const [bridgeOnline, setBridgeOnline] = useState(true);
+  const [bridgeOnline, setBridgeOnline] = useState(false);
   const [agentMesh, setAgentMesh] = useState(null);
   const [busTarget, setBusTarget] = useState('muse-wonder-1.0 (01a1b743)');
   const [busSubject, setBusSubject] = useState('Parallel Video Batch & Bridge Sync');
@@ -125,6 +129,15 @@ export default function SovereignBridgeGodModeTool() {
   };
 
   useEffect(() => {
+    setSelectedChannel(isZothRelay ? 'webhook' : 'signal');
+    setRecipient(isZothRelay ? 'http://127.0.0.1:8131/relay/hmac' : DEMO_SIGNAL_RECIPIENT);
+  }, [isZothRelay]);
+
+  useEffect(() => {
+    if (!isLocalRuntime()) {
+      setBridgeOnline(false);
+      return undefined;
+    }
     fetch('http://127.0.0.1:8102/api/health')
       .then((r) => r.json())
       .then((d) => setBridgeOnline(d?.status === 'ok' || d?.status === 'HEALTHY'))
@@ -378,47 +391,51 @@ export default function SovereignBridgeGodModeTool() {
           <Box>
             <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
               <Typography sx={{ fontFamily: mono, fontWeight: 900, fontSize: '0.98rem', color: '#F8FAFC', letterSpacing: '0.04em' }}>
-                SOVEREIGN AGENT SIGNAL BRIDGE
+                {isZothRelay ? 'ZOTH RELAY — HMAC LOOPBACK & WEBHOOK TUNNEL' : 'SOVEREIGN AGENT SIGNAL BRIDGE'}
               </Typography>
               <Chip
-                label={bridgeOnline ? "PORT :8102 ONLINE" : "PORT :8102 LOCAL LOOP"}
+                label={bridgeOnline ? 'PORT :8102 ONLINE' : 'IN-BROWSER ENGINE ACTIVE'}
                 size="small"
                 sx={{
                   height: 20,
                   fontFamily: mono,
                   fontSize: '0.62rem',
                   fontWeight: 800,
-                  bgcolor: bridgeOnline ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)',
-                  color: bridgeOnline ? '#34D399' : '#FBBF24',
-                  border: bridgeOnline ? '1px solid rgba(16,185,129,0.35)' : '1px solid rgba(245,158,11,0.35)',
+                  bgcolor: bridgeOnline ? 'rgba(16,185,129,0.15)' : 'rgba(56,189,248,0.15)',
+                  color: bridgeOnline ? '#34D399' : '#38BDF8',
+                  border: bridgeOnline ? '1px solid rgba(16,185,129,0.35)' : '1px solid rgba(56,189,248,0.35)',
                 }}
               />
             </Stack>
             <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mt: 0.2 }}>
-              E2EE Multi-Transport Mesh • Signal Protocol • SimpleX Onion Relays • Watchdog Dead-Man Switch
+              {isZothRelay
+                ? 'HMAC-SHA256 Signed Webhook Pipe • Replay-Protected Nonces • Zero-DNS Loopback Relay'
+                : 'E2EE Multi-Transport Mesh • Signal Protocol • SimpleX Onion Relays • Watchdog Dead-Man Switch'}
             </Typography>
           </Box>
         </Box>
 
         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-          <Button
-            size="small"
-            variant="outlined"
-            href="http://127.0.0.1:8102"
-            target="_blank"
-            rel="noopener noreferrer"
-            startIcon={<LaunchIcon sx={{ fontSize: 14 }} />}
-            sx={{
-              fontFamily: mono,
-              fontSize: '0.7rem',
-              fontWeight: 800,
-              color: '#38BDF8',
-              borderColor: 'rgba(56,189,248,0.3)',
-              '&:hover': { borderColor: '#38BDF8', bgcolor: 'rgba(56,189,248,0.08)' },
-            }}
-          >
-            Open :8102 Studio
-          </Button>
+          {isLocalRuntime() && (
+            <Button
+              size="small"
+              variant="outlined"
+              href="http://127.0.0.1:8102"
+              target="_blank"
+              rel="noopener noreferrer"
+              startIcon={<LaunchIcon sx={{ fontSize: 14 }} />}
+              sx={{
+                fontFamily: mono,
+                fontSize: '0.7rem',
+                fontWeight: 800,
+                color: '#38BDF8',
+                borderColor: 'rgba(56,189,248,0.3)',
+                '&:hover': { borderColor: '#38BDF8', bgcolor: 'rgba(56,189,248,0.08)' },
+              }}
+            >
+              Open :8102 Studio
+            </Button>
+          )}
 
           <Button
             size="small"

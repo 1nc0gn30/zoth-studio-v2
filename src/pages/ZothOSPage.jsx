@@ -1491,16 +1491,16 @@ export default function ZothOSPage() {
                     wordBreak: 'break-word',
                   }}
                 >
-                  ▓▒░ ZOTHOS-LITE v1.1 // TAILS-STYLE AMNESIC EDITION ░▒▓
+                  ▓▒░ ZOTHOS-LITE v1.2 // TAILS-STYLE AMNESIC MONOTONE EDITION ░▒▓
                 </Box>
                 <Typography sx={{ fontFamily: mono, fontSize: '0.73rem', color: '#FFFFFF', letterSpacing: '0.04em', overflowWrap: 'anywhere', wordBreak: 'break-word', minWidth: 0 }}>
-                  1-BIT BLACK & WHITE (#000000 / #FFFFFF) • BAYER 4x4 DITHER • UNICODE U+2800 BRAILLE
+                  PAPER IVORY & BLACK INK (#F7F7F4 / #000000) • 56 CURATED MODELS ACROSS 8 PROVIDERS • TORAM NOSWAP
                 </Typography>
               </Box>
               <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', minWidth: 0, maxWidth: '100%' }}>
                 <Button
                   component="a"
-                  href="http://localhost:8145"
+                  href="https://zothos-lite.nullai.tech"
                   target="_blank"
                   rel="noopener noreferrer"
                   size="small"
@@ -1518,7 +1518,7 @@ export default function ZothOSPage() {
                     '&:hover': { bgcolor: '#000000', color: '#FFFFFF' },
                   }}
                 >
-                  [ LAUNCH ZOTHOS-LITE WORKSTATION (:8145) ↗ ]
+                  [ LAUNCH ZOTHOS-LITE v1.2 (zothos-lite.nullai.tech) ↗ ]
                 </Button>
                 <Button
                   component="a"
@@ -1566,9 +1566,7 @@ export default function ZothOSPage() {
                 </Button>
                 <Button
                   component="a"
-                  href="http://localhost:8140"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/vaelor"
                   size="small"
                   sx={{
                     bgcolor: '#000000',
@@ -1584,7 +1582,7 @@ export default function ZothOSPage() {
                     '&:hover': { bgcolor: '#FFFFFF', color: '#000000' },
                   }}
                 >
-                  [ VAELOR L1 NODE (:8140) ↗ ]
+                  [ VAELOR L1 DAG DECK (/vaelor) → ]
                 </Button>
               </Box>
             </Box>

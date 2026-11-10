@@ -22,6 +22,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import DownloadIcon from '@mui/icons-material/Download';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
+import { isLocalRuntime } from '../../utils/sovereignRuntime';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -44,22 +45,41 @@ const PERSONA_MODES = [
 
 const ASCII_CHARS = ' ·,:;+*?%S#@';
 
-export default function AzothArchonGodModeTool() {
-  const [selectedAgent, setSelectedAgent] = useState('ollama');
-  const [selectedMode, setSelectedMode] = useState('regular');
-  const [taskPrompt, setTaskPrompt] = useState('Run a Python benchmark and verify local agent tools');
+export default function AzothArchonGodModeTool({ tool }) {
+  const isZothBot = (tool?.id || '') === 'zoth-bot';
+  const [selectedAgent, setSelectedAgent] = useState(isZothBot ? 'hermes' : 'ollama');
+  const [selectedMode, setSelectedMode] = useState(isZothBot ? 'coder' : 'regular');
+  const [taskPrompt, setTaskPrompt] = useState(
+    isZothBot
+      ? 'Route encrypted Telegram/Matrix bot command through Hermes × DeepSeek Flash with zero-egress sandbox'
+      : 'Run a Python benchmark and verify local agent tools'
+  );
   const [concurrency, setConcurrency] = useState(4);
   const [running, setRunning] = useState(true);
   const [executing, setExecuting] = useState(false);
   const [resultLog, setResultLog] = useState('');
   const [thinkingLog, setThinkingLog] = useState('');
   const [copied, setCopied] = useState(false);
-  const [cockpitOnline, setCockpitOnline] = useState(true);
+  const [cockpitOnline, setCockpitOnline] = useState(false);
   const canvasRef = useRef(null);
 
   const activeObj = SUBAGENTS.find((a) => a.id === selectedAgent) || SUBAGENTS[0];
 
   useEffect(() => {
+    setSelectedAgent(isZothBot ? 'hermes' : 'ollama');
+    setSelectedMode(isZothBot ? 'coder' : 'regular');
+    setTaskPrompt(
+      isZothBot
+        ? 'Route encrypted Telegram/Matrix bot command through Hermes × DeepSeek Flash with zero-egress sandbox'
+        : 'Run a Python benchmark and verify local agent tools'
+    );
+  }, [isZothBot]);
+
+  useEffect(() => {
+    if (!isLocalRuntime()) {
+      setCockpitOnline(false);
+      return;
+    }
     fetch('http://127.0.0.1:8136/health')
       .then((r) => r.json())
       .then((d) => setCockpitOnline(d?.status === 'healthy'))
@@ -217,7 +237,9 @@ export default function AzothArchonGodModeTool() {
     }
   };
 
-  const cliCommand = `azoth -q "${taskPrompt.replace(/"/g, '\\"')}" --mode ${selectedMode} --json`;
+  const cliCommand = isZothBot
+    ? `zoth-bot --engine ${selectedAgent} --mode ${selectedMode} --dispatch "${taskPrompt.replace(/"/g, '\\"')}"`
+    : `azoth -q "${taskPrompt.replace(/"/g, '\\"')}" --mode ${selectedMode} --json`;
 
   const copyCmd = () => {
     navigator.clipboard?.writeText(cliCommand)?.catch?.(() => {});
@@ -227,7 +249,7 @@ export default function AzothArchonGodModeTool() {
 
   const exportJson = () => {
     const payload = {
-      tool: 'azoth-local-agent',
+      tool: isZothBot ? 'zoth-bot' : 'azoth-local-agent',
       version: '3.0.0',
       activeEngine: activeObj,
       mode: selectedMode,
@@ -241,7 +263,7 @@ export default function AzothArchonGodModeTool() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `azoth-archon-${selectedAgent}-${Date.now()}.json`;
+    a.download = `${isZothBot ? 'zoth-bot' : 'azoth-archon'}-${selectedAgent}-${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -289,47 +311,51 @@ export default function AzothArchonGodModeTool() {
           <Box>
             <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
               <Typography sx={{ fontFamily: mono, fontWeight: 900, fontSize: '0.98rem', color: '#F8FAFC', letterSpacing: '0.04em' }}>
-                AZOTH LOCAL ARCHON ORCHESTRATOR
+                {isZothBot ? 'ZOTH BOT AUTONOMOUS GATEWAY & ARCHON BUS' : 'AZOTH LOCAL ARCHON ORCHESTRATOR'}
               </Typography>
               <Chip
-                label={cockpitOnline ? "PORT :8136 ONLINE" : "PORT :8136 LOCAL LOOP"}
+                label={cockpitOnline ? 'PORT :8136 ONLINE' : 'IN-BROWSER ENGINE ACTIVE'}
                 size="small"
                 sx={{
                   height: 20,
                   fontFamily: mono,
                   fontSize: '0.62rem',
                   fontWeight: 800,
-                  bgcolor: cockpitOnline ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)',
-                  color: cockpitOnline ? '#34D399' : '#FBBF24',
-                  border: cockpitOnline ? '1px solid rgba(16,185,129,0.35)' : '1px solid rgba(245,158,11,0.35)',
+                  bgcolor: cockpitOnline ? 'rgba(16,185,129,0.15)' : 'rgba(56,189,248,0.15)',
+                  color: cockpitOnline ? '#34D399' : '#38BDF8',
+                  border: cockpitOnline ? '1px solid rgba(16,185,129,0.35)' : '1px solid rgba(56,189,248,0.35)',
                 }}
               />
             </Stack>
             <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mt: 0.2 }}>
-              Multi-Agent Orchestrator • Zero-Egress ReAct Loop • Chrome Headed Automation • Python Sandbox
+              {isZothBot
+                ? 'Telegram / Matrix / Discord Sovereign Bot Gateway • Hermes × DeepSeek Flash • Zero-Egress Sandbox'
+                : 'Multi-Agent Orchestrator • Zero-Egress ReAct Loop • Chrome Headed Automation • Python Sandbox'}
             </Typography>
           </Box>
         </Box>
 
         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-          <Button
-            size="small"
-            variant="outlined"
-            href="http://127.0.0.1:8136"
-            target="_blank"
-            rel="noopener noreferrer"
-            startIcon={<LaunchIcon sx={{ fontSize: 14 }} />}
-            sx={{
-              fontFamily: mono,
-              fontSize: '0.7rem',
-              fontWeight: 800,
-              color: '#38BDF8',
-              borderColor: 'rgba(56,189,248,0.3)',
-              '&:hover': { borderColor: '#38BDF8', bgcolor: 'rgba(56,189,248,0.08)' },
-            }}
-          >
-            Open :8136 Cockpit
-          </Button>
+          {isLocalRuntime() && (
+            <Button
+              size="small"
+              variant="outlined"
+              href="http://127.0.0.1:8136"
+              target="_blank"
+              rel="noopener noreferrer"
+              startIcon={<LaunchIcon sx={{ fontSize: 14 }} />}
+              sx={{
+                fontFamily: mono,
+                fontSize: '0.7rem',
+                fontWeight: 800,
+                color: '#38BDF8',
+                borderColor: 'rgba(56,189,248,0.3)',
+                '&:hover': { borderColor: '#38BDF8', bgcolor: 'rgba(56,189,248,0.08)' },
+              }}
+            >
+              Open :8136 Cockpit
+            </Button>
+          )}
 
           <Button
             size="small"

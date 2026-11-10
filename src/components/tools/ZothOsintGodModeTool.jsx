@@ -31,6 +31,7 @@ import DnsIcon from '@mui/icons-material/Dns';
 import HistoryToggleOffIcon from '@mui/icons-material/HistoryToggleOff';
 import HubIcon from '@mui/icons-material/Hub';
 import { useReality } from '../../context/RealityContext';
+import { isLocalRuntime } from '../../utils/sovereignRuntime';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow, titleBaseSx, ledeSx } from '../sovereign/typography.jsx';
 
@@ -45,7 +46,14 @@ const TARGET_PRESETS = [
 ];
 
 export default function ZothOsintGodModeTool({ tool, manifest }) {
-  const { currentPalette } = useReality();
+  const reality = useReality();
+  const currentPalette = useMemo(
+    () => ({
+      accentGold: reality?.currentPalette?.accentGold || reality?.theme?.accent || '#D4AF37',
+    }),
+    [reality]
+  );
+  const isScoutSkill = tool?.id === 'osint-scout-skill';
   const [target, setTarget] = useState('nullai.tech');
   const [activeTab, setActiveTab] = useState(0);
   const [daemonOnline, setDaemonOnline] = useState(false);
@@ -54,8 +62,9 @@ export default function ZothOsintGodModeTool({ tool, manifest }) {
   const [scanResult, setScanResult] = useState(null);
   const [copiedKey, setCopiedKey] = useState('');
 
-  // Probe local daemon on port 8149
+  // Probe local daemon on port 8149 when running on local workstation
   useEffect(() => {
+    if (!isLocalRuntime()) return undefined;
     let mounted = true;
     const checkHealth = async () => {
       try {
@@ -158,7 +167,7 @@ export default function ZothOsintGodModeTool({ tool, manifest }) {
         <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between" sx={{ width: '100%' }}>
           <Stack direction="row" spacing={1.5} alignItems="center">
             <Typography variant="caption" sx={{ fontFamily: mono, color: currentPalette.accentGold, fontWeight: 700 }}>
-              ZOTH OSINT WORKSTATION v4.0.0
+              {isScoutSkill ? 'OSINT SCOUT SKILL WORKSTATION v2.4' : 'ZOTH OSINT WORKSTATION v4.0.0'}
             </Typography>
             <Chip
               size="small"

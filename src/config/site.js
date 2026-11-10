@@ -264,7 +264,7 @@ export function generateSchemaGraph(path = '/') {
       },
       'sameAs': [
         siteConfig.githubUrl,
-        'https://twitter.com/NullAITech'
+        'https://x.com/1nc0gn30'
       ]
     },
     {

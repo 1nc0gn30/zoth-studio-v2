@@ -50,6 +50,12 @@ const PANTHEON_RINGS = [
 
 const SWARM_MISSIONS = [
   {
+    id: 'imperator-quests',
+    label: 'Zoth Civilization v3.0 — Imperator Quests & 22-Key Sanctuary',
+    objective: 'Command 23 Pantheon Agents across Zoth Prime, issue 4 Planetary Decrees, complete Imperator Ranks I–V, and link DeepSeek Flash via Hermes Agent (Nous Research).',
+    quorumRequired: 16,
+  },
+  {
     id: 'zero-day-triage',
     label: 'Autonomous CVE Triage & Patch Synthesis',
     objective: 'Decompile target ELF/PHP binary, isolate heap/CGI sink, synthesize YARA-X rule, and verify patch in Ring-3 sandbox.',
@@ -63,19 +69,84 @@ const SWARM_MISSIONS = [
   },
   {
     id: 'civilization-consensus',
-    label: '21-Agent Civilization State Epoch Commit',
-    objective: 'Synchronize Hebbian STDP episodic memory graph, verify Merkle state root across all 3 Pantheon rings, and seal epoch.',
-    quorumRequired: 15,
+    label: '23-Agent Civilization State Epoch Commit',
+    objective: 'Synchronize Hebbian STDP episodic memory graph, verify Merkle state root across Zoth Prime & Pantheon rings, and seal epoch.',
+    quorumRequired: 16,
   },
 ];
 
-export default function SwarmCivilizationGodModeTool() {
+const PLANETARY_DECREES = [
+  { id: 'golden-harvest', name: '🌾 Golden Harvest', effect: '+35% Treasury Yield across City Desk & POD ateliers' },
+  { id: 'adytum-light', name: '🕯️ Adytum Illumination', effect: 'Unlocks 22-Key Sanctuary & zero-leak browser meditations' },
+  { id: 'hermes-flash', name: '⚡ Hermes × DeepSeek Flash', effect: 'Low-latency BYOK reasoning via Hermes Agent (Nous Research)' },
+  { id: 'trade-surge', name: '🏛️ Agora Trade Surge', effect: 'Synchronizes all 23 Pantheon Citizens & Imperator Quest XP' },
+];
+
+const EGREGORE_ARCHETYPES = [
+  'ORACLE', 'SENTINEL', 'ARCHITECT', 'AZOTH', 'NEXUS', 'DRACO', 'AETHER', 'MIMIR',
+  'JANUS', 'FULCRUM', 'SCRIBE', 'ARTIFICER', 'WARDEN', 'ANVIL', 'CANOPY', 'PYTHIA',
+  'HELIOS', 'LETHE', 'PROTEUS', 'TELOS', 'CHORUS', 'DAEDALUS', 'ABYSS', 'PANTHEON',
+];
+const EGREGORE_DOMAINS = [
+  'CORRECTNESS', 'PERFORMANCE', 'COST', 'SECURITY', 'RELIABILITY', 'SCALABILITY',
+  'INTEGRITY', 'UX', 'MAINTAINABILITY', 'OBSERVABILITY', 'CONCURRENCY', 'STANDARDS',
+  'EDGE-CASES', 'ETHICS', 'DEPLOYMENT', 'HUMAN', 'ECONOMICS', 'LONG-TERM',
+];
+const EGREGORE_STANCES = [
+  'advocate', 'skeptic', 'refuter', 'quant', 'reductive', 'empirical', 'decisive', 'recursive',
+];
+
+function sampleEgregoreLenses(seedText, count = 8) {
+  let h = 2166136261;
+  const s = String(seedText || 'egregore');
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  let stride = (h % 3455) + 1;
+  while (stride % 2 === 0 || stride % 3 === 0) stride = (stride % 3455) + 1;
+  const out = [];
+  for (let k = 0; k < count; k++) {
+    const idx = (h + k * stride) % 3456;
+    const a = EGREGORE_ARCHETYPES[idx % 24];
+    const d = EGREGORE_DOMAINS[Math.floor(idx / 24) % 18];
+    const st = EGREGORE_STANCES[Math.floor(idx / (24 * 18)) % 8];
+    out.push({ index: idx, signature: `${a}·${d}·${st}`, archetype: a, domain: d, stance: st });
+  }
+  return out;
+}
+
+export default function SwarmCivilizationGodModeTool({ tool }) {
   const { realityId, activeTheme } = useReality();
-  const [missionId, setMissionId] = useState(SWARM_MISSIONS[0].id);
+  const isCivTool = (tool?.id || '').includes('civilization');
+  const [missionId, setMissionId] = useState(isCivTool ? 'imperator-quests' : 'zero-day-triage');
+  const [activeDecree, setActiveDecree] = useState(PLANETARY_DECREES[2].id);
   const [byzantineFaults, setByzantineFaults] = useState(2);
   const [orbitalVelocity, setOrbitalVelocity] = useState(1.0);
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(isCivTool ? 2 : 0);
+  const [egregoreSeed, setEgregoreSeed] = useState('distributed consensus under packet loss');
+  const [egregoreMode, setEgregoreMode] = useState('auto');
   const [copied, setCopied] = useState(false);
+
+  const egregoreSample = useMemo(() => sampleEgregoreLenses(egregoreSeed, 8), [egregoreSeed]);
+  const egregoreSim = useMemo(() => {
+    const disagree = Math.min(0.88, Math.max(0.08, ((egregoreSeed.length * 13) % 77) / 100));
+    if (egregoreMode === 'probe') {
+      return { minds: 8, waves: 1, agreement: +(1 - disagree * 0.4).toFixed(3), confidence: 0.964, stoppedBy: 'probe_wave' };
+    }
+    if (egregoreMode === '256') {
+      return { minds: 256, waves: 4, agreement: +(0.81 - disagree * 0.25).toFixed(3), confidence: 0.992, stoppedBy: 'fixed_256' };
+    }
+    const needEsc = disagree > 0.42;
+    return needEsc
+      ? { minds: 72, waves: 3, agreement: 0.742, confidence: 0.958, stoppedBy: 'asc_beta_posterior' }
+      : { minds: 8, waves: 1, agreement: 0.912, confidence: 0.981, stoppedBy: 'asc_beta_posterior' };
+  }, [egregoreSeed, egregoreMode]);
+
+  useEffect(() => {
+    setMissionId(isCivTool ? 'imperator-quests' : 'zero-day-triage');
+    setActiveTab(isCivTool ? 2 : 0);
+  }, [isCivTool]);
 
   const canvasRef = useRef(null);
 
@@ -258,13 +329,17 @@ rings:
       }}
     >
       <SovereignEyebrow accent="#D4AF37" right="Swarm & Core">
-        {"zoth-swarm-multiplexer"}
+        {isCivTool ? 'zoth-civilization' : 'zoth-swarm-multiplexer'}
       </SovereignEyebrow>
       <SovereignBand
-        seed={"zoth-swarm-multiplexer"}
-        eyebrow={"Swarm & Core"}
-        caption={"21-Agent Swarm Multiplexer"}
-        label={"21-Agent Swarm Multiplexer — Zoth sovereign visualisation"}
+        seed={isCivTool ? 'zoth-civilization' : 'zoth-swarm-multiplexer'}
+        eyebrow={'Swarm & Core'}
+        caption={isCivTool ? 'Zoth Civilization v3.0 (23 Pantheon Agents)' : '21-Agent Swarm Multiplexer'}
+        label={
+          isCivTool
+            ? 'Zoth Civilization v3.0 — 23 Pantheon Agents, Imperator Quests & 22-Key Sanctuary'
+            : '21-Agent Swarm Multiplexer — Zoth sovereign visualisation'
+        }
       />
       {/* Header */}
       <Stack
@@ -290,7 +365,11 @@ rings:
             />
             <Chip
               icon={<HubIcon sx={{ fontSize: '0.95rem !important', color: `${activeTheme.primary} !important` }} />}
-              label="21-AGENT PANTHEON SWARM & CIVILIZATION MULTIPLEXER"
+              label={
+                isCivTool
+                  ? 'ZOTH CIVILIZATION v3.0 • 23 PANTHEON AGENTS'
+                  : '21-AGENT PANTHEON SWARM & CIVILIZATION MULTIPLEXER'
+              }
               size="small"
               sx={{
                 bgcolor: `${activeTheme.primary}18`,
@@ -315,14 +394,36 @@ rings:
             />
           </Stack>
           <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 800 }}>
-            21-Agent Swarm Multiplexer & Byzantine Civilization Hub
+            {isCivTool
+              ? 'Zoth Civilization v3.0 — Sphere of Zoth Prime & Imperator Deck'
+              : '21-Agent Swarm Multiplexer & Byzantine Civilization Hub'}
           </Typography>
           <Typography variant="body2" sx={{ ...ledeSx, color: 'text.secondary', mt: 0.4 }}>
-            Orchestrate the 3 concentric Pantheon rings, simulate Byzantine fault tolerance (<code>N = 3f + 1</code>), and export deterministic swarm topologies.
+            {isCivTool
+              ? 'Explore the autonomous 23-agent society on Zoth Prime, issue Planetary Decrees, unlock the 22-Key Sanctuary, or connect DeepSeek Flash via Hermes Agent (Nous Research).'
+              : 'Orchestrate the 3 concentric Pantheon rings, simulate Byzantine fault tolerance (N = 3f + 1), and export deterministic swarm topologies.'}
           </Typography>
         </Box>
 
         <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', useFlexGap: true, alignItems: 'center' }}>
+          <Button
+            size="small"
+            variant="contained"
+            href="https://zoth-civilization.netlify.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              bgcolor: '#10B981',
+              color: '#04130D',
+              fontWeight: 900,
+              fontSize: '0.72rem',
+              fontFamily: mono,
+              textTransform: 'none',
+              '&:hover': { bgcolor: '#34D399' },
+            }}
+          >
+            🌐 Play Zoth Civilization v3.0 ↗
+          </Button>
           <Button
             size="small"
             variant="contained"
@@ -457,12 +558,14 @@ rings:
             <Tabs
               value={activeTab}
               onChange={(_, v) => setActiveTab(v)}
+              variant="scrollable"
+              scrollButtons="auto"
               sx={{
                 minHeight: 38,
                 '& .MuiTab-root': {
                   minHeight: 38,
                   fontFamily: mono,
-                  fontSize: '0.72rem',
+                  fontSize: '0.7rem',
                   fontWeight: 700,
                   textTransform: 'none',
                 },
@@ -470,8 +573,79 @@ rings:
             >
               <Tab icon={<GroupsIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="Pantheon Rings (21)" />
               <Tab icon={<CodeIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="Swarm Topology (.yaml)" />
+              <Tab icon={<TerminalIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="Civilization v3.0 (23)" />
+              <Tab icon={<TerminalIcon sx={{ fontSize: 15 }} />} iconPosition="start" label="Egregore (3,456 Lenses)" />
             </Tabs>
           </Box>
+
+          {activeTab === 2 && (
+            <Stack spacing={1.5}>
+              <Alert
+                severity="info"
+                sx={{ bgcolor: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.35)' }}
+              >
+                <Typography sx={{ fontFamily: mono, fontSize: '0.73rem', fontWeight: 800, color: '#34D399' }}>
+                  Recommended Lightweight AI Path: DeepSeek Flash via Hermes Agent (Nous Research)
+                </Typography>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.3 }}>
+                  Play immediately in zero-key Autonomous Sandbox mode (23 Pantheon Agents, Imperator Quests I–V, 22-Key Sanctuary), or connect DeepSeek Flash (`deepseek-v4-flash-0731`) through Hermes Agent for live BYOK dialogues & browser-only meditations.
+                </Typography>
+              </Alert>
+
+              <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 800, color: activeTheme.primary }}>
+                ISSUE PLANETARY DECREE ON ZOTH PRIME
+              </Typography>
+              <Grid container spacing={1}>
+                {PLANETARY_DECREES.map((d) => {
+                  const sel = activeDecree === d.id;
+                  return (
+                    <Grid xs={12} sm={6} key={d.id}>
+                      <Box
+                        onClick={() => setActiveDecree(d.id)}
+                        sx={{
+                          p: 1.3,
+                          borderRadius: 1.5,
+                          cursor: 'pointer',
+                          bgcolor: sel ? `${activeTheme.primary}1F` : '#06080E',
+                          border: sel ? `1.5px solid ${activeTheme.primary}` : '1px solid rgba(255,255,255,0.1)',
+                        }}
+                      >
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.71rem', fontWeight: 800, color: sel ? activeTheme.primary : '#F5F0E8' }}>
+                          {d.name}
+                        </Typography>
+                        <Typography sx={{ fontSize: '0.66rem', color: 'text.secondary', mt: 0.35, lineHeight: 1.35 }}>
+                          {d.effect}
+                        </Typography>
+                      </Box>
+                    </Grid>
+                  );
+                })}
+              </Grid>
+
+              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                <Button
+                  size="small"
+                  variant="contained"
+                  href="https://zoth-civilization.netlify.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 800, bgcolor: activeTheme.primary, color: '#05070B' }}
+                >
+                  Open Live Sphere World ↗
+                </Button>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  href="https://zoth-civilization.netlify.app/gallery.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 800, color: activeTheme.primary, borderColor: activeTheme.border }}
+                >
+                  22-Key Sanctuary Studio ↗
+                </Button>
+              </Stack>
+            </Stack>
+          )}
 
           {activeTab === 0 && (
             <Stack spacing={1.5}>
@@ -571,6 +745,78 @@ rings:
                 {swarmYamlExport}
               </Box>
             </Box>
+          )}
+
+          {activeTab === 3 && (
+            <Stack spacing={1.5}>
+              <Alert
+                severity="success"
+                sx={{ bgcolor: 'rgba(75, 227, 193, 0.08)', border: '1px solid rgba(75, 227, 193, 0.35)' }}
+              >
+                <Typography sx={{ fontFamily: mono, fontSize: '0.73rem', fontWeight: 800, color: '#4BE3C1' }}>
+                  Zoth Egregore v1.0 (:8147) — 1 Model × 3,456 Co-Prime Lenses → 1 Answer
+                </Typography>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.3 }}>
+                  Engineered via Nous Hermes: Self-MoA (arXiv:2502.00674) + Beta-posterior Adaptive-Consistency (arXiv:2305.11860). Walks 24 Archetypes × 18 Domains × 8 Stances with co-prime stride so every wave maximizes perspective diversity.
+                </Typography>
+              </Alert>
+
+              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                {[
+                  { id: 'probe', label: 'zoth-egregore:probe (8)' },
+                  { id: 'auto', label: 'zoth-egregore (adaptive)' },
+                  { id: '256', label: 'zoth-egregore:256' },
+                ].map((m) => (
+                  <Chip
+                    key={m.id}
+                    label={m.label}
+                    size="small"
+                    onClick={() => setEgregoreMode(m.id)}
+                    sx={{
+                      fontFamily: mono,
+                      fontSize: '0.68rem',
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      bgcolor: egregoreMode === m.id ? 'rgba(75,227,193,0.18)' : 'rgba(255,255,255,0.04)',
+                      color: egregoreMode === m.id ? '#4BE3C1' : 'text.secondary',
+                      border: egregoreMode === m.id ? '1px solid #4BE3C1' : '1px solid rgba(255,255,255,0.12)',
+                    }}
+                  />
+                ))}
+              </Stack>
+
+              <Box
+                component="input"
+                value={egregoreSeed}
+                onChange={(e) => setEgregoreSeed(e.target.value)}
+                aria-label="Egregore prompt seed"
+                placeholder="Enter question seed to compute co-prime lens stride..."
+                sx={{
+                  width: '100%',
+                  p: 1.1,
+                  borderRadius: 1.5,
+                  bgcolor: '#05070B',
+                  border: `1px solid ${activeTheme.border}`,
+                  color: '#F5F0E8',
+                  fontFamily: mono,
+                  fontSize: '0.73rem',
+                }}
+              />
+
+              <Box sx={{ p: 1.2, borderRadius: 1.5, bgcolor: '#05070B', border: '1px solid rgba(75,227,193,0.25)' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#4BE3C1', fontWeight: 800, mb: 0.8 }}>
+                  WAVE PROJECTION: {egregoreSim.minds} MINDS · {egregoreSim.waves} WAVE(S) · AGREEMENT {egregoreSim.agreement} · P(LEADER)={egregoreSim.confidence} ({egregoreSim.stoppedBy})
+                </Typography>
+                <Stack spacing={0.5}>
+                  {egregoreSample.map((l) => (
+                    <Box key={l.index} sx={{ display: 'flex', justifyContent: 'space-between', fontFamily: mono, fontSize: '0.66rem', color: '#CBD5E1' }}>
+                      <span>#{String(l.index).padStart(4, '0')} {l.signature}</span>
+                      <span style={{ color: '#94A3B8' }}>{l.stance}</span>
+                    </Box>
+                  ))}
+                </Stack>
+              </Box>
+            </Stack>
           )}
         </Grid>
       </Grid>

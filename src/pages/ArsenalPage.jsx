@@ -330,7 +330,7 @@ function UnifiedAssetCard({ item, isDark, gold, runtime }) {
           >
             Launch Tool ⚡
           </Button>
-          {item.localPort && (
+          {isLocalRuntime() && item.localPort && (
             <Button
               size="small"
               variant="outlined"
@@ -360,7 +360,11 @@ function UnifiedAssetCard({ item, isDark, gold, runtime }) {
             size="small"
             variant="text"
             startIcon={<GitHubIcon sx={{ fontSize: '0.85rem' }} />}
-            href={item.github}
+            href={
+              ['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(item.id)
+                ? 'https://github.com/NullAITech/zoth-studio-v2'
+                : item.github
+            }
             target="_blank"
             rel="noreferrer"
             sx={{

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { isLocalRuntime } from '../../utils/sovereignRuntime';
 import {
   Box,
   Paper,
@@ -673,6 +674,7 @@ export default function ZothBoltGodModeTool() {
           </Typography>
         </Box>
 
+        {isLocalRuntime() && (
         <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
           <Button
             size="small"
@@ -711,6 +713,7 @@ export default function ZothBoltGodModeTool() {
             Simple QuickSite Starter (:8092)
           </Button>
         </Box>
+        )}
       </Box>
 
       {/* Mode Switcher Tabs */}

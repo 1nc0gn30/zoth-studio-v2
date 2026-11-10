@@ -43,7 +43,7 @@ const primaryNav = [
   { label: 'Arsenal', path: '/arsenal', badge: `${arsenalStats.total}` },
   { label: 'Vaelor L1', path: '/vaelor', badge: 'DAG', pulse: true },
   { label: 'Voice Station', path: '/voice', badge: 'LIVE', pulse: true },
-  { label: 'Zoth OS', path: '/zoth-os', badge: 'v3.3', pulse: true },
+  { label: 'Zoth OS', path: '/zoth-os', badge: 'v3.4', pulse: true },
   { label: 'WebGen', path: '/webgen', badge: 'NEW' },
   { label: 'Agora', path: '/agora', badge: 'DAPP', pulse: true, wideOnly: true },
   { label: 'Swarm', path: '/swarm', wideOnly: true },

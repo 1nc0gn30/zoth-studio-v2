@@ -65,7 +65,7 @@ function bufferToBase64Url(buffer) {
 const SAMPLE_TOKENS = [
   {
     label: 'Standard Valid HS256 Token',
-    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyX3NvdmVyZWlnbl85OTIxIiwibmFtZSI6Ik5lYWwgRnJhemllciIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcyOTM4MjQwMCwiZXhwIjoxNzI5OTg3MjAwfQ.S0tHqgU43Uv2tC1y93tM00nU_Y7L_eJk_tFqW6Qv8tY',
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyX3NvdmVyZWlnbl85OTIxIiwibmFtZSI6IjFuYzBnbjMwIiwib3JnIjoiTnVsbEFJIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzI5MzgyNDAwLCJleHAiOjE4OTM0NTYwMDB9.43Nv0NohcGAqTUCxiqpJxApl7uXKWtIEzZPlqNkRnvI',
     secret: 'sovereign_jwt_secret_key_2026'
   },
   {

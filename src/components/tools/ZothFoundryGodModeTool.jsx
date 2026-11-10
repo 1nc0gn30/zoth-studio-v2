@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { isLocalRuntime } from '../../utils/sovereignRuntime';
 import {
   Box,
   Paper,
@@ -343,6 +344,7 @@ export default function ZothFoundryGodModeTool() {
           >
             Switch to Zoth Bolt
           </Button>
+          {isLocalRuntime() && (
           <Button
             size="small"
             variant="outlined"
@@ -354,6 +356,7 @@ export default function ZothFoundryGodModeTool() {
           >
             Open :8092
           </Button>
+          )}
         </Box>
       </Box>
 

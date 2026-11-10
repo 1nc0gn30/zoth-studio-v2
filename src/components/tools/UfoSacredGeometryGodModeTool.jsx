@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { isLocalRuntime } from '../../utils/sovereignRuntime';
 import {
   Box,
   Paper,
@@ -618,6 +619,7 @@ l 2 3 4 5 6 7 2
                 border: `1px solid ${daemonStatus.online ? emerald : 'rgba(255,255,255,0.1)'}`
               }}
             />
+            {isLocalRuntime() && (
             <Button
               variant="outlined"
               size="small"
@@ -632,6 +634,7 @@ l 2 3 4 5 6 7 2
             >
               Standalone :8083 ↗
             </Button>
+            )}
           </Stack>
         </Stack>
 

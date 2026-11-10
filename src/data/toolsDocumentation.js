@@ -782,7 +782,7 @@ export const toolsDocumentation = {
       }
     },
     quickstart: [
-      'git clone https://github.com/1nc0gn30/anderson-security-sentinel.git',
+      'git clone https://github.com/NullAITech/zoth-studio-v2.git',
       'cd anderson-security-sentinel && pip install -r requirements.txt',
       'python3 engine/sentinel.py'
     ],

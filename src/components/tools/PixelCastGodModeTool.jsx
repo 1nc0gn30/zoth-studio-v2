@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { isLocalRuntime } from '../../utils/sovereignRuntime';
 import {
   Box,
   Paper,
@@ -38,7 +39,7 @@ const FALLBACK_SCREEN_SVG = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg 
   <rect width="540" height="960" fill="#0b0c12"/>
   <rect x="24" y="56" width="492" height="120" rx="18" fill="#181b28" stroke="#f59e0b" stroke-opacity="0.4"/>
   <text x="48" y="102" fill="#f59e0b" font-family="monospace" font-size="18" font-weight="bold">PIXEL 10 PRO // TAILSCALE MESH</text>
-  <text x="48" y="138" fill="#9ca3af" font-family="monospace" font-size="15">100.106.39.46:5555 • 60fps Scrcpy</text>
+  <text x="48" y="138" fill="#9ca3af" font-family="monospace" font-size="15">100.64.0.10:5555 • 60fps Scrcpy</text>
   <rect x="24" y="204" width="234" height="130" rx="16" fill="#121521" stroke="#10b981" stroke-opacity="0.35"/>
   <text x="48" y="248" fill="#9ca3af" font-family="monospace" font-size="14">BATTERY</text>
   <text x="48" y="294" fill="#10b981" font-family="monospace" font-size="30" font-weight="bold">94% ⚡</text>
@@ -151,8 +152,8 @@ export default function PixelCastGodModeTool() {
   const pixel = statusData?.tailscale?.pixel;
   const selfNode = statusData?.tailscale?.self;
   const battery = statusData?.battery;
-  const targetIp = pixel?.ip || '100.106.39.46';
-  const mobileUrl = `http://${selfNode?.ip || '100.106.132.5'}:8148/mobile`;
+  const targetIp = pixel?.ip || '100.64.0.10';
+  const mobileUrl = `http://${selfNode?.ip || '100.64.0.1'}:8148/mobile`;
 
   return (
     <Box sx={{ width: '100%', color: '#F3F4F6' }}>
@@ -201,6 +202,7 @@ export default function PixelCastGodModeTool() {
                 </Typography>
               </Box>
 
+              {isLocalRuntime() && (
               <Stack direction="row" spacing={1}>
                 <Button
                   component="a"
@@ -239,6 +241,7 @@ export default function PixelCastGodModeTool() {
                   Mobile Cast
                 </Button>
               </Stack>
+              )}
             </Box>
 
             {/* Battery & Health strip */}

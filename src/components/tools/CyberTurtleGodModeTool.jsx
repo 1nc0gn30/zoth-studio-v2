@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { isLocalRuntime } from '../../utils/sovereignRuntime';
 import {
   Box,
   Paper,
@@ -523,6 +524,7 @@ M2 ; program complete`;
               >
                 {copiedKey === 'path' ? 'Copied Path!' : 'Copy SVG Path'}
               </Button>
+              {isLocalRuntime() && (
               <Button
                 size="small"
                 variant="text"
@@ -533,6 +535,7 @@ M2 ; program complete`;
               >
                 Open Local :8129 Workstation ↗
               </Button>
+              )}
             </Stack>
           </Paper>
         </Grid>

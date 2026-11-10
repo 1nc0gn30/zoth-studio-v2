@@ -6,8 +6,10 @@ import { theme } from './theme';
 import App from './App';
 import ErrorBoundary from './components/ErrorBoundary';
 import { installClipboardFallback } from './utils/clipboardFallback';
+import { installSovereignLoopbackGuard } from './utils/sovereignRuntime';
 
 installClipboardFallback();
+installSovereignLoopbackGuard();
 
 // Ensure manifest.json is linked in the document head for PWA installability
 if (typeof document !== 'undefined') {

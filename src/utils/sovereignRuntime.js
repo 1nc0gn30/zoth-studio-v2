@@ -32,6 +32,79 @@ export function isLocalRuntime() {
   );
 }
 
+const LOOPBACK_URL_RE = /^https?:\/\/(?:127\.0\.0\.1|localhost|0\.0\.0\.0|\[::1\])(?::\d+)?(?:\/|$)/i;
+
+export function resolveLocalOrFallbackUrl(localUrl, fallbackUrl = 'https://github.com/NullAITech/zoth-studio-v2') {
+  return isLocalRuntime() ? localUrl : fallbackUrl;
+}
+
+let loopbackGuardInstalled = false;
+
+/**
+ * Prevents HTTPS Mixed-Content / Private Network Access console errors and dead
+ * 127.0.0.1 anchor tabs when Zoth Studio v2 is served on public HTTPS domains
+ * (e.g. https://zoth.nullai.tech), allowing every God-Mode workstation to switch
+ * instantaneously (0ms timeout wait) to its 100% client-side in-browser engine.
+ */
+export function installSovereignLoopbackGuard() {
+  if (loopbackGuardInstalled || typeof window === 'undefined') return;
+  loopbackGuardInstalled = true;
+
+  if (typeof window.fetch === 'function') {
+    const nativeFetch = window.fetch.bind(window);
+    window.fetch = function guardedSovereignFetch(input, init) {
+      if (!isLocalRuntime()) {
+        const urlStr =
+          typeof input === 'string'
+            ? input
+            : input && typeof input.url === 'string'
+            ? input.url
+            : String(input || '');
+        if (LOOPBACK_URL_RE.test(urlStr)) {
+          return Promise.resolve(
+            new Response(
+              JSON.stringify({
+                ok: false,
+                status: 'browser_client_mode',
+                offline: true,
+                message: 'Public HTTPS runtime active — executing client-side in-browser engine.',
+              }),
+              {
+                status: 503,
+                statusText: 'Client-Side In-Browser Mode',
+                headers: { 'Content-Type': 'application/json' },
+              }
+            )
+          );
+        }
+      }
+      return nativeFetch(input, init);
+    };
+  }
+
+  if (typeof document !== 'undefined') {
+    document.addEventListener(
+      'click',
+      (event) => {
+        if (isLocalRuntime()) return;
+        const anchor = event.target?.closest?.('a[href]');
+        if (!anchor) return;
+        const rawHref = anchor.getAttribute('href') || '';
+        if (LOOPBACK_URL_RE.test(rawHref)) {
+          event.preventDefault();
+          const deck =
+            document.getElementById('enclave-workstation-deck') ||
+            document.getElementById('client-workstation-deck');
+          if (deck) {
+            deck.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      },
+      true
+    );
+  }
+}
+
 let webgpuCheckPromise = null;
 
 export async function detectWebGPU() {
