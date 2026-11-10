@@ -90,7 +90,7 @@ export default function ZothOSShowcasePage() {
     {
       icon: <AutoAwesomeIcon sx={{ fontSize: 32 }} />,
       title: 'Zoth Studio v2 + ZothOS-Lite (:8145)',
-      desc: 'Native desktop launch of Zoth Studio v2 (:3000), Vaelor L1 (:8140), Zoth Civilization (:9393), and ZothOS-Lite v1.1 (:8145) — our Tails-style Amnesic Monotone Edition featuring a 60fps Unicode Braille + Bayer 8×8 Dither windowed GUI and live root terminal.',
+      desc: 'Native desktop launch of Zoth Studio v2 (:3000), Vaelor L1 (:8140), Zoth Civilization (:9393), and ZothOS-Lite v1.2 (:8145) — our Tails-style Amnesic Monotone Edition featuring a 60fps Unicode Braille + Bayer 8×8 Dither windowed GUI and live root terminal.',
       badge: 'DUAL EDITION',
     },
     {
@@ -300,7 +300,7 @@ export default function ZothOSShowcasePage() {
                 mb: 3,
               }}
             >
-              A bootable Linux operating system engineered by NullAI. Combines the Kali and Parrot security arsenal with the Zoth Studio v2 suite, Vaelor L1 (:8140), Zoth Civilization (:9393), and ZothOS-Lite v1.1 (:8145). The shipped flagship release is v3.4.0 featuring deterministic 4-folder KDE Plasma 6 desktop organization and verified 166KB multi-size Xcursor themes with hardware/VM SWCursor visibility.
+              A bootable Linux operating system engineered by NullAI. Combines the Kali and Parrot security arsenal with the Zoth Studio v2 suite, Vaelor L1 (:8140), Zoth Civilization (:9393), and ZothOS-Lite v1.2 (:8145). The shipped flagship release is v3.4.0 featuring deterministic 4-folder KDE Plasma 6 desktop organization and verified 166KB multi-size Xcursor themes with hardware/VM SWCursor visibility.
             </Typography>
             <Box sx={{ display: 'flex', gap: 1.4, flexWrap: 'wrap', alignItems: 'center' }}>
               <Button
@@ -374,7 +374,7 @@ export default function ZothOSShowcasePage() {
                   bgcolor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#F8FAFC',
                 }}
               >
-                ▓ ZothOS-Lite v1.1
+                ▓ ZothOS-Lite v1.2
               </Button>
             </Box>
           </Box>
@@ -437,7 +437,7 @@ export default function ZothOSShowcasePage() {
           <ToolMotionShowcase
             tool={{
               id: 'zoth-os',
-              name: 'Zoth OS v3.4.0 + ZothOS-Lite v1.1',
+              name: 'Zoth OS v3.4.0 + ZothOS-Lite v1.2',
               category: 'Swarm & Core',
               executionType: 'local_cli',
               localPort: 8145,

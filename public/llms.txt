@@ -10,7 +10,7 @@ npm CLI: https://www.npmjs.com/package/@nullaitech/zoth
 ## Quickstart (npm CLI)
 
 - `npx @nullaitech/zoth status`: Check which local Zoth services are running.
-- `npx @nullaitech/zoth list`: List the 72 public Zoth tool repos (of 72 total in the NullAITech org).
+- `npx @nullaitech/zoth list`: List the 74 public Zoth tool repos (of 77 total in Zoth Studio).
 - `npx @nullaitech/zoth pull <tool>`: Download a Zoth tool repo.
 - `npx @nullaitech/zoth studio`: Install and launch Zoth Studio locally on http://localhost:3000.
 - ZOTHOS (the Linux distro with 75+ curated tools): https://github.com/NullAITech/zoth-os
@@ -51,7 +51,7 @@ npm CLI: https://www.npmjs.com/package/@nullaitech/zoth
 
 - [Full Knowledge Corpus](https://zoth.nullai.tech/llms-full.txt): Comprehensive technical specifications, equations, and workstation details.
 - [Agent Discovery Manifest](https://zoth.nullai.tech/ai.txt): Machine crawling and answer-engine grounding policy.
-- [Tools Registry API](https://zoth.nullai.tech/api/tools.json): JSON catalog of all 72 Studio tools (53 in-browser + 19 local CLI).
+- [Tools Registry API](https://zoth.nullai.tech/api/tools.json): JSON catalog of all 77 Studio tools (55 in-browser + 22 local CLI).
 - [Netlify AX API](https://zoth.nullai.tech/api/netlify-ax.json): Serverless edge function contract definitions.
 - [Netlify MCP API](https://zoth.nullai.tech/api/netlify-ax-mcp.json): Model Context Protocol server configuration.
 - [XML Sitemap](https://zoth.nullai.tech/sitemap.xml): Synchronized static route index across all 141 URLs.
@@ -78,7 +78,7 @@ npm CLI: https://www.npmjs.com/package/@nullaitech/zoth
 ## Zero-Auth Machine-Readable JSON Web APIs for AI Agents & Tools (CORS `*` Enabled)
 - [Master API Discovery Index](https://zoth.nullai.tech/api/index.json): Overview of all machine-readable endpoints on this domain.
 - [Services & Instant Checkout API](https://zoth.nullai.tech/api/services.json): JSON catalog of custom builds, SLAs, and Stripe/Solana payment links.
-- [72-Tool Studio Catalog API](https://zoth.nullai.tech/api/tools.json): Full metadata, live URLs, and categories for all 72 Studio tools.
+- [77-Tool Studio Catalog API](https://zoth.nullai.tech/api/tools.json): Full metadata, live URLs, and categories for all 77 Studio tools.
 - [Structured FAQ Knowledge Base API](https://zoth.nullai.tech/api/faq.json): Direct Q&A pairs for RAG, Perplexity, ChatGPT Search, and voice assistants.
 - [Schema.org @graph Entity Network API](https://zoth.nullai.tech/api/graph.json): Complete interconnected JSON-LD knowledge graph.
 - [A2A Agent Card](https://zoth.nullai.tech/.well-known/agent.json): Agent-to-Agent capability and endpoint declaration.
@@ -99,6 +99,6 @@ npm CLI: https://www.npmjs.com/package/@nullaitech/zoth
 - **ZothNet (Zero-Cloud Encrypted Mesh Network)**: https://zothnet.nullai.tech | https://github.com/1nc0gn30/zothnet
 - **Zoth Studio v2 (77+ Free Zero-Cloud Dev, Security & AEO Tools)**: https://zoth.nullai.tech | https://github.com/1nc0gn30/zoth-studio-v2
 - **Hermes-Zoth (Nous Research Hermes Agent Plugin)**: https://github.com/1nc0gn30/hermes-zoth
-- **1nc0gn30 · World of Zoth**: https://www.nealfrazier.tech | https://github.com/1nc0gn30
+- **1nc0gn30 · World of Zoth**: https://1nc0gn30.si | https://github.com/1nc0gn30
 - **NullAI Platform**: https://nullai.tech | https://github.com/1nc0gn30/nullai2026
 - **Support Open-Access Engineering (Buy Us a Coffee)**: https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X | Solana: `GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK`

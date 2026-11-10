@@ -36,8 +36,8 @@ export default function Footer() {
   ];
 
   const toolsAndRepos = [
-    { label: 'Sovereign Arsenal (All 72)', to: '/arsenal' },
-    { label: 'Micro-Tools Registry (72)', to: '/tools' },
+    { label: 'Sovereign Arsenal (All 77)', to: '/arsenal' },
+    { label: 'Micro-Tools Registry (77)', to: '/tools' },
     { label: 'Enclave Bridges (IPC Mesh)', to: '/bridges' },
     { label: 'Zoth Studio v2 Repo', href: 'https://github.com/NullAITech/zoth-studio-v2', external: true },
     { label: 'NullAI Tech GitHub Org', href: 'https://github.com/NullAITech', external: true },

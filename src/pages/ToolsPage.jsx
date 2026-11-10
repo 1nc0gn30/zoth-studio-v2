@@ -98,7 +98,7 @@ export default function ToolsPage() {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const isBrowserTool = (t) => t.executionType === 'webgpu' || t.executionType === 'browser';
+  const isBrowserTool = (t) => t.executionType === 'webgpu' || t.executionType === 'browser' || t.executionType === 'hybrid';
 
   const filtered = microTools.filter((t) => {
     const matchesCat = selectedCat === 'All' || t.category === selectedCat;

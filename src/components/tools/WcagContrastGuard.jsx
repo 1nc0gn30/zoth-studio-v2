@@ -225,13 +225,13 @@ export default function WcagContrastGuard() {
             size="small"
             variant="contained"
             component="a"
-            href="http://127.0.0.1:8099"
+            href="http://127.0.0.1:8150"
             target="_blank"
             rel="noopener noreferrer"
             endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
             sx={{ fontFamily: mono, fontSize: '0.72rem', bgcolor: '#38BDF8', color: '#000', fontWeight: 800 }}
           >
-            Launch Standalone (:8099)
+            Launch Standalone (:8150)
           </Button>
         </Stack>
       </Stack>
@@ -407,11 +407,11 @@ export default function WcagContrastGuard() {
         </Grid>
       </Grid>
 
-      {/* Embedded Live Sovereign Workstation (:8099) */}
+      {/* Embedded Live Sovereign Workstation (:8150) */}
       <Box sx={{ mt: 2 }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
           <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: 'text.secondary' }}>
-            EMBEDDED WORKSTATION · HTTP://127.0.0.1:8099
+            EMBEDDED WORKSTATION · HTTP://127.0.0.1:8150
           </Typography>
           <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: '#34D399' }}>
             ● LIVE EMBED
@@ -428,7 +428,7 @@ export default function WcagContrastGuard() {
           }}
         >
           <iframe
-            src="http://127.0.0.1:8099"
+            src="http://127.0.0.1:8150"
             title="WCAG Contrast Guard Studio Workstation"
             style={{ width: '100%', height: '100%', border: 'none' }}
             onLoad={() => setIframeLoaded(true)}

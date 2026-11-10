@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * ZOTH ARSENAL & HERMES INTEGRATION VERIFIER (72 Tools Comprehensive Sentinel)
+ * ZOTH ARSENAL & HERMES INTEGRATION VERIFIER (77 Tools Comprehensive Sentinel)
  * 
  * Verifies:
- *  1. Registry Integrity (all 72 tools defined with valid JSON schema).
+ *  1. Registry Integrity (all 77 tools defined with valid JSON schema).
  *  2. Prerendered Static HTML Route Existence for every single tool (/tools/:id).
  *  3. GitHub Repository & Hermes Clone Source Health (valid git URL, zero 404s).
  *  4. Port Uniqueness & Air-Gap Execution Mode (client-side vs daemon loopback).
@@ -65,7 +65,7 @@ async function checkUrlStatus(urlStr) {
 
 async function main() {
   console.log(`\n${C.bold}${C.gold}══════════════════════════════════════════════════════════════════════════════════════${C.reset}`);
-  console.log(`${C.bold}${C.gold}        ZOTH STUDIO v2 & HERMES PLUGIN — 72-TOOL FULL ARSENAL AUDITOR         ${C.reset}`);
+  console.log(`${C.bold}${C.gold}        ZOTH STUDIO v2 & HERMES PLUGIN — 77-TOOL FULL ARSENAL AUDITOR         ${C.reset}`);
   console.log(`${C.bold}${C.gold}══════════════════════════════════════════════════════════════════════════════════════${C.reset}\n`);
 
   if (!fs.existsSync(toolsJsonPath)) {

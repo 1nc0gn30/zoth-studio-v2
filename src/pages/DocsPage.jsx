@@ -209,7 +209,7 @@ export default function DocsPage() {
       },
       {
         id: 'sec-2',
-        title: '2. Decoupled 72 Micro-Repo Directory',
+        title: '2. Decoupled 77 Micro-Repo Directory',
         topics: ['Invariants'],
         kicker: 'MICRO-REPO INDEX'
       },
@@ -275,7 +275,7 @@ export default function DocsPage() {
       },
       {
         id: 'sec-workstations',
-        title: '13. Sovereign Arsenal Architecture (72 tools, 72 with public repos)',
+        title: '13. Sovereign Arsenal Architecture (77 tools, 74 with public repos)',
         topics: ['Enclaves & Netlify'],
         kicker: 'ARSENAL TOPOLOGY'
       },
@@ -369,7 +369,7 @@ Shannon entropy gatekeeper active on all inter-process channels.`,
 
     `npm run zoth -- pull --all
 
-Clones the 72 public catalog entries (of 72) into ./tools.
+Clones the 74 public catalog entries (of 77) into ./tools.
 Runs local invariant verification before staging tools.`
   ];
 
@@ -398,7 +398,7 @@ Runs local invariant verification before staging tools.`
                 />
                 <Chip
                   icon={<HubIcon sx={{ fontSize: '14px !important', color: `${textSecondary} !important` }} />}
-                  label="72 TOOLS · 72 PUBLIC REPOS"
+                  label="77 TOOLS · 74 PUBLIC REPOS"
                   size="small"
                   sx={{
                     bgcolor: dark ? '#14141E' : '#F2F4F7',
@@ -826,7 +826,7 @@ Runs local invariant verification before staging tools.`
 
                   <Typography variant="body1" color="text.secondary" paragraph>
                     Zoth Studio v2 is the local-first operator desk (it can run offline) for sovereign AI agent development.
-                    Integrating 43 dedicated workstations, 72 micro-tools, Lucy Oracle STDP
+                    Integrating 43 dedicated workstations, 77 micro-tools, Lucy Oracle STDP
                     synaptic memory, 3-agent Byzantine consensus, and the Adytum Hardware Sanctum,
                     all execution runs strictly on physical hardware via local loopback enclaves (
                     <code>127.0.0.1</code>).
@@ -866,7 +866,7 @@ Runs local invariant verification before staging tools.`
                       }}
                     >
                       {[
-                        { icon: <CodeIcon sx={{ mb: 0.5, color: dark ? '#79C0FF' : '#0969DA' }} />, title: '72 Studio Tools', desc: 'DAG Composer, IDE & Foundry' },
+                        { icon: <CodeIcon sx={{ mb: 0.5, color: dark ? '#79C0FF' : '#0969DA' }} />, title: '77 Studio Tools', desc: 'DAG Composer, IDE & Foundry' },
                         { icon: <MemoryIcon sx={{ mb: 0.5, color: dark ? '#00F0FF' : '#0891B2' }} />, title: 'Lucy Cognitive Oracle', desc: 'STDP Synaptic Plasticity (:8094)' },
                         { icon: <GavelIcon sx={{ mb: 0.5, color: dark ? '#C084FC' : '#7C3AED' }} />, title: '3-Agent Byzantine', desc: 'Triadic AST Socratic Debate' },
                         { icon: <ShieldIcon sx={{ mb: 0.5, color: dark ? '#34D399' : '#047857' }} />, title: 'Zero-Egress Invariants', desc: 'Shannon Entropy & Loopback' },
@@ -908,7 +908,7 @@ npm run dev`}
                 </Paper>
               )}
 
-              {/* SECTION 2: Decoupled 72 Micro-Repo Directory */}
+              {/* SECTION 2: Decoupled 77 Micro-Repo Directory */}
               {visibleSectionIds.has('sec-2') && (
                 <Paper
                   id="sec-2"
@@ -936,7 +936,7 @@ npm run dev`}
                         sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700, mb: 1 }}
                       />
                       <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
-                        2. Decoupled 72 Micro-Repo Directory ({filteredTools.length})
+                        2. Decoupled 77 Micro-Repo Directory ({filteredTools.length})
                       </Typography>
                     </Box>
 
@@ -1708,7 +1708,7 @@ npm run preview`}
                   </Box>
 
                   <Typography variant="body1" color="text.secondary" paragraph>
-                    Comprehensive interactive index of all 72 Studio tools and workspaces across agent
+                    Comprehensive interactive index of all 77 Studio tools and workspaces across agent
                     coordination, neural memory, Byzantine consensus, code development, and hardware
                     sanctum domains.
                   </Typography>
@@ -1789,7 +1789,7 @@ export ZOTH_DEFAULT_MODEL="qwen2.5-coder:32b"`}
                     C. Installing Micro-Tools into /usr/local/bin
                   </Typography>
                   <Typography variant="body2" color="text.secondary" paragraph>
-                    Link any of the 72 micro-tools into your system PATH for immediate command-line execution:
+                    Link any of the 77 micro-tools into your system PATH for immediate command-line execution:
                   </Typography>
                   <CodeSnippet
                     title="GLOBAL PATH INSTALLATION"

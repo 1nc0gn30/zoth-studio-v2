@@ -143,7 +143,9 @@ function AppShell({ mode, onToggleTheme }) {
           borderRadius: reality.cardRadius,
         },
         '& .text-gradient-gold': {
-          backgroundImage: `linear-gradient(135deg, ${reality.accent} 0%, ${reality.accentSoft} 50%, ${reality.accent} 100%) !important`,
+          backgroundImage: theme.palette.mode === 'dark'
+            ? `linear-gradient(135deg, ${reality.accent} 0%, ${reality.accentSoft} 50%, ${reality.accent} 100%) !important`
+            : `linear-gradient(135deg, ${reality.accentLightMode || '#7A5400'} 0%, #9A6E08 50%, ${reality.accentLightMode || '#6E4B00'} 100%) !important`,
         },
         '& .MuiButton-containedPrimary': {
           backgroundColor: `${reality.accent} !important`,

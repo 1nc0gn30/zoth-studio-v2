@@ -23,12 +23,12 @@ const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const OS_PILLARS = [
   { id: 'amnesic', name: 'Amnesic RAM Hygiene', glyph: '🛡️', desc: 'Debian 13 boots via toram noswap. Boot USB unmounts; power-off wipes RAM with 0 trace.' },
   { id: 'persistence', name: 'USB & Cloud Persistence', glyph: '💾', desc: 'Auto-mounts external SSDs at /media/$USER/*. Syncs to cloud drives via rclone.' },
-  { id: 'ai-swarm', name: '42+ Model Universal AI', glyph: '🤖', desc: 'Universal AI execution on Intel, AMD, NVIDIA, or CPU across 8 major frontier providers.' },
+  { id: 'ai-swarm', name: '48+ Model Universal AI', glyph: '🤖', desc: 'Universal AI execution on Intel, AMD, NVIDIA, or CPU across 8 major frontier providers.' },
   { id: 'zothnet', name: 'ZothNet Encrypted Mesh', glyph: '🌐', desc: 'Zero-centralization P2P communication via WireGuard, Yggdrasil, and onion routing.' },
 ];
 
 const DEV_TOOLS = [
-  { id: 'swarm', name: 'Multi-Model Swarm Console', role: 'Run 42+ frontier models across 8 providers with client-side key encryption.' },
+  { id: 'swarm', name: 'Multi-Model Swarm Console', role: 'Run 48+ frontier models across 8 providers with client-side key encryption.' },
   { id: 'image-viewer', name: 'Precision Image Viewer', role: 'In-browser zoom, pan, rotation, brightness/contrast filters, and EXIF extraction.' },
   { id: 'av-player', name: 'Precision AV Player', role: 'Frame-accurate scrubbing, 32-band real-time audio spectrum, and snapshot export.' },
   { id: 'packager', name: 'Storage & Cloud Packager', role: 'Client-side zero-dependency PKZIP compressor with SHA256 integrity manifest.' },
@@ -122,7 +122,7 @@ export default function ZothOSLiteGodModeTool() {
       ctx.fillText(`⣿ ZOTHOS-LITE v1.2 (TORAM NOSWAP) // TOPIC: ${selectedPillar.id.toUpperCase()}`, 12, 16);
       ctx.fillStyle = '#38BDF8';
       ctx.textAlign = 'right';
-      ctx.fillText(liveStatus ? 'DAEMON :8145 ONLINE • 42 AI MODELS' : 'UNIVERSAL HARDWARE ARMED', cw - 12, 16);
+      ctx.fillText(liveStatus ? 'DAEMON :8145 ONLINE • 48+ AI MODELS' : 'UNIVERSAL HARDWARE ARMED', cw - 12, 16);
 
       ctx.restore();
       raf = requestAnimationFrame(render);
@@ -136,7 +136,7 @@ export default function ZothOSLiteGodModeTool() {
     return `# 1. Query Universal Amnesic OS Status & Hardware Compatibility
 zothos-lite --status
 
-# 2. List 42+ Supported AI Models Across 8 Frontier Providers
+# 2. List 48+ Supported AI Models Across 8 Frontier Providers
 zothos-lite --models
 zothos-lite --providers
 
@@ -197,7 +197,7 @@ zothos-lite --tools`;
                 ZOTHOS-LITE v1.2 // UNIVERSAL AMNESIC SECURITY OS (:8145)
               </Typography>
               <Chip
-                label="42+ MODELS • 8 PROVIDERS • UNIVERSAL x86_64"
+                label="48+ MODELS • 8 PROVIDERS • UNIVERSAL x86_64"
                 size="small"
                 sx={{
                   height: 20,

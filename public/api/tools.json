@@ -1,6 +1,6 @@
 {
   "schema": "zoth/tools-static/v1",
-  "generated_at": "2026-11-10T16:44:33.000Z",
+  "generated_at": "2026-11-10T17:38:15.234Z",
   "tool_count": 77,
   "tools": [
     {
@@ -568,7 +568,7 @@
       "name": "Anderson Security Sentinel",
       "description": "Autonomous biometric laptop perimeter defense, WiFi X-Ray RF tomography, USB tripwire guard, and thermal FLIR optics. Free to use; tips optional.",
       "category": "Security & OpSec",
-      "github": "https://github.com/1nc0gn30/sentinel-security-engine",
+      "github": "https://github.com/1nc0gn30/anderson-security-sentinel",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/anderson-security-sentinel/",
       "version": "2.5.0",
@@ -707,7 +707,7 @@
       "id": "wcag-contrast-guard",
       "name": "WCAG & APCA Contrast Guard Studio",
       "description": "WCAG 2.2 Level AA/AAA, APCA contrast algorithm, colorblindness simulation, focus indicators, and harmonic palette generation.",
-      "category": "accessibility",
+      "category": "Accessibility & UI",
       "github": "https://github.com/1nc0gn30/wcag-contrast-guard",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/wcag-contrast-guard/",
@@ -865,7 +865,7 @@
     },
     {
       "id": "agent-gods-eye",
-      "name": "Agent God",
+      "name": "Agent God's Eye",
       "description": "Autonomous zero-dependency Shodan OSINT tactical radar, 3D kinetic planetary attack surface reconnaissance, and threat scoring.",
       "category": "Security & Recon",
       "github": "https://github.com/1nc0gn30/agent-gods-eye",
@@ -1166,7 +1166,7 @@
     {
       "id": "osint-scout-skill",
       "name": "Domain Intel OSINT Scout",
-      "description": "100% in-browser passive domain intelligence & attack surface reconnaissance engine auditing Certificate Transparency logs, DoH DNS records, and SPF/DMARC posture \u2014 free to use; optional tips welcome.",
+      "description": "100% in-browser passive domain intelligence & attack surface reconnaissance engine auditing Certificate Transparency logs, DoH DNS records, and SPF/DMARC posture — free to use; optional tips welcome.",
       "category": "Security & Recon",
       "github": "https://github.com/NullAITech/osint-scout-skill",
       "published": true,
@@ -1306,7 +1306,7 @@
     {
       "id": "zoth-ascii-magic",
       "name": "Zoth ASCII Magic Studio",
-      "description": "100% client-side Image/Video/3D-to-ASCII & Sub-Pixel Unicode Braille studio with Sobel directional edge detection (/\\\\|-), interactive 2D point relighting, CRT phosphor bloom, and 24-bit TrueColor ANSI/HTML/SVG exports.",
+      "description": "100% client-side Image/Video/3D-to-ASCII & Sub-Pixel Unicode Braille studio with Sobel directional edge detection (/\\|-), interactive 2D point relighting, CRT phosphor bloom, and 24-bit TrueColor ANSI/HTML/SVG exports.",
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/zoth-ascii-magic",
       "published": true,
@@ -1406,7 +1406,7 @@
     {
       "id": "zela-glasses-guide",
       "name": "Zela Glasses Guide",
-      "description": "Sovereign wearable AI mission coach for Ray-Ban Meta smart glasses over Tailscale \u2014 full-duplex WebSocket guide stream, Moondream vision, AGY coaching, and Kokoro TTS via zoth-relay-mobile.",
+      "description": "Sovereign wearable AI mission coach for Ray-Ban Meta smart glasses over Tailscale — full-duplex WebSocket guide stream, Moondream vision, AGY coaching, and Kokoro TTS via zoth-relay-mobile.",
       "category": "Swarm & Core",
       "github": "https://github.com/1nc0gn30/zela-glasses-guide",
       "published": true,
@@ -1426,7 +1426,7 @@
     {
       "id": "zoth-bot",
       "name": "Zoth Bot Desktop Companion",
-      "description": "Local-first always-on 3D WebGL desk companion for Zoth OS \u2014 multi-harness neural engine (Grok/Hermes/Ollama), Security Ring authority, MCP hub, summoned with Ctrl+Shift+Space.",
+      "description": "Local-first always-on 3D WebGL desk companion for Zoth OS — multi-harness neural engine (Grok/Hermes/Ollama), Security Ring authority, MCP hub, summoned with Ctrl+Shift+Space.",
       "category": "Swarm & Core",
       "github": "https://github.com/1nc0gn30/zoth-bot",
       "published": true,
@@ -1466,7 +1466,7 @@
     {
       "id": "zoth-scene-foundry",
       "name": "Zoth Scene Foundry",
-      "description": "Procedural ZothOS-style ASCII + pixel-art scene engine \u2014 1000 deterministic scenes with Bayer dither, tube palettes, and three.js AsciiEffect stage on :8823.",
+      "description": "Procedural ZothOS-style ASCII + pixel-art scene engine — 1000 deterministic scenes with Bayer dither, tube palettes, and three.js AsciiEffect stage on :8823.",
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/zoth-scene-foundry",
       "published": true,
@@ -1488,7 +1488,7 @@
       "name": "Zoth Math Pillar HUD",
       "description": "Real-time 4-Pillar Mathematical Security & Compute Telemetry HUD (L0 Kernel Hardware, L1 Crypto Vault, L2 Network Enclave, L3 Agent Runtime) with Compact Pill mode, Electron desktop overlay, and Braille TUI.",
       "category": "Security & Enclave",
-      "github": "https://github.com/1nc0gn30/zoth-os/tree/main/config/includes.chroot/opt/zoth-math-pillar",
+      "github": "https://github.com/1nc0gn30/zoth-os",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/zoth-math-pillar/",
       "version": "2.0.0",
@@ -1505,13 +1505,13 @@
     },
     {
       "id": "zothos-lite",
-      "name": "ZothOS-Lite v1.1 (Amnesic Monotone OS)",
-      "description": "1-Bit Monotone Amnesic Security & AI Workstation (toram noswap) with AZOTH Embodied Braille AI, A100 80GB Foundry, 21 Pantheon Agent Rigs, 6 Helios-Zoth Planets, 22 Adytum Tarot 3D Dioramas, and 45 Kali/Parrot CLI Tools on :8145.",
+      "name": "ZothOS-Lite v1.2 (Amnesic Monotone OS)",
+      "description": "1-Bit Amnesic Monotone Security & AI OS (Debian 13 Live · toram noswap) supporting 48+ AI models across 8 providers, interactive onboarding, ZothNet P2P mesh, external USB/cloud persistence, and lightweight media/dev tools on :8145.",
       "category": "Hardware & OS",
       "github": "https://github.com/1nc0gn30/zothos-lite",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/zothos-lite/",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "pull": "zothos-lite desktop  # or: zothos-lite-tui | zothos-lite --status",
       "execution_type": "local_cli",
       "runtimes": [
@@ -1532,7 +1532,7 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/zothnet/",
       "version": "1.2.0",
-      "pull": "zothnet run --alias ",
+      "pull": "zothnet run --alias \"Studio-Node\"  # or: zothnet status --json | zothnet mcp",
       "execution_type": "local_cli",
       "runtimes": [
         "python",

@@ -211,7 +211,7 @@ EOF
 ## Zero-Auth Machine-Readable JSON Web APIs for AI Agents & Tools (CORS `*` Enabled)
 - [Master API Discovery Index](https://zoth.nullai.tech/api/index.json): Overview of all machine-readable endpoints on this domain.
 - [Services & Instant Checkout API](https://zoth.nullai.tech/api/services.json): JSON catalog of custom builds, SLAs, and Stripe/Solana payment links.
-- [72-Tool Studio Catalog API](https://zoth.nullai.tech/api/tools.json): Full metadata, live URLs, and categories for all 72 Studio tools.
+- [77-Tool Studio Catalog API](https://zoth.nullai.tech/api/tools.json): Full metadata, live URLs, and categories for all 77 Studio tools.
 - [Structured FAQ Knowledge Base API](https://zoth.nullai.tech/api/faq.json): Direct Q&A pairs for RAG, Perplexity, ChatGPT Search, and voice assistants.
 - [Schema.org @graph Entity Network API](https://zoth.nullai.tech/api/graph.json): Complete interconnected JSON-LD knowledge graph.
 - [A2A Agent Card](https://zoth.nullai.tech/.well-known/agent.json): Agent-to-Agent capability and endpoint declaration.

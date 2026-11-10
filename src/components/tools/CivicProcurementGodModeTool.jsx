@@ -73,7 +73,7 @@ export default function CivicProcurementGodModeTool({ tool }) {
 
   // Product Hunt Launch Kit State
   const [phProductName, setPhProductName] = useState('Zoth Studio v2.2 — Sovereign AI Arsenal');
-  const [phTagline, setPhTagline] = useState('72 zero-egress developer tools & WebGPU workstations in browser');
+  const [phTagline, setPhTagline] = useState('77 zero-egress developer tools & WebGPU workstations in browser');
   const [phTopics, setPhTopics] = useState('Developer Tools, Artificial Intelligence, Open Source, Privacy');
   const [phFirst4HrUpvotes, setPhFirst4HrUpvotes] = useState(185);
 

@@ -73,7 +73,7 @@ const heroItemVariants = {
 export function HeroReveal({ children, className, style, delay = 0, ...rest }) {
   const prefersReduced = useReducedMotion();
   const ref = useRef(null);
-  const isInView = useGatedInView(ref, { once: true, margin: '-40px' });
+  const released = useIntroReleased();
 
   if (prefersReduced) {
     return (
@@ -90,7 +90,7 @@ export function HeroReveal({ children, className, style, delay = 0, ...rest }) {
       style={style}
       variants={heroContainerVariants}
       initial="hidden"
-      animate={isInView ? 'visible' : 'hidden'}
+      animate={released ? 'visible' : 'hidden'}
       transition={{ delayChildren: delay }}
       {...rest}
     >

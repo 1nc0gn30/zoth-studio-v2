@@ -125,8 +125,8 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
     `).join('');
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Sovereign Tool Nexus // 25 Air-Gapped Micro-Tools</h2>
-        <p style="color: #D1D5DB; line-height: 1.6;">Standalone, schema-validated air-gapped developer utilities for JWT verification, payload entropy analysis, 3D modeling, and code generation.</p>
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Sovereign Tool Nexus // ${microTools.length} Air-Gapped Micro-Tools</h2>
+        <p style="color: #D1D5DB; line-height: 1.6;">Standalone, schema-validated air-gapped developer utilities (55 in-browser + 22 CLI) for JWT verification, payload entropy analysis, 3D modeling, and code generation.</p>
         <ul style="line-height: 1.8; color: #E5E7EB; margin-top: 1rem;">
           ${toolsList}
         </ul>
@@ -140,8 +140,8 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
     `).join('');
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Workstations // 24 Studio Environments & Interactive Consoles</h2>
-        <p style="color: #D1D5DB; line-height: 1.6;">Full directory of 24 native studio workstations organized across the 6 operational bands: Build, Observe, Security, Spatial, Studio, and Swarm & Consensus.</p>
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Workstations // ${workstations.length} Studio Environments & Interactive Consoles</h2>
+        <p style="color: #D1D5DB; line-height: 1.6;">Full directory of ${workstations.length} native studio workstations organized across the 6 operational bands: Build, Observe, Security, Spatial, Studio, and Swarm & Consensus.</p>
         <ul style="line-height: 1.8; color: #E5E7EB; margin-top: 1rem;">
           ${stationList}
         </ul>
@@ -406,8 +406,8 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
               <li><a href="/memory" style="color: #D4AF37; text-decoration: underline;">Lucy Cognitive Memory</a></li>
               <li><a href="/swarm" style="color: #D4AF37; text-decoration: underline;">21 Swarm Pantheon</a></li>
               <li><a href="/bridges" style="color: #D4AF37; text-decoration: underline;">Signal Bridge (:8102)</a></li>
-              <li><a href="/tools" style="color: #D4AF37; text-decoration: underline;">72 Studio Tools</a></li>
-              <li><a href="/workstations" style="color: #D4AF37; text-decoration: underline;">43 Workstations</a></li>
+              <li><a href="/tools" style="color: #D4AF37; text-decoration: underline;">${microTools.length} Studio Tools</a></li>
+              <li><a href="/workstations" style="color: #D4AF37; text-decoration: underline;">${workstations.length} Workstations</a></li>
               <li><a href="/consensus" style="color: #D4AF37; text-decoration: underline;">Consensus Battle Arena</a></li>
               <li><a href="/webgen" style="color: #D4AF37; text-decoration: underline;">WebGen Foundry</a></li>
               <li><a href="/hexstrike" style="color: #D4AF37; text-decoration: underline;">HexStrike Cybersec</a></li>

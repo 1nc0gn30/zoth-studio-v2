@@ -98,7 +98,7 @@ const INITIAL_MEMORIES = [
   {
     id: 'mem-09',
     tier: 'Semantic Vault',
-    content: '1nc0gn30 Sovereign Hub (1nc0gn30.si, nealfrazier.tech, nullai.tech) & 7-APK Master Roadmap (F-Droid & Google Play): ZothNet, ZothTerm, Zoth-Cursorz, World of Zoth, Spotter / FieldKit, Zoth-Bot Wear OS, and Zoth Signal Bridge.',
+    content: '1nc0gn30 Sovereign Hub (1nc0gn30.si, nullai.tech) & 7-APK Master Roadmap (F-Droid & Google Play): ZothNet, ZothTerm, Zoth-Cursorz, World of Zoth, Spotter / FieldKit, Zoth-Bot Wear OS, and Zoth Signal Bridge.',
     tags: ['1nc0gn30', 'apk', 'fdroid', 'play-store', 'roadmap', 'obsidian'],
     salience: 0.98,
     ageHours: 0.3,

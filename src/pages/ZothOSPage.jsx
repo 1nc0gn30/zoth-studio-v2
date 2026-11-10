@@ -951,7 +951,7 @@ export default function ZothOSPage() {
               Zoth OS: Sovereign <span className="text-gradient-gold">Agent Operating System</span>
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 680, lineHeight: 1.65, fontSize: '1.0rem', mb: 2.5 }}>
-              The shipped flagship release is <strong>v3.4.0</strong>, showcased alongside <strong>ZothOS-Lite v1.1</strong> (Amnesic Monotone Edition on <code>:8145</code>) and <strong>Chain of Thoughts (<code>zoth-cot</code>)</strong>. Zoth OS is a custom Linux distribution engineered to run Zoth Studio, Ollama, all micro-tools, and the local memory daemon out-of-the-box with zero setup hassle. Flashed to bare metal or run via QEMU/KVM, it guarantees <span className="text-highlight-gold">100% Zero-Telemetry Local Operation</span>.
+              The shipped flagship release is <strong>v3.4.0</strong>, showcased alongside <strong>ZothOS-Lite v1.2</strong> (Amnesic Monotone Edition on <code>:8145</code>) and <strong>Chain of Thoughts (<code>zoth-cot</code>)</strong>. Zoth OS is a custom Linux distribution engineered to run Zoth Studio, Ollama, all micro-tools, and the local memory daemon out-of-the-box with zero setup hassle. Flashed to bare metal or run via QEMU/KVM, it guarantees <span className="text-highlight-gold">100% Zero-Telemetry Local Operation</span>.
             </Typography>
 
             {/* Export Manifest & Fast Navigation Buttons */}
@@ -1172,7 +1172,7 @@ export default function ZothOSPage() {
           <ToolMotionShowcase
             tool={{
               id: 'zoth-os',
-              name: 'Zoth OS v3.4.0 + ZothOS-Lite v1.1',
+              name: 'Zoth OS v3.4.0 + ZothOS-Lite v1.2',
               category: 'Swarm & Core',
               executionType: 'local_cli',
               localPort: 8094,
@@ -1444,7 +1444,7 @@ export default function ZothOSPage() {
           </Box>
         </RevealOnScroll>
 
-        {/* SECTION: ZothOS-Lite v1.1 (Amnesic 1-Bit Black & White Tails-Style Edition) */}
+        {/* SECTION: ZothOS-Lite v1.2 (Amnesic 1-Bit Black & White Tails-Style Edition) */}
         <RevealOnScroll preset="fadeUp" delay={0.28}>
           <Box
             sx={{

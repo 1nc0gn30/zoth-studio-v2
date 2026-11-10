@@ -327,7 +327,7 @@ export function getKnowledgeBaseAnswer(query = '') {
   if (q.includes('3-tier') || q.includes('tier architecture') || q.includes('architecture')) {
     return `Zoth Studio operates on a sovereign 3-tier local architecture:
 1. Public Hub (http://127.0.0.1:3000): Static edge showcase, catalog, and documentation.
-2. Operator Deck (http://127.0.0.1:8484): Sovereign control center for agent execution, multi-model consensus, and 72 interactive workstations.
+2. Operator Deck (http://127.0.0.1:8484): Sovereign control center for agent execution, multi-model consensus, and 77 interactive workstations.
 3. BYOK Secrets Vault (http://127.0.0.1:8787): Rust-native loopback daemon using Argon2id memory-hard KDF and XChaCha20-Poly1305 AEAD for zero-telemetry key protection.`;
   }
 

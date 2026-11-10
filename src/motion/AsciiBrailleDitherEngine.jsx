@@ -269,7 +269,7 @@ export const SHAPE_DESCRIPTORS = {
 };
 
 /**
- * Deterministically maps any of the 72 Sovereign Arsenal tools to a tailored Uncommon Web
+ * Deterministically maps any of the 77 Sovereign Arsenal tools to a tailored Uncommon Web
  * 2x4 Sub-Pixel Braille + Bayer 8x8 Dither procedural shape.
  */
 export function resolveToolBrailleShape(tool) {

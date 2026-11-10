@@ -77,7 +77,7 @@ Zoth Studio v2 is an offline-capable, zero-egress development studio designed fo
 - Function: Guides the sovereign agent pantheon through the Whitespace Cyberspace memory stratum.
 - Memory Law: Spike-Timing-Dependent Plasticity (STDP) adjusts synaptic weights (dw = A+ * exp(-dt/tau)). Frequent queries reinforce memories; stale vectors decay logarithmically.
 
-## 43 Studio Workstations & 72 Tools
+## 43 Studio Workstations & 77 Tools
 - Build: Agent Composer (DAG builder), AX Powerhouse, IDE Code Foundry, Edge Forge, Tool Bench, WebGen.
 - Security: HexStrike CVE matrix, Web3 Sovereign Solana Bridge, SubSweep lead scanner, Adytum Key Sanctum.
 - Swarm & Consensus: 3-Agent Byzantine Triangulation (Socratic AST debate), Swarm NOC, Cockpit radar, Signal Bridge.
@@ -129,7 +129,7 @@ SECTION 2: LOCAL-FIRST AUDIT INVARIANTS
 ================================================================================
 SECTION 3: MACHINE-READABLE CONTRACTS & TOOL SCHEMAS
 ================================================================================
-- Tool Index API: /api/tools.json (72 sovereign CLI & browser tools and micro-repos)
+- Tool Index API: /api/tools.json (77 sovereign CLI & browser tools and micro-repos)
 - MCP Schemas: /api/netlify-ax-mcp.json (Model Context Protocol endpoints)
 - Agent Crawler Rules: /ai.txt
 - Full XML Route Index: /sitemap.xml (141 static routes)`
@@ -218,7 +218,7 @@ netlify-mcp-api: https://zoth.nullai.tech/api/netlify-ax-mcp.json`
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
-  <!-- [Synchronized: 72 production static routes ready for sovereign agent indexing] -->
+  <!-- [Synchronized: 146 production static routes ready for sovereign agent indexing] -->
 </urlset>`
   },
   {
@@ -807,7 +807,7 @@ export default function AXPage() {
             startIcon={<OpenInNewIcon />}
             sx={{ fontWeight: 750, color: theme.palette.text.secondary }}
           >
-            sitemap.xml (72 URLs)
+            sitemap.xml (146 URLs)
           </Button>
         </Box>
 

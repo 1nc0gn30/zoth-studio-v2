@@ -212,7 +212,6 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'reality-shader-forge': RealityShaderForgeGodModeTool,
   'anderson-security-sentinel': AttackSurfaceSentinelGodModeTool,
   'city-desk': CivicProcurementGodModeTool,
-  'osint-scout-skill': SubSweepGodModeTool,
   'storefront-catalog': PodCommerceGodModeTool,
   'pixel-cast': PixelCastGodModeTool,
   'zoth-math-pillar': ZothPillGodModeTool,

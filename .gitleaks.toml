@@ -192,9 +192,10 @@ paths = [
 
 # Default gitleaks skips common images but not the studio capture binaries.
 [[allowlists]]
-description = "Published studio-capture binaries (mp4, webm, webp). Not a place for source or env fixtures."
+description = "Published studio-capture binaries (mp4, webm, webp, iso) and gitignored local build/runtime caches (dist, release-artifacts, node_modules, .netlify, .vite_cache, .zoth, __pycache__)."
 paths = [
-  '''(?i)\.(?:mp4|webm|webp)$''',
+  '''(?i)\.(?:mp4|webm|webp|iso)$''',
+  '''(?:^|/)(?:dist|release-artifacts|node_modules|\.netlify|\.vite_cache|\.zoth|__pycache__)/''',
 ]
 
 # Pre-existing product fixtures. Each allowlist is an exact secret, and the

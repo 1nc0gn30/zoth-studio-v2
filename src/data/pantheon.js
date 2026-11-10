@@ -783,15 +783,15 @@ export const pantheonAgents = [
       name: 'Nekomata MCP Arsenal Drop',
       cooldown: '4.5s',
       vfxType: 'neko_tool_starburst',
-      effect: 'Instant 72-Tool Hot-Load & Lucky Crit Boost',
-      damageOrEffect: 'Instant 72-Tool Hot-Load & Lucky Crit Boost',
+      effect: 'Instant 77-Tool Hot-Load & Lucky Crit Boost',
+      damageOrEffect: 'Instant 77-Tool Hot-Load & Lucky Crit Boost',
       description:
         'Summons a spinning carousel of glowing golden MCP tool cartridges that buff every nearby agent.',
     },
     animations: {
       idle: 'Twin neon-orange Nekomata tails swaying while holographic MCP tool cards orbit her',
       walk: 'Nimble rooftop cyber-cat leap with sparkling Lucky-Cat coin trails',
-      work: 'Juggling and indexing 72 Zoth Arsenal tool cartridges at lightning speed',
+      work: 'Juggling and indexing 77 Zoth Arsenal tool cartridges at lightning speed',
       ability: 'Maneki-Neko Tool Summon — waves a lucky cyber-paw, dropping a barrage of glowing MCP tool crates',
       ultimate: 'Solar Bazaar Carnival — opens a massive golden holographic library that equips the entire swarm',
       meditate: 'Sunbeam Purr — curled up beside Cyber Calico inside a warm golden sun-sphere',
