@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-import { Box, Chip, Button, Tooltip } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const STRIPE_COFFEE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
 const SOLANA_WALLET = 'GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK';
 
 /**
- * 100% Open-Access badge + "Buy Us a Coffee" (Stripe) + Solana Wallet Tip bar.
+ * Quiet, high-contrast open-source support strip.
  */
-export default function ToolOfferLine({ tool, isDark }) {
+export default function ToolOfferLine({ isDark }) {
   const [copiedSol, setCopiedSol] = useState(false);
 
-  const color = isDark ? '#F5E6AB' : '#8A6508';
-  const wash = isDark ? 'rgba(61,255,168,0.12)' : '#ECFDF5';
-  const border = isDark ? 'rgba(61,255,168,0.38)' : 'rgba(16,185,129,0.35)';
+  const borderCol = isDark ? 'rgba(245, 241, 230, 0.14)' : 'rgba(16, 24, 40, 0.14)';
+  const textPrimary = isDark ? '#F5F1E6' : '#101828';
+  const textMuted = isDark ? '#9CA3AF' : '#475467';
 
   const handleCopySolana = (e) => {
     e.preventDefault();
@@ -25,20 +25,10 @@ export default function ToolOfferLine({ tool, isDark }) {
   };
 
   return (
-    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center', mt: 1.5 }}>
-      <Chip
-        label="✦ 100% Free & Open Access"
-        size="small"
-        sx={{
-          fontFamily: mono,
-          fontWeight: 800,
-          letterSpacing: '0.04em',
-          bgcolor: wash,
-          color: isDark ? '#3dffa8' : '#047857',
-          border: `1px solid ${border}`,
-          height: 26,
-        }}
-      />
+    <Box sx={{ display: 'flex', gap: 1.25, flexWrap: 'wrap', alignItems: 'center', mt: 1.5 }}>
+      <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 600, color: textMuted }}>
+        100% Open Source · Zero Paywalls
+      </Typography>
       <Button
         size="small"
         component="a"
@@ -47,69 +37,36 @@ export default function ToolOfferLine({ tool, isDark }) {
         rel="noopener noreferrer"
         sx={{
           fontFamily: mono,
-          fontWeight: 800,
-          fontSize: '0.72rem',
-          letterSpacing: '0.03em',
-          bgcolor: isDark ? 'rgba(212,175,55,0.16)' : '#FEF3C7',
-          color: isDark ? '#F5E6AB' : '#92400E',
-          border: `1px solid ${isDark ? 'rgba(212,175,55,0.4)' : '#F59E0B'}`,
+          fontWeight: 700,
+          fontSize: '0.7rem',
+          color: textPrimary,
+          border: `1px solid ${borderCol}`,
           textTransform: 'none',
-          px: 1.2,
+          px: 1.1,
           py: 0.25,
-          borderRadius: 1.5,
-          '&:hover': {
-            bgcolor: isDark ? 'rgba(212,175,55,0.28)' : '#FDE68A',
-          },
+          borderRadius: 1,
         }}
       >
-        ☕ Buy Us a Coffee (Stripe)
+        ☕ Buy Us a Coffee
       </Button>
-      <Tooltip title={`Click to copy Solana wallet: ${SOLANA_WALLET}`}>
-        <Button
-          size="small"
-          onClick={handleCopySolana}
-          href={`solana:${SOLANA_WALLET}`}
-          sx={{
-            fontFamily: mono,
-            fontWeight: 800,
-            fontSize: '0.72rem',
-            letterSpacing: '0.03em',
-            bgcolor: isDark ? 'rgba(20,241,149,0.12)' : '#ECFDF5',
-            color: isDark ? '#14F195' : '#047857',
-            border: `1px solid ${isDark ? 'rgba(20,241,149,0.38)' : '#10B981'}`,
-            textTransform: 'none',
-            px: 1.2,
-            py: 0.25,
-            borderRadius: 1.5,
-            '&:hover': {
-              bgcolor: isDark ? 'rgba(20,241,149,0.22)' : '#D1FAE5',
-            },
-          }}
-        >
-          {copiedSol ? '✓ Copied GG2e...dXoK!' : '◎ Solana Tip (GG2e...dXoK)'}
-        </Button>
-      </Tooltip>
-      {tool?.liveUrl && !tool.liveUrl.includes('github.com') && (
-        <Button
-          size="small"
-          href={tool.liveUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          sx={{
-            fontFamily: mono,
-            fontWeight: 750,
-            fontSize: '0.72rem',
-            letterSpacing: '0.04em',
-            color,
-            textTransform: 'none',
-            minWidth: 0,
-            px: 0.8,
-            py: 0.2,
-          }}
-        >
-          Live app ↗
-        </Button>
-      )}
+      <Button
+        size="small"
+        onClick={handleCopySolana}
+        sx={{
+          fontFamily: mono,
+          fontWeight: 700,
+          fontSize: '0.7rem',
+          color: isDark ? '#34D399' : '#047857',
+          border: `1px solid ${isDark ? 'rgba(52,211,153,0.35)' : '#A7F3D0'}`,
+          bgcolor: isDark ? 'rgba(16,185,129,0.06)' : '#ECFDF5',
+          textTransform: 'none',
+          px: 1.1,
+          py: 0.25,
+          borderRadius: 1,
+        }}
+      >
+        {copiedSol ? 'Copied GG2e…dXoK' : 'Solana Tip: GG2e…dXoK'}
+      </Button>
     </Box>
   );
 }

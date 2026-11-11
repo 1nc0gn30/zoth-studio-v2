@@ -1,58 +1,31 @@
 /**
- * IntroDirector — route-level motion-edit intros with a cinematic handoff.
+ * IntroDirector — crisp two-door editorial aperture intros with dual-theme contrast.
  *
- * One director owns every route's intro so the experience is identical across
- * the site and pages no longer manage their own overlay state.
+ * Every primary route opens with two architectural shutter panels meeting at a
+ * horizontal 50% center seam:
+ *   · Upper Shutter: route index strip + framed 60fps Sub-Pixel Braille/Bayer emblem.
+ *   · Lower Shutter: high-contrast runtime kicker + serif display title + Enter ESC pill.
  *
- *   ┌─────────────── full (first visit to a clip this session) ──────────────┐
- *   │ rendered clip plays  →  last 0.7s: "Aperture Seam" handoff begins      │
- *   │   · accent seam flares across the centre                               │
- *   │   · overlay splits open from the seam (mask), clip keeps playing       │
- *   │   · page is released and staggers in *through* the opening             │
- *   └────────────────────────────────────────────────────────────────────────┘
- *   ┌─────────────── wipe (repeat visit) ─────────────────────────────────────┐
- *   │ 0.4s title card (index + route label) → same aperture handoff          │
- *   └────────────────────────────────────────────────────────────────────────┘
- *   none → reduced motion, automation/bots, or `?intro=0`.
- *
- * `?intro=1` forces the full clip (handy for reviewing edits).
+ * Because the Braille plate lives strictly in the Upper Shutter (above 50%) and
+ * all title typography lives strictly in the Lower Shutter (below 50%), the center
+ * seam never crosses a single character on any viewport, and handoff parts both
+ * shutters cleanly upward and downward without slicing text.
  */
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import {
-  motion,
-  animate,
-  useMotionValue,
-  useTransform,
-  useReducedMotion,
-} from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { useMediaQuery, useTheme } from '@mui/material';
 import { IntroGateContext, useIntroPhase } from './IntroGate';
-import { resolveRouteIntro, clipSources } from './routeIntros';
+import { resolveRouteIntro } from './routeIntros';
 import { AsciiBrailleIntroStage, useGlyphScramble } from './AsciiBrailleDitherEngine';
 
-const SEEN_KEY = 'zoth-intros-seen-v2';
-// Every rendered cut ends on a light "title card" that settles ~1s before the
-// end; we hand off once it has been readable for a beat.
-const HANDOFF_LEAD_S = 0.62;
-// All cuts share one structure (measured with ffmpeg signalstats): the scene
-// ramps to the white title card between ~1.55s and ~1.30s before the end.
-// In dark mode we mask that ramp with the page colour, swap the clip to an
-// inverted (dark) grade while hidden, then reveal a native-looking dark card.
-const CARD_RAMP_START_S = 1.9;
-const CARD_RAMP_FULL_S = 1.52;
-const CARD_SWAP_S = 1.32;
-const CARD_REVEAL_END_S = 1.05;
-const DARK_CARD_FILTER = 'invert(1) hue-rotate(180deg) saturate(1.15)';
-const STALL_TIMEOUT_MS = 2600;
-const HARD_CAP_MS = 15000;
-const NARROW_QUERY = '(max-width: 899.95px)';
+const SEEN_KEY = 'zoth-intros-seen-v3';
+const NARROW_QUERY = '(max-width: 640px)';
 const EASE_APERTURE = [0.76, 0, 0.24, 1];
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1];
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
 
-/* ── session memory ─────────────────────────────────────────────────────── */
 function readSeen() {
   try {
     return new Set(JSON.parse(window.sessionStorage.getItem(SEEN_KEY) || '[]'));
@@ -60,13 +33,14 @@ function readSeen() {
     return new Set();
   }
 }
+
 function markSeen(key) {
   try {
     const seen = readSeen();
     seen.add(key);
     window.sessionStorage.setItem(SEEN_KEY, JSON.stringify([...seen]));
   } catch {
-    /* storage unavailable — intros simply replay */
+    /* storage unavailable */
   }
 }
 
@@ -78,12 +52,20 @@ function isAutomated() {
 
 function decideMode(intro, reduced, search) {
   if (!intro || typeof window === 'undefined') return 'none';
-  const flag = new URLSearchParams(search || '').get('intro');
+  const params = new URLSearchParams(search || '');
+  const flag = params.get('intro');
   if (flag === '0') return 'none';
   if (flag === '1') return 'full';
   if (flag === 'wipe' || flag === 'ascii' || flag === 'braille') return 'wipe';
   if (reduced || isAutomated()) return 'none';
-  return readSeen().has(intro.key) ? 'wipe' : 'full';
+
+  const groupKey = intro.seenGroupKey || intro.key;
+  const seen = readSeen();
+  if (seen.has(groupKey)) {
+    if (groupKey === 'tools-detail' || groupKey === 'docs-math-detail') return 'none';
+    return 'wipe';
+  }
+  return 'full';
 }
 
 function makeRun(intro, reduced, search, pathname) {
@@ -96,7 +78,6 @@ function makeRun(intro, reduced, search, pathname) {
   };
 }
 
-/* ── provider ───────────────────────────────────────────────────────────── */
 export function IntroDirector({ children }) {
   const location = useLocation();
   const reduced = useReducedMotion();
@@ -106,13 +87,13 @@ export function IntroDirector({ children }) {
   const [run, setRun] = useState(() => makeRun(intro, reduced, location.search, location.pathname));
   const [replayNonce, setReplayNonce] = useState(0);
 
-  // Route changed → arm a new run before paint so the new page never flashes.
   useLayoutEffect(() => {
-    if (run.key !== routeKey) setRun(makeRun(intro, reduced, location.search, location.pathname));
+    if (run.key !== routeKey) {
+      setRun(makeRun(intro, reduced, location.search, location.pathname));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [routeKey]);
 
-  // Allow any tool or showcase button to trigger a live replay of the full cinema cut or ASCII/Braille wipe.
   useEffect(() => {
     const onReplay = (e) => {
       if (!intro) return;
@@ -129,22 +110,15 @@ export function IntroDirector({ children }) {
     return () => window.removeEventListener('zoth:replay-intro', onReplay);
   }, [intro]);
 
-  // Same render as a route change, before the layout effect lands: preview the run.
   const current = run.key === routeKey ? run : makeRun(intro, reduced, location.search, location.pathname);
 
   const handleHandoff = useCallback((key) => {
     setRun((r) => (r.key === key && r.phase === 'intro' ? { ...r, phase: 'handoff' } : r));
   }, []);
+
   const handleDone = useCallback((key) => {
     setRun((r) => (r.key === key ? { ...r, phase: 'idle' } : r));
   }, []);
-
-  usePrefetchOnIntent();
-
-  // The very first intro is revealed by the HTML preloader; every later one
-  // closes in over the outgoing page so navigation never hard-cuts.
-  const firstKey = useRef(run.key);
-  const enter = current.key !== firstKey.current;
 
   const gate = useMemo(() => ({ phase: current.phase, routeKey: current.key }), [current.phase, current.key]);
   const showOverlay = current.mode !== 'none' && current.phase !== 'idle';
@@ -157,7 +131,6 @@ export function IntroDirector({ children }) {
           key={`${current.key}-${replayNonce}`}
           intro={current.intro}
           mode={current.mode}
-          enter={enter || replayNonce > 0}
           onHandoff={() => handleHandoff(current.key)}
           onDone={() => handleDone(current.key)}
         />
@@ -166,7 +139,6 @@ export function IntroDirector({ children }) {
   );
 }
 
-/* ── page stage: holds the page until handoff, then lands it ────────────── */
 export function PageStage({ children }) {
   const phase = useIntroPhase();
   const reduced = useReducedMotion();
@@ -182,140 +154,58 @@ export function PageStage({ children }) {
     <motion.div
       key={key}
       className="page-stage"
-      initial={phase === 'idle' ? false : { opacity: 0, y: 22, scale: 0.988 }}
+      initial={phase === 'idle' ? false : { opacity: 0, y: 12 }}
       animate={
         released
           ? {
               opacity: 1,
               y: 0,
-              scale: 1,
-              // Clear transform afterwards so position:fixed descendants
-              // (HUDs, modals, floating pets) are not trapped in this layer.
               transitionEnd: { transform: 'none' },
             }
-          : { opacity: 0, y: 22, scale: 0.988 }
+          : { opacity: 0, y: 12 }
       }
-      transition={{ duration: 0.9, ease: EASE_OUT_EXPO, delay: phase === 'handoff' ? 0.1 : 0 }}
-      style={{ transformOrigin: '50% 35vh' }}
+      transition={{ duration: 0.44, ease: EASE_OUT_EXPO }}
     >
       {children}
     </motion.div>
   );
 }
 
-/* ── overlay ────────────────────────────────────────────────────────────── */
-function IntroOverlay({ intro, mode, enter, onHandoff, onDone }) {
+function IntroOverlay({ intro, mode, onHandoff, onDone }) {
   const narrow = useMediaQuery(NARROW_QUERY, { noSsr: true });
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
-  const pageBg = theme.palette.background.default;
-  const cut = narrow ? 'mobile' : 'desktop';
-  const videoRef = useRef(null);
+
+  const surfaceBg = dark ? '#08080B' : '#FAF8F3';
+  const plateBg = dark ? '#0E1017' : '#F2EDE2';
+  const primaryInk = dark ? '#F5F1E6' : '#101828';
+  const mutedInk = dark ? '#9CA3AF' : '#475467';
+  const accentInk = dark ? (intro.accent || '#D4AF37') : (intro.accentLight || '#7A5808');
+  const hairline = dark ? 'rgba(245, 241, 230, 0.12)' : 'rgba(16, 24, 40, 0.12)';
+  const emblemBorder = dark ? `${accentInk}45` : `${accentInk}38`;
+
   const started = useRef(false);
   const [handing, setHanding] = useState(false);
 
-  const open = useMotionValue(enter ? 1 : 0); // 0 = closed, 1 = aperture fully open
-  const seam = useMotionValue(0); // seam flare scaleX
-  const progress = useMotionValue(0); // clip playback progress
-
-  const gap = useTransform(open, (v) => v * 50);
-  const mask = useTransform(gap, (h) =>
-    h <= 0.01
-      ? 'none'
-      : `linear-gradient(to bottom, #000 0%, #000 calc(50% - ${h}% - 2px), transparent calc(50% - ${h}% + 2px), transparent calc(50% + ${h}% - 2px), #000 calc(50% + ${h}% + 2px), #000 100%)`,
-  );
-  const topEdge = useTransform(gap, (h) => `calc(50% - ${h}%)`);
-  const bottomEdge = useTransform(gap, (h) => `calc(50% + ${h}%)`);
-  const edgeOpacity = useTransform(open, [0, 0.8, 1], [1, 0.9, 0]);
-  const videoScale = useTransform(open, [0, 1], [1, 1.05]);
-  // Wash the clip's closing title card into the live page background so the
-  // halves that slide away are the page's own colour (no white→dark flash).
-  const cardWash = useMotionValue(0); // dark-mode title-card masking
-  const washOpacity = useTransform([open, cardWash], ([o, c]) => Math.max(Math.min(1, o / 0.42), c));
-  const leakOpacity = useTransform(open, [0, 0.25, 1], [0, dark ? 0.28 : 0.14, 0]);
-  const leakScaleY = useTransform(open, [0, 1], [0.2, 2.4]);
+  const compact = mode === 'wipe';
+  const splitDuration = compact ? 0.34 : 0.44;
+  const scrambledLabel = useGlyphScramble(intro.label, compact ? 160 : 220, !handing);
 
   const beginHandoff = useCallback(() => {
     if (started.current) return;
     started.current = true;
     setHanding(true);
     onHandoff();
-    if (mode === 'full') animate(seam, 1, { duration: 0.28, ease: EASE_OUT_EXPO });
-    animate(open, 1, {
-      duration: mode === 'wipe' ? 0.66 : 0.95,
-      delay: mode === 'wipe' ? 0 : 0.18,
-      ease: EASE_APERTURE,
-      onComplete: onDone,
-    });
-  }, [mode, onHandoff, onDone, open, seam]);
+    window.setTimeout(onDone, Math.round(splitDuration * 1000) + 40);
+  }, [onHandoff, onDone, splitDuration]);
 
-  // Enter: shutters close in from the edges onto the seam.
   useEffect(() => {
-    if (!enter) return;
-    animate(open, 0, { duration: 0.28, ease: [0.65, 0, 0.35, 1] });
-    if (mode === 'full') animate(seam, [0, 1, 0], { duration: 0.6, times: [0, 0.45, 1], ease: 'easeInOut' });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    markSeen(intro.seenGroupKey || intro.key);
+    const holdMs = compact ? 260 : 680;
+    const timer = window.setTimeout(beginHandoff, holdMs);
+    return () => window.clearTimeout(timer);
+  }, [compact, intro.key, intro.seenGroupKey, beginHandoff]);
 
-  // Wipe: draw the seam + title card, then open.
-  useEffect(() => {
-    if (mode !== 'wipe') return undefined;
-    animate(seam, 1, { duration: 0.34, delay: enter ? 0.08 : 0, ease: EASE_OUT_EXPO });
-    const t = window.setTimeout(beginHandoff, enter ? 560 : 420);
-    return () => window.clearTimeout(t);
-  }, [mode, enter, seam, beginHandoff]);
-
-  // Full: remember the clip, watch playback, hand off just before the end.
-  useEffect(() => {
-    if (mode !== 'full') return undefined;
-    markSeen(intro.key);
-    let raf = 0;
-    const tick = () => {
-      const v = videoRef.current;
-      if (v && Number.isFinite(v.duration) && v.duration > 0) {
-        const remaining = v.duration - v.currentTime;
-        progress.set(Math.min(1, v.currentTime / v.duration));
-        if (dark) {
-          let c = 0;
-          if (remaining <= CARD_RAMP_START_S && remaining > CARD_SWAP_S) {
-            c = (CARD_RAMP_START_S - remaining) / (CARD_RAMP_START_S - CARD_RAMP_FULL_S);
-          } else if (remaining <= CARD_SWAP_S && remaining > CARD_REVEAL_END_S) {
-            c = (remaining - CARD_REVEAL_END_S) / (CARD_SWAP_S - CARD_REVEAL_END_S);
-          }
-          cardWash.set(Math.max(0, Math.min(1, c)));
-          const wantDark = remaining <= CARD_SWAP_S;
-          if (wantDark !== (v.dataset.grade === 'dark')) {
-            v.dataset.grade = wantDark ? 'dark' : '';
-            v.style.filter = wantDark ? DARK_CARD_FILTER : '';
-          }
-        }
-        if (remaining <= (intro.handoffLead || HANDOFF_LEAD_S)) beginHandoff();
-      }
-      if (!started.current) raf = window.requestAnimationFrame(tick);
-    };
-    raf = window.requestAnimationFrame(tick);
-    const stall = window.setTimeout(() => {
-      const v = videoRef.current;
-      if (!v || v.readyState < 2 || v.paused) beginHandoff();
-    }, STALL_TIMEOUT_MS);
-    const cap = window.setTimeout(beginHandoff, HARD_CAP_MS);
-    return () => {
-      window.cancelAnimationFrame(raf);
-      window.clearTimeout(stall);
-      window.clearTimeout(cap);
-    };
-  }, [mode, dark, intro.key, intro.handoffLead, progress, cardWash, beginHandoff]);
-
-  // Autoplay can be refused (power saver, iOS low-power) — never trap the user.
-  useEffect(() => {
-    if (mode !== 'full') return;
-    const v = videoRef.current;
-    if (!v) return;
-    const p = v.play();
-    if (p && typeof p.catch === 'function') p.catch(() => beginHandoff());
-  }, [mode, cut, beginHandoff]);
-
-  // Skip keys.
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') {
@@ -327,7 +217,6 @@ function IntroOverlay({ intro, mode, enter, onHandoff, onDone }) {
     return () => window.removeEventListener('keydown', onKey);
   }, [beginHandoff]);
 
-  // Lock scroll only while the page is fully covered.
   useEffect(() => {
     if (handing) return undefined;
     const root = document.documentElement;
@@ -338,376 +227,269 @@ function IntroOverlay({ intro, mode, enter, onHandoff, onDone }) {
     };
   }, [handing]);
 
-  const accent = intro.accent;
+  const insetPad = narrow ? 12 : 20;
 
   return (
-    <>
-      {/* Masked layer: splits open from the seam during handoff */}
+    <div
+      role="dialog"
+      aria-label={`${intro.label} introduction`}
+      onClick={beginHandoff}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 99990,
+        pointerEvents: handing ? 'none' : 'auto',
+        cursor: handing ? 'default' : 'pointer',
+        overflow: 'hidden',
+      }}
+    >
+      {/* ── UPPER SHUTTER (0% -> 50%): Top Index Strip + Framed Braille Plate ── */}
       <motion.div
-        role="dialog"
-        aria-label={`${intro.label} introduction`}
-        onClick={beginHandoff}
+        initial={{ y: '0%' }}
+        animate={{ y: handing ? '-103%' : '0%' }}
+        transition={{ duration: splitDuration, ease: EASE_APERTURE }}
         style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: 99990,
-          background: mode === 'wipe' || dark ? pageBg : '#000',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '50%',
+          background: surfaceBg,
+          color: primaryInk,
+          borderBottom: `1px solid ${accentInk}88`,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          paddingBottom: compact ? 16 : 24,
+          paddingLeft: 24,
+          paddingRight: 24,
           overflow: 'hidden',
-          cursor: handing ? 'default' : 'pointer',
-          pointerEvents: handing ? 'none' : 'auto',
-          WebkitMaskImage: mask,
-          maskImage: mask,
         }}
       >
-        {/* Live 60fps Unicode U+2800 Braille + Ordered Bayer 8x8 Dither procedural layer */}
-        <AsciiBrailleIntroStage intro={intro} dark={dark} handing={handing} fullVideoMode={mode === 'full'} />
-
-        {mode === 'full' ? (
-          <motion.video
-            key={cut}
-            ref={videoRef}
-            autoPlay
-            muted
-            playsInline
-            preload="auto"
-            onEnded={beginHandoff}
-            onError={beginHandoff}
-            aria-hidden="true"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain',
-              background: 'transparent',
-              pointerEvents: 'none',
-              scale: videoScale,
-            }}
-          >
-            {clipSources(intro.clip, cut).map((s) => (
-              <source key={s.src} src={s.src} type={s.type} />
-            ))}
-          </motion.video>
-        ) : (
-          <TitleCard intro={intro} handing={handing} dark={dark} text={theme.palette.text.primary} />
-        )}
-
-        {mode === 'full' && (
-          <motion.div
-            aria-hidden="true"
-            style={{ position: 'absolute', inset: 0, background: pageBg, opacity: washOpacity, pointerEvents: 'none' }}
-          />
-        )}
-
-        {/* subtle vignette keeps the skip control legible over bright frames */}
-        {mode === 'full' && <div
+        {/* Architectural top inset frame */}
+        <div
           aria-hidden="true"
           style={{
             position: 'absolute',
-            inset: 0,
+            top: insetPad,
+            left: insetPad,
+            right: insetPad,
+            bottom: 0,
+            borderTop: `1px solid ${hairline}`,
+            borderLeft: `1px solid ${hairline}`,
+            borderRight: `1px solid ${hairline}`,
+            borderTopLeftRadius: 4,
+            borderTopRightRadius: 4,
             pointerEvents: 'none',
-            background:
-              'radial-gradient(ellipse 120% 90% at 50% 50%, transparent 60%, rgba(0,0,0,0.45) 100%)',
           }}
-        />}
+        />
 
-        {mode === 'full' && <IntroHud intro={intro} progress={progress} handing={handing} onSkip={beginHandoff} />}
-      </motion.div>
-
-      {/* Light leak — brief accent bloom through the opening */}
-      <motion.div
-        aria-hidden="true"
-        style={{
-          position: 'fixed',
-          left: 0,
-          right: 0,
-          top: '50%',
-          height: '40vh',
-          marginTop: '-20vh',
-          zIndex: 99991,
-          pointerEvents: 'none',
-          background: `radial-gradient(ellipse 60% 50% at 50% 50%, ${accent}, transparent 70%)`,
-          mixBlendMode: 'screen',
-          opacity: leakOpacity,
-          scaleY: leakScaleY,
-        }}
-      />
-
-      {/* Seam edges — ride the aperture as it opens */}
-      {[topEdge, bottomEdge].map((top, i) => (
-        <motion.div
-          key={i}
-          aria-hidden="true"
+        {/* Single-line top index strip */}
+        <div
           style={{
-            position: 'fixed',
-            left: 0,
-            right: 0,
-            top,
-            height: 1.5,
-            marginTop: -0.75,
-            zIndex: 99992,
+            position: 'absolute',
+            top: narrow ? 24 : 34,
+            left: narrow ? 24 : 38,
+            right: narrow ? 24 : 38,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 12,
             pointerEvents: 'none',
-            transformOrigin: '50% 50%',
-            scaleX: seam,
-            opacity: edgeOpacity,
-            background: `linear-gradient(90deg, transparent 0%, ${accent} 22%, ${dark ? '#FFF6D8' : accent} 50%, ${accent} 78%, transparent 100%)`,
-            boxShadow: dark ? `0 0 8px ${accent}cc, 0 0 28px ${accent}40` : `0 0 6px ${accent}99`,
-          }}
-        />
-      ))}
-    </>
-  );
-}
-
-function TitleCard({ intro, handing, dark, text }) {
-  const scrambledLabel = useGlyphScramble(intro.label, 420, !handing);
-  const scrambledKicker = useGlyphScramble(intro.kicker || 'Sovereign AI Workstation', 380, !handing);
-  return (
-    <motion.div
-      aria-hidden="true"
-      initial={{ opacity: 0, y: 10, scale: 0.985 }}
-      animate={handing ? { opacity: 0, y: -12, scale: 1.015 } : { opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: handing ? 0.22 : 0.36, delay: handing ? 0 : 0.12, ease: EASE_OUT_EXPO }}
-      style={{
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        bottom: 'calc(50% + 22px)',
-        textAlign: 'center',
-        padding: '0 24px',
-        pointerEvents: 'none',
-      }}
-    >
-      {/* Subtle radial accent aura behind the title card */}
-      <div
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: 'min(560px, 88vw)',
-          height: 180,
-          background: `radial-gradient(ellipse 60% 55% at 50% 50%, ${intro.accent}${dark ? '24' : '18'}, transparent 72%)`,
-          filter: 'blur(18px)',
-          pointerEvents: 'none',
-          zIndex: 0,
-        }}
-      />
-      <div
-        style={{
-          position: 'relative',
-          zIndex: 1,
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 10,
-          padding: '4px 14px',
-          borderRadius: 999,
-          border: `1px solid ${intro.accent}${dark ? '44' : '33'}`,
-          background: dark ? 'rgba(8,8,11,0.72)' : 'rgba(255,255,255,0.85)',
-          fontFamily: mono,
-          fontSize: 10.5,
-          fontWeight: 700,
-          letterSpacing: '0.24em',
-          textTransform: 'uppercase',
-          color: dark ? intro.accent : text,
-          marginBottom: 14,
-        }}
-      >
-        <span
-          style={{
-            width: 6,
-            height: 6,
-            borderRadius: '50%',
-            background: intro.accent,
-            boxShadow: `0 0 8px ${intro.accent}`,
-          }}
-        />
-        <span>{intro.index} / {intro.total}</span>
-        {intro.kicker && (
-          <>
-            <span style={{ opacity: 0.4 }}>·</span>
-            <span style={{ opacity: 0.9 }}>{scrambledKicker}</span>
-          </>
-        )}
-        <span style={{ opacity: 0.4 }}>·</span>
-        <span style={{ opacity: 0.85 }}>{intro.brailleBadge || '⣿ U+2800 DITHER'}</span>
-      </div>
-      <div
-        style={{
-          position: 'relative',
-          zIndex: 1,
-          fontFamily: display,
-          fontSize: 'clamp(2.1rem, 4.8vw, 3.75rem)',
-          lineHeight: 1.04,
-          color: text,
-          letterSpacing: '0.015em',
-          textShadow: dark ? `0 0 34px ${intro.accent}33` : '0 1px 0 rgba(255,255,255,0.9)',
-        }}
-      >
-        {scrambledLabel}
-      </div>
-      {/* Architectural GlowLine rule beneath title */}
-      <div
-        style={{
-          position: 'relative',
-          zIndex: 1,
-          width: 'min(220px, 48vw)',
-          height: 1.5,
-          margin: '16px auto 0',
-          background: `linear-gradient(90deg, transparent 0%, ${intro.accent} 50%, transparent 100%)`,
-          boxShadow: `0 0 12px ${intro.accent}88`,
-        }}
-      />
-    </motion.div>
-  );
-}
-
-// The rendered cuts carry their own HUD (frame counter, progress), so ours is
-// a top-left cinema telemetry pill + a centred skip control with playback ring.
-function IntroHud({ intro, progress, handing, onSkip }) {
-  const RING = 2 * Math.PI * 15;
-  const dash = useTransform(progress, (p) => RING * (1 - p));
-  const scrambledLabel = useGlyphScramble(intro.label, 520, !handing);
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: handing ? 0 : 1 }}
-      transition={{ duration: handing ? 0.2 : 0.6, delay: handing ? 0 : 0.3 }}
-      style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
-    >
-      {/* Top-left route cinema telemetry pill */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 'max(20px, env(safe-area-inset-top))',
-          left: 'max(22px, env(safe-area-inset-left))',
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 10,
-          padding: '6px 14px',
-          borderRadius: 999,
-          border: '1px solid rgba(245,241,230,0.16)',
-          background: 'rgba(8,8,11,0.68)',
-          backdropFilter: 'blur(10px)',
-          WebkitBackdropFilter: 'blur(10px)',
-          color: '#F5F1E6',
-          fontFamily: mono,
-          fontSize: 10.5,
-          fontWeight: 700,
-          letterSpacing: '0.2em',
-          textTransform: 'uppercase',
-        }}
-      >
-        <span
-          style={{
-            width: 7,
-            height: 7,
-            borderRadius: '50%',
-            background: intro.accent,
-            boxShadow: `0 0 10px ${intro.accent}`,
-          }}
-        />
-        <span style={{ color: intro.accent }}>{intro.index} / {intro.total}</span>
-        <span style={{ opacity: 0.35 }}>·</span>
-        <span>{scrambledLabel}</span>
-        <span style={{ opacity: 0.35 }}>·</span>
-        <span style={{ color: intro.accent, opacity: 0.9 }}>{intro.brailleBadge || '⣿ BRAILLE · BAYER 8×8'}</span>
-      </div>
-
-      <button
-        type="button"
-        onClick={(e) => {
-          e.stopPropagation();
-          onSkip();
-        }}
-        aria-label="Skip introduction"
-        style={{
-          pointerEvents: 'auto',
-          position: 'absolute',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          bottom: 'max(22px, env(safe-area-inset-bottom))',
-          minHeight: 44,
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 10,
-          padding: '6px 16px 6px 8px',
-          borderRadius: 999,
-          border: `1px solid ${intro.accent}55`,
-          background: 'rgba(8,8,11,0.68)',
-          boxShadow: `0 10px 28px rgba(0,0,0,0.55), 0 0 20px ${intro.accent}22`,
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          color: '#F5F1E6',
-          fontFamily: mono,
-          fontSize: 11,
-          fontWeight: 700,
-          letterSpacing: '0.18em',
-          textTransform: 'uppercase',
-          cursor: 'pointer',
-        }}
-      >
-        <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
-          <circle cx="17" cy="17" r="15" fill="none" stroke="rgba(245,241,230,0.16)" strokeWidth="2" />
-          <motion.circle
-            cx="17"
-            cy="17"
-            r="15"
-            fill="none"
-            stroke={intro.accent}
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeDasharray={RING}
-            style={{ strokeDashoffset: dash, rotate: -90, transformOrigin: '50% 50%' }}
-          />
-          <path d="M14 12 L21 17 L14 22 Z" fill="#F5F1E6" />
-        </svg>
-        <span>Skip intro</span>
-        <span
-          style={{
-            padding: '2px 7px',
-            borderRadius: 6,
-            border: '1px solid rgba(245,241,230,0.22)',
-            background: 'rgba(245,241,230,0.08)',
-            fontSize: 9.5,
-            letterSpacing: '0.12em',
-            opacity: 0.85,
+            fontFamily: mono,
+            fontSize: 10.5,
+            fontWeight: 600,
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase',
+            color: mutedInk,
           }}
         >
-          ESC
-        </span>
-      </button>
-    </motion.div>
-  );
-}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              minWidth: 0,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            <span
+              style={{
+                width: 6,
+                height: 6,
+                borderRadius: '50%',
+                background: accentInk,
+                flexShrink: 0,
+              }}
+            />
+            <span style={{ color: accentInk, fontWeight: 700, flexShrink: 0 }}>
+              {intro.index} / {intro.total}
+            </span>
+            <span style={{ opacity: 0.4, flexShrink: 0 }}>·</span>
+            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              ZOTH STUDIO
+            </span>
+          </div>
 
-/* ── prefetch the next clip when the user shows intent on a nav link ───── */
-function usePrefetchOnIntent() {
-  useEffect(() => {
-    if (typeof document === 'undefined') return undefined;
-    const done = new Set();
-    const probe = document.createElement('video');
-    const ext = probe.canPlayType && probe.canPlayType('video/webm') ? 'webm' : 'mp4';
-    const onIntent = (e) => {
-      const a = e.target && e.target.closest ? e.target.closest('a[href^="/"]') : null;
-      if (!a) return;
-      const intro = resolveRouteIntro(new URL(a.href, window.location.origin).pathname);
-      if (!intro || done.has(intro.clip) || readSeen().has(intro.key)) return;
-      done.add(intro.clip);
-      const cut = window.matchMedia(NARROW_QUERY).matches ? 'mobile' : 'desktop';
-      const link = document.createElement('link');
-      link.rel = 'prefetch';
-      link.as = 'video';
-      link.href = `/intros/${intro.clip}-${cut}.${ext}`;
-      document.head.appendChild(link);
-    };
-    document.addEventListener('pointerover', onIntent, { passive: true });
-    document.addEventListener('focusin', onIntent);
-    document.addEventListener('touchstart', onIntent, { passive: true });
-    return () => {
-      document.removeEventListener('pointerover', onIntent);
-      document.removeEventListener('focusin', onIntent);
-      document.removeEventListener('touchstart', onIntent);
-    };
-  }, []);
+          {!narrow && (
+            <span style={{ color: mutedInk, whiteSpace: 'nowrap', flexShrink: 0, opacity: 0.85 }}>
+              {intro.brailleBadge || 'ASTROLABE · SDF'}
+            </span>
+          )}
+        </div>
+
+        {/* Framed Sub-Pixel Braille + Bayer 8x8 Emblem — strictly above center seam */}
+        <div
+          style={{
+            position: 'relative',
+            width: compact ? 'min(236px, 72vw)' : 'min(304px, 78vw)',
+            height: compact ? 72 : 106,
+            borderRadius: 6,
+            border: `1px solid ${emblemBorder}`,
+            background: plateBg,
+            overflow: 'hidden',
+            boxShadow: dark
+              ? 'inset 0 1px 0 rgba(255,255,255,0.04)'
+              : 'inset 0 1px 2px rgba(16,24,40,0.04)',
+          }}
+        >
+          <AsciiBrailleIntroStage intro={intro} dark={dark} handing={handing} compact={compact} />
+        </div>
+      </motion.div>
+
+      {/* ── LOWER SHUTTER (50% -> 100%): Kicker + Serif Title + Hairline + Skip ── */}
+      <motion.div
+        initial={{ y: '0%' }}
+        animate={{ y: handing ? '103%' : '0%' }}
+        transition={{ duration: splitDuration, ease: EASE_APERTURE }}
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '50%',
+          background: surfaceBg,
+          color: primaryInk,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          paddingTop: compact ? 16 : 24,
+          paddingLeft: 24,
+          paddingRight: 24,
+          textAlign: 'center',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Architectural bottom inset frame */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: insetPad,
+            right: insetPad,
+            bottom: insetPad,
+            borderBottom: `1px solid ${hairline}`,
+            borderLeft: `1px solid ${hairline}`,
+            borderRight: `1px solid ${hairline}`,
+            borderBottomLeftRadius: 4,
+            borderBottomRightRadius: 4,
+            pointerEvents: 'none',
+          }}
+        />
+
+        {/* High-contrast category / runtime kicker */}
+        <div
+          style={{
+            fontFamily: mono,
+            fontSize: narrow ? 10 : 11,
+            fontWeight: 700,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            color: accentInk,
+            marginBottom: 10,
+            maxWidth: 'min(560px, 86vw)',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          {intro.kicker}
+        </div>
+
+        {/* Primary Display Serif Title (> 15:1 contrast in both Light and Dark modes) */}
+        <div
+          style={{
+            fontFamily: display,
+            fontSize: compact ? 'clamp(1.7rem, 3.6vw, 2.65rem)' : 'clamp(1.9rem, 4.4vw, 3.25rem)',
+            fontWeight: 400,
+            lineHeight: 1.08,
+            letterSpacing: '0.01em',
+            color: primaryInk,
+            maxWidth: 'min(760px, 88vw)',
+          }}
+        >
+          {scrambledLabel}
+        </div>
+
+        {/* Expanding architectural hairline rule */}
+        <motion.div
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.36, ease: EASE_OUT_EXPO }}
+          style={{
+            width: 'min(136px, 36vw)',
+            height: 1.5,
+            marginTop: 16,
+            transformOrigin: '50% 50%',
+            background: accentInk,
+            opacity: 0.78,
+          }}
+        />
+
+        {/* Clean dual-theme Skip control */}
+        {!compact && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              beginHandoff();
+            }}
+            aria-label="Skip introduction"
+            style={{
+              pointerEvents: 'auto',
+              position: 'absolute',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              bottom: narrow ? 24 : 32,
+              minHeight: 38,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              padding: '6px 14px',
+              borderRadius: 999,
+              border: `1px solid ${hairline}`,
+              background: plateBg,
+              color: primaryInk,
+              fontFamily: mono,
+              fontSize: 10.5,
+              fontWeight: 600,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              cursor: 'pointer',
+            }}
+          >
+            <span>Enter</span>
+            <span style={{ color: mutedInk, fontSize: 9.5 }}>ESC</span>
+          </button>
+        )}
+      </motion.div>
+    </div>
+  );
 }
 
 export default IntroDirector;

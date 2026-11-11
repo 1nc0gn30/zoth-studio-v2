@@ -1,43 +1,39 @@
 import React, { useState, useMemo } from 'react';
 import {
-  Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, CardActions,
-  Chip, Button, TextField, InputAdornment, Paper, ToggleButtonGroup, ToggleButton,
-  IconButton, Tooltip, Stack, Divider
+  Box,
+  Container,
+  Typography,
+  Unstable_Grid2 as Grid,
+  Card,
+  CardContent,
+  CardActions,
+  Chip,
+  Button,
+  TextField,
+  InputAdornment,
+  Paper,
+  ToggleButtonGroup,
+  ToggleButton,
+  IconButton,
+  Stack,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
-import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
-
-// Icons
 import SearchIcon from '@mui/icons-material/Search';
-import LaunchIcon from '@mui/icons-material/Launch';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import GridViewIcon from '@mui/icons-material/GridView';
-import AccountTreeIcon from '@mui/icons-material/AccountTree';
-import TerminalIcon from '@mui/icons-material/Terminal';
-import CloudOffIcon from '@mui/icons-material/CloudOff';
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
+import ViewListIcon from '@mui/icons-material/ViewList';
 import ClearIcon from '@mui/icons-material/Clear';
-import CodeIcon from '@mui/icons-material/Code';
-import SecurityIcon from '@mui/icons-material/Security';
-import HubIcon from '@mui/icons-material/Hub';
-import HandymanIcon from '@mui/icons-material/Handyman';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import LayersIcon from '@mui/icons-material/Layers';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import FlashOnIcon from '@mui/icons-material/FlashOn';
-import LockIcon from '@mui/icons-material/Lock';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import { masterArsenal, arsenalStats } from '../data/arsenalData';
 import SovereignFunnel from '../components/SovereignFunnel';
-import { useSovereignRuntime, isLocalRuntime } from '../utils/sovereignRuntime';
-import { useReality } from '../context/RealityContext';
+import { HeroReveal, HeroItem, GlowLine } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
+const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
 
 const ORDERED_CATEGORIES = [
   'All',
@@ -50,334 +46,192 @@ const ORDERED_CATEGORIES = [
   'Planning',
   'Automation',
   'AI & Knowledge',
-  'Media & 3D'
+  'Media & 3D',
 ];
 
-const CATEGORY_CONFIG = {
-  'Security & Network': {
-    color: '#38BDF8',
-    lightColor: '#0284C7',
-    wash: 'rgba(56, 189, 248, 0.14)',
-    icon: SecurityIcon,
-  },
-  'Simulation & Testing': {
-    color: '#10B981',
-    lightColor: '#059669',
-    wash: 'rgba(16, 185, 129, 0.14)',
-    icon: TerminalIcon,
-  },
-  'Memory & Brain': {
-    color: '#C084FC',
-    lightColor: '#9333EA',
-    wash: 'rgba(192, 132, 252, 0.14)',
-    icon: PsychologyIcon,
-  },
-  'Security & Recon': {
-    color: '#F87171',
-    lightColor: '#DC2626',
-    wash: 'rgba(248, 113, 113, 0.14)',
-    icon: SecurityIcon,
-  },
-  'Swarm & Core': {
-    color: '#34D399',
-    lightColor: '#059669',
-    wash: 'rgba(52, 211, 153, 0.14)',
-    icon: HubIcon,
-  },
-  'Autonomous Web': {
-    color: '#F59E0B',
-    lightColor: '#B45309',
-    wash: 'rgba(245, 158, 11, 0.14)',
-    icon: CodeIcon,
-  },
-  'Planning': {
-    color: '#D4AF37',
-    lightColor: '#8A6508',
-    wash: 'rgba(212, 175, 55, 0.14)',
-    icon: LayersIcon,
-  },
-  'Automation': {
-    color: '#38BDF8',
-    lightColor: '#0369A1',
-    wash: 'rgba(56, 189, 248, 0.14)',
-    icon: TerminalIcon,
-  },
-  'AI & Knowledge': {
-    color: '#A78BFA',
-    lightColor: '#7C3AED',
-    wash: 'rgba(167, 139, 250, 0.14)',
-    icon: PsychologyIcon,
-  },
-  'Media & 3D': {
-    color: '#EC4899',
-    lightColor: '#BE185D',
-    wash: 'rgba(236, 72, 153, 0.14)',
-    icon: AutoAwesomeIcon,
-  },
-};
+function resolveRepoUrl(item) {
+  if (['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(item.id) || !item.github) {
+    return 'https://github.com/NullAITech/zoth-studio-v2';
+  }
+  return item.github;
+}
 
-function UnifiedAssetCard({ item, isDark, gold, runtime }) {
+function ArsenalCard({ item, isDark, gold, primaryText, secondaryText, cardBg, codeBg, borderCol }) {
   const [copied, setCopied] = useState(false);
-  const catCfg = CATEGORY_CONFIG[item.category] || {
-    color: gold.accent,
-    wash: gold.wash,
-    icon: HandymanIcon,
-  };
-  const CatIconComponent = catCfg.icon;
-  const execEval = runtime?.evaluateTool ? runtime.evaluateTool(item) : { canExecute: false, label: 'Inspect Specs 📖' };
+  const repoUrl = resolveRepoUrl(item);
+  const cloneCmd = `git clone ${repoUrl.replace(/\.git$/, '')}.git`;
 
-  const handleCopyPull = (e) => {
+  const handleCopy = (e) => {
     e.stopPropagation();
-    if (!item.pullCommand) return;
-    try {
-      navigator.clipboard.writeText(item.pullCommand);
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(cloneCmd);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error(err);
     }
   };
 
   return (
     <Card
+      elevation={0}
       sx={{
         height: '100%',
         width: '100%',
-        flex: 1,
         display: 'flex',
         flexDirection: 'column',
-        borderRadius: 3,
-        bgcolor: isDark ? '#0A0A10' : '#FFFFFF',
-        border: '1px solid',
-        borderColor: item.isFlagship
-          ? gold.accent
-          : isDark
-            ? 'rgba(255, 255, 255, 0.08)'
-            : 'rgba(0, 0, 0, 0.08)',
-        boxShadow: item.isFlagship
-          ? isDark
-            ? '0 4px 24px rgba(212, 175, 55, 0.18)'
-            : '0 4px 20px rgba(184, 134, 11, 0.15)'
-          : isDark
-            ? '0 2px 12px rgba(0, 0, 0, 0.4)'
-            : '0 2px 8px rgba(0, 0, 0, 0.04)',
-        transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+        borderRadius: 2.5,
+        bgcolor: cardBg,
+        border: `1px solid ${item.isFlagship ? (isDark ? 'rgba(212,175,55,0.45)' : 'rgba(122,88,8,0.4)') : borderCol}`,
+        transition: 'border-color 0.2s ease, transform 0.2s ease',
         '&:hover': {
-          transform: 'translateY(-3px)',
-          borderColor: isDark ? '#38BDF8' : '#0369A1',
-          boxShadow: isDark
-            ? '0 12px 32px rgba(0, 0, 0, 0.6), 0 0 16px rgba(56, 189, 248, 0.15)'
-            : '0 8px 24px rgba(2, 132, 199, 0.12)',
+          transform: 'translateY(-2px)',
+          borderColor: gold,
         },
       }}
     >
       <CardContent sx={{ p: 2.5, flexGrow: 1 }}>
-        {/* Top Badges */}
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, mb: 1.5, flexWrap: 'wrap' }}>
-          <Chip
-            size="small"
-            icon={<CatIconComponent sx={{ fontSize: '0.85rem !important', color: `${isDark ? catCfg.color : catCfg.lightColor} !important` }} />}
-            label={item.category}
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, mb: 1.5 }}>
+          <Typography
             sx={{
-              height: 24,
-              fontSize: '0.7rem',
-              fontWeight: 800,
               fontFamily: mono,
-              bgcolor: isDark ? catCfg.wash : '#F8FAFC',
-              color: isDark ? catCfg.color : catCfg.lightColor,
-              border: `1px solid ${isDark ? catCfg.wash : '#E2E8F0'}`,
+              fontSize: '0.68rem',
+              fontWeight: 700,
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              color: gold,
             }}
-          />
+          >
+            {item.category}
+          </Typography>
 
-          <Chip
-            size="small"
-            label={item.localPort ? `✦ Free · ZothOS :${item.localPort}` : '✦ 100% Free & Open'}
+          <Typography
             sx={{
-              height: 22,
-              fontSize: '0.65rem',
-              fontWeight: 800,
               fontFamily: mono,
-              bgcolor: isDark ? 'rgba(52, 211, 153, 0.12)' : '#ECFDF3',
-              color: isDark ? '#34D399' : '#047857',
-              border: '1px solid',
-              borderColor: isDark ? 'rgba(52, 211, 153, 0.35)' : '#A7F3D0',
+              fontSize: '0.68rem',
+              fontWeight: 700,
+              color: item.localPort ? (isDark ? '#34D399' : '#047857') : secondaryText,
             }}
-          />
+          >
+            {item.localPort ? `LOCAL :${item.localPort}` : `v${item.version || '2.5.0'}`}
+          </Typography>
         </Box>
 
-        {/* Asset Name */}
         <Typography
           variant="h6"
+          component={RouterLink}
+          to={item.target}
           sx={{
             fontSize: '1.05rem',
             fontWeight: 800,
-            lineHeight: 1.35,
+            lineHeight: 1.32,
             mb: 1,
-            color: isDark ? '#EDEFF2' : '#101828',
+            color: primaryText,
+            textDecoration: 'none',
+            display: 'block',
+            '&:hover': { color: gold },
           }}
         >
           {item.name}
         </Typography>
 
-        {/* Description */}
         <Typography
           variant="body2"
           sx={{
-            color: 'text.secondary',
-            fontSize: '0.84rem',
-            lineHeight: 1.55,
-            mb: 1.5,
+            color: secondaryText,
+            fontSize: '0.85rem',
+            lineHeight: 1.58,
+            mb: 2,
+            display: '-webkit-box',
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
           }}
         >
           {item.description}
         </Typography>
 
-        {/* Asset ID & Zero-Egress verified */}
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75, mb: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.68rem', color: gold.accent, fontWeight: 700 }}>
-                ID:
-              </Typography>
-              <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.7rem', color: isDark ? '#9CA3AF' : '#374151', bgcolor: isDark ? '#14141E' : '#F3F4F6', px: 0.8, py: 0.2, borderRadius: 1, border: `1px solid ${isDark ? '#26262F' : '#E5E7EB'}` }}>
-                {item.id}
-              </Typography>
-            </Box>
-            <Chip
-              size="small"
-              icon={<VerifiedUserIcon sx={{ fontSize: '0.75rem !important', color: `${isDark ? '#34D399' : '#047857'} !important` }} />}
-              label="Zero-Egress"
-              sx={{
-                height: 20,
-                fontSize: '0.65rem',
-                fontWeight: 750,
-                fontFamily: mono,
-                bgcolor: isDark ? 'rgba(52, 211, 153, 0.1)' : '#ECFDF3',
-                color: isDark ? '#34D399' : '#047857',
-                border: `1px solid ${isDark ? 'rgba(52, 211, 153, 0.3)' : 'rgba(4, 120, 87, 0.3)'}`,
-              }}
-            />
-          </Box>
-
-          {/* Copyable pull command */}
-          {item.pullCommand && (
-            <Box
-              onClick={handleCopyPull}
-              sx={{
-                cursor: 'pointer',
-                p: 0.75,
-                px: 1,
-                borderRadius: 1.5,
-                bgcolor: isDark ? '#08080C' : '#F3F4F6',
-                border: `1px solid ${isDark ? '#26262F' : '#E5E7EB'}`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: 1,
-                '&:hover': {
-                  borderColor: isDark ? '#38BDF8' : '#0369A1',
-                  bgcolor: isDark ? '#0E1118' : '#EDEFEF',
-                },
-                transition: 'all 0.18s ease',
-              }}
-            >
-              <Typography
-                variant="caption"
-                sx={{
-                  fontFamily: mono,
-                  fontSize: '0.68rem',
-                  color: isDark ? '#9CA3AF' : '#4B5563',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {item.pullCommand}
-              </Typography>
-              {copied ? (
-                <CheckIcon sx={{ fontSize: '0.85rem', color: 'var(--zs-emerald)', flexShrink: 0 }} />
-              ) : (
-                <ContentCopyIcon sx={{ fontSize: '0.8rem', color: 'text.secondary', flexShrink: 0 }} />
-              )}
-            </Box>
+        <Box
+          onClick={handleCopy}
+          sx={{
+            cursor: 'pointer',
+            p: 1,
+            px: 1.25,
+            borderRadius: 1.5,
+            bgcolor: codeBg,
+            border: `1px solid ${borderCol}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 1,
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.7rem',
+              color: primaryText,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {cloneCmd}
+          </Typography>
+          {copied ? (
+            <CheckIcon sx={{ fontSize: '0.85rem', color: isDark ? '#34D399' : '#047857', flexShrink: 0 }} />
+          ) : (
+            <ContentCopyIcon sx={{ fontSize: '0.8rem', color: secondaryText, flexShrink: 0 }} />
           )}
         </Box>
       </CardContent>
 
-      <CardActions sx={{ px: 2.5, pb: 2.5, pt: 0, gap: 1, flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Box sx={{ display: 'flex', gap: 0.75, flexWrap: 'wrap', alignItems: 'center' }}>
-          <Button
-            size="small"
-            variant="contained"
-            component={RouterLink}
-            to={item.target}
-            startIcon={<FlashOnIcon sx={{ fontSize: '0.95rem' }} />}
-            sx={{
-              bgcolor: isDark ? '#10B981' : '#047857',
-              color: '#08080B',
-              fontWeight: 800,
-              fontSize: '0.76rem',
-              px: 2,
-              py: 0.55,
-              borderRadius: 9999,
-              boxShadow: isDark ? '0 2px 10px rgba(16, 185, 129, 0.3)' : '0 2px 10px rgba(4, 120, 87, 0.2)',
-              '&:hover': {
-                bgcolor: '#34D399',
-                color: '#08080B',
-              },
-              transition: 'all 0.2s ease',
-            }}
-          >
-            Launch Tool ⚡
-          </Button>
-          {isLocalRuntime() && item.localPort && (
-            <Button
-              size="small"
-              variant="outlined"
-              component="a"
-              href={item.localUrl || `http://127.0.0.1:${item.localPort}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{
-                fontFamily: mono,
-                fontWeight: 800,
-                fontSize: '0.68rem',
-                px: 1.2,
-                py: 0.45,
-                borderRadius: 9999,
-                borderColor: gold.border,
-                color: gold.accent,
-                '&:hover': { borderColor: gold.accent, bgcolor: gold.wash },
-              }}
-            >
-              Local :{item.localPort}
-            </Button>
-          )}
-        </Box>
+      <CardActions
+        sx={{
+          px: 2.5,
+          pb: 2.25,
+          pt: 1.25,
+          borderTop: `1px solid ${borderCol}`,
+          justifyContent: 'space-between',
+          gap: 1,
+        }}
+      >
+        <Button
+          size="small"
+          variant="contained"
+          component={RouterLink}
+          to={item.target}
+          endIcon={<ArrowForwardIcon sx={{ fontSize: '0.9rem !important' }} />}
+          sx={{
+            bgcolor: isDark ? '#D4AF37' : '#101828',
+            color: isDark ? '#08080B' : '#FFFFFF',
+            fontWeight: 700,
+            fontSize: '0.76rem',
+            textTransform: 'none',
+            px: 1.8,
+            '&:hover': { bgcolor: isDark ? '#E5C158' : '#1E293B' },
+          }}
+        >
+          View Specs
+        </Button>
 
-        {item.github && (
-          <Button
-            size="small"
-            variant="text"
-            startIcon={<GitHubIcon sx={{ fontSize: '0.85rem' }} />}
-            href={
-              ['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(item.id)
-                ? 'https://github.com/NullAITech/zoth-studio-v2'
-                : item.github
-            }
-            target="_blank"
-            rel="noreferrer"
-            sx={{
-              color: isDark ? '#9CA3AF' : '#6B7280',
-              fontSize: '0.74rem',
-              fontFamily: mono,
-              p: 0.5,
-              '&:hover': { color: gold.accent },
-            }}
-          >
-            GitHub
-          </Button>
-        )}
+        <Button
+          size="small"
+          variant="outlined"
+          href={repoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          startIcon={<GitHubIcon sx={{ fontSize: '0.88rem !important' }} />}
+          sx={{
+            borderColor: borderCol,
+            color: primaryText,
+            fontSize: '0.75rem',
+            fontWeight: 700,
+            textTransform: 'none',
+            px: 1.4,
+            '&:hover': { borderColor: gold },
+          }}
+        >
+          GitHub
+        </Button>
       </CardActions>
     </Card>
   );
@@ -386,444 +240,273 @@ function UnifiedAssetCard({ item, isDark, gold, runtime }) {
 export default function ArsenalPage() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const runtime = useSovereignRuntime();
-  const isLocal = runtime.isLocal;
 
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [search, setSearch] = useState('');
   const [viewMode, setViewMode] = useState('grid');
-  const { reality } = useReality();
 
-  const gold = {
-    accent: isDark ? reality.accent : reality.accentLightMode,
-    wash: isDark ? reality.accentWash : '#FEF9E7',
-    border: isDark ? reality.accentBorder : 'rgba(184,134,11,0.25)',
-  };
+  const gold = isDark ? '#D4AF37' : '#7A5808';
+  const primaryText = isDark ? '#F5F1E6' : '#101828';
+  const secondaryText = isDark ? '#A3AAB8' : '#475467';
+  const pageBg = isDark ? '#08080B' : '#FAF8F3';
+  const cardBg = isDark ? '#0D0F16' : '#FFFFFF';
+  const codeBg = isDark ? '#080A0F' : '#F3F4F6';
+  const borderCol = isDark ? 'rgba(245, 241, 230, 0.12)' : 'rgba(16, 24, 40, 0.12)';
 
-  // Filtered Assets
   const filteredAssets = useMemo(() => {
     return masterArsenal.filter((asset) => {
-      // Category filter
       if (categoryFilter !== 'All' && asset.category !== categoryFilter) {
         return false;
       }
-      // Search filter
       if (search.trim()) {
         const q = search.toLowerCase();
-        const matchesName = asset.name.toLowerCase().includes(q);
-        const matchesId = asset.id.toLowerCase().includes(q);
-        const matchesDesc = asset.description.toLowerCase().includes(q);
-        const matchesCat = asset.category.toLowerCase().includes(q);
-        return matchesName || matchesId || matchesDesc || matchesCat;
+        return (
+          asset.name.toLowerCase().includes(q) ||
+          asset.id.toLowerCase().includes(q) ||
+          asset.description.toLowerCase().includes(q) ||
+          asset.category.toLowerCase().includes(q)
+        );
       }
       return true;
     });
   }, [categoryFilter, search]);
 
+  const daemonCount = useMemo(() => masterArsenal.filter((a) => Boolean(a.localPort)).length, []);
+
   return (
-    <Box sx={{ bgcolor: isDark ? '#08080B' : '#F8FAFC', minHeight: '100vh', pb: 10 }}>
-      {/* Cinematic Intro Banner */}
-      <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
-        {/* Page Header */}
+    <Box sx={{ bgcolor: pageBg, minHeight: '100vh', pb: 10 }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
         <HeroReveal>
-          <Box
-            sx={{
-              mb: 3.5,
-              position: 'relative',
-              borderRadius: 3,
-              p: { xs: 2.5, md: 3.5 },
-              background: isDark
-                ? 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.14) 0%, rgba(212,175,55,0.02) 60%, transparent 75%)'
-                : 'radial-gradient(ellipse 70% 100% at 50% 0%, rgba(212,175,55,0.18) 0%, rgba(254,249,231,0.5) 60%, transparent 75%)',
-              border: `1px solid ${isDark ? 'rgba(212,175,55,0.22)' : 'rgba(184,134,11,0.22)'}`,
-              boxShadow: isDark
-                ? '0 12px 30px -8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(212,175,55,0.15)'
-                : '0 8px 24px -4px rgba(184,134,11,0.08)',
-            }}
-          >
-            <HeroItem>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap', mb: 1 }}>
-                <Chip
-                  label="SOVEREIGN COMMAND HUB"
-                  size="small"
-                  sx={{
-                    bgcolor: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-                    color: gold.accent,
-                    border: `1px solid ${isDark ? 'rgba(212,175,55,0.35)' : '#F0E1A8'}`,
-                    fontWeight: 800,
-                    letterSpacing: '0.08em',
-                    fontSize: '0.72rem',
-                    fontFamily: mono,
-                  }}
-                />
-                <Chip
-                  label="OFFLINE-CAPABLE MATRIX"
-                  size="small"
-                  sx={{
-                    bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#ECFDF5',
-                    color: isDark ? '#10B981' : '#047857',
-                    border: isDark ? '1px solid rgba(16,185,129,0.3)' : '1px solid #A7F3D0',
-                    fontWeight: 800,
-                    fontSize: '0.72rem',
-                    fontFamily: mono,
-                  }}
-                />
-              </Box>
-            </HeroItem>
+          <Box sx={{ mb: 4.5 }}>
+            <GlowLine
+              height={2}
+              color={gold}
+              glowColor={isDark ? 'rgba(212,175,55,0.35)' : 'rgba(122,88,8,0.2)'}
+            />
             <HeroItem>
               <Typography
-                variant="h3"
                 sx={{
-                  fontFamily: '"Celtic Garamond", Georgia, serif',
+                  mt: 2.5,
                   mb: 1,
-                  color: isDark ? '#EDEFF2' : '#101828',
-                  fontSize: { xs: '1.9rem', sm: '2.8rem', md: '3.4rem' },
-                  fontWeight: 800,
-                  lineHeight: 1.1,
-                  wordBreak: 'break-word',
-                  overflowWrap: 'break-word',
+                  fontFamily: mono,
+                  fontSize: '0.74rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.16em',
+                  textTransform: 'uppercase',
+                  color: gold,
                 }}
               >
-                The Sovereign <span className="text-gradient-gold">Arsenal</span>
+                MASTER REPOSITORY DIRECTORY · {arsenalStats.total} LOCAL PACKAGES
               </Typography>
             </HeroItem>
+
             <HeroItem>
-              <Typography color="text.secondary" sx={{ maxWidth: 880, fontSize: { xs: '0.98rem', sm: '1.05rem' }, lineHeight: 1.65 }}>
-                One unified directory consolidating all {arsenalStats.total} sovereign micro-tools and repositories. Everything executes strictly on local hardware with zero external cloud dependencies.
+              <Typography
+                component="h1"
+                sx={{
+                  fontFamily: display,
+                  fontSize: { xs: '2.15rem', sm: '2.9rem', md: '3.45rem' },
+                  fontWeight: 400,
+                  lineHeight: 1.08,
+                  color: primaryText,
+                  mb: 1.75,
+                }}
+              >
+                The Sovereign Arsenal
               </Typography>
+            </HeroItem>
+
+            <HeroItem>
+              <Typography sx={{ color: secondaryText, maxWidth: 800, fontSize: { xs: '0.98rem', sm: '1.06rem' }, lineHeight: 1.7, mb: 2.5 }}>
+                A unified index of all {arsenalStats.total} local-first repositories, CLI utilities, and loopback daemons. Instead of running fragile simulations in a web browser, clone any standalone repository directly or install the full{' '}
+                <Box
+                  component="a"
+                  href="https://github.com/NullAITech/zoth-studio-v2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{ color: gold, fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '3px' }}
+                >
+                  Zoth Studio v2
+                </Box>{' '}
+                suite locally.
+              </Typography>
+            </HeroItem>
+
+            <HeroItem>
+              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+                <Button
+                  variant="contained"
+                  href="https://github.com/NullAITech/zoth-studio-v2"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  startIcon={<GitHubIcon />}
+                  sx={{
+                    bgcolor: isDark ? '#D4AF37' : '#101828',
+                    color: isDark ? '#08080B' : '#FFFFFF',
+                    fontWeight: 700,
+                    textTransform: 'none',
+                    px: 2.5,
+                    '&:hover': { bgcolor: isDark ? '#E5C158' : '#1E293B' },
+                  }}
+                >
+                  Get Zoth Studio Repo
+                </Button>
+                <Button
+                  component={RouterLink}
+                  to="/zoth-os"
+                  variant="outlined"
+                  sx={{
+                    borderColor: borderCol,
+                    color: primaryText,
+                    fontWeight: 700,
+                    textTransform: 'none',
+                    px: 2.5,
+                    '&:hover': { borderColor: gold },
+                  }}
+                >
+                  ZothOS Pre-Installed ISO →
+                </Button>
+              </Stack>
             </HeroItem>
           </Box>
         </HeroReveal>
 
-        {/* 100% Free & Open Access + Support Banner */}
-        <Paper
-          elevation={0}
+        {/* Clean Summary Metrics */}
+        <Box
           sx={{
-            p: 2.5,
-            mb: 3.5,
-            borderRadius: 3,
-            bgcolor: isDark ? 'rgba(16, 185, 129, 0.08)' : '#ECFDF5',
-            border: '1.5px solid',
-            borderColor: isDark ? 'rgba(16, 185, 129, 0.4)' : '#A7F3D0',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 2,
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr 1fr', md: 'repeat(4, 1fr)' },
+            gap: 1.75,
+            mb: 4,
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2, maxWidth: 780, flexWrap: { xs: 'wrap', sm: 'nowrap' } }}>
-            <Box sx={{ p: 1.2, borderRadius: 2, bgcolor: isDark ? 'rgba(16, 185, 129, 0.18)' : '#D1FAE5', color: '#10B981', display: 'flex' }}>
-              <VerifiedUserIcon sx={{ fontSize: 28 }} />
-            </Box>
-            <Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 0.5 }}>
-                <Typography sx={{ fontFamily: mono, fontWeight: 850, fontSize: '0.86rem', color: isDark ? '#34D399' : '#047857' }}>
-                  ✦ 100% FREE & OPEN ACCESS — ALL 77 TOOLS UNLOCKED IN-BROWSER & INSTALLED IN ZOTHOS
-                </Typography>
-                <Chip
-                  label="ZERO PAYWALLS"
-                  size="small"
-                  sx={{
-                    fontFamily: mono,
-                    fontSize: '0.64rem',
-                    fontWeight: 800,
-                    bgcolor: isDark ? 'rgba(212,175,55,0.2)' : '#FEF3C7',
-                    color: gold.accent,
-                  }}
-                />
-              </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.88rem', lineHeight: 1.6 }}>
-                Every tool in the Sovereign Arsenal runs 100% free in your browser (with interactive God-Mode Workstations & Universal Output Workbenches) AND is pre-installed in ZothOS (<code>/usr/local/bin/&lt;tool-id&gt;</code> &amp; local loopback ports). Optional community support via Stripe or Solana:
+          {[
+            ['Total Repositories', arsenalStats.total],
+            ['Loopback Daemons', daemonCount],
+            ['CLI & MCP Ready', '100%'],
+            ['Outbound Telemetry', '0 WAN'],
+          ].map(([label, val]) => (
+            <Paper
+              key={label}
+              elevation={0}
+              sx={{
+                p: 2,
+                borderRadius: 2,
+                bgcolor: cardBg,
+                border: `1px solid ${borderCol}`,
+              }}
+            >
+              <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '1.35rem', color: primaryText, lineHeight: 1.15 }}>
+                {val}
               </Typography>
-            </Box>
-          </Box>
-
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: { xs: '100%', sm: 'auto' } }}>
-            <Button
-              component="a"
-              href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="contained"
-              size="small"
-              sx={{
-                bgcolor: '#D4AF37',
-                color: '#08080B',
-                fontFamily: mono,
-                fontWeight: 800,
-                fontSize: '0.76rem',
-                py: 1,
-                px: 2,
-                width: { xs: '100%', sm: 'auto' },
-                '&:hover': { bgcolor: '#F5E6AB' },
-              }}
-            >
-              ☕ Buy Us a Coffee (Stripe)
-            </Button>
-            <Button
-              component="a"
-              href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
-              onClick={() => navigator?.clipboard?.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK')}
-              variant="outlined"
-              size="small"
-              sx={{
-                borderColor: isDark ? 'rgba(20, 241, 149, 0.45)' : '#059669',
-                color: isDark ? '#14F195' : '#065F46',
-                fontFamily: mono,
-                fontWeight: 800,
-                fontSize: '0.76rem',
-                py: 1,
-                px: 2,
-                width: { xs: '100%', sm: 'auto' },
-              }}
-            >
-              ◎ Solana Tip (GG2e...dXoK)
-            </Button>
-          </Stack>
-        </Paper>
-
-        {/* Telemetry Stats Bar */}
-        <RevealOnScroll preset="fadeUp" delay={0.2}>
-          <Paper
-            elevation={0}
-            sx={{
-              p: { xs: 2, md: 2.5 },
-              mb: 3.5,
-              borderRadius: 3,
-              bgcolor: isDark ? '#0B0B12' : '#FFFFFF',
-              border: '1px solid',
-              borderColor: isDark ? 'rgba(212,175,55,0.22)' : 'rgba(184,134,11,0.2)',
-              boxShadow: isDark
-                ? '0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(212,175,55,0.1)'
-                : '0 2px 12px rgba(16,24,40,0.06)',
-            }}
-          >
-            <Grid container spacing={2.5} alignItems="center">
-              {/* Stat 1: Total Sovereign Tools */}
-              <Grid xs={12} sm={6} md={3}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.75 }}>
-                  <Box
-                    sx={{
-                      width: 44,
-                      height: 44,
-                      borderRadius: 2,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      bgcolor: 'rgba(212,175,55,0.12)',
-                      border: '1px solid rgba(212,175,55,0.3)',
-                      color: gold.accent,
-                      flexShrink: 0,
-                    }}
-                  >
-                    <TerminalIcon sx={{ fontSize: '1.35rem' }} />
-                  </Box>
-                  <Box>
-                    <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent, lineHeight: 1.15 }}>
-                      {arsenalStats.total}
-                    </Typography>
-                    <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', fontSize: '0.78rem' }}>
-                      Sovereign Tool Repositories
-                    </Typography>
-                  </Box>
-                </Box>
-              </Grid>
-
-              {/* Stat 2: CLI Binaries */}
-              <Grid xs={12} sm={6} md={3}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.75 }}>
-                  <Box
-                    sx={{
-                      width: 44,
-                      height: 44,
-                      borderRadius: 2,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF',
-                      border: `1px solid ${isDark ? 'rgba(56,189,248,0.3)' : '#BAE6FD'}`,
-                      color: isDark ? '#38BDF8' : '#0369A1',
-                      flexShrink: 0,
-                    }}
-                  >
-                    <CodeIcon sx={{ fontSize: '1.35rem' }} />
-                  </Box>
-                  <Box>
-                    <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 800, color: isDark ? '#EDEFF2' : '#101828', lineHeight: 1.15 }}>
-                      {arsenalStats.cli}
-                    </Typography>
-                    <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', fontSize: '0.78rem' }}>
-                      Local CLI Binaries
-                    </Typography>
-                  </Box>
-                </Box>
-              </Grid>
-
-              {/* Stat 3: WebGPU In-Browser */}
-              <Grid xs={12} sm={6} md={3}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.75 }}>
-                  <Box
-                    sx={{
-                      width: 44,
-                      height: 44,
-                      borderRadius: 2,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      bgcolor: isDark ? 'rgba(167,139,250,0.12)' : '#FAF5FF',
-                      border: `1px solid ${isDark ? 'rgba(167,139,250,0.3)' : '#DDD6FE'}`,
-                      color: isDark ? '#A78BFA' : '#7C3AED',
-                      flexShrink: 0,
-                    }}
-                  >
-                    <AutoAwesomeIcon sx={{ fontSize: '1.35rem' }} />
-                  </Box>
-                  <Box>
-                    <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 800, color: isDark ? '#EDEFF2' : '#101828', lineHeight: 1.15 }}>
-                      {arsenalStats.webgpu}
-                    </Typography>
-                    <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', fontSize: '0.78rem' }}>
-                      WebGPU In-Browser Tools
-                    </Typography>
-                  </Box>
-                </Box>
-              </Grid>
-
-              {/* Stat 4: Zero Cloud Dependencies */}
-              <Grid xs={12} sm={6} md={3}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.75 }}>
-                  <Box
-                    sx={{
-                      width: 44,
-                      height: 44,
-                      borderRadius: 2,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      bgcolor: isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF3',
-                      border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#ABE5C6'}`,
-                      color: isDark ? '#34D399' : '#027A48',
-                      flexShrink: 0,
-                    }}
-                  >
-                    <CloudOffIcon sx={{ fontSize: '1.35rem' }} />
-                  </Box>
-                  <Box>
-                    <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 800, color: isDark ? '#34D399' : '#027A48', lineHeight: 1.15 }}>
-                      0 WAN
-                    </Typography>
-                    <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', fontSize: '0.78rem' }}>
-                      Zero Outbound Telemetry
-                    </Typography>
-                  </Box>
-                </Box>
-              </Grid>
-            </Grid>
-          </Paper>
-        </RevealOnScroll>
-
-        {/* Filter & Search Bar */}
-        <Box sx={{ mb: 3 }}>
-          <Grid container spacing={2} alignItems="center">
-            {/* Search Input */}
-            <Grid xs={12} md={7}>
-              <TextField
-                fullWidth
-                size="small"
-                placeholder="Search 77 Studio tools by name, ID, or description..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon sx={{ color: gold.accent }} />
-                    </InputAdornment>
-                  ),
-                  endAdornment: search && (
-                    <InputAdornment position="end">
-                      <IconButton size="small" onClick={() => setSearch('')}>
-                        <ClearIcon fontSize="small" />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                  sx: {
-                    fontFamily: mono,
-                    fontSize: '0.85rem',
-                    bgcolor: isDark ? '#0D0D14' : '#FFFFFF',
-                    borderRadius: 2,
-                  },
-                }}
-              />
-            </Grid>
-
-            {/* View Mode Toggle */}
-            <Grid xs={12} md={5} sx={{ display: 'flex', justifyContent: { xs: 'flex-start', md: 'flex-end' }, gap: 1, flexWrap: 'wrap' }}>
-              <ToggleButtonGroup
-                value={viewMode}
-                exclusive
-                onChange={(_, v) => v && setViewMode(v)}
-                size="small"
+              <Typography
+                variant="caption"
                 sx={{
-                  bgcolor: isDark ? '#0D0D14' : '#FFFFFF',
-                  borderRadius: 2,
-                  '& .MuiToggleButton-root': {
-                    fontFamily: mono,
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    px: 1.8,
-                    border: '1px solid',
-                    borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
-                    '&.Mui-selected': {
-                      bgcolor: isDark ? 'rgba(212,175,55,0.18)' : '#FEF3C7',
-                      color: gold.accent,
-                    },
-                  },
+                  fontFamily: mono,
+                  fontWeight: 600,
+                  fontSize: '0.68rem',
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: secondaryText,
                 }}
               >
-                <ToggleButton value="grid">
-                  <GridViewIcon sx={{ fontSize: '1rem', mr: 0.8 }} /> Grid ({filteredAssets.length})
-                </ToggleButton>
-                <ToggleButton value="compact">
-                  <AccountTreeIcon sx={{ fontSize: '1rem', mr: 0.8 }} /> List ({filteredAssets.length})
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </Grid>
-          </Grid>
+                {label}
+              </Typography>
+            </Paper>
+          ))}
         </Box>
 
-        {/* Categories Bar */}
-        <Box sx={{ mb: 4, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+        {/* Search + View Toggle */}
+        <Grid container spacing={2} alignItems="center" sx={{ mb: 2.5 }}>
+          <Grid xs={12} md={8}>
+            <TextField
+              fullWidth
+              size="small"
+              placeholder="Search 77 repositories by name, ID, or capability…"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon sx={{ color: gold, fontSize: '1.15rem' }} />
+                  </InputAdornment>
+                ),
+                endAdornment: search ? (
+                  <InputAdornment position="end">
+                    <IconButton size="small" aria-label="Clear search" onClick={() => setSearch('')}>
+                      <ClearIcon fontSize="small" />
+                    </IconButton>
+                  </InputAdornment>
+                ) : null,
+                sx: {
+                  fontFamily: mono,
+                  fontSize: '0.85rem',
+                  bgcolor: cardBg,
+                  borderRadius: 2,
+                },
+              }}
+            />
+          </Grid>
+
+          <Grid xs={12} md={4} sx={{ display: 'flex', justifyContent: { xs: 'flex-start', md: 'flex-end' } }}>
+            <ToggleButtonGroup
+              value={viewMode}
+              exclusive
+              onChange={(_, v) => v && setViewMode(v)}
+              size="small"
+              sx={{
+                bgcolor: cardBg,
+                borderRadius: 2,
+                '& .MuiToggleButton-root': {
+                  fontFamily: mono,
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  textTransform: 'none',
+                  px: 1.8,
+                  color: primaryText,
+                  border: `1px solid ${borderCol}`,
+                  '&.Mui-selected': {
+                    bgcolor: isDark ? '#D4AF37' : '#101828',
+                    color: isDark ? '#08080B' : '#FFFFFF',
+                    '&:hover': {
+                      bgcolor: isDark ? '#E5C158' : '#1E293B',
+                    },
+                  },
+                },
+              }}
+            >
+              <ToggleButton value="grid">
+                <GridViewIcon sx={{ fontSize: '1rem', mr: 0.75 }} /> Grid ({filteredAssets.length})
+              </ToggleButton>
+              <ToggleButton value="compact">
+                <ViewListIcon sx={{ fontSize: '1rem', mr: 0.75 }} /> List ({filteredAssets.length})
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Grid>
+        </Grid>
+
+        {/* Category Filter Chips */}
+        <Box sx={{ mb: 4, display: 'flex', flexWrap: 'wrap', gap: 0.9 }}>
           {ORDERED_CATEGORIES.map((cat) => {
             const isSelected = categoryFilter === cat;
-            const count = cat === 'All' ? masterArsenal.length : masterArsenal.filter((a) => a.category === cat).length;
-            const catCfg = CATEGORY_CONFIG[cat] || { color: gold.accent, lightColor: gold.accent, wash: gold.wash, icon: HandymanIcon };
-            const Icon = catCfg.icon;
+            const count =
+              cat === 'All' ? masterArsenal.length : masterArsenal.filter((a) => a.category === cat).length;
 
             return (
               <Chip
                 key={cat}
                 clickable
                 onClick={() => setCategoryFilter(cat)}
-                icon={<Icon sx={{ fontSize: '0.85rem !important', color: `${isSelected ? '#FFFFFF' : (isDark ? catCfg.color : catCfg.lightColor)} !important` }} />}
-                label={`${cat} (${count})`}
+                label={`${cat} · ${count}`}
                 sx={{
                   fontFamily: mono,
-                  fontWeight: 750,
-                  fontSize: '0.75rem',
-                  py: 0.5,
-                  px: 0.8,
-                  borderRadius: 2,
-                  bgcolor: isSelected
-                    ? (isDark ? '#38BDF8' : '#0369A1')
-                    : (isDark ? '#0D0D14' : '#FFFFFF'),
-                  color: isSelected ? '#FFFFFF' : (isDark ? '#D1D5DB' : '#374151'),
-                  border: '1px solid',
-                  borderColor: isSelected
-                    ? (isDark ? '#38BDF8' : '#0369A1')
-                    : (isDark ? 'rgba(255, 255, 255, 0.08)' : '#E2E8F0'),
+                  fontWeight: 700,
+                  fontSize: '0.73rem',
+                  bgcolor: isSelected ? (isDark ? '#D4AF37' : '#101828') : cardBg,
+                  color: isSelected ? (isDark ? '#08080B' : '#FFFFFF') : primaryText,
+                  border: `1px solid ${isSelected ? (isDark ? '#D4AF37' : '#101828') : borderCol}`,
                   '&:hover': {
-                    bgcolor: isSelected ? (isDark ? '#7DD3FC' : '#0369A1') : (isDark ? '#141420' : '#F1F5F9'),
+                    bgcolor: isSelected ? (isDark ? '#E5C158' : '#1E293B') : (isDark ? '#141824' : '#F3F4F6'),
                   },
                 }}
               />
@@ -831,26 +514,29 @@ export default function ArsenalPage() {
           })}
         </Box>
 
-        {/* Asset Grid or List */}
+        {/* Results */}
         {filteredAssets.length === 0 ? (
           <Paper
             elevation={0}
             sx={{
               p: 6,
               textAlign: 'center',
-              borderRadius: 3,
-              bgcolor: isDark ? '#0D0D14' : '#FFFFFF',
-              border: `1px dashed ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}`,
+              borderRadius: 2.5,
+              bgcolor: cardBg,
+              border: `1px dashed ${borderCol}`,
             }}
           >
-            <Typography variant="h6" sx={{ color: 'text.secondary', mb: 1 }}>
-              No sovereign tools match your search criteria.
+            <Typography variant="h6" sx={{ color: primaryText, mb: 1 }}>
+              No repositories match your filter.
             </Typography>
             <Button
               variant="outlined"
               size="small"
-              onClick={() => { setSearch(''); setCategoryFilter('All'); }}
-              sx={{ mt: 1, fontFamily: mono, fontSize: '0.8rem' }}
+              onClick={() => {
+                setSearch('');
+                setCategoryFilter('All');
+              }}
+              sx={{ mt: 1, fontFamily: mono, fontSize: '0.78rem', textTransform: 'none', color: primaryText, borderColor: borderCol }}
             >
               Reset Filters
             </Button>
@@ -859,14 +545,23 @@ export default function ArsenalPage() {
           <Grid container spacing={2.5}>
             {filteredAssets.map((asset) => (
               <Grid xs={12} sm={6} md={4} key={asset.id} sx={{ display: 'flex' }}>
-                <UnifiedAssetCard item={asset} isDark={isDark} gold={gold} runtime={runtime} />
+                <ArsenalCard
+                  item={asset}
+                  isDark={isDark}
+                  gold={gold}
+                  primaryText={primaryText}
+                  secondaryText={secondaryText}
+                  cardBg={cardBg}
+                  codeBg={codeBg}
+                  borderCol={borderCol}
+                />
               </Grid>
             ))}
           </Grid>
         ) : (
-          <Stack spacing={1.5}>
+          <Stack spacing={1.25}>
             {filteredAssets.map((asset) => {
-              const assetEval = runtime.evaluateTool(asset);
+              const repoUrl = resolveRepoUrl(asset);
               return (
                 <Paper
                   key={asset.id}
@@ -874,120 +569,92 @@ export default function ArsenalPage() {
                   sx={{
                     p: 2,
                     px: 2.5,
-                    borderRadius: 2.5,
-                    bgcolor: isDark ? '#0A0A10' : '#FFFFFF',
-                    border: '1px solid',
-                    borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)',
+                    borderRadius: 2,
+                    bgcolor: cardBg,
+                    border: `1px solid ${borderCol}`,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     flexWrap: 'wrap',
                     gap: 2,
-                    '&:hover': {
-                      borderColor: isDark ? '#38BDF8' : '#0369A1',
-                    },
+                    '&:hover': { borderColor: gold },
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, minWidth: 260 }}>
-                    <Box>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Typography sx={{ fontWeight: 800, fontSize: '0.95rem', color: isDark ? '#EDEFF2' : '#101828' }}>
-                          {asset.name}
-                        </Typography>
+                  <Box sx={{ minWidth: 240, flex: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 0.4 }}>
+                      <Typography
+                        component={RouterLink}
+                        to={asset.target}
+                        sx={{ fontWeight: 800, fontSize: '0.96rem', color: primaryText, textDecoration: 'none', '&:hover': { color: gold } }}
+                      >
+                        {asset.name}
+                      </Typography>
+                      <Chip
+                        size="small"
+                        label={asset.category}
+                        sx={{ height: 20, fontSize: '0.66rem', fontFamily: mono, fontWeight: 700, bgcolor: codeBg, color: secondaryText }}
+                      />
+                      {asset.localPort && (
                         <Chip
                           size="small"
-                          label={asset.category}
-                          sx={{ height: 20, fontSize: '0.65rem', fontFamily: mono, fontWeight: 700 }}
-                        />
-                        <Chip
-                          size="small"
-                          label={
-                            runtime.isLocal
-                              ? 'Local Node'
-                              : asset.executionType === 'webgpu'
-                                ? 'WebGPU In-Browser'
-                                : 'Bare-Metal'
-                          }
+                          label={`:${asset.localPort}`}
                           sx={{
                             height: 20,
-                            fontSize: '0.62rem',
+                            fontSize: '0.66rem',
                             fontFamily: mono,
-                            fontWeight: 750,
-                            bgcolor: runtime.isLocal
-                              ? (isDark ? 'rgba(52, 211, 153, 0.12)' : '#ECFDF3')
-                              : asset.executionType === 'webgpu'
-                                ? (isDark ? 'rgba(56, 189, 248, 0.12)' : '#F0F9FF')
-                                : (isDark ? 'rgba(239, 68, 68, 0.12)' : '#FEF2F2'),
-                            color: runtime.isLocal
-                              ? (isDark ? '#34D399' : '#047857')
-                              : asset.executionType === 'webgpu'
-                                ? (isDark ? '#38BDF8' : '#0369A1')
-                                : (isDark ? '#FCA5A5' : '#B91C1C'),
+                            fontWeight: 700,
+                            bgcolor: isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF5',
+                            color: isDark ? '#34D399' : '#047857',
                           }}
                         />
-                      </Box>
-                      <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', maxWidth: 540 }}>
-                        {asset.description}
-                      </Typography>
+                      )}
                     </Box>
+                    <Typography variant="body2" sx={{ color: secondaryText, fontSize: '0.84rem' }}>
+                      {asset.description}
+                    </Typography>
                   </Box>
 
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.7rem', color: isDark ? '#9CA3AF' : '#4B5563', bgcolor: isDark ? '#14141E' : '#F3F4F6', px: 1, py: 0.3, borderRadius: 1 }}>
-                      {asset.id}
-                    </Typography>
+                  <Stack direction="row" spacing={1} alignItems="center">
                     <Button
                       size="small"
-                      variant={assetEval.canExecute ? "contained" : "outlined"}
+                      variant="contained"
                       component={RouterLink}
                       to={asset.target}
                       sx={{
-                        bgcolor: assetEval.canExecute
-                          ? (runtime.isLocal ? (isDark ? '#10B981' : '#047857') : (isDark ? '#38BDF8' : '#0369A1'))
-                          : 'transparent',
-                        borderColor: assetEval.canExecute ? 'transparent' : (isDark ? 'rgba(212,175,55,0.4)' : '#D4AF37'),
-                        color: assetEval.canExecute ? '#FFFFFF' : (isDark ? '#F5E6AB' : '#8A6A09'),
-                        fontFamily: mono,
-                        fontWeight: 750,
-                        fontSize: '0.75rem',
-                        px: 2,
-                        borderRadius: 2,
-                        '&:hover': {
-                          bgcolor: assetEval.canExecute
-                            ? (runtime.isLocal ? '#34D399' : '#7DD3FC')
-                            : (isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7'),
-                        },
+                        bgcolor: isDark ? '#D4AF37' : '#101828',
+                        color: isDark ? '#08080B' : '#FFFFFF',
+                        fontWeight: 700,
+                        fontSize: '0.74rem',
+                        textTransform: 'none',
+                        px: 1.75,
                       }}
                     >
-                      {runtime.isLocal ? 'Launch ⚡' : assetEval.label}
+                      Specs
                     </Button>
-                  {asset.github && (
                     <Button
                       size="small"
                       variant="outlined"
-                      href={asset.github}
+                      href={repoUrl}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       sx={{
-                        color: isDark ? '#9CA3AF' : '#4B5563',
-                        fontFamily: mono,
-                        fontSize: '0.75rem',
-                        px: 1.5,
-                        borderRadius: 2,
+                        borderColor: borderCol,
+                        color: primaryText,
+                        fontWeight: 700,
+                        fontSize: '0.74rem',
+                        textTransform: 'none',
                       }}
                     >
                       GitHub
                     </Button>
-                  )}
-                </Box>
-              </Paper>
-            ); })}
+                  </Stack>
+                </Paper>
+              );
+            })}
           </Stack>
         )}
 
-        <Box sx={{ mt: 8 }}>
-          <SovereignFunnel />
-        </Box>
+        <SovereignFunnel />
       </Container>
     </Box>
   );

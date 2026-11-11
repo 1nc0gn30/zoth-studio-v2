@@ -55,8 +55,8 @@ export default function MathPillarsGrid({ variant = 'full' }) {
               onClick={() => setTier(name)}
               sx={{
                 fontWeight: 700,
-                bgcolor: tier === name ? gold : theme.palette.background.paper,
-                color: tier === name ? '#FFFFFF' : theme.palette.text.primary,
+                bgcolor: tier === name ? (isDark ? '#D4AF37' : '#101828') : theme.palette.background.paper,
+                color: tier === name ? (isDark ? '#08080B' : '#FFFFFF') : theme.palette.text.primary,
                 border: '1px solid',
                 borderColor: tier === name ? gold : theme.palette.divider,
                 '&:hover': { borderColor: gold },

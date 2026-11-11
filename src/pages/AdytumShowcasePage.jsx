@@ -1,239 +1,82 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Chip,
-  Container,
-  Typography,
-  Unstable_Grid2 as Grid,
-} from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import { Link as RouterLink } from 'react-router-dom';
-import AccountTreeIcon from '@mui/icons-material/AccountTree';
-import VerifiedIcon from '@mui/icons-material/Verified';
-import FactCheckIcon from '@mui/icons-material/FactCheck';
-import ComputerIcon from '@mui/icons-material/Computer';
-import PeopleIcon from '@mui/icons-material/People';
-import {
-  HeroReveal,
-  HeroItem,
-  GlowLine,
-  RevealOnScroll,
-  StaggerChildren,
-  StaggerItem,
-} from '../components/MotionReveal';
-import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
-import AdytumPlannerGodModeTool from '../components/tools/AdytumPlannerGodModeTool';
-
-const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-
-const FEATURES = [
-  { icon: <AccountTreeIcon />, title: 'Chained Workflows', desc: 'Link AI calls into automated, multi-step pipelines.' },
-  { icon: <VerifiedIcon />, title: 'Schema-Validated I/O', desc: 'Every input and output is checked against a contract.' },
-  { icon: <FactCheckIcon />, title: 'Plan & Verify', desc: 'Built-in planning and result verification at every stage.' },
-  { icon: <ComputerIcon />, title: 'Runs Locally', desc: 'Your machine, your models — nothing leaves your network.' },
-];
-
-const AUDIENCES = [
-  'AI engineers building production pipelines',
-  'Teams automating repetitive LLM tasks',
-  'Builders who need reliable, repeatable AI workflows',
-];
+import LocalSystemDossier from '../components/LocalSystemDossier';
 
 export default function AdytumShowcasePage() {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#8A6508';
-  const goldGlow = isDark ? 'rgba(212,175,55,0.45)' : 'rgba(184,134,11,0.35)';
-  const surface = isDark
-    ? 'rgba(212,175,55,0.06)'
-    : 'rgba(184,134,11,0.06)';
-  const bg = isDark ? '#08080B' : theme.palette.background.default;
-
   return (
-    <>
-
-      <Box sx={{ bgcolor: bg, minHeight: '100vh' }}>
-        <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 } }}>
-          {/* ── Hero ─────────────────────────────────── */}
-          <HeroReveal>
-            <HeroItem>
-              <GlowLine color={gold} glowColor={goldGlow} />
-            </HeroItem>
-
-            <HeroItem>
-              <Chip
-                label="ADYTUM"
-                size="small"
-                sx={{
-                  mt: 4,
-                  fontFamily: mono,
-                  fontWeight: 700,
-                  letterSpacing: '0.12em',
-                  color: gold,
-                  borderColor: gold,
-                  bgcolor: surface,
-                }}
-                variant="outlined"
-              />
-            </HeroItem>
-
-            <HeroItem>
-              <Typography
-                variant="h3"
-                sx={{
-                  fontFamily: mono,
-                  fontWeight: 800,
-                  mt: 2,
-                  color: theme.palette.text.primary,
-                }}
-              >
-                Orchestrate AI Workflows,{' '}
-                <Box component="span" sx={{ color: gold }}>
-                  Automatically
-                </Box>
-              </Typography>
-            </HeroItem>
-
-            <HeroItem>
-              <Typography
-                sx={{ mt: 1.5, maxWidth: 640, lineHeight: 1.65, color: theme.palette.text.secondary }}
-              >
-                Define your workflow once — Adytum chains every AI call, validates
-                results, and keeps the whole pipeline on track.
-              </Typography>
-            </HeroItem>
-          </HeroReveal>
-
-          {/* ── 60FPS ASCII & Braille Motion Edit + 22-Key Hermetic Planning Rite ── */}
-          <Box sx={{ mt: 5 }}>
-            <ToolMotionShowcase
-              tool={{
-                id: 'adytum-alchemist-ai-workflow',
-                name: 'Adytum Planner',
-                category: 'Planning',
-                executionType: 'local_cli',
-                description: 'The 22-key hermetic planning rite. Intention, five-minute incubation, and a local-model gate.',
-              }}
-              onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
-            />
-            <Box sx={{ mt: 4 }}>
-              <AdytumPlannerGodModeTool />
-            </Box>
-          </Box>
-
-          {/* ── Feature Cards ────────────────────────── */}
-          <RevealOnScroll preset="fadeUp" delay={0.1}>
-            <StaggerChildren
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-                gap: 24,
-                marginTop: 56,
-                alignItems: 'stretch',
-              }}
-            >
-              {FEATURES.map((f) => (
-                <StaggerItem key={f.title}>
-                  <Card
-                    variant="outlined"
-                    sx={{
-                      height: '100%',
-                      width: '100%',
-                      flex: 1,
-                      bgcolor: surface,
-                      borderColor: isDark
-                        ? 'rgba(212,175,55,0.18)'
-                        : 'rgba(184,134,11,0.18)',
-                    }}
-                  >
-                    <CardContent>
-                      <Box sx={{ color: gold, mb: 1 }}>{f.icon}</Box>
-                      <Typography
-                        variant="subtitle2"
-                        sx={{ fontFamily: mono, fontWeight: 700, color: gold }}
-                      >
-                        {f.title}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ mt: 0.5, color: theme.palette.text.secondary }}
-                      >
-                        {f.desc}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </StaggerItem>
-              ))}
-            </StaggerChildren>
-          </RevealOnScroll>
-
-          {/* ── Built For ────────────────────────────── */}
-          <RevealOnScroll preset="fadeUp" delay={0.15}>
-            <Box sx={{ mt: 8 }}>
-              <Typography
-                variant="overline"
-                sx={{ fontFamily: mono, color: gold, letterSpacing: '0.14em' }}
-              >
-                Built For
-              </Typography>
-              {AUDIENCES.map((a) => (
-                <Box
-                  key={a}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1.5,
-                    mt: 1.5,
-                  }}
-                >
-                  <PeopleIcon sx={{ fontSize: 18, color: gold }} />
-                  <Typography sx={{ color: theme.palette.text.secondary }}>
-                    {a}
-                  </Typography>
-                </Box>
-              ))}
-            </Box>
-          </RevealOnScroll>
-
-          {/* ── CTA ──────────────────────────────────── */}
-          <RevealOnScroll preset="fadeUp" delay={0.2}>
-            <Box sx={{ mt: 7, display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
-              <Button
-                component={RouterLink}
-                to="/adytum/docs"
-                variant="contained"
-                sx={{
-                  bgcolor: gold,
-                  color: '#000',
-                  fontFamily: mono,
-                  fontWeight: 700,
-                  '&:hover': { bgcolor: isDark ? '#b8960e' : '#9a7209' },
-                }}
-              >
-                Explore Full Documentation →
-              </Button>
-              <Button
-                href="https://github.com/NullAITech/adytum-alchemist-ai-workflow"
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="outlined"
-                sx={{
-                  borderColor: gold,
-                  color: gold,
-                  fontFamily: mono,
-                  fontWeight: 700,
-                  '&:hover': { borderColor: gold, bgcolor: surface },
-                }}
-              >
-                View on GitHub →
-              </Button>
-            </Box>
-          </RevealOnScroll>
-        </Container>
-      </Box>
-    </>
+    <LocalSystemDossier
+      tone="gold"
+      kicker="ADYTUM WORKFLOW ENGINE"
+      badges={['LOCAL DAEMON :8135', '22-STAGE PIPELINE', 'JSON SCHEMA I/O']}
+      title="Deterministic AI Workflow"
+      accentWord="Pipelines."
+      subtitle="Adytum replaces brittle prompt chains with contract-validated local execution graphs. Define multi-stage planning, synthesis, and verification pipelines once—every intermediate payload is validated against strict JSON schemas before advancing to the next local model or tool call."
+      cloneCommand="git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git && cd adytum-alchemist-ai-workflow"
+      repoUrl="https://github.com/NullAITech/adytum-alchemist-ai-workflow"
+      repoLabel="Get Adytum Workflow Repo"
+      docsRoute="/adytum/docs"
+      docsLabel="Workflow Engine Docs"
+      overviewTitle="Schema-Enforced Multi-Step Execution"
+      overviewParagraphs={[
+        'Unconstrained agent loops drift off-spec when intermediate outputs contain malformed fields or hallucinated assumptions. Adytum structures complex engineering rites into up to 22 discrete stages, enforcing explicit input/output schemas and pre-flight invariants at every boundary.',
+        'When a stage fails validation, Adytum triggers bounded local repair with exact schema error diagnostics rather than cascading corrupted state downstream.',
+      ]}
+      pipelineSteps={[
+        {
+          label: 'Contract & DAG Declaration',
+          detail: 'Define stage prompts, tool bindings, and JSON Schema contracts in version-controlled YAML/JSON manifests.',
+        },
+        {
+          label: 'Local Model & Tool Execution',
+          detail: 'Stages dispatch against local Ollama models, Hermes Agent, or CLI binaries with deterministic seed and timeout controls.',
+        },
+        {
+          label: 'Boundary Validation & Checkpointing',
+          detail: 'Outputs are verified against schema invariants and checkpointed to disk so long pipelines can resume cleanly.',
+        },
+      ]}
+      specs={[
+        { key: 'Loopback Daemon', value: '127.0.0.1:8135' },
+        { key: 'CLI Entrypoint', value: 'adytum' },
+        { key: 'Pipeline Stages', value: '22 Deterministic Gates' },
+        { key: 'Contract Format', value: 'JSON Schema Draft 2020-12' },
+        { key: 'Model Backends', value: 'Ollama / Hermes / OpenAI-Compatible' },
+        { key: 'License & Privacy', value: 'Open Source • Zero Cloud Lock-In' },
+      ]}
+      quickstartLines={[
+        '# Clone standalone Adytum workflow repository',
+        'git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git',
+        'cd adytum-alchemist-ai-workflow',
+        '',
+        '# Start local Adytum planning daemon on 127.0.0.1:8135',
+        'python3 server.py --port 8135',
+      ]}
+      capabilitiesKicker="PIPELINE GUARANTEES"
+      capabilitiesTitle="Reliable Orchestration on Local Models"
+      capabilities={[
+        {
+          tag: 'CONTRACTS',
+          title: 'Strict JSON Schema Validation',
+          desc: 'Every stage input and output is validated against explicit type, enum, and structural constraints before downstream execution.',
+        },
+        {
+          tag: 'CHECKPOINTS',
+          title: 'Resumable Disk State',
+          desc: 'Every completed step writes an immutable local checkpoint so interrupted multi-step runs resume without recomputing prior stages.',
+        },
+        {
+          tag: 'BOUNDED REPAIR',
+          title: 'Automated Schema Self-Correction',
+          desc: 'Malformed model responses are caught immediately and retried with exact validator diagnostics under strict retry budgets.',
+        },
+        {
+          tag: 'COMPOSABLE',
+          title: 'Native Zoth Studio Integration',
+          desc: 'Chains seamlessly with Neuro-Memory (:8094), Pantheon Swarm (:8141), and all 77 local CLI tools in the Zoth Studio arsenal.',
+        },
+      ]}
+      funnelToolTitle="Adytum Workflow Engine"
+      funnelToolTag="DETERMINISTIC PLANNING"
+      funnelToolDesc="22-stage schema-validated local AI workflow orchestrator with disk checkpointing and bounded repair."
+    />
   );
 }

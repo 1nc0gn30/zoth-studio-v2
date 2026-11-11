@@ -1,148 +1,85 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Container, Typography, Link, Chip, Divider, Stack, IconButton, Tooltip, Unstable_Grid2 as Grid } from '@mui/material';
+import { Box, Container, Typography, Link, Stack, IconButton, Unstable_Grid2 as Grid } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LanguageIcon from '@mui/icons-material/Language';
-import ShieldIcon from '@mui/icons-material/Shield';
-import MemoryIcon from '@mui/icons-material/Memory';
-import TerminalIcon from '@mui/icons-material/Terminal';
-import StorageIcon from '@mui/icons-material/Storage';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import SovereignMascots from './SovereignMascots';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
+const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
 
 export default function Footer() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#8A6508';
-  const goldLight = isDark ? '#F3E5AB' : '#8A6A09';
-  const borderCol = theme.palette.divider;
-  const linkColor = isDark ? '#94A3B8' : '#334155';
-  const headingColor = isDark ? '#FFFFFF' : '#0F172A';
-  const subtextColor = isDark ? '#64748B' : '#475569';
 
-  const workstations = [
-    { label: 'Autonomous WebGen', to: '/webgen' },
-    { label: 'Lucy Netrunner Memory Hub', to: '/memory' },
-    { label: 'Byzantine Consensus Arena', to: '/consensus' },
-    { label: 'Adytum Sanctum (22 Keys)', to: '/adytum' },
-    { label: 'HexStrike Cybersec Terminal', to: '/hexstrike' },
-    { label: 'Zoth OS v3.4.0', to: '/zoth-os' },
-    { label: '21 Swarm Pantheon', to: '/swarm' },
-    { label: 'Workstations Matrix (43)', to: '/workstations' },
-    { label: 'Sovereign Arsenal Hub', to: '/arsenal' },
+  const gold = isDark ? '#D4AF37' : '#7A5808';
+  const primaryText = isDark ? '#F5F1E6' : '#101828';
+  const secondaryText = isDark ? '#A3AAB8' : '#475467';
+  const borderCol = isDark ? 'rgba(245, 241, 230, 0.12)' : 'rgba(16, 24, 40, 0.12)';
+  const footerBg = isDark ? '#06070B' : '#F3EFE6';
+
+  const systems = [
+    { label: 'The Sovereign Arsenal (77)', to: '/arsenal' },
+    { label: 'ZothOS v3.4.0 & Lite v1.2', to: '/zoth-os' },
+    { label: 'Pantheon Swarm (:9393)', to: '/swarm' },
+    { label: 'Neuro-Memory (:8094)', to: '/memory' },
+    { label: 'Zoth Bolt WebGen (:5173)', to: '/webgen' },
+    { label: 'HexStrike Security (:8888)', to: '/hexstrike' },
+    { label: 'Adytum Chamber', to: '/adytum' },
+    { label: 'Architecture Dossiers (43)', to: '/workstations' },
   ];
 
-  const toolsAndRepos = [
-    { label: 'Sovereign Arsenal (All 77)', to: '/arsenal' },
-    { label: 'Micro-Tools Registry (77)', to: '/tools' },
-    { label: 'Enclave Bridges (IPC Mesh)', to: '/bridges' },
+  const repositories = [
     { label: 'Zoth Studio v2 Repo', href: 'https://github.com/NullAITech/zoth-studio-v2', external: true },
-    { label: 'NullAI Tech GitHub Org', href: 'https://github.com/NullAITech', external: true },
-    { label: 'WebGen Autonomous Foundry', href: 'https://github.com/NullAITech/zoth-webgen', external: true },
-    { label: 'Neuro-Memory Daemon', href: 'https://github.com/NullAITech/neuro-memory-daemon', external: true },
-    { label: '21-Agent Swarm Multiplexer', href: 'https://github.com/NullAITech/zoth-swarm-multiplexer', external: true },
-    { label: 'Adytum Alchemist Workflow', href: 'https://github.com/NullAITech/adytum-alchemist-ai-workflow', external: true },
+    { label: 'ZothOS Linux Repo', href: 'https://github.com/NullAITech/zoth-os', external: true },
+    { label: 'Zoth Egregore (Beta)', href: 'https://github.com/1nc0gn30/zoth-egregore', external: true },
+    { label: 'Egregore Documentation Site', href: 'https://zoth-egregore.netlify.app', external: true },
+    { label: 'Zoth Civilization Site', href: 'https://zoth-civilization.netlify.app', external: true },
+    { label: 'NullAI Tech GitHub', href: 'https://github.com/NullAITech', external: true },
+    { label: '1nc0gn30 GitHub', href: 'https://github.com/1nc0gn30', external: true },
   ];
 
   const theoryAndDocs = [
+    { label: 'System Documentation', to: '/docs' },
     { label: 'Six Mathematical Pillars', to: '/docs/math' },
-    { label: 'Pillar I: Linear Attention', to: '/docs/math/linear' },
-    { label: 'Pillar II: Calculus & AdamW', to: '/docs/math/calculus' },
-    { label: 'Pillar III: Shannon Entropy', to: '/docs/math/probability' },
-    { label: 'Pillar IV: Loss Landscapes', to: '/docs/math/hessian' },
-    { label: 'Pillar V: Lyapunov Attractors', to: '/docs/math/lyapunov' },
-    { label: 'Pillar VI: STDP Synaptic Proof', to: '/docs/math/stdp' },
+    { label: 'Byzantine Consensus', to: '/consensus' },
+    { label: 'Command Bridges', to: '/bridges' },
+    { label: 'Agent Experience (AX)', to: '/ax' },
+    { label: 'Studio FAQs', to: '/faqs' },
     { label: 'Studio Gallery', to: '/gallery' },
-    { label: 'Architecture & Whitepaper', to: '/docs' },
-    { label: 'Frequently Asked Questions', to: '/faqs' },
   ];
 
   const machineStandards = [
-    { label: 'Agent AX Specification', to: '/ax' },
-    { label: 'LLMs Context (llms.txt)', href: '/llms.txt', external: true },
-    { label: 'Full Corpus (llms-full.txt)', href: '/llms-full.txt', external: true },
-    { label: 'Agent Policy (ai.txt)', href: '/ai.txt', external: true },
-    { label: 'Sitemap Index (sitemap.xml)', href: '/sitemap.xml', external: true },
-    { label: 'Robots Policy (robots.txt)', href: '/robots.txt', external: true },
-    { label: 'Humans Attribution (humans.txt)', href: '/humans.txt', external: true },
-    { label: 'Zero-Egress Invariants', to: '/docs' },
+    { label: 'llms.txt', href: '/llms.txt', external: true },
+    { label: 'llms-full.txt', href: '/llms-full.txt', external: true },
+    { label: 'ai.txt', href: '/ai.txt', external: true },
+    { label: 'sitemap.xml', href: '/sitemap.xml', external: true },
+    { label: 'robots.txt', href: '/robots.txt', external: true },
+    { label: 'humans.txt', href: '/humans.txt', external: true },
   ];
 
-  // Refined section heading — clearer hierarchy with depth shadow
-  const sectionHeadingStyle = {
+  const headingSx = {
     fontFamily: mono,
-    fontWeight: 800,
-    color: headingColor,
-    display: 'inline-block',
-    mb: 2.8,
+    fontWeight: 700,
+    color: primaryText,
+    display: 'block',
+    mb: 2,
     letterSpacing: '0.12em',
-    fontSize: '0.74rem',
+    fontSize: '0.72rem',
     textTransform: 'uppercase',
-    position: 'relative',
-    pb: 0.7,
-    '.MuiTypography-root': {
-      background: 'none',
-    },
-    '&::after': {
-      content: '""',
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      width: '28px',
-      height: '2px',
-      borderRadius: '1px',
-      background: isDark
-        ? 'linear-gradient(90deg, #D4AF37 0%, rgba(212,175,55,0.15) 100%)'
-        : 'linear-gradient(90deg, #B8860B 0%, rgba(184,134,11,0.15) 100%)',
-      boxShadow: isDark ? '0 0 8px rgba(212,175,55,0.25)' : '0 0 6px rgba(184,134,11,0.15)',
-    },
   };
 
-  // Elegant link hover — gold gradient underline with silk-smooth transition
-  const navLinkStyle = {
-    color: linkColor,
+  const linkSx = {
+    color: secondaryText,
     fontSize: '0.84rem',
     textDecoration: 'none',
-    position: 'relative',
     display: 'inline-flex',
     alignItems: 'center',
-    py: 0.45,
-    px: 0.9,
-    mx: -0.9,
-    borderRadius: '6px',
-    transition: 'color 0.25s cubic-bezier(0.16,1,0.3,1), background-color 0.25s cubic-bezier(0.16,1,0.3,1), transform 0.25s cubic-bezier(0.16,1,0.3,1)',
-    '&::after': {
-      content: '""',
-      position: 'absolute',
-      bottom: '4px',
-      left: '10px',
-      width: 0,
-      height: '1.5px',
-      borderRadius: '1px',
-      background: isDark
-        ? 'linear-gradient(90deg, #D4AF37 0%, rgba(212,175,55,0.5) 100%)'
-        : 'linear-gradient(90deg, #B8860B 0%, rgba(184,134,11,0.4) 100%)',
-      transition: 'width 0.3s cubic-bezier(0.16,1,0.3,1)',
-      boxShadow: isDark ? '0 0 6px rgba(212,175,55,0.3)' : 'none',
-    },
+    gap: 0.5,
+    py: 0.25,
     '&:hover': {
       color: gold,
-      bgcolor: isDark ? 'rgba(212,175,55,0.07)' : 'rgba(184,134,11,0.07)',
-      transform: 'translateX(4px)',
-      '&::after': {
-        width: 'calc(100% - 20px)',
-      },
-      '& .nav-external-icon': {
-        opacity: 1,
-        color: goldLight,
-        transform: 'translate(3px, -2px) scale(1.1)',
-      },
-    },
-    '&:active': {
-      transform: 'translateX(2px) scale(0.98)',
     },
   };
 
@@ -152,546 +89,148 @@ export default function Footer() {
       sx={{
         mt: 'auto',
         borderTop: `1px solid ${borderCol}`,
-        bgcolor: isDark ? '#06070B' : '#F8FAFC',
-        color: theme.palette.text.secondary,
-        pt: { xs: 7, md: 9 },
+        bgcolor: footerBg,
+        color: secondaryText,
+        pt: { xs: 6, md: 8 },
         pb: 5,
-        position: 'relative',
-        zIndex: 2,
-        overflow: 'hidden',
-        backgroundImage: isDark
-          ? 'radial-gradient(ellipse 80% 55% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 72%), radial-gradient(ellipse 50% 45% at 100% 100%, rgba(212,175,55,0.035) 0%, transparent 62%)'
-          : 'radial-gradient(ellipse 80% 55% at 50% 0%, rgba(184,134,11,0.045) 0%, transparent 72%), radial-gradient(ellipse 40% 35% at 100% 100%, rgba(184,134,11,0.025) 0%, transparent 65%)',
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: { xs: '4%', md: '12%' },
-          right: { xs: '4%', md: '12%' },
-          height: '1px',
-          background: isDark
-            ? 'linear-gradient(90deg, transparent, rgba(212,175,55,0.55), rgba(212,175,55,0.35), transparent)'
-            : 'linear-gradient(90deg, transparent, rgba(184,134,11,0.45), rgba(184,134,11,0.25), transparent)',
-          pointerEvents: 'none',
-        },
       }}
     >
-      <Container maxWidth="xl">
-        <Grid container spacing={{ xs: 4.5, sm: 4.5, md: 4.5, lg: 5 }}>
-
-          {/* Column 1: Brand & Manifest — elevated with logo halo */}
-          <Grid xs={12} lg={4}>
-            <Box sx={{ mb: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2.5 }}>
-                {/* Logo with premium halo ring */}
-                <Box
-                  sx={{
-                    p: 1,
-                    borderRadius: 2.5,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    border: isDark
-                      ? '1px solid rgba(212,175,55,0.3)'
-                      : '1px solid rgba(184,134,11,0.25)',
-                    bgcolor: isDark
-                      ? 'rgba(212,175,55,0.065)'
-                      : 'rgba(184,134,11,0.065)',
-                    boxShadow: isDark
-                      ? '0 0 20px rgba(212,175,55,0.1), inset 0 0 12px rgba(212,175,55,0.04)'
-                      : '0 2px 12px rgba(184,134,11,0.08), inset 0 0 8px rgba(184,134,11,0.03)',
-                    transition: 'all 0.25s ease',
-                    '&:hover': {
-                      boxShadow: isDark
-                        ? '0 0 28px rgba(212,175,55,0.18), inset 0 0 16px rgba(212,175,55,0.06)'
-                        : '0 4px 16px rgba(184,134,11,0.14), inset 0 0 12px rgba(184,134,11,0.05)',
-                      borderColor: isDark ? 'rgba(212,175,55,0.5)' : 'rgba(184,134,11,0.45)',
-                    },
-                  }}
-                >
-                  <Box
-                    component="img"
-                    src="/brand/ghostbyte-dark.png"
-                    alt="Ghostbyte NullAI Logo"
-                    sx={{ height: 36, width: 'auto', display: 'block', filter: isDark ? 'drop-shadow(0 0 6px rgba(212,175,55,0.3))' : 'drop-shadow(0 0 4px rgba(184,134,11,0.2))' }}
-                  />
-                </Box>
-                <Box>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      fontFamily: '"Celtic Garamond", Georgia, serif',
-                      fontWeight: 800,
-                      color: isDark ? goldLight : '#101828',
-                      lineHeight: 1.12,
-                      fontSize: '1.32rem',
-                      letterSpacing: '0.018em',
-                      transition: 'color 0.2s ease',
-                    }}
-                  >
-                    Zoth Studio v2
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      color: gold,
-                      fontFamily: mono,
-                      fontWeight: 750,
-                      fontSize: '0.68rem',
-                      letterSpacing: '0.14em',
-                      display: 'block',
-                      mt: 0.35,
-                    }}
-                  >
-                    SOVEREIGN COMPILATION STRATUM
-                  </Typography>
-                </Box>
-              </Box>
-
-              {/* Manifest description — refined border, better rhythm */}
-              <Typography
-                variant="body2"
+      <Container maxWidth="lg">
+        <Grid container spacing={4}>
+          <Grid xs={12} md={4}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
+              <Box
+                aria-hidden="true"
                 sx={{
-                  color: isDark ? '#94A3B8' : '#475569',
-                  mb: 3.5,
-                  lineHeight: 1.72,
-                  fontSize: '0.86rem',
-                  maxWidth: 400,
-                  borderLeft: `2px solid ${isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.4)'}`,
-                  pl: 2,
-                  py: 0.3,
-                  fontWeight: 400,
+                  width: 32,
+                  height: 32,
+                  borderRadius: 1.5,
+                  border: `1px solid ${isDark ? 'rgba(212,175,55,0.38)' : 'rgba(122,88,8,0.32)'}`,
+                  bgcolor: isDark ? 'rgba(212,175,55,0.10)' : 'rgba(122,88,8,0.08)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontFamily: display,
+                  fontWeight: 700,
+                  fontSize: '1.05rem',
+                  color: gold,
+                  flexShrink: 0,
                 }}
               >
-                High-performance sovereign intelligence suite designed and maintained by{' '}
-                <Link
-                  href="https://nullai.tech"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  sx={{
-                    color: gold,
-                    fontWeight: 700,
-                    textDecoration: 'none',
-                    position: 'relative',
-                    transition: 'color 0.22s ease',
-                    '&:hover': {
-                      color: isDark ? goldLight : '#8A6A09',
-                      '&::after': { width: '100%' },
-                    },
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      bottom: -1,
-                      left: 0,
-                      width: 0,
-                      height: '1px',
-                      bgcolor: gold,
-                      transition: 'width 0.25s cubic-bezier(0.16,1,0.3,1)',
-                    },
-                  }}
-                >
-                  NullAI Tech
-                </Link>
-                . Offline-capable neural memory, Byzantine multi-agent consensus, and local WebGPU / WASM execution with zero external cloud egress.
-              </Typography>
-
-              {/* Status Badges — elevated, animated pulse */}
-              <Stack direction="row" spacing={1.75} flexWrap="wrap" useFlexGap sx={{ mb: 3.5 }}>
-                <Chip
-                  icon={
-                    <TerminalIcon
-                      sx={{
-                        fontSize: '0.88rem !important',
-                        color: `${isDark ? '#34D399' : '#047857'} !important`,
-                        ml: 1,
-                      }}
-                    />
-                  }
-                  label="SOVEREIGN RUNTIME SPEC"
-                  size="small"
-                  sx={{
-                    bgcolor: isDark ? 'rgba(52,211,153,0.09)' : 'rgba(5,150,105,0.08)',
-                    color: isDark ? '#34D399' : '#047857',
-                    border: `1px solid ${isDark ? 'rgba(52,211,153,0.32)' : 'rgba(5,150,105,0.35)'}`,
-                    fontFamily: mono,
-                    fontSize: '0.66rem',
-                    fontWeight: 800,
-                    letterSpacing: '0.05em',
-                  }}
-                />
-                <Chip
-                  icon={
-                    <ShieldIcon
-                      sx={{
-                        fontSize: '0.88rem !important',
-                        color: `${gold} !important`,
-                        ml: 1,
-                        filter: isDark ? 'drop-shadow(0 0 5px rgba(212,175,55,0.5))' : 'none',
-                        transition: 'filter 0.2s ease',
-                        '&:hover': {
-                          filter: isDark ? 'drop-shadow(0 0 8px rgba(212,175,55,0.7))' : 'drop-shadow(0 0 4px rgba(184,134,11,0.4))',
-                        },
-                      }}
-                    />
-                  }
-                  label="ZERO CLOUD EGRESS"
-                  size="small"
-                  sx={{
-                    bgcolor: isDark ? 'rgba(212,175,55,0.085)' : 'rgba(184,134,11,0.085)',
-                    color: gold,
-                    border: `1px solid ${isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.35)'}`,
-                    fontFamily: mono,
-                    fontSize: '0.66rem',
-                    fontWeight: 800,
-                    letterSpacing: '0.05em',
-                    boxShadow: isDark
-                      ? '0 0 14px -2px rgba(212,175,55,0.18), inset 0 0 8px rgba(212,175,55,0.03)'
-                      : '0 1px 4px rgba(184,134,11,0.08), inset 0 0 6px rgba(184,134,11,0.02)',
-                    transition: 'all 0.22s cubic-bezier(0.16,1,0.3,1)',
-                    '&:hover': {
-                      borderColor: gold,
-                      bgcolor: isDark ? 'rgba(212,175,55,0.15)' : 'rgba(184,134,11,0.15)',
-                      boxShadow: isDark ? '0 0 20px rgba(212,175,55,0.3)' : '0 2px 10px rgba(184,134,11,0.22)',
-                      transform: 'translateY(-1px) scale(1.02)',
-                    },
-                  }}
-                />
-              </Stack>
-
-              {/* External Links — refined icon buttons */}
-              <Box sx={{ display: 'flex', gap: 1.75, alignItems: 'center' }}>
-                <Tooltip title="NullAI Tech Sovereign Portal">
-                  <IconButton
-                    component="a"
-                    href="https://nullai.tech"
-                    aria-label="NullAI Tech website (opens in new tab)"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    size="small"
-                    sx={{
-                      bgcolor: isDark ? 'rgba(16,18,26,0.82)' : '#EDE8D5',
-                      color: gold,
-                      border: `1px solid ${isDark ? 'rgba(212,175,55,0.22)' : borderCol}`,
-                      borderRadius: 2,
-                      transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
-                      backdropFilter: 'blur(8px)',
-                      '&:hover': {
-                        bgcolor: isDark ? 'rgba(24,27,38,0.97)' : '#E2DABF',
-                        borderColor: gold,
-                        transform: 'translateY(-2px)',
-                        boxShadow: isDark
-                          ? '0 6px 20px rgba(212,175,55,0.22), 0 0 0 1px rgba(212,175,55,0.15)'
-                          : '0 5px 14px rgba(184,134,11,0.2), 0 0 0 1px rgba(184,134,11,0.12)',
-                      },
-                    }}
-                  >
-                    <LanguageIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-
-                <Tooltip title="NullAI Tech GitHub Organization">
-                  <IconButton
-                    component="a"
-                    href="https://github.com/NullAITech"
-                    aria-label="NullAI Tech on GitHub (opens in new tab)"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    size="small"
-                    sx={{
-                      bgcolor: isDark ? 'rgba(16,18,26,0.82)' : '#EDE8D5',
-                      color: isDark ? '#FFF' : '#08080B',
-                      border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : borderCol}`,
-                      borderRadius: 2,
-                      transition: 'all 0.25s cubic-bezier(0.16,1,0.3,1)',
-                      backdropFilter: 'blur(8px)',
-                      '&:hover': {
-                        bgcolor: isDark ? 'rgba(24,27,38,0.97)' : '#E2DABF',
-                        borderColor: gold,
-                        transform: 'translateY(-2px)',
-                        color: gold,
-                        boxShadow: isDark
-                          ? '0 6px 20px rgba(212,175,55,0.22), 0 0 0 1px rgba(212,175,55,0.15)'
-                          : '0 5px 14px rgba(184,134,11,0.2), 0 0 0 1px rgba(184,134,11,0.12)',
-                      },
-                    }}
-                  >
-                    <GitHubIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-
-                <Typography variant="caption" sx={{ fontFamily: mono, color: subtextColor, fontSize: '0.72rem', letterSpacing: '0.03em', fontWeight: 600 }}>
-                  org: <strong style={{ color: gold, fontWeight: 800 }}>NullAITech</strong>
+                Z
+              </Box>
+              <Box>
+                <Typography sx={{ fontFamily: display, fontWeight: 700, fontSize: '1.25rem', color: primaryText, lineHeight: 1.1 }}>
+                  Zoth Studio
+                </Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.64rem', fontWeight: 700, letterSpacing: '0.14em', color: gold }}>
+                  LOCAL-FIRST REPOSITORY INDEX
                 </Typography>
               </Box>
             </Box>
+
+            <Typography variant="body2" sx={{ color: secondaryText, lineHeight: 1.7, mb: 2.5, maxWidth: 340 }}>
+              Local-first AI engineering suite maintained by{' '}
+              <Link href="https://nullai.tech" target="_blank" rel="noopener noreferrer" sx={{ color: gold, fontWeight: 700 }}>
+                NullAI
+              </Link>{' '}
+              &amp;{' '}
+              <Link href="https://1nc0gn30.si" target="_blank" rel="noopener noreferrer" sx={{ color: gold, fontWeight: 700 }}>
+                1nc0gn30
+              </Link>
+              . CLI binaries, STDP neural memory daemons, and Byzantine multi-agent orchestration running directly on your hardware.
+            </Typography>
+
+            <Stack direction="row" spacing={1} alignItems="center">
+              <IconButton
+                component="a"
+                href="https://nullai.tech"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="NullAI website"
+                size="small"
+                sx={{ border: `1px solid ${borderCol}`, color: primaryText }}
+              >
+                <LanguageIcon fontSize="small" />
+              </IconButton>
+              <IconButton
+                component="a"
+                href="https://github.com/NullAITech/zoth-studio-v2"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Zoth Studio GitHub repository"
+                size="small"
+                sx={{ border: `1px solid ${borderCol}`, color: primaryText }}
+              >
+                <GitHubIcon fontSize="small" />
+              </IconButton>
+            </Stack>
           </Grid>
 
-          {/* Column 2: Sovereign Workstations */}
-          <Grid xs={6} sm={3} lg={2}>
-            <Typography variant="caption" sx={sectionHeadingStyle}>
-              Workstations
-            </Typography>
-            <Stack spacing={1.3}>
-              {workstations.map((item, idx) => (
-                <Link
-                  key={idx}
-                  component={RouterLink}
-                  to={item.to}
-                  sx={navLinkStyle}
-                >
+          <Grid xs={6} sm={4} md={2.75}>
+            <Typography sx={headingSx}>Systems</Typography>
+            <Stack spacing={1}>
+              {systems.map((item) => (
+                <Link key={item.to} component={RouterLink} to={item.to} sx={linkSx}>
                   {item.label}
                 </Link>
               ))}
             </Stack>
           </Grid>
 
-          {/* Column 3: NullAI Tech Repos & Tools */}
-          <Grid xs={6} sm={3} lg={2.5}>
-            <Typography variant="caption" sx={sectionHeadingStyle}>
-              NullAI Tech Repos
-            </Typography>
-            <Stack spacing={1.3}>
-              {toolsAndRepos.map((item, idx) => (
-                item.external ? (
-                  <Link
-                    key={idx}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    sx={navLinkStyle}
-                  >
-                    {item.label}
-                    <OpenInNewIcon className="nav-external-icon" sx={{ fontSize: '0.72rem', opacity: 0.5, ml: 0.6, transition: 'transform 0.25s cubic-bezier(0.16,1,0.3,1), opacity 0.25s cubic-bezier(0.16,1,0.3,1), color 0.25s cubic-bezier(0.16,1,0.3,1)' }} />
-                  </Link>
-                ) : (
-                  <Link
-                    key={idx}
-                    component={RouterLink}
-                    to={item.to}
-                    sx={navLinkStyle}
-                  >
-                    {item.label}
-                  </Link>
-                )
-              ))}
-            </Stack>
-          </Grid>
-
-          {/* Column 4: Theory & Math Pillars */}
-          <Grid xs={6} sm={3} lg={2}>
-            <Typography variant="caption" sx={sectionHeadingStyle}>
-              Theory & Math
-            </Typography>
-            <Stack spacing={1.3}>
-              {theoryAndDocs.map((item, idx) => (
-                <Link
-                  key={idx}
-                  component={RouterLink}
-                  to={item.to}
-                  sx={navLinkStyle}
-                >
+          <Grid xs={6} sm={4} md={2.75}>
+            <Typography sx={headingSx}>Repositories</Typography>
+            <Stack spacing={1}>
+              {repositories.map((item) => (
+                <Link key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" sx={linkSx}>
                   {item.label}
+                  <OpenInNewIcon sx={{ fontSize: '0.72rem', opacity: 0.65 }} />
                 </Link>
               ))}
             </Stack>
           </Grid>
 
-          {/* Column 5: Machine Interfaces & Standards */}
-          <Grid xs={6} sm={3} lg={1.5}>
-            <Typography variant="caption" sx={sectionHeadingStyle}>
-              Standards
-            </Typography>
-            <Stack spacing={1.3}>
-              {machineStandards.map((item, idx) => (
-                item.external ? (
-                  <Link
-                    key={idx}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    sx={navLinkStyle}
-                  >
-                    {item.label}
-                    <OpenInNewIcon className="nav-external-icon" sx={{ fontSize: '0.72rem', opacity: 0.5, ml: 0.6, transition: 'transform 0.25s cubic-bezier(0.16,1,0.3,1), opacity 0.25s cubic-bezier(0.16,1,0.3,1), color 0.25s cubic-bezier(0.16,1,0.3,1)' }} />
-                  </Link>
-                ) : (
-                  <Link
-                    key={idx}
-                    component={RouterLink}
-                    to={item.to}
-                    sx={navLinkStyle}
-                  >
-                    {item.label}
-                  </Link>
-                )
+          <Grid xs={12} sm={4} md={2.5}>
+            <Typography sx={headingSx}>Docs &amp; Machine Specs</Typography>
+            <Stack spacing={1}>
+              {theoryAndDocs.map((item) => (
+                <Link key={item.to} component={RouterLink} to={item.to} sx={linkSx}>
+                  {item.label}
+                </Link>
+              ))}
+              {machineStandards.map((item) => (
+                <Link key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" sx={linkSx}>
+                  {item.label}
+                </Link>
               ))}
             </Stack>
           </Grid>
-
         </Grid>
 
-        {/* Elegant Gradient Divider — richer gold bloom */}
         <Box
           sx={{
-            my: { xs: 5, md: 6 },
-            height: '1px',
-            background: isDark
-              ? 'linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.12) 12%, rgba(212,175,55,0.45) 50%, rgba(212,175,55,0.12) 88%, transparent 100%)'
-              : 'linear-gradient(90deg, transparent 0%, rgba(184,134,11,0.12) 12%, rgba(184,134,11,0.38) 50%, rgba(184,134,11,0.12) 88%, transparent 100%)',
-          }}
-        />
-
-        {/* Mascot Interactive Strip — refined sanctum framing */}
-        <Box
-          sx={{
-            mb: 5,
-            p: { xs: 2.5, sm: 3.5 },
-            borderRadius: 3.5,
-            bgcolor: isDark
-              ? 'rgba(10,12,18,0.62)'
-              : 'rgba(255,255,255,0.6)',
-            border: isDark
-              ? '1px solid rgba(212,175,55,0.18)'
-              : '1px solid rgba(184,134,11,0.18)',
-            boxShadow: isDark
-              ? '0 10px 40px -6px rgba(0,0,0,0.45), inset 0 0 30px rgba(212,175,55,0.03), 0 0 0 1px rgba(212,175,55,0.06)'
-              : '0 6px 24px -3px rgba(0,0,0,0.05), inset 0 0 20px rgba(184,134,11,0.025), 0 0 0 1px rgba(184,134,11,0.06)',
-            backdropFilter: 'blur(12px)',
-            position: 'relative',
-            overflow: 'hidden',
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              top: 0,
-              left: '12%',
-              right: '12%',
-              height: '1px',
-              background: isDark
-                ? 'linear-gradient(90deg, transparent, rgba(212,175,55,0.5), rgba(212,175,55,0.25), transparent)'
-                : 'linear-gradient(90deg, transparent, rgba(184,134,11,0.4), rgba(184,134,11,0.2), transparent)',
-              pointerEvents: 'none',
-            },
-            '&::after': {
-              content: '""',
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: '1px',
-              background: isDark
-                ? 'linear-gradient(90deg, transparent, rgba(212,175,55,0.2), transparent)'
-                : 'linear-gradient(90deg, transparent, rgba(184,134,11,0.15), transparent)',
-              pointerEvents: 'none',
-            },
-          }}
-        >
-          <SovereignMascots />
-        </Box>
-
-        {/* Sub-Footer Copyright & Invariant — refined spacing */}
-        <Box
-          sx={{
+            mt: 5,
+            pt: 3,
+            borderTop: `1px solid ${borderCol}`,
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             flexWrap: 'wrap',
-            gap: 3,
-            pt: 3,
-            borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.065)' : 'rgba(0,0,0,0.065)'}`,
-            fontSize: '0.76rem',
-            color: subtextColor,
+            gap: 2,
             fontFamily: mono,
+            fontSize: '0.73rem',
+            color: secondaryText,
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
-            <span>© 2026 NullAI Tech & Zoth Studio.</span>
-            <Box component="span" sx={{ opacity: 0.35, fontSize: '0.7rem' }}>•</Box>
-            <span>Released under Sovereign Apache 2.0 / MIT.</span>
-            <Box component="span" sx={{ opacity: 0.35, fontSize: '0.7rem' }}>•</Box>
-            <Link
-              href="https://nullai.tech"
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{
-                color: gold,
-                textDecoration: 'none',
-                fontWeight: 700,
-                position: 'relative',
-                transition: 'color 0.2s ease',
-                '&:hover': {
-                  color: isDark ? goldLight : '#8A6A09',
-                  textDecoration: 'underline',
-                  '&::after': { width: '100%' },
-                },
-                '&::after': {
-                  content: '""',
-                  position: 'absolute',
-                  bottom: -2,
-                  left: 0,
-                  width: 0,
-                  height: '1px',
-                  bgcolor: gold,
-                  transition: 'width 0.22s ease',
-                },
-              }}
-            >
-              nullai.tech
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
+            <span>© 2026 1nc0gn30 • NullAI Platform</span>
+            <span>·</span>
+            <Link href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X" target="_blank" rel="noopener noreferrer" sx={{ color: gold, textDecoration: 'none', fontWeight: 700 }}>
+              ☕ Buy Us a Coffee
             </Link>
           </Box>
-
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2.5, flexWrap: 'wrap' }}>
-            <Box
-              sx={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 1,
-                fontSize: '0.72rem',
-                color: subtextColor,
-                letterSpacing: '0.05em',
-                fontWeight: 600,
-              }}
-            >
-              <span>OFFLINE-CAPABLE ZERO-EGRESS HARDWARE</span>
-            </Box>
-            <Box component="span" sx={{ opacity: 0.35, fontSize: '0.7rem' }}>•</Box>
-            <Box
-              sx={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 1,
-                px: 1.25,
-                py: 0.45,
-                borderRadius: '5px',
-                bgcolor: isDark ? 'rgba(16,185,129,0.09)' : 'rgba(16,185,129,0.08)',
-                border: '1px solid rgba(16,185,129,0.3)',
-                color: isDark ? '#34D399' : '#047857',
-                fontSize: '0.7rem',
-                fontWeight: 750,
-                letterSpacing: '0.05em',
-                boxShadow: isDark ? '0 0 10px -2px rgba(16,185,129,0.18)' : '0 1px 4px rgba(16,185,129,0.08)',
-                transition: 'all 0.2s ease',
-                '&:hover': {
-                  borderColor: '#10B981',
-                  bgcolor: isDark ? 'rgba(16,185,129,0.15)' : 'rgba(16,185,129,0.14)',
-                  boxShadow: '0 0 16px rgba(16,185,129,0.25)',
-                  transform: 'translateY(-1px)',
-                },
-              }}
-            >
-              <Box
-                sx={{
-                  width: 5,
-                  height: 5,
-                  borderRadius: '50%',
-                  bgcolor: '#10B981',
-                  boxShadow: '0 0 8px #10B981',
-                }}
-              />
-              <span>SYSTEM PURITY: 100%</span>
-            </Box>
-          </Box>
+          <span>LOCAL-FIRST · ZERO CLOUD TELEMETRY</span>
         </Box>
-
       </Container>
     </Box>
   );

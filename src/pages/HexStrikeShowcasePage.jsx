@@ -1,247 +1,82 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import {
-  HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem,
-} from '../components/MotionReveal';
-import {
-  Box, Container, Typography, Card, CardContent,
-  Unstable_Grid2 as Grid, Button, Stack,
-} from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import RadarIcon from '@mui/icons-material/Radar';
-import BugReportIcon from '@mui/icons-material/BugReport';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import MemoryIcon from '@mui/icons-material/Memory';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
-import HexStrikeGodModeTool from '../components/tools/HexStrikeGodModeTool';
-
-const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-
-const FEATURES = [
-  {
-    icon: RadarIcon,
-    title: 'Vulnerability Scanning',
-    desc: 'Automatically find weak spots across your entire local stack.',
-  },
-  {
-    icon: BugReportIcon,
-    title: 'CVE Database & Threat Analysis',
-    desc: 'Cross-reference known exploits and assess real-world risk.',
-  },
-  {
-    icon: VisibilityOffIcon,
-    title: 'Steganography Tools',
-    desc: 'Hide and detect concealed data inside ordinary files.',
-  },
-  {
-    icon: MemoryIcon,
-    title: 'Runs on Your Hardware',
-    desc: 'Everything executes locally — no cloud, no data leaves your machine.',
-  },
-];
-
-const BUILT_FOR = [
-  'Security researchers & pen-testers',
-  'Red team operators',
-  'Developers who take security seriously',
-];
+import LocalSystemDossier from '../components/LocalSystemDossier';
 
 export default function HexStrikeShowcasePage() {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
-  const accent = isDark ? '#EF4444' : '#DC2626';
-  const accentWash = isDark ? 'rgba(239,68,68,0.12)' : '#FEF2F2';
-  const accentBorder = isDark ? 'rgba(239,68,68,0.28)' : '#FECACA';
-  const voidBg = isDark ? '#08080B' : '#FFFFFF';
-
   return (
-    <>
-      <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 }, position: 'relative' }}>
-
-        {/* Hero Section */}
-        <HeroReveal>
-          <HeroItem>
-            <GlowLine height={3} color={accent} glowColor={isDark ? 'rgba(239,68,68,0.40)' : 'rgba(220,38,38,0.22)'} duration={1.5} delay={0.1} />
-          </HeroItem>
-
-          <HeroItem>
-            <Typography
-              variant="h2"
-              sx={{
-                fontWeight: 800,
-                letterSpacing: '-0.03em',
-                mt: 4,
-                mb: 2,
-                fontSize: { xs: '2rem', sm: '2.8rem', md: '3.6rem' },
-                lineHeight: 1.1,
-                color: theme.palette.text.primary,
-              }}
-            >
-              Offensive Security,{' '}
-              <Box component="span" sx={{ color: accent }}>On Your Terms</Box>
-            </Typography>
-          </HeroItem>
-
-          <HeroItem>
-            <Typography
-              variant="body1"
-              color="text.secondary"
-              sx={{ maxWidth: 640, mb: 5, fontSize: '1.1rem', lineHeight: 1.65 }}
-            >
-              Scan for vulnerabilities, analyze threats, and simulate attacks — all from your own machine. No cloud required.
-            </Typography>
-          </HeroItem>
-        </HeroReveal>
-
-        {/* 60FPS ASCII & Braille Motion Edit + Live HexStrike Pentesting Cockpit */}
-        <Box sx={{ mb: 7 }}>
-          <ToolMotionShowcase
-            tool={{
-              id: 'hexstrike-arsenal',
-              name: 'HexStrike Security Arsenal',
-              category: 'Security & Recon',
-              executionType: 'local_cli',
-              description: 'Autonomous penetration audit suite, CVE matrix inspector, and exploit payload lab.',
-            }}
-            onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
-          />
-          <Box sx={{ mt: 4 }}>
-            <HexStrikeGodModeTool />
-          </Box>
-        </Box>
-
-        {/* Feature Cards */}
-        <RevealOnScroll preset="fadeUp" delay={0.1}>
-          <Grid container spacing={2.5} sx={{ mb: 8 }} alignItems="stretch">
-            {FEATURES.map((f) => {
-              const Icon = f.icon;
-              return (
-                <Grid xs={12} sm={6} md={3} key={f.title} sx={{ display: 'flex' }}>
-                  <Card
-                    sx={{
-                      height: '100%',
-                      width: '100%',
-                      flex: 1,
-                      bgcolor: voidBg,
-                      border: `1px solid ${accentBorder}`,
-                      borderRadius: 2.5,
-                      transition: 'border-color 0.2s ease, transform 0.2s ease',
-                      '&:hover': { borderColor: accent, transform: 'translateY(-3px)' },
-                    }}
-                  >
-                    <CardContent>
-                      <Box
-                        sx={{
-                          p: 1, borderRadius: 1.5, bgcolor: accentWash,
-                          display: 'inline-flex', mb: 1.5,
-                        }}
-                      >
-                        <Icon sx={{ color: accent, fontSize: '1.4rem' }} />
-                      </Box>
-                      <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 0.5, color: theme.palette.text.primary }}>
-                        {f.title}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.55 }}>
-                        {f.desc}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              );
-            })}
-          </Grid>
-        </RevealOnScroll>
-
-        {/* Built For Section */}
-        <RevealOnScroll preset="fadeUp" delay={0.15}>
-          <Box sx={{ mb: 8 }}>
-            <Typography
-              variant="h5"
-              sx={{ fontWeight: 800, mb: 3, color: theme.palette.text.primary }}
-            >
-              Built For
-            </Typography>
-            <StaggerChildren>
-              {BUILT_FOR.map((persona) => (
-                <StaggerItem key={persona}>
-                  <Box
-                    sx={{
-                      py: 1.5, px: 2.5, mb: 1.5,
-                      borderRadius: 2,
-                      border: `1px solid ${accentBorder}`,
-                      bgcolor: isDark ? 'rgba(239,68,68,0.04)' : '#FFFBFB',
-                      fontFamily: mono,
-                      fontSize: '0.95rem',
-                      fontWeight: 600,
-                      color: theme.palette.text.primary,
-                    }}
-                  >
-                    {persona}
-                  </Box>
-                </StaggerItem>
-              ))}
-            </StaggerChildren>
-          </Box>
-        </RevealOnScroll>
-
-        {/* CTA Block */}
-        <RevealOnScroll preset="fadeUp" delay={0.2}>
-          <Box
-            sx={{
-              p: { xs: 3, md: 4 },
-              borderRadius: 3,
-              bgcolor: isDark ? '#0E0E14' : '#FAFAFA',
-              border: `1px solid ${accentBorder}`,
-              textAlign: 'center',
-            }}
-          >
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 3, color: theme.palette.text.primary }}>
-              Ready to take control of your security?
-            </Typography>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center" alignItems="center">
-              <Button
-                component={RouterLink}
-                to="/hexstrike/docs"
-                variant="contained"
-                endIcon={<ArrowForwardIcon />}
-                sx={{
-                  bgcolor: accent,
-                  color: '#FFFFFF',
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  px: 3, py: 1.2,
-                  borderRadius: 2,
-                  '&:hover': { bgcolor: isDark ? '#F87171' : '#B91C1C' },
-                }}
-              >
-                Explore Full Documentation →
-              </Button>
-              <Button
-                component="a"
-                href="https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal"
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="outlined"
-                startIcon={<GitHubIcon />}
-                sx={{
-                  borderColor: isDark ? 'rgba(255,255,255,0.2)' : '#D1D5DB',
-                  color: theme.palette.text.primary,
-                  fontWeight: 700,
-                  fontFamily: mono,
-                  px: 3, py: 1.2,
-                  borderRadius: 2,
-                  '&:hover': { borderColor: accent, color: accent },
-                }}
-              >
-                View on GitHub →
-              </Button>
-            </Stack>
-          </Box>
-        </RevealOnScroll>
-
-      </Container>
-    </>
+    <LocalSystemDossier
+      tone="crimson"
+      kicker="HEXSTRIKE SECURITY ARSENAL"
+      badges={['LOCAL DAEMON :8138', 'DEFENSIVE & RED-TEAM CLI', 'AIR-GAPPED RECON']}
+      title="Local Security Auditing &"
+      accentWord="Threat Reconnaissance."
+      subtitle="Real security tooling cannot run inside a sandboxed browser tab—it requires raw sockets, local binary inspection, and direct filesystem access. Clone the HexStrike repository or boot ZothOS to run automated vulnerability triage, CVE correlation, binary entropy analysis, and secret auditing entirely on your own hardware."
+      cloneCommand="git clone https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal.git && cd NullAI-HexStrike-AI-Terminal"
+      repoUrl="https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal"
+      repoLabel="Get HexStrike Terminal Repo"
+      docsRoute="/hexstrike/docs"
+      docsLabel="Security Architecture Docs"
+      overviewTitle="Operator-Controlled Reconnaissance & Audit Automation"
+      overviewParagraphs={[
+        'HexStrike unifies classic offensive and defensive Linux utilities—Nmap, Nuclei, Semgrep, Gitleaks, and binary entropy analyzers—behind a structured local terminal and MCP interface. Every scan executes strictly from your host interface with explicit target scope.',
+        'Findings are normalized into deterministic JSON and Markdown audit reports correlating open services, dependency CVEs, exposed secrets, and remediation diffs without transmitting sensitive scan telemetry to external SaaS dashboards.',
+      ]}
+      pipelineSteps={[
+        {
+          label: 'Scoped Surface Enumeration',
+          detail: 'Executes local port, service, TLS cipher, and HTTP header inspection against authorized targets.',
+        },
+        {
+          label: 'CVE & Static AST Correlation',
+          detail: 'Cross-references discovered versions and source trees against CVE advisories, Semgrep rules, and entropy anomalies.',
+        },
+        {
+          label: 'Remediation & Verification Report',
+          detail: 'Produces reproducible PoC transcripts and patch recommendations stored strictly on local disk.',
+        },
+      ]}
+      specs={[
+        { key: 'Loopback API', value: '127.0.0.1:8138' },
+        { key: 'CLI Entrypoint', value: 'hexstrike' },
+        { key: 'Host OS Parity', value: 'Debian / Kali / Parrot / ZothOS' },
+        { key: 'Static Analyzers', value: 'Semgrep + Gitleaks + Shannon Entropy' },
+        { key: 'MCP Integration', value: 'Scoped Read/Audit Tool Contracts' },
+        { key: 'Network Policy', value: 'Zero Third-Party Telemetry' },
+      ]}
+      quickstartLines={[
+        '# Clone standalone HexStrike terminal repository',
+        'git clone https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal.git',
+        'cd NullAI-HexStrike-AI-Terminal',
+        '',
+        '# Start local loopback server on 127.0.0.1:8138',
+        'python3 server.py --port 8138',
+      ]}
+      capabilitiesKicker="SECURITY MODULES"
+      capabilitiesTitle="Native Linux & Local CLI Capabilities"
+      capabilities={[
+        {
+          tag: 'RECON & TLS',
+          title: 'Service & Header Auditing',
+          desc: 'Inspect open ports, TLS certificate chains, HSTS/CSP security headers, and CORS misconfigurations from your local network interface.',
+        },
+        {
+          tag: 'CVE TRIAGE',
+          title: 'Dependency & Advisory Matching',
+          desc: 'Correlate lockfiles, container layers, and service banners against known vulnerability advisories with CVSS severity breakdowns.',
+        },
+        {
+          tag: 'FORENSICS',
+          title: 'Binary Entropy & Stego Inspection',
+          desc: 'Compute byte-level Shannon entropy, inspect ELF/PE sections, and detect concealed payloads or leaked high-entropy credentials.',
+        },
+        {
+          tag: 'ZOTHOS PARITY',
+          title: 'Pre-Integrated on ZothOS v3.4',
+          desc: 'Ships alongside 150+ Kali and Parrot security packages inside ZothOS with default-deny UFW firewall rules and Tor ghostmode support.',
+        },
+      ]}
+      funnelToolTitle="HexStrike AI Security Terminal"
+      funnelToolTag="SECURITY & RECON"
+      funnelToolDesc="Local offensive security audit terminal, CVE correlator, and binary forensics suite for Linux and ZothOS."
+    />
   );
 }

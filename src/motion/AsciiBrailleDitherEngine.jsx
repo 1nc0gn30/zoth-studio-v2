@@ -18,13 +18,13 @@ const BRAILLE_BITS = [
   [0x40, 0x80],
 ];
 
-const ASCII_RAMP = ' ·:;+xX$#▓█';
-const SCRAMBLE_GLYPHS = '⣿⣷⣯⣟⡿⢿⣻⣽░▒▓█╬═║⟡⟠∆∇◊01';
+const ASCII_RAMP = ' ·:;+xX#';
+const SCRAMBLE_GLYPHS = '·•◦';
 
 /**
- * Character-scramble decode hook using Braille + Bayer Dither glyphs.
+ * Quiet architectural glyph-decode hook (zero emoji or heavy block noise).
  */
-export function useGlyphScramble(targetText, durationMs = 460, active = true) {
+export function useGlyphScramble(targetText, durationMs = 220, active = true) {
   const [display, setDisplay] = useState(targetText || '');
 
   useEffect(() => {
@@ -38,13 +38,15 @@ export function useGlyphScramble(targetText, durationMs = 460, active = true) {
 
     const step = (now) => {
       const p = Math.min(1, (now - start) / durationMs);
-      const out = chars.map((ch, idx) => {
-        if (ch === ' ' || ch === '·') return ch;
-        const threshold = (idx / Math.max(1, chars.length)) * 0.68 + 0.32;
-        if (p >= threshold) return ch;
-        const gIdx = Math.floor((now * 0.06 + idx * 7) % SCRAMBLE_GLYPHS.length);
-        return SCRAMBLE_GLYPHS[gIdx];
-      }).join('');
+      const out = chars
+        .map((ch, idx) => {
+          if (ch === ' ' || ch === '·' || ch === '/' || ch === '-') return ch;
+          const threshold = (idx / Math.max(1, chars.length)) * 0.65 + 0.25;
+          if (p >= threshold) return ch;
+          const gIdx = Math.floor((now * 0.05 + idx * 5) % SCRAMBLE_GLYPHS.length);
+          return SCRAMBLE_GLYPHS[gIdx];
+        })
+        .join('');
       setDisplay(out);
       if (p < 1) {
         raf = requestAnimationFrame(step);
@@ -68,7 +70,6 @@ export function sampleProceduralSDF(shape, nx, ny, t) {
   const a = Math.atan2(ny, nx);
 
   if (shape === 'shield') {
-    // ZothOS Kernel Shield & Tor Onion Rings
     const hexA = Math.cos(a * 6 + t * 0.8) * 0.04;
     const shieldRing = Math.exp(-Math.pow((r - (0.58 + hexA)) * 15, 2));
     const innerTorus = Math.exp(-Math.pow((r - 0.34) * 18, 2)) * (0.65 + 0.35 * Math.sin(a * 8 - t * 2.4));
@@ -78,7 +79,6 @@ export function sampleProceduralSDF(shape, nx, ny, t) {
   }
 
   if (shape === 'dag') {
-    // Vaelor L1 PoUW Directed Acyclic Graph Topology
     let v = 0;
     for (let i = 0; i < 7; i++) {
       const na = (i / 7) * Math.PI * 2 + t * 0.45;
@@ -87,7 +87,6 @@ export function sampleProceduralSDF(shape, nx, ny, t) {
       const py = Math.sin(na) * nr;
       const d = Math.hypot(nx - px, ny - py);
       v += Math.exp(-d * 14) * 0.85;
-      // DAG edge toward center and next node
       const proj = Math.abs(nx * Math.sin(na) - ny * Math.cos(na));
       if (r < nr && proj < 0.045) v += 0.32 * (0.5 + 0.5 * Math.sin(r * 24 - t * 6));
     }
@@ -97,7 +96,6 @@ export function sampleProceduralSDF(shape, nx, ny, t) {
   }
 
   if (shape === 'synapse') {
-    // Neuro-Memory STDP Spiking Neural Lattice
     const arms = Math.sin(a * 5 + r * 8 - t * 2.1) * 0.5 + 0.5;
     const pulse = Math.sin(r * 18 - t * 5.2) * 0.5 + 0.5;
     const soma = Math.exp(-r * 4.5);
@@ -107,7 +105,6 @@ export function sampleProceduralSDF(shape, nx, ny, t) {
   }
 
   if (shape === 'hex') {
-    // HexStrike Offensive Red-Team Radar & Hex Grid
     const sweep = ((a - t * 2.2) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2);
     const radar = Math.exp(-sweep * 1.1) * (r < 0.76 ? 0.75 : 0);
     const rings = (Math.exp(-Math.pow((r - 0.28) * 22, 2)) + Math.exp(-Math.pow((r - 0.52) * 22, 2)) + Math.exp(-Math.pow((r - 0.74) * 22, 2))) * 0.65;
@@ -116,7 +113,6 @@ export function sampleProceduralSDF(shape, nx, ny, t) {
   }
 
   if (shape === 'quorum') {
-    // Tri-Model Byzantine Consensus Triangulation
     let field = 0;
     for (let k = 0; k < 3; k++) {
       const ka = (k / 3) * Math.PI * 2 + t * 0.65;
@@ -130,7 +126,6 @@ export function sampleProceduralSDF(shape, nx, ny, t) {
   }
 
   if (shape === 'grid') {
-    // Sovereign Arsenal Isometric Voxel Wave
     const gx = Math.abs(((nx * 6 + t * 0.5) % 1 + 1) % 1 - 0.5);
     const gy = Math.abs(((ny * 6 - t * 0.35) % 1 + 1) % 1 - 0.5);
     const wire = (gx < 0.08 || gy < 0.08) ? 0.48 : 0;
@@ -139,7 +134,6 @@ export function sampleProceduralSDF(shape, nx, ny, t) {
   }
 
   if (shape === 'tesseract') {
-    // 4D Hypercube (Tesseract) projection in 2x4 Sub-Pixel Braille
     const c1 = Math.cos(t * 0.65);
     const s1 = Math.sin(t * 0.65);
     const rx = nx * c1 - ny * s1;
@@ -154,7 +148,6 @@ export function sampleProceduralSDF(shape, nx, ny, t) {
   }
 
   if (shape === 'trefoil') {
-    // Parametric Trefoil Knot Ribbon with Bayer 8x8 Dither
     let minD = 99;
     const steps = 28;
     for (let i = 0; i < steps; i++) {
@@ -170,7 +163,6 @@ export function sampleProceduralSDF(shape, nx, ny, t) {
   }
 
   if (shape === 'metaballs') {
-    // Organic Smooth-Minimum Metaball Field (Shader / Media / Likeness)
     let potential = 0;
     for (let i = 0; i < 4; i++) {
       const ang = t * (0.7 + i * 0.25) + i * 1.57;
@@ -185,7 +177,6 @@ export function sampleProceduralSDF(shape, nx, ny, t) {
   }
 
   if (shape === 'event_horizon') {
-    // Relativistic Accretion Disk & Gravitational Lensing
     const tiltY = ny * 2.4 + nx * 0.45 * Math.sin(t * 0.5);
     const diskR = Math.hypot(nx, tiltY);
     const doppler = 0.65 + 0.35 * Math.cos(a - t * 2.5);
@@ -196,7 +187,6 @@ export function sampleProceduralSDF(shape, nx, ny, t) {
   }
 
   if (shape === 'lissajous') {
-    // Harmonic Phase Oscilloscope (Audio / Stego / Voice / Synth)
     let minD = 99;
     const steps = 36;
     for (let i = 0; i < steps; i++) {
@@ -212,7 +202,6 @@ export function sampleProceduralSDF(shape, nx, ny, t) {
   }
 
   if (shape === 'dungeon_fov') {
-    // Roguelike Shadowcast FOV & Cellular Grid (OSINT / Recon / Sentinel)
     const cellX = Math.floor((nx + 1) * 6);
     const cellY = Math.floor((ny + 1) * 6);
     const hash = Math.sin(cellX * 12.9898 + cellY * 78.233) * 43758.5453;
@@ -224,7 +213,6 @@ export function sampleProceduralSDF(shape, nx, ny, t) {
   }
 
   if (shape === 'globe_arcs') {
-    // Orthographic Globe with Great-Circle Telemetry Arcs
     if (r > 0.74) {
       const orbit = Math.exp(-Math.pow((r - 0.84) * 22, 2)) * (0.5 + 0.5 * Math.sin(a * 6 - t * 3));
       return Math.min(1, orbit);
@@ -252,32 +240,30 @@ export function sampleProceduralSDF(shape, nx, ny, t) {
 }
 
 export const SHAPE_DESCRIPTORS = {
-  shield: { name: 'ZothOS Tor Onion & Kernel Ring', formula: 'SDF: exp(-(r-0.58-0.04cos(6θ))²·15²) + Torus(0.34)', badge: '🛡️ TOR+SQUASHFS' },
-  dag: { name: 'Vaelor PoUW Directed Acyclic Graph', formula: 'SDF: ∑ exp(-‖p - v_i(t)‖·14) + EdgeProj(θ_i)', badge: '⛓️ DAG-QUORUM' },
-  synapse: { name: 'STDP Spiking Neural Engram Lattice', formula: 'SDF: exp(-r·4.5) + exp(-|r-0.46|·7)·sin²(5θ-2.1t)', badge: '🧠 STDP-ENGRAM' },
-  hex: { name: 'HexStrike Perimeter Radar & Sweep', formula: 'SDF: exp(-((θ-2.2t) mod 2π)) + ∑ Ring(r_k)', badge: '🎯 HEX-RADAR' },
-  quorum: { name: 'Tri-Model Byzantine Consensus Ring', formula: 'SDF: ∑_{k=1..3} exp(-‖p - c_k(t)‖·7.5)', badge: '⚖️ BFT-3F+1' },
-  grid: { name: 'Isometric Voxel Wave & AST Matrix', formula: 'SDF: Wire(p mod 1/6) + sin(14r-3.8t)·exp(-1.4r)', badge: '▦ VOXEL-AST' },
-  tesseract: { name: '4D Hypercube (Tesseract) XW/YZ Projection', formula: 'SDF: max(|R_θ p|) ∈ {0.62, 0.32} + Diag(XW)', badge: '⬡ 4D-TESSERACT' },
-  trefoil: { name: 'Parametric Trefoil Knot Ribbon', formula: 'SDF: min_u ‖p - (sin u+2sin 2u, cos u-2cos 2u)‖', badge: '🪢 TREFOIL-KNOT' },
-  metaballs: { name: 'Smooth-Min Liquid Metaball Field', formula: 'SDF: ∑ 0.042 / (‖p - b_i(t)‖² + 0.018) = 1', badge: '💧 METABALL-SDF' },
-  event_horizon: { name: 'Relativistic Black Hole Accretion Disk', formula: 'SDF: Doppler(θ)·exp(-(r_tilt-0.52)²·11²) + Photon(0.31)', badge: '🕳️ EVENT-HORIZON' },
-  lissajous: { name: 'Harmonic Phase Oscilloscope (3:4)', formula: 'SDF: min_u ‖p - (sin(3u+1.6t), sin(4u+0.9t))‖', badge: '〰️ LISSAJOUS-DSP' },
-  dungeon_fov: { name: 'Recursive Shadowcast FOV & Cellular Grid', formula: 'SDF: HashCell(⌊6p⌋) + cos³(θ-1.9t)·exp(-1.1r)', badge: '🔦 SHADOWCAST-FOV' },
-  globe_arcs: { name: 'Orthographic Globe & Great-Circle Arcs', formula: 'SDF: sin²(6·atan2(x,z)) + sin²(5·asin(y/R))', badge: '🌐 ORTHO-GLOBE' },
-  astrolabe: { name: 'Sacred Orbital Armillary Sphere', formula: 'SDF: ∑_{k=1..3} exp(-(‖E_k R_t p‖ - r_k)²·18²)', badge: '🧭 ASTROLABE' },
+  shield: { name: 'ZothOS Tor Onion & Kernel Ring', formula: 'SDF: exp(-(r-0.58-0.04cos(6θ))²·15²) + Torus(0.34)', badge: 'TOR · SQUASHFS' },
+  dag: { name: 'PoUW Directed Acyclic Graph', formula: 'SDF: ∑ exp(-‖p - v_i(t)‖·14) + EdgeProj(θ_i)', badge: 'DAG · QUORUM' },
+  synapse: { name: 'STDP Spiking Neural Engram Lattice', formula: 'SDF: exp(-r·4.5) + exp(-|r-0.46|·7)·sin²(5θ-2.1t)', badge: 'STDP · ENGRAM' },
+  hex: { name: 'HexStrike Perimeter Radar & Sweep', formula: 'SDF: exp(-((θ-2.2t) mod 2π)) + ∑ Ring(r_k)', badge: 'RECON · RADAR' },
+  quorum: { name: 'Tri-Model Byzantine Consensus Ring', formula: 'SDF: ∑_{k=1..3} exp(-‖p - c_k(t)‖·7.5)', badge: 'BFT · 3F+1' },
+  grid: { name: 'Isometric Voxel Wave & AST Matrix', formula: 'SDF: Wire(p mod 1/6) + sin(14r-3.8t)·exp(-1.4r)', badge: 'VOXEL · AST' },
+  tesseract: { name: '4D Hypercube Projection', formula: 'SDF: max(|R_θ p|) ∈ {0.62, 0.32} + Diag(XW)', badge: '4D · TESSERACT' },
+  trefoil: { name: 'Parametric Trefoil Knot Ribbon', formula: 'SDF: min_u ‖p - (sin u+2sin 2u, cos u-2cos 2u)‖', badge: 'TREFOIL · SDF' },
+  metaballs: { name: 'Smooth-Min Liquid Metaball Field', formula: 'SDF: ∑ 0.042 / (‖p - b_i(t)‖² + 0.018) = 1', badge: 'METABALL · SDF' },
+  event_horizon: { name: 'Relativistic Accretion Disk', formula: 'SDF: Doppler(θ)·exp(-(r_tilt-0.52)²·11²) + Photon(0.31)', badge: 'EVENT · HORIZON' },
+  lissajous: { name: 'Harmonic Phase Oscilloscope (3:4)', formula: 'SDF: min_u ‖p - (sin(3u+1.6t), sin(4u+0.9t))‖', badge: 'LISSAJOUS · DSP' },
+  dungeon_fov: { name: 'Recursive Shadowcast FOV Grid', formula: 'SDF: HashCell(⌊6p⌋) + cos³(θ-1.9t)·exp(-1.1r)', badge: 'SHADOWCAST · FOV' },
+  globe_arcs: { name: 'Orthographic Telemetry Globe', formula: 'SDF: sin²(6·atan2(x,z)) + sin²(5·asin(y/R))', badge: 'ORTHO · GLOBE' },
+  astrolabe: { name: 'Orbital Armillary Sphere', formula: 'SDF: ∑_{k=1..3} exp(-(‖E_k R_t p‖ - r_k)²·18²)', badge: 'ASTROLABE · SDF' },
 };
 
 /**
- * Deterministically maps any of the 77 Sovereign Arsenal tools to a tailored Uncommon Web
- * 2x4 Sub-Pixel Braille + Bayer 8x8 Dither procedural shape.
+ * Deterministically maps any of the 77 Sovereign Arsenal tools to a procedural Braille SDF shape.
  */
 export function resolveToolBrailleShape(tool) {
   if (!tool) return 'astrolabe';
   const id = (tool.id || '').toLowerCase();
   const cat = (tool.category || '').toLowerCase();
 
-  // Exact tool overrides for bespoke Uncommon Web visual identity
   if (id.includes('zoth-os') || id.includes('zothos') || id.includes('usb-arsenal') || id.includes('privacy')) return 'shield';
   if (id.includes('nexus-3d') || id.includes('scene-foundry') || id.includes('voxel') || id.includes('mockup')) return 'tesseract';
   if (id.includes('sacred-geometry') || id.includes('knot') || id.includes('astrolabe')) return 'trefoil';
@@ -290,7 +276,6 @@ export function resolveToolBrailleShape(tool) {
   if (id.includes('civilization') || id.includes('swarm') || id.includes('consensus') || id.includes('pantheon') || id.includes('bot')) return 'quorum';
   if (id.includes('shopify') || id.includes('etsy') || id.includes('producthunt') || id.includes('storefront') || id.includes('seo') || id.includes('aeo')) return 'globe_arcs';
 
-  // Category fallbacks across all 14 shapes
   if (cat.includes('security') || cat.includes('recon') || cat.includes('opsec')) return 'hex';
   if (cat.includes('memory') || cat.includes('brain')) return 'synapse';
   if (cat.includes('swarm') || cat.includes('core')) return 'quorum';
@@ -299,7 +284,6 @@ export function resolveToolBrailleShape(tool) {
   if (cat.includes('web') || cat.includes('developer')) return 'grid';
   if (cat.includes('ai') || cat.includes('knowledge')) return 'trefoil';
 
-  // Deterministic hash across remaining tools so every tool is visually distinct
   const pool = ['tesseract', 'trefoil', 'metaballs', 'event_horizon', 'lissajous', 'dungeon_fov', 'globe_arcs', 'astrolabe', 'dag', 'synapse'];
   let h = 0;
   for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
@@ -309,7 +293,7 @@ export function resolveToolBrailleShape(tool) {
 /**
  * Generates an array of strings representing a 2x4 Sub-Pixel Unicode Braille + Bayer 8x8 Dither matrix.
  */
-export function renderBrailleDitherLines({ cols = 46, rows = 14, shape = 'astrolabe', t = 0, mode = 'hybrid' }) {
+export function renderBrailleDitherLines({ cols = 46, rows = 14, shape = 'astrolabe', t = 0, mode = 'braille' }) {
   const lines = [];
   const subW = cols * 2;
   const subH = rows * 4;
@@ -325,7 +309,7 @@ export function renderBrailleDitherLines({ cols = 46, rows = 14, shape = 'astrol
           const sx = cx * 2 + dx;
           const sy = cy * 4 + dy;
           const nx = (sx / subW) * 2 - 1;
-          const ny = ((sy / subH) * 2 - 1) * (rows * 2 / cols);
+          const ny = ((sy / subH) * 2 - 1) * ((rows * 2) / cols);
           const lum = sampleProceduralSDF(shape, nx, ny, t);
           lumSum += lum;
           const threshold = (BAYER_8X8[sy & 7][sx & 7] + 0.5) / 64.0;
@@ -341,14 +325,11 @@ export function renderBrailleDitherLines({ cols = 46, rows = 14, shape = 'astrol
         rowStr += ASCII_RAMP[idx];
       } else if (mode === 'braille') {
         rowStr += String.fromCharCode(0x2800 | mask);
+      } else if (avgLum > 0.82) {
+        const idx = Math.min(ASCII_RAMP.length - 1, Math.floor(avgLum * ASCII_RAMP.length));
+        rowStr += ASCII_RAMP[idx];
       } else {
-        // Hybrid: high-intensity core uses solid ASCII dither blocks, gradients use 2x4 sub-pixel Braille
-        if (avgLum > 0.78) {
-          const idx = Math.min(ASCII_RAMP.length - 1, Math.floor(avgLum * ASCII_RAMP.length));
-          rowStr += ASCII_RAMP[idx];
-        } else {
-          rowStr += String.fromCharCode(0x2800 | mask);
-        }
+        rowStr += String.fromCharCode(0x2800 | mask);
       }
     }
     lines.push(rowStr);
@@ -357,12 +338,17 @@ export function renderBrailleDitherLines({ cols = 46, rows = 14, shape = 'astrol
 }
 
 /**
- * Live 60fps ASCII + Unicode U+2800 Braille + Bayer 8x8 Dither Stage for Route Intros.
+ * Framed 60fps Unicode U+2800 Braille + Bayer 8x8 Dither Emblem Stage.
+ * Renders cleanly inside its dedicated parent box with strict Light/Dark contrast
+ * so glyphs never collide with typography.
  */
-export function AsciiBrailleIntroStage({ intro, dark, handing, fullVideoMode = false }) {
+export function AsciiBrailleIntroStage({ intro, dark, handing, compact = false }) {
   const canvasRef = useRef(null);
   const shape = intro?.brailleShape || 'astrolabe';
-  const accent = intro?.accent || '#D4AF37';
+  const strokeColor = dark
+    ? (intro?.accent || '#D4AF37')
+    : (intro?.accentLight || '#7A5808');
+  const coreColor = dark ? '#F5F1E6' : '#1E293B';
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -371,52 +357,47 @@ export function AsciiBrailleIntroStage({ intro, dark, handing, fullVideoMode = f
     if (!ctx) return undefined;
 
     let raf;
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    let width = 300;
+    let height = compact ? 76 : 112;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     const resize = () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
+      const parent = canvas.parentElement;
+      width = parent ? Math.max(180, parent.clientWidth) : 300;
+      height = parent ? Math.max(64, parent.clientHeight) : (compact ? 76 : 112);
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
     };
     resize();
     window.addEventListener('resize', resize);
 
-    let start = performance.now();
+    const start = performance.now();
 
     const draw = (now) => {
-      const t = (now - start) * 0.0014;
+      const t = (now - start) * 0.0016;
       ctx.save();
       ctx.scale(dpr, dpr);
       ctx.clearRect(0, 0, width, height);
 
-      const cols = width < 640 ? 34 : 54;
-      const rows = width < 640 ? 14 : 20;
-      const lines = renderBrailleDitherLines({ cols, rows, shape, t, mode: 'hybrid' });
+      const cols = compact ? 30 : (width < 280 ? 30 : 38);
+      const rows = compact ? 7 : 10;
+      const lines = renderBrailleDitherLines({ cols, rows, shape, t, mode: 'braille' });
 
-      const fontSize = width < 640 ? 11 : 13.5;
-      const lineHeight = fontSize * 1.18;
+      const fontSize = compact ? 9.5 : 10.5;
+      const lineHeight = fontSize * 1.06;
       ctx.font = `600 ${fontSize}px "JetBrains Mono", "IBM Plex Mono", monospace`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
-      const centerY = fullVideoMode ? height * 0.5 : height * 0.52;
       const totalH = rows * lineHeight;
-      const startY = centerY - totalH * 0.5;
+      const startY = height * 0.5 - totalH * 0.5 + lineHeight * 0.5;
 
-      // Ordered Bayer 8x8 corner micro-grids
-      ctx.fillStyle = dark ? `${accent}26` : 'rgba(138, 101, 8, 0.16)';
-      lines.forEach((line, rIdx) => {
-        const distFromMid = Math.abs(rIdx - rows / 2) / (rows / 2);
-        const alpha = fullVideoMode
-          ? (dark ? 0.24 : 0.22) * (1 - distFromMid * 0.45)
-          : (dark ? 0.46 : 0.36) * (1 - distFromMid * 0.35);
-        ctx.globalAlpha = Math.max(0.05, alpha);
-        ctx.fillStyle = dark ? accent : '#8A6508';
-        ctx.fillText(line, width * 0.5, startY + rIdx * lineHeight);
-      });
+      for (let rIdx = 0; rIdx < lines.length; rIdx++) {
+        const distFromMid = Math.abs(rIdx - (rows - 1) / 2) / Math.max(1, rows / 2);
+        ctx.globalAlpha = Math.max(0.28, (dark ? 0.92 : 0.88) * (1 - distFromMid * 0.32));
+        ctx.fillStyle = distFromMid < 0.34 ? coreColor : strokeColor;
+        ctx.fillText(lines[rIdx], width * 0.5, startY + rIdx * lineHeight);
+      }
 
       ctx.restore();
       raf = requestAnimationFrame(draw);
@@ -427,21 +408,19 @@ export function AsciiBrailleIntroStage({ intro, dark, handing, fullVideoMode = f
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', resize);
     };
-  }, [shape, accent, dark, fullVideoMode]);
+  }, [shape, strokeColor, coreColor, dark, compact]);
 
   return (
     <canvas
       ref={canvasRef}
       aria-hidden="true"
       style={{
-        position: 'absolute',
-        inset: 0,
+        display: 'block',
         width: '100%',
         height: '100%',
         pointerEvents: 'none',
         opacity: handing ? 0 : 1,
-        transition: 'opacity 0.28s ease',
-        mixBlendMode: dark ? 'screen' : 'multiply',
+        transition: 'opacity 0.22s ease',
       }}
     />
   );

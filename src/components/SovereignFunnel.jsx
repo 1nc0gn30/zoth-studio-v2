@@ -9,104 +9,56 @@ import {
   IconButton,
   Snackbar,
   Alert,
-  useTheme
+  useTheme,
 } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import TerminalIcon from '@mui/icons-material/Terminal';
-import StorageIcon from '@mui/icons-material/Storage';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
+const STRIPE_COFFEE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
+const SOLANA_WALLET = 'GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK';
+
 export default function SovereignFunnel({
-  title = "Sovereign Installation & Ecosystem Deployment",
-  subtitle = "Run this capability locally with complete zero-telemetry sovereignty. Choose from standalone micro-modules, the unified Studio cockpit, or bare-metal Zoth OS.",
+  title = 'Local Installation & Repository Access',
+  subtitle = 'Every tool in the ecosystem is architected for local execution with zero outbound telemetry. Clone an isolated repository, pull the full Zoth Studio v2 monorepo, or boot ZothOS with everything pre-installed.',
   toolTitle,
-  toolTag = "STANDALONE",
+  toolTag = 'STANDALONE REPO',
   toolDescription,
   toolRepo,
   toolCommand,
-  studioRepo = "https://github.com/NullAITech/zoth-studio-v2",
-  osRepo = "https://github.com/NullAITech/zoth-os",
-  sx = {}
+  studioRepo = 'https://github.com/NullAITech/zoth-studio-v2',
+  osRepo = 'https://github.com/NullAITech/zoth-os',
+  sx = {},
 }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMsg, setSnackbarMsg] = useState('');
-  const [isSettlingVaelor, setIsSettlingVaelor] = useState(false);
-  const [vaelorReceipt, setVaelorReceipt] = useState(null);
-
-  const handleVaelorCheckout = async () => {
-    setIsSettlingVaelor(true);
-    let receipt = null;
-    try {
-      const res = await fetch('http://127.0.0.1:8140/api/receipts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          buyer: '@citizen',
-          merchant: '@zoth',
-          items: [{ name: 'Optional Zoth Studio Tip', qty: 1, unitPriceVlr: 19, price: 19 }],
-          cashbackBps: 250,
-          category: 'Software & SaaS',
-          warrantyDays: 365
-        })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.ok) {
-          receipt = data.receipt;
-        }
-      }
-    } catch (_) {}
-
-    if (!receipt) {
-      receipt = {
-        id: `rcp_${Date.now().toString(16)}`,
-        buyerHandle: '@citizen',
-        merchantHandle: '@zoth',
-        grossVlr: 19,
-        cashbackVlr: 0.475,
-        netVlr: 18.525,
-        warrantyDays: 365,
-        quorumStatus: 'FINALIZED_BFT'
-      };
-    }
-
-    if (typeof localStorage !== 'undefined') {
-      try {
-        localStorage.setItem('zoth_studio_licensed', 'true');
-      } catch (_) {}
-    }
-    setVaelorReceipt(receipt);
-    setIsSettlingVaelor(false);
-    setSnackbarMsg(`◈ Settled 19 VLR via Vaelor BFT (${receipt.id || 'Receipt'}). Zero gas + 2.5% cashback!`);
-    setSnackbarOpen(true);
-  };
 
   const handleCopy = (text, label) => {
     if (navigator?.clipboard?.writeText) {
       navigator.clipboard.writeText(text);
-      setSnackbarMsg(`Copied ${label || 'command'} to clipboard!`);
+      setSnackbarMsg(`Copied ${label || 'command'} to clipboard`);
       setSnackbarOpen(true);
     }
   };
 
-  const gold = isDark ? '#D4AF37' : '#8A6508';
-  const goldHeading = isDark ? '#F5E6AB' : '#8A6A09';
-  const textPrimary = theme.palette.text.primary;
-  const textSecondary = theme.palette.text.secondary;
-  const borderCol = isDark ? 'rgba(212, 175, 55, 0.25)' : 'rgba(184, 134, 11, 0.25)';
-  const cardBg = isDark ? '#11131F' : '#FFFFFF';
-  const codeBoxBg = isDark ? '#08080B' : '#F1F5F9';
-  const mono = '"JetBrains Mono", "Fira Code", monospace';
+  const gold = isDark ? '#D4AF37' : '#7A5808';
+  const goldHeading = isDark ? '#F5E6AB' : '#101828';
+  const textPrimary = isDark ? '#F5F1E6' : '#101828';
+  const textSecondary = isDark ? '#A3AAB8' : '#475467';
+  const borderCol = isDark ? 'rgba(212, 175, 55, 0.22)' : 'rgba(16, 24, 40, 0.12)';
+  const cardBg = isDark ? '#0E1017' : '#FFFFFF';
+  const codeBoxBg = isDark ? '#08090D' : '#F3F4F6';
+  const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
-  const hasSpecificTool = Boolean(toolTitle || toolRepo);
-  const opt1Title = toolTitle || "Option 1: Autonomous Micro-Tool";
-  const opt1Desc = toolDescription || "Pull isolated zero-egress single-purpose micro-engines without spinning up the entire studio workspace.";
-  const opt1Repo = toolRepo || "https://github.com/NullAITech/zoth-studio-v2";
-  const opt1Cmd = toolCommand || `git clone ${opt1Repo}.git`;
+  const opt1Title = toolTitle || 'Option 1: Standalone Repository';
+  const opt1Desc =
+    toolDescription ||
+    'Clone any individual tool repository directly to run its CLI binary, local daemon, or MCP server independently.';
+  const opt1Repo = toolRepo || 'https://github.com/NullAITech/zoth-studio-v2';
+  const opt1Cmd = toolCommand || `git clone ${opt1Repo.replace(/\.git$/, '')}.git`;
 
   return (
     <Paper
@@ -114,137 +66,47 @@ export default function SovereignFunnel({
       sx={{
         mt: 8,
         p: { xs: 3, md: 4.5 },
-        bgcolor: isDark ? 'rgba(15, 17, 26, 0.95)' : '#F8FAFC',
+        bgcolor: isDark ? '#0B0C11' : '#F4F1EA',
         border: `1px solid ${borderCol}`,
-        borderRadius: 3,
+        borderRadius: 2.5,
         position: 'relative',
         overflow: 'hidden',
-        boxShadow: isDark
-          ? '0 12px 36px rgba(0,0,0,0.5), inset 0 1px 0 rgba(212,175,55,0.2)'
-          : '0 8px 30px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8)',
-        ...sx
+        ...sx,
       }}
     >
       <Box sx={{ mb: 3.5 }}>
         <Chip
-          label="SOVEREIGN DEPLOYMENT FUNNEL"
+          label="LOCAL-FIRST DISTRIBUTION"
           size="small"
           sx={{
             mb: 1.5,
-            fontWeight: 800,
-            fontSize: '0.7rem',
-            letterSpacing: '0.08em',
-            bgcolor: isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7',
-            color: isDark ? '#D4AF37' : '#8A6A09',
-            border: `1px solid ${borderCol}`
+            fontFamily: mono,
+            fontWeight: 700,
+            fontSize: '0.68rem',
+            letterSpacing: '0.1em',
+            bgcolor: isDark ? 'rgba(212,175,55,0.12)' : '#FAF6EB',
+            color: gold,
+            border: `1px solid ${borderCol}`,
           }}
         />
-        <Typography variant="h5" sx={{ fontWeight: 850, color: textPrimary, mb: 1, letterSpacing: '-0.02em' }}>
+        <Typography
+          variant="h5"
+          sx={{
+            fontFamily: '"Celtic Garamond", Georgia, serif',
+            fontWeight: 600,
+            fontSize: { xs: '1.5rem', md: '1.85rem' },
+            color: textPrimary,
+            mb: 1,
+          }}
+        >
           {title}
         </Typography>
-        <Typography variant="body2" sx={{ color: textSecondary, maxWidth: 840, lineHeight: 1.6 }}>
+        <Typography variant="body2" sx={{ color: textSecondary, maxWidth: 820, lineHeight: 1.65 }}>
           {subtitle}
         </Typography>
       </Box>
 
-      {/* Open-Source Support — Buy Us a Coffee (Stripe or Solana Wallet) */}
-      <Box
-        sx={{
-          mb: 3.5,
-          p: { xs: 2, md: 2.5 },
-          borderRadius: 2.5,
-          bgcolor: isDark ? 'rgba(61, 255, 168, 0.06)' : '#F0FDF4',
-          border: `1px solid ${isDark ? 'rgba(61, 255, 168, 0.35)' : '#10B981'}`,
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 2,
-        }}
-      >
-        <Box sx={{ minWidth: 0, flex: '1 1 300px' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 0.5 }}>
-            <Chip
-              label="✦ 100% FREE & OPEN ACCESS • ZERO PAYWALLS"
-              size="small"
-              sx={{
-                height: 22,
-                fontFamily: mono,
-                fontWeight: 800,
-                fontSize: '0.66rem',
-                bgcolor: isDark ? 'rgba(16, 185, 129, 0.16)' : '#DCFCE7',
-                color: isDark ? '#34D399' : '#047857',
-                border: '1px solid rgba(16, 185, 129, 0.4)',
-              }}
-            />
-          </Box>
-          <Typography variant="subtitle1" sx={{ fontWeight: 800, color: textPrimary, lineHeight: 1.3 }}>
-            All tools, exports, and local models are 100% unlocked. If this saves you time, buy us a coffee!
-          </Typography>
-        </Box>
-
-        <Box sx={{ display: 'flex', gap: 1.2, flexWrap: 'wrap', alignItems: 'center' }}>
-          <Button
-            variant="contained"
-            size="small"
-            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              background: '#FFDD00',
-              color: '#000000',
-              fontFamily: mono,
-              fontWeight: 850,
-              fontSize: '0.76rem',
-              textTransform: 'none',
-              px: 2,
-              py: 0.9,
-              '&:hover': { background: '#FFE642', color: '#000000' },
-            }}
-          >
-            ☕ Buy Us a Coffee
-          </Button>
-          <Button
-            variant="contained"
-            size="small"
-            href={studioRepo}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              background: gold,
-              color: isDark ? '#08080B' : '#FFFFFF',
-              fontFamily: mono,
-              fontWeight: 800,
-              fontSize: '0.76rem',
-              textTransform: 'none',
-              px: 2,
-              py: 0.9,
-              '&:hover': { background: isDark ? '#F5E6AB' : '#6B4E06' },
-            }}
-          >
-            ★ Star on GitHub
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={() => handleCopy('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK', 'Solana Wallet Address')}
-            sx={{
-              borderColor: '#14F195',
-              color: '#14F195',
-              fontFamily: mono,
-              fontWeight: 800,
-              fontSize: '0.74rem',
-              textTransform: 'none',
-              px: 1.8,
-              py: 0.85,
-            }}
-          >
-            ◎ Solana Tip: GG2eQb…dXoK (Copy)
-          </Button>
-        </Box>
-      </Box>
-
-      <Grid container spacing={3}>
+      <Grid container spacing={2.5}>
         {/* Option 1: Standalone Tool */}
         <Grid item xs={12} md={4}>
           <Box
@@ -253,59 +115,61 @@ export default function SovereignFunnel({
               height: '100%',
               bgcolor: cardBg,
               border: `1px solid ${borderCol}`,
-              borderRadius: 2.5,
+              borderRadius: 2,
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
             }}
           >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: goldHeading }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mb: 1.5 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: goldHeading, fontSize: '0.98rem' }}>
                 {opt1Title}
               </Typography>
               <Chip
                 label={toolTag}
                 size="small"
                 sx={{
-                  bgcolor: isDark ? 'rgba(56,189,248,0.15)' : '#E0F2FE',
+                  fontFamily: mono,
+                  bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#EFF6FF',
                   color: isDark ? '#38BDF8' : '#0369A1',
-                  fontWeight: 800,
-                  fontSize: '0.65rem'
+                  border: `1px solid ${isDark ? 'rgba(56,189,248,0.28)' : '#BFDBFE'}`,
+                  fontWeight: 700,
+                  fontSize: '0.64rem',
                 }}
               />
             </Box>
-            <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.85rem', lineHeight: 1.5 }}>
+            <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.85rem', lineHeight: 1.6 }}>
               {opt1Desc}
             </Typography>
 
             <Box
               sx={{
-                p: 1.2,
+                p: 1.1,
                 mb: 2,
                 bgcolor: codeBoxBg,
                 border: `1px solid ${borderCol}`,
                 borderRadius: 1.5,
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
               }}
             >
               <Typography
                 sx={{
                   fontFamily: mono,
-                  fontSize: '0.74rem',
-                  color: isDark ? '#38BDF8' : '#0369A1',
+                  fontSize: '0.73rem',
+                  color: isDark ? '#E2E8F0' : '#1E293B',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+                  whiteSpace: 'nowrap',
                 }}
               >
                 {opt1Cmd}
               </Typography>
-              <IconButton aria-label="Copy command"
+              <IconButton
+                aria-label="Copy clone command"
                 size="small"
                 onClick={() => handleCopy(opt1Cmd, opt1Title)}
                 sx={{ color: gold, ml: 1, p: 0.5 }}
-                title="Copy command"
               >
                 <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
               </IconButton>
@@ -319,19 +183,19 @@ export default function SovereignFunnel({
               fullWidth
               startIcon={<GitHubIcon />}
               sx={{
-                background: gold,
+                bgcolor: isDark ? '#D4AF37' : '#101828',
                 color: isDark ? '#08080B' : '#FFFFFF',
-                fontWeight: 800,
+                fontWeight: 700,
                 textTransform: 'none',
-                '&:hover': { background: isDark ? '#F5E6AB' : '#6B4E06' }
+                '&:hover': { bgcolor: isDark ? '#E5C158' : '#1E293B' },
               }}
             >
-              Inspect Repository
+              Get Repository
             </Button>
           </Box>
         </Grid>
 
-        {/* Option 2: Zoth Studio v2 Unified Cockpit */}
+        {/* Option 2: Zoth Studio v2 */}
         <Grid item xs={12} md={4}>
           <Box
             sx={{
@@ -339,86 +203,90 @@ export default function SovereignFunnel({
               height: '100%',
               bgcolor: cardBg,
               border: `1px solid ${borderCol}`,
-              borderRadius: 2.5,
+              borderRadius: 2,
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
             }}
           >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: goldHeading }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mb: 1.5 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: goldHeading, fontSize: '0.98rem' }}>
                 Option 2: Zoth Studio v2
               </Typography>
               <Chip
                 label="FULL SUITE"
                 size="small"
                 sx={{
-                  bgcolor: isDark ? 'rgba(212,175,55,0.18)' : '#FEF9E7',
+                  fontFamily: mono,
+                  bgcolor: isDark ? 'rgba(212,175,55,0.14)' : '#FAF6EB',
                   color: gold,
-                  border: `1px solid ${gold}`,
-                  fontWeight: 800,
-                  fontSize: '0.65rem'
+                  border: `1px solid ${borderCol}`,
+                  fontWeight: 700,
+                  fontSize: '0.64rem',
                 }}
               />
             </Box>
-            <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.85rem', lineHeight: 1.5 }}>
-              The comprehensive sovereign AI developer studio featuring 29+ interactive tools, 3D memory worlds, local consensus engines, and offline templates.
+            <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.85rem', lineHeight: 1.6 }}>
+              Clone the unified Zoth Studio v2 workspace orchestrating all 77 local tools, STDP neural memory (:8094), and Pantheon swarm (:9393).
             </Typography>
 
             <Box
               sx={{
-                p: 1.2,
+                p: 1.1,
                 mb: 2,
                 bgcolor: codeBoxBg,
                 border: `1px solid ${borderCol}`,
                 borderRadius: 1.5,
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
               }}
             >
               <Typography
                 sx={{
                   fontFamily: mono,
-                  fontSize: '0.74rem',
-                  color: isDark ? '#38BDF8' : '#0369A1',
+                  fontSize: '0.73rem',
+                  color: isDark ? '#E2E8F0' : '#1E293B',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+                  whiteSpace: 'nowrap',
                 }}
               >
                 git clone https://github.com/NullAITech/zoth-studio-v2.git
               </Typography>
-              <IconButton aria-label="Copy command"
+              <IconButton
+                aria-label="Copy Studio clone command"
                 size="small"
-                onClick={() => handleCopy('git clone https://github.com/NullAITech/zoth-studio-v2.git', 'Studio v2 clone')}
+                onClick={() => handleCopy('git clone https://github.com/NullAITech/zoth-studio-v2.git', 'Zoth Studio clone command')}
                 sx={{ color: gold, ml: 1, p: 0.5 }}
-                title="Copy command"
               >
                 <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
               </IconButton>
             </Box>
 
             <Button
-              variant="contained"
+              variant="outlined"
               href={studioRepo}
               target="_blank"
               rel="noopener noreferrer"
               fullWidth
               startIcon={<GitHubIcon />}
               sx={{
-                background: gold,
-                color: isDark ? '#08080B' : '#FFFFFF',
-                fontWeight: 800,
+                borderColor: isDark ? 'rgba(212,175,55,0.45)' : '#101828',
+                color: textPrimary,
+                fontWeight: 700,
                 textTransform: 'none',
-                '&:hover': { background: isDark ? '#F5E6AB' : '#6B4E06' }
+                '&:hover': {
+                  borderColor: gold,
+                  bgcolor: isDark ? 'rgba(212,175,55,0.08)' : 'rgba(16,24,40,0.04)',
+                },
               }}
             >
-              Open Studio v2 Repo
+              Get Zoth Studio Repo
             </Button>
           </Box>
         </Grid>
 
-        {/* Option 3: Sovereign Zoth OS */}
+        {/* Option 3: ZothOS */}
         <Grid item xs={12} md={4}>
           <Box
             sx={{
@@ -426,59 +294,61 @@ export default function SovereignFunnel({
               height: '100%',
               bgcolor: cardBg,
               border: `1px solid ${borderCol}`,
-              borderRadius: 2.5,
+              borderRadius: 2,
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
             }}
           >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: goldHeading }}>
-                Option 3: Sovereign Zoth OS
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mb: 1.5 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: goldHeading, fontSize: '0.98rem' }}>
+                Option 3: ZothOS v3.4
               </Typography>
               <Chip
-                label="BARE-METAL OS"
+                label="LIVE ISO"
                 size="small"
                 sx={{
-                  bgcolor: isDark ? 'rgba(16,185,129,0.15)' : '#ECFDF3',
-                  color: isDark ? '#10B981' : '#047857',
-                  fontWeight: 800,
-                  fontSize: '0.65rem'
+                  fontFamily: mono,
+                  bgcolor: isDark ? 'rgba(16,185,129,0.14)' : '#ECFDF5',
+                  color: isDark ? '#34D399' : '#047857',
+                  border: `1px solid ${isDark ? 'rgba(16,185,129,0.3)' : '#A7F3D0'}`,
+                  fontWeight: 700,
+                  fontSize: '0.64rem',
                 }}
               />
             </Box>
-            <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.85rem', lineHeight: 1.5 }}>
-              Bare-metal offline-capable operating system kernel for autonomous agent swarms, zero-telemetry hardware enclave execution, and cryptographic seals.
+            <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.85rem', lineHeight: 1.6 }}>
+              Bootable Debian Live distribution with all 77 CLI binaries, local loopback daemons, and Ollama runtime pre-configured out of the box.
             </Typography>
 
             <Box
               sx={{
-                p: 1.2,
+                p: 1.1,
                 mb: 2,
                 bgcolor: codeBoxBg,
                 border: `1px solid ${borderCol}`,
                 borderRadius: 1.5,
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
               }}
             >
               <Typography
                 sx={{
                   fontFamily: mono,
-                  fontSize: '0.74rem',
-                  color: isDark ? '#10B981' : '#047857',
+                  fontSize: '0.73rem',
+                  color: isDark ? '#E2E8F0' : '#1E293B',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap'
+                  whiteSpace: 'nowrap',
                 }}
               >
-                https://github.com/NullAITech/zoth-os
+                git clone https://github.com/NullAITech/zoth-os.git
               </Typography>
-              <IconButton aria-label="Copy link"
+              <IconButton
+                aria-label="Copy ZothOS repository"
                 size="small"
-                onClick={() => handleCopy('https://github.com/NullAITech/zoth-os', 'Zoth OS link')}
+                onClick={() => handleCopy('git clone https://github.com/NullAITech/zoth-os.git', 'ZothOS clone command')}
                 sx={{ color: gold, ml: 1, p: 0.5 }}
-                title="Copy link"
               >
                 <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
               </IconButton>
@@ -492,26 +362,84 @@ export default function SovereignFunnel({
               fullWidth
               startIcon={<OpenInNewIcon />}
               sx={{
-                borderColor: gold,
-                color: gold,
-                fontWeight: 800,
+                borderColor: isDark ? 'rgba(212,175,55,0.45)' : '#101828',
+                color: textPrimary,
+                fontWeight: 700,
                 textTransform: 'none',
                 '&:hover': {
-                  borderColor: isDark ? '#F5E6AB' : '#9A7008',
-                  bgcolor: isDark ? 'rgba(212,175,55,0.08)' : '#FEF9E7'
-                }
+                  borderColor: gold,
+                  bgcolor: isDark ? 'rgba(212,175,55,0.08)' : 'rgba(16,24,40,0.04)',
+                },
               }}
             >
-              Inspect Zoth OS Repo
+              Inspect ZothOS Repo
             </Button>
           </Box>
         </Grid>
       </Grid>
 
-      {/* Snackbar Notification */}
+      {/* Subtle Open-Access & Optional Support Strip */}
+      <Box
+        sx={{
+          mt: 3,
+          pt: 2.5,
+          borderTop: `1px solid ${borderCol}`,
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 1.5,
+        }}
+      >
+        <Typography variant="caption" sx={{ color: textSecondary, fontSize: '0.8rem' }}>
+          100% open-access repositories with zero paywalls or license gates. Optional community support:
+        </Typography>
+        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
+          <Button
+            size="small"
+            variant="outlined"
+            href={STRIPE_COFFEE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              fontFamily: mono,
+              fontWeight: 700,
+              fontSize: '0.72rem',
+              textTransform: 'none',
+              borderColor: borderCol,
+              color: textPrimary,
+              bgcolor: cardBg,
+              '&:hover': { borderColor: gold },
+            }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => handleCopy(SOLANA_WALLET, 'Solana tip address')}
+            sx={{
+              fontFamily: mono,
+              fontWeight: 700,
+              fontSize: '0.72rem',
+              textTransform: 'none',
+              borderColor: isDark ? 'rgba(52,211,153,0.35)' : '#A7F3D0',
+              color: isDark ? '#34D399' : '#047857',
+              bgcolor: isDark ? 'rgba(16,185,129,0.06)' : '#ECFDF5',
+              '&:hover': {
+                borderColor: isDark ? '#34D399' : '#059669',
+                bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#D1FAE5',
+              },
+            }}
+          >
+            Solana Tip: GG2eQb…dXoK (Copy)
+          </Button>
+        </Box>
+      </Box>
+
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={3000}
+        autoHideDuration={2600}
         onClose={() => setSnackbarOpen(false)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
@@ -520,10 +448,9 @@ export default function SovereignFunnel({
           severity="success"
           sx={{
             width: '100%',
-            bgcolor: '#10B981',
+            bgcolor: '#047857',
             color: '#FFFFFF',
             fontWeight: 700,
-            boxShadow: '0 8px 24px rgba(0,0,0,0.3)'
           }}
         >
           {snackbarMsg}

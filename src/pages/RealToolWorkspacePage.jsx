@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams, Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useParams, Link as RouterLink } from 'react-router-dom';
 import {
   Box,
   Container,
@@ -10,240 +10,25 @@ import {
   Unstable_Grid2 as Grid,
   Stack,
   Divider,
-  Alert,
   IconButton,
-  Tooltip,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
-import LaunchIcon from '@mui/icons-material/Launch';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import TerminalIcon from '@mui/icons-material/Terminal';
-import SecurityIcon from '@mui/icons-material/Security';
-import MemoryIcon from '@mui/icons-material/Memory';
-import CodeIcon from '@mui/icons-material/Code';
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import SpeedIcon from '@mui/icons-material/Speed';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 import { microTools } from '../data/toolsData';
 import { workstations } from '../data/workstations';
-import ToolOfferLine from '../components/ToolOfferLine';
 import { getToolDocumentation } from '../data/toolsDocumentation';
 import SovereignFunnel from '../components/SovereignFunnel';
-import AirGapToolLockout from '../components/AirGapToolLockout';
-import WebMCPConsole from '../components/WebMCPConsole';
-import WebGPUToolWorkstation from '../components/tools/WebGPUToolWorkstation';
-import JwtInspectorGodModeTool from '../components/tools/JwtInspectorGodModeTool';
-import PayloadEntropyGodModeTool from '../components/tools/PayloadEntropyGodModeTool';
-import GhidraMcpGodModeTool from '../components/tools/GhidraMcpGodModeTool';
-import RegexDroidGodModeTool from '../components/tools/RegexDroidGodModeTool';
-import PolyglotStudioGodModeTool from '../components/tools/PolyglotStudioGodModeTool';
-import RobotsTxtAuditorGodModeTool from '../components/tools/RobotsTxtAuditorGodModeTool';
-import PwaManifestBuilderGodModeTool from '../components/tools/PwaManifestBuilderGodModeTool';
-import SchemaIllustratorGodModeTool from '../components/tools/SchemaIllustratorGodModeTool';
-import CertPathRoadmapGodModeTool from '../components/tools/CertPathRoadmapGodModeTool';
-import Badge3dCoinGodModeTool from '../components/tools/Badge3dCoinGodModeTool';
-import McpLensGodModeTool from '../components/tools/McpLensGodModeTool';
-import CwvSpeedEngineGodModeTool from '../components/tools/CwvSpeedEngineGodModeTool';
-import OmniPostSocialGodModeTool from '../components/tools/OmniPostSocialGodModeTool';
-import DeepSearchGodModeTool from '../components/tools/DeepSearchGodModeTool';
-import PromptMasterGodModeTool from '../components/tools/PromptMasterGodModeTool';
-import VectorSearchGodModeTool from '../components/tools/VectorSearchGodModeTool';
-import ZothOSGodModeTool from '../components/tools/ZothOSGodModeTool';
-import AgentCapsuleJailGodModeTool from '../components/tools/AgentCapsuleJailGodModeTool';
-import AgentGodsEyeGodModeTool from '../components/tools/AgentGodsEyeGodModeTool';
-import AgentMockTwinGodModeTool from '../components/tools/AgentMockTwinGodModeTool';
-import AgentPolicyAuditorGodModeTool from '../components/tools/AgentPolicyAuditorGodModeTool';
-import AudioCipherGodModeTool from '../components/tools/AudioCipherGodModeTool';
-import CyberTurtleGodModeTool from '../components/tools/CyberTurtleGodModeTool';
-import DatamoshGlitchGodModeTool from '../components/tools/DatamoshGlitchGodModeTool';
-import Nexus3DGodModeTool from '../components/tools/Nexus3DGodModeTool';
-import UfoSacredGeometryGodModeTool from '../components/tools/UfoSacredGeometryGodModeTool';
-import LikenessDeskGodModeTool from '../components/tools/LikenessDeskGodModeTool';
-import CronRhythmGodModeTool from '../components/tools/CronRhythmGodModeTool';
-import EnvGuardVaultGodModeTool from '../components/tools/EnvGuardVaultGodModeTool';
-import HexStrikeGodModeTool from '../components/tools/HexStrikeGodModeTool';
-import SubSweepGodModeTool from '../components/tools/SubSweepGodModeTool';
-import WebSecurityGuardGodModeTool from '../components/tools/WebSecurityGuardGodModeTool';
-import AeoGraphEngineGodModeTool from '../components/tools/AeoGraphEngineGodModeTool';
-import NeuroMemoryGodModeTool from '../components/tools/NeuroMemoryGodModeTool';
-import SovereignBridgeGodModeTool from '../components/tools/SovereignBridgeGodModeTool';
-import AgentEgressSentinelGodModeTool from '../components/tools/AgentEgressSentinelGodModeTool';
-import AgentPromptFirewallGodModeTool from '../components/tools/AgentPromptFirewallGodModeTool';
-import AgentFlightRecorderGodModeTool from '../components/tools/AgentFlightRecorderGodModeTool';
-import AgentBudgetSentinelGodModeTool from '../components/tools/AgentBudgetSentinelGodModeTool';
-import PodCommerceGodModeTool from '../components/tools/PodCommerceGodModeTool';
-import AsciiMotionGodModeTool from '../components/tools/AsciiMotionGodModeTool';
-import AdytumPlannerGodModeTool from '../components/tools/AdytumPlannerGodModeTool';
-import AzothArchonGodModeTool from '../components/tools/AzothArchonGodModeTool';
-import AgentVoiceCallGodModeTool from '../components/tools/AgentVoiceCallGodModeTool';
-import ZothFoundryGodModeTool from '../components/tools/ZothFoundryGodModeTool';
-import ZothBoltGodModeTool from '../components/tools/ZothBoltGodModeTool';
-import WebMcpInspectorGodModeTool from '../components/tools/WebMcpInspectorGodModeTool';
-import YaraSigmaForgeGodModeTool from '../components/tools/YaraSigmaForgeGodModeTool';
-import RealityShaderForgeGodModeTool from '../components/tools/RealityShaderForgeGodModeTool';
-import AttackSurfaceSentinelGodModeTool from '../components/tools/AttackSurfaceSentinelGodModeTool';
-import VisionKinematicsGodModeTool from '../components/tools/VisionKinematicsGodModeTool';
-import SwarmCivilizationGodModeTool from '../components/tools/SwarmCivilizationGodModeTool';
-import CivicProcurementGodModeTool from '../components/tools/CivicProcurementGodModeTool';
-import PixelCastGodModeTool from '../components/tools/PixelCastGodModeTool';
-import ZothPillGodModeTool from '../components/tools/ZothPillGodModeTool';
-import ZothOSLiteGodModeTool from '../components/tools/ZothOSLiteGodModeTool';
-import ZothnetGodModeTool from '../components/tools/ZothnetGodModeTool';
-import WcagContrastGuard from '../components/tools/WcagContrastGuard';
-import ZothOsintGodModeTool from '../components/tools/ZothOsintGodModeTool';
-import SovereignToolOutputWorkbench from '../components/tools/SovereignToolOutputWorkbench';
-import ToolMotionShowcase, { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
-import {
-  HeroReveal,
-  HeroItem,
-  GlowLine,
-  RevealOnScroll,
-  StaggerChildren,
-  StaggerItem,
-} from '../components/MotionReveal';
-import { useSovereignRuntime } from '../utils/sovereignRuntime';
-import { useReality } from '../context/RealityContext';
+import { HeroReveal, HeroItem, GlowLine, RevealOnScroll } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-
-const ENCLAVE_TOOL_COMPONENTS = {
-  'zoth-os': ZothOSGodModeTool,
-  'badge3d-coin-generator': Badge3dCoinGodModeTool,
-  'badge3d-coin': Badge3dCoinGodModeTool,
-  'certpath-roadmap-studio': CertPathRoadmapGodModeTool,
-  'certpath-roadmap': CertPathRoadmapGodModeTool,
-  'schema-illustrator-studio': SchemaIllustratorGodModeTool,
-  'schema-illustrator': SchemaIllustratorGodModeTool,
-  'robots-txt-auditor': RobotsTxtAuditorGodModeTool,
-  'robots-txt': RobotsTxtAuditorGodModeTool,
-  'pwa-manifest-builder': PwaManifestBuilderGodModeTool,
-  'pwa-manifest': PwaManifestBuilderGodModeTool,
-  'polyglot-framework-exporter': PolyglotStudioGodModeTool,
-  'polyglot-studio': PolyglotStudioGodModeTool,
-  'regex-droid-builder': RegexDroidGodModeTool,
-  'regex-droid': RegexDroidGodModeTool,
-  'jwt-inspector-guard': JwtInspectorGodModeTool,
-  'jwt-inspector': JwtInspectorGodModeTool,
-  'payload-entropy-studio': PayloadEntropyGodModeTool,
-  'payload-entropy': PayloadEntropyGodModeTool,
-  'ghidra-mcp-bridge': GhidraMcpGodModeTool,
-  'ghidra-mcp': GhidraMcpGodModeTool,
-  'shodan-surface-sentinel': AttackSurfaceSentinelGodModeTool,
-  'shodan-sentinel': AttackSurfaceSentinelGodModeTool,
-  'adytum-alchemist-ai-workflow': AdytumPlannerGodModeTool,
-  'adytum-alchemist': AdytumPlannerGodModeTool,
-  'azoth-archon-orchestrator': AzothArchonGodModeTool,
-  'azoth-local-agent': AzothArchonGodModeTool,
-  'sovereign-bridge-protocol': SovereignBridgeGodModeTool,
-  'sovereign-agent-bridge': SovereignBridgeGodModeTool,
-  'neuro-memory-service': NeuroMemoryGodModeTool,
-  'neuro-memory-daemon': NeuroMemoryGodModeTool,
-  'agent-egress-sentinel': AgentEgressSentinelGodModeTool,
-  'agent-mock-twin': AgentMockTwinGodModeTool,
-  'agent-prompt-firewall': AgentPromptFirewallGodModeTool,
-  'wcag-contrast-guard': WcagContrastGuard,
-  'agent-flight-recorder': AgentFlightRecorderGodModeTool,
-  'agent-capsule-jail': AgentCapsuleJailGodModeTool,
-  'agent-policy-auditor': AgentPolicyAuditorGodModeTool,
-  'vector-search-engine': VectorSearchGodModeTool,
-  'deepsearch-research-agent': DeepSearchGodModeTool,
-  'prompt-master-optimizer': PromptMasterGodModeTool,
-  'promptmaster-studio': PromptMasterGodModeTool,
-  'hexstrike-tactical-terminal': HexStrikeGodModeTool,
-  'hexstrike-arsenal': HexStrikeGodModeTool,
-  'envguard-secrets-vault': EnvGuardVaultGodModeTool,
-  'web-security-guard': WebSecurityGuardGodModeTool,
-  'audiocipher-stego-vault': AudioCipherGodModeTool,
-  'audiocipher-stego-engine': AudioCipherGodModeTool,
-  'aeo-graph-engine': AeoGraphEngineGodModeTool,
-  'cwv-speed-engine': CwvSpeedEngineGodModeTool,
-  'subsweep-lead-scanner': SubSweepGodModeTool,
-  'omnipost-social-engine': OmniPostSocialGodModeTool,
-  'cron-rhythm-studio': CronRhythmGodModeTool,
-  'printify-connector': PodCommerceGodModeTool,
-  'gelato-connector': PodCommerceGodModeTool,
-  'etsy-connector': PodCommerceGodModeTool,
-  'shopify-connector': PodCommerceGodModeTool,
-  'etsy-pod-forge': PodCommerceGodModeTool,
-  'pod-smart-router': PodCommerceGodModeTool,
-  'digital-asset-forge': PodCommerceGodModeTool,
-  'pod-mockup-forge': PodCommerceGodModeTool,
-  'pod-margin-sentinel': PodCommerceGodModeTool,
-  'agent-voice-call': AgentVoiceCallGodModeTool,
-  'mcp-lens': McpLensGodModeTool,
-  'agent-budget-sentinel': AgentBudgetSentinelGodModeTool,
-  'agent-gods-eye': AgentGodsEyeGodModeTool,
-  'zoth-osint': ZothOsintGodModeTool,
-  'osint-scout-skill': ZothOsintGodModeTool,
-  'zoth-webgen': ZothFoundryGodModeTool,
-  'zoth-swarm-multiplexer': SwarmCivilizationGodModeTool,
-  'zoth-civilization': SwarmCivilizationGodModeTool,
-  'likeness-desk': LikenessDeskGodModeTool,
-  'likeness': LikenessDeskGodModeTool,
-  'bolt.diy': ZothBoltGodModeTool,
-  'bolt-diy': ZothBoltGodModeTool,
-  'zoth-bolt': ZothBoltGodModeTool,
-  'producthunt-connector': CivicProcurementGodModeTool,
-  'zoth-ph': CivicProcurementGodModeTool,
-  'zoth-relay': SovereignBridgeGodModeTool,
-  'zela-glasses-guide': VisionKinematicsGodModeTool,
-  'zoth-bot': AzothArchonGodModeTool,
-  'zoth-bounty': AttackSurfaceSentinelGodModeTool,
-  'zoth-scene-foundry': AsciiMotionGodModeTool,
-
-  'vision-gesture-control': VisionKinematicsGodModeTool,
-  'datamosh-glitch-studio': DatamoshGlitchGodModeTool,
-  'datamosh-studio': DatamoshGlitchGodModeTool,
-  'nexus-3d-scene-studio': Nexus3DGodModeTool,
-  'nexus-3d': Nexus3DGodModeTool,
-  'nexus-3d-studio': Nexus3DGodModeTool,
-  'ufo-sacred-geometry': UfoSacredGeometryGodModeTool,
-  'ufo-geometry': UfoSacredGeometryGodModeTool,
-  'cyber-turtle-studio': CyberTurtleGodModeTool,
-  'og-canvas-forge': AsciiMotionGodModeTool,
-  'zoth-ascii-magic': AsciiMotionGodModeTool,
-  'webmcp-protocol-inspector': WebMcpInspectorGodModeTool,
-  'yara-sigma-forge': YaraSigmaForgeGodModeTool,
-  'reality-shader-forge': RealityShaderForgeGodModeTool,
-  'anderson-security-sentinel': AttackSurfaceSentinelGodModeTool,
-  'city-desk': CivicProcurementGodModeTool,
-  'storefront-catalog': PodCommerceGodModeTool,
-  'pixel-cast': PixelCastGodModeTool,
-  'zoth-math-pillar': ZothPillGodModeTool,
-  'zothos-lite': ZothOSLiteGodModeTool,
-  'zothnet': ZothnetGodModeTool,
-
-  // Studio Cockpit & Workstation IDs (from workstations.js)
-  'cockpit': SwarmCivilizationGodModeTool,
-  'ide': ZothBoltGodModeTool,
-  'agent-composer': AzothArchonGodModeTool,
-  'mission-control': SwarmCivilizationGodModeTool,
-  'models': PromptMasterGodModeTool,
-  'ax-powerhouse': WebMcpInspectorGodModeTool,
-  'cyberpunk-hud': AttackSurfaceSentinelGodModeTool,
-  'chronicle': AdytumPlannerGodModeTool,
-  'notes-reviewer': NeuroMemoryGodModeTool,
-  'brand': RealityShaderForgeGodModeTool,
-  'vision-link': VisionKinematicsGodModeTool,
-  'web3-hub': SovereignBridgeGodModeTool,
-  'github-tool': PolyglotStudioGodModeTool,
-  'edge-forge': AgentCapsuleJailGodModeTool,
-  'netlify-ax': AeoGraphEngineGodModeTool,
-  'webgen': ZothFoundryGodModeTool,
-  'omnipost': OmniPostSocialGodModeTool,
-  'subsweep': SubSweepGodModeTool,
-  'connectors': McpLensGodModeTool,
-  'hexstrike': HexStrikeGodModeTool,
-  'netrunner-memory': NeuroMemoryGodModeTool,
-  'consensus': SovereignBridgeGodModeTool,
-  'bus-monitor': SovereignBridgeGodModeTool,
-  'math-pillars': VectorSearchGodModeTool,
-};
+const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
 
 const WORKSTATION_TOOL_ALIASES = {
   'adytum-alchemist': 'adytum-alchemist-ai-workflow',
@@ -259,1281 +44,642 @@ const WORKSTATION_TOOL_ALIASES = {
   'bus-monitor': 'sovereign-agent-bridge',
 };
 
+const DEDICATED_SITES = {
+  'zoth-os': { label: 'ZothOS Portal', url: 'https://zothos.nullai.tech' },
+  'zothos-lite': { label: 'ZothOS-Lite Portal', url: 'https://zothos-lite.nullai.tech' },
+  'zoth-civilization': { label: 'Zoth Civilization Site', url: 'https://zoth-civilization.netlify.app' },
+  'zoth-swarm-multiplexer': { label: 'Zoth Egregore Model Site', url: 'https://zoth-egregore.netlify.app' },
+};
+
 export default function RealToolWorkspacePage() {
   const { toolId } = useParams();
-  const navigate = useNavigate();
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
-  const [copiedCmd, setCopiedCmd] = useState(false);
+  const [copiedClone, setCopiedClone] = useState(false);
   const [copiedMcp, setCopiedMcp] = useState(false);
-  const [copiedElectronCmd, setCopiedElectronCmd] = useState(false);
-  const [copiedTuiCmd, setCopiedTuiCmd] = useState(false);
-  const [unlockedPreview, setUnlockedPreview] = useState(false);
-  const [localViewMode, setLocalViewMode] = useState(
-    toolId === 'zoth-swarm-multiplexer' ? 'enclave' : 'webapp'
-  );
-  const [localWebAppReady, setLocalWebAppReady] = useState(false);
-  const [iframeKey, setIframeKey] = useState(0);
 
-  const { isLocal, hasWebGPU, evaluateTool } = useSovereignRuntime();
   const resolvedToolId = WORKSTATION_TOOL_ALIASES[toolId] || toolId;
-  const catalogTool = microTools.find((t) => t.id === resolvedToolId || t.repo === resolvedToolId || t.id === toolId);
+  const catalogTool = microTools.find(
+    (t) => t.id === resolvedToolId || t.repo === resolvedToolId || t.id === toolId,
+  );
   const wsEntry = !catalogTool ? workstations.find((w) => w.id === toolId) : null;
-  const tool = catalogTool || (wsEntry ? {
-    id: wsEntry.id,
-    name: wsEntry.name,
-    repo: wsEntry.id,
-    category: wsEntry.band || 'Swarm & Core',
-    executionType: 'browser',
-    github: 'https://github.com/NullAITech/zoth-studio-v2',
-    liveUrl: `https://zoth.nullai.tech/tools/${wsEntry.id}`,
-    description: wsEntry.description || 'Zero-egress sovereign workstation integrated into Zoth Studio v2.',
-    version: '2.2.0',
-    pull: wsEntry.pullCommand || 'npx @nullaitech/zoth studio',
-  } : null);
 
-  React.useEffect(() => {
-    if (!isLocal || !tool?.localPort) {
-      setLocalWebAppReady(false);
-      return undefined;
-    }
-    let cancelled = false;
-    setLocalWebAppReady(false);
-    fetch('/api/studio/tool/wake', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: tool.id, repo: tool.repo, port: tool.localPort }),
-    })
-      .then((r) => r.json())
-      .then(() => {
-        if (!cancelled) {
-          setLocalWebAppReady(true);
-          setIframeKey((k) => k + 1);
+  const tool =
+    catalogTool ||
+    (wsEntry
+      ? {
+          id: wsEntry.id,
+          name: wsEntry.name,
+          repo: 'zoth-studio-v2',
+          category: wsEntry.band || 'Architecture',
+          executionType: 'local_cli',
+          github: 'https://github.com/NullAITech/zoth-studio-v2',
+          description:
+            wsEntry.description ||
+            'Local-first architecture module integrated inside the Zoth Studio v2 repository.',
+          version: '3.3.0',
+          pull: wsEntry.pullCommand || 'git clone https://github.com/NullAITech/zoth-studio-v2.git',
         }
-      })
-      .catch(() => {
-        if (!cancelled) setLocalWebAppReady(true);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [isLocal, tool?.id, tool?.repo, tool?.localPort]);
-  const docs = getToolDocumentation(tool);
-  const execEval = evaluateTool(tool);
-  const canRunClientSide = execEval.canExecute;
-  const EnclaveToolComponent = ENCLAVE_TOOL_COMPONENTS[tool?.id] || ENCLAVE_TOOL_COMPONENTS[toolId];
-  // Tools with dedicated 60fps in-browser God-Mode workstations or WebGPU/WASM engines are immediately interactive!
-  const isLocked = !isLocal && !canRunClientSide && !unlockedPreview && !EnclaveToolComponent;
-  const { reality, params: realityParams } = useReality();
-  const [copiedTuiSpec, setCopiedTuiSpec] = useState(false);
+      : null);
 
-  const gold = {
-    accent: isDark ? reality.accent : reality.accentLightMode,
-    soft: isDark ? reality.accentSoft : reality.accentLightMode,
-    wash: isDark ? reality.accentWash : '#FEF9E7',
-    border: isDark ? reality.accentBorder : 'rgba(184,134,11,0.3)',
-  };
-
-  const brailleSignature = React.useMemo(() => {
-    const seedStr = tool?.id || toolId || 'zoth';
-    const densityBoost = (realityParams?.density || 50) / 100;
-    const chars = [];
-    for (let i = 0; i < 16; i++) {
-      const code = seedStr.charCodeAt(i % seedStr.length) + i * 17;
-      const mask = Math.min(255, Math.max(1, Math.round(((code % 255) * (0.65 + densityBoost * 0.55)) % 256)));
-      chars.push(String.fromCharCode(0x2800 + mask));
-    }
-    return chars.join('');
-  }, [tool?.id, toolId, realityParams?.density]);
-
-  const handleCopyBrailleSpec = () => {
-    if (!tool) return;
-    const spec = [
-      `┌── UNCOMMON WEB × ZOTH STUDIO TELEMETRY ──────────────────────────┐`,
-      `│ TOOL    : ${tool.name} (${tool.id})`,
-      `│ ENGINE  : ${tool.executionType?.toUpperCase() || 'BROWSER'} · ZERO-EGRESS`,
-      `│ BRAILLE : ${brailleSignature} (U+2800 2x4 Sub-Pixel Matrix)`,
-      `│ BAYER   : ░▒▓█ ${reality?.name || 'Aurum Sovereign'} · Density ${realityParams?.density || 50}%`,
-      `│ PULL    : ${tool.pull || `npx @nullaitech/zoth pull ${tool.id}`}`,
-      `└──────────────────────────────────────────────────────────────────┘`,
-    ].join('\n');
-    navigator.clipboard?.writeText(spec);
-    setCopiedTuiSpec(true);
-    setTimeout(() => setCopiedTuiSpec(false), 1800);
-  };
-
-  const handleExportUncommonSvg = () => {
-    if (!tool) return;
-    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    const lines = [
-      `UNCOMMON WEB (webdev.teknium.io) x ZOTH STUDIO TELEMETRY CARD`,
-      `--------------------------------------------------------------------`,
-      `TOOL ID     : ${tool.id}  [v${tool.version || '2.2.0'}]`,
-      `NAME        : ${tool.name}`,
-      `CATEGORY    : ${tool.category || 'Sovereign Arsenal'}`,
-      `EXECUTION   : ${tool.executionType === 'local_cli' ? 'LOCAL CLI + IN-BROWSER WORKBENCH' : '100% CLIENT-SIDE IN-BROWSER ENGINE'}`,
-      `BRAILLE SIG : ${brailleSignature}  (Unicode U+2800 2x4 Sub-Pixel)`,
-      `BAYER 4x4   : ░▒▓█▓▒░  REALITY=${reality?.id || 'aurum'} DENSITY=${realityParams?.density || 50}%`,
-      `CLI / PULL  : ${tool.pull || `npx @nullaitech/zoth pull ${tool.id}`}`,
-      `--------------------------------------------------------------------`,
-      `Engineered by 1nc0gn30 • NullAI Platform`,
-    ];
-    const fontSize = 13;
-    const lineHeight = 20;
-    const width = 680;
-    const height = lines.length * lineHeight + 44;
-    const tspanNodes = lines
-      .map(
-        (line, i) =>
-          `<text x="22" y="${30 + i * lineHeight}" fill="${i === 0 || i === 6 ? '#D4AF37' : '#EDEFF2'}" font-family="JetBrains Mono, monospace" font-size="${fontSize}px" xml:space="preserve">${esc(line)}</text>`
-      )
-      .join('\n  ');
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">
-  <rect width="100%" height="100%" rx="12" fill="#08080C" stroke="#D4AF37" stroke-width="1.5"/>
-  ${tspanNodes}
-</svg>`;
-    const blob = new Blob([svg], { type: 'image/svg+xml' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${tool.id}-uncommon-braille-card.svg`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const handleCopy = (text, setCopiedFn) => {
-    if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
-      setCopiedFn(true);
-      setTimeout(() => setCopiedFn(false), 2000);
-    }
-  };
+  const gold = isDark ? '#D4AF37' : '#7A5808';
+  const primaryText = isDark ? '#F5F1E6' : '#101828';
+  const secondaryText = isDark ? '#A3AAB8' : '#475467';
+  const cardBg = isDark ? '#0D0F16' : '#FFFFFF';
+  const subtleBg = isDark ? '#11141D' : '#F4F1EA';
+  const borderCol = isDark ? 'rgba(245, 241, 230, 0.12)' : 'rgba(16, 24, 40, 0.12)';
 
   if (!tool) {
     return (
-      <Container maxWidth="md" sx={{ py: 10, textAlign: 'center' }}>
-        <Typography variant="h4" sx={{ fontWeight: 800, mb: 2, color: theme.palette.text.primary }}>
-          Tool Repository Not Found
-        </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-          The requested tool identifier <code>"{toolId}"</code> does not exist in the active catalog.
-        </Typography>
-        <Button
-          component={RouterLink}
-          to="/tools"
-          variant="contained"
-          startIcon={<ArrowBackIcon />}
-          sx={{ bgcolor: gold.accent, color: '#08080B', fontWeight: 800 }}
+      <Container maxWidth="md" sx={{ py: 10 }}>
+        <Paper
+          elevation={0}
+          sx={{
+            p: 5,
+            borderRadius: 2.5,
+            bgcolor: cardBg,
+            border: `1px solid ${borderCol}`,
+            textAlign: 'center',
+          }}
         >
-          Return to Tool Nexus
-        </Button>
+          <Typography variant="h4" sx={{ fontFamily: display, color: primaryText, mb: 1.5 }}>
+            Repository Not Found
+          </Typography>
+          <Typography variant="body1" sx={{ color: secondaryText, mb: 3 }}>
+            No local repository or architecture specification matched <code>{toolId}</code>.
+          </Typography>
+          <Button
+            component={RouterLink}
+            to="/arsenal"
+            variant="contained"
+            startIcon={<ArrowBackIcon />}
+            sx={{
+              bgcolor: isDark ? '#D4AF37' : '#101828',
+              color: isDark ? '#08080B' : '#FFFFFF',
+              fontWeight: 700,
+              textTransform: 'none',
+            }}
+          >
+            Browse All 77 Repositories
+          </Button>
+        </Paper>
       </Container>
     );
   }
 
-  const mcpConfigSnippet = JSON.stringify(
-    {
-      mcpServers: {
-        [tool.id]: {
-          command: tool.executionType === 'local_cli' ? 'python3' : 'npx',
-          args: tool.executionType === 'local_cli' ? ['-m', `${tool.repo.replace(/-/g, '_')}.mcp`] : [tool.id, '--mcp'],
-          env: {
-            ZOTH_ZERO_EGRESS: 'true',
-            ZOTH_LOCAL_INVARIANT: 'enforced',
-          },
-        },
-      },
-    },
-    null,
-    2
-  );
+  const docs = getToolDocumentation(tool);
+  const repoUrl =
+    ['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(tool.id) || !tool.github
+      ? 'https://github.com/NullAITech/zoth-studio-v2'
+      : tool.github;
+  const studioRepoUrl = 'https://github.com/NullAITech/zoth-studio-v2';
+  const cloneCommand = `git clone ${repoUrl.replace(/\.git$/, '')}.git`;
+  const dedicatedSite = DEDICATED_SITES[tool.id];
+
+  const copyText = (text, setter) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setter(true);
+      setTimeout(() => setter(false), 2000);
+    }
+  };
 
   return (
-    <Container maxWidth="lg" className="page-fade-in" sx={{ py: 6, position: 'relative' }}>
-      {/* Breadcrumb & Navigation */}
+    <Container maxWidth="lg" sx={{ py: { xs: 4, md: 7 } }}>
+      {/* Breadcrumb */}
       <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5 }}>
         <Button
           component={RouterLink}
-          to="/tools"
-          startIcon={<ArrowBackIcon />}
+          to="/arsenal"
+          size="small"
+          startIcon={<ArrowBackIcon sx={{ fontSize: '1rem !important' }} />}
           sx={{
-            color: 'text.secondary',
             fontFamily: mono,
-            fontSize: '0.82rem',
+            fontSize: '0.76rem',
             fontWeight: 700,
-            '&:hover': { color: gold.accent },
+            color: secondaryText,
+            textTransform: 'none',
+            px: 1,
+            '&:hover': { color: primaryText, bgcolor: 'transparent' },
           }}
         >
-          Back to Tool Catalog
+          All 77 Repositories
         </Button>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+
+        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
           <Chip
-            label="SOVEREIGN TOOL REPOSITORY"
             size="small"
+            label={tool.category}
             sx={{
-              height: 22,
-              fontSize: '0.68rem',
               fontFamily: mono,
-              fontWeight: 800,
-              bgcolor: gold.wash,
-              color: gold.soft,
-              border: `1px solid ${gold.border}`,
+              fontWeight: 700,
+              fontSize: '0.7rem',
+              bgcolor: isDark ? 'rgba(212,175,55,0.12)' : '#FAF6EB',
+              color: gold,
+              border: `1px solid ${borderCol}`,
             }}
           />
+          {tool.localPort && (
+            <Chip
+              size="small"
+              label={`LOCAL DAEMON :${tool.localPort}`}
+              sx={{
+                fontFamily: mono,
+                fontWeight: 700,
+                fontSize: '0.7rem',
+                bgcolor: isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF5',
+                color: isDark ? '#34D399' : '#047857',
+                border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`,
+              }}
+            />
+          )}
           <Chip
-            label="ZERO-EGRESS INVARIANT"
             size="small"
+            label={`v${tool.version || '2.5.0'}`}
             sx={{
-              height: 22,
-              fontSize: '0.68rem',
               fontFamily: mono,
-              fontWeight: 800,
-              bgcolor: isDark ? 'rgba(34,197,94,0.15)' : '#DCFCE7',
-              color: '#22C55E',
-              border: `1px solid rgba(34,197,94,0.35)`,
+              fontWeight: 600,
+              fontSize: '0.7rem',
+              bgcolor: subtleBg,
+              color: secondaryText,
+              border: `1px solid ${borderCol}`,
             }}
           />
-        </Box>
+        </Stack>
       </Box>
 
-      {/* If Public Web and Bare-Metal Tool without dedicated God-Mode Workstation: Display Hardware Enclave Lockout */}
-      {!isLocal && !canRunClientSide && !EnclaveToolComponent && (
-        <AirGapToolLockout
-          tool={tool}
-          isUnlocked={unlockedPreview}
-          onUnlockPreview={() => setUnlockedPreview(true)}
-          onReseal={() => setUnlockedPreview(false)}
-        />
-      )}
-
-      {/* If Public Web and Client/God-Mode Tool: Display Active Client Compute HUD */}
-      {!isLocal && (canRunClientSide || Boolean(EnclaveToolComponent)) && (
-        <Paper
-          elevation={0}
-          sx={{
-            mb: 4,
-            p: 2.2,
-            borderRadius: 2.5,
-            bgcolor: isDark ? 'rgba(56, 189, 248, 0.08)' : '#F0F9FF',
-            border: '1.5px solid',
-            borderColor: isDark ? 'rgba(56, 189, 248, 0.4)' : '#BAE6FD',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 2,
-            boxShadow: isDark ? '0 0 24px -4px rgba(56, 189, 248, 0.25)' : 'none',
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Box sx={{ p: 1, borderRadius: '50%', bgcolor: isDark ? 'rgba(56, 189, 248, 0.18)' : '#E0F2FE', color: 'var(--zs-sky)', display: 'flex' }}>
-              <SpeedIcon sx={{ fontSize: 22 }} />
-            </Box>
-            <Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-                <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.82rem', color: 'var(--zs-sky)' }}>
-                  IN-BROWSER CLIENT EXECUTION UNLOCKED · ZERO DATA EGRESS
-                </Typography>
-                <Chip
-                  label={hasWebGPU ? "WEBGPU HARDWARE ACCELERATED" : "WASM CPU FALLBACK"}
-                  size="small"
-                  sx={{
-                    fontFamily: mono,
-                    fontSize: '0.64rem',
-                    fontWeight: 800,
-                    bgcolor: isDark ? '#111827' : '#E0F2FE',
-                    color: isDark ? '#7DD3FC' : '#0369A1',
-                    height: 20,
-                  }}
-                />
-              </Box>
-              <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontSize: '0.76rem' }}>
-                You are on the public website. This tool executes 100% client-side in your browser via {hasWebGPU ? 'WebGPU WGSL shaders' : 'WebAssembly CPU SIMD'}. No network data is transmitted.
-              </Typography>
-            </Box>
-          </Box>
-          <Button
-            size="small"
-            variant="contained"
-            onClick={() => {
-              const el = document.getElementById('enclave-workstation-deck') || document.getElementById('client-workstation-deck');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }}
-            sx={{
-              fontFamily: mono,
-              fontWeight: 850,
-              fontSize: '0.74rem',
-              bgcolor: isDark ? '#38BDF8' : '#0369A1',
-              color: '#08080B',
-              px: 2,
-              '&:hover': { bgcolor: '#7DD3FC' },
-            }}
-          >
-            Launch WebGPU Deck ⚡
-          </Button>
-        </Paper>
-      )}
-
-      {/* If Local Sovereign Node: Display Node Status */}
-      {isLocal && (
-        <Paper
-          elevation={0}
-          sx={{
-            mb: 4,
-            p: 2,
-            borderRadius: 2.5,
-            bgcolor: isDark ? 'rgba(16, 185, 129, 0.08)' : '#ECFDF5',
-            border: '1.5px solid',
-            borderColor: isDark ? 'rgba(16, 185, 129, 0.35)' : '#A7F3D0',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 2,
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Box sx={{ p: 0.8, borderRadius: '50%', bgcolor: isDark ? 'rgba(16, 185, 129, 0.18)' : '#D1FAE5', color: 'var(--zs-emerald)', display: 'flex' }}>
-              <SecurityIcon sx={{ fontSize: 20 }} />
-            </Box>
-            <Box>
-              <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.8rem', color: 'var(--zs-emerald)' }}>
-                LOCAL SOVEREIGN NODE ACTIVE (127.0.0.1)
-              </Typography>
-              <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontSize: '0.74rem' }}>
-                Bare-metal hardware access, local daemons, and loopback Unix sockets available.
-              </Typography>
-            </Box>
-          </Box>
-          <Chip
-            label="FULL PRIVILEGES"
-            size="small"
-            sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.66rem', bgcolor: isDark ? '#064E3B' : '#D1FAE5', color: 'var(--zs-mint)' }}
-          />
-        </Paper>
-      )}
-
-      {/* Main Tool Dossier Workspace — Blurred and Blocked when Remote and Not Unlocked */}
-      <Box
-        sx={{
-          filter: isLocked ? 'blur(10px) grayscale(30%)' : 'none',
-          pointerEvents: isLocked ? 'none' : 'auto',
-          userSelect: isLocked ? 'none' : 'auto',
-          transition: 'all 0.35s ease',
-          opacity: isLocked ? 0.42 : 1,
-          position: 'relative',
-        }}
-      >
-      {/* Hero Dossier Header with Category-Coded GlowLine Seam & MotionReveal */}
+      {/* Hero Dossier Header */}
       <HeroReveal>
         <Paper
+          elevation={0}
           sx={{
-            p: { xs: 3, md: 4.5 },
+            p: { xs: 3, md: 5 },
             mb: 4,
-            borderRadius: 3,
-            bgcolor: isDark ? '#08080B' : '#FFFFFF',
-            border: `1px solid ${gold.border}`,
-            boxShadow: isDark ? '0 12px 32px rgba(0,0,0,0.6), 0 0 20px -4px rgba(212,175,55,0.2)' : '0 4px 16px rgba(184,134,11,0.12)',
-            position: 'relative',
-            overflow: 'hidden',
+            borderRadius: 2.5,
+            bgcolor: cardBg,
+            border: `1px solid ${borderCol}`,
           }}
         >
-          <HeroItem>
-            <GlowLine
-              height={3}
-              color={getCategoryMotionMeta(tool.category).accent}
-              glowColor={`${getCategoryMotionMeta(tool.category).accent}66`}
-            />
-          </HeroItem>
-          <HeroItem>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5, mt: 1 }}>
-              <Box sx={{ maxWidth: 920 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5, flexWrap: 'wrap' }}>
-                  <Chip
-                    label={tool.category}
-                    size="small"
-                    sx={{
-                      bgcolor: `${getCategoryMotionMeta(tool.category).accent}20`,
-                      color: getCategoryMotionMeta(tool.category).accent,
-                      border: `1px solid ${getCategoryMotionMeta(tool.category).accent}55`,
-                      fontWeight: 800,
-                      fontSize: '0.75rem',
-                    }}
-                  />
-                  <Chip
-                    label={`v${tool.version || '1.0.0'}`}
-                    size="small"
-                    sx={{
-                      fontFamily: mono,
-                      bgcolor: isDark ? 'rgba(255,255,255,0.06)' : '#F1F5F9',
-                      color: gold.accent,
-                      fontWeight: 800,
-                      fontSize: '0.75rem',
-                    }}
-                  />
-                  <Chip
-                    label={tool.executionType === 'local_cli' ? 'LOCAL CLI & MCP DAEMON' : '100% IN-BROWSER CLIENT ENGINE'}
-                    size="small"
-                    sx={{
-                      fontFamily: mono,
-                      bgcolor: gold.wash,
-                      color: gold.soft,
-                      border: `1px solid ${gold.border}`,
-                      fontWeight: 800,
-                      fontSize: '0.72rem',
-                    }}
-                  />
-                </Box>
-                <Typography
-                  variant="h3"
-                  sx={{
-                    fontWeight: 800,
-                    letterSpacing: '-0.03em',
-                    mb: 1.5,
-                    color: theme.palette.text.primary,
-                    fontSize: { xs: '1.75rem', sm: '2.35rem', md: '2.85rem' },
-                    lineHeight: 1.15,
-                  }}
-                >
-                  {tool.name}
-                </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ fontSize: '1.05rem', lineHeight: 1.65 }}>
-                  {tool.description}
-                </Typography>
-                <ToolOfferLine tool={tool} isDark={isDark} />
-              </Box>
+          <GlowLine
+            height={2}
+            color={gold}
+            glowColor={isDark ? 'rgba(212,175,55,0.35)' : 'rgba(122,88,8,0.2)'}
+          />
 
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: '100%', flexWrap: 'wrap' }}>
-                {isLocal && tool.localPort && (
-                  <Button
-                    component="a"
-                    href={tool.localUrl || `http://127.0.0.1:${tool.localPort}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    variant="outlined"
-                    endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
-                    sx={{
-                      fontWeight: 800,
-                      fontFamily: mono,
-                      fontSize: '0.8rem',
-                      borderColor: isDark ? 'rgba(52,211,153,0.45)' : '#A7F3D0',
-                      color: isDark ? '#34D399' : '#047857',
-                      bgcolor: isDark ? 'rgba(52,211,153,0.08)' : '#ECFDF3',
-                      '&:hover': { borderColor: '#34D399', bgcolor: isDark ? 'rgba(52,211,153,0.18)' : '#D1FAE5' },
-                    }}
-                  >
-                    Local Web App :{tool.localPort}
-                  </Button>
-                )}
-                {isLocal && tool.localPort && (
-                  <Button
-                    variant="outlined"
-                    onClick={() => handleCopy(`${tool.id} desktop`, setCopiedElectronCmd)}
-                    startIcon={copiedElectronCmd ? <CheckIcon sx={{ fontSize: 15 }} /> : <LaunchIcon sx={{ fontSize: 15 }} />}
-                    sx={{
-                      fontWeight: 800,
-                      fontFamily: mono,
-                      fontSize: '0.78rem',
-                      borderColor: isDark ? 'rgba(56,189,248,0.45)' : '#BAE6FD',
-                      color: isDark ? '#38BDF8' : '#0369A1',
-                      bgcolor: isDark ? 'rgba(56,189,248,0.08)' : '#F0F9FF',
-                      '&:hover': { borderColor: '#38BDF8', bgcolor: isDark ? 'rgba(56,189,248,0.16)' : '#E0F2FE' },
-                    }}
-                  >
-                    {copiedElectronCmd ? `Copied: ${tool.id} desktop` : `Electron App (${tool.id} desktop)`}
-                  </Button>
-                )}
-                {isLocal && tool.localPort && (
-                  <Button
-                    variant="outlined"
-                    onClick={() => handleCopy(`${tool.id}-tui --status`, setCopiedTuiCmd)}
-                    startIcon={copiedTuiCmd ? <CheckIcon sx={{ fontSize: 15 }} /> : <TerminalIcon sx={{ fontSize: 15 }} />}
-                    sx={{
-                      fontWeight: 800,
-                      fontFamily: mono,
-                      fontSize: '0.78rem',
-                      borderColor: gold.border,
-                      color: gold.accent,
-                      bgcolor: gold.wash,
-                      '&:hover': { borderColor: gold.accent },
-                    }}
-                  >
-                    {copiedTuiCmd ? `Copied: ${tool.id}-tui` : `Braille TUI (${tool.id}-tui)`}
-                  </Button>
-                )}
-                {tool.liveUrl && (
-                  <Button
-                    component="a"
-                    href={tool.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    variant="outlined"
-                    endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
-                    sx={{
-                      fontWeight: 800,
-                      fontFamily: mono,
-                      fontSize: '0.8rem',
-                      borderColor: gold.border,
-                      color: gold.accent,
-                      '&:hover': { borderColor: gold.accent, bgcolor: gold.wash },
-                    }}
-                  >
-                    Web Mirror ↗
-                  </Button>
-                )}
-                {tool.id === 'neuro-memory-daemon' && (
-                  <Button
-                    component={RouterLink}
-                    to="/memory"
-                    variant="outlined"
-                    startIcon={<MemoryIcon sx={{ fontSize: 16 }} />}
-                    sx={{
-                      fontWeight: 800,
-                      fontFamily: mono,
-                      fontSize: '0.8rem',
-                      borderColor: isDark ? 'rgba(192,132,252,0.45)' : '#E9D5FF',
-                      color: isDark ? '#C084FC' : '#7E22CE',
-                      bgcolor: isDark ? 'rgba(192,132,252,0.08)' : '#FAF5FF',
-                      '&:hover': { borderColor: '#C084FC', bgcolor: isDark ? 'rgba(192,132,252,0.18)' : '#F3E8FF' },
-                    }}
-                  >
-                    3D Cosmic Nebula
-                  </Button>
-                )}
-                {tool.id === 'zoth-swarm-multiplexer' && (
-                  <Button
-                    component="a"
-                    href="https://zoth-egregore.netlify.app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    variant="outlined"
-                    endIcon={<OpenInNewIcon sx={{ fontSize: 14 }} />}
-                    sx={{
-                      fontWeight: 800,
-                      fontFamily: mono,
-                      fontSize: '0.8rem',
-                      borderColor: isDark ? 'rgba(75,227,193,0.45)' : 'rgba(11,125,99,0.4)',
-                      color: isDark ? '#4BE3C1' : '#0B7D63',
-                      bgcolor: isDark ? 'rgba(75,227,193,0.08)' : 'rgba(11,125,99,0.06)',
-                      '&:hover': {
-                        borderColor: isDark ? '#4BE3C1' : '#0B7D63',
-                        bgcolor: isDark ? 'rgba(75,227,193,0.16)' : 'rgba(11,125,99,0.12)',
-                      },
-                    }}
-                  >
-                    Egregore AI Model (Beta)
-                  </Button>
-                )}
-                {tool.github && (
-                  <Button
-                    component="a"
-                    href={
-                      ['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(tool.id)
-                        ? 'https://github.com/NullAITech/zoth-studio-v2'
-                        : tool.github
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    variant="outlined"
-                    startIcon={<GitHubIcon />}
-                    endIcon={<OpenInNewIcon sx={{ fontSize: 14 }} />}
-                    sx={{
-                      fontWeight: 800,
-                      borderColor: gold.border,
-                      color: theme.palette.text.primary,
-                      '&:hover': { borderColor: gold.accent, bgcolor: gold.wash },
-                    }}
-                  >
-                    GitHub Repository
-                  </Button>
-                )}
-                {canRunClientSide ? (
-                  <Button
-                    variant="contained"
-                    onClick={() => {
-                      const el = document.getElementById('enclave-workstation-deck') || document.getElementById('client-workstation-deck');
-                      if (el) el.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                    startIcon={<SpeedIcon />}
-                    sx={{
-                      bgcolor: '#38BDF8',
-                      color: '#08080B',
-                      fontWeight: 800,
-                      boxShadow: '0 4px 16px rgba(56,189,248,0.3)',
-                      '&:hover': { bgcolor: '#7DD3FC' },
-                    }}
-                  >
-                    Try In-Browser ⚡
-                  </Button>
-                ) : EnclaveToolComponent && (isLocal || unlockedPreview) ? (
-                  <Button
-                    variant="contained"
-                    onClick={() => {
-                      const el = document.getElementById('enclave-workstation-deck');
-                      if (el) el.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                    startIcon={<TerminalIcon />}
-                    sx={{
-                      bgcolor: isLocal ? '#10B981' : gold.accent,
-                      color: '#08080B',
-                      fontWeight: 800,
-                      boxShadow: isLocal ? '0 4px 16px rgba(16,185,129,0.3)' : '0 4px 16px rgba(212,175,55,0.3)',
-                      '&:hover': { bgcolor: isLocal ? '#34D399' : (isDark ? '#F5E6AB' : '#9A7008') },
-                    }}
-                  >
-                    {isLocal ? 'Launch Enclave ⚡' : 'Inspect Simulator ⚡'}
-                  </Button>
-                ) : (
-                  <Button
-                    component={RouterLink}
-                    to="/zoth-os"
-                    variant="contained"
-                    startIcon={<LaunchIcon />}
-                    sx={{
-                      bgcolor: gold.accent,
-                      color: '#08080B',
-                      fontWeight: 800,
-                      boxShadow: '0 4px 16px rgba(212,175,55,0.3)',
-                      '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#9A7008' },
-                    }}
-                  >
-                    {isLocal ? 'Run in ZothOS' : 'Bare-Metal ZothOS'}
-                  </Button>
-                )}
-              </Stack>
-            </Box>
+          <HeroItem>
+            <Typography
+              sx={{
+                mt: 2.5,
+                mb: 1,
+                fontFamily: mono,
+                fontSize: '0.74rem',
+                fontWeight: 700,
+                letterSpacing: '0.16em',
+                textTransform: 'uppercase',
+                color: gold,
+              }}
+            >
+              LOCAL-FIRST REPOSITORY SPECIFICATION · {tool.id}
+            </Typography>
           </HeroItem>
 
-          {/* Quick Pull Terminal Command Strip */}
+          <HeroItem>
+            <Typography
+              component="h1"
+              sx={{
+                fontFamily: display,
+                fontSize: { xs: '2rem', sm: '2.65rem', md: '3.2rem' },
+                fontWeight: 400,
+                lineHeight: 1.1,
+                color: primaryText,
+                mb: 2,
+              }}
+            >
+              {tool.name}
+            </Typography>
+          </HeroItem>
+
+          <HeroItem>
+            <Typography
+              sx={{
+                fontSize: { xs: '1rem', md: '1.1rem' },
+                lineHeight: 1.7,
+                color: secondaryText,
+                maxWidth: 820,
+                mb: 3.5,
+              }}
+            >
+              {tool.description}
+            </Typography>
+          </HeroItem>
+
+          {/* Local Execution Notice + Git Clone Bar */}
           <HeroItem>
             <Box
               sx={{
-                mt: 3.5,
-                p: 1.8,
+                p: 2,
+                mb: 3,
                 borderRadius: 2,
-                bgcolor: isDark ? '#040406' : '#F8FAFC',
-                border: `1px solid ${theme.palette.divider}`,
+                bgcolor: '#0B0E14',
+                border: '1px solid rgba(245, 241, 230, 0.14)',
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                alignItems: { xs: 'stretch', sm: 'center' },
+                justifyContent: 'space-between',
+                gap: 1.5,
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, minWidth: 0, flex: 1 }}>
+                <TerminalIcon sx={{ color: '#D4AF37', fontSize: '1.15rem', flexShrink: 0 }} />
+                <Typography
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: { xs: '0.78rem', sm: '0.85rem' },
+                    color: '#F8FAFC',
+                    overflowWrap: 'anywhere',
+                  }}
+                >
+                  {cloneCommand}
+                </Typography>
+              </Box>
+              <Button
+                size="small"
+                onClick={() => copyText(cloneCommand, setCopiedClone)}
+                startIcon={copiedClone ? <CheckIcon /> : <ContentCopyIcon />}
+                sx={{
+                  fontFamily: mono,
+                  fontWeight: 700,
+                  fontSize: '0.75rem',
+                  textTransform: 'none',
+                  color: '#08080B',
+                  bgcolor: '#D4AF37',
+                  px: 1.75,
+                  '&:hover': { bgcolor: '#E5C158' },
+                }}
+              >
+                {copiedClone ? 'Copied' : 'Copy Clone'}
+              </Button>
+            </Box>
+          </HeroItem>
+
+          {/* Primary Repository & OS Action Buttons */}
+          <HeroItem>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} flexWrap="wrap" useFlexGap>
+              <Button
+                variant="contained"
+                href={repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                startIcon={<GitHubIcon />}
+                sx={{
+                  bgcolor: isDark ? '#D4AF37' : '#101828',
+                  color: isDark ? '#08080B' : '#FFFFFF',
+                  fontWeight: 700,
+                  px: 2.75,
+                  py: 1.15,
+                  textTransform: 'none',
+                  '&:hover': { bgcolor: isDark ? '#E5C158' : '#1E293B' },
+                }}
+              >
+                Get Tool Repository
+              </Button>
+
+              <Button
+                variant="outlined"
+                href={studioRepoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                startIcon={<GitHubIcon />}
+                sx={{
+                  borderColor: isDark ? 'rgba(245,241,230,0.28)' : '#101828',
+                  color: primaryText,
+                  fontWeight: 700,
+                  px: 2.5,
+                  py: 1.15,
+                  textTransform: 'none',
+                  '&:hover': {
+                    borderColor: gold,
+                    bgcolor: isDark ? 'rgba(212,175,55,0.08)' : 'rgba(16,24,40,0.04)',
+                  },
+                }}
+              >
+                Get Zoth Studio Repo
+              </Button>
+
+              <Button
+                component={RouterLink}
+                to="/zoth-os"
+                variant="outlined"
+                sx={{
+                  borderColor: borderCol,
+                  color: secondaryText,
+                  fontWeight: 700,
+                  px: 2.25,
+                  py: 1.15,
+                  textTransform: 'none',
+                  '&:hover': { borderColor: gold, color: primaryText },
+                }}
+              >
+                Run Pre-Installed on ZothOS →
+              </Button>
+
+              {dedicatedSite && (
+                <Button
+                  variant="outlined"
+                  href={dedicatedSite.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  endIcon={<OpenInNewIcon sx={{ fontSize: '0.95rem !important' }} />}
+                  sx={{
+                    borderColor: isDark ? 'rgba(52,211,153,0.4)' : '#059669',
+                    color: isDark ? '#34D399' : '#047857',
+                    fontWeight: 700,
+                    px: 2.25,
+                    py: 1.15,
+                    textTransform: 'none',
+                  }}
+                >
+                  {dedicatedSite.label}
+                </Button>
+              )}
+            </Stack>
+          </HeroItem>
+
+          {tool.id === 'zoth-swarm-multiplexer' && (
+            <Box
+              sx={{
+                mt: 3,
+                p: 2.25,
+                borderRadius: 2,
+                bgcolor: subtleBg,
+                border: `1px solid ${borderCol}`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                gap: 2,
                 flexWrap: 'wrap',
+                gap: 2,
               }}
             >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, minWidth: 0 }}>
-                <TerminalIcon sx={{ color: gold.accent, fontSize: 20 }} />
-                <Typography
-                  sx={{
-                    fontFamily: mono,
-                    fontSize: { xs: '0.78rem', sm: '0.88rem' },
-                    color: isDark ? '#E2E8F0' : '#1E293B',
-                    wordBreak: 'break-all',
-                  }}
-                >
-                  {tool.pull || `git clone ${['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(tool.id) ? 'https://github.com/NullAITech/zoth-studio-v2' : tool.github}.git`}
+              <Box sx={{ maxWidth: 660 }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 700, color: gold, mb: 0.4 }}>
+                  COMPANION MODEL · ZOTH EGREGORE (BETA)
+                </Typography>
+                <Typography variant="body2" sx={{ color: primaryText, fontWeight: 600 }}>
+                  DeepSeek-Flash fine-tuned agent model orchestrated via Nous Research Hermes &amp; local Zoth tools.
                 </Typography>
               </Box>
-              <Tooltip title={copiedCmd ? 'Copied command!' : 'Copy to clipboard'}>
+              <Stack direction="row" spacing={1}>
                 <Button
                   size="small"
                   variant="outlined"
-                  onClick={() => handleCopy(tool.pull || `git clone ${['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(tool.id) ? 'https://github.com/NullAITech/zoth-studio-v2' : tool.github}.git`, setCopiedCmd)}
-                  startIcon={copiedCmd ? <CheckIcon sx={{ fontSize: 16 }} /> : <ContentCopyIcon sx={{ fontSize: 16 }} />}
-                  sx={{
-                    fontFamily: mono,
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    borderColor: gold.border,
-                    color: gold.soft,
-                    whiteSpace: 'nowrap',
-                  }}
+                  href="https://github.com/1nc0gn30/zoth-egregore"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  startIcon={<GitHubIcon />}
+                  sx={{ textTransform: 'none', fontWeight: 700, color: primaryText, borderColor: borderCol }}
                 >
-                  {copiedCmd ? 'Copied' : 'Copy Command'}
+                  1nc0gn30/zoth-egregore
                 </Button>
-              </Tooltip>
-            </Box>
-          </HeroItem>
-        </Paper>
-      </HeroReveal>
-
-      {/* LOCAL-ONLY: Unlock Full Standalone Web App (Matching Electron Desktop App) — NEVER rendered on public web */}
-      {isLocal && tool.localPort && (
-        <Paper
-          elevation={0}
-          id="local-webapp-workstation-deck"
-          sx={{
-            p: { xs: 2, md: 3 },
-            mb: 4,
-            borderRadius: 3,
-            bgcolor: isDark ? '#070B0E' : '#F8FAFC',
-            border: '1.5px solid rgba(16, 185, 129, 0.45)',
-            boxShadow: isDark ? '0 16px 40px rgba(0,0,0,0.65), 0 0 24px -4px rgba(16,185,129,0.22)' : '0 4px 20px rgba(16,185,129,0.12)',
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <Box sx={{ p: 1, borderRadius: 2, bgcolor: isDark ? 'rgba(16,185,129,0.16)' : '#DCFCE7', color: '#10B981', display: 'flex' }}>
-                <LaunchIcon sx={{ fontSize: 22 }} />
-              </Box>
-              <Box>
-                <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
-                  {tool.name} — Unlocked Local Web App &amp; Electron Engine (:{tool.localPort})
-                </Typography>
-                <Typography variant="caption" sx={{ fontFamily: mono, color: '#34D399', fontWeight: 700 }}>
-                  LOCALHOST ONLY (127.0.0.1:{tool.localPort}) · 100% ELECTRON DESKTOP APP PARITY · NEVER EXPOSED ON PUBLIC WEB
-                </Typography>
-              </Box>
-            </Box>
-            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
-              <Button
-                size="small"
-                variant={localViewMode === 'webapp' ? 'contained' : 'outlined'}
-                onClick={() => setLocalViewMode('webapp')}
-                sx={{
-                  fontFamily: mono,
-                  fontWeight: 800,
-                  fontSize: '0.72rem',
-                  bgcolor: localViewMode === 'webapp' ? '#10B981' : 'transparent',
-                  color: localViewMode === 'webapp' ? '#04130D' : '#34D399',
-                  borderColor: 'rgba(16,185,129,0.45)',
-                  '&:hover': { bgcolor: localViewMode === 'webapp' ? '#34D399' : 'rgba(16,185,129,0.12)' },
-                }}
-              >
-                🟢 Live Web App (:{tool.localPort})
-              </Button>
-              {(EnclaveToolComponent || canRunClientSide) && (
-                <Button
-                  size="small"
-                  variant={localViewMode === 'enclave' ? 'contained' : 'outlined'}
-                  onClick={() => setLocalViewMode('enclave')}
-                  sx={{
-                    fontFamily: mono,
-                    fontWeight: 800,
-                    fontSize: '0.72rem',
-                    bgcolor: localViewMode === 'enclave' ? gold.accent : 'transparent',
-                    color: localViewMode === 'enclave' ? '#08080B' : gold.accent,
-                    borderColor: gold.border,
-                  }}
-                >
-                  ⚡ Studio God-Mode Deck
-                </Button>
-              )}
-              <Button
-                size="small"
-                component="a"
-                href={tool.localUrl || `http://127.0.0.1:${tool.localPort}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="outlined"
-                endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
-                sx={{
-                  fontFamily: mono,
-                  fontWeight: 800,
-                  fontSize: '0.72rem',
-                  borderColor: 'rgba(56,189,248,0.45)',
-                  color: '#38BDF8',
-                }}
-              >
-                Popout Full Window
-              </Button>
-            </Stack>
-          </Box>
-
-          {localViewMode === 'webapp' && (
-            <Box
-              sx={{
-                width: '100%',
-                height: { xs: 560, md: 760 },
-                borderRadius: 2,
-                overflow: 'hidden',
-                border: '1px solid rgba(16,185,129,0.35)',
-                bgcolor: '#08080B',
-              }}
-            >
-              {localWebAppReady ? (
-                <Box
-                  key={iframeKey}
-                  component="iframe"
-                  src={tool.localUrl || `http://127.0.0.1:${tool.localPort}`}
-                  title={`${tool.name} Local Sovereign Web Application (:${tool.localPort})`}
-                  sx={{
-                    width: '100%',
-                    height: '100%',
-                    border: 0,
-                    display: 'block',
-                    bgcolor: '#08080B',
-                  }}
-                />
-              ) : (
-                <Box sx={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Typography sx={{ fontFamily: mono, color: '#34D399', fontSize: '0.84rem', fontWeight: 700 }}>
-                    ⚡ Waking Sovereign Daemon on 127.0.0.1:{tool.localPort} (LRU Memory-Safe Pool)...
-                  </Typography>
-                </Box>
-              )}
+              </Stack>
             </Box>
           )}
         </Paper>
-      )}
+      </HeroReveal>
 
-      {/* Interactive In-Browser Workstation — Placed ABOVE THE FOLD immediately after the Hero Header */}
-      {canRunClientSide && tool.id !== 'webmcp-protocol-inspector' && !EnclaveToolComponent && (!isLocal || !tool.localPort || localViewMode === 'enclave') && (
-        <Box id="client-workstation-deck" sx={{ mb: 4 }}>
-          <WebGPUToolWorkstation tool={tool} />
-          <SovereignToolOutputWorkbench tool={tool} />
-        </Box>
-      )}
-
-      {/* Sovereign Enclave Microtool Workstation (Mounted for all tools with a dedicated 60fps God-Mode component) */}
-      {EnclaveToolComponent && (!isLocal || !tool.localPort || localViewMode === 'enclave') && (
-        <Paper
-          elevation={0}
-          id="enclave-workstation-deck"
-          sx={{
-            p: { xs: 2.5, md: 3.5 },
-            mb: 5,
-            borderRadius: 3,
-            bgcolor: isDark ? '#0A0A10' : '#FFFFFF',
-            border: `1.5px solid ${isLocal ? 'rgba(34,197,94,0.35)' : gold.border}`,
-            boxShadow: isDark
-              ? '0 12px 32px rgba(0,0,0,0.6), 0 0 20px -4px rgba(212,175,55,0.2)'
-              : '0 4px 20px rgba(212,175,55,0.12)',
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <Box sx={{ p: 1, borderRadius: 2, bgcolor: isDark ? 'rgba(212,175,55,0.15)' : '#FEF9E7', color: gold.accent, display: 'flex' }}>
-                <TerminalIcon sx={{ fontSize: 24 }} />
-              </Box>
-              <Box>
-                <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary, lineHeight: 1.2 }}>
-                  Interactive Enclave Workstation
-                </Typography>
-                <Typography variant="caption" sx={{ fontFamily: mono, color: isLocal || tool.executionType !== 'local_cli' ? '#34D399' : gold.soft, fontWeight: 700 }}>
-                  {isLocal
-                    ? 'LOCAL SOVEREIGN ENCLAVE · BARE-METAL HARNESS ACTIVE'
-                    : tool.executionType !== 'local_cli'
-                    ? '100% CLIENT-SIDE ENGINE · ZERO-EGRESS IN-BROWSER EXECUTION'
-                    : 'INTERACTIVE IN-BROWSER WORKBENCH · CLI & MCP PARITY'}
-                </Typography>
-              </Box>
-            </Box>
-            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
-              <Chip
-                icon={<CheckCircleIcon sx={{ fontSize: '0.85rem !important', color: isLocal || tool.executionType !== 'local_cli' ? '#10B981' : gold.accent }} />}
-                label={
-                  isLocal
-                    ? 'LIVE LOCAL EXECUTION'
-                    : tool.executionType !== 'local_cli'
-                    ? 'LIVE IN-BROWSER ENGINE'
-                    : 'INTERACTIVE WORKBENCH'
-                }
-                size="small"
-                sx={{
-                  fontFamily: mono,
-                  fontWeight: 800,
-                  fontSize: '0.68rem',
-                  bgcolor: isLocal || tool.executionType !== 'local_cli' ? (isDark ? 'rgba(16,185,129,0.15)' : '#ECFDF5') : gold.wash,
-                  color: isLocal || tool.executionType !== 'local_cli' ? (isDark ? '#34D399' : '#047857') : gold.soft,
-                  border: `1px solid ${isLocal || tool.executionType !== 'local_cli' ? 'rgba(16,185,129,0.3)' : gold.border}`,
-                }}
-              />
-            </Stack>
-          </Box>
-
-          {/* Uncommon Web (webdev.teknium.io) × Zoth Studio Sub-Pixel Braille & Vector Export Bar */}
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: 1.5,
-              px: 2,
-              py: 1.1,
-              mb: 3,
-              borderRadius: 2,
-              bgcolor: isDark ? 'rgba(212,175,55,0.05)' : '#FAF7F0',
-              border: `1px solid ${gold.border}`,
-              backgroundImage: isDark
-                ? 'radial-gradient(rgba(212, 175, 55, 0.12) 1px, transparent 0)'
-                : 'radial-gradient(rgba(184, 134, 11, 0.10) 1px, transparent 0)',
-              backgroundSize: '8px 8px',
-            }}
-          >
-            <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
-              <Chip
-                label={`⣿ U+2800 ${brailleSignature}`}
-                size="small"
-                sx={{
-                  fontFamily: mono,
-                  fontWeight: 800,
-                  fontSize: '0.7rem',
-                  bgcolor: isDark ? '#08080C' : '#FFFFFF',
-                  color: gold.accent,
-                  border: `1px solid ${gold.border}`,
-                }}
-              />
-              <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: 'text.secondary', fontWeight: 700 }}>
-                ░▒▓█ BAYER 8×8 DITHER · REALITY: {(reality?.name || 'AURUM').toUpperCase()} ({realityParams?.density || 50}% DENSITY)
-              </Typography>
-            </Stack>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Button
-                size="small"
-                variant="outlined"
-                startIcon={<ContentCopyIcon sx={{ fontSize: 13 }} />}
-                onClick={handleCopyBrailleSpec}
-                sx={{
-                  fontFamily: mono,
-                  fontSize: '0.68rem',
-                  py: 0.25,
-                  textTransform: 'none',
-                  color: theme.palette.text.primary,
-                  borderColor: gold.border,
-                }}
-              >
-                {copiedTuiSpec ? 'Copied TUI Spec' : 'Copy TUI Braille Spec'}
-              </Button>
-              <Button
-                size="small"
-                variant="outlined"
-                startIcon={<CodeIcon sx={{ fontSize: 14 }} />}
-                onClick={handleExportUncommonSvg}
-                sx={{
-                  fontFamily: mono,
-                  fontSize: '0.68rem',
-                  py: 0.25,
-                  textTransform: 'none',
-                  color: gold.accent,
-                  borderColor: gold.border,
-                }}
-              >
-                Export Vector .SVG Card
-              </Button>
-            </Stack>
-          </Box>
-          <EnclaveToolComponent tool={tool} />
-          <SovereignToolOutputWorkbench tool={tool} />
-        </Paper>
-      )}
-
-      {/* Interactive 15s Code-First Motion Edit & Kinetic Anchor Stage (Moved below the Interactive Workstation so the tool is Above-the-Fold) */}
-      <Box sx={{ mb: 5 }}>
-        <ToolMotionShowcase
-          tool={tool}
-          onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
-        />
-      </Box>
-
-      {/* SECTION 1: Why Use This Tool & Problem Solved */}
-      <Box sx={{ mb: 6 }}>
-        <Typography className="section-kicker">Architectural Rationale & Sovereign Philosophy</Typography>
-        <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em', mb: 3, color: theme.palette.text.primary }}>
-          Why Sovereign Developers & AI Agents Need {tool.name}
-        </Typography>
-
-        <Grid container spacing={3}>
-          <Grid xs={12} md={6}>
+      {/* Architecture & Capabilities 2-Column Grid */}
+      <RevealOnScroll preset="fadeUp">
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          <Grid xs={12} md={6} sx={{ display: 'flex' }}>
             <Paper
+              elevation={0}
               sx={{
-                p: 3.5,
-                height: '100%',
+                p: { xs: 3, md: 4 },
+                width: '100%',
                 borderRadius: 2.5,
-                bgcolor: isDark ? '#08080B' : '#FFFFFF',
-                border: `1px solid ${theme.palette.divider}`,
-                display: 'flex',
-                flexDirection: 'column',
+                bgcolor: cardBg,
+                border: `1px solid ${borderCol}`,
               }}
             >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-                <SecurityIcon sx={{ color: gold.accent, fontSize: 24 }} />
-                <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                  The Sovereign Purpose (Why to Use It)
-                </Typography>
-              </Box>
-              <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7, flexGrow: 1 }}>
-                {docs.whyUse}
-              </Typography>
-            </Paper>
-          </Grid>
-
-          <Grid xs={12} md={6}>
-            <Paper
-              sx={{
-                p: 3.5,
-                height: '100%',
-                borderRadius: 2.5,
-                bgcolor: isDark ? '#08080B' : '#FFFFFF',
-                border: `1px solid ${theme.palette.divider}`,
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
-                <AutoFixHighIcon sx={{ color: 'var(--zs-green)', fontSize: 24 }} />
-                <Typography variant="h6" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                  Eliminated SaaS Pain Points & Telemetry Risks
-                </Typography>
-              </Box>
-              <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7, flexGrow: 1 }}>
-                {docs.problemSolved}
-              </Typography>
-            </Paper>
-          </Grid>
-        </Grid>
-
-        {/* Core Capabilities List */}
-        <Box sx={{ mt: 3 }}>
-          <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: gold.accent, fontFamily: mono, letterSpacing: '0.04em' }}>
-            VERIFIED INVARIANT CAPABILITIES:
-          </Typography>
-          <Grid container spacing={1.5}>
-            {docs.features.map((feature, idx) => (
-              <Grid xs={12} sm={6} md={4} key={idx}>
-                <Box
-                  sx={{
-                    p: 1.8,
-                    borderRadius: 2,
-                    bgcolor: isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC',
-                    border: `1px solid ${theme.palette.divider}`,
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: 1.5,
-                  }}
-                >
-                  <CheckCircleIcon sx={{ color: gold.accent, fontSize: 18, mt: 0.2, flexShrink: 0 }} />
-                  <Typography variant="body2" sx={{ fontWeight: 600, color: theme.palette.text.primary, lineHeight: 1.4 }}>
-                    {feature}
-                  </Typography>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-      </Box>
-
-      {/* SECTION 2: AI Agent & Local Model Integration Protocol */}
-      <Box sx={{ mb: 6 }}>
-        <Typography className="section-kicker">Machine-Readable Interface & Automation</Typography>
-        <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em', mb: 1.5, color: theme.palette.text.primary }}>
-          Autonomous AI Agent & Local LLM Integration Protocol
-        </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mb: 3, maxWidth: 840, lineHeight: 1.65 }}>
-          This tool is engineered for seamless execution by autonomous agents (Hermes Agent, Claude Code, OpenCode, Codex, Ollama). It exports standard Model Context Protocol (MCP) tool endpoints and deterministic CLI arguments.
-        </Typography>
-
-        <Grid container spacing={3}>
-          {/* MCP Server Integration Config */}
-          <Grid xs={12} md={6}>
-            <Paper
-              sx={{
-                p: 3,
-                height: '100%',
-                borderRadius: 2.5,
-                bgcolor: isDark ? '#08080B' : '#FFFFFF',
-                border: `1px solid ${theme.palette.divider}`,
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <CodeIcon sx={{ color: gold.accent, fontSize: 22 }} />
-                  <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                    Model Context Protocol (MCP) Config
-                  </Typography>
-                </Box>
-                <Tooltip title={copiedMcp ? 'Copied MCP config!' : 'Copy MCP JSON'}>
-                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy(mcpConfigSnippet, setCopiedMcp)} sx={{ color: gold.accent }}>
-                    {copiedMcp ? <CheckIcon sx={{ fontSize: 16 }} /> : <ContentCopyIcon sx={{ fontSize: 16 }} />}
-                  </IconButton>
-                </Tooltip>
-              </Box>
-              <Typography variant="caption" sx={{ color: 'text.secondary', mb: 1.5, display: 'block' }}>
-                Paste into your <code>claude_desktop_config.json</code>, Cursor, or Cline MCP settings:
-              </Typography>
-              <Box
-                component="pre"
+              <Typography
                 sx={{
-                  p: 2,
-                  m: 0,
-                  borderRadius: 2,
-                  bgcolor: isDark ? '#040406' : '#F1F5F9',
-                  border: `1px solid ${theme.palette.divider}`,
-                  fontFamily: mono,
-                  fontSize: '0.78rem',
-                  color: isDark ? '#A7F3D0' : '#065F46',
-                  overflowX: 'auto',
-                  flexGrow: 1,
-                }}
-              >
-                {mcpConfigSnippet}
-              </Box>
-            </Paper>
-          </Grid>
-
-          {/* CLI Invocation & Contracts */}
-          <Grid xs={12} md={6}>
-            <Paper
-              sx={{
-                p: 3,
-                height: '100%',
-                borderRadius: 2.5,
-                bgcolor: isDark ? '#08080B' : '#FFFFFF',
-                border: `1px solid ${theme.palette.divider}`,
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-                <TerminalIcon sx={{ color: gold.accent, fontSize: 22 }} />
-                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                  Autonomous Agent CLI Execution Example
-                </Typography>
-              </Box>
-              <Typography variant="caption" sx={{ color: 'text.secondary', mb: 1.5, display: 'block' }}>
-                How local models (via Ollama/vLLM) and cloud models trigger this tool deterministically:
-              </Typography>
-              <Box
-                component="pre"
-                sx={{
-                  p: 2,
-                  m: 0,
-                  borderRadius: 2,
-                  bgcolor: isDark ? '#040406' : '#F1F5F9',
-                  border: `1px solid ${theme.palette.divider}`,
-                  fontFamily: mono,
-                  fontSize: '0.8rem',
-                  color: gold.accent,
-                  overflowX: 'auto',
-                  mb: 2,
-                }}
-              >
-                $ {docs.aiAgentProtocol?.cliExample || `zoth run ${tool.id} --help`}
-              </Box>
-
-              <Typography variant="subtitle2" sx={{ fontWeight: 800, fontSize: '0.78rem', color: theme.palette.text.primary, mb: 0.5, fontFamily: mono }}>
-                JSON-RPC TOOL ENDPOINT:
-              </Typography>
-              <Typography variant="body2" sx={{ fontFamily: mono, color: gold.soft, mb: 1.5, fontSize: '0.82rem' }}>
-                <code>{docs.aiAgentProtocol?.mcpTool || `${tool.id.replace(/-/g, '_')}_execute`}</code> — {docs.aiAgentProtocol?.description || 'Execute tool'}
-              </Typography>
-
-              <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 0.5, fontWeight: 700 }}>
-                INPUT / OUTPUT CONTRACTS:
-              </Typography>
-              <Box
-                component="pre"
-                sx={{
-                  p: 1.5,
-                  m: 0,
-                  borderRadius: 1.5,
-                  bgcolor: isDark ? '#040406' : '#F1F5F9',
-                  border: `1px solid ${theme.palette.divider}`,
                   fontFamily: mono,
                   fontSize: '0.72rem',
-                  color: isDark ? '#94A3B8' : '#475467',
-                  overflowX: 'auto',
+                  fontWeight: 700,
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: gold,
+                  mb: 1.5,
                 }}
               >
-                {JSON.stringify({ inputSchema: docs.aiAgentProtocol?.inputSchema, outputSchema: docs.aiAgentProtocol?.outputSchema }, null, 2)}
-              </Box>
+                01 · WHY LOCAL-FIRST
+              </Typography>
+              <Typography variant="h6" sx={{ fontWeight: 800, color: primaryText, mb: 1.25 }}>
+                Purpose &amp; Operational Scope
+              </Typography>
+              <Typography variant="body2" sx={{ color: secondaryText, lineHeight: 1.7, mb: 3 }}>
+                {docs.whyUse}
+              </Typography>
+
+              <Divider sx={{ my: 2.5, borderColor: borderCol }} />
+
+              <Typography variant="subtitle2" sx={{ fontWeight: 800, color: primaryText, mb: 0.75 }}>
+                Problem Solved
+              </Typography>
+              <Typography variant="body2" sx={{ color: secondaryText, lineHeight: 1.7, mb: 3 }}>
+                {docs.problemSolved}
+              </Typography>
+
+              <Typography variant="subtitle2" sx={{ fontWeight: 800, color: primaryText, mb: 0.75 }}>
+                Local Runtime Architecture
+              </Typography>
+              <Typography variant="body2" sx={{ color: secondaryText, lineHeight: 1.7 }}>
+                {docs.architecture}
+              </Typography>
+            </Paper>
+          </Grid>
+
+          <Grid xs={12} md={6} sx={{ display: 'flex' }}>
+            <Paper
+              elevation={0}
+              sx={{
+                p: { xs: 3, md: 4 },
+                width: '100%',
+                borderRadius: 2.5,
+                bgcolor: cardBg,
+                border: `1px solid ${borderCol}`,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: gold,
+                  mb: 1.5,
+                }}
+              >
+                02 · CAPABILITY SPECIFICATION
+              </Typography>
+              <Typography variant="h6" sx={{ fontWeight: 800, color: primaryText, mb: 2 }}>
+                What {tool.name} Does Locally
+              </Typography>
+
+              <Stack spacing={1.75}>
+                {(docs.features || []).map((feat, idx) => (
+                  <Box
+                    key={idx}
+                    sx={{
+                      p: 1.75,
+                      borderRadius: 2,
+                      bgcolor: subtleBg,
+                      border: `1px solid ${borderCol}`,
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: 1.5,
+                    }}
+                  >
+                    <CheckCircleOutlineIcon
+                      sx={{
+                        fontSize: '1.1rem',
+                        color: isDark ? '#34D399' : '#047857',
+                        mt: 0.25,
+                        flexShrink: 0,
+                      }}
+                    />
+                    <Typography variant="body2" sx={{ color: primaryText, lineHeight: 1.6, fontWeight: 500 }}>
+                      {feat}
+                    </Typography>
+                  </Box>
+                ))}
+              </Stack>
             </Paper>
           </Grid>
         </Grid>
-      </Box>
+      </RevealOnScroll>
 
-      {/* SECTION 3: Technical Architecture & Verification */}
-      <Box sx={{ mb: 6 }}>
-        <Typography className="section-kicker">Runtime Architecture & Local Verification</Typography>
-        <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em', mb: 3, color: theme.palette.text.primary }}>
-          Technical Specifications & Local Quickstart
-        </Typography>
-
+      {/* Local CLI Quickstart & MCP Agent Contract */}
+      <RevealOnScroll preset="fadeUp">
         <Paper
+          elevation={0}
           sx={{
-            p: 3.5,
+            p: { xs: 3, md: 4 },
             borderRadius: 2.5,
-            bgcolor: isDark ? '#08080B' : '#FFFFFF',
-            border: `1px solid ${theme.palette.divider}`,
+            bgcolor: cardBg,
+            border: `1px solid ${borderCol}`,
           }}
         >
+          <Typography
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: gold,
+              mb: 1,
+            }}
+          >
+            03 · LOCAL INSTALLATION &amp; AGENT CONTRACT
+          </Typography>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: primaryText, mb: 0.75 }}>
+            CLI Quickstart &amp; MCP Interface
+          </Typography>
+          <Typography variant="body2" sx={{ color: secondaryText, mb: 3, maxWidth: 760 }}>
+            Designed to run directly on Linux, macOS, or ZothOS terminals without browser sandbox limits. Autonomous agents invoke it via standardized MCP or JSON CLI flags.
+          </Typography>
+
           <Grid container spacing={3}>
             <Grid xs={12} md={6}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-                <MemoryIcon sx={{ color: gold.accent, fontSize: 22 }} />
-                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                  Runtime & Execution Architecture
-                </Typography>
-              </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7, mb: 2 }}>
-                {docs.architecture}
-              </Typography>
-              <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC', border: `1px solid ${theme.palette.divider}` }}>
-                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', fontWeight: 700 }}>SOVEREIGN NETWORK POLICY:</Typography>
-                <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, color: 'var(--zs-green)' }}>
-                  100% Zero-Egress // No Outbound Cloud Requests
-                </Typography>
-              </Box>
-            </Grid>
-
-            <Grid xs={12} md={6}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-                <TerminalIcon sx={{ color: gold.accent, fontSize: 22 }} />
-                <Typography variant="subtitle1" sx={{ fontWeight: 800, color: theme.palette.text.primary }}>
-                  Local Verification & Test Suite
-                </Typography>
-              </Box>
-              <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1 }}>
-                Execute these commands in your local terminal to clone, install, and run automated unit tests:
+              <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700, color: primaryText, mb: 1 }}>
+                Terminal Quickstart
               </Typography>
               <Box
                 component="pre"
                 sx={{
-                  p: 2,
                   m: 0,
+                  p: 2.25,
                   borderRadius: 2,
-                  bgcolor: isDark ? '#040406' : '#F1F5F9',
-                  border: `1px solid ${theme.palette.divider}`,
+                  bgcolor: '#0B0E14',
+                  border: '1px solid rgba(245,241,230,0.12)',
+                  color: '#E2E8F0',
                   fontFamily: mono,
                   fontSize: '0.78rem',
-                  color: isDark ? '#E2E8F0' : '#1E293B',
-                  lineHeight: 1.7,
+                  lineHeight: 1.75,
                   overflowX: 'auto',
                 }}
               >
-                {docs.quickstart.map((cmd) => `$ ${cmd}`).join('\n')}
+                {(docs.quickstart || [cloneCommand]).map((line, i) => (
+                  <Box key={i} component="div">
+                    {line.startsWith('#') ? (
+                      <Box component="span" sx={{ color: '#94A3B8' }}>{line}</Box>
+                    ) : (
+                      <>
+                        <Box component="span" sx={{ color: '#D4AF37', userSelect: 'none' }}>$ </Box>
+                        <Box component="span">{line}</Box>
+                      </>
+                    )}
+                  </Box>
+                ))}
+              </Box>
+            </Grid>
+
+            <Grid xs={12} md={6}>
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700, color: primaryText }}>
+                  MCP Tool: {docs.aiAgentProtocol?.mcpTool || `${tool.id.replace(/-/g, '_')}_execute`}
+                </Typography>
+                {docs.aiAgentProtocol?.cliExample && (
+                  <IconButton
+                    size="small"
+                    aria-label="Copy CLI example"
+                    onClick={() => copyText(docs.aiAgentProtocol.cliExample, setCopiedMcp)}
+                    sx={{ color: secondaryText }}
+                  >
+                    {copiedMcp ? <CheckIcon sx={{ fontSize: '0.95rem', color: '#10B981' }} /> : <ContentCopyIcon sx={{ fontSize: '0.95rem' }} />}
+                  </IconButton>
+                )}
+              </Box>
+              <Box
+                component="pre"
+                sx={{
+                  m: 0,
+                  p: 2.25,
+                  borderRadius: 2,
+                  bgcolor: '#0B0E14',
+                  border: '1px solid rgba(245,241,230,0.12)',
+                  color: '#6EE7B7',
+                  fontFamily: mono,
+                  fontSize: '0.76rem',
+                  lineHeight: 1.65,
+                  overflowX: 'auto',
+                }}
+              >
+                {JSON.stringify(
+                  {
+                    mcpTool: docs.aiAgentProtocol?.mcpTool,
+                    cli: docs.aiAgentProtocol?.cliExample,
+                    inputSchema: docs.aiAgentProtocol?.inputSchema,
+                  },
+                  null,
+                  2,
+                )}
               </Box>
             </Grid>
           </Grid>
         </Paper>
-      </Box>
+      </RevealOnScroll>
 
-      {/* SECTION 3.5: Interactive Enclave Sandbox (WebMCP Tool) */}
-      {tool.id === 'webmcp-protocol-inspector' && (
-        <Box sx={{ mb: 6 }}>
-          <Typography className="section-kicker">Interactive Sovereign Enclave</Typography>
-          <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em', mb: 3, color: theme.palette.text.primary }}>
-            Live WebMCP Inspector & Zoth OS Video Player
-          </Typography>
-          <WebMCPConsole />
-        </Box>
-      )}
-
-      {/* SECTION 4: Sovereign Funnel */}
-      <Box sx={{ mt: 6 }}>
-        <SovereignFunnel
-          title={`Deploy ${tool.name} in Your Sovereign Workspace`}
-          subtitle={`Choose between pulling this standalone micro-tool repository, running it natively inside Zoth Studio, or booting ZothOS where all ${microTools.length} sovereign tools are pre-configured.`}
-          toolTitle={tool.name}
-          toolDescription={tool.description}
-          toolRepo={['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(tool.id) ? 'https://github.com/NullAITech/zoth-studio-v2' : tool.github}
-          toolCommand={tool.pull || `git clone ${['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(tool.id) ? 'https://github.com/NullAITech/zoth-studio-v2' : tool.github}.git`}
-        />
-      </Box>
-      </Box>
+      {/* Unified Repository Funnel */}
+      <SovereignFunnel
+        toolTitle={`Option 1: ${tool.name}`}
+        toolTag="STANDALONE REPO"
+        toolDescription={`Clone ${tool.repo || tool.id} directly to run its local CLI binary, daemon, and test suite on your machine.`}
+        toolRepo={repoUrl}
+        toolCommand={cloneCommand}
+      />
     </Container>
   );
 }

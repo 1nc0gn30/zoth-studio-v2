@@ -1,23 +1,28 @@
 import React, { useState, useMemo } from 'react';
 import {
-  Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, CardActions,
-  Chip, Button, TextField, InputAdornment, Paper, ToggleButtonGroup, ToggleButton,
-  IconButton, Tooltip, Stack, Divider
+  Box,
+  Container,
+  Typography,
+  Unstable_Grid2 as Grid,
+  Card,
+  CardContent,
+  CardActions,
+  Chip,
+  Button,
+  TextField,
+  InputAdornment,
+  Paper,
+  ToggleButtonGroup,
+  ToggleButton,
+  IconButton,
+  Stack,
+  Divider,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
-import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
-
-// Icons
 import SearchIcon from '@mui/icons-material/Search';
-import LaunchIcon from '@mui/icons-material/Launch';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import GridViewIcon from '@mui/icons-material/GridView';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
-import TerminalIcon from '@mui/icons-material/Terminal';
-import CloudOffIcon from '@mui/icons-material/CloudOff';
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import ClearIcon from '@mui/icons-material/Clear';
 import CodeIcon from '@mui/icons-material/Code';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -25,435 +30,244 @@ import SecurityIcon from '@mui/icons-material/Security';
 import LayersIcon from '@mui/icons-material/Layers';
 import PaletteIcon from '@mui/icons-material/Palette';
 import HubIcon from '@mui/icons-material/Hub';
-import ComputerIcon from '@mui/icons-material/Computer';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import HandymanIcon from '@mui/icons-material/Handyman';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 import { workstations } from '../data/workstations';
-import { useStudioStatus } from '../studio/useStudioStatus';
 import SovereignFunnel from '../components/SovereignFunnel';
-import { useReality } from '../context/RealityContext';
+import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
+const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
 
-const ORDERED_BANDS = [
-  'Build',
-  'Observe',
-  'Security',
-  'Spatial',
-  'Studio',
-  'Swarm & Consensus'
-];
+const ORDERED_BANDS = ['Build', 'Observe', 'Security', 'Spatial', 'Studio', 'Swarm & Consensus'];
 
 const BAND_CONFIG = {
-  'Build': {
+  Build: {
     color: '#F59E0B',
-    lightColor: '#B45309',
-    wash: 'rgba(245, 158, 11, 0.14)',
-    lightWash: '#FFFBEB',
-    border: 'rgba(245, 158, 11, 0.35)',
-    lightBorder: '#FCD34D',
+    lightColor: '#92400E',
     icon: CodeIcon,
-    description: 'Autonomous compilation pipelines, code foundries & WebContainer sandboxes',
+    description: 'Local compilation pipelines, code synthesis engines & AST verification modules',
     svgPos: { x: 460, y: 75 },
   },
-  'Observe': {
+  Observe: {
     color: '#38BDF8',
     lightColor: '#0369A1',
-    wash: 'rgba(56, 189, 248, 0.14)',
-    lightWash: '#F0F9FF',
-    border: 'rgba(56, 189, 248, 0.35)',
-    lightBorder: '#BAE6FD',
     icon: VisibilityIcon,
-    description: 'Telemetry arrays, horizon chronicles & mathematical theory academy',
+    description: 'Telemetry arrays, audit flight recorders & mathematical proof specifications',
     svgPos: { x: 740, y: 145 },
   },
   'Swarm & Consensus': {
     color: '#34D399',
-    lightColor: '#059669',
-    wash: 'rgba(52, 211, 153, 0.14)',
-    lightWash: '#ECFDF5',
-    border: 'rgba(52, 211, 153, 0.35)',
-    lightBorder: '#A7F3D0',
+    lightColor: '#047857',
     icon: HubIcon,
-    description: '3-agent Byzantine AST synthesis, signal bridges & swarm radars',
+    description: 'Byzantine quorum engines, IPC bridges & Pantheon multi-agent dispatchers',
     svgPos: { x: 740, y: 335 },
   },
-  'Security': {
+  Security: {
     color: '#F87171',
-    lightColor: '#DC2626',
-    wash: 'rgba(248, 113, 113, 0.14)',
-    lightWash: '#FEF2F2',
-    border: 'rgba(248, 113, 113, 0.35)',
-    lightBorder: '#FECACA',
+    lightColor: '#B91C1C',
     icon: SecurityIcon,
-    description: 'Shannon entropy monitors, threat simulation & offline-capable web3 bridges',
+    description: 'Entropy monitors, prompt firewalls, egress sentinels & red-team audit suites',
     svgPos: { x: 460, y: 405 },
   },
-  'Spatial': {
+  Spatial: {
     color: '#C084FC',
-    lightColor: '#7E22CE',
-    wash: 'rgba(192, 132, 252, 0.14)',
-    lightWash: '#FAF5FF',
-    border: 'rgba(192, 132, 252, 0.35)',
-    lightBorder: '#E9D5FF',
+    lightColor: '#6D28D9',
     icon: LayersIcon,
-    description: 'Nexus 3D Omniverse viewports, spatial engines & visual linkages',
+    description: '3D scene geometry generators, shader compilers & kinematics pipelines',
     svgPos: { x: 180, y: 335 },
   },
-  'Studio': {
-    color: '#EC4899',
-    lightColor: '#BE185D',
-    wash: 'rgba(236, 72, 153, 0.14)',
-    lightWash: '#FDF2F8',
-    border: 'rgba(236, 72, 153, 0.35)',
-    lightBorder: '#FBCFE8',
+  Studio: {
+    color: '#F472B6',
+    lightColor: '#9D174D',
     icon: PaletteIcon,
-    description: 'Sovereign netrunner memory hubs, design tokens & alchemical seals',
+    description: 'Synaptic memory hubs, knowledge graphs & local workspace orchestration',
     svgPos: { x: 180, y: 145 },
   },
 };
 
-function getBandConfig(bandName, isDark) {
-  const base = BAND_CONFIG[bandName];
-  if (!base) return null;
-  return {
-    ...base,
-    color: isDark ? base.color : base.lightColor,
-    wash: isDark ? base.wash : base.lightWash,
-    border: isDark ? base.border : base.lightBorder,
-  };
-}
-
-function WorkstationCard({ item, isDark, gold }) {
+function WorkstationCard({ item, isDark, gold, primaryText, secondaryText, cardBg, codeBg, borderCol }) {
   const [copied, setCopied] = useState(false);
-  const bandCfg = getBandConfig(item.band, isDark) || {
-    color: gold.accent,
-    wash: gold.wash,
-    border: gold.border,
-    icon: ComputerIcon
-  };
-  const BandIconComponent = bandCfg.icon;
+  const bandMeta = BAND_CONFIG[item.band] || BAND_CONFIG.Build;
+  const bandColor = isDark ? bandMeta.color : bandMeta.lightColor;
+  const typeLabel =
+    item.type === 'integrated_tool'
+      ? 'STANDALONE REPO'
+      : item.type === 'enclave_daemon'
+        ? 'LOOPBACK DAEMON'
+        : 'STUDIO MODULE';
 
-  const isTool = item.type === 'integrated_tool';
-  const isEnclave = item.type === 'enclave_daemon';
-  const isCockpit = item.type === 'cockpit' || (!isTool && !isEnclave);
+  const targetHref = item.alsoInApp || `/workstations/${item.id}`;
+  const cloneCmd = item.pullCommand || 'git clone https://github.com/NullAITech/zoth-studio-v2.git';
 
-  const handleCopyPull = (e) => {
+  const handleCopy = (e) => {
     e.stopPropagation();
-    if (!item.pullCommand) return;
-    try {
-      navigator.clipboard.writeText(item.pullCommand);
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(cloneCmd);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error(err);
     }
   };
 
   return (
     <Card
+      elevation={0}
       sx={{
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        borderRadius: 3,
-        border: '1px solid',
-        borderColor: isDark ? '#26262F' : '#EAECF0',
-        bgcolor: isDark ? '#0B0B12' : '#FFFFFF',
-        boxShadow: isDark ? 'none' : '0 1px 3px rgba(16, 24, 40, 0.05)',
-        transition: 'transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease',
+        borderRadius: 2.5,
+        border: `1px solid ${borderCol}`,
+        bgcolor: cardBg,
+        transition: 'transform 0.2s ease, border-color 0.2s ease',
         '&:hover': {
-          borderColor: isTool ? '#38BDF8' : isEnclave ? '#A78BFA' : gold.accent,
-          transform: 'translateY(-3px)',
-          boxShadow: isDark
-            ? '0 12px 28px -6px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(212, 175, 55, 0.25)'
-            : '0 12px 24px -4px rgba(16, 24, 40, 0.08), 0 0 0 1px rgba(184, 134, 11, 0.25)',
+          borderColor: gold,
+          transform: 'translateY(-2px)',
         },
       }}
     >
-      <CardContent sx={{ flexGrow: 1, p: 2.5, pb: 1.5 }}>
-        {/* Top Badges: Classification Type & Architectural Band */}
+      <CardContent sx={{ flexGrow: 1, p: 2.5, pb: 1.75 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, mb: 1.5, flexWrap: 'wrap' }}>
-          {isTool ? (
-            <Chip
-              size="small"
-              icon={<HandymanIcon sx={{ fontSize: '0.85rem !important', color: `${isDark ? '#38BDF8' : '#0369A1'} !important` }} />}
-              label="STANDALONE MICRO-TOOL"
-              sx={{
-                height: 24,
-                fontSize: '0.68rem',
-                fontWeight: 800,
-                fontFamily: mono,
-                bgcolor: isDark ? 'rgba(56, 189, 248, 0.12)' : '#F0F9FF',
-                color: isDark ? '#38BDF8' : '#0369A1',
-                border: `1px solid ${isDark ? 'rgba(56, 189, 248, 0.3)' : '#BAE6FD'}`,
-              }}
-            />
-          ) : isEnclave ? (
-            <Chip
-              size="small"
-              icon={<HubIcon sx={{ fontSize: '0.85rem !important', color: `${isDark ? '#A78BFA' : '#7C3AED'} !important` }} />}
-              label="CORE HARDWARE ENCLAVE"
-              sx={{
-                height: 24,
-                fontSize: '0.68rem',
-                fontWeight: 800,
-                fontFamily: mono,
-                bgcolor: isDark ? 'rgba(167, 139, 250, 0.12)' : '#FAF5FF',
-                color: isDark ? '#A78BFA' : '#7C3AED',
-                border: `1px solid ${isDark ? 'rgba(167, 139, 250, 0.3)' : '#DDD6FE'}`,
-              }}
-            />
-          ) : (
-            <Chip
-              size="small"
-              icon={<TerminalIcon sx={{ fontSize: '0.85rem !important', color: `${gold.accent} !important` }} />}
-              label="STUDIO COCKPIT & IDE"
-              sx={{
-                height: 24,
-                fontSize: '0.68rem',
-                fontWeight: 800,
-                fontFamily: mono,
-                bgcolor: gold.wash,
-                color: gold.accent,
-                border: `1px solid ${gold.border}`,
-              }}
-            />
-          )}
-
-          <Chip
-            size="small"
-            icon={<BandIconComponent sx={{ fontSize: '0.85rem !important', color: `${bandCfg.color} !important` }} />}
-            label={item.band}
+          <Typography
             sx={{
-              height: 24,
-              fontSize: '0.7rem',
-              fontWeight: 800,
               fontFamily: mono,
-              bgcolor: bandCfg.wash,
-              color: bandCfg.color,
-              border: `1px solid ${bandCfg.border}`,
+              fontSize: '0.67rem',
+              fontWeight: 700,
+              letterSpacing: '0.08em',
+              color: bandColor,
+              textTransform: 'uppercase',
             }}
-          />
+          >
+            {item.band}
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.66rem',
+              fontWeight: 700,
+              color: secondaryText,
+            }}
+          >
+            {typeLabel}
+          </Typography>
         </Box>
 
-        {/* Workstation Name */}
         <Typography
           variant="h6"
+          component={RouterLink}
+          to={targetHref}
           sx={{
-            fontSize: '1.05rem',
+            fontSize: '1.04rem',
             fontWeight: 800,
-            lineHeight: 1.35,
+            lineHeight: 1.34,
             mb: 1,
-            color: isDark ? '#EDEFF2' : '#101828',
+            color: primaryText,
+            textDecoration: 'none',
+            display: 'block',
+            '&:hover': { color: gold },
           }}
         >
           {item.name}
         </Typography>
 
-        {/* Description */}
         <Typography
           variant="body2"
           sx={{
-            color: 'text.secondary',
+            color: secondaryText,
             fontSize: '0.84rem',
-            lineHeight: 1.55,
-            mb: 1.5,
+            lineHeight: 1.58,
+            mb: 2,
           }}
         >
-          {item.description || "Zero-egress sovereign workstation integrated into Zoth Studio v2."}
+          {item.description || 'Local-first module integrated inside the Zoth Studio v2 repository.'}
         </Typography>
 
-        {/* Workstation ID & Micro-repo Pull CLI */}
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75, mb: 1 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.68rem', color: gold.accent, fontWeight: 700 }}>
-                ID:
-              </Typography>
-              <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.7rem', color: isDark ? '#9CA3AF' : '#374151', bgcolor: isDark ? '#14141E' : '#F3F4F6', px: 0.8, py: 0.2, borderRadius: 1, border: `1px solid ${isDark ? '#26262F' : '#E5E7EB'}` }}>
-                {item.id}
-              </Typography>
-            </Box>
-            <Chip
-              size="small"
-              icon={<VerifiedUserIcon sx={{ fontSize: '0.75rem !important', color: `${isDark ? '#34D399' : '#047857'} !important` }} />}
-              label="Zero-Egress"
-              sx={{
-                height: 20,
-                fontSize: '0.65rem',
-                fontWeight: 750,
-                fontFamily: mono,
-                bgcolor: isDark ? 'rgba(52, 211, 153, 0.1)' : '#ECFDF3',
-                color: isDark ? '#34D399' : '#047857',
-                border: `1px solid ${isDark ? 'rgba(52, 211, 153, 0.3)' : 'rgba(4, 120, 87, 0.3)'}`,
-              }}
-            />
-          </Box>
-
-          {item.pullCommand && (
-            <Box
-              onClick={handleCopyPull}
-              sx={{
-                cursor: 'pointer',
-                p: 0.75,
-                px: 1,
-                borderRadius: 1.5,
-                bgcolor: isDark ? '#08080C' : '#F3F4F6',
-                border: `1px solid ${isDark ? '#26262F' : '#E5E7EB'}`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: 1,
-                '&:hover': {
-                  borderColor: isTool ? '#38BDF8' : gold.accent,
-                  bgcolor: isDark ? '#0E1118' : '#EDEFEF',
-                },
-                transition: 'all 0.18s ease',
-              }}
-            >
-              <Typography
-                variant="caption"
-                sx={{
-                  fontFamily: mono,
-                  fontSize: '0.68rem',
-                  color: isDark ? '#9CA3AF' : '#4B5563',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {item.pullCommand}
-              </Typography>
-              {copied ? (
-                <CheckIcon sx={{ fontSize: '0.85rem', color: 'var(--zs-emerald)', flexShrink: 0 }} />
-              ) : (
-                <ContentCopyIcon sx={{ fontSize: '0.8rem', color: 'text.secondary', flexShrink: 0 }} />
-              )}
-            </Box>
+        <Box
+          onClick={handleCopy}
+          sx={{
+            cursor: 'pointer',
+            p: 1,
+            px: 1.25,
+            borderRadius: 1.5,
+            bgcolor: codeBg,
+            border: `1px solid ${borderCol}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 1,
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.69rem',
+              color: primaryText,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {cloneCmd}
+          </Typography>
+          {copied ? (
+            <CheckIcon sx={{ fontSize: '0.85rem', color: isDark ? '#34D399' : '#047857', flexShrink: 0 }} />
+          ) : (
+            <ContentCopyIcon sx={{ fontSize: '0.8rem', color: secondaryText, flexShrink: 0 }} />
           )}
         </Box>
       </CardContent>
 
-      <CardActions sx={{ px: 2.5, pb: 2.5, pt: 0, gap: 1, flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
-        {isTool ? (
-          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Button
-              size="small"
-              variant="contained"
-              component={RouterLink}
-              to={item.alsoInApp}
-              startIcon={<RocketLaunchIcon sx={{ fontSize: '0.95rem' }} />}
-              sx={{
-                bgcolor: isDark ? '#38BDF8' : '#0369A1',
-                color: '#FFFFFF',
-                fontWeight: 800,
-                fontSize: '0.78rem',
-                px: 2,
-                py: 0.6,
-                borderRadius: 9999,
-                boxShadow: '0 2px 10px rgba(56, 189, 248, 0.3)',
-                '&:hover': {
-                  bgcolor: isDark ? '#7DD3FC' : '#0369A1',
-                  color: isDark ? '#0B0B12' : '#FFFFFF',
-                },
-                transition: 'all 0.2s ease',
-              }}
-            >
-              Open in Tool Arsenal ↗
-            </Button>
-            <Button
-              size="small"
-              variant="text"
-              component={RouterLink}
-              to={`/workstations/${item.id}`}
-              sx={{
-                color: isDark ? '#9CA3AF' : '#6B7280',
-                fontSize: '0.74rem',
-                fontFamily: mono,
-                p: 0.5,
-                '&:hover': { color: gold.accent },
-              }}
-            >
-              Console View
-            </Button>
-          </Box>
-        ) : isEnclave ? (
-          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Button
-              size="small"
-              variant="contained"
-              component={RouterLink}
-              to={item.alsoInApp}
-              startIcon={<HubIcon sx={{ fontSize: '0.95rem' }} />}
-              sx={{
-                bgcolor: isDark ? '#A78BFA' : '#7C3AED',
-                color: '#FFFFFF',
-                fontWeight: 800,
-                fontSize: '0.78rem',
-                px: 2,
-                py: 0.6,
-                borderRadius: 9999,
-                boxShadow: '0 2px 10px rgba(167, 139, 250, 0.3)',
-                '&:hover': {
-                  bgcolor: isDark ? '#C4B5FD' : '#6D28D9',
-                  color: isDark ? '#0B0B12' : '#FFFFFF',
-                },
-                transition: 'all 0.2s ease',
-              }}
-            >
-              Enter Enclave Hub ↗
-            </Button>
-            <Button
-              size="small"
-              variant="text"
-              component={RouterLink}
-              to={`/workstations/${item.id}`}
-              sx={{
-                color: isDark ? '#9CA3AF' : '#6B7280',
-                fontSize: '0.74rem',
-                fontFamily: mono,
-                p: 0.5,
-                '&:hover': { color: gold.accent },
-              }}
-            >
-              Console View
-            </Button>
-          </Box>
-        ) : (
-          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Button
-              size="small"
-              variant="contained"
-              component={RouterLink}
-              to={`/workstations/${item.id}`}
-              startIcon={<PlayArrowIcon sx={{ fontSize: '1rem' }} />}
-              sx={{
-                bgcolor: gold.accent,
-                color: '#101828',
-                fontWeight: 800,
-                fontSize: '0.8rem',
-                px: 2,
-                py: 0.6,
-                borderRadius: 9999,
-                boxShadow: '0 2px 10px rgba(212, 175, 55, 0.3)',
-                '&:hover': {
-                  bgcolor: '#F3D56A',
-                  boxShadow: '0 4px 16px rgba(212, 175, 55, 0.45)',
-                  transform: 'translateY(-1px)',
-                },
-                transition: 'all 0.2s ease',
-              }}
-            >
-              Launch Cockpit
-            </Button>
-          </Box>
-        )}
+      <CardActions
+        sx={{
+          px: 2.5,
+          pb: 2.25,
+          pt: 1.25,
+          borderTop: `1px solid ${borderCol}`,
+          justifyContent: 'space-between',
+          gap: 1,
+        }}
+      >
+        <Button
+          size="small"
+          variant="contained"
+          component={RouterLink}
+          to={targetHref}
+          endIcon={<ArrowForwardIcon sx={{ fontSize: '0.9rem !important' }} />}
+          sx={{
+            bgcolor: isDark ? '#D4AF37' : '#101828',
+            color: isDark ? '#08080B' : '#FFFFFF',
+            fontWeight: 700,
+            fontSize: '0.76rem',
+            textTransform: 'none',
+            px: 1.75,
+            '&:hover': { bgcolor: isDark ? '#E5C158' : '#1E293B' },
+          }}
+        >
+          Architecture Specs
+        </Button>
+
+        <Button
+          size="small"
+          variant="outlined"
+          href="https://github.com/NullAITech/zoth-studio-v2"
+          target="_blank"
+          rel="noopener noreferrer"
+          startIcon={<GitHubIcon sx={{ fontSize: '0.88rem !important' }} />}
+          sx={{
+            borderColor: borderCol,
+            color: primaryText,
+            fontSize: '0.74rem',
+            fontWeight: 700,
+            textTransform: 'none',
+            px: 1.35,
+            '&:hover': { borderColor: gold },
+          }}
+        >
+          Studio Repo
+        </Button>
       </CardActions>
     </Card>
   );
@@ -464,19 +278,16 @@ export default function WorkstationsPage() {
   const isDark = theme.palette.mode === 'dark';
   const [search, setSearch] = useState('');
   const [band, setBand] = useState('All');
-  const [typeFilter, setTypeFilter] = useState('all'); // 'all' | 'cockpit' | 'integrated_tool' | 'enclave_daemon'
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'topology'
-  const { status } = useStudioStatus();
-  const swarmUp = Boolean(status?.services?.swarm?.up);
+  const [typeFilter, setTypeFilter] = useState('all');
+  const [viewMode, setViewMode] = useState('grid');
 
-  const { activeTheme } = useReality();
-  const gold = {
-    accent: isDark ? (activeTheme?.accent || '#D4AF37') : '#8A6508',
-    wash: isDark ? (activeTheme?.accentWash || 'rgba(212,175,55,0.14)') : '#FEF9E7',
-    border: isDark ? (activeTheme?.border || 'rgba(212,175,55,0.28)') : 'rgba(184,134,11,0.25)',
-  };
+  const gold = isDark ? '#D4AF37' : '#7A5808';
+  const primaryText = isDark ? '#F5F1E6' : '#101828';
+  const secondaryText = isDark ? '#A3AAB8' : '#475467';
+  const cardBg = isDark ? '#0D0F16' : '#FFFFFF';
+  const codeBg = isDark ? '#080A0F' : '#F3F4F6';
+  const borderCol = isDark ? 'rgba(245, 241, 230, 0.12)' : 'rgba(16, 24, 40, 0.12)';
 
-  // Precomputed band counts
   const bandCounts = useMemo(() => {
     const counts = {};
     for (const item of workstations) {
@@ -485,25 +296,19 @@ export default function WorkstationsPage() {
     return counts;
   }, []);
 
-  // Precomputed type counts
   const typeCounts = useMemo(() => {
     const counts = { all: workstations.length, cockpit: 0, integrated_tool: 0, enclave_daemon: 0 };
     for (const item of workstations) {
-      if (item.type && counts[item.type] !== undefined) {
-        counts[item.type]++;
-      }
+      if (item.type && counts[item.type] !== undefined) counts[item.type]++;
     }
     return counts;
   }, []);
 
-  // Filtered workstations matching type, band, and search
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return workstations.filter((item) => {
-      const inType = typeFilter === 'all' || item.type === typeFilter;
-      if (!inType) return false;
-      const inBand = band === 'All' || item.band === band;
-      if (!inBand) return false;
+      if (typeFilter !== 'all' && item.type !== typeFilter) return false;
+      if (band !== 'All' && item.band !== band) return false;
       if (!q) return true;
       return (
         item.name.toLowerCase().includes(q) ||
@@ -514,1014 +319,406 @@ export default function WorkstationsPage() {
     });
   }, [typeFilter, band, search]);
 
-  // Grouped by band for Cadre Topology Map
-  const groupedByBand = useMemo(() => {
-    const map = {};
-    for (const b of ORDERED_BANDS) {
-      map[b] = [];
-    }
-    for (const item of filtered) {
-      if (map[item.band]) {
-        map[item.band].push(item);
-      } else {
-        map[item.band] = [item];
-      }
-    }
-    return map;
-  }, [filtered]);
-
   return (
-    <>
-      <Container maxWidth="xl" className="page-fade-in" sx={{ py: { xs: 4, md: 6 } }}>
-      {/* Page Header */}
+    <Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
+      {/* Header */}
       <HeroReveal>
-        <Box sx={{ mb: 3 }}>
+        <Box sx={{ mb: 4.5 }}>
+          <GlowLine
+            height={2}
+            color={gold}
+            glowColor={isDark ? 'rgba(212,175,55,0.35)' : 'rgba(122,88,8,0.2)'}
+          />
           <HeroItem>
-            <Typography variant="overline" sx={{ color: gold.accent, letterSpacing: '0.18em', fontWeight: 800, display: 'block', mb: 1 }}>
-              SOVEREIGN WORKSTATION DIRECTORY
+            <Typography
+              sx={{
+                mt: 2.5,
+                mb: 1,
+                fontFamily: mono,
+                fontSize: '0.74rem',
+                fontWeight: 700,
+                letterSpacing: '0.16em',
+                textTransform: 'uppercase',
+                color: gold,
+              }}
+            >
+              SYSTEM ARCHITECTURE INDEX · {workstations.length} LOCAL MODULES
             </Typography>
           </HeroItem>
+
           <HeroItem>
-            <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', mb: 1, color: isDark ? '#EDEFF2' : '#101828', fontSize: { xs: '1.85rem', sm: '2.6rem', md: '3.4rem' }, lineHeight: 1.15, wordBreak: 'break-word', overflowWrap: 'break-word' }}>
-              Workstations & <span className="text-gradient-gold">Cockpits</span>
+            <Typography
+              component="h1"
+              sx={{
+                fontFamily: display,
+                fontSize: { xs: '2.1rem', sm: '2.8rem', md: '3.4rem' },
+                fontWeight: 400,
+                lineHeight: 1.08,
+                color: primaryText,
+                mb: 1.75,
+              }}
+            >
+              Architecture &amp; Daemon Dossiers
             </Typography>
           </HeroItem>
+
           <HeroItem>
-            <Typography color="text.secondary" sx={{ maxWidth: 880, fontSize: '1.05rem', lineHeight: 1.6 }}>
-              Curated matrix of sovereign studio cockpits, standalone micro-tools, and hardware enclave daemons integrated directly into Zoth Studio v2. Operating strictly with zero cloud telemetry and deterministic loopback verification.
+            <Typography sx={{ color: secondaryText, maxWidth: 800, fontSize: { xs: '0.98rem', md: '1.05rem' }, lineHeight: 1.7 }}>
+              Structural taxonomy of the {workstations.length} local IDE modules, standalone repositories, and loopback hardware daemons inside{' '}
+              <Box
+                component="a"
+                href="https://github.com/NullAITech/zoth-studio-v2"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ color: gold, fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '3px' }}
+              >
+                Zoth Studio v2
+              </Box>
+              . Clone the repository to run the local Express/IPC server on <code>127.0.0.1:3000</code>, or run all 77 tools natively inside ZothOS.
             </Typography>
           </HeroItem>
         </Box>
       </HeroReveal>
 
-      {/* Workstation Stats Bar */}
-      <RevealOnScroll preset="fadeUp" delay={0.2}>
-        <Paper
-          elevation={0}
-          sx={{
-            p: { xs: 2, md: 2.5 },
-            mb: 3.5,
-            borderRadius: 3,
-            bgcolor: isDark ? '#0B0B12' : '#FFFFFF',
-            border: '1px solid',
-            borderColor: isDark ? 'rgba(212,175,55,0.22)' : 'rgba(184,134,11,0.2)',
-            boxShadow: isDark
-              ? '0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(212,175,55,0.1)'
-              : '0 2px 12px rgba(16,24,40,0.06)',
-          }}
-        >
-          <Grid container spacing={2.5} alignItems="center">
-            {/* Stat 1: Curated Sovereign Consoles */}
-            <Grid xs={12} sm={6} md={3}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.75 }}>
-                <Box
-                  sx={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 2,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    bgcolor: 'rgba(212,175,55,0.12)',
-                    border: '1px solid rgba(212,175,55,0.3)',
-                    color: gold.accent,
-                    flexShrink: 0,
-                  }}
-                >
-                  <TerminalIcon sx={{ fontSize: '1.35rem' }} />
-                </Box>
-                <Box>
-                  <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent, lineHeight: 1.15 }}>
-                    {workstations.length}
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', fontSize: '0.78rem' }}>
-                    {typeCounts.cockpit} Cockpits · {typeCounts.integrated_tool} Tools · {typeCounts.enclave_daemon} Enclaves
-                  </Typography>
-                </Box>
-              </Box>
-            </Grid>
-
-            {/* Stat 2: 6 Architectural Bands */}
-            <Grid xs={12} sm={6} md={3}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.75 }}>
-                <Box
-                  sx={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 2,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF',
-                    border: `1px solid ${isDark ? 'rgba(56,189,248,0.3)' : '#BAE6FD'}`,
-                    color: isDark ? '#38BDF8' : '#0369A1',
-                    flexShrink: 0,
-                  }}
-                >
-                  <AccountTreeIcon sx={{ fontSize: '1.35rem' }} />
-                </Box>
-                <Box>
-                  <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 800, color: isDark ? '#EDEFF2' : '#101828', lineHeight: 1.15 }}>
-                    6
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', fontSize: '0.78rem' }}>
-                    6 Architectural Cadres
-                  </Typography>
-                </Box>
-              </Box>
-            </Grid>
-
-            {/* Stat 3: Zero Cloud Dependencies (100% Loopback) */}
-            <Grid xs={12} sm={6} md={3}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.75 }}>
-                <Box
-                  sx={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 2,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    bgcolor: isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF5',
-                    border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`,
-                    color: isDark ? '#34D399' : '#047857',
-                    flexShrink: 0,
-                  }}
-                >
-                  <CloudOffIcon sx={{ fontSize: '1.35rem' }} />
-                </Box>
-                <Box>
-                  <Typography variant="subtitle1" sx={{ fontFamily: mono, fontWeight: 800, color: isDark ? '#34D399' : '#047857', lineHeight: 1.2 }}>
-                    100% Loopback
-                  </Typography>
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, display: 'block', fontSize: '0.78rem' }}>
-                    Zero Cloud Dependencies
-                  </Typography>
-                </Box>
-              </Box>
-            </Grid>
-
-            {/* Stat 4: Swarm multiplexer status badge */}
-            <Grid xs={12} sm={6} md={3}>
-              <Box
-                sx={{
-                  p: 1.25,
-                  px: 1.5,
-                  borderRadius: 2,
-                  border: '1px solid',
-                  borderColor: swarmUp ? (isDark ? 'rgba(52,211,153,0.35)' : '#A7F3D0') : (isDark ? '#26262F' : '#EAECF0'),
-                  bgcolor: swarmUp
-                    ? (isDark ? 'rgba(52,211,153,0.08)' : '#ECFDF3')
-                    : (isDark ? 'rgba(255,255,255,0.02)' : '#F9FAFB'),
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: 1.25,
-                  flexWrap: 'wrap',
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
-                  <Box
-                    sx={{
-                      width: 10,
-                      height: 10,
-                      borderRadius: '50%',
-                      bgcolor: swarmUp ? (isDark ? '#34D399' : '#047857') : '#6B7280',
-                      boxShadow: swarmUp ? (isDark ? '0 0 8px #34D399' : '0 0 6px rgba(5,150,105,0.4)') : 'none',
-                      flexShrink: 0,
-                    }}
-                  />
-                  <Box>
-                    <Typography variant="caption" sx={{ fontWeight: 800, display: 'block', color: swarmUp ? (isDark ? '#34D399' : '#047857') : 'text.primary', lineHeight: 1.2 }}>
-                      {swarmUp ? 'Swarm Multiplexer :8989' : 'Swarm Offline :8989'}
-                    </Typography>
-                    <Typography variant="caption" sx={{ fontSize: '0.68rem', color: 'text.secondary', fontFamily: mono }}>
-                      {swarmUp ? 'Live SSE Cadres' : 'zoth-swarm daemon'}
-                    </Typography>
-                  </Box>
-                </Box>
-                <Chip
-                  size="small"
-                  label={swarmUp ? ':8989 UP' : 'OFFLINE'}
-                  sx={{
-                    height: 20,
-                    fontSize: '0.65rem',
-                    fontWeight: 800,
-                    fontFamily: mono,
-                    bgcolor: swarmUp ? (isDark ? 'rgba(52,211,153,0.2)' : '#D1FAE5') : (isDark ? 'rgba(255,255,255,0.06)' : '#E5E7EB'),
-                    color: swarmUp ? (isDark ? '#34D399' : '#047857') : 'text.secondary',
-                    border: `1px solid ${swarmUp ? (isDark ? 'rgba(52,211,153,0.4)' : '#6EE7B7') : (isDark ? '#374151' : '#D1D5DB')}`,
-                  }}
-                />
-              </Box>
-            </Grid>
-          </Grid>
-        </Paper>
-      </RevealOnScroll>
-
-      {/* Architectural Taxonomy Clarification Card */}
-      <RevealOnScroll preset="fadeUp" delay={0.25}>
-        <Paper
-          sx={{
-            p: 2.5,
-            mb: 3.5,
-            borderRadius: 3,
-            bgcolor: isDark ? '#080A12' : '#F8FAFC',
-            border: `1px solid ${isDark ? 'rgba(212,175,55,0.25)' : '#E2E8F0'}`,
-            background: isDark
-              ? 'linear-gradient(135deg, rgba(212,175,55,0.06) 0%, rgba(8,10,18,0.95) 100%)'
-              : 'linear-gradient(135deg, rgba(212,175,55,0.04) 0%, #FFFFFF 100%)',
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-            <InfoOutlinedIcon sx={{ color: gold.accent, fontSize: '1.2rem' }} />
-            <Typography variant="overline" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent, letterSpacing: '0.12em' }}>
-              TAXONOMY CLARIFICATION · COCKPITS VS. TOOLS VS. ENCLAVES
-            </Typography>
-          </Box>
-          <Grid container spacing={2} alignItems="stretch">
-            <Grid xs={12} md={4} sx={{ display: 'flex' }}>
-              <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? '#0D111D' : '#FFFFFF', border: `1px solid ${isDark ? '#26262F' : '#EAECF0'}`, height: '100%', width: '100%', flex: 1 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.75 }}>
-                  <TerminalIcon sx={{ color: gold.accent, fontSize: '1.1rem' }} />
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? '#F5E6AB' : '#101828' }}>
-                    1. Studio Cockpits & IDEs (15)
-                  </Typography>
-                </Box>
-                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', lineHeight: 1.5 }}>
-                  Multi-pane visual environments where human operators compose agent DAGs, review code ASTs, switch local AI models, and supervise swarm dispatchers.
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid xs={12} md={4} sx={{ display: 'flex' }}>
-              <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? '#0D111D' : '#FFFFFF', border: `1px solid ${isDark ? '#26262F' : '#EAECF0'}`, height: '100%', width: '100%', flex: 1 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.75 }}>
-                  <HandymanIcon sx={{ color: isDark ? '#38BDF8' : '#0369A1', fontSize: '1.1rem' }} />
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? '#BAE6FD' : '#101828' }}>
-                    2. Sovereign Tools (27 Repos)
-                  </Typography>
-                </Box>
-                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', lineHeight: 1.5 }}>
-                  Standalone micro-repos (WebGen, OmniPost, SubSweep, 3D Scene Studio) that can be cloned and run independently offline via CLI or MCP servers.
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid xs={12} md={4} sx={{ display: 'flex' }}>
-              <Box sx={{ p: 1.5, borderRadius: 2, bgcolor: isDark ? '#0D111D' : '#FFFFFF', border: `1px solid ${isDark ? '#26262F' : '#EAECF0'}`, height: '100%', width: '100%', flex: 1 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.75 }}>
-                  <HubIcon sx={{ color: isDark ? '#A78BFA' : '#7C3AED', fontSize: '1.1rem' }} />
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800, color: isDark ? '#DDD6FE' : '#101828' }}>
-                    3. Hardware Enclaves (Loopback :8094 / :8989)
-                  </Typography>
-                </Box>
-                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', lineHeight: 1.5 }}>
-                  Zero-telemetry local background daemons (21-Agent Swarm, Lucy Neural Memory, Adytum Sanctum, HexStrike) bound strictly to loopback sockets.
-                </Typography>
-              </Box>
-            </Grid>
-          </Grid>
-        </Paper>
-      </RevealOnScroll>
-
-      {/* Control Bar: Dual-View Toggle & Instant Search */}
-      <RevealOnScroll preset="fadeUp" delay={0.3}>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' },
-            gap: 2,
-            justifyContent: 'space-between',
-            alignItems: { xs: 'stretch', md: 'center' },
-            mb: 2.5,
-          }}
-        >
-          {/* Dual-View Toggle: Grid Matrix vs Cadre Topology Map */}
-          <ToggleButtonGroup
-            value={viewMode}
-            exclusive
-            onChange={(e, next) => {
-              if (next) setViewMode(next);
-            }}
-            size="small"
-            sx={{
-              bgcolor: isDark ? '#0B0B12' : '#FFFFFF',
-              border: '1px solid',
-              borderColor: isDark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.25)',
-              borderRadius: 2.5,
-              p: 0.5,
-              maxWidth: '100%',
-              flexWrap: 'wrap',
-              alignSelf: { xs: 'flex-start', md: 'center' },
-              '& .MuiToggleButton-root': {
-                px: { xs: 1.25, sm: 2 },
-                py: 0.8,
-                border: 'none',
-                borderRadius: '8px !important',
-                textTransform: 'none',
-                fontWeight: 750,
-                fontSize: { xs: '0.78rem', sm: '0.85rem' },
-                color: isDark ? '#9CA3AF' : '#4B5563',
-                transition: 'all 0.2s ease',
-                '&.Mui-selected': {
-                  bgcolor: gold.accent,
-                  color: isDark ? '#08080B' : '#101828',
-                  boxShadow: '0 2px 10px rgba(212,175,55,0.3)',
-                  '&:hover': {
-                    bgcolor: '#F3D56A',
-                    color: isDark ? '#08080B' : '#101828',
-                  },
-                },
-                '&:hover': {
-                  bgcolor: isDark ? 'rgba(212,175,55,0.1)' : 'rgba(212,175,55,0.08)',
-                  color: gold.accent,
-                },
-              },
-            }}
-          >
-            <ToggleButton value="grid" aria-label="Grid Matrix">
-              <GridViewIcon sx={{ fontSize: '1.1rem', mr: 1 }} />
-              Grid Matrix
-            </ToggleButton>
-            <ToggleButton value="topology" aria-label="Cadre Topology Map">
-              <AccountTreeIcon sx={{ fontSize: '1.1rem', mr: 1 }} />
-              Cadre Topology Map
-            </ToggleButton>
-          </ToggleButtonGroup>
-
-          {/* Instant Search Input matching workstation name, id, and band */}
-          <TextField
-            size="small"
-            placeholder={`Search ${workstations.length} sovereign consoles by name, ID, band, or capability...`}
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon fontSize="small" sx={{ color: gold.accent }} />
-                </InputAdornment>
-              ),
-              endAdornment: search ? (
-                <InputAdornment position="end">
-                  <IconButton size="small" onClick={() => setSearch('')} sx={{ color: 'text.secondary' }}>
-                    <ClearIcon fontSize="small" />
-                  </IconButton>
-                </InputAdornment>
-              ) : null,
-            }}
-            sx={{
-              minWidth: { xs: '100%', md: 380 },
-              '& .MuiOutlinedInput-root': {
-                borderRadius: 2.5,
-                bgcolor: isDark ? '#0B0B12' : '#FFFFFF',
-                '& fieldset': {
-                  borderColor: isDark ? 'rgba(212,175,55,0.22)' : 'rgba(184,134,11,0.2)',
-                },
-                '&:hover fieldset': {
-                  borderColor: gold.accent,
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: gold.accent,
-                },
-              },
-            }}
-          />
-        </Box>
-      </RevealOnScroll>
-
-      {/* Cadre Classification Filter Chips */}
-      <RevealOnScroll preset="fadeUp" delay={0.35}>
-        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 2, alignItems: 'center' }}>
-          <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: 'text.secondary', mr: 0.5 }}>
-            CADRE:
-          </Typography>
-          {[
-            { id: 'all', label: `All Consoles (${workstations.length})`, icon: GridViewIcon },
-            { id: 'cockpit', label: `Studio Cockpits (${typeCounts.cockpit})`, icon: TerminalIcon },
-            { id: 'integrated_tool', label: `Sovereign Tools (${typeCounts.integrated_tool})`, icon: HandymanIcon },
-            { id: 'enclave_daemon', label: `Enclave Daemons (${typeCounts.enclave_daemon})`, icon: HubIcon },
-          ].map((t) => {
-            const active = typeFilter === t.id;
-            const IconComponent = t.icon;
-            return (
-              <Chip
-                key={t.id}
-                icon={<IconComponent sx={{ fontSize: '0.85rem !important', color: active ? `${isDark ? '#08080B' : '#101828'} !important` : `${gold.accent} !important` }} />}
-                label={t.label}
-                clickable
-                onClick={() => setTypeFilter(t.id)}
-                sx={{
-                  fontWeight: 800,
-                  fontSize: '0.78rem',
-                  fontFamily: mono,
-                  bgcolor: active ? gold.accent : (isDark ? '#0B0B12' : '#FFFFFF'),
-                  color: active ? (isDark ? '#08080B' : '#101828') : 'text.primary',
-                  border: '1px solid',
-                  borderColor: active ? gold.accent : (isDark ? '#26262F' : '#EAECF0'),
-                  '&:hover': {
-                    borderColor: gold.accent,
-                    bgcolor: active ? gold.accent : (isDark ? 'rgba(212,175,55,0.1)' : '#FEF9E7'),
-                  },
-                  transition: 'all 0.18s ease',
-                }}
-              />
-            );
-          })}
-        </Box>
-      </RevealOnScroll>
-
-      {/* Band Filter Chips with Counts */}
-      <RevealOnScroll preset="fadeUp" delay={0.4}>
-        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 3, alignItems: 'center' }}>
-          <Chip
-            label={`All Bands · ${workstations.length}`}
-            clickable
-            onClick={() => setBand('All')}
-            sx={{
-              fontWeight: 800,
-              fontSize: '0.82rem',
-              fontFamily: mono,
-              bgcolor: band === 'All' ? gold.accent : (isDark ? '#0B0B12' : '#FFFFFF'),
-              color: band === 'All' ? (isDark ? '#08080B' : '#101828') : 'text.primary',
-              border: '1px solid',
-              borderColor: band === 'All' ? gold.accent : (isDark ? '#26262F' : '#EAECF0'),
-              '&:hover': {
-                borderColor: gold.accent,
-                bgcolor: band === 'All' ? gold.accent : (isDark ? 'rgba(212,175,55,0.1)' : '#FEF9E7'),
-              },
-              transition: 'all 0.18s ease',
-            }}
-          />
-
-          {ORDERED_BANDS.map((item) => {
-            const active = item === band;
-            const count = bandCounts[item] || 0;
-            const cfg = getBandConfig(item, isDark);
-            const IconComp = cfg.icon;
-
-            return (
-              <Chip
-                key={item}
-                icon={<IconComp sx={{ fontSize: '0.9rem !important', color: active ? `${isDark ? '#08080B' : '#101828'} !important` : `${cfg.color} !important` }} />}
-                label={`${item} · ${count}`}
-                clickable
-                onClick={() => setBand(item)}
-                sx={{
-                  fontWeight: 750,
-                  fontSize: '0.82rem',
-                  fontFamily: mono,
-                  bgcolor: active ? gold.accent : (isDark ? '#0B0B12' : '#FFFFFF'),
-                  color: active ? (isDark ? '#08080B' : '#101828') : 'text.primary',
-                  border: '1px solid',
-                  borderColor: active ? gold.accent : (isDark ? '#26262F' : '#EAECF0'),
-                  '&:hover': {
-                    borderColor: cfg.color,
-                    bgcolor: active ? gold.accent : (isDark ? cfg.wash : '#FEF9E7'),
-                  },
-                  transition: 'all 0.18s ease',
-                }}
-              />
-            );
-          })}
-        </Box>
-      </RevealOnScroll>
-
-      {/* Result Metrics */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="body2" color="text.secondary" sx={{ fontFamily: mono, fontSize: '0.85rem' }}>
-          Showing <strong>{filtered.length}</strong> of <strong>{workstations.length}</strong> consoles
-          {typeFilter !== 'all' && <span> in <strong>{typeFilter === 'cockpit' ? 'Studio Cockpits' : typeFilter === 'integrated_tool' ? 'Sovereign Tools' : 'Enclave Daemons'}</strong></span>}
-          {band !== 'All' && <span> in band <strong>{band}</strong></span>}
-          {search.trim() && <span> matching &ldquo;{search.trim()}&rdquo;</span>}
-        </Typography>
-
-        {(band !== 'All' || search || typeFilter !== 'all') && (
-          <Button
-            size="small"
-            onClick={() => {
-              setBand('All');
-              setTypeFilter('all');
-              setSearch('');
-            }}
-            sx={{ color: gold.accent, fontSize: '0.78rem', textTransform: 'none', fontWeight: 700 }}
-          >
-            Reset All Filters
-          </Button>
-        )}
-      </Box>
-
-      {/* VIEW MODE 1: GRID MATRIX */}
-      {viewMode === 'grid' && (
-        <>
-          {filtered.length === 0 ? (
-            <Paper
-              sx={{
-                p: 5,
-                textAlign: 'center',
-                bgcolor: isDark ? '#0B0B12' : '#FFFFFF',
-                border: '1px dashed',
-                borderColor: isDark ? '#26262F' : '#EAECF0',
-                borderRadius: 3,
-              }}
-            >
-              <Typography variant="h6" sx={{ color: gold.accent, mb: 1 }}>
-                No workstations matched criteria
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Try adjusting your search terms or selecting &ldquo;All&rdquo; bands.
-              </Typography>
-              <Button
-                size="small"
-                variant="outlined"
-                onClick={() => {
-                  setBand('All');
-                  setSearch('');
-                }}
-                sx={{ borderColor: gold.accent, color: gold.accent }}
-              >
-                Clear Filters
-              </Button>
-            </Paper>
-          ) : (
-            <StaggerChildren>
-              <Grid container spacing={3}>
-                {filtered.map((item) => (
-                  <Grid xs={12} sm={6} md={4} key={item.id}>
-                    <StaggerItem>
-                      <WorkstationCard item={item} isDark={isDark} gold={gold} />
-                    </StaggerItem>
-                  </Grid>
-                ))}
-              </Grid>
-            </StaggerChildren>
-          )}
-        </>
-      )}
-
-      {/* VIEW MODE 2: CADRE TOPOLOGY MAP */}
-      {viewMode === 'topology' && (
-        <RevealOnScroll preset="scaleUp" delay={0.2}>
-          <Box>
-            {/* Interactive Visual SVG Node Graph */}
+      {/* Taxonomy 3-Column Overview */}
+      <Grid container spacing={2.5} sx={{ mb: 4 }}>
+        {[
+          {
+            title: `1. Studio Modules (${typeCounts.cockpit})`,
+            desc: 'Local operator views inside Zoth Studio v2 for composing agent DAGs, inspecting ASTs, and supervising local inference.',
+          },
+          {
+            title: '2. Standalone Repositories (77)',
+            desc: 'Independent Git repositories with dedicated CLI binaries and MCP interfaces that run without browser dependencies.',
+          },
+          {
+            title: `3. Loopback Daemons (${typeCounts.enclave_daemon})`,
+            desc: 'Background services (Pantheon Swarm :8141, Neuro-Memory :8094, HexStrike :8138) bound strictly to localhost.',
+          },
+        ].map((col) => (
+          <Grid xs={12} md={4} key={col.title} sx={{ display: 'flex' }}>
             <Paper
               elevation={0}
               sx={{
-                p: { xs: 1.5, md: 3 },
-                mb: 4,
-                borderRadius: 3,
-                bgcolor: isDark ? '#08080B' : '#FAFAFA',
-                border: '1px solid',
-                borderColor: isDark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.25)',
-                position: 'relative',
-                overflow: 'hidden',
+                p: 2.5,
+                width: '100%',
+                borderRadius: 2,
+                bgcolor: cardBg,
+                border: `1px solid ${borderCol}`,
               }}
             >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
-              <Box>
-                <Typography variant="overline" sx={{ color: gold.accent, letterSpacing: '0.15em', fontWeight: 800 }}>
-                  TOPOLOGY GRAPH // 6 ARCHITECTURAL CADRES
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.85rem' }}>
-                  Interactive node map representing loopback core orchestration. Click any cadre hub to focus band.
-                </Typography>
-              </Box>
-              <Chip
-                size="small"
-                label={band === 'All' ? 'Cadre Focus: All 6 Bands' : `Cadre Focus: ${band}`}
-                sx={{
-                  fontFamily: mono,
-                  fontWeight: 800,
-                  bgcolor: isDark ? 'rgba(212,175,55,0.12)' : '#FEF9E7',
-                  color: isDark ? '#D4AF37' : '#8A6A09',
-                  border: `1px solid ${gold.border}`,
-                }}
-              />
-            </Box>
+              <Typography sx={{ fontWeight: 800, fontSize: '0.95rem', color: primaryText, mb: 0.75 }}>
+                {col.title}
+              </Typography>
+              <Typography variant="body2" sx={{ color: secondaryText, fontSize: '0.84rem', lineHeight: 1.6 }}>
+                {col.desc}
+              </Typography>
+            </Paper>
+          </Grid>
+        ))}
+      </Grid>
 
-            {/* SVG Visual Canvas */}
+      {/* Controls */}
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          gap: 2,
+          justifyContent: 'space-between',
+          alignItems: { xs: 'stretch', md: 'center' },
+          mb: 2.5,
+        }}
+      >
+        <ToggleButtonGroup
+          value={viewMode}
+          exclusive
+          onChange={(_, next) => next && setViewMode(next)}
+          size="small"
+          sx={{
+            bgcolor: cardBg,
+            borderRadius: 2,
+            alignSelf: 'flex-start',
+            '& .MuiToggleButton-root': {
+              px: 2,
+              py: 0.75,
+              textTransform: 'none',
+              fontFamily: mono,
+              fontWeight: 700,
+              fontSize: '0.78rem',
+              color: primaryText,
+              border: `1px solid ${borderCol}`,
+              '&.Mui-selected': {
+                bgcolor: isDark ? '#D4AF37' : '#101828',
+                color: isDark ? '#08080B' : '#FFFFFF',
+                '&:hover': {
+                  bgcolor: isDark ? '#E5C158' : '#1E293B',
+                },
+              },
+            },
+          }}
+        >
+          <ToggleButton value="grid">
+            <GridViewIcon sx={{ fontSize: '1rem', mr: 0.8 }} /> Grid ({filtered.length})
+          </ToggleButton>
+          <ToggleButton value="topology">
+            <AccountTreeIcon sx={{ fontSize: '1rem', mr: 0.8 }} /> Cadre Topology
+          </ToggleButton>
+        </ToggleButtonGroup>
+
+        <TextField
+          size="small"
+          placeholder={`Search ${workstations.length} architecture modules…`}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon fontSize="small" sx={{ color: gold }} />
+              </InputAdornment>
+            ),
+            endAdornment: search ? (
+              <InputAdornment position="end">
+                <IconButton size="small" aria-label="Clear search" onClick={() => setSearch('')}>
+                  <ClearIcon fontSize="small" />
+                </IconButton>
+              </InputAdornment>
+            ) : null,
+          }}
+          sx={{
+            minWidth: { xs: '100%', md: 360 },
+            '& .MuiOutlinedInput-root': {
+              borderRadius: 2,
+              bgcolor: cardBg,
+              fontFamily: mono,
+              fontSize: '0.84rem',
+            },
+          }}
+        />
+      </Box>
+
+      {/* Type Filter Chips */}
+      <Box sx={{ display: 'flex', gap: 0.9, flexWrap: 'wrap', mb: 1.75 }}>
+        {[
+          { id: 'all', label: `All (${workstations.length})` },
+          { id: 'cockpit', label: `Studio Modules (${typeCounts.cockpit})` },
+          { id: 'integrated_tool', label: `Tool Integrations (${typeCounts.integrated_tool})` },
+          { id: 'enclave_daemon', label: `Loopback Daemons (${typeCounts.enclave_daemon})` },
+        ].map((t) => {
+          const active = typeFilter === t.id;
+          return (
+            <Chip
+              key={t.id}
+              label={t.label}
+              clickable
+              onClick={() => setTypeFilter(t.id)}
+              sx={{
+                fontFamily: mono,
+                fontWeight: 700,
+                fontSize: '0.73rem',
+                bgcolor: active ? (isDark ? '#D4AF37' : '#101828') : cardBg,
+                color: active ? (isDark ? '#08080B' : '#FFFFFF') : primaryText,
+                border: `1px solid ${active ? (isDark ? '#D4AF37' : '#101828') : borderCol}`,
+              }}
+            />
+          );
+        })}
+      </Box>
+
+      {/* Band Filter Chips */}
+      <Box sx={{ display: 'flex', gap: 0.9, flexWrap: 'wrap', mb: 3.5 }}>
+        <Chip
+          label={`All Bands · ${workstations.length}`}
+          clickable
+          onClick={() => setBand('All')}
+          sx={{
+            fontFamily: mono,
+            fontWeight: 700,
+            fontSize: '0.73rem',
+            bgcolor: band === 'All' ? (isDark ? '#D4AF37' : '#101828') : cardBg,
+            color: band === 'All' ? (isDark ? '#08080B' : '#FFFFFF') : primaryText,
+            border: `1px solid ${band === 'All' ? (isDark ? '#D4AF37' : '#101828') : borderCol}`,
+          }}
+        />
+        {ORDERED_BANDS.map((item) => {
+          const active = item === band;
+          return (
+            <Chip
+              key={item}
+              label={`${item} · ${bandCounts[item] || 0}`}
+              clickable
+              onClick={() => setBand(item)}
+              sx={{
+                fontFamily: mono,
+                fontWeight: 700,
+                fontSize: '0.73rem',
+                bgcolor: active ? (isDark ? '#D4AF37' : '#101828') : cardBg,
+                color: active ? (isDark ? '#08080B' : '#FFFFFF') : primaryText,
+                border: `1px solid ${active ? (isDark ? '#D4AF37' : '#101828') : borderCol}`,
+              }}
+            />
+          );
+        })}
+      </Box>
+
+      {/* Topology Diagram */}
+      {viewMode === 'topology' && (
+        <RevealOnScroll preset="fadeUp">
+          <Paper
+            elevation={0}
+            sx={{
+              p: { xs: 2, md: 3 },
+              mb: 4,
+              borderRadius: 2.5,
+              bgcolor: cardBg,
+              border: `1px solid ${borderCol}`,
+            }}
+          >
+            <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 700, color: gold, letterSpacing: '0.14em', mb: 0.5 }}>
+              CADRE TOPOLOGY · 6 ARCHITECTURAL BANDS
+            </Typography>
+            <Typography variant="body2" sx={{ color: secondaryText, mb: 2 }}>
+              Click any cadre node to filter modules in that band.
+            </Typography>
             <Box sx={{ width: '100%', overflowX: 'auto' }}>
               <svg
                 viewBox="0 0 920 480"
                 style={{
                   width: '100%',
                   height: 'auto',
-                  minWidth: 700,
+                  minWidth: 660,
                   display: 'block',
-                  background: isDark ? 'radial-gradient(circle at 460px 240px, #10101A 0%, #08080B 100%)' : '#FFFFFF',
-                  borderRadius: 12,
+                  background: isDark ? '#090B10' : '#FAF8F3',
+                  borderRadius: 8,
                 }}
               >
-                <defs>
-                  {/* Glowing Filter */}
-                  <filter id="goldGlow" x="-30%" y="-30%" width="160%" height="160%">
-                    <feGaussianBlur stdDeviation="4" result="blur" />
-                    <feMerge>
-                      <feMergeNode in="blur" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                  <linearGradient id="coreGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#F3D56A" />
-                    <stop offset="50%" stopColor="#D4AF37" />
-                    <stop offset="100%" stopColor="#9A7209" />
-                  </linearGradient>
-                </defs>
+                <circle cx="460" cy="240" r="105" fill="none" stroke={borderCol} strokeWidth="1" strokeDasharray="3 6" />
+                <circle cx="460" cy="240" r="195" fill="none" stroke={borderCol} strokeWidth="1" strokeDasharray="4 8" />
 
-                {/* Concentric Background Grid Rings */}
-                <circle cx="460" cy="240" r="100" fill="none" stroke={isDark ? 'rgba(212,175,55,0.12)' : 'rgba(184,134,11,0.22)'} strokeWidth="1.2" strokeDasharray="3 6" />
-                <circle cx="460" cy="240" r="190" fill="none" stroke={isDark ? 'rgba(212,175,55,0.10)' : 'rgba(184,134,11,0.20)'} strokeWidth="1.2" strokeDasharray="4 8" />
-                <circle cx="460" cy="240" r="275" fill="none" stroke={isDark ? 'rgba(212,175,55,0.08)' : 'rgba(184,134,11,0.2)'} strokeWidth="1.2" strokeDasharray="5 10" />
-
-                {/* Connecting Links from Core to the 6 Band Hubs */}
                 {ORDERED_BANDS.map((bName) => {
-                  const cfg = getBandConfig(bName, isDark);
+                  const cfg = BAND_CONFIG[bName];
+                  const col = isDark ? cfg.color : cfg.lightColor;
                   const active = band === 'All' || band === bName;
-                  const isCurrent = band === bName;
-
                   return (
-                    <g key={`link-${bName}`}>
-                      <line
-                        x1="460"
-                        y1="240"
-                        x2={cfg.svgPos.x}
-                        y2={cfg.svgPos.y}
-                        stroke={isCurrent ? cfg.color : (active ? (isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.45)') : (isDark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.35)'))}
-                        strokeWidth={isCurrent ? 3 : (active ? 1.75 : 1.2)}
-                        strokeDasharray={isCurrent ? 'none' : '4 4'}
-                        opacity={active ? 1 : 0.65}
-                      />
-                      {/* Pulse particle along link */}
-                      {active && (
-                        <circle
-                          cx={(460 + cfg.svgPos.x) / 2}
-                          cy={(240 + cfg.svgPos.y) / 2}
-                          r="3"
-                          fill={cfg.color}
-                          opacity="0.8"
-                        />
-                      )}
-                    </g>
+                    <line
+                      key={`line-${bName}`}
+                      x1="460"
+                      y1="240"
+                      x2={cfg.svgPos.x}
+                      y2={cfg.svgPos.y}
+                      stroke={band === bName ? col : borderCol}
+                      strokeWidth={band === bName ? 2.5 : 1.4}
+                      opacity={active ? 1 : 0.4}
+                    />
                   );
                 })}
 
-                {/* Central Loopback Core Node */}
-                <g
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => setBand('All')}
-                >
-                  <circle
-                    cx="460"
-                    cy="240"
-                    r="54"
-                    fill="none"
-                    stroke={gold.accent}
-                    strokeWidth="1.5"
-                    strokeDasharray="4 4"
-                    opacity="0.6"
-                  />
-                  <circle
-                    cx="460"
-                    cy="240"
-                    r="44"
-                    fill={isDark ? '#0B0B12' : '#FFFFFF'}
-                    stroke={gold.accent}
-                    strokeWidth="2.5"
-                    filter="url(#goldGlow)"
-                  />
-                  <text
-                    x="460"
-                    y="228"
-                    textAnchor="middle"
-                    fill={isDark ? '#D4AF37' : '#8A6A09'}
-                    fontSize="10"
-                    fontWeight="800"
-                    fontFamily={mono}
-                    letterSpacing="1px"
-                  >
-                    ZOTH v2 CORE
+                <g style={{ cursor: 'pointer' }} onClick={() => setBand('All')}>
+                  <circle cx="460" cy="240" r="46" fill={cardBg} stroke={gold} strokeWidth="2" />
+                  <text x="460" y="236" textAnchor="middle" fill={primaryText} fontSize="10" fontWeight="800" fontFamily={mono}>
+                    ZOTH CORE
                   </text>
-                  <text
-                    x="460"
-                    y="244"
-                    textAnchor="middle"
-                    fill={isDark ? '#34D399' : '#047857'}
-                    fontSize="8.5"
-                    fontWeight="700"
-                    fontFamily={mono}
-                  >
-                    100% LOOPBACK
+                  <text x="460" y="251" textAnchor="middle" fill={secondaryText} fontSize="8.5" fontFamily={mono}>
+                    127.0.0.1
                   </text>
-                  <text
-                    x="460"
-                    y="258"
-                    textAnchor="middle"
-                    fill={isDark ? '#9CA3AF' : '#475467'}
-                    fontSize="8"
-                    fontFamily={mono}
-                  >
-                    {workstations.length} CONSOLES
-                  </text>
-                  <title>Zoth Sovereign Core · Click to view All Cadres</title>
                 </g>
 
-                {/* 6 Cadre Hub Nodes with Satellites */}
                 {ORDERED_BANDS.map((bName) => {
-                  const cfg = getBandConfig(bName, isDark);
+                  const cfg = BAND_CONFIG[bName];
+                  const col = isDark ? cfg.color : cfg.lightColor;
                   const count = bandCounts[bName] || 0;
-                  const active = band === 'All' || band === bName;
-                  const isCurrent = band === bName;
                   const hx = cfg.svgPos.x;
                   const hy = cfg.svgPos.y;
-
-                  // Satellites for each workstation in this band
-                  const bandItems = workstations.filter((w) => w.band === bName);
-                  const dx = hx - 460;
-                  const dy = hy - 240;
-                  const centerAngle = Math.atan2(dy, dx);
-                  const spread = Math.PI * 0.75; // 135 deg arc facing outwards
-                  const step = bandItems.length > 1 ? spread / (bandItems.length - 1) : 0;
-
                   return (
                     <g
-                      key={`cadre-group-${bName}`}
-                      opacity={active ? 1 : 0.35}
-                      style={{ transition: 'opacity 0.25s ease' }}
+                      key={`hub-${bName}`}
+                      style={{ cursor: 'pointer' }}
+                      onClick={() => setBand(band === bName ? 'All' : bName)}
                     >
-                      {/* Satellite Workstation Micro-Nodes */}
-                      {bandItems.map((item, idx) => {
-                        const satAngle = centerAngle - spread / 2 + idx * step;
-                        const orbitR = 48;
-                        const sx = hx + orbitR * Math.cos(satAngle);
-                        const sy = hy + orbitR * Math.sin(satAngle);
-
-                        return (
-                          <g key={`sat-${item.id}`}>
-                            {/* Spoke to Hub */}
-                            <line
-                              x1={hx}
-                              y1={hy}
-                              x2={sx}
-                              y2={sy}
-                              stroke={isCurrent ? cfg.color : (isDark ? 'rgba(212,175,55,0.25)' : 'rgba(184,134,11,0.35)')}
-                              strokeWidth="1.2"
-                              strokeDasharray="2 2"
-                            />
-                            {/* Satellite dot */}
-                            <circle
-                              cx={sx}
-                              cy={sy}
-                              r={isCurrent ? 4.5 : 3.5}
-                              fill={isCurrent ? cfg.color : (isDark ? '#14141E' : '#FFFFFF')}
-                              stroke={cfg.color}
-                              strokeWidth="1.5"
-                              style={{ cursor: 'pointer' }}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setBand(bName);
-                              }}
-                            >
-                              <title>{`${item.name} (${item.id}) · Click to inspect band`}</title>
-                            </circle>
-                          </g>
-                        );
-                      })}
-
-                      {/* Cadre Hub Node */}
-                      <g
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => setBand(band === bName ? 'All' : bName)}
+                      <circle cx={hx} cy={hy} r="28" fill={cardBg} stroke={col} strokeWidth={band === bName ? 3 : 2} />
+                      <text x={hx} y={hy + 4} textAnchor="middle" fill={col} fontSize="13" fontWeight="800" fontFamily={mono}>
+                        {count}
+                      </text>
+                      <text
+                        x={hx}
+                        y={hy + (hy > 240 ? 44 : -36)}
+                        textAnchor="middle"
+                        fill={primaryText}
+                        fontSize="11"
+                        fontWeight="800"
+                        fontFamily={mono}
                       >
-                        {/* Outer Glow Ring if currently focused */}
-                        {isCurrent && (
-                          <circle
-                            cx={hx}
-                            cy={hy}
-                            r="36"
-                            fill="none"
-                            stroke={cfg.color}
-                            strokeWidth="2"
-                            strokeDasharray="3 3"
-                            filter="url(#goldGlow)"
-                          />
-                        )}
-
-                        <circle
-                          cx={hx}
-                          cy={hy}
-                          r="28"
-                          fill={isDark ? '#0B0B12' : '#FFFFFF'}
-                          stroke={isCurrent ? cfg.color : (active ? gold.accent : (isDark ? '#4B5563' : '#9CA3AF'))}
-                          strokeWidth={isCurrent ? 3 : 2}
-                        />
-
-                        {/* Node Count inside Hub */}
-                        <text
-                          x={hx}
-                          y={hy - 2}
-                          textAnchor="middle"
-                          fill={cfg.color}
-                          fontSize="13"
-                          fontWeight="800"
-                          fontFamily={mono}
-                        >
-                          {count}
-                        </text>
-                        <text
-                          x={hx}
-                          y={hy + 10}
-                          textAnchor="middle"
-                          fill={isDark ? '#9CA3AF' : '#6B7280'}
-                          fontSize="7"
-                          fontWeight="700"
-                          fontFamily={mono}
-                        >
-                          NODES
-                        </text>
-
-                        {/* Band Label below or above Hub */}
-                        <text
-                          x={hx}
-                          y={hy + (hy > 240 ? 44 : -36)}
-                          textAnchor="middle"
-                          fill={isCurrent ? cfg.color : (isDark ? '#EDEFF2' : '#101828')}
-                          fontSize="11"
-                          fontWeight="800"
-                          fontFamily={mono}
-                        >
-                          {bName.toUpperCase()}
-                        </text>
-
-                        <title>{`${bName} Cadre · ${count} Workstations · Click to filter`}</title>
-                      </g>
+                        {bName.toUpperCase()}
+                      </text>
                     </g>
                   );
                 })}
               </svg>
             </Box>
-
-            {/* Quick Filter Jump Toolbar */}
-            <Divider sx={{ my: 2.5, borderColor: isDark ? 'rgba(212,175,55,0.15)' : 'rgba(184,134,11,0.15)' }} />
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: gold.accent, letterSpacing: '0.1em', mr: 0.5 }}>
-                QUICK CADRE JUMP:
-              </Typography>
-              <Chip
-                size="small"
-                label={`All Cadres (${workstations.length})`}
-                clickable
-                onClick={() => setBand('All')}
-                sx={{
-                  fontFamily: mono,
-                  fontWeight: 750,
-                  bgcolor: band === 'All' ? gold.accent : (isDark ? 'transparent' : '#FFFFFF'),
-                  color: band === 'All' ? (isDark ? '#08080B' : '#101828') : 'text.primary',
-                  border: '1px solid',
-                  borderColor: band === 'All' ? gold.accent : (isDark ? '#374151' : '#D1D5DB'),
-                }}
-              />
-              {ORDERED_BANDS.map((bName) => (
-                <Chip
-                  key={`jump-${bName}`}
-                  size="small"
-                  label={`${bName} (${bandCounts[bName] || 0})`}
-                  clickable
-                  onClick={() => setBand(bName)}
-                  sx={{
-                    fontFamily: mono,
-                    fontWeight: 750,
-                    bgcolor: band === bName ? gold.accent : (isDark ? 'transparent' : '#FFFFFF'),
-                    color: band === bName ? (isDark ? '#08080B' : '#101828') : 'text.primary',
-                    border: '1px solid',
-                    borderColor: band === bName ? gold.accent : (isDark ? '#374151' : '#D1D5DB'),
-                  }}
-                />
-              ))}
-            </Box>
           </Paper>
-
-          {/* Grouped Architectural Cadres Display */}
-          <Stack spacing={4}>
-            {ORDERED_BANDS.map((bName) => {
-              const bItems = groupedByBand[bName] || [];
-              if (band !== 'All' && band !== bName) return null;
-              const cfg = getBandConfig(bName, isDark);
-              const IconComponent = cfg.icon;
-
-              return (
-                <Paper
-                  key={`cadre-section-${bName}`}
-                  elevation={0}
-                  sx={{
-                    p: { xs: 2, md: 3 },
-                    borderRadius: 3,
-                    bgcolor: isDark ? '#08080B' : '#FFFFFF',
-                    border: '1px solid',
-                    borderColor: isDark ? '#26262F' : '#EAECF0',
-                    boxShadow: isDark ? 'none' : '0 1px 3px rgba(16, 24, 40, 0.05)',
-                  }}
-                >
-                  {/* Cadre Header */}
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2.5, flexWrap: 'wrap', gap: 1.5 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                      <Box
-                        sx={{
-                          width: 40,
-                          height: 40,
-                          borderRadius: 2,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          bgcolor: cfg.wash,
-                          border: `1px solid ${cfg.border}`,
-                          color: cfg.color,
-                        }}
-                      >
-                        <IconComponent />
-                      </Box>
-                      <Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-                          <Typography variant="h5" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontWeight: 700, color: isDark ? '#EDEFF2' : '#101828' }}>
-                            {bName} Cadre
-                          </Typography>
-                          <Chip
-                            size="small"
-                            label={`${bItems.length} Consoles`}
-                            sx={{
-                              height: 22,
-                              fontFamily: mono,
-                              fontSize: '0.72rem',
-                              fontWeight: 800,
-                              bgcolor: cfg.wash,
-                              color: cfg.color,
-                              border: `1px solid ${cfg.border}`,
-                            }}
-                          />
-                          <Chip
-                            size="small"
-                            icon={<VerifiedUserIcon sx={{ fontSize: '0.75rem !important', color: `${isDark ? '#34D399' : '#047857'} !important` }} />}
-                            label="Zero-Egress Invariant Verified"
-                            sx={{
-                              height: 22,
-                              fontFamily: mono,
-                              fontSize: '0.68rem',
-                              fontWeight: 700,
-                              bgcolor: isDark ? 'rgba(52,211,153,0.1)' : '#ECFDF3',
-                              color: isDark ? '#34D399' : '#047857',
-                              border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : 'rgba(4,120,87,0.3)'}`,
-                            }}
-                          />
-                        </Box>
-                        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5, fontSize: '0.88rem' }}>
-                          {cfg.description}
-                        </Typography>
-                      </Box>
-                    </Box>
-
-                    {band !== bName && (
-                      <Button
-                        size="small"
-                        onClick={() => setBand(bName)}
-                        sx={{ color: gold.accent, fontSize: '0.78rem', textTransform: 'none', fontWeight: 700 }}
-                      >
-                        Focus Cadre
-                      </Button>
-                    )}
-                  </Box>
-
-                  {/* Workstations Grid within this Cadre */}
-                  {bItems.length === 0 ? (
-                    <Typography variant="body2" color="text.secondary" sx={{ fontStyle: 'italic', py: 1 }}>
-                      No workstations in this cadre match current filter.
-                    </Typography>
-                  ) : (
-                    <Grid container spacing={2.5}>
-                      {bItems.map((item) => (
-                        <Grid xs={12} sm={6} md={4} key={item.id}>
-                          <WorkstationCard item={item} isDark={isDark} gold={gold} />
-                        </Grid>
-                      ))}
-                    </Grid>
-                  )}
-                </Paper>
-              );
-            })}
-          </Stack>
-          </Box>
         </RevealOnScroll>
       )}
 
-      {/* Sovereign Installation Funnel */}
-      <RevealOnScroll preset="fadeUp" delay={0.4}>
-        <SovereignFunnel
-          title="Deploy Sovereign Workstations Locally"
-          subtitle="Zero-egress developer workstations, offline code compiler sandboxes, local telemetry arrays, and multi-agent coordination bridges."
-          toolTitle="Option 1: Zoth CLI Workstations Engine"
-          toolTag="WORKSTATIONS"
-          toolDescription="Launch any of the 6 sovereign workstation bands locally with offline telemetry arrays, sandboxed runtimes, and local IPC daemon bridges."
-          toolRepo="https://github.com/NullAITech/zoth-studio-v2"
-          toolCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git && npm install"
-        />
-      </RevealOnScroll>
+      {/* Module Grid */}
+      {filtered.length === 0 ? (
+        <Paper
+          elevation={0}
+          sx={{
+            p: 5,
+            textAlign: 'center',
+            bgcolor: cardBg,
+            border: `1px dashed ${borderCol}`,
+            borderRadius: 2.5,
+          }}
+        >
+          <Typography variant="h6" sx={{ color: primaryText, mb: 1 }}>
+            No modules matched your filter
+          </Typography>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={() => {
+              setBand('All');
+              setTypeFilter('all');
+              setSearch('');
+            }}
+            sx={{ borderColor: borderCol, color: primaryText, textTransform: 'none' }}
+          >
+            Reset Filters
+          </Button>
+        </Paper>
+      ) : (
+        <StaggerChildren>
+          <Grid container spacing={2.5}>
+            {filtered.map((item) => (
+              <Grid xs={12} sm={6} md={4} key={item.id} sx={{ display: 'flex' }}>
+                <StaggerItem style={{ display: 'flex', width: '100%' }}>
+                  <WorkstationCard
+                    item={item}
+                    isDark={isDark}
+                    gold={gold}
+                    primaryText={primaryText}
+                    secondaryText={secondaryText}
+                    cardBg={cardBg}
+                    codeBg={codeBg}
+                    borderCol={borderCol}
+                  />
+                </StaggerItem>
+              </Grid>
+            ))}
+          </Grid>
+        </StaggerChildren>
+      )}
+
+      <Divider sx={{ my: 2, borderColor: 'transparent' }} />
+      <SovereignFunnel
+        title="Run Zoth Studio Locally"
+        subtitle="Clone the Zoth Studio v2 repository to run the local Express/IPC server and connect directly to loopback daemons on your machine."
+        toolTitle="Option 1: Zoth Studio v2 Repo"
+        toolTag="MONOREPO"
+        toolDescription="Full source repository containing all 6 architectural bands, local IPC bridges, and test suites."
+        toolRepo="https://github.com/NullAITech/zoth-studio-v2"
+        toolCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git"
+      />
     </Container>
-    </>
   );
 }

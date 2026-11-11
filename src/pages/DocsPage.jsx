@@ -356,15 +356,15 @@ export default function DocsPage() {
   const terminalAuditLogs = [
     `npm run zoth -- doctor
 
-Probes 127.0.0.1:8094 (memory), :8102 (bridge), :8989 (swarm), :8787 (vault), and :11434 (Ollama).
+Probes 127.0.0.1:8094 (memory), :8102 (bridge), :8141 (swarm), :8088 (vault), and :11434 (Ollama).
 Zero Cloud Telemetry Guaranteed. 100% loopback enclave binding.
 Prints whether each published tool is checked out. Run directly in the repo.`,
 
     `npm run zoth -- up
 
 Starts neuro-memory-daemon on 127.0.0.1:8094 and sovereign-agent-bridge on 127.0.0.1:8102.
-Swarm multiplexer active on 127.0.0.1:8989.
-Argon2id vault binary daemon listening on 127.0.0.1:8787.
+Swarm multiplexer active on 127.0.0.1:8141.
+Argon2id vault binary daemon listening on 127.0.0.1:8088.
 Shannon entropy gatekeeper active on all inter-process channels.`,
 
     `npm run zoth -- pull --all
@@ -896,7 +896,7 @@ Runs local invariant verification before staging tools.`
 
                   <CodeSnippet
                     title="SYSTEM INITIALIZATION SEQUENCE"
-                    code={`# Check local daemons and enclave port health (:8094, :8102, :8989, :8787, :11434)
+                    code={`# Check local daemons and enclave port health (:8094, :8102, :8141, :8088, :11434)
 npm run zoth -- doctor
 
 # Launch local backend daemons

@@ -49,8 +49,8 @@ const heroContainerVariants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.04,
+      staggerChildren: 0.035,
+      delayChildren: 0,
     },
   },
 };
@@ -58,13 +58,13 @@ const heroContainerVariants = {
 const heroItemVariants = {
   hidden: {
     opacity: 0,
-    y: 20,
+    y: 8,
   },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.58,
+      duration: 0.28,
       ease: EASE_OUT_EXPO,
     },
   },

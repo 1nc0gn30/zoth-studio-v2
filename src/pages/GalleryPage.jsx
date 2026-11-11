@@ -1,178 +1,204 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Container, Typography, Button, Stack } from '@mui/material';
+import { Box, Container, Typography, Button, Paper } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import SEO from '../components/SEO';
-import { galleryGroups } from '../data/galleryManifest';
+import { resolveRouteIntro } from '../motion/routeIntros';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
+const serif = '"Cormorant Garamond", Georgia, serif';
 
-function Frame({ label, image, video, narrow }) {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#8A6508';
-  const muted = theme.palette.text.secondary;
-
-  return (
-    <Box sx={{ minWidth: 0 }}>
-      <Typography
-        sx={{
-          fontFamily: mono,
-          fontSize: '0.72rem',
-          fontWeight: 800,
-          letterSpacing: '0.12em',
-          textTransform: 'uppercase',
-          color: gold,
-          mb: 1,
-        }}
-      >
-        {label}
-      </Typography>
-      <Box
-        component="img"
-        src={image}
-        alt={`${label} screenshot`}
-        loading="lazy"
-        sx={{
-          display: 'block',
-          width: narrow ? 'min(100%, 280px)' : '100%',
-          mx: narrow ? 'auto' : 0,
-          height: 'auto',
-          borderRadius: 1.5,
-          bgcolor: '#000',
-          border: `1px solid ${theme.palette.divider}`,
-        }}
-      />
-      <Box
-        component="video"
-        controls
-        playsInline
-        preload="none"
-        poster={image}
-        src={video}
-        sx={{
-          display: 'block',
-          width: narrow ? 'min(100%, 280px)' : '100%',
-          mx: narrow ? 'auto' : 0,
-          mt: 1.25,
-          borderRadius: 1.5,
-          bgcolor: '#000',
-          border: `1px solid ${theme.palette.divider}`,
-        }}
-      />
-      <Typography sx={{ mt: 0.75, fontFamily: mono, fontSize: '0.72rem', color: muted }}>
-        Intro recording
-      </Typography>
-    </Box>
-  );
-}
-
-function CaptureCard({ item }) {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
-  const border = isDark ? 'rgba(212,175,55,0.28)' : 'rgba(184,134,11,0.28)';
-  const panel = isDark ? '#0D0E15' : theme.palette.background.paper;
-
-  return (
-    <Box
-      component="article"
-      id={item.slug}
-      sx={{
-        border: `1px solid ${border}`,
-        borderRadius: 2,
-        bgcolor: panel,
-        p: { xs: 2, md: 2.5 },
-      }}
-    >
-      <Stack
-        direction={{ xs: 'column', sm: 'row' }}
-        spacing={1.5}
-        sx={{ alignItems: { sm: 'center' }, justifyContent: 'space-between', mb: 2 }}
-      >
-        <Box>
-          <Typography variant="h4" sx={{ color: theme.palette.text.primary }}>
-            {item.title}
-          </Typography>
-          <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', color: theme.palette.text.secondary, mt: 0.5 }}>
-            {item.path}
-          </Typography>
-        </Box>
-        <Button
-          component={RouterLink}
-          to={item.path}
-          variant="outlined"
-          color="primary"
-          sx={{ fontWeight: 750, alignSelf: { xs: 'flex-start', sm: 'center' } }}
-        >
-          Open route
-        </Button>
-      </Stack>
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1.4fr) minmax(220px, 0.6fr)' },
-          gap: { xs: 3, md: 2.5 },
-        }}
-      >
-        <Frame label="Desktop" image={item.desktopImage} video={item.desktopVideo} />
-        <Frame label="Mobile" image={item.mobileImage} video={item.mobileVideo} narrow />
-      </Box>
-    </Box>
-  );
-}
+const ROUTE_INDEX = [
+  { path: '/', introKey: 'home', desc: 'Flagship overview, 77-tool local repository index, and six core systems.' },
+  { path: '/arsenal', introKey: 'arsenal', desc: 'Complete searchable 77-tool local repository matrix with grid and list views.' },
+  { path: '/tools', introKey: 'tools', desc: 'Categorized standalone CLI and loopback daemon repository directory.' },
+  { path: '/workstations', introKey: 'workstations', desc: '18 role-specialized workstation cadres and port topology.' },
+  { path: '/zoth-os', introKey: 'zoth-os', desc: 'ZothOS v3.4.0 (Debian 13 + KDE Plasma 6) and ZothOS-Lite v1.2 amnesic edition.' },
+  { path: '/swarm', introKey: 'swarm', desc: 'Pantheon 21-agent multiplexer (:8141), Zoth Egregore, and Zoth Civilization (:9393).' },
+  { path: '/memory', introKey: 'memory', desc: 'Neuro-Memory STDP synaptic SQLite WAL daemon (:8094) and MCP recall.' },
+  { path: '/webgen', introKey: 'webgen', desc: 'Local 6-framework web compiler with Schema.org AEO and viewport guardrails.' },
+  { path: '/hexstrike', introKey: 'hexstrike', desc: 'Local security audit terminal, CVE correlation, and entropy inspection.' },
+  { path: '/adytum', introKey: 'adytum', desc: '22-stage JSON Schema-validated local AI workflow orchestrator.' },
+  { path: '/ax', introKey: 'ax', desc: 'Agent Experience (AX) manifests, /.well-known/mcp.json, and /llms.txt.' },
+  { path: '/consensus', introKey: 'consensus', desc: 'Byzantine N >= 3f + 1 multi-model quorum and ground-truth verification.' },
+  { path: '/bridges', introKey: 'bridges', desc: 'Loopback-bound MCP stdio/SSE bridges and encrypted WireGuard/Tailscale mesh.' },
+  { path: '/voice', introKey: 'voice', desc: 'Local Whisper STT and Kokoro/Piper neural TTS voice pipeline (:8114).' },
+  { path: '/agora', introKey: 'agora', desc: 'Structured adversarial multi-agent debate and Socratic design verification.' },
+  { path: '/vaelor', introKey: 'vaelor', desc: 'Feeless local DAG ledger specification for cryptographic agent task receipts.' },
+  { path: '/docs', introKey: 'docs', desc: 'Master architectural codex, CLI cheat sheets, and security invariants.' },
+  { path: '/docs/math', introKey: 'math', desc: 'Six closed-form mathematical pillars: linear algebra, STDP, and Lyapunov proofs.' },
+];
 
 export default function GalleryPage() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const gold = isDark ? '#D4AF37' : '#8A6508';
+
+  const pageBg = isDark ? '#08080B' : '#FAF8F3';
+  const cardBg = isDark ? '#0E1016' : '#FFFFFF';
+  const textPrimary = isDark ? '#F5F1E6' : '#101828';
+  const textSecondary = isDark ? '#A8A29E' : '#334155';
+  const hairline = isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(16, 24, 40, 0.12)';
+  const gold = isDark ? '#D4AF37' : '#7A5808';
 
   return (
-    <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 4, md: 7 } }}>
-      <SEO
-        title="Studio Gallery // Pages and Motion Intros"
-        description="Desktop and mobile screenshots and intro recordings of Zoth Studio v2, including nested documentation routes."
-        path="/gallery"
-      />
-      <Typography
-        sx={{
-          fontFamily: mono,
-          fontSize: '0.75rem',
-          fontWeight: 800,
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-          color: gold,
-          mb: 1.5,
-        }}
-      >
-        Studio gallery
-      </Typography>
-      <Typography variant="h2" sx={{ color: theme.palette.text.primary, mb: 2, maxWidth: 720 }}>
-        What Zoth Studio looks like
-      </Typography>
-      <Typography sx={{ maxWidth: 680, fontSize: { xs: '1.02rem', md: '1.12rem' }, lineHeight: 1.7, color: theme.palette.text.primary, mb: 1.5 }}>
-        Screenshots of the live pages, plus screen recordings of the motion intros, on desktop and on a phone-width viewport. Captured in the dark theme. Nested docs such as /adytum/docs play that section’s intro.
-      </Typography>
-      <Typography sx={{ fontFamily: mono, fontSize: '0.8rem', color: theme.palette.text.secondary, mb: 5 }}>
-        Files are in public/studio-captures/
-      </Typography>
+    <Box sx={{ bgcolor: pageBg, minHeight: '100vh', color: textPrimary }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 4, md: 7 } }}>
+        <SEO
+          title="Studio Directory & Intro Choreography // Zoth Studio v2"
+          description="Interactive route index and 60fps Sub-Pixel Unicode Braille + Bayer 8x8 Dither aperture intro choreography across Zoth Studio v2."
+          path="/gallery"
+        />
 
-      <Stack spacing={6}>
-        {galleryGroups.map((group) => (
-          <Box key={group.id} component="section">
-            <Typography variant="h3" sx={{ color: theme.palette.text.primary, mb: 1 }}>
-              {group.title}
-            </Typography>
-            <Typography sx={{ maxWidth: 720, color: theme.palette.text.secondary, mb: 3, lineHeight: 1.7 }}>
-              {group.lede}
-            </Typography>
-            <Stack spacing={3}>
-              {group.items.map((item) => (
-                <CaptureCard key={item.slug} item={item} />
-              ))}
-            </Stack>
-          </Box>
-        ))}
-      </Stack>
-    </Container>
+        <Box sx={{ pb: 4, mb: 5, borderBottom: `1px solid ${hairline}` }}>
+          <Typography
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              letterSpacing: '0.16em',
+              textTransform: 'uppercase',
+              color: gold,
+              mb: 1.25,
+            }}
+          >
+            STUDIO ROUTE INDEX & MOTION ARCHITECTURE
+          </Typography>
+          <Typography
+            variant="h1"
+            sx={{
+              fontFamily: serif,
+              fontWeight: 600,
+              fontSize: { xs: '2.3rem', sm: '3.1rem', md: '3.6rem' },
+              lineHeight: 1.08,
+              letterSpacing: '-0.02em',
+              color: textPrimary,
+              mb: 2,
+            }}
+          >
+            Editorial Aperture & Route Directory
+          </Typography>
+          <Typography
+            sx={{
+              maxWidth: 740,
+              fontSize: { xs: '0.98rem', md: '1.08rem' },
+              lineHeight: 1.68,
+              color: textSecondary,
+            }}
+          >
+            Every primary route in Zoth Studio v2 opens through a procedural 60fps Unicode U+2800 Sub-Pixel Braille and Ordered Bayer 8x8 Dither emblem stage before parting along a horizontal center-seam aperture. Select any route below to inspect its live layout or preview its full intro sequence.
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: 'minmax(0, 1fr)', sm: 'repeat(2, minmax(0, 1fr))', md: 'repeat(3, minmax(0, 1fr))' },
+            gap: 2.5,
+          }}
+        >
+          {ROUTE_INDEX.map((item) => {
+            const meta = resolveRouteIntro(item.path) || resolveRouteIntro('/');
+            const accent = isDark ? meta.accent : (meta.accentLight || gold);
+
+            return (
+              <Paper
+                key={item.path}
+                elevation={0}
+                sx={{
+                  p: 2.75,
+                  borderRadius: 2.5,
+                  bgcolor: cardBg,
+                  border: `1px solid ${hairline}`,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  gap: 2,
+                }}
+              >
+                <Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                    <Typography
+                      sx={{
+                        fontFamily: mono,
+                        fontSize: '0.68rem',
+                        fontWeight: 700,
+                        letterSpacing: '0.12em',
+                        color: accent,
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      {meta.kicker}
+                    </Typography>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: textSecondary }}>
+                      {item.path}
+                    </Typography>
+                  </Box>
+                  <Typography
+                    sx={{
+                      fontFamily: serif,
+                      fontWeight: 600,
+                      fontSize: '1.45rem',
+                      color: textPrimary,
+                      mb: 0.75,
+                      lineHeight: 1.15,
+                    }}
+                  >
+                    {meta.label}
+                  </Typography>
+                  <Typography sx={{ fontSize: '0.88rem', lineHeight: 1.6, color: textSecondary }}>
+                    {item.desc}
+                  </Typography>
+                </Box>
+
+                <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                  <Button
+                    component={RouterLink}
+                    to={item.path}
+                    size="small"
+                    variant="contained"
+                    disableElevation
+                    endIcon={<ArrowForwardIcon sx={{ fontSize: 14 }} />}
+                    sx={{
+                      bgcolor: isDark ? accent : '#101828',
+                      color: isDark ? '#08080B' : '#FFFFFF',
+                      fontFamily: mono,
+                      fontSize: '0.74rem',
+                      fontWeight: 700,
+                      textTransform: 'none',
+                      borderRadius: 1.25,
+                      '&:hover': {
+                        bgcolor: isDark ? '#F5F1E6' : '#1E293B',
+                        color: isDark ? '#08080B' : '#FFFFFF',
+                      },
+                    }}
+                  >
+                    Open Route
+                  </Button>
+                  <Button
+                    component={RouterLink}
+                    to={`${item.path}?intro=1`}
+                    size="small"
+                    variant="outlined"
+                    sx={{
+                      borderColor: hairline,
+                      color: textPrimary,
+                      fontFamily: mono,
+                      fontSize: '0.74rem',
+                      fontWeight: 600,
+                      textTransform: 'none',
+                      borderRadius: 1.25,
+                      '&:hover': { borderColor: accent, color: accent },
+                    }}
+                  >
+                    Preview Intro
+                  </Button>
+                </Box>
+              </Paper>
+            );
+          })}
+        </Box>
+      </Container>
+    </Box>
   );
 }

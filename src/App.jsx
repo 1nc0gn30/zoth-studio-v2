@@ -5,6 +5,8 @@ import { theme as lightTheme, darkTheme } from './theme';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import ToolsPage from './pages/ToolsPage';
+import ArsenalPage from './pages/ArsenalPage';
+import WorkstationsPage from './pages/WorkstationsPage';
 import ShortcutsHelp from './components/ShortcutsHelp';
 import ErrorBoundary from './components/ErrorBoundary';
 import SEO from './components/SEO';
@@ -12,9 +14,7 @@ import Footer from './components/Footer';
 import { IntroDirector, PageStage } from './motion/IntroDirector';
 import { RealityProvider, useReality } from './context/RealityContext';
 import RealityBackgroundCanvas from './components/RealityBackgroundCanvas';
-import RealityZothBotHUD from './components/RealityZothBotHUD';
 
-// Code-split route modules for instant initial load and on-demand streaming
 const SwarmPage = lazy(() => import('./pages/SwarmPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const SwarmShowcasePage = lazy(() => import('./pages/SwarmShowcasePage'));
@@ -32,9 +32,7 @@ const AdytumShowcasePage = lazy(() => import('./pages/AdytumShowcasePage'));
 const MathPillarDetailPage = lazy(() => import('./pages/MathPillarDetailPage'));
 const MathPillarsPage = lazy(() => import('./pages/MathPillarsPage'));
 const RealToolWorkspacePage = lazy(() => import('./pages/RealToolWorkspacePage'));
-const ArsenalPage = lazy(() => import('./pages/ArsenalPage'));
 const BridgesPage = lazy(() => import('./pages/BridgesPage'));
-const WorkstationsPage = lazy(() => import('./pages/WorkstationsPage'));
 const ConsensusPage = lazy(() => import('./pages/ConsensusPage'));
 const FaqsPage = lazy(() => import('./pages/FaqsPage'));
 const AXPage = lazy(() => import('./pages/AXPage'));
@@ -51,35 +49,34 @@ function RouteFallback() {
     <Box
       sx={{
         flex: 1,
-        minHeight: '60vh',
+        minHeight: '50vh',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 2,
-        opacity: 0.85,
+        gap: 1.5,
       }}
     >
       <Box
         sx={{
-          width: 44,
-          height: 44,
+          width: 32,
+          height: 32,
           borderRadius: '50%',
-          border: '2px solid rgba(212, 175, 55, 0.15)',
-          borderTopColor: '#D4AF37',
-          animation: 'zoth-spin 0.9s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite',
+          border: `2px solid ${dark ? 'rgba(212, 175, 55, 0.2)' : 'rgba(122, 88, 8, 0.2)'}`,
+          borderTopColor: dark ? '#D4AF37' : '#7A5808',
+          animation: 'zoth-spin 0.9s linear infinite',
         }}
       />
       <Box
         sx={{
           fontFamily: '"JetBrains Mono", monospace',
-          fontSize: '0.72rem',
-          letterSpacing: '0.22em',
-          color: dark ? 'rgba(212, 175, 55, 0.75)' : '#B8860B',
+          fontSize: '0.7rem',
+          letterSpacing: '0.18em',
+          color: dark ? '#D4AF37' : '#7A5808',
           textTransform: 'uppercase',
         }}
       >
-        INITIALIZING ENCLAVE
+        Loading Specification
       </Box>
     </Box>
   );
@@ -105,9 +102,6 @@ function WorkstationRedirect() {
   return <Navigate to={`/tools/${workstationId}`} replace />;
 }
 
-/**
- * Ensures user is immediately landed at the top of the page on every route navigation.
- */
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -121,106 +115,105 @@ function ScrollToTop() {
 }
 
 function AppShell({ mode, onToggleTheme }) {
-  // Page-level boundary keyed on the route: a crashing page no longer takes down the
-  // navbar, and navigating to another page recovers automatically.
   const { pathname: routePath } = useLocation();
   const theme = useTheme();
   const { reality } = useReality();
 
   return (
     <IntroDirector>
-    <RealityBackgroundCanvas />
-    <Box
-      sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: 'transparent',
-        color: theme.palette.text.primary,
-        position: 'relative',
-        zIndex: 2,
-        '& .MuiPaper-root': {
-          borderRadius: reality.cardRadius,
-        },
-        '& .text-gradient-gold': {
-          backgroundImage: theme.palette.mode === 'dark'
-            ? `linear-gradient(135deg, ${reality.accent} 0%, ${reality.accentSoft} 50%, ${reality.accent} 100%) !important`
-            : `linear-gradient(135deg, ${reality.accentLightMode || '#7A5400'} 0%, #9A6E08 50%, ${reality.accentLightMode || '#6E4B00'} 100%) !important`,
-        },
-        '& .MuiButton-containedPrimary': {
-          backgroundColor: `${reality.accent} !important`,
-          color: '#050609 !important',
-          borderRadius: reality.cardRadius,
-        },
-        '& .section-kicker': {
-          color: `${theme.palette.mode === 'dark' ? reality.accent : reality.accentLightMode} !important`,
-        },
-      }}
-    >
-      <ScrollToTop />
-      <SEO />
-      <Navbar mode={mode} onToggleTheme={onToggleTheme} />
+      <RealityBackgroundCanvas />
       <Box
-        component="main"
         sx={{
-          flexGrow: 1,
+          minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
+          backgroundColor: 'transparent',
+          color: theme.palette.text.primary,
           position: 'relative',
           zIndex: 2,
-          minWidth: 0,
-          overflowX: 'clip',
-          '& > .MuiContainer-root, & > .page-stage > .MuiContainer-root': { flex: 1, width: '100%', minWidth: 0 },
-          '& > .page-stage': { flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 },
+          '& .text-gradient-gold': {
+            backgroundImage:
+              theme.palette.mode === 'dark'
+                ? `linear-gradient(135deg, ${reality.accent} 0%, ${reality.accentSoft} 50%, ${reality.accent} 100%)`
+                : 'linear-gradient(135deg, #6E4B00 0%, #8A6508 50%, #5C3E00 100%)',
+          },
+          '& .section-kicker': {
+            color: theme.palette.mode === 'dark' ? reality.accent : '#7A5808',
+          },
         }}
       >
-        <PageStage>
-          <ErrorBoundary key={routePath}>
-          <Suspense fallback={<RouteFallback />}>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/arsenal" element={<ArsenalPage />} />
-              <Route path="/adytum" element={<AdytumShowcasePage />} />
-              <Route path="/adytum/docs" element={<AdytumPage />} />
-              <Route path="/swarm" element={<SwarmShowcasePage />} />
-              <Route path="/swarm/docs" element={<SwarmPage />} />
-              <Route path="/voice" element={<VoiceStationPage />} />
-              <Route path="/bridges" element={<BridgesPage />} />
-              <Route path="/tools" element={<ToolsPage />} />
-              <Route path="/workstations" element={<WorkstationsPage />} />
-              <Route path="/workstations/:workstationId" element={<WorkstationRedirect />} />
-              <Route path="/templates" element={<Navigate to="/arsenal" replace />} />
-              <Route path="/tools/:toolId" element={<RealToolWorkspacePage />} />
-              <Route path="/memory" element={<MemoryShowcasePage />} />
-              <Route path="/memory/docs" element={<MemoryPage />} />
-              <Route path="/consensus" element={<ConsensusPage />} />
-              <Route path="/webgen" element={<WebGenShowcasePage />} />
-              <Route path="/webgen/docs" element={<WebGenPage />} />
-              <Route path="/hexstrike" element={<HexStrikeShowcasePage />} />
-              <Route path="/hexstrike/docs" element={<HexStrikePage />} />
-              <Route path="/zothos" element={<Navigate to="/zoth-os" replace />} />
-              <Route path="/zoth-os" element={<ZothOSShowcasePage />} />
-              <Route path="/zoth-os/docs" element={<ZothOSPage />} />
-              <Route path="/docs" element={<DocsPage />} />
-              <Route path="/docs/math/:pillarId" element={<MathPillarDetailPage />} />
-              <Route path="/docs/math" element={<MathPillarsPage />} />
-              <Route path="/math-pillars" element={<Navigate to="/docs/math" replace />} />
-              <Route path="/faqs" element={<FaqsPage />} />
-              <Route path="/ax" element={<AXShowcasePage />} />
-              <Route path="/ax/docs" element={<AXPage />} />
-              <Route path="/gallery" element={<GalleryPage />} />
-              <Route path="/agora" element={<AgoraPage />} />
-              <Route path="/vaelor" element={<VaelorPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
-            <ShortcutsHelp />
-          </Suspense>
-          </ErrorBoundary>
-        </PageStage>
+        <ScrollToTop />
+        <SEO />
+        <Navbar mode={mode} onToggleTheme={onToggleTheme} />
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'relative',
+            zIndex: 2,
+            minWidth: 0,
+            overflowX: 'clip',
+            '& > .MuiContainer-root, & > .page-stage > .MuiContainer-root': {
+              flex: 1,
+              width: '100%',
+              minWidth: 0,
+            },
+            '& > .page-stage': {
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              minWidth: 0,
+            },
+          }}
+        >
+          <PageStage>
+            <ErrorBoundary key={routePath}>
+              <Suspense fallback={<RouteFallback />}>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/arsenal" element={<ArsenalPage />} />
+                  <Route path="/adytum" element={<AdytumShowcasePage />} />
+                  <Route path="/adytum/docs" element={<AdytumPage />} />
+                  <Route path="/swarm" element={<SwarmShowcasePage />} />
+                  <Route path="/swarm/docs" element={<SwarmPage />} />
+                  <Route path="/voice" element={<VoiceStationPage />} />
+                  <Route path="/bridges" element={<BridgesPage />} />
+                  <Route path="/tools" element={<ToolsPage />} />
+                  <Route path="/workstations" element={<WorkstationsPage />} />
+                  <Route path="/workstations/:workstationId" element={<WorkstationRedirect />} />
+                  <Route path="/templates" element={<Navigate to="/arsenal" replace />} />
+                  <Route path="/tools/:toolId" element={<RealToolWorkspacePage />} />
+                  <Route path="/memory" element={<MemoryShowcasePage />} />
+                  <Route path="/memory/docs" element={<MemoryPage />} />
+                  <Route path="/consensus" element={<ConsensusPage />} />
+                  <Route path="/webgen" element={<WebGenShowcasePage />} />
+                  <Route path="/webgen/docs" element={<WebGenPage />} />
+                  <Route path="/hexstrike" element={<HexStrikeShowcasePage />} />
+                  <Route path="/hexstrike/docs" element={<HexStrikePage />} />
+                  <Route path="/zothos" element={<Navigate to="/zoth-os" replace />} />
+                  <Route path="/zoth-os" element={<ZothOSShowcasePage />} />
+                  <Route path="/zoth-os/docs" element={<ZothOSPage />} />
+                  <Route path="/docs" element={<DocsPage />} />
+                  <Route path="/docs/math/:pillarId" element={<MathPillarDetailPage />} />
+                  <Route path="/docs/math" element={<MathPillarsPage />} />
+                  <Route path="/math-pillars" element={<Navigate to="/docs/math" replace />} />
+                  <Route path="/faqs" element={<FaqsPage />} />
+                  <Route path="/ax" element={<AXShowcasePage />} />
+                  <Route path="/ax/docs" element={<AXPage />} />
+                  <Route path="/gallery" element={<GalleryPage />} />
+                  <Route path="/agora" element={<AgoraPage />} />
+                  <Route path="/vaelor" element={<VaelorPage />} />
+                  <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+                <ShortcutsHelp />
+              </Suspense>
+            </ErrorBoundary>
+          </PageStage>
+        </Box>
+        <Footer />
       </Box>
-      <RealityZothBotHUD />
-      <Footer />
-    </Box>
     </IntroDirector>
   );
 }
@@ -234,9 +227,9 @@ function RealityThemedApp({ mode, onToggleTheme }) {
     return createTheme(base, {
       palette: {
         primary: {
-          main: isDark ? reality.accent : reality.accentLightMode,
+          main: isDark ? reality.accent : '#101828',
           light: reality.accentSoft,
-          dark: reality.accentLightMode,
+          dark: '#0B0F19',
         },
         background: {
           default: isDark ? reality.bgDark : '#FAF8F3',
@@ -244,14 +237,14 @@ function RealityThemedApp({ mode, onToggleTheme }) {
         },
       },
       shape: {
-        borderRadius: parseInt(reality.cardRadius, 10) || 12,
+        borderRadius: parseInt(reality.cardRadius, 10) || 10,
       },
     });
   }, [isDark, reality]);
 
   useEffect(() => {
     const bg = isDark ? reality.bgDark : '#FAF8F3';
-    const fg = isDark ? '#EDEFF2' : '#101828';
+    const fg = isDark ? '#F5F1E6' : '#101828';
     document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
     document.documentElement.style.setProperty('--zoth-page-bg', bg);
     document.documentElement.style.setProperty('--zoth-page-fg', fg);
@@ -279,7 +272,6 @@ export default function App() {
     }
   }, [mode]);
 
-  // Seamlessly fade out and dismiss the zero-latency sovereign splash veil
   useEffect(() => {
     const preloader = document.getElementById('zoth-preloader');
     if (preloader) {
@@ -288,7 +280,7 @@ export default function App() {
         if (preloader.parentNode) {
           preloader.parentNode.removeChild(preloader);
         }
-      }, 420);
+      }, 360);
       return () => clearTimeout(timer);
     }
   }, []);

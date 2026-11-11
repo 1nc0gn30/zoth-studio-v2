@@ -1,406 +1,283 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent, CardActions,
-  Chip, Button, TextField, InputAdornment, MenuItem, Select, FormControl, InputLabel,
-  Paper, IconButton, Stack
+  Box,
+  Container,
+  Typography,
+  Unstable_Grid2 as Grid,
+  Card,
+  CardContent,
+  CardActions,
+  Chip,
+  Button,
+  TextField,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import TerminalIcon from '@mui/icons-material/Terminal';
-import LockIcon from '@mui/icons-material/Lock';
-import FlashOnIcon from '@mui/icons-material/FlashOn';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
-import LaunchIcon from '@mui/icons-material/Launch';
-import SecurityIcon from '@mui/icons-material/Security';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import DnsIcon from '@mui/icons-material/Dns';
-import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import CheckIcon from '@mui/icons-material/Check';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import ClearIcon from '@mui/icons-material/Clear';
+import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+
 import { microTools } from '../data/toolsData';
-import ToolOfferLine from '../components/ToolOfferLine';
-import { useStudioStatus } from '../studio/useStudioStatus';
-import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem, ParallaxGlow, FloatingElement } from '../components/MotionReveal';
-import { getCategoryMotionMeta } from '../components/tools/ToolMotionShowcase';
-import AsciiMotionGodModeTool from '../components/tools/AsciiMotionGodModeTool';
-import { useSovereignRuntime, isLocalRuntime } from '../utils/sovereignRuntime';
+import SovereignFunnel from '../components/SovereignFunnel';
+import { HeroReveal, HeroItem, GlowLine, StaggerChildren, StaggerItem } from '../components/MotionReveal';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
+const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
 const categories = ['All', ...Array.from(new Set(microTools.map((t) => t.category)))];
 
 export default function ToolsPage() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
-  const { status } = useStudioStatus();
-  const { isLocal, hasWebGPU, evaluateTool } = useSovereignRuntime();
-  const activeServices = status?.services
-    ? Object.values(status.services).filter((s) => s.up)
-    : [];
-  const isBackendConnected = activeServices.length > 0;
 
-  // Filters live in the URL (?q=&cat=&mode=&pinned=1) so views are shareable and survive reload/back.
   const [params, setParams] = useSearchParams();
   const [search, setSearch] = useState(() => params.get('q') || '');
   const [selectedCat, setSelectedCat] = useState(() => params.get('cat') || 'All');
-  const [execFilter, setExecFilter] = useState(() => (['all', 'webgpu', 'local_cli'].includes(params.get('mode')) ? params.get('mode') : 'all')); // 'all' | 'webgpu' | 'local_cli'
   const [pinnedOnly, setPinnedOnly] = useState(() => params.get('pinned') === '1');
   const [pinned, setPinned] = useState(() => {
-    try { const v = JSON.parse(localStorage.getItem('zoth.pinnedTools') || '[]'); return Array.isArray(v) ? v : []; } catch { return []; }
+    try {
+      const v = JSON.parse(localStorage.getItem('zoth.pinnedTools') || '[]');
+      return Array.isArray(v) ? v : [];
+    } catch {
+      return [];
+    }
   });
+  const [copiedId, setCopiedId] = useState(null);
   const searchRef = useRef(null);
+
   useEffect(() => {
     const next = new URLSearchParams(params);
-    if (search) next.set('q', search); else next.delete('q');
-    if (selectedCat !== 'All') next.set('cat', selectedCat); else next.delete('cat');
-    if (execFilter !== 'all') next.set('mode', execFilter); else next.delete('mode');
-    if (pinnedOnly) next.set('pinned', '1'); else next.delete('pinned');
+    if (search) next.set('q', search);
+    else next.delete('q');
+    if (selectedCat !== 'All') next.set('cat', selectedCat);
+    else next.delete('cat');
+    if (pinnedOnly) next.set('pinned', '1');
+    else next.delete('pinned');
+    next.delete('mode');
     if (next.toString() !== params.toString()) setParams(next, { replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, selectedCat, execFilter, pinnedOnly]);
+  }, [search, selectedCat, pinnedOnly]);
+
   useEffect(() => {
-    try { localStorage.setItem('zoth.pinnedTools', JSON.stringify(pinned)); } catch { /* private mode */ }
+    try {
+      localStorage.setItem('zoth.pinnedTools', JSON.stringify(pinned));
+    } catch {
+      /* private browsing */
+    }
   }, [pinned]);
+
   useEffect(() => {
-    // "/" focuses the catalog search (unless already typing somewhere).
     const onKey = (e) => {
       const t = e.target;
       if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
       if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
-      e.preventDefault(); searchRef.current?.focus();
+      e.preventDefault();
+      searchRef.current?.focus();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
-  const togglePin = (id) => setPinned((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
-  const [copiedId, setCopiedId] = useState(null);
-  const [expanded, setExpanded] = useState(() => new Set());
 
-  const gold = {
-    accent: isDark ? '#D4AF37' : '#8A6508',
-    soft: isDark ? '#F5E6AB' : '#8A6A09',
-    wash: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
+  const togglePin = (id) =>
+    setPinned((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+
+  const handleCopy = (cmd, id) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(cmd);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
+    }
   };
 
-  const toggleExpand = (id) => {
-    setExpanded((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
+  const gold = isDark ? '#D4AF37' : '#7A5808';
+  const primaryText = isDark ? '#F5F1E6' : '#101828';
+  const secondaryText = isDark ? '#A3AAB8' : '#475467';
+  const cardBg = isDark ? '#0D0F16' : '#FFFFFF';
+  const codeBg = isDark ? '#080A0F' : '#F3F4F6';
+  const borderCol = isDark ? 'rgba(245, 241, 230, 0.12)' : 'rgba(16, 24, 40, 0.12)';
 
-  const handleCopy = (pullCmd, id) => {
-    navigator.clipboard.writeText(pullCmd);
-    setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 2000);
-  };
+  const filtered = microTools
+    .filter((t) => {
+      const matchesCat = selectedCat === 'All' || t.category === selectedCat;
+      const q = search.trim().toLowerCase();
+      const matchesSearch =
+        !q ||
+        t.name.toLowerCase().includes(q) ||
+        t.description.toLowerCase().includes(q) ||
+        t.repo.toLowerCase().includes(q) ||
+        t.id.toLowerCase().includes(q);
+      const matchesPin = !pinnedOnly || pinned.includes(t.id);
+      return matchesCat && matchesSearch && matchesPin;
+    })
+    .sort((a, b) => Number(pinned.includes(b.id)) - Number(pinned.includes(a.id)));
 
-  const isBrowserTool = (t) => t.executionType === 'webgpu' || t.executionType === 'browser' || t.executionType === 'hybrid';
-
-  const filtered = microTools.filter((t) => {
-    const matchesCat = selectedCat === 'All' || t.category === selectedCat;
-    const matchesExec =
-      execFilter === 'all' ||
-      (execFilter === 'webgpu' ? isBrowserTool(t) : t.executionType === execFilter);
-    const matchesSearch =
-      t.name.toLowerCase().includes(search.toLowerCase()) ||
-      t.description.toLowerCase().includes(search.toLowerCase()) ||
-      t.repo.toLowerCase().includes(search.toLowerCase());
-    const matchesPin = !pinnedOnly || pinned.includes(t.id);
-    return matchesCat && matchesExec && matchesSearch && matchesPin;
-  }).sort((a, b) => Number(pinned.includes(b.id)) - Number(pinned.includes(a.id)));
+  const daemonCount = microTools.filter((t) => Boolean(t.localPort)).length;
 
   return (
-    <>
-      <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 5, md: 7 } }}>
-      {/* Page Header with gold top-edge glow (ToolsPage signature) */}
+    <Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
+      {/* Editorial Header */}
       <HeroReveal>
-        <Box sx={{ position: 'relative', mb: 4, pt: 1 }}>
+        <Box sx={{ mb: 4.5 }}>
           <GlowLine
-            height={3}
-            color={isDark ? '#D4AF37' : '#8A6508'}
-            glowColor={isDark ? 'rgba(212,175,55,0.45)' : 'rgba(184,134,11,0.35)'}
+            height={2}
+            color={gold}
+            glowColor={isDark ? 'rgba(212,175,55,0.35)' : 'rgba(122,88,8,0.2)'}
           />
           <HeroItem>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 1.5, flexWrap: 'wrap' }}>
-              <Chip
-                icon={<TerminalIcon sx={{ color: `${gold.accent} !important` }} />}
-                label="NULLAI TOOL CATALOG & WEBGPU WORKSTATIONS"
-                size="small"
-                sx={{ bgcolor: gold.wash, color: gold.accent, border: `1px solid ${isDark ? 'rgba(212,175,55,0.42)' : '#F0E1A8'}`, fontWeight: 800, px: 1, maxWidth: '100%', height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 } }}
-              />
-              {isBackendConnected ? (
-                <Chip
-                  icon={<DnsIcon sx={{ color: isDark ? '#34D399 !important' : '#027A48 !important' }} />}
-                  label={`LOCAL DAEMON CONNECTED · ${activeServices.length} SERVICES ACTIVE`}
-                  size="small"
-                  sx={{ bgcolor: isDark ? 'rgba(52,211,153,0.14)' : '#ECFDF3', color: isDark ? '#34D399' : '#027A48', border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0'}`, fontWeight: 800 }}
-                />
-              ) : (
-                <Chip
-                  icon={<DnsIcon sx={{ color: isDark ? '#94A3B8 !important' : '#64748B !important' }} />}
-                  label="STANDALONE MODE · IN-BROWSER WEBGPU READY (RUN NPX ZOTH UP FOR LOCAL DAEMONS)"
-                  size="small"
-                  sx={{ bgcolor: isDark ? 'rgba(148,163,184,0.1)' : '#F1F5F9', color: isDark ? '#CBD5E1' : '#475569', border: `1px solid ${isDark ? 'rgba(148,163,184,0.25)' : '#CBD5E1'}`, fontWeight: 750, maxWidth: '100%', height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 } }}
-                />
-              )}
-            </Box>
-          </HeroItem>
-          <HeroItem>
-            <Typography variant="h3" sx={{ mb: 1, fontWeight: 800, letterSpacing: '-0.03em', color: theme.palette.text.primary, fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' }, lineHeight: 1.15, wordBreak: 'break-word', overflowWrap: 'break-word' }}>
-              Tool Nexus <span className="text-gradient-gold">Sovereign Repositories</span>
+            <Typography
+              sx={{
+                mt: 2.5,
+                mb: 1,
+                fontFamily: mono,
+                fontSize: '0.74rem',
+                fontWeight: 700,
+                letterSpacing: '0.16em',
+                textTransform: 'uppercase',
+                color: gold,
+              }}
+            >
+              LOCAL-FIRST REPOSITORY INDEX · CLI, DAEMONS &amp; MCP
             </Typography>
           </HeroItem>
+
           <HeroItem>
-            <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 840, lineHeight: 1.65, fontSize: '1.05rem' }}>
-              Explore the official documentation, MCP agent schemas, and architectural dossiers for all {microTools.length} sovereign micro-tools. To run any tool with zero setup, copy the CLI command, launch natively inside Zoth Studio, or boot <span className="text-highlight-dark">Zoth OS</span> for complete out-of-the-box preinstalled execution.
+            <Typography
+              component="h1"
+              sx={{
+                fontFamily: display,
+                fontSize: { xs: '2.1rem', sm: '2.8rem', md: '3.4rem' },
+                fontWeight: 400,
+                lineHeight: 1.08,
+                color: primaryText,
+                mb: 1.75,
+              }}
+            >
+              Tool Repositories
+            </Typography>
+          </HeroItem>
+
+          <HeroItem>
+            <Typography
+              sx={{
+                maxWidth: 780,
+                fontSize: { xs: '0.98rem', md: '1.06rem' },
+                lineHeight: 1.7,
+                color: secondaryText,
+              }}
+            >
+              Every Zoth tool is engineered to run natively on your own hardware via CLI binaries and local loopback daemons rather than constrained browser sandboxes. Inspect what each tool does below, then clone its standalone repository, pull the unified{' '}
+              <Box
+                component="a"
+                href="https://github.com/NullAITech/zoth-studio-v2"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ color: gold, fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '3px' }}
+              >
+                Zoth Studio v2 repository
+              </Box>
+              , or run everything pre-installed on{' '}
+              <Box
+                component={RouterLink}
+                to="/zoth-os"
+                sx={{ color: gold, fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '3px' }}
+              >
+                ZothOS
+              </Box>
+              .
             </Typography>
           </HeroItem>
         </Box>
       </HeroReveal>
 
-      {/* Public Web God-Mode Workstation Status Banner */}
-      {!isLocal && (
-        <Paper
-          elevation={0}
-          sx={{
-            p: 3,
-            mb: 4,
-            borderRadius: 3,
-            bgcolor: isDark ? 'rgba(16, 185, 129, 0.07)' : '#ECFDF5',
-            border: '1.5px solid',
-            borderColor: isDark ? 'rgba(16, 185, 129, 0.4)' : '#6EE7B7',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 2,
-            boxShadow: isDark ? '0 0 30px -8px rgba(16, 185, 129, 0.22)' : 'none',
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2, maxWidth: 760, flexWrap: { xs: 'wrap', sm: 'nowrap' } }}>
-            <Box sx={{ p: 1.2, borderRadius: 2, bgcolor: isDark ? 'rgba(16, 185, 129, 0.16)' : '#D1FAE5', color: '#10B981', display: 'flex' }}>
-              <FlashOnIcon sx={{ fontSize: 28 }} />
-            </Box>
-            <Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 0.5 }}>
-                <Typography sx={{ fontFamily: mono, fontWeight: 850, fontSize: '0.86rem', color: '#10B981' }}>
-                  ALL {microTools.length} GOD-MODE WORKSTATIONS & 60FPS ASCII MOTION SYNTHS UNLOCKED
-                </Typography>
-                <Chip
-                  label="100% ZERO-EGRESS CLIENT EXECUTION"
-                  size="small"
-                  sx={{
-                    fontFamily: mono,
-                    fontSize: '0.64rem',
-                    fontWeight: 800,
-                    bgcolor: isDark ? 'rgba(212,175,55,0.16)' : '#FEF9E7',
-                    color: gold.accent,
-                    border: `1px solid ${gold.accent}44`,
-                  }}
-                />
-              </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.88rem', lineHeight: 1.6 }}>
-                Every repository in the catalog includes a dedicated <strong>60fps interactive God-Mode Workstation</strong> and <strong>ASCII/Braille Motion Showcase</strong> directly in your browser. For bare-metal kernel daemons (<code>127.0.0.1</code>) and local Ollama pipelines, boot <RouterLink to="/zoth-os" style={{ color: '#D4AF37', fontWeight: 700 }}>Zoth OS</RouterLink> or pull from <RouterLink to="/arsenal" style={{ color: 'var(--zs-mint)', fontWeight: 700 }}>The Sovereign Arsenal</RouterLink>.
-              </Typography>
-            </Box>
-          </Box>
-
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: { xs: '100%', sm: 'auto' } }}>
-            <Button
-              component={RouterLink}
-              to="/zoth-os"
-              variant="contained"
-              size="small"
-              startIcon={<LaunchIcon />}
-              sx={{
-                bgcolor: '#D4AF37',
-                color: '#08080B',
-                fontFamily: mono,
-                fontWeight: 800,
-                fontSize: '0.78rem',
-                py: 1,
-                px: 2,
-                width: { xs: '100%', sm: 'auto' },
-                '&:hover': { bgcolor: '#F5E6AB' },
-              }}
-            >
-              Boot Zoth OS
-            </Button>
-            <Button
-              component={RouterLink}
-              to="/arsenal"
-              variant="outlined"
-              size="small"
-              sx={{
-                borderColor: isDark ? 'rgba(52, 211, 153, 0.4)' : '#059669',
-                color: isDark ? '#34D399' : '#065F46',
-                fontFamily: mono,
-                fontWeight: 800,
-                fontSize: '0.78rem',
-                py: 1,
-                px: 2,
-                width: { xs: '100%', sm: 'auto' },
-              }}
-            >
-              Browse Repos
-            </Button>
-          </Stack>
-        </Paper>
-      )}
-
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr 1fr', sm: 'repeat(4, 1fr)' }, gap: 1.5, mb: 4 }}>
+      {/* Clean 4-Stat Strip */}
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr 1fr', sm: 'repeat(4, 1fr)' },
+          gap: 1.75,
+          mb: 4,
+        }}
+      >
         {[
-          ['Catalog', microTools.length],
-          ['In browser', microTools.filter(isBrowserTool).length],
-          ['Local CLI', microTools.filter((tool) => tool.executionType === 'local_cli').length],
+          ['Repositories', microTools.length],
+          ['Loopback Daemons', daemonCount],
           ['Categories', categories.length - 1],
+          ['WAN Telemetry', '0 Bytes'],
         ].map(([label, value]) => (
-          <Box key={label} sx={{ p: 1.75, borderRadius: 2, border: `1px solid ${theme.palette.divider}`, bgcolor: theme.palette.background.paper }}>
-            <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '1.5rem', color: gold.accent, lineHeight: 1 }}>{value}</Typography>
-            <Typography variant="caption" sx={{ fontWeight: 750, letterSpacing: '0.06em', textTransform: 'uppercase', color: theme.palette.text.secondary }}>{label}</Typography>
+          <Box
+            key={label}
+            sx={{
+              p: 2,
+              borderRadius: 2,
+              border: `1px solid ${borderCol}`,
+              bgcolor: cardBg,
+            }}
+          >
+            <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '1.35rem', color: primaryText, lineHeight: 1.15 }}>
+              {value}
+            </Typography>
+            <Typography
+              variant="caption"
+              sx={{
+                fontFamily: mono,
+                fontWeight: 600,
+                fontSize: '0.68rem',
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                color: secondaryText,
+              }}
+            >
+              {label}
+            </Typography>
           </Box>
         ))}
       </Box>
 
-      {/* Zoth OS Funnel Banner */}
-      <Paper
-        elevation={0}
-        className="breathe-card"
-        sx={{
-          p: 3.5,
-          mb: 5,
-          border: `1px solid ${isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.35)'}`,
-          borderRadius: 3,
-          bgcolor: isDark ? '#0B0B12' : '#F8FAFC',
-          color: theme.palette.text.primary,
-          position: 'relative',
-          overflow: 'hidden',
-          boxShadow: isDark
-            ? '0 8px 24px rgba(0,0,0,0.5), 0 0 16px -4px rgba(212,175,55,0.2)'
-            : '0 8px 24px rgba(16,24,40,0.06), 0 0 16px -4px rgba(184,134,11,0.15)',
-        }}
-      >
-        <Box sx={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
-          <Box sx={{ maxWidth: 740 }}>
-            <Chip
-              icon={<RocketLaunchIcon sx={{ color: isDark ? '#FDD663 !important' : '#8A6508 !important' }} />}
-              label="SOVEREIGN BARE-METAL DISTRIBUTION"
-              size="small"
-              sx={{
-                bgcolor: isDark ? 'rgba(30,41,59,0.6)' : gold.wash,
-                color: isDark ? '#FDD663' : '#8A6A09',
-                border: `1px solid ${isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.35)'}`,
-                fontWeight: 800,
-                mb: 1.5
-              }}
-            />
-            <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: theme.palette.text.primary }}>
-              Want all {microTools.length} sovereign tools preinstalled ready to use?
-            </Typography>
-            <Typography variant="body2" sx={{ color: theme.palette.text.secondary, lineHeight: 1.6 }}>
-              Download the <strong>Zoth OS ISO</strong> image. Flash to USB or boot inside QEMU / KVM to run all {microTools.length} tools, local daemons, and local Ollama models with zero manual dependencies!
-            </Typography>
-          </Box>
-          <Button
-            component={RouterLink}
-            to="/zoth-os"
-            variant="contained"
-            color="primary"
-            size="large"
-            endIcon={<LaunchIcon />}
-            className="pulse-glow-btn"
-            sx={{ px: 3.5, py: 1.4, fontWeight: 800, borderRadius: 9999, color: '#08080B', width: { xs: '100%', sm: 'auto' }, textAlign: 'center' }}
-          >
-            Get Zoth OS ISO
-          </Button>
-        </Box>
-      </Paper>
-
-      {/* Interactive 60FPS Sovereign ASCII & Braille Motion Synth */}
-      <Box sx={{ mb: 5 }}>
-        <AsciiMotionGodModeTool />
-      </Box>
-
-      {/* Filter & Search Bar */}
+      {/* Search Input */}
       <TextField
         fullWidth
-        placeholder="Search the catalog by name, category, or repo...  (press / to focus)"
+        size="small"
+        placeholder="Search 77 local repositories by name, capability, or slug… (press / to focus)"
         inputRef={searchRef}
-        inputProps={{ 'aria-label': 'Search the tool catalog' }}
+        inputProps={{ 'aria-label': 'Search tool repositories' }}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        sx={{ mb: 2 }}
+        sx={{
+          mb: 2.25,
+          '& .MuiOutlinedInput-root': {
+            bgcolor: cardBg,
+            borderRadius: 2,
+            fontFamily: mono,
+            fontSize: '0.86rem',
+          },
+        }}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SearchIcon sx={{ color: gold.accent }} />
+              <SearchIcon sx={{ color: gold, fontSize: '1.15rem' }} />
             </InputAdornment>
           ),
+          endAdornment: search ? (
+            <InputAdornment position="end">
+              <IconButton size="small" aria-label="Clear search" onClick={() => setSearch('')}>
+                <ClearIcon fontSize="small" />
+              </IconButton>
+            </InputAdornment>
+          ) : null,
         }}
       />
 
-      {/* Execution Substrate Mode Filters */}
-      <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap', alignItems: 'center' }}>
-        <Typography variant="caption" sx={{ fontWeight: 800, color: gold.accent, letterSpacing: '0.06em', textTransform: 'uppercase', mr: 0.5 }}>
-          Substrate:
-        </Typography>
-        <Chip
-          label={`All Modes (${microTools.length})`}
-          clickable
-          onClick={() => setExecFilter('all')}
-          size="small"
-          sx={{
-            fontWeight: 800,
-            bgcolor: execFilter === 'all' ? gold.accent : theme.palette.background.paper,
-            color: execFilter === 'all' ? (isDark ? '#08080B' : '#0F172A') : theme.palette.text.primary,
-            border: `1px solid ${execFilter === 'all' ? gold.accent : theme.palette.divider}`,
-          }}
-        />
-        <Chip
-          icon={<FlashOnIcon sx={{ fontSize: '16px !important', color: execFilter === 'webgpu' ? (isDark ? '#08080B !important' : '#0F172A !important') : `${gold.accent} !important` }} />}
-          label={`In-Browser Workstations (${microTools.filter(isBrowserTool).length})`}
-          clickable
-          onClick={() => setExecFilter('webgpu')}
-          size="small"
-          sx={{
-            fontWeight: 800,
-            bgcolor: execFilter === 'webgpu' ? gold.accent : theme.palette.background.paper,
-            color: execFilter === 'webgpu' ? (isDark ? '#08080B' : '#0F172A') : theme.palette.text.primary,
-            border: `1px solid ${execFilter === 'webgpu' ? gold.accent : theme.palette.divider}`,
-          }}
-        />
-        <Chip
-          icon={<TerminalIcon sx={{ fontSize: '16px !important', color: execFilter === 'local_cli' ? (isDark ? '#08080B !important' : '#0F172A !important') : `${gold.accent} !important` }} />}
-          label={`Local CLI Enclave (${microTools.filter((t) => t.executionType === 'local_cli').length})`}
-          clickable
-          onClick={() => setExecFilter('local_cli')}
-          size="small"
-          sx={{
-            fontWeight: 800,
-            bgcolor: execFilter === 'local_cli' ? gold.accent : theme.palette.background.paper,
-            color: execFilter === 'local_cli' ? (isDark ? '#08080B' : '#0F172A') : theme.palette.text.primary,
-            border: `1px solid ${execFilter === 'local_cli' ? gold.accent : theme.palette.divider}`,
-          }}
-        />
-        <Chip
-          size="small"
-          clickable
-          onClick={() => setPinnedOnly((v) => !v)}
-          icon={<StarIcon sx={{ fontSize: 16, color: pinnedOnly ? '#08080B !important' : `${gold.accent} !important` }} />}
-          label={`Pinned (${pinned.length})`}
-          aria-pressed={pinnedOnly}
-          sx={{ fontWeight: 700, bgcolor: pinnedOnly ? gold.accent : 'transparent', color: pinnedOnly ? '#08080B' : 'text.primary', border: `1px solid ${gold.accent}66` }}
-        />
-      </Box>
-
-      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 4 }}>
+      {/* Category & Pin Filters — High Contrast in Both Light & Dark Modes */}
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.9, mb: 3 }}>
         {categories.map((cat) => {
           const active = selectedCat === cat;
-          const count = cat === 'All' ? microTools.length : microTools.filter((tool) => tool.category === cat).length;
+          const count = cat === 'All' ? microTools.length : microTools.filter((t) => t.category === cat).length;
           return (
             <Chip
               key={cat}
@@ -408,218 +285,246 @@ export default function ToolsPage() {
               clickable
               onClick={() => setSelectedCat(cat)}
               sx={{
-                fontWeight: 750,
-                bgcolor: active ? gold.accent : theme.palette.background.paper,
-                color: active ? (isDark ? '#08080B' : '#0F172A') : theme.palette.text.primary,
-                border: '1px solid',
-                borderColor: active ? gold.accent : theme.palette.divider,
+                fontFamily: mono,
+                fontSize: '0.73rem',
+                fontWeight: 700,
+                bgcolor: active ? (isDark ? '#D4AF37' : '#101828') : cardBg,
+                color: active ? (isDark ? '#08080B' : '#FFFFFF') : primaryText,
+                border: `1px solid ${active ? (isDark ? '#D4AF37' : '#101828') : borderCol}`,
+                '&:hover': {
+                  bgcolor: active ? (isDark ? '#E5C158' : '#1E293B') : (isDark ? '#141824' : '#F3F4F6'),
+                },
               }}
             />
           );
         })}
+
+        <Chip
+          clickable
+          onClick={() => setPinnedOnly((v) => !v)}
+          icon={
+            <StarIcon
+              sx={{
+                fontSize: '0.9rem !important',
+                color: `${pinnedOnly ? (isDark ? '#08080B' : '#FFFFFF') : gold} !important`,
+              }}
+            />
+          }
+          label={`Saved (${pinned.length})`}
+          sx={{
+            fontFamily: mono,
+            fontSize: '0.73rem',
+            fontWeight: 700,
+            bgcolor: pinnedOnly ? (isDark ? '#D4AF37' : '#101828') : cardBg,
+            color: pinnedOnly ? (isDark ? '#08080B' : '#FFFFFF') : primaryText,
+            border: `1px solid ${pinnedOnly ? (isDark ? '#D4AF37' : '#101828') : borderCol}`,
+          }}
+        />
       </Box>
 
-      {/* Tools Counter */}
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        Showing <strong>{filtered.length}</strong> of <strong>{microTools.length}</strong> micro-tool repositories (
-        <Box component="span" sx={{ color: gold.accent, fontWeight: 800 }}>
-          {microTools.filter(isBrowserTool).length} In-Browser Workstations
-        </Box>{' '}
-        | {microTools.filter((t) => t.executionType === 'local_cli').length} Local CLI / Zoth OS)
+      {/* Result Count */}
+      <Typography variant="body2" sx={{ color: secondaryText, mb: 3, fontFamily: mono, fontSize: '0.8rem' }}>
+        Showing <strong>{filtered.length}</strong> of <strong>{microTools.length}</strong> local-first repositories
       </Typography>
 
-      {/* Tools Grid */}
+      {/* Repository Grid */}
       <StaggerChildren>
-        <Grid container spacing={3}>
+        <Grid container spacing={2.5}>
           {filtered.map((tool) => {
-            const execEval = evaluateTool(tool);
-            const isWebGPU = isBrowserTool(tool);
-            const isExpanded = expanded.has(tool.id);
-            const catAccent = getCategoryMotionMeta(tool.category).accent;
+            const repoUrl =
+              ['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(tool.id) || !tool.github
+                ? 'https://github.com/NullAITech/zoth-studio-v2'
+                : tool.github;
+            const cloneCmd = `git clone ${repoUrl.replace(/\.git$/, '')}.git`;
+
             return (
-              <Grid xs={12} sm={6} md={4} key={tool.id}>
-                <StaggerItem>
+              <Grid xs={12} sm={6} md={4} key={tool.id} sx={{ display: 'flex' }}>
+                <StaggerItem style={{ display: 'flex', width: '100%' }}>
                   <Card
+                    elevation={0}
                     sx={{
-                      height: '100%',
+                      width: '100%',
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'space-between',
-                      border: `1px solid ${theme.palette.divider}`,
-                      borderTop: `2.5px solid ${catAccent}`,
-                      bgcolor: theme.palette.background.paper,
-                      transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-                      position: 'relative',
-                      overflow: 'hidden',
+                      borderRadius: 2.5,
+                      border: `1px solid ${borderCol}`,
+                      bgcolor: cardBg,
+                      transition: 'border-color 0.2s ease, transform 0.2s ease',
                       '&:hover': {
-                        borderColor: catAccent,
-                        boxShadow: isDark
-                          ? `0 12px 28px rgba(0,0,0,0.55), 0 0 22px -6px ${catAccent}44`
-                          : `0 10px 24px rgba(16,24,40,0.08), 0 0 18px -6px ${catAccent}33`,
-                        transform: 'translateY(-3px)'
-                      }
+                        borderColor: gold,
+                        transform: 'translateY(-2px)',
+                      },
                     }}
                   >
-                    <CardContent sx={{ pb: 1 }}>
-                      {/* Badge Row */}
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, flexWrap: 'wrap', gap: 0.5 }}>
-                        {isLocal ? (
-                          <Chip
-                            icon={<FlashOnIcon sx={{ color: '#10B981 !important', fontSize: '14px !important' }} />}
-                            label="Local Sovereign Node"
+                    <CardContent sx={{ p: 2.5, pb: 1.75 }}>
+                      {/* Metadata Header */}
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5, gap: 1 }}>
+                        <Typography
+                          sx={{
+                            fontFamily: mono,
+                            fontSize: '0.68rem',
+                            fontWeight: 700,
+                            letterSpacing: '0.08em',
+                            textTransform: 'uppercase',
+                            color: gold,
+                          }}
+                        >
+                          {tool.category}
+                        </Typography>
+
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+                          {tool.localPort && (
+                            <Typography
+                              sx={{
+                                fontFamily: mono,
+                                fontSize: '0.68rem',
+                                fontWeight: 700,
+                                px: 0.75,
+                                py: 0.15,
+                                borderRadius: 1,
+                                bgcolor: isDark ? 'rgba(52,211,153,0.12)' : '#ECFDF5',
+                                color: isDark ? '#34D399' : '#047857',
+                              }}
+                            >
+                              :{tool.localPort}
+                            </Typography>
+                          )}
+                          <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: secondaryText }}>
+                            v{tool.version}
+                          </Typography>
+                          <IconButton
                             size="small"
-                            sx={{ bgcolor: isDark ? 'rgba(16,185,129,0.15)' : '#ECFDF5', color: isDark ? '#34D399' : '#047857', fontWeight: 800, fontSize: '0.72rem', border: '1px solid rgba(16,185,129,0.3)' }}
-                          />
-                        ) : execEval.canExecute ? (
-                          <Chip
-                            icon={<FlashOnIcon sx={{ color: '#38BDF8 !important', fontSize: '14px !important' }} />}
-                            label="⚡ WebGPU (In-Browser)"
-                            size="small"
-                            sx={{ bgcolor: isDark ? 'rgba(56,189,248,0.15)' : '#F0F9FF', color: isDark ? '#38BDF8' : '#0369A1', fontWeight: 800, fontSize: '0.72rem', border: '1px solid rgba(56,189,248,0.35)' }}
-                          />
-                        ) : (
-                          <Chip
-                            icon={<LockIcon sx={{ color: `${theme.palette.text.secondary} !important`, fontSize: '13px !important' }} />}
-                            label="Requires Local CLI"
-                            size="small"
-                            sx={{ bgcolor: isDark ? 'rgba(148,163,184,0.12)' : '#F1F5F9', color: theme.palette.text.secondary, fontWeight: 700, fontSize: '0.72rem', border: `1px solid ${theme.palette.divider}` }}
-                          />
-                        )}
-                        {tool.localPort && (
-                          <Chip
-                            label={`:${tool.localPort}`}
-                            size="small"
-                            sx={{
-                              height: 20,
-                              fontFamily: mono,
-                              fontWeight: 800,
-                              fontSize: '0.68rem',
-                              bgcolor: isDark ? 'rgba(212,175,55,0.14)' : '#FEF9E7',
-                              color: gold.accent,
-                              border: `1px solid ${isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.3)'}`,
-                            }}
-                          />
-                        )}
-                        <Chip label={`v${tool.version}`} size="small" variant="outlined" sx={{ color: theme.palette.text.secondary, fontSize: '0.72rem', fontFamily: mono, borderColor: theme.palette.divider }} />
+                            onClick={() => togglePin(tool.id)}
+                            aria-label={pinned.includes(tool.id) ? `Unsave ${tool.name}` : `Save ${tool.name}`}
+                            sx={{ p: 0.25, color: pinned.includes(tool.id) ? gold : secondaryText }}
+                          >
+                            {pinned.includes(tool.id) ? <StarIcon sx={{ fontSize: '1rem' }} /> : <StarBorderIcon sx={{ fontSize: '1rem' }} />}
+                          </IconButton>
+                        </Box>
                       </Box>
 
-                      <Box sx={{ position: 'relative' }}>
+                      {/* Title */}
                       <Typography
                         variant="h6"
                         component={RouterLink}
                         to={`/tools/${tool.id}`}
-                        sx={{ color: theme.palette.text.primary, mb: 1, fontWeight: 800, textDecoration: 'none', display: 'block', pr: 4, '&:hover': { color: gold.accent } }}
+                        sx={{
+                          fontSize: '1.04rem',
+                          fontWeight: 800,
+                          lineHeight: 1.32,
+                          color: primaryText,
+                          textDecoration: 'none',
+                          display: 'block',
+                          mb: 1,
+                          '&:hover': { color: gold },
+                        }}
                       >
                         {tool.name}
                       </Typography>
-                      <IconButton
-                        size="small"
-                        onClick={() => togglePin(tool.id)}
-                        aria-label={pinned.includes(tool.id) ? `Unpin ${tool.name}` : `Pin ${tool.name}`}
-                        aria-pressed={pinned.includes(tool.id)}
-                        title={pinned.includes(tool.id) ? 'Unpin' : 'Pin to top'}
-                        sx={{ position: 'absolute', top: -4, right: -8, color: pinned.includes(tool.id) ? gold.accent : 'text.disabled', '&:hover': { color: gold.accent } }}
-                      >
-                        {pinned.includes(tool.id) ? <StarIcon fontSize="small" /> : <StarBorderIcon fontSize="small" />}
-                      </IconButton>
-                      </Box>
 
+                      {/* Clean 3-line summary */}
                       <Typography
                         variant="body2"
-                        color="text.secondary"
                         sx={{
-                          mb: 1,
-                          fontSize: '0.86rem',
-                          lineHeight: 1.55,
+                          color: secondaryText,
+                          fontSize: '0.85rem',
+                          lineHeight: 1.58,
+                          mb: 2,
                           display: '-webkit-box',
-                          WebkitLineClamp: isExpanded ? 'unset' : 2,
+                          WebkitLineClamp: 3,
                           WebkitBoxOrient: 'vertical',
                           overflow: 'hidden',
                         }}
                       >
                         {tool.description}
                       </Typography>
-                      <ToolOfferLine tool={tool} isDark={isDark} />
 
-                      <Button
-                        size="small"
-                        onClick={() => toggleExpand(tool.id)}
-                        endIcon={<ExpandMoreIcon sx={{ transform: isExpanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease' }} />}
-                        sx={{ color: gold.accent, fontWeight: 750, fontSize: '0.78rem', textTransform: 'none', p: 0, minHeight: 0, mb: 1.5, '&:hover': { backgroundColor: 'transparent', color: gold.soft } }}
+                      {/* Copyable git clone strip */}
+                      <Box
+                        onClick={() => handleCopy(cloneCmd, tool.id)}
+                        sx={{
+                          cursor: 'pointer',
+                          p: 1,
+                          px: 1.25,
+                          borderRadius: 1.5,
+                          bgcolor: codeBg,
+                          border: `1px solid ${borderCol}`,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: 1,
+                        }}
                       >
-                        {isExpanded ? 'Show less' : 'Read more'}
-                      </Button>
-
-                      <Box sx={{
-                        bgcolor: isDark ? '#0B0B12' : (isWebGPU ? '#FEF9E7' : '#F8FAFC'),
-                        p: 1.25,
-                        borderRadius: 1.5,
-                        border: isDark
-                          ? (isWebGPU ? '1px solid rgba(212,175,55,0.4)' : '1px dashed rgba(255,255,255,0.18)')
-                          : (isWebGPU ? '1px solid rgba(184,134,11,0.35)' : `1px dashed ${theme.palette.divider}`),
-                        fontFamily: mono,
-                        fontSize: '0.78rem',
-                        color: isDark ? (isWebGPU ? '#F5E6AB' : '#EDEFF2') : (isWebGPU ? '#8A6A09' : '#1E293B'),
-                        wordBreak: 'break-all'
-                      }}>
-                        <Box component="span" sx={{ color: gold.accent, fontWeight: 800, mr: 0.75 }}>$</Box>
-                        {tool.pull}
+                        <Typography
+                          sx={{
+                            fontFamily: mono,
+                            fontSize: '0.7rem',
+                            color: primaryText,
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {cloneCmd}
+                        </Typography>
+                        {copiedId === tool.id ? (
+                          <CheckIcon sx={{ fontSize: '0.85rem', color: isDark ? '#34D399' : '#047857', flexShrink: 0 }} />
+                        ) : (
+                          <ContentCopyIcon sx={{ fontSize: '0.8rem', color: secondaryText, flexShrink: 0 }} />
+                        )}
                       </Box>
                     </CardContent>
 
-                    <CardActions sx={{ px: 2, pb: 2, pt: 1.5, flexDirection: 'column', gap: 1, borderTop: `1px solid ${theme.palette.divider}`, bgcolor: isDark ? 'rgba(212,175,55,0.04)' : 'rgba(184,134,11,0.03)' }}>
+                    <CardActions
+                      sx={{
+                        px: 2.5,
+                        pb: 2.25,
+                        pt: 1.25,
+                        borderTop: `1px solid ${borderCol}`,
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        gap: 1,
+                      }}
+                    >
                       <Button
-                        fullWidth
                         size="small"
-                        variant={execEval.canExecute ? "contained" : "outlined"}
+                        variant="contained"
                         component={RouterLink}
                         to={`/tools/${tool.id}`}
-                        startIcon={execEval.canExecute ? <RocketLaunchIcon /> : <LaunchIcon />}
+                        endIcon={<ArrowForwardIcon sx={{ fontSize: '0.9rem !important' }} />}
                         sx={{
-                          fontWeight: 800,
-                          py: 0.85,
-                          borderRadius: 2,
-                          color: execEval.canExecute
-                            ? (isLocal ? '#FFFFFF' : '#08080B')
-                            : (isDark ? '#F5E6AB' : '#8A6A09'),
-                          bgcolor: execEval.canExecute
-                            ? (isLocal ? (isDark ? '#10B981' : '#047857') : '#38BDF8')
-                            : 'transparent',
-                          borderColor: execEval.canExecute ? 'transparent' : gold.accent,
-                          '&:hover': {
-                            bgcolor: execEval.canExecute
-                              ? (isLocal ? '#34D399' : '#7DD3FC')
-                              : gold.wash,
-                          }
+                          bgcolor: isDark ? '#D4AF37' : '#101828',
+                          color: isDark ? '#08080B' : '#FFFFFF',
+                          fontWeight: 700,
+                          fontSize: '0.76rem',
+                          textTransform: 'none',
+                          px: 1.75,
+                          '&:hover': { bgcolor: isDark ? '#E5C158' : '#1E293B' },
                         }}
                       >
-                        {isLocal ? 'Launch Tool ⚡' : execEval.label}
+                        View Specs
                       </Button>
-                      <Box sx={{ display: 'flex', gap: 1, width: '100%', justifyContent: 'space-between' }}>
-                        <Button
-                          fullWidth
-                          size="small"
-                          variant="text"
-                          startIcon={<ContentCopyIcon sx={{ fontSize: '14px !important' }} />}
-                          onClick={() => handleCopy(tool.pull, tool.id)}
-                          sx={{ fontWeight: 750, fontSize: '0.75rem', py: 0.4, color: gold.accent }}
-                        >
-                          {copiedId === tool.id ? 'Copied!' : 'Copy CLI'}
-                        </Button>
-                        {tool.github && (
-                          <Button
-                            size="small"
-                            variant="text"
-                            href={tool.github}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            startIcon={<GitHubIcon sx={{ fontSize: '14px !important' }} />}
-                            sx={{ fontWeight: 700, fontSize: '0.75rem', py: 0.4, color: isDark ? '#9CA3AF' : '#475467', flexShrink: 0 }}
-                          >
-                            Repo
-                          </Button>
-                        )}
-                      </Box>
+
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        href={repoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        startIcon={<GitHubIcon sx={{ fontSize: '0.9rem !important' }} />}
+                        sx={{
+                          borderColor: borderCol,
+                          color: primaryText,
+                          fontWeight: 700,
+                          fontSize: '0.75rem',
+                          textTransform: 'none',
+                          px: 1.4,
+                          '&:hover': { borderColor: gold },
+                        }}
+                      >
+                        GitHub
+                      </Button>
                     </CardActions>
                   </Card>
                 </StaggerItem>
@@ -629,140 +534,7 @@ export default function ToolsPage() {
         </Grid>
       </StaggerChildren>
 
-      {/* SOVEREIGN TOOLS SUITE INSTALLATION FUNNEL */}
-      <RevealOnScroll preset="fadeUp">
-        <Paper
-          sx={{
-            mt: 6,
-            p: { xs: 3, md: 4.5 },
-            borderRadius: 3,
-            border: `1px solid ${isDark ? 'rgba(212,175,55,0.45)' : 'rgba(184,134,11,0.35)'}`,
-            bgcolor: isDark ? '#0B0B12' : '#0F172A',
-            color: '#FFFFFF',
-            boxShadow: isDark ? '0 12px 40px rgba(0,0,0,0.6)' : '0 12px 32px rgba(0,0,0,0.15)',
-            position: 'relative',
-            overflow: 'hidden'
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5, mb: 1.5 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <RocketLaunchIcon sx={{ color: gold.accent, fontSize: '1.8rem' }} />
-              <Box>
-                <Typography variant="h5" sx={{ fontWeight: 800, color: '#FFFFFF' }}>
-                  Deploy Sovereign Intelligence Locally
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'var(--zs-slate)' }}>
-                  Run all {microTools.length} tools offline with zero telemetry. Pull standalone micro-modules, clone the unified Studio v2 cockpit, or flash bare-metal Zoth OS.
-                </Typography>
-              </Box>
-            </Box>
-            <Chip
-              label="RUNS IN YOUR BROWSER · LOCAL-FIRST"
-              size="small"
-              sx={{ bgcolor: gold.wash, color: gold.accent, border: `1px solid ${gold.accent}`, fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
-            />
-          </Box>
-
-          <Grid container spacing={2.5} sx={{ mt: 1 }}>
-            {/* Option 1: Standalone Micro-Tool Enclave CLI */}
-            <Grid xs={12} md={4}>
-              <Box sx={{ p: 2.5, height: '100%', bgcolor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 2, display: 'flex', flexDirection: 'column' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'var(--zs-sky)' }}>
-                    Option 1: Micro-Tool CLI
-                  </Typography>
-                  <Chip label="STANDALONE" size="small" sx={{ bgcolor: 'rgba(56,189,248,0.15)', color: 'var(--zs-sky)', fontWeight: 800, fontSize: '0.65rem' }} />
-                </Box>
-                <Typography variant="body2" sx={{ color: 'var(--zs-slate)', mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
-                  Pull isolated zero-egress single-purpose micro-engines without spinning up the entire studio workspace.
-                </Typography>
-                <Box sx={{ p: 1.2, mb: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: '#38BDF8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    npx @nullaitech/zoth pull &lt;tool-id&gt;
-                  </Typography>
-                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('npx @nullaitech/zoth pull adytum-alchemist-ai-workflow', 'cli-funnel')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
-                    <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
-                  </IconButton>
-                </Box>
-                <Button
-                  variant="outlined"
-                  onClick={() => handleCopy('npx @nullaitech/zoth pull adytum-alchemist-ai-workflow', 'cli-funnel')}
-                  sx={{ borderColor: '#38BDF8', color: 'var(--zs-sky)', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: 'rgba(56,189,248,0.1)' } }}
-                >
-                  {copiedId === 'cli-funnel' ? 'Command Copied!' : 'Copy Sample Pull Command'}
-                </Button>
-              </Box>
-            </Grid>
-
-            {/* Option 2: Zoth Studio v2 Unified Cockpit */}
-            <Grid xs={12} md={4}>
-              <Box sx={{ p: 2.5, height: '100%', bgcolor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 2, display: 'flex', flexDirection: 'column' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 800, color: gold.soft }}>
-                    Option 2: Zoth Studio v2
-                  </Typography>
-                  <Chip label="FULL SUITE" size="small" sx={{ bgcolor: gold.wash, color: gold.accent, fontWeight: 800, fontSize: '0.65rem', border: `1px solid ${gold.accent}` }} />
-                </Box>
-                <Typography variant="body2" sx={{ color: 'var(--zs-slate)', mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
-                  Complete workstation with all {microTools.length} tools, local WebGPU inference, STDP memory vector daemon, and Byzantine consensus.
-                </Typography>
-                <Box sx={{ p: 1.2, mb: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: gold.accent, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    git clone https://github.com/NullAITech/zoth-studio-v2.git
-                  </Typography>
-                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('git clone https://github.com/NullAITech/zoth-studio-v2.git', 'studio-funnel')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
-                    <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
-                  </IconButton>
-                </Box>
-                <Button
-                  component="a"
-                  href="https://github.com/NullAITech/zoth-studio-v2"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variant="contained"
-                  sx={{ bgcolor: gold.accent, color: '#08080B', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: gold.soft } }}
-                >
-                  {copiedId === 'studio-funnel' ? 'Command Copied!' : 'Clone Studio v2 Repo ↗'}
-                </Button>
-              </Box>
-            </Grid>
-
-            {/* Option 3: Sovereign Zoth OS Bare-Metal ISO */}
-            <Grid xs={12} md={4}>
-              <Box sx={{ p: 2.5, height: '100%', bgcolor: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 2, display: 'flex', flexDirection: 'column' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 0.5 }}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'var(--zs-mint)' }}>
-                    Option 3: Sovereign Zoth OS
-                  </Typography>
-                  <Chip label="BARE-METAL OS" size="small" sx={{ bgcolor: 'rgba(52,211,153,0.15)', color: 'var(--zs-mint)', fontWeight: 800, fontSize: '0.65rem' }} />
-                </Box>
-                <Typography variant="body2" sx={{ color: 'var(--zs-slate)', mb: 2, flexGrow: 1, fontSize: '0.84rem' }}>
-                  Alchemical Linux OS based on KDE Plasma 6 with Kali/Parrot security arsenal, 10 Ollama models, and Tor Ghostmode.
-                </Typography>
-                <Box sx={{ p: 1.2, mb: 2, bgcolor: '#050508', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 1.5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', color: '#34D399', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    zoth-os-install --bare-metal
-                  </Typography>
-                  <IconButton aria-label="Copy to clipboard" size="small" onClick={() => handleCopy('zoth-os-install --bare-metal', 'os-funnel')} sx={{ color: '#94A3B8', '&:hover': { color: '#FFF' } }}>
-                    <ContentCopyIcon sx={{ fontSize: '0.9rem' }} />
-                  </IconButton>
-                </Box>
-                <Button
-                  component="a"
-                  href="https://github.com/NullAITech/zoth-os"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  variant="outlined"
-                  sx={{ borderColor: '#34D399', color: 'var(--zs-mint)', fontWeight: 800, textTransform: 'none', '&:hover': { bgcolor: 'rgba(52,211,153,0.1)' } }}
-                >
-                  {copiedId === 'os-funnel' ? 'Command Copied!' : 'Explore Zoth OS ISO ↗'}
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
-        </Paper>
-      </RevealOnScroll>
+      <SovereignFunnel />
     </Container>
-    </>
   );
 }

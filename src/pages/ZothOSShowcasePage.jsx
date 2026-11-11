@@ -1,666 +1,250 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Box,
-  Container,
-  Typography,
-  Button,
   Paper,
-  Chip,
+  Typography,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  IconButton,
-  Tooltip,
-  Snackbar,
-  Alert,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { Link as RouterLink } from 'react-router-dom';
-import {
-  HeroReveal,
-  HeroItem,
-  GlowLine,
-  RevealOnScroll,
-  StaggerChildren,
-  StaggerItem,
-} from '../components/MotionReveal';
-import SovereignFunnel from '../components/SovereignFunnel';
-import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
-import ZothOSGodModeTool from '../components/tools/ZothOSGodModeTool';
-import { RealityMatrixShowcaseSection } from '../components/RealityZothBotHUD';
-import UncommonTelemetryDeck from '../components/UncommonTelemetryDeck';
-import ZothosAsciiLogo from '../components/ZothosAsciiLogo';
-
-// Icons
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
-import BuildCircleIcon from '@mui/icons-material/BuildCircle';
-import SmartToyIcon from '@mui/icons-material/SmartToy';
-import UsbIcon from '@mui/icons-material/Usb';
-import SecurityIcon from '@mui/icons-material/Security';
-import TerminalIcon from '@mui/icons-material/Terminal';
-import ShieldIcon from '@mui/icons-material/Shield';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import TuneIcon from '@mui/icons-material/Tune';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import LaunchIcon from '@mui/icons-material/Launch';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import MemoryIcon from '@mui/icons-material/Memory';
-import PaletteIcon from '@mui/icons-material/Palette';
-import HealingIcon from '@mui/icons-material/Healing';
+import LocalSystemDossier from '../components/LocalSystemDossier';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
+const serif = '"Cormorant Garamond", Georgia, serif';
+
+const COMPARISON_ROWS = [
+  {
+    feature: 'Offensive & Defensive Security Suite',
+    zoth: 'Kali + Parrot parity + HexStrike CLI',
+    kali: '150+ Tools',
+    parrot: '150+ Tools',
+    ubuntu: 'Manual install',
+  },
+  {
+    feature: 'Local AI Coding Agents & Daemons',
+    zoth: 'Ollama (127.0.0.1), Hermes, Egregore, 163 MCP catalog (off by default)',
+    kali: 'None',
+    parrot: 'None',
+    ubuntu: 'None',
+  },
+  {
+    feature: 'Pre-Installed Local Tool Arsenal',
+    zoth: 'Zoth Studio v2 (77-tool local CLI & daemon suite)',
+    kali: 'None',
+    parrot: 'None',
+    ubuntu: 'None',
+  },
+  {
+    feature: 'Self-Healing System Diagnostics',
+    zoth: 'zoth-heal automated resilience daemon',
+    kali: 'None',
+    parrot: 'None',
+    ubuntu: 'None',
+  },
+  {
+    feature: 'Hardware Credential Vault',
+    zoth: 'zoth-vault (Argon2id + AES-256) + Pass',
+    kali: 'Standard keyring',
+    parrot: 'Standard keyring',
+    ubuntu: 'Standard keyring',
+  },
+  {
+    feature: 'Amnesic & Tor Ghostmode Edition',
+    zoth: 'zoth ghost + ZothOS-Lite v1.2 RAM-only edition',
+    kali: 'Manual setup',
+    parrot: 'AnonSurf',
+    ubuntu: 'None',
+  },
+];
 
 export default function ZothOSShowcasePage() {
-  const [toastMessage, setToastMessage] = useState(null);
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
-  const gold = isDark ? '#D4AF37' : '#8A6508';
-  const goldSoft = isDark ? '#F5E6AB' : '#8A6A09';
-  const goldWash = isDark ? 'rgba(212, 175, 55, 0.12)' : '#FEF9E7';
-  const goldBorder = isDark ? 'rgba(212, 175, 55, 0.35)' : '#E2CE82';
-  const textPrimary = isDark ? '#F1F5F9' : '#101828';
-  const textSecondary = isDark ? '#94A3B8' : '#475467';
-  const cardBg = isDark ? '#11131F' : '#FFFFFF';
-
-  const copyToClipboard = (text, label) => {
-    if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
-      setToastMessage(`Copied ${label} to clipboard!`);
-    }
-  };
-
-  const features = [
-    {
-      icon: <SecurityIcon sx={{ fontSize: 32 }} />,
-      title: 'Kali and Parrot security tools',
-      desc: 'Complete Kali Linux and Parrot Security parity out of the box. Pre-configured Burp Suite, Caido, Nmap, Metasploit, Recon-ng, Wireshark, and NullAI HexStrike Terminal with zero setup friction.',
-      badge: 'OFFENSIVE SEC',
-    },
-    {
-      icon: <SmartToyIcon sx={{ fontSize: 32 }} />,
-      title: 'Frontier AI Agent Core (v3.4.0)',
-      desc: 'Ollama bound to 127.0.0.1. Deterministic 4-folder KDE Plasma 6 desktop (01-AI-Agents-and-Dev, 02-Security-and-Privacy, 03-ZothOS-Daemons, 04-Media-and-Utilities) with zero delayed loose icon pop-in. UFW starts default-deny and allows loopback, tailscale0, UDP 41641, and TCP 7890. MCP catalog is 163 servers, all off by default.',
-      badge: 'FRONTIER AI',
-    },
-    {
-      icon: <AutoAwesomeIcon sx={{ fontSize: 32 }} />,
-      title: 'Zoth Studio v2 + ZothOS-Lite (:8145)',
-      desc: 'Native desktop launch of Zoth Studio v2 (:3000), Vaelor L1 (:8140), Zoth Civilization (:9393), and ZothOS-Lite v1.2 (:8145) — our Tails-style Amnesic Monotone Edition featuring a 60fps Unicode Braille + Bayer 8×8 Dither windowed GUI and live root terminal.',
-      badge: 'DUAL EDITION',
-    },
-    {
-      icon: <ShieldIcon sx={{ fontSize: 32 }} />,
-      title: 'Ghostmode Tor & Sovereign Vault',
-      desc: 'One-command system-wide Tor anonymization, amnesic RAM-only execution profiles, and Argon2id + AES-256 hardware vault (zoth-vault) for zero-leak cryptographic credentials.',
-      badge: 'PRIVACY & VAULT',
-    },
-    {
-      icon: <HealingIcon sx={{ fontSize: 32 }} />,
-      title: 'Self-Healing Resilience Daemon (zoth-heal)',
-      desc: 'Continuous autonomous diagnostics and self-repair across audio, display, network, packages, and disk storage. If an anomaly occurs, zoth-heal detects and restores nominal state instantly.',
-      badge: 'RESILIENCE',
-    },
-    {
-      icon: <PaletteIcon sx={{ fontSize: 32 }} />,
-      title: 'KDE Plasma 6 + Multi-Size Xcursor Suite',
-      desc: 'Verified 166,688-byte multi-size (16×16–48×48) Zoth-Gold-Cursors across all 3 reality themes with X11/Wayland SWCursor hardware fallback so cursors never vanish over GTK/Qt/Electron windows. Eight named virtual desktops in a 2×4 pager.',
-      badge: 'ALCHEMICAL DESKTOP',
-    },
-  ];
-
-  const comparisonRows = [
-    {
-      feature: 'Offensive Security & Pentesting',
-      zoth: 'Kali and Parrot security tools',
-      kali: '150+ Tools',
-      parrot: '150+ Tools',
-      ubuntu: 'None (Manual install)',
-    },
-    {
-      feature: 'Frontier AI Coding Agents',
-      zoth: 'Install wrappers on ISO; Ollama on 127.0.0.1; MCP 163 all off',
-      kali: 'None',
-      parrot: 'None',
-      ubuntu: 'None',
-    },
-    {
-      feature: 'Integrated AI Development Studio',
-      zoth: 'Zoth Studio v2 (zoth.nullai.tech, 30-tool catalog)',
-      kali: 'None',
-      parrot: 'None',
-      ubuntu: 'None',
-    },
-    {
-      feature: 'Local LLM Inference Engine',
-      zoth: 'Ollama on 127.0.0.1',
-      kali: 'Manual setup',
-      parrot: 'Manual setup',
-      ubuntu: 'Manual setup',
-    },
-    {
-      feature: 'Self-Healing Diagnostic System',
-      zoth: 'zoth-heal Automated Resilience Daemon',
-      kali: 'None',
-      parrot: 'None',
-      ubuntu: 'None',
-    },
-    {
-      feature: 'Sovereign Zero-Leak Hardware Vault',
-      zoth: 'Argon2id Rust Daemon + Bitwarden + Pass',
-      kali: 'Standard Keyring',
-      parrot: 'Standard Keyring',
-      ubuntu: 'Standard Keyring',
-    },
-    {
-      feature: 'Virtual Desktops & Multi-Monitor',
-      zoth: '8 named desktops; Samsung on its own screen (zoth-workspaces)',
-      kali: 'Empty desktop by default',
-      parrot: 'Empty desktop by default',
-      ubuntu: 'Empty desktop by default',
-    },
-    {
-      feature: 'Tor Anonymization & Ghostmode',
-      zoth: 'One-Click Tor Route & Amnesic Mode (zoth ghost)',
-      kali: 'Manual configuration',
-      parrot: 'AnonSurf module',
-      ubuntu: 'None',
-    },
-  ];
-
-  const builtFor = [
-    {
-      role: 'Autonomous AI Engineers',
-      desc: 'Develop, benchmark, and orchestrate local multi-agent swarms with zero cloud latency and zero subscription overhead.',
-    },
-    {
-      role: 'Offensive Security & Red Teamers',
-      desc: 'Full penetration testing suite with an AI-augmented terminal (HexStrike) that correlates vulnerabilities and automates reconnaissance.',
-    },
-    {
-      role: 'Privacy-First Developers & Researchers',
-      desc: 'Offline-capable operation, hardware zero-egress invariants, and amnesic runtime profiles to ensure proprietary IP never leaves your machine.',
-    },
-    {
-      role: 'Operators Seeking Turnkey Sovereignty',
-      desc: 'Eliminate weeks of configuration. Flash ZothOS to bare metal or run inside KVM/QEMU with every runtime ready on first boot.',
-    },
-  ];
+  const cardBg = isDark ? '#0E1016' : '#FFFFFF';
+  const textPrimary = isDark ? '#F5F1E6' : '#101828';
+  const textSecondary = isDark ? '#A8A29E' : '#334155';
+  const hairline = isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(16, 24, 40, 0.12)';
+  const gold = isDark ? '#D4AF37' : '#7A5808';
+  const goldWash = isDark ? 'rgba(212, 175, 55, 0.08)' : 'rgba(122, 88, 8, 0.06)';
 
   return (
-    <>
-
-      <Container maxWidth="lg" className="page-fade-in" sx={{ py: { xs: 4, md: 7 } }}>
-        {/* Hero Section with 60FPS 3D Volumetric ZOTHOS Logo Turntable */}
-        <Box
+    <LocalSystemDossier
+      tone="gold"
+      kicker="ZOTH OS v3.4.0 & ZOTHOS-LITE v1.2"
+      badges={['DEBIAN 13 TRIXIE', 'KDE PLASMA 6', '77 TOOLS PRE-INSTALLED']}
+      title="The Sovereign AI & Security"
+      accentWord="Linux Distribution."
+      subtitle="Most Zoth Studio tools execute against real Linux sockets, local SQLite graphs, and loopback inference daemons—not browser sandboxes. ZothOS v3.4.0 ships the entire 77-tool Zoth Studio arsenal, Kali and Parrot security parity, Ollama on 127.0.0.1, and deterministic KDE Plasma 6 workspaces ready on first boot."
+      cloneCommand="git clone https://github.com/NullAITech/zoth-os.git && cd zoth-os"
+      repoUrl="https://github.com/NullAITech/zoth-os"
+      repoLabel="Get ZothOS Build Repo"
+      docsRoute="/zoth-os/docs"
+      docsLabel="OS Architecture & ISO Docs"
+      externalLinks={[
+        { label: 'zothos.nullai.tech', href: 'https://zothos.nullai.tech' },
+        { label: 'zothos-lite.nullai.tech', href: 'https://zothos-lite.nullai.tech' },
+      ]}
+      overviewTitle="Two Purpose-Built Editions: Workstation & Amnesic Lite"
+      overviewParagraphs={[
+        'ZothOS v3.4.0 is our full Debian 13 (Trixie) + KDE Plasma 6 workstation distribution engineered by NullAI. It combines offensive and defensive security tooling with local-first AI runtimes—binding Ollama strictly to 127.0.0.1, starting UFW in default-deny mode, and keeping all 163 cataloged MCP servers disabled until explicitly enabled by the operator.',
+        'For air-gapped or RAM-only boot workflows, ZothOS-Lite v1.2 (1nc0gn30/zothos-lite) provides a monochrome, Tails-inspired amnesic live environment with zero persistent disk writes.',
+      ]}
+      pipelineSteps={[
+        {
+          label: 'Deterministic Live-Build Pipeline',
+          detail: 'Reproducible SquashFS & chroot hooks configure KDE Plasma 6 folders, Xcursor themes, and /usr/local/bin tool wrappers.',
+        },
+        {
+          label: 'Loopback-First Daemon Topology',
+          detail: 'Zoth Studio (:3000), Neuro-Memory (:8094), Pantheon Swarm (:8141), and Ollama (:11434) bind strictly to localhost.',
+        },
+        {
+          label: 'Self-Healing & Ghostmode Controls',
+          detail: 'zoth-heal monitors system health while zoth ghost routes traffic through Tor or enforces RAM-only execution.',
+        },
+      ]}
+      specs={[
+        { key: 'Base System', value: 'Debian 13 (Trixie) x86_64' },
+        { key: 'Desktop Shell', value: 'KDE Plasma 6 (4 Deterministic Folders)' },
+        { key: 'Lite Edition', value: 'ZothOS-Lite v1.2 (Amnesic Monotone)' },
+        { key: 'Firewall Posture', value: 'UFW Default-Deny + Loopback Only' },
+        { key: 'Preloaded Arsenal', value: 'All 77 Zoth Studio CLI & Daemon Tools' },
+        { key: 'MCP Catalog', value: '163 Servers Indexed (All Off by Default)' },
+      ]}
+      quickstartLines={[
+        '# Clone the ZothOS ISO live-build repository',
+        'git clone https://github.com/NullAITech/zoth-os.git',
+        'cd zoth-os',
+        '',
+        '# Or clone the lightweight amnesic ZothOS-Lite edition',
+        'git clone https://github.com/1nc0gn30/zothos-lite.git',
+      ]}
+      capabilitiesKicker="OPERATING SYSTEM PILLARS"
+      capabilitiesTitle="What Ships Out of the Box on ZothOS"
+      capabilities={[
+        {
+          tag: 'SECURITY PARITY',
+          title: 'Kali & Parrot Tooling Built In',
+          desc: 'Pre-configured Nmap, Wireshark, Metasploit, Recon-ng, Burp/Caido workflows, and HexStrike CLI with zero post-install dependency hunting.',
+        },
+        {
+          tag: 'LOCAL AI CORE',
+          title: 'Loopback LLM & Agent Stack',
+          desc: 'Ships with Ollama bound to 127.0.0.1, Nous Research Hermes Agent integration, Zoth Egregore support, and Neuro-Memory (:8094).',
+        },
+        {
+          tag: 'PRIVACY & VAULT',
+          title: 'Ghostmode Tor & Argon2id Vault',
+          desc: 'System-wide Tor routing via zoth ghost alongside zoth-vault (Argon2id + AES-256) for zero-leak local credential storage.',
+        },
+        {
+          tag: 'RESILIENCE',
+          title: 'zoth-heal Autonomous Diagnostics',
+          desc: 'Continuous local health checks across display, audio, network, package state, and loopback services with one-command recovery.',
+        },
+        {
+          tag: 'AMNESIC LITE',
+          title: 'ZothOS-Lite v1.2 Companion ISO',
+          desc: 'Dedicated monochrome, RAM-only toram boot profile for ephemeral research sessions that leave zero trace on host storage.',
+        },
+        {
+          tag: 'DESKTOP HYGIENE',
+          title: 'Deterministic Plasma 6 Workspaces',
+          desc: 'Four clean desktop folders, eight named virtual desktops, and multi-size SWCursor-safe Xcursor themes verified across bare metal and KVM.',
+        },
+      ]}
+      funnelToolTitle="ZothOS v3.4.0 & ZothOS-Lite v1.2"
+      funnelToolTag="SOVEREIGN LINUX OS"
+      funnelToolDesc="Debian 13 + KDE Plasma 6 operating system pre-loaded with all 77 Zoth Studio tools, local LLM runtimes, and security parity."
+    >
+      {/* Clean Distribution Comparison Matrix */}
+      <Box>
+        <Typography
           sx={{
-            display: 'grid',
-            gridTemplateColumns: { xs: 'minmax(0, 1fr)', lg: 'minmax(0, 1.15fr) minmax(0, 0.85fr)' },
-            gap: { xs: 3.5, lg: 4 },
-            alignItems: 'center',
-            mb: 5,
+            fontFamily: mono,
+            fontSize: '0.72rem',
+            fontWeight: 700,
+            letterSpacing: '0.15em',
+            textTransform: 'uppercase',
+            color: gold,
+            mb: 0.75,
           }}
         >
-          <Box sx={{ minWidth: 0 }}>
-            <GlowLine color={gold} glowColor="rgba(212, 175, 55, 0.4)" />
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, mt: 3, mb: 1, flexWrap: 'wrap' }}>
-              <Chip
-                label="ZOTH OS v3.4.0 + ZOTHOS-LITE v1.1"
-                size="small"
-                sx={{
-                  bgcolor: goldWash,
-                  color: goldSoft,
-                  border: `1px solid ${goldBorder}`,
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  fontSize: '0.72rem',
-                }}
-              />
-              <Chip
-                label="KALI + PARROT DUAL PARITY"
-                size="small"
-                sx={{
-                  bgcolor: isDark ? 'rgba(52, 211, 153, 0.12)' : '#ECFDF3',
-                  color: isDark ? '#34D399' : '#027A48',
-                  border: `1px solid ${isDark ? 'rgba(52, 211, 153, 0.35)' : '#ABE5C6'}`,
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  fontSize: '0.72rem',
-                }}
-              />
-              <Chip
-                label="FRONTIER AI INTEGRATED"
-                size="small"
-                sx={{
-                  bgcolor: isDark ? 'rgba(96, 165, 250, 0.12)' : '#EFF6FF',
-                  color: isDark ? '#60A5FA' : '#1D4ED8',
-                  border: `1px solid ${isDark ? 'rgba(96, 165, 250, 0.35)' : '#BFDBFE'}`,
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  fontSize: '0.72rem',
-                }}
-              />
-              <Chip
-                label="163 MCP CATALOG (ALL OFF)"
-                size="small"
-                sx={{
-                  bgcolor: isDark ? 'rgba(248, 113, 113, 0.12)' : '#FEF2F2',
-                  color: isDark ? '#F87171' : '#B91C1C',
-                  border: `1px solid ${isDark ? 'rgba(248, 113, 113, 0.35)' : '#FECACA'}`,
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  fontSize: '0.72rem',
-                }}
-              />
-            </Box>
-            <Box sx={{ mt: 2, mb: 1.5, display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1.5 }}>
-              <Box
-                component="a"
-                href="https://www.producthunt.com/products/zothos?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-zothos-2"
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{ display: 'inline-flex', lineHeight: 0 }}
-              >
-                <Box
-                  component="img"
-                  src={`https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1276873&theme=${isDark ? 'dark' : 'light'}&t=1792205107200`}
-                  alt="ZOTHOS - Debian 13 + KDE Plasma 6 OS for AI agents and security | Product Hunt"
-                  width={250}
-                  height={54}
-                  sx={{ width: 250, height: 54, display: 'block' }}
-                />
-              </Box>
-            </Box>
-            <Typography
-              variant="h1"
-              sx={{
-                fontSize: { xs: '2.1rem', sm: '3.1rem', md: '3.6rem' },
-                fontWeight: 900,
-                color: textPrimary,
-                lineHeight: 1.06,
-                letterSpacing: '-0.025em',
-                mb: 2,
-              }}
-            >
-              The Sovereign AI &{' '}
-              <Box component="span" className="text-gradient-gold">
-                Offensive Security OS
-              </Box>
-            </Typography>
-            <Typography
-              sx={{
-                color: textSecondary,
-                fontSize: { xs: '0.98rem', md: '1.08rem' },
-                lineHeight: 1.65,
-                maxWidth: 680,
-                mb: 3,
-              }}
-            >
-              A bootable Linux operating system engineered by NullAI. Combines the Kali and Parrot security arsenal with the Zoth Studio v2 suite, Vaelor L1 (:8140), Zoth Civilization (:9393), and ZothOS-Lite v1.2 (:8145). The shipped flagship release is v3.4.0 featuring deterministic 4-folder KDE Plasma 6 desktop organization and verified 166KB multi-size Xcursor themes with hardware/VM SWCursor visibility.
-            </Typography>
-            <Box sx={{ display: 'flex', gap: 1.4, flexWrap: 'wrap', alignItems: 'center' }}>
-              <Button
-                variant="contained"
-                color="primary"
-                size="medium"
-                href="https://zothos.nullai.tech"
-                target="_blank"
-                rel="noopener noreferrer"
-                startIcon={<LaunchIcon />}
-                sx={{
-                  px: 2.5,
-                  py: 1.1,
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  boxShadow: `0 4px 20px ${isDark ? 'rgba(212,175,55,0.4)' : 'rgba(184,134,11,0.3)'}`,
-                }}
-              >
-                zothos.nullai.tech
-              </Button>
-              <Button
-                variant="outlined"
-                color="primary"
-                size="medium"
-                component={RouterLink}
-                to="/zoth-os/docs"
-                startIcon={<TerminalIcon />}
-                sx={{
-                  px: 2.5,
-                  py: 1.1,
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  borderColor: goldBorder,
-                }}
-              >
-                Launch Live Codex & Dials →
-              </Button>
-              <Button
-                variant="outlined"
-                size="medium"
-                href="https://github.com/1nc0gn30/chain-of-thoughts"
-                target="_blank"
-                rel="noopener noreferrer"
-                startIcon={<GitHubIcon />}
-                sx={{
-                  px: 2.2,
-                  py: 1.1,
-                  fontWeight: 750,
-                  fontFamily: mono,
-                  color: isDark ? '#38BDF8' : '#0369A1',
-                  borderColor: isDark ? 'rgba(56, 189, 248, 0.4)' : '#BAE6FD',
-                  bgcolor: isDark ? 'rgba(56, 189, 248, 0.08)' : '#F0F9FF',
-                }}
-              >
-                ◈ Chain of Thoughts
-              </Button>
-              <Button
-                variant="outlined"
-                size="medium"
-                href="https://github.com/1nc0gn30/zothos-lite"
-                target="_blank"
-                rel="noopener noreferrer"
-                startIcon={<GitHubIcon />}
-                sx={{
-                  px: 2.2,
-                  py: 1.1,
-                  fontWeight: 750,
-                  fontFamily: mono,
-                  color: isDark ? '#FFFFFF' : '#0F172A',
-                  borderColor: isDark ? 'rgba(255, 255, 255, 0.3)' : '#0F172A',
-                  bgcolor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#F8FAFC',
-                }}
-              >
-                ▓ ZothOS-Lite v1.2
-              </Button>
-            </Box>
-          </Box>
+          DISTRIBUTION MATRIX
+        </Typography>
+        <Typography
+          variant="h3"
+          sx={{
+            fontFamily: serif,
+            fontWeight: 600,
+            fontSize: { xs: '1.75rem', md: '2.15rem' },
+            color: textPrimary,
+            mb: 3,
+            lineHeight: 1.15,
+          }}
+        >
+          How ZothOS Compares to Standard Linux Distros
+        </Typography>
 
-          <Box sx={{ minWidth: 0, width: '100%', display: 'flex', justifyContent: 'center' }}>
-            <ZothosAsciiLogo size="hero" />
-          </Box>
-        </Box>
-
-        {/* Live Machine Status + Unicode Braille & Bayer 8x8 Dither Telemetry Deck */}
-        <Box sx={{ mb: 6 }}>
-          <UncommonTelemetryDeck compact />
-        </Box>
-
-        {/* Interactive 5-Reality Switcher & Zoth Bot Showcase */}
-        <RealityMatrixShowcaseSection />
-
-        {/* Quick Clone & Deployment Terminal Strip */}
-        <Paper
+        <TableContainer
+          component={Paper}
           elevation={0}
           sx={{
-            p: 2.5,
-            mb: 8,
-            borderRadius: 3,
-            bgcolor: isDark ? '#08080B' : '#F8F9FA',
-            border: `1px solid ${goldBorder}`,
-            display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' },
-            alignItems: { xs: 'stretch', md: 'center' },
-            justifyContent: 'space-between',
-            gap: 2,
+            borderRadius: 2.5,
+            bgcolor: cardBg,
+            border: `1px solid ${hairline}`,
+            overflowX: 'auto',
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <TerminalIcon sx={{ color: gold }} />
-            <Typography sx={{ fontFamily: mono, fontSize: '0.85rem', color: goldSoft, fontWeight: 700, overflowWrap: 'anywhere' }}>
-              $ git clone https://github.com/NullAITech/zoth-os.git && cd zoth-os
-            </Typography>
-          </Box>
-          <Button
-            size="small"
-            variant="outlined"
-            onClick={() => copyToClipboard('git clone https://github.com/NullAITech/zoth-os.git && cd zoth-os', 'Git clone command')}
-            startIcon={<ContentCopyIcon />}
-            sx={{
-              fontFamily: mono,
-              fontWeight: 700,
-              fontSize: '0.76rem',
-              color: gold,
-              borderColor: goldBorder,
-              whiteSpace: 'nowrap',
-            }}
-          >
-            Copy Quickstart
-          </Button>
-        </Paper>
-
-        {/* Interactive 60FPS ASCII & Braille Motion Edit + ZothOS v3.4.0 Desktop Pillar Inspector */}
-        <Box sx={{ mb: 8 }}>
-          <ToolMotionShowcase
-            tool={{
-              id: 'zoth-os',
-              name: 'Zoth OS v3.4.0 + ZothOS-Lite v1.2',
-              category: 'Swarm & Core',
-              executionType: 'local_cli',
-              localPort: 8145,
-              description: 'Debian 13 Trixie + KDE Plasma 6.3 sovereign AI distribution with 7 Root Flagships, 4 Deterministic Desktop Folders, Multi-Size Xcursor Suite, and ZothOS-Lite Amnesic Monotone Edition (:8145).',
-            }}
-            onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
-          />
-          <Box sx={{ mt: 4 }}>
-            <ZothOSGodModeTool />
-          </Box>
-        </Box>
-
-        {/* 6 Key Pillars Grid */}
-        <Box sx={{ mb: 10 }}>
-          <Typography
-            sx={{
-              fontFamily: mono,
-              color: gold,
-              letterSpacing: '0.12em',
-              fontSize: '0.8rem',
-              fontWeight: 800,
-              textTransform: 'uppercase',
-              mb: 1,
-            }}
-          >
-            Sovereign OS Architecture
-          </Typography>
-          <Typography variant="h3" sx={{ fontWeight: 800, color: textPrimary, mb: 4, letterSpacing: '-0.02em' }}>
-            What <span className="text-gradient-gold">Zoth OS Delivers</span> Out of the Box
-          </Typography>
-
-          <StaggerChildren>
-            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, gap: 3 }}>
-              {features.map((f, i) => (
-                <StaggerItem key={i}>
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      p: 3.5,
-                      height: '100%',
-                      width: '100%',
-                      flex: 1,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      borderRadius: 3.5,
-                      bgcolor: cardBg,
-                      border: `1px solid ${isDark ? 'rgba(212, 175, 55, 0.22)' : 'rgba(0, 0, 0, 0.08)'}`,
-                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      position: 'relative',
-                      overflow: 'hidden',
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
-                        borderColor: gold,
-                        boxShadow: `0 12px 32px -10px ${isDark ? 'rgba(212, 175, 55, 0.3)' : 'rgba(184, 134, 11, 0.2)'}`,
-                      },
-                    }}
-                  >
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                      <Box sx={{ color: gold }}>{f.icon}</Box>
-                      <Chip
-                        label={f.badge}
-                        size="small"
-                        sx={{
-                          height: 20,
-                          fontSize: '0.64rem',
-                          fontFamily: mono,
-                          fontWeight: 800,
-                          bgcolor: goldWash,
-                          color: goldSoft,
-                          border: `1px solid ${goldBorder}`,
-                        }}
-                      />
-                    </Box>
-                    <Typography sx={{ fontFamily: mono, fontWeight: 800, color: textPrimary, fontSize: '1.05rem', mb: 1.2 }}>
-                      {f.title}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: textSecondary, lineHeight: 1.7, flex: 1 }}>
-                      {f.desc}
-                    </Typography>
-                  </Paper>
-                </StaggerItem>
-              ))}
-            </Box>
-          </StaggerChildren>
-        </Box>
-
-        {/* Feature Comparison Matrix */}
-        <Box sx={{ mb: 10 }}>
-          <Typography
-            sx={{
-              fontFamily: mono,
-              color: gold,
-              letterSpacing: '0.12em',
-              fontSize: '0.8rem',
-              fontWeight: 800,
-              textTransform: 'uppercase',
-              mb: 1,
-            }}
-          >
-            Ecosystem Comparison
-          </Typography>
-          <Typography variant="h3" sx={{ fontWeight: 800, color: textPrimary, mb: 4, letterSpacing: '-0.02em' }}>
-            Why Choose <span className="text-gradient-gold">Zoth OS</span> Over Standard Distros
-          </Typography>
-
-          <TableContainer
-            component={Paper}
-            elevation={0}
-            sx={{
-              borderRadius: 3,
-              border: `1px solid ${goldBorder}`,
-              bgcolor: cardBg,
-              overflowX: 'auto',
-            }}
-          >
-            <Table sx={{ minWidth: 650 }}>
-              <TableHead sx={{ bgcolor: isDark ? 'rgba(212, 175, 55, 0.08)' : '#FEF9E7' }}>
-                <TableRow>
-                  <TableCell sx={{ fontFamily: mono, fontWeight: 800, color: textPrimary, fontSize: '0.85rem' }}>Capability</TableCell>
-                  <TableCell sx={{ fontFamily: mono, fontWeight: 900, color: gold, fontSize: '0.85rem' }}>Zoth OS v3.4.0</TableCell>
-                  <TableCell sx={{ fontFamily: mono, fontWeight: 700, color: textSecondary, fontSize: '0.85rem' }}>Kali Linux</TableCell>
-                  <TableCell sx={{ fontFamily: mono, fontWeight: 700, color: textSecondary, fontSize: '0.85rem' }}>Parrot OS</TableCell>
-                  <TableCell sx={{ fontFamily: mono, fontWeight: 700, color: textSecondary, fontSize: '0.85rem' }}>Ubuntu</TableCell>
+          <Table sx={{ minWidth: 640 }}>
+            <TableHead sx={{ bgcolor: goldWash }}>
+              <TableRow>
+                <TableCell sx={{ fontFamily: mono, fontWeight: 700, fontSize: '0.78rem', color: textPrimary }}>
+                  Capability
+                </TableCell>
+                <TableCell sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.78rem', color: gold }}>
+                  ZothOS v3.4.0
+                </TableCell>
+                <TableCell sx={{ fontFamily: mono, fontWeight: 600, fontSize: '0.78rem', color: textSecondary }}>
+                  Kali Linux
+                </TableCell>
+                <TableCell sx={{ fontFamily: mono, fontWeight: 600, fontSize: '0.78rem', color: textSecondary }}>
+                  Parrot OS
+                </TableCell>
+                <TableCell sx={{ fontFamily: mono, fontWeight: 600, fontSize: '0.78rem', color: textSecondary }}>
+                  Ubuntu
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {COMPARISON_ROWS.map((row) => (
+                <TableRow key={row.feature} sx={{ '&:last-child td': { borderBottom: 0 } }}>
+                  <TableCell sx={{ fontWeight: 600, fontSize: '0.86rem', color: textPrimary }}>
+                    {row.feature}
+                  </TableCell>
+                  <TableCell sx={{ fontFamily: mono, fontWeight: 700, fontSize: '0.8rem', color: gold }}>
+                    {row.zoth}
+                  </TableCell>
+                  <TableCell sx={{ fontFamily: mono, fontSize: '0.8rem', color: textSecondary }}>
+                    {row.kali}
+                  </TableCell>
+                  <TableCell sx={{ fontFamily: mono, fontSize: '0.8rem', color: textSecondary }}>
+                    {row.parrot}
+                  </TableCell>
+                  <TableCell sx={{ fontFamily: mono, fontSize: '0.8rem', color: textSecondary }}>
+                    {row.ubuntu}
+                  </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {comparisonRows.map((row, index) => (
-                  <TableRow
-                    key={index}
-                    sx={{
-                      '&:nth-of-type(even)': { bgcolor: isDark ? 'rgba(255, 255, 255, 0.015)' : 'rgba(0, 0, 0, 0.015)' },
-                      '&:hover': { bgcolor: isDark ? 'rgba(212, 175, 55, 0.05)' : '#FEF9E7' },
-                    }}
-                  >
-                    <TableCell sx={{ fontWeight: 750, color: textPrimary, fontSize: '0.88rem' }}>{row.feature}</TableCell>
-                    <TableCell sx={{ fontWeight: 800, color: gold, fontFamily: mono, fontSize: '0.82rem' }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
-                        <CheckCircleIcon sx={{ fontSize: 16, color: gold }} />
-                        {row.zoth}
-                      </Box>
-                    </TableCell>
-                    <TableCell sx={{ color: textSecondary, fontSize: '0.82rem', fontFamily: mono }}>{row.kali}</TableCell>
-                    <TableCell sx={{ color: textSecondary, fontSize: '0.82rem', fontFamily: mono }}>{row.parrot}</TableCell>
-                    <TableCell sx={{ color: textSecondary, fontSize: '0.82rem', fontFamily: mono }}>{row.ubuntu}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-
-        {/* Built For Personas */}
-        <Box sx={{ mb: 10 }}>
-          <Typography
-            sx={{
-              fontFamily: mono,
-              color: gold,
-              letterSpacing: '0.12em',
-              fontSize: '0.8rem',
-              fontWeight: 800,
-              textTransform: 'uppercase',
-              mb: 1,
-            }}
-          >
-            Target Workloads
-          </Typography>
-          <Typography variant="h3" sx={{ fontWeight: 800, color: textPrimary, mb: 4, letterSpacing: '-0.02em' }}>
-            Engineered Specifically For
-          </Typography>
-
-          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 3 }}>
-            {builtFor.map((item, idx) => (
-              <Paper
-                key={idx}
-                elevation={0}
-                sx={{
-                  p: 3,
-                  borderRadius: 3,
-                  bgcolor: cardBg,
-                  borderLeft: `4px solid ${gold}`,
-                  borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
-                  borderRight: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
-                  borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'}`,
-                }}
-              >
-                <Typography sx={{ fontFamily: mono, fontWeight: 800, color: goldSoft, fontSize: '1rem', mb: 1 }}>
-                  {item.role}
-                </Typography>
-                <Typography variant="body2" sx={{ color: textSecondary, lineHeight: 1.7 }}>
-                  {item.desc}
-                </Typography>
-              </Paper>
-            ))}
-          </Box>
-        </Box>
-
-        {/* Sovereign Funnel Integration */}
-        <Box sx={{ mt: 10 }}>
-          <SovereignFunnel
-            title="Deploy Zoth OS & Studio Ecosystem"
-            subtitle="Choose between running Zoth OS on bare metal / KVM, launching the unified Zoth Studio cockpit, or pulling standalone autonomous micro-engines."
-            toolTitle="Zoth OS Sovereign Operating System"
-            toolTag="OPERATING SYSTEM"
-            toolDescription="Dual Kali + Parrot parity Linux distro pre-loaded with local AI agents, cyber tools, and Zoth Studio v2."
-            toolRepo="https://github.com/NullAITech/zoth-os"
-            toolCommand="git clone https://github.com/NullAITech/zoth-os.git && cd zoth-os"
-            studioRepo="https://github.com/NullAITech/zoth-studio-v2"
-            osRepo="https://github.com/NullAITech/zoth-os"
-          />
-        </Box>
-      </Container>
-
-      {/* Snackbar Notifications */}
-      <Snackbar
-        open={Boolean(toastMessage)}
-        autoHideDuration={3000}
-        onClose={() => setToastMessage(null)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert severity="success" onClose={() => setToastMessage(null)} sx={{ fontFamily: mono, fontWeight: 700 }}>
-          {toastMessage}
-        </Alert>
-      </Snackbar>
-    </>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    </LocalSystemDossier>
   );
 }

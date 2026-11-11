@@ -349,19 +349,20 @@ export const theme = createTheme({
           transition: 'background 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, transform 0.22s ease, color 0.22s ease',
         },
         containedPrimary: {
-          color: '#101828',
-          background: 'linear-gradient(135deg, #FBF1D6 0%, #F5E6AB 28%, #D4AF37 68%, #B8860B 100%)',
-          boxShadow: '0 2px 4px rgba(184, 134, 11, 0.24), 0 4px 14px rgba(212, 175, 55, 0.3)',
+          color: '#FFFFFF',
+          backgroundImage: 'none',
+          backgroundColor: '#101828',
+          boxShadow: '0 1px 3px rgba(16, 24, 40, 0.16)',
           '&:hover': {
-            background: 'linear-gradient(135deg, #F8E7A0 0%, #F5E08E 25%, #D4AF37 65%, #9A7209 100%)',
-            boxShadow:
-              '0 8px 24px -4px rgba(212, 175, 55, 0.45), 0 0 0 1.5px rgba(251, 241, 214, 0.65), 0 2px 6px rgba(212, 175, 55, 0.25)',
+            backgroundImage: 'none',
+            backgroundColor: '#1E293B',
+            boxShadow: '0 4px 12px rgba(16, 24, 40, 0.2)',
             transform: 'translateY(-1px)',
           },
           '&:active': {
-            background: 'linear-gradient(135deg, #FBF1D6 12%, #F5E6AB 35%, #D4AF37 65%, #B8860B 88%)',
-            transform: 'translateY(1px)',
-            boxShadow: '0 1px 4px rgba(184, 134, 11, 0.22), 0 1px 6px rgba(212, 175, 55, 0.2)',
+            backgroundImage: 'none',
+            backgroundColor: '#0F172A',
+            transform: 'translateY(0)',
           },
         },
         outlinedPrimary: {
@@ -830,19 +831,20 @@ export const darkTheme = createTheme({
           transition: 'background 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, transform 0.22s ease, color 0.22s ease',
         },
         containedPrimary: {
-          color: '#101828',
-          background: 'linear-gradient(135deg, #FBF1D6 0%, #F5E6AB 28%, #D4AF37 68%, #B8860B 100%)',
-          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.45), 0 4px 16px rgba(212, 175, 55, 0.35)',
+          color: '#08080B',
+          backgroundImage: 'none',
+          backgroundColor: '#D4AF37',
+          boxShadow: '0 2px 10px rgba(0, 0, 0, 0.45)',
           '&:hover': {
-            background: 'linear-gradient(135deg, #F8E7A0 0%, #F5E08E 25%, #D4AF37 65%, #9A7209 100%)',
-            boxShadow:
-              '0 8px 26px -4px rgba(212, 175, 55, 0.5), 0 0 0 1.5px rgba(251, 241, 214, 0.65), 0 2px 8px rgba(212, 175, 55, 0.3)',
+            backgroundImage: 'none',
+            backgroundColor: '#E5C358',
+            boxShadow: '0 6px 18px rgba(212, 175, 55, 0.28)',
             transform: 'translateY(-1px)',
           },
           '&:active': {
-            background: 'linear-gradient(135deg, #FBF1D6 12%, #F5E6AB 35%, #D4AF37 65%, #B8860B 88%)',
-            transform: 'translateY(1px)',
-            boxShadow: '0 1px 4px rgba(0, 0, 0, 0.6), 0 1px 8px rgba(212, 175, 55, 0.25)',
+            backgroundImage: 'none',
+            backgroundColor: '#C49F2F',
+            transform: 'translateY(0)',
           },
         },
         outlinedPrimary: {

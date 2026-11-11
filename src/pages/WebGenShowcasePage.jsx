@@ -1,229 +1,82 @@
-import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import {
-  Box, Container, Typography, Unstable_Grid2 as Grid, Card, CardContent,
-  Button, Chip, useTheme,
-} from '@mui/material';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import CodeIcon from '@mui/icons-material/Code';
-import WifiOffIcon from '@mui/icons-material/WifiOff';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import DaemonStatusStrip from '../components/DaemonStatusStrip';
-import {
-  HeroReveal, HeroItem, GlowLine, RevealOnScroll,
-  StaggerChildren, StaggerItem,
-} from '../components/MotionReveal';
-import ToolMotionShowcase from '../components/tools/ToolMotionShowcase';
-import ZothFoundryGodModeTool from '../components/tools/ZothFoundryGodModeTool';
-
-const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-
-const FEATURES = [
-  { icon: AutoAwesomeIcon, title: 'Prompt to Website', desc: 'Describe what you need — get a complete site in seconds.' },
-  { icon: CodeIcon, title: '6 Framework Exports', desc: 'React, Vue, Svelte, Solid, Astro, or clean HTML.' },
-  { icon: WifiOffIcon, title: '100% Local & Offline', desc: 'Runs on your machine. No cloud, no tracking, ever.' },
-  { icon: DarkModeIcon, title: 'Beautiful Themes', desc: 'Four stunning dark-mode design systems built in.' },
-];
-
-const AUDIENCE = [
-  'Developers who want instant site scaffolds',
-  'Founders who need a landing page fast',
-  'Anyone who wants code ownership without cloud lock-in',
-];
+import React from 'react';
+import LocalSystemDossier from '../components/LocalSystemDossier';
 
 export default function WebGenShowcasePage() {
-  const theme = useTheme();
-  const dark = theme.palette.mode === 'dark';
-
-  const accent = '#38BDF8';
-  const accentGlow = 'rgba(56, 189, 248, 0.45)';
-  const cardBg = dark ? 'rgba(56, 189, 248, 0.04)' : 'rgba(56, 189, 248, 0.06)';
-  const cardBorder = dark ? 'rgba(56, 189, 248, 0.18)' : 'rgba(56, 189, 248, 0.25)';
-  const surfaceBg = dark ? '#0B0B12' : theme.palette.background.default;
-
   return (
-    <Box sx={{ bgcolor: surfaceBg, minHeight: '100vh' }}>
-      <Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
-
-        {/* ── Hero ── */}
-        <HeroReveal>
-          <HeroItem>
-            <GlowLine color={accent} glowColor={accentGlow} />
-          </HeroItem>
-
-          <HeroItem>
-            <Chip
-              label="WEBGEN"
-              size="small"
-              sx={{
-                mt: 4, fontFamily: mono, fontWeight: 700, letterSpacing: '0.12em',
-                bgcolor: `${accent}18`, color: accent, border: `1px solid ${accent}40`,
-              }}
-            />
-          </HeroItem>
-
-          <HeroItem>
-            <Typography
-              variant="h2"
-              sx={{
-                mt: 2, fontWeight: 900, letterSpacing: '-0.02em',
-                fontSize: { xs: '2rem', sm: '2.8rem', md: '3.4rem' },
-                color: dark ? '#fff' : 'text.primary',
-              }}
-            >
-              Websites from Words.
-            </Typography>
-          </HeroItem>
-
-          <HeroItem>
-            <Typography
-              sx={{
-                mt: 1.5, maxWidth: 540, color: 'text.secondary',
-                fontSize: { xs: '1rem', md: '1.15rem' }, lineHeight: 1.6,
-              }}
-            >
-              Type a prompt, pick a framework, and get a production-ready website on your machine. The published engine is the Python generator. The local site foundry keeps Grok CLI, Hermes, OpenCode, Cline, Aider, AGY, or Claude Code working until the site artifact is closed.
-            </Typography>
-          </HeroItem>
-        </HeroReveal>
-
-        <Box sx={{ mt: 4 }}>
-          <DaemonStatusStrip />
-        </Box>
-
-        {/* ── 60FPS ASCII & Braille Motion Edit + Autonomous Site Foundry ── */}
-        <Box sx={{ mt: 5 }}>
-          <ToolMotionShowcase
-            tool={{
-              id: 'zoth-webgen',
-              name: 'Zoth WebGen Foundry',
-              category: 'Autonomous Web',
-              executionType: 'local_cli',
-              description: '6-Archetype Full-Stack Compiler with Schema.org AEO & Triple-Viewport Guardrails.',
-            }}
-            onReplayRouteIntro={() => window.dispatchEvent(new CustomEvent('zoth:replay-intro'))}
-          />
-          <Box sx={{ mt: 4 }}>
-            <ZothFoundryGodModeTool tool={{ id: 'zoth-webgen', name: 'Zoth WebGen Foundry' }} />
-          </Box>
-        </Box>
-
-        {/* ── Feature Cards ── */}
-        <Box sx={{ mt: 5 }}>
-          <Grid container spacing={3} alignItems="stretch">
-            {FEATURES.map((f, idx) => (
-              <Grid xs={12} sm={6} md={3} key={f.title} sx={{ display: 'flex' }}>
-                <RevealOnScroll preset="fadeUp" delay={0.06 * idx} style={{ width: '100%', display: 'flex' }}>
-                  <Card
-                    elevation={0}
-                    sx={{
-                      height: '100%', width: '100%', flex: 1, bgcolor: cardBg,
-                      border: `1px solid ${cardBorder}`, borderRadius: 3,
-                      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                      '&:hover': {
-                        borderColor: accent,
-                        transform: 'translateY(-4px)',
-                        boxShadow: `0 8px 24px ${accent}22`,
-                      },
-                    }}
-                  >
-                    <CardContent sx={{ p: 3 }}>
-                      <f.icon sx={{ fontSize: 32, color: accent, mb: 1.5 }} />
-                      <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>
-                        {f.title}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {f.desc}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </RevealOnScroll>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-
-        {/* ── Built For ── */}
-        <RevealOnScroll preset="fadeUp" delay={0.1}>
-          <Box sx={{ mt: 8, mb: 2 }}>
-            <Typography
-              variant="overline"
-              sx={{ fontFamily: mono, color: accent, letterSpacing: '0.15em', fontWeight: 700 }}
-            >
-              Built For
-            </Typography>
-            <Box component="ul" sx={{ mt: 1.5, pl: 2.5, listStyle: 'none', p: 0 }}>
-              {AUDIENCE.map((line) => (
-                <Typography
-                  component="li" key={line} variant="body1"
-                  sx={{
-                    py: 0.6, color: 'text.secondary', display: 'flex',
-                    alignItems: 'center', gap: 1.5,
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: 6, height: 6, borderRadius: '50%',
-                      bgcolor: accent, flexShrink: 0,
-                    }}
-                  />
-                  {line}
-                </Typography>
-              ))}
-            </Box>
-          </Box>
-        </RevealOnScroll>
-
-        {/* ── CTA ── */}
-        <RevealOnScroll preset="fadeUp" delay={0.15}>
-          <Box sx={{ mt: 7, display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
-            <Button
-              component={RouterLink}
-              to="/webgen/docs"
-              variant="contained"
-              endIcon={<ArrowForwardIcon />}
-              sx={{
-                bgcolor: accent, color: '#070709', fontWeight: 700,
-                textTransform: 'none', borderRadius: 2, px: 3, py: 1.2,
-                boxShadow: `0 4px 14px ${accent}40`,
-                '&:hover': { bgcolor: '#0284C7', color: '#fff' },
-              }}
-            >
-              Launch In-Browser Compiler & Docs
-            </Button>
-            <Button
-              component={RouterLink}
-              to="/tools/bolt.diy"
-              variant="outlined"
-              endIcon={<ArrowForwardIcon />}
-              sx={{
-                borderColor: accent, color: accent, fontWeight: 700,
-                textTransform: 'none', borderRadius: 2, px: 3, py: 1.2,
-                '&:hover': { bgcolor: `${accent}15` },
-              }}
-            >
-              Open Zoth WebGen Workstation
-            </Button>
-            <Button
-              href="https://github.com/1nc0gn30/zoth-webgen"
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="outlined"
-              startIcon={<GitHubIcon />}
-              sx={{
-                borderColor: cardBorder, color: dark ? '#fff' : 'text.primary',
-                textTransform: 'none', borderRadius: 2, px: 3, py: 1.2,
-                '&:hover': { borderColor: accent, color: accent },
-              }}
-            >
-              View Zoth WebGen on GitHub
-            </Button>
-          </Box>
-        </RevealOnScroll>
-
-      </Container>
-    </Box>
+    <LocalSystemDossier
+      tone="sky"
+      kicker="ZOTH WEBGEN FOUNDRY"
+      badges={['LOCAL CLI COMPILER', '6 FRAMEWORK TARGETS', 'SCHEMA.ORG AEO']}
+      title="Full-Stack Site Synthesis on"
+      accentWord="Your Own Machine."
+      subtitle="Zoth WebGen is a local code synthesizer and static/full-stack project generator. Clone the repository to scaffold, theme, and verify production-ready web applications directly on your filesystem—complete with Schema.org JSON-LD graphs, security headers, and multi-viewport layout checks."
+      cloneCommand="git clone https://github.com/1nc0gn30/zoth-webgen.git && cd zoth-webgen"
+      repoUrl="https://github.com/1nc0gn30/zoth-webgen"
+      repoLabel="Get Zoth WebGen Repo"
+      docsRoute="/webgen/docs"
+      docsLabel="Compiler & CLI Documentation"
+      overviewTitle="Deterministic Project Scaffolding Without SaaS Lock-In"
+      overviewParagraphs={[
+        'Browser-hosted AI site builders trap your code behind proprietary sandboxes and export bloated, unmaintainable markup. Zoth WebGen runs locally as a Python and Node CLI pipeline that writes clean, standard project trees directly into your git workspace.',
+        'Every generated project includes structured metadata (`robots.txt`, `sitemap.xml`, OpenGraph tags, and Schema.org `@graph`), strict Content-Security and frame headers, and responsive CSS grid tokens verified across mobile, tablet, and desktop viewports.',
+      ]}
+      pipelineSteps={[
+        {
+          label: 'Specification & Theme Tokenization',
+          detail: 'Reads a concise prompt or manifest and resolves typography, WCAG contrast pairs, and route topology.',
+        },
+        {
+          label: 'Multi-Framework AST Emission',
+          detail: 'Emits idiomatic React, Vue, Svelte, Solid, Astro, or zero-dependency semantic HTML/CSS bundles.',
+        },
+        {
+          label: 'Local Guardrail Verification',
+          detail: 'Validates HTML tag closure, AEO JSON-LD structure, and zero horizontal overflow before build completion.',
+        },
+      ]}
+      specs={[
+        { key: 'CLI Entrypoint', value: 'zoth-webgen' },
+        { key: 'Dev Preview Port', value: '127.0.0.1:5173' },
+        { key: 'Export Targets', value: 'React / Vue / Svelte / Solid / Astro / HTML' },
+        { key: 'SEO / AEO Layer', value: 'Schema.org JSON-LD + Sitemap + Robots' },
+        { key: 'Model Support', value: 'Ollama / Hermes / OpenAI-Compatible' },
+        { key: 'Code Ownership', value: '100% Local MIT Output' },
+      ]}
+      quickstartLines={[
+        '# Clone standalone compiler repository',
+        'git clone https://github.com/1nc0gn30/zoth-webgen.git',
+        'cd zoth-webgen',
+        '',
+        '# Inspect CLI flags & target frameworks',
+        'python3 webgen.py --help',
+      ]}
+      capabilitiesKicker="COMPILER MODULES"
+      capabilitiesTitle="Built for Clean Code Ownership"
+      capabilities={[
+        {
+          tag: '6 TARGETS',
+          title: 'Multi-Framework Code Emission',
+          desc: 'Generate clean Vite + React, Vue, Svelte, Solid, Astro, or vanilla HTML/CSS repositories with zero proprietary runtime dependencies.',
+        },
+        {
+          tag: 'AEO READY',
+          title: 'Built-In Schema.org & Discovery',
+          desc: 'Automatically synthesizes valid WebApplication + FAQPage JSON-LD graphs, canonical sitemaps, and crawler-friendly robots policies.',
+        },
+        {
+          tag: 'CONTRAST SAFE',
+          title: 'Dual-Theme Design Tokens',
+          desc: 'Ships calibrated editorial light and obsidian dark palettes engineered to prevent low-contrast text and layout overflow.',
+        },
+        {
+          tag: 'OFFLINE FIRST',
+          title: 'Local LLM & Agent Compatible',
+          desc: 'Pairs with local Ollama models, Hermes Agent, or Zoth Studio v2 without uploading proprietary product specs to cloud builders.',
+        },
+      ]}
+      funnelToolTitle="Zoth WebGen Foundry"
+      funnelToolTag="AUTONOMOUS WEB COMPILER"
+      funnelToolDesc="Local 6-framework web application compiler with built-in Schema.org AEO generation and viewport guardrails."
+    />
   );
 }
