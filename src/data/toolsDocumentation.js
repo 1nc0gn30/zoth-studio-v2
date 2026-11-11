@@ -37,7 +37,7 @@ export const toolsDocumentation = {
       'pixel-cast status',
       'pixel-cast connect',
       'pixel-cast stream',
-      '# Open workstation at http://127.0.0.1:8148 or http://100.106.132.5:8148'
+      '# Open workstation at http://127.0.0.1:8148 or http://100.64.0.10:8148'
     ],
     features: [
       'Autonomous Tailscale Mesh discovery detecting Google Pixel 10 Pro with live latency ping',
@@ -3006,7 +3006,7 @@ export const toolsDocumentation = {
           "# Open standalone workstation at http://127.0.0.1:8144 or Studio route /tools/zela-glasses-guide"
       ],
       "features": [
-          "Full-Duplex Encrypted Stream \u2014 Connect Ray-Ban Meta Smart Glasses to your Linux workstation over Tailscale WireGuard (100.106.132.5:8766/v1/guide/stream).",
+          "Full-Duplex Encrypted Stream \u2014 Connect Ray-Ban Meta Smart Glasses to your Linux workstation over Tailscale WireGuard (100.64.0.10:8766/v1/guide/stream).",
           "Local Moondream Vision \u2014 1.34s ask-to-say latency with edge frame captioning via local Ollama (moondream).",
           "Persistent AGY Session Rolling \u2014 Pre-warmed spare AGY session rolling with low-effort sub-second prompt caching.",
           "24kHz Kokoro ONNX Neural TTS \u2014 Studio-quality voice synthesis (af_heart) running 100% in local volatile RAM.",

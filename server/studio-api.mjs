@@ -782,7 +782,7 @@ export function studioMiddleware() {
       if (req.method === 'GET' && (url.pathname === '/api/edge/telemetry' || url.pathname === '/api/edge/geo')) {
         send(res, 200, {
           platform: 'Netlify Edge Runtime (Emulated)',
-          edgePOP: { city: 'Norfolk / Virginia Beach', country: 'United States' },
+          edgePOP: { city: 'Ashburn, VA (us-east-1)', country: 'United States' },
           securityEnclave: { coop: 'same-origin', coep: 'credentialless', webgpuPermitted: true },
           showcase: { routesPrerendered: 140, framework: 'React 19 + Vite + Three.js + WebGPU' }
         });

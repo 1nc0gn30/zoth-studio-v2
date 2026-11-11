@@ -278,7 +278,7 @@ export default function PixelCastGodModeTool() {
               <Box>
                 <Typography variant="caption" sx={{ color: '#9CA3AF', textTransform: 'uppercase', fontFamily: mono }}>Host Node</Typography>
                 <Typography variant="body1" sx={{ fontFamily: mono, fontWeight: 700, color: '#F3F4F6' }}>
-                  {selfNode?.ip || '100.106.132.5'}
+                  {selfNode?.ip || '100.64.0.10'}
                 </Typography>
               </Box>
             </Box>
