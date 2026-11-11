@@ -270,7 +270,9 @@ export default function RealToolWorkspacePage() {
   const [copiedElectronCmd, setCopiedElectronCmd] = useState(false);
   const [copiedTuiCmd, setCopiedTuiCmd] = useState(false);
   const [unlockedPreview, setUnlockedPreview] = useState(false);
-  const [localViewMode, setLocalViewMode] = useState('webapp');
+  const [localViewMode, setLocalViewMode] = useState(
+    toolId === 'zoth-swarm-multiplexer' ? 'enclave' : 'webapp'
+  );
   const [localWebAppReady, setLocalWebAppReady] = useState(false);
   const [iframeKey, setIframeKey] = useState(0);
 
@@ -797,6 +799,30 @@ export default function RealToolWorkspacePage() {
                     }}
                   >
                     3D Cosmic Nebula
+                  </Button>
+                )}
+                {tool.id === 'zoth-swarm-multiplexer' && (
+                  <Button
+                    component="a"
+                    href="https://zoth-egregore.netlify.app"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="outlined"
+                    endIcon={<OpenInNewIcon sx={{ fontSize: 14 }} />}
+                    sx={{
+                      fontWeight: 800,
+                      fontFamily: mono,
+                      fontSize: '0.8rem',
+                      borderColor: isDark ? 'rgba(75,227,193,0.45)' : 'rgba(11,125,99,0.4)',
+                      color: isDark ? '#4BE3C1' : '#0B7D63',
+                      bgcolor: isDark ? 'rgba(75,227,193,0.08)' : 'rgba(11,125,99,0.06)',
+                      '&:hover': {
+                        borderColor: isDark ? '#4BE3C1' : '#0B7D63',
+                        bgcolor: isDark ? 'rgba(75,227,193,0.16)' : 'rgba(11,125,99,0.12)',
+                      },
+                    }}
+                  >
+                    Egregore AI Model (Beta)
                   </Button>
                 )}
                 {tool.github && (
