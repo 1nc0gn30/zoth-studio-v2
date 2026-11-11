@@ -753,10 +753,27 @@ rings:
                 severity="success"
                 sx={{ bgcolor: 'rgba(75, 227, 193, 0.08)', border: '1px solid rgba(75, 227, 193, 0.35)' }}
               >
-                <Typography sx={{ fontFamily: mono, fontSize: '0.73rem', fontWeight: 800, color: '#4BE3C1' }}>
-                  Zoth Egregore v1.0 (:8147) — 1 Model × 3,456 Co-Prime Lenses → 1 Answer
-                </Typography>
-                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.3 }}>
+                <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.73rem', fontWeight: 800, color: '#4BE3C1' }}>
+                    Zoth Egregore v0.1.0-beta (:8147) — 1 Model × 3,456 Co-Prime Lenses → 1 Answer
+                  </Typography>
+                  <Chip
+                    label="EXPERIMENTAL BETA"
+                    size="small"
+                    sx={{ height: 18, fontFamily: mono, fontSize: '0.6rem', fontWeight: 800, bgcolor: 'rgba(255,180,84,0.16)', color: '#FFB454', border: '1px solid rgba(255,180,84,0.45)' }}
+                  />
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    href="https://github.com/1nc0gn30/zoth-egregore"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{ py: 0, px: 1, minHeight: 22, fontFamily: mono, fontSize: '0.64rem', fontWeight: 700, textTransform: 'none', color: '#4BE3C1', borderColor: 'rgba(75,227,193,0.45)' }}
+                  >
+                    1nc0gn30/zoth-egregore ↗
+                  </Button>
+                </Stack>
+                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.5 }}>
                   Engineered via Nous Hermes: Self-MoA (arXiv:2502.00674) + Beta-posterior Adaptive-Consistency (arXiv:2305.11860). Walks 24 Archetypes × 18 Domains × 8 Stances with co-prime stride so every wave maximizes perspective diversity.
                 </Typography>
               </Alert>
