@@ -90,7 +90,7 @@ def surface_scan():
 def component_refs():
     page = read(os.path.join(ST, "src/pages/RealToolWorkspacePage.jsx"))
     lazy = set(re.findall(r"const\s+(\w+)\s*=\s*lazy\(", page))
-    mapping = dict(re.findall(r"['\"]([a-z0-9][a-z0-9\-]{3,})['\"]\s*:\s*(\w+Tool)", page))
+    mapping = dict(re.findall(r"['\"]([a-z0-9][a-z0-9\-]{3,})['\"]\s*:\s*([A-Z]\w+)\b", page))
     comps = sorted(os.path.basename(x) for x in glob.glob(os.path.join(ST, "src/components/tools/*")))
     return lazy, mapping, comps
 
@@ -770,8 +770,12 @@ def render_report(rows, s):
         "Phase 3: npm run build, full pytest, secret audit, final report",
         "```",
         "",
-        "Priority order — smallest scope first: fix the single Layer `[B]` gap (`%s`)," % (
-            s["b_missing"][0] if s["b_missing"] else "n/a"),
+        "Priority order — smallest scope first: %s" % (
+            ("the single Layer `[B]` gap (`%s`), " % s["b_missing"][0]) if s["b_missing"]
+            else "Layer `[B]` is now **80/80** (the `[B]` gaps were a probe artefact: the router map's "
+                 "component names are not all suffixed `Tool`, so `wcag-contrast-guard` — which does "
+                 "resolve to `WcagContrastGuard.jsx` — was mis-flagged; the matcher now accepts any "
+                 "PascalCase component)"),
         "then the single Layer `[D]` gap (`%s`), then the %d SEO/AEO entries, then the %d Layer E rows" % (
             s["d_missing"][0] if s["d_missing"] else "n/a", len(s["seo_gap"]), len(s["e_issue"])),
         "whose API panes stay empty (`%s`)." % (", ".join(s["e_issue"]) or "none"),

@@ -4,7 +4,7 @@ Master architectural ledger for the `NullAITech` sovereign tool ecosystem.
 
 | | |
 |---|---|
-| Generated | 2026-11-15 11:28 |
+| Generated | 2026-11-15 11:31 |
 | Generator | `zoth-studio-v2/docs/tools/atlas_gen.py` (re-runnable, no hardcoded counts) |
 | Catalog of record | `zoth-studio-v2/src/data/toolsData.js` |
 | CLI surfaces compared | `zoth-os/config/includes.chroot/usr/local/bin`, `/usr/local/bin`, `~/.local/bin` |
@@ -44,7 +44,7 @@ stay trustworthy:
 | Layer A — standalone web entry present | **79/80** |
 | Layer A — SEO/AEO complete in entry document | **80/80** |
 | Layer A — bare `<img>` without `alt` | **1** |
-| Layer B — God-Mode component resolves in `lazy()` registry | **79/80** |
+| Layer B — God-Mode component resolves in `lazy()` registry | **80/80** |
 | Layer D — `README.md` present | **80/80** |
 | Layer E — headless 3-viewport verified | **77/80** (static 76 · live 10 · 240 shots) |
 | Top-level repositories under `NullAITech/` | **141** |
@@ -54,7 +54,7 @@ stay trustworthy:
 canonical wrappers are present on all three surfaces with identical bytes, **65/80** catalog
 entries are byte-identical on all three, the only **13** exceptions are native-CLI tools with a
 diffed and explained delta (§4.2), and there are **zero** port collisions across all 80 catalog
-entries. The real remaining gaps are small and enumerable: **1** catalog entries lack a Layer B
+entries. The real remaining gaps are small and enumerable: **0** catalog entries lack a Layer B
 component, **0** lack a README, **1** lack a standalone web entry, and **0** have incomplete
 SEO/AEO metadata. Layer E is closed: every catalog entry was captured headlessly at
 390x844 / 820x1180 / 1440x900 over loopback HTTP (**77/80** clean, `overflowPx==0`,
@@ -114,7 +114,7 @@ headlessly (see §8), so a `[E]` cell means a clean capture row exists for that 
 | 33 | `agent-egress-sentinel` | Security & Network | 2.5.0 | `:8095` | browser | `A` | `B` | `C` | `D` | `E` |
 | 34 | `agent-mock-twin` | Simulation & Testing | 2.5.0 | `:8097` | browser | `A` | `B` | ^C^ | `D` | `E` |
 | 35 | `agent-prompt-firewall` | Security & Network | 2.5.0 | `:8098` | browser | `A` | `B` | `C` | `D` | `E` |
-| 36 | `wcag-contrast-guard` | Accessibility & UI | 2.5.0 | `:8150` | browser | `A` | . | `C` | `D` | `E` |
+| 36 | `wcag-contrast-guard` | Accessibility & UI | 2.5.0 | `:8150` | browser | `A` | `B` | `C` | `D` | `E` |
 | 37 | `agent-flight-recorder` | Forensics & Telemetry | 2.5.0 | `:8104` | browser | `A` | `B` | `C` | `D` | `E` |
 | 38 | `agent-capsule-jail` | Security & Enclave | 2.5.0 | `:8105` | browser | `A` | `B` | `C` | `D` | `E` |
 | 39 | `agent-policy-auditor` | Security & Enclave | 2.5.0 | `:8106` | browser | `A` | `B` | `C` | `D` | `E` |
@@ -397,7 +397,7 @@ Recommended triage (owner's call):
 
 | layer | gap | items |
 |---|---|---|
-| `[B]` | no God-Mode component resolving in the router | `wcag-contrast-guard` |
+| `[B]` | no God-Mode component resolving in the router |  |
 | `[D]` | no `README.md` |  |
 | `[A]` | no standalone web entry document | `zothnet` |
 | `[A]` | incomplete SEO/AEO metadata in entry document | 0 entries:  |
@@ -515,7 +515,7 @@ showed its port open, so no daemon was started, stopped, or replaced for this me
 
 | when | change |
 |---|---|
-| 2026-11-15 11:28 | atlas generator created; Layers A/B/C/D measured across 80 entries |
+| 2026-11-15 11:31 | atlas generator created; Layers A/B/C/D measured across 80 entries |
 | 2026-11-15 | `zela-glasses-guide` tri-surface repair (see §4.4) |
 | 2026-11-15 | Layer E wired into the generator: headless 3-viewport verdicts read from `layerE_results_http.jsonl` / `layerE_results_live.jsonl` (§8) |
 

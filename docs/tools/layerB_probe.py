@@ -34,7 +34,7 @@ def parse_registry():
         for k, v in re.findall(r"'([^']+)'\s*:\s*'([^']+)'", m.group(1)):
             al[k] = v
     imports = dict(re.findall(r"import\s+(\w+)\s+from\s+'[^']*?/([\w.]+)'", t))
-    imports.update({m: m + ".jsx" for m in re.findall(r"import\('\.\./components/tools/(\w+)\.jsx'\)", t)})
+    imports.update({m: m + ".jsx" for m in re.findall(r"import\('\.\./components/tools/(\w+)(?:\.jsx)?'\)", t)})
     return reg, al, imports
 
 
