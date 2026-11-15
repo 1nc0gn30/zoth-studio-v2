@@ -6,7 +6,7 @@ Resume point for the strict one-tool-at-a-time 5-layer sweep of
 
 | | |
 |---|---|
-| last updated | 2026-11-15 11:21 |
+| last updated | 2026-11-15 11:28 |
 | tools registered | 80 |
 | layers automated so far | A, B, C, D, E (evidence below) |
 | layers still manual | Layer A interactive-quality review (the only layer left) |
@@ -16,7 +16,8 @@ Resume point for the strict one-tool-at-a-time 5-layer sweep of
 For each tool, in catalog order: inspect the repo workspace and web entry (Layer A), the
 `/tools/<id>` route and component (Layer B), the three CLI surfaces + `--help`/`--json` +
 `.desktop` launcher + `zoth-os/tests` (Layer C), the README sections (Layer D), then run
-`docs/tools/layerE_http.py` at 390x844 / 820x1180 / 1440x900 and require `overflowPx===0`,
+`docs/tools/layerE_http.py` (which wraps the canonical `capture.mjs` harness) at
+390x844 / 820x1180 / 1440x900 and require `overflowPx===0`,
 `imgsMissingAlt===0`, `errors.length===0` (Layer E). Write the checkpoint here before moving on.
 
 **Status of this pass:** Layers A-D were measured programmatically for all 80 tools in one
@@ -120,8 +121,10 @@ has touched that tool since the timestamp above.
 - `[A]` SEO/AEO incomplete (0): none
 - `[C]` alias filenames drifting between surfaces (18): `bounty-hub`, `reality-forge`, `robots-txt`, `robots-txt-auditor`, `scene-foundry`, `sigma-forge`, `theme-forge`, `yara-forge`, `zela`, `zela-guide`, `zoth-capsule-jail`, `zoth-egress-sentinel`, `zoth-flight-recorder`, `zoth-foundry`, `zoth-policy-auditor`, `zoth-prompt-firewall`, `zoth-theme-forge`, `zoth-yara-forge`
 
-## Next tool
+## Next work
 
-Resume the manual Layer E sweep at **`pixel-cast`** (catalog index 1) unless the gaps above are
-prioritised first — in which case start with `wcag-contrast-guard`, the only tool failing two layers.
+Layers B-E are swept fleet-wide and committed; **Layer A (interactive quality) is the only
+layer without automated evidence.** Resume there, most-broken first: `wcag-contrast-guard` — the one tool
+failing two layers (no God-Mode component) — then the 3 tools whose live API panes stay
+empty (`likeness-desk, zoth-bounty, zothnet`), whose own daemons must be up before their panes can render.
 

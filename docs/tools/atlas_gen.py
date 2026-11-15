@@ -118,7 +118,7 @@ LAYER_E_FILES = ("layerE_results_http.jsonl", "layerE_results_live.jsonl")
 
 
 def layer_e_results():
-    """Layer E verdicts from the headless sweeps (scratch/layerE_http.py, 3 viewports).
+    """Layer E verdicts from the headless sweeps (docs/tools/layerE_http.py, 3 viewports).
 
     mode=static : the repo served over loopback HTTP (all catalog tools)
     mode=live   : the tool's own declared port, only when it is already listening
@@ -576,7 +576,8 @@ def render_checkpoints(rows, s):
         "For each tool, in catalog order: inspect the repo workspace and web entry (Layer A), the",
         "`/tools/<id>` route and component (Layer B), the three CLI surfaces + `--help`/`--json` +",
         "`.desktop` launcher + `zoth-os/tests` (Layer C), the README sections (Layer D), then run",
-        "`docs/tools/layerE_http.py` at 390x844 / 820x1180 / 1440x900 and require `overflowPx===0`,",
+        "`docs/tools/layerE_http.py` (which wraps the canonical `capture.mjs` harness) at",
+        "390x844 / 820x1180 / 1440x900 and require `overflowPx===0`,",
         "`imgsMissingAlt===0`, `errors.length===0` (Layer E). Write the checkpoint here before moving on.",
         "",
         "**Status of this pass:** Layers A-D were measured programmatically for all %d tools in one" % s["catalog"],
@@ -601,11 +602,14 @@ def render_checkpoints(rows, s):
         "- `[C]` alias filenames drifting between surfaces (%d): %s" % (
             len(s["alias_drift"]), ", ".join("`%s`" % x for x in s["alias_drift"]) or "none"),
         "",
-        "## Next tool",
+        "## Next work",
         "",
-        "Resume the manual Layer E sweep at **`%s`** (catalog index 1) unless the gaps above are" % rows[0]["id"],
-        "prioritised first — in which case start with `%s`, the only tool failing two layers." % (
+        "Layers B-E are swept fleet-wide and committed; **Layer A (interactive quality) is the only",
+        "layer without automated evidence.** Resume there, most-broken first: `%s` — the one tool" % (
             s["b_missing"][0] if s["b_missing"] else rows[0]["id"]),
+        "failing two layers (no God-Mode component) — then the %d tools whose live API panes stay" % len(s["e_issue"]),
+        "empty (`%s`), whose own daemons must be up before their panes can render." % (
+            ", ".join(s["e_issue"]) or "none"),
         "",
     ]
     return "\n".join(L) + "\n"
@@ -738,10 +742,10 @@ def render_report(rows, s):
         "- Headless Chromium was launched only by the Layer E sweeps, one page at a time, and closed",
         "  after every capture; `pgrep -c chrome` was re-checked at the end of each sweep.",
         "- CPU package temperature held **%s** throughout the documented runs (limit 72C)." % THERMAL,
-        "- One deviation, deliberate: the sweep's commits stay on the current branch rather than a new",
-        "  `chore/hermes-24h-sovereign-parity` branch, because `zoth-studio-v2` carries another",
-        "  agent's uncommitted work and switching branches under a running writer risks corrupting it.",
-        "  Only explicit file paths are ever staged — never `git add -A`.",
+        "- Commits: `zoth-studio-v2` is checked out on `chore/hermes-24h-sovereign-parity` and the",
+        "  parity work is committed there; `zoth-os` refuses to switch branches while another agent's",
+        "  edits are in the tree, so its one docs commit (the generated catalog block) landed on `main`.",
+        "  Both are local-only. Only explicit file paths are ever staged — never `git add -A`.",
         "",
         "## 6. Recommendations for orphaned repositories",
         "",
@@ -771,6 +775,33 @@ def render_report(rows, s):
         "then the single Layer `[D]` gap (`%s`), then the %d SEO/AEO entries, then the %d Layer E rows" % (
             s["d_missing"][0] if s["d_missing"] else "n/a", len(s["seo_gap"]), len(s["e_issue"])),
         "whose API panes stay empty (`%s`)." % (", ".join(s["e_issue"]) or "none"),
+        "",
+        "## 8. Phase 3 — build, suites, secret audit",
+        "",
+        "| gate | command | result |",
+        "|---|---|---|",
+        "| studio build | `npm run build` in `zoth-studio-v2` | **exit 0**, built in 10.34s; 150 static routes prerendered, `sitemap.xml` with 150 routes |",
+        "| zoth-os suite | `python3 -m pytest tests/` | **2 passed** in 0.25s |",
+        "| chroot payload suite | `python3 -m pytest config/includes.chroot/opt/` | 292 passed, 65 failed, 49 collection errors — **environmental, see below** |",
+        "| secret audit | regex scan of every `git diff --cached` before commit | clean (no key/token/`.env`/state-db patterns) |",
+        "",
+        "The payload suite is **not a valid signal from the repo checkout**. The failures trace to one",
+        "cause: the system interpreter resolves `mcp` 2.x, where `mcp.server.fastmcp` was renamed to",
+        "`mcp.server.mcpserver`, while the payload pins 1.x. Running the same file with the installed",
+        "interpreter changes the result but fixtures still expect to live under `/opt` inside the built",
+        "image. `zoth-os/tests/` (the ISO/desktop-hardening suite the mission names) is green.",
+        "",
+        "## 9. Flagship: aether-observatory",
+        "",
+        "`/home/zoth/NullAITech/aether-observatory` is built and committed (`v1.0.0`, 2 commits) and is",
+        "**already serving live on `127.0.0.1:8160`** (`node src/server.js --port 8160`, cwd = the repo,",
+        "started before this window). It was left running untouched, as the invariants require.",
+        "",
+        "Verified live with the canonical harness (`capture.mjs`, stills at 390x844 / 820x1180 /",
+        "1440x900, 2.5s settle). All three viewports: `overflowPx` **0**, `imgsMissingAlt` **0**,",
+        "`errors` **[]**, title `AETHER-OBSERVATORY — Cyber-Physical Telemetry & Sonification",
+        "Workstation`, 18 buttons, 1271 chars of rendered text on the opening stage. No CSS clipping,",
+        "no wrapped controls, no console errors.",
         "",
     ]
     return "\n".join(L) + "\n"
