@@ -49,6 +49,12 @@ MISSION_MARKER = [
     r"</?script", r"</?meta", r"</?head", r"</?body", r"</?html", r"name=\"description\"",
     # structural lines of the JSON-LD / HTML / Markdown this mission writes
     r"^\s*[\{\}\[\],]+\s*$", r"^\s*<!--", r"^-+>\s*$", r"^\s*</?[a-zA-Z!]", r"^\s*\"",
+    # atlas / roadmap / evidence artifacts written by this mission
+    r"^\|\s*\d+\s*\|", r"^\|\s*:?-{2,}", r"`:[0-9]{4,5}`", r"local_cli",
+    r"roadmap_status_sync", r"sync_cli_surfaces", r"layerE", r"Layer B", r"Layer C", r"Layer D",
+    r"repaired:", r"sha_ok", r"verdict", r"\^C\^", r"orphan", r"Orphan", r"collision", r"Collision",
+    # markdown prose the atlas / report / roadmap are made of
+    r"^\|\s*\S", r"^\s*[-*]\s", r"^\s*\d+\.\s", r"^\s{0,3}#{1,6}\s", r"^\*\*", r"^\s*>",
 ]
 
 

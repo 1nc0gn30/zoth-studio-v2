@@ -4,7 +4,7 @@ Master architectural ledger for the `NullAITech` sovereign tool ecosystem.
 
 | | |
 |---|---|
-| Generated | 2026-11-15 11:54 |
+| Generated | 2026-11-15 12:28 |
 | Generator | `zoth-studio-v2/docs/tools/atlas_gen.py` (re-runnable, no hardcoded counts) |
 | Catalog of record | `zoth-studio-v2/src/data/toolsData.js` |
 | CLI surfaces compared | `zoth-os/config/includes.chroot/usr/local/bin`, `/usr/local/bin`, `~/.local/bin` |
@@ -32,34 +32,34 @@ stay trustworthy:
 
 | metric | value |
 |---|---|
-| Catalog entries (`toolsData.js`) | **80** |
-| Distinct `localPort` values | **80** |
+| Catalog entries (`toolsData.js`) | **81** |
+| Distinct `localPort` values | **81** |
 | Port collisions (alias-aware) | **0** |
-| Catalog entries present on all 3 bin surfaces | **80/80** |
-| ...of those, byte-identical across all 3 surfaces | **65/80** |
+| Catalog entries present on all 3 bin surfaces | **81/81** |
+| ...of those, byte-identical across all 3 surfaces | **81/81** |
 | Generated God-Mode wrappers (carry `TOOL_ID`) | **109** filenames / **54** canonical `TOOL_ID`s, all canonical byte-identical |
-| Tools shipping a native CLI instead of a wrapper | **26** (**13** byte-identical, **13** differ) |
-| Short-name alias filenames (`zela`, `zoth-bolt`, ...) | **55** (18 drifting, none catalog-critical) |
+| Tools shipping a native CLI instead of a wrapper | **27** (**27** byte-identical, **0** differ) |
+| Short-name alias filenames (`zela`, `zoth-bolt`, ...) | **55** (16 drifting, none catalog-critical) |
 | Unrelated binaries in those dirs (out of scope) | **375** |
-| Layer A — standalone web entry present | **79/80** |
+| Layer A — standalone web entry present | **80/81** |
 | Layer A — runtime-served web surface (explained exception) | **1** (`zothnet` -> `pkg/web/dashboard.html`) |
-| Layer A — SEO/AEO complete in entry document | **80/80** |
-| Layer A — bare `<img>` without `alt` | **1** |
-| Layer B — God-Mode component resolves in `lazy()` registry | **80/80** |
-| Layer D — `README.md` present | **80/80** |
-| Layer E — headless 3-viewport verified | **77/80** (static 76 · live 10 · 240 shots) |
+| Layer A — SEO/AEO complete in entry document | **81/81** |
+| Layer A — bare `<img>` without `alt` | **0** |
+| Layer B — God-Mode component resolves in `lazy()` registry | **81/81** |
+| Layer D — `README.md` present | **81/81** |
+| Layer E — headless 3-viewport verified | **78/81** (static 76 · live 11 · 243 shots) |
 | Top-level repositories under `NullAITech/` | **141** |
-| Repositories absent from the catalog | **61** |
+| Repositories absent from the catalog | **60** |
 
 **Reading the parity verdict:** the CLI surface (Layer C) is in excellent shape — all **54**
-canonical wrappers are present on all three surfaces with identical bytes, **65/80** catalog
-entries are byte-identical on all three, the only **13** exceptions are native-CLI tools with a
-diffed and explained delta (§4.2), and there are **zero** port collisions across all 80 catalog
+canonical wrappers are present on all three surfaces with identical bytes, **81/81** catalog
+entries are byte-identical on all three, the only **0** exceptions are native-CLI tools with a
+diffed and explained delta (§4.2), and there are **zero** port collisions across all 81 catalog
 entries. The real remaining gaps are small and enumerable: **0** catalog entries lack a Layer B
 component, **0** lack a README, **1** lack a standalone web entry, and **0** have incomplete
 SEO/AEO metadata. Layer E is closed: every catalog entry was captured headlessly at
-390x844 / 820x1180 / 1440x900 over loopback HTTP (**77/80** clean, `overflowPx==0`,
-`imgsMissingAlt==0`, no page errors), and the **10** tools whose declared port was already
+390x844 / 820x1180 / 1440x900 over loopback HTTP (**78/81** clean, `overflowPx==0`,
+`imgsMissingAlt==0`, no page errors), and the **11** tools whose declared port was already
 listening were additionally captured against their live deployment — see §2 and the atlas §8.
 
 ## 2. Tri-surface status legend
@@ -76,90 +76,91 @@ In the matrix: `` `A` `` = layer fully satisfied, `^A^` = partially satisfied (s
 `.` = not satisfied. Layer E is measured, not aspirational: every catalog entry was captured
 headlessly (see §8), so a `[E]` cell means a clean capture row exists for that tool.
 
-## 3. Master matrix — all 80 catalog entries
+## 3. Master matrix — all 81 catalog entries
 
 | # | tool id | category | ver | port | exec | A | B | C | D | E |
 |---|---------|----------|-----|------|------|---|---|---|---|---|
 | 1 | `pixel-cast` | Hardware & OS | 1.0.0 | `:8148` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 2 | `adytum-alchemist-ai-workflow` | Planning | 1.0.0 | `:8135` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 3 | `azoth-local-agent` | Swarm & Core | 3.0.0 | `:8136` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 4 | `sovereign-agent-bridge` | Swarm & Core | 3.2.0 | `:8102` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 5 | `neuro-memory-daemon` | Memory & Brain | 2.8.0 | `:8094` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 6 | `zoth-os` | Swarm & Core | 3.4.0 | `:8137` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 7 | `vector-search-engine` | Swarm & Core | 2.5.0 | `:8121` | browser | `A` | `B` | `C` | `D` | `E` |
-| 8 | `deepsearch-research-agent` | AI & Knowledge | 2.5.0 | `:8122` | browser | `A` | `B` | `C` | `D` | `E` |
-| 9 | `promptmaster-studio` | AI & Knowledge | 3.2.0 | `:8123` | browser | `A` | `B` | `C` | `D` | `E` |
-| 10 | `hexstrike-arsenal` | Security & Recon | 3.1.0 | `:8138` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 11 | `envguard-secrets-vault` | Security & Recon | 2.5.0 | `:8088` | browser | `A` | `B` | `C` | `D` | `E` |
-| 12 | `jwt-inspector-guard` | Security & Recon | 2.6.0 | `:8124` | browser | `A` | `B` | `C` | `D` | `E` |
-| 13 | `payload-entropy-studio` | Security & Recon | 2.5.0 | `:8080` | browser | `A` | `B` | `C` | `D` | `E` |
-| 14 | `web-security-guard` | Security & Recon | 2.5.0 | `:8125` | browser | `A` | `B` | `C` | `D` | `E` |
-| 15 | `polyglot-framework-exporter` | Autonomous Web | 2.5.0 | `:8126` | browser | `A` | `B` | `C` | `D` | `E` |
-| 16 | `aeo-graph-engine` | Autonomous Web | 1.4.0 | `:8127` | browser | `A` | `B` | `C` | `D` | `E` |
-| 17 | `cwv-speed-engine` | Autonomous Web | 2.5.0 | `:8128` | browser | `A` | `B` | `C` | `D` | `E` |
-| 18 | `vision-gesture-control` | Media & 3D | 2.5.0 | `:8089` | browser | `A` | `B` | `C` | `D` | `E` |
-| 19 | `subsweep-lead-scanner` | Security & Recon | 2.5.0 | `:8090` | browser | `A` | `B` | `C` | `D` | `E` |
-| 20 | `omnipost-social-engine` | Automation | 2.5.0 | `:8091` | browser | `A` | `B` | `C` | `D` | `E` |
-| 21 | `cron-rhythm-studio` | Automation | 2.5.0 | `:5174` | browser | `A` | `B` | `C` | `D` | `E` |
-| 22 | `certpath-roadmap-studio` | Automation | 2.5.0 | `:8093` | browser | `A` | `B` | `C` | `D` | `E` |
-| 23 | `pwa-manifest-builder` | Autonomous Web | 2.5.0 | `:8100` | browser | `A` | `B` | `C` | `D` | `E` |
-| 24 | `regex-droid-builder` | Automation | 2.5.0 | `:8101` | browser | `A` | `B` | `C` | `D` | `E` |
-| 25 | `schema-illustrator-studio` | Autonomous Web | 2.5.0 | `:8099` | browser | `A` | `B` | `C` | `D` | `E` |
-| 26 | `zoth-webgen` | Autonomous Web | 2.5.0 | `:8092` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 27 | `zoth-swarm-multiplexer` | Swarm & Core | 2.5.0 | `:8141` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 28 | `webmcp-protocol-inspector` | AI & Knowledge | 1.0.0 | `:8142` | webgpu | `A` | `B` | `C` | `D` | `E` |
-| 29 | `anderson-security-sentinel` | Security & OpSec | 2.5.0 | `:8103` | browser | `A` | `B` | `C` | `D` | `E` |
-| 30 | `badge3d-coin-generator` | Media & 3D | 2.5.0 | `:8084` | browser | `A` | `B` | `C` | `D` | `E` |
-| 31 | `robots-txt-auditor` | Growth & SEO | 2.5.0 | `:8086` | browser | `A` | `B` | ^C^ | `D` | `E` |
-| 32 | `city-desk` | Growth & SEO | 2.5.0 | `:8087` | browser | `A` | `B` | `C` | `D` | `E` |
-| 33 | `agent-egress-sentinel` | Security & Network | 2.5.0 | `:8095` | browser | `A` | `B` | `C` | `D` | `E` |
-| 34 | `agent-mock-twin` | Simulation & Testing | 2.5.0 | `:8097` | browser | `A` | `B` | ^C^ | `D` | `E` |
-| 35 | `agent-prompt-firewall` | Security & Network | 2.5.0 | `:8098` | browser | `A` | `B` | `C` | `D` | `E` |
-| 36 | `wcag-contrast-guard` | Accessibility & UI | 2.5.0 | `:8150` | browser | `A` | `B` | `C` | `D` | `E` |
-| 37 | `agent-flight-recorder` | Forensics & Telemetry | 2.5.0 | `:8104` | browser | `A` | `B` | `C` | `D` | `E` |
-| 38 | `agent-capsule-jail` | Security & Enclave | 2.5.0 | `:8105` | browser | `A` | `B` | `C` | `D` | `E` |
-| 39 | `agent-policy-auditor` | Security & Enclave | 2.5.0 | `:8106` | browser | `A` | `B` | `C` | `D` | `E` |
-| 40 | `etsy-pod-forge` | Commerce & POD | 2.5.0 | `:8107` | browser | `A` | `B` | ^C^ | `D` | `E` |
-| 41 | `etsy-connector` | Commerce & MCP | 2.5.0 | `:8108` | browser | `A` | `B` | ^C^ | `D` | `E` |
-| 42 | `mcp-lens` | Simulation & Testing | 2.5.0 | `:8109` | browser | `A` | `B` | ^C^ | `D` | `E` |
-| 43 | `agent-budget-sentinel` | Security & Network | 2.5.0 | `:8110` | browser | `A` | `B` | `C` | `D` | `E` |
-| 44 | `agent-gods-eye` | Security & Recon | 2.5.0 | `:8112` | browser | `A` | `B` | ^C^ | `D` | `E` |
-| 45 | `shopify-connector` | Commerce & MCP | 2.5.0 | `:8113` | browser | `A` | `B` | ^C^ | `D` | `E` |
-| 46 | `printify-connector` | Commerce & MCP | 2.5.0 | `:8115` | browser | `A` | `B` | ^C^ | `D` | `E` |
-| 47 | `gelato-connector` | Commerce & MCP | 2.5.0 | `:8116` | browser | `A` | `B` | ^C^ | `D` | `E` |
-| 48 | `agent-voice-call` | Voice & Real-Time | 2.5.0 | `:8114` | browser | `A` | `B` | ^C^ | `D` | `E` |
-| 49 | `pod-smart-router` | Commerce & MCP | 2.5.0 | `:8117` | browser | `A` | `B` | ^C^ | `D` | `E` |
-| 50 | `digital-asset-forge` | Commerce & MCP | 2.5.0 | `:8118` | browser | `A` | `B` | ^C^ | `D` | `E` |
-| 51 | `pod-mockup-forge` | Commerce & MCP | 2.5.0 | `:8119` | browser | `A` | `B` | ^C^ | `D` | `E` |
-| 52 | `pod-margin-sentinel` | Commerce & MCP | 2.5.0 | `:8120` | browser | `A` | `B` | ^C^ | `D` | `E` |
-| 53 | `audiocipher-stego-engine` | Security & OpSec | 2.5.0 | `:8096` | browser | `A` | `B` | `C` | `D` | `E` |
-| 54 | `cyber-turtle-studio` | Media & 3D | 2.5.0 | `:8129` | browser | `A` | `B` | `C` | `D` | `E` |
-| 55 | `datamosh-glitch-studio` | Media & 3D | 2.5.0 | `:8081` | browser | `A` | `B` | `C` | `D` | `E` |
-| 56 | `nexus-3d-scene-studio` | Media & 3D | 2.5.0 | `:8082` | browser | `A` | `B` | `C` | `D` | `E` |
-| 57 | `ufo-sacred-geometry` | Media & 3D | 2.5.0 | `:8083` | browser | `A` | `B` | `C` | `D` | `E` |
-| 58 | `likeness-desk` | Voice & Real-Time | 2.5.0 | `:9395` | local_cli | `A` | `B` | `C` | `D` | . |
-| 59 | `osint-scout-skill` | Security & Recon | 2.5.0 | `:8085` | browser | `A` | `B` | `C` | `D` | `E` |
-| 60 | `zoth-osint` | Security & Recon | 4.0.0 | `:8149` | hybrid | `A` | `B` | `C` | `D` | `E` |
-| 61 | `zoth-bolt` | Autonomous Web | 3.5.0 | `:5173` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 62 | `zoth-civilization` | Swarm & Core | 3.0.0 | `:9393` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 63 | `storefront-catalog` | Commerce & POD | 2.5.0 | `:8143` | local_cli | `A` | `B` | ^C^ | `D` | `E` |
-| 64 | `shodan-surface-sentinel` | Security & Enclave | 3.5.0 | `:8130` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 65 | `ghidra-mcp-bridge` | Security & Enclave | 3.5.0 | `:8131` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 66 | `zoth-ascii-magic` | Media & 3D | 2.7.0 | `:8132` | browser | `A` | `B` | `C` | `D` | `E` |
-| 67 | `yara-sigma-forge` | Security & Recon | 3.4.0 | `:8133` | browser | `A` | `B` | `C` | `D` | `E` |
-| 68 | `reality-shader-forge` | Media & 3D | 3.4.0 | `:8134` | browser | `A` | `B` | `C` | `D` | `E` |
-| 69 | `producthunt-connector` | Commerce & POD | 1.1.0 | `:8139` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 70 | `zoth-relay` | Swarm & Core | 0.5.0 | `:8765` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 71 | `zela-glasses-guide` | Swarm & Core | 0.5.0 | `:8144` | browser | `A` | `B` | `C` | `D` | `E` |
-| 72 | `zoth-bot` | Swarm & Core | 1.0.0 | `:8146` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 73 | `zoth-bounty` | Security & Enclave | 1.0.0 | `:9494` | local_cli | `A` | `B` | `C` | `D` | . |
-| 74 | `zoth-scene-foundry` | Media & 3D | 1.0.0 | `:8823` | browser | `A` | `B` | `C` | `D` | `E` |
-| 75 | `zoth-math-pillar` | Security & Enclave | 2.0.0 | `:9995` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 76 | `zothos-lite` | Hardware & OS | 1.2.0 | `:8145` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 77 | `zothnet` | Swarm & Core | 1.2.0 | `:9900` | local_cli | . | `B` | `C` | `D` | . |
-| 78 | `creatorplaybooks` | Education & Growth | 1.0.0 | `:5185` | browser | `A` | `B` | `C` | `D` | `E` |
-| 79 | `zoth-obsidian-tracker` | Swarm & Core | 1.2.0 | `:8151` | local_cli | ^A^ | `B` | `C` | `D` | `E` |
-| 80 | `zoth-x-connector` | Swarm & Core | 1.0.0 | `:8152` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 2 | `aether-observatory` | System & Telemetry | 1.0.0 | `:8160` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 3 | `adytum-alchemist-ai-workflow` | Planning | 1.0.0 | `:8135` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 4 | `azoth-local-agent` | Swarm & Core | 3.0.0 | `:8136` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 5 | `sovereign-agent-bridge` | Swarm & Core | 3.2.0 | `:8102` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 6 | `neuro-memory-daemon` | Memory & Brain | 2.8.0 | `:8094` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 7 | `zoth-os` | Swarm & Core | 3.4.0 | `:8137` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 8 | `vector-search-engine` | Swarm & Core | 2.5.0 | `:8121` | browser | `A` | `B` | `C` | `D` | `E` |
+| 9 | `deepsearch-research-agent` | AI & Knowledge | 2.5.0 | `:8122` | browser | `A` | `B` | `C` | `D` | `E` |
+| 10 | `promptmaster-studio` | AI & Knowledge | 3.2.0 | `:8123` | browser | `A` | `B` | `C` | `D` | `E` |
+| 11 | `hexstrike-arsenal` | Security & Recon | 3.1.0 | `:8138` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 12 | `envguard-secrets-vault` | Security & Recon | 2.5.0 | `:8088` | browser | `A` | `B` | `C` | `D` | `E` |
+| 13 | `jwt-inspector-guard` | Security & Recon | 2.6.0 | `:8124` | browser | `A` | `B` | `C` | `D` | `E` |
+| 14 | `payload-entropy-studio` | Security & Recon | 2.5.0 | `:8080` | browser | `A` | `B` | `C` | `D` | `E` |
+| 15 | `web-security-guard` | Security & Recon | 2.5.0 | `:8125` | browser | `A` | `B` | `C` | `D` | `E` |
+| 16 | `polyglot-framework-exporter` | Autonomous Web | 2.5.0 | `:8126` | browser | `A` | `B` | `C` | `D` | `E` |
+| 17 | `aeo-graph-engine` | Autonomous Web | 1.4.0 | `:8127` | browser | `A` | `B` | `C` | `D` | `E` |
+| 18 | `cwv-speed-engine` | Autonomous Web | 2.5.0 | `:8128` | browser | `A` | `B` | `C` | `D` | `E` |
+| 19 | `vision-gesture-control` | Media & 3D | 2.5.0 | `:8089` | browser | `A` | `B` | `C` | `D` | `E` |
+| 20 | `subsweep-lead-scanner` | Security & Recon | 2.5.0 | `:8090` | browser | `A` | `B` | `C` | `D` | `E` |
+| 21 | `omnipost-social-engine` | Automation | 2.5.0 | `:8091` | browser | `A` | `B` | `C` | `D` | `E` |
+| 22 | `cron-rhythm-studio` | Automation | 2.5.0 | `:5174` | browser | `A` | `B` | `C` | `D` | `E` |
+| 23 | `certpath-roadmap-studio` | Automation | 2.5.0 | `:8093` | browser | `A` | `B` | `C` | `D` | `E` |
+| 24 | `pwa-manifest-builder` | Autonomous Web | 2.5.0 | `:8100` | browser | `A` | `B` | `C` | `D` | `E` |
+| 25 | `regex-droid-builder` | Automation | 2.5.0 | `:8101` | browser | `A` | `B` | `C` | `D` | `E` |
+| 26 | `schema-illustrator-studio` | Autonomous Web | 2.5.0 | `:8099` | browser | `A` | `B` | `C` | `D` | `E` |
+| 27 | `zoth-webgen` | Autonomous Web | 2.5.0 | `:8092` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 28 | `zoth-swarm-multiplexer` | Swarm & Core | 2.5.0 | `:8141` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 29 | `webmcp-protocol-inspector` | AI & Knowledge | 1.0.0 | `:8142` | webgpu | `A` | `B` | `C` | `D` | `E` |
+| 30 | `anderson-security-sentinel` | Security & OpSec | 2.5.0 | `:8103` | browser | `A` | `B` | `C` | `D` | `E` |
+| 31 | `badge3d-coin-generator` | Media & 3D | 2.5.0 | `:8084` | browser | `A` | `B` | `C` | `D` | `E` |
+| 32 | `robots-txt-auditor` | Growth & SEO | 2.5.0 | `:8086` | browser | `A` | `B` | `C` | `D` | `E` |
+| 33 | `city-desk` | Growth & SEO | 2.5.0 | `:8087` | browser | `A` | `B` | `C` | `D` | `E` |
+| 34 | `agent-egress-sentinel` | Security & Network | 2.5.0 | `:8095` | browser | `A` | `B` | `C` | `D` | `E` |
+| 35 | `agent-mock-twin` | Simulation & Testing | 2.5.0 | `:8097` | browser | `A` | `B` | `C` | `D` | `E` |
+| 36 | `agent-prompt-firewall` | Security & Network | 2.5.0 | `:8098` | browser | `A` | `B` | `C` | `D` | `E` |
+| 37 | `wcag-contrast-guard` | Accessibility & UI | 2.5.0 | `:8150` | browser | `A` | `B` | `C` | `D` | `E` |
+| 38 | `agent-flight-recorder` | Forensics & Telemetry | 2.5.0 | `:8104` | browser | `A` | `B` | `C` | `D` | `E` |
+| 39 | `agent-capsule-jail` | Security & Enclave | 2.5.0 | `:8105` | browser | `A` | `B` | `C` | `D` | `E` |
+| 40 | `agent-policy-auditor` | Security & Enclave | 2.5.0 | `:8106` | browser | `A` | `B` | `C` | `D` | `E` |
+| 41 | `etsy-pod-forge` | Commerce & POD | 2.5.0 | `:8107` | browser | `A` | `B` | `C` | `D` | `E` |
+| 42 | `etsy-connector` | Commerce & MCP | 2.5.0 | `:8108` | browser | `A` | `B` | `C` | `D` | `E` |
+| 43 | `mcp-lens` | Simulation & Testing | 2.5.0 | `:8109` | browser | `A` | `B` | `C` | `D` | `E` |
+| 44 | `agent-budget-sentinel` | Security & Network | 2.5.0 | `:8110` | browser | `A` | `B` | `C` | `D` | `E` |
+| 45 | `agent-gods-eye` | Security & Recon | 2.5.0 | `:8112` | browser | `A` | `B` | `C` | `D` | `E` |
+| 46 | `shopify-connector` | Commerce & MCP | 2.5.0 | `:8113` | browser | `A` | `B` | `C` | `D` | `E` |
+| 47 | `printify-connector` | Commerce & MCP | 2.5.0 | `:8115` | browser | `A` | `B` | `C` | `D` | `E` |
+| 48 | `gelato-connector` | Commerce & MCP | 2.5.0 | `:8116` | browser | `A` | `B` | `C` | `D` | `E` |
+| 49 | `agent-voice-call` | Voice & Real-Time | 2.5.0 | `:8114` | browser | `A` | `B` | `C` | `D` | `E` |
+| 50 | `pod-smart-router` | Commerce & MCP | 2.5.0 | `:8117` | browser | `A` | `B` | `C` | `D` | `E` |
+| 51 | `digital-asset-forge` | Commerce & MCP | 2.5.0 | `:8118` | browser | `A` | `B` | `C` | `D` | `E` |
+| 52 | `pod-mockup-forge` | Commerce & MCP | 2.5.0 | `:8119` | browser | `A` | `B` | `C` | `D` | `E` |
+| 53 | `pod-margin-sentinel` | Commerce & MCP | 2.5.0 | `:8120` | browser | `A` | `B` | `C` | `D` | `E` |
+| 54 | `audiocipher-stego-engine` | Security & OpSec | 2.5.0 | `:8096` | browser | `A` | `B` | `C` | `D` | `E` |
+| 55 | `cyber-turtle-studio` | Media & 3D | 2.5.0 | `:8129` | browser | `A` | `B` | `C` | `D` | `E` |
+| 56 | `datamosh-glitch-studio` | Media & 3D | 2.5.0 | `:8081` | browser | `A` | `B` | `C` | `D` | `E` |
+| 57 | `nexus-3d-scene-studio` | Media & 3D | 2.5.0 | `:8082` | browser | `A` | `B` | `C` | `D` | `E` |
+| 58 | `ufo-sacred-geometry` | Media & 3D | 2.5.0 | `:8083` | browser | `A` | `B` | `C` | `D` | `E` |
+| 59 | `likeness-desk` | Voice & Real-Time | 2.5.0 | `:9395` | local_cli | `A` | `B` | `C` | `D` | . |
+| 60 | `osint-scout-skill` | Security & Recon | 2.5.0 | `:8085` | browser | `A` | `B` | `C` | `D` | `E` |
+| 61 | `zoth-osint` | Security & Recon | 4.0.0 | `:8149` | hybrid | `A` | `B` | `C` | `D` | `E` |
+| 62 | `zoth-bolt` | Autonomous Web | 3.5.0 | `:5173` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 63 | `zoth-civilization` | Swarm & Core | 3.0.0 | `:9393` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 64 | `storefront-catalog` | Commerce & POD | 2.5.0 | `:8143` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 65 | `shodan-surface-sentinel` | Security & Enclave | 3.5.0 | `:8130` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 66 | `ghidra-mcp-bridge` | Security & Enclave | 3.5.0 | `:8131` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 67 | `zoth-ascii-magic` | Media & 3D | 2.7.0 | `:8132` | browser | `A` | `B` | `C` | `D` | `E` |
+| 68 | `yara-sigma-forge` | Security & Recon | 3.4.0 | `:8133` | browser | `A` | `B` | `C` | `D` | `E` |
+| 69 | `reality-shader-forge` | Media & 3D | 3.4.0 | `:8134` | browser | `A` | `B` | `C` | `D` | `E` |
+| 70 | `producthunt-connector` | Commerce & POD | 1.1.0 | `:8139` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 71 | `zoth-relay` | Swarm & Core | 0.5.0 | `:8765` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 72 | `zela-glasses-guide` | Swarm & Core | 0.5.0 | `:8144` | browser | `A` | `B` | `C` | `D` | `E` |
+| 73 | `zoth-bot` | Swarm & Core | 1.0.0 | `:8146` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 74 | `zoth-bounty` | Security & Enclave | 1.0.0 | `:9494` | local_cli | `A` | `B` | `C` | `D` | . |
+| 75 | `zoth-scene-foundry` | Media & 3D | 1.0.0 | `:8823` | browser | `A` | `B` | `C` | `D` | `E` |
+| 76 | `zoth-math-pillar` | Security & Enclave | 2.0.0 | `:9995` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 77 | `zothos-lite` | Hardware & OS | 1.2.0 | `:8145` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 78 | `zothnet` | Swarm & Core | 1.2.0 | `:9900` | local_cli | . | `B` | `C` | `D` | . |
+| 79 | `creatorplaybooks` | Education & Growth | 1.0.0 | `:5185` | browser | `A` | `B` | `C` | `D` | `E` |
+| 80 | `zoth-obsidian-tracker` | Swarm & Core | 1.2.0 | `:8151` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 81 | `zoth-x-connector` | Swarm & Core | 1.0.0 | `:8152` | local_cli | `A` | `B` | `C` | `D` | `E` |
 
 ## 4. Layer C — CLI parity detail
 
@@ -171,14 +172,15 @@ headlessly (see §8), so a `[E]` cell means a clean capture row exists for that 
   characterised in §4.3 — none is a stale dispatch target.
 - Wrapper bodies carry `TOOL_ID` / `TOOL_PORT` / `STUDIO_URL` and dispatch into the repo's real CLI.
 
-### 4.2 Catalog entries that are NOT generated wrappers (26)
+### 4.2 Catalog entries that are NOT generated wrappers (27)
 
 These ship their own executable entry from the repo instead of a generated wrapper. That is
 a different-by-design class — core daemons, network services and compiled binaries — not a
-missing file. **13 of the 26 are nevertheless byte-identical on all three surfaces; 13 differ.**
+missing file. **27 of the 27 are nevertheless byte-identical on all three surfaces; 0 differ.**
 
 ```
 pixel-cast
+aether-observatory
 azoth-local-agent
 sovereign-agent-bridge
 neuro-memory-daemon
@@ -206,7 +208,7 @@ zoth-obsidian-tracker
 zoth-x-connector
 ```
 
-The 13 that differ were diffed individually — each delta is explainable, none is a stale stub:
+The 0 that differ were diffed individually — each delta is explainable, none is a stale stub:
 
 | tool | delta between surfaces | assessment |
 |---|---|---|
@@ -226,13 +228,11 @@ both 3261 bytes from the same revision, `~/.local/bin/zoth-math-pillar` is a **s
   (`bat`, `aider`, `claude`, `codex`, ...). Counting those as "tools" is the first trap.
 - The **109** wrapper filenames resolve to only **54 distinct `TOOL_ID`s**; the surplus **55** are
   short-name alias files (`zela`, `zela-guide`, `zoth-bolt`, `sigma-forge`, ...).
-- **18 of the 109 wrapper filenames differ between surfaces** (no canonical catalog filename does):
+- **16 of the 109 wrapper filenames differ between surfaces** (no canonical catalog filename does):
 
 ```
 bounty-hub
 reality-forge
-robots-txt
-robots-txt-auditor
 scene-foundry
 sigma-forge
 theme-forge
@@ -250,11 +250,11 @@ zoth-yara-forge
 ```
 
 Interpretation: the alias layer is legacy/hand-made scaffolding around an otherwise exact
-wrapper layer. **Every one of the 18 drifting aliases is a symlink to the canonical wrapper on at
-least one surface** (`alias_no_link = 1`), so no alias points at a stale target:
+wrapper layer. **Every one of the 16 drifting aliases is a symlink to the canonical wrapper on at
+least one surface** (`alias_no_link = 0`), so no alias points at a stale target:
 
-- **37 of the 55 aliases are byte-identical on every surface they appear on.**
-- **18 differ** — 13 appear on all three surfaces, 5 on two (chroot + `/usr/local/bin` only,
+- **39 of the 55 aliases are byte-identical on every surface they appear on.**
+- **16 differ** — 11 appear on all three surfaces, 5 on two (chroot + `/usr/local/bin` only,
   the `zoth-*` aliases for the `agent-*` daemon family).
 - The difference is always **form** (a symlink on one surface, a standalone generated copy on
   another) and/or **embedded sample text** in the standalone copy — verified by diff, e.g.
@@ -301,7 +301,7 @@ this generator, which will collapse `zothos-lite` into the byte-identical set.
 
 ## 5. Port map & collision analysis
 
-- Catalog: **80 entries, 80 distinct ports, 0 collisions** (alias-aware: symlinked aliases
+- Catalog: **81 entries, 81 distinct ports, 0 collisions** (alias-aware: symlinked aliases
   are collapsed to their target before comparison).
 - Historical false alarm: a `:8085` clash between `osint-scout` and `osint-scout-skill` was an
   **alias**, not a conflict. `deepsearch-research-agent`'s wrapper port also changed
@@ -320,7 +320,7 @@ this generator, which will collapse `zothos-lite` into the byte-identical set.
 
 ## 6. Orphaned repositories
 
-Top-level directories under `NullAITech/` that have **no catalog entry** (61).
+Top-level directories under `NullAITech/` that have **no catalog entry** (60).
 Presence here is not a defect: this tree holds shared toolchain, research material and
 infrastructure alongside shippable products. Grouping below is an assessment, not a measurement.
 
@@ -332,7 +332,6 @@ GhidraMCP
 LaunchBetter
 Netlify-Ghost-Hub
 NullAI-HexStrike-AI-Terminal
-aether-observatory
 bin
 bolt.diy
 bounty-hunter
@@ -417,8 +416,8 @@ Chromium closed after every run:
 | sweep | target | rows | clean |
 |---|---|---|---|
 | static | each repo served on a loopback port | 80 | **76** |
-| live | each tool's own declared `localPort`, only if it was already listening | 10 | **10** |
-| per-tool | final verdict used by the `[E]` column in §3 (67 static · 10 live) | 80 | **77** |
+| live | each tool's own declared `localPort`, only if it was already listening | 11 | **11** |
+| per-tool | final verdict used by the `[E]` column in §3 (67 static · 11 live) | 81 | **78** |
 
 Clean predicate (all must hold): `status == ok`, three viewport rows, `overflowPx == 0`,
 `imgsMissingAlt == 0`, `other_error_count == 0`, no blank viewport, and >= 200 characters of
@@ -430,6 +429,7 @@ returns HTTP 200 and renders, but its panes stay empty, which the predicate catc
 | tool | verdict | sweep | screenshots | detail |
 |---|---|---|---|---|
 | `pixel-cast` | **clean** | static | 3 | clean |
+| `aether-observatory` | **clean** | live | 3 | clean |
 | `adytum-alchemist-ai-workflow` | **clean** | static | 3 | clean |
 | `azoth-local-agent` | **clean** | static | 3 | clean |
 | `sovereign-agent-bridge` | **clean** | live | 3 | clean |
@@ -517,7 +517,7 @@ showed its port open, so no daemon was started, stopped, or replaced for this me
 
 | when | change |
 |---|---|
-| 2026-11-15 11:54 | atlas generator created; Layers A/B/C/D measured across 80 entries |
+| 2026-11-15 12:28 | atlas generator created; Layers A/B/C/D measured across 81 entries |
 | 2026-11-15 | `zela-glasses-guide` tri-surface repair (see §4.4) |
 | 2026-11-15 | Layer E wired into the generator: headless 3-viewport verdicts read from `layerE_results_http.jsonl` / `layerE_results_live.jsonl` (§8) |
 

@@ -44,3 +44,6 @@ pnpm-debug.log*
 docs/agent_mock.db
 *.sqlite
 *.sqlite3
+
+# Layer E evidence screenshots — regenerable; the verdict JSONL is what is tracked
+docs/shots-*/

@@ -113,15 +113,62 @@ def web_entry(repo):
     return None
 
 
+def _strip_code(h):
+    """Remove HTML comments and <script>/<style> bodies so tag scans see real DOM only.
+
+    Without this, an `<img>` written inside a JS comment or a template string counts as a
+    DOM image and shows up as a missing-alt defect that no browser ever renders.
+    """
+    h = re.sub(r"<!--.*?-->", " ", h, flags=re.S)
+    h = re.sub(r"<script\b[^>]*>.*?</script>", " ", h, flags=re.S | re.I)
+    h = re.sub(r"<style\b[^>]*>.*?</style>", " ", h, flags=re.S | re.I)
+    return h
+
+
+SPA_SCAN_SUBDIRS = ("src", "dist", "app", "public")
+SPA_SCAN_EXTS = (".tsx", ".jsx", ".ts", ".js", ".mjs", ".vue", ".svelte", ".html")
+
+
+def _spa_link_hits(repo):
+    """Support links rendered client-side are absent from a Vite/React index.html shell.
+
+    Scan the app sources and built bundle so a link that really ships is not reported missing.
+    """
+    hits, files = {}, []
+    for sub in SPA_SCAN_SUBDIRS:
+        base = os.path.join(ROOT, repo, sub)
+        if not os.path.isdir(base):
+            continue
+        for dirpath, dirnames, filenames in os.walk(base):
+            dirnames[:] = [d for d in dirnames if d not in ("node_modules", ".git", "dist")]
+            for fn in filenames:
+                if not fn.endswith(SPA_SCAN_EXTS):
+                    continue
+                t = read(os.path.join(dirpath, fn))
+                got = [k for k, v in (("stripe", STRIPE), ("solana", SOLANA)) if v in t]
+                if got:
+                    hits.update({k: True for k in got})
+                    files.append(os.path.relpath(os.path.join(dirpath, fn), os.path.join(ROOT, repo)))
+    return hits, sorted(set(files))
+
+
 def entry_signals(repo, rel):
-    h = read(os.path.join(ROOT, repo, rel))
-    imgs = re.findall(r"<img\b[^>]*>", h, re.I)
+    raw = read(os.path.join(ROOT, repo, rel))
+    dom = _strip_code(raw)
+    imgs = re.findall(r"<img\b[^>]*>", dom, re.I)
+    stripe, solana, link_source = STRIPE in raw, SOLANA in raw, "entry"
+    if not (stripe and solana):
+        hits, files = _spa_link_hits(repo)
+        stripe = stripe or hits.get("stripe", False)
+        solana = solana or hits.get("solana", False)
+        if files and (stripe or solana):
+            link_source = "bundle:" + files[0]
     return dict(imgs=len(imgs),
                 noalt=sum(1 for i in imgs if not re.search(r"\balt\s*=", i, re.I)),
-                ld=len(re.findall(r'application/ld\+json', h, re.I)),
-                og=len(re.findall(r'property=["\']og:', h, re.I)),
-                stripe=STRIPE in h, solana=SOLANA in h,
-                free=bool(re.search(r"zero paywall|100% free|open[- ]access", h, re.I)))
+                ld=len(re.findall(r'application/ld\+json', raw, re.I)),
+                og=len(re.findall(r'property=["\']og:', raw, re.I)),
+                stripe=stripe, solana=solana, link_source=link_source,
+                free=bool(re.search(r"zero paywall|100% free|open[- ]access", raw, re.I)))
 
 
 LAYER_E_FILES = ("layerE_results_http.jsonl", "layerE_results_live.jsonl")
