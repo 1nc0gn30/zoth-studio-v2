@@ -1,0 +1,2194 @@
+{
+  "generated_at": "2026-11-15T16:52:31.943060+00:00",
+  "counts": {
+    "declared_tools": 79,
+    "filesystem_repos": 131,
+    "studio_component_map_ids": 130,
+    "orphan_candidates": 51,
+    "orphan_likely_tools": 24,
+    "port_collisions": 0
+  },
+  "port_collisions": {},
+  "orphans": [
+    {
+      "repo": "1nc0gn30",
+      "path": "/home/zoth/NullAITech/1nc0gn30",
+      "has_readme": true,
+      "readme_bytes": 6532,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "1nc0gn30.github.io",
+      "path": "/home/zoth/NullAITech/1nc0gn30.github.io",
+      "has_readme": true,
+      "readme_bytes": 6341,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "30-days-of-Linux-Fundamentals",
+      "path": "/home/zoth/NullAITech/30-days-of-Linux-Fundamentals",
+      "has_readme": true,
+      "readme_bytes": 23902,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "GhidraMCP",
+      "path": "/home/zoth/NullAITech/GhidraMCP",
+      "has_readme": false,
+      "readme_bytes": 0,
+      "version": null,
+      "stack": [],
+      "declared_port": 8131,
+      "cli_binaries": [],
+      "git_branch": null,
+      "git_dirty": false,
+      "looks_like_tool": true
+    },
+    {
+      "repo": "LaunchBetter",
+      "path": "/home/zoth/NullAITech/LaunchBetter",
+      "has_readme": true,
+      "readme_bytes": 4073,
+      "version": "0.0.0",
+      "stack": [
+        "node"
+      ],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": false,
+      "package_name": "react-example",
+      "looks_like_tool": true
+    },
+    {
+      "repo": "Netlify-Ghost-Hub",
+      "path": "/home/zoth/NullAITech/Netlify-Ghost-Hub",
+      "has_readme": true,
+      "readme_bytes": 12043,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "aether-observatory",
+      "path": "/home/zoth/NullAITech/aether-observatory",
+      "has_readme": true,
+      "readme_bytes": 5158,
+      "version": "1.0.0",
+      "stack": [
+        "node"
+      ],
+      "declared_port": null,
+      "cli_binaries": [
+        "usr_local_bin:aether-observatory",
+        "local_bin:aether-observatory"
+      ],
+      "git_branch": "main",
+      "git_dirty": false,
+      "package_name": "aether-observatory",
+      "looks_like_tool": true
+    },
+    {
+      "repo": "bounty-hunter",
+      "path": "/home/zoth/NullAITech/bounty-hunter",
+      "has_readme": false,
+      "readme_bytes": 0,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": null,
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "chain-of-thoughts",
+      "path": "/home/zoth/NullAITech/chain-of-thoughts",
+      "has_readme": true,
+      "readme_bytes": 10018,
+      "version": "1.0.0",
+      "stack": [
+        "node"
+      ],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": false,
+      "package_name": "chain-of-thoughts",
+      "looks_like_tool": true
+    },
+    {
+      "repo": "colibri",
+      "path": "/home/zoth/NullAITech/colibri",
+      "has_readme": true,
+      "readme_bytes": 53778,
+      "version": null,
+      "stack": [
+        "python"
+      ],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": true,
+      "looks_like_tool": true
+    },
+    {
+      "repo": "fieldkit",
+      "path": "/home/zoth/NullAITech/fieldkit",
+      "has_readme": true,
+      "readme_bytes": 13986,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [
+        "local_bin:fieldkit",
+        "chroot:fieldkit"
+      ],
+      "git_branch": "main",
+      "git_dirty": true,
+      "looks_like_tool": true
+    },
+    {
+      "repo": "fieldkit-site",
+      "path": "/home/zoth/NullAITech/fieldkit-site",
+      "has_readme": false,
+      "readme_bytes": 0,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": null,
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "google-ai-resources",
+      "path": "/home/zoth/NullAITech/google-ai-resources",
+      "has_readme": false,
+      "readme_bytes": 0,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": null,
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "hermes-laboratory",
+      "path": "/home/zoth/NullAITech/hermes-laboratory",
+      "has_readme": false,
+      "readme_bytes": 0,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": null,
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "hermes-webchat",
+      "path": "/home/zoth/NullAITech/hermes-webchat",
+      "has_readme": false,
+      "readme_bytes": 0,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": null,
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "hermes-zoth",
+      "path": "/home/zoth/NullAITech/hermes-zoth",
+      "has_readme": true,
+      "readme_bytes": 8944,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "hexstrike-arsenal",
+      "path": "/home/zoth/NullAITech/hexstrike-arsenal",
+      "has_readme": true,
+      "readme_bytes": 7645,
+      "version": "1.0.0",
+      "stack": [
+        "node"
+      ],
+      "declared_port": null,
+      "cli_binaries": [
+        "usr_local_bin:hexstrike-arsenal",
+        "local_bin:hexstrike-arsenal",
+        "chroot:hexstrike-arsenal"
+      ],
+      "git_branch": "main",
+      "git_dirty": false,
+      "package_name": "nullai-hexstrike-terminal",
+      "looks_like_tool": true
+    },
+    {
+      "repo": "meta-hackathon-2026",
+      "path": "/home/zoth/NullAITech/meta-hackathon-2026",
+      "has_readme": false,
+      "readme_bytes": 0,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": null,
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "metadigitalgoods",
+      "path": "/home/zoth/NullAITech/metadigitalgoods",
+      "has_readme": false,
+      "readme_bytes": 0,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": null,
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "muse-code-linux",
+      "path": "/home/zoth/NullAITech/muse-code-linux",
+      "has_readme": true,
+      "readme_bytes": 4467,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "neal-bliki",
+      "path": "/home/zoth/NullAITech/neal-bliki",
+      "has_readme": true,
+      "readme_bytes": 9134,
+      "version": "0.0.0",
+      "stack": [
+        "node"
+      ],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": false,
+      "package_name": "react-example",
+      "looks_like_tool": true
+    },
+    {
+      "repo": "neal-voice-clone",
+      "path": "/home/zoth/NullAITech/neal-voice-clone",
+      "has_readme": true,
+      "readme_bytes": 1477,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": null,
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "nealfrazier-tech-build",
+      "path": "/home/zoth/NullAITech/nealfrazier-tech-build",
+      "has_readme": true,
+      "readme_bytes": 10494,
+      "version": "0.0.0",
+      "stack": [
+        "node"
+      ],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": false,
+      "package_name": "react-example",
+      "looks_like_tool": true
+    },
+    {
+      "repo": "nealsvision",
+      "path": "/home/zoth/NullAITech/nealsvision",
+      "has_readme": true,
+      "readme_bytes": 5792,
+      "version": "0.0.0",
+      "stack": [
+        "node"
+      ],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": false,
+      "package_name": "nealsvision",
+      "looks_like_tool": true
+    },
+    {
+      "repo": "nullai2026",
+      "path": "/home/zoth/NullAITech/nullai2026",
+      "has_readme": true,
+      "readme_bytes": 5063,
+      "version": "0.0.0",
+      "stack": [
+        "node"
+      ],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": false,
+      "package_name": "nullai-ui",
+      "looks_like_tool": true
+    },
+    {
+      "repo": "pentest-academy",
+      "path": "/home/zoth/NullAITech/pentest-academy",
+      "has_readme": true,
+      "readme_bytes": 5453,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "shodan-viz",
+      "path": "/home/zoth/NullAITech/shodan-viz",
+      "has_readme": true,
+      "readme_bytes": 1016,
+      "version": "0.0.0",
+      "stack": [
+        "node"
+      ],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": null,
+      "git_dirty": false,
+      "package_name": "shodan_viz",
+      "looks_like_tool": true
+    },
+    {
+      "repo": "super-muse",
+      "path": "/home/zoth/NullAITech/super-muse",
+      "has_readme": false,
+      "readme_bytes": 0,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": null,
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "vaelor-network",
+      "path": "/home/zoth/NullAITech/vaelor-network",
+      "has_readme": true,
+      "readme_bytes": 51952,
+      "version": "1.0.0",
+      "stack": [
+        "node"
+      ],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": false,
+      "package_name": "@nullaitech/vaelor-network",
+      "looks_like_tool": true
+    },
+    {
+      "repo": "vb-bin-butler",
+      "path": "/home/zoth/NullAITech/vb-bin-butler",
+      "has_readme": true,
+      "readme_bytes": 8310,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "master",
+      "git_dirty": true,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "vb-towncenter-delivery",
+      "path": "/home/zoth/NullAITech/vb-towncenter-delivery",
+      "has_readme": true,
+      "readme_bytes": 4769,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "master",
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "video-production",
+      "path": "/home/zoth/NullAITech/video-production",
+      "has_readme": false,
+      "readme_bytes": 0,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "war-of-zoth",
+      "path": "/home/zoth/NullAITech/war-of-zoth",
+      "has_readme": false,
+      "readme_bytes": 0,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": null,
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "zml-website",
+      "path": "/home/zoth/NullAITech/zml-website",
+      "has_readme": true,
+      "readme_bytes": 3438,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "master",
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "zoth-bolt",
+      "path": "/home/zoth/NullAITech/zoth-bolt",
+      "has_readme": true,
+      "readme_bytes": 12391,
+      "version": "3.0.0",
+      "stack": [
+        "node"
+      ],
+      "declared_port": null,
+      "cli_binaries": [
+        "usr_local_bin:zoth-bolt",
+        "local_bin:zoth-bolt",
+        "chroot:zoth-bolt"
+      ],
+      "git_branch": "main",
+      "git_dirty": true,
+      "package_name": "zoth-webgen",
+      "looks_like_tool": true
+    },
+    {
+      "repo": "zoth-cursorz",
+      "path": "/home/zoth/NullAITech/zoth-cursorz",
+      "has_readme": true,
+      "readme_bytes": 6214,
+      "version": "1.0.0",
+      "stack": [
+        "node"
+      ],
+      "declared_port": null,
+      "cli_binaries": [
+        "usr_local_bin:zoth-cursorz",
+        "local_bin:zoth-cursorz",
+        "chroot:zoth-cursorz"
+      ],
+      "git_branch": "main",
+      "git_dirty": false,
+      "package_name": "zoth-cursorz",
+      "looks_like_tool": true
+    },
+    {
+      "repo": "zoth-egregore",
+      "path": "/home/zoth/NullAITech/zoth-egregore",
+      "has_readme": true,
+      "readme_bytes": 7948,
+      "version": null,
+      "stack": [
+        "python"
+      ],
+      "declared_port": null,
+      "cli_binaries": [
+        "usr_local_bin:zoth-egregore",
+        "local_bin:zoth-egregore",
+        "chroot:zoth-egregore"
+      ],
+      "git_branch": "main",
+      "git_dirty": true,
+      "looks_like_tool": true
+    },
+    {
+      "repo": "zoth-fast",
+      "path": "/home/zoth/NullAITech/zoth-fast",
+      "has_readme": true,
+      "readme_bytes": 8653,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": null,
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "zoth-gpu-foundry",
+      "path": "/home/zoth/NullAITech/zoth-gpu-foundry",
+      "has_readme": true,
+      "readme_bytes": 2731,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [
+        "usr_local_bin:zoth-gpu-foundry",
+        "local_bin:zoth-gpu-foundry",
+        "chroot:zoth-gpu-foundry"
+      ],
+      "git_branch": null,
+      "git_dirty": false,
+      "looks_like_tool": true
+    },
+    {
+      "repo": "zoth-lattice-bot",
+      "path": "/home/zoth/NullAITech/zoth-lattice-bot",
+      "has_readme": false,
+      "readme_bytes": 0,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": null,
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "zoth-npm",
+      "path": "/home/zoth/NullAITech/zoth-npm",
+      "has_readme": true,
+      "readme_bytes": 1712,
+      "version": "0.1.0",
+      "stack": [
+        "node"
+      ],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": null,
+      "git_dirty": false,
+      "package_name": "@nullaitech/zoth",
+      "looks_like_tool": true
+    },
+    {
+      "repo": "zoth-os-website",
+      "path": "/home/zoth/NullAITech/zoth-os-website",
+      "has_readme": true,
+      "readme_bytes": 12568,
+      "version": "3.4.0",
+      "stack": [
+        "node"
+      ],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": false,
+      "package_name": "zoth-os-website",
+      "looks_like_tool": true
+    },
+    {
+      "repo": "zoth-studio-og",
+      "path": "/home/zoth/NullAITech/zoth-studio-og",
+      "has_readme": true,
+      "readme_bytes": 18816,
+      "version": null,
+      "stack": [
+        "node"
+      ],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "main",
+      "git_dirty": true,
+      "package_name": null,
+      "looks_like_tool": true
+    },
+    {
+      "repo": "zoth-termux",
+      "path": "/home/zoth/NullAITech/zoth-termux",
+      "has_readme": true,
+      "readme_bytes": 27713,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "master",
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "zoth-theme-forge",
+      "path": "/home/zoth/NullAITech/zoth-theme-forge",
+      "has_readme": false,
+      "readme_bytes": 0,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [
+        "usr_local_bin:zoth-theme-forge",
+        "local_bin:zoth-theme-forge",
+        "chroot:zoth-theme-forge"
+      ],
+      "git_branch": null,
+      "git_dirty": false,
+      "looks_like_tool": true
+    },
+    {
+      "repo": "zoth-ui-kit",
+      "path": "/home/zoth/NullAITech/zoth-ui-kit",
+      "has_readme": true,
+      "readme_bytes": 2735,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": null,
+      "git_dirty": false,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "zoth-usb-bridge",
+      "path": "/home/zoth/NullAITech/zoth-usb-bridge",
+      "has_readme": true,
+      "readme_bytes": 2121,
+      "version": "1.0.0",
+      "stack": [
+        "node"
+      ],
+      "declared_port": null,
+      "cli_binaries": [
+        "usr_local_bin:zoth-usb-bridge",
+        "local_bin:zoth-usb-bridge",
+        "chroot:zoth-usb-bridge"
+      ],
+      "git_branch": "main",
+      "git_dirty": true,
+      "package_name": "zoth-usb-bridge",
+      "looks_like_tool": true
+    },
+    {
+      "repo": "zoth-x-connector",
+      "path": "/home/zoth/NullAITech/zoth-x-connector",
+      "has_readme": true,
+      "readme_bytes": 3919,
+      "version": "1.0.0",
+      "stack": [
+        "node"
+      ],
+      "declared_port": null,
+      "cli_binaries": [
+        "usr_local_bin:zoth-x-connector",
+        "local_bin:zoth-x-connector",
+        "chroot:zoth-x-connector"
+      ],
+      "git_branch": "master",
+      "git_dirty": true,
+      "package_name": "zoth-x-connector",
+      "looks_like_tool": true
+    },
+    {
+      "repo": "zoth-yara-forge",
+      "path": "/home/zoth/NullAITech/zoth-yara-forge",
+      "has_readme": false,
+      "readme_bytes": 0,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [
+        "usr_local_bin:zoth-yara-forge",
+        "local_bin:zoth-yara-forge",
+        "chroot:zoth-yara-forge"
+      ],
+      "git_branch": null,
+      "git_dirty": false,
+      "looks_like_tool": true
+    },
+    {
+      "repo": "zothnet-android",
+      "path": "/home/zoth/NullAITech/zothnet-android",
+      "has_readme": true,
+      "readme_bytes": 4523,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "master",
+      "git_dirty": true,
+      "looks_like_tool": false
+    },
+    {
+      "repo": "zothnet-website",
+      "path": "/home/zoth/NullAITech/zothnet-website",
+      "has_readme": true,
+      "readme_bytes": 5940,
+      "version": null,
+      "stack": [],
+      "declared_port": null,
+      "cli_binaries": [],
+      "git_branch": "master",
+      "git_dirty": false,
+      "looks_like_tool": false
+    }
+  ],
+  "matrix": [
+    {
+      "id": "adytum-alchemist-ai-workflow",
+      "name": "Adytum Planner",
+      "repo": "adytum-alchemist-ai-workflow",
+      "category": "Planning",
+      "executionType": "local_cli",
+      "version": "1.0.0",
+      "localPort": 8135,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:adytum-alchemist-ai-workflow",
+        "local_bin:adytum-alchemist-ai-workflow",
+        "chroot:adytum-alchemist-ai-workflow"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "aeo-graph-engine",
+      "name": "AEO Graph Engine & Studio",
+      "repo": "aeo-graph-engine",
+      "category": "Autonomous Web",
+      "executionType": "browser",
+      "version": "1.4.0",
+      "localPort": 8127,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:aeo-graph-engine",
+        "local_bin:aeo-graph-engine",
+        "chroot:aeo-graph-engine"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "agent-budget-sentinel",
+      "name": "Agent Budget Sentinel",
+      "repo": "agent-budget-sentinel",
+      "category": "Security & Network",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8110,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:agent-budget-sentinel",
+        "local_bin:agent-budget-sentinel",
+        "chroot:agent-budget-sentinel"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "agent-capsule-jail",
+      "name": "Agent Capsule Jail",
+      "repo": "agent-capsule-jail",
+      "category": "Security & Enclave",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8105,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:agent-capsule-jail",
+        "local_bin:agent-capsule-jail",
+        "chroot:agent-capsule-jail"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "agent-egress-sentinel",
+      "name": "Agent Egress Sentinel",
+      "repo": "agent-egress-sentinel",
+      "category": "Security & Network",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8095,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:agent-egress-sentinel",
+        "local_bin:agent-egress-sentinel",
+        "chroot:agent-egress-sentinel"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "agent-flight-recorder",
+      "name": "Agent Flight Recorder",
+      "repo": "agent-flight-recorder",
+      "category": "Forensics & Telemetry",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8104,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:agent-flight-recorder",
+        "local_bin:agent-flight-recorder",
+        "chroot:agent-flight-recorder"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "agent-gods-eye",
+      "name": null,
+      "repo": "agent-gods-eye",
+      "category": "Security & Recon",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8112,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:agent-gods-eye",
+        "local_bin:agent-gods-eye",
+        "chroot:agent-gods-eye"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "agent-mock-twin",
+      "name": "Agent Mock Twin",
+      "repo": "agent-mock-twin",
+      "category": "Simulation & Testing",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8097,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:agent-mock-twin",
+        "local_bin:agent-mock-twin",
+        "chroot:agent-mock-twin"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "agent-policy-auditor",
+      "name": "Agent Policy Auditor",
+      "repo": "agent-policy-auditor",
+      "category": "Security & Enclave",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8106,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:agent-policy-auditor",
+        "local_bin:agent-policy-auditor",
+        "chroot:agent-policy-auditor"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "agent-prompt-firewall",
+      "name": "Agent Prompt Firewall",
+      "repo": "agent-prompt-firewall",
+      "category": "Security & Network",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8098,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:agent-prompt-firewall",
+        "local_bin:agent-prompt-firewall",
+        "chroot:agent-prompt-firewall"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "agent-voice-call",
+      "name": "Agent Voice Call",
+      "repo": "agent-voice-call",
+      "category": "Voice & Real-Time",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8114,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:agent-voice-call",
+        "local_bin:agent-voice-call",
+        "chroot:agent-voice-call"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "anderson-security-sentinel",
+      "name": "Anderson Security Sentinel",
+      "repo": "anderson-security-sentinel",
+      "category": "Security & OpSec",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8103,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:anderson-security-sentinel",
+        "local_bin:anderson-security-sentinel",
+        "chroot:anderson-security-sentinel"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "audiocipher-stego-engine",
+      "name": "AudioCipher Stego Studio",
+      "repo": "audiocipher-stego-engine",
+      "category": "Security & OpSec",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8096,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:audiocipher-stego-engine",
+        "local_bin:audiocipher-stego-engine",
+        "chroot:audiocipher-stego-engine"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "azoth-local-agent",
+      "name": "AZOTH Local Archon Agent",
+      "repo": "azoth-local-agent",
+      "category": "Swarm & Core",
+      "executionType": "local_cli",
+      "version": "3.0.0",
+      "localPort": 8136,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:azoth-local-agent",
+        "local_bin:azoth-local-agent",
+        "chroot:azoth-local-agent"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "badge3d-coin-generator",
+      "name": "Badge3D Coin Generator",
+      "repo": "badge3d-coin-generator",
+      "category": "Media & 3D",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8084,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:badge3d-coin-generator",
+        "local_bin:badge3d-coin-generator",
+        "chroot:badge3d-coin-generator"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "certpath-roadmap-studio",
+      "name": "CertPath Roadmap Studio",
+      "repo": "certpath-roadmap-studio",
+      "category": "Automation",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8093,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:certpath-roadmap-studio",
+        "local_bin:certpath-roadmap-studio",
+        "chroot:certpath-roadmap-studio"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "city-desk",
+      "name": "City Desk",
+      "repo": "city-desk",
+      "category": "Growth & SEO",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8087,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:city-desk",
+        "local_bin:city-desk",
+        "chroot:city-desk"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "creatorplaybooks",
+      "name": "CreatorPlaybooks",
+      "repo": "creatorplaybooks",
+      "category": "Education & Growth",
+      "executionType": "browser",
+      "version": "1.0.0",
+      "localPort": 5185,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:creatorplaybooks",
+        "local_bin:creatorplaybooks",
+        "chroot:creatorplaybooks"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "cron-rhythm-studio",
+      "name": "CronRhythm Studio",
+      "repo": "cron-rhythm-studio",
+      "category": "Automation",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 5174,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:cron-rhythm-studio",
+        "local_bin:cron-rhythm-studio",
+        "chroot:cron-rhythm-studio"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "cwv-speed-engine",
+      "name": "CWV Speed Engine",
+      "repo": "cwv-speed-engine",
+      "category": "Autonomous Web",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8128,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:cwv-speed-engine",
+        "local_bin:cwv-speed-engine",
+        "chroot:cwv-speed-engine"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "cyber-turtle-studio",
+      "name": "Cyber Turtle Studio",
+      "repo": "cyber-turtle-studio",
+      "category": "Media & 3D",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8129,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:cyber-turtle-studio",
+        "local_bin:cyber-turtle-studio",
+        "chroot:cyber-turtle-studio"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "datamosh-glitch-studio",
+      "name": "Datamosh Glitch Studio",
+      "repo": "datamosh-glitch-studio",
+      "category": "Media & 3D",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8081,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:datamosh-glitch-studio",
+        "local_bin:datamosh-glitch-studio",
+        "chroot:datamosh-glitch-studio"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "deepsearch-research-agent",
+      "name": "DeepSearch Research Agent & Studio",
+      "repo": "deepsearch-research-agent",
+      "category": "AI & Knowledge",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8122,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:deepsearch-research-agent",
+        "local_bin:deepsearch-research-agent",
+        "chroot:deepsearch-research-agent"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "digital-asset-forge",
+      "name": "Digital Asset Forge",
+      "repo": "digital-asset-forge",
+      "category": "Commerce & MCP",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8118,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:digital-asset-forge",
+        "local_bin:digital-asset-forge",
+        "chroot:digital-asset-forge"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "envguard-secrets-vault",
+      "name": "EnvGuard Secrets Vault",
+      "repo": "envguard-secrets-vault",
+      "category": "Security & Recon",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8088,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:envguard-secrets-vault",
+        "local_bin:envguard-secrets-vault",
+        "chroot:envguard-secrets-vault"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "etsy-connector",
+      "name": "Etsy Connector",
+      "repo": "etsy-connector",
+      "category": "Commerce & MCP",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8108,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:etsy-connector",
+        "local_bin:etsy-connector",
+        "chroot:etsy-connector"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "etsy-pod-forge",
+      "name": "Etsy POD Forge",
+      "repo": "etsy-pod-forge",
+      "category": "Commerce & POD",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8107,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:etsy-pod-forge",
+        "local_bin:etsy-pod-forge",
+        "chroot:etsy-pod-forge"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "gelato-connector",
+      "name": "Gelato Connector",
+      "repo": "gelato-connector",
+      "category": "Commerce & MCP",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8116,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:gelato-connector",
+        "local_bin:gelato-connector",
+        "chroot:gelato-connector"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "ghidra-mcp-bridge",
+      "name": "GhidraMCP Binary Reverse Engineering Bridge",
+      "repo": "ghidra-mcp-bridge",
+      "category": "Security & Enclave",
+      "executionType": "local_cli",
+      "version": "3.5.0",
+      "localPort": 8131,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:ghidra-mcp-bridge",
+        "local_bin:ghidra-mcp-bridge",
+        "chroot:ghidra-mcp-bridge"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "hexstrike-arsenal",
+      "name": "HexStrike Security Arsenal",
+      "repo": "NullAI-HexStrike-AI-Terminal",
+      "category": "Security & Recon",
+      "executionType": "local_cli",
+      "version": "3.1.0",
+      "localPort": 8138,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [],
+      "E_visual_verified": false
+    },
+    {
+      "id": "jwt-inspector-guard",
+      "name": "JWT Inspector Guard",
+      "repo": "jwt-inspector-guard",
+      "category": "Security & Recon",
+      "executionType": "browser",
+      "version": "2.6.0",
+      "localPort": 8124,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:jwt-inspector-guard",
+        "local_bin:jwt-inspector-guard",
+        "chroot:jwt-inspector-guard"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "likeness-desk",
+      "name": "Likeness Desk (AI Video Double)",
+      "repo": "likeness-desk",
+      "category": "Voice & Real-Time",
+      "executionType": "local_cli",
+      "version": "2.5.0",
+      "localPort": 9395,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:likeness-desk",
+        "local_bin:likeness-desk",
+        "chroot:likeness-desk"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "mcp-lens",
+      "name": "MCP Lens",
+      "repo": "mcp-lens",
+      "category": "Simulation & Testing",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8109,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:mcp-lens",
+        "local_bin:mcp-lens",
+        "chroot:mcp-lens"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "neuro-memory-daemon",
+      "name": "Neuro-Memory Daemon",
+      "repo": "neuro-memory-daemon",
+      "category": "Memory & Brain",
+      "executionType": "local_cli",
+      "version": "2.8.0",
+      "localPort": 8094,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:neuro-memory-daemon",
+        "local_bin:neuro-memory-daemon",
+        "chroot:neuro-memory-daemon"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "nexus-3d-scene-studio",
+      "name": "Nexus 3D Scene Studio",
+      "repo": "nexus-3d-scene-studio",
+      "category": "Media & 3D",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8082,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:nexus-3d-scene-studio",
+        "local_bin:nexus-3d-scene-studio",
+        "chroot:nexus-3d-scene-studio"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "omnipost-social-engine",
+      "name": "OmniPost Social Engine",
+      "repo": "omnipost-social-engine",
+      "category": "Automation",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8091,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:omnipost-social-engine",
+        "local_bin:omnipost-social-engine",
+        "chroot:omnipost-social-engine"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "osint-scout-skill",
+      "name": "Domain Intel OSINT Scout",
+      "repo": "osint-scout-skill",
+      "category": "Security & Recon",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8085,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:osint-scout-skill",
+        "local_bin:osint-scout-skill",
+        "chroot:osint-scout-skill"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "payload-entropy-studio",
+      "name": "Payload Entropy Studio",
+      "repo": "payload-entropy-studio",
+      "category": "Security & Recon",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8080,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:payload-entropy-studio",
+        "local_bin:payload-entropy-studio",
+        "chroot:payload-entropy-studio"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "pixel-cast",
+      "name": "PixelCast",
+      "repo": "pixel-cast",
+      "category": "Hardware & OS",
+      "executionType": "local_cli",
+      "version": "1.0.0",
+      "localPort": 8148,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:pixel-cast",
+        "local_bin:pixel-cast",
+        "chroot:pixel-cast"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "pod-margin-sentinel",
+      "name": "POD Margin Sentinel",
+      "repo": "pod-margin-sentinel",
+      "category": "Commerce & MCP",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8120,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:pod-margin-sentinel",
+        "local_bin:pod-margin-sentinel",
+        "chroot:pod-margin-sentinel"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "pod-mockup-forge",
+      "name": "POD Mockup Forge",
+      "repo": "pod-mockup-forge",
+      "category": "Commerce & MCP",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8119,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:pod-mockup-forge",
+        "local_bin:pod-mockup-forge",
+        "chroot:pod-mockup-forge"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "pod-smart-router",
+      "name": "POD Smart Router",
+      "repo": "pod-smart-router",
+      "category": "Commerce & MCP",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8117,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:pod-smart-router",
+        "local_bin:pod-smart-router",
+        "chroot:pod-smart-router"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "polyglot-framework-exporter",
+      "name": "Polyglot Framework Exporter",
+      "repo": "polyglot-framework-exporter",
+      "category": "Autonomous Web",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8126,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:polyglot-framework-exporter",
+        "local_bin:polyglot-framework-exporter",
+        "chroot:polyglot-framework-exporter"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "printify-connector",
+      "name": "Printify Connector",
+      "repo": "printify-connector",
+      "category": "Commerce & MCP",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8115,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:printify-connector",
+        "local_bin:printify-connector",
+        "chroot:printify-connector"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "producthunt-connector",
+      "name": "Product Hunt Connector (zoth-ph)",
+      "repo": "producthunt-connector",
+      "category": "Commerce & POD",
+      "executionType": "local_cli",
+      "version": "1.1.0",
+      "localPort": 8139,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:producthunt-connector",
+        "local_bin:producthunt-connector",
+        "chroot:producthunt-connector"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "promptmaster-studio",
+      "name": "PromptMaster Studio",
+      "repo": "promptmaster-studio",
+      "category": "AI & Knowledge",
+      "executionType": "browser",
+      "version": "3.2.0",
+      "localPort": 8123,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:promptmaster-studio",
+        "local_bin:promptmaster-studio",
+        "chroot:promptmaster-studio"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "pwa-manifest-builder",
+      "name": "PWA Manifest Studio",
+      "repo": "pwa-manifest-builder",
+      "category": "Autonomous Web",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8100,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:pwa-manifest-builder",
+        "local_bin:pwa-manifest-builder",
+        "chroot:pwa-manifest-builder"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "reality-shader-forge",
+      "name": "Zoth Reality Shader & Theme Forge",
+      "repo": "reality-shader-forge",
+      "category": "Media & 3D",
+      "executionType": "browser",
+      "version": "3.4.0",
+      "localPort": 8134,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:reality-shader-forge",
+        "local_bin:reality-shader-forge",
+        "chroot:reality-shader-forge"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "regex-droid-builder",
+      "name": "Regex Droid Studio",
+      "repo": "regex-droid-builder",
+      "category": "Automation",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8101,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:regex-droid-builder",
+        "local_bin:regex-droid-builder",
+        "chroot:regex-droid-builder"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "robots-txt-auditor",
+      "name": "Robots.txt & AEO Auditor",
+      "repo": "robots-txt-auditor",
+      "category": "Growth & SEO",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8086,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:robots-txt-auditor",
+        "local_bin:robots-txt-auditor",
+        "chroot:robots-txt-auditor"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "schema-illustrator-studio",
+      "name": "Schema Illustrator Studio",
+      "repo": "schema-illustrator-studio",
+      "category": "Autonomous Web",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8099,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:schema-illustrator-studio",
+        "local_bin:schema-illustrator-studio",
+        "chroot:schema-illustrator-studio"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "shodan-surface-sentinel",
+      "name": "Shodan Attack Surface Sentinel",
+      "repo": "shodan-surface-sentinel",
+      "category": "Security & Enclave",
+      "executionType": "local_cli",
+      "version": "3.5.0",
+      "localPort": 8130,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:shodan-surface-sentinel",
+        "local_bin:shodan-surface-sentinel",
+        "chroot:shodan-surface-sentinel"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "shopify-connector",
+      "name": "Shopify Connector",
+      "repo": "shopify-connector",
+      "category": "Commerce & MCP",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8113,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:shopify-connector",
+        "local_bin:shopify-connector",
+        "chroot:shopify-connector"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "sovereign-agent-bridge",
+      "name": "Sovereign Agent Signal Bridge",
+      "repo": "sovereign-agent-bridge",
+      "category": "Swarm & Core",
+      "executionType": "local_cli",
+      "version": "3.2.0",
+      "localPort": 8102,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:sovereign-agent-bridge",
+        "local_bin:sovereign-agent-bridge",
+        "chroot:sovereign-agent-bridge"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "storefront-catalog",
+      "name": "YourDigitalSpace POD Showcase",
+      "repo": "storefront-catalog",
+      "category": "Commerce & POD",
+      "executionType": "local_cli",
+      "version": "2.5.0",
+      "localPort": 8143,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:storefront-catalog",
+        "local_bin:storefront-catalog",
+        "chroot:storefront-catalog"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "subsweep-lead-scanner",
+      "name": "SubSweep Lead Scanner",
+      "repo": "subsweep-lead-scanner",
+      "category": "Security & Recon",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8090,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:subsweep-lead-scanner",
+        "local_bin:subsweep-lead-scanner",
+        "chroot:subsweep-lead-scanner"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "ufo-sacred-geometry",
+      "name": "UFO Sacred Geometry Studio",
+      "repo": "ufo-sacred-geometry",
+      "category": "Media & 3D",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8083,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:ufo-sacred-geometry",
+        "local_bin:ufo-sacred-geometry",
+        "chroot:ufo-sacred-geometry"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "vector-search-engine",
+      "name": "Vector Search Engine & Studio",
+      "repo": "vector-search-engine",
+      "category": "Swarm & Core",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8121,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:vector-search-engine",
+        "local_bin:vector-search-engine",
+        "chroot:vector-search-engine"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "vision-gesture-control",
+      "name": "Vision Gesture Control",
+      "repo": "vision-gesture-control",
+      "category": "Media & 3D",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8089,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:vision-gesture-control",
+        "local_bin:vision-gesture-control",
+        "chroot:vision-gesture-control"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "wcag-contrast-guard",
+      "name": "WCAG & APCA Contrast Guard Studio",
+      "repo": "wcag-contrast-guard",
+      "category": "Accessibility & UI",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8150,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:wcag-contrast-guard",
+        "local_bin:wcag-contrast-guard",
+        "chroot:wcag-contrast-guard"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "web-security-guard",
+      "name": "Web Security Guard",
+      "repo": "web-security-guard",
+      "category": "Security & Recon",
+      "executionType": "browser",
+      "version": "2.5.0",
+      "localPort": 8125,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:web-security-guard",
+        "local_bin:web-security-guard",
+        "chroot:web-security-guard"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "webmcp-protocol-inspector",
+      "name": "WebMCP Protocol Suite",
+      "repo": "webmcp-protocol-inspector",
+      "category": "AI & Knowledge",
+      "executionType": "webgpu",
+      "version": "1.0.0",
+      "localPort": 8142,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:webmcp-protocol-inspector",
+        "local_bin:webmcp-protocol-inspector",
+        "chroot:webmcp-protocol-inspector"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "yara-sigma-forge",
+      "name": "YARA-X & Sigma Threat Rule Forge",
+      "repo": "yara-sigma-forge",
+      "category": "Security & Recon",
+      "executionType": "browser",
+      "version": "3.4.0",
+      "localPort": 8133,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:yara-sigma-forge",
+        "local_bin:yara-sigma-forge",
+        "chroot:yara-sigma-forge"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "zela-glasses-guide",
+      "name": "Zela Glasses Guide",
+      "repo": "zela-glasses-guide",
+      "category": "Swarm & Core",
+      "executionType": "browser",
+      "version": "0.5.0",
+      "localPort": 8144,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:zela-glasses-guide",
+        "local_bin:zela-glasses-guide",
+        "chroot:zela-glasses-guide"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "zoth-ascii-magic",
+      "name": "Zoth ASCII Magic Studio",
+      "repo": "zoth-ascii-magic",
+      "category": "Media & 3D",
+      "executionType": "browser",
+      "version": "2.7.0",
+      "localPort": 8132,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:zoth-ascii-magic",
+        "local_bin:zoth-ascii-magic",
+        "chroot:zoth-ascii-magic"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "zoth-bolt",
+      "name": "Zoth Bolt",
+      "repo": "bolt.diy",
+      "category": "Autonomous Web",
+      "executionType": "local_cli",
+      "version": "3.5.0",
+      "localPort": 5173,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:bolt.diy",
+        "local_bin:bolt.diy",
+        "chroot:bolt.diy"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "zoth-bot",
+      "name": "Zoth Bot Desktop Companion",
+      "repo": "zoth-bot",
+      "category": "Swarm & Core",
+      "executionType": "local_cli",
+      "version": "1.0.0",
+      "localPort": 8146,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:zoth-bot",
+        "local_bin:zoth-bot",
+        "chroot:zoth-bot"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "zoth-bounty",
+      "name": "Zoth Bounty Research Hub",
+      "repo": "zoth-bounty",
+      "category": "Security & Enclave",
+      "executionType": "local_cli",
+      "version": "1.0.0",
+      "localPort": 9494,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:zoth-bounty",
+        "local_bin:zoth-bounty",
+        "chroot:zoth-bounty"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "zoth-civilization",
+      "name": "Zoth Civilization v3.0",
+      "repo": "zoth-civilization",
+      "category": "Swarm & Core",
+      "executionType": "local_cli",
+      "version": "3.0.0",
+      "localPort": 9393,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:zoth-civilization",
+        "local_bin:zoth-civilization",
+        "chroot:zoth-civilization"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "zoth-math-pillar",
+      "name": "Zoth Math Pillar HUD",
+      "repo": "zoth-math-pillar",
+      "category": "Security & Enclave",
+      "executionType": "local_cli",
+      "version": "2.0.0",
+      "localPort": 9995,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:zoth-math-pillar",
+        "local_bin:zoth-math-pillar",
+        "chroot:zoth-math-pillar"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "zoth-obsidian-tracker",
+      "name": "Zoth Obsidian Tracker",
+      "repo": "zoth-obsidian-tracker",
+      "category": "Swarm & Core",
+      "executionType": "local_cli",
+      "version": "1.2.0",
+      "localPort": 8151,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:zoth-obsidian-tracker",
+        "local_bin:zoth-obsidian-tracker",
+        "chroot:zoth-obsidian-tracker"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "zoth-os",
+      "name": "Zoth OS v3.4.0",
+      "repo": "zoth-os",
+      "category": "Swarm & Core",
+      "executionType": "local_cli",
+      "version": "3.4.0",
+      "localPort": 8137,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:zoth-os",
+        "local_bin:zoth-os",
+        "chroot:zoth-os"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "zoth-osint",
+      "name": "Zoth OSINT Workstation & Masterclass",
+      "repo": "zoth-osint",
+      "category": "Security & Recon",
+      "executionType": "hybrid",
+      "version": "4.0.0",
+      "localPort": 8149,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:zoth-osint",
+        "local_bin:zoth-osint",
+        "chroot:zoth-osint"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "zoth-relay",
+      "name": "Zoth Relay (MCP Agent Bridge)",
+      "repo": "zoth-relay",
+      "category": "Swarm & Core",
+      "executionType": "local_cli",
+      "version": "0.5.0",
+      "localPort": 8765,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:zoth-relay",
+        "local_bin:zoth-relay",
+        "chroot:zoth-relay"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "zoth-scene-foundry",
+      "name": "Zoth Scene Foundry",
+      "repo": "zoth-scene-foundry",
+      "category": "Media & 3D",
+      "executionType": "browser",
+      "version": "1.0.0",
+      "localPort": 8823,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:zoth-scene-foundry",
+        "local_bin:zoth-scene-foundry",
+        "chroot:zoth-scene-foundry"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "zoth-swarm-multiplexer",
+      "name": "21-Agent Swarm Multiplexer",
+      "repo": "zoth-swarm-multiplexer",
+      "category": "Swarm & Core",
+      "executionType": "local_cli",
+      "version": "2.5.0",
+      "localPort": 8141,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:zoth-swarm-multiplexer",
+        "local_bin:zoth-swarm-multiplexer",
+        "chroot:zoth-swarm-multiplexer"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "zoth-webgen",
+      "name": "Zoth QuickSite Starter",
+      "repo": "zoth-webgen",
+      "category": "Autonomous Web",
+      "executionType": "local_cli",
+      "version": "2.5.0",
+      "localPort": 8092,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:zoth-webgen",
+        "local_bin:zoth-webgen",
+        "chroot:zoth-webgen"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "zothnet",
+      "name": "ZothNet (Sovereign Darknet Mesh)",
+      "repo": "zothnet",
+      "category": "Swarm & Core",
+      "executionType": "local_cli",
+      "version": "1.2.0",
+      "localPort": 9900,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:zothnet",
+        "local_bin:zothnet",
+        "chroot:zothnet"
+      ],
+      "E_visual_verified": false
+    },
+    {
+      "id": "zothos-lite",
+      "name": "ZothOS-Lite v1.2 (Amnesic Monotone OS)",
+      "repo": "zothos-lite",
+      "category": "Hardware & OS",
+      "executionType": "local_cli",
+      "version": "1.2.0",
+      "localPort": 8145,
+      "A_standalone_repo": true,
+      "A_has_readme": true,
+      "B_studio_component": true,
+      "C_cli_binaries": [
+        "usr_local_bin:zothos-lite",
+        "local_bin:zothos-lite",
+        "chroot:zothos-lite"
+      ],
+      "E_visual_verified": false
+    }
+  ]
+}
