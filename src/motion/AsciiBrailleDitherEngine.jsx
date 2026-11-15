@@ -257,7 +257,7 @@ export const SHAPE_DESCRIPTORS = {
 };
 
 /**
- * Deterministically maps any of the 77 Sovereign Arsenal tools to a procedural Braille SDF shape.
+ * Deterministically maps any of the 80 Sovereign Arsenal tools to a procedural Braille SDF shape.
  */
 export function resolveToolBrailleShape(tool) {
   if (!tool) return 'astrolabe';

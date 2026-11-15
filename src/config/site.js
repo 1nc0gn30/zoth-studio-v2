@@ -66,7 +66,7 @@ export const siteConfig = {
     },
     '/tools': {
       title: `Sovereign Tool Arsenal // ${microTools.length} Offline-Capable Micro-Tools & Workstations`,
-      description: `Explore ${microTools.length} standalone, schema-validated developer tools (55 in-browser + 22 CLI) and interactive God-Mode workstations with 15s code-first motion showcases.`,
+      description: `Explore ${microTools.length} standalone, schema-validated developer tools (56 in-browser + 24 CLI) and interactive God-Mode workstations with 15s code-first motion showcases.`,
       keywords: 'developer tools, zoth webgen, omnipost, subsweep, payload entropy, offline-capable tools',
       type: 'article',
     },

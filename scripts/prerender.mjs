@@ -126,7 +126,7 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
         <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Sovereign Tool Nexus // ${microTools.length} Air-Gapped Micro-Tools</h2>
-        <p style="color: #D1D5DB; line-height: 1.6;">Standalone, schema-validated air-gapped developer utilities (55 in-browser + 22 CLI) for JWT verification, payload entropy analysis, 3D modeling, and code generation.</p>
+        <p style="color: #D1D5DB; line-height: 1.6;">Standalone, schema-validated air-gapped developer utilities (56 in-browser + 24 CLI) for JWT verification, payload entropy analysis, 3D modeling, and code generation.</p>
         <ul style="line-height: 1.8; color: #E5E7EB; margin-top: 1rem;">
           ${toolsList}
         </ul>

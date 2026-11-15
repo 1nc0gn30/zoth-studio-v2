@@ -317,7 +317,7 @@ export default function SovereignFunnel({
               />
             </Box>
             <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.85rem', lineHeight: 1.6 }}>
-              Bootable Debian Live distribution with all 77 CLI binaries, local loopback daemons, and Ollama runtime pre-configured out of the box.
+              Bootable Debian Live distribution with all 80 sovereign tools & CLI binaries, local loopback daemons, and Ollama runtime pre-configured out of the box.
             </Typography>
 
             <Box

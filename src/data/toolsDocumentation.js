@@ -3194,10 +3194,77 @@ export const toolsDocumentation = {
           "zoth-x-connector --status --json"
       ],
       "features": [
-          "Multi-Account X API v2 Dispatcher — Supports @1nc0gn30, @zoth_os, @zothstudio, @nealfraziertech, and @dinorawrai.",
+          "Multi-Account X API v2 Dispatcher — Supports @1nc0gn30, @zoth_os, and @nullaitech (legacy fallback + paused @zothstudio / @dinorawrai)",
           "Persistent Systemd User Timer — Automated 09:00, 12:00, 15:00, 18:00, and 21:00 local schedule with Persistent=true.",
           "Zoth Vault OAuth Configurator — Credentials remain strictly on disk in ~/.config/zoth-vault/ with zero secrets in Git.",
           "4-Step Visual Guide & 16s MP4 Showreel — Built-in walkthrough directly inside the :8152 workstation."
+      ]
+  },
+  "creatorplaybooks": {
+      "whyUse": "Provides a zero-tracking, sub-millisecond tactical reading deck, mental-model index, and creator swipe-file browser hosted locally on 127.0.0.1:5185 or offline in-browser.",
+      "problemSolved": "Replaces scattered social bookmarks, Notion paywalls, and ad-tracked curator newsletters with a deterministic React 19 + TypeScript playbook workstation and CLI/TUI.",
+      "architecture": "Client-side React 19 + Vite bundle with optional X Developer API v2 (X_BEARER_TOKEN) Netlify hydration and graceful offline curated fallback, plus creatorplaybooks / creatorplaybooks-tui CLI wrappers.",
+      "aiAgentProtocol": {
+          "mcpTool": "creatorplaybooks_search",
+          "description": "Query tactical creator playbooks, mentor reading lists, repeatable cadences, and swipe files.",
+          "cliExample": "creatorplaybooks --status && creatorplaybooks --json",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "query": { "type": "string", "description": "Keyword, mental model, or creator handle" },
+                  "category": { "type": "string", "description": "Filter by playbook cadence or discipline" }
+              },
+              "required": ["query"]
+          },
+          "outputSchema": {
+              "matches": "array",
+              "totalPlaybooks": "number"
+          }
+      },
+      "quickstart": [
+          "git clone https://github.com/1nc0gn30/creatorplaybooks.git",
+          "cd creatorplaybooks && npm install && npm run dev",
+          "creatorplaybooks desktop  # or: creatorplaybooks-tui | creatorplaybooks --status"
+      ],
+      "features": [
+          "Interactive Zero-Egress Playbook Search — Instant client-side filtering across tactical plays, reading lists, and hooks.",
+          "Swipe Files & Execution Cadences — Copy-ready formats and proven creator frameworks.",
+          "Optional Live X Telemetry — Hydrates live follower/post stats when X_BEARER_TOKEN is configured, otherwise runs 100% offline.",
+          "Native ZothOS CLI & 60fps U+2800 Braille TUI — Inspect health JSON or browse playbooks directly inside a terminal."
+      ]
+  },
+  "zoth-obsidian-tracker": {
+      "whyUse": "Dedicated sovereign workstation (127.0.0.1:8151) and Unicode U+2800 Braille TUI verifying the 1,800+ Markdown notes, JSON Canvas 1.0 boards, Obsidian Bases, 5 Ecosystem Pillars, 7 APKs, and all 80 Zoth Studio tools.",
+      "problemSolved": "Eliminates stale documentation drift across repos, Obsidian Vault notes, and Zoth Studio deployments by continuously cross-verifying tools, canvases, and build health from a single local index.",
+      "architecture": "Python REST backend (server.py on 127.0.0.1:8151) indexing ~/Documents/Obsidian Vault alongside a Web UI and Unicode U+2800 Braille TUI (zoth-obsidian-tracker / zoth-obsidian-tracker-tui).",
+      "aiAgentProtocol": {
+          "mcpTool": "zoth_obsidian_tracker_verify",
+          "description": "Inspect vault coverage, 5 ecosystem pillars, Android APK roadmap, and run per-tool verification checks.",
+          "cliExample": "zoth-obsidian-tracker --status && zoth-obsidian-tracker --pillars",
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "mode": { "type": "string", "enum": ["status", "pillars", "canvases", "bases", "verify"] },
+                  "toolId": { "type": "string", "description": "Optional tool ID to cross-verify against Obsidian notes" }
+              },
+              "required": ["mode"]
+          },
+          "outputSchema": {
+              "verifiedTools": "number",
+              "notesIndexed": "number",
+              "pillars": "array"
+          }
+      },
+      "quickstart": [
+          "git clone https://github.com/1nc0gn30/zoth-obsidian-tracker.git",
+          "cd zoth-obsidian-tracker && python3 server.py",
+          "zoth-obsidian-tracker --status  # or: zoth-obsidian-tracker-tui | zoth-obsidian-tracker --pillars"
+      ],
+      "features": [
+          "Obsidian Vault Coverage Telemetry — Indexes 1,800+ notes, 21 JSON Canvas boards, and 24 relational .base tables.",
+          "80-Tool Verification Matrix — Audits local ports, CLI wrappers, and Vault dossier notes across the entire Zoth Studio arsenal.",
+          "5 Sovereign Ecosystem Pillars & 7-APK Tracker — Tracks ZothNet, ZothOS, Zoth Studio, World of Zoth, and NullAI mobile packages.",
+          "60fps U+2800 Braille + Bayer 8x8 TUI — Terminal verification harness alongside REST API (/api/tools, /api/pillars, /api/verify/:id)."
       ]
   }
 };

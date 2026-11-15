@@ -16,7 +16,7 @@ Publisher: NullAI Tech (https://nullai.tech)
 - [HexStrike Cybersec Terminal](https://zoth.nullai.tech/hexstrike): Air-gapped CVE vulnerability matrix, attack surface analyzer, and exploit audit lab.
 - [Zoth OS Kernel](https://zoth.nullai.tech/zoth-os): Local Linux KVM hypervisor sandbox, thin QEMU disk management, and WebContainer runtime.
 - [Adytum Sanctum](https://zoth.nullai.tech/adytum): 22 Hermetic key engineering lifecycle, 5-minute incubation gates, and Argon2id hardware key vault.
-- [Sovereign Arsenal](https://zoth.nullai.tech/arsenal): Comprehensive searchable directory of all 43 workstations, 65 micro-tools, and 21 autonomous agents.
+- [Sovereign Arsenal](https://zoth.nullai.tech/arsenal): Comprehensive searchable directory of all 43 workstations, 80 micro-tools, and 21 autonomous agents.
 - [Micro-Tools Registry](https://zoth.nullai.tech/tools): 65 schema-validated air-gapped developer utilities for JWT verification, payload entropy, and code export.
 - [Workstations Matrix](https://zoth.nullai.tech/workstations): 43 interactive studio environments spanning Build, Security, Swarm, Spatial, and Observe bands.
 - [Enclave Bridges](https://zoth.nullai.tech/bridges): End-to-end encrypted inter-agent signal mesh and local IPC bus monitor.
@@ -42,16 +42,16 @@ Publisher: NullAI Tech (https://nullai.tech)
 
 - [Full Knowledge Corpus](https://zoth.nullai.tech/llms-full.txt): Comprehensive technical specifications, equations, and workstation details.
 - [Agent Discovery Manifest](https://zoth.nullai.tech/ai.txt): Machine crawling and answer-engine grounding policy.
-- [Tools Registry API](https://zoth.nullai.tech/api/tools.json): JSON catalog of all 77 Studio tools (55 in-browser + 22 local CLI).
+- [Tools Registry API](https://zoth.nullai.tech/api/tools.json): JSON catalog of all 80 Studio tools (56 in-browser + 24 local CLI).
 - [Netlify AX API](https://zoth.nullai.tech/api/netlify-ax.json): Serverless edge function contract definitions.
 - [Netlify MCP API](https://zoth.nullai.tech/api/netlify-ax-mcp.json): Model Context Protocol server configuration.
-- [XML Sitemap](https://zoth.nullai.tech/sitemap.xml): Synchronized static route index across all 141 URLs.
+- [XML Sitemap](https://zoth.nullai.tech/sitemap.xml): Synchronized static route index across all 149 URLs.
 
 
 ## Entity & Ecosystem Summary
 - **Maintainer**: 1nc0gn30 (`@1nc0gn30`, `https://1nc0gn30.si`), Founder of **NullAI** (`https://nullai.tech`).
 - **Core Properties**:
-  1. **Zoth Studio v2** (`https://zoth.nullai.tech`) — Local-first multi-agent AI engineering catalog indexing 76 CLI, MCP, and workstation tools (`npx @nullaitech/zoth studio`).
+  1. **Zoth Studio v2** (`https://zoth.nullai.tech`) — Local-first multi-agent AI engineering catalog indexing 80 CLI, MCP, and workstation tools (`npx @nullaitech/zoth studio`).
   2. **ZothOS Linux v3.4** (`https://zothos.nullai.tech`) — Debian Trixie + KDE Plasma 6 Wayland live operating system with local LLM orchestration and eBPF process isolation.
   3. **ZothOS-Lite v1.2** (`https://zothos-lite.nullai.tech`) — Browser-hosted Linux desktop showcase and environment preview.
   4. **Zoth Egregore (Beta)** (`https://zoth-egregore.netlify.app`) — Local-first multi-agent runtime combining DeepSeek Flash and Nous Research Hermes Agent with native Zoth Studio MCP tool routing.
@@ -59,7 +59,7 @@ Publisher: NullAI Tech (https://nullai.tech)
 
 ## Machine-Readable JSON Endpoints (CORS `*`)
 - [Master API Discovery Index](https://zoth.nullai.tech/api/index.json): Overview of all machine-readable endpoints on this domain.
-- [Studio Tool Catalog API](https://zoth.nullai.tech/api/tools.json): Metadata, repository URLs, ports, CLI invocations, and categories for all 76 Studio tools.
+- [Studio Tool Catalog API](https://zoth.nullai.tech/api/tools.json): Metadata, repository URLs, ports, CLI invocations, and categories for all 80 Studio tools.
 - [Structured FAQ Knowledge Base API](https://zoth.nullai.tech/api/faq.json): Direct Q&A pairs for RAG and answer engines.
 - [Schema.org @graph Entity Network API](https://zoth.nullai.tech/api/graph.json): Interconnected JSON-LD knowledge graph.
 - [A2A Agent Card](https://zoth.nullai.tech/.well-known/agent.json): Agent-to-Agent capability declaration.
