@@ -6,7 +6,7 @@ Resume point for the strict one-tool-at-a-time 5-layer sweep of
 
 | | |
 |---|---|
-| last updated | 2026-11-15 11:28 |
+| last updated | 2026-11-15 11:34 |
 | tools registered | 80 |
 | layers automated so far | A, B, C, D, E (evidence below) |
 | layers still manual | Layer A interactive-quality review (the only layer left) |
@@ -67,7 +67,7 @@ has touched that tool since the timestamp above.
 | 33 | `agent-egress-sentinel` | Security & Network | 2.5.0 | `:8095` | browser | `A` | `B` | `C` | `D` | `E` |
 | 34 | `agent-mock-twin` | Simulation & Testing | 2.5.0 | `:8097` | browser | `A` | `B` | ^C^ | `D` | `E` |
 | 35 | `agent-prompt-firewall` | Security & Network | 2.5.0 | `:8098` | browser | `A` | `B` | `C` | `D` | `E` |
-| 36 | `wcag-contrast-guard` | Accessibility & UI | 2.5.0 | `:8150` | browser | `A` | . | `C` | `D` | `E` |
+| 36 | `wcag-contrast-guard` | Accessibility & UI | 2.5.0 | `:8150` | browser | `A` | `B` | `C` | `D` | `E` |
 | 37 | `agent-flight-recorder` | Forensics & Telemetry | 2.5.0 | `:8104` | browser | `A` | `B` | `C` | `D` | `E` |
 | 38 | `agent-capsule-jail` | Security & Enclave | 2.5.0 | `:8105` | browser | `A` | `B` | `C` | `D` | `E` |
 | 39 | `agent-policy-auditor` | Security & Enclave | 2.5.0 | `:8106` | browser | `A` | `B` | `C` | `D` | `E` |
@@ -115,7 +115,7 @@ has touched that tool since the timestamp above.
 
 ## Confirmed gaps carried into Phase 2
 
-- `[B]` no resolvable God-Mode component: `wcag-contrast-guard`
+- `[B]` no resolvable God-Mode component: none
 - `[D]` no README: none
 - `[A]` no web entry: `zothnet`
 - `[A]` SEO/AEO incomplete (0): none
@@ -124,7 +124,7 @@ has touched that tool since the timestamp above.
 ## Next work
 
 Layers B-E are swept fleet-wide and committed; **Layer A (interactive quality) is the only
-layer without automated evidence.** Resume there, most-broken first: `wcag-contrast-guard` — the one tool
+layer without automated evidence.** Resume there, most-broken first: `pixel-cast` — the one tool
 failing two layers (no God-Mode component) — then the 3 tools whose live API panes stay
 empty (`likeness-desk, zoth-bounty, zothnet`), whose own daemons must be up before their panes can render.
 

@@ -776,8 +776,10 @@ def render_report(rows, s):
                  "component names are not all suffixed `Tool`, so `wcag-contrast-guard` — which does "
                  "resolve to `WcagContrastGuard.jsx` — was mis-flagged; the matcher now accepts any "
                  "PascalCase component)"),
-        "then the single Layer `[D]` gap (`%s`), then the %d SEO/AEO entries, then the %d Layer E rows" % (
-            s["d_missing"][0] if s["d_missing"] else "n/a", len(s["seo_gap"]), len(s["e_issue"])),
+        "then %s, then the %d Layer E rows" % (
+            ("the single Layer `[D]` gap (`%s`)" % s["d_missing"][0]) if s["d_missing"]
+            else "no Layer `[D]` gap (**80/80** READMEs carry the four required sections)",
+            len(s["e_issue"])),
         "whose API panes stay empty (`%s`)." % (", ".join(s["e_issue"]) or "none"),
         "",
         "## 8. Phase 3 — build, suites, secret audit",
