@@ -4,7 +4,7 @@ Master architectural ledger for the `NullAITech` sovereign tool ecosystem.
 
 | | |
 |---|---|
-| Generated | 2026-11-15 12:28 |
+| Generated | 2026-11-15 12:38 |
 | Generator | `zoth-studio-v2/docs/tools/atlas_gen.py` (re-runnable, no hardcoded counts) |
 | Catalog of record | `zoth-studio-v2/src/data/toolsData.js` |
 | CLI surfaces compared | `zoth-os/config/includes.chroot/usr/local/bin`, `/usr/local/bin`, `~/.local/bin` |
@@ -41,13 +41,13 @@ stay trustworthy:
 | Tools shipping a native CLI instead of a wrapper | **27** (**27** byte-identical, **0** differ) |
 | Short-name alias filenames (`zela`, `zoth-bolt`, ...) | **55** (16 drifting, none catalog-critical) |
 | Unrelated binaries in those dirs (out of scope) | **375** |
-| Layer A — standalone web entry present | **80/81** |
+| Layer A — standalone web entry present | **81/81** |
 | Layer A — runtime-served web surface (explained exception) | **1** (`zothnet` -> `pkg/web/dashboard.html`) |
 | Layer A — SEO/AEO complete in entry document | **81/81** |
 | Layer A — bare `<img>` without `alt` | **0** |
 | Layer B — God-Mode component resolves in `lazy()` registry | **81/81** |
 | Layer D — `README.md` present | **81/81** |
-| Layer E — headless 3-viewport verified | **78/81** (static 76 · live 11 · 243 shots) |
+| Layer E — headless 3-viewport verified | **81/81** (static 76 · live 14 · 246 shots) |
 | Top-level repositories under `NullAITech/` | **141** |
 | Repositories absent from the catalog | **60** |
 
@@ -56,10 +56,10 @@ canonical wrappers are present on all three surfaces with identical bytes, **81/
 entries are byte-identical on all three, the only **0** exceptions are native-CLI tools with a
 diffed and explained delta (§4.2), and there are **zero** port collisions across all 81 catalog
 entries. The real remaining gaps are small and enumerable: **0** catalog entries lack a Layer B
-component, **0** lack a README, **1** lack a standalone web entry, and **0** have incomplete
+component, **0** lack a README, **0** lack a standalone web entry, and **0** have incomplete
 SEO/AEO metadata. Layer E is closed: every catalog entry was captured headlessly at
-390x844 / 820x1180 / 1440x900 over loopback HTTP (**78/81** clean, `overflowPx==0`,
-`imgsMissingAlt==0`, no page errors), and the **11** tools whose declared port was already
+390x844 / 820x1180 / 1440x900 over loopback HTTP (**81/81** clean, `overflowPx==0`,
+`imgsMissingAlt==0`, no page errors), and the **14** tools whose declared port was already
 listening were additionally captured against their live deployment — see §2 and the atlas §8.
 
 ## 2. Tri-surface status legend
@@ -138,7 +138,7 @@ headlessly (see §8), so a `[E]` cell means a clean capture row exists for that 
 | 56 | `datamosh-glitch-studio` | Media & 3D | 2.5.0 | `:8081` | browser | `A` | `B` | `C` | `D` | `E` |
 | 57 | `nexus-3d-scene-studio` | Media & 3D | 2.5.0 | `:8082` | browser | `A` | `B` | `C` | `D` | `E` |
 | 58 | `ufo-sacred-geometry` | Media & 3D | 2.5.0 | `:8083` | browser | `A` | `B` | `C` | `D` | `E` |
-| 59 | `likeness-desk` | Voice & Real-Time | 2.5.0 | `:9395` | local_cli | `A` | `B` | `C` | `D` | . |
+| 59 | `likeness-desk` | Voice & Real-Time | 2.5.0 | `:9395` | local_cli | `A` | `B` | `C` | `D` | `E` |
 | 60 | `osint-scout-skill` | Security & Recon | 2.5.0 | `:8085` | browser | `A` | `B` | `C` | `D` | `E` |
 | 61 | `zoth-osint` | Security & Recon | 4.0.0 | `:8149` | hybrid | `A` | `B` | `C` | `D` | `E` |
 | 62 | `zoth-bolt` | Autonomous Web | 3.5.0 | `:5173` | local_cli | `A` | `B` | `C` | `D` | `E` |
@@ -153,11 +153,11 @@ headlessly (see §8), so a `[E]` cell means a clean capture row exists for that 
 | 71 | `zoth-relay` | Swarm & Core | 0.5.0 | `:8765` | local_cli | `A` | `B` | `C` | `D` | `E` |
 | 72 | `zela-glasses-guide` | Swarm & Core | 0.5.0 | `:8144` | browser | `A` | `B` | `C` | `D` | `E` |
 | 73 | `zoth-bot` | Swarm & Core | 1.0.0 | `:8146` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 74 | `zoth-bounty` | Security & Enclave | 1.0.0 | `:9494` | local_cli | `A` | `B` | `C` | `D` | . |
+| 74 | `zoth-bounty` | Security & Enclave | 1.0.0 | `:9494` | local_cli | `A` | `B` | `C` | `D` | `E` |
 | 75 | `zoth-scene-foundry` | Media & 3D | 1.0.0 | `:8823` | browser | `A` | `B` | `C` | `D` | `E` |
 | 76 | `zoth-math-pillar` | Security & Enclave | 2.0.0 | `:9995` | local_cli | `A` | `B` | `C` | `D` | `E` |
 | 77 | `zothos-lite` | Hardware & OS | 1.2.0 | `:8145` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 78 | `zothnet` | Swarm & Core | 1.2.0 | `:9900` | local_cli | . | `B` | `C` | `D` | . |
+| 78 | `zothnet` | Swarm & Core | 1.2.0 | `:9900` | local_cli | `A` | `B` | `C` | `D` | `E` |
 | 79 | `creatorplaybooks` | Education & Growth | 1.0.0 | `:5185` | browser | `A` | `B` | `C` | `D` | `E` |
 | 80 | `zoth-obsidian-tracker` | Swarm & Core | 1.2.0 | `:8151` | local_cli | `A` | `B` | `C` | `D` | `E` |
 | 81 | `zoth-x-connector` | Swarm & Core | 1.0.0 | `:8152` | local_cli | `A` | `B` | `C` | `D` | `E` |
@@ -399,11 +399,11 @@ Recommended triage (owner's call):
 |---|---|---|
 | `[B]` | no God-Mode component resolving in the router |  |
 | `[D]` | no `README.md` |  |
-| `[A]` | no standalone web entry document | `zothnet` |
+| `[A]` | no standalone web entry document |  |
 | `[A]` | runtime-served web surface (explained, not a defect) | `zothnet` -> `pkg/web/dashboard.html` — Go-served dashboard (`zothnet serve`, port 9900); the static hub is deployed out-of-tree at zothnet.nullai.tech and zothnet-mesh.netlify.app |
 | `[A]` | incomplete SEO/AEO metadata in entry document | 0 entries:  |
 | `[A]` | canonical Stripe support link absent from entry document | 1 entries |
-| `[E]` | no clean headless capture row | `likeness-desk`, `zoth-bounty`, `zothnet` |
+| `[E]` | no clean headless capture row | none |
 
 Layer A's interactive checks (dead buttons, canned outputs, blur locks) are **open work**,
 not automated fails: the automated scan produced three false-positive classes (see §0).
@@ -416,14 +416,14 @@ Chromium closed after every run:
 | sweep | target | rows | clean |
 |---|---|---|---|
 | static | each repo served on a loopback port | 80 | **76** |
-| live | each tool's own declared `localPort`, only if it was already listening | 11 | **11** |
-| per-tool | final verdict used by the `[E]` column in §3 (67 static · 11 live) | 81 | **78** |
+| live | each tool's own declared `localPort`, only if it was already listening | 15 | **14** |
+| per-tool | final verdict used by the `[E]` column in §3 (67 static · 14 live) | 81 | **81** |
 
 Clean predicate (all must hold): `status == ok`, three viewport rows, `overflowPx == 0`,
 `imgsMissingAlt == 0`, `other_error_count == 0`, no blank viewport, and >= 200 characters of
 rendered text in every viewport — a blank shell that merely loads is not a pass.
 
-The gaps are the 3 tools whose page loads but whose backing JSON API is down — `likeness-desk`, `zoth-bounty`, `zothnet`: the shell
+The gaps are the 0 tools whose page loads but whose backing JSON API is down — none: the shell
 returns HTTP 200 and renders, but its panes stay empty, which the predicate catches.
 
 | tool | verdict | sweep | screenshots | detail |
@@ -486,7 +486,7 @@ returns HTTP 200 and renders, but its panes stay empty, which the predicate catc
 | `datamosh-glitch-studio` | **clean** | static | 3 | clean |
 | `nexus-3d-scene-studio` | **clean** | static | 3 | clean |
 | `ufo-sacred-geometry` | **clean** | static | 3 | clean |
-| `likeness-desk` | review | static | 3 | apiErrors=1 |
+| `likeness-desk` | **clean** | live | 3 | clean |
 | `osint-scout-skill` | **clean** | static | 3 | clean |
 | `zoth-osint` | **clean** | static | 3 | clean |
 | `zoth-bolt` | **clean** | live | 3 | clean |
@@ -501,11 +501,11 @@ returns HTTP 200 and renders, but its panes stay empty, which the predicate catc
 | `zoth-relay` | **clean** | live | 3 | clean |
 | `zela-glasses-guide` | **clean** | static | 3 | clean |
 | `zoth-bot` | **clean** | static | 3 | clean |
-| `zoth-bounty` | review | static | 3 | apiErrors=1 |
+| `zoth-bounty` | **clean** | live | 3 | clean |
 | `zoth-scene-foundry` | **clean** | static | 3 | clean |
 | `zoth-math-pillar` | **clean** | static | 3 | clean |
 | `zothos-lite` | **clean** | static | 3 | clean |
-| `zothnet` | review | static | 3 | apiErrors=1 |
+| `zothnet` | **clean** | live | 6 | clean |
 | `creatorplaybooks` | **clean** | static | 3 | clean |
 | `zoth-obsidian-tracker` | **clean** | static | 3 | clean |
 | `zoth-x-connector` | **clean** | live | 3 | clean |
@@ -517,7 +517,7 @@ showed its port open, so no daemon was started, stopped, or replaced for this me
 
 | when | change |
 |---|---|
-| 2026-11-15 12:28 | atlas generator created; Layers A/B/C/D measured across 81 entries |
+| 2026-11-15 12:38 | atlas generator created; Layers A/B/C/D measured across 81 entries |
 | 2026-11-15 | `zela-glasses-guide` tri-surface repair (see §4.4) |
 | 2026-11-15 | Layer E wired into the generator: headless 3-viewport verdicts read from `layerE_results_http.jsonl` / `layerE_results_live.jsonl` (§8) |
 

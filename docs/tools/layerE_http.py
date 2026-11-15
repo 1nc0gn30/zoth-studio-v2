@@ -27,6 +27,10 @@ import parity_probe as pp  # noqa: E402
 
 THERMAL_LIMIT = 70.0
 
+# Tools whose own server serves the entry document at a path other than its
+# static webroot filename (live mode only). Everything else uses "/<file>".
+LIVE_ROUTE = {"zothnet": "/"}
+
 
 def pkg_temp():
     try:
@@ -196,7 +200,11 @@ def main():
                            entry_kind=entry_kind)
                 if a.mode == "live":
                     port = int(t.get("localPort") or 0)
-                    rec.update(port=port)
+                    # A tool's own server may route the entry document at a path of
+                    # its choosing (e.g. a Go mux serving the dashboard at "/"), so
+                    # the static webroot filename is not always the live URL.
+                    route = LIVE_ROUTE.get(tid, route)
+                    rec.update(port=port, route=route)
                     if port not in live:
                         rec.update(status="not-listening")
                     else:

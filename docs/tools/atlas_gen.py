@@ -105,7 +105,22 @@ def component_refs():
     return lazy, mapping, comps
 
 
+try:  # same directory; keep the atlas runnable even if the probe moves
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from parity_probe import find_entry as _probe_find_entry
+except Exception:  # pragma: no cover
+    _probe_find_entry = None
+
+
 def web_entry(repo):
+    # Delegate to the probe's discovery so the atlas and the Layer A probe can
+    # never disagree on what a tool's entry document is (non-conventional
+    # layouts like zothnet's pkg/web/dashboard.html are found there).
+    d = os.path.join(ROOT, repo)
+    if _probe_find_entry:
+        p = _probe_find_entry(d)
+        if p:
+            return os.path.relpath(p, d).replace(os.sep, "/")
     for cand in ("index.html", "public/index.html", "dist/index.html"):
         p = os.path.join(ROOT, repo, cand)
         if os.path.isfile(p):

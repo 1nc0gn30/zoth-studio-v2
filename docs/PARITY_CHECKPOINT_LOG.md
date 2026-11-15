@@ -6,7 +6,7 @@ Resume point for the strict one-tool-at-a-time 5-layer sweep of
 
 | | |
 |---|---|
-| last updated | 2026-11-15 12:28 |
+| last updated | 2026-11-15 12:38 |
 | tools registered | 81 |
 | layers automated so far | A, B, C, D, E (evidence below) |
 | layers still manual | Layer A interactive-quality review (the only layer left) |
@@ -23,7 +23,7 @@ For each tool, in catalog order: inspect the repo workspace and web entry (Layer
 **Status of this pass:** Layers A-D were measured programmatically for all 81 tools in one
 deterministic sweep, so the matrix below is complete for those four layers. Layer E was
 then measured the same way — every tool captured headlessly at three viewports (static, plus
-live for the 11 whose declared port was already listening), and **78/81** came back clean.
+live for the 14 whose declared port was already listening), and **81/81** came back clean.
 Treat `.` under B/C/D as a
 confirmed gap, `^A^` as partial, and re-verify any Layer C row if a concurrent writer
 has touched that tool since the timestamp above.
@@ -90,7 +90,7 @@ has touched that tool since the timestamp above.
 | 56 | `datamosh-glitch-studio` | Media & 3D | 2.5.0 | `:8081` | browser | `A` | `B` | `C` | `D` | `E` |
 | 57 | `nexus-3d-scene-studio` | Media & 3D | 2.5.0 | `:8082` | browser | `A` | `B` | `C` | `D` | `E` |
 | 58 | `ufo-sacred-geometry` | Media & 3D | 2.5.0 | `:8083` | browser | `A` | `B` | `C` | `D` | `E` |
-| 59 | `likeness-desk` | Voice & Real-Time | 2.5.0 | `:9395` | local_cli | `A` | `B` | `C` | `D` | . |
+| 59 | `likeness-desk` | Voice & Real-Time | 2.5.0 | `:9395` | local_cli | `A` | `B` | `C` | `D` | `E` |
 | 60 | `osint-scout-skill` | Security & Recon | 2.5.0 | `:8085` | browser | `A` | `B` | `C` | `D` | `E` |
 | 61 | `zoth-osint` | Security & Recon | 4.0.0 | `:8149` | hybrid | `A` | `B` | `C` | `D` | `E` |
 | 62 | `zoth-bolt` | Autonomous Web | 3.5.0 | `:5173` | local_cli | `A` | `B` | `C` | `D` | `E` |
@@ -105,11 +105,11 @@ has touched that tool since the timestamp above.
 | 71 | `zoth-relay` | Swarm & Core | 0.5.0 | `:8765` | local_cli | `A` | `B` | `C` | `D` | `E` |
 | 72 | `zela-glasses-guide` | Swarm & Core | 0.5.0 | `:8144` | browser | `A` | `B` | `C` | `D` | `E` |
 | 73 | `zoth-bot` | Swarm & Core | 1.0.0 | `:8146` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 74 | `zoth-bounty` | Security & Enclave | 1.0.0 | `:9494` | local_cli | `A` | `B` | `C` | `D` | . |
+| 74 | `zoth-bounty` | Security & Enclave | 1.0.0 | `:9494` | local_cli | `A` | `B` | `C` | `D` | `E` |
 | 75 | `zoth-scene-foundry` | Media & 3D | 1.0.0 | `:8823` | browser | `A` | `B` | `C` | `D` | `E` |
 | 76 | `zoth-math-pillar` | Security & Enclave | 2.0.0 | `:9995` | local_cli | `A` | `B` | `C` | `D` | `E` |
 | 77 | `zothos-lite` | Hardware & OS | 1.2.0 | `:8145` | local_cli | `A` | `B` | `C` | `D` | `E` |
-| 78 | `zothnet` | Swarm & Core | 1.2.0 | `:9900` | local_cli | . | `B` | `C` | `D` | . |
+| 78 | `zothnet` | Swarm & Core | 1.2.0 | `:9900` | local_cli | `A` | `B` | `C` | `D` | `E` |
 | 79 | `creatorplaybooks` | Education & Growth | 1.0.0 | `:5185` | browser | `A` | `B` | `C` | `D` | `E` |
 | 80 | `zoth-obsidian-tracker` | Swarm & Core | 1.2.0 | `:8151` | local_cli | `A` | `B` | `C` | `D` | `E` |
 | 81 | `zoth-x-connector` | Swarm & Core | 1.0.0 | `:8152` | local_cli | `A` | `B` | `C` | `D` | `E` |
@@ -118,7 +118,7 @@ has touched that tool since the timestamp above.
 
 - `[B]` no resolvable God-Mode component: none
 - `[D]` no README: none
-- `[A]` no web entry: `zothnet`
+- `[A]` no web entry: none
 - `[A]` SEO/AEO incomplete (0): none
 - `[C]` alias filenames drifting between surfaces (16): `bounty-hub`, `reality-forge`, `scene-foundry`, `sigma-forge`, `theme-forge`, `yara-forge`, `zela`, `zela-guide`, `zoth-capsule-jail`, `zoth-egress-sentinel`, `zoth-flight-recorder`, `zoth-foundry`, `zoth-policy-auditor`, `zoth-prompt-firewall`, `zoth-theme-forge`, `zoth-yara-forge`
 
@@ -126,6 +126,6 @@ has touched that tool since the timestamp above.
 
 Layers B-E are swept fleet-wide and committed; **Layer A (interactive quality) is the only
 layer without automated evidence.** Resume there, most-broken first: `pixel-cast` — the one tool
-failing two layers (no God-Mode component) — then the 3 tools whose live API panes stay
-empty (`likeness-desk, zoth-bounty, zothnet`), whose own daemons must be up before their panes can render.
+failing two layers (no God-Mode component) — then the 0 tools whose live API panes stay
+empty (`none`), whose own daemons must be up before their panes can render.
 
