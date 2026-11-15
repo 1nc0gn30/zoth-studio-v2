@@ -26,6 +26,16 @@ SURF = [("chroot",   os.path.join(ZOS, "config/includes.chroot/usr/local/bin")),
         ("user_local", os.path.expanduser("~/.local/bin"))]
 STRIPE = "buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
 SOLANA = "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
+
+# Catalog ids whose standalone browser surface is served by a runtime (Go template/dashboard)
+# rather than a static index.html, so web_entry()'s static probe cannot see it. Each value is
+# (path relative to the repo, why) and was confirmed by reading the file on disk. These are
+# explained exceptions, NOT defects, and are deliberately excluded from no entry in the counts.
+A_RUNTIME_ENTRY = {
+    "zothnet": ("pkg/web/dashboard.html",
+                "Go-served dashboard (`zothnet serve`, port 9900); the static hub is deployed "
+                "out-of-tree at zothnet.nullai.tech and zothnet-mesh.netlify.app"),
+}
 NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M %Z").strip()
 
 
@@ -231,6 +241,7 @@ def build_rows():
                  b_ok=sum(r["B_ok"] for r in rows), b_missing=[r["id"] for r in rows if not r["B_ok"]],
                  d_ok=sum(r["D_readme"] for r in rows), d_missing=[r["id"] for r in rows if not r["D_readme"]],
                  a_ok=sum(bool(r["A_entry"]) for r in rows), a_missing=[r["id"] for r in rows if not r["A_entry"]],
+                 a_runtime=[i for i in A_RUNTIME_ENTRY if i in {r["id"] for r in rows}],
                  seo_gap=[r["id"] for r in rows if r["A_entry"] and (r["ld"] == 0 or r["og"] < 3)],
                  alt_bad=[r["id"] for r in rows if r["noalt"] > 0],
                  stripe_missing=[r["id"] for r in rows if r["A_entry"] and not r["stripe"]],
@@ -318,6 +329,9 @@ def render_atlas(rows, s):
             s["alias_count"], len(s["alias_drift"])),
         "| Unrelated binaries in those dirs (out of scope) | **%d** |" % s["bin_others"],
         "| Layer A — standalone web entry present | **%d/%d** |" % (s["a_ok"], s["catalog"]),
+        "| Layer A — runtime-served web surface (explained exception) | **%d** (%s) |" % (
+            len(s["a_runtime"]),
+            ", ".join("`%s` -> `%s`" % (i, A_RUNTIME_ENTRY[i][0]) for i in s["a_runtime"]) or "none"),
         "| Layer A — SEO/AEO complete in entry document | **%d/%d** |" % (s["catalog"] - len(s["seo_gap"]), s["catalog"]),
         "| Layer A — bare `<img>` without `alt` | **%d** |" % len(s["alt_bad"]),
         "| Layer B — God-Mode component resolves in `lazy()` registry | **%d/%d** |" % (s["b_ok"], s["catalog"]),
@@ -504,6 +518,9 @@ def render_atlas(rows, s):
         "| `[B]` | no God-Mode component resolving in the router | %s |" % ", ".join("`%s`" % x for x in s["b_missing"]),
         "| `[D]` | no `README.md` | %s |" % ", ".join("`%s`" % x for x in s["d_missing"]),
         "| `[A]` | no standalone web entry document | %s |" % ", ".join("`%s`" % x for x in s["a_missing"]),
+        "| `[A]` | runtime-served web surface (explained, not a defect) | %s |" % (
+            ", ".join("`%s` -> `%s` — %s" % (i, A_RUNTIME_ENTRY[i][0], A_RUNTIME_ENTRY[i][1])
+                      for i in s["a_runtime"]) or "none"),
         "| `[A]` | incomplete SEO/AEO metadata in entry document | %d entries: %s |" % (
             len(s["seo_gap"]), ", ".join("`%s`" % x for x in s["seo_gap"])),
         "| `[A]` | canonical Stripe support link absent from entry document | %d entries |" % len(s["stripe_missing"]),

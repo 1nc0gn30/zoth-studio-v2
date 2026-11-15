@@ -6,7 +6,7 @@ Resume point for the strict one-tool-at-a-time 5-layer sweep of
 
 | | |
 |---|---|
-| last updated | 2026-11-15 11:44 |
+| last updated | 2026-11-15 11:54 |
 | tools registered | 80 |
 | layers automated so far | A, B, C, D, E (evidence below) |
 | layers still manual | Layer A interactive-quality review (the only layer left) |

@@ -39,3 +39,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+# local state databases — never stage (sovereign parity invariants)
+docs/agent_mock.db
+*.sqlite
+*.sqlite3

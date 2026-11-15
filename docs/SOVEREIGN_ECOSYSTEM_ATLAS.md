@@ -4,7 +4,7 @@ Master architectural ledger for the `NullAITech` sovereign tool ecosystem.
 
 | | |
 |---|---|
-| Generated | 2026-11-15 11:44 |
+| Generated | 2026-11-15 11:54 |
 | Generator | `zoth-studio-v2/docs/tools/atlas_gen.py` (re-runnable, no hardcoded counts) |
 | Catalog of record | `zoth-studio-v2/src/data/toolsData.js` |
 | CLI surfaces compared | `zoth-os/config/includes.chroot/usr/local/bin`, `/usr/local/bin`, `~/.local/bin` |
@@ -42,6 +42,7 @@ stay trustworthy:
 | Short-name alias filenames (`zela`, `zoth-bolt`, ...) | **55** (18 drifting, none catalog-critical) |
 | Unrelated binaries in those dirs (out of scope) | **375** |
 | Layer A — standalone web entry present | **79/80** |
+| Layer A — runtime-served web surface (explained exception) | **1** (`zothnet` -> `pkg/web/dashboard.html`) |
 | Layer A — SEO/AEO complete in entry document | **80/80** |
 | Layer A — bare `<img>` without `alt` | **1** |
 | Layer B — God-Mode component resolves in `lazy()` registry | **80/80** |
@@ -400,6 +401,7 @@ Recommended triage (owner's call):
 | `[B]` | no God-Mode component resolving in the router |  |
 | `[D]` | no `README.md` |  |
 | `[A]` | no standalone web entry document | `zothnet` |
+| `[A]` | runtime-served web surface (explained, not a defect) | `zothnet` -> `pkg/web/dashboard.html` — Go-served dashboard (`zothnet serve`, port 9900); the static hub is deployed out-of-tree at zothnet.nullai.tech and zothnet-mesh.netlify.app |
 | `[A]` | incomplete SEO/AEO metadata in entry document | 0 entries:  |
 | `[A]` | canonical Stripe support link absent from entry document | 1 entries |
 | `[E]` | no clean headless capture row | `likeness-desk`, `zoth-bounty`, `zothnet` |
@@ -515,7 +517,7 @@ showed its port open, so no daemon was started, stopped, or replaced for this me
 
 | when | change |
 |---|---|
-| 2026-11-15 11:44 | atlas generator created; Layers A/B/C/D measured across 80 entries |
+| 2026-11-15 11:54 | atlas generator created; Layers A/B/C/D measured across 80 entries |
 | 2026-11-15 | `zela-glasses-guide` tri-surface repair (see §4.4) |
 | 2026-11-15 | Layer E wired into the generator: headless 3-viewport verdicts read from `layerE_results_http.jsonl` / `layerE_results_live.jsonl` (§8) |
 
