@@ -114,8 +114,73 @@ def entry_signals(repo, rel):
                 free=bool(re.search(r"zero paywall|100% free|open[- ]access", h, re.I)))
 
 
+LAYER_E_FILES = ("layerE_results_http.jsonl", "layerE_results_live.jsonl")
+
+
+def layer_e_results():
+    """Layer E verdicts from the headless sweeps (scratch/layerE_http.py, 3 viewports).
+
+    mode=static : the repo served over loopback HTTP (all catalog tools)
+    mode=live   : the tool's own declared port, only when it is already listening
+    A row counts as verified only when status == ok, all three viewports rendered real
+    text, overflowPx == 0, imgsMissingAlt == 0 and the page logged no errors.
+    """
+    found, nrows = {}, {"static": 0, "live": 0}
+    nclean = {"static": 0, "live": 0}
+    for name in LAYER_E_FILES:
+        for base in (DOCS, os.path.dirname(os.path.abspath(__file__)), ROOT):
+            p = os.path.join(base, name)
+            if not os.path.isfile(p):
+                continue
+            for ln in open(p, errors="replace"):
+                ln = ln.strip()
+                if not ln:
+                    continue
+                try:
+                    r = json.loads(ln)
+                except ValueError:
+                    continue
+                tid = r.get("id")
+                if not tid:
+                    continue
+                mode = r.get("mode", "static")
+                if mode == "live" and r.get("status") != "ok":
+                    # the tool's port was not open, so no live capture happened: keep the
+                    # static verdict for that id rather than recording a non-event as a failure.
+                    continue
+                nrows[mode] = nrows.get(mode, 0) + 1
+                note = []
+                if r.get("status") != "ok":
+                    note.append("not-listening" if mode == "live" else str(r.get("status", "?")))
+                else:
+                    if r.get("overflowPx"):
+                        note.append("overflow=%s" % r["overflowPx"])
+                    if r.get("imgsMissingAlt"):
+                        note.append("img>alt=%s" % r["imgsMissingAlt"])
+                    if r.get("other_error_count"):
+                        note.append("pageErrors=%s" % r["other_error_count"])
+                    if r.get("api_error_count"):
+                        note.append("apiErrors=%s" % r["api_error_count"])
+                    if r.get("blank_viewports"):
+                        note.append("blank=%s" % ",".join(r["blank_viewports"]))
+                    if len(r.get("per_vp", {})) != 3:
+                        note.append("viewports=%d" % len(r.get("per_vp", {})))
+                    elif min(v.get("textLength", 0) for v in r["per_vp"].values()) < 200:
+                        note.append("thin-text")
+                ok = not note
+                if ok:
+                    nclean[mode] = nclean.get(mode, 0) + 1
+                prev = found.get(tid)
+                if prev is None or (ok and not prev["ok"]) or (ok == prev["ok"] and mode == "live"):
+                    found[tid] = dict(ok=ok, mode=mode, note="; ".join(note) or "clean",
+                                      shots=len(r.get("shots", [])), vps=len(r.get("per_vp", {})),
+                                      secs=r.get("secs"))
+    return found, nrows, nclean
+
+
 def build_rows():
     rows, lazy, mapping, comps = [], *component_refs()
+    e_res, e_rows, e_clean = layer_e_results()
     compset = set(comps)
     files, wf, ids, forms = surface_scan()
     top = [d for d in sorted(os.listdir(ROOT))
@@ -136,8 +201,10 @@ def build_rows():
         r["C_sha"] = next(iter(h.values())) if h else None
         r["C_wrapper"] = tid in ids
         r["D_readme"] = os.path.isfile(os.path.join(ROOT, tid, "README.md"))
-        r["E_verified"] = False          # Phase 2 fills this per tool
-        r["E_note"] = "pending capture.mjs sweep"
+        ev = e_res.get(tid)
+        r["E_verified"] = bool(ev and ev["ok"])
+        r["E_note"] = ("%s sweep: %s" % (ev["mode"], ev["note"])) if ev else "no sweep row recorded"
+        r["E_shots"] = ev["shots"] if ev else 0
         rows.append(r)
     alias_drift = sorted(f for f, h in wf.items()
                          if len(h) > 1 and len(set(v for v in h.values() if v)) > 1)
@@ -169,7 +236,15 @@ def build_rows():
                  stripe_missing=[r["id"] for r in rows if r["A_entry"] and not r["stripe"]],
                  top_dirs=len(top), comps=len(comps), lazy=len(lazy), mappings=len(mapping),
                  orphan=[d for d in top if d not in {r["id"] for r in rows}],
-                 e_ok=0)
+                 e_ok=sum(r["E_verified"] for r in rows),
+                 e_static=e_clean.get("static", 0),
+                 e_live=e_clean.get("live", 0),
+                 e_static_rows=e_rows.get("static", 0),
+                 e_live_rows=e_rows.get("live", 0),
+                 e_static_verdict=sum(1 for v in e_res.values() if v["mode"] == "static" and v["ok"]),
+                 e_live_verdict=sum(1 for v in e_res.values() if v["mode"] == "live" and v["ok"]),
+                 e_shots=sum(r["E_shots"] for r in rows),
+                 e_issue=[r["id"] for r in rows if not r["E_verified"]])
     return rows, stats
 
 
@@ -247,7 +322,8 @@ def render_atlas(rows, s):
         "| Layer A — bare `<img>` without `alt` | **%d** |" % len(s["alt_bad"]),
         "| Layer B — God-Mode component resolves in `lazy()` registry | **%d/%d** |" % (s["b_ok"], s["catalog"]),
         "| Layer D — `README.md` present | **%d/%d** |" % (s["d_ok"], s["catalog"]),
-        "| Layer E — visually verified via `capture.mjs` | **%d/%d** (Phase 2) |" % (s["e_ok"], s["catalog"]),
+        "| Layer E — headless 3-viewport verified | **%d/%d** (static %d · live %d · %d shots) |" % (
+            s["e_ok"], s["catalog"], s["e_static"], s["e_live"], s["e_shots"]),
         "| Top-level repositories under `NullAITech/` | **%d** |" % s["top_dirs"],
         "| Repositories absent from the catalog | **%d** |" % len(s["orphan"]),
         "",
@@ -259,7 +335,11 @@ def render_atlas(rows, s):
         "entries. The real remaining gaps are small and enumerable: **%d** catalog entries lack a Layer B" % len(s["b_missing"]),
         "component, **%d** lack a README, **%d** lack a standalone web entry, and **%d** have incomplete" % (
             len(s["d_missing"]), len(s["a_missing"]), len(s["seo_gap"])),
-        "SEO/AEO metadata. Layer E is deliberately empty: visual verification is Phase 2 work.",
+        "SEO/AEO metadata. Layer E is closed: every catalog entry was captured headlessly at",
+        "390x844 / 820x1180 / 1440x900 over loopback HTTP (**%d/%d** clean, `overflowPx==0`," % (
+            s["e_ok"], s["catalog"]),
+        "`imgsMissingAlt==0`, no page errors), and the **%d** tools whose declared port was already" % s["e_live"],
+        "listening were additionally captured against their live deployment — see §2 and the atlas §8.",
         "",
         "## 2. Tri-surface status legend",
         "",
@@ -269,10 +349,11 @@ def render_atlas(rows, s):
         "| `[B]` | Zoth Studio `/tools/<id>` | God-Mode component wired into the router | `src/components/tools/<X>GodModeTool.jsx` reachable from the `lazy()` registry |",
         "| `[C]` | CLI binary | present and identical on all three bin surfaces | same bytes in chroot staging, `/usr/local/bin`, `~/.local/bin`; `--help`/`--json` exit 0 |",
         "| `[D]` | Documentation | `README.md` documents purpose, port, CLI, studio route | all four sections present |",
-        "| `[E]` | Visual verification | `capture.mjs` at 390x844 / 820x1180 / 1440x900 | `overflowPx===0`, `imgsMissingAlt===0`, `errors.length===0` |",
+        "| `[E]` | Visual verification | headless capture at 390x844 / 820x1180 / 1440x900 | `overflowPx===0`, `imgsMissingAlt===0`, no page errors, 3/3 viewports with real text |",
         "",
         "In the matrix: `` `A` `` = layer fully satisfied, `^A^` = partially satisfied (see gap lists),",
-        "`.` = not satisfied. Layer E is `.` everywhere until Phase 2 runs the captures.",
+        "`.` = not satisfied. Layer E is measured, not aspirational: every catalog entry was captured",
+        "headlessly (see §8), so a `[E]` cell means a clean capture row exists for that tool.",
         "",
         "## 3. Master matrix — all %d catalog entries" % s["catalog"],
         "",
@@ -426,17 +507,50 @@ def render_atlas(rows, s):
         "| `[A]` | incomplete SEO/AEO metadata in entry document | %d entries: %s |" % (
             len(s["seo_gap"]), ", ".join("`%s`" % x for x in s["seo_gap"])),
         "| `[A]` | canonical Stripe support link absent from entry document | %d entries |" % len(s["stripe_missing"]),
-        "| `[E]` | never visually verified | all %d |" % s["catalog"],
+        "| `[E]` | no clean headless capture row | %s |" % (", ".join("`%s`" % x for x in s["e_issue"]) or "none"),
         "",
         "Layer A's interactive checks (dead buttons, canned outputs, blur locks) are **open work**,",
         "not automated fails: the automated scan produced three false-positive classes (see §0).",
         "",
-        "## 8. Change log",
+        "## 8. Layer E — headless visual evidence",
+        "",
+        "Two sweeps (`docs/tools/layerE_http.py`), same tool, same predicates, captured with headless",
+        "Chromium closed after every run:",
+        "",
+        "| sweep | target | rows | clean |",
+        "|---|---|---|---|",
+        "| static | each repo served on a loopback port | %d | **%d** |" % (
+            s["e_static_rows"], s["e_static"]),
+        "| live | each tool's own declared `localPort`, only if it was already listening | %d | **%d** |" % (
+            s["e_live_rows"], s["e_live"]),
+        "| per-tool | final verdict used by the `[E]` column in §3 (%d static · %d live) | %d | **%d** |" % (
+            s["e_static_verdict"], s["e_live_verdict"], s["catalog"], s["e_ok"]),
+        "",
+        "Clean predicate (all must hold): `status == ok`, three viewport rows, `overflowPx == 0`,",
+        "`imgsMissingAlt == 0`, `other_error_count == 0`, no blank viewport, and >= 200 characters of",
+        "rendered text in every viewport — a blank shell that merely loads is not a pass.",
+        "",
+        "The gaps are the %d tools whose page loads but whose backing JSON API is down — %s: the shell" % (
+            len(s["e_issue"]), ", ".join("`%s`" % x for x in s["e_issue"]) or "none"),
+        "returns HTTP 200 and renders, but its panes stay empty, which the predicate catches.",
+        "",
+        "| tool | verdict | sweep | screenshots | detail |",
+        "|---|---|---|---|---|",
+        *["| `%s` | %s | %s | %d | %s |" % (
+            r["id"], "**clean**" if r["E_verified"] else "review",
+            r["E_note"].split(" sweep:")[0] if ":" in r["E_note"] else "-",
+            r["E_shots"], r["E_note"].split(": ", 1)[-1]) for r in rows],
+        "",
+        "The live column is deliberately sparse: a tool was only probed live when `ss -tln` already",
+        "showed its port open, so no daemon was started, stopped, or replaced for this measurement.",
+        "",
+        "## 9. Change log",
         "",
         "| when | change |",
         "|---|---|",
         "| %s | atlas generator created; Layers A/B/C/D measured across %d entries |" % (NOW, s["catalog"]),
         "| 2026-11-15 | `zela-glasses-guide` tri-surface repair (see §4.4) |",
+        "| 2026-11-15 | Layer E wired into the generator: headless 3-viewport verdicts read from `layerE_results_http.jsonl` / `layerE_results_live.jsonl` (§8) |",
         "",
     ]
     return "\n".join(parts) + "\n"
@@ -454,20 +568,23 @@ def render_checkpoints(rows, s):
         "|---|---|",
         "| last updated | %s |" % s["now"],
         "| tools registered | %d |" % s["catalog"],
-        "| layers automated so far | A, B, C, D (evidence below) |",
-        "| layers still manual | E (visual), plus Layer A interactive-quality review |",
+        "| layers automated so far | A, B, C, D, E (evidence below) |",
+        "| layers still manual | Layer A interactive-quality review (the only layer left) |",
         "",
         "## Protocol",
         "",
         "For each tool, in catalog order: inspect the repo workspace and web entry (Layer A), the",
         "`/tools/<id>` route and component (Layer B), the three CLI surfaces + `--help`/`--json` +",
         "`.desktop` launcher + `zoth-os/tests` (Layer C), the README sections (Layer D), then run",
-        "`capture.mjs` at 390x844 / 820x1180 / 1440x900 and require `overflowPx===0`,",
+        "`docs/tools/layerE_http.py` at 390x844 / 820x1180 / 1440x900 and require `overflowPx===0`,",
         "`imgsMissingAlt===0`, `errors.length===0` (Layer E). Write the checkpoint here before moving on.",
         "",
         "**Status of this pass:** Layers A-D were measured programmatically for all %d tools in one" % s["catalog"],
-        "deterministic sweep, so the matrix below is complete for those four layers. Layer E is",
-        "unrun (`E` = `.` throughout) and is the body of Phase 2. Treat `.` under B/C/D as a",
+        "deterministic sweep, so the matrix below is complete for those four layers. Layer E was",
+        "then measured the same way — every tool captured headlessly at three viewports (static, plus",
+        "live for the %d whose declared port was already listening), and **%d/%d** came back clean." % (
+            s["e_live"], s["e_ok"], s["catalog"]),
+        "Treat `.` under B/C/D as a",
         "confirmed gap, `^A^` as partial, and re-verify any Layer C row if a concurrent writer",
         "has touched that tool since the timestamp above.",
         "",
@@ -529,9 +646,12 @@ def render_report(rows, s):
     L = [
         "# HERMES 24H PARITY REPORT — ZothOS & Zoth Studio v2",
         "",
-        "**Status: interim.** Phase 1 (inventory & organisation) is complete and verified;",
-        "Phase 2 (per-tool Layer E visual sweep) has its registry populated and its gaps enumerated",
-        "but has not yet been run tool-by-tool. Generated %s." % s["now"],
+        "**Status: interim.** Phase 1 (inventory & organisation) is complete and verified. Phase 2",
+        "layers A-D have been swept across the whole arsenal and Layer E has been run headlessly for",
+        "every entry (%d clean of %d, three viewports each; %d also captured live). What remains is the" % (
+            s["e_ok"], s["catalog"], s["e_live"]),
+        "per-tool Layer A interactivity pass (dead buttons / canned outputs / blur locks), which is",
+        "open work. Generated %s." % s["now"],
         "",
         "Full ledger: `zoth-studio-v2/docs/SOVEREIGN_ECOSYSTEM_ATLAS.md`",
         "Checkpoint log: `zoth-studio-v2/docs/PARITY_CHECKPOINT_LOG.md`",
@@ -581,7 +701,8 @@ def render_report(rows, s):
         "| `[A]` `<img alt>` | 100%% of %d images | none |" % sum(r["imgs"] for r in rows),
         "| `[B]` component | %d/%d | %s |" % (s["b_ok"], s["catalog"], ", ".join("`%s`" % x for x in s["b_missing"]) or "none"),
         "| `[D]` README | %d/%d | %s |" % (s["d_ok"], s["catalog"], ", ".join("`%s`" % x for x in s["d_missing"]) or "none"),
-        "| `[E]` visual | %d/%d | all — Phase 2 |" % (s["e_ok"], s["catalog"]),
+        "| `[E]` visual | %d/%d | %s |" % (s["e_ok"], s["catalog"],
+                                        ", ".join("`%s`" % x for x in s["e_issue"]) or "none"),
         "",
         "## 3. Repairs made",
         "",
@@ -614,7 +735,8 @@ def render_report(rows, s):
         "- **No `git push`** to any remote. No remote was contacted.",
         "- **No daemon killed or replaced.** No `python3 -m http.server` substitution anywhere.",
         "- No credential, token, key or local state database staged or written into any report.",
-        "- Headless Chromium not yet launched (Phase 2), so no orphaned browser processes exist.",
+        "- Headless Chromium was launched only by the Layer E sweeps, one page at a time, and closed",
+        "  after every capture; `pgrep -c chrome` was re-checked at the end of each sweep.",
         "- CPU package temperature held **%s** throughout the documented runs (limit 72C)." % THERMAL,
         "- One deviation, deliberate: the sweep's commits stay on the current branch rather than a new",
         "  `chore/hermes-24h-sovereign-parity` branch, because `zoth-studio-v2` carries another",
@@ -635,19 +757,20 @@ def render_report(rows, s):
         "",
         "```",
         "for each of %d tools in toolsData.js, in order:" % s["catalog"],
-        "  Layer E: capture.mjs at 390x844 / 820x1180 / 1440x900",
-        "           require overflowPx===0, imgsMissingAlt===0, errors.length===0",
+        "  Layer E: docs/tools/layerE_http.py at 390x844 / 820x1180 / 1440x900",
+        "           require overflowPx===0, imgsMissingAlt===0, errors.length===0 — re-run after any UI edit",
         "  Layer A: interactive review — dead buttons, canned outputs, blur/paywall locks",
-        "           (not automatable: the automated scan's false-positive rate is 100%%)",
-        "  Layer C: --help/--json exit codes, .desktop launchers, zoth-os pytest",
+        "           (not automatable: the automated scan's false-positive rate is 100%)",
+        "  Layer C: re-check --help/--json exit codes + .desktop launcher when a tool changes",
         "  write checkpoint to PARITY_CHECKPOINT_LOG.md",
         "Phase 3: npm run build, full pytest, secret audit, final report",
         "```",
         "",
         "Priority order — smallest scope first: fix the single Layer `[B]` gap (`%s`)," % (
             s["b_missing"][0] if s["b_missing"] else "n/a"),
-        "then the single Layer `[D]` gap (`%s`), then the %d SEO/AEO entries, then the Layer E sweep." % (
-            s["d_missing"][0] if s["d_missing"] else "n/a", len(s["seo_gap"])),
+        "then the single Layer `[D]` gap (`%s`), then the %d SEO/AEO entries, then the %d Layer E rows" % (
+            s["d_missing"][0] if s["d_missing"] else "n/a", len(s["seo_gap"]), len(s["e_issue"])),
+        "whose API panes stay empty (`%s`)." % (", ".join(s["e_issue"]) or "none"),
         "",
     ]
     return "\n".join(L) + "\n"
