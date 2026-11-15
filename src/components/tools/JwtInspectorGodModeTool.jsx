@@ -22,6 +22,8 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import TimerIcon from '@mui/icons-material/Timer';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
+import { STRIPE_COFFEE_URL, SOLANA_TIP_ADDRESS } from '../sovereign/SovereignPrimitives.jsx';
+import { useCopy } from '../sovereign/hooks.js';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -110,15 +112,9 @@ export function JwtInspectorGodModeTool() {
   const [rawSignature, setRawSignature] = useState('');
   const [sigStatus, setSigStatus] = useState({ state: 'valid', text: '✔ Cryptographic Signature Ready (HS256 Web Crypto Enclave)' });
   const [securityFindings, setSecurityFindings] = useState([]);
-  const [copiedKey, setCopiedKey] = useState(null);
+  const { copied: copiedKey, copy } = useCopy(2000);
 
-  const handleCopy = (text, key) => {
-    if (navigator?.clipboard?.writeText) {
-      navigator.clipboard?.writeText(text)?.catch?.(() => {});
-      setCopiedKey(key);
-      setTimeout(() => setCopiedKey(null), 2000);
-    }
-  };
+  const handleCopy = (text, key) => copy(text, key);
 
   // ---------------------------------------------------------------------------
   // Parse JWT & Execute Security Linter
@@ -335,7 +331,7 @@ export function JwtInspectorGodModeTool() {
             <SecurityIcon sx={{ fontSize: 28 }} />
           </Box>
           <Box>
-            <Stack direction="row" spacing={1} alignItems="center">
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center' }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 800, color: gold }}>
                 JWT Inspector Guard: Sovereign Cryptographic Auditor
               </Typography>
@@ -350,21 +346,22 @@ export function JwtInspectorGodModeTool() {
                   fontFamily: mono
                 }}
               />
-            </Stack>
+            </Box>
             <Typography variant="caption" color="text.secondary">
               Real Web Crypto HMAC-SHA256 signature verification, CVE-2015-9235 exploit tester, and secret leak auditor. Zero cloud egress.
             </Typography>
           </Box>
         </Stack>
 
-        <Stack direction="row" spacing={1.5}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5 }}>
           <Button
             variant="contained"
             size="small"
-            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
+            href={STRIPE_COFFEE_URL}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             sx={{
+              minHeight: 44,
               bgcolor: gold,
               color: '#000',
               fontWeight: 800,
@@ -377,12 +374,12 @@ export function JwtInspectorGodModeTool() {
           <Button
             variant="outlined"
             size="small"
-            href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
-            sx={{ borderColor: emerald, color: emerald, fontWeight: 700, fontFamily: mono }}
+            href={`solana:${SOLANA_TIP_ADDRESS}`}
+            sx={{ minHeight: 44, borderColor: emerald, color: emerald, fontWeight: 700, fontFamily: mono }}
           >
             ◎ Solana Tip
           </Button>
-        </Stack>
+        </Box>
       </Paper>
 
       {/* Token Input & Presets */}

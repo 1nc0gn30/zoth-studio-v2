@@ -41,6 +41,7 @@ const GalleryPage = lazy(() => import('./pages/GalleryPage'));
 const VoiceStationPage = lazy(() => import('./pages/VoiceStationPage'));
 const AgoraPage = lazy(() => import('./pages/AgoraPage'));
 const VaelorPage = lazy(() => import('./pages/VaelorPage'));
+const UiKitPage = lazy(() => import('./pages/UiKitPage'));
 
 function RouteFallback() {
   const theme = useTheme();
@@ -205,6 +206,7 @@ function AppShell({ mode, onToggleTheme }) {
                   <Route path="/gallery" element={<GalleryPage />} />
                   <Route path="/agora" element={<AgoraPage />} />
                   <Route path="/vaelor" element={<VaelorPage />} />
+                  <Route path="/ui-kit" element={<UiKitPage />} />
                   <Route path="*" element={<NotFoundPage />} />
                 </Routes>
                 <ShortcutsHelp />

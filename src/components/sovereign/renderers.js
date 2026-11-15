@@ -398,12 +398,156 @@ export function particleOrbit(ctx, env) {
 }
 
 /* ------------------------------------------------------------------ *
+ * 5. HEX LATTICE — Isometric hexagonal mesh with radial activation
+ *    waves and travelling edge signal packets.
+ * ------------------------------------------------------------------ */
+export function hexLattice(ctx, env) {
+  const { w, h, t, accent, seed } = env;
+  if (w <= 4 || h <= 4) return null;
+
+  ctx.save();
+  ctx.fillStyle = SOV.obsidian;
+  ctx.fillRect(0, 0, w, h);
+
+  const radius = 18;
+  const dx = radius * 1.73205;
+  const dy = radius * 1.5;
+  const phase = (seed % 360) * (Math.PI / 180);
+  const cx = w / 2;
+  const cy = h / 2;
+  const cols = Math.ceil(w / dx) + 2;
+  const rows = Math.ceil(h / dy) + 2;
+
+  let hexCount = 0;
+  let activeCount = 0;
+
+  ctx.lineWidth = 1;
+  for (let row = -1; row < rows; row += 1) {
+    const offsetX = row & 1 ? dx / 2 : 0;
+    const py = row * dy;
+    for (let col = -1; col < cols; col += 1) {
+      const px = col * dx + offsetX;
+      hexCount += 1;
+      const dist = Math.hypot(px - cx, py - cy);
+      const pulse = 0.5 + 0.5 * Math.sin(dist * 0.045 - t * 1.8 + phase);
+      const colHex = pulse > 0.72 ? accent : pulse > 0.42 ? SOV.cyber : SOV.emerald;
+      const alpha = 0.08 + pulse * 0.42;
+      if (pulse > 0.65) activeCount += 1;
+
+      ctx.strokeStyle = rgba(colHex, alpha);
+      ctx.beginPath();
+      for (let s = 0; s < 6; s += 1) {
+        const ang = (Math.PI / 3) * s + Math.PI / 6;
+        const vx = px + Math.cos(ang) * (radius - 1.2);
+        const vy = py + Math.sin(ang) * (radius - 1.2);
+        if (s === 0) ctx.moveTo(vx, vy);
+        else ctx.lineTo(vx, vy);
+      }
+      ctx.closePath();
+      ctx.stroke();
+
+      if (pulse > 0.78) {
+        ctx.fillStyle = rgba(colHex, pulse * 0.75);
+        ctx.beginPath();
+        ctx.arc(px, py, 1.8, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  }
+
+  for (let p = 0; p < 6; p += 1) {
+    const lane = ((p * 2 + 1) / 12) * h;
+    const px = ((t * (48 + p * 11) + p * 97 + (seed % 80)) % (w + 40)) - 20;
+    const py = lane + Math.sin(t * 1.4 + p) * 10;
+    const pktCol = p % 2 === 0 ? accent : SOV.emerald;
+    ctx.fillStyle = pktCol;
+    ctx.beginPath();
+    ctx.arc(px, py, 2.4, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.restore();
+  return { cells: hexCount, lit: activeCount };
+}
+
+/* ------------------------------------------------------------------ *
+ * 6. WAVEFORM HARMONICS — Layered Fourier interference ribbons with
+ *    calibrated horizontal centerline and peak sampling dots.
+ * ------------------------------------------------------------------ */
+export function waveformHarmonics(ctx, env) {
+  const { w, h, t, accent, seed } = env;
+  if (w <= 4 || h <= 4) return null;
+
+  ctx.save();
+  ctx.fillStyle = SOV.obsidian;
+  ctx.fillRect(0, 0, w, h);
+
+  const midY = h / 2;
+  const phase = (seed % 360) * (Math.PI / 180);
+
+  ctx.strokeStyle = rgba(SOV.slate, 0.16);
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(0, midY);
+  ctx.lineTo(w, midY);
+  for (let gx = 0; gx < w; gx += 48) {
+    ctx.moveTo(gx, midY - 5);
+    ctx.lineTo(gx, midY + 5);
+  }
+  ctx.stroke();
+
+  const colors = [SOV.gold, SOV.cyber, SOV.emerald, accent];
+  for (let hIdx = 1; hIdx <= 4; hIdx += 1) {
+    const amp = (h * 0.34) / Math.pow(hIdx, 0.65);
+    const freq = 0.011 * hIdx;
+    const speed = (1.1 + hIdx * 0.45) * (hIdx % 2 === 0 ? -1 : 1);
+    const ribbonCol = colors[hIdx - 1];
+
+    ctx.strokeStyle = rgba(ribbonCol, hIdx === 1 ? 0.85 : 0.48);
+    ctx.lineWidth = hIdx === 1 ? 1.8 : 1.15;
+    ctx.beginPath();
+    for (let x = 0; x <= w; x += 4) {
+      const envMod = Math.sin((x / Math.max(1, w)) * Math.PI);
+      const y =
+        midY +
+        (Math.sin(x * freq + t * speed + phase) * 0.72 +
+          Math.cos(x * freq * 1.7 - t * speed * 0.6) * 0.28) *
+          amp *
+          (0.35 + 0.65 * envMod);
+      if (x === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+
+  const litCount = Math.floor(w / 32);
+  ctx.fillStyle = accent;
+  for (let sx = 16; sx < w; sx += 32) {
+    const envMod = Math.sin((sx / Math.max(1, w)) * Math.PI);
+    const y =
+      midY +
+      (Math.sin(sx * 0.011 + t * 1.55 + phase) * 0.72 +
+        Math.cos(sx * 0.0187 - t * 0.93) * 0.28) *
+        (h * 0.34) *
+        (0.35 + 0.65 * envMod);
+    ctx.beginPath();
+    ctx.arc(sx, y, 2.2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.restore();
+  return { cells: Math.floor(w / 4) * 4, lit: litCount };
+}
+
+/* ------------------------------------------------------------------ *
  * Variant → renderer dispatch. */
 export const RENDERERS = Object.freeze({
   'braille-orbit': brailleOrbit,
   'bayer-field': bayerField,
   'scanline-grid': scanlineGrid,
   'particle-orbit': particleOrbit,
+  'hex-lattice': hexLattice,
+  'waveform-harmonics': waveformHarmonics,
 });
 
 export function getRenderer(variant) {
@@ -412,7 +556,8 @@ export function getRenderer(variant) {
 
 /** Accent resolution shared by every variant (kept here so scenes agree). */
 export function sceneAccent(seed, variant) {
-  if (variant === 'braille-orbit') return SOV.gold;
+  if (variant === 'braille-orbit' || variant === 'waveform-harmonics') return SOV.gold;
   if (variant === 'bayer-field') return SOV.emerald;
+  if (variant === 'hex-lattice') return SOV.cyber;
   return pickAccent(seed);
 }

@@ -71,12 +71,14 @@ export function rng(seed) {
   };
 }
 
-/** The four sovereign canvas primitives. */
+/** The six sovereign canvas primitives. */
 export const VARIANTS = Object.freeze([
   'braille-orbit',
   'bayer-field',
   'scanline-grid',
   'particle-orbit',
+  'hex-lattice',
+  'waveform-harmonics',
 ]);
 
 export const VARIANT_META = Object.freeze({
@@ -84,6 +86,8 @@ export const VARIANT_META = Object.freeze({
   'bayer-field': { label: 'BAYER FIELD', glyph: '8×8', prov: 'ORDERED DITHER' },
   'scanline-grid': { label: 'SCANLINE GRID', glyph: 'CRT', prov: 'PHOSPHOR RETRACE' },
   'particle-orbit': { label: 'PARTICLE ORBIT', glyph: 'N-BODY', prov: 'FLUID ELLIPTIC' },
+  'hex-lattice': { label: 'HEX LATTICE', glyph: 'HEX', prov: 'ISOMETRIC MESH' },
+  'waveform-harmonics': { label: 'WAVE HARMONICS', glyph: 'FOURIER', prov: 'PHASE INTERFERENCE' },
 });
 
 export const ACCENTS = Object.freeze([SOV.gold, SOV.emerald, SOV.cyber]);

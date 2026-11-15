@@ -48,6 +48,7 @@ const ROUTES = [
   { match: /^\/consensus\/?$/, clip: 'consensus', label: 'Byzantine Consensus', kicker: 'Multi-Model Verification · :8106', accent: 'cyan', brailleShape: 'quorum' },
   { match: /^\/webgen\/docs\/?$/, clip: 'webgen', label: 'Zoth Bolt · Docs', kicker: 'Full-Stack Engine Reference', accent: 'sky', brailleShape: 'grid' },
   { match: /^\/webgen\/?$/, clip: 'webgen', label: 'Zoth Bolt', kicker: 'Full-Stack Code Synthesizer · :5173', accent: 'sky', brailleShape: 'grid' },
+  { match: /^\/ui-kit\/?$/, clip: 'webgen', label: 'Zoth UI Kit', kicker: 'Reusable Sovereign Components & Scaffolder', accent: 'gold', brailleShape: 'grid' },
   { match: /^\/hexstrike\/docs\/?$/, clip: 'hexstrike', label: 'HexStrike · Docs', kicker: 'Security Architecture Manual', accent: 'crimson', brailleShape: 'hex' },
   { match: /^\/hexstrike\/?$/, clip: 'hexstrike', label: 'HexStrike AI', kicker: 'Local Security Audit Suite · :8138', accent: 'crimson', brailleShape: 'hex' },
   { match: /^\/zoth-os\/docs\/?$/, clip: 'zoth-os', label: 'ZothOS · Docs', kicker: 'Live ISO Architecture · v3.4.0', accent: 'gold', brailleShape: 'shield' },

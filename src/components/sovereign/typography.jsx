@@ -95,9 +95,11 @@ export function SovereignEyebrow({ children, accent = SOV.gold, right, sx }) {
     <Box
       sx={{
         display: 'flex',
+        flexWrap: 'wrap',
         alignItems: 'center',
         justifyContent: 'space-between',
-        gap: 1.5,
+        rowGap: 0.35,
+        columnGap: 1.5,
         mb: { xs: 0.75, md: 1 },
         minWidth: 0,
         ...sx,

@@ -153,6 +153,12 @@ export const siteConfig = {
       description: 'Vaelor (◈ VLR) Sovereign Layer-1 Account-Lattice: Zero gas fees, <15ms 5-validator BFT quorum finality, 8.5% APY savings vault, 2.5% instant merchant cashback, and Proof-of-Useful-Work (PoUW) AI cognitive mining.',
       keywords: 'Vaelor, VLR, account-lattice, feeless crypto, DAG, proof of useful work, PoUW, BFT consensus, sovereign finance',
       type: 'article',
+    },
+    '/ui-kit': {
+      title: 'Zoth UI Kit // Reusable Sovereign Components & Project Scaffolder',
+      description: 'Unified Obsidian Dark and Editorial Ivory Light component kit (@zoth/ui + zoth-ui-kit) and zoth-scaffold CLI generator for Zoth Studio and standalone apps.',
+      keywords: 'Zoth UI Kit, SovereignWorkstationShell, zoth-scaffold, reusable UI components, dark light dual theme',
+      type: 'article',
     }
   }
 };

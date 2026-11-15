@@ -48,6 +48,47 @@ export const toolsDocumentation = {
       'Battery, charging state, voltage, and thermal temperature telemetry monitor'
     ]
   },
+  'aether-observatory': {
+    whyUse: 'Turns the whole machine into a single observable object: every listening port, daemon, thermal zone, memory engram and git repo rendered as an interactive 3D constellation, sonified in real time, and recorded into a replayable flight log. Replaces ad-hoc `ss`/`top`/`sensors` tab-hopping and cloud APM agents with a sovereign localhost command deck.',
+    problemSolved: 'Local telemetry is normally scattered across shell tools with no history and no cross-signal correlation. Aether Observatory correlates ports, processes, thermals and git activity into one time-indexed model so you can diff any two moments and see exactly which port spawned or died, and how load and temperature moved with it.',
+    architecture: 'Node.js daemon on port 8160 (loopback only) serving a static 60fps WebGL/Canvas deck plus a read-only JSON API (/health, /api/telemetry/live, /api/constellation/nodes, /api/git/pulse, /api/timeline/snapshots, /api/timeline/diff, /api/snapshot/now, /api/stream SSE). Sampled frames are compacted into SQLite for the time-machine scrubber; audio is synthesised procedurally in-browser with WebAudio (no external assets).',
+    aiAgentProtocol: {
+      mcpTool: 'aether_observatory_telemetry',
+      description: 'Read live machine telemetry, the port/process constellation, and historical frame diffs as structured JSON.',
+      cliExample: 'aether-observatory status --json && aether-observatory snapshot',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          action: { type: 'string', enum: ['status', 'constellation', 'snapshot', 'diff'], description: 'Telemetry action to execute' },
+          t1: { type: 'number', description: 'Epoch-ms lower bound for a diff' },
+          t2: { type: 'number', description: 'Epoch-ms upper bound for a diff' }
+        },
+        required: ['action']
+      },
+      outputSchema: {
+        hostname: 'string',
+        cpu: { model: 'string', coreCount: 'number', load1: 'number', busyPct: 'number' },
+        thermals: { packageC: 'number', zones: 'array' },
+        listeners: 'number',
+        nodes: 'array',
+        diff: { spawnedPorts: 'array', terminatedPorts: 'array', loadDelta: 'number' }
+      }
+    },
+    quickstart: [
+      'aether-observatory status --json',
+      'aether-observatory constellation',
+      'aether-observatory serve --port 8160',
+      '# Open the command deck at http://127.0.0.1:8160'
+    ],
+    features: [
+      '60fps 3D orbital constellation of every live port, daemon, thermal zone and git repo (drag to orbit, scroll to zoom, click a node for live process telemetry)',
+      'Unicode U+2800 braille sub-pixel and ordered Bayer 8x8 dither HUD layered over the starfield',
+      'Procedural WebAudio telemetry synthesizer: CPU load, network I/O and daemon heartbeats become an ambient generative soundscape with a master LUFS limiter and FFT spectrogram',
+      'Time-machine flight recorder: continuous SQLite snapshots with a spring-physics scrubber and port/thermal/memory diff between any two timestamps',
+      'Dual-theme alchemist engine toggling Obsidian Gold cyber-glass and Editorial Ivory light mode, opened by an ASCII-braille aperture seam intro',
+      'Deterministic Markdown and JSON diagnostic export for hand-off reporting'
+    ]
+  },
   'adytum-alchemist-ai-workflow': {
     whyUse: 'Eliminates aimless prompt iteration by enforcing the 22-key Hermetic Planning Rite. Guarantees deterministic intention formulation, compulsory incubation phases, and local LLM gatekeeper validation before a single line of production code is written.',
     problemSolved: 'Replaces unstructured, error-prone conversational prompt churn with an immutable 22-step architectural contract that validates requirements, edge cases, and test criteria upfront.',

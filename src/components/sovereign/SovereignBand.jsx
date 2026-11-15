@@ -91,119 +91,121 @@ export default function SovereignBand({
         ...sx,
       }}
     >
-      <Box
-        component="canvas"
-        ref={canvasRef}
-        role="img"
-        aria-label={label || `Zoth sovereign ${meta_.label.toLowerCase()} visualisation`}
-        sx={{
-          display: 'block',
-          width: '100%',
-          height,
-          // A canvas that fails to build must never leave a white box.
-          bgcolor: SOV.obsidian,
-          imageRendering: resolvedVariant === 'bayer-field' ? 'pixelated' : 'auto',
-        }}
-      />
-
-      {/* CSS CRT layer (composits over every variant) */}
-      <Box
-        aria-hidden
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          pointerEvents: 'none',
-          backgroundImage: SCANLINE_CSS,
-          opacity: 0.55,
-          mixBlendMode: 'multiply',
-        }}
-      />
-      <Box
-        aria-hidden
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          pointerEvents: 'none',
-          background: `radial-gradient(120% 130% at 50% 50%, rgba(5,6,11,0) 42%, ${rgba(SOV.obsidian, 0.72)} 100%)`,
-        }}
-      />
-
-      <CornerTick pos="tl" color={rgba(accent, 0.8)} />
-      <CornerTick pos="tr" color={rgba(accent, 0.8)} />
-      <CornerTick pos="bl" color={rgba(accent, 0.8)} />
-      <CornerTick pos="br" color={rgba(accent, 0.8)} />
-
-      {/* Chrome — eyebrow + live readout */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: 9,
-          left: 13,
-          right: 13,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 1.5,
-          pointerEvents: 'none',
-          zIndex: 2,
-        }}
-      >
+      <Box sx={{ position: 'relative' }}>
         <Box
+          component="canvas"
+          ref={canvasRef}
+          role="img"
+          aria-label={label || `Zoth sovereign ${meta_.label.toLowerCase()} visualisation`}
           sx={{
-            fontFamily: MONO,
-            fontSize: 10,
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            color: accent,
-            textShadow: `0 0 12px ${rgba(accent, 0.45)}`,
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
+            display: 'block',
+            width: '100%',
+            height,
+            // A canvas that fails to build must never leave a white box.
+            bgcolor: SOV.obsidian,
+            imageRendering: resolvedVariant === 'bayer-field' ? 'pixelated' : 'auto',
           }}
-        >
-          {eyebrow}
-        </Box>
-        <Box
-          sx={{
-            fontFamily: MONO,
-            fontSize: 10,
-            letterSpacing: '0.12em',
-            color: rgba(SOV.slate, 0.92),
-            whiteSpace: 'nowrap',
-            flexShrink: 0,
-          }}
-        >
-          {readout}
-        </Box>
-      </Box>
+        />
 
-      {(caption || children) && (
+        {/* CSS CRT layer (composits over every variant) */}
+        <Box
+          aria-hidden
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
+            backgroundImage: SCANLINE_CSS,
+            opacity: 0.55,
+            mixBlendMode: 'multiply',
+          }}
+        />
+        <Box
+          aria-hidden
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            pointerEvents: 'none',
+            background: `radial-gradient(120% 130% at 50% 50%, rgba(5,6,11,0) 42%, ${rgba(SOV.obsidian, 0.72)} 100%)`,
+          }}
+        />
+
+        <CornerTick pos="tl" color={rgba(accent, 0.8)} />
+        <CornerTick pos="tr" color={rgba(accent, 0.8)} />
+        <CornerTick pos="bl" color={rgba(accent, 0.8)} />
+        <CornerTick pos="br" color={rgba(accent, 0.8)} />
+
+        {/* Chrome — eyebrow + live readout */}
         <Box
           sx={{
             position: 'absolute',
-            bottom: 9,
+            top: 9,
             left: 13,
             right: 13,
-            zIndex: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 1.5,
             pointerEvents: 'none',
+            zIndex: 2,
           }}
         >
-          {caption && (
-            <Box
-              sx={{
-                fontFamily: DISPLAY,
-                fontSize: { xs: 13, md: 15 },
-                fontWeight: 600,
-                letterSpacing: '-0.01em',
-                color: rgba(SOV.ink, 0.94),
-              }}
-            >
-              {caption}
-            </Box>
-          )}
-          {children}
+          <Box
+            sx={{
+              fontFamily: MONO,
+              fontSize: 10,
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              color: accent,
+              textShadow: `0 0 12px ${rgba(accent, 0.45)}`,
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            {eyebrow}
+          </Box>
+          <Box
+            sx={{
+              fontFamily: MONO,
+              fontSize: 10,
+              letterSpacing: '0.12em',
+              color: rgba(SOV.slate, 0.92),
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
+            }}
+          >
+            {readout}
+          </Box>
         </Box>
-      )}
+
+        {(caption || children) && (
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: 9,
+              left: 13,
+              right: 13,
+              zIndex: 2,
+              pointerEvents: 'none',
+            }}
+          >
+            {caption && (
+              <Box
+                sx={{
+                  fontFamily: DISPLAY,
+                  fontSize: { xs: 13, md: 15 },
+                  fontWeight: 600,
+                  letterSpacing: '-0.01em',
+                  color: rgba(SOV.ink, 0.94),
+                }}
+              >
+                {caption}
+              </Box>
+            )}
+            {children}
+          </Box>
+        )}
+      </Box>
 
       {/* Meta strip sits under the canvas, never over the art. */}
       {metaItems.length > 0 && (

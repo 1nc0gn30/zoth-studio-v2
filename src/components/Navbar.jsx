@@ -50,6 +50,7 @@ const primaryNav = [
 const moreSystemItems = [
   { label: 'Tool Repositories (80)', path: '/tools', desc: 'Searchable repository catalog & CLI specs' },
   { label: 'Architecture Dossiers (43)', path: '/workstations', desc: 'Studio modules, cadres & daemon topology' },
+  { label: 'Zoth UI Kit', path: '/ui-kit', desc: 'Reusable React & Vanilla UI components + scaffolder' },
   { label: 'Adytum Chamber', path: '/adytum', desc: '22-key deterministic planning specification' },
   { label: 'Byzantine Consensus', path: '/consensus', desc: 'Multi-model verification & quorum protocol' },
   { label: 'Command Bridges', path: '/bridges', desc: 'Local IPC & authenticated relay topology' },
@@ -60,6 +61,7 @@ const moreSystemItems = [
 
 const docsMenuItems = [
   { label: 'System Documentation', path: '/docs', desc: 'Zero-egress invariants & installation guides' },
+  { label: 'Zoth UI Kit', path: '/ui-kit', desc: 'Reusable React & Vanilla UI components + scaffolder' },
   { label: 'Six Math Pillars', path: '/docs/math', desc: 'STDP, Byzantine quorum & Shannon entropy proofs' },
   { label: 'AX Protocol', path: '/ax', desc: 'Machine-readable agent discovery standard' },
   { label: 'Architecture FAQs', path: '/faqs', desc: 'Local execution, licensing & hardware requirements' },
