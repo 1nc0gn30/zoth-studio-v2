@@ -189,7 +189,7 @@ function AppShell({ mode, onToggleTheme }) {
                   <Route path="/memory" element={<MemoryShowcasePage />} />
                   <Route path="/memory/docs" element={<MemoryPage />} />
                   <Route path="/consensus" element={<ConsensusPage />} />
-                  <Route path="/webgen" element={<WebGenShowcasePage />} />
+                  <Route path="/webgen" element={<Navigate to="/tools/zoth-bolt" replace />} />
                   <Route path="/webgen/docs" element={<WebGenPage />} />
                   <Route path="/hexstrike" element={<HexStrikeShowcasePage />} />
                   <Route path="/hexstrike/docs" element={<HexStrikePage />} />

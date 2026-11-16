@@ -122,6 +122,48 @@ has touched that tool since the timestamp above.
 - `[A]` SEO/AEO incomplete (0): none
 - `[C]` alias filenames drifting between surfaces (16): `bounty-hub`, `reality-forge`, `scene-foundry`, `sigma-forge`, `theme-forge`, `yara-forge`, `zela`, `zela-guide`, `zoth-capsule-jail`, `zoth-egress-sentinel`, `zoth-flight-recorder`, `zoth-foundry`, `zoth-policy-auditor`, `zoth-prompt-firewall`, `zoth-theme-forge`, `zoth-yara-forge`
 
+## Checkpoint — Layer C green (81/81), Layer E re-measured on live surfaces
+
+- **Layer C (CLI tri-surface contract): 81/81 ok, problems=0.** Two genuine failures fixed:
+  `mcp-lens` and `agent-gods-eye` emitted valid offline JSON but exited 1. Both now treat
+  `--json` as a machine-readable contract (exit 0 with the offline state in the payload);
+  human `--status` still exits 1 when offline. The other 13 tools flagged by the earlier probe
+  were **stale** — their `/usr/local/bin` launchers were rewritten (repo-shim injection) after
+  that probe ran, and they already passed on re-test.
+- **Layer E (browser tri-viewport): re-measured in `--mode live` against real daemons.** All 10
+  tools whose services are actually listening came back clean — including `sovereign-agent-bridge`
+  on `:8102` (`api_err=0`), whose static-mode `ERRapi` was a harness artifact (a plain static
+  server answers `/api/*` with the HTML doc, so the page's JSON parse fails).
+- **`layerE_results_http.jsonl` deduped**: 86 accumulated rows → 81 latest-per-id, matching the
+  81-tool catalog.
+- **Graceful degradation added** (verified: `status=ok`, `api_err=0`, console errors 0):
+  `zoth-bounty` (`loadState()`) and `likeness-desk` (`refresh()`) did an unguarded page-load
+  `fetch()` + `res.json()`; when the daemon is down that raised an uncaught promise rejection and
+  left a dead UI. Both now catch, log, and surface an offline message, and recover on the poll.
+- **Prerender routes: 151 for 81 tools** (was 150 for 80) — derived from `allRoutes`, not a
+  hardcoded count, so the extra route is the `aether-observatory` addition. Sitemap 151 in
+  `public/` and `dist/`; `BUILD_EXIT=0`.
+
+## Checkpoint — batch verification closed (Layer C 81/81, Layer E live 81/81)
+
+- **Layer C definitive re-run**: `checked 81 tools: ok=81 problems=0` → `layerC_cli_results2.jsonl`.
+  `mcp-lens` and `agent-gods-eye` both `help_exit=0 json_exit=0` — the two CLI patches hold.
+- **Layer E live sweep completed for the whole fleet**: `docs/layerE_results_live.jsonl` now holds
+  **81/81 ids** (11 `ok` with `api_err=0 other_err=0 blank=[]`, 70 `not-listening` — expected, those
+  daemons are on-demand). The flagship **`aether-observatory` is live on `:8160`, CLEAN**
+  (`api_error_count=0`, `other_error_count=0`, `blank_viewports=[]`, `overflowPx=0`).
+- **Resume gap found and closed**: the first live run silently skipped one id, leaving 80 rows. A
+  fresh sweep of the missing id (`--ids aether-observatory --force`) closed it; the file is now
+  verified complete against the 81 catalog ids by set difference, not by eye.
+- **Graceful-degradation guards verified harmless**: `likeness-desk` and `zoth-bounty`
+  `api_err 0 -> 0`, `other 0 -> 0`, `status ok`, `blank []` before and after the try/catch patches
+  (`node --check app.js` OK) — the guards changed no measurement, they only stop the uncaught
+  rejection when the daemon is down.
+- **`vite preview` on `:4173` smoke-tested**: `/`, `/tools/aether-observatory/`, `/tools/mcp-lens/`,
+  `/tools/zoth-bounty/` → 200; prerendered shell present (title + ld+json + og:title);
+  151 `dist/**/index.html` = 151 sitemap `<loc>`. Unknown paths return 200 (SPA fallback) — a
+  soft-404 cannot be validated on the preview, only on the production host config.
+
 ## Next work
 
 Layers B-E are swept fleet-wide and committed; **Layer A (interactive quality) is the only
