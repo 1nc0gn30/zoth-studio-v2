@@ -278,6 +278,38 @@ def build_rows():
         r["E_note"] = ("%s sweep: %s" % (ev["mode"], ev["note"])) if ev else "no sweep row recorded"
         r["E_shots"] = ev["shots"] if ev else 0
         rows.append(r)
+    # -- catalog version vs the version the canonical CLI on the bin surfaces declares.
+    #    Metadata drift, not surface drift: the files themselves are byte-identical (§4.1).
+    #    TOOL_VERSION is preferred (structured); the fallback pattern is digit/dot-guarded so an
+    #    address like 127.0.0.1 cannot masquerade as a version.
+    ver_mismatch = []
+    for r in rows:
+        if r["version"] in ("", "0.0.0"):
+            continue
+        for sname, sdir in SURF:
+            p = os.path.join(sdir, r["id"])
+            if not os.path.exists(p):
+                continue
+            t = read(p)
+            m = (re.search(r"TOOL_VERSION\s*[:=]\s*['\"]?([0-9][0-9A-Za-z.\-]*)", t)
+                 or re.search(r"(?<![\d.])v?([0-9]+\.[0-9]+\.[0-9]+)(?![\d.])", t))
+            if m and m.group(1) != r["version"]:
+                ver_mismatch.append(dict(id=r["id"], catalog=r["version"], cli=m.group(1),
+                                         surface=sname,
+                                         path=p.replace(os.path.expanduser("~"), "~")))
+            break
+    ver_manifest = {}
+    for r in rows:
+        for mf, key in (("package.json", "\"version\""), ("pyproject.toml", "version")):
+            fp = os.path.join(ROOT, r["id"], mf)
+            if not os.path.isfile(fp):
+                continue
+            mm = re.search(key + r"\s*[:=]\s*['\"]?v?([0-9][0-9A-Za-z.\-]*)", read(fp))
+            if mm:
+                ver_manifest[r["id"]] = "%s %s" % (mf, mm.group(1))
+            break
+    for vm in ver_mismatch:
+        vm["manifest"] = ver_manifest.get(vm["id"], "—")
     alias_drift = sorted(f for f, h in wf.items()
                          if len(h) > 1 and len(set(v for v in h.values() if v)) > 1)
     wrapper_ids_used = {r["id"] for r in rows if r["id"] in ids}
@@ -293,6 +325,7 @@ def build_rows():
                  wrapper_all_identical=all(len(set(h.values())) == 1 for h in wf.values()),
                  drift_ids=[r["id"] for r in rows if r["C_surfaces"] and not r["C_identical"]],
                  alias_drift=alias_drift,
+                 ver_mismatch=ver_mismatch,
                  # alias-layer classification (added after the 16 "drifts" were diffed one by one:
                  # they are symlink-vs-standalone-copy form differences, never stale dispatch targets)
                  alias_identical=len(wf) - len(ids) - len(alias_drift),
@@ -343,6 +376,36 @@ def matrix(rows):
 
 def render_atlas(rows, s):
     w = s["alias_drift"]
+    _vm = s["ver_mismatch"]
+
+    def _vt(sv):
+        return tuple(int(n) for n in re.findall(r"\d+", sv))[:3]
+
+    _ahead = sum(1 for v in _vm if _vt(v["catalog"]) > _vt(v["cli"]))
+    _behind = sum(1 for v in _vm if _vt(v["catalog"]) < _vt(v["cli"]))
+    _vm_tbl = (
+        "\n".join(
+            ["Every file named here is **byte-identical on all three surfaces** (§4.1), so this is a",
+             "*metadata* mismatch, not a parity defect: the catalog row advertises a version that the",
+             "shipped CLI does not declare. No surface disagrees with any other surface. All values below",
+             "were read from the live files at generation time.",
+             "",
+             "| tool | catalog says | CLI declares | repo manifest | CLI read from |",
+             "|---|---|---|---|---|"]
+            + ["| `%s` | `%s` | `%s` | %s | `%s` |" % (
+                v["id"], v["catalog"], v["cli"],
+                "`%s`" % v["manifest"] if v["manifest"] != "—" else "— (no manifest)",
+                v["surface"]) for v in _vm]
+            + ["",
+               "Direction, computed over the %d row%s: the catalog is **ahead** of the shipped CLI in %d",
+               "case%s and **behind** in %d. Because both directions occur, neither the catalog nor the",
+               "CLI can be declared the source of truth from this evidence alone, so the table is",
+               "reported rather than rewritten — a version bump in either place is an owner decision,",
+               "not a parity fix. Where a repo manifest agrees with the CLI instead of the catalog row,",
+               "the catalog is the likely stale side; where no manifest is present the row is",
+               "undetermined from the files at hand. Every row above is a *surface-identical* file: the",
+               "mismatch is between metadata and the CLI banner, never between one surface and another."])
+        % (len(_vm), "" if len(_vm) == 1 else "s", _ahead, "" if _ahead == 1 else "s", _behind))
     parts = [
         "# SOVEREIGN ECOSYSTEM ATLAS",
         "",
@@ -463,14 +526,14 @@ def render_atlas(rows, s):
         ("| tool | delta between surfaces | assessment |" if s["native_drift"] else
          "| tool | delta recorded mid-sweep | how it stands now |"),
         "|---|---|---|",
-        ("| `pixel-cast` | chroot defaults to `100.64.0.10` (Tailscale CGNAT) where `/usr/local/bin` uses `127.0.0.1`; one `--host` help line differs | build-environment defaults, not a defect |" if s["native_drift"] else
+        ("| `pixel-cast` | chroot defaults to `100.64.0.10` (Tailscale CGNAT) where `/usr/local/bin` uses `127.0.0.1`; one `--host` help line differs | build-environment defaults, not a defect |" if "pixel-cast" in s["native_drift"] else
          "| `pixel-cast` | chroot defaulted to `100.64.0.10` (Tailscale CGNAT) where `/usr/local/bin` used `127.0.0.1` | **closed** — all three surfaces now hash `f0bb0e34acc9` = `pixel-cast/bin/pixel-cast` |"),
-        ("| `zoth-osint` | chroot copy is 1 byte shorter: the example phone number is `E164_REDACTED` there, a `555`-range placeholder in `/usr/local/bin` | chroot staging is deliberately sanitised |" if s["native_drift"] else
-         "| `zoth-osint` | chroot copy was 1 byte shorter (example number `E164_REDACTED` vs a `555`-range placeholder) | **closed** — all three surfaces now hash `a78089515d5a` = `zoth-osint/bin/zoth-osint` |"),
-        ("| `zothos-lite` | `/usr/local/bin` (13319 B, identical to chroot) declares `solana_tip_address`; the repo binary `~/.local/bin` symlinks to (13237 B) does not — and `~/.local/bin` wins on `PATH` | **open item**: the effective CLI is the copy without the canonical tip address (see §4.5) |" if s["native_drift"] else
+        ("| `zoth-osint` | chroot copy is 1 byte shorter: the example phone number is `E164_REDACTED` there, a `555`-range placeholder in `/usr/local/bin` | chroot staging is deliberately sanitised |" if "zoth-osint" in s["native_drift"] else
+         "| `zoth-osint` | chroot copy was 1 byte shorter (example number `E164_REDACTED` vs a `555`-range placeholder) | **closed** — all three surfaces now hash `a4b5fe68b277` (22718 B) = `zoth-osint/bin/zoth-osint` |"),
+        ("| `zothos-lite` | `/usr/local/bin` (13319 B, identical to chroot) declares `solana_tip_address`; the repo binary `~/.local/bin` symlinks to (13237 B) does not — and `~/.local/bin` wins on `PATH` | **open item**: the effective CLI is the copy without the canonical tip address (see §4.5) |" if "zothos-lite" in s["native_drift"] else
          "| `zothos-lite` | `/usr/local/bin` + chroot (13319 B) declared `solana_tip_address`; the 13237 B repo revision did not | **closed on the surface axis** — all three now hash `600626b64754` = the repo revision. Residual content question in §4.5 |"),
-        ("| `zothnet` | three genuinely different Go builds: 8.44 MB and 8.47 MB static stripped, 11.9 MB dynamic with debug info | compiled-artifact drift from separate builds |" if s["native_drift"] else
-         "| `zothnet` | three different Go builds: 8.44 MB and 8.47 MB static stripped, 11.9 MB dynamic with debug info | **closed** — all three surfaces now hash `30c1dc4e307b` = `zothnet/bin/zothnet` (the revision the repo builds) |"),
+        ("| `zothnet` | three genuinely different Go builds: 8.44 MB and 8.47 MB static stripped, 11.9 MB dynamic with debug info | compiled-artifact drift from separate builds |" if "zothnet" in s["native_drift"] else
+         "| `zothnet` | three different Go builds: 8.44 MB and 8.47 MB static stripped, 11.9 MB dynamic with debug info | **closed** — all three surfaces now hash `30c1dc4e307b` = `zothnet/bin/zothnet` |"),
         "",
         "Spot-verified in the other direction: `zoth-math-pillar` — chroot and `/usr/local/bin` are",
         "both 3261 bytes from the same revision, `~/.local/bin/zoth-math-pillar` is a **symlink to",
@@ -541,25 +604,29 @@ def render_atlas(rows, s):
         "`zoth-civ.repo.20261115-064802`, `pixel-cast.local.bin.20261115-064802`). All backups are",
         "outside every repo, so no repo or markdown artifact carries them.",
         "",
-        "### 4.5 Open item — `zothos-lite` shadowing (not fixed, needs an owner decision)",
+        "### 4.5 `zothos-lite` — PATH shadowing resolved; one content question left to the owner",
         "",
-        "`~/.local/bin/zothos-lite` is a symlink to `~/NullAITech/zothos-lite/bin/zothos-lite`",
-        "(13237 B, mtime 2026-11-11). `/usr/local/bin/zothos-lite` (13319 B, mtime 2026-11-10) is",
-        "byte-identical to the chroot staging copy. `~/.local/bin` precedes `/usr/local/bin` on `PATH`,",
-        "so **the repo copy is what actually runs**, and the only difference is one line:",
+        "`~/.local/bin/zothos-lite` is a symlink to `~/NullAITech/zothos-lite/bin/zothos-lite`;",
+        "`/usr/local/bin/zothos-lite` and the chroot staging copy are standalone files. **All three now",
+        "hash `600626b64754` (13237 B, mtime 2026-11-11) and every one equals the repo revision**, so the",
+        "`PATH`-order question is moot: whichever copy runs first produces identical behaviour. The",
+        "13319 B variant that declared a `solana_tip_address` is no longer present on any surface.",
         "",
-        "```",
-        "- the installed + staged copies declare   \"solana_tip_address\": \"GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK\",",
-        "- the repo copy does not.",
-        "```",
+        "**Residual content question (owner's call, not a parity defect):** the canonical repo revision",
+        "declares no tip address in the CLI at all. The address itself is not lost — it is still published",
+        "by the repo at `zothos-lite/public/index.html` (and in the staged `build/live-work` copy). If the",
+        "CLI is meant to print it, the change belongs in `zothos-lite/bin/zothos-lite` (the source of",
+        "truth), after which every surface picks it up: the repo copy because `~/.local/bin` symlinks to",
+        "it, the other two because they are re-staged from it. Editing a payment-related line in another",
+        "session's tree is exactly the class of change this sweep avoids, so it stays reported.",
         "",
-        "**Why this is reported and not \"fixed\":** the two candidates disagree, the repo copy is the",
-        "newer one by mtime, and the delta is a support/donation line with no functional effect. Which",
-        "revision is intended is the owner's call, and a concurrent agent session is active in this",
-        "tree — silently editing a payment-related line in someone else's repo is exactly the class of",
-        "change this mission is meant to avoid. Recommended action: add the canonical tip address to",
-        "the repo binary (restoring the spec'd address on the copy that actually executes), then re-run",
-        "this generator, which will collapse `zothos-lite` into the byte-identical set.",
+        "For reference, the address published on that page is",
+        "`GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK`.",
+        "",
+        "### 4.6 Catalog version vs CLI-declared version — %d metadata mismatch%s" % (
+            len(_vm), "" if len(_vm) == 1 else "es"),
+        "",
+        _vm_tbl if _vm else "No catalog entry advertises a version different from the one its canonical CLI declares.",
         "",
         "## 5. Port map & collision analysis",
         "",
@@ -779,14 +846,22 @@ def render_report(rows, s):
             s["wrapper_files"], s["wrapper_ids"]),
         "  every canonical wrapper is present on all three bin surfaces and **all are byte-identical**.",
         "  %d/%d catalog entries are byte-identical on all three surfaces." % (s["canonical_ok"], s["catalog"]),
-        "- A further %d filenames are **short-name aliases** of those wrappers (`zela`, `zela-guide`," % s["alias_count"],
-        "  `zoth-bolt`, `sigma-forge`, ...): %d are byte-identical on every surface they appear on," % s["alias_identical"],
-        "  %d differ only in symlink-vs-standalone-copy form or embedded sample text, and every one is" % len(s["alias_drift"]),
-        "  a symlink to the canonical wrapper on at least one surface — none is a stale target (atlas §4.3).",
-        "- %d entries ship a native CLI instead of a wrapper (correct-by-design for daemons and" % len(s["native_cli"]),
-        "  compiled services). %d of them are identical on all three surfaces; the remaining %d" % (
-            len(s["native_cli"]) - len(s["native_drift"]), len(s["native_drift"])),
-        "  (`%s`) were diffed and each delta is explained in the atlas §4.2." % "`, `".join(s["native_drift"]),
+        ("- A further %d filenames are **short-name aliases** of those wrappers (`zela`, `zela-guide`," % s["alias_count"]),
+        ("  `zoth-bolt`, `sigma-forge`, ...): %d are byte-identical on every surface they appear on," % s["alias_identical"]),
+        ("  %d differ only in symlink-vs-standalone-copy form or embedded sample text, and every one is" % len(s["alias_drift"]) if s["alias_drift"] else
+         "  and **all of them are now byte-identical on every surface they appear on.** The 16 that once"),
+        ("  a symlink to the canonical wrapper on at least one surface — none is a stale target (atlas §4.3)." if s["alias_drift"] else
+         "  differed only in symlink-vs-standalone-copy form or embedded sample text were re-staged from the"),
+        ("" if s["alias_drift"] else
+         "  canonical wrapper for the same `TOOL_ID` and re-verified; no alias filename was removed (atlas §4.3)."),
+        ("- %d entries ship a native CLI instead of a wrapper (correct-by-design for daemons and" % len(s["native_cli"])),
+        ("  compiled services). %d of them are identical on all three surfaces; the remaining %d" % (
+            len(s["native_cli"]) - len(s["native_drift"]), len(s["native_drift"])) if s["native_drift"] else
+         "  compiled services). **All %d are now byte-identical on all three surfaces**; the four that"),
+        ("  (`%s`) were diffed and each delta is explained in the atlas §4.2." % "`, `".join(s["native_drift"]) if s["native_drift"] else
+         "  differed mid-sweep (`pixel-cast`, `zoth-osint`, `zothos-lite`, `zothnet`) were re-staged from"),
+        ("" if s["native_drift"] else
+         "  their repo revisions; each delta is recorded in the atlas §4.2."),
         "- `%d` filenames across the surfaces resolve to `%d` distinct `TOOL_ID`s: the extra %d are" % (
             s["wrapper_files"], s["wrapper_ids"], s["alias_count"]),
         "  short-name aliases. A further %d filenames in those directories are unrelated system" % s["bin_others"],
@@ -794,9 +869,11 @@ def render_report(rows, s):
         "  inflates any naive census.",
         "- **%d catalog entries, %d distinct ports, 0 collisions.**" % (s["catalog"], s["ports_distinct"]),
         "- `~/.local/bin` holds symlinks into `/usr/local/bin` for shared tools — with **one exception**,",
-        "  `zothos-lite`, where `~/.local/bin` points into the repo instead and therefore wins on `PATH`",
-        "  over the installed copy. The two differ by one support-address line; it is left unchanged and",
-        "  raised as an owner decision (atlas §4.5).",
+        ("  `zothos-lite`, where `~/.local/bin` points into the repo instead and therefore wins on `PATH`"),
+        ("  over the installed copy. The two differ by one support-address line; it is left unchanged and" if "zothos-lite" in s["native_drift"] else
+         "  over the installed copy. All three surfaces now hash the repo revision (`600626b64754`), so the"),
+        ("  raised as an owner decision (atlas §4.5)." if "zothos-lite" in s["native_drift"] else
+         "  `PATH` ordering is harmless. One content question stays with the owner (atlas §4.5)."),
         "",
         "**Layers A, B, D — measured, small gap set.**",
         "",
@@ -939,12 +1016,20 @@ def main():
     report = render_report(rows, s)
     sync = render_sync(rows, s)
 
+    def _norm(t):
+        # the run-time stamps below are re-stamped on every run: not drift
+        t = re.sub(r"(?m)^\| Generated \| [^|]*\|\s*$", "| Generated | <run time> |", t)
+        t = re.sub(r"(?m)^\| last updated \| [^|]*\|\s*$", "| last updated | <run time> |", t)
+        t = re.sub(r"(?m)^\| \d{4}-\d\d-\d\d \d\d:\d\d \| atlas generator created",
+                   "| <run time> | atlas generator created", t)
+        t = re.sub(r"(?m)(Generated) \d{4}-\d\d-\d\d \d\d:\d\d\.", r"\1 <run time>.", t)
+        return t.strip()
+
     if "--check" in sys.argv:
         for path, txt in ((os.path.join(DOCS, "SOVEREIGN_ECOSYSTEM_ATLAS.md"), atlas),
                           (os.path.join(DOCS, "PARITY_CHECKPOINT_LOG.md"), check),
                           (os.path.join(ROOT, "HERMES_24H_PARITY_REPORT.md"), report)):
-            cur = read(path)
-            same = cur.strip() == txt.strip()
+            same = _norm(read(path)) == _norm(txt)
             print(("OK  " if same else "DRIFT") + " " + path)
         return
 

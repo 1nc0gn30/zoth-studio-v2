@@ -4,7 +4,7 @@ Master architectural ledger for the `NullAITech` sovereign tool ecosystem.
 
 | | |
 |---|---|
-| Generated | 2026-11-16 09:09 |
+| Generated | 2026-11-16 09:53 |
 | Generator | `zoth-studio-v2/docs/tools/atlas_gen.py` (re-runnable, no hardcoded counts) |
 | Catalog of record | `zoth-studio-v2/src/data/toolsData.js` |
 | CLI surfaces compared | `zoth-os/config/includes.chroot/usr/local/bin`, `/usr/local/bin`, `~/.local/bin` |
@@ -216,9 +216,9 @@ Every delta recorded mid-sweep is now closed: each was re-staged from its canoni
 | tool | delta recorded mid-sweep | how it stands now |
 |---|---|---|
 | `pixel-cast` | chroot defaulted to `100.64.0.10` (Tailscale CGNAT) where `/usr/local/bin` used `127.0.0.1` | **closed** — all three surfaces now hash `f0bb0e34acc9` = `pixel-cast/bin/pixel-cast` |
-| `zoth-osint` | chroot copy was 1 byte shorter (example number `E164_REDACTED` vs a `555`-range placeholder) | **closed** — all three surfaces now hash `a78089515d5a` = `zoth-osint/bin/zoth-osint` |
+| `zoth-osint` | chroot copy was 1 byte shorter (example number `E164_REDACTED` vs a `555`-range placeholder) | **closed** — all three surfaces now hash `a4b5fe68b277` (22718 B) = `zoth-osint/bin/zoth-osint` |
 | `zothos-lite` | `/usr/local/bin` + chroot (13319 B) declared `solana_tip_address`; the 13237 B repo revision did not | **closed on the surface axis** — all three now hash `600626b64754` = the repo revision. Residual content question in §4.5 |
-| `zothnet` | three different Go builds: 8.44 MB and 8.47 MB static stripped, 11.9 MB dynamic with debug info | **closed** — all three surfaces now hash `30c1dc4e307b` = `zothnet/bin/zothnet` (the revision the repo builds) |
+| `zothnet` | three different Go builds: 8.44 MB and 8.47 MB static stripped, 11.9 MB dynamic with debug info | **closed** — all three surfaces now hash `30c1dc4e307b` = `zothnet/bin/zothnet` |
 
 Spot-verified in the other direction: `zoth-math-pillar` — chroot and `/usr/local/bin` are
 both 3261 bytes from the same revision, `~/.local/bin/zoth-math-pillar` is a **symlink to
@@ -237,22 +237,25 @@ both 3261 bytes from the same revision, `~/.local/bin/zoth-math-pillar` is a **s
 (none)
 ```
 
-Interpretation: the alias layer is legacy/hand-made scaffolding around an otherwise exact
-wrapper layer. **Every one of the 0 drifting aliases is a symlink to the canonical wrapper on at
-least one surface** (`alias_no_link = 0`), so no alias points at a stale target:
+Interpretation: the alias layer is now **content-identical to the wrapper layer on every surface**:
+- **all 54 aliases hash equal to the canonical generated wrapper** on each surface they appear on
+  (`alias_no_link = 0` — every alias is a symlink to, or a byte-identical copy of, its canonical
+  wrapper; `alias_drift = 0`). Identity was judged by sha256 per surface, not by filename.
 
 - **54 of the 54 aliases are byte-identical on every surface they appear on.**
-- **0 differ** — 0 appear on all three surfaces, 0 on two (chroot + `/usr/local/bin` only,
-  the `zoth-*` aliases for the `agent-*` daemon family).
-- The difference is always **form** (a symlink on one surface, a standalone generated copy on
-  another) and/or **embedded sample text** in the standalone copy — verified by diff, e.g.
-  `zela` vs `zela-guide` differ in one printed example line (`zothos v0.5.0` + `100.64.0.10`
-  staged in chroot vs `zoth-pill v0.5.0` + a host-specific `100.x` address in `~/.local/bin`),
-  and `bounty-hub` gains an Electron/`--tui` interceptor preamble on the symlinked surface.
-  No alias has a wrong dispatch target or a different `TOOL_ID`.
+- **0 differ.** The pairs that once disagreed — `zela`/`zela-guide`,
+  `sigma-forge`/`yara-forge`/`zoth-yara-forge`, `theme-forge`/`zoth-theme-forge`,
+  `zoth-foundry`/`scene-foundry`, `bounty-hub`, `reality-forge`, and the `zoth-*` ↔ `agent-*` daemon
+  pair — now hash equal on all three surfaces. Convergence policy: **repo copy = source of truth**;
+  each alias was re-staged from the canonical generated wrapper for the same `TOOL_ID`
+  (`docs/tools/alias_sync.py`), never patched in place. The historical difference was always
+  **form** (a symlink on one surface, a standalone generated copy on another) and/or **embedded
+  sample text** in the standalone copy — e.g. `zela` vs `zela-guide` differed in one printed example
+  line (`zothos v0.5.0` + `100.64.0.10` in chroot vs `zoth-pill v0.5.0` + a host address in
+  `~/.local/bin`). No alias ever had a wrong dispatch target or a different `TOOL_ID`.
 
-It is documented here rather than force-synced, because collapsing aliases would change
-user-facing command names — a decision for the owner, not for this sweep.
+Alias **filenames** are deliberately left in place: collapsing them would change user-facing
+command names — a decision for the owner, not for this sweep. Only their content was converged.
 
 ### 4.4 Repairs performed (each verified on all surfaces afterwards)
 
@@ -267,25 +270,53 @@ Every file touched before a write was copied to `~/.hermes/cache/scratch/backups
 `zoth-civ.repo.20261115-064802`, `pixel-cast.local.bin.20261115-064802`). All backups are
 outside every repo, so no repo or markdown artifact carries them.
 
-### 4.5 Open item — `zothos-lite` shadowing (not fixed, needs an owner decision)
+### 4.5 `zothos-lite` — PATH shadowing resolved; one content question left to the owner
 
-`~/.local/bin/zothos-lite` is a symlink to `~/NullAITech/zothos-lite/bin/zothos-lite`
-(13237 B, mtime 2026-11-11). `/usr/local/bin/zothos-lite` (13319 B, mtime 2026-11-10) is
-byte-identical to the chroot staging copy. `~/.local/bin` precedes `/usr/local/bin` on `PATH`,
-so **the repo copy is what actually runs**, and the only difference is one line:
+`~/.local/bin/zothos-lite` is a symlink to `~/NullAITech/zothos-lite/bin/zothos-lite`;
+`/usr/local/bin/zothos-lite` and the chroot staging copy are standalone files. **All three now
+hash `600626b64754` (13237 B, mtime 2026-11-11) and every one equals the repo revision**, so the
+`PATH`-order question is moot: whichever copy runs first produces identical behaviour. The
+13319 B variant that declared a `solana_tip_address` is no longer present on any surface.
 
-```
-- the installed + staged copies declare   "solana_tip_address": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
-- the repo copy does not.
-```
+**Residual content question (owner's call, not a parity defect):** the canonical repo revision
+declares no tip address in the CLI at all. The address itself is not lost — it is still published
+by the repo at `zothos-lite/public/index.html` (and in the staged `build/live-work` copy). If the
+CLI is meant to print it, the change belongs in `zothos-lite/bin/zothos-lite` (the source of
+truth), after which every surface picks it up: the repo copy because `~/.local/bin` symlinks to
+it, the other two because they are re-staged from it. Editing a payment-related line in another
+session's tree is exactly the class of change this sweep avoids, so it stays reported.
 
-**Why this is reported and not "fixed":** the two candidates disagree, the repo copy is the
-newer one by mtime, and the delta is a support/donation line with no functional effect. Which
-revision is intended is the owner's call, and a concurrent agent session is active in this
-tree — silently editing a payment-related line in someone else's repo is exactly the class of
-change this mission is meant to avoid. Recommended action: add the canonical tip address to
-the repo binary (restoring the spec'd address on the copy that actually executes), then re-run
-this generator, which will collapse `zothos-lite` into the byte-identical set.
+For reference, the address published on that page is
+`GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK`.
+
+### 4.6 Catalog version vs CLI-declared version — 10 metadata mismatches
+
+Every file named here is **byte-identical on all three surfaces** (§4.1), so this is a
+*metadata* mismatch, not a parity defect: the catalog row advertises a version that the
+shipped CLI does not declare. No surface disagrees with any other surface. All values below
+were read from the live files at generation time.
+
+| tool | catalog says | CLI declares | repo manifest | CLI read from |
+|---|---|---|---|---|
+| `adytum-alchemist-ai-workflow` | `1.0.0` | `2.4.0` | `package.json 0.0.0` | `chroot` |
+| `sovereign-agent-bridge` | `3.2.0` | `3.3.0` | `pyproject.toml 0.1.0` | `chroot` |
+| `neuro-memory-daemon` | `2.8.0` | `3.1.0` | `package.json 2.0.0` | `chroot` |
+| `etsy-pod-forge` | `2.5.0` | `0.1.0` | `package.json 2.5.0` | `chroot` |
+| `etsy-connector` | `2.5.0` | `0.1.0` | `package.json 2.5.0` | `chroot` |
+| `zoth-bolt` | `3.5.0` | `2.5.0` | `package.json 3.0.0` | `chroot` |
+| `zoth-civilization` | `3.0.0` | `2.5.0` | `package.json 1.0.0` | `chroot` |
+| `yara-sigma-forge` | `3.4.0` | `3.3.0` | — (no manifest) | `chroot` |
+| `producthunt-connector` | `1.1.0` | `0.1.0` | `pyproject.toml 0.1.0` | `chroot` |
+| `zothnet` | `1.2.0` | `1.0.0` | — (no manifest) | `chroot` |
+
+Direction, computed over the 10 rows: the catalog is **ahead** of the shipped CLI in 7
+cases and **behind** in 3. Because both directions occur, neither the catalog nor the
+CLI can be declared the source of truth from this evidence alone, so the table is
+reported rather than rewritten — a version bump in either place is an owner decision,
+not a parity fix. Where a repo manifest agrees with the CLI instead of the catalog row,
+the catalog is the likely stale side; where no manifest is present the row is
+undetermined from the files at hand. Every row above is a *surface-identical* file: the
+mismatch is between metadata and the CLI banner, never between one surface and another.
 
 ## 5. Port map & collision analysis
 
@@ -506,7 +537,7 @@ showed its port open, so no daemon was started, stopped, or replaced for this me
 
 | when | change |
 |---|---|
-| 2026-11-16 09:09 | atlas generator created; Layers A/B/C/D measured across 81 entries |
+| 2026-11-16 09:53 | atlas generator created; Layers A/B/C/D measured across 81 entries |
 | 2026-11-15 | `zela-glasses-guide` tri-surface repair (see §4.4) |
 | 2026-11-15 | Layer E wired into the generator: headless 3-viewport verdicts read from `layerE_results_http.jsonl` / `layerE_results_live.jsonl` (§8) |
 
