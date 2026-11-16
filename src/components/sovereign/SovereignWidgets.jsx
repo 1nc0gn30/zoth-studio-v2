@@ -12,6 +12,7 @@ import {
   Chip,
   IconButton,
   InputAdornment,
+  Slider,
   Table,
   TableBody,
   TableCell,
@@ -30,6 +31,17 @@ import CheckIcon from '@mui/icons-material/Check';
 import DownloadIcon from '@mui/icons-material/Download';
 import SearchIcon from '@mui/icons-material/Search';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
+import DataObjectIcon from '@mui/icons-material/DataObject';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { SOV, MONO, DISPLAY, rgba } from './palette.js';
 import { resolveModeAccent } from './SovereignPrimitives.jsx';
 import { copyText, downloadText } from './hooks.js';
@@ -893,6 +905,820 @@ export function SovereignFaqAccordion({ items = [], accent = SOV.gold, defaultOp
           </Box>
         );
       })}
+    </Box>
+  );
+}
+
+/**
+ * SovereignJsonTree — collapsible, syntax-highlighted, searchable JSON/AST inspector.
+ * Replaces unstyled JSON.stringify dumps with interactive tree navigation.
+ */
+function JsonTreeNode({
+  nodeKey,
+  value,
+  depth = 0,
+  maxDepth = 3,
+  searchTerm = '',
+  path = '',
+  accent = SOV.gold,
+  isDark = true,
+  expandedPaths,
+  setExpandedPaths,
+}) {
+  const isObject = value !== null && typeof value === 'object';
+  const isArray = Array.isArray(value);
+  const currentPath = path ? (nodeKey !== undefined ? `${path}.${nodeKey}` : path) : String(nodeKey ?? 'root');
+  
+  const isExpanded = expandedPaths.has(currentPath);
+
+  const toggleExpand = (e) => {
+    e.stopPropagation();
+    setExpandedPaths((prev) => {
+      const next = new Set(prev);
+      if (next.has(currentPath)) next.delete(currentPath);
+      else next.add(currentPath);
+      return next;
+    });
+  };
+
+  const [copied, setCopied] = useState(false);
+  const handleCopyNode = (e) => {
+    e.stopPropagation();
+    copyText(typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value)).then((ok) => {
+      if (ok) {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1400);
+      }
+    });
+  };
+
+  const keyCol = resolveModeAccent(accent, isDark);
+  const stringCol = resolveModeAccent(SOV.emerald, isDark);
+  const numCol = resolveModeAccent(SOV.cyber, isDark);
+  const boolCol = resolveModeAccent('#C084FC', isDark);
+  const nullCol = isDark ? SOV.slate : '#94A3B8';
+
+  const matchesSearch = Boolean(
+    searchTerm &&
+    ((nodeKey && String(nodeKey).toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (!isObject && String(value).toLowerCase().includes(searchTerm.toLowerCase())))
+  );
+
+  if (!isObject) {
+    let renderedValue = null;
+    if (typeof value === 'string') {
+      renderedValue = <Typography component="span" sx={{ fontFamily: MONO, fontSize: '0.78rem', color: stringCol }}>"{value}"</Typography>;
+    } else if (typeof value === 'number') {
+      renderedValue = <Typography component="span" sx={{ fontFamily: MONO, fontSize: '0.78rem', color: numCol }}>{value}</Typography>;
+    } else if (typeof value === 'boolean') {
+      renderedValue = <Typography component="span" sx={{ fontFamily: MONO, fontSize: '0.78rem', fontWeight: 700, color: boolCol }}>{String(value)}</Typography>;
+    } else {
+      renderedValue = <Typography component="span" sx={{ fontFamily: MONO, fontSize: '0.78rem', fontStyle: 'italic', color: nullCol }}>{value === null ? 'null' : 'undefined'}</Typography>;
+    }
+
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+          py: 0.25,
+          pl: depth * 1.75,
+          bgcolor: matchesSearch ? rgba(accent, 0.15) : 'transparent',
+          borderRadius: 0.5,
+          '&:hover .node-copy-btn': { opacity: 1 },
+        }}
+      >
+        {nodeKey !== undefined && (
+          <Typography component="span" sx={{ fontFamily: MONO, fontSize: '0.78rem', fontWeight: 700, color: keyCol }}>
+            {nodeKey}:
+          </Typography>
+        )}
+        {renderedValue}
+        <IconButton
+          size="small"
+          className="node-copy-btn"
+          aria-label="Copy node value"
+          onClick={handleCopyNode}
+          sx={{ opacity: 0, p: 0.25, transition: 'opacity 0.15s ease', color: copied ? SOV.emerald : keyCol }}
+        >
+          {copied ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+        </IconButton>
+      </Box>
+    );
+  }
+
+  const keys = Object.keys(value || {});
+  const count = keys.length;
+  const brackets = isArray ? ['[', ']'] : ['{', '}'];
+
+  return (
+    <Box sx={{ pl: depth > 0 ? 1.75 : 0, py: 0.15 }}>
+      <Box
+        onClick={toggleExpand}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 0.5,
+          cursor: 'pointer',
+          userSelect: 'none',
+          py: 0.25,
+          borderRadius: 0.5,
+          bgcolor: matchesSearch ? rgba(accent, 0.15) : 'transparent',
+          '&:hover': { bgcolor: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)' },
+          '&:hover .node-copy-btn': { opacity: 1 },
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', color: keyCol }}>
+          {isExpanded ? <ArrowDropDownIcon sx={{ fontSize: 18 }} /> : <ArrowRightIcon sx={{ fontSize: 18 }} />}
+        </Box>
+        {nodeKey !== undefined && (
+          <Typography component="span" sx={{ fontFamily: MONO, fontSize: '0.78rem', fontWeight: 700, color: keyCol }}>
+            {nodeKey}:
+          </Typography>
+        )}
+        <Typography component="span" sx={{ fontFamily: MONO, fontSize: '0.76rem', color: isDark ? SOV.slate : '#64748B' }}>
+          {isExpanded ? brackets[0] : `${brackets[0]} ... ${brackets[1]} (${count} ${isArray ? 'items' : 'keys'})`}
+        </Typography>
+        <IconButton
+          size="small"
+          className="node-copy-btn"
+          aria-label="Copy JSON fragment"
+          onClick={handleCopyNode}
+          sx={{ opacity: 0, p: 0.25, transition: 'opacity 0.15s ease', color: copied ? SOV.emerald : keyCol }}
+        >
+          {copied ? <CheckIcon sx={{ fontSize: 13 }} /> : <ContentCopyIcon sx={{ fontSize: 13 }} />}
+        </IconButton>
+      </Box>
+
+      {isExpanded && (
+        <Box sx={{ borderLeft: `1px solid ${isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.08)'}`, ml: 1, pl: 0.5 }}>
+          {keys.map((k) => (
+            <JsonTreeNode
+              key={k}
+              nodeKey={isArray ? Number(k) : k}
+              value={value[k]}
+              depth={depth + 1}
+              maxDepth={maxDepth}
+              searchTerm={searchTerm}
+              path={currentPath}
+              accent={accent}
+              isDark={isDark}
+              expandedPaths={expandedPaths}
+              setExpandedPaths={setExpandedPaths}
+            />
+          ))}
+          <Box sx={{ pl: 1, py: 0.1 }}>
+            <Typography component="span" sx={{ fontFamily: MONO, fontSize: '0.76rem', color: isDark ? SOV.slate : '#64748B' }}>
+              {brackets[1]}
+            </Typography>
+          </Box>
+        </Box>
+      )}
+    </Box>
+  );
+}
+
+export function SovereignJsonTree({
+  data,
+  title = 'STRUCTURED JSON INSPECTOR',
+  initialDepth = 2,
+  searchable = true,
+  copyable = true,
+  accent = SOV.gold,
+  maxHeight = 440,
+  sx,
+}) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const modeAccent = resolveModeAccent(accent, isDark);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [copiedAll, setCopiedAll] = useState(false);
+
+  const allPaths = useMemo(() => {
+    const paths = new Set();
+    function walk(val, path, depth) {
+      if (val !== null && typeof val === 'object') {
+        paths.add(path);
+        if (depth < initialDepth) {
+          Object.keys(val).forEach((k) => walk(val[k], `${path}.${k}`, depth + 1));
+        }
+      }
+    }
+    walk(data, 'root', 0);
+    return paths;
+  }, [data, initialDepth]);
+
+  const [expandedPaths, setExpandedPaths] = useState(allPaths);
+
+  const expandAll = () => {
+    const paths = new Set();
+    function walk(val, path) {
+      if (val !== null && typeof val === 'object') {
+        paths.add(path);
+        Object.keys(val).forEach((k) => walk(val[k], `${path}.${k}`));
+      }
+    }
+    walk(data, 'root');
+    setExpandedPaths(paths);
+  };
+
+  const collapseAll = () => {
+    setExpandedPaths(new Set());
+  };
+
+  const handleCopyAll = () => {
+    copyText(JSON.stringify(data, null, 2)).then((ok) => {
+      if (ok) {
+        setCopiedAll(true);
+        setTimeout(() => setCopiedAll(false), 1600);
+      }
+    });
+  };
+
+  return (
+    <Box
+      sx={{
+        borderRadius: 2,
+        border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(16,24,40,0.12)'}`,
+        bgcolor: isDark ? '#08080C' : '#FAF8F3',
+        overflow: 'hidden',
+        position: 'relative',
+        ...sx,
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 1,
+          px: 2,
+          py: 1.25,
+          borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(16,24,40,0.08)'}`,
+          bgcolor: isDark ? 'rgba(255,255,255,0.02)' : 'rgba(16,24,40,0.02)',
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <DataObjectIcon sx={{ fontSize: 18, color: modeAccent }} />
+          <Typography
+            sx={{
+              fontFamily: MONO,
+              fontSize: '0.74rem',
+              fontWeight: 700,
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              color: isDark ? SOV.cream : '#101828',
+            }}
+          >
+            {title}
+          </Typography>
+        </Box>
+
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+          {searchable && (
+            <TextField
+              size="small"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Filter keys or values..."
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon sx={{ fontSize: 14, color: isDark ? SOV.slate : '#94A3B8' }} />
+                  </InputAdornment>
+                ),
+                sx: {
+                  height: 32,
+                  fontSize: '0.74rem',
+                  fontFamily: MONO,
+                  bgcolor: isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
+                  borderRadius: 1,
+                },
+              }}
+            />
+          )}
+
+          <Button
+            size="small"
+            onClick={expandAll}
+            startIcon={<UnfoldMoreIcon sx={{ fontSize: 14 }} />}
+            sx={{
+              minHeight: 32,
+              fontFamily: MONO,
+              fontSize: '0.7rem',
+              textTransform: 'none',
+              color: isDark ? SOV.slate : '#64748B',
+            }}
+          >
+            Expand
+          </Button>
+
+          <Button
+            size="small"
+            onClick={collapseAll}
+            startIcon={<UnfoldLessIcon sx={{ fontSize: 14 }} />}
+            sx={{
+              minHeight: 32,
+              fontFamily: MONO,
+              fontSize: '0.7rem',
+              textTransform: 'none',
+              color: isDark ? SOV.slate : '#64748B',
+            }}
+          >
+            Collapse
+          </Button>
+
+          {copyable && (
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={handleCopyAll}
+              startIcon={copiedAll ? <CheckIcon sx={{ fontSize: 14 }} /> : <ContentCopyIcon sx={{ fontSize: 14 }} />}
+              sx={{
+                minHeight: 32,
+                px: 1.25,
+                fontFamily: MONO,
+                fontSize: '0.7rem',
+                fontWeight: 700,
+                textTransform: 'none',
+                borderColor: rgba(modeAccent, 0.4),
+                color: modeAccent,
+                '&:hover': { borderColor: modeAccent, bgcolor: rgba(modeAccent, 0.08) },
+              }}
+            >
+              {copiedAll ? 'Copied' : 'Copy All'}
+            </Button>
+          )}
+        </Box>
+      </Box>
+
+      <Box
+        sx={{
+          p: 2,
+          maxHeight,
+          overflowY: 'auto',
+          fontFamily: MONO,
+        }}
+      >
+        <JsonTreeNode
+          value={data}
+          depth={0}
+          searchTerm={searchTerm}
+          path="root"
+          accent={accent}
+          isDark={isDark}
+          expandedPaths={expandedPaths}
+          setExpandedPaths={setExpandedPaths}
+        />
+      </Box>
+    </Box>
+  );
+}
+
+/**
+ * SovereignFileDropzone — zero-dependency in-browser drag & drop file processor.
+ * Automatically parses text/JSON/code or binary buffers with size validation.
+ */
+export function SovereignFileDropzone({
+  onFilesLoaded,
+  accept = '*/*',
+  multiple = false,
+  maxSizeMb = 25,
+  title = 'DROP FILES OR DIRECTORIES HERE',
+  subtitle = 'Drag & drop text, JSON, code, or binary files — processed 100% in-browser',
+  accent = SOV.gold,
+  sx,
+}) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const modeAccent = resolveModeAccent(accent, isDark);
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [loadedFiles, setLoadedFiles] = useState([]);
+  const [errorMsg, setErrorMsg] = useState('');
+  const fileInputRef = useRef(null);
+
+  const processFileList = (fileList) => {
+    setErrorMsg('');
+    const files = Array.from(fileList || []);
+    if (!files.length) return;
+
+    const accepted = [];
+    let pending = files.length;
+
+    files.forEach((file) => {
+      if (file.size > maxSizeMb * 1024 * 1024) {
+        setErrorMsg(`File "${file.name}" exceeds ${maxSizeMb} MB limit.`);
+        pending -= 1;
+        return;
+      }
+
+      const isText = file.type.startsWith('text/') ||
+        /\.(json|txt|md|csv|js|jsx|ts|tsx|py|html|css|xml|yaml|yml|toml|sql|sh)$/i.test(file.name);
+
+      const reader = new FileReader();
+      if (isText) {
+        reader.onload = (e) => {
+          accepted.push({
+            name: file.name,
+            size: file.size,
+            type: file.type || 'text/plain',
+            content: e.target.result,
+          });
+          pending -= 1;
+          if (pending === 0) finish();
+        };
+        reader.readAsText(file);
+      } else {
+        reader.onload = (e) => {
+          accepted.push({
+            name: file.name,
+            size: file.size,
+            type: file.type || 'application/octet-stream',
+            buffer: e.target.result,
+          });
+          pending -= 1;
+          if (pending === 0) finish();
+        };
+        reader.readAsArrayBuffer(file);
+      }
+    });
+
+    function finish() {
+      setLoadedFiles(accepted);
+      if (onFilesLoaded) onFilesLoaded(accepted);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    if (e.dataTransfer && e.dataTransfer.files) {
+      processFileList(e.dataTransfer.files);
+    }
+  };
+
+  const handleRemoveFile = (idx) => {
+    const next = loadedFiles.filter((_, i) => i !== idx);
+    setLoadedFiles(next);
+    if (onFilesLoaded) onFilesLoaded(next);
+  };
+
+  const handleClearAll = () => {
+    setLoadedFiles([]);
+    setErrorMsg('');
+    if (fileInputRef.current) fileInputRef.current.value = '';
+    if (onFilesLoaded) onFilesLoaded([]);
+  };
+
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, ...sx }}>
+      <Box
+        onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
+        onDragLeave={() => setIsDragOver(false)}
+        onDrop={handleDrop}
+        onClick={() => fileInputRef.current && fileInputRef.current.click()}
+        sx={{
+          p: { xs: 2.5, md: 3.5 },
+          borderRadius: 2,
+          border: `2px dashed ${isDragOver ? modeAccent : (isDark ? 'rgba(255,255,255,0.15)' : 'rgba(16,24,40,0.20)')}`,
+          bgcolor: isDragOver
+            ? rgba(modeAccent, 0.08)
+            : (isDark ? 'rgba(255,255,255,0.015)' : 'rgba(16,24,40,0.02)'),
+          cursor: 'pointer',
+          textAlign: 'center',
+          transition: 'all 0.18s ease',
+          '&:hover': {
+            borderColor: modeAccent,
+            bgcolor: rgba(modeAccent, 0.04),
+          },
+        }}
+      >
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept={accept}
+          multiple={multiple}
+          style={{ display: 'none' }}
+          onChange={(e) => processFileList(e.target.files)}
+        />
+        <UploadFileIcon sx={{ fontSize: 36, color: modeAccent, mb: 1 }} />
+        <Typography sx={{ fontFamily: MONO, fontSize: '0.84rem', fontWeight: 700, color: isDark ? SOV.cream : '#101828', mb: 0.5 }}>
+          {title}
+        </Typography>
+        <Typography variant="body2" sx={{ color: isDark ? SOV.slate : '#64748B', maxWidth: 480, mx: 'auto', mb: 1 }}>
+          {subtitle}
+        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, flexWrap: 'wrap' }}>
+          <Chip
+            size="small"
+            label={`MAX ${maxSizeMb} MB`}
+            sx={{ fontFamily: MONO, fontSize: '0.66rem', fontWeight: 700, bgcolor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }}
+          />
+          <Chip
+            size="small"
+            label={multiple ? 'MULTIPLE FILES' : 'SINGLE FILE'}
+            sx={{ fontFamily: MONO, fontSize: '0.66rem', fontWeight: 700, bgcolor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }}
+          />
+        </Box>
+      </Box>
+
+      {errorMsg && (
+        <Typography sx={{ fontFamily: MONO, fontSize: '0.74rem', color: SOV.crimson }}>
+          ✖ {errorMsg}
+        </Typography>
+      )}
+
+      {loadedFiles.length > 0 && (
+        <Box
+          sx={{
+            p: 1.5,
+            borderRadius: 1.5,
+            bgcolor: isDark ? 'rgba(255,255,255,0.02)' : 'rgba(16,24,40,0.02)',
+            border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(16,24,40,0.08)'}`,
+          }}
+        >
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+            <Typography sx={{ fontFamily: MONO, fontSize: '0.72rem', fontWeight: 700, color: isDark ? SOV.cream : '#101828' }}>
+              LOADED ARTIFACTS ({loadedFiles.length})
+            </Typography>
+            <Button
+              size="small"
+              onClick={handleClearAll}
+              sx={{ minHeight: 32, fontFamily: MONO, fontSize: '0.68rem', color: SOV.crimson, textTransform: 'none' }}
+            >
+              Clear All
+            </Button>
+          </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
+            {loadedFiles.map((file, idx) => (
+              <Box
+                key={`${file.name}-${idx}`}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  px: 1.25,
+                  py: 0.75,
+                  borderRadius: 1,
+                  bgcolor: isDark ? '#0D0E15' : '#FFFFFF',
+                  border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(16,24,40,0.08)'}`,
+                }}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
+                  <InsertDriveFileIcon sx={{ fontSize: 16, color: modeAccent }} />
+                  <Typography sx={{ fontFamily: MONO, fontSize: '0.76rem', fontWeight: 600, color: isDark ? SOV.cream : '#101828', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {file.name}
+                  </Typography>
+                  <Typography sx={{ fontFamily: MONO, fontSize: '0.68rem', color: isDark ? SOV.slate : '#94A3B8' }}>
+                    ({(file.size / 1024).toFixed(1)} KB)
+                  </Typography>
+                </Box>
+                <IconButton
+                  size="small"
+                  aria-label="Remove file"
+                  onClick={() => handleRemoveFile(idx)}
+                  sx={{ color: isDark ? SOV.slate : '#94A3B8', '&:hover': { color: SOV.crimson } }}
+                >
+                  <DeleteOutlineIcon sx={{ fontSize: 16 }} />
+                </IconButton>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      )}
+    </Box>
+  );
+}
+
+/**
+ * SovereignMediaHUD — sovereign audio player, waveform engine & media telemetry.
+ * Displays animated waveform canvas, playback controls, scrubber, speed & volume.
+ */
+export function SovereignMediaHUD({
+  src,
+  title = 'SOVEREIGN AUDIO ENGINE',
+  subtitle = 'Procedural synthesis & waveform telemetry',
+  duration = 120,
+  bars = 48,
+  accent = SOV.gold,
+  onPlayStateChange,
+  sx,
+}) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const modeAccent = resolveModeAccent(accent, isDark);
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [volume, setVolume] = useState(80);
+  const [isMuted, setIsMuted] = useState(false);
+  const [speed, setSpeed] = useState(1);
+  const audioRef = useRef(null);
+
+  const waveformPeaks = useMemo(() => {
+    const peaks = [];
+    for (let i = 0; i < bars; i++) {
+      const v = Math.sin(i * 0.28) * 0.35 + Math.sin(i * 0.65 + 1.2) * 0.35 + 0.55;
+      peaks.push(Math.max(0.12, Math.min(1.0, v)));
+    }
+    return peaks;
+  }, [bars]);
+
+  const togglePlay = () => {
+    const next = !isPlaying;
+    setIsPlaying(next);
+    if (audioRef.current) {
+      if (next) audioRef.current.play().catch(() => {});
+      else audioRef.current.pause();
+    }
+    if (onPlayStateChange) onPlayStateChange(next);
+  };
+
+  const handleSeek = (_, val) => {
+    setCurrentTime(val);
+    if (audioRef.current) {
+      audioRef.current.currentTime = val;
+    }
+  };
+
+  const cycleSpeed = () => {
+    const speeds = [1, 1.25, 1.5, 2];
+    const nextIdx = (speeds.indexOf(speed) + 1) % speeds.length;
+    const nextSpeed = speeds[nextIdx];
+    setSpeed(nextSpeed);
+    if (audioRef.current) audioRef.current.playbackRate = nextSpeed;
+  };
+
+  const formatTime = (secs) => {
+    const s = Math.floor(secs || 0);
+    const m = Math.floor(s / 60);
+    const rem = s % 60;
+    return `${String(m).padStart(2, '0')}:${String(rem).padStart(2, '0')}`;
+  };
+
+  const progressFraction = duration > 0 ? currentTime / duration : 0;
+
+  return (
+    <Box
+      sx={{
+        borderRadius: 2,
+        border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(16,24,40,0.12)'}`,
+        bgcolor: isDark ? '#08080D' : '#FAF8F3',
+        p: { xs: 2, md: 2.5 },
+        ...sx,
+      }}
+    >
+      {src && (
+        <audio
+          ref={audioRef}
+          src={src}
+          onTimeUpdate={(e) => setCurrentTime(e.target.currentTime)}
+          onEnded={() => setIsPlaying(false)}
+        />
+      )}
+
+      {/* Header Info */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
+        <Box>
+          <Typography sx={{ fontFamily: MONO, fontSize: '0.78rem', fontWeight: 800, color: modeAccent, letterSpacing: '0.06em' }}>
+            {title}
+          </Typography>
+          <Typography variant="caption" sx={{ color: isDark ? SOV.slate : '#64748B', display: 'block' }}>
+            {subtitle}
+          </Typography>
+        </Box>
+        <Chip
+          size="small"
+          label={isPlaying ? 'PLAYING' : 'IDLE'}
+          sx={{
+            fontFamily: MONO,
+            fontSize: '0.66rem',
+            fontWeight: 800,
+            bgcolor: isPlaying ? rgba(SOV.emerald, 0.15) : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'),
+            color: isPlaying ? SOV.emerald : (isDark ? SOV.slate : '#64748B'),
+            border: `1px solid ${isPlaying ? rgba(SOV.emerald, 0.3) : 'transparent'}`,
+          }}
+        />
+      </Box>
+
+      {/* Waveform Visualization Bars */}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: { xs: '2px', sm: '3px' },
+          height: 64,
+          px: 1,
+          mb: 1.5,
+          borderRadius: 1.5,
+          bgcolor: isDark ? 'rgba(255,255,255,0.02)' : 'rgba(16,24,40,0.03)',
+          border: `1px solid ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(16,24,40,0.06)'}`,
+        }}
+      >
+        {waveformPeaks.map((peak, i) => {
+          const barFraction = i / bars;
+          const isPlayed = barFraction <= progressFraction;
+          return (
+            <Box
+              key={i}
+              sx={{
+                flex: 1,
+                height: `${peak * 100}%`,
+                bgcolor: isPlayed ? modeAccent : (isDark ? 'rgba(255,255,255,0.12)' : 'rgba(16,24,40,0.15)'),
+                borderRadius: '2px',
+                transition: 'background-color 0.1s ease',
+              }}
+            />
+          );
+        })}
+      </Box>
+
+      {/* Scrubber Slider */}
+      <Box sx={{ px: 0.5, mb: 1 }}>
+        <Slider
+          size="small"
+          value={currentTime}
+          min={0}
+          max={duration}
+          onChange={handleSeek}
+          aria-label="Audio scrubber"
+          sx={{
+            color: modeAccent,
+            height: 4,
+            '& .MuiSlider-thumb': {
+              width: 12,
+              height: 12,
+              '&:hover, &.Mui-focusVisible': { boxShadow: `0 0 0 6px ${rgba(modeAccent, 0.2)}` },
+            },
+          }}
+        />
+      </Box>
+
+      {/* Controls Bar */}
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <IconButton
+            onClick={togglePlay}
+            aria-label={isPlaying ? 'Pause audio' : 'Play audio'}
+            sx={{
+              minWidth: 44,
+              minHeight: 44,
+              bgcolor: modeAccent,
+              color: isDark ? '#08080B' : '#FFFFFF',
+              '&:hover': { bgcolor: isDark ? '#F5F1E6' : '#1E293B', color: isDark ? '#08080B' : '#FFFFFF' },
+            }}
+          >
+            {isPlaying ? <PauseIcon sx={{ fontSize: 22 }} /> : <PlayArrowIcon sx={{ fontSize: 22 }} />}
+          </IconButton>
+
+          <Typography sx={{ fontFamily: MONO, fontSize: '0.76rem', fontWeight: 700, color: isDark ? SOV.cream : '#101828' }}>
+            {formatTime(currentTime)} / {formatTime(duration)}
+          </Typography>
+        </Box>
+
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Button
+            size="small"
+            onClick={cycleSpeed}
+            sx={{
+              minHeight: 36,
+              px: 1,
+              fontFamily: MONO,
+              fontSize: '0.72rem',
+              fontWeight: 800,
+              color: modeAccent,
+              border: `1px solid ${rgba(modeAccent, 0.3)}`,
+            }}
+          >
+            {speed}x
+          </Button>
+
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, width: 110 }}>
+            <IconButton
+              size="small"
+              onClick={() => setIsMuted(!isMuted)}
+              aria-label={isMuted ? 'Unmute' : 'Mute'}
+              sx={{ color: isDark ? SOV.slate : '#64748B' }}
+            >
+              {isMuted || volume === 0 ? <VolumeOffIcon sx={{ fontSize: 18 }} /> : <VolumeUpIcon sx={{ fontSize: 18 }} />}
+            </IconButton>
+            <Slider
+              size="small"
+              value={isMuted ? 0 : volume}
+              min={0}
+              max={100}
+              onChange={(_, v) => { setVolume(v); setIsMuted(false); }}
+              aria-label="Volume slider"
+              sx={{
+                color: modeAccent,
+                '& .MuiSlider-thumb': { width: 10, height: 10 },
+              }}
+            />
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 }

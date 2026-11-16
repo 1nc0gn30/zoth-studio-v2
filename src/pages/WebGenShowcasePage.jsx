@@ -10,9 +10,11 @@ export default function WebGenShowcasePage() {
       title="Full-Stack Site Synthesis on"
       accentWord="Your Own Machine."
       subtitle="Zoth WebGen is a local code synthesizer and static/full-stack project generator. Clone the repository to scaffold, theme, and verify production-ready web applications directly on your filesystem—complete with Schema.org JSON-LD graphs, security headers, and multi-viewport layout checks."
-      cloneCommand="git clone https://github.com/1nc0gn30/zoth-webgen.git && cd zoth-webgen"
-      repoUrl="https://github.com/1nc0gn30/zoth-webgen"
-      repoLabel="Get Zoth WebGen Repo"
+      cloneCommand="git clone https://github.com/1nc0gn30/bolt.diy.git && cd bolt.diy"
+      toolRoute="/tools/zoth-bolt"
+      toolLabel="Launch Zoth Bolt in Studio"
+      repoUrl="https://github.com/1nc0gn30/bolt.diy"
+      repoLabel="Get Zoth Bolt Repo (bolt.diy)"
       docsRoute="/webgen/docs"
       docsLabel="Compiler & CLI Documentation"
       overviewTitle="Deterministic Project Scaffolding Without SaaS Lock-In"
@@ -74,9 +76,10 @@ export default function WebGenShowcasePage() {
           desc: 'Pairs with local Ollama models, Hermes Agent, or Zoth Studio v2 without uploading proprietary product specs to cloud builders.',
         },
       ]}
-      funnelToolTitle="Zoth WebGen Foundry"
-      funnelToolTag="AUTONOMOUS WEB COMPILER"
-      funnelToolDesc="Local 6-framework web application compiler with built-in Schema.org AEO generation and viewport guardrails."
+      funnelToolTitle="Zoth Bolt & WebGen Foundry"
+      funnelToolTag="FLAGSHIP SOVEREIGN ARCHITECT"
+      funnelToolDesc="Full-stack AI web, 3D shader, and motion architect powered by bolt.diy, local Ollama, and WebContainer synthesis."
+      funnelToolRoute="/tools/zoth-bolt"
     />
   );
 }

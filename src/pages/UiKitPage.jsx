@@ -39,6 +39,11 @@ import {
   SovereignFilterBar,
   SovereignStatComparison,
   SovereignTerminalLog,
+  SovereignStatusPill,
+  SovereignJsonTree,
+  SovereignFileDropzone,
+  SovereignMediaHUD,
+  SovereignPromptBox,
   resolveModeAccent,
 } from '../components/sovereign';
 
@@ -107,6 +112,11 @@ const AUDIT_ROWS = [
   { exportName: 'SovereignFilterBar', layer: 'Query Toolbar', runtime: 'Search + Pills', status: 'READY' },
   { exportName: 'SovereignStatComparison', layer: 'Benchmark Bars', runtime: 'Auto Delta %', status: 'READY' },
   { exportName: 'SovereignTerminalLog', layer: 'Log Stream', runtime: 'Severity Filter', status: 'READY' },
+  { exportName: 'SovereignStatusPill', layer: 'Telemetry Pill', runtime: 'Pulse CSS', status: 'READY' },
+  { exportName: 'SovereignJsonTree', layer: 'AST Inspector', runtime: 'Recursive Tree', status: 'READY' },
+  { exportName: 'SovereignFileDropzone', layer: 'Drag & Drop', runtime: 'In-Browser File API', status: 'READY' },
+  { exportName: 'SovereignMediaHUD', layer: 'Audio & Media HUD', runtime: 'Waveform Canvas', status: 'READY' },
+  { exportName: 'SovereignPromptBox', layer: 'AI Dispatch Deck', runtime: 'Model + Shortcut', status: 'READY' },
 ];
 
 const SYSTEM_CONTRACT_ITEMS = [
@@ -130,7 +140,7 @@ const UI_KIT_FAQ = [
       'Every generated web tool, product site, and Studio component pre-populates Schema.org JSON-LD (@graph), robots.txt, sitemap.xml, netlify.toml security headers, dual dark/light tokens, 44px touch targets, and the zero-paywall Buy Us a Coffee support bar. Run `zoth-scaffold audit` to verify all 8 checks programmatically.',
   },
   {
-    question: 'Are all 24 exports and 6 canvas renderers SSR-safe for Vite static prerendering?',
+    question: 'Are all 29 exports and 6 canvas renderers SSR-safe for Vite static prerendering?',
     tag: 'SSR + STATIC',
     answer:
       'Yes. Canvas initialization, Clipboard API copy buttons, FileReader uploads, and Blob CSV downloads execute exclusively inside event handlers or useEffect hooks—never at module evaluation time.',
@@ -177,7 +187,7 @@ const WIZARD_STEPS = [
   {
     id: 'compose',
     label: 'Compose Blocks',
-    badge: '24 EXPORTS',
+    badge: '29 EXPORTS',
     summary: 'Drop in pre-styled React blocks (SovereignHeroSection, SovereignDiffViewer, SovereignTimeline) or Vanilla `data-zoth-*` hooks.',
   },
   {
@@ -227,7 +237,7 @@ const BENCHMARK_STATS = [
 ];
 
 const INITIAL_LOGS = [
-  { ts: '06:50:12', level: 'INFO', source: '@zoth/ui', message: 'Registered 24 React component exports across Primitives, Widgets, and Blocks.' },
+  { ts: '06:50:12', level: 'INFO', source: '@zoth/ui', message: 'Registered 29 React component exports across Primitives, Widgets, and Blocks.' },
   { ts: '06:50:14', level: 'INFO', source: 'renderers', message: 'Activated hex-lattice and waveform-harmonics deterministic engines.' },
   { ts: '06:50:18', level: 'WARN', source: 'enclave', message: 'Offline loopback enforcement active — outbound tracking pixels blocked.' },
   { ts: '06:50:21', level: 'ERROR', source: 'demo-check', message: 'Simulated alert: example failing artifact lacked viewport meta tag (fixed by scaffold).' },
@@ -362,7 +372,7 @@ const PRIMITIVE_SNIPPETS = {
   highlight="Web Tools Fast"
   subtitle="Reusable React & Vanilla UI blocks without starting from scratch."
   primaryAction={{ label: 'Jump to Generator', onClick: fn }}
-  trustItems={[{ label: 'EXPORTS', value: '24' }, { label: 'PAYWALL', value: 'NONE' }]}
+  trustItems={[{ label: 'EXPORTS', value: '29' }, { label: 'PAYWALL', value: 'NONE' }]}
 />`,
   },
   SovereignFeatureGrid: {
@@ -413,6 +423,41 @@ const PRIMITIVE_SNIPPETS = {
     filename: 'SovereignTerminalLogUsage.jsx',
     desc: 'Filterable monospaced log console (`ALL`, `INFO`, `WARN`, `ERROR`) with timestamp, source badge, and 1-click log copy.',
     code: `<SovereignTerminalLog title="LIVE STREAM" logs={logs} onClear={() => setLogs([])} />`,
+  },
+  SovereignStatusPill: {
+    title: 'SovereignStatusPill',
+    badge: 'TELEMETRY PILL',
+    filename: 'SovereignStatusPillUsage.jsx',
+    desc: 'Live daemon & port telemetry pill with animated CSS pulse beacon, port tag, and latency readout.',
+    code: `<SovereignStatusPill status="online" label="DAEMON ACTIVE" port={8092} pingMs={14} />`,
+  },
+  SovereignJsonTree: {
+    title: 'SovereignJsonTree',
+    badge: 'AST INSPECTOR',
+    filename: 'SovereignJsonTreeUsage.jsx',
+    desc: 'Collapsible, syntax-highlighted, searchable JSON/AST inspector replacing raw JSON.stringify walls.',
+    code: `<SovereignJsonTree title="AST SYNTAX TREE" data={complexPayload} initialDepth={2} />`,
+  },
+  SovereignFileDropzone: {
+    title: 'SovereignFileDropzone',
+    badge: 'DRAG & DROP',
+    filename: 'SovereignFileDropzoneUsage.jsx',
+    desc: 'Zero-dependency in-browser drag & drop file processor with automatic text/binary parsing and size limits.',
+    code: `<SovereignFileDropzone onFilesLoaded={(files) => console.log(files)} maxSizeMb={25} />`,
+  },
+  SovereignMediaHUD: {
+    title: 'SovereignMediaHUD',
+    badge: 'MEDIA TELEMETRY',
+    filename: 'SovereignMediaHUDUsage.jsx',
+    desc: 'Audio player, procedural waveform engine & media telemetry with scrubber, speed, and volume controls.',
+    code: `<SovereignMediaHUD title="PROCEDURAL SYNTHESIS" duration={180} />`,
+  },
+  SovereignPromptBox: {
+    title: 'SovereignPromptBox',
+    badge: 'AI DISPATCH DECK',
+    filename: 'SovereignPromptBoxUsage.jsx',
+    desc: 'Unified AI prompt, agent orchestration & directive dispatch deck with model selector, tuning, and ⌘↵ shortcut.',
+    code: `<SovereignPromptBox value={prompt} onChange={setPrompt} onSubmit={handleExecute} />`,
   },
 };
 
@@ -537,7 +582,7 @@ export default function UiKitPage() {
     return {
       severity: 'success',
       title: `Air-Gapped Nominal (${gaugeValue}%)`,
-      message: uploadedNote || 'All 24 React exports & Vanilla blocks operate locally with zero external egress.',
+      message: uploadedNote || 'All 29 React exports & Vanilla blocks operate locally with zero external egress.',
       actionLabel: 'Simulate Burst',
     };
   }, [gaugeValue, uploadedNote]);
@@ -908,6 +953,49 @@ ${reactBodyByArch[archetype] || reactBodyByArch.workstation}
         return <SovereignStatComparison title="BENCHMARKS" items={BENCHMARK_STATS.slice(0, 2)} accent={SOV.emerald} />;
       case 'SovereignTerminalLog':
         return <SovereignTerminalLog title="LIVE STREAM" logs={logs.slice(0, 3)} maxHeight={180} accent={SOV.emerald} />;
+      case 'SovereignStatusPill':
+        return (
+          <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap', alignItems: 'center' }}>
+            <SovereignStatusPill status="online" label="ACTIVE DAEMON" port={8092} pingMs={12} />
+            <SovereignStatusPill status="syncing" label="SYNCHRONIZING" pingMs={45} />
+            <SovereignStatusPill status="standby" label="IDLE STANDBY" />
+            <SovereignStatusPill status="offline" label="OFFLINE SERVICE" />
+          </Box>
+        );
+      case 'SovereignJsonTree':
+        return (
+          <SovereignJsonTree
+            title="INSPECT PARSED AST"
+            data={{
+              tool: 'zoth-ui',
+              version: '3.0.0',
+              architecture: { ssr: true, dualTheme: true, components: 29 },
+              ports: [8092, 5173, 3000],
+              status: 'nominal',
+            }}
+            initialDepth={2}
+            accent={SOV.emerald}
+          />
+        );
+      case 'SovereignFileDropzone':
+        return (
+          <SovereignFileDropzone
+            title="DROP CODE OR SPEC ARTIFACTS"
+            subtitle="Text, JSON, and source files parsed locally"
+            accent={SOV.emerald}
+          />
+        );
+      case 'SovereignMediaHUD':
+        return <SovereignMediaHUD title="AUDIO WAVEFORM TELEMETRY" duration={140} accent={SOV.emerald} />;
+      case 'SovereignPromptBox':
+        return (
+          <SovereignPromptBox
+            value="Synthesize responsive landing page with Schema.org WebApplication graph..."
+            onChange={() => {}}
+            onSubmit={() => {}}
+            accent={SOV.emerald}
+          />
+        );
       default:
         return (
           <SovereignCard
@@ -963,7 +1051,7 @@ ${reactBodyByArch[archetype] || reactBodyByArch.workstation}
         </HeroItem>
         <HeroItem>
           <Typography color="text.secondary" sx={{ maxWidth: 780, mb: 3.5, lineHeight: 1.65 }}>
-            24 SSR-safe React primitives &amp; blocks, 6 deterministic canvas engines, a zero-dependency Vanilla runtime, and a 4-archetype CLI generator + 8-point guardrail auditor.
+            29 SSR-safe React primitives &amp; blocks, 6 deterministic canvas engines, a zero-dependency Vanilla runtime, and a 4-archetype CLI generator + 8-point guardrail auditor.
           </Typography>
         </HeroItem>
       </HeroReveal>
@@ -975,9 +1063,9 @@ ${reactBodyByArch[archetype] || reactBodyByArch.workstation}
         version="3.0.0"
         variant={bandVariant}
         accent={accent}
-        subtitle="Test 6 canvas renderers (01), telemetry widgets (02), workflow/diff/site blocks (03), 24 exports explorer (04), and 4-archetype codegen (05)."
+        subtitle="Test 6 canvas renderers (01), telemetry widgets (02), workflow/diff/site blocks (03), 29 exports explorer (04), and 4-archetype codegen (05)."
         metrics={[
-          { label: 'REACT PRIMITIVES', value: '24', unit: 'EXPORTS', status: 'SSR-SAFE', accent: SOV.gold },
+          { label: 'REACT PRIMITIVES', value: '29', unit: 'EXPORTS', status: 'SSR-SAFE', accent: SOV.gold },
           { label: 'VANILLA DROP-IN', value: '2 FILES', unit: 'CSS + JS v3', status: 'ZERO DEPS', accent: SOV.emerald },
           { label: 'CLI SCAFFOLDER', value: 'zoth-scaffold v3', status: '4 ARCHETYPES', accent: SOV.cyber },
           { label: 'CANVAS ENGINES', value: '6', unit: 'RENDERERS', status: bandVariant.toUpperCase() },
@@ -1161,7 +1249,7 @@ ${reactBodyByArch[archetype] || reactBodyByArch.workstation}
                 primaryAction={{ label: 'Advance Step Wizard', onClick: () => setWizardStep((s) => (s + 1) % WIZARD_STEPS.length) }}
                 secondaryAction={{ label: 'Swap Diff Sample', onClick: () => setDiffSwapped((v) => !v) }}
                 trustItems={[
-                  { label: 'EXPORTS', value: '24' },
+                  { label: 'EXPORTS', value: '29' },
                   { label: 'CANVAS', value: '6 ENGINES' },
                   { label: 'GUARDRAIL', value: '8/8 AUDIT' },
                 ]}
@@ -1234,7 +1322,7 @@ ${reactBodyByArch[archetype] || reactBodyByArch.workstation}
             eyebrow="REACT & VANILLA COMPONENTS"
             title="Reusable Bento, Widget & Block Explorer"
             subtitle="Inspect each standardized component in live Dark or Light theme and copy its usage pattern."
-            badge="24 EXPORTS"
+            badge="29 EXPORTS"
             accent={SOV.emerald}
           >
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2.5 }}>

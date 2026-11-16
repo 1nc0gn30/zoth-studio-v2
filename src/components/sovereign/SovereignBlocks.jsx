@@ -14,9 +14,12 @@ import {
   Box,
   Button,
   Chip,
+  CircularProgress,
+  IconButton,
   InputAdornment,
   LinearProgress,
   MenuItem,
+  Slider,
   TextField,
   Typography,
   Unstable_Grid2 as Grid,
@@ -28,6 +31,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import TuneIcon from '@mui/icons-material/Tune';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { SOV, rgba, MONO, DISPLAY } from './palette.js';
 import { SovereignCard, resolveModeAccent } from './SovereignPrimitives.jsx';
 import { useCopy } from './hooks.js';
@@ -1335,6 +1340,300 @@ export function SovereignTerminalLog({
             );
           })
         )}
+      </Box>
+    </Box>
+  );
+}
+
+/**
+ * SovereignPromptBox — unified AI prompt, agent orchestration & directive dispatch deck.
+ * Includes model selector, temperature controls, system prompt drawer,
+ * character/token estimator, keyboard submission (Ctrl+Enter / Cmd+Enter), and loading states.
+ */
+export function SovereignPromptBox({
+  value,
+  onChange,
+  onSubmit,
+  onClear,
+  loading = false,
+  placeholder = 'Enter system instruction, agent workflow directive, or query...',
+  models = [
+    { id: 'local-ollama', label: 'Ollama Local (Hermes 3 / Qwen 2.5)', badge: ':11434' },
+    { id: 'zoth-archon', label: 'Zoth Archon (Enclave Agent)', badge: 'Sovereign' },
+    { id: 'claude-3-7', label: 'Claude 3.7 Sonnet (Anthropic)', badge: 'Cloud' },
+  ],
+  selectedModel,
+  onModelChange,
+  systemPrompt,
+  onSystemPromptChange,
+  temperature = 0.7,
+  onTemperatureChange,
+  accent = SOV.gold,
+  submitLabel = 'Execute Directive',
+  minRows = 3,
+  maxRows = 8,
+  sx,
+}) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const modeAccent = resolveModeAccent(accent, isDark);
+  const [showConfig, setShowConfig] = useState(false);
+
+  const charCount = (value || '').length;
+  const tokenEstimate = Math.round(charCount / 4);
+
+  const handleKeyDown = (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      if (!loading && onSubmit && value && value.trim()) {
+        onSubmit(value);
+      }
+    }
+  };
+
+  const handlePasteClipboard = async () => {
+    try {
+      if (typeof navigator !== 'undefined' && navigator.clipboard) {
+        const text = await navigator.clipboard.readText();
+        if (text && onChange) {
+          onChange(value ? `${value}\n${text}` : text);
+        }
+      }
+    } catch (_) {}
+  };
+
+  return (
+    <Box
+      sx={{
+        borderRadius: 2,
+        border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(16,24,40,0.12)'}`,
+        bgcolor: isDark ? '#08080C' : '#FAF8F3',
+        overflow: 'hidden',
+        position: 'relative',
+        ...sx,
+      }}
+    >
+      {/* Top Header / Model Strip */}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 1,
+          px: 2,
+          py: 1.25,
+          borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(16,24,40,0.08)'}`,
+          bgcolor: isDark ? 'rgba(255,255,255,0.02)' : 'rgba(16,24,40,0.02)',
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <TextField
+            select
+            size="small"
+            value={selectedModel || (models[0] && models[0].id) || ''}
+            onChange={(e) => onModelChange && onModelChange(e.target.value)}
+            sx={{
+              minWidth: 200,
+              '& .MuiInputBase-root': {
+                height: 34,
+                fontFamily: MONO,
+                fontSize: '0.74rem',
+                fontWeight: 700,
+                bgcolor: isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF',
+              },
+            }}
+          >
+            {models.map((m) => (
+              <MenuItem key={m.id} value={m.id} sx={{ fontFamily: MONO, fontSize: '0.76rem' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', gap: 1 }}>
+                  <span>{m.label}</span>
+                  {m.badge && (
+                    <Chip
+                      size="small"
+                      label={m.badge}
+                      sx={{ height: 20, fontSize: '0.62rem', fontFamily: MONO, fontWeight: 700 }}
+                    />
+                  )}
+                </Box>
+              </MenuItem>
+            ))}
+          </TextField>
+        </Box>
+
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Button
+            size="small"
+            variant="text"
+            onClick={() => setShowConfig(!showConfig)}
+            startIcon={<TuneIcon sx={{ fontSize: 15 }} />}
+            sx={{
+              minHeight: 34,
+              fontFamily: MONO,
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              textTransform: 'none',
+              color: showConfig ? modeAccent : (isDark ? SOV.slate : '#64748B'),
+            }}
+          >
+            {showConfig ? 'Hide Params' : 'Tuning'}
+          </Button>
+
+          {onClear && value && (
+            <Button
+              size="small"
+              onClick={onClear}
+              sx={{
+                minHeight: 34,
+                fontFamily: MONO,
+                fontSize: '0.7rem',
+                color: SOV.crimson,
+                textTransform: 'none',
+              }}
+            >
+              Clear
+            </Button>
+          )}
+        </Box>
+      </Box>
+
+      {/* Collapsible Tuning Panel */}
+      {showConfig && (
+        <Box
+          sx={{
+            p: 2,
+            borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(16,24,40,0.08)'}`,
+            bgcolor: isDark ? 'rgba(255,255,255,0.015)' : 'rgba(16,24,40,0.015)',
+          }}
+        >
+          <Grid container spacing={2} alignItems="center">
+            <Grid xs={12} sm={6}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                <Typography sx={{ fontFamily: MONO, fontSize: '0.72rem', fontWeight: 700, color: isDark ? SOV.cream : '#101828' }}>
+                  TEMPERATURE: {temperature}
+                </Typography>
+                <Typography sx={{ fontFamily: MONO, fontSize: '0.68rem', color: isDark ? SOV.slate : '#64748B' }}>
+                  {temperature < 0.3 ? 'Deterministic' : temperature > 0.8 ? 'Creative' : 'Balanced'}
+                </Typography>
+              </Box>
+              <Slider
+                size="small"
+                min={0}
+                max={1.5}
+                step={0.05}
+                value={temperature}
+                onChange={(_, v) => onTemperatureChange && onTemperatureChange(v)}
+                sx={{ color: modeAccent }}
+              />
+            </Grid>
+            <Grid xs={12} sm={6}>
+              <TextField
+                fullWidth
+                size="small"
+                label="System Directive / Enclave Persona"
+                placeholder="You are an autonomous sovereign engineer..."
+                value={systemPrompt || ''}
+                onChange={(e) => onSystemPromptChange && onSystemPromptChange(e.target.value)}
+                InputProps={{
+                  sx: {
+                    fontFamily: MONO,
+                    fontSize: '0.74rem',
+                    bgcolor: isDark ? 'rgba(255,255,255,0.03)' : '#FFFFFF',
+                  },
+                }}
+              />
+            </Grid>
+          </Grid>
+        </Box>
+      )}
+
+      {/* Textarea Input Body */}
+      <Box sx={{ p: 2 }}>
+        <TextField
+          fullWidth
+          multiline
+          minRows={minRows}
+          maxRows={maxRows}
+          value={value || ''}
+          onChange={(e) => onChange && onChange(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={placeholder}
+          variant="standard"
+          InputProps={{
+            disableUnderline: true,
+            sx: {
+              fontFamily: MONO,
+              fontSize: '0.86rem',
+              lineHeight: 1.6,
+              color: isDark ? SOV.cream : '#101828',
+            },
+          }}
+        />
+      </Box>
+
+      {/* Footer Dispatch Bar */}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: 1.5,
+          px: 2,
+          py: 1.25,
+          borderTop: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(16,24,40,0.08)'}`,
+          bgcolor: isDark ? 'rgba(255,255,255,0.015)' : 'rgba(16,24,40,0.015)',
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <Typography sx={{ fontFamily: MONO, fontSize: '0.7rem', color: isDark ? SOV.slate : '#64748B' }}>
+            {charCount} chars · ~{tokenEstimate} tokens
+          </Typography>
+          <Button
+            size="small"
+            onClick={handlePasteClipboard}
+            sx={{ minHeight: 28, px: 0.75, fontFamily: MONO, fontSize: '0.68rem', color: isDark ? SOV.slate : '#64748B', textTransform: 'none' }}
+          >
+            Paste Clipboard
+          </Button>
+        </Box>
+
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
+          <Typography
+            sx={{
+              display: { xs: 'none', sm: 'block' },
+              fontFamily: MONO,
+              fontSize: '0.68rem',
+              color: isDark ? SOV.slateDim : '#94A3B8',
+            }}
+          >
+            Press ⌘↵ or Ctrl+↵ to run
+          </Typography>
+
+          <Button
+            variant="contained"
+            disabled={loading || !value || !value.trim()}
+            onClick={() => onSubmit && onSubmit(value)}
+            startIcon={loading ? <CircularProgress size={16} color="inherit" /> : <PlayArrowIcon sx={{ fontSize: 18 }} />}
+            sx={{
+              minHeight: 44,
+              px: 2.5,
+              fontFamily: MONO,
+              fontSize: '0.78rem',
+              fontWeight: 800,
+              textTransform: 'none',
+              bgcolor: isDark ? modeAccent : '#101828',
+              color: isDark ? '#08080B' : '#FFFFFF',
+              boxShadow: `0 0 16px ${rgba(modeAccent, 0.25)}`,
+              '&:hover': {
+                bgcolor: isDark ? '#F5F1E6' : '#1E293B',
+                color: isDark ? '#08080B' : '#FFFFFF',
+              },
+            }}
+          >
+            {loading ? 'Synthesizing...' : submitLabel}
+          </Button>
+        </Box>
       </Box>
     </Box>
   );

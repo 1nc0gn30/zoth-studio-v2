@@ -639,3 +639,112 @@ export function SovereignActionBar({ actions = [], status, statusAccent = SOV.em
     </Box>
   );
 }
+
+/**
+ * SovereignStatusPill — live daemon, port & network telemetry pill.
+ * Features animated pulse beacon, port tag, and latency readout.
+ */
+export function SovereignStatusPill({
+  status = 'online',
+  label,
+  port,
+  pingMs,
+  compact = false,
+  accent,
+  sx,
+}) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+
+  const statusColorMap = {
+    online: SOV.emerald,
+    offline: SOV.crimson,
+    standby: SOV.amber,
+    degraded: SOV.amber,
+    syncing: SOV.cyber,
+  };
+
+  const baseCol = accent || statusColorMap[status] || SOV.emerald;
+  const col = resolveModeAccent(baseCol, isDark);
+  const displayLabel = label || status.toUpperCase();
+
+  return (
+    <Box
+      sx={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: compact ? 0.75 : 1,
+        px: compact ? 1 : 1.25,
+        py: compact ? 0.25 : 0.5,
+        minHeight: compact ? 26 : 34,
+        borderRadius: 999,
+        border: `1px solid ${rgba(col, isDark ? 0.35 : 0.28)}`,
+        bgcolor: isDark ? rgba(col, 0.08) : rgba(col, 0.06),
+        ...sx,
+      }}
+    >
+      <Box
+        component="span"
+        sx={{
+          width: compact ? 6 : 8,
+          height: compact ? 6 : 8,
+          borderRadius: '50%',
+          bgcolor: col,
+          boxShadow: `0 0 8px ${col}`,
+          animation: status === 'offline' ? 'none' : 'sovereignPillPulse 2s ease-in-out infinite',
+          '@keyframes sovereignPillPulse': {
+            '0%': { transform: 'scale(0.95)', opacity: 0.7 },
+            '50%': { transform: 'scale(1.2)', opacity: 1 },
+            '100%': { transform: 'scale(0.95)', opacity: 0.7 },
+          },
+        }}
+      />
+      <Typography
+        component="span"
+        sx={{
+          fontFamily: MONO,
+          fontSize: compact ? '0.68rem' : '0.74rem',
+          fontWeight: 700,
+          letterSpacing: '0.04em',
+          color: col,
+          lineHeight: 1,
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {displayLabel}
+      </Typography>
+      {port != null && (
+        <Typography
+          component="span"
+          sx={{
+            fontFamily: MONO,
+            fontSize: '0.66rem',
+            fontWeight: 600,
+            color: isDark ? SOV.slate : '#64748B',
+            bgcolor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
+            px: 0.6,
+            py: 0.15,
+            borderRadius: 0.75,
+            lineHeight: 1,
+          }}
+        >
+          :{port}
+        </Typography>
+      )}
+      {pingMs != null && (
+        <Typography
+          component="span"
+          sx={{
+            fontFamily: MONO,
+            fontSize: '0.66rem',
+            fontWeight: 600,
+            color: isDark ? SOV.slate : '#64748B',
+            lineHeight: 1,
+          }}
+        >
+          {pingMs}ms
+        </Typography>
+      )}
+    </Box>
+  );
+}

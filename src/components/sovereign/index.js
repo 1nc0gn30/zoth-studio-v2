@@ -1,4 +1,4 @@
-/** Public surface of the sovereign visual primitives (24 component exports). */
+/** Public surface of the sovereign visual primitives (29 component exports). */
 export { SOV, rgba, MONO, DISPLAY, hashSeed, rng, VARIANTS, VARIANT_META, ACCENTS, pickVariant, pickAccent, bandAccent, luma } from './palette.js';
 export { BAYER8, bayer8, dither2Tone, ditherFieldToRGBA } from './bayer.js';
 export { DOT_BITS, BLANK, cellChar, bitsFromDots, dotsFromBits, probeBrailleSupport, drawBrailleField } from './braille.js';
@@ -16,6 +16,7 @@ export {
   SovereignCodeBlock,
   SovereignSupportBar,
   SovereignActionBar,
+  SovereignStatusPill,
 } from './SovereignPrimitives.jsx';
 export { default as SovereignWorkstationShell } from './SovereignWorkstationShell.jsx';
 export {
@@ -26,6 +27,9 @@ export {
   SovereignKeyValueGrid,
   SovereignAlertBanner,
   SovereignFaqAccordion,
+  SovereignJsonTree,
+  SovereignFileDropzone,
+  SovereignMediaHUD,
 } from './SovereignWidgets.jsx';
 export {
   SovereignHeroSection,
@@ -36,4 +40,5 @@ export {
   SovereignFilterBar,
   SovereignStatComparison,
   SovereignTerminalLog,
+  SovereignPromptBox,
 } from './SovereignBlocks.jsx';

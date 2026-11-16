@@ -748,6 +748,63 @@
     }).join('');
   }
 
+  function renderStatusPill(el) {
+    if (!el) return;
+    var status = (el.getAttribute('data-status') || 'online').toLowerCase();
+    var label = el.getAttribute('data-label') || status.toUpperCase();
+    var port = el.getAttribute('data-port');
+    var ping = el.getAttribute('data-ping');
+    var accent = el.getAttribute('data-accent');
+
+    var col = accent || (status === 'online' ? '#34D399' : status === 'offline' ? '#EF4444' : status === 'syncing' ? '#38BDF8' : '#F59E0B');
+    var portHtml = port ? '<span style="font-family:var(--zoth-font-mono);font-size:0.66rem;font-weight:600;opacity:0.8;background:rgba(255,255,255,0.06);padding:2px 5px;border-radius:4px;">:' + escapeHtml(port) + '</span>' : '';
+    var pingHtml = ping ? '<span style="font-family:var(--zoth-font-mono);font-size:0.66rem;font-weight:600;opacity:0.8;">' + escapeHtml(ping) + 'ms</span>' : '';
+
+    el.className = (el.className ? el.className + ' ' : '') + 'zoth-status-pill';
+    el.style.display = 'inline-flex';
+    el.style.alignItems = 'center';
+    el.style.gap = '8px';
+    el.style.padding = '4px 12px';
+    el.style.borderRadius = '999px';
+    el.style.border = '1px solid ' + col;
+    el.style.background = 'rgba(52, 211, 153, 0.08)';
+    el.innerHTML =
+      '<span class="zoth-pill-dot" style="width:8px;height:8px;border-radius:50%;background:' + escapeHtml(col) + ';box-shadow:0 0 8px ' + escapeHtml(col) + ';"></span>' +
+      '<span style="font-family:var(--zoth-font-mono);font-size:0.72rem;font-weight:700;letter-spacing:0.04em;color:' + escapeHtml(col) + ';">' + escapeHtml(label) + '</span>' +
+      portHtml + pingHtml;
+  }
+
+  function renderMediaHUD(el) {
+    if (!el) return;
+    var title = el.getAttribute('data-title') || 'SOVEREIGN AUDIO ENGINE';
+    var duration = parseInt(el.getAttribute('data-duration') || '120', 10);
+    var accent = el.getAttribute('data-accent') || '#D4AF37';
+
+    var barsCount = 36;
+    var barsHtml = '';
+    for (var i = 0; i < barsCount; i++) {
+      var h = Math.max(15, Math.min(100, Math.round((Math.sin(i * 0.3) * 0.35 + Math.sin(i * 0.7 + 1.2) * 0.35 + 0.55) * 100)));
+      var active = i < Math.floor(barsCount * 0.35);
+      barsHtml += '<span style="flex:1;height:' + h + '%;background:' + (active ? accent : 'rgba(255,255,255,0.12)') + ';border-radius:2px;"></span>';
+    }
+
+    el.innerHTML =
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">' +
+        '<span style="font-family:var(--zoth-font-mono);font-size:0.76rem;font-weight:800;color:' + escapeHtml(accent) + ';">' + escapeHtml(title) + '</span>' +
+        '<span class="zoth-badge" style="color:#34D399;border-color:#34D399;">PLAYING</span>' +
+      '</div>' +
+      '<div style="display:flex;align-items:center;gap:3px;height:52px;padding:4px 8px;margin-bottom:12px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:8px;">' +
+        barsHtml +
+      '</div>' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+        '<div style="display:flex;align-items:center;gap:10px;">' +
+          '<button type="button" class="zoth-btn" style="min-height:38px;padding:0 14px;background:' + escapeHtml(accent) + ';color:#08080B;font-weight:800;">▶ Play</button>' +
+          '<span style="font-family:var(--zoth-font-mono);font-size:0.74rem;font-weight:700;">00:42 / 02:00</span>' +
+        '</div>' +
+        '<span style="font-family:var(--zoth-font-mono);font-size:0.72rem;color:var(--zoth-slate);">1.0x</span>' +
+      '</div>';
+  }
+
   function wireLogs(root) {
     var scope = root || document;
     scope.querySelectorAll('[data-zoth-log-filter]').forEach(function (btn) {
@@ -788,6 +845,8 @@
     document.querySelectorAll('[data-zoth-sparkline]').forEach(renderSparkline);
     document.querySelectorAll('[data-zoth-diff]').forEach(renderDiff);
     document.querySelectorAll('[data-zoth-stat-bars]').forEach(renderStatBars);
+    document.querySelectorAll('[data-zoth-status-pill]').forEach(renderStatusPill);
+    document.querySelectorAll('[data-zoth-media-hud]').forEach(renderMediaHUD);
     wireActions(document);
     wirePresets(document);
     wireTables(document);
@@ -807,6 +866,8 @@
     renderSparkline: renderSparkline,
     renderDiff: renderDiff,
     renderStatBars: renderStatBars,
+    renderStatusPill: renderStatusPill,
+    renderMediaHUD: renderMediaHUD,
     openTutorial: openTutorial,
     wireActions: wireActions,
     wirePresets: wirePresets,

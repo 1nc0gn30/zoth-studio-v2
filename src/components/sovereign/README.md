@@ -24,7 +24,7 @@ The matching zero-build HTML/CSS/JS version is `~/NullAITech/zoth-ui-kit` (`zoth
 | `<Stack direction="row">` for chips/buttons | `<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>`, which wraps cleanly at 390px |
 | An extra Quickstart dialog | `tutorialSteps` prop on `SovereignWorkstationShell` |
 
-## Components (24)
+## Components (29)
 
 ### Layout & primitives (`SovereignPrimitives.jsx`, `SovereignWorkstationShell.jsx`)
 | Component | Key props | Use for |
@@ -35,6 +35,7 @@ The matching zero-build HTML/CSS/JS version is `~/NullAITech/zoth-ui-kit` (`zoth
 | `SovereignCodeBlock` | `title, badge, code, filename, maxHeight` | Output or export artifacts (Copy and Download built in) |
 | `SovereignSupportBar` | `label, compact` | Open-access strip with Coffee and Solana tip |
 | `SovereignActionBar` | `actions=[{label,onClick,href,primary,icon,accent}], status` | 44px action buttons plus a status chip |
+| `SovereignStatusPill` | `status: online/offline/standby/syncing, label, port, pingMs, compact, accent` | Real-time daemon & port telemetry pill with pulse beacon |
 | `SovereignBand` | `seed, variant, eyebrow, caption, height` | Animated canvas header. Variants: `braille-orbit`, `bayer-field`, `scanline-grid`, `particle-orbit`, `hex-lattice`, `waveform-harmonics` |
 
 ### Widgets (`SovereignWidgets.jsx`)
@@ -47,6 +48,9 @@ The matching zero-build HTML/CSS/JS version is `~/NullAITech/zoth-ui-kit` (`zoth
 | `SovereignKeyValueGrid` | `items=[{label,value,badge,mono,copyable}], cols` | Spec sheets and metadata |
 | `SovereignAlertBanner` | `severity: info/success/warning/error, title, message, actionLabel, onAction` | Callouts |
 | `SovereignFaqAccordion` | `items=[{question,answer,tag}], defaultOpenIndex` | In-app docs and FAQs |
+| `SovereignJsonTree` | `data, title, initialDepth, searchable, copyable, maxHeight, accent` | Collapsible, syntax-highlighted, searchable JSON/AST inspector |
+| `SovereignFileDropzone` | `onFilesLoaded, accept, multiple, maxSizeMb, title, subtitle, accent` | In-browser drag & drop file processor with auto text/binary parsing |
+| `SovereignMediaHUD` | `src, title, subtitle, duration, bars, accent, onPlayStateChange` | Audio player, procedural waveform engine & media telemetry |
 
 ### Blocks (`SovereignBlocks.jsx`)
 | Component | Key props | Use for |
@@ -59,6 +63,7 @@ The matching zero-build HTML/CSS/JS version is `~/NullAITech/zoth-ui-kit` (`zoth
 | `SovereignFilterBar` | `search, onSearchChange, categories[], activeCategory, sortOptions[], totalCount, filteredCount, onReset` | Toolbar above any list |
 | `SovereignStatComparison` | `items=[{label,baseline,current,unit,max,better: 'lower'/'higher'}]` | Before/after benchmarks |
 | `SovereignTerminalLog` | `logs=[{ts,level,source,message}], onClear, maxHeight` | Live event streams with level filter and copy |
+| `SovereignPromptBox` | `value, onChange, onSubmit, onClear, loading, models[], systemPrompt, temperature, accent` | AI prompt & agent directive dispatch deck with shortcut execution |
 
 ### Typography (`typography.jsx`)
 `SovereignEyebrow` (mono provenance line), `SovereignSectionHead`, `SovereignLede`, `SovereignMeta`,
