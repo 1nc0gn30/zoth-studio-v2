@@ -1228,7 +1228,7 @@
       "name": "Zoth Bolt",
       "description": "Flagship Sovereign Full-Stack AI Web & Motion Architect (Zoth Bolt / bolt.diy) on 127.0.0.1:5173. Supports 19+ AI providers, local Ollama & CLI agents (AGY, Hermes, Grok, Claude, OpenCode, Cline, Aider), 6 Motion Edit templates, 200k+ SVG & Pixel Art icons, TUI (`zoth-bolt-tui`), and Electron Desktop app (`zoth-bolt desktop`).",
       "category": "Autonomous Web",
-      "github": "https://github.com/1nc0gn30/zoth-webgen",
+      "github": "https://github.com/1nc0gn30/bolt.diy",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/zoth-bolt/",
       "version": "3.5.0",

@@ -1161,7 +1161,7 @@ export const microTools = [
     repo: 'bolt.diy',
     category: 'Autonomous Web',
     executionType: 'local_cli',
-    github: 'https://github.com/1nc0gn30/zoth-webgen',
+    github: 'https://github.com/1nc0gn30/bolt.diy',
     priceUsd: '0',
     priceCents: 0,
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
