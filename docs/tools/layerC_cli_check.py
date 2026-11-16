@@ -2,7 +2,7 @@
 """Layer C CLI-invariant verifier with a SANITIZED environment.
 
 Hard lesson (harness artifact #3): running `<bin> --help` from a Python kernel
-whose PATH leaks an unrelated venv (e.g. /home/zoth/.hermes/installs/*/venv with a
+whose PATH leaks an unrelated venv (e.g. ~/.hermes/installs/*/venv with a
 broken `openai`) makes healthy tools exit 1 with an import traceback. Verdicts
 must therefore be taken under a minimal, deterministic environment:
 

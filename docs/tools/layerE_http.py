@@ -19,9 +19,9 @@ Usage:
 """
 import argparse, json, os, re, socket, subprocess, sys, time, contextlib, signal
 
-STUDIO = "/home/zoth/NullAITech/zoth-studio-v2"
-SCRATCH = "/home/zoth/.hermes/cache/scratch"
-CAPTURE = "/home/zoth/.gemini/config/skills/ui-verification-loop/scripts/capture.mjs"
+STUDIO = "~/NullAITech/zoth-studio-v2"
+SCRATCH = "~/.hermes/cache/scratch"
+CAPTURE = "~/.gemini/config/skills/ui-verification-loop/scripts/capture.mjs"
 sys.path.insert(0, os.path.join(STUDIO, "docs", "tools"))
 import parity_probe as pp  # noqa: E402
 

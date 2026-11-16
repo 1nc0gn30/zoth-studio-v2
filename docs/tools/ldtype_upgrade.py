@@ -27,7 +27,7 @@ import time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import parity_probe as P  # noqa: E402
 
-BACKUP_DIR = "/home/zoth/.hermes/cache/scratch/backups-24h"
+BACKUP_DIR = "~/.hermes/cache/scratch/backups-24h"
 NEW_TYPE = '["WebApplication", "SoftwareApplication"]'
 # the exact key/value pair the fleet emits, with any inner/outer spacing
 PAT = re.compile(r'("@type"\s*:\s*)"SoftwareApplication"')

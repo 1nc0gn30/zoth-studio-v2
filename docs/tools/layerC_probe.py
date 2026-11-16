@@ -27,10 +27,10 @@ import parity_probe as pp  # noqa: E402
 
 S1 = "/usr/local/bin"
 S2 = os.path.expanduser("~/.local/bin")
-S3 = "/home/zoth/NullAITech/zoth-os/config/includes.chroot/usr/local/bin"
+S3 = "~/NullAITech/zoth-os/config/includes.chroot/usr/local/bin"
 SURFACES = (("S1", S1), ("S2", S2), ("S3", S3))
-ZOTHOS = "/home/zoth/NullAITech/zoth-os"
-SCRATCH = "/home/zoth/.hermes/cache/scratch"
+ZOTHOS = "~/NullAITech/zoth-os"
+SCRATCH = "~/.hermes/cache/scratch"
 
 
 def sha(path):

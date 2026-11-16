@@ -281,7 +281,7 @@ outside every repo, so no repo or markdown artifact carries them.
 
 ### 4.5 Open item — `zothos-lite` shadowing (not fixed, needs an owner decision)
 
-`~/.local/bin/zothos-lite` is a symlink to `/home/zoth/NullAITech/zothos-lite/bin/zothos-lite`
+`~/.local/bin/zothos-lite` is a symlink to `~/NullAITech/zothos-lite/bin/zothos-lite`
 (13237 B, mtime 2026-11-11). `/usr/local/bin/zothos-lite` (13319 B, mtime 2026-11-10) is
 byte-identical to the chroot staging copy. `~/.local/bin` precedes `/usr/local/bin` on `PATH`,
 so **the repo copy is what actually runs**, and the only difference is one line:

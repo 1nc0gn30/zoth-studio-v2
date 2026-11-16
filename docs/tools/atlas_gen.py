@@ -17,7 +17,7 @@ Usage: python3 docs/tools/atlas_gen.py [--check]
 """
 import os, re, sys, json, glob, hashlib, datetime, subprocess
 
-ROOT = "/home/zoth/NullAITech"
+ROOT = "~/NullAITech"
 ST   = os.path.join(ROOT, "zoth-studio-v2")
 ZOS  = os.path.join(ROOT, "zoth-os")
 DOCS = os.path.join(ST, "docs")
@@ -519,7 +519,7 @@ def render_atlas(rows, s):
         "",
         "### 4.5 Open item — `zothos-lite` shadowing (not fixed, needs an owner decision)",
         "",
-        "`~/.local/bin/zothos-lite` is a symlink to `/home/zoth/NullAITech/zothos-lite/bin/zothos-lite`",
+        "`~/.local/bin/zothos-lite` is a symlink to `~/NullAITech/zothos-lite/bin/zothos-lite`",
         "(13237 B, mtime 2026-11-11). `/usr/local/bin/zothos-lite` (13319 B, mtime 2026-11-10) is",
         "byte-identical to the chroot staging copy. `~/.local/bin` precedes `/usr/local/bin` on `PATH`,",
         "so **the repo copy is what actually runs**, and the only difference is one line:",
@@ -878,7 +878,7 @@ def render_report(rows, s):
         "",
         "## 9. Flagship: aether-observatory",
         "",
-        "`/home/zoth/NullAITech/aether-observatory` is built and committed (`v1.0.0`, 2 commits) and is",
+        "`~/NullAITech/aether-observatory` is built and committed (`v1.0.0`, 2 commits) and is",
         "**already serving live on `127.0.0.1:8160`** (`node src/server.js --port 8160`, cwd = the repo,",
         "started before this window). It was left running untouched, as the invariants require.",
         "",
@@ -954,7 +954,7 @@ def main():
               s["catalog"], s["ports_distinct"], s["canonical_ok"], len(s["drift_ids"]),
               len(s["native_cli"]), s["alias_count"], len(s["alias_drift"]),
               s["a_ok"], s["b_ok"], s["d_ok"], len(s["seo_gap"]), len(s["orphan"])))
-    json.dump({"rows": rows, "stats": s}, open("/home/zoth/.hermes/cache/scratch/atlas_full.json", "w"), indent=1)
+    json.dump({"rows": rows, "stats": s}, open("~/.hermes/cache/scratch/atlas_full.json", "w"), indent=1)
 
 
 if __name__ == "__main__":

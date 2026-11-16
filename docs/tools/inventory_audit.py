@@ -2,7 +2,7 @@
 """Sovereign ecosystem inventory + parity audit.
 
 Collects real evidence (filesystem, git, ports, CLI binaries) for every repo
-under /home/zoth/NullAITech and emits a JSON ledger. No network, no writes to
+under ~/NullAITech and emits a JSON ledger. No network, no writes to
 any repo.
 """
 import json
@@ -12,10 +12,10 @@ import shutil
 import subprocess
 from datetime import datetime, timezone
 
-BASE = "/home/zoth/NullAITech"
+BASE = "~/NullAITech"
 STUDIO = os.path.join(BASE, "zoth-studio-v2")
 CHROOT_BIN = os.path.join(BASE, "zoth-os/config/includes.chroot/usr/local/bin")
-LOCAL_BIN = "/home/zoth/.local/bin"
+LOCAL_BIN = "~/.local/bin"
 USR_BIN = "/usr/local/bin"
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "inventory.json")
 

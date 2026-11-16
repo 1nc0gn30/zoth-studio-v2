@@ -18,7 +18,7 @@ import parity_probe as pp  # noqa: E402
 SURFACES = [
     ("S1 /usr/local/bin", "/usr/local/bin"),
     ("S2 ~/.local/bin", os.path.expanduser("~/.local/bin")),
-    ("S3 zoth-os chroot", "/home/zoth/NullAITech/zoth-os/config/includes.chroot/usr/local/bin"),
+    ("S3 zoth-os chroot", "~/NullAITech/zoth-os/config/includes.chroot/usr/local/bin"),
 ]
 REPO_BIN = ["bin/{id}", "{id}", "dist/{id}", "scripts/{id}"]
 

@@ -12,7 +12,7 @@
   "orphans": [
     {
       "repo": "1nc0gn30",
-      "path": "/home/zoth/NullAITech/1nc0gn30",
+      "path": "~/NullAITech/1nc0gn30",
       "has_readme": true,
       "readme_bytes": 6532,
       "version": null,
@@ -25,7 +25,7 @@
     },
     {
       "repo": "1nc0gn30.github.io",
-      "path": "/home/zoth/NullAITech/1nc0gn30.github.io",
+      "path": "~/NullAITech/1nc0gn30.github.io",
       "has_readme": true,
       "readme_bytes": 6341,
       "version": null,
@@ -38,7 +38,7 @@
     },
     {
       "repo": "30-days-of-Linux-Fundamentals",
-      "path": "/home/zoth/NullAITech/30-days-of-Linux-Fundamentals",
+      "path": "~/NullAITech/30-days-of-Linux-Fundamentals",
       "has_readme": true,
       "readme_bytes": 23902,
       "version": null,
@@ -51,7 +51,7 @@
     },
     {
       "repo": "GhidraMCP",
-      "path": "/home/zoth/NullAITech/GhidraMCP",
+      "path": "~/NullAITech/GhidraMCP",
       "has_readme": false,
       "readme_bytes": 0,
       "version": null,
@@ -64,7 +64,7 @@
     },
     {
       "repo": "LaunchBetter",
-      "path": "/home/zoth/NullAITech/LaunchBetter",
+      "path": "~/NullAITech/LaunchBetter",
       "has_readme": true,
       "readme_bytes": 4073,
       "version": "0.0.0",
@@ -80,7 +80,7 @@
     },
     {
       "repo": "Netlify-Ghost-Hub",
-      "path": "/home/zoth/NullAITech/Netlify-Ghost-Hub",
+      "path": "~/NullAITech/Netlify-Ghost-Hub",
       "has_readme": true,
       "readme_bytes": 12043,
       "version": null,
@@ -93,7 +93,7 @@
     },
     {
       "repo": "aether-observatory",
-      "path": "/home/zoth/NullAITech/aether-observatory",
+      "path": "~/NullAITech/aether-observatory",
       "has_readme": true,
       "readme_bytes": 5158,
       "version": "1.0.0",
@@ -112,7 +112,7 @@
     },
     {
       "repo": "bounty-hunter",
-      "path": "/home/zoth/NullAITech/bounty-hunter",
+      "path": "~/NullAITech/bounty-hunter",
       "has_readme": false,
       "readme_bytes": 0,
       "version": null,
@@ -125,7 +125,7 @@
     },
     {
       "repo": "chain-of-thoughts",
-      "path": "/home/zoth/NullAITech/chain-of-thoughts",
+      "path": "~/NullAITech/chain-of-thoughts",
       "has_readme": true,
       "readme_bytes": 10018,
       "version": "1.0.0",
@@ -141,7 +141,7 @@
     },
     {
       "repo": "colibri",
-      "path": "/home/zoth/NullAITech/colibri",
+      "path": "~/NullAITech/colibri",
       "has_readme": true,
       "readme_bytes": 53778,
       "version": null,
@@ -156,7 +156,7 @@
     },
     {
       "repo": "fieldkit",
-      "path": "/home/zoth/NullAITech/fieldkit",
+      "path": "~/NullAITech/fieldkit",
       "has_readme": true,
       "readme_bytes": 13986,
       "version": null,
@@ -172,7 +172,7 @@
     },
     {
       "repo": "fieldkit-site",
-      "path": "/home/zoth/NullAITech/fieldkit-site",
+      "path": "~/NullAITech/fieldkit-site",
       "has_readme": false,
       "readme_bytes": 0,
       "version": null,
@@ -185,7 +185,7 @@
     },
     {
       "repo": "google-ai-resources",
-      "path": "/home/zoth/NullAITech/google-ai-resources",
+      "path": "~/NullAITech/google-ai-resources",
       "has_readme": false,
       "readme_bytes": 0,
       "version": null,
@@ -198,7 +198,7 @@
     },
     {
       "repo": "hermes-laboratory",
-      "path": "/home/zoth/NullAITech/hermes-laboratory",
+      "path": "~/NullAITech/hermes-laboratory",
       "has_readme": false,
       "readme_bytes": 0,
       "version": null,
@@ -211,7 +211,7 @@
     },
     {
       "repo": "hermes-webchat",
-      "path": "/home/zoth/NullAITech/hermes-webchat",
+      "path": "~/NullAITech/hermes-webchat",
       "has_readme": false,
       "readme_bytes": 0,
       "version": null,
@@ -224,7 +224,7 @@
     },
     {
       "repo": "hermes-zoth",
-      "path": "/home/zoth/NullAITech/hermes-zoth",
+      "path": "~/NullAITech/hermes-zoth",
       "has_readme": true,
       "readme_bytes": 8944,
       "version": null,
@@ -237,7 +237,7 @@
     },
     {
       "repo": "hexstrike-arsenal",
-      "path": "/home/zoth/NullAITech/hexstrike-arsenal",
+      "path": "~/NullAITech/hexstrike-arsenal",
       "has_readme": true,
       "readme_bytes": 7645,
       "version": "1.0.0",
@@ -257,7 +257,7 @@
     },
     {
       "repo": "meta-hackathon-2026",
-      "path": "/home/zoth/NullAITech/meta-hackathon-2026",
+      "path": "~/NullAITech/meta-hackathon-2026",
       "has_readme": false,
       "readme_bytes": 0,
       "version": null,
@@ -270,7 +270,7 @@
     },
     {
       "repo": "metadigitalgoods",
-      "path": "/home/zoth/NullAITech/metadigitalgoods",
+      "path": "~/NullAITech/metadigitalgoods",
       "has_readme": false,
       "readme_bytes": 0,
       "version": null,
@@ -283,7 +283,7 @@
     },
     {
       "repo": "muse-code-linux",
-      "path": "/home/zoth/NullAITech/muse-code-linux",
+      "path": "~/NullAITech/muse-code-linux",
       "has_readme": true,
       "readme_bytes": 4467,
       "version": null,
@@ -296,7 +296,7 @@
     },
     {
       "repo": "neal-bliki",
-      "path": "/home/zoth/NullAITech/neal-bliki",
+      "path": "~/NullAITech/neal-bliki",
       "has_readme": true,
       "readme_bytes": 9134,
       "version": "0.0.0",
@@ -312,7 +312,7 @@
     },
     {
       "repo": "neal-voice-clone",
-      "path": "/home/zoth/NullAITech/neal-voice-clone",
+      "path": "~/NullAITech/neal-voice-clone",
       "has_readme": true,
       "readme_bytes": 1477,
       "version": null,
@@ -325,7 +325,7 @@
     },
     {
       "repo": "nealfrazier-tech-build",
-      "path": "/home/zoth/NullAITech/nealfrazier-tech-build",
+      "path": "~/NullAITech/nealfrazier-tech-build",
       "has_readme": true,
       "readme_bytes": 10494,
       "version": "0.0.0",
@@ -341,7 +341,7 @@
     },
     {
       "repo": "nealsvision",
-      "path": "/home/zoth/NullAITech/nealsvision",
+      "path": "~/NullAITech/nealsvision",
       "has_readme": true,
       "readme_bytes": 5792,
       "version": "0.0.0",
@@ -357,7 +357,7 @@
     },
     {
       "repo": "nullai2026",
-      "path": "/home/zoth/NullAITech/nullai2026",
+      "path": "~/NullAITech/nullai2026",
       "has_readme": true,
       "readme_bytes": 5063,
       "version": "0.0.0",
@@ -373,7 +373,7 @@
     },
     {
       "repo": "pentest-academy",
-      "path": "/home/zoth/NullAITech/pentest-academy",
+      "path": "~/NullAITech/pentest-academy",
       "has_readme": true,
       "readme_bytes": 5453,
       "version": null,
@@ -386,7 +386,7 @@
     },
     {
       "repo": "shodan-viz",
-      "path": "/home/zoth/NullAITech/shodan-viz",
+      "path": "~/NullAITech/shodan-viz",
       "has_readme": true,
       "readme_bytes": 1016,
       "version": "0.0.0",
@@ -402,7 +402,7 @@
     },
     {
       "repo": "super-muse",
-      "path": "/home/zoth/NullAITech/super-muse",
+      "path": "~/NullAITech/super-muse",
       "has_readme": false,
       "readme_bytes": 0,
       "version": null,
@@ -415,7 +415,7 @@
     },
     {
       "repo": "vaelor-network",
-      "path": "/home/zoth/NullAITech/vaelor-network",
+      "path": "~/NullAITech/vaelor-network",
       "has_readme": true,
       "readme_bytes": 51952,
       "version": "1.0.0",
@@ -431,7 +431,7 @@
     },
     {
       "repo": "vb-bin-butler",
-      "path": "/home/zoth/NullAITech/vb-bin-butler",
+      "path": "~/NullAITech/vb-bin-butler",
       "has_readme": true,
       "readme_bytes": 8310,
       "version": null,
@@ -444,7 +444,7 @@
     },
     {
       "repo": "vb-towncenter-delivery",
-      "path": "/home/zoth/NullAITech/vb-towncenter-delivery",
+      "path": "~/NullAITech/vb-towncenter-delivery",
       "has_readme": true,
       "readme_bytes": 4769,
       "version": null,
@@ -457,7 +457,7 @@
     },
     {
       "repo": "video-production",
-      "path": "/home/zoth/NullAITech/video-production",
+      "path": "~/NullAITech/video-production",
       "has_readme": false,
       "readme_bytes": 0,
       "version": null,
@@ -470,7 +470,7 @@
     },
     {
       "repo": "war-of-zoth",
-      "path": "/home/zoth/NullAITech/war-of-zoth",
+      "path": "~/NullAITech/war-of-zoth",
       "has_readme": false,
       "readme_bytes": 0,
       "version": null,
@@ -483,7 +483,7 @@
     },
     {
       "repo": "zml-website",
-      "path": "/home/zoth/NullAITech/zml-website",
+      "path": "~/NullAITech/zml-website",
       "has_readme": true,
       "readme_bytes": 3438,
       "version": null,
@@ -496,7 +496,7 @@
     },
     {
       "repo": "zoth-bolt",
-      "path": "/home/zoth/NullAITech/zoth-bolt",
+      "path": "~/NullAITech/zoth-bolt",
       "has_readme": true,
       "readme_bytes": 12391,
       "version": "3.0.0",
@@ -516,7 +516,7 @@
     },
     {
       "repo": "zoth-cursorz",
-      "path": "/home/zoth/NullAITech/zoth-cursorz",
+      "path": "~/NullAITech/zoth-cursorz",
       "has_readme": true,
       "readme_bytes": 6214,
       "version": "1.0.0",
@@ -536,7 +536,7 @@
     },
     {
       "repo": "zoth-egregore",
-      "path": "/home/zoth/NullAITech/zoth-egregore",
+      "path": "~/NullAITech/zoth-egregore",
       "has_readme": true,
       "readme_bytes": 7948,
       "version": null,
@@ -555,7 +555,7 @@
     },
     {
       "repo": "zoth-fast",
-      "path": "/home/zoth/NullAITech/zoth-fast",
+      "path": "~/NullAITech/zoth-fast",
       "has_readme": true,
       "readme_bytes": 8653,
       "version": null,
@@ -568,7 +568,7 @@
     },
     {
       "repo": "zoth-gpu-foundry",
-      "path": "/home/zoth/NullAITech/zoth-gpu-foundry",
+      "path": "~/NullAITech/zoth-gpu-foundry",
       "has_readme": true,
       "readme_bytes": 2731,
       "version": null,
@@ -585,7 +585,7 @@
     },
     {
       "repo": "zoth-lattice-bot",
-      "path": "/home/zoth/NullAITech/zoth-lattice-bot",
+      "path": "~/NullAITech/zoth-lattice-bot",
       "has_readme": false,
       "readme_bytes": 0,
       "version": null,
@@ -598,7 +598,7 @@
     },
     {
       "repo": "zoth-npm",
-      "path": "/home/zoth/NullAITech/zoth-npm",
+      "path": "~/NullAITech/zoth-npm",
       "has_readme": true,
       "readme_bytes": 1712,
       "version": "0.1.0",
@@ -614,7 +614,7 @@
     },
     {
       "repo": "zoth-os-website",
-      "path": "/home/zoth/NullAITech/zoth-os-website",
+      "path": "~/NullAITech/zoth-os-website",
       "has_readme": true,
       "readme_bytes": 12568,
       "version": "3.4.0",
@@ -630,7 +630,7 @@
     },
     {
       "repo": "zoth-studio-og",
-      "path": "/home/zoth/NullAITech/zoth-studio-og",
+      "path": "~/NullAITech/zoth-studio-og",
       "has_readme": true,
       "readme_bytes": 18816,
       "version": null,
@@ -646,7 +646,7 @@
     },
     {
       "repo": "zoth-termux",
-      "path": "/home/zoth/NullAITech/zoth-termux",
+      "path": "~/NullAITech/zoth-termux",
       "has_readme": true,
       "readme_bytes": 27713,
       "version": null,
@@ -659,7 +659,7 @@
     },
     {
       "repo": "zoth-theme-forge",
-      "path": "/home/zoth/NullAITech/zoth-theme-forge",
+      "path": "~/NullAITech/zoth-theme-forge",
       "has_readme": false,
       "readme_bytes": 0,
       "version": null,
@@ -676,7 +676,7 @@
     },
     {
       "repo": "zoth-ui-kit",
-      "path": "/home/zoth/NullAITech/zoth-ui-kit",
+      "path": "~/NullAITech/zoth-ui-kit",
       "has_readme": true,
       "readme_bytes": 2735,
       "version": null,
@@ -689,7 +689,7 @@
     },
     {
       "repo": "zoth-usb-bridge",
-      "path": "/home/zoth/NullAITech/zoth-usb-bridge",
+      "path": "~/NullAITech/zoth-usb-bridge",
       "has_readme": true,
       "readme_bytes": 2121,
       "version": "1.0.0",
@@ -709,7 +709,7 @@
     },
     {
       "repo": "zoth-x-connector",
-      "path": "/home/zoth/NullAITech/zoth-x-connector",
+      "path": "~/NullAITech/zoth-x-connector",
       "has_readme": true,
       "readme_bytes": 3919,
       "version": "1.0.0",
@@ -729,7 +729,7 @@
     },
     {
       "repo": "zoth-yara-forge",
-      "path": "/home/zoth/NullAITech/zoth-yara-forge",
+      "path": "~/NullAITech/zoth-yara-forge",
       "has_readme": false,
       "readme_bytes": 0,
       "version": null,
@@ -746,7 +746,7 @@
     },
     {
       "repo": "zothnet-android",
-      "path": "/home/zoth/NullAITech/zothnet-android",
+      "path": "~/NullAITech/zothnet-android",
       "has_readme": true,
       "readme_bytes": 4523,
       "version": null,
@@ -759,7 +759,7 @@
     },
     {
       "repo": "zothnet-website",
-      "path": "/home/zoth/NullAITech/zothnet-website",
+      "path": "~/NullAITech/zothnet-website",
       "has_readme": true,
       "readme_bytes": 5940,
       "version": null,

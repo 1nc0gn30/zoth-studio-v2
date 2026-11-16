@@ -35,10 +35,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import parity_probe as pp  # noqa: E402
 
 MARK = "# zothos-json-manifest"
-SURFACES_USER = ["/home/zoth/.local/bin",
-                 "/home/zoth/NullAITech/zoth-os/config/includes.chroot/usr/local/bin"]
+SURFACES_USER = ["~/.local/bin",
+                 "~/NullAITech/zoth-os/config/includes.chroot/usr/local/bin"]
 SURFACE_ROOT = "/usr/local/bin"
-SANE = {"HOME": "/home/zoth",
+SANE = {"HOME": "~",
         "PATH": "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
         "TERM": "dumb", "LANG": "C.UTF-8"}
 BAD = re.compile(r"unrecognized arguments|invalid choice|unrecognized option", re.I)
@@ -162,7 +162,7 @@ def main() -> int:
     ap.add_argument("--ids", help="comma-separated ids (default: whole catalog)")
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--force", action="store_true", help="rewrite already-manifested tools")
-    ap.add_argument("--sudo-script", default="/home/zoth/.hermes/cache/scratch/fix_json_surfaces.sh")
+    ap.add_argument("--sudo-script", default="~/.hermes/cache/scratch/fix_json_surfaces.sh")
     a = ap.parse_args()
 
     tools = {t["id"]: t for t in pp.parse_tools()}
@@ -222,7 +222,7 @@ def main() -> int:
         os.chmod(a.sudo_script, 0o755)
         print(f"\nsudo script: {a.sudo_script} ({len(sudo_lines)} root surfaces)")
 
-    out = "/home/zoth/.hermes/cache/scratch/fix_top_level_json.json"
+    out = "~/.hermes/cache/scratch/fix_top_level_json.json"
     json.dump(rows, open(out, "w"), indent=1)
     from collections import Counter
     print("status counts:", dict(Counter(r["status"] for r in rows)))

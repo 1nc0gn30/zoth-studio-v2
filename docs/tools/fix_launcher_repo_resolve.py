@@ -14,7 +14,7 @@ the ZothOS chroot, where the computation yields ``/usr`` / ``~/.local`` -- so
 
 Fix: prepend an idempotent shim (marker ``# zothos-repo-shim``) to the repo's
 canonical launcher.  The shim re-executes the canonical repo copy
-(``$ZOTH_REPO_DIR`` override, else ``/home/zoth/NullAITech/<repo>``) whenever the
+(``$ZOTH_REPO_DIR`` override, else ``~/NullAITech/<repo>``) whenever the
 running file is NOT the repo copy, so repo-relative paths always resolve.  When
 the repo copy itself runs, the shim is a no-op -- no recursion.
 
@@ -39,11 +39,11 @@ import parity_probe as pp  # noqa: E402
 
 MARK = "# zothos-repo-shim"
 QUOTES = ('"""', "'''")
-ROOT = "/home/zoth/NullAITech"
-SURFACES_USER = ["/home/zoth/.local/bin",
-                 "/home/zoth/NullAITech/zoth-os/config/includes.chroot/usr/local/bin"]
+ROOT = "~/NullAITech"
+SURFACES_USER = ["~/.local/bin",
+                 "~/NullAITech/zoth-os/config/includes.chroot/usr/local/bin"]
 SURFACE_ROOT = "/usr/local/bin"
-SANE = {"HOME": "/home/zoth",
+SANE = {"HOME": "~",
         "PATH": "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
         "TERM": "dumb", "LANG": "C.UTF-8"}
 
@@ -125,7 +125,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--ids", help="comma-separated tool ids (default: auto-detect)")
     ap.add_argument("--apply", action="store_true")
-    ap.add_argument("--sudo-script", default="/home/zoth/.hermes/cache/scratch/fix_launcher_surfaces.sh")
+    ap.add_argument("--sudo-script", default="~/.hermes/cache/scratch/fix_launcher_surfaces.sh")
     a = ap.parse_args()
 
     tools = {t["id"]: t for t in pp.parse_tools()}
@@ -181,7 +181,7 @@ def main() -> int:
         os.chmod(a.sudo_script, 0o755)
         print(f"\nsudo script: {a.sudo_script}  ({len(sudo_lines)} root surfaces)")
 
-    out = "/home/zoth/.hermes/cache/scratch/fix_launcher_repo_resolve.json"
+    out = "~/.hermes/cache/scratch/fix_launcher_repo_resolve.json"
     json.dump(rows, open(out, "w"), indent=1)
     print("report ->", out)
     return 0

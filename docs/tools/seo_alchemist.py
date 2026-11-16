@@ -27,8 +27,8 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from parity_probe import parse_tools, find_entry, probe_layer_a  # noqa: E402
 
-ROOT = "/home/zoth/NullAITech"
-BACKUP = "/home/zoth/.hermes/cache/scratch/backups-24h"
+ROOT = "~/NullAITech"
+BACKUP = "~/.hermes/cache/scratch/backups-24h"
 STRIPE = "https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
 SOLANA = "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
 OG_IMAGE = "https://zoth.nullai.tech/og-zoth.png"

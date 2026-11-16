@@ -15,8 +15,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import parity_probe as pp  # noqa: E402
 
-SCRATCH = "/home/zoth/.hermes/cache/scratch"
-STUDIO = "/home/zoth/NullAITech/zoth-studio-v2"
+SCRATCH = "~/.hermes/cache/scratch"
+STUDIO = "~/NullAITech/zoth-studio-v2"
 PAGE = os.path.join(STUDIO, "src/pages/RealToolWorkspacePage.jsx")
 COMPDIR = os.path.join(STUDIO, "src/components/tools")
 

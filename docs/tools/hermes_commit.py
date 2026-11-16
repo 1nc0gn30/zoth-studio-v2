@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Hermes 24h mission — auditable local commit gate (HEAD-safe).
 
-Why this exists: `/home/zoth/NullAITech/*` repos carry the owner's own
+Why this exists: `~/NullAITech/*` repos carry the owner's own
 uncommitted work-in-progress, and the owner's tooling commits on `main` while
 this mission runs. So this gate never switches branches, never touches the
 owner's index, never pushes, and commits ONLY the explicit paths handed to it:
@@ -26,7 +26,7 @@ import sys
 import tempfile
 
 BRANCH = "chore/hermes-24h-sovereign-parity"
-SCRATCH = "/home/zoth/.hermes/cache/scratch"
+SCRATCH = "~/.hermes/cache/scratch"
 
 FORBIDDEN_PATH = [
     r"(^|/)\.env(\..*)?$", r"(^|/)auth\.json$", r"mcp[-_]?tokens", r"\.pem$", r"\.key$",

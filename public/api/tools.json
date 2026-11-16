@@ -1,7 +1,7 @@
 {
   "schema": "zoth/tools-static/v1",
   "generated_at": "2026-11-13T12:00:00.000Z",
-  "tool_count": 80,
+  "tool_count": 81,
   "tools": [
     {
       "id": "pixel-cast",
@@ -22,6 +22,26 @@
       ],
       "port": 8148,
       "local_url": "http://127.0.0.1:8148"
+    },
+    {
+      "id": "aether-observatory",
+      "name": "Aether Observatory",
+      "description": "Sovereign cyber-physical telemetry command deck: 60fps 3D orbital constellation of every live port, daemon, thermal zone and repo, Braille/Bayer-8x8 dither HUD, procedural WebAudio sonification, and a SQLite flight recorder with a diff scrubber.",
+      "category": "System & Telemetry",
+      "github": "https://github.com/1nc0gn30/aether-observatory",
+      "published": true,
+      "studio_url": "https://zoth.nullai.tech/tools/aether-observatory/",
+      "version": "1.0.0",
+      "pull": "aether-observatory --help  # or: git clone https://github.com/1nc0gn30/aether-observatory.git",
+      "execution_type": "local_cli",
+      "runtimes": [
+        "python",
+        "node",
+        "cli",
+        "zero-egress"
+      ],
+      "port": 8160,
+      "local_url": "http://127.0.0.1:8160"
     },
     {
       "id": "adytum-alchemist-ai-workflow",
@@ -1166,7 +1186,7 @@
     {
       "id": "osint-scout-skill",
       "name": "Domain Intel OSINT Scout",
-      "description": "100% in-browser passive domain intelligence & attack surface reconnaissance engine auditing Certificate Transparency logs, DoH DNS records, and SPF/DMARC posture — free to use; optional tips welcome.",
+      "description": "100% in-browser passive domain intelligence & attack surface reconnaissance engine auditing Certificate Transparency logs, DoH DNS records, and SPF/DMARC posture \u2014 free to use; optional tips welcome.",
       "category": "Security & Recon",
       "github": "https://github.com/NullAITech/osint-scout-skill",
       "published": true,
@@ -1226,7 +1246,7 @@
     {
       "id": "zoth-civilization",
       "name": "Zoth Civilization v3.0",
-      "description": "Autonomous 23-agent Pantheon society simulation on the Sphere of Zoth Prime. Features Imperator Quests (Ranks I–V), 4 Planetary Decrees, the zero-leak 22-Key Sanctuary, and lightweight BYOK reasoning via DeepSeek Flash through Hermes Agent (Nous Research).",
+      "description": "Autonomous 23-agent Pantheon society simulation on the Sphere of Zoth Prime. Features Imperator Quests (Ranks I\u2013V), 4 Planetary Decrees, the zero-leak 22-Key Sanctuary, and lightweight BYOK reasoning via DeepSeek Flash through Hermes Agent (Nous Research).",
       "category": "Swarm & Core",
       "github": "https://github.com/1nc0gn30/zoth-civilization",
       "live_url": "https://zoth-civilization.netlify.app",
@@ -1407,7 +1427,7 @@
     {
       "id": "zela-glasses-guide",
       "name": "Zela Glasses Guide",
-      "description": "Sovereign wearable AI mission coach for Ray-Ban Meta smart glasses over Tailscale — full-duplex WebSocket guide stream, Moondream vision, AGY coaching, and Kokoro TTS via zoth-relay-mobile.",
+      "description": "Sovereign wearable AI mission coach for Ray-Ban Meta smart glasses over Tailscale \u2014 full-duplex WebSocket guide stream, Moondream vision, AGY coaching, and Kokoro TTS via zoth-relay-mobile.",
       "category": "Swarm & Core",
       "github": "https://github.com/1nc0gn30/zela-glasses-guide",
       "published": true,
@@ -1427,7 +1447,7 @@
     {
       "id": "zoth-bot",
       "name": "Zoth Bot Desktop Companion",
-      "description": "Local-first always-on 3D WebGL desk companion for Zoth OS — multi-harness neural engine (Grok/Hermes/Ollama), Security Ring authority, MCP hub, summoned with Ctrl+Shift+Space.",
+      "description": "Local-first always-on 3D WebGL desk companion for Zoth OS \u2014 multi-harness neural engine (Grok/Hermes/Ollama), Security Ring authority, MCP hub, summoned with Ctrl+Shift+Space.",
       "category": "Swarm & Core",
       "github": "https://github.com/1nc0gn30/zoth-bot",
       "published": true,
@@ -1467,7 +1487,7 @@
     {
       "id": "zoth-scene-foundry",
       "name": "Zoth Scene Foundry",
-      "description": "Procedural ZothOS-style ASCII + pixel-art scene engine — 1000 deterministic scenes with Bayer dither, tube palettes, and three.js AsciiEffect stage on :8823.",
+      "description": "Procedural ZothOS-style ASCII + pixel-art scene engine \u2014 1000 deterministic scenes with Bayer dither, tube palettes, and three.js AsciiEffect stage on :8823.",
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/zoth-scene-foundry",
       "published": true,
@@ -1507,7 +1527,7 @@
     {
       "id": "zothos-lite",
       "name": "ZothOS-Lite v1.2 (Amnesic Monotone OS)",
-      "description": "Tails-style Amnesic Monotone Security & AI OS (#F7F7F4 / #000000 · Debian 13 Live · toram noswap) supporting 56 curated AI models across 8 providers, interactive onboarding, ZothNet P2P mesh, external USB/cloud persistence, and lightweight media/dev tools on :8145.",
+      "description": "Tails-style Amnesic Monotone Security & AI OS (#F7F7F4 / #000000 \u00b7 Debian 13 Live \u00b7 toram noswap) supporting 56 curated AI models across 8 providers, interactive onboarding, ZothNet P2P mesh, external USB/cloud persistence, and lightweight media/dev tools on :8145.",
       "category": "Hardware & OS",
       "github": "https://github.com/1nc0gn30/zothos-lite",
       "published": true,
