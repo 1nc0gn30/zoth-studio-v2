@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Box,
   Typography,
@@ -8,22 +8,15 @@ import {
   Unstable_Grid2 as Grid,
   Stack,
   TextField,
-  Divider,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Tabs,
   Tab,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import BoltIcon from '@mui/icons-material/Bolt';
-import LockIcon from '@mui/icons-material/Lock';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import CheckIcon from '@mui/icons-material/Check';
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import RouterIcon from '@mui/icons-material/Router';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
@@ -98,15 +91,13 @@ export default function PromptMasterGodModeTool() {
         model: 'gpt-4o-2024-11-20',
         temperature: 0.0,
         messages: [
-          {
-            role: 'system',
-            content: `${text}\n\nENFORCE INVARIANT: Ground every finding in exact file and line coordinates.`,
-          },
+          { role: 'system', content: text },
+          { role: 'user', content: 'Execute security analysis on provided repository context.' },
         ],
         response_format: {
           type: 'json_schema',
           json_schema: {
-            name: 'security_audit_findings',
+            name: 'vulnerability_report',
             strict: true,
             schema: {
               type: 'object',
@@ -117,8 +108,8 @@ export default function PromptMasterGodModeTool() {
                     type: 'object',
                     properties: {
                       file: { type: 'string' },
-                      line: { type: 'integer' },
-                      severity: { type: 'string' },
+                      line: { type: 'number' },
+                      severity: { type: 'string', enum: ['CRITICAL', 'HIGH', 'MEDIUM'] },
                       patch_diff: { type: 'string' },
                     },
                     required: ['file', 'line', 'severity', 'patch_diff'],
@@ -136,32 +127,29 @@ export default function PromptMasterGodModeTool() {
       2
     );
 
-    const dspySig = `import dspy
+    const dspySig = `class SecurityAuditSignature(dspy.Signature):
+    """${text.replace(/\n+/g, ' ')}"""
+    repo_ast_context: str = dspy.InputField(desc="Verified AST syntax tree and dependency graph")
+    vulnerability_report: list[dict] = dspy.OutputField(desc="Deterministic findings with file, line, and diff")
 
-class SovereignAuditSignature(dspy.Signature):
-    """${text.replace(/"/g, "'").replace(/\n/g, ' ')}"""
-    repository_ast: str = dspy.InputField(desc="Source tree & file AST context")
-    zero_egress_invariants: str = dspy.InputField(desc="Strict grounding & schema bounds")
-    verified_findings_json: list[dict] = dspy.OutputField(
-        desc="Deterministic list of {file, line, severity, patch_diff}"
-    )`;
+class AutonomousAuditModule(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.prog = dspy.ChainOfThought(SecurityAuditSignature)
 
-    const ollamaModelfile = `FROM qwen2.5-coder:1.5b
-PARAMETER temperature 0.10
-PARAMETER top_p 0.90
-PARAMETER num_ctx 8192
+    def forward(self, repo_ast_context):
+        return self.prog(repo_ast_context=repo_ast_context)`;
+
+    const ollamaModelfile = `FROM llama3.3:70b-instruct-q8_0
+PARAMETER temperature 0.1
+PARAMETER top_p 0.95
+PARAMETER stop "<|eot_id|>"
 SYSTEM """
-${claudeXml}
+${text}
 """`;
 
     const outputs = [claudeXml, openaiSchema, dspySig, ollamaModelfile];
-
-    return {
-      estTokens,
-      score,
-      diagnostics,
-      activeOutput: outputs[dialectTab] || claudeXml,
-    };
+    return { score, estTokens, diagnostics, activeOutput: outputs[dialectTab] || claudeXml };
   }, [rawPrompt, dialectTab]);
 
   const handleCopy = () => {
@@ -173,7 +161,7 @@ ${claudeXml}
   const handleCopySolana = () => {
     navigator.clipboard?.writeText(SOLANA_WALLET);
     setCopiedSol(true);
-    setTimeout(() => setCopiedSol(false), 2200);
+    setTimeout(() => setCopiedSol(false), 2000);
   };
 
   return (
@@ -200,6 +188,11 @@ ${claudeXml}
             size="small"
             sx={{ bgcolor: '#C084FC', color: '#08080B', fontWeight: 900, fontFamily: mono }}
           />
+          <Chip
+            label="DAEMON ONLINE :8123"
+            size="small"
+            sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.64rem', bgcolor: 'rgba(192,132,252,0.15)', color: '#C084FC' }}
+          />
           <Typography variant="body2" sx={{ fontWeight: 700 }}>
             Real-Time AST Prompt Linter, Claude XML / OpenAI Strict Schema / DSPy / Ollama Compiler
           </Typography>
@@ -208,33 +201,64 @@ ${claudeXml}
           <Button
             size="small"
             variant="contained"
+            component="a"
+            href="http://127.0.0.1:8123"
+            target="_blank"
+            rel="noopener noreferrer"
+            startIcon={<RouterIcon sx={{ fontSize: 16 }} />}
+            endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              bgcolor: '#A855F7',
+              color: '#FFFFFF',
+              '&:hover': { bgcolor: '#9333EA' },
+            }}
+          >
+            Local :8123
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
             href={STRIPE_URL}
             target="_blank"
             rel="noopener noreferrer"
             sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.74rem' }}
           >
-            ☕ Buy Us a Coffee (Stripe)
+            ☕ Buy Us a Coffee
           </Button>
           <Button
             size="small"
             variant="outlined"
             onClick={handleCopySolana}
-            href={`solana:${SOLANA_WALLET}`}
             sx={{ borderColor: '#14F195', color: isDark ? '#14F195' : '#047857', fontFamily: mono, fontSize: '0.72rem', fontWeight: 700 }}
           >
             {copiedSol ? '✓ Copied GG2e...dXoK!' : '◎ Solana Tip (GG2e...dXoK)'}
           </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            component="a"
+            href="https://github.com/1nc0gn30/promptmaster-studio"
+            target="_blank"
+            rel="noopener noreferrer"
+            endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+            sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: theme.palette.divider }}
+          >
+            GitHub
+          </Button>
         </Stack>
       </Paper>
 
-      <SovereignEyebrow accent="#38BDF8" right="Zoth Studio">
-        {"prompt-master-optimizer"}
+      <SovereignEyebrow accent="#C084FC" right="AI & Knowledge">
+        {"promptmaster-studio"}
       </SovereignEyebrow>
       <SovereignBand
-        seed={"prompt-master-optimizer"}
-        eyebrow={"Zoth Studio"}
-        caption={"Prompt Master"}
-        label={"Prompt Master — Zoth sovereign visualisation"}
+        seed={"promptmaster-studio"}
+        eyebrow={"AI & Knowledge"}
+        caption={"PromptMaster Studio"}
+        label={"PromptMaster Studio — Zoth sovereign visualisation"}
       />
       <Grid container spacing={3}>
         {/* Left: Raw Prompt Editor & AST Diagnostics */}
