@@ -18,7 +18,7 @@ import os
 import re
 import sys
 
-ROOT = "~/NullAITech"
+ROOT = os.path.expanduser("~/NullAITech")
 STUDIO = os.path.join(ROOT, "zoth-studio-v2")
 TOOLS_JS = os.path.join(STUDIO, "src", "data", "toolsData.js")
 STRIPE = "https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"

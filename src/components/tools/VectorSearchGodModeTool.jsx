@@ -8,11 +8,6 @@ import {
   Unstable_Grid2 as Grid,
   Stack,
   TextField,
-  Divider,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Table,
   TableBody,
   TableCell,
@@ -23,16 +18,17 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import BoltIcon from '@mui/icons-material/Bolt';
-import LockIcon from '@mui/icons-material/Lock';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import CheckIcon from '@mui/icons-material/Check';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import RouterIcon from '@mui/icons-material/Router';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
+const SOLANA_ADDRESS = 'GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK';
 
 const INITIAL_DOCS = [
   { id: 'vec_101', title: 'Byzantine Consensus Triangulation', text: 'Multi-model quorum verification across 3 independent LLM reasoning paths to eliminate hallucination drift.', x: 185, y: 55, layer: 2 },
@@ -52,24 +48,10 @@ export default function VectorSearchGodModeTool() {
   const [newDocText, setNewDocText] = useState('');
   const [rrfK, setRrfK] = useState(60);
   const [efSearch, setEfSearch] = useState(64);
-  const [isPro, setIsPro] = useState(true);
-  const [paywallOpen, setPaywallOpen] = useState(false);
-  const [licenseInput, setLicenseInput] = useState('');
   const [copied, setCopied] = useState(false);
+  const [solCopied, setSolCopied] = useState(false);
 
   const canvasRef = useRef(null);
-
-  useEffect(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('licensed') === 'true' || localStorage.getItem('vector_search_pro_active') === 'true' || localStorage.getItem('pro_licensed') === 'true') {
-        setIsPro(true);
-        localStorage.setItem('vector_search_pro_active', 'true');
-      }
-    } catch {
-      // ignore
-    }
-  }, []);
 
   // Client-Side Deterministic Vector + Okapi BM25 + RRF Ranker
   const ranked = useMemo(() => {
@@ -139,49 +121,64 @@ export default function VectorSearchGodModeTool() {
       ctx.arc(pt.x, pt.y, idx === 0 ? 6 : 4.5, 0, Math.PI * 2);
       ctx.fill();
 
-      ctx.fillStyle = isDark ? '#E2E8F0' : '#0F172A';
-      ctx.font = `700 9px ${mono}`;
-      ctx.fillText(`${pt.id} (L${pt.layer})`, pt.x + 8, pt.y + 3);
+      // Label top rank
+      if (idx === 0) {
+        ctx.fillStyle = '#34D399';
+        ctx.font = '9px monospace';
+        ctx.fillText(`Top #1 (${pt.id})`, pt.x + 8, pt.y + 3);
+      }
     });
 
-    // Query Centroid
-    ctx.fillStyle = '#EF4444';
+    // Center Query Node
+    ctx.fillStyle = '#FFFFFF';
     ctx.beginPath();
-    ctx.arc(qx, qy, 6, 0, Math.PI * 2);
+    ctx.arc(qx, qy, 5, 0, Math.PI * 2);
     ctx.fill();
+    ctx.fillStyle = '#D4AF37';
+    ctx.font = '10px monospace';
+    ctx.fillText('Query Vector (Dense+BM25)', qx - 65, qy - 10);
   }, [ranked, isDark]);
 
   const handleAddDoc = () => {
     if (!newDocText.trim()) return;
-    const nextId = `vec_${700 + docs.length}`;
-    setDocs((prev) => [
-      ...prev,
-      {
-        id: nextId,
-        title: newDocText.trim().slice(0, 36),
-        text: newDocText.trim(),
-        x: 60 + ((docs.length * 53) % 210),
-        y: 45 + ((docs.length * 41) % 115),
-        layer: docs.length % 3,
-      },
-    ]);
+    const nextId = `vec_${Math.floor(100 + Math.random() * 900)}`;
+    const angle = Math.random() * Math.PI * 2;
+    const rad = 45 + Math.random() * 60;
+    const newDoc = {
+      id: nextId,
+      title: newDocText.slice(0, 36) + (newDocText.length > 36 ? '...' : ''),
+      text: newDocText,
+      x: Math.round(165 + Math.cos(angle) * rad),
+      y: Math.round(97 + Math.sin(angle) * rad),
+      layer: Math.floor(Math.random() * 3),
+    };
+    setDocs((prev) => [newDoc, ...prev]);
     setNewDocText('');
   };
 
   const exportPayload = useMemo(() => {
     return JSON.stringify(
       {
-        engine: 'Zoth HNSW + BM25 Hybrid Vector Index v2.5.0',
-        parameters: { efSearch, M: 16, rrfK },
-        query,
-        results: ranked.map((r, i) => ({
+        schema: 'zoth-hnsw-snapshot-v1',
+        engine: 'vector-search-engine:8121',
+        metric: 'cosine + bm25 rrf',
+        ef_search: efSearch,
+        rrf_k: rrfK,
+        query: query,
+        top_candidates: ranked.slice(0, 5).map((r, i) => ({
           rank: i + 1,
           id: r.id,
           title: r.title,
-          denseScore: r.dense.toFixed(3),
-          bm25Score: r.bm25.toFixed(3),
-          rrfScore: r.rrf,
+          rrf_score: r.rrf,
+          dense_cosine: r.dense,
+          sparse_bm25: r.bm25,
+          layer: r.layer,
         })),
+        mcp_tool_def: {
+          name: 'vector_search_query',
+          description: 'HNSW Skip-Graph & BM25 Reciprocal Rank Fusion Search',
+          parameters: { query: 'string', limit: 'integer' },
+        },
       },
       null,
       2
@@ -189,27 +186,20 @@ export default function VectorSearchGodModeTool() {
   }, [efSearch, rrfK, query, ranked]);
 
   const handleCopyExport = () => {
-    if (!isPro) {
-      setPaywallOpen(true);
-      return;
-    }
     navigator.clipboard?.writeText(exportPayload);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleActivateLicense = () => {
-    if (licenseInput.trim().length >= 4) {
-      localStorage.setItem('vector_search_pro_active', 'true');
-      localStorage.setItem('pro_licensed', 'true');
-      setIsPro(true);
-      setPaywallOpen(false);
-    }
+  const handleCopySolana = () => {
+    navigator.clipboard?.writeText(SOLANA_ADDRESS);
+    setSolCopied(true);
+    setTimeout(() => setSolCopied(false), 2000);
   };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      {/* Sales Funnel Banner */}
+      {/* Top Daemon Status & 100% Free / Support Bar */}
       <Paper
         elevation={0}
         sx={{
@@ -227,37 +217,71 @@ export default function VectorSearchGodModeTool() {
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
           <Chip
             icon={<BoltIcon sx={{ color: '#08080B !important', fontSize: 16 }} />}
-            label={isPro ? '✦ 100% FREE & OPEN ACCESS' : '✦ 100% OPEN ACCESS'}
+            label="✦ 100% FREE & OPEN ACCESS"
             size="small"
             sx={{ bgcolor: '#34D399', color: '#08080B', fontWeight: 900, fontFamily: mono }}
+          />
+          <Chip
+            label="DAEMON ONLINE :8121"
+            size="small"
+            sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.64rem', bgcolor: 'rgba(52,211,153,0.15)', color: '#34D399' }}
           />
           <Typography variant="body2" sx={{ fontWeight: 700 }}>
             In-Browser HNSW Skip-Graph, Okapi BM25 Lexical Engine & Reciprocal Rank Fusion (RRF) Studio
           </Typography>
         </Box>
-        {!isPro && (
-          <Stack direction="row" spacing={1}>
-            <Button
-              size="small"
-              variant="contained"
-              href={STRIPE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.74rem' }}
-            >
-              ☕ Buy Us a Coffee (Stripe)
-            </Button>
-            <Button
-              size="small"
-              variant="outlined"
-              onClick={() => setPaywallOpen(true)}
-              startIcon={<VpnKeyIcon sx={{ fontSize: 14 }} />}
-              sx={{ borderColor: '#34D399', color: isDark ? '#34D399' : '#047857', fontFamily: mono, fontSize: '0.72rem', fontWeight: 700 }}
-            >
-              Say Thanks
-            </Button>
-          </Stack>
-        )}
+        <Stack direction="row" spacing={1} flexWrap="wrap">
+          <Button
+            size="small"
+            variant="contained"
+            component="a"
+            href="http://127.0.0.1:8121"
+            target="_blank"
+            rel="noopener noreferrer"
+            startIcon={<RouterIcon sx={{ fontSize: 16 }} />}
+            endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              bgcolor: '#34D399',
+              color: '#08080B',
+              '&:hover': { bgcolor: '#10B981' },
+            }}
+          >
+            Local :8121
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            href={STRIPE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.74rem' }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={handleCopySolana}
+            sx={{ borderColor: '#34D399', color: isDark ? '#34D399' : '#047857', fontFamily: mono, fontSize: '0.72rem', fontWeight: 700 }}
+          >
+            {solCopied ? '✓ Copied Solana!' : '◎ Solana Tip'}
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            component="a"
+            href="https://github.com/1nc0gn30/vector-search-engine"
+            target="_blank"
+            rel="noopener noreferrer"
+            endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+            sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: theme.palette.divider }}
+          >
+            GitHub
+          </Button>
+        </Stack>
       </Paper>
 
       <SovereignEyebrow accent="#D4AF37" right="Swarm & Core">
@@ -284,19 +308,36 @@ export default function VectorSearchGodModeTool() {
 
             <Grid container spacing={2} sx={{ mb: 2 }}>
               <Grid xs={6}>
-                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700 }}>
-                  HNSW efSearch: {efSearch}
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: 'text.secondary' }}>
+                  Reciprocal Rank Fusion k: {rrfK}
                 </Typography>
-                <Slider size="small" min={16} max={256} step={16} value={efSearch} onChange={(_, v) => setEfSearch(v)} />
+                <Slider
+                  size="small"
+                  value={rrfK}
+                  min={10}
+                  max={120}
+                  step={5}
+                  onChange={(_, val) => setRrfK(val)}
+                  sx={{ color: '#34D399' }}
+                />
               </Grid>
               <Grid xs={6}>
-                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700 }}>
-                  RRF Constant (k): {rrfK}
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: 'text.secondary' }}>
+                  HNSW efSearch Beam Width: {efSearch}
                 </Typography>
-                <Slider size="small" min={10} max={120} step={10} value={rrfK} onChange={(_, v) => setRrfK(v)} />
+                <Slider
+                  size="small"
+                  value={efSearch}
+                  min={16}
+                  max={128}
+                  step={8}
+                  onChange={(_, val) => setEfSearch(val)}
+                  sx={{ color: '#D4AF37' }}
+                />
               </Grid>
             </Grid>
 
+            {/* Ranked Results Table */}
             <TableContainer sx={{ border: `1px solid ${theme.palette.divider}`, borderRadius: 2, mb: 2 }}>
               <Table size="small">
                 <TableHead>
@@ -338,7 +379,7 @@ export default function VectorSearchGodModeTool() {
           </Paper>
         </Grid>
 
-        {/* Right: 2D HNSW Skip-Graph Projection & Frosted Snapshot Export */}
+        {/* Right: 2D HNSW Skip-Graph Projection & Snapshot Export */}
         <Grid xs={12} md={5}>
           <Stack spacing={2.5} sx={{ height: '100%' }}>
             <Paper sx={{ p: 2, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: isDark ? '#08080C' : '#FFFFFF', textAlign: 'center' }}>
@@ -365,41 +406,12 @@ export default function VectorSearchGodModeTool() {
                   maxHeight: 135,
                   overflowY: 'auto',
                   flexGrow: 1,
-                  filter: isPro ? 'none' : 'blur(6px)',
-                  userSelect: isPro ? 'auto' : 'none',
+                  filter: 'none',
+                  userSelect: 'auto',
                 }}
               >
                 {exportPayload}
               </Box>
-              {!isPro && (
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    inset: 0,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    bgcolor: 'rgba(8,8,12,0.58)',
-                    borderRadius: 2.5,
-                    p: 2,
-                    textAlign: 'center',
-                  }}
-                >
-                  <LockIcon sx={{ fontSize: 30, color: '#D4AF37', mb: 0.5 }} />
-                  <Typography variant="caption" sx={{ fontWeight: 800, color: '#FFF', mb: 1 }}>
-                    HNSW Index Snapshot & FastMCP Exporter Locked
-                  </Typography>
-                  <Button
-                    size="small"
-                    variant="contained"
-                    onClick={() => setPaywallOpen(true)}
-                    sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.72rem' }}
-                  >
-                    ☕ Buy Us a Coffee
-                  </Button>
-                </Box>
-              )}
               <Button
                 fullWidth
                 variant="contained"
@@ -413,41 +425,6 @@ export default function VectorSearchGodModeTool() {
           </Stack>
         </Grid>
       </Grid>
-
-      <Dialog open={paywallOpen} onClose={() => setPaywallOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ fontWeight: 900 }}>Support Vector Search Engine (optional tip)</DialogTitle>
-        <DialogContent dividers>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Unlock serialized HNSW index exports, FastMCP Python server templates, and unlimited custom vector ingestion.
-          </Typography>
-          <Button
-            fullWidth
-            variant="contained"
-            href={STRIPE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{ mb: 2, bgcolor: '#D4AF37', color: '#08080B', fontWeight: 900 }}
-          >
-            Leave an optional tip via Stripe
-          </Button>
-          <Divider sx={{ my: 1.5 }} />
-          <Stack direction="row" spacing={1}>
-            <TextField
-              fullWidth
-              size="small"
-              placeholder="Optional: your name or a note"
-              value={licenseInput}
-              onChange={(e) => setLicenseInput(e.target.value)}
-            />
-            <Button variant="contained" onClick={handleActivateLicense} sx={{ bgcolor: '#10B981', color: '#08080B', fontWeight: 800 }}>
-              Activate
-            </Button>
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setPaywallOpen(false)}>Close</Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }
