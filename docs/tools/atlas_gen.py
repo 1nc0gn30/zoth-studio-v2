@@ -36,6 +36,11 @@ A_RUNTIME_ENTRY = {
                 "Go-served dashboard (`zothnet serve`, port 9900); the static hub is deployed "
                 "out-of-tree at zothnet.nullai.tech and zothnet-mesh.netlify.app"),
 }
+# Layer A = interactive-quality review. First tool measured with the checked-in
+# instruments (docs/tools/layerA_probe.mjs + layerA_occl.mjs); evidence doc per tool.
+LAYER_A_EVIDENCE = {
+    "pixel-cast": "docs/LAYER_A_FINDINGS.md",
+}
 NOW = datetime.datetime.now().strftime("%Y-%m-%d %H:%M %Z").strip()
 
 
@@ -94,6 +99,54 @@ def surface_scan():
                 if m:
                     ids.setdefault(m.group(1), {}).setdefault(sname, []).append(fn)
     return files, wf, ids, forms
+
+
+# ---------------------------------- Layer C, second class: non-TOOL_ID helpers
+HELPER_RE = re.compile(r"^(zoth|zela|zothos|agent-)")
+
+
+def helper_drift():
+    """Project-owned helpers that carry NO TOOL_ID, so the wrapper/alias layer cannot see them.
+
+    Layer C is keyed on TOOL_ID metadata: 105 files / 51 TOOL_IDs. Everything else in those bin
+    directories is invisible to it. Most of that remainder is third-party (node, python, uv, aider,
+    claude, ...) whose per-surface differences are just separate installs and are NOT drift. This
+    function narrows to names in the project's own namespace (`^(zoth|zela|zothos|agent-)`), skips
+    symlinks (an alias, resolved by the alias layer) and skips anything carrying TOOL_ID, then
+    reports every such helper present on >=2 surfaces with differing bytes.
+
+    Direction is reported as per-surface sha/mtime/size only: both sides carry post-copy edits in
+    both directions, so neither surface can be declared canonical from this evidence (atlas §4.6).
+    """
+    seen = {}
+    for sname, sdir in SURF:
+        for p in glob.glob(sdir + "/*"):
+            fn = os.path.basename(p)
+            if os.path.islink(p) or not HELPER_RE.match(fn):
+                continue
+            if "TOOL_ID" in read(p):
+                continue
+            rp = os.path.realpath(p)
+            try:
+                seen.setdefault(fn, {})[sname] = dict(
+                    sha=sha12(p), size=os.path.getsize(rp),
+                    mtime=datetime.datetime.fromtimestamp(
+                        os.path.getmtime(rp)).strftime("%Y-%m-%d"))
+            except OSError:
+                continue
+    out, same, lone = [], 0, 0
+    for fn, per in sorted(seen.items()):
+        shas = {v["sha"] for v in per.values() if v["sha"]}
+        if len(per) < 2:
+            lone += 1
+            continue
+        if len(shas) == 1:
+            same += 1
+            continue
+        out.append(dict(name=fn, surfaces=sorted(per),
+                        newest=max(per.items(), key=lambda kv: kv[1]["mtime"])[0],
+                        per={k: v for k, v in sorted(per.items())}))
+    return out, same, lone
 
 
 # -------------------------------------------------------- layers A,B,D
@@ -315,6 +368,7 @@ def build_rows():
     wrapper_ids_used = {r["id"] for r in rows if r["id"] in ids}
     native = [r["id"] for r in rows if r["id"] not in wrapper_ids_used]
     native_drift = [r["id"] for r in rows if r["id"] in native and r["C_surfaces"] and not r["C_identical"]]
+    helper_rows, helper_same, helper_lone = helper_drift()
     stats = dict(now=NOW, catalog=len(rows),
                  ports_distinct=len({r["port"] for r in rows}),
                  wrapper_ids=len(ids), wrapper_files=len(wf),
@@ -325,6 +379,7 @@ def build_rows():
                  wrapper_all_identical=all(len(set(h.values())) == 1 for h in wf.values()),
                  drift_ids=[r["id"] for r in rows if r["C_surfaces"] and not r["C_identical"]],
                  alias_drift=alias_drift,
+                 helper_rows=helper_rows, helper_same=helper_same, helper_lone=helper_lone,
                  ver_mismatch=ver_mismatch,
                  # alias-layer classification (added after the 16 "drifts" were diffed one by one:
                  # they are symlink-vs-standalone-copy form differences, never stale dispatch targets)
@@ -337,6 +392,7 @@ def build_rows():
                  d_ok=sum(r["D_readme"] for r in rows), d_missing=[r["id"] for r in rows if not r["D_readme"]],
                  a_ok=sum(bool(r["A_entry"]) for r in rows), a_missing=[r["id"] for r in rows if not r["A_entry"]],
                  a_runtime=[i for i in A_RUNTIME_ENTRY if i in {r["id"] for r in rows}],
+                 a_evidence=[i for i in sorted(LAYER_A_EVIDENCE) if i in {r["id"] for r in rows}],
                  seo_gap=[r["id"] for r in rows if r["A_entry"] and (r["ld"] == 0 or r["og"] < 3)],
                  alt_bad=[r["id"] for r in rows if r["noalt"] > 0],
                  stripe_missing=[r["id"] for r in rows if r["A_entry"] and not r["stripe"]],
@@ -628,6 +684,49 @@ def render_atlas(rows, s):
         "",
         _vm_tbl if _vm else "No catalog entry advertises a version different from the one its canonical CLI declares.",
         "",
+        "### 4.7 Project-owned helpers outside the `TOOL_ID` layer — %d in cross-surface drift" % len(s["helper_rows"]),
+        "",
+        "The alias/wrapper layer above is keyed on `TOOL_ID` metadata (**%d files carrying %d distinct" % (
+            s["wrapper_files"], s["wrapper_ids"]),
+        "`TOOL_ID`s**) and is therefore structurally blind to everything else in those three bin",
+        "directories. Most of that remainder is third-party (`node`, `python`, `uv`, `aider`, `claude`, …)",
+        "whose per-surface differences are just separate installs, not drift. Narrowing to the project's",
+        "own namespace (regex `^(zoth|zela|zothos|agent-)`, symlinks and anything carrying `TOOL_ID`",
+        "excluded) leaves **%d helpers**: %d byte-identical across every surface they appear on, %d" % (
+            len(s["helper_rows"]) + s["helper_same"] + s["helper_lone"], s["helper_same"], s["helper_lone"]),
+        "present on a single surface, and **%d in genuine cross-surface drift**:" % len(s["helper_rows"]),
+        "",
+        "| helper | surfaces | chroot | usr_local | user_local | newest |",
+        "|---|---|---|---|---|---|",
+        "\n".join(
+            "| `%s` | %s | %s | %s | %s | %s |" % (
+                h["name"], ", ".join("`%s`" % x for x in h["surfaces"]),
+                ("`%s` %s %sB" % (h["per"]["chroot"]["sha"][:8], h["per"]["chroot"]["mtime"], h["per"]["chroot"]["size"])
+                 if "chroot" in h["per"] else "—"),
+                ("`%s` %s %sB" % (h["per"]["usr_local"]["sha"][:8], h["per"]["usr_local"]["mtime"], h["per"]["usr_local"]["size"])
+                 if "usr_local" in h["per"] else "—"),
+                ("`%s` %s %sB" % (h["per"]["user_local"]["sha"][:8], h["per"]["user_local"]["mtime"], h["per"]["user_local"]["size"])
+                 if "user_local" in h["per"] else "—"),
+                "`%s`" % h["newest"])
+            for h in s["helper_rows"]),
+        "",
+        "The split is **not one-sided**, and mtime does not order it. Grouped by which surfaces",
+        "agree: **five helpers** (`zoth-arsenal-daemons`, `zoth-ci-gate`, `zoth-guide`,",
+        "`zoth-second-brain`, `zoth-welcome`) have the two live surfaces agreeing with each other",
+        "against a differing chroot image copy; `zoth-dualboot` instead has `{chroot, usr_local}`",
+        "agreeing against `user_local`; and `zoth-bridge-gate` / `zoth-vault-daemon` exist on only two",
+        "surfaces and differ on both. Within those groups the chroot copy is the *newer* file by mtime",
+        "for most rows and the older one for others, and two rows break the ordering outright:",
+        "`zoth-guide`'s `usr_local` copy is byte-identical to its `user_local` copy (`3dcabc4b`) yet",
+        "stamped `2026-11-03` against `2026-10-19`, while `zoth-dualboot`'s two different contents",
+        "(`a22fa365` vs `cdcfa619`) share the date `2026-10-26`. Content and timestamps therefore",
+        "cross-cut in both directions, and the same conclusion §4.6 reached for the advertised-version",
+        "mismatch applies: **no surface can be declared canonical from this evidence, and a blind",
+        "`--apply` sync across these eight would be a regression, not a repair.** None of them is a",
+        "catalog tool (no `TOOL_ID`), which is why the alias layer above reports 0 drift while this",
+        "class does not — the two measurements answer different questions.",
+        "Reproduce with `docs/tools/atlas_gen.py` (`helper_drift()`), which scans the same three surfaces.",
+        "",
         "## 5. Port map & collision analysis",
         "",
         "- Catalog: **%d entries, %d distinct ports, 0 collisions** (alias-aware: symlinked aliases" % (
@@ -677,6 +776,7 @@ def render_atlas(rows, s):
         "| `[A]` | incomplete SEO/AEO metadata in entry document | %d entries: %s |" % (
             len(s["seo_gap"]), ", ".join("`%s`" % x for x in s["seo_gap"])),
         "| `[A]` | canonical Stripe support link absent from entry document | %d entries |" % len(s["stripe_missing"]),
+        "| `[C]` | project-owned helper outside the `TOOL_ID` layer, cross-surface drift | %d (§4.7) |" % len(s["helper_rows"]),
         "| `[E]` | no clean headless capture row | %s |" % (", ".join("`%s`" % x for x in s["e_issue"]) or "none"),
         "",
         "Layer A's interactive checks (dead buttons, canned outputs, blur locks) are **open work**,",
@@ -739,7 +839,8 @@ def render_checkpoints(rows, s):
         "| last updated | %s |" % s["now"],
         "| tools registered | %d |" % s["catalog"],
         "| layers automated so far | A, B, C, D, E (evidence below) |",
-        "| layers still manual | Layer A interactive-quality review (the only layer left) |",
+        "| layers still manual | Layer A interactive-quality review: evidence for %d/%d tools; %d still manual |" % (
+            len(s["a_evidence"]), s["catalog"], s["catalog"] - len(s["a_evidence"])),
         "",
         "## Protocol",
         "",
@@ -759,6 +860,13 @@ def render_checkpoints(rows, s):
         "confirmed gap, `^A^` as partial, and re-verify any Layer C row if a concurrent writer",
         "has touched that tool since the timestamp above.",
         "",
+        "**Layer A:** evidence covers %d of %d tools — %s (see" % (
+            len(s["a_evidence"]), s["catalog"],
+            ", ".join("`%s` -> `%s`" % (i, LAYER_A_EVIDENCE[i]) for i in s["a_evidence"]) or "none"),
+        "`docs/tools/layerA_probe.mjs` and `docs/tools/layerA_occl.mjs`, both zero-dependency CDP",
+        "instruments driven by a real pointer click). Layer A evidence proves reachability and",
+        "wiring, not end-to-end success against attached hardware.",
+        "",
         "## Checkpoints",
         "",
         matrix(rows),
@@ -774,12 +882,14 @@ def render_checkpoints(rows, s):
         "",
         "## Next work",
         "",
-        "Layers B-E are swept fleet-wide and committed; **Layer A (interactive quality) is the only",
-        "layer without automated evidence.** Resume there, most-broken first: `%s` — the one tool" % (
-            s["b_missing"][0] if s["b_missing"] else rows[0]["id"]),
-        "failing two layers (no God-Mode component) — then the %d tools whose live API panes stay" % len(s["e_issue"]),
-        "empty (`%s`), whose own daemons must be up before their panes can render." % (
-            ", ".join(s["e_issue"]) or "none"),
+        "Layers B-E are swept fleet-wide and committed. **Layer A now has evidence for %d of %d" % (
+            len(s["a_evidence"]), s["catalog"]),
+        "tools** (`%s`) and the instrument is general — any base URL plus routes — so resume the" % (
+            ", ".join(s["a_evidence"]) or "none"),
+        "sweep there, one tool at a time, before moving on to §4.7 helper drift (project-owned",
+        "helpers with no `TOOL_ID`, no canonical surface) and the alias close-out (`[C]`: %d" % len(s["alias_drift"]),
+        "form-level drifts still open — all 16 historical symlink-vs-copy drifts closed, bypassed via",
+        "symlinked paths, never a stale dispatch target).",
         "",
     ]
     return "\n".join(L) + "\n"

@@ -4,7 +4,7 @@ Master architectural ledger for the `NullAITech` sovereign tool ecosystem.
 
 | | |
 |---|---|
-| Generated | 2026-11-16 09:53 |
+| Generated | 2026-11-16 11:52 |
 | Generator | `zoth-studio-v2/docs/tools/atlas_gen.py` (re-runnable, no hardcoded counts) |
 | Catalog of record | `zoth-studio-v2/src/data/toolsData.js` |
 | CLI surfaces compared | `zoth-os/config/includes.chroot/usr/local/bin`, `/usr/local/bin`, `~/.local/bin` |
@@ -318,6 +318,44 @@ the catalog is the likely stale side; where no manifest is present the row is
 undetermined from the files at hand. Every row above is a *surface-identical* file: the
 mismatch is between metadata and the CLI banner, never between one surface and another.
 
+### 4.7 Project-owned helpers outside the `TOOL_ID` layer — 8 in cross-surface drift
+
+The alias/wrapper layer above is keyed on `TOOL_ID` metadata (**105 files carrying 51 distinct
+`TOOL_ID`s**) and is therefore structurally blind to everything else in those three bin
+directories. Most of that remainder is third-party (`node`, `python`, `uv`, `aider`, `claude`, …)
+whose per-surface differences are just separate installs, not drift. Narrowing to the project's
+own namespace (regex `^(zoth|zela|zothos|agent-)`, symlinks and anything carrying `TOOL_ID`
+excluded) leaves **154 helpers**: 130 byte-identical across every surface they appear on, 16
+present on a single surface, and **8 in genuine cross-surface drift**:
+
+| helper | surfaces | chroot | usr_local | user_local | newest |
+|---|---|---|---|---|---|
+| `zoth-arsenal-daemons` | `chroot`, `user_local`, `usr_local` | `2a09332e` 2026-11-03 1794B | `217197fd` 2026-11-09 6812B | `217197fd` 2026-11-09 6812B | `usr_local` |
+| `zoth-bridge-gate` | `chroot`, `user_local` | `edc044a2` 2026-11-11 461B | — | `b872cba6` 2026-11-08 342B | `chroot` |
+| `zoth-ci-gate` | `chroot`, `user_local`, `usr_local` | `40487810` 2026-11-10 5764B | `4b2e326e` 2026-11-10 6083B | `4b2e326e` 2026-11-10 6083B | `chroot` |
+| `zoth-dualboot` | `chroot`, `user_local`, `usr_local` | `a22fa365` 2026-10-26 6037B | `a22fa365` 2026-10-26 6037B | `cdcfa619` 2026-10-26 7206B | `chroot` |
+| `zoth-guide` | `chroot`, `user_local`, `usr_local` | `9fb9e9d9` 2026-11-03 2043B | `3dcabc4b` 2026-11-03 2046B | `3dcabc4b` 2026-10-19 2046B | `chroot` |
+| `zoth-second-brain` | `chroot`, `user_local`, `usr_local` | `0332b335` 2026-11-11 108984B | `beeb80e0` 2026-10-31 108980B | `beeb80e0` 2026-11-02 108980B | `chroot` |
+| `zoth-vault-daemon` | `chroot`, `usr_local` | `e43f5aec` 2026-10-26 2496256B | `361e2110` 2026-10-19 2496256B | — | `chroot` |
+| `zoth-welcome` | `chroot`, `user_local`, `usr_local` | `5bab23ac` 2026-11-11 11318B | `272524d0` 2026-11-10 11336B | `272524d0` 2026-11-10 11336B | `chroot` |
+
+The split is **not one-sided**, and mtime does not order it. Grouped by which surfaces
+agree: **five helpers** (`zoth-arsenal-daemons`, `zoth-ci-gate`, `zoth-guide`,
+`zoth-second-brain`, `zoth-welcome`) have the two live surfaces agreeing with each other
+against a differing chroot image copy; `zoth-dualboot` instead has `{chroot, usr_local}`
+agreeing against `user_local`; and `zoth-bridge-gate` / `zoth-vault-daemon` exist on only two
+surfaces and differ on both. Within those groups the chroot copy is the *newer* file by mtime
+for most rows and the older one for others, and two rows break the ordering outright:
+`zoth-guide`'s `usr_local` copy is byte-identical to its `user_local` copy (`3dcabc4b`) yet
+stamped `2026-11-03` against `2026-10-19`, while `zoth-dualboot`'s two different contents
+(`a22fa365` vs `cdcfa619`) share the date `2026-10-26`. Content and timestamps therefore
+cross-cut in both directions, and the same conclusion §4.6 reached for the advertised-version
+mismatch applies: **no surface can be declared canonical from this evidence, and a blind
+`--apply` sync across these eight would be a regression, not a repair.** None of them is a
+catalog tool (no `TOOL_ID`), which is why the alias layer above reports 0 drift while this
+class does not — the two measurements answer different questions.
+Reproduce with `docs/tools/atlas_gen.py` (`helper_drift()`), which scans the same three surfaces.
+
 ## 5. Port map & collision analysis
 
 - Catalog: **81 entries, 81 distinct ports, 0 collisions** (alias-aware: symlinked aliases
@@ -423,6 +461,7 @@ Recommended triage (owner's call):
 | `[A]` | runtime-served web surface (explained, not a defect) | `zothnet` -> `pkg/web/dashboard.html` — Go-served dashboard (`zothnet serve`, port 9900); the static hub is deployed out-of-tree at zothnet.nullai.tech and zothnet-mesh.netlify.app |
 | `[A]` | incomplete SEO/AEO metadata in entry document | 0 entries:  |
 | `[A]` | canonical Stripe support link absent from entry document | 1 entries |
+| `[C]` | project-owned helper outside the `TOOL_ID` layer, cross-surface drift | 8 (§4.7) |
 | `[E]` | no clean headless capture row | none |
 
 Layer A's interactive checks (dead buttons, canned outputs, blur locks) are **open work**,
@@ -537,7 +576,7 @@ showed its port open, so no daemon was started, stopped, or replaced for this me
 
 | when | change |
 |---|---|
-| 2026-11-16 09:53 | atlas generator created; Layers A/B/C/D measured across 81 entries |
+| 2026-11-16 11:52 | atlas generator created; Layers A/B/C/D measured across 81 entries |
 | 2026-11-15 | `zela-glasses-guide` tri-surface repair (see §4.4) |
 | 2026-11-15 | Layer E wired into the generator: headless 3-viewport verdicts read from `layerE_results_http.jsonl` / `layerE_results_live.jsonl` (§8) |
 

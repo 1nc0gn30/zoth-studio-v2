@@ -182,6 +182,9 @@ def main() -> int:
             stale.setdefault(can["path"], (rec["tid"], can["ver"], can["catalog_ver"]))
     for path, (tid, old, new) in sorted(stale.items()):
         print(f"  STALE-VERSION {tid}: canonical {old} -> catalog {new}  ({path})")
+    plan["stale_version"] = [
+        {"path": p, "tool_id": t, "canonical_ver": o, "catalog_ver": n}
+        for p, (t, o, n) in sorted(stale.items())]
 
     if not a.apply:
         print("\ndry run: no files written (pass --apply)")

@@ -6,10 +6,10 @@ Resume point for the strict one-tool-at-a-time 5-layer sweep of
 
 | | |
 |---|---|
-| last updated | 2026-11-16 09:53 |
+| last updated | 2026-11-16 11:52 |
 | tools registered | 81 |
 | layers automated so far | A, B, C, D, E (evidence below) |
-| layers still manual | Layer A interactive-quality review (the only layer left) |
+| layers still manual | Layer A interactive-quality review: evidence for 1/81 tools; 80 still manual |
 
 ## Protocol
 
@@ -27,6 +27,11 @@ live for the 15 whose declared port was already listening), and **81/81** came b
 Treat `.` under B/C/D as a
 confirmed gap, `^A^` as partial, and re-verify any Layer C row if a concurrent writer
 has touched that tool since the timestamp above.
+
+**Layer A:** evidence covers 1 of 81 tools — `pixel-cast` -> `docs/LAYER_A_FINDINGS.md` (see
+`docs/tools/layerA_probe.mjs` and `docs/tools/layerA_occl.mjs`, both zero-dependency CDP
+instruments driven by a real pointer click). Layer A evidence proves reachability and
+wiring, not end-to-end success against attached hardware.
 
 ## Checkpoints
 
@@ -124,8 +129,10 @@ has touched that tool since the timestamp above.
 
 ## Next work
 
-Layers B-E are swept fleet-wide and committed; **Layer A (interactive quality) is the only
-layer without automated evidence.** Resume there, most-broken first: `pixel-cast` — the one tool
-failing two layers (no God-Mode component) — then the 0 tools whose live API panes stay
-empty (`none`), whose own daemons must be up before their panes can render.
+Layers B-E are swept fleet-wide and committed. **Layer A now has evidence for 1 of 81
+tools** (`pixel-cast`) and the instrument is general — any base URL plus routes — so resume the
+sweep there, one tool at a time, before moving on to §4.7 helper drift (project-owned
+helpers with no `TOOL_ID`, no canonical surface) and the alias close-out (`[C]`: 0
+form-level drifts still open — all 16 historical symlink-vs-copy drifts closed, bypassed via
+symlinked paths, never a stale dispatch target).
 
