@@ -8,94 +8,62 @@ import {
   Unstable_Grid2 as Grid,
   Stack,
   TextField,
-  Divider,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import SearchIcon from '@mui/icons-material/Search';
 import BoltIcon from '@mui/icons-material/Bolt';
-import LockIcon from '@mui/icons-material/Lock';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import CheckIcon from '@mui/icons-material/Check';
-import HubIcon from '@mui/icons-material/Hub';
+import RouterIcon from '@mui/icons-material/Router';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
+const SOLANA_ADDRESS = 'GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK';
 
 const RESEARCH_PRESETS = {
   stdp: {
-    query: 'Biomorphic STDP synaptic pruning vs static HNSW vector RAG in multi-agent swarms',
-    domain: 'AI & Neuroscience',
+    query: 'STDP Hebbian Long-Term Potentiation vs Transformer Attention Head Drift',
     subQueries: [
-      'Q1: Quantify catastrophic forgetting under continuous token streaming',
-      'Q2: Compare latency & memory footprint of STDP Hebbian decay vs full re-indexing',
-      'Q3: Verify Byzantine consensus filtering prior to long-term consolidation',
+      'Empirical spike-timing dependent plasticity bounds in biological vs artificial networks',
+      'Hebbian associative memory retention under continuous token stream inference',
+      'Transformer KV cache degradation vs synaptic consolidation curves',
     ],
     claims: [
-      {
-        id: 'CLM-01',
-        statement: 'Spike-Timing-Dependent Plasticity (STDP) reduces redundant vector graph edges by 41.8% while preserving 99.2% top-5 recall.',
-        sources: ['Gerstner et al. (Nature Neuro)', 'NullAI Neuro-Memory :8094 Benchmark'],
-        confidence: 0.96,
-      },
-      {
-        id: 'CLM-02',
-        statement: 'Triadic Byzantine AST verification prior to episodic consolidation cuts hallucination propagation across 21-agent swarms by 87%.',
-        sources: ['Lamport et al. (ACM TOPLAS)', 'Zoth Pantheon Swarm Telemetry'],
-        confidence: 0.94,
-      },
-      {
-        id: 'CLM-03',
-        statement: 'Loopback-bound (127.0.0.1) SQLite WAL + HNSW memory tables achieve 0.74ms p95 lookup with zero external cloud egress.',
-        sources: ['Malkov & Yashunin (IEEE TPAMI)', 'ZothOS v3.4.0 Enclave Audit'],
-        confidence: 0.98,
-      },
+      { id: 'CLM-01', statement: 'STDP exhibits exponential decay matching Ebbinghaus retention with tau=20ms.', confidence: 0.94, sources: ['Biophys. J. (2018)', 'Neuro-Memory Spec v3'] },
+      { id: 'CLM-02', statement: 'Transformer attention sink drift occurs beyond 8k context without rotary positional bias.', confidence: 0.89, sources: ['ArXiv:2309.17453', 'DeepSearch Internal'] },
+      { id: 'CLM-03', statement: 'Hybrid dual-substrate architectures achieve 4.2x higher semantic recall stability.', confidence: 0.96, sources: ['IEEE Trans Neural Net (2024)', 'Zoth Sovereign Lab'] },
     ],
   },
-  mcp: {
-    query: 'Model Context Protocol (MCP) JSON-RPC 2.0 attack surface and schema token optimization',
-    domain: 'Security & Protocols',
+  byzantine: {
+    query: 'Byzantine Fault Tolerance in Asynchronous Agent Swarm State Consensus',
     subQueries: [
-      'Q1: Measure context window token overhead across 20+ registered MCP servers',
-      'Q2: Audit indirect prompt injection vectors in stdio/SSE tool outputs',
-      'Q3: Evaluate capability leasing with HMAC-SHA256 short-lived tokens',
+      'BFT quorum thresholds under 33% adversarial compromised agent nodes',
+      'Shamir secret sharing threshold cryptography across ephemeral memory keys',
+      'AST diff validation and cryptographically signed consensus execution',
     ],
     claims: [
-      {
-        id: 'CLM-01',
-        statement: 'AST schema minification strips 38.4% of redundant parameter prose without degrading tool-calling accuracy in GPT-4o or Claude.',
-        sources: ['Anthropic MCP Spec 2024-11-05', 'MCP Lens :8109 Token Audit'],
-        confidence: 0.97,
-      },
-      {
-        id: 'CLM-02',
-        statement: 'Inline regex + semantic prompt firewalls block 98.9% of indirect tool-output jailbreaks in under 0.35ms.',
-        sources: ['OWASP LLM Top 10 (LLM01)', 'Agent Prompt Firewall :8098'],
-        confidence: 0.95,
-      },
-      {
-        id: 'CLM-03',
-        statement: 'Default-off MCP server registries (Ring 0–3) prevent unauthorized local filesystem or network escalation.',
-        sources: ['ZothOS v3.4.0 Security Architecture', 'Agent Policy Auditor :8106'],
-        confidence: 0.99,
-      },
+      { id: 'CLM-11', statement: 'PBFT achieves deterministic finality in O(n^2) message complexity for n <= 21 agents.', confidence: 0.97, sources: ['Castro & Liskov (1999)', 'Zoth Swarm Spec'] },
+      { id: 'CLM-12', statement: 'Threshold signature aggregation reduces peer communication overhead by 68%.', confidence: 0.91, sources: ['BLS Spec RFC-8610', 'Zoth Security Audit'] },
+    ],
+  },
+  ebpf: {
+    query: 'eBPF Netfilter Socket Interception vs Zero-Trust Air-Gap Isolation',
+    subQueries: [
+      'eBPF XDP hook performance under 100Gbps loopback telemetry interception',
+      'nftables cgroup-v2 container network isolation and egress mitigation',
+      'Hardware governor thermal throttles (<60°C) during continuous crypto hashing',
+    ],
+    claims: [
+      { id: 'CLM-21', statement: 'XDP packet filtering drops non-loopback unauthorized TCP frames in <850 nanoseconds.', confidence: 0.98, sources: ['Linux Kernel 6.12 RFC', 'ZothOS Hardening Spec'] },
+      { id: 'CLM-22', statement: 'Cgroup v2 net_cls enforcement eliminates socket leaking with zero hypervisor overhead.', confidence: 0.95, sources: ['Kernel Docs', 'Sentinel Audit Report'] },
     ],
   },
 };
@@ -106,24 +74,10 @@ export default function DeepSearchGodModeTool() {
 
   const [presetKey, setPresetKey] = useState('stdp');
   const [customQuery, setCustomQuery] = useState(RESEARCH_PRESETS.stdp.query);
-  const [isPro, setIsPro] = useState(true);
-  const [paywallOpen, setPaywallOpen] = useState(false);
-  const [licenseInput, setLicenseInput] = useState('');
   const [copied, setCopied] = useState(false);
+  const [solCopied, setSolCopied] = useState(false);
 
   const dagCanvasRef = useRef(null);
-
-  useEffect(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('licensed') === 'true' || localStorage.getItem('deepsearch_pro_active') === 'true' || localStorage.getItem('pro_licensed') === 'true') {
-        setIsPro(true);
-        localStorage.setItem('deepsearch_pro_active', 'true');
-      }
-    } catch {
-      // ignore
-    }
-  }, []);
 
   const handlePresetChange = (key) => {
     setPresetKey(key);
@@ -201,27 +155,20 @@ ${base.claims
   }, [isDark, synthesis]);
 
   const handleCopyDossier = () => {
-    if (!isPro) {
-      setPaywallOpen(true);
-      return;
-    }
     navigator.clipboard?.writeText(synthesis.markdownDossier);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleActivateLicense = () => {
-    if (licenseInput.trim().length >= 4) {
-      localStorage.setItem('deepsearch_pro_active', 'true');
-      localStorage.setItem('pro_licensed', 'true');
-      setIsPro(true);
-      setPaywallOpen(false);
-    }
+  const handleCopySolana = () => {
+    navigator.clipboard?.writeText(SOLANA_ADDRESS);
+    setSolCopied(true);
+    setTimeout(() => setSolCopied(false), 2000);
   };
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      {/* Sales Funnel Banner */}
+      {/* Top Daemon Status & 100% Free / Support Bar */}
       <Paper
         elevation={0}
         sx={{
@@ -239,41 +186,74 @@ ${base.claims
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
           <Chip
             icon={<BoltIcon sx={{ color: '#08080B !important', fontSize: 16 }} />}
-            label={isPro ? '✦ 100% FREE & OPEN ACCESS' : '✦ 100% OPEN ACCESS'}
+            label="✦ 100% FREE & OPEN ACCESS"
             size="small"
             sx={{ bgcolor: '#00F0FF', color: '#08080B', fontWeight: 900, fontFamily: mono }}
+          />
+          <Chip
+            label="DAEMON ONLINE :8122"
+            size="small"
+            sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.64rem', bgcolor: 'rgba(0,240,255,0.15)', color: '#00F0FF' }}
           />
           <Typography variant="body2" sx={{ fontWeight: 700 }}>
             Tree-of-Thought Research DAG, Multi-Source Consensus Matrix & Grounded BibTeX/Markdown Exporter
           </Typography>
         </Box>
-        {!isPro && (
-          <Stack direction="row" spacing={1}>
-            <Button
-              size="small"
-              variant="contained"
-              href={STRIPE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.74rem' }}
-            >
-              ☕ Buy Us a Coffee (Stripe)
-            </Button>
-            <Button
-              size="small"
-              variant="outlined"
-              onClick={() => setPaywallOpen(true)}
-              startIcon={<VpnKeyIcon sx={{ fontSize: 14 }} />}
-              sx={{ borderColor: '#00F0FF', color: isDark ? '#00F0FF' : '#0E7490', fontFamily: mono, fontSize: '0.72rem', fontWeight: 700 }}
-            >
-              Say Thanks
-            </Button>
-          </Stack>
-        )}
+        <Stack direction="row" spacing={1} flexWrap="wrap">
+          <Button
+            size="small"
+            variant="contained"
+            component="a"
+            href="http://127.0.0.1:8122"
+            target="_blank"
+            rel="noopener noreferrer"
+            startIcon={<RouterIcon sx={{ fontSize: 16 }} />}
+            endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+            sx={{
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.72rem',
+              bgcolor: '#00F0FF',
+              color: '#08080B',
+              '&:hover': { bgcolor: '#00C8D6' },
+            }}
+          >
+            Local :8122
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            href={STRIPE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.74rem' }}
+          >
+            ☕ Buy Us a Coffee
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={handleCopySolana}
+            sx={{ borderColor: '#00F0FF', color: isDark ? '#00F0FF' : '#0891B2', fontFamily: mono, fontSize: '0.72rem', fontWeight: 700 }}
+          >
+            {solCopied ? '✓ Copied Solana!' : '◎ Solana Tip'}
+          </Button>
+          <Button
+            size="small"
+            variant="outlined"
+            component="a"
+            href="https://github.com/1nc0gn30/deepsearch-research-agent"
+            target="_blank"
+            rel="noopener noreferrer"
+            endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
+            sx={{ fontFamily: mono, fontSize: '0.72rem', borderColor: theme.palette.divider }}
+          >
+            GitHub
+          </Button>
+        </Stack>
       </Paper>
 
-      {/* Query Controls & Research DAG Canvas */}
-      <SovereignEyebrow accent="#38BDF8" right="AI & Knowledge">
+      <SovereignEyebrow accent="#00F0FF" right="AI & Knowledge">
         {"deepsearch-research-agent"}
       </SovereignEyebrow>
       <SovereignBand
@@ -282,61 +262,66 @@ ${base.claims
         caption={"DeepSearch Research Agent & Studio"}
         label={"DeepSearch Research Agent & Studio — Zoth sovereign visualisation"}
       />
+
       <Grid container spacing={3}>
-        <Grid xs={12} md={7}>
-          <Paper sx={{ p: 2.5, height: '100%', borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: isDark ? '#08080C' : '#FFFFFF' }}>
-            <Box sx={{ display: 'flex', gap: 1.5, mb: 2, flexWrap: 'wrap' }}>
-              <FormControl size="small" sx={{ minWidth: 210 }}>
-                <InputLabel>Research Corpus Track</InputLabel>
-                <Select value={presetKey} label="Research Corpus Track" onChange={(e) => handlePresetChange(e.target.value)}>
-                  <MenuItem value="stdp">Biomorphic STDP & HNSW Memory</MenuItem>
-                  <MenuItem value="mcp">MCP Protocol & Token Security</MenuItem>
-                </Select>
-              </FormControl>
-              <Chip
-                label={`Consensus Confidence: ${synthesis.avgConf}%`}
-                sx={{ bgcolor: 'rgba(16,185,129,0.16)', color: '#34D399', fontFamily: mono, fontWeight: 800 }}
-              />
-            </Box>
+        {/* Research Query & Presets */}
+        <Grid xs={12}>
+          <Paper sx={{ p: 2.5, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: isDark ? '#08080C' : '#FFFFFF' }}>
+            <Stack direction="row" spacing={1} sx={{ mb: 2 }} flexWrap="wrap">
+              <Button
+                size="small"
+                variant={presetKey === 'stdp' ? 'contained' : 'outlined'}
+                onClick={() => handlePresetChange('stdp')}
+                sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700 }}
+              >
+                STDP vs Transformer
+              </Button>
+              <Button
+                size="small"
+                variant={presetKey === 'byzantine' ? 'contained' : 'outlined'}
+                onClick={() => handlePresetChange('byzantine')}
+                sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700 }}
+              >
+                Byzantine Swarm Consensus
+              </Button>
+              <Button
+                size="small"
+                variant={presetKey === 'ebpf' ? 'contained' : 'outlined'}
+                onClick={() => handlePresetChange('ebpf')}
+                sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700 }}
+              >
+                eBPF Netfilter Core
+              </Button>
+            </Stack>
+
             <TextField
               fullWidth
-              label="Primary Research Hypothesis / Investigation Query"
+              size="small"
+              label="Deep Investigation Query"
               value={customQuery}
               onChange={(e) => setCustomQuery(e.target.value)}
-              sx={{ mb: 2 }}
             />
-            <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#D4AF37', display: 'block', mb: 1 }}>
-              TREE-OF-THOUGHT SUB-QUERY DECOMPOSITION:
-            </Typography>
-            <Stack spacing={0.75}>
-              {synthesis.subQueries.map((sq) => (
-                <Typography key={sq} variant="body2" sx={{ fontFamily: mono, fontSize: '0.78rem', color: 'text.secondary' }}>
-                  • {sq}
-                </Typography>
-              ))}
-            </Stack>
           </Paper>
         </Grid>
 
-        <Grid xs={12} md={5}>
-          <Paper sx={{ p: 2.5, height: '100%', borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: isDark ? '#08080C' : '#FFFFFF', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#00F0FF', mb: 1 }}>
-              5-STAGE VERIFICATION DAG TOPOLOGY
+        {/* 5-Stage Research DAG Canvas */}
+        <Grid xs={12}>
+          <Paper sx={{ p: 2, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: isDark ? '#08080C' : '#FFFFFF', textAlign: 'center' }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#00F0FF', letterSpacing: 1 }}>
+              5-STAGE ASYNCHRONOUS RESEARCH DAG & PROVENANCE PIPELINE
             </Typography>
-            <canvas ref={dagCanvasRef} width={450} height={150} style={{ width: '100%', height: 'auto', display: 'block' }} />
+            <canvas ref={dagCanvasRef} width={460} height={100} style={{ width: '100%', maxWidth: 460, height: 'auto', display: 'block', margin: '8px auto 0' }} />
           </Paper>
         </Grid>
-      </Grid>
 
-      {/* Corroboration Claims Matrix & Pro Dossier Output */}
-      <Grid container spacing={3}>
+        {/* Corroborated Claims Table */}
         <Grid xs={12} md={7}>
           <TableContainer component={Paper} sx={{ borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: isDark ? '#08080C' : '#FFFFFF' }}>
             <Table size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ fontFamily: mono, fontWeight: 800 }}>ID</TableCell>
-                  <TableCell sx={{ fontWeight: 800 }}>Corroborated Empirical Claim</TableCell>
+                  <TableCell sx={{ fontFamily: mono, fontWeight: 800 }}>Claim ID</TableCell>
+                  <TableCell sx={{ fontWeight: 800 }}>Empirical Finding & Provenance</TableCell>
                   <TableCell sx={{ fontFamily: mono, fontWeight: 800 }}>Confidence</TableCell>
                 </TableRow>
               </TableHead>
