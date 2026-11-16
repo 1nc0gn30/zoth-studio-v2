@@ -4,7 +4,7 @@ Master architectural ledger for the `NullAITech` sovereign tool ecosystem.
 
 | | |
 |---|---|
-| Generated | 2026-11-16 11:52 |
+| Generated | 2026-11-16 12:05 |
 | Generator | `zoth-studio-v2/docs/tools/atlas_gen.py` (re-runnable, no hardcoded counts) |
 | Catalog of record | `zoth-studio-v2/src/data/toolsData.js` |
 | CLI surfaces compared | `zoth-os/config/includes.chroot/usr/local/bin`, `/usr/local/bin`, `~/.local/bin` |
@@ -24,7 +24,9 @@ stay trustworthy:
    *anti*-paywall marketing copy (`ZERO PAYWALLS`), each app's own
    `zoth-open-access-override` stylesheet, glassmorphism `backdrop-filter: blur()`, and
    the substring `canned` inside `**Scan**ned`. Those are **not** defects and are excluded.
-   Layer A's interactive-quality checks therefore remain open work, not automated fails.
+   Layer A's interactive-quality checks are not machine-verifiable at fleet scale; 1 of 81
+   tools carry real interactive evidence (`docs/LAYER_A_FINDINGS.md`), the rest are open work, not
+   automated fails.
 3. **Moving target.** A concurrent agent session writes in these trees. Every figure is
    timestamped; re-run the generator to refresh.
 
@@ -461,11 +463,14 @@ Recommended triage (owner's call):
 | `[A]` | runtime-served web surface (explained, not a defect) | `zothnet` -> `pkg/web/dashboard.html` — Go-served dashboard (`zothnet serve`, port 9900); the static hub is deployed out-of-tree at zothnet.nullai.tech and zothnet-mesh.netlify.app |
 | `[A]` | incomplete SEO/AEO metadata in entry document | 0 entries:  |
 | `[A]` | canonical Stripe support link absent from entry document | 1 entries |
+| `[A]` | interactive-quality evidence present (doc + CDP instruments) | 1/81: `pixel-cast` -> `docs/LAYER_A_FINDINGS.md` |
 | `[C]` | project-owned helper outside the `TOOL_ID` layer, cross-surface drift | 8 (§4.7) |
 | `[E]` | no clean headless capture row | none |
 
-Layer A's interactive checks (dead buttons, canned outputs, blur locks) are **open work**,
-not automated fails: the automated scan produced three false-positive classes (see §0).
+Layer A's interactive checks (dead buttons, canned outputs, blur locks) are **open work** at
+scale, not automated fails: the automated scan produced three false-positive classes (see §0).
+1 of 81 tools now carry real interactive evidence (CDP instruments + a findings doc — see the
+§7 row and `docs/LAYER_A_FINDINGS.md`); the remaining 80 are still manual.
 
 ## 8. Layer E — headless visual evidence
 
@@ -576,7 +581,7 @@ showed its port open, so no daemon was started, stopped, or replaced for this me
 
 | when | change |
 |---|---|
-| 2026-11-16 11:52 | atlas generator created; Layers A/B/C/D measured across 81 entries |
+| 2026-11-16 12:05 | atlas generator created; Layers A/B/C/D measured across 81 entries |
 | 2026-11-15 | `zela-glasses-guide` tri-surface repair (see §4.4) |
 | 2026-11-15 | Layer E wired into the generator: headless 3-viewport verdicts read from `layerE_results_http.jsonl` / `layerE_results_live.jsonl` (§8) |
 

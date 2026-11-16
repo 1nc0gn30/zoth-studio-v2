@@ -489,7 +489,10 @@ def render_atlas(rows, s):
         "   *anti*-paywall marketing copy (`ZERO PAYWALLS`), each app's own",
         "   `zoth-open-access-override` stylesheet, glassmorphism `backdrop-filter: blur()`, and",
         "   the substring `canned` inside `**Scan**ned`. Those are **not** defects and are excluded.",
-        "   Layer A's interactive-quality checks therefore remain open work, not automated fails.",
+        "   Layer A's interactive-quality checks are not machine-verifiable at fleet scale; %d of %d" % (
+            len(s["a_evidence"]), s["catalog"]),
+        "   tools carry real interactive evidence (`docs/LAYER_A_FINDINGS.md`), the rest are open work, not",
+        "   automated fails.",
         "3. **Moving target.** A concurrent agent session writes in these trees. Every figure is",
         "   timestamped; re-run the generator to refresh.",
         "",
@@ -776,11 +779,18 @@ def render_atlas(rows, s):
         "| `[A]` | incomplete SEO/AEO metadata in entry document | %d entries: %s |" % (
             len(s["seo_gap"]), ", ".join("`%s`" % x for x in s["seo_gap"])),
         "| `[A]` | canonical Stripe support link absent from entry document | %d entries |" % len(s["stripe_missing"]),
+        "| `[A]` | interactive-quality evidence present (doc + CDP instruments) | %d/%d: %s |" % (
+            len(s["a_evidence"]), s["catalog"],
+            ", ".join("`%s` -> `%s`" % (i, LAYER_A_EVIDENCE[i]) for i in s["a_evidence"]) or "none"),
         "| `[C]` | project-owned helper outside the `TOOL_ID` layer, cross-surface drift | %d (§4.7) |" % len(s["helper_rows"]),
         "| `[E]` | no clean headless capture row | %s |" % (", ".join("`%s`" % x for x in s["e_issue"]) or "none"),
         "",
-        "Layer A's interactive checks (dead buttons, canned outputs, blur locks) are **open work**,",
-        "not automated fails: the automated scan produced three false-positive classes (see §0).",
+        "Layer A's interactive checks (dead buttons, canned outputs, blur locks) are **open work** at",
+        "scale, not automated fails: the automated scan produced three false-positive classes (see §0).",
+        "%d of %d tools now carry real interactive evidence (CDP instruments + a findings doc — see the" % (
+            len(s["a_evidence"]), s["catalog"]),
+        "§7 row and `docs/LAYER_A_FINDINGS.md`); the remaining %d are still manual." % (
+            s["catalog"] - len(s["a_evidence"])),
         "",
         "## 8. Layer E — headless visual evidence",
         "",
@@ -1136,11 +1146,20 @@ def main():
         return t.strip()
 
     if "--check" in sys.argv:
+        bad = []
         for path, txt in ((os.path.join(DOCS, "SOVEREIGN_ECOSYSTEM_ATLAS.md"), atlas),
                           (os.path.join(DOCS, "PARITY_CHECKPOINT_LOG.md"), check),
                           (os.path.join(ROOT, "HERMES_24H_PARITY_REPORT.md"), report)):
             same = _norm(read(path)) == _norm(txt)
             print(("OK  " if same else "DRIFT") + " " + path)
+            if not same:
+                bad.append(path)
+        # a check that cannot fail is not a check: exit nonzero on real drift
+        if bad:
+            print("check FAILED: %d of 3 documents differ from the generator output "
+                  "(run --write to regenerate)" % len(bad))
+            sys.exit(1)
+        print("check OK: all 3 documents match the generator output")
         return
 
     written = []
