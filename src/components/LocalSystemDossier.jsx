@@ -15,6 +15,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import LaunchIcon from '@mui/icons-material/Launch';
 import TerminalIcon from '@mui/icons-material/Terminal';
 import SovereignFunnel from './SovereignFunnel';
 
@@ -79,6 +80,8 @@ export default function LocalSystemDossier({
   title,
   accentWord,
   subtitle,
+  toolRoute,
+  toolLabel = 'Open Tool in Zoth Studio',
   cloneCommand,
   repoUrl,
   repoLabel = 'Get Standalone Repo',
@@ -266,18 +269,47 @@ export default function LocalSystemDossier({
 
           {/* Action Row — Local Repository & Spec First */}
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, alignItems: 'center' }}>
+            {toolRoute && (
+              <Button
+                component={RouterLink}
+                to={toolRoute}
+                variant="contained"
+                disableElevation
+                startIcon={<LaunchIcon sx={{ fontSize: 18 }} />}
+                sx={{
+                  bgcolor: isDark ? accent : '#101828',
+                  color: isDark ? '#08080B' : '#FFFFFF',
+                  fontFamily: mono,
+                  fontWeight: 800,
+                  fontSize: '0.84rem',
+                  textTransform: 'none',
+                  px: 2.75,
+                  py: 1.15,
+                  borderRadius: 1.5,
+                  boxShadow: `0 0 20px ${accentWash}`,
+                  '&:hover': {
+                    bgcolor: isDark ? '#F5F1E6' : '#1E293B',
+                    color: isDark ? '#08080B' : '#FFFFFF',
+                  },
+                }}
+              >
+                {toolLabel}
+              </Button>
+            )}
+
             {repoUrl && (
               <Button
                 component="a"
                 href={repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                variant="contained"
+                variant={toolRoute ? 'outlined' : 'contained'}
                 disableElevation
                 startIcon={<GitHubIcon sx={{ fontSize: 18 }} />}
                 sx={{
-                  bgcolor: isDark ? accent : '#101828',
-                  color: isDark ? '#08080B' : '#FFFFFF',
+                  borderColor: toolRoute ? accentBorder : undefined,
+                  bgcolor: toolRoute ? accentWash : (isDark ? accent : '#101828'),
+                  color: toolRoute ? accent : (isDark ? '#08080B' : '#FFFFFF'),
                   fontFamily: mono,
                   fontWeight: 700,
                   fontSize: '0.82rem',
@@ -286,8 +318,9 @@ export default function LocalSystemDossier({
                   py: 1.15,
                   borderRadius: 1.5,
                   '&:hover': {
-                    bgcolor: isDark ? '#F5F1E6' : '#1E293B',
-                    color: isDark ? '#08080B' : '#FFFFFF',
+                    bgcolor: toolRoute ? accentWash : (isDark ? '#F5F1E6' : '#1E293B'),
+                    color: toolRoute ? accent : (isDark ? '#08080B' : '#FFFFFF'),
+                    borderColor: toolRoute ? accent : undefined,
                   },
                 }}
               >

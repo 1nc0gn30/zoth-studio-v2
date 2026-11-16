@@ -48,6 +48,8 @@ export default function AXShowcasePage() {
       title="Machine-Readable Discovery for"
       accentWord="Autonomous Agents."
       subtitle="Human interfaces are only half the contract. The Agent Experience (AX) specification equips Zoth Studio and local repositories with deterministic manifests—/.well-known/mcp.json, /.well-known/agent.json, /llms.txt, and /api/tools.json—so coding agents discover, clone, and invoke tools without fragile DOM scraping."
+      toolRoute="/tools/netlify-ax"
+      toolLabel="Open AX Engine in Zoth Studio"
       cloneCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git && cd zoth-studio-v2"
       repoUrl="https://github.com/NullAITech/zoth-studio-v2"
       repoLabel="Get Zoth Studio Repo"

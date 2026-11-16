@@ -80,6 +80,8 @@ export default function ZothOSShowcasePage() {
       title="The Sovereign AI & Security"
       accentWord="Linux Distribution."
       subtitle="Most Zoth Studio tools execute against real Linux sockets, local SQLite graphs, and loopback inference daemons—not browser sandboxes. ZothOS v3.4.0 ships the entire 80-tool Zoth Studio arsenal, Kali and Parrot security parity, Ollama on 127.0.0.1, and deterministic KDE Plasma 6 workspaces ready on first boot."
+      toolRoute="/tools/zoth-os"
+      toolLabel="Open ZothOS Workstation in Zoth Studio"
       cloneCommand="git clone https://github.com/NullAITech/zoth-os.git && cd zoth-os"
       repoUrl="https://github.com/NullAITech/zoth-os"
       repoLabel="Get ZothOS Build Repo"

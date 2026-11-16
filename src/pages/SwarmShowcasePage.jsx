@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { Box, Paper, Typography, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import LaunchIcon from '@mui/icons-material/Launch';
 import LocalSystemDossier from '../components/LocalSystemDossier';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
@@ -27,15 +28,13 @@ export default function SwarmShowcasePage() {
       title="Multi-Agent Orchestration on"
       accentWord="Local Silicon."
       subtitle="Pantheon coordinates planner, implementer, verifier, and security specialist agents over loopback IPC. Instead of running fragile browser toy prompts, clone the multiplexer repository or Zoth Studio v2 to dispatch real multi-file builds, AST audits, and consensus checks on your own workstation."
+      toolRoute="/tools/zoth-swarm-multiplexer"
+      toolLabel="Open Swarm Multiplexer in Zoth Studio"
       cloneCommand="git clone https://github.com/NullAITech/zoth-swarm-multiplexer.git && cd zoth-swarm-multiplexer"
       repoUrl="https://github.com/NullAITech/zoth-swarm-multiplexer"
       repoLabel="Get Swarm Multiplexer Repo"
       docsRoute="/swarm/docs"
       docsLabel="Swarm Protocol Specification"
-      externalLinks={[
-        { label: 'Zoth Egregore Site', href: 'https://zoth-egregore.netlify.app' },
-        { label: 'Zoth Civilization', href: 'https://zoth-civilization.netlify.app' },
-      ]}
       overviewTitle="Deterministic Task Routing & Verifier Gates"
       overviewParagraphs={[
         'Single-shot LLM calls degrade rapidly when modifying real repositories. Pantheon decomposes high-level engineering goals into a typed Directed Acyclic Graph (DAG), assigning isolated worktrees and scoped tool permissions to specialized local workers.',
@@ -167,13 +166,11 @@ export default function SwarmShowcasePage() {
             </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.25 }}>
               <Button
-                component="a"
-                href="https://zoth-egregore.netlify.app"
-                target="_blank"
-                rel="noopener noreferrer"
+                component={RouterLink}
+                to="/tools/zoth-swarm-multiplexer"
                 variant="outlined"
                 size="small"
-                endIcon={<OpenInNewIcon sx={{ fontSize: 14 }} />}
+                startIcon={<LaunchIcon sx={{ fontSize: 14 }} />}
                 sx={{
                   fontFamily: mono,
                   fontWeight: 700,
@@ -184,7 +181,7 @@ export default function SwarmShowcasePage() {
                   '&:hover': { borderColor: gold, color: gold },
                 }}
               >
-                Visit Egregore Docs
+                Open in Zoth Studio
               </Button>
               <Button
                 component="a"
@@ -240,13 +237,11 @@ export default function SwarmShowcasePage() {
             </Typography>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.25 }}>
               <Button
-                component="a"
-                href="https://zoth-civilization.netlify.app"
-                target="_blank"
-                rel="noopener noreferrer"
+                component={RouterLink}
+                to="/tools/zoth-civilization"
                 variant="outlined"
                 size="small"
-                endIcon={<OpenInNewIcon sx={{ fontSize: 14 }} />}
+                startIcon={<LaunchIcon sx={{ fontSize: 14 }} />}
                 sx={{
                   fontFamily: mono,
                   fontWeight: 700,
@@ -257,7 +252,7 @@ export default function SwarmShowcasePage() {
                   '&:hover': { borderColor: emerald, color: emerald },
                 }}
               >
-                Open Zoth Civilization
+                Open in Zoth Studio
               </Button>
               <Button
                 component="a"

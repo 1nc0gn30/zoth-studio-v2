@@ -10,6 +10,8 @@ export default function HexStrikeShowcasePage() {
       title="Local Security Auditing &"
       accentWord="Threat Reconnaissance."
       subtitle="Real security tooling cannot run inside a sandboxed browser tab—it requires raw sockets, local binary inspection, and direct filesystem access. Clone the HexStrike repository or boot ZothOS to run automated vulnerability triage, CVE correlation, binary entropy analysis, and secret auditing entirely on your own hardware."
+      toolRoute="/tools/hexstrike-arsenal"
+      toolLabel="Open HexStrike Arsenal in Zoth Studio"
       cloneCommand="git clone https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal.git && cd NullAI-HexStrike-AI-Terminal"
       repoUrl="https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal"
       repoLabel="Get HexStrike Terminal Repo"

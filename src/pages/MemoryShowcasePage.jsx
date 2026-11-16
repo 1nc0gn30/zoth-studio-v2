@@ -10,6 +10,8 @@ export default function MemoryShowcasePage() {
       title="Persistent Synaptic Memory That"
       accentWord="Consolidates Locally."
       subtitle="AI coding agents lose architectural context every time a terminal session closes. Neuro-Memory runs as a lightweight loopback daemon on port :8094, storing episodic engrams in a local SQLite WAL graph weighted by Spike-Timing-Dependent Plasticity (STDP) so active facts strengthen and stale noise decays naturally."
+      toolRoute="/tools/neuro-memory-daemon"
+      toolLabel="Open Neuro-Memory in Zoth Studio"
       cloneCommand="git clone https://github.com/NullAITech/neuro-memory-daemon.git && cd neuro-memory-daemon"
       repoUrl="https://github.com/NullAITech/neuro-memory-daemon"
       repoLabel="Get Neuro-Memory Repo"

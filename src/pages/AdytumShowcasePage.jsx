@@ -10,6 +10,8 @@ export default function AdytumShowcasePage() {
       title="Deterministic AI Workflow"
       accentWord="Pipelines."
       subtitle="Adytum replaces brittle prompt chains with contract-validated local execution graphs. Define multi-stage planning, synthesis, and verification pipelines once—every intermediate payload is validated against strict JSON schemas before advancing to the next local model or tool call."
+      toolRoute="/tools/adytum-alchemist-ai-workflow"
+      toolLabel="Open Adytum Chamber in Zoth Studio"
       cloneCommand="git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git && cd adytum-alchemist-ai-workflow"
       repoUrl="https://github.com/NullAITech/adytum-alchemist-ai-workflow"
       repoLabel="Get Adytum Workflow Repo"

@@ -20,6 +20,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import LaunchIcon from '@mui/icons-material/Launch';
 
 import GoldenZLogo3D from '../components/GoldenZLogo3D';
 import MathPillarsGrid from '../components/MathPillarsGrid';
@@ -37,6 +38,7 @@ const FLAGSHIP_SYSTEMS = [
     summary:
       'Bootable Debian Live operating system pre-configured with all 77 CLI binaries, local loopback daemons, Ollama inference runtime, and Tor network isolation.',
     route: '/zoth-os',
+    toolRoute: '/tools/zoth-os',
     repo: 'https://github.com/NullAITech/zoth-os',
     externalUrl: 'https://zothos.nullai.tech',
     externalLabel: 'zothos.nullai.tech',
@@ -47,9 +49,8 @@ const FLAGSHIP_SYSTEMS = [
     summary:
       '21-cadre local agent multiplexer paired with Zoth Egregore — a DeepSeek-Flash agent model orchestrated via Nous Research Hermes and native Zoth tools.',
     route: '/swarm',
+    toolRoute: '/tools/zoth-swarm-multiplexer',
     repo: 'https://github.com/NullAITech/zoth-swarm-multiplexer',
-    externalUrl: 'https://zoth-egregore.netlify.app',
-    externalLabel: 'zoth-egregore.netlify.app',
   },
   {
     kicker: 'SYNAPTIC GRAPH DAEMON · :8094',
@@ -57,6 +58,7 @@ const FLAGSHIP_SYSTEMS = [
     summary:
       'Persistent Spike-Timing-Dependent Plasticity (STDP) vector and graph memory daemon bound strictly to localhost for long-horizon agent recall.',
     route: '/memory',
+    toolRoute: '/tools/neuro-memory-daemon',
     repo: 'https://github.com/NullAITech/neuro-memory-daemon',
   },
   {
@@ -64,8 +66,9 @@ const FLAGSHIP_SYSTEMS = [
     title: 'Zoth Bolt WebGen',
     summary:
       'Local full-stack AST synthesizer and multi-model compilation pipeline that builds, tests, and verifies complete applications on your own machine.',
-    route: '/webgen',
-    repo: 'https://github.com/NullAITech/zoth-webgen',
+    route: '/tools/zoth-bolt',
+    toolRoute: '/tools/zoth-bolt',
+    repo: 'https://github.com/1nc0gn30/zoth-webgen',
   },
   {
     kicker: 'SECURITY AUDIT SUITE · :8138',
@@ -73,6 +76,7 @@ const FLAGSHIP_SYSTEMS = [
     summary:
       'Local reconnaissance, YARA/Sigma rule synthesis, CVE surface auditing, and binary inspection designed for defensive and red-team engineers.',
     route: '/hexstrike',
+    toolRoute: '/tools/hexstrike-arsenal',
     repo: 'https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal',
   },
   {
@@ -81,6 +85,7 @@ const FLAGSHIP_SYSTEMS = [
     summary:
       'Structured 22-stage architectural specification engine that validates requirements, invariants, and test matrices before code generation begins.',
     route: '/adytum',
+    toolRoute: '/tools/adytum-alchemist-ai-workflow',
     repo: 'https://github.com/NullAITech/adytum-alchemist-ai-workflow',
   },
 ];
@@ -420,22 +425,48 @@ export default function HomePage() {
                         justifyContent: 'space-between',
                       }}
                     >
-                      <Stack direction="row" spacing={1} alignItems="center">
+                      <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
+                        {sys.toolRoute && (
+                          <Button
+                            size="small"
+                            variant="contained"
+                            component={RouterLink}
+                            to={sys.toolRoute}
+                            startIcon={<LaunchIcon sx={{ fontSize: '0.85rem !important' }} />}
+                            sx={{
+                              bgcolor: isDark ? '#D4AF37' : '#101828',
+                              color: isDark ? '#08080B' : '#FFFFFF',
+                              fontWeight: 700,
+                              fontSize: '0.76rem',
+                              textTransform: 'none',
+                              px: 1.5,
+                              '&:hover': {
+                                bgcolor: isDark ? '#F5F1E6' : '#1E293B',
+                              },
+                            }}
+                          >
+                            Studio Tool
+                          </Button>
+                        )}
                         <Button
                           size="small"
-                          variant="contained"
+                          variant="outlined"
                           component={RouterLink}
                           to={sys.route}
                           sx={{
-                            bgcolor: isDark ? '#D4AF37' : '#101828',
-                            color: isDark ? '#08080B' : '#FFFFFF',
+                            borderColor: borderCol,
+                            color: primaryText,
                             fontWeight: 700,
                             fontSize: '0.76rem',
                             textTransform: 'none',
-                            px: 1.75,
+                            px: 1.5,
+                            '&:hover': {
+                              borderColor: gold,
+                              color: gold,
+                            },
                           }}
                         >
-                          Architecture
+                          Dossier
                         </Button>
                         <Button
                           size="small"
@@ -450,6 +481,10 @@ export default function HomePage() {
                             fontWeight: 700,
                             fontSize: '0.75rem',
                             textTransform: 'none',
+                            '&:hover': {
+                              borderColor: gold,
+                              color: gold,
+                            },
                           }}
                         >
                           Repo
