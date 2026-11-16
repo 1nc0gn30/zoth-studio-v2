@@ -14,8 +14,10 @@ precisely what the evidence does and does not prove. Instruments are checked in 
 | routes reviewed | `/`, `/mobile` |
 | instrument 1 | `docs/tools/layerA_probe.mjs` — enumerate + real pointer click + classify every control |
 | instrument 2 | `docs/tools/layerA_occl.mjs` — two-state occlusion experiment (rest / fullscreen / post-exit) |
+| instrument revision | the verdict vocabulary is the discriminator: `wired-request` / `wired-dom` / `no-effect` / `click-occluded`. A report carrying the superseded `request` / `no-op` / `occluded?` vocabulary (and no `directVerdict`) came from an older probe build and is **not** evidence — re-run the checked-in instrument instead. |
 | evidence files | `layerA_pixelcast_v5.json` (probe), `occl_rerun_root.log`, `occl_rerun_mobile.log` (occlusion) |
 | re-verified | `layerA_pixelcast_final.json`, `occl_final_root.log`, `occl_final_mobile.log` — a second, independent run of the checked-in instruments, reproducing every number below |
+| re-verified (3rd) | `layerA_v5_repro.json` — run against the live `:8148` after a background job was found writing a superseded-vocabulary report; reproduced the same `byVerdict` sets on `/` and `/mobile`, 0 console errors, `overflowPx=0`, exit 0 |
 
 Both instruments are zero-dependency Node scripts driving system Chrome over CDP with a
 real `Input.dispatchMouseEvent` pointer click at the control's centre (not `element.click()`),
