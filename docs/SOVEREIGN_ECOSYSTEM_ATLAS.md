@@ -4,7 +4,7 @@ Master architectural ledger for the `NullAITech` sovereign tool ecosystem.
 
 | | |
 |---|---|
-| Generated | 2026-11-15 12:38 |
+| Generated | 2026-11-16 09:09 |
 | Generator | `zoth-studio-v2/docs/tools/atlas_gen.py` (re-runnable, no hardcoded counts) |
 | Catalog of record | `zoth-studio-v2/src/data/toolsData.js` |
 | CLI surfaces compared | `zoth-os/config/includes.chroot/usr/local/bin`, `/usr/local/bin`, `~/.local/bin` |
@@ -37,21 +37,21 @@ stay trustworthy:
 | Port collisions (alias-aware) | **0** |
 | Catalog entries present on all 3 bin surfaces | **81/81** |
 | ...of those, byte-identical across all 3 surfaces | **81/81** |
-| Generated God-Mode wrappers (carry `TOOL_ID`) | **109** filenames / **54** canonical `TOOL_ID`s, all canonical byte-identical |
-| Tools shipping a native CLI instead of a wrapper | **27** (**27** byte-identical, **0** differ) |
-| Short-name alias filenames (`zela`, `zoth-bolt`, ...) | **55** (16 drifting, none catalog-critical) |
-| Unrelated binaries in those dirs (out of scope) | **375** |
+| Generated God-Mode wrappers (carry `TOOL_ID`) | **105** filenames / **51** canonical `TOOL_ID`s, all canonical byte-identical |
+| Tools shipping a native CLI instead of a wrapper | **30** (**30** byte-identical, **0** differ) |
+| Short-name alias filenames (`zela`, `zoth-bolt`, ...) | **54** (0 drifting, none catalog-critical) |
+| Unrelated binaries in those dirs (out of scope) | **379** |
 | Layer A — standalone web entry present | **81/81** |
 | Layer A — runtime-served web surface (explained exception) | **1** (`zothnet` -> `pkg/web/dashboard.html`) |
 | Layer A — SEO/AEO complete in entry document | **81/81** |
 | Layer A — bare `<img>` without `alt` | **0** |
 | Layer B — God-Mode component resolves in `lazy()` registry | **81/81** |
 | Layer D — `README.md` present | **81/81** |
-| Layer E — headless 3-viewport verified | **81/81** (static 76 · live 14 · 246 shots) |
-| Top-level repositories under `NullAITech/` | **141** |
-| Repositories absent from the catalog | **60** |
+| Layer E — headless 3-viewport verified | **81/81** (static 76 · live 15 · 246 shots) |
+| Top-level repositories under `NullAITech/` | **142** |
+| Repositories absent from the catalog | **61** |
 
-**Reading the parity verdict:** the CLI surface (Layer C) is in excellent shape — all **54**
+**Reading the parity verdict:** the CLI surface (Layer C) is in excellent shape — all **51**
 canonical wrappers are present on all three surfaces with identical bytes, **81/81** catalog
 entries are byte-identical on all three, the only **0** exceptions are native-CLI tools with a
 diffed and explained delta (§4.2), and there are **zero** port collisions across all 81 catalog
@@ -59,7 +59,7 @@ entries. The real remaining gaps are small and enumerable: **0** catalog entries
 component, **0** lack a README, **0** lack a standalone web entry, and **0** have incomplete
 SEO/AEO metadata. Layer E is closed: every catalog entry was captured headlessly at
 390x844 / 820x1180 / 1440x900 over loopback HTTP (**81/81** clean, `overflowPx==0`,
-`imgsMissingAlt==0`, no page errors), and the **14** tools whose declared port was already
+`imgsMissingAlt==0`, no page errors), and the **15** tools whose declared port was already
 listening were additionally captured against their live deployment — see §2 and the atlas §8.
 
 ## 2. Tri-surface status legend
@@ -166,17 +166,17 @@ headlessly (see §8), so a `[E]` cell means a clean capture row exists for that 
 
 ### 4.1 Generated God-Mode wrappers
 
-- **109** filenames on the bin surfaces carry `TOOL_ID` metadata, resolving to **54** distinct tools.
-- The **54 canonical catalog filenames are byte-identical across all three surfaces** (chroot
-  staging = `/usr/local/bin` = `~/.local/bin`). The surplus **55** files are short-name aliases,
+- **105** filenames on the bin surfaces carry `TOOL_ID` metadata, resolving to **51** distinct tools.
+- The **51 canonical catalog filenames are byte-identical across all three surfaces** (chroot
+  staging = `/usr/local/bin` = `~/.local/bin`). The surplus **54** files are short-name aliases,
   characterised in §4.3 — none is a stale dispatch target.
 - Wrapper bodies carry `TOOL_ID` / `TOOL_PORT` / `STUDIO_URL` and dispatch into the repo's real CLI.
 
-### 4.2 Catalog entries that are NOT generated wrappers (27)
+### 4.2 Catalog entries that are NOT generated wrappers (30)
 
 These ship their own executable entry from the repo instead of a generated wrapper. That is
 a different-by-design class — core daemons, network services and compiled binaries — not a
-missing file. **27 of the 27 are nevertheless byte-identical on all three surfaces; 0 differ.**
+missing file. **30 of the 30 are nevertheless byte-identical on all three surfaces; 0 differ.**
 
 ```
 pixel-cast
@@ -186,6 +186,8 @@ sovereign-agent-bridge
 neuro-memory-daemon
 zoth-os
 vector-search-engine
+zoth-webgen
+agent-mock-twin
 etsy-pod-forge
 etsy-connector
 mcp-lens
@@ -204,18 +206,19 @@ zoth-ascii-magic
 zoth-math-pillar
 zothos-lite
 zothnet
+creatorplaybooks
 zoth-obsidian-tracker
 zoth-x-connector
 ```
 
-The 0 that differ were diffed individually — each delta is explainable, none is a stale stub:
+Every delta recorded mid-sweep is now closed: each was re-staged from its canonical repo revision and re-verified:
 
-| tool | delta between surfaces | assessment |
+| tool | delta recorded mid-sweep | how it stands now |
 |---|---|---|
-| `pixel-cast` | chroot defaults to `100.64.0.10` (Tailscale CGNAT) where `/usr/local/bin` uses `127.0.0.1`; one `--host` help line differs | build-environment defaults, not a defect |
-| `zoth-osint` | chroot copy is 1 byte shorter: the example phone number is `E164_REDACTED` there, a `555`-range placeholder in `/usr/local/bin` | chroot staging is deliberately sanitised |
-| `zothos-lite` | `/usr/local/bin` (13319 B, identical to chroot) declares `solana_tip_address`; the repo binary `~/.local/bin` symlinks to (13237 B) does not — and `~/.local/bin` wins on `PATH` | **open item**: the effective CLI is the copy without the canonical tip address (see §4.5) |
-| `zothnet` | three genuinely different Go builds: 8.44 MB and 8.47 MB static stripped, 11.9 MB dynamic with debug info | compiled-artifact drift from separate builds |
+| `pixel-cast` | chroot defaulted to `100.64.0.10` (Tailscale CGNAT) where `/usr/local/bin` used `127.0.0.1` | **closed** — all three surfaces now hash `f0bb0e34acc9` = `pixel-cast/bin/pixel-cast` |
+| `zoth-osint` | chroot copy was 1 byte shorter (example number `E164_REDACTED` vs a `555`-range placeholder) | **closed** — all three surfaces now hash `a78089515d5a` = `zoth-osint/bin/zoth-osint` |
+| `zothos-lite` | `/usr/local/bin` + chroot (13319 B) declared `solana_tip_address`; the 13237 B repo revision did not | **closed on the surface axis** — all three now hash `600626b64754` = the repo revision. Residual content question in §4.5 |
+| `zothnet` | three different Go builds: 8.44 MB and 8.47 MB static stripped, 11.9 MB dynamic with debug info | **closed** — all three surfaces now hash `30c1dc4e307b` = `zothnet/bin/zothnet` (the revision the repo builds) |
 
 Spot-verified in the other direction: `zoth-math-pillar` — chroot and `/usr/local/bin` are
 both 3261 bytes from the same revision, `~/.local/bin/zoth-math-pillar` is a **symlink to
@@ -223,38 +226,23 @@ both 3261 bytes from the same revision, `~/.local/bin/zoth-math-pillar` is a **s
 
 ### 4.3 The alias layer (why every naive census is wrong)
 
-- The three bin directories hold **484 distinct filenames** in total, but only **109** of them
-  are generated wrappers — the other **375** are unrelated system binaries and `-tui` launchers
+- The three bin directories hold **484 distinct filenames** in total, but only **105** of them
+  are generated wrappers — the other **379** are unrelated system binaries and `-tui` launchers
   (`bat`, `aider`, `claude`, `codex`, ...). Counting those as "tools" is the first trap.
-- The **109** wrapper filenames resolve to only **54 distinct `TOOL_ID`s**; the surplus **55** are
+- The **105** wrapper filenames resolve to only **51 distinct `TOOL_ID`s**; the surplus **54** are
   short-name alias files (`zela`, `zela-guide`, `zoth-bolt`, `sigma-forge`, ...).
-- **16 of the 109 wrapper filenames differ between surfaces** (no canonical catalog filename does):
+- **0 of the 105 wrapper filenames differ between surfaces** (no canonical catalog filename does):
 
 ```
-bounty-hub
-reality-forge
-scene-foundry
-sigma-forge
-theme-forge
-yara-forge
-zela
-zela-guide
-zoth-capsule-jail
-zoth-egress-sentinel
-zoth-flight-recorder
-zoth-foundry
-zoth-policy-auditor
-zoth-prompt-firewall
-zoth-theme-forge
-zoth-yara-forge
+(none)
 ```
 
 Interpretation: the alias layer is legacy/hand-made scaffolding around an otherwise exact
-wrapper layer. **Every one of the 16 drifting aliases is a symlink to the canonical wrapper on at
+wrapper layer. **Every one of the 0 drifting aliases is a symlink to the canonical wrapper on at
 least one surface** (`alias_no_link = 0`), so no alias points at a stale target:
 
-- **39 of the 55 aliases are byte-identical on every surface they appear on.**
-- **16 differ** — 11 appear on all three surfaces, 5 on two (chroot + `/usr/local/bin` only,
+- **54 of the 54 aliases are byte-identical on every surface they appear on.**
+- **0 differ** — 0 appear on all three surfaces, 0 on two (chroot + `/usr/local/bin` only,
   the `zoth-*` aliases for the `agent-*` daemon family).
 - The difference is always **form** (a symlink on one surface, a standalone generated copy on
   another) and/or **embedded sample text** in the standalone copy — verified by diff, e.g.
@@ -320,7 +308,7 @@ this generator, which will collapse `zothos-lite` into the byte-identical set.
 
 ## 6. Orphaned repositories
 
-Top-level directories under `NullAITech/` that have **no catalog entry** (60).
+Top-level directories under `NullAITech/` that have **no catalog entry** (61).
 Presence here is not a defect: this tree holds shared toolchain, research material and
 infrastructure alongside shippable products. Grouping below is an assessment, not a measurement.
 
@@ -353,6 +341,7 @@ neal-bliki
 neal-voice-clone
 nealfrazier-tech-build
 nealsvision
+nous-hermes-zoth-collab
 nullai2026
 pentest-academy
 prompts
@@ -415,8 +404,8 @@ Chromium closed after every run:
 
 | sweep | target | rows | clean |
 |---|---|---|---|
-| static | each repo served on a loopback port | 80 | **76** |
-| live | each tool's own declared `localPort`, only if it was already listening | 15 | **14** |
+| static | each repo served on a loopback port | 77 | **76** |
+| live | each tool's own declared `localPort`, only if it was already listening | 15 | **15** |
 | per-tool | final verdict used by the `[E]` column in §3 (67 static · 14 live) | 81 | **81** |
 
 Clean predicate (all must hold): `status == ok`, three viewport rows, `overflowPx == 0`,
@@ -517,7 +506,7 @@ showed its port open, so no daemon was started, stopped, or replaced for this me
 
 | when | change |
 |---|---|
-| 2026-11-15 12:38 | atlas generator created; Layers A/B/C/D measured across 81 entries |
+| 2026-11-16 09:09 | atlas generator created; Layers A/B/C/D measured across 81 entries |
 | 2026-11-15 | `zela-glasses-guide` tri-surface repair (see §4.4) |
 | 2026-11-15 | Layer E wired into the generator: headless 3-viewport verdicts read from `layerE_results_http.jsonl` / `layerE_results_live.jsonl` (§8) |
 

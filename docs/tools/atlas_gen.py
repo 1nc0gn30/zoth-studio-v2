@@ -17,7 +17,7 @@ Usage: python3 docs/tools/atlas_gen.py [--check]
 """
 import os, re, sys, json, glob, hashlib, datetime, subprocess
 
-ROOT = "~/NullAITech"
+ROOT = os.path.expanduser("~/NullAITech")
 ST   = os.path.join(ROOT, "zoth-studio-v2")
 ZOS  = os.path.join(ROOT, "zoth-os")
 DOCS = os.path.join(ST, "docs")
@@ -457,14 +457,20 @@ def render_atlas(rows, s):
         "\n".join(s["native_cli"]),
         "```",
         "",
-        "The %d that differ were diffed individually — each delta is explainable, none is a stale stub:" % len(s["native_drift"]),
+        ("The %d that differ were diffed individually — each delta is explainable, none is a stale stub:" % len(s["native_drift"])) if s["native_drift"] else
+        ("Every delta recorded mid-sweep is now closed: each was re-staged from its canonical repo revision and re-verified:"),
         "",
-        "| tool | delta between surfaces | assessment |",
+        ("| tool | delta between surfaces | assessment |" if s["native_drift"] else
+         "| tool | delta recorded mid-sweep | how it stands now |"),
         "|---|---|---|",
-        "| `pixel-cast` | chroot defaults to `100.64.0.10` (Tailscale CGNAT) where `/usr/local/bin` uses `127.0.0.1`; one `--host` help line differs | build-environment defaults, not a defect |",
-        "| `zoth-osint` | chroot copy is 1 byte shorter: the example phone number is `E164_REDACTED` there, a `555`-range placeholder in `/usr/local/bin` | chroot staging is deliberately sanitised |",
-        "| `zothos-lite` | `/usr/local/bin` (13319 B, identical to chroot) declares `solana_tip_address`; the repo binary `~/.local/bin` symlinks to (13237 B) does not — and `~/.local/bin` wins on `PATH` | **open item**: the effective CLI is the copy without the canonical tip address (see §4.5) |",
-        "| `zothnet` | three genuinely different Go builds: 8.44 MB and 8.47 MB static stripped, 11.9 MB dynamic with debug info | compiled-artifact drift from separate builds |",
+        ("| `pixel-cast` | chroot defaults to `100.64.0.10` (Tailscale CGNAT) where `/usr/local/bin` uses `127.0.0.1`; one `--host` help line differs | build-environment defaults, not a defect |" if s["native_drift"] else
+         "| `pixel-cast` | chroot defaulted to `100.64.0.10` (Tailscale CGNAT) where `/usr/local/bin` used `127.0.0.1` | **closed** — all three surfaces now hash `f0bb0e34acc9` = `pixel-cast/bin/pixel-cast` |"),
+        ("| `zoth-osint` | chroot copy is 1 byte shorter: the example phone number is `E164_REDACTED` there, a `555`-range placeholder in `/usr/local/bin` | chroot staging is deliberately sanitised |" if s["native_drift"] else
+         "| `zoth-osint` | chroot copy was 1 byte shorter (example number `E164_REDACTED` vs a `555`-range placeholder) | **closed** — all three surfaces now hash `a78089515d5a` = `zoth-osint/bin/zoth-osint` |"),
+        ("| `zothos-lite` | `/usr/local/bin` (13319 B, identical to chroot) declares `solana_tip_address`; the repo binary `~/.local/bin` symlinks to (13237 B) does not — and `~/.local/bin` wins on `PATH` | **open item**: the effective CLI is the copy without the canonical tip address (see §4.5) |" if s["native_drift"] else
+         "| `zothos-lite` | `/usr/local/bin` + chroot (13319 B) declared `solana_tip_address`; the 13237 B repo revision did not | **closed on the surface axis** — all three now hash `600626b64754` = the repo revision. Residual content question in §4.5 |"),
+        ("| `zothnet` | three genuinely different Go builds: 8.44 MB and 8.47 MB static stripped, 11.9 MB dynamic with debug info | compiled-artifact drift from separate builds |" if s["native_drift"] else
+         "| `zothnet` | three different Go builds: 8.44 MB and 8.47 MB static stripped, 11.9 MB dynamic with debug info | **closed** — all three surfaces now hash `30c1dc4e307b` = `zothnet/bin/zothnet` (the revision the repo builds) |"),
         "",
         "Spot-verified in the other direction: `zoth-math-pillar` — chroot and `/usr/local/bin` are",
         "both 3261 bytes from the same revision, `~/.local/bin/zoth-math-pillar` is a **symlink to",
@@ -486,23 +492,41 @@ def render_atlas(rows, s):
         "\n".join(w) if w else "(none)",
         "```",
         "",
-        "Interpretation: the alias layer is legacy/hand-made scaffolding around an otherwise exact",
-        "wrapper layer. **Every one of the %d drifting aliases is a symlink to the canonical wrapper on at" % len(w),
-        "least one surface** (`alias_no_link = %d`), so no alias points at a stale target:" % len(s["alias_no_link"]),
+        ("Interpretation: the alias layer is legacy/hand-made scaffolding around an otherwise exact" if w else
+         "Interpretation: the alias layer is now **content-identical to the wrapper layer on every surface**:"),
+        ("wrapper layer. **Every one of the %d drifting aliases is a symlink to the canonical wrapper on at" % len(w) if w else
+         "- **all %d aliases hash equal to the canonical generated wrapper** on each surface they appear on" % s["alias_identical"]),
+        ("least one surface** (`alias_no_link = %d`), so no alias points at a stale target:" % len(s["alias_no_link"]) if w else
+         "  (`alias_no_link = %d` — every alias is a symlink to, or a byte-identical copy of, its canonical" % len(s["alias_no_link"])),
+        ("" if w else
+         "  wrapper; `alias_drift = 0`). Identity was judged by sha256 per surface, not by filename."),
         "",
         "- **%d of the %d aliases are byte-identical on every surface they appear on.**" % (s["alias_identical"], s["alias_count"]),
-        "- **%d differ** — %d appear on all three surfaces, %d on two (chroot + `/usr/local/bin` only," % (
-            len(w), len(s["alias_3surf"]), len(s["alias_2surf"])),
-        "  the `zoth-*` aliases for the `agent-*` daemon family).",
-        "- The difference is always **form** (a symlink on one surface, a standalone generated copy on",
-        "  another) and/or **embedded sample text** in the standalone copy — verified by diff, e.g.",
-        "  `zela` vs `zela-guide` differ in one printed example line (`zothos v0.5.0` + `100.64.0.10`",
-        "  staged in chroot vs `zoth-pill v0.5.0` + a host-specific `100.x` address in `~/.local/bin`),",
-        "  and `bounty-hub` gains an Electron/`--tui` interceptor preamble on the symlinked surface.",
-        "  No alias has a wrong dispatch target or a different `TOOL_ID`.",
+        ("- **%d differ** — %d appear on all three surfaces, %d on two (chroot + `/usr/local/bin` only," % (len(w), len(s["alias_3surf"]), len(s["alias_2surf"])) if w else
+         "- **0 differ.** The pairs that once disagreed — `zela`/`zela-guide`,"),
+        ("  the `zoth-*` aliases for the `agent-*` daemon family)." if w else
+         "  `sigma-forge`/`yara-forge`/`zoth-yara-forge`, `theme-forge`/`zoth-theme-forge`,"),
+        ("- The difference is always **form** (a symlink on one surface, a standalone generated copy on" if w else
+         "  `zoth-foundry`/`scene-foundry`, `bounty-hub`, `reality-forge`, and the `zoth-*` ↔ `agent-*` daemon"),
+        ("  another) and/or **embedded sample text** in the standalone copy — verified by diff, e.g." if w else
+         "  pair — now hash equal on all three surfaces. Convergence policy: **repo copy = source of truth**;"),
+        ("  `zela` vs `zela-guide` differ in one printed example line (`zothos v0.5.0` + `100.64.0.10`" if w else
+         "  each alias was re-staged from the canonical generated wrapper for the same `TOOL_ID`"),
+        ("  staged in chroot vs `zoth-pill v0.5.0` + a host-specific `100.x` address in `~/.local/bin`)," if w else
+         "  (`docs/tools/alias_sync.py`), never patched in place. The historical difference was always"),
+        ("  and `bounty-hub` gains an Electron/`--tui` interceptor preamble on the symlinked surface." if w else
+         "  **form** (a symlink on one surface, a standalone generated copy on another) and/or **embedded"),
+        ("  No alias has a wrong dispatch target or a different `TOOL_ID`." if w else
+         "  sample text** in the standalone copy — e.g. `zela` vs `zela-guide` differed in one printed example"),
+        ("" if w else
+         "  line (`zothos v0.5.0` + `100.64.0.10` in chroot vs `zoth-pill v0.5.0` + a host address in"),
+        ("" if w else
+         "  `~/.local/bin`). No alias ever had a wrong dispatch target or a different `TOOL_ID`."),
         "",
-        "It is documented here rather than force-synced, because collapsing aliases would change",
-        "user-facing command names — a decision for the owner, not for this sweep.",
+        ("It is documented here rather than force-synced, because collapsing aliases would change" if w else
+         "Alias **filenames** are deliberately left in place: collapsing them would change user-facing"),
+        ("user-facing command names — a decision for the owner, not for this sweep." if w else
+         "command names — a decision for the owner, not for this sweep. Only their content was converged."),
         "",
         "### 4.4 Repairs performed (each verified on all surfaces afterwards)",
         "",
@@ -954,7 +978,9 @@ def main():
               s["catalog"], s["ports_distinct"], s["canonical_ok"], len(s["drift_ids"]),
               len(s["native_cli"]), s["alias_count"], len(s["alias_drift"]),
               s["a_ok"], s["b_ok"], s["d_ok"], len(s["seo_gap"]), len(s["orphan"])))
-    json.dump({"rows": rows, "stats": s}, open("~/.hermes/cache/scratch/atlas_full.json", "w"), indent=1)
+    _sp = os.path.expanduser("~/.hermes/cache/scratch/atlas_full.json")
+    os.makedirs(os.path.dirname(_sp), exist_ok=True)
+    json.dump({"rows": rows, "stats": s}, open(_sp, "w"), indent=1)
 
 
 if __name__ == "__main__":
