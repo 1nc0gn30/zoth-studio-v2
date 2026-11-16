@@ -26,6 +26,7 @@ import StorageIcon from '@mui/icons-material/Storage';
 import LanIcon from '@mui/icons-material/Lan';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
+import { SovereignJsonTree } from '../sovereign/SovereignWidgets.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -705,43 +706,21 @@ export default function McpLensGodModeTool() {
               </Stack>
 
               {selectedFrame ? (
-                <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', display: 'block', mb: 0.5 }}>
-                    REQUEST PARAMS ({selectedFrame.method})
-                  </Typography>
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      p: 1.5,
-                      mb: 2,
-                      bgcolor: isDark ? '#050508' : '#F1F5F9',
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      fontFamily: mono,
-                      fontSize: '0.75rem',
-                      overflowX: 'auto'
-                    }}
-                  >
-                    <pre style={{ margin: 0 }}>{JSON.stringify(selectedFrame.params, null, 2)}</pre>
-                  </Paper>
-
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', display: 'block', mb: 0.5 }}>
-                    RESPONSE PAYLOAD ({selectedFrame.status})
-                  </Typography>
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      p: 1.5,
-                      bgcolor: isDark ? '#050508' : '#F1F5F9',
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      fontFamily: mono,
-                      fontSize: '0.75rem',
-                      overflowX: 'auto'
-                    }}
-                  >
-                    <pre style={{ margin: 0 }}>{JSON.stringify(selectedFrame.result, null, 2)}</pre>
-                  </Paper>
+                <Box sx={{ flexGrow: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <SovereignJsonTree
+                    data={selectedFrame.params}
+                    title={`REQUEST PARAMS (${selectedFrame.method})`}
+                    accent="#38BDF8"
+                    initialDepth={2}
+                    maxHeight={240}
+                  />
+                  <SovereignJsonTree
+                    data={selectedFrame.result}
+                    title={`RESPONSE PAYLOAD (${selectedFrame.status})`}
+                    accent="#10B981"
+                    initialDepth={2}
+                    maxHeight={260}
+                  />
                 </Box>
               ) : (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 260 }}>
