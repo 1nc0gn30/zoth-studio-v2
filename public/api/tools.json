@@ -528,7 +528,7 @@
       "name": "Zoth QuickSite Starter",
       "description": "Simple 3-step static template & 1-click Netlify launcher on 127.0.0.1:8092. Pick a ready-made template, preview live, and export HTML/ZIP or deploy to Netlify.",
       "category": "Autonomous Web",
-      "github": "https://github.com/NullAITech/zoth-webgen",
+      "github": "https://github.com/1nc0gn30/zoth-webgen",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/zoth-webgen/",
       "version": "2.5.0",
