@@ -15,6 +15,7 @@ precisely what the evidence does and does not prove. Instruments are checked in 
 | instrument 1 | `docs/tools/layerA_probe.mjs` — enumerate + real pointer click + classify every control |
 | instrument 2 | `docs/tools/layerA_occl.mjs` — two-state occlusion experiment (rest / fullscreen / post-exit) |
 | evidence files | `layerA_pixelcast_v5.json` (probe), `occl_rerun_root.log`, `occl_rerun_mobile.log` (occlusion) |
+| re-verified | `layerA_pixelcast_final.json`, `occl_final_root.log`, `occl_final_mobile.log` — a second, independent run of the checked-in instruments, reproducing every number below |
 
 Both instruments are zero-dependency Node scripts driving system Chrome over CDP with a
 real `Input.dispatchMouseEvent` pointer click at the control's centre (not `element.click()`),
