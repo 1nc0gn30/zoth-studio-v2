@@ -2,13 +2,37 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Person",
+      "@id": "https://nullai.tech/#person",
+      "name": "Neal Frazier",
+      "alternateName": ["1nc0gn30", "Neal Frazier Tech"],
+      "url": "https://1nc0gn30.si",
+      "sameAs": [
+        "https://1nc0gn30.si",
+        "https://nullai.tech",
+        "https://nullai.tech/fieldkit",
+        "https://x.com/1nc0gn30",
+        "https://github.com/NullAITech",
+        "https://github.com/1nc0gn30"
+      ]
+    },
+    {
       "@type": "Organization",
       "@id": "https://nullai.tech/#org",
-      "name": "NullAI",
-      "alternateName": "1nc0gn30",
+      "name": "Neal Frazier Tech • NullAI Platform",
+      "alternateName": ["NullAI", "1nc0gn30"],
       "url": "https://nullai.tech",
+      "founder": { "@id": "https://nullai.tech/#person" },
       "email": "contact@nullai.tech",
       "sameAs": [
+        "https://nullai.tech",
+        "https://nullai.tech/fieldkit",
+        "https://1nc0gn30.si",
+        "https://zoth.nullai.tech",
+        "https://zothos.nullai.tech",
+        "https://zothos-lite.nullai.tech",
+        "https://zoth-civilization.netlify.app",
+        "https://zothnet.nullai.tech",
         "https://x.com/1nc0gn30",
         "https://github.com/NullAITech",
         "https://github.com/1nc0gn30"
@@ -24,9 +48,58 @@
       }
     },
     {
-      "@type": "SoftwareApplication",
-      "name": "Zoth Studio",
+      "@type": ["WebApplication", "SoftwareApplication"],
+      "name": "Zoth Studio v2",
       "url": "https://zoth.nullai.tech",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "ZothOS v3.4.0, ZothOS-Lite v1.2, Web, Linux, macOS, Windows",
+      "creator": { "@id": "https://nullai.tech/#person" },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "publisher": {
+        "@id": "https://nullai.tech/#org"
+      },
+      "description": "Local-first AI studio: 80 free open-access tools (56 in-browser/WebGPU + 24 CLI/daemon across 79 public GitHub repositories) and 43 workstations."
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "ZothOS v3.4.0",
+      "url": "https://zothos.nullai.tech",
+      "applicationCategory": "OperatingSystem",
+      "operatingSystem": "Debian 13 KDE Plasma 6 Linux",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "publisher": {
+        "@id": "https://nullai.tech/#org"
+      },
+      "description": "Debian 13 + KDE Plasma 6 sovereign AI Linux distribution shipping all 80 Zoth tools and 23 resident loopback daemons."
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "ZothOS-Lite v1.2",
+      "url": "https://zothos-lite.nullai.tech",
+      "applicationCategory": "OperatingSystem",
+      "operatingSystem": "Amnesic Monotone Live USB/ISO Linux (toram)",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "publisher": {
+        "@id": "https://nullai.tech/#org"
+      },
+      "description": "Amnesic Monotone Live USB/ISO (toram) featuring 56 curated AI models across 8 providers."
+    },
+    {
+      "@type": "WebApplication",
+      "name": "Zoth Civilization v3.0",
+      "url": "https://zoth-civilization.netlify.app",
       "applicationCategory": "DeveloperApplication",
       "operatingSystem": "Web, Linux",
       "offers": {
@@ -37,23 +110,7 @@
       "publisher": {
         "@id": "https://nullai.tech/#org"
       },
-      "description": "Local-first AI studio: 80 tools (56 in-browser/WebGPU, 24 CLI), 43 workstations."
-    },
-    {
-      "@type": "SoftwareApplication",
-      "name": "ZothOS",
-      "url": "https://zothos.nullai.tech",
-      "applicationCategory": "OperatingSystem",
-      "operatingSystem": "Linux",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "publisher": {
-        "@id": "https://nullai.tech/#org"
-      },
-      "description": "Debian-based Linux distribution shipping the Zoth tools and 23 loopback daemons."
+      "description": "Autonomous 23 Pantheon Agents simulation featuring the 22-Key Sanctuary and DeepSeek Flash x Hermes BYOK."
     },
     {
       "@type": "FAQPage",
@@ -61,58 +118,26 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "What is NullAI?",
+          "name": "What is Zoth Studio v2?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "NullAI is an independent software lab that builds Zoth Studio, ZothOS Linux and related local-first AI tools. It is built in public by 1nc0gn30."
+            "text": "Zoth Studio v2 (https://zoth.nullai.tech) is a local-first AI engineering studio with 80 free open-access tools (56 in-browser/WebGPU + 24 CLI/daemon across 79 public GitHub repositories) and 43 Studio workstations."
           }
         },
         {
           "@type": "Question",
-          "name": "What is Zoth Studio?",
+          "name": "How do ZothOS v3.4.0, ZothOS-Lite v1.2, and Zoth Civilization v3.0 fit into the NullAI ecosystem?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Zoth Studio (https://zoth.nullai.tech) is a local-first AI studio with 80 tools: 56 run in the browser/WebGPU and 24 are CLI tools. It also groups tools into 43 workstations."
+            "text": "ZothOS v3.4.0 (https://zothos.nullai.tech) is the Debian 13 KDE Plasma 6 workstation OS running 23 loopback daemons. ZothOS-Lite v1.2 (https://zothos-lite.nullai.tech) is the Amnesic Monotone Live USB/ISO (toram) shipping 56 curated models across 8 providers. Zoth Civilization v3.0 (https://zoth-civilization.netlify.app) orchestrates 23 Pantheon Agents with the 22-Key Sanctuary and DeepSeek Flash x Hermes BYOK, alongside ZothNet (https://zothnet.nullai.tech) and FieldKit (https://nullai.tech/fieldkit)."
           }
         },
         {
           "@type": "Question",
-          "name": "What is ZothOS?",
+          "name": "Are all tools 100% free and zero-telemetry?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "ZothOS (https://zothos.nullai.tech) is a Debian-based Linux distribution from NullAI that ships the Zoth tools and 23 loopback daemons that listen only on localhost."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Is it free?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Zoth Studio, ZothOS and the tools are free. Tips are optional."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Where is the source code?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Source lives on GitHub under https://github.com/NullAITech and https://github.com/1nc0gn30. 79 of the 80 tools have public GitHub source repositories."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Does NullAI send my data anywhere?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The tools are designed to run locally. The 23 daemons bind to loopback (127.0.0.1) only."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "How do I contact NullAI?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Email contact@nullai.tech or reach @1nc0gn30 on X (https://x.com/1nc0gn30)."
+            "text": "Yes. Every tool, repository, and OS image across Zoth Studio and NullAI is 100% free and unlocked by default with zero paywalls and zero cloud telemetry. Optional community tips are accepted via Buy Us a Coffee or Solana."
           }
         }
       ]

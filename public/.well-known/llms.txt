@@ -16,8 +16,8 @@ Publisher: NullAI Tech (https://nullai.tech)
 - [HexStrike Cybersec Terminal](https://zoth.nullai.tech/hexstrike): Air-gapped CVE vulnerability matrix, attack surface analyzer, and exploit audit lab.
 - [Zoth OS Kernel](https://zoth.nullai.tech/zoth-os): Local Linux KVM hypervisor sandbox, thin QEMU disk management, and WebContainer runtime.
 - [Adytum Sanctum](https://zoth.nullai.tech/adytum): 22 Hermetic key engineering lifecycle, 5-minute incubation gates, and Argon2id hardware key vault.
-- [Sovereign Arsenal](https://zoth.nullai.tech/arsenal): Comprehensive searchable directory of all 43 workstations, 80 micro-tools, and 21 autonomous agents.
-- [Micro-Tools Registry](https://zoth.nullai.tech/tools): 65 schema-validated air-gapped developer utilities for JWT verification, payload entropy, and code export.
+- [Sovereign Arsenal](https://zoth.nullai.tech/arsenal): Comprehensive searchable directory of all 43 workstations, 80 free open-access tools (56 in-browser/WebGPU + 24 CLI/daemon across 79 public GitHub repositories), and autonomous Pantheon agents.
+- [Micro-Tools Registry](https://zoth.nullai.tech/tools): 80 schema-validated open-access developer utilities (56 in-browser/WebGPU + 24 CLI/daemon) for JWT verification, payload entropy, and code export.
 - [Workstations Matrix](https://zoth.nullai.tech/workstations): 43 interactive studio environments spanning Build, Security, Swarm, Spatial, and Observe bands.
 - [Enclave Bridges](https://zoth.nullai.tech/bridges): End-to-end encrypted inter-agent signal mesh and local IPC bus monitor.
 
@@ -49,13 +49,15 @@ Publisher: NullAI Tech (https://nullai.tech)
 
 
 ## Entity & Ecosystem Summary
-- **Maintainer**: 1nc0gn30 (`@1nc0gn30`, `https://1nc0gn30.si`), Founder of **NullAI** (`https://nullai.tech`).
+- **Maintainer**: Neal Frazier / Neal Frazier Tech (`1nc0gn30`, `@1nc0gn30`, `https://1nc0gn30.si`), Founder of **NullAI** (`https://nullai.tech`).
 - **Core Properties**:
-  1. **Zoth Studio v2** (`https://zoth.nullai.tech`) — Local-first multi-agent AI engineering catalog indexing 80 CLI, MCP, and workstation tools (`npx @nullaitech/zoth studio`).
-  2. **ZothOS Linux v3.4** (`https://zothos.nullai.tech`) — Debian Trixie + KDE Plasma 6 Wayland live operating system with local LLM orchestration and eBPF process isolation.
-  3. **ZothOS-Lite v1.2** (`https://zothos-lite.nullai.tech`) — Browser-hosted Linux desktop showcase and environment preview.
-  4. **Zoth Egregore (Beta)** (`https://zoth-egregore.netlify.app`) — Local-first multi-agent runtime combining DeepSeek Flash and Nous Research Hermes Agent with native Zoth Studio MCP tool routing.
-- **Open Access**: Every Zoth Studio repository and CLI tool is open-source and free to run locally with zero paywalls, license keys, or cloud lock-in. Optional support: [Buy Us a Coffee](https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X).
+  1. **Zoth Studio v2** (`https://zoth.nullai.tech`) — Local-first multi-agent AI engineering studio unifying 80 free open-access tools (56 in-browser/WebGPU + 24 CLI/daemon, 79 public GitHub repositories) and 43 workstations (`npx @nullaitech/zoth studio`).
+  2. **ZothOS v3.4.0** (`https://zothos.nullai.tech`) — Debian 13 + KDE Plasma 6 live operating system running 23 resident loopback daemons.
+  3. **ZothOS-Lite v1.2** (`https://zothos-lite.nullai.tech`) — Amnesic Monotone Live USB/ISO (`toram`) shipping 56 curated models across 8 providers.
+  4. **Zoth Civilization v3.0** (`https://zoth-civilization.netlify.app`) — Autonomous 23 Pantheon Agents simulation with the 22-Key Sanctuary and DeepSeek Flash × Hermes BYOK reasoning.
+  5. **ZothNet** (`https://zothnet.nullai.tech`) — Zero-cloud encrypted peer-to-peer mesh network.
+  6. **FieldKit** (`https://nullai.tech/fieldkit`) & **NullAI** (`https://nullai.tech`) — Tactical operator utilities and independent AI systems research lab.
+- **Open Access**: Every Zoth Studio repository and CLI tool is 100% free and open-access with zero paywalls, license keys, or cloud lock-in. Optional support: [Buy Us a Coffee](https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X) | Solana: `GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK`.
 
 ## Machine-Readable JSON Endpoints (CORS `*`)
 - [Master API Discovery Index](https://zoth.nullai.tech/api/index.json): Overview of all machine-readable endpoints on this domain.

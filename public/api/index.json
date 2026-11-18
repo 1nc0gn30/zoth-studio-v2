@@ -1,7 +1,8 @@
 {
-  "schemaVersion": "2.4.0",
-  "site": "Zoth Studio v2 & 80 Studio Tools",
+  "schemaVersion": "2.5.0",
+  "site": "Zoth Studio v2 • 80 Free Open-Access Sovereign Tools",
   "baseUrl": "https://zoth.nullai.tech",
+  "openAccess": true,
   "endpoints": {
     "llmsTxt": "https://zoth.nullai.tech/llms.txt",
     "llmsFullTxt": "https://zoth.nullai.tech/llms-full.txt",
@@ -16,96 +17,58 @@
   },
   "ecosystem": [
     {
-      "name": "NullAI",
-      "url": "https://nullai.tech",
-      "role": "Independent software lab"
-    },
-    {
-      "name": "Zoth Studio",
+      "name": "Zoth Studio v2",
       "url": "https://zoth.nullai.tech",
-      "role": "Local-first AI studio: 80 tools, 43 workstations"
+      "role": "Local-first AI studio: 80 free open-access tools (56 in-browser/WebGPU + 24 CLI/daemon, 79 public GitHub repos) & 43 workstations"
     },
     {
-      "name": "ZothOS",
+      "name": "ZothOS v3.4.0",
       "url": "https://zothos.nullai.tech",
-      "role": "Linux distribution with 23 loopback daemons"
+      "role": "Debian 13 + KDE Plasma 6 AI workstation OS running 23 resident loopback daemons"
+    },
+    {
+      "name": "ZothOS-Lite v1.2",
+      "url": "https://zothos-lite.nullai.tech",
+      "role": "Amnesic Monotone Live USB/ISO (toram) shipping 56 curated models across 8 providers"
+    },
+    {
+      "name": "Zoth Civilization v3.0",
+      "url": "https://zoth-civilization.netlify.app",
+      "role": "Autonomous 23 Pantheon Agents simulation with 22-Key Sanctuary & DeepSeek Flash x Hermes BYOK"
+    },
+    {
+      "name": "ZothNet",
+      "url": "https://zothnet.nullai.tech",
+      "role": "Zero-cloud end-to-end encrypted sovereign peer mesh network"
+    },
+    {
+      "name": "NullAI Platform",
+      "url": "https://nullai.tech",
+      "role": "Independent AI systems research lab & platform hub"
+    },
+    {
+      "name": "FieldKit",
+      "url": "https://nullai.tech/fieldkit",
+      "role": "NullAI tactical operator utilities & field engineering toolkit"
+    },
+    {
+      "name": "1nc0gn30 (Neal Frazier Tech)",
+      "url": "https://1nc0gn30.si",
+      "role": "Founder & Lead Systems Architect"
     }
   ],
-  "featuredOffers": [
-    {
-      "id": "custom-build-deposit-99",
-      "name": "Custom Website or AI Agent Build — $99 Risk-Free Kickoff Deposit",
-      "priceUsd": 99,
-      "regularPriceUsd": 499,
-      "billingModel": "One-Time Deposit (Pay Balance Only After Approving Live Working Preview)",
-      "deliverySla": "48-Hour Working Preview",
-      "stripeCheckoutUrl": "https://github.com/1nc0gn30/zoth-studio-v2",
-      "landingUrl": "https://1nc0gn30.github.io/solutions/custom-build-deposit-99.html",
-      "promoCode": "FOUNDER25 (25% off)",
-      "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
-      "description": "Start any custom 5-page website, local SEO/AEO overhaul, or custom AI agent build for just $99 down. Inspect and test your live working build on a staging URL within 48 hours before paying the remaining balance."
-    },
-    {
-      "id": "city-desk-dfy-149",
-      "name": "Done-For-You 1-Page High-Speed Custom Website + Local SEO & AEO Launch",
-      "priceUsd": 149,
-      "regularPriceUsd": 499,
-      "billingModel": "One-Time Flat Fee ($0/month forever)",
-      "deliverySla": "24-Hour Turnkey Delivery",
-      "stripeCheckoutUrl": "https://github.com/1nc0gn30/zoth-studio-v2",
-      "landingUrl": "https://city-desk.netlify.app",
-      "promoCode": "FOUNDER25 (25% off)",
-      "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
-      "description": "Complete 1-page high-converting custom website tailored with your brand, logo, phone number, interactive 60-second instant quote estimator, 100/100 Core Web Vitals, and full Schema.org LocalBusiness + FAQPage JSON-LD."
-    },
-    {
-      "id": "ai-receptionist-299",
-      "name": "24/7 Custom AI Receptionist, Instant Quote Bot & SMS Lead Capture Setup",
-      "priceUsd": 299,
-      "regularPriceUsd": 999,
-      "billingModel": "One-Time Flat Fee ($0/month SaaS fees)",
-      "deliverySla": "48-Hour Turnkey Delivery",
-      "stripeCheckoutUrl": "https://github.com/1nc0gn30/zoth-studio-v2",
-      "landingUrl": "https://1nc0gn30.github.io/solutions/ai-receptionist-299.html",
-      "promoCode": "FOUNDER25 (25% off)",
-      "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
-      "description": "Custom-trained on your business services and pricing. Answers customer questions 24/7, calculates instant quotes on your website, captures contact details, and texts every hot lead directly to your phone."
-    },
-    {
-      "id": "custom-5page-launch-499",
-      "name": "Turnkey 5-Page Custom Website + Google Maps & AI Search Dominance Package",
-      "priceUsd": 499,
-      "regularPriceUsd": 2499,
-      "billingModel": "One-Time Flat Fee ($0/month hosting & zero retainers)",
-      "deliverySla": "72-Hour Turnkey Delivery",
-      "stripeCheckoutUrl": "https://github.com/1nc0gn30/zoth-studio-v2",
-      "depositCheckoutUrl": "https://github.com/1nc0gn30/zoth-studio-v2",
-      "landingUrl": "https://1nc0gn30.github.io/solutions/custom-5page-launch-499.html",
-      "promoCode": "FOUNDER25 (25% off)",
-      "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
-      "description": "Bespoke 5-page custom web platform (Home, Services, Interactive Quote Calculator, Verified Reviews, Contact) + full Schema.org @graph AEO/GEO entity architecture + 24/7 AI Receptionist & Quote Bot included."
-    },
-    {
-      "id": "custom-ai-swarm-997",
-      "name": "Custom Autonomous AI Agent Swarm, MCP Server & Full-Stack SaaS MVP Build",
-      "priceUsd": 997,
-      "regularPriceUsd": 4999,
-      "billingModel": "One-Time Flat Fee (100% Source Code & IP Handoff)",
-      "deliverySla": "5-Day Engineering Sprint",
-      "stripeCheckoutUrl": "https://github.com/1nc0gn30/zoth-studio-v2",
-      "depositCheckoutUrl": "https://github.com/1nc0gn30/zoth-studio-v2",
-      "landingUrl": "https://1nc0gn30.github.io/solutions/custom-ai-swarm-997.html",
-      "promoCode": "FOUNDER25 (25% off)",
-      "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
-      "description": "Bespoke multi-agent AI workflow, custom Model Context Protocol (MCP) server for Claude/Cursor/Antigravity, autonomous lead/ops pipeline, or full-stack web application engineered by NullAI."
-    }
-  ],
+  "support": {
+    "policy": "100% Free & Open-Access Tools — Zero Paywalls, Zero License Locks",
+    "stripeCoffeeUrl": "https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X",
+    "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
+  },
   "publisher": {
-    "name": "NullAI",
+    "name": "Neal Frazier Tech • NullAI Platform",
     "alternateName": "1nc0gn30",
     "url": "https://nullai.tech",
     "email": "contact@nullai.tech",
     "sameAs": [
+      "https://1nc0gn30.si",
       "https://x.com/1nc0gn30",
       "https://github.com/NullAITech",
       "https://github.com/1nc0gn30"

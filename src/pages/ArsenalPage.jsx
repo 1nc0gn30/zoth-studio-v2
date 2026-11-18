@@ -15,7 +15,6 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   IconButton,
-  Stack,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Link as RouterLink } from 'react-router-dom';
@@ -27,26 +26,24 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
-import { masterArsenal, arsenalStats } from '../data/arsenalData';
+import { masterArsenal } from '../data/arsenalData';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { HeroReveal, HeroItem, GlowLine } from '../components/MotionReveal';
+import { useCopy } from '../components/sovereign';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
 
-const ORDERED_CATEGORIES = [
-  'All',
-  'Security & Network',
-  'Simulation & Testing',
-  'Memory & Brain',
-  'Security & Recon',
-  'Swarm & Core',
-  'Autonomous Web',
-  'Planning',
-  'Automation',
-  'AI & Knowledge',
-  'Media & 3D',
+const ECOSYSTEM_PILLS = [
+  { label: 'ZothOS v3.4.0 (23 Daemons)', href: 'https://zothos.nullai.tech' },
+  { label: 'ZothOS-Lite v1.2 (56 Models · toram)', href: 'https://zothos-lite.nullai.tech' },
+  { label: 'Civilization v3.0 (23 Pantheon)', href: 'https://zoth-civilization.netlify.app' },
+  { label: 'ZothNet Mesh', href: 'https://zothnet.nullai.tech' },
+  { label: 'NullAI', href: 'https://nullai.tech' },
+  { label: 'FieldKit', href: 'https://nullai.tech/fieldkit' },
+  { label: '1nc0gn30', href: 'https://1nc0gn30.si' },
 ];
 
 function resolveRepoUrl(item) {
@@ -56,18 +53,19 @@ function resolveRepoUrl(item) {
   return item.github;
 }
 
-function ArsenalCard({ item, isDark, gold, primaryText, secondaryText, cardBg, codeBg, borderCol }) {
-  const [copied, setCopied] = useState(false);
+function isBrowserSurface(item) {
+  return item.executionType === 'browser' || item.executionType === 'webgpu' || item.executionType === 'hybrid';
+}
+
+function ArsenalCard({ item, isDark, gold, goldLine, primaryText, secondaryText, cardBg, codeBg, borderCol }) {
+  const { copied, copy } = useCopy(2000);
   const repoUrl = resolveRepoUrl(item);
   const cloneCmd = `git clone ${repoUrl.replace(/\.git$/, '')}.git`;
+  const inBrowser = isBrowserSurface(item);
 
   const handleCopy = (e) => {
     e.stopPropagation();
-    if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(cloneCmd);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
+    copy(cloneCmd);
   };
 
   return (
@@ -80,20 +78,21 @@ function ArsenalCard({ item, isDark, gold, primaryText, secondaryText, cardBg, c
         flexDirection: 'column',
         borderRadius: 2.5,
         bgcolor: cardBg,
-        border: `1px solid ${item.isFlagship ? (isDark ? 'rgba(212,175,55,0.45)' : 'rgba(122,88,8,0.4)') : borderCol}`,
+        border: `1px solid ${item.isFlagship ? (isDark ? 'rgba(212,175,55,0.42)' : 'rgba(184,134,11,0.38)') : borderCol}`,
+        borderTop: item.isFlagship ? `2px solid ${goldLine}` : undefined,
         transition: 'border-color 0.2s ease, transform 0.2s ease',
         '&:hover': {
           transform: 'translateY(-2px)',
-          borderColor: gold,
+          borderColor: goldLine,
         },
       }}
     >
       <CardContent sx={{ p: 2.5, flexGrow: 1 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, mb: 1.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 0.75, mb: 1.5 }}>
           <Typography
             sx={{
               fontFamily: mono,
-              fontSize: '0.68rem',
+              fontSize: '0.66rem',
               fontWeight: 700,
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
@@ -103,16 +102,38 @@ function ArsenalCard({ item, isDark, gold, primaryText, secondaryText, cardBg, c
             {item.category}
           </Typography>
 
-          <Typography
-            sx={{
-              fontFamily: mono,
-              fontSize: '0.68rem',
-              fontWeight: 700,
-              color: item.localPort ? (isDark ? '#34D399' : '#047857') : secondaryText,
-            }}
-          >
-            {item.localPort ? `LOCAL :${item.localPort}` : `v${item.version || '2.5.0'}`}
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
+            <Chip
+              size="small"
+              label={inBrowser ? 'WEBGPU / UI' : 'CLI / DAEMON'}
+              sx={{
+                height: 19,
+                fontFamily: mono,
+                fontSize: '0.6rem',
+                fontWeight: 700,
+                bgcolor: inBrowser
+                  ? isDark
+                    ? 'rgba(212,175,55,0.12)'
+                    : 'rgba(184,134,11,0.10)'
+                  : isDark
+                    ? 'rgba(56,189,248,0.12)'
+                    : '#EFF6FF',
+                color: inBrowser ? gold : isDark ? '#38BDF8' : '#0369A1',
+              }}
+            />
+            {item.localPort && (
+              <Typography
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.66rem',
+                  fontWeight: 700,
+                  color: isDark ? '#34D399' : '#047857',
+                }}
+              >
+                :{item.localPort}
+              </Typography>
+            )}
+          </Box>
         </Box>
 
         <Typography
@@ -120,7 +141,7 @@ function ArsenalCard({ item, isDark, gold, primaryText, secondaryText, cardBg, c
           component={RouterLink}
           to={item.target}
           sx={{
-            fontSize: '1.05rem',
+            fontSize: '1.04rem',
             fontWeight: 800,
             lineHeight: 1.32,
             mb: 1,
@@ -150,11 +171,21 @@ function ArsenalCard({ item, isDark, gold, primaryText, secondaryText, cardBg, c
         </Typography>
 
         <Box
+          role="button"
+          tabIndex={0}
+          aria-label={`Copy clone command for ${item.name}`}
           onClick={handleCopy}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleCopy(e);
+            }
+          }}
           sx={{
             cursor: 'pointer',
             p: 1,
             px: 1.25,
+            minHeight: 40,
             borderRadius: 1.5,
             bgcolor: codeBg,
             border: `1px solid ${borderCol}`,
@@ -162,6 +193,7 @@ function ArsenalCard({ item, isDark, gold, primaryText, secondaryText, cardBg, c
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: 1,
+            '&:hover': { borderColor: goldLine },
           }}
         >
           <Typography
@@ -201,6 +233,7 @@ function ArsenalCard({ item, isDark, gold, primaryText, secondaryText, cardBg, c
           to={item.target}
           endIcon={<ArrowForwardIcon sx={{ fontSize: '0.9rem !important' }} />}
           sx={{
+            minHeight: { xs: 44, sm: 34 },
             bgcolor: isDark ? '#D4AF37' : '#101828',
             color: isDark ? '#08080B' : '#FFFFFF',
             fontWeight: 700,
@@ -210,7 +243,7 @@ function ArsenalCard({ item, isDark, gold, primaryText, secondaryText, cardBg, c
             '&:hover': { bgcolor: isDark ? '#E5C158' : '#1E293B' },
           }}
         >
-          View Specs
+          Open Tool
         </Button>
 
         <Button
@@ -221,13 +254,14 @@ function ArsenalCard({ item, isDark, gold, primaryText, secondaryText, cardBg, c
           rel="noopener noreferrer"
           startIcon={<GitHubIcon sx={{ fontSize: '0.88rem !important' }} />}
           sx={{
+            minHeight: { xs: 44, sm: 34 },
             borderColor: borderCol,
             color: primaryText,
             fontSize: '0.75rem',
             fontWeight: 700,
             textTransform: 'none',
             px: 1.4,
-            '&:hover': { borderColor: gold },
+            '&:hover': { borderColor: goldLine },
           }}
         >
           GitHub
@@ -242,20 +276,34 @@ export default function ArsenalPage() {
   const isDark = theme.palette.mode === 'dark';
 
   const [categoryFilter, setCategoryFilter] = useState('All');
+  const [surfaceFilter, setSurfaceFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [viewMode, setViewMode] = useState('grid');
 
   const gold = isDark ? '#D4AF37' : '#7A5808';
+  const goldLine = isDark ? '#D4AF37' : '#B8860B';
   const primaryText = isDark ? '#F5F1E6' : '#101828';
   const secondaryText = isDark ? '#A3AAB8' : '#475467';
   const pageBg = isDark ? '#08080B' : '#FAF8F3';
   const cardBg = isDark ? '#0D0F16' : '#FFFFFF';
-  const codeBg = isDark ? '#080A0F' : '#F3F4F6';
+  const codeBg = isDark ? '#080A0F' : '#F3EFE6';
   const borderCol = isDark ? 'rgba(245, 241, 230, 0.12)' : 'rgba(16, 24, 40, 0.12)';
+  const specularBorder = isDark ? 'rgba(212, 175, 55, 0.28)' : 'rgba(184, 134, 11, 0.32)';
+
+  const allCategories = useMemo(
+    () => ['All', ...Array.from(new Set(masterArsenal.map((a) => a.category)))],
+    [],
+  );
 
   const filteredAssets = useMemo(() => {
     return masterArsenal.filter((asset) => {
       if (categoryFilter !== 'All' && asset.category !== categoryFilter) {
+        return false;
+      }
+      if (surfaceFilter === 'browser' && !isBrowserSurface(asset)) {
+        return false;
+      }
+      if (surfaceFilter === 'cli' && isBrowserSurface(asset)) {
         return false;
       }
       if (search.trim()) {
@@ -269,19 +317,17 @@ export default function ArsenalPage() {
       }
       return true;
     });
-  }, [categoryFilter, search]);
-
-  const daemonCount = useMemo(() => masterArsenal.filter((a) => Boolean(a.localPort)).length, []);
+  }, [categoryFilter, surfaceFilter, search]);
 
   return (
     <Box sx={{ bgcolor: pageBg, minHeight: '100vh', pb: 10 }}>
-      <Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 4.5, md: 7 } }}>
         <HeroReveal>
-          <Box sx={{ mb: 4.5 }}>
+          <Box sx={{ mb: 4 }}>
             <GlowLine
               height={2}
-              color={gold}
-              glowColor={isDark ? 'rgba(212,175,55,0.35)' : 'rgba(122,88,8,0.2)'}
+              color={goldLine}
+              glowColor={isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.22)'}
             />
             <HeroItem>
               <Typography
@@ -289,14 +335,14 @@ export default function ArsenalPage() {
                   mt: 2.5,
                   mb: 1,
                   fontFamily: mono,
-                  fontSize: '0.74rem',
+                  fontSize: '0.73rem',
                   fontWeight: 700,
-                  letterSpacing: '0.16em',
+                  letterSpacing: '0.18em',
                   textTransform: 'uppercase',
                   color: gold,
                 }}
               >
-                MASTER REPOSITORY DIRECTORY · {arsenalStats.total} LOCAL PACKAGES
+                MASTER DIRECTORY · 80 FREE OPEN-ACCESS TOOLS · 79 PUBLIC GITHUB REPOS
               </Typography>
             </HeroItem>
 
@@ -317,8 +363,17 @@ export default function ArsenalPage() {
             </HeroItem>
 
             <HeroItem>
-              <Typography sx={{ color: secondaryText, maxWidth: 800, fontSize: { xs: '0.98rem', sm: '1.06rem' }, lineHeight: 1.7, mb: 2.5 }}>
-                A unified index of all {arsenalStats.total} local-first repositories, CLI utilities, and loopback daemons. Instead of running fragile simulations in a web browser, clone any standalone repository directly or install the full{' '}
+              <Typography
+                sx={{
+                  color: secondaryText,
+                  maxWidth: '68ch',
+                  fontSize: { xs: '0.98rem', sm: '1.06rem' },
+                  lineHeight: 1.7,
+                  mb: 2.5,
+                }}
+              >
+                Unified directory of <strong>80 free open-access tools</strong> (56 in-browser/WebGPU + 24 CLI/daemon across{' '}
+                <strong>79 public GitHub repositories</strong>) and 43 Studio workstations, plus local telemetry cockpits. Launch any tool in-browser, clone its standalone repository, or pull the complete{' '}
                 <Box
                   component="a"
                   href="https://github.com/NullAITech/zoth-studio-v2"
@@ -333,7 +388,7 @@ export default function ArsenalPage() {
             </HeroItem>
 
             <HeroItem>
-              <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.25 }}>
                 <Button
                   variant="contained"
                   href="https://github.com/NullAITech/zoth-studio-v2"
@@ -341,6 +396,7 @@ export default function ArsenalPage() {
                   rel="noopener noreferrer"
                   startIcon={<GitHubIcon />}
                   sx={{
+                    minHeight: 44,
                     bgcolor: isDark ? '#D4AF37' : '#101828',
                     color: isDark ? '#08080B' : '#FFFFFF',
                     fontWeight: 700,
@@ -356,36 +412,53 @@ export default function ArsenalPage() {
                   to="/zoth-os"
                   variant="outlined"
                   sx={{
+                    minHeight: 44,
                     borderColor: borderCol,
                     color: primaryText,
                     fontWeight: 700,
                     textTransform: 'none',
                     px: 2.5,
-                    '&:hover': { borderColor: gold },
+                    '&:hover': { borderColor: goldLine },
                   }}
                 >
-                  ZothOS Pre-Installed ISO →
+                  ZothOS v3.4.0 ISO →
                 </Button>
-              </Stack>
+                <Button
+                  component={RouterLink}
+                  to="/workstations"
+                  variant="outlined"
+                  sx={{
+                    minHeight: 44,
+                    borderColor: borderCol,
+                    color: primaryText,
+                    fontWeight: 700,
+                    textTransform: 'none',
+                    px: 2.25,
+                    '&:hover': { borderColor: goldLine },
+                  }}
+                >
+                  43 Workstations
+                </Button>
+              </Box>
             </HeroItem>
           </Box>
         </HeroReveal>
 
-        {/* Clean Summary Metrics */}
+        {/* Ground-Truth Summary Metrics */}
         <Box
           sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr 1fr', md: 'repeat(4, 1fr)' },
             gap: 1.75,
-            mb: 4,
+            mb: 3,
           }}
         >
           {[
-            ['Total Repositories', arsenalStats.total],
-            ['Loopback Daemons', daemonCount],
-            ['CLI & MCP Ready', '100%'],
-            ['Outbound Telemetry', '0 WAN'],
-          ].map(([label, val]) => (
+            ['Open-Access Tools', '80', '56 WebGPU · 24 CLI'],
+            ['Public GitHub Repos', '79', 'Standalone Cloneable'],
+            ['ZothOS v3.4.0 Daemons', '23', 'Debian 13 · KDE 6'],
+            ['Outbound Telemetry', '0 WAN', '100% Free & Unlocked'],
+          ].map(([label, val, sub]) => (
             <Paper
               key={label}
               elevation={0}
@@ -394,6 +467,7 @@ export default function ArsenalPage() {
                 borderRadius: 2,
                 bgcolor: cardBg,
                 border: `1px solid ${borderCol}`,
+                borderTop: `2px solid ${specularBorder}`,
               }}
             >
               <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '1.35rem', color: primaryText, lineHeight: 1.15 }}>
@@ -402,33 +476,94 @@ export default function ArsenalPage() {
               <Typography
                 variant="caption"
                 sx={{
+                  display: 'block',
+                  mt: 0.4,
                   fontFamily: mono,
-                  fontWeight: 600,
-                  fontSize: '0.68rem',
-                  letterSpacing: '0.08em',
+                  fontWeight: 700,
+                  fontSize: '0.67rem',
+                  letterSpacing: '0.06em',
                   textTransform: 'uppercase',
-                  color: secondaryText,
+                  color: gold,
                 }}
               >
                 {label}
+              </Typography>
+              <Typography variant="caption" sx={{ fontFamily: mono, fontSize: '0.65rem', color: secondaryText }}>
+                {sub}
               </Typography>
             </Paper>
           ))}
         </Box>
 
-        {/* Search + View Toggle */}
-        <Grid container spacing={2} alignItems="center" sx={{ mb: 2.5 }}>
-          <Grid xs={12} md={8}>
+        {/* Ecosystem Bridge Bar */}
+        <Box
+          sx={{
+            mb: 3.5,
+            p: 1.5,
+            px: 2,
+            borderRadius: 2,
+            bgcolor: cardBg,
+            border: `1px solid ${borderCol}`,
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: mono,
+              fontSize: '0.68rem',
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              color: gold,
+              mr: 0.5,
+            }}
+          >
+            ECOSYSTEM:
+          </Typography>
+          {ECOSYSTEM_PILLS.map((p) => (
+            <Button
+              key={p.href}
+              size="small"
+              href={p.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              endIcon={<OpenInNewIcon sx={{ fontSize: '0.72rem !important' }} />}
+              sx={{
+                minHeight: 32,
+                px: 1.15,
+                py: 0.35,
+                borderRadius: 1.5,
+                border: `1px solid ${borderCol}`,
+                bgcolor: codeBg,
+                color: primaryText,
+                fontFamily: mono,
+                fontSize: '0.68rem',
+                fontWeight: 600,
+                textTransform: 'none',
+                '&:hover': { borderColor: goldLine, color: gold },
+              }}
+            >
+              {p.label}
+            </Button>
+          ))}
+        </Box>
+
+        {/* Search + Surface Filter + View Toggle */}
+        <Grid container spacing={1.75} alignItems="center" sx={{ mb: 2.25 }}>
+          <Grid xs={12} md={6}>
             <TextField
               fullWidth
               size="small"
-              placeholder={`Search ${masterArsenal.length} repositories by name, ID, or capability…`}
+              placeholder={`Search ${masterArsenal.length} Studio entries by name, ID, or capability…`}
+              inputProps={{ 'aria-label': 'Search Sovereign Arsenal' }}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon sx={{ color: gold, fontSize: '1.15rem' }} />
+                    <SearchIcon sx={{ color: goldLine, fontSize: '1.15rem' }} />
                   </InputAdornment>
                 ),
                 endAdornment: search ? (
@@ -440,7 +575,7 @@ export default function ArsenalPage() {
                 ) : null,
                 sx: {
                   fontFamily: mono,
-                  fontSize: '0.85rem',
+                  fontSize: '0.84rem',
                   bgcolor: cardBg,
                   borderRadius: 2,
                 },
@@ -448,46 +583,91 @@ export default function ArsenalPage() {
             />
           </Grid>
 
-          <Grid xs={12} md={4} sx={{ display: 'flex', justifyContent: { xs: 'flex-start', md: 'flex-end' } }}>
-            <ToggleButtonGroup
-              value={viewMode}
-              exclusive
-              onChange={(_, v) => v && setViewMode(v)}
-              size="small"
+          <Grid xs={12} md={6}>
+            <Box
               sx={{
-                bgcolor: cardBg,
-                borderRadius: 2,
-                '& .MuiToggleButton-root': {
-                  fontFamily: mono,
-                  fontSize: '0.75rem',
-                  fontWeight: 700,
-                  textTransform: 'none',
-                  px: 1.8,
-                  color: primaryText,
-                  border: `1px solid ${borderCol}`,
-                  '&.Mui-selected': {
-                    bgcolor: isDark ? '#D4AF37' : '#101828',
-                    color: isDark ? '#08080B' : '#FFFFFF',
-                    '&:hover': {
-                      bgcolor: isDark ? '#E5C158' : '#1E293B',
-                    },
-                  },
-                },
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: 1,
+                justifyContent: { xs: 'flex-start', md: 'flex-end' },
+                alignItems: 'center',
               }}
             >
-              <ToggleButton value="grid">
-                <GridViewIcon sx={{ fontSize: '1rem', mr: 0.75 }} /> Grid ({filteredAssets.length})
-              </ToggleButton>
-              <ToggleButton value="compact">
-                <ViewListIcon sx={{ fontSize: '1rem', mr: 0.75 }} /> List ({filteredAssets.length})
-              </ToggleButton>
-            </ToggleButtonGroup>
+              <ToggleButtonGroup
+                value={surfaceFilter}
+                exclusive
+                onChange={(_, v) => v && setSurfaceFilter(v)}
+                size="small"
+                aria-label="Filter by execution surface"
+                sx={{
+                  bgcolor: cardBg,
+                  borderRadius: 2,
+                  '& .MuiToggleButton-root': {
+                    minHeight: { xs: 40, sm: 36 },
+                    fontFamily: mono,
+                    fontSize: '0.72rem',
+                    fontWeight: 700,
+                    textTransform: 'none',
+                    px: 1.35,
+                    color: primaryText,
+                    border: `1px solid ${borderCol}`,
+                    '&.Mui-selected': {
+                      bgcolor: isDark ? '#D4AF37' : '#101828',
+                      color: isDark ? '#08080B' : '#FFFFFF',
+                      '&:hover': {
+                        bgcolor: isDark ? '#E5C158' : '#1E293B',
+                      },
+                    },
+                  },
+                }}
+              >
+                <ToggleButton value="all">All</ToggleButton>
+                <ToggleButton value="browser">WebGPU / UI</ToggleButton>
+                <ToggleButton value="cli">CLI / Daemon</ToggleButton>
+              </ToggleButtonGroup>
+
+              <ToggleButtonGroup
+                value={viewMode}
+                exclusive
+                onChange={(_, v) => v && setViewMode(v)}
+                size="small"
+                aria-label="Select layout mode"
+                sx={{
+                  bgcolor: cardBg,
+                  borderRadius: 2,
+                  '& .MuiToggleButton-root': {
+                    minHeight: { xs: 40, sm: 36 },
+                    fontFamily: mono,
+                    fontSize: '0.72rem',
+                    fontWeight: 700,
+                    textTransform: 'none',
+                    px: 1.4,
+                    color: primaryText,
+                    border: `1px solid ${borderCol}`,
+                    '&.Mui-selected': {
+                      bgcolor: isDark ? '#D4AF37' : '#101828',
+                      color: isDark ? '#08080B' : '#FFFFFF',
+                      '&:hover': {
+                        bgcolor: isDark ? '#E5C158' : '#1E293B',
+                      },
+                    },
+                  },
+                }}
+              >
+                <ToggleButton value="grid">
+                  <GridViewIcon sx={{ fontSize: '0.95rem', mr: 0.6 }} /> Grid ({filteredAssets.length})
+                </ToggleButton>
+                <ToggleButton value="compact">
+                  <ViewListIcon sx={{ fontSize: '0.95rem', mr: 0.6 }} /> List
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </Box>
           </Grid>
         </Grid>
 
-        {/* Category Filter Chips */}
-        <Box sx={{ mb: 4, display: 'flex', flexWrap: 'wrap', gap: 0.9 }}>
-          {ORDERED_CATEGORIES.map((cat) => {
+        {/* Complete Dynamic Category Filter Chips */}
+        <Box sx={{ mb: 4, display: 'flex', flexWrap: 'wrap', gap: 0.85 }}>
+          {allCategories.map((cat) => {
             const isSelected = categoryFilter === cat;
             const count =
               cat === 'All' ? masterArsenal.length : masterArsenal.filter((a) => a.category === cat).length;
@@ -502,12 +682,12 @@ export default function ArsenalPage() {
                 sx={{
                   fontFamily: mono,
                   fontWeight: 700,
-                  fontSize: '0.73rem',
+                  fontSize: '0.72rem',
                   bgcolor: isSelected ? (isDark ? '#D4AF37' : '#101828') : cardBg,
                   color: isSelected ? (isDark ? '#08080B' : '#FFFFFF') : primaryText,
                   border: `1px solid ${isSelected ? (isDark ? '#D4AF37' : '#101828') : borderCol}`,
                   '&:hover': {
-                    bgcolor: isSelected ? (isDark ? '#E5C158' : '#1E293B') : (isDark ? '#141824' : '#F3F4F6'),
+                    bgcolor: isSelected ? (isDark ? '#E5C158' : '#1E293B') : isDark ? '#141824' : '#F3EFE6',
                   },
                 }}
               />
@@ -528,7 +708,7 @@ export default function ArsenalPage() {
             }}
           >
             <Typography variant="h6" sx={{ color: primaryText, mb: 1 }}>
-              No repositories match your filter.
+              No tools match your current filter.
             </Typography>
             <Button
               variant="outlined"
@@ -536,8 +716,17 @@ export default function ArsenalPage() {
               onClick={() => {
                 setSearch('');
                 setCategoryFilter('All');
+                setSurfaceFilter('all');
               }}
-              sx={{ mt: 1, fontFamily: mono, fontSize: '0.78rem', textTransform: 'none', color: primaryText, borderColor: borderCol }}
+              sx={{
+                mt: 1,
+                minHeight: 40,
+                fontFamily: mono,
+                fontSize: '0.78rem',
+                textTransform: 'none',
+                color: primaryText,
+                borderColor: borderCol,
+              }}
             >
               Reset Filters
             </Button>
@@ -550,6 +739,7 @@ export default function ArsenalPage() {
                   item={asset}
                   isDark={isDark}
                   gold={gold}
+                  goldLine={goldLine}
                   primaryText={primaryText}
                   secondaryText={secondaryText}
                   cardBg={cardBg}
@@ -560,7 +750,7 @@ export default function ArsenalPage() {
             ))}
           </Grid>
         ) : (
-          <Stack spacing={1.25}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25 }}>
             {filteredAssets.map((asset) => {
               const repoUrl = resolveRepoUrl(asset);
               return (
@@ -578,15 +768,21 @@ export default function ArsenalPage() {
                     justifyContent: 'space-between',
                     flexWrap: 'wrap',
                     gap: 2,
-                    '&:hover': { borderColor: gold },
+                    '&:hover': { borderColor: goldLine },
                   }}
                 >
-                  <Box sx={{ minWidth: 240, flex: 1 }}>
+                  <Box sx={{ minWidth: 220, flex: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 0.4 }}>
                       <Typography
                         component={RouterLink}
                         to={asset.target}
-                        sx={{ fontWeight: 800, fontSize: '0.96rem', color: primaryText, textDecoration: 'none', '&:hover': { color: gold } }}
+                        sx={{
+                          fontWeight: 800,
+                          fontSize: '0.96rem',
+                          color: primaryText,
+                          textDecoration: 'none',
+                          '&:hover': { color: gold },
+                        }}
                       >
                         {asset.name}
                       </Typography>
@@ -615,13 +811,14 @@ export default function ArsenalPage() {
                     </Typography>
                   </Box>
 
-                  <Stack direction="row" spacing={1} alignItems="center">
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center' }}>
                     <Button
                       size="small"
                       variant="contained"
                       component={RouterLink}
                       to={asset.target}
                       sx={{
+                        minHeight: { xs: 44, sm: 34 },
                         bgcolor: isDark ? '#D4AF37' : '#101828',
                         color: isDark ? '#08080B' : '#FFFFFF',
                         fontWeight: 700,
@@ -630,7 +827,7 @@ export default function ArsenalPage() {
                         px: 1.75,
                       }}
                     >
-                      Specs
+                      Open Tool
                     </Button>
                     <Button
                       size="small"
@@ -639,6 +836,7 @@ export default function ArsenalPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       sx={{
+                        minHeight: { xs: 44, sm: 34 },
                         borderColor: borderCol,
                         color: primaryText,
                         fontWeight: 700,
@@ -648,11 +846,11 @@ export default function ArsenalPage() {
                     >
                       GitHub
                     </Button>
-                  </Stack>
+                  </Box>
                 </Paper>
               );
             })}
-          </Stack>
+          </Box>
         )}
 
         <SovereignFunnel />

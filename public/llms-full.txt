@@ -150,8 +150,8 @@ SECTION 6: 30 AIR-GAPPED MICRO-TOOLS DIRECTORY
 11. payload-entropy-studio: In-browser Shannon entropy analysis tool for detecting obfuscated payloads.
 12. web-security-guard: Security headers auditor, CSP validator, and WAF protection scanner.
 13. polyglot-framework-exporter: In-browser exporter from React/JSX to HTML/CSS, Vue, Svelte, and Solid.js.
-14. aeo-graph-engine: Answer Engine Optimization knowledge graph builder and Schema.org entity linker. Free to use.
-15. cwv-speed-engine: Core Web Vitals LCP, CLS, and INP diagnostic engine and asset minifier. Live app is $39.
+14. aeo-graph-engine: Answer Engine Optimization knowledge graph builder and Schema.org entity linker. 100% free open-access.
+15. cwv-speed-engine: Core Web Vitals LCP, CLS, and INP diagnostic engine and asset minifier. 100% free open-access.
 16. vision-gesture-control: In-browser MediaPipe webcam hand-gesture recognition interface controller.
 17. subsweep-lead-scanner: Subdomain recon scanner and OSINT lead enrichment engine.
 18. omnipost-social-engine: Multi-platform social content scheduler and cross-post automation engine.
@@ -165,8 +165,9 @@ SECTION 6: 30 AIR-GAPPED MICRO-TOOLS DIRECTORY
 26. webmcp-protocol-inspector: In-browser MCP JSON-RPC inspector and tool schema dispatcher.
 27. anderson-security-sentinel: RF sentinel with angle-of-arrival tracking. Its dashboard port is TCP 7890.
 28. badge3d-coin-generator: Browser 3D coin, medallion, and relief badge generator. Free to use.
-29. robots-txt-auditor: Robots.txt and frontier-crawler auditor. Free to use.
-30. city-desk: One studio writes the finished page for a trade and a city. Boise painters $800, plumbers $900, HVAC $1,100. Those are the page price, not a job quote.
+29. robots-txt-auditor: Robots.txt and frontier-crawler auditor. 100% free open-access.
+30. city-desk: Local trade & city landing page generator with structured Schema.org LocalBusiness + FAQPage AEO markup. 100% free open-access.
+(Plus 50 additional open-access tools across Zoth Studio v2 — 80 free open-access tools total: 56 in-browser/WebGPU + 24 CLI/daemon across 79 public GitHub repositories; full machine catalog at https://zoth.nullai.tech/api/tools.json.)
 
 ================================================================================
 SECTION 7: LOCAL ENCLAVE PORTS & DAEMON SERVICES
@@ -218,9 +219,11 @@ EOF
 - [Model Context Protocol (MCP) Manifest](https://zoth.nullai.tech/.well-known/mcp.json): MCP tool definitions for Claude Desktop, Cursor, Hermes Agent, and Antigravity.
 
 ## Complete Ecosystem Network
-- **Zoth Studio v2 (80 Free Tools: 56 In-Browser/WebGPU + 24 CLI/Daemon, 79 Public GitHub Repos)**: https://zoth.nullai.tech
-- **ZothOS Linux v3.4.0 (Sovereign AI-Native Operating System, 23 Daemons)**: https://zothos.nullai.tech
-- **ZothOS-Lite v1.2 (Amnesic Monotone OS, 56 Curated Models / 8 Providers)**: https://zothos-lite.nullai.tech
-- **Zoth Civilization v3.0 (23 Pantheon Agents, Imperator Quests & 22-Key Sanctuary)**: https://zoth-civilization.netlify.app
-- **1nc0gn30**: https://1nc0gn30.si
+- **Zoth Studio v2 (80 Free Open-Access Tools: 56 In-Browser/WebGPU + 24 CLI/Daemon, 79 Public GitHub Repos)**: https://zoth.nullai.tech
+- **ZothOS v3.4.0 (Debian 13 + KDE Plasma 6 AI Workstation OS, 23 Daemons)**: https://zothos.nullai.tech
+- **ZothOS-Lite v1.2 (Amnesic Monotone Live USB/ISO, 56 Curated Models / 8 Providers, `toram`)**: https://zothos-lite.nullai.tech
+- **Zoth Civilization v3.0 (23 Pantheon Agents, 22-Key Sanctuary, DeepSeek Flash × Hermes BYOK)**: https://zoth-civilization.netlify.app
+- **ZothNet (Zero-Cloud Encrypted Mesh Network)**: https://zothnet.nullai.tech
+- **FieldKit (NullAI Tactical Operator Utilities)**: https://nullai.tech/fieldkit
+- **1nc0gn30 (Neal Frazier Tech)**: https://1nc0gn30.si
 - **NullAI Platform**: https://nullai.tech

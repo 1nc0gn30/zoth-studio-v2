@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Container, Typography, Link, Stack, IconButton, Unstable_Grid2 as Grid } from '@mui/material';
+import { Box, Container, Typography, Link, Stack, IconButton, Button, Unstable_Grid2 as Grid } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LanguageIcon from '@mui/icons-material/Language';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+
+import { STRIPE_COFFEE_URL, SOLANA_TIP_ADDRESS, useCopy } from './sovereign';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -12,6 +14,7 @@ const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
 export default function Footer() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
+  const { copied: solCopied, copy: copySol } = useCopy(2000);
 
   const gold = isDark ? '#D4AF37' : '#7A5808';
   const primaryText = isDark ? '#F5F1E6' : '#101828';
@@ -20,43 +23,43 @@ export default function Footer() {
   const footerBg = isDark ? '#06070B' : '#F3EFE6';
 
   const systems = [
-    { label: 'The Sovereign Arsenal (80)', to: '/arsenal' },
+    { label: 'Sovereign Arsenal (80 Free Tools)', to: '/arsenal' },
     { label: 'ZothOS v3.4.0 & Lite v1.2', to: '/zoth-os' },
     { label: 'Pantheon Swarm (:9393)', to: '/swarm' },
     { label: 'Neuro-Memory (:8094)', to: '/memory' },
     { label: 'Zoth Bolt WebGen (:5173)', to: '/webgen' },
     { label: 'HexStrike Security (:8888)', to: '/hexstrike' },
-    { label: 'Adytum Chamber', to: '/adytum' },
+    { label: 'Adytum 22-Key Chamber', to: '/adytum' },
     { label: 'Architecture Dossiers (43)', to: '/workstations' },
   ];
 
-  const repositories = [
-    { label: 'Zoth Studio v2 Repo', href: 'https://github.com/NullAITech/zoth-studio-v2', external: true },
-    { label: 'ZothOS Linux Repo', href: 'https://github.com/NullAITech/zoth-os', external: true },
-    { label: 'Zoth Egregore (Beta)', href: 'https://github.com/1nc0gn30/zoth-egregore', external: true },
-    { label: 'Egregore Documentation Site', href: 'https://zoth-egregore.netlify.app', external: true },
-    { label: 'Zoth Civilization Site', href: 'https://zoth-civilization.netlify.app', external: true },
-    { label: 'NullAI Tech GitHub', href: 'https://github.com/NullAITech', external: true },
-    { label: '1nc0gn30 GitHub', href: 'https://github.com/1nc0gn30', external: true },
+  const ecosystem = [
+    { label: 'ZothOS v3.4.0 (23 Daemons)', href: 'https://zothos.nullai.tech' },
+    { label: 'ZothOS-Lite v1.2 (56 Models)', href: 'https://zothos-lite.nullai.tech' },
+    { label: 'Zoth Civilization v3.0', href: 'https://zoth-civilization.netlify.app' },
+    { label: 'ZothNet Encrypted Mesh', href: 'https://zothnet.nullai.tech' },
+    { label: 'NullAI Platform', href: 'https://nullai.tech' },
+    { label: 'FieldKit Utilities', href: 'https://nullai.tech/fieldkit' },
+    { label: '1nc0gn30 Hub', href: 'https://1nc0gn30.si' },
+    { label: '79 Public GitHub Repos', href: 'https://github.com/1nc0gn30' },
   ];
 
   const theoryAndDocs = [
     { label: 'System Documentation', to: '/docs' },
+    { label: 'Zoth UI Kit (@zoth/ui)', to: '/ui-kit' },
     { label: 'Six Mathematical Pillars', to: '/docs/math' },
     { label: 'Byzantine Consensus', to: '/consensus' },
-    { label: 'Command Bridges', to: '/bridges' },
     { label: 'Agent Experience (AX)', to: '/ax' },
     { label: 'Studio FAQs', to: '/faqs' },
     { label: 'Studio Gallery', to: '/gallery' },
   ];
 
   const machineStandards = [
-    { label: 'llms.txt', href: '/llms.txt', external: true },
-    { label: 'llms-full.txt', href: '/llms-full.txt', external: true },
-    { label: 'ai.txt', href: '/ai.txt', external: true },
-    { label: 'sitemap.xml', href: '/sitemap.xml', external: true },
-    { label: 'robots.txt', href: '/robots.txt', external: true },
-    { label: 'humans.txt', href: '/humans.txt', external: true },
+    { label: 'llms.txt', href: '/llms.txt' },
+    { label: 'llms-full.txt', href: '/llms-full.txt' },
+    { label: 'ai.txt', href: '/ai.txt' },
+    { label: 'sitemap.xml', href: '/sitemap.xml' },
+    { label: 'robots.txt', href: '/robots.txt' },
   ];
 
   const headingSx = {
@@ -97,13 +100,13 @@ export default function Footer() {
     >
       <Container maxWidth="lg">
         <Grid container spacing={4}>
-          <Grid xs={12} md={4}>
+          <Grid xs={12} md={3.8}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2 }}>
               <Box
                 aria-hidden="true"
                 sx={{
-                  width: 32,
-                  height: 32,
+                  width: 34,
+                  height: 34,
                   borderRadius: 1.5,
                   border: `1px solid ${isDark ? 'rgba(212,175,55,0.38)' : 'rgba(122,88,8,0.32)'}`,
                   bgcolor: isDark ? 'rgba(212,175,55,0.10)' : 'rgba(122,88,8,0.08)',
@@ -111,8 +114,8 @@ export default function Footer() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontFamily: display,
-                  fontWeight: 700,
-                  fontSize: '1.05rem',
+                  fontWeight: 400,
+                  fontSize: '1.1rem',
                   color: gold,
                   flexShrink: 0,
                 }}
@@ -120,11 +123,11 @@ export default function Footer() {
                 Z
               </Box>
               <Box>
-                <Typography sx={{ fontFamily: display, fontWeight: 700, fontSize: '1.25rem', color: primaryText, lineHeight: 1.1 }}>
+                <Typography sx={{ fontFamily: display, fontWeight: 400, fontSize: '1.28rem', color: primaryText, lineHeight: 1.1 }}>
                   Zoth Studio
                 </Typography>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.64rem', fontWeight: 700, letterSpacing: '0.14em', color: gold }}>
-                  LOCAL-FIRST REPOSITORY INDEX
+                <Typography sx={{ fontFamily: mono, fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.14em', color: gold }}>
+                  80 FREE OPEN-ACCESS TOOLS
                 </Typography>
               </Box>
             </Box>
@@ -138,37 +141,37 @@ export default function Footer() {
               <Link href="https://1nc0gn30.si" target="_blank" rel="noopener noreferrer" sx={{ color: gold, fontWeight: 700 }}>
                 1nc0gn30
               </Link>
-              . CLI binaries, STDP neural memory daemons, and Byzantine multi-agent orchestration running directly on your hardware.
+              . 56 in-browser/WebGPU utilities, 24 CLI/daemon packages, 79 public GitHub repos, and 43 Studio workstations running with zero cloud telemetry.
             </Typography>
 
-            <Stack direction="row" spacing={1} alignItems="center">
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
               <IconButton
                 component="a"
                 href="https://nullai.tech"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="NullAI website"
+                aria-label="NullAI Platform website"
                 size="small"
-                sx={{ border: `1px solid ${borderCol}`, color: primaryText }}
+                sx={{ border: `1px solid ${borderCol}`, color: primaryText, minWidth: 40, minHeight: 40 }}
               >
                 <LanguageIcon fontSize="small" />
               </IconButton>
               <IconButton
                 component="a"
-                href="https://github.com/NullAITech/zoth-studio-v2"
+                href="https://github.com/1nc0gn30/zoth-studio-v2"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Zoth Studio GitHub repository"
                 size="small"
-                sx={{ border: `1px solid ${borderCol}`, color: primaryText }}
+                sx={{ border: `1px solid ${borderCol}`, color: primaryText, minWidth: 40, minHeight: 40 }}
               >
                 <GitHubIcon fontSize="small" />
               </IconButton>
-            </Stack>
+            </Box>
           </Grid>
 
-          <Grid xs={6} sm={4} md={2.75}>
-            <Typography sx={headingSx}>Systems</Typography>
+          <Grid xs={6} sm={4} md={2.7}>
+            <Typography sx={headingSx}>Studio Systems</Typography>
             <Stack spacing={1}>
               {systems.map((item) => (
                 <Link key={item.to} component={RouterLink} to={item.to} sx={linkSx}>
@@ -178,10 +181,10 @@ export default function Footer() {
             </Stack>
           </Grid>
 
-          <Grid xs={6} sm={4} md={2.75}>
-            <Typography sx={headingSx}>Repositories</Typography>
+          <Grid xs={6} sm={4} md={3}>
+            <Typography sx={headingSx}>Sovereign Ecosystem</Typography>
             <Stack spacing={1}>
-              {repositories.map((item) => (
+              {ecosystem.map((item) => (
                 <Link key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" sx={linkSx}>
                   {item.label}
                   <OpenInNewIcon sx={{ fontSize: '0.72rem', opacity: 0.65 }} />
@@ -216,20 +219,75 @@ export default function Footer() {
             justifyContent: 'space-between',
             alignItems: 'center',
             flexWrap: 'wrap',
-            gap: 2,
+            gap: 1.5,
             fontFamily: mono,
             fontSize: '0.73rem',
             color: secondaryText,
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
-            <span>© 2026 1nc0gn30 • NullAI Platform</span>
-            <span>·</span>
-            <Link href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X" target="_blank" rel="noopener noreferrer" sx={{ color: gold, textDecoration: 'none', fontWeight: 700 }}>
-              ☕ Buy Us a Coffee
-            </Link>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, flexWrap: 'wrap' }}>
+            <span>
+              Engineered by Neal Frazier Tech (
+              <Link
+                href="https://github.com/1nc0gn30/zoth-studio-v2"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ color: primaryText, fontWeight: 700, textDecoration: 'none', '&:hover': { color: gold } }}
+              >
+                @1nc0gn30
+              </Link>
+              ) •{' '}
+              <Link
+                href="https://nullai.tech"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ color: primaryText, fontWeight: 700, textDecoration: 'none', '&:hover': { color: gold } }}
+              >
+                NullAI Platform
+              </Link>
+            </span>
           </Box>
-          <span>LOCAL-FIRST · ZERO CLOUD TELEMETRY</span>
+
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+            <Button
+              size="small"
+              variant="outlined"
+              href={STRIPE_COFFEE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                minHeight: 34,
+                px: 1.4,
+                fontFamily: mono,
+                fontSize: '0.7rem',
+                fontWeight: 700,
+                textTransform: 'none',
+                color: gold,
+                borderColor: borderCol,
+                '&:hover': { borderColor: gold },
+              }}
+            >
+              ☕ Buy Us a Coffee
+            </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => copySol(SOLANA_TIP_ADDRESS)}
+              sx={{
+                minHeight: 34,
+                px: 1.4,
+                fontFamily: mono,
+                fontSize: '0.7rem',
+                fontWeight: 700,
+                textTransform: 'none',
+                color: isDark ? '#34D399' : '#047857',
+                borderColor: borderCol,
+                '&:hover': { borderColor: isDark ? '#34D399' : '#047857' },
+              }}
+            >
+              {solCopied ? '✓ Copied Solana Tip' : '◎ Solana Tip'}
+            </Button>
+          </Box>
         </Box>
       </Container>
     </Box>

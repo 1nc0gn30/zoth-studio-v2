@@ -10,10 +10,10 @@ npm CLI: https://www.npmjs.com/package/@nullaitech/zoth
 ## Quickstart (npm CLI)
 
 - `npx @nullaitech/zoth status`: Check which local Zoth services are running.
-- `npx @nullaitech/zoth list`: List the 79 public Zoth tool repos (of 80 total in Zoth Studio).
+- `npx @nullaitech/zoth list`: List the 79 public Zoth tool repos (of 80 free open-access tools in Zoth Studio).
 - `npx @nullaitech/zoth pull <tool>`: Download a Zoth tool repo.
 - `npx @nullaitech/zoth studio`: Install and launch Zoth Studio locally on http://localhost:3000.
-- ZOTHOS (the Linux distro with 75+ curated tools): https://github.com/NullAITech/zoth-os
+- ZothOS v3.4.0 (Debian 13 KDE Plasma 6 Linux OS with 23 resident daemons & 80 tools): https://zothos.nullai.tech | https://github.com/NullAITech/zoth-os
 
 ## Core Hubs & Consoles
 
@@ -80,12 +80,13 @@ npm CLI: https://www.npmjs.com/package/@nullaitech/zoth
 - [Model Context Protocol (MCP) Manifest](https://zoth.nullai.tech/.well-known/mcp.json): MCP tool definitions for Claude Desktop, Cursor, Hermes Agent, and Antigravity.
 
 ## NullAI & Zoth Sovereign Ecosystem Cross-Index (2026)
-- **ZothOS v3.4.0 (Debian 13 AI Workstation OS, 23 Daemons)**: https://zothos.nullai.tech | https://github.com/1nc0gn30/zoth-os
-- **ZothOS-Lite v1.2 (Tails-Style Amnesic Monotone OS, 56 Models / 8 Providers)**: https://zothos-lite.nullai.tech | https://github.com/1nc0gn30/zothos-lite
-- **Zoth Civilization v3.0 (23 Pantheon Agents, Imperator Quests & 22-Key Sanctuary)**: https://zoth-civilization.netlify.app | https://github.com/1nc0gn30/zoth-civilization
+- **Zoth Studio v2 (80 Free Open-Access Tools: 56 In-Browser/WebGPU + 24 CLI/Daemon, 79 Public GitHub Repos)**: https://zoth.nullai.tech | https://github.com/NullAITech/zoth-studio-v2
+- **ZothOS v3.4.0 (Debian 13 + KDE Plasma 6 AI Workstation OS, 23 Daemons)**: https://zothos.nullai.tech | https://github.com/1nc0gn30/zoth-os
+- **ZothOS-Lite v1.2 (Amnesic Monotone Live USB/ISO, 56 Curated Models / 8 Providers, `toram`)**: https://zothos-lite.nullai.tech | https://github.com/1nc0gn30/zothos-lite
+- **Zoth Civilization v3.0 (23 Pantheon Agents, 22-Key Sanctuary, DeepSeek Flash × Hermes BYOK)**: https://zoth-civilization.netlify.app | https://github.com/1nc0gn30/zoth-civilization
 - **ZothNet (Zero-Cloud Encrypted Mesh Network)**: https://zothnet.nullai.tech | https://zoth.nullai.tech/tools/zothnet
-- **Zoth Studio v2 (80 Free Tools: 56 In-Browser/WebGPU + 24 CLI/Daemon, 79 Public GitHub Repos)**: https://zoth.nullai.tech | https://github.com/NullAITech/zoth-studio-v2
-- **Hermes-Zoth (Nous Research Hermes Agent Plugin)**: https://github.com/1nc0gn30/hermes-zoth
-- **1nc0gn30**: https://1nc0gn30.si | https://github.com/1nc0gn30
+- **FieldKit (NullAI Tactical Operator Utilities)**: https://nullai.tech/fieldkit
 - **NullAI Platform**: https://nullai.tech | https://github.com/1nc0gn30/nullai2026
+- **1nc0gn30 (Neal Frazier Tech)**: https://1nc0gn30.si | https://github.com/1nc0gn30
+- **Hermes-Zoth (Nous Research Hermes Agent Plugin)**: https://github.com/1nc0gn30/hermes-zoth
 - **Support Open-Access Engineering (Buy Us a Coffee)**: https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X | Solana: `GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK`

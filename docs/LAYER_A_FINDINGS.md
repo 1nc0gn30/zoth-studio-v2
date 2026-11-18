@@ -9,7 +9,7 @@ precisely what the evidence does and does not prove. Instruments are checked in 
 
 | item | value |
 | --- | --- |
-| target | `pixel-cast` (`/home/zoth/NullAITech/pixel-cast`), served on `:8148` |
+| target | `pixel-cast` (`~/NullAITech/pixel-cast`), served on `:8148` |
 | backend under test | `python3 server.py --host 127.0.0.1 --port 8148`, pid 490855 — the real FastAPI backend, not `http.server` |
 | routes reviewed | `/`, `/mobile` |
 | instrument 1 | `docs/tools/layerA_probe.mjs` — enumerate + real pointer click + classify every control |

@@ -10,56 +10,56 @@
       "@type": "Question",
       "name": "What is NullAI?",
       "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "NullAI is an independent software lab that builds Zoth Studio, ZothOS Linux and related local-first AI tools. It is built in public by 1nc0gn30."
+        "text": "NullAI (https://nullai.tech) is the independent AI systems lab founded by Neal Frazier (1nc0gn30, https://1nc0gn30.si) behind Zoth Studio v2, ZothOS v3.4.0, ZothOS-Lite v1.2, Zoth Civilization v3.0, ZothNet, and FieldKit.",
+        "@type": "Answer"
       }
     },
     {
       "@type": "Question",
-      "name": "What is Zoth Studio?",
+      "name": "What is Zoth Studio v2?",
       "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Zoth Studio (https://zoth.nullai.tech) is a local-first AI studio with 80 tools: 56 run in the browser/WebGPU and 24 are CLI tools. It also groups tools into 43 workstations."
+        "text": "Zoth Studio v2 (https://zoth.nullai.tech) is a local-first AI studio unifying 80 free open-access tools (56 in-browser/WebGPU + 24 CLI/daemon across 79 public GitHub repositories) and 43 Studio workstations.",
+        "@type": "Answer"
       }
     },
     {
       "@type": "Question",
-      "name": "What is ZothOS?",
+      "name": "What are ZothOS v3.4.0 and ZothOS-Lite v1.2?",
       "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "ZothOS (https://zothos.nullai.tech) is a Debian-based Linux distribution from NullAI that ships the Zoth tools and 23 loopback daemons that listen only on localhost."
+        "text": "ZothOS v3.4.0 (https://zothos.nullai.tech) is a Debian 13 + KDE Plasma 6 Linux distribution shipping all 80 Zoth tools and 23 resident loopback daemons on 127.0.0.1. ZothOS-Lite v1.2 (https://zothos-lite.nullai.tech) is a Tails-style Amnesic Monotone Live USB/ISO (toram) featuring 56 curated models across 8 providers.",
+        "@type": "Answer"
       }
     },
     {
       "@type": "Question",
-      "name": "Is it free?",
+      "name": "What is Zoth Civilization v3.0?",
       "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Zoth Studio, ZothOS and the tools are free. Tips are optional."
+        "text": "Zoth Civilization v3.0 (https://zoth-civilization.netlify.app) is an autonomous 23 Pantheon Agents simulation featuring Imperator Quests, the 22-Key Sanctuary, and DeepSeek Flash x Hermes BYOK reasoning.",
+        "@type": "Answer"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is everything 100% free and open-access?",
+      "acceptedAnswer": {
+        "text": "Yes. Zoth Studio, ZothOS, ZothOS-Lite, Zoth Civilization, ZothNet (https://zothnet.nullai.tech), FieldKit (https://nullai.tech/fieldkit), and all 80 tools are 100% free and unlocked with zero paywalls. Community tips are completely optional.",
+        "@type": "Answer"
       }
     },
     {
       "@type": "Question",
       "name": "Where is the source code?",
       "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Source lives on GitHub under https://github.com/NullAITech and https://github.com/1nc0gn30. 79 of the 80 tools have public GitHub source repositories."
+        "text": "Source code is published on GitHub under https://github.com/NullAITech and https://github.com/1nc0gn30, with 79 public GitHub repositories across the 80 open-access Zoth Studio tools.",
+        "@type": "Answer"
       }
     },
     {
       "@type": "Question",
-      "name": "Does NullAI send my data anywhere?",
+      "name": "Does Zoth Studio send data to external servers?",
       "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The tools are designed to run locally. The 23 daemons bind to loopback (127.0.0.1) only."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How do I contact NullAI?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Email contact@nullai.tech or reach @1nc0gn30 on X (https://x.com/1nc0gn30)."
+        "text": "No. In-browser and WebGPU tools execute client-side in your browser, and the 23 ZothOS daemons bind strictly to loopback (127.0.0.1) with zero cloud telemetry.",
+        "@type": "Answer"
       }
     }
   ]

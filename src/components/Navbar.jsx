@@ -28,6 +28,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 
 import GoldenZLogo3D from './GoldenZLogo3D';
@@ -48,10 +49,10 @@ const primaryNav = [
 ];
 
 const moreSystemItems = [
-  { label: 'Tool Repositories (80)', path: '/tools', desc: 'Searchable repository catalog & CLI specs' },
+  { label: 'Tool Repositories (80 Free)', path: '/tools', desc: '56 WebGPU + 24 CLI across 79 public GitHub repos' },
   { label: 'Architecture Dossiers (43)', path: '/workstations', desc: 'Studio modules, cadres & daemon topology' },
-  { label: 'Zoth UI Kit', path: '/ui-kit', desc: 'Reusable React & Vanilla UI components + scaffolder' },
-  { label: 'Adytum Chamber', path: '/adytum', desc: '22-key deterministic planning specification' },
+  { label: 'Zoth UI Kit (@zoth/ui)', path: '/ui-kit', desc: 'Reusable React & Vanilla UI components + scaffolder' },
+  { label: 'Adytum 22-Key Chamber', path: '/adytum', desc: '22-key deterministic planning specification' },
   { label: 'Byzantine Consensus', path: '/consensus', desc: 'Multi-model verification & quorum protocol' },
   { label: 'Command Bridges', path: '/bridges', desc: 'Local IPC & authenticated relay topology' },
   { label: 'Voice Station', path: '/voice', desc: 'Local neural speech & DSP pipeline' },
@@ -61,11 +62,20 @@ const moreSystemItems = [
 
 const docsMenuItems = [
   { label: 'System Documentation', path: '/docs', desc: 'Zero-egress invariants & installation guides' },
-  { label: 'Zoth UI Kit', path: '/ui-kit', desc: 'Reusable React & Vanilla UI components + scaffolder' },
   { label: 'Six Math Pillars', path: '/docs/math', desc: 'STDP, Byzantine quorum & Shannon entropy proofs' },
   { label: 'AX Protocol', path: '/ax', desc: 'Machine-readable agent discovery standard' },
-  { label: 'Architecture FAQs', path: '/faqs', desc: 'Local execution, licensing & hardware requirements' },
-  { label: 'Studio Gallery', path: '/gallery', desc: 'Architectural artifacts & visual captures' },
+  { label: 'Architecture FAQs', path: '/faqs', desc: 'Local execution, open-access & hardware specs' },
+  { label: 'Studio Gallery', path: '/gallery', desc: '60fps aperture reels & architectural captures' },
+];
+
+const ecosystemExternalItems = [
+  { label: 'ZothOS v3.4.0 (zothos.nullai.tech)', href: 'https://zothos.nullai.tech' },
+  { label: 'ZothOS-Lite v1.2 (zothos-lite.nullai.tech)', href: 'https://zothos-lite.nullai.tech' },
+  { label: 'Zoth Civilization v3.0', href: 'https://zoth-civilization.netlify.app' },
+  { label: 'ZothNet Mesh (zothnet.nullai.tech)', href: 'https://zothnet.nullai.tech' },
+  { label: 'NullAI Platform (nullai.tech)', href: 'https://nullai.tech' },
+  { label: 'FieldKit (nullai.tech/fieldkit)', href: 'https://nullai.tech/fieldkit' },
+  { label: '1nc0gn30 (1nc0gn30.si)', href: 'https://1nc0gn30.si' },
 ];
 
 export default function Navbar({ onToggleTheme }) {
@@ -138,7 +148,7 @@ export default function Navbar({ onToggleTheme }) {
       }}
     >
       <Container maxWidth="lg">
-        <Toolbar disableGutters sx={{ justifyContent: 'space-between', height: 68, gap: 1.5 }}>
+        <Toolbar disableGutters sx={{ justifyContent: 'space-between', height: 68, gap: 1 }}>
           {/* Brand */}
           <Box
             component={RouterLink}
@@ -146,10 +156,11 @@ export default function Navbar({ onToggleTheme }) {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              gap: 1.4,
+              gap: 1.25,
               textDecoration: 'none',
               color: primaryText,
               flexShrink: 0,
+              minHeight: 44,
             }}
           >
             <Box
@@ -171,7 +182,7 @@ export default function Navbar({ onToggleTheme }) {
                 sx={{
                   fontFamily: display,
                   fontSize: { xs: '1.1rem', sm: '1.3rem' },
-                  fontWeight: 700,
+                  fontWeight: 400,
                   lineHeight: 1.05,
                   color: primaryText,
                 }}
@@ -188,7 +199,7 @@ export default function Navbar({ onToggleTheme }) {
                   display: { xs: 'none', sm: 'block' },
                 }}
               >
-                LOCAL-FIRST AI SYSTEMS
+                80 OPEN-ACCESS TOOLS · v2.2
               </Typography>
             </Box>
           </Box>
@@ -206,9 +217,10 @@ export default function Navbar({ onToggleTheme }) {
                   sx={{
                     color: active ? primaryText : mutedText,
                     fontWeight: active ? 800 : 600,
-                    fontSize: '0.84rem',
+                    fontSize: '0.83rem',
                     textTransform: 'none',
-                    px: 1.4,
+                    whiteSpace: 'nowrap',
+                    px: 1.2,
                     py: 0.65,
                     borderRadius: 1.5,
                     bgcolor: active ? (dark ? 'rgba(212,175,55,0.14)' : 'rgba(16,24,40,0.06)') : 'transparent',
@@ -229,9 +241,10 @@ export default function Navbar({ onToggleTheme }) {
               sx={{
                 color: isMoreActive ? primaryText : mutedText,
                 fontWeight: isMoreActive ? 800 : 600,
-                fontSize: '0.84rem',
+                fontSize: '0.83rem',
                 textTransform: 'none',
-                px: 1.4,
+                whiteSpace: 'nowrap',
+                px: 1.2,
                 py: 0.65,
                 borderRadius: 1.5,
                 bgcolor: isMoreActive ? (dark ? 'rgba(212,175,55,0.14)' : 'rgba(16,24,40,0.06)') : 'transparent',
@@ -241,12 +254,12 @@ export default function Navbar({ onToggleTheme }) {
                 },
               }}
             >
-              Systems &amp; Docs
+              Ecosystem &amp; Docs
             </Button>
           </Box>
 
           {/* Right Controls */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.85, flexShrink: 0 }}>
             <Button
               size="small"
               onClick={() => setPaletteOpen(true)}
@@ -257,11 +270,14 @@ export default function Navbar({ onToggleTheme }) {
                 border: `1px solid ${borderCol}`,
                 bgcolor: dark ? '#0D0F16' : '#FFFFFF',
                 borderRadius: 1.5,
-                px: 1.4,
+                px: 1.35,
                 py: 0.55,
-                fontSize: '0.76rem',
+                minHeight: 38,
+                fontSize: '0.75rem',
                 fontFamily: mono,
                 textTransform: 'none',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
                 '&:hover': { borderColor: gold, color: primaryText },
               }}
             >
@@ -277,7 +293,8 @@ export default function Navbar({ onToggleTheme }) {
                 color: primaryText,
                 border: `1px solid ${borderCol}`,
                 borderRadius: 1.5,
-                p: 0.8,
+                minWidth: 44,
+                minHeight: 44,
               }}
             >
               <SearchIcon fontSize="small" />
@@ -295,10 +312,12 @@ export default function Navbar({ onToggleTheme }) {
                 bgcolor: dark ? '#D4AF37' : '#101828',
                 color: dark ? '#08080B' : '#FFFFFF',
                 fontWeight: 700,
-                fontSize: '0.78rem',
+                fontSize: '0.77rem',
                 textTransform: 'none',
-                px: 1.75,
-                py: 0.65,
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
+                px: 1.6,
+                minHeight: 38,
                 borderRadius: 1.5,
                 '&:hover': { bgcolor: dark ? '#E5C158' : '#1E293B' },
               }}
@@ -314,7 +333,8 @@ export default function Navbar({ onToggleTheme }) {
                 border: `1px solid ${borderCol}`,
                 bgcolor: dark ? '#0D0F16' : '#FFFFFF',
                 borderRadius: 1.5,
-                p: 0.8,
+                minWidth: { xs: 44, sm: 38 },
+                minHeight: { xs: 44, sm: 38 },
                 '&:hover': { borderColor: gold },
               }}
             >
@@ -329,7 +349,8 @@ export default function Navbar({ onToggleTheme }) {
                 color: primaryText,
                 border: `1px solid ${borderCol}`,
                 borderRadius: 1.5,
-                p: 0.8,
+                minWidth: 44,
+                minHeight: 44,
               }}
             >
               <MenuIcon fontSize="small" />
@@ -338,7 +359,7 @@ export default function Navbar({ onToggleTheme }) {
         </Toolbar>
       </Container>
 
-      {/* Systems & Docs Dropdown */}
+      {/* Systems, Docs & Ecosystem Dropdown */}
       <Menu
         anchorEl={moreAnchor}
         open={Boolean(moreAnchor)}
@@ -347,8 +368,9 @@ export default function Navbar({ onToggleTheme }) {
           elevation: 0,
           sx: {
             mt: 1,
-            width: 360,
+            width: 380,
             maxWidth: 'calc(100vw - 24px)',
+            maxHeight: '82vh',
             p: 1,
             borderRadius: 2,
             bgcolor: dark ? '#0E1017' : '#FFFFFF',
@@ -377,7 +399,7 @@ export default function Navbar({ onToggleTheme }) {
             component={RouterLink}
             to={item.path}
             onClick={() => setMoreAnchor(null)}
-            sx={{ borderRadius: 1.5, py: 0.85, px: 1.5, display: 'block' }}
+            sx={{ borderRadius: 1.5, py: 0.75, px: 1.5, display: 'block' }}
           >
             <Typography variant="body2" sx={{ fontWeight: 700, color: primaryText }}>
               {item.label}
@@ -410,7 +432,7 @@ export default function Navbar({ onToggleTheme }) {
             component={RouterLink}
             to={item.path}
             onClick={() => setMoreAnchor(null)}
-            sx={{ borderRadius: 1.5, py: 0.85, px: 1.5, display: 'block' }}
+            sx={{ borderRadius: 1.5, py: 0.75, px: 1.5, display: 'block' }}
           >
             <Typography variant="body2" sx={{ fontWeight: 700, color: primaryText }}>
               {item.label}
@@ -418,6 +440,39 @@ export default function Navbar({ onToggleTheme }) {
             <Typography variant="caption" sx={{ color: mutedText, display: 'block', whiteSpace: 'normal' }}>
               {item.desc}
             </Typography>
+          </MenuItem>
+        ))}
+
+        <Divider sx={{ my: 1, borderColor: borderCol }} />
+
+        <Typography
+          sx={{
+            px: 1.5,
+            py: 0.75,
+            fontFamily: mono,
+            fontSize: '0.66rem',
+            fontWeight: 700,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            color: gold,
+          }}
+        >
+          Sovereign Ecosystem Sites
+        </Typography>
+        {ecosystemExternalItems.map((item) => (
+          <MenuItem
+            key={item.href}
+            component="a"
+            href={item.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setMoreAnchor(null)}
+            sx={{ borderRadius: 1.5, py: 0.7, px: 1.5, display: 'flex', justifyContent: 'space-between', gap: 1 }}
+          >
+            <Typography variant="body2" sx={{ fontWeight: 600, fontSize: '0.82rem', color: primaryText }}>
+              {item.label}
+            </Typography>
+            <OpenInNewIcon sx={{ fontSize: '0.8rem', color: gold, flexShrink: 0 }} />
           </MenuItem>
         ))}
       </Menu>
@@ -443,7 +498,7 @@ export default function Navbar({ onToggleTheme }) {
             <InputBase
               autoFocus
               fullWidth
-              placeholder={`Search all ${arsenalStats.total} repositories & specifications…`}
+              placeholder={`Search all ${arsenalStats.total} Studio entries & specifications…`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               sx={{ color: primaryText, fontSize: '0.95rem' }}
@@ -455,7 +510,7 @@ export default function Navbar({ onToggleTheme }) {
 
           <Box sx={{ maxHeight: 380, overflowY: 'auto', p: 1.25 }}>
             <Typography sx={{ px: 1.5, py: 0.5, fontFamily: mono, fontSize: '0.68rem', fontWeight: 700, color: gold }}>
-              REPOSITORIES ({filteredTools.length})
+              TOOLS &amp; REPOSITORIES ({filteredTools.length})
             </Typography>
             <List dense disablePadding>
               {filteredTools.map((t) => (
@@ -468,7 +523,7 @@ export default function Navbar({ onToggleTheme }) {
                       secondaryTypographyProps={{ fontFamily: mono, fontSize: '0.7rem', color: mutedText }}
                     />
                     <Chip
-                      label="Specs"
+                      label="Open"
                       size="small"
                       sx={{
                         height: 20,
@@ -526,10 +581,15 @@ export default function Navbar({ onToggleTheme }) {
       >
         <Box sx={{ p: 2.5, display: 'flex', flexDirection: 'column', height: '100%' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-            <Typography sx={{ fontFamily: display, fontWeight: 700, fontSize: '1.25rem', color: primaryText }}>
+            <Typography sx={{ fontFamily: display, fontWeight: 400, fontSize: '1.25rem', color: primaryText }}>
               Zoth Studio
             </Typography>
-            <IconButton size="small" aria-label="Close drawer" onClick={() => setMobileOpen(false)} sx={{ color: mutedText }}>
+            <IconButton
+              size="small"
+              aria-label="Close drawer"
+              onClick={() => setMobileOpen(false)}
+              sx={{ color: mutedText, minWidth: 44, minHeight: 44 }}
+            >
               <CloseIcon fontSize="small" />
             </IconButton>
           </Box>
@@ -543,6 +603,7 @@ export default function Navbar({ onToggleTheme }) {
             startIcon={<GitHubIcon />}
             sx={{
               mb: 2,
+              minHeight: 44,
               bgcolor: dark ? '#D4AF37' : '#101828',
               color: dark ? '#08080B' : '#FFFFFF',
               fontWeight: 700,
@@ -565,7 +626,7 @@ export default function Navbar({ onToggleTheme }) {
                       to={item.path}
                       onClick={() => setMobileOpen(false)}
                       selected={selected}
-                      sx={{ borderRadius: 1.5, py: 0.85 }}
+                      sx={{ borderRadius: 1.5, py: 0.9, minHeight: 44 }}
                     >
                       <ListItemText
                         primary={item.label}
@@ -579,6 +640,31 @@ export default function Navbar({ onToggleTheme }) {
                   </ListItem>
                 );
               })}
+            </List>
+
+            <Divider sx={{ my: 1.5, borderColor: borderCol }} />
+            <Typography sx={{ px: 1.5, pb: 0.75, fontFamily: mono, fontSize: '0.66rem', fontWeight: 700, color: gold }}>
+              ECOSYSTEM PROPERTIES
+            </Typography>
+            <List dense>
+              {ecosystemExternalItems.map((item) => (
+                <ListItem key={item.href} disablePadding>
+                  <ListItemButton
+                    component="a"
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMobileOpen(false)}
+                    sx={{ borderRadius: 1.5, py: 0.85, minHeight: 44 }}
+                  >
+                    <ListItemText
+                      primary={item.label}
+                      primaryTypographyProps={{ fontWeight: 600, color: primaryText, fontSize: '0.84rem' }}
+                    />
+                    <OpenInNewIcon sx={{ fontSize: '0.8rem', color: gold }} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
             </List>
           </Box>
         </Box>

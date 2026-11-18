@@ -27,6 +27,7 @@ import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 import { microTools } from '../data/toolsData';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { HeroReveal, HeroItem, GlowLine, StaggerChildren, StaggerItem } from '../components/MotionReveal';
+import { copyText } from '../components/sovereign';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -88,18 +89,17 @@ export default function ToolsPage() {
     setPinned((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
   const handleCopy = (cmd, id) => {
-    if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(cmd);
-      setCopiedId(id);
-      setTimeout(() => setCopiedId(null), 2000);
-    }
+    copyText(cmd);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
   };
 
   const gold = isDark ? '#D4AF37' : '#7A5808';
+  const goldLine = isDark ? '#D4AF37' : '#B8860B';
   const primaryText = isDark ? '#F5F1E6' : '#101828';
   const secondaryText = isDark ? '#A3AAB8' : '#475467';
   const cardBg = isDark ? '#0D0F16' : '#FFFFFF';
-  const codeBg = isDark ? '#080A0F' : '#F3F4F6';
+  const codeBg = isDark ? '#080A0F' : '#F3EFE6';
   const borderCol = isDark ? 'rgba(245, 241, 230, 0.12)' : 'rgba(16, 24, 40, 0.12)';
 
   const filtered = microTools
@@ -117,17 +117,15 @@ export default function ToolsPage() {
     })
     .sort((a, b) => Number(pinned.includes(b.id)) - Number(pinned.includes(a.id)));
 
-  const daemonCount = microTools.filter((t) => Boolean(t.localPort)).length;
-
   return (
-    <Container maxWidth="lg" sx={{ py: { xs: 5, md: 7 } }}>
+    <Container maxWidth="lg" sx={{ py: { xs: 4.5, md: 7 } }}>
       {/* Editorial Header */}
       <HeroReveal>
         <Box sx={{ mb: 4.5 }}>
           <GlowLine
             height={2}
-            color={gold}
-            glowColor={isDark ? 'rgba(212,175,55,0.35)' : 'rgba(122,88,8,0.2)'}
+            color={goldLine}
+            glowColor={isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.22)'}
           />
           <HeroItem>
             <Typography
@@ -135,14 +133,14 @@ export default function ToolsPage() {
                 mt: 2.5,
                 mb: 1,
                 fontFamily: mono,
-                fontSize: '0.74rem',
+                fontSize: '0.73rem',
                 fontWeight: 700,
-                letterSpacing: '0.16em',
+                letterSpacing: '0.18em',
                 textTransform: 'uppercase',
                 color: gold,
               }}
             >
-              LOCAL-FIRST REPOSITORY INDEX · CLI, DAEMONS &amp; MCP
+              OPEN-ACCESS REPOSITORY INDEX · 56 WEBGPU + 24 CLI · 79 PUBLIC REPOS
             </Typography>
           </HeroItem>
 
@@ -165,13 +163,14 @@ export default function ToolsPage() {
           <HeroItem>
             <Typography
               sx={{
-                maxWidth: 780,
+                maxWidth: '68ch',
                 fontSize: { xs: '0.98rem', md: '1.06rem' },
                 lineHeight: 1.7,
                 color: secondaryText,
               }}
             >
-              Every Zoth tool is engineered to run natively on your own hardware via CLI binaries and local loopback daemons rather than constrained browser sandboxes. Inspect what each tool does below, then clone its standalone repository, pull the unified{' '}
+              Every Zoth tool is 100% free and unlocked — spanning <strong>56 in-browser/WebGPU utilities</strong> and{' '}
+              <strong>24 CLI/daemon packages</strong> across <strong>79 public GitHub repositories</strong>. Launch any tool directly in-browser, clone its standalone repository, pull the unified{' '}
               <Box
                 component="a"
                 href="https://github.com/NullAITech/zoth-studio-v2"
@@ -179,15 +178,15 @@ export default function ToolsPage() {
                 rel="noopener noreferrer"
                 sx={{ color: gold, fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '3px' }}
               >
-                Zoth Studio v2 repository
+                Zoth Studio v2 monorepo
               </Box>
-              , or run everything pre-installed on{' '}
+              , or boot everything pre-installed on{' '}
               <Box
                 component={RouterLink}
                 to="/zoth-os"
                 sx={{ color: gold, fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: '3px' }}
               >
-                ZothOS
+                ZothOS v3.4.0
               </Box>
               .
             </Typography>
@@ -205,8 +204,8 @@ export default function ToolsPage() {
         }}
       >
         {[
-          ['Repositories', microTools.length],
-          ['Loopback Daemons', daemonCount],
+          ['Open-Access Tools', '80'],
+          ['Public GitHub Repos', '79'],
           ['Categories', categories.length - 1],
           ['WAN Telemetry', '0 Bytes'],
         ].map(([label, value]) => (
@@ -243,7 +242,7 @@ export default function ToolsPage() {
       <TextField
         fullWidth
         size="small"
-        placeholder={`Search ${microTools.length} local repositories by name, capability, or slug… (press / to focus)`}
+        placeholder={`Search ${microTools.length} Studio entries by name, capability, or slug… (press / to focus)`}
         inputRef={searchRef}
         inputProps={{ 'aria-label': 'Search tool repositories' }}
         value={search}
@@ -260,7 +259,7 @@ export default function ToolsPage() {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SearchIcon sx={{ color: gold, fontSize: '1.15rem' }} />
+              <SearchIcon sx={{ color: goldLine, fontSize: '1.15rem' }} />
             </InputAdornment>
           ),
           endAdornment: search ? (
@@ -273,7 +272,7 @@ export default function ToolsPage() {
         }}
       />
 
-      {/* Category & Pin Filters — High Contrast in Both Light & Dark Modes */}
+      {/* Category & Pin Filters */}
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.9, mb: 3 }}>
         {categories.map((cat) => {
           const active = selectedCat === cat;
@@ -293,7 +292,7 @@ export default function ToolsPage() {
                 color: active ? (isDark ? '#08080B' : '#FFFFFF') : primaryText,
                 border: `1px solid ${active ? (isDark ? '#D4AF37' : '#101828') : borderCol}`,
                 '&:hover': {
-                  bgcolor: active ? (isDark ? '#E5C158' : '#1E293B') : (isDark ? '#141824' : '#F3F4F6'),
+                  bgcolor: active ? (isDark ? '#E5C158' : '#1E293B') : isDark ? '#141824' : '#F3EFE6',
                 },
               }}
             />
@@ -326,7 +325,7 @@ export default function ToolsPage() {
 
       {/* Result Count */}
       <Typography variant="body2" sx={{ color: secondaryText, mb: 3, fontFamily: mono, fontSize: '0.8rem' }}>
-        Showing <strong>{filtered.length}</strong> of <strong>{microTools.length}</strong> local-first repositories
+        Showing <strong>{filtered.length}</strong> of <strong>{microTools.length}</strong> Studio entries
       </Typography>
 
       {/* Repository Grid */}
@@ -354,7 +353,7 @@ export default function ToolsPage() {
                       bgcolor: cardBg,
                       transition: 'border-color 0.2s ease, transform 0.2s ease',
                       '&:hover': {
-                        borderColor: gold,
+                        borderColor: goldLine,
                         transform: 'translateY(-2px)',
                       },
                     }}
@@ -399,7 +398,7 @@ export default function ToolsPage() {
                             size="small"
                             onClick={() => togglePin(tool.id)}
                             aria-label={pinned.includes(tool.id) ? `Unsave ${tool.name}` : `Save ${tool.name}`}
-                            sx={{ p: 0.25, color: pinned.includes(tool.id) ? gold : secondaryText }}
+                            sx={{ p: 0.5, color: pinned.includes(tool.id) ? gold : secondaryText }}
                           >
                             {pinned.includes(tool.id) ? <StarIcon sx={{ fontSize: '1rem' }} /> : <StarBorderIcon sx={{ fontSize: '1rem' }} />}
                           </IconButton>
@@ -444,11 +443,21 @@ export default function ToolsPage() {
 
                       {/* Copyable git clone strip */}
                       <Box
+                        role="button"
+                        tabIndex={0}
+                        aria-label={`Copy clone command for ${tool.name}`}
                         onClick={() => handleCopy(cloneCmd, tool.id)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handleCopy(cloneCmd, tool.id);
+                          }
+                        }}
                         sx={{
                           cursor: 'pointer',
                           p: 1,
                           px: 1.25,
+                          minHeight: 40,
                           borderRadius: 1.5,
                           bgcolor: codeBg,
                           border: `1px solid ${borderCol}`,
@@ -456,6 +465,7 @@ export default function ToolsPage() {
                           alignItems: 'center',
                           justifyContent: 'space-between',
                           gap: 1,
+                          '&:hover': { borderColor: goldLine },
                         }}
                       >
                         <Typography
@@ -496,6 +506,7 @@ export default function ToolsPage() {
                         to={`/tools/${tool.id}`}
                         endIcon={<ArrowForwardIcon sx={{ fontSize: '0.9rem !important' }} />}
                         sx={{
+                          minHeight: { xs: 44, sm: 34 },
                           bgcolor: isDark ? '#D4AF37' : '#101828',
                           color: isDark ? '#08080B' : '#FFFFFF',
                           fontWeight: 700,
@@ -505,7 +516,7 @@ export default function ToolsPage() {
                           '&:hover': { bgcolor: isDark ? '#E5C158' : '#1E293B' },
                         }}
                       >
-                        View Specs
+                        Open Tool
                       </Button>
 
                       <Button
@@ -516,13 +527,14 @@ export default function ToolsPage() {
                         rel="noopener noreferrer"
                         startIcon={<GitHubIcon sx={{ fontSize: '0.9rem !important' }} />}
                         sx={{
+                          minHeight: { xs: 44, sm: 34 },
                           borderColor: borderCol,
                           color: primaryText,
                           fontWeight: 700,
                           fontSize: '0.75rem',
                           textTransform: 'none',
                           px: 1.4,
-                          '&:hover': { borderColor: gold },
+                          '&:hover': { borderColor: goldLine },
                         }}
                       >
                         GitHub

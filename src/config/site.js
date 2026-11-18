@@ -10,34 +10,35 @@ import { FAQS_DATA } from '../data/faqsData.js';
 
 export const siteConfig = {
   name: 'Zoth Studio',
-  legalName: 'NullAI Tech',
+  legalName: 'Neal Frazier Tech • NullAI Platform',
   url: 'https://zoth.nullai.tech',
-  tagline: 'Zero-Egress Sovereign Agent Development Studio & Pantheon Matrix',
-  description: `Zoth Studio v2 is a local-first, offline-capable development environment for autonomous AI agents, featuring biomorphic STDP memory, Lucy Netrunner Oracle, Byzantine consensus triangulation, ${workstations.length} sovereign developer cockpits, and ${microTools.length} micro-tools (56 browser/WebGPU + 24 CLI/daemon, 79 with public GitHub repos).`,
-  author: 'NullAI Tech',
-  twitterHandle: '@NullAITech',
+  tagline: '80 Free Open-Access Sovereign Tools, Pantheon Matrix & Local AI Studio',
+  description: `Zoth Studio v2 is a local-first, zero-egress AI engineering studio unifying 80 free open-access developer, security, AEO, and AI tools (56 in-browser/WebGPU + 24 CLI/daemon across 79 public GitHub repositories), ${workstations.length} Studio workstations, ZothOS v3.4.0 (23 daemons, Debian 13 KDE Plasma 6), ZothOS-Lite v1.2 (Amnesic Monotone Live USB/ISO, 56 curated models across 8 providers, toram), and Zoth Civilization v3.0 (23 Pantheon Agents, 22-Key Sanctuary, DeepSeek Flash × Hermes BYOK).`,
+  author: 'Neal Frazier Tech (@1nc0gn30) • NullAI Platform',
+  twitterHandle: '@1nc0gn30',
   githubUrl: 'https://github.com/NullAITech/zoth-studio-v2',
   themeColor: '#08080B',
   accentColor: '#D4AF37',
-  ogImage: 'https://zoth.nullai.tech/brand/ghostbyte-dark.png',
+  ogImage: 'https://zoth.nullai.tech/og-banner.jpg',
+  logoImage: 'https://zoth.nullai.tech/brand/ghostbyte-dark.png',
   keywords: [
     'sovereign AI agents',
     'zero-egress development studio',
-    'biomorphic STDP memory',
-    'Lucy Netrunner Oracle',
-    'Byzantine consensus triangulation',
-    'local LLM orchestration',
-    'Ollama model foundry',
-    'autonomous agent DAG composer',
-    'offline-capable AI workspace',
-    'React MUI studio v2',
+    '80 open-access developer tools',
+    'ZothOS v3.4.0',
+    'ZothOS-Lite v1.2',
+    'Zoth Civilization v3.0',
+    'ZothNet',
+    'NullAI FieldKit',
+    '1nc0gn30',
+    'Neal Frazier Tech',
     'Zoth Studio'
   ],
   routes: {
     '/': {
-      title: 'Zoth Studio // Sovereign Agent Development Studio & Pantheon Matrix',
-      description: 'Zero-egress development studio for autonomous AI agent pantheons, local model orchestration, and hardware-secured sovereign intelligence.',
-      keywords: 'Zoth Studio, sovereign AI, agent pantheon, zero egress studio, offline-capable agent development',
+      title: 'Zoth Studio // 80 Sovereign Open-Access Tools, Pantheon Matrix & Local AI Studio',
+      description: 'Local-first, zero-egress AI engineering studio unifying 80 free open-access tools (56 in-browser/WebGPU + 24 CLI/daemon, 79 public GitHub repos), 43 workstations, ZothOS v3.4.0, ZothOS-Lite v1.2, and Zoth Civilization v3.0.',
+      keywords: 'Zoth Studio, 80 open-access tools, ZothOS v3.4.0, ZothOS-Lite v1.2, Zoth Civilization v3.0, NullAI, 1nc0gn30',
       type: 'website',
     },
     '/adytum': {
@@ -59,15 +60,15 @@ export const siteConfig = {
       type: 'article',
     },
     '/arsenal': {
-      title: 'The Sovereign Arsenal // Unified Command Matrix & Developer Catalog',
-      description: `Unified master directory consolidating ${microTools.length} standalone micro-tools, ${workstations.length} offline-capable developer cockpits, and hardware enclaves.`,
-      keywords: 'sovereign arsenal, zoth catalog, developer cockpits, sovereign micro tools, hardware enclaves',
+      title: 'The Sovereign Arsenal // 80 Free Open-Access Tools, 79 GitHub Repos & 43 Workstations',
+      description: `Unified master directory of 80 free open-access developer, security, AEO & AI tools (56 in-browser/WebGPU + 24 CLI/daemon across 79 public GitHub repositories) and ${workstations.length} Studio workstations.`,
+      keywords: 'sovereign arsenal, 80 open-access tools, 79 GitHub repositories, developer cockpits, ZothOS, Zoth Studio',
       type: 'article',
     },
     '/tools': {
-      title: `Sovereign Tool Arsenal // ${microTools.length} Offline-Capable Micro-Tools & Workstations`,
-      description: `Explore ${microTools.length} standalone, schema-validated developer tools (56 in-browser + 24 CLI) and interactive God-Mode workstations with 15s code-first motion showcases.`,
-      keywords: 'developer tools, zoth webgen, omnipost, subsweep, payload entropy, offline-capable tools',
+      title: 'Sovereign Tool Repositories // 80 Free Open-Access Tools (56 WebGPU + 24 CLI)',
+      description: 'Explore 80 free open-access, schema-validated developer tools (56 in-browser/WebGPU + 24 CLI/daemon across 79 public GitHub repositories) and interactive God-Mode workstations.',
+      keywords: 'developer tools, zoth webgen, 80 open-access tools, 79 public repos, offline-capable tools',
       type: 'article',
     },
     '/workstations': {
@@ -248,7 +249,54 @@ export function generateSchemaGraph(path = '/') {
   const routeMeta = getRouteMeta(path);
   const fullUrl = `${siteConfig.url}${path === '/' ? '' : path}`;
 
+  const coreFaqEntities = [
+    {
+      '@type': 'Question',
+      'name': 'Are all 80 Zoth Studio tools, ZothOS v3.4.0, and ZothOS-Lite v1.2 100% free and open-access?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'Yes. All 80 Zoth Studio tools (56 in-browser/WebGPU + 24 CLI/daemon across 79 public GitHub repositories), 43 Studio workstations, ZothOS v3.4.0 (https://zothos.nullai.tech), ZothOS-Lite v1.2 (https://zothos-lite.nullai.tech), Zoth Civilization v3.0 (https://zoth-civilization.netlify.app), ZothNet (https://zothnet.nullai.tech), and FieldKit (https://nullai.tech/fieldkit) are 100% free and unlocked by default with zero paywalls, zero license modals, and optional Buy Us a Coffee or Solana community tips.'
+      }
+    },
+    {
+      '@type': 'Question',
+      'name': 'How do ZothOS v3.4.0, ZothOS-Lite v1.2, and Zoth Civilization v3.0 connect to Zoth Studio?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'ZothOS v3.4.0 (https://zothos.nullai.tech) is the persistent Debian 13 + KDE Plasma 6 AI workstation OS running 23 resident loopback daemons on 127.0.0.1. ZothOS-Lite v1.2 (https://zothos-lite.nullai.tech) is the Tails-style Amnesic Monotone Live USB/ISO (toram) shipping 56 curated models across 8 providers. Zoth Civilization v3.0 (https://zoth-civilization.netlify.app) is the autonomous 23-agent Pantheon simulation featuring the 22-Key Sanctuary and DeepSeek Flash × Hermes BYOK reasoning.'
+      }
+    },
+    {
+      '@type': 'Question',
+      'name': 'Does Zoth Studio send prompts, keys, or source code to external servers?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'No. In-browser and WebGPU utilities execute 100% client-side in your browser, while CLI packages and the 23 ZothOS daemons bind strictly to local loopback (127.0.0.1) with zero outbound cloud telemetry.'
+      }
+    }
+  ];
+
   const graph = [
+    {
+      '@type': 'Person',
+      '@id': 'https://nullai.tech/#person',
+      'name': 'Neal Frazier',
+      'alternateName': ['1nc0gn30', 'Neal Frazier Tech'],
+      'url': 'https://1nc0gn30.si',
+      'sameAs': [
+        'https://1nc0gn30.si',
+        'https://nullai.tech',
+        'https://nullai.tech/fieldkit',
+        'https://zoth.nullai.tech',
+        'https://zothos.nullai.tech',
+        'https://zothos-lite.nullai.tech',
+        'https://zoth-civilization.netlify.app',
+        'https://zothnet.nullai.tech',
+        'https://github.com/1nc0gn30',
+        'https://github.com/NullAITech',
+        'https://x.com/1nc0gn30'
+      ]
+    },
     {
       '@type': 'WebSite',
       '@id': `${siteConfig.url}/#website`,
@@ -263,22 +311,38 @@ export function generateSchemaGraph(path = '/') {
       '@type': 'Organization',
       '@id': `${siteConfig.url}/#organization`,
       'name': siteConfig.legalName,
-      'url': siteConfig.url,
+      'alternateName': ['NullAI', 'NullAI Platform', 'Neal Frazier Tech'],
+      'url': 'https://nullai.tech',
+      'founder': {
+        '@id': 'https://nullai.tech/#person'
+      },
       'logo': {
         '@type': 'ImageObject',
-        'url': siteConfig.ogImage
+        'url': siteConfig.logoImage || siteConfig.ogImage
       },
       'sameAs': [
         siteConfig.githubUrl,
+        'https://github.com/1nc0gn30/zoth-studio-v2',
+        'https://nullai.tech',
+        'https://nullai.tech/fieldkit',
+        'https://1nc0gn30.si',
+        'https://zothos.nullai.tech',
+        'https://zothos-lite.nullai.tech',
+        'https://zoth-civilization.netlify.app',
+        'https://zothnet.nullai.tech',
         'https://x.com/1nc0gn30'
       ]
     },
     {
-      '@type': 'SoftwareApplication',
+      '@type': ['WebApplication', 'SoftwareApplication'],
       '@id': `${siteConfig.url}/#application`,
-      'name': siteConfig.name,
+      'name': `${siteConfig.name} v2 • 80 Free Open-Access Sovereign Tools`,
+      'url': siteConfig.url,
       'applicationCategory': 'DeveloperApplication',
-      'operatingSystem': 'Linux, macOS, Windows',
+      'operatingSystem': 'ZothOS v3.4.0, ZothOS-Lite v1.2, All Modern Browsers, Linux, macOS, Windows',
+      'creator': {
+        '@id': 'https://nullai.tech/#person'
+      },
       'offers': {
         '@type': 'Offer',
         'price': '0',
@@ -384,7 +448,13 @@ export function generateSchemaGraph(path = '/') {
   ];
 
   // Specific Schema Entities for Rich Snippets & Answer Engines
-  if (path === '/faqs') {
+  if (path === '/' || path === '/arsenal' || path === '/tools') {
+    graph.push({
+      '@type': 'FAQPage',
+      '@id': `${fullUrl}#faq`,
+      'mainEntity': coreFaqEntities
+    });
+  } else if (path === '/faqs') {
     graph.push({
       '@type': 'FAQPage',
       '@id': `${fullUrl}#faq`,

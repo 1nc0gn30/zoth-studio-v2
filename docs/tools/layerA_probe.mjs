@@ -10,6 +10,8 @@
  */
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
 const args = process.argv.slice(2);
 const opt = (name, def) => {
@@ -21,7 +23,7 @@ const opt = (name, def) => {
 };
 const BASE = String(opt('base', ['http://127.0.0.1:8148'])[0]).replace(/\/$/, '');
 const ROUTES = opt('routes', ['/']);
-const OUT = opt('out', ['/home/zoth/.hermes/cache/scratch/layerA_pixelcast.json'])[0];
+const OUT = opt('out', [path.join(os.homedir(), '.hermes/cache/scratch/layerA_pixelcast.json')])[0];
 const VW = 1440, VH = 900;
 const PORT = 9300 + Math.floor(Math.random() * 500);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

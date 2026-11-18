@@ -14,6 +14,7 @@ import {
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { copyText } from './sovereign';
 
 const STRIPE_COFFEE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
 const SOLANA_WALLET = 'GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK';
@@ -37,11 +38,9 @@ export default function SovereignFunnel({
   const [snackbarMsg, setSnackbarMsg] = useState('');
 
   const handleCopy = (text, label) => {
-    if (navigator?.clipboard?.writeText) {
-      navigator.clipboard.writeText(text);
-      setSnackbarMsg(`Copied ${label || 'command'} to clipboard`);
-      setSnackbarOpen(true);
-    }
+    copyText(text);
+    setSnackbarMsg(`Copied ${label || 'command'} to clipboard`);
+    setSnackbarOpen(true);
   };
 
   const gold = isDark ? '#D4AF37' : '#7A5808';
@@ -50,7 +49,7 @@ export default function SovereignFunnel({
   const textSecondary = isDark ? '#A3AAB8' : '#475467';
   const borderCol = isDark ? 'rgba(212, 175, 55, 0.22)' : 'rgba(16, 24, 40, 0.12)';
   const cardBg = isDark ? '#0E1017' : '#FFFFFF';
-  const codeBoxBg = isDark ? '#08090D' : '#F3F4F6';
+  const codeBoxBg = isDark ? '#08090D' : '#F3EFE6';
   const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
   const opt1Title = toolTitle || 'Option 1: Standalone Repository';
@@ -226,7 +225,7 @@ export default function SovereignFunnel({
               />
             </Box>
             <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.85rem', lineHeight: 1.6 }}>
-              Clone the unified Zoth Studio v2 workspace orchestrating all 80 local tools, STDP neural memory (:8094), and Pantheon swarm (:9393).
+              Clone the unified Zoth Studio v2 workspace orchestrating 80 free open-access tools (79 public GitHub repos), 43 workstations, STDP neural memory (:8094), and Pantheon swarm (:9393).
             </Typography>
 
             <Box
@@ -301,7 +300,7 @@ export default function SovereignFunnel({
           >
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mb: 1.5 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 800, color: goldHeading, fontSize: '0.98rem' }}>
-                Option 3: ZothOS v3.4
+                Option 3: ZothOS v3.4.0
               </Typography>
               <Chip
                 label="LIVE ISO"
@@ -317,7 +316,7 @@ export default function SovereignFunnel({
               />
             </Box>
             <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.85rem', lineHeight: 1.6 }}>
-              Bootable Debian Live distribution with all 80 sovereign tools & CLI binaries, local loopback daemons, and Ollama runtime pre-configured out of the box.
+              Bootable Debian 13 + KDE Plasma 6 distribution running 23 resident loopback daemons with all 80 Zoth tools &amp; Ollama pre-installed (plus amnesic ZothOS-Lite v1.2).
             </Typography>
 
             <Box
