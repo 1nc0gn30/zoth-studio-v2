@@ -4,6 +4,7 @@ import { Box, Container, Typography, Link, Stack, IconButton, Button, Unstable_G
 import { useTheme } from '@mui/material/styles';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LanguageIcon from '@mui/icons-material/Language';
+import GhostByteMark from './GhostByteMark';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import { STRIPE_COFFEE_URL, SOLANA_TIP_ADDRESS, useCopy } from './sovereign';
@@ -145,17 +146,30 @@ export default function Footer() {
             </Typography>
 
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
-              <IconButton
-                component="a"
+              <Link
                 href="https://nullai.tech"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="NullAI Platform website"
-                size="small"
-                sx={{ border: `1px solid ${borderCol}`, color: primaryText, minWidth: 40, minHeight: 40 }}
+                aria-label="NullAI Platform — Living 3D GhostByte Specimen"
+                sx={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 0.9,
+                  px: 1.2,
+                  py: 0.45,
+                  borderRadius: '10px',
+                  border: `1px solid ${borderCol}`,
+                  textDecoration: 'none',
+                  color: primaryText,
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  '&:hover': { borderColor: gold },
+                }}
               >
-                <LanguageIcon fontSize="small" />
-              </IconButton>
+                <GhostByteMark size={28} variant="hologram" interactive={false} showRings={false} ariaLabel="NullAI 3D GhostByte emblem" />
+                <span>NullAI</span>
+              </Link>
               <IconButton
                 component="a"
                 href="https://github.com/1nc0gn30/zoth-studio-v2"
