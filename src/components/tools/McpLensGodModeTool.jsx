@@ -189,34 +189,7 @@ export default function McpLensGodModeTool() {
   const [minifiedSchema, setMinifiedSchema] = useState('');
   const [tokenStats, setTokenStats] = useState({ rawTokens: 0, minTokens: 0, savedPercent: 0 });
 
-  // Pro State
-  const [isPro, setIsPro] = useState(true);
-  const [proModalOpen, setProModalOpen] = useState(false);
-  const [licenseKeyInput, setLicenseKeyInput] = useState('');
   const [copied, setCopied] = useState(false);
-
-  // Check URL / LocalStorage for Pro License
-  useEffect(() => {
-    try {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('licensed') === 'true' || urlParams.get('pro') === 'true') {
-        localStorage.setItem('mcp_lens_pro_active', 'true');
-        setIsPro(true);
-      } else if (localStorage.getItem('mcp_lens_pro_active') === 'true') {
-        setIsPro(true);
-      }
-    } catch {
-      // ignore
-    }
-  }, []);
-
-  const handleActivateKey = () => {
-    if (licenseKeyInput.trim().length > 6) {
-      localStorage.setItem('mcp_lens_pro_active', 'true');
-      setIsPro(true);
-      setProModalOpen(false);
-    }
-  };
 
   // -------------------------------------------------------------------------
   // BPE Token Calculation & Minification Engine
@@ -347,7 +320,7 @@ export default function McpLensGodModeTool() {
   return (
     <Box sx={{ width: '100%', maxWidth: 1400, mx: 'auto', p: { xs: 1.5, sm: 2.5, md: 3 } }}>
       
-      {/* 1. High-Converting Founding Member Sales Banner */}
+      {/* 1. Open-Access Header & Optional Community Support Banner */}
       <Paper
         elevation={0}
         sx={{
@@ -370,10 +343,10 @@ export default function McpLensGodModeTool() {
         <Box>
           <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 0.8 }}>
             <Chip
-              label={isPro ? "✦ 100% FREE & OPEN ACCESS" : "FREE & OPEN ACCESS"}
+              label="✦ 100% FREE & OPEN ACCESS"
               size="small"
               sx={{
-                bgcolor: isPro ? '#22C55E' : '#D4AF37',
+                bgcolor: '#22C55E',
                 color: '#000000',
                 fontWeight: 900,
                 fontSize: '0.72rem',
@@ -948,35 +921,6 @@ if __name__ == "__main__":
           </Grid>
         </Grid>
       )}
-
-      {/* Pro Unlock Key Modal */}
-      <Dialog open={proModalOpen} onClose={() => setProModalOpen(false)} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ fontFamily: mono, fontWeight: 800 }}>Support MCP Lens (100% Free & Open Access)</DialogTitle>
-        <DialogContent>
-          <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-            All features are 100% unlocked for free. Optional support via Stripe or Solana:
-          </Typography>
-          <TextField
-            autoFocus
-            fullWidth
-            size="small"
-            placeholder="e.g. buyer@example.com or cs_live_..."
-            value={licenseKeyInput}
-            onChange={(e) => setLicenseKeyInput(e.target.value)}
-            InputProps={{ sx: { fontFamily: mono, fontSize: '0.85rem' } }}
-          />
-        </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <Button onClick={() => setProModalOpen(false)}>Cancel</Button>
-          <Button
-            variant="contained"
-            onClick={handleActivateKey}
-            sx={{ bgcolor: '#D4AF37', color: '#000', fontWeight: 800, fontFamily: mono }}
-          >
-            Activate Now
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

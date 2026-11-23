@@ -154,14 +154,6 @@ export function AgentMockTwinGodModeTool() {
     }
   };
 
-  const handleActivateLicense = () => {
-    if (licenseKeyInput.trim().length > 6) {
-      localStorage.setItem('zoth_studio_pro_license', 'active');
-      setIsProLicensed(true);
-      setShowPaywallModal(false);
-    }
-  };
-
   // ---------------------------------------------------------------------------
   // Execute Real In-Browser Mock Matching Engine
   // ---------------------------------------------------------------------------

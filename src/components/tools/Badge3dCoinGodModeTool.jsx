@@ -514,11 +514,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
   const realityAccent = activeTheme?.accent || '#D4AF37';
   const realityBot = activeTheme?.bot || { name: 'AURUM-IX', title: '24K Sovereign Archon' };
 
-  // License State
-  const [isLicensed, setIsLicensed] = useState(true);
-  const [licenseModalOpen, setLicenseModalOpen] = useState(false);
-  const [licenseKeyInput, setLicenseKeyInput] = useState('');
-  const [licenseStatusMsg, setLicenseStatusMsg] = useState('');
+  // Open-access mode (all 3D CNC & STL export features unlocked by default)
 
   // Audio Feedback State
   const [audioEnabled, setAudioEnabled] = useState(true);
@@ -551,39 +547,6 @@ export default function Badge3dCoinGodModeTool({ tool }) {
   const coinGroupRef = useRef(null);
   const animFrameIdRef = useRef(null);
   const fallbackCanvasRef = useRef(null);
-
-  // License detection
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const paramLicensed = urlParams.get('licensed') === 'true' || urlParams.get('session_id') !== null;
-    const localLicensed = localStorage.getItem('pro_licensed') === 'true' ||
-                          localStorage.getItem('badge3d_pro_licensed') === 'true';
-
-    if (paramLicensed || localLicensed) {
-      setIsLicensed(true);
-      if (paramLicensed) {
-        localStorage.setItem('badge3d_pro_licensed', 'true');
-        localStorage.setItem('pro_licensed', 'true');
-      }
-    }
-  }, []);
-
-  const handleActivateLicense = () => {
-    const clean = licenseKeyInput.trim();
-    if (clean.length >= 4 || clean.toUpperCase().includes('COIN') || clean.toUpperCase().includes('PRO') || clean.includes('@')) {
-      setIsLicensed(true);
-      localStorage.setItem('badge3d_pro_licensed', 'true');
-      localStorage.setItem('pro_licensed', 'true');
-      playClink(audioEnabled, 1400);
-      setLicenseStatusMsg('⭐ License successfully activated! All 3D CNC & STL features unlocked.');
-      setTimeout(() => {
-        setLicenseModalOpen(false);
-        setLicenseStatusMsg('');
-      }, 1200);
-    } else {
-      setLicenseStatusMsg('Everything is already free. No key needed.');
-    }
-  };
 
   // Re-sync material when Reality theme shifts if default
   useEffect(() => {
@@ -1304,11 +1267,11 @@ export default function Badge3dCoinGodModeTool({ tool }) {
                 Relief Coin & Medallion Parameters
               </Typography>
               <Chip
-                label={isLicensed ? '✦ 100% FREE & OPEN ACCESS' : 'FREE & OPEN ACCESS'}
+                label="✦ 100% FREE & OPEN ACCESS"
                 size="small"
                 sx={{
-                  bgcolor: isLicensed ? 'rgba(16,185,129,0.15)' : 'rgba(212,175,55,0.15)',
-                  color: isLicensed ? '#10B981' : realityAccent,
+                  bgcolor: 'rgba(16,185,129,0.15)',
+                  color: '#10B981',
                   fontWeight: 800,
                   fontSize: '0.68rem',
                   fontFamily: mono
@@ -1507,74 +1470,6 @@ export default function Badge3dCoinGodModeTool({ tool }) {
           </Paper>
         </Grid>
       </Grid>
-
-      {/* --------------------------------------------------------------------- */}
-      {/* LICENSE ACTIVATION DIALOG                                             */}
-      {/* --------------------------------------------------------------------- */}
-      <Dialog
-        open={licenseModalOpen}
-        onClose={() => setLicenseModalOpen(false)}
-        maxWidth="xs"
-        fullWidth
-        PaperProps={{
-          sx: {
-            bgcolor: isDark ? '#0D0D12' : '#FFFFFF',
-            border: `1px solid ${realityAccent}66`,
-            borderRadius: 3,
-            p: 1,
-          },
-        }}
-      >
-        <DialogTitle sx={{ fontWeight: 800, fontFamily: mono, display: 'flex', alignItems: 'center', gap: 1 }}>
-          <VpnKeyIcon sx={{ color: realityAccent }} />
-          100% Open Access
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Everything is already unlocked and free to use. Tips are optional and unlock nothing extra.
-          </Typography>
-          <TextField
-            fullWidth
-            autoFocus
-            size="small"
-            placeholder="e.g. COIN-PRO-XXXX or receipt email"
-            value={licenseKeyInput}
-            onChange={(e) => setLicenseKeyInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') handleActivateLicense();
-            }}
-            InputProps={{
-              sx: { fontFamily: mono, fontSize: '0.88rem' }
-            }}
-          />
-          {licenseStatusMsg && (
-            <Alert
-              severity={licenseStatusMsg.includes('⭐') ? 'success' : 'warning'}
-              sx={{ mt: 2, fontFamily: mono, fontSize: '0.78rem' }}
-            >
-              {licenseStatusMsg}
-            </Alert>
-          )}
-        </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <Button onClick={() => setLicenseModalOpen(false)} sx={{ color: 'text.secondary', fontFamily: mono }}>
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleActivateLicense}
-            sx={{
-              bgcolor: realityAccent,
-              color: '#08080B',
-              fontWeight: 800,
-              fontFamily: mono,
-              '&:hover': { bgcolor: '#F5E6AB' },
-            }}
-          >
-            Activate Now
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }
