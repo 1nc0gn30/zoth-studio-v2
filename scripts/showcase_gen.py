@@ -619,6 +619,14 @@ PILLS = {
         "Multi-agent dynamics you can observe and reason about, not just prompt.",
         "AI & simulation",
     ),
+    "zoth-egregore": (
+        "One model, 3,456 co-prime cognitive lenses.",
+        ["Start the OpenAI-compatible inference proxy on :8147",
+         "Run a deliberation across co-prime cognitive lenses over DeepSeek-Flash or Hermes",
+         "Watch Beta-posterior Adaptive-Consistency stop early once consensus converges"],
+        "Collective-intelligence inference with zero external dependencies, drop-in for any OpenAI client.",
+        "AI engineers & swarm builders",
+    ),
     "zoth-math-pillar": (
         "Four pillars of live security telemetry.",
         ["Walk L0 kernel through L3 agent runtime",

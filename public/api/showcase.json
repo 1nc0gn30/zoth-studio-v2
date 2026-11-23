@@ -1,19 +1,19 @@
 {
   "schema": "zoth/showcase-plan/v1",
-  "generated_at": "2026-11-23T18:24:20Z",
+  "generated_at": "2026-11-23T18:50:04Z",
   "source_registry": "public/api/tools.json",
   "source_registry_schema": "zoth/tools-static/v1",
   "series": "Zoth Pills",
   "pill_seconds": 75,
   "cadence_per_week": 5,
-  "total_pills": 82,
+  "total_pills": 83,
   "weeks": 17,
   "seasons": [
     {
       "code": "S1",
       "title": "Sovereign Core",
       "blurb": "The operating system layer: the swarm, the memory, the telemetry, and the distros everything else runs on.",
-      "pills": 15
+      "pills": 16
     },
     {
       "code": "S2",
@@ -34,7 +34,7 @@
       "pills": 26
     }
   ],
-  "curated": 82,
+  "curated": 83,
   "fallbacks": [],
   "plan": [
     {
@@ -276,6 +276,32 @@
       "pill": "Zoth Pill-010",
       "season": "S1",
       "season_title": "Sovereign Core",
+      "id": "zoth-egregore",
+      "name": "Zoth Egregore",
+      "category": "Swarm & Core",
+      "execution_type": "local_cli",
+      "version": "0.1.0-beta",
+      "studio_url": "https://zoth.nullai.tech/tools/zoth-egregore/",
+      "local_url": "http://127.0.0.1:8147",
+      "port": 8147,
+      "github": "https://github.com/1nc0gn30/zoth-egregore",
+      "duration_s": 75,
+      "hook": "One model, 3,456 co-prime cognitive lenses.",
+      "beats": [
+        "Start the OpenAI-compatible inference proxy on :8147",
+        "Run a deliberation across co-prime cognitive lenses over DeepSeek-Flash or Hermes",
+        "Watch Beta-posterior Adaptive-Consistency stop early once consensus converges"
+      ],
+      "why": "Collective-intelligence inference with zero external dependencies, drop-in for any OpenAI client.",
+      "audience": "AI engineers & swarm builders",
+      "capture_route": "record local CLI/daemon at http://127.0.0.1:8147",
+      "x_copy": "One model, 3,456 co-prime cognitive lenses.\n\nCollective-intelligence inference with zero external dependencies, drop-in for any OpenAI client.\n\nhttps://zoth.nullai.tech/tools/zoth-egregore/\n100% local, zero telemetry, free.\n#ZothSwarm #ZothStudio #ZothPills"
+    },
+    {
+      "episode": 11,
+      "pill": "Zoth Pill-011",
+      "season": "S1",
+      "season_title": "Sovereign Core",
       "id": "zoth-obsidian-tracker",
       "name": "Zoth Obsidian Tracker",
       "category": "Swarm & Core",
@@ -298,8 +324,8 @@
       "x_copy": "A 78-tool verification matrix, live.\n\nEcosystem status without maintaining a spreadsheet by hand.\n\nhttps://zoth.nullai.tech/tools/zoth-obsidian-tracker/\n100% local, zero telemetry, free.\n#ZothSwarm #ZothStudio #ZothPills"
     },
     {
-      "episode": 11,
-      "pill": "Zoth Pill-011",
+      "episode": 12,
+      "pill": "Zoth Pill-012",
       "season": "S1",
       "season_title": "Sovereign Core",
       "id": "zoth-os",
@@ -324,8 +350,8 @@
       "x_copy": "A sovereign AI distro that actually boots.\n\nKali and Parrot parity without the cloud dependency.\n\nhttps://zoth.nullai.tech/tools/zoth-os/\n100% local, zero telemetry, free.\n#ZothSwarm #ZothStudio #ZothPills"
     },
     {
-      "episode": 12,
-      "pill": "Zoth Pill-012",
+      "episode": 13,
+      "pill": "Zoth Pill-013",
       "season": "S1",
       "season_title": "Sovereign Core",
       "id": "zoth-relay",
@@ -350,8 +376,8 @@
       "x_copy": "Many agents, one machine, per-agent tokens.\n\nLets a swarm share one ZothOS box without any agent inheriting the others' authority.\n\nhttps://zoth.nullai.tech/tools/zoth-relay/\n100% local, zero telemetry, free.\n#ZothSwarm #ZothStudio #ZothPills"
     },
     {
-      "episode": 13,
-      "pill": "Zoth Pill-013",
+      "episode": 14,
+      "pill": "Zoth Pill-014",
       "season": "S1",
       "season_title": "Sovereign Core",
       "id": "zoth-x-connector",
@@ -376,8 +402,8 @@
       "x_copy": "Run X automation from your own machine.\n\nOwn your X automation instead of renting a SaaS scheduler.\n\nhttps://zoth.nullai.tech/tools/zoth-x-connector/\n100% local, zero telemetry, free.\n#ZothSwarm #ZothStudio #ZothPills"
     },
     {
-      "episode": 14,
-      "pill": "Zoth Pill-014",
+      "episode": 15,
+      "pill": "Zoth Pill-015",
       "season": "S1",
       "season_title": "Sovereign Core",
       "id": "zothnet",
@@ -402,8 +428,8 @@
       "x_copy": "A darknet mesh with no DNS at all.\n\nTransport built on the assumption that the network is hostile.\n\nhttps://zoth.nullai.tech/tools/zothnet/\n100% local, zero telemetry, free.\n#ZothSwarm #ZothStudio #ZothPills"
     },
     {
-      "episode": 15,
-      "pill": "Zoth Pill-015",
+      "episode": 16,
+      "pill": "Zoth Pill-016",
       "season": "S1",
       "season_title": "Sovereign Core",
       "id": "aether-observatory",
@@ -428,8 +454,8 @@
       "x_copy": "Every port, daemon and thermal zone as a 60fps orbit.\n\nYou can read a whole machine's state at a glance and rewind to the minute it changed.\n\nhttps://zoth.nullai.tech/tools/aether-observatory/\n100% local, zero telemetry, free.\n#Observability #ZothStudio #ZothPills"
     },
     {
-      "episode": 16,
-      "pill": "Zoth Pill-016",
+      "episode": 17,
+      "pill": "Zoth Pill-017",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "agent-flight-recorder",
@@ -454,8 +480,8 @@
       "x_copy": "A black box for agents: rewind the whole incident.\n\nPost-incident forensics for when an agent does something inexplicable.\n\nhttps://zoth.nullai.tech/tools/agent-flight-recorder/\n100% local, zero telemetry, free.\n#DFIR #ZothStudio #ZothPills"
     },
     {
-      "episode": 17,
-      "pill": "Zoth Pill-017",
+      "episode": 18,
+      "pill": "Zoth Pill-018",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "agent-capsule-jail",
@@ -480,8 +506,8 @@
       "x_copy": "An untrusted agent, sealed inside a kernel enclave.\n\nRun third-party agents behind a hard boundary that also refuses to leak secrets.\n\nhttps://zoth.nullai.tech/tools/agent-capsule-jail/\n100% local, zero telemetry, free.\n#AppSec #ZothStudio #ZothPills"
     },
     {
-      "episode": 18,
-      "pill": "Zoth Pill-018",
+      "episode": 19,
+      "pill": "Zoth Pill-019",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "agent-policy-auditor",
@@ -506,8 +532,8 @@
       "x_copy": "What can your agent actually do? Prove it.\n\nCapability governance for agents that are already in production.\n\nhttps://zoth.nullai.tech/tools/agent-policy-auditor/\n100% local, zero telemetry, free.\n#AppSec #ZothStudio #ZothPills"
     },
     {
-      "episode": 19,
-      "pill": "Zoth Pill-019",
+      "episode": 20,
+      "pill": "Zoth Pill-020",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "ghidra-mcp-bridge",
@@ -532,8 +558,8 @@
       "x_copy": "Let an agent read the decompiler.\n\nBinary reverse engineering with agent leverage instead of manual clicking.\n\nhttps://zoth.nullai.tech/tools/ghidra-mcp-bridge/\n100% local, zero telemetry, free.\n#AppSec #ZothStudio #ZothPills"
     },
     {
-      "episode": 20,
-      "pill": "Zoth Pill-020",
+      "episode": 21,
+      "pill": "Zoth Pill-021",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "shodan-surface-sentinel",
@@ -558,8 +584,8 @@
       "x_copy": "Your own exposures, audited defensively.\n\nYou cannot patch what you cannot see, and you cannot see it from inside.\n\nhttps://zoth.nullai.tech/tools/shodan-surface-sentinel/\n100% local, zero telemetry, free.\n#AppSec #ZothStudio #ZothPills"
     },
     {
-      "episode": 21,
-      "pill": "Zoth Pill-021",
+      "episode": 22,
+      "pill": "Zoth Pill-022",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "zoth-bounty",
@@ -584,8 +610,8 @@
       "x_copy": "Disclosure tracking with zero false positives.\n\nResponsible disclosure needs a pipeline, not a spreadsheet.\n\nhttps://zoth.nullai.tech/tools/zoth-bounty/\n100% local, zero telemetry, free.\n#AppSec #ZothStudio #ZothPills"
     },
     {
-      "episode": 22,
-      "pill": "Zoth Pill-022",
+      "episode": 23,
+      "pill": "Zoth Pill-023",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "zoth-math-pillar",
@@ -610,8 +636,8 @@
       "x_copy": "Four pillars of live security telemetry.\n\nMachine truth in a single always-visible HUD.\n\nhttps://zoth.nullai.tech/tools/zoth-math-pillar/\n100% local, zero telemetry, free.\n#AppSec #ZothStudio #ZothPills"
     },
     {
-      "episode": 23,
-      "pill": "Zoth Pill-023",
+      "episode": 24,
+      "pill": "Zoth Pill-024",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "agent-budget-sentinel",
@@ -636,8 +662,8 @@
       "x_copy": "Kill the runaway agent at the dollar, not the invoice.\n\nStops agents from burning money silently between deploys.\n\nhttps://zoth.nullai.tech/tools/agent-budget-sentinel/\n100% local, zero telemetry, free.\n#Egress #ZothStudio #ZothPills"
     },
     {
-      "episode": 24,
-      "pill": "Zoth Pill-024",
+      "episode": 25,
+      "pill": "Zoth Pill-025",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "agent-egress-sentinel",
@@ -662,8 +688,8 @@
       "x_copy": "Catch the phone-home before it leaves the box.\n\nEgress is the last honest signal that an agent went rogue.\n\nhttps://zoth.nullai.tech/tools/agent-egress-sentinel/\n100% local, zero telemetry, free.\n#Egress #ZothStudio #ZothPills"
     },
     {
-      "episode": 25,
-      "pill": "Zoth Pill-025",
+      "episode": 26,
+      "pill": "Zoth Pill-026",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "agent-prompt-firewall",
@@ -688,8 +714,8 @@
       "x_copy": "Prompt injection dies at the edge.\n\nInline defense for LLM apps with zero token leak.\n\nhttps://zoth.nullai.tech/tools/agent-prompt-firewall/\n100% local, zero telemetry, free.\n#Egress #ZothStudio #ZothPills"
     },
     {
-      "episode": 26,
-      "pill": "Zoth Pill-026",
+      "episode": 27,
+      "pill": "Zoth Pill-027",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "anderson-security-sentinel",
@@ -714,8 +740,8 @@
       "x_copy": "Your laptop grows a perimeter.\n\nPhysical-layer awareness for a machine that travels between networks.\n\nhttps://zoth.nullai.tech/tools/anderson-security-sentinel/\n100% local, zero telemetry, free.\n#OpSec #ZothStudio #ZothPills"
     },
     {
-      "episode": 27,
-      "pill": "Zoth Pill-027",
+      "episode": 28,
+      "pill": "Zoth Pill-028",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "audiocipher-stego-engine",
@@ -740,8 +766,8 @@
       "x_copy": "Air-gap comms, carried by sound.\n\nMove data across an air gap with no network path at all.\n\nhttps://zoth.nullai.tech/tools/audiocipher-stego-engine/\n100% local, zero telemetry, free.\n#OpSec #ZothStudio #ZothPills"
     },
     {
-      "episode": 28,
-      "pill": "Zoth Pill-028",
+      "episode": 29,
+      "pill": "Zoth Pill-029",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "agent-gods-eye",
@@ -766,8 +792,8 @@
       "x_copy": "Planet-scale attack surface, in 3D, fully offline.\n\nScope an engagement's public surface in minutes instead of tabs.\n\nhttps://zoth.nullai.tech/tools/agent-gods-eye/\n100% local, zero telemetry, free.\n#Recon #ZothStudio #ZothPills"
     },
     {
-      "episode": 29,
-      "pill": "Zoth Pill-029",
+      "episode": 30,
+      "pill": "Zoth Pill-030",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "osint-scout-skill",
@@ -792,8 +818,8 @@
       "x_copy": "A domain's whole history, from Certificate Transparency.\n\nPassive reconnaissance before you touch a single packet at the target.\n\nhttps://zoth.nullai.tech/tools/osint-scout-skill/\n100% local, zero telemetry, free.\n#Recon #ZothStudio #ZothPills"
     },
     {
-      "episode": 30,
-      "pill": "Zoth Pill-030",
+      "episode": 31,
+      "pill": "Zoth Pill-031",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "envguard-secrets-vault",
@@ -818,8 +844,8 @@
       "x_copy": "Secrets that never touch a cloud.\n\nHardware vault plus quorum release, so no single machine holds the key.\n\nhttps://zoth.nullai.tech/tools/envguard-secrets-vault/\n100% local, zero telemetry, free.\n#Recon #ZothStudio #ZothPills"
     },
     {
-      "episode": 31,
-      "pill": "Zoth Pill-031",
+      "episode": 32,
+      "pill": "Zoth Pill-032",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "hexstrike-arsenal",
@@ -844,8 +870,8 @@
       "x_copy": "The audit suite that lives on your own box.\n\nScoped offensive tooling that never leaves the machine.\n\nhttps://zoth.nullai.tech/tools/hexstrike-arsenal/\n100% local, zero telemetry, free.\n#Recon #ZothStudio #ZothPills"
     },
     {
-      "episode": 32,
-      "pill": "Zoth Pill-032",
+      "episode": 33,
+      "pill": "Zoth Pill-033",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "jwt-inspector-guard",
@@ -870,8 +896,8 @@
       "x_copy": "Decode, verify, then try to break your own JWT.\n\nAuth bugs found on your desk instead of in production.\n\nhttps://zoth.nullai.tech/tools/jwt-inspector-guard/\n100% local, zero telemetry, free.\n#Recon #ZothStudio #ZothPills"
     },
     {
-      "episode": 33,
-      "pill": "Zoth Pill-033",
+      "episode": 34,
+      "pill": "Zoth Pill-034",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "payload-entropy-studio",
@@ -896,8 +922,8 @@
       "x_copy": "Entropy reveals the payload.\n\nDeobfuscation and defensive rules derived from one sample, client-side.\n\nhttps://zoth.nullai.tech/tools/payload-entropy-studio/\n100% local, zero telemetry, free.\n#Recon #ZothStudio #ZothPills"
     },
     {
-      "episode": 34,
-      "pill": "Zoth Pill-034",
+      "episode": 35,
+      "pill": "Zoth Pill-035",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "subsweep-lead-scanner",
@@ -922,8 +948,8 @@
       "x_copy": "Find the companies worth pitching, before you pitch.\n\nLead intelligence built only from public data, with zero cloud egress.\n\nhttps://zoth.nullai.tech/tools/subsweep-lead-scanner/\n100% local, zero telemetry, free.\n#Recon #ZothStudio #ZothPills"
     },
     {
-      "episode": 35,
-      "pill": "Zoth Pill-035",
+      "episode": 36,
+      "pill": "Zoth Pill-036",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "web-security-guard",
@@ -948,8 +974,8 @@
       "x_copy": "Headers, TLS and CSP in one audit.\n\nThe cheapest wins against entire classes of web vulnerabilities.\n\nhttps://zoth.nullai.tech/tools/web-security-guard/\n100% local, zero telemetry, free.\n#Recon #ZothStudio #ZothPills"
     },
     {
-      "episode": 36,
-      "pill": "Zoth Pill-036",
+      "episode": 37,
+      "pill": "Zoth Pill-037",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "yara-sigma-forge",
@@ -974,8 +1000,8 @@
       "x_copy": "Detection rules from a sample, client-side.\n\nDetection engineering without uploading a single sample anywhere.\n\nhttps://zoth.nullai.tech/tools/yara-sigma-forge/\n100% local, zero telemetry, free.\n#Recon #ZothStudio #ZothPills"
     },
     {
-      "episode": 37,
-      "pill": "Zoth Pill-037",
+      "episode": 38,
+      "pill": "Zoth Pill-038",
       "season": "S2",
       "season_title": "Security Theatre",
       "id": "zoth-osint",
@@ -1000,8 +1026,8 @@
       "x_copy": "Ten OSINT modules inside one investigation.\n\nCovers the whole arc from collection to finished intelligence product.\n\nhttps://zoth.nullai.tech/tools/zoth-osint/\n100% local, zero telemetry, free.\n#Recon #ZothStudio #ZothPills"
     },
     {
-      "episode": 38,
-      "pill": "Zoth Pill-038",
+      "episode": 39,
+      "pill": "Zoth Pill-039",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "certpath-roadmap-studio",
@@ -1026,8 +1052,8 @@
       "x_copy": "137 certifications, solved as one dependency graph.\n\nCareer pathing as a graph instead of guesswork and forum threads.\n\nhttps://zoth.nullai.tech/tools/certpath-roadmap-studio/\n100% local, zero telemetry, free.\n#DevOps #ZothStudio #ZothPills"
     },
     {
-      "episode": 39,
-      "pill": "Zoth Pill-039",
+      "episode": 40,
+      "pill": "Zoth Pill-040",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "cron-rhythm-studio",
@@ -1052,8 +1078,8 @@
       "x_copy": "Cron you can finally see.\n\nSchedule bugs stay invisible until they fire in production.\n\nhttps://zoth.nullai.tech/tools/cron-rhythm-studio/\n100% local, zero telemetry, free.\n#DevOps #ZothStudio #ZothPills"
     },
     {
-      "episode": 40,
-      "pill": "Zoth Pill-040",
+      "episode": 41,
+      "pill": "Zoth Pill-041",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "omnipost-social-engine",
@@ -1078,8 +1104,8 @@
       "x_copy": "One draft, every platform's native format.\n\nWriting is only a fifth of the real cost of posting everywhere.\n\nhttps://zoth.nullai.tech/tools/omnipost-social-engine/\n100% local, zero telemetry, free.\n#DevOps #ZothStudio #ZothPills"
     },
     {
-      "episode": 41,
-      "pill": "Zoth Pill-041",
+      "episode": 42,
+      "pill": "Zoth Pill-042",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "regex-droid-builder",
@@ -1104,8 +1130,8 @@
       "x_copy": "Regex you can see \u2014 and that will not ReDoS.\n\nRegex is where production outages hide in plain sight.\n\nhttps://zoth.nullai.tech/tools/regex-droid-builder/\n100% local, zero telemetry, free.\n#DevOps #ZothStudio #ZothPills"
     },
     {
-      "episode": 42,
-      "pill": "Zoth Pill-042",
+      "episode": 43,
+      "pill": "Zoth Pill-043",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "digital-asset-forge",
@@ -1130,8 +1156,8 @@
       "x_copy": "A 300 DPI wall art pack in a single pass.\n\nDigital downloads are the highest-margin product a seller can ship.\n\nhttps://zoth.nullai.tech/tools/digital-asset-forge/\n100% local, zero telemetry, free.\n#POD #ZothStudio #ZothPills"
     },
     {
-      "episode": 43,
-      "pill": "Zoth Pill-043",
+      "episode": 44,
+      "pill": "Zoth Pill-044",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "etsy-connector",
@@ -1156,8 +1182,8 @@
       "x_copy": "Etsy Open API v3, straight from the studio.\n\nRemoves the spreadsheet glue from day-to-day Etsy operations.\n\nhttps://zoth.nullai.tech/tools/etsy-connector/\n100% local, zero telemetry, free.\n#POD #ZothStudio #ZothPills"
     },
     {
-      "episode": 44,
-      "pill": "Zoth Pill-044",
+      "episode": 45,
+      "pill": "Zoth Pill-045",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "gelato-connector",
@@ -1182,8 +1208,8 @@
       "x_copy": "32 countries, cheapest print route wins.\n\nPrint routing is a margin problem before it is a logistics problem.\n\nhttps://zoth.nullai.tech/tools/gelato-connector/\n100% local, zero telemetry, free.\n#POD #ZothStudio #ZothPills"
     },
     {
-      "episode": 45,
-      "pill": "Zoth Pill-045",
+      "episode": 46,
+      "pill": "Zoth Pill-046",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "pod-margin-sentinel",
@@ -1208,8 +1234,8 @@
       "x_copy": "Real profit per SKU, with 2026 fees included.\n\nPrices set by guessing are the fastest way to lose money on volume.\n\nhttps://zoth.nullai.tech/tools/pod-margin-sentinel/\n100% local, zero telemetry, free.\n#POD #ZothStudio #ZothPills"
     },
     {
-      "episode": 46,
-      "pill": "Zoth Pill-046",
+      "episode": 47,
+      "pill": "Zoth Pill-047",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "pod-mockup-forge",
@@ -1234,8 +1260,8 @@
       "x_copy": "Photorealistic mockups at 60fps.\n\nThe listing photo decides the click, and the click decides everything.\n\nhttps://zoth.nullai.tech/tools/pod-mockup-forge/\n100% local, zero telemetry, free.\n#POD #ZothStudio #ZothPills"
     },
     {
-      "episode": 47,
-      "pill": "Zoth Pill-047",
+      "episode": 48,
+      "pill": "Zoth Pill-048",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "pod-smart-router",
@@ -1260,8 +1286,8 @@
       "x_copy": "Printify or Gelato? Let landed cost decide.\n\nEvery routing decision is pure margin, made thousands of times.\n\nhttps://zoth.nullai.tech/tools/pod-smart-router/\n100% local, zero telemetry, free.\n#POD #ZothStudio #ZothPills"
     },
     {
-      "episode": 48,
-      "pill": "Zoth Pill-048",
+      "episode": 49,
+      "pill": "Zoth Pill-049",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "printify-connector",
@@ -1286,8 +1312,8 @@
       "x_copy": "Printify operations without the spreadsheet.\n\nFewer rejected prints and better margins from the same catalog.\n\nhttps://zoth.nullai.tech/tools/printify-connector/\n100% local, zero telemetry, free.\n#POD #ZothStudio #ZothPills"
     },
     {
-      "episode": 49,
-      "pill": "Zoth Pill-049",
+      "episode": 50,
+      "pill": "Zoth Pill-050",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "shopify-connector",
@@ -1312,8 +1338,8 @@
       "x_copy": "Etsy listing to Shopify in one click.\n\nMulti-channel selling without re-entering every product by hand.\n\nhttps://zoth.nullai.tech/tools/shopify-connector/\n100% local, zero telemetry, free.\n#POD #ZothStudio #ZothPills"
     },
     {
-      "episode": 50,
-      "pill": "Zoth Pill-050",
+      "episode": 51,
+      "pill": "Zoth Pill-051",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "etsy-pod-forge",
@@ -1338,8 +1364,8 @@
       "x_copy": "From idea to live listing in one pass.\n\nPOD listings without hiring a designer or a copywriter.\n\nhttps://zoth.nullai.tech/tools/etsy-pod-forge/\n100% local, zero telemetry, free.\n#PrintOnDemand #ZothStudio #ZothPills"
     },
     {
-      "episode": 51,
-      "pill": "Zoth Pill-051",
+      "episode": 52,
+      "pill": "Zoth Pill-052",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "producthunt-connector",
@@ -1364,8 +1390,8 @@
       "x_copy": "Launch day, tracked from your own machine.\n\nLaunch telemetry without handing an API token to a third-party dashboard.\n\nhttps://zoth.nullai.tech/tools/producthunt-connector/\n100% local, zero telemetry, free.\n#PrintOnDemand #ZothStudio #ZothPills"
     },
     {
-      "episode": 52,
-      "pill": "Zoth Pill-052",
+      "episode": 53,
+      "pill": "Zoth Pill-053",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "storefront-catalog",
@@ -1390,8 +1416,8 @@
       "x_copy": "Ten products, 62.6% blended margin.\n\nA POD catalog you can actually start, not a theory about one.\n\nhttps://zoth.nullai.tech/tools/storefront-catalog/\n100% local, zero telemetry, free.\n#PrintOnDemand #ZothStudio #ZothPills"
     },
     {
-      "episode": 53,
-      "pill": "Zoth Pill-053",
+      "episode": 54,
+      "pill": "Zoth Pill-054",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "creatorplaybooks",
@@ -1416,8 +1442,8 @@
       "x_copy": "The playbooks top operators actually run.\n\nCurated operator knowledge that keeps working offline.\n\nhttps://zoth.nullai.tech/tools/creatorplaybooks/\n100% local, zero telemetry, free.\n#Learning #ZothStudio #ZothPills"
     },
     {
-      "episode": 54,
-      "pill": "Zoth Pill-054",
+      "episode": 55,
+      "pill": "Zoth Pill-055",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "city-desk",
@@ -1442,8 +1468,8 @@
       "x_copy": "One thousand local pages from one studio.\n\nLocal SEO at scale, for trades that live on 'near me' searches.\n\nhttps://zoth.nullai.tech/tools/city-desk/\n100% local, zero telemetry, free.\n#LocalSEO #ZothStudio #ZothPills"
     },
     {
-      "episode": 55,
-      "pill": "Zoth Pill-055",
+      "episode": 56,
+      "pill": "Zoth Pill-056",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "robots-txt-auditor",
@@ -1468,8 +1494,8 @@
       "x_copy": "What can GPTBot actually read from your site?\n\nAI crawler policy became a business decision, not a footnote.\n\nhttps://zoth.nullai.tech/tools/robots-txt-auditor/\n100% local, zero telemetry, free.\n#LocalSEO #ZothStudio #ZothPills"
     },
     {
-      "episode": 56,
-      "pill": "Zoth Pill-056",
+      "episode": 57,
+      "pill": "Zoth Pill-057",
       "season": "S3",
       "season_title": "Shop & Sell",
       "id": "adytum-alchemist-ai-workflow",
@@ -1494,8 +1520,8 @@
       "x_copy": "22 keys, five minutes, one local model gate.\n\nTurns a fuzzy intention into a gated, testable plan without a cloud round-trip.\n\nhttps://zoth.nullai.tech/tools/adytum-alchemist-ai-workflow/\n100% local, zero telemetry, free.\n#DeepWork #ZothStudio #ZothPills"
     },
     {
-      "episode": 57,
-      "pill": "Zoth Pill-057",
+      "episode": 58,
+      "pill": "Zoth Pill-058",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "deepsearch-research-agent",
@@ -1520,8 +1546,8 @@
       "x_copy": "Deep research with citations you can click.\n\nResearch you can defend line by line, not a summary you have to trust.\n\nhttps://zoth.nullai.tech/tools/deepsearch-research-agent/\n100% local, zero telemetry, free.\n#AI #ZothStudio #ZothPills"
     },
     {
-      "episode": 58,
-      "pill": "Zoth Pill-058",
+      "episode": 59,
+      "pill": "Zoth Pill-059",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "promptmaster-studio",
@@ -1546,8 +1572,8 @@
       "x_copy": "Prompts with unit tests.\n\nPrompt quality is engineering, and it should be measurable.\n\nhttps://zoth.nullai.tech/tools/promptmaster-studio/\n100% local, zero telemetry, free.\n#AI #ZothStudio #ZothPills"
     },
     {
-      "episode": 59,
-      "pill": "Zoth Pill-059",
+      "episode": 60,
+      "pill": "Zoth Pill-060",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "webmcp-protocol-inspector",
@@ -1572,8 +1598,8 @@
       "x_copy": "MCP JSON-RPC, inspected live.\n\nSee the protocol instead of guessing at it from a client library.\n\nhttps://zoth.nullai.tech/tools/webmcp-protocol-inspector/\n100% local, zero telemetry, free.\n#AI #ZothStudio #ZothPills"
     },
     {
-      "episode": 60,
-      "pill": "Zoth Pill-060",
+      "episode": 61,
+      "pill": "Zoth Pill-061",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "wcag-contrast-guard",
@@ -1598,8 +1624,8 @@
       "x_copy": "Ship contrast that passes both AA and APCA.\n\nAccessibility is legal exposure and, more often, plain quality.\n\nhttps://zoth.nullai.tech/tools/wcag-contrast-guard/\n100% local, zero telemetry, free.\n#A11y #ZothStudio #ZothPills"
     },
     {
-      "episode": 61,
-      "pill": "Zoth Pill-061",
+      "episode": 62,
+      "pill": "Zoth Pill-062",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "aeo-graph-engine",
@@ -1624,8 +1650,8 @@
       "x_copy": "Your site ranks in ChatGPT only if the @graph is right.\n\nAnswer-engine visibility is replacing blue links; this writes the graph the LLM crawlers actually read.\n\nhttps://zoth.nullai.tech/tools/aeo-graph-engine/\n100% local, zero telemetry, free.\n#WebDev #ZothStudio #ZothPills"
     },
     {
-      "episode": 62,
-      "pill": "Zoth Pill-062",
+      "episode": 63,
+      "pill": "Zoth Pill-063",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "cwv-speed-engine",
@@ -1650,8 +1676,8 @@
       "x_copy": "Core Web Vitals, diagnosed and fixed in the browser.\n\nSpeed is ranking and revenue, and it is fixable without a build pipeline.\n\nhttps://zoth.nullai.tech/tools/cwv-speed-engine/\n100% local, zero telemetry, free.\n#WebDev #ZothStudio #ZothPills"
     },
     {
-      "episode": 63,
-      "pill": "Zoth Pill-063",
+      "episode": 64,
+      "pill": "Zoth Pill-064",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "polyglot-framework-exporter",
@@ -1676,8 +1702,8 @@
       "x_copy": "One project, thirteen frameworks.\n\nMigration and prototyping without rewriting anything by hand.\n\nhttps://zoth.nullai.tech/tools/polyglot-framework-exporter/\n100% local, zero telemetry, free.\n#WebDev #ZothStudio #ZothPills"
     },
     {
-      "episode": 64,
-      "pill": "Zoth Pill-064",
+      "episode": 65,
+      "pill": "Zoth Pill-065",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "pwa-manifest-builder",
@@ -1702,8 +1728,8 @@
       "x_copy": "An installable app in one session.\n\nPWA fundamentals are still done wrong on most sites.\n\nhttps://zoth.nullai.tech/tools/pwa-manifest-builder/\n100% local, zero telemetry, free.\n#WebDev #ZothStudio #ZothPills"
     },
     {
-      "episode": 65,
-      "pill": "Zoth Pill-065",
+      "episode": 66,
+      "pill": "Zoth Pill-066",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "schema-illustrator-studio",
@@ -1728,8 +1754,8 @@
       "x_copy": "Draw the database, get the code.\n\nSchema drift starts at the whiteboard, so fix it there.\n\nhttps://zoth.nullai.tech/tools/schema-illustrator-studio/\n100% local, zero telemetry, free.\n#WebDev #ZothStudio #ZothPills"
     },
     {
-      "episode": 66,
-      "pill": "Zoth Pill-066",
+      "episode": 67,
+      "pill": "Zoth Pill-067",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "zoth-bolt",
@@ -1754,8 +1780,8 @@
       "x_copy": "Full-stack AI builder with 19 providers and local models.\n\nBuild without vendor lock and without handing over cloud keys.\n\nhttps://zoth.nullai.tech/tools/zoth-bolt/\n100% local, zero telemetry, free.\n#WebDev #ZothStudio #ZothPills"
     },
     {
-      "episode": 67,
-      "pill": "Zoth Pill-067",
+      "episode": 68,
+      "pill": "Zoth Pill-068",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "zoth-webgen",
@@ -1780,8 +1806,8 @@
       "x_copy": "Three steps to a live site.\n\nShip a real site in about a minute, on 127.0.0.1:8092.\n\nhttps://zoth.nullai.tech/tools/zoth-webgen/\n100% local, zero telemetry, free.\n#WebDev #ZothStudio #ZothPills"
     },
     {
-      "episode": 68,
-      "pill": "Zoth Pill-068",
+      "episode": 69,
+      "pill": "Zoth Pill-069",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "pixel-cast",
@@ -1806,8 +1832,8 @@
       "x_copy": "Your Pixel as a second screen, without cables.\n\nWireless device control for people who test on real hardware.\n\nhttps://zoth.nullai.tech/tools/pixel-cast/\n100% local, zero telemetry, free.\n#Linux #ZothStudio #ZothPills"
     },
     {
-      "episode": 69,
-      "pill": "Zoth Pill-069",
+      "episode": 70,
+      "pill": "Zoth Pill-070",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "zothos-lite",
@@ -1832,8 +1858,8 @@
       "x_copy": "An amnesic OS where nothing survives the reboot.\n\nTails-style deniability and AI capability in the same live image.\n\nhttps://zoth.nullai.tech/tools/zothos-lite/\n100% local, zero telemetry, free.\n#Linux #ZothStudio #ZothPills"
     },
     {
-      "episode": 70,
-      "pill": "Zoth Pill-070",
+      "episode": 71,
+      "pill": "Zoth Pill-071",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "badge3d-coin-generator",
@@ -1858,8 +1884,8 @@
       "x_copy": "Mint a printable coin in the browser tab.\n\n3D medals and merch with no CAD seat and no upload.\n\nhttps://zoth.nullai.tech/tools/badge3d-coin-generator/\n100% local, zero telemetry, free.\n#CreativeCoding #ZothStudio #ZothPills"
     },
     {
-      "episode": 71,
-      "pill": "Zoth Pill-071",
+      "episode": 72,
+      "pill": "Zoth Pill-072",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "cyber-turtle-studio",
@@ -1884,8 +1910,8 @@
       "x_copy": "Fractals that leave the screen.\n\nGenerative art that becomes a physical object, not just a PNG.\n\nhttps://zoth.nullai.tech/tools/cyber-turtle-studio/\n100% local, zero telemetry, free.\n#CreativeCoding #ZothStudio #ZothPills"
     },
     {
-      "episode": 72,
-      "pill": "Zoth Pill-072",
+      "episode": 73,
+      "pill": "Zoth Pill-073",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "datamosh-glitch-studio",
@@ -1910,8 +1936,8 @@
       "x_copy": "Datamosh real video, inside the tab.\n\nPublishing-grade glitch effects without opening an NLE.\n\nhttps://zoth.nullai.tech/tools/datamosh-glitch-studio/\n100% local, zero telemetry, free.\n#CreativeCoding #ZothStudio #ZothPills"
     },
     {
-      "episode": 73,
-      "pill": "Zoth Pill-073",
+      "episode": 74,
+      "pill": "Zoth Pill-074",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "nexus-3d-scene-studio",
@@ -1936,8 +1962,8 @@
       "x_copy": "Math you can export as STL.\n\nA geometry engine with real mesh export, in a browser tab.\n\nhttps://zoth.nullai.tech/tools/nexus-3d-scene-studio/\n100% local, zero telemetry, free.\n#CreativeCoding #ZothStudio #ZothPills"
     },
     {
-      "episode": 74,
-      "pill": "Zoth Pill-074",
+      "episode": 75,
+      "pill": "Zoth Pill-075",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "ufo-sacred-geometry",
@@ -1962,8 +1988,8 @@
       "x_copy": "Sacred geometry straight to DXF.\n\nDesign to CAD and vector output with no toolchain in between.\n\nhttps://zoth.nullai.tech/tools/ufo-sacred-geometry/\n100% local, zero telemetry, free.\n#CreativeCoding #ZothStudio #ZothPills"
     },
     {
-      "episode": 75,
-      "pill": "Zoth Pill-075",
+      "episode": 76,
+      "pill": "Zoth Pill-076",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "vision-gesture-control",
@@ -1988,8 +2014,8 @@
       "x_copy": "Control the machine with your hands.\n\nTouchless control plus an agent hook, useful far beyond novelty.\n\nhttps://zoth.nullai.tech/tools/vision-gesture-control/\n100% local, zero telemetry, free.\n#CreativeCoding #ZothStudio #ZothPills"
     },
     {
-      "episode": 76,
-      "pill": "Zoth Pill-076",
+      "episode": 77,
+      "pill": "Zoth Pill-077",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "zoth-ascii-magic",
@@ -2014,8 +2040,8 @@
       "x_copy": "Any image, video or mesh, rendered as ASCII.\n\nRetro text art generated from any asset, with sub-pixel braille detail.\n\nhttps://zoth.nullai.tech/tools/zoth-ascii-magic/\n100% local, zero telemetry, free.\n#CreativeCoding #ZothStudio #ZothPills"
     },
     {
-      "episode": 77,
-      "pill": "Zoth Pill-077",
+      "episode": 78,
+      "pill": "Zoth Pill-078",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "reality-shader-forge",
@@ -2040,8 +2066,8 @@
       "x_copy": "Theme your entire desktop from one shader.\n\nOne visual identity carried across every surface you actually look at.\n\nhttps://zoth.nullai.tech/tools/reality-shader-forge/\n100% local, zero telemetry, free.\n#CreativeCoding #ZothStudio #ZothPills"
     },
     {
-      "episode": 78,
-      "pill": "Zoth Pill-078",
+      "episode": 79,
+      "pill": "Zoth Pill-079",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "zoth-scene-foundry",
@@ -2066,8 +2092,8 @@
       "x_copy": "One thousand deterministic ASCII scenes.\n\nProcedural retro scenes that are reproducible seed-for-seed, not random noise.\n\nhttps://zoth.nullai.tech/tools/zoth-scene-foundry/\n100% local, zero telemetry, free.\n#CreativeCoding #ZothStudio #ZothPills"
     },
     {
-      "episode": 79,
-      "pill": "Zoth Pill-079",
+      "episode": 80,
+      "pill": "Zoth Pill-080",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "agent-mock-twin",
@@ -2092,8 +2118,8 @@
       "x_copy": "Your agent's API, replayed for zero tokens.\n\nCI stops costing tokens and stops flaking on third-party APIs.\n\nhttps://zoth.nullai.tech/tools/agent-mock-twin/\n100% local, zero telemetry, free.\n#Testing #ZothStudio #ZothPills"
     },
     {
-      "episode": 80,
-      "pill": "Zoth Pill-080",
+      "episode": 81,
+      "pill": "Zoth Pill-081",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "mcp-lens",
@@ -2118,8 +2144,8 @@
       "x_copy": "See what your MCP server actually says.\n\nMCP debugging is otherwise blind \u2014 this is the wiretap.\n\nhttps://zoth.nullai.tech/tools/mcp-lens/\n100% local, zero telemetry, free.\n#Testing #ZothStudio #ZothPills"
     },
     {
-      "episode": 81,
-      "pill": "Zoth Pill-081",
+      "episode": 82,
+      "pill": "Zoth Pill-082",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "agent-voice-call",
@@ -2144,8 +2170,8 @@
       "x_copy": "A voice agent that keeps zero telemetry.\n\nReal-time voice agents without handing raw audio to a cloud vendor.\n\nhttps://zoth.nullai.tech/tools/agent-voice-call/\n100% local, zero telemetry, free.\n#VoiceAI #ZothStudio #ZothPills"
     },
     {
-      "episode": 82,
-      "pill": "Zoth Pill-082",
+      "episode": 83,
+      "pill": "Zoth Pill-083",
       "season": "S4",
       "season_title": "Build & Broadcast",
       "id": "likeness-desk",

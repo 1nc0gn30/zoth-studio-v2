@@ -78,7 +78,7 @@ In the matrix: `` `A` `` = layer fully satisfied, `^A^` = partially satisfied (s
 `.` = not satisfied. Layer E is measured, not aspirational: every catalog entry was captured
 headlessly (see §8), so a `[E]` cell means a clean capture row exists for that tool.
 
-## 3. Master matrix — all 82 catalog entries
+## 3. Master matrix — all 83 catalog entries
 
 | # | tool id | category | ver | port | exec | A | B | C | D | E |
 |---|---------|----------|-----|------|------|---|---|---|---|---|
@@ -164,6 +164,7 @@ headlessly (see §8), so a `[E]` cell means a clean capture row exists for that 
 | 80 | `zoth-obsidian-tracker` | Swarm & Core | 1.2.0 | `:8151` | local_cli | `A` | `B` | `C` | `D` | `E` |
 | 81 | `zoth-x-connector` | Swarm & Core | 1.0.0 | `:8152` | local_cli | `A` | `B` | `C` | `D` | `E` |
 | 82 | `zoth-memory-vault` | Memory & Brain | 1.0.0 | `:8161` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 83 | `zoth-egregore` | Swarm & Core | 0.1.0-beta | `:8147` | local_cli | `A` | `B` | `C` | `D` | `E` |
 
 ## 4. Layer C — CLI parity detail
 
@@ -361,7 +362,7 @@ Reproduce with `docs/tools/atlas_gen.py` (`helper_drift()`), which scans the sam
 
 ## 5. Port map & collision analysis
 
-- Catalog: **82 entries, 82 distinct ports, 0 collisions** (alias-aware: symlinked aliases
+- Catalog: **83 entries, 83 distinct ports, 0 collisions** (alias-aware: symlinked aliases
   are collapsed to their target before comparison).
 - Historical false alarm: a `:8085` clash between `osint-scout` and `osint-scout-skill` was an
   **alias**, not a conflict. `deepsearch-research-agent`'s wrapper port also changed
@@ -374,6 +375,7 @@ Reproduce with `docs/tools/atlas_gen.py` (`helper_drift()`), which scans the sam
 | `:8094` | Neuro-Memory Daemon |
 | `:8102` | Sovereign Agent Bridge |
 | `:8145` | ZothOS Lite |
+| `:8147` | Zoth Egregore (`zoth-egregore`) |
 | `:8160` | aether-observatory |
 | `:8161` | Chronicle Vault (`zoth-memory-vault`) |
 | `:11434` | Ollama |
