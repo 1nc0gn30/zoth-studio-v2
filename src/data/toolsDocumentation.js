@@ -48,6 +48,47 @@ export const toolsDocumentation = {
       'Battery, charging state, voltage, and thermal temperature telemetry monitor'
     ]
   },
+  'zoth-memory-vault': {
+    whyUse: 'Consolidates every Hermes Agent and AGY session into a single loopback-only SQLite FTS5 ledger so recurring friction, unfinished loops, breakage risks, and high-signal prompt playbooks stay searchable without cloud telemetry.',
+    problemSolved: 'AI sessions scatter across disconnected CLI transcripts and IDE logs, causing agents to repeat the same mistakes, forget parked ideas, and break fragile unfinished work. Chronicle Vault mines those histories locally and injects live continuity briefs before edits begin.',
+    architecture: 'Zero-dependency Python 3 ThreadingHTTPServer bound strictly to 127.0.0.1:8161 (chronicle-vault.service) backed by SQLite FTS5, plus a native ZothOS CLI (/usr/local/bin/zoth-memory-vault) and stdio MCP server. Exposes /api/overview, /api/continuity/overview, /api/continuity/recall, /api/continuity/preflight, /api/patterns, /api/conversations, /api/playbook, and /api/analytics/models.',
+    aiAgentProtocol: {
+      mcpTool: 'chronicle_vault_recall',
+      description: 'Query past Hermes + AGY memories, surface unfinished loops and breakage warnings, and run prompt preflight checks over local SQLite history.',
+      cliExample: 'zoth-memory-vault recall "zoth-studio-v2" && zoth-memory-vault patterns --json',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          action: { type: 'string', enum: ['recall', 'search', 'patterns', 'stats', 'digest', 'playbook', 'models'], description: 'Chronicle Vault command to execute' },
+          query: { type: 'string', description: 'Topic, repository name, or FTS5 search term' }
+        },
+        required: ['action']
+      },
+      outputSchema: {
+        totals: { conversations: 'number', messages: 'number', avg_friction: 'number' },
+        related_memories: 'array',
+        repetition_alerts: 'array',
+        breakage_warnings: 'array',
+        patterns: 'array'
+      }
+    },
+    quickstart: [
+      'zoth-memory-vault serve --port 8161',
+      'zoth-memory-vault sync-recent',
+      'zoth-memory-vault recall "zoth-studio-v2"',
+      'zoth-memory-vault patterns --json',
+      'zoth-memory-vault mcp',
+      '# Open standalone workstation at http://127.0.0.1:8161 or Studio route /tools/zoth-memory-vault'
+    ],
+    features: [
+      'Unified Hermes Agent + AGY transcript ingestion into a local SQLite FTS5 archive with automatic secret redaction',
+      'Live Continuity Recall engine surfacing related past threads, repetition alerts, unfinished loops, and breakage warnings',
+      'Friction & Pattern Radar detecting stall chains, tool errors, and recurring agent anti-patterns',
+      'Prompt Playbook & Model Matrix tracking golden prompts, post-mortems, and per-domain model performance',
+      'Safe Memory Sync preview & rollback across MEMORY.md, USER.md, HERMES_SOUL, and AGY_RULES',
+      'Native ZothOS CLI (serve, sync, sync-recent, mcp, stats, patterns, search, recall, live, digest, playbook, models) and systemd user service'
+    ]
+  },
   'aether-observatory': {
     whyUse: 'Turns the whole machine into a single observable object: every listening port, daemon, thermal zone, memory engram and git repo rendered as an interactive 3D constellation, sonified in real time, and recorded into a replayable flight log. Replaces ad-hoc `ss`/`top`/`sensors` tab-hopping and cloud APM agents with a sovereign localhost command deck.',
     problemSolved: 'Local telemetry is normally scattered across shell tools with no history and no cross-signal correlation. Aether Observatory correlates ports, processes, thermals and git activity into one time-indexed model so you can diff any two moments and see exactly which port spawned or died, and how load and temperature moved with it.',

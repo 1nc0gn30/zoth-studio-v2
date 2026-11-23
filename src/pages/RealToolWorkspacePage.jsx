@@ -76,6 +76,7 @@ const OmniPostSocialGodModeTool = lazy(() => import('../components/tools/OmniPos
 const PayloadEntropyGodModeTool = lazy(() => import('../components/tools/PayloadEntropyGodModeTool'));
 const PixelCastGodModeTool = lazy(() => import('../components/tools/PixelCastGodModeTool'));
 const AetherObservatoryGodModeTool = lazy(() => import('../components/tools/AetherObservatoryGodModeTool'));
+const ChronicleVaultGodModeTool = lazy(() => import('../components/tools/ChronicleVaultGodModeTool'));
 const PodCommerceGodModeTool = lazy(() => import('../components/tools/PodCommerceGodModeTool'));
 const PolyglotStudioGodModeTool = lazy(() => import('../components/tools/PolyglotStudioGodModeTool'));
 const PromptMasterGodModeTool = lazy(() => import('../components/tools/PromptMasterGodModeTool'));
@@ -208,6 +209,8 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'storefront-catalog': PodCommerceGodModeTool,
   'pixel-cast': PixelCastGodModeTool,
   'aether-observatory': AetherObservatoryGodModeTool,
+  'zoth-memory-vault': ChronicleVaultGodModeTool,
+  'chronicle-vault': ChronicleVaultGodModeTool,
   'zoth-math-pillar': ZothPillGodModeTool,
   'zothos-lite': ZothOSLiteGodModeTool,
   'zothnet': ZothnetGodModeTool,

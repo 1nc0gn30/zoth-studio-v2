@@ -1,5 +1,23 @@
 export const microTools = [
   {
+    id: 'zoth-memory-vault',
+    published: true,
+    name: 'Chronicle Vault',
+    repo: 'zoth-memory-vault',
+    category: 'Memory & Brain',
+    executionType: 'local_cli',
+    github: 'https://github.com/1nc0gn30/zoth-memory-vault',
+    priceUsd: '0',
+    priceCents: 0,
+    stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
+    pricing: '100% Free & Open-Access',
+    description: 'Contained Hermes + AGY conversation consolidation, friction/pattern intelligence, live continuity recall, and personal prompt playbook workstation.',
+    version: '1.0.0',
+    pull: 'zoth-memory-vault --help  # or: git clone https://github.com/1nc0gn30/zoth-memory-vault.git',
+    localPort: 8161,
+    localUrl: 'http://127.0.0.1:8161',
+  },
+  {
     id: 'pixel-cast',
     published: true,
     name: 'PixelCast',

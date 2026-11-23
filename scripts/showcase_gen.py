@@ -627,6 +627,14 @@ PILLS = {
         "Machine truth in a single always-visible HUD.",
         "SecOps & Zoth users",
     ),
+    "zoth-memory-vault": (
+        "Every Hermes and AGY session, mined for continuity.",
+        ["Sync Hermes and AGY histories into the local SQLite FTS5 ledger",
+         "Run live continuity recall to surface breakage warnings and parked ideas",
+         "Inspect the friction pattern radar and personal prompt playbook"],
+        "Turns scattered agent transcripts into searchable local memory that stops repeat mistakes.",
+        "AI builders & power users",
+    ),
     "zoth-obsidian-tracker": (
         "A 78-tool verification matrix, live.",
         ["Open the sovereign vault explorer",

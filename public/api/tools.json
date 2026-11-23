@@ -1,8 +1,28 @@
 {
   "schema": "zoth/tools-static/v1",
-  "generated_at": "2026-11-13T12:00:00.000Z",
-  "tool_count": 81,
+  "generated_at": "2026-11-23T18:22:00.000Z",
+  "tool_count": 82,
   "tools": [
+    {
+      "id": "zoth-memory-vault",
+      "name": "Chronicle Vault",
+      "description": "Contained Hermes + AGY conversation consolidation, friction/pattern intelligence, live continuity recall, and personal prompt playbook workstation.",
+      "category": "Memory & Brain",
+      "github": "https://github.com/1nc0gn30/zoth-memory-vault",
+      "published": true,
+      "studio_url": "https://zoth.nullai.tech/tools/zoth-memory-vault/",
+      "version": "1.0.0",
+      "pull": "zoth-memory-vault --help  # or: git clone https://github.com/1nc0gn30/zoth-memory-vault.git",
+      "execution_type": "local_cli",
+      "runtimes": [
+        "python",
+        "cli",
+        "mcp",
+        "zero-egress"
+      ],
+      "port": 8161,
+      "local_url": "http://127.0.0.1:8161"
+    },
     {
       "id": "pixel-cast",
       "name": "PixelCast",
