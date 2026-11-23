@@ -398,7 +398,7 @@ Runs local invariant verification before staging tools.`
                 />
                 <Chip
                   icon={<HubIcon sx={{ fontSize: '14px !important', color: `${textSecondary} !important` }} />}
-                  label={`${microTools.length} TOOLS · 77 PUBLIC REPOS`}
+                  label={`${microTools.length} TOOLS · 79 PUBLIC REPOS`}
                   size="small"
                   sx={{
                     bgcolor: dark ? '#14141E' : '#F2F4F7',

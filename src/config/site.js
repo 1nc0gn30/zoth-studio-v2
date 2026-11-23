@@ -252,10 +252,10 @@ export function generateSchemaGraph(path = '/') {
   const coreFaqEntities = [
     {
       '@type': 'Question',
-      'name': 'Are all 80 Zoth Studio tools, ZothOS v3.4.0, and ZothOS-Lite v1.2 100% free and open-access?',
+      'name': 'Are all 83 Zoth Studio tools, ZothOS v3.4.0, and ZothOS-Lite v1.2 100% free and open-access?',
       'acceptedAnswer': {
         '@type': 'Answer',
-        'text': 'Yes. All 80 Zoth Studio tools (56 in-browser/WebGPU + 24 CLI/daemon across 79 public GitHub repositories), 43 Studio workstations, ZothOS v3.4.0 (https://zothos.nullai.tech), ZothOS-Lite v1.2 (https://zothos-lite.nullai.tech), Zoth Civilization v3.0 (https://zoth-civilization.netlify.app), ZothNet (https://zothnet.nullai.tech), and FieldKit (https://nullai.tech/fieldkit) are 100% free and unlocked by default with zero paywalls, zero license modals, and optional Buy Us a Coffee or Solana community tips.'
+        'text': 'Yes. All 83 Zoth Studio tools (56 in-browser/WebGPU + 27 CLI/daemon across 79 public GitHub repositories), 43 Studio workstations, ZothOS v3.4.0 (https://zothos.nullai.tech), ZothOS-Lite v1.2 (https://zothos-lite.nullai.tech), Zoth Civilization v3.0 (https://zoth-civilization.netlify.app), ZothNet (https://zothnet.nullai.tech), and FieldKit (https://nullai.tech/fieldkit) are 100% free and unlocked by default with zero paywalls, zero license modals, and optional Buy Us a Coffee or Solana community tips.'
       }
     },
     {

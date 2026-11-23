@@ -140,7 +140,7 @@ export default function ToolsPage() {
                 color: gold,
               }}
             >
-              OPEN-ACCESS REPOSITORY INDEX · 56 WEBGPU + 24 CLI · 79 PUBLIC REPOS
+              OPEN-ACCESS REPOSITORY INDEX · 56 WEBGPU + 27 CLI · 79 PUBLIC REPOS
             </Typography>
           </HeroItem>
 
@@ -170,7 +170,7 @@ export default function ToolsPage() {
               }}
             >
               Every Zoth tool is 100% free and unlocked — spanning <strong>56 in-browser/WebGPU utilities</strong> and{' '}
-              <strong>24 CLI/daemon packages</strong> across <strong>79 public GitHub repositories</strong>. Launch any tool directly in-browser, clone its standalone repository, pull the unified{' '}
+              <strong>27 CLI/daemon packages</strong> across <strong>79 public GitHub repositories</strong>. Launch any tool directly in-browser, clone its standalone repository, pull the unified{' '}
               <Box
                 component="a"
                 href="https://github.com/NullAITech/zoth-studio-v2"
@@ -204,7 +204,7 @@ export default function ToolsPage() {
         }}
       >
         {[
-          ['Open-Access Tools', '80'],
+          ['Open-Access Tools', String(microTools.length)],
           ['Public GitHub Repos', '79'],
           ['Categories', categories.length - 1],
           ['WAN Telemetry', '0 Bytes'],
