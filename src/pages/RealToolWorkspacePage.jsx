@@ -214,6 +214,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'zoth-math-pillar': ZothPillGodModeTool,
   'zothos-lite': ZothOSLiteGodModeTool,
   'zothnet': ZothnetGodModeTool,
+  'zoth-egregore': SwarmCivilizationGodModeTool,
 
   // Studio Cockpit & Workstation aliases (from workstations.js)
   'cockpit': SwarmCivilizationGodModeTool,
@@ -261,6 +262,7 @@ const DEDICATED_SITES = {
   'zoth-os': { label: 'ZothOS Portal', url: 'https://zothos.nullai.tech' },
   'zothos-lite': { label: 'ZothOS-Lite Portal', url: 'https://zothos-lite.nullai.tech' },
   'zoth-civilization': { label: 'Zoth Civilization Site', url: 'https://zoth-civilization.netlify.app' },
+  'zoth-egregore': { label: 'Zoth Egregore Model Site', url: 'https://zoth-egregore.netlify.app' },
   'zoth-swarm-multiplexer': { label: 'Zoth Egregore Model Site', url: 'https://zoth-egregore.netlify.app' },
   'creatorplaybooks': { label: 'CreatorPlaybooks Live', url: 'https://creatorplaybooks.netlify.app' },
 };

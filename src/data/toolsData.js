@@ -1550,6 +1550,25 @@ export const microTools = [
     localUrl: 'http://127.0.0.1:8152',
     version: '1.0.0',
     pull: 'zoth-x-connector --status  # or: zoth-x-connector run | zoth-x-connector timer start',
+  },
+  {
+    id: 'zoth-egregore',
+    published: true,
+    name: 'Zoth Egregore',
+    repo: 'zoth-egregore',
+    category: 'Swarm & Core',
+    executionType: 'local_cli',
+    github: 'https://github.com/1nc0gn30/zoth-egregore',
+    liveUrl: 'https://zoth-egregore.netlify.app',
+    priceUsd: '0',
+    priceCents: 0,
+    stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
+    pricing: '100% Free & Open-Access',
+    description: 'Zero-dependency OpenAI-compatible collective-intelligence inference proxy (:8147) orchestrating 3,456 co-prime cognitive lenses over DeepSeek-Flash & Nous Research Hermes Agent with Beta-posterior Adaptive-Consistency stopping.',
+    localPort: 8147,
+    localUrl: 'http://127.0.0.1:8147',
+    version: '0.1.0-beta',
+    pull: 'git clone https://github.com/1nc0gn30/zoth-egregore.git && cd zoth-egregore && pip install -e . && zoth-egregore serve --port 8147',
   }
 ];
 
