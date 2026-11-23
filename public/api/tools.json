@@ -525,23 +525,23 @@
     },
     {
       "id": "zoth-webgen",
-      "name": "Zoth QuickSite Starter",
-      "description": "Simple 3-step static template & 1-click Netlify launcher on 127.0.0.1:8092. Pick a ready-made template, preview live, and export HTML/ZIP or deploy to Netlify.",
+      "name": "Zoth Bolt (bolt.diy fork)",
+      "description": "Legacy alias of zoth-bolt — the real bolt.diy fork, Zoth edition, on 127.0.0.1:5173. Full-stack AI workbench with 19+ providers, local Ollama, CLI agents, MCP tools, and 1-click Netlify deploy.",
       "category": "Autonomous Web",
-      "github": "https://github.com/1nc0gn30/zoth-webgen",
+      "github": "https://github.com/1nc0gn30/bolt.diy",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/zoth-webgen/",
-      "version": "2.5.0",
-      "pull": "git clone https://github.com/NullAITech/zoth-webgen.git && cd zoth-webgen && python3 server.py --port 8092",
+      "version": "3.5.0",
+      "pull": "zoth-bolt dev  # or: cd ~/NullAITech/bolt.diy && npm run dev -- --port 5173",
       "execution_type": "local_cli",
       "runtimes": [
-        "python",
         "node",
         "cli",
         "zero-egress"
       ],
-      "port": 8092,
-      "local_url": "http://127.0.0.1:8092"
+      "port": 5173,
+      "local_url": "http://127.0.0.1:5173",
+      "alias_of": "zoth-bolt"
     },
     {
       "id": "zoth-swarm-multiplexer",

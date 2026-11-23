@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { existsSync } from 'node:fs';
 import { studioMiddleware } from './server/studio-api.mjs';
+import { boltProxyMiddleware, boltProxyUpgrade } from './server/bolt-proxy.mjs';
 
 export default defineConfig({
   build: {
@@ -30,10 +31,14 @@ export default defineConfig({
     {
       name: 'zoth-studio-api',
       configureServer(server) {
+        server.middlewares.use(boltProxyMiddleware);
         server.middlewares.use(studioMiddleware());
+        server.httpServer?.on('upgrade', boltProxyUpgrade);
       },
       configurePreviewServer(server) {
+        server.middlewares.use(boltProxyMiddleware);
         server.middlewares.use(studioMiddleware());
+        server.httpServer?.on('upgrade', boltProxyUpgrade);
       },
     },
   ],

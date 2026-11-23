@@ -65,11 +65,33 @@ const ALL_AGENTS = PANTHEON_RINGS.flatMap((r, rIdx) =>
 );
 
 const HARNESS_OPTIONS = [
-  { id: 'hermes-deepseek-flash', label: 'Hermes × DeepSeek Flash', badge: 'deepseek-v4.1-flash' },
+  { id: 'agy', label: 'Antigravity (Agy)', badge: 'claude-opus-4-6-thinking' },
+  { id: 'hermes-agent', label: 'Hermes Agent (Nous Portal + Custom)', badge: 'nousresearch/hermes-4-70b' },
+  { id: 'codex', label: 'OpenAI Codex CLI', badge: 'gpt-5.3-codex' },
+  { id: 'claude-code', label: 'Claude Code CLI', badge: 'claude-sonnet-4-6' },
+  { id: 'opencode', label: 'OpenCode CLI', badge: 'opencode/big-pickle' },
+  { id: 'ollama', label: 'Local Ollama / vLLM', badge: 'qwen2.5-coder:32b' },
   { id: 'zoth-egregore-8147', label: 'Egregore :8147 (3,456 Lenses)', badge: 'zoth-egregore' },
-  { id: 'zoth-relay-landlock', label: 'Zoth-Relay :8765 (Landlock)', badge: 'ring-3-ipc' },
-  { id: 'local-ollama-vllm', label: 'Local Ollama / vLLM', badge: 'zero-egress' },
 ];
+
+const DEFAULT_HARNESS_MODELS = {
+  agy: [
+    'claude-opus-4-6-thinking', 'claude-opus-4-5-thinking', 'claude-sonnet-4-6',
+    'claude-sonnet-4-5', 'claude-haiku-4-5', 'gemini-2.5-pro', 'gemini-2.5-flash',
+    'gemini-2.5-flash-lite', 'gemini-3-pro', 'gemini-3-flash', 'gpt-4o', 'o3', 'o4-mini',
+  ],
+  'hermes-agent': [
+    'nousresearch/hermes-4-70b', 'nousresearch/hermes-4-405b', 'nousresearch/hermes-3-llama-3.1-70b',
+    'nousresearch/hermes-3-llama-3.1-405b', 'nousresearch/deephermes-3-llama-3-8b-preview',
+    'nousresearch/deephermes-3-mistral-24b-preview', 'deepseek/deepseek-v4.1-flash',
+    'deepseek/deepseek-r1', 'qwen/qwen3-coder-480b', 'custom/local-hermes-gguf',
+  ],
+  codex: ['gpt-5.3-codex', 'o3', 'o4-mini', 'gpt-4o'],
+  'claude-code': ['claude-opus-4-6-thinking', 'claude-sonnet-4-6', 'claude-haiku-4-5'],
+  opencode: ['opencode/big-pickle', 'deepseek/deepseek-r1', 'qwen2.5-coder:32b'],
+  ollama: ['qwen2.5-coder:32b', 'llama3.3:70b', 'deepseek-r1:32b'],
+  'zoth-egregore-8147': ['zoth-egregore-3456-lenses'],
+};
 
 const SWARM_MISSIONS = [
   {
@@ -159,10 +181,20 @@ export default function SwarmCivilizationGodModeTool({ tool }) {
     Object.fromEntries(
       ALL_AGENTS.map((a) => [
         a.index,
-        a.index % 5 === 0 ? 'zoth-egregore-8147' : 'hermes-deepseek-flash',
+        a.index % 2 === 0 ? 'agy' : 'hermes-agent',
       ])
     )
   );
+  const [harnessModelsMap, setHarnessModelsMap] = useState(DEFAULT_HARNESS_MODELS);
+  const [paneModels, setPaneModels] = useState(() =>
+    Object.fromEntries(
+      ALL_AGENTS.map((a) => {
+        const h = a.index % 2 === 0 ? 'agy' : 'hermes-agent';
+        return [a.index, DEFAULT_HARNESS_MODELS[h][0]];
+      })
+    )
+  );
+  const [daemonOnline, setDaemonOnline] = useState(false);
   const [cmdInput, setCmdInput] = useState('zoth-egregore tools "audit quorum backpressure & memory recall" --probe');
   const [paneLogs, setPaneLogs] = useState(() =>
     Object.fromEntries(
@@ -216,7 +248,66 @@ export default function SwarmCivilizationGodModeTool({ tool }) {
   );
 
   const selectedAgent = ALL_AGENTS[selectedIdx] || ALL_AGENTS[0];
-  const selectedHarnessId = paneHarnesses[selectedAgent.index] || 'hermes-deepseek-flash';
+  const selectedHarnessId = paneHarnesses[selectedAgent.index] || 'agy';
+  const availableModels = useMemo(() => {
+    const raw = harnessModelsMap[selectedHarnessId] || DEFAULT_HARNESS_MODELS[selectedHarnessId] || ['default'];
+    return raw.map((m) => (typeof m === 'string' ? { id: m, label: m } : m));
+  }, [harnessModelsMap, selectedHarnessId]);
+  const selectedModelId = paneModels[selectedAgent.index] || availableModels[0]?.id || 'default';
+
+  useEffect(() => {
+    let evtSource = null;
+    let cancelled = false;
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 1500);
+    fetch('http://127.0.0.1:8141/status', { signal: ctrl.signal })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        clearTimeout(timer);
+        if (cancelled || !data) return;
+        setDaemonOnline(true);
+        if (data.harness_models) {
+          setHarnessModelsMap((prev) => ({ ...prev, ...data.harness_models }));
+        }
+        try {
+          evtSource = new EventSource('http://127.0.0.1:8141/stream');
+          evtSource.addEventListener('log', (e) => {
+            const payload = JSON.parse(e.data);
+            const ag = ALL_AGENTS.find((a) => a.name === payload.agent_id);
+            if (!ag || !payload.entry) return;
+            setPaneLogs((prev) => ({
+              ...prev,
+              [ag.index]: [...(prev[ag.index] || []), `[${payload.entry.type}] ${payload.entry.text}`].slice(-18),
+            }));
+          });
+          evtSource.addEventListener('stream_chunk', (e) => {
+            const payload = JSON.parse(e.data);
+            const ag = ALL_AGENTS.find((a) => a.name === payload.agent_id);
+            const chunk = payload.text || payload.chunk;
+            if (!ag || !chunk) return;
+            setPaneLogs((prev) => {
+              const cur = [...(prev[ag.index] || [])];
+              if (cur.length && cur[cur.length - 1].startsWith('[pty] ')) {
+                cur[cur.length - 1] += chunk;
+              } else {
+                cur.push(`[pty] ${chunk}`);
+              }
+              return { ...prev, [ag.index]: cur.slice(-18) };
+            });
+          });
+          evtSource.onerror = () => {
+            try { evtSource.close(); } catch (_) {}
+          };
+        } catch (_) {}
+      })
+      .catch(() => clearTimeout(timer));
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+      ctrl.abort();
+      if (evtSource) try { evtSource.close(); } catch (_) {}
+    };
+  }, []);
 
   const quorumStats = useMemo(() => {
     const total = 21;
@@ -248,23 +339,47 @@ export default function SwarmCivilizationGodModeTool({ tool }) {
     });
   }, []);
 
-  const dispatchCommand = (broadcast = false) => {
+  const dispatchCommand = async (broadcast = false) => {
     const trimmed = cmdInput.trim();
     if (!trimmed) return;
     const stamp = new Date().toISOString().slice(11, 19);
+
+    if (daemonOnline) {
+      try {
+        const url = broadcast
+          ? 'http://127.0.0.1:8141/api/swarm/pty_broadcast'
+          : 'http://127.0.0.1:8141/api/swarm/pty_spawn';
+        const payload = broadcast
+          ? { prompt: trimmed, cadre: 'All' }
+          : {
+              agent_id: selectedAgent.name,
+              prompt: trimmed,
+              harness: selectedHarnessId,
+              model: selectedModelId,
+            };
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) return;
+      } catch (_) {}
+    }
+
     setPaneLogs((prev) => {
       const next = { ...prev };
       const targets = broadcast
         ? ALL_AGENTS.filter((a) => !faultSet.has(a.index))
         : [selectedAgent];
       targets.forEach((ag) => {
-        const hId = paneHarnesses[ag.index] || 'hermes-deepseek-flash';
+        const hId = paneHarnesses[ag.index] || 'agy';
+        const mId = paneModels[ag.index] || selectedModelId;
         const lines = [...(next[ag.index] || [])];
         lines.push(`[${stamp}] $ ${trimmed}`);
         lines.push(
-          `[${stamp}] -> [${hId}] OK · quorum=${quorumStats.honest}/21 · merkle=${quorumStats.merkleRoot}`
+          `[${stamp}] -> [${hId}:${mId}] DUCKY SPAWN->WAIT->STRING+ENTER · quorum=${quorumStats.honest}/21`
         );
-        next[ag.index] = lines.slice(-10);
+        next[ag.index] = lines.slice(-14);
       });
       return next;
     });
@@ -879,12 +994,18 @@ ${paneLines}`;
                           size="small"
                           label="AI Harness"
                           value={selectedHarnessId}
-                          onChange={(e) =>
+                          onChange={(e) => {
+                            const nextH = e.target.value;
                             setPaneHarnesses((prev) => ({
                               ...prev,
-                              [selectedAgent.index]: e.target.value,
-                            }))
-                          }
+                              [selectedAgent.index]: nextH,
+                            }));
+                            const list = harnessModelsMap[nextH] || DEFAULT_HARNESS_MODELS[nextH] || [];
+                            if (list.length) {
+                              const firstId = typeof list[0] === 'string' ? list[0] : list[0].id;
+                              setPaneModels((prev) => ({ ...prev, [selectedAgent.index]: firstId }));
+                            }
+                          }}
                           sx={{
                             minWidth: 215,
                             '& .MuiInputBase-root': { fontFamily: mono, fontSize: '0.72rem' },
@@ -893,6 +1014,29 @@ ${paneLines}`;
                           {HARNESS_OPTIONS.map((h) => (
                             <MenuItem key={h.id} value={h.id} sx={{ fontFamily: mono, fontSize: '0.72rem' }}>
                               {h.label}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+
+                        <TextField
+                          select
+                          size="small"
+                          label="Model Target"
+                          value={selectedModelId}
+                          onChange={(e) =>
+                            setPaneModels((prev) => ({
+                              ...prev,
+                              [selectedAgent.index]: e.target.value,
+                            }))
+                          }
+                          sx={{
+                            minWidth: 220,
+                            '& .MuiInputBase-root': { fontFamily: mono, fontSize: '0.72rem' },
+                          }}
+                        >
+                          {availableModels.map((m) => (
+                            <MenuItem key={m.id} value={m.id} sx={{ fontFamily: mono, fontSize: '0.72rem' }}>
+                              {m.label}
                             </MenuItem>
                           ))}
                         </TextField>

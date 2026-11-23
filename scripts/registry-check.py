@@ -67,10 +67,20 @@ def main():
         fail("Registry contains 0 tools.")
     ok(f"tools.json parsed successfully ({registry_count} tools declared)")
 
-    # 2. Port collision check
+    # 2. Port collision check (allowing explicit alias_of -> canonical tool)
+    tool_ids_set = {t.get('id') for t in tools if t.get('id')}
+    aliases = {}
     ports = {}
     for t in tools:
         tid = t.get('id', 'unknown')
+        alias_of = t.get('alias_of') or t.get('aliasOf')
+        if alias_of:
+            if alias_of not in tool_ids_set:
+                fail(f"Dangling alias in registry: {tid} declares alias_of='{alias_of}', which does not exist")
+            if alias_of == tid:
+                fail(f"Self-referential alias in registry: {tid}")
+            aliases[tid] = alias_of
+
         port = t.get('port')
         if not port:
             # Fall back to inspecting pull command or local_url
@@ -85,11 +95,19 @@ def main():
         if port:
             ports.setdefault(port, []).append(tid)
 
-    collisions = {p: ts for p, ts in ports.items() if len(ts) > 1}
+    collisions = {}
+    for p, ts in ports.items():
+        if len(ts) > 1:
+            # Resolve every claimant to its canonical target; only collide if >1 canonical owner
+            canonical_owners = sorted({aliases.get(tid, tid) for tid in ts})
+            if len(canonical_owners) > 1:
+                collisions[p] = ts
+
     if collisions:
         msg = "; ".join(f":{p} claimed by {ts}" for p, ts in collisions.items())
         fail(f"Port collisions detected in registry: {msg}")
-    ok(f"Port collision check passed: {len(ports)} unique loopback ports, 0 collisions")
+    alias_note = f" ({len(aliases)} verified alias{'es' if len(aliases) != 1 else ''}: " + ", ".join(f"{k}->{v}" for k, v in sorted(aliases.items())) + ")" if aliases else ""
+    ok(f"Port collision check passed: {len(ports)} unique loopback ports, 0 collisions{alias_note}")
 
     # 3. toolsData.js count check
     if os.path.exists(tools_data_path):

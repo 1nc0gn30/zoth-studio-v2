@@ -61,7 +61,13 @@ function spawnOnDemandTool(id, rootDir, port) {
   let cmd = 'python3';
   let args = ['server.py', '--port', String(port)];
 
-  if (fs.existsSync(path.join(rootDir, 'server.js'))) {
+  // Zoth Bolt = the real bolt.diy fork (Remix/Vite workbench on :5173).
+  // The braille server.py stand-in is retired — never spawn it for the fork.
+  const isBoltFork = ['zoth-bolt', 'bolt-diy', 'bolt.diy'].includes(id) || path.basename(rootDir) === 'bolt.diy';
+  if (isBoltFork) {
+    cmd = 'npm';
+    args = ['run', 'dev', '--', '--port', String(port)];
+  } else if (fs.existsSync(path.join(rootDir, 'server.js'))) {
     cmd = 'node';
     args = ['server.js', '--port', String(port)];
   } else if (fs.existsSync(path.join(rootDir, 'server.py'))) {
@@ -265,7 +271,7 @@ export async function probeStatus() {
     requestJson(8105, '/api/stats'),
     requestJson(8106, '/api/stats'),
     requestJson(9393, '/api/status', { timeout: 1000 }),
-    requestJson(8092, '/api/status', { timeout: 700 }),
+    requestJson(5173, '/api/health', { timeout: 1500 }),
   ]);
 
   const memoryUp = memoryPrimary.up || memorySec.up;
@@ -371,9 +377,10 @@ export async function probeStatus() {
         } : null,
       },
       webgen: {
-        name: 'Zoth WebGen Foundry (One-Shot + Netlify)',
-        port: 8092,
+        name: 'Zoth Bolt (bolt.diy fork)',
+        port: 5173,
         up: webgen.up,
+        detail: webgen.json,
       },
     },
   };
@@ -690,11 +697,12 @@ export function studioMiddleware() {
         const target = String(body.service || '').toLowerCase();
         const bootMap = {
           civilization: `ENABLE_KOKORO_VOICE=0 nohup node ${shellQuote(path.join(NULLAITECH_ROOT, 'zoth-civilization', 'server.js'))} >/tmp/zoth-civ-supervisor.log 2>&1 &`,
-          webgen: `cd ${shellQuote(path.join(NULLAITECH_ROOT, 'zoth-webgen'))} && nohup python3 server.py --port 8092 >/tmp/zoth-webgen-supervisor.log 2>&1 &`,
+          webgen: `cd ${shellQuote(path.join(NULLAITECH_ROOT, 'bolt.diy'))} && nohup npm run dev -- --port 5173 >/tmp/zoth-bolt-supervisor.log 2>&1 &`,
+          bolt: `cd ${shellQuote(path.join(NULLAITECH_ROOT, 'bolt.diy'))} && nohup npm run dev -- --port 5173 >/tmp/zoth-bolt-supervisor.log 2>&1 &`,
           daemons: `${shellQuote(CONDUCTOR_BIN)} up >/tmp/zoth-daemons-supervisor.log 2>&1 && nohup node ${shellQuote(path.join(STUDIO_ROOT, 'bin', 'zoth.js'))} up >>/tmp/zoth-daemons-supervisor.log 2>&1 &`,
         };
         if (!bootMap[target]) {
-          send(res, 400, { error: `Unknown service "${target}". Allowed: civilization, webgen, daemons.` });
+          send(res, 400, { error: `Unknown service "${target}". Allowed: civilization, bolt (webgen), daemons.` });
           return;
         }
         exec(bootMap[target], (err) => {
@@ -848,35 +856,142 @@ export function studioMiddleware() {
       }
 
       if (req.method === 'GET' && url.pathname === '/api/studio/webgen/templates') {
-        const result = await requestJson(8092, '/api/production-templates', { timeout: 4000 });
+        const result = await requestJson(5173, '/api/webgen/control', {
+          method: 'POST',
+          body: { action: 'get_design_catalog', category: 'frameworks' },
+          timeout: 5000,
+        });
         if (!result.up || !result.json) {
-          send(res, 503, { error: 'Zoth WebGen Foundry daemon is not answering on 127.0.0.1:8092.' });
+          send(res, 503, { error: 'Zoth Bolt fork is not answering on 127.0.0.1:5173.' });
           return;
         }
-        send(res, 200, result.json);
+        send(res, 200, { templates: result.json.frameworks || [], source: 'zoth-bolt' });
         return;
       }
 
       if (req.method === 'GET' && url.pathname === '/api/studio/webgen/presets') {
-        const qs = url.search || '';
-        const result = await requestJson(8092, `/api/presets${qs}`, { timeout: 4000 });
+        const result = await requestJson(5173, '/api/webgen/control', {
+          method: 'POST',
+          body: { action: 'get_design_catalog' },
+          timeout: 5000,
+        });
         if (!result.up || !result.json) {
-          send(res, 503, { error: 'Zoth WebGen Foundry daemon is not answering on 127.0.0.1:8092.' });
+          send(res, 503, { error: 'Zoth Bolt fork is not answering on 127.0.0.1:5173.' });
           return;
         }
-        send(res, 200, result.json);
+        send(res, 200, {
+          presets: result.json.palettes || [],
+          typography: result.json.typographyPairings || [],
+          uiLibraries: result.json.uiLibraries || [],
+          animationLibraries: result.json.animationLibraries || [],
+          source: 'zoth-bolt',
+        });
         return;
       }
 
       if (req.method === 'POST' && (url.pathname === '/api/studio/webgen/oneshot' || url.pathname === '/api/studio/webgen/deploy')) {
         const body = await readBody(req);
-        const upstream = url.pathname.endsWith('/deploy') ? '/api/deploy' : '/api/oneshot';
-        const result = await requestJson(8092, upstream, { method: 'POST', body, timeout: 60000 });
+        if (url.pathname.endsWith('/deploy')) {
+          const result = await requestJson(5173, '/api/netlify-deploy', { method: 'POST', body, timeout: 120000 });
+          if (!result.up || !result.json) {
+            send(res, 503, { error: 'Zoth Bolt fork (:5173) did not respond to deploy.' });
+            return;
+          }
+          send(res, result.status || 200, result.json);
+          return;
+        }
+        const result = await requestJson(5173, '/api/webgen/control', {
+          method: 'POST',
+          body: {
+            action: 'prompt_and_build',
+            prompt: body.prompt || '',
+            model: body.model,
+            provider: body.provider,
+            template: body.template || body.framework,
+          },
+          timeout: 15000,
+        });
         if (!result.up || !result.json) {
-          send(res, 503, { error: 'Zoth WebGen Foundry daemon (:8092) did not respond in time.' });
+          send(res, 503, { error: 'Zoth Bolt fork (:5173) did not respond.' });
           return;
         }
         send(res, result.status || 200, result.json);
+        return;
+      }
+
+      if (url.pathname === '/api/studio/webgen/control' || url.pathname === '/api/studio/webgen/status') {
+        const isPost = req.method === 'POST';
+        const body = isPost ? await readBody(req) : undefined;
+        const result = await requestJson(5173, '/api/webgen/control', {
+          method: isPost ? 'POST' : 'GET',
+          body,
+          timeout: 30000,
+        });
+        if (!result.up || !result.json) {
+          send(res, 503, { error: 'Zoth Bolt fork (:5173) is not answering. Boot it via /api/studio/supervisor/boot {service:"bolt"}.' });
+          return;
+        }
+        send(res, result.status || 200, result.json);
+        return;
+      }
+
+      /* Canonical Bolt fork surface — same-origin passthrough to :5173.
+         The GodMode harness and any external consumer use these paths;
+         /api/studio/webgen/* above remains as the legacy alias. */
+      if (url.pathname === '/api/webgen/control') {
+        const isPost = req.method === 'POST';
+        const body = isPost ? await readBody(req) : undefined;
+        const result = await requestJson(5173, '/api/webgen/control', {
+          method: isPost ? 'POST' : 'GET',
+          body,
+          timeout: 130000, // run_tool inside the fork may take up to 120s
+        });
+        if (!result.up || !result.json) {
+          send(res, 503, { success: false, error: 'Zoth Bolt fork (:5173) is not answering. Boot it via /api/studio/supervisor/boot {service:"bolt"}.' });
+          return;
+        }
+        send(res, result.status || 200, result.json);
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/webgen/health') {
+        const result = await requestJson(5173, '/api/health', { timeout: 2500 });
+        if (!result.up) {
+          send(res, 503, { status: 'offline', port: 5173, engine: 'bolt.diy' });
+          return;
+        }
+        send(res, result.status || 200, { ...(result.json || {}), engine: 'bolt.diy', port: 5173 });
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/webgen/events') {
+        // Stream the fork's live event bus (SSE) straight through to the client.
+        const upstream = http.request(
+          { host: '127.0.0.1', port: 5173, path: '/api/webgen/events', method: 'GET', headers: { accept: 'text/event-stream' } },
+          (up) => {
+            if ((up.statusCode || 500) >= 400) {
+              up.resume();
+              send(res, 503, { error: 'Zoth Bolt fork (:5173) event bus unavailable.' });
+              return;
+            }
+            res.writeHead(200, {
+              'Content-Type': 'text/event-stream; charset=utf-8',
+              'Cache-Control': 'no-cache, no-transform',
+              Connection: 'keep-alive',
+              'X-Accel-Buffering': 'no',
+            });
+            up.pipe(res);
+            const cleanup = () => { try { up.destroy(); } catch {} };
+            req.on('close', cleanup);
+            res.on('close', cleanup);
+            up.on('error', cleanup);
+          },
+        );
+        upstream.on('error', () => {
+          if (!res.headersSent) send(res, 503, { error: 'Zoth Bolt fork (:5173) is not answering.' });
+          else res.end();
+        });
+        upstream.end();
         return;
       }
 

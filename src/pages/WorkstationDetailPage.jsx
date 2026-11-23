@@ -1758,11 +1758,11 @@ function HubWorkstationConsole({ station }) {
       stats: [{ label: 'Frameworks', val: 'React / Astro / Svelte' }, { label: 'Target', val: 'Zero-Egress Static' }, { label: 'Build Time', val: 'Sub-second' }],
     },
     'webgen': {
-      title: 'WebGen Autonomous Site Generator',
-      desc: 'Multi-framework frontend generator capable of scaffolding React, Astro, Vue, and Svelte applications locally.',
-      target: '/webgen',
-      badge: 'Synthesizer',
-      stats: [{ label: 'Frameworks', val: 'React / Astro / Svelte' }, { label: 'Target', val: 'Zero-Egress Static' }, { label: 'Build Time', val: 'Sub-second' }],
+      title: 'Zoth Bolt — Full-Stack AI & Motion Architect',
+      desc: 'The bolt.diy fork (1nc0gn30/zoth-webgen) running locally on :5173 with local Ollama models, agent harnesses, and live WebContainers.',
+      target: '/tools/zoth-bolt',
+      badge: 'Zoth Bolt',
+      stats: [{ label: 'Engine', val: 'bolt.diy (real fork)' }, { label: 'Port', val: '127.0.0.1:5173' }, { label: 'Models', val: 'Local Ollama + 19 providers' }],
     },
     'subsweep': {
       title: 'Zoth SubSweep Surface Scanner',

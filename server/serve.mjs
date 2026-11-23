@@ -8,6 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { studioMiddleware } from './studio-api.mjs';
+import { boltProxyMiddleware, boltProxyUpgrade } from './bolt-proxy.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const arg = (name, dflt) => { const i = process.argv.indexOf(name); return i > -1 ? process.argv[i + 1] : dflt; };
@@ -38,7 +39,7 @@ const api = studioMiddleware();
 const server = http.createServer((req, res) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Referrer-Policy', 'same-origin');
-  api(req, res, () => {
+  boltProxyMiddleware(req, res, () => api(req, res, () => {
     if (req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405); res.end(); return; }
     let file = resolveFile(req.url);
     if (file === null) { res.writeHead(403); res.end('Forbidden'); return; }
@@ -58,7 +59,8 @@ const server = http.createServer((req, res) => {
       if (req.method === 'HEAD') { res.end(); return; }
       fs.createReadStream(file).pipe(res);
     });
-  });
+  }));
 });
+server.on('upgrade', boltProxyUpgrade);
 server.on('error', (e) => { console.error(`[zoth-studio] ${e.code === 'EADDRINUSE' ? `port ${PORT} is busy` : e.message}`); process.exit(1); });
 server.listen(PORT, HOST, () => console.log(`[zoth-studio] serving ${ROOT} + Studio API at http://${HOST}:${PORT}/`));

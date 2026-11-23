@@ -1,1731 +1,566 @@
-import React, { useState, useEffect } from 'react';
-import { isLocalRuntime } from '../../utils/sovereignRuntime';
-import {
-  Box,
-  Paper,
-  Typography,
-  TextField,
-  Button,
-  Chip,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  LinearProgress,
-  Alert,
-  Tabs,
-  Tab,
-  Tooltip,
-} from '@mui/material';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import DownloadIcon from '@mui/icons-material/Download';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import DesktopWindowsIcon from '@mui/icons-material/DesktopWindows';
-import TabletMacIcon from '@mui/icons-material/TabletMac';
-import SmartphoneIcon from '@mui/icons-material/Smartphone';
-import BoltIcon from '@mui/icons-material/Bolt';
-import MovieFilterIcon from '@mui/icons-material/MovieFilter';
-import ExtensionIcon from '@mui/icons-material/Extension';
-import TerminalIcon from '@mui/icons-material/Terminal';
-import SovereignBand from '../sovereign/SovereignBand.jsx';
-import { SovereignEyebrow, titleBaseSx, ledeSx } from '../sovereign/typography.jsx';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-const mono = '"JetBrains Mono", "IBM Plex Mono", monospace';
-const displayFont = '"Space Grotesk", "Cinzel", sans-serif';
+/**
+ * Zoth Bolt — GodMode harness for the REAL bolt.diy fork.
+ *
+ * Single source of truth: ~/NullAITech/bolt.diy served by Remix/Vite on
+ * 127.0.0.1:5173. Studio mounts the actual workbench in a same-origin iframe
+ * via the /bolt/ proxy (vite.config.js), so it works on loopback, LAN and
+ * Tailscale alike — no hardcoded 127.0.0.1 in the browser.
+ *
+ * This component is a thin harness around that workbench:
+ *  - drives the fork through /api/webgen/control (same-origin proxied)
+ *  - watches the live event bus at /api/webgen/events (SSE)
+ *  - polls get_status / health for build state and preview URL
+ *
+ * There is no simulated preview here. The braille stand-in is retired.
+ */
 
-const AI_PROVIDERS_AND_AGENTS = [
-  { id: 'ZothLocal:zoth-bolt-instant', group: 'Zoth Local & CLI Agents', label: '⚡ Zoth Bolt Instant Architect (Deterministic High-Craft + Motion)' },
-  { id: 'ZothLocal:agy-engine', group: 'Zoth Local & CLI Agents', label: '⚡ Google Antigravity (AGY Local Coding Agent)' },
-  { id: 'ZothLocal:hermes-agent', group: 'Zoth Local & CLI Agents', label: '👑 Nous Hermes 3 Autonomous Agent CLI' },
-  { id: 'ZothLocal:grok-cli', group: 'Zoth Local & CLI Agents', label: '🚀 Grok CLI Local Sovereign Agent' },
-  { id: 'ZothLocal:claude-cli', group: 'Zoth Local & CLI Agents', label: '🧠 Claude Code Local Agent CLI' },
-  { id: 'ZothLocal:opencode', group: 'Zoth Local & CLI Agents', label: '💻 OpenCode Local Agent CLI' },
-  { id: 'ZothLocal:cline', group: 'Zoth Local & CLI Agents', label: '🤖 Cline Autonomous Agent CLI' },
-  { id: 'ZothLocal:aider', group: 'Zoth Local & CLI Agents', label: '🛠️ Aider Pair-Programming Agent CLI' },
-  { id: 'ZothLocal:codex-cli', group: 'Zoth Local & CLI Agents', label: '⚡ OpenAI Codex Local CLI Agent' },
-  { id: 'ZothLocal:qwen2.5-coder:1.5b', group: 'Local Ollama Models', label: '🦙 Ollama · Qwen 2.5 Coder (Local Zero-Egress)' },
-  { id: 'ZothLocal:llama3.2:1b', group: 'Local Ollama Models', label: '🦙 Ollama · Llama 3.2 (Local Zero-Egress)' },
-  { id: 'ZothLocal:zoth-model:latest', group: 'Local Ollama Models', label: '👑 Ollama · Zoth Sovereign Fine-Tune' },
-  { id: 'Google:gemini-2.5-pro', group: 'Frontier Cloud Providers', label: '🌟 Google · Gemini 2.5 Pro' },
-  { id: 'Google:gemini-2.5-flash', group: 'Frontier Cloud Providers', label: '🌟 Google · Gemini 2.5 Flash' },
-  { id: 'Anthropic:claude-3-7-sonnet-20250219', group: 'Frontier Cloud Providers', label: '🟣 Anthropic · Claude 3.7 Sonnet' },
-  { id: 'OpenAI:gpt-4o', group: 'Frontier Cloud Providers', label: '🟢 OpenAI · GPT-4o' },
-  { id: 'OpenAI:o3-mini', group: 'Frontier Cloud Providers', label: '🟢 OpenAI · o3-mini Reasoning' },
-  { id: 'xAI:grok-3', group: 'Frontier Cloud Providers', label: '⚫ xAI · Grok 3' },
-  { id: 'Deepseek:deepseek-reasoner', group: 'Frontier Cloud Providers', label: '🔵 DeepSeek · DeepSeek R1 / V3' },
-  { id: 'OpenRouter:auto', group: 'Frontier Cloud Providers', label: '🌐 OpenRouter · Any 200+ Cloud Models' },
-  { id: 'Groq:llama-3.3-70b-versatile', group: 'Frontier Cloud Providers', label: '⚡ Groq · Llama 3.3 70B LPU' },
-];
+const CONTROL = '/api/webgen/control';
+const EVENTS = '/api/webgen/events';
+const HEALTH = '/api/health';
+const BOLT_URL = '/bolt/';
 
-const MOTION_EDIT_TEMPLATES = [
-  {
-    id: 'claude-15s-showreel',
-    name: '🎬 15s Claude Motion Showreel Hero',
-    shader: 'braille',
-    accent: '#D4AF37',
-    badge: '6-Scene Cinema Cut',
-    desc: 'Deterministic 15-second 6-scene product launch film with live timeline scrubber, kinetic canvas choreography, and aperture handoff.',
-    ideaSeed: 'Build an elite product launch site featuring a 15-second 6-scene Claude Motion Showreel hero, kinetic canvas choreography, bespoke SVG crests, and interactive workspace.',
-  },
-  {
-    id: 'teknium-uncommon-shader',
-    name: '🌐 @teknium Uncommon Web Shader Stage',
-    shader: 'dither',
-    accent: '#38BDF8',
-    badge: 'Braille · Dither · ASCII',
-    desc: 'Interactive 60fps HTML5 Canvas shader with live mode pills switching between Unicode Braille Wave, Bayer 4x4 Ordered Dither, and ASCII Matrix.',
-    ideaSeed: 'Build an avant-garde developer platform with a 60fps @teknium Uncommon Web Shader hero (Braille Wave, Bayer 4x4 Dither, ASCII Matrix), custom SVG diagrams, and Bento grid.',
-  },
-  {
-    id: 'gameboy-pixel-cinema',
-    name: '👾 16-Bit Pixel Art & Retro CRT Arcade',
-    shader: 'ascii',
-    accent: '#22C55E',
-    badge: 'Pixel Art + Chiptune',
-    desc: 'Crisp shape-rendering="crispEdges" 16x16 inline SVG pixel-art sprites, animated simulation viewport, CRT scanline toggle, and WebAudio 8-bit synth.',
-    ideaSeed: 'Build a 16-bit Pixel Art & Retro CRT Arcade hub featuring crisp inline SVG pixel-art icons, animated simulation canvas, scanline toggle, and WebAudio 8-bit chiptune SFX.',
-  },
-  {
-    id: 'hermes-commerce-drop',
-    name: '🛍️ Instant Delivery & Commerce Drop (Sprig/Hatch/Hush)',
-    shader: 'constellation',
-    accent: '#10B981',
-    badge: 'Bespoke SVG + Live ETA',
-    desc: 'Editorial neighborhood delivery storefront with multi-layered gradient SVG product artwork, animated SVG ETA ring, and non-blocking slide-over bag.',
-    ideaSeed: 'Build a 15-minute neighborhood delivery storefront with multi-layered gradient SVG product art, animated SVG ETA countdown ring, category filters, and slide-over bag.',
-  },
-  {
-    id: 'scroll-choreography-deck',
-    name: '🧊 3D Isometric Exploded View & Scroll Stage',
-    shader: 'braille',
-    accent: '#C084FC',
-    badge: 'Spring Physics + SVG',
-    desc: 'Multi-layer isometric SVG hardware/architecture stack that separates into annotated layers on slider scrub with live latency calculators.',
-    ideaSeed: 'Build an interactive hardware & architecture showcase with a multi-layer isometric SVG exploded-view stage, layer separation slider, and live telemetry calculator.',
-  },
-  {
-    id: 'sovereign-saas-funnel',
-    name: '💎 Sovereign Micro-SaaS + Motion Hero',
-    shader: 'dither',
-    accent: '#F59E0B',
-    badge: 'Stripe + Solana Ready',
-    desc: 'Complete client-side developer utility with kinetic motion hero, real-time AST/linter gauges, founding member banner, and 1-click license unlock.',
-    ideaSeed: 'Build a production Sovereign Micro-SaaS utility with a kinetic motion hero, real-time client-side AST/linter gauges, founding member banner, and instant license unlock.',
-  },
-];
-
-const PIXEL_ART_SVGS = [
-  {
-    id: 'pixel-bolt',
-    name: 'Zoth Golden Bolt',
-    category: 'Cyber · 16x16 SVG',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32" shape-rendering="crispEdges"><path fill="#F5E6AB" d="M9 1h3v2H10v2H9v2h4v2h-2v2H9v2H7v2H5v-3h2V9H4V7h2V5h2V3h1z"/><path fill="#D4AF37" d="M8 2h2v2H8v2H6v2h4v1H8v2H6v3H5v-2h2v-2H3V8h2V6h2V4h1z"/></svg>`,
-  },
-  {
-    id: 'pixel-crown',
-    name: 'Sovereign 24K Crown',
-    category: 'RPG · 16x16 SVG',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32" shape-rendering="crispEdges"><path fill="#D4AF37" d="M2 5h2v2h2V5h1V3h2v2h1v2h2V5h2v7H2V5z"/><path fill="#F5E6AB" d="M3 6h1v3h8V6h1v4H3V6zm4-2h2v3H7V4z"/><rect x="4" y="10" width="2" height="1" fill="#EF4444"/><rect x="7" y="10" width="2" height="1" fill="#10B981"/><rect x="10" y="10" width="2" height="1" fill="#3B82F6"/><rect x="2" y="12" width="12" height="2" fill="#8C6D1F"/></svg>`,
-  },
-  {
-    id: 'pixel-robot',
-    name: 'Swarm Agent Droid',
-    category: 'Agent · 16x16 SVG',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32" shape-rendering="crispEdges"><rect x="7" y="1" width="2" height="2" fill="#D4AF37"/><rect x="3" y="3" width="10" height="8" fill="#1E293B"/><rect x="4" y="4" width="8" height="6" fill="#0F172A"/><rect x="5" y="5" width="2" height="2" fill="#38BDF8"/><rect x="9" y="5" width="2" height="2" fill="#38BDF8"/><rect x="5" y="8" width="6" height="1" fill="#10B981"/><rect x="4" y="11" width="8" height="3" fill="#334155"/></svg>`,
-  },
-  {
-    id: 'pixel-terminal',
-    name: 'CRT Phosphor Deck',
-    category: 'CLI · 16x16 SVG',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32" shape-rendering="crispEdges"><rect x="1" y="2" width="14" height="11" fill="#1E293B"/><rect x="2" y="3" width="12" height="9" fill="#05080A"/><path fill="#22C55E" d="M4 5h1v1h1v1H5v1H4V7h1V6H4V5zm3 3h4v1H7V8z"/><rect x="3" y="14" width="10" height="1" fill="#334155"/></svg>`,
-  },
-  {
-    id: 'pixel-coin',
-    name: 'Treasury Gold Coin',
-    category: 'FinOps · 16x16 SVG',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32" shape-rendering="crispEdges"><path fill="#B45309" d="M5 2h6v1h2v2h1v6h-1v2h-2v1H5v-1H3v-2H2V5h1V3h2V2z"/><path fill="#FACC15" d="M5 3h6v1h2v2h1v4h-1v2h-2v1H5v-1H3v-2H2V6h1V4h2V3z"/><rect x="7" y="5" width="2" height="6" fill="#FEF08A"/></svg>`,
-  },
-  {
-    id: 'pixel-shield',
-    name: 'Zero-Egress Aegis',
-    category: 'Security · 16x16 SVG',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="32" height="32" shape-rendering="crispEdges"><path fill="#065F46" d="M3 2h10v6H12v3h-2v2H8v1H6v-2H4V8H3V2z"/><path fill="#10B981" d="M4 3h8v5h-1v2H9v2H7v-2H5V8H4V3z"/><path fill="#A7F3D0" d="M7 4h2v6H7V4zM5 6h6v2H5V6z"/></svg>`,
-  },
-  {
-    id: 'svg-bolt-crest',
-    name: 'Sovereign Prism Crest',
-    category: 'Multi-Layer Vector SVG',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="36" height="36"><polygon points="60,10 106,36 106,84 60,110 14,84 14,36" fill="#0B0D14" stroke="#D4AF37" stroke-width="4"/><path d="M66 24 L38 64 H58 L52 96 L84 54 H62 Z" fill="#D4AF37"/></svg>`,
-  },
-  {
-    id: 'svg-emerald-seal',
-    name: 'Botanical Pantry Seal',
-    category: 'Multi-Layer Vector SVG',
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="36" height="36"><circle cx="60" cy="60" r="52" fill="#06140E" stroke="#10B981" stroke-width="4"/><path d="M60 20 C88 26 96 58 60 98 C24 58 32 26 60 20 Z" fill="#10B981" opacity="0.9"/></svg>`,
-  },
-];
-
-export default function ZothBoltGodModeTool() {
-  const [activeTab, setActiveTab] = useState('architect');
-  const [idea, setIdea] = useState(
-    'Sprig Neighborhood Pantry — 15-minute organic produce, cold-pressed tonics, and sourdough drops with live courier ETA ring and bespoke botanical SVG art'
-  );
-  const [selectedModel, setSelectedModel] = useState('ZothLocal:zoth-bolt-instant');
-  const [motionTemplate, setMotionTemplate] = useState('claude-15s-showreel');
-  const [templateId, setTemplateId] = useState('hermes-sprig');
-  const [shader, setShader] = useState('braille');
-  const [accent, setAccent] = useState('#22C55E');
-  const [templates, setTemplates] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [deploying, setDeploying] = useState(false);
-  const [error, setError] = useState(null);
-  const [result, setResult] = useState(null);
-  const [viewport, setViewport] = useState('desktop');
-  const [copied, setCopied] = useState(false);
-  const [iconQuery, setIconQuery] = useState('bolt');
-  const [iconCollection, setIconCollection] = useState('pixelarticons');
-  const [iconResults, setIconResults] = useState([
-    'pixelarticons:zap',
-    'pixelarticons:shield',
-    'pixelarticons:trophy',
-    'pixelarticons:coin',
-    'pixelarticons:android',
-    'pixelarticons:gamepad',
-    'lucide:sparkles',
-    'lucide:rocket',
-    'lucide:cpu',
-    'lucide:terminal',
-    'ph:lightning-fill',
-    'ph:cube-focus-fill',
-  ]);
-  const [cloneUrl, setCloneUrl] = useState('https://zoth.nullai.tech');
-  const [cloningUrl, setCloningUrl] = useState(false);
-  const [urlBlueprint, setUrlBlueprint] = useState(null);
-  const [selectedSections, setSelectedSections] = useState([
-    '60fps Kinetic Shader & Motion Hero',
-    'Interactive In-Browser Utility / Calculator',
-    '6-Card Tactile Bento Grid',
-    'Sovereign Dual-Rail Pricing & Output Paywall',
-    'AEO Schema.org @graph & FAQ Accordion',
-  ]);
-  const [visualEditMode, setVisualEditMode] = useState(false);
-  const [savedBuilds, setSavedBuilds] = useState(() => {
-    try {
-      const raw = localStorage.getItem('zoth_bolt_saved_vault');
-      return raw ? JSON.parse(raw) : [];
-    } catch (_) {
-      return [];
-    }
+async function control(body) {
+  const res = await fetch(CONTROL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
   });
+  const json = await res.json().catch(() => ({}));
+  return { ok: res.ok, status: res.status, json };
+}
 
-  useEffect(() => {
-    function onVisualMessage(e) {
-      if (e?.data?.type === 'ZOTH_BOLT_VISUAL_EDIT' && typeof e.data.html === 'string') {
-        setResult((prev) => (prev ? { ...prev, html: e.data.html } : prev));
-      }
+const fmtTime = (ts) =>
+  new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+function eventSummary(ev) {
+  switch (ev.type) {
+    case 'CONNECTED':
+      return `bus connected · ${Object.keys(ev.state?.files || {}).length} files on bridge`;
+    case 'PROMPT_AND_BUILD':
+      return `build requested · ${(ev.prompt || '').slice(0, 80)}${ev.model ? ` · ${ev.model}` : ''}`;
+    case 'SET_PROMPT':
+      return `prompt set · ${(ev.prompt || '').slice(0, 80)}`;
+    case 'SUBMIT':
+      return 'submit dispatched';
+    case 'SET_FRAMEWORK':
+      return `framework → ${ev.framework}`;
+    case 'SET_DESIGN_SCHEME':
+      return `design scheme → ${ev.scheme || ev.presetId}`;
+    case 'WRITE_FILE':
+      return `write_file → ${ev.path}`;
+    case 'INSERT_MEDIA_PACK':
+      return `media pack → ${ev.industry} (${ev.assets?.length ?? 0} assets)`;
+    default:
+      return ev.type || 'event';
+  }
+}
+
+export default function ZothBoltGodModeTool({ tool }) {
+  const [forkUp, setForkUp] = useState(null); // null = probing
+  const [booting, setBooting] = useState(false);
+  const [bootLog, setBootLog] = useState('');
+  const [frameKey, setFrameKey] = useState(0);
+  const [frameLoaded, setFrameLoaded] = useState(false);
+
+  const [prompt, setPrompt] = useState('');
+  const [frameworks, setFrameworks] = useState([]);
+  const [framework, setFramework] = useState('');
+  const [palettes, setPalettes] = useState([]);
+  const [palette, setPalette] = useState('');
+
+  const [status, setStatus] = useState(null); // get_status payload
+  const [events, setEvents] = useState([]);
+  const [busLive, setBusLive] = useState(false);
+  const [dispatching, setDispatching] = useState(false);
+  const [notice, setNotice] = useState('');
+
+  const [showFiles, setShowFiles] = useState(false);
+  const [openFile, setOpenFile] = useState(null); // {path, content}
+  const [toolCmd, setToolCmd] = useState('');
+  const [toolOut, setToolOut] = useState(null);
+  const [toolRunning, setToolRunning] = useState(false);
+
+  const esRef = useRef(null);
+  const promptRef = useRef(null);
+
+  /* ---- fork health probe -------------------------------------------------- */
+  const probe = useCallback(async () => {
+    try {
+      const res = await fetch(HEALTH, { cache: 'no-store' });
+      const json = await res.json().catch(() => ({}));
+      setForkUp(res.ok && (json.engine === 'bolt.diy' || json.status === 'ok'));
+      return res.ok;
+    } catch {
+      setForkUp(false);
+      return false;
     }
-    window.addEventListener('message', onVisualMessage);
-    return () => window.removeEventListener('message', onVisualMessage);
   }, []);
 
   useEffect(() => {
-    let mounted = true;
-    fetch('/api/studio/webgen/templates')
-      .then((r) => r.json())
-      .then((d) => {
-        if (!mounted) return;
-        if (Array.isArray(d?.templates)) setTemplates(d.templates);
-      })
-      .catch(() => {});
-    handleSynthesize({
-      ideaOverride:
-        'Sprig Neighborhood Pantry — 15-minute organic produce, cold-pressed tonics, and sourdough drops with live courier ETA ring and bespoke botanical SVG art',
-      templateOverride: 'hermes-sprig',
-      shaderOverride: 'braille',
-      accentOverride: '#22C55E',
-      deployNow: false,
-    });
+    probe();
+    const t = setInterval(probe, 15000);
+    return () => clearInterval(t);
+  }, [probe]);
+
+  /* ---- SSE: live event bus ------------------------------------------------ */
+  useEffect(() => {
+    if (!forkUp) return undefined;
+    const es = new EventSource(EVENTS);
+    esRef.current = es;
+    es.onopen = () => setBusLive(true);
+    es.onmessage = (msg) => {
+      try {
+        const ev = JSON.parse(msg.data);
+        setEvents((prev) => [{ ...ev, at: Date.now() }, ...prev].slice(0, 60));
+        if (ev.type === 'CONNECTED' && ev.state) {
+          setStatus((prev) => ({
+            ...(prev || {}),
+            isStreaming: ev.state.isStreaming,
+            previewUrl: ev.state.previewUrl,
+            fileCount: Object.keys(ev.state.files || {}).length,
+            files: Object.keys(ev.state.files || {}),
+            lastPrompt: ev.state.lastPrompt,
+          }));
+        }
+      } catch {
+        /* keepalive comment or malformed frame — ignore */
+      }
+    };
+    es.onerror = () => setBusLive(false);
     return () => {
-      mounted = false;
+      es.close();
+      esRef.current = null;
+      setBusLive(false);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [forkUp, frameKey]);
+
+  /* ---- status poll while mounted ------------------------------------------ */
+  const refreshStatus = useCallback(async () => {
+    try {
+      const { ok, json } = await control({ action: 'get_status' });
+      if (ok && json.success) setStatus(json);
+    } catch {
+      /* fork busy — next tick retries */
+    }
   }, []);
 
-  async function handleSynthesize({
-    ideaOverride,
-    templateOverride,
-    shaderOverride,
-    accentOverride,
-    deployNow = false,
-  } = {}) {
-    const targetIdea = (ideaOverride ?? idea).trim();
-    if (!targetIdea) return;
-    if (deployNow) setDeploying(true);
-    else setLoading(true);
-    setError(null);
+  useEffect(() => {
+    if (!forkUp) return undefined;
+    refreshStatus();
+    const t = setInterval(refreshStatus, 6000);
+    return () => clearInterval(t);
+  }, [forkUp, refreshStatus]);
 
-    try {
-      const [providerName, ...modelParts] = selectedModel.split(':');
-      const modelName = modelParts.join(':');
-
-      // Also broadcast to live Zoth Bolt (:5173) if connected
-      fetch('http://127.0.0.1:5173/api/webgen/control', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'set_prompt',
-          prompt: `[AI: ${providerName}/${modelName} | Motion: ${motionTemplate}]\n${targetIdea}`,
-        }),
-      }).catch(() => {});
-
-      const res = await fetch('/api/studio/webgen/oneshot', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          idea: targetIdea,
-          mode: 'template',
-          templateId: (templateOverride ?? templateId) || undefined,
-          shader: shaderOverride ?? shader,
-          accent: accentOverride ?? accent,
-          deploy: Boolean(deployNow),
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok || data.error) {
-        throw new Error(data.error || `HTTP ${res.status}`);
+  /* ---- design catalog ------------------------------------------------------ */
+  useEffect(() => {
+    if (!forkUp) return;
+    (async () => {
+      try {
+        const { ok, json } = await control({ action: 'get_design_catalog' });
+        if (!ok || !json.success) return;
+        setFrameworks(json.frameworks || []);
+        setPalettes(json.palettes || []);
+        if ((json.frameworks || []).length && !framework) {
+          setFramework(json.frameworks[0].id || json.frameworks[0].name || '');
+        }
+      } catch {
+        /* catalog optional — workbench has its own */
       }
-      setResult(data);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [forkUp]);
+
+  /* ---- actions ------------------------------------------------------------- */
+  const bootFork = useCallback(async () => {
+    setBooting(true);
+    setBootLog('Requesting supervisor boot…');
+    try {
+      const res = await fetch('/api/studio/supervisor/boot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ service: 'bolt' }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || `boot failed (${res.status})`);
+      setBootLog('Fork booting — Remix/Vite dev server takes ~10–30s…');
+      for (let i = 0; i < 40; i += 1) {
+        await new Promise((r) => setTimeout(r, 2000));
+        if (await probe()) {
+          setBootLog('');
+          setFrameKey((k) => k + 1);
+          setBooting(false);
+          return;
+        }
+      }
+      setBootLog('Boot timed out. Start it manually: cd ~/NullAITech/bolt.diy && npm run dev -- --port 5173');
     } catch (err) {
-      setError(err.message || String(err));
-    } finally {
-      setLoading(false);
-      setDeploying(false);
+      setBootLog(String(err.message || err));
     }
-  }
+    setBooting(false);
+  }, [probe]);
 
-  async function searchFreeIcons() {
-    if (!iconQuery.trim()) return;
+  const dispatchBuild = useCallback(async () => {
+    const text = prompt.trim();
+    if (!text) {
+      promptRef.current?.focus();
+      return;
+    }
+    setDispatching(true);
+    setNotice('');
     try {
-      const prefix = iconCollection === 'all' ? '' : `&prefix=${encodeURIComponent(iconCollection)}`;
-      const res = await fetch(
-        `https://api.iconify.design/search?query=${encodeURIComponent(iconQuery.trim())}&limit=18${prefix}`
-      );
-      const data = await res.json();
-      if (Array.isArray(data?.icons) && data.icons.length > 0) {
-        setIconResults(data.icons);
+      const body = { action: 'prompt_and_build', prompt: text };
+      if (framework) body.template = framework;
+      const { ok, json } = await control(body);
+      if (!ok) throw new Error(json.error || `control returned ${json.status || 'error'}`);
+      if (!json.clientsNotified) {
+        setNotice('No Bolt workbench is connected to the bus — open the workbench below so it can execute the build.');
+      } else {
+        setNotice(`Dispatched to ${json.clientsNotified} connected workbench client${json.clientsNotified > 1 ? 's' : ''}.`);
       }
-    } catch (_) {}
-  }
-
-  function injectAssetIntoIdea(snippet) {
-    setIdea((prev) => `${prev.trim()}\n\n${snippet}`);
-    setActiveTab('architect');
-  }
-
-  function handleDownloadHtml() {
-    if (!result?.html) return;
-    const blob = new Blob([result.html], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${result.slug || 'zoth-bolt-site'}.html`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-
-  function handleCopyHtml() {
-    if (!result?.html) return;
-    navigator.clipboard?.writeText(result.html)?.catch?.(() => {});
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  }
-
-  async function handleDeconstructLiveUrl() {
-    if (!cloneUrl.trim()) return;
-    setCloningUrl(true);
-    try {
-      const res = await fetch('http://127.0.0.1:5173/api/zoth/url-blueprint', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: cloneUrl.trim() }),
-      });
-      const data = await res.json();
-      setUrlBlueprint(data);
-    } catch (_) {
-      const cleanHost = cloneUrl.replace(/^https?:\/\//, '').split('/')[0] || 'reference.site';
-      setUrlBlueprint({
-        ok: true,
-        url: cloneUrl,
-        title: `${cleanHost} — Sovereign Redesign`,
-        description: 'High-converting interactive application and motion showcase.',
-        headings: ['Hero Value Proposition', 'Interactive Utility Stage', 'Bento Capability Matrix', 'Pricing & FAQ'],
-        colors: ['#D4AF37', '#38BDF8', '#10B981'],
-        fonts: ['Syne', 'Space Grotesk', 'JetBrains Mono'],
-        sectionCount: 5,
-        hasJsonLd: false,
-        synthesizedPrompt: `Re-architect ${cloneUrl} into an Awwwards-grade full-stack web experience with a 60fps kinetic shader hero, bespoke multi-layer SVG artwork, real client-side utility calculator, Bento feature matrix, and full Schema.org @graph JSON-LD.`,
-      });
-    } finally {
-      setCloningUrl(false);
+      refreshStatus();
+    } catch (err) {
+      setNotice(`Dispatch failed: ${err.message || err}`);
     }
-  }
+    setDispatching(false);
+  }, [prompt, framework, refreshStatus]);
 
-  function computeGuardrailAudit(htmlStr) {
-    const html = htmlStr || '';
-    const checks = [
-      {
-        id: 'jsonld',
-        label: 'AEO Schema.org @graph (WebApp + FAQPage)',
-        pass: /application\/ld\+json/i.test(html) && /FAQPage/i.test(html),
-      },
-      {
-        id: 'og',
-        label: 'OpenGraph & Twitter Social Meta',
-        pass: /og:title/i.test(html) && /twitter:card/i.test(html),
-      },
-      {
-        id: 'viewport',
-        label: 'Triple-Viewport Responsive Meta',
-        pass: /name=["']viewport["']/i.test(html) && /width=device-width/i.test(html),
-      },
-      {
-        id: 'alt',
-        label: '100% Image Alt-Text Accessibility',
-        pass: !/<img(?![^>]*\balt=["'][^"']+["'])[^>]*>/i.test(html),
-      },
-      {
-        id: 'visuals',
-        label: '60fps Canvas Shader & Bespoke SVG Craft',
-        pass: /<canvas\b/i.test(html) || /<svg\b/i.test(html),
-      },
-      {
-        id: 'tags',
-        label: 'Strict HTML Tag Closure Integrity',
-        pass: /<\/style>/i.test(html) && /<\/head>/i.test(html) && /<\/body>/i.test(html),
-      },
-      {
-        id: 'attribution',
-        label: 'Sovereign Attribution (1nc0gn30 • NullAI)',
-        pass: /1nc0gn30 • NullAI|1nc0gn30|NullAI/i.test(html),
-      },
-      {
-        id: 'monetization',
-        label: 'Dual-Rail Stripe + Solana & ?licensed=true',
-        pass: /Stripe|Solana|licensed/i.test(html),
-      },
-    ];
-    const passed = checks.filter((c) => c.pass).length;
-    const score = html ? Math.round((passed / checks.length) * 100) : 0;
-    return { checks, passed, total: checks.length, score };
-  }
-
-  function handleAutoHealGuardrail() {
-    if (!result?.html) return;
-    let patched = result.html;
-    const siteTitle = result.siteName || 'Zoth Bolt Sovereign App';
-
-    // 1. Fix any <img> missing alt attribute
-    patched = patched.replace(/<img(?![^>]*\balt=)([^>]*)>/gi, `<img alt="${siteTitle} visual asset"$1>`);
-
-    // 2. Inject Schema.org @graph + OpenGraph + Viewport if missing
-    const headAdditions = [];
-    if (!/name=["']viewport["']/i.test(patched)) {
-      headAdditions.push('<meta name="viewport" content="width=device-width, initial-scale=1.0" />');
-    }
-    if (!/og:title/i.test(patched)) {
-      headAdditions.push(
-        `<meta property="og:title" content="${siteTitle}" />`,
-        `<meta property="og:description" content="Engineered with Zoth Bolt by 1nc0gn30 (@1nc0gn30) • NullAI Platform." />`,
-        `<meta property="og:type" content="website" />`,
-        `<meta property="og:image" content="https://zoth.nullai.tech/og-banner.png" />`,
-        `<meta name="twitter:card" content="summary_large_image" />`,
-        `<meta name="twitter:site" content="@1nc0gn30" />`,
-        `<meta name="twitter:creator" content="@1nc0gn30" />`
-      );
-    }
-    if (!/application\/ld\+json/i.test(patched) || !/FAQPage/i.test(patched)) {
-      const schemaGraph = {
-        '@context': 'https://schema.org',
-        '@graph': [
-          {
-            '@type': 'WebApplication',
-            name: siteTitle,
-            applicationCategory: 'DeveloperApplication',
-            operatingSystem: 'All',
-            offers: { '@type': 'Offer', price: '19.00', priceCurrency: 'USD' },
-            creator: { '@type': 'Organization', name: '1nc0gn30 • NullAI', url: 'https://nullai.tech' },
-          },
-          {
-            '@type': 'FAQPage',
-            mainEntity: [
-              {
-                '@type': 'Question',
-                name: `How does ${siteTitle} work in the browser?`,
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: `${siteTitle} runs 100% client-side with zero fake placeholders and instant interactive feedback.`,
-                },
-              },
-              {
-                '@type': 'Question',
-                name: 'What payment and licensing options are supported?',
-                acceptedAnswer: {
-                  '@type': 'Answer',
-                  text: 'Supports instant lifetime unlock via Stripe (Cards/Apple Pay) and Solana Tip with ?licensed=true client-side activation.',
-                },
-              },
-            ],
-          },
-        ],
-      };
-      headAdditions.push(`<script type="application/ld+json">${JSON.stringify(schemaGraph)}</script>`);
-    }
-    if (headAdditions.length > 0 && /<\/head>/i.test(patched)) {
-      patched = patched.replace(/<\/head>/i, `${headAdditions.join('\n')}\n</head>`);
-    }
-
-    // 3. Inject Sovereign Attribution + Dual-Rail Monetization Bar if missing
-    if (!/1nc0gn30 • NullAI|1nc0gn30/i.test(patched) || !/Stripe|Solana|licensed/i.test(patched)) {
-      const footerBar = `
-<section style="margin:24px auto;max-width:1120px;padding:14px 20px;border-radius:14px;background:rgba(17,20,32,0.92);border:1px solid rgba(212,175,55,0.4);color:#F8FAFC;font-family:monospace;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
-  <div><strong style="color:#D4AF37;">✦ 100% FREE & OPEN ACCESS</strong> • Optional Stripe & Solana tips</div>
-  <div style="font-size:12px;color:#94A3B8;">Engineered by <a href="https://github.com/1nc0gn30" style="color:#D4AF37;">1nc0gn30 (@1nc0gn30)</a> • <a href="https://nullai.tech" style="color:#38BDF8;">NullAI Platform</a></div>
-</section>`;
-      patched = patched.replace(/<\/body>/i, `${footerBar}\n</body>`);
-    }
-
-    setResult({ ...result, html: patched });
-  }
-
-  const auditReport = computeGuardrailAudit(result?.html);
-
-  function handleInstantThemeSwap(hexColor) {
-    if (!result?.html) return;
-    setAccent(hexColor);
-    const themeBlock = `<style id="zoth-live-theme">:root { --accent: ${hexColor} !important; --primary: ${hexColor} !important; } html, body { overflow-x: hidden; scroll-behavior: smooth; } h1 { font-size: clamp(2.1rem, 4.4vw, 3.6rem); }</style>`;
-    let updated = result.html;
-    if (updated.includes('id="zoth-live-theme"')) {
-      updated = updated.replace(/<style id="zoth-live-theme">[\s\S]*?<\/style>/i, themeBlock);
-    } else if (/<\/head>/i.test(updated)) {
-      updated = updated.replace(/<\/head>/i, `${themeBlock}\n</head>`);
-    }
-    setResult({ ...result, html: updated });
-  }
-
-  function handleSaveToVault() {
-    if (!result?.html) return;
-    const entry = {
-      id: `build-${Date.now()}`,
-      name: result.siteName || 'Zoth Bolt Build',
-      idea,
-      shader,
-      accent,
-      html: result.html,
-      savedAt: new Date().toLocaleTimeString(),
-    };
-    const next = [entry, ...savedBuilds.slice(0, 7)];
-    setSavedBuilds(next);
-    try {
-      localStorage.setItem('zoth_bolt_saved_vault', JSON.stringify(next));
-    } catch (_) {}
-  }
-
-  const previewHtmlWithVisualEditor = (() => {
-    if (!result?.html) return '';
-    if (!visualEditMode) return result.html;
-    const editorScript = `
-<script id="zoth-visual-editor-runtime">
-(function(){
-  const sel = 'h1,h2,h3,h4,p,button,a,span,li,strong,label';
-  document.addEventListener('mouseover', function(e){
-    const el = e.target.closest(sel);
-    if (el) { el.style.outline = '1.5px dashed #D4AF37'; el.style.cursor = 'text'; }
-  });
-  document.addEventListener('mouseout', function(e){
-    const el = e.target.closest(sel);
-    if (el && document.activeElement !== el) { el.style.outline = ''; }
-  });
-  document.addEventListener('click', function(e){
-    const el = e.target.closest(sel);
-    if (!el) return;
-    e.preventDefault();
-    e.stopPropagation();
-    el.contentEditable = 'true';
-    el.style.outline = '2px solid #10B981';
-    el.focus();
-  }, true);
-  document.addEventListener('focusout', function(e){
-    const el = e.target;
-    if (el && el.isContentEditable) {
-      el.removeAttribute('contenteditable');
-      el.style.outline = '';
-      const clone = document.documentElement.cloneNode(true);
-      const rt = clone.querySelector('#zoth-visual-editor-runtime');
-      if (rt) rt.remove();
-      window.parent.postMessage({ type: 'ZOTH_BOLT_VISUAL_EDIT', html: '<!DOCTYPE html>\\n' + clone.outerHTML }, '*');
-    }
-  });
-})();
-</script>`;
-    return result.html.replace(/<\/body>/i, `${editorScript}\n</body>`);
-  })();
-
-  const previewWidth = viewport === 'mobile' ? '390px' : viewport === 'tablet' ? '768px' : '100%';
-  const liveDeployUrl = result?.deploy?.liveUrl || result?.deploy?.deployUrl;
-
-  const mcpSnippet = JSON.stringify(
-    {
-      mcpServers: {
-        'zoth-bolt': {
-          command: 'node',
-          args: ['~/NullAITech/bolt.diy/packages/mcp-server/index.mjs'],
-          env: { WEBGEN_BASE_URL: 'http://127.0.0.1:5173' },
-        },
-      },
+  const applyPalette = useCallback(
+    async (id) => {
+      setPalette(id);
+      if (!id) return;
+      const scheme = palettes.find((p) => (p.id || p.name) === id);
+      try {
+        await control({ action: 'apply_design_preset', presetId: id, scheme });
+      } catch {
+        /* non-fatal */
+      }
     },
-    null,
-    2
+    [palettes],
   );
+
+  const readFileFromBridge = useCallback(async (path) => {
+    try {
+      const { ok, json } = await control({ action: 'read_file', path });
+      if (ok && json.success) setOpenFile({ path, content: json.content });
+      else setOpenFile({ path, content: `// ${json.error || 'file not available on the bridge'}` });
+    } catch (err) {
+      setOpenFile({ path, content: `// read failed: ${err.message || err}` });
+    }
+  }, []);
+
+  const runTool = useCallback(async () => {
+    const cmd = toolCmd.trim();
+    if (!cmd) return;
+    setToolRunning(true);
+    setToolOut(null);
+    try {
+      const { ok, json } = await control({ action: 'run_tool', command: cmd, timeout: 45000 });
+      if (!ok && !json.command) throw new Error(json.error || 'run_tool failed');
+      setToolOut(json);
+    } catch (err) {
+      setToolOut({ success: false, output: String(err.message || err), exitCode: 1 });
+    }
+    setToolRunning(false);
+  }, [toolCmd]);
+
+  /* ---- render -------------------------------------------------------------- */
+  const streaming = Boolean(status?.isStreaming);
+  const fileCount = status?.fileCount ?? 0;
+  const previewUrl = status?.previewUrl || '';
 
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        p: { xs: 2, md: 3 },
-        borderRadius: 3.5,
-        bgcolor: '#0A0B10',
-        border: '1px solid rgba(212, 175, 55, 0.35)',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.65)',
-        color: '#F8FAFC',
-      }}
-    >
-      <SovereignEyebrow accent="#D4AF37" right="Autonomous Web">
-        {"bolt.diy"}
-      </SovereignEyebrow>
-      <SovereignBand
-        seed={"bolt.diy"}
-        eyebrow={"Autonomous Web"}
-        caption={"Zoth Bolt"}
-        label={"Zoth Bolt — Zoth sovereign visualisation"}
-      />
-      {/* Top Header Strip */}
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: 1.5,
-          mb: 2,
-          pb: 1.8,
-          borderBottom: '1px solid rgba(212, 175, 55, 0.2)',
-        }}
-      >
-        <Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 0.4 }}>
-            <Chip
-              icon={<BoltIcon sx={{ color: '#08080B !important', fontSize: 16 }} />}
-              label="ZOTH BOLT v3.5 // MAIN AI & MOTION ARCHITECT"
-              size="small"
-              sx={{
-                fontFamily: mono,
-                fontWeight: 900,
-                fontSize: '0.68rem',
-                bgcolor: '#D4AF37',
-                color: '#08080B',
-              }}
-            />
-            <Chip
-              label="23+ AI PROVIDERS & LOCAL CLI AGENTS"
-              size="small"
-              sx={{
-                fontFamily: mono,
-                fontWeight: 700,
-                fontSize: '0.66rem',
-                bgcolor: 'rgba(56, 189, 248, 0.14)',
-                color: '#38BDF8',
-                border: '1px solid rgba(56, 189, 248, 0.35)',
-              }}
-            />
-            <Chip
-              label="6 MOTION EDIT TEMPLATES · 200K+ FREE SVGS & PIXEL ART"
-              size="small"
-              sx={{
-                fontFamily: mono,
-                fontWeight: 700,
-                fontSize: '0.66rem',
-                bgcolor: 'rgba(16, 185, 129, 0.14)',
-                color: '#34D399',
-                border: '1px solid rgba(16, 185, 129, 0.35)',
-              }}
-            />
-          </Box>
-          <Typography
-            variant="h5"
-            sx={{ ...titleBaseSx, fontFamily: displayFont, fontWeight: 800, color: '#F5E6AB', letterSpacing: '0.02em' }}
+    <div className="flex h-full min-h-[560px] w-full flex-col gap-3 bg-[#07080d] p-3 text-zinc-200">
+      {/* header */}
+      <header className="flex flex-wrap items-center gap-2 rounded-lg border border-[#d4af37]/25 bg-[#0c0e16] px-3 py-2">
+        <span className="text-base" aria-hidden="true">⚡</span>
+        <h2 className="text-sm font-semibold tracking-wide text-[#d4af37]">
+          ZOTH BOLT <span className="font-normal text-zinc-400">· bolt.diy fork · :5173</span>
+        </h2>
+        <div className="ml-auto flex flex-wrap items-center gap-2 text-xs">
+          <span
+            className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 ${
+              forkUp === null
+                ? 'border-zinc-600 text-zinc-400'
+                : forkUp
+                  ? 'border-emerald-500/40 text-emerald-400'
+                  : 'border-red-500/40 text-red-400'
+            }`}
+            role="status"
           >
-            Zoth Bolt — Full-Stack AI, Motion Edit & Asset Architect
-          </Typography>
-          <Typography sx={{ ...ledeSx, fontFamily: mono, fontSize: '0.68rem', color: '#94A3B8', mt: 0.4 }}>
-            Supercharged for Zoth Studio & ZothOS • Proudly built on the open-source <span style={{ color: '#D4AF37' }}>bolt.diy</span> foundation
-          </Typography>
-        </Box>
-
-        {isLocalRuntime() && (
-        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-          <Button
-            size="small"
-            variant="contained"
-            href="http://127.0.0.1:5173"
-            target="_blank"
-            rel="noopener"
-            endIcon={<OpenInNewIcon sx={{ fontSize: 14 }} />}
-            sx={{
-              fontFamily: mono,
-              fontSize: '0.72rem',
-              fontWeight: 900,
-              bgcolor: '#D4AF37',
-              color: '#08080B',
-              textTransform: 'none',
-              '&:hover': { bgcolor: '#F5E6AB' },
+            <span className={`h-1.5 w-1.5 rounded-full ${forkUp ? 'bg-emerald-400' : forkUp === false ? 'bg-red-400' : 'bg-zinc-500'}`} />
+            {forkUp === null ? 'probing…' : forkUp ? 'fork live' : 'fork down'}
+          </span>
+          <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 ${busLive ? 'border-[#d4af37]/40 text-[#d4af37]' : 'border-zinc-600 text-zinc-500'}`}>
+            <span className={`h-1.5 w-1.5 rounded-full ${busLive ? 'bg-[#d4af37]' : 'bg-zinc-600'}`} />
+            bus {busLive ? 'live' : 'idle'}
+          </span>
+          {streaming && (
+            <span className="inline-flex items-center gap-1 rounded-full border border-sky-500/40 px-2 py-0.5 text-sky-300">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-sky-400" />
+              building…
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={() => {
+              setFrameLoaded(false);
+              setFrameKey((k) => k + 1);
+              probe();
             }}
+            className="rounded border border-zinc-600 px-2 py-0.5 text-zinc-300 hover:border-[#d4af37]/60 hover:text-[#d4af37]"
           >
-            Launch Full Zoth Bolt IDE (:5173)
-          </Button>
-          <Button
-            size="small"
-            variant="outlined"
-            href="http://127.0.0.1:8092"
+            Reload workbench
+          </button>
+          <a
+            href={BOLT_URL}
             target="_blank"
-            rel="noopener"
-            endIcon={<OpenInNewIcon sx={{ fontSize: 14 }} />}
-            sx={{
-              fontFamily: mono,
-              fontSize: '0.72rem',
-              borderColor: 'rgba(255,255,255,0.2)',
-              color: '#CBD5E1',
-              textTransform: 'none',
-            }}
+            rel="noreferrer"
+            className="rounded border border-zinc-600 px-2 py-0.5 text-zinc-300 hover:border-[#d4af37]/60 hover:text-[#d4af37]"
           >
-            Simple QuickSite Starter (:8092)
-          </Button>
-        </Box>
-        )}
-      </Box>
+            Open full ↗
+          </a>
+        </div>
+      </header>
 
-      {/* Mode Switcher Tabs */}
-      <Tabs
-        value={activeTab}
-        onChange={(e, v) => setActiveTab(v)}
-        variant="scrollable"
-        scrollButtons="auto"
-        sx={{
-          mb: 2.5,
-          minHeight: 40,
-          '& .MuiTab-root': {
-            minHeight: 40,
-            fontFamily: mono,
-            fontSize: '0.74rem',
-            fontWeight: 800,
-            textTransform: 'none',
-            color: '#94A3B8',
-            borderRadius: 2,
-            mr: 1,
-            '&.Mui-selected': {
-              bgcolor: 'rgba(212, 175, 55, 0.16)',
-              color: '#F5E6AB',
-              border: '1px solid rgba(212, 175, 55, 0.45)',
-            },
-          },
-          '& .MuiTabs-indicator': { display: 'none' },
-        }}
-      >
-        <Tab value="architect" icon={<BoltIcon sx={{ fontSize: 16 }} />} iconPosition="start" label="1. AI & Motion Architect + Live Netlify Deploy" />
-        <Tab value="clone" icon={<AutoAwesomeIcon sx={{ fontSize: 16 }} />} iconPosition="start" label="2. URL Clone & Relume Section Composer" />
-        <Tab value="motion" icon={<MovieFilterIcon sx={{ fontSize: 16 }} />} iconPosition="start" label="3. Motion Edit Templates (6 Cinema Cuts)" />
-        <Tab value="vault" icon={<ExtensionIcon sx={{ fontSize: 16 }} />} iconPosition="start" label="4. Icons, SVGs, 16-Bit Pixel Art & MCP Vault" />
-        <Tab value="workbench" icon={<TerminalIcon sx={{ fontSize: 16 }} />} iconPosition="start" label="5. Embedded Zoth Bolt WebContainer IDE (:5173)" />
-      </Tabs>
-
-      {/* TAB: URL CLONE & RELUME SECTION COMPOSER */}
-      {activeTab === 'clone' && (
-        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2.5, mb: 2 }}>
-          <Box sx={{ p: 2.5, borderRadius: 2.5, bgcolor: '#111420', border: '1px solid rgba(212,175,55,0.35)' }}>
-            <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', fontWeight: 900, color: '#D4AF37', mb: 0.5 }}>
-              🔗 LIVE URL DECONSTRUCTOR & REMIX ENGINE (SAME.NEW / V0 STYLE)
-            </Typography>
-            <Typography sx={{ fontSize: '0.78rem', color: '#94A3B8', mb: 1.5 }}>
-              Paste any public reference or competitor URL. Zoth Bolt extracts its headings, navigation, color hex swatches, and typography, then synthesizes an upgraded Awwwards redesign.
-            </Typography>
-            <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-              <TextField
-                size="small"
-                fullWidth
-                value={cloneUrl}
-                onChange={(e) => setCloneUrl(e.target.value)}
-                placeholder="https://linear.app or https://zoth.nullai.tech"
-                sx={{ '& .MuiOutlinedInput-root': { bgcolor: '#07080D', color: '#FFF', fontFamily: mono, fontSize: '0.76rem' } }}
-              />
-              <Button
-                variant="contained"
-                disabled={cloningUrl}
-                onClick={handleDeconstructLiveUrl}
-                sx={{ bgcolor: '#D4AF37', color: '#08080B', fontFamily: mono, fontWeight: 900, fontSize: '0.72rem', textTransform: 'none', whiteSpace: 'nowrap' }}
-              >
-                {cloningUrl ? 'Scanning...' : '🔍 Deconstruct URL'}
-              </Button>
-            </Box>
-
-            {urlBlueprint && (
-              <Box sx={{ p: 1.8, borderRadius: 2, bgcolor: '#080A10', border: '1px solid rgba(255,255,255,0.1)' }}>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#38BDF8' }}>{urlBlueprint.url}</Typography>
-                <Typography sx={{ fontWeight: 800, fontSize: '0.92rem', color: '#FFF', mb: 0.5 }}>{urlBlueprint.title}</Typography>
-                <Typography sx={{ fontSize: '0.74rem', color: '#94A3B8', mb: 1 }}>{urlBlueprint.description}</Typography>
-                <Box sx={{ display: 'flex', gap: 0.8, flexWrap: 'wrap', mb: 1.5 }}>
-                  {(urlBlueprint.colors || []).map((hex) => (
-                    <Chip
-                      key={hex}
-                      label={hex}
-                      size="small"
-                      sx={{ fontFamily: mono, fontSize: '0.65rem', bgcolor: 'rgba(255,255,255,0.06)', color: '#FFF', border: `1px solid ${hex}` }}
-                    />
-                  ))}
-                </Box>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  onClick={() => {
-                    setIdea(urlBlueprint.synthesizedPrompt);
-                    if (urlBlueprint.colors?.[0]) setAccent(urlBlueprint.colors[0]);
-                    setActiveTab('architect');
-                    handleSynthesize({
-                      ideaOverride: urlBlueprint.synthesizedPrompt,
-                      accentOverride: urlBlueprint.colors?.[0] || accent,
-                      deployNow: false,
-                    });
-                  }}
-                  sx={{ bgcolor: '#10B981', color: '#08080B', fontFamily: mono, fontWeight: 900, fontSize: '0.73rem', textTransform: 'none' }}
-                >
-                  ⚡ Clone & Synthesize Upgraded Site Now
-                </Button>
-              </Box>
-            )}
-          </Box>
-
-          <Box sx={{ p: 2.5, borderRadius: 2.5, bgcolor: '#111420', border: '1px solid rgba(56,189,248,0.35)' }}>
-            <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', fontWeight: 900, color: '#38BDF8', mb: 0.5 }}>
-              📐 RELUME / FRAMER-STYLE SECTION STACK COMPOSER
-            </Typography>
-            <Typography sx={{ fontSize: '0.78rem', color: '#94A3B8', mb: 1.5 }}>
-              Toggle the exact architectural blocks to compile into your site generation blueprint:
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.8, mb: 2 }}>
-              {[
-                '60fps Kinetic Shader & Motion Hero',
-                'Interactive In-Browser Utility / Calculator',
-                '6-Card Tactile Bento Grid',
-                'Isometric Multi-Layer SVG Architecture Stage',
-                'Sovereign Dual-Rail Pricing & Output Paywall',
-                'AEO Schema.org @graph & FAQ Accordion',
-              ].map((sec) => {
-                const active = selectedSections.includes(sec);
-                return (
-                  <Box
-                    key={sec}
-                    onClick={() =>
-                      setSelectedSections((prev) =>
-                        prev.includes(sec) ? prev.filter((x) => x !== sec) : [...prev, sec]
-                      )
-                    }
-                    sx={{
-                      p: 1,
-                      borderRadius: 1.5,
-                      bgcolor: active ? 'rgba(16,185,129,0.14)' : '#080A10',
-                      border: active ? '1px solid rgba(16,185,129,0.5)' : '1px solid rgba(255,255,255,0.08)',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#F8FAFC', fontWeight: 700 }}>
-                      {sec}
-                    </Typography>
-                    <Chip
-                      label={active ? '✓ ACTIVE' : '+ ADD'}
-                      size="small"
-                      sx={{
-                        height: 18,
-                        fontFamily: mono,
-                        fontSize: '0.6rem',
-                        bgcolor: active ? '#10B981' : 'rgba(255,255,255,0.08)',
-                        color: active ? '#08080B' : '#94A3B8',
-                        fontWeight: 900,
-                      }}
-                    />
-                  </Box>
-                );
-              })}
-            </Box>
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={() => {
-                const compiledIdea = `${idea.split('\n\n[SECTION STACK')[0]}\n\n[SECTION STACK ARCHITECTURE: ${selectedSections.join(' -> ')}]`;
-                setIdea(compiledIdea);
-                setActiveTab('architect');
-                handleSynthesize({ ideaOverride: compiledIdea, deployNow: false });
-              }}
-              sx={{ bgcolor: '#38BDF8', color: '#08080B', fontFamily: mono, fontWeight: 900, fontSize: '0.73rem', textTransform: 'none' }}
-            >
-              ⚡ Compile {selectedSections.length}-Section Stack & Synthesize
-            </Button>
-          </Box>
-        </Box>
+      {/* fork offline banner */}
+      {forkUp === false && (
+        <div className="flex flex-wrap items-center gap-3 rounded-lg border border-red-500/30 bg-red-950/30 px-3 py-2 text-sm">
+          <span>The bolt.diy fork is not answering on :5173.</span>
+          <button
+            type="button"
+            onClick={bootFork}
+            disabled={booting}
+            className="rounded bg-[#d4af37] px-3 py-1 text-xs font-semibold text-black hover:bg-[#e6c65a] disabled:opacity-50"
+          >
+            {booting ? 'Booting…' : 'Boot fork via supervisor'}
+          </button>
+          {bootLog && <span className="text-xs text-zinc-400">{bootLog}</span>}
+        </div>
       )}
 
-      {/* TAB 2: MOTION EDIT TEMPLATES */}
-      {activeTab === 'motion' && (
-        <Box sx={{ mb: 2 }}>
-          <Typography sx={{ fontSize: '0.84rem', color: '#94A3B8', mb: 2 }}>
-            Select any production Motion Edit template below to seed Zoth Bolt with deterministic 60fps choreography, bespoke multi-layered SVG artwork, and @teknium Uncommon Web shaders:
-          </Typography>
-          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 2 }}>
-            {MOTION_EDIT_TEMPLATES.map((tpl) => (
-              <Box
-                key={tpl.id}
-                sx={{
-                  p: 2,
-                  borderRadius: 2.5,
-                  bgcolor: '#111420',
-                  border: motionTemplate === tpl.id ? `2px solid ${tpl.accent}` : '1px solid rgba(255,255,255,0.1)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  gap: 1.5,
-                }}
-              >
-                <Box>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                    <Chip
-                      label={tpl.badge}
-                      size="small"
-                      sx={{
-                        fontFamily: mono,
-                        fontSize: '0.65rem',
-                        fontWeight: 800,
-                        bgcolor: `${tpl.accent}22`,
-                        color: tpl.accent,
-                        border: `1px solid ${tpl.accent}55`,
-                      }}
-                    />
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.65rem', color: '#64748B' }}>
-                      shader:{tpl.shader}
-                    </Typography>
-                  </Box>
-                  <Typography sx={{ fontWeight: 800, fontSize: '0.95rem', color: '#FFF', mb: 0.5 }}>
-                    {tpl.name}
-                  </Typography>
-                  <Typography sx={{ fontSize: '0.78rem', color: '#94A3B8', lineHeight: 1.5 }}>
-                    {tpl.desc}
-                  </Typography>
-                </Box>
-                <Button
-                  fullWidth
-                  size="small"
-                  variant="contained"
-                  onClick={() => {
-                    setMotionTemplate(tpl.id);
-                    setShader(tpl.shader);
-                    setAccent(tpl.accent);
-                    setIdea(tpl.ideaSeed);
-                    setActiveTab('architect');
-                    handleSynthesize({
-                      ideaOverride: tpl.ideaSeed,
-                      shaderOverride: tpl.shader,
-                      accentOverride: tpl.accent,
-                      deployNow: false,
-                    });
-                  }}
-                  sx={{
-                    bgcolor: tpl.accent,
-                    color: '#08080B',
-                    fontFamily: mono,
-                    fontWeight: 900,
-                    fontSize: '0.72rem',
-                    textTransform: 'none',
-                  }}
-                >
-                  ⚡ Load Motion Template & Synthesize
-                </Button>
-              </Box>
-            ))}
-          </Box>
-        </Box>
-      )}
-
-      {/* TAB 3: ICONS, SVGS, PIXEL ART & MCP ASSET VAULT */}
-      {activeTab === 'vault' && (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-          <Box sx={{ p: 2, borderRadius: 2.5, bgcolor: '#111420', border: '1px solid rgba(212,175,55,0.25)' }}>
-            <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', fontWeight: 800, color: '#F5E6AB', mb: 1.5 }}>
-              👾 BUILT-IN 16-BIT PIXEL ART SVGS & MULTI-LAYERED VECTOR CRESTS (ZERO EXTERNAL DEPENDENCIES)
-            </Typography>
-            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr 1fr', sm: 'repeat(4, 1fr)' }, gap: 1.5 }}>
-              {PIXEL_ART_SVGS.map((item) => (
-                <Box
-                  key={item.id}
-                  sx={{
-                    p: 1.5,
-                    borderRadius: 2,
-                    bgcolor: '#090B11',
-                    border: '1px solid rgba(255,255,255,0.08)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    textAlign: 'center',
-                    gap: 1,
-                  }}
-                >
-                  <Box
-                    sx={{
-                      width: 48,
-                      height: 48,
-                      borderRadius: 1.5,
-                      bgcolor: 'rgba(255,255,255,0.03)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                    dangerouslySetInnerHTML={{ __html: item.svg }}
-                  />
-                  <Box>
-                    <Typography sx={{ fontSize: '0.78rem', fontWeight: 800, color: '#FFF' }}>{item.name}</Typography>
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.64rem', color: '#64748B' }}>
-                      {item.category}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', gap: 0.8, width: '100%' }}>
-                    <Button
-                      fullWidth
-                      size="small"
-                      variant="outlined"
-                      onClick={() => injectAssetIntoIdea(`Include inline SVG asset (${item.name}):\n${item.svg}`)}
-                      sx={{
-                        fontFamily: mono,
-                        fontSize: '0.65rem',
-                        borderColor: 'rgba(212,175,55,0.4)',
-                        color: '#F5E6AB',
-                        textTransform: 'none',
-                      }}
-                    >
-                      + Inject
-                    </Button>
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      onClick={() => navigator.clipboard?.writeText(item.svg)?.catch?.(() => {})}
-                      sx={{
-                        fontFamily: mono,
-                        fontSize: '0.65rem',
-                        borderColor: 'rgba(255,255,255,0.15)',
-                        color: '#94A3B8',
-                        textTransform: 'none',
-                      }}
-                    >
-                      Copy
-                    </Button>
-                  </Box>
-                </Box>
-              ))}
-            </Box>
-          </Box>
-
-          {/* Free Iconify 200k+ Search */}
-          <Box sx={{ p: 2, borderRadius: 2.5, bgcolor: '#111420', border: '1px solid rgba(56,189,248,0.25)' }}>
-            <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', fontWeight: 800, color: '#38BDF8', mb: 1.2 }}>
-              🔍 SEARCH 200,000+ FREE VECTOR & PIXEL-ART ICONS (ICONIFY + DICEBEAR REST API)
-            </Typography>
-            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1.5 }}>
-              <Select
-                size="small"
-                value={iconCollection}
-                onChange={(e) => setIconCollection(e.target.value)}
-                sx={{ bgcolor: '#090B11', color: '#FFF', fontFamily: mono, fontSize: '0.75rem', minWidth: 210 }}
-              >
-                <MenuItem value="pixelarticons">Pixelarticons (8-Bit Pixel Art)</MenuItem>
-                <MenuItem value="lucide">Lucide (Clean Vector)</MenuItem>
-                <MenuItem value="ph">Phosphor (Editorial Vector)</MenuItem>
-                <MenuItem value="game-icons">Game-Icons (RPG & Arcade)</MenuItem>
-                <MenuItem value="simple-icons">Simple-Icons (Brand Logos)</MenuItem>
-                <MenuItem value="all">All 200,000+ Free Icons</MenuItem>
-              </Select>
-              <TextField
-                size="small"
-                value={iconQuery}
-                onChange={(e) => setIconQuery(e.target.value)}
-                placeholder="Search icons (e.g. sword, bolt, shield, robot, ramen)..."
-                sx={{
-                  flex: 1,
-                  minWidth: 200,
-                  '& .MuiOutlinedInput-root': { bgcolor: '#090B11', color: '#FFF', fontFamily: mono, fontSize: '0.78rem' },
-                }}
-              />
-              <Button
-                variant="contained"
-                onClick={searchFreeIcons}
-                sx={{ bgcolor: '#38BDF8', color: '#08080B', fontFamily: mono, fontWeight: 900, fontSize: '0.74rem', textTransform: 'none' }}
-              >
-                Search Free Icons
-              </Button>
-            </Box>
-            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(105px, 1fr))', gap: 1 }}>
-              {iconResults.map((id) => {
-                const [prefix, name] = id.split(':');
-                const svgUrl = `https://api.iconify.design/${prefix}/${name}.svg?color=%23D4AF37`;
-                return (
-                  <Box
-                    key={id}
-                    onClick={() =>
-                      injectAssetIntoIdea(`Use Iconify SVG icon "${id}" via <img src="${svgUrl}" alt="${name} icon" width="24" height="24" />`)
-                    }
-                    sx={{
-                      p: 1,
-                      borderRadius: 1.5,
-                      bgcolor: '#090B11',
-                      border: '1px solid rgba(255,255,255,0.08)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      gap: 0.6,
-                      cursor: 'pointer',
-                      '&:hover': { borderColor: '#D4AF37' },
-                    }}
-                  >
-                    <img src={svgUrl} alt={`${name} icon`} width="26" height="26" />
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.62rem', color: '#CBD5E1', textAlign: 'center' }} noWrap>
-                      {name}
-                    </Typography>
-                  </Box>
-                );
-              })}
-            </Box>
-          </Box>
-
-          {/* MCP Server Snippet */}
-          <Box sx={{ p: 2, borderRadius: 2.5, bgcolor: '#111420', border: '1px solid rgba(16,185,129,0.3)' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: '#34D399' }}>
-                🔌 ZOTH BOLT MEDIA & FULL-STACK MCP SERVER (zoth_bolt_search_free_icons · zoth_bolt_get_svg_pixel_library · zoth_bolt_list_motion_templates)
-              </Typography>
-              <Button
-                size="small"
-                variant="outlined"
-                onClick={() => navigator.clipboard?.writeText(mcpSnippet)?.catch?.(() => {})}
-                sx={{ fontFamily: mono, fontSize: '0.68rem', borderColor: '#34D399', color: '#34D399', textTransform: 'none' }}
-              >
-                Copy MCP JSON
-              </Button>
-            </Box>
-            <pre style={{ margin: 0, fontFamily: mono, fontSize: '0.7rem', color: '#E2E8F0', overflowX: 'auto' }}>
-              {mcpSnippet}
-            </pre>
-          </Box>
-        </Box>
-      )}
-
-      {/* TAB 4: EMBEDDED ZOTH BOLT IDE (:5173) */}
-      {activeTab === 'workbench' && (
-        <Box sx={{ borderRadius: 2.5, overflow: 'hidden', border: '1px solid rgba(212,175,55,0.35)', height: 700, bgcolor: '#05060A' }}>
-          <iframe
-            src="http://127.0.0.1:5173"
-            title="Zoth Bolt Live Full-Stack Workbench (:5173)"
-            style={{ width: '100%', height: '100%', border: 'none' }}
-          />
-        </Box>
-      )}
-
-      {/* TAB 1: MAIN AI & MOTION ARCHITECT WORKSPACE */}
-      {activeTab === 'architect' && (
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: { xs: '1fr', lg: '410px 1fr' },
-            gap: 2.5,
-            alignItems: 'stretch',
-          }}
+      <div className="flex min-h-0 flex-1 flex-col gap-3 lg:flex-row">
+        {/* workbench embed — the real fork */}
+        <section
+          aria-label="Zoth Bolt workbench"
+          className="relative min-h-[380px] flex-1 overflow-hidden rounded-lg border border-zinc-800 bg-black lg:min-h-0"
         >
-          {/* Left Controls */}
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 1.5,
-              p: 2,
-              borderRadius: 2.5,
-              bgcolor: '#10121B',
-              border: '1px solid rgba(255,255,255,0.08)',
-            }}
-          >
-            <FormControl fullWidth size="small">
-              <InputLabel sx={{ color: '#94A3B8', fontFamily: mono, fontSize: '0.74rem' }}>
-                AI Provider / Model / Local Agent CLI
-              </InputLabel>
-              <Select
-                value={selectedModel}
-                label="AI Provider / Model / Local Agent CLI"
-                onChange={(e) => setSelectedModel(e.target.value)}
-                sx={{
-                  bgcolor: '#07080D',
-                  color: '#F8FAFC',
-                  fontFamily: mono,
-                  fontSize: '0.75rem',
-                  '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(212,175,55,0.35)' },
-                }}
-              >
-                {AI_PROVIDERS_AND_AGENTS.map((m) => (
-                  <MenuItem key={m.id} value={m.id} sx={{ fontFamily: mono, fontSize: '0.74rem' }}>
-                    {m.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <FormControl fullWidth size="small">
-              <InputLabel sx={{ color: '#94A3B8', fontFamily: mono, fontSize: '0.74rem' }}>
-                Motion Edit / Cinema Template
-              </InputLabel>
-              <Select
-                value={motionTemplate}
-                label="Motion Edit / Cinema Template"
-                onChange={(e) => {
-                  const val = e.target.value;
-                  setMotionTemplate(val);
-                  const found = MOTION_EDIT_TEMPLATES.find((t) => t.id === val);
-                  if (found) {
-                    setShader(found.shader);
-                    setAccent(found.accent);
-                  }
-                }}
-                sx={{
-                  bgcolor: '#07080D',
-                  color: '#F8FAFC',
-                  fontFamily: mono,
-                  fontSize: '0.75rem',
-                  '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(16,185,129,0.35)' },
-                }}
-              >
-                {MOTION_EDIT_TEMPLATES.map((t) => (
-                  <MenuItem key={t.id} value={t.id} sx={{ fontFamily: mono, fontSize: '0.74rem' }}>
-                    {t.name} ({t.badge})
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <Box>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: '#D4AF37', fontWeight: 800, mb: 0.6 }}>
-                HIGH-CRAFT SITE & MOTION SPECIFICATION
-              </Typography>
-              <TextField
-                fullWidth
-                multiline
-                minRows={3}
-                maxRows={5}
-                value={idea}
-                onChange={(e) => setIdea(e.target.value)}
-                placeholder="Describe any app, storefront, SaaS utility, or motion showreel..."
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    bgcolor: '#07080D',
-                    color: '#F8FAFC',
-                    fontSize: '0.84rem',
-                    borderRadius: 2,
-                    '& fieldset': { borderColor: 'rgba(212, 175, 55, 0.28)' },
-                    '&:hover fieldset': { borderColor: '#D4AF37' },
-                  },
-                }}
-              />
-            </Box>
-
-            {/* Quick High-Craft Presets */}
-            <Box>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#94A3B8', mb: 0.6 }}>
-                INSTANT HIGH-CRAFT & MOTION SEEDS:
-              </Typography>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.6 }}>
-                {[
-                  {
-                    label: '🥬 Sprig Pantry',
-                    tpl: 'hermes-sprig',
-                    sh: 'braille',
-                    ac: '#22C55E',
-                    text: 'Sprig Neighborhood Pantry — 15-minute organic produce, cold-pressed tonics, and sourdough drops with live courier ETA ring and bespoke botanical SVG art',
-                  },
-                  {
-                    label: '🍜 Hatch Bento',
-                    tpl: 'hermes-hatch',
-                    sh: 'dither',
-                    ac: '#F97316',
-                    text: 'Hatch Late-Night Ramen & Hot Bento Drop — Wagyu katsu sando, black garlic tonkotsu ramen, and crispy gyoza with thermal lock tracking',
-                  },
-                  {
-                    label: '🍷 Hush Cellar',
-                    tpl: 'hermes-hush',
-                    sh: 'constellation',
-                    ac: '#A855F7',
-                    text: 'Hush Reserve Spirits & Midnight Cellar — Small-batch Japanese whisky, mezcal, and botanical aperitifs with instant 21+ demo preview',
-                  },
-                  {
-                    label: '🔐 JWT Guard',
-                    tpl: 'jwt-inspector-guard',
-                    sh: 'ascii',
-                    ac: '#D4AF37',
-                    text: 'Zero-Egress JWT & OAuth Security Inspector with live HMAC/RSA verifier, algorithm confusion scanner, and token expiry telemetry',
-                  },
-                ].map((sample) => (
-                  <Chip
-                    key={sample.label}
-                    label={sample.label}
-                    size="small"
-                    onClick={() => {
-                      setIdea(sample.text);
-                      setTemplateId(sample.tpl);
-                      setShader(sample.sh);
-                      setAccent(sample.ac);
-                      handleSynthesize({
-                        ideaOverride: sample.text,
-                        templateOverride: sample.tpl,
-                        shaderOverride: sample.sh,
-                        accentOverride: sample.ac,
-                        deployNow: false,
-                      });
-                    }}
-                    sx={{
-                      fontFamily: mono,
-                      fontSize: '0.67rem',
-                      bgcolor: 'rgba(255,255,255,0.05)',
-                      color: '#E2E8F0',
-                      border: '1px solid rgba(255,255,255,0.12)',
-                      cursor: 'pointer',
-                      '&:hover': { borderColor: '#D4AF37', color: '#F5E6AB' },
-                    }}
-                  />
-                ))}
-              </Box>
-            </Box>
-
-            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1 }}>
-              <FormControl size="small">
-                <InputLabel sx={{ color: '#94A3B8', fontFamily: mono, fontSize: '0.72rem' }}>Base Architecture</InputLabel>
-                <Select
-                  value={templateId}
-                  label="Base Architecture"
-                  onChange={(e) => setTemplateId(e.target.value)}
-                  sx={{ bgcolor: '#07080D', color: '#F8FAFC', fontFamily: mono, fontSize: '0.73rem' }}
-                >
-                  <MenuItem value="">✨ Auto-Match Best Architecture</MenuItem>
-                  {templates.map((t) => (
-                    <MenuItem key={t.id} value={t.id} sx={{ fontFamily: mono, fontSize: '0.73rem' }}>
-                      {t.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <FormControl size="small">
-                <InputLabel sx={{ color: '#94A3B8', fontFamily: mono, fontSize: '0.72rem' }}>@teknium Shader</InputLabel>
-                <Select
-                  value={shader}
-                  label="@teknium Shader"
-                  onChange={(e) => setShader(e.target.value)}
-                  sx={{ bgcolor: '#07080D', color: '#F8FAFC', fontFamily: mono, fontSize: '0.73rem' }}
-                >
-                  <MenuItem value="braille">⠿ Braille Wave (U+2800)</MenuItem>
-                  <MenuItem value="dither">▓ Bayer 4x4 Dither</MenuItem>
-                  <MenuItem value="ascii">█ Kinetic ASCII Matrix</MenuItem>
-                  <MenuItem value="constellation">✦ Constellation Mesh</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-
-            {/* Primary Action Buttons */}
-            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, mt: 0.5 }}>
-              <Button
-                variant="contained"
-                disabled={loading || deploying}
-                startIcon={<AutoAwesomeIcon />}
-                onClick={() => handleSynthesize({ deployNow: false })}
-                sx={{
-                  bgcolor: '#D4AF37',
-                  color: '#08080B',
-                  fontWeight: 900,
-                  fontFamily: mono,
-                  fontSize: '0.74rem',
-                  py: 1.1,
-                  textTransform: 'none',
-                  '&:hover': { bgcolor: '#F5E6AB' },
-                }}
-              >
-                {loading ? 'Synthesizing...' : '⚡ Synthesize Site'}
-              </Button>
-
-              <Button
-                variant="contained"
-                disabled={loading || deploying}
-                startIcon={<RocketLaunchIcon />}
-                onClick={() => handleSynthesize({ deployNow: true })}
-                sx={{
-                  background: 'linear-gradient(135deg, #38BDF8 0%, #0284C7 100%)',
-                  color: '#08080B',
-                  fontWeight: 900,
-                  fontFamily: mono,
-                  fontSize: '0.74rem',
-                  py: 1.1,
-                  textTransform: 'none',
-                }}
-              >
-                {deploying ? 'Deploying...' : '🚀 Deploy Live Netlify'}
-              </Button>
-            </Box>
-
-            {(loading || deploying) && <LinearProgress sx={{ bgcolor: 'rgba(212,175,55,0.15)', '& .MuiLinearProgress-bar': { bgcolor: '#D4AF37' } }} />}
-
-            {error && (
-              <Alert severity="error" sx={{ fontSize: '0.75rem', py: 0.5 }}>
-                {error}
-              </Alert>
-            )}
-
-            {liveDeployUrl && (
-              <Box sx={{ p: 1.2, borderRadius: 2, bgcolor: 'rgba(16,185,129,0.12)', border: '1px solid rgba(16,185,129,0.4)' }}>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, color: '#34D399' }}>
-                  <CheckCircleIcon sx={{ fontSize: 13, mr: 0.5, verticalAlign: 'middle' }} />
-                  LIVE ON NETLIFY CDN:
-                </Typography>
-                <a
-                  href={liveDeployUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ fontFamily: mono, fontSize: '0.74rem', color: '#F8FAFC', fontWeight: 700, textDecoration: 'underline', wordBreak: 'break-all' }}
-                >
-                  {liveDeployUrl} ↗
-                </a>
-              </Box>
-            )}
-
-            {/* Export Controls */}
-            {result && (
-              <Box sx={{ display: 'flex', gap: 0.8, flexWrap: 'wrap', pt: 0.5 }}>
-                <Button
-                  size="small"
-                  variant="outlined"
-                  startIcon={<DownloadIcon />}
-                  onClick={handleDownloadHtml}
-                  sx={{ flex: 1, fontFamily: mono, fontSize: '0.68rem', borderColor: 'rgba(212,175,55,0.4)', color: '#F5E6AB', textTransform: 'none' }}
-                >
-                  .HTML
-                </Button>
-                {result.outputDir && (
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    startIcon={<DownloadIcon />}
-                    href={`http://127.0.0.1:8092/api/download-zip?dir=${encodeURIComponent(result.outputDir)}`}
-                    sx={{ flex: 1, fontFamily: mono, fontSize: '0.68rem', borderColor: 'rgba(56,189,248,0.4)', color: '#38BDF8', textTransform: 'none' }}
-                  >
-                    .ZIP Bundle
-                  </Button>
-                )}
-                <Button
-                  size="small"
-                  variant="outlined"
-                  startIcon={<ContentCopyIcon />}
-                  onClick={handleCopyHtml}
-                  sx={{ fontFamily: mono, fontSize: '0.68rem', borderColor: 'rgba(255,255,255,0.2)', color: '#CBD5E1', textTransform: 'none' }}
-                >
-                  {copied ? 'Copied!' : 'Copy'}
-                </Button>
-                <Button
-                  size="small"
-                  variant="outlined"
-                  onClick={handleSaveToVault}
-                  sx={{ fontFamily: mono, fontSize: '0.68rem', borderColor: 'rgba(16,185,129,0.45)', color: '#34D399', textTransform: 'none' }}
-                >
-                  💾 Save Vault
-                </Button>
-              </Box>
-            )}
-
-            {savedBuilds.length > 0 && (
-              <Box sx={{ pt: 0.5 }}>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.64rem', color: '#94A3B8', mb: 0.5 }}>
-                  💾 SAVED PERSONAL VAULT ({savedBuilds.length}):
-                </Typography>
-                <Box sx={{ display: 'flex', gap: 0.5, flexWrap: 'wrap' }}>
-                  {savedBuilds.map((b) => (
-                    <Chip
-                      key={b.id}
-                      label={`${b.name} (${b.savedAt})`}
-                      size="small"
-                      onClick={() => {
-                        setIdea(b.idea);
-                        setShader(b.shader);
-                        setAccent(b.accent);
-                        setResult((prev) => ({ ...(prev || {}), siteName: b.name, matchedSource: 'Saved Vault', html: b.html }));
-                      }}
-                      sx={{
-                        fontFamily: mono,
-                        fontSize: '0.62rem',
-                        bgcolor: 'rgba(16,185,129,0.1)',
-                        color: '#A7F3D0',
-                        border: '1px solid rgba(16,185,129,0.3)',
-                        cursor: 'pointer',
-                      }}
-                    />
-                  ))}
-                </Box>
-              </Box>
-            )}
-          </Box>
-
-          {/* Right Live Multi-Viewport Preview */}
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              borderRadius: 2.5,
-              overflow: 'hidden',
-              border: '1px solid rgba(212, 175, 55, 0.28)',
-              bgcolor: '#05060A',
-              minHeight: 620,
-            }}
-          >
-            <Box
-              sx={{
-                px: 2,
-                py: 1,
-                bgcolor: '#121521',
-                borderBottom: '1px solid rgba(212, 175, 55, 0.2)',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                flexWrap: 'wrap',
-                gap: 1,
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.73rem', color: '#F5E6AB', fontWeight: 700 }}>
-                  {result ? `${result.siteName} · ${result.matchedSource}` : 'Zoth Bolt Live Viewport'}
-                </Typography>
-                <Chip
-                  label={selectedModel.split(':')[1] || selectedModel}
-                  size="small"
-                  sx={{ fontFamily: mono, fontSize: '0.62rem', height: 20, bgcolor: 'rgba(212,175,55,0.14)', color: '#D4AF37' }}
-                />
-              </Box>
-              <Box sx={{ display: 'flex', gap: 0.6, flexWrap: 'wrap', alignItems: 'center' }}>
-                <Button
-                  size="small"
-                  onClick={() => setVisualEditMode((v) => !v)}
-                  sx={{
-                    fontFamily: mono,
-                    fontSize: '0.66rem',
-                    py: 0.25,
-                    px: 1,
-                    textTransform: 'none',
-                    fontWeight: 800,
-                    color: visualEditMode ? '#08080B' : '#34D399',
-                    bgcolor: visualEditMode ? '#10B981' : 'rgba(16,185,129,0.12)',
-                    border: '1px solid rgba(16,185,129,0.45)',
-                  }}
-                >
-                  {visualEditMode ? '🎨 Click-to-Edit: ON (Click Any Text)' : '🎨 Click-to-Edit Mode'}
-                </Button>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, px: 0.8, py: 0.3, borderRadius: 1.5, bgcolor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                  {[
-                    { hex: '#D4AF37', label: 'Gold' },
-                    { hex: '#10B981', label: 'Emerald' },
-                    { hex: '#38BDF8', label: 'Cyan' },
-                    { hex: '#C084FC', label: 'Violet' },
-                    { hex: '#F97316', label: 'Amber' },
-                  ].map((sw) => (
-                    <Tooltip key={sw.hex} title={`Instant Theme Swap: ${sw.label}`}>
-                      <Box
-                        onClick={() => handleInstantThemeSwap(sw.hex)}
-                        sx={{
-                          width: 13,
-                          height: 13,
-                          borderRadius: '50%',
-                          bgcolor: sw.hex,
-                          border: accent === sw.hex ? '2px solid #FFF' : '1px solid rgba(255,255,255,0.3)',
-                          cursor: 'pointer',
-                        }}
-                      />
-                    </Tooltip>
-                  ))}
-                </Box>
-                {[
-                  { id: 'desktop', label: 'Desktop', icon: <DesktopWindowsIcon sx={{ fontSize: 13 }} /> },
-                  { id: 'tablet', label: 'Tablet', icon: <TabletMacIcon sx={{ fontSize: 13 }} /> },
-                  { id: 'mobile', label: 'Mobile', icon: <SmartphoneIcon sx={{ fontSize: 13 }} /> },
-                  { id: 'matrix', label: '3-Viewport Matrix', icon: <BoltIcon sx={{ fontSize: 13 }} /> },
-                ].map((vp) => (
-                  <Tooltip key={vp.id} title={`${vp.label} Viewport`}>
-                    <Button
-                      size="small"
-                      startIcon={vp.icon}
-                      onClick={() => setViewport(vp.id)}
-                      sx={{
-                        fontFamily: mono,
-                        fontSize: '0.68rem',
-                        py: 0.25,
-                        px: 1,
-                        minWidth: 'auto',
-                        textTransform: 'none',
-                        color: viewport === vp.id ? '#08080B' : '#94A3B8',
-                        bgcolor: viewport === vp.id ? '#D4AF37' : 'transparent',
-                        border: '1px solid rgba(255,255,255,0.12)',
-                      }}
-                    >
-                      {vp.label}
-                    </Button>
-                  </Tooltip>
-                ))}
-              </Box>
-            </Box>
-
-            {/* Sovereign Production Guardrail 8-Point Live Scoreboard */}
-            {result?.html && (
-              <Box
-                sx={{
-                  px: 2,
-                  py: 1,
-                  bgcolor: '#0B0E17',
-                  borderBottom: '1px solid rgba(255,255,255,0.08)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  flexWrap: 'wrap',
-                  gap: 1,
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-                  <Chip
-                    label={`GUARDRAIL SCORE: ${auditReport.score}/100 (${auditReport.passed}/${auditReport.total})`}
-                    size="small"
-                    sx={{
-                      fontFamily: mono,
-                      fontWeight: 900,
-                      fontSize: '0.65rem',
-                      bgcolor: auditReport.score === 100 ? 'rgba(16,185,129,0.2)' : 'rgba(245,158,11,0.2)',
-                      color: auditReport.score === 100 ? '#34D399' : '#FBBF24',
-                      border: `1px solid ${auditReport.score === 100 ? '#10B981' : '#F59E0B'}`,
-                    }}
-                  />
-                  {auditReport.checks.map((chk) => (
-                    <Tooltip key={chk.id} title={chk.label}>
-                      <Chip
-                        label={`${chk.pass ? '✔' : '⚠'} ${chk.id.toUpperCase()}`}
-                        size="small"
-                        sx={{
-                          height: 20,
-                          fontFamily: mono,
-                          fontSize: '0.6rem',
-                          bgcolor: chk.pass ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.15)',
-                          color: chk.pass ? '#A7F3D0' : '#FCA5A5',
-                        }}
-                      />
-                    </Tooltip>
-                  ))}
-                </Box>
-                {auditReport.score < 100 && (
-                  <Button
-                    size="small"
-                    variant="contained"
-                    onClick={handleAutoHealGuardrail}
-                    sx={{
-                      bgcolor: '#10B981',
-                      color: '#08080B',
-                      fontFamily: mono,
-                      fontWeight: 900,
-                      fontSize: '0.66rem',
-                      py: 0.25,
-                      textTransform: 'none',
-                    }}
-                  >
-                    🛠️ Auto-Heal to 100/100 Guardrail Score
-                  </Button>
-                )}
-              </Box>
-            )}
-
-            <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'stretch', bgcolor: '#05060A' }}>
-              {result?.html ? (
-                viewport === 'matrix' ? (
-                  <Box
-                    sx={{
-                      display: 'grid',
-                      gridTemplateColumns: { xs: '1fr', xl: '320px 420px 1fr' },
-                      gap: 1.5,
-                      p: 1.5,
-                      width: '100%',
-                      bgcolor: '#05060A',
-                    }}
-                  >
-                    {[
-                      { title: '📱 Mobile (375px)', w: '100%' },
-                      { title: '📟 Tablet (768px)', w: '100%' },
-                      { title: '🖥️ Desktop (1280px)', w: '100%' },
-                    ].map((pane) => (
-                      <Box
-                        key={pane.title}
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          borderRadius: 2,
-                          overflow: 'hidden',
-                          border: '1px solid rgba(212,175,55,0.28)',
-                          bgcolor: '#08080B',
-                        }}
-                      >
-                        <Box sx={{ px: 1.2, py: 0.5, bgcolor: '#121521', fontFamily: mono, fontSize: '0.65rem', color: '#D4AF37', fontWeight: 800 }}>
-                          {pane.title}
-                        </Box>
-                        <iframe
-                          title={`Zoth Bolt ${pane.title}`}
-                          srcDoc={result.html}
-                          style={{ width: pane.w, height: 520, border: 'none', background: '#08080B' }}
-                        />
-                      </Box>
-                    ))}
-                  </Box>
-                ) : (
-                  <iframe
-                    title="Zoth Bolt Live Preview"
-                    srcDoc={previewHtmlWithVisualEditor}
-                    style={{
-                      width: previewWidth,
-                      height: '100%',
-                      minHeight: 575,
-                      border: 'none',
-                      background: '#08080B',
-                      transition: 'width 0.25s ease',
-                    }}
-                  />
-                )
-              ) : (
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748B', fontFamily: mono, fontSize: '0.82rem', p: 4 }}>
-                  Initializing Zoth Bolt Architect...
-                </Box>
+          {forkUp !== false ? (
+            <>
+              {!frameLoaded && (
+                <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#07080d] text-sm text-zinc-500">
+                  <span className="animate-pulse">Loading bolt.diy workbench…</span>
+                </div>
               )}
-            </Box>
-          </Box>
-        </Box>
-      )}
-    </Paper>
+              <iframe
+                key={frameKey}
+                src={BOLT_URL}
+                title="Zoth Bolt — bolt.diy workbench"
+                onLoad={() => setFrameLoaded(true)}
+                className="h-full w-full border-0"
+                allow="clipboard-read; clipboard-write; cross-origin-isolated"
+              />
+            </>
+          ) : (
+            <div className="flex h-full flex-col items-center justify-center gap-2 p-6 text-center text-sm text-zinc-500">
+              <span className="text-2xl" aria-hidden="true">⚡</span>
+              <p>Workbench offline. Boot the fork to load the real bolt.diy UI here.</p>
+              <code className="rounded bg-zinc-900 px-2 py-1 text-xs text-zinc-400">
+                cd ~/NullAITech/bolt.diy && npm run dev -- --port 5173
+              </code>
+            </div>
+          )}
+        </section>
+
+        {/* harness rail */}
+        <aside className="flex w-full flex-col gap-3 overflow-y-auto lg:w-[360px] lg:shrink-0" aria-label="Bolt harness controls">
+          {/* prompt dispatch */}
+          <div className="rounded-lg border border-zinc-800 bg-[#0c0e16] p-3">
+            <label htmlFor="bolt-prompt" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-zinc-400">
+              Dispatch build
+            </label>
+            <textarea
+              id="bolt-prompt"
+              ref={promptRef}
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              onKeyDown={(e) => {
+                if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') dispatchBuild();
+              }}
+              rows={3}
+              placeholder="Describe the site or app to build… (Ctrl+Enter to dispatch)"
+              className="w-full resize-y rounded border border-zinc-700 bg-[#07080d] p-2 text-sm text-zinc-200 placeholder:text-zinc-600 focus:border-[#d4af37]/60 focus:outline-none"
+            />
+            <div className="mt-2 flex flex-wrap gap-2">
+              <select
+                aria-label="Framework"
+                value={framework}
+                onChange={(e) => setFramework(e.target.value)}
+                className="min-w-0 flex-1 rounded border border-zinc-700 bg-[#07080d] px-2 py-1 text-xs text-zinc-300 focus:border-[#d4af37]/60 focus:outline-none"
+              >
+                {frameworks.length === 0 && <option value="">default framework</option>}
+                {frameworks.map((f) => (
+                  <option key={f.id || f.name} value={f.id || f.name}>
+                    {f.name || f.id}
+                  </option>
+                ))}
+              </select>
+              <select
+                aria-label="Color palette"
+                value={palette}
+                onChange={(e) => applyPalette(e.target.value)}
+                className="min-w-0 flex-1 rounded border border-zinc-700 bg-[#07080d] px-2 py-1 text-xs text-zinc-300 focus:border-[#d4af37]/60 focus:outline-none"
+              >
+                <option value="">palette…</option>
+                {palettes.map((p) => (
+                  <option key={p.id || p.name} value={p.id || p.name}>
+                    {p.name || p.id}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button
+              type="button"
+              onClick={dispatchBuild}
+              disabled={dispatching || forkUp === false}
+              className="mt-2 w-full rounded bg-[#d4af37] px-3 py-1.5 text-sm font-semibold text-black hover:bg-[#e6c65a] disabled:opacity-50"
+            >
+              {dispatching ? 'Dispatching…' : '⚡ Prompt & build'}
+            </button>
+            {notice && <p className="mt-2 text-xs text-zinc-400">{notice}</p>}
+          </div>
+
+          {/* live state */}
+          <div className="rounded-lg border border-zinc-800 bg-[#0c0e16] p-3 text-xs">
+            <h3 className="mb-2 font-semibold uppercase tracking-wider text-zinc-400">Bridge state</h3>
+            <dl className="grid grid-cols-2 gap-x-3 gap-y-1 text-zinc-300">
+              <dt className="text-zinc-500">Clients</dt>
+              <dd>{status?.connectedClients ?? '—'}</dd>
+              <dt className="text-zinc-500">Files</dt>
+              <dd>{fileCount}</dd>
+              <dt className="text-zinc-500">Streaming</dt>
+              <dd>{streaming ? 'yes' : 'no'}</dd>
+              <dt className="text-zinc-500">Preview</dt>
+              <dd className="truncate">
+                {previewUrl ? (
+                  <a href={previewUrl} target="_blank" rel="noreferrer" className="text-[#d4af37] hover:underline">
+                    open ↗
+                  </a>
+                ) : (
+                  '—'
+                )}
+              </dd>
+            </dl>
+            {status?.lastPrompt && (
+              <p className="mt-2 line-clamp-2 border-t border-zinc-800 pt-2 text-zinc-500">
+                last: {status.lastPrompt}
+              </p>
+            )}
+            {fileCount > 0 && (
+              <div className="mt-2 border-t border-zinc-800 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowFiles((v) => !v)}
+                  className="text-[#d4af37] hover:underline"
+                  aria-expanded={showFiles}
+                >
+                  {showFiles ? 'Hide' : 'Show'} {fileCount} synced files
+                </button>
+                {showFiles && (
+                  <ul className="mt-1 max-h-36 space-y-0.5 overflow-y-auto font-mono text-[11px]">
+                    {(status?.files || []).map((f) => (
+                      <li key={f}>
+                        <button
+                          type="button"
+                          onClick={() => readFileFromBridge(f)}
+                          className="w-full truncate text-left text-zinc-400 hover:text-[#d4af37]"
+                          title={`Read ${f} from bridge`}
+                        >
+                          {f}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* file viewer */}
+          {openFile && (
+            <div className="rounded-lg border border-zinc-800 bg-[#0c0e16] p-3">
+              <div className="mb-1 flex items-center justify-between gap-2">
+                <span className="truncate font-mono text-[11px] text-[#d4af37]">{openFile.path}</span>
+                <button type="button" onClick={() => setOpenFile(null)} className="text-xs text-zinc-500 hover:text-zinc-300" aria-label="Close file viewer">
+                  ✕
+                </button>
+              </div>
+              <pre className="max-h-48 overflow-auto whitespace-pre-wrap rounded bg-[#07080d] p-2 font-mono text-[11px] leading-relaxed text-zinc-300">
+                {openFile.content}
+              </pre>
+            </div>
+          )}
+
+          {/* tool runner — fork runs local CLI tools */}
+          <div className="rounded-lg border border-zinc-800 bg-[#0c0e16] p-3">
+            <label htmlFor="bolt-tool" className="mb-1 block text-xs font-semibold uppercase tracking-wider text-zinc-400">
+              Run tool on fork host
+            </label>
+            <div className="flex gap-2">
+              <input
+                id="bolt-tool"
+                value={toolCmd}
+                onChange={(e) => setToolCmd(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && runTool()}
+                placeholder="e.g. zoth-webgen --help"
+                className="min-w-0 flex-1 rounded border border-zinc-700 bg-[#07080d] px-2 py-1 font-mono text-xs text-zinc-200 placeholder:text-zinc-600 focus:border-[#d4af37]/60 focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={runTool}
+                disabled={toolRunning || forkUp === false}
+                className="rounded border border-[#d4af37]/50 px-2 py-1 text-xs text-[#d4af37] hover:bg-[#d4af37]/10 disabled:opacity-50"
+              >
+                {toolRunning ? '…' : 'Run'}
+              </button>
+            </div>
+            {toolOut && (
+              <div className="mt-2">
+                <p className={`text-[11px] ${toolOut.success ? 'text-emerald-400' : 'text-red-400'}`}>
+                  exit {toolOut.exitCode} · {toolOut.durationMs != null ? `${toolOut.durationMs}ms` : ''}
+                </p>
+                <pre className="mt-1 max-h-40 overflow-auto whitespace-pre-wrap rounded bg-[#07080d] p-2 font-mono text-[11px] text-zinc-300">
+                  {toolOut.output || '(no output)'}
+                </pre>
+              </div>
+            )}
+          </div>
+
+          {/* event log */}
+          <div className="rounded-lg border border-zinc-800 bg-[#0c0e16] p-3">
+            <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-400">
+              Event bus {busLive ? '· live' : ''}
+            </h3>
+            {events.length === 0 ? (
+              <p className="text-xs text-zinc-600">No events yet — dispatch a build or open the workbench.</p>
+            ) : (
+              <ul className="max-h-48 space-y-1 overflow-y-auto text-[11px]" aria-live="polite">
+                {events.map((ev, i) => (
+                  <li key={`${ev.at}-${i}`} className="flex gap-2 border-b border-zinc-800/60 pb-1">
+                    <span className="shrink-0 font-mono text-zinc-600">{fmtTime(ev.at)}</span>
+                    <span className="text-zinc-300">{eventSummary(ev)}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </aside>
+      </div>
+
+      <footer className="text-[11px] text-zinc-600">
+        {tool?.name || 'Zoth Bolt'} · source of truth: ~/NullAITech/bolt.diy (Remix/Vite :5173) · embedded same-origin via /bolt/ proxy
+      </footer>
+    </div>
   );
 }

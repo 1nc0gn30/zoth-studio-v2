@@ -152,14 +152,14 @@ export const workstations = [
   // ==========================================
   {
     id: "webgen",
-    name: "Zoth WebGen Foundry",
-    path: "/studio/webgen.html",
+    name: "Zoth Bolt",
+    path: "/tools/zoth-bolt",
     band: "Build",
     type: "integrated_tool",
-    description: "Published Python generator with 6 archetypes and an MCP server. The separate local site foundry keeps the chosen agent working until the site artifact is closed.",
-    alsoInApp: "/webgen",
-    toolRepoId: "zoth-webgen",
-    pullCommand: "git clone https://github.com/NullAITech/zoth-webgen.git && cd zoth-webgen && python3 webgen_engine.py --help"
+    description: "Zoth Bolt — the bolt.diy fork (1nc0gn30/zoth-webgen): full-stack AI web & motion architect on :5173 with local Ollama, agents, and live WebContainers.",
+    alsoInApp: "/tools/zoth-bolt",
+    toolRepoId: "zoth-bolt",
+    pullCommand: "git clone https://github.com/1nc0gn30/zoth-webgen.git bolt.diy && cd bolt.diy && pnpm install"
   },
   {
     id: "omnipost",
