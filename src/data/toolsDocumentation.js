@@ -879,7 +879,7 @@ export const toolsDocumentation = {
 
   'badge3d-coin-generator': {
     whyUse: 'Browser 3D coin, medallion, and relief badge generator. Free to use.',
-    problemSolved: 'Mints a 3D coin in the browser and exports a mesh. The live page takes a card checkout and also lists a Solana rail.',
+    problemSolved: 'Mints a 3D coin in the browser and exports a watertight STL/OBJ/GLB mesh with zero paywalls, zero cloud uploads, and optional Buy Us a Coffee support.',
     architecture: 'Vanilla Three.js and WebGL canvas with parametric edge-milling geometry and STL/OBJ/GLB 3D export.',
     aiAgentProtocol: {
       mcpTool: 'badge3d_mint_mesh',
@@ -1416,7 +1416,7 @@ export const toolsDocumentation = {
       ]
   },
   "certpath-roadmap-studio": {
-      "whyUse": "100% in-browser certification DAG solver, career roadmap planner, and study guide generator with 137 credentials, procedural DAG brand media, and dual Stripe + Solana rails. Built for human operators and autonomous AI agents requiring zero-egress automation execution without cloud SaaS lock-in.",
+      "whyUse": "100% in-browser certification DAG solver, career roadmap planner, and study guide generator with 137 credentials, procedural DAG brand media, and 100% free open-access execution. Built for human operators and autonomous AI agents requiring zero-egress automation execution without cloud SaaS lock-in.",
       "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for CertPath Roadmap Studio workflows by running 100% locally on ZothOS and in the browser.",
       "architecture": "100% client-side in-browser execution engine (Automation) with standalone loopback workstation on 127.0.0.1:8093 and ZothOS CLI wrapper (/usr/local/bin/certpath-roadmap-studio).",
       "aiAgentProtocol": {
@@ -2382,7 +2382,7 @@ export const toolsDocumentation = {
       ]
   },
   "ufo-sacred-geometry": {
-      "whyUse": "100% in-browser sacred geometry synthesizer, crop circle agro-glyph CAD generator, procedural Metatron brand media, and AutoCAD DXF, Wavefront OBJ, and vector SVG exporter with dual Stripe + Solana rails. Built for human operators and autonomous AI agents requiring zero-egress media & 3d execution without cloud SaaS lock-in.",
+      "whyUse": "100% in-browser sacred geometry synthesizer, crop circle agro-glyph CAD generator, procedural Metatron brand media, and AutoCAD DXF, Wavefront OBJ, and vector SVG exporter with 100% free open-access execution. Built for human operators and autonomous AI agents requiring zero-egress media & 3d execution without cloud SaaS lock-in.",
       "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for UFO Sacred Geometry Studio workflows by running 100% locally on ZothOS and in the browser.",
       "architecture": "100% client-side in-browser execution engine (Media & 3D) with standalone loopback workstation on 127.0.0.1:8083 and ZothOS CLI wrapper (/usr/local/bin/ufo-sacred-geometry).",
       "aiAgentProtocol": {

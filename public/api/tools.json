@@ -206,7 +206,7 @@
     {
       "id": "promptmaster-studio",
       "name": "PromptMaster Studio",
-      "description": "100% in-browser prompt engineering and meta-optimization studio with real-time AST linting, multi-model rewrites (Claude, ChatGPT, Gemini), tri-model constellation brand media, and dual Stripe + Solana rails.",
+      "description": "100% in-browser prompt engineering and meta-optimization studio with real-time AST linting, multi-model rewrites (Claude, ChatGPT, Gemini), tri-model constellation brand media, and 100% free open-access execution.",
       "category": "AI & Knowledge",
       "github": "https://github.com/1nc0gn30/promptmaster-studio",
       "published": true,
@@ -346,7 +346,7 @@
     {
       "id": "aeo-graph-engine",
       "name": "AEO Graph Engine & Studio",
-      "description": "100% in-browser Answer Engine Optimization (AEO/GEO) workbench, Schema.org JSON-LD @graph generator, live semantic crawler, and MCP export with dual checkout rails.",
+      "description": "100% in-browser Answer Engine Optimization (AEO/GEO) workbench, Schema.org JSON-LD @graph generator, live semantic crawler, and MCP export with 100% free open-access execution.",
       "category": "Autonomous Web",
       "github": "https://github.com/1nc0gn30/aeo-graph-engine",
       "published": true,
@@ -426,7 +426,7 @@
     {
       "id": "omnipost-social-engine",
       "name": "OmniPost Social Engine",
-      "description": "100% in-browser social content formatting, viral thread splitter, virality scoring, MCP AI agent client hub, and procedural omni-beacon brand media with dual Stripe + Solana rails.",
+      "description": "100% in-browser social content formatting, viral thread splitter, virality scoring, MCP AI agent client hub, and procedural omni-beacon brand media with 100% free open-access execution.",
       "category": "Automation",
       "github": "https://github.com/1nc0gn30/omnipost-social-engine",
       "published": true,
@@ -446,7 +446,7 @@
     {
       "id": "cron-rhythm-studio",
       "name": "CronRhythm Studio",
-      "description": "High-precision cron AST parser, 24x7 rhythm heatmap, countdown timeline, multi-dialect transpiler across K8s, GitHub Actions, AWS EventBridge, and Systemd with procedural chronometer brand media and dual Stripe + Solana rails.",
+      "description": "High-precision cron AST parser, 24x7 rhythm heatmap, countdown timeline, multi-dialect transpiler across K8s, GitHub Actions, AWS EventBridge, and Systemd with procedural chronometer brand media and 100% free open-access execution.",
       "category": "Automation",
       "github": "https://github.com/1nc0gn30/cron-rhythm-studio",
       "published": true,
@@ -466,7 +466,7 @@
     {
       "id": "certpath-roadmap-studio",
       "name": "CertPath Roadmap Studio",
-      "description": "100% in-browser certification DAG solver, career roadmap planner, and study guide generator with 137 credentials, procedural DAG brand media, and dual Stripe + Solana rails.",
+      "description": "100% in-browser certification DAG solver, career roadmap planner, and study guide generator with 137 credentials, procedural DAG brand media, and 100% free open-access execution.",
       "category": "Automation",
       "github": "https://github.com/1nc0gn30/certpath-roadmap-studio",
       "published": true,
@@ -786,7 +786,7 @@
     {
       "id": "agent-capsule-jail",
       "name": "Agent Capsule Jail",
-      "description": "Autonomous kernel enclave sandbox, resource quota manager, and secret stripping engine with dual Stripe + Solana rails.",
+      "description": "Autonomous kernel enclave sandbox, resource quota manager, and secret stripping engine with 100% free open-access loopback execution.",
       "category": "Security & Enclave",
       "github": "https://github.com/1nc0gn30/agent-capsule-jail",
       "published": true,
@@ -806,7 +806,7 @@
     {
       "id": "agent-policy-auditor",
       "name": "Agent Policy Auditor",
-      "description": "Autonomous capability leaser, permission broker, and OWASP LLM manifest security auditor with dual Stripe + Solana rails.",
+      "description": "Autonomous capability leaser, permission broker, and OWASP LLM manifest security auditor with 100% free open-access loopback execution.",
       "category": "Security & Enclave",
       "github": "https://github.com/1nc0gn30/agent-policy-auditor",
       "published": true,
@@ -1166,7 +1166,7 @@
     {
       "id": "ufo-sacred-geometry",
       "name": "UFO Sacred Geometry Studio",
-      "description": "100% in-browser sacred geometry synthesizer, crop circle agro-glyph CAD generator, procedural Metatron brand media, and AutoCAD DXF, Wavefront OBJ, and vector SVG exporter with dual Stripe + Solana rails.",
+      "description": "100% in-browser sacred geometry synthesizer, crop circle agro-glyph CAD generator, procedural Metatron brand media, and AutoCAD DXF, Wavefront OBJ, and vector SVG exporter with 100% free open-access execution.",
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/ufo-sacred-geometry",
       "published": true,
@@ -1246,7 +1246,7 @@
     {
       "id": "zoth-bolt",
       "name": "Zoth Bolt",
-      "description": "Flagship Sovereign Full-Stack AI Web & Motion Architect (Zoth Bolt / bolt.diy) on 127.0.0.1:5173. Supports 19+ AI providers, local Ollama & CLI agents (AGY, Hermes, Grok, Claude, OpenCode, Cline, Aider), 6 Motion Edit templates, 200k+ SVG & Pixel Art icons, TUI (`zoth-bolt-tui`), and Electron Desktop app (`zoth-bolt desktop`).",
+      "description": "Flagship Sovereign Full-Stack AI Web & Motion Architect (Zoth Bolt / bolt.diy) on 127.0.0.1:5173. Supports 19+ AI providers, local Ollama & CLI agents (AGY, Hermes, Grok, Claude, OpenCode, Cline, Aider), 6 Motion Edit templates, 200k+ SVG & Pixel Art icons, TUI (zoth-bolt-tui), and Electron Desktop app (zoth-bolt desktop).",
       "category": "Autonomous Web",
       "github": "https://github.com/1nc0gn30/bolt.diy",
       "published": true,
