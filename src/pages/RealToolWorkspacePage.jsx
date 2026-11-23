@@ -238,9 +238,9 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'connectors': McpLensGodModeTool,
   'hexstrike': HexStrikeGodModeTool,
   'netrunner-memory': NeuroMemoryGodModeTool,
-  'consensus': SovereignBridgeGodModeTool,
+  'consensus': SwarmCivilizationGodModeTool,
   'bus-monitor': SovereignBridgeGodModeTool,
-  'math-pillars': VectorSearchGodModeTool,
+  'math-pillars': ZothPillGodModeTool,
 };
 
 const WORKSTATION_TOOL_ALIASES = {

@@ -100,7 +100,8 @@ function getInitialMode() {
 
 function WorkstationRedirect() {
   const { workstationId } = useParams();
-  return <Navigate to={`/tools/${workstationId}`} replace />;
+  const location = useLocation();
+  return <Navigate to={`/tools/${workstationId}${location.search}${location.hash}`} replace />;
 }
 
 function ScrollToTop() {
