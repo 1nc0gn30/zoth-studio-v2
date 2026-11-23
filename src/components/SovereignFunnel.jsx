@@ -15,6 +15,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { copyText } from './sovereign';
+import { microTools } from '../data/toolsData';
 
 const STRIPE_COFFEE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
 const SOLANA_WALLET = 'GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK';
@@ -225,7 +226,7 @@ export default function SovereignFunnel({
               />
             </Box>
             <Typography variant="body2" sx={{ color: textSecondary, mb: 2, flexGrow: 1, fontSize: '0.85rem', lineHeight: 1.6 }}>
-              Clone the unified Zoth Studio v2 workspace orchestrating 80 free open-access tools (79 public GitHub repos), 43 workstations, STDP neural memory (:8094), and Pantheon swarm (:9393).
+              Clone the unified Zoth Studio v2 workspace orchestrating {microTools.length} free open-access tools (79 public GitHub repos), 43 workstations, STDP neural memory (:8094), and Pantheon swarm (:9393).
             </Typography>
 
             <Box

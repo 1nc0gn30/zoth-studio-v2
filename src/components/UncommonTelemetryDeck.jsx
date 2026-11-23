@@ -9,6 +9,7 @@ import HubIcon from '@mui/icons-material/Hub';
 import MemoryIcon from '@mui/icons-material/Memory';
 import { renderBrailleDitherLines, useGlyphScramble } from '../motion/AsciiBrailleDitherEngine';
 import { useStudioStatus } from '../studio/useStudioStatus';
+import { microTools } from '../data/toolsData';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -474,7 +475,7 @@ export default function UncommonTelemetryDeck({ compact = false }) {
             <Grid item xs={12} sm={6}>
               <SplitFlapTile
                 label="OPEN-ACCESS ARSENAL"
-                value="163 MCP · 80 TOOLS"
+                value={`163 MCP · ${microTools.length} TOOLS`}
                 sub="100% Free: Client-Side AST, Security, AEO + AI Workstations"
                 dark={dark}
                 to="/arsenal"

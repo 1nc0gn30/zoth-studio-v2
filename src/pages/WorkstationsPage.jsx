@@ -36,6 +36,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import GitHubIcon from '@mui/icons-material/GitHub';
 
 import { workstations } from '../data/workstations';
+import { microTools } from '../data/toolsData';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll, StaggerChildren, StaggerItem } from '../components/MotionReveal';
 
@@ -374,7 +375,7 @@ export default function WorkstationsPage() {
               >
                 Zoth Studio v2
               </Box>
-              . Clone the repository to run the local Express/IPC server on <code>127.0.0.1:3000</code>, or run all 80 tools natively inside ZothOS.
+              . Clone the repository to run the local Express/IPC server on <code>127.0.0.1:3000</code>, or run all {microTools.length} tools natively inside ZothOS.
             </Typography>
           </HeroItem>
         </Box>
@@ -388,7 +389,7 @@ export default function WorkstationsPage() {
             desc: 'Local operator views inside Zoth Studio v2 for composing agent DAGs, inspecting ASTs, and supervising local inference.',
           },
           {
-            title: '2. Standalone Repositories (80)',
+            title: `2. Standalone Repositories (${microTools.length})`,
             desc: 'Independent Git repositories with dedicated CLI binaries and MCP interfaces that run without browser dependencies.',
           },
           {

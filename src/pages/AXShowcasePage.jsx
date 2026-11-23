@@ -3,6 +3,7 @@ import { Box, Paper, Typography, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import LocalSystemDossier from '../components/LocalSystemDossier';
+import { microTools } from '../data/toolsData';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const serif = '"Cormorant Garamond", Georgia, serif';
@@ -25,7 +26,7 @@ const ENDPOINTS = [
   },
   {
     path: '/api/tools.json',
-    label: '80-Tool Canonical Registry',
+    label: `${microTools.length}-Tool Canonical Registry`,
     desc: 'Single source of truth declaring every tool ID, GitHub clone URL, local loopback port, CLI command, and execution mode.',
   },
 ];
@@ -44,7 +45,7 @@ export default function AXShowcasePage() {
     <LocalSystemDossier
       tone="cyan"
       kicker="AGENT EXPERIENCE (AX) PROTOCOL"
-      badges={['MCP MANIFESTS', 'LLMS.TXT + JSON-LD', '80-TOOL REGISTRY']}
+      badges={['MCP MANIFESTS', 'LLMS.TXT + JSON-LD', `${microTools.length}-TOOL REGISTRY`]}
       title="Machine-Readable Discovery for"
       accentWord="Autonomous Agents."
       subtitle="Human interfaces are only half the contract. The Agent Experience (AX) specification equips Zoth Studio and local repositories with deterministic manifests—/.well-known/mcp.json, /.well-known/agent.json, /llms.txt, and /api/tools.json—so coding agents discover, clone, and invoke tools without fragile DOM scraping."
@@ -58,12 +59,12 @@ export default function AXShowcasePage() {
       overviewTitle="Zero-Glue Tool Discovery Across Local Agents"
       overviewParagraphs={[
         'When an autonomous agent inspects a project or documentation domain, HTML styling and interactive widgets are wasted tokens. AX publishes canonical, schema-verified endpoints at predictable paths so agents resolve exact CLI flags, loopback ports, and GitHub clone URLs in a single HTTP or filesystem read.',
-        'Cloning Zoth Studio v2 gives local agents (Hermes, Egregore, Claude Code, OpenCode, and Cursor) the complete 80-tool registry and local verification scripts (`npm run registry:check`) out of the box.',
+        `Cloning Zoth Studio v2 gives local agents (Hermes, Egregore, Claude Code, OpenCode, and Cursor) the complete ${microTools.length}-tool registry and local verification scripts (\`npm run registry:check\`) out of the box.`,
       ]}
       pipelineSteps={[
         {
           label: 'Canonical Manifest Resolution',
-          detail: 'Agents read /.well-known/mcp.json and /api/tools.json to enumerate all 80 tools, unique ports, and git repositories.',
+          detail: `Agents read /.well-known/mcp.json and /api/tools.json to enumerate all ${microTools.length} tools, unique ports, and git repositories.`,
         },
         {
           label: 'Typed Schema Binding',
@@ -78,12 +79,12 @@ export default function AXShowcasePage() {
         { key: 'MCP Discovery', value: '/.well-known/mcp.json' },
         { key: 'Agent Descriptor', value: '/.well-known/agent.json' },
         { key: 'LLM Context Map', value: '/llms.txt & /llms-full.txt' },
-        { key: 'Tool Registry', value: 'public/api/tools.json (80 Tools)' },
+        { key: 'Tool Registry', value: `public/api/tools.json (${microTools.length} Tools)` },
         { key: 'Integrity Gate', value: 'python3 scripts/registry-check.py' },
         { key: 'Structured Graph', value: 'Schema.org JSON-LD @graph' },
       ]}
       quickstartLines={[
-        '# Clone Zoth Studio v2 & validate the 80-tool AX registry locally',
+        `# Clone Zoth Studio v2 & validate the ${microTools.length}-tool AX registry locally`,
         'git clone https://github.com/NullAITech/zoth-studio-v2.git',
         'cd zoth-studio-v2',
         'python3 scripts/registry-check.py',
@@ -114,7 +115,7 @@ export default function AXShowcasePage() {
       ]}
       funnelToolTitle="Zoth AX & MCP Discovery Suite"
       funnelToolTag="AGENT PROTOCOL"
-      funnelToolDesc="Machine-readable MCP manifests, 80-tool JSON registry, and /llms.txt specifications bundled inside Zoth Studio v2."
+      funnelToolDesc={`Machine-readable MCP manifests, ${microTools.length}-tool JSON registry, and /llms.txt specifications bundled inside Zoth Studio v2.`}
     >
       {/* Live Machine-Readable Endpoints Table */}
       <Box>

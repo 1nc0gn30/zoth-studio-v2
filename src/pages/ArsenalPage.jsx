@@ -29,6 +29,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import { masterArsenal } from '../data/arsenalData';
+import { microTools } from '../data/toolsData';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { HeroReveal, HeroItem, GlowLine } from '../components/MotionReveal';
 import { useCopy } from '../components/sovereign';
@@ -342,7 +343,7 @@ export default function ArsenalPage() {
                   color: gold,
                 }}
               >
-                MASTER DIRECTORY · 80 FREE OPEN-ACCESS TOOLS · 79 PUBLIC GITHUB REPOS
+                MASTER DIRECTORY · {microTools.length} FREE OPEN-ACCESS TOOLS · 79 PUBLIC GITHUB REPOS
               </Typography>
             </HeroItem>
 
@@ -372,7 +373,7 @@ export default function ArsenalPage() {
                   mb: 2.5,
                 }}
               >
-                Unified directory of <strong>80 free open-access tools</strong> (56 in-browser/WebGPU + 24 CLI/daemon across{' '}
+                Unified directory of <strong>{microTools.length} free open-access tools</strong> (56 in-browser/WebGPU + 24 CLI/daemon across{' '}
                 <strong>79 public GitHub repositories</strong>) and 43 Studio workstations, plus local telemetry cockpits. Launch any tool in-browser, clone its standalone repository, or pull the complete{' '}
                 <Box
                   component="a"

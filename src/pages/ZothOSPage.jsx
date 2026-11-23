@@ -1,5 +1,6 @@
 import React from 'react';
 import TechnicalReferencePage from '../components/TechnicalReferencePage';
+import { microTools } from '../data/toolsData';
 
 export default function ZothOSPage() {
   return (
@@ -54,7 +55,7 @@ export default function ZothOSPage() {
           body: 'Ships organized into 01-AI-Agents-and-Dev, 02-Security-and-Privacy, 03-ZothOS-Daemons, and 04-Media-and-Utilities with SWCursor hardware/VM cursor visibility.',
         },
         {
-          heading: 'All 80 Arsenal Tools Pre-Installed',
+          heading: `All ${microTools.length} Arsenal Tools Pre-Installed`,
           body: 'Every CLI binary and loopback daemon cataloged on zoth.nullai.tech is pre-wired in /usr/local/bin on ZothOS.',
         },
         {

@@ -1,5 +1,6 @@
 import React from 'react';
 import TechnicalReferencePage from '../components/TechnicalReferencePage';
+import { microTools } from '../data/toolsData';
 
 export default function AXPage() {
   return (
@@ -14,7 +15,7 @@ export default function AXPage() {
       repoLabel="Clone Zoth Studio v2"
       cloneCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git && cd zoth-studio-v2"
       installSteps={[
-        '# 1. Clone Zoth Studio v2 to access the canonical 80-tool registry',
+        `# 1. Clone Zoth Studio v2 to access the canonical ${microTools.length}-tool registry`,
         'git clone https://github.com/NullAITech/zoth-studio-v2.git',
         'cd zoth-studio-v2',
         '',
@@ -25,7 +26,7 @@ export default function AXPage() {
       cliCommands={[
         { cmd: 'GET /.well-known/mcp.json', desc: 'Returns Model Context Protocol server capabilities, transports, and tool descriptors.' },
         { cmd: 'GET /.well-known/agent.json', desc: 'Returns autonomous agent identity, repository provenance, and protocol endpoints.' },
-        { cmd: 'GET /api/tools.json', desc: 'Returns the canonical 80-tool JSON registry with unique ports, CLI binaries, and GitHub clone URLs.' },
+        { cmd: 'GET /api/tools.json', desc: `Returns the canonical ${microTools.length}-tool JSON registry with unique ports, CLI binaries, and GitHub clone URLs.` },
         { cmd: 'GET /llms.txt', desc: 'Returns a concise Markdown architecture map optimized for LLM context windows.' },
       ]}
       contractTitle="Canonical Tool Registry Entry (/api/tools.json)"
@@ -50,7 +51,7 @@ export default function AXPage() {
         },
         {
           heading: 'Collision-Free Loopback Ports',
-          body: 'Every daemon in the 80-tool registry is assigned a strictly unique localhost port verified on every test run.',
+          body: `Every daemon in the ${microTools.length}-tool registry is assigned a strictly unique localhost port verified on every test run.`,
         },
         {
           heading: 'Schema.org JSON-LD Parity',

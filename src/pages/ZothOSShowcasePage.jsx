@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import LocalSystemDossier from '../components/LocalSystemDossier';
+import { microTools } from '../data/toolsData';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const serif = '"Cormorant Garamond", Georgia, serif';
@@ -33,7 +34,7 @@ const COMPARISON_ROWS = [
   },
   {
     feature: 'Pre-Installed Local Tool Arsenal',
-    zoth: 'Zoth Studio v2 (80-tool local CLI & daemon suite)',
+    zoth: `Zoth Studio v2 (${microTools.length}-tool local CLI & daemon suite)`,
     kali: 'None',
     parrot: 'None',
     ubuntu: 'None',
@@ -76,10 +77,10 @@ export default function ZothOSShowcasePage() {
     <LocalSystemDossier
       tone="gold"
       kicker="ZOTH OS v3.4.0 & ZOTHOS-LITE v1.2"
-      badges={['DEBIAN 13 TRIXIE', 'KDE PLASMA 6', '80 TOOLS PRE-INSTALLED']}
+      badges={['DEBIAN 13 TRIXIE', 'KDE PLASMA 6', `${microTools.length} TOOLS PRE-INSTALLED`]}
       title="The Sovereign AI & Security"
       accentWord="Linux Distribution."
-      subtitle="Most Zoth Studio tools execute against real Linux sockets, local SQLite graphs, and loopback inference daemons—not browser sandboxes. ZothOS v3.4.0 ships the entire 80-tool Zoth Studio arsenal, Kali and Parrot security parity, Ollama on 127.0.0.1, and deterministic KDE Plasma 6 workspaces ready on first boot."
+      subtitle={`Most Zoth Studio tools execute against real Linux sockets, local SQLite graphs, and loopback inference daemons—not browser sandboxes. ZothOS v3.4.0 ships the entire ${microTools.length}-tool Zoth Studio arsenal, Kali and Parrot security parity, Ollama on 127.0.0.1, and deterministic KDE Plasma 6 workspaces ready on first boot.`}
       toolRoute="/tools/zoth-os"
       toolLabel="Open ZothOS Workstation in Zoth Studio"
       cloneCommand="git clone https://github.com/NullAITech/zoth-os.git && cd zoth-os"

@@ -31,7 +31,7 @@ export const ACCENTS_LIGHT = {
 // Ordered: first match wins. `match` is tested against location.pathname.
 const ROUTES = [
   { match: /^\/$/, clip: 'home', label: 'Zoth Studio', kicker: 'Local-First AI Systems & Repositories', accent: 'gold', brailleShape: 'astrolabe' },
-  { match: /^\/arsenal\/?$/, clip: 'arsenal', label: 'The Sovereign Arsenal', kicker: '80 Standalone Repositories · CLI & Daemons', accent: 'gold', brailleShape: 'grid' },
+  { match: /^\/arsenal\/?$/, clip: 'arsenal', label: 'The Sovereign Arsenal', kicker: `${microTools.length} Standalone Repositories · CLI & Daemons`, accent: 'gold', brailleShape: 'grid' },
   { match: /^\/vaelor\/?$/, clip: 'consensus', label: 'Vaelor L1 Network', kicker: 'PoUW DAG Architecture · :8140', accent: 'gold', brailleShape: 'dag' },
   { match: /^\/adytum\/docs\/?$/, clip: 'adytum', label: 'Adytum · Docs', kicker: 'Autonomous Loop Specification', accent: 'gold', brailleShape: 'astrolabe' },
   { match: /^\/adytum\/?$/, clip: 'adytum', label: 'Adytum Chamber', kicker: 'Autonomous Loop Engine · :8135', accent: 'gold', brailleShape: 'astrolabe' },
@@ -41,7 +41,7 @@ const ROUTES = [
   { match: /^\/voice\/?$/, clip: 'bridges', label: 'Voice Station', kicker: 'Local Neural Speech & DSP · :8114', accent: 'gold', brailleShape: 'lissajous' },
   { match: /^\/bridges\/?$/, clip: 'bridges', label: 'Command Bridges', kicker: 'Loopback & Relay Topology · :8102', accent: 'gold', brailleShape: 'dag' },
   { match: /^\/tools\/[^/]+\/?$/, clip: 'tools', label: 'Repository Dossier', kicker: 'Local CLI & Daemon Specification', accent: 'gold', dynamic: 'toolId', brailleShape: 'grid' },
-  { match: /^\/tools\/?$/, clip: 'tools', label: 'Tool Repositories', kicker: '80 Local-First Packages · Git & CLI', accent: 'gold', brailleShape: 'grid' },
+  { match: /^\/tools\/?$/, clip: 'tools', label: 'Tool Repositories', kicker: `${microTools.length} Local-First Packages · Git & CLI`, accent: 'gold', brailleShape: 'grid' },
   { match: /^\/workstations(\/.*)?$/, clip: 'workstations', label: 'Architecture Dossiers', kicker: '43 System & Daemon Specifications', accent: 'gold', brailleShape: 'astrolabe' },
   { match: /^\/memory\/docs\/?$/, clip: 'memory', label: 'Memory · Docs', kicker: 'Synaptic Graph Specification', accent: 'purple', brailleShape: 'synapse' },
   { match: /^\/memory\/?$/, clip: 'memory', label: 'Neuro Memory', kicker: 'STDP Synaptic Graph · :8094', accent: 'purple', brailleShape: 'synapse' },

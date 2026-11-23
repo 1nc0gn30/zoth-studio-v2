@@ -28,6 +28,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import SecurityIcon from '@mui/icons-material/Security';
 import CodeIcon from '@mui/icons-material/Code';
 import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
+import { microTools } from '../data/toolsData';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import SpeedIcon from '@mui/icons-material/Speed';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
@@ -352,7 +353,7 @@ export default function WebMCPConsole() {
                       $ [ZOTH-KERNEL-IPC] webmcp_bridge --transport sse --port 8094 --bind 127.0.0.1
                     </Typography>
                     <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', fontWeight: 600, wordBreak: 'break-all' }}>
-                      &gt; Tools registered: 80 Studio tools · WebGPU acceleration enabled · Zero egress telemetry: OK
+                      &gt; Tools registered: {microTools.length} Studio tools · WebGPU acceleration enabled · Zero egress telemetry: OK
                     </Typography>
                   </Box>
                 </Paper>
@@ -422,7 +423,7 @@ export default function WebMCPConsole() {
               Anthropic MCP JSON-RPC 2.0 In-Browser Tool Registry
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Autonomous AI agents discover and execute these 80 Studio tools via strict JSON-Schema input contracts.
+              Autonomous AI agents discover and execute these {microTools.length} Studio tools via strict JSON-Schema input contracts.
             </Typography>
           </Box>
 

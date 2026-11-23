@@ -110,7 +110,7 @@ const ECOSYSTEM_BRIDGES = [
       'NullAI independent AI systems lab (nullai.tech), FieldKit tactical operator utilities (nullai.tech/fieldkit), and architecture dispatches by 1nc0gn30 (1nc0gn30.si).',
   },
   {
-    kicker: '80 FREE TOOLS · 79 PUBLIC REPOS',
+    kicker: `${microTools.length} FREE TOOLS · 79 PUBLIC REPOS`,
     title: 'Sovereign Arsenal & UI Kit',
     domain: 'zoth.nullai.tech/arsenal',
     studioRoute: '/arsenal',
@@ -242,7 +242,7 @@ export default function HomePage() {
                     color: gold,
                   }}
                 >
-                  SOVEREIGN AI ENGINEERING SUITE · 80 FREE OPEN-ACCESS TOOLS
+                  SOVEREIGN AI ENGINEERING SUITE · {microTools.length} FREE OPEN-ACCESS TOOLS
                 </Typography>
               </HeroItem>
 
@@ -273,7 +273,7 @@ export default function HomePage() {
                     mb: 3,
                   }}
                 >
-                  Zoth Studio unifies <strong>80 free open-access tools</strong> (56 in-browser/WebGPU + 24 CLI/daemon across{' '}
+                  Zoth Studio unifies <strong>{microTools.length} free open-access tools</strong> (56 in-browser/WebGPU + 24 CLI/daemon across{' '}
                   <strong>79 public GitHub repositories</strong>) with <strong>43 Studio workstations</strong> — engineered to execute on{' '}
                   <Box component="code" sx={{ fontFamily: mono, fontSize: '0.9em', color: gold }}>
                     127.0.0.1
@@ -427,7 +427,7 @@ export default function HomePage() {
                       '&:hover': { bgcolor: isDark ? '#E5C158' : '#1E293B' },
                     }}
                   >
-                    Explore 80 Tools
+                    Explore {microTools.length} Tools
                   </Button>
 
                   <Button
@@ -539,7 +539,7 @@ export default function HomePage() {
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     {[
                       [
-                        '80 Free Open-Access Tools',
+                        `${microTools.length} Free Open-Access Tools`,
                         '56 in-browser/WebGPU utilities + 24 CLI/daemon packages across 79 public GitHub repositories.',
                       ],
                       [
@@ -1208,7 +1208,7 @@ export default function HomePage() {
           }}
         >
           <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#A3AAB8' }}>
-            80 Free Open-Access Tools (56 WebGPU + 24 CLI) · 79 Public GitHub Repos · 43 Workstations
+            {microTools.length} Free Open-Access Tools (56 WebGPU + 24 CLI) · 79 Public GitHub Repos · 43 Workstations
           </Typography>
           <Button
             size="small"

@@ -39,6 +39,7 @@ import CloudOffIcon from '@mui/icons-material/CloudOff';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import { workstations } from '../data/workstations';
+import { microTools } from '../data/toolsData';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import ZothAIAssistant from '../components/ZothAIAssistant';
 import SovereignFunnel from '../components/SovereignFunnel';
@@ -1780,7 +1781,7 @@ function HubWorkstationConsole({ station }) {
     },
     'tool-nexus': {
       title: 'Zoth Tool Nexus Workstation',
-      desc: 'Unified launcher for all 80 Studio tools and hardware micro-utilities.',
+      desc: `Unified launcher for all ${microTools.length} Studio tools and hardware micro-utilities.`,
       target: '/arsenal',
       badge: 'Tool Nexus',
       stats: [{ label: 'Total Tools', val: '21 Native Tools' }, { label: 'Execution', val: 'In-Browser / Web Crypto' }, { label: 'Status', val: 'All Active' }],

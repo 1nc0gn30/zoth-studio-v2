@@ -5,13 +5,14 @@ import { useTheme } from '@mui/material/styles';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import SEO from '../components/SEO';
 import { resolveRouteIntro } from '../motion/routeIntros';
+import { microTools } from '../data/toolsData';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const serif = '"Cormorant Garamond", Georgia, serif';
 
 const ROUTE_INDEX = [
-  { path: '/', introKey: 'home', desc: 'Flagship overview, 80-tool local repository index, and six core systems.' },
-  { path: '/arsenal', introKey: 'arsenal', desc: 'Complete searchable 80-tool local repository matrix with grid and list views.' },
+  { path: '/', introKey: 'home', desc: `Flagship overview, ${microTools.length}-tool local repository index, and six core systems.` },
+  { path: '/arsenal', introKey: 'arsenal', desc: `Complete searchable ${microTools.length}-tool local repository matrix with grid and list views.` },
   { path: '/tools', introKey: 'tools', desc: 'Categorized standalone CLI and loopback daemon repository directory.' },
   { path: '/workstations', introKey: 'workstations', desc: '18 role-specialized workstation cadres and port topology.' },
   { path: '/zoth-os', introKey: 'zoth-os', desc: 'ZothOS v3.4.0 (Debian 13 + KDE Plasma 6) and ZothOS-Lite v1.2 amnesic edition.' },

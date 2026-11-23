@@ -8,6 +8,7 @@ import GhostByteMark from './GhostByteMark';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import { STRIPE_COFFEE_URL, SOLANA_TIP_ADDRESS, useCopy } from './sovereign';
+import { microTools } from '../data/toolsData';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -24,7 +25,7 @@ export default function Footer() {
   const footerBg = isDark ? '#06070B' : '#F3EFE6';
 
   const systems = [
-    { label: 'Sovereign Arsenal (80 Free Tools)', to: '/arsenal' },
+    { label: `Sovereign Arsenal (${microTools.length} Free Tools)`, to: '/arsenal' },
     { label: 'ZothOS v3.4.0 & Lite v1.2', to: '/zoth-os' },
     { label: 'Pantheon Swarm (:9393)', to: '/swarm' },
     { label: 'Neuro-Memory (:8094)', to: '/memory' },
@@ -128,7 +129,7 @@ export default function Footer() {
                   Zoth Studio
                 </Typography>
                 <Typography sx={{ fontFamily: mono, fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.14em', color: gold }}>
-                  80 FREE OPEN-ACCESS TOOLS
+                  {microTools.length} FREE OPEN-ACCESS TOOLS
                 </Typography>
               </Box>
             </Box>
