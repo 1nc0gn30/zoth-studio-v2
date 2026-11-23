@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * ZOTH ARSENAL & HERMES INTEGRATION VERIFIER (79 Tools Comprehensive Sentinel)
+ * ZOTH ARSENAL & HERMES INTEGRATION VERIFIER (Full Arsenal Comprehensive Sentinel)
  * 
  * Verifies:
- *  1. Registry Integrity (all 79 tools defined with valid JSON schema).
+ *  1. Registry Integrity (all registered tools defined with valid JSON schema).
  *  2. Prerendered Static HTML Route Existence for every single tool (/tools/:id).
  *  3. GitHub Repository & Hermes Clone Source Health (valid git URL, zero 404s).
  *  4. Port Uniqueness & Air-Gap Execution Mode (client-side vs daemon loopback).
@@ -64,10 +64,6 @@ async function checkUrlStatus(urlStr) {
 }
 
 async function main() {
-  console.log(`\n${C.bold}${C.gold}══════════════════════════════════════════════════════════════════════════════════════${C.reset}`);
-  console.log(`${C.bold}${C.gold}        ZOTH STUDIO v2 & HERMES PLUGIN — 80-TOOL FULL ARSENAL AUDITOR         ${C.reset}`);
-  console.log(`${C.bold}${C.gold}══════════════════════════════════════════════════════════════════════════════════════${C.reset}\n`);
-
   if (!fs.existsSync(toolsJsonPath)) {
     console.error(`${C.red}✖ FAIL: public/api/tools.json not found!${C.reset}`);
     process.exit(1);
@@ -77,11 +73,16 @@ async function main() {
   const data = JSON.parse(raw);
   const tools = data.tools || [];
 
+  console.log(`\n${C.bold}${C.gold}══════════════════════════════════════════════════════════════════════════════════════${C.reset}`);
+  console.log(`${C.bold}${C.gold}        ZOTH STUDIO v2 & HERMES PLUGIN — ${tools.length}-TOOL FULL ARSENAL AUDITOR         ${C.reset}`);
+  console.log(`${C.bold}${C.gold}══════════════════════════════════════════════════════════════════════════════════════${C.reset}\n`);
+
   console.log(`Auditing ${C.bold}${tools.length}${C.reset} tools across all 18 cadres...\n`);
 
   let passedRoutes = 0;
   let passedSchemas = 0;
-  let seenPorts = new Set();
+  let seenPorts = new Map();
+  let declaredAliases = [];
   let portCollisions = [];
   let failures = [];
 
@@ -94,12 +95,22 @@ async function main() {
     if (hasSchema) passedSchemas++;
     else failures.push(`${t.id || 'unnamed'}: Incomplete JSON schema`);
 
-    // 2. Port collision check
+    // 2. Port collision check (respecting declared alias_of targets)
     if (t.port) {
       if (seenPorts.has(t.port)) {
-        portCollisions.push({ port: t.port, id: t.id });
+        const existing = seenPorts.get(t.port);
+        if (t.alias_of && t.alias_of === existing.id) {
+          declaredAliases.push({ port: t.port, alias: t.id, target: existing.id });
+        } else if (existing.alias_of && existing.alias_of === t.id) {
+          declaredAliases.push({ port: t.port, alias: existing.id, target: t.id });
+          seenPorts.set(t.port, t);
+        } else if (t.alias_of && existing.alias_of && t.alias_of === existing.alias_of) {
+          declaredAliases.push({ port: t.port, alias: t.id, target: t.alias_of });
+        } else {
+          portCollisions.push({ port: t.port, id: t.id, existingId: existing.id });
+        }
       } else {
-        seenPorts.add(t.port);
+        seenPorts.set(t.port, t);
       }
     }
 
@@ -114,8 +125,9 @@ async function main() {
     const statusMark = (hasSchema && hasRoute) ? `${C.green}✔ PASS${C.reset}` : `${C.red}✖ FAIL${C.reset}`;
     const portBadge = t.port ? `${C.cyan}:${t.port}${C.reset}` : `${C.dim}NO-PORT${C.reset}`;
     const modeBadge = `${C.yellow}[${t.execution_type}]${C.reset}`;
+    const aliasTag = t.alias_of ? ` ${C.dim}(alias -> ${t.alias_of})${C.reset}` : '';
 
-    console.log(`  [${num}/${tools.length}] ${statusMark} ${portBadge.padEnd(16)} ${modeBadge.padEnd(20)} ${C.bold}${t.name.padEnd(35)}${C.reset}`);
+    console.log(`  [${num}/${tools.length}] ${statusMark} ${portBadge.padEnd(16)} ${modeBadge.padEnd(20)} ${C.bold}${t.name.padEnd(35)}${C.reset}${aliasTag}`);
   }
 
   console.log(`\n${C.bold}══════════════════════════════════════════════════════════════════════════════════════${C.reset}`);
@@ -125,12 +137,16 @@ async function main() {
   console.log(`  Valid JSON Schema Definitions     : ${passedSchemas === tools.length ? C.green : C.red}${passedSchemas}/${tools.length}${C.reset}`);
   console.log(`  Prerendered HTML Routes in dist/  : ${passedRoutes === tools.length ? C.green : C.red}${passedRoutes}/${tools.length}${C.reset}`);
   console.log(`  Declared Unique Host Ports        : ${C.green}${seenPorts.size}${C.reset}`);
+  if (declaredAliases.length > 0) {
+    const aliasSummary = declaredAliases.map((a) => `${a.alias} -> ${a.target} (:${a.port})`).join(', ');
+    console.log(`  Declared Port Aliases             : ${C.cyan}${declaredAliases.length}${C.reset} ${C.dim}(${aliasSummary})${C.reset}`);
+  }
   console.log(`  Port Collisions Detected          : ${portCollisions.length === 0 ? C.green + '0' : C.red + portCollisions.length}${C.reset}`);
 
   if (portCollisions.length > 0) {
     console.log(`\n${C.red}Port Collisions:${C.reset}`);
     for (const c of portCollisions) {
-      console.log(`  - Port :${c.port} duplicate in ${c.id}`);
+      console.log(`  - Port :${c.port} duplicate in ${c.id} (conflicts with ${c.existingId})`);
     }
   }
 

@@ -444,7 +444,7 @@ async function main() {
   console.log(`  Total Console Errors   : ${totalErrors === 0 ? C.green + '0' : C.red + totalErrors}${C.reset}`);
 
   if (failedCount === 0 && totalErrors === 0) {
-    console.log(`\n${C.bgGreen}${C.white}${C.bold} ALL 21 TESTED ROUTES PASSED: 100% HYDRATION & CONSOLE CLEANLINESS ${C.reset}\n`);
+    console.log(`\n${C.bgGreen}${C.white}${C.bold} ALL ${ALL_ROUTES.length} TESTED ROUTES PASSED: 100% HYDRATION & CONSOLE CLEANLINESS ${C.reset}\n`);
     process.exit(0);
   } else {
     console.log(`\n${C.bgRed}${C.white}${C.bold} ROUTE VERIFICATION COMPLETED WITH FAILURES (${failedCount} failed) ${C.reset}\n`);
