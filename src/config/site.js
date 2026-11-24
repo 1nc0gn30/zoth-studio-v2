@@ -12,8 +12,8 @@ export const siteConfig = {
   name: 'Zoth Studio',
   legalName: 'Neal Frazier Tech • NullAI Platform',
   url: 'https://zoth.nullai.tech',
-  tagline: '83 Free Open-Access Sovereign Tools, Pantheon Matrix & Local AI Studio',
-  description: `Zoth Studio v2 is a local-first, zero-egress AI engineering studio unifying 83 free open-access developer, security, AEO, and AI tools (56 in-browser/WebGPU + 27 CLI/daemon across 79 public GitHub repositories), ${workstations.length} Studio workstations, ZothOS v3.4.0 (23 daemons, Debian 13 KDE Plasma 6), ZothOS-Lite v1.2 (Amnesic Monotone Live USB/ISO, 56 curated models across 8 providers, toram), and Zoth Civilization v3.0 (23 Pantheon Agents, 22-Key Sanctuary, DeepSeek Flash × Hermes BYOK).`,
+  tagline: '85 Free Open-Access Sovereign Tools, Pantheon Matrix & Local AI Studio',
+  description: `Zoth Studio v2 is a local-first, zero-egress AI engineering studio unifying 85 free open-access developer, security, AEO, and AI tools (56 in-browser/WebGPU + 29 local CLI/daemon across 82 public GitHub repositories), ${workstations.length} Studio workstations, ZothOS v3.4.0 (23 daemons, Debian 13 KDE Plasma 6), ZothOS-Lite v1.2 (Amnesic Monotone Live USB/ISO, 56 curated models across 8 providers, toram), and Zoth Civilization v3.0 (23 Pantheon Agents, 22-Key Sanctuary, DeepSeek Flash × Hermes BYOK).`,
   author: 'Neal Frazier Tech (@1nc0gn30) • NullAI Platform',
   twitterHandle: '@1nc0gn30',
   githubUrl: 'https://github.com/NullAITech/zoth-studio-v2',
@@ -24,7 +24,7 @@ export const siteConfig = {
   keywords: [
     'sovereign AI agents',
     'zero-egress development studio',
-    '83 open-access developer tools',
+    '85 open-access developer tools',
     'ZothOS v3.4.0',
     'ZothOS-Lite v1.2',
     'Zoth Civilization v3.0',
@@ -36,9 +36,9 @@ export const siteConfig = {
   ],
   routes: {
     '/': {
-      title: 'Zoth Studio // 83 Sovereign Open-Access Tools, Pantheon Matrix & Local AI Studio',
-      description: 'Local-first, zero-egress AI engineering studio unifying 83 free open-access tools (56 in-browser/WebGPU + 27 CLI/daemon, 79 public GitHub repos), 43 workstations, ZothOS v3.4.0, ZothOS-Lite v1.2, and Zoth Civilization v3.0.',
-      keywords: 'Zoth Studio, 83 open-access tools, ZothOS v3.4.0, ZothOS-Lite v1.2, Zoth Civilization v3.0, NullAI, 1nc0gn30',
+      title: 'Zoth Studio // 85 Sovereign Open-Access Tools, Pantheon Matrix & Local AI Studio',
+      description: 'Local-first, zero-egress AI engineering studio unifying 85 free open-access tools (56 in-browser/WebGPU + 29 local CLI/daemon, 82 public GitHub repos), 43 workstations, ZothOS v3.4.0, ZothOS-Lite v1.2, and Zoth Civilization v3.0.',
+      keywords: 'Zoth Studio, 85 open-access tools, ZothOS v3.4.0, ZothOS-Lite v1.2, Zoth Civilization v3.0, NullAI, 1nc0gn30',
       type: 'website',
     },
     '/adytum': {
@@ -60,15 +60,15 @@ export const siteConfig = {
       type: 'article',
     },
     '/arsenal': {
-      title: 'The Sovereign Arsenal // 83 Free Open-Access Tools, 79 GitHub Repos & 43 Workstations',
-      description: `Unified master directory of 83 free open-access developer, security, AEO & AI tools (56 in-browser/WebGPU + 27 CLI/daemon across 79 public GitHub repositories) and ${workstations.length} Studio workstations.`,
-      keywords: 'sovereign arsenal, 83 open-access tools, 79 GitHub repositories, developer cockpits, ZothOS, Zoth Studio',
+      title: 'The Sovereign Arsenal // 85 Free Open-Access Tools, 82 GitHub Repos & 43 Workstations',
+      description: `Unified master directory of 85 free open-access developer, security, AEO & AI tools (56 in-browser/WebGPU + 29 local CLI/daemon across 82 public GitHub repositories) and ${workstations.length} Studio workstations.`,
+      keywords: 'sovereign arsenal, 85 open-access tools, 82 GitHub repositories, developer cockpits, ZothOS, Zoth Studio',
       type: 'article',
     },
     '/tools': {
-      title: 'Sovereign Tool Repositories // 83 Free Open-Access Tools (56 WebGPU + 27 CLI)',
-      description: 'Explore 83 free open-access, schema-validated developer tools (56 in-browser/WebGPU + 27 CLI/daemon across 79 public GitHub repositories) and interactive God-Mode workstations.',
-      keywords: 'developer tools, zoth webgen, 83 open-access tools, 79 public repos, offline-capable tools',
+      title: 'Sovereign Tool Repositories // 85 Free Open-Access Tools (56 In-Browser + 29 CLI)',
+      description: 'Explore 85 free open-access, schema-validated developer tools (56 in-browser/WebGPU + 29 local CLI/daemon across 82 public GitHub repositories) and interactive God-Mode workstations.',
+      keywords: 'developer tools, zoth webgen, 85 open-access tools, 82 public repos, offline-capable tools',
       type: 'article',
     },
     '/workstations': {
@@ -255,7 +255,7 @@ export function generateSchemaGraph(path = '/') {
       'name': 'Are all 83 Zoth Studio tools, ZothOS v3.4.0, and ZothOS-Lite v1.2 100% free and open-access?',
       'acceptedAnswer': {
         '@type': 'Answer',
-        'text': 'Yes. All 83 Zoth Studio tools (56 in-browser/WebGPU + 27 CLI/daemon across 79 public GitHub repositories), 43 Studio workstations, ZothOS v3.4.0 (https://zothos.nullai.tech), ZothOS-Lite v1.2 (https://zothos-lite.nullai.tech), Zoth Civilization v3.0 (https://zoth-civilization.netlify.app), ZothNet (https://zothnet.nullai.tech), and FieldKit (https://nullai.tech/fieldkit) are 100% free and unlocked by default with zero paywalls, zero license modals, and optional Buy Us a Coffee or Solana community tips.'
+        'text': 'Yes. All 85 Zoth Studio tools (56 in-browser/WebGPU + 29 local CLI/daemon across 82 public GitHub repositories), 43 Studio workstations, ZothOS v3.4.0 (https://zothos.nullai.tech), ZothOS-Lite v1.2 (https://zothos-lite.nullai.tech), Zoth Civilization v3.0 (https://zoth-civilization.netlify.app), ZothNet (https://zothnet.nullai.tech), and FieldKit (https://nullai.tech/fieldkit) are 100% free and unlocked by default with zero paywalls, zero license modals, and optional Buy Us a Coffee or Solana community tips.'
       }
     },
     {
@@ -336,7 +336,7 @@ export function generateSchemaGraph(path = '/') {
     {
       '@type': ['WebApplication', 'SoftwareApplication'],
       '@id': `${siteConfig.url}/#application`,
-      'name': `${siteConfig.name} v2 • 83 Free Open-Access Sovereign Tools`,
+      'name': `${siteConfig.name} v2 • 85 Free Open-Access Sovereign Tools`,
       'url': siteConfig.url,
       'applicationCategory': 'DeveloperApplication',
       'operatingSystem': 'ZothOS v3.4.0, ZothOS-Lite v1.2, All Modern Browsers, Linux, macOS, Windows',

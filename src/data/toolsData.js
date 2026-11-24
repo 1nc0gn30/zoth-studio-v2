@@ -42,7 +42,7 @@ export const microTools = [
     repo: 'aether-observatory',
     category: 'System & Telemetry',
     executionType: 'local_cli',
-    github: '',
+    github: 'https://github.com/NullAITech/zoth-studio-v2',
     priceUsd: '0',
     priceCents: 0,
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
@@ -1585,7 +1585,7 @@ export const microTools = [
     description: 'Mobile-first PWA and desktop Command Deck (:8190) unifying Hermes, Antigravity (AGY), Chronicle Vault, Social Teach-by-Recording Playbooks, and Netlify Cove over local loopback and Tailscale HTTPS.',
     localPort: 8190,
     localUrl: 'http://127.0.0.1:8190',
-    version: '1.3.0',
+    version: '1.4.0',
     pull: 'zoth-bot-os --help  # or: git clone https://github.com/1nc0gn30/zoth-bot-os.git',
   },
   {
@@ -1600,10 +1600,10 @@ export const microTools = [
     priceCents: 0,
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     pricing: '100% Free & Open-Access',
-    description: 'Zero-dependency Python CLI & workflow library connecting Zoth web projects to Comfy Cloud and Partner Nodes (FLUX.2 Pro, FLUX.1 Kontext, Partner Video Loops) for hero specimens, packshots, and batch SKU renders with zero local GPU VRAM required.',
+    description: 'Zero-dependency Python CLI & 8-preset workflow library connecting Zoth web projects to Comfy Cloud and Partner Nodes (FLUX.2 Pro, FLUX.1 Kontext, Partner Video Loops) for hero specimens, packshots, and batch SKU renders with zero local GPU VRAM required.',
     localPort: null,
     localUrl: '',
-    version: '1.1.0',
+    version: '1.2.0',
     pull: 'zoth-comfy --help  # or: git clone https://github.com/1nc0gn30/zoth-comfy-foundry.git',
   }
 ];

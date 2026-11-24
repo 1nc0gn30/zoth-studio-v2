@@ -373,7 +373,7 @@ export default function ArsenalPage() {
                   mb: 2.5,
                 }}
               >
-                Unified directory of <strong>{microTools.length} free open-access tools</strong> (56 in-browser/WebGPU + 27 CLI/daemon across{' '}
+                Unified directory of <strong>{microTools.length} free open-access tools</strong> (56 in-browser/WebGPU + 29 local CLI/daemon across{' '}
                 <strong>79 public GitHub repositories</strong>) and 43 Studio workstations, plus local telemetry cockpits. Launch any tool in-browser, clone its standalone repository, or pull the complete{' '}
                 <Box
                   component="a"
@@ -455,7 +455,7 @@ export default function ArsenalPage() {
           }}
         >
           {[
-            ['Open-Access Tools', String(microTools.length), '56 WebGPU · 27 CLI'],
+            ['Open-Access Tools', String(microTools.length), '56 In-Browser · 29 CLI'],
             ['Public GitHub Repos', '79', 'Standalone Cloneable'],
             ['ZothOS v3.4.0 Daemons', '23', 'Debian 13 · KDE 6'],
             ['Outbound Telemetry', '0 WAN', '100% Free & Unlocked'],

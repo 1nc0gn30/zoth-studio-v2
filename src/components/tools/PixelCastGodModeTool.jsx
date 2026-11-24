@@ -52,7 +52,21 @@ const FALLBACK_SCREEN_SVG = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg 
   <text x="270" y="625" text-anchor="middle" fill="#9ca3af" font-family="monospace" font-size="14">H.264 / Opus • 1080p @ 60fps</text>
 </svg>`)}`;
 
+const FALLBACK_QR_SVG = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="68" height="68" viewBox="0 0 68 68">
+  <rect width="68" height="68" rx="6" fill="#0B0C12"/>
+  <rect x="8" y="8" width="18" height="18" fill="none" stroke="#F59E0B" stroke-width="3"/>
+  <rect x="13" y="13" width="8" height="8" fill="#F59E0B"/>
+  <rect x="42" y="8" width="18" height="18" fill="none" stroke="#F59E0B" stroke-width="3"/>
+  <rect x="47" y="13" width="8" height="8" fill="#F59E0B"/>
+  <rect x="8" y="42" width="18" height="18" fill="none" stroke="#F59E0B" stroke-width="3"/>
+  <rect x="13" y="47" width="8" height="8" fill="#F59E0B"/>
+  <rect x="31" y="31" width="6" height="6" fill="#F59E0B"/>
+  <rect x="42" y="42" width="8" height="8" fill="#F59E0B"/>
+  <rect x="52" y="52" width="8" height="8" fill="#F59E0B"/>
+</svg>`)}`;
+
 export default function PixelCastGodModeTool() {
+  const [localEnv] = useState(() => isLocalRuntime());
   const [statusData, setStatusData] = useState(null);
   const [streamActive, setStreamActive] = useState(false);
   const [screenShotUrl, setScreenShotUrl] = useState(FALLBACK_SCREEN_SVG);
@@ -64,6 +78,7 @@ export default function PixelCastGodModeTool() {
   const [loading, setLoading] = useState(false);
 
   const fetchStatus = async () => {
+    if (!isLocalRuntime()) return;
     try {
       const res = await fetch('http://127.0.0.1:8148/api/status');
       if (res.ok) {
@@ -77,10 +92,11 @@ export default function PixelCastGodModeTool() {
   };
 
   useEffect(() => {
+    if (!localEnv) return undefined;
     fetchStatus();
     const interval = setInterval(fetchStatus, 3500);
     return () => clearInterval(interval);
-  }, []);
+  }, [localEnv]);
 
   const handleLaunchMirror = async () => {
     setLoading(true);
@@ -527,8 +543,9 @@ export default function PixelCastGodModeTool() {
             >
               <Box
                 component="img"
-                src="http://127.0.0.1:8148/api/qr"
+                src={localEnv && statusData ? 'http://127.0.0.1:8148/api/qr' : FALLBACK_QR_SVG}
                 alt="Tailscale Mobile Connect QR Code"
+                onError={(e) => { e.target.src = FALLBACK_QR_SVG; }}
                 sx={{ width: 68, height: 68, borderRadius: 1, bgcolor: '#FFF', p: 0.5 }}
               />
               <Box sx={{ flex: 1, minWidth: 0 }}>

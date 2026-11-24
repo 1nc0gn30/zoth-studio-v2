@@ -96,6 +96,8 @@ const WebMcpInspectorGodModeTool = lazy(() => import('../components/tools/WebMcp
 const WebSecurityGuardGodModeTool = lazy(() => import('../components/tools/WebSecurityGuardGodModeTool'));
 const YaraSigmaForgeGodModeTool = lazy(() => import('../components/tools/YaraSigmaForgeGodModeTool'));
 const ZothBoltGodModeTool = lazy(() => import('../components/tools/ZothBoltGodModeTool'));
+const ZothBotOSGodModeTool = lazy(() => import('../components/tools/ZothBotOSGodModeTool'));
+const ZothComfyFoundryGodModeTool = lazy(() => import('../components/tools/ZothComfyFoundryGodModeTool'));
 const ZothFoundryGodModeTool = lazy(() => import('../components/tools/ZothFoundryGodModeTool'));
 const ZothOSGodModeTool = lazy(() => import('../components/tools/ZothOSGodModeTool'));
 const ZothOSLiteGodModeTool = lazy(() => import('../components/tools/ZothOSLiteGodModeTool'));
@@ -215,6 +217,8 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'zothos-lite': ZothOSLiteGodModeTool,
   'zothnet': ZothnetGodModeTool,
   'zoth-egregore': SwarmCivilizationGodModeTool,
+  'zoth-bot-os': ZothBotOSGodModeTool,
+  'zoth-comfy-foundry': ZothComfyFoundryGodModeTool,
 
   // Studio Cockpit & Workstation aliases (from workstations.js)
   'cockpit': SwarmCivilizationGodModeTool,
@@ -274,6 +278,7 @@ export default function RealToolWorkspacePage() {
 
   const [copiedClone, setCopiedClone] = useState(false);
   const [copiedPull, setCopiedPull] = useState(false);
+  const [copiedRuntimePull, setCopiedRuntimePull] = useState(false);
   const [copiedMcp, setCopiedMcp] = useState(false);
   const [copiedTuiSpec, setCopiedTuiSpec] = useState(false);
   const [localViewMode, setLocalViewMode] = useState(
@@ -416,6 +421,36 @@ export default function RealToolWorkspacePage() {
   const cloneCommand = `git clone ${repoUrl.replace(/\.git$/, '')}.git`;
   const pullCommand = tool.pull || cloneCommand;
   const dedicatedSite = DEDICATED_SITES[tool.id];
+  const execType = String(tool.executionType || tool.execution_type || 'browser').toLowerCase();
+  const runtimePort = tool.localPort ?? tool.port ?? null;
+  const isBrowserOnly = execType === 'browser' || execType === 'webgpu';
+  const isHybrid = execType === 'hybrid';
+  const isLocalCli = execType === 'local_cli';
+  const runtimeBanner = isBrowserOnly
+    ? {
+        tone: 'emerald',
+        badge: execType === 'webgpu' ? 'WEBGPU / BROWSER' : 'IN-BROWSER',
+        text: '✓ Runs 100% in your browser — no local install or backend required',
+      }
+    : isHybrid
+    ? {
+        tone: 'gold',
+        badge: 'HYBRID',
+        text: runtimePort
+          ? `⚡ Browser Workbench + Optional Local Daemon (127.0.0.1:${runtimePort})`
+          : '⚡ Browser Workbench + Optional Local Daemon',
+      }
+    : runtimePort
+    ? {
+        tone: 'amber',
+        badge: `LOCAL DAEMON :${runtimePort}`,
+        text: `⚙ Local ZothOS Daemon (127.0.0.1:${runtimePort}) — interactive preview below; install CLI or ZothOS for live local execution`,
+      }
+    : {
+        tone: 'amber',
+        badge: 'LOCAL CLI',
+        text: '⌨ Local CLI Tool — configure & export commands below; runs locally via ZothOS / terminal',
+      };
   const ActiveEnclaveComponent =
     ENCLAVE_TOOL_COMPONENTS[tool.id] ||
     ENCLAVE_TOOL_COMPONENTS[toolId] ||
@@ -518,7 +553,7 @@ export default function RealToolWorkspacePage() {
           />
           <Chip
             size="small"
-            label={hasWebGPU ? 'WEBGPU + ZERO-EGRESS' : '100% OPEN-ACCESS'}
+            label={isBrowserOnly && hasWebGPU ? 'WEBGPU + IN-BROWSER' : '100% OPEN-ACCESS'}
             sx={{
               fontFamily: mono,
               fontWeight: 700,
@@ -528,10 +563,32 @@ export default function RealToolWorkspacePage() {
               border: `1px solid ${emeraldBorder}`,
             }}
           />
-          {tool.localPort && (
+          <Chip
+            size="small"
+            label={runtimeBanner.badge}
+            sx={{
+              fontFamily: mono,
+              fontWeight: 700,
+              fontSize: '0.68rem',
+              bgcolor: isBrowserOnly
+                ? emeraldBg
+                : isDark
+                ? 'rgba(245, 158, 11, 0.14)'
+                : '#FFFBEB',
+              color: isBrowserOnly ? emeraldText : isDark ? '#FBBF24' : '#92400E',
+              border: `1px solid ${
+                isBrowserOnly
+                  ? emeraldBorder
+                  : isDark
+                  ? 'rgba(245, 158, 11, 0.35)'
+                  : '#FDE68A'
+              }`,
+            }}
+          />
+          {isLocal && runtimePort && localWebAppUp && (
             <Chip
               size="small"
-              label={`DAEMON :${tool.localPort}`}
+              label={`LIVE LOCAL :${runtimePort}`}
               sx={{
                 fontFamily: mono,
                 fontWeight: 700,
@@ -615,11 +672,98 @@ export default function RealToolWorkspacePage() {
                 lineHeight: 1.7,
                 color: secondaryText,
                 maxWidth: 860,
-                mb: 3,
+                mb: 2.5,
               }}
             >
               {tool.description}
             </Typography>
+          </HeroItem>
+
+          {/* Honest Runtime Verification Strip */}
+          <HeroItem>
+            <Box
+              data-testid="runtime-verification-strip"
+              sx={{
+                mb: 2.5,
+                px: 2,
+                py: 1.35,
+                borderRadius: 2,
+                bgcolor:
+                  runtimeBanner.tone === 'emerald'
+                    ? emeraldBg
+                    : isDark
+                    ? 'rgba(245, 158, 11, 0.1)'
+                    : '#FFFBEB',
+                border: `1px solid ${
+                  runtimeBanner.tone === 'emerald'
+                    ? emeraldBorder
+                    : isDark
+                    ? 'rgba(245, 158, 11, 0.34)'
+                    : '#FDE68A'
+                }`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: 1.25,
+              }}
+            >
+              <Box sx={{ minWidth: 0, flex: '1 1 260px' }}>
+                <Typography
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: { xs: '0.74rem', sm: '0.8rem' },
+                    fontWeight: 700,
+                    lineHeight: 1.5,
+                    color:
+                      runtimeBanner.tone === 'emerald'
+                        ? emeraldText
+                        : isDark
+                        ? '#FCD34D'
+                        : '#92400E',
+                    overflowWrap: 'anywhere',
+                  }}
+                >
+                  {runtimeBanner.text}
+                </Typography>
+              </Box>
+
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1 }}>
+                {isLocal && runtimePort && localWebAppUp && (
+                  <Chip
+                    size="small"
+                    label={`● Local Daemon Reachable (:${runtimePort})`}
+                    sx={{
+                      fontFamily: mono,
+                      fontWeight: 700,
+                      fontSize: '0.68rem',
+                      bgcolor: emeraldBg,
+                      color: emeraldText,
+                      border: `1px solid ${emeraldBorder}`,
+                    }}
+                  />
+                )}
+                {(isLocalCli || isHybrid) && (
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    onClick={() => copyText(pullCommand, setCopiedRuntimePull)}
+                    startIcon={copiedRuntimePull ? <CheckIcon sx={{ fontSize: 14 }} /> : <ContentCopyIcon sx={{ fontSize: 14 }} />}
+                    sx={{
+                      fontFamily: mono,
+                      fontWeight: 700,
+                      fontSize: '0.7rem',
+                      textTransform: 'none',
+                      color: primaryText,
+                      borderColor: borderCol,
+                      minHeight: 32,
+                    }}
+                  >
+                    {copiedRuntimePull ? 'Copied Quickstart' : 'Copy Install / CLI'}
+                  </Button>
+                )}
+              </Box>
+            </Box>
           </HeroItem>
 
           {/* Pull / CLI Command Strip + Git Clone Strip */}
@@ -1019,23 +1163,33 @@ export default function RealToolWorkspacePage() {
                 <Typography variant="h6" sx={{ fontWeight: 800, color: primaryText, lineHeight: 1.25 }}>
                   Interactive Enclave Workstation
                 </Typography>
-                <Typography variant="caption" sx={{ fontFamily: mono, color: emeraldText, fontWeight: 700 }}>
-                  {isLocal
-                    ? 'LOCAL SOVEREIGN ENCLAVE · BARE-METAL HARNESS ACTIVE'
-                    : '100% OPEN-ACCESS CLIENT ENGINE · ZERO PAYWALLS · ZERO EGRESS'}
+                <Typography variant="caption" sx={{ fontFamily: mono, color: isBrowserOnly ? emeraldText : gold, fontWeight: 700 }}>
+                  {isBrowserOnly
+                    ? '100% OPEN-ACCESS CLIENT ENGINE · RUNS DIRECTLY IN YOUR BROWSER'
+                    : isHybrid
+                    ? 'BROWSER WORKBENCH · CONNECTS TO LOCAL DAEMON WHEN RUNNING ON 127.0.0.1'
+                    : isLocal && localWebAppUp
+                    ? `LOCAL DAEMON REACHABLE ON 127.0.0.1:${runtimePort} · INTERACTIVE DECK ACTIVE`
+                    : 'INTERACTIVE PREVIEW & CLI WORKBENCH · INSTALL CLI OR ZOTHOS FOR LOCAL EXECUTION'}
                 </Typography>
               </Box>
             </Box>
             <Chip
               size="small"
-              label={tool.executionType === 'local_cli' ? 'IN-BROWSER DECK + CLI' : 'LIVE IN-BROWSER ENGINE'}
+              label={
+                isBrowserOnly
+                  ? '100% IN-BROWSER ENGINE'
+                  : isHybrid
+                  ? 'HYBRID BROWSER + LOCAL'
+                  : 'PREVIEW + LOCAL CLI'
+              }
               sx={{
                 fontFamily: mono,
                 fontWeight: 800,
                 fontSize: '0.68rem',
-                bgcolor: emeraldBg,
-                color: emeraldText,
-                border: `1px solid ${emeraldBorder}`,
+                bgcolor: isBrowserOnly ? emeraldBg : isDark ? 'rgba(212,175,55,0.12)' : '#FAF6EB',
+                color: isBrowserOnly ? emeraldText : gold,
+                border: `1px solid ${isBrowserOnly ? emeraldBorder : borderCol}`,
               }}
             />
           </Box>
@@ -1276,7 +1430,9 @@ export default function RealToolWorkspacePage() {
             CLI Quickstart &amp; MCP Interface
           </Typography>
           <Typography variant="body2" sx={{ color: secondaryText, mb: 3, maxWidth: 760 }}>
-            Runs interactively above inside Zoth Studio or natively on Linux, macOS, and ZothOS terminals without cloud egress. Autonomous agents invoke it via standardized MCP or JSON CLI flags.
+            {isBrowserOnly
+              ? 'Executes directly in your browser above, and can also be cloned to run natively on Linux, macOS, and ZothOS terminals. Autonomous agents invoke it via standardized MCP or JSON CLI flags.'
+              : 'Configure and preview commands above inside Zoth Studio, then install the local repository or run pre-installed on ZothOS for live local CLI/daemon execution. Autonomous agents invoke it via standardized MCP or JSON CLI flags.'}
           </Typography>
 
           <Grid container spacing={3}>

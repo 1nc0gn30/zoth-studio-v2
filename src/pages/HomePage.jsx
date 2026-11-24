@@ -118,7 +118,7 @@ const ECOSYSTEM_BRIDGES = [
     secondaryRoute: '/ui-kit',
     secondaryLabel: '@zoth/ui Kit',
     summary:
-      '56 in-browser/WebGPU utilities and 27 local CLI/daemon packages across 79 public GitHub repositories, paired with 43 Studio workstations — 100% unlocked.',
+      '56 in-browser/WebGPU utilities and 29 local CLI/daemon packages across 82 public GitHub repositories, paired with 43 Studio workstations — 100% unlocked.',
   },
 ];
 
@@ -273,7 +273,7 @@ export default function HomePage() {
                     mb: 3,
                   }}
                 >
-                  Zoth Studio unifies <strong>{microTools.length} free open-access tools</strong> (56 in-browser/WebGPU + 27 CLI/daemon across{' '}
+                  Zoth Studio unifies <strong>{microTools.length} free open-access tools</strong> (56 in-browser/WebGPU + 29 local CLI/daemon across{' '}
                   <strong>79 public GitHub repositories</strong>) with <strong>43 Studio workstations</strong> — engineered to execute on{' '}
                   <Box component="code" sx={{ fontFamily: mono, fontSize: '0.9em', color: gold }}>
                     127.0.0.1
@@ -540,7 +540,7 @@ export default function HomePage() {
                     {[
                       [
                         `${microTools.length} Free Open-Access Tools`,
-                        '56 in-browser/WebGPU utilities + 27 CLI/daemon packages across 79 public GitHub repositories.',
+                        '56 in-browser/WebGPU utilities + 29 local CLI/daemon packages across 82 public GitHub repositories.',
                       ],
                       [
                         'ZothOS v3.4.0 & Lite v1.2',
@@ -1208,7 +1208,7 @@ export default function HomePage() {
           }}
         >
           <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#A3AAB8' }}>
-            {microTools.length} Free Open-Access Tools (56 WebGPU + 27 CLI) · 79 Public GitHub Repos · 43 Workstations
+            {microTools.length} Free Open-Access Tools (56 In-Browser + 29 CLI) · 82 Public GitHub Repos · 43 Workstations
           </Typography>
           <Button
             size="small"

@@ -143,7 +143,7 @@ export default function Footer() {
               <Link href="https://1nc0gn30.si" target="_blank" rel="noopener noreferrer" sx={{ color: gold, fontWeight: 700 }}>
                 1nc0gn30
               </Link>
-              . 56 in-browser/WebGPU utilities, 27 CLI/daemon packages, 79 public GitHub repos, and 43 Studio workstations running with zero cloud telemetry.
+              . 56 in-browser/WebGPU utilities, 29 local CLI/daemon packages, 82 public GitHub repos, and 43 Studio workstations running with zero cloud telemetry.
             </Typography>
 
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>
