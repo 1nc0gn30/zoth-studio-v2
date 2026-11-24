@@ -119,6 +119,11 @@ const OsintScoutSkillGodModeTool = lazy(() => import('../components/tools/OsintS
 const EtsyPodForgeGodModeTool = lazy(() => import('../components/tools/EtsyPodForgeGodModeTool'));
 const ShopifyConnectorGodModeTool = lazy(() => import('../components/tools/ShopifyConnectorGodModeTool'));
 const PodMockupForgeGodModeTool = lazy(() => import('../components/tools/PodMockupForgeGodModeTool'));
+const PrintifyConnectorGodModeTool = lazy(() => import('../components/tools/PrintifyConnectorGodModeTool'));
+const GelatoConnectorGodModeTool = lazy(() => import('../components/tools/GelatoConnectorGodModeTool'));
+const PodSmartRouterGodModeTool = lazy(() => import('../components/tools/PodSmartRouterGodModeTool'));
+const PodMarginSentinelGodModeTool = lazy(() => import('../components/tools/PodMarginSentinelGodModeTool'));
+const StorefrontCatalogGodModeTool = lazy(() => import('../components/tools/StorefrontCatalogGodModeTool'));
 const ZothnetGodModeTool = lazy(() => import('../components/tools/ZothnetGodModeTool'));
 
 const ENCLAVE_TOOL_COMPONENTS = {
@@ -178,15 +183,15 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'omnipost-social-engine': OmniPostSocialGodModeTool,
   'zoth-x-connector': ZothXConnectorGodModeTool,
   'cron-rhythm-studio': CronRhythmGodModeTool,
-  'printify-connector': PodCommerceGodModeTool,
-  'gelato-connector': PodCommerceGodModeTool,
+  'printify-connector': PrintifyConnectorGodModeTool,
+  'gelato-connector': GelatoConnectorGodModeTool,
   'etsy-connector': EtsyPodForgeGodModeTool,
   'shopify-connector': ShopifyConnectorGodModeTool,
   'etsy-pod-forge': EtsyPodForgeGodModeTool,
-  'pod-smart-router': PodCommerceGodModeTool,
+  'pod-smart-router': PodSmartRouterGodModeTool,
   'digital-asset-forge': PodMockupForgeGodModeTool,
   'pod-mockup-forge': PodMockupForgeGodModeTool,
-  'pod-margin-sentinel': PodCommerceGodModeTool,
+  'pod-margin-sentinel': PodMarginSentinelGodModeTool,
   'agent-voice-call': AgentVoiceCallGodModeTool,
   'mcp-lens': McpLensGodModeTool,
   'agent-budget-sentinel': AgentBudgetSentinelGodModeTool,
@@ -224,7 +229,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'reality-shader-forge': RealityShaderForgeGodModeTool,
   'anderson-security-sentinel': AttackSurfaceSentinelGodModeTool,
   'city-desk': CivicProcurementGodModeTool,
-  'storefront-catalog': PodCommerceGodModeTool,
+  'storefront-catalog': StorefrontCatalogGodModeTool,
   'pixel-cast': PixelCastGodModeTool,
   'aether-observatory': AetherObservatoryGodModeTool,
   'zoth-memory-vault': ChronicleVaultGodModeTool,
