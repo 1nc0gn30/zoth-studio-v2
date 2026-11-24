@@ -96,6 +96,7 @@ const WebMcpInspectorGodModeTool = lazy(() => import('../components/tools/WebMcp
 const WebSecurityGuardGodModeTool = lazy(() => import('../components/tools/WebSecurityGuardGodModeTool'));
 const YaraSigmaForgeGodModeTool = lazy(() => import('../components/tools/YaraSigmaForgeGodModeTool'));
 const ZothBoltGodModeTool = lazy(() => import('../components/tools/ZothBoltGodModeTool'));
+const ZothBotGodModeTool = lazy(() => import('../components/tools/ZothBotGodModeTool'));
 const ZothBotOSGodModeTool = lazy(() => import('../components/tools/ZothBotOSGodModeTool'));
 const ZothBountyGodModeTool = lazy(() => import('../components/tools/ZothBountyGodModeTool'));
 const ZothComfyFoundryGodModeTool = lazy(() => import('../components/tools/ZothComfyFoundryGodModeTool'));
@@ -106,9 +107,12 @@ const ZothOSLiteGodModeTool = lazy(() => import('../components/tools/ZothOSLiteG
 const ZothObsidianTrackerGodModeTool = lazy(() => import('../components/tools/ZothObsidianTrackerGodModeTool'));
 const ZothOsintGodModeTool = lazy(() => import('../components/tools/ZothOsintGodModeTool'));
 const ZothPillGodModeTool = lazy(() => import('../components/tools/ZothPillGodModeTool'));
+const ZothRelayGodModeTool = lazy(() => import('../components/tools/ZothRelayGodModeTool'));
 const ZothSceneFoundryGodModeTool = lazy(() => import('../components/tools/ZothSceneFoundryGodModeTool'));
 const ZothXConnectorGodModeTool = lazy(() => import('../components/tools/ZothXConnectorGodModeTool'));
 const ProductHuntConnectorGodModeTool = lazy(() => import('../components/tools/ProductHuntConnectorGodModeTool'));
+const CreatorPlaybooksGodModeTool = lazy(() => import('../components/tools/CreatorPlaybooksGodModeTool'));
+const ZelaGlassesGuideGodModeTool = lazy(() => import('../components/tools/ZelaGlassesGuideGodModeTool'));
 const ZothnetGodModeTool = lazy(() => import('../components/tools/ZothnetGodModeTool'));
 
 const ENCLAVE_TOOL_COMPONENTS = {
@@ -137,7 +141,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'shodan-sentinel': AttackSurfaceSentinelGodModeTool,
   'adytum-alchemist-ai-workflow': AdytumPlannerGodModeTool,
   'adytum-alchemist': AdytumPlannerGodModeTool,
-  'creatorplaybooks': AdytumPlannerGodModeTool,
+  'creatorplaybooks': CreatorPlaybooksGodModeTool,
   'azoth-archon-orchestrator': AzothArchonGodModeTool,
   'azoth-local-agent': AzothArchonGodModeTool,
   'sovereign-bridge-protocol': SovereignBridgeGodModeTool,
@@ -193,9 +197,9 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'zoth-bolt': ZothBoltGodModeTool,
   'producthunt-connector': ProductHuntConnectorGodModeTool,
   'zoth-ph': ProductHuntConnectorGodModeTool,
-  'zoth-relay': SovereignBridgeGodModeTool,
-  'zela-glasses-guide': VisionKinematicsGodModeTool,
-  'zoth-bot': AzothArchonGodModeTool,
+  'zoth-relay': ZothRelayGodModeTool,
+  'zela-glasses-guide': ZelaGlassesGuideGodModeTool,
+  'zoth-bot': ZothBotGodModeTool,
   'zoth-bounty': ZothBountyGodModeTool,
   'zoth-scene-foundry': ZothSceneFoundryGodModeTool,
   'vision-gesture-control': VisionKinematicsGodModeTool,
