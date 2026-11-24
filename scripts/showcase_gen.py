@@ -603,6 +603,14 @@ PILLS = {
         "An always-on local assistant, kept on a leash you control.",
         "Zoth users",
     ),
+    "zoth-bot-os": (
+        "Your entire agent fleet, controlled from your phone over Tailscale.",
+        ["Open the mobile-first PWA command deck on :8190 and stream Hermes or AGY live over SSE",
+         "Jump into Convos to search Chronicle Vault transcripts and resume any thread into Chat",
+         "Record a Social playbook once in Chrome and replay it with parameterized captions and media"],
+        "Unifies Hermes, AGY, Chronicle Vault, Social Playbooks, and Netlify Cove into one private command deck.",
+        "AI power users & solo founders",
+    ),
     "zoth-bounty": (
         "Disclosure tracking with zero false positives.",
         ["Open the loopback command center on :9494",
@@ -618,6 +626,14 @@ PILLS = {
          "Watch a Planetary Decree propagate"],
         "Multi-agent dynamics you can observe and reason about, not just prompt.",
         "AI & simulation",
+    ),
+    "zoth-comfy-foundry": (
+        "Studio-grade FLUX.2 hero art and packshots from one CLI — zero local GPU.",
+        ["Run zoth-comfy presets to inspect all 6 built-in brand and POD workflows",
+         "Generate a 3-SKU Hatch/Hush/POD manifest with manifest-init and dry-run the resolved graph",
+         "Render a 1440x810 obsidian-and-gold hero specimen directly into your repo assets"],
+        "Reproducible, seed-locked Comfy Cloud asset pipelines straight from the terminal without renting a GPU box.",
+        "Design engineers & POD founders",
     ),
     "zoth-egregore": (
         "One model, 3,456 co-prime cognitive lenses.",

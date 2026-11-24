@@ -165,6 +165,8 @@ headlessly (see §8), so a `[E]` cell means a clean capture row exists for that 
 | 81 | `zoth-x-connector` | Swarm & Core | 1.0.0 | `:8152` | local_cli | `A` | `B` | `C` | `D` | `E` |
 | 82 | `zoth-memory-vault` | Memory & Brain | 1.0.0 | `:8161` | local_cli | `A` | `B` | `C` | `D` | `E` |
 | 83 | `zoth-egregore` | Swarm & Core | 0.1.0-beta | `:8147` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 84 | `zoth-bot-os` | Swarm & Core | 1.3.0 | `:8190` | local_cli | `A` | `B` | `C` | `D` | `E` |
+| 85 | `zoth-comfy-foundry` | Media & 3D | 1.1.0 | `cli` | local_cli | `A` | `B` | `C` | `D` | `E` |
 
 ## 4. Layer C — CLI parity detail
 
@@ -378,6 +380,7 @@ Reproduce with `docs/tools/atlas_gen.py` (`helper_drift()`), which scans the sam
 | `:8147` | Zoth Egregore (`zoth-egregore`) |
 | `:8160` | aether-observatory |
 | `:8161` | Chronicle Vault (`zoth-memory-vault`) |
+| `:8190` | Zoth Bot OS (`zoth-bot-os`) |
 | `:11434` | Ollama |
 | `:18000` | AGY-Hermes Proxy |
 

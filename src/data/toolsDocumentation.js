@@ -89,6 +89,84 @@ export const toolsDocumentation = {
       'Native ZothOS CLI (serve, sync, sync-recent, mcp, stats, patterns, search, recall, live, digest, playbook, models) and systemd user service'
     ]
   },
+  'zoth-bot-os': {
+    whyUse: 'Gives you a single mobile-first PWA and desktop Command Deck on :8190 (and Tailscale HTTPS) to run Hermes, Antigravity (AGY), Chronicle Vault continuity, Social Teach-by-Recording playbooks, and Netlify Cove from your phone or workstation.',
+    problemSolved: 'Managing autonomous agents, past conversation histories, social posting flows, and Netlify site fleets across scattered terminals breaks mobile workflows. Zoth Bot OS consolidates all five surfaces into one live SSE-streamed command deck with zero cloud middlemen.',
+    architecture: 'Python 3 local HTTP/SSE server bound to 127.0.0.1:8190 (zoth-bot-os.service) with Tailscale HTTPS Serve support, dynamic /api/models discovery, /api/chat/run & /api/chat/stream/<job_id> streaming, Chronicle Vault (:8161) proxy, persistent Chrome profile Social Engine, Netlify Cove Bridge, and native CLI wrapper (zoth-bot-os).',
+    aiAgentProtocol: {
+      mcpTool: 'zoth_bot_os_status',
+      description: 'Inspect Zoth Bot OS daemon health, discovered Hermes/AGY models, fleet telemetry, and Tailscale pairing URLs.',
+      cliExample: 'zoth-bot-os status && zoth-bot-os models && zoth-bot-os system',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          action: { type: 'string', enum: ['serve', 'status', 'models', 'system', 'url'], description: 'Zoth Bot OS CLI subcommand' }
+        },
+        required: ['action']
+      },
+      outputSchema: {
+        status: 'string',
+        models: 'array',
+        daemons: 'object',
+        urls: { local: 'string', tailscale: 'string' }
+      }
+    },
+    quickstart: [
+      'zoth-bot-os serve --port 8190',
+      'zoth-bot-os status',
+      'zoth-bot-os models',
+      'zoth-bot-os system',
+      'zoth-bot-os url',
+      '# Open standalone PWA at http://127.0.0.1:8190 or Studio route /tools/zoth-bot-os'
+    ],
+    features: [
+      '01 · Chat (Hermes / AGY / Cove): Unified multi-engine command deck with dynamic model discovery, reasoning effort controls, SSE token/tool streaming, session resume, and photo/file uploads',
+      '02 · Convos (Chronicle Vault): Live proxy to Chronicle Vault (:8161) to search Hermes + AGY transcripts, resolve continuity items, and resume any thread into Chat',
+      '03 · Social (Teach-by-Recording Studio): Persistent Chrome profiles for Instagram, YouTube, and X with live click/type recording into reusable JSON playbooks and parameterized replay',
+      '04 · Cove (Netlify Cove Agent): Live Netlify site inventory, local Cove Knowledge Base full-text search, and one-click Ask Cove context injection',
+      '05 · System & Phone Pairing: Live daemon fleet health probes, zoth-comfy pipeline status, and pure-JS SVG QR code for instant iOS/Android Tailscale PWA onboarding'
+    ]
+  },
+  'zoth-comfy-foundry': {
+    whyUse: 'Renders production 3D obsidian/gold hero specimens, locked-lighting POD/SKU product packshots, brand relights, OpenGraph banners, and 1080p looping hero videos directly from the CLI via Comfy Cloud with zero local GPU VRAM required.',
+    problemSolved: 'Generating cohesive brand imagery, multi-SKU product packshots, and tactile UI textures usually requires heavy local GPU rigs or manual web UI clicking. Zoth Comfy Cloud Foundry automates repeatable, seed-locked Comfy Cloud workflows straight into your repo assets.',
+    architecture: 'Zero-dependency Python 3 CLI (zoth-comfy v1.1.0) and JSON API workflow library connecting to Comfy Cloud (https://cloud.comfy.org) and Comfy Partner Nodes (FLUX.2 Pro, FLUX.1 Kontext Pro, Partner Video Loops), storing API keys securely in chmod 600 ~/.config/zoth/comfy.env.',
+    aiAgentProtocol: {
+      mcpTool: 'zoth_comfy_render',
+      description: 'List built-in Comfy Cloud presets, generate batch SKU manifests, dry-run workflow payloads, or render production brand assets via zoth-comfy.',
+      cliExample: 'zoth-comfy presets && zoth-comfy render hero-specimen --prompt "Brushed obsidian prism, gold rim light" --dry-run',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          action: { type: 'string', enum: ['status', 'auth', 'presets', 'render', 'batch', 'manifest-init'], description: 'zoth-comfy CLI subcommand' },
+          preset: { type: 'string', description: 'Built-in preset name (hero-specimen, product-packshot, brand-relight, hero-loop, ui-texture-tile, og-social-card)' },
+          prompt: { type: 'string', description: 'Render prompt text' }
+        },
+        required: ['action']
+      },
+      outputSchema: {
+        preset: 'string',
+        workflow_nodes: 'number',
+        output_path: 'string',
+        dry_run: 'boolean'
+      }
+    },
+    quickstart: [
+      'zoth-comfy auth "<YOUR_COMFY_API_KEY>"',
+      'zoth-comfy status',
+      'zoth-comfy presets',
+      'zoth-comfy render hero-specimen --prompt "Brushed obsidian geometric prism, warm gold rim light" --dry-run',
+      'zoth-comfy manifest-init --out manifest.json --preset product-packshot',
+      'zoth-comfy batch manifest.json --out-dir ./public/assets/products/ --dry-run'
+    ],
+    features: [
+      'Six built-in UI & Brand presets: hero-specimen (1440x810), product-packshot (1024x1024), brand-relight (Kontext Pro), hero-loop (1080p video), ui-texture-tile, and og-social-card (1200x630)',
+      'Zero local GPU VRAM required — dispatches directly to Comfy Cloud Partner Nodes (FLUX.2 Pro, FLUX.1 Kontext, Partner Video)',
+      'Seed-locked multi-SKU batch manifest generator (manifest-init) and batch runner for consistent Hatch/Hush/POD product photography',
+      'Safe --dry-run workflow resolution to inspect full ComfyUI API JSON graphs without spending credits',
+      'Custom workflow runner accepting any ComfyUI "Save (API Format)" JSON file with chmod 600 local key storage'
+    ]
+  },
   'aether-observatory': {
     whyUse: 'Turns the whole machine into a single observable object: every listening port, daemon, thermal zone, memory engram and git repo rendered as an interactive 3D constellation, sonified in real time, and recorded into a replayable flight log. Replaces ad-hoc `ss`/`top`/`sensors` tab-hopping and cloud APM agents with a sovereign localhost command deck.',
     problemSolved: 'Local telemetry is normally scattered across shell tools with no history and no cross-signal correlation. Aether Observatory correlates ports, processes, thermals and git activity into one time-indexed model so you can diff any two moments and see exactly which port spawned or died, and how load and temperature moved with it.',
