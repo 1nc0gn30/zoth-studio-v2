@@ -150,6 +150,7 @@ tags = ["solana", "treasury"]
 [[rules.allowlists]]
 description = "Intentional public receive address on labeled payment and treasury surfaces only."
 paths = [
+  '''(?:^|/)index\.html$''',
   '''(?:^|/)src/pages/AgoraPage\.jsx$''',
   '''(?:^|/)src/pages/ZothOSPage\.jsx$''',
   '''(?:^|/)src/pages/ArsenalPage\.jsx$''',
