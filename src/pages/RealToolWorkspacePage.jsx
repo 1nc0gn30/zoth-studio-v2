@@ -97,12 +97,18 @@ const WebSecurityGuardGodModeTool = lazy(() => import('../components/tools/WebSe
 const YaraSigmaForgeGodModeTool = lazy(() => import('../components/tools/YaraSigmaForgeGodModeTool'));
 const ZothBoltGodModeTool = lazy(() => import('../components/tools/ZothBoltGodModeTool'));
 const ZothBotOSGodModeTool = lazy(() => import('../components/tools/ZothBotOSGodModeTool'));
+const ZothBountyGodModeTool = lazy(() => import('../components/tools/ZothBountyGodModeTool'));
 const ZothComfyFoundryGodModeTool = lazy(() => import('../components/tools/ZothComfyFoundryGodModeTool'));
+const ZothEgregoreGodModeTool = lazy(() => import('../components/tools/ZothEgregoreGodModeTool'));
 const ZothFoundryGodModeTool = lazy(() => import('../components/tools/ZothFoundryGodModeTool'));
 const ZothOSGodModeTool = lazy(() => import('../components/tools/ZothOSGodModeTool'));
 const ZothOSLiteGodModeTool = lazy(() => import('../components/tools/ZothOSLiteGodModeTool'));
+const ZothObsidianTrackerGodModeTool = lazy(() => import('../components/tools/ZothObsidianTrackerGodModeTool'));
 const ZothOsintGodModeTool = lazy(() => import('../components/tools/ZothOsintGodModeTool'));
 const ZothPillGodModeTool = lazy(() => import('../components/tools/ZothPillGodModeTool'));
+const ZothSceneFoundryGodModeTool = lazy(() => import('../components/tools/ZothSceneFoundryGodModeTool'));
+const ZothXConnectorGodModeTool = lazy(() => import('../components/tools/ZothXConnectorGodModeTool'));
+const ProductHuntConnectorGodModeTool = lazy(() => import('../components/tools/ProductHuntConnectorGodModeTool'));
 const ZothnetGodModeTool = lazy(() => import('../components/tools/ZothnetGodModeTool'));
 
 const ENCLAVE_TOOL_COMPONENTS = {
@@ -138,7 +144,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'sovereign-agent-bridge': SovereignBridgeGodModeTool,
   'neuro-memory-service': NeuroMemoryGodModeTool,
   'neuro-memory-daemon': NeuroMemoryGodModeTool,
-  'zoth-obsidian-tracker': NeuroMemoryGodModeTool,
+  'zoth-obsidian-tracker': ZothObsidianTrackerGodModeTool,
   'agent-egress-sentinel': AgentEgressSentinelGodModeTool,
   'agent-mock-twin': AgentMockTwinGodModeTool,
   'agent-prompt-firewall': AgentPromptFirewallGodModeTool,
@@ -160,7 +166,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'cwv-speed-engine': CwvSpeedEngineGodModeTool,
   'subsweep-lead-scanner': SubSweepGodModeTool,
   'omnipost-social-engine': OmniPostSocialGodModeTool,
-  'zoth-x-connector': OmniPostSocialGodModeTool,
+  'zoth-x-connector': ZothXConnectorGodModeTool,
   'cron-rhythm-studio': CronRhythmGodModeTool,
   'printify-connector': PodCommerceGodModeTool,
   'gelato-connector': PodCommerceGodModeTool,
@@ -185,13 +191,13 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'bolt.diy': ZothBoltGodModeTool,
   'bolt-diy': ZothBoltGodModeTool,
   'zoth-bolt': ZothBoltGodModeTool,
-  'producthunt-connector': CivicProcurementGodModeTool,
-  'zoth-ph': CivicProcurementGodModeTool,
+  'producthunt-connector': ProductHuntConnectorGodModeTool,
+  'zoth-ph': ProductHuntConnectorGodModeTool,
   'zoth-relay': SovereignBridgeGodModeTool,
   'zela-glasses-guide': VisionKinematicsGodModeTool,
   'zoth-bot': AzothArchonGodModeTool,
-  'zoth-bounty': AttackSurfaceSentinelGodModeTool,
-  'zoth-scene-foundry': AsciiMotionGodModeTool,
+  'zoth-bounty': ZothBountyGodModeTool,
+  'zoth-scene-foundry': ZothSceneFoundryGodModeTool,
   'vision-gesture-control': VisionKinematicsGodModeTool,
   'datamosh-glitch-studio': DatamoshGlitchGodModeTool,
   'datamosh-studio': DatamoshGlitchGodModeTool,
@@ -216,7 +222,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'zoth-math-pillar': ZothPillGodModeTool,
   'zothos-lite': ZothOSLiteGodModeTool,
   'zothnet': ZothnetGodModeTool,
-  'zoth-egregore': SwarmCivilizationGodModeTool,
+  'zoth-egregore': ZothEgregoreGodModeTool,
   'zoth-bot-os': ZothBotOSGodModeTool,
   'zoth-comfy-foundry': ZothComfyFoundryGodModeTool,
 
