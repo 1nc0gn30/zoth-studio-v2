@@ -109,10 +109,16 @@ const ZothOsintGodModeTool = lazy(() => import('../components/tools/ZothOsintGod
 const ZothPillGodModeTool = lazy(() => import('../components/tools/ZothPillGodModeTool'));
 const ZothRelayGodModeTool = lazy(() => import('../components/tools/ZothRelayGodModeTool'));
 const ZothSceneFoundryGodModeTool = lazy(() => import('../components/tools/ZothSceneFoundryGodModeTool'));
+const ZothSwarmMultiplexerGodModeTool = lazy(() => import('../components/tools/ZothSwarmMultiplexerGodModeTool'));
 const ZothXConnectorGodModeTool = lazy(() => import('../components/tools/ZothXConnectorGodModeTool'));
 const ProductHuntConnectorGodModeTool = lazy(() => import('../components/tools/ProductHuntConnectorGodModeTool'));
 const CreatorPlaybooksGodModeTool = lazy(() => import('../components/tools/CreatorPlaybooksGodModeTool'));
 const ZelaGlassesGuideGodModeTool = lazy(() => import('../components/tools/ZelaGlassesGuideGodModeTool'));
+const ShodanSurfaceSentinelGodModeTool = lazy(() => import('../components/tools/ShodanSurfaceSentinelGodModeTool'));
+const OsintScoutSkillGodModeTool = lazy(() => import('../components/tools/OsintScoutSkillGodModeTool'));
+const EtsyPodForgeGodModeTool = lazy(() => import('../components/tools/EtsyPodForgeGodModeTool'));
+const ShopifyConnectorGodModeTool = lazy(() => import('../components/tools/ShopifyConnectorGodModeTool'));
+const PodMockupForgeGodModeTool = lazy(() => import('../components/tools/PodMockupForgeGodModeTool'));
 const ZothnetGodModeTool = lazy(() => import('../components/tools/ZothnetGodModeTool'));
 
 const ENCLAVE_TOOL_COMPONENTS = {
@@ -137,8 +143,8 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'payload-entropy': PayloadEntropyGodModeTool,
   'ghidra-mcp-bridge': GhidraMcpGodModeTool,
   'ghidra-mcp': GhidraMcpGodModeTool,
-  'shodan-surface-sentinel': AttackSurfaceSentinelGodModeTool,
-  'shodan-sentinel': AttackSurfaceSentinelGodModeTool,
+  'shodan-surface-sentinel': ShodanSurfaceSentinelGodModeTool,
+  'shodan-sentinel': ShodanSurfaceSentinelGodModeTool,
   'adytum-alchemist-ai-workflow': AdytumPlannerGodModeTool,
   'adytum-alchemist': AdytumPlannerGodModeTool,
   'creatorplaybooks': CreatorPlaybooksGodModeTool,
@@ -174,21 +180,21 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'cron-rhythm-studio': CronRhythmGodModeTool,
   'printify-connector': PodCommerceGodModeTool,
   'gelato-connector': PodCommerceGodModeTool,
-  'etsy-connector': PodCommerceGodModeTool,
-  'shopify-connector': PodCommerceGodModeTool,
-  'etsy-pod-forge': PodCommerceGodModeTool,
+  'etsy-connector': EtsyPodForgeGodModeTool,
+  'shopify-connector': ShopifyConnectorGodModeTool,
+  'etsy-pod-forge': EtsyPodForgeGodModeTool,
   'pod-smart-router': PodCommerceGodModeTool,
-  'digital-asset-forge': PodCommerceGodModeTool,
-  'pod-mockup-forge': PodCommerceGodModeTool,
+  'digital-asset-forge': PodMockupForgeGodModeTool,
+  'pod-mockup-forge': PodMockupForgeGodModeTool,
   'pod-margin-sentinel': PodCommerceGodModeTool,
   'agent-voice-call': AgentVoiceCallGodModeTool,
   'mcp-lens': McpLensGodModeTool,
   'agent-budget-sentinel': AgentBudgetSentinelGodModeTool,
   'agent-gods-eye': AgentGodsEyeGodModeTool,
   'zoth-osint': ZothOsintGodModeTool,
-  'osint-scout-skill': ZothOsintGodModeTool,
+  'osint-scout-skill': OsintScoutSkillGodModeTool,
   'zoth-webgen': ZothBoltGodModeTool,
-  'zoth-swarm-multiplexer': SwarmCivilizationGodModeTool,
+  'zoth-swarm-multiplexer': ZothSwarmMultiplexerGodModeTool,
   'zoth-civilization': SwarmCivilizationGodModeTool,
   'likeness-desk': LikenessDeskGodModeTool,
   'likeness': LikenessDeskGodModeTool,
