@@ -6,66 +6,76 @@ export default function AdytumPage() {
     <TechnicalReferencePage
       tone="gold"
       parentRoute="/adytum"
-      parentLabel="Adytum Overview"
-      kicker="ADYTUM WORKFLOW SPECIFICATION // :8135"
-      title="Adytum 22-Stage Workflow Reference"
-      summary="Pipeline manifest specification, JSON Schema boundary gates, and CLI commands for running deterministic multi-step AI workflows locally."
-      repoUrl="https://github.com/NullAITech/adytum-alchemist-ai-workflow"
-      repoLabel="Clone Adytum Workflow"
-      cloneCommand="git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git && cd adytum-alchemist-ai-workflow"
+      parentLabel="Adytum Planner Overview"
+      kicker="ADYTUM PLANNER REFERENCE // :8135 · v2.4.0"
+      title="Adytum Planner CLI & Loopback API Reference"
+      summary="Verified ZothOS CLI subcommands, loopback HTTP endpoints (GET /api/keys, POST /api/validate, POST /api/harden), and local-first architecture for the 22-Key Hermetic AI Workbench."
+      repoUrl="https://github.com/1nc0gn30/adytum-alchemist-ai-workflow"
+      repoLabel="Clone Adytum Planner"
+      cloneCommand="git clone https://github.com/1nc0gn30/adytum-alchemist-ai-workflow.git && cd adytum-alchemist-ai-workflow"
       installSteps={[
-        '# 1. Clone the standalone Adytum workflow repository',
-        'git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git',
+        '# 1. Clone the standalone Adytum Planner repository',
+        'git clone https://github.com/1nc0gn30/adytum-alchemist-ai-workflow.git',
         'cd adytum-alchemist-ai-workflow',
         '',
-        '# 2. Start local Adytum loopback server on 127.0.0.1:8135',
-        'python3 server.py --port 8135',
+        '# 2. Run verification suites (JS + Python)',
+        'npm test && pytest -v',
+        '',
+        '# 3. Start local loopback daemon on 127.0.0.1:8135',
+        'adytum serve --port 8135',
         'curl -s http://127.0.0.1:8135/health',
       ]}
       cliCommands={[
-        { cmd: 'adytum validate <manifest.json>', desc: 'Verify DAG acyclicity and Draft 2020-12 JSON Schema definitions across all stages.' },
-        { cmd: 'adytum run <manifest.json>', desc: 'Execute stages sequentially or in parallel against local Ollama, Hermes, or CLI tools.' },
-        { cmd: 'adytum resume <run-id>', desc: 'Resume an interrupted pipeline from the last verified JSONL disk checkpoint.' },
-        { cmd: 'adytum inspect <run-id> --json', desc: 'Print stage latencies, retry counts, and schema validation transcripts.' },
+        { cmd: 'adytum list [--json]', desc: 'List all 22 Major Arcana Hermetic keys, elemental gates, and architectural directives.' },
+        { cmd: 'adytum key <0-21> [--json]', desc: 'Inspect a single Key (0 The Fool through 21 The World) in human-readable or JSON format.' },
+        { cmd: 'adytum invariants [project] [--json]', desc: 'Generate a complete 22-point Hermetic architectural checklist for your project.' },
+        { cmd: 'adytum validate <file-or-text> [--json]', desc: 'Run the negation-aware 15-rule Hermetic Gatekeeper (exits 0 when score >= 70, exits 1 otherwise).' },
+        { cmd: 'adytum harden <file-or-text> [--json]', desc: 'Coherently rewrite flawed/negated draft specs and append missing invariant clauses to reach 100/100 (A+).' },
+        { cmd: 'adytum serve --port 8135', desc: 'Launch server.py bound strictly to 127.0.0.1:8135 with /health, /api/keys, /api/validate, and /api/harden.' },
       ]}
-      contractTitle="Workflow Stage Contract"
+      contractTitle="POST /api/validate JSON Response Contract"
       contractLanguage="json"
       contractCode={JSON.stringify(
         {
-          pipeline: 'architecture-audit',
-          stages: [
+          passed: true,
+          score: 100,
+          grade: 'A+',
+          summary: 'Specification passes the Hermetic Quality Gate. Architecture is robust, testable, and bounded.',
+          checks: [
             {
-              id: '01-decompose',
-              runner: 'hermes-local',
-              outputSchema: {
-                type: 'object',
-                required: ['modules', 'invariants'],
-              },
-              maxRetries: 2,
+              keyNumber: 0,
+              keyName: '0 · The Fool (Aleph)',
+              rule: 'Intention & Purpose Defined (Aleph)',
+              passed: true,
+              weight: 5,
+              recommendation: null,
             },
             {
-              id: '02-verify',
-              runner: 'cli',
-              command: 'npm test',
-              requireExitZero: true,
+              keyNumber: 9,
+              keyName: 'IX · The Hermit (Yod)',
+              rule: 'Deterministic Verification Test Suite (Yod)',
+              passed: true,
+              weight: 6,
+              recommendation: null,
             },
           ],
+          blockers: [],
         },
         null,
         2
       )}
       architectureNotes={[
         {
-          heading: 'Deterministic Stage Gating',
-          body: 'Downstream stages never execute until upstream outputs satisfy both JSON Schema validation and exit-code invariants.',
+          heading: 'Hardened Loopback Enclave (server.py)',
+          body: 'Binds exclusively to 127.0.0.1:8135, validates Origin via urllib.parse (rejecting cross-origin requests with 403), supports OPTIONS preflight (204), and enforces strict realpath containment to prevent traversal oracles.',
         },
         {
-          heading: 'Immutable Local Checkpoints',
-          body: 'Each ratified stage writes a SHA-256-hashed checkpoint under .adytum/runs/ for reproducible auditing.',
+          heading: 'Secret-Redacted Local Session Exports',
+          body: 'Browser progress, notes, and provider preferences stay in localStorage; Export Session JSON strips all OpenAI and Ollama Cloud API keys automatically before generating the download.',
         },
         {
-          heading: 'Model-Agnostic Execution',
-          body: 'Switch seamlessly between local Ollama weights, DeepSeek-Flash via Hermes, or deterministic shell scripts.',
+          heading: '100% Offline Curriculum + Local Ollama',
+          body: 'All 22 Major Arcana lessons, canonical BOTA texts, and contemplation timers operate completely offline, with optional local Ollama (:11434) auto-discovery for Socratic initiation.',
         },
       ]}
     />

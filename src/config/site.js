@@ -42,9 +42,9 @@ export const siteConfig = {
       type: 'website',
     },
     '/adytum': {
-      title: 'Adytum Sanctum // Sovereign Key Management & Zero-Egress Secrets',
-      description: 'Hardware-anchored secret management and cryptographic key derivation via Argon2id and XChaCha20-Poly1305 in local enclaves.',
-      keywords: 'Adytum, cryptographic keys, zero-egress secrets, hardware vault, Argon2id',
+      title: 'Adytum Planner // 22-Key Hermetic AI Workbench & Spec Gatekeeper',
+      description: 'Local-first 22 Major Arcana BOTA contemplation deck, offline AI-Chemistry curriculum, 3D Arcana viewer, and negation-aware 15-rule architectural invariant gatekeeper on 127.0.0.1:8135.',
+      keywords: 'Adytum Planner, 22 Major Arcana, Hermetic AI workbench, BOTA contemplation, spec validator, local Ollama, ZothOS CLI',
       type: 'article',
     },
     '/swarm': {
@@ -487,10 +487,14 @@ export function generateSchemaGraph(path = '/') {
     });
   } else if (path === '/adytum') {
     graph.push({
-      '@type': 'SecurityService',
-      '@id': `${fullUrl}#security-service`,
-      'name': 'Adytum Sanctum Key Derivation & Enclave Vault',
+      '@type': 'SoftwareApplication',
+      '@id': `${fullUrl}#adytum-application`,
+      'name': 'Adytum Planner — 22-Key Hermetic AI Workbench',
+      'softwareVersion': '2.4.0',
+      'applicationCategory': 'DeveloperApplication',
+      'operatingSystem': 'Web, Linux, ZothOS',
       'description': routeMeta.description,
+      'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' },
       'provider': { '@id': `${siteConfig.url}/#organization` }
     });
   } else if (path === '/zoth-os') {

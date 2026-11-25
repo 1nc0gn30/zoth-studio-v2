@@ -209,39 +209,39 @@ export const toolsDocumentation = {
     ]
   },
   'adytum-alchemist-ai-workflow': {
-    whyUse: 'Eliminates aimless prompt iteration by enforcing the 22-key Hermetic Planning Rite. Guarantees deterministic intention formulation, compulsory incubation phases, and local LLM gatekeeper validation before a single line of production code is written.',
-    problemSolved: 'Replaces unstructured, error-prone conversational prompt churn with an immutable 22-step architectural contract that validates requirements, edge cases, and test criteria upfront.',
-    architecture: 'Pure Node.js / Python dual-mode execution runtime with zero external network access. State files are persisted as signed JSON-LD enclaves on local disk.',
+    whyUse: 'Adytum Planner — 22-Key Hermetic AI Workbench unifies a 22 Major Arcana BOTA contemplation and offline AI-Chemistry deck on 127.0.0.1:8135 with a negation-aware 15-rule architectural spec gatekeeper in Zoth Studio and ZothOS CLI.',
+    problemSolved: 'Replaces unstructured prompt churn with 22 concrete engineering invariants, bundled offline AI-Chemistry study lessons, and automated CLI/HTTP plan auditing before code ships.',
+    architecture: 'React + Vite standalone workbench served by a hardened Python loopback daemon (server.py on 127.0.0.1:8135) with GET /api/keys, POST /api/validate, POST /api/harden, localStorage persistence, and secret-redacted JSON exports.',
     aiAgentProtocol: {
       mcpTool: 'adytum_validate_plan',
-      description: 'Validate a proposed software architecture against the 22 hermetic quality invariants.',
-      cliExample: 'zoth-adytum validate --spec ./plan.json --gatekeeper local-ollama',
+      description: 'Validate a proposed software architecture against 15 negation-aware Hermetic quality invariants.',
+      cliExample: 'adytum validate ./plan.md --json',
       inputSchema: {
         type: 'object',
         properties: {
-          intention: { type: 'string', description: 'Core functional objective' },
-          invariants: { type: 'array', items: { type: 'string' }, description: 'Non-negotiable constraints' },
-          testMatrix: { type: 'array', items: { type: 'string' }, description: 'Verification test cases' }
+          text: { type: 'string', description: 'Architectural specification or PRD markdown text' },
+          projectName: { type: 'string', description: 'Optional project name for auto-hardening' }
         },
-        required: ['intention', 'invariants']
+        required: ['text']
       },
       outputSchema: {
-        status: 'PASSED | REJECTED',
-        gatekeeperScore: '0-100',
+        passed: 'boolean',
+        score: '0-100',
+        grade: 'A+ | A | B | NEEDS_REVISION',
         blockers: ['string']
       }
     },
     quickstart: [
-      'git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git',
+      'git clone https://github.com/1nc0gn30/adytum-alchemist-ai-workflow.git',
       'cd adytum-alchemist-ai-workflow && npm install',
-      'npm test && npm run adytum:init'
+      'npm test && pytest -v && adytum serve --port 8135'
     ],
     features: [
-      '22-Key Hermetic Planning State Machine',
-      'Compulsory 5-minute incubation checkpoint to prevent hallucination cascades',
-      'Local Ollama / vLLM gatekeeper signature verification',
-      'Deterministic JSON-LD plan export with SHA-256 integrity seal',
-      'Zero outbound network telemetry guaranteed'
+      '22 Major Arcana HD Deck with bundled offline AI-Chemistry lessons & BOTA study excerpts',
+      'Pausable 5-minute BOTA contemplation timer with local Ollama (:11434) auto-discovery',
+      'Negation-aware 15-rule architectural spec validator via CLI (adytum validate) & POST /api/validate',
+      'Coherent spec auto-hardening (adytum harden / POST /api/harden) & Markdown/JSON exports',
+      'Zero paywalls, loopback-only CORS, realpath traversal containment, and secret-redacted session exports'
     ]
   },
 

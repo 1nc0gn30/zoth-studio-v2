@@ -250,7 +250,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'models': PromptMasterGodModeTool,
   'ax-powerhouse': WebMcpInspectorGodModeTool,
   'cyberpunk-hud': AttackSurfaceSentinelGodModeTool,
-  'chronicle': AdytumPlannerGodModeTool,
+  'chronicle': ChronicleVaultGodModeTool,
   'notes-reviewer': NeuroMemoryGodModeTool,
   'brand': RealityShaderForgeGodModeTool,
   'vision-link': VisionKinematicsGodModeTool,
@@ -804,14 +804,14 @@ export default function RealToolWorkspacePage() {
                   gap: 1.25,
                 }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, minWidth: 0, flex: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, minWidth: 0, flex: 1, overflowX: 'auto' }}>
                   <TerminalIcon sx={{ color: '#D4AF37', fontSize: '1.1rem', flexShrink: 0 }} />
                   <Typography
                     sx={{
                       fontFamily: mono,
                       fontSize: { xs: '0.76rem', sm: '0.84rem' },
                       color: '#F8FAFC',
-                      overflowWrap: 'anywhere',
+                      whiteSpace: 'nowrap',
                     }}
                   >
                     {pullCommand}
@@ -856,7 +856,10 @@ export default function RealToolWorkspacePage() {
                       fontFamily: mono,
                       fontSize: { xs: '0.74rem', sm: '0.8rem' },
                       color: secondaryText,
-                      overflowWrap: 'anywhere',
+                      whiteSpace: 'nowrap',
+                      overflowX: 'auto',
+                      flex: 1,
+                      minWidth: 0,
                     }}
                   >
                     {cloneCommand}
@@ -1054,7 +1057,16 @@ export default function RealToolWorkspacePage() {
                 <LaunchIcon sx={{ fontSize: 22 }} />
               </Box>
               <Box sx={{ minWidth: 0 }}>
-                <Typography variant="h6" sx={{ fontWeight: 800, color: primaryText, lineHeight: 1.25 }}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontFamily: '"Space Grotesk", "Inter", system-ui, sans-serif',
+                    fontWeight: 700,
+                    color: primaryText,
+                    lineHeight: 1.25,
+                    letterSpacing: '-0.01em',
+                  }}
+                >
                   {tool.name} · Localhost Daemon (127.0.0.1:{tool.localPort})
                 </Typography>
                 <Typography variant="caption" sx={{ fontFamily: mono, color: emeraldText, fontWeight: 700, display: 'block' }}>
@@ -1182,7 +1194,16 @@ export default function RealToolWorkspacePage() {
                 <TerminalIcon sx={{ fontSize: 22 }} />
               </Box>
               <Box>
-                <Typography variant="h6" sx={{ fontWeight: 800, color: primaryText, lineHeight: 1.25 }}>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontFamily: '"Space Grotesk", "Inter", system-ui, sans-serif',
+                    fontWeight: 700,
+                    color: primaryText,
+                    lineHeight: 1.25,
+                    letterSpacing: '-0.01em',
+                  }}
+                >
                   Interactive Enclave Workstation
                 </Typography>
                 <Typography variant="caption" sx={{ fontFamily: mono, color: isBrowserOnly ? emeraldText : gold, fontWeight: 700 }}>

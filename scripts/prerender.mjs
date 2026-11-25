@@ -75,15 +75,14 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
   } else if (routePath === '/adytum') {
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Adytum Sanctum // Sovereign Key Management & Zero-Egress Secrets</h2>
-        <p style="color: #D1D5DB; line-height: 1.6;">The Adytum Rite unifies ancient Hermetic principles with zero-egress hardware encryption. 22 Major Arcana keys (Key 0 The Fool to Key XXI The World) guide the software engineering lifecycle.</p>
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Adytum Planner // 22-Key Hermetic AI Workbench & Spec Gatekeeper</h2>
+        <p style="color: #D1D5DB; line-height: 1.6;">Adytum Planner unifies a 22 Major Arcana BOTA contemplation and offline AI-Chemistry workbench on 127.0.0.1:8135 with a negation-aware 15-rule architectural invariant gatekeeper and ZothOS CLI (<code>adytum</code>).</p>
         
-        <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">Cryptographic Architecture</h3>
+        <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">Core Architecture</h3>
         <ul style="color: #9CA3AF; line-height: 1.8;">
-          <li><strong>Memory-Hard KDF:</strong> Argon2id (t=3 iterations, m=64MB memory cost, p=4 parallelism lanes) running on loopback port 8787.</li>
-          <li><strong>Symmetric Cipher:</strong> XChaCha20-Poly1305 with extended 192-bit nonces to eliminate nonce-reuse collisions.</li>
-          <li><strong>Kernel Page Locking:</strong> Decrypted secret bytes are pinned in non-swappable memory (mlock) and zeroized immediately post-task.</li>
-          <li><strong>5-Minute Incubation Rule:</strong> Cognitive stillness mechanism generating SHA-256 thesis commitment digests.</li>
+          <li><strong>Standalone Workbench (:8135):</strong> All 22 Major Arcana keys with HD artwork, canonical BOTA study excerpts, offline AI-Chemistry lessons, and pausable 5-minute contemplation timer.</li>
+          <li><strong>Negation-Aware Gatekeeper:</strong> 15-rule architectural validator exposed in Zoth Studio, CLI (<code>adytum validate</code> / <code>adytum harden</code>), and <code>POST /api/validate</code>.</li>
+          <li><strong>Hardened Loopback Daemon:</strong> Strict loopback CORS with OPTIONS preflight, realpath traversal containment, and secret-redacted session JSON exports.</li>
         </ul>
       </section>
     `;
@@ -402,7 +401,7 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
             <h3 style="font-size: 1rem; color: #D4AF37; margin-bottom: 0.75rem;">Sovereign Studio Navigation Hub</h3>
             <ul style="display: flex; flex-wrap: wrap; gap: 1rem; padding: 0; list-style: none; font-size: 0.9rem;">
               <li><a href="/" style="color: #D4AF37; text-decoration: underline;">Home Hub</a></li>
-              <li><a href="/adytum" style="color: #D4AF37; text-decoration: underline;">Adytum Sanctum</a></li>
+              <li><a href="/adytum" style="color: #D4AF37; text-decoration: underline;">Adytum Planner</a></li>
               <li><a href="/memory" style="color: #D4AF37; text-decoration: underline;">Lucy Cognitive Memory</a></li>
               <li><a href="/swarm" style="color: #D4AF37; text-decoration: underline;">21 Swarm Pantheon</a></li>
               <li><a href="/bridges" style="color: #D4AF37; text-decoration: underline;">Signal Bridge (:8102)</a></li>

@@ -871,7 +871,7 @@ Runs local invariant verification before staging tools.`
                         { icon: <MemoryIcon sx={{ mb: 0.5, color: dark ? '#00F0FF' : '#0891B2' }} />, title: 'Lucy Cognitive Oracle', desc: 'STDP Synaptic Plasticity (:8094)' },
                         { icon: <GavelIcon sx={{ mb: 0.5, color: dark ? '#C084FC' : '#7C3AED' }} />, title: '3-Agent Byzantine', desc: 'Triadic AST Socratic Debate' },
                         { icon: <ShieldIcon sx={{ mb: 0.5, color: dark ? '#34D399' : '#047857' }} />, title: 'Zero-Egress Invariants', desc: 'Shannon Entropy & Loopback' },
-                        { icon: <LockIcon sx={{ mb: 0.5, color: dark ? '#F59E0B' : '#D97706' }} />, title: 'Adytum Sanctum', desc: '22 Keys & 5-Min Incubation' },
+                        { icon: <LockIcon sx={{ mb: 0.5, color: dark ? '#F59E0B' : '#D97706' }} />, title: 'Adytum Planner', desc: '22 Keys & 15-Rule Gatekeeper' },
                         { icon: <CloudDoneIcon sx={{ mb: 0.5, color: dark ? '#38BDF8' : '#0369A1' }} />, title: 'Netlify Edge AEO', desc: '149 Prerendered Static Routes' },
                       ].map((item, i) => (
                         <Paper
@@ -1225,14 +1225,13 @@ cd tools/sovereign-agent-bridge && npm start`}
                       sx={{ bgcolor: goldBg, color: goldLight, fontWeight: 700 }}
                     />
                     <Typography variant="h5" sx={{ fontWeight: 700, color: textPrimary }}>
-                      5. Argon2id Hardware Vault & Adytum Sanctum
+                      5. Argon2id Hardware Vault (EnvGuard)
                     </Typography>
                   </Box>
 
                   <Typography variant="body1" color="text.secondary" paragraph>
                     Local secret storage uses Argon2id key derivation combined with XChaCha20-Poly1305
-                    and AES-256-GCM authenticated payload encryption. Master keys in the Adytum Hardware
-                    Sanctum require a 5-minute incubation period before cryptographic sealing.
+                    and AES-256-GCM authenticated payload encryption via EnvGuard Secrets Vault.
                   </Typography>
 
                   <CodeSnippet

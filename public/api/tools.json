@@ -66,13 +66,13 @@
     {
       "id": "adytum-alchemist-ai-workflow",
       "name": "Adytum Planner",
-      "description": "The 22-key hermetic planning rite. Intention, five-minute incubation, and a local-model gate.",
+      "description": "Adytum Planner — 22-Key Hermetic AI Workbench: BOTA contemplation deck, offline AI-Chemistry lessons, and negation-aware 15-rule architectural spec gatekeeper.",
       "category": "Planning",
-      "github": "https://github.com/NullAITech/adytum-alchemist-ai-workflow",
+      "github": "https://github.com/1nc0gn30/adytum-alchemist-ai-workflow",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/adytum-alchemist-ai-workflow/",
-      "version": "1.0.0",
-      "pull": "adytum-alchemist-ai-workflow --help  # or: git clone https://github.com/NullAITech/adytum-alchemist-ai-workflow.git",
+      "version": "2.4.0",
+      "pull": "adytum --help  # or: git clone https://github.com/1nc0gn30/adytum-alchemist-ai-workflow.git",
       "execution_type": "local_cli",
       "runtimes": [
         "python",

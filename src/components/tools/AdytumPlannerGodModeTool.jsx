@@ -11,6 +11,7 @@ import {
   Slider,
   Divider,
   Unstable_Grid2 as Grid,
+  useTheme,
 } from '@mui/material';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -76,7 +77,7 @@ const HERMETIC_KEYS = [
   { key: 18, arcana: 'XVIII · The Moon (Qoph)', letter: 'Qoph', gematria: 100, gate: 'Pisces / Soma', phase: 'Deep Synaptic Retention & Subconscious Caches', prompt: 'Preserve lineage history and user artifacts seamlessly across upgrades.' },
   { key: 19, arcana: 'XIX · The Sun (Resh)', letter: 'Resh', gematria: 200, gate: 'Sun / Radiance', phase: 'Production-Grade Elegance & High-Fidelity UI', prompt: 'Deliver high-contrast, responsive UI across mobile, tablet, and desktop viewports.' },
   { key: 20, arcana: 'XX · Judgement (Shin)', letter: 'Shin', gematria: 300, gate: 'Fire / Awakening', phase: 'Comprehensive Integration Sentinel & Release Gate', prompt: 'Verify README, in-app docs, CLI --help, and live UI parity before release.' },
-  { key: 21, arcana: 'XXI · The World (Tau)', letter: 'Tav', gematria: 400, gate: 'Saturn / Crown', phase: 'Hermetic Sovereign Wholeness & Zero-Egress Proof', prompt: 'Seal the compiled artifact, emit deterministic manifest, and ship 100% open-access.' },
+  { key: 21, arcana: 'XXI · The World (Tav)', letter: 'Tav', gematria: 400, gate: 'Saturn / Crown', phase: 'Hermetic Sovereign Wholeness & Zero-Egress Proof', prompt: 'Seal the compiled artifact, emit deterministic manifest, and ship 100% open-access.' },
 ];
 
 const HARDENED_SPEC_PRESET = `Project: Sovereign Zero-Egress Enclave
@@ -88,24 +89,43 @@ Hygiene & Release: Prune stale cache state, emit structured stdout telemetry log
 
 const FLAWED_SPEC_PRESET = `Quick cloud-only prototype using placeholder mock_production responses and fake_data timers with no tests or boundaries.`;
 
-function validatePlan(planText = '') {
-  const text = (planText || '').toLowerCase();
+const NEGATION_RE = /\b(?:no|without|zero|skip|skipping|none|lack|lacking|missing|never|not|avoid|omits?|omitting)\b/i;
+
+function hasPositiveTerm(text, terms) {
+  for (const term of terms) {
+    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(`\\b${escaped}\\w*`, 'gi');
+    let match;
+    while ((match = re.exec(text)) !== null) {
+      const prefix = text.slice(Math.max(0, match.index - 32), match.index);
+      const clausePrefix = prefix.split(/[.;\n!?]/).pop() || '';
+      if (!NEGATION_RE.test(clausePrefix)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+export function validatePlan(planText = '') {
+  const raw = (planText || '').trim();
+  const text = raw.toLowerCase();
   const rules = [
-    { key: 0, test: () => text.length > 50, label: 'Intention & Purpose Defined (Aleph)', weight: 5 },
-    { key: 1, test: () => text.includes('scope') || text.includes('goal') || text.includes('objective'), label: 'Single-Pointed Focus (Beth)', weight: 5 },
-    { key: 2, test: () => text.includes('memory') || text.includes('store') || text.includes('cache') || text.includes('state'), label: 'State & Memory Integrity (Gimel)', weight: 5 },
-    { key: 4, test: () => text.includes('invariant') || text.includes('rule') || text.includes('constraint'), label: 'Immutable Invariants Enforced (Heh)', weight: 5 },
-    { key: 5, test: () => text.includes('schema') || text.includes('json') || text.includes('contract') || text.includes('type'), label: 'Standardized Schemas & Interfaces (Vav)', weight: 5 },
-    { key: 6, test: () => text.includes('tradeoff') || text.includes('boundary') || text.includes('exclude'), label: 'Explicit Tradeoffs & Non-Goals (Zain)', weight: 4 },
-    { key: 7, test: () => text.includes('isolate') || text.includes('air-gap') || text.includes('sandbox') || text.includes('zero-egress') || text.includes('local'), label: 'Air-Gapped Isolation & Sandbox (Cheth)', weight: 6 },
-    { key: 8, test: () => text.includes('error') || text.includes('fail') || text.includes('catch') || text.includes('resilien'), label: 'Graceful Error Handling (Teth)', weight: 5 },
-    { key: 9, test: () => text.includes('test') || text.includes('audit') || text.includes('verify'), label: 'Deterministic Verification Test Suite (Yod)', weight: 6 },
-    { key: 11, test: () => text.includes('budget') || text.includes('metric') || text.includes('eval') || text.includes('benchmark'), label: 'Performance & Budget Equilibrated (Lamed)', weight: 4 },
-    { key: 13, test: () => text.includes('clean') || text.includes('prune') || text.includes('remove') || text.includes('purge'), label: 'Resource Pruning & Cleanup (Nun)', weight: 4 },
+    { key: 0, test: () => raw.length > 50, label: 'Intention & Purpose Defined (Aleph)', weight: 5 },
+    { key: 1, test: () => hasPositiveTerm(text, ['scope', 'goal', 'objective']), label: 'Single-Pointed Focus (Beth)', weight: 5 },
+    { key: 2, test: () => hasPositiveTerm(text, ['memory', 'store', 'cache', 'state', 'storage']), label: 'State & Memory Integrity (Gimel)', weight: 5 },
+    { key: 4, test: () => hasPositiveTerm(text, ['invariant', 'rule', 'constraint']), label: 'Immutable Invariants Enforced (Heh)', weight: 5 },
+    { key: 5, test: () => hasPositiveTerm(text, ['schema', 'json', 'contract', 'type']), label: 'Standardized Schemas & Interfaces (Vav)', weight: 5 },
+    { key: 6, test: () => hasPositiveTerm(text, ['tradeoff', 'boundary', 'boundaries', 'exclude', 'non-goal']), label: 'Explicit Tradeoffs & Non-Goals (Zain)', weight: 4 },
+    { key: 7, test: () => hasPositiveTerm(text, ['isolate', 'isolation', 'air-gap', 'sandbox', 'zero-egress', 'local', 'loopback']), label: 'Air-Gapped Isolation & Sandbox (Cheth)', weight: 6 },
+    { key: 8, test: () => hasPositiveTerm(text, ['error', 'fail', 'catch', 'resilien', 'recovery']), label: 'Graceful Error Handling (Teth)', weight: 5 },
+    { key: 9, test: () => hasPositiveTerm(text, ['test', 'audit', 'verify', 'verification', 'pytest']), label: 'Deterministic Verification Test Suite (Yod)', weight: 6 },
+    { key: 11, test: () => hasPositiveTerm(text, ['budget', 'metric', 'eval', 'benchmark', 'latency']), label: 'Performance & Budget Equilibrated (Lamed)', weight: 4 },
+    { key: 13, test: () => hasPositiveTerm(text, ['clean', 'prune', 'remove', 'purge']), label: 'Resource Pruning & Cleanup (Nun)', weight: 4 },
     { key: 15, test: () => !text.includes('placeholder') && !text.includes('mock_production') && !text.includes('fake_data'), label: 'Truth In Advertising / No Fake State (Ayin)', weight: 6 },
-    { key: 17, test: () => text.includes('log') || text.includes('telemetry') || text.includes('trace') || text.includes('stdout'), label: 'Clear Logging & Diagnostics (Tzaddi)', weight: 4 },
-    { key: 20, test: () => text.includes('release') || text.includes('deploy') || text.includes('deliver') || text.includes('ci'), label: 'Integration Gate & Release Verification (Shin)', weight: 5 },
-    { key: 21, test: () => !text.includes('cloud-only') && (text.includes('offline') || text.includes('local-first') || text.includes('sovereign')), label: 'Sovereign Wholeness & Local Autonomy (Tav)', weight: 5 },
+    { key: 17, test: () => hasPositiveTerm(text, ['log', 'telemetry', 'trace', 'stdout', 'diagnostic']), label: 'Clear Logging & Diagnostics (Tzaddi)', weight: 4 },
+    { key: 20, test: () => hasPositiveTerm(text, ['release', 'deploy', 'deliver', 'ci']), label: 'Integration Gate & Release Verification (Shin)', weight: 5 },
+    { key: 21, test: () => !text.includes('cloud-only') && hasPositiveTerm(text, ['offline', 'local-first', 'sovereign']), label: 'Sovereign Wholeness & Local Autonomy (Tav)', weight: 5 },
   ];
 
   const totalWeight = rules.reduce((s, r) => s + r.weight, 0);
@@ -138,13 +158,24 @@ function validatePlan(planText = '') {
   };
 }
 
-function autoHardenSpec(planText = '', projectName = 'Sovereign Zero-Egress Enclave') {
+export function autoHardenSpec(planText = '', projectName = 'Sovereign Zero-Egress Enclave') {
   let nextText = (planText || '').trim();
-  nextText = nextText
-    .replace(/cloud-only/gi, 'local-first sovereign')
-    .replace(/placeholder/gi, 'deterministic-implementation')
-    .replace(/mock_production/gi, 'verified_production')
-    .replace(/fake_data/gi, 'canonical_fixtures');
+  const replacements = [
+    [/\bwith\s+no\s+tests?\s+(?:or|and)\s+boundar(?:y|ies)\b/gi, 'with automated verification tests and explicit security boundaries'],
+    [/\b(?:with\s+)?no\s+tests?\b/gi, 'with automated verification tests'],
+    [/\bwithout\s+tests?\b/gi, 'with automated verification tests'],
+    [/\b(?:with\s+)?no\s+boundar(?:y|ies)\b/gi, 'with explicit security boundaries'],
+    [/\bwithout\s+boundar(?:y|ies)\b/gi, 'with explicit security boundaries'],
+    [/\bplaceholder\s+mock_production\s+responses\b/gi, 'verified production API handlers'],
+    [/\bfake_data\s+timers\b/gi, 'deterministic live execution loops'],
+    [/\bcloud-only\b/gi, 'local-first sovereign'],
+    [/\bplaceholder\b/gi, 'verified implementation'],
+    [/\bmock_production\b/gi, 'verified_production'],
+    [/\bfake_data\b/gi, 'canonical_fixtures'],
+  ];
+  for (const [pattern, repl] of replacements) {
+    nextText = nextText.replace(pattern, repl);
+  }
 
   const remediationMap = {
     0: `Intention & Purpose (Key 0 · Aleph): Deliver a sovereign, zero-egress architecture for ${projectName} with unambiguous user value.`,
@@ -158,7 +189,7 @@ function autoHardenSpec(planText = '', projectName = 'Sovereign Zero-Egress Encl
     9: `Deterministic Verification Suite (Key 9 · Yod): Audit and verify runtime behavior via an automated end-to-end test suite.`,
     11: `Equilibrated Performance Budgets (Key 11 · Lamed): Benchmark latency and memory metrics against strict quantitative budgets.`,
     13: `Resource Pruning & Hygiene (Key 13 · Nun): Prune stale cache state, zombie processes, and dead code paths automatically.`,
-    15: `Anti-Deception Guarantee (Key 15 · Ayin): Zero fake state—all transforms, metrics, and outputs execute real algorithms.`,
+    15: `Anti-Deception Guarantee (Key 15 · Ayin): Zero fabricated state—all transforms, metrics, and outputs execute real algorithms.`,
     17: `Transparent Telemetry & Diagnostics (Key 17 · Tzaddi): Emit structured stdout telemetry logs and health trace diagnostics.`,
     20: `Release & CI Integration Gate (Key 20 · Shin): Gate CI deployment and release delivery on 100% invariant verification.`,
     21: `Sovereign Wholeness & Offline Autonomy (Key 21 · Tav): Guarantee 100% offline, local-first sovereign operation without external cloud lock-in.`,
@@ -187,6 +218,9 @@ function autoHardenSpec(planText = '', projectName = 'Sovereign Zero-Egress Encl
 const BRAILLE_RAMP = ' ⠁⠃⠇⠏⠟⠿⣿';
 
 export default function AdytumPlannerGodModeTool() {
+  const theme = useTheme();
+  const isLight = theme.palette.mode === 'light';
+
   const [selectedIdx, setSelectedIdx] = useState(7);
   const [projectName, setProjectName] = useState('Sovereign Zero-Egress Enclave');
   const [intention, setIntention] = useState(HARDENED_SPEC_PRESET);
@@ -200,14 +234,82 @@ export default function AdytumPlannerGodModeTool() {
   const activeKey = HERMETIC_KEYS[selectedIdx] || HERMETIC_KEYS[0];
   const audit = useMemo(() => validatePlan(intention), [intention]);
 
+  // Dual-theme Editorial Ivory / Sovereign Obsidian palette tokens
+  const t = isLight
+    ? {
+        shellBg: '#FAF8F3',
+        topBarBg: '#F3EFE6',
+        panelBg: '#FFFFFF',
+        subPanelBg: '#F6F2E8',
+        codeBg: '#F3EFE6',
+        inputBg: '#FFFFFF',
+        border: 'rgba(138, 102, 24, 0.24)',
+        divider: 'rgba(26, 24, 21, 0.1)',
+        gold: '#8A6414',
+        goldStrong: '#6E4E0B',
+        goldSoftBg: 'rgba(138, 100, 20, 0.1)',
+        goldChipBg: '#8A6414',
+        goldChipText: '#FFFFFF',
+        ink: '#1A1815',
+        muted: '#475569',
+        emerald: '#047857',
+        emeraldBg: 'rgba(4, 120, 87, 0.1)',
+        emeraldBorder: 'rgba(4, 120, 87, 0.35)',
+        danger: '#B91C1C',
+        dangerBg: 'rgba(185, 28, 28, 0.08)',
+        dangerBorder: 'rgba(185, 28, 28, 0.35)',
+        sky: '#0369A1',
+        skyBorder: 'rgba(3, 105, 161, 0.35)',
+        scrollThumb: 'rgba(138, 100, 20, 0.42)',
+        scrollTrack: '#EDE8DC',
+        shadow: '0 14px 40px rgba(26, 24, 21, 0.08)',
+      }
+    : {
+        shellBg: '#07070C',
+        topBarBg: '#0B0B14',
+        panelBg: '#090910',
+        subPanelBg: '#080811',
+        codeBg: '#030306',
+        inputBg: 'rgba(0,0,0,0.45)',
+        border: 'rgba(212, 175, 55, 0.32)',
+        divider: 'rgba(255,255,255,0.08)',
+        gold: '#D4AF37',
+        goldStrong: '#F5E6AB',
+        goldSoftBg: 'rgba(212,175,55,0.14)',
+        goldChipBg: '#D4AF37',
+        goldChipText: '#060609',
+        ink: '#F8FAFC',
+        muted: '#94A3B8',
+        emerald: '#34D399',
+        emeraldBg: 'rgba(52,211,153,0.15)',
+        emeraldBorder: 'rgba(52,211,153,0.4)',
+        danger: '#F87171',
+        dangerBg: 'rgba(248,113,113,0.15)',
+        dangerBorder: 'rgba(248,113,113,0.4)',
+        sky: '#38BDF8',
+        skyBorder: 'rgba(56,189,248,0.4)',
+        scrollThumb: 'rgba(212, 175, 55, 0.42)',
+        scrollTrack: '#0C0C14',
+        shadow: '0 20px 60px rgba(0,0,0,0.85)',
+      };
+
+  const inlineCodeSx = {
+    fontFamily: mono,
+    fontSize: '0.9em',
+    px: 0.6,
+    py: 0.15,
+    borderRadius: 1,
+    bgcolor: isLight ? 'rgba(138,100,20,0.1)' : 'rgba(255,255,255,0.08)',
+    color: t.goldStrong,
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let raf;
-    let t = 0;
+    let tick = 0;
 
-    // Shifted Y coordinates down so top HUD banner never collides with KETHER
     const sephiroth = [
       { id: 'Kether', x: 0.5, y: 0.23 },
       { id: 'Chokmah', x: 0.76, y: 0.33 },
@@ -228,7 +330,7 @@ export default function AdytumPlannerGodModeTool() {
     ];
 
     const render = () => {
-      if (running) t += 0.018;
+      if (running) tick += 0.018;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const cw = canvas.clientWidth || 640;
       const ch = canvas.clientHeight || 360;
@@ -252,7 +354,7 @@ export default function AdytumPlannerGodModeTool() {
           const nx = (c / (cols - 1)) * 2 - 1;
           const ny = (r / (rows - 1)) * 2 - 1;
           const dist = Math.hypot(nx, ny);
-          const wave = 0.5 + 0.5 * Math.cos(dist * 10 - t * 2.4 + selectedIdx * 0.4);
+          const wave = 0.5 + 0.5 * Math.cos(dist * 10 - tick * 2.4 + selectedIdx * 0.4);
           const idx = Math.min(BRAILLE_RAMP.length - 1, Math.floor(wave * BRAILLE_RAMP.length));
           if (idx > 1) {
             ctx.fillStyle = `rgba(212, 175, 55, ${(wave * 0.22).toFixed(2)})`;
@@ -277,7 +379,7 @@ export default function AdytumPlannerGodModeTool() {
         ctx.lineTo(x2, y2);
         ctx.stroke();
 
-        const p = (t * 0.65 + i * 0.13) % 1;
+        const p = (tick * 0.65 + i * 0.13) % 1;
         const px = x1 + (x2 - x1) * p;
         const py = y1 + (y2 - y1) * p;
         ctx.fillStyle = isActive ? '#F5E6AB' : '#C084FC';
@@ -289,7 +391,7 @@ export default function AdytumPlannerGodModeTool() {
       sephiroth.forEach((node, idx) => {
         const x = node.x * cw;
         const y = node.y * ch;
-        const pulse = 1 + 0.14 * Math.sin(t * 3 + idx);
+        const pulse = 1 + 0.14 * Math.sin(tick * 3 + idx);
 
         ctx.fillStyle = '#090812';
         ctx.strokeStyle = '#D4AF37';
@@ -304,15 +406,18 @@ export default function AdytumPlannerGodModeTool() {
         ctx.fillText(node.id.toUpperCase(), x, y - 15);
       });
 
-      // Top HUD bar with translucent backdrop so text is crisp
-      ctx.fillStyle = 'rgba(5, 5, 9, 0.82)';
+      ctx.fillStyle = 'rgba(5, 5, 9, 0.86)';
       ctx.fillRect(0, 0, cw, 42);
-      ctx.fillStyle = 'rgba(245, 230, 171, 0.92)';
+      ctx.fillStyle = 'rgba(245, 230, 171, 0.94)';
       ctx.font = `700 10px ${mono}`;
       ctx.textAlign = 'left';
-      ctx.fillText(`ADYTUM // 22-KEY HERMETIC RITE // KEY [${activeKey.arcana.toUpperCase()}]`, 14, 16);
+      ctx.fillText(`ADYTUM PLANNER // KEY [${activeKey.arcana.toUpperCase()}]`, 14, 16);
       ctx.fillStyle = audit.passed ? '#34D399' : '#F87171';
-      ctx.fillText(`GATEKEEPER SCORE: ${audit.score}/100 (${audit.grade}) — ${audit.checks.filter((c) => c.passed).length}/${audit.checks.length} RULES PASSED`, 14, 31);
+      ctx.fillText(
+        `GATEKEEPER SCORE: ${audit.score}/100 (${audit.grade}) — ${audit.checks.filter((c) => c.passed).length}/${audit.checks.length} RULES PASSED`,
+        14,
+        31
+      );
 
       ctx.restore();
       raf = requestAnimationFrame(render);
@@ -326,7 +431,8 @@ export default function AdytumPlannerGodModeTool() {
     () =>
       JSON.stringify(
         {
-          protocol: 'adytum.hermetic.rite.v1',
+          protocol: 'adytum.hermetic.rite.v2',
+          version: '2.4.0',
           projectName,
           selectedKey: activeKey.key,
           selectedArcana: activeKey.arcana,
@@ -344,7 +450,7 @@ export default function AdytumPlannerGodModeTool() {
             blockers: audit.blockers,
           },
           directive: activeKey.prompt,
-          cliEquivalent: `adytum invariants "${projectName}" --json && adytum validate plan.md --json`,
+          cliEquivalent: `adytum invariants "${projectName}" --json && adytum validate ./plan.md --json`,
         },
         null,
         2
@@ -354,7 +460,7 @@ export default function AdytumPlannerGodModeTool() {
 
   const markdownPrd = useMemo(() => {
     const lines = [
-      `# ⚡ Adytum 22-Key Hermetic Architectural Rite: ${projectName}`,
+      `# Adytum Planner — 22-Key Hermetic Architectural Rite: ${projectName}`,
       ``,
       `- **Active Key**: ${activeKey.arcana} (Gematria: ${activeKey.gematria}, Gate: ${activeKey.gate})`,
       `- **Core Invariant**: ${activeKey.phase}`,
@@ -395,15 +501,23 @@ export default function AdytumPlannerGodModeTool() {
     URL.revokeObjectURL(url);
   };
 
+  const scrollStyles = {
+    scrollbarWidth: 'thin',
+    scrollbarColor: `${t.scrollThumb} ${t.scrollTrack}`,
+    '&::-webkit-scrollbar': { width: 6, height: 6 },
+    '&::-webkit-scrollbar-track': { background: t.scrollTrack, borderRadius: 4 },
+    '&::-webkit-scrollbar-thumb': { background: t.scrollThumb, borderRadius: 4 },
+  };
+
   return (
     <Paper
       elevation={0}
       sx={{
         borderRadius: 3,
         overflow: 'hidden',
-        bgcolor: '#07070C',
-        border: '1px solid rgba(212, 175, 55, 0.32)',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.85)',
+        bgcolor: t.shellBg,
+        border: `1px solid ${t.border}`,
+        boxShadow: t.shadow,
       }}
     >
       {/* Top Bar */}
@@ -411,8 +525,8 @@ export default function AdytumPlannerGodModeTool() {
         sx={{
           px: { xs: 2, md: 3 },
           py: 2,
-          borderBottom: '1px solid rgba(255,255,255,0.08)',
-          bgcolor: '#0B0B14',
+          borderBottom: `1px solid ${t.divider}`,
+          bgcolor: t.topBarBg,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -425,9 +539,9 @@ export default function AdytumPlannerGodModeTool() {
             sx={{
               p: 1,
               borderRadius: 2,
-              bgcolor: 'rgba(212,175,55,0.14)',
-              border: '1px solid rgba(212,175,55,0.4)',
-              color: '#D4AF37',
+              bgcolor: t.goldSoftBg,
+              border: `1px solid ${t.border}`,
+              color: t.gold,
               display: 'flex',
             }}
           >
@@ -435,50 +549,52 @@ export default function AdytumPlannerGodModeTool() {
           </Box>
           <Box>
             <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
-              <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', fontWeight: 800, color: '#D4AF37', letterSpacing: '0.12em' }}>
-                ADYTUM 22-KEY HERMETIC PLANNING RITE &amp; INVARIANT GATEKEEPER
+              <Typography sx={{ fontFamily: mono, fontSize: '0.76rem', fontWeight: 800, color: t.gold, letterSpacing: '0.1em' }}>
+                ADYTUM PLANNER · 22-KEY HERMETIC AI WORKBENCH &amp; GATEKEEPER
               </Typography>
               <Chip
                 label={`GATE SCORE: ${audit.score}/100 (${audit.grade})`}
                 size="small"
                 sx={{
-                  height: 20,
+                  height: 22,
                   fontFamily: mono,
                   fontSize: '0.62rem',
                   fontWeight: 800,
-                  bgcolor: audit.passed ? 'rgba(52,211,153,0.15)' : 'rgba(248,113,113,0.15)',
-                  color: audit.passed ? '#34D399' : '#F87171',
-                  border: `1px solid ${audit.passed ? 'rgba(52,211,153,0.4)' : 'rgba(248,113,113,0.4)'}`,
+                  bgcolor: audit.passed ? t.emeraldBg : t.dangerBg,
+                  color: audit.passed ? t.emerald : t.danger,
+                  border: `1px solid ${audit.passed ? t.emeraldBorder : t.dangerBorder}`,
                 }}
               />
             </Stack>
-            <Typography variant="caption" sx={{ color: '#94A3B8', display: 'block', mt: 0.3 }}>
-              All 22 Canonical BOTA Keys (0–21) • 15-Rule Architectural Plan Validator • ZothOS CLI (`adytum`) &amp; Local Workstation (`:8135`)
+            <Typography variant="caption" sx={{ color: t.muted, display: 'block', mt: 0.4 }}>
+              All 22 Canonical BOTA Keys (0–21) • 15-Rule Negation-Aware Spec Validator • ZothOS CLI{' '}
+              <Box component="code" sx={inlineCodeSx}>adytum</Box> &amp; Local Workbench{' '}
+              <Box component="code" sx={inlineCodeSx}>127.0.0.1:8135</Box>
             </Typography>
           </Box>
         </Box>
 
         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
           {isLocalRuntime() && (
-          <Button
-            size="small"
-            variant="outlined"
-            component="a"
-            href="http://127.0.0.1:8135"
-            target="_blank"
-            rel="noopener noreferrer"
-            startIcon={<OpenInNewIcon sx={{ fontSize: 15 }} />}
-            sx={{
-              fontFamily: mono,
-              fontSize: '0.7rem',
-              fontWeight: 800,
-              color: '#F5E6AB',
-              borderColor: 'rgba(212,175,55,0.45)',
-              bgcolor: 'rgba(212,175,55,0.1)',
-            }}
-          >
-            Open :8135 Workstation
-          </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              component="a"
+              href="http://127.0.0.1:8135"
+              target="_blank"
+              rel="noopener noreferrer"
+              startIcon={<OpenInNewIcon sx={{ fontSize: 15 }} />}
+              sx={{
+                fontFamily: mono,
+                fontSize: '0.7rem',
+                fontWeight: 800,
+                color: t.goldStrong,
+                borderColor: t.border,
+                bgcolor: t.goldSoftBg,
+              }}
+            >
+              Open :8135 Workbench
+            </Button>
           )}
           <Button
             size="small"
@@ -489,8 +605,8 @@ export default function AdytumPlannerGodModeTool() {
               fontFamily: mono,
               fontSize: '0.7rem',
               fontWeight: 800,
-              color: '#E2E8F0',
-              borderColor: 'rgba(255,255,255,0.16)',
+              color: t.ink,
+              borderColor: t.divider,
             }}
           >
             {running ? 'Pause Lattice' : 'Resume'}
@@ -504,8 +620,8 @@ export default function AdytumPlannerGodModeTool() {
               fontFamily: mono,
               fontSize: '0.7rem',
               fontWeight: 800,
-              color: '#34D399',
-              borderColor: 'rgba(52,211,153,0.4)',
+              color: t.emerald,
+              borderColor: t.emeraldBorder,
             }}
           >
             {copiedMd ? 'Copied 22-Key PRD' : 'Copy Markdown PRD'}
@@ -519,8 +635,8 @@ export default function AdytumPlannerGodModeTool() {
               fontFamily: mono,
               fontSize: '0.7rem',
               fontWeight: 800,
-              color: '#38BDF8',
-              borderColor: 'rgba(56,189,248,0.4)',
+              color: t.sky,
+              borderColor: t.skyBorder,
             }}
           >
             Download .md
@@ -534,9 +650,9 @@ export default function AdytumPlannerGodModeTool() {
               fontFamily: mono,
               fontSize: '0.7rem',
               fontWeight: 800,
-              bgcolor: '#D4AF37',
-              color: '#060609',
-              '&:hover': { bgcolor: '#F5E6AB' },
+              bgcolor: t.goldChipBg,
+              color: t.goldChipText,
+              '&:hover': { bgcolor: t.gold },
             }}
           >
             {copiedJson ? 'JSON Copied' : 'Export JSON Manifest'}
@@ -544,19 +660,20 @@ export default function AdytumPlannerGodModeTool() {
         </Stack>
       </Box>
 
-      <SovereignEyebrow accent="#34D399" right="Planning">
+      <SovereignEyebrow accent={t.emerald} right="Planning · v2.4.0">
         {"adytum-alchemist-ai-workflow"}
       </SovereignEyebrow>
       <SovereignBand
         seed={"adytum-alchemist-ai-workflow"}
         eyebrow={"Planning"}
         caption={"Adytum Planner"}
-        label={"Adytum Planner — Zoth sovereign visualisation"}
+        label={"Adytum Planner — 22-Key Hermetic AI Workbench"}
       />
+
       <Grid container>
-        {/* Left Column: Tree of Life Canvas + Active BOTA Tarot Card + All 22 Keys */}
-        <Grid xs={12} md={6} sx={{ borderRight: { md: '1px solid rgba(255,255,255,0.08)' }, bgcolor: '#050509' }}>
-          <Box sx={{ width: '100%', height: 350 }}>
+        {/* Left Column: Tree of Life Canvas + Active BOTA Tarot Card + 3D GLB + All 22 Keys */}
+        <Grid xs={12} md={6} sx={{ borderRight: { md: `1px solid ${t.divider}` }, bgcolor: t.subPanelBg }}>
+          <Box sx={{ width: '100%', height: 340, bgcolor: '#050509' }}>
             <canvas ref={canvasRef} style={{ width: '100%', height: '100%', display: 'block' }} />
           </Box>
 
@@ -566,37 +683,37 @@ export default function AdytumPlannerGodModeTool() {
             return (
               <Box
                 sx={{
-                  p: 1.5,
-                  borderTop: '1px solid rgba(255,255,255,0.08)',
-                  bgcolor: '#080811',
+                  p: 1.75,
+                  borderTop: `1px solid ${t.divider}`,
+                  bgcolor: t.panelBg,
                 }}
               >
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1.5 }}>
                   <Box
                     component="img"
                     src={tarot3dMeta.hdImageUrl || TAROT_IMAGES[activeKey.key] || '/tarot/fool.jpg'}
-                    alt={`${activeKey.arcana} 4K Illuminated Tarot Card`}
+                    alt={`${activeKey.arcana} HD Tarot Card`}
                     sx={{
                       width: 72,
-                      height: 116,
+                      height: 112,
                       objectFit: 'cover',
                       borderRadius: 1.5,
-                      border: `1px solid ${tarot3dMeta.primaryColor}`,
-                      boxShadow: '0 8px 20px rgba(0,0,0,0.65)',
+                      border: `1px solid ${isLight ? t.border : tarot3dMeta.primaryColor}`,
+                      boxShadow: isLight ? '0 6px 18px rgba(0,0,0,0.16)' : '0 8px 20px rgba(0,0,0,0.65)',
                       flexShrink: 0,
                     }}
                   />
                   <Box sx={{ minWidth: 0, flex: 1 }}>
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 800, color: tarot3dMeta.primaryColor }}>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: isLight ? t.goldStrong : tarot3dMeta.primaryColor }}>
                       {activeKey.arcana} — {activeKey.phase}
                     </Typography>
-                    <Typography variant="caption" sx={{ fontFamily: mono, color: '#F5E6AB', display: 'block', mt: 0.2 }}>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: t.gold, display: 'block', mt: 0.25 }}>
                       Hebrew Letter: {activeKey.letter} (Gematria: {activeKey.gematria}) • Gate: {activeKey.gate}
                     </Typography>
-                    <Typography variant="caption" sx={{ fontFamily: mono, color: tarot3dMeta.secondaryColor, display: 'block', mt: 0.2, fontWeight: 800 }}>
-                      ⚡ RPG Spell: {tarot3dMeta.spellName} (PWR {tarot3dMeta.spellPower}) • Guardian: {tarot3dMeta.guardianAgent} ({tarot3dMeta.guardianPet})
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: isLight ? t.emerald : tarot3dMeta.secondaryColor, display: 'block', mt: 0.25, fontWeight: 700 }}>
+                      3D Studio Arcana: {tarot3dMeta.spellName} • Guardian: {tarot3dMeta.guardianAgent}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: '#CBD5E1', fontSize: '0.75rem', mt: 0.5, lineHeight: 1.45 }}>
+                    <Typography variant="body2" sx={{ color: t.ink, fontSize: '0.78rem', mt: 0.5, lineHeight: 1.45 }}>
                       {activeKey.prompt}
                     </Typography>
                   </Box>
@@ -621,7 +738,7 @@ export default function AdytumPlannerGodModeTool() {
                         height: 195,
                         borderRadius: 2.5,
                         overflow: 'hidden',
-                        border: `1px solid ${tarot3dMeta.secondaryColor}55`,
+                        border: `1px solid ${t.border}`,
                         bgcolor: '#05070E',
                       }}
                     >
@@ -659,15 +776,15 @@ export default function AdytumPlannerGodModeTool() {
 
           <Box
             sx={{
-              p: 1.5,
-              borderTop: '1px solid rgba(255,255,255,0.08)',
-              bgcolor: '#090912',
+              p: 1.75,
+              borderTop: `1px solid ${t.divider}`,
+              bgcolor: t.subPanelBg,
             }}
           >
-            <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', fontWeight: 800, color: '#D4AF37', mb: 1 }}>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, color: t.gold, mb: 1 }}>
               SELECT CANONICAL HERMETIC KEY (ALL 22 KEYS: 0 THE FOOL → 21 THE WORLD)
             </Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, maxHeight: 155, overflowY: 'auto', pr: 0.5 }}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, maxHeight: 165, overflowY: 'auto', pr: 0.5, ...scrollStyles }}>
               {HERMETIC_KEYS.map((item, idx) => (
                 <Button
                   key={item.key}
@@ -676,14 +793,14 @@ export default function AdytumPlannerGodModeTool() {
                   onClick={() => setSelectedIdx(idx)}
                   sx={{
                     fontFamily: mono,
-                    fontSize: '0.62rem',
-                    fontWeight: 800,
-                    py: 0.35,
-                    px: 1,
+                    fontSize: '0.64rem',
+                    fontWeight: 700,
+                    py: 0.45,
+                    px: 1.1,
                     textTransform: 'none',
-                    bgcolor: selectedIdx === idx ? '#D4AF37' : 'rgba(255,255,255,0.02)',
-                    color: selectedIdx === idx ? '#050508' : '#94A3B8',
-                    borderColor: selectedIdx === idx ? '#D4AF37' : 'rgba(255,255,255,0.12)',
+                    bgcolor: selectedIdx === idx ? t.goldChipBg : t.panelBg,
+                    color: selectedIdx === idx ? t.goldChipText : t.ink,
+                    borderColor: selectedIdx === idx ? t.goldChipBg : t.divider,
                   }}
                 >
                   {item.arcana}
@@ -694,10 +811,10 @@ export default function AdytumPlannerGodModeTool() {
         </Grid>
 
         {/* Right Column: Specification Input, Presets, Auto-Harden, and Live 15-Rule Gatekeeper Audit */}
-        <Grid xs={12} md={6} sx={{ p: 2.5, bgcolor: '#090910', display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Grid xs={12} md={6} sx={{ p: 2.5, bgcolor: t.panelBg, display: 'flex', flexDirection: 'column', gap: 2 }}>
           <Box>
             <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={1} sx={{ mb: 1 }}>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, color: '#94A3B8' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, color: t.muted }}>
                 PROJECT NAME &amp; ARCHITECTURAL SPECIFICATION (LIVE 22-KEY GATEKEEPER)
               </Typography>
               <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
@@ -705,7 +822,7 @@ export default function AdytumPlannerGodModeTool() {
                   size="small"
                   variant="outlined"
                   onClick={() => setIntention(HARDENED_SPEC_PRESET)}
-                  sx={{ fontFamily: mono, fontSize: '0.62rem', py: 0.2, px: 1, color: '#34D399', borderColor: 'rgba(52,211,153,0.4)' }}
+                  sx={{ fontFamily: mono, fontSize: '0.64rem', py: 0.3, px: 1, color: t.emerald, borderColor: t.emeraldBorder }}
                 >
                   Hardened (100/100)
                 </Button>
@@ -713,7 +830,7 @@ export default function AdytumPlannerGodModeTool() {
                   size="small"
                   variant="outlined"
                   onClick={() => setIntention(FLAWED_SPEC_PRESET)}
-                  sx={{ fontFamily: mono, fontSize: '0.62rem', py: 0.2, px: 1, color: '#F87171', borderColor: 'rgba(248,113,113,0.4)' }}
+                  sx={{ fontFamily: mono, fontSize: '0.64rem', py: 0.3, px: 1, color: t.danger, borderColor: t.dangerBorder }}
                 >
                   Flawed Spec
                 </Button>
@@ -724,14 +841,15 @@ export default function AdytumPlannerGodModeTool() {
                   startIcon={<AutoFixHighIcon sx={{ fontSize: 13 }} />}
                   sx={{
                     fontFamily: mono,
-                    fontSize: '0.62rem',
+                    fontSize: '0.64rem',
                     fontWeight: 800,
-                    py: 0.2,
+                    py: 0.3,
                     px: 1.2,
-                    bgcolor: 'rgba(212,175,55,0.2)',
-                    color: '#F5E6AB',
-                    border: '1px solid rgba(212,175,55,0.55)',
-                    '&:hover': { bgcolor: 'rgba(212,175,55,0.32)' },
+                    bgcolor: t.goldSoftBg,
+                    color: t.goldStrong,
+                    border: `1px solid ${t.border}`,
+                    boxShadow: 'none',
+                    '&:hover': { bgcolor: t.goldChipBg, color: t.goldChipText },
                   }}
                 >
                   Auto-Harden Invariants
@@ -745,9 +863,15 @@ export default function AdytumPlannerGodModeTool() {
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
               placeholder="Project Name"
+              inputProps={{ 'aria-label': 'Project Name' }}
               sx={{
                 mb: 1.2,
-                '& .MuiInputBase-root': { fontFamily: mono, fontSize: '0.76rem', bgcolor: 'rgba(0,0,0,0.45)', color: '#F8FAFC' },
+                '& .MuiInputBase-root': {
+                  fontFamily: mono,
+                  fontSize: '0.78rem',
+                  bgcolor: t.inputBg,
+                  color: t.ink,
+                },
               }}
             />
 
@@ -758,23 +882,25 @@ export default function AdytumPlannerGodModeTool() {
               size="small"
               value={intention}
               onChange={(e) => setIntention(e.target.value)}
+              inputProps={{ 'aria-label': 'Architectural Specification' }}
               sx={{
                 mb: 1.5,
                 '& .MuiInputBase-root': {
                   fontFamily: mono,
-                  fontSize: '0.73rem',
-                  bgcolor: 'rgba(0,0,0,0.45)',
-                  color: '#E2E8F0',
+                  fontSize: '0.74rem',
+                  bgcolor: t.inputBg,
+                  color: t.ink,
                 },
+                '& textarea': scrollStyles,
               }}
             />
 
             <Box sx={{ mb: 1.5 }}>
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#94A3B8' }}>INCUBATION GATE DURATION</Typography>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#D4AF37', fontWeight: 800 }}>{incubationDepth} min</Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: t.muted }}>INCUBATION GATE DURATION</Typography>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: t.gold, fontWeight: 800 }}>{incubationDepth} min</Typography>
               </Box>
-              <Slider size="small" min={1} max={22} value={incubationDepth} onChange={(_, v) => setIncubationDepth(v)} sx={{ color: '#D4AF37' }} />
+              <Slider size="small" min={1} max={22} value={incubationDepth} onChange={(_, v) => setIncubationDepth(v)} aria-label="Incubation Gate Duration" sx={{ color: t.gold }} />
             </Box>
 
             {/* Live 15-Check Invariant Matrix */}
@@ -782,24 +908,25 @@ export default function AdytumPlannerGodModeTool() {
               sx={{
                 p: 1.5,
                 borderRadius: 2,
-                bgcolor: '#05050A',
-                border: `1px solid ${audit.passed ? 'rgba(52,211,153,0.3)' : 'rgba(248,113,113,0.3)'}`,
-                maxHeight: 225,
+                bgcolor: t.subPanelBg,
+                border: `1px solid ${audit.passed ? t.emeraldBorder : t.dangerBorder}`,
+                maxHeight: 230,
                 overflowY: 'auto',
+                ...scrollStyles,
               }}
             >
               <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1} sx={{ mb: 1 }}>
                 <Stack direction="row" alignItems="center" spacing={1}>
                   {audit.passed ? (
-                    <VerifiedUserIcon sx={{ fontSize: 16, color: '#34D399' }} />
+                    <VerifiedUserIcon sx={{ fontSize: 16, color: t.emerald }} />
                   ) : (
-                    <WarningAmberIcon sx={{ fontSize: 16, color: '#F87171' }} />
+                    <WarningAmberIcon sx={{ fontSize: 16, color: t.danger }} />
                   )}
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, color: audit.passed ? '#34D399' : '#F87171' }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, color: audit.passed ? t.emerald : t.danger }}>
                     {audit.passed ? 'PASSED HERMETIC GATE' : 'FAILED HERMETIC GATE'} — {audit.score}/100 ({audit.grade})
                   </Typography>
                 </Stack>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.62rem', color: '#94A3B8' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.64rem', color: t.muted }}>
                   {audit.checks.filter((c) => c.passed).length}/{audit.checks.length} Checks
                 </Typography>
               </Stack>
@@ -809,8 +936,8 @@ export default function AdytumPlannerGodModeTool() {
                     <Typography
                       sx={{
                         fontFamily: mono,
-                        fontSize: '0.63rem',
-                        color: c.passed ? '#34D399' : '#F87171',
+                        fontSize: '0.64rem',
+                        color: c.passed ? t.emerald : t.danger,
                         display: 'flex',
                         alignItems: 'center',
                         gap: 0.5,
@@ -827,31 +954,31 @@ export default function AdytumPlannerGodModeTool() {
         </Grid>
       </Grid>
 
-      <Divider sx={{ borderColor: 'rgba(255,255,255,0.08)' }} />
+      <Divider sx={{ borderColor: t.divider }} />
 
-      {/* Bottom Section: How It Works, What It Does & ZothOS CLI Reference */}
-      <Box sx={{ p: { xs: 2, md: 3 }, bgcolor: '#06060B' }}>
+      {/* Bottom Section: How It Works, What It Does & Verified ZothOS CLI Reference */}
+      <Box sx={{ p: { xs: 2, md: 3 }, bgcolor: t.topBarBg }}>
         <Grid container spacing={2.5}>
           <Grid xs={12} md={6}>
-            <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 800, color: '#D4AF37', mb: 1 }}>
-              📖 HOW ADYTUM PLANNER WORKS &amp; WHAT IT DOES
+            <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 800, color: t.gold, mb: 1 }}>
+              HOW ADYTUM PLANNER WORKS &amp; WHAT IT DOES
             </Typography>
-            <Typography variant="body2" sx={{ color: '#CBD5E1', fontSize: '0.8rem', lineHeight: 1.6, mb: 1.2 }}>
-              <strong>Adytum Alchemist AI Workflow</strong> replaces ad-hoc prompt guessing with a deterministic <strong>22-Key Hermetic Planning Rite</strong> (Builders of the Adytum lineage). Every Key from <strong>Key 0 (The Fool / Aleph)</strong> to <strong>Key 21 (The World / Tav)</strong> maps an archetypal symbol to a mandatory software engineering invariant:
+            <Typography variant="body2" sx={{ color: t.ink, fontSize: '0.82rem', lineHeight: 1.6, mb: 1.2 }}>
+              <strong>Adytum Planner — 22-Key Hermetic AI Workbench</strong> maps all 22 Major Arcana (<strong>Key 0 The Fool</strong> through <strong>Key 21 The World</strong>) to concrete software engineering invariants, offline AI-Chemistry study lessons, and a negation-aware 15-rule specification validator:
             </Typography>
-            <Stack spacing={0.6} sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8' }}>
-              <Box>• <strong>1. Intention Crystallization</strong>: Select a Key (0–21) or paste your PRD/plan above to audit against the 15-rule Hermetic Gatekeeper.</Box>
-              <Box>• <strong>2. Auto-Hardening &amp; Incubation</strong>: Click <strong>Auto-Harden Invariants</strong> to automatically inject missing architectural guarantees, or launch the full 3-column Tarot workstation on <code>http://127.0.0.1:8135</code>.</Box>
-              <Box>• <strong>3. Export &amp; Gate CI</strong>: Export the 22-Key Markdown PRD or run <code>adytum validate plan.md</code> / <code>adytum harden plan.md</code> in ZothOS CLI &amp; MCP pipelines.</Box>
+            <Stack spacing={0.6} sx={{ fontFamily: mono, fontSize: '0.72rem', color: t.muted }}>
+              <Box>• <strong>1. Studio Gatekeeper &amp; 3D Deck</strong>: Audit plans against 15 negation-aware invariants right here, inspect 3D Arcana dioramas, and export Markdown PRDs or JSON manifests.</Box>
+              <Box>• <strong>2. Standalone Workbench (:8135)</strong>: Launch <Box component="code" sx={inlineCodeSx}>http://127.0.0.1:8135</Box> for the 22-Key BOTA contemplation timer, offline AI-Chemistry curriculum, and local Ollama guide.</Box>
+              <Box>• <strong>3. Deterministic CLI &amp; Loopback API</strong>: Run <Box component="code" sx={inlineCodeSx}>adytum validate</Box>, <Box component="code" sx={inlineCodeSx}>adytum harden</Box>, or <Box component="code" sx={inlineCodeSx}>POST /api/validate</Box> in CI pipelines.</Box>
             </Stack>
           </Grid>
 
           <Grid xs={12} md={6}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }} flexWrap="wrap" gap={1}>
               <Stack direction="row" spacing={1} alignItems="center">
-                <TerminalIcon sx={{ fontSize: 16, color: '#34D399' }} />
-                <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 800, color: '#34D399' }}>
-                  ZOTHOS CLI &amp; MCP COMMANDS (`/usr/local/bin/adytum`)
+                <TerminalIcon sx={{ fontSize: 16, color: t.emerald }} />
+                <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 800, color: t.emerald }}>
+                  ZOTHOS CLI COMMANDS (<Box component="code" sx={inlineCodeSx}>/usr/local/bin/adytum</Box>)
                 </Typography>
               </Stack>
               <Button
@@ -862,7 +989,7 @@ export default function AdytumPlannerGodModeTool() {
                   setCopiedCli(true);
                   setTimeout(() => setCopiedCli(false), 1800);
                 }}
-                sx={{ fontFamily: mono, fontSize: '0.62rem', py: 0.2, px: 1, color: '#34D399', borderColor: 'rgba(52,211,153,0.35)' }}
+                sx={{ fontFamily: mono, fontSize: '0.64rem', py: 0.25, px: 1, color: t.emerald, borderColor: t.emeraldBorder }}
               >
                 {copiedCli ? 'Copied CLI' : 'Copy CLI Quickstart'}
               </Button>
@@ -873,23 +1000,23 @@ export default function AdytumPlannerGodModeTool() {
                 p: 1.5,
                 m: 0,
                 borderRadius: 2,
-                bgcolor: '#030306',
-                border: '1px solid rgba(52,211,153,0.22)',
+                bgcolor: t.codeBg,
+                border: `1px solid ${t.emeraldBorder}`,
                 fontFamily: mono,
                 fontSize: '0.68rem',
-                color: '#E2E8F0',
+                color: t.ink,
                 overflowX: 'auto',
                 lineHeight: 1.55,
+                ...scrollStyles,
               }}
             >
-{`# Installed globally on ZothOS as both 'adytum' and 'adytum-alchemist-ai-workflow'
-adytum list                          # List all 22 Hermetic Keys & engineering invariants
-adytum key 7 --json                  # Inspect Key 7 (The Chariot / Cheth) in JSON
-adytum invariants "${projectName}"   # Generate 22-point project invariant checklist
-adytum validate ./plan.md --json     # Audit a plan/PRD (exit 0 if score >= 70)
+{`# Installed globally on ZothOS as 'adytum' and 'adytum-alchemist-ai-workflow'
+adytum list                          # List all 22 Hermetic Keys & directives
+adytum key 7 --json                  # Inspect Key 7 (The Chariot / Cheth)
+adytum invariants "${projectName}"   # Print 22-point project invariant checklist
+adytum validate ./plan.md --json     # Negation-aware audit (exit 0 if score >= 70)
 adytum harden ./plan.md              # Auto-harden a draft spec to 100/100 (A+)
-adytum mcp                           # Launch MCP stdio server (4 tools for AI agents)
-adytum web                           # Start local workstation on http://127.0.0.1:8135`}
+adytum serve --port 8135             # Start loopback workbench on 127.0.0.1:8135`}
             </Box>
           </Grid>
         </Grid>
