@@ -232,7 +232,7 @@
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/hexstrike-arsenal/",
       "version": "3.1.0",
-      "pull": "hexstrike-arsenal --help  # or: git clone https://github.com/NullAITech/hexstrike-arsenal.git",
+      "pull": "hexstrike-arsenal --help  # or: git clone https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal.git",
       "execution_type": "local_cli",
       "runtimes": [
         "python",

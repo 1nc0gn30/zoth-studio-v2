@@ -2187,7 +2187,7 @@ export default function WorkstationDetailPage() {
           {/* Air-gap status badge */}
           <Chip
             icon={<RadioButtonCheckedIcon sx={{ fontSize: '0.9rem', color: isDark ? '#34D399 !important' : '#059669 !important' }} />}
-            label="AIR-GAP: VERIFIED (0 BYTES EGRESS)"
+            label="LOCAL-FIRST: LOOPBACK EXECUTION"
             size="small"
             sx={{
               bgcolor: isDark ? 'rgba(52,211,153,0.14)' : '#ECFDF5',
@@ -2369,7 +2369,7 @@ export default function WorkstationDetailPage() {
       {/* Sovereign Installation Funnel */}
       <SovereignFunnel
         title={`Deploy ${station.name} Locally`}
-        subtitle={`Run this sovereign capability locally with complete zero-telemetry air-gap guarantees. Install standalone via the Zoth CLI, spin up within the unified Studio cockpit, or boot into bare-metal Zoth OS.`}
+        subtitle={`Run this sovereign capability locally with local-first loopback execution and zero cloud telemetry. Install standalone via the Zoth CLI, spin up within the unified Studio cockpit, or boot into bare-metal Zoth OS.`}
         toolTitle={`Standalone ${station.name}`}
         toolTag={station.band?.toUpperCase() || "WORKSTATION"}
         toolDescription={`Offline-capable micro-enclave runtime for ${station.name} (${station.id}). Binds strictly to loopback 127.0.0.1 with zero cloud egress sockets.`}

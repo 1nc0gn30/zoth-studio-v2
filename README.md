@@ -1,12 +1,12 @@
 <div align="center">
-  <img src="public/assets/zoth-studio-v2-hero.svg" alt="Zoth Studio v2 — Local-First Sovereign Tool Registry, Desktop Host & 80-Repository Architecture" width="100%" />
+  <img src="public/assets/zoth-studio-v2-hero.svg" alt="Zoth Studio v2 — Local-First Sovereign Tool Registry, Desktop Host & 85-Repository Architecture" width="100%" />
 </div>
 
 # Zoth Studio v2
 
-**Local-First Sovereign Agent Workstation, Desktop Loopback Host & 80-Tool Repository Index**
+**Local-First Sovereign Agent Workstation, Desktop Loopback Host & 85-Tool Repository Index**
 
-[![Registry Integrity](https://img.shields.io/badge/Registry-80%2F80%20Verified%20Tools-101828?style=flat-square)](#tool-registry--cadre-index-80-entries)
+[![Registry Integrity](https://img.shields.io/badge/Registry-85%2F85%20Verified%20Tools-101828?style=flat-square)](#tool-registry--cadre-index-85-entries)
 [![Prerendered Routes](https://img.shields.io/badge/Routes-146%20Static%20HTML%20Shells-0F766E?style=flat-square)](#build-prerender--verification-suite)
 [![Zero Egress](https://img.shields.io/badge/Architecture-Local--First%20Loopback-B45309?style=flat-square)](#system-overview--architectural-model)
 [![Theme](https://img.shields.io/badge/Theme-Editorial%20Alabaster%20%2B%20Obsidian%20Void-334155?style=flat-square)](#procedural-aperture-intros--dual-theme-design)
@@ -24,7 +24,7 @@ Primary Repositories: **[NullAITech/zoth-studio-v2](https://github.com/NullAITec
 1. **Public Architectural Reference & Repository Index (`https://zoth.nullai.tech`)**:
    Most sovereign security, OSINT, PTY multiplexing, neuromorphic memory, and hardware tools require real Linux sockets, local file-system sandboxes, USB/ADB bridges, or local GPU runtimes that cannot execute honestly inside a public static browser tab. Rather than shipping simulated browser widgets on the public web, `zoth.nullai.tech` provides high-contrast architectural dossiers, verified `git clone` instructions, exact loopback port assignments, CLI/MCP specifications, and release packages so operators can run every tool genuinely on local hardware.
 2. **Local Desktop Host & Loopback Supervisor (`127.0.0.1:3000` on ZothOS / Linux / macOS / Windows)**:
-   When cloned locally or installed via the native desktop bundle, `serve.mjs` and the Studio supervisor coordinate **80 registered tools** across unique loopback ports (`127.0.0.1:5173`–`127.0.0.1:9995`), connecting local CLI binaries, Model Context Protocol (MCP) servers, STDP memory (`:8094`), Vaelor DAG L1 (`:8140`), Swarm Multiplexer (`:8141`), ZothOS-Lite (`:8145`), Zoth Obsidian Tracker (`:8151`), Zoth X Connector (`:8152`), and Zoth Civilization (`:9393`) with strict origin checks and zero cloud telemetry.
+   When cloned locally or installed via the native desktop bundle, `serve.mjs` and the Studio supervisor coordinate **85 registered tools** across unique loopback ports (`127.0.0.1:5173`–`127.0.0.1:9995`), connecting local CLI binaries, Model Context Protocol (MCP) servers, STDP memory (`:8094`), Vaelor DAG L1 (`:8140`), Swarm Multiplexer (`:8141`), ZothOS-Lite (`:8145`), Zoth Obsidian Tracker (`:8151`), Zoth X Connector (`:8152`), and Zoth Civilization (`:9393`) with strict origin checks and zero cloud telemetry.
 
 ---
 
@@ -92,7 +92,7 @@ Prebuilt desktop bundles and standalone binaries are published on [**GitHub Rele
 ```mermaid
 flowchart TD
     subgraph Studio["Zoth Studio v2 (React 19 + Vite 5 + MUI v5)"]
-        Index["80-Tool Repository Directory (/tools & /arsenal)"]
+        Index["85-Tool Repository Directory (/tools & /arsenal)"]
         Dossiers["Local System Dossiers (/swarm, /memory, /hexstrike, /adytum, /webgen, /ax, /zoth-os)"]
         Docs["Technical Reference & Six Math Pillars (/docs & /docs/math/*)"]
         Intro["Two-Shutter U+2800 Braille + Bayer 8x8 Aperture Engine"]
@@ -138,12 +138,12 @@ Companion Agent Architecture: **[Zoth Egregore (`1nc0gn30/zoth-egregore`)](https
 
 ---
 
-## Tool Registry & Cadre Index (80 Entries)
+## Tool Registry & Cadre Index (85 Entries)
 
 The canonical registry lives in [`public/api/tools.json`](public/api/tools.json) and [`src/data/toolsData.js`](src/data/toolsData.js), audited on every test run by `scripts/registry-check.py` and `scripts/test-arsenal.mjs`:
 
-- **80 Verified Tool Entries** across **18 specialized cadres** (Core Daemons, Agent Security & Governance, Cryptography & Vaults, OSINT & Recon, AEO/SEO & Web Engineering, Print-on-Demand & Commerce Connectors, 3D/Shader/Audio Synthesis, and ZothOS System Utilities).
-- **80 Unique Loopback Ports** (`0` port collisions across `:5173`–`:9995`).
+- **85 Verified Tool Entries** across **18 specialized cadres** (Core Daemons, Agent Security & Governance, Cryptography & Vaults, OSINT & Recon, AEO/SEO & Web Engineering, Print-on-Demand & Commerce Connectors, 3D/Shader/Audio Synthesis, and ZothOS System Utilities).
+- **85 Unique Loopback Ports** (`0` port collisions across `:5173`–`:9995`).
 - **43 Workstation Groups** mapped cleanly to standalone source repositories under `https://github.com/1nc0gn30/*` and `https://github.com/NullAITech/*` (plus upstream `LaurieWired/GhidraMCP`).
 - Every `/tools/<id>` route provides the repository link, exact `git clone` and install sequence, assigned `127.0.0.1:<port>`, CLI binary invocation, and architectural overview.
 
@@ -154,9 +154,9 @@ The canonical registry lives in [`public/api/tools.json`](public/api/tools.json)
 `npm test` executes a four-stage deterministic verification pipeline:
 
 1. **Registry Integrity Gate (`scripts/registry-check.py`)**:
-   Verifies `public/api/tools.json` (80 tools), `src/data/toolsData.js` (80 tools), `catalog.json` parity, and `0` port collisions.
-2. **80-Tool Arsenal Auditor (`scripts/test-arsenal.mjs`)**:
-   Validates JSON schema completeness and confirms all 80 prerendered `dist/tools/<id>/index.html` artifacts exist.
+   Verifies `public/api/tools.json` (85 tools), `src/data/toolsData.js` (85 tools), `catalog.json` parity, and `0` port collisions.
+2. **85-Tool Arsenal Auditor (`scripts/test-arsenal.mjs`)**:
+   Validates JSON schema completeness and confirms all 85 prerendered `dist/tools/<id>/index.html` artifacts exist.
 3. **Ground-Truth Mathematical & Cryptographic Harness (`scripts/test-ground-truth.mjs`)**:
    Audits Shannon entropy ($H = -\sum p \log_2 p$), RFC 7519 HMAC-SHA256 WebCrypto signatures, 2D tensor dot-products, marketplace fee schedules, and W3C manifest output (`12/12` checks).
 4. **Loopback Server Security & 37-Route Headless Browser Hydration (`scripts/test-serve.mjs` + `scripts/test-routes.mjs`)**:
@@ -178,14 +178,14 @@ zoth-studio-v2/
 ├── docs/                           # Architectural & protocol documentation
 ├── netlify/                        # Edge/serverless configuration
 ├── public/
-│   ├── api/tools.json              # Canonical 80-tool machine-readable registry
+│   ├── api/tools.json              # Canonical 85-tool machine-readable registry
 │   ├── llms.txt & llms-full.txt    # Answer-engine & LLM discovery manifests
 │   ├── robots.txt & ai.txt         # Search and AI crawler directives
 │   └── sitemap.xml                 # Synchronized 149-route XML sitemap
 ├── scripts/
 │   ├── prerender.mjs               # Static HTML + Schema.org JSON-LD prerenderer (149 routes)
 │   ├── generate-sitemap.mjs        # Sitemap generator
-│   ├── registry-check.py           # 80-tool registry & port collision gate
+│   ├── registry-check.py           # 85-tool registry & port collision gate
 │   ├── test-arsenal.mjs            # Prerendered tool route & schema auditor
 │   ├── test-ground-truth.mjs       # Cryptographic & mathematical ground-truth suite
 │   ├── test-serve.mjs              # Loopback HTTP security & traversal test harness
@@ -197,7 +197,7 @@ zoth-studio-v2/
 │   │   ├── Navbar.jsx & Footer.jsx     # High-contrast navigation & attribution chrome
 │   │   └── MotionReveal.jsx            # Spring/stagger reveal primitives
 │   ├── data/
-│   │   ├── toolsData.js            # 80-tool metadata & cadre definitions
+│   │   ├── toolsData.js            # 85-tool metadata & cadre definitions
 │   │   └── toolsDocumentation.js   # Per-tool CLI, architecture & usage specs
 │   ├── motion/
 │   │   ├── AsciiBrailleDitherEngine.jsx # 60fps U+2800 Braille + Bayer 8x8 SDF stage

@@ -217,7 +217,7 @@ export const microTools = [
     github: 'https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal',
     description: 'Autonomous penetration audit suite, CVE matrix inspector, and exploit payload lab.',
     version: '3.1.0',
-    pull: 'hexstrike-arsenal --help  # or: git clone https://github.com/NullAITech/hexstrike-arsenal.git',
+    pull: 'hexstrike-arsenal --help  # or: git clone https://github.com/NullAITech/NullAI-HexStrike-AI-Terminal.git',
     localPort: 8138,
     localUrl: 'http://127.0.0.1:8138',
   },

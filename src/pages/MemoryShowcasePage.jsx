@@ -72,7 +72,7 @@ export default function MemoryShowcasePage() {
         },
         {
           tag: 'ZERO CLOUD',
-          title: 'Air-Gapped SQLite Persistence',
+          title: 'Local-First SQLite Persistence',
           desc: 'Your codebase architecture, credentials context, and research notes never touch a third-party SaaS vector store.',
         },
       ]}

@@ -1,7 +1,7 @@
 /**
  * Zoth Studio v2 - Sovereign Master Arsenal & Unified Catalog
  *
- * Consolidates all 80 sovereign tools and micro-repositories into a single
+ * Consolidates all 85 sovereign tools and micro-repositories into a single
  * 100% open-access catalog with interactive in-browser God-Mode Workstations,
  * ZothOS local ports, CLI binaries (/usr/local/bin/<id>), and GitHub references.
  */

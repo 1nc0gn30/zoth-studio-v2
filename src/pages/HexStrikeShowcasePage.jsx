@@ -6,7 +6,7 @@ export default function HexStrikeShowcasePage() {
     <LocalSystemDossier
       tone="crimson"
       kicker="HEXSTRIKE SECURITY ARSENAL"
-      badges={['LOCAL DAEMON :8138', 'DEFENSIVE & RED-TEAM CLI', 'AIR-GAPPED RECON']}
+      badges={['LOCAL DAEMON :8138', 'DEFENSIVE & RED-TEAM CLI', 'LOCAL-FIRST RECON']}
       title="Local Security Auditing &"
       accentWord="Threat Reconnaissance."
       subtitle="Real security tooling cannot run inside a sandboxed browser tab—it requires raw sockets, local binary inspection, and direct filesystem access. Clone the HexStrike repository or boot ZothOS to run automated vulnerability triage, CVE correlation, binary entropy analysis, and secret auditing entirely on your own hardware."

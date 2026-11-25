@@ -293,7 +293,7 @@ const PRIMITIVE_SNIPPETS = {
     code: `<SovereignKpiStrip
   items={[
     { label: 'THROUGHPUT', value: '1,420', unit: 'tok/s', status: 'NOMINAL', accent: '#34D399' },
-    { label: 'EGRESS', value: '0 B', status: 'AIR-GAPPED', accent: '#D4AF37' },
+    { label: 'EGRESS', value: '0 B', status: 'LOCAL-FIRST', accent: '#D4AF37' },
   ]}
 />`,
   },
@@ -315,7 +315,7 @@ const PRIMITIVE_SNIPPETS = {
     title: 'SovereignPresetBar',
     badge: 'PRESETS + UPLOAD',
     filename: 'SovereignPresetBarUsage.jsx',
-    desc: 'One-click sample presets paired with an air-gapped client-side FileReader uploader and Reset button.',
+    desc: 'One-click sample presets paired with a local-first client-side FileReader uploader and Reset button.',
     code: `<SovereignPresetBar presets={presets} activeId={id} onSelect={onSelect} onUploadText={onUpload} onReset={onReset} />`,
   },
   SovereignGauge: {
@@ -351,7 +351,7 @@ const PRIMITIVE_SNIPPETS = {
     badge: 'SEMANTIC CALLOUT',
     filename: 'SovereignAlertBannerUsage.jsx',
     desc: 'Four semantic severity levels (info, success, warning, error) with high-contrast border stripes and optional 44px CTA action.',
-    code: `<SovereignAlertBanner severity="success" title="Air-Gapped Nominal" message="Zero external egress." actionLabel="Simulate Burst" onAction={fn} />`,
+    code: `<SovereignAlertBanner severity="success" title="Local-First Nominal" message="Zero external egress." actionLabel="Simulate Burst" onAction={fn} />`,
   },
   SovereignFaqAccordion: {
     title: 'SovereignFaqAccordion',
@@ -575,13 +575,13 @@ export default function UiKitPage() {
       return {
         severity: 'warning',
         title: `Elevated Queue Pressure (${gaugeValue}%)`,
-        message: 'Batch queue approaching soft limit (65%). Streaming remains 100% air-gapped on device.',
+        message: 'Batch queue approaching soft limit (65%). Streaming remains 100% local-first on device.',
         actionLabel: 'Rebalance Queue',
       };
     }
     return {
       severity: 'success',
-      title: `Air-Gapped Nominal (${gaugeValue}%)`,
+      title: `Local-First Nominal (${gaugeValue}%)`,
       message: uploadedNote || 'All 29 React exports & Vanilla blocks operate locally with zero external egress.',
       actionLabel: 'Simulate Burst',
     };
@@ -832,7 +832,7 @@ ${reactBodyByArch[archetype] || reactBodyByArch.workstation}
             cols={6}
             items={[
               { label: 'EXPORTS', value: '24', unit: 'BLOCKS', status: 'READY', accent: SOV.emerald },
-              { label: 'EGRESS', value: '0 B', status: 'AIR-GAPPED', accent: SOV.gold },
+              { label: 'EGRESS', value: '0 B', status: 'LOCAL-FIRST', accent: SOV.gold },
             ]}
           />
         );

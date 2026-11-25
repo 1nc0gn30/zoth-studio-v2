@@ -57,7 +57,7 @@ export default function HexStrikePage() {
           body: 'Designed strictly for auditing repositories, containers, and infrastructure you own or have explicit written authorization to test.',
         },
         {
-          heading: 'Air-Gapped Report Storage',
+          heading: 'Local-First Report Storage',
           body: 'Scan findings and target metadata remain strictly on your local filesystem—never uploaded to external cloud scanners.',
         },
         {
