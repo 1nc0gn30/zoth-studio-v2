@@ -77,7 +77,6 @@ const PayloadEntropyGodModeTool = lazy(() => import('../components/tools/Payload
 const PixelCastGodModeTool = lazy(() => import('../components/tools/PixelCastGodModeTool'));
 const AetherObservatoryGodModeTool = lazy(() => import('../components/tools/AetherObservatoryGodModeTool'));
 const ChronicleVaultGodModeTool = lazy(() => import('../components/tools/ChronicleVaultGodModeTool'));
-const PodCommerceGodModeTool = lazy(() => import('../components/tools/PodCommerceGodModeTool'));
 const PolyglotStudioGodModeTool = lazy(() => import('../components/tools/PolyglotStudioGodModeTool'));
 const PromptMasterGodModeTool = lazy(() => import('../components/tools/PromptMasterGodModeTool'));
 const PwaManifestBuilderGodModeTool = lazy(() => import('../components/tools/PwaManifestBuilderGodModeTool'));
@@ -116,8 +115,10 @@ const CreatorPlaybooksGodModeTool = lazy(() => import('../components/tools/Creat
 const ZelaGlassesGuideGodModeTool = lazy(() => import('../components/tools/ZelaGlassesGuideGodModeTool'));
 const ShodanSurfaceSentinelGodModeTool = lazy(() => import('../components/tools/ShodanSurfaceSentinelGodModeTool'));
 const OsintScoutSkillGodModeTool = lazy(() => import('../components/tools/OsintScoutSkillGodModeTool'));
+const EtsyConnectorGodModeTool = lazy(() => import('../components/tools/EtsyConnectorGodModeTool'));
 const EtsyPodForgeGodModeTool = lazy(() => import('../components/tools/EtsyPodForgeGodModeTool'));
 const ShopifyConnectorGodModeTool = lazy(() => import('../components/tools/ShopifyConnectorGodModeTool'));
+const DigitalAssetForgeGodModeTool = lazy(() => import('../components/tools/DigitalAssetForgeGodModeTool'));
 const PodMockupForgeGodModeTool = lazy(() => import('../components/tools/PodMockupForgeGodModeTool'));
 const PrintifyConnectorGodModeTool = lazy(() => import('../components/tools/PrintifyConnectorGodModeTool'));
 const GelatoConnectorGodModeTool = lazy(() => import('../components/tools/GelatoConnectorGodModeTool'));
@@ -185,11 +186,11 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'cron-rhythm-studio': CronRhythmGodModeTool,
   'printify-connector': PrintifyConnectorGodModeTool,
   'gelato-connector': GelatoConnectorGodModeTool,
-  'etsy-connector': EtsyPodForgeGodModeTool,
+  'etsy-connector': EtsyConnectorGodModeTool,
   'shopify-connector': ShopifyConnectorGodModeTool,
   'etsy-pod-forge': EtsyPodForgeGodModeTool,
   'pod-smart-router': PodSmartRouterGodModeTool,
-  'digital-asset-forge': PodMockupForgeGodModeTool,
+  'digital-asset-forge': DigitalAssetForgeGodModeTool,
   'pod-mockup-forge': PodMockupForgeGodModeTool,
   'pod-margin-sentinel': PodMarginSentinelGodModeTool,
   'agent-voice-call': AgentVoiceCallGodModeTool,
