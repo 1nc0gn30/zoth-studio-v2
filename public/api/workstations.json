@@ -568,13 +568,13 @@
       "name": "Zoth Swarm NOC & Signal Bridge",
       "band": "Swarm & Consensus",
       "type": "enclave_daemon",
-      "executionType": "browser",
+      "executionType": "hybrid",
       "version": "2.3.0",
-      "route": "/bridges",
-      "path": "/studio/bus-monitor.html",
+      "route": "/workstations/bus-monitor",
+      "path": "/workstations/bus-monitor",
       "pullCommand": "zoth open bus-monitor",
-      "description": "Decentralized agent bus monitor with E2EE WebSocket loopback pinger and NOC telemetry.",
-      "url": "https://zoth.nullai.tech/bridges"
+      "description": "Real-time loopback service NOC, measured RTT pinger, Signal Bridge session telemetry, and HKDF-SHA256/HMAC envelope verifier.",
+      "url": "https://zoth.nullai.tech/workstations/bus-monitor"
     },
     {
       "id": "math-pillars",

@@ -128,6 +128,17 @@ export const TOOL_MOTION_OVERRIDES = {
     execLabel: '100% CLIENT-SIDE SVG/PNG FORGE + /api/studio/brand/tokens',
     telemetrySub: '6 Parametric SVG Seals · Editorial Ivory + Obsidian Gold Tokens · WCAG 2.1 Matrix · v2.3.0.',
   },
+  'bus-monitor': {
+    accent: '#38BDF8',
+    secondary: '#34D399',
+    archetype: 'swarm',
+    anchorName: 'Loopback Star-Topology NOC & HMAC-SHA256 Signal Ring',
+    formula: 'Host ∈ {127.0.0.1, localhost, [::1]} · p50/p95 RTT · MAC = HMAC-SHA256(K, ts‖nonce‖payload)',
+    badge: 'SWARM NOC & SIGNAL BRIDGE',
+    clip: 'bridges',
+    execLabel: 'HYBRID CLIENT CRYPTO + /api/studio/bus/{telemetry,ping}',
+    telemetrySub: '12 Loopback Service Probes · SSRF-Guarded Port Pinger · Live :8102 Sessions · v2.3.0.',
+  },
 };
 
 export function getToolMotionMeta(tool) {

@@ -285,40 +285,86 @@ export const toolsDocumentation = {
     ]
   },
 
-  'sovereign-agent-bridge': {
-    whyUse: 'Provides end-to-end encrypted, zero-leak communication between autonomous AI agents across local processes, Docker containers, and Simplex/Signal mesh protocols.',
-    problemSolved: 'Replaces insecure plaintext HTTP webhooks and centralized cloud messaging brokers (Slack, Discord bots) with zero-egress cryptographic ratchets.',
-    architecture: 'Python asyncio WebSocket daemon bound strictly to 127.0.0.1:8102 with libsodium/Ed25519 authenticated message envelopes and Simplex chat daemon integration.',
+  'bus-monitor': {
+    whyUse: 'Provides an honest, real-time loopback Network Operations Center (NOC) for inspecting all 12 core ZothOS local daemons, measuring true HTTP/TCP p50 and p95 RTT, checking live Signal Bridge (:8102) sessions, and signing/verifying HKDF-SHA256 / HMAC-SHA256 bridge envelopes offline in-browser.',
+    problemSolved: 'Eliminates blind local daemon debugging, fabricated mock latencies, and cross-origin / DNS-rebinding exposure by consolidating loopback health sweeps, targeted SSRF-guarded port pings, and sanitized diagnostic exports into one dual-theme Studio workstation.',
+    architecture: 'Hybrid browser + Studio API workstation (`src/utils/busMonitorEngine.js` mirrored byte-identically at `server/bus-monitor-engine.mjs`). Studio (:3000) exposes `GET /api/studio/bus/telemetry` and `POST /api/studio/bus/ping` guarded by strict loopback `Host` + `Origin` allowlists (403 on untrusted hosts) and `127.0.0.1` port validation (`1024..65535`). Client-side envelope verification uses native WebCrypto `crypto.subtle` HMAC-SHA256 with zero external network egress.',
     aiAgentProtocol: {
-      mcpTool: 'bridge_send_signal',
-      description: 'Transmit an encrypted signal envelope to another local or peer agent.',
-      cliExample: 'curl -X POST http://127.0.0.1:8102/api/bridge/send -d \'{"to":"agent-7","message":"Task complete"}\'',
+      mcpTool: 'studio_bus_telemetry',
+      description: 'Run a concurrent loopback NOC sweep across core ZothOS services or ping a single 127.0.0.1 port via Zoth Studio.',
+      cliExample: 'curl -s http://127.0.0.1:3000/api/studio/bus/telemetry | jq .summary',
       inputSchema: {
         type: 'object',
         properties: {
-          to: { type: 'string', description: 'Recipient agent identifier' },
-          message: { type: 'string', description: 'Payload content' },
-          encrypt: { type: 'boolean', default: true }
-        },
-        required: ['to', 'message']
+          port: { type: 'integer', minimum: 1024, maximum: 65535, description: 'Loopback port on 127.0.0.1 to probe via POST /api/studio/bus/ping' }
+        }
       },
       outputSchema: {
-        delivered: 'boolean',
-        timestamp: 'number',
-        signature: 'string'
+        schemaVersion: 'string',
+        summary: { count: 'number', onlineCount: 'number', offlineCount: 'number', p50Ms: 'number|null', p95Ms: 'number|null' },
+        nodes: 'array',
+        unixSockets: 'array'
+      }
+    },
+    quickstart: [
+      'git clone https://github.com/NullAITech/zoth-studio-v2.git && cd zoth-studio-v2',
+      'npm install && npm run build && npm run serve',
+      'curl -s http://127.0.0.1:3000/api/studio/bus/telemetry',
+      'curl -s -X POST http://127.0.0.1:3000/api/studio/bus/ping -H "Content-Type: application/json" -d \'{"port":3000}\''
+    ],
+    cliCommands: [
+      'zoth open bus-monitor --json',
+      'node --test scripts/test-bus-monitor-engine.mjs'
+    ],
+    features: [
+      'Real concurrent loopback TCP/HTTP probes across 12 core ZothOS services (zero Math.random() fabrication)',
+      'SSRF-guarded POST /api/studio/bus/ping restricted strictly to 127.0.0.1 ports 1024..65535',
+      'Hardened GET & POST DNS-rebinding Host allowlist (403 Forbidden on untrusted Host headers)',
+      'Live :8102 Sovereign Agent Bridge session & adapter inspection plus Unix socket discovery',
+      'Offline WebCrypto HKDF-SHA256 / HMAC-SHA256 envelope signer & constant-time verifier',
+      'Formula-injection-safe CSV, JSON, and Markdown NOC diagnostic report exports'
+    ]
+  },
+
+  'sovereign-agent-bridge': {
+    whyUse: 'Provides local-first, cryptographically authenticated inter-agent messaging, claim-lock coordination, and tool-policy gating across local AI sessions (Muse, Antigravity, Hermes) and relay adapters.',
+    problemSolved: 'Replaces unauthenticated local scripts and cloud-hosted agent webhooks with a zero-dependency Python stdlib loopback daemon and HKDF-SHA256 / SHA256-CTR / HMAC-SHA256 authenticated envelopes.',
+    architecture: 'Zero-dependency Python 3.10+ stdlib `http.server` daemon bound to `127.0.0.1:8102` (`server.py` / `sovereign_agent_bridge`) with `crypto_envelope.py` (`HKDF-SHA256`, `SHA256-CTR`, `HMAC-SHA256`), SQLite state/claim board, and Studio same-origin proxy endpoints at `/api/studio/bridge*`.',
+    aiAgentProtocol: {
+      mcpTool: 'bridge_send_signal',
+      description: 'Transmit a signed message frame through the local Sovereign Agent Bridge daemon on 127.0.0.1:8102.',
+      cliExample: 'curl -s -X POST http://127.0.0.1:8102/api/send -H "Content-Type: application/json" -d \'{"channel":"webhook","recipient":"http://127.0.0.1:8102/webhook","message":"Task complete"}\'',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          channel: { type: 'string', description: 'Configured bridge channel adapter (signal, simplex, matrix, telegram, webhook)' },
+          recipient: { type: 'string', description: 'Target recipient address or loopback hook' },
+          message: { type: 'string', description: 'Message payload content' }
+        },
+        required: ['channel', 'recipient', 'message']
+      },
+      outputSchema: {
+        ok: 'boolean',
+        channel: 'string',
+        timestamp: 'string'
       }
     },
     quickstart: [
       'git clone https://github.com/NullAITech/sovereign-agent-bridge.git',
-      'cd sovereign-agent-bridge && python3 -m sovereign_agent_bridge serve --port 8102',
-      'curl http://127.0.0.1:8102/api/bridge/status'
+      'cd sovereign-agent-bridge && python3 server.py --port 8102',
+      'curl -s http://127.0.0.1:8102/api/health',
+      'curl -s http://127.0.0.1:8102/api/stats'
+    ],
+    cliCommands: [
+      'sovereign-agent-bridge --help',
+      'sovereign-agent-bridge channels --json'
     ],
     features: [
-      'E2EE WebSocket & Simplex protocol bridge',
-      'Zero external cloud relay dependencies',
-      'Peer-to-peer authenticated agent mesh networking',
-      'Automatic offline queueing with replay attack prevention',
-      'Live IPC stream integration for Zoth Studio cockpit'
+      'Zero-dependency Python stdlib http.server daemon on 127.0.0.1:8102',
+      'HKDF-SHA256 + SHA256-CTR + HMAC-SHA256 envelope authentication (`crypto_envelope.py`)',
+      'Live agent session introspection (`/api/agents/live`) and tool gatekeeper policies',
+      'Real REST endpoints: `/api/health`, `/api/stats`, `/api/channels`, `/api/send`, `/api/agents/live`',
+      'Same-origin hardened Studio proxy via `/api/studio/bridge*` and `/api/studio/bus/telemetry`'
     ]
   },
 

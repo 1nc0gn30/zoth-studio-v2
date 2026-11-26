@@ -1,12 +1,23 @@
 import http from 'node:http';
+import net from 'node:net';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { performance } from 'node:perf_hooks';
 import { fileURLToPath } from 'node:url';
 import { exec, execFile, spawn } from 'node:child_process';
 import { validateAxSpec, gradeFromScore, AX_SPEC_IDS } from './ax-contract-engine.mjs';
 import { getBrandApiManifest } from './brand-asset-engine.mjs';
+import {
+  BUS_MONITOR_VERSION,
+  LOOPBACK_BUS_TARGETS,
+  isLoopbackHostString,
+  validateLoopbackPort,
+  classifyProbeStatus,
+  computeLatencyStats,
+  normalizeBridgeChannels,
+} from './bus-monitor-engine.mjs';
 
 const STUDIO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOME_DIR = process.env.ZOTH_HOME || os.homedir();
@@ -915,6 +926,10 @@ function send(res, status, payload) {
 
 const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]', '::1']);
 
+export function isLocalHost(req) {
+  return isLoopbackHostString(req?.headers?.host);
+}
+
 export function isLocalOrigin(origin) {
   if (!origin) return true;
   try {
@@ -926,9 +941,202 @@ export function isLocalOrigin(origin) {
 }
 
 export function isLocalRequest(req) {
-  const host = String(req.headers?.host || '').replace(/:\d+$/, '').toLowerCase();
-  if (host && !LOCAL_HOSTS.has(host)) return false;
-  return isLocalOrigin(req.headers?.origin);
+  if (!isLocalHost(req)) return false;
+  return isLocalOrigin(req?.headers?.origin);
+}
+
+function readJsonBodyStrict(req, maxBytes = 16384) {
+  return new Promise((resolve, reject) => {
+    const chunks = [];
+    let total = 0;
+    let settled = false;
+    req.on('data', (chunk) => {
+      if (settled) return;
+      total += chunk.length;
+      if (total > maxBytes) {
+        settled = true;
+        reject(Object.assign(new Error('Request body exceeds limit.'), { statusCode: 413 }));
+        req.destroy();
+        return;
+      }
+      chunks.push(chunk);
+    });
+    req.on('end', () => {
+      if (settled) return;
+      settled = true;
+      const raw = Buffer.concat(chunks).toString('utf8').trim();
+      if (!raw) {
+        resolve({});
+        return;
+      }
+      try {
+        const parsed = JSON.parse(raw);
+        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+          reject(Object.assign(new Error('JSON object body required.'), { statusCode: 400 }));
+          return;
+        }
+        resolve(parsed);
+      } catch {
+        reject(Object.assign(new Error('Malformed JSON payload.'), { statusCode: 400 }));
+      }
+    });
+    req.on('error', (err) => {
+      if (settled) return;
+      settled = true;
+      reject(Object.assign(err, { statusCode: 400 }));
+    });
+  });
+}
+
+function probeTcpLoopback(port, timeoutMs = 700) {
+  return new Promise((resolve) => {
+    const t0 = performance.now();
+    let settled = false;
+    const done = (ok) => {
+      if (settled) return;
+      settled = true;
+      const rttMs = ok ? Math.round((performance.now() - t0) * 10) / 10 : null;
+      resolve({ ok, httpStatus: null, protocol: 'TCP', rttMs });
+    };
+    const sock = net.createConnection({ host: '127.0.0.1', port });
+    sock.setTimeout(timeoutMs);
+    sock.on('connect', () => {
+      sock.destroy();
+      done(true);
+    });
+    sock.on('timeout', () => {
+      sock.destroy();
+      done(false);
+    });
+    sock.on('error', () => {
+      sock.destroy();
+      done(false);
+    });
+  });
+}
+
+async function probeLoopbackTarget(target, timeoutMs = 700) {
+  const port = target.port;
+  const probePath = target.probePath || '/';
+  const checkedAt = new Date().toISOString();
+
+  if (target.protocol === 'TCP') {
+    const tcp = await probeTcpLoopback(port, timeoutMs);
+    return {
+      id: target.id,
+      code: target.code,
+      name: target.name,
+      host: '127.0.0.1',
+      port,
+      category: target.category || 'Loopback',
+      description: target.description || '',
+      protocol: 'TCP',
+      ok: tcp.ok,
+      httpStatus: null,
+      rttMs: tcp.rttMs,
+      status: classifyProbeStatus({ ok: tcp.ok, rttMs: tcp.rttMs }),
+      checkedAt,
+    };
+  }
+
+  const httpResult = await new Promise((resolve) => {
+    const t0 = performance.now();
+    let settled = false;
+    const finish = (resObj) => {
+      if (settled) return;
+      settled = true;
+      resolve(resObj);
+    };
+    const req = http.request(
+      {
+        hostname: '127.0.0.1',
+        port,
+        path: probePath,
+        method: 'GET',
+        timeout: timeoutMs,
+        headers: { Host: `127.0.0.1:${port}` },
+      },
+      (res) => {
+        res.resume();
+        const rttMs = Math.round((performance.now() - t0) * 10) / 10;
+        finish({ ok: true, httpStatus: res.statusCode || 200, protocol: 'HTTP', rttMs, parseError: false });
+      }
+    );
+    req.on('timeout', () => {
+      req.destroy();
+      finish({ ok: false, httpStatus: null, protocol: 'HTTP', rttMs: null, parseError: false });
+    });
+    req.on('error', (err) => {
+      const parseError = String(err?.code || '').startsWith('HPE_');
+      finish({ ok: false, httpStatus: null, protocol: 'HTTP', rttMs: null, parseError });
+    });
+    req.end();
+  });
+
+  if (!httpResult.ok && httpResult.parseError) {
+    const tcp = await probeTcpLoopback(port, timeoutMs);
+    return {
+      id: target.id,
+      code: target.code,
+      name: target.name,
+      host: '127.0.0.1',
+      port,
+      category: target.category || 'Loopback',
+      description: target.description || '',
+      protocol: 'TCP',
+      ok: tcp.ok,
+      httpStatus: null,
+      rttMs: tcp.rttMs,
+      status: classifyProbeStatus({ ok: tcp.ok, rttMs: tcp.rttMs }),
+      checkedAt,
+    };
+  }
+
+  return {
+    id: target.id,
+    code: target.code,
+    name: target.name,
+    host: '127.0.0.1',
+    port,
+    category: target.category || 'Loopback',
+    description: target.description || '',
+    protocol: httpResult.protocol,
+    ok: httpResult.ok,
+    httpStatus: httpResult.httpStatus,
+    rttMs: httpResult.rttMs,
+    status: classifyProbeStatus({ ok: httpResult.ok, rttMs: httpResult.rttMs }),
+    checkedAt,
+  };
+}
+
+function scanLocalUnixSockets() {
+  const dirs = ['/run/zoth'];
+  if (process.env.XDG_RUNTIME_DIR) {
+    dirs.push(path.join(process.env.XDG_RUNTIME_DIR, 'zoth'));
+  }
+  const found = [];
+  const seen = new Set();
+  for (const dir of dirs) {
+    try {
+      if (!fs.existsSync(dir)) continue;
+      for (const entry of fs.readdirSync(dir)) {
+        const full = path.join(dir, entry);
+        if (seen.has(full)) continue;
+        try {
+          const st = fs.lstatSync(full);
+          if (st.isSocket()) {
+            seen.add(full);
+            found.push({
+              name: entry,
+              path: full.startsWith(HOME_DIR) ? full.replace(HOME_DIR, '~') : full,
+              mtime: st.mtime.toISOString(),
+            });
+          }
+        } catch {}
+      }
+    } catch {}
+  }
+  return found;
 }
 
 export function studioMiddleware() {
@@ -939,8 +1147,15 @@ export function studioMiddleware() {
       return;
     }
 
-    // Writes (launch terminals, run the local model, send via bridge) only from
-    // local pages: blocks CSRF from any website and DNS-rebinding hosts.
+    // Strict loopback Host validation on ALL /api/studio/* & /api/swarm/* requests
+    // (including GET and HEAD) to defeat DNS-rebinding exfiltration.
+    if (!isLocalHost(req)) {
+      send(res, 403, { error: 'Untrusted host blocked.' });
+      return;
+    }
+
+    // Writes (launch terminals, run the local model, send via bridge, ping) only from
+    // local origins: blocks CSRF from any website.
     if (req.method !== 'GET' && req.method !== 'HEAD' && !isLocalRequest(req)) {
       send(res, 403, { error: 'Cross-origin request blocked.' });
       return;
@@ -1629,6 +1844,90 @@ export function studioMiddleware() {
         return;
       }
 
+      if (req.method === 'GET' && url.pathname === '/api/studio/bus/telemetry') {
+        const timestamp = new Date().toISOString();
+        const nodes = await Promise.all(
+          LOOPBACK_BUS_TARGETS.map((target) => probeLoopbackTarget(target, 700))
+        );
+        const summary = computeLatencyStats(nodes);
+        const unixSockets = scanLocalUnixSockets();
+
+        const bridgeNode = nodes.find((n) => n.port === 8102);
+        let bridge = { online: false, port: 8102 };
+        if (bridgeNode?.ok) {
+          const [health, stats, live, channels] = await Promise.all([
+            requestJson(8102, '/api/health', { timeout: 700 }),
+            requestJson(8102, '/api/stats', { timeout: 700 }),
+            requestJson(8102, '/api/agents/live', { timeout: 900 }),
+            requestJson(8102, '/api/channels', { timeout: 700 }),
+          ]);
+          const normalizedChannels = normalizeBridgeChannels(channels.json?.channels || []);
+          bridge = {
+            online: Boolean(health.up),
+            port: 8102,
+            rttMs: bridgeNode.rttMs,
+            health: health.json || null,
+            stats: stats.json || null,
+            liveSummary: live.json?.summary || null,
+            museSessions: Array.isArray(live.json?.muse_sessions) ? live.json.muse_sessions.slice(0, 6) : [],
+            antigravitySessions: Array.isArray(live.json?.antigravity_sessions) ? live.json.antigravity_sessions.slice(0, 6) : [],
+            toolPolicies: Array.isArray(live.json?.tool_policies) ? live.json.tool_policies : [],
+            channels: normalizedChannels,
+          };
+        }
+
+        send(res, 200, {
+          schemaVersion: BUS_MONITOR_VERSION,
+          timestamp,
+          summary: {
+            ...summary,
+            totalTargets: nodes.length,
+          },
+          nodes,
+          bridge,
+          unixSockets,
+        });
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/bus/ping') {
+        let body;
+        try {
+          body = await readJsonBodyStrict(req, 16384);
+        } catch (err) {
+          send(res, err.statusCode || 400, { error: err.message || 'Invalid JSON body.' });
+          return;
+        }
+        const validation = validateLoopbackPort(body.port, { host: body.host });
+        if (!validation.valid) {
+          send(res, 400, { error: validation.error });
+          return;
+        }
+        const target = validation.target || {
+          id: `loopback-${validation.port}`,
+          code: `P${String(validation.port).slice(-3)}`,
+          name: `Loopback Port :${validation.port}`,
+          port: validation.port,
+          probePath: '/',
+          protocol: 'HTTP',
+          category: 'Custom',
+        };
+        const probed = await probeLoopbackTarget(target, 700);
+        send(res, 200, {
+          ok: probed.ok,
+          host: '127.0.0.1',
+          port: probed.port,
+          targetId: probed.id,
+          name: probed.name,
+          status: probed.status,
+          httpStatus: probed.httpStatus,
+          protocol: probed.protocol,
+          rttMs: probed.rttMs,
+          checkedAt: probed.checkedAt,
+        });
+        return;
+      }
+
       if (req.method === 'GET' && url.pathname === '/api/studio/bridge') {
         let [health, channels, stats] = await Promise.all([
           requestJson(8102, '/api/health'),
@@ -1645,11 +1944,45 @@ export function studioMiddleware() {
         if (!health.up) {
           send(res, 503, {
             error: 'Signal bridge is not answering on 127.0.0.1:8102.',
-            hint: 'node server/bridge.js --port 8102 or npm run zoth -- up',
+            hint: 'python3 server.py --port 8102 or sovereign-agent-bridge serve --port 8102',
           });
           return;
         }
         send(res, 200, { health: health.json, channels: channels.json, stats: stats.json });
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/bridge/live') {
+        const live = await requestJson(8102, '/api/agents/live', { timeout: 1200 });
+        if (!live.up) {
+          send(res, 503, {
+            error: 'Signal bridge live agent mesh is not answering on 127.0.0.1:8102.',
+            hint: 'python3 server.py --port 8102',
+          });
+          return;
+        }
+        send(res, 200, live.json || {});
+        return;
+      }
+
+      if (req.method === 'POST' && (url.pathname === '/api/studio/bridge/agents/message' || url.pathname === '/api/studio/bridge/agents/policy')) {
+        const upstream = url.pathname.endsWith('/message') ? '/api/agents/message' : '/api/agents/policy';
+        let body;
+        try {
+          body = await readJsonBodyStrict(req, 32768);
+        } catch (err) {
+          send(res, err.statusCode || 400, { error: err.message || 'Invalid JSON body.' });
+          return;
+        }
+        const result = await requestJson(8102, upstream, { method: 'POST', body, timeout: 4000 });
+        if (!result.up) {
+          send(res, 503, {
+            error: 'Signal bridge is not answering on 127.0.0.1:8102.',
+            hint: 'python3 server.py --port 8102',
+          });
+          return;
+        }
+        send(res, result.status || 200, result.json || { ok: true });
         return;
       }
 
@@ -1837,7 +2170,7 @@ export function studioMiddleware() {
         if (!result.up) {
           send(res, 503, {
             error: 'Signal bridge is not answering on 127.0.0.1:8102.',
-            hint: 'node server/bridge.js --port 8102 or npm run zoth -- up',
+            hint: 'python3 server.py --port 8102 or sovereign-agent-bridge serve --port 8102',
           });
           return;
         }

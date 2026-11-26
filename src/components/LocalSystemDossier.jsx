@@ -99,6 +99,7 @@ export default function LocalSystemDossier({
   funnelToolTitle,
   funnelToolTag = 'LOCAL SYSTEM',
   funnelToolDesc,
+  showSupportStrip = true,
   children,
 }) {
   const theme = useTheme();
@@ -114,8 +115,8 @@ export default function LocalSystemDossier({
   const cardBg = isDark ? '#0E1016' : '#FFFFFF';
   const codeBg = isDark ? '#06070A' : '#F3EFE6';
   const textPrimary = isDark ? '#F5F1E6' : '#101828';
-  const textSecondary = isDark ? '#A8A29E' : '#334155';
-  const textMuted = isDark ? '#78716C' : '#475569';
+  const textSecondary = isDark ? '#B8B2AA' : '#334155';
+  const textMuted = isDark ? '#A8A29E' : '#475569';
   const hairline = isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(16, 24, 40, 0.12)';
 
   const handleCopy = (text, key) => {
@@ -340,6 +341,7 @@ export default function LocalSystemDossier({
                 variant="outlined"
                 startIcon={<GitHubIcon sx={{ fontSize: 18 }} />}
                 sx={{
+                  minHeight: 44,
                   borderColor: accentBorder,
                   color: accent,
                   bgcolor: accentWash,
@@ -768,6 +770,7 @@ export default function LocalSystemDossier({
           toolCommand={cloneCommand || 'git clone https://github.com/NullAITech/zoth-studio-v2.git && cd zoth-studio-v2'}
           studioRepo="https://github.com/NullAITech/zoth-studio-v2"
           osRepo="https://github.com/NullAITech/zoth-os"
+          showSupportStrip={showSupportStrip}
         />
       </Container>
 

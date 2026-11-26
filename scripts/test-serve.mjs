@@ -48,6 +48,18 @@ try {
   check('Static /api/workstations.json 200 JSON (45 workstations)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"workstation_count":\s*45/.test(r.body), `${r.status}`);
   r = await req('/api/studio/brand/tokens');
   check('Brand tokens API 200 JSON (6 seals + dual-theme)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"ghostbyte-sanctum"/.test(r.body) && /"#FAF8F3"/.test(r.body), `${r.status}`);
+  r = await req('/api/studio/bus/telemetry');
+  check('Bus telemetry API 200 JSON (12 loopback nodes)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"schemaVersion":"2.3.0"/.test(r.body) && /"nodes":\[/.test(r.body), `${r.status}`);
+  r = await req('/api/studio/bus/telemetry', { headers: { Host: 'evil.example.invalid' } });
+  check('Bus telemetry GET DNS-rebinding blocked (403)', r.status === 403 && /Untrusted host blocked/.test(r.body), `${r.status} ${r.body.slice(0, 80)}`);
+  r = await req('/api/studio/bridge', { headers: { Host: 'evil.example.invalid' } });
+  check('Bridge GET DNS-rebinding blocked (403)', r.status === 403 && /Untrusted host blocked/.test(r.body), `${r.status} ${r.body.slice(0, 80)}`);
+  r = await req('/api/studio/bus/ping', { method: 'POST', headers: { Origin: base, 'Content-Type': 'application/json' }, body: JSON.stringify({ port: PORT }) });
+  check('Bus ping local loopback port (200 ok)', r.status === 200 && /"ok":true/.test(r.body) && /"host":"127.0.0.1"/.test(r.body), `${r.status} ${r.body.slice(0, 120)}`);
+  r = await req('/api/studio/bus/ping', { method: 'POST', headers: { Origin: base, 'Content-Type': 'application/json' }, body: JSON.stringify({ host: '169.254.169.254', port: 80 }) });
+  check('Bus ping SSRF external/metadata host rejected (400)', r.status === 400, `${r.status} ${r.body.slice(0, 100)}`);
+  r = await req('/api/studio/bus/ping', { method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/json' }, body: JSON.stringify({ port: PORT }) });
+  check('Bus ping cross-origin blocked (403)', r.status === 403, `${r.status}`);
   r = await req('/api/studio/ax/audit');
   check('AX audit API 200 JSON (driftCount 0)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"driftCount":0/.test(r.body), `${r.status} ${r.body.slice(0, 180)}`);
   r = await req('/api/studio/ax/validate', { method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/json' }, body: '{"spec":"robots.txt","content":"User-agent: *\\nAllow: /"}' });

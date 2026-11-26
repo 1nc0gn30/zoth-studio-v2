@@ -103,15 +103,15 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
   } else if (routePath === '/bridges') {
     extraContent = `
       <section style="margin-top: 1.5rem; padding: 1.25rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; background: rgba(212,175,55,0.03);">
-        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Sovereign Bridges // E2EE Signal Mesh & Loopback Bus Monitor</h2>
-        <p style="color: #D1D5DB; line-height: 1.6;">End-to-end encrypted inter-agent communication bus listening on port 8102. Simplex channels eliminate single-point-of-failure deadlocks across peer nodes.</p>
+        <h2 style="font-size: 1.35rem; color: #D4AF37; margin-top: 0;">Sovereign Bridges // Zero-Trust Loopback IPC &amp; Signal Bridge</h2>
+        <p style="color: #D1D5DB; line-height: 1.6;">Zero-dependency Python stdlib loopback signal bridge listening on 127.0.0.1:8102 with HKDF-SHA256 / SHA256-CTR / HMAC-SHA256 authenticated envelopes and hardened Studio NOC telemetry at <a href="/workstations/bus-monitor" style="color: #D4AF37;">/workstations/bus-monitor</a>.</p>
 
-        <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">Core Sovereign Nodes</h3>
+        <h3 style="color: #D4AF37; font-size: 1rem; margin-top: 1rem;">Core Sovereign Loopback Endpoints</h3>
         <ul style="color: #9CA3AF; line-height: 1.8;">
-          <li><strong>Azoth (Prime Architect):</strong> Port :8790 | Lead consensus coordinator</li>
-          <li><strong>Athena (Cognitive Arbiter):</strong> Socratic synthesis & verification</li>
-          <li><strong>Lucy (Synaptic Latent Stream):</strong> Port :8094 | STDP memory routing</li>
-          <li><strong>Lycan (OWASP Enclave Sentinel):</strong> Port :8787 | Zero-egress sandbox enforcement</li>
+          <li><strong>Zoth Studio NOC (:3000):</strong> Hardened /api/studio/bus/telemetry &amp; /api/studio/bus/ping</li>
+          <li><strong>Sovereign Agent Bridge (:8102):</strong> Python stdlib /api/health, /api/stats, /api/send, /api/agents/live</li>
+          <li><strong>Neuro-Memory Daemon (:8094):</strong> STDP synaptic vector memory routing</li>
+          <li><strong>Zoth Vault Daemon (:8787):</strong> Encrypted local secrets enclave</li>
         </ul>
       </section>
     `;

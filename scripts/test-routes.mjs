@@ -70,6 +70,8 @@ const SAMPLE_ROUTES = [
   '/tools/ax-powerhouse',
   '/workstations/brand',
   '/tools/brand',
+  '/workstations/bus-monitor',
+  '/tools/bus-monitor',
   '/workstations/mission-control',
   '/docs/math/stdp',
 ];
@@ -401,6 +403,38 @@ async function main() {
         });
         if (!axCheck.hasTitle || !axCheck.hasSoftwareApp || !axCheck.hasFaq || !axCheck.hasAxWorkstation) {
           failureReason = `ax-powerhouse invariants failed: ${JSON.stringify(axCheck)}`;
+        }
+      } else if (route === '/workstations/bus-monitor' || route === '/tools/bus-monitor') {
+        const busCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          return {
+            hasTitle: document.title.includes('Zoth Swarm NOC & Signal Bridge'),
+            hasH1: h1Text.includes('Zoth Swarm NOC & Signal Bridge'),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasBusWorkstation: Boolean(document.querySelector('[data-testid="bus-monitor-workstation"]')),
+          };
+        });
+        if (!busCheck.hasTitle || !busCheck.hasH1 || !busCheck.hasSoftwareApp || !busCheck.hasFaq || !busCheck.hasBusWorkstation) {
+          failureReason = `bus-monitor invariants failed: ${JSON.stringify(busCheck)}`;
+        }
+      } else if (route === '/bridges') {
+        const brCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          return {
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+          };
+        });
+        if (!brCheck.hasSoftwareApp || !brCheck.hasFaq) {
+          failureReason = `/bridges invariants failed: ${JSON.stringify(brCheck)}`;
         }
       }
     } catch (err) {

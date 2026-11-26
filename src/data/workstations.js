@@ -475,11 +475,14 @@ export const workstations = [
   {
     id: "bus-monitor",
     name: "Zoth Swarm NOC & Signal Bridge",
-    path: "/studio/bus-monitor.html",
+    path: "/workstations/bus-monitor",
     band: "Swarm & Consensus",
     type: "enclave_daemon",
-    description: "Decentralized agent bus monitor with E2EE WebSocket loopback pinger and NOC telemetry.",
-    alsoInApp: "/bridges"
+    executionType: "hybrid",
+    version: "2.3.0",
+    pullCommand: "zoth open bus-monitor",
+    description: "Real-time loopback service NOC, measured RTT pinger, Signal Bridge session telemetry, and HKDF-SHA256/HMAC envelope verifier.",
+    alsoInApp: "/workstations/bus-monitor"
   },
   {
     id: "math-pillars",

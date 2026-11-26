@@ -118,7 +118,7 @@ Zoth Studio v2 exposes **45 workstations** organized across Build, Security, Swa
 19. `hexstrike`: HEXSTRIKE // Threat & Security Radar — local security sentinel and exploit sandbox.
 20. `netrunner-memory`: Lucy Oracle Biomorphic Memory Hub — STDP biomorphic spike-timing vector memory on :8094.
 21. `consensus`: Byzantine Consensus Battle Arena — 3-agent Byzantine AST synthesis arena and truth arbitration.
-22. `bus-monitor`: Zoth Swarm NOC & Signal Bridge — decentralized agent bus monitor with E2EE WebSocket pinger.
+22. `bus-monitor`: Zoth Swarm NOC & Signal Bridge — real-time loopback service NOC, measured RTT pinger, Signal Bridge session telemetry, and HKDF-SHA256/HMAC envelope verifier (`/workstations/bus-monitor`).
 23. `math-pillars`: Six Mathematical Pillars Academy — formal mathematical foundations and proofs.
 (Plus 22 additional integrated enclave & tool workstations — **45 workstations** total; see `/workstations`.)
 
@@ -148,7 +148,7 @@ Zoth Studio v2 ships **85 free open-access tools** (`44` in-browser/WebGPU + `41
 20. `payload-entropy-studio`: In-browser Shannon entropy analysis tool for detecting obfuscated payloads.
 21. `polyglot-framework-exporter`: In-browser exporter from React/JSX to HTML/CSS, Vue, Svelte, and Solid.js.
 22. `robots-txt-auditor`: Robots.txt and frontier-crawler auditor.
-23. `sovereign-agent-bridge`: E2EE WebSocket signal protocol and Simplex peer mesh IPC communicator (`:8102`).
+23. `sovereign-agent-bridge`: Zero-dependency Python stdlib loopback signal bridge with HKDF-SHA256 / HMAC-SHA256 envelopes (`:8102`).
 24. `webmcp-protocol-inspector`: In-browser W3C WebMCP & MCP JSON-RPC inspector and tool schema firewall.
 25. `zoth-memory-vault`: Chronicle Vault — Hermes + AGY continuity recall and prompt playbook workstation (`:8161`).
 (Full 85-tool machine catalog at https://zoth.nullai.tech/api/tools.json.)
@@ -158,7 +158,7 @@ Zoth Studio v2 ships **85 free open-access tools** (`44` in-browser/WebGPU + `41
 When running the full Zoth Studio repository locally, daemons bind strictly to local loopback (`127.0.0.1`):
 - Port `3000`: Zoth Studio v2 Web Dashboard & Loopback Studio API (`/api/studio/ax/audit`, `/api/studio/ax/validate`, `/api/studio/composer/*`, `/api/tools.json`)
 - Port `8094`: Neuro Memory Daemon (STDP Synaptic Vectors + SQLite vec0)
-- Port `8102`: Sovereign Agent Bridge (WebSocket IPC Message Bus)
+- Port `8102`: Sovereign Agent Bridge (Python Stdlib Loopback Signal Bridge)
 - Port `8484`: Operator Deck PTY Terminal
 - Port `8787`: Adytum Keymaster Hardware Vault (Argon2id + XChaCha20-Poly1305)
 - Port `8790`: Azoth Local Agent / Archon Core Orchestrator

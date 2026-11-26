@@ -54,9 +54,9 @@ export const siteConfig = {
       type: 'article',
     },
     '/bridges': {
-      title: 'Sovereign Bridges // E2EE Signal Mesh & Loopback Bus Monitor',
-      description: 'End-to-end encrypted inter-agent communication, WebSocket packet pinger, and loopback mesh channels with zero external leakage.',
-      keywords: 'signal bridge, sovereign communications, E2EE mesh, inter-agent bus, zero-leakage',
+      title: 'Sovereign Bridges // Zero-Trust Loopback IPC & Signal Bridge',
+      description: 'Zero-dependency Python loopback signal bridge (:8102), hardened Studio NOC telemetry (:3000), HKDF-SHA256/HMAC-SHA256 envelopes, and Tailscale/WireGuard transport.',
+      keywords: 'signal bridge, sovereign communications, loopback IPC, HKDF-SHA256, HMAC-SHA256, Zoth Swarm NOC, zero-egress',
       type: 'article',
     },
     '/arsenal': {
@@ -198,6 +198,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, ${station.band}, multi-agent DAG composer, local Ollama pipeline, Zoth Studio workstation`
         : station.id === 'brand'
         ? `${station.name}, alchemical seals, parametric SVG seal generator, cyber-sigils, Editorial Ivory Light, Obsidian Gold Dark, WCAG 2.1 contrast checker, W3C design tokens, Zoth Studio`
+        : station.id === 'bus-monitor'
+        ? `${station.name}, loopback service NOC, measured RTT pinger, Signal Bridge telemetry, HKDF-SHA256, HMAC-SHA256 envelope verifier, zero-egress IPC, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -220,6 +222,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, ${station.band}, multi-agent DAG composer, local Ollama pipeline, Zoth Studio workstation`
         : station.id === 'brand'
         ? `${station.name}, alchemical seals, parametric SVG seal generator, cyber-sigils, Editorial Ivory Light, Obsidian Gold Dark, WCAG 2.1 contrast checker, W3C design tokens, Zoth Studio`
+        : station.id === 'bus-monitor'
+        ? `${station.name}, loopback service NOC, measured RTT pinger, Signal Bridge telemetry, HKDF-SHA256, HMAC-SHA256 envelope verifier, zero-egress IPC, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -266,6 +270,7 @@ export function getAllStaticRoutes() {
   routes['/tools/agent-composer'] = getRouteMeta('/tools/agent-composer');
   routes['/tools/ax-powerhouse'] = getRouteMeta('/tools/ax-powerhouse');
   routes['/tools/brand'] = getRouteMeta('/tools/brand');
+  routes['/tools/bus-monitor'] = getRouteMeta('/tools/bus-monitor');
 
   // Add all math pillars
   mathPillars.forEach((pillar) => {
@@ -616,6 +621,49 @@ export function generateSchemaGraph(path = '/') {
       'author': { '@type': 'Organization', 'name': 'NullAI Tech' },
       'publisher': { '@id': `${siteConfig.url}/#organization` }
     });
+  } else if (path === '/bridges') {
+    graph.push({
+      '@type': 'SoftwareApplication',
+      '@id': `${fullUrl}#bridges-application`,
+      'name': 'Sovereign Agent Bridge & Zoth Swarm NOC',
+      'applicationCategory': 'DeveloperApplication',
+      'operatingSystem': 'Linux, macOS, Windows, ZothOS',
+      'softwareVersion': '2.3.0',
+      'description': routeMeta.description,
+      'author': { '@id': 'https://nullai.tech/#person' },
+      'creator': { '@id': 'https://nullai.tech/#person' },
+      'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' }
+    });
+    graph.push({
+      '@type': 'FAQPage',
+      '@id': `${fullUrl}#faq`,
+      'mainEntity': [
+        {
+          '@type': 'Question',
+          'name': 'How does Sovereign Agent Bridge connect local AI agents without exposing public ports?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Sovereign Agent Bridge runs a zero-dependency Python stdlib HTTP daemon bound to 127.0.0.1:8102 using HKDF-SHA256, SHA256-CTR, and HMAC-SHA256 authenticated envelopes, while Zoth Studio (:3000) proxies telemetry through /api/studio/bus/* and /api/studio/bridge* with strict 403 rejection on untrusted Host or cross-origin requests.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'Where can I run live loopback RTT sweeps and inspect Signal Bridge sessions?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Open the interactive Zoth Swarm NOC & Signal Bridge workstation at /workstations/bus-monitor to probe 12 core loopback services, ping individual 127.0.0.1 ports, inspect live :8102 sessions, verify HMAC-SHA256 envelopes offline via WebCrypto, and export sanitized JSON/CSV/Markdown diagnostic reports.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'Is Sovereign Agent Bridge free and open-access without paywalls?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Yes. Both Sovereign Agent Bridge and the Zoth Swarm NOC workstation are 100% free and open-access with zero paywalls, zero license gates, and optional community support via Buy Us a Coffee (Stripe) or Solana tips.'
+          }
+        }
+      ]
+    });
   } else if (path === '/webgen') {
     graph.push({
       '@type': 'SoftwareApplication',
@@ -825,6 +873,39 @@ export function generateSchemaGraph(path = '/') {
               'acceptedAnswer': {
                 '@type': 'Answer',
                 'text': 'Yes. Every SVG seal, 1024px PNG export, studio emblem download, and design-token bundle is 100% free and unlocked by default with zero paywalls or license gates, supported optionally by Buy Us a Coffee (Stripe) or Solana community tips.'
+              }
+            }
+          ]
+        });
+      }
+
+      if (station.id === 'bus-monitor') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What loopback services and telemetry does Zoth Swarm NOC & Signal Bridge v2.3.0 monitor?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Zoth Swarm NOC & Signal Bridge runs real concurrent loopback TCP and HTTP probes via GET /api/studio/bus/telemetry across 12 core ZothOS services (:3000 Studio, :8094 Neuro-Memory, :8102 Signal Bridge, :5225 SimpleX CLI, :8787 Vault, :11434 Ollama, :18000 AGY-Hermes, :8110 Budget Sentinel, :8114 Voice Call, :8135 Adytum/Netrunner, :8136 AZOTH Agent, and :8989 Swarm Coordinator), measures real p50/p95 RTT, inspects live :8102 agent sessions, and detects Unix domain sockets under /run/zoth.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does the Bus Monitor prevent SSRF, DNS rebinding, and external data leaks?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'POST /api/studio/bus/ping restricts probes strictly to 127.0.0.1 unprivileged ports (1024..65535) and rejects any external host or metadata IP with HTTP 400. All /api/studio/* GET and POST endpoints enforce strict loopback Host header allowlists (returning 403 on untrusted hosts) and Origin checks on writes, while HMAC-SHA256 envelope signing runs 100% client-side in WebCrypto with zero external requests.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Zoth Swarm NOC & Signal Bridge free and open-access without paywalls?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Every loopback sweep, targeted port ping, WebCrypto HMAC-SHA256 envelope verification, and JSON/CSV/Markdown diagnostic report export is 100% free and open-access with zero paywalls, supported optionally via Stripe Buy Us a Coffee or Solana community tips.'
               }
             }
           ]

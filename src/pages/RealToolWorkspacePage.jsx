@@ -36,6 +36,7 @@ import { useReality } from '../context/RealityContext';
 import AgentComposerGodModeTool from '../components/tools/AgentComposerGodModeTool';
 import AxPowerhouseGodModeTool from '../components/tools/AxPowerhouseGodModeTool';
 import BrandAssetsForgeGodModeTool from '../components/tools/BrandAssetsForgeGodModeTool';
+import BusMonitorGodModeTool from '../components/tools/BusMonitorGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -268,7 +269,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'hexstrike': HexStrikeGodModeTool,
   'netrunner-memory': NeuroMemoryGodModeTool,
   'consensus': SwarmCivilizationGodModeTool,
-  'bus-monitor': SovereignBridgeGodModeTool,
+  'bus-monitor': BusMonitorGodModeTool,
   'math-pillars': ZothPillGodModeTool,
 };
 
@@ -284,7 +285,6 @@ const WORKSTATION_TOOL_ALIASES = {
   'subsweep': 'subsweep-lead-scanner',
   'hexstrike': 'hexstrike-arsenal',
   'netrunner-memory': 'neuro-memory-daemon',
-  'bus-monitor': 'sovereign-agent-bridge',
 };
 
 const DEDICATED_SITES = {
@@ -1151,7 +1151,7 @@ export default function RealToolWorkspacePage() {
                     fontSize: '0.72rem',
                     textTransform: 'none',
                     bgcolor: localViewMode === 'webapp' ? emeraldText : 'transparent',
-                    color: localViewMode === 'webapp' ? '#FFFFFF' : emeraldText,
+                    color: localViewMode === 'webapp' ? (isDark ? '#06130E' : '#FFFFFF') : emeraldText,
                     borderColor: emeraldBorder,
                   }}
                 >

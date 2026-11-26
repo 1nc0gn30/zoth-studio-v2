@@ -42,7 +42,7 @@ const ROUTES = [
   { match: /^\/bridges\/?$/, clip: 'bridges', label: 'Command Bridges', kicker: 'Loopback & Relay Topology · :8102', accent: 'gold', brailleShape: 'dag' },
   { match: /^\/tools\/[^/]+\/?$/, clip: 'tools', label: 'Repository Dossier', kicker: 'Local CLI & Daemon Specification', accent: 'gold', dynamic: 'toolId', brailleShape: 'grid' },
   { match: /^\/tools\/?$/, clip: 'tools', label: 'Tool Repositories', kicker: `${microTools.length} Local-First Packages · Git & CLI`, accent: 'gold', brailleShape: 'grid' },
-  { match: /^\/workstations(\/.*)?$/, clip: 'workstations', label: 'Architecture Dossiers', kicker: '43 System & Daemon Specifications', accent: 'gold', brailleShape: 'astrolabe' },
+  { match: /^\/workstations(\/.*)?$/, clip: 'workstations', label: 'Architecture Dossiers', kicker: `${workstations.length} System & Daemon Specifications`, accent: 'gold', brailleShape: 'astrolabe' },
   { match: /^\/memory\/docs\/?$/, clip: 'memory', label: 'Memory · Docs', kicker: 'Synaptic Graph Specification', accent: 'purple', brailleShape: 'synapse' },
   { match: /^\/memory\/?$/, clip: 'memory', label: 'Neuro Memory', kicker: 'STDP Synaptic Graph · :8094', accent: 'purple', brailleShape: 'synapse' },
   { match: /^\/consensus\/?$/, clip: 'consensus', label: 'Byzantine Consensus', kicker: 'Multi-Model Verification · :8106', accent: 'cyan', brailleShape: 'quorum' },

@@ -35,7 +35,7 @@ export const enclaveBinds = [
 export const legacyWorkstations = [
   { file: 'swarm.html', job: '21-agent pantheon control plane and IPC topology', to: '/swarm' },
   { file: 'signal-bridge.html', job: 'E2EE WebSocket signal bridge and packet pinger', to: '/tools/sovereign-agent-bridge' },
-  { file: 'bus-monitor.html', job: 'Loopback bus channels and mesh latency', to: '/tools/sovereign-agent-bridge' },
+  { file: 'bus-monitor.html', job: 'Loopback bus NOC, measured RTT pinger, and HKDF-SHA256/HMAC envelope inspector', to: '/workstations/bus-monitor' },
   { file: 'netrunner-memory.html', job: 'Biomorphic STDP memory daemon and vector search', to: '/memory' },
   { file: 'consensus.html', job: 'Socratic debate arena and AST diff console', to: '/arsenal' },
   { file: 'fusion-arena.html', job: 'Multi-model fusion arbitration', to: '/arsenal' },
