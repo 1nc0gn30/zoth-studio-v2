@@ -1186,48 +1186,6 @@ export function AeoGraphEngineTool() {
 }
 
 /* ==========================================================================
-   TOOL 13: CWV Speed Engine (cwv-speed-engine)
-   Features: Radial Performance Dials, Asset Waterfall Breakdown
-   ========================================================================== */
-export function CwvSpeedEngineTool() {
-  const theme = useTheme();
-  return (
-    <Box sx={{ mt: 1 }}>
-      <Typography variant="h6" sx={{ fontWeight: 800, color: gold(theme), mb: 0.5 }}>
-        Core Web Vitals Speed Diagnostic & Minifier
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2.5 }}>
-        Diagnoses Largest Contentful Paint (LCP), Cumulative Layout Shift (CLS), and Interaction to Next Paint (INP).
-      </Typography>
-
-      <Grid container spacing={2}>
-        <Grid xs={4}>
-          <Paper sx={{ p: 2, textAlign: 'center', bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
-            <Typography variant="caption" color="text.secondary">LCP (Speed)</Typography>
-            <Typography variant="h4" sx={{ fontWeight: 800, color: 'var(--zs-emerald)', my: 0.5 }}>0.42s</Typography>
-            <Chip label="GOOD" size="small" sx={{ bgcolor: successBg(theme), color: successFg(theme), fontWeight: 800 }} />
-          </Paper>
-        </Grid>
-        <Grid xs={4}>
-          <Paper sx={{ p: 2, textAlign: 'center', bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
-            <Typography variant="caption" color="text.secondary">CLS (Stability)</Typography>
-            <Typography variant="h4" sx={{ fontWeight: 800, color: 'var(--zs-emerald)', my: 0.5 }}>0.001</Typography>
-            <Chip label="GOOD" size="small" sx={{ bgcolor: successBg(theme), color: successFg(theme), fontWeight: 800 }} />
-          </Paper>
-        </Grid>
-        <Grid xs={4}>
-          <Paper sx={{ p: 2, textAlign: 'center', bgcolor: theme.palette.background.paper, border: `1px solid ${theme.palette.divider}`, borderRadius: 2 }}>
-            <Typography variant="caption" color="text.secondary">INP (Response)</Typography>
-            <Typography variant="h4" sx={{ fontWeight: 800, color: 'var(--zs-emerald)', my: 0.5 }}>18ms</Typography>
-            <Chip label="GOOD" size="small" sx={{ bgcolor: successBg(theme), color: successFg(theme), fontWeight: 800 }} />
-          </Paper>
-        </Grid>
-      </Grid>
-    </Box>
-  );
-}
-
-/* ==========================================================================
    TOOL 14: SubSweep Lead Scanner (subsweep-lead-scanner)
    Features: Real In-Browser DoH Enumeration + Zero-Key Shodan Port & CVE Recon
    ========================================================================== */

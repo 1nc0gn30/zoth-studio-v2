@@ -8,224 +8,113 @@ import {
   Unstable_Grid2 as Grid,
   Stack,
   TextField,
-  Divider,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Tabs,
   Tab,
   Switch,
   FormControlLabel,
-  LinearProgress,
+  ToggleButton,
+  ToggleButtonGroup,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import SpeedIcon from '@mui/icons-material/Speed';
 import BoltIcon from '@mui/icons-material/Bolt';
-import LockIcon from '@mui/icons-material/Lock';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DownloadIcon from '@mui/icons-material/Download';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import CheckIcon from '@mui/icons-material/Check';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
+import {
+  DEFAULT_SAMPLE_HTML,
+  auditHtml,
+  transformHtml,
+  compareDiff,
+  generateSpeculationRules,
+  auditPerformanceBudget,
+} from '../../utils/cwvSpeedEngine.js';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const STRIPE_URL = 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X';
-
-const SAMPLE_HTML = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Enterprise SaaS Landing</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:400,700">
-  <link rel="stylesheet" href="/assets/vendor-bundle.css">
-  <script src="https://cdn.example.com/analytics-heavy.js"></script>
-  <script src="/assets/app-main.js"></script>
-</head>
-<body>
-  <header class="hero">
-    <img src="/assets/hero-dashboard-4k.png" alt="Hero Dashboard">
-    <h1>Next-Gen Autonomous Cloud Telemetry</h1>
-  </header>
-  <section class="gallery">
-    <img src="/assets/feature-1.png" alt="Feature 1">
-    <img src="/assets/feature-2.png" alt="Feature 2">
-  </section>
-</body>
-</html>`;
 
 export default function CwvSpeedEngineGodModeTool() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
-  const [htmlInput, setHtmlInput] = useState(SAMPLE_HTML);
+  const [htmlInput, setHtmlInput] = useState(DEFAULT_SAMPLE_HTML);
+  const [device, setDevice] = useState('mobile');
   const [activeTab, setActiveTab] = useState(0);
   const [optDeferScripts, setOptDeferScripts] = useState(true);
   const [optHeroPriority, setOptHeroPriority] = useState(true);
   const [optImageDims, setOptImageDims] = useState(true);
   const [optFontSwap, setOptFontSwap] = useState(true);
   const [optPreconnect, setOptPreconnect] = useState(true);
-
-  const [isPro, setIsPro] = useState(true);
-  const [paywallOpen, setPaywallOpen] = useState(false);
-  const [licenseInput, setLicenseInput] = useState('');
-  const [copied, setCopied] = useState(false);
+  const [specAggressiveness, setSpecAggressiveness] = useState('balanced');
+  const [diffCandidateOverride, setDiffCandidateOverride] = useState('');
+  const [copiedKey, setCopiedKey] = useState('');
 
   const gaugeCanvasRef = useRef(null);
 
-  useEffect(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('licensed') === 'true' || localStorage.getItem('cwv_speed_pro_active') === 'true' || localStorage.getItem('pro_licensed') === 'true') {
-        setIsPro(true);
-        localStorage.setItem('cwv_speed_pro_active', 'true');
+  // Strict WCAG AA (>= 4.5:1) dual-theme tokens
+  const tk = isDark
+    ? {
+        surface: '#0D0F16',
+        subtle: '#131622',
+        codeBg: '#090B12',
+        codeText: '#E2E8F0',
+        eyebrow: '#60A5FA',
+        gold: '#E5C158',
+        good: '#34D399',
+        goodBg: 'rgba(16,185,129,0.16)',
+        warn: '#FBBF24',
+        warnBg: 'rgba(245,158,11,0.16)',
+        poor: '#F87171',
+        poorBg: 'rgba(239,68,68,0.16)',
+        primaryBtnBg: '#10B981',
+        primaryBtnFg: '#08080B',
       }
-    } catch {
-      // ignore
-    }
-  }, []);
+    : {
+        surface: '#FFFFFF',
+        subtle: '#F3EFE6',
+        codeBg: '#F3EFE6',
+        codeText: '#101828',
+        eyebrow: '#0369A1',
+        gold: '#7A5808',
+        good: '#046C4E',
+        goodBg: '#ECFDF5',
+        warn: '#92400E',
+        warnBg: '#FEF3C7',
+        poor: '#B91C1C',
+        poorBg: '#FEE2E2',
+        primaryBtnBg: '#046C4E',
+        primaryBtnFg: '#FFFFFF',
+      };
 
-  // Real Client-Side DOM AST Diagnostic & Transformer
   const analysis = useMemo(() => {
-    const raw = htmlInput || '';
-    const scriptMatches = [...raw.matchAll(/<script\b([^>]*)>/gi)];
-    const blockingScripts = scriptMatches.filter(
-      (m) => /src=/i.test(m[1]) && !/\b(defer|async|type=["']module["'])\b/i.test(m[1])
-    );
-
-    const imgMatches = [...raw.matchAll(/<img\b([^>]*)>/gi)];
-    const missingDims = imgMatches.filter((m) => !/\bwidth=/i.test(m[1]) || !/\bheight=/i.test(m[1]));
-    const missingLazy = imgMatches.slice(1).filter((m) => !/\bloading=/i.test(m[1]));
-    const heroImgMissingPriority = imgMatches.length > 0 && !/\bfetchpriority=["']high["']/i.test(imgMatches[0][1]);
-
-    const fontLinks = [...raw.matchAll(/<link\b[^>]*fonts\.googleapis\.com[^>]*>/gi)];
-    const missingDisplaySwap = fontLinks.filter((m) => !/display=swap/i.test(m[0]));
-
-    const issues = [];
-    if (blockingScripts.length > 0) {
-      issues.push({
-        severity: 'CRITICAL',
-        metric: 'LCP / FCP',
-        title: `${blockingScripts.length} Render-Blocking <script> Tag(s) in <head>`,
-        fix: 'Add defer or modulepreload to unblock HTML parser and cut LCP by ~680ms.',
-      });
-    }
-    if (missingDims.length > 0) {
-      issues.push({
-        severity: 'HIGH',
-        metric: 'CLS',
-        title: `${missingDims.length} <img> Element(s) Missing Explicit width/height`,
-        fix: 'Inject intrinsic aspect-ratio dimensions (1200×675) to eliminate layout shift.',
-      });
-    }
-    if (heroImgMissingPriority) {
-      issues.push({
-        severity: 'MEDIUM',
-        metric: 'LCP',
-        title: 'Above-the-Fold Hero Image Missing fetchpriority="high"',
-        fix: 'Prioritize LCP hero image discovery in browser preload scanner.',
-      });
-    }
-    if (missingLazy.length > 0) {
-      issues.push({
-        severity: 'MEDIUM',
-        metric: 'LCP / Bandwidth',
-        title: `${missingLazy.length} Below-the-Fold Image(s) Eagerly Loaded`,
-        fix: 'Add loading="lazy" decoding="async" to offscreen media.',
-      });
-    }
-    if (missingDisplaySwap.length > 0) {
-      issues.push({
-        severity: 'LOW',
-        metric: 'CLS / FCP',
-        title: 'Google Fonts Stylesheet Missing &display=swap',
-        fix: 'Append &display=swap and preconnect to fonts.gstatic.com.',
-      });
-    }
-
-    // Compute baseline vs transformed metrics
-    const baseLcp = +(1.15 + blockingScripts.length * 0.62 + (heroImgMissingPriority ? 0.38 : 0)).toFixed(2);
-    const baseCls = +(0.004 + missingDims.length * 0.068).toFixed(3);
-    const baseInp = Math.round(32 + blockingScripts.length * 48);
-
-    const optLcp = +(
-      Math.max(
-        0.38,
-        baseLcp -
-          (optDeferScripts ? blockingScripts.length * 0.58 : 0) -
-          (optHeroPriority && heroImgMissingPriority ? 0.34 : 0) -
-          (optPreconnect ? 0.14 : 0)
-      )
-    ).toFixed(2);
-    const optCls = +(Math.max(0.001, baseCls - (optImageDims ? missingDims.length * 0.067 : 0))).toFixed(3);
-    const optInp = Math.max(16, baseInp - (optDeferScripts ? blockingScripts.length * 42 : 0));
-
-    const score = Math.min(
-      100,
-      Math.max(
-        35,
-        Math.round(
-          100 -
-            Math.max(0, (optLcp - 0.8) * 18) -
-            Math.max(0, optCls * 120) -
-            Math.max(0, (optInp - 24) * 0.25)
-        )
-      )
-    );
-
-    // Perform AST Speed Transformation
-    let transformed = raw;
-    if (optPreconnect && !/rel=["']preconnect["']/i.test(transformed)) {
-      transformed = transformed.replace(
-        /<head>/i,
-        `<head>\n  <!-- [CWV Speed Engine] Zero-Latency Preconnect Hints -->\n  <link rel="preconnect" href="https://fonts.googleapis.com">\n  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>`
-      );
-    }
-    if (optFontSwap) {
-      transformed = transformed.replace(
-        /(fonts\.googleapis\.com\/css[^"']*)/gi,
-        (m) => (m.includes('display=swap') ? m : `${m}&display=swap`)
-      );
-    }
-    if (optDeferScripts) {
-      transformed = transformed.replace(
-        /<script\b((?=[^>]*\bsrc=)[^>]*)>/gi,
-        (full, attrs) => (/\b(defer|async|type=["']module["'])\b/i.test(attrs) ? full : `<script${attrs} defer>`)
-      );
-    }
-    let imgIdx = 0;
-    transformed = transformed.replace(/<img\b([^>]*)>/gi, (full, attrs) => {
-      imgIdx += 1;
-      let nextAttrs = attrs;
-      if (optImageDims && !/\bwidth=/i.test(nextAttrs)) {
-        nextAttrs += imgIdx === 1 ? ' width="1280" height="720"' : ' width="640" height="400"';
-      }
-      if (optHeroPriority && imgIdx === 1 && !/\bfetchpriority=/i.test(nextAttrs)) {
-        nextAttrs += ' fetchpriority="high" decoding="sync"';
-      } else if (imgIdx > 1 && !/\bloading=/i.test(nextAttrs)) {
-        nextAttrs += ' loading="lazy" decoding="async"';
-      }
-      return `<img${nextAttrs}>`;
+    const before = auditHtml(htmlInput, device);
+    const { transformed, changes } = transformHtml(htmlInput, {
+      optDeferScripts,
+      optHeroPriority,
+      optImageDims,
+      optFontSwap,
+      optPreconnect,
     });
+    const after = auditHtml(transformed, device);
+    const diffTarget = diffCandidateOverride.trim() ? diffCandidateOverride : transformed;
+    const diff = compareDiff(htmlInput, diffTarget, device);
+    const speculation = generateSpeculationRules(htmlInput, 'https://example.com', specAggressiveness);
+    const budget = auditPerformanceBudget(htmlInput);
+    return { before, after, transformed, changes, diff, speculation, budget };
+  }, [
+    htmlInput,
+    device,
+    optDeferScripts,
+    optHeroPriority,
+    optImageDims,
+    optFontSwap,
+    optPreconnect,
+    specAggressiveness,
+    diffCandidateOverride,
+  ]);
 
-    return {
-      issues,
-      baseLcp,
-      baseCls,
-      baseInp,
-      optLcp,
-      optCls,
-      optInp,
-      score,
-      transformed,
-    };
-  }, [htmlInput, optDeferScripts, optHeroPriority, optImageDims, optFontSwap, optPreconnect]);
-
-  // Draw Tachometer Canvas
+  // Tachometer Canvas (theme-calibrated contrast)
   useEffect(() => {
     const canvas = gaugeCanvasRef.current;
     if (!canvas) return;
@@ -238,143 +127,127 @@ export default function CwvSpeedEngineGodModeTool() {
     const cy = h * 0.66;
     const r = 68;
 
-    // Background Arc
-    ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(15,23,42,0.12)';
+    ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(16,24,40,0.14)';
     ctx.lineWidth = 11;
     ctx.lineCap = 'round';
     ctx.beginPath();
     ctx.arc(cx, cy, r, Math.PI * 0.8, Math.PI * 2.2);
     ctx.stroke();
 
-    // Foreground Score Arc
-    const pct = analysis.score / 100;
+    const pct = analysis.after.score / 100;
     const endAngle = Math.PI * 0.8 + pct * Math.PI * 1.4;
-    const color = analysis.score >= 90 ? '#10B981' : analysis.score >= 70 ? '#F59E0B' : '#EF4444';
-    ctx.strokeStyle = color;
+    const arcColor = analysis.after.score >= 90 ? tk.good : analysis.after.score >= 50 ? tk.warn : tk.poor;
+    ctx.strokeStyle = arcColor;
     ctx.lineWidth = 11;
     ctx.beginPath();
     ctx.arc(cx, cy, r, Math.PI * 0.8, endAngle);
     ctx.stroke();
 
-    // Score Text
-    ctx.fillStyle = isDark ? '#F8FAFC' : '#0F172A';
+    ctx.fillStyle = isDark ? '#F5F1E6' : '#101828';
     ctx.font = `800 30px ${mono}`;
     ctx.textAlign = 'center';
-    ctx.fillText(`${analysis.score}`, cx, cy - 4);
+    ctx.fillText(`${analysis.after.score}`, cx, cy - 4);
 
-    ctx.fillStyle = color;
+    ctx.fillStyle = arcColor;
     ctx.font = `700 9.5px ${mono}`;
-    ctx.fillText('CWV SPEED INDEX', cx, cy + 16);
-  }, [analysis.score, isDark]);
+    ctx.fillText('OPTIMIZED CWV SCORE', cx, cy + 16);
+  }, [analysis.after.score, isDark, tk.good, tk.warn, tk.poor]);
 
-  const handleCopyOutput = () => {
-    navigator.clipboard?.writeText(analysis.transformed);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const copyText = (key, value) => {
+    navigator.clipboard?.writeText(value);
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(''), 1800);
   };
 
-  const handleDownloadBundle = () => {
-    const blob = new Blob([analysis.transformed], { type: 'text/html' });
+  const downloadFile = (content, filename, mime = 'text/plain;charset=utf-8') => {
+    const blob = new Blob([content], { type: mime });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'cwv-optimized-index.html';
+    a.download = filename;
     a.click();
     URL.revokeObjectURL(url);
   };
 
-  const handleActivateLicense = () => {
-    if (licenseInput.trim().length >= 4) {
-      localStorage.setItem('cwv_speed_pro_active', 'true');
-      localStorage.setItem('pro_licensed', 'true');
-      setIsPro(true);
-      setPaywallOpen(false);
-    }
-  };
+  const metricColor = (rating) =>
+    rating === 'GOOD' ? tk.good : rating === 'NEEDS_IMPROVEMENT' ? tk.warn : tk.poor;
+  const metricBg = (rating) =>
+    rating === 'GOOD' ? tk.goodBg : rating === 'NEEDS_IMPROVEMENT' ? tk.warnBg : tk.poorBg;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      {/* Above-the-Fold Founding Member Sales Banner */}
+      {/* Clean Open-Access Banner (Zero Paywall / License Scaffolding) */}
       <Paper
         elevation={0}
         sx={{
-          p: 2.2,
+          p: 2,
           borderRadius: 2.5,
-          bgcolor: isDark ? 'rgba(16,185,129,0.08)' : '#ECFDF5',
-          border: `1.5px solid ${isDark ? 'rgba(16,185,129,0.4)' : '#6EE7B7'}`,
+          bgcolor: tk.goodBg,
+          border: `1px solid ${tk.good}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           flexWrap: 'wrap',
-          gap: 2,
+          gap: 1.5,
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
           <Chip
-            icon={<BoltIcon sx={{ color: '#08080B !important', fontSize: 16 }} />}
-            label={isPro ? '✦ 100% FREE & OPEN ACCESS' : '✦ 100% OPEN ACCESS'}
+            icon={<BoltIcon sx={{ color: `${tk.primaryBtnFg} !important`, fontSize: 16 }} />}
+            label="100% FREE & OPEN ACCESS · v2.6.0"
             size="small"
-            sx={{ bgcolor: '#10B981', color: '#08080B', fontWeight: 900, fontFamily: mono }}
+            sx={{ bgcolor: tk.primaryBtnBg, color: tk.primaryBtnFg, fontWeight: 800, fontFamily: mono }}
           />
           <Typography variant="body2" sx={{ fontWeight: 700, color: theme.palette.text.primary }}>
-            Client-Side DOM AST Speed Transformer, CLS Dimension Injector & Lighthouse 100/100 Compiler
+            Client-Side CWV Auditor, &lt;head&gt;-Scoped AST Transformer, Diff Comparator, Speculation Rules &amp; Budget Simulator
           </Typography>
         </Box>
-        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
-          {!isPro && (
-            <>
-              <Button
-                size="small"
-                variant="contained"
-                href={STRIPE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.74rem' }}
-              >
-                ☕ Buy Us a Coffee (Stripe)
-              </Button>
-              <Button
-                size="small"
-                variant="outlined"
-                onClick={() => setPaywallOpen(true)}
-                startIcon={<VpnKeyIcon sx={{ fontSize: 14 }} />}
-                sx={{ borderColor: '#10B981', color: isDark ? '#34D399' : '#047857', fontFamily: mono, fontSize: '0.72rem', fontWeight: 700 }}
-              >
-              Say Thanks
-            </Button>
-            </>
-          )}
-        </Stack>
+        <ToggleButtonGroup
+          size="small"
+          exclusive
+          value={device}
+          onChange={(_, val) => val && setDevice(val)}
+          aria-label="CWV device simulation profile"
+        >
+          <ToggleButton value="mobile" sx={{ minHeight: 44, px: 2, fontFamily: mono, fontWeight: 700 }}>
+            Mobile
+          </ToggleButton>
+          <ToggleButton value="desktop" sx={{ minHeight: 44, px: 2, fontFamily: mono, fontWeight: 700 }}>
+            Desktop
+          </ToggleButton>
+        </ToggleButtonGroup>
       </Paper>
 
-      {/* Top Telemetry Dials */}
-      <SovereignEyebrow accent="#38BDF8" right="Autonomous Web">
-        {"cwv-speed-engine"}
+      <SovereignEyebrow accent={tk.eyebrow} right="Autonomous Web">
+        cwv-speed-engine
       </SovereignEyebrow>
       <SovereignBand
-        seed={"cwv-speed-engine"}
-        eyebrow={"Autonomous Web"}
-        caption={"CWV Speed Engine"}
-        label={"CWV Speed Engine — Zoth sovereign visualisation"}
+        seed="cwv-speed-engine"
+        eyebrow="Autonomous Web"
+        caption="CWV Speed Engine v2.6.0"
+        label="CWV Speed Engine — Zoth sovereign visualisation"
       />
+
+      {/* Top Telemetry Row */}
       <Grid container spacing={2.5}>
         <Grid xs={12} md={4}>
           <Paper
+            elevation={0}
             sx={{
               p: 2,
               height: '100%',
               borderRadius: 2.5,
               border: `1px solid ${theme.palette.divider}`,
-              bgcolor: isDark ? '#08080C' : '#FFFFFF',
+              bgcolor: tk.surface,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <canvas ref={gaugeCanvasRef} width={220} height={135} style={{ display: 'block' }} />
-            <Typography variant="caption" color="text.secondary" sx={{ fontFamily: mono }}>
-              Baseline: {analysis.baseLcp}s LCP → <strong>{analysis.optLcp}s Optimized</strong>
+            <canvas ref={gaugeCanvasRef} width={220} height={135} style={{ display: 'block' }} aria-label="Optimized CWV speed score gauge" />
+            <Typography variant="caption" color="text.secondary" sx={{ fontFamily: mono, fontWeight: 700 }}>
+              Baseline {analysis.before.score}/100 → Optimized {analysis.after.score}/100 ({device})
             </Typography>
           </Paper>
         </Grid>
@@ -382,81 +255,81 @@ export default function CwvSpeedEngineGodModeTool() {
         <Grid xs={12} md={8}>
           <Grid container spacing={2} sx={{ height: '100%' }}>
             {[
-              {
-                label: 'LCP (Largest Contentful Paint)',
-                before: `${analysis.baseLcp}s`,
-                after: `${analysis.optLcp}s`,
-                target: '≤ 2.5s Good',
-                good: analysis.optLcp <= 1.2,
-              },
-              {
-                label: 'CLS (Cumulative Layout Shift)',
-                before: `${analysis.baseCls}`,
-                after: `${analysis.optCls}`,
-                target: '≤ 0.10 Good',
-                good: analysis.optCls <= 0.05,
-              },
-              {
-                label: 'INP (Interaction to Next Paint)',
-                before: `${analysis.baseInp}ms`,
-                after: `${analysis.optInp}ms`,
-                target: '≤ 200ms Good',
-                good: analysis.optInp <= 60,
-              },
-            ].map((m) => (
-              <Grid xs={12} sm={4} key={m.label}>
-                <Paper
-                  sx={{
-                    p: 2.2,
-                    height: '100%',
-                    borderRadius: 2.5,
-                    border: `1px solid ${theme.palette.divider}`,
-                    bgcolor: isDark ? '#08080C' : '#FFFFFF',
-                  }}
-                >
-                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700, display: 'block', mb: 0.5 }}>
-                    {m.label}
-                  </Typography>
-                  <Typography variant="h4" sx={{ fontFamily: mono, fontWeight: 900, color: '#10B981', my: 0.5 }}>
-                    {m.after}
-                  </Typography>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', display: 'block', mb: 1 }}>
-                    Raw: <del>{m.before}</del> ({m.target})
-                  </Typography>
-                  <Chip
-                    label={m.good ? 'PASS · CORE WEB VITALS' : 'NEEDS TUNING'}
-                    size="small"
+              { key: 'lcp', label: 'LCP (Largest Contentful Paint)' },
+              { key: 'cls', label: 'CLS (Cumulative Layout Shift)' },
+              { key: 'inp', label: 'INP (Interaction to Next Paint)' },
+            ].map(({ key, label }) => {
+              const beforeM = analysis.before.metrics[key];
+              const afterM = analysis.after.metrics[key];
+              return (
+                <Grid xs={12} sm={4} key={key}>
+                  <Paper
+                    elevation={0}
                     sx={{
-                      height: 20,
-                      fontSize: '0.64rem',
-                      fontFamily: mono,
-                      fontWeight: 800,
-                      bgcolor: 'rgba(16,185,129,0.16)',
-                      color: '#34D399',
+                      p: 2,
+                      height: '100%',
+                      borderRadius: 2.5,
+                      border: `1px solid ${theme.palette.divider}`,
+                      bgcolor: tk.surface,
                     }}
-                  />
-                </Paper>
-              </Grid>
-            ))}
+                  >
+                    <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700, display: 'block', mb: 0.5 }}>
+                      {label}
+                    </Typography>
+                    <Typography variant="h4" sx={{ fontFamily: mono, fontWeight: 900, color: metricColor(afterM.rating), my: 0.5 }}>
+                      {afterM.value}{afterM.unit}
+                    </Typography>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', display: 'block', mb: 1 }}>
+                      Raw: <del>{beforeM.value}{beforeM.unit}</del> ({afterM.target})
+                    </Typography>
+                    <Chip
+                      label={afterM.rating.replace('_', ' ')}
+                      size="small"
+                      sx={{
+                        height: 22,
+                        fontSize: '0.68rem',
+                        fontFamily: mono,
+                        fontWeight: 800,
+                        bgcolor: metricBg(afterM.rating),
+                        color: metricColor(afterM.rating),
+                        border: `1px solid ${metricColor(afterM.rating)}`,
+                      }}
+                    />
+                  </Paper>
+                </Grid>
+              );
+            })}
           </Grid>
         </Grid>
       </Grid>
 
-      {/* Main Two-Column AST Workbench */}
+      {/* Main Two-Column Workbench */}
       <Grid container spacing={3}>
-        {/* Left: Input HTML & AST Transform Rules */}
         <Grid xs={12} md={6}>
-          <Paper sx={{ p: 2.5, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: isDark ? '#08080C' : '#FFFFFF' }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+          <Paper elevation={0} sx={{ p: 2.5, borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: tk.surface }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1, mb: 1.5 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 800 }}>
                 1. Raw HTML Document Input
               </Typography>
-              <Chip label={`${analysis.issues.length} Bottlenecks Detected`} size="small" color="warning" sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.68rem' }} />
+              <Chip
+                label={`${analysis.before.issues.length} Bottleneck(s) Detected`}
+                size="small"
+                sx={{
+                  fontFamily: mono,
+                  fontWeight: 800,
+                  fontSize: '0.7rem',
+                  bgcolor: analysis.before.issues.length > 0 ? tk.warnBg : tk.goodBg,
+                  color: analysis.before.issues.length > 0 ? tk.warn : tk.good,
+                  border: `1px solid ${analysis.before.issues.length > 0 ? tk.warn : tk.good}`,
+                }}
+              />
             </Box>
             <TextField
               fullWidth
               multiline
               rows={10}
+              label="Raw HTML Document Input"
+              inputProps={{ 'aria-label': 'Raw HTML document input for CWV audit and transformation' }}
               value={htmlInput}
               onChange={(e) => setHtmlInput(e.target.value)}
               sx={{
@@ -464,202 +337,304 @@ export default function CwvSpeedEngineGodModeTool() {
                 '& .MuiInputBase-input': { fontFamily: mono, fontSize: '0.78rem', lineHeight: 1.55 },
               }}
             />
-            <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: '#D4AF37', display: 'block', mb: 1 }}>
+            <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: tk.gold, display: 'block', mb: 1 }}>
               CLIENT AST TRANSFORMER PASSES:
             </Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-              <FormControlLabel control={<Switch size="small" checked={optDeferScripts} onChange={(e) => setOptDeferScripts(e.target.checked)} />} label={<Typography variant="caption" sx={{ fontWeight: 700 }}>Defer Render-Blocking JS</Typography>} />
-              <FormControlLabel control={<Switch size="small" checked={optHeroPriority} onChange={(e) => setOptHeroPriority(e.target.checked)} />} label={<Typography variant="caption" sx={{ fontWeight: 700 }}>Hero fetchpriority=&quot;high&quot;</Typography>} />
-              <FormControlLabel control={<Switch size="small" checked={optImageDims} onChange={(e) => setOptImageDims(e.target.checked)} />} label={<Typography variant="caption" sx={{ fontWeight: 700 }}>Inject CLS Image Dimensions</Typography>} />
-              <FormControlLabel control={<Switch size="small" checked={optFontSwap} onChange={(e) => setOptFontSwap(e.target.checked)} />} label={<Typography variant="caption" sx={{ fontWeight: 700 }}>Font-Display Swap</Typography>} />
-              <FormControlLabel control={<Switch size="small" checked={optPreconnect} onChange={(e) => setOptPreconnect(e.target.checked)} />} label={<Typography variant="caption" sx={{ fontWeight: 700 }}>Origin Preconnect Hints</Typography>} />
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+              <FormControlLabel
+                sx={{ minHeight: 44 }}
+                control={<Switch checked={optDeferScripts} onChange={(e) => setOptDeferScripts(e.target.checked)} inputProps={{ 'aria-label': 'Defer render-blocking scripts in head' }} />}
+                label={<Typography variant="caption" sx={{ fontWeight: 700 }}>Defer &lt;head&gt; JS</Typography>}
+              />
+              <FormControlLabel
+                sx={{ minHeight: 44 }}
+                control={<Switch checked={optHeroPriority} onChange={(e) => setOptHeroPriority(e.target.checked)} inputProps={{ 'aria-label': 'Prioritize hero LCP image' }} />}
+                label={<Typography variant="caption" sx={{ fontWeight: 700 }}>Hero fetchpriority</Typography>}
+              />
+              <FormControlLabel
+                sx={{ minHeight: 44 }}
+                control={<Switch checked={optImageDims} onChange={(e) => setOptImageDims(e.target.checked)} inputProps={{ 'aria-label': 'Inject explicit image dimensions' }} />}
+                label={<Typography variant="caption" sx={{ fontWeight: 700 }}>CLS Dimensions</Typography>}
+              />
+              <FormControlLabel
+                sx={{ minHeight: 44 }}
+                control={<Switch checked={optFontSwap} onChange={(e) => setOptFontSwap(e.target.checked)} inputProps={{ 'aria-label': 'Append font display swap' }} />}
+                label={<Typography variant="caption" sx={{ fontWeight: 700 }}>Font-Display Swap</Typography>}
+              />
+              <FormControlLabel
+                sx={{ minHeight: 44 }}
+                control={<Switch checked={optPreconnect} onChange={(e) => setOptPreconnect(e.target.checked)} inputProps={{ 'aria-label': 'Inject origin preconnect hints' }} />}
+                label={<Typography variant="caption" sx={{ fontWeight: 700 }}>Origin Preconnect</Typography>}
+              />
             </Box>
           </Paper>
         </Grid>
 
-        {/* Right: Diagnostics & Frosted Glass Transformed Code Output */}
         <Grid xs={12} md={6}>
-          <Paper sx={{ p: 2.5, height: '100%', borderRadius: 2.5, border: `1px solid ${theme.palette.divider}`, bgcolor: isDark ? '#08080C' : '#FFFFFF', display: 'flex', flexDirection: 'column' }}>
-            <Tabs value={activeTab} onChange={(_, v) => setActiveTab(v)} sx={{ mb: 2, minHeight: 36 }}>
-              <Tab label={`AST Diagnostics (${analysis.issues.length})`} sx={{ fontSize: '0.78rem', fontWeight: 800, minHeight: 36 }} />
-              <Tab label="Transformed Production HTML" sx={{ fontSize: '0.78rem', fontWeight: 800, minHeight: 36 }} />
+          <Paper
+            elevation={0}
+            sx={{
+              p: 2.5,
+              height: '100%',
+              borderRadius: 2.5,
+              border: `1px solid ${theme.palette.divider}`,
+              bgcolor: tk.surface,
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <Tabs
+              value={activeTab}
+              onChange={(_, v) => setActiveTab(v)}
+              variant="scrollable"
+              scrollButtons="auto"
+              sx={{ mb: 2, minHeight: 44 }}
+            >
+              <Tab label={`Diagnostics (${analysis.before.issues.length})`} sx={{ fontSize: '0.76rem', fontWeight: 800, minHeight: 44 }} />
+              <Tab label="Transformed HTML" sx={{ fontSize: '0.76rem', fontWeight: 800, minHeight: 44 }} />
+              <Tab label="Diff" sx={{ fontSize: '0.76rem', fontWeight: 800, minHeight: 44 }} />
+              <Tab label="Speculation" sx={{ fontSize: '0.76rem', fontWeight: 800, minHeight: 44 }} />
+              <Tab label="Budget / LoAF" sx={{ fontSize: '0.76rem', fontWeight: 800, minHeight: 44 }} />
             </Tabs>
 
-            {activeTab === 0 ? (
+            {/* Tab 0: Diagnostics */}
+            {activeTab === 0 && (
               <Stack spacing={1.5} sx={{ flexGrow: 1 }}>
-                {analysis.issues.map((iss, idx) => (
-                  <Box
-                    key={idx}
-                    sx={{
-                      p: 1.5,
-                      borderRadius: 2,
-                      bgcolor: isDark ? 'rgba(255,255,255,0.02)' : '#F8FAFC',
-                      border: `1px solid ${theme.palette.divider}`,
-                    }}
-                  >
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 0.5 }}>
-                      <Typography variant="subtitle2" sx={{ fontWeight: 800, fontSize: '0.82rem' }}>
-                        {iss.title}
-                      </Typography>
-                      <Chip label={iss.metric} size="small" sx={{ height: 18, fontSize: '0.62rem', fontFamily: mono, fontWeight: 800 }} />
-                    </Box>
-                    <Typography variant="caption" color="text.secondary">
-                      <AutoFixHighIcon sx={{ fontSize: 13, mr: 0.5, verticalAlign: 'text-bottom', color: '#10B981' }} />
-                      {iss.fix}
+                {analysis.before.issues.length === 0 ? (
+                  <Box sx={{ p: 2, borderRadius: 2, bgcolor: tk.goodBg, border: `1px solid ${tk.good}` }}>
+                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: tk.good }}>
+                      All Core Web Vitals AST checks passed.
                     </Typography>
                   </Box>
-                ))}
+                ) : (
+                  analysis.before.issues.map((iss) => (
+                    <Box
+                      key={iss.id}
+                      sx={{
+                        p: 1.5,
+                        borderRadius: 2,
+                        bgcolor: tk.subtle,
+                        border: `1px solid ${theme.palette.divider}`,
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1, mb: 0.5 }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 800, fontSize: '0.82rem' }}>
+                          {iss.title}
+                        </Typography>
+                        <Chip
+                          label={iss.metric}
+                          size="small"
+                          sx={{ height: 20, fontSize: '0.64rem', fontFamily: mono, fontWeight: 800 }}
+                        />
+                      </Box>
+                      <Typography variant="caption" color="text.secondary">
+                        <AutoFixHighIcon sx={{ fontSize: 14, mr: 0.5, verticalAlign: 'text-bottom', color: tk.good }} />
+                        {iss.fix}
+                      </Typography>
+                    </Box>
+                  ))
+                )}
                 <Button
                   variant="contained"
                   onClick={() => setActiveTab(1)}
-                  sx={{ mt: 'auto', bgcolor: '#10B981', color: '#08080B', fontWeight: 800 }}
+                  sx={{
+                    mt: 'auto',
+                    minHeight: 44,
+                    bgcolor: tk.primaryBtnBg,
+                    color: tk.primaryBtnFg,
+                    fontWeight: 800,
+                  }}
                 >
-                  View Transformed 100/100 HTML Output →
+                  View Transformed HTML ({analysis.after.score}/100 Score) →
                 </Button>
               </Stack>
-            ) : (
-              <Box sx={{ position: 'relative', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+            )}
+
+            {/* Tab 1: Transformed HTML (Light-mode parchment, Dark-mode obsidian) */}
+            {activeTab === 1 && (
+              <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                 <Box
                   component="pre"
                   sx={{
                     m: 0,
                     p: 2,
                     borderRadius: 2,
-                    bgcolor: '#050508',
-                    color: '#A7F3D0',
+                    bgcolor: tk.codeBg,
+                    color: tk.codeText,
+                    border: `1px solid ${theme.palette.divider}`,
                     fontFamily: mono,
                     fontSize: '0.74rem',
                     overflowX: 'auto',
+                    maxHeight: 340,
                     flexGrow: 1,
-                    filter: isPro ? 'none' : 'blur(6px)',
-                    userSelect: isPro ? 'auto' : 'none',
                   }}
                 >
                   {analysis.transformed}
                 </Box>
-
-                {!isPro && (
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      inset: 0,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      bgcolor: 'rgba(8,8,12,0.55)',
-                      borderRadius: 2,
-                      p: 3,
-                      textAlign: 'center',
-                    }}
-                  >
-                    <LockIcon sx={{ fontSize: 36, color: '#D4AF37', mb: 1 }} />
-                    <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#FFFFFF', mb: 0.5 }}>
-                      Transformed 100/100 HTML & PWA Bundle Locked
-                    </Typography>
-                    <Typography variant="caption" sx={{ color: '#CBD5E1', maxWidth: 340, mb: 2 }}>
-                      Full AST-transformed HTML copy, critical CSS inliner, and ServiceWorker speed bundle export is free to use.
-                    </Typography>
-                    <Stack direction="row" spacing={1.5}>
-                      <Button
-                        variant="contained"
-                        href={STRIPE_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 800, fontFamily: mono, fontSize: '0.75rem' }}
-                      >
-                        ☕ Buy Us a Coffee (Stripe)
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        onClick={() => setPaywallOpen(true)}
-                        sx={{ borderColor: '#34D399', color: '#34D399', fontWeight: 800, fontFamily: mono, fontSize: '0.75rem' }}
-                      >
-                        Enter Key / Solana
-                      </Button>
-                    </Stack>
-                  </Box>
-                )}
-
-                <Stack direction="row" spacing={1.5} sx={{ mt: 1.5 }}>
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ mt: 1.5 }}>
                   <Button
                     fullWidth
                     variant="outlined"
-                    startIcon={copied ? <CheckIcon /> : <ContentCopyIcon />}
-                    onClick={handleCopyOutput}
-                    sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.75rem' }}
+                    startIcon={copiedKey === 'html' ? <CheckIcon /> : <ContentCopyIcon />}
+                    onClick={() => copyText('html', analysis.transformed)}
+                    sx={{ minHeight: 44, fontFamily: mono, fontWeight: 800, fontSize: '0.75rem' }}
                   >
-                    {copied ? 'Copied Optimized HTML' : 'Copy Transformed HTML'}
+                    {copiedKey === 'html' ? 'Copied Optimized HTML' : 'Copy Transformed HTML'}
                   </Button>
                   <Button
                     fullWidth
                     variant="contained"
                     startIcon={<DownloadIcon />}
-                    onClick={handleDownloadBundle}
-                    sx={{ bgcolor: '#10B981', color: '#08080B', fontFamily: mono, fontWeight: 800, fontSize: '0.75rem' }}
+                    onClick={() => downloadFile(analysis.transformed, 'cwv-optimized-index.html', 'text/html;charset=utf-8')}
+                    sx={{ minHeight: 44, bgcolor: tk.primaryBtnBg, color: tk.primaryBtnFg, fontFamily: mono, fontWeight: 800, fontSize: '0.75rem' }}
                   >
-                    Export Speed Bundle
+                    Export Optimized HTML
                   </Button>
                 </Stack>
               </Box>
             )}
+
+            {/* Tab 2: Performance Diff */}
+            {activeTab === 2 && (
+              <Stack spacing={1.5} sx={{ flexGrow: 1 }}>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={4}
+                  label="Candidate HTML Override (leave empty to compare against Transformed HTML)"
+                  inputProps={{ 'aria-label': 'Candidate HTML for performance diff comparison' }}
+                  value={diffCandidateOverride}
+                  onChange={(e) => setDiffCandidateOverride(e.target.value)}
+                  placeholder="Paste candidate HTML (or identical HTML to verify 0 delta)..."
+                  sx={{ '& .MuiInputBase-input': { fontFamily: mono, fontSize: '0.74rem' } }}
+                />
+                <Box sx={{ p: 1.8, borderRadius: 2, bgcolor: tk.subtle, border: `1px solid ${theme.palette.divider}` }}>
+                  <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 900, color: analysis.diff.scoreDelta >= 0 ? tk.good : tk.poor }}>
+                    {analysis.diff.scoreDelta > 0 ? `+${analysis.diff.scoreDelta}` : analysis.diff.scoreDelta} pts
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1 }}>
+                    {analysis.diff.summary}
+                  </Typography>
+                  <Grid container spacing={1}>
+                    {['lcp', 'cls', 'inp', 'fcp', 'ttfb'].map((k) => {
+                      const d = analysis.diff.metricDeltas[k];
+                      return (
+                        <Grid xs={6} sm={4} key={k}>
+                          <Box sx={{ p: 1, borderRadius: 1.5, bgcolor: tk.surface, border: `1px solid ${theme.palette.divider}` }}>
+                            <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, display: 'block' }}>
+                              {k.toUpperCase()}
+                            </Typography>
+                            <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: d.delta < 0 ? tk.good : d.delta > 0 ? tk.poor : 'text.primary' }}>
+                              {d.delta > 0 ? `+${d.delta}` : d.delta}{d.unit}
+                            </Typography>
+                          </Box>
+                        </Grid>
+                      );
+                    })}
+                  </Grid>
+                </Box>
+              </Stack>
+            )}
+
+            {/* Tab 3: Speculation Rules */}
+            {activeTab === 3 && (
+              <Stack spacing={1.5} sx={{ flexGrow: 1 }}>
+                <ToggleButtonGroup
+                  size="small"
+                  exclusive
+                  value={specAggressiveness}
+                  onChange={(_, val) => val && setSpecAggressiveness(val)}
+                  aria-label="Speculation rules aggressiveness"
+                >
+                  <ToggleButton value="conservative" sx={{ minHeight: 44, fontFamily: mono, fontWeight: 700 }}>Conservative</ToggleButton>
+                  <ToggleButton value="balanced" sx={{ minHeight: 44, fontFamily: mono, fontWeight: 700 }}>Balanced</ToggleButton>
+                  <ToggleButton value="aggressive" sx={{ minHeight: 44, fontFamily: mono, fontWeight: 700 }}>Aggressive</ToggleButton>
+                </ToggleButtonGroup>
+                <Typography variant="caption" color="text.secondary" sx={{ fontFamily: mono }}>
+                  Prerender: {analysis.speculation.prerender.join(', ') || 'none'} · Guarded/Excluded: {analysis.speculation.excluded.join(', ') || 'none'}
+                </Typography>
+                <Box
+                  component="pre"
+                  sx={{
+                    m: 0,
+                    p: 2,
+                    borderRadius: 2,
+                    bgcolor: tk.codeBg,
+                    color: tk.codeText,
+                    border: `1px solid ${theme.palette.divider}`,
+                    fontFamily: mono,
+                    fontSize: '0.74rem',
+                    overflowX: 'auto',
+                  }}
+                >
+                  {analysis.speculation.scriptTag}
+                </Box>
+                <Button
+                  variant="outlined"
+                  startIcon={<DownloadIcon />}
+                  onClick={() => downloadFile(analysis.speculation.scriptTag, 'speculation-rules.html', 'text/html;charset=utf-8')}
+                  sx={{ minHeight: 44, fontFamily: mono, fontWeight: 800 }}
+                >
+                  Download speculation-rules.html
+                </Button>
+              </Stack>
+            )}
+
+            {/* Tab 4: Performance Budget & LoAF */}
+            {activeTab === 4 && (
+              <Stack spacing={1.5} sx={{ flexGrow: 1 }}>
+                <Grid container spacing={1}>
+                  {analysis.budget.checks.map((c) => (
+                    <Grid xs={6} sm={4} key={c.resourceType}>
+                      <Box sx={{ p: 1.2, borderRadius: 1.5, bgcolor: tk.subtle, border: `1px solid ${theme.palette.divider}` }}>
+                        <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, textTransform: 'uppercase', display: 'block' }}>
+                          {c.resourceType}
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 800, color: c.status === 'PASS' ? tk.good : tk.poor }}>
+                          {c.actualKb} / {c.budgetKb} KB ({c.status})
+                        </Typography>
+                      </Box>
+                    </Grid>
+                  ))}
+                </Grid>
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: tk.gold }}>
+                  LoAF SYNCHRONOUS SCRIPT RISKS: {analysis.budget.loafRisks.length}
+                </Typography>
+                <Box
+                  component="pre"
+                  sx={{
+                    m: 0,
+                    p: 1.5,
+                    borderRadius: 2,
+                    bgcolor: tk.codeBg,
+                    color: tk.codeText,
+                    border: `1px solid ${theme.palette.divider}`,
+                    fontFamily: mono,
+                    fontSize: '0.72rem',
+                    overflowX: 'auto',
+                  }}
+                >
+                  {JSON.stringify(analysis.budget.lighthouseBudgetJson, null, 2)}
+                </Box>
+                <Button
+                  variant="contained"
+                  startIcon={<DownloadIcon />}
+                  onClick={() =>
+                    downloadFile(
+                      JSON.stringify(analysis.budget.lighthouseBudgetJson, null, 2),
+                      'budget.json',
+                      'application/json;charset=utf-8',
+                    )
+                  }
+                  sx={{ minHeight: 44, bgcolor: tk.primaryBtnBg, color: tk.primaryBtnFg, fontFamily: mono, fontWeight: 800 }}
+                >
+                  Export Lighthouse budget.json
+                </Button>
+              </Stack>
+            )}
           </Paper>
         </Grid>
       </Grid>
-
-      {/* Pro Paywall & License Activation Modal */}
-      <Dialog open={paywallOpen} onClose={() => setPaywallOpen(false)} maxWidth="sm" fullWidth>
-        <DialogTitle sx={{ fontWeight: 900 }}>Support CWV Speed Engine (optional tip)</DialogTitle>
-        <DialogContent dividers>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Free, unlimited DOM AST speed transformations, CLS dimension injection, and ServiceWorker bundle exports.
-          </Typography>
-          <Stack spacing={1} sx={{ mb: 2.5 }}>
-            {[
-              'Unlimited Client-Side HTML/CSS/JS AST Speed Transformations',
-              'Automated CLS Intrinsic Dimension & Aspect-Ratio Injection',
-              'Above-the-Fold LCP Preload & FetchPriority Synthesis',
-              'Zero-Egress 100% Browser Execution + MCP Server Export',
-            ].map((item) => (
-              <Box key={item} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <CheckCircleIcon sx={{ color: '#10B981', fontSize: 18 }} />
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>{item}</Typography>
-              </Box>
-            ))}
-          </Stack>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ mb: 3 }}>
-            <Button
-              fullWidth
-              variant="contained"
-              href={STRIPE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              sx={{ bgcolor: '#D4AF37', color: '#08080B', fontWeight: 900 }}
-            >
-              Leave an optional tip via Stripe
-            </Button>
-          </Stack>
-          <Divider sx={{ my: 2 }} />
-          <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, display: 'block', mb: 1 }}>
-            INSTANT LICENSE / RECEIPT ACTIVATION:
-          </Typography>
-          <Stack direction="row" spacing={1}>
-            <TextField
-              fullWidth
-              size="small"
-              placeholder="Optional: your name or a note"
-              value={licenseInput}
-              onChange={(e) => setLicenseInput(e.target.value)}
-            />
-            <Button variant="contained" onClick={handleActivateLicense} sx={{ bgcolor: '#10B981', color: '#08080B', fontWeight: 800 }}>
-              Activate
-            </Button>
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setPaywallOpen(false)}>Close</Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

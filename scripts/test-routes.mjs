@@ -83,6 +83,7 @@ const SAMPLE_ROUTES = [
   '/tools/city-desk',
   '/tools/creatorplaybooks',
   '/tools/cron-rhythm-studio',
+  '/tools/cwv-speed-engine',
   '/workstations/mission-control',
   '/docs/math/stdp',
 ];
@@ -552,6 +553,30 @@ async function main() {
         });
         if (!crCheck.hasTitle || !crCheck.hasH1 || !crCheck.hasSoftwareApp || !crCheck.hasFaq || crCheck.hasPhantomDocs) {
           failureReason = `cron-rhythm-studio invariants failed: ${JSON.stringify(crCheck)}`;
+        }
+      } else if (route === '/tools/cwv-speed-engine') {
+        const cwvCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          const bodyText = document.body?.innerText || '';
+          return {
+            hasTitle: document.title.includes('CWV Speed Engine'),
+            hasH1: h1Text.includes('CWV Speed Engine'),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasPhantomDocs:
+              bodyText.includes('Headless Chromium CDP runner') ||
+              bodyText.includes('audit_web_vitals') ||
+              bodyText.includes('cwv-speed profile') ||
+              bodyText.includes('python3 -m http.server 8128') ||
+              bodyText.includes('Next-Gen'),
+          };
+        });
+        if (!cwvCheck.hasTitle || !cwvCheck.hasH1 || !cwvCheck.hasSoftwareApp || !cwvCheck.hasFaq || cwvCheck.hasPhantomDocs) {
+          failureReason = `cwv-speed-engine invariants failed: ${JSON.stringify(cwvCheck)}`;
         }
       } else if (route === '/tools/creatorplaybooks') {
         await page.waitForSelector('[data-testid="creatorplaybooks-godmode-workstation"]', { timeout: 4000 }).catch(() => {});

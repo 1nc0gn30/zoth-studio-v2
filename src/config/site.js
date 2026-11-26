@@ -744,6 +744,38 @@ export function generateSchemaGraph(path = '/') {
           ...(tool.liveUrl ? { 'url': tool.liveUrl } : {}),
         }
       });
+      if (tool.id === 'cwv-speed-engine') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What engines and MCP tools are included in CWV Speed Engine v2.6.0?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'CWV Speed Engine v2.6.0 ships a zero-dependency Python 3.8+ stdlib server on 127.0.0.1:8128 (url_guard.py, analyzer.py, transformer.py, speculation_engine.py, budget_simulator.py, loaf_analyzer.py, ui_server.py), a matching browser DOM engine, a Unicode U+2800 Braille TUI, and 8 JSON-RPC 2.0 stdio MCP tools (cwv_audit_site, cwv_optimize_html, cwv_generate_cache_config, cwv_generate_pwa, cwv_generate_og_card, cwv_diff_performance, cwv_generate_speculation_rules, and cwv_audit_performance_budget).'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does CWV Speed Engine prevent SSRF and DNS-rebinding on local port 8128?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'url_guard.py enforces a strict http/https scheme allowlist, resolves every target via socket.getaddrinfo() to block loopback, RFC1918 private, link-local, and cloud metadata IPs (127.0.0.0/8, ::1, 169.254.169.254, 10/8, 172.16/12, 192.168/16), re-validates every HTTP redirect hop, and enforces loopback Host and exact-port CORS allowlists with all four security headers.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is CWV Speed Engine 100% free and open-access without paywalls?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Every Core Web Vitals audit, HTML AST transform, performance diff, W3C Speculation Rules export, Lighthouse budget.json, PWA ZIP archive, CLI command, and MCP tool is 100% free and open-access with zero paywalls and optional community support via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'cron-rhythm-studio') {
         graph.push({
           '@type': 'FAQPage',

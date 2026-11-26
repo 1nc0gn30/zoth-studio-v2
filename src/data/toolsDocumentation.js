@@ -845,38 +845,41 @@ export const toolsDocumentation = {
   },
 
   'cwv-speed-engine': {
-    whyUse: 'High-speed Core Web Vitals (LCP, CLS, INP) performance profiler and asset optimization compiler.',
-    problemSolved: 'Pinpoints heavy DOM mutations, unoptimized hero images, and thread-blocking JavaScript execution that degrade user experience.',
-    architecture: 'Headless Chromium CDP runner + Node.js asset minification engine.',
+    whyUse: 'Zero-dependency Core Web Vitals (LCP, CLS, INP, FCP, TTFB) diagnostic engine, HTML AST speed transformer, W3C Speculation Rules generator, performance budget simulator, and 8-tool MCP server.',
+    problemSolved: 'Detects unsized images, render-blocking <head> scripts, missing hero fetchpriority, unoptimized Google Fonts, and LoAF blockers while transforming HTML and exporting Lighthouse budget.json and immutable edge cache headers.',
+    architecture: 'Pure Python 3.8+ standard-library server on 127.0.0.1:8128 (url_guard.py SSRF defense, analyzer.py, transformer.py, speculation_engine.py, budget_simulator.py, loaf_analyzer.py, mcp_server.py) paired with a zero-egress dual-theme browser DOM engine and Unicode U+2800 Braille TUI.',
     aiAgentProtocol: {
-      mcpTool: 'audit_web_vitals',
-      description: 'Profile a URL against Core Web Vitals thresholds and produce remediation patches.',
-      cliExample: 'cwv-speed profile --url http://127.0.0.1:3000 --metrics lcp,cls,inp',
+      mcpTool: 'cwv_audit_site',
+      description: 'JSON-RPC 2.0 stdio MCP server exposing 8 tools: cwv_audit_site, cwv_optimize_html, cwv_generate_cache_config, cwv_generate_pwa, cwv_generate_og_card, cwv_diff_performance, cwv_generate_speculation_rules, and cwv_audit_performance_budget.',
+      cliExample: 'cwv-speed-engine audit ./public/index.html --device mobile --json',
       inputSchema: {
         type: 'object',
         properties: {
-          url: { type: 'string' }
+          target: { type: 'string', description: 'Public http(s) URL, raw HTML string, or local .html file' },
+          device: { type: 'string', enum: ['mobile', 'desktop'], default: 'mobile' },
+          min_score: { type: 'number', default: 85 }
         },
-        required: ['url']
+        required: ['target']
       },
       outputSchema: {
-        lcpMs: 'number',
-        clsScore: 'number',
-        inpMs: 'number',
-        optimizations: ['string']
+        score: 'number',
+        grade: 'string',
+        passed: 'boolean',
+        vitals: { lcp: 'object', cls: 'object', inp: 'object', fcp: 'object', ttfb: 'object', tbt: 'object' },
+        diagnostics: ['object']
       }
     },
     quickstart: [
-      'git clone https://github.com/NullAITech/cwv-speed-engine.git',
-      'cd cwv-speed-engine && npm install',
-      'npm run audit -- http://127.0.0.1:3000'
+      'git clone https://github.com/1nc0gn30/cwv-speed-engine.git',
+      'cd cwv-speed-engine && python3 server.py --port 8128',
+      'cwv-speed-engine audit ./public/index.html --device mobile --json'
     ],
     features: [
-      'Headless browser CDP performance trace analysis',
-      'Largest Contentful Paint (LCP) resource optimization hints',
-      'Cumulative Layout Shift (CLS) layout stability diagnostics',
-      'Interaction to Next Paint (INP) JavaScript main-thread profiler',
-      'Fully offline automated benchmarking'
+      'SSRF-hardened :8128 REST API (scheme/DNS/IP/redirect guardrails, Host & exact-port CORS checks)',
+      'HTML AST transformer: explicit CLS image dimensions, hero fetchpriority, lazy loading, & <head>-scoped defer',
+      'Exact Baseline vs. Candidate Performance Diff Comparator (identical HTML returns 0 delta)',
+      'W3C Speculation Rules & 103 Early Hints generator + Multi-network Performance Budget & LoAF simulator',
+      '8-tool JSON-RPC 2.0 stdio MCP server (cwv-speed-engine mcp) + Unicode U+2800 Braille TUI (cwv-speed-engine-tui)'
     ]
   },
 

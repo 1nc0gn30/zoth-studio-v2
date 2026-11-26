@@ -71,6 +71,26 @@
         "cron_audit_dst_anomalies",
         "cron_multizone_flight_board"
       ]
+    },
+    {
+      "id": "cwv-speed-engine",
+      "name": "CWV Speed Engine",
+      "version": "2.6.0",
+      "transport": "stdio",
+      "command": "cwv-speed-engine",
+      "args": ["mcp"],
+      "localApi": "http://127.0.0.1:8128/api/mcp/config",
+      "toolCount": 8,
+      "tools": [
+        "cwv_audit_site",
+        "cwv_optimize_html",
+        "cwv_generate_cache_config",
+        "cwv_generate_pwa",
+        "cwv_generate_og_card",
+        "cwv_diff_performance",
+        "cwv_generate_speculation_rules",
+        "cwv_audit_performance_budget"
+      ]
     }
   ]
 }
