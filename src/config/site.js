@@ -200,6 +200,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, alchemical seals, parametric SVG seal generator, cyber-sigils, Editorial Ivory Light, Obsidian Gold Dark, WCAG 2.1 contrast checker, W3C design tokens, Zoth Studio`
         : station.id === 'bus-monitor'
         ? `${station.name}, loopback service NOC, measured RTT pinger, Signal Bridge telemetry, HKDF-SHA256, HMAC-SHA256 envelope verifier, zero-egress IPC, Zoth Studio`
+        : station.id === 'chronicle'
+        ? `${station.name}, Chronicle Hub, continuity vault proxy, SQLite FTS5 search, browser JSONL transcript analyzer, friction pattern radar, engineering release chronicle, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -224,6 +226,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, alchemical seals, parametric SVG seal generator, cyber-sigils, Editorial Ivory Light, Obsidian Gold Dark, WCAG 2.1 contrast checker, W3C design tokens, Zoth Studio`
         : station.id === 'bus-monitor'
         ? `${station.name}, loopback service NOC, measured RTT pinger, Signal Bridge telemetry, HKDF-SHA256, HMAC-SHA256 envelope verifier, zero-egress IPC, Zoth Studio`
+        : station.id === 'chronicle'
+        ? `${station.name}, Chronicle Hub, continuity vault proxy, SQLite FTS5 search, browser JSONL transcript analyzer, friction pattern radar, engineering release chronicle, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -271,6 +275,7 @@ export function getAllStaticRoutes() {
   routes['/tools/ax-powerhouse'] = getRouteMeta('/tools/ax-powerhouse');
   routes['/tools/brand'] = getRouteMeta('/tools/brand');
   routes['/tools/bus-monitor'] = getRouteMeta('/tools/bus-monitor');
+  routes['/tools/chronicle'] = getRouteMeta('/tools/chronicle');
 
   // Add all math pillars
   mathPillars.forEach((pillar) => {
@@ -938,6 +943,39 @@ export function generateSchemaGraph(path = '/') {
               'acceptedAnswer': {
                 '@type': 'Answer',
                 'text': 'Yes. Every loopback sweep, targeted port ping, WebCrypto HMAC-SHA256 envelope verification, and JSON/CSV/Markdown diagnostic report export is 100% free and open-access with zero paywalls, supported optionally via Stripe Buy Us a Coffee or Solana community tips.'
+              }
+            }
+          ]
+        });
+      }
+
+      if (station.id === 'chronicle') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What does Zoth Chronicle Hub & Engineering Horizon v2.3.0 provide online and offline?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'When running locally alongside zoth-memory-vault (:8161), Chronicle Hub proxies live SQLite FTS5 archive search, continuity recall, friction pattern radar, and sanitized unfinished loops through Studio loopback (/api/studio/chronicle/{summary,recall,search}). When offline or hosted statically, it provides a 100% in-browser JSONL/JSON/Markdown session transcript analyzer, full-text filter, friction marker extractor, verified Studio v2.0–v2.3.0 release chronicle, and sanitized JSON/Markdown/CSV exports.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does Chronicle Hub protect local privacy, home paths, and loopback APIs?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'All Studio proxy endpoints enforce strict loopback Host header validation (returning 403 on DNS-rebinding hosts) and Origin checks on POST calls, automatically redact literal host home paths to ~/ before rendering or exporting, and neutralize spreadsheet formula injection on CSV exports with zero external telemetry.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Zoth Chronicle Hub free and open-access without paywalls or license locks?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Zoth Chronicle Hub & Engineering Horizon is 100% free and open-access with zero paywalls, zero gated exports, and optional community support via Stripe Buy Us a Coffee or Solana tips.'
               }
             }
           ]

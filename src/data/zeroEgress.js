@@ -50,7 +50,7 @@ export const legacyWorkstations = [
   { file: 'subsweep.html', job: 'Subdomain recon, now subsweep-lead-scanner', to: '/tools/subsweep-lead-scanner' },
   { file: 'omnipost.html', job: 'Cross-post scheduler, now omnipost-social-engine', to: '/tools/omnipost-social-engine' },
   { file: 'notes-reviewer.html', job: 'Annotation and codex review', to: '/docs' },
-  { file: 'chronicle.html', job: 'Session chronicle of swarm verdicts and audits', to: '/docs' },
+  { file: 'chronicle.html', job: 'Hybrid continuity vault proxy (:8161), browser JSONL/Markdown transcript analyzer, and Studio release chronicle', to: '/workstations/chronicle' },
   { file: 'ax-powerhouse.html', job: 'Agent-experience and answer-engine surfaces', to: '/ax' },
   { file: 'brand.html', job: 'Alchemical seal vector forge and dual-theme design token system', to: '/workstations/brand' },
   { file: 'math-pillars.html', job: 'Six math pillars and the learning academy', to: '/docs/math' },

@@ -82,11 +82,14 @@ export const workstations = [
   },
   {
     id: "chronicle",
-    name: "Zoth Chronicle & Engineering Horizon Roadmap",
-    path: "/studio/chronicle.html",
+    name: "Zoth Chronicle Hub & Engineering Horizon",
+    path: "/workstations/chronicle",
     band: "Observe",
     type: "cockpit",
-    description: "Milestone timeline, system architecture chronicle, and release telemetry logs.",
+    executionType: "hybrid",
+    version: "2.3.0",
+    pullCommand: "zoth open chronicle",
+    description: "Hybrid conversation continuity vault (:8161 proxy), browser JSONL/Markdown transcript analyzer, friction pattern radar, and Studio release chronicle.",
     alsoInApp: "/workstations/chronicle"
   },
   {

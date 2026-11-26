@@ -139,6 +139,17 @@ export const TOOL_MOTION_OVERRIDES = {
     execLabel: 'HYBRID CLIENT CRYPTO + /api/studio/bus/{telemetry,ping}',
     telemetrySub: '12 Loopback Service Probes · SSRF-Guarded Port Pinger · Live :8102 Sessions · v2.3.0.',
   },
+  'chronicle': {
+    accent: '#C084FC',
+    secondary: '#D4AF37',
+    archetype: 'timeline',
+    anchorName: 'Continuity Lattice & FTS5 Chronicle Horizon',
+    formula: 'Chronicle(t) = Proxy(:3000 → :8161) ∪ LocalParse(JSONL ∪ MD) · PathRedact(~/ )',
+    badge: 'CHRONICLE HUB · v2.3.0',
+    clip: 'memory',
+    execLabel: 'HYBRID BROWSER ANALYZER + /api/studio/chronicle/{summary,recall,search}',
+    telemetrySub: 'Safe Epoch/ISO Normalization · FTS5 Archive Search · Offline JSONL/MD Parser · Sanitized CSV/MD/JSON · v2.3.0.',
+  },
 };
 
 export function getToolMotionMeta(tool) {

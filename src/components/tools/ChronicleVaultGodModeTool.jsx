@@ -29,63 +29,80 @@ import {
   MONO,
   rgba,
 } from '../sovereign';
+import {
+  CHRONICLE_QUICK_QUERIES,
+  CHRONICLE_SCHEMA_VERSION,
+  formatChronicleDate,
+  sanitizeChronicleText,
+  buildChronicleMarkdownBrief,
+} from '../../utils/chronicleEngine';
 
 /**
  * Chronicle Vault (zoth-memory-vault) — God-Mode workstation (Layer B).
  *
- * Live loopback client for chronicle-vault.service on http://127.0.0.1:8161.
- * Every KPI, continuity recall, pattern signal, and FTS5 conversation hit comes
- * directly from the local SQLite-backed daemon with zero canned data.
+ * Routes all reads through Studio's hardened same-origin loopback proxy
+ * `/api/studio/chronicle/{summary,recall,search}` (zero direct :8161 browser fetches,
+ * zero host-path leaks, zero offline ERR_FAILED console spam, and safe timestamp formatting).
  */
-const BASE = 'http://127.0.0.1:8161';
+const STANDALONE_URL = 'http://127.0.0.1:8161';
 const PURPLE_DARK = '#C084FC';
 const PURPLE_LIGHT = '#6D28D9';
-const QUICK_QUERIES = ['zoth-studio-v2', 'hermes', 'zoth-os', 'screenshot'];
 
-async function apiGet(path, timeoutMs = 4000) {
+async function proxyGet(path, timeoutMs = 4000) {
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), timeoutMs);
   try {
-    const res = await fetch(`${BASE}${path}`, {
+    const res = await fetch(path, {
       signal: ctl.signal,
       headers: { Accept: 'application/json' },
       cache: 'no-store',
     });
-    if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+    if (!res.ok) return { online: false, reason: `HTTP ${res.status}` };
+    const ct = res.headers.get('content-type') || '';
+    if (!ct.includes('application/json')) return { online: false, reason: 'Studio proxy unavailable' };
     return await res.json();
+  } catch (e) {
+    return { online: false, reason: e.name === 'AbortError' ? 'request timed out' : 'proxy unreachable' };
   } finally {
     clearTimeout(timer);
   }
 }
 
-async function apiPost(path, payload, timeoutMs = 5000) {
+async function proxyPost(path, payload, timeoutMs = 5000) {
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), timeoutMs);
   try {
-    const res = await fetch(`${BASE}${path}`, {
+    const res = await fetch(path, {
       method: 'POST',
       signal: ctl.signal,
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify(payload),
     });
-    if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+    if (!res.ok) return { online: false, reason: `HTTP ${res.status}` };
+    const ct = res.headers.get('content-type') || '';
+    if (!ct.includes('application/json')) return { online: false, reason: 'Studio proxy unavailable' };
     return await res.json();
+  } catch (e) {
+    return { online: false, reason: e.name === 'AbortError' ? 'recall timed out' : 'proxy unreachable' };
   } finally {
     clearTimeout(timer);
   }
 }
 
-export default function ChronicleVaultGodModeTool() {
+export default function ChronicleVaultGodModeTool({ showSupportBar = false }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const accent = isDark ? PURPLE_DARK : PURPLE_LIGHT;
+  const amber = isDark ? '#F59E0B' : '#B45309';
+  const crimson = isDark ? '#F87171' : '#B91C1C';
+  const emerald = isDark ? '#34D399' : '#047857';
   const { copied, copy } = useCopy();
 
   const [connStatus, setConnStatus] = useState('connecting');
-  const [err, setErr] = useState(null);
-  const [overview, setOverview] = useState(null);
-  const [continuity, setContinuity] = useState(null);
+  const [statusReason, setStatusReason] = useState('');
+  const [stats, setStats] = useState(null);
   const [patterns, setPatterns] = useState([]);
+  const [continuityItems, setContinuityItems] = useState([]);
   const [recallQuery, setRecallQuery] = useState('zoth-studio-v2');
   const [recallResult, setRecallResult] = useState(null);
   const [recallBusy, setRecallBusy] = useState(false);
@@ -100,37 +117,31 @@ export default function ChronicleVaultGodModeTool() {
     const trimmed = (q || '').trim();
     if (!trimmed) return;
     setRecallBusy(true);
-    try {
-      const res = await apiPost('/api/continuity/recall', { query: trimmed });
-      if (!alive.current) return;
+    const res = await proxyPost('/api/studio/chronicle/recall', { query: trimmed });
+    if (!alive.current) return;
+    if (res.online) {
       setRecallResult(res);
-    } catch (e) {
-      if (!alive.current) return;
-      setErr(e.name === 'AbortError' ? 'recall request timed out' : e.message);
-    } finally {
-      if (alive.current) setRecallBusy(false);
+    } else {
+      setRecallResult(null);
+      if (res.reason) setStatusReason(res.reason);
     }
+    setRecallBusy(false);
   }, []);
 
   const refresh = useCallback(async () => {
-    try {
-      const [ov, co, pat] = await Promise.all([
-        apiGet('/api/overview'),
-        apiGet('/api/continuity/overview'),
-        apiGet('/api/patterns'),
-      ]);
-      if (!alive.current) return;
-      setOverview(ov);
-      setContinuity(co);
-      setPatterns(Array.isArray(pat.patterns) ? pat.patterns : []);
+    const summary = await proxyGet('/api/studio/chronicle/summary');
+    if (!alive.current) return;
+    if (summary.online) {
+      setStats(summary.stats || null);
+      setPatterns(Array.isArray(summary.patterns) ? summary.patterns : []);
+      setContinuityItems(Array.isArray(summary.continuityItems) ? summary.continuityItems : []);
       setConnStatus('live');
-      setErr(null);
+      setStatusReason('');
       setLastSync(new Date());
       runRecall('zoth-studio-v2');
-    } catch (e) {
-      if (!alive.current) return;
+    } else {
       setConnStatus('offline');
-      setErr(e.name === 'AbortError' ? 'request timed out' : e.message);
+      setStatusReason(summary.reason || 'Chronicle Vault daemon (:8161) offline');
     }
   }, [runRecall]);
 
@@ -143,56 +154,55 @@ export default function ChronicleVaultGodModeTool() {
   const runSearch = useCallback(async (q) => {
     const trimmed = (q || '').trim();
     setSearchBusy(true);
-    try {
-      const res = await apiGet(`/api/conversations?q=${encodeURIComponent(trimmed)}&limit=6`);
-      if (!alive.current) return;
-      setSearchHits(Array.isArray(res.conversations) ? res.conversations : (Array.isArray(res.items) ? res.items : []));
-      setSearchTotal(typeof res.total === 'number' ? res.total : null);
-    } catch (e) {
-      if (!alive.current) return;
-      setErr(e.message);
-    } finally {
-      if (alive.current) setSearchBusy(false);
+    const res = await proxyGet(`/api/studio/chronicle/search?q=${encodeURIComponent(trimmed)}&limit=8`);
+    if (!alive.current) return;
+    if (res.online) {
+      setSearchHits(Array.isArray(res.conversations) ? res.conversations : []);
+      setSearchTotal(typeof res.total === 'number' ? res.total : 0);
     }
+    setSearchBusy(false);
   }, []);
 
   const handleExportJson = () => {
     downloadJson(
       `chronicle-vault-snapshot-${new Date().toISOString().slice(0, 10)}.json`,
-      { exported_at: new Date().toISOString(), base: BASE, overview, continuity, recallResult, top_patterns: patterns.slice(0, 12) }
+      {
+        schemaVersion: CHRONICLE_SCHEMA_VERSION,
+        exported_at: new Date().toISOString(),
+        online: connStatus === 'live',
+        stats,
+        recallResult,
+        top_patterns: patterns.slice(0, 12),
+        continuity_items: continuityItems.slice(0, 12),
+      }
     );
   };
 
   const handleExportBrief = () => {
-    const lines = [
-      '# Chronicle Vault Continuity Snapshot',
-      `Exported: ${new Date().toISOString()}`,
-      `Conversations: ${overview?.totals?.conversations ?? '—'} | Messages: ${overview?.totals?.messages ?? '—'} | Avg Friction: ${overview?.totals?.avg_friction ?? '—'}`,
-      `Unfinished Open: ${continuity?.counts?.unfinished_open ?? '—'} | Innovation Ideas: ${continuity?.counts?.innovation_open ?? '—'}`,
-      '',
-      `## Recall Query: ${recallQuery}`,
-      ...(recallResult?.related_memories || []).slice(0, 6).map(
-        (m) => `- [${m.family || 'vault'}] ${m.started_at || ''} (f:${m.friction_score ?? 0}) ${m.title || m.conversation_id}`
-      ),
-    ];
-    downloadText(`chronicle-vault-brief-${new Date().toISOString().slice(0, 10)}.md`, lines.join('\n'));
+    const md = buildChronicleMarkdownBrief({
+      mode: connStatus === 'live' ? 'live-proxy' : 'offline',
+      stats,
+      recallQuery,
+      recallResult,
+      patterns,
+    });
+    downloadText(`chronicle-vault-brief-${new Date().toISOString().slice(0, 10)}.md`, md);
   };
 
-  const totals = overview?.totals || {};
-  const counts = continuity?.counts || {};
   const kpis = [
-    { label: 'Conversations', value: totals.conversations != null ? totals.conversations.toLocaleString() : '—', accent },
-    { label: 'Messages', value: totals.messages != null ? totals.messages.toLocaleString() : '—' },
-    { label: 'Avg Friction', value: totals.avg_friction != null ? `${totals.avg_friction}` : '—', accent: '#F59E0B' },
-    { label: 'Unfinished Loops', value: counts.unfinished_open != null ? String(counts.unfinished_open) : '—', accent: '#F87171' },
-    { label: 'Parked Ideas', value: counts.innovation_open != null ? String(counts.innovation_open) : '—', accent: '#34D399' },
+    { label: 'Conversations', value: stats?.conversations != null ? stats.conversations.toLocaleString() : '—', accent },
+    { label: 'Messages', value: stats?.messages != null ? stats.messages.toLocaleString() : '—', accent },
+    { label: 'Avg Friction', value: stats?.avgFriction != null ? String(stats.avgFriction) : '—', accent: amber },
+    { label: 'Unfinished Loops', value: stats?.unfinishedLoops != null ? String(stats.unfinishedLoops) : '—', accent: crimson },
+    { label: 'Parked Ideas', value: stats?.parkedIdeas != null ? String(stats.parkedIdeas) : '—', accent: emerald },
+    { label: 'Active Patterns', value: stats?.activePatterns != null ? String(stats.activePatterns) : String(patterns.length), accent },
   ];
 
   const statusNode = (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center' }}>
       <SovereignStatusPill
-        status={connStatus === 'live' ? 'ok' : connStatus === 'offline' ? 'error' : 'info'}
-        label={connStatus === 'live' ? 'LIVE :8161' : connStatus === 'offline' ? 'DAEMON OFFLINE' : 'CONNECTING'}
+        status={connStatus === 'live' ? 'online' : connStatus === 'offline' ? 'warning' : 'syncing'}
+        label={connStatus === 'live' ? 'LIVE :8161 PROXY' : connStatus === 'offline' ? 'DAEMON OFFLINE' : 'CONNECTING'}
       />
       {lastSync && (
         <Typography sx={{ fontFamily: MONO, fontSize: 11, color: 'text.secondary' }}>
@@ -203,60 +213,85 @@ export default function ChronicleVaultGodModeTool() {
   );
 
   const actions = [
-    { label: 'Refresh', icon: <RefreshIcon fontSize="small" />, onClick: refresh, variant: 'outlined' },
-    { label: 'Export JSON', icon: <DownloadIcon fontSize="small" />, onClick: handleExportJson, variant: 'outlined', disabled: !overview },
-    { label: 'Export Brief', icon: <DownloadIcon fontSize="small" />, onClick: handleExportBrief, variant: 'outlined', disabled: !overview },
+    { label: 'Refresh', icon: <RefreshIcon fontSize="small" />, onClick: refresh, accent },
+    { label: 'Export JSON', icon: <DownloadIcon fontSize="small" />, onClick: handleExportJson, accent },
+    { label: 'Export Brief', icon: <DownloadIcon fontSize="small" />, onClick: handleExportBrief, accent },
     {
       label: 'Open :8161 Workstation',
       icon: <OpenInNewIcon fontSize="small" />,
-      href: BASE,
+      href: STANDALONE_URL,
       target: '_blank',
       rel: 'noopener noreferrer',
-      variant: 'contained',
+      primary: true,
+      accent,
     },
   ];
 
   const leftPane = (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-      <SovereignCard title="LIVE CONTINUITY RECALL" subtitle="Auto-connect past Hermes + AGY threads, breakage warnings, and habit alerts">
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1.5 }}>
+      <SovereignCard
+        title="LIVE CONTINUITY RECALL"
+        subtitle="Auto-connect past Hermes + AGY threads, breakage warnings, and habit alerts"
+        accent={accent}
+      >
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1.5, alignItems: 'stretch' }}>
           <TextField
+            id="vault-recall-query"
+            label="Continuity Recall Query"
             size="small"
             fullWidth
             value={recallQuery}
             onChange={(e) => setRecallQuery(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') runRecall(recallQuery); }}
             placeholder="Repo, topic, or subsystem (e.g. zoth-studio-v2)"
-            sx={{ flex: '1 1 200px', '& input': { fontFamily: MONO, fontSize: 13 } }}
+            inputProps={{ 'aria-label': 'Continuity Recall Query' }}
+            sx={{
+              flex: '1 1 200px',
+              '& .MuiInputBase-root': { minHeight: 44 },
+              '& input': { fontFamily: MONO, fontSize: 13, minHeight: 44, boxSizing: 'border-box', py: 1.25 },
+            }}
           />
           <Button
             variant="contained"
-            size="small"
             startIcon={<AutoAwesomeIcon fontSize="small" />}
             disabled={connStatus !== 'live' || recallBusy}
             onClick={() => runRecall(recallQuery)}
-            sx={{ fontFamily: MONO, fontSize: 11, textTransform: 'uppercase' }}
+            sx={{
+              minHeight: 44,
+              px: 2,
+              fontFamily: MONO,
+              fontSize: 11.5,
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              bgcolor: isDark ? PURPLE_DARK : PURPLE_LIGHT,
+              color: isDark ? '#08080B' : '#FFFFFF',
+            }}
           >
             Recall
           </Button>
         </Box>
 
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, mb: 1.5 }}>
-          {QUICK_QUERIES.map((q) => (
-            <Chip
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1.5 }}>
+          {CHRONICLE_QUICK_QUERIES.map((q) => (
+            <Button
               key={q}
-              label={q}
               size="small"
-              clickable
+              variant="outlined"
               onClick={() => { setRecallQuery(q); runRecall(q); }}
               sx={{
+                minHeight: 44,
+                px: 1.5,
                 fontFamily: MONO,
-                fontSize: 11,
-                bgcolor: recallQuery === q ? rgba(accent, 0.16) : 'transparent',
-                border: `1px solid ${rgba(accent, recallQuery === q ? 0.5 : 0.22)}`,
-                color: recallQuery === q ? accent : 'text.secondary',
+                fontSize: 11.5,
+                fontWeight: 700,
+                textTransform: 'none',
+                bgcolor: recallQuery === q ? rgba(accent, 0.14) : 'transparent',
+                borderColor: rgba(accent, recallQuery === q ? 0.65 : 0.3),
+                color: recallQuery === q ? accent : 'text.primary',
               }}
-            />
+            >
+              {q}
+            </Button>
           ))}
         </Box>
 
@@ -264,74 +299,79 @@ export default function ChronicleVaultGodModeTool() {
 
         {recallResult ? (
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25 }}>
-            {(recallResult.repetition_alerts || []).slice(0, 2).map((a, idx) => (
+            {(recallResult.alerts || recallResult.repetition_alerts || []).slice(0, 2).map((a, idx) => (
               <Box
-                key={`rep-${idx}`}
+                key={a.id || `rep-${idx}`}
                 sx={{
                   p: 1.25,
                   borderRadius: 1,
-                  border: '1px solid rgba(245, 158, 11, 0.35)',
-                  bgcolor: 'rgba(245, 158, 11, 0.08)',
+                  border: `1px solid ${rgba(amber, 0.4)}`,
+                  bgcolor: rgba(amber, 0.08),
                 }}
               >
-                <Typography sx={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, color: '#F59E0B' }}>
-                  {a.label || 'REPETITION ALERT'}
+                <Typography sx={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, color: amber }}>
+                  {a.title || 'Recurring Pattern Alert'}
                 </Typography>
-                <Typography variant="body2" sx={{ fontSize: 12.5, mt: 0.25 }}>
-                  {a.detail || a.message || String(a)}
-                </Typography>
+                {a.detail && (
+                  <Typography variant="body2" sx={{ fontSize: 12.5, mt: 0.25 }}>
+                    {a.detail}
+                  </Typography>
+                )}
               </Box>
             ))}
 
             {(recallResult.breakage_warnings || []).slice(0, 2).map((w, idx) => (
               <Box
-                key={`brk-${idx}`}
+                key={w.id || `brk-${idx}`}
                 sx={{
                   p: 1.25,
                   borderRadius: 1,
-                  border: '1px solid rgba(248, 113, 113, 0.35)',
-                  bgcolor: 'rgba(248, 113, 113, 0.08)',
+                  border: `1px solid ${rgba(crimson, 0.4)}`,
+                  bgcolor: rgba(crimson, 0.08),
                 }}
               >
-                <Typography sx={{ fontFamily: MONO, fontSize: 11, fontWeight: 700, color: '#F87171', display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                  <WarningAmberIcon sx={{ fontSize: 14 }} /> BREAKAGE RISK
+                <Typography sx={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, color: crimson, display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                  <WarningAmberIcon sx={{ fontSize: 15 }} /> {w.title || 'BREAKAGE RISK'}
                 </Typography>
-                <Typography variant="body2" sx={{ fontSize: 12.5, mt: 0.25 }}>
-                  {w.title || w.snippet || String(w)}
-                </Typography>
+                {w.detail && (
+                  <Typography variant="body2" sx={{ fontSize: 12.5, mt: 0.25 }}>
+                    {w.detail}
+                  </Typography>
+                )}
               </Box>
             ))}
 
-            <Typography sx={{ fontFamily: MONO, fontSize: 10.5, letterSpacing: 1.2, opacity: 0.65, textTransform: 'uppercase' }}>
+            <Typography sx={{ fontFamily: MONO, fontSize: 11, letterSpacing: 1.1, color: 'text.secondary', textTransform: 'uppercase' }}>
               Related Past Memories ({(recallResult.related_memories || []).length})
             </Typography>
             {(recallResult.related_memories || []).slice(0, 5).map((m, idx) => (
               <Box
-                key={m.conversation_id || idx}
-                sx={{ p: 1, borderRadius: 1, border: '1px solid', borderColor: 'divider' }}
+                key={m.id || idx}
+                sx={{ p: 1.25, borderRadius: 1, border: '1px solid', borderColor: 'divider' }}
               >
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, alignItems: 'center', mb: 0.25 }}>
-                  <Chip label={m.family || 'vault'} size="small" sx={{ fontFamily: MONO, fontSize: 10, height: 20 }} />
-                  <Typography sx={{ fontFamily: MONO, fontSize: 10.5, color: 'text.secondary' }}>
-                    {(m.started_at || '').slice(0, 10)} · f:{m.friction_score ?? 0}
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, alignItems: 'center', mb: 0.35 }}>
+                  <Chip label={m.source || 'vault'} size="small" sx={{ fontFamily: MONO, fontSize: 10.5, height: 22 }} />
+                  <Typography sx={{ fontFamily: MONO, fontSize: 11, color: 'text.secondary' }}>
+                    {formatChronicleDate(m)} · f:{m.frictionScore ?? 0}
                   </Typography>
                 </Box>
-                <Typography variant="body2" sx={{ fontSize: 12.5, fontWeight: 500, wordBreak: 'break-word' }}>
-                  {m.title || m.conversation_id}
+                <Typography variant="body2" sx={{ fontSize: 12.5, fontWeight: 600, wordBreak: 'break-word' }}>
+                  {sanitizeChronicleText(m.title || m.id)}
                 </Typography>
               </Box>
             ))}
           </Box>
         ) : (
           <Typography variant="body2" color="text.secondary">
-            {connStatus === 'live' ? 'Run a recall query to inspect connected Hermes + AGY threads.' : 'Start chronicle-vault.service to query live continuity.'}
+            {connStatus === 'live' ? 'Run a recall query to inspect connected Hermes + AGY threads.' : 'Start chronicle-vault.service on :8161 to query live continuity.'}
           </Typography>
         )}
       </SovereignCard>
 
-      <SovereignCard title="ZOTHOS CLI & MCP QUICKSTART" subtitle="Loopback-only SQLite FTS5 & MCP stdio server">
+      <SovereignCard title="ZOTHOS CLI & MCP QUICKSTART" subtitle="Loopback-only SQLite FTS5 & MCP stdio server" accent={accent}>
         <SovereignCodeBlock
-          language="bash"
+          title="CHRONICLE VAULT CLI"
+          accent={accent}
           code={`zoth-memory-vault serve --port 8161
 zoth-memory-vault sync-recent
 zoth-memory-vault recall "zoth-studio-v2"
@@ -340,11 +380,10 @@ zoth-memory-vault mcp`}
         />
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1.25 }}>
           <Button
-            size="small"
             variant="outlined"
             startIcon={copied ? <CheckIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
             onClick={() => copy('zoth-memory-vault recall "zoth-studio-v2"')}
-            sx={{ fontFamily: MONO, fontSize: 11 }}
+            sx={{ minHeight: 44, px: 2, fontFamily: MONO, fontSize: 11.5, fontWeight: 700, color: accent, borderColor: rgba(accent, 0.45) }}
           >
             {copied ? 'Copied CLI' : 'Copy Recall CLI'}
           </Button>
@@ -355,34 +394,48 @@ zoth-memory-vault mcp`}
 
   const rightPane = (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-      <SovereignCard title="FRICTION & PATTERN RADAR" subtitle="Live recurring failure modes and agent hygiene signals">
+      <SovereignCard title="FRICTION & PATTERN RADAR" subtitle="Live recurring failure modes and agent hygiene signals" accent={accent}>
         {patterns.length === 0 ? (
           <Typography variant="body2" color="text.secondary">
             {connStatus === 'live' ? 'No friction patterns recorded yet.' : 'Daemon offline — start chronicle-vault.service on :8161.'}
           </Typography>
         ) : (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25 }}>
             {patterns.slice(0, 6).map((p, idx) => (
               <Box
-                key={p.id || p.pattern_key || idx}
-                sx={{ p: 1.25, borderRadius: 1, border: '1px solid', borderColor: 'divider' }}
+                key={p.id || idx}
+                sx={{ p: 1.35, borderRadius: 1.25, border: '1px solid', borderColor: 'divider' }}
               >
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 1, alignItems: 'center' }}>
-                  <Typography sx={{ fontWeight: 600, fontSize: 13 }}>
-                    {p.title || p.name || p.pattern_key}
+                  <Typography sx={{ fontWeight: 700, fontSize: 13.5 }}>
+                    {p.title}
                   </Typography>
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75 }}>
-                    {p.occurrences != null && (
-                      <Chip label={`${p.occurrences}x`} size="small" sx={{ fontFamily: MONO, fontSize: 10.5, height: 20 }} />
-                    )}
-                    {p.severity && (
-                      <Chip label={String(p.severity).toUpperCase()} size="small" sx={{ fontFamily: MONO, fontSize: 10.5, height: 20, color: accent }} />
-                    )}
+                    <Chip label={`${p.count ?? 0}x`} size="small" sx={{ fontFamily: MONO, fontSize: 10.5, height: 22 }} />
+                    <Chip
+                      label={String(p.polarity || 'neutral').toUpperCase()}
+                      size="small"
+                      sx={{
+                        fontFamily: MONO,
+                        fontSize: 10.5,
+                        height: 22,
+                        fontWeight: 700,
+                        color: p.polarity === 'remove' ? crimson : p.polarity === 'keep' ? emerald : accent,
+                        border: `1px solid ${rgba(p.polarity === 'remove' ? crimson : p.polarity === 'keep' ? emerald : accent, 0.35)}`,
+                        bgcolor: rgba(p.polarity === 'remove' ? crimson : p.polarity === 'keep' ? emerald : accent, 0.08),
+                      }}
+                    />
+                    <Chip label={p.category || 'behavior'} size="small" sx={{ fontFamily: MONO, fontSize: 10.5, height: 22 }} />
                   </Box>
                 </Box>
-                {(p.summary || p.description || p.recommendation) && (
-                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: 12.2, mt: 0.5 }}>
-                    {p.summary || p.description || p.recommendation}
+                {p.summary && (
+                  <Typography variant="body2" color="text.secondary" sx={{ fontSize: 12.5, mt: 0.65, lineHeight: 1.55 }}>
+                    {p.summary}
+                  </Typography>
+                )}
+                {p.suggestedShift && (
+                  <Typography variant="body2" sx={{ fontSize: 12, mt: 0.65, color: accent, fontWeight: 600 }}>
+                    Shift: {p.suggestedShift}
                   </Typography>
                 )}
               </Box>
@@ -391,68 +444,81 @@ zoth-memory-vault mcp`}
         )}
       </SovereignCard>
 
-      <SovereignCard title="FTS5 ARCHIVE SEARCH" subtitle="Full-text search across consolidated Hermes + AGY histories">
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1.25 }}>
+      <SovereignCard title="FTS5 ARCHIVE SEARCH" subtitle="Full-text search across consolidated Hermes + AGY histories" accent={accent}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1.25, alignItems: 'stretch' }}>
           <TextField
+            id="vault-fts5-search"
+            label="FTS5 Archive Search"
             size="small"
             fullWidth
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') runSearch(searchQuery); }}
             placeholder="Search conversations (e.g. screenshot, proxy, systemd)"
-            sx={{ flex: '1 1 200px', '& input': { fontFamily: MONO, fontSize: 13 } }}
+            inputProps={{ 'aria-label': 'FTS5 Archive Search' }}
+            sx={{
+              flex: '1 1 200px',
+              '& .MuiInputBase-root': { minHeight: 44 },
+              '& input': { fontFamily: MONO, fontSize: 13, minHeight: 44, boxSizing: 'border-box', py: 1.25 },
+            }}
           />
           <Button
             variant="outlined"
-            size="small"
             startIcon={<SearchIcon fontSize="small" />}
             disabled={connStatus !== 'live' || searchBusy}
             onClick={() => runSearch(searchQuery)}
-            sx={{ fontFamily: MONO, fontSize: 11 }}
+            sx={{ minHeight: 44, px: 2, fontFamily: MONO, fontSize: 11.5, fontWeight: 700, color: accent, borderColor: rgba(accent, 0.45) }}
           >
             Search
           </Button>
         </Box>
         {searchBusy && <LinearProgress sx={{ mb: 1 }} />}
         {searchTotal !== null && (
-          <Typography sx={{ fontFamily: MONO, fontSize: 11, color: 'text.secondary', mb: 1 }}>
+          <Typography sx={{ fontFamily: MONO, fontSize: 11.5, color: 'text.secondary', mb: 1 }}>
             {searchTotal.toLocaleString()} matching conversations
           </Typography>
         )}
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
-          {searchHits.slice(0, 5).map((c, idx) => (
-            <Box key={c.id || idx} sx={{ p: 1, borderRadius: 1, border: '1px solid', borderColor: 'divider' }}>
+          {searchHits.slice(0, 6).map((c, idx) => (
+            <Box key={c.id || idx} sx={{ p: 1.15, borderRadius: 1, border: '1px solid', borderColor: 'divider' }}>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, alignItems: 'center' }}>
-                <Chip label={c.family || 'log'} size="small" sx={{ fontFamily: MONO, fontSize: 10, height: 20 }} />
-                <Typography sx={{ fontFamily: MONO, fontSize: 10.5, color: 'text.secondary' }}>
-                  {(c.started_at || '').slice(0, 10)} · {c.message_count ?? '?'} msgs
+                <Chip label={c.source || 'log'} size="small" sx={{ fontFamily: MONO, fontSize: 10.5, height: 22 }} />
+                <Typography sx={{ fontFamily: MONO, fontSize: 11, color: 'text.secondary' }}>
+                  {formatChronicleDate(c)} · {c.messageCount ?? 0} msgs
                 </Typography>
               </Box>
-              <Typography variant="body2" sx={{ fontSize: 12.5, mt: 0.35, wordBreak: 'break-word' }}>
-                {c.title || c.id}
+              <Typography variant="body2" sx={{ fontSize: 12.5, mt: 0.35, fontWeight: 600, wordBreak: 'break-word' }}>
+                {sanitizeChronicleText(c.title || c.id)}
               </Typography>
             </Box>
           ))}
         </Box>
       </SovereignCard>
 
-      {continuity?.items?.length > 0 && (
-        <SovereignCard title="OPEN CONTINUITY LOOPS" subtitle="Unfinished threads & parked innovation ideas">
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
-            {continuity.items.slice(0, 4).map((item) => (
-              <Box key={item.id} sx={{ p: 1, borderRadius: 1, border: '1px solid', borderColor: 'divider' }}>
+      {continuityItems.length > 0 && (
+        <SovereignCard title="OPEN CONTINUITY LOOPS" subtitle="Sanitized unfinished threads & parked innovation ideas" accent={accent}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.85 }}>
+            {continuityItems.slice(0, 4).map((item) => (
+              <Box key={item.id} sx={{ p: 1.15, borderRadius: 1, border: '1px solid', borderColor: 'divider' }}>
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, alignItems: 'center' }}>
                   <Chip
-                    label={item.item_type || 'loop'}
+                    label={item.itemType}
                     size="small"
-                    sx={{ fontFamily: MONO, fontSize: 10, height: 20, color: item.item_type === 'unfinished' ? '#F87171' : '#34D399' }}
+                    sx={{
+                      fontFamily: MONO,
+                      fontSize: 10.5,
+                      height: 22,
+                      fontWeight: 700,
+                      color: item.itemType === 'unfinished' ? crimson : emerald,
+                      border: `1px solid ${rgba(item.itemType === 'unfinished' ? crimson : emerald, 0.35)}`,
+                    }}
                   />
-                  <Typography sx={{ fontFamily: MONO, fontSize: 10.5, color: 'text.secondary' }}>
-                    {item.category || item.project}
+                  <Typography sx={{ fontFamily: MONO, fontSize: 11, color: 'text.secondary' }}>
+                    {item.category} · {item.date}
                   </Typography>
                 </Box>
-                <Typography variant="body2" sx={{ fontSize: 12.2, mt: 0.35, wordBreak: 'break-word' }}>
-                  {item.snippet || item.title}
+                <Typography variant="body2" sx={{ fontSize: 12.5, mt: 0.4, wordBreak: 'break-word' }}>
+                  {item.summary || item.title}
                 </Typography>
               </Box>
             ))}
@@ -468,18 +534,18 @@ zoth-memory-vault mcp`}
         <Box sx={{ mb: 2 }}>
           <SovereignAlertBanner
             severity="warning"
-            title="Chronicle Vault daemon unreachable on 127.0.0.1:8161"
-            message={`Error: ${err || 'connection refused'}. Start it with: systemctl --user start chronicle-vault.service (or zoth-memory-vault serve --port 8161).`}
+            title="Chronicle Vault daemon (:8161) unreachable via Studio proxy"
+            message={`${statusReason || 'Daemon offline.'} Start it locally with: systemctl --user start chronicle-vault.service (or zoth-memory-vault serve --port 8161).`}
           />
         </Box>
       )}
       <SovereignWorkstationShell
         id="zoth-memory-vault"
-        category="MEMORY & BRAIN"
+        category="MEMORY & CONTINUITY"
         title="Chronicle Vault"
-        subtitle="Contained Hermes + AGY conversation consolidation, friction/pattern intelligence, live continuity recall, and personal prompt playbook workstation."
-        version="1.0.0"
-        accent={PURPLE_DARK}
+        subtitle="Loopback SQLite FTS5 conversation consolidation, friction/pattern radar, and live continuity recall proxied through Studio :3000."
+        version={CHRONICLE_SCHEMA_VERSION}
+        accent={accent}
         metrics={kpis}
         status={statusNode}
         actions={actions}
@@ -487,6 +553,7 @@ zoth-memory-vault mcp`}
         rightPane={rightPane}
         leftCols={5}
         rightCols={7}
+        showSupportBar={showSupportBar}
       />
       <Divider sx={{ my: 2, opacity: 0.25 }} />
     </Box>

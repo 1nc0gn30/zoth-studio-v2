@@ -43,6 +43,7 @@ import { microTools } from '../data/toolsData';
 import { useStudioStatus } from '../studio/useStudioStatus';
 import ZothAIAssistant from '../components/ZothAIAssistant';
 import SovereignFunnel from '../components/SovereignFunnel';
+import ChronicleHubGodModeTool from '../components/tools/ChronicleHubGodModeTool';
 import { useReality } from '../context/RealityContext';
 import AgentComposerGodModeTool from '../components/tools/AgentComposerGodModeTool';
 import BrandAssetsForgeGodModeTool from '../components/tools/BrandAssetsForgeGodModeTool';
@@ -421,170 +422,11 @@ function ModelsWorkstation() {
 }
 
 /* ==========================================================================
-   WORKSTATION 6: Chronicle & Engineering Horizon Roadmap (chronicle)
+   WORKSTATION 6: Chronicle Hub & Engineering Horizon (chronicle)
+   Delegated directly to the unified hybrid ChronicleHubGodModeTool (v2.3.0).
    ========================================================================== */
 function ChronicleWorkstation() {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
-  const [filter, setFilter] = useState('All');
-  const [copiedManifest, setCopiedManifest] = useState(false);
-
-  const milestones = [
-    { id: 'M-1', track: 'Consensus', title: 'Byzantine 3-Agent Triangulation AST Engine', status: 'Shipped', progress: 100, target: 'v2.0-Alpha', hash: 'e3b0c44298fc1c14' },
-    { id: 'M-2', track: 'Memory & AI', title: 'Lucy Oracle STDP Synaptic Weight Plasticity Core', status: 'Shipped', progress: 100, target: 'v2.0-GA', hash: '8f434346648f6b96' },
-    { id: 'M-3', track: 'Enclaves', title: 'Adytum Vault & AES-256-GCM Local Store', status: 'Shipped', progress: 100, target: 'v2.0-GA', hash: 'd4735e3a265e16ee' },
-    { id: 'M-4', track: 'Spatial 3D', title: 'Nexus WebGL Scene Studio & 3D Interactive Omniverse', status: 'Active Sprint', progress: 85, target: 'v2.1', hash: '356a192b7913b04c' },
-    { id: 'M-5', track: 'Consensus', title: 'Cross-Agent ZeroMQ IPC Bus with P2P Heartbeats', status: 'Active Sprint', progress: 90, target: 'v2.1', hash: 'da4b9237bacccdf1' },
-    { id: 'M-6', track: 'Enclaves', title: 'Zero-Egress WASI Native Binary Cross-Compiler (Edge Forge)', status: 'Horizon Spec', progress: 40, target: 'v2.2', hash: '77de68daecd823b7' },
-  ];
-
-  const tracks = ['All', 'Consensus', 'Memory & AI', 'Enclaves', 'Spatial 3D'];
-  const filtered = filter === 'All' ? milestones : milestones.filter((m) => m.track === filter);
-
-  const handleCopyManifest = () => {
-    const manifest = {
-      project: 'Zoth Studio Engineering Horizon',
-      timestamp: new Date().toISOString(),
-      active_milestones: milestones.length,
-      shipped_ratio: '3/6 (50% GA Delivered)',
-      zero_egress_verified: true,
-      integrity_hash: 'sha256-9b8716b5a8e10086c8a7'
-    };
-    navigator.clipboard.writeText(JSON.stringify(manifest, null, 2));
-    setCopiedManifest(true);
-    setTimeout(() => setCopiedManifest(false), 2000);
-  };
-
-  return (
-    <Box>
-      <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
-          <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, mb: 3 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
-              <Box>
-                <Typography variant="h6" sx={{ fontWeight: 800 }}>Engineering Sprint Chronicle</Typography>
-                <Typography variant="body2" color="text.secondary">Verified release matrix and decentralized architectural milestones.</Typography>
-              </Box>
-              <Button
-                variant="outlined"
-                color="primary"
-                startIcon={copiedManifest ? <CheckIcon /> : <ContentCopyIcon />}
-                onClick={handleCopyManifest}
-                sx={{ fontWeight: 750 }}
-              >
-                {copiedManifest ? 'Manifest Copied!' : 'Export Release Manifest'}
-              </Button>
-            </Box>
-
-            <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 3 }}>
-              {tracks.map((t) => (
-                <Chip
-                  key={t}
-                  label={t}
-                  clickable
-                  onClick={() => setFilter(t)}
-                  sx={{
-                    fontWeight: 750,
-                    bgcolor: filter === t ? (isDark ? '#D4AF37' : '#B8860B') : 'transparent',
-                    color: filter === t ? '#101828' : theme.palette.text.primary,
-                    border: '1px solid',
-                    borderColor: filter === t ? (isDark ? '#D4AF37' : '#B8860B') : theme.palette.divider,
-                  }}
-                />
-              ))}
-            </Box>
-
-            <Stack spacing={2}>
-              {filtered.map((item) => (
-                <Paper
-                  key={item.id}
-                  sx={{
-                    p: 2,
-                    border: '1px solid',
-                    borderColor: item.status === 'Shipped' ? (isDark ? 'rgba(52,211,153,0.3)' : '#A7F3D0') : item.status === 'Active Sprint' ? (isDark ? 'rgba(212,175,55,0.4)' : '#FDE68A') : theme.palette.divider,
-                    bgcolor: isDark ? '#0C0F17' : '#F8FAFC',
-                    borderRadius: 2,
-                  }}
-                >
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, flexWrap: 'wrap', gap: 1 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Chip label={item.track} size="small" sx={{ fontWeight: 700, fontSize: '0.7rem' }} />
-                      <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>{item.title}</Typography>
-                    </Box>
-                    <Chip
-                      label={item.status}
-                      size="small"
-                      sx={{
-                        fontWeight: 800,
-                        bgcolor: item.status === 'Shipped' ? (isDark ? 'rgba(52,211,153,0.18)' : '#ECFDF3') : item.status === 'Active Sprint' ? (isDark ? 'rgba(212,175,55,0.18)' : '#FEF9E7') : (isDark ? 'rgba(148,163,184,0.18)' : '#F1F5F9'),
-                        color: item.status === 'Shipped' ? (isDark ? '#34D399' : '#047857') : item.status === 'Active Sprint' ? (isDark ? '#D4AF37' : '#8A6A09') : theme.palette.text.secondary,
-                        border: `1px solid ${item.status === 'Shipped' ? (isDark ? 'rgba(52,211,153,0.3)' : 'rgba(5,150,105,0.3)') : item.status === 'Active Sprint' ? (isDark ? 'rgba(212,175,55,0.3)' : 'rgba(184,134,11,0.25)') : 'transparent'}`,
-                      }}
-                    />
-                  </Box>
-
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 1.5 }}>
-                    <Box sx={{ flex: 1 }}>
-                      <LinearProgress
-                        variant="determinate"
-                        value={item.progress}
-                        sx={{
-                          height: 7,
-                          borderRadius: 1,
-                          bgcolor: isDark ? '#1E293B' : '#E2E8F0',
-                          '& .MuiLinearProgress-bar': {
-                            bgcolor: item.progress === 100 ? (isDark ? '#34D399' : '#047857') : (isDark ? '#D4AF37' : '#B8860B'),
-                          },
-                        }}
-                      />
-                    </Box>
-                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 750 }}>{item.progress}%</Typography>
-                  </Box>
-
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1, fontSize: '0.75rem', color: theme.palette.text.secondary, fontFamily: mono }}>
-                    <span>Target: {item.target}</span>
-                    <span>Commit SHA: {item.hash.substring(0, 10)}</span>
-                  </Box>
-                </Paper>
-              ))}
-            </Stack>
-          </Paper>
-        </Grid>
-
-        <Grid xs={12} md={4}>
-          <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#8A6A09' }}>Chronicle Invariants</Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Every deliverable complies with zero-cloud execution and reproducible offline cryptographic guarantees.
-            </Typography>
-
-            <Stack spacing={2}>
-              <Paper sx={{ p: 1.5, bgcolor: isDark ? '#08080B' : '#F1F5F9', border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #EAECF0', borderRadius: 1.5 }}>
-                <Typography variant="caption" sx={{ fontWeight: 800, color: isDark ? '#D4AF37' : '#8A6A09', display: 'block' }}>Zero-Egress Standard</Typography>
-                <Typography variant="body2" sx={{ fontSize: '0.82rem', mt: 0.5 }}>
-                  100% of pipeline stages run in loopback space (127.0.0.1). No network telemetry permitted.
-                </Typography>
-              </Paper>
-
-              <Paper sx={{ p: 1.5, bgcolor: isDark ? '#08080B' : '#F1F5F9', border: isDark ? '1px solid rgba(52,211,153,0.2)' : '1px solid rgba(5,150,105,0.2)', borderRadius: 1.5 }}>
-                <Typography variant="caption" sx={{ fontWeight: 800, color: isDark ? '#34D399' : '#047857', display: 'block' }}>Reproducible Artifacts</Typography>
-                <Typography variant="body2" sx={{ fontSize: '0.82rem', mt: 0.5 }}>
-                  Deterministic build hashes verified across all local tool builds without cloud CI.
-                </Typography>
-              </Paper>
-
-              <Paper sx={{ p: 1.5, bgcolor: isDark ? '#08080B' : '#F1F5F9', border: isDark ? '1px solid rgba(96,165,250,0.2)' : '1px solid rgba(37,99,235,0.2)', borderRadius: 1.5 }}>
-                <Typography variant="caption" sx={{ fontWeight: 800, color: isDark ? '#60A5FA' : '#1D4ED8', display: 'block' }}>Byzantine AST Quorum</Typography>
-                <Typography variant="body2" sx={{ fontSize: '0.82rem', mt: 0.5 }}>
-                  3-agent agreement threshold required before code AST is executed in the runtime.
-                </Typography>
-              </Paper>
-            </Stack>
-          </Paper>
-        </Grid>
-      </Grid>
-    </Box>
-  );
+  return <ChronicleHubGodModeTool />;
 }
 
 /* ==========================================================================

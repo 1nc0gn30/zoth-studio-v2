@@ -97,15 +97,15 @@
     },
     {
       "id": "chronicle",
-      "name": "Zoth Chronicle & Engineering Horizon Roadmap",
+      "name": "Zoth Chronicle Hub & Engineering Horizon",
       "band": "Observe",
       "type": "cockpit",
-      "executionType": "browser",
+      "executionType": "hybrid",
       "version": "2.3.0",
       "route": "/workstations/chronicle",
-      "path": "/studio/chronicle.html",
+      "path": "/workstations/chronicle",
       "pullCommand": "zoth open chronicle",
-      "description": "Milestone timeline, system architecture chronicle, and release telemetry logs.",
+      "description": "Hybrid conversation continuity vault (:8161 proxy), browser JSONL/Markdown transcript analyzer, friction pattern radar, and Studio release chronicle.",
       "url": "https://zoth.nullai.tech/workstations/chronicle"
     },
     {

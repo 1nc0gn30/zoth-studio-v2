@@ -18,6 +18,15 @@ import {
   computeLatencyStats,
   normalizeBridgeChannels,
 } from './bus-monitor-engine.mjs';
+import {
+  CHRONICLE_SCHEMA_VERSION,
+  sanitizeChronicleText,
+  normalizeOverviewStats,
+  normalizePatterns,
+  normalizeContinuityItems,
+  normalizeRecallResponse,
+  normalizeConversations,
+} from './chronicle-engine.mjs';
 
 const STUDIO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOME_DIR = process.env.ZOTH_HOME || os.homedir();
@@ -1840,6 +1849,134 @@ export function studioMiddleware() {
           edgePOP: { city: 'Ashburn, VA (us-east-1)', country: 'United States' },
           securityEnclave: { coop: 'same-origin', coep: 'credentialless', webgpuPermitted: true },
           showcase: { routesPrerendered: 140, framework: 'React 19 + Vite + Three.js + WebGPU' }
+        });
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/chronicle/summary') {
+        const checkedAt = new Date().toISOString();
+        const [health, overview, continuity, patternsRes] = await Promise.all([
+          requestJson(8161, '/health', { timeout: 1200 }),
+          requestJson(8161, '/api/overview', { timeout: 1200 }),
+          requestJson(8161, '/api/continuity/overview', { timeout: 1200 }),
+          requestJson(8161, '/api/patterns', { timeout: 1200 }),
+        ]);
+
+        if (!health.up && !overview.up) {
+          send(res, 200, {
+            online: false,
+            schemaVersion: CHRONICLE_SCHEMA_VERSION,
+            checkedAt,
+            reason: 'Chronicle Vault daemon (:8161) not reachable — browser hybrid analyzer active',
+            stats: null,
+            patterns: [],
+            alerts: [],
+            unfinishedLoops: [],
+            parkedIdeas: [],
+            byFamily: [],
+          });
+          return;
+        }
+
+        const patterns = normalizePatterns(patternsRes.up ? patternsRes.json : []);
+        const continuityNorm = normalizeContinuityItems(continuity.up ? continuity.json : []);
+        const stats = normalizeOverviewStats(
+          overview.up ? overview.json : {},
+          continuity.up ? continuity.json : {},
+          patterns
+        );
+
+        send(res, 200, {
+          online: true,
+          schemaVersion: CHRONICLE_SCHEMA_VERSION,
+          checkedAt,
+          service: sanitizeChronicleText(health.json?.service || 'chronicle-vault'),
+          syncRunning: Boolean(health.json?.sync_running),
+          stats,
+          patterns,
+          alerts: [],
+          unfinishedLoops: continuityNorm.unfinishedLoops,
+          parkedIdeas: continuityNorm.parkedIdeas,
+          continuityItems: continuityNorm.items,
+          byFamily: stats.byFamily,
+        });
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/chronicle/recall') {
+        let body;
+        try {
+          body = await readJsonBodyStrict(req, 16384);
+        } catch (err) {
+          send(res, err.statusCode || 400, { error: err.message || 'Invalid JSON body.' });
+          return;
+        }
+        if (typeof body.query !== 'string' || !body.query.trim()) {
+          send(res, 400, { error: 'Request body must include non-empty string field "query".' });
+          return;
+        }
+        const query = body.query.trim().slice(0, 300);
+        const recallRes = await requestJson(8161, '/api/continuity/recall', {
+          method: 'POST',
+          body: { query },
+          timeout: 2500,
+        });
+
+        if (!recallRes.up || !recallRes.json) {
+          send(res, 200, {
+            online: false,
+            schemaVersion: CHRONICLE_SCHEMA_VERSION,
+            query: sanitizeChronicleText(query),
+            reason: 'Chronicle Vault daemon (:8161) not reachable — browser hybrid analyzer active',
+            entities: [],
+            keywords: [],
+            related_memories: [],
+            alerts: [],
+            repetition_alerts: [],
+            breakage_warnings: [],
+            unfinished_loops: [],
+            parked_ideas: [],
+          });
+          return;
+        }
+
+        const normalized = normalizeRecallResponse(recallRes.json);
+        send(res, 200, {
+          online: true,
+          schemaVersion: CHRONICLE_SCHEMA_VERSION,
+          ...normalized,
+        });
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/chronicle/search') {
+        const q = String(url.searchParams.get('q') || '').trim().slice(0, 200);
+        const rawLimit = Number(url.searchParams.get('limit') || 12);
+        const limit = Number.isFinite(rawLimit) ? Math.max(1, Math.min(100, Math.floor(rawLimit))) : 12;
+        const upstreamPath = `/api/conversations?q=${encodeURIComponent(q)}&limit=${limit}`;
+        const searchRes = await requestJson(8161, upstreamPath, { timeout: 2000 });
+
+        if (!searchRes.up || !searchRes.json) {
+          send(res, 200, {
+            online: false,
+            schemaVersion: CHRONICLE_SCHEMA_VERSION,
+            query: sanitizeChronicleText(q),
+            limit,
+            total: 0,
+            conversations: [],
+            reason: 'Chronicle Vault daemon (:8161) not reachable — browser hybrid analyzer active',
+          });
+          return;
+        }
+
+        const normalized = normalizeConversations(searchRes.json);
+        send(res, 200, {
+          online: true,
+          schemaVersion: CHRONICLE_SCHEMA_VERSION,
+          query: sanitizeChronicleText(q),
+          limit,
+          total: normalized.total,
+          conversations: normalized.conversations,
         });
         return;
       }

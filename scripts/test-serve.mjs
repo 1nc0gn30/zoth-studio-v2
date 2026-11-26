@@ -60,6 +60,18 @@ try {
   check('Bus ping SSRF external/metadata host rejected (400)', r.status === 400, `${r.status} ${r.body.slice(0, 100)}`);
   r = await req('/api/studio/bus/ping', { method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/json' }, body: JSON.stringify({ port: PORT }) });
   check('Bus ping cross-origin blocked (403)', r.status === 403, `${r.status}`);
+  r = await req('/api/studio/chronicle/summary');
+  check('Chronicle summary API 200 JSON (no /home/ leak)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"schemaVersion":"2.3.0"/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 140)}`);
+  r = await req('/api/studio/chronicle/summary', { headers: { Host: 'evil.example.invalid' } });
+  check('Chronicle summary GET DNS-rebinding blocked (403)', r.status === 403 && /Untrusted host blocked/.test(r.body), `${r.status} ${r.body.slice(0, 80)}`);
+  r = await req('/api/studio/chronicle/recall', { method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/json' }, body: '{"query":"zoth-studio-v2"}' });
+  check('Chronicle recall cross-origin blocked (403)', r.status === 403, `${r.status}`);
+  r = await req('/api/studio/chronicle/recall', { method: 'POST', headers: { Origin: base, 'Content-Type': 'application/json' }, body: '{bad-json' });
+  check('Chronicle recall malformed JSON rejected (400)', r.status === 400, `${r.status}`);
+  r = await req('/api/studio/chronicle/recall', { method: 'POST', headers: { Origin: base, 'Content-Type': 'application/json' }, body: '{"query":"zoth-studio-v2"}' });
+  check('Chronicle recall local POST 200 JSON (no /home/ leak)', r.status === 200 && /"related_memories":\[/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 140)}`);
+  r = await req('/api/studio/chronicle/search?q=chronicle&limit=5');
+  check('Chronicle search GET 200 JSON (no /home/ leak)', r.status === 200 && /"conversations":\[/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 140)}`);
   r = await req('/api/studio/ax/audit');
   check('AX audit API 200 JSON (driftCount 0)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"driftCount":0/.test(r.body), `${r.status} ${r.body.slice(0, 180)}`);
   r = await req('/api/studio/ax/validate', { method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/json' }, body: '{"spec":"robots.txt","content":"User-agent: *\\nAllow: /"}' });

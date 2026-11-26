@@ -48,6 +48,50 @@ export const toolsDocumentation = {
       'Battery, charging state, voltage, and thermal temperature telemetry monitor'
     ]
   },
+  'chronicle': {
+    whyUse: 'Unifies live Hermes + AGY continuity recall (proxied over Studio loopback to SQLite FTS5 on :8161) with a 100% offline browser JSONL/Markdown transcript analyzer, friction pattern radar, and verified Studio release chronicle.',
+    problemSolved: 'Eliminates disconnected AI chat histories, repeated agent friction loops, unsanitized host-path leakage, and dead offline UI states by combining a hardened same-origin Studio proxy with a full client-side log parser and sanitized JSON/Markdown/CSV exporter.',
+    architecture: 'Hybrid browser + loopback architecture (v2.3.0): shared pure engine mirrored byte-identically between src/utils/chronicleEngine.js and server/chronicle-engine.mjs. Studio :3000 exposes hardened same-origin endpoints GET /api/studio/chronicle/summary, POST /api/studio/chronicle/recall, and GET /api/studio/chronicle/search guarded by strict loopback Host/Origin checks (403 on DNS-rebinding or cross-origin writes) and automatic ~/ home-path redaction. Pairs cleanly with zoth-memory-vault (:8161) SQLite FTS5 when local and runs 100% client-side when offline.',
+    aiAgentProtocol: {
+      mcpTool: 'chronicle_vault_recall',
+      description: 'Query live continuity memory, friction patterns, and FTS5 conversation history through the local zoth-memory-vault stdio MCP server or Studio loopback endpoints (/api/studio/chronicle/{summary,recall,search}).',
+      cliExample: 'zoth open chronicle && zoth-memory-vault recall "zoth-studio-v2" && zoth-memory-vault patterns --json',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          endpoint: { type: 'string', enum: ['/api/studio/chronicle/summary', '/api/studio/chronicle/recall', '/api/studio/chronicle/search'], description: 'Hardened Studio loopback proxy endpoint' },
+          query: { type: 'string', description: 'Repository, topic, or FTS5 archive search query' },
+          limit: { type: 'integer', minimum: 1, maximum: 100, default: 12, description: 'Maximum FTS5 search records returned' }
+        },
+        required: ['endpoint']
+      },
+      outputSchema: {
+        online: 'boolean',
+        schemaVersion: 'string',
+        stats: { conversations: 'number', messages: 'number', avgFriction: 'number', unfinishedLoops: 'number', parkedIdeas: 'number', activePatterns: 'number' },
+        related_memories: 'array',
+        patterns: 'array',
+        conversations: 'array'
+      }
+    },
+    quickstart: [
+      'zoth open chronicle',
+      'zoth-memory-vault serve --port 8161',
+      'zoth-memory-vault sync-recent',
+      'zoth-memory-vault recall "zoth-studio-v2"',
+      'zoth-memory-vault patterns --json',
+      'zoth-memory-vault mcp',
+      '# Same-origin Studio proxy: GET http://127.0.0.1:3000/api/studio/chronicle/summary'
+    ],
+    features: [
+      'Hardened same-origin Studio proxy (/api/studio/chronicle/{summary,recall,search}) with DNS-rebinding 403 guards and ~/ home-path redaction',
+      'Safe timestamp normalization across ISO strings, Unix epoch floats (seconds/ms), and numeric strings with full :8161 schema parity',
+      '100% offline Browser Transcript Analyzer for .jsonl, .json, and .md session logs with topic extraction and error/correction markers',
+      'Live SQLite FTS5 archive search with automatic client-side full-text fallback when :8161 is offline',
+      'Friction & Pattern Radar displaying polarity, category, summary, and actionable workflow shifts',
+      'Sanitized JSON, Markdown Brief, and CSV exports (with spreadsheet formula-injection neutralization) plus verified v2.0–v2.3.0 Release Chronicle'
+    ]
+  },
   'zoth-memory-vault': {
     whyUse: 'Consolidates every Hermes Agent and AGY session into a single loopback-only SQLite FTS5 ledger so recurring friction, unfinished loops, breakage risks, and high-signal prompt playbooks stay searchable without cloud telemetry.',
     problemSolved: 'AI sessions scatter across disconnected CLI transcripts and IDE logs, causing agents to repeat the same mistakes, forget parked ideas, and break fragile unfinished work. Chronicle Vault mines those histories locally and injects live continuity briefs before edits begin.',

@@ -72,6 +72,8 @@ const SAMPLE_ROUTES = [
   '/tools/brand',
   '/workstations/bus-monitor',
   '/tools/bus-monitor',
+  '/workstations/chronicle',
+  '/tools/chronicle',
   '/tools/certpath-roadmap-studio',
   '/workstations/mission-control',
   '/docs/math/stdp',
@@ -422,6 +424,27 @@ async function main() {
         });
         if (!busCheck.hasTitle || !busCheck.hasH1 || !busCheck.hasSoftwareApp || !busCheck.hasFaq || !busCheck.hasBusWorkstation) {
           failureReason = `bus-monitor invariants failed: ${JSON.stringify(busCheck)}`;
+        }
+      } else if (route === '/workstations/chronicle' || route === '/tools/chronicle') {
+        await page.waitForTimeout(700);
+        const chrCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          const bodyText = document.body?.innerText || '';
+          return {
+            hasTitle: document.title.includes('Zoth Chronicle Hub & Engineering Horizon'),
+            hasH1: h1Text.includes('Zoth Chronicle Hub & Engineering Horizon'),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasChronicleWorkstation: Boolean(document.querySelector('[data-testid="chronicle-hub-workstation"]')),
+            hasErrorBoundary: bodyText.includes('Zoth Studio Workstation UI Recovered'),
+          };
+        });
+        if (!chrCheck.hasTitle || !chrCheck.hasH1 || !chrCheck.hasSoftwareApp || !chrCheck.hasFaq || !chrCheck.hasChronicleWorkstation || chrCheck.hasErrorBoundary) {
+          failureReason = `chronicle invariants failed: ${JSON.stringify(chrCheck)}`;
         }
       } else if (route === '/tools/certpath-roadmap-studio') {
         const cpCheck = await page.evaluate(() => {

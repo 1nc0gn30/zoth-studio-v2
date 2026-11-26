@@ -37,6 +37,7 @@ import AgentComposerGodModeTool from '../components/tools/AgentComposerGodModeTo
 import AxPowerhouseGodModeTool from '../components/tools/AxPowerhouseGodModeTool';
 import BrandAssetsForgeGodModeTool from '../components/tools/BrandAssetsForgeGodModeTool';
 import BusMonitorGodModeTool from '../components/tools/BusMonitorGodModeTool';
+import ChronicleHubGodModeTool from '../components/tools/ChronicleHubGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -255,7 +256,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'models': PromptMasterGodModeTool,
   'ax-powerhouse': AxPowerhouseGodModeTool,
   'cyberpunk-hud': AttackSurfaceSentinelGodModeTool,
-  'chronicle': ChronicleVaultGodModeTool,
+  'chronicle': ChronicleHubGodModeTool,
   'notes-reviewer': NeuroMemoryGodModeTool,
   'brand': BrandAssetsForgeGodModeTool,
   'vision-link': VisionKinematicsGodModeTool,

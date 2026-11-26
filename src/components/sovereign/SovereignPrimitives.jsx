@@ -32,6 +32,7 @@ export function resolveModeAccent(accent, isDark) {
     if (low === SOV.cyber.toLowerCase()) return '#0369A1';
     if (low === SOV.crimson.toLowerCase()) return '#B91C1C';
     if (low === SOV.amber.toLowerCase()) return '#B45309';
+    if (low === '#c084fc') return '#6D28D9';
   }
   return accent;
 }
@@ -658,15 +659,23 @@ export function SovereignStatusPill({
 
   const statusColorMap = {
     online: SOV.emerald,
-    offline: SOV.crimson,
+    ok: SOV.emerald,
+    live: SOV.emerald,
+    offline: SOV.amber,
+    warning: SOV.amber,
+    warn: SOV.amber,
     standby: SOV.amber,
     degraded: SOV.amber,
+    error: SOV.crimson,
+    critical: SOV.crimson,
     syncing: SOV.cyber,
+    info: SOV.cyber,
   };
 
-  const baseCol = accent || statusColorMap[status] || SOV.emerald;
+  const baseCol = accent || statusColorMap[status] || SOV.amber;
   const col = resolveModeAccent(baseCol, isDark);
   const displayLabel = label || status.toUpperCase();
+  const isStaticDot = status === 'offline' || status === 'error' || status === 'critical';
 
   return (
     <Box
@@ -691,7 +700,7 @@ export function SovereignStatusPill({
           borderRadius: '50%',
           bgcolor: col,
           boxShadow: `0 0 8px ${col}`,
-          animation: status === 'offline' ? 'none' : 'sovereignPillPulse 2s ease-in-out infinite',
+          animation: isStaticDot ? 'none' : 'sovereignPillPulse 2s ease-in-out infinite',
           '@keyframes sovereignPillPulse': {
             '0%': { transform: 'scale(0.95)', opacity: 0.7 },
             '50%': { transform: 'scale(1.2)', opacity: 1 },
