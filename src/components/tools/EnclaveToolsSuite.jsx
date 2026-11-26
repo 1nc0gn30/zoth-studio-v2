@@ -4730,15 +4730,12 @@ export function AgentBudgetSentinelTool() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
   const [daemonOnline, setDaemonOnline] = useState(false);
-  const [breakerState, setBreakerState] = useState('CLOSED'); // CLOSED (Normal) or OPEN (Tripped)
-  const [currentSpend, setCurrentSpend] = useState(0.042);
+  const [breakerState, setBreakerState] = useState('CLOSED'); // CLOSED | WARN | TRIPPED
+  const [currentSpend, setCurrentSpend] = useState(0.0);
   const [maxBudget, setMaxBudget] = useState(5.0);
-  const [selectedModel, setSelectedModel] = useState('gpt-4o');
+  const [selectedModel, setSelectedModel] = useState('gpt-4.1');
   const [simTokens, setSimTokens] = useState({ prompt: 1500, completion: 450 });
-  const [recentEvents, setRecentEvents] = useState([
-    { id: 1, time: '15:38:12', model: 'gpt-4o', tokens: 1950, cost: '$0.0068', status: 'PASS' },
-    { id: 2, time: '15:39:04', model: 'claude-3-5-sonnet', tokens: 3200, cost: '$0.0125', status: 'PASS' },
-  ]);
+  const [recentEvents, setRecentEvents] = useState([]);
   const [copiedCmd, setCopiedCmd] = useState(false);
 
   const modelRates = {

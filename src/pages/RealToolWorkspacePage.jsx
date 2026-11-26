@@ -804,7 +804,18 @@ export default function RealToolWorkspacePage() {
                   gap: 1.25,
                 }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, minWidth: 0, flex: 1, overflowX: 'auto' }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1.25,
+                    minWidth: 0,
+                    flex: 1,
+                    overflowX: 'auto',
+                    scrollbarWidth: 'none',
+                    '&::-webkit-scrollbar': { display: 'none' },
+                  }}
+                >
                   <TerminalIcon sx={{ color: '#D4AF37', fontSize: '1.1rem', flexShrink: 0 }} />
                   <Typography
                     sx={{
@@ -1086,6 +1097,7 @@ export default function RealToolWorkspacePage() {
                   variant={localViewMode === 'webapp' ? 'contained' : 'outlined'}
                   onClick={() => setLocalViewMode('webapp')}
                   sx={{
+                    minHeight: 44,
                     fontFamily: mono,
                     fontWeight: 700,
                     fontSize: '0.72rem',
@@ -1103,6 +1115,7 @@ export default function RealToolWorkspacePage() {
                 variant={localViewMode === 'enclave' || !localWebAppUp ? 'contained' : 'outlined'}
                 onClick={() => setLocalViewMode('enclave')}
                 sx={{
+                  minHeight: 44,
                   fontFamily: mono,
                   fontWeight: 700,
                   fontSize: '0.72rem',
@@ -1116,12 +1129,11 @@ export default function RealToolWorkspacePage() {
               </Button>
               {localWebAppUp && localViewMode === 'webapp' && (
                 <IconButton
-                  size="small"
                   aria-label="Reload local web app iframe"
                   onClick={() => setIframeKey((k) => k + 1)}
-                  sx={{ color: secondaryText, border: `1px solid ${borderCol}` }}
+                  sx={{ minWidth: 44, minHeight: 44, color: secondaryText, border: `1px solid ${borderCol}` }}
                 >
-                  <RefreshIcon sx={{ fontSize: 16 }} />
+                  <RefreshIcon sx={{ fontSize: 18 }} />
                 </IconButton>
               )}
               <Button
@@ -1133,6 +1145,7 @@ export default function RealToolWorkspacePage() {
                 variant="outlined"
                 endIcon={<OpenInNewIcon sx={{ fontSize: 13 }} />}
                 sx={{
+                  minHeight: 44,
                   fontFamily: mono,
                   fontWeight: 700,
                   fontSize: '0.72rem',
@@ -1154,20 +1167,24 @@ export default function RealToolWorkspacePage() {
                 borderRadius: 2,
                 overflow: 'hidden',
                 border: `1px solid ${emeraldBorder}`,
-                bgcolor: '#08080B',
+                bgcolor: isDark ? '#08080B' : '#FAF7F0',
               }}
             >
               <Box
-                key={iframeKey}
+                key={`${iframeKey}-${isDark ? 'dark' : 'light'}`}
                 component="iframe"
-                src={tool.localUrl || `http://127.0.0.1:${tool.localPort}`}
+                src={
+                  tool.id === 'agent-budget-sentinel'
+                    ? `${tool.localUrl || `http://127.0.0.1:${tool.localPort}`}?theme=${isDark ? 'dark' : 'light'}&embed=1`
+                    : (tool.localUrl || `http://127.0.0.1:${tool.localPort}`)
+                }
                 title={`${tool.name} Local Sovereign Web Application (:${tool.localPort})`}
                 sx={{
                   width: '100%',
                   height: '100%',
                   border: 0,
                   display: 'block',
-                  bgcolor: '#08080B',
+                  bgcolor: isDark ? '#08080B' : '#FAF7F0',
                 }}
               />
             </Box>

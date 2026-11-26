@@ -1413,18 +1413,20 @@ export const toolsDocumentation = {
   },
 
   'agent-budget-sentinel': {
-    whyUse: 'Autonomous zero-dependency spending guardrail, real-time token cost circuit breaker, and runaway loop interceptor.',
-    problemSolved: 'Permanently eliminates runaway LLM infinite loops, rogue retry bursts, and catastrophic end-of-month cloud API billing surprises.',
-    architecture: 'Python 3.10+ standard library daemon running on port 8110 (Web Deck) and port 8111 (Inline Proxy) with heuristic BPE token cost estimation, SQLite ledger, and instantaneous HTTP 429 circuit trip.',
+    whyUse: 'Zero-dependency Python spending guardrail, SSRF-hardened inline LLM proxy (:8111), real-time cl100k_base BPE cost circuit breaker, SQLite telemetry cockpit (:8110), and stdio MCP server.',
+    problemSolved: 'Eliminates runaway LLM infinite loops, rogue retry bursts, and surprise cloud API billing by tripping to HTTP 429 deterministically on hard USD ceilings or per-minute spend velocity limits.',
+    architecture: 'Python 3.10+ standard-library daemon serving Dual-Theme Web Cockpit & REST/SSE API on 127.0.0.1:8110, SSRF-hardened inline HTTP proxy on 127.0.0.1:8111, SQLite restart-hydrated ledger (budget.db), and zero-dependency stdio JSON-RPC 2.0 MCP server (agent-budget mcp).',
     aiAgentProtocol: {
       mcpTool: 'budget_circuit_breaker_status',
-      description: 'Checks live spending, remaining budget ceiling, and circuit breaker trip state.',
-      cliExample: './bin/agent-budget run --max-budget 2.50 -- python my_agent.py',
+      description: 'Inspects live hydrated spending, remaining USD ceiling, velocity, and circuit breaker state (CLOSED | WARN | TRIPPED) via agent-budget mcp, or executes trip, reset, and set-budget actions.',
+      cliExample: 'agent-budget run --max-budget 2.50 -- python3 my_agent.py',
       inputSchema: {
         type: 'object',
         properties: {
           action: { type: 'string', enum: ['status', 'trip', 'reset', 'set-budget'], description: 'Circuit breaker operation' },
-          amount: { type: 'number', description: 'New budget ceiling in USD' }
+          amount: { type: 'number', description: 'New budget ceiling in USD' },
+          reason: { type: 'string', description: 'Optional trip reason' },
+          clear: { type: 'boolean', description: 'Purge SQLite ledger on reset' }
         },
         required: ['action']
       },
@@ -1436,16 +1438,16 @@ export const toolsDocumentation = {
       }
     },
     quickstart: [
-      'git clone https://github.com/1nc0gn30/agent-budget-sentinel.git',
-      'cd agent-budget-sentinel && chmod +x bin/agent-budget',
-      './bin/agent-budget serve --web-port 8110 --proxy-port 8111'
+      'agent-budget serve --web-port 8110 --proxy-port 8111 --budget 5.00',
+      'agent-budget run --max-budget 2.50 -- python3 my_agent.py',
+      'agent-budget mcp --host 127.0.0.1 --port 8110'
     ],
     features: [
-      'Inline transparent HTTP proxy on port 8111 intercepting LLM requests with 0 latency overhead',
-      'Real-time token cost estimation for OpenAI, Anthropic, Gemini, and DeepSeek',
-      'Emergency kill-switch circuit breaker tripping on cumulative budget breach or velocity spike',
-      'Interactive Web Radar Deck on port 8110 with live SSE transaction feed and test harness',
-      'Zero external dependencies (100% Python standard library)'
+      'SSRF-hardened inline HTTP proxy on port 8111 with strict loopback CORS, DNS/IMDS blocking, and mid-flight SSE guillotine',
+      'Embedded pure-Python cl100k_base BPE tokenizer with 2025/2026 cloud models and $0.00 local Ollama, AGY, and Hermes metering',
+      'Deterministic 3-state circuit breaker (CLOSED, WARN, TRIPPED) returning HTTP 429 across GET and POST forwarded traffic',
+      'SQLite restart hydration keeping Web Deck (:8110), CLI (--json), live TUI, and Studio Mode 2 synchronized',
+      'Zero-dependency stdio JSON-RPC 2.0 MCP server exposing budget_circuit_breaker_status, budget_set_ceiling, budget_trip, budget_reset, and budget_estimate_cost'
     ]
   },
   "zoth-os": {
