@@ -117,6 +117,10 @@ export default function AeoGraphEngineGodModeTool() {
   const [outputTab, setOutputTab] = useState('jsonld');
   const [copied, setCopied] = useState(false);
   const [daemonStatus, setDaemonStatus] = useState({ reachable: false, version: null, syncedScore: null });
+  const [autoDomain, setAutoDomain] = useState('');
+  const [autoAgent, setAutoAgent] = useState('agy_bridge');
+  const [autoLoading, setAutoLoading] = useState(false);
+  const [autoResult, setAutoResult] = useState(null);
 
   const canvasRef = useRef(null);
 
@@ -393,6 +397,56 @@ export default function AeoGraphEngineGodModeTool() {
     } catch {}
   };
 
+  const handleGenerateFromDomain = async () => {
+    const target = autoDomain.trim();
+    if (!target) {
+      setAutoResult({ ok: false, message: 'Enter an existing public domain URL (e.g. https://example.com).' });
+      return;
+    }
+    setAutoLoading(true);
+    setAutoResult(null);
+    try {
+      const res = await fetch('http://127.0.0.1:8127/api/agent/generate-from-domain', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: target, provider: autoAgent, max_pages: 6 }),
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        setAutoResult({ ok: false, message: data.error || `HTTP ${res.status}` });
+        return;
+      }
+      const cfg = data.config || {};
+      const cs = data.crawl_summary || {};
+      const ag = data.agent_execution || {};
+      setProfile((prev) => ({
+        ...prev,
+        name: cfg.site_name || prev.name,
+        url: data.origin || (cfg.domain ? `https://${cfg.domain}` : prev.url),
+        category: cfg.category || prev.category,
+        entityType: cfg.category === 'LocalBusiness' ? 'LocalBusiness' : 'SoftwareApplication',
+        creator: cfg.publisher_name || prev.creator,
+        sameAs: Array.isArray(cfg.same_as) && cfg.same_as.length ? cfg.same_as.join(', ') : prev.sameAs,
+        description: cfg.description || prev.description,
+        faqs:
+          Array.isArray(cfg.faqs) && cfg.faqs.length
+            ? cfg.faqs.map((f) => ({ q: f.question || f.q || '', a: f.answer || f.a || '' }))
+            : prev.faqs,
+      }));
+      setAutoResult({
+        ok: true,
+        message: `Scraped ${cs.pages_scraped || 0} page(s) (${cs.sitemap_detected ? 'sitemap found' : 'link crawl'}) · Agent: ${ag.used_provider || autoAgent} (${ag.mode || 'done'}). ${ag.notice || ''}`,
+      });
+    } catch (err) {
+      setAutoResult({
+        ok: false,
+        message: `Local :8127 daemon required for live domain crawling (${err.message}). Start with: python3 server.py --port 8127`,
+      });
+    } finally {
+      setAutoLoading(false);
+    }
+  };
+
   // Theme-Aware Entity Graph Canvas (respects prefers-reduced-motion)
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -611,6 +665,83 @@ export default function AeoGraphEngineGodModeTool() {
         caption="AEO Graph Engine & Studio"
         label="AEO Graph Engine & Studio — entity graph visualisation"
       />
+
+      {/* Generate For Me from Existing Domain Bar */}
+      <Box
+        sx={{
+          p: 2,
+          mb: 3,
+          borderRadius: 2.5,
+          bgcolor: palette.cardBg,
+          border: `1px solid ${palette.border}`,
+        }}
+      >
+        <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: palette.accentSky, mb: 1 }}>
+          GENERATE FOR ME · AUTO-CRAWL EXISTING DOMAIN &amp; AI AGENT SYNTHESIS
+        </Typography>
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={1.25} alignItems={{ xs: 'stretch', md: 'center' }}>
+          <TextField
+            fullWidth
+            size="small"
+            label="Existing Domain URL"
+            placeholder="https://example.com"
+            value={autoDomain}
+            onChange={(e) => setAutoDomain(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleGenerateFromDomain();
+            }}
+          />
+          <FormControl size="small" sx={{ minWidth: { xs: '100%', md: 215 } }}>
+            <InputLabel id="aeo-auto-agent-label" sx={{ fontFamily: mono, fontSize: '0.75rem' }}>
+              AI Agent
+            </InputLabel>
+            <Select
+              labelId="aeo-auto-agent-label"
+              value={autoAgent}
+              label="AI Agent"
+              onChange={(e) => setAutoAgent(e.target.value)}
+              sx={{ fontFamily: mono, fontSize: '0.78rem', minHeight: 44 }}
+            >
+              <MenuItem value="agy_bridge">AGY Bridge (:18000)</MenuItem>
+              <MenuItem value="agy_cli">AGY CLI</MenuItem>
+              <MenuItem value="hermes_cli">Hermes Agent</MenuItem>
+              <MenuItem value="ollama_local">Ollama Local</MenuItem>
+              <MenuItem value="codex_cli">Codex CLI</MenuItem>
+              <MenuItem value="claude_code">Claude Code CLI</MenuItem>
+              <MenuItem value="heuristic">Crawl Only (No LLM)</MenuItem>
+            </Select>
+          </FormControl>
+          <Button
+            variant="contained"
+            disabled={autoLoading}
+            onClick={handleGenerateFromDomain}
+            sx={{
+              minHeight: 44,
+              minWidth: { xs: '100%', md: 195 },
+              fontFamily: mono,
+              fontWeight: 800,
+              fontSize: '0.75rem',
+              bgcolor: palette.accentGold,
+              color: isDark ? '#090B11' : '#FFFFFF',
+              '&:hover': { bgcolor: palette.accentGold, filter: 'brightness(1.06)' },
+            }}
+          >
+            {autoLoading ? 'Crawling...' : 'Generate For Me'}
+          </Button>
+        </Stack>
+        {autoResult && (
+          <Typography
+            sx={{
+              mt: 1,
+              fontFamily: mono,
+              fontSize: '0.72rem',
+              color: autoResult.ok ? palette.accentEmerald : isDark ? '#FDA4AF' : '#9F1239',
+            }}
+          >
+            {autoResult.message}
+          </Typography>
+        )}
+      </Box>
 
       <Grid container spacing={3}>
         {/* Left Column: Entity Graph Editor */}
