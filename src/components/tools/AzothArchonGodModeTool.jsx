@@ -497,9 +497,11 @@ export default function AzothArchonGodModeTool({ tool }) {
               multiline
               rows={2}
               size="small"
+              label="Sovereign Archon Directive"
               value={taskPrompt}
               onChange={(e) => setTaskPrompt(e.target.value)}
               placeholder="Enter directive for sovereign local archon..."
+              inputProps={{ 'aria-label': 'Sovereign Archon Directive' }}
               sx={{
                 mb: 2,
                 '& .MuiInputBase-root': {
@@ -516,7 +518,15 @@ export default function AzothArchonGodModeTool({ tool }) {
                 <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#94A3B8' }}>CONCURRENCY WORKERS</Typography>
                 <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#D4AF37', fontWeight: 800 }}>{concurrency} threads</Typography>
               </Box>
-              <Slider size="small" min={1} max={8} value={concurrency} onChange={(_, v) => setConcurrency(v)} sx={{ color: '#D4AF37' }} />
+              <Slider
+                size="small"
+                min={1}
+                max={8}
+                value={concurrency}
+                aria-label="Concurrency workers"
+                onChange={(_, v) => setConcurrency(v)}
+                sx={{ color: '#D4AF37' }}
+              />
             </Box>
 
             {/* Execute Button */}
@@ -528,12 +538,18 @@ export default function AzothArchonGodModeTool({ tool }) {
                 disabled={executing}
                 startIcon={executing ? <CircularProgress size={16} color="inherit" /> : <PlayArrowIcon sx={{ fontSize: 16 }} />}
                 sx={{
+                  minHeight: 44,
                   fontFamily: mono,
                   fontSize: '0.74rem',
                   fontWeight: 900,
                   bgcolor: '#34D399',
                   color: '#05060B',
                   '&:hover': { bgcolor: '#6EE7B7' },
+                  '&.Mui-disabled': {
+                    bgcolor: 'rgba(52, 211, 153, 0.24)',
+                    color: '#ECFDF5',
+                    border: '1px solid rgba(52, 211, 153, 0.55)',
+                  },
                 }}
               >
                 {executing ? 'Executing ReAct Loop...' : 'Dispatch Directive'}

@@ -44,171 +44,16 @@ import { useStudioStatus } from '../studio/useStudioStatus';
 import ZothAIAssistant from '../components/ZothAIAssistant';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { useReality } from '../context/RealityContext';
+import AgentComposerGodModeTool from '../components/tools/AgentComposerGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
 /* ==========================================================================
    WORKSTATION 1: Agent Composer (Multi-Agent DAG Composer & Pipeline Foundry)
+   Delegates directly to AgentComposerGodModeTool (zero mock loops).
    ========================================================================== */
 function AgentComposerWorkstation() {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
-  const [pipelineName, setPipelineName] = useState('Byzantine_AST_Synthesizer_v2');
-  const [nodes, setNodes] = useState([
-    { id: '1', name: 'PromptIngest', agent: 'Azoth', role: 'Input Normalizer & Security Sanitizer', status: 'Completed' },
-    { id: '2', name: 'TriangulateAST', agent: 'Chronos', role: '3-Way Byzantine AST Synthesizer', status: 'In Progress' },
-    { id: '3', name: 'EntropyGuard', agent: 'Lycan', role: 'Shannon Entropy & Zero-Egress Guard', status: 'Pending' },
-    { id: '4', name: 'ConsensusBridge', agent: 'Athena', role: 'Consensus Verification & Commit', status: 'Pending' },
-  ]);
-  const [newNodeName, setNewNodeName] = useState('');
-  const [selectedAgent, setSelectedAgent] = useState('Hermes');
-  const [executing, setExecuting] = useState(false);
-  const [execLog, setExecLog] = useState([
-    '[23:10:01] [DAG-INIT] Initialized DAG orchestrator with 4 active nodes.',
-    '[23:10:02] [NODE-1] Azoth completed security pass on AST payload.',
-  ]);
-
-  const handleAddNode = () => {
-    if (!newNodeName.trim()) return;
-    const newNode = {
-      id: String(nodes.length + 1),
-      name: newNodeName.trim(),
-      agent: selectedAgent,
-      role: 'Autonomous Pipeline Worker',
-      status: 'Pending',
-    };
-    setNodes([...nodes, newNode]);
-    setNewNodeName('');
-    setExecLog((prev) => [...prev, `[DAG-EXPAND] Added pipeline node ${newNode.name} assigned to ${selectedAgent}`]);
-  };
-
-  const handleRunPipeline = () => {
-    setExecuting(true);
-    setExecLog((prev) => [...prev, `[EXEC-TRIGGER] Executing DAG pipeline "${pipelineName}"...`]);
-    let step = 0;
-    const interval = setInterval(() => {
-      step++;
-      if (step <= nodes.length) {
-        setNodes((prevNodes) =>
-          prevNodes.map((n, idx) => (idx < step ? { ...n, status: 'Completed' } : idx === step ? { ...n, status: 'In Progress' } : n))
-        );
-        setExecLog((prev) => [...prev, `[NODE-${step}] Node ${nodes[step - 1]?.name} successfully executed.`]);
-      } else {
-        clearInterval(interval);
-        setExecuting(false);
-        setExecLog((prev) => [...prev, `[DAG-DONE] All ${nodes.length} nodes synthesized. Zero-egress pipeline complete.`]);
-      }
-    }, 900);
-  };
-
-  return (
-    <Box>
-      <Grid container spacing={3}>
-        <Grid xs={12} md={7}>
-          <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, mb: 3 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
-              <Typography variant="h6" sx={{ fontWeight: 800 }}>DAG Pipeline Topology</Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<PlayArrowIcon />}
-                disabled={executing}
-                onClick={handleRunPipeline}
-                sx={{ fontWeight: 750 }}
-              >
-                {executing ? 'Executing Pipeline…' : 'Run Live DAG'}
-              </Button>
-            </Box>
-
-            <Stack spacing={1.5} sx={{ mb: 3 }}>
-              {nodes.map((node, index) => (
-                <Paper
-                  key={node.id}
-                  sx={{
-                    p: 2,
-                    border: '1px solid',
-                    borderColor: node.status === 'Completed' ? (isDark ? 'rgba(52,211,153,0.5)' : '#A7F3D0') : node.status === 'In Progress' ? (isDark ? '#D4AF37' : '#B8860B') : theme.palette.divider,
-                    bgcolor: isDark ? '#0F121C' : '#F8FAFC',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: 1.5,
-                  }}
-                >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                    <Chip label={`0${index + 1}`} size="small" sx={{ fontFamily: mono, fontWeight: 800, bgcolor: isDark ? 'rgba(212,175,55,0.18)' : '#FEF9E7', color: isDark ? '#D4AF37' : '#8A6A09', border: `1px solid ${isDark ? 'rgba(212,175,55,0.3)' : '#F5E6AB'}` }} />
-                    <Box>
-                      <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>{node.name}</Typography>
-                      <Typography variant="caption" color="text.secondary">Assigned Agent: <strong>{node.agent}</strong> · {node.role}</Typography>
-                    </Box>
-                  </Box>
-                  <Chip
-                    label={node.status}
-                    size="small"
-                    sx={{
-                      fontWeight: 750,
-                      bgcolor: node.status === 'Completed' ? (isDark ? 'rgba(52,211,153,0.15)' : '#ECFDF3') : node.status === 'In Progress' ? (isDark ? 'rgba(212,175,55,0.2)' : '#FEF9E7') : (isDark ? '#1E293B' : '#F1F5F9'),
-                      color: node.status === 'Completed' ? (isDark ? '#34D399' : '#047857') : node.status === 'In Progress' ? (isDark ? '#D4AF37' : '#8A6A09') : theme.palette.text.secondary,
-                      border: `1px solid ${node.status === 'Completed' ? (isDark ? 'rgba(52,211,153,0.3)' : 'rgba(5,150,105,0.3)') : node.status === 'In Progress' ? (isDark ? 'rgba(212,175,55,0.35)' : 'rgba(184,134,11,0.3)') : 'transparent'}`,
-                    }}
-                  />
-                </Paper>
-              ))}
-            </Stack>
-
-            <Divider sx={{ my: 2 }} />
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5 }}>Append DAG Execution Node</Typography>
-            <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
-              <TextField
-                size="small"
-                placeholder="Stage Name (e.g. MemorySync)"
-                value={newNodeName}
-                onChange={(e) => setNewNodeName(e.target.value)}
-                sx={{ flex: '1 1 200px' }}
-              />
-              <TextField
-                size="small"
-                select
-                SelectProps={{ native: true }}
-                value={selectedAgent}
-                onChange={(e) => setSelectedAgent(e.target.value)}
-                sx={{ width: 140 }}
-              >
-                {['Hermes', 'Azoth', 'Athena', 'Lycan', 'Chronos', 'Grok', 'Antigravity'].map((a) => (
-                  <option key={a} value={a}>{a}</option>
-                ))}
-              </TextField>
-              <Button variant="outlined" onClick={handleAddNode} sx={{ fontWeight: 750 }}>
-                + Add Stage
-              </Button>
-            </Box>
-          </Paper>
-        </Grid>
-
-        <Grid xs={12} md={5}>
-          <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1, color: isDark ? '#D4AF37' : '#8A6A09' }}>
-              Autonomous Execution Log
-            </Typography>
-            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: '#38BDF8', fontFamily: mono, fontSize: '0.8rem', height: 320, overflowY: 'auto', borderRadius: 1.5, border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #1E293B' }}>
-              {execLog.map((log, i) => (
-                <Box key={i} sx={{ mb: 0.75, lineHeight: 1.45 }}>{log}</Box>
-              ))}
-            </Paper>
-            <Button
-              size="small"
-              variant="text"
-              startIcon={<RefreshIcon />}
-              onClick={() => setExecLog(['[DAG-RESET] Log cleared. Ready for next synthesis run.'])}
-              sx={{ mt: 1.5 }}
-            >
-              Clear Log
-            </Button>
-          </Paper>
-        </Grid>
-      </Grid>
-    </Box>
-  );
+  return <AgentComposerGodModeTool />;
 }
 
 /* ==========================================================================
@@ -2089,27 +1934,14 @@ export default function WorkstationDetailPage() {
   };
 
   const [copiedCmd, setCopiedCmd] = useState('');
-  const [telemetry, setTelemetry] = useState({
-    latency: '0.24ms',
-    throughput: '2.4 MB/s',
-    entropy: '7.991',
-    loopbackPackets: 18420,
-    egressDrop: '100% (0 B egress)',
-    status: 'OFFLINE-CAPABLE // OPTIMAL',
-  });
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTelemetry((prev) => ({
-        ...prev,
-        latency: `${(0.18 + Math.random() * 0.12).toFixed(2)}ms`,
-        throughput: `${(2.1 + Math.random() * 0.7).toFixed(1)} MB/s`,
-        entropy: (7.986 + Math.random() * 0.011).toFixed(3),
-        loopbackPackets: prev.loopbackPackets + Math.floor(Math.random() * 9 + 3),
-      }));
-    }, 2200);
-    return () => clearInterval(timer);
-  }, []);
+  const telemetry = {
+    latency: '127.0.0.1',
+    throughput: 'Loopback API',
+    entropy: 'WebCrypto',
+    loopbackPackets: 'Local',
+    egressDrop: 'Zero-Egress Default',
+    status: 'LOCAL-FIRST // READY',
+  };
 
   const handleCopyCmd = (cmd, id) => {
     if (navigator?.clipboard?.writeText) {
@@ -2199,7 +2031,7 @@ export default function WorkstationDetailPage() {
             }}
           />
           <Chip
-            label="STRICT LOOPBACK :8094"
+            label="HYBRID LOOPBACK RUNTIME"
             size="small"
             sx={{
               bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#F0F9FF',
@@ -2211,12 +2043,12 @@ export default function WorkstationDetailPage() {
           />
         </Box>
 
-        <Typography variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontWeight: 800, color: theme.palette.text.primary, mb: 1.5, letterSpacing: '-0.01em', fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' }, lineHeight: 1.15, wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+        <Typography component="h1" variant="h3" sx={{ fontFamily: '"Celtic Garamond", Georgia, serif', fontWeight: 800, color: theme.palette.text.primary, mb: 1.5, letterSpacing: '-0.01em', fontSize: { xs: '1.75rem', sm: '2.5rem', md: '3.4rem' }, lineHeight: 1.15, wordBreak: 'break-word', overflowWrap: 'break-word' }}>
           {station.name}
         </Typography>
 
         <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 880, lineHeight: 1.65, mb: 3 }}>
-          Zero-egress sovereign workstation integrated into Zoth Studio v2. Operating strictly within local host enclaves with verified hardware TRNG entropy, loopback inter-process messaging, and deterministic zero-telemetry execution.
+          {station.description || 'Local-first interactive workstation integrated into Zoth Studio v2.'}
         </Typography>
 
         {/* One-Click CLI Execution & Control Bar */}

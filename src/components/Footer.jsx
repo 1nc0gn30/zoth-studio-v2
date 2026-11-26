@@ -43,7 +43,7 @@ export default function Footer() {
     { label: 'NullAI Platform', href: 'https://nullai.tech' },
     { label: 'FieldKit Utilities', href: 'https://nullai.tech/fieldkit' },
     { label: '1nc0gn30 Hub', href: 'https://1nc0gn30.si' },
-    { label: '79 Public GitHub Repos', href: 'https://github.com/1nc0gn30' },
+    { label: '82 Public GitHub Repos', href: 'https://github.com/1nc0gn30' },
   ];
 
   const theoryAndDocs = [
@@ -271,7 +271,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               sx={{
-                minHeight: 34,
+                minHeight: { xs: 44, sm: 34 },
                 px: 1.4,
                 fontFamily: mono,
                 fontSize: '0.7rem',
@@ -289,7 +289,7 @@ export default function Footer() {
               variant="outlined"
               onClick={() => copySol(SOLANA_TIP_ADDRESS)}
               sx={{
-                minHeight: 34,
+                minHeight: { xs: 44, sm: 34 },
                 px: 1.4,
                 fontFamily: mono,
                 fontSize: '0.7rem',

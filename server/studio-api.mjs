@@ -3,14 +3,224 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { exec, spawn } from 'node:child_process';
+import { exec, execFile, spawn } from 'node:child_process';
 
 const STUDIO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOME_DIR = process.env.ZOTH_HOME || os.homedir();
 const NULLAITECH_ROOT = process.env.NULLAITECH_ROOT || path.join(HOME_DIR, 'NullAITech');
 const LOCAL_BIN = process.env.ZOTH_LOCAL_BIN || path.join(HOME_DIR, '.local', 'bin');
 const GROK_BIN_DIR = process.env.ZOTH_GROK_BIN_DIR || path.join(HOME_DIR, '.grok', 'bin');
-const CONDUCTOR_BIN = process.env.ZOTH_CONDUCTOR_BIN || path.join(NULLAITECH_ROOT, 'bin', 'zoth-agent-conductor');
+const AGY_BIN_DIR = path.join(HOME_DIR, '.gemini', 'antigravity-cli', 'bin');
+
+function resolveBinaryOnPath(name, extraDirs = []) {
+  if (!/^[a-zA-Z0-9._-]+$/.test(name)) return null;
+  const pathDirs = String(process.env.PATH || '').split(path.delimiter).filter(Boolean);
+  const dirs = [...extraDirs, '/usr/local/bin', LOCAL_BIN, '/usr/bin', ...pathDirs];
+  const seen = new Set();
+  for (const dir of dirs) {
+    if (!dir || seen.has(dir)) continue;
+    seen.add(dir);
+    const full = path.join(dir, name);
+    try {
+      if (fs.existsSync(full) && fs.statSync(full).isFile()) {
+        fs.accessSync(full, fs.constants.X_OK);
+        return full;
+      }
+    } catch {}
+  }
+  return null;
+}
+
+function resolveConductorBin() {
+  if (process.env.ZOTH_CONDUCTOR_BIN && fs.existsSync(process.env.ZOTH_CONDUCTOR_BIN)) {
+    return process.env.ZOTH_CONDUCTOR_BIN;
+  }
+  if (fs.existsSync('/usr/local/bin/zoth-agent-conductor')) {
+    return '/usr/local/bin/zoth-agent-conductor';
+  }
+  const repoConductor = path.join(NULLAITECH_ROOT, 'bin', 'zoth-agent-conductor');
+  if (fs.existsSync(repoConductor)) {
+    return repoConductor;
+  }
+  return resolveBinaryOnPath('zoth-agent-conductor') || '/usr/local/bin/zoth-agent-conductor';
+}
+
+const CONDUCTOR_BIN = resolveConductorBin();
+
+function sanitizeErrorMessage(msg) {
+  const raw = String(msg || 'Execution error');
+  if (!HOME_DIR) return raw;
+  return raw.split(HOME_DIR).join('~');
+}
+
+function runDeterministicTransformServer(mode, promptText) {
+  const t0 = Date.now();
+  const text = String(promptText || '').trim();
+  const lines = text ? text.split(/\r?\n/) : [];
+  const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+  const normMode = String(mode || 'markdown-brief').toLowerCase();
+  let output = '';
+
+  if (normMode === 'json-validate' || normMode === 'validator') {
+    const startIdx = [text.indexOf('{'), text.indexOf('[')].filter((i) => i >= 0).sort((a, b) => a - b)[0];
+    let candidate = text;
+    if (startIdx !== undefined) {
+      const endIdx = Math.max(text.lastIndexOf('}'), text.lastIndexOf(']'));
+      if (endIdx > startIdx) candidate = text.slice(startIdx, endIdx + 1);
+    }
+    try {
+      const parsed = JSON.parse(candidate);
+      const keys = Array.isArray(parsed) ? [`array[${parsed.length}]`] : Object.keys(parsed || {});
+      output = `[TRANSFORM: json-validate] VALID JSON (${keys.join(', ') || 'empty'})\n${JSON.stringify(parsed, null, 2)}`;
+    } catch (err) {
+      output = `[TRANSFORM: json-validate] JSON parse diagnostic: ${err.message}\n${text.slice(0, 600)}`;
+    }
+  } else if (normMode === 'regex-extract') {
+    const urls = [...new Set(text.match(/https?:\/\/[^\s"'<>]+/g) || [])];
+    const ports = [...new Set(text.match(/(?:127\.0\.0\.1|localhost|0\.0\.0\.0)?:\d{2,5}/g) || [])];
+    const routes = [...new Set(text.match(/\/api\/[a-zA-Z0-9/_-]+/g) || [])];
+    output = [
+      `[TRANSFORM: regex-extract] ${text.length} chars · ${lines.length} lines · ${words} words`,
+      `- Routes (${routes.length}): ${routes.join(', ') || 'none'}`,
+      `- Endpoints (${ports.length}): ${ports.join(', ') || 'none'}`,
+      `- URLs (${urls.length}): ${urls.join(', ') || 'none'}`,
+    ].join('\n');
+  } else if (normMode === 'schema-verify') {
+    const hasWildcard = /0\.0\.0\.0/.test(text);
+    const hasSecret = /(sk-[a-zA-Z0-9]{16,}|ghp_[a-zA-Z0-9]{16,}|PRIVATE KEY)/.test(text);
+    output = [
+      `[TRANSFORM: schema-verify] Policy & Schema Check`,
+      `[${text.length >= 12 ? 'PASS' : 'WARN'}] Payload size (${text.length} chars, ${words} words)`,
+      `[${hasWildcard ? 'WARN' : 'PASS'}] Loopback hygiene`,
+      `[${hasSecret ? 'FAIL' : 'PASS'}] Secret hygiene`,
+    ].join('\n');
+  } else {
+    const bullets = lines
+      .filter((l) => l.trim().length > 0)
+      .slice(0, 6)
+      .map((l) => `- ${l.trim().slice(0, 180)}`);
+    output = [
+      `# Pipeline Synthesis Brief`,
+      `> Deterministic Transform (\`${normMode}\`) · ${words} words`,
+      ...bullets,
+    ].join('\n');
+  }
+
+  return {
+    ok: true,
+    provider: 'transform',
+    model: normMode,
+    output,
+    durationMs: Math.max(1, Date.now() - t0),
+    tokenEstimate: Math.max(1, Math.round(output.length / 4)),
+    error: null,
+  };
+}
+
+export async function probeComposerProviders() {
+  const probeTimed = async (port, urlPath, timeout = 1100) => {
+    const t0 = Date.now();
+    const res = await requestJson(port, urlPath, { method: 'GET', timeout });
+    return { ...res, latencyMs: res.up ? Math.max(1, Date.now() - t0) : 0 };
+  };
+
+  const [ollamaTags, hermesHealth, hermesModels, azothHealth, memoryPrimary, memorySec, bridgePrimary] = await Promise.all([
+    probeTimed(11434, '/api/tags', 1100),
+    probeTimed(18000, '/health', 1100),
+    probeTimed(18000, '/v1/models', 1100),
+    probeTimed(8136, '/health', 1100),
+    probeTimed(8094, '/health', 1100),
+    probeTimed(8788, '/health', 900),
+    probeTimed(8102, '/health', 1100),
+  ]);
+
+  const ollamaModelList = ollamaTags.up ? localModels(ollamaTags.json) : [];
+  const hermesModelList = hermesModels.up && Array.isArray(hermesModels.json?.data)
+    ? hermesModels.json.data.map((m) => m.id || m.name).filter(Boolean)
+    : [];
+  const memoryUp = memoryPrimary.up || memorySec.up;
+  const memoryPort = memoryPrimary.up ? 8094 : 8788;
+
+  const cliBins = {
+    hermes: Boolean(resolveBinaryOnPath('hermes', [LOCAL_BIN, '/opt/zothos-ai-env/bin'])),
+    agy: Boolean(resolveBinaryOnPath('agy', [AGY_BIN_DIR, LOCAL_BIN])),
+    codex: Boolean(resolveBinaryOnPath('codex', [LOCAL_BIN])),
+    'claude-code': Boolean(resolveBinaryOnPath('claude', [LOCAL_BIN])),
+  };
+
+  return {
+    checkedAt: new Date().toISOString(),
+    loopbackOnly: true,
+    providers: {
+      ollama: {
+        id: 'ollama',
+        name: 'Ollama Local LLM',
+        kind: 'loopback',
+        port: 11434,
+        up: ollamaTags.up,
+        latencyMs: ollamaTags.latencyMs,
+        models: ollamaModelList,
+        capabilities: ['chat', 'completion', 'local-inference'],
+      },
+      'agy-hermes': {
+        id: 'agy-hermes',
+        name: 'AGY-Hermes Proxy',
+        kind: 'loopback',
+        port: 18000,
+        up: hermesHealth.up || hermesModels.up,
+        latencyMs: hermesHealth.latencyMs || hermesModels.latencyMs,
+        models: hermesModelList,
+        capabilities: ['openai-compat', 'chat', 'multi-model-routing'],
+      },
+      azoth: {
+        id: 'azoth',
+        name: 'Azoth Local Agent',
+        kind: 'loopback',
+        port: 8136,
+        up: azothHealth.up,
+        latencyMs: azothHealth.latencyMs,
+        models: azothHealth.up ? ['azoth-react'] : [],
+        capabilities: ['react-loop', 'local-agent'],
+      },
+      'neuro-memory': {
+        id: 'neuro-memory',
+        name: 'Neuro-Memory Daemon',
+        kind: 'loopback',
+        port: memoryPort,
+        up: memoryUp,
+        latencyMs: memoryPrimary.up ? memoryPrimary.latencyMs : memorySec.latencyMs,
+        models: memoryUp ? ['stdp-recall'] : [],
+        capabilities: ['stdp-recall', 'context-memory'],
+      },
+      'sovereign-bridge': {
+        id: 'sovereign-bridge',
+        name: 'Sovereign Agent Bridge',
+        kind: 'loopback',
+        port: 8102,
+        up: bridgePrimary.up,
+        latencyMs: bridgePrimary.latencyMs,
+        models: bridgePrimary.up ? ['signal-mesh'] : [],
+        capabilities: ['ipc-relay', 'signal-mesh'],
+      },
+      transform: {
+        id: 'transform',
+        name: 'Deterministic Transform (Local JS)',
+        kind: 'deterministic',
+        port: null,
+        up: true,
+        latencyMs: 1,
+        models: ['json-validate', 'markdown-brief', 'regex-extract', 'schema-verify'],
+        capabilities: ['json-validate', 'markdown-brief', 'regex-extract', 'schema-verify'],
+      },
+    },
+    cli: {
+      hermes: { id: 'hermes', command: 'hermes', detected: cliBins.hermes, kind: 'cli' },
+      agy: { id: 'agy', command: 'agy', detected: cliBins.agy, kind: 'cli' },
+      codex: { id: 'codex', command: 'codex', detected: cliBins.codex, kind: 'cli' },
+      'claude-code': { id: 'claude-code', command: 'claude', detected: cliBins['claude-code'], kind: 'cli' },
+    },
+  };
+}
 
 const ON_DEMAND_PROCS = [];
 const MAX_ON_DEMAND_PROCS = 4;
@@ -562,6 +772,12 @@ export function studioMiddleware() {
         return;
       }
 
+      if (req.method === 'GET' && url.pathname === '/api/studio/swarm/mux-status') {
+        const mux = await requestJson(8141, '/status', { timeout: 900 });
+        send(res, 200, mux.up ? { up: true, ...(mux.json || {}) } : { up: false });
+        return;
+      }
+
       if (req.method === 'GET' && (url.pathname === '/api/studio/swarm/status' || url.pathname === '/api/swarm/status')) {
         const t0 = Date.now();
         const swarmRes = await requestJson(8989, '/status', { timeout: 800 });
@@ -625,16 +841,292 @@ export function studioMiddleware() {
         return;
       }
 
+      if (req.method === 'GET' && url.pathname === '/api/studio/composer/providers') {
+        send(res, 200, await probeComposerProviders());
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/composer/step') {
+        const body = await readBody(req);
+        const provider = String(body.provider || 'transform').toLowerCase().trim();
+        const model = String(body.model || '').trim();
+        const role = String(body.role || 'Pipeline Worker').slice(0, 160);
+        const nodeName = String(body.name || 'DAG Node').slice(0, 120);
+        const prompt = String(body.prompt || body.input || '').slice(0, 24000);
+        const timeoutMs = Math.max(1500, Math.min(45000, Number(body.timeoutMs) || 25000));
+        const t0 = Date.now();
+
+        if (!prompt.trim()) {
+          send(res, 400, {
+            ok: false,
+            provider,
+            model,
+            output: '',
+            durationMs: 0,
+            tokenEstimate: 0,
+            error: 'Step prompt cannot be empty.',
+          });
+          return;
+        }
+
+        if (provider === 'transform' || provider === 'validator') {
+          const transformMode = model || body.transformMode || (provider === 'validator' ? 'json-validate' : 'markdown-brief');
+          send(res, 200, runDeterministicTransformServer(transformMode, prompt));
+          return;
+        }
+
+        if (provider === 'ollama') {
+          let targetModel = model;
+          if (!targetModel) {
+            const tags = await requestJson(11434, '/api/tags', { timeout: 1200 });
+            const installed = tags.up ? localModels(tags.json) : [];
+            targetModel = installed[0] || 'qwen2.5-coder:1.5b';
+          }
+          if (/cloud/i.test(targetModel)) {
+            send(res, 400, {
+              ok: false,
+              provider,
+              model: targetModel,
+              output: '',
+              durationMs: Date.now() - t0,
+              tokenEstimate: 0,
+              error: 'Cloud model identifiers are rejected by the loopback invariant.',
+            });
+            return;
+          }
+          const result = await requestJson(11434, '/api/chat', {
+            method: 'POST',
+            timeout: timeoutMs,
+            body: {
+              model: targetModel,
+              messages: [
+                { role: 'system', content: `You are ${nodeName} (${role}) inside a Zoth Studio DAG pipeline. Respond concisely and concretely.` },
+                { role: 'user', content: prompt },
+              ],
+              stream: false,
+              options: { temperature: 0.4, num_predict: 384 },
+            },
+          });
+          const text = result.json?.message?.content?.trim();
+          if (!result.up || !text) {
+            send(res, result.up ? 502 : 503, {
+              ok: false,
+              provider,
+              model: targetModel,
+              output: '',
+              durationMs: Date.now() - t0,
+              tokenEstimate: 0,
+              error: result.json?.error || `Ollama (:11434) failed for model "${targetModel}".`,
+            });
+            return;
+          }
+          send(res, 200, {
+            ok: true,
+            provider,
+            model: targetModel,
+            output: text,
+            durationMs: Math.max(1, Date.now() - t0),
+            tokenEstimate: Math.max(1, Math.round(text.length / 4)),
+            error: null,
+          });
+          return;
+        }
+
+        if (provider === 'agy-hermes') {
+          let targetModel = model;
+          if (!targetModel) {
+            const list = await requestJson(18000, '/v1/models', { timeout: 1200 });
+            targetModel = list.json?.data?.[0]?.id || 'gemini-3.8-flash-medium';
+          }
+          const result = await requestJson(18000, '/v1/chat/completions', {
+            method: 'POST',
+            timeout: timeoutMs,
+            body: {
+              model: targetModel,
+              messages: [
+                { role: 'system', content: `You are ${nodeName} (${role}) inside a Zoth Studio DAG pipeline. Respond concisely.` },
+                { role: 'user', content: prompt },
+              ],
+              max_tokens: 384,
+            },
+          });
+          const text = result.json?.choices?.[0]?.message?.content?.trim();
+          if (!result.up || !text) {
+            send(res, result.up ? 502 : 503, {
+              ok: false,
+              provider,
+              model: targetModel,
+              output: '',
+              durationMs: Date.now() - t0,
+              tokenEstimate: 0,
+              error: result.json?.error?.message || result.json?.error || `AGY-Hermes (:18000) did not return a completion for "${targetModel}".`,
+            });
+            return;
+          }
+          send(res, 200, {
+            ok: true,
+            provider,
+            model: targetModel,
+            output: text,
+            durationMs: Math.max(1, Date.now() - t0),
+            tokenEstimate: Math.max(1, Math.round(text.length / 4)),
+            error: null,
+          });
+          return;
+        }
+
+        if (provider === 'azoth') {
+          const result = await requestJson(8136, '/api/chat', {
+            method: 'POST',
+            timeout: timeoutMs,
+            body: { message: prompt, prompt, role, nodeName },
+          });
+          const text = String(
+            result.json?.reply ||
+              result.json?.response ||
+              result.json?.output ||
+              result.json?.message ||
+              ''
+          ).trim();
+          if (!result.up || !text) {
+            send(res, result.up ? 502 : 503, {
+              ok: false,
+              provider,
+              model: model || 'azoth-react',
+              output: '',
+              durationMs: Date.now() - t0,
+              tokenEstimate: 0,
+              error: result.json?.error || 'Azoth Local Agent (:8136) did not return a text response.',
+            });
+            return;
+          }
+          send(res, 200, {
+            ok: true,
+            provider,
+            model: model || 'azoth-react',
+            output: text,
+            durationMs: Math.max(1, Date.now() - t0),
+            tokenEstimate: Math.max(1, Math.round(text.length / 4)),
+            error: null,
+          });
+          return;
+        }
+
+        if (provider === 'neuro-memory') {
+          const query = prompt.replace(/\s+/g, ' ').trim().slice(0, 140);
+          const qPath = `/api/memories?q=${encodeURIComponent(query)}&limit=5`;
+          let result = await requestJson(8094, qPath, { timeout: Math.min(timeoutMs, 4000) });
+          if (!result.up) {
+            result = await requestJson(8788, qPath, { timeout: Math.min(timeoutMs, 4000) });
+          }
+          if (!result.up) {
+            send(res, 503, {
+              ok: false,
+              provider,
+              model: 'stdp-recall',
+              output: '',
+              durationMs: Date.now() - t0,
+              tokenEstimate: 0,
+              error: 'Neuro-Memory daemon (:8094) is offline or unreachable.',
+            });
+            return;
+          }
+          const items = Array.isArray(result.json?.memories) ? result.json.memories : [];
+          const text = items.length
+            ? items
+                .map((m, idx) => `${idx + 1}. [${String(m.id || '').slice(0, 8)}] ${String(m.text || m.content || '').slice(0, 260)}`)
+                .join('\n')
+            : `No Neuro-Memory engrams matched query "${query.slice(0, 64)}".`;
+          send(res, 200, {
+            ok: true,
+            provider,
+            model: 'stdp-recall',
+            output: text,
+            durationMs: Math.max(1, Date.now() - t0),
+            tokenEstimate: Math.max(1, Math.round(text.length / 4)),
+            error: null,
+          });
+          return;
+        }
+
+        if (provider === 'sovereign-bridge') {
+          const health = await requestJson(8102, '/health', { timeout: 1500 });
+          if (!health.up) {
+            send(res, 503, {
+              ok: false,
+              provider,
+              model: 'signal-mesh',
+              output: '',
+              durationMs: Date.now() - t0,
+              tokenEstimate: 0,
+              error: 'Sovereign Agent Bridge (:8102) is offline.',
+            });
+            return;
+          }
+          const text = `[Sovereign Bridge :8102 ONLINE] Status: ${JSON.stringify(health.json)}\nQueued Context (${prompt.length} chars): ${prompt.slice(0, 240)}`;
+          send(res, 200, {
+            ok: true,
+            provider,
+            model: 'signal-mesh',
+            output: text,
+            durationMs: Math.max(1, Date.now() - t0),
+            tokenEstimate: Math.max(1, Math.round(text.length / 4)),
+            error: null,
+          });
+          return;
+        }
+
+        if (['hermes', 'agy', 'codex', 'claude-code'].includes(provider)) {
+          const binName = provider === 'claude-code' ? 'claude' : provider;
+          const found = Boolean(resolveBinaryOnPath(binName, [LOCAL_BIN, AGY_BIN_DIR, '/opt/zothos-ai-env/bin']));
+          send(res, 501, {
+            ok: false,
+            provider,
+            model: model || provider,
+            output: '',
+            durationMs: Math.max(1, Date.now() - t0),
+            tokenEstimate: 0,
+            error: found
+              ? `CLI provider "${binName}" is installed on PATH but requires an interactive terminal session; switch this node to "agy-hermes" (:18000) or "ollama" (:11434) for headless HTTP DAG execution.`
+              : `CLI binary "${binName}" was not detected on PATH.`,
+          });
+          return;
+        }
+
+        send(res, 400, {
+          ok: false,
+          provider,
+          model,
+          output: '',
+          durationMs: Math.max(1, Date.now() - t0),
+          tokenEstimate: 0,
+          error: `Unsupported composer provider "${provider}".`,
+        });
+        return;
+      }
+
       if (req.method === 'GET' && url.pathname === '/api/studio/agent/triad') {
-        exec(`${shellQuote(CONDUCTOR_BIN)} agents --json`, { timeout: 6000 }, (err, stdout) => {
+        const conductorPath = resolveConductorBin();
+        const envWithPath = {
+          ...process.env,
+          PATH: [LOCAL_BIN, '/usr/local/bin', '/usr/bin', '/bin', AGY_BIN_DIR, process.env.PATH || ''].filter(Boolean).join(path.delimiter),
+        };
+        execFile(conductorPath, ['agents', '--json'], { timeout: 6000, env: envWithPath }, (err, stdout) => {
           if (err) {
-            send(res, 500, { error: err.message });
+            send(res, 503, { error: sanitizeErrorMessage(err.message), ready_count: 0, agents: [] });
             return;
           }
           try {
-            send(res, 200, JSON.parse(stdout));
+            const parsed = JSON.parse(stdout);
+            if (Array.isArray(parsed.agents)) {
+              parsed.agents = parsed.agents.map((a) => ({
+                ...a,
+                binary: a.binary ? sanitizeErrorMessage(a.binary) : a.binary,
+              }));
+            }
+            send(res, 200, parsed);
           } catch {
-            send(res, 200, { raw: stdout });
+            send(res, 200, { raw: sanitizeErrorMessage(stdout) });
           }
         });
         return;
@@ -646,17 +1138,18 @@ export function studioMiddleware() {
         const promptText = String(body.prompt || 'Summarize workspace status').slice(0, 1200);
         const dirPath = String(body.dir || path.join(NULLAITECH_ROOT, 'zoth-studio-v2'));
         const modelName = String(body.model || 'qwen2.5-coder:1.5b').replace(/[^a-zA-Z0-9._:-]/g, '');
-        const dryRunFlag = body.dryRun ? '--dry-run' : '';
-        const safePrompt = JSON.stringify(promptText);
-        const safeDir = JSON.stringify(dirPath);
-        exec(`${shellQuote(CONDUCTOR_BIN)} dispatch --engine ${engine} --model ${modelName} --dir ${safeDir} ${dryRunFlag} --json ${safePrompt}`, { timeout: 95000 }, (err, stdout, stderr) => {
+        const argv = ['dispatch', '--engine', engine, '--model', modelName, '--dir', dirPath];
+        if (body.dryRun) argv.push('--dry-run');
+        argv.push('--json', promptText);
+        const conductorPath = resolveConductorBin();
+        execFile(conductorPath, argv, { timeout: 95000 }, (err, stdout, stderr) => {
           try {
             send(res, 200, JSON.parse(stdout));
           } catch {
             send(res, 200, {
               success: !err,
               engine,
-              output: stdout || stderr || (err ? err.message : ''),
+              output: sanitizeErrorMessage(stdout || stderr || (err ? err.message : '')),
             });
           }
         });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, Suspense, lazy } from 'react';
-import { Routes, Route, Navigate, useParams, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Box, ThemeProvider, CssBaseline, useTheme, createTheme } from '@mui/material';
 import { theme as lightTheme, darkTheme } from './theme';
 import Navbar from './components/Navbar';
@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import ToolsPage from './pages/ToolsPage';
 import ArsenalPage from './pages/ArsenalPage';
 import WorkstationsPage from './pages/WorkstationsPage';
+import RealToolWorkspacePage from './pages/RealToolWorkspacePage';
 import ShortcutsHelp from './components/ShortcutsHelp';
 import ErrorBoundary from './components/ErrorBoundary';
 import SEO from './components/SEO';
@@ -31,7 +32,6 @@ const AdytumPage = lazy(() => import('./pages/AdytumPage'));
 const AdytumShowcasePage = lazy(() => import('./pages/AdytumShowcasePage'));
 const MathPillarDetailPage = lazy(() => import('./pages/MathPillarDetailPage'));
 const MathPillarsPage = lazy(() => import('./pages/MathPillarsPage'));
-const RealToolWorkspacePage = lazy(() => import('./pages/RealToolWorkspacePage'));
 const BridgesPage = lazy(() => import('./pages/BridgesPage'));
 const ConsensusPage = lazy(() => import('./pages/ConsensusPage'));
 const FaqsPage = lazy(() => import('./pages/FaqsPage'));
@@ -96,12 +96,6 @@ function getInitialMode() {
     /* ignore */
   }
   return 'light';
-}
-
-function WorkstationRedirect() {
-  const { workstationId } = useParams();
-  const location = useLocation();
-  return <Navigate to={`/tools/${workstationId}${location.search}${location.hash}`} replace />;
 }
 
 function ScrollToTop() {
@@ -184,7 +178,7 @@ function AppShell({ mode, onToggleTheme }) {
                   <Route path="/bridges" element={<BridgesPage />} />
                   <Route path="/tools" element={<ToolsPage />} />
                   <Route path="/workstations" element={<WorkstationsPage />} />
-                  <Route path="/workstations/:workstationId" element={<WorkstationRedirect />} />
+                  <Route path="/workstations/:workstationId" element={<RealToolWorkspacePage />} />
                   <Route path="/templates" element={<Navigate to="/arsenal" replace />} />
                   <Route path="/tools/:toolId" element={<RealToolWorkspacePage />} />
                   <Route path="/memory" element={<MemoryShowcasePage />} />

@@ -184,6 +184,15 @@ export function getRouteMeta(path = '/') {
         type: 'article'
       };
     }
+    const station = workstations.find((w) => w.id === toolId);
+    if (station) {
+      return {
+        title: `${station.name} // Zoth Studio`,
+        description: `${station.description} Interactive local-first workstation (${station.band}) inside Zoth Studio v2.`,
+        keywords: `${station.name}, ${station.band}, multi-agent DAG composer, local Ollama pipeline, Zoth Studio workstation`,
+        type: 'article'
+      };
+    }
   }
 
   // Dynamic Workstation Route: /workstations/:workstationId
@@ -192,9 +201,9 @@ export function getRouteMeta(path = '/') {
     const station = workstations.find((w) => w.id === stationId);
     if (station) {
       return {
-        title: `${station.name} // Zoth Studio Workstation`,
-        description: `Sovereign interactive workstation for ${station.name} (${station.band}). Decoupled and rendered directly in Zoth Studio v2.`,
-        keywords: `${station.name}, ${station.band}, Zoth workstation, offline-capable console`,
+        title: `${station.name} // Zoth Studio`,
+        description: `${station.description} Interactive local-first workstation (${station.band}) inside Zoth Studio v2.`,
+        keywords: `${station.name}, ${station.band}, multi-agent DAG composer, local Ollama pipeline, Zoth Studio workstation`,
         type: 'article'
       };
     }
@@ -229,10 +238,11 @@ export function getAllStaticRoutes() {
     routes[`/tools/${tool.id}`] = getRouteMeta(`/tools/${tool.id}`);
   });
 
-  // Add all workstations
+  // Add all workstations (canonical /workstations/:id + /tools/agent-composer alias)
   workstations.forEach((station) => {
     routes[`/workstations/${station.id}`] = getRouteMeta(`/workstations/${station.id}`);
   });
+  routes['/tools/agent-composer'] = getRouteMeta('/tools/agent-composer');
 
   // Add all math pillars
   mathPillars.forEach((pillar) => {
@@ -543,9 +553,12 @@ export function generateSchemaGraph(path = '/') {
       'description': routeMeta.description,
       'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'USD' }
     });
-  } else if (path.startsWith('/tools/')) {
-    const toolId = path.replace('/tools/', '');
-    const tool = microTools.find((t) => t.id === toolId || t.repo === toolId);
+  } else if (path.startsWith('/tools/') || path.startsWith('/workstations/')) {
+    const isWsPath = path.startsWith('/workstations/');
+    const slug = path.replace(/^\/(tools|workstations)\//, '');
+    const tool = !isWsPath ? microTools.find((t) => t.id === slug || t.repo === slug) : null;
+    const station = !tool ? workstations.find((w) => w.id === slug) : null;
+
     if (tool) {
       graph.push({
         '@type': 'SoftwareApplication',
@@ -555,6 +568,8 @@ export function generateSchemaGraph(path = '/') {
         'operatingSystem': 'Linux, macOS, Windows',
         'description': tool.description,
         'softwareVersion': tool.version,
+        'author': { '@id': 'https://nullai.tech/#person' },
+        'creator': { '@id': 'https://nullai.tech/#person' },
         'offers': {
           '@type': 'Offer',
           'price': tool.priceUsd || '0',
@@ -562,24 +577,56 @@ export function generateSchemaGraph(path = '/') {
           ...(tool.liveUrl ? { 'url': tool.liveUrl } : {}),
         }
       });
-    }
-  } else if (path.startsWith('/workstations/')) {
-    const stationId = path.replace('/workstations/', '');
-    const station = workstations.find((w) => w.id === stationId);
-    if (station) {
+    } else if (station) {
       graph.push({
         '@type': 'SoftwareApplication',
         '@id': `${fullUrl}#workstation-software`,
         'name': station.name,
         'applicationCategory': 'DeveloperApplication',
-        'operatingSystem': 'Linux, macOS, Windows',
-        'description': `Sovereign interactive workstation for ${station.name} (${station.band}). Decoupled and rendered natively in Zoth Studio v2.`,
+        'operatingSystem': 'Web, Linux, macOS, Windows, ZothOS',
+        'softwareVersion': station.version || '2.2.0',
+        'description': station.description || `Interactive workstation for ${station.name} (${station.band}) inside Zoth Studio v2.`,
+        'author': { '@id': 'https://nullai.tech/#person' },
+        'creator': { '@id': 'https://nullai.tech/#person' },
         'offers': {
           '@type': 'Offer',
           'price': '0',
           'priceCurrency': 'USD'
         }
       });
+
+      if (station.id === 'agent-composer') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'How does the Multi-Agent DAG Composer execute multi-step pipelines?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'The DAG Composer validates acyclicity with DFS cycle detection, groups independent stages into parallel execution waves using Kahn topological sorting, interpolates {{input}} and {{nodeId.output}} templates, and dispatches each step to real loopback providers (Ollama :11434, AGY-Hermes :18000, Azoth :8136, Neuro-Memory :8094) or deterministic local JavaScript transforms.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Do my prompts, DAG topologies, or local model outputs leave my machine?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'No. Pipeline state persists locally in browser localStorage and live execution endpoints bind strictly to 127.0.0.1 loopback with cross-origin CSRF protection. You can also export any DAG as portable JSON, YAML, or a standalone stdlib Python 3 script.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is the Multi-Agent DAG Composer free and unlocked without a paywall?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Multi-Agent DAG Composer & Pipeline Foundry is 100% free and open-access with zero paywalls, zero license keys, and optional community support via Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
     }
   } else if (path.startsWith('/docs/math/')) {
     const pillarId = path.replace('/docs/math/', '');

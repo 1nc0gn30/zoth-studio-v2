@@ -520,6 +520,7 @@ ${JSON.stringify(
               variant={inputText === p.input ? 'contained' : 'outlined'}
               onClick={() => setInputText(p.input)}
               sx={{
+                minHeight: { xs: 44, sm: 34 },
                 fontFamily: mono,
                 fontSize: '0.67rem',
                 fontWeight: 700,
@@ -538,6 +539,7 @@ ${JSON.stringify(
             variant="outlined"
             startIcon={<UploadFileIcon sx={{ fontSize: 14 }} />}
             sx={{
+              minHeight: { xs: 44, sm: 34 },
               fontFamily: mono,
               fontSize: '0.67rem',
               fontWeight: 700,
@@ -547,7 +549,7 @@ ${JSON.stringify(
             }}
           >
             Load File
-            <input type="file" hidden onChange={handleFileUpload} />
+            <input type="file" hidden aria-label="Load custom payload file" onChange={handleFileUpload} />
           </Button>
         </Stack>
       </Stack>
@@ -652,6 +654,7 @@ ${JSON.stringify(
                 startIcon={<PlayArrowIcon />}
                 onClick={handleSaveSnapshot}
                 sx={{
+                  minHeight: { xs: 44, sm: 36 },
                   bgcolor: accent,
                   color: '#08080B',
                   fontFamily: mono,
@@ -691,9 +694,9 @@ ${JSON.stringify(
               variant="scrollable"
               scrollButtons="auto"
               sx={{
-                minHeight: 36,
+                minHeight: { xs: 44, sm: 36 },
                 '& .MuiTab-root': {
-                  minHeight: 36,
+                  minHeight: { xs: 44, sm: 36 },
                   fontFamily: mono,
                   fontSize: '0.7rem',
                   fontWeight: 800,
@@ -730,7 +733,7 @@ ${JSON.stringify(
                     'tab'
                   )
                 }
-                sx={{ fontFamily: mono, fontSize: '0.67rem', textTransform: 'none', py: 0.25 }}
+                sx={{ minHeight: { xs: 44, sm: 34 }, fontFamily: mono, fontSize: '0.67rem', textTransform: 'none', py: 0.25 }}
               >
                 {copiedState === 'tab' ? 'Copied!' : 'Copy Active Output'}
               </Button>
@@ -739,7 +742,7 @@ ${JSON.stringify(
                 variant="outlined"
                 startIcon={<DownloadIcon sx={{ fontSize: 13 }} />}
                 onClick={() => handleDownloadFile(structuredArtifactJson, 'json', 'application/json')}
-                sx={{ fontFamily: mono, fontSize: '0.67rem', textTransform: 'none', py: 0.25, color: '#10B981', borderColor: 'rgba(16,185,129,0.4)' }}
+                sx={{ minHeight: { xs: 44, sm: 34 }, fontFamily: mono, fontSize: '0.67rem', textTransform: 'none', py: 0.25, color: '#10B981', borderColor: 'rgba(16,185,129,0.4)' }}
               >
                 .JSON
               </Button>
@@ -748,7 +751,7 @@ ${JSON.stringify(
                 variant="outlined"
                 startIcon={<DownloadIcon sx={{ fontSize: 13 }} />}
                 onClick={() => handleDownloadFile(markdownReport, 'md', 'text/markdown')}
-                sx={{ fontFamily: mono, fontSize: '0.67rem', textTransform: 'none', py: 0.25, color: accent, borderColor: `${accent}55` }}
+                sx={{ minHeight: { xs: 44, sm: 34 }, fontFamily: mono, fontSize: '0.67rem', textTransform: 'none', py: 0.25, color: accent, borderColor: `${accent}55` }}
               >
                 .MD Report
               </Button>

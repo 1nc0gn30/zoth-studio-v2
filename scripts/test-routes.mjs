@@ -64,6 +64,8 @@ const SAMPLE_ROUTES = [
   '/tools/pod-mockup-forge',
   '/tools/pod-margin-sentinel',
   '/workstations/cockpit',
+  '/workstations/agent-composer',
+  '/tools/agent-composer',
   '/workstations/mission-control',
   '/docs/math/stdp',
 ];
@@ -364,6 +366,22 @@ async function main() {
         failureReason = 'Document title is empty';
       } else if (consoleErrors.length > 0 || pageErrors.length > 0) {
         failureReason = `${consoleErrors.length + pageErrors.length} console/runtime error(s)`;
+      } else if (route === '/workstations/agent-composer' || route === '/tools/agent-composer') {
+        const metaCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          return {
+            hasTitle: document.title.includes('Multi-Agent DAG Composer'),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasDagSvg: Boolean(document.querySelector('[data-testid="composer-dag-svg"]')),
+          };
+        });
+        if (!metaCheck.hasTitle || !metaCheck.hasSoftwareApp || !metaCheck.hasFaq || !metaCheck.hasDagSvg) {
+          failureReason = `agent-composer invariants failed: ${JSON.stringify(metaCheck)}`;
+        }
       }
     } catch (err) {
       status = 0;

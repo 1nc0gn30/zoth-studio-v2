@@ -260,11 +260,11 @@ export default function SwarmCivilizationGodModeTool({ tool }) {
     let cancelled = false;
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 1500);
-    fetch('http://127.0.0.1:8141/status', { signal: ctrl.signal })
+    fetch('/api/studio/swarm/mux-status', { signal: ctrl.signal })
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         clearTimeout(timer);
-        if (cancelled || !data) return;
+        if (cancelled || !data || !data.up) return;
         setDaemonOnline(true);
         if (data.harness_models) {
           setHarnessModelsMap((prev) => ({ ...prev, ...data.harness_models }));

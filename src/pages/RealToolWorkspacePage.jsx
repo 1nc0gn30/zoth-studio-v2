@@ -33,6 +33,7 @@ import SovereignFunnel from '../components/SovereignFunnel';
 import { HeroReveal, HeroItem, GlowLine, RevealOnScroll } from '../components/MotionReveal';
 import { useSovereignRuntime } from '../utils/sovereignRuntime';
 import { useReality } from '../context/RealityContext';
+import AgentComposerGodModeTool from '../components/tools/AgentComposerGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -245,7 +246,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   // Studio Cockpit & Workstation aliases (from workstations.js)
   'cockpit': SwarmCivilizationGodModeTool,
   'ide': ZothBoltGodModeTool,
-  'agent-composer': AzothArchonGodModeTool,
+  'agent-composer': AgentComposerGodModeTool,
   'mission-control': SwarmCivilizationGodModeTool,
   'models': PromptMasterGodModeTool,
   'ax-powerhouse': WebMcpInspectorGodModeTool,
@@ -293,7 +294,8 @@ const DEDICATED_SITES = {
 };
 
 export default function RealToolWorkspacePage() {
-  const { toolId } = useParams();
+  const { toolId: paramToolId, workstationId } = useParams();
+  const toolId = paramToolId || workstationId;
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
@@ -326,13 +328,13 @@ export default function RealToolWorkspacePage() {
           name: wsEntry.name,
           repo: 'zoth-studio-v2',
           category: wsEntry.band || 'Architecture',
-          executionType: 'browser',
-          github: 'https://github.com/NullAITech/zoth-studio-v2',
-          liveUrl: `https://zoth.nullai.tech/tools/${wsEntry.id}`,
+          executionType: wsEntry.executionType || (wsEntry.id === 'agent-composer' ? 'hybrid' : 'browser'),
+          github: 'https://github.com/1nc0gn30/zoth-studio-v2',
+          liveUrl: `https://zoth.nullai.tech/workstations/${wsEntry.id}`,
           description:
             wsEntry.description ||
             'Local-first architecture module integrated inside the Zoth Studio v2 repository.',
-          version: '3.3.0',
+          version: wsEntry.version || '2.2.0',
           pull: wsEntry.pullCommand || 'git clone https://github.com/NullAITech/zoth-studio-v2.git',
         }
       : null);
@@ -550,23 +552,46 @@ export default function RealToolWorkspacePage() {
     <Container maxWidth="lg" sx={{ py: { xs: 4, md: 6 } }}>
       {/* Breadcrumb */}
       <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1.5 }}>
-        <Button
-          component={RouterLink}
-          to="/arsenal"
-          size="small"
-          startIcon={<ArrowBackIcon sx={{ fontSize: '1rem !important' }} />}
-          sx={{
-            fontFamily: mono,
-            fontSize: '0.76rem',
-            fontWeight: 700,
-            color: secondaryText,
-            textTransform: 'none',
-            px: 1,
-            '&:hover': { color: primaryText, bgcolor: 'transparent' },
-          }}
-        >
-          All {microTools.length} Repositories
-        </Button>
+        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
+          {wsEntry && (
+            <Button
+              component={RouterLink}
+              to="/workstations"
+              size="small"
+              startIcon={<ArrowBackIcon sx={{ fontSize: '1rem !important' }} />}
+              sx={{
+                minHeight: { xs: 44, sm: 34 },
+                fontFamily: mono,
+                fontSize: '0.76rem',
+                fontWeight: 700,
+                color: gold,
+                textTransform: 'none',
+                px: 1.25,
+                '&:hover': { color: primaryText, bgcolor: 'transparent' },
+              }}
+            >
+              Workstations
+            </Button>
+          )}
+          <Button
+            component={RouterLink}
+            to="/arsenal"
+            size="small"
+            startIcon={<ArrowBackIcon sx={{ fontSize: '1rem !important' }} />}
+            sx={{
+              minHeight: { xs: 44, sm: 34 },
+              fontFamily: mono,
+              fontSize: '0.76rem',
+              fontWeight: 700,
+              color: secondaryText,
+              textTransform: 'none',
+              px: 1.25,
+              '&:hover': { color: primaryText, bgcolor: 'transparent' },
+            }}
+          >
+            All {microTools.length} Repositories
+          </Button>
+        </Stack>
 
         <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
           <Chip
@@ -786,7 +811,7 @@ export default function RealToolWorkspacePage() {
                       textTransform: 'none',
                       color: primaryText,
                       borderColor: borderCol,
-                      minHeight: 32,
+                      minHeight: { xs: 44, sm: 34 },
                     }}
                   >
                     {copiedRuntimePull ? 'Copied Quickstart' : 'Copy Install / CLI'}
@@ -841,6 +866,7 @@ export default function RealToolWorkspacePage() {
                   onClick={() => copyText(pullCommand, setCopiedPull)}
                   startIcon={copiedPull ? <CheckIcon /> : <ContentCopyIcon />}
                   sx={{
+                    minHeight: { xs: 44, sm: 34 },
                     fontFamily: mono,
                     fontWeight: 700,
                     fontSize: '0.74rem',
@@ -889,6 +915,7 @@ export default function RealToolWorkspacePage() {
                     onClick={() => copyText(cloneCommand, setCopiedClone)}
                     startIcon={copiedClone ? <CheckIcon /> : <ContentCopyIcon />}
                     sx={{
+                      minHeight: { xs: 44, sm: 34 },
                       fontFamily: mono,
                       fontWeight: 700,
                       fontSize: '0.72rem',
@@ -918,6 +945,7 @@ export default function RealToolWorkspacePage() {
                 }}
                 startIcon={<SpeedIcon />}
                 sx={{
+                  minHeight: 44,
                   bgcolor: isDark ? '#D4AF37' : '#7A5808',
                   color: isDark ? '#08080B' : '#FFFFFF',
                   fontWeight: 800,
@@ -937,6 +965,7 @@ export default function RealToolWorkspacePage() {
                 rel="noopener noreferrer"
                 startIcon={<GitHubIcon />}
                 sx={{
+                  minHeight: 44,
                   borderColor: isDark ? 'rgba(245,241,230,0.28)' : '#101828',
                   color: primaryText,
                   fontWeight: 700,
@@ -957,6 +986,7 @@ export default function RealToolWorkspacePage() {
                   rel="noopener noreferrer"
                   startIcon={<GitHubIcon />}
                   sx={{
+                    minHeight: 44,
                     borderColor: borderCol,
                     color: secondaryText,
                     fontWeight: 700,
@@ -975,6 +1005,7 @@ export default function RealToolWorkspacePage() {
                 to="/zoth-os"
                 variant="outlined"
                 sx={{
+                  minHeight: 44,
                   borderColor: borderCol,
                   color: secondaryText,
                   fontWeight: 700,
@@ -1077,6 +1108,7 @@ export default function RealToolWorkspacePage() {
               </Box>
               <Box sx={{ minWidth: 0 }}>
                 <Typography
+                  component="h2"
                   variant="h6"
                   sx={{
                     fontFamily: '"Space Grotesk", "Inter", system-ui, sans-serif',
@@ -1222,6 +1254,7 @@ export default function RealToolWorkspacePage() {
               </Box>
               <Box>
                 <Typography
+                  component="h2"
                   variant="h6"
                   sx={{
                     fontFamily: '"Space Grotesk", "Inter", system-ui, sans-serif',
@@ -1344,6 +1377,8 @@ export default function RealToolWorkspacePage() {
             }
           >
             <ActiveEnclaveComponent tool={tool} />
+          </Suspense>
+          <Suspense fallback={null}>
             <Box sx={{ mt: 3 }}>
               <SovereignToolOutputWorkbench tool={tool} />
             </Box>
@@ -1388,7 +1423,7 @@ export default function RealToolWorkspacePage() {
               >
                 01 · WHY LOCAL-FIRST
               </Typography>
-              <Typography variant="h6" sx={{ fontWeight: 800, color: primaryText, mb: 1.25 }}>
+              <Typography component="h2" variant="h6" sx={{ fontWeight: 800, color: primaryText, mb: 1.25 }}>
                 Purpose &amp; Operational Scope
               </Typography>
               <Typography variant="body2" sx={{ color: secondaryText, lineHeight: 1.7, mb: 3 }}>
@@ -1437,7 +1472,7 @@ export default function RealToolWorkspacePage() {
               >
                 02 · CAPABILITY SPECIFICATION
               </Typography>
-              <Typography variant="h6" sx={{ fontWeight: 800, color: primaryText, mb: 2 }}>
+              <Typography component="h2" variant="h6" sx={{ fontWeight: 800, color: primaryText, mb: 2 }}>
                 What {tool.name} Does Locally
               </Typography>
 
@@ -1498,7 +1533,7 @@ export default function RealToolWorkspacePage() {
           >
             03 · LOCAL INSTALLATION &amp; AGENT CONTRACT
           </Typography>
-          <Typography variant="h6" sx={{ fontWeight: 800, color: primaryText, mb: 0.75 }}>
+          <Typography component="h2" variant="h6" sx={{ fontWeight: 800, color: primaryText, mb: 0.75 }}>
             CLI Quickstart &amp; MCP Interface
           </Typography>
           <Typography variant="body2" sx={{ color: secondaryText, mb: 3, maxWidth: 760 }}>
@@ -1555,7 +1590,7 @@ export default function RealToolWorkspacePage() {
                     size="small"
                     aria-label="Copy CLI example"
                     onClick={() => copyText(docs.aiAgentProtocol.cliExample, setCopiedMcp)}
-                    sx={{ color: secondaryText }}
+                    sx={{ minWidth: { xs: 44, sm: 34 }, minHeight: { xs: 44, sm: 34 }, color: secondaryText }}
                   >
                     {copiedMcp ? <CheckIcon sx={{ fontSize: '0.95rem', color: '#10B981' }} /> : <ContentCopyIcon sx={{ fontSize: '0.95rem' }} />}
                   </IconButton>

@@ -333,6 +333,7 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
   } else if (routePath.startsWith('/tools/')) {
     const toolId = routePath.replace('/tools/', '');
     const tool = microTools.find((t) => t.id === toolId || t.repo === toolId);
+    const station = !tool ? workstations.find((w) => w.id === toolId) : null;
     if (tool) {
       extraContent = `
         <section style="margin-top: 1.5rem; padding: 1rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 4px; background: rgba(212,175,55,0.03);">
@@ -341,6 +342,14 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
           <p style="color: #D1D5DB; line-height: 1.6;">${tool.description}</p>
           <pre style="background: #0D0E15; padding: 0.75rem; border: 1px solid #1E2230; border-radius: 4px; color: #D4AF37; overflow-x: auto;"><code>${tool.pull || `npx @nullaitech/zoth pull ${tool.id}`}</code></pre>
           ${tool.github ? `<p><a href="${tool.github}" target="_blank" rel="noopener noreferrer" style="color: #60A5FA;">View Open-Source Repository ↗</a></p>` : ''}
+        </section>
+      `;
+    } else if (station) {
+      extraContent = `
+        <section style="margin-top: 1.5rem; padding: 1rem; border: 1px solid rgba(212,175,55,0.3); border-radius: 4px; background: rgba(212,175,55,0.03);">
+          <h2 style="font-size: 1.25rem; color: #D4AF37;">${station.name} Sovereign Workstation</h2>
+          <p><strong>Operational Band:</strong> ${station.band} | <strong>Runtime:</strong> ${station.executionType || 'hybrid'} | <strong>Version:</strong> ${station.version || '2.2.0'}</p>
+          <p style="color: #D1D5DB; line-height: 1.6;">${station.description}</p>
         </section>
       `;
     }

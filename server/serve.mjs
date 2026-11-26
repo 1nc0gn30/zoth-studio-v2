@@ -40,12 +40,18 @@ const server = http.createServer((req, res) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Referrer-Policy', 'same-origin');
   boltProxyMiddleware(req, res, () => api(req, res, () => {
+    const cleanPath = (req.url || '/').split('?')[0];
+    if (cleanPath.startsWith('/api/')) {
+      res.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+      res.end(JSON.stringify({ error: 'Unknown API route.' }));
+      return;
+    }
     if (req.method !== 'GET' && req.method !== 'HEAD') { res.writeHead(405); res.end(); return; }
     let file = resolveFile(req.url);
     if (file === null) { res.writeHead(403); res.end('Forbidden'); return; }
     let status = 200;
     if (file === undefined) {
-      const looksLikeAsset = /\.[a-z0-9]{2,5}$/i.test(req.url.split('?')[0]);
+      const looksLikeAsset = /\.[a-z0-9]{2,5}$/i.test(cleanPath);
       if (looksLikeAsset) { res.writeHead(404, { 'Content-Type': 'text/plain' }); res.end('Not found'); return; }
       file = path.join(ROOT, 'index.html');                                 // SPA route fallback
     }

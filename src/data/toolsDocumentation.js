@@ -3466,6 +3466,59 @@ export const toolsDocumentation = {
           "5 Sovereign Ecosystem Pillars & 7-APK Tracker — Tracks ZothNet, ZothOS, Zoth Studio, World of Zoth, and NullAI mobile packages.",
           "60fps U+2800 Braille + Bayer 8x8 TUI — Terminal verification harness alongside REST API (/api/tools, /api/pillars, /api/verify/:id)."
       ]
+  },
+  "agent-composer": {
+      "whyUse": "Compose, validate, and execute real multi-agent directed acyclic graphs (DAGs) without third-party cloud workflow SaaS. Combines an interactive SVG node-graph editor, Kahn topological wave scheduling, DFS cycle detection, and loopback execution against Ollama (:11434), AGY-Hermes (:18000), Azoth (:8136), Neuro-Memory (:8094), and deterministic in-browser JavaScript transforms.",
+      "problemSolved": "Eliminates brittle bash glue scripts and black-box cloud agent orchestrators by making dependencies, variable templates ({{input}}, {{nodeId.output}}), wave parallelism, and provider failure states transparent, reproducible, and exportable.",
+      "architecture": "Hybrid Studio-native workstation: pure zero-dependency DAG core (src/utils/dagEngine.js) running client-side in your browser paired with loopback Studio API bridges (GET /api/studio/composer/providers and CSRF-protected POST /api/studio/composer/step on 127.0.0.1:3000).",
+      "aiAgentProtocol": {
+          "server": "zoth-studio-loopback-api (127.0.0.1:3000)",
+          "mcpTool": "GET /api/studio/composer/providers · POST /api/studio/composer/step",
+          "description": "Probe live loopback providers/models and execute individual DAG nodes with AbortController timeouts and explicit error reporting.",
+          "cliExample": "zoth open agent-composer --json",
+          "tools": [
+              {
+                  "name": "GET /api/studio/composer/providers",
+                  "description": "Probes Ollama (:11434), AGY-Hermes (:18000), Azoth (:8136), Neuro-Memory (:8094), Bridge (:8102), and local CLI binaries (hermes, agy, codex, claude)."
+              },
+              {
+                  "name": "POST /api/studio/composer/step",
+                  "description": "Executes one DAG step against ollama, agy-hermes, azoth, neuro-memory, sovereign-bridge, or deterministic transform with strict Origin loopback enforcement."
+              }
+          ],
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "provider": { "type": "string", "enum": ["ollama", "agy-hermes", "azoth", "neuro-memory", "sovereign-bridge", "transform"] },
+                  "model": { "type": "string", "description": "Local model ID or transform mode (json-validate, markdown-brief, regex-extract, schema-verify)" },
+                  "prompt": { "type": "string", "description": "Interpolated step prompt" }
+              },
+              "required": ["provider", "prompt"]
+          },
+          "outputSchema": {
+              "ok": "boolean",
+              "provider": "string",
+              "model": "string",
+              "output": "string",
+              "durationMs": "number",
+              "tokenEstimate": "number",
+              "error": "string | null"
+          }
+      },
+      "quickstart": [
+          "zoth open agent-composer",
+          "zoth open agent-composer --json",
+          "curl -sS http://127.0.0.1:3000/api/studio/composer/providers | jq ."
+      ],
+      "cliCommands": [
+          "npm run test:dag  # run unit tests for DAG validation, waves & exports"
+      ],
+      "features": [
+          "Interactive SVG Directed Node-Graph Canvas — Drag nodes, connect directed Bézier edges via ports or dependency toggles, auto-layout by topological wave, and switch between 3 real starter templates.",
+          "Kahn Topological Waves & DFS Cycle Detection — Rejects self-loops and multi-node cycles with the exact offending cycle path before execution.",
+          "Real Loopback Provider Dispatch — Executes live steps against Ollama (:11434), AGY-Hermes (:18000), Azoth (:8136), Neuro-Memory (:8094), or deterministic JS transforms with AbortController cancel and honest error states.",
+          "Portable Exports & Persistence — Auto-saves to localStorage and exports/imports canonical JSON, Zoth YAML, and standalone runnable Python 3 wave scripts."
+      ]
   }
 };
 

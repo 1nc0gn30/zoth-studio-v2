@@ -32,6 +32,16 @@ try {
   r = await req('/../../etc/passwd'); check('traversal does not leak /etc/passwd', !/root:x:0:0/.test(r.body));
   r = await req('/%2e%2e/%2e%2e/etc/passwd'); check('encoded traversal blocked', !/root:x:0:0/.test(r.body));
   r = await req('/api/studio/status'); check('Studio API mounted', r.status === 200 && r.body.trim().startsWith('{'), r.status);
+  r = await req('/api/studio/composer/providers');
+  check('Composer providers API 200 JSON', r.status === 200 && /"providers"/.test(r.body) && /"transform"/.test(r.body), r.status);
+  r = await req('/api/studio/composer/step', { method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/json' }, body: '{"provider":"transform","prompt":"hi"}' });
+  check('Composer step cross-origin blocked (403)', r.status === 403, r.status);
+  r = await req('/api/studio/composer/step', { method: 'POST', headers: { Origin: base, 'Content-Type': 'application/json' }, body: '{"provider":"transform","model":"json-validate","prompt":"{\\"ok\\":true}"}' });
+  check('Composer step local transform (200)', r.status === 200 && /"ok":true/.test(r.body) && /VALID JSON/.test(r.body), `${r.status} ${r.body.slice(0, 120)}`);
+  r = await req('/api/studio/agent/triad');
+  check('Agent triad no 500 & no /home/ leak', r.status !== 500 && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status}`);
+  r = await req('/api/unknown-composer-check');
+  check('Unknown /api/* returns JSON 404', r.status === 404 && /application\/json/.test(String(r.headers['content-type'] || '')), r.status);
   r = await req('/api/studio/launch', { method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/json' }, body: '{"tool":"terminal"}' });
   check('cross-origin launch blocked (403)', r.status === 403, r.status);
   r = await req('/', { method: 'DELETE' }); check('non-GET static 405', r.status === 405, r.status);

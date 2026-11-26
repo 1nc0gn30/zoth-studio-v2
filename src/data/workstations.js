@@ -32,10 +32,13 @@ export const workstations = [
   {
     id: "agent-composer",
     name: "Multi-Agent DAG Composer & Pipeline Foundry",
-    path: "/studio/agent-composer.html",
+    path: "/workstations/agent-composer",
     band: "Build",
     type: "cockpit",
-    description: "Visual node-graph builder for orchestrating complex multi-agent execution pipelines.",
+    executionType: "hybrid",
+    version: "2.2.0",
+    pullCommand: "zoth open agent-composer",
+    description: "Visual directed-acyclic-graph (DAG) builder and topological wave runner wiring Ollama (:11434), AGY-Hermes (:18000), Azoth (:8136), Neuro-Memory (:8094), and deterministic JS transforms.",
     alsoInApp: "/workstations/agent-composer"
   },
   {

@@ -12,6 +12,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { microTools } from '../src/data/toolsData.js';
+import { workstations } from '../src/data/workstations.js';
 import { pantheonAgents } from '../src/data/pantheon.js';
 import { probeStatus } from '../server/studio-api.mjs';
 
@@ -321,9 +322,60 @@ function handleSwarm() {
   }
 }
 
+function handleOpen(targetId, { json = false } = {}) {
+  const id = String(targetId || '').trim();
+  if (!id || id === '--help' || id === '-h') {
+    if (json) {
+      console.log(JSON.stringify({ usage: 'zoth open <tool-or-workstation-id> [--json]' }, null, 2));
+      return;
+    }
+    banner();
+    console.log(`${BOLD}Usage:${RESET} ${GOLD}zoth open <tool-or-workstation-id> [--json]${RESET}`);
+    console.log(`${GRAY}Prints the canonical local Studio (:3000) and production URLs for any workstation or Arsenal tool.${RESET}`);
+    console.log(`${GRAY}Example: zoth open agent-composer${RESET}`);
+    return;
+  }
+
+  const ws = workstations.find((w) => w.id === id);
+  const tool = microTools.find((t) => t.id === id || t.repo === id);
+  if (!ws && !tool) {
+    if (json) {
+      console.log(JSON.stringify({ ok: false, error: `Unknown tool or workstation "${id}"` }, null, 2));
+    } else {
+      banner();
+      console.log(`${RED}✖ Unknown tool or workstation "${id}".${RESET} Run ${CYAN}zoth list${RESET}`);
+    }
+    process.exitCode = 1;
+    return;
+  }
+
+  const route = ws ? `/workstations/${ws.id}` : `/tools/${tool.id}`;
+  const payload = {
+    ok: true,
+    id: ws ? ws.id : tool.id,
+    name: ws ? ws.name : tool.name,
+    kind: ws ? 'workstation' : 'tool',
+    route,
+    localUrl: `http://127.0.0.1:3000${route}`,
+    productionUrl: `https://zoth.nullai.tech${route}`,
+  };
+
+  if (json) {
+    console.log(JSON.stringify(payload, null, 2));
+    return;
+  }
+
+  banner();
+  console.log(`${BOLD}${payload.name}${RESET}  ${GRAY}(${payload.kind})${RESET}`);
+  console.log(`  ${GOLD}Local Studio${RESET} : ${CYAN}${payload.localUrl}${RESET}`);
+  console.log(`  ${GOLD}Production  ${RESET} : ${CYAN}${payload.productionUrl}${RESET}`);
+  console.log(`  ${GOLD}Route       ${RESET} : ${payload.route}`);
+}
+
 function handleHelp() {
   banner();
   console.log(`${BOLD}Commands${RESET}`);
+  console.log(`  ${GOLD}zoth open <id> [--json]${RESET}         Print canonical Studio & workstation URLs (e.g. agent-composer)`);
   console.log(`  ${GOLD}npm run zoth -- doctor${RESET}          Probe loopback services and local checkouts`);
   console.log(`  ${GOLD}npm run zoth -- list${RESET}            Catalog, with published GitHub URLs`);
   console.log(`  ${GOLD}npm run zoth -- pull <repo>${RESET}     Clone or fast-forward one published tool into ./tools`);
@@ -339,6 +391,9 @@ const command = args[0] || 'help';
 
 if (command === 'doctor' || command === 'status') {
   await handleDoctor();
+} else if (command === 'open') {
+  const target = args.slice(1).find((a) => !a.startsWith('--'));
+  handleOpen(target, { json: args.includes('--json') });
 } else if (command === 'pull') {
   await handlePull(args.includes('--all') ? null : args[1], { all: args.includes('--all') });
 } else if (command === 'up' || command === 'serve' || command === 'start') {

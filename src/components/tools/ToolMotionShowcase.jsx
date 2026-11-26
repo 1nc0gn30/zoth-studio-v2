@@ -62,6 +62,17 @@ export const TOOL_MOTION_OVERRIDES = {
     execLabel: '127.0.0.1:8105 LOCAL DAEMON · BUBBLEWRAP JAIL',
     telemetrySub: 'bwrap --unshare-all · --cap-drop ALL · prlimit / cgroup TasksMax · SHA-256 receipt per run.',
   },
+  'agent-composer': {
+    accent: '#D4AF37',
+    secondary: '#34D399',
+    archetype: 'swarm',
+    anchorName: 'Topological DAG Wave Lattice',
+    formula: 'W_k = { v ∈ V : indeg(v) = 0 } · Kahn parallel waves + DFS cycle guard',
+    badge: 'MULTI-AGENT DAG FOUNDRY',
+    clip: 'tools',
+    execLabel: 'HYBRID BROWSER DAG + 127.0.0.1 LOOPBACK PROVIDERS',
+    telemetrySub: 'Ollama :11434 · AGY-Hermes :18000 · Azoth :8136 · Neuro-Memory :8094 · Deterministic JS Transforms.',
+  },
 };
 
 export function getToolMotionMeta(tool) {
@@ -688,6 +699,7 @@ Scene Breakdown & Exact On-Screen Copy:
               variant="outlined"
               onClick={() => setRenderMode(m.id)}
               sx={{
+                minHeight: { xs: 44, sm: 32 },
                 fontFamily: mono,
                 fontSize: '0.64rem',
                 fontWeight: 800,
@@ -713,6 +725,7 @@ Scene Breakdown & Exact On-Screen Copy:
             onClick={handleCopyAsciiSnapshot}
             startIcon={copiedAscii ? <CheckIcon sx={{ fontSize: 14 }} /> : <TerminalIcon sx={{ fontSize: 14 }} />}
             sx={{
+              minHeight: { xs: 44, sm: 32 },
               fontFamily: mono,
               fontSize: '0.66rem',
               fontWeight: 700,
@@ -732,6 +745,7 @@ Scene Breakdown & Exact On-Screen Copy:
             onClick={() => setShowPrompt((v) => !v)}
             startIcon={<CodeIcon sx={{ fontSize: 15 }} />}
             sx={{
+              minHeight: { xs: 44, sm: 32 },
               fontFamily: mono,
               fontSize: '0.66rem',
               fontWeight: 700,
@@ -752,6 +766,7 @@ Scene Breakdown & Exact On-Screen Copy:
               onClick={onReplayRouteIntro}
               startIcon={<FullscreenIcon sx={{ fontSize: 16 }} />}
               sx={{
+                minHeight: { xs: 44, sm: 32 },
                 fontFamily: mono,
                 fontSize: '0.66rem',
                 fontWeight: 800,
@@ -800,8 +815,8 @@ Scene Breakdown & Exact On-Screen Copy:
             sx={{
               color: '#08080B',
               bgcolor: meta.accent,
-              width: 28,
-              height: 28,
+              minWidth: { xs: 44, sm: 32 },
+              minHeight: { xs: 44, sm: 32 },
               '&:hover': { bgcolor: '#F8FAFC' },
             }}
           >
@@ -815,7 +830,7 @@ Scene Breakdown & Exact On-Screen Copy:
               setPlaying(true);
             }}
             aria-label="Restart motion reel"
-            sx={{ color: '#94A3B8', '&:hover': { color: '#FFFFFF' } }}
+            sx={{ minWidth: { xs: 44, sm: 32 }, minHeight: { xs: 44, sm: 32 }, color: '#94A3B8', '&:hover': { color: '#FFFFFF' } }}
           >
             <ReplayIcon sx={{ fontSize: 16 }} />
           </IconButton>
@@ -832,7 +847,7 @@ Scene Breakdown & Exact On-Screen Copy:
                 clickable
                 onClick={() => handleJumpScene(s)}
                 sx={{
-                  height: 22,
+                  minHeight: { xs: 44, sm: 26 },
                   fontFamily: mono,
                   fontSize: '0.64rem',
                   fontWeight: 700,
