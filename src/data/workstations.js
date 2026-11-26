@@ -438,14 +438,15 @@ export const workstations = [
   },
   {
     id: "connectors",
-    name: "Zoth Tool Bench & Integration Ecosystem",
-    path: "/studio/connectors.html",
+    name: "Connectors Hub // AI Providers, CLI Harnesses & MCP Bridges",
+    path: "/workstations/connectors",
     band: "Observe",
-    type: "integrated_tool",
-    description: "Integration workbench bridging the 21 sovereign micro-repos and MCP contract endpoints.",
-    alsoInApp: "/tools",
-    toolRepoId: "envguard-secrets-vault",
-    pullCommand: "npx @nullaitech/zoth tools list"
+    type: "cockpit",
+    executionType: "hybrid",
+    version: "2.3.0",
+    description: "Hybrid loopback Connectors Hub probing local AI inference providers (:18000, :11434, :1234, :8000), CLI agent harnesses (hermes, agy, claude, codex, gemini, opencode), core Zoth bridges, and sanitized local MCP servers across the 85-tool ecosystem with zero-secret-leakage config generation.",
+    alsoInApp: "/workstations/connectors",
+    pullCommand: "zoth open connectors"
   },
 
   // ==========================================

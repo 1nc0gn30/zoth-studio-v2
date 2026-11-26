@@ -76,6 +76,16 @@ try {
   check('Cockpit API 200 JSON (host, fleet, daemons, no /home/ leak)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"schemaVersion":"2.3.0"/.test(r.body) && /"host":\{/.test(r.body) && /"fleet":\{/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 140)}`);
   r = await req('/api/studio/cockpit', { headers: { Host: 'evil.example.invalid' } });
   check('Cockpit GET DNS-rebinding blocked (403)', r.status === 403 && /Untrusted host blocked/.test(r.body), `${r.status} ${r.body.slice(0, 80)}`);
+  r = await req('/api/studio/connectors');
+  check('Connectors API 200 JSON (providers, harnesses, bridges, mcpServers, 0 /home/ leaks)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"schemaVersion":"2.3.0"/.test(r.body) && /"providers":\[/.test(r.body) && /"harnesses":\[/.test(r.body) && /"bridges":\[/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 140)}`);
+  r = await req('/api/studio/connectors', { headers: { Host: 'evil.example.invalid' } });
+  check('Connectors GET DNS-rebinding blocked (403)', r.status === 403 && /Untrusted host blocked/.test(r.body), `${r.status} ${r.body.slice(0, 80)}`);
+  r = await req('/api/studio/connectors/probe', { method: 'POST', headers: { Origin: base, 'Content-Type': 'application/json' }, body: JSON.stringify({ host: '169.254.169.254', port: 8080 }) });
+  check('Connectors probe SSRF external/IMDS rejected (400)', r.status === 400, `${r.status} ${r.body.slice(0, 100)}`);
+  r = await req('/api/studio/connectors/probe', { method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/json' }, body: JSON.stringify({ port: PORT }) });
+  check('Connectors probe cross-origin blocked (403)', r.status === 403, `${r.status}`);
+  r = await req('/api/studio/connectors/probe', { method: 'POST', headers: { Origin: base, 'Content-Type': 'application/json' }, body: JSON.stringify({ port: PORT, path: '/api/studio/status' }) });
+  check('Connectors probe local loopback port (200 online)', r.status === 200 && /"online":true/.test(r.body) && /"host":"127.0.0.1"/.test(r.body), `${r.status} ${r.body.slice(0, 140)}`);
   r = await req('/api/studio/ax/audit');
   check('AX audit API 200 JSON (driftCount 0)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"driftCount":0/.test(r.body), `${r.status} ${r.body.slice(0, 180)}`);
   r = await req('/api/studio/ax/validate', { method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/json' }, body: '{"spec":"robots.txt","content":"User-agent: *\\nAllow: /"}' });

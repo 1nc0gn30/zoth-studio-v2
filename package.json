@@ -25,9 +25,10 @@
     "test:chronicle": "node --test scripts/test-chronicle-engine.mjs",
     "test:city-desk": "node --test scripts/test-city-desk-engine.mjs",
     "test:cockpit": "node --test scripts/test-cockpit-engine.mjs",
+    "test:connectors": "node --test scripts/test-connectors-engine.mjs",
     "test:arsenal": "node scripts/test-arsenal.mjs",
     "test:ground-truth": "node scripts/test-ground-truth.mjs",
-    "test": "python3 scripts/registry-check.py && node --test scripts/test-dag-engine.mjs && node --test scripts/test-ax-engine.mjs && node --test scripts/test-brand-engine.mjs && node --test scripts/test-bus-monitor-engine.mjs && node --test scripts/test-chronicle-engine.mjs && node --test scripts/test-city-desk-engine.mjs && node --test scripts/test-cockpit-engine.mjs && node scripts/test-arsenal.mjs && node scripts/test-ground-truth.mjs && node scripts/test-serve.mjs",
+    "test": "python3 scripts/registry-check.py && node --test scripts/test-dag-engine.mjs && node --test scripts/test-ax-engine.mjs && node --test scripts/test-brand-engine.mjs && node --test scripts/test-bus-monitor-engine.mjs && node --test scripts/test-chronicle-engine.mjs && node --test scripts/test-city-desk-engine.mjs && node --test scripts/test-cockpit-engine.mjs && node --test scripts/test-connectors-engine.mjs && node scripts/test-arsenal.mjs && node scripts/test-ground-truth.mjs && node scripts/test-serve.mjs",
     "registry:check": "python3 scripts/registry-check.py",
     "build:release": "bash scripts/build-release-suite.sh"
   },

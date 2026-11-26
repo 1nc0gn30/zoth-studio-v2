@@ -39,6 +39,7 @@ import BrandAssetsForgeGodModeTool from '../components/tools/BrandAssetsForgeGod
 import BusMonitorGodModeTool from '../components/tools/BusMonitorGodModeTool';
 import ChronicleHubGodModeTool from '../components/tools/ChronicleHubGodModeTool';
 import CockpitGodModeTool from '../components/tools/CockpitGodModeTool';
+import ConnectorsHubGodModeTool from '../components/tools/ConnectorsHubGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -268,7 +269,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'webgen': ZothBoltGodModeTool,
   'omnipost': OmniPostSocialGodModeTool,
   'subsweep': SubSweepGodModeTool,
-  'connectors': McpLensGodModeTool,
+  'connectors': ConnectorsHubGodModeTool,
   'hexstrike': HexStrikeGodModeTool,
   'netrunner-memory': NeuroMemoryGodModeTool,
   'consensus': SwarmCivilizationGodModeTool,

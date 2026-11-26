@@ -161,6 +161,18 @@ export const TOOL_MOTION_OVERRIDES = {
     execLabel: 'HYBRID BROWSER INSPECTOR + GET /api/studio/cockpit (HOST 403)',
     telemetrySub: 'Live Host Sensors · 88-Port Fleet Matrix · Fuzzy Command Palette · Sanitized JSON/MD/CSV · v2.3.0.',
   },
+  'connectors': {
+    accent: '#D4AF37',
+    secondary: '#38BDF8',
+    archetype: 'swarm',
+    anchorName: 'AI Provider, CLI & MCP Config Lattice',
+    formula: 'Probe(127.0.0.1, p ∈ [1024,65535]) ∧ Redact(~/ , ${ENV_VAR}) → MCP ∪ .env ∪ YAML ∪ TOML',
+    badge: 'CONNECTORS HUB · v2.3.0',
+    clip: 'bridges',
+    execLabel: 'HYBRID CONFIG FORGE + /api/studio/connectors{,/probe}',
+    mcpLabel: 'GET /API/STUDIO/CONNECTORS · POST /PROBE',
+    telemetrySub: 'AGY-Hermes :18000 · Ollama :11434 · 6 CLI Harnesses · 8 Core Bridges · Secret-Redacted MCP · v2.3.0.',
+  },
 };
 
 export function getToolMotionMeta(tool) {
@@ -352,7 +364,7 @@ export default function ToolMotionShowcase({ tool, onReplayRouteIntro }) {
         start: 8.5,
         end: 11.5,
         kicker: 'SCENE 04 · AUTONOMOUS AGENT MCP',
-        headline: `${(tool?.id || 'tool').replace(/-/g, '_').toUpperCase()}_EXECUTE`,
+        headline: meta.mcpLabel || `${(tool?.id || 'tool').replace(/-/g, '_').toUpperCase()}_EXECUTE`,
         sub: 'Native Model Context Protocol JSON-RPC 2.0 endpoint for Hermes, Grok CLI & Ollama.',
       },
       {
@@ -709,6 +721,15 @@ Scene Breakdown & Exact On-Screen Copy:
     setTimeout(() => setCopiedAscii(false), 2000);
   };
 
+  const lightAccent = '#7A5808';
+  const uiAccent = isDark ? meta.accent : lightAccent;
+  const uiBg = isDark ? '#08080C' : '#FFFFFF';
+  const uiBarBg = isDark ? 'rgba(255,255,255,0.03)' : '#F8F6F0';
+  const uiScrubBg = isDark ? 'rgba(0,0,0,0.45)' : '#F2EFE6';
+  const uiBorder = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(16,24,40,0.14)';
+  const uiInk = isDark ? '#F8FAFC' : '#101828';
+  const uiMuted = isDark ? '#CBD5E1' : '#334155';
+
   return (
     <Paper
       elevation={0}
@@ -716,34 +737,36 @@ Scene Breakdown & Exact On-Screen Copy:
         mb: 4,
         borderRadius: 3,
         overflow: 'hidden',
-        bgcolor: isDark ? '#08080C' : '#0B0F19',
-        border: `1px solid ${meta.accent}55`,
+        bgcolor: uiBg,
+        border: `1px solid ${isDark ? `${meta.accent}55` : 'rgba(122,88,8,0.32)'}`,
         boxShadow: isDark
           ? `0 12px 34px rgba(0,0,0,0.65), 0 0 24px -6px ${meta.accent}33`
-          : `0 10px 28px rgba(15,23,42,0.18)`,
+          : '0 8px 24px rgba(16,24,40,0.08)',
       }}
     >
       <SovereignEyebrow
-        accent="#D4AF37"
+        accent={isDark ? '#D4AF37' : '#7A5808'}
         right="Zoth Studio"
-        rightSx={{ color: '#CBD5E1' }}
+        rightSx={{ color: uiMuted }}
         sx={{ px: { xs: 2, md: 3 }, pt: 1.25 }}
       >
         {"tool-motion-showcase"}
       </SovereignEyebrow>
-      <SovereignBand
-        seed={"tool-motion-showcase"}
-        eyebrow={"Zoth Studio"}
-        caption={"Tool Motion Showcase"}
-        label={"Tool Motion Showcase — Zoth sovereign visualisation"}
-      />
+      {isDark && (
+        <SovereignBand
+          seed={"tool-motion-showcase"}
+          eyebrow={"Zoth Studio"}
+          caption={"Tool Motion Showcase"}
+          label={"Tool Motion Showcase — Zoth sovereign visualisation"}
+        />
+      )}
       {/* Top Cinema Control Bar */}
       <Box
         sx={{
           px: { xs: 2, md: 3 },
           py: 1.4,
-          bgcolor: 'rgba(255,255,255,0.03)',
-          borderBottom: '1px solid rgba(255,255,255,0.08)',
+          bgcolor: uiBarBg,
+          borderBottom: `1px solid ${uiBorder}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -752,14 +775,14 @@ Scene Breakdown & Exact On-Screen Copy:
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2, flexWrap: 'wrap' }}>
-          <MovieFilterIcon sx={{ color: meta.accent, fontSize: 19 }} />
+          <MovieFilterIcon sx={{ color: uiAccent, fontSize: 19 }} />
           <Typography
             sx={{
               fontFamily: mono,
               fontSize: '0.74rem',
               fontWeight: 800,
               letterSpacing: '0.14em',
-              color: '#F8FAFC',
+              color: uiInk,
               textTransform: 'uppercase',
             }}
           >
@@ -769,13 +792,13 @@ Scene Breakdown & Exact On-Screen Copy:
             label={`SCENE ${activeScene.id}/06`}
             size="small"
             sx={{
-              height: 20,
+              height: 22,
               fontFamily: mono,
-              fontSize: '0.65rem',
+              fontSize: '0.68rem',
               fontWeight: 800,
-              bgcolor: `${meta.accent}22`,
-              color: meta.accent,
-              border: `1px solid ${meta.accent}55`,
+              bgcolor: isDark ? `${meta.accent}22` : '#FEF7E0',
+              color: uiAccent,
+              border: `1px solid ${isDark ? `${meta.accent}55` : '#B8860B'}`,
             }}
           />
         </Box>
@@ -794,17 +817,17 @@ Scene Breakdown & Exact On-Screen Copy:
               sx={{
                 minHeight: { xs: 44, sm: 32 },
                 fontFamily: mono,
-                fontSize: '0.64rem',
+                fontSize: '0.66rem',
                 fontWeight: 800,
                 py: 0.35,
                 px: 1.15,
                 textTransform: 'none',
-                bgcolor: renderMode === m.id ? meta.accent : 'rgba(255,255,255,0.03)',
-                color: renderMode === m.id ? '#050508' : '#CBD5E1',
-                borderColor: renderMode === m.id ? meta.accent : 'rgba(255,255,255,0.16)',
+                bgcolor: renderMode === m.id ? uiAccent : (isDark ? 'rgba(255,255,255,0.03)' : '#FFFFFF'),
+                color: renderMode === m.id ? (isDark ? '#050508' : '#FFFFFF') : uiInk,
+                borderColor: renderMode === m.id ? uiAccent : (isDark ? 'rgba(255,255,255,0.22)' : 'rgba(16,24,40,0.22)'),
                 '&:hover': {
-                  bgcolor: renderMode === m.id ? '#F5E6AB' : 'rgba(255,255,255,0.08)',
-                  borderColor: meta.accent,
+                  bgcolor: renderMode === m.id ? (isDark ? '#F5E6AB' : '#5E4305') : (isDark ? 'rgba(255,255,255,0.08)' : '#F2EFE6'),
+                  borderColor: uiAccent,
                 },
               }}
             >
@@ -824,8 +847,9 @@ Scene Breakdown & Exact On-Screen Copy:
               fontWeight: 700,
               py: 0.3,
               px: 1.1,
-              borderColor: 'rgba(255,255,255,0.2)',
-              color: copiedAscii ? '#34D399' : '#E2E8F0',
+              borderColor: isDark ? 'rgba(255,255,255,0.22)' : 'rgba(16,24,40,0.22)',
+              bgcolor: isDark ? 'transparent' : '#FFFFFF',
+              color: copiedAscii ? (isDark ? '#34D399' : '#047857') : uiInk,
               textTransform: 'none',
             }}
           >
@@ -844,10 +868,11 @@ Scene Breakdown & Exact On-Screen Copy:
               fontWeight: 700,
               py: 0.3,
               px: 1.1,
-              borderColor: 'rgba(255,255,255,0.2)',
-              color: '#E2E8F0',
+              borderColor: isDark ? 'rgba(255,255,255,0.22)' : 'rgba(16,24,40,0.22)',
+              bgcolor: isDark ? 'transparent' : '#FFFFFF',
+              color: uiInk,
               textTransform: 'none',
-              '&:hover': { borderColor: meta.accent, color: meta.accent },
+              '&:hover': { borderColor: uiAccent, color: uiAccent },
             }}
           >
             {showPrompt ? 'Hide Spec' : '15s Prompt'}
@@ -865,10 +890,10 @@ Scene Breakdown & Exact On-Screen Copy:
                 fontWeight: 800,
                 py: 0.35,
                 px: 1.3,
-                bgcolor: meta.accent,
-                color: '#08080B',
+                bgcolor: uiAccent,
+                color: isDark ? '#08080B' : '#FFFFFF',
                 textTransform: 'none',
-                '&:hover': { bgcolor: '#F8FAFC' },
+                '&:hover': { bgcolor: isDark ? '#F8FAFC' : '#5E4305' },
               }}
             >
               Fullscreen Cinema Cut
@@ -891,8 +916,8 @@ Scene Breakdown & Exact On-Screen Copy:
         sx={{
           px: { xs: 2, md: 3 },
           py: 1.2,
-          bgcolor: 'rgba(0,0,0,0.45)',
-          borderTop: '1px solid rgba(255,255,255,0.08)',
+          bgcolor: uiScrubBg,
+          borderTop: `1px solid ${uiBorder}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -906,11 +931,11 @@ Scene Breakdown & Exact On-Screen Copy:
             onClick={() => setPlaying((p) => !p)}
             aria-label={playing ? 'Pause motion reel' : 'Play motion reel'}
             sx={{
-              color: '#08080B',
-              bgcolor: meta.accent,
+              color: isDark ? '#08080B' : '#FFFFFF',
+              bgcolor: uiAccent,
               minWidth: { xs: 44, sm: 32 },
               minHeight: { xs: 44, sm: 32 },
-              '&:hover': { bgcolor: '#F8FAFC' },
+              '&:hover': { bgcolor: isDark ? '#F8FAFC' : '#5E4305' },
             }}
           >
             {playing ? <PauseIcon sx={{ fontSize: 16 }} /> : <PlayArrowIcon sx={{ fontSize: 16 }} />}
@@ -923,7 +948,14 @@ Scene Breakdown & Exact On-Screen Copy:
               setPlaying(true);
             }}
             aria-label="Restart motion reel"
-            sx={{ minWidth: { xs: 44, sm: 32 }, minHeight: { xs: 44, sm: 32 }, color: '#94A3B8', '&:hover': { color: '#FFFFFF' } }}
+            sx={{
+              minWidth: { xs: 44, sm: 32 },
+              minHeight: { xs: 44, sm: 32 },
+              color: uiInk,
+              border: `1px solid ${uiBorder}`,
+              bgcolor: isDark ? 'transparent' : '#FFFFFF',
+              '&:hover': { color: uiAccent, borderColor: uiAccent },
+            }}
           >
             <ReplayIcon sx={{ fontSize: 16 }} />
           </IconButton>
@@ -933,23 +965,36 @@ Scene Breakdown & Exact On-Screen Copy:
           {scenes.map((s) => {
             const isActive = activeScene.id === s.id;
             return (
-              <Chip
+              <Button
                 key={s.id}
-                label={`${s.id} · ${s.kicker.split('·')[1]?.trim() || ''}`}
                 size="small"
-                clickable
+                variant="outlined"
                 onClick={() => handleJumpScene(s)}
                 sx={{
-                  minHeight: { xs: 44, sm: 26 },
+                  minHeight: { xs: 44, sm: 28 },
+                  borderRadius: '999px',
+                  px: 1.25,
+                  py: 0.25,
                   fontFamily: mono,
-                  fontSize: '0.64rem',
+                  fontSize: '0.66rem',
                   fontWeight: 700,
-                  bgcolor: isActive ? `${meta.accent}28` : 'rgba(255,255,255,0.04)',
-                  color: isActive ? meta.accent : '#94A3B8',
-                  border: `1px solid ${isActive ? meta.accent : 'rgba(255,255,255,0.1)'}`,
-                  '&:hover': { borderColor: meta.accent, color: '#FFFFFF' },
+                  textTransform: 'none',
+                  bgcolor: isActive
+                    ? (isDark ? `${meta.accent}28` : '#7A5808')
+                    : (isDark ? 'rgba(255,255,255,0.06)' : '#FFFFFF'),
+                  color: isActive
+                    ? (isDark ? meta.accent : '#FFFFFF')
+                    : (isDark ? '#E2E8F0' : '#1E293B'),
+                  borderColor: isActive ? uiAccent : (isDark ? 'rgba(255,255,255,0.18)' : 'rgba(16,24,40,0.22)'),
+                  '&:hover': {
+                    borderColor: uiAccent,
+                    bgcolor: isActive ? (isDark ? `${meta.accent}38` : '#5E4305') : (isDark ? 'rgba(255,255,255,0.12)' : '#FEF7E0'),
+                    color: isActive ? '#FFFFFF' : uiInk,
+                  },
                 }}
-              />
+              >
+                {s.id} · {s.kicker.split('·')[1]?.trim() || ''}
+              </Button>
             );
           })}
         </Box>
@@ -960,12 +1005,12 @@ Scene Breakdown & Exact On-Screen Copy:
         <Box
           sx={{
             p: 2.5,
-            bgcolor: '#050508',
-            borderTop: '1px solid rgba(255,255,255,0.1)',
+            bgcolor: isDark ? '#050508' : '#F8F6F0',
+            borderTop: `1px solid ${uiBorder}`,
           }}
         >
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-            <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: meta.accent }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 1, mb: 1 }}>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: uiAccent }}>
               CLAUDE MOTION / REVID.AI 15-SECOND SHOWREEL DIRECTOR BRIEF
             </Typography>
             <Tooltip title={copiedPrompt ? 'Copied!' : 'Copy Showreel Prompt'}>
@@ -975,10 +1020,13 @@ Scene Breakdown & Exact On-Screen Copy:
                 onClick={handleCopyPrompt}
                 startIcon={copiedPrompt ? <CheckIcon sx={{ fontSize: 14 }} /> : <ContentCopyIcon sx={{ fontSize: 14 }} />}
                 sx={{
+                  minHeight: { xs: 44, sm: 32 },
                   fontFamily: mono,
                   fontSize: '0.68rem',
-                  color: meta.accent,
-                  borderColor: `${meta.accent}55`,
+                  fontWeight: 700,
+                  color: uiAccent,
+                  borderColor: isDark ? `${meta.accent}55` : '#B8860B',
+                  bgcolor: isDark ? 'transparent' : '#FFFFFF',
                   textTransform: 'none',
                 }}
               >
@@ -992,11 +1040,11 @@ Scene Breakdown & Exact On-Screen Copy:
               m: 0,
               p: 1.75,
               borderRadius: 1.5,
-              bgcolor: '#090A10',
-              border: '1px solid rgba(255,255,255,0.08)',
+              bgcolor: isDark ? '#090A10' : '#FFFFFF',
+              border: `1px solid ${uiBorder}`,
               fontFamily: mono,
               fontSize: '0.74rem',
-              color: '#CBD5E1',
+              color: isDark ? '#CBD5E1' : '#101828',
               whiteSpace: 'pre-wrap',
               lineHeight: 1.55,
             }}

@@ -1,24 +1,14 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import {
   Box, Typography, Paper, Chip, Button, Unstable_Grid2 as Grid, Stack, TextField,
-  Card, CardContent, IconButton, Tooltip, Alert, InputAdornment, Dialog,
-  DialogTitle, DialogContent, DialogActions, FormControl, InputLabel, Select, MenuItem,
+  IconButton, Alert, InputAdornment, FormControl, InputLabel, Select, MenuItem,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, Tab
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import CodeIcon from '@mui/icons-material/Code';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import DownloadIcon from '@mui/icons-material/Download';
-import LockIcon from '@mui/icons-material/Lock';
-import BoltIcon from '@mui/icons-material/Bolt';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
-import SecurityIcon from '@mui/icons-material/Security';
 import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
+import DownloadIcon from '@mui/icons-material/Download';
 import SearchIcon from '@mui/icons-material/Search';
-import SpeedIcon from '@mui/icons-material/Speed';
-import SmartToyIcon from '@mui/icons-material/SmartToy';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CompressIcon from '@mui/icons-material/Compress';
@@ -188,9 +178,18 @@ export default function McpLensGodModeTool() {
   const [schemaText, setSchemaText] = useState(PRESET_SCHEMAS['standard-tools']);
   const [minifiedSchema, setMinifiedSchema] = useState('');
   const [tokenStats, setTokenStats] = useState({ rawTokens: 0, minTokens: 0, savedPercent: 0 });
+  const [schemaError, setSchemaError] = useState('');
+  const [simError, setSimError] = useState('');
 
-  const [copied, setCopied] = useState(false);
+  const [copiedKey, setCopiedKey] = useState('');
   const [liveConnectors, setLiveConnectors] = useState(null);
+
+  const goldColor = isDark ? '#D4AF37' : '#7A5808';
+  const emeraldColor = isDark ? '#34D399' : '#047857';
+  const skyColor = isDark ? '#38BDF8' : '#0369A1';
+  const crimsonColor = isDark ? '#FB7185' : '#B91C1C';
+  const goldBtnBg = isDark ? '#D4AF37' : '#7A5808';
+  const goldBtnInk = isDark ? '#08080B' : '#FFFFFF';
 
   useEffect(() => {
     let active = true;
@@ -248,8 +247,9 @@ export default function McpLensGodModeTool() {
         minTokens: minTok,
         savedPercent: Math.max(0, savedPct)
       });
+      setSchemaError('');
     } catch (e) {
-      alert('Invalid JSON Schema: ' + e.message);
+      setSchemaError('Invalid JSON Schema: ' + e.message);
     }
   };
 
@@ -265,8 +265,9 @@ export default function McpLensGodModeTool() {
     let parsedParams = {};
     try {
       parsedParams = JSON.parse(simParams);
+      setSimError('');
     } catch (e) {
-      alert('Params must be valid JSON: ' + e.message);
+      setSimError('Params must be valid JSON: ' + e.message);
       return;
     }
 
@@ -313,10 +314,10 @@ export default function McpLensGodModeTool() {
     });
   }, [frames, methodFilter, searchQuery]);
 
-  const copyToClipboard = (text) => {
+  const copyToClipboard = (text, key = 'default') => {
     navigator.clipboard?.writeText(text)?.catch?.(() => {});
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey((prev) => (prev === key ? '' : prev)), 2000);
   };
 
   const handleExportJson = () => {
@@ -332,35 +333,30 @@ export default function McpLensGodModeTool() {
   return (
     <Box sx={{ width: '100%', maxWidth: 1400, mx: 'auto', p: { xs: 1.5, sm: 2.5, md: 3 } }}>
       
-      {/* 1. Open-Access Header & Optional Community Support Banner */}
+      {/* 1. Open-Access Header (zero duplicate Coffee/Solana bar — single CTA lives in global Footer) */}
       <Paper
         elevation={0}
         sx={{
           mb: 3,
-          p: 2.5,
+          p: { xs: 2, sm: 2.5 },
           borderRadius: 3,
           background: isDark
             ? 'linear-gradient(135deg, rgba(212,175,55,0.18) 0%, rgba(20,20,25,0.95) 100%)'
-            : 'linear-gradient(135deg, rgba(212,175,55,0.25) 0%, #FFFFFF 100%)',
+            : 'linear-gradient(135deg, #FEF7E0 0%, #FFFFFF 100%)',
           border: '1.5px solid',
-          borderColor: isDark ? 'rgba(212,175,55,0.45)' : 'rgba(212,175,55,0.5)',
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-          alignItems: { xs: 'flex-start', md: 'center' },
-          justifyContent: 'space-between',
-          gap: 2.5,
-          boxShadow: isDark ? '0 10px 30px -10px rgba(212,175,55,0.2)' : '0 10px 25px -5px rgba(212,175,55,0.15)'
+          borderColor: isDark ? 'rgba(212,175,55,0.45)' : 'rgba(122,88,8,0.35)',
+          overflow: 'hidden',
         }}
       >
-        <Box>
-          <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 0.8 }}>
+        <Box sx={{ minWidth: 0 }}>
+          <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap sx={{ mb: 1 }}>
             <Chip
               label="✦ 100% FREE & OPEN ACCESS"
               size="small"
               sx={{
-                bgcolor: '#22C55E',
-                color: '#000000',
-                fontWeight: 900,
+                bgcolor: isDark ? '#34D399' : '#047857',
+                color: isDark ? '#050508' : '#FFFFFF',
+                fontWeight: 800,
                 fontSize: '0.72rem',
                 fontFamily: mono
               }}
@@ -369,56 +365,37 @@ export default function McpLensGodModeTool() {
               label="BPE TOKEN AUDITOR · LIVE SNIFFER"
               size="small"
               variant="outlined"
-              sx={{ fontSize: '0.68rem', fontFamily: mono, borderColor: 'rgba(212,175,55,0.5)' }}
+              sx={{
+                fontSize: '0.68rem',
+                fontFamily: mono,
+                fontWeight: 700,
+                color: goldColor,
+                borderColor: isDark ? 'rgba(212,175,55,0.5)' : '#B8860B',
+              }}
             />
           </Stack>
-          <Typography variant="h6" sx={{ fontWeight: 800, letterSpacing: -0.4, display: 'flex', alignItems: 'center', gap: 1 }}>
-            MCP Lens God Mode Suite
-            <Typography component="span" sx={{ fontSize: '0.85rem', color: 'text.secondary', fontWeight: 500 }}>
-              (Model Context Protocol JSON-RPC Traffic Inspector & Token Optimizer)
+          <Typography
+            component="h3"
+            sx={{
+              fontWeight: 800,
+              fontSize: { xs: '1.1rem', sm: '1.25rem' },
+              letterSpacing: -0.3,
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'baseline',
+              gap: 1,
+              overflowWrap: 'anywhere',
+            }}
+          >
+            <span>MCP Lens God Mode Suite</span>
+            <Typography component="span" sx={{ fontSize: '0.84rem', color: 'text.secondary', fontWeight: 500 }}>
+              (Model Context Protocol JSON-RPC Traffic Inspector &amp; Token Optimizer)
             </Typography>
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary', mt: 0.5 }}>
-            Sniff live agent tool calls, benchmark stdio/SSE latency, and eliminate up to 48% of prompt token bloat directly in-browser.
+            Sniff agent tool calls, benchmark stdio/SSE latency, and trim prompt token overhead directly in-browser.
           </Typography>
         </Box>
-
-        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ width: { xs: '100%', md: 'auto' } }}>
-          <Button
-            variant="contained"
-            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              bgcolor: '#D4AF37',
-              color: '#08080B',
-              fontWeight: 800,
-              fontFamily: mono,
-              '&:hover': { bgcolor: '#F5E6AB' },
-              px: 2
-            }}
-          >
-            ☕ Buy Us a Coffee
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={() => {
-              if (navigator.clipboard) {
-                navigator.clipboard?.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK')?.catch?.(() => {});
-              }
-            }}
-            sx={{
-              borderColor: isDark ? '#14F195' : '#047857',
-              color: isDark ? '#14F195' : '#047857',
-              bgcolor: isDark ? 'rgba(20,241,149,0.08)' : 'rgba(4,120,87,0.08)',
-              fontFamily: mono,
-              fontWeight: 700,
-              fontSize: '0.78rem'
-            }}
-          >
-            ◎ Solana Tip (GG2e...dXoK)
-          </Button>
-        </Stack>
       </Paper>
 
       {/* Live Loopback Connectors Strip (AGY-Hermes Proxy :18000, Ollama :11434, Memory :8094, Bridge :8102) */}
@@ -501,6 +478,9 @@ export default function McpLensGodModeTool() {
         <Tabs
           value={activeTab}
           onChange={(e, val) => setActiveTab(val)}
+          variant="scrollable"
+          scrollButtons="auto"
+          allowScrollButtonsMobile
           textColor="inherit"
           indicatorColor="primary"
           sx={{
@@ -541,7 +521,7 @@ export default function McpLensGodModeTool() {
                 gap: 2
               }}
             >
-              <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
+              <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
                 <FilterListIcon sx={{ color: 'text.secondary', fontSize: 20 }} />
                 <Typography sx={{ fontFamily: mono, fontSize: '0.82rem', fontWeight: 700 }}>Filter:</Typography>
                 {['ALL', 'tools', 'resources', 'initialize'].map((m) => (
@@ -551,39 +531,43 @@ export default function McpLensGodModeTool() {
                     size="small"
                     onClick={() => setMethodFilter(m)}
                     sx={{
+                      minHeight: { xs: 44, sm: 32 },
                       fontFamily: mono,
                       fontWeight: 700,
                       cursor: 'pointer',
-                      bgcolor: methodFilter === m ? (isDark ? '#D4AF37' : '#8A6508') : 'transparent',
-                      color: methodFilter === m ? '#000' : 'text.primary',
+                      bgcolor: methodFilter === m ? goldBtnBg : 'transparent',
+                      color: methodFilter === m ? goldBtnInk : 'text.primary',
                       border: '1px solid',
-                      borderColor: methodFilter === m ? '#D4AF37' : 'divider'
+                      borderColor: methodFilter === m ? goldBtnBg : 'divider'
                     }}
                   />
                 ))}
               </Stack>
 
-              <Stack direction="row" spacing={1.5} alignItems="center">
+              <Stack direction="row" spacing={1.25} alignItems="center" flexWrap="wrap" useFlexGap sx={{ width: { xs: '100%', sm: 'auto' } }}>
                 <TextField
                   size="small"
+                  label="Search frames"
                   placeholder="Search frames..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  inputProps={{ 'aria-label': 'Search JSON-RPC frames' }}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
                         <SearchIcon sx={{ fontSize: 18 }} />
                       </InputAdornment>
                     ),
-                    sx: { fontFamily: mono, fontSize: '0.8rem', width: 220 }
+                    sx: { fontFamily: mono, fontSize: '0.8rem', minHeight: 44 }
                   }}
+                  sx={{ width: { xs: '100%', sm: 220 } }}
                 />
                 <Button
                   variant="outlined"
                   size="small"
                   startIcon={<DownloadIcon />}
                   onClick={handleExportJson}
-                  sx={{ fontFamily: mono, fontWeight: 700, textTransform: 'none' }}
+                  sx={{ minHeight: 44, fontFamily: mono, fontWeight: 700, textTransform: 'none' }}
                 >
                   Export JSON
                 </Button>
@@ -630,7 +614,7 @@ export default function McpLensGodModeTool() {
                           <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', color: 'text.secondary' }}>
                             {frame.timestamp}
                           </TableCell>
-                          <TableCell sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 700, color: 'var(--zs-sky, #38BDF8)' }}>
+                          <TableCell sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 700, color: skyColor }}>
                             {frame.method}
                           </TableCell>
                           <TableCell>
@@ -638,12 +622,14 @@ export default function McpLensGodModeTool() {
                               label={frame.status}
                               size="small"
                               sx={{
-                                height: 20,
+                                height: 22,
                                 fontSize: '0.68rem',
                                 fontFamily: mono,
                                 fontWeight: 800,
-                                bgcolor: frame.status.includes('200') ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)',
-                                color: frame.status.includes('200') ? '#22C55E' : '#EF4444'
+                                bgcolor: frame.status.includes('200')
+                                  ? (isDark ? 'rgba(52,211,153,0.16)' : '#ECFDF5')
+                                  : (isDark ? 'rgba(251,113,133,0.16)' : '#FEF2F2'),
+                                color: frame.status.includes('200') ? emeraldColor : crimsonColor
                               }}
                             />
                           </TableCell>
@@ -677,18 +663,25 @@ export default function McpLensGodModeTool() {
               }}
             >
               <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.85rem', mb: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
-                <PlayArrowIcon sx={{ fontSize: 18, color: '#D4AF37' }} />
-                Simulate & Inject JSON-RPC Frame
+                <PlayArrowIcon sx={{ fontSize: 18, color: goldColor }} />
+                Simulate &amp; Inject JSON-RPC Frame
               </Typography>
-              <SovereignEyebrow accent="#D4AF37" right="Simulation & Testing">
+              <SovereignEyebrow accent={goldColor} right="Simulation & Testing">
                 {"mcp-lens"}
               </SovereignEyebrow>
-              <SovereignBand
-                seed={"mcp-lens"}
-                eyebrow={"Simulation & Testing"}
-                caption={"MCP Lens"}
-                label={"MCP Lens — Zoth sovereign visualisation"}
-              />
+              {isDark && (
+                <SovereignBand
+                  seed={"mcp-lens"}
+                  eyebrow={"Simulation & Testing"}
+                  caption={"MCP Lens"}
+                  label={"MCP Lens — Zoth sovereign visualisation"}
+                />
+              )}
+              {simError && (
+                <Alert severity="error" sx={{ mb: 1.5, fontFamily: mono, fontSize: '0.76rem' }}>
+                  {simError}
+                </Alert>
+              )}
               <Grid container spacing={2}>
                 <Grid xs={12} sm={4}>
                   <FormControl fullWidth size="small">
@@ -697,7 +690,7 @@ export default function McpLensGodModeTool() {
                       value={simMethod}
                       label="Method"
                       onChange={(e) => setSimMethod(e.target.value)}
-                      sx={{ fontFamily: mono, fontSize: '0.8rem' }}
+                      sx={{ fontFamily: mono, fontSize: '0.8rem', minHeight: 44 }}
                     >
                       <MenuItem value="tools/call">tools/call</MenuItem>
                       <MenuItem value="tools/list">tools/list</MenuItem>
@@ -714,11 +707,12 @@ export default function McpLensGodModeTool() {
                     onClick={handleInjectFrame}
                     startIcon={<PlayArrowIcon />}
                     sx={{
-                      bgcolor: isDark ? '#D4AF37' : '#8A6508',
-                      color: '#000',
+                      minHeight: 44,
+                      bgcolor: goldBtnBg,
+                      color: goldBtnInk,
                       fontWeight: 800,
                       fontFamily: mono,
-                      '&:hover': { bgcolor: '#F5E6AB' }
+                      '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#5E4305' }
                     }}
                   >
                     Send Client-Side Frame
@@ -755,12 +749,17 @@ export default function McpLensGodModeTool() {
               }}
             >
               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-                <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.9rem', color: '#D4AF37' }}>
+                <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.9rem', color: goldColor }}>
                   {selectedFrame ? `Frame Inspector: ${selectedFrame.id}` : 'Select a Frame'}
                 </Typography>
                 {selectedFrame && (
-                  <IconButton size="small" onClick={() => copyToClipboard(JSON.stringify(selectedFrame, null, 2))}>
-                    <ContentCopyIcon sx={{ fontSize: 16 }} />
+                  <IconButton
+                    size="small"
+                    aria-label="Copy selected frame JSON"
+                    onClick={() => copyToClipboard(JSON.stringify(selectedFrame, null, 2), 'frame')}
+                    sx={{ minWidth: 44, minHeight: 44 }}
+                  >
+                    {copiedKey === 'frame' ? <CheckIcon sx={{ fontSize: 16, color: emeraldColor }} /> : <ContentCopyIcon sx={{ fontSize: 16 }} />}
                   </IconButton>
                 )}
               </Stack>
@@ -805,7 +804,7 @@ export default function McpLensGodModeTool() {
               <Grid xs={12} sm={4}>
                 <Paper elevation={0} sx={{ p: 2, borderRadius: 2, border: '1px solid', borderColor: 'divider', textAlign: 'center' }}>
                   <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>RAW SCHEMA TOKENS</Typography>
-                  <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 800, mt: 0.5, color: '#EF4444' }}>
+                  <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 800, mt: 0.5, color: crimsonColor }}>
                     {tokenStats.rawTokens}
                   </Typography>
                 </Paper>
@@ -813,7 +812,7 @@ export default function McpLensGodModeTool() {
               <Grid xs={12} sm={4}>
                 <Paper elevation={0} sx={{ p: 2, borderRadius: 2, border: '1px solid', borderColor: 'divider', textAlign: 'center' }}>
                   <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>MINIFIED TOKENS</Typography>
-                  <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 800, mt: 0.5, color: '#22C55E' }}>
+                  <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 800, mt: 0.5, color: emeraldColor }}>
                     {tokenStats.minTokens}
                   </Typography>
                 </Paper>
@@ -821,7 +820,7 @@ export default function McpLensGodModeTool() {
               <Grid xs={12} sm={4}>
                 <Paper elevation={0} sx={{ p: 2, borderRadius: 2, border: '1px solid', borderColor: 'divider', textAlign: 'center' }}>
                   <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>TOKEN OVERHEAD SAVED</Typography>
-                  <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 800, mt: 0.5, color: '#D4AF37' }}>
+                  <Typography variant="h5" sx={{ fontFamily: mono, fontWeight: 800, mt: 0.5, color: goldColor }}>
                     {tokenStats.savedPercent}%
                   </Typography>
                 </Paper>
@@ -853,12 +852,19 @@ export default function McpLensGodModeTool() {
                   </Button>
                 </Stack>
               </Stack>
+              {schemaError && (
+                <Alert severity="error" sx={{ mb: 1.5, fontFamily: mono, fontSize: '0.76rem' }}>
+                  {schemaError}
+                </Alert>
+              )}
               <TextField
                 fullWidth
                 multiline
                 rows={14}
+                label="Raw MCP Tool Schema JSON"
                 value={schemaText}
                 onChange={(e) => setSchemaText(e.target.value)}
+                inputProps={{ 'aria-label': 'Raw MCP Tool Schema JSON' }}
                 InputProps={{ sx: { fontFamily: mono, fontSize: '0.75rem' } }}
               />
               <Button
@@ -868,14 +874,15 @@ export default function McpLensGodModeTool() {
                 startIcon={<CompressIcon />}
                 sx={{
                   mt: 2,
-                  bgcolor: isDark ? '#D4AF37' : '#8A6508',
-                  color: '#000',
+                  minHeight: 44,
+                  bgcolor: goldBtnBg,
+                  color: goldBtnInk,
                   fontWeight: 800,
                   fontFamily: mono,
-                  '&:hover': { bgcolor: '#F5E6AB' }
+                  '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#5E4305' }
                 }}
               >
-                Run Token Minifier & Optimizer
+                Run Token Minifier &amp; Optimizer
               </Button>
             </Paper>
           </Grid>
@@ -897,11 +904,16 @@ export default function McpLensGodModeTool() {
               }}
             >
               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1.5 }}>
-                <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.85rem', color: '#22C55E' }}>
+                <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.85rem', color: emeraldColor }}>
                   Optimized Zero-Bloat MCP Output
                 </Typography>
-                <IconButton size="small" onClick={() => copyToClipboard(minifiedSchema)}>
-                  <ContentCopyIcon sx={{ fontSize: 16 }} />
+                <IconButton
+                  size="small"
+                  aria-label="Copy minified MCP schema"
+                  onClick={() => copyToClipboard(minifiedSchema, 'minified')}
+                  sx={{ minWidth: 44, minHeight: 44 }}
+                >
+                  {copiedKey === 'minified' ? <CheckIcon sx={{ fontSize: 16, color: emeraldColor }} /> : <ContentCopyIcon sx={{ fontSize: 16 }} />}
                 </IconButton>
               </Stack>
 
@@ -937,17 +949,28 @@ export default function McpLensGodModeTool() {
         <Grid container spacing={3}>
           <Grid xs={12} md={6}>
             <Paper elevation={0} sx={{ p: 2.5, borderRadius: 2, border: '1px solid', borderColor: 'divider', bgcolor: isDark ? '#0D0D11' : '#FFFFFF' }}>
-              <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.9rem', mb: 1.5, color: 'var(--zs-sky)' }}>
-                Antigravity / Claude Desktop Configuration
-              </Typography>
+              <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1} sx={{ mb: 1.5 }}>
+                <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.9rem', color: skyColor }}>
+                  Antigravity / Claude Desktop Configuration
+                </Typography>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  startIcon={copiedKey === 'recipe-mcp' ? <CheckIcon /> : <ContentCopyIcon />}
+                  onClick={() => copyToClipboard(`{\n  "mcpServers": {\n    "mcp-lens": {\n      "command": "python3",\n      "args": ["-m", "mcp_lens.cli", "sniff", "--port", "8109"]\n    }\n  }\n}`, 'recipe-mcp')}
+                  sx={{ minHeight: 44, fontFamily: mono, fontSize: '0.72rem', fontWeight: 700, textTransform: 'none' }}
+                >
+                  {copiedKey === 'recipe-mcp' ? 'Copied' : 'Copy JSON'}
+                </Button>
+              </Stack>
               <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-                Inject this entry into your `~/.gemini/antigravity-cli/mcp/` or `claude_desktop_config.json`:
+                Inject this entry into your <code>~/.gemini/antigravity-cli/mcp/</code> or <code>claude_desktop_config.json</code>:
               </Typography>
               <Paper
                 elevation={0}
                 sx={{
                   p: 2,
-                  bgcolor: isDark ? '#050508' : '#F1F5F9',
+                  bgcolor: isDark ? '#050508' : '#F4F1EA',
                   border: '1px solid',
                   borderColor: 'divider',
                   fontFamily: mono,
@@ -974,9 +997,20 @@ export default function McpLensGodModeTool() {
 
           <Grid xs={12} md={6}>
             <Paper elevation={0} sx={{ p: 2.5, borderRadius: 2, border: '1px solid', borderColor: 'divider', bgcolor: isDark ? '#0D0D11' : '#FFFFFF' }}>
-              <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.9rem', mb: 1.5, color: '#D4AF37' }}>
-                FastMCP Python Proxy Integration
-              </Typography>
+              <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={1} sx={{ mb: 1.5 }}>
+                <Typography sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.9rem', color: goldColor }}>
+                  FastMCP Python Proxy Integration
+                </Typography>
+                <Button
+                  size="small"
+                  variant="outlined"
+                  startIcon={copiedKey === 'recipe-fastmcp' ? <CheckIcon /> : <ContentCopyIcon />}
+                  onClick={() => copyToClipboard(`from fastmcp import FastMCP\n\nmcp = FastMCP("sovereign-agent-hub")\n\n@mcp.tool()\ndef compute_hash(data: str) -> str:\n    """Computes SHA-256 with zero egress."""\n    import hashlib\n    return hashlib.sha256(data.encode()).hexdigest()\n\nif __name__ == "__main__":\n    mcp.run()`, 'recipe-fastmcp')}
+                  sx={{ minHeight: 44, fontFamily: mono, fontSize: '0.72rem', fontWeight: 700, textTransform: 'none' }}
+                >
+                  {copiedKey === 'recipe-fastmcp' ? 'Copied' : 'Copy Python'}
+                </Button>
+              </Stack>
               <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
                 Tapping tool execution with zero monkey-patching:
               </Typography>
@@ -984,7 +1018,7 @@ export default function McpLensGodModeTool() {
                 elevation={0}
                 sx={{
                   p: 2,
-                  bgcolor: isDark ? '#050508' : '#F1F5F9',
+                  bgcolor: isDark ? '#050508' : '#F4F1EA',
                   border: '1px solid',
                   borderColor: 'divider',
                   fontFamily: mono,

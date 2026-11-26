@@ -204,6 +204,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, Chronicle Hub, continuity vault proxy, SQLite FTS5 search, browser JSONL transcript analyzer, friction pattern radar, engineering release chronicle, Zoth Studio`
         : station.id === 'cockpit'
         ? `${station.name}, Sovereign Operator Command, live Linux host telemetry HUD, 88-port loopback fleet health board, fuzzy command palette, zoth-cockpit CLI, sanitized JSON Markdown CSV diagnostics, Zoth Studio`
+        : station.id === 'connectors'
+        ? `${station.name}, local AI providers, Ollama 11434, AGY-Hermes Proxy 18000, LM Studio, MCP servers, Hermes Agent, Antigravity CLI, Claude Code, Codex CLI, SSRF-safe loopback probe, zero-key-leakage config generator, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -232,6 +234,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, Chronicle Hub, continuity vault proxy, SQLite FTS5 search, browser JSONL transcript analyzer, friction pattern radar, engineering release chronicle, Zoth Studio`
         : station.id === 'cockpit'
         ? `${station.name}, Sovereign Operator Command, live Linux host telemetry HUD, 88-port loopback fleet health board, fuzzy command palette, zoth-cockpit CLI, sanitized JSON Markdown CSV diagnostics, Zoth Studio`
+        : station.id === 'connectors'
+        ? `${station.name}, local AI providers, Ollama 11434, AGY-Hermes Proxy 18000, LM Studio, MCP servers, Hermes Agent, Antigravity CLI, Claude Code, Codex CLI, SSRF-safe loopback probe, zero-key-leakage config generator, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -281,6 +285,7 @@ export function getAllStaticRoutes() {
   routes['/tools/bus-monitor'] = getRouteMeta('/tools/bus-monitor');
   routes['/tools/chronicle'] = getRouteMeta('/tools/chronicle');
   routes['/tools/cockpit'] = getRouteMeta('/tools/cockpit');
+  routes['/tools/connectors'] = getRouteMeta('/tools/connectors');
 
   // Add all math pillars
   mathPillars.forEach((pillar) => {
@@ -1046,6 +1051,39 @@ export function generateSchemaGraph(path = '/') {
               'acceptedAnswer': {
                 '@type': 'Answer',
                 'text': 'Yes. The Cockpit workstation and its companion ZothOS CLI (/usr/local/bin/zoth-cockpit) are 100% free and unlocked by default with zero paywalls or license modals, supported voluntarily via Buy Us a Coffee on Stripe or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
+
+      if (station.id === 'connectors') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What AI providers, CLI harnesses, and MCP bridges does Zoth Connectors Hub probe?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Zoth Connectors Hub probes local AI inference gateways (AGY-Hermes Proxy :18000, Ollama :11434, LM Studio :1234, vLLM :8000) with measured latency and model counts, checks CLI agent binary presence (hermes, agy, claude, codex, gemini, opencode), monitors core Zoth loopback bridges (:8094, :8102, :8787, :8161, :5173, :8136, :8109, FieldKit stdio), and lists sanitized local MCP servers via GET /api/studio/connectors.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does Connectors Hub prevent SSRF, DNS-rebinding, and plaintext API key leaks?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'GET /api/studio/connectors enforces loopback Host header validation (HTTP 403 on untrusted hosts), while POST /api/studio/connectors/probe enforces loopback Host and Origin checks plus strict SSRF validation permitting only 127.0.0.1 unprivileged ports 1024..65535 (HTTP 400 on external, RFC1918, or metadata hosts). Zero plaintext API keys are stored in localStorage or emitted in API/DOM output; all generated MCP JSON, .env, Hermes YAML, and Codex TOML configs strictly emit ${ENV_VAR} placeholders and redact home paths to ~/.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Connectors Hub free and open-access with offline config generation?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Connectors Hub is 100% free and unlocked by default with zero paywalls or license modals. When opened statically without the local :3000 server, it switches cleanly to an honest offline browser fallback while keeping all MCP JSON, .env, Hermes YAML, Codex TOML, and sanitized JSON/Markdown/CSV generators fully functional, supported optionally via Stripe Buy Us a Coffee or Solana community tips.'
               }
             }
           ]

@@ -35,6 +35,17 @@ import {
   normalizeHostTelemetry,
   normalizeFleetData,
 } from './cockpit-engine.mjs';
+import {
+  CONNECTORS_SCHEMA_VERSION,
+  AI_PROVIDER_CONNECTORS,
+  AGENT_HARNESS_CONNECTORS,
+  ZOTH_BRIDGE_CONNECTORS,
+  sanitizeConnectorText,
+  sanitizeConnectorPayload,
+  redactMcpServerConfig,
+  validateLoopbackProbeTarget,
+  computeConnectorSummary,
+} from './connectors-engine.mjs';
 
 const STUDIO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOME_DIR = process.env.ZOTH_HOME || os.homedir();
@@ -2440,6 +2451,269 @@ export function studioMiddleware() {
           rttMs: probed.rttMs,
           checkedAt: probed.checkedAt,
         });
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/connectors') {
+        const checkedAt = new Date().toISOString();
+
+        const probeHttp = (port, probePath = '/', timeoutMs = 1000) =>
+          new Promise((resolve) => {
+            const started = performance.now();
+            const r = http.request(
+              { host: '127.0.0.1', port, path: probePath, method: 'GET', timeout: timeoutMs },
+              (resp) => {
+                let raw = '';
+                resp.on('data', (chunk) => {
+                  if (raw.length < 65536) raw += chunk;
+                });
+                resp.on('end', () => {
+                  const latencyMs = Math.max(1, Math.round(performance.now() - started));
+                  let json = null;
+                  try { json = JSON.parse(raw); } catch {}
+                  resolve({
+                    online: true,
+                    statusCode: resp.statusCode || 200,
+                    latencyMs,
+                    json,
+                  });
+                });
+              }
+            );
+            r.on('timeout', () => {
+              r.destroy();
+              resolve({ online: false, statusCode: 0, latencyMs: null, json: null });
+            });
+            r.on('error', () => {
+              resolve({ online: false, statusCode: 0, latencyMs: null, json: null });
+            });
+            r.end();
+          });
+
+        const probeProvider = async (prov) => {
+          const primary = await probeHttp(prov.port, prov.probePath || '/', 1000);
+          let modelsCount = null;
+          let version = null;
+          if (primary.online) {
+            if (primary.json && typeof primary.json === 'object') {
+              if (typeof primary.json.version === 'string') version = primary.json.version;
+              if (Array.isArray(primary.json.models)) modelsCount = primary.json.models.length;
+              else if (Array.isArray(primary.json.data)) modelsCount = primary.json.data.length;
+              else if (Number.isFinite(Number(primary.json.modelsCount))) modelsCount = Number(primary.json.modelsCount);
+            }
+            if (modelsCount === null && prov.modelsPath && prov.modelsPath !== prov.probePath) {
+              const mRes = await probeHttp(prov.port, prov.modelsPath, 900);
+              if (mRes.online && mRes.json) {
+                if (Array.isArray(mRes.json.data)) modelsCount = mRes.json.data.length;
+                else if (Array.isArray(mRes.json.models)) modelsCount = mRes.json.models.length;
+              }
+            }
+          }
+          return {
+            ...prov,
+            online: primary.online,
+            status: primary.online ? 'online' : 'offline',
+            statusCode: primary.statusCode,
+            latencyMs: primary.latencyMs,
+            modelsCount,
+            version,
+          };
+        };
+
+        const probeBridge = async (bridge) => {
+          if (!bridge.port) {
+            const binPath = resolveBinaryOnPath(bridge.mcpCommand, [LOCAL_BIN, AGY_BIN_DIR]);
+            const present = Boolean(binPath);
+            return {
+              ...bridge,
+              online: present,
+              status: present ? 'online' : 'offline',
+              statusCode: null,
+              latencyMs: null,
+              location: binPath ? sanitizeConnectorText(binPath) : null,
+            };
+          }
+          const resProbe = await probeHttp(bridge.port, bridge.probePath || '/', 900);
+          return {
+            ...bridge,
+            online: resProbe.online,
+            status: resProbe.online ? 'online' : 'offline',
+            statusCode: resProbe.statusCode,
+            latencyMs: resProbe.latencyMs,
+          };
+        };
+
+        const discoverMcpServers = () => {
+          const byName = new Map();
+
+          // 1. Antigravity CLI MCP directory (~/.gemini/antigravity-cli/mcp/*)
+          const agyMcpDir = path.join(HOME_DIR, '.gemini', 'antigravity-cli', 'mcp');
+          try {
+            if (fs.existsSync(agyMcpDir)) {
+              const entries = fs.readdirSync(agyMcpDir, { withFileTypes: true });
+              for (const ent of entries) {
+                if (!ent.isDirectory() || ent.name.startsWith('.')) continue;
+                const srvDir = path.join(agyMcpDir, ent.name);
+                let toolCount = 0;
+                try {
+                  toolCount = fs.readdirSync(srvDir).filter((f) => f.endsWith('.json') && f !== 'server.json').length;
+                } catch {}
+                const cfg = redactMcpServerConfig(
+                  ent.name,
+                  { transport: 'stdio', toolCount },
+                  '~/.gemini/antigravity-cli/mcp/'
+                );
+                byName.set(cfg.name, cfg);
+              }
+            }
+          } catch {}
+
+          // 2. JSON MCP registries (~/.hermes/mcp_servers.json, ~/.claude.json, ~/.config/claude/claude_desktop_config.json)
+          const jsonSources = [
+            { file: path.join(HOME_DIR, '.hermes', 'mcp_servers.json'), label: '~/.hermes/mcp_servers.json' },
+            { file: path.join(HOME_DIR, '.claude.json'), label: '~/.claude.json' },
+            { file: path.join(HOME_DIR, '.config', 'claude', 'claude_desktop_config.json'), label: '~/.config/claude/claude_desktop_config.json' },
+          ];
+          for (const src of jsonSources) {
+            try {
+              if (!fs.existsSync(src.file)) continue;
+              const parsed = JSON.parse(fs.readFileSync(src.file, 'utf8'));
+              const map = parsed?.mcpServers && typeof parsed.mcpServers === 'object'
+                ? parsed.mcpServers
+                : (parsed && typeof parsed === 'object' && !Array.isArray(parsed) && !parsed.numStartups ? parsed : null);
+              if (!map || typeof map !== 'object') continue;
+              for (const [name, rawCfg] of Object.entries(map)) {
+                if (!rawCfg || typeof rawCfg !== 'object') continue;
+                const cfg = redactMcpServerConfig(name, rawCfg, src.label);
+                if (!byName.has(cfg.name)) {
+                  byName.set(cfg.name, cfg);
+                }
+              }
+            } catch {}
+          }
+
+          return Array.from(byName.values()).sort((a, b) => a.name.localeCompare(b.name));
+        };
+
+        const [providers, bridges] = await Promise.all([
+          Promise.all(AI_PROVIDER_CONNECTORS.map(probeProvider)),
+          Promise.all(ZOTH_BRIDGE_CONNECTORS.map(probeBridge)),
+        ]);
+
+        const harnesses = AGENT_HARNESS_CONNECTORS.map((h) => {
+          const foundPath = resolveBinaryOnPath(h.binary, [AGY_BIN_DIR, LOCAL_BIN]);
+          return {
+            ...h,
+            present: Boolean(foundPath),
+            status: foundPath ? 'detected' : 'missing',
+            location: foundPath ? sanitizeConnectorText(foundPath) : null,
+          };
+        });
+
+        const mcpServers = discoverMcpServers();
+
+        const rawPayload = {
+          schemaVersion: CONNECTORS_SCHEMA_VERSION,
+          mode: 'loopback-live',
+          liveApiReachable: true,
+          checkedAt,
+          providers,
+          harnesses,
+          bridges,
+          mcpServers,
+        };
+        rawPayload.summary = computeConnectorSummary(rawPayload);
+
+        send(res, 200, sanitizeConnectorPayload(rawPayload));
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/connectors/probe') {
+        let body;
+        try {
+          body = await readJsonBodyStrict(req, 8192);
+        } catch (err) {
+          send(res, err.statusCode || 400, { error: err.message || 'Invalid JSON body.' });
+          return;
+        }
+        const validation = validateLoopbackProbeTarget(body);
+        if (!validation.valid) {
+          send(res, 400, { error: validation.error });
+          return;
+        }
+
+        const started = performance.now();
+        const checkedAt = new Date().toISOString();
+        const result = await new Promise((resolve) => {
+          const r = http.request(
+            {
+              host: '127.0.0.1',
+              port: validation.port,
+              path: validation.path,
+              method: 'GET',
+              timeout: 1100,
+            },
+            (resp) => {
+              let raw = '';
+              resp.on('data', (chunk) => {
+                if (raw.length < 16384) raw += chunk;
+              });
+              resp.on('end', () => {
+                const latencyMs = Math.max(1, Math.round(performance.now() - started));
+                let summary = `HTTP ${resp.statusCode || 200}`;
+                try {
+                  const parsed = JSON.parse(raw);
+                  if (Array.isArray(parsed?.models)) summary = `HTTP ${resp.statusCode} · ${parsed.models.length} models`;
+                  else if (Array.isArray(parsed?.data)) summary = `HTTP ${resp.statusCode} · ${parsed.data.length} items`;
+                  else if (parsed?.status || parsed?.service) summary = `HTTP ${resp.statusCode} · ${parsed.service || parsed.status}`;
+                } catch {}
+                resolve({
+                  online: true,
+                  statusCode: resp.statusCode || 200,
+                  latencyMs,
+                  summary: sanitizeConnectorText(summary),
+                });
+              });
+            }
+          );
+          r.on('timeout', () => {
+            r.destroy();
+            resolve({ online: false, statusCode: 0, latencyMs: null, summary: 'Probe timed out (>1100ms)' });
+          });
+          r.on('error', () => {
+            // Quick fallback TCP check for non-HTTP loopback sockets
+            const sock = new net.Socket();
+            let settled = false;
+            const done = (val) => {
+              if (!settled) {
+                settled = true;
+                try { sock.destroy(); } catch {}
+                resolve(val);
+              }
+            };
+            sock.setTimeout(350);
+            sock.once('connect', () => {
+              const latencyMs = Math.max(1, Math.round(performance.now() - started));
+              done({ online: true, statusCode: 0, latencyMs, summary: 'TCP loopback port open (non-HTTP)' });
+            });
+            sock.once('timeout', () => done({ online: false, statusCode: 0, latencyMs: null, summary: 'Connection refused or unreachable' }));
+            sock.once('error', () => done({ online: false, statusCode: 0, latencyMs: null, summary: 'Connection refused' }));
+            sock.connect(validation.port, '127.0.0.1');
+          });
+          r.end();
+        });
+
+        send(res, 200, sanitizeConnectorPayload({
+          ok: true,
+          host: '127.0.0.1',
+          port: validation.port,
+          path: validation.path,
+          online: result.online,
+          statusCode: result.statusCode,
+          latencyMs: result.latencyMs,
+          summary: result.summary,
+          checkedAt,
+        }));
         return;
       }
 

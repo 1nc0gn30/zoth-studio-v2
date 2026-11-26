@@ -3891,6 +3891,60 @@ export const toolsDocumentation = {
           "Fuzzy Quick-Launch Command Palette — Instant ranked search across all 85 Arsenal tools, 45 Studio workstations, ports, and operator CLI actions — available both online and offline.",
           "Sanitized Diagnostic Snapshot Exporter — One-click Copy and Download for home-path-redacted JSON, structured Markdown briefs, and spreadsheet formula-injection-neutralized CSV fleet reports."
       ]
+  },
+  "connectors": {
+      "whyUse": "Inspect and wire local AI inference providers (AGY-Hermes Proxy :18000, Ollama :11434, LM Studio :1234, vLLM :8000), CLI agent harnesses (hermes, agy, claude, codex, gemini, opencode), core Zoth loopback bridges (:8094, :8102, :8787, :8161, :5173, :8136, :8109, FieldKit stdio), and discovered local MCP servers from one hardened Studio workstation.",
+      "problemSolved": "Replaces fragile hand-edited config files, plaintext API key sprawl, and blind port guessing with live SSRF-guarded loopback health probes and real-time ${ENV_VAR}-only config generation for Antigravity, Claude Desktop, Claude Code, Hermes Agent, and Codex CLI.",
+      "architecture": "Hybrid Studio-native cockpit powered by a pure zero-dependency engine (src/utils/connectorsEngine.js, byte-identically mirrored at server/connectors-engine.mjs) paired with DNS-rebinding- and CSRF-hardened loopback endpoints (GET /api/studio/connectors and POST /api/studio/connectors/probe on 127.0.0.1:3000) plus an honest offline browser fallback.",
+      "aiAgentProtocol": {
+          "server": "zoth-studio-loopback-api (127.0.0.1:3000)",
+          "mcpTool": "GET /api/studio/connectors · POST /api/studio/connectors/probe",
+          "description": "Retrieve live loopback AI provider RTT & model counts, safe CLI binary presence booleans, core bridge health, and secret-redacted local MCP server inventories, or execute bounded 127.0.0.1 unprivileged port probes (1024..65535).",
+          "cliExample": "zoth open connectors --json",
+          "tools": [
+              {
+                  "name": "GET /api/studio/connectors",
+                  "description": "Protected by loopback Host validation (403 on untrusted hosts). Aggregates live provider probes (:18000, :11434, :1234, :8000), CLI harness binary presence booleans, core Zoth daemon probes, and sanitized local MCP inventories with 0 plaintext secrets and 0 literal home-directory leaks."
+              },
+              {
+                  "name": "POST /api/studio/connectors/probe",
+                  "description": "Protected by loopback Host + Origin checks (403) and strict SSRF validation (400 on external, IMDS, RFC1918, or port < 1024). Executes a bounded <= 1200ms loopback probe to 127.0.0.1:<port> and returns measured statusCode, latencyMs, and sanitized summary."
+              }
+          ],
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "host": { "type": "string", "enum": ["127.0.0.1", "localhost", "[::1]"] },
+                  "port": { "type": "integer", "minimum": 1024, "maximum": 65535 },
+                  "path": { "type": "string", "default": "/health" }
+              },
+              "required": ["port"]
+          },
+          "outputSchema": {
+              "schemaVersion": "2.3.0",
+              "mode": "loopback-live | browser-fallback",
+              "providers": "array",
+              "harnesses": "array",
+              "bridges": "array",
+              "mcpServers": "array"
+          }
+      },
+      "quickstart": [
+          "zoth open connectors",
+          "zoth open connectors --json",
+          "curl -sS http://127.0.0.1:3000/api/studio/connectors | jq '{mode, summary}'"
+      ],
+      "cliCommands": [
+          "zoth open connectors --json  # Print canonical Connectors Hub route and URLs",
+          "curl -sS -X POST http://127.0.0.1:3000/api/studio/connectors/probe -H 'Origin: http://127.0.0.1:3000' -H 'Content-Type: application/json' -d '{\"port\":18000,\"path\":\"/health\"}'  # Live loopback probe",
+          "npm run test:connectors      # Run Connectors Engine SSRF, redaction, config-forge & CSV unit tests"
+      ],
+      "features": [
+          "Live AI Providers & CLI Harnesses — Concurrent loopback probes for AGY-Hermes (:18000), Ollama (:11434), LM Studio (:1234), and vLLM (:8000) with real RTT and model counts alongside safe PATH detection for hermes, agy, claude, codex, gemini, and opencode.",
+          "MCP & Loopback Bridges + Custom SSRF-Safe Prober — Live health checks across :8094, :8102, :8787, :8161, :5173, :8136, :8109, and FieldKit stdio, plus secret-redacted local MCP discovery and an interactive 127.0.0.1 port prober.",
+          "Zero-Key-Leakage Config & .env Forge — Interactive multi-connector generators with Copy and Download for MCP mcpServers JSON, OpenAI-compatible .env, Hermes config.yaml, and Codex config.toml strictly using ${ENV_VAR} placeholders.",
+          "Sanitized Diagnostic Exports & Offline Inspector — One-click Copy and Download for home-path-redacted JSON, Markdown briefs, and formula-neutralized CSV inventories with an honest browser fallback when :3000 is unreachable."
+      ]
   }
 };
 

@@ -48,6 +48,7 @@ import { useReality } from '../context/RealityContext';
 import AgentComposerGodModeTool from '../components/tools/AgentComposerGodModeTool';
 import BrandAssetsForgeGodModeTool from '../components/tools/BrandAssetsForgeGodModeTool';
 import CockpitGodModeTool from '../components/tools/CockpitGodModeTool';
+import ConnectorsHubGodModeTool from '../components/tools/ConnectorsHubGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -296,172 +297,11 @@ function ChronicleWorkstation() {
 }
 
 /* ==========================================================================
-   WORKSTATION 7: Connectors & Tool Integration Ecosystem (connectors)
+   WORKSTATION 7: Connectors Hub — AI Providers, CLI Harnesses & MCP Bridges (connectors)
+   Delegated directly to ConnectorsHubGodModeTool (v2.3.0 — zero mock latency or broken regex).
    ========================================================================== */
 function ConnectorsWorkstation() {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
-
-  const [connectors, setConnectors] = useState([
-    { id: 'mcp-stdio', name: 'Model Context Protocol (MCP)', transport: 'Loopback STDIO / IPC', port: '8094/sse', status: 'Standby', latency: null, capabilities: ['tools/list', 'tools/call', 'prompts/get'] },
-    { id: 'rest-enclave', name: 'Zoth Enclave REST Daemon', transport: 'HTTP/1.1 Loopback', port: '127.0.0.1:8094', status: 'Standby', latency: null, capabilities: ['/api/studio/status', '/api/adytum/keys', '/api/vault'] },
-    { id: 'zeromq-bus', name: 'Inter-Agent ZeroMQ Mesh', transport: 'IPC Socket /tmp/zoth.sock', port: 'ipc://zoth-swarm', status: 'Standby', latency: null, capabilities: ['AST-Quorum', 'SwarmHeartbeat', 'STDPWeightSync'] },
-    { id: 'webrtc-peer', name: 'WebRTC Sovereign DataChannel', transport: 'E2EE SCTP Enclave', port: '127.0.0.1:9001', status: 'Standby', latency: null, capabilities: ['P2P-Mesh', 'AudioSpectrogram', 'NeuralWeights'] },
-    { id: 'ollama-native', name: 'Ollama LLM Engine Socket', transport: 'Localhost REST', port: '127.0.0.1:11434', status: 'Standby', latency: null, capabilities: ['generate', 'embeddings', 'chat'] },
-    { id: 'agy-hermes-proxy', name: 'AGY-Hermes OpenAI Bridge', transport: 'Hardened Loopback OpenAI v1', port: '127.0.0.1:18000', status: 'Standby', latency: null, capabilities: ['/v1/models', '/v1/chat/completions', '/health', '/metrics'] },
-  ]);
-
-  const [pinging, setPinging] = useState(false);
-
-  const handlePingAll = async () => {
-    setPinging(true);
-    try {
-      const res = await fetch('/api/studio/status').then(r => r.json()).catch(() => null);
-      setConnectors((prev) =>
-        prev.map((c) => {
-          const portNum = parseInt(c.port.replace(/\D/g, ''), 10);
-          const serviceMatch = res?.services ? Object.values(res.services).find(s => s.port === portNum) : null;
-          return {
-            ...c,
-            status: serviceMatch?.up ? 'Online' : 'Offline (No Daemon)',
-            latency: serviceMatch?.up ? '< 1ms' : null,
-          };
-        })
-      );
-    } catch {
-      setConnectors((prev) =>
-        prev.map((c) => ({
-          ...c,
-          status: 'Offline (No Daemon)',
-          latency: null,
-        }))
-      );
-    } finally {
-      setPinging(false);
-    }
-  };
-
-  return (
-    <Box>
-      <Grid container spacing={3}>
-        <Grid xs={12} md={8}>
-          <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, mb: 3 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
-              <Box>
-                <Typography variant="h6" sx={{ fontWeight: 800 }}>Loopback Connector Protocols</Typography>
-                <Typography variant="body2" color="text.secondary">Direct inter-process communication channels between sovereign micro-services.</Typography>
-              </Box>
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<RefreshIcon />}
-                disabled={pinging}
-                onClick={handlePingAll}
-                sx={{ fontWeight: 750 }}
-              >
-                {pinging ? 'Probing Daemons…' : 'Probe Daemon Sockets'}
-              </Button>
-            </Box>
-
-            <Stack spacing={2}>
-              {connectors.map((c) => (
-                <Paper
-                  key={c.id}
-                  sx={{
-                    p: 2,
-                    border: '1px solid',
-                    borderColor: theme.palette.divider,
-                    bgcolor: isDark ? '#0A0D15' : '#F8FAFC',
-                    borderRadius: 2,
-                  }}
-                >
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, flexWrap: 'wrap', gap: 1 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                      <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: c.status === 'Online' ? (isDark ? '#34D399' : '#047857') : (isDark ? '#64748B' : '#94A3B8'), boxShadow: c.status === 'Online' ? '0 0 8px #34D399' : 'none' }} />
-                      <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>{c.name}</Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                      {c.latency && (
-                        <Chip
-                          label={`Latency: ${c.latency}`}
-                          size="small"
-                          sx={{
-                            fontFamily: mono,
-                            fontWeight: 750,
-                            bgcolor: isDark ? 'rgba(52,211,153,0.14)' : '#ECFDF3',
-                            color: isDark ? '#34D399' : '#047857',
-                            border: `1px solid ${isDark ? 'rgba(52,211,153,0.3)' : 'rgba(5,150,105,0.25)'}`,
-                          }}
-                        />
-                      )}
-                      <Chip
-                        label={c.status}
-                        size="small"
-                        sx={{
-                          fontWeight: 800,
-                          bgcolor: c.status === 'Online'
-                            ? (isDark ? 'rgba(52,211,153,0.18)' : '#ECFDF3')
-                            : (isDark ? 'rgba(148,163,184,0.12)' : '#F1F5F9'),
-                          color: c.status === 'Online'
-                            ? (isDark ? '#34D399' : '#047857')
-                            : (isDark ? '#94A3B8' : '#64748B'),
-                          border: `1px solid ${c.status === 'Online' ? (isDark ? 'rgba(52,211,153,0.3)' : 'rgba(5,150,105,0.25)') : (isDark ? 'rgba(148,163,184,0.2)' : 'rgba(203,213,225,0.8)')}`,
-                        }}
-                      />
-                    </Box>
-                  </Box>
-
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: theme.palette.text.secondary, display: 'block', mb: 1.5 }}>
-                    Transport: {c.transport} · Target: {c.port}
-                  </Typography>
-
-                  <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                    {c.capabilities.map((cap) => (
-                      <Chip key={cap} label={cap} size="small" variant="outlined" sx={{ fontFamily: mono, fontSize: '0.7rem' }} />
-                    ))}
-                  </Box>
-                </Paper>
-              ))}
-            </Stack>
-          </Paper>
-        </Grid>
-
-        <Grid xs={12} md={4}>
-          <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#8A6A09' }}>Connector Schema Sandbox</Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Inspect live Model Context Protocol (MCP) capabilities format:
-            </Typography>
-
-            <Paper sx={{ p: 2, bgcolor: isDark ? '#08080B' : '#0F172A', color: 'var(--zs-sky)', fontFamily: mono, fontSize: '0.78rem', borderRadius: 1.5, border: isDark ? '1px solid rgba(212,175,55,0.2)' : '1px solid #1E293B', whiteSpace: 'pre-wrap' }}>
-{`{
-  "jsonrpc": "2.0",
-  "result": {
-    "serverInfo": {
-      "name": "zoth-enclave-bridge",
-      "version": "2.0.0"
-    },
-    "capabilities": {
-      "tools": { "listChanged": true },
-      "logging": {},
-      "roots": { "listChanged": true }
-    },
-    "security": {
-      "zero_egress": true,
-      "isolated_ipc": true
-    }
-  }
-}`}
-            </Paper>
-
-            <Alert severity="info" sx={{ mt: 2, fontSize: '0.8rem' }}>
-              Local daemons bind to 127.0.0.1 or Unix sockets. Commerce and MCP connectors call the external APIs you configure.
-            </Alert>
-          </Paper>
-        </Grid>
-      </Grid>
-    </Box>
-  );
+  return <ConnectorsHubGodModeTool />;
 }
 
 /* ==========================================================================

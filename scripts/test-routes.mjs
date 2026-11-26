@@ -65,6 +65,8 @@ const SAMPLE_ROUTES = [
   '/tools/pod-margin-sentinel',
   '/workstations/cockpit',
   '/tools/cockpit',
+  '/workstations/connectors',
+  '/tools/connectors',
   '/workstations/agent-composer',
   '/tools/agent-composer',
   '/workstations/ax-powerhouse',
@@ -396,6 +398,26 @@ async function main() {
         });
         if (!ckCheck.hasTitle || !ckCheck.hasH1 || !ckCheck.hasSoftwareApp || !ckCheck.hasFaq || !ckCheck.hasCockpitWorkstation || ckCheck.hasSwarmCollision) {
           failureReason = `cockpit invariants failed: ${JSON.stringify(ckCheck)}`;
+        }
+      } else if (route === '/workstations/connectors' || route === '/tools/connectors') {
+        const cnCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          const bodyText = document.body?.innerText || '';
+          return {
+            hasTitle: document.title.includes('Connectors Hub'),
+            hasH1: h1Text.includes('Connectors Hub'),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasConnectorsWorkstation: Boolean(document.querySelector('[data-testid="connectors-hub-workstation"]')),
+            hasMcpLensCollision: bodyText.includes('MCP Lens God Mode Suite') || bodyText.includes('connectors_execute'),
+          };
+        });
+        if (!cnCheck.hasTitle || !cnCheck.hasH1 || !cnCheck.hasSoftwareApp || !cnCheck.hasFaq || !cnCheck.hasConnectorsWorkstation || cnCheck.hasMcpLensCollision) {
+          failureReason = `connectors invariants failed: ${JSON.stringify(cnCheck)}`;
         }
       } else if (route === '/workstations/agent-composer' || route === '/tools/agent-composer') {
         const metaCheck = await page.evaluate(() => {

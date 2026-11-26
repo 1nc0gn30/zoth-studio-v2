@@ -47,7 +47,7 @@ export const legacyWorkstations = [
   { file: 'edge-forge.html', job: 'Edge dispatch inside the isolated VM', to: '/zoth-os' },
   { file: 'mission-control.html', job: 'Operator mission board for the swarm', to: '/swarm' },
   { file: 'models.html', job: 'Local model connectors (Ollama, llama.cpp)', to: '/docs' },
-  { file: 'connectors.html', job: 'Tool and model connector directory', to: '/arsenal' },
+  { file: 'connectors.html', job: 'Hybrid AI provider, CLI harness, loopback bridge, and sanitized MCP config hub', to: '/workstations/connectors' },
   { file: 'subsweep.html', job: 'Subdomain recon, now subsweep-lead-scanner', to: '/tools/subsweep-lead-scanner' },
   { file: 'omnipost.html', job: 'Cross-post scheduler, now omnipost-social-engine', to: '/tools/omnipost-social-engine' },
   { file: 'notes-reviewer.html', job: 'Annotation and codex review', to: '/docs' },

@@ -513,16 +513,16 @@
     },
     {
       "id": "connectors",
-      "name": "Zoth Tool Bench & Integration Ecosystem",
+      "name": "Connectors Hub // AI Providers, CLI Harnesses & MCP Bridges",
       "band": "Observe",
-      "type": "integrated_tool",
-      "executionType": "browser",
+      "type": "cockpit",
+      "executionType": "hybrid",
       "version": "2.3.0",
-      "route": "/tools",
-      "path": "/studio/connectors.html",
-      "pullCommand": "npx @nullaitech/zoth tools list",
-      "description": "Integration workbench bridging the 21 sovereign micro-repos and MCP contract endpoints.",
-      "url": "https://zoth.nullai.tech/tools"
+      "route": "/workstations/connectors",
+      "path": "/workstations/connectors",
+      "pullCommand": "zoth open connectors",
+      "description": "Hybrid loopback Connectors Hub probing local AI inference providers (:18000, :11434, :1234, :8000), CLI agent harnesses (hermes, agy, claude, codex, gemini, opencode), core Zoth bridges, and sanitized local MCP servers across the 85-tool ecosystem with zero-secret-leakage config generation.",
+      "url": "https://zoth.nullai.tech/workstations/connectors"
     },
     {
       "id": "hexstrike",
