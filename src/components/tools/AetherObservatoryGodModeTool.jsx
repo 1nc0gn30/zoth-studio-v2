@@ -19,28 +19,29 @@ import MemoryIcon from '@mui/icons-material/Memory';
 import DownloadIcon from '@mui/icons-material/Download';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import HistoryIcon from '@mui/icons-material/History';
-import SovereignBand from '../sovereign/SovereignBand.jsx';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 /**
  * Aether Observatory — God-Mode workstation (Layer B).
  *
- * Live client for the standalone flagship daemon on :8160. Every panel is
- * backed by a real HTTP call to the local observatory API — no canned data.
- * When the daemon is unreachable the component reports the real failure and
- * links out to the standalone workstation instead of inventing output.
+ * Live client for the standalone daemon on 127.0.0.1:8160.
+ * Zero simulated fallbacks; adapts cleanly to Obsidian Dark and Editorial Ivory Light themes;
+ * enforces >= 44px mobile touch targets across all interactive controls.
  */
 const BASE = 'http://127.0.0.1:8160';
-const GOLD = '#D4AF37';
-const CYAN = '#38BDF8';
 
-async function api(path, timeoutMs = 4000) {
+async function api(path, { timeoutMs = 8000, method = 'GET', body } = {}) {
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), timeoutMs);
   try {
+    const headers = { Accept: 'application/json' };
+    if (body !== undefined) headers['Content-Type'] = 'application/json';
     const res = await fetch(`${BASE}${path}`, {
+      method,
       signal: ctl.signal,
-      headers: { Accept: 'application/json' },
+      headers,
+      body: body !== undefined ? JSON.stringify(body) : undefined,
       cache: 'no-store',
     });
     if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
@@ -65,11 +66,11 @@ function Stat({ label, value, accent, hint }) {
         borderColor: 'divider',
       }}
     >
-      <Typography sx={{ fontFamily: 'monospace', fontSize: 10, letterSpacing: 1.2, opacity: 0.6, textTransform: 'uppercase' }}>
+      <Typography sx={{ fontFamily: 'monospace', fontSize: 10, letterSpacing: 1.2, opacity: 0.72, textTransform: 'uppercase' }}>
         {label}
       </Typography>
       <Tooltip title={hint || ''} disableHoverListener={!hint}>
-        <Typography sx={{ fontFamily: 'monospace', fontSize: 19, fontWeight: 600, color: accent || 'text.primary', lineHeight: 1.3 }}>
+        <Typography sx={{ fontFamily: 'monospace', fontSize: 18, fontWeight: 700, color: accent || 'text.primary', lineHeight: 1.3 }}>
           {value}
         </Typography>
       </Tooltip>
@@ -80,14 +81,23 @@ function Stat({ label, value, accent, hint }) {
 export default function AetherObservatoryGodModeTool() {
   const theme = useTheme();
   const dark = theme.palette.mode === 'dark';
+  const GOLD = dark ? '#D4AF37' : '#8C6239';
+  const CYAN = dark ? '#38BDF8' : '#0B7498';
+  const OK = dark ? '#22C55E' : '#156A43';
+  const ERR = dark ? '#EF4444' : '#AA2E24';
 
-  const [status, setStatus] = useState('connecting'); // connecting | live | offline
+  const [status, setStatus] = useState('connecting'); // connecting | online | offline
   const [err, setErr] = useState(null);
   const [health, setHealth] = useState(null);
   const [live, setLive] = useState(null);
   const [nodes, setNodes] = useState([]);
   const [frames, setFrames] = useState([]);
+  const [totalStored, setTotalStored] = useState(0);
   const [diff, setDiff] = useState(null);
+  const [providers, setProviders] = useState([]);
+  const [selectedProvider, setSelectedProvider] = useState('auto');
+  const [triage, setTriage] = useState(null);
+  const [triageBusy, setTriageBusy] = useState(false);
   const [lastSync, setLastSync] = useState(null);
   const [polling, setPolling] = useState(true);
   const [intervalSec, setIntervalSec] = useState(5);
@@ -99,11 +109,12 @@ export default function AetherObservatoryGodModeTool() {
 
   const refresh = useCallback(async () => {
     try {
-      const [h, l, n, s] = await Promise.all([
+      const [h, l, n, s, p] = await Promise.all([
         api('/health'),
         api('/api/telemetry/live'),
         api('/api/constellation/nodes'),
         api('/api/timeline/snapshots?limit=120'),
+        api('/api/providers').catch(() => ({ providers: [] })),
       ]);
       if (!alive.current) return;
       setHealth(h);
@@ -111,9 +122,11 @@ export default function AetherObservatoryGodModeTool() {
       setNodes(Array.isArray(n.nodes) ? n.nodes : []);
       const fr = Array.isArray(s.frames) ? s.frames : [];
       setFrames(fr);
-      setT1((prev) => prev || (fr[0] ? String(fr[0].epoch) : ''));
-      setT2((prev) => prev || (fr[fr.length - 1] ? String(fr[fr.length - 1].epoch) : ''));
-      setStatus('live');
+      setTotalStored(s.totalCount ?? h.totalSnapshots ?? fr.length);
+      if (Array.isArray(p?.providers) && p.providers.length) setProviders(p.providers);
+      setT1((prev) => prev || (fr[fr.length - 1] ? String(fr[fr.length - 1].epoch) : ''));
+      setT2((prev) => prev || (fr[0] ? String(fr[0].epoch) : ''));
+      setStatus('online');
       setErr(null);
       setLastSync(new Date());
     } catch (e) {
@@ -152,7 +165,7 @@ export default function AetherObservatoryGodModeTool() {
   const recordNow = useCallback(async () => {
     setBusy(true);
     try {
-      await api('/api/snapshot/now');
+      await api('/api/snapshot/now', { method: 'POST' });
       await refresh();
     } catch (e) {
       setErr(e.message);
@@ -160,6 +173,25 @@ export default function AetherObservatoryGodModeTool() {
       setBusy(false);
     }
   }, [refresh]);
+
+  const runTriage = useCallback(async () => {
+    setTriageBusy(true);
+    try {
+      const res = await api('/api/ai/analyze', {
+        method: 'POST',
+        timeoutMs: 16000,
+        body: {
+          provider: selectedProvider,
+          ...(t1 && t2 ? { t1: Number(t1), t2: Number(t2) } : {}),
+        },
+      });
+      setTriage(res);
+    } catch (e) {
+      setTriage({ mode: 'error', summary: e.message, anomalies: [] });
+    } finally {
+      setTriageBusy(false);
+    }
+  }, [selectedProvider, t1, t2]);
 
   const filtered = useMemo(() => {
     const q = filter.trim().toLowerCase();
@@ -175,7 +207,7 @@ export default function AetherObservatoryGodModeTool() {
     return [...z].sort((a, b) => b.celsius - a.celsius).slice(0, 8);
   }, [live]);
 
-  const maxZone = zones[0];
+  const pkgTemp = live?.thermals?.packageC ?? zones[0]?.celsius ?? null;
   const zothCount = nodes.filter((n) => n.zothTool).length;
 
   const exportDiagnostics = useCallback((kind) => {
@@ -183,7 +215,7 @@ export default function AetherObservatoryGodModeTool() {
     let body;
     let name;
     if (kind === 'json') {
-      body = JSON.stringify({ exportedAt: new Date().toISOString(), base: BASE, health, live, nodes, frames: frames.length, diff }, null, 2);
+      body = JSON.stringify({ exportedAt: new Date().toISOString(), base: BASE, health, live, nodes, totalStored, diff, triage }, null, 2);
       name = `aether-observatory-${stamp}.json`;
     } else {
       const lines = [
@@ -194,22 +226,23 @@ export default function AetherObservatoryGodModeTool() {
         `- Host: ${live?.hostname || 'unknown'} (${live?.platform || 'unknown'})`,
         `- Uptime: ${live?.uptimeSec ?? '—'}s`,
         '',
-        '## Load',
+        '## Load & Thermals',
         '',
         `- load1: ${live?.cpu?.load1 ?? '—'}  busy: ${pct(live?.cpu?.busyPct)}  cores: ${live?.cpu?.coreCount ?? '—'}`,
-        `- package temp: ${maxZone ? `${maxZone.label} ${maxZone.celsius}C` : '—'}`,
+        `- CPU package temp: ${pkgTemp != null ? `${pkgTemp}°C` : '—'}`,
+        `- fan: ${live?.thermals?.fanRpm != null ? `${live.thermals.fanRpm} RPM` : '—'}`,
         `- memory used: ${pct(live?.memory?.usedPct)}`,
         '',
         '## Live listeners',
         '',
-        '| port | name | category | pid | latency ms | zoth tool |',
-        '| --- | --- | --- | --- | --- | --- |',
-        ...nodes.map((n) => `| ${n.port} | ${n.name || ''} | ${n.category || ''} | ${n.pid ?? ''} | ${n.latencyMs ?? ''} | ${n.zothTool ? 'yes' : 'no'} |`),
+        '| port | proto | name | category | pid | latency ms | zoth tool |',
+        '| --- | --- | --- | --- | --- | --- | --- |',
+        ...nodes.map((n) => `| ${n.port} | ${n.proto || 'tcp'} | ${n.name || ''} | ${n.category || ''} | ${n.pid ?? ''} | ${n.latencyMs ?? ''} | ${n.zothTool ? 'yes' : 'no'} |`),
         '',
         '## Timeline diff',
         '',
         diff
-          ? `- window: ${diff.t1?.ts} → ${diff.t2?.ts}\n- spawned ports: ${(diff.spawnedPorts || []).join(', ') || 'none'}\n- terminated ports: ${(diff.terminatedPorts || []).join(', ') || 'none'}\n- load delta: ${diff.loadDelta}  busy delta: ${diff.busyDeltaPct}%  thermal delta: ${diff.thermalDeltaC}C`
+          ? `- window: ${diff.t1?.ts} → ${diff.t2?.ts} (${diff.windowSec ?? 0}s)\n- spawned ports: ${(diff.spawnedPorts || []).join(', ') || 'none'}\n- terminated ports: ${(diff.terminatedPorts || []).join(', ') || 'none'}\n- load delta: ${diff.loadDelta}  busy delta: ${diff.busyDeltaPct}%  thermal delta: ${diff.thermalDeltaC}°C`
           : '- no diff computed',
         '',
       ];
@@ -223,52 +256,81 @@ export default function AetherObservatoryGodModeTool() {
     a.download = name;
     a.click();
     URL.revokeObjectURL(url);
-  }, [health, live, nodes, frames.length, diff, maxZone]);
+  }, [health, live, nodes, totalStored, diff, triage, pkgTemp]);
 
-  const statusColor = status === 'live' ? '#22C55E' : status === 'connecting' ? GOLD : '#EF4444';
+  const statusColor = status === 'online' ? OK : status === 'connecting' ? GOLD : ERR;
+  const tapBtnSx = { fontFamily: 'monospace', minHeight: 44 };
 
   return (
     <Box sx={{ p: { xs: 1.5, md: 3 } }}>
-      <SovereignBand />
+      {/* Dual-theme adaptive header telemetry ribbon (zero black slab in Light Mode) */}
+      <Paper
+        variant="outlined"
+        sx={{
+          p: 1.5,
+          mb: 2,
+          borderRadius: 2,
+          borderColor: dark ? 'rgba(212,175,55,0.28)' : 'rgba(140,98,57,0.32)',
+          background: dark
+            ? 'linear-gradient(90deg, rgba(13,18,32,0.92), rgba(16,24,40,0.86))'
+            : 'linear-gradient(90deg, rgba(247,244,235,0.96), rgba(242,238,225,0.94))',
+        }}
+      >
+        <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ sm: 'center' }} justifyContent="space-between" spacing={1}>
+          <Typography sx={{ fontFamily: 'monospace', fontSize: 11, fontWeight: 700, letterSpacing: 1.2, color: GOLD }}>
+            AETHER-OBSERVATORY · ZERO-EGRESS TELEMETRY · 127.0.0.1:8160 · MCP STDIO
+          </Typography>
+          <Typography sx={{ fontFamily: 'monospace', fontSize: 11, color: CYAN }}>
+            {live ? `CPU ${pct(live.cpu?.busyPct)} · PKG ${pkgTemp ?? '—'}°C · ${nodes.length} SOCKETS` : 'READY FOR LOOPBACK DAEMON'}
+          </Typography>
+        </Stack>
+      </Paper>
+
       <SovereignEyebrow accent={GOLD}>Layer B · God-Mode Workstation</SovereignEyebrow>
       <Stack direction={{ xs: 'column', md: 'row' }} alignItems={{ md: 'center' }} spacing={2} sx={{ mb: 2 }}>
         <Box sx={{ flex: 1 }}>
           <Typography variant="h4" sx={{ fontWeight: 700, letterSpacing: -0.5 }}>
             Aether Observatory
           </Typography>
-          <Typography sx={{ fontFamily: 'monospace', fontSize: 12, opacity: 0.7 }}>
-            Sovereign cyber-physical telemetry · 3D constellation · acoustic sonification · flight recorder
+          <Typography sx={{ fontFamily: 'monospace', fontSize: 12, opacity: 0.78 }}>
+            Sovereign cyber-physical telemetry · 3D constellation · acoustic sonification · flight recorder · MCP
           </Typography>
         </Box>
         <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
           <Chip
-            size="small"
-            icon={<SensorsIcon sx={{ fontSize: 15 }} />}
+            icon={<SensorsIcon sx={{ fontSize: 16 }} />}
             label={status.toUpperCase()}
-            sx={{ fontFamily: 'monospace', bgcolor: `${statusColor}22`, color: statusColor, border: `1px solid ${statusColor}66` }}
+            sx={{
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              minHeight: 36,
+              bgcolor: `${statusColor}20`,
+              color: statusColor,
+              border: `1px solid ${statusColor}66`,
+            }}
           />
           {lastSync && (
-            <Typography sx={{ fontFamily: 'monospace', fontSize: 11, opacity: 0.6 }}>
+            <Typography sx={{ fontFamily: 'monospace', fontSize: 11, opacity: 0.72 }}>
               sync {lastSync.toLocaleTimeString()}
             </Typography>
           )}
-          <Button size="small" variant="outlined" startIcon={<RefreshIcon />} onClick={refresh} sx={{ fontFamily: 'monospace' }}>
+          <Button variant="outlined" startIcon={<RefreshIcon />} onClick={refresh} sx={tapBtnSx}>
             Refresh
           </Button>
           <Button
-            size="small"
             variant={polling ? 'contained' : 'outlined'}
             onClick={() => setPolling((p) => !p)}
-            sx={{ fontFamily: 'monospace' }}
+            sx={tapBtnSx}
           >
             {polling ? 'Polling on' : 'Polling off'}
           </Button>
           <TextField
             select
             size="small"
+            label="Cadence"
             value={intervalSec}
             onChange={(e) => setIntervalSec(Number(e.target.value))}
-            sx={{ width: 96, '& .MuiInputBase-input': { fontFamily: 'monospace', fontSize: 12 } }}
+            sx={{ width: 108, '& .MuiInputBase-root': { minHeight: 44 }, '& .MuiInputBase-input': { fontFamily: 'monospace', fontSize: 12 } }}
           >
             {[2, 5, 10, 30].map((s) => (
               <MenuItem key={s} value={s} sx={{ fontFamily: 'monospace', fontSize: 12 }}>{s}s</MenuItem>
@@ -280,28 +342,24 @@ export default function AetherObservatoryGodModeTool() {
       {status === 'offline' && (
         <Paper
           variant="outlined"
-          sx={{ p: 2, mb: 2, borderColor: '#EF444488', bgcolor: dark ? '#2a1212' : '#FEF2F2' }}
+          sx={{ p: 2, mb: 2, borderColor: `${ERR}88`, bgcolor: dark ? '#2a1212' : '#FEF2F2' }}
         >
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ sm: 'center' }}>
             <Box sx={{ flex: 1 }}>
-              <Typography sx={{ fontWeight: 700, color: '#EF4444', fontFamily: 'monospace', fontSize: 13 }}>
+              <Typography sx={{ fontWeight: 700, color: ERR, fontFamily: 'monospace', fontSize: 13 }}>
                 Observatory daemon not reachable at {BASE}
               </Typography>
               <Typography sx={{ fontFamily: 'monospace', fontSize: 12, opacity: 0.85, mt: 0.5 }}>
-                {err ? `reason: ${err}` : 'no response'}. This workstation reads the standalone daemon live — no cached
-                or simulated values are shown. Start it with{' '}
-                <code>aether-observatory serve --port 8160</code> (or <code>npm start</code> in the repo), then refresh.
-                If the daemon is already up, its JSON API may predate the CORS header added in
-                <code> src/server.js</code> — restart it to pick that up.
+                {err ? `reason: ${err}` : 'no response'}. Start it with <code>aether-observatory serve --port 8160</code>, then click Refresh.
               </Typography>
             </Box>
             <Button
               variant="outlined"
               endIcon={<OpenInNewIcon />}
-              href={BASE}
+              href={`${BASE}/?theme=${dark ? 'dark' : 'light'}`}
               target="_blank"
               rel="noopener noreferrer"
-              sx={{ fontFamily: 'monospace', whiteSpace: 'nowrap' }}
+              sx={{ ...tapBtnSx, whiteSpace: 'nowrap' }}
             >
               Open :8160
             </Button>
@@ -316,65 +374,64 @@ export default function AetherObservatoryGodModeTool() {
         <Stat label="Cores" value={live?.cpu?.coreCount ?? '—'} />
         <Stat label="Mem used" value={pct(live?.memory?.usedPct)} />
         <Stat
-          label="Pkg temp"
-          value={maxZone ? `${maxZone.celsius}°C` : '—'}
-          accent={maxZone && maxZone.celsius > 72 ? '#EF4444' : '#22C55E'}
-          hint={maxZone ? `${maxZone.label} (${maxZone.zone})` : ''}
+          label="CPU Pkg"
+          value={pkgTemp != null ? `${pkgTemp}°C` : '—'}
+          accent={pkgTemp != null && pkgTemp > 75 ? ERR : OK}
+          hint={live?.thermals?.fanRpm ? `Fan: ${live.thermals.fanRpm} RPM` : 'Package id 0 / x86_pkg_temp'}
         />
-        <Stat label="Listeners" value={live?.listening?.count ?? live?.listening?.ports?.length ?? nodes.length ?? '—'} />
+        <Stat label="Listeners" value={live?.listening?.count ?? nodes.length ?? '—'} />
         <Stat label="Zoth tools" value={`${zothCount}/${nodes.length}`} accent={GOLD} />
-        <Stat label="Snapshots" value={frames.length} accent={GOLD} />
+        <Stat label="Stored" value={totalStored.toLocaleString()} accent={GOLD} />
       </Stack>
 
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', lg: '1.35fr 1fr' }, gap: 2 }}>
         {/* Constellation */}
         <Paper variant="outlined" sx={{ p: 2, borderColor: 'divider' }}>
-          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1.5 }}>
+          <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ sm: 'center' }} spacing={1} sx={{ mb: 1.5 }}>
             <Typography sx={{ fontWeight: 700, fontFamily: 'monospace', fontSize: 13, letterSpacing: 1 }}>
               LIVE CONSTELLATION · {filtered.length} NODES
             </Typography>
             <Box sx={{ flex: 1 }} />
             <TextField
               size="small"
-              placeholder="filter port / name / pid"
+              label="Filter"
+              placeholder="port / name / pid"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              sx={{ width: 220, '& input': { fontFamily: 'monospace', fontSize: 12 } }}
+              sx={{ width: { xs: '100%', sm: 220 }, '& .MuiInputBase-root': { minHeight: 44 }, '& input': { fontFamily: 'monospace', fontSize: 12 } }}
             />
           </Stack>
-          <Box sx={{ maxHeight: 380, overflow: 'auto' }}>
+          <Box sx={{ maxHeight: 390, overflow: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'monospace', fontSize: 12 }}>
               <thead>
-                <tr style={{ textAlign: 'left', opacity: 0.6 }}>
-                  <th style={{ padding: '4px 6px' }}>PORT</th>
-                  <th style={{ padding: '4px 6px' }}>NAME</th>
-                  <th style={{ padding: '4px 6px' }}>CATEGORY</th>
-                  <th style={{ padding: '4px 6px' }}>PID</th>
-                  <th style={{ padding: '4px 6px' }}>UP</th>
-                  <th style={{ padding: '4px 6px' }}>LAT</th>
+                <tr style={{ textAlign: 'left', opacity: 0.7 }}>
+                  <th style={{ padding: '6px' }}>PORT</th>
+                  <th style={{ padding: '6px' }}>PROTO</th>
+                  <th style={{ padding: '6px' }}>NAME</th>
+                  <th style={{ padding: '6px' }}>CATEGORY</th>
+                  <th style={{ padding: '6px' }}>PID</th>
+                  <th style={{ padding: '6px' }}>LAT</th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.map((n) => (
                   <tr key={`${n.port}-${n.pid}-${n.proto}`} style={{ borderTop: `1px solid ${theme.palette.divider}` }}>
-                    <td style={{ padding: '4px 6px', color: n.zothTool ? GOLD : undefined, fontWeight: n.zothTool ? 700 : 400 }}>
+                    <td style={{ padding: '6px', color: n.zothTool ? GOLD : undefined, fontWeight: n.zothTool ? 700 : 400 }}>
                       {n.port}
                     </td>
-                    <td style={{ padding: '4px 6px' }}>{n.name || n.processName || '—'}</td>
-                    <td style={{ padding: '4px 6px', opacity: 0.75 }}>{n.category || 'System'}</td>
-                    <td style={{ padding: '4px 6px', opacity: 0.75 }}>{n.pid ?? '—'}</td>
-                    <td style={{ padding: '4px 6px', opacity: 0.75 }}>
-                      {typeof n.uptimeSec === 'number' ? `${Math.floor(n.uptimeSec / 60)}m` : '—'}
-                    </td>
-                    <td style={{ padding: '4px 6px', color: n.latencyMs != null && n.latencyMs > 200 ? '#EF4444' : undefined }}>
-                      {n.latencyMs != null ? `${n.latencyMs}` : '—'}
+                    <td style={{ padding: '6px', opacity: 0.72 }}>{n.proto || 'tcp'}</td>
+                    <td style={{ padding: '6px' }}>{n.name || n.processName || '—'}</td>
+                    <td style={{ padding: '6px', opacity: 0.78 }}>{n.category || 'System'}</td>
+                    <td style={{ padding: '6px', opacity: 0.78 }}>{n.pid ?? '—'}</td>
+                    <td style={{ padding: '6px', color: n.latencyMs != null && n.latencyMs > 200 ? ERR : undefined }}>
+                      {n.latencyMs != null ? `${n.latencyMs}ms` : '—'}
                     </td>
                   </tr>
                 ))}
                 {!filtered.length && (
                   <tr>
-                    <td colSpan={6} style={{ padding: 12, opacity: 0.6 }}>
-                      {status === 'live' ? 'no listeners match this filter' : 'awaiting daemon…'}
+                    <td colSpan={6} style={{ padding: 12, opacity: 0.65 }}>
+                      {status === 'online' ? 'no listeners match this filter' : 'awaiting daemon…'}
                     </td>
                   </tr>
                 )}
@@ -394,7 +451,7 @@ export default function AetherObservatoryGodModeTool() {
                 <Box key={z.zone}>
                   <Stack direction="row" justifyContent="space-between">
                     <Typography sx={{ fontFamily: 'monospace', fontSize: 11 }}>{z.label || z.zone}</Typography>
-                    <Typography sx={{ fontFamily: 'monospace', fontSize: 11, color: z.celsius > 72 ? '#EF4444' : GOLD }}>
+                    <Typography sx={{ fontFamily: 'monospace', fontSize: 11, color: z.celsius > 75 ? ERR : GOLD }}>
                       {z.celsius}°C
                     </Typography>
                   </Stack>
@@ -402,16 +459,16 @@ export default function AetherObservatoryGodModeTool() {
                     variant="determinate"
                     value={Math.min(100, (z.celsius / 100) * 100)}
                     sx={{
-                      height: 5,
+                      height: 6,
                       borderRadius: 1,
                       bgcolor: 'divider',
-                      '& .MuiLinearProgress-bar': { bgcolor: z.celsius > 72 ? '#EF4444' : z.celsius > 55 ? GOLD : CYAN },
+                      '& .MuiLinearProgress-bar': { bgcolor: z.celsius > 75 ? ERR : z.celsius > 58 ? GOLD : CYAN },
                     }}
                   />
                 </Box>
               ))}
               {!zones.length && (
-                <Typography sx={{ fontFamily: 'monospace', fontSize: 11, opacity: 0.6 }}>no thermal zones reported</Typography>
+                <Typography sx={{ fontFamily: 'monospace', fontSize: 11, opacity: 0.65 }}>no thermal zones reported</Typography>
               )}
             </Stack>
           </Paper>
@@ -424,7 +481,7 @@ export default function AetherObservatoryGodModeTool() {
                 FLIGHT RECORDER
               </Typography>
               <Box sx={{ flex: 1 }} />
-              <Button size="small" variant="outlined" disabled={busy || status !== 'live'} onClick={recordNow} sx={{ fontFamily: 'monospace', fontSize: 11 }}>
+              <Button variant="outlined" disabled={busy || status !== 'online'} onClick={recordNow} sx={{ ...tapBtnSx, fontSize: 11 }}>
                 Record now
               </Button>
             </Stack>
@@ -432,45 +489,44 @@ export default function AetherObservatoryGodModeTool() {
               <TextField
                 select
                 size="small"
-                label="From"
+                label="From (T1)"
                 value={t1}
                 onChange={(e) => setT1(e.target.value)}
-                sx={{ flex: 1, '& .MuiInputBase-input': { fontFamily: 'monospace', fontSize: 11 } }}
+                sx={{ flex: 1, '& .MuiInputBase-root': { minHeight: 44 }, '& .MuiInputBase-input': { fontFamily: 'monospace', fontSize: 11 } }}
               >
                 {frames.map((f) => (
                   <MenuItem key={`a${f.epoch}`} value={String(f.epoch)} sx={{ fontFamily: 'monospace', fontSize: 11 }}>
-                    {f.ts} · L{f.load1} · {f.packageC}°C
+                    {f.ts.slice(11, 19)} · L{f.load1} · {f.packageC ?? '—'}°C
                   </MenuItem>
                 ))}
               </TextField>
               <TextField
                 select
                 size="small"
-                label="To"
+                label="To (T2)"
                 value={t2}
                 onChange={(e) => setT2(e.target.value)}
-                sx={{ flex: 1, '& .MuiInputBase-input': { fontFamily: 'monospace', fontSize: 11 } }}
+                sx={{ flex: 1, '& .MuiInputBase-root': { minHeight: 44 }, '& .MuiInputBase-input': { fontFamily: 'monospace', fontSize: 11 } }}
               >
                 {frames.map((f) => (
                   <MenuItem key={`b${f.epoch}`} value={String(f.epoch)} sx={{ fontFamily: 'monospace', fontSize: 11 }}>
-                    {f.ts} · L{f.load1} · {f.packageC}°C
+                    {f.ts.slice(11, 19)} · L{f.load1} · {f.packageC ?? '—'}°C
                   </MenuItem>
                 ))}
               </TextField>
               <Button
-                size="small"
                 variant="contained"
-                disabled={busy || !t1 || !t2 || status !== 'live'}
+                disabled={busy || !t1 || !t2 || status !== 'online'}
                 onClick={() => runDiff(t1, t2)}
-                sx={{ fontFamily: 'monospace' }}
+                sx={tapBtnSx}
               >
                 Diff
               </Button>
             </Stack>
             {diff ? (
               <Box sx={{ fontFamily: 'monospace', fontSize: 11.5, lineHeight: 1.7 }}>
-                <Typography sx={{ fontFamily: 'monospace', fontSize: 11, opacity: 0.65 }}>
-                  {diff.t1?.ts} → {diff.t2?.ts}
+                <Typography sx={{ fontFamily: 'monospace', fontSize: 11, opacity: 0.72 }}>
+                  {diff.t1?.ts} → {diff.t2?.ts} ({diff.windowSec ?? 0}s)
                 </Typography>
                 <Box>spawned ports: {diff.spawnedPorts?.length ? diff.spawnedPorts.join(', ') : 'none'}</Box>
                 <Box>terminated ports: {diff.terminatedPorts?.length ? diff.terminatedPorts.join(', ') : 'none'}</Box>
@@ -478,37 +534,95 @@ export default function AetherObservatoryGodModeTool() {
                 <Box>mem Δ {diff.memDeltaPct}% · process Δ {diff.processDelta}</Box>
               </Box>
             ) : (
-              <Typography sx={{ fontFamily: 'monospace', fontSize: 11, opacity: 0.6 }}>
+              <Typography sx={{ fontFamily: 'monospace', fontSize: 11, opacity: 0.65 }}>
                 {frames.length ? 'pick two frames and run a diff' : 'no snapshots recorded yet'}
               </Typography>
             )}
             <Divider sx={{ my: 1.5 }} />
-            <Stack direction="row" spacing={1}>
-              <Button size="small" variant="outlined" startIcon={<DownloadIcon />} onClick={() => exportDiagnostics('md')} sx={{ fontFamily: 'monospace', fontSize: 11 }}>
+            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+              <Button variant="outlined" startIcon={<DownloadIcon />} onClick={() => exportDiagnostics('md')} sx={{ ...tapBtnSx, fontSize: 11 }}>
                 Markdown
               </Button>
-              <Button size="small" variant="outlined" startIcon={<DownloadIcon />} onClick={() => exportDiagnostics('json')} sx={{ fontFamily: 'monospace', fontSize: 11 }}>
+              <Button variant="outlined" startIcon={<DownloadIcon />} onClick={() => exportDiagnostics('json')} sx={{ ...tapBtnSx, fontSize: 11 }}>
                 JSON
               </Button>
               <Box sx={{ flex: 1 }} />
               <Button
-                size="small"
                 endIcon={<OpenInNewIcon />}
-                href={`${BASE}/`}
+                href={`${BASE}/?theme=${dark ? 'dark' : 'light'}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                sx={{ fontFamily: 'monospace', fontSize: 11 }}
+                sx={{ ...tapBtnSx, fontSize: 11 }}
               >
                 3D deck
               </Button>
             </Stack>
           </Paper>
 
+          {/* Sovereign AI Anomaly Triage */}
           <Paper variant="outlined" sx={{ p: 2, borderColor: 'divider' }}>
+            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1.25 }}>
+              <AutoAwesomeIcon sx={{ fontSize: 16, color: CYAN }} />
+              <Typography sx={{ fontWeight: 700, fontFamily: 'monospace', fontSize: 13, letterSpacing: 1 }}>
+                SOVEREIGN AI TRIAGE
+              </Typography>
+            </Stack>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ mb: 1.25 }}>
+              <TextField
+                select
+                size="small"
+                label="Provider"
+                value={selectedProvider}
+                onChange={(e) => setSelectedProvider(e.target.value)}
+                sx={{ flex: 1, '& .MuiInputBase-root': { minHeight: 44 }, '& .MuiInputBase-input': { fontFamily: 'monospace', fontSize: 11 } }}
+              >
+                <MenuItem value="auto" sx={{ fontFamily: 'monospace', fontSize: 11 }}>Auto (Best Local)</MenuItem>
+                {providers.map((p) => (
+                  <MenuItem key={p.id} value={p.id} sx={{ fontFamily: 'monospace', fontSize: 11 }}>
+                    {p.label}{!p.available ? ' (offline)' : p.guarded ? ' (guarded)' : ''}
+                  </MenuItem>
+                ))}
+              </TextField>
+              <Button
+                variant="contained"
+                disabled={triageBusy || status !== 'online'}
+                onClick={runTriage}
+                sx={tapBtnSx}
+              >
+                {triageBusy ? 'Analyzing…' : 'Run Triage'}
+              </Button>
+            </Stack>
+            {triage ? (
+              <Box sx={{ fontFamily: 'monospace', fontSize: 11.5, lineHeight: 1.6 }}>
+                <Typography sx={{ fontFamily: 'monospace', fontSize: 10.5, opacity: 0.7, mb: 0.5 }}>
+                  mode: {triage.mode} · provider: {triage.provider} ({triage.model || 'n/a'}) · {triage.latencyMs ?? 0}ms
+                </Typography>
+                <Typography sx={{ fontSize: 12.5, mb: 0.75 }}>{triage.summary}</Typography>
+                {(triage.anomalies || []).length > 0 && (
+                  <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
+                    {triage.anomalies.map((a, idx) => (
+                      <Chip
+                        key={idx}
+                        size="small"
+                        label={`${String(a.severity || 'info').toUpperCase()}: ${a.detail}`}
+                        sx={{ fontFamily: 'monospace', fontSize: 10.5 }}
+                      />
+                    ))}
+                  </Stack>
+                )}
+              </Box>
+            ) : (
+              <Typography sx={{ fontFamily: 'monospace', fontSize: 11, opacity: 0.65 }}>
+                Runs AGY Bridge (:18000), Ollama (:11434), or deterministic offline rules over live telemetry &amp; diffs.
+              </Typography>
+            )}
+          </Paper>
+
+          <Paper variant="outlined" sx={{ p: 1.75, borderColor: 'divider' }}>
             <Stack direction="row" spacing={1} alignItems="center">
               <MemoryIcon sx={{ fontSize: 16, color: CYAN }} />
-              <Typography sx={{ fontFamily: 'monospace', fontSize: 11, opacity: 0.8 }}>
-                {health ? `daemon v${health.version} · uptime ${Math.floor((health.uptimeSec || 0) / 60)}m · db ${health.db ? 'attached' : 'none'}` : 'daemon metadata unavailable'}
+              <Typography sx={{ fontFamily: 'monospace', fontSize: 11, opacity: 0.85 }}>
+                {health ? `daemon v${health.version} · uptime ${Math.floor((health.uptimeSec || 0) / 60)}m · db ${health.db ? 'attached' : 'none'} · ${totalStored.toLocaleString()} frames` : 'daemon metadata unavailable'}
               </Typography>
             </Stack>
           </Paper>

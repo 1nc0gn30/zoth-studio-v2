@@ -46,18 +46,18 @@
     {
       "id": "aether-observatory",
       "name": "Aether Observatory",
-      "description": "Sovereign cyber-physical telemetry command deck: 60fps 3D orbital constellation of every live port, daemon, thermal zone and repo, Braille/Bayer-8x8 dither HUD, procedural WebAudio sonification, and a SQLite flight recorder with a diff scrubber.",
+      "description": "Zero-egress cyber-physical telemetry command deck: 3D orbital constellation of live sockets and Zoth daemons, Braille/Bayer-8x8 HUD, WebAudio sonification with compressor limiter, SQLite flight recorder with diff/export, stdio MCP server, and local AI anomaly triage.",
       "category": "System & Telemetry",
       "github": "https://github.com/1nc0gn30/aether-observatory",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/aether-observatory/",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "pull": "aether-observatory --help  # or: git clone https://github.com/1nc0gn30/aether-observatory.git",
       "execution_type": "local_cli",
       "runtimes": [
-        "python",
         "node",
         "cli",
+        "mcp",
         "zero-egress"
       ],
       "port": 8160,

@@ -168,13 +168,13 @@ export const toolsDocumentation = {
     ]
   },
   'aether-observatory': {
-    whyUse: 'Turns the whole machine into a single observable object: every listening port, daemon, thermal zone, memory engram and git repo rendered as an interactive 3D constellation, sonified in real time, and recorded into a replayable flight log. Replaces ad-hoc `ss`/`top`/`sensors` tab-hopping and cloud APM agents with a sovereign localhost command deck.',
-    problemSolved: 'Local telemetry is normally scattered across shell tools with no history and no cross-signal correlation. Aether Observatory correlates ports, processes, thermals and git activity into one time-indexed model so you can diff any two moments and see exactly which port spawned or died, and how load and temperature moved with it.',
-    architecture: 'Node.js daemon on port 8160 (loopback only) serving a static 60fps WebGL/Canvas deck plus a read-only JSON API (/health, /api/telemetry/live, /api/constellation/nodes, /api/git/pulse, /api/timeline/snapshots, /api/timeline/diff, /api/snapshot/now, /api/stream SSE). Sampled frames are compacted into SQLite for the time-machine scrubber; audio is synthesised procedurally in-browser with WebAudio (no external assets).',
+    whyUse: 'Turns the local Linux machine into a single observable instrument: every listening TCP socket, Zoth daemon, CPU package thermal zone, and active git repository rendered as a 3D constellation, sonified in real time, and recorded into a replayable SQLite flight log. Replaces ad-hoc ss, top, and sensors tab-hopping with a zero-egress localhost command deck.',
+    problemSolved: 'Local telemetry is normally scattered across shell utilities with no history and no cross-signal correlation. Aether Observatory correlates ports, processes, CPU package thermals, and git activity into one time-indexed SQLite model so you can diff any two timestamps, export Markdown/JSON reports, or triage anomalies via local AI or stdio MCP.',
+    architecture: 'Zero-dependency Node.js >=22 daemon on 127.0.0.1:8160 (loopback-only CORS) using async TTL-cached execFile probes over /proc, /sys/class/thermal, sensors(1), and ss -tlnp. Serves /health, /api/health, /api/telemetry/live, /api/constellation/nodes, /api/git/pulse, /api/timeline/{snapshots,diff,export.md,export.json}, POST /api/snapshot/now, /api/providers, POST /api/ai/analyze, and /api/stream SSE, plus a zero-dependency stdio JSON-RPC 2.0 MCP server (aether-observatory mcp).',
     aiAgentProtocol: {
       mcpTool: 'aether_observatory_telemetry',
-      description: 'Read live machine telemetry, the port/process constellation, and historical frame diffs as structured JSON.',
-      cliExample: 'aether-observatory status --json && aether-observatory snapshot',
+      description: 'Read live machine telemetry, the port/process constellation, record snapshots, and compute historical frame diffs over stdio JSON-RPC 2.0 MCP (aether-observatory mcp).',
+      cliExample: 'aether-observatory status --json && aether-observatory snapshot --json',
       inputSchema: {
         type: 'object',
         properties: {
@@ -187,25 +187,26 @@ export const toolsDocumentation = {
       outputSchema: {
         hostname: 'string',
         cpu: { model: 'string', coreCount: 'number', load1: 'number', busyPct: 'number' },
-        thermals: { packageC: 'number', zones: 'array' },
+        thermals: { packageC: 'number', fanRpm: 'number', zones: 'array' },
         listeners: 'number',
         nodes: 'array',
-        diff: { spawnedPorts: 'array', terminatedPorts: 'array', loadDelta: 'number' }
+        diff: { spawnedPorts: 'array', terminatedPorts: 'array', loadDelta: 'number', thermalDeltaC: 'number' }
       }
     },
     quickstart: [
       'aether-observatory status --json',
-      'aether-observatory constellation',
+      'aether-observatory constellation --json',
+      'aether-observatory mcp',
       'aether-observatory serve --port 8160',
       '# Open the command deck at http://127.0.0.1:8160'
     ],
     features: [
-      '60fps 3D orbital constellation of every live port, daemon, thermal zone and git repo (drag to orbit, scroll to zoom, click a node for live process telemetry)',
-      'Unicode U+2800 braille sub-pixel and ordered Bayer 8x8 dither HUD layered over the starfield',
-      'Procedural WebAudio telemetry synthesizer: CPU load, network I/O and daemon heartbeats become an ambient generative soundscape with a master LUFS limiter and FFT spectrogram',
-      'Time-machine flight recorder: continuous SQLite snapshots with a spring-physics scrubber and port/thermal/memory diff between any two timestamps',
-      'Dual-theme alchemist engine toggling Obsidian Gold cyber-glass and Editorial Ivory light mode, opened by an ASCII-braille aperture seam intro',
-      'Deterministic Markdown and JSON diagnostic export for hand-off reporting'
+      '360-degree golden-angle 3D orbital constellation of live TCP/TCP6 listeners joined with the Zoth Studio registry, with secret-redacted Deep Socket Inspector',
+      'Three interactive render pipelines: 01 VECTOR, 02 BRAILLE (Unicode U+2800 2x4 sub-pixel matrix), and 03 DITHER (ordered Bayer 8x8 halftone)',
+      'Opt-in WebAudio Sonorium mapping live CPU, RAM, CPU package thermal, and open sockets through a lowpass filter and DynamicsCompressorNode master limiter into a 60fps FFT waterfall',
+      'SQLite flight recorder (8,640 rows = 24h @ 10s cadence) with chronological scrubber, T1/T2 diff chips, and downloadable Markdown/JSON incident reports',
+      'Built-in stdio JSON-RPC 2.0 MCP server (aether-observatory mcp) plus optional local Sovereign AI anomaly triage (AGY Bridge :18000, Ollama :11434, and deterministic offline rules)',
+      'Zero-egress dual-theme UI (Obsidian Dark and Editorial Ivory Light) with loopback-only CORS and >=44px mobile touch targets'
     ]
   },
   'adytum-alchemist-ai-workflow': {
