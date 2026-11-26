@@ -26,6 +26,8 @@ import {
   normalizeContinuityItems,
   normalizeRecallResponse,
   normalizeConversations,
+  normalizeLastSync,
+  normalizeSyncTimer,
 } from './chronicle-engine.mjs';
 
 const STUDIO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -486,8 +488,105 @@ export async function probeFleet() {
   };
 }
 
+function readChronicleSyncTimerStatus(timeoutMs = 1200) {
+  return new Promise((resolve) => {
+    execFile(
+      'systemctl',
+      [
+        '--user',
+        'show',
+        'chronicle-vault-sync.timer',
+        'chronicle-vault-sync.service',
+        '-p',
+        'Id,ActiveState,SubState,UnitFileState,NextElapseUSecRealtime,LastTriggerUSec,Result,ExecMainStatus,ExecMainStartTimestamp,ExecMainExitTimestamp,MemoryPeak',
+      ],
+      { timeout: timeoutMs, maxBuffer: 64 * 1024 },
+      (err, stdout) => {
+        if (err || !stdout || !stdout.trim()) {
+          resolve(normalizeSyncTimer({ available: false }));
+          return;
+        }
+        const blocks = stdout.trim().split(/\n\s*\n/).filter(Boolean);
+        const byId = {};
+        for (const block of blocks) {
+          const kv = {};
+          for (const line of block.split(/\r?\n/)) {
+            const idx = line.indexOf('=');
+            if (idx > 0) {
+              kv[line.slice(0, idx).trim()] = line.slice(idx + 1).trim();
+            }
+          }
+          if (kv.Id) byId[kv.Id] = kv;
+        }
+        const timer = byId['chronicle-vault-sync.timer'] || {};
+        const svc = byId['chronicle-vault-sync.service'] || {};
+        if (!timer.ActiveState && !svc.ActiveState) {
+          resolve(normalizeSyncTimer({ available: false }));
+          return;
+        }
+        let memPeakMb = null;
+        if (svc.MemoryPeak && /^\d+$/.test(svc.MemoryPeak)) {
+          const bytes = Number(svc.MemoryPeak);
+          if (Number.isFinite(bytes) && bytes >= 0 && bytes < 1e15) {
+            memPeakMb = Math.round((bytes / (1024 * 1024)) * 10) / 10;
+          }
+        }
+        let lastDurationSec = null;
+        const startMs = svc.ExecMainStartTimestamp ? Date.parse(svc.ExecMainStartTimestamp) : NaN;
+        const exitMs = svc.ExecMainExitTimestamp ? Date.parse(svc.ExecMainExitTimestamp) : NaN;
+        if (Number.isFinite(startMs) && Number.isFinite(exitMs) && exitMs >= startMs) {
+          lastDurationSec = Math.round(((exitMs - startMs) / 1000) * 10) / 10;
+        }
+        const exitStatus = svc.ExecMainStatus && /^\d+$/.test(svc.ExecMainStatus) ? Number(svc.ExecMainStatus) : null;
+        const finishWithNext = (nextTrig) => {
+          resolve(
+            normalizeSyncTimer({
+              available: true,
+              unit: 'chronicle-vault-sync.timer',
+              serviceUnit: 'chronicle-vault-sync.service',
+              activeState: timer.ActiveState || 'unknown',
+              subState: timer.SubState || 'unknown',
+              unitFileState: timer.UnitFileState || 'unknown',
+              serviceActiveState: svc.ActiveState || 'unknown',
+              nextTrigger: nextTrig || '',
+              lastTrigger: timer.LastTriggerUSec || '',
+              result: svc.Result || '',
+              exitStatus,
+              lastDurationSec,
+              memPeakMb,
+              cadence: '30m',
+            })
+          );
+        };
+        if (timer.NextElapseUSecRealtime) {
+          finishWithNext(timer.NextElapseUSecRealtime);
+          return;
+        }
+        execFile(
+          'systemctl',
+          ['--user', 'list-timers', 'chronicle-vault-sync.timer', '--output=json', '--no-pager'],
+          { timeout: Math.min(timeoutMs, 1000), maxBuffer: 32 * 1024 },
+          (ltErr, ltOut) => {
+            let nextTrig = '';
+            if (!ltErr && ltOut && ltOut.trim()) {
+              try {
+                const parsed = JSON.parse(ltOut);
+                const nextUs = Array.isArray(parsed) && parsed[0]?.next ? Number(parsed[0].next) : 0;
+                if (Number.isFinite(nextUs) && nextUs > 0) {
+                  nextTrig = new Date(nextUs / 1000).toISOString().replace('T', ' ').slice(0, 19) + ' UTC';
+                }
+              } catch {}
+            }
+            finishWithNext(nextTrig);
+          }
+        );
+      }
+    );
+  });
+}
+
 export async function probeStatus() {
-  const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama, agyHermesHealth, agyHermesModels, vault, egress, mock, firewall, flight, capsule, policy, civ, webgen] = await Promise.all([
+  const [memoryPrimary, memorySec, bridgePrimary, bridgeSec, swarmPrimary, swarmSec, ollama, agyHermesHealth, agyHermesModels, vault, egress, mock, firewall, flight, capsule, policy, civ, webgen, chronicleVault, chronicleSyncTimer] = await Promise.all([
     requestJson(8094, '/health'),
     requestJson(8788, '/health'),
     requestJson(8102, '/api/health'),
@@ -506,6 +605,8 @@ export async function probeStatus() {
     requestJson(8106, '/api/stats'),
     requestJson(9393, '/api/status', { timeout: 1000 }),
     requestJson(5173, '/api/health', { timeout: 1500 }),
+    requestJson(8161, '/health', { timeout: 1000 }),
+    readChronicleSyncTimerStatus(1200),
   ]);
 
   const agyHermesModelList = agyHermesModels.up && Array.isArray(agyHermesModels.json?.data)
@@ -622,6 +723,28 @@ export async function probeStatus() {
           observationalCycles: civ.json?.observationalCycles || 0,
           latestReflection: (civ.json?.mentalReflections && civ.json.mentalReflections[civ.json.mentalReflections.length - 1]) || null
         } : null,
+      },
+      chronicleVault: {
+        name: 'Chronicle Vault',
+        port: 8161,
+        up: chronicleVault.up,
+        detail: chronicleVault.json
+          ? {
+              status: sanitizeChronicleText(chronicleVault.json.status || 'ok'),
+              service: sanitizeChronicleText(chronicleVault.json.service || 'chronicle-vault'),
+              db: sanitizeChronicleText(chronicleVault.json.db || 'memory_vault.db'),
+              conversations: chronicleVault.json.conversations ?? null,
+              messages: chronicleVault.json.messages ?? null,
+              activePatterns: chronicleVault.json.active_patterns ?? null,
+              syncRunning: Boolean(chronicleVault.json.sync_running),
+            }
+          : null,
+      },
+      chronicleSyncTimer: {
+        name: 'Chronicle Vault Sync Timer',
+        unit: 'chronicle-vault-sync.timer',
+        up: Boolean(chronicleSyncTimer?.active),
+        detail: chronicleSyncTimer,
       },
       webgen: {
         name: 'Zoth Bolt (bolt.diy fork)',
@@ -1855,11 +1978,12 @@ export function studioMiddleware() {
 
       if (req.method === 'GET' && url.pathname === '/api/studio/chronicle/summary') {
         const checkedAt = new Date().toISOString();
-        const [health, overview, continuity, patternsRes] = await Promise.all([
+        const [health, overview, continuity, patternsRes, syncTimer] = await Promise.all([
           requestJson(8161, '/health', { timeout: 1200 }),
           requestJson(8161, '/api/overview', { timeout: 1200 }),
           requestJson(8161, '/api/continuity/overview', { timeout: 1200 }),
           requestJson(8161, '/api/patterns', { timeout: 1200 }),
+          readChronicleSyncTimerStatus(1200),
         ]);
 
         if (!health.up && !overview.up) {
@@ -1868,6 +1992,9 @@ export function studioMiddleware() {
             schemaVersion: CHRONICLE_SCHEMA_VERSION,
             checkedAt,
             reason: 'Chronicle Vault daemon (:8161) not reachable — browser hybrid analyzer active',
+            syncRunning: syncTimer.serviceActiveState === 'activating',
+            lastSync: null,
+            syncTimer,
             stats: null,
             patterns: [],
             alerts: [],
@@ -1885,13 +2012,16 @@ export function studioMiddleware() {
           continuity.up ? continuity.json : {},
           patterns
         );
+        const lastSync = normalizeLastSync(overview.up ? overview.json?.last_sync : null);
 
         send(res, 200, {
           online: true,
           schemaVersion: CHRONICLE_SCHEMA_VERSION,
           checkedAt,
           service: sanitizeChronicleText(health.json?.service || 'chronicle-vault'),
-          syncRunning: Boolean(health.json?.sync_running),
+          syncRunning: Boolean(health.json?.sync_running || syncTimer.serviceActiveState === 'activating'),
+          lastSync,
+          syncTimer,
           stats,
           patterns,
           alerts: [],

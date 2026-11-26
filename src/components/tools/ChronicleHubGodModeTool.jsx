@@ -116,6 +116,7 @@ export default function ChronicleHubGodModeTool() {
   const borderCol = isDark ? 'rgba(245, 241, 230, 0.14)' : 'rgba(16, 24, 40, 0.13)';
 
   const { copied: copiedCli, copy: copyCli } = useCopy();
+  const { copied: copiedTimerCli, copy: copyTimerCli } = useCopy();
   const fileInputRef = useRef(null);
   const alive = useRef(true);
 
@@ -126,6 +127,8 @@ export default function ChronicleHubGodModeTool() {
   const [livePatterns, setLivePatterns] = useState([]);
   const [unfinishedLoops, setUnfinishedLoops] = useState([]);
   const [parkedIdeas, setParkedIdeas] = useState([]);
+  const [lastSyncRun, setLastSyncRun] = useState(null);
+  const [syncTimer, setSyncTimer] = useState(null);
   const [lastSync, setLastSync] = useState(null);
 
   // Tab 1: Recall state
@@ -243,6 +246,8 @@ export default function ChronicleHubGodModeTool() {
   const refresh = useCallback(async () => {
     const summary = await safeProxyGet('/api/studio/chronicle/summary');
     if (!alive.current) return;
+    setSyncTimer(summary.syncTimer || null);
+    setLastSyncRun(summary.lastSync || null);
     if (summary.online) {
       setLiveStats(summary.stats || null);
       setLivePatterns(Array.isArray(summary.patterns) ? summary.patterns : []);
@@ -490,6 +495,132 @@ export default function ChronicleHubGodModeTool() {
 
       {/* Balanced 6-Tile KPI Strip (3x2 on desktop, 2x3 on tablet) */}
       <SovereignKpiStrip items={kpiItems} cols={4} />
+
+      {/* Incremental Sync Timer & Last Sync Observability Strip */}
+      <Box
+        data-testid="chronicle-sync-timer-strip"
+        sx={{
+          p: { xs: 1.75, sm: 2 },
+          mb: 2.25,
+          borderRadius: 1.75,
+          bgcolor: cardBg,
+          border: `1px solid ${borderCol}`,
+        }}
+      >
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 1.25, mb: 1.25 }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 1, minWidth: 0 }}>
+            <Typography
+              component="span"
+              sx={{ fontFamily: MONO, fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.12em', color: accent, textTransform: 'uppercase' }}
+            >
+              INCREMENTAL SYNC TIMER · chronicle-vault-sync.timer
+            </Typography>
+            <Chip
+              label={
+                syncTimer?.active
+                  ? `ACTIVE · ${syncTimer.cadence || '30m'}`
+                  : syncTimer?.available === false
+                    ? 'OFFLINE · SYSTEMD UNAVAILABLE'
+                    : String(syncTimer?.activeState || 'OFFLINE').toUpperCase()
+              }
+              size="small"
+              sx={{
+                height: 24,
+                fontFamily: MONO,
+                fontSize: '0.68rem',
+                fontWeight: 700,
+                color: syncTimer?.active ? emerald : amber,
+                bgcolor: rgba(syncTimer?.active ? emerald : amber, isDark ? 0.14 : 0.08),
+                border: `1px solid ${rgba(syncTimer?.active ? emerald : amber, 0.38)}`,
+              }}
+            />
+            {syncTimer?.exitStatus != null && (
+              <Chip
+                label={`EXIT ${syncTimer.exitStatus}/${String(syncTimer.result || 'OK').toUpperCase()}`}
+                size="small"
+                sx={{
+                  height: 24,
+                  fontFamily: MONO,
+                  fontSize: '0.68rem',
+                  fontWeight: 700,
+                  color: syncTimer.exitStatus === 0 ? emerald : crimson,
+                  bgcolor: rgba(syncTimer.exitStatus === 0 ? emerald : crimson, isDark ? 0.12 : 0.07),
+                  border: `1px solid ${rgba(syncTimer.exitStatus === 0 ? emerald : crimson, 0.35)}`,
+                }}
+              />
+            )}
+            {syncTimer?.memPeakMb != null && (
+              <Chip
+                label={`PEAK ${syncTimer.memPeakMb} MB`}
+                size="small"
+                sx={{
+                  height: 24,
+                  fontFamily: MONO,
+                  fontSize: '0.68rem',
+                  fontWeight: 700,
+                  color: primaryText,
+                  bgcolor: subtleBg,
+                  border: `1px solid ${borderCol}`,
+                }}
+              />
+            )}
+          </Box>
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={copiedTimerCli ? <CheckIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}
+            onClick={() => copyTimerCli('systemctl --user status chronicle-vault-sync.timer chronicle-vault-sync.service')}
+            sx={{
+              minHeight: 44,
+              px: 1.75,
+              fontFamily: MONO,
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              textTransform: 'none',
+              color: gold,
+              borderColor: rgba(gold, 0.45),
+            }}
+          >
+            {copiedTimerCli ? 'Copied Timer Status CLI' : 'Copy Timer Status CLI'}
+          </Button>
+        </Box>
+        <Grid container spacing={1.25}>
+          <Grid xs={12} sm={4}>
+            <Box sx={{ p: 1.25, borderRadius: 1.25, bgcolor: subtleBg, border: `1px solid ${borderCol}` }}>
+              <Typography sx={{ fontFamily: MONO, fontSize: '0.66rem', fontWeight: 700, color: secondaryText, letterSpacing: '0.08em' }}>
+                NEXT TRIGGER
+              </Typography>
+              <Typography sx={{ fontFamily: MONO, fontSize: '0.76rem', fontWeight: 600, color: primaryText, mt: 0.35, wordBreak: 'break-word' }}>
+                {syncTimer?.nextTrigger || 'Not scheduled / offline'}
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid xs={12} sm={4}>
+            <Box sx={{ p: 1.25, borderRadius: 1.25, bgcolor: subtleBg, border: `1px solid ${borderCol}` }}>
+              <Typography sx={{ fontFamily: MONO, fontSize: '0.66rem', fontWeight: 700, color: secondaryText, letterSpacing: '0.08em' }}>
+                LAST SYNC RUN
+              </Typography>
+              <Typography sx={{ fontFamily: MONO, fontSize: '0.76rem', fontWeight: 600, color: primaryText, mt: 0.35, wordBreak: 'break-word' }}>
+                {lastSyncRun
+                  ? `${(lastSyncRun.finishedAt || lastSyncRun.startedAt || lastSyncRun.date || '—').slice(0, 19).replace('T', ' ')} · ${lastSyncRun.status.toUpperCase()}`
+                  : 'No live sync_runs telemetry'}
+              </Typography>
+            </Box>
+          </Grid>
+          <Grid xs={12} sm={4}>
+            <Box sx={{ p: 1.25, borderRadius: 1.25, bgcolor: subtleBg, border: `1px solid ${borderCol}` }}>
+              <Typography sx={{ fontFamily: MONO, fontSize: '0.66rem', fontWeight: 700, color: secondaryText, letterSpacing: '0.08em' }}>
+                CHANGED INGESTED
+              </Typography>
+              <Typography sx={{ fontFamily: MONO, fontSize: '0.76rem', fontWeight: 600, color: primaryText, mt: 0.35, wordBreak: 'break-word' }}>
+                {lastSyncRun
+                  ? `${lastSyncRun.conversationsIngested.toLocaleString()} convs · ${lastSyncRun.messagesIngested.toLocaleString()} msgs`
+                  : 'Watermarked incremental mode'}
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
 
       {/* 4-Tab Navigation Bar (44px+ touch targets, scrollable on mobile) */}
       <Box

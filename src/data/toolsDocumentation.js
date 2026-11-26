@@ -51,7 +51,7 @@ export const toolsDocumentation = {
   'chronicle': {
     whyUse: 'Unifies live Hermes + AGY continuity recall (proxied over Studio loopback to SQLite FTS5 on :8161) with a 100% offline browser JSONL/Markdown transcript analyzer, friction pattern radar, and verified Studio release chronicle.',
     problemSolved: 'Eliminates disconnected AI chat histories, repeated agent friction loops, unsanitized host-path leakage, and dead offline UI states by combining a hardened same-origin Studio proxy with a full client-side log parser and sanitized JSON/Markdown/CSV exporter.',
-    architecture: 'Hybrid browser + loopback architecture (v2.3.0): shared pure engine mirrored byte-identically between src/utils/chronicleEngine.js and server/chronicle-engine.mjs. Studio :3000 exposes hardened same-origin endpoints GET /api/studio/chronicle/summary, POST /api/studio/chronicle/recall, and GET /api/studio/chronicle/search guarded by strict loopback Host/Origin checks (403 on DNS-rebinding or cross-origin writes) and automatic ~/ home-path redaction. Pairs cleanly with zoth-memory-vault (:8161) SQLite FTS5 when local and runs 100% client-side when offline.',
+    architecture: 'Hybrid browser + loopback architecture (v2.3.0): shared pure engine mirrored byte-identically between src/utils/chronicleEngine.js and server/chronicle-engine.mjs. Studio :3000 exposes hardened same-origin endpoints GET /api/studio/chronicle/summary (including lastSync + chronicle-vault-sync.timer status), POST /api/studio/chronicle/recall, and GET /api/studio/chronicle/search guarded by strict loopback Host/Origin checks (403 on DNS-rebinding or cross-origin writes) and automatic ~/ home-path redaction. Pairs cleanly with zoth-memory-vault (:8161) SQLite FTS5 (0600 perms, ingest-time secret redaction) and chronicle-vault-sync.timer (30m watermarked sync) when local, and runs 100% client-side when offline.',
     aiAgentProtocol: {
       mcpTool: 'chronicle_vault_recall',
       description: 'Query live continuity memory, friction patterns, and FTS5 conversation history through the local zoth-memory-vault stdio MCP server or Studio loopback endpoints (/api/studio/chronicle/{summary,recall,search}).',
@@ -77,10 +77,11 @@ export const toolsDocumentation = {
     quickstart: [
       'zoth open chronicle',
       'zoth-memory-vault serve --port 8161',
-      'zoth-memory-vault sync-recent',
+      'zoth-memory-vault sync-recent --dry-run --json',
+      'zoth-memory-vault sync-recent --status --json',
+      'systemctl --user status chronicle-vault-sync.timer chronicle-vault-sync.service',
+      'journalctl --user -u chronicle-vault-sync.service -n 30 --no-pager',
       'zoth-memory-vault recall "zoth-studio-v2"',
-      'zoth-memory-vault patterns --json',
-      'zoth-memory-vault mcp',
       '# Same-origin Studio proxy: GET http://127.0.0.1:3000/api/studio/chronicle/summary'
     ],
     features: [
@@ -95,7 +96,7 @@ export const toolsDocumentation = {
   'zoth-memory-vault': {
     whyUse: 'Consolidates every Hermes Agent and AGY session into a single loopback-only SQLite FTS5 ledger so recurring friction, unfinished loops, breakage risks, and high-signal prompt playbooks stay searchable without cloud telemetry.',
     problemSolved: 'AI sessions scatter across disconnected CLI transcripts and IDE logs, causing agents to repeat the same mistakes, forget parked ideas, and break fragile unfinished work. Chronicle Vault mines those histories locally and injects live continuity briefs before edits begin.',
-    architecture: 'Zero-dependency Python 3 ThreadingHTTPServer bound strictly to 127.0.0.1:8161 (chronicle-vault.service) backed by SQLite FTS5, plus a native ZothOS CLI (/usr/local/bin/zoth-memory-vault) and stdio MCP server. Exposes /api/overview, /api/continuity/overview, /api/continuity/recall, /api/continuity/preflight, /api/patterns, /api/conversations, /api/playbook, and /api/analytics/models.',
+    architecture: 'Zero-dependency Python 3 ThreadingHTTPServer bound strictly to 127.0.0.1:8161 (chronicle-vault.service) with loopback Host/Origin 403 guards, paired with chronicle-vault-sync.timer / chronicle-vault-sync.service (watermarked 30m incremental sync across Hermes main, all profiles, webchat, AGY transcripts/history, and memory snapshots with fcntl.flock exclusion, ingest-time secret redaction, incremental FTS5 updates, and 0600 SQLite permissions).',
     aiAgentProtocol: {
       mcpTool: 'chronicle_vault_recall',
       description: 'Query past Hermes + AGY memories, surface unfinished loops and breakage warnings, and run prompt preflight checks over local SQLite history.',
@@ -118,9 +119,11 @@ export const toolsDocumentation = {
     },
     quickstart: [
       'zoth-memory-vault serve --port 8161',
-      'zoth-memory-vault sync-recent',
+      'zoth-memory-vault sync-recent --dry-run --json',
+      'zoth-memory-vault sync-recent --status --json',
+      'systemctl --user status chronicle-vault-sync.timer chronicle-vault-sync.service',
+      'journalctl --user -u chronicle-vault-sync.service -n 30 --no-pager',
       'zoth-memory-vault recall "zoth-studio-v2"',
-      'zoth-memory-vault patterns --json',
       'zoth-memory-vault mcp',
       '# Open standalone workstation at http://127.0.0.1:8161 or Studio route /tools/zoth-memory-vault'
     ],

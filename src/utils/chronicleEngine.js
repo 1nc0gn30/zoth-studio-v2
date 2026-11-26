@@ -865,3 +865,75 @@ export function buildChronicleMarkdownBrief({
 
   return sanitizeChronicleText(lines.join('\n')) + '\n';
 }
+
+/**
+ * Normalizes `:8161/api/overview`'s `last_sync` row with strict host-path sanitization.
+ */
+export function normalizeLastSync(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+  const startedAt = sanitizeChronicleText(raw.started_at || raw.startedAt || '');
+  const finishedAt = sanitizeChronicleText(raw.finished_at || raw.finishedAt || '');
+  return {
+    id: raw.id != null ? toSafeNumber(raw.id, 0) : null,
+    status: sanitizeChronicleText(raw.status || 'unknown').toLowerCase() || 'unknown',
+    startedAt: startedAt || null,
+    finishedAt: finishedAt || null,
+    date: formatChronicleTimestamp(finishedAt || startedAt),
+    conversationsIngested: toSafeNumber(raw.conversations_ingested ?? raw.conversationsIngested, 0),
+    messagesIngested: toSafeNumber(raw.messages_ingested ?? raw.messagesIngested, 0),
+    patternsFound: toSafeNumber(raw.patterns_found ?? raw.patternsFound, 0),
+    summary: sanitizeChronicleText(raw.summary || ''),
+  };
+}
+
+/**
+ * Normalizes `chronicle-vault-sync.timer` + `chronicle-vault-sync.service` status
+ * into a stable, host-path-free observability payload.
+ */
+export function normalizeSyncTimer(raw) {
+  if (!raw || typeof raw !== 'object' || raw.available === false) {
+    return {
+      available: false,
+      unit: 'chronicle-vault-sync.timer',
+      serviceUnit: 'chronicle-vault-sync.service',
+      active: false,
+      enabled: false,
+      activeState: sanitizeChronicleText(raw?.activeState || raw?.active_state || 'unavailable') || 'unavailable',
+      subState: sanitizeChronicleText(raw?.subState || raw?.sub_state || 'unknown') || 'unknown',
+      unitFileState: sanitizeChronicleText(raw?.unitFileState || raw?.unit_file_state || 'unknown') || 'unknown',
+      serviceActiveState: sanitizeChronicleText(raw?.serviceActiveState || raw?.service_active_state || 'unknown') || 'unknown',
+      cadence: '30m',
+      nextTrigger: '',
+      lastTrigger: '',
+      result: '',
+      exitStatus: null,
+      lastDurationSec: null,
+      memPeakMb: null,
+    };
+  }
+
+  const activeState = sanitizeChronicleText(raw.activeState || raw.active_state || 'unknown') || 'unknown';
+  const unitFileState = sanitizeChronicleText(raw.unitFileState || raw.unit_file_state || 'unknown') || 'unknown';
+  const exitRaw = raw.exitStatus ?? raw.exit_status;
+  const memRaw = raw.memPeakMb ?? raw.mem_peak_mb;
+  const durRaw = raw.lastDurationSec ?? raw.last_duration_sec;
+
+  return {
+    available: true,
+    unit: sanitizeChronicleText(raw.unit || 'chronicle-vault-sync.timer') || 'chronicle-vault-sync.timer',
+    serviceUnit: sanitizeChronicleText(raw.serviceUnit || raw.service_unit || 'chronicle-vault-sync.service') || 'chronicle-vault-sync.service',
+    active: Boolean(raw.active ?? activeState === 'active'),
+    enabled: Boolean(raw.enabled ?? unitFileState === 'enabled'),
+    activeState,
+    subState: sanitizeChronicleText(raw.subState || raw.sub_state || 'unknown') || 'unknown',
+    unitFileState,
+    serviceActiveState: sanitizeChronicleText(raw.serviceActiveState || raw.service_active_state || 'unknown') || 'unknown',
+    cadence: sanitizeChronicleText(raw.cadence || '30m') || '30m',
+    nextTrigger: sanitizeChronicleText(raw.nextTrigger || raw.next_trigger || ''),
+    lastTrigger: sanitizeChronicleText(raw.lastTrigger || raw.last_trigger || ''),
+    result: sanitizeChronicleText(raw.result || ''),
+    exitStatus: exitRaw != null && Number.isFinite(Number(exitRaw)) ? Number(exitRaw) : null,
+    lastDurationSec: durRaw != null && Number.isFinite(Number(durRaw)) ? Number(durRaw) : null,
+    memPeakMb: memRaw != null && Number.isFinite(Number(memRaw)) ? Number(memRaw) : null,
+  };
+}

@@ -110,6 +110,8 @@ export default function ChronicleVaultGodModeTool({ showSupportBar = false }) {
   const [searchHits, setSearchHits] = useState([]);
   const [searchTotal, setSearchTotal] = useState(null);
   const [searchBusy, setSearchBusy] = useState(false);
+  const [lastSyncRun, setLastSyncRun] = useState(null);
+  const [syncTimer, setSyncTimer] = useState(null);
   const [lastSync, setLastSync] = useState(null);
   const alive = useRef(true);
 
@@ -131,6 +133,8 @@ export default function ChronicleVaultGodModeTool({ showSupportBar = false }) {
   const refresh = useCallback(async () => {
     const summary = await proxyGet('/api/studio/chronicle/summary');
     if (!alive.current) return;
+    setSyncTimer(summary.syncTimer || null);
+    setLastSyncRun(summary.lastSync || null);
     if (summary.online) {
       setStats(summary.stats || null);
       setPatterns(Array.isArray(summary.patterns) ? summary.patterns : []);
@@ -366,6 +370,58 @@ export default function ChronicleVaultGodModeTool({ showSupportBar = false }) {
             {connStatus === 'live' ? 'Run a recall query to inspect connected Hermes + AGY threads.' : 'Start chronicle-vault.service on :8161 to query live continuity.'}
           </Typography>
         )}
+      </SovereignCard>
+
+      <SovereignCard
+        title="INCREMENTAL SYNC TIMER"
+        subtitle="chronicle-vault-sync.timer · watermarked 30m Hermes + AGY sync"
+        accent={accent}
+      >
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.85, mb: 1.25 }}>
+          <Chip
+            label={syncTimer?.active ? `ACTIVE · ${syncTimer.cadence || '30m'}` : String(syncTimer?.activeState || 'OFFLINE').toUpperCase()}
+            size="small"
+            sx={{
+              fontFamily: MONO,
+              fontSize: 10.5,
+              fontWeight: 700,
+              height: 24,
+              color: syncTimer?.active ? emerald : amber,
+              border: `1px solid ${rgba(syncTimer?.active ? emerald : amber, 0.4)}`,
+              bgcolor: rgba(syncTimer?.active ? emerald : amber, 0.09),
+            }}
+          />
+          {syncTimer?.exitStatus != null && (
+            <Chip
+              label={`EXIT ${syncTimer.exitStatus}/${String(syncTimer.result || 'OK').toUpperCase()}`}
+              size="small"
+              sx={{
+                fontFamily: MONO,
+                fontSize: 10.5,
+                fontWeight: 700,
+                height: 24,
+                color: syncTimer.exitStatus === 0 ? emerald : crimson,
+                border: `1px solid ${rgba(syncTimer.exitStatus === 0 ? emerald : crimson, 0.35)}`,
+              }}
+            />
+          )}
+          {syncTimer?.memPeakMb != null && (
+            <Chip label={`PEAK ${syncTimer.memPeakMb} MB`} size="small" sx={{ fontFamily: MONO, fontSize: 10.5, height: 24 }} />
+          )}
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.65 }}>
+          <Typography sx={{ fontFamily: MONO, fontSize: 11.5, color: 'text.secondary' }}>
+            Next trigger: <strong style={{ color: 'inherit' }}>{syncTimer?.nextTrigger || 'Offline / unscheduled'}</strong>
+          </Typography>
+          <Typography sx={{ fontFamily: MONO, fontSize: 11.5, color: 'text.secondary' }}>
+            Last sync: <strong style={{ color: 'inherit' }}>{lastSyncRun ? `${(lastSyncRun.finishedAt || lastSyncRun.startedAt || '—').slice(0, 19).replace('T', ' ')} (${lastSyncRun.conversationsIngested} convs · ${lastSyncRun.messagesIngested} msgs)` : 'No run data'}</strong>
+          </Typography>
+          {lastSyncRun?.summary && (
+            <Typography variant="body2" sx={{ fontSize: 12, color: 'text.secondary', mt: 0.25 }}>
+              {lastSyncRun.summary}
+            </Typography>
+          )}
+        </Box>
       </SovereignCard>
 
       <SovereignCard title="ZOTHOS CLI & MCP QUICKSTART" subtitle="Loopback-only SQLite FTS5 & MCP stdio server" accent={accent}>

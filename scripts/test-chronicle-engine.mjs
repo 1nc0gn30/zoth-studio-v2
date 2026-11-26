@@ -22,6 +22,8 @@ import {
   neutralizeCsvCell,
   buildChronicleCsvExport,
   buildChronicleMarkdownBrief,
+  normalizeLastSync,
+  normalizeSyncTimer,
 } from '../src/utils/chronicleEngine.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -217,4 +219,43 @@ test('CSV export neutralizes formula injection and Markdown brief + release mile
   assert.ok(!brief.includes('e3b0c44298'));
   assert.ok(!brief.includes(FAKE_HOME));
   assert.ok(STUDIO_RELEASE_MILESTONES.length >= 5);
+});
+
+test('normalizeLastSync & normalizeSyncTimer sanitize host paths and handle unavailable systemd cleanly', () => {
+  const ls = normalizeLastSync({
+    id: 214,
+    status: 'ok',
+    started_at: '2026-11-26T12:25:00-05:00',
+    finished_at: '2026-11-26T12:25:02-05:00',
+    conversations_ingested: 2,
+    messages_ingested: 18,
+    summary: `Incremental sync at ${FAKE_HOME}NullAITech/zoth-memory-vault`,
+  });
+  assert.equal(ls.id, 214);
+  assert.equal(ls.status, 'ok');
+  assert.equal(ls.date, '2026-11-26');
+  assert.equal(ls.conversationsIngested, 2);
+  assert.equal(ls.messagesIngested, 18);
+  assert.ok(!ls.summary.includes(FAKE_HOME));
+
+  const timerOk = normalizeSyncTimer({
+    available: true,
+    activeState: 'active',
+    unitFileState: 'enabled',
+    nextTrigger: 'Thu 2026-11-26 12:55:00 EST',
+    result: 'success',
+    exitStatus: 0,
+    lastDurationSec: 1.4,
+    memPeakMb: 42.5,
+  });
+  assert.equal(timerOk.available, true);
+  assert.equal(timerOk.active, true);
+  assert.equal(timerOk.enabled, true);
+  assert.equal(timerOk.exitStatus, 0);
+  assert.equal(timerOk.memPeakMb, 42.5);
+
+  const timerOff = normalizeSyncTimer({ available: false });
+  assert.equal(timerOff.available, false);
+  assert.equal(timerOff.active, false);
+  assert.equal(timerOff.cadence, '30m');
 });
