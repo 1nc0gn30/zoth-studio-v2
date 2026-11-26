@@ -708,38 +708,43 @@ export const toolsDocumentation = {
   },
 
   'aeo-graph-engine': {
-    whyUse: 'Answer Engine Optimization (AEO) and Agent Experience (AX) graph builder that generates structured JSON-LD Schema.org graphs so AI agents and LLMs can cite your project accurately.',
-    problemSolved: 'Stops AI hallucination about your brand or software by providing clean, machine-readable knowledge graphs directly to Perplexity, Claude, ChatGPT, and Google Search.',
-    architecture: 'TypeScript / Node.js compiler validating against Schema.org RFC standards and Google Rich Snippet guidelines.',
+    whyUse: 'Zero-dependency Answer Engine Optimization (AEO/GEO) compiler and validator that produces linked Schema.org JSON-LD @graph ontologies, llms.txt & llms-full.txt manifests, ai.txt policies, robots.txt crawler rules, and 12 MCP tools.',
+    problemSolved: 'Eliminates AI entity ambiguity and broken crawler policies by emitting validated Schema.org linked data, machine manifests, and SSRF-hardened live audits for Perplexity, ChatGPT Search, Claude, and Google AI Overviews.',
+    architecture: 'Python 3.9+ standard-library engine (core.py, validator.py, scanner.py, bot_inspector.py, knowledge_graph.py, claim_evidence_matrix.py, framework_exporter.py, mcp_server.py, ui_server.py on 127.0.0.1:8127) paired with a zero-egress dual-theme browser Studio.',
     aiAgentProtocol: {
-      mcpTool: 'generate_aeo_graph',
-      description: 'Generate a validated Schema.org JSON-LD knowledge graph for a website or tool repository.',
-      cliExample: 'aeo-graph build --config ./site.config.js --out public/schema.jsonld',
+      mcpTool: 'aeo_generate_bundle',
+      description: 'Compile a validated Schema.org JSON-LD @graph, llms.txt, llms-full.txt, ai.txt, and robots.txt bundle. Full MCP server exposes 12 tools: aeo_scan_site, aeo_synthesize_prompt, aeo_generate_bundle, aeo_inject_html, aeo_validate, aeo_get_framework_snippets, aeo_simulate_citation, aeo_visualize_schema, aeo_crawl_sitemap, aeo_extract_knowledge_graph, aeo_analyze_claims, aeo_generate_claim_matrix.',
+      cliExample: 'aeo-graph-engine --generate-all --site-name "MyApp" --domain "myapp.dev" --output-dir ./dist_aeo',
       inputSchema: {
         type: 'object',
         properties: {
-          entityType: { type: 'string', enum: ['SoftwareApplication', 'Organization', 'TechArticle'] },
-          name: { type: 'string' },
-          description: { type: 'string' }
+          site_name: { type: 'string' },
+          domain: { type: 'string' },
+          niche: { type: 'string', enum: ['developer_tools', 'saas', 'ai_swarm', 'cybersecurity', 'spatial_3d', 'creator', 'ecommerce', 'local_business'] },
+          output_dir: { type: 'string' }
         },
-        required: ['entityType', 'name', 'description']
+        required: ['site_name', 'domain']
       },
       outputSchema: {
-        jsonLdGraph: 'object',
-        validationErrors: ['string']
+        schema: 'object',
+        llms_txt: 'string',
+        ai_txt: 'string',
+        robots_txt: 'string',
+        score: 'number'
       }
     },
     quickstart: [
-      'git clone https://github.com/NullAITech/aeo-graph-engine.git',
-      'cd aeo-graph-engine && npm install',
-      'npm test'
+      'git clone https://github.com/1nc0gn30/aeo-graph-engine.git',
+      'cd aeo-graph-engine && pip install -e .',
+      'python3 server.py --port 8127',
+      'PYTHONPATH=src python3 -m pytest -q'
     ],
     features: [
-      'Schema.org graph validator with zero external network requests',
-      'Answer Engine Optimization keyword matrix generator',
-      'Automated sitemap.xml and robots.txt crawler rule sync',
-      'Agent Experience (AX) machine-readable endpoints authoring',
-      'Direct integration with Vite and Astro static build pipelines'
+      'Linked Schema.org JSON-LD @graph compiler & array-@type validator',
+      'Standardized llms.txt, llms-full.txt, ai.txt & AI crawler robots.txt generator',
+      'SSRF-hardened live site scanner, offline HTML paste auditor & 10-bot WAF probe',
+      '12-tool JSON-RPC 2.0 stdio MCP server (python3 -m aeo_graph_engine.mcp_server)',
+      '15+ provider local/cloud AI hub (AGY Bridge, Ollama, AZOTH, local CLIs, cloud APIs)'
     ]
   },
 

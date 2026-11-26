@@ -15,95 +15,92 @@ import {
   FormControlLabel,
   Unstable_Grid2 as Grid,
   LinearProgress,
+  Tabs,
+  Tab,
+  IconButton,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import HubIcon from '@mui/icons-material/Hub';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import DownloadIcon from '@mui/icons-material/Download';
+import SyncIcon from '@mui/icons-material/Sync';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
-import { SovereignEyebrow, titleBaseSx } from '../sovereign/typography.jsx';
+import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
+const headingSans = '"Space Grotesk", "Inter", system-ui, -apple-system, sans-serif';
 
 const PRESET_PROFILES = {
   saas: {
-    label: 'Sovereign Micro-SaaS Application',
+    label: 'Open-Access Developer Workbench',
     entityType: 'SoftwareApplication',
-    name: 'AEO Graph Engine Studio',
+    name: 'AEO Graph Engine & Studio',
     url: 'https://aeo-graph-engine.netlify.app',
     category: 'DeveloperApplication',
     price: '0.00',
-    phone: '+1-555-555-0199',
-    email: '1nc0gn30@nullai.tech',
-    creator: '1nc0gn30 (1nc0gn30 • NullAI)',
-    sameAs: 'https://github.com/1nc0gn30, https://nullai.tech, https://www.nullai.tech',
+    email: 'architect@nullai.tech',
+    creator: 'Neal Frazier Tech (@1nc0gn30)',
+    sameAs: 'https://github.com/1nc0gn30/aeo-graph-engine, https://nullai.tech',
     description:
-      'Deterministic Answer Engine Optimization (AEO) and Schema.org @graph compiler engineered for instant citation by Perplexity, Google SGE, GPTBot, and ClaudeBot.',
+      'Zero-dependency Python and browser compiler for linked Schema.org JSON-LD @graph ontologies, llms.txt manifests, ai.txt policies, and 12 MCP tools.',
     faqs: [
       {
         q: 'How does AEO Graph Engine improve AI search citations?',
-        a: 'By linking SoftwareApplication, Organization, and FAQPage nodes via deterministic @id URIs in a unified JSON-LD @graph, eliminating entity disambiguation drift for frontier LLM crawlers.',
+        a: 'By linking Organization, WebSite, SoftwareApplication, and FAQPage nodes via canonical @id URIs alongside llms.txt and explicit crawler directives.',
       },
       {
-        q: 'Does this tool transmit my schema or business data to external servers?',
-        a: 'No. 100% of AST graph compilation, entity validation, and crawler readiness scoring executes locally in your browser with zero network egress.',
+        q: 'Does the engine require external API keys or paywalls?',
+        a: 'No. Every generator, validator, framework exporter, and local MCP server runs 100% open-access on local loopback with zero paywalls.',
       },
       {
-        q: 'Who engineered AEO Graph Engine Studio?',
-        a: 'Engineered by 1nc0gn30 (1nc0gn30 • NullAI) on the NullAI Platform. Direct studio contact: (555) 555-0199 or 1nc0gn30@nullai.tech.',
+        q: 'Which MCP tools are exposed by the Python server?',
+        a: '12 stdio JSON-RPC 2.0 tools including aeo_scan_site, aeo_generate_bundle, aeo_validate, aeo_extract_knowledge_graph, and aeo_generate_claim_matrix.',
       },
     ],
   },
   os: {
-    label: 'ZothOS Sovereign Linux Distribution',
+    label: 'ZothOS Local AI Workstation',
     entityType: 'SoftwareApplication',
-    name: 'ZothOS v1.0 Sovereign AI Workstation',
-    url: 'https://zothos.nullai.tech',
+    name: 'ZothOS Sovereign Linux Workstation',
+    url: 'https://zoth.nullai.tech',
     category: 'OperatingSystem',
     price: '0.00',
-    phone: '+1-555-555-0199',
-    email: '1nc0gn30@nullai.tech',
-    creator: '1nc0gn30 (1nc0gn30 • NullAI)',
-    sameAs: 'https://github.com/1nc0gn30/zothos, https://zoth.nullai.tech, https://nullai.tech',
+    email: 'architect@nullai.tech',
+    creator: 'Neal Frazier Tech (@1nc0gn30)',
+    sameAs: 'https://github.com/1nc0gn30/zoth-os, https://zoth.nullai.tech, https://nullai.tech',
     description:
-      'Debian 12 Bookworm live workstation pre-wired with 23 loopback AI daemons, 83 desktop launchers across 4 tactical pillars, and offline-capable cryptographic telemetry.',
+      'Debian-based local workstation wired with loopback AI daemons, offline cryptographic tooling, and deterministic CLI/MCP utilities.',
     faqs: [
       {
-        q: 'What is included in the ZothOS desktop architecture?',
-        a: '10 Root Flagship launchers plus 4 categorized folders (AI Agents & Dev, Security & Privacy, ZothOS Daemons, Media & Utilities) managed by zoth-control-center.',
+        q: 'How are local ZothOS tool daemons isolated?',
+        a: 'Services bind strictly to 127.0.0.1 loopback with validated loopback CORS and zero unsolicited cloud telemetry.',
       },
       {
-        q: 'How are the 23 local AI daemons orchestrated?',
-        a: 'Through the ZothOS Sovereign Conductor on loopback ports :8094–:8121 and :9393 with strict <60°C thermal governor protection.',
+        q: 'How do I launch AEO Graph Engine locally?',
+        a: 'Run python3 server.py --port 8127 or aeo-graph-engine serve --port 8127 to expose both the browser Studio and REST APIs.',
       },
     ],
   },
   agency: {
-    label: '1nc0gn30 • NullAI — Engineering Studio',
+    label: 'Neal Frazier Tech — Engineering Studio',
     entityType: 'ProfessionalService',
-    name: '1nc0gn30 • NullAI',
-    url: 'https://www.nullai.tech',
+    name: 'Neal Frazier Tech',
+    url: 'https://nealfrazier.tech',
     category: 'TechnologyConsulting',
-    price: '100.00',
-    phone: '+1-555-555-0199',
-    email: '1nc0gn30@nullai.tech',
-    creator: '1nc0gn30',
-    sameAs: 'https://github.com/1nc0gn30, https://nullai.tech, https://zoth.nullai.tech',
+    price: '0.00',
+    email: 'architect@nullai.tech',
+    creator: 'Neal Frazier (@1nc0gn30)',
+    sameAs: 'https://github.com/1nc0gn30, https://nullai.tech, https://nealfrazier.tech',
     description:
-      'Custom high-speed web engineering, Core Web Vitals optimization, and sovereign AI infrastructure in Coastal Virginia and nationwide.',
+      'High-speed web engineering, Core Web Vitals optimization, Schema.org knowledge graphs, and local-first AI tooling.',
     faqs: [
       {
-        q: 'How can I contact 1nc0gn30 • NullAI directly?',
-        a: 'Call or text (555) 555-0199 or email 1nc0gn30@nullai.tech for direct engineering dispatch.',
-      },
-      {
-        q: 'Do you retain full code and domain ownership?',
-        a: 'Yes. Every deployment ships with 100% client repository and domain ownership, clean Schema.org JSON-LD, and zero monthly agency lock-in.',
+        q: 'Do clients retain full repository and domain ownership?',
+        a: 'Yes. Deployments ship with clean Schema.org JSON-LD, llms.txt manifests, and zero vendor lock-in.',
       },
     ],
   },
@@ -117,9 +114,51 @@ export default function AeoGraphEngineGodModeTool() {
   const [profile, setProfile] = useState(PRESET_PROFILES.saas);
   const [includeSpeakable, setIncludeSpeakable] = useState(true);
   const [includeBreadcrumb, setIncludeBreadcrumb] = useState(true);
+  const [outputTab, setOutputTab] = useState('jsonld');
   const [copied, setCopied] = useState(false);
+  const [daemonStatus, setDaemonStatus] = useState({ reachable: false, version: null, syncedScore: null });
 
   const canvasRef = useRef(null);
+
+  // Theme-aware tokens (Editorial Ivory Light & Obsidian Noir Dark)
+  const palette = useMemo(
+    () => ({
+      paperBg: isDark ? 'rgba(10,12,18,0.94)' : '#FFFFFF',
+      cardBg: isDark ? 'rgba(255,255,255,0.03)' : '#F8F5EE',
+      codeBg: isDark ? '#07090F' : '#F4F1EA',
+      codeHeaderBg: isDark ? 'rgba(212,175,55,0.09)' : 'rgba(138,97,0,0.08)',
+      codeText: isDark ? '#E2E8F0' : '#1E293B',
+      border: isDark ? 'rgba(56,189,248,0.28)' : 'rgba(3,105,161,0.24)',
+      goldBorder: isDark ? 'rgba(212,175,55,0.32)' : 'rgba(138,97,0,0.28)',
+      accentSky: isDark ? '#38BDF8' : '#0369A1',
+      accentEmerald: isDark ? '#34D399' : '#047857',
+      accentGold: isDark ? '#E2BE4C' : '#8A6100',
+      canvasBg: isDark ? '#070A12' : '#FAF7F0',
+      canvasNodeFill: isDark ? '#0E1320' : '#FFFFFF',
+      canvasLabel: isDark ? '#EDEFF2' : '#141821',
+      canvasEdge: isDark ? 'rgba(56,189,248,0.34)' : 'rgba(3,105,161,0.30)',
+      progressTrack: isDark ? 'rgba(255,255,255,0.10)' : 'rgba(15,23,42,0.10)',
+    }),
+    [isDark]
+  );
+
+  // Probe optional local :8127 daemon cleanly on mount
+  useEffect(() => {
+    let active = true;
+    const ctrl = new AbortController();
+    fetch('http://127.0.0.1:8127/health', { signal: ctrl.signal })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (active && d && d.status === 'healthy') {
+          setDaemonStatus((prev) => ({ ...prev, reachable: true, version: d.version || '2.1.0' }));
+        }
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+      ctrl.abort();
+    };
+  }, []);
 
   const handlePresetChange = (key) => {
     setPresetKey(key);
@@ -146,8 +185,8 @@ export default function AeoGraphEngineGodModeTool() {
       faqs: [
         ...prev.faqs,
         {
-          q: 'How is cryptographic provenance verified?',
-          a: 'Via deterministic SHA-256 signature validation directly in the client browser.',
+          q: 'How is structured data verified?',
+          a: 'Via deterministic Schema.org @graph validation and JSON-LD syntax linting.',
         },
       ],
     }));
@@ -161,7 +200,7 @@ export default function AeoGraphEngineGodModeTool() {
   };
 
   const compiledGraph = useMemo(() => {
-    const cleanUrl = (profile.url || 'https://nullai.tech').replace(/\/$/, '');
+    const cleanUrl = (profile.url || '').trim().replace(/\/$/, '') || 'https://example.com';
     const sameAsArr = (profile.sameAs || '')
       .split(',')
       .map((s) => s.trim())
@@ -170,25 +209,24 @@ export default function AeoGraphEngineGodModeTool() {
     const orgNode = {
       '@type': 'Organization',
       '@id': `${cleanUrl}/#organization`,
-      name: profile.creator || '1nc0gn30 • NullAI',
+      name: (profile.creator || '').trim() || (profile.name || '').trim(),
       url: cleanUrl,
-      telephone: profile.phone || '+1-555-555-0199',
-      email: profile.email || '1nc0gn30@nullai.tech',
+      ...(profile.email?.trim() ? { email: profile.email.trim() } : {}),
       ...(sameAsArr.length > 0 ? { sameAs: sameAsArr } : {}),
     };
 
     const primaryNode = {
-      '@type': profile.entityType || 'SoftwareApplication',
+      '@type': (profile.entityType || '').trim() || 'SoftwareApplication',
       '@id': `${cleanUrl}/#primary-entity`,
-      name: profile.name,
+      name: (profile.name || '').trim(),
       url: cleanUrl,
-      description: profile.description,
-      applicationCategory: profile.category,
+      description: (profile.description || '').trim(),
+      applicationCategory: (profile.category || '').trim() || 'DeveloperApplication',
       operatingSystem: 'Web, Linux, macOS, Windows',
       creator: { '@id': `${cleanUrl}/#organization` },
       offers: {
         '@type': 'Offer',
-        price: profile.price || '19.00',
+        price: (profile.price || '').trim() || '0.00',
         priceCurrency: 'USD',
         availability: 'https://schema.org/InStock',
       },
@@ -209,22 +247,23 @@ export default function AeoGraphEngineGodModeTool() {
         '@type': 'BreadcrumbList',
         '@id': `${cleanUrl}/#breadcrumb`,
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'NullAI Platform', item: 'https://nullai.tech' },
-          { '@type': 'ListItem', position: 2, name: profile.name, item: cleanUrl },
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${cleanUrl}/` },
+          { '@type': 'ListItem', position: 2, name: (profile.name || 'App').trim(), item: cleanUrl },
         ],
       });
     }
 
-    if (profile.faqs && profile.faqs.length > 0) {
+    const validFaqs = (profile.faqs || []).filter((f) => f.q?.trim() && f.a?.trim());
+    if (validFaqs.length > 0) {
       graphNodes.push({
         '@type': 'FAQPage',
         '@id': `${cleanUrl}/#faq`,
-        mainEntity: profile.faqs.map((f) => ({
+        mainEntity: validFaqs.map((f) => ({
           '@type': 'Question',
-          name: f.q,
+          name: f.q.trim(),
           acceptedAnswer: {
             '@type': 'Answer',
-            text: f.a,
+            text: f.a.trim(),
           },
         })),
       });
@@ -236,50 +275,138 @@ export default function AeoGraphEngineGodModeTool() {
     };
   }, [profile, includeSpeakable, includeBreadcrumb]);
 
-  const jsonOutput = useMemo(
-    () => `<script type="application/ld+json">\n${JSON.stringify(compiledGraph, null, 2)}\n</script>`,
-    [compiledGraph]
-  );
+  const outputs = useMemo(() => {
+    const cleanUrl = (profile.url || 'https://example.com').trim().replace(/\/$/, '');
+    const name = (profile.name || 'Unnamed Entity').trim();
+    const desc = (profile.description || '').trim();
+    const validFaqs = (profile.faqs || []).filter((f) => f.q?.trim() && f.a?.trim());
 
+    const jsonld = `<script type="application/ld+json">\n${JSON.stringify(compiledGraph, null, 2)}\n</script>`;
+
+    const llms = [
+      `# ${name}`,
+      '',
+      `> ${desc || 'Structured entity summary.'}`,
+      '',
+      `Official Website: ${cleanUrl}/`,
+      '',
+      '## Canonical Machine Endpoints',
+      `- [Schema.org @graph](${cleanUrl}/schema-graph.json): Linked entity graph`,
+      `- [AI Policy](${cleanUrl}/ai.txt): Citation and access manifest`,
+      `- [Crawler Rules](${cleanUrl}/robots.txt): AI search crawler directives`,
+      ...(validFaqs.length
+        ? [
+            '',
+            '## Frequently Asked Questions',
+            ...validFaqs.flatMap((f) => [`### Q: ${f.q.trim()}`, f.a.trim(), '']),
+          ]
+        : []),
+    ].join('\n');
+
+    const aiTxt = [
+      `# ai.txt — Machine & AI Agent Access Manifest`,
+      `User-Agent: *`,
+      `Allow: /`,
+      `Canonical-URL: ${cleanUrl}/`,
+      `Publisher: ${(profile.creator || name).trim()}`,
+      `Schema-Org-Graph: ${cleanUrl}/schema-graph.json`,
+      `LLMs-Txt: ${cleanUrl}/llms.txt`,
+      `Citation-Required: True`,
+    ].join('\n');
+
+    const robots = [
+      `# robots.txt for ${name}`,
+      `User-agent: *`,
+      `Allow: /`,
+      '',
+      `User-agent: GPTBot`,
+      `Allow: /`,
+      '',
+      `User-agent: OAI-SearchBot`,
+      `Allow: /`,
+      '',
+      `User-agent: ClaudeBot`,
+      `Allow: /`,
+      '',
+      `User-agent: PerplexityBot`,
+      `Allow: /`,
+      '',
+      `User-agent: Applebot-Extended`,
+      `Allow: /`,
+      '',
+      `Sitemap: ${cleanUrl}/sitemap.xml`,
+    ].join('\n');
+
+    return { jsonld, llms, aiTxt, robots };
+  }, [profile, compiledGraph]);
+
+  // Honest 0-100 validation score (no artificial 60/100 or 88% floor!)
   const readinessMetrics = useMemo(() => {
-    const sameAsCount = (profile.sameAs || '').split(',').filter((x) => x.trim()).length;
-    const faqCount = profile.faqs?.length || 0;
+    const hasName = Boolean(profile.name?.trim());
+    const hasValidUrl = /^https?:\/\/[A-Za-z0-9.-]+\.[A-Za-z]{2,}/.test((profile.url || '').trim());
+    const hasDesc = (profile.description || '').trim().length >= 30;
+    const hasCreator = Boolean(profile.creator?.trim());
+    const sameAsCount = (profile.sameAs || '').split(',').filter((x) => x.trim().startsWith('http')).length;
+    const validFaqCount = (profile.faqs || []).filter((f) => f.q?.trim() && f.a?.trim()).length;
+
+    let score = 0;
+    if (hasName) score += 18;
+    if (hasValidUrl) score += 18;
+    if (hasDesc) score += 18;
+    if (hasCreator) score += 10;
+    score += Math.min(12, sameAsCount * 6);
+    score += Math.min(14, validFaqCount * 7);
+    if (includeSpeakable) score += 5;
+    if (includeBreadcrumb) score += 5;
+
     const idLinks = compiledGraph['@graph'].length;
-    const score = Math.min(
-      100,
-      55 +
-        (sameAsCount >= 2 ? 12 : 5) +
-        Math.min(15, faqCount * 5) +
-        (includeSpeakable ? 9 : 0) +
-        (includeBreadcrumb ? 9 : 0)
-    );
+    const issues = [];
+    if (!hasName) issues.push('Missing Entity Name');
+    if (!hasValidUrl) issues.push('Canonical URL must be a valid https:// domain');
+    if (!hasDesc) issues.push('Description under 30 chars');
+    if (validFaqCount === 0) issues.push('Add at least 1 FAQPage Q&A pair');
+
     return {
-      score,
-      sameAsCount,
-      faqCount,
+      score: Math.min(100, score),
+      issues,
       idLinks,
       crawlers: [
-        { name: 'PerplexityBot', status: 'OPTIMAL', score: Math.min(100, score + 2) },
-        { name: 'Google SGE / Gemini', status: 'VERIFIED', score },
-        { name: 'GPTBot / SearchGPT', status: 'OPTIMAL', score: Math.min(100, score + 1) },
-        { name: 'ClaudeBot / Anthropic', status: 'VERIFIED', score: Math.max(88, score - 1) },
+        { name: 'PerplexityBot', score: Math.min(100, Math.round(score * (validFaqCount > 0 ? 1 : 0.82))) },
+        { name: 'Google AI Overviews', score },
+        { name: 'GPTBot / Search', score: Math.min(100, Math.round(score * (hasValidUrl ? 1 : 0.75))) },
+        { name: 'ClaudeBot', score: Math.min(100, Math.round(score * (hasDesc ? 1 : 0.8))) },
       ],
     };
   }, [profile, compiledGraph, includeSpeakable, includeBreadcrumb]);
 
-  // Kinetic Entity Graph Visualizer Canvas
+  const validateOnLocalDaemon = async () => {
+    try {
+      const res = await fetch('http://127.0.0.1:8127/api/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ schema: compiledGraph }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setDaemonStatus((prev) => ({ ...prev, reachable: true, syncedScore: data.score }));
+      }
+    } catch {}
+  };
+
+  // Theme-Aware Entity Graph Canvas (respects prefers-reduced-motion)
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
+    const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
     let raf;
     let t = 0;
 
     const render = () => {
-      t += 0.025;
+      if (!reducedMotion) t += 0.02;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const w = canvas.clientWidth || 480;
-      const h = canvas.clientHeight || 220;
+      const h = canvas.clientHeight || 200;
       if (canvas.width !== w * dpr || canvas.height !== h * dpr) {
         canvas.width = w * dpr;
         canvas.height = h * dpr;
@@ -290,107 +417,98 @@ export default function AeoGraphEngineGodModeTool() {
 
       const cx = w * 0.5;
       const cy = h * 0.5;
+      const validFaqs = (profile.faqs || []).filter((f) => f.q?.trim() && f.a?.trim()).length;
 
       const nodes = [
-        { label: '@id/#primary', x: cx, y: cy, r: 22, color: '#38BDF8' },
-        {
-          label: '@id/#organization',
-          x: cx - 135,
-          y: cy - 48 + Math.sin(t) * 6,
-          r: 16,
-          color: '#D4AF37',
-        },
-        {
-          label: `@id/#faq (${profile.faqs?.length || 0})`,
-          x: cx + 135,
-          y: cy - 45 + Math.cos(t * 0.9) * 6,
-          r: 16,
-          color: '#34D399',
-        },
+        { label: '@id/#primary', x: cx, y: cy, r: 21, color: palette.accentSky },
+        { label: '@id/#organization', x: cx - 132, y: cy - 46 + Math.sin(t) * 4, r: 15, color: palette.accentGold },
+        ...(validFaqs > 0
+          ? [{ label: `@id/#faq (${validFaqs})`, x: cx + 132, y: cy - 44 + Math.cos(t * 0.9) * 4, r: 15, color: palette.accentEmerald }]
+          : []),
         ...(includeSpeakable
-          ? [
-              {
-                label: 'SpeakableSpec',
-                x: cx - 115,
-                y: cy + 56 + Math.cos(t * 1.1) * 5,
-                r: 14,
-                color: '#C084FC',
-              },
-            ]
+          ? [{ label: 'SpeakableSpec', x: cx - 114, y: cy + 54 + Math.cos(t * 1.1) * 3, r: 13, color: isDark ? '#C084FC' : '#7E22CE' }]
           : []),
         ...(includeBreadcrumb
-          ? [
-              {
-                label: '@id/#breadcrumb',
-                x: cx + 120,
-                y: cy + 56 + Math.sin(t * 1.2) * 5,
-                r: 14,
-                color: '#F59E0B',
-              },
-            ]
+          ? [{ label: '@id/#breadcrumb', x: cx + 118, y: cy + 54 + Math.sin(t * 1.2) * 3, r: 13, color: isDark ? '#F59E0B' : '#B45309' }]
           : []),
       ];
 
-      // Draw edges + animated data packets
       for (let i = 1; i < nodes.length; i++) {
         const n = nodes[i];
         ctx.beginPath();
         ctx.moveTo(cx, cy);
         ctx.lineTo(n.x, n.y);
-        ctx.strokeStyle = 'rgba(56,189,248,0.28)';
-        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = palette.canvasEdge;
+        ctx.lineWidth = 1.6;
         ctx.stroke();
 
-        const p = (t * 0.45 + i * 0.25) % 1;
-        const px = cx + (n.x - cx) * p;
-        const py = cy + (n.y - cy) * p;
-        ctx.beginPath();
-        ctx.arc(px, py, 3, 0, Math.PI * 2);
-        ctx.fillStyle = n.color;
-        ctx.fill();
+        if (!reducedMotion) {
+          const p = (t * 0.45 + i * 0.25) % 1;
+          ctx.beginPath();
+          ctx.arc(cx + (n.x - cx) * p, cy + (n.y - cy) * p, 3, 0, Math.PI * 2);
+          ctx.fillStyle = n.color;
+          ctx.fill();
+        }
       }
 
-      // Draw nodes
       nodes.forEach((n) => {
         ctx.beginPath();
         ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(8,8,14,0.92)';
+        ctx.fillStyle = palette.canvasNodeFill;
         ctx.fill();
         ctx.lineWidth = 2;
         ctx.strokeStyle = n.color;
         ctx.stroke();
 
-        ctx.fillStyle = '#EDEFF2';
-        ctx.font = '600 10px "JetBrains Mono", monospace';
+        ctx.fillStyle = palette.canvasLabel;
+        ctx.font = '600 10.5px "JetBrains Mono", monospace';
         ctx.textAlign = 'center';
         ctx.fillText(n.label, n.x, n.y + n.r + 14);
       });
 
       ctx.restore();
-      raf = requestAnimationFrame(render);
+      if (!reducedMotion) raf = requestAnimationFrame(render);
     };
 
-    raf = requestAnimationFrame(render);
+    render();
     return () => cancelAnimationFrame(raf);
-  }, [profile.faqs?.length, includeSpeakable, includeBreadcrumb]);
+  }, [profile.faqs, includeSpeakable, includeBreadcrumb, palette, isDark]);
+
+  const activeCode = outputs[outputTab] || outputs.jsonld;
 
   const handleCopy = () => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard?.writeText(jsonOutput)?.catch?.(() => {});
+      navigator.clipboard.writeText(activeCode).catch(() => {});
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopied(false), 1800);
     }
+  };
+
+  const handleDownload = () => {
+    const fileMap = {
+      jsonld: 'schema-graph.html',
+      llms: 'llms.txt',
+      aiTxt: 'ai.txt',
+      robots: 'robots.txt',
+    };
+    const blob = new Blob([activeCode], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileMap[outputTab] || 'aeo-artifact.txt';
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
     <Paper
       elevation={0}
       sx={{
-        p: { xs: 2.5, md: 3.5 },
+        p: { xs: 2, md: 3.5 },
         mb: 4,
         borderRadius: 3,
-        bgcolor: isDark ? 'rgba(10,12,18,0.92)' : '#FFFFFF',
-        border: `1px solid ${isDark ? 'rgba(56,189,248,0.32)' : 'rgba(14,165,233,0.3)'}`,
+        bgcolor: palette.paperBg,
+        border: `1px solid ${palette.border}`,
         boxShadow: isDark ? '0 24px 60px rgba(0,0,0,0.65)' : '0 12px 32px rgba(15,23,42,0.06)',
       }}
     >
@@ -403,46 +521,77 @@ export default function AeoGraphEngineGodModeTool() {
         sx={{ mb: 3 }}
       >
         <Box>
-          <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.75 }}>
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap alignItems="center" sx={{ mb: 0.75 }}>
             <Chip
-              icon={<HubIcon sx={{ fontSize: '0.95rem !important', color: '#38BDF8 !important' }} />}
-              label="AEO GRAPH ENGINE · GOD-MODE WORKSTATION"
+              icon={<HubIcon sx={{ fontSize: '0.95rem !important', color: `${palette.accentSky} !important` }} />}
+              label="AEO GRAPH ENGINE v2.1.0 · WORKSTATION"
               size="small"
               sx={{
                 fontFamily: mono,
                 fontWeight: 800,
                 fontSize: '0.68rem',
-                bgcolor: 'rgba(56,189,248,0.14)',
-                color: '#38BDF8',
-                border: '1px solid rgba(56,189,248,0.35)',
+                bgcolor: isDark ? 'rgba(56,189,248,0.14)' : 'rgba(3,105,161,0.10)',
+                color: palette.accentSky,
+                border: `1px solid ${palette.border}`,
               }}
             />
             <Chip
-              icon={<VerifiedIcon sx={{ fontSize: '0.9rem !important', color: '#34D399 !important' }} />}
-              label={`CITATION SCORE: ${readinessMetrics.score}/100`}
+              icon={<VerifiedIcon sx={{ fontSize: '0.9rem !important', color: `${palette.accentEmerald} !important` }} />}
+              label={`READINESS: ${readinessMetrics.score}/100`}
               size="small"
               sx={{
                 fontFamily: mono,
                 fontWeight: 800,
                 fontSize: '0.68rem',
-                bgcolor: 'rgba(52,211,153,0.14)',
-                color: '#34D399',
-                border: '1px solid rgba(52,211,153,0.35)',
+                bgcolor: isDark ? 'rgba(52,211,153,0.14)' : 'rgba(4,120,87,0.10)',
+                color: palette.accentEmerald,
+                border: `1px solid ${isDark ? 'rgba(52,211,153,0.35)' : 'rgba(4,120,87,0.3)'}`,
               }}
             />
+            {daemonStatus.reachable && (
+              <Button
+                size="small"
+                variant="outlined"
+                startIcon={<SyncIcon />}
+                onClick={validateOnLocalDaemon}
+                sx={{
+                  minHeight: 44,
+                  fontFamily: mono,
+                  fontSize: '0.7rem',
+                  color: palette.accentEmerald,
+                  borderColor: palette.accentEmerald,
+                }}
+              >
+                {daemonStatus.syncedScore !== null
+                  ? `:8127 Verified (${daemonStatus.syncedScore}/100)`
+                  : `Validate on :8127 (v${daemonStatus.version})`}
+              </Button>
+            )}
           </Stack>
-          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 400, letterSpacing: '-0.01em' }}>
-            Deterministic Schema.org <span style={{ color: '#38BDF8' }}>@graph</span> & AI Citation Compiler
+          <Typography
+            variant="h5"
+            sx={{
+              fontFamily: headingSans,
+              fontWeight: 700,
+              letterSpacing: '-0.02em',
+              color: theme.palette.text.primary,
+            }}
+          >
+            Deterministic Schema.org <span style={{ color: palette.accentSky }}>@graph</span> &amp; Manifest Compiler
           </Typography>
         </Box>
 
-        <FormControl size="small" sx={{ minWidth: 260 }}>
-          <InputLabel sx={{ fontFamily: mono, fontSize: '0.78rem' }}>Entity Preset</InputLabel>
+        <FormControl size="small" sx={{ minWidth: { xs: '100%', md: 270 } }}>
+          <InputLabel id="aeo-preset-label" sx={{ fontFamily: mono, fontSize: '0.78rem' }}>
+            Entity Preset
+          </InputLabel>
           <Select
+            labelId="aeo-preset-label"
+            id="aeo-preset-select"
             value={presetKey}
             label="Entity Preset"
             onChange={(e) => handlePresetChange(e.target.value)}
-            sx={{ fontFamily: mono, fontSize: '0.8rem' }}
+            sx={{ fontFamily: mono, fontSize: '0.8rem', minHeight: 44 }}
           >
             {Object.entries(PRESET_PROFILES).map(([k, v]) => (
               <MenuItem key={k} value={k} sx={{ fontFamily: mono, fontSize: '0.8rem' }}>
@@ -453,15 +602,16 @@ export default function AeoGraphEngineGodModeTool() {
         </FormControl>
       </Stack>
 
-      <SovereignEyebrow accent="#D4AF37" right="Autonomous Web">
-        {"aeo-graph-engine"}
+      <SovereignEyebrow accent={palette.accentGold} right="Autonomous Web">
+        {'aeo-graph-engine'}
       </SovereignEyebrow>
       <SovereignBand
-        seed={"aeo-graph-engine"}
-        eyebrow={"Autonomous Web"}
-        caption={"AEO Graph Engine & Studio"}
-        label={"AEO Graph Engine & Studio — Zoth sovereign visualisation"}
+        seed="aeo-graph-engine"
+        eyebrow="Autonomous Web"
+        caption="AEO Graph Engine & Studio"
+        label="AEO Graph Engine & Studio — entity graph visualisation"
       />
+
       <Grid container spacing={3}>
         {/* Left Column: Entity Graph Editor */}
         <Grid xs={12} md={6}>
@@ -485,7 +635,7 @@ export default function AeoGraphEngineGodModeTool() {
                   onChange={(e) => updateField('url', e.target.value)}
                 />
               </Grid>
-              <Grid xs={12} sm={4}>
+              <Grid xs={12} sm={6}>
                 <TextField
                   fullWidth
                   size="small"
@@ -494,7 +644,7 @@ export default function AeoGraphEngineGodModeTool() {
                   onChange={(e) => updateField('entityType', e.target.value)}
                 />
               </Grid>
-              <Grid xs={12} sm={4}>
+              <Grid xs={12} sm={6}>
                 <TextField
                   fullWidth
                   size="small"
@@ -503,29 +653,20 @@ export default function AeoGraphEngineGodModeTool() {
                   onChange={(e) => updateField('category', e.target.value)}
                 />
               </Grid>
-              <Grid xs={12} sm={4}>
+              <Grid xs={12} sm={6}>
                 <TextField
                   fullWidth
                   size="small"
-                  label="Offer Price (USD)"
-                  value={profile.price}
-                  onChange={(e) => updateField('price', e.target.value)}
+                  label="Creator / Organization"
+                  value={profile.creator}
+                  onChange={(e) => updateField('creator', e.target.value)}
                 />
               </Grid>
               <Grid xs={12} sm={6}>
                 <TextField
                   fullWidth
                   size="small"
-                  label="Direct Phone"
-                  value={profile.phone}
-                  onChange={(e) => updateField('phone', e.target.value)}
-                />
-              </Grid>
-              <Grid xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  label="Direct Email"
+                  label="Contact Email"
                   value={profile.email}
                   onChange={(e) => updateField('email', e.target.value)}
                 />
@@ -552,7 +693,7 @@ export default function AeoGraphEngineGodModeTool() {
               </Grid>
             </Grid>
 
-            <Stack direction="row" spacing={2} alignItems="center">
+            <Stack direction="row" spacing={2} flexWrap="wrap" alignItems="center">
               <FormControlLabel
                 control={
                   <Switch
@@ -578,27 +719,27 @@ export default function AeoGraphEngineGodModeTool() {
             {/* FAQ Nodes */}
             <Box>
               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: '#38BDF8' }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: palette.accentSky }}>
                   FAQPAGE ANSWER NODES ({profile.faqs?.length || 0})
                 </Typography>
                 <Button
                   size="small"
                   startIcon={<AddCircleOutlineIcon />}
                   onClick={addFaq}
-                  sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#38BDF8' }}
+                  sx={{ fontFamily: mono, fontSize: '0.72rem', color: palette.accentSky, minHeight: 44 }}
                 >
-                  Add Q&A Node
+                  Add Q&amp;A Node
                 </Button>
               </Stack>
-              <Stack spacing={1.25} sx={{ maxHeight: 230, overflowY: 'auto', pr: 0.5 }}>
+              <Stack spacing={1.25} sx={{ maxHeight: 240, overflowY: 'auto', pr: 0.5 }}>
                 {profile.faqs.map((faq, idx) => (
                   <Box
                     key={idx}
                     sx={{
                       p: 1.25,
                       borderRadius: 2,
-                      bgcolor: isDark ? 'rgba(255,255,255,0.025)' : '#F8FAFC',
-                      border: '1px solid rgba(148,163,184,0.18)',
+                      bgcolor: palette.cardBg,
+                      border: `1px solid ${theme.palette.divider}`,
                     }}
                   >
                     <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
@@ -609,14 +750,15 @@ export default function AeoGraphEngineGodModeTool() {
                         value={faq.q}
                         onChange={(e) => updateFaq(idx, 'q', e.target.value)}
                       />
-                      <Button
+                      <IconButton
                         size="small"
                         color="error"
+                        aria-label={`Remove FAQ item ${idx + 1}`}
                         onClick={() => removeFaq(idx)}
-                        sx={{ minWidth: 32, p: 0.5 }}
+                        sx={{ minWidth: 44, minHeight: 44 }}
                       >
                         <DeleteOutlineIcon fontSize="small" />
-                      </Button>
+                      </IconButton>
                     </Stack>
                     <TextField
                       fullWidth
@@ -632,16 +774,15 @@ export default function AeoGraphEngineGodModeTool() {
           </Stack>
         </Grid>
 
-        {/* Right Column: Live Topology Canvas + Crawler Readiness + JSON-LD Output */}
+        {/* Right Column: Theme-Aware Topology Canvas + Readiness + Multi-Artifact Output */}
         <Grid xs={12} md={6}>
           <Stack spacing={2}>
             <Box
               sx={{
                 borderRadius: 2.5,
                 overflow: 'hidden',
-                border: '1px solid rgba(56,189,248,0.28)',
-                bgcolor: '#06080E',
-                position: 'relative',
+                border: `1px solid ${palette.border}`,
+                bgcolor: palette.canvasBg,
               }}
             >
               <Box
@@ -651,25 +792,21 @@ export default function AeoGraphEngineGodModeTool() {
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  borderBottom: '1px solid rgba(56,189,248,0.16)',
-                  bgcolor: 'rgba(56,189,248,0.06)',
+                  borderBottom: `1px solid ${palette.border}`,
+                  bgcolor: isDark ? 'rgba(56,189,248,0.06)' : 'rgba(3,105,161,0.06)',
                 }}
               >
-                <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#38BDF8', fontWeight: 700 }}>
-                  LIVE @ID ENTITY GRAPH TOPOLOGY ({readinessMetrics.idLinks} LINKED NODES)
+                <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: palette.accentSky, fontWeight: 700 }}>
+                  LIVE @ID ENTITY GRAPH TOPOLOGY ({readinessMetrics.idLinks} NODES)
                 </Typography>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#94A3B8' }}>
-                  60 FPS AST LATTICE
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: theme.palette.text.secondary }}>
+                  {isDark ? 'OBSIDIAN' : 'EDITORIAL IVORY'}
                 </Typography>
               </Box>
-              <Box
-                component="canvas"
-                ref={canvasRef}
-                sx={{ width: '100%', height: 195, display: 'block' }}
-              />
+              <Box component="canvas" ref={canvasRef} sx={{ width: '100%', height: 195, display: 'block' }} />
             </Box>
 
-            {/* AI Answer Engine Readiness Matrix */}
+            {/* Readiness Matrix */}
             <Grid container spacing={1}>
               {readinessMetrics.crawlers.map((c) => (
                 <Grid xs={6} key={c.name}>
@@ -677,15 +814,15 @@ export default function AeoGraphEngineGodModeTool() {
                     sx={{
                       p: 1.25,
                       borderRadius: 2,
-                      bgcolor: isDark ? 'rgba(255,255,255,0.025)' : '#F8FAFC',
-                      border: '1px solid rgba(52,211,153,0.25)',
+                      bgcolor: palette.cardBg,
+                      border: `1px solid ${isDark ? 'rgba(52,211,153,0.25)' : 'rgba(4,120,87,0.22)'}`,
                     }}
                   >
                     <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.5 }}>
                       <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 700 }}>
                         {c.name}
                       </Typography>
-                      <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: '#34D399', fontWeight: 800 }}>
+                      <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: palette.accentEmerald, fontWeight: 800 }}>
                         {c.score}%
                       </Typography>
                     </Stack>
@@ -695,8 +832,8 @@ export default function AeoGraphEngineGodModeTool() {
                       sx={{
                         height: 5,
                         borderRadius: 2,
-                        bgcolor: 'rgba(255,255,255,0.08)',
-                        '& .MuiLinearProgress-bar': { bgcolor: '#34D399' },
+                        bgcolor: palette.progressTrack,
+                        '& .MuiLinearProgress-bar': { bgcolor: palette.accentEmerald },
                       }}
                     />
                   </Box>
@@ -704,59 +841,113 @@ export default function AeoGraphEngineGodModeTool() {
               ))}
             </Grid>
 
-            {/* Compiled JSON-LD Output */}
+            {readinessMetrics.issues.length > 0 && (
+              <Box
+                sx={{
+                  px: 1.5,
+                  py: 1,
+                  borderRadius: 2,
+                  bgcolor: isDark ? 'rgba(251,113,133,0.12)' : 'rgba(190,18,60,0.08)',
+                  border: `1px solid ${isDark ? 'rgba(251,113,133,0.35)' : 'rgba(190,18,60,0.25)'}`,
+                }}
+              >
+                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: isDark ? '#FDA4AF' : '#9F1239' }}>
+                  Validation Gaps: {readinessMetrics.issues.join(' · ')}
+                </Typography>
+              </Box>
+            )}
+
+            {/* Multi-Artifact Compiled Output (JSON-LD, llms.txt, ai.txt, robots.txt) */}
             <Box
               sx={{
                 borderRadius: 2,
-                bgcolor: '#05060A',
-                border: '1px solid rgba(212,175,55,0.28)',
+                bgcolor: palette.codeBg,
+                border: `1px solid ${palette.goldBorder}`,
                 overflow: 'hidden',
               }}
             >
               <Stack
-                direction="row"
+                direction={{ xs: 'column', sm: 'row' }}
                 justifyContent="space-between"
-                alignItems="center"
+                alignItems={{ xs: 'stretch', sm: 'center' }}
+                spacing={1}
                 sx={{
-                  px: 1.5,
-                  py: 0.85,
-                  bgcolor: 'rgba(212,175,55,0.08)',
-                  borderBottom: '1px solid rgba(212,175,55,0.2)',
+                  px: 1.25,
+                  py: 0.5,
+                  bgcolor: palette.codeHeaderBg,
+                  borderBottom: `1px solid ${palette.goldBorder}`,
                 }}
               >
-                <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: '#F5E6AB', fontWeight: 700 }}>
-                  COMPILED PRODUCTION JSON-LD SNIPPET
-                </Typography>
-                <Button
-                  size="small"
-                  variant="outlined"
-                  startIcon={copied ? <CheckIcon /> : <ContentCopyIcon />}
-                  onClick={handleCopy}
+                <Tabs
+                  value={outputTab}
+                  onChange={(_, v) => setOutputTab(v)}
+                  variant="scrollable"
+                  scrollButtons="auto"
                   sx={{
-                    fontFamily: mono,
-                    fontSize: '0.68rem',
-                    py: 0.25,
-                    color: copied ? '#34D399' : '#D4AF37',
-                    borderColor: copied ? '#34D399' : 'rgba(212,175,55,0.4)',
+                    minHeight: 40,
+                    '& .MuiTab-root': {
+                      minHeight: 44,
+                      minWidth: 68,
+                      fontFamily: mono,
+                      fontSize: '0.72rem',
+                      fontWeight: 700,
+                      textTransform: 'none',
+                      px: 1.25,
+                    },
                   }}
                 >
-                  {copied ? 'Copied JSON-LD' : 'Copy <script>'}
-                </Button>
+                  <Tab value="jsonld" label="JSON-LD" />
+                  <Tab value="llms" label="llms.txt" />
+                  <Tab value="aiTxt" label="ai.txt" />
+                  <Tab value="robots" label="robots.txt" />
+                </Tabs>
+                <Stack direction="row" spacing={1}>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={copied ? <CheckIcon /> : <ContentCopyIcon />}
+                    onClick={handleCopy}
+                    sx={{
+                      minHeight: 44,
+                      fontFamily: mono,
+                      fontSize: '0.7rem',
+                      color: copied ? palette.accentEmerald : palette.accentGold,
+                      borderColor: copied ? palette.accentEmerald : palette.goldBorder,
+                    }}
+                  >
+                    {copied ? 'Copied' : 'Copy'}
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={<DownloadIcon />}
+                    onClick={handleDownload}
+                    sx={{
+                      minHeight: 44,
+                      fontFamily: mono,
+                      fontSize: '0.7rem',
+                      color: palette.accentSky,
+                      borderColor: palette.border,
+                    }}
+                  >
+                    Save
+                  </Button>
+                </Stack>
               </Stack>
               <Box
                 component="pre"
                 sx={{
                   m: 0,
                   p: 1.5,
-                  maxHeight: 230,
+                  maxHeight: 240,
                   overflow: 'auto',
                   fontFamily: mono,
                   fontSize: '0.72rem',
-                  color: '#E2E8F0',
+                  color: palette.codeText,
                   lineHeight: 1.55,
                 }}
               >
-                {jsonOutput}
+                {activeCode}
               </Box>
             </Box>
           </Stack>

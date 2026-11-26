@@ -351,8 +351,8 @@
       "github": "https://github.com/1nc0gn30/aeo-graph-engine",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/aeo-graph-engine/",
-      "version": "1.4.0",
-      "pull": "git clone https://github.com/1nc0gn30/aeo-graph-engine.git && cd aeo-graph-engine && python3 -m http.server 8127 --directory public",
+      "version": "2.1.0",
+      "pull": "git clone https://github.com/1nc0gn30/aeo-graph-engine.git && cd aeo-graph-engine && python3 server.py --port 8127",
       "execution_type": "browser",
       "runtimes": [
         "browser",

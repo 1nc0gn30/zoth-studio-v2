@@ -249,7 +249,7 @@ export default function ToolMotionShowcase({ tool, onReplayRouteIntro }) {
   }, [scenes, currentTime]);
 
   const showreelPrompt = useMemo(() => {
-    return `Act as a world-class motion graphics director and lead designer. Make a dynamic 15-second ASCII + Vector motion graphics video for ${tool?.name}.
+    return `Act as a precision motion graphics director and lead designer. Make a dynamic 15-second ASCII + Vector motion graphics video for ${tool?.name}.
 
 Product: ${tool?.name} (${tool?.category} · v${tool?.version || '2.5.0'})
 Hero Anchor: The ${meta.accent} ${meta.anchorName} rendered in Hybrid Cyber-ASCII & 60fps vector geometry with cubic-bezier(0.16, 1, 0.3, 1) snap choreography.
