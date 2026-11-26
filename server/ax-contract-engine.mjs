@@ -23,7 +23,7 @@ export const FRONTIER_CRAWLERS = [
 export const DEFAULT_AX_COMPILER_CONFIG = {
   siteName: 'Zoth Studio v2',
   canonicalUrl: 'https://zoth.nullai.tech',
-  tagline: 'Local-first, zero-egress AI engineering studio unifying 85 free open-access tools and 44 Studio workstations.',
+  tagline: 'Local-first, zero-egress AI engineering studio unifying 85 free open-access tools and 45 Studio workstations.',
   creatorName: 'Neal Frazier Tech • NullAI Platform',
   creatorHandle: '@1nc0gn30',
   creatorUrl: 'https://nullai.tech',
@@ -31,7 +31,7 @@ export const DEFAULT_AX_COMPILER_CONFIG = {
   githubUrl: 'https://github.com/NullAITech/zoth-studio-v2',
   version: '2.3.0',
   toolCount: 85,
-  workstationCount: 44,
+  workstationCount: 45,
   crawlerPolicy: 'allow-all',
   openAccess: true,
   capabilities: [
@@ -624,7 +624,7 @@ export function compileAxBundle(inputConfig = {}) {
   const githubUrl = String(cfg.githubUrl || 'https://github.com/NullAITech/zoth-studio-v2').trim();
   const version = String(cfg.version || '2.3.0').trim();
   const toolCount = Math.max(0, Number(cfg.toolCount ?? 85) || 0);
-  const workstationCount = Math.max(0, Number(cfg.workstationCount ?? 44) || 0);
+  const workstationCount = Math.max(0, Number(cfg.workstationCount ?? 45) || 0);
   const crawlerPolicy = String(cfg.crawlerPolicy || 'allow-all');
   const openAccess = cfg.openAccess !== false;
   const capabilities = Array.isArray(cfg.capabilities) && cfg.capabilities.length > 0

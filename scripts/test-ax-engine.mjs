@@ -114,10 +114,10 @@ test('validateJsonLdGraph requires @context, SoftwareApplication/WebApplication,
   assert.equal(good.score, 100);
 });
 
-test('Live public/ AX manifests match ground truth (85 tools / 44 workstations) with zero drift', () => {
+test('Live public/ AX manifests match ground truth (85 tools / 45 workstations) with zero drift', () => {
   const counts = { tools: microTools.length, workstations: workstations.length };
   assert.equal(counts.tools, 85);
-  assert.equal(counts.workstations, 44);
+  assert.equal(counts.workstations, 45);
 
   const checks = [
     ['llms.txt', 'public/llms.txt'],
@@ -146,7 +146,7 @@ test('Live public/ AX manifests match ground truth (85 tools / 44 workstations) 
 
   const apiIndex = JSON.parse(fs.readFileSync(path.join(root, 'public/api/index.json'), 'utf8'));
   assert.equal(apiIndex.counts.tools, 85);
-  assert.equal(apiIndex.counts.workstations, 44);
+  assert.equal(apiIndex.counts.workstations, 45);
   assert.equal(apiIndex.openAccess, true);
 
   const services = JSON.parse(fs.readFileSync(path.join(root, 'public/api/services.json'), 'utf8'));

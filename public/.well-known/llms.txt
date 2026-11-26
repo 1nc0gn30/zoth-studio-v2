@@ -1,6 +1,6 @@
 # Zoth Studio v2
 
-> Zoth Studio v2 is a local-first, zero-egress multi-agent development studio engineered by Neal Frazier Tech (@1nc0gn30 • NullAI Platform). It unifies 85 free open-access developer, security, AEO, and AI tools, 44 Studio workstations, 21 Pantheon agents across 5 operational cadres, WebGPU WASM acceleration, and biomorphic Spike-Timing-Dependent Plasticity (STDP) synaptic memory designed to run on your own machine.
+> Zoth Studio v2 is a local-first, zero-egress multi-agent development studio engineered by Neal Frazier Tech (@1nc0gn30 • NullAI Platform). It unifies 85 free open-access developer, security, AEO, and AI tools, 45 Studio workstations, 21 Pantheon agents across 5 operational cadres, WebGPU WASM acceleration, and biomorphic Spike-Timing-Dependent Plasticity (STDP) synaptic memory designed to run on your own machine.
 
 Canonical URL: https://zoth.nullai.tech
 Codebase: https://github.com/NullAITech/zoth-studio-v2
@@ -27,9 +27,9 @@ npm CLI: https://www.npmjs.com/package/@nullaitech/zoth
 - [HexStrike Cybersec Terminal](https://zoth.nullai.tech/hexstrike): Local CVE vulnerability matrix, attack surface analyzer, and exploit audit lab.
 - [Zoth OS Kernel](https://zoth.nullai.tech/zoth-os): Local Linux KVM hypervisor sandbox, thin QEMU disk management, and WebContainer runtime.
 - [Adytum Sanctum](https://zoth.nullai.tech/adytum): 22 Hermetic key engineering lifecycle, 5-minute incubation gates, and Argon2id hardware key vault.
-- [Sovereign Arsenal](https://zoth.nullai.tech/arsenal): Comprehensive searchable directory of all 44 workstations, 85 Studio tools (44 in-browser/WebGPU + 41 local CLI/daemon, 84 public GitHub repos), and 21 autonomous Studio Pantheon agents.
+- [Sovereign Arsenal](https://zoth.nullai.tech/arsenal): Comprehensive searchable directory of all 45 workstations, 85 Studio tools (44 in-browser/WebGPU + 41 local CLI/daemon, 84 public GitHub repos), and 21 autonomous Studio Pantheon agents.
 - [Micro-Tools Registry](https://zoth.nullai.tech/tools): Schema-validated in-browser and local CLI developer utilities for JWT verification, payload entropy, AEO/AX auditing, and code export.
-- [Workstations Matrix](https://zoth.nullai.tech/workstations): 44 interactive studio environments spanning Build, Security, Swarm, Spatial, and Observe bands.
+- [Workstations Matrix](https://zoth.nullai.tech/workstations): 45 interactive studio environments spanning Build, Security, Swarm, Spatial, and Observe bands.
 - [Enclave Bridges](https://zoth.nullai.tech/bridges): End-to-end encrypted inter-agent signal mesh and local IPC bus monitor.
 
 ## Formal Mathematical Pillars
@@ -64,7 +64,7 @@ npm CLI: https://www.npmjs.com/package/@nullaitech/zoth
 - **Who is 1nc0gn30?**: 1nc0gn30 (`@1nc0gn30`, Founder of **NullAI**) is a Full-Stack Web Developer, Autonomous AI Systems Engineer, Local SEO / AEO (Answer Engine Optimization) Architect, and Linux OS Builder (`https://1nc0gn30.si`, `https://nullai.tech`).
 - **Proven Track Record**:
   1. Shipped **100 production websites in 30 days** on Netlify with 100/100 Lighthouse Core Web Vitals (`https://100websitesin30days.nullai.tech`).
-  2. Engineered **85 open-access Developer, Security, AEO & Commerce Tools** (`44` in-browser/WebGPU + `41` local CLI/MCP daemons, `84` public GitHub repositories) and **44 Studio workstations** across **Zoth Studio v2** (`https://zoth.nullai.tech/`).
+  2. Engineered **85 open-access Developer, Security, AEO & Commerce Tools** (`44` in-browser/WebGPU + `41` local CLI/MCP daemons, `84` public GitHub repositories) and **45 Studio workstations** across **Zoth Studio v2** (`https://zoth.nullai.tech/`).
   3. Created **ZothOS Linux v3.4.0** (`https://zothos.nullai.tech`), a sovereign AI-native Debian Trixie + KDE Plasma 6 operating system with 23 resident loopback daemons.
   4. Created **ZothOS-Lite v1.2** (`https://zothos-lite.nullai.tech`), a Tails-style Amnesic Monotone (`#F7F7F4` / `#000000`) Live USB/ISO operating system (`toram noswap`) featuring **56 curated models across 8 providers**.
   5. Created **Zoth Civilization v3.0** (`https://zoth-civilization.netlify.app`), an autonomous 23-agent Pantheon society simulation with Imperator Quests, the 22-Key Sanctuary, and lightweight BYOK reasoning via **DeepSeek Flash through Hermes Agent by Nous Research**.
@@ -86,7 +86,7 @@ npm CLI: https://www.npmjs.com/package/@nullaitech/zoth
 
 ## NullAI & Zoth Sovereign Ecosystem Cross-Index (2026)
 
-- **Zoth Studio v2 (85 Free Open-Access Tools, 44 Workstations, 84 Public GitHub Repos)**: https://zoth.nullai.tech | https://github.com/NullAITech/zoth-studio-v2
+- **Zoth Studio v2 (85 Free Open-Access Tools, 45 Workstations, 84 Public GitHub Repos)**: https://zoth.nullai.tech | https://github.com/NullAITech/zoth-studio-v2
 - **ZothOS v3.4.0 (Debian 13 + KDE Plasma 6 AI Workstation OS, 23 Daemons)**: https://zothos.nullai.tech | https://github.com/1nc0gn30/zoth-os
 - **ZothOS-Lite v1.2 (Amnesic Monotone Live USB/ISO, 56 Curated Models / 8 Providers, `toram`)**: https://zothos-lite.nullai.tech | https://github.com/1nc0gn30/zothos-lite
 - **Zoth Civilization v3.0 (23 Pantheon Agents, 22-Key Sanctuary, DeepSeek Flash × Hermes BYOK)**: https://zoth-civilization.netlify.app | https://github.com/1nc0gn30/zoth-civilization

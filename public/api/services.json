@@ -5,7 +5,7 @@
   "contactEmail": "contact@nullai.tech",
   "pricing": "free_open_access",
   "openAccess": true,
-  "policy": "All 85 Zoth Studio tools and 44 workstations are 100% free and open-access with zero paywalls, zero license keys, and zero gated exports. Optional community support is available via Buy Us a Coffee or Solana tip.",
+  "policy": "All 85 Zoth Studio tools and 45 workstations are 100% free and open-access with zero paywalls, zero license keys, and zero gated exports. Optional community support is available via Buy Us a Coffee or Solana tip.",
   "support": {
     "stripeCoffeeUrl": "https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X",
     "solanaWallet": "GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK",
@@ -14,7 +14,7 @@
   "services": [
     {
       "id": "zoth-studio-open-access",
-      "name": "Zoth Studio v2 — 85 Open-Access Tools & 44 Workstations",
+      "name": "Zoth Studio v2 — 85 Open-Access Tools & 45 Workstations",
       "priceUsd": 0,
       "billingModel": "100% Free & Open Access (Optional Voluntary Support)",
       "landingUrl": "https://zoth.nullai.tech/arsenal",

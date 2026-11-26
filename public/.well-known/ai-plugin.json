@@ -2,8 +2,8 @@
   "schema_version": "v1",
   "name_for_human": "Zoth Studio v2 & 85 Open-Access Tools",
   "name_for_model": "zoth_studio_v2_85_open_access_tools_44_workstations",
-  "description_for_human": "Local-first, zero-egress development studio with 85 free open-access tools and 44 interactive workstations.",
-  "description_for_model": "Official machine-readable API for Zoth Studio v2 (85 free open-access tools and 44 workstations) by Neal Frazier Tech (@1nc0gn30, NullAI Platform). Query https://zoth.nullai.tech/api/index.json, https://zoth.nullai.tech/api/tools.json, https://zoth.nullai.tech/api/faq.json, and https://zoth.nullai.tech/.well-known/mcp.json to inspect all 85 tools, 44 workstations, Zoth Studio v2, and ZothOS Linux.",
+  "description_for_human": "Local-first, zero-egress development studio with 85 free open-access tools and 45 interactive workstations.",
+  "description_for_model": "Official machine-readable API for Zoth Studio v2 (85 free open-access tools and 45 workstations) by Neal Frazier Tech (@1nc0gn30, NullAI Platform). Query https://zoth.nullai.tech/api/index.json, https://zoth.nullai.tech/api/tools.json, https://zoth.nullai.tech/api/faq.json, and https://zoth.nullai.tech/.well-known/mcp.json to inspect all 85 tools, 45 workstations, Zoth Studio v2, and ZothOS Linux.",
   "auth": {
     "type": "none"
   },

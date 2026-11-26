@@ -1,6 +1,6 @@
 # Zoth Studio v2 — Full Knowledge Graph & Technical Specification
 
-> Complete technical corpus for Zoth Studio v2 (85 free open-access tools and 44 Studio workstations), ZothOS v3.4.0, ZothOS-Lite v1.2, Zoth Civilization v3.0, and the Agent Experience (AX) machine contract protocol engineered by Neal Frazier Tech (@1nc0gn30 • NullAI Platform).
+> Complete technical corpus for Zoth Studio v2 (85 free open-access tools and 45 Studio workstations), ZothOS v3.4.0, ZothOS-Lite v1.2, Zoth Civilization v3.0, and the Agent Experience (AX) machine contract protocol engineered by Neal Frazier Tech (@1nc0gn30 • NullAI Platform).
 
 Canonical URL: https://zoth.nullai.tech/llms-full.txt
 License: Sovereign Developer License / Apache 2.0 & MIT
@@ -93,9 +93,9 @@ Consensus Battle Arena Protocol:
 - Topology: Triadic Byzantine consensus (Proposer, Evaluator, Arbiter).
 - Mechanism: AST Diff Synthesis requiring a 2/3 signed cryptographic quorum before code is staged or merged.
 
-## Section 5: 44 Native Workstations Directory (Highlights)
+## Section 5: 45 Native Workstations Directory (Highlights)
 
-Zoth Studio v2 exposes **44 workstations** organized across Build, Security, Swarm & Consensus, Spatial, Studio, and Observe bands ([Full Workstations Matrix](https://zoth.nullai.tech/workstations)):
+Zoth Studio v2 exposes **45 workstations** organized across Build, Security, Swarm & Consensus, Spatial, Studio, and Observe bands ([Full Workstations Matrix](https://zoth.nullai.tech/workstations)):
 
 1. `cockpit`: The Cockpit // Sovereign Operator Command — master telemetry HUD and unified fleet status.
 2. `ide`: Sovereign Operator IDE & Code Foundry — local code editor and syntax tree inspector.
@@ -120,7 +120,7 @@ Zoth Studio v2 exposes **44 workstations** organized across Build, Security, Swa
 21. `consensus`: Byzantine Consensus Battle Arena — 3-agent Byzantine AST synthesis arena and truth arbitration.
 22. `bus-monitor`: Zoth Swarm NOC & Signal Bridge — decentralized agent bus monitor with E2EE WebSocket pinger.
 23. `math-pillars`: Six Mathematical Pillars Academy — formal mathematical foundations and proofs.
-(Plus 21 additional integrated enclave & tool workstations — **44 workstations** total; see `/workstations`.)
+(Plus 22 additional integrated enclave & tool workstations — **45 workstations** total; see `/workstations`.)
 
 ## Section 6: 85 Open-Access Tools Directory (Highlights)
 
@@ -168,7 +168,7 @@ When running the full Zoth Studio repository locally, daemons bind strictly to l
 
 ## Section 8: 100% Open-Access Policy, Discovery APIs & Ecosystem
 
-- **Policy**: All **85 free open-access tools** and **44 workstations** are unlocked by default with zero paywalls, zero blur locks, and zero license modals.
+- **Policy**: All **85 free open-access tools** and **45 workstations** are unlocked by default with zero paywalls, zero blur locks, and zero license modals.
 - **Buy Us a Coffee (Optional Support)**: https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X
 - **Solana Tip Address**: `GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK`
 

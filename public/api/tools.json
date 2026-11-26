@@ -626,18 +626,19 @@
     {
       "id": "badge3d-coin-generator",
       "name": "Badge3D Coin Generator",
-      "description": "100% in-browser WebGL 3D coin, medallion, and relief badge generator with real-time PBR metallic shaders, watertight STL/OBJ export, and 100% free & open-access with optional Buy Us a Coffee & Solana tip support.",
+      "description": "Zero-egress 3D WebGL coin, medallion, and relief badge workstation (:8084) with procedural PBR metallic lighting, watertight 2-manifold Python STL/OBJ/GLB exports, Marlin G-code slicer, and 9 stdio MCP tools. 100% free & open-access.",
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/badge3d-coin-generator",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/badge3d-coin-generator/",
-      "version": "2.5.0",
-      "pull": "python3 server.py --port 8084  # or: badge3d --status",
-      "execution_type": "browser",
+      "version": "2.6.0",
+      "pull": "python3 server.py --host 127.0.0.1 --port 8084  # or: badge3d --status",
+      "execution_type": "hybrid",
       "runtimes": [
         "browser",
         "webgpu",
         "cli",
+        "mcp",
         "zero-egress"
       ],
       "port": 8084,

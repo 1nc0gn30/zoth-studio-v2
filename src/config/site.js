@@ -578,7 +578,7 @@ export function generateSchemaGraph(path = '/') {
           'name': 'How does Zoth AX Powerhouse verify manifest parity and prevent stale count drift?',
           'acceptedAnswer': {
             '@type': 'Answer',
-            'text': 'Zoth AX Powerhouse (/workstations/ax-powerhouse) probes live endpoints alongside GET /api/studio/ax/audit and POST /api/studio/ax/validate to check HTTP 200 status, UTF-8 byte/token budgets, SHA-256 mirror parity, Schema.org @graph compliance, and exact alignment with the 85-tool / 44-workstation registry.'
+            'text': 'Zoth AX Powerhouse (/workstations/ax-powerhouse) probes live endpoints alongside GET /api/studio/ax/audit and POST /api/studio/ax/validate to check HTTP 200 status, UTF-8 byte/token budgets, SHA-256 mirror parity, Schema.org @graph compliance, and exact alignment with the 85-tool / 45-workstation registry.'
           }
         },
         {
@@ -644,6 +644,38 @@ export function generateSchemaGraph(path = '/') {
           ...(tool.liveUrl ? { 'url': tool.liveUrl } : {}),
         }
       });
+      if (tool.id === 'badge3d-coin-generator') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What 3D formats and slicing outputs does Badge3D Coin Generator v2.6.0 produce?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Badge3D Coin Generator produces watertight 2-manifold Binary/ASCII STL, Wavefront OBJ+MTL, glTF 2.0/GLB, and RepRap/Marlin G-code via its pure-Python CoinMeshEngine and slicer_engine on 127.0.0.1:8084, plus 9 JSON-RPC 2.0 stdio MCP tools (coin_generate, coin_export_stl, coin_export_obj, coin_presets, coin_diagnostics, coin_slice_gcode, coin_generate_edge_profile, coin_stamp_crypto_hash, coin_inscribe_edge_text).'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Does Badge3D Coin Generator run offline with zero cloud uploads?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. The local workstation bundles self-hosted Three.js assets under public/vendor/ with zero external CDN dependencies, binds strictly to loopback (127.0.0.1:8084) with Host/Origin allowlists and path containment, and processes all SVG relief heightmaps and 3D geometry locally.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Badge3D Coin Generator free and open-access without paywalls?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Badge3D Coin Generator is 100% free and open-access with zero paywalls, zero license keys, and optional community support via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'azoth-local-agent') {
         graph.push({
           '@type': 'FAQPage',

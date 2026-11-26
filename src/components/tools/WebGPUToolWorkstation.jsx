@@ -1453,8 +1453,10 @@ Disallow: /`
   );
 }
 
+const LazyBadge3dCoinGodModeTool = React.lazy(() => import('./Badge3dCoinGodModeTool'));
+
 /* --------------------------------------------------------------------------
-   9. Badge3D Coin Generator Workstation
+   9. Badge3D Coin Generator Workstation (delegates to Badge3dCoinGodModeTool)
    -------------------------------------------------------------------------- */
 function Badge3dCoinWorkstation({ isDark, gold }) {
   const [diameter, setDiameter] = useState(40);
@@ -3686,7 +3688,11 @@ export default function WebGPUToolWorkstation({ tool }) {
       case 'robots-txt-auditor':
         return <RobotsTxtAuditorWorkstation isDark={isDark} gold={gold} />;
       case 'badge3d-coin-generator':
-        return <Badge3dCoinWorkstation isDark={isDark} gold={gold} />;
+        return (
+          <React.Suspense fallback={<Box sx={{ p: 3, fontFamily: 'monospace' }}>Loading Badge3D Coin Generator…</Box>}>
+            <LazyBadge3dCoinGodModeTool />
+          </React.Suspense>
+        );
       case 'certpath-roadmap-studio':
         return <CertPathRoadmapWorkstation isDark={isDark} gold={gold} />;
       case 'anderson-security-sentinel':

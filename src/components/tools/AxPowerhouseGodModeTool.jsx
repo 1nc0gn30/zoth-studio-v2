@@ -194,7 +194,7 @@ export default function AxPowerhouseGodModeTool() {
   const groundTruthCounts = useMemo(
     () => ({
       tools: serverAudit?.groundTruth?.tools || 85,
-      workstations: serverAudit?.groundTruth?.workstations || 44,
+      workstations: serverAudit?.groundTruth?.workstations || 45,
     }),
     [serverAudit]
   );
@@ -217,7 +217,7 @@ export default function AxPowerhouseGodModeTool() {
             const estimatedTokens = estimateTokens(text);
             const mimeType = res.headers.get('content-type') || 'unknown';
             const clientValidation = ep.spec
-              ? validateAxSpec(ep.spec, text, { tools: 85, workstations: 44 })
+              ? validateAxSpec(ep.spec, text, { tools: 85, workstations: 45 })
               : null;
             return {
               ...ep,
@@ -398,7 +398,7 @@ export default function AxPowerhouseGodModeTool() {
         fetch('/api/index.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)),
       ]);
       const liveToolCount = toolsRes?.tools?.length || toolsRes?.tool_count || 85;
-      const liveWsCount = indexRes?.counts?.workstations || serverAudit?.groundTruth?.workstations || 44;
+      const liveWsCount = indexRes?.counts?.workstations || serverAudit?.groundTruth?.workstations || 45;
       setCompilerConfig((prev) => ({
         ...prev,
         siteName: 'Zoth Studio v2',

@@ -215,6 +215,19 @@ export const workstations = [
     pullCommand: "audiocipher-stego-engine serve --host 127.0.0.1 --port 8096"
   },
   {
+    id: "badge3d-coin-generator",
+    name: "Badge3D Coin Generator // Parametric 3D Mint & G-Code Slicer",
+    path: "/tools/badge3d-coin-generator",
+    band: "Spatial",
+    type: "integrated_tool",
+    executionType: "hybrid",
+    version: "2.6.0",
+    description: "Zero-egress loopback workstation (:8084) & WebGL studio for watertight 2-manifold Binary STL/OBJ/GLB coin synthesis, SHA-256 rim security stamps, RepRap/Marlin G-code slicing, and 9-tool stdio MCP.",
+    alsoInApp: "/tools/badge3d-coin-generator",
+    toolRepoId: "badge3d-coin-generator",
+    pullCommand: "python3 server.py --host 127.0.0.1 --port 8084"
+  },
+  {
     id: "agent-mock-twin",
     name: "Agent Mock Twin // Deterministic API Replay",
     path: "/tools/agent-mock-twin",

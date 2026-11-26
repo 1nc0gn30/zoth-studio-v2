@@ -966,35 +966,39 @@ export const toolsDocumentation = {
   },
 
   'badge3d-coin-generator': {
-    whyUse: 'Browser 3D coin, medallion, and relief badge generator. Free to use.',
-    problemSolved: 'Mints a 3D coin in the browser and exports a watertight STL/OBJ/GLB mesh with zero paywalls, zero cloud uploads, and optional Buy Us a Coffee support.',
-    architecture: 'Vanilla Three.js and WebGL canvas with parametric edge-milling geometry and STL/OBJ/GLB 3D export.',
+    whyUse: 'Zero-egress parametric 3D coin, medallion, and relief badge workstation (:8084) with watertight Python STL/OBJ/GLB exports, Marlin G-code slicing, and 9 MCP tools.',
+    problemSolved: 'Synthesizes true watertight 2-manifold 3D coins, reeded rims, SHA-256 cryptographic edge stamps, and accurate RepRap/Marlin G-code completely offline without cloud CAD subscriptions or paywalls.',
+    architecture: 'Pure Python 3 stdlib CoinMeshEngine, SVGRasterizer, edge_milling, slicer_engine, hardened loopback HTTP server (:8084), 9-tool JSON-RPC 2.0 MCP stdio server, and self-hosted Three.js WebGL studio with PMREM metallic lighting.',
     aiAgentProtocol: {
-      mcpTool: 'badge3d_mint_mesh',
-      description: 'Generate 3D watertight procedural coin mesh from SVG relief heightmaps.',
-      cliExample: 'python3 -m badge3d.cli generate --diameter 30 --depth 2.5 --out coin.stl',
+      mcpTool: 'coin_generate',
+      description: 'Generate watertight 2-manifold 3D coin mesh topology, volume, and precious-metal mass estimates (9 MCP tools: coin_generate, coin_export_stl, coin_export_obj, coin_presets, coin_diagnostics, coin_slice_gcode, coin_generate_edge_profile, coin_stamp_crypto_hash, coin_inscribe_edge_text).',
+      cliExample: 'badge3d generate -r 15 -t 2.5 -o coin.stl',
       inputSchema: {
         type: 'object',
         properties: {
-          diameter: { type: 'number' },
-          metalType: { type: 'string' }
+          radius: { type: 'number', description: 'Outer radius in mm (1.0..100.0)' },
+          thickness: { type: 'number', description: 'Total coin thickness in mm (0.5..25.0)' },
+          serrations: { type: 'integer', description: 'Edge reeding serrations (0..360)' },
+          relief_pattern: { type: 'string', description: 'wreath, star, cross, sunburst, hex_grid, shield, roman_head, skull, concentric, smooth' },
+          preset: { type: 'string', description: 'challenge_coin, crypto_token, roman_medallion, sovereign_gold, scifi_hex_badge, commemorative_gold, cyberpunk_hex, antique_roman, military_challenge, sovereign_silver' }
         }
       },
       outputSchema: {
-        stlPath: 'string',
-        vertices: 'number',
-        triangles: 'number'
+        parameters: 'object',
+        mesh_stats: 'object',
+        physical_estimates: 'object'
       }
     },
     quickstart: [
       'git clone https://github.com/1nc0gn30/badge3d-coin-generator.git',
-      'cd badge3d-coin-generator && python3 -m http.server 8080'
+      'cd badge3d-coin-generator && python3 server.py --host 127.0.0.1 --port 8084'
     ],
     features: [
-      'Real-time WebGL gold, silver, and obsidian shader materials',
-      'Sub-millimeter procedural edge milling and reeding patterns',
-      'Watertight 3D printable STL and binary GLB mesh export',
-      'In-browser 3D lighting customizer with conic border highlights'
+      'Self-hosted zero-egress Three.js studio with procedural PMREM lighting for 24K Gold, Silver, Bronze, Obsidian, and Titanium',
+      'Pure-Python CoinMeshEngine producing watertight 2-manifold Binary/ASCII STL, Wavefront OBJ+MTL, and glTF 2.0/GLB',
+      'Built-in FDM G-code slicer (rectilinear, grid, concentric, triangles infill) with verified filament extrusion math',
+      'Cylindrical edge inscriptions, segmented reeding, and SHA-256 hash-derived anti-counterfeiting security grooves',
+      '9-tool JSON-RPC 2.0 stdio MCP server (coin_generate, coin_export_stl, coin_export_obj, coin_presets, coin_diagnostics, coin_slice_gcode, coin_generate_edge_profile, coin_stamp_crypto_hash, coin_inscribe_edge_text) & live Braille TUI'
     ]
   },
 
@@ -3617,7 +3621,7 @@ export const toolsDocumentation = {
       "aiAgentProtocol": {
           "server": "zoth-studio-loopback-api (127.0.0.1:3000)",
           "mcpTool": "GET /api/studio/ax/audit · POST /api/studio/ax/validate",
-          "description": "Audit live Zoth Studio AX manifests against the 85-tool / 44-workstation ground-truth registry and validate custom AX contracts server-side with strict loopback Origin enforcement.",
+          "description": "Audit live Zoth Studio AX manifests against the 85-tool / 45-workstation ground-truth registry and validate custom AX contracts server-side with strict loopback Origin enforcement.",
           "cliExample": "zoth open ax-powerhouse --json",
           "tools": [
               {

@@ -1298,7 +1298,7 @@ function AxPowerhouseWorkstation() {
 
   const schemas = {
     '/llms.txt': `# Zoth Studio v2
-> Local-first, zero-egress AI development studio unifying 85 free open-access tools and 44 Studio workstations.
+> Local-first, zero-egress AI development studio unifying 85 free open-access tools and 45 Studio workstations.
 
 Canonical URL: https://zoth.nullai.tech
 Publisher: Neal Frazier Tech • NullAI Platform (https://nullai.tech)
@@ -1379,7 +1379,7 @@ Contact: contact@nullai.tech`,
           <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
             <Typography variant="h6" sx={{ fontWeight: 800, mb: 1.5, color: isDark ? '#D4AF37' : '#8A6508' }}>Autonomous Crawler Readiness</Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Zoth Studio exposes machine-readable endpoints for all 85 tools and 44 workstations.
+              Zoth Studio exposes machine-readable endpoints for all 85 tools and 45 workstations.
             </Typography>
 
             <Stack spacing={2}>

@@ -1,11 +1,11 @@
 {
   "schemaVersion": "2.3.0",
-  "site": "Zoth Studio v2 • 85 Free Open-Access Sovereign Tools & 44 Workstations",
+  "site": "Zoth Studio v2 • 85 Free Open-Access Sovereign Tools & 45 Workstations",
   "baseUrl": "https://zoth.nullai.tech",
   "openAccess": true,
   "counts": {
     "tools": 85,
-    "workstations": 44,
+    "workstations": 45,
     "inBrowserTools": 44,
     "localCliAndDaemonTools": 41,
     "publicRepositories": 84
@@ -26,7 +26,7 @@
     {
       "name": "Zoth Studio v2",
       "url": "https://zoth.nullai.tech",
-      "role": "Local-first AI studio: 85 free open-access tools (44 in-browser/WebGPU + 41 local CLI/daemon, 84 public GitHub repos) & 44 workstations"
+      "role": "Local-first AI studio: 85 free open-access tools (44 in-browser/WebGPU + 41 local CLI/daemon, 84 public GitHub repos) & 45 workstations"
     },
     {
       "name": "ZothOS v3.4.0",

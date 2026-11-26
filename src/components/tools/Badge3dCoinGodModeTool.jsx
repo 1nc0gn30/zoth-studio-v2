@@ -510,9 +510,27 @@ export default function Badge3dCoinGodModeTool({ tool }) {
   const isDark = theme.palette.mode === 'dark';
   const { reality, activeTheme } = useReality();
 
-  // Dynamic Reality Accent Colors
+  // Dynamic Reality Accent Colors (WCAG AA compliant in both Light & Dark)
   const realityAccent = activeTheme?.accent || '#D4AF37';
+  const accentText = isDark ? realityAccent : '#7A5808';
+  const emeraldText = isDark ? '#34D399' : '#047857';
+  const skyText = isDark ? '#38BDF8' : '#0369A1';
   const realityBot = activeTheme?.bot || { name: 'AURUM-IX', title: '24K Sovereign Archon' };
+  const [daemonOnline, setDaemonOnline] = useState(false);
+
+  useEffect(() => {
+    if (!isLocalRuntime()) return undefined;
+    let active = true;
+    fetch('http://127.0.0.1:8084/api/health')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (active && d && d.status === 'ok') setDaemonOnline(true);
+      })
+      .catch(() => {
+        if (active) setDaemonOnline(false);
+      });
+    return () => { active = false; };
+  }, []);
 
   // Open-access mode (all 3D CNC & STL export features unlocked by default)
 
@@ -567,7 +585,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
 
     // Scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(isDark ? 0x060609 : 0xf8fafc);
+    scene.background = new THREE.Color(isDark ? 0x0a0c12 : 0xf4efe4);
     sceneRef.current = scene;
 
     // Camera
@@ -606,9 +624,34 @@ export default function Badge3dCoinGodModeTool({ tool }) {
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 0.92;
       rendererRef.current = renderer;
       container.innerHTML = '';
       container.appendChild(renderer.domElement);
+
+      // Procedural PMREM Studio Environment Map for authentic metallic PBR gold/silver sheen
+      try {
+        const pmrem = new THREE.PMREMGenerator(renderer);
+        const envScene = new THREE.Scene();
+        envScene.background = new THREE.Color(0x181a24);
+        const addPanel = (col, pw, ph, pos, rot) => {
+          const m = new THREE.Mesh(
+            new THREE.PlaneGeometry(pw, ph),
+            new THREE.MeshBasicMaterial({ color: col, side: THREE.DoubleSide })
+          );
+          m.position.set(pos[0], pos[1], pos[2]);
+          m.rotation.set(rot[0], rot[1], rot[2]);
+          envScene.add(m);
+        };
+        addPanel(0xfff1cc, 12, 7, [4, 14, 4], [Math.PI / 2, 0, 0]);
+        addPanel(0xffd27a, 10, 6, [14, 5, 10], [0, -Math.PI / 3, 0]);
+        addPanel(0x93c5fd, 9, 6, [-14, 4, 8], [0, Math.PI / 3, 0]);
+        addPanel(0xfde68a, 10, 5, [0, 3, -14], [0, 0, 0]);
+        const envRT = pmrem.fromScene(envScene, 0.04);
+        scene.environment = envRT.texture;
+        pmrem.dispose();
+      } catch {}
     } catch (e) {
       const fb = document.createElement('canvas');
       fb.width = width;
@@ -889,11 +932,16 @@ export default function Badge3dCoinGodModeTool({ tool }) {
 
   }, [materialKey, crestKey, shape, radius, thickness, serrations, obverseText, reverseText, wireframe, bumpScale, realityBot, realityAccent]);
 
-  // Export 4K PNG Snapshot
+  // Export PNG Snapshot (supports both WebGL and 2D fallback canvas)
   const handleCaptureSnapshot = () => {
     playClink(audioEnabled, 1600);
-    if (!rendererRef.current) return;
-    const dataUrl = rendererRef.current.domElement.toDataURL('image/png');
+    let dataUrl = null;
+    if (rendererRef.current && rendererRef.current.domElement) {
+      dataUrl = rendererRef.current.domElement.toDataURL('image/png');
+    } else if (fallbackCanvasRef.current) {
+      dataUrl = fallbackCanvasRef.current.toDataURL('image/png');
+    }
+    if (!dataUrl) return;
     const a = document.createElement('a');
     a.href = dataUrl;
     a.download = `zoth-coin-${shape}-${materialKey}-${Date.now()}.png`;
@@ -902,18 +950,45 @@ export default function Badge3dCoinGodModeTool({ tool }) {
     document.body.removeChild(a);
   };
 
-  // Real Client-Side Watertight CNC STL Export
-  const handleExportSTL = () => {
+  // Watertight Binary STL Export (prefers Python :8084 engine, honest offline fallback)
+  const handleExportSTL = async () => {
     playClink(audioEnabled, 1800);
+    if (isLocalRuntime()) {
+      try {
+        const res = await fetch('http://127.0.0.1:8084/api/export-stl', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            radius,
+            thickness,
+            edge_reed_count: serrations,
+            rim_width: 2.0,
+            rim_height: 0.6,
+          }),
+        });
+        if (res.ok) {
+          const blob = await res.blob();
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `zoth-badge3d-coin-${shape}-${radius}mm-watertight.stl`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          setDaemonOnline(true);
+          return;
+        }
+      } catch (e) {}
+    }
     if (!coinGroupRef.current) return;
-
     try {
-      const { buffer, numTriangles, volumeCm3 } = generateBinarySTL(coinGroupRef.current);
+      const { buffer } = generateBinarySTL(coinGroupRef.current);
       const blob = new Blob([buffer], { type: 'application/octet-stream' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `zoth-badge3d-coin-${shape}-${radius}mm-${materialKey}.stl`;
+      a.download = `zoth-badge3d-coin-${shape}-${radius}mm-${materialKey}-preview.stl`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -923,12 +998,40 @@ export default function Badge3dCoinGodModeTool({ tool }) {
     }
   };
 
-  // Real Client-Side Wavefront OBJ CAD Export
-  const handleExportOBJ = () => {
+  // Wavefront OBJ CAD Export (prefers Python :8084 engine, honest offline fallback)
+  const handleExportOBJ = async () => {
     playClink(audioEnabled, 1600);
+    if (isLocalRuntime()) {
+      try {
+        const res = await fetch('http://127.0.0.1:8084/api/export-obj', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            radius,
+            thickness,
+            edge_reed_count: serrations,
+            rim_width: 2.0,
+            rim_height: 0.6,
+          }),
+        });
+        if (res.ok) {
+          const blob = await res.blob();
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `zoth-badge3d-coin-${shape}-${radius}mm-watertight.obj`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          setDaemonOnline(true);
+          return;
+        }
+      } catch (e) {}
+    }
     if (!coinGroupRef.current) return;
     try {
-      let objContent = `# Wavefront OBJ generated by Zoth Studio Badge3D Coin Generator\no CoinMesh\n`;
+      let objContent = `# Wavefront OBJ Client Preview Mesh (Offline Fallback)\no CoinPreview\n`;
       let vertOffset = 1;
       coinGroupRef.current.traverse((child) => {
         if (child.isMesh && child.geometry) {
@@ -949,7 +1052,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `zoth-badge3d-coin-${shape}-${radius}mm-${materialKey}.obj`;
+      a.download = `zoth-badge3d-coin-${shape}-${radius}mm-${materialKey}-preview.obj`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -963,16 +1066,18 @@ export default function Badge3dCoinGodModeTool({ tool }) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <SovereignEyebrow accent="#D4AF37" right="Media & 3D">
+      <SovereignEyebrow accent={accentText} right="Media & 3D · v2.6.0">
         {"badge3d-coin-generator"}
       </SovereignEyebrow>
-      <SovereignBand
-        seed={"badge3d-coin-generator"}
-        eyebrow={"Media & 3D"}
-        caption={"Badge3D Coin Generator"}
-        label={"Badge3D Coin Generator — Zoth sovereign visualisation"}
-      />
-      {/* Sovereign 100% Free Open Access & Tip Bar */}
+      {isDark && (
+        <SovereignBand
+          seed={"badge3d-coin-generator"}
+          eyebrow={"Media & 3D"}
+          caption={"Badge3D Coin Generator"}
+          label={"Badge3D Coin Generator — Zoth sovereign visualisation"}
+        />
+      )}
+      {/* Sovereign 100% Free Open Access & Tip Bar (WCAG AA Light + Dark) */}
       <Paper
         elevation={0}
         sx={{
@@ -980,7 +1085,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
           p: { xs: 1.5, sm: 2 },
           borderRadius: 2,
           bgcolor: isDark ? 'rgba(9, 11, 17, 0.9)' : '#FFFBEB',
-          border: `1px solid ${realityAccent}44`,
+          border: `1px solid ${isDark ? `${realityAccent}44` : 'rgba(122, 88, 8, 0.28)'}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -988,68 +1093,53 @@ export default function Badge3dCoinGodModeTool({ tool }) {
           gap: 1.5,
         }}
       >
-        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
           <Chip
             label="✦ 100% FREE & OPEN ACCESS"
             size="small"
             sx={{
-              bgcolor: 'rgba(16,185,129,0.15)',
-              color: '#10B981',
+              bgcolor: isDark ? 'rgba(16,185,129,0.15)' : '#ECFDF5',
+              color: emeraldText,
               fontWeight: 800,
               fontSize: '0.68rem',
               fontFamily: mono,
-              border: '1px solid rgba(16,185,129,0.3)',
+              border: `1px solid ${isDark ? 'rgba(52,211,153,0.35)' : '#6EE7B7'}`,
             }}
           />
           <Chip
             label="ZERO PAYWALLS · LOCAL DAEMON :8084"
             size="small"
             sx={{
-              bgcolor: 'rgba(212,175,55,0.12)',
-              color: '#F5E6AB',
+              bgcolor: isDark ? 'rgba(212,175,55,0.14)' : '#FEF3C7',
+              color: isDark ? '#F5E6AB' : '#7A5808',
               fontWeight: 700,
               fontSize: '0.68rem',
               fontFamily: mono,
+              border: `1px solid ${isDark ? 'rgba(212,175,55,0.35)' : '#F59E0B66'}`,
             }}
           />
         </Stack>
 
-        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
-          <Button
-            size="small"
-            variant="contained"
-            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              bgcolor: '#D4AF37',
-              color: '#08080B',
-              fontWeight: 800,
-              fontSize: '0.72rem',
-              fontFamily: mono,
-              textTransform: 'none',
-              '&:hover': { bgcolor: '#F5E6AB' },
-            }}
-          >
-            ☕ Buy Us a Coffee
-          </Button>
+        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
           <Button
             size="small"
             variant="outlined"
             href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
-            onClick={(e) => {
+            onClick={() => {
               if (navigator.clipboard) {
                 navigator.clipboard?.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK')?.catch?.(() => {});
               }
             }}
             sx={{
-              borderColor: 'rgba(20,241,149,0.5)',
-              color: '#14F195',
+              minHeight: { xs: 44, sm: 34 },
+              borderColor: isDark ? 'rgba(52,211,153,0.55)' : '#047857',
+              bgcolor: isDark ? 'transparent' : '#ECFDF5',
+              color: emeraldText,
               fontWeight: 800,
               fontSize: '0.72rem',
               fontFamily: mono,
               textTransform: 'none',
-              '&:hover': { borderColor: '#14F195', bgcolor: 'rgba(20,241,149,0.1)' },
+              '&:hover': { borderColor: emeraldText, bgcolor: isDark ? 'rgba(52,211,153,0.12)' : '#D1FAE5' },
             }}
           >
             ◎ Tip SOL
@@ -1062,8 +1152,9 @@ export default function Badge3dCoinGodModeTool({ tool }) {
             target="_blank"
             rel="noopener noreferrer"
             sx={{
-              borderColor: realityAccent,
-              color: realityAccent,
+              minHeight: { xs: 44, sm: 34 },
+              borderColor: accentText,
+              color: accentText,
               fontWeight: 700,
               fontSize: '0.72rem',
               fontFamily: mono,
@@ -1115,16 +1206,17 @@ export default function Badge3dCoinGodModeTool({ tool }) {
                 />
               </Box>
 
-              <Stack direction="row" spacing={1} alignItems="center">
+              <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
                 <Tooltip title={audioEnabled ? 'Mute Procedural Clicks' : 'Enable Procedural Clicks'}>
                   <IconButton
                     size="small"
+                    aria-label={audioEnabled ? 'Mute Procedural Clicks' : 'Enable Procedural Clicks'}
                     onClick={() => {
                       const next = !audioEnabled;
                       setAudioEnabled(next);
                       playClink(next, 1000);
                     }}
-                    sx={{ color: audioEnabled ? realityAccent : 'text.disabled' }}
+                    sx={{ minWidth: { xs: 44, sm: 36 }, minHeight: { xs: 44, sm: 36 }, color: audioEnabled ? accentText : 'text.disabled' }}
                   >
                     {audioEnabled ? <VolumeUpIcon sx={{ fontSize: 18 }} /> : <VolumeOffIcon sx={{ fontSize: 18 }} />}
                   </IconButton>
@@ -1136,11 +1228,13 @@ export default function Badge3dCoinGodModeTool({ tool }) {
                   onClick={handleCaptureSnapshot}
                   startIcon={<CameraAltIcon sx={{ fontSize: 16 }} />}
                   sx={{
+                    minHeight: { xs: 44, sm: 34 },
                     fontFamily: mono,
                     fontSize: '0.75rem',
-                    borderColor: `${realityAccent}55`,
-                    color: realityAccent,
-                    '&:hover': { borderColor: realityAccent, bgcolor: `${realityAccent}11` }
+                    fontWeight: 700,
+                    borderColor: accentText,
+                    color: accentText,
+                    '&:hover': { borderColor: accentText, bgcolor: isDark ? `${realityAccent}16` : 'rgba(122,88,8,0.08)' }
                   }}
                 >
                   Snapshot PNG
@@ -1152,12 +1246,14 @@ export default function Badge3dCoinGodModeTool({ tool }) {
                   onClick={handleExportOBJ}
                   startIcon={<DownloadIcon sx={{ fontSize: 16 }} />}
                   sx={{
+                    minHeight: { xs: 44, sm: 34 },
                     fontFamily: mono,
                     fontSize: '0.75rem',
                     fontWeight: 700,
-                    borderColor: 'rgba(56,189,248,0.4)',
-                    color: '#38BDF8',
-                    '&:hover': { borderColor: '#38BDF8', bgcolor: 'rgba(56,189,248,0.1)' }
+                    borderColor: isDark ? 'rgba(56,189,248,0.45)' : '#0369A1',
+                    bgcolor: isDark ? 'transparent' : '#F0F9FF',
+                    color: skyText,
+                    '&:hover': { borderColor: skyText, bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#E0F2FE' }
                   }}
                 >
                   Export OBJ (CAD)
@@ -1169,12 +1265,13 @@ export default function Badge3dCoinGodModeTool({ tool }) {
                   onClick={handleExportSTL}
                   startIcon={<DownloadIcon sx={{ fontSize: 16 }} />}
                   sx={{
+                    minHeight: { xs: 44, sm: 34 },
                     fontFamily: mono,
                     fontSize: '0.75rem',
                     fontWeight: 800,
-                    bgcolor: realityAccent,
-                    color: '#08080B',
-                    '&:hover': { bgcolor: '#F5E6AB' },
+                    bgcolor: isDark ? realityAccent : '#7A5808',
+                    color: isDark ? '#08080B' : '#FFFFFF',
+                    '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#5F4305' },
                   }}
                 >
                   Export STL (3D Print)
@@ -1190,7 +1287,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
                 minHeight: 460,
                 borderRadius: 2,
                 overflow: 'hidden',
-                bgcolor: isDark ? '#040406' : '#F8FAFC',
+                bgcolor: isDark ? '#040406' : '#F4EFE4',
                 border: `1px solid ${theme.palette.divider}`,
               }}
             />
@@ -1201,7 +1298,7 @@ export default function Badge3dCoinGodModeTool({ tool }) {
                 mt: 2,
                 p: 1.5,
                 borderRadius: 1.5,
-                bgcolor: isDark ? 'rgba(15,16,24,0.7)' : 'rgba(240,243,246,0.85)',
+                bgcolor: isDark ? 'rgba(15,16,24,0.7)' : 'rgba(244,239,228,0.85)',
                 border: `1px solid ${theme.palette.divider}`,
                 display: 'flex',
                 alignItems: 'center',
@@ -1211,10 +1308,10 @@ export default function Badge3dCoinGodModeTool({ tool }) {
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <PrecisionManufacturingIcon sx={{ fontSize: 18, color: realityAccent }} />
+                <PrecisionManufacturingIcon sx={{ fontSize: 18, color: accentText }} />
                 <Box>
                   <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', display: 'block', fontSize: '0.65rem' }}>
-                    WATERTIGHT CNC MESH
+                    {daemonOnline ? 'WATERTIGHT 2-MANIFOLD (:8084)' : 'CLIENT PREVIEW MESH (OFFLINE)'}
                   </Typography>
                   <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, fontSize: '0.82rem' }}>
                     {meshStats.triangles.toLocaleString()} Triangles
@@ -1223,19 +1320,19 @@ export default function Badge3dCoinGodModeTool({ tool }) {
               </Box>
 
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <ScaleIcon sx={{ fontSize: 18, color: realityAccent }} />
+                <ScaleIcon sx={{ fontSize: 18, color: accentText }} />
                 <Box>
                   <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', display: 'block', fontSize: '0.65rem' }}>
                     EST. MINT MASS ({matConfig.badge})
                   </Typography>
-                  <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, fontSize: '0.82rem', color: realityAccent }}>
+                  <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, fontSize: '0.82rem', color: accentText }}>
                     {meshStats.massGrams} g · {meshStats.troyOz} oz t
                   </Typography>
                 </Box>
               </Box>
 
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <ViewInArIcon sx={{ fontSize: 18, color: realityAccent }} />
+                <ViewInArIcon sx={{ fontSize: 18, color: accentText }} />
                 <Box>
                   <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', display: 'block', fontSize: '0.65rem' }}>
                     DISPLACEMENT VOLUME
@@ -1264,14 +1361,14 @@ export default function Badge3dCoinGodModeTool({ tool }) {
           >
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
               <Typography variant="subtitle2" sx={{ fontWeight: 800, fontFamily: mono }}>
-                Relief Coin & Medallion Parameters
+                Relief Coin &amp; Medallion Parameters
               </Typography>
               <Chip
-                label="✦ 100% FREE & OPEN ACCESS"
+                label="v2.6.0 · 9 MCP TOOLS"
                 size="small"
                 sx={{
-                  bgcolor: 'rgba(16,185,129,0.15)',
-                  color: '#10B981',
+                  bgcolor: isDark ? 'rgba(212,175,55,0.14)' : '#FEF3C7',
+                  color: accentText,
                   fontWeight: 800,
                   fontSize: '0.68rem',
                   fontFamily: mono
@@ -1366,17 +1463,18 @@ export default function Badge3dCoinGodModeTool({ tool }) {
                   <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700 }}>
                     COIN RADIUS
                   </Typography>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: realityAccent }}>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: accentText }}>
                     {radius} mm (Ø {radius * 2} mm)
                   </Typography>
                 </Box>
                 <Slider
                   size="small"
+                  aria-label="Coin Radius"
                   value={radius}
                   min={10}
                   max={32}
                   onChange={(e, v) => setRadius(v)}
-                  sx={{ color: realityAccent }}
+                  sx={{ color: accentText }}
                 />
               </Box>
 
@@ -1385,18 +1483,19 @@ export default function Badge3dCoinGodModeTool({ tool }) {
                   <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700 }}>
                     COIN THICKNESS
                   </Typography>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: realityAccent }}>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: accentText }}>
                     {thickness} mm
                   </Typography>
                 </Box>
                 <Slider
                   size="small"
+                  aria-label="Coin Thickness"
                   value={thickness}
                   min={1.5}
                   max={6.5}
                   step={0.1}
                   onChange={(e, v) => setThickness(v)}
-                  sx={{ color: realityAccent }}
+                  sx={{ color: accentText }}
                 />
               </Box>
 
@@ -1405,18 +1504,19 @@ export default function Badge3dCoinGodModeTool({ tool }) {
                   <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700 }}>
                     EDGE SERRATIONS (REEDING)
                   </Typography>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: realityAccent }}>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: accentText }}>
                     {serrations} teeth
                   </Typography>
                 </Box>
                 <Slider
                   size="small"
+                  aria-label="Edge Serrations"
                   value={serrations}
                   min={0}
                   max={140}
                   step={4}
                   onChange={(e, v) => setSerrations(v)}
-                  sx={{ color: realityAccent }}
+                  sx={{ color: accentText }}
                 />
               </Box>
 
@@ -1425,18 +1525,19 @@ export default function Badge3dCoinGodModeTool({ tool }) {
                   <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700 }}>
                     RELIEF BUMP INTENSITY
                   </Typography>
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: realityAccent }}>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: accentText }}>
                     {(bumpScale * 100).toFixed(0)}%
                   </Typography>
                 </Box>
                 <Slider
                   size="small"
+                  aria-label="Relief Bump Intensity"
                   value={bumpScale}
                   min={0.02}
                   max={0.30}
                   step={0.01}
                   onChange={(e, v) => setBumpScale(v)}
-                  sx={{ color: realityAccent }}
+                  sx={{ color: accentText }}
                 />
               </Box>
 
