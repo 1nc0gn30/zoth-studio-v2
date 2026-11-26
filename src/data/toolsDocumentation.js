@@ -1215,48 +1215,80 @@ export const toolsDocumentation = {
   },
 
   'agent-capsule-jail': {
-    whyUse: 'Autonomous zero-dependency kernel enclave sandbox, resource quotas, and ephemeral process isolation for AI agents. Run arbitrary code, untrusted scripts, and multi-turn shell commands without risking host compromise, fork bombs, or credential theft.',
-    problemSolved: 'Eliminates the danger of rogue agent commands (rm -rf, disk wipes, infinite runaway loops, or secret exfiltration) while avoiding heavy Docker daemon dependencies.',
-    architecture: 'Python 3.10+ standard library daemon running on port 8105. Utilizes native Linux resource quotas via resource.setrlimit (CPU, RAM, process count, file size), ephemeral scratch spaces, environment sanitization, and filesystem delta diffing with direct telemetry forwarding to agent-flight-recorder (:8104).',
+    whyUse: 'Run commands proposed by an AI agent inside a disposable Linux sandbox instead of on your host shell. Each run gets a read-only view of the host, private scratch directories, no network, capped time/memory/processes, an environment with secrets removed, and a SHA-256 receipt you can verify later.',
+    problemSolved: 'Agents that execute shell commands can delete files, fork-bomb the machine, read API keys from the environment, or exfiltrate data. Agent Capsule Jail confines each command with bubblewrap namespaces and resource limits without needing Docker, and reports exactly what the command printed and changed.',
+    architecture: 'Python 3.10+ standard-library daemon bound to 127.0.0.1:8105 (v2.6.0). Each capsule runs under Linux bubblewrap: `--ro-bind / /` (read-only host root), private tmpfs on `/home`, `/root`, `/run` and `/tmp`, `--unshare-all` (mount, PID, network, IPC, UTS, user namespaces), `--cap-drop ALL`, `--die-with-parent` and `--new-session`. Time, memory (RLIMIT_AS), file size and process limits are applied with prlimit; when `systemd-run --user --scope` is available the process cap is a cgroup `TasksMax` (`pids_enforcement: "cgroup-tasksmax"`), otherwise RLIMIT_NPROC (`"rlimit-nproc"`). The environment is rebuilt from a small allowlist and a secret denylist (keys, tokens, passwords, cloud credentials) is enforced even for names passed in `allowed_env`, unless the operator sets `CAPSULE_FORCE_SENSITIVE_ENV=1`. `allow_network` is rejected with 403 unless the operator starts the daemon with `CAPSULE_ALLOW_NETWORK=1`. CPU time and peak RSS come from a per-run `os.wait4` rusage (not cumulative). Every result carries `receipt_sha256` = SHA-256 of the key-sorted, whitespace-free JSON of `{capsule_id, command, exit_code, stdout, stderr, fs_diff}`, and is forwarded to agent-flight-recorder (`:8104/api/ingest`); `flight_recorder_dispatched` is true only when that POST returned 2xx. `POST /api/exec` requires the `X-Capsule-Token` header (from `agent-capsule-jail token`); browser requests are accepted only from 127.0.0.1/localhost on the daemon port, 127.0.0.1:3000 / localhost:3000 (Studio) and https://zoth.nullai.tech. If bubblewrap is missing, `/api/health` reports `sandbox: "unavailable"` or `"unsandboxed"` instead of pretending. Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform.',
     aiAgentProtocol: {
+      server: 'agent-capsule-jail mcp  # stdio JSON-RPC 2.0',
       mcpTool: 'capsule_jail_exec',
-      description: 'Execute a command in an isolated ephemeral capsule sandbox with resource constraints.',
-      cliExample: './bin/agent-capsule exec -- python3 -c "print(1+1)"',
+      description: 'Execute a command or Python script inside a bubblewrap capsule with time, memory and process limits; returns output, filesystem diff, rusage and a SHA-256 receipt.',
+      cliExample: 'agent-capsule-jail exec --json -- python3 -c "print(1+1)"',
       inputSchema: {
         type: 'object',
         properties: {
-          command: { type: 'string', description: 'Shell command string to execute in capsule' },
-          timeout_sec: { type: 'number', description: 'Execution timeout in seconds', default: 30 },
-          memory_mb: { type: 'number', description: 'Maximum memory RSS cap in megabytes', default: 512 },
-          allowed_env: { type: 'array', items: { type: 'string' }, description: 'Allowed environment variable keys' }
+          command: { oneOf: [{ type: 'string' }, { type: 'array', items: { type: 'string' } }], description: 'Command string (runs via /bin/sh -c) or argv list. Provide command or script.' },
+          script: { type: 'string', description: 'Python source to run instead of command' },
+          timeout_sec: { type: 'number', minimum: 0.5, maximum: 60, default: 30 },
+          memory_mb: { type: 'integer', minimum: 32, maximum: 4096, default: 512 },
+          max_procs: { type: 'integer', minimum: 1, maximum: 512, default: 64 },
+          max_file_size_mb: { type: 'integer', minimum: 1, maximum: 1024, default: 50 },
+          allowed_env: { type: 'array', items: { type: 'string' }, description: 'Extra env names to pass through; the secret denylist still applies' },
+          initial_files: { type: 'object', additionalProperties: { type: 'string' }, description: 'relative path -> file content written into the scratch dir before the run' },
         },
-        required: ['command']
       },
       outputSchema: {
-        exit_code: 'number',
+        capsule_id: 'string',
+        status: '"success" | "error" | "timeout" | "oom_killed"',
+        exit_code: 'integer',
         stdout: 'string',
         stderr: 'string',
-        execution_ms: 'number',
-        files_diff: {
-          created: 'array',
-          modified: 'array',
-          deleted: 'array'
+        duration_ms: 'number',
+        fs_diff: { created: '[{path, size_bytes, sha256, is_dir}]', modified: '[{path, size_bytes, sha256, is_dir}]', deleted: '[path]', total_changes: 'integer' },
+        cpu_time_user_s: 'number',
+        cpu_time_system_s: 'number',
+        max_rss_kb: 'integer',
+        receipt_sha256: 'string (64 hex)',
+        sandbox_mode: 'string',
+      },
+      tools: [
+        {
+          name: 'capsule_jail_exec',
+          input: '{ command | script, timeout_sec?, memory_mb?, max_procs?, max_file_size_mb?, allowed_env?, initial_files? }',
+          output: '{ capsule_id, status, exit_code, stdout, stderr, duration_ms, fs_diff, cpu_time_user_s, cpu_time_system_s, max_rss_kb, receipt_sha256, sandbox_mode }',
         },
-        resource_usage: 'object'
-      }
+        {
+          name: 'capsule_jail_status',
+          input: '{ port? }',
+          output: '{ service, version, sandbox_mode, pids_enforcement, network_opt_in_enabled, daemon_online, daemon_port, health, stats }',
+        },
+      ],
     },
+    cliCommands: [
+      'agent-capsule-jail serve [--port 8105]   # start the daemon on 127.0.0.1',
+      'agent-capsule-jail exec [--json] -- <cmd...>   # run one command in a capsule',
+      'agent-capsule-jail status [--json]   # sandbox mode, pids enforcement, daemon health',
+      'agent-capsule-jail --status / --json',
+      'agent-capsule-jail token   # print the exec token for X-Capsule-Token',
+      'agent-capsule-jail mcp   # stdio MCP server (capsule_jail_exec, capsule_jail_status)',
+      'agent-capsule-jail test   # run the self-test suite',
+      'agent-capsule-jail-tui --once | --json   # terminal status view',
+    ],
     quickstart: [
       'git clone https://github.com/1nc0gn30/agent-capsule-jail.git',
-      'cd agent-capsule-jail && chmod +x bin/agent-capsule',
-      './bin/agent-capsule serve --port 8105'
+      'cd agent-capsule-jail && python3 server.py --port 8105',
+      '# in another terminal:',
+      'agent-capsule-jail status --json',
+      'agent-capsule-jail token',
+      'agent-capsule-jail exec -- sh -c "id && ls /"',
     ],
     features: [
-      'Zero-dependency Linux kernel process isolation via resource.setrlimit',
-      'Ephemeral copy-on-write scratch directories with commit/discard policies',
-      'Host environment sanitization (automatic stripping of API and cloud secrets)',
-      'Automated telemetry stream to Agent Flight Recorder on port 8104',
-      'Real-time Web Cockpit with resource gauges, process log feeds, and filesystem diffs',
-      'Zero external dependencies (100% Python standard library)'
+      'bubblewrap jail: read-only host root, private tmpfs /home /root /run /tmp, --unshare-all, --cap-drop ALL, --die-with-parent, --new-session',
+      'Process cap via cgroup TasksMax (systemd-run --user --scope) or RLIMIT_NPROC fallback; time, memory and file-size limits via prlimit',
+      'Environment rebuilt from an allowlist; secret denylist enforced even for allowed_env unless CAPSULE_FORCE_SENSITIVE_ENV=1',
+      'No network inside the capsule; allow_network only works when the operator sets CAPSULE_ALLOW_NETWORK=1',
+      'Per-run os.wait4 rusage (CPU user/system, peak RSS), filesystem diff with per-file SHA-256, and a receipt_sha256 per run',
+      'Token-gated POST /api/exec with an exact Origin/Host allowlist; MCP tools capsule_jail_exec and capsule_jail_status',
+      'Studio deck: Real Enclave Execution against 127.0.0.1:8105, plus a separate offline browser JS worker preview (no kernel isolation)',
     ]
   },
 

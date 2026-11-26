@@ -49,6 +49,25 @@ function prog(t, start, end) {
   return easeOutExpo(clamp01((t - start) / Math.max(0.001, end - start)));
 }
 
+// Per-tool motion metadata that overrides the category defaults.
+export const TOOL_MOTION_OVERRIDES = {
+  'agent-capsule-jail': {
+    accent: '#38BDF8',
+    secondary: '#34D399',
+    archetype: 'capsule',
+    anchorName: 'Capsule Seal / Namespace Ring',
+    formula: 'r = 0.62 ± seal(θ, t) · six namespace arcs (mnt, pid, net, ipc, uts, user)',
+    badge: 'BWRAP NAMESPACE JAIL',
+    clip: 'tools',
+    execLabel: '127.0.0.1:8105 LOCAL DAEMON · BUBBLEWRAP JAIL',
+    telemetrySub: 'bwrap --unshare-all · --cap-drop ALL · prlimit / cgroup TasksMax · SHA-256 receipt per run.',
+  },
+};
+
+export function getToolMotionMeta(tool) {
+  return TOOL_MOTION_OVERRIDES[tool?.id] || null;
+}
+
 export function getCategoryMotionMeta(category) {
   const cat = (category || '').toLowerCase();
   if (cat.includes('security') || cat.includes('recon') || cat.includes('opsec') || cat.includes('enclave')) {
@@ -139,6 +158,13 @@ function sampleArchetypeField(nx, ny, t, archetype) {
     const core = Math.exp(-r * 1.4);
     return clamp01(Math.abs(wave) * 0.7 + core * 0.55);
   }
+  if (archetype === 'capsule') {
+    // Sealed capsule shell with six rotating namespace arcs around a quiet core.
+    const shell = 1 - Math.min(1, Math.abs(r - 0.62) * 6.0);
+    const arcs = Math.pow(Math.max(0, Math.cos(a * 6 - t * 1.2)), 6) * (1 - Math.min(1, Math.abs(r - 0.82) * 7.0));
+    const core = Math.exp(-r * 4.2) * (0.55 + 0.25 * Math.sin(t * 2.0));
+    return clamp01(shell * 0.8 + arcs * 0.7 + core);
+  }
   if (archetype === 'geometry') {
     const poly = Math.cos(a * 6 + t * 0.9) * 0.25 + 0.55;
     const shell = 1 - Math.min(1, Math.abs(r - poly) * 3.4);
@@ -156,6 +182,7 @@ export default function ToolMotionShowcase({ tool, onReplayRouteIntro }) {
   const isDark = theme.palette.mode === 'dark';
   const meta = useMemo(() => {
     const base = getCategoryMotionMeta(tool?.category);
+    const override = getToolMotionMeta(tool);
     const brailleShape = resolveToolBrailleShape(tool);
     const desc = SHAPE_DESCRIPTORS[brailleShape] || SHAPE_DESCRIPTORS.astrolabe;
     return {
@@ -164,6 +191,7 @@ export default function ToolMotionShowcase({ tool, onReplayRouteIntro }) {
       anchorName: desc.name,
       formula: desc.formula,
       badge: desc.badge,
+      ...(override || {}),
     };
   }, [tool]);
 
@@ -188,10 +216,13 @@ export default function ToolMotionShowcase({ tool, onReplayRouteIntro }) {
   }, [renderMode]);
 
   const scenes = useMemo(() => {
-    const execLabel =
-      tool?.executionType === 'local_cli'
-        ? `127.0.0.1:${tool?.localPort || 'CLI'} LOOPBACK ENCLAVE`
-        : '100% IN-BROWSER CLIENT ENGINE';
+    const execLabel = meta.execLabel
+      ? meta.execLabel
+      : tool?.executionType === 'local_cli'
+      ? `127.0.0.1:${tool?.localPort || 'CLI'} LOOPBACK ENCLAVE`
+      : tool?.executionType === 'local-daemon'
+      ? `127.0.0.1:${tool?.localPort || ''} LOCAL DAEMON`
+      : '100% IN-BROWSER CLIENT ENGINE';
     return [
       {
         id: '01',
@@ -215,7 +246,7 @@ export default function ToolMotionShowcase({ tool, onReplayRouteIntro }) {
         end: 8.5,
         kicker: 'SCENE 03 · SUBSTRATE TELEMETRY',
         headline: execLabel,
-        sub: `0.00ms External Egress · v${tool?.version || '2.5.0'} Verified Runtime · Hardware-Anchored.`,
+        sub: meta.telemetrySub || `0.00ms External Egress · v${tool?.version || '2.5.0'} Verified Runtime · Hardware-Anchored.`,
       },
       {
         id: '04',
@@ -257,7 +288,7 @@ Hero Anchor: The ${meta.accent} ${meta.anchorName} rendered in Hybrid Cyber-ASCI
 Scene Breakdown & Exact On-Screen Copy:
 - Scene 1 (0:00 - 0:02.5): Explosive kinetic typography drop. Text: "ZERO CLOUD BLOAT."
 - Scene 2 (0:02.5 - 0:05.5): Anchor shape morphs into ${meta.anchorName}. Text: "${tool?.description}"
-- Scene 3 (0:05.5 - 0:08.5): High-contrast telemetry snap zoom. Text: "${tool?.executionType === 'local_cli' ? `127.0.0.1:${tool?.localPort || 'CLI'} LOOPBACK ENCLAVE` : '100% IN-BROWSER CLIENT ENGINE'}"
+- Scene 3 (0:05.5 - 0:08.5): High-contrast telemetry snap zoom. Text: "${meta.execLabel || (tool?.executionType === 'local_cli' ? `127.0.0.1:${tool?.localPort || 'CLI'} LOOPBACK ENCLAVE` : '100% IN-BROWSER CLIENT ENGINE')}"
 - Scene 4 (0:08.5 - 0:11.5): 3D isometric MCP JSON-RPC dispatch stream. Text: "${(tool?.id || 'tool').replace(/-/g, '_')}_execute"
 - Scene 5 (0:11.5 - 0:13.5): Climax gauge rises to 100/100 Sovereign Grade. Text: "ZERO EGRESS. INSTANT ACCESS."
 - Scene 6 (0:13.5 - 0:15.0): Branded resolve lockup. Text: "${tool?.name} — zoth.nullai.tech/tools/${tool?.id}"`;
@@ -412,6 +443,34 @@ Scene Breakdown & Exact On-Screen Copy:
             ctx.beginPath();
             ctx.arc(0, 0, 6 + Math.sin(t * 4) * 1.5, 0, Math.PI * 2);
             ctx.fill();
+          } else if (meta.archetype === 'capsule') {
+            // Capsule seal: closed shell, six namespace arcs, and a sealed core.
+            ctx.save();
+            ctx.strokeStyle = meta.accent;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(0, 0, R * 0.62, 0, Math.PI * 2);
+            ctx.stroke();
+            const ns = ['mnt', 'pid', 'net', 'ipc', 'uts', 'user'];
+            ns.forEach((label, i) => {
+              const a0 = (i / ns.length) * Math.PI * 2 + t * 0.5;
+              const a1 = a0 + (Math.PI * 2) / ns.length - 0.22;
+              ctx.strokeStyle = i % 2 === 0 ? meta.accent : meta.secondary;
+              ctx.lineWidth = 4;
+              ctx.beginPath();
+              ctx.arc(0, 0, R * 0.84, a0, a1);
+              ctx.stroke();
+              const mid = (a0 + a1) / 2;
+              ctx.fillStyle = meta.secondary;
+              ctx.font = '10px "JetBrains Mono", monospace';
+              ctx.textAlign = 'center';
+              ctx.fillText(label, Math.cos(mid) * R * 1.0, Math.sin(mid) * R * 1.0 + 3);
+            });
+            ctx.fillStyle = `${meta.accent}55`;
+            ctx.beginPath();
+            ctx.arc(0, 0, R * (0.2 + Math.sin(t * 2) * 0.02), 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
           } else if (meta.archetype === 'geometry') {
             for (let layer = 0; layer < 3; layer++) {
               const sides = 6 + layer * 2;

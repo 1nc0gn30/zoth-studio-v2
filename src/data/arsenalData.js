@@ -53,6 +53,6 @@ export function getAssetById(id) {
 export const arsenalStats = {
   total: microTools.length,
   tools: microTools.length,
-  cli: microTools.filter((t) => t.executionType === 'local_cli').length,
+  cli: microTools.filter((t) => t.executionType === 'local_cli' || t.executionType === 'local-daemon').length,
   webgpu: microTools.filter((t) => t.executionType === 'webgpu' || t.executionType === 'browser' || t.executionType === 'hybrid').length,
 };

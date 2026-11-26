@@ -230,13 +230,13 @@ export const workstations = [
   {
     id: "agent-capsule-jail",
     name: "Agent Capsule Jail // Kernel Sandbox & Isolation",
-    path: "/studio/agent-capsule.html",
+    path: "/tools/agent-capsule-jail",
     band: "Security",
     type: "integrated_tool",
-    description: "Kernel enclave sandbox, resource quotas, and ephemeral process isolation for AI agents.",
+    description: "Runs agent commands inside a Linux bubblewrap namespace jail with timeout, memory and process caps, secret-stripped environment, and a SHA-256 receipt per run (local daemon on 127.0.0.1:8105).",
     alsoInApp: "/tools/agent-capsule-jail",
     toolRepoId: "agent-capsule-jail",
-    pullCommand: "./bin/agent-capsule serve --port 8105"
+    pullCommand: "agent-capsule-jail serve --port 8105"
   },
   {
     id: "agent-policy-auditor",

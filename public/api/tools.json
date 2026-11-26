@@ -786,19 +786,18 @@
     {
       "id": "agent-capsule-jail",
       "name": "Agent Capsule Jail",
-      "description": "Autonomous kernel enclave sandbox, resource quota manager, and secret stripping engine with 100% free open-access loopback execution.",
+      "description": "Local Python daemon (127.0.0.1:8105) that runs agent commands inside a Linux bubblewrap namespace jail with timeout, memory and process caps, a secret-stripped environment, filesystem diffs, and a SHA-256 receipt per run. Free and open source.",
       "category": "Security & Enclave",
       "github": "https://github.com/1nc0gn30/agent-capsule-jail",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/agent-capsule-jail/",
-      "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/agent-capsule-jail.git && cd agent-capsule-jail && python3 server.py --port 8105  # or: agent-capsule --status",
-      "execution_type": "browser",
+      "version": "2.6.0",
+      "pull": "git clone https://github.com/1nc0gn30/agent-capsule-jail.git && cd agent-capsule-jail && python3 server.py --port 8105  # or: agent-capsule-jail serve",
+      "execution_type": "local-daemon",
       "runtimes": [
-        "browser",
-        "webgpu",
+        "local-daemon",
         "cli",
-        "zero-egress"
+        "mcp"
       ],
       "port": 8105,
       "local_url": "http://127.0.0.1:8105"

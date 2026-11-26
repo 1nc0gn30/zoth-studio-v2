@@ -256,7 +256,6 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'vision-link': VisionKinematicsGodModeTool,
   'web3-hub': SovereignBridgeGodModeTool,
   'github-tool': PolyglotStudioGodModeTool,
-  'edge-forge': AgentCapsuleJailGodModeTool,
   'netlify-ax': AeoGraphEngineGodModeTool,
   'webgen': ZothBoltGodModeTool,
   'omnipost': OmniPostSocialGodModeTool,
@@ -448,7 +447,16 @@ export default function RealToolWorkspacePage() {
   const isBrowserOnly = execType === 'browser' || execType === 'webgpu';
   const isHybrid = execType === 'hybrid';
   const isLocalCli = execType === 'local_cli';
-  const runtimeBanner = isBrowserOnly
+  const isLocalDaemon = execType === 'local-daemon' || execType === 'local_daemon';
+  const runtimeBanner = isLocalDaemon
+    ? {
+        tone: 'amber',
+        badge: runtimePort ? `LOCAL DAEMON :${runtimePort}` : 'LOCAL DAEMON',
+        text: tool.id === 'agent-capsule-jail'
+          ? 'Requires local daemon (agent-capsule-jail serve) — optional offline JS worker preview in Studio'
+          : `Requires local daemon${runtimePort ? ` (127.0.0.1:${runtimePort})` : ''} — Studio deck talks to it over loopback`,
+      }
+    : isBrowserOnly
     ? {
         tone: 'emerald',
         badge: execType === 'webgpu' ? 'WEBGPU / BROWSER' : 'IN-BROWSER',
@@ -508,7 +516,7 @@ export default function RealToolWorkspacePage() {
       `TOOL ID     : ${tool.id}  [v${tool.version || '2.5.0'}]`,
       `NAME        : ${tool.name}`,
       `CATEGORY    : ${tool.category || 'Sovereign Arsenal'}`,
-      `EXECUTION   : ${tool.executionType === 'local_cli' ? 'LOCAL CLI + IN-BROWSER WORKBENCH' : '100% CLIENT-SIDE IN-BROWSER ENGINE'}`,
+      `EXECUTION   : ${tool.executionType === 'local_cli' ? 'LOCAL CLI + IN-BROWSER WORKBENCH' : tool.executionType === 'local-daemon' ? `LOCAL DAEMON 127.0.0.1:${tool.localPort || ''} (REQUIRED FOR LIVE RUNS)` : '100% CLIENT-SIDE IN-BROWSER ENGINE'}`,
       `BRAILLE SIG : ${brailleSignature}  (Unicode U+2800 2x4 Sub-Pixel)`,
       `BAYER 8x8   : ░▒▓█▓▒░  REALITY=${reality?.id || 'aurum'} DENSITY=${realityParams?.density || 50}%`,
       `CLI / PULL  : ${pullCommand}`,
@@ -1176,6 +1184,8 @@ export default function RealToolWorkspacePage() {
                 src={
                   tool.id === 'agent-budget-sentinel'
                     ? `${tool.localUrl || `http://127.0.0.1:${tool.localPort}`}?theme=${isDark ? 'dark' : 'light'}&embed=1`
+                    : tool.id === 'agent-capsule-jail'
+                    ? `${tool.localUrl || `http://127.0.0.1:${tool.localPort}`}/?embed=1&theme=${isDark ? 'dark' : 'light'}`
                     : (tool.localUrl || `http://127.0.0.1:${tool.localPort}`)
                 }
                 title={`${tool.name} Local Sovereign Web Application (:${tool.localPort})`}
@@ -1517,7 +1527,7 @@ export default function RealToolWorkspacePage() {
                   overflowX: 'auto',
                 }}
               >
-                {(docs.quickstart || [cloneCommand]).map((line, i) => (
+                {[...(docs.quickstart || [cloneCommand]), ...(docs.cliCommands?.length ? ['# CLI reference', ...docs.cliCommands] : [])].map((line, i) => (
                   <Box key={i} component="div">
                     {line.startsWith('#') ? (
                       <Box component="span" sx={{ color: '#94A3B8' }}>{line}</Box>
@@ -1535,7 +1545,10 @@ export default function RealToolWorkspacePage() {
             <Grid xs={12} md={6}>
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
                 <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700, color: primaryText }}>
-                  MCP Tool: {docs.aiAgentProtocol?.mcpTool || `${tool.id.replace(/-/g, '_')}_execute`}
+                  MCP Tool{docs.aiAgentProtocol?.tools?.length > 1 ? 's' : ''}:{' '}
+                  {docs.aiAgentProtocol?.tools?.length
+                    ? docs.aiAgentProtocol.tools.map((x) => x.name).join(', ')
+                    : docs.aiAgentProtocol?.mcpTool || `${tool.id.replace(/-/g, '_')}_execute`}
                 </Typography>
                 {docs.aiAgentProtocol?.cliExample && (
                   <IconButton
@@ -1564,11 +1577,17 @@ export default function RealToolWorkspacePage() {
                 }}
               >
                 {JSON.stringify(
-                  {
-                    mcpTool: docs.aiAgentProtocol?.mcpTool,
-                    cli: docs.aiAgentProtocol?.cliExample,
-                    inputSchema: docs.aiAgentProtocol?.inputSchema,
-                  },
+                  docs.aiAgentProtocol?.tools?.length
+                    ? {
+                        server: docs.aiAgentProtocol.server,
+                        cli: docs.aiAgentProtocol.cliExample,
+                        tools: docs.aiAgentProtocol.tools,
+                      }
+                    : {
+                        mcpTool: docs.aiAgentProtocol?.mcpTool,
+                        cli: docs.aiAgentProtocol?.cliExample,
+                        inputSchema: docs.aiAgentProtocol?.inputSchema,
+                      },
                   null,
                   2,
                 )}
