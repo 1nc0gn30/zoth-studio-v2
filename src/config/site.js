@@ -286,6 +286,7 @@ export function getAllStaticRoutes() {
   routes['/tools/chronicle'] = getRouteMeta('/tools/chronicle');
   routes['/tools/cockpit'] = getRouteMeta('/tools/cockpit');
   routes['/tools/connectors'] = getRouteMeta('/tools/connectors');
+  routes['/tools/consensus'] = getRouteMeta('/tools/consensus');
 
   // Add all math pillars
   mathPillars.forEach((pillar) => {
@@ -533,10 +534,40 @@ export function generateSchemaGraph(path = '/') {
     graph.push({
       '@type': 'TechArticle',
       '@id': `${fullUrl}#tech-article`,
-      'headline': 'Consensus Battle Arena // 3-Agent Byzantine Triangulation & AST Synthesis',
+      'headline': 'Byzantine Consensus Battle Arena // N >= 3f + 1 Multi-Model Quorum & Diff Arbiter',
       'description': routeMeta.description,
       'author': { '@type': 'Organization', 'name': 'NullAI Tech' },
       'publisher': { '@id': `${siteConfig.url}/#organization` }
+    });
+    graph.push({
+      '@type': 'FAQPage',
+      '@id': `${fullUrl}#faq`,
+      'mainEntity': [
+        {
+          '@type': 'Question',
+          'name': 'How does the Byzantine Consensus Battle Arena calculate quorum safety and verdict receipts?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'The arena enforces exact Byzantine Fault Tolerant bounds (N >= 3f + 1, f_max = floor((N - 1) / 3), and supermajority Q = max(2f + 1, floor(2N / 3) + 1)) across 4 to 7 domain validators or up to 4 local loopback models, then seals the proposal digest and canonical sorted validator votes into a genuine FIPS 180-4 SHA-256 binary Merkle root.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'Can the Consensus Battle Arena run offline in the browser as well as against local Ollama and AGY-Hermes models?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Yes. Its hybrid engine (src/utils/consensusEngine.js mirrored at server/consensus-engine.mjs) runs a deterministic multi-agent proposal and unified-diff rubric arbiter 100% in-browser with zero external requests, and optionally fans out to local 127.0.0.1:18000 (AGY-Hermes) and 127.0.0.1:11434 (Ollama) models through hardened Host/Origin-checked /api/studio/consensus/{models,run} loopback APIs.'
+          }
+        },
+        {
+          '@type': 'Question',
+          'name': 'Is Byzantine Consensus Battle Arena free and open-access without paywalls?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Yes. Byzantine Consensus Battle Arena is 100% free and unlocked by default with zero paywalls, zero license keys, sanitized JSON/Markdown/CSV exports, and optional community support via Stripe Buy Us a Coffee or Solana tips.'
+          }
+        }
+      ]
     });
   } else if (path === '/adytum') {
     graph.push({
@@ -1084,6 +1115,39 @@ export function generateSchemaGraph(path = '/') {
               'acceptedAnswer': {
                 '@type': 'Answer',
                 'text': 'Yes. Connectors Hub is 100% free and unlocked by default with zero paywalls or license modals. When opened statically without the local :3000 server, it switches cleanly to an honest offline browser fallback while keeping all MCP JSON, .env, Hermes YAML, Codex TOML, and sanitized JSON/Markdown/CSV generators fully functional, supported optionally via Stripe Buy Us a Coffee or Solana community tips.'
+              }
+            }
+          ]
+        });
+      }
+
+      if (station.id === 'consensus') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'How does the Byzantine Consensus Battle Arena calculate quorum safety and SHA-256 Merkle receipts?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Byzantine Consensus Battle Arena enforces exact BFT quorum math (N >= 3f + 1, f_max = floor((N - 1) / 3), Q = max(2f + 1, floor(2N / 3) + 1)) across 4 to 7 domain validators or up to 4 local loopback models, returning QUORUM_REACHED, BYZANTINE_SPLIT, or FAULT_THRESHOLD_EXCEEDED and sealing every round into a verifiable FIPS 180-4 SHA-256 binary Merkle receipt.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does Consensus Battle Arena protect local model gateways against SSRF and DNS rebinding?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'GET /api/studio/consensus/models and POST /api/studio/consensus/run enforce strict loopback Host and Origin header validation (returning HTTP 403 on untrusted hosts or cross-origin requests), cap request bodies at 64 KB, reject external URLs or arbitrary hosts with HTTP 400, restrict model dispatch exclusively to 127.0.0.1:18000 (AGY-Hermes) and 127.0.0.1:11434 (Ollama) with <= 12s timeouts, redact home paths to ~/, and neutralize CSV formula injection.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Byzantine Consensus Battle Arena free and open-access offline and online?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Byzantine Consensus Battle Arena is 100% free and unlocked by default with zero paywalls or license locks. Its deterministic in-browser multi-agent diff arbiter, SHA-256 Merkle verifier, and sanitized JSON/Markdown/CSV exports work completely offline, supported voluntarily via Stripe Buy Us a Coffee or Solana community tips.'
               }
             }
           ]

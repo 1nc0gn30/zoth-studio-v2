@@ -1848,10 +1848,10 @@ envguard --help`}
       "args": ["-y", "@nullaitech/zoth-memory-mcp", "--port", "8094"],
       "env": { "ZOTH_LOOPBACK_ONLY": "1" }
     },
-    "zoth-studio-consensus-mcp": {
-      "command": "npx",
-      "args": ["-y", "@nullaitech/zoth-consensus-mcp", "--port", "8989"],
-      "env": { "ZOTH_LOOPBACK_ONLY": "1" }
+    "zoth-studio-consensus-api": {
+      "command": "node",
+      "args": ["./server/serve.mjs", "--port", "3000"],
+      "env": { "ZOTH_LOOPBACK_ONLY": "1", "ZOTH_CONSENSUS_ENDPOINTS": "/api/studio/consensus/{models,run}" }
     },
     "zoth-studio-adytum-mcp": {
       "command": "npx",

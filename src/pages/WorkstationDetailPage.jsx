@@ -969,17 +969,10 @@ function HubWorkstationConsole({ station }) {
       badge: 'Security Enclave',
       stats: [{ label: 'Loopback Ports', val: '64/64 Scanned' }, { label: 'Security Score', val: '98/100' }, { label: 'Offline-Capable', val: 'VERIFIED' }],
     },
-    'consensus': {
-      title: 'Consensus Battle Arena & Byzantine Triangulation',
-      desc: '3-agent adversarial arena where Azoth, Chronos, and Lycan debate AST correctness until a 2/3 Byzantine quorum is reached.',
-      target: '/consensus',
-      badge: 'Swarm & Consensus',
-      stats: [{ label: 'Agents in Quorum', val: '3 Nodes' }, { label: 'Quorum Rule', val: '2/3 Byzantine' }, { label: 'AST Status', val: 'Verified' }],
-    },
     'fusion-arena': {
       title: 'Fusion Swarm Arena 3D Viewport',
       desc: 'Real-time 3D spatial visualization of multi-agent consensus synthesis and Byzantine debate nodes.',
-      target: '/consensus',
+      target: '/workstations/consensus',
       badge: 'Swarm & Consensus',
       stats: [{ label: 'Render Engine', val: 'Three.js / WebGL' }, { label: 'Framerate', val: '60 FPS' }, { label: 'Node Meshes', val: 'Synchronized' }],
     },

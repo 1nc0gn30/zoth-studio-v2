@@ -45,7 +45,7 @@ const ROUTES = [
   { match: /^\/workstations(\/.*)?$/, clip: 'workstations', label: 'Architecture Dossiers', kicker: `${workstations.length} System & Daemon Specifications`, accent: 'gold', brailleShape: 'astrolabe' },
   { match: /^\/memory\/docs\/?$/, clip: 'memory', label: 'Memory · Docs', kicker: 'Synaptic Graph Specification', accent: 'purple', brailleShape: 'synapse' },
   { match: /^\/memory\/?$/, clip: 'memory', label: 'Neuro Memory', kicker: 'STDP Synaptic Graph · :8094', accent: 'purple', brailleShape: 'synapse' },
-  { match: /^\/consensus\/?$/, clip: 'consensus', label: 'Byzantine Consensus', kicker: 'Multi-Model Verification · :8106', accent: 'cyan', brailleShape: 'quorum' },
+  { match: /^\/consensus\/?$/, clip: 'consensus', label: 'Byzantine Consensus', kicker: 'BFT Quorum Verification · N >= 3f + 1', accent: 'cyan', brailleShape: 'quorum' },
   { match: /^\/webgen\/docs\/?$/, clip: 'webgen', label: 'Zoth Bolt · Docs', kicker: 'Full-Stack Engine Reference', accent: 'sky', brailleShape: 'grid' },
   { match: /^\/webgen\/?$/, clip: 'webgen', label: 'Zoth Bolt', kicker: 'Full-Stack Code Synthesizer · :5173', accent: 'sky', brailleShape: 'grid' },
   { match: /^\/ui-kit\/?$/, clip: 'webgen', label: 'Zoth UI Kit', kicker: 'Reusable Sovereign Components & Scaffolder', accent: 'gold', brailleShape: 'grid' },

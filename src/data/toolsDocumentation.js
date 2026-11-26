@@ -3945,6 +3945,61 @@ export const toolsDocumentation = {
           "Zero-Key-Leakage Config & .env Forge — Interactive multi-connector generators with Copy and Download for MCP mcpServers JSON, OpenAI-compatible .env, Hermes config.yaml, and Codex config.toml strictly using ${ENV_VAR} placeholders.",
           "Sanitized Diagnostic Exports & Offline Inspector — One-click Copy and Download for home-path-redacted JSON, Markdown briefs, and formula-neutralized CSV inventories with an honest browser fallback when :3000 is unreachable."
       ]
+  },
+  "consensus": {
+      "whyUse": "Arbitrate candidate code diffs, security patches, and architectural proposals across heterogeneous validators using strict Byzantine Fault Tolerant quorum bounds (N >= 3f + 1, f_max = floor((N - 1) / 3), Q = 2f + 1) with cryptographic SHA-256 Merkle verdict receipts.",
+      "problemSolved": "Eliminates single-model hallucinations, fabricated arithmetic hashes, and unverified patch approvals by combining deterministic multi-domain static/diff rubric scoring in-browser with optional live loopback fan-out across local AGY-Hermes (:18000) and Ollama (:11434) models.",
+      "architecture": "Hybrid Studio workstation backed by a pure zero-dependency consensus engine (src/utils/consensusEngine.js mirrored byte-identically at server/consensus-engine.mjs) and hardened loopback APIs (GET /api/studio/consensus/models and POST /api/studio/consensus/run on 127.0.0.1:3000) enforcing Host/Origin 403 guards, 64 KB payload caps, and strict loopback provider allowlists.",
+      "aiAgentProtocol": {
+          "server": "zoth-studio-loopback-api (127.0.0.1:3000)",
+          "mcpTool": "GET /api/studio/consensus/models · POST /api/studio/consensus/run",
+          "description": "Discover live local models across 127.0.0.1:18000 (AGY-Hermes) and 127.0.0.1:11434 (Ollama) and execute deterministic BFT or live loopback multi-model quorum rounds with FIPS 180-4 SHA-256 Merkle verdict receipts.",
+          "cliExample": "zoth open consensus --json",
+          "tools": [
+              {
+                  "name": "GET /api/studio/consensus/models",
+                  "description": "Protected by loopback Host header validation (403 on untrusted hosts). Probes local 127.0.0.1:18000 (/v1/models) and 127.0.0.1:11434 (/api/tags) with <= 1400ms timeout and returns sanitized provider health and model IDs with 0 host home-path leaks."
+              },
+              {
+                  "name": "POST /api/studio/consensus/run",
+                  "description": "Protected by loopback Host + Origin checks (403), 64 KB body cap, and SSRF allowlist (400 on external URLs/hosts). Runs deterministic multi-agent BFT arbitration or dispatches up to 4 local :18000/:11434 models (<= 12s timeout each) and seals a genuine SHA-256 Merkle verdict receipt."
+              }
+          ],
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "proposal": { "type": "string", "description": "Proposal text, claim, or unified git diff (max 48,000 chars)" },
+                  "mode": { "type": "string", "enum": ["in-browser-deterministic", "loopback-models"] },
+                  "nodeCount": { "type": "integer", "minimum": 4, "maximum": 7, "default": 5 },
+                  "faultyCount": { "type": "integer", "minimum": 0, "maximum": 7, "default": 1 },
+                  "models": { "type": "array", "maxItems": 4, "description": "Local { provider: 'agy-hermes'|'ollama', model } targets" }
+              },
+              "required": ["proposal"]
+          },
+          "outputSchema": {
+              "schemaVersion": "2.3.0",
+              "mode": "in-browser-deterministic | loopback-models",
+              "votes": "array",
+              "tally": "object",
+              "receipt": "object"
+          }
+      },
+      "quickstart": [
+          "zoth open consensus",
+          "zoth open consensus --json",
+          "curl -sS http://127.0.0.1:3000/api/studio/consensus/models | jq '{totalModels, providers: [.providers[] | {id, online, count: (.models|length)}]}'"
+      ],
+      "cliCommands": [
+          "zoth open consensus --json  # Print canonical Byzantine Consensus Battle Arena route and URLs",
+          "curl -sS -X POST http://127.0.0.1:3000/api/studio/consensus/run -H 'Origin: http://127.0.0.1:3000' -H 'Content-Type: application/json' -d '{\"proposal\":\"+const host = \\\"127.0.0.1\\\";\",\"mode\":\"in-browser-deterministic\",\"nodeCount\":5,\"faultyCount\":1}'",
+          "npm run test:consensus      # Run BFT quorum math, SHA-256 Merkle proof, SSRF & CSV unit tests"
+      ],
+      "features": [
+          "Real BFT Quorum Math — Exact N >= 3f + 1, f_max = floor((N - 1) / 3), and Q = 2f + 1 / supermajority invariants with live Byzantine fault injection showing safety-boundary halts.",
+          "Deterministic Multi-Agent Diff Arbiter — Evaluates real code patches and unified diffs across Security, Performance, Architecture, Compatibility, Policy, Crypto, and Reliability rubrics with zero Math.random().",
+          "Cryptographic SHA-256 Receipt & Merkle Proof — Computes FIPS 180-4 SHA-256 digests over the proposal and canonical sorted validator leaves, constructing a verifiable binary SHA-256 Merkle root.",
+          "Live Loopback Models & Sanitized Exports — Discovers local :18000 AGY-Hermes and :11434 Ollama models via hardened Studio APIs and exports home-path-redacted JSON, Markdown, and formula-neutralized CSV receipts."
+      ]
   }
 };
 

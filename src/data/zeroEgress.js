@@ -38,7 +38,7 @@ export const legacyWorkstations = [
   { file: 'signal-bridge.html', job: 'E2EE WebSocket signal bridge and packet pinger', to: '/tools/sovereign-agent-bridge' },
   { file: 'bus-monitor.html', job: 'Loopback bus NOC, measured RTT pinger, and HKDF-SHA256/HMAC envelope inspector', to: '/workstations/bus-monitor' },
   { file: 'netrunner-memory.html', job: 'Biomorphic STDP memory daemon and vector search', to: '/memory' },
-  { file: 'consensus.html', job: 'Socratic debate arena and AST diff console', to: '/arsenal' },
+  { file: 'consensus.html', job: 'Hybrid Byzantine Consensus Battle Arena (N >= 3f + 1), unified diff arbiter, and SHA-256 Merkle verdict console', to: '/workstations/consensus' },
   { file: 'fusion-arena.html', job: 'Multi-model fusion arbitration', to: '/arsenal' },
   { file: 'webgen.html', job: 'Layout foundry and polyglot framework exporter', to: '/webgen' },
   { file: 'ide.html', job: 'Local code workstation and diff review', to: '/webgen' },

@@ -86,6 +86,16 @@ try {
   check('Connectors probe cross-origin blocked (403)', r.status === 403, `${r.status}`);
   r = await req('/api/studio/connectors/probe', { method: 'POST', headers: { Origin: base, 'Content-Type': 'application/json' }, body: JSON.stringify({ port: PORT, path: '/api/studio/status' }) });
   check('Connectors probe local loopback port (200 online)', r.status === 200 && /"online":true/.test(r.body) && /"host":"127.0.0.1"/.test(r.body), `${r.status} ${r.body.slice(0, 140)}`);
+  r = await req('/api/studio/consensus/models');
+  check('Consensus models API 200 JSON (0 /home/ leaks)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"schemaVersion":"2.3.0"/.test(r.body) && /"providers":\[/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 140)}`);
+  r = await req('/api/studio/consensus/models', { headers: { Host: 'evil.example.invalid' } });
+  check('Consensus models GET DNS-rebinding blocked (403)', r.status === 403 && /Untrusted host blocked/.test(r.body), `${r.status} ${r.body.slice(0, 80)}`);
+  r = await req('/api/studio/consensus/run', { method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/json' }, body: JSON.stringify({ proposal: 'test', mode: 'in-browser-deterministic' }) });
+  check('Consensus run cross-origin blocked (403)', r.status === 403, `${r.status}`);
+  r = await req('/api/studio/consensus/run', { method: 'POST', headers: { Origin: base, 'Content-Type': 'application/json' }, body: JSON.stringify({ proposal: 'test', mode: 'loopback-models', url: 'http://169.254.169.254/latest' }) });
+  check('Consensus run external/SSRF target rejected (400)', r.status === 400, `${r.status} ${r.body.slice(0, 120)}`);
+  r = await req('/api/studio/consensus/run', { method: 'POST', headers: { Origin: base, 'Content-Type': 'application/json' }, body: JSON.stringify({ proposal: '+const host = "127.0.0.1";\n+const h = sha256Hex("ok");\n// /home/operator/redacted', mode: 'in-browser-deterministic', nodeCount: 5, faultyCount: 1 }) });
+  check('Consensus run deterministic 200 JSON (64-hex SHA-256 Merkle root, 0 /home/ leaks)', r.status === 200 && /"merkleRoot":"[0-9a-f]{64}"/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 160)}`);
   r = await req('/api/studio/ax/audit');
   check('AX audit API 200 JSON (driftCount 0)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"driftCount":0/.test(r.body), `${r.status} ${r.body.slice(0, 180)}`);
   r = await req('/api/studio/ax/validate', { method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/json' }, body: '{"spec":"robots.txt","content":"User-agent: *\\nAllow: /"}' });

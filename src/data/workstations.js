@@ -473,11 +473,14 @@ export const workstations = [
   {
     id: "consensus",
     name: "Byzantine Consensus Battle Arena",
-    path: "/studio/consensus.html",
+    path: "/workstations/consensus",
     band: "Swarm & Consensus",
-    type: "enclave_daemon",
-    description: "3-agent Byzantine AST synthesis arena with deterministic truth arbitration.",
-    alsoInApp: "/consensus"
+    type: "cockpit",
+    executionType: "hybrid",
+    version: "2.3.0",
+    pullCommand: "zoth open consensus",
+    description: "Hybrid Byzantine Fault Tolerant (N >= 3f + 1, Q = 2f + 1) proposal and unified-diff arbitration workstation with deterministic in-browser multi-agent rubric evaluation, live loopback model dispatch (:18000 AGY-Hermes & :11434 Ollama), FIPS 180-4 SHA-256 Merkle verdict receipts, and sanitized JSON/Markdown/CSV exports.",
+    alsoInApp: "/workstations/consensus"
   },
   {
     id: "bus-monitor",

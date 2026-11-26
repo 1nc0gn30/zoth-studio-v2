@@ -173,6 +173,18 @@ export const TOOL_MOTION_OVERRIDES = {
     mcpLabel: 'GET /API/STUDIO/CONNECTORS · POST /PROBE',
     telemetrySub: 'AGY-Hermes :18000 · Ollama :11434 · 6 CLI Harnesses · 8 Core Bridges · Secret-Redacted MCP · v2.3.0.',
   },
+  'consensus': {
+    accent: '#22D3EE',
+    secondary: '#D4AF37',
+    archetype: 'swarm',
+    anchorName: 'Byzantine Quorum Lattice & SHA-256 Merkle Seal',
+    formula: 'N ≥ 3f + 1 · f_max = ⌊(N−1)/3⌋ · Q = max(2f+1, ⌊2N/3⌋+1) · Root = MerkleSHA256(votes)',
+    badge: 'CONSENSUS BATTLE ARENA · v2.3.0',
+    clip: 'consensus',
+    execLabel: 'HYBRID IN-BROWSER BFT + /api/studio/consensus/{models,run}',
+    mcpLabel: 'GET /API/STUDIO/CONSENSUS/MODELS · POST /RUN',
+    telemetrySub: 'N ≥ 3f + 1 Quorum · Unified Diff Arbiter · AGY-Hermes :18000 · Ollama :11434 · SHA-256 Merkle · v2.3.0.',
+  },
 };
 
 export function getToolMotionMeta(tool) {

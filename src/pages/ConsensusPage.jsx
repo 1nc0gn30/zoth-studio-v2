@@ -6,47 +6,52 @@ export default function ConsensusPage() {
     <LocalSystemDossier
       tone="emerald"
       kicker="BYZANTINE CONSENSUS ENGINE"
-      badges={['LOCAL DAEMON :8141', 'N >= 3F + 1 QUORUM', 'CROSS-MODEL VERIFICATION']}
+      badges={['HYBRID WORKSTATION', 'N >= 3F + 1 QUORUM', 'SHA-256 MERKLE RECEIPTS']}
       title="Fault-Tolerant Multi-Model"
       accentWord="Quorum Verification."
-      subtitle="High-assurance engineering cannot trust a single stochastic completion. Our Byzantine Consensus layer evaluates code patches, security audits, and formal claims across N >= 3f + 1 independent model instances—ratifying outputs only when a verifiable supermajority converges."
-      cloneCommand="git clone https://github.com/NullAITech/zoth-studio-v2.git && cd zoth-studio-v2"
+      subtitle="High-assurance engineering cannot trust a single stochastic completion. Our Byzantine Consensus layer evaluates code patches, unified diffs, and security claims across N >= 3f + 1 independent validators or local loopback models (:18000 AGY-Hermes and :11434 Ollama)—ratifying outputs only when a verifiable supermajority converges."
+      toolRoute="/workstations/consensus"
+      toolLabel="Open Consensus Battle Arena"
+      cloneCommand="zoth open consensus"
       repoUrl="https://github.com/NullAITech/zoth-studio-v2"
       repoLabel="Get Zoth Studio Repo"
       docsRoute="/docs/math"
       docsLabel="Read Formal Math Proofs"
+      showSupportStrip={false}
       overviewTitle="Applying Classical BFT Quorum Bounds to Stochastic Agents"
       overviewParagraphs={[
-        'In distributed systems, tolerating f faulty or hallucinating worker nodes requires a minimum pool of N = 3f + 1 independent participants and a 2f + 1 commit quorum. When synthesizing security-critical code or cryptographic transforms, dispatching identical specifications across diverse local models exposes subtle logic divergences immediately.',
-        'Combined with deterministic test vector harnesses (`scripts/test-ground-truth.mjs`), Consensus rejects any candidate patch that fails either mathematical ground-truth checks or cross-model semantic agreement.',
+        'In distributed systems, tolerating f faulty or hallucinating worker nodes requires a minimum pool of N = 3f + 1 independent participants and a 2f + 1 supermajority commit quorum. When auditing security-critical diffs or configuration changes, evaluating identical specifications across independent specialist rubrics or local loopback models exposes logic divergences immediately.',
+        'Paired with our pure consensus verification suite (scripts/test-consensus-engine.mjs via npm run test:consensus), the arena seals every round into a canonical FIPS 180-4 SHA-256 binary Merkle receipt and halts ratification whenever faults exceed f_max = floor((N - 1) / 3).',
       ]}
       pipelineSteps={[
         {
-          label: 'Parallel Heterogeneous Fan-Out',
-          detail: 'Dispatches identical task contracts across independent local Ollama weights, Hermes workers, or configured API endpoints.',
+          label: 'Deterministic Rubric or Loopback Model Fan-Out',
+          detail: 'Runs 100% in-browser across 4 to 7 domain validators or dispatches up to 4 local loopback models on 127.0.0.1:18000 (AGY-Hermes) and 127.0.0.1:11434 (Ollama) through POST /api/studio/consensus/run.',
         },
         {
-          label: 'AST & Test-Vector Normalization',
-          detail: 'Canonicalizes candidate outputs and executes deterministic unit/crypto test vectors against each candidate.',
+          label: 'Unified Diff & Static Invariant Analysis',
+          detail: 'Parses diff hunks line-by-line to surface eval/XSS sinks, wildcard 0.0.0.0 binds, SELECT * queries, weak hashes, and positive loopback/error-handling guards.',
         },
         {
-          label: '2f + 1 Supermajority Commit',
-          detail: 'Commits the verified artifact only when quorum threshold and zero-error runtime checks pass simultaneously.',
+          label: '2f + 1 Supermajority Commit & SHA-256 Merkle Seal',
+          detail: 'Computes exact BFT safety/liveness verdicts (QUORUM_REACHED, BYZANTINE_SPLIT, or FAULT_THRESHOLD_EXCEEDED) and exports sanitized JSON, Markdown, and formula-neutralized CSV receipts.',
         },
       ]}
       specs={[
-        { key: 'Loopback Service', value: '127.0.0.1:8141' },
-        { key: 'Fault Tolerance Bound', value: 'N >= 3f + 1 (Up to 33% Faulty Nodes)' },
-        { key: 'Commit Threshold', value: '2f + 1 Verified Supermajority' },
-        { key: 'Ground-Truth Harness', value: 'node scripts/test-ground-truth.mjs' },
-        { key: 'Math Specification', value: '/docs/math (Six Formal Pillars)' },
-        { key: 'Execution Mode', value: 'Local CLI & Daemon Verification' },
+        { key: 'Interactive Workstation', value: '/workstations/consensus (v2.3.0)' },
+        { key: 'Studio Loopback APIs', value: '127.0.0.1:3000 /api/studio/consensus/{models,run}' },
+        { key: 'Local Model Gateways', value: '127.0.0.1:18000 (AGY-Hermes) & :11434 (Ollama)' },
+        { key: 'Fault Tolerance Bound', value: 'N >= 3f + 1 (f_max = floor((N - 1) / 3))' },
+        { key: 'Commit Threshold', value: 'Q = max(2f + 1, floor(2N / 3) + 1)' },
+        { key: 'Automated Test Suite', value: 'npm run test:consensus (scripts/test-consensus-engine.mjs)' },
       ]}
       quickstartLines={[
-        '# Clone Zoth Studio v2 & run the deterministic ground-truth suite',
-        'git clone https://github.com/NullAITech/zoth-studio-v2.git',
-        'cd zoth-studio-v2 && npm install',
-        'npm run test:ground-truth',
+        '# Open the interactive Byzantine Consensus Battle Arena',
+        'zoth open consensus',
+        '# Query discovered local loopback models (:18000 & :11434)',
+        'curl -sS http://127.0.0.1:3000/api/studio/consensus/models | jq .',
+        '# Run the pure BFT quorum & SHA-256 Merkle unit test suite',
+        'npm run test:consensus',
       ]}
       capabilitiesKicker="CONSENSUS GUARANTEES"
       capabilitiesTitle="Deterministic Verification Over Guesswork"
@@ -54,27 +59,27 @@ export default function ConsensusPage() {
         {
           tag: 'QUORUM MATH',
           title: '3f + 1 Fault Isolation',
-          desc: 'Isolates outlier hallucinations, truncated completions, and prompt-injected worker responses before they reach your codebase.',
+          desc: 'Isolates equivocating, timed-out, or hallucinating validators and halts commits immediately when f exceeds floor((N - 1) / 3).',
         },
         {
-          tag: 'GROUND TRUTH',
-          title: 'RFC & Crypto Vector Gating',
-          desc: 'Pairs model voting with hard mathematical assertions—Shannon entropy, HMAC-SHA256, and AST parse checks.',
+          tag: 'SHA-256 MERKLE',
+          title: 'Cryptographic Receipt Sealing',
+          desc: 'Seals the proposal digest and canonical sorted validator votes into a genuine FIPS 180-4 SHA-256 binary Merkle root with one-click integrity verification.',
         },
         {
-          tag: 'HETEROGENEOUS',
-          title: 'Cross-Family Model Diversity',
-          desc: 'Combines DeepSeek, Qwen, Llama, and frontier models locally so correlated single-family blind spots are caught.',
+          tag: 'HYBRID MODELS',
+          title: 'In-Browser + Loopback Inference',
+          desc: 'Executes deterministically offline in any browser or fans out to live local AGY-Hermes (:18000) and Ollama (:11434) models with SSRF allowlists and 12s timeouts.',
         },
         {
-          tag: 'ZERO BLOAT',
-          title: 'Scriptable CLI Exit Codes',
-          desc: 'Designed to run in real local CI hooks and terminal pipelines rather than decorative browser sliders.',
+          tag: 'SANITIZED EXPORTS',
+          title: 'Audit-Ready JSON, MD & CSV',
+          desc: 'Exports home-path-redacted JSON and Markdown briefs plus spreadsheet formula-neutralized CSV vote matrices with zero external telemetry.',
         },
       ]}
-      funnelToolTitle="Byzantine Consensus & Ground-Truth Verifier"
+      funnelToolTitle="Byzantine Consensus Battle Arena"
       funnelToolTag="CONSENSUS & FORMAL VERIFICATION"
-      funnelToolDesc="N >= 3f + 1 multi-model quorum engine and cryptographic ground-truth verification suite inside Zoth Studio v2."
+      funnelToolDesc="Hybrid N >= 3f + 1 multi-agent quorum workstation, unified diff arbiter, and SHA-256 Merkle verdict engine inside Zoth Studio v2."
     />
   );
 }

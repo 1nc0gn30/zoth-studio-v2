@@ -40,6 +40,7 @@ import BusMonitorGodModeTool from '../components/tools/BusMonitorGodModeTool';
 import ChronicleHubGodModeTool from '../components/tools/ChronicleHubGodModeTool';
 import CockpitGodModeTool from '../components/tools/CockpitGodModeTool';
 import ConnectorsHubGodModeTool from '../components/tools/ConnectorsHubGodModeTool';
+import ConsensusArenaGodModeTool from '../components/tools/ConsensusArenaGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -272,7 +273,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'connectors': ConnectorsHubGodModeTool,
   'hexstrike': HexStrikeGodModeTool,
   'netrunner-memory': NeuroMemoryGodModeTool,
-  'consensus': SwarmCivilizationGodModeTool,
+  'consensus': ConsensusArenaGodModeTool,
   'bus-monitor': BusMonitorGodModeTool,
   'math-pillars': ZothPillGodModeTool,
 };
@@ -840,8 +841,8 @@ export default function RealToolWorkspacePage() {
                 sx={{
                   p: 1.6,
                   borderRadius: 2,
-                  bgcolor: '#0B0E14',
-                  border: '1px solid rgba(245, 241, 230, 0.14)',
+                  bgcolor: isDark ? '#0B0E14' : '#F4F1EA',
+                  border: `1px solid ${isDark ? 'rgba(245, 241, 230, 0.14)' : 'rgba(16, 24, 40, 0.14)'}`,
                   display: 'flex',
                   flexDirection: { xs: 'column', sm: 'row' },
                   alignItems: { xs: 'stretch', sm: 'center' },
@@ -861,12 +862,12 @@ export default function RealToolWorkspacePage() {
                     '&::-webkit-scrollbar': { display: 'none' },
                   }}
                 >
-                  <TerminalIcon sx={{ color: '#D4AF37', fontSize: '1.1rem', flexShrink: 0 }} />
+                  <TerminalIcon sx={{ color: isDark ? '#D4AF37' : '#7A5808', fontSize: '1.1rem', flexShrink: 0 }} />
                   <Typography
                     sx={{
                       fontFamily: mono,
                       fontSize: { xs: '0.76rem', sm: '0.84rem' },
-                      color: '#F8FAFC',
+                      color: isDark ? '#F8FAFC' : '#101828',
                       whiteSpace: { xs: 'normal', sm: 'nowrap' },
                       overflowWrap: 'anywhere',
                     }}
@@ -884,11 +885,11 @@ export default function RealToolWorkspacePage() {
                     fontWeight: 700,
                     fontSize: '0.74rem',
                     textTransform: 'none',
-                    color: '#08080B',
-                    bgcolor: '#D4AF37',
+                    color: isDark ? '#08080B' : '#FFFFFF',
+                    bgcolor: isDark ? '#D4AF37' : '#7A5808',
                     px: 1.6,
                     whiteSpace: 'nowrap',
-                    '&:hover': { bgcolor: '#E5C158' },
+                    '&:hover': { bgcolor: isDark ? '#E5C158' : '#5E4306' },
                   }}
                 >
                   {copiedPull ? 'Copied CLI' : 'Copy CLI'}
@@ -1566,9 +1567,9 @@ export default function RealToolWorkspacePage() {
                   m: 0,
                   p: 2.25,
                   borderRadius: 2,
-                  bgcolor: '#0B0E14',
-                  border: '1px solid rgba(245,241,230,0.12)',
-                  color: '#E2E8F0',
+                  bgcolor: isDark ? '#0B0E14' : '#F4F1EA',
+                  border: `1px solid ${isDark ? 'rgba(245,241,230,0.12)' : 'rgba(16,24,40,0.14)'}`,
+                  color: isDark ? '#E2E8F0' : '#101828',
                   fontFamily: mono,
                   fontSize: '0.78rem',
                   lineHeight: 1.75,
@@ -1578,10 +1579,10 @@ export default function RealToolWorkspacePage() {
                 {[...(docs.quickstart || [cloneCommand]), ...(docs.cliCommands?.length ? ['# CLI reference', ...docs.cliCommands] : [])].map((line, i) => (
                   <Box key={i} component="div">
                     {line.startsWith('#') ? (
-                      <Box component="span" sx={{ color: '#94A3B8' }}>{line}</Box>
+                      <Box component="span" sx={{ color: isDark ? '#94A3B8' : '#475569' }}>{line}</Box>
                     ) : (
                       <>
-                        <Box component="span" sx={{ color: '#D4AF37', userSelect: 'none' }}>$ </Box>
+                        <Box component="span" sx={{ color: isDark ? '#D4AF37' : '#7A5808', userSelect: 'none' }}>$ </Box>
                         <Box component="span">{line}</Box>
                       </>
                     )}
@@ -1605,7 +1606,7 @@ export default function RealToolWorkspacePage() {
                     onClick={() => copyText(docs.aiAgentProtocol.cliExample, setCopiedMcp)}
                     sx={{ minWidth: 44, minHeight: 44, color: secondaryText }}
                   >
-                    {copiedMcp ? <CheckIcon sx={{ fontSize: '0.95rem', color: '#10B981' }} /> : <ContentCopyIcon sx={{ fontSize: '0.95rem' }} />}
+                    {copiedMcp ? <CheckIcon sx={{ fontSize: '0.95rem', color: isDark ? '#10B981' : '#065F46' }} /> : <ContentCopyIcon sx={{ fontSize: '0.95rem' }} />}
                   </IconButton>
                 )}
               </Box>
@@ -1615,9 +1616,9 @@ export default function RealToolWorkspacePage() {
                   m: 0,
                   p: 2.25,
                   borderRadius: 2,
-                  bgcolor: '#0B0E14',
-                  border: '1px solid rgba(245,241,230,0.12)',
-                  color: '#6EE7B7',
+                  bgcolor: isDark ? '#0B0E14' : '#F4F1EA',
+                  border: `1px solid ${isDark ? 'rgba(245,241,230,0.12)' : 'rgba(16,24,40,0.14)'}`,
+                  color: isDark ? '#6EE7B7' : '#065F46',
                   fontFamily: mono,
                   fontSize: '0.76rem',
                   lineHeight: 1.65,

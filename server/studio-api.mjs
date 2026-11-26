@@ -46,6 +46,18 @@ import {
   validateLoopbackProbeTarget,
   computeConnectorSummary,
 } from './connectors-engine.mjs';
+import {
+  CONSENSUS_SCHEMA_VERSION,
+  ALLOWED_LOCAL_PROVIDERS,
+  sanitizeConsensusText,
+  sanitizeConsensusPayload,
+  validateConsensusRunRequest,
+  evaluateDeterministicRound,
+  analyzeProposalDiff,
+  tallyByzantineVotes,
+  buildConsensusReceipt,
+  parseModelVoteText,
+} from './consensus-engine.mjs';
 
 const STUDIO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOME_DIR = process.env.ZOTH_HOME || os.homedir();
@@ -2714,6 +2726,182 @@ export function studioMiddleware() {
           summary: result.summary,
           checkedAt,
         }));
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/consensus/models') {
+        const checkedAt = new Date().toISOString();
+        const probeProvider = async (spec, endpointPath, extractFn) => {
+          const started = performance.now();
+          const resp = await requestJson(spec.port, endpointPath, { method: 'GET', timeout: 1400 });
+          const latencyMs = resp.up ? Math.max(1, Math.round(performance.now() - started)) : null;
+          const models = resp.up && resp.json ? extractFn(resp.json) : [];
+          return {
+            id: spec.id,
+            name: `${spec.name} (:${spec.port})`,
+            host: spec.host,
+            port: spec.port,
+            online: Boolean(resp.up),
+            latencyMs,
+            models: models.slice(0, 48).map((m) => sanitizeConsensusText(m)),
+          };
+        };
+
+        const [hermes, ollama] = await Promise.all([
+          probeProvider(ALLOWED_LOCAL_PROVIDERS['agy-hermes'], '/v1/models', (json) =>
+            Array.isArray(json?.data) ? json.data.map((m) => String(m?.id || '').trim()).filter(Boolean) : []
+          ),
+          probeProvider(ALLOWED_LOCAL_PROVIDERS.ollama, '/api/tags', (json) =>
+            Array.isArray(json?.models) ? json.models.map((m) => String(m?.name || m?.model || '').trim()).filter(Boolean) : []
+          ),
+        ]);
+
+        const providers = [hermes, ollama];
+        const totalModels = providers.reduce((acc, p) => acc + p.models.length, 0);
+        send(
+          res,
+          200,
+          sanitizeConsensusPayload({
+            schemaVersion: CONSENSUS_SCHEMA_VERSION,
+            checkedAt,
+            providers,
+            totalModels,
+          })
+        );
+        return;
+      }
+
+      if (req.method === 'POST' && url.pathname === '/api/studio/consensus/run') {
+        let body;
+        try {
+          body = await readJsonBodyStrict(req, 65536);
+        } catch (err) {
+          send(res, err.statusCode || 400, { error: sanitizeConsensusText(err.message || 'Invalid JSON body.') });
+          return;
+        }
+        const validation = validateConsensusRunRequest(body);
+        if (!validation.valid) {
+          send(res, 400, { error: validation.error });
+          return;
+        }
+
+        const ts = new Date().toISOString();
+        if (validation.mode === 'in-browser-deterministic') {
+          const result = evaluateDeterministicRound({
+            proposalText: validation.proposal,
+            nodeCount: validation.nodeCount,
+            faultyCount: validation.faultyCount,
+            timestamp: ts,
+          });
+          send(res, 200, sanitizeConsensusPayload(result));
+          return;
+        }
+
+        const diffAnalysis = analyzeProposalDiff(validation.proposal);
+        const systemPrompt =
+          'You are a Byzantine consensus code & architecture validator. Reply with one concise paragraph starting with APPROVE, REJECT, or ABSTAIN followed by "score=<0-100>:" and your technical rationale.';
+        const userPrompt = `Evaluate the following technical proposal or unified diff for security, performance, architecture, and reliability:\n\n${validation.proposal.slice(0, 6000)}`;
+
+        const invokeLocalModel = async (target, idx) => {
+          const started = performance.now();
+          let resp;
+          if (target.provider === 'agy-hermes') {
+            resp = await requestJson(18000, '/v1/chat/completions', {
+              method: 'POST',
+              timeout: 12000,
+              body: {
+                model: target.model,
+                temperature: 0.1,
+                max_tokens: 180,
+                messages: [
+                  { role: 'system', content: systemPrompt },
+                  { role: 'user', content: userPrompt },
+                ],
+              },
+            });
+          } else {
+            resp = await requestJson(11434, '/api/chat', {
+              method: 'POST',
+              timeout: 12000,
+              body: {
+                model: target.model,
+                stream: false,
+                messages: [
+                  { role: 'system', content: systemPrompt },
+                  { role: 'user', content: userPrompt },
+                ],
+              },
+            });
+          }
+
+          const latencyMs = Math.max(1, Math.round(performance.now() - started));
+          const validatorId = `${target.provider}-${idx + 1}-${target.model.replace(/[^a-zA-Z0-9._-]/g, '_')}`;
+          if (!resp.up || !resp.json) {
+            return {
+              validatorId,
+              name: target.model,
+              role: `${target.provider} (:${target.port})`,
+              domain: 'loopback-model',
+              source: `${target.provider}:${target.port}`,
+              vote: 'FAULTY',
+              score: 0,
+              latencyMs,
+              criteria: { security: 0, performance: 0, architecture: 0, compatibility: 0, policy: 0 },
+              rationale: `Loopback model timed out or unreachable on 127.0.0.1:${target.port} (HTTP ${resp.status || 0}).`,
+              matchedFindings: [],
+            };
+          }
+
+          const content =
+            target.provider === 'agy-hermes'
+              ? resp.json?.choices?.[0]?.message?.content || ''
+              : resp.json?.message?.content || '';
+          const parsed = parseModelVoteText(content);
+          return {
+            validatorId,
+            name: target.model,
+            role: `${target.provider} (:${target.port})`,
+            domain: 'loopback-model',
+            source: `${target.provider}:${target.port}`,
+            vote: parsed.vote,
+            score: parsed.score,
+            latencyMs,
+            criteria: {
+              security: parsed.score,
+              performance: parsed.score,
+              architecture: parsed.score,
+              compatibility: parsed.score,
+              policy: parsed.score,
+            },
+            rationale: parsed.rationale,
+            matchedFindings: diffAnalysis.findings.map((f) => f.id),
+          };
+        };
+
+        const votes = await Promise.all(validation.models.map((m, idx) => invokeLocalModel(m, idx)));
+        const tally = tallyByzantineVotes(votes, validation.faultyCount);
+        const receipt = buildConsensusReceipt({
+          proposalText: validation.proposal,
+          mode: 'loopback-models',
+          tally,
+          votes,
+          timestamp: ts,
+        });
+
+        send(
+          res,
+          200,
+          sanitizeConsensusPayload({
+            schemaVersion: CONSENSUS_SCHEMA_VERSION,
+            mode: 'loopback-models',
+            timestamp: ts,
+            proposalPreview: sanitizeConsensusText(validation.proposal).slice(0, 240),
+            diffAnalysis,
+            votes,
+            tally,
+            receipt,
+          })
+        );
         return;
       }
 

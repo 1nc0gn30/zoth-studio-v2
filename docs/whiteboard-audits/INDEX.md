@@ -29,3 +29,4 @@
 | `#025` | `city-desk` | City Desk (`v2.6.0`) | `3.48 / 10` (`NEEDS FIX`) | **`9.64 / 10`** (`9.7 / 9.6 / 9.7 / 9.6 / 9.6`) | — | **`PASS`** | `2026-11-26 13:26:00 EST` | [025-city-desk.md](./025-city-desk.md) |
 | `#026` | `cockpit` | The Cockpit // Sovereign Operator Command (`v2.3.0`) | `3.80 / 10` (`NEEDS FIX`) | **`9.64 / 10`** (`9.7 / 9.6 / 9.7 / 9.6 / 9.6`) | — | **`PASS`** | `2026-11-26 14:11:05 EST` | [026-cockpit.md](./026-cockpit.md) |
 | `#027` | `connectors` | Connectors Hub // AI Providers, CLI Harnesses & MCP Bridges (`v2.3.0`) | `3.40 / 10` (`NEEDS FIX`) | **`9.64 / 10`** (`9.7 / 9.6 / 9.7 / 9.6 / 9.6`) | — | **`PASS`** | `2026-11-26 15:06:34 EST` | [027-connectors.md](./027-connectors.md) |
+| `#028` | `consensus` | Byzantine Consensus Battle Arena (`v2.3.0`) | `3.60 / 10` (`NEEDS FIX`) | **`9.64 / 10`** (`9.7 / 9.6 / 9.7 / 9.6 / 9.6`) | — | **`PASS`** | `2026-11-26 15:44:32 EST` | [028-consensus.md](./028-consensus.md) |

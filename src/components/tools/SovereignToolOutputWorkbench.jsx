@@ -170,6 +170,34 @@ function getPresetsForTool(tool) {
     ];
   }
 
+  if (id === 'consensus') {
+    return [
+      {
+        label: 'BFT Quorum Verdict Payload',
+        input: JSON.stringify(
+          {
+            tool_id: 'consensus',
+            engine: 'hybrid',
+            bft_bound: 'N >= 3f + 1',
+            quorum_rule: 'Q = 2f + 1',
+            studio_api: 'http://127.0.0.1:3000/api/studio/consensus/run',
+            local_model_gateways: ['127.0.0.1:18000', '127.0.0.1:11434'],
+          },
+          null,
+          2
+        ),
+      },
+      {
+        label: 'Sample Loopback Diff',
+        input: `--- a/server/api.mjs\n+++ b/server/api.mjs\n@@ -1,2 +1,3 @@\n-const HOST = '0.0.0.0';\n+const HOST = '127.0.0.1';\n+const digest = sha256Hex(payload);`,
+      },
+      {
+        label: 'Uncommon Web Shader & Braille Spec',
+        input: `SHADER=bayer_8x8_ordered | GLYPH_RAMP=U+2800_BRAILLE | FPS=60 | DENSITY=72% | ACCENT=#D4AF37`,
+      },
+    ];
+  }
+
   return [
     {
       label: `Canonical ${tool?.name || 'Sovereign'} Payload`,
@@ -178,7 +206,7 @@ function getPresetsForTool(tool) {
           tool_id: tool?.id || 'zoth-tool',
           engine: tool?.executionType || 'browser',
           zero_egress: true,
-          loopback_port: tool?.localPort || 8094,
+          loopback_port: tool?.localPort || 3000,
           objective: `Execute deterministic ${tool?.name || 'Sovereign'} synthesis and verify ground-truth invariants.`,
         },
         null,
@@ -561,12 +589,42 @@ ${JSON.stringify(
       <SovereignEyebrow accent={cyanInk} right="Zoth Studio">
         {"sovereign-tool-output-workbench"}
       </SovereignEyebrow>
-      <SovereignBand
-        seed={"sovereign-tool-output-workbench"}
-        eyebrow={"Zoth Studio"}
-        caption={"Sovereign Tool Output Workbench"}
-        label={"Sovereign Tool Output Workbench — Zoth sovereign visualisation"}
-      />
+      {isDark ? (
+        <SovereignBand
+          seed={"sovereign-tool-output-workbench"}
+          eyebrow={"Zoth Studio"}
+          caption={"Sovereign Tool Output Workbench"}
+          label={"Sovereign Tool Output Workbench — Zoth sovereign visualisation"}
+        />
+      ) : (
+        <Box
+          sx={{
+            mb: { xs: 2, md: 2.5 },
+            px: 2,
+            py: 1.5,
+            borderRadius: 1.5,
+            bgcolor: '#F2EFE6',
+            border: '1px solid rgba(16, 24, 40, 0.14)',
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
+          <Box>
+            <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 800, color: '#7A5808', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+              ZOTH STUDIO · EDITORIAL IVORY TELEMETRY
+            </Typography>
+            <Typography sx={{ fontFamily: display, fontSize: '1.05rem', fontWeight: 600, color: '#101828' }}>
+              Sovereign Tool Output Workbench
+            </Typography>
+          </Box>
+          <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 700, color: '#334155' }}>
+            ZERO-EGRESS · WEBCRYPTO SHA-256 · SHANNON ENTROPY
+          </Typography>
+        </Box>
+      )}
       <Grid container spacing={2.5}>
         {/* Left Pane: Live Custom Input & Telemetry Strip */}
         <Grid xs={12} md={5}>

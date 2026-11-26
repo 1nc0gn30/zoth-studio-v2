@@ -222,10 +222,10 @@ export default function SwarmCivilizationGodModeTool({ tool }) {
 
   const tokens = useMemo(
     () => ({
-      accent: isDark ? '#34D399' : '#047857',
-      accentSoft: isDark ? 'rgba(52, 211, 153, 0.12)' : 'rgba(4, 120, 87, 0.09)',
-      accentBorder: isDark ? 'rgba(52, 211, 153, 0.34)' : 'rgba(4, 120, 87, 0.32)',
-      mint: isDark ? '#4BE3C1' : '#047857',
+      accent: isDark ? '#34D399' : '#065F46',
+      accentSoft: isDark ? 'rgba(52, 211, 153, 0.12)' : 'rgba(6, 95, 70, 0.09)',
+      accentBorder: isDark ? 'rgba(52, 211, 153, 0.34)' : 'rgba(6, 95, 70, 0.32)',
+      mint: isDark ? '#4BE3C1' : '#065F46',
       gold: isDark ? '#D4AF37' : '#7A5808',
       goldSoft: isDark ? 'rgba(212, 175, 55, 0.12)' : 'rgba(122, 88, 8, 0.10)',
       danger: isDark ? '#FB7185' : '#BE123C',

@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { Box, Button, Chip, Container, Stack, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import SEO from '../components/SEO';
-
-const gold = '#D4AF37';
 
 // Typo-tolerant similarity on path words (/galery -> /gallery, /tool/capsule -> /tools/agent-capsule-jail).
 function lev(a, b) {
@@ -34,6 +33,10 @@ function score(target, candidate) {
 }
 
 export default function NotFoundPage() {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
+  const gold = isDark ? '#D4AF37' : '#7A5808';
+  const btnInk = isDark ? '#08080B' : '#FFFFFF';
   const { pathname } = useLocation();
   const [routes, setRoutes] = useState([]);
   useEffect(() => {
@@ -79,7 +82,7 @@ export default function NotFoundPage() {
           <Button key={r} component={RouterLink} to={r} size="small" variant="text" sx={{ color: 'text.primary' }}>{r.replace(/\//g, '') || 'home'}</Button>
         ))}
       </Stack>
-      <Button component={RouterLink} to="/" variant="contained" sx={{ mt: 4, bgcolor: gold, color: '#08080B', fontWeight: 800, '&:hover': { bgcolor: '#F5E6AB' } }}>
+      <Button component={RouterLink} to="/" variant="contained" sx={{ mt: 4, bgcolor: gold, color: btnInk, fontWeight: 800, minHeight: 44, '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#5E4306' } }}>
         Back to Studio home
       </Button>
     </Container>

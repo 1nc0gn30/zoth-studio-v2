@@ -67,6 +67,8 @@ const SAMPLE_ROUTES = [
   '/tools/cockpit',
   '/workstations/connectors',
   '/tools/connectors',
+  '/workstations/consensus',
+  '/tools/consensus',
   '/workstations/agent-composer',
   '/tools/agent-composer',
   '/workstations/ax-powerhouse',
@@ -418,6 +420,26 @@ async function main() {
         });
         if (!cnCheck.hasTitle || !cnCheck.hasH1 || !cnCheck.hasSoftwareApp || !cnCheck.hasFaq || !cnCheck.hasConnectorsWorkstation || cnCheck.hasMcpLensCollision) {
           failureReason = `connectors invariants failed: ${JSON.stringify(cnCheck)}`;
+        }
+      } else if (route === '/workstations/consensus' || route === '/tools/consensus') {
+        const csCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          const bodyText = document.body?.innerText || '';
+          return {
+            hasTitle: document.title.includes('Byzantine Consensus Battle Arena'),
+            hasH1: h1Text.includes('Byzantine Consensus Battle Arena'),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasConsensusWorkstation: Boolean(document.querySelector('[data-testid="consensus-arena-workstation"]')),
+            hasCollision: bodyText.includes('3-RING PBFT TOPOLOGY') || bodyText.includes('consensus_execute'),
+          };
+        });
+        if (!csCheck.hasTitle || !csCheck.hasH1 || !csCheck.hasSoftwareApp || !csCheck.hasFaq || !csCheck.hasConsensusWorkstation || csCheck.hasCollision) {
+          failureReason = `consensus invariants failed: ${JSON.stringify(csCheck)}`;
         }
       } else if (route === '/workstations/agent-composer' || route === '/tools/agent-composer') {
         const metaCheck = await page.evaluate(() => {
