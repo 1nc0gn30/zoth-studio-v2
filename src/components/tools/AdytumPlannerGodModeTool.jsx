@@ -27,6 +27,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
 import { SovereignGLBViewport, ADYTUM_22_TAROT_KEYS } from '../A100SovereignFoundryShowcase.jsx';
+import AdytumArcanaCard from './AdytumArcanaCard.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -688,20 +689,12 @@ export default function AdytumPlannerGodModeTool() {
                   bgcolor: t.panelBg,
                 }}
               >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1.5 }}>
-                  <Box
-                    component="img"
-                    src={tarot3dMeta.hdImageUrl || TAROT_IMAGES[activeKey.key] || '/tarot/fool.jpg'}
-                    alt={`${activeKey.arcana} HD Tarot Card`}
-                    sx={{
-                      width: 72,
-                      height: 112,
-                      objectFit: 'cover',
-                      borderRadius: 1.5,
-                      border: `1px solid ${isLight ? t.border : tarot3dMeta.primaryColor}`,
-                      boxShadow: isLight ? '0 6px 18px rgba(0,0,0,0.16)' : '0 8px 20px rgba(0,0,0,0.65)',
-                      flexShrink: 0,
-                    }}
+                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'center', sm: 'flex-start' }, gap: 2, mb: 1.5 }}>
+                  <AdytumArcanaCard
+                    keyNumber={activeKey.key}
+                    themeMode={isLight ? 'light' : 'dark'}
+                    width={148}
+                    showFlipButton
                   />
                   <Box sx={{ minWidth: 0, flex: 1 }}>
                     <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: isLight ? t.goldStrong : tarot3dMeta.primaryColor }}>
