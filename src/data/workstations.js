@@ -300,10 +300,10 @@ export const workstations = [
   {
     id: "agent-gods-eye",
     name: "Agent God's Eye // OSINT Planetary Threat Radar",
-    path: "/studio/gods-eye.html",
+    path: "/tools/agent-gods-eye",
     band: "Security",
     type: "integrated_tool",
-    description: "Shodan-powered threat vector reconnaissance, vulnerable exposed service scanner, and planetary attack surface radar.",
+    description: "Local Python 3.10+ Shodan OSINT tactical radar daemon (:8112) with SSRF/IP guards, dual-theme 3D planetary globe, live SSE stream, and stdio MCP server.",
     alsoInApp: "/tools/agent-gods-eye",
     toolRepoId: "agent-gods-eye",
     pullCommand: "./bin/agent-gods-eye serve --port 8112"

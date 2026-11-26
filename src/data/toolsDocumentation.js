@@ -1873,13 +1873,13 @@ export const toolsDocumentation = {
       ]
   },
   "agent-gods-eye": {
-      "whyUse": "Autonomous zero-dependency Shodan OSINT tactical radar, 3D kinetic planetary attack surface reconnaissance, and threat scoring. Built for human operators and autonomous AI agents requiring zero-egress security & recon execution without cloud SaaS lock-in.",
-      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Agent God's Eye workflows by running 100% locally on ZothOS and in the browser.",
-      "architecture": "100% client-side in-browser execution engine (Security & Recon) with standalone loopback workstation on 127.0.0.1:8112 and ZothOS CLI wrapper (/usr/local/bin/agent-gods-eye).",
+      "whyUse": "Local Python 3.10+ Shodan OSINT tactical radar daemon (127.0.0.1:8112) with dual-theme 3D planetary visualization, strict IP/SSRF validation, RFC 5737 offline demo mode, live SSE telemetry, formula-safe CSV/JSON exports, live TUI, and a 4-tool stdio MCP server.",
+      "problemSolved": "Eliminates SaaS telemetry leakage, browser-side Shodan key exposure, and unsafe IP interrogation by keeping Shodan credentials, SQLite target storage, and SSRF validation strictly inside a loopback Python standard-library daemon.",
+      "architecture": "Zero-dependency Python 3.10+ local daemon bound to 127.0.0.1:8112 (WAL-mode SQLite + REST API + named SSE stream + 4-tool stdio JSON-RPC 2.0 MCP server) paired with a dual-theme 3D Canvas cockpit and native ZothOS CLI/TUI wrappers (/usr/local/bin/agent-gods-eye, /usr/local/bin/agent-gods-eye-tui).",
       "aiAgentProtocol": {
           "mcpTool": "agent_gods_eye_execute",
-          "description": "Execute Agent God's Eye operations via JSON-RPC / MCP or ZothOS CLI.",
-          "cliExample": "agent-gods-eye --help && agent-gods-eye --json",
+          "description": "Invoke the zero-dependency stdio MCP server (`agent-gods-eye mcp`) exposing `agent_gods_eye_execute`, `gods_eye_search`, `gods_eye_host`, and `gods_eye_stats`.",
+          "cliExample": "agent-gods-eye search \"port:502 modbus\" --json && agent-gods-eye mcp",
           "inputSchema": {
               "type": "object",
               "properties": {
@@ -1887,15 +1887,20 @@ export const toolsDocumentation = {
                       "type": "string",
                       "enum": [
                           "status",
-                          "run",
-                          "audit",
+                          "search",
+                          "host",
+                          "stats",
                           "export"
                       ],
                       "description": "Operation to run on Agent God's Eye"
                   },
                   "target": {
                       "type": "string",
-                      "description": "Primary target payload or parameter"
+                      "description": "Search query string (for action='search') or validated target IP (for action='host')"
+                  },
+                  "limit": {
+                      "type": "integer",
+                      "description": "Maximum results to return (1..500)"
                   }
               },
               "required": [
@@ -1910,17 +1915,18 @@ export const toolsDocumentation = {
           }
       },
       "quickstart": [
-          "agent-gods-eye --help",
-          "agent-gods-eye --json",
+          "agent-gods-eye serve --host 127.0.0.1 --port 8112",
+          "agent-gods-eye search \"port:502 modbus\" --limit 10 --json",
           "agent-gods-eye-tui --status",
+          "agent-gods-eye mcp --db godseye.db",
           "# Open standalone workstation at http://127.0.0.1:8112 or Studio route /tools/agent-gods-eye"
       ],
       "features": [
-          "Autonomous zero-dependency Shodan OSINT tactical radar, 3D kinetic planetary attack surface reconnaissance, and threat scoring.",
-          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/agent-gods-eye) and standalone server on http://127.0.0.1:8112",
-          "Native ZothOS CLI binary (/usr/local/bin/agent-gods-eye) and 60fps Unicode U+2800 Braille TUI (agent-gods-eye-tui)",
-          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
-          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+          "Loopback Python 3.10+ OSINT daemon on 127.0.0.1:8112 with strict Origin/Host guards, SSRF/metadata IP rejection (400/403), and API key redaction.",
+          "Honest live Shodan mode (when SHODAN_API_KEY is configured) and RFC 5737 offline demo catalog with genuine query filtering.",
+          "Dual-theme Editorial Ivory Light + Obsidian Dark 3D planetary globe, live named SSE console, and JSON/formula-safe CSV exports.",
+          "Native ZothOS CLI (`agent-gods-eye`), live terminal radar viewer (`agent-gods-eye-tui`), and 4-tool stdio JSON-RPC 2.0 MCP server (`agent-gods-eye mcp`).",
+          "100% Free & Open-Access (MIT) — Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform."
       ]
   },
   "shopify-connector": {
