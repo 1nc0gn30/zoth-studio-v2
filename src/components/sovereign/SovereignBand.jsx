@@ -235,7 +235,7 @@ export default function SovereignBand({
                 color: i === 0 ? rgba(SOV.gold, 0.92) : rgba(SOV.slate, 0.78),
               }}
             >
-              {i > 0 && <Box aria-hidden component="span" sx={{ color: rgba(SOV.gold, 0.35) }}>•</Box>}
+              {i > 0 && <Box aria-hidden component="span" sx={{ color: rgba(SOV.gold, 0.78) }}>•</Box>}
               <span>{item}</span>
             </Box>
           ))}

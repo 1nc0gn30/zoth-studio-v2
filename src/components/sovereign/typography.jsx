@@ -17,6 +17,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { useTheme } from '@mui/material/styles';
 import { SOV, rgba, MONO, DISPLAY } from './palette.js';
 
 export const eyebrowSx = (accent = SOV.gold) => ({
@@ -90,7 +91,10 @@ export function SovereignSectionHead({ index, title, right, accent = SOV.gold, s
 }
 
 /** Tier 1: machine-provenance eyebrow that opens every tool page. */
-export function SovereignEyebrow({ children, accent = SOV.gold, right, sx }) {
+export function SovereignEyebrow({ children, accent = SOV.gold, right, rightSx, sx }) {
+  const theme = useTheme();
+  const isDark = theme?.palette?.mode !== 'light';
+  const defaultRightColor = isDark ? '#CBD5E1' : '#334155';
   return (
     <Box
       sx={{
@@ -118,7 +122,11 @@ export function SovereignEyebrow({ children, accent = SOV.gold, right, sx }) {
       >
         {children}
       </Box>
-      {right != null && <Box sx={{ ...metaSx, flexShrink: 0 }}>{right}</Box>}
+      {right != null && (
+        <Box sx={{ ...metaSx, color: defaultRightColor, flexShrink: 0, ...rightSx }}>
+          {right}
+        </Box>
+      )}
     </Box>
   );
 }

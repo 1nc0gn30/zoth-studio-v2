@@ -64,6 +64,7 @@ const SAMPLE_ROUTES = [
   '/tools/pod-mockup-forge',
   '/tools/pod-margin-sentinel',
   '/workstations/cockpit',
+  '/tools/cockpit',
   '/workstations/agent-composer',
   '/tools/agent-composer',
   '/workstations/ax-powerhouse',
@@ -376,6 +377,26 @@ async function main() {
         failureReason = 'Document title is empty';
       } else if (consoleErrors.length > 0 || pageErrors.length > 0) {
         failureReason = `${consoleErrors.length + pageErrors.length} console/runtime error(s)`;
+      } else if (route === '/workstations/cockpit' || route === '/tools/cockpit') {
+        const ckCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          const bodyText = document.body?.innerText || '';
+          return {
+            hasTitle: document.title.includes('The Cockpit'),
+            hasH1: h1Text.includes('The Cockpit'),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasCockpitWorkstation: Boolean(document.querySelector('[data-testid="cockpit-workstation"]')),
+            hasSwarmCollision: bodyText.includes('3-RING PBFT TOPOLOGY') || bodyText.includes('ACTIVE PTY PANES'),
+          };
+        });
+        if (!ckCheck.hasTitle || !ckCheck.hasH1 || !ckCheck.hasSoftwareApp || !ckCheck.hasFaq || !ckCheck.hasCockpitWorkstation || ckCheck.hasSwarmCollision) {
+          failureReason = `cockpit invariants failed: ${JSON.stringify(ckCheck)}`;
+        }
       } else if (route === '/workstations/agent-composer' || route === '/tools/agent-composer') {
         const metaCheck = await page.evaluate(() => {
           const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))

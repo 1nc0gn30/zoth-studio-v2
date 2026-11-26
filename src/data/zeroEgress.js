@@ -33,6 +33,7 @@ export const enclaveBinds = [
 ];
 
 export const legacyWorkstations = [
+  { file: 'cockpit.html', job: 'Hybrid operator telemetry HUD, 88-port loopback fleet board, fuzzy command palette, and sanitized diagnostic exports', to: '/workstations/cockpit' },
   { file: 'swarm.html', job: '21-agent pantheon control plane and IPC topology', to: '/swarm' },
   { file: 'signal-bridge.html', job: 'E2EE WebSocket signal bridge and packet pinger', to: '/tools/sovereign-agent-bridge' },
   { file: 'bus-monitor.html', job: 'Loopback bus NOC, measured RTT pinger, and HKDF-SHA256/HMAC envelope inspector', to: '/workstations/bus-monitor' },

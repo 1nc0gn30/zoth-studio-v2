@@ -29,6 +29,12 @@ import {
   normalizeLastSync,
   normalizeSyncTimer,
 } from './chronicle-engine.mjs';
+import {
+  COCKPIT_SCHEMA_VERSION,
+  sanitizeCockpitPayload,
+  normalizeHostTelemetry,
+  normalizeFleetData,
+} from './cockpit-engine.mjs';
 
 const STUDIO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOME_DIR = process.env.ZOTH_HOME || os.homedir();
@@ -423,7 +429,268 @@ function localModels(tags) {
     .filter((name) => name && !/cloud/i.test(name));
 }
 
-export async function probeFleet() {
+function sampleCpuTimes() {
+  const cpus = os.cpus() || [];
+  let idle = 0;
+  let total = 0;
+  for (const cpu of cpus) {
+    const t = cpu.times || {};
+    idle += (t.idle || 0);
+    total += (t.user || 0) + (t.nice || 0) + (t.sys || 0) + (t.idle || 0) + (t.irq || 0);
+  }
+  return { idle, total };
+}
+
+function measureCpuPct(windowMs = 60) {
+  return new Promise((resolve) => {
+    const start = sampleCpuTimes();
+    setTimeout(() => {
+      const end = sampleCpuTimes();
+      const idleDiff = end.idle - start.idle;
+      const totalDiff = end.total - start.total;
+      if (totalDiff <= 0) {
+        resolve(0);
+        return;
+      }
+      const pct = Math.max(0, Math.min(100, (1 - idleDiff / totalDiff) * 100));
+      resolve(Math.round(pct * 10) / 10);
+    }, windowMs);
+  });
+}
+
+function readRootDiskStats() {
+  try {
+    if (typeof fs.statfsSync === 'function') {
+      const st = fs.statfsSync('/');
+      const bsize = Number(st.bsize || st.frsize || 4096);
+      const totalBytes = Number(st.blocks || 0) * bsize;
+      const freeBytes = Number(st.bavail ?? st.bfree ?? 0) * bsize;
+      const usedBytes = Math.max(0, totalBytes - freeBytes);
+      const gib = 1024 ** 3;
+      return {
+        mount: '/',
+        totalGiB: Math.round((totalBytes / gib) * 100) / 100,
+        usedGiB: Math.round((usedBytes / gib) * 100) / 100,
+        freeGiB: Math.round((freeBytes / gib) * 100) / 100,
+      };
+    }
+  } catch {}
+  return { mount: '/', totalGiB: 0, usedGiB: 0, freeGiB: 0 };
+}
+
+function readThermalZones() {
+  const zones = [];
+  const base = '/sys/class/thermal';
+  try {
+    if (!fs.existsSync(base)) return zones;
+    const dirs = fs.readdirSync(base).filter((d) => d.startsWith('thermal_zone')).sort();
+    for (const dir of dirs) {
+      const tempPath = path.join(base, dir, 'temp');
+      const typePath = path.join(base, dir, 'type');
+      try {
+        const rawTemp = fs.readFileSync(tempPath, 'utf8').trim();
+        const milli = Number(rawTemp);
+        if (!Number.isFinite(milli)) continue;
+        const tempC = Math.round((milli / 1000) * 10) / 10;
+        if (tempC < -30 || tempC > 150) continue;
+        let type = 'sensor';
+        try {
+          type = fs.readFileSync(typePath, 'utf8').trim() || 'sensor';
+        } catch {}
+        zones.push({ name: dir, type, tempC });
+      } catch {}
+    }
+  } catch {}
+  return zones;
+}
+
+function readNvidiaGpu(timeoutMs = 900) {
+  return new Promise((resolve) => {
+    const bin = resolveBinaryOnPath('nvidia-smi');
+    if (!bin) {
+      resolve(null);
+      return;
+    }
+    execFile(
+      bin,
+      ['--query-gpu=name,temperature.gpu,utilization.gpu,memory.used,memory.total', '--format=csv,noheader,nounits'],
+      { timeout: timeoutMs, maxBuffer: 16 * 1024 },
+      (err, stdout) => {
+        if (err || !stdout || !stdout.trim()) {
+          resolve(null);
+          return;
+        }
+        const firstLine = stdout.trim().split(/\r?\n/)[0] || '';
+        const parts = firstLine.split(',').map((s) => s.trim());
+        if (parts.length < 5 || !parts[0]) {
+          resolve(null);
+          return;
+        }
+        resolve({
+          name: parts[0],
+          tempC: Number.isFinite(Number(parts[1])) ? Number(parts[1]) : null,
+          utilizationPct: Number.isFinite(Number(parts[2])) ? Number(parts[2]) : null,
+          memoryUsedMiB: Number.isFinite(Number(parts[3])) ? Number(parts[3]) : 0,
+          memoryTotalMiB: Number.isFinite(Number(parts[4])) ? Number(parts[4]) : 0,
+        });
+      }
+    );
+  });
+}
+
+function detectAudioSubsystem() {
+  const uid = typeof process.getuid === 'function' ? process.getuid() : 1000;
+  const pipewireSock = `/run/user/${uid}/pipewire-0`;
+  const pulseSock = `/run/user/${uid}/pulse/native`;
+  let alsaCard = '';
+  try {
+    if (fs.existsSync('/proc/asound/cards')) {
+      const raw = fs.readFileSync('/proc/asound/cards', 'utf8');
+      const m = raw.match(/^\s*\d+\s+\[[^\]]+\]:\s*(.+)$/m);
+      if (m && m[1]) alsaCard = m[1].trim();
+    }
+  } catch {}
+
+  if (fs.existsSync(pipewireSock) || resolveBinaryOnPath('wpctl')) {
+    return {
+      subsystem: 'PipeWire / WirePlumber',
+      device: alsaCard || 'PipeWire Audio Graph (Active)',
+      detected: true,
+    };
+  }
+  if (fs.existsSync(pulseSock) || resolveBinaryOnPath('pactl')) {
+    return {
+      subsystem: 'PulseAudio',
+      device: alsaCard || 'PulseAudio Server (Active)',
+      detected: true,
+    };
+  }
+  if (alsaCard) {
+    return {
+      subsystem: 'ALSA',
+      device: alsaCard,
+      detected: true,
+    };
+  }
+  return {
+    subsystem: 'Unavailable',
+    device: 'No local audio subsystem detected',
+    detected: false,
+  };
+}
+
+function readRealityProfileState() {
+  const modeFile = path.join(HOME_DIR, '.config', 'zothos', 'current_mode');
+  const charFile = path.join(HOME_DIR, '.config', 'zothos', 'active_character.json');
+  let mode = 'gold';
+  try {
+    if (fs.existsSync(modeFile)) {
+      mode = fs.readFileSync(modeFile, 'utf8').trim() || 'gold';
+    }
+  } catch {}
+  let character = null;
+  try {
+    if (fs.existsSync(charFile)) {
+      character = JSON.parse(fs.readFileSync(charFile, 'utf8'));
+    }
+  } catch {}
+  return {
+    mode,
+    character,
+    allModes: ['gold', 'ghost', 'matrix', 'incognito'],
+  };
+}
+
+async function collectRawHostTelemetry() {
+  const [cpuPct, gpu] = await Promise.all([measureCpuPct(60), readNvidiaGpu(900)]);
+  const isZothOS = fs.existsSync('/etc/zothos-release') || fs.existsSync('/usr/local/bin/zoth-doctor') || fs.existsSync('/opt/zoth-studio');
+  const cpus = os.cpus() || [];
+  const audio = detectAudioSubsystem();
+  const disk = readRootDiskStats();
+  const thermalZones = readThermalZones();
+
+  return {
+    isZothOS,
+    distro: isZothOS ? 'ZothOS Sovereign Linux' : `${os.type()} (${os.platform()})`,
+    release: isZothOS ? '2026.1 (Imperial Sovereign Edition)' : os.release(),
+    kernel: os.release(),
+    arch: os.arch(),
+    hostname: os.hostname(),
+    cpus: cpus.length || 1,
+    cpuModel: cpus[0]?.model || 'Native Silicon',
+    cpuPct,
+    loadavg: os.loadavg().map((n) => Math.round(n * 100) / 100),
+    totalMem: Math.round(os.totalmem() / (1024 * 1024)),
+    freeMem: Math.round(os.freemem() / (1024 * 1024)),
+    uptime: Math.round(os.uptime()),
+    disk,
+    thermalZones,
+    gpu,
+    audio,
+    audioDevice: audio.detected ? `${audio.subsystem} — ${audio.device}` : 'No local audio subsystem detected',
+    installedTools: {
+      claude: fs.existsSync('/usr/local/bin/claude') || fs.existsSync(path.join(LOCAL_BIN, 'claude')),
+      opencode: fs.existsSync('/usr/local/bin/opencode') || fs.existsSync(path.join(LOCAL_BIN, 'opencode')),
+      hermes: fs.existsSync(path.join(LOCAL_BIN, 'hermes')) || fs.existsSync('/usr/local/bin/hermes'),
+      cursor: fs.existsSync(path.join(LOCAL_BIN, 'cursor-agent')) || fs.existsSync('/usr/bin/cursor'),
+      zothos: fs.existsSync(CONDUCTOR_BIN) || fs.existsSync('/usr/local/bin/zoth-agent-conductor'),
+      grok: fs.existsSync(path.join(GROK_BIN_DIR, 'agent')) || fs.existsSync('/usr/local/bin/grok'),
+      burpsuite: fs.existsSync('/usr/bin/burpsuite'),
+      bitwarden: fs.existsSync('/usr/local/bin/bw'),
+      streamlit: fs.existsSync('/usr/local/bin/streamlit'),
+      netlify: fs.existsSync('/usr/local/bin/netlify') || fs.existsSync(path.join(LOCAL_BIN, 'netlify')),
+      ollama: fs.existsSync('/usr/local/bin/ollama') || fs.existsSync('/usr/bin/ollama'),
+    },
+  };
+}
+
+export async function collectCockpitSnapshot() {
+  const [rawHost, statusData, fleetRaw] = await Promise.all([
+    collectRawHostTelemetry(),
+    probeStatus(),
+    probeFleet(450),
+  ]);
+  const reality = readRealityProfileState();
+  const host = normalizeHostTelemetry(rawHost);
+  const fleet = normalizeFleetData(fleetRaw);
+  const svcs = statusData?.services || {};
+
+  const coreKeys = ['memory', 'bridge', 'vault', 'ollama', 'agy-hermes-proxy', 'chronicleVault', 'swarm'];
+  const coreDaemons = coreKeys
+    .filter((k) => svcs[k])
+    .map((k) => ({
+      id: k,
+      name: svcs[k].name || k,
+      port: svcs[k].port || null,
+      up: Boolean(svcs[k].up),
+      models: Array.isArray(svcs[k].models) ? svcs[k].models : undefined,
+      modelsCount: svcs[k].modelsCount ?? (Array.isArray(svcs[k].models) ? svcs[k].models.length : undefined),
+    }));
+
+  const payload = {
+    schemaVersion: COCKPIT_SCHEMA_VERSION,
+    mode: 'loopback-live',
+    checkedAt: new Date().toISOString(),
+    host,
+    daemons: {
+      kvm: Boolean(statusData?.kvm),
+      core: coreDaemons,
+      ollamaModels: Array.isArray(svcs.ollama?.models) ? svcs.ollama.models : [],
+      chronicleSyncTimer: svcs.chronicleSyncTimer?.detail || null,
+    },
+    fleet,
+    reality,
+    counts: {
+      tools: 85,
+      workstations: 45,
+      ports: fleet.total,
+    },
+  };
+
+  return sanitizeCockpitPayload(payload);
+}
+
+export async function probeFleet(timeoutMs = 1200) {
   const distTools = path.join(STUDIO_ROOT, 'dist', 'api', 'tools.json');
   const pubTools = path.join(STUDIO_ROOT, 'public', 'api', 'tools.json');
   const toolsJsonPath = fs.existsSync(distTools) ? distTools : pubTools;
@@ -468,7 +735,7 @@ export async function probeFleet() {
   const results = await Promise.all(
     fleetList.map(async (item) => {
       const t0 = Date.now();
-      const res = await requestJson(item.port, '/', { method: 'GET', timeout: 1200 });
+      const res = await requestJson(item.port, '/', { method: 'GET', timeout: timeoutMs });
       return {
         ...item,
         up: res.up,
@@ -1460,35 +1727,14 @@ export function studioMiddleware() {
       }
 
       if (req.method === 'GET' && url.pathname === '/api/studio/host') {
-        const isZothOS = fs.existsSync('/etc/zothos-release') || fs.existsSync('/usr/local/bin/zoth-doctor') || fs.existsSync('/opt/zoth-studio');
-        const info = {
-          isZothOS,
-          distro: 'ZothOS Sovereign Linux',
-          release: '2026.1 (Imperial Sovereign Edition)',
-          kernel: os.release(),
-          arch: os.arch(),
-          hostname: os.hostname(),
-          cpus: os.cpus().length,
-          cpuModel: os.cpus()[0]?.model || 'Native Silicon',
-          totalMem: Math.round(os.totalmem() / (1024 * 1024)),
-          freeMem: Math.round(os.freemem() / (1024 * 1024)),
-          uptime: Math.round(os.uptime()),
-          audioDevice: 'ICH9 High Definition Audio (Active)',
-          installedTools: {
-            claude: fs.existsSync('/usr/local/bin/claude') || fs.existsSync(path.join(LOCAL_BIN, 'claude')),
-            opencode: fs.existsSync('/usr/local/bin/opencode') || fs.existsSync(path.join(LOCAL_BIN, 'opencode')),
-            hermes: fs.existsSync(path.join(LOCAL_BIN, 'hermes')) || fs.existsSync('/usr/local/bin/hermes'),
-            cursor: fs.existsSync(path.join(LOCAL_BIN, 'cursor-agent')) || fs.existsSync('/usr/bin/cursor'),
-            zothos: fs.existsSync(CONDUCTOR_BIN) || fs.existsSync('/usr/local/bin/zoth-agent-conductor'),
-            grok: fs.existsSync(path.join(GROK_BIN_DIR, 'agent')) || fs.existsSync('/usr/local/bin/grok'),
-            burpsuite: fs.existsSync('/usr/bin/burpsuite'),
-            bitwarden: fs.existsSync('/usr/local/bin/bw'),
-            streamlit: fs.existsSync('/usr/local/bin/streamlit'),
-            netlify: fs.existsSync('/usr/local/bin/netlify') || fs.existsSync(path.join(LOCAL_BIN, 'netlify')),
-            ollama: fs.existsSync('/usr/local/bin/ollama') || fs.existsSync('/usr/bin/ollama')
-          }
-        };
-        send(res, 200, info);
+        const rawHost = await collectRawHostTelemetry();
+        send(res, 200, sanitizeCockpitPayload(rawHost));
+        return;
+      }
+
+      if (req.method === 'GET' && url.pathname === '/api/studio/cockpit') {
+        const payload = await collectCockpitSnapshot();
+        send(res, 200, payload);
         return;
       }
 

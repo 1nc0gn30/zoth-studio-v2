@@ -14,10 +14,13 @@ export const workstations = [
   {
     id: "cockpit",
     name: "The Cockpit // Sovereign Operator Command",
-    path: "/studio/cockpit.html",
+    path: "/workstations/cockpit",
     band: "Swarm & Consensus",
     type: "cockpit",
-    description: "Master telemetry HUD, real-time agent dispatch status, and unified system overview.",
+    executionType: "hybrid",
+    version: "2.3.0",
+    pullCommand: "zoth open cockpit",
+    description: "Hybrid operator command deck aggregating live loopback host telemetry (CPU %, loadavg, RAM, disk, thermal sensors, GPU), 88-port fleet health board, 85-tool / 45-workstation fuzzy Command Palette, and sanitized diagnostic exports with honest offline browser fallback.",
     alsoInApp: "/workstations/cockpit"
   },
   {

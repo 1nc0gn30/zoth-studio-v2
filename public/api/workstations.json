@@ -9,12 +9,12 @@
       "name": "The Cockpit // Sovereign Operator Command",
       "band": "Swarm & Consensus",
       "type": "cockpit",
-      "executionType": "browser",
+      "executionType": "hybrid",
       "version": "2.3.0",
       "route": "/workstations/cockpit",
-      "path": "/studio/cockpit.html",
+      "path": "/workstations/cockpit",
       "pullCommand": "zoth open cockpit",
-      "description": "Master telemetry HUD, real-time agent dispatch status, and unified system overview.",
+      "description": "Hybrid operator command deck aggregating live loopback host telemetry (CPU %, loadavg, RAM, disk, thermal sensors, GPU), 88-port fleet health board, 85-tool / 45-workstation fuzzy Command Palette, and sanitized diagnostic exports with honest offline browser fallback.",
       "url": "https://zoth.nullai.tech/workstations/cockpit"
     },
     {

@@ -202,6 +202,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, loopback service NOC, measured RTT pinger, Signal Bridge telemetry, HKDF-SHA256, HMAC-SHA256 envelope verifier, zero-egress IPC, Zoth Studio`
         : station.id === 'chronicle'
         ? `${station.name}, Chronicle Hub, continuity vault proxy, SQLite FTS5 search, browser JSONL transcript analyzer, friction pattern radar, engineering release chronicle, Zoth Studio`
+        : station.id === 'cockpit'
+        ? `${station.name}, Sovereign Operator Command, live Linux host telemetry HUD, 88-port loopback fleet health board, fuzzy command palette, zoth-cockpit CLI, sanitized JSON Markdown CSV diagnostics, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -228,6 +230,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, loopback service NOC, measured RTT pinger, Signal Bridge telemetry, HKDF-SHA256, HMAC-SHA256 envelope verifier, zero-egress IPC, Zoth Studio`
         : station.id === 'chronicle'
         ? `${station.name}, Chronicle Hub, continuity vault proxy, SQLite FTS5 search, browser JSONL transcript analyzer, friction pattern radar, engineering release chronicle, Zoth Studio`
+        : station.id === 'cockpit'
+        ? `${station.name}, Sovereign Operator Command, live Linux host telemetry HUD, 88-port loopback fleet health board, fuzzy command palette, zoth-cockpit CLI, sanitized JSON Markdown CSV diagnostics, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -276,6 +280,7 @@ export function getAllStaticRoutes() {
   routes['/tools/brand'] = getRouteMeta('/tools/brand');
   routes['/tools/bus-monitor'] = getRouteMeta('/tools/bus-monitor');
   routes['/tools/chronicle'] = getRouteMeta('/tools/chronicle');
+  routes['/tools/cockpit'] = getRouteMeta('/tools/cockpit');
 
   // Add all math pillars
   mathPillars.forEach((pillar) => {
@@ -1008,6 +1013,39 @@ export function generateSchemaGraph(path = '/') {
               'acceptedAnswer': {
                 '@type': 'Answer',
                 'text': 'Yes. Zoth Chronicle Hub & Engineering Horizon is 100% free and open-access with zero paywalls, zero gated exports, and optional community support via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
+
+      if (station.id === 'cockpit') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What does The Cockpit (Sovereign Operator Command v2.3.0) monitor locally and offline?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'When connected to Zoth Studio on 127.0.0.1:3000, The Cockpit aggregates live host CPU %, 1m/5m/15m load averages, RAM MiB, root disk GiB, /sys/class/thermal temperatures, optional NVIDIA GPU stats, core enclave daemons (:8094, :8102, :8787, :11434, :18000, :8161), and an 88-port loopback fleet health matrix via GET /api/studio/cockpit. When accessed remotely or statically, it degrades honestly to a browser hardware inspector alongside the full 85-tool / 45-workstation fuzzy Command Palette and diagnostic exporter.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does The Cockpit prevent DNS-rebinding exfiltration and external telemetry leaks?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'GET /api/studio/cockpit, /api/studio/host, and /api/studio/fleet enforce strict loopback Host header allowlists (returning HTTP 403 on untrusted hosts), automatically redact literal home directory paths to ~/ before serialization, neutralize CSV spreadsheet formula injection, and execute with zero external CDN or analytics requests.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is The Cockpit 100% free and open-access without paywalls?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. The Cockpit workstation and its companion ZothOS CLI (/usr/local/bin/zoth-cockpit) are 100% free and unlocked by default with zero paywalls or license modals, supported voluntarily via Buy Us a Coffee on Stripe or Solana tips.'
               }
             }
           ]

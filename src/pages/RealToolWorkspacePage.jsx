@@ -38,6 +38,7 @@ import AxPowerhouseGodModeTool from '../components/tools/AxPowerhouseGodModeTool
 import BrandAssetsForgeGodModeTool from '../components/tools/BrandAssetsForgeGodModeTool';
 import BusMonitorGodModeTool from '../components/tools/BusMonitorGodModeTool';
 import ChronicleHubGodModeTool from '../components/tools/ChronicleHubGodModeTool';
+import CockpitGodModeTool from '../components/tools/CockpitGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -250,7 +251,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'zoth-comfy-foundry': ZothComfyFoundryGodModeTool,
 
   // Studio Cockpit & Workstation aliases (from workstations.js)
-  'cockpit': SwarmCivilizationGodModeTool,
+  'cockpit': CockpitGodModeTool,
   'ide': ZothBoltGodModeTool,
   'agent-composer': AgentComposerGodModeTool,
   'mission-control': SwarmCivilizationGodModeTool,
@@ -865,7 +866,8 @@ export default function RealToolWorkspacePage() {
                       fontFamily: mono,
                       fontSize: { xs: '0.76rem', sm: '0.84rem' },
                       color: '#F8FAFC',
-                      whiteSpace: 'nowrap',
+                      whiteSpace: { xs: 'normal', sm: 'nowrap' },
+                      overflowWrap: 'anywhere',
                     }}
                   >
                     {pullCommand}

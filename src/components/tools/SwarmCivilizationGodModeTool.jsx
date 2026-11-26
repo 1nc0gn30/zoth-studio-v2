@@ -222,12 +222,12 @@ export default function SwarmCivilizationGodModeTool({ tool }) {
 
   const tokens = useMemo(
     () => ({
-      accent: isDark ? '#34D399' : '#059669',
-      accentSoft: isDark ? 'rgba(52, 211, 153, 0.12)' : 'rgba(5, 150, 105, 0.09)',
-      accentBorder: isDark ? 'rgba(52, 211, 153, 0.34)' : 'rgba(5, 150, 105, 0.32)',
-      mint: isDark ? '#4BE3C1' : '#0B7D63',
-      gold: isDark ? '#D4AF37' : '#8C6510',
-      goldSoft: isDark ? 'rgba(212, 175, 55, 0.12)' : 'rgba(140, 101, 16, 0.10)',
+      accent: isDark ? '#34D399' : '#047857',
+      accentSoft: isDark ? 'rgba(52, 211, 153, 0.12)' : 'rgba(4, 120, 87, 0.09)',
+      accentBorder: isDark ? 'rgba(52, 211, 153, 0.34)' : 'rgba(4, 120, 87, 0.32)',
+      mint: isDark ? '#4BE3C1' : '#047857',
+      gold: isDark ? '#D4AF37' : '#7A5808',
+      goldSoft: isDark ? 'rgba(212, 175, 55, 0.12)' : 'rgba(122, 88, 8, 0.10)',
       danger: isDark ? '#FB7185' : '#BE123C',
       dangerSoft: isDark ? 'rgba(251, 113, 133, 0.14)' : 'rgba(190, 18, 60, 0.09)',
       surface: isDark ? '#0B1017' : '#F8F6F0',
@@ -988,7 +988,7 @@ ${paneLines}`;
                         </Typography>
                       </Box>
 
-                      <Stack direction="row" spacing={1} alignItems="center" sx={{ flexWrap: 'wrap', useFlexGap: true }}>
+                      <Stack direction="row" spacing={2} alignItems="center" sx={{ flexWrap: 'wrap', rowGap: 2, columnGap: 1.5 }}>
                         <TextField
                           select
                           size="small"
@@ -1180,10 +1180,10 @@ ${paneLines}`;
                       />
                     </Stack>
                     <Typography sx={{ fontSize: '0.84rem', color: tokens.muted, lineHeight: 1.6, mb: 1.5 }}>
-                      Pair any Swarm Multiplexer pane with <strong>EGREGORE</strong> on <code>127.0.0.1:8147/v1</code>: one OpenAI-compatible face backed by 3,456 co-prime Pantheon lenses, zero-call Beta-posterior stopping, a distilled Design-Director + Formal-Logic Codex, and native routing across 80 ZothOS &amp; Zoth Studio tools.
+                      Pair any Swarm Multiplexer pane with <strong>EGREGORE</strong> on <code>127.0.0.1:8147/v1</code>: one OpenAI-compatible face backed by 3,456 co-prime Pantheon lenses, zero-call Beta-posterior stopping, a distilled Design-Director + Formal-Logic Codex, and native routing across 85 ZothOS &amp; Zoth Studio tools.
                     </Typography>
                     <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: tokens.gold, mb: 1.5 }}>
-                      ROADMAP: Expanded Tests Coming Soon · Public Benchmarks Coming Soon · HuggingFace Coming Soon
+                      LOCAL RUNTIME: OpenAI-compatible loopback bridge (:8147) · Deterministic lens sampler · CLI &amp; MCP tool router
                     </Typography>
                     <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
                       <Button
@@ -1285,8 +1285,14 @@ ${paneLines}`;
                       return (
                         <Grid xs={12} sm={6} key={d.id}>
                           <Box
+                            component="button"
+                            type="button"
+                            aria-pressed={sel}
                             onClick={() => setActiveDecree(d.id)}
                             sx={{
+                              width: '100%',
+                              textAlign: 'left',
+                              minHeight: 44,
                               p: 1.35,
                               borderRadius: 1.5,
                               cursor: 'pointer',
@@ -1359,7 +1365,7 @@ ${paneLines}`;
                     sx={{ mb: 1.25, flexWrap: 'wrap', gap: 1 }}
                   >
                     <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: tokens.muted }}>
-                      21-Pane Swarm Multiplexer &amp; PBFT Manifest (`.yaml`)
+                      21-Pane Swarm Multiplexer &amp; PBFT Manifest (.yaml)
                     </Typography>
                     <Stack direction="row" spacing={1}>
                       <Button

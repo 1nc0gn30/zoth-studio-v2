@@ -3831,6 +3831,66 @@ export const toolsDocumentation = {
           "Editorial Ivory + Obsidian Gold Token Matrix & WCAG 2.1 Checker — Interactive click-to-copy swatches synced to src/theme.js, self-hosted typography specimens (Celtic Garamond, Inter, JetBrains Mono), and live contrast ratio auditing.",
           "Multi-Format Production Bundle Exporter — One-click CSS custom properties, W3C Design Tokens JSON, Tailwind preset, and compliant Neal Frazier Tech (@1nc0gn30) • NullAI Platform attribution snippets."
       ]
+  },
+  "cockpit": {
+      "whyUse": "Monitor live Linux host hardware telemetry, inspect all 88 loopback ZothOS/Studio ports in real time, fuzzy-launch any of the 85 Arsenal tools or 45 Studio workstations, and export sanitized diagnostic reports without cloud monitoring agents or SaaS lock-in.",
+      "problemSolved": "Replaces scattered terminal probes, stale static dashboards, and third-party cloud APMs with a single hardened loopback command center that degrades honestly to a browser hardware inspector when opened remotely.",
+      "architecture": "Hybrid Studio-native workstation: pure zero-dependency engine (src/utils/cockpitEngine.js, byte-identically mirrored at server/cockpit-engine.mjs) paired with DNS-rebinding-hardened loopback endpoints (GET /api/studio/cockpit, GET /api/studio/host, and GET /api/studio/fleet on 127.0.0.1:3000) plus the companion ZothOS terminal CLI (/usr/local/bin/zoth-cockpit).",
+      "aiAgentProtocol": {
+          "server": "zoth-studio-loopback-api (127.0.0.1:3000) & /usr/local/bin/zoth-cockpit",
+          "mcpTool": "GET /api/studio/cockpit · GET /api/studio/host · GET /api/studio/fleet",
+          "description": "Retrieve normalized, home-path-redacted host telemetry (CPU %, loadavg, RAM, root disk, thermal zones, GPU, honest audio subsystem), core daemon health (:8094, :8102, :8787, :11434, :18000, :8161), and 88-port loopback fleet status.",
+          "cliExample": "zoth open cockpit --json",
+          "tools": [
+              {
+                  "name": "GET /api/studio/cockpit",
+                  "description": "Unified DNS-rebinding-protected (Host 403) loopback telemetry snapshot aggregating host CPU/RAM/disk/thermal/GPU metrics, core daemon status, 88-port fleet scan, and active reality profile with zero /home/<user>/ leaks."
+              },
+              {
+                  "name": "GET /api/studio/host",
+                  "description": "Direct host substrate readout including sampled CPU %, 1m/5m/15m load averages, RAM MiB, root disk GiB, /sys/class/thermal zones, optional nvidia-smi GPU telemetry, and detected PipeWire/PulseAudio/ALSA audio."
+              },
+              {
+                  "name": "GET /api/studio/fleet",
+                  "description": "Concurrent loopback port health matrix scanning all 88 ZothOS & Zoth Studio ports with measured HTTP latency."
+              },
+              {
+                  "name": "/usr/local/bin/zoth-cockpit --json",
+                  "description": "Companion ZothOS terminal operations CLI emitting sampled CPU %, RAM, root disk, Tor cloaking status, AI engines, security arsenal, and Studio daemons as machine-readable JSON (also supports --status, --tui, and --gui)."
+              }
+          ],
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "endpoint": { "type": "string", "enum": ["/api/studio/cockpit", "/api/studio/host", "/api/studio/fleet"] },
+                  "format": { "type": "string", "enum": ["json", "markdown", "csv"] }
+              }
+          },
+          "outputSchema": {
+              "schemaVersion": "2.3.0",
+              "mode": "loopback-live | browser-fallback",
+              "host": "object | null",
+              "daemons": "object | null",
+              "fleet": "object",
+              "reality": "object"
+          }
+      },
+      "quickstart": [
+          "zoth open cockpit",
+          "zoth open cockpit --json",
+          "curl -sS http://127.0.0.1:3000/api/studio/cockpit | jq '{mode, cpu: .host.cpu.pct, ramPct: .host.memory.usedPct, fleet: {live: .fleet.live, total: .fleet.total}}'"
+      ],
+      "cliCommands": [
+          "zoth-cockpit --status  # ZothOS headless terminal telemetry & daemon snapshot",
+          "zoth-cockpit --json    # Machine-readable JSON telemetry with sampled CPU %",
+          "npm run test:cockpit   # Run unit tests for cockpitEngine.js, redaction & CSV safety"
+      ],
+      "features": [
+          "Live Host Telemetry HUD — Real sampled CPU %, 1m/5m/15m load averages, RAM MiB, root disk GiB, /sys/class/thermal zones with COOL/WARM/HOT classification, optional NVIDIA GPU stats, honest audio subsystem detection, and core daemon status (:8094, :8102, :8787, :11434, :18000, :8161).",
+          "Live 88-Port Loopback Fleet Matrix — Filterable ALL/LIVE/DARK health board with category selector, instant search, measured latency badges, and safe open/copy-CLI controls.",
+          "Fuzzy Quick-Launch Command Palette — Instant ranked search across all 85 Arsenal tools, 45 Studio workstations, ports, and operator CLI actions — available both online and offline.",
+          "Sanitized Diagnostic Snapshot Exporter — One-click Copy and Download for home-path-redacted JSON, structured Markdown briefs, and spreadsheet formula-injection-neutralized CSV fleet reports."
+      ]
   }
 };
 

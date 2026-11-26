@@ -72,6 +72,10 @@ try {
   check('Chronicle recall local POST 200 JSON (no /home/ leak)', r.status === 200 && /"related_memories":\[/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 140)}`);
   r = await req('/api/studio/chronicle/search?q=chronicle&limit=5');
   check('Chronicle search GET 200 JSON (no /home/ leak)', r.status === 200 && /"conversations":\[/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 140)}`);
+  r = await req('/api/studio/cockpit');
+  check('Cockpit API 200 JSON (host, fleet, daemons, no /home/ leak)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"schemaVersion":"2.3.0"/.test(r.body) && /"host":\{/.test(r.body) && /"fleet":\{/.test(r.body) && !/\/home\/[a-z0-9_-]+\//i.test(r.body), `${r.status} ${r.body.slice(0, 140)}`);
+  r = await req('/api/studio/cockpit', { headers: { Host: 'evil.example.invalid' } });
+  check('Cockpit GET DNS-rebinding blocked (403)', r.status === 403 && /Untrusted host blocked/.test(r.body), `${r.status} ${r.body.slice(0, 80)}`);
   r = await req('/api/studio/ax/audit');
   check('AX audit API 200 JSON (driftCount 0)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"driftCount":0/.test(r.body), `${r.status} ${r.body.slice(0, 180)}`);
   r = await req('/api/studio/ax/validate', { method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/json' }, body: '{"spec":"robots.txt","content":"User-agent: *\\nAllow: /"}' });

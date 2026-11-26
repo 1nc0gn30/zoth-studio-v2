@@ -47,6 +47,7 @@ import ChronicleHubGodModeTool from '../components/tools/ChronicleHubGodModeTool
 import { useReality } from '../context/RealityContext';
 import AgentComposerGodModeTool from '../components/tools/AgentComposerGodModeTool';
 import BrandAssetsForgeGodModeTool from '../components/tools/BrandAssetsForgeGodModeTool';
+import CockpitGodModeTool from '../components/tools/CockpitGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -67,146 +68,11 @@ function BrandWorkstation() {
 }
 
 /* ==========================================================================
-   WORKSTATION 3: Cyberpunk HUD Cockpit
+   WORKSTATION 3: The Cockpit // Sovereign Operator Command
+   Delegates directly to CockpitGodModeTool (v2.3.0 — zero static mock HUD).
    ========================================================================== */
-function CyberpunkHudWorkstation() {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
-  const canvasRef = useRef(null);
-  const [telemetry, setTelemetry] = useState({ cpu: 14, memory: 42, packets: 18420, latency: 1.8 });
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let frame = 0;
-    let animId;
-
-    const render = () => {
-      frame++;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = isDark ? '#08080B' : '#0A0F1D';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      const cx = canvas.width / 2;
-      const cy = canvas.height / 2;
-      const r = Math.min(cx, cy) - 20;
-
-      // Radar outer rings
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.25)';
-      ctx.lineWidth = 1;
-      for (let i = 1; i <= 3; i++) {
-        ctx.beginPath();
-        ctx.arc(cx, cy, (r / 3) * i, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-
-      // Crosshairs
-      ctx.beginPath();
-      ctx.moveTo(cx - r, cy);
-      ctx.lineTo(cx + r, cy);
-      ctx.moveTo(cx, cy - r);
-      ctx.lineTo(cx, cy + r);
-      ctx.stroke();
-
-      // Sweeping beam
-      const angle = (frame * 0.03) % (Math.PI * 2);
-      ctx.save();
-      ctx.translate(cx, cy);
-      ctx.rotate(angle);
-      const grad = ctx.createLinearGradient(0, 0, r, 0);
-      grad.addColorStop(0, 'rgba(0, 240, 255, 0.4)');
-      grad.addColorStop(1, 'rgba(0, 240, 255, 0)');
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.arc(0, 0, r, 0, 0.45);
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
-
-      // Simulated targets
-      const targets = [
-        { x: cx + Math.cos(1.2) * (r * 0.6), y: cy + Math.sin(1.2) * (r * 0.6), label: 'Node:Azoth' },
-        { x: cx + Math.cos(3.8) * (r * 0.4), y: cy + Math.sin(3.8) * (r * 0.4), label: 'Lucy:Oracle' },
-        { x: cx + Math.cos(5.4) * (r * 0.75), y: cy + Math.sin(5.4) * (r * 0.75), label: 'Vault:8787' },
-      ];
-
-      ctx.fillStyle = '#D4AF37';
-      ctx.font = '9px "JetBrains Mono"';
-      targets.forEach((t) => {
-        ctx.beginPath();
-        ctx.arc(t.x, t.y, 4, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillText(t.label, t.x + 8, t.y + 3);
-      });
-
-      animId = requestAnimationFrame(render);
-    };
-
-    render();
-    return () => cancelAnimationFrame(animId);
-  }, [isDark]);
-
-  return (
-    <Box>
-      <Grid container spacing={3}>
-        <Grid xs={12} md={7}>
-          <Paper sx={{ p: 2, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: isDark ? '#08080B' : '#0A0F1D', textAlign: 'center' }}>
-            <canvas ref={canvasRef} width={500} height={340} style={{ width: '100%', maxWidth: 500, height: 'auto', display: 'block', margin: '0 auto' }} />
-            <Typography variant="caption" sx={{ color: isDark ? '#00F0FF' : '#38BDF8', fontFamily: mono, display: 'block', mt: 1 }}>
-              ACTIVE SCANNER // 360° SWARM RADAR · ZERO-EGRESS HOST ENCLAVE
-            </Typography>
-          </Paper>
-        </Grid>
-
-        <Grid xs={12} md={5}>
-          <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1, color: isDark ? '#D4AF37' : '#8A6A09' }}>HUD Cockpit Telemetry</Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Real-time hardware sensors and loopback telemetry streams.
-            </Typography>
-
-            <Stack spacing={2}>
-              <Box>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5, fontSize: '0.85rem' }}>
-                  <span>Core Host CPU Load</span>
-                  <strong>{telemetry.cpu}%</strong>
-                </Box>
-                <LinearProgress variant="determinate" value={telemetry.cpu} sx={{ height: 6, borderRadius: 1 }} />
-              </Box>
-
-              <Box>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5, fontSize: '0.85rem' }}>
-                  <span>Neural Vector Memory</span>
-                  <strong>{telemetry.memory}%</strong>
-                </Box>
-                <LinearProgress variant="determinate" value={telemetry.memory} color="warning" sx={{ height: 6, borderRadius: 1 }} />
-              </Box>
-
-              <Box>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5, fontSize: '0.85rem' }}>
-                  <span>Inter-Agent Packet Pings</span>
-                  <strong>{telemetry.packets.toLocaleString()} pkts</strong>
-                </Box>
-                <LinearProgress variant="determinate" value={78} color="success" sx={{ height: 6, borderRadius: 1 }} />
-              </Box>
-
-              <Divider sx={{ my: 1 }} />
-              <Paper sx={{ p: 2, bgcolor: isDark ? '#0E131F' : '#F0F9FF', border: `1px solid ${isDark ? 'rgba(0,240,255,0.2)' : 'rgba(2,132,199,0.3)'}` }}>
-                <Typography variant="caption" sx={{ fontFamily: mono, color: isDark ? '#00F0FF' : '#0369A1', fontWeight: 700 }}>
-                  LOCK-ON TARGET: LUCY ORACLE CORE (LOOPBACK :8094)
-                </Typography>
-                <Typography variant="body2" sx={{ mt: 0.5, fontSize: '0.85rem' }}>
-                  Biomorphic link stable. Zero packets routed through public internet.
-                </Typography>
-              </Paper>
-            </Stack>
-          </Paper>
-        </Grid>
-      </Grid>
-    </Box>
-  );
+function CockpitWorkstation() {
+  return <CockpitGodModeTool />;
 }
 
 /* ==========================================================================
@@ -1705,7 +1571,7 @@ export default function WorkstationDetailPage() {
         return <BrandWorkstation />;
       case 'cyberpunk-hud':
       case 'cockpit':
-        return <CyberpunkHudWorkstation />;
+        return <CockpitWorkstation />;
       case 'ide':
         return <IdeWorkstation />;
       case 'models':

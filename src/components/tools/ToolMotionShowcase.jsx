@@ -150,6 +150,17 @@ export const TOOL_MOTION_OVERRIDES = {
     execLabel: 'HYBRID BROWSER ANALYZER + /api/studio/chronicle/{summary,recall,search}',
     telemetrySub: 'Safe Epoch/ISO Normalization · FTS5 Archive Search · Offline JSONL/MD Parser · Sanitized CSV/MD/JSON · v2.3.0.',
   },
+  'cockpit': {
+    accent: '#34D399',
+    secondary: '#D4AF37',
+    archetype: 'radar',
+    anchorName: 'Sovereign Operator Telemetry & 88-Port Loopback Radar',
+    formula: 'Cockpit(t) = Host(CPU, RAM, Disk, Thermal, GPU) ∪ Fleet(88 ports) ∪ Palette(85+45)',
+    badge: 'OPERATOR COMMAND · v2.3.0',
+    clip: 'swarm',
+    execLabel: 'HYBRID BROWSER INSPECTOR + GET /api/studio/cockpit (HOST 403)',
+    telemetrySub: 'Live Host Sensors · 88-Port Fleet Matrix · Fuzzy Command Palette · Sanitized JSON/MD/CSV · v2.3.0.',
+  },
 };
 
 export function getToolMotionMeta(tool) {
@@ -712,7 +723,12 @@ Scene Breakdown & Exact On-Screen Copy:
           : `0 10px 28px rgba(15,23,42,0.18)`,
       }}
     >
-      <SovereignEyebrow accent="#D4AF37" right="Zoth Studio">
+      <SovereignEyebrow
+        accent="#D4AF37"
+        right="Zoth Studio"
+        rightSx={{ color: '#CBD5E1' }}
+        sx={{ px: { xs: 2, md: 3 }, pt: 1.25 }}
+      >
         {"tool-motion-showcase"}
       </SovereignEyebrow>
       <SovereignBand
