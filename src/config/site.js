@@ -744,6 +744,38 @@ export function generateSchemaGraph(path = '/') {
           ...(tool.liveUrl ? { 'url': tool.liveUrl } : {}),
         }
       });
+      if (tool.id === 'cron-rhythm-studio') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What engines and MCP tools are included in CronRhythm Studio v2.6.0?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'CronRhythm Studio v2.6.0 ships a zero-dependency Python 3.9+ stdlib cron engine (parser.py, timeline_engine.py, humanizer.py, transpiler.py, rhythm_matrix.py, fleet_optimizer.py, timezone_auditor.py, catalog.py) on 127.0.0.1:5174, a matching in-browser POSIX/Quartz engine with leap-year and DOM/DOW OR support, a Unicode U+2800 Braille TUI, and 12 JSON-RPC 2.0 stdio MCP tools.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does CronRhythm Studio handle DST transitions and Systemd OnCalendar differences?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'The timeline calculator validates local wall-clock candidates via UTC round-trip conversion to skip non-existent DST spring-forward gap times, the DST anomaly auditor flags skipped and duplicate hours across IANA zones, and the Systemd transpiler emits an explicit warning when both Day-of-Month and Day-of-Week are restricted because POSIX cron uses OR while Systemd OnCalendar uses AND.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is CronRhythm Studio 100% free with zero external network egress?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. CronRhythm Studio is 100% free and open-access under the MIT license with zero paywalls, zero external font or CDN requests, strict loopback Host and Origin security guards on :5174, and optional community support via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'creatorplaybooks') {
         graph.push({
           '@type': 'FAQPage',

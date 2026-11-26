@@ -1,267 +1,139 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   Box, Typography, Paper, Chip, Button, Unstable_Grid2 as Grid, Stack, TextField,
-  Divider, Card, CardContent, LinearProgress, Switch, FormControlLabel,
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton,
-  Tooltip, Tabs, Tab, Alert, InputAdornment, Dialog, DialogTitle, DialogContent, DialogActions,
-  Select, MenuItem, FormControl, InputLabel
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+  Tabs, Tab, Alert, InputAdornment, Select, MenuItem, FormControl, InputLabel
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import ScheduleIcon from '@mui/icons-material/Schedule';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ShieldIcon from '@mui/icons-material/Shield';
-import BoltIcon from '@mui/icons-material/Bolt';
-import KeyIcon from '@mui/icons-material/VpnKey';
+import DownloadIcon from '@mui/icons-material/Download';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CodeIcon from '@mui/icons-material/Code';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import TimerIcon from '@mui/icons-material/Timer';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
+import {
+  CURATED_PRESETS,
+  parseCron,
+  humanizeCron,
+  getNextRuns,
+  calculateHeatmap,
+  toggleHourInExpression,
+  transpileCron,
+  buildExportBundle,
+  auditDst,
+  auditFleet,
+} from '../../utils/cronRhythmEngine.js';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
-// ---------------------------------------------------------------------------
-// Curated Presets
-// ---------------------------------------------------------------------------
-const PRESETS = [
-  { label: 'Every 5 Minutes', cron: '*/5 * * * *', desc: 'Continuous polling and high-frequency health checks' },
-  { label: 'Hourly on the Hour', cron: '0 * * * *', desc: 'Standard hourly sync and metric aggregation' },
-  { label: 'Daily at Midnight', cron: '0 0 * * *', desc: 'Nightly database vacuum and backup sealing' },
-  { label: 'Business Hours (9-5 M-F)', cron: '0 9-17 * * 1-5', desc: 'Dispatches active notifications on workdays' },
-  { label: 'Weekly on Sunday 03:00', cron: '0 3 * * 0', desc: 'Deep maintenance and cold log rotation' },
-  { label: 'Monthly 1st at 00:00', cron: '0 0 1 * *', desc: 'Monthly invoicing and financial reconciliation' },
-  { label: 'Twice Daily (08:00 & 20:00)', cron: '0 8,20 * * *', desc: 'Morning and evening operational synchronization' },
-  { label: 'Every 15 Mins M-F', cron: '*/15 9-17 * * 1-5', desc: 'Market trading hours execution interval' }
+const DEFAULT_FLEET_JSON = JSON.stringify(
+  {
+    db_backup: '0 0 * * *',
+    nightly_analytics: '0 0 * * *',
+    billing_reconciliation: '0 0 * * *',
+    cache_eviction: '0 0 * * *',
+  },
+  null,
+  2
+);
+
+const DIALECTS = [
+  { id: 'systemd', label: 'Systemd Timer' },
+  { id: 'kubernetes', label: 'Kubernetes' },
+  { id: 'github', label: 'GitHub Actions' },
+  { id: 'eventbridge', label: 'AWS EventBridge' },
+  { id: 'quartz', label: 'Quartz 7-Field' },
+  { id: 'unix', label: 'UNIX Crontab' },
 ];
-
-// ---------------------------------------------------------------------------
-// Real Zero-Dependency Cron Parser & Field Matcher
-// ---------------------------------------------------------------------------
-function parseField(fieldStr, minVal, maxVal) {
-  const values = new Set();
-  const parts = fieldStr.split(',');
-
-  for (const part of parts) {
-    if (part === '*') {
-      for (let i = minVal; i <= maxVal; i++) values.add(i);
-    } else if (part.includes('/')) {
-      const [range, stepStr] = part.split('/');
-      const step = parseInt(stepStr, 10) || 1;
-      let start = minVal;
-      let end = maxVal;
-      if (range !== '*') {
-        if (range.includes('-')) {
-          const [s, e] = range.split('-').map(Number);
-          start = isNaN(s) ? minVal : s;
-          end = isNaN(e) ? maxVal : e;
-        } else {
-          start = parseInt(range, 10) || minVal;
-        }
-      }
-      for (let i = start; i <= end; i += step) {
-        if (i >= minVal && i <= maxVal) values.add(i);
-      }
-    } else if (part.includes('-')) {
-      const [start, end] = part.split('-').map(Number);
-      if (!isNaN(start) && !isNaN(end)) {
-        for (let i = start; i <= end; i++) {
-          if (i >= minVal && i <= maxVal) values.add(i);
-        }
-      }
-    } else {
-      const val = parseInt(part, 10);
-      if (!isNaN(val) && val >= minVal && val <= maxVal) {
-        values.add(val);
-      }
-    }
-  }
-
-  return Array.from(values).sort((a, b) => a - b);
-}
-
-// Translate cron expression to human-readable English
-function describeCron(cronStr) {
-  const parts = cronStr.trim().split(/\s+/);
-  if (parts.length !== 5) {
-    return 'Invalid cron format. Please provide 5 space-delimited fields (min hour day-of-month month day-of-week).';
-  }
-
-  const [min, hour, dom, mon, dow] = parts;
-
-  let desc = 'Executes ';
-
-  // Minute
-  if (min === '*') desc += 'every minute';
-  else if (min.startsWith('*/')) desc += `every ${min.replace('*/', '')} minutes`;
-  else if (min === '0') desc += 'at minute 00';
-  else desc += `at minute ${min}`;
-
-  // Hour
-  if (hour === '*') desc += ' past every hour';
-  else if (hour.startsWith('*/')) desc += `, every ${hour.replace('*/', '')} hours`;
-  else if (hour.includes('-')) desc += `, between ${hour.split('-')[0]}:00 and ${hour.split('-')[1]}:59`;
-  else if (hour.includes(',')) desc += `, at hours ${hour}`;
-  else desc += `, at ${hour.padStart(2, '0')}:00`;
-
-  // Day of Month
-  if (dom !== '*') {
-    if (dom.startsWith('*/')) desc += `, every ${dom.replace('*/', '')} days`;
-    else desc += `, on day ${dom} of the month`;
-  }
-
-  // Month
-  if (mon !== '*') {
-    const monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    if (mon.startsWith('*/')) desc += `, every ${mon.replace('*/', '')} months`;
-    else {
-      const mNums = mon.split(',').map((n) => monthNames[parseInt(n, 10)] || n);
-      desc += `, in ${mNums.join(', ')}`;
-    }
-  }
-
-  // Day of Week
-  if (dow !== '*') {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    if (dow.includes('-')) {
-      const [s, e] = dow.split('-').map(Number);
-      desc += `, ${days[s] || s} through ${days[e] || e}`;
-    } else if (dow.includes(',')) {
-      const dNames = dow.split(',').map((n) => days[parseInt(n, 10)] || n);
-      desc += `, on ${dNames.join(', ')}`;
-    } else {
-      desc += `, only on ${days[parseInt(dow, 10)] || dow}`;
-    }
-  }
-
-  return desc + '.';
-}
-
-// Calculate the next N trigger execution dates
-function calculateNextTriggers(cronStr, count = 8) {
-  const parts = cronStr.trim().split(/\s+/);
-  if (parts.length !== 5) return [];
-
-  const [minStr, hourStr, domStr, monStr, dowStr] = parts;
-  const minutes = parseField(minStr, 0, 59);
-  const hours = parseField(hourStr, 0, 23);
-  const doms = parseField(domStr, 1, 31);
-  const months = parseField(monStr, 1, 12);
-  const dows = parseField(dowStr, 0, 6);
-
-  if (minutes.length === 0 || hours.length === 0 || doms.length === 0 || months.length === 0 || dows.length === 0) {
-    return [];
-  }
-
-  const triggers = [];
-  const current = new Date();
-  // Move current forward by 1 minute to calculate future executions
-  let iter = new Date(current.getTime());
-  iter.setSeconds(0, 0);
-  iter.setMinutes(iter.getMinutes() + 1);
-
-  // Maximum search horizon: 5 years or 100,000 minute iterations
-  let loops = 0;
-  while (triggers.length < count && loops < 150000) {
-    loops++;
-    const mon = iter.getMonth() + 1; // 1-12
-    const dom = iter.getDate(); // 1-31
-    const dow = iter.getDay(); // 0-6
-    const hr = iter.getHours();
-    const mn = iter.getMinutes();
-
-    if (months.includes(mon) && doms.includes(dom) && dows.includes(dow) && hours.includes(hr) && minutes.includes(mn)) {
-      triggers.push(new Date(iter.getTime()));
-      // Advance by at least 1 minute
-      iter.setMinutes(iter.getMinutes() + 1);
-    } else {
-      // Step optimization: if hour not in match, jump to next hour
-      if (!hours.includes(hr)) {
-        iter.setMinutes(0);
-        iter.setHours(iter.getHours() + 1);
-      } else {
-        iter.setMinutes(iter.getMinutes() + 1);
-      }
-    }
-  }
-
-  return triggers;
-}
 
 export function CronRhythmGodModeTool() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
-  // Aesthetic Tokens
-  const emerald = '#00FF9D';
-  const emeraldSoft = 'rgba(0, 255, 157, 0.12)';
-  const gold = '#D4AF37';
-  const goldSoft = 'rgba(212, 175, 55, 0.14)';
-  const crimson = '#FF3355';
-  const crimsonSoft = 'rgba(255, 51, 85, 0.12)';
-  const cyan = '#38BDF8';
-  const cyanSoft = 'rgba(56, 189, 248, 0.12)';
-  const voidDark = '#08080B';
-  const surfaceDark = '#10121A';
-  const cardBorder = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)';
+  // High-contrast Dual-Theme Tokens (WCAG >= 4.5:1 in both Obsidian Dark & Editorial Ivory Light)
+  const gold = isDark ? '#D4AF37' : '#7A5808';
+  const goldSoft = isDark ? 'rgba(212, 175, 55, 0.14)' : 'rgba(154, 111, 11, 0.11)';
+  const goldBorder = isDark ? 'rgba(212, 175, 55, 0.42)' : 'rgba(122, 88, 8, 0.38)';
+  const emerald = isDark ? '#34D399' : '#047857';
+  const emeraldSoft = isDark ? 'rgba(16, 185, 129, 0.14)' : 'rgba(4, 120, 87, 0.10)';
+  const cyan = isDark ? '#38BDF8' : '#0369A1';
+  const cyanSoft = isDark ? 'rgba(56, 189, 248, 0.14)' : 'rgba(3, 105, 161, 0.10)';
+  const crimson = isDark ? '#FB7185' : '#BE123C';
+  const crimsonSoft = isDark ? 'rgba(244, 63, 94, 0.14)' : 'rgba(190, 18, 60, 0.10)';
+  const surfaceBg = isDark ? '#10121A' : '#FFFFFF';
+  const subtleBg = isDark ? '#08080B' : '#F3EFE6';
+  const cardBorder = isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(16, 24, 40, 0.13)';
+  const textPrimary = isDark ? '#F8FAFC' : '#101828';
+  const textSecondary = isDark ? '#CBD5E1' : '#475467';
 
-  // Operational State
-  const [cronExpression, setCronExpression] = useState('*/5 * * * *');
-  const [nextTriggers, setNextTriggers] = useState([]);
-  const [activeHours, setActiveHours] = useState([]);
+  // State
+  const [cronExpression, setCronExpression] = useState('*/15 * * * *');
+  const [tzMode, setTzMode] = useState('UTC');
+  const [activeTab, setActiveTab] = useState(0);
+  const [dialect, setDialect] = useState('systemd');
   const [copiedKey, setCopiedKey] = useState(null);
   const [countdownText, setCountdownText] = useState('');
+  const [dstTz, setDstTz] = useState('America/New_York');
+  const [dstYear, setDstYear] = useState(2026);
+  const [fleetText, setFleetText] = useState(DEFAULT_FLEET_JSON);
 
-  // Radial 24-Hour Sequencer Canvas
   const canvasRef = useRef(null);
 
-  // Update schedule & active hours when expression changes
-  useEffect(() => {
+  const ast = useMemo(() => parseCron(cronExpression), [cronExpression]);
+  const humanSummary = useMemo(() => humanizeCron(ast), [ast]);
+  const nextTriggers = useMemo(
+    () => (ast.isValid && !ast.isReboot ? getNextRuns(ast, { count: 8, timezone: tzMode }) : []),
+    [ast, tzMode]
+  );
+  const activeHours = useMemo(() => (ast.isValid && !ast.isReboot ? ast.fields.hour : []), [ast]);
+  const heatmap = useMemo(() => calculateHeatmap(ast), [ast]);
+  const transpiled = useMemo(() => transpileCron(ast, dialect), [ast, dialect]);
+  const dstReport = useMemo(() => auditDst(cronExpression, dstTz, dstYear), [cronExpression, dstTz, dstYear]);
+  const fleetReport = useMemo(() => {
     try {
-      const triggers = calculateNextTriggers(cronExpression, 8);
-      setNextTriggers(triggers);
-
-      const parts = cronExpression.trim().split(/\s+/);
-      if (parts.length === 5) {
-        const hrs = parseField(parts[1], 0, 23);
-        setActiveHours(hrs);
-      }
-    } catch {
-      setNextTriggers([]);
-      setActiveHours([]);
+      const parsed = JSON.parse(fleetText);
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return { error: 'Fleet input must be a JSON object.' };
+      return auditFleet(parsed);
+    } catch (e) {
+      return { error: `Invalid JSON: ${e.message}` };
     }
-  }, [cronExpression]);
+  }, [fleetText]);
 
   // Live countdown to next trigger
   useEffect(() => {
+    if (!ast.isValid) {
+      setCountdownText('Invalid syntax');
+      return undefined;
+    }
+    if (ast.isReboot) {
+      setCountdownText('On host startup (@reboot)');
+      return undefined;
+    }
     if (nextTriggers.length === 0) {
-      setCountdownText('Awaiting valid schedule...');
-      return;
+      setCountdownText('No runs in search window');
+      return undefined;
     }
 
-    const interval = setInterval(() => {
-      const target = nextTriggers[0];
-      const diff = target.getTime() - Date.now();
+    const update = () => {
+      const diff = nextTriggers[0].getTime() - Date.now();
       if (diff <= 0) {
-        setCountdownText('Executing now...');
-        setNextTriggers(calculateNextTriggers(cronExpression, 8));
+        setCountdownText('Executing now');
       } else {
-        const h = Math.floor(diff / (1000 * 60 * 60));
-        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const s = Math.floor((diff % (1000 * 60)) / 1000);
-        setCountdownText(`${h > 0 ? `${h}h ` : ''}${m}m ${s}s`);
+        const d = Math.floor(diff / 86400000);
+        const h = Math.floor((diff % 86400000) / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        setCountdownText(`${d > 0 ? `${d}d ` : ''}${h > 0 ? `${h}h ` : ''}${m}m ${s}s`);
       }
-    }, 1000);
-
+    };
+    update();
+    const interval = setInterval(update, 1000);
     return () => clearInterval(interval);
-  }, [nextTriggers, cronExpression]);
+  }, [nextTriggers, ast]);
 
-  // ---------------------------------------------------------------------------
-  // 24-Hour Radial Circular Clock Render
-  // ---------------------------------------------------------------------------
+  // 24-Hour Radial Timing Orbit Canvas
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -274,395 +146,652 @@ export function CronRhythmGodModeTool() {
 
     ctx.clearRect(0, 0, w, h);
 
-    // Outer Track Ring
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+    ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.10)' : 'rgba(16,24,40,0.12)';
     ctx.lineWidth = 14;
     ctx.stroke();
 
-    // 24-Hour Hour Segments
     for (let hr = 0; hr < 24; hr++) {
-      // Angle: 0 is top (-PI/2)
-      const angle = (hr / 24) * Math.PI * 2 - Math.PI * 2 / 4;
+      const angle = (hr / 24) * Math.PI * 2 - Math.PI / 2;
       const isActive = activeHours.includes(hr);
 
-      // Arc segment
       ctx.beginPath();
       ctx.arc(cx, cy, r, angle - 0.08, angle + 0.08);
-      ctx.strokeStyle = isActive ? gold : isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)';
+      ctx.strokeStyle = isActive ? gold : isDark ? 'rgba(255,255,255,0.05)' : 'rgba(16,24,40,0.06)';
       ctx.lineWidth = isActive ? 16 : 10;
       ctx.stroke();
 
-      // Tick mark
       const tickInner = r - (isActive ? 16 : 10);
       const tickOuter = r + 12;
-      const tx1 = cx + Math.cos(angle) * tickInner;
-      const ty1 = cy + Math.sin(angle) * tickInner;
-      const tx2 = cx + Math.cos(angle) * tickOuter;
-      const ty2 = cy + Math.sin(angle) * tickOuter;
-
       ctx.beginPath();
-      ctx.moveTo(tx1, ty1);
-      ctx.lineTo(tx2, ty2);
-      ctx.strokeStyle = isActive ? gold : isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)';
+      ctx.moveTo(cx + Math.cos(angle) * tickInner, cy + Math.sin(angle) * tickInner);
+      ctx.lineTo(cx + Math.cos(angle) * tickOuter, cy + Math.sin(angle) * tickOuter);
+      ctx.strokeStyle = isActive ? gold : isDark ? 'rgba(255,255,255,0.22)' : 'rgba(16,24,40,0.24)';
       ctx.lineWidth = hr % 6 === 0 ? 2 : 1;
       ctx.stroke();
 
-      // Hour Numbers for 0, 6, 12, 18
       if (hr % 6 === 0) {
-        const textR = r - 26;
-        const lx = cx + Math.cos(angle) * textR;
-        const ly = cy + Math.sin(angle) * textR;
-        ctx.fillStyle = isActive ? gold : isDark ? '#94A3B8' : '#64748B';
-        ctx.font = '10px "JetBrains Mono", monospace';
+        const textR = r - 28;
+        ctx.fillStyle = isActive ? gold : textSecondary;
+        ctx.font = 'bold 11px "JetBrains Mono", monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(`${hr}h`, lx, ly);
+        ctx.fillText(`${hr}h`, cx + Math.cos(angle) * textR, cy + Math.sin(angle) * textR);
       }
     }
 
-    // Current Time Hand
     const now = new Date();
-    const currentFraction = (now.getHours() * 60 + now.getMinutes()) / 1440;
-    const currentAngle = currentFraction * Math.PI * 2 - Math.PI / 2;
+    const curHr = tzMode === 'UTC' ? now.getUTCHours() : now.getHours();
+    const curMin = tzMode === 'UTC' ? now.getUTCMinutes() : now.getMinutes();
+    const currentAngle = ((curHr * 60 + curMin) / 1440) * Math.PI * 2 - Math.PI / 2;
 
     ctx.beginPath();
     ctx.moveTo(cx, cy);
-    ctx.lineTo(cx + Math.cos(currentAngle) * (r - 8), cy + Math.sin(currentAngle) * (r - 8));
+    ctx.lineTo(cx + Math.cos(currentAngle) * (r - 10), cy + Math.sin(currentAngle) * (r - 10));
     ctx.strokeStyle = cyan;
     ctx.lineWidth = 2.5;
     ctx.stroke();
 
-    // Center Hub
     ctx.beginPath();
     ctx.arc(cx, cy, 6, 0, Math.PI * 2);
     ctx.fillStyle = cyan;
     ctx.fill();
-  }, [activeHours, isDark]);
+  }, [activeHours, isDark, gold, cyan, textSecondary, tzMode, activeTab]);
 
   const handleCopy = (text, key) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard?.writeText(text)?.catch?.(() => {});
-      setCopiedKey(key);
-      setTimeout(() => setCopiedKey(null), 2000);
+      navigator.clipboard.writeText(text).catch(() => {});
     }
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 2000);
   };
 
-  // Generate systemd timer calendar format
-  const generateSystemdTimer = () => {
-    return `[Unit]
-Description=ZothOS Sovereign Task Rhythm Trigger
-Wants=network-online.target
-
-[Timer]
-OnCalendar=*-*-* ${cronExpression.split(' ')[1] || '*'}:${cronExpression.split(' ')[0] || '*'}:00
-Persistent=true
-
-[Install]
-WantedBy=timers.target`;
-  };
-
-  // Generate crontab entry
-  const generateCrontab = () => {
-    return `# Sovereign Scheduled Task Rhythm
-${cronExpression} /usr/local/bin/zoth-agent-tick >> /var/log/zoth/rhythm.log 2>&1`;
+  const handleDownloadBundle = () => {
+    const bundle = buildExportBundle(cronExpression, { name: 'cron-rhythm-job', tz: tzMode });
+    if (!bundle.isValid) return;
+    const blob = new Blob([bundle.combinedText], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'cron-rhythm-bundle.txt';
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   return (
-    <Box sx={{ mt: 1 }}>
-      {/* Monetization Funnel Banner */}
-      <Paper
-        sx={{
-          p: 2,
-          mb: 3,
-          background: isDark
-            ? 'linear-gradient(135deg, rgba(212,175,55,0.18) 0%, rgba(8,8,11,0.92) 100%)'
-            : 'linear-gradient(135deg, #FFFDF0 0%, #FEF9E7 100%)',
-          border: `1px solid ${gold}`,
-          borderRadius: 2,
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 2
-        }}
-      >
-        <Stack direction="row" spacing={2} alignItems="center">
-          <Box
-            sx={{
-              p: 1.2,
-              borderRadius: 2,
-              bgcolor: goldSoft,
-              color: gold,
-              display: 'flex',
-              alignItems: 'center'
-            }}
-          >
-            <ScheduleIcon sx={{ fontSize: 28 }} />
-          </Box>
-          <Box>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: gold }}>
-                CronRhythm Apex Task Orchestration Studio
-              </Typography>
-              <Chip
-                size="small"
-                label="✦ 100% FREE & OPEN ACCESS"
-                sx={{
-                  bgcolor: emeraldSoft,
-                  color: emerald,
-                  fontWeight: 800,
-                  fontSize: '0.72rem',
-                  fontFamily: mono
-                }}
-              />
-            </Stack>
-            <Typography variant="caption" color="text.secondary">
-              5-field POSIX & Quartz cron parser, 24-hour radial execution clock, and systemd timer generator.
-            </Typography>
-          </Box>
-        </Stack>
-
-        <Stack direction="row" spacing={1.5} alignItems="center">
-          <Button
-            variant="contained"
-            size="small"
-            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
-            target="_blank"
-            rel="noreferrer"
-            startIcon={<BoltIcon />}
-            sx={{
-              bgcolor: gold,
-              color: '#000',
-              fontWeight: 800,
-              '&:hover': { bgcolor: '#B8860B' }
-            }}
-          >
-            ☕ Buy Us a Coffee
-          </Button>
-          <Chip
-            icon={<CheckCircleIcon style={{ color: emerald }} />}
-            label="UNLIMITED SYSTEMD EXPORTS UNLOCKED"
-            sx={{ bgcolor: emeraldSoft, color: emerald, fontWeight: 800, fontFamily: mono }}
-          />
-        </Stack>
-      </Paper>
-
+    <Box data-testid="cron-rhythm-godmode-workstation" sx={{ mt: 1 }}>
       {/* Main Interactive Expression Editor */}
       <Paper
+        elevation={0}
         sx={{
-          p: 2.5,
-          mb: 3,
-          bgcolor: isDark ? surfaceDark : theme.palette.background.paper,
+          p: { xs: 2, md: 2.5 },
+          mb: 2.5,
+          bgcolor: surfaceBg,
           border: `1px solid ${cardBorder}`,
-          borderRadius: 2
+          borderRadius: 2,
         }}
       >
-        <SovereignEyebrow accent="#D4AF37" right="Automation">
-          {"cron-rhythm-studio"}
+        <SovereignEyebrow accent={gold} right="Automation · v2.6.0">
+          cron-rhythm-studio
         </SovereignEyebrow>
         <SovereignBand
-          seed={"cron-rhythm-studio"}
-          eyebrow={"Automation"}
-          caption={"CronRhythm Studio"}
-          label={"CronRhythm Studio — Zoth sovereign visualisation"}
+          seed="cron-rhythm-studio"
+          eyebrow="Automation"
+          caption="CronRhythm Studio"
+          label="CronRhythm Studio — POSIX/Quartz AST Parser & Multi-Dialect Transpiler"
         />
-        <Grid container spacing={2} alignItems="center">
+
+        <Grid container spacing={2} alignItems="stretch">
           <Grid xs={12} md={6}>
             <TextField
               fullWidth
-              label="5-Field Cron Expression"
+              label="Cron Expression (5/6/7-Field or @macro)"
               value={cronExpression}
               onChange={(e) => setCronExpression(e.target.value)}
-              placeholder="* * * * *"
+              error={!ast.isValid}
+              helperText={ast.isValid ? `Valid ${ast.isReboot ? '@reboot macro' : `${ast.fieldCount}-field AST`} · POSIX DOM/DOW OR` : ast.error}
+              placeholder="*/15 * * * *"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <AccessTimeIcon sx={{ color: cyan }} />
                   </InputAdornment>
                 ),
-                sx: { fontFamily: mono, fontSize: '1.05rem', fontWeight: 800 }
+                sx: { fontFamily: mono, fontSize: '1.05rem', fontWeight: 800, minHeight: 48 },
               }}
             />
           </Grid>
 
           <Grid xs={12} md={6}>
-            <Paper sx={{ p: 1.5, bgcolor: isDark ? voidDark : '#F8FAFC', border: `1px solid ${cardBorder}`, borderRadius: 1.5 }}>
-              <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>
-                NEXT SCHEDULED TRIGGER COUNTDOWN:
-              </Typography>
-              <Typography variant="h6" sx={{ fontFamily: mono, fontWeight: 800, color: emerald, mt: 0.2 }}>
-                {countdownText || 'Calculating...'}
-              </Typography>
+            <Paper
+              elevation={0}
+              sx={{
+                p: 1.5,
+                height: '100%',
+                bgcolor: subtleBg,
+                border: `1px solid ${cardBorder}`,
+                borderRadius: 1.5,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: 1.5,
+              }}
+            >
+              <Box>
+                <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, fontWeight: 700, display: 'block' }}>
+                  NEXT TRIGGER COUNTDOWN ({tzMode}):
+                </Typography>
+                <Typography variant="h6" sx={{ fontFamily: mono, fontWeight: 800, color: ast.isValid ? emerald : crimson, mt: 0.2 }}>
+                  {countdownText}
+                </Typography>
+              </Box>
+              <Button
+                variant="outlined"
+                onClick={() => setTzMode((m) => (m === 'UTC' ? 'Local' : 'UTC'))}
+                sx={{
+                  minHeight: 44,
+                  fontFamily: mono,
+                  fontWeight: 700,
+                  fontSize: '0.76rem',
+                  color: cyan,
+                  borderColor: cyan,
+                  textTransform: 'none',
+                }}
+              >
+                TZ Mode: {tzMode}
+              </Button>
             </Paper>
           </Grid>
         </Grid>
 
-        {/* Natural Language Translation */}
+        {/* Natural Language Interpretation (Theme-aware Parchment in Light Mode, Obsidian in Dark Mode) */}
         <Paper
+          elevation={0}
           sx={{
             p: 2,
             mt: 2,
-            bgcolor: isDark ? voidDark : '#0F172A',
-            border: `1px solid ${gold}`,
+            bgcolor: ast.isValid ? subtleBg : crimsonSoft,
+            border: `1px solid ${ast.isValid ? goldBorder : crimson}`,
             borderRadius: 1.5,
-            color: '#F8FAFC'
+            color: ast.isValid ? textPrimary : crimson,
           }}
         >
           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
-            <CalendarMonthIcon sx={{ color: gold, fontSize: 18 }} />
-            <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: gold }}>
+            <CalendarMonthIcon sx={{ color: ast.isValid ? gold : crimson, fontSize: 18 }} />
+            <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: ast.isValid ? gold : crimson }}>
               NATURAL LANGUAGE INTERPRETATION
             </Typography>
           </Stack>
-          <Typography variant="body1" sx={{ fontFamily: mono, fontWeight: 700, color: '#E2E8F0' }}>
-            {describeCron(cronExpression)}
+          <Typography variant="body1" sx={{ fontFamily: mono, fontWeight: 700, color: ast.isValid ? textPrimary : crimson, overflowWrap: 'anywhere' }}>
+            {humanSummary}
           </Typography>
         </Paper>
 
-        {/* Preset Chips */}
-        <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 2, mb: 1, fontFamily: mono, fontWeight: 700 }}>
+        {/* Curated Production Presets (minHeight: 44 for mobile tap targets) */}
+        <Typography variant="caption" sx={{ color: textSecondary, display: 'block', mt: 2, mb: 1, fontFamily: mono, fontWeight: 700 }}>
           CURATED PRODUCTION PRESETS:
         </Typography>
-        <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
-          {PRESETS.map((p) => (
-            <Chip
-              key={p.cron}
-              label={`${p.label} (${p.cron})`}
-              clickable
-              onClick={() => setCronExpression(p.cron)}
-              sx={{
-                fontFamily: mono,
-                fontSize: '0.72rem',
-                bgcolor: cronExpression === p.cron ? goldSoft : isDark ? 'rgba(255,255,255,0.04)' : '#F3F4F6',
-                color: cronExpression === p.cron ? gold : 'text.primary',
-                border: `1px solid ${cronExpression === p.cron ? gold : cardBorder}`,
-                fontWeight: cronExpression === p.cron ? 800 : 500
-              }}
-            />
-          ))}
-        </Stack>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+          {CURATED_PRESETS.map((p) => {
+            const active = cronExpression.trim() === p.cron;
+            return (
+              <Chip
+                key={p.id}
+                label={p.label.includes(p.cron) ? p.label : `${p.label} (${p.cron})`}
+                clickable
+                onClick={() => setCronExpression(p.cron)}
+                sx={{
+                  minHeight: 44,
+                  px: 0.5,
+                  fontFamily: mono,
+                  fontSize: '0.74rem',
+                  bgcolor: active ? goldSoft : subtleBg,
+                  color: active ? gold : textPrimary,
+                  border: `1px solid ${active ? goldBorder : cardBorder}`,
+                  fontWeight: active ? 800 : 600,
+                }}
+              />
+            );
+          })}
+        </Box>
       </Paper>
 
-      {/* Visual Radial Sequencer & Upcoming Execution Matrix */}
-      <Grid container spacing={3}>
-        {/* Left: 24-Hour Circular Sequencer Clock */}
-        <Grid xs={12} md={5}>
-          <Paper
-            sx={{
-              p: 2.5,
-              bgcolor: isDark ? surfaceDark : theme.palette.background.paper,
-              border: `1px solid ${cardBorder}`,
-              borderRadius: 2,
-              textAlign: 'center'
-            }}
-          >
-            <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: cyan, mb: 2 }}>
-              24-HOUR RADIAL TIMING ORBIT
-            </Typography>
+      {/* 4-Tab Sovereign Operations Bar */}
+      <Paper elevation={0} sx={{ mb: 2.5, bgcolor: surfaceBg, border: `1px solid ${cardBorder}`, borderRadius: 2 }}>
+        <Tabs
+          value={activeTab}
+          onChange={(_, v) => setActiveTab(v)}
+          variant="scrollable"
+          scrollButtons="auto"
+          aria-label="CronRhythm Studio Workbench Tabs"
+          sx={{
+            borderBottom: `1px solid ${cardBorder}`,
+            '& .MuiTab-root': {
+              minHeight: 48,
+              fontFamily: mono,
+              fontWeight: 700,
+              fontSize: '0.78rem',
+              textTransform: 'none',
+              color: textSecondary,
+            },
+            '& .Mui-selected': { color: `${gold} !important` },
+            '& .MuiTabs-indicator': { bgcolor: gold },
+          }}
+        >
+          <Tab label="Schedule & Orbit" />
+          <Tab label="Multi-Dialect Transpiler" />
+          <Tab label="DST & Fleet Audit" />
+          <Tab label="24x7 Interactive Heatmap" />
+        </Tabs>
 
-            <Box sx={{ display: 'flex', justifyContent: 'center', my: 1 }}>
-              <canvas
-                ref={canvasRef}
-                width={280}
-                height={280}
-                style={{ width: '280px', height: '280px', display: 'block' }}
-              />
-            </Box>
+        <Box sx={{ p: { xs: 2, md: 2.5 } }}>
+          {/* TAB 0: Schedule & Orbit */}
+          {activeTab === 0 && (
+            <Grid container spacing={2.5}>
+              <Grid xs={12} md={5}>
+                <Paper
+                  elevation={0}
+                  sx={{
+                    p: 2,
+                    bgcolor: subtleBg,
+                    border: `1px solid ${cardBorder}`,
+                    borderRadius: 2,
+                    textAlign: 'center',
+                  }}
+                >
+                  <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: cyan, mb: 1.5 }}>
+                    24-HOUR RADIAL TIMING ORBIT ({tzMode})
+                  </Typography>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', my: 1 }}>
+                    <canvas
+                      ref={canvasRef}
+                      width={260}
+                      height={260}
+                      style={{ width: '260px', height: '260px', maxWidth: '100%', display: 'block' }}
+                    />
+                  </Box>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, display: 'block', mt: 1 }}>
+                    Active Hours:{' '}
+                    <strong style={{ color: textPrimary }}>
+                      {activeHours.length === 24
+                        ? 'All 24 Hours'
+                        : activeHours.length > 0
+                          ? activeHours.map((h) => `${String(h).padStart(2, '0')}:00`).join(', ')
+                          : 'None'}
+                    </strong>
+                  </Typography>
+                </Paper>
+              </Grid>
 
-            <Typography variant="caption" color="text.secondary" sx={{ fontFamily: mono, display: 'block', mt: 1 }}>
-              Active Hours: <strong>{activeHours.length === 24 ? 'All 24 Hours' : activeHours.map((h) => `${h}:00`).join(', ') || 'None'}</strong>
-            </Typography>
-          </Paper>
-        </Grid>
+              <Grid xs={12} md={7}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={1} sx={{ mb: 1.5 }}>
+                  <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: emerald }}>
+                    UPCOMING CHRONOLOGICAL EXECUTIONS
+                  </Typography>
+                  <Chip
+                    size="small"
+                    label={`LIVE ${tzMode} SYNC`}
+                    sx={{ fontFamily: mono, fontSize: '0.7rem', bgcolor: emeraldSoft, color: emerald, fontWeight: 800 }}
+                  />
+                </Stack>
 
-        {/* Right: Next 8 Executions Table */}
-        <Grid xs={12} md={7}>
-          <Paper
-            sx={{
-              p: 2.5,
-              bgcolor: isDark ? surfaceDark : theme.palette.background.paper,
-              border: `1px solid ${cardBorder}`,
-              borderRadius: 2
-            }}
-          >
-            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-              <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: emerald }}>
-                UPCOMING CHRONOLOGICAL EXECUTIONS
-              </Typography>
-              <Chip
-                size="small"
-                label="LIVE CLOCK SYNC"
-                sx={{ fontFamily: mono, fontSize: '0.68rem', bgcolor: emeraldSoft, color: emerald, fontWeight: 800 }}
-              />
-            </Stack>
-
-            <TableContainer sx={{ border: `1px solid ${cardBorder}`, borderRadius: 1.5, maxHeight: 290 }}>
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 800, fontFamily: mono, bgcolor: isDark ? voidDark : '#F8FAFC' }}>
-                      #
-                    </TableCell>
-                    <TableCell sx={{ fontWeight: 800, fontFamily: mono, bgcolor: isDark ? voidDark : '#F8FAFC' }}>
-                      Execution Date & Time (Local)
-                    </TableCell>
-                    <TableCell sx={{ fontWeight: 800, fontFamily: mono, bgcolor: isDark ? voidDark : '#F8FAFC' }}>
-                      UTC Timestamp
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {nextTriggers.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={3} sx={{ textAlign: 'center', py: 4, color: 'text.secondary', fontFamily: mono }}>
-                        No upcoming executions computed. Verify cron expression syntax.
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    nextTriggers.map((t, idx) => (
-                      <TableRow key={idx} hover>
-                        <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', color: gold, fontWeight: 800 }}>
-                          #{idx + 1}
+                <TableContainer sx={{ border: `1px solid ${cardBorder}`, borderRadius: 1.5, maxHeight: 300 }}>
+                  <Table size="small">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell sx={{ fontWeight: 800, fontFamily: mono, bgcolor: subtleBg, color: gold }}>#</TableCell>
+                        <TableCell sx={{ fontWeight: 800, fontFamily: mono, bgcolor: subtleBg, color: textPrimary }}>
+                          Local Display
                         </TableCell>
-                        <TableCell sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: idx === 0 ? 800 : 500, color: idx === 0 ? emerald : 'text.primary' }}>
-                          {t.toLocaleString()} {idx === 0 && '⚡ (NEXT)'}
-                        </TableCell>
-                        <TableCell sx={{ fontFamily: mono, fontSize: '0.72rem', color: 'text.secondary' }}>
-                          {t.toISOString()}
+                        <TableCell sx={{ fontWeight: 800, fontFamily: mono, bgcolor: subtleBg, color: textPrimary }}>
+                          ISO-8601 UTC
                         </TableCell>
                       </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                      {nextTriggers.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={3} sx={{ textAlign: 'center', py: 3, color: textSecondary, fontFamily: mono }}>
+                            {ast.isReboot ? '@reboot runs once on system boot.' : 'No upcoming executions computed.'}
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        nextTriggers.map((t, idx) => (
+                          <TableRow key={t.toISOString() + idx} hover>
+                            <TableCell sx={{ fontFamily: mono, fontSize: '0.76rem', color: gold, fontWeight: 800 }}>
+                              #{idx + 1}
+                            </TableCell>
+                            <TableCell sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: idx === 0 ? 800 : 500, color: idx === 0 ? emerald : textPrimary }}>
+                              {t.toLocaleString()} {idx === 0 ? '(NEXT)' : ''}
+                            </TableCell>
+                            <TableCell sx={{ fontFamily: mono, fontSize: '0.74rem', color: textSecondary }}>
+                              {t.toISOString()}
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
 
-            {/* Config Generators (systemd + crontab) */}
-            <Stack direction="row" spacing={1.5} sx={{ mt: 2.5 }}>
-              <Button
-                size="small"
-                variant="outlined"
-                startIcon={<ContentCopyIcon />}
-                onClick={() => handleCopy(generateCrontab(), 'copyCrontab')}
-                sx={{ fontFamily: mono, fontSize: '0.72rem', color: cyan, borderColor: cyan }}
+                <Stack direction="row" spacing={1.25} flexWrap="wrap" useFlexGap sx={{ mt: 2 }}>
+                  <Button
+                    variant="outlined"
+                    startIcon={<ContentCopyIcon />}
+                    onClick={() => handleCopy(transpileCron(ast, 'unix').syntax, 'crontab')}
+                    sx={{ minHeight: 44, fontFamily: mono, fontSize: '0.75rem', fontWeight: 700, color: cyan, borderColor: cyan }}
+                  >
+                    {copiedKey === 'crontab' ? 'Copied Crontab' : 'Copy Crontab'}
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    startIcon={<CodeIcon />}
+                    onClick={() => handleCopy(transpileCron(ast, 'systemd').syntax, 'systemd')}
+                    sx={{ minHeight: 44, fontFamily: mono, fontSize: '0.75rem', fontWeight: 700, color: gold, borderColor: goldBorder }}
+                  >
+                    {copiedKey === 'systemd' ? 'Copied Systemd' : 'Copy Systemd Timer'}
+                  </Button>
+                  <Button
+                    variant="contained"
+                    startIcon={<DownloadIcon />}
+                    onClick={handleDownloadBundle}
+                    disabled={!ast.isValid}
+                    sx={{
+                      minHeight: 44,
+                      fontFamily: mono,
+                      fontSize: '0.75rem',
+                      fontWeight: 800,
+                      bgcolor: gold,
+                      color: isDark ? '#08080B' : '#FFFFFF',
+                      '&:hover': { bgcolor: isDark ? '#E5C158' : '#5E4306' },
+                    }}
+                  >
+                    Download .timer/.service/.crontab
+                  </Button>
+                </Stack>
+              </Grid>
+            </Grid>
+          )}
+
+          {/* TAB 1: Multi-Dialect Transpiler */}
+          {activeTab === 1 && (
+            <Box>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
+                {DIALECTS.map((d) => {
+                  const active = dialect === d.id;
+                  return (
+                    <Button
+                      key={d.id}
+                      variant={active ? 'contained' : 'outlined'}
+                      onClick={() => setDialect(d.id)}
+                      sx={{
+                        minHeight: 44,
+                        fontFamily: mono,
+                        fontSize: '0.75rem',
+                        fontWeight: 700,
+                        textTransform: 'none',
+                        bgcolor: active ? gold : 'transparent',
+                        color: active ? (isDark ? '#08080B' : '#FFFFFF') : textPrimary,
+                        borderColor: active ? gold : cardBorder,
+                      }}
+                    >
+                      {d.label}
+                    </Button>
+                  );
+                })}
+              </Box>
+
+              <Typography variant="body2" sx={{ color: textSecondary, mb: 1.5 }}>
+                {transpiled.desc}
+              </Typography>
+
+              {transpiled.warnings && transpiled.warnings.length > 0 && (
+                <Alert
+                  severity="warning"
+                  icon={<WarningAmberIcon />}
+                  sx={{ mb: 1.5, fontFamily: mono, fontSize: '0.76rem' }}
+                >
+                  {transpiled.warnings.join(' ')}
+                </Alert>
+              )}
+
+              <Paper
+                elevation={0}
+                component="pre"
+                sx={{
+                  p: 2,
+                  m: 0,
+                  bgcolor: subtleBg,
+                  color: textPrimary,
+                  border: `1px solid ${cardBorder}`,
+                  borderRadius: 1.5,
+                  fontFamily: mono,
+                  fontSize: '0.8rem',
+                  lineHeight: 1.6,
+                  whiteSpace: 'pre-wrap',
+                  overflowWrap: 'anywhere',
+                  overflowX: 'auto',
+                }}
               >
-                {copiedKey === 'copyCrontab' ? 'COPIED CRONTAB' : 'COPY CRONTAB ENTRY'}
-              </Button>
-              <Button
-                size="small"
-                variant="outlined"
-                startIcon={<CodeIcon />}
-                onClick={() => handleCopy(generateSystemdTimer(), 'copySystemd')}
-                sx={{ fontFamily: mono, fontSize: '0.72rem', color: gold, borderColor: gold }}
-              >
-                {copiedKey === 'copySystemd' ? 'COPIED SYSTEMD' : 'COPY SYSTEMD TIMER'}
-              </Button>
-            </Stack>
-          </Paper>
-        </Grid>
-      </Grid>
+                {transpiled.syntax}
+              </Paper>
+
+              <Stack direction="row" spacing={1.25} flexWrap="wrap" useFlexGap sx={{ mt: 2 }}>
+                <Button
+                  variant="outlined"
+                  startIcon={<ContentCopyIcon />}
+                  onClick={() => handleCopy(transpiled.syntax, 'dialect')}
+                  sx={{ minHeight: 44, fontFamily: mono, fontSize: '0.75rem', fontWeight: 700, color: cyan, borderColor: cyan }}
+                >
+                  {copiedKey === 'dialect' ? 'Copied Spec' : 'Copy Spec'}
+                </Button>
+                <Button
+                  variant="contained"
+                  startIcon={<DownloadIcon />}
+                  onClick={handleDownloadBundle}
+                  disabled={!ast.isValid}
+                  sx={{
+                    minHeight: 44,
+                    fontFamily: mono,
+                    fontSize: '0.75rem',
+                    fontWeight: 800,
+                    bgcolor: gold,
+                    color: isDark ? '#08080B' : '#FFFFFF',
+                  }}
+                >
+                  Download Bundle
+                </Button>
+              </Stack>
+            </Box>
+          )}
+
+          {/* TAB 2: DST & Fleet Audit */}
+          {activeTab === 2 && (
+            <Grid container spacing={2.5}>
+              <Grid xs={12} md={6}>
+                <Paper elevation={0} sx={{ p: 2, bgcolor: subtleBg, border: `1px solid ${cardBorder}`, borderRadius: 2 }}>
+                  <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: gold, mb: 1.5 }}>
+                    IANA DST ANOMALY AUDITOR
+                  </Typography>
+                  <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap sx={{ mb: 2 }}>
+                    <FormControl size="small" sx={{ minWidth: 190 }}>
+                      <InputLabel id="dst-tz-label">Timezone</InputLabel>
+                      <Select
+                        labelId="dst-tz-label"
+                        label="Timezone"
+                        value={dstTz}
+                        onChange={(e) => setDstTz(e.target.value)}
+                        sx={{ minHeight: 44, fontFamily: mono, fontSize: '0.8rem' }}
+                      >
+                        <MenuItem value="America/New_York">America/New_York</MenuItem>
+                        <MenuItem value="America/Chicago">America/Chicago</MenuItem>
+                        <MenuItem value="America/Los_Angeles">America/Los_Angeles</MenuItem>
+                        <MenuItem value="Europe/London">Europe/London</MenuItem>
+                        <MenuItem value="Europe/Berlin">Europe/Berlin</MenuItem>
+                        <MenuItem value="UTC">UTC</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <TextField
+                      size="small"
+                      label="Year"
+                      type="number"
+                      value={dstYear}
+                      onChange={(e) => setDstYear(Number(e.target.value) || 2026)}
+                      sx={{ width: 100 }}
+                      InputProps={{ sx: { minHeight: 44, fontFamily: mono } }}
+                    />
+                  </Stack>
+
+                  <Alert
+                    severity={dstReport.anomalies.length === 0 ? 'success' : 'warning'}
+                    sx={{ mb: 1.5, fontFamily: mono, fontSize: '0.76rem' }}
+                  >
+                    {dstReport.anomalies.length === 0
+                      ? `SAFE: No DST clock-shift skips or duplicates in ${dstTz} (${dstYear}).`
+                      : `RISK (${dstReport.risk_level}): ${dstReport.anomalies.length} anomaly(ies) detected. Suggested safe schedule: ${dstReport.safe_expression}`}
+                  </Alert>
+
+                  {dstReport.anomalies.map((a, i) => (
+                    <Typography key={i} variant="caption" sx={{ display: 'block', fontFamily: mono, color: textPrimary, mb: 0.75 }}>
+                      • <strong>{a.type}</strong> ({a.date}): {a.detail}
+                    </Typography>
+                  ))}
+
+                  {dstReport.safe_expression !== cronExpression && (
+                    <Button
+                      variant="outlined"
+                      onClick={() => setCronExpression(dstReport.safe_expression)}
+                      sx={{ minHeight: 44, mt: 1, fontFamily: mono, fontWeight: 700, color: emerald, borderColor: emerald }}
+                    >
+                      Apply Safe Schedule ({dstReport.safe_expression})
+                    </Button>
+                  )}
+                </Paper>
+              </Grid>
+
+              <Grid xs={12} md={6}>
+                <Paper elevation={0} sx={{ p: 2, bgcolor: subtleBg, border: `1px solid ${cardBorder}`, borderRadius: 2 }}>
+                  <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: cyan, mb: 1.5 }}>
+                    FLEET THUNDERING-HERD OPTIMIZER
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    multiline
+                    minRows={5}
+                    label="Fleet Jobs (JSON)"
+                    value={fleetText}
+                    onChange={(e) => setFleetText(e.target.value)}
+                    InputProps={{ sx: { fontFamily: mono, fontSize: '0.78rem' } }}
+                    sx={{ mb: 1.5 }}
+                  />
+                  {fleetReport.error ? (
+                    <Alert severity="error" sx={{ fontFamily: mono, fontSize: '0.76rem' }}>{fleetReport.error}</Alert>
+                  ) : (
+                    <Box>
+                      <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: textPrimary, display: 'block', mb: 1 }}>
+                        Jobs: {fleetReport.job_count} · Peak concurrency: {fleetReport.peak_concurrency} · Collision buckets: {fleetReport.collision_count}
+                      </Typography>
+                      <Paper
+                        elevation={0}
+                        component="pre"
+                        sx={{
+                          p: 1.5,
+                          m: 0,
+                          bgcolor: surfaceBg,
+                          border: `1px solid ${cardBorder}`,
+                          borderRadius: 1,
+                          fontFamily: mono,
+                          fontSize: '0.74rem',
+                          color: textPrimary,
+                          whiteSpace: 'pre-wrap',
+                          overflowWrap: 'anywhere',
+                        }}
+                      >
+                        {JSON.stringify(fleetReport.rebalanced_jobs, null, 2)}
+                      </Paper>
+                    </Box>
+                  )}
+                </Paper>
+              </Grid>
+            </Grid>
+          )}
+
+          {/* TAB 3: 24x7 Interactive Heatmap */}
+          {activeTab === 3 && (
+            <Box>
+              <Stack direction="row" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={1} sx={{ mb: 1.5 }}>
+                <Typography variant="body2" sx={{ color: textSecondary }}>
+                  Click any cell to toggle that hour inside the cron expression.
+                </Typography>
+                <Chip
+                  label={`${heatmap.total_runs_per_week} runs/week · Peak ${String(heatmap.peak_hour).padStart(2, '0')}:00`}
+                  sx={{ fontFamily: mono, fontWeight: 800, fontSize: '0.74rem', bgcolor: goldSoft, color: gold }}
+                />
+              </Stack>
+
+              <Box sx={{ width: '100%', overflowX: 'auto', pb: 1 }}>
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: '42px repeat(24, minmax(16px, 1fr))',
+                    gap: '4px',
+                    minWidth: 460,
+                    fontFamily: mono,
+                    fontSize: '0.68rem',
+                  }}
+                >
+                  <Box />
+                  {Array.from({ length: 24 }, (_, h) => (
+                    <Box key={h} sx={{ textAlign: 'center', color: textSecondary }}>
+                      {h % 3 === 0 ? h : ''}
+                    </Box>
+                  ))}
+                  {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, dIdx) => (
+                    <React.Fragment key={day}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', fontWeight: 700, color: textPrimary }}>{day}</Box>
+                      {Array.from({ length: 24 }, (_, h) => {
+                        const cell = heatmap.matrix[dIdx]?.[h];
+                        const count = cell?.execution_count || 0;
+                        const bg =
+                          count > 15
+                            ? gold
+                            : count > 8
+                              ? (isDark ? 'rgba(212,175,55,0.7)' : 'rgba(122,88,8,0.72)')
+                              : count > 2
+                                ? cyan
+                                : count > 0
+                                  ? (isDark ? 'rgba(56,189,248,0.45)' : 'rgba(3,105,161,0.38)')
+                                  : (isDark ? 'rgba(255,255,255,0.06)' : 'rgba(16,24,40,0.08)');
+                        return (
+                          <Box
+                            key={`${day}-${h}`}
+                            component="button"
+                            type="button"
+                            onClick={() => setCronExpression((prev) => toggleHourInExpression(prev, h))}
+                            title={`${day} ${String(h).padStart(2, '0')}:00 — ${count} runs/hr (click to toggle hour ${h})`}
+                            aria-label={`Toggle hour ${h} on ${day}`}
+                            sx={{
+                              aspectRatio: '1',
+                              borderRadius: '4px',
+                              bgcolor: bg,
+                              border: '1px solid transparent',
+                              cursor: 'pointer',
+                              p: 0,
+                              '&:hover': { borderColor: gold },
+                            }}
+                          />
+                        );
+                      })}
+                    </React.Fragment>
+                  ))}
+                </Box>
+              </Box>
+            </Box>
+          )}
+        </Box>
+      </Paper>
     </Box>
   );
 }

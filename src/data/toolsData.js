@@ -426,9 +426,9 @@ export const microTools = [
     priceCents: 0,
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     pricing: '100% Free & Open-Access',
-    description: 'High-precision cron AST parser, 24x7 rhythm heatmap, countdown timeline, multi-dialect transpiler across K8s, GitHub Actions, AWS EventBridge, and Systemd with procedural chronometer brand media and 100% free open-access execution.',
-    version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/cron-rhythm-studio.git && cd cron-rhythm-studio && python3 server.py --port 5174',
+    description: 'Zero-dependency Python 3.9+ stdlib & in-browser POSIX/Quartz cron AST parser, interactive 24x7 rhythm heatmap, DST anomaly auditor, fleet thundering-herd optimizer, multi-dialect transpiler (Systemd, K8s, GitHub Actions, AWS EventBridge, Quartz), and 12 MCP tools. 100% free and open-access.',
+    version: '2.6.0',
+    pull: 'git clone https://github.com/1nc0gn30/cron-rhythm-studio.git && cd cron-rhythm-studio && python3 server.py --host 127.0.0.1 --port 5174',
   },
   {
     id: 'certpath-roadmap-studio',

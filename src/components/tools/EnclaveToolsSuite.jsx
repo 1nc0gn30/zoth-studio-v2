@@ -41,7 +41,6 @@ import WebSecurityGuardGodModeTool from './WebSecurityGuardGodModeTool';
 import EnvGuardVaultGodModeTool from './EnvGuardVaultGodModeTool';
 import SubSweepGodModeTool from './SubSweepGodModeTool';
 import AudioCipherGodModeTool from './AudioCipherGodModeTool';
-import CronRhythmGodModeTool from './CronRhythmGodModeTool';
 import AgentEgressSentinelGodModeTool from './AgentEgressSentinelGodModeTool';
 import AgentMockTwinGodModeTool from './AgentMockTwinGodModeTool';
 import AgentCapsuleJailGodModeTool from './AgentCapsuleJailGodModeTool';
@@ -1281,14 +1280,6 @@ export function OmniPostSocialTool() {
       </Grid>
     </Box>
   );
-}
-
-/* ==========================================================================
-   TOOL 16: CronRhythm Studio (cron-rhythm-studio)
-   Features: Real 5-Field Cron Parser, 24h Radial Orbit & Next Execution Schedule
-   ========================================================================== */
-export function CronRhythmTool() {
-  return <CronRhythmGodModeTool />;
 }
 
 /* ==========================================================================

@@ -950,38 +950,39 @@ export const toolsDocumentation = {
   },
 
   'cron-rhythm-studio': {
-    whyUse: 'Precision cron expression syntax validator, timeline visualizer, and deterministic schedule trigger matrix.',
-    problemSolved: 'Prevents silent cron syntax bugs, unexpected midnight execution pileups, and Daylight Savings timezone errors in scheduled automation.',
-    architecture: 'TypeScript / Node.js cron calculation engine with standard 5-part and 6-part cron parsing.',
+    whyUse: 'Zero-dependency Python 3.9+ stdlib cron AST parser, 24x7 interactive rhythm heatmap, DST spring-forward/fall-back anomaly auditor, fleet thundering-herd optimizer, and multi-dialect transpiler.',
+    problemSolved: 'Prevents silent cron syntax bugs, POSIX DOM/DOW OR vs systemd AND mismatches, midnight thundering-herd pileups, and Daylight Saving Time skipped or duplicate runs in production schedulers.',
+    architecture: 'Pure Python 3.9+ stdlib engine (parser.py, timeline_engine.py, humanizer.py, transpiler.py, rhythm_matrix.py, fleet_optimizer.py, timezone_auditor.py, catalog.py, mcp_server.py, cli.py) serving a hardened loopback HTTP/REST server on 127.0.0.1:5174, paired with a zero-egress in-browser POSIX/Quartz engine and Unicode Braille terminal TUI.',
     aiAgentProtocol: {
-      mcpTool: 'cron_evaluate',
-      description: 'Validate a cron string and calculate the next N trigger execution timestamps.',
-      cliExample: 'cron-rhythm eval "*/15 * * * *" --next 10',
+      mcpTool: 'cron_parse_expression, cron_next_runs, cron_humanize, cron_transpile, cron_rhythm_matrix, cron_audit_fleet, cron_audit_dst_anomalies, cron_multizone_flight_board, cron_list_presets, cron_diagnostics, cron_calculate_timeline, cron_preset_catalog',
+      description: 'Expose 12 JSON-RPC 2.0 stdio MCP tools for parsing 5/6/7-field & @macro expressions, projecting DST-safe runs, transpiling across 6 dialects, auditing DST/fleet risks, and querying 40+ presets.',
+      cliExample: 'cron-rhythm next "*/15 * * * *" -n 10 --json',
       inputSchema: {
         type: 'object',
         properties: {
-          expression: { type: 'string' },
-          iterations: { type: 'number', default: 5 }
+          expression: { type: 'string', description: '5/6/7-field cron expression or @macro (@daily, @reboot)' },
+          count: { type: 'number', default: 10 },
+          timezone: { type: 'string', default: 'UTC' }
         },
         required: ['expression']
       },
       outputSchema: {
-        isValid: 'boolean',
-        humanReadable: 'string',
-        nextOccurrences: ['string']
+        is_valid: 'boolean',
+        human_summary: 'string',
+        upcoming_runs: ['object']
       }
     },
     quickstart: [
-      'git clone https://github.com/NullAITech/cron-rhythm-studio.git',
-      'cd cron-rhythm-studio && npm install',
-      'npm test'
+      'git clone https://github.com/1nc0gn30/cron-rhythm-studio.git',
+      'cd cron-rhythm-studio && python3 -m pytest -q',
+      'python3 server.py --host 127.0.0.1 --port 5174'
     ],
     features: [
-      'Standard 5 and 6-field cron expression parser',
-      'Human-readable natural language translation',
-      'Timezone drift calculation and collision detection',
-      'Visual timeline execution graph',
-      'Zero external dependencies'
+      'POSIX/Vixie 5/6/7-field & @macro (@daily, @reboot) AST parser with DOM/DOW OR semantics',
+      'DST-safe next-run projection skipping spring-forward gaps + leap-year Feb 29 support',
+      'Multi-dialect transpiler (Systemd OnCalendar with OR->AND warning, Kubernetes, GitHub Actions, AWS EventBridge, Quartz)',
+      'Interactive 24x7 weekly rhythm heatmap, fleet thundering-herd rebalancer, and world TZ flight board',
+      '12 pure-Python stdlib JSON-RPC 2.0 MCP tools & Unicode U+2800 Braille TUI (cron-rhythm-studio-tui)'
     ]
   },
 

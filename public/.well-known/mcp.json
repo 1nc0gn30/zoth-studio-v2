@@ -46,5 +46,31 @@
       "name": "LLMs Full Knowledge Corpus",
       "mimeType": "text/plain"
     }
+  ],
+  "servers": [
+    {
+      "id": "cron-rhythm-studio",
+      "name": "CronRhythm Studio",
+      "version": "2.6.0",
+      "transport": "stdio",
+      "command": "cron-rhythm-studio",
+      "args": ["mcp"],
+      "localApi": "http://127.0.0.1:5174/api/mcp/config",
+      "toolCount": 12,
+      "tools": [
+        "cron_parse_expression",
+        "cron_next_runs",
+        "cron_humanize",
+        "cron_transpile",
+        "cron_rhythm_matrix",
+        "cron_list_presets",
+        "cron_diagnostics",
+        "cron_calculate_timeline",
+        "cron_preset_catalog",
+        "cron_audit_fleet",
+        "cron_audit_dst_anomalies",
+        "cron_multizone_flight_board"
+      ]
+    }
   ]
 }
