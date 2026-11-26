@@ -29,6 +29,31 @@ const ARCANA_META = {
   21: { keyNumber: 21, roman: 'XXI', name: 'The World', subtitle: 'Sovereign Wholeness', hebrew: 'ת', letterName: 'Tav', gematria: 400, element: 'Earth', gate: 'Saturn / Crown', guardian: 'THOTH', phase: 'Hermetic Sovereign Wholeness & Zero-Egress Proof', directive: 'Seal the compiled artifact, emit deterministic manifest, and ship 100% open-access.' },
 };
 
+const CLASSIC_TAROT_PATHS = {
+  0: '/tarot/fool.jpg',
+  1: '/tarot/magician.jpg',
+  2: '/tarot/highpriestess.jpg',
+  3: '/tarot/empress.jpg',
+  4: '/tarot/emperor.jpg',
+  5: '/tarot/hierorphant.jpg',
+  6: '/tarot/lovers.jpg',
+  7: '/tarot/chariot.jpg',
+  8: '/tarot/strength.jpg',
+  9: '/tarot/hermit.jpg',
+  10: '/tarot/wheeloffortune.jpg',
+  11: '/tarot/justice.jpg',
+  12: '/tarot/hangedman.jpg',
+  13: '/tarot/death.jpg',
+  14: '/tarot/temperance.jpg',
+  15: '/tarot/devil.jpg',
+  16: '/tarot/tower.jpg',
+  17: '/tarot/star.jpg',
+  18: '/tarot/moon.jpg',
+  19: '/tarot/sun.jpg',
+  20: '/tarot/judgement.jpg',
+  21: '/tarot/world.jpg',
+};
+
 const ELEMENT_COLORS = {
   Air: { glow: 'rgba(56, 189, 248, 0.24)', stroke: '#7DD3FC', badgeText: '#BAE6FD', badgeBorder: 'rgba(125, 211, 252, 0.48)' },
   Fire: { glow: 'rgba(249, 115, 22, 0.24)', stroke: '#FDBA74', badgeText: '#FED7AA', badgeBorder: 'rgba(253, 186, 116, 0.48)' },
@@ -401,13 +426,13 @@ export default function AdytumArcanaCard({ keyNumber = 0, themeMode = 'dark', wi
             </Box>
           </Box>
 
-          {/* BACKPLATE */}
+          {/* BACKPLATE (CLASSIC OG BOTA TAROT ARTWORK) */}
           <Box
             sx={{
               position: 'absolute',
               inset: 0,
               borderRadius: '14px',
-              p: 1.25,
+              p: 1,
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
@@ -418,31 +443,29 @@ export default function AdytumArcanaCard({ keyNumber = 0, themeMode = 'dark', wi
               transform: 'rotateY(180deg)',
             }}
           >
-            <Box sx={{ textAlign: 'center', borderBottom: '1px solid rgba(212,175,55,0.28)', pb: 0.6 }}>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.54rem', color: '#D4AF37', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                KEY {meta.keyNumber} · {meta.roman}
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 0.75, py: 0.35, borderRadius: 1, bgcolor: 'rgba(6,6,11,0.9)', border: '1px solid rgba(212,175,55,0.3)' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.52rem', color: '#D4AF37', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                Classic BOTA · {meta.roman}
               </Typography>
-              <Typography sx={{ fontFamily: 'Georgia, serif', fontSize: '0.76rem', fontWeight: 700, color: '#F5E6AB' }}>
-                {meta.name}
-              </Typography>
-            </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.55, my: 'auto' }}>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.56rem', color: '#F5E6AB' }}>
-                {meta.letterName} ({meta.hebrew}) · {meta.gematria}
-              </Typography>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.55rem', color: '#CBD5E1' }}>
-                Gate: {meta.gate}
-              </Typography>
-              <Typography sx={{ fontFamily: mono, fontSize: '0.55rem', color: '#34D399' }}>
-                Guardian: {meta.guardian}
-              </Typography>
-              <Typography sx={{ fontSize: '0.6rem', color: '#E2E8F0', lineHeight: 1.35, mt: 0.3 }}>
-                {meta.directive}
+              <Typography sx={{ fontFamily: mono, fontSize: '0.52rem', color: '#34D399' }}>
+                {meta.guardian}
               </Typography>
             </Box>
-            <Typography sx={{ fontFamily: mono, fontSize: '0.5rem', color: '#94A3B8', textAlign: 'center', borderTop: '1px solid rgba(212,175,55,0.2)', pt: 0.5 }}>
-              ADYTUM PLANNER · v2.4.0
-            </Typography>
+
+            <Box sx={{ flex: 1, my: 0.6, borderRadius: 1.5, bgcolor: 'rgba(5,5,9,0.92)', border: '1px solid rgba(212,175,55,0.35)', p: 0.5, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+              <Box
+                component="img"
+                src={CLASSIC_TAROT_PATHS[meta.keyNumber] || '/tarot/fool.jpg'}
+                alt={`Classic BOTA Tarot Key ${meta.keyNumber}: ${meta.name}`}
+                sx={{ height: '100%', width: 'auto', maxWidth: '100%', objectFit: 'contain', borderRadius: 1 }}
+              />
+            </Box>
+
+            <Box sx={{ px: 0.6, py: 0.4, borderRadius: 1, bgcolor: 'rgba(6,6,11,0.9)', border: '1px solid rgba(212,175,55,0.28)', textAlign: 'center' }}>
+              <Typography sx={{ fontFamily: mono, fontSize: '0.52rem', color: '#F5E6AB', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {meta.letterName} ({meta.hebrew}) · {meta.gematria} · {meta.gate}
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </Box>
