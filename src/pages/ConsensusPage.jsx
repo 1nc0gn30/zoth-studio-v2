@@ -6,7 +6,7 @@ export default function ConsensusPage() {
     <LocalSystemDossier
       tone="emerald"
       kicker="BYZANTINE CONSENSUS ENGINE"
-      badges={['LOCAL DAEMON :8096', 'N >= 3F + 1 QUORUM', 'CROSS-MODEL VERIFICATION']}
+      badges={['LOCAL DAEMON :8141', 'N >= 3F + 1 QUORUM', 'CROSS-MODEL VERIFICATION']}
       title="Fault-Tolerant Multi-Model"
       accentWord="Quorum Verification."
       subtitle="High-assurance engineering cannot trust a single stochastic completion. Our Byzantine Consensus layer evaluates code patches, security audits, and formal claims across N >= 3f + 1 independent model instances—ratifying outputs only when a verifiable supermajority converges."
@@ -35,7 +35,7 @@ export default function ConsensusPage() {
         },
       ]}
       specs={[
-        { key: 'Loopback Service', value: '127.0.0.1:8096' },
+        { key: 'Loopback Service', value: '127.0.0.1:8141' },
         { key: 'Fault Tolerance Bound', value: 'N >= 3f + 1 (Up to 33% Faulty Nodes)' },
         { key: 'Commit Threshold', value: '2f + 1 Verified Supermajority' },
         { key: 'Ground-Truth Harness', value: 'node scripts/test-ground-truth.mjs' },

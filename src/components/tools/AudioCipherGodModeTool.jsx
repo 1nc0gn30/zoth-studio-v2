@@ -1,359 +1,395 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Box, Typography, Paper, Chip, Button, Unstable_Grid2 as Grid, Stack, TextField,
-  Divider, Card, CardContent, LinearProgress, Switch, FormControlLabel,
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton,
-  Tooltip, Tabs, Tab, Alert, InputAdornment, Dialog, DialogTitle, DialogContent, DialogActions
+  Divider, Tabs, Tab, Alert, Slider, Select, MenuItem, FormControl, InputLabel
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import GraphicEqIcon from '@mui/icons-material/GraphicEq';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
-import ShieldIcon from '@mui/icons-material/Shield';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DownloadIcon from '@mui/icons-material/Download';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import BoltIcon from '@mui/icons-material/Bolt';
-import KeyIcon from '@mui/icons-material/VpnKey';
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import ShieldIcon from '@mui/icons-material/Shield';
+import DialpadIcon from '@mui/icons-material/Dialpad';
+import RadioIcon from '@mui/icons-material/Radio';
+import SensorsIcon from '@mui/icons-material/Sensors';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-const MAGIC_HEADER = 'ZOTHSTEG'; // 8-byte identification header
+const DAEMON_BASE = 'http://127.0.0.1:8096';
 
 // ---------------------------------------------------------------------------
-// Helper: Binary string / Uint8Array utilities
+// Standard CRC-32 & CRC-16-CCITT (100% wire-compatible with Python backend)
 // ---------------------------------------------------------------------------
-function writeString(view, offset, string) {
-  for (let i = 0; i < string.length; i++) {
-    view.setUint8(offset + i, string.charCodeAt(i));
+const CRC32_TABLE = new Uint32Array(256);
+for (let i = 0; i < 256; i++) {
+  let c = i;
+  for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+  CRC32_TABLE[i] = c;
+}
+function crc32(bytes) {
+  let c = 0xFFFFFFFF;
+  for (let i = 0; i < bytes.length; i++) c = (c >>> 8) ^ CRC32_TABLE[(c ^ bytes[i]) & 0xFF];
+  return (c ^ 0xFFFFFFFF) >>> 0;
+}
+function crc16Ccitt(bytes) {
+  let crc = 0xFFFF;
+  for (let i = 0; i < bytes.length; i++) {
+    crc ^= bytes[i] << 8;
+    for (let b = 0; b < 8; b++) crc = (crc & 0x8000) ? (((crc << 1) ^ 0x1021) & 0xFFFF) : ((crc << 1) & 0xFFFF);
   }
+  return crc;
 }
 
+function bytesToBase64(bytes) {
+  let bin = '';
+  const chunk = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunk) {
+    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+  }
+  return btoa(bin);
+}
+function base64ToArrayBuffer(b64) {
+  const bin = atob(b64);
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out.buffer;
+}
+function concatBytes(...arrs) {
+  const total = arrs.reduce((s, a) => s + a.length, 0);
+  const out = new Uint8Array(total);
+  let off = 0;
+  for (const a of arrs) { out.set(a, off); off += a.length; }
+  return out;
+}
+
+function writeString(view, offset, str) {
+  for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i));
+}
 function readString(view, offset, length) {
-  let str = '';
-  for (let i = 0; i < length; i++) {
-    str += String.fromCharCode(view.getUint8(offset + i));
-  }
-  return str;
+  let s = '';
+  for (let i = 0; i < length; i++) s += String.fromCharCode(view.getUint8(offset + i));
+  return s;
 }
 
-// ---------------------------------------------------------------------------
-// Synthesize a pristine 16-bit 44.1kHz mono WAV audio carrier in memory
-// ---------------------------------------------------------------------------
-function createHarmonicWavCarrier(durationSec = 4, baseFreq = 320) {
-  const sampleRate = 44100;
-  const numSamples = sampleRate * durationSec;
-  const buffer = new ArrayBuffer(44 + numSamples * 2);
+function samplesToWavBuffer(samples, sampleRate = 44100) {
+  const buffer = new ArrayBuffer(44 + samples.length * 2);
   const view = new DataView(buffer);
-
-  // RIFF Chunk
   writeString(view, 0, 'RIFF');
-  view.setUint32(4, 36 + numSamples * 2, true);
+  view.setUint32(4, 36 + samples.length * 2, true);
   writeString(view, 8, 'WAVE');
-
-  // fmt Subchunk
   writeString(view, 12, 'fmt ');
-  view.setUint32(16, 16, true); // Subchunk1Size (16 for PCM)
-  view.setUint16(20, 1, true); // AudioFormat (1 = PCM)
-  view.setUint16(22, 1, true); // NumChannels (1 = Mono)
-  view.setUint32(24, sampleRate, true); // SampleRate
-  view.setUint32(28, sampleRate * 2, true); // ByteRate
-  view.setUint16(32, 2, true); // BlockAlign
-  view.setUint16(34, 16, true); // BitsPerSample
-
-  // data Subchunk
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 1, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * 2, true);
+  view.setUint16(32, 2, true);
+  view.setUint16(34, 16, true);
   writeString(view, 36, 'data');
-  view.setUint32(40, numSamples * 2, true);
-
-  // Synthesize smooth harmonic ambient tone (Fundamental + Third + Fifth)
-  for (let i = 0; i < numSamples; i++) {
-    const t = i / sampleRate;
-    // Envelope attack & release
-    let env = 1.0;
-    if (t < 0.2) env = t / 0.2;
-    else if (t > durationSec - 0.3) env = (durationSec - t) / 0.3;
-
-    const sample =
-      (Math.sin(2 * Math.PI * baseFreq * t) * 0.45 +
-        Math.sin(2 * Math.PI * (baseFreq * 1.25) * t) * 0.25 +
-        Math.sin(2 * Math.PI * (baseFreq * 1.5) * t) * 0.15) *
-      env;
-
-    const int16 = Math.max(-32768, Math.min(32767, Math.floor(sample * 32767)));
-    view.setInt16(44 + i * 2, int16, true);
+  view.setUint32(40, samples.length * 2, true);
+  for (let i = 0; i < samples.length; i++) {
+    view.setInt16(44 + i * 2, Math.max(-32768, Math.min(32767, Math.round(samples[i]))), true);
   }
-
   return buffer;
 }
 
-// ---------------------------------------------------------------------------
-// Real LSB Steganography Engine: Embed bitstream into 16-bit PCM
-// ---------------------------------------------------------------------------
+function createHarmonicWavCarrier(durationSec = 4, baseFreq = 432) {
+  const sampleRate = 44100;
+  const numSamples = sampleRate * durationSec;
+  const samples = new Int16Array(numSamples);
+  for (let i = 0; i < numSamples; i++) {
+    const t = i / sampleRate;
+    let env = 1.0;
+    if (t < 0.2) env = t / 0.2;
+    else if (t > durationSec - 0.3) env = (durationSec - t) / 0.3;
+    const s =
+      (Math.sin(2 * Math.PI * baseFreq * t) * 0.45 +
+        Math.sin(2 * Math.PI * (baseFreq * 1.25) * t) * 0.25 +
+        Math.sin(2 * Math.PI * (baseFreq * 1.5) * t) * 0.15) * env;
+    samples[i] = Math.floor(s * 32767);
+  }
+  return samplesToWavBuffer(samples, sampleRate);
+}
+
+// Standard Wire-Compatible LSB Steganography: 'STEG' (4B) + LE uint32 len (4B) + LE uint32 CRC-32 (4B)
 function embedSecretIntoWav(wavBuffer, secretString) {
   const enc = new TextEncoder();
   const secretBytes = enc.encode(secretString);
-  const payloadLen = secretBytes.length;
+  const checksum = crc32(secretBytes);
+  const header = new Uint8Array(12);
+  header.set([0x53, 0x54, 0x45, 0x47], 0); // 'STEG'
+  const hv = new DataView(header.buffer);
+  hv.setUint32(4, secretBytes.length, true);
+  hv.setUint32(8, checksum, true);
 
-  // Header payload: MAGIC_HEADER (8B) + length (4B uint32) + secret bytes
-  const headerBytes = enc.encode(MAGIC_HEADER);
-  const totalPayloadSize = 8 + 4 + payloadLen;
-  const payloadBuffer = new Uint8Array(totalPayloadSize);
-
-  payloadBuffer.set(headerBytes, 0);
-  const lenView = new DataView(payloadBuffer.buffer);
-  lenView.setUint32(8, payloadLen, false); // Big endian length
-  payloadBuffer.set(secretBytes, 12);
-
-  // Total bits needed
-  const totalBits = totalPayloadSize * 8;
-
-  // Clone WAV buffer to preserve original
+  const fullPayload = concatBytes(header, secretBytes);
+  const totalBits = fullPayload.length * 8;
   const newWavBuffer = wavBuffer.slice(0);
   const view = new DataView(newWavBuffer);
-
-  const numSamples = (newWavBuffer.byteLength - 44) / 2;
+  const numSamples = Math.floor((newWavBuffer.byteLength - 44) / 2);
   if (totalBits > numSamples) {
-    throw new Error(
-      `Payload exceeds carrier capacity! Required: ${totalBits} samples, Available: ${numSamples} samples (${(numSamples / 8).toFixed(0)} bytes max).`
-    );
+    throw new Error(`Payload exceeds carrier capacity (${totalBits} bits needed, ${numSamples} samples available).`);
   }
-
-  // Embed bit by bit into LSB of each 16-bit sample
-  let bitIndex = 0;
-  for (let byteIdx = 0; byteIdx < totalPayloadSize; byteIdx++) {
-    const currentByte = payloadBuffer[byteIdx];
+  let bitIdx = 0;
+  for (let i = 0; i < fullPayload.length; i++) {
+    const byteVal = fullPayload[i];
     for (let b = 7; b >= 0; b--) {
-      const bit = (currentByte >> b) & 1;
-      const sampleOffset = 44 + bitIndex * 2;
-      let sample = view.getInt16(sampleOffset, true);
-
-      // Mask out LSB and set to target bit
-      sample = (sample & ~1) | bit;
-      view.setInt16(sampleOffset, sample, true);
-      bitIndex++;
+      const bit = (byteVal >> b) & 1;
+      const off = 44 + bitIdx * 2;
+      view.setInt16(off, (view.getInt16(off, true) & ~1) | bit, true);
+      bitIdx++;
     }
   }
-
-  return { stegoWavBuffer: newWavBuffer, bitsEmbedded: totalBits, bytesEmbedded: totalPayloadSize };
+  return { stegoWavBuffer: newWavBuffer, bitsEmbedded: totalBits, bytesEmbedded: fullPayload.length, checksum };
 }
 
-// ---------------------------------------------------------------------------
-// Real LSB Steganography Engine: Extract bitstream from 16-bit PCM
-// ---------------------------------------------------------------------------
 function extractSecretFromWav(wavBuffer) {
   const view = new DataView(wavBuffer);
-  const numSamples = (wavBuffer.byteLength - 44) / 2;
-
-  // We need at least 12 bytes (96 bits) for MAGIC (8) + length (4)
-  if (numSamples < 96) {
-    throw new Error('Audio carrier is too short to contain a valid AudioCipher payload.');
-  }
-
-  // Helper to extract N bytes starting from sample index
-  const extractBytes = (startBit, numBytes) => {
-    const bytes = new Uint8Array(numBytes);
-    let sampleBit = startBit;
-    for (let i = 0; i < numBytes; i++) {
-      let byteVal = 0;
+  const numSamples = Math.floor((wavBuffer.byteLength - 44) / 2);
+  if (numSamples < 96) throw new Error('Audio carrier too short to contain a STEG header.');
+  const readBytes = (startBit, count) => {
+    const out = new Uint8Array(count);
+    let bit = startBit;
+    for (let i = 0; i < count; i++) {
+      let v = 0;
       for (let b = 7; b >= 0; b--) {
-        const sampleOffset = 44 + sampleBit * 2;
-        const sample = view.getInt16(sampleOffset, true);
-        const bit = sample & 1;
-        byteVal |= bit << b;
-        sampleBit++;
+        const s = view.getInt16(44 + bit * 2, true);
+        v |= (s & 1) << b;
+        bit++;
       }
-      bytes[i] = byteVal;
+      out[i] = v;
     }
-    return { bytes, nextBit: sampleBit };
+    return { bytes: out, nextBit: bit };
   };
-
-  // 1. Check Magic Header
-  const { bytes: headerBytes, nextBit: afterHeaderBit } = extractBytes(0, 8);
-  const dec = new TextDecoder();
-  const header = dec.decode(headerBytes);
-
-  if (header !== MAGIC_HEADER) {
-    throw new Error('No AudioCipher Steganographic signature detected in audio carrier.');
+  const { bytes: hdr, nextBit } = readBytes(0, 12);
+  if (String.fromCharCode(hdr[0], hdr[1], hdr[2], hdr[3]) !== 'STEG') {
+    throw new Error('No STEG steganographic signature detected in 16-bit PCM carrier.');
   }
-
-  // 2. Read Payload Length (4 bytes big-endian)
-  const { bytes: lenBytes, nextBit: afterLenBit } = extractBytes(afterHeaderBit, 4);
-  const lenView = new DataView(lenBytes.buffer);
-  const payloadLen = lenView.getUint32(0, false);
-
-  if (payloadLen <= 0 || payloadLen > (numSamples - afterLenBit) / 8) {
-    throw new Error(`Corrupted or invalid payload length detected (${payloadLen} bytes).`);
+  const hv = new DataView(hdr.buffer);
+  const payloadLen = hv.getUint32(4, true);
+  const expectedCrc = hv.getUint32(8, true);
+  if (payloadLen > (numSamples - nextBit) / 8) {
+    throw new Error(`Corrupted carrier: header declares ${payloadLen} bytes exceeding audio length.`);
   }
-
-  // 3. Extract Secret Bytes
-  const { bytes: secretBytes } = extractBytes(afterLenBit, payloadLen);
-  return dec.decode(secretBytes);
+  const { bytes: payload } = readBytes(nextBit, payloadLen);
+  const actualCrc = crc32(payload);
+  if (actualCrc !== expectedCrc) {
+    throw new Error(`CRC-32 integrity failure (expected 0x${expectedCrc.toString(16)}, got 0x${actualCrc.toString(16)}).`);
+  }
+  return { text: new TextDecoder().decode(payload), crcHex: `0x${actualCrc.toString(16).toUpperCase()}` };
 }
+
+function goertzel(samples, targetFreq, sampleRate) {
+  const k = Math.round((samples.length * targetFreq) / sampleRate);
+  const omega = (2 * Math.PI * k) / samples.length;
+  const coeff = 2 * Math.cos(omega);
+  let q0 = 0, q1 = 0, q2 = 0;
+  for (let i = 0; i < samples.length; i++) {
+    q0 = coeff * q1 - q2 + samples[i];
+    q2 = q1;
+    q1 = q0;
+  }
+  return q1 * q1 + q2 * q2 - coeff * q1 * q2;
+}
+
+async function deriveMasterKeyJs(audioBytes, volumeDb, salt) {
+  const vb = new ArrayBuffer(8);
+  new DataView(vb).setFloat64(0, volumeDb, true);
+  const digest = new Uint8Array(await crypto.subtle.digest('SHA-256', concatBytes(audioBytes, new Uint8Array(vb))));
+  const base = await crypto.subtle.importKey('raw', digest, 'PBKDF2', false, ['deriveBits']);
+  return new Uint8Array(await crypto.subtle.deriveBits({ name: 'PBKDF2', salt, iterations: 200000, hash: 'SHA-256' }, base, 256));
+}
+async function hmacSha256Js(keyBytes, msgBytes) {
+  const k = await crypto.subtle.importKey('raw', keyBytes, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  return new Uint8Array(await crypto.subtle.sign('HMAC', k, msgBytes));
+}
+async function keystreamJs(encKey, iv, length) {
+  const blocks = [];
+  let gen = 0, ctr = 0;
+  while (gen < length) {
+    const cb = new ArrayBuffer(8);
+    const dv = new DataView(cb);
+    dv.setUint32(0, ctr >>> 0, true);
+    dv.setUint32(4, Math.floor(ctr / 0x100000000), true);
+    const blk = await hmacSha256Js(encKey, concatBytes(iv, new Uint8Array(cb)));
+    blocks.push(blk);
+    gen += blk.length;
+    ctr++;
+  }
+  return concatBytes(...blocks).subarray(0, length);
+}
+
+const DTMF_FREQS = {
+  '1': [697, 1209], '2': [697, 1336], '3': [697, 1477], 'A': [697, 1633],
+  '4': [770, 1209], '5': [770, 1336], '6': [770, 1477], 'B': [770, 1633],
+  '7': [852, 1209], '8': [852, 1336], '9': [852, 1477], 'C': [852, 1633],
+  '*': [941, 1209], '0': [941, 1336], '#': [941, 1477], 'D': [941, 1633]
+};
+const MORSE_MAP = {
+  A:'.-',B:'-...',C:'-.-.',D:'-..',E:'.',F:'..-.',G:'--.',H:'....',I:'..',J:'.---',K:'-.-',L:'.-..',
+  M:'--',N:'-.',O:'---',P:'.--.',Q:'--.-',R:'.-.',S:'...',T:'-',U:'..-',V:'...-',W:'.--',X:'-..-',
+  Y:'-.--',Z:'--..',0:'-----',1:'.----',2:'..---',3:'...--',4:'....-',5:'.....',6:'-....',7:'--...',
+  8:'---..',9:'----.',' ':'/'
+};
 
 export function AudioCipherGodModeTool() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
-  // Aesthetic Tokens
-  const emerald = isDark ? '#00FF9D' : '#059669';
-  const emeraldSoft = isDark ? 'rgba(0, 255, 157, 0.12)' : 'rgba(5, 150, 105, 0.12)';
-  const gold = isDark ? '#D4AF37' : '#9A7209';
-  const goldSoft = isDark ? 'rgba(212, 175, 55, 0.14)' : 'rgba(154, 114, 9, 0.12)';
-  const crimson = isDark ? '#FF3355' : '#DC2626';
-  const crimsonSoft = isDark ? 'rgba(255, 51, 85, 0.12)' : 'rgba(220, 38, 38, 0.10)';
-  const cyan = isDark ? '#38BDF8' : '#0284C7';
-  const cyanSoft = isDark ? 'rgba(56, 189, 248, 0.12)' : 'rgba(2, 132, 199, 0.12)';
-  const amber = '#F59E0B';
+  const emerald = isDark ? '#10B981' : '#047857';
+  const emeraldSoft = isDark ? 'rgba(16, 185, 129, 0.14)' : 'rgba(4, 120, 87, 0.10)';
+  const gold = isDark ? '#D4AF37' : '#8C6A2E';
+  const goldSoft = isDark ? 'rgba(212, 175, 55, 0.14)' : 'rgba(140, 106, 46, 0.12)';
+  const goldInk = isDark ? '#08080B' : '#FFFDF8';
+  const crimson = isDark ? '#F87171' : '#B91C1C';
+  const crimsonSoft = isDark ? 'rgba(248, 113, 113, 0.14)' : 'rgba(185, 28, 28, 0.10)';
+  const cyan = isDark ? '#38BDF8' : '#0369A1';
+  const cyanSoft = isDark ? 'rgba(56, 189, 248, 0.14)' : 'rgba(3, 105, 161, 0.10)';
   const voidDark = '#08080B';
-  const surfaceDark = '#10121A';
-  const cardBorder = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.12)';
+  const surfaceBg = isDark ? '#10121A' : '#FFFDF8';
+  const subSurfaceBg = isDark ? '#08080B' : '#F4EFE3';
+  const cardBorder = isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(24, 22, 19, 0.14)';
 
-  // Operational State
-  const [activeTab, setActiveTab] = useState(0); // 0: Encode/Embed, 1: Decode/Extract
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [activeTab, setActiveTab] = useState(0); // 0: LSB Stego, 1: Cipher, 2: Steganalysis, 3: DTMF, 4: Morse, 5: BFSK
   const [secretMessage, setSecretMessage] = useState(
-    'SOVEREIGN_ENCLAVE_DEPLOY_KEY=zoth_sec_f99a38217bb4c009\nCOORDINATES=36.8508_N_75.9780_W\nAGENT=AZOTH_ARCHON_01'
+    'SOVEREIGN_ENCLAVE_DEPLOY_KEY=zoth_sec_f99a38217bb4c009\nCOORDINATES=36.8508_N_75.9780_W'
   );
-  const [passphrase, setPassphrase] = useState('sovereign_audio_key_2026');
-  const [carrierDuration, setCarrierDuration] = useState(5); // seconds
-  const [carrierFreq, setCarrierFreq] = useState(432); // Hz (432Hz harmonic)
+  const [cipherText, setCipherText] = useState('Top Secret Sovereign Agent Directive #757');
+  const [volumeDb, setVolumeDb] = useState(50);
+  const [encryptedB64, setEncryptedB64] = useState('');
+  const [audioKeyB64, setAudioKeyB64] = useState('');
+  const [dtmfDigits, setDtmfDigits] = useState('18005550199#');
+  const [morseText, setMorseText] = useState('SOS ZOTH 757');
+  const [morseWpm, setMorseWpm] = useState(20);
+  const [fskPayload, setFskPayload] = useState('AIRGAP_PACKET_016');
+  const [fskBaud, setFskBaud] = useState(300);
+  const [fskBand, setFskBand] = useState('audible');
+
+  const [carrierDuration, setCarrierDuration] = useState(4);
+  const [carrierFreq, setCarrierFreq] = useState(432);
   const [activeAudioBuffer, setActiveAudioBuffer] = useState(null);
   const [hasStegoEmbedded, setHasStegoEmbedded] = useState(false);
-  const [extractedMessage, setExtractedMessage] = useState('');
+  const [outputText, setOutputText] = useState('');
   const [statusMessage, setStatusMessage] = useState(null);
   const [statusType, setStatusType] = useState('info');
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioStats, setAudioStats] = useState(null);
   const [copiedKey, setCopiedKey] = useState(null);
 
-  // Audio Context & Canvas Refs
   const canvasRef = useRef(null);
   const audioContextRef = useRef(null);
   const sourceNodeRef = useRef(null);
   const analyserRef = useRef(null);
   const animationFrameRef = useRef(null);
 
-  // Initial carrier audio synthesis
   useEffect(() => {
+    let alive = true;
+    const probe = async () => {
+      try {
+        const res = await fetch(`${DAEMON_BASE}/health`, { cache: 'no-store' });
+        if (alive && res.ok) {
+          const data = await res.json();
+          setDaemonOnline(data?.service === 'audiocipher-stego-engine');
+        }
+      } catch {
+        if (alive) setDaemonOnline(false);
+      }
+    };
+    probe();
     generateNewCarrier(carrierDuration, carrierFreq);
     return () => {
+      alive = false;
       stopPlayback();
-      if (audioContextRef.current) {
-        audioContextRef.current.close().catch(() => {});
-      }
+      if (audioContextRef.current) audioContextRef.current.close().catch(() => {});
     };
   }, []);
 
-  // Render static harmonic spectrum + waveform preview when idle
   useEffect(() => {
     if (isPlaying) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    const w = canvas.width;
-    const h = canvas.height;
+    const w = canvas.width, h = canvas.height;
     ctx.fillStyle = '#08080B';
     ctx.fillRect(0, 0, w, h);
-
-    // Subtle grid
     ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-    ctx.lineWidth = 1;
     for (let y = 28; y < h; y += 28) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(w, y);
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
     }
-
-    // Harmonic spectrum bars
-    const numBars = 48;
-    const barW = (w - numBars * 2) / numBars;
+    const numBars = 48, barW = (w - numBars * 2) / numBars;
     for (let i = 0; i < numBars; i++) {
-      const freqRatio = i / numBars;
-      const p1 = Math.exp(-Math.pow((freqRatio - 0.18) * 9, 2));
-      const p2 = Math.exp(-Math.pow((freqRatio - 0.24) * 11, 2)) * 0.65;
-      const p3 = Math.exp(-Math.pow((freqRatio - 0.30) * 12, 2)) * 0.45;
-      const lsbFloor = hasStegoEmbedded ? 0.12 + 0.08 * Math.sin(i * 1.7) : 0.04;
-      const amp = Math.min(1, p1 + p2 + p3 + lsbFloor);
+      const r = i / numBars;
+      const amp = Math.min(1, Math.exp(-Math.pow((r - 0.18) * 9, 2)) + Math.exp(-Math.pow((r - 0.26) * 11, 2)) * 0.6 + (hasStegoEmbedded ? 0.14 : 0.04));
       const bh = Math.max(4, amp * (h - 24));
       const grad = ctx.createLinearGradient(0, h, 0, 0);
-      if (hasStegoEmbedded) {
-        grad.addColorStop(0, '#D4AF37');
-        grad.addColorStop(1, '#00FF9D');
-      } else {
-        grad.addColorStop(0, '#38BDF8');
-        grad.addColorStop(1, '#6366F1');
-      }
+      grad.addColorStop(0, hasStegoEmbedded ? '#D4AF37' : '#38BDF8');
+      grad.addColorStop(1, hasStegoEmbedded ? '#10B981' : '#6366F1');
       ctx.fillStyle = grad;
       ctx.fillRect(i * (barW + 2), h - bh, barW, bh);
     }
-
-    // Time-domain carrier sine overlay
-    ctx.strokeStyle = hasStegoEmbedded ? '#00FF9D' : '#38BDF8';
+    ctx.strokeStyle = hasStegoEmbedded ? '#10B981' : '#38BDF8';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     for (let x = 0; x < w; x++) {
       const t = (x / w) * Math.PI * 8;
       const y = 34 + Math.sin(t) * 14 + Math.sin(t * 1.25) * 6;
-      if (x === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
+      if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
     }
     ctx.stroke();
   }, [activeAudioBuffer, hasStegoEmbedded, isPlaying, carrierFreq]);
 
-  const handleCopy = (text, key) => {
-    if (navigator?.clipboard?.writeText) {
-      navigator.clipboard?.writeText(text)?.catch?.(() => {});
-      setCopiedKey(key);
-      setTimeout(() => setCopiedKey(null), 2000);
-    }
+  const apiCall = async (path, body) => {
+    const res = await fetch(`${DAEMON_BASE}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || data.message || `HTTP ${res.status}`);
+    return data;
   };
 
-  // ---------------------------------------------------------------------------
-  // Generate Carrier Wave
-  // ---------------------------------------------------------------------------
+  const updateBufferStats = (buf, label = `${carrierFreq} Hz`) => {
+    const view = new DataView(buf);
+    const sr = view.getUint32(24, true) || 44100;
+    const numSamples = Math.max(0, Math.floor((buf.byteLength - 44) / 2));
+    setActiveAudioBuffer(buf);
+    setAudioStats({
+      duration: (numSamples / sr).toFixed(2),
+      frequency: label,
+      sampleRate: sr,
+      numSamples,
+      maxCapacityBytes: Math.max(0, Math.floor(numSamples / 8) - 12),
+    });
+  };
+
   const generateNewCarrier = (sec, freq) => {
     stopPlayback();
     const buf = createHarmonicWavCarrier(sec, freq);
-    setActiveAudioBuffer(buf);
     setHasStegoEmbedded(false);
-    setExtractedMessage('');
-    const sampleRate = 44100;
-    const numSamples = sampleRate * sec;
-    setAudioStats({
-      duration: sec,
-      frequency: freq,
-      sampleRate,
-      numSamples,
-      maxCapacityBytes: Math.floor(numSamples / 8) - 12
-    });
-    setStatusMessage(`Synthesized fresh 16-bit PCM carrier (${sec}s @ ${freq}Hz). Max covert capacity: ${(Math.floor(numSamples / 8) - 12).toLocaleString()} bytes.`);
+    setOutputText('');
+    updateBufferStats(buf, `${freq} Hz`);
+    setStatusMessage(`Synthesized 16-bit PCM WAV carrier (${sec}s @ ${freq}Hz). Wire format: STEG + LE uint32 + CRC-32.`);
     setStatusType('info');
   };
 
-  // ---------------------------------------------------------------------------
-  // Live Web Audio Playback & Real FFT Spectrogram Canvas
-  // ---------------------------------------------------------------------------
   const initAudioEngine = () => {
     if (!audioContextRef.current || audioContextRef.current.state === 'closed') {
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       audioContextRef.current = new AudioCtx();
     }
-    if (audioContextRef.current.state === 'suspended') {
-      audioContextRef.current.resume();
-    }
+    if (audioContextRef.current.state === 'suspended') audioContextRef.current.resume();
     if (!analyserRef.current) {
       analyserRef.current = audioContextRef.current.createAnalyser();
       analyserRef.current.fftSize = 256;
-      analyserRef.current.smoothingTimeConstant = 0.85;
     }
   };
 
@@ -362,35 +398,24 @@ export function AudioCipherGodModeTool() {
     try {
       initAudioEngine();
       stopPlayback();
-
-      // Decode WAV buffer into AudioBuffer
-      const audioBuffer = await audioContextRef.current.decodeAudioData(activeAudioBuffer.slice(0));
-      const source = audioContextRef.current.createBufferSource();
-      source.buffer = audioBuffer;
-      source.connect(analyserRef.current);
+      const decoded = await audioContextRef.current.decodeAudioData(activeAudioBuffer.slice(0));
+      const src = audioContextRef.current.createBufferSource();
+      src.buffer = decoded;
+      src.connect(analyserRef.current);
       analyserRef.current.connect(audioContextRef.current.destination);
-
-      source.onended = () => {
-        setIsPlaying(false);
-      };
-
-      source.start(0);
-      sourceNodeRef.current = source;
+      src.onended = () => setIsPlaying(false);
+      src.start(0);
+      sourceNodeRef.current = src;
       setIsPlaying(true);
-      drawLiveSpectrogram();
     } catch (err) {
-      console.error(err);
-      setStatusMessage(`Audio playback error: ${err.message}`);
+      setStatusMessage(`Playback error: ${err.message}`);
       setStatusType('error');
     }
   };
 
   const stopPlayback = () => {
     if (sourceNodeRef.current) {
-      try {
-        sourceNodeRef.current.stop();
-        sourceNodeRef.current.disconnect();
-      } catch {}
+      try { sourceNodeRef.current.stop(); sourceNodeRef.current.disconnect(); } catch {}
       sourceNodeRef.current = null;
     }
     if (animationFrameRef.current) {
@@ -400,143 +425,29 @@ export function AudioCipherGodModeTool() {
     setIsPlaying(false);
   };
 
-  const togglePlayback = () => {
-    if (isPlaying) {
-      stopPlayback();
-    } else {
-      startPlayback();
+  const handleCopy = (text, key) => {
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text).catch(() => {});
+      setCopiedKey(key);
+      setTimeout(() => setCopiedKey(null), 2000);
     }
   };
 
-  // ---------------------------------------------------------------------------
-  // Real-Time Canvas Frequency Spectrum & Spectrogram
-  // ---------------------------------------------------------------------------
-  const drawLiveSpectrogram = () => {
-    const canvas = canvasRef.current;
-    if (!canvas || !analyserRef.current) return;
-    const ctx = canvas.getContext('2d');
-    const bufferLength = analyserRef.current.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-
-    const render = () => {
-      animationFrameRef.current = requestAnimationFrame(render);
-      analyserRef.current.getByteFrequencyData(dataArray);
-
-      ctx.fillStyle = isDark ? '#08080B' : '#0F172A';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      const barWidth = (canvas.width / bufferLength) * 2.5;
-      let x = 0;
-
-      for (let i = 0; i < bufferLength; i++) {
-        const barHeight = (dataArray[i] / 255) * (canvas.height - 10);
-
-        // Gradient coloring: cyan to gold to emerald
-        const grad = ctx.createLinearGradient(0, canvas.height, 0, 0);
-        if (hasStegoEmbedded) {
-          grad.addColorStop(0, gold);
-          grad.addColorStop(1, emerald);
-        } else {
-          grad.addColorStop(0, cyan);
-          grad.addColorStop(1, '#6366F1');
-        }
-
-        ctx.fillStyle = grad;
-        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-        x += barWidth + 1;
-      }
-    };
-
-    render();
-  };
-
-  // ---------------------------------------------------------------------------
-  // Action: Embed Secret via Real LSB Modulation
-  // ---------------------------------------------------------------------------
-  const handleEmbedSecret = () => {
-    if (!secretMessage.trim()) {
-      setStatusMessage('Error: Please provide a plaintext secret payload to embed.');
-      setStatusType('error');
-      return;
-    }
-    if (!activeAudioBuffer) {
-      setStatusMessage('Error: No audio carrier available.');
-      setStatusType('error');
-      return;
-    }
-
-    try {
-      stopPlayback();
-      const { stegoWavBuffer, bitsEmbedded, bytesEmbedded } = embedSecretIntoWav(activeAudioBuffer, secretMessage);
-      setActiveAudioBuffer(stegoWavBuffer);
-      setHasStegoEmbedded(true);
-      setStatusMessage(`✔ Secret successfully embedded into 16-bit PCM carrier! (${bitsEmbedded} bits / ${bytesEmbedded} bytes sealed with LSB modulation). Zero acoustic degradation.`);
-      setStatusType('success');
-    } catch (err) {
-      setStatusMessage(`Embedding failed: ${err.message}`);
-      setStatusType('error');
-    }
-  };
-
-  // ---------------------------------------------------------------------------
-  // Action: Extract Secret from Stego WAV
-  // ---------------------------------------------------------------------------
-  const handleExtractSecret = () => {
-    if (!activeAudioBuffer) {
-      setStatusMessage('Error: No audio buffer loaded for extraction.');
-      setStatusType('error');
-      return;
-    }
-
-    try {
-      const recovered = extractSecretFromWav(activeAudioBuffer);
-      setExtractedMessage(recovered);
-      setStatusMessage(`✔ Steganographic signature verified! Recovered ${recovered.length} characters of authentic covert payload.`);
-      setStatusType('success');
-    } catch (err) {
-      setExtractedMessage('');
-      setStatusMessage(`Extraction failed: ${err.message}`);
-      setStatusType('error');
-    }
-  };
-
-  // ---------------------------------------------------------------------------
-  // Action: Handle User Custom WAV Upload
-  // ---------------------------------------------------------------------------
   const handleFileUpload = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = (evt) => {
       try {
         const buf = evt.target.result;
-        // Basic check for RIFF header
         const view = new DataView(buf);
-        const riff = readString(view, 0, 4);
-        const wave = readString(view, 8, 4);
-        if (riff !== 'RIFF' || wave !== 'WAVE') {
-          throw new Error('Selected file is not a valid RIFF WAVE (.wav) audio file.');
+        if (readString(view, 0, 4) !== 'RIFF' || readString(view, 8, 4) !== 'WAVE') {
+          throw new Error('Selected file is not a valid RIFF/WAVE (.wav) file.');
         }
-
         stopPlayback();
-        setActiveAudioBuffer(buf);
         setHasStegoEmbedded(false);
-        setExtractedMessage('');
-
-        const sampleRate = view.getUint32(24, true);
-        const numSamples = (buf.byteLength - 44) / 2;
-        const dur = (numSamples / sampleRate).toFixed(1);
-
-        setAudioStats({
-          duration: dur,
-          frequency: 'External Audio Track',
-          sampleRate,
-          numSamples,
-          maxCapacityBytes: Math.floor(numSamples / 8) - 12
-        });
-
-        setStatusMessage(`Successfully loaded external audio carrier: ${file.name} (${dur}s, ${sampleRate}Hz, ${(Math.floor(numSamples / 8) - 12).toLocaleString()} bytes capacity).`);
+        updateBufferStats(buf, file.name);
+        setStatusMessage(`Loaded external 16-bit PCM WAV: ${file.name}`);
         setStatusType('info');
       } catch (err) {
         setStatusMessage(`File error: ${err.message}`);
@@ -546,226 +457,446 @@ export function AudioCipherGodModeTool() {
     reader.readAsArrayBuffer(file);
   };
 
-  // ---------------------------------------------------------------------------
-  // Action: Download Steganographic WAV File
-  // ---------------------------------------------------------------------------
   const handleDownloadWav = () => {
     if (!activeAudioBuffer) return;
-
-    const blob = new Blob([activeAudioBuffer], { type: 'audio/wav' });
-    const url = URL.createObjectURL(blob);
+    const url = URL.createObjectURL(new Blob([activeAudioBuffer], { type: 'audio/wav' }));
     const link = document.createElement('a');
     link.href = url;
-    link.download = `audiocipher_stego_${hasStegoEmbedded ? 'sealed' : 'carrier'}_${Date.now()}.wav`;
+    link.download = `audiocipher_stego_${Date.now()}.wav`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
 
+  // --- Mode 0: LSB Stego ---
+  const handleEmbedSecret = async () => {
+    if (!secretMessage.trim() || !activeAudioBuffer) return;
+    try {
+      stopPlayback();
+      if (daemonOnline) {
+        const carrierB64 = bytesToBase64(new Uint8Array(activeAudioBuffer));
+        const res = await apiCall('/api/stego/embed', { payload: secretMessage, carrier_wav_base64: carrierB64 });
+        updateBufferStats(base64ToArrayBuffer(res.stego_wav_base64), 'Stego WAV (:8096)');
+        setHasStegoEmbedded(true);
+        setOutputText(`Embedded ${res.payload_size_bytes} bytes via live :8096 daemon (STEG + LE uint32 + CRC-32).`);
+        setStatusMessage('Embedded payload via live :8096 daemon.');
+        setStatusType('success');
+        return;
+      }
+      const { stegoWavBuffer, bitsEmbedded, checksum } = embedSecretIntoWav(activeAudioBuffer, secretMessage);
+      updateBufferStats(stegoWavBuffer, 'Stego WAV (Offline)');
+      setHasStegoEmbedded(true);
+      setOutputText(`Embedded ${bitsEmbedded} bits offline (STEG + LE uint32 + CRC-32 0x${checksum.toString(16).toUpperCase()}).`);
+      setStatusMessage('Embedded payload offline with standard STEG + CRC-32 wire format.');
+      setStatusType('success');
+    } catch (err) {
+      setStatusMessage(`Embed failed: ${err.message}`);
+      setStatusType('error');
+    }
+  };
+
+  const handleExtractSecret = async () => {
+    if (!activeAudioBuffer) return;
+    try {
+      if (daemonOnline) {
+        const carrierB64 = bytesToBase64(new Uint8Array(activeAudioBuffer));
+        const res = await apiCall('/api/stego/extract', { carrier_wav_base64: carrierB64 });
+        setOutputText(res.extracted_text);
+        setStatusMessage(`Extracted ${res.length_bytes} bytes via :8096 (CRC-32 verified).`);
+        setStatusType('success');
+        return;
+      }
+      const { text, crcHex } = extractSecretFromWav(activeAudioBuffer);
+      setOutputText(text);
+      setStatusMessage(`Extracted offline payload (CRC-32 ${crcHex} verified).`);
+      setStatusType('success');
+    } catch (err) {
+      setStatusMessage(`Extract failed: ${err.message}`);
+      setStatusType('error');
+    }
+  };
+
+  // --- Mode 1: Acoustic Keyed Cipher (v2 key-separated) ---
+  const handleEncryptCipher = async () => {
+    try {
+      if (daemonOnline) {
+        const res = await apiCall('/api/encrypt', { payload: cipherText, volume_db: volumeDb });
+        setEncryptedB64(res.encrypted_blob_base64);
+        setAudioKeyB64(res.audio_key_base64);
+        updateBufferStats(base64ToArrayBuffer(res.audio_key_base64), 'Cipher Audio Key (:8096)');
+        setOutputText(res.encrypted_blob_base64);
+        setStatusMessage(`Encrypted via :8096 (${res.length_bytes} B, AC2 v2 key-separated PBKDF2 200k).`);
+        setStatusType('success');
+        return;
+      }
+      const wavBytes = new Uint8Array(activeAudioBuffer || createHarmonicWavCarrier(1, 440));
+      const keyB64 = bytesToBase64(wavBytes);
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(16));
+      const enc = new TextEncoder();
+      const plain = enc.encode(cipherText);
+      const mk = await deriveMasterKeyJs(wavBytes, volumeDb, salt);
+      const ek = await hmacSha256Js(mk, enc.encode('audiocipher-enc-v2'));
+      const ak = await hmacSha256Js(mk, enc.encode('audiocipher-mac-v2'));
+      const ks = await keystreamJs(ek, iv, plain.length);
+      const ct = new Uint8Array(plain.length);
+      for (let i = 0; i < plain.length; i++) ct[i] = plain[i] ^ ks[i];
+      const macInput = concatBytes(new Uint8Array([0x41, 0x43, 0x32, 0x02]), salt, iv, ct);
+      const blob = concatBytes(macInput, await hmacSha256Js(ak, macInput));
+      const b64 = bytesToBase64(blob);
+      setEncryptedB64(b64);
+      setAudioKeyB64(keyB64);
+      setOutputText(b64);
+      setStatusMessage(`Encrypted offline (${blob.length} B, AC2 v2 key-separated PBKDF2 200k).`);
+      setStatusType('success');
+    } catch (err) {
+      setStatusMessage(`Encrypt failed: ${err.message}`);
+      setStatusType('error');
+    }
+  };
+
+  const handleDecryptCipher = async () => {
+    if (!encryptedB64 || !audioKeyB64) {
+      setStatusMessage('Encrypt a payload first.');
+      setStatusType('error');
+      return;
+    }
+    try {
+      if (daemonOnline) {
+        const res = await apiCall('/api/decrypt', {
+          encrypted_blob_base64: encryptedB64,
+          audio_base64: audioKeyB64,
+          volume_db: volumeDb,
+        });
+        setOutputText(res.decrypted_text);
+        setStatusMessage('Decrypted & HMAC-authenticated via :8096.');
+        setStatusType('success');
+        return;
+      }
+      const blob = new Uint8Array(base64ToArrayBuffer(encryptedB64));
+      const wavBytes = new Uint8Array(base64ToArrayBuffer(audioKeyB64));
+      const enc = new TextEncoder();
+      const salt = blob.subarray(4, 20), iv = blob.subarray(20, 36);
+      const ct = blob.subarray(36, blob.length - 32), tag = blob.subarray(blob.length - 32);
+      const mk = await deriveMasterKeyJs(wavBytes, volumeDb, salt);
+      const ek = await hmacSha256Js(mk, enc.encode('audiocipher-enc-v2'));
+      const ak = await hmacSha256Js(mk, enc.encode('audiocipher-mac-v2'));
+      const expected = await hmacSha256Js(ak, blob.subarray(0, blob.length - 32));
+      let diff = 0;
+      for (let i = 0; i < 32; i++) diff |= (tag[i] ^ expected[i]);
+      if (diff !== 0) throw new Error('Authentication failed: wrong dB or tampered ciphertext.');
+      const ks = await keystreamJs(ek, iv, ct.length);
+      const pt = new Uint8Array(ct.length);
+      for (let i = 0; i < ct.length; i++) pt[i] = ct[i] ^ ks[i];
+      setOutputText(new TextDecoder().decode(pt));
+      setStatusMessage('Decrypted & HMAC-authenticated offline.');
+      setStatusType('success');
+    } catch (err) {
+      setStatusMessage(`Decrypt failed: ${err.message}`);
+      setStatusType('error');
+    }
+  };
+
+  // --- Mode 2: Steganalysis ---
+  const handleSteganalysis = async () => {
+    if (!activeAudioBuffer) return;
+    try {
+      if (daemonOnline) {
+        const carrierB64 = bytesToBase64(new Uint8Array(activeAudioBuffer));
+        const rep = await apiCall('/api/steganalysis', { carrier_wav_base64: carrierB64 });
+        setOutputText(JSON.stringify(rep, null, 2));
+        setStatusMessage(`Steganalysis (:8096): ${rep.forensic_verdict} (${rep.confidence_score}% confidence)`);
+        setStatusType(rep.stego_detected ? 'warning' : 'success');
+        return;
+      }
+      let detected = false;
+      try { extractSecretFromWav(activeAudioBuffer); detected = true; } catch {}
+      setOutputText(JSON.stringify({ mode: 'offline-scan', stego_detected: detected, signature: detected ? 'STEG+CRC32' : 'NONE' }, null, 2));
+      setStatusMessage(detected ? 'Offline scan detected STEG LSB signature.' : 'Offline scan: clean carrier.');
+      setStatusType(detected ? 'warning' : 'success');
+    } catch (err) {
+      setStatusMessage(`Steganalysis failed: ${err.message}`);
+      setStatusType('error');
+    }
+  };
+
+  // --- Mode 3: DTMF ---
+  const handleDtmfSynth = async () => {
+    try {
+      if (daemonOnline) {
+        const res = await apiCall('/api/dtmf/synthesize', { digits: dtmfDigits, tone_duration: 0.1, silence_duration: 0.05 });
+        updateBufferStats(base64ToArrayBuffer(res.wav_base64), 'DTMF WAV (:8096)');
+        setOutputText(`Synthesized DTMF [${res.digits}] (${res.duration_seconds}s) via :8096.`);
+        setStatusMessage('DTMF WAV synthesized via :8096.');
+        setStatusType('success');
+        return;
+      }
+      const sr = 8000, toneN = 800, pauseN = 400;
+      const samples = new Int16Array(dtmfDigits.length * (toneN + pauseN));
+      let off = 0;
+      for (const ch of dtmfDigits.toUpperCase()) {
+        const pair = DTMF_FREQS[ch] || [0, 0];
+        for (let i = 0; i < toneN; i++) {
+          const t = i / sr;
+          samples[off++] = Math.round((Math.sin(2 * Math.PI * pair[0] * t) + Math.sin(2 * Math.PI * pair[1] * t)) * 8000);
+        }
+        off += pauseN;
+      }
+      updateBufferStats(samplesToWavBuffer(samples, sr), 'DTMF WAV (Offline)');
+      setOutputText(`Synthesized DTMF [${dtmfDigits.toUpperCase()}] offline.`);
+      setStatusMessage('DTMF WAV synthesized offline.');
+      setStatusType('success');
+    } catch (err) {
+      setStatusMessage(`DTMF failed: ${err.message}`);
+      setStatusType('error');
+    }
+  };
+
+  const handleDtmfDecode = async () => {
+    if (!activeAudioBuffer) return;
+    try {
+      if (daemonOnline) {
+        const wavB64 = bytesToBase64(new Uint8Array(activeAudioBuffer));
+        const res = await apiCall('/api/dtmf/decode', { wav_base64: wavB64, tone_duration: 0.1, silence_duration: 0.05 });
+        setOutputText(`Decoded DTMF Digits: ${res.decoded_digits}`);
+        setStatusMessage(`Goertzel decoded via :8096: ${res.decoded_digits}`);
+        setStatusType('success');
+        return;
+      }
+      const view = new DataView(activeAudioBuffer);
+      const sr = view.getUint32(24, true) || 8000;
+      const n = Math.floor((activeAudioBuffer.byteLength - 44) / 2);
+      const samples = new Int16Array(n);
+      for (let i = 0; i < n; i++) samples[i] = view.getInt16(44 + i * 2, true);
+      const toneN = Math.round(sr * 0.1), step = Math.round(sr * 0.15);
+      const low = [697, 770, 852, 941], high = [1209, 1336, 1477, 1633];
+      let decoded = '';
+      for (let d = 0; d < Math.floor(n / step); d++) {
+        const blk = samples.subarray(d * step, d * step + toneN);
+        const bl = low.reduce((a, b) => goertzel(blk, b, sr) > goertzel(blk, a, sr) ? b : a, low[0]);
+        const bh = high.reduce((a, b) => goertzel(blk, b, sr) > goertzel(blk, a, sr) ? b : a, high[0]);
+        for (const [k, pair] of Object.entries(DTMF_FREQS)) if (pair[0] === bl && pair[1] === bh) { decoded += k; break; }
+      }
+      setOutputText(`Decoded DTMF Digits (Offline): ${decoded}`);
+      setStatusMessage(`Goertzel decoded offline: ${decoded}`);
+      setStatusType('success');
+    } catch (err) {
+      setStatusMessage(`DTMF decode failed: ${err.message}`);
+      setStatusType('error');
+    }
+  };
+
+  // --- Mode 4: Morse ---
+  const handleMorseSynth = async () => {
+    try {
+      if (daemonOnline) {
+        const res = await apiCall('/api/morse', { text: morseText, frequency: 800.0, wpm: morseWpm });
+        updateBufferStats(base64ToArrayBuffer(res.wav_base64), 'Morse WAV (:8096)');
+        setOutputText(`Notation: ${res.morse_notation}\nDuration: ${res.duration_seconds}s @ ${morseWpm} WPM`);
+        setStatusMessage('ITU Morse synthesized via :8096.');
+        setStatusType('success');
+        return;
+      }
+      const notation = morseText.toUpperCase().split('').map(c => MORSE_MAP[c] || '').filter(Boolean).join(' ');
+      const sr = 22050, unit = Math.round(sr * (1.2 / morseWpm));
+      const buf = [];
+      for (const ch of notation) {
+        if (ch === '.' || ch === '-') {
+          const len = ch === '.' ? unit : unit * 3;
+          for (let i = 0; i < len; i++) buf.push(Math.round(Math.sin(2 * Math.PI * 800 * (i / sr)) * 15000));
+          for (let i = 0; i < unit; i++) buf.push(0);
+        } else if (ch === ' ') { for (let i = 0; i < unit * 2; i++) buf.push(0); }
+        else if (ch === '/') { for (let i = 0; i < unit * 6; i++) buf.push(0); }
+      }
+      updateBufferStats(samplesToWavBuffer(Int16Array.from(buf), sr), 'Morse WAV (Offline)');
+      setOutputText(`Notation: ${notation}`);
+      setStatusMessage('ITU Morse synthesized offline.');
+      setStatusType('success');
+    } catch (err) {
+      setStatusMessage(`Morse failed: ${err.message}`);
+      setStatusType('error');
+    }
+  };
+
+  // --- Mode 5: BFSK Modem ---
+  const handleFskModulate = async () => {
+    try {
+      const ultrasonic = fskBand === 'ultrasonic';
+      if (daemonOnline) {
+        const res = await apiCall('/api/fsk-modulate', { payload: fskPayload, baud_rate: fskBaud, ultrasonic });
+        updateBufferStats(base64ToArrayBuffer(res.wav_base64), `BFSK ${fskBaud}b (:8096)`);
+        setOutputText(`BFSK Modulated via :8096 (${res.duration_seconds}s, ${res.mark_frequency_hz}/${res.space_frequency_hz} Hz, 0x55/0x7E + CRC-16).`);
+        setStatusMessage('BFSK waveform modulated via :8096.');
+        setStatusType('success');
+        return;
+      }
+      const markF = ultrasonic ? 18500 : 1200, spaceF = ultrasonic ? 20000 : 2200;
+      const sr = 44100, spb = Math.max(1, Math.round(sr / fskBaud));
+      const dataBytes = new TextEncoder().encode(fskPayload);
+      const lenHdr = new Uint8Array([(dataBytes.length >> 8) & 0xFF, dataBytes.length & 0xFF]);
+      const crcVal = crc16Ccitt(concatBytes(lenHdr, dataBytes));
+      const packet = concatBytes(new Uint8Array([0x55, 0x55, 0x55, 0x55, 0x7E]), lenHdr, dataBytes, new Uint8Array([(crcVal >> 8) & 0xFF, crcVal & 0xFF]));
+      const bits = [1, 1, 1, 1, 1, 1, 1, 1];
+      for (const byte of packet) {
+        bits.push(0);
+        for (let b = 0; b < 8; b++) bits.push((byte >> b) & 1);
+        bits.push(1);
+      }
+      bits.push(1, 1, 1, 1, 1, 1, 1, 1);
+      const samples = new Int16Array(bits.length * spb);
+      let phase = 0, off = 0;
+      for (const bit of bits) {
+        const step = 2 * Math.PI * (bit ? markF : spaceF) / sr;
+        for (let i = 0; i < spb; i++) { phase = (phase + step) % (2 * Math.PI); samples[off++] = Math.round(Math.sin(phase) * 16383); }
+      }
+      updateBufferStats(samplesToWavBuffer(samples, sr), `BFSK ${fskBaud}b (Offline)`);
+      setOutputText(`BFSK Modulated offline (0x55/0x7E + CRC-16 0x${crcVal.toString(16).toUpperCase()}).`);
+      setStatusMessage('BFSK waveform modulated offline.');
+      setStatusType('success');
+    } catch (err) {
+      setStatusMessage(`BFSK modulate failed: ${err.message}`);
+      setStatusType('error');
+    }
+  };
+
+  const handleFskDemodulate = async () => {
+    if (!activeAudioBuffer) return;
+    try {
+      const ultrasonic = fskBand === 'ultrasonic';
+      if (daemonOnline) {
+        const wavB64 = bytesToBase64(new Uint8Array(activeAudioBuffer));
+        const res = await apiCall('/api/fsk-demodulate', { wav_base64: wavB64, baud_rate: fskBaud, ultrasonic });
+        setOutputText(`Decoded: ${res.decoded_text}\nCRC-16: ${res.telemetry?.crc16_hex} | SNR: ${res.telemetry?.estimated_snr_db} dB`);
+        setStatusMessage('BFSK demodulated & CRC-16 verified via :8096.');
+        setStatusType('success');
+        return;
+      }
+      const view = new DataView(activeAudioBuffer);
+      const sr = view.getUint32(24, true) || 44100;
+      const n = Math.floor((activeAudioBuffer.byteLength - 44) / 2);
+      const samples = new Int16Array(n);
+      for (let i = 0; i < n; i++) samples[i] = view.getInt16(44 + i * 2, true);
+      const markF = ultrasonic ? 18500 : 1200, spaceF = ultrasonic ? 20000 : 2200;
+      const spb = Math.max(1, Math.round(sr / fskBaud));
+      const bits = [];
+      for (let b = 0; b < Math.floor(n / spb); b++) {
+        const sl = samples.subarray(b * spb, (b + 1) * spb);
+        bits.push(goertzel(sl, markF, sr) >= goertzel(sl, spaceF, sr) ? 1 : 0);
+      }
+      const bytes = [];
+      for (let i = 0; i + 10 <= bits.length;) {
+        if (bits[i] === 0 && bits[i + 9] === 1) {
+          let v = 0;
+          for (let b = 0; b < 8; b++) v |= (bits[i + 1 + b] << b);
+          bytes.push(v); i += 10;
+        } else i++;
+      }
+      const dIdx = bytes.indexOf(0x7E);
+      if (dIdx < 0 || dIdx + 5 > bytes.length) throw new Error('No 0x7E BFSK frame delimiter found.');
+      const rem = bytes.slice(dIdx + 1);
+      const len = (rem[0] << 8) | rem[1];
+      const body = new Uint8Array(rem.slice(2, 2 + len));
+      const rxCrc = (rem[2 + len] << 8) | rem[3 + len];
+      const expCrc = crc16Ccitt(concatBytes(new Uint8Array([rem[0], rem[1]]), body));
+      if (rxCrc !== expCrc) throw new Error('CRC-16 mismatch.');
+      setOutputText(`Decoded Offline: ${new TextDecoder().decode(body)} (CRC-16 0x${rxCrc.toString(16).toUpperCase()})`);
+      setStatusMessage('BFSK demodulated & CRC-16 verified offline.');
+      setStatusType('success');
+    } catch (err) {
+      setStatusMessage(`BFSK demodulate failed: ${err.message}`);
+      setStatusType('error');
+    }
+  };
+
   return (
     <Box sx={{ mt: 1 }}>
-      {/* Sovereign Support Banner */}
-      <Paper
-        sx={{
-          p: 2,
-          mb: 3,
-          background: isDark
-            ? 'linear-gradient(135deg, rgba(212,175,55,0.18) 0%, rgba(8,8,11,0.92) 100%)'
-            : 'linear-gradient(135deg, #FFFDF0 0%, #FEF9E7 100%)',
-          border: `1px solid ${gold}`,
-          borderRadius: 2,
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 2
-        }}
-      >
-        <Stack direction="row" spacing={2} alignItems="center">
-          <Box
-            sx={{
-              p: 1.2,
-              borderRadius: 2,
-              bgcolor: goldSoft,
-              color: gold,
-              display: 'flex',
-              alignItems: 'center'
-            }}
-          >
-            <GraphicEqIcon sx={{ fontSize: 28 }} />
-          </Box>
-          <Box>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: gold }}>
-                AudioCipher Mil-Spec LSB Steganography Studio
-              </Typography>
-              <Chip
-                size="small"
-                label="✦ 100% FREE & OPEN ACCESS"
-                sx={{
-                  bgcolor: emeraldSoft,
-                  color: emerald,
-                  fontWeight: 800,
-                  fontSize: '0.72rem',
-                  fontFamily: mono
-                }}
-              />
-            </Stack>
-            <Typography variant="caption" color="text.secondary">
-              Real 16-bit PCM waveform LSB bitstream injection, in-browser Web Audio API synthesis, and zero acoustic degradation.
-            </Typography>
-          </Box>
-        </Stack>
-
-        <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
-          <Button
-            variant="contained"
-            size="small"
-            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
-            target="_blank"
-            rel="noopener noreferrer"
-            startIcon={<BoltIcon />}
-            sx={{
-              bgcolor: gold,
-              color: '#08080B',
-              fontWeight: 800,
-              fontSize: '0.8rem',
-              '&:hover': { bgcolor: '#B8860B' }
-            }}
-          >
-            ☕ Buy Us a Coffee
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              borderColor: 'rgba(20,241,149,0.45)',
-              color: '#14F195',
-              bgcolor: 'rgba(20,241,149,0.08)',
-              fontWeight: 800,
-              fontSize: '0.8rem',
-              '&:hover': { borderColor: '#14F195', bgcolor: 'rgba(20,241,149,0.16)' }
-            }}
-          >
-            ◎ Solana Tip
-          </Button>
-        </Stack>
-      </Paper>
-
-      {/* Main Interactive Workstation */}
-      <SovereignEyebrow accent="#34D399" right="Zoth Studio">
-        {"audiocipher-stego-vault"}
+      <SovereignEyebrow accent={emerald} right={daemonOnline ? 'LIVE :8096 DAEMON' : 'OFFLINE BROWSER MODE'}>
+        {'audiocipher-stego-engine'}
       </SovereignEyebrow>
       <SovereignBand
-        seed={"audiocipher-stego-vault"}
-        eyebrow={"Zoth Studio"}
-        caption={"Audio Cipher"}
-        label={"Audio Cipher — Zoth sovereign visualisation"}
+        seed={'audiocipher-stego-engine'}
+        eyebrow={'Zoth Studio v2.6.0'}
+        caption={'AudioCipher Stego Studio — 6-Mode Hybrid Acoustic Cryptography & Stego Deck'}
+        label={'AudioCipher Stego Studio — Zoth sovereign visualisation'}
       />
+
       <Grid container spacing={3}>
-        {/* Left Column: Carrier Wave Control & Audio Spectrum Canvas */}
+        {/* Left Column: Spectrum Canvas & Carrier Controls */}
         <Grid xs={12} lg={5}>
-          <Paper
-            sx={{
-              p: 2.5,
-              bgcolor: isDark ? surfaceDark : theme.palette.background.paper,
-              border: `1px solid ${cardBorder}`,
-              borderRadius: 2,
-              mb: 3
-            }}
-          >
-            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+          <Paper sx={{ p: 2.5, bgcolor: surfaceBg, border: `1px solid ${cardBorder}`, borderRadius: 2 }}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2, gap: 1, flexWrap: 'wrap' }}>
               <Typography variant="subtitle2" sx={{ fontWeight: 800, fontFamily: mono, color: cyan }}>
-                AUDIO SPECTRUM SPECTROGRAM
+                AUDIO SPECTRUM MONITOR
               </Typography>
               <Chip
                 size="small"
                 icon={<MusicNoteIcon sx={{ fontSize: '14px !important' }} />}
-                label={hasStegoEmbedded ? 'STEGO SEALED' : 'CLEAN CARRIER'}
+                label={hasStegoEmbedded ? 'STEGO SEALED' : daemonOnline ? 'LIVE :8096' : 'OFFLINE PCM'}
                 sx={{
                   fontFamily: mono,
                   fontSize: '0.7rem',
                   fontWeight: 800,
-                  bgcolor: hasStegoEmbedded ? goldSoft : cyanSoft,
-                  color: hasStegoEmbedded ? gold : cyan
+                  bgcolor: hasStegoEmbedded ? goldSoft : emeraldSoft,
+                  color: hasStegoEmbedded ? gold : emerald,
                 }}
               />
             </Stack>
 
-            {/* Canvas Spectrogram */}
-            <Box
-              sx={{
-                bgcolor: isDark ? voidDark : '#0F172A',
-                border: `1px solid ${cardBorder}`,
-                borderRadius: 2,
-                p: 1,
-                mb: 2,
-                overflow: 'hidden'
-              }}
-            >
-              <canvas
-                ref={canvasRef}
-                width={360}
-                height={140}
-                style={{ width: '100%', height: '140px', display: 'block' }}
-              />
+            <Box sx={{ bgcolor: voidDark, border: `1px solid ${cardBorder}`, borderRadius: 2, p: 1, mb: 2, overflow: 'hidden' }}>
+              <canvas ref={canvasRef} width={360} height={140} style={{ width: '100%', height: '140px', display: 'block' }} />
             </Box>
 
-            {/* Audio Playback Controls */}
-            <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2.5 }}>
+            <Stack direction="row" spacing={1.25} alignItems="stretch" sx={{ mb: 2 }}>
               <Button
                 variant="contained"
-                onClick={togglePlayback}
+                onClick={isPlaying ? stopPlayback : startPlayback}
                 startIcon={isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
                 sx={{
                   bgcolor: isPlaying ? crimson : emerald,
-                  color: '#000',
+                  color: '#FFFDF8',
                   fontWeight: 800,
                   fontFamily: mono,
+                  fontSize: '0.76rem',
+                  minHeight: 44,
+                  whiteSpace: 'nowrap',
                   flex: 1,
-                  '&:hover': { bgcolor: isPlaying ? '#E11D48' : '#059669' }
                 }}
               >
-                {isPlaying ? 'PAUSE MONITOR' : 'PLAY CARRIER WAVE'}
+                {isPlaying ? 'PAUSE' : 'PLAY WAV'}
               </Button>
               <Button
                 variant="outlined"
                 onClick={handleDownloadWav}
                 startIcon={<DownloadIcon />}
-                sx={{ borderColor: cardBorder, color: 'text.primary', fontFamily: mono, fontWeight: 700 }}
+                sx={{
+                  borderColor: cardBorder,
+                  color: 'text.primary',
+                  fontFamily: mono,
+                  fontWeight: 700,
+                  fontSize: '0.76rem',
+                  minHeight: 44,
+                  whiteSpace: 'nowrap',
+                  flex: 1,
+                }}
               >
-                DOWNLOAD .WAV
+                SAVE .WAV
               </Button>
             </Stack>
 
-            {/* Carrier Parameters & Upload */}
             <Divider sx={{ my: 2 }} />
-            <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', fontWeight: 700, mb: 1.5, display: 'block' }}>
-              CARRIER WAVE ENGINE CONFIGURATION
-            </Typography>
-
             <Grid container spacing={1.5} sx={{ mb: 2 }}>
               <Grid xs={6}>
                 <TextField
-                  fullWidth
-                  size="small"
-                  type="number"
-                  label="Duration (sec)"
+                  fullWidth size="small" type="number" label="Duration (sec)"
                   value={carrierDuration}
-                  onChange={(e) => setCarrierDuration(Math.max(1, Math.min(60, Number(e.target.value))))}
+                  onChange={(e) => setCarrierDuration(Math.max(1, Math.min(30, Number(e.target.value))))}
                   InputProps={{ sx: { fontFamily: mono, fontSize: '0.8rem' } }}
                 />
               </Grid>
               <Grid xs={6}>
                 <TextField
-                  fullWidth
-                  size="small"
-                  type="number"
-                  label="Freq (Hz)"
+                  fullWidth size="small" type="number" label="Freq (Hz)"
                   value={carrierFreq}
                   onChange={(e) => setCarrierFreq(Math.max(60, Math.min(2000, Number(e.target.value))))}
                   InputProps={{ sx: { fontFamily: mono, fontSize: '0.8rem' } }}
@@ -773,212 +904,240 @@ export function AudioCipherGodModeTool() {
               </Grid>
             </Grid>
 
-            <Stack direction="row" spacing={1.5}>
+            <Stack direction="row" spacing={1.25} alignItems="stretch">
               <Button
-                size="small"
-                variant="outlined"
+                size="small" variant="outlined"
                 onClick={() => generateNewCarrier(carrierDuration, carrierFreq)}
                 startIcon={<RefreshIcon />}
-                sx={{ borderColor: cyan, color: cyan, fontFamily: mono, fontSize: '0.75rem', flex: 1 }}
+                sx={{
+                  borderColor: cyan, color: cyan, fontFamily: mono, fontWeight: 700,
+                  fontSize: '0.74rem', minHeight: 44, whiteSpace: 'nowrap', flex: 1,
+                }}
               >
-                SYNTHESIZE NEW CARRIER
+                NEW CARRIER
               </Button>
               <Button
-                size="small"
-                variant="outlined"
-                component="label"
+                size="small" variant="outlined" component="label"
                 startIcon={<UploadFileIcon />}
-                sx={{ borderColor: cardBorder, color: 'text.secondary', fontFamily: mono, fontSize: '0.75rem', flex: 1 }}
+                sx={{
+                  borderColor: cardBorder, color: 'text.primary', fontFamily: mono, fontWeight: 700,
+                  fontSize: '0.74rem', minHeight: 44, whiteSpace: 'nowrap', flex: 1,
+                }}
               >
                 IMPORT WAV
                 <input type="file" accept=".wav,audio/wav" hidden onChange={handleFileUpload} />
               </Button>
             </Stack>
 
-            {/* Carrier Telemetry Info */}
             {audioStats && (
-              <Paper sx={{ p: 1.5, mt: 2, bgcolor: isDark ? voidDark : '#F8FAFC', border: `1px solid ${cardBorder}`, borderRadius: 1.5 }}>
+              <Paper sx={{ p: 1.5, mt: 2, bgcolor: subSurfaceBg, border: `1px solid ${cardBorder}`, borderRadius: 1.5 }}>
                 <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', display: 'block' }}>
-                  Channels: 1 (Mono) • Format: 16-bit PCM • Rate: {audioStats.sampleRate} Hz
+                  16-bit PCM WAV • {audioStats.sampleRate} Hz • {audioStats.duration}s ({audioStats.frequency})
                 </Typography>
-                <Typography variant="caption" sx={{ fontFamily: mono, color: gold, display: 'block', mt: 0.5 }}>
-                  Total PCM Samples: {audioStats.numSamples.toLocaleString()} • Capacity: {audioStats.maxCapacityBytes.toLocaleString()} bytes
+                <Typography variant="caption" sx={{ fontFamily: mono, color: gold, display: 'block', mt: 0.5, fontWeight: 700 }}>
+                  Samples: {audioStats.numSamples.toLocaleString()} • LSB Capacity: {audioStats.maxCapacityBytes.toLocaleString()} B
                 </Typography>
               </Paper>
             )}
           </Paper>
         </Grid>
 
-        {/* Right Column: Encode & Decode Station */}
+        {/* Right Column: 6-Mode Hybrid Workstation */}
         <Grid xs={12} lg={7}>
-          <Paper
-            sx={{
-              p: 2.5,
-              bgcolor: isDark ? surfaceDark : theme.palette.background.paper,
-              border: `1px solid ${cardBorder}`,
-              borderRadius: 2
-            }}
-          >
-            {/* Mode Switch Tabs */}
+          <Paper sx={{ p: 2.5, bgcolor: surfaceBg, border: `1px solid ${cardBorder}`, borderRadius: 2 }}>
             <Tabs
               value={activeTab}
               onChange={(_, v) => setActiveTab(v)}
+              variant="scrollable"
+              scrollButtons="auto"
               sx={{
                 mb: 2,
                 borderBottom: `1px solid ${cardBorder}`,
-                '& .MuiTab-root': {
-                  fontFamily: mono,
-                  fontWeight: 800,
-                  fontSize: '0.8rem',
-                  py: 1
-                }
+                '& .MuiTab-root': { fontFamily: mono, fontWeight: 700, fontSize: '0.75rem', minHeight: 44 },
               }}
             >
-              <Tab icon={<LockIcon />} iconPosition="start" label="EMBED SECRET (LSB INJECTION)" />
-              <Tab icon={<LockOpenIcon />} iconPosition="start" label="EXTRACT SECRET (LSB RECOVERY)" />
+              <Tab icon={<ShieldIcon fontSize="small" />} iconPosition="start" label="LSB Stego" />
+              <Tab icon={<LockIcon fontSize="small" />} iconPosition="start" label="Cipher v2" />
+              <Tab icon={<GraphicEqIcon fontSize="small" />} iconPosition="start" label="Steganalysis" />
+              <Tab icon={<DialpadIcon fontSize="small" />} iconPosition="start" label="DTMF" />
+              <Tab icon={<RadioIcon fontSize="small" />} iconPosition="start" label="Morse" />
+              <Tab icon={<SensorsIcon fontSize="small" />} iconPosition="start" label="BFSK Modem" />
             </Tabs>
 
             {statusMessage && (
               <Alert
                 severity={statusType}
                 sx={{
-                  mb: 2.5,
+                  mb: 2,
                   fontFamily: mono,
-                  fontSize: '0.75rem',
-                  bgcolor:
-                    statusType === 'success' ? emeraldSoft : statusType === 'error' ? crimsonSoft : 'rgba(56, 189, 248, 0.08)',
+                  fontSize: '0.76rem',
+                  bgcolor: statusType === 'success' ? emeraldSoft : statusType === 'error' ? crimsonSoft : cyanSoft,
                   color: statusType === 'success' ? emerald : statusType === 'error' ? crimson : cyan,
-                  border: `1px solid ${statusType === 'success' ? emerald : statusType === 'error' ? crimson : cyan}`
+                  border: `1px solid ${statusType === 'success' ? emerald : statusType === 'error' ? crimson : cyan}`,
                 }}
               >
                 {statusMessage}
               </Alert>
             )}
 
-            {/* TAB 0: EMBED / INJECT */}
             {activeTab === 0 && (
               <Box>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                  Inject confidential strings, keys, or coordinates into the least significant bit (LSB) of each 16-bit PCM audio sample.
-                </Typography>
-
                 <TextField
-                  fullWidth
-                  multiline
-                  rows={6}
-                  label="Covert Plaintext Payload"
-                  value={secretMessage}
-                  onChange={(e) => setSecretMessage(e.target.value)}
-                  placeholder="Enter confidential variables, token seeds, or enclave credentials..."
-                  InputProps={{
-                    sx: { fontFamily: mono, fontSize: '0.8rem' }
-                  }}
-                  sx={{ mb: 2.5 }}
+                  fullWidth multiline rows={4} label="Covert Payload (STEG + LE uint32 + CRC-32)"
+                  value={secretMessage} onChange={(e) => setSecretMessage(e.target.value)}
+                  InputProps={{ sx: { fontFamily: mono, fontSize: '0.8rem' } }} sx={{ mb: 2 }}
                 />
-
-                <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
-                  <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>
-                    Payload Size: <strong>{new TextEncoder().encode(secretMessage).length} bytes</strong> ({new TextEncoder().encode(secretMessage).length * 8} bits)
-                  </Typography>
-
-                  <Button
-                    variant="contained"
-                    onClick={handleEmbedSecret}
-                    startIcon={<GraphicEqIcon />}
-                    sx={{
-                      bgcolor: gold,
-                      color: '#000',
-                      fontWeight: 800,
-                      fontFamily: mono,
-                      px: 3,
-                      '&:hover': { bgcolor: '#B8860B' }
-                    }}
-                  >
-                    INJECT & SEAL AUDIO
+                <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
+                  <Button variant="contained" onClick={handleEmbedSecret} startIcon={<LockIcon />}
+                    sx={{ bgcolor: gold, color: goldInk, fontFamily: mono, fontWeight: 800, minHeight: 44, whiteSpace: 'nowrap' }}>
+                    EMBED LSB
+                  </Button>
+                  <Button variant="outlined" onClick={handleExtractSecret} startIcon={<LockOpenIcon />}
+                    sx={{ borderColor: emerald, color: emerald, fontFamily: mono, fontWeight: 800, minHeight: 44, whiteSpace: 'nowrap' }}>
+                    EXTRACT LSB
                   </Button>
                 </Stack>
               </Box>
             )}
 
-            {/* TAB 1: EXTRACT / RECOVER */}
             {activeTab === 1 && (
               <Box>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                  Probe the currently loaded WAV carrier buffer, identify the AudioCipher header, and reconstruct the plaintext bitstream.
+                <TextField
+                  fullWidth multiline rows={3} label="Plaintext for v2 Key-Separated Acoustic Cipher"
+                  value={cipherText} onChange={(e) => setCipherText(e.target.value)}
+                  InputProps={{ sx: { fontFamily: mono, fontSize: '0.8rem' } }} sx={{ mb: 2 }}
+                />
+                <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>
+                  Volume Modifier Key: <strong>{volumeDb} dB</strong> (200,000 PBKDF2 rounds + separate enc/mac keys)
                 </Typography>
-
-                <Button
-                  variant="contained"
-                  onClick={handleExtractSecret}
-                  startIcon={<LockOpenIcon />}
-                  sx={{
-                    bgcolor: emerald,
-                    color: '#000',
-                    fontWeight: 800,
-                    fontFamily: mono,
-                    mb: 2.5,
-                    '&:hover': { bgcolor: '#059669' }
-                  }}
-                >
-                  EXTRACT & RECOVER SECRET
-                </Button>
-
-                {extractedMessage ? (
-                  <Paper
-                    sx={{
-                      p: 2,
-                      bgcolor: isDark ? voidDark : '#0F172A',
-                      border: `1px solid ${emerald}`,
-                      borderRadius: 1.5
-                    }}
-                  >
-                    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-                      <Typography variant="caption" sx={{ fontFamily: mono, color: emerald, fontWeight: 800 }}>
-                        RECOVERED COVERT PAYLOAD
-                      </Typography>
-                      <Button
-                        size="small"
-                        startIcon={<ContentCopyIcon />}
-                        onClick={() => handleCopy(extractedMessage, 'copyExtracted')}
-                        sx={{ fontFamily: mono, fontSize: '0.7rem', color: emerald }}
-                      >
-                        {copiedKey === 'copyExtracted' ? 'COPIED' : 'COPY'}
-                      </Button>
-                    </Stack>
-                    <pre
-                      style={{
-                        margin: 0,
-                        fontFamily: mono,
-                        fontSize: '0.8rem',
-                        color: '#E2E8F0',
-                        whiteSpace: 'pre-wrap',
-                        wordBreak: 'break-all'
-                      }}
-                    >
-                      {extractedMessage}
-                    </pre>
-                  </Paper>
-                ) : (
-                  <Paper
-                    sx={{
-                      p: 4,
-                      textAlign: 'center',
-                      bgcolor: isDark ? voidDark : '#F8FAFC',
-                      border: `1px dashed ${cardBorder}`,
-                      borderRadius: 1.5
-                    }}
-                  >
-                    <Typography variant="body2" sx={{ fontFamily: mono, color: 'text.secondary' }}>
-                      Click &ldquo;EXTRACT & RECOVER SECRET&rdquo; to scan the current carrier for embedded payloads.
-                    </Typography>
-                  </Paper>
-                )}
+                <Slider value={volumeDb} min={10} max={90} onChange={(_, v) => setVolumeDb(v)} sx={{ color: gold, mb: 2 }} />
+                <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
+                  <Button variant="contained" onClick={handleEncryptCipher} startIcon={<LockIcon />}
+                    sx={{ bgcolor: gold, color: goldInk, fontFamily: mono, fontWeight: 800, minHeight: 44, whiteSpace: 'nowrap' }}>
+                    ENCRYPT (AC2 v2)
+                  </Button>
+                  <Button variant="outlined" onClick={handleDecryptCipher} startIcon={<LockOpenIcon />}
+                    sx={{ borderColor: emerald, color: emerald, fontFamily: mono, fontWeight: 800, minHeight: 44, whiteSpace: 'nowrap' }}>
+                    DECRYPT &amp; VERIFY
+                  </Button>
+                </Stack>
               </Box>
+            )}
+
+            {activeTab === 2 && (
+              <Box>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  Run forensic PoV chi-square, LSB header detection, and ultrasonic HF energy analysis on the active 16-bit PCM WAV buffer.
+                </Typography>
+                <Button variant="contained" onClick={handleSteganalysis} startIcon={<GraphicEqIcon />}
+                  sx={{ bgcolor: gold, color: goldInk, fontFamily: mono, fontWeight: 800, minHeight: 44, whiteSpace: 'nowrap' }}>
+                  RUN FORENSIC STEGANALYSIS
+                </Button>
+              </Box>
+            )}
+
+            {activeTab === 3 && (
+              <Box>
+                <TextField
+                  fullWidth size="small" label="DTMF Digits (0-9, A-D, *, #)"
+                  value={dtmfDigits} onChange={(e) => setDtmfDigits(e.target.value)}
+                  InputProps={{ sx: { fontFamily: mono, fontSize: '0.85rem' } }} sx={{ mb: 2 }}
+                />
+                <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
+                  <Button variant="contained" onClick={handleDtmfSynth}
+                    sx={{ bgcolor: gold, color: goldInk, fontFamily: mono, fontWeight: 800, minHeight: 44, whiteSpace: 'nowrap' }}>
+                    SYNTHESIZE DTMF
+                  </Button>
+                  <Button variant="outlined" onClick={handleDtmfDecode}
+                    sx={{ borderColor: emerald, color: emerald, fontFamily: mono, fontWeight: 800, minHeight: 44, whiteSpace: 'nowrap' }}>
+                    GOERTZEL DECODE
+                  </Button>
+                </Stack>
+              </Box>
+            )}
+
+            {activeTab === 4 && (
+              <Box>
+                <TextField
+                  fullWidth size="small" label="ITU Morse Message"
+                  value={morseText} onChange={(e) => setMorseText(e.target.value)}
+                  InputProps={{ sx: { fontFamily: mono, fontSize: '0.85rem' } }} sx={{ mb: 2 }}
+                />
+                <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>
+                  Speed: <strong>{morseWpm} WPM</strong> (800 Hz PCM)
+                </Typography>
+                <Slider value={morseWpm} min={5} max={40} onChange={(_, v) => setMorseWpm(v)} sx={{ color: gold, mb: 2 }} />
+                <Button variant="contained" onClick={handleMorseSynth}
+                  sx={{ bgcolor: gold, color: goldInk, fontFamily: mono, fontWeight: 800, minHeight: 44, whiteSpace: 'nowrap' }}>
+                  SYNTHESIZE MORSE WAV
+                </Button>
+              </Box>
+            )}
+
+            {activeTab === 5 && (
+              <Box>
+                <TextField
+                  fullWidth size="small" label="BFSK Air-Gap Payload (0x55/0x7E + CRC-16)"
+                  value={fskPayload} onChange={(e) => setFskPayload(e.target.value)}
+                  InputProps={{ sx: { fontFamily: mono, fontSize: '0.85rem' } }} sx={{ mb: 2 }}
+                />
+                <Grid container spacing={1.5} sx={{ mb: 2 }}>
+                  <Grid xs={6}>
+                    <FormControl fullWidth size="small">
+                      <InputLabel>Baud Rate</InputLabel>
+                      <Select value={fskBaud} label="Baud Rate" onChange={(e) => setFskBaud(Number(e.target.value))}>
+                        <MenuItem value={300}>300 baud</MenuItem>
+                        <MenuItem value={600}>600 baud</MenuItem>
+                        <MenuItem value={1200}>1200 baud</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid xs={6}>
+                    <FormControl fullWidth size="small">
+                      <InputLabel>Carrier Band</InputLabel>
+                      <Select value={fskBand} label="Carrier Band" onChange={(e) => setFskBand(e.target.value)}>
+                        <MenuItem value="audible">Audible (1200/2200 Hz)</MenuItem>
+                        <MenuItem value="ultrasonic">Ultrasonic (18.5/20.0 kHz)</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                </Grid>
+                <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
+                  <Button variant="contained" onClick={handleFskModulate}
+                    sx={{ bgcolor: gold, color: goldInk, fontFamily: mono, fontWeight: 800, minHeight: 44, whiteSpace: 'nowrap' }}>
+                    MODULATE BFSK
+                  </Button>
+                  <Button variant="outlined" onClick={handleFskDemodulate}
+                    sx={{ borderColor: emerald, color: emerald, fontFamily: mono, fontWeight: 800, minHeight: 44, whiteSpace: 'nowrap' }}>
+                    DEMODULATE CRC-16
+                  </Button>
+                </Stack>
+              </Box>
+            )}
+
+            {outputText && (
+              <Paper sx={{ p: 2, mt: 2.5, bgcolor: subSurfaceBg, border: `1px solid ${cardBorder}`, borderRadius: 1.5 }}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+                  <Typography variant="caption" sx={{ fontFamily: mono, color: emerald, fontWeight: 800 }}>
+                    ENGINE OUTPUT
+                  </Typography>
+                  <Button
+                    size="small"
+                    startIcon={<ContentCopyIcon />}
+                    onClick={() => handleCopy(outputText, 'out')}
+                    sx={{ fontFamily: mono, fontSize: '0.72rem', color: gold, minHeight: 36 }}
+                  >
+                    {copiedKey === 'out' ? 'COPIED' : 'COPY'}
+                  </Button>
+                </Stack>
+                <pre style={{ margin: 0, fontFamily: mono, fontSize: '0.78rem', whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
+                  {outputText}
+                </pre>
+              </Paper>
             )}
           </Paper>
         </Grid>
       </Grid>
-
     </Box>
   );
 }

@@ -199,6 +199,19 @@ export const workstations = [
     pullCommand: "agent-egress-sentinel serve --web-port 8095 --proxy-port 8195"
   },
   {
+    id: "audiocipher-stego-engine",
+    name: "AudioCipher Stego Studio // Acoustic Cipher & BFSK Modem",
+    path: "/tools/audiocipher-stego-engine",
+    band: "Security",
+    type: "integrated_tool",
+    executionType: "hybrid",
+    version: "2.6.0",
+    description: "Zero-egress loopback daemon (:8096) & hybrid browser workstation for v2 key-separated acoustic cryptography, 16-bit PCM WAV LSB stego, forensic steganalysis, DTMF/Morse DSP, BFSK air-gap modem, and 9-tool stdio MCP.",
+    alsoInApp: "/tools/audiocipher-stego-engine",
+    toolRepoId: "audiocipher-stego-engine",
+    pullCommand: "audiocipher-stego-engine serve --host 127.0.0.1 --port 8096"
+  },
+  {
     id: "agent-mock-twin",
     name: "Agent Mock Twin // Deterministic API Replay",
     path: "/tools/agent-mock-twin",

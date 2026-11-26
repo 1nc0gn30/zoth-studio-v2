@@ -38,7 +38,7 @@ export default function VaelorPage() {
         { key: 'Local Node Port', value: '127.0.0.1:8140' },
         { key: 'Topology', value: 'Feeless Directed Acyclic Graph (DAG)' },
         { key: 'Hash Primitive', value: 'SHA-256 / BLAKE3 Merkle Roots' },
-        { key: 'Consensus Coupling', value: 'Byzantine Quorum (:8096)' },
+        { key: 'Consensus Coupling', value: 'Byzantine Quorum (:8141)' },
         { key: 'Execution Scope', value: 'Local Daemon Inside Zoth Studio / ZothOS' },
         { key: 'Network Requirement', value: 'Offline & Loopback First' },
       ]}

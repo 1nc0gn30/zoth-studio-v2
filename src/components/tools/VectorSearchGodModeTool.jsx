@@ -35,7 +35,7 @@ const INITIAL_DOCS = [
   { id: 'vec_204', title: 'Neuro-Memory STDP Synaptic Daemon', text: 'Spike-timing-dependent plasticity memory graph bound to 127.0.0.1:8094 with Hebbian associative recall.', x: 85, y: 70, layer: 2 },
   { id: 'vec_309', title: 'Argon2id + AES-256-GCM Enclave Vault', text: 'Zero-cloud hardware secret storage, Shamir secret sharing quorum, and memory page locking.', x: 245, y: 125, layer: 1 },
   { id: 'vec_412', title: 'HNSW Skip-Graph & Okapi BM25 RRF', text: 'Hierarchical navigable small world graphs fused with lexical BM25 via Reciprocal Rank Fusion k=60.', x: 145, y: 140, layer: 2 },
-  { id: 'vec_518', title: 'Agent Egress Sentinel TLS Sniffer', text: 'Loopback proxy on :8095/:8096 intercepting outbound telemetry domains and enforcing zero egress.', x: 65, y: 145, layer: 0 },
+  { id: 'vec_518', title: 'Agent Egress Sentinel TLS Sniffer', text: 'Loopback proxy on :8095/:8195 intercepting outbound telemetry domains and enforcing zero egress.', x: 65, y: 145, layer: 0 },
   { id: 'vec_625', title: 'MCP Lens JSON-RPC Token Minifier', text: 'Stdio/SSE traffic sniffer and BPE schema compressor reducing agent context overhead by 38%.', x: 255, y: 60, layer: 1 },
 ];
 

@@ -467,7 +467,7 @@ export default function UncommonTelemetryDeck({ compact = false }) {
               <SplitFlapTile
                 label="FLEET SUPERVISOR"
                 value="23 LOOPBACK DAEMONS"
-                sub="Adytum :3000 · WebGen :5173 · Memory :8094 · Consensus :8096 · HexStrike :8888"
+                sub="Adytum :3000 · WebGen :5173 · Memory :8094 · Consensus :8141 · HexStrike :8888"
                 dark={dark}
                 to="/bridges"
               />

@@ -2367,54 +2367,71 @@ export const toolsDocumentation = {
       ]
   },
   "audiocipher-stego-engine": {
-      "whyUse": "100% in-browser acoustic cryptography, PCM audio LSB steganography, DTMF Goertzel decoder, ITU Morse synthesizer, and ultrasonic BFSK air-gap modem. Built for human operators and autonomous AI agents requiring zero-egress security & opsec execution without cloud SaaS lock-in.",
-      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for AudioCipher Stego Studio workflows by running 100% locally on ZothOS and in the browser.",
-      "architecture": "100% client-side in-browser execution engine (Security & OpSec) with standalone loopback workstation on 127.0.0.1:8096 and ZothOS CLI wrapper (/usr/local/bin/audiocipher-stego-engine).",
+      "whyUse": "Zero-egress acoustic cryptography (v2 key-separated 200k-round PBKDF2-HMAC-SHA256), 16-bit PCM WAV LSB/parity steganography (STEG + CRC-32), forensic PoV chi-square steganalysis, DTMF Goertzel codec, ITU Morse synthesizer, and audible/ultrasonic BFSK air-gap modem (0x55/0x7E + CRC-16).",
+      "problemSolved": "Eliminates third-party telemetry, wire-format drift, and cloud exposure for acoustic steganography and air-gap modem workflows by running locally on loopback 127.0.0.1:8096 with wire-compatible browser fallback.",
+      "architecture": "Hybrid execution engine (Security & OpSec): zero-dependency Python 3.9+ loopback daemon on 127.0.0.1:8096 with 9-tool JSON-RPC 2.0 stdio MCP server, ZothOS CLI wrapper (/usr/local/bin/audiocipher-stego-engine), live Braille Telemetry TUI, and dual-theme WebAudio workstation.",
       "aiAgentProtocol": {
-          "mcpTool": "audiocipher_stego_engine_execute",
-          "description": "Execute AudioCipher Stego Studio operations via JSON-RPC / MCP or ZothOS CLI.",
-          "cliExample": "audiocipher-stego-engine --help && audiocipher-stego-engine --json",
+          "mcpServer": "audiocipher-stego-engine mcp",
+          "protocolVersion": "2024-11-05",
+          "mcpTools": [
+              "audio_encrypt",
+              "audio_decrypt",
+              "audio_stego_embed",
+              "audio_stego_extract",
+              "audio_morse_synthesize",
+              "audio_diagnostics",
+              "audio_steganalysis",
+              "audio_modulate_fsk",
+              "audio_demodulate_fsk"
+          ],
+          "description": "Execute all 9 AudioCipher Stego Studio tools via JSON-RPC 2.0 stdio MCP (`audiocipher-stego-engine mcp`) or ZothOS CLI.",
+          "cliExample": "audiocipher-stego-engine --status --json && audiocipher-stego-engine doctor",
           "inputSchema": {
               "type": "object",
               "properties": {
-                  "action": {
+                  "tool": {
                       "type": "string",
                       "enum": [
-                          "status",
-                          "run",
-                          "audit",
-                          "export"
+                          "audio_encrypt",
+                          "audio_decrypt",
+                          "audio_stego_embed",
+                          "audio_stego_extract",
+                          "audio_morse_synthesize",
+                          "audio_diagnostics",
+                          "audio_steganalysis",
+                          "audio_modulate_fsk",
+                          "audio_demodulate_fsk"
                       ],
-                      "description": "Operation to run on AudioCipher Stego Studio"
+                      "description": "MCP tool name exposed by audiocipher-stego-engine mcp"
                   },
-                  "target": {
-                      "type": "string",
-                      "description": "Primary target payload or parameter"
+                  "arguments": {
+                      "type": "object",
+                      "description": "Tool-specific JSON arguments (e.g. payload, volume_db, carrier_wav_base64, audio_wav_base64, baud_rate, ultrasonic)"
                   }
               },
               "required": [
-                  "action"
+                  "tool"
               ]
           },
           "outputSchema": {
-              "status": "ONLINE | SUCCESS",
-              "tool": "audiocipher-stego-engine",
-              "port": 8096,
-              "results": "object"
+              "status": "success | error",
+              "service": "audiocipher-stego-engine",
+              "version": "2.6.0",
+              "port": 8096
           }
       },
       "quickstart": [
-          "audiocipher-stego-engine --help",
-          "audiocipher-stego-engine --json",
+          "audiocipher-stego-engine --version && audiocipher-stego-engine --status --json",
+          "audiocipher-stego-engine serve --host 127.0.0.1 --port 8096",
           "audiocipher-stego-engine-tui --status",
-          "# Open standalone workstation at http://127.0.0.1:8096 or Studio route /tools/audiocipher-stego-engine"
+          "audiocipher-stego-engine mcp  # 9 JSON-RPC 2.0 stdio tools"
       ],
       "features": [
-          "100% in-browser acoustic cryptography, PCM audio LSB steganography, DTMF Goertzel decoder, ITU Morse synthesizer, and ultrasonic BFSK air-gap modem.",
-          "Interactive God-Mode Workstation in Zoth Studio v2 (/tools/audiocipher-stego-engine) and standalone server on http://127.0.0.1:8096",
-          "Native ZothOS CLI binary (/usr/local/bin/audiocipher-stego-engine) and 60fps Unicode U+2800 Braille TUI (audiocipher-stego-engine-tui)",
-          "100% Free & Open-Access execution with zero cloud telemetry and strict loopback isolation",
-          "Verified 0 console errors and 0px horizontal overflow across Mobile (390px), Tablet (820px), and Desktop (1425px)"
+          "v2 Key-Separated Acoustic Cipher (200k-round PBKDF2-HMAC-SHA256 + independent enc/mac keys, legacy v1 decrypt compat)",
+          "16-bit PCM WAV LSB & Parity Steganography (STEG + LE uint32 + CRC-32) + PoV Chi-Square Forensic Steganalysis",
+          "Audible Bell 202 & Ultrasonic (>18 kHz) BFSK Modem (0x55/0x7E + CRC-16), ITU Morse & DTMF Goertzel Codec",
+          "9-Tool JSON-RPC 2.0 Stdio MCP Server, Hardened Loopback Daemon (:8096), Native CLI & Live Braille Telemetry TUI",
+          "100% Free & Open-Access with Editorial Ivory Light Mode, Obsidian Dark Mode, and Zero External Egress"
       ]
   },
   "cyber-turtle-studio": {
