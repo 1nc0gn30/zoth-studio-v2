@@ -445,9 +445,9 @@ export const microTools = [
     priceCents: 0,
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     pricing: '100% Free & Open-Access',
-    description: '100% in-browser certification DAG solver, career roadmap planner, and study guide generator with 137 credentials, procedural DAG brand media, and 100% free open-access execution.',
-    version: '2.5.0',
-    pull: 'git clone https://github.com/1nc0gn30/certpath-roadmap-studio.git && cd certpath-roadmap-studio && python3 server.py --port 8093',
+    description: '137-credential certification DAG solver, 8-role career roadmap planner, Monte Carlo P50/P80/P95 velocity simulator, financial ROI & skill overlap engine, and 12-tool stdlib MCP server. 100% free and open-access.',
+    version: '2.6.0',
+    pull: 'git clone https://github.com/1nc0gn30/certpath-roadmap-studio.git && cd certpath-roadmap-studio && PYTHONPATH=src python3 -m certpath_roadmap_studio.cli serve --host 127.0.0.1 --port 8093 --no-browser',
   },
   {
     id: 'pwa-manifest-builder',

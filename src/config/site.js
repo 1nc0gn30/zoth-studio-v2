@@ -698,6 +698,38 @@ export function generateSchemaGraph(path = '/') {
           ...(tool.liveUrl ? { 'url': tool.liveUrl } : {}),
         }
       });
+      if (tool.id === 'certpath-roadmap-studio') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What engines and MCP tools are included in CertPath Roadmap Studio v2.6.0?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'CertPath Roadmap Studio v2.6.0 includes a verified 137-credential acyclic prerequisite DAG solver, 8 career role archetypes, a Monte Carlo P50/P80/P95 learning velocity simulator, a financial ROI and Jaccard skill-overlap calculator, a hardened loopback REST server on 127.0.0.1:8093, and 12 pure-Python stdlib JSON-RPC 2.0 MCP stdio tools.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Does CertPath Roadmap Studio run locally with zero external CDN egress?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Both the 127.0.0.1:8093 workstation and the Zoth Studio v2 interactive deck run locally with zero external Google Fonts or telemetry requests, strict loopback Host and Origin allowlists, 1 MiB body limits, and Markdown, Mermaid, CSV, and JSON exports.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is CertPath Roadmap Studio free and open-access?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. CertPath Roadmap Studio is 100% free and open-access under the MIT license with zero paywalls, zero license keys, and optional community support via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'badge3d-coin-generator') {
         graph.push({
           '@type': 'FAQPage',

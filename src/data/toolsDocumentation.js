@@ -1643,53 +1643,73 @@ export const toolsDocumentation = {
       ]
   },
   "certpath-roadmap-studio": {
-      "whyUse": "100% in-browser certification DAG solver, career roadmap planner, and study guide generator with 137 credentials, procedural DAG brand media, and 100% free open-access execution. Built for human operators and autonomous AI agents requiring zero-egress automation execution without cloud SaaS lock-in.",
-      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for CertPath Roadmap Studio workflows by running 100% locally on ZothOS and in the browser.",
-      "architecture": "100% client-side in-browser execution engine (Automation) with standalone loopback workstation on 127.0.0.1:8093 and ZothOS CLI wrapper (/usr/local/bin/certpath-roadmap-studio).",
+      "whyUse": "Zero-dependency Python 3.9+ and in-browser certification prerequisite DAG solver, 8-role career roadmap planner, Monte Carlo P50/P80/P95 velocity simulator, financial ROI & Jaccard skill-overlap calculator, and 12-tool stdio MCP server across 137 verified IT, cloud, AI, and cybersecurity credentials.",
+      "problemSolved": "Eliminates manual prerequisite guesswork, cloud telemetry, and third-party SaaS paywalls by resolving bidirectional DAG dependencies, completion-date probability bands, and exam payback metrics 100% locally on 127.0.0.1:8093 or client-side.",
+      "architecture": "Pure Python stdlib (zero third-party runtime dependencies) backend exposing REST endpoints on hardened loopback 127.0.0.1:8093 (Host/Origin allowlists, 1 MiB body cap, CSP, HEAD, symlink guard), pure-stdlib JSON-RPC 2.0 stdio MCP server (12 tools), and dual-theme zero-egress browser workstation.",
       "aiAgentProtocol": {
-          "mcpTool": "certpath_roadmap_studio_execute",
-          "description": "Execute CertPath Roadmap Studio operations via JSON-RPC / MCP or ZothOS CLI.",
-          "cliExample": "certpath-roadmap-studio --help && certpath-roadmap-studio --json",
+          "mcpTool": "certpath_plan_career",
+          "mcpTools": [
+              "certpath_search",
+              "certpath_resolve_prereqs",
+              "certpath_plan_career",
+              "certpath_compare",
+              "certpath_export_dag",
+              "certpath_roles",
+              "certpath_catalog_stats",
+              "certpath_diagnostics",
+              "certpath_simulate_velocity",
+              "certpath_calculate_roi",
+              "certpath_skill_overlap",
+              "certpath_portfolio_valuation"
+          ],
+          "description": "Pure Python stdlib JSON-RPC 2.0 stdio MCP server (`certpath mcp`) exposing 12 certification DAG, career roadmap, Monte Carlo velocity, ROI, skill overlap, and portfolio valuation tools.",
+          "cliExample": "certpath search kubernetes --json && certpath prereqs cyber-oscp --json && certpath plan --role cloud_solutions_architect --hours 15 --format json",
           "inputSchema": {
               "type": "object",
               "properties": {
-                  "action": {
+                  "role": {
                       "type": "string",
-                      "enum": [
-                          "status",
-                          "run",
-                          "audit",
-                          "export"
-                      ],
-                      "description": "Operation to run on CertPath Roadmap Studio"
+                      "description": "Target career role archetype (e.g. cloud_security_architect, penetration_tester, cloud_solutions_architect, soc_analyst, ai_ml_engineer, fullstack_devops_lead, data_platform_architect, devops_platform_engineer)"
                   },
                   "target": {
                       "type": "string",
-                      "description": "Primary target payload or parameter"
+                      "description": "Target certification ID (e.g. cyber-oscp, cloud-aws-pro, cyber-cissp)"
+                  },
+                  "hours_per_week": {
+                      "type": "integer",
+                      "description": "Weekly study hours (1..168, default 10)"
+                  },
+                  "format": {
+                      "type": "string",
+                      "enum": ["markdown", "json", "mermaid"],
+                      "description": "Roadmap output format"
                   }
-              },
-              "required": [
-                  "action"
-              ]
+              }
           },
           "outputSchema": {
-              "status": "ONLINE | SUCCESS",
-              "tool": "certpath-roadmap-studio",
-              "port": 8093,
-              "results": "object"
+              "target_name": "string",
+              "total_hours": "integer",
+              "total_weeks": "number",
+              "total_cost_usd": "number",
+              "phases": "array"
           }
       },
       "quickstart": [
-          "certpath-roadmap-studio --help",
-          "certpath-roadmap-studio --json",
-          "certpath-roadmap-studio-tui --status",
-          "# Open standalone workstation at http://127.0.0.1:8093 or Studio route /tools/certpath-roadmap-studio"
+          "certpath --version && certpath stats --json",
+          "certpath search kubernetes --json",
+          "certpath prereqs cyber-oscp --json",
+          "certpath plan --role cloud_solutions_architect --hours 15 --format json",
+          "certpath roi --cert cyber-oscp --json",
+          "certpath simulate --role soc_analyst --hours 12 --trials 200 --json",
+          "certpath mermaid --role penetration_tester",
+          "certpath-roadmap-studio-tui --json",
+          "certpath serve --host 127.0.0.1 --port 8093 --no-browser"
       ],
       "features": [
-          "\ud83e\udd16 FastMCP Model Context Protocol Server \u2014 Direct stdio JSON-RPC 2.0 integration for Claude Desktop, Cursor, and Cline.",
-          "\ud83d\udee1\ufe0f 100% Pure Python Standard Library \u2014 Zero third-party runtime dependencies. Compatible with Python 3.9\u20133.13 across Linux, macOS, Windows, and Termux.",
-          "Pure Client Execution \u2014 100% in-browser AST & DAG traversal with zero broken cloud APIs or external backend requirements.",
-          "Console Errors \u2014 0 console errors across all test paths."
+          "Pure Stdlib JSON-RPC 2.0 MCP Server — 12 tools (certpath_search, certpath_resolve_prereqs, certpath_plan_career, certpath_compare, certpath_export_dag, certpath_roles, certpath_catalog_stats, certpath_diagnostics, certpath_simulate_velocity, certpath_calculate_roi, certpath_skill_overlap, certpath_portfolio_valuation) over stdio.",
+          "Hardened Loopback Workstation (:8093) — Strict Host & Origin allowlists, 1 MiB body limit, strict JSON/numeric parsing, symlink containment, dual-theme Editorial Ivory & Obsidian Gold UI, and zero external CDN requests.",
+          "Monte Carlo Velocity & Financial ROI — P50/P80/P95 completion timelines with fatigue analysis, Jaccard skill overlap, HHI vendor diversification, and honest $0 free-credential ROI reporting.",
+          "100% Free & Open-Access — Zero paywalls, zero external telemetry, and full Markdown/Mermaid/CSV/JSON/JSON-LD exports."
       ]
   },
   "pwa-manifest-builder": {
