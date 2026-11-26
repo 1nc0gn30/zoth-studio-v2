@@ -75,6 +75,7 @@ const SAMPLE_ROUTES = [
   '/workstations/chronicle',
   '/tools/chronicle',
   '/tools/certpath-roadmap-studio',
+  '/tools/city-desk',
   '/workstations/mission-control',
   '/docs/math/stdp',
 ];
@@ -462,6 +463,23 @@ async function main() {
         });
         if (!cpCheck.hasTitle || !cpCheck.hasH1 || !cpCheck.hasSoftwareApp || !cpCheck.hasFaq) {
           failureReason = `certpath-roadmap-studio invariants failed: ${JSON.stringify(cpCheck)}`;
+        }
+      } else if (route === '/tools/city-desk') {
+        const cdCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          return {
+            hasTitle: document.title.includes('City Desk'),
+            hasH1: h1Text.includes('City Desk'),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+          };
+        });
+        if (!cdCheck.hasTitle || !cdCheck.hasH1 || !cdCheck.hasSoftwareApp || !cdCheck.hasFaq) {
+          failureReason = `city-desk invariants failed: ${JSON.stringify(cdCheck)}`;
         }
       } else if (route === '/bridges') {
         const brCheck = await page.evaluate(() => {

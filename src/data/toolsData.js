@@ -633,9 +633,9 @@ export const microTools = [
     pricing: '100% Free & Open-Access',
     localPort: 8087,
     localUrl: 'http://127.0.0.1:8087',
-    description: 'One studio writes the finished page for a trade and a city. 1,000 localized service pages across 20 trades and 50 mid-size cities with live customizer, multi-mipmap ICO, Pro bundle export, and 100% free & open-access with optional Buy Us a Coffee & Solana tip support.',
-    version: '2.5.0',
-    pull: 'python3 server.py --port 8087  # or: city-desk --status',
+    description: 'Deterministic static offer-page compiler generating 1,000 localized HTML + Schema.org pages across 20 real trades and 50 US cities, with interactive 60-second written quote estimator, standalone HTML export, and a hardened 127.0.0.1:8087 loopback REST workstation. 100% free & open-access.',
+    version: '2.6.0',
+    pull: 'city-desk --serve  # or: python3 server.py --host 127.0.0.1 --port 8087',
   },
   {
     id: 'agent-egress-sentinel',

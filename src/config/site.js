@@ -703,6 +703,38 @@ export function generateSchemaGraph(path = '/') {
           ...(tool.liveUrl ? { 'url': tool.liveUrl } : {}),
         }
       });
+      if (tool.id === 'city-desk') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What does City Desk v2.6.0 compile and serve?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'City Desk v2.6.0 deterministically compiles 1,000 localized HTML + Schema.org offer pages across 20 canonical service trades and 50 mid-size US cities, with an interactive 60-second written quote estimator, escaped standalone HTML/JSON/CSV exports, and a hardened loopback REST server on 127.0.0.1:8087.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Does City Desk work offline without running the :8087 daemon?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. The Zoth Studio /tools/city-desk workstation includes the full 20 trades × 50 US cities engine directly in the browser, automatically bridging to 127.0.0.1:8087 when active and running 100% client-side with zero external CDN requests when idle.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is City Desk free and open-access?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. City Desk is 100% free and open-access under the MIT license with zero paywalls, zero license keys, and optional voluntary support via Buy Us a Coffee on Stripe or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'certpath-roadmap-studio') {
         graph.push({
           '@type': 'FAQPage',

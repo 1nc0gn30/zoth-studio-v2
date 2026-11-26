@@ -64,6 +64,7 @@ const AudioCipherGodModeTool = lazy(() => import('../components/tools/AudioCiphe
 const AzothArchonGodModeTool = lazy(() => import('../components/tools/AzothArchonGodModeTool'));
 const Badge3dCoinGodModeTool = lazy(() => import('../components/tools/Badge3dCoinGodModeTool'));
 const CertPathRoadmapGodModeTool = lazy(() => import('../components/tools/CertPathRoadmapGodModeTool'));
+const CityDeskGodModeTool = lazy(() => import('../components/tools/CityDeskGodModeTool'));
 const CivicProcurementGodModeTool = lazy(() => import('../components/tools/CivicProcurementGodModeTool'));
 const CronRhythmGodModeTool = lazy(() => import('../components/tools/CronRhythmGodModeTool'));
 const CwvSpeedEngineGodModeTool = lazy(() => import('../components/tools/CwvSpeedEngineGodModeTool'));
@@ -235,7 +236,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'yara-sigma-forge': YaraSigmaForgeGodModeTool,
   'reality-shader-forge': RealityShaderForgeGodModeTool,
   'anderson-security-sentinel': AndersonSentinelGodModeTool,
-  'city-desk': CivicProcurementGodModeTool,
+  'city-desk': CityDeskGodModeTool,
   'storefront-catalog': StorefrontCatalogGodModeTool,
   'pixel-cast': PixelCastGodModeTool,
   'aether-observatory': AetherObservatoryGodModeTool,
@@ -1225,7 +1226,7 @@ export default function RealToolWorkspacePage() {
                 src={
                   tool.id === 'agent-budget-sentinel'
                     ? `${tool.localUrl || `http://127.0.0.1:${tool.localPort}`}?theme=${isDark ? 'dark' : 'light'}&embed=1`
-                    : tool.id === 'certpath-roadmap-studio' || tool.id === 'badge3d-coin-generator' || tool.id === 'azoth-local-agent' || tool.id === 'audiocipher-stego-engine' || tool.id === 'anderson-security-sentinel' || tool.id === 'agent-capsule-jail' || tool.id === 'agent-egress-sentinel' || tool.id === 'agent-flight-recorder' || tool.id === 'agent-gods-eye' || tool.id === 'agent-mock-twin' || tool.id === 'agent-policy-auditor' || tool.id === 'agent-prompt-firewall' || tool.id === 'agent-voice-call'
+                    : tool.id === 'city-desk' || tool.id === 'certpath-roadmap-studio' || tool.id === 'badge3d-coin-generator' || tool.id === 'azoth-local-agent' || tool.id === 'audiocipher-stego-engine' || tool.id === 'anderson-security-sentinel' || tool.id === 'agent-capsule-jail' || tool.id === 'agent-egress-sentinel' || tool.id === 'agent-flight-recorder' || tool.id === 'agent-gods-eye' || tool.id === 'agent-mock-twin' || tool.id === 'agent-policy-auditor' || tool.id === 'agent-prompt-firewall' || tool.id === 'agent-voice-call'
                     ? `${tool.localUrl || `http://127.0.0.1:${tool.localPort}`}/?embed=1&theme=${isDark ? 'dark' : 'light'}`
                     : (tool.localUrl || `http://127.0.0.1:${tool.localPort}`)
                 }

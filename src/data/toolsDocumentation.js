@@ -1129,37 +1129,40 @@ export const toolsDocumentation = {
   },
 
   'city-desk': {
-    whyUse: 'One studio writes the finished page for a trade and a city. The page is what gets sent. City Desk is not a local office and not a contractor directory.',
-    problemSolved: 'The owner fills in name, phone, and email. The page does not invent reviews, rankings, a local shop, a reply address, or a domain. The Boise page prices are the price of the page, not a job quote.',
-    architecture: 'Node static generator. It rebuilds the full finished set together so a later build does not revert a page. Painters use the tape layout. Other trades use the same bones with an ink rule.',
+    whyUse: 'Compiles 1,000 localized service offer pages (20 canonical trades × 50 mid-size US cities) into self-contained HTML with deterministic FNV-1a copy rotation, Schema.org JSON-LD, interactive 60-second written price estimators, and standalone single-file HTML export.',
+    problemSolved: 'Eliminates agency retainers and broken template drift: every trade page leaves owner business name, phone, and email blank until personalized via URL query parameters or the live synthesizer, with zero fabricated reviews, zero rank guarantees, and a hardened 127.0.0.1:8087 loopback server.',
+    architecture: 'Zero-dependency Node.js static compiler (build.js + data.js + config.js) paired with a hardened Python 3 ThreadingHTTPServer (server.py on 127.0.0.1:8087) featuring strict SITE_DIR path containment, loopback Host/Origin allowlists, 1 MiB body limits, dynamic catalog parity from site/offers.json, and Editorial Ivory / Obsidian Gold dual-theme parity.',
     aiAgentProtocol: {
-      mcpTool: 'citydesk_build_pages',
-      description: 'Build the finished page set. Each page is one trade in one city. The first sendable set is Boise painters, plumbers, and HVAC.',
-      cliExample: 'cd city-desk && node build.js',
+      mcpTool: 'static_discovery_only (/.well-known/mcp.json + :8087 REST)',
+      description: 'City Desk does not run a stdio MCP server. Machine-readable discovery is exposed via static /.well-known/mcp.json, /offers.json, /api/services.json, and live loopback REST endpoints (/health, /api/trades, /api/cities, /api/offers, POST /api/synth, POST /api/lead) on 127.0.0.1:8087.',
+      cliExample: 'city-desk --build && city-desk --serve  # or: python3 server.py --host 127.0.0.1 --port 8087',
       inputSchema: {
         type: 'object',
         properties: {
-          city: { type: 'string' },
-          trade: { type: 'string' }
+          trade: { type: 'string', description: 'One of 20 canonical trade slugs (e.g. painters, plumbers, hvac, dentists)' },
+          city: { type: 'string', description: 'One of 50 canonical US city slugs (e.g. boise-id, norfolk-va, raleigh-nc)' },
+          biz: { type: 'string', description: 'Optional owner business name for URL personalization' },
+          phone: { type: 'string', description: 'Optional business phone (blank by default)' }
         }
       },
       outputSchema: {
-        pageCount: 'number',
-        distPath: 'string',
-        buildTimeMs: 'number'
+        trades_count: 'number (20)',
+        cities_count: 'number (50)',
+        total_pages: 'number (1000)',
+        preview_url: 'string'
       }
     },
     quickstart: [
       'git clone https://github.com/1nc0gn30/city-desk.git',
       'cd city-desk && node build.js',
-      'python3 -m http.server 8877 --directory site'
+      'python3 server.py --host 127.0.0.1 --port 8087  # or: city-desk --serve'
     ],
     features: [
-      'Finished page for one trade in one city, sent as the site',
-      'Boise painters $800, plumbers $900, HVAC $1,100, labeled as the page price',
-      'Owner name, phone, and email stay blank lines',
-      'Footer says this is not a local office',
-      'No reviews, rankings, invented neighborhoods, reply address, or domain'
+      '20 canonical trades × 50 mid-size US cities = 1,000 compiled HTML + Schema.org pages',
+      'Live browser synthesizer with escaped standalone .html export and offers.json / CSV export',
+      'Hardened 127.0.0.1:8087 loopback server (path containment, Host/Origin allowlist, 1 MiB cap, POST /api/lead)',
+      'Full Editorial Ivory Light & Obsidian Gold Dark dual-theme UI with self-hosted fonts and zero external CDN egress',
+      'Owner business name, phone, and email default blank; config.js controls canonical origin and reply-to contact'
     ]
   },
 

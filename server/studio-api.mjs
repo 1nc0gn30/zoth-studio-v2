@@ -1808,9 +1808,11 @@ export function studioMiddleware() {
               parsed.agents = parsed.agents.map((a) => ({
                 ...a,
                 binary: a.binary ? sanitizeErrorMessage(a.binary) : a.binary,
+                version: a.version ? sanitizeErrorMessage(a.version) : a.version,
+                error: a.error ? sanitizeErrorMessage(a.error) : a.error,
               }));
             }
-            send(res, 200, parsed);
+            send(res, 200, JSON.parse(sanitizeErrorMessage(JSON.stringify(parsed))));
           } catch {
             send(res, 200, { raw: sanitizeErrorMessage(stdout) });
           }
