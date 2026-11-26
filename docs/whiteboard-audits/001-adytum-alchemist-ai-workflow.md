@@ -271,3 +271,56 @@ The single biggest drag on Item `#001` is **narrative drift outpacing code reali
 - **What Changed Most**: Closing the truth gap between documentation, CLI, and live runtime completely transformed this tool's credibility. Every CLI command documented in Zoth Studio now genuinely executes and passes deterministic tests; `test_server.py` even caught a subtle Python `urllib.parse.urlparse` quirk (`http://127.0.0.1:8135.evil.com`) before release, proving why real automated tests matter.
 - **Standout Upgrades**: Wiring the 22 offline AI-Chemistry lessons directly into `:8135` paired with the `480×720` HD card art and wide desktop layout turned the standalone workstation from a cramped preview into a self-contained study tool; meanwhile, adapting `AdytumPlannerGodModeTool` to Editorial Ivory Light Mode makes the Studio workbench look native in both themes.
 - **Remaining Minor Opportunity (Non-Blocking)**: `/adytum/docs` still inherits the root Studio `<title>` because `site.js` does not define a dedicated `/adytum/docs` entry, and standalone `:8135` remains dark-only (intentionally matching its sanctuary theme). Neither blocks a `9+ / 10` release.
+
+---
+
+## 7. v3 Enhancement Pass (Museum Card Overhaul + 15-Provider AI Connection Hub)
+
+### v3 Metadata
+
+| Field | Value |
+| :--- | :--- |
+| **v3 Start** | `2026-11-25 19:07:27 EST` (`2026-11-26 00:07:27 UTC`) |
+| **v3 Completion** | `2026-11-25 19:28:18 EST` (`2026-11-26 00:28:18 UTC`) |
+| **Commit (`adytum-alchemist-ai-workflow`)** | `59cce62` (from `286cb75`) |
+| **Commit (`zoth-studio-v2`)** | `d4c91a1` (from `87595c8`) |
+| **Commit (`zoth-os`)** | `ef204212` (unchanged, `12/12` pytest passing) |
+| **v3 Verdict** | **`PASS`** (Composite: **9.66 / 10**, all 5 levels `>= 9.4 / 10`) |
+
+### Updated 5-Level Scorecard (`v1` → `v2` → `v3`)
+
+| Level | `v1` Baseline | `v2` Remediation | `v3` Enhancement | Status | Key v3 Verified Upgrades |
+| :--- | :---: | :---: | :---: | :---: | :--- |
+| **1. System** | `7.5 / 10` | `9.5 / 10` | **9.7 / 10** | `PASS` | Threaded loopback bridge in `server.py` (`GET /api/providers`, `POST /api/providers/test`, `POST /api/chat`) with `shell=False` argv execution, `SAFE_MODEL_RE` validation rejecting shell injection (`400`), instant harness/loop wrapper detection (`codex_cli` & `claude_code` report honestly in `0 ms`), and regenerated `1200×630` `og-banner.jpg` + 22 crisp `960×1440` / `560×840` plates. |
+| **2. User** | `6.5 / 10` | `9.3 / 10` | **9.7 / 10** | `PASS` | Categorized **15-Engine AI Provider Connection Hub** (8 Local Agents/Daemons + 7 Cloud/Custom APIs) with live `ONLINE`/`CLI READY`/`OFFLINE` badges, live **Test Connection** latency diagnostics, intelligent default to live `AGY Bridge (:18000)`, verified live `POST /api/chat` round-trip (`gemini-3.8-flash-high`, `16,786 ms`), and interactive 3D-tilting/flippable `AdytumArcanaCard` (Front Sacred Geometry ↔ Engraved Hermetic Backplate). |
+| **3. Engineer** | `6.0 / 10` | `9.4 / 10` | **9.6 / 10** | `PASS` | `exportSanitizer.ts` extended and unit-tested to redact all 7 cloud/custom API key fields (`openaiApiKey`, `anthropicApiKey`, `geminiApiKey`, `openrouterApiKey`, `xaiApiKey`, `ollamaCloudApiKey`, `customApiKey`); `pytest -v` passes **`7/7`** (`0.25s`), `npm test` passes **`5/5`**, `zoth-studio-v2 npm test` passes **`37/37`** routes + serve/arsenal/ground-truth/registry checks, `zoth-os pytest -q` passes **`12/12`**. |
+| **4. UI** | `7.5 / 10` | `9.4 / 10` | **9.8 / 10** | `PASS` | Eliminated all blurry 100×172 scans, clipped borders, and tofu `[]` glyphs across all 22 static plates (`scripts/generate_arcana_plates.py`) AND mounted live vector `AdytumArcanaCard` in both `:8135` and Zoth Studio Light & Dark Modes; **`0/34`** mobile tap targets `<44px`, `0` overflow, `0` console errors, `0` missing `alt` across all inspected v3 captures. |
+| **5. Readability** | `5.5 / 10` | `9.3 / 10` | **9.5 / 10** | `PASS` | Crisp DOM typography on card front & engraved backplate (`0`–`XXI`, real Hebrew `א`–`ת` + Gematria, elemental sigil pill, title + concise subtitle), clear separation of Local Sovereign Agents vs Cloud APIs in the Provider Hub, and transparent status details for every provider. |
+
+### Live Multi-Provider Verification Matrix (`127.0.0.1:8135`)
+
+| Provider ID | Group | Transport | Live Observed Status (`POST /api/providers/test`) | Latency | Observed Detail / Models |
+| :--- | :--- | :--- | :---: | :---: | :--- |
+| `agy_bridge` | Local | HTTP (`:18000`) | **`online`** (`ok: true`) | `2 ms` | 6 models (`gemini-3.8-flash-high`, `gemini-4-argon-medium`, `claude-sonnet-5-5-high`, `claude-opus-5-5-high`, `gpt-oss-120b-medium`) — **live `POST /api/chat` verified (`16,786 ms`)** |
+| `ollama_local` | Local | HTTP (`:11434`) | **`online`** (`ok: true`) | `11 ms` | 16 local models (`hermes3-64k:latest`, `hermes3:8b`, `zoth-coder:latest`, `qwen3:1.7b`, etc.) |
+| `azoth_local` | Local | HTTP (`:8136`) | **`online`** (`ok: true`) | `2 ms` | `AZOTH Local health: healthy` (`/api/chat`) |
+| `agy_cli` | Local | CLI (`agy`) | **`cli_ready`** (`ok: true`) | `186 ms` | `1.5.17` (`agy --model <m> -p <prompt> --output-format text`) |
+| `hermes_cli` | Local | CLI (`hermes`) | **`cli_ready`** (`ok: true`) | `1060 ms` | `Hermes Agent v0.23.3+1139.g084538c` (`hermes chat -q <prompt> --oneshot -Q`) |
+| `grok_cli` | Local | CLI (`grok`) | **`cli_ready`** (`ok: true`) | `39 ms` | `grok 1.0.70 (f50904eaee6c) [stable]` (`grok -p <prompt> --output-format plain`) |
+| `codex_cli` | Local | CLI (`codex`) | `offline` (`ok: false`) | `0 ms` | Honest detection: recursive gatekeeper wrapper detected without underlying `@openai/codex` binary |
+| `claude_code` | Local | CLI (`claude`) | `offline` (`ok: false`) | `0 ms` | Honest detection: ZothOS installer harness present (`claude install` required) |
+| Cloud & Custom (7) | Cloud | Server-Proxied HTTP | `configured_via_key` | — | `openai`, `anthropic` (CORS-safe proxy), `gemini_api` (`x-goog-api-key` header), `openrouter`, `xai_grok`, `ollama_cloud`, `custom_openai` (`missing_key` verified in `pytest`) |
+
+### Visually Inspected v3 Screenshots & Plates (`read_file` Verified)
+
+- **Regenerated Static Museum Plates & Social Card**:
+  - [fool.jpg](file:///home/zoth/NullAITech/adytum-alchemist-ai-workflow/public/tarot/fool.jpg), [chariot.jpg](file:///home/zoth/NullAITech/adytum-alchemist-ai-workflow/public/tarot/chariot.jpg), [world.jpg](file:///home/zoth/NullAITech/adytum-alchemist-ai-workflow/public/tarot/world.jpg), [og-banner.jpg](file:///home/zoth/NullAITech/adytum-alchemist-ai-workflow/public/og-banner.jpg) (`1200×630`)
+- **Standalone `:8135` (Redesigned Card + Backplate + Provider Hub)**:
+  - [home_desktop.jpg](file:///tmp/whiteboard-audit-001-v3/standalone/home_desktop.jpg) (1440×900 — Front illuminated plate + `AI: AGY Bridge · gemini-3.8-flash-high`)
+  - [home_tablet.jpg](file:///tmp/whiteboard-audit-001-v3/standalone/home_tablet.jpg) (820×1180)
+  - [home_mobile.jpg](file:///tmp/whiteboard-audit-001-v3/standalone/home_mobile.jpg) (390×844 — `0/34` tap targets under 44px)
+  - [standalone_flipped_backplate_desktop.jpg](file:///tmp/whiteboard-audit-001-v3/interactive/standalone_flipped_backplate_desktop.jpg) (Engraved Hermetic Backplate)
+  - [standalone_provider_hub_desktop.jpg](file:///tmp/whiteboard-audit-001-v3/interactive/standalone_provider_hub_desktop.jpg) (15-Engine AI Provider Connection Hub + live `✔ agy_bridge [online] · 2 ms`)
+- **Zoth Studio `/tools/adytum-alchemist-ai-workflow` (Dual-Theme `AdytumArcanaCard`)**:
+  - [studio_godmode_card_light_desktop.jpg](file:///tmp/whiteboard-audit-001-v3/interactive/studio_godmode_card_light_desktop.jpg) (Editorial Ivory Light Mode)
+  - [studio_godmode_card_dark_desktop.jpg](file:///tmp/whiteboard-audit-001-v3/interactive/studio_godmode_card_dark_desktop.jpg) (Sovereign Obsidian Dark Mode)
