@@ -247,39 +247,41 @@ export const toolsDocumentation = {
   },
 
   'azoth-local-agent': {
-    whyUse: 'A sovereign Archon orchestrator agent that runs 100% locally on your machine. Dispatches tasks across subagents, tools, and background terminals without piping your code, credentials, or intentions to third-party cloud providers.',
-    problemSolved: 'Removes total dependence on proprietary cloud-based coding agents that harvest user telemetry, log codebase contexts, and impose strict rate limits.',
-    architecture: 'Python 3.10+ async core orchestrator with pluggable local LLM backends (Ollama, llama.cpp, vLLM) and optional authenticated cloud model bridges (Claude, GPT-4, DeepSeek).',
+    whyUse: 'A hardened loopback Archon ReAct agent (127.0.0.1:8136) that routes tasks across local Ollama and installed CLI engines (Hermes, AGY, Codex, Grok CLI, Claude, Gemini) with Playwright browser automation, DuckyScript studio, Python sandbox, and JSON-RPC 2.0 MCP stdio.',
+    problemSolved: 'Eliminates unauthenticated localhost/cloud agent risks and proprietary telemetry by running a token-gated, SSRF-guarded, workspace-contained Archon runtime 100% on your own machine.',
+    architecture: 'Python FastAPI daemon (v3.1.0) on 127.0.0.1:8136 with pure ASGI LoopbackSecurityMiddleware (strict Host/Origin allowlists, per-boot CSPRNG token gating, 1 MiB body limit), Path.is_relative_to() sandbox containment, SSRF-guarded web/browser tools, and 36 JSON-RPC 2.0 MCP stdio tools.',
     aiAgentProtocol: {
-      mcpTool: 'azoth_dispatch_task',
-      description: 'Dispatch an autonomous sub-agent with isolated context and bounded file permissions.',
-      cliExample: 'azoth run --task "Audit auth middleware" --model ollama:qwen2.5-coder:7b',
+      mcpTool: 'azoth_agent_query',
+      description: 'Send a high-level task to AZOTH Local Archon Agent (plus 35 native azoth_* tools including azoth_run_python, azoth_duckyscript, azoth_deep_search, azoth_browser_navigate, and azoth_vm_status).',
+      cliExample: 'azoth --engine ollama --mode coder -q "Inspect workspace tests" --json',
       inputSchema: {
         type: 'object',
         properties: {
-          task: { type: 'string', description: 'High-level task description' },
-          allowedTools: { type: 'array', items: { type: 'string' } },
-          maxIterations: { type: 'number', default: 10 }
+          prompt: { type: 'string', description: 'Task or query description for the agent' },
+          engine: { type: 'string', description: 'Engine ID: ollama, hermes, agy, codex, grok_cli, claude, gemini', default: 'ollama' }
         },
-        required: ['task']
+        required: ['prompt']
       },
       outputSchema: {
-        success: 'boolean',
-        artifactsCreated: ['string'],
-        executionLog: 'string'
+        ok: 'boolean',
+        reply: 'string',
+        thinking: 'string',
+        engine: 'string',
+        mode: 'string'
       }
     },
     quickstart: [
       'git clone https://github.com/NullAITech/azoth-local-agent.git',
-      'cd azoth-local-agent && pip install -e .',
-      'azoth doctor && azoth run --help'
+      'cd azoth-local-agent && pip install -r requirements.txt',
+      'azoth --version && azoth status && azoth modes && azoth tools',
+      'azoth -q "Summarize sandbox workspace" --mode regular --json'
     ],
     features: [
-      'Multi-agent role specialization (Architect, Coder, Reviewer, Janitor)',
-      'Subagent spawning with bounded workspaces and non-interfering branches',
-      'Local Ollama inference support with automated fallback routing',
-      'Zero-telemetry audit trail recorded in local markdown artifacts',
-      'Native integration with Zoth Studio and ZothOS terminals'
+      'Hardened loopback cockpit on 127.0.0.1:8136 with Host/Origin allowlists & per-boot X-Azoth-Token auth',
+      '36 JSON-RPC 2.0 MCP stdio tools (azoth_agent_query + 35 azoth_* tools) via azoth mcp',
+      'Multi-engine routing across Ollama, Hermes, AGY, Codex, Grok CLI, Claude & Gemini with offline fallback',
+      'SSRF-guarded Playwright browser sandbox, DuckyScript macro studio & stateful Python workspace REPL',
+      'Editorial Ivory Light & Obsidian Dark dual-theme parity, live :8136 TUI, and 100% free open access'
     ]
   },
 

@@ -1223,7 +1223,7 @@ export default function RealToolWorkspacePage() {
                 src={
                   tool.id === 'agent-budget-sentinel'
                     ? `${tool.localUrl || `http://127.0.0.1:${tool.localPort}`}?theme=${isDark ? 'dark' : 'light'}&embed=1`
-                    : tool.id === 'audiocipher-stego-engine' || tool.id === 'anderson-security-sentinel' || tool.id === 'agent-capsule-jail' || tool.id === 'agent-egress-sentinel' || tool.id === 'agent-flight-recorder' || tool.id === 'agent-gods-eye' || tool.id === 'agent-mock-twin' || tool.id === 'agent-policy-auditor' || tool.id === 'agent-prompt-firewall' || tool.id === 'agent-voice-call'
+                    : tool.id === 'azoth-local-agent' || tool.id === 'audiocipher-stego-engine' || tool.id === 'anderson-security-sentinel' || tool.id === 'agent-capsule-jail' || tool.id === 'agent-egress-sentinel' || tool.id === 'agent-flight-recorder' || tool.id === 'agent-gods-eye' || tool.id === 'agent-mock-twin' || tool.id === 'agent-policy-auditor' || tool.id === 'agent-prompt-firewall' || tool.id === 'agent-voice-call'
                     ? `${tool.localUrl || `http://127.0.0.1:${tool.localPort}`}/?embed=1&theme=${isDark ? 'dark' : 'light'}`
                     : (tool.localUrl || `http://127.0.0.1:${tool.localPort}`)
                 }

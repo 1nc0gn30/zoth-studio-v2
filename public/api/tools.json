@@ -86,12 +86,12 @@
     {
       "id": "azoth-local-agent",
       "name": "AZOTH Local Archon Agent",
-      "description": "Archon Orchestrator core agent for local zero-telemetry task dispatching and subagent delegation.",
+      "description": "Hardened loopback Archon ReAct agent (:8136) with multi-engine routing, 36 MCP tools, Playwright browser sandbox, DuckyScript studio, and Python REPL.",
       "category": "Swarm & Core",
       "github": "https://github.com/NullAITech/azoth-local-agent",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/azoth-local-agent/",
-      "version": "3.0.0",
+      "version": "3.1.0",
       "pull": "azoth-local-agent --help  # or: git clone https://github.com/NullAITech/azoth-local-agent.git",
       "execution_type": "local_cli",
       "runtimes": [

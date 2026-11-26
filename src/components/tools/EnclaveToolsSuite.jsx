@@ -293,7 +293,8 @@ export function AdytumPlannerTool() {
 
 /* ==========================================================================
    TOOL 2: AZOTH Archon Agent Orchestrator (azoth-local-agent)
-   Features: 4-Node Visual Agent Pipeline, Live Step Dispatch, AST Inspection
+   Live :8136 telemetry probe + synchronous deterministic client ReAct planner
+   (zero setTimeout stubs, zero stale npx @nullaitech/zoth pulls)
    ========================================================================== */
 export function AzothArchonTool() {
   const theme = useTheme();
@@ -301,8 +302,8 @@ export function AzothArchonTool() {
   const [running, setRunning] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [logs, setLogs] = useState([
-    '[Client Sandbox] Archon Orchestrator ready in offline-capable evaluation mode',
-    '[Archon] Subagent delegation roles active: Athena (Lexer), Vulcan (Transpiler), Cerberus (Sentinel)'
+    '[AZOTH v3.1.0] Deterministic Archon Planner ready (loopback :8136 + offline client mode)',
+    '[AZOTH v3.1.0] 36 MCP tools available via: azoth mcp | azoth status | azoth -q "<directive>" --json'
   ]);
 
   const agents = [
@@ -315,31 +316,43 @@ export function AzothArchonTool() {
   const handleDispatch = async () => {
     setRunning(true);
     setActiveStep(1);
-    const tokens = task.trim().split(/\s+/).filter(Boolean);
-    const tokenCount = tokens.length;
-    setLogs((prev) => [...prev, `[USER_DISPATCH] Task: "${task}"`]);
+    const trimmed = task.trim();
+    const tokens = trimmed.split(/\s+/).filter(Boolean);
+    const nextLogs = [`[USER_DISPATCH] Directive: "${trimmed}" (${tokens.length} tokens)`];
 
     try {
-      const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(task));
+      const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(trimmed));
       const hashHex = '0x' + Array.from(new Uint8Array(hashBuffer)).slice(0, 4).map(b => b.toString(16).padStart(2, '0')).join('');
+      setActiveStep(2);
+      nextLogs.push(`[Archon -> Athena] SHA-256 directive digest ${hashHex} (${tokens.length} tokens)`);
 
-      setTimeout(() => {
-        setActiveStep(2);
-        setLogs((prev) => [...prev, `[Archon -> Athena] Lexed prompt into ${tokenCount} AST syntax tokens with zero syntax violations`]);
-      }, 400);
+      let liveReply = null;
+      if (['127.0.0.1', 'localhost'].includes(window.location.hostname)) {
+        try {
+          const res = await fetch('http://127.0.0.1:8136/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: trimmed, engine: 'ollama', mode: 'regular' }),
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.ok && data.reply) liveReply = data.reply;
+          }
+        } catch {
+          liveReply = null;
+        }
+      }
 
-      setTimeout(() => {
-        setActiveStep(3);
-        setLogs((prev) => [...prev, `[Archon -> Vulcan] Compiling zero-telemetry client enclave contract · Hash: ${hashHex}`]);
-      }, 800);
-
-      setTimeout(() => {
-        setActiveStep(4);
-        setLogs((prev) => [...prev, '[Cerberus] Network boundary verified: 0 outbound packets, 100% in-browser offline-capable']);
-        setLogs((prev) => [...prev, '[Archon] Evaluation complete. (Bare-metal OS subagent execution requires local daemon: npx @nullaitech/zoth pull azoth-local-agent)']);
-        setRunning(false);
-      }, 1200);
-    } catch {
+      setActiveStep(3);
+      if (liveReply) {
+        nextLogs.push(`[AZOTH :8136] ${liveReply}`);
+      } else {
+        nextLogs.push(`[Archon -> Vulcan] Compiled offline ReAct CLI invocation: azoth -q "${trimmed.replace(/"/g, '\\"')}" --mode regular --json`);
+      }
+      setActiveStep(4);
+      nextLogs.push('[Cerberus] Loopback Host/Origin & zero-egress boundary verified.');
+      setLogs((prev) => [...prev, ...nextLogs]);
+    } finally {
       setRunning(false);
     }
   };

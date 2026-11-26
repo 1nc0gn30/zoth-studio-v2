@@ -644,6 +644,38 @@ export function generateSchemaGraph(path = '/') {
           ...(tool.liveUrl ? { 'url': tool.liveUrl } : {}),
         }
       });
+      if (tool.id === 'azoth-local-agent') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What does AZOTH Local Archon Agent v3.1.0 include?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'AZOTH Local Archon Agent runs a hardened FastAPI cockpit on 127.0.0.1:8136 with multi-engine routing (Ollama, Hermes, AGY, Codex, Grok CLI, Claude, Gemini), SSRF-guarded Playwright browser control, DuckyScript automation studio, stateful Python workspace REPL, and 36 JSON-RPC 2.0 MCP stdio tools.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'How does AZOTH Local Archon Agent protect local execution endpoints?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'It enforces a pure ASGI LoopbackSecurityMiddleware with strict loopback Host and Origin allowlists, per-boot CSPRNG X-Azoth-Token gating on all privileged execution and mutation routes, a 1 MiB body limit, is_relative_to() workspace containment, and public HTTP/HTTPS SSRF guards.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is AZOTH Local Archon Agent free and open-access?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. AZOTH Local Archon Agent is 100% free and open-access with zero paywalls, zero license keys, and optional community support via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
     } else if (station) {
       graph.push({
         '@type': 'SoftwareApplication',

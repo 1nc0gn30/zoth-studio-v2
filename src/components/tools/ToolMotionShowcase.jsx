@@ -95,6 +95,17 @@ export const TOOL_MOTION_OVERRIDES = {
     execLabel: '127.0.0.1:8104 LOCAL DAEMON · WAL SQLITE + SSE',
     telemetrySub: 'Append-Only SHA-256 Hash Chain · Live SSE Scrubber · 4 Stdio MCP Tools · v2.6.0.',
   },
+  'azoth-local-agent': {
+    accent: '#D4AF37',
+    secondary: '#34D399',
+    archetype: 'swarm',
+    anchorName: 'Hardened Loopback Archon Ring',
+    formula: 'R(t) = Host(127.0.0.1) ∧ Origin(loopback) ∧ Token(CSPRNG) → 36 MCP Tools',
+    badge: 'ARCHON REACT AGENT',
+    clip: 'swarm',
+    execLabel: '127.0.0.1:8136 LOOPBACK COCKPIT · 36 MCP STDIO TOOLS',
+    telemetrySub: 'Multi-Engine CLI/Ollama Router · SSRF-Guarded Playwright · DuckyScript Studio · v3.1.0.',
+  },
   'ax-powerhouse': {
     accent: '#22D3EE',
     secondary: '#D4AF37',
