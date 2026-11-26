@@ -1521,7 +1521,7 @@ export function AgentPromptFirewallTool() {
           <Chip
             size="small"
             icon={<RouterIcon sx={{ fontSize: '0.8rem !important' }} />}
-            label="In-Line Proxy :8099"
+            label="In-Line Proxy :8198"
             sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 700, bgcolor: 'rgba(56, 189, 248, 0.12)', color: 'var(--zs-sky)' }}
           />
         </Stack>

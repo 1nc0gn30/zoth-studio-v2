@@ -213,13 +213,14 @@ export const workstations = [
   {
     id: "agent-prompt-firewall",
     name: "Agent Prompt Firewall // Inline Defense & Radar",
-    path: "/studio/agent-firewall.html",
+    path: "/tools/agent-prompt-firewall",
     band: "Security",
     type: "integrated_tool",
-    description: "Autonomous inline prompt injection defense, PII redactor, and real-time SSE threat radar.",
+    executionType: "local-daemon",
+    description: "Zero-dependency Python inline LLM security proxy (:8198), pre-storage PII/secret redactor, SHA-256 hash-chained SQLite WAL audit ledger, SSE threat radar (:8098), and 4-tool stdio MCP server.",
     alsoInApp: "/tools/agent-prompt-firewall",
     toolRepoId: "agent-prompt-firewall",
-    pullCommand: "./bin/agent-firewall serve --web-port 8098 --proxy-port 8099"
+    pullCommand: "agent-prompt-firewall serve --host 127.0.0.1 --web-port 8098 --proxy-port 8198"
   },
   {
     id: "agent-flight-recorder",

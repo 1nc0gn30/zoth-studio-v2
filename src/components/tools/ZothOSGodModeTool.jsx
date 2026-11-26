@@ -61,7 +61,7 @@ const SOVEREIGN_DAEMONS = [
   { id: 'azoth-archon', name: 'Azoth Archon Quorum', port: 8000, ring: 'ring2', cmd: '/usr/local/bin/azoth-archon --quorum 4', category: 'Swarm Orchestrator', memMb: 68 },
   { id: 'neuro-memory', name: 'NeuroMemory Vector DB', port: 8092, ring: 'ring2', cmd: '/usr/local/bin/neuro-memory serve --port 8092', category: 'Memory Enclave', memMb: 54 },
   { id: 'agent-egress', name: 'Agent Egress Sentinel', port: 8095, ring: 'ring0', cmd: '/usr/local/bin/agent-egress-sentinel serve --web-port 8095 --proxy-port 8195', category: 'Egress Proxy', memMb: 28 },
-  { id: 'agent-firewall', name: 'Prompt Firewall Guard', port: 8094, ring: 'ring0', cmd: '/usr/local/bin/agent-prompt-firewall --port 8094', category: 'Prompt Defense', memMb: 31 },
+  { id: 'agent-firewall', name: 'Prompt Firewall Guard', port: 8098, ring: 'ring0', cmd: '/usr/local/bin/agent-prompt-firewall serve --web-port 8098 --proxy-port 8198', category: 'Prompt Defense', memMb: 31 },
   { id: 'envguard-vault', name: 'EnvGuard Secrets Vault', port: 8088, ring: 'ring1', cmd: '/usr/local/bin/envguard-vault serve --port 8088', category: 'Crypto Enclave', memMb: 24 },
   { id: 'audiocipher', name: 'AudioCipher Stego Engine', port: 8096, ring: 'ring1', cmd: '/usr/local/bin/audiocipher serve --port 8096', category: 'Acoustic Stego', memMb: 36 },
   { id: 'zoth-ascii-magic', name: 'Zoth ASCII Magic Synth', port: 8089, ring: 'ring3', cmd: '/usr/local/bin/zoth-ascii-magic --serve 8089', category: 'ASCII & Braille', memMb: 29 },
