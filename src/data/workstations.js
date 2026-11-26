@@ -246,13 +246,13 @@ export const workstations = [
   {
     id: "agent-policy-auditor",
     name: "Agent Policy Auditor // Capability Leaser & Broker",
-    path: "/studio/agent-policy.html",
+    path: "/tools/agent-policy-auditor",
     band: "Security",
     type: "integrated_tool",
-    description: "Cryptographic capability leaser, permission broker, and OWASP LLM manifest security auditor.",
+    description: "Local Python daemon (127.0.0.1:8106) and 4-tool stdio MCP server issuing HMAC-SHA256 time-bound capability leases, SQLite WAL audit trails, path-traversal guards, and OWASP LLM manifest security auditing.",
     alsoInApp: "/tools/agent-policy-auditor",
     toolRepoId: "agent-policy-auditor",
-    pullCommand: "./bin/agent-policy serve --port 8106"
+    pullCommand: "agent-policy-auditor serve --port 8106"
   },
   {
     id: "etsy-pod-forge",

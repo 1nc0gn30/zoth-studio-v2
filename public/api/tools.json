@@ -66,7 +66,7 @@
     {
       "id": "adytum-alchemist-ai-workflow",
       "name": "Adytum Planner",
-      "description": "Adytum Planner — 22-Key Hermetic AI Workbench: BOTA contemplation deck, offline AI-Chemistry lessons, and negation-aware 15-rule architectural spec gatekeeper.",
+      "description": "Adytum Planner \u2014 22-Key Hermetic AI Workbench: BOTA contemplation deck, offline AI-Chemistry lessons, and negation-aware 15-rule architectural spec gatekeeper.",
       "category": "Planning",
       "github": "https://github.com/1nc0gn30/adytum-alchemist-ai-workflow",
       "published": true,
@@ -546,7 +546,7 @@
     {
       "id": "zoth-webgen",
       "name": "Zoth Bolt (bolt.diy fork)",
-      "description": "Legacy alias of zoth-bolt — the real bolt.diy fork, Zoth edition, on 127.0.0.1:5173. Full-stack AI workbench with 19+ providers, local Ollama, CLI agents, MCP tools, and 1-click Netlify deploy.",
+      "description": "Legacy alias of zoth-bolt \u2014 the real bolt.diy fork, Zoth edition, on 127.0.0.1:5173. Full-stack AI workbench with 19+ providers, local Ollama, CLI agents, MCP tools, and 1-click Netlify deploy.",
       "category": "Autonomous Web",
       "github": "https://github.com/1nc0gn30/bolt.diy",
       "published": true,
@@ -806,19 +806,18 @@
     {
       "id": "agent-policy-auditor",
       "name": "Agent Policy Auditor",
-      "description": "Autonomous capability leaser, permission broker, and OWASP LLM manifest security auditor with 100% free open-access loopback execution.",
+      "description": "Local Python daemon (127.0.0.1:8106) and 4-tool stdio MCP server issuing HMAC-SHA256 signed time-bound capability leases (FS_READ, FS_WRITE, NET_EGRESS, SHELL_EXEC, TOKEN_BUDGET), enforcing path-traversal & USD quota guards, and auditing manifests against OWASP LLM Top 10 & NIST AI RMF.",
       "category": "Security & Enclave",
       "github": "https://github.com/1nc0gn30/agent-policy-auditor",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/agent-policy-auditor/",
-      "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/agent-policy-auditor.git && cd agent-policy-auditor && python3 server.py --port 8106  # or: agent-policy status",
-      "execution_type": "browser",
+      "version": "2.6.0",
+      "pull": "git clone https://github.com/1nc0gn30/agent-policy-auditor.git && cd agent-policy-auditor && python3 server.py --port 8106  # or: agent-policy-auditor serve",
+      "execution_type": "local-daemon",
       "runtimes": [
-        "browser",
-        "webgpu",
+        "local-daemon",
         "cli",
-        "zero-egress"
+        "mcp"
       ],
       "port": 8106,
       "local_url": "http://127.0.0.1:8106"
@@ -1205,7 +1204,7 @@
     {
       "id": "osint-scout-skill",
       "name": "Domain Intel OSINT Scout",
-      "description": "100% in-browser passive domain intelligence & attack surface reconnaissance engine auditing Certificate Transparency logs, DoH DNS records, and SPF/DMARC posture — free to use; optional tips welcome.",
+      "description": "100% in-browser passive domain intelligence & attack surface reconnaissance engine auditing Certificate Transparency logs, DoH DNS records, and SPF/DMARC posture \u2014 free to use; optional tips welcome.",
       "category": "Security & Recon",
       "github": "https://github.com/NullAITech/osint-scout-skill",
       "published": true,
@@ -1265,7 +1264,7 @@
     {
       "id": "zoth-civilization",
       "name": "Zoth Civilization v3.0",
-      "description": "Autonomous 23-agent Pantheon society simulation on the Sphere of Zoth Prime. Features Imperator Quests (Ranks I–V), 4 Planetary Decrees, the zero-leak 22-Key Sanctuary, and lightweight BYOK reasoning via DeepSeek Flash through Hermes Agent (Nous Research).",
+      "description": "Autonomous 23-agent Pantheon society simulation on the Sphere of Zoth Prime. Features Imperator Quests (Ranks I\u2013V), 4 Planetary Decrees, the zero-leak 22-Key Sanctuary, and lightweight BYOK reasoning via DeepSeek Flash through Hermes Agent (Nous Research).",
       "category": "Swarm & Core",
       "github": "https://github.com/1nc0gn30/zoth-civilization",
       "live_url": "https://zoth-civilization.netlify.app",
@@ -1446,7 +1445,7 @@
     {
       "id": "zela-glasses-guide",
       "name": "Zela Glasses Guide",
-      "description": "Sovereign wearable AI mission coach for Ray-Ban Meta smart glasses over Tailscale — full-duplex WebSocket guide stream, Moondream vision, AGY coaching, and Kokoro TTS via zoth-relay-mobile.",
+      "description": "Sovereign wearable AI mission coach for Ray-Ban Meta smart glasses over Tailscale \u2014 full-duplex WebSocket guide stream, Moondream vision, AGY coaching, and Kokoro TTS via zoth-relay-mobile.",
       "category": "Swarm & Core",
       "github": "https://github.com/1nc0gn30/zela-glasses-guide",
       "published": true,
@@ -1466,7 +1465,7 @@
     {
       "id": "zoth-bot",
       "name": "Zoth Bot Desktop Companion",
-      "description": "Local-first always-on 3D WebGL desk companion for Zoth OS — multi-harness neural engine (Grok/Hermes/Ollama), Security Ring authority, MCP hub, summoned with Ctrl+Shift+Space.",
+      "description": "Local-first always-on 3D WebGL desk companion for Zoth OS \u2014 multi-harness neural engine (Grok/Hermes/Ollama), Security Ring authority, MCP hub, summoned with Ctrl+Shift+Space.",
       "category": "Swarm & Core",
       "github": "https://github.com/1nc0gn30/zoth-bot",
       "published": true,
@@ -1506,7 +1505,7 @@
     {
       "id": "zoth-scene-foundry",
       "name": "Zoth Scene Foundry",
-      "description": "Procedural ZothOS-style ASCII + pixel-art scene engine — 1000 deterministic scenes with Bayer dither, tube palettes, and three.js AsciiEffect stage on :8823.",
+      "description": "Procedural ZothOS-style ASCII + pixel-art scene engine \u2014 1000 deterministic scenes with Bayer dither, tube palettes, and three.js AsciiEffect stage on :8823.",
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/zoth-scene-foundry",
       "published": true,
@@ -1546,7 +1545,7 @@
     {
       "id": "zothos-lite",
       "name": "ZothOS-Lite v1.2 (Amnesic Monotone OS)",
-      "description": "Tails-style Amnesic Monotone Security & AI OS (#F7F7F4 / #000000 · Debian 13 Live · toram noswap) supporting 56 curated AI models across 8 providers, interactive onboarding, ZothNet P2P mesh, external USB/cloud persistence, and lightweight media/dev tools on :8145.",
+      "description": "Tails-style Amnesic Monotone Security & AI OS (#F7F7F4 / #000000 \u00b7 Debian 13 Live \u00b7 toram noswap) supporting 56 curated AI models across 8 providers, interactive onboarding, ZothNet P2P mesh, external USB/cloud persistence, and lightweight media/dev tools on :8145.",
       "category": "Hardware & OS",
       "github": "https://github.com/1nc0gn30/zothos-lite",
       "published": true,

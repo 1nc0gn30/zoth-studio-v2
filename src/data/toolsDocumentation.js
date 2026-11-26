@@ -1329,43 +1329,56 @@ export const toolsDocumentation = {
   },
 
   'agent-policy-auditor': {
-    whyUse: 'Autonomous zero-dependency capability leasing broker, permission manager, and static manifest security auditor for AI agents. Issues time-bound HMAC-SHA256 signed capability tokens across filesystem scopes, network egress, and token budgets.',
-    problemSolved: 'Replaces dangerous all-or-nothing execution models with granular, time-expiring capability leases, preventing runaway agent actions and auditing tool definitions against OWASP Top 10 for LLMs.',
-    architecture: 'Python 3.10+ standard library daemon running on port 8106. Features HMAC-SHA256 lease signing, path glob matching, automatic TTL expiry, emergency kill-switches, and automated telemetry streaming into Agent Flight Recorder (:8104).',
+    whyUse: 'Zero-dependency Python 3.10+ local daemon (127.0.0.1:8106), live terminal monitor, and 4-tool JSON-RPC 2.0 stdio MCP server for AI agent capability leasing, action verification, and OWASP LLM manifest security auditing.',
+    problemSolved: 'Replaces static, unbounded agent permissions with HMAC-SHA256 signed time-bound and budget-bounded leases, blocks filesystem path-traversal escapes and negative-cost quota tampering, and audits MCP tool schemas before execution.',
+    architecture: 'Multi-threaded Python 3.10+ ThreadingHTTPServer (127.0.0.1:8106) backed by 0600 SQLite WAL persistence (leases + audit_events), CSPRNG 0600 HMAC-SHA256 signing key, strict Host/Origin CSRF guards, non-blocking Flight Recorder (:8104) forwarding, and a 4-tool stdio MCP server.',
     aiAgentProtocol: {
-      mcpTool: 'policy_lease_grant',
-      description: 'Issue or verify a time-bound capability lease for an autonomous agent action.',
-      cliExample: './bin/agent-policy lease grant --agent pantheon_01 --cap FS_WRITE --target "/tmp/*" --duration 300',
+      mcpTool: 'policy_lease_grant | policy_lease_verify | policy_lease_revoke | policy_audit_manifest',
+      description: 'Run `agent-policy-auditor mcp` for JSON-RPC 2.0 stdio access to all 4 PolicyBroker & ManifestAuditor tools.',
+      cliExample: 'agent-policy-auditor lease grant --agent researcher_01 --cap FS_WRITE --target "/tmp/work/*" --duration 300 --budget 1.50 --json',
       inputSchema: {
         type: 'object',
         properties: {
           agent_id: { type: 'string', description: 'Unique agent identifier' },
           capability: { type: 'string', enum: ['FS_READ', 'FS_WRITE', 'NET_EGRESS', 'SHELL_EXEC', 'TOKEN_BUDGET'] },
-          target: { type: 'string', description: 'Target glob pattern, domain, or command prefix' },
-          duration_sec: { type: 'number', description: 'Lease TTL in seconds', default: 300 },
-          budget_usd: { type: 'number', description: 'Maximum USD spend quota', default: 0.0 }
+          target: { type: 'string', description: 'Target segment-aware glob pattern, domain, or command scope' },
+          duration_sec: { type: 'number', description: 'Lease TTL in seconds (1..86400)', default: 300 },
+          budget_usd: { type: 'number', description: 'Maximum USD spend quota (0..100000)', default: 0.0 }
         },
-        required: ['agent_id', 'capability']
+        required: ['agent_id', 'capability', 'target']
       },
       outputSchema: {
         lease_id: 'string',
-        signature: 'string',
+        signature: 'string (HMAC-SHA256 over id, agent, cap, target, granted_at, expires_at, max_budget_usd)',
         expires_at: 'number',
-        status: 'granted | verified | denied'
+        status: 'granted | allowed | denied | revoked'
       }
     },
+    cliCommands: [
+      'agent-policy-auditor serve [--host 127.0.0.1 --port 8106]   # launch REST API & dual-theme cockpit',
+      'agent-policy-auditor --status | --json                      # live :8106 or offline SQLite telemetry',
+      'agent-policy lease grant --agent <id> --cap FS_WRITE --target "/tmp/work/*" --duration 300 --budget 1.00',
+      'agent-policy lease verify --lease <id> --cap FS_WRITE --target "/tmp/work/out.txt" --cost 0.25',
+      'agent-policy lease revoke --lease <id> | lease revoke-all --all',
+      'agent-policy audit --file manifest.json --json              # static OWASP LLM & NIST AI RMF audit',
+      'agent-policy-auditor mcp                                    # 4-tool JSON-RPC 2.0 stdio MCP server',
+      'agent-policy-auditor-tui --status | --json                  # live terminal policy monitor',
+    ],
     quickstart: [
       'git clone https://github.com/1nc0gn30/agent-policy-auditor.git',
-      'cd agent-policy-auditor && chmod +x bin/agent-policy',
-      './bin/agent-policy serve --port 8106'
+      'cd agent-policy-auditor && python3 server.py --port 8106',
+      '# Or invoke CLI / TUI / MCP directly on ZothOS:',
+      'agent-policy-auditor --status',
+      'agent-policy-auditor-tui --status',
+      'agent-policy-auditor mcp'
     ],
     features: [
-      'Cryptographic HMAC-SHA256 time-bound capability leases (FS, Network, Shell, Budget)',
-      'Automatic TTL expiration with real-time countdown meters',
-      'Emergency kill-switch for instant agent lease revocation',
-      'Static tool schema and manifest security auditor (OWASP LLM & NIST AI RMF scoring)',
-      'Direct telemetry forwarding to Agent Flight Recorder on port 8104',
-      'Zero external dependencies (100% Python standard library)'
+      'HMAC-SHA256 signed capability leases covering max_budget_usd and granted_at with 0600 CSPRNG key',
+      'POSIX path normalization + segment-aware glob matching blocking ../ traversal escapes',
+      'SQLite WAL persistence (0600 perms) with persistent audit_events log and global Kill-Switch All',
+      '4-tool JSON-RPC 2.0 stdio MCP server (policy_lease_grant, policy_lease_verify, policy_lease_revoke, policy_audit_manifest)',
+      'OWASP LLM Top 10 & NIST AI RMF static manifest auditor (secrets, unsandboxed shell, wildcards, prompt injection)',
+      'Zero-egress Editorial Ivory Light & Obsidian Dark web cockpit with Studio ?embed=1&theme= framing'
     ]
   },
 

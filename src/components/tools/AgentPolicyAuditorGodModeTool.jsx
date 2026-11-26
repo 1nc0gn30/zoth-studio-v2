@@ -1,23 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Box, Typography, Paper, Chip, Button, Unstable_Grid2 as Grid, Stack, TextField,
-  Divider, Card, CardContent, LinearProgress, Switch, FormControlLabel,
-  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton,
-  Tooltip, Tabs, Tab, Alert, InputAdornment, Dialog, DialogTitle, DialogContent, DialogActions,
-  Select, MenuItem, FormControl, InputLabel
+  Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton,
+  Tabs, Tab, Alert, Select, MenuItem, FormControl, InputLabel
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import SecurityIcon from '@mui/icons-material/Security';
-import ShieldIcon from '@mui/icons-material/Shield';
 import KeyIcon from '@mui/icons-material/VpnKey';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import BoltIcon from '@mui/icons-material/Bolt';
-import CodeIcon from '@mui/icons-material/Code';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import TimerIcon from '@mui/icons-material/Timer';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RuleIcon from '@mui/icons-material/Rule';
@@ -25,81 +18,25 @@ import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
+const DAEMON_BASE = 'http://127.0.0.1:8106';
 
-// ---------------------------------------------------------------------------
-// Security Audit Rules Catalog
-// ---------------------------------------------------------------------------
-const AUDIT_RULES = [
-  {
-    id: 'EXEC-001',
-    name: 'Unsandboxed Shell & Subprocess Execution',
-    severity: 'CRITICAL',
-    weight: 35,
-    test: (tool) => {
-      const name = (tool.name || '').toLowerCase();
-      const desc = (tool.description || '').toLowerCase();
-      return /bash|shell|terminal|exec|command|run_command|spawn|system/i.test(name) ||
-             /execute.*(?:shell|command|terminal|bash)/i.test(desc);
-    },
-    message: 'Tool enables arbitrary host shell execution without offline-capable process jail boundaries.',
-    remediation: 'Confine execution using Agent Capsule Jail (:8105) or restrict allowable commands.'
-  },
-  {
-    id: 'FS-001',
-    name: 'Unrestricted Filesystem Write Access',
-    severity: 'HIGH',
-    weight: 25,
-    test: (tool) => {
-      const name = (tool.name || '').toLowerCase();
-      const desc = (tool.description || '').toLowerCase();
-      return /write_file|edit_file|save_file|delete_file|unlink|remove_file|modify/i.test(name) ||
-             /write.*file|save.*disk|modify.*filesystem/i.test(desc);
-    },
-    message: 'Tool allows arbitrary disk write / delete operations without path confinement.',
-    remediation: 'Restrict writable targets to ephemeral scratch directories with path chroot validation.'
-  },
-  {
-    id: 'NET-001',
-    name: 'Unfiltered Network Egress & HTTP Fetch',
-    severity: 'HIGH',
-    weight: 20,
-    test: (tool) => {
-      const name = (tool.name || '').toLowerCase();
-      const desc = (tool.description || '').toLowerCase();
-      return /fetch|http|request|curl|download|browser|get_url|post_url/i.test(name) ||
-             /network.*request|fetch.*url|send.*http/i.test(desc);
-    },
-    message: 'Tool can initiate outbound network requests susceptible to SSRF and data exfiltration.',
-    remediation: 'Route requests through Agent Egress Sentinel (:8095) with SNI domain allowlists.'
-  },
-  {
-    id: 'CRED-001',
-    name: 'Credential & Key Parameter Exposure',
-    severity: 'CRITICAL',
-    weight: 30,
-    test: (tool) => {
-      const schemaStr = JSON.stringify(tool.parameters || {}).toLowerCase();
-      return /api_key|token|secret|password|auth_header|bearer|private_key/i.test(schemaStr);
-    },
-    message: 'Tool parameters accept raw credentials in model context without cryptographic vault sealing.',
-    remediation: 'Store credentials in EnvGuard Secrets Vault and pass zero-knowledge token references.'
-  },
-  {
-    id: 'INJ-001',
-    name: 'Untyped Raw Prompt Injection Vector',
-    severity: 'MEDIUM',
-    weight: 15,
-    test: (tool) => {
-      const schema = tool.parameters || {};
-      const props = schema.properties || {};
-      return Object.values(props).some((p) => p.type === 'string' && !p.enum && !p.pattern && (p.description || '').toLowerCase().includes('prompt'));
-    },
-    message: 'Tool accepts freeform prompt strings susceptible to adversarial delimiter hijacking.',
-    remediation: 'Apply Agent Prompt Firewall regex sanitization and strict schema enum constraints.'
-  }
+const CAPABILITIES = [
+  { value: 'FS_READ', label: 'FS_READ (Filesystem Read)' },
+  { value: 'FS_WRITE', label: 'FS_WRITE (Filesystem Write)' },
+  { value: 'NET_EGRESS', label: 'NET_EGRESS (Outbound Network)' },
+  { value: 'SHELL_EXEC', label: 'SHELL_EXEC (Subprocess Command)' },
+  { value: 'TOKEN_BUDGET', label: 'TOKEN_BUDGET (USD Spend Cap)' },
 ];
 
-// Helper: HMAC-SHA256 Token Signing
+// Ephemeral in-memory CSPRNG key for offline preview only (never hardcoded)
+function generateEphemeralKeyHex() {
+  const bytes = new Uint8Array(32);
+  if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+    crypto.getRandomValues(bytes);
+  }
+  return Array.from(bytes).map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
 async function signHmacSha256(payloadStr, secretKeyStr) {
   const enc = new TextEncoder();
   const key = await crypto.subtle.importKey(
@@ -113,28 +50,129 @@ async function signHmacSha256(payloadStr, secretKeyStr) {
   return Array.from(new Uint8Array(signature)).map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
+// Offline client-side parity ruleset (used only when :8106 is offline)
+function auditManifestOffline(rawText) {
+  const findings = [];
+  let parsed = null;
+  try {
+    parsed = JSON.parse(rawText);
+  } catch (_e) {
+    parsed = { prompt: rawText };
+  }
+  const text = typeof rawText === 'string' ? rawText : JSON.stringify(rawText);
+  const lower = text.toLowerCase();
+
+  if (/sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{36}|AKIA[0-9A-Z]{16}|BEGIN (?:RSA )?PRIVATE KEY/i.test(text)) {
+    findings.push({
+      rule_id: 'SEC-001-HARDCODED-SECRET',
+      severity: 'CRITICAL',
+      description: 'Detected hardcoded credential inside agent manifest or prompt.',
+      remediation: 'Extract credentials to external vault or ephemeral environment leases.',
+    });
+  }
+
+  const tools = (parsed && Array.isArray(parsed.tools)) ? parsed.tools : [];
+  tools.forEach((t) => {
+    if (!t || typeof t !== 'object') return;
+    const tName = String(t.name || '').toLowerCase();
+    const schema = JSON.stringify(t.parameters || {}).toLowerCase();
+    if (/(?:bash|sh|shell|exec|terminal|command|subprocess)/i.test(tName) && !/(?:sandbox|capsule|timeout|quota|container)/.test(schema)) {
+      findings.push({
+        rule_id: 'EXEC-002-UNSANDBOXED-SHELL',
+        severity: 'HIGH',
+        description: `Tool '${t.name}' provides shell execution without sandbox or quota boundaries.`,
+        remediation: 'Wrap subprocess in Agent Capsule Jail (:8105) or apply strict limits.',
+      });
+    }
+    if (/(?:write|file|save|modify|purge|delete)/i.test(tName) && !tName.startsWith('read_') && !/(?:allowed_dir|root|workspace|jail|sandbox)/.test(schema)) {
+      findings.push({
+        rule_id: 'FS-003-UNCONSTRAINED-WRITE',
+        severity: 'MEDIUM',
+        description: `Tool '${t.name}' allows arbitrary file writes without workspace root constraints.`,
+        remediation: 'Enforce strict working directory path prefix validation.',
+      });
+    }
+  });
+
+  if (/\b(?:rm\s+-rf|del\s+\/f|mkfs|drop\s+database|file_system_purge|sudo)\b/i.test(text)) {
+    findings.push({
+      rule_id: 'DEST-004-IRREVERSIBLE-ACTION',
+      severity: 'CRITICAL',
+      description: 'Detected destructive or privileged command without approval gate.',
+      remediation: 'Require explicit lease authorization or human confirmation.',
+    });
+  }
+  if (/(?:fetch|curl|http_request|urllib|requests)/i.test(lower) && !/(?:domain_whitelist|allowlist)/.test(lower)) {
+    findings.push({
+      rule_id: 'NET-005-UNFILTERED-EGRESS',
+      severity: 'LOW',
+      description: 'Outbound network tool present without domain allowlist.',
+      remediation: 'Route outbound requests through Agent Egress Sentinel (:8095).',
+    });
+  }
+  if (/ignore\s+(?:all\s+)?previous\s+instructions|bypass\s+policy|override\s+permissions/i.test(text)) {
+    findings.push({
+      rule_id: 'INJ-007-PROMPT-INJECTION',
+      severity: 'CRITICAL',
+      description: 'Detected prompt-injection or policy-evasion directive.',
+      remediation: 'Isolate system directives from untrusted input.',
+    });
+  }
+
+  const weights = { CRITICAL: 35, HIGH: 20, MEDIUM: 10, LOW: 5 };
+  const deduction = findings.reduce((acc, f) => acc + (weights[f.severity] || 5), 0);
+  const score = Math.max(0, 100 - deduction);
+  const hasCritical = findings.some((f) => f.severity === 'CRITICAL');
+  const hasHigh = findings.some((f) => f.severity === 'HIGH');
+  const risk = (hasCritical || score < 25) ? 'CRITICAL' : (hasHigh || score < 50) ? 'HIGH' : score < 75 ? 'MEDIUM' : score < 90 ? 'LOW' : 'SAFE';
+
+  return {
+    manifest_name: (parsed && parsed.name) || 'custom_manifest',
+    security_score: score,
+    risk_level: risk,
+    total_findings: findings.length,
+    findings,
+    compliance_frameworks: {
+      NIST_AI_RMF: score >= 80 ? 'COMPLIANT' : 'NON_COMPLIANT',
+      OWASP_LLM_TOP_10: (hasCritical || hasHigh) ? 'ACTION_REQUIRED' : 'PASS',
+      ZOTH_ZERO_EGRESS_INVARIANT: score >= 85 ? 'VERIFIED' : 'QUARANTINED',
+    },
+  };
+}
+
 export function AgentPolicyAuditorGodModeTool() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
-  // Aesthetic Tokens
-  const emerald = '#00FF9D';
-  const emeraldSoft = 'rgba(0, 255, 157, 0.12)';
-  const gold = '#D4AF37';
-  const goldSoft = 'rgba(212, 175, 55, 0.14)';
-  const crimson = '#FF3355';
-  const crimsonSoft = 'rgba(255, 51, 85, 0.12)';
-  const cyan = '#38BDF8';
-  const cyanSoft = 'rgba(56, 189, 248, 0.12)';
-  const voidDark = '#08080B';
-  const surfaceDark = '#10121A';
-  const cardBorder = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)';
+  // High-contrast Dual-Theme Tokens (>= 4.5:1 in both Dark and Editorial Ivory Light)
+  const emerald = isDark ? '#10B981' : '#047857';
+  const emeraldSoft = isDark ? 'rgba(16, 185, 129, 0.14)' : 'rgba(4, 120, 87, 0.11)';
+  const gold = isDark ? '#D4AF37' : '#8C6A2E';
+  const goldSoft = isDark ? 'rgba(212, 175, 55, 0.14)' : 'rgba(140, 106, 46, 0.11)';
+  const crimson = isDark ? '#F43F5E' : '#BE123C';
+  const crimsonSoft = isDark ? 'rgba(244, 63, 94, 0.14)' : 'rgba(190, 18, 60, 0.10)';
+  const cyan = isDark ? '#38BDF8' : '#0369A1';
+  const cyanSoft = isDark ? 'rgba(56, 189, 248, 0.14)' : 'rgba(3, 105, 161, 0.10)';
+  const panelInsetBg = isDark ? '#0B0D14' : '#F3EFE6';
+  const cardBg = isDark ? '#10121A' : '#FFFFFF';
+  const cardBorder = isDark ? 'rgba(255, 255, 255, 0.10)' : 'rgba(24, 22, 19, 0.15)';
+  const textPrimary = isDark ? '#F8FAFC' : '#181613';
+  const textSecondary = isDark ? '#94A3B8' : '#4A463F';
 
-  // Operational State
-  const [activeTab, setActiveTab] = useState(0); // 0: Manifest Security Auditor, 1: Cryptographic Leaser, 2: Token Verifier
+  const ephemeralKeyRef = useRef(null);
+  if (!ephemeralKeyRef.current) {
+    ephemeralKeyRef.current = generateEphemeralKeyHex();
+  }
+
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [daemonVersion, setDaemonVersion] = useState('2.6.0');
+  const [statusMessage, setStatusMessage] = useState(null);
+  const [activeTab, setActiveTab] = useState(0);
+
+  // Tab 0: Manifest Auditor
   const [manifestText, setManifestText] = useState(`{
   "name": "pantheon_enterprise_worker",
-  "version": "2.4.0",
+  "version": "2.6.0",
   "tools": [
     {
       "name": "bash_terminal",
@@ -149,7 +187,7 @@ export function AgentPolicyAuditorGodModeTool() {
     },
     {
       "name": "write_file",
-      "description": "Writes arbitrary code files to disk",
+      "description": "Writes code files to disk",
       "parameters": {
         "type": "object",
         "properties": {
@@ -164,314 +202,434 @@ export function AgentPolicyAuditorGodModeTool() {
       "parameters": {
         "type": "object",
         "properties": {
-          "url": { "type": "string" },
-          "api_key": { "type": "string", "description": "Bearer token or API Key" }
+          "url": { "type": "string" }
         }
       }
     }
   ]
 }`);
-
   const [auditReport, setAuditReport] = useState(null);
   const [auditing, setAuditing] = useState(false);
 
-  // Leaser State
+  // Tab 1: Capability Leaser
   const [leases, setLeases] = useState([]);
   const [agentId, setAgentId] = useState('pantheon_archon_01');
   const [capability, setCapability] = useState('FS_WRITE');
-  const [targetScope, setTargetScope] = useState('~/NullAITech/**');
+  const [targetScope, setTargetScope] = useState('/tmp/work/*');
   const [ttlSeconds, setTtlSeconds] = useState(300);
-  const [maxBudgetUsd, setMaxBudgetUsd] = useState(0.50);
+  const [maxBudgetUsd, setMaxBudgetUsd] = useState(1.0);
 
-  // Verification State
-  const [verifyTokenInput, setVerifyTokenInput] = useState('');
+  // Tab 2: Action / Token Verifier
+  const [verifyLeaseId, setVerifyLeaseId] = useState('');
+  const [verifyCap, setVerifyCap] = useState('FS_WRITE');
+  const [verifyTarget, setVerifyTarget] = useState('/tmp/work/output.txt');
+  const [verifyCost, setVerifyCost] = useState(0.25);
   const [verifyResult, setVerifyResult] = useState(null);
 
-  const [copiedKey, setCopiedKey] = useState(null);
-
-  // Enclave Master Signing Key (in-memory)
-  const masterKey = 'sovereign_enclave_hmac_master_seed_2026';
-
-  useEffect(() => {
-    // Run initial audit on load
-    handleRunAudit();
+  const notify = useCallback((severity, text) => {
+    setStatusMessage({ severity, text });
   }, []);
 
-  // Periodic Lease TTL Countdown
+  const syncLiveLeases = useCallback(async () => {
+    try {
+      const healthRes = await fetch(`${DAEMON_BASE}/health`);
+      if (!healthRes.ok) {
+        setDaemonOnline(false);
+        return false;
+      }
+      const h = await healthRes.json();
+      setDaemonOnline(true);
+      if (h.version) setDaemonVersion(h.version);
+
+      const leasesRes = await fetch(`${DAEMON_BASE}/api/leases`);
+      if (leasesRes.ok) {
+        const data = await leasesRes.json();
+        const mapped = (data.leases || []).map((l) => ({
+          leaseId: l.lease_id,
+          agentId: l.agent_id,
+          capability: l.capability,
+          targetScope: l.target,
+          budget: Number(l.max_budget_usd || 0),
+          usedBudget: Number(l.used_budget_usd || 0),
+          remainingSec: Math.max(0, Math.floor(Number(l.ttl_seconds || 0))),
+          signature: l.signature || '',
+          live: true,
+        }));
+        setLeases(mapped);
+        if (mapped.length > 0 && !verifyLeaseId) {
+          setVerifyLeaseId(mapped[0].leaseId);
+          setVerifyCap(mapped[0].capability);
+        }
+      }
+      return true;
+    } catch (_e) {
+      setDaemonOnline(false);
+      return false;
+    }
+  }, [verifyLeaseId]);
+
+  useEffect(() => {
+    syncLiveLeases().then((online) => {
+      handleRunAudit(online);
+    });
+  }, []);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setLeases((prev) =>
         prev
-          .map((l) => ({ ...l, remainingSec: Math.max(0, Math.floor((l.expiresAt - Date.now()) / 1000)) }))
+          .map((l) => ({ ...l, remainingSec: Math.max(0, l.remainingSec - 1) }))
           .filter((l) => l.remainingSec > 0)
       );
     }, 1000);
     return () => clearInterval(timer);
   }, []);
 
-  const handleCopy = (text, key) => {
+  const handleCopy = (text, label) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard?.writeText(text)?.catch?.(() => {});
-      setCopiedKey(key);
-      setTimeout(() => setCopiedKey(null), 2000);
+      navigator.clipboard.writeText(text).then(() => {
+        notify('success', `Copied ${label} to clipboard.`);
+      }).catch(() => {
+        notify('info', `${label} ready to copy.`);
+      });
     }
   };
 
-  // ---------------------------------------------------------------------------
-  // Real In-Browser Manifest Security Audit Engine
-  // ---------------------------------------------------------------------------
-  const handleRunAudit = () => {
+  const handleRunAudit = async (forceLive) => {
     setAuditing(true);
+    const useLive = typeof forceLive === 'boolean' ? forceLive : daemonOnline;
     try {
-      const parsed = JSON.parse(manifestText);
-      const tools = parsed.tools || (Array.isArray(parsed) ? parsed : [parsed]);
-
-      const findings = [];
-      let totalPenalty = 0;
-
-      tools.forEach((tool) => {
-        AUDIT_RULES.forEach((rule) => {
-          if (rule.test(tool)) {
-            totalPenalty += rule.weight;
-            findings.push({
-              toolName: tool.name || 'unnamed_tool',
-              ruleId: rule.id,
-              ruleName: rule.name,
-              severity: rule.severity,
-              message: rule.message,
-              remediation: rule.remediation
-            });
-          }
-        });
-      });
-
-      const securityScore = Math.max(0, Math.min(100, 100 - totalPenalty));
-      let riskLevel = 'CLEAN';
-      if (securityScore < 40) riskLevel = 'CRITICAL';
-      else if (securityScore < 70) riskLevel = 'HIGH';
-      else if (securityScore < 90) riskLevel = 'MEDIUM';
-
-      setAuditReport({
-        agentName: parsed.name || 'Custom Agent',
-        toolsAudited: tools.length,
-        securityScore,
-        riskLevel,
-        findings,
-        compliance: {
-          nistAiRmf: securityScore >= 80 ? 'COMPLIANT' : 'ACTION REQUIRED',
-          owaspLlmTop10: findings.some((f) => f.ruleId === 'EXEC-001' || f.ruleId === 'CRED-001') ? 'VULNERABILITIES DETECTED' : 'PASSED',
-          zothZeroEgress: findings.some((f) => f.ruleId === 'NET-001') ? 'POLICY VIOLATION' : 'ENFORCED'
+      if (useLive) {
+        let manifestPayload = manifestText;
+        let name = 'studio_manifest';
+        try {
+          const parsed = JSON.parse(manifestText);
+          manifestPayload = parsed;
+          if (parsed && typeof parsed.name === 'string') name = parsed.name;
+        } catch (_e) {
+          manifestPayload = manifestText;
         }
-      });
-    } catch (err) {
-      setAuditReport({
-        agentName: 'Parse Error',
-        toolsAudited: 0,
-        securityScore: 0,
-        riskLevel: 'INVALID JSON',
-        findings: [{ toolName: 'Schema Parser', ruleId: 'SYNTAX-001', severity: 'CRITICAL', message: `Manifest JSON is invalid: ${err.message}`, remediation: 'Correct syntax errors.' }],
-        compliance: { nistAiRmf: 'FAIL', owaspLlmTop10: 'FAIL', zothZeroEgress: 'FAIL' }
-      });
+        const res = await fetch(`${DAEMON_BASE}/api/audit`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ manifest: manifestPayload, name }),
+        });
+        if (res.ok) {
+          const report = await res.json();
+          setAuditReport({ ...report, source: 'live-daemon' });
+          setAuditing(false);
+          return;
+        }
+      }
+      const offlineReport = auditManifestOffline(manifestText);
+      setAuditReport({ ...offlineReport, source: 'offline-preview' });
+    } catch (_err) {
+      const offlineReport = auditManifestOffline(manifestText);
+      setAuditReport({ ...offlineReport, source: 'offline-preview' });
     }
     setAuditing(false);
   };
 
-  // ---------------------------------------------------------------------------
-  // Issue Real Cryptographically Signed Lease Token
-  // ---------------------------------------------------------------------------
   const handleGrantLease = async () => {
-    const issuedAt = Date.now();
-    const expiresAt = issuedAt + ttlSeconds * 1000;
-    const nonce = Math.random().toString(36).substring(2, 10);
-
-    const payload = {
-      iss: 'zoth-policy-broker',
-      sub: agentId,
-      cap: capability,
-      scope: targetScope,
-      budget: maxBudgetUsd,
-      iat: issuedAt,
-      exp: expiresAt,
-      nonce
-    };
-
-    const payloadJson = JSON.stringify(payload);
-    const signature = await signHmacSha256(payloadJson, masterKey);
-    const signedToken = `${btoa(payloadJson)}.${signature}`;
-
-    const newLease = {
-      leaseId: `lease_${nonce}`,
-      agentId,
-      capability,
-      targetScope,
-      budget: maxBudgetUsd,
-      issuedAt,
-      expiresAt,
-      remainingSec: ttlSeconds,
-      token: signedToken
-    };
-
-    setLeases((prev) => [newLease, ...prev]);
-  };
-
-  // ---------------------------------------------------------------------------
-  // Verify Cryptographic Lease Token
-  // ---------------------------------------------------------------------------
-  const handleVerifyToken = async () => {
-    if (!verifyTokenInput.trim()) return;
-
-    try {
-      const parts = verifyTokenInput.trim().split('.');
-      if (parts.length !== 2) {
-        setVerifyResult({ valid: false, error: 'Malformed token structure. Expected [Base64Payload].[HMACSignature]' });
+    if (daemonOnline) {
+      try {
+        const res = await fetch(`${DAEMON_BASE}/api/leases/grant`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            agent_id: agentId.trim(),
+            capability,
+            target: targetScope.trim(),
+            duration_sec: Number(ttlSeconds),
+            budget_usd: Number(maxBudgetUsd),
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.lease) {
+          notify('error', `Broker rejected lease (${res.status}): ${data.error || 'Invalid input'}`);
+          return;
+        }
+        setVerifyLeaseId(data.lease.lease_id);
+        setVerifyCap(data.lease.capability);
+        notify('success', `Granted live lease ${data.lease.lease_id} on :8106.`);
+        await syncLiveLeases();
+        return;
+      } catch (err) {
+        notify('error', `Failed to reach :8106: ${err.message}`);
+        setDaemonOnline(false);
         return;
       }
-
-      const [b64Payload, providedSig] = parts;
-      const payloadStr = atob(b64Payload);
-      const payload = JSON.parse(payloadStr);
-
-      const expectedSig = await signHmacSha256(payloadStr, masterKey);
-      const isSignatureValid = expectedSig === providedSig;
-      const isExpired = Date.now() > payload.exp;
-
-      setVerifyResult({
-        valid: isSignatureValid && !isExpired,
-        signatureMatch: isSignatureValid,
-        expired: isExpired,
-        payload,
-        remainingSec: Math.max(0, Math.floor((payload.exp - Date.now()) / 1000))
-      });
-    } catch (err) {
-      setVerifyResult({ valid: false, error: `Token validation error: ${err.message}` });
     }
+
+    // Clearly labeled offline preview using ephemeral WebCrypto CSPRNG key
+    const issuedAt = Date.now();
+    const expiresAt = issuedAt + Number(ttlSeconds) * 1000;
+    const nonce = generateEphemeralKeyHex().slice(0, 12);
+    const payload = {
+      iss: 'offline-preview-ephemeral',
+      lease_id: `lease_${nonce}`,
+      agent_id: agentId.trim(),
+      capability,
+      target: targetScope.trim(),
+      max_budget_usd: Number(maxBudgetUsd),
+      iat: issuedAt,
+      exp: expiresAt,
+    };
+    const sig = await signHmacSha256(JSON.stringify(payload), ephemeralKeyRef.current);
+    const previewLease = {
+      leaseId: payload.lease_id,
+      agentId: payload.agent_id,
+      capability: payload.capability,
+      targetScope: payload.target,
+      budget: payload.max_budget_usd,
+      usedBudget: 0,
+      remainingSec: Number(ttlSeconds),
+      signature: sig,
+      live: false,
+    };
+    setLeases((prev) => [previewLease, ...prev]);
+    setVerifyLeaseId(previewLease.leaseId);
+    setVerifyCap(previewLease.capability);
+    notify('info', `Offline preview lease ${previewLease.leaseId} signed with ephemeral WebCrypto key.`);
+  };
+
+  const handleRevokeLease = async (leaseId) => {
+    if (daemonOnline) {
+      try {
+        await fetch(`${DAEMON_BASE}/api/leases/revoke`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ lease_id: leaseId }),
+        });
+        notify('success', `Revoked lease ${leaseId} on :8106.`);
+        await syncLiveLeases();
+        return;
+      } catch (err) {
+        notify('error', `Revoke failed: ${err.message}`);
+      }
+    }
+    setLeases((prev) => prev.filter((l) => l.leaseId !== leaseId));
+  };
+
+  const handleKillSwitchAll = async () => {
+    if (daemonOnline) {
+      try {
+        const res = await fetch(`${DAEMON_BASE}/api/leases/revoke_all`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ all_agents: true }),
+        });
+        const data = await res.json();
+        notify('warning', `Global kill-switch revoked ${data.revoked_count || 0} active lease(s) on :8106.`);
+        await syncLiveLeases();
+        return;
+      } catch (err) {
+        notify('error', `Kill-switch failed: ${err.message}`);
+      }
+    }
+    setLeases([]);
+    notify('warning', 'Cleared all offline preview leases.');
+  };
+
+  const handleVerifyAction = async () => {
+    if (!verifyLeaseId.trim()) {
+      notify('error', 'Enter or select a Lease ID first.');
+      return;
+    }
+    if (daemonOnline) {
+      try {
+        const res = await fetch(`${DAEMON_BASE}/api/leases/verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            lease_id: verifyLeaseId.trim(),
+            capability: verifyCap,
+            target: verifyTarget.trim(),
+            cost_usd: Number(verifyCost),
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          setVerifyResult({ allowed: false, reason: data.error || `HTTP ${res.status}`, source: 'live-daemon' });
+          return;
+        }
+        setVerifyResult({ ...data, source: 'live-daemon' });
+        await syncLiveLeases();
+        return;
+      } catch (err) {
+        setVerifyResult({ allowed: false, reason: `Daemon error: ${err.message}`, source: 'live-daemon' });
+        return;
+      }
+    }
+
+    const found = leases.find((l) => l.leaseId === verifyLeaseId.trim());
+    if (!found) {
+      setVerifyResult({ allowed: false, reason: 'Offline preview: lease not found.', source: 'offline-preview' });
+      return;
+    }
+    const capMatch = found.capability === verifyCap;
+    const noTraversal = !verifyTarget.includes('..');
+    const ok = capMatch && noTraversal;
+    setVerifyResult({
+      allowed: ok,
+      reason: ok ? 'Offline preview: capability and path checks passed (start :8106 for SQLite enforcement).' : 'Offline preview: capability mismatch or traversal blocked.',
+      source: 'offline-preview',
+    });
   };
 
   return (
     <Box sx={{ mt: 1 }}>
-      {/* Monetization Funnel Banner */}
+      {/* Live Connection & Action Header */}
       <Paper
+        elevation={0}
         sx={{
           p: 2,
-          mb: 3,
-          background: isDark
-            ? 'linear-gradient(135deg, rgba(212,175,55,0.18) 0%, rgba(8,8,11,0.92) 100%)'
-            : 'linear-gradient(135deg, #FFFDF0 0%, #FEF9E7 100%)',
-          border: `1px solid ${gold}`,
+          mb: 2.5,
+          bgcolor: cardBg,
+          border: `1px solid ${daemonOnline ? emerald : gold}`,
           borderRadius: 2,
           display: 'flex',
           flexDirection: { xs: 'column', md: 'row' },
-          alignItems: 'center',
+          alignItems: { xs: 'flex-start', md: 'center' },
           justifyContent: 'space-between',
-          gap: 2
+          gap: 1.5,
         }}
       >
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction="row" spacing={1.5} alignItems="center">
           <Box
             sx={{
-              p: 1.2,
+              p: 1.1,
               borderRadius: 2,
               bgcolor: goldSoft,
               color: gold,
               display: 'flex',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
-            <VerifiedUserIcon sx={{ fontSize: 28 }} />
+            <VerifiedUserIcon sx={{ fontSize: 26 }} />
           </Box>
           <Box>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: gold }}>
-                Agent Policy Auditor & Capability Leaser
+            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
+              <Typography variant="subtitle1" sx={{ fontWeight: 800, color: textPrimary }}>
+                Agent Policy Auditor v{daemonVersion}
               </Typography>
               <Chip
                 size="small"
-                label="✦ 100% FREE & OPEN ACCESS"
+                icon={<CheckCircleIcon sx={{ color: `${daemonOnline ? emerald : gold} !important` }} />}
+                label={daemonOnline ? 'LIVE DAEMON :8106 CONNECTED' : 'OFFLINE IN-BROWSER PREVIEW'}
                 sx={{
-                  bgcolor: emeraldSoft,
-                  color: emerald,
+                  bgcolor: daemonOnline ? emeraldSoft : goldSoft,
+                  color: daemonOnline ? emerald : gold,
                   fontWeight: 800,
                   fontSize: '0.72rem',
-                  fontFamily: mono
+                  fontFamily: mono,
                 }}
               />
             </Stack>
-            <Typography variant="caption" color="text.secondary">
-              Real static MCP security auditor, Web Crypto HMAC-SHA256 capability leasing, and compliance verification.
+            <Typography variant="caption" sx={{ color: textSecondary, display: 'block', mt: 0.3 }}>
+              {daemonOnline
+                ? 'Directly bridged to 127.0.0.1:8106 SQLite WAL broker, HMAC-SHA256 verifier, and OWASP LLM manifest auditor.'
+                : 'Local daemon (:8106) is stopped. Using ephemeral WebCrypto preview — run `agent-policy-auditor serve` for live persistence.'}
             </Typography>
           </Box>
         </Stack>
 
-        <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
-          <Chip
-            icon={<CheckCircleIcon style={{ color: emerald }} />}
-            label="UNLIMITED LEASING AUDITS UNLOCKED"
-            sx={{ bgcolor: emeraldSoft, color: emerald, fontWeight: 800, fontFamily: mono }}
-          />
+        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
           <Button
-            variant="contained"
+            variant="outlined"
             size="small"
-            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
-            target="_blank"
-            rel="noreferrer"
-            startIcon={<BoltIcon />}
+            startIcon={<RefreshIcon />}
+            onClick={syncLiveLeases}
             sx={{
-              bgcolor: gold,
-              color: '#000',
-              fontWeight: 800,
-              '&:hover': { bgcolor: '#B8860B' }
+              minHeight: 40,
+              borderColor: cyan,
+              color: cyan,
+              fontWeight: 700,
+              fontFamily: mono,
             }}
           >
-            ☕ Buy Us a Coffee
+            Sync :8106
           </Button>
           <Button
             variant="outlined"
             size="small"
-            onClick={() => {
-              if (navigator.clipboard) {
-                navigator.clipboard?.writeText('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK')?.catch?.(() => {});
-                alert('Solana Tip Address copied to clipboard: GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK');
-              }
+            startIcon={<BoltIcon />}
+            onClick={handleKillSwitchAll}
+            sx={{
+              minHeight: 40,
+              borderColor: crimson,
+              color: crimson,
+              fontWeight: 700,
+              fontFamily: mono,
             }}
-            sx={{ borderColor: cyan, color: cyan, fontWeight: 700, fontFamily: mono }}
           >
-            ◎ Solana Tip
+            Kill-Switch All
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => handleCopy('GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK', 'Solana Tip Address')}
+            sx={{
+              minHeight: 40,
+              borderColor: gold,
+              color: gold,
+              fontWeight: 700,
+              fontFamily: mono,
+            }}
+          >
+            ◎ Copy Solana Tip
           </Button>
         </Stack>
       </Paper>
 
+      {statusMessage && (
+        <Alert
+          severity={statusMessage.severity}
+          onClose={() => setStatusMessage(null)}
+          sx={{ mb: 2, fontFamily: mono, fontSize: '0.78rem' }}
+        >
+          {statusMessage.text}
+        </Alert>
+      )}
+
       {/* Main Workspace Tabs */}
       <Paper
+        elevation={0}
         sx={{
-          p: 2.5,
-          bgcolor: isDark ? surfaceDark : theme.palette.background.paper,
+          p: { xs: 2, md: 2.5 },
+          bgcolor: cardBg,
           border: `1px solid ${cardBorder}`,
-          borderRadius: 2
+          borderRadius: 2,
         }}
       >
         <Tabs
           value={activeTab}
           onChange={(_, v) => setActiveTab(v)}
+          variant="scrollable"
+          scrollButtons="auto"
           sx={{
             mb: 2.5,
             borderBottom: `1px solid ${cardBorder}`,
             '& .MuiTab-root': {
               fontFamily: mono,
               fontWeight: 800,
-              fontSize: '0.8rem',
-              py: 1
-            }
+              fontSize: '0.78rem',
+              minHeight: 44,
+              color: textSecondary,
+            },
+            '& .Mui-selected': {
+              color: `${gold} !important`,
+            },
           }}
         >
-          <Tab icon={<RuleIcon />} iconPosition="start" label="MANIFEST SECURITY AUDITOR" />
+          <Tab icon={<RuleIcon />} iconPosition="start" label="MANIFEST AUDITOR" />
           <Tab icon={<KeyIcon />} iconPosition="start" label={`HMAC CAPABILITY LEASER (${leases.length})`} />
-          <Tab icon={<SecurityIcon />} iconPosition="start" label="LEASE TOKEN VERIFIER" />
+          <Tab icon={<SecurityIcon />} iconPosition="start" label="LIVE ACTION VERIFIER" />
         </Tabs>
 
         {/* TAB 0: MANIFEST SECURITY AUDITOR */}
         {activeTab === 0 && (
           <Grid container spacing={3}>
-            {/* Manifest Input */}
             <Grid xs={12} lg={6}>
               <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: cyan, mb: 1 }}>
                 MCP / AGENT TOOL MANIFEST (JSON)
@@ -479,7 +637,7 @@ export function AgentPolicyAuditorGodModeTool() {
               <TextField
                 fullWidth
                 multiline
-                rows={14}
+                rows={13}
                 value={manifestText}
                 onChange={(e) => setManifestText(e.target.value)}
                 InputProps={{ sx: { fontFamily: mono, fontSize: '0.78rem' } }}
@@ -488,110 +646,104 @@ export function AgentPolicyAuditorGodModeTool() {
               <Button
                 fullWidth
                 variant="contained"
-                onClick={handleRunAudit}
+                onClick={() => handleRunAudit()}
                 disabled={auditing}
                 startIcon={<SecurityIcon />}
                 sx={{
+                  minHeight: 44,
                   bgcolor: cyan,
-                  color: '#000',
+                  color: isDark ? '#041019' : '#FFFFFF',
                   fontWeight: 800,
                   fontFamily: mono,
-                  py: 1.2,
-                  '&:hover': { bgcolor: '#0284C7' }
+                  '&:hover': { bgcolor: isDark ? '#0EA5E9' : '#075985' },
                 }}
               >
-                EXECUTE REAL STATIC SECURITY AUDIT
+                {daemonOnline ? 'RUN LIVE :8106 MANIFEST AUDIT' : 'RUN OFFLINE STATIC MANIFEST AUDIT'}
               </Button>
             </Grid>
 
-            {/* Audit Report & Findings */}
             <Grid xs={12} lg={6}>
               {auditReport ? (
                 <Stack spacing={2}>
-                  {/* Score Card */}
-                  <Paper sx={{ p: 2, bgcolor: isDark ? voidDark : '#F8FAFC', border: `1px solid ${cardBorder}`, borderRadius: 1.5 }}>
+                  <Paper elevation={0} sx={{ p: 2, bgcolor: panelInsetBg, border: `1px solid ${cardBorder}`, borderRadius: 1.5 }}>
                     <Stack direction="row" justifyContent="space-between" alignItems="center">
                       <Box>
-                        <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary' }}>
-                          SECURITY COMPLIANCE SCORE
+                        <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary }}>
+                          SECURITY COMPLIANCE SCORE ({auditReport.source === 'live-daemon' ? 'LIVE :8106' : 'OFFLINE'})
                         </Typography>
                         <Typography
                           variant="h4"
                           sx={{
                             fontFamily: mono,
                             fontWeight: 800,
-                            color: auditReport.securityScore >= 80 ? emerald : auditReport.securityScore >= 50 ? gold : crimson
+                            color: auditReport.security_score >= 80 ? emerald : auditReport.security_score >= 50 ? gold : crimson,
                           }}
                         >
-                          {auditReport.securityScore}/100
+                          {auditReport.security_score}/100
                         </Typography>
                       </Box>
                       <Chip
-                        label={auditReport.riskLevel}
+                        label={auditReport.risk_level}
                         sx={{
                           fontFamily: mono,
                           fontWeight: 800,
-                          bgcolor: auditReport.riskLevel === 'CRITICAL' ? crimsonSoft : auditReport.riskLevel === 'HIGH' ? goldSoft : emeraldSoft,
-                          color: auditReport.riskLevel === 'CRITICAL' ? crimson : auditReport.riskLevel === 'HIGH' ? gold : emerald
+                          bgcolor: auditReport.risk_level === 'CRITICAL' ? crimsonSoft : auditReport.risk_level === 'HIGH' ? goldSoft : emeraldSoft,
+                          color: auditReport.risk_level === 'CRITICAL' ? crimson : auditReport.risk_level === 'HIGH' ? gold : emerald,
                         }}
                       />
                     </Stack>
 
                     <Divider sx={{ my: 1.5 }} />
 
-                    <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', display: 'block' }}>
-                      NIST AI RMF: <strong>{auditReport.compliance.nistAiRmf}</strong> • OWASP LLM: <strong>{auditReport.compliance.owaspLlmTop10}</strong>
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, display: 'block' }}>
+                      NIST AI RMF: <strong>{auditReport.compliance_frameworks?.NIST_AI_RMF}</strong> • OWASP LLM:{' '}
+                      <strong>{auditReport.compliance_frameworks?.OWASP_LLM_TOP_10}</strong>
                     </Typography>
                   </Paper>
 
-                  {/* Findings Feed */}
-                  <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: 'text.secondary' }}>
-                    IDENTIFIED VULNERABILITIES & POLICY REMEDIATIONS ({auditReport.findings.length}):
+                  <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: textSecondary }}>
+                    FINDINGS ({(auditReport.findings || []).length}):
                   </Typography>
 
-                  <Box sx={{ maxHeight: 270, overflowY: 'auto', pr: 0.5 }}>
-                    {auditReport.findings.length === 0 ? (
-                      <Paper sx={{ p: 3, textAlign: 'center', bgcolor: isDark ? voidDark : '#F8FAFC', border: `1px solid ${cardBorder}` }}>
+                  <Box sx={{ maxHeight: 280, overflowY: 'auto', pr: 0.5 }}>
+                    {(auditReport.findings || []).length === 0 ? (
+                      <Paper elevation={0} sx={{ p: 3, textAlign: 'center', bgcolor: panelInsetBg, border: `1px solid ${cardBorder}` }}>
                         <Typography variant="body2" sx={{ fontFamily: mono, color: emerald, fontWeight: 700 }}>
-                          ✔ 100% Policy Compliant! No security vulnerabilities identified across audited tool definitions.
+                          ✓ 0 vulnerabilities identified. Manifest passes OWASP LLM &amp; NIST AI RMF static checks.
                         </Typography>
                       </Paper>
                     ) : (
-                      auditReport.findings.map((f, idx) => (
+                      (auditReport.findings || []).map((f, idx) => (
                         <Paper
                           key={idx}
+                          elevation={0}
                           sx={{
                             p: 1.5,
                             mb: 1.5,
-                            bgcolor: isDark ? voidDark : '#FFF',
+                            bgcolor: cardBg,
                             border: `1px solid ${f.severity === 'CRITICAL' ? crimson : gold}`,
-                            borderRadius: 1.5
+                            borderRadius: 1.5,
                           }}
                         >
                           <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 0.5 }}>
                             <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: f.severity === 'CRITICAL' ? crimson : gold }}>
-                              {f.ruleId}: {f.ruleName}
+                              [{f.severity}] {f.rule_id}
                             </Typography>
-                            <Chip label={f.toolName} size="small" sx={{ fontFamily: mono, fontSize: '0.65rem' }} />
                           </Stack>
-                          <Typography variant="caption" sx={{ fontFamily: mono, color: 'text.secondary', display: 'block' }}>
-                            {f.message}
+                          <Typography variant="caption" sx={{ fontFamily: mono, color: textPrimary, display: 'block' }}>
+                            {f.description}
                           </Typography>
-                          <Typography variant="caption" sx={{ fontFamily: mono, color: cyan, display: 'block', mt: 0.5 }}>
-                            Remediation: {f.remediation}
-                          </Typography>
+                          {f.remediation && (
+                            <Typography variant="caption" sx={{ fontFamily: mono, color: cyan, display: 'block', mt: 0.5 }}>
+                              Remediation: {f.remediation}
+                            </Typography>
+                          )}
                         </Paper>
                       ))
                     )}
                   </Box>
                 </Stack>
-              ) : (
-                <Paper sx={{ p: 6, textAlign: 'center', bgcolor: isDark ? voidDark : '#F8FAFC', border: `1px dashed ${cardBorder}` }}>
-                  <Typography variant="body2" sx={{ fontFamily: mono, color: 'text.secondary' }}>
-                    Click &ldquo;EXECUTE REAL STATIC SECURITY AUDIT&rdquo; to analyze manifest parameters against policy rules.
-                  </Typography>
-                </Paper>
-              )}
+              ) : null}
             </Grid>
           </Grid>
         )}
@@ -599,9 +751,8 @@ export function AgentPolicyAuditorGodModeTool() {
         {/* TAB 1: HMAC CAPABILITY LEASER */}
         {activeTab === 1 && (
           <Grid container spacing={3}>
-            {/* Grant Lease Form */}
             <Grid xs={12} md={5}>
-              <Paper sx={{ p: 2, bgcolor: isDark ? voidDark : '#F8FAFC', border: `1px solid ${cardBorder}`, borderRadius: 1.5 }}>
+              <Paper elevation={0} sx={{ p: 2, bgcolor: panelInsetBg, border: `1px solid ${cardBorder}`, borderRadius: 1.5 }}>
                 <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: gold, mb: 2 }}>
                   ISSUE CRYPTOGRAPHIC CAPABILITY LEASE
                 </Typography>
@@ -623,30 +774,20 @@ export function AgentPolicyAuditorGodModeTool() {
                       onChange={(e) => setCapability(e.target.value)}
                       sx={{ fontFamily: mono, fontSize: '0.8rem' }}
                     >
-                      <MenuItem value="FS_WRITE">FS_WRITE (Filesystem Modifications)</MenuItem>
-                      <MenuItem value="NET_EGRESS">NET_EGRESS (Outbound Web Access)</MenuItem>
-                      <MenuItem value="SHELL_EXEC">SHELL_EXEC (Subprocess Invocations)</MenuItem>
-                      <MenuItem value="VAULT_READ">VAULT_READ (Decryption Access)</MenuItem>
+                      {CAPABILITIES.map((c) => (
+                        <MenuItem key={c.value} value={c.value}>{c.label}</MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
 
                   <TextField
                     size="small"
-                    label="Scope / Target Constraint"
+                    label="Scope / Target Pattern"
                     value={targetScope}
                     onChange={(e) => setTargetScope(e.target.value)}
                     InputProps={{ sx: { fontFamily: mono, fontSize: '0.8rem' } }}
                   />
 
-                  <SovereignEyebrow accent="#34D399" right="Security & Enclave">
-                    {"agent-policy-auditor"}
-                  </SovereignEyebrow>
-                  <SovereignBand
-                    seed={"agent-policy-auditor"}
-                    eyebrow={"Security & Enclave"}
-                    caption={"Agent Policy Auditor"}
-                    label={"Agent Policy Auditor — Zoth sovereign visualisation"}
-                  />
                   <Grid container spacing={2}>
                     <Grid xs={6}>
                       <TextField
@@ -675,37 +816,36 @@ export function AgentPolicyAuditorGodModeTool() {
                     onClick={handleGrantLease}
                     startIcon={<KeyIcon />}
                     sx={{
+                      minHeight: 44,
                       bgcolor: gold,
-                      color: '#000',
+                      color: isDark ? '#08080B' : '#FFFFFF',
                       fontWeight: 800,
                       fontFamily: mono,
-                      py: 1.1,
-                      '&:hover': { bgcolor: '#B8860B' }
+                      '&:hover': { bgcolor: isDark ? '#C59B27' : '#6F511E' },
                     }}
                   >
-                    SIGN & GRANT HMAC LEASE
+                    {daemonOnline ? 'GRANT LIVE :8106 LEASE' : 'GRANT OFFLINE PREVIEW LEASE'}
                   </Button>
                 </Stack>
               </Paper>
             </Grid>
 
-            {/* Active Leases Table */}
             <Grid xs={12} md={7}>
               <TableContainer sx={{ border: `1px solid ${cardBorder}`, borderRadius: 1.5 }}>
                 <Table size="small">
                   <TableHead>
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 800, fontFamily: mono, bgcolor: isDark ? voidDark : '#F8FAFC' }}>Lease ID</TableCell>
-                      <TableCell sx={{ fontWeight: 800, fontFamily: mono, bgcolor: isDark ? voidDark : '#F8FAFC' }}>Agent / Capability</TableCell>
-                      <TableCell sx={{ fontWeight: 800, fontFamily: mono, bgcolor: isDark ? voidDark : '#F8FAFC' }}>TTL Countdown</TableCell>
-                      <TableCell align="right" sx={{ fontWeight: 800, fontFamily: mono, bgcolor: isDark ? voidDark : '#F8FAFC' }}>Token</TableCell>
+                      <TableCell sx={{ fontWeight: 800, fontFamily: mono, bgcolor: panelInsetBg, color: textPrimary }}>Lease ID</TableCell>
+                      <TableCell sx={{ fontWeight: 800, fontFamily: mono, bgcolor: panelInsetBg, color: textPrimary }}>Agent / Cap</TableCell>
+                      <TableCell sx={{ fontWeight: 800, fontFamily: mono, bgcolor: panelInsetBg, color: textPrimary }}>TTL</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 800, fontFamily: mono, bgcolor: panelInsetBg, color: textPrimary }}>Actions</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {leases.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={4} sx={{ textAlign: 'center', py: 5, color: 'text.secondary', fontFamily: mono }}>
-                          No active capability leases issued. Fill the form to grant a signed token.
+                        <TableCell colSpan={4} sx={{ textAlign: 'center', py: 5, color: textSecondary, fontFamily: mono }}>
+                          No active capability leases. Issue a lease on the left.
                         </TableCell>
                       </TableRow>
                     ) : (
@@ -715,10 +855,10 @@ export function AgentPolicyAuditorGodModeTool() {
                             {l.leaseId}
                           </TableCell>
                           <TableCell>
-                            <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700 }}>
+                            <Typography variant="body2" sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 700, color: textPrimary }}>
                               {l.agentId}
                             </Typography>
-                            <Chip label={l.capability} size="small" sx={{ fontFamily: mono, fontSize: '0.62rem', height: 18, bgcolor: cyanSoft, color: cyan }} />
+                            <Chip label={l.capability} size="small" sx={{ fontFamily: mono, fontSize: '0.66rem', height: 20, bgcolor: cyanSoft, color: cyan, fontWeight: 700 }} />
                           </TableCell>
                           <TableCell sx={{ fontFamily: mono, fontSize: '0.75rem', color: emerald, fontWeight: 800 }}>
                             {l.remainingSec}s
@@ -726,10 +866,19 @@ export function AgentPolicyAuditorGodModeTool() {
                           <TableCell align="right">
                             <IconButton
                               size="small"
-                              onClick={() => handleCopy(l.token, l.leaseId)}
-                              sx={{ color: gold }}
+                              aria-label={`Copy lease ${l.leaseId}`}
+                              onClick={() => handleCopy(l.leaseId, l.leaseId)}
+                              sx={{ color: gold, minWidth: 36, minHeight: 36 }}
                             >
                               <ContentCopyIcon sx={{ fontSize: 16 }} />
+                            </IconButton>
+                            <IconButton
+                              size="small"
+                              aria-label={`Revoke lease ${l.leaseId}`}
+                              onClick={() => handleRevokeLease(l.leaseId)}
+                              sx={{ color: crimson, minWidth: 36, minHeight: 36 }}
+                            >
+                              <DeleteIcon sx={{ fontSize: 16 }} />
                             </IconButton>
                           </TableCell>
                         </TableRow>
@@ -742,81 +891,102 @@ export function AgentPolicyAuditorGodModeTool() {
           </Grid>
         )}
 
-        {/* TAB 2: LEASE TOKEN VERIFIER */}
+        {/* TAB 2: LIVE ACTION VERIFIER */}
         {activeTab === 2 && (
           <Grid container spacing={3}>
             <Grid xs={12} md={6}>
-              <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: cyan, mb: 1 }}>
-                VERIFY SIGNED CAPABILITY TOKEN
+              <Typography variant="subtitle2" sx={{ fontFamily: mono, fontWeight: 800, color: cyan, mb: 1.5 }}>
+                VERIFY AGENT ACTION (HMAC + PATH NORM + QUOTA)
               </Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={5}
-                placeholder="Paste [Base64Payload].[HMACSignature] token here..."
-                value={verifyTokenInput}
-                onChange={(e) => setVerifyTokenInput(e.target.value)}
-                InputProps={{ sx: { fontFamily: mono, fontSize: '0.78rem' } }}
-                sx={{ mb: 2 }}
-              />
-              <Button
-                variant="contained"
-                onClick={handleVerifyToken}
-                startIcon={<VerifiedUserIcon />}
-                sx={{
-                  bgcolor: emerald,
-                  color: '#000',
-                  fontWeight: 800,
-                  fontFamily: mono,
-                  py: 1.1,
-                  '&:hover': { bgcolor: '#059669' }
-                }}
-              >
-                VERIFY CRYPTOGRAPHIC SIGNATURE & TTL
-              </Button>
+              <Stack spacing={2}>
+                <TextField
+                  size="small"
+                  label="Lease ID"
+                  value={verifyLeaseId}
+                  onChange={(e) => setVerifyLeaseId(e.target.value)}
+                  InputProps={{ sx: { fontFamily: mono, fontSize: '0.8rem' } }}
+                />
+                <FormControl size="small">
+                  <InputLabel>Action Capability</InputLabel>
+                  <Select
+                    value={verifyCap}
+                    label="Action Capability"
+                    onChange={(e) => setVerifyCap(e.target.value)}
+                    sx={{ fontFamily: mono, fontSize: '0.8rem' }}
+                  >
+                    {CAPABILITIES.map((c) => (
+                      <MenuItem key={c.value} value={c.value}>{c.value}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <TextField
+                  size="small"
+                  label="Candidate Target (e.g. /tmp/work/file.txt)"
+                  value={verifyTarget}
+                  onChange={(e) => setVerifyTarget(e.target.value)}
+                  InputProps={{ sx: { fontFamily: mono, fontSize: '0.8rem' } }}
+                />
+                <TextField
+                  size="small"
+                  type="number"
+                  label="Action Cost ($USD)"
+                  value={verifyCost}
+                  onChange={(e) => setVerifyCost(Number(e.target.value))}
+                  InputProps={{ sx: { fontFamily: mono, fontSize: '0.8rem' } }}
+                />
+                <Button
+                  variant="contained"
+                  onClick={handleVerifyAction}
+                  startIcon={<VerifiedUserIcon />}
+                  sx={{
+                    minHeight: 44,
+                    bgcolor: emerald,
+                    color: isDark ? '#04130D' : '#FFFFFF',
+                    fontWeight: 800,
+                    fontFamily: mono,
+                    '&:hover': { bgcolor: isDark ? '#059669' : '#065F46' },
+                  }}
+                >
+                  VERIFY ACTION AGAINST POLICY BROKER
+                </Button>
+              </Stack>
             </Grid>
 
             <Grid xs={12} md={6}>
               {verifyResult ? (
                 <Paper
+                  elevation={0}
                   sx={{
-                    p: 2,
-                    bgcolor: isDark ? voidDark : '#0F172A',
-                    border: `1px solid ${verifyResult.valid ? emerald : crimson}`,
-                    borderRadius: 1.5
+                    p: 2.5,
+                    bgcolor: panelInsetBg,
+                    border: `1.5px solid ${verifyResult.allowed ? emerald : crimson}`,
+                    borderRadius: 1.5,
                   }}
                 >
                   <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1.5 }}>
                     <Chip
-                      label={verifyResult.valid ? 'SIGNATURE VALID & ACTIVE' : 'INVALID / EXPIRED TOKEN'}
+                      label={verifyResult.allowed ? 'ALLOW — AUTHORIZED' : 'DENY — BLOCKED'}
                       sx={{
                         fontFamily: mono,
                         fontWeight: 800,
-                        bgcolor: verifyResult.valid ? emeraldSoft : crimsonSoft,
-                        color: verifyResult.valid ? emerald : crimson
+                        bgcolor: verifyResult.allowed ? emeraldSoft : crimsonSoft,
+                        color: verifyResult.allowed ? emerald : crimson,
                       }}
                     />
                   </Stack>
-
-                  {verifyResult.error ? (
-                    <Typography variant="body2" sx={{ color: crimson, fontFamily: mono }}>
-                      {verifyResult.error}
+                  <Typography variant="body2" sx={{ fontFamily: mono, color: textPrimary, mb: 1 }}>
+                    {verifyResult.reason}
+                  </Typography>
+                  {typeof verifyResult.max_budget_usd === 'number' && (
+                    <Typography variant="caption" sx={{ fontFamily: mono, color: textSecondary, display: 'block' }}>
+                      Budget: used ${Number(verifyResult.used_budget_usd).toFixed(4)} / cap ${Number(verifyResult.max_budget_usd).toFixed(4)} (remaining ${Number(verifyResult.remaining_budget_usd).toFixed(4)})
                     </Typography>
-                  ) : (
-                    <Box sx={{ fontFamily: mono, fontSize: '0.78rem', color: '#CBD5E1' }}>
-                      <div>Subject: <strong>{verifyResult.payload.sub}</strong></div>
-                      <div>Capability: <strong>{verifyResult.payload.cap}</strong></div>
-                      <div>Scope: <strong>{verifyResult.payload.scope}</strong></div>
-                      <div>Budget Cap: <strong>${verifyResult.payload.budget}</strong></div>
-                      <div>Signature Match: <strong>{verifyResult.signatureMatch ? 'YES (HMAC-SHA256)' : 'NO (TAMPERED)'}</strong></div>
-                      <div>Remaining TTL: <strong>{verifyResult.remainingSec}s</strong></div>
-                    </Box>
                   )}
                 </Paper>
               ) : (
-                <Paper sx={{ p: 5, textAlign: 'center', bgcolor: isDark ? voidDark : '#F8FAFC', border: `1px dashed ${cardBorder}` }}>
-                  <Typography variant="body2" sx={{ fontFamily: mono, color: 'text.secondary' }}>
-                    Paste a lease token and click &ldquo;VERIFY CRYPTOGRAPHIC SIGNATURE & TTL&rdquo; to inspect integrity.
+                <Paper elevation={0} sx={{ p: 5, textAlign: 'center', bgcolor: panelInsetBg, border: `1px dashed ${cardBorder}` }}>
+                  <Typography variant="body2" sx={{ fontFamily: mono, color: textSecondary }}>
+                    Grant a lease in Tab 2, then verify allowed paths, traversal blocks, and budget quotas here.
                   </Typography>
                 </Paper>
               )}
@@ -824,6 +994,19 @@ export function AgentPolicyAuditorGodModeTool() {
           </Grid>
         )}
       </Paper>
+
+      {/* Sovereign Visual Band positioned cleanly outside forms */}
+      <Box sx={{ mt: 3 }}>
+        <SovereignEyebrow accent={emerald} right="Security & Enclave">
+          agent-policy-auditor
+        </SovereignEyebrow>
+        <SovereignBand
+          seed="agent-policy-auditor"
+          eyebrow="Security & Enclave"
+          caption="Agent Policy Auditor v2.6.0 — Local Daemon :8106 & Stdio MCP"
+          label="Agent Policy Auditor — Zoth sovereign visualisation"
+        />
+      </Box>
     </Box>
   );
 }
