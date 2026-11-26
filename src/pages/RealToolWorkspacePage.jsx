@@ -53,6 +53,7 @@ const AgentMockTwinGodModeTool = lazy(() => import('../components/tools/AgentMoc
 const AgentPolicyAuditorGodModeTool = lazy(() => import('../components/tools/AgentPolicyAuditorGodModeTool'));
 const AgentPromptFirewallGodModeTool = lazy(() => import('../components/tools/AgentPromptFirewallGodModeTool'));
 const AgentVoiceCallGodModeTool = lazy(() => import('../components/tools/AgentVoiceCallGodModeTool'));
+const AndersonSentinelGodModeTool = lazy(() => import('../components/tools/AndersonSentinelGodModeTool'));
 const AsciiMotionGodModeTool = lazy(() => import('../components/tools/AsciiMotionGodModeTool'));
 const AttackSurfaceSentinelGodModeTool = lazy(() => import('../components/tools/AttackSurfaceSentinelGodModeTool'));
 const AudioCipherGodModeTool = lazy(() => import('../components/tools/AudioCipherGodModeTool'));
@@ -229,7 +230,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'webmcp-protocol-inspector': WebMcpInspectorGodModeTool,
   'yara-sigma-forge': YaraSigmaForgeGodModeTool,
   'reality-shader-forge': RealityShaderForgeGodModeTool,
-  'anderson-security-sentinel': AttackSurfaceSentinelGodModeTool,
+  'anderson-security-sentinel': AndersonSentinelGodModeTool,
   'city-desk': CivicProcurementGodModeTool,
   'storefront-catalog': StorefrontCatalogGodModeTool,
   'pixel-cast': PixelCastGodModeTool,
@@ -351,7 +352,12 @@ export default function RealToolWorkspacePage() {
     fetch('/api/studio/tool/wake', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: tool.id, repo: tool.repo, port: tool.localPort }),
+      body: JSON.stringify({
+        id: tool.id,
+        repo: tool.repo,
+        port: tool.localPort,
+        probeOnly: tool.id === 'anderson-security-sentinel',
+      }),
     })
       .then((r) => (r.ok ? r.json() : { up: false }))
       .then((data) => {
@@ -437,7 +443,7 @@ export default function RealToolWorkspacePage() {
 
   const docs = getToolDocumentation(tool);
   const repoUrl =
-    ['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(tool.id) || !tool.github
+    ['wcag-contrast-guard', 'zothnet'].includes(tool.id) || !tool.github
       ? 'https://github.com/NullAITech/zoth-studio-v2'
       : tool.github;
   const studioRepoUrl = 'https://github.com/NullAITech/zoth-studio-v2';
@@ -1216,7 +1222,7 @@ export default function RealToolWorkspacePage() {
                 src={
                   tool.id === 'agent-budget-sentinel'
                     ? `${tool.localUrl || `http://127.0.0.1:${tool.localPort}`}?theme=${isDark ? 'dark' : 'light'}&embed=1`
-                    : tool.id === 'agent-capsule-jail' || tool.id === 'agent-egress-sentinel' || tool.id === 'agent-flight-recorder' || tool.id === 'agent-gods-eye' || tool.id === 'agent-mock-twin' || tool.id === 'agent-policy-auditor' || tool.id === 'agent-prompt-firewall' || tool.id === 'agent-voice-call'
+                    : tool.id === 'anderson-security-sentinel' || tool.id === 'agent-capsule-jail' || tool.id === 'agent-egress-sentinel' || tool.id === 'agent-flight-recorder' || tool.id === 'agent-gods-eye' || tool.id === 'agent-mock-twin' || tool.id === 'agent-policy-auditor' || tool.id === 'agent-prompt-firewall' || tool.id === 'agent-voice-call'
                     ? `${tool.localUrl || `http://127.0.0.1:${tool.localPort}`}/?embed=1&theme=${isDark ? 'dark' : 'light'}`
                     : (tool.localUrl || `http://127.0.0.1:${tool.localPort}`)
                 }

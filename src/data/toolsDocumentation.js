@@ -926,38 +926,40 @@ export const toolsDocumentation = {
   },
 
   'anderson-security-sentinel': {
-    whyUse: 'High-accuracy RF sensing and physical-layer intruder tracking utilizing multi-antenna Wi-Fi differential reception and computer vision fusion.',
-    problemSolved: 'Replaces blind heuristic RF detectors with physical angle-of-arrival (AoA), differential wall discrimination, and optical ground truth validation.',
-    architecture: 'Python 3.12 daemon interfacing with Linux nl80211, multi-transceiver synthetic aperture array, and OpenCV facial tracking.',
+    whyUse: 'Local loopback (:8103) biometric and physical-layer workstation perimeter defense combining OpenCV YuNet/SFace facial recognition, 802.11 Wi-Fi VRTI tomography, sysfs USB BadUSB tripwire, BlueZ BLE proximity, and SHA-256 forensic dossiers.',
+    problemSolved: 'Protects unattended laptops and operator consoles against shoulder surfers, rogue USB hardware implants, nearby RF anomalies, and untrusted local tampering with zero cloud egress.',
+    architecture: 'Python 3.12 FastAPI + Uvicorn ASGI daemon on 127.0.0.1:8103 protected by LoopbackSecurityMiddleware (strict Host/Origin allowlist, CSRF guard, 128 KiB streaming body cap, SSRF webhook validation), async MJPEG + WebSocket telemetry, offline /docs OpenAPI Explorer, and a zero-dependency 4-tool stdio JSON-RPC 2.0 MCP server.',
     aiAgentProtocol: {
       mcpTool: 'sentinel_scan_rf',
-      description: 'Run physical RF radar sweep across tri-antenna array and return intruder coordinates.',
-      cliExample: 'python3 engine/sentinel.py --port 7890 --accuracy high',
+      description: 'Stdio JSON-RPC 2.0 MCP server (`anderson-security-sentinel mcp`) exposing 4 tools: sentinel_status, sentinel_scan_rf, sentinel_perimeter, and sentinel_dossier.',
+      cliExample: 'anderson-security-sentinel mcp  # or: anderson-security-sentinel xray',
       inputSchema: {
         type: 'object',
         properties: {
-          accuracy: { type: 'string', enum: ['standard', 'high'] },
-          differentialLoss: { type: 'boolean' }
+          trigger_scan: { type: 'boolean', description: 'Trigger an immediate 802.11 RF sweep before snapshotting' },
+          port: { type: 'integer', default: 8103 }
         }
       },
       outputSchema: {
-        bearingDeg: 'number',
-        zone: 'string',
-        material: 'string',
-        coordinates: 'object'
+        active: 'boolean',
+        total_nodes: 'number',
+        disturbance_index: 'number',
+        room_bounds: 'object',
+        tomography_grid_active: 'boolean',
+        building_perimeter: 'object'
       }
     },
     quickstart: [
-      'git clone https://github.com/NullAITech/zoth-studio-v2.git',
-      'cd anderson-security-sentinel && pip install -r requirements.txt',
-      'python3 engine/sentinel.py'
+      'git clone https://github.com/1nc0gn30/anderson-security-sentinel.git',
+      'cd anderson-security-sentinel && python3 -m pip install -e .',
+      'python3 server.py --host 127.0.0.1 --port 8103  # or: anderson-security-sentinel serve'
     ],
     features: [
-      'Tri-transceiver synthetic aperture array geometry (wlan0, wlan1, wlan2)',
-      'Dual-band differential wall discriminator (2.4 GHz vs 5.0 GHz)',
-      'Real-time physical Angle-of-Arrival (AoA) bearing calculation',
-      'Camera optical ground-truth pinhole fusion',
-      'Tailscale-authorized remote video and RF dashboard on port 7890'
+      'OpenCV YuNet + SFace facial verification, shoulder-surfer alerts, and Thermal/Predator shaders (normal/optical, thermal, predator)',
+      '802.11 Wi-Fi VRTI 25x25 RF tomography grid with Kalman human target tracker and optical-to-RF pinhole fusion',
+      'Linux sysfs USB BadUSB tripwire, BlueZ BLE proximity guard, and OUI surveillance camera scanner',
+      'SHA-256 sealed JSON & XSS-escaped HTML forensic dossiers (/api/export_dossier, /api/export_dossier_html)',
+      '4-tool stdio JSON-RPC 2.0 MCP server (sentinel_status, sentinel_scan_rf, sentinel_perimeter, sentinel_dossier) & live :8103 Braille TUI'
     ]
   },
 

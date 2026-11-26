@@ -231,7 +231,6 @@ function resolveToolRootDir(id, repo) {
     'bolt-diy': 'bolt.diy',
     'zoth-math-pillar': 'zoth-math-pillar',
     'zothos-lite': 'zothos-lite',
-    'anderson-security-sentinel': 'sentinel-security-engine',
     'hexstrike': 'hexstrike-arsenal',
     'polyglot-studio': 'polyglot-framework-exporter',
     'schema-illustrator': 'schema-illustrator-studio',
@@ -258,7 +257,7 @@ function resolveToolRootDir(id, repo) {
   return null;
 }
 
-function spawnOnDemandTool(id, rootDir, port) {
+function spawnOnDemandTool(id, rootDir, port, extraEnv = {}) {
   while (ON_DEMAND_PROCS.length >= MAX_ON_DEMAND_PROCS) {
     const oldest = ON_DEMAND_PROCS.shift();
     if (oldest?.child?.pid) {
@@ -267,7 +266,7 @@ function spawnOnDemandTool(id, rootDir, port) {
     }
   }
 
-  const env = { ...process.env, PORT: String(port), PYTHONUNBUFFERED: '1' };
+  const env = { ...process.env, PORT: String(port), PYTHONUNBUFFERED: '1', ...extraEnv };
   let cmd = 'python3';
   let args = ['server.py', '--port', String(port)];
 
@@ -1535,12 +1534,27 @@ export function studioMiddleware() {
           send(res, 200, { up: true, port, spawned: false, activeOnDemand: ON_DEMAND_PROCS.length });
           return;
         }
+        // Hardware-camera opt-in guard: never silently activate /dev/video0 on page browse
+        const isCameraDaemon = id === 'anderson-security-sentinel' || repo === 'anderson-security-sentinel';
+        if (body.probeOnly || (isCameraDaemon && !body.optIn)) {
+          send(res, 200, {
+            up: false,
+            port,
+            spawned: false,
+            optInRequired: isCameraDaemon,
+            activeOnDemand: ON_DEMAND_PROCS.length,
+          });
+          return;
+        }
         const rootDir = resolveToolRootDir(id, repo);
         if (!rootDir) {
           send(res, 404, { up: false, port, error: `Tool directory not found for ${id || repo}` });
           return;
         }
-        spawnOnDemandTool(id || repo, rootDir, port);
+        const extraEnv = isCameraDaemon && !body.enableCamera
+          ? { ANDERSON_CAMERA_INDEX: '-1', ANDERSON_OFFLINE: '1' }
+          : {};
+        spawnOnDemandTool(id || repo, rootDir, port, extraEnv);
         let ready = false;
         for (let i = 0; i < 16; i++) {
           await new Promise((r) => setTimeout(r, 150));

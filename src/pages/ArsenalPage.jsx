@@ -48,7 +48,7 @@ const ECOSYSTEM_PILLS = [
 ];
 
 function resolveRepoUrl(item) {
-  if (['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(item.id) || !item.github) {
+  if (['wcag-contrast-guard', 'zothnet'].includes(item.id) || !item.github) {
     return 'https://github.com/NullAITech/zoth-studio-v2';
   }
   return item.github;

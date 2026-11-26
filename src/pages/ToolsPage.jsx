@@ -333,7 +333,7 @@ export default function ToolsPage() {
         <Grid container spacing={2.5}>
           {filtered.map((tool) => {
             const repoUrl =
-              ['anderson-security-sentinel', 'wcag-contrast-guard', 'zothnet'].includes(tool.id) || !tool.github
+              ['wcag-contrast-guard', 'zothnet'].includes(tool.id) || !tool.github
                 ? 'https://github.com/NullAITech/zoth-studio-v2'
                 : tool.github;
             const cloneCmd = `git clone ${repoUrl.replace(/\.git$/, '')}.git`;
