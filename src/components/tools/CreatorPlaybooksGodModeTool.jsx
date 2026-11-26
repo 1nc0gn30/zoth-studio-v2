@@ -10,6 +10,7 @@ import {
   LinearProgress,
   IconButton,
   Tooltip,
+  Link,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
@@ -24,6 +25,7 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import TerminalIcon from '@mui/icons-material/Terminal';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import {
   SovereignWorkstationShell,
   SovereignCard,
@@ -38,255 +40,64 @@ import {
   rgba,
   resolveModeAccent,
 } from '../sovereign';
+import { CREATOR_PLAYBOOKS_DATASET } from '../../data/creatorPlaybooksData';
 
 const ACCENT_DARK = '#F59E0B';
-const ACCENT_LIGHT = '#B45309';
+const ACCENT_LIGHT = '#9A6F0B';
 
 const STORAGE_BOOKMARKS = 'zoth_creatorplaybooks_bookmarks_v1';
 const STORAGE_CHECKS = 'zoth_creatorplaybooks_checks_v1';
 const STORAGE_SPRINT = 'zoth_creatorplaybooks_sprint_v1';
 
-const CATEGORIES = ['All', 'Engineering', 'Founder', 'Product', 'Growth', 'Community'];
-
-const PLAYBOOKS = [
-  {
-    id: 'owned-hub-trailer',
-    title: 'Owned Hub + Social Trailer Loop',
-    category: 'Growth',
-    cadence: 'Weekly',
-    operator: 'Indie Founder / Media Operator',
-    mentalModel: 'Owned Page First, Feed Second',
-    summary:
-      'Publish the full essay, benchmark, or episode on a URL you control first, then treat social posts strictly as concise trailers linking back to that canonical page.',
-    antiPatterns: [
-      'Publishing your best breakdown solely inside an ephemeral feed thread with no canonical URL.',
-      'Teasing an upcoming interview or launch instead of linking a completed artifact.',
-    ],
-    checklist: [
-      { id: 'oht-1', text: 'Create a single canonical page with a stable URL for this week’s deliverable.', minutes: 45, deliverable: 'Published URL on owned domain' },
-      { id: 'oht-2', text: 'Write one concrete experiment log: channel tried, action taken, and measured outcome.', minutes: 35, deliverable: '3-row experiment entry' },
-      { id: 'oht-3', text: 'Draft two feed trailers pointing directly to the canonical URL without clickbait.', minutes: 20, deliverable: '2 trailer posts + UTM/link check' },
-      { id: 'oht-4', text: 'Index the page in your archive table so new visitors can browse past experiments.', minutes: 15, deliverable: 'Updated archive index' },
-    ],
-  },
-  {
-    id: 'search-log-roadmap',
-    title: 'Empty-Search-Log Demand Roadmap',
-    category: 'Product',
-    cadence: 'Bi-Weekly',
-    operator: 'Design-Systems & Library Maintainer',
-    mentalModel: 'Observed Pull Over Speculative Push',
-    summary:
-      'Capture zero-result queries from your docs, icon pack, or CLI help logs and convert recurring real-user misses directly into your next release changelog.',
-    antiPatterns: [
-      'Shipping features based on guesses while ignoring actual zero-result search queries.',
-      'Rounding or inflating item counts instead of reporting exact repository totals.',
-    ],
-    checklist: [
-      { id: 'slr-1', text: 'Log local or docs search queries that returned zero matches over the past 14 days.', minutes: 25, deliverable: 'Raw empty-query list' },
-      { id: 'slr-2', text: 'Cluster synonyms and misspellings to surface the top 5 unmet requests.', minutes: 20, deliverable: 'Ranked 5-item backlog' },
-      { id: 'slr-3', text: 'Ship the top requested additions with exact counts and install/upgrade command.', minutes: 90, deliverable: 'Tagged release + diff' },
-      { id: 'slr-4', text: 'Publish a dated changelog entry naming the exact additions and how owners fetch them.', minutes: 25, deliverable: 'Public changelog note' },
-    ],
-  },
-  {
-    id: 'local-first-zero-telemetry',
-    title: 'Local-First Zero-Telemetry Architecture',
-    category: 'Engineering',
-    cadence: 'Per-Release',
-    operator: 'Systems & CLI Architect',
-    mentalModel: 'Client-Side Determinism',
-    summary:
-      'Bundle reference data and core transforms directly in the client or loopback daemon so every utility works offline on localhost with zero tracking scripts.',
-    antiPatterns: [
-      'Gating core search or export behind third-party SaaS APIs that break offline.',
-      'Shipping fake setTimeout placeholders instead of deterministic client-side parsing.',
-    ],
-    checklist: [
-      { id: 'lfz-1', text: 'Verify zero external analytics beacons, cookies, or blocking third-party CDN calls.', minutes: 20, deliverable: 'Network tab audit (0 trackers)' },
-      { id: 'lfz-2', text: 'Persist user state (bookmarks, filters, drafts) exclusively in localStorage or SQLite.', minutes: 35, deliverable: 'Local state persistence layer' },
-      { id: 'lfz-3', text: 'Provide one-click Markdown and JSON export so users own every output file.', minutes: 30, deliverable: 'Verified .md / .json downloads' },
-      { id: 'lfz-4', text: 'Document loopback port, health check, and CLI subcommands in README.md.', minutes: 25, deliverable: 'Updated README & --help parity' },
-    ],
-  },
-  {
-    id: 'one-hour-builder-workshop',
-    title: 'One-Hour Prompted Builder Workshop',
-    category: 'Community',
-    cadence: 'Monthly',
-    operator: 'Developer Relations / Community Lead',
-    mentalModel: 'Spotlight Builders, Not Hosts',
-    summary:
-      'Run a tightly scoped 60-minute build room with one concrete prompt, one starter URL, and a public recap where 80% of sentences credit participants and what they shipped.',
-    antiPatterns: [
-      'Announcing a community event without a concrete build prompt or deliverable link.',
-      'Writing a recap centered on the organizer rather than naming participant projects.',
-    ],
-    checklist: [
-      { id: 'obw-1', text: 'Publish the exact 60-minute prompt, starter repo URL, and start timestamp.', minutes: 30, deliverable: 'Workshop brief + repo link' },
-      { id: 'obw-2', text: 'Reserve the final 15 minutes strictly for live 90-second shipped demos.', minutes: 15, deliverable: 'Timed demo roster' },
-      { id: 'obw-3', text: 'Collect working demo URLs and verify every link opens before publishing.', minutes: 25, deliverable: 'Verified link list' },
-      { id: 'obw-4', text: 'Write a recap crediting at least three builders and one concrete detail per build.', minutes: 40, deliverable: 'Published community recap' },
-    ],
-  },
-  {
-    id: 'bio-offer-alignment',
-    title: 'Single-Priority Bio & Offer Alignment',
-    category: 'Founder',
-    cadence: 'Monthly',
-    operator: 'Multi-Product Solo Founder',
-    mentalModel: 'One Headline Link, Archived Side Projects',
-    summary:
-      'Keep older side projects live and documented, but order your profile bio, README, and homepage so line one always points to your current flagship offer.',
-    antiPatterns: [
-      'Listing five equal-weight links so a first-time visitor cannot tell what you build today.',
-      'Letting your GitHub profile, personal site, and X bio describe different current roles.',
-    ],
-    checklist: [
-      { id: 'boa-1', text: 'Audit your homepage, GitHub bio, and X bio side by side for conflicting headlines.', minutes: 15, deliverable: '3-surface audit note' },
-      { id: 'boa-2', text: 'Move your primary active product or repository to line one everywhere.', minutes: 20, deliverable: 'Aligned bio & nav links' },
-      { id: 'boa-3', text: 'Place older side projects into a clean "Archive / Earlier Builds" section.', minutes: 25, deliverable: 'Structured archive block' },
-      { id: 'boa-4', text: 'Test with a cold reader: can they repeat your flagship offer in one sentence?', minutes: 15, deliverable: 'One-sentence clarity check' },
-    ],
-  },
-  {
-    id: 'first-customer-forensics',
-    title: 'First-Ten-Customer Channel Forensics',
-    category: 'Founder',
-    cadence: 'Quarterly',
-    operator: 'Early-Stage Product Founder',
-    mentalModel: 'Trace Repeatable Acquisition Before Scaling',
-    summary:
-      'Interview users who actually adopted or paid for a tool about the exact trigger event, search phrase, or referral that led them to try it this week.',
-    antiPatterns: [
-      'Copying another founder’s acquisition channel without checking if your buyer hangs out there.',
-      'Asking hypothetical "would you use this" questions instead of auditing real behavior.',
-    ],
-    checklist: [
-      { id: 'fcf-1', text: 'Contact 5 recent active users and ask what broke right before they searched for your tool.', minutes: 40, deliverable: '5 trigger-event notes' },
-      { id: 'fcf-2', text: 'Record the exact channel, page, or CLI command that converted each user.', minutes: 25, deliverable: 'Channel attribution table' },
-      { id: 'fcf-3', text: 'Pick the single highest-signal channel and run 4 consecutive weekly reps.', minutes: 60, deliverable: '4-week channel schedule' },
-      { id: 'fcf-4', text: 'Document one failed channel hypothesis so you stop repeating low-yield outreach.', minutes: 20, deliverable: 'Anti-channel log entry' },
-    ],
-  },
-  {
-    id: 'vertical-slice-shipping',
-    title: '48-Hour End-to-End Vertical Slice',
-    category: 'Engineering',
-    cadence: 'Per-Feature',
-    operator: 'Staff Full-Stack Engineer',
-    mentalModel: 'Working Thin Slice Beats Polished Mockups',
-    summary:
-      'Cut every milestone to a single runnable path—input, real logic, output export, and verification command—before adding secondary tabs or visual polish.',
-    antiPatterns: [
-      'Spending four days on auth, billing, or landing copy before the core utility works.',
-      'Declaring a feature complete without running a build check and visual inspection.',
-    ],
-    checklist: [
-      { id: 'vss-1', text: 'Define the single core input -> transformation -> downloadable output loop.', minutes: 20, deliverable: '1-paragraph slice spec' },
-      { id: 'vss-2', text: 'Implement deterministic logic with unit-testable pure functions.', minutes: 75, deliverable: 'Pure core module' },
-      { id: 'vss-3', text: 'Wire the interactive UI controls and verify zero console errors across viewports.', minutes: 50, deliverable: 'Verified UI build' },
-      { id: 'vss-4', text: 'Ship the slice with a real example dataset preloaded so visitors test it immediately.', minutes: 25, deliverable: 'Preloaded interactive default' },
-    ],
-  },
-  {
-    id: 'benchmark-spec-reading-list',
-    title: 'Primary-Source Reading & Verification Protocol',
-    category: 'Product',
-    cadence: 'Weekly',
-    operator: 'Technical Researcher / Curator',
-    mentalModel: 'Cite Primary Docs Over Commentary',
-    summary:
-      'Distinguish primary source facts (dated posts, specs, changelogs, git commits) from personal interpretation or practice suggestions in every playbook note.',
-    antiPatterns: [
-      'Blending unverified hearsay with primary documentation inside the same checklist.',
-      'Keeping dead links or undated claims in an engineering reference handbook.',
-    ],
-    checklist: [
-      { id: 'bsr-1', text: 'Tag every playbook step as either [SOURCE] (primary doc) or [PRACTICE] (suggested drill).', minutes: 20, deliverable: 'Tagged reading notes' },
-      { id: 'bsr-2', text: 'Attach exact dates and canonical URLs to every metric or release claim.', minutes: 25, deliverable: 'Dated citation block' },
-      { id: 'bsr-3', text: 'Prune stale advice that no longer matches the current API or CLI flags.', minutes: 30, deliverable: 'Cleaned reference list' },
-    ],
-  },
-];
-
-const MENTAL_MODELS = [
-  { id: 'owned-hub', label: 'Owned Hub Over Feed', note: 'Publish long-form work on your own domain; use feeds as trailers.' },
-  { id: 'search-pull', label: 'Search-Log Pull', note: 'Convert empty searches and support questions directly into roadmap items.' },
-  { id: 'vertical-slice', label: 'Vertical Slice First', note: 'Ship one working end-to-end utility before adding breadth.' },
-  { id: 'source-vs-practice', label: 'Source vs. Practice Split', note: 'Separate verified primary facts from experimental drills.' },
-  { id: 'local-determinism', label: 'Local-First Determinism', note: 'Ensure core tools run offline with zero tracking and clean export.' },
-  { id: 'spotlight-builders', label: 'Spotlight Builders', note: 'Center community recaps on participant demos and working URLs.' },
-  { id: 'single-priority', label: 'Single-Priority Surface', note: 'Put one flagship link at line one across bio, docs, and nav.' },
-  { id: 'small-batch', label: 'Small Batch Cadence', note: 'Prefer dated weekly diffs with exact counts over silent multi-month rewrites.' },
+const CATEGORY_TABS = [
+  { id: 'all', label: 'All (35)' },
+  { id: 'netlify-shippers', label: 'Netlify' },
+  { id: 'indie-hackers', label: 'Indie hackers' },
+  { id: 'big-players', label: 'Larger accounts' },
 ];
 
 const HORIZONS = [
-  { days: 7, label: '7-Day Sprint', phases: ['Day 1–2 · Scope', 'Day 3–5 · Build', 'Day 6–7 · Ship & Measure'] },
-  { days: 14, label: '14-Day Sprint', phases: ['Week 1 · Prototype & Validate', 'Week 2 · Harden & Distribute'] },
-  { days: 30, label: '30-Day Sprint', phases: ['Days 1–7 · Foundation', 'Days 8–20 · Iteration', 'Days 21–30 · Distribution & Review'] },
+  { days: 7, label: '7-Day Sprint', phases: ['Days 1–2 · Scope & Study', 'Days 3–5 · Build & Publish', 'Days 6–7 · Review & Distribute'] },
+  { days: 14, label: '14-Day Sprint', phases: ['Days 1–4 · Research & Hook Bank', 'Days 5–10 · Daily Ship Cadence', 'Days 11–14 · Synthesis & Retro'] },
+  { days: 30, label: '30-Day Sprint', phases: ['Week 1 · Playbook Selection', 'Weeks 2–3 · Repeatable Distribution', 'Week 4 · Owned Hub & Metrics'] },
+];
+
+const MENTAL_MODELS = [
+  { id: 'owned-hub', label: 'Owned Hub First', note: 'Publish canonical notes on your own domain; treat feeds as trailers.' },
+  { id: 'volume-speed', label: 'Volume + Speed', note: 'Test hooks and angles quickly in public to find demand signals.' },
+  { id: 'proof-of-work', label: 'Proof of Work', note: 'Show real shipped artifacts, benchmarks, and changelogs over advice.' },
+  { id: 'local-first', label: 'Local-First Utility', note: 'Bundle datasets and core tools client-side with zero tracking.' },
+  { id: 'source-cited', label: 'Source-Cited Claims', note: 'Attach dates and direct URLs to every public milestone.' },
 ];
 
 const DEFAULT_SPRINT = {
-  goal: 'Ship v1.0 open-access developer utility with verified docs and first 25 real users',
+  goal: 'Apply Maya’s Volume + Speed and Owned Distribution plays over 14 days',
   horizonDays: 14,
   weeklyHours: 8,
-  selectedModels: ['owned-hub', 'vertical-slice', 'local-determinism'],
+  selectedModels: ['owned-hub', 'volume-speed', 'proof-of-work'],
   tasks: [
-    {
-      id: 'sp-1',
-      phase: 'Week 1 · Prototype & Validate',
-      title: 'Define the single core client-side input -> output vertical slice',
-      minutes: 45,
-      done: true,
-      source: '48-Hour End-to-End Vertical Slice',
-    },
-    {
-      id: 'sp-2',
-      phase: 'Week 1 · Prototype & Validate',
-      title: 'Publish canonical landing/docs page on owned domain with working demo',
-      minutes: 90,
-      done: false,
-      source: 'Owned Hub + Social Trailer Loop',
-    },
-    {
-      id: 'sp-3',
-      phase: 'Week 2 · Harden & Distribute',
-      title: 'Verify zero console errors, offline persistence, and .md/.json export',
-      minutes: 60,
-      done: false,
-      source: 'Local-First Zero-Telemetry Architecture',
-    },
-    {
-      id: 'sp-4',
-      phase: 'Week 2 · Harden & Distribute',
-      title: 'Publish dated changelog + 2 concise trailer posts linking to canonical URL',
-      minutes: 40,
-      done: false,
-      source: 'Owned Hub + Social Trailer Loop',
-    },
+    { id: 'seed-1', title: 'Audit 3 mentor playbooks and extract 5 concrete hooks', minutes: 45, phase: 'Days 1–4 · Research & Hook Bank', source: 'Maya (@buildwithmaya)', done: false },
+    { id: 'seed-2', title: 'Ship one public build update with screenshot + source link', minutes: 60, phase: 'Days 5–10 · Daily Ship Cadence', source: 'KP (@thisiskp_)', done: false },
+    { id: 'seed-3', title: 'Publish canonical recap on owned site & export Markdown log', minutes: 40, phase: 'Days 11–14 · Synthesis & Retro', source: 'CreatorPlaybooks', done: false },
   ],
 };
 
-function readStorageJson(key, fallback) {
+function readStorage(key, fallback) {
   try {
     const raw = window.localStorage.getItem(key);
     if (!raw) return fallback;
-    const parsed = JSON.parse(raw);
-    return parsed ?? fallback;
+    return JSON.parse(raw);
   } catch {
     return fallback;
   }
 }
 
 function slugify(str) {
-  return (
-    String(str || 'playbook-sprint')
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')
-      .slice(0, 44) || 'playbook-sprint'
-  );
+  return String(str || 'playbook-sprint')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 48) || 'playbook-sprint';
 }
 
 export default function CreatorPlaybooksGodModeTool() {
@@ -295,105 +106,104 @@ export default function CreatorPlaybooksGodModeTool() {
   const accent = isDark ? ACCENT_DARK : ACCENT_LIGHT;
   const { copied, copy } = useCopy();
 
-  // Explorer state (zero-tracking localStorage persistence)
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [bookmarkedOnly, setBookmarkedOnly] = useState(false);
-  const [bookmarks, setBookmarks] = useState(() =>
-    readStorageJson(STORAGE_BOOKMARKS, ['owned-hub-trailer', 'local-first-zero-telemetry']),
-  );
-  const [checkedSteps, setCheckedSteps] = useState(() =>
-    readStorageJson(STORAGE_CHECKS, { 'oht-1': true, 'lfz-1': true }),
-  );
-  const [activePlaybookId, setActivePlaybookId] = useState(PLAYBOOKS[0].id);
+  const creators = CREATOR_PLAYBOOKS_DATASET.creators;
+  const datasetStats = CREATOR_PLAYBOOKS_DATASET.stats;
 
-  // Sprint Planner state
-  const [sprint, setSprint] = useState(() => readStorageJson(STORAGE_SPRINT, DEFAULT_SPRINT));
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [bookmarkedOnly, setBookmarkedOnly] = useState(false);
+  const [activeCreatorId, setActiveCreatorId] = useState(creators[0]?.id || 'maya');
+  const [bookmarks, setBookmarks] = useState(() => readStorage(STORAGE_BOOKMARKS, ['maya', 'kp']));
+  const [checkedPlays, setCheckedPlays] = useState(() => readStorage(STORAGE_CHECKS, {}));
+  const [sprint, setSprint] = useState(() => readStorage(STORAGE_SPRINT, DEFAULT_SPRINT));
   const [newTaskTitle, setNewTaskTitle] = useState('');
-  const [newTaskMinutes, setNewTaskMinutes] = useState('45');
-  const [newTaskPhase, setNewTaskPhase] = useState('');
+  const [newTaskMinutes, setNewTaskMinutes] = useState('35');
   const [exportFormat, setExportFormat] = useState('md');
+  const [liveBridge, setLiveBridge] = useState({ checked: false, online: false, version: CREATOR_PLAYBOOKS_DATASET.version });
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem(STORAGE_BOOKMARKS, JSON.stringify(bookmarks));
-    } catch {
-      /* ignore storage quota errors */
-    }
+    try { window.localStorage.setItem(STORAGE_BOOKMARKS, JSON.stringify(bookmarks)); } catch { /* ignore */ }
   }, [bookmarks]);
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem(STORAGE_CHECKS, JSON.stringify(checkedSteps));
-    } catch {
-      /* ignore storage quota errors */
-    }
-  }, [checkedSteps]);
+    try { window.localStorage.setItem(STORAGE_CHECKS, JSON.stringify(checkedPlays)); } catch { /* ignore */ }
+  }, [checkedPlays]);
 
   useEffect(() => {
-    try {
-      window.localStorage.setItem(STORAGE_SPRINT, JSON.stringify(sprint));
-    } catch {
-      /* ignore storage quota errors */
-    }
+    try { window.localStorage.setItem(STORAGE_SPRINT, JSON.stringify(sprint)); } catch { /* ignore */ }
   }, [sprint]);
 
-  const currentHorizon = useMemo(
-    () => HORIZONS.find((h) => h.days === sprint.horizonDays) || HORIZONS[1],
-    [sprint.horizonDays],
+  // Safe same-origin loopback status check via Studio API (avoids browser ERR_CONNECTION_REFUSED when :5185 is idle)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const host = window.location.hostname;
+    if (host !== '127.0.0.1' && host !== 'localhost') return;
+    let cancelled = false;
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), 900);
+    fetch('/api/studio/status', { signal: controller.signal })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (cancelled) return;
+        const entry = data?.tools?.creatorplaybooks || data?.daemons?.creatorplaybooks || null;
+        setLiveBridge({
+          checked: true,
+          online: Boolean(entry?.online || entry?.up),
+          version: CREATOR_PLAYBOOKS_DATASET.version,
+        });
+      })
+      .catch(() => {
+        if (!cancelled) setLiveBridge((prev) => ({ ...prev, checked: true, online: false }));
+      })
+      .finally(() => window.clearTimeout(timer));
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, []);
+
+  const filteredCreators = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return creators.filter((c) => {
+      if (selectedCategory !== 'all' && c.category !== selectedCategory) return false;
+      if (bookmarkedOnly && !bookmarks.includes(c.id)) return false;
+      if (!q) return true;
+      return (
+        c.name.toLowerCase().includes(q) ||
+        c.handle.toLowerCase().includes(q) ||
+        c.bio.toLowerCase().includes(q) ||
+        c.tags.some((t) => t.toLowerCase().includes(q)) ||
+        c.plays.some((p) => p.title.toLowerCase().includes(q) || p.description.toLowerCase().includes(q))
+      );
+    });
+  }, [creators, searchQuery, selectedCategory, bookmarkedOnly, bookmarks]);
+
+  const activeCreator = useMemo(
+    () => creators.find((c) => c.id === activeCreatorId) || filteredCreators[0] || creators[0],
+    [creators, activeCreatorId, filteredCreators]
   );
 
-  const filteredPlaybooks = useMemo(() => {
-    const q = searchQuery.trim().toLowerCase();
-    return PLAYBOOKS.filter((pb) => {
-      if (selectedCategory !== 'All' && pb.category !== selectedCategory) return false;
-      if (bookmarkedOnly && !bookmarks.includes(pb.id)) return false;
-      if (!q) return true;
-      const hay = [
-        pb.title,
-        pb.category,
-        pb.operator,
-        pb.mentalModel,
-        pb.summary,
-        ...pb.antiPatterns,
-        ...pb.checklist.map((c) => `${c.text} ${c.deliverable}`),
-      ]
-        .join(' ')
-        .toLowerCase();
-      return hay.includes(q);
-    });
-  }, [searchQuery, selectedCategory, bookmarkedOnly, bookmarks]);
-
-  const activePlaybook = useMemo(
-    () =>
-      filteredPlaybooks.find((p) => p.id === activePlaybookId) ||
-      PLAYBOOKS.find((p) => p.id === activePlaybookId) ||
-      PLAYBOOKS[0],
-    [filteredPlaybooks, activePlaybookId],
+  const totalPlays = datasetStats.plays;
+  const completedPlays = useMemo(
+    () => creators.reduce((sum, c) => sum + c.plays.filter((p) => Boolean(checkedPlays[p.id])).length, 0),
+    [creators, checkedPlays]
   );
 
   const toggleBookmark = (id) => {
     setBookmarks((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   };
 
-  const toggleChecklistStep = (stepId) => {
-    setCheckedSteps((prev) => ({ ...prev, [stepId]: !prev[stepId] }));
+  const togglePlayCheck = (playId) => {
+    setCheckedPlays((prev) => ({ ...prev, [playId]: !prev[playId] }));
   };
 
-  const totalChecklistSteps = useMemo(
-    () => PLAYBOOKS.reduce((acc, pb) => acc + pb.checklist.length, 0),
-    [],
-  );
-  const completedChecklistSteps = useMemo(
-    () =>
-      PLAYBOOKS.reduce(
-        (acc, pb) => acc + pb.checklist.filter((step) => Boolean(checkedSteps[step.id])).length,
-        0,
-      ),
-    [checkedSteps],
-  );
+  const currentHorizon = HORIZONS.find((h) => h.days === sprint.horizonDays) || HORIZONS[1];
 
-  // Sprint handlers
+  const handleSetHorizon = (days) => {
+    setSprint((prev) => ({ ...prev, horizonDays: days }));
+  };
+
   const handleToggleModel = (modelId) => {
     setSprint((prev) => {
       const exists = prev.selectedModels.includes(modelId);
@@ -406,17 +216,43 @@ export default function CreatorPlaybooksGodModeTool() {
     });
   };
 
-  const handleSetHorizon = (days) => {
-    const h = HORIZONS.find((item) => item.days === days) || HORIZONS[1];
+  const handleImportCreatorPlaysToSprint = (creator) => {
+    const phase = currentHorizon.phases[1] || currentHorizon.phases[0];
+    setSprint((prev) => {
+      const existingTitles = new Set(prev.tasks.map((t) => t.title));
+      const added = creator.plays
+        .filter((p) => !existingTitles.has(`${p.title} (${creator.name})`))
+        .map((p) => ({
+          id: `pb-${p.id}-${Date.now()}`,
+          title: `${p.title} (${creator.name})`,
+          minutes: p.frequency === 'Daily' ? 30 : 45,
+          phase,
+          source: `${creator.name} (${creator.handle})`,
+          done: false,
+        }));
+      return { ...prev, tasks: [...prev.tasks, ...added] };
+    });
+  };
+
+  const handleAddCustomTask = () => {
+    const title = newTaskTitle.trim();
+    if (!title) return;
+    const mins = Math.max(5, Math.min(480, Number.parseInt(newTaskMinutes, 10) || 30));
     setSprint((prev) => ({
       ...prev,
-      horizonDays: days,
-      tasks: prev.tasks.map((t, idx) => ({
-        ...t,
-        phase: h.phases[Math.min(Math.floor((idx / Math.max(prev.tasks.length, 1)) * h.phases.length), h.phases.length - 1)],
-      })),
+      tasks: [
+        ...prev.tasks,
+        {
+          id: `custom-${Date.now()}`,
+          title,
+          minutes: mins,
+          phase: currentHorizon.phases[0],
+          source: 'Custom Step',
+          done: false,
+        },
+      ],
     }));
-    setNewTaskPhase(h.phases[0]);
+    setNewTaskTitle('');
   };
 
   const handleToggleSprintTask = (taskId) => {
@@ -433,162 +269,91 @@ export default function CreatorPlaybooksGodModeTool() {
     }));
   };
 
-  const handleAddCustomTask = () => {
-    const title = newTaskTitle.trim();
-    if (!title) return;
-    const mins = Math.max(5, Math.min(480, Number.parseInt(newTaskMinutes, 10) || 45));
-    const phase = newTaskPhase || currentHorizon.phases[0];
-    setSprint((prev) => ({
-      ...prev,
-      tasks: [
-        ...prev.tasks,
-        {
-          id: `custom-${Date.now()}`,
-          phase,
-          title,
-          minutes: mins,
-          done: false,
-          source: 'Custom Action',
-        },
-      ],
-    }));
-    setNewTaskTitle('');
-  };
-
-  const handleImportPlaybookToSprint = (pb) => {
-    const phases = currentHorizon.phases;
-    setSprint((prev) => {
-      const existingTitles = new Set(prev.tasks.map((t) => t.title.toLowerCase()));
-      const additions = pb.checklist
-        .filter((step) => !existingTitles.has(step.text.toLowerCase()))
-        .map((step, idx) => ({
-          id: `pb-${pb.id}-${step.id}`,
-          phase: phases[Math.min(Math.floor((idx / pb.checklist.length) * phases.length), phases.length - 1)],
-          title: step.text,
-          minutes: step.minutes,
-          done: Boolean(checkedSteps[step.id]),
-          source: pb.title,
-        }));
-      if (additions.length === 0) return prev;
-      return { ...prev, tasks: [...prev.tasks, ...additions] };
-    });
-  };
-
   const sprintMetrics = useMemo(() => {
     const totalTasks = sprint.tasks.length;
     const doneTasks = sprint.tasks.filter((t) => t.done).length;
-    const totalMinutes = sprint.tasks.reduce((sum, t) => sum + (Number(t.minutes) || 0), 0);
-    const remainingMinutes = sprint.tasks
-      .filter((t) => !t.done)
-      .reduce((sum, t) => sum + (Number(t.minutes) || 0), 0);
     const pct = totalTasks === 0 ? 0 : Math.round((doneTasks / totalTasks) * 100);
-    const dailyMinutesNeeded = Math.ceil(remainingMinutes / Math.max(1, sprint.horizonDays));
-    return { totalTasks, doneTasks, totalMinutes, remainingMinutes, pct, dailyMinutesNeeded };
+    const totalMinutes = sprint.tasks.reduce((sum, t) => sum + (Number(t.minutes) || 0), 0);
+    const remainingMinutes = sprint.tasks.filter((t) => !t.done).reduce((sum, t) => sum + (Number(t.minutes) || 0), 0);
+    const dailyMinutesNeeded = Math.max(1, Math.round(remainingMinutes / Math.max(1, sprint.horizonDays)));
+    return { totalTasks, doneTasks, pct, totalMinutes, remainingMinutes, dailyMinutesNeeded };
   }, [sprint]);
 
-  const sprintPlanObject = useMemo(() => {
-    const models = MENTAL_MODELS.filter((m) => sprint.selectedModels.includes(m.id));
-    return {
-      schema: 'creatorplaybooks.sprint/v1',
-      generated_at: new Date().toISOString().slice(0, 10),
-      goal: sprint.goal.trim() || 'Untitled Operator Sprint',
-      horizon_days: sprint.horizonDays,
-      weekly_focus_hours: sprint.weeklyHours,
-      completion_pct: sprintMetrics.pct,
-      total_estimated_minutes: sprintMetrics.totalMinutes,
-      remaining_minutes: sprintMetrics.remainingMinutes,
-      mental_models: models.map((m) => ({ id: m.id, name: m.label, principle: m.note })),
-      milestones: sprint.tasks.map((t, index) => ({
-        order: index + 1,
-        phase: t.phase,
-        title: t.title,
-        estimated_minutes: t.minutes,
-        completed: t.done,
-        source_playbook: t.source,
-      })),
-    };
-  }, [sprint, sprintMetrics]);
+  const sprintPlanObject = useMemo(() => ({
+    schema: 'creatorplaybooks.sprint/v1.1',
+    version: CREATOR_PLAYBOOKS_DATASET.version,
+    datasetStats,
+    activeMentor: { id: activeCreator.id, name: activeCreator.name, handle: activeCreator.handle },
+    goal: sprint.goal,
+    horizonDays: sprint.horizonDays,
+    weeklyHours: sprint.weeklyHours,
+    models: MENTAL_MODELS.filter((m) => sprint.selectedModels.includes(m.id)),
+    metrics: sprintMetrics,
+    tasks: sprint.tasks,
+  }), [activeCreator, datasetStats, sprint, sprintMetrics]);
 
   const sprintMarkdown = useMemo(() => {
     const models = MENTAL_MODELS.filter((m) => sprint.selectedModels.includes(m.id));
-    const grouped = currentHorizon.phases.map((phase) => ({
-      phase,
-      items: sprint.tasks.filter((t) => t.phase === phase),
-    }));
-    const otherItems = sprint.tasks.filter((t) => !currentHorizon.phases.includes(t.phase));
-    if (otherItems.length > 0) {
-      grouped.push({ phase: 'Additional Actions', items: otherItems });
-    }
-
     const lines = [
-      `# Playbook Sprint Plan (${sprint.horizonDays}-Day Horizon)`,
+      `# CreatorPlaybooks Sprint Plan (${sprint.horizonDays}-Day Horizon)`,
       '',
       `**Goal:** ${sprint.goal.trim() || 'Define concrete sprint goal'}`,
-      `**Horizon:** ${sprint.horizonDays} days · **Budget:** ${sprint.weeklyHours}h/week · **Progress:** ${sprintMetrics.doneTasks}/${sprintMetrics.totalTasks} (${sprintMetrics.pct}%)`,
+      `**Active Mentor:** ${activeCreator.name} (${activeCreator.handle}) · **Progress:** ${sprintMetrics.doneTasks}/${sprintMetrics.totalTasks} (${sprintMetrics.pct}%)`,
       `**Effort Estimate:** ${sprintMetrics.totalMinutes} min total (${sprintMetrics.remainingMinutes} min remaining · ~${sprintMetrics.dailyMinutesNeeded} min/day)`,
       '',
-      '## Applicable Mental Models',
-      ...(models.length > 0
-        ? models.map((m) => `- **${m.label}**: ${m.note}`)
-        : ['- _Select at least one mental model to anchor scope decisions._']),
+      '## Governing Mental Models',
+      ...(models.length ? models.map((m) => `- **${m.label}**: ${m.note}`) : ['- _Select a mental model._']),
       '',
-      '## Milestones & Action Checklist',
-    ];
-
-    grouped.forEach((group) => {
-      if (group.items.length === 0) return;
-      lines.push('', `### ${group.phase}`);
-      group.items.forEach((item) => {
-        lines.push(
-          `- [${item.done ? 'x' : ' '}] ${item.title} _(${item.minutes}m · ${item.source})_`,
-        );
-      });
-    });
-
-    lines.push(
+      '## Action Checklist',
+      ...sprint.tasks.map((item) => `- [${item.done ? 'x' : ' '}] ${item.title} _(${item.minutes}m · ${item.source})_`),
       '',
       '---',
-      '*Generated locally with CreatorPlaybooks (:5185) — zero tracking, client-side export.*',
-    );
+      '*Generated locally with CreatorPlaybooks v1.1.0 (35 mentors · 115 plays · 20 cities) — Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform.*',
+    ];
     return lines.join('\n');
-  }, [sprint, sprintMetrics, currentHorizon]);
+  }, [activeCreator, sprint, sprintMetrics]);
 
   const sprintJsonText = useMemo(() => JSON.stringify(sprintPlanObject, null, 2), [sprintPlanObject]);
 
-  const cliReference = useMemo(() => {
-    const goalSafe = (sprint.goal || 'Launch developer playbook sprint').replace(/"/g, '\\"');
-    return [
-      '# 1. Launch standalone CreatorPlaybooks desktop workstation on http://127.0.0.1:5185',
-      'creatorplaybooks desktop',
-      '',
-      '# 2. Open 60fps Unicode U+2800 Braille terminal TUI',
-      'creatorplaybooks-tui',
-      '',
-      '# 3. Dispatch goal or playbook query via Hermes Agent plugin',
-      `hermes-creatorplaybooks --horizon ${sprint.horizonDays} --goal "${goalSafe}"`,
-      '',
-      '# 4. Inspect local daemon telemetry & serve directly on :5185',
-      'creatorplaybooks --status',
-      'creatorplaybooks --json',
-      'creatorplaybooks serve',
-    ].join('\n');
-  }, [sprint.goal, sprint.horizonDays]);
+  const cliReference = useMemo(() => [
+    '# 1. Start hardened zero-dependency loopback server on http://127.0.0.1:5185',
+    'creatorplaybooks serve',
+    'creatorplaybooks desktop',
+    '',
+    '# 2. Launch interactive Unicode U+2800 Braille terminal TUI (or single snapshot)',
+    'creatorplaybooks-tui',
+    `creatorplaybooks-tui --search "${activeCreator.id}" --once`,
+    `creatorplaybooks-tui --search "${activeCreator.id}" --json`,
+    '',
+    '# 3. Inspect CLI status & live loopback JSON API',
+    'creatorplaybooks --status',
+    'creatorplaybooks --json',
+    `curl -s "http://127.0.0.1:5185/api/creator?id=${activeCreator.id}&expand=all"`,
+    `curl -s "http://127.0.0.1:5185/api/export?creator=${activeCreator.id}&format=md"`,
+    '',
+    '# 4. Real Hermes Agent plugin tools (github.com/1nc0gn30/hermes-creatorplaybooks)',
+    '#   - creatorplaybooks_mentors',
+    '#   - creatorplaybooks_mentor',
+    '#   - creatorplaybooks_playbook',
+    '#   - creatorplaybooks_ideas',
+    '#   - creatorplaybooks_goal_plan',
+  ].join('\n'), [activeCreator.id]);
 
-  const activePbChecked = activePlaybook.checklist.filter((c) => Boolean(checkedSteps[c.id])).length;
-  const activePbPct = Math.round((activePbChecked / Math.max(1, activePlaybook.checklist.length)) * 100);
+  const activeCheckedCount = activeCreator.plays.filter((p) => Boolean(checkedPlays[p.id])).length;
+  const activePct = Math.round((activeCheckedCount / Math.max(1, activeCreator.plays.length)) * 100);
   const exportSlug = slugify(sprint.goal || 'playbook-sprint');
 
   const kpis = [
     {
-      label: 'Playbook Library',
-      value: `${filteredPlaybooks.length}/${PLAYBOOKS.length}`,
-      unit: `${bookmarks.length} bookmarked`,
+      label: 'Curated Mentors',
+      value: `${filteredCreators.length}/${datasetStats.creators}`,
+      unit: `${datasetStats.places} cities · ${bookmarks.length} saved`,
       accent: ACCENT_DARK,
     },
     {
-      label: 'Checklist Progress',
-      value: `${completedChecklistSteps}/${totalChecklistSteps}`,
-      unit: `${Math.round((completedChecklistSteps / Math.max(1, totalChecklistSteps)) * 100)}% done`,
+      label: 'Repeatable Plays',
+      value: `${completedPlays}/${totalPlays}`,
+      unit: `${Math.round((completedPlays / Math.max(1, totalPlays)) * 100)}% applied`,
       accent: SOV.emerald,
     },
     {
@@ -609,7 +374,11 @@ export default function CreatorPlaybooksGodModeTool() {
     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center' }}>
       <SovereignStatusPill
         status="online"
-        label={`ZERO-TRACKING LOCAL STORAGE · :5185 STANDALONE READY · ${sprint.horizonDays}D SPRINT`}
+        label={
+          liveBridge.online
+            ? `35 MENTORS · 115 PLAYS · :5185 LOOPBACK v${liveBridge.version} ONLINE`
+            : '35 MENTORS · 115 PLAYS · 20 CITIES · 100% OFFLINE CLIENT ENGINE'
+        }
         accent={ACCENT_DARK}
         sx={{ maxWidth: '100%', '& .MuiTypography-root': { whiteSpace: 'normal', lineHeight: 1.25 } }}
       />
@@ -634,7 +403,7 @@ export default function CreatorPlaybooksGodModeTool() {
       onClick: () => downloadJson(sprintPlanObject, `${exportSlug}.json`),
     },
     {
-      label: copied === 'cli' ? 'Copied CLI Commands' : 'Copy CLI & Hermes Cmds',
+      label: copied === 'cli' ? 'Copied CLI Commands' : 'Copy CLI & TUI Cmds',
       icon: copied === 'cli' ? <CheckIcon fontSize="small" /> : <TerminalIcon fontSize="small" />,
       onClick: () => copy(cliReference, 'cli'),
     },
@@ -649,137 +418,133 @@ export default function CreatorPlaybooksGodModeTool() {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <SovereignCard
         index="01"
-        eyebrow="CLIENT-SIDE DIRECTORY · ZERO TELEMETRY"
-        title="Operator Playbooks & Mental Models Explorer"
-        subtitle="Filter concrete engineering, founder, product, growth, and community playbooks. Bookmarks and reading checklists save only to your browser localStorage."
+        eyebrow="CANONICAL 35-MENTOR DATASET · ZERO TELEMETRY"
+        title="Curated Creators & Playbooks Explorer"
+        subtitle="Synced directly from shared/creators.json (35 mentors, 115 repeatable plays, 20 cities). Search, bookmark, and check off plays offline."
         accent={ACCENT_DARK}
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
           <TextField
             size="small"
             fullWidth
-            label="Search playbooks, mental models, deliverables, or anti-patterns"
+            label="Search 35 mentors by name, handle, tag, or play"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             InputProps={{
               startAdornment: <SearchIcon fontSize="small" sx={{ mr: 1, color: 'text.secondary' }} />,
             }}
-            sx={{ '& input': { fontFamily: MONO, fontSize: '0.78rem' } }}
+            sx={{ '& .MuiInputBase-root': { minHeight: 44 }, '& .MuiInputBase-input': { minHeight: 44, boxSizing: 'border-box', fontFamily: MONO, fontSize: '0.8rem' } }}
           />
 
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, alignItems: 'center' }}>
-            {CATEGORIES.map((cat) => {
-              const active = selectedCategory === cat;
+            {CATEGORY_TABS.map((cat) => {
+              const active = selectedCategory === cat.id;
               return (
                 <Chip
-                  key={cat}
-                  label={cat}
+                  key={cat.id}
+                  label={cat.label}
                   clickable
-                  onClick={() => setSelectedCategory(cat)}
+                  onClick={() => setSelectedCategory(cat.id)}
                   sx={{
-                    minHeight: 36,
+                    minHeight: 44,
                     fontFamily: MONO,
-                    fontSize: '0.71rem',
-                    fontWeight: active ? 700 : 500,
-                    bgcolor: active ? rgba(accent, 0.16) : 'transparent',
-                    color: active ? accent : 'text.primary',
-                    border: `1px solid ${active ? accent : 'rgba(148,163,184,0.3)'}`,
+                    fontSize: '0.73rem',
+                    fontWeight: active ? 700 : 600,
+                    bgcolor: active ? (isDark ? rgba(ACCENT_DARK, 0.2) : '#FEF7E0') : 'transparent',
+                    color: active ? (isDark ? '#FDE68A' : '#7A5808') : 'text.primary',
+                    '& .MuiChip-label': { color: active ? (isDark ? '#FDE68A' : '#7A5808') : 'inherit' },
+                    border: `1px solid ${active ? accent : isDark ? 'rgba(148,163,184,0.35)' : 'rgba(16,24,40,0.25)'}`,
                   }}
                 />
               );
             })}
             <Chip
-              icon={bookmarkedOnly ? <BookmarkIcon sx={{ fontSize: '0.95rem !important' }} /> : <BookmarkBorderIcon sx={{ fontSize: '0.95rem !important' }} />}
+              icon={bookmarkedOnly ? <BookmarkIcon sx={{ fontSize: '1rem !important' }} /> : <BookmarkBorderIcon sx={{ fontSize: '1rem !important' }} />}
               label={`Saved (${bookmarks.length})`}
               clickable
               onClick={() => setBookmarkedOnly((v) => !v)}
               sx={{
-                minHeight: 36,
+                minHeight: 44,
                 fontFamily: MONO,
-                fontSize: '0.71rem',
-                fontWeight: bookmarkedOnly ? 700 : 500,
-                bgcolor: bookmarkedOnly ? rgba(SOV.gold, 0.18) : 'transparent',
-                color: bookmarkedOnly ? resolveModeAccent(SOV.gold, isDark) : 'text.secondary',
-                border: `1px solid ${bookmarkedOnly ? resolveModeAccent(SOV.gold, isDark) : 'rgba(148,163,184,0.3)'}`,
+                fontSize: '0.73rem',
+                fontWeight: bookmarkedOnly ? 700 : 600,
+                bgcolor: bookmarkedOnly ? (isDark ? rgba(SOV.gold, 0.22) : '#FEF7E0') : 'transparent',
+                color: bookmarkedOnly ? (isDark ? '#FDE68A' : '#7A5808') : 'text.primary',
+                '& .MuiChip-label': { color: bookmarkedOnly ? (isDark ? '#FDE68A' : '#7A5808') : 'inherit' },
+                border: `1px solid ${bookmarkedOnly ? accent : isDark ? 'rgba(148,163,184,0.35)' : 'rgba(16,24,40,0.25)'}`,
               }}
             />
           </Box>
 
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            {filteredPlaybooks.length === 0 ? (
-              <Box
-                sx={{
-                  p: 2,
-                  borderRadius: 1.5,
-                  border: '1px dashed',
-                  borderColor: 'divider',
-                  textAlign: 'center',
-                }}
-              >
-                <Typography sx={{ fontFamily: MONO, fontSize: '0.76rem', color: 'text.secondary' }}>
-                  No playbooks match "{searchQuery}" under {selectedCategory}.
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, maxHeight: 460, overflowY: 'auto', pr: 0.5 }}>
+            {filteredCreators.length === 0 ? (
+              <Box sx={{ p: 2, borderRadius: 1.5, border: '1px dashed', borderColor: 'divider', textAlign: 'center' }}>
+                <Typography sx={{ fontFamily: MONO, fontSize: '0.78rem', color: 'text.secondary' }}>
+                  No mentors match &ldquo;{searchQuery}&rdquo;.
                 </Typography>
               </Box>
             ) : (
-              filteredPlaybooks.map((pb) => {
-                const isSelected = activePlaybook.id === pb.id;
-                const isSaved = bookmarks.includes(pb.id);
-                const doneCount = pb.checklist.filter((s) => Boolean(checkedSteps[s.id])).length;
-                const pct = Math.round((doneCount / pb.checklist.length) * 100);
+              filteredCreators.map((c) => {
+                const isSelected = activeCreator.id === c.id;
+                const isSaved = bookmarks.includes(c.id);
+                const doneCount = c.plays.filter((p) => Boolean(checkedPlays[p.id])).length;
+                const pct = Math.round((doneCount / Math.max(1, c.plays.length)) * 100);
                 return (
                   <Box
-                    key={pb.id}
-                    onClick={() => setActivePlaybookId(pb.id)}
+                    key={c.id}
+                    onClick={() => setActiveCreatorId(c.id)}
                     sx={{
                       p: 1.35,
                       borderRadius: 1.5,
                       cursor: 'pointer',
-                      border: `1px solid ${isSelected ? accent : isDark ? 'rgba(255,255,255,0.09)' : 'rgba(16,24,40,0.12)'}`,
+                      border: `1px solid ${isSelected ? accent : isDark ? 'rgba(255,255,255,0.1)' : 'rgba(16,24,40,0.14)'}`,
                       bgcolor: isSelected
                         ? isDark
-                          ? rgba(ACCENT_DARK, 0.1)
-                          : rgba(ACCENT_LIGHT, 0.06)
+                          ? rgba(ACCENT_DARK, 0.12)
+                          : '#FEF7E0'
                         : isDark
-                          ? 'rgba(255,255,255,0.015)'
-                          : 'rgba(255,255,255,0.65)',
+                          ? 'rgba(255,255,255,0.02)'
+                          : '#FFFFFF',
                       transition: 'border-color 140ms ease, background-color 140ms ease',
                     }}
                   >
                     <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 1 }}>
                       <Box sx={{ minWidth: 0, flex: 1 }}>
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, alignItems: 'center', mb: 0.4 }}>
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, alignItems: 'center', mb: 0.35 }}>
                           <Chip
                             size="small"
-                            label={pb.category.toUpperCase()}
+                            label={c.category.toUpperCase()}
                             sx={{
                               height: 22,
                               fontFamily: MONO,
-                              fontSize: '0.63rem',
+                              fontSize: '0.64rem',
                               fontWeight: 700,
-                              bgcolor: rgba(accent, 0.14),
-                              color: accent,
+                              bgcolor: isDark ? rgba(ACCENT_DARK, 0.16) : '#F3EFE6',
+                              color: isDark ? '#FDE68A' : '#7A5808',
                             }}
                           />
-                          <Typography sx={{ fontFamily: MONO, fontSize: '0.66rem', color: 'text.secondary' }}>
-                            {pb.cadence} · {doneCount}/{pb.checklist.length} done
+                          <Typography sx={{ fontFamily: MONO, fontSize: '0.68rem', color: 'text.secondary' }}>
+                            {c.followersStr} · {doneCount}/{c.plays.length} plays
                           </Typography>
                         </Box>
-                        <Typography sx={{ fontWeight: 700, fontSize: '0.92rem', lineHeight: 1.3 }}>
-                          {pb.title}
+                        <Typography sx={{ fontWeight: 700, fontSize: '0.94rem', lineHeight: 1.3, color: 'text.primary' }}>
+                          {c.emoji} {c.name}{' '}
+                          <Box component="span" sx={{ fontFamily: MONO, fontSize: '0.76rem', color: 'text.secondary', fontWeight: 500 }}>
+                            {c.handle}
+                          </Box>
                         </Typography>
-                        <Typography sx={{ fontFamily: MONO, fontSize: '0.7rem', color: accent, mt: 0.25 }}>
-                          Model: {pb.mentalModel}
+                        <Typography sx={{ fontSize: '0.78rem', color: 'text.secondary', mt: 0.25, lineHeight: 1.4 }}>
+                          {(c.currentFocus || c.bio).split('\n')[0].slice(0, 120)}
                         </Typography>
                       </Box>
                       <Tooltip title={isSaved ? 'Remove bookmark' : 'Bookmark locally'}>
                         <IconButton
-                          size="small"
-                          aria-label={isSaved ? `Remove bookmark for ${pb.title}` : `Bookmark ${pb.title}`}
+                          aria-label={isSaved ? `Remove bookmark for ${c.name}` : `Bookmark ${c.name}`}
                           onClick={(e) => {
                             e.stopPropagation();
-                            toggleBookmark(pb.id);
+                            toggleBookmark(c.id);
                           }}
-                          sx={{ minWidth: 38, minHeight: 38, color: isSaved ? accent : 'text.secondary' }}
+                          sx={{ minWidth: 44, minHeight: 44, color: isSaved ? accent : 'text.secondary' }}
                         >
                           {isSaved ? <BookmarkIcon fontSize="small" /> : <BookmarkBorderIcon fontSize="small" />}
                         </IconButton>
@@ -792,8 +557,8 @@ export default function CreatorPlaybooksGodModeTool() {
                         mt: 1,
                         height: 4,
                         borderRadius: 2,
-                        bgcolor: isDark ? 'rgba(255,255,255,0.07)' : 'rgba(16,24,40,0.08)',
-                        '& .MuiLinearProgress-bar': { bgcolor: pct === 100 ? SOV.emerald : accent },
+                        bgcolor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(16,24,40,0.09)',
+                        '& .MuiLinearProgress-bar': { bgcolor: pct === 100 ? (isDark ? SOV.emerald : '#047857') : accent },
                       }}
                     />
                   </Box>
@@ -806,76 +571,78 @@ export default function CreatorPlaybooksGodModeTool() {
 
       <SovereignCard
         index="02"
-        eyebrow={`${activePlaybook.category.toUpperCase()} · ${activePlaybook.operator.toUpperCase()}`}
-        title={activePlaybook.title}
-        subtitle={activePlaybook.summary}
+        eyebrow={`${activeCreator.category.toUpperCase()} · ${activeCreator.handle.toUpperCase()} · ${activeCreator.followersStr}`}
+        title={`${activeCreator.emoji} ${activeCreator.name} — Verified Playbook`}
+        subtitle={activeCreator.currentFocus || activeCreator.bio}
         accent={ACCENT_DARK}
       >
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center', justifyContent: 'space-between', mb: 1.5 }}>
-          <Typography sx={{ fontFamily: MONO, fontSize: '0.72rem', fontWeight: 700, color: accent }}>
-            READING & EXECUTION CHECKLIST ({activePbChecked}/{activePlaybook.checklist.length} · {activePbPct}%)
+          <Typography sx={{ fontFamily: MONO, fontSize: '0.73rem', fontWeight: 700, color: accent }}>
+            REPEATABLE PLAYS ({activeCheckedCount}/{activeCreator.plays.length} · {activePct}%)
           </Typography>
           <Button
             size="small"
             variant="outlined"
             startIcon={<PlaylistAddIcon fontSize="small" />}
-            onClick={() => handleImportPlaybookToSprint(activePlaybook)}
+            onClick={() => handleImportCreatorPlaysToSprint(activeCreator)}
             sx={{
-              minHeight: 38,
+              minHeight: 44,
+              px: 1.5,
               fontFamily: MONO,
-              fontSize: '0.71rem',
+              fontSize: '0.73rem',
               fontWeight: 700,
               textTransform: 'none',
               color: accent,
-              borderColor: rgba(accent, 0.45),
+              borderColor: accent,
             }}
           >
-            Add Steps to Sprint
+            Add Plays to Sprint
           </Button>
         </Box>
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75, mb: 2 }}>
-          {activePlaybook.checklist.map((step) => {
-            const done = Boolean(checkedSteps[step.id]);
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.85, mb: 2 }}>
+          {activeCreator.plays.map((play) => {
+            const done = Boolean(checkedPlays[play.id]);
             return (
               <Box
-                key={step.id}
-                onClick={() => toggleChecklistStep(step.id)}
+                key={play.id}
+                onClick={() => togglePlayCheck(play.id)}
                 sx={{
-                  p: 1,
+                  p: 1.15,
                   borderRadius: 1.25,
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'flex-start',
                   gap: 1,
                   border: '1px solid',
-                  borderColor: done ? rgba(resolveModeAccent(SOV.emerald, isDark), 0.45) : 'divider',
+                  borderColor: done ? (isDark ? 'rgba(52,211,153,0.45)' : '#047857') : 'divider',
                   bgcolor: done
-                    ? isDark
-                      ? 'rgba(52,211,153,0.06)'
-                      : 'rgba(4,120,87,0.05)'
+                    ? isDark ? 'rgba(52,211,153,0.06)' : 'rgba(4,120,87,0.06)'
                     : 'transparent',
                 }}
               >
                 <Checkbox
                   checked={done}
-                  size="small"
-                  sx={{ p: 0.5, mt: -0.25 }}
-                  inputProps={{ 'aria-label': step.text }}
+                  sx={{ p: 0.75, minWidth: 44, minHeight: 44, mt: -0.5 }}
+                  inputProps={{ 'aria-label': `Mark ${play.title} completed` }}
                 />
                 <Box sx={{ minWidth: 0, flex: 1 }}>
                   <Typography
                     sx={{
-                      fontSize: '0.82rem',
-                      lineHeight: 1.45,
+                      fontWeight: 700,
+                      fontSize: '0.86rem',
+                      lineHeight: 1.35,
                       textDecoration: done ? 'line-through' : 'none',
                       color: done ? 'text.secondary' : 'text.primary',
                     }}
                   >
-                    {step.text}
+                    {play.emoji} {play.title} ({play.frequency})
                   </Typography>
-                  <Typography sx={{ fontFamily: MONO, fontSize: '0.67rem', color: 'text.secondary', mt: 0.25 }}>
-                    Deliverable: {step.deliverable} · ~{step.minutes} min
+                  <Typography sx={{ fontSize: '0.8rem', color: 'text.secondary', mt: 0.35, lineHeight: 1.45 }}>
+                    {play.description}
+                  </Typography>
+                  <Typography sx={{ fontFamily: MONO, fontSize: '0.7rem', color: accent, mt: 0.4 }}>
+                    Action: {play.action}
                   </Typography>
                 </Box>
               </Box>
@@ -883,17 +650,51 @@ export default function CreatorPlaybooksGodModeTool() {
           })}
         </Box>
 
-        <Divider sx={{ mb: 1.5 }} />
-        <Typography sx={{ fontFamily: MONO, fontSize: '0.68rem', fontWeight: 700, color: resolveModeAccent(SOV.crimson, isDark), mb: 0.75 }}>
-          COMMON FAILURE MODES TO AVOID
-        </Typography>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.6 }}>
-          {activePlaybook.antiPatterns.map((mistake, idx) => (
-            <Typography key={idx} variant="body2" sx={{ fontSize: '0.79rem', color: 'text.secondary', lineHeight: 1.45 }}>
-              • {mistake}
+        {activeCreator.hooks.length > 0 && (
+          <>
+            <Divider sx={{ mb: 1.5 }} />
+            <Typography sx={{ fontFamily: MONO, fontSize: '0.7rem', fontWeight: 700, color: accent, mb: 0.75 }}>
+              SWIPE FILE HOOKS
             </Typography>
-          ))}
-        </Box>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.65, mb: 1.5 }}>
+              {activeCreator.hooks.slice(0, 4).map((hook, idx) => (
+                <Typography key={idx} variant="body2" sx={{ fontSize: '0.8rem', color: 'text.primary', lineHeight: 1.45 }}>
+                  • &ldquo;{hook}&rdquo;
+                </Typography>
+              ))}
+            </Box>
+          </>
+        )}
+
+        {activeCreator.sources.length > 0 && (
+          <>
+            <Divider sx={{ mb: 1.25 }} />
+            <Typography sx={{ fontFamily: MONO, fontSize: '0.7rem', fontWeight: 700, color: 'text.secondary', mb: 0.6 }}>
+              VERIFIED SOURCES (CHECKED {CREATOR_PLAYBOOKS_DATASET.checkedDate})
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+              {activeCreator.sources.map((src, idx) => (
+                <Link
+                  key={idx}
+                  href={src.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    minHeight: 44,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 0.5,
+                    fontFamily: MONO,
+                    fontSize: '0.72rem',
+                    color: isDark ? '#38BDF8' : '#0369A1',
+                  }}
+                >
+                  {src.label} <OpenInNewIcon sx={{ fontSize: 13 }} />
+                </Link>
+              ))}
+            </Box>
+          </>
+        )}
       </SovereignCard>
     </Box>
   );
@@ -904,7 +705,7 @@ export default function CreatorPlaybooksGodModeTool() {
         index="03"
         eyebrow="GOAL-TO-PLAYBOOK EXECUTION ENGINE"
         title="Interactive Sprint Planner (7 / 14 / 30 Days)"
-        subtitle="Scope one concrete goal, pick the governing mental models, check off milestones, and export a structured Markdown or JSON sprint plan."
+        subtitle="Scope one concrete goal, pick governing mental models, import plays from any of the 35 mentors, and export Markdown or JSON."
         accent={ACCENT_DARK}
       >
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
@@ -914,7 +715,7 @@ export default function CreatorPlaybooksGodModeTool() {
             label="Concrete Sprint Goal"
             value={sprint.goal}
             onChange={(e) => setSprint((prev) => ({ ...prev, goal: e.target.value }))}
-            sx={{ '& input': { fontFamily: MONO, fontSize: '0.8rem' } }}
+            sx={{ '& .MuiInputBase-root': { minHeight: 44 }, '& .MuiInputBase-input': { minHeight: 44, boxSizing: 'border-box', fontFamily: MONO, fontSize: '0.8rem' } }}
           />
 
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center', justifyContent: 'space-between' }}>
@@ -928,13 +729,14 @@ export default function CreatorPlaybooksGodModeTool() {
                     clickable
                     onClick={() => handleSetHorizon(h.days)}
                     sx={{
-                      minHeight: 36,
+                      minHeight: 44,
                       fontFamily: MONO,
-                      fontSize: '0.72rem',
-                      fontWeight: active ? 700 : 500,
-                      bgcolor: active ? rgba(accent, 0.16) : 'transparent',
-                      color: active ? accent : 'text.primary',
-                      border: `1px solid ${active ? accent : 'rgba(148,163,184,0.3)'}`,
+                      fontSize: '0.73rem',
+                      fontWeight: active ? 700 : 600,
+                      bgcolor: active ? (isDark ? rgba(ACCENT_DARK, 0.2) : '#FEF7E0') : 'transparent',
+                      color: active ? (isDark ? '#FDE68A' : '#7A5808') : 'text.primary',
+                      '& .MuiChip-label': { color: active ? (isDark ? '#FDE68A' : '#7A5808') : 'inherit' },
+                      border: `1px solid ${active ? accent : isDark ? 'rgba(148,163,184,0.35)' : 'rgba(16,24,40,0.25)'}`,
                     }}
                   />
                 );
@@ -952,32 +754,33 @@ export default function CreatorPlaybooksGodModeTool() {
                   weeklyHours: Math.max(1, Math.min(80, Number.parseInt(e.target.value, 10) || 1)),
                 }))
               }
-              sx={{ width: 120, '& input': { fontFamily: MONO, fontSize: '0.78rem' } }}
+              sx={{ width: 124, '& .MuiInputBase-root': { minHeight: 44 }, '& .MuiInputBase-input': { minHeight: 44, boxSizing: 'border-box', fontFamily: MONO, fontSize: '0.8rem' } }}
             />
           </Box>
 
           <Box>
-            <Typography sx={{ fontFamily: MONO, fontSize: '0.68rem', fontWeight: 700, color: 'text.secondary', mb: 0.75 }}>
+            <Typography sx={{ fontFamily: MONO, fontSize: '0.7rem', fontWeight: 700, color: 'text.secondary', mb: 0.75 }}>
               APPLICABLE MENTAL MODELS ({sprint.selectedModels.length} SELECTED)
             </Typography>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.65 }}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75 }}>
               {MENTAL_MODELS.map((m) => {
                 const selected = sprint.selectedModels.includes(m.id);
+                const modelColor = resolveModeAccent(SOV.cyber, isDark);
                 return (
                   <Tooltip key={m.id} title={m.note}>
                     <Chip
-                      size="small"
                       label={m.label}
                       clickable
                       onClick={() => handleToggleModel(m.id)}
                       sx={{
-                        minHeight: 34,
+                        minHeight: 44,
                         fontFamily: MONO,
-                        fontSize: '0.69rem',
-                        fontWeight: selected ? 700 : 500,
-                        bgcolor: selected ? rgba(SOV.cyber, isDark ? 0.18 : 0.1) : 'transparent',
-                        color: selected ? resolveModeAccent(SOV.cyber, isDark) : 'text.secondary',
-                        border: `1px solid ${selected ? resolveModeAccent(SOV.cyber, isDark) : 'rgba(148,163,184,0.3)'}`,
+                        fontSize: '0.72rem',
+                        fontWeight: selected ? 700 : 600,
+                        bgcolor: selected ? (isDark ? rgba(SOV.cyber, 0.2) : '#E0F2FE') : 'transparent',
+                        color: selected ? (isDark ? '#BAE6FD' : '#0369A1') : 'text.primary',
+                        '& .MuiChip-label': { color: selected ? (isDark ? '#BAE6FD' : '#0369A1') : 'inherit' },
+                        border: `1px solid ${selected ? modelColor : isDark ? 'rgba(148,163,184,0.35)' : 'rgba(16,24,40,0.25)'}`,
                       }}
                     />
                   </Tooltip>
@@ -994,10 +797,8 @@ export default function CreatorPlaybooksGodModeTool() {
               label="Add Milestone / Action Item"
               value={newTaskTitle}
               onChange={(e) => setNewTaskTitle(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') handleAddCustomTask();
-              }}
-              sx={{ flex: '1 1 220px', '& input': { fontFamily: MONO, fontSize: '0.76rem' } }}
+              onKeyDown={(e) => { if (e.key === 'Enter') handleAddCustomTask(); }}
+              sx={{ flex: '1 1 220px', '& .MuiInputBase-root': { minHeight: 44 }, '& .MuiInputBase-input': { minHeight: 44, boxSizing: 'border-box', fontFamily: MONO, fontSize: '0.78rem' } }}
             />
             <TextField
               size="small"
@@ -1005,17 +806,17 @@ export default function CreatorPlaybooksGodModeTool() {
               label="Min"
               value={newTaskMinutes}
               onChange={(e) => setNewTaskMinutes(e.target.value)}
-              sx={{ width: 78, '& input': { fontFamily: MONO, fontSize: '0.76rem' } }}
+              sx={{ width: 84, '& .MuiInputBase-root': { minHeight: 44 }, '& .MuiInputBase-input': { minHeight: 44, boxSizing: 'border-box', fontFamily: MONO, fontSize: '0.78rem' } }}
             />
             <Button
               variant="contained"
-              size="small"
               startIcon={<AddCircleOutlineIcon fontSize="small" />}
               onClick={handleAddCustomTask}
               sx={{
-                minHeight: 40,
+                minHeight: 44,
+                px: 2,
                 fontFamily: MONO,
-                fontSize: '0.73rem',
+                fontSize: '0.74rem',
                 fontWeight: 700,
                 textTransform: 'none',
                 bgcolor: accent,
@@ -1029,8 +830,8 @@ export default function CreatorPlaybooksGodModeTool() {
 
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
             {sprint.tasks.length === 0 ? (
-              <Typography sx={{ fontFamily: MONO, fontSize: '0.75rem', color: 'text.secondary' }}>
-                No sprint tasks yet. Add a custom action above or click "Add Steps to Sprint" on any playbook.
+              <Typography sx={{ fontFamily: MONO, fontSize: '0.76rem', color: 'text.secondary' }}>
+                No sprint tasks yet. Add a step above or click &ldquo;Add Plays to Sprint&rdquo; on any mentor.
               </Typography>
             ) : (
               sprint.tasks.map((task) => (
@@ -1040,22 +841,22 @@ export default function CreatorPlaybooksGodModeTool() {
                     p: 1,
                     borderRadius: 1.25,
                     border: '1px solid',
-                    borderColor: task.done ? rgba(resolveModeAccent(SOV.emerald, isDark), 0.4) : 'divider',
+                    borderColor: task.done ? (isDark ? 'rgba(52,211,153,0.45)' : '#047857') : 'divider',
                     display: 'flex',
                     alignItems: 'center',
                     gap: 0.75,
                   }}
                 >
                   <Checkbox
-                    size="small"
                     checked={task.done}
                     onChange={() => handleToggleSprintTask(task.id)}
+                    sx={{ minWidth: 44, minHeight: 44 }}
                     inputProps={{ 'aria-label': `Toggle ${task.title}` }}
                   />
                   <Box sx={{ minWidth: 0, flex: 1 }}>
                     <Typography
                       sx={{
-                        fontSize: '0.81rem',
+                        fontSize: '0.82rem',
                         lineHeight: 1.35,
                         textDecoration: task.done ? 'line-through' : 'none',
                         color: task.done ? 'text.secondary' : 'text.primary',
@@ -1063,15 +864,14 @@ export default function CreatorPlaybooksGodModeTool() {
                     >
                       {task.title}
                     </Typography>
-                    <Typography sx={{ fontFamily: MONO, fontSize: '0.66rem', color: 'text.secondary' }}>
+                    <Typography sx={{ fontFamily: MONO, fontSize: '0.68rem', color: 'text.secondary' }}>
                       {task.phase} · {task.minutes}m · {task.source}
                     </Typography>
                   </Box>
                   <IconButton
-                    size="small"
                     aria-label={`Remove ${task.title}`}
                     onClick={() => handleRemoveSprintTask(task.id)}
-                    sx={{ minWidth: 36, minHeight: 36, color: 'text.secondary' }}
+                    sx={{ minWidth: 44, minHeight: 44, color: 'text.secondary' }}
                   >
                     <DeleteOutlineIcon fontSize="small" />
                   </IconButton>
@@ -1085,7 +885,7 @@ export default function CreatorPlaybooksGodModeTool() {
               size="small"
               startIcon={<RestartAltIcon fontSize="small" />}
               onClick={() => setSprint(DEFAULT_SPRINT)}
-              sx={{ fontFamily: MONO, fontSize: '0.7rem', textTransform: 'none', color: 'text.secondary' }}
+              sx={{ minHeight: 44, fontFamily: MONO, fontSize: '0.73rem', textTransform: 'none', color: 'text.secondary' }}
             >
               Reset Default Sprint
             </Button>
@@ -1097,29 +897,30 @@ export default function CreatorPlaybooksGodModeTool() {
         index="04"
         eyebrow="LIVE EXPORT PREVIEW"
         title={exportFormat === 'md' ? 'Markdown Sprint Playbook (playbook-sprint.md)' : `Structured JSON Plan (${exportSlug}.json)`}
-        subtitle="Ready to drop into a repository README, Obsidian vault, or Hermes Agent goal prompt"
+        subtitle="Ready for repository docs, Obsidian vaults, or Hermes creatorplaybooks_goal_plan prompts"
         accent={ACCENT_DARK}
       >
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.85, mb: 1.5 }}>
           {[
             { id: 'md', label: 'Markdown (.md)' },
             { id: 'json', label: 'Structured JSON (.json)' },
-          ].map((tab) => {
-            const active = exportFormat === tab.id;
+          ].map((tabItem) => {
+            const active = exportFormat === tabItem.id;
             return (
               <Chip
-                key={tab.id}
-                label={tab.label}
+                key={tabItem.id}
+                label={tabItem.label}
                 clickable
-                onClick={() => setExportFormat(tab.id)}
+                onClick={() => setExportFormat(tabItem.id)}
                 sx={{
-                  minHeight: 36,
+                  minHeight: 44,
                   fontFamily: MONO,
-                  fontSize: '0.72rem',
-                  fontWeight: active ? 700 : 500,
-                  bgcolor: active ? rgba(accent, 0.16) : 'transparent',
-                  color: active ? accent : 'text.primary',
-                  border: `1px solid ${active ? accent : 'rgba(148,163,184,0.3)'}`,
+                  fontSize: '0.73rem',
+                  fontWeight: active ? 700 : 600,
+                  bgcolor: active ? (isDark ? rgba(ACCENT_DARK, 0.2) : '#FEF7E0') : 'transparent',
+                  color: active ? (isDark ? '#FDE68A' : '#7A5808') : 'text.primary',
+                  '& .MuiChip-label': { color: active ? (isDark ? '#FDE68A' : '#7A5808') : 'inherit' },
+                  border: `1px solid ${active ? accent : isDark ? 'rgba(148,163,184,0.35)' : 'rgba(16,24,40,0.25)'}`,
                 }}
               />
             );
@@ -1128,7 +929,7 @@ export default function CreatorPlaybooksGodModeTool() {
 
         <SovereignCodeBlock
           title={exportFormat === 'md' ? 'playbook-sprint.md' : `${exportSlug}.json`}
-          badge={exportFormat === 'md' ? `${sprint.horizonDays}D MARKDOWN` : 'JSON SCHEMA v1'}
+          badge={exportFormat === 'md' ? `${sprint.horizonDays}D MARKDOWN` : 'JSON SCHEMA v1.1'}
           code={exportFormat === 'md' ? sprintMarkdown : sprintJsonText}
           filename={exportFormat === 'md' ? 'playbook-sprint.md' : `${exportSlug}.json`}
           accent={ACCENT_DARK}
@@ -1138,38 +939,38 @@ export default function CreatorPlaybooksGodModeTool() {
 
       <SovereignCard
         index="05"
-        eyebrow="LOCAL WORKSTATION (:5185) · TUI · HERMES PLUGIN"
-        title="Local CLI & Hermes Plugin Reference"
-        subtitle="Run CreatorPlaybooks locally on 127.0.0.1:5185, launch the Braille TUI, or dispatch sprints via Hermes"
+        eyebrow="LOCAL SERVER (:5185) · U+2800 BRAILLE TUI · HERMES PLUGIN"
+        title="Verified CLI, Braille TUI & Hermes Tool Reference"
+        subtitle="Run server.mjs on 127.0.0.1:5185, launch creatorplaybooks-tui, or invoke the 5 read-only Hermes plugin tools"
         accent={ACCENT_DARK}
       >
         <SovereignCodeBlock
-          title="CREATORPLAYBOOKS CLI & HERMES DISPATCH"
+          title="CREATORPLAYBOOKS CLI, TUI & HERMES REFERENCE"
           badge="BASH · LOCAL :5185"
           code={cliReference}
           filename="creatorplaybooks-cli.sh"
           accent={ACCENT_DARK}
-          maxHeight={230}
+          maxHeight={260}
         />
       </SovereignCard>
     </Box>
   );
 
   return (
-    <Box sx={{ width: '100%', minWidth: 0 }}>
+    <Box data-testid="creatorplaybooks-godmode-workstation" sx={{ width: '100%', minWidth: 0 }}>
       <Box sx={{ mb: 2 }}>
         <SovereignAlertBanner
           severity="info"
-          title="Runtime Disclosure · 100% Client-Side Explorer & Sprint Planner"
-          message="Playbook search, localStorage bookmarks, checklist progress, and Markdown/JSON sprint exports execute strictly in your browser with zero tracking or remote telemetry. For the full local Vite app, TUI, or Hermes plugin, run creatorplaybooks desktop on http://127.0.0.1:5185."
+          title="Runtime Disclosure · 35 Curated Mentors Offline + Optional :5185 Loopback Bridge"
+          message="All 35 curated mentors, 115 repeatable plays, 20 cities, localStorage bookmarks, sprint planning, and Markdown/JSON exports run 100% client-side with zero tracking. Start the hardened zero-dependency loopback server with creatorplaybooks serve or browse in terminal with creatorplaybooks-tui."
         />
       </Box>
       <SovereignWorkstationShell
         id="creatorplaybooks"
         category="EDUCATION & GROWTH · PLAYBOOKS"
         title="CreatorPlaybooks Operator Workbench"
-        subtitle="Zero-tracking client-side operator playbooks & mental models directory, interactive 7/14/30-day sprint planner with Markdown/JSON export, and ZothOS CLI/Hermes command reference."
-        version="1.0.0"
+        subtitle="Canonical 35-mentor directory (115 plays · 20 cities), interactive 7/14/30-day sprint planner with Markdown/JSON export, and verified ZothOS CLI/Braille TUI + Hermes plugin reference."
+        version="1.1.0"
         variant="bayer-field"
         accent={ACCENT_DARK}
         metrics={kpis}

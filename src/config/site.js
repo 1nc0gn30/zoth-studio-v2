@@ -744,6 +744,38 @@ export function generateSchemaGraph(path = '/') {
           ...(tool.liveUrl ? { 'url': tool.liveUrl } : {}),
         }
       });
+      if (tool.id === 'creatorplaybooks') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What is included in CreatorPlaybooks v1.1.0?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'CreatorPlaybooks v1.1.0 indexes 35 curated public builders, 115 repeatable plays, and 20 cities from a single shared/creators.json dataset, backed by a zero-dependency hardened loopback server on 127.0.0.1:5185, a Unicode U+2800 Braille terminal TUI (creatorplaybooks-tui), and an interactive Zoth Studio workbench.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Which Hermes Agent tools and local API endpoints does CreatorPlaybooks provide?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'The local :5185 server exposes /health, /api/creators, /api/creator, /api/playbook, /api/ideas, /api/export (JSON and Markdown), and /api/members. The Hermes community plugin provides 5 read-only tools: creatorplaybooks_mentors, creatorplaybooks_mentor, creatorplaybooks_playbook, creatorplaybooks_ideas, and creatorplaybooks_goal_plan.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is CreatorPlaybooks 100% free and offline-capable without login walls?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Every mentor dossier, sprint planner, local dashboard, offline Builder Hub, and Markdown/JSON export is 100% free and open-access with zero paywalls, zero login gates, and optional voluntary support via Stripe Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'city-desk') {
         graph.push({
           '@type': 'FAQPage',

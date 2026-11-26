@@ -3611,36 +3611,38 @@ export const toolsDocumentation = {
       ]
   },
   "creatorplaybooks": {
-      "whyUse": "Provides a zero-tracking, sub-millisecond tactical reading deck, mental-model index, and creator swipe-file browser hosted locally on 127.0.0.1:5185 or offline in-browser.",
-      "problemSolved": "Replaces scattered social bookmarks, Notion paywalls, and ad-tracked curator newsletters with a deterministic React 19 + TypeScript playbook workstation and CLI/TUI.",
-      "architecture": "Client-side React 19 + Vite bundle with optional X Developer API v2 (X_BEARER_TOKEN) Netlify hydration and graceful offline curated fallback, plus creatorplaybooks / creatorplaybooks-tui CLI wrappers.",
+      "whyUse": "Provides a zero-tracking 35-mentor reading list (115 repeatable plays · 20 cities), dual-theme Editorial Ivory/Obsidian workstation on 127.0.0.1:5185, local JSON/Markdown APIs, and a Unicode U+2800 Braille TUI.",
+      "problemSolved": "Replaces scattered social bookmarks, Notion paywalls, and ad-tracked curator newsletters with a deterministic local-first React 19 + hardened Node loopback server (server.mjs) and offline CLI/TUI.",
+      "architecture": "Single canonical shared/creators.json dataset shared across the React 19 UI, zero-dependency loopback server.mjs (:5185), hardened Netlify Functions, and Python Unicode U+2800 Braille TUI (creatorplaybooks-tui).",
       "aiAgentProtocol": {
-          "mcpTool": "creatorplaybooks_search",
-          "description": "Query tactical creator playbooks, mentor reading lists, repeatable cadences, and swipe files.",
-          "cliExample": "creatorplaybooks --status && creatorplaybooks --json",
+          "mcpTool": "creatorplaybooks_mentors",
+          "description": "Hermes Agent community plugin (github.com/1nc0gn30/hermes-creatorplaybooks) exposes 5 read-only tools: creatorplaybooks_mentors, creatorplaybooks_mentor, creatorplaybooks_playbook, creatorplaybooks_ideas, and creatorplaybooks_goal_plan.",
+          "cliExample": "creatorplaybooks --status && creatorplaybooks --json && creatorplaybooks-tui --once",
           "inputSchema": {
               "type": "object",
               "properties": {
-                  "query": { "type": "string", "description": "Keyword, mental model, or creator handle" },
-                  "category": { "type": "string", "description": "Filter by playbook cadence or discipline" }
-              },
-              "required": ["query"]
+                  "q": { "type": "string", "description": "Filter mentors by name, handle, bio, tag, or play title" },
+                  "category": { "type": "string", "enum": ["indie-hackers", "netlify-shippers", "big-players"] },
+                  "creator": { "type": "string", "description": "Mentor slug (e.g. maya, kp, karpathy) for mentor/playbook/ideas/goal_plan calls" }
+              }
           },
           "outputSchema": {
-              "matches": "array",
-              "totalPlaybooks": "number"
+              "count": "number",
+              "creators": "array",
+              "plays": "array"
           }
       },
       "quickstart": [
           "git clone https://github.com/1nc0gn30/creatorplaybooks.git",
-          "cd creatorplaybooks && npm install && npm run dev",
-          "creatorplaybooks desktop  # or: creatorplaybooks-tui | creatorplaybooks --status"
+          "cd creatorplaybooks && npm install && npm run build && npm start",
+          "creatorplaybooks desktop",
+          "creatorplaybooks-tui --once  # or: creatorplaybooks --status"
       ],
       "features": [
-          "Interactive Zero-Egress Playbook Search — Instant client-side filtering across tactical plays, reading lists, and hooks.",
-          "Swipe Files & Execution Cadences — Copy-ready formats and proven creator frameworks.",
-          "Optional Live X Telemetry — Hydrates live follower/post stats when X_BEARER_TOKEN is configured, otherwise runs 100% offline.",
-          "Native ZothOS CLI & 60fps U+2800 Braille TUI — Inspect health JSON or browse playbooks directly inside a terminal."
+          "Canonical 35-Mentor Dataset (115 Plays · 20 Cities) — Zero-tracking client search, category/tag filters, saved queues, and verified source dates.",
+          "Hardened Loopback Server (:5185) — Zero-dependency server.mjs with Host/Origin allowlists, path-traversal blocking, 4 security headers, and full /api/{creators,creator,playbook,ideas,export} endpoints.",
+          "Offline-First Dashboard & Builder Hub — Persistent localStorage XP/schedule logs, local builder profile, creator voting, nomination queue, and JSON/Markdown/.ics/.zip exports.",
+          "Native ZothOS CLI & Unicode U+2800 Braille TUI — Inspect status JSON via creatorplaybooks --json or browse all 35 mentors in terminal via creatorplaybooks-tui."
       ]
   },
   "zoth-obsidian-tracker": {

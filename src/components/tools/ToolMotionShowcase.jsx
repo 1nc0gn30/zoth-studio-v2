@@ -150,6 +150,17 @@ export const TOOL_MOTION_OVERRIDES = {
     execLabel: 'HYBRID BROWSER ANALYZER + /api/studio/chronicle/{summary,recall,search}',
     telemetrySub: 'Safe Epoch/ISO Normalization · FTS5 Archive Search · Offline JSONL/MD Parser · Sanitized CSV/MD/JSON · v2.3.0.',
   },
+  'creatorplaybooks': {
+    accent: '#F59E0B',
+    secondary: '#38BDF8',
+    archetype: 'grid',
+    anchorName: '35-Mentor Playbook Lattice & Braille TUI',
+    formula: 'C = 35 mentors · 115 plays · 20 cities · server.mjs(:5185) ∪ creatorplaybooks-tui',
+    badge: 'CREATORPLAYBOOKS v1.1.0',
+    clip: 'tools',
+    execLabel: '100% OFFLINE CLIENT ENGINE + 127.0.0.1:5185 LOOPBACK API',
+    telemetrySub: 'shared/creators.json · Host/Origin Allowlist · 5 Hermes Plugin Tools · U+2800 Braille TUI.',
+  },
   'cockpit': {
     accent: '#34D399',
     secondary: '#D4AF37',
@@ -445,8 +456,10 @@ Scene Breakdown & Exact On-Screen Copy:
         ctx.save();
         ctx.scale(dpr, dpr);
 
-        // 1. Deep Obsidian Cinema Background
-        ctx.fillStyle = '#06060A';
+        // 1. Theme-Aware Cinema Background (Obsidian Dark vs Editorial Ivory Light)
+        const canvasAccent = isDark ? meta.accent : '#9A6F0B';
+        const canvasSecondary = isDark ? meta.secondary : '#0369A1';
+        ctx.fillStyle = isDark ? '#06060A' : '#F3EFE6';
         ctx.fillRect(0, 0, w, h);
 
         // 2. CRT Scanline & ASCII Background Matrix
@@ -475,7 +488,7 @@ Scene Breakdown & Exact On-Screen Copy:
                 const ramp = mode === 'ascii' ? ASCII_RAMP : BRAILLE_RAMP;
                 const charIdx = Math.min(ramp.length - 1, Math.floor(val * ramp.length));
                 const ch = ramp[charIdx];
-                ctx.fillStyle = val > 0.66 ? meta.accent : val > 0.38 ? meta.secondary : 'rgba(148,163,184,0.28)';
+                ctx.fillStyle = val > 0.66 ? canvasAccent : val > 0.38 ? canvasSecondary : (isDark ? 'rgba(148,163,184,0.28)' : 'rgba(16,24,40,0.22)');
                 ctx.globalAlpha = mode === 'ascii' ? Math.min(1, val * 1.15) : Math.min(0.85, val * 0.9);
                 ctx.fillText(ch, gx, gy);
               }
@@ -641,19 +654,19 @@ Scene Breakdown & Exact On-Screen Copy:
         const leftPad = 24;
         const maxTextW = w > 560 ? w * 0.54 : w - 48;
 
-        // Subtle dark backing for text legibility when Pure ASCII mode is active
+        // Subtle backing for text legibility when Pure ASCII mode is active
         if (mode === 'ascii') {
-          ctx.fillStyle = 'rgba(6,6,10,0.78)';
+          ctx.fillStyle = isDark ? 'rgba(6,6,10,0.78)' : 'rgba(243,239,230,0.88)';
           ctx.fillRect(leftPad - 10, 16, maxTextW + 20, h - 32);
         }
 
         // Top Aperture Seam Line
-        ctx.fillStyle = meta.accent;
+        ctx.fillStyle = canvasAccent;
         ctx.fillRect(leftPad, 26, maxTextW * enterP, 2);
 
         // Scene Kicker + ASCII Glyph Tag
         ctx.font = `700 10.5px ${mono}`;
-        ctx.fillStyle = meta.accent;
+        ctx.fillStyle = canvasAccent;
         ctx.fillText(`${active.kicker}  [∷ ${mode.toUpperCase()} SHADER]`, leftPad, 48);
 
         // Kinetic Headline with Mask Slide
@@ -661,12 +674,12 @@ Scene Breakdown & Exact On-Screen Copy:
         const slideY = (1 - enterP) * 18;
         ctx.globalAlpha = enterP;
         ctx.font = `800 ${w < 480 ? '18px' : '24px'} "Google Sans", "Inter", system-ui, sans-serif`;
-        ctx.fillStyle = '#F8FAFC';
+        ctx.fillStyle = isDark ? '#F8FAFC' : '#101828';
         ctx.fillText(active.headline.slice(0, 38), leftPad, 82 + slideY);
 
         // Subtitle wrapped
         ctx.font = `400 12.5px "Google Sans", "Inter", system-ui, sans-serif`;
-        ctx.fillStyle = '#CBD5E1';
+        ctx.fillStyle = isDark ? '#CBD5E1' : '#334155';
         const words = active.sub.split(' ');
         let line = '';
         let ly = 108 + slideY;
@@ -686,7 +699,7 @@ Scene Breakdown & Exact On-Screen Copy:
 
         // Bottom Telemetry Pill inside Canvas
         ctx.font = `700 10px ${mono}`;
-        ctx.fillStyle = 'rgba(248,250,252,0.62)';
+        ctx.fillStyle = isDark ? 'rgba(248,250,252,0.62)' : 'rgba(16,24,40,0.72)';
         const tc = `${t.toFixed(2).padStart(5, '0')}s / ${DURATION_S.toFixed(1)}s · 60 FPS ASCII+VECTOR ENGINE`;
         ctx.fillText(tc, leftPad, h - 16);
 
@@ -698,7 +711,7 @@ Scene Breakdown & Exact On-Screen Copy:
 
     rafId = requestAnimationFrame(renderFrame);
     return () => cancelAnimationFrame(rafId);
-  }, [meta, scenes]);
+  }, [meta, scenes, isDark]);
 
   const handleJumpScene = (scene) => {
     timeRef.current = scene.start + 0.05;

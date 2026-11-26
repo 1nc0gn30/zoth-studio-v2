@@ -1512,10 +1512,10 @@ export const microTools = [
     priceCents: 0,
     stripeUrl: 'https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X',
     pricing: '100% Free & Open-Access',
-    description: 'Curated reading lists, tactical playbooks, and business mental models from top creators and operators with zero-tracking client-side search on :5185.',
+    description: 'Curated reading list, 35-mentor playbook directory (115 plays · 20 cities), hardened :5185 loopback JSON API, and Unicode U+2800 Braille TUI.',
     localPort: 5185,
     localUrl: 'http://127.0.0.1:5185',
-    version: '1.0.0',
+    version: '1.1.0',
     pull: 'creatorplaybooks desktop  # or: creatorplaybooks-tui | creatorplaybooks --status',
   },
   {

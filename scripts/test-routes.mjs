@@ -81,6 +81,7 @@ const SAMPLE_ROUTES = [
   '/tools/chronicle',
   '/tools/certpath-roadmap-studio',
   '/tools/city-desk',
+  '/tools/creatorplaybooks',
   '/workstations/mission-control',
   '/docs/math/stdp',
 ];
@@ -528,6 +529,27 @@ async function main() {
         });
         if (!cpCheck.hasTitle || !cpCheck.hasH1 || !cpCheck.hasSoftwareApp || !cpCheck.hasFaq) {
           failureReason = `certpath-roadmap-studio invariants failed: ${JSON.stringify(cpCheck)}`;
+        }
+      } else if (route === '/tools/creatorplaybooks') {
+        await page.waitForSelector('[data-testid="creatorplaybooks-godmode-workstation"]', { timeout: 4000 }).catch(() => {});
+        const cbCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          const bodyText = document.body?.innerText || '';
+          return {
+            hasTitle: document.title.includes('CreatorPlaybooks'),
+            hasH1: h1Text.includes('CreatorPlaybooks'),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasWorkstation: Boolean(document.querySelector('[data-testid="creatorplaybooks-godmode-workstation"]')),
+            hasPhantomMcp: bodyText.includes('creatorplaybooks_search') || bodyText.includes('hermes-creatorplaybooks --horizon'),
+          };
+        });
+        if (!cbCheck.hasTitle || !cbCheck.hasH1 || !cbCheck.hasSoftwareApp || !cbCheck.hasFaq || !cbCheck.hasWorkstation || cbCheck.hasPhantomMcp) {
+          failureReason = `creatorplaybooks invariants failed: ${JSON.stringify(cbCheck)}`;
         }
       } else if (route === '/tools/city-desk') {
         const cdCheck = await page.evaluate(() => {

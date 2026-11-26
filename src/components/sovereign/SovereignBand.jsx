@@ -19,6 +19,7 @@
 
 import React, { useMemo, useRef } from 'react';
 import Box from '@mui/material/Box';
+import { useTheme } from '@mui/material/styles';
 import { SOV, rgba, MONO, DISPLAY, pickVariant, VARIANT_META, hashSeed, bandAccent } from './palette.js';
 import { useSovereignCanvas } from './useSovereignCanvas.js';
 
@@ -52,10 +53,13 @@ export default function SovereignBand({
   sx,
   children,
 }) {
+  const theme = useTheme();
+  const isLight = theme.palette.mode === 'light';
   const canvasRef = useRef(null);
   const resolvedVariant = useMemo(() => variant || pickVariant(seed), [variant, seed]);
   const meta_ = VARIANT_META[resolvedVariant] || VARIANT_META['braille-orbit'];
   const accent = useMemo(() => bandAccent(seed), [seed]);
+  const lightAccent = '#7A5808';
 
   const state = useSovereignCanvas({
     canvasRef,
@@ -77,6 +81,80 @@ export default function SovereignBand({
     lit ? `${(lit * 8).toLocaleString('en-US')} SUB-PX LIT` : null,
     state.glyphs === false ? 'DOT-FALLBACK' : state.glyphs === true ? 'GLYPH MODE' : null,
   ]).filter(Boolean);
+
+  if (isLight) {
+    return (
+      <Box
+        sx={{
+          position: 'relative',
+          mb: { xs: 2, md: 2.5 },
+          border: '1px solid rgba(122, 88, 8, 0.28)',
+          borderRadius: 1.5,
+          overflow: 'hidden',
+          bgcolor: '#F3EFE6',
+          backgroundImage:
+            'linear-gradient(rgba(122, 88, 8, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(122, 88, 8, 0.07) 1px, transparent 1px)',
+          backgroundSize: '28px 22px',
+          ...sx,
+        }}
+      >
+        <Box sx={{ position: 'relative', px: 2, py: 1.75 }}>
+          <CornerTick pos="tl" color="rgba(122, 88, 8, 0.65)" />
+          <CornerTick pos="tr" color="rgba(122, 88, 8, 0.65)" />
+          <CornerTick pos="bl" color="rgba(122, 88, 8, 0.65)" />
+          <CornerTick pos="br" color="rgba(122, 88, 8, 0.65)" />
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1.5, flexWrap: 'wrap', mb: 0.75 }}>
+            <Box sx={{ fontFamily: MONO, fontSize: 10.5, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: lightAccent }}>
+              {eyebrow}
+            </Box>
+            <Box sx={{ fontFamily: MONO, fontSize: 10.5, fontWeight: 700, letterSpacing: '0.1em', color: '#334155' }}>
+              {meta_.label} · EDITORIAL IVORY
+            </Box>
+          </Box>
+          {caption && (
+            <Box sx={{ fontFamily: DISPLAY, fontSize: { xs: 14, md: 16 }, fontWeight: 700, letterSpacing: '-0.01em', color: '#101828' }}>
+              {caption}
+            </Box>
+          )}
+          {children}
+        </Box>
+        {metaItems.length > 0 && (
+          <Box
+            sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              gap: { xs: 1, md: 1.5 },
+              px: 1.75,
+              py: 0.75,
+              borderTop: '1px solid rgba(16, 24, 40, 0.1)',
+              bgcolor: '#FAF8F3',
+            }}
+          >
+            {metaItems.slice(0, 4).map((item, i) => (
+              <Box
+                key={`${item}-${i}`}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                  fontFamily: MONO,
+                  fontSize: 10,
+                  fontWeight: 700,
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: i === 0 ? lightAccent : '#334155',
+                }}
+              >
+                {i > 0 && <Box aria-hidden component="span" sx={{ color: lightAccent }}>•</Box>}
+                <span>{item}</span>
+              </Box>
+            ))}
+          </Box>
+        )}
+      </Box>
+    );
+  }
 
   return (
     <Box
