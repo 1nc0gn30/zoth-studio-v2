@@ -201,13 +201,14 @@ export const workstations = [
   {
     id: "agent-mock-twin",
     name: "Agent Mock Twin // Deterministic API Replay",
-    path: "/studio/agent-mock.html",
+    path: "/tools/agent-mock-twin",
     band: "Build",
     type: "integrated_tool",
-    description: "Autonomous offline API mock & deterministic replay server for AI agents with $0 token spend.",
+    executionType: "local-daemon",
+    description: "Autonomous offline API mock daemon (127.0.0.1:8097) with HAR/OpenAPI {param} matching, SQLite WAL storage, live chaos controls, and 4-tool stdio MCP.",
     alsoInApp: "/tools/agent-mock-twin",
     toolRepoId: "agent-mock-twin",
-    pullCommand: "./bin/agent-mock serve --port 8097"
+    pullCommand: "agent-mock-twin serve --host 127.0.0.1 --port 8097"
   },
   {
     id: "agent-prompt-firewall",

@@ -1106,41 +1106,43 @@ export const toolsDocumentation = {
   },
 
   'agent-mock-twin': {
-    whyUse: 'Autonomous offline API mock and deterministic replay server for AI agents. Run test suites and local agent loops with $0 token spend, zero latency, and 100% deterministic outputs.',
-    problemSolved: 'Eliminates $500+ CI/CD test bills, rate limits (HTTP 429), and non-deterministic agent test failures by providing high-speed offline simulation.',
-    architecture: 'Python 3.10+ standard library daemon running at 127.0.0.1:8097. Multi-Tier Request Matcher (Tier 1 Exact Hash Match, Tier 2 Fuzzy Semantic Match, Tier 3 Fallback Synthesis) with SQLite cache.',
+    whyUse: 'Autonomous offline API mock and deterministic replay daemon (127.0.0.1:8097) for AI agents. Run CI/CD test suites and local agent loops with $0 token spend, OpenAPI {param} template matching, live chaos controls, and 4-tool stdio MCP.',
+    problemSolved: 'Eliminates CI/CD LLM token bills, rate limits (HTTP 429), and flaky external API tests via local SQLite WAL deterministic replay.',
+    architecture: 'Zero-dependency Python 3.10+ ThreadingHTTPServer at 127.0.0.1:8097 with SQLite WAL storage, 4-tier RequestMatcher (Exact SHA-256 Hash, Fuzzy Semantic, Safe Literal-Segment OpenAPI {param} Template, Deterministic Fallback), SSE telemetry stream, and JSON-RPC 2.0 stdio MCP server.',
     aiAgentProtocol: {
       mcpTool: 'mock_replay_query',
-      description: 'Execute or test an offline API mock request against recorded HAR or OpenAPI routes.',
-      cliExample: './bin/agent-mock serve --port 8097',
+      mcpTools: ['mock_replay_query', 'mock_list_routes', 'mock_import_spec', 'mock_get_stats'],
+      description: 'Execute offline API mock replays, list indexed routes, import HAR/OpenAPI specs, and inspect token savings via `agent-mock-twin mcp`.',
+      cliExample: 'agent-mock-twin mcp --port 8097  # exposes mock_replay_query, mock_list_routes, mock_import_spec, mock_get_stats',
       inputSchema: {
         type: 'object',
         properties: {
-          method: { type: 'string', enum: ['GET', 'POST', 'PUT', 'DELETE'] },
-          path: { type: 'string', description: 'Target request path' },
-          body: { type: 'object', description: 'Request payload' }
+          method: { type: 'string', enum: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'] },
+          path: { type: 'string', description: 'Target request path (supports OpenAPI {param} templates)' },
+          body: { type: 'object', description: 'Optional request payload' }
         },
-        required: ['method', 'path']
+        required: ['path']
       },
       outputSchema: {
         status: 'number',
-        matchedTier: 'exact | fuzzy | synthetic',
+        matchedTier: 'exact | template | fuzzy | fallback | chaos',
         tokensSaved: 'number',
+        usdSaved: 'number',
         response: 'object'
       }
     },
     quickstart: [
-      'git clone https://github.com/1nc0gn30/agent-mock-twin.git',
-      'cd agent-mock-twin && chmod +x bin/agent-mock',
-      './bin/agent-mock serve --port 8097'
+      'git clone https://github.com/1nc0gn30/agent-mock-twin.git && cd agent-mock-twin',
+      'agent-mock-twin serve --host 127.0.0.1 --port 8097 --latency 25 --jitter 15',
+      'agent-mock-twin mcp --port 8097  # or live terminal monitor: agent-mock-twin-tui --once'
     ],
     features: [
-      'Multi-Tier Request Matcher (Exact Hash, Fuzzy Semantic, Fallback Synthesis)',
-      'Deterministic replay server hosting OpenAI/Anthropic compatible endpoints on port 8097',
-      'Real-time token and USD savings dashboard with live telemetry',
-      'Ingests standard HAR 1.2 recordings and OpenAPI 3.0 blueprints',
-      'Chaos injection simulation (latency jitter, 429 rate limit triggers)',
-      'Zero external dependencies (Python standard library only)'
+      '4-Tier Deterministic Request Matcher (Exact Hash, Fuzzy Semantic, OpenAPI {param} Template, Deterministic Fallback)',
+      'SQLite WAL storage with RFC 7230 CRLF header validation, strict Host/Origin CSRF guard, and clean <1s SIGTERM shutdown',
+      'Live Latency, Jitter, and HTTP 429/500/503/504 Chaos Controls wired to POST /api/config',
+      'Real 4-tool JSON-RPC 2.0 stdio MCP server (mock_replay_query, mock_list_routes, mock_import_spec, mock_get_stats)',
+      'Zero-code CI wrapper (`agent-mock-twin run -- pytest tests/`) and live terminal monitor (`agent-mock-twin-tui`)',
+      'Zero external pip dependencies (Python 3.10+ stdlib only)'
     ]
   },
 
