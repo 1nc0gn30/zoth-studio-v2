@@ -2561,54 +2561,73 @@ export const toolsDocumentation = {
       ]
   },
   "cyber-turtle-studio": {
-      "whyUse": "100% in-browser L-System fractal synthesizer, turtle geometry studio, and physical CNC pen-plotter G-Code and SVG vector exporter. Free to use; tips optional. Built for human operators and autonomous AI agents requiring zero-egress media & 3d execution without cloud SaaS lock-in.",
-      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Cyber Turtle Studio workflows by running 100% locally on ZothOS and in the browser.",
-      "architecture": "100% client-side in-browser execution engine (Media & 3D) with standalone loopback workstation on 127.0.0.1:8129 and ZothOS CLI wrapper (/usr/local/bin/cyber-turtle-studio).",
+      "whyUse": "Zero-egress L-System fractal synthesizer (28 presets including Pythagoras Tree), bounded Logo DSL compiler, procedural Truchet/BFS Maze/Spirograph studio, Nearest-Neighbor + 2-Opt TSP air-travel optimizer, and pen-up gated CNC G-Code / sanitized SVG / 2x4 Braille exporter. Free and open-access for human operators and autonomous AI agents.",
+      "problemSolved": "Eliminates cloud telemetry, unoptimized CNC pen-up air travel, and external runtime dependencies by running deterministic Pure Python stdlib geometry + 9 MCP stdio tools locally on 127.0.0.1:8129 and directly in the browser.",
+      "architecture": "Hybrid loopback Python 3 stdlib ThreadingHTTPServer (127.0.0.1:8129) with strict Host/exact-port CORS/CSP hardening, 9 stdio MCP tools (turtle_*), deterministic JS client parity engine, and ZothOS CLI/Braille TUI (/usr/local/bin/cyber-turtle-studio).",
       "aiAgentProtocol": {
-          "mcpTool": "cyber_turtle_studio_execute",
-          "description": "Execute Cyber Turtle Studio operations via JSON-RPC / MCP or ZothOS CLI.",
-          "cliExample": "cyber-turtle-studio --help && cyber-turtle-studio --json",
+          "mcpTool": "turtle_execute_logo",
+          "mcpTools": [
+              "turtle_execute_logo",
+              "turtle_generate_lsystem",
+              "turtle_export_svg",
+              "turtle_export_gcode",
+              "turtle_presets",
+              "turtle_diagnostics",
+              "turtle_optimize_toolpath",
+              "turtle_generate_truchet",
+              "turtle_generate_maze"
+          ],
+          "description": "Invoke any of the 9 Cyber Turtle Studio MCP JSON-RPC 2.0 stdio tools (turtle_execute_logo, turtle_generate_lsystem, turtle_export_svg, turtle_export_gcode, turtle_presets, turtle_diagnostics, turtle_optimize_toolpath, turtle_generate_truchet, turtle_generate_maze) or the ZothOS CLI.",
+          "cliExample": "cyber-turtle-studio --status --json && cyber-turtle-studio optimize -p koch_snowflake --json",
           "inputSchema": {
               "type": "object",
               "properties": {
-                  "action": {
+                  "script": {
+                      "type": "string",
+                      "description": "Bounded Logo DSL script (fd, bk, lt, rt, pu, pd, circle, repeat, make, to..end, if)"
+                  },
+                  "theme": {
                       "type": "string",
                       "enum": [
-                          "status",
-                          "run",
-                          "audit",
-                          "export"
+                          "cyber_matrix",
+                          "retro_amber",
+                          "blueprint_cyan",
+                          "sacred_gold",
+                          "light_minimal",
+                          "monochrome"
                       ],
-                      "description": "Operation to run on Cyber Turtle Studio"
+                      "description": "Sanitized SVG color theme palette"
                   },
-                  "target": {
-                      "type": "string",
-                      "description": "Primary target payload or parameter"
+                  "include_gcode": {
+                      "type": "boolean",
+                      "description": "Include pen-up gated CNC G-Code in response"
                   }
               },
               "required": [
-                  "action"
+                  "script"
               ]
           },
           "outputSchema": {
-              "status": "ONLINE | SUCCESS",
+              "status": "READY | OK",
               "tool": "cyber-turtle-studio",
+              "version": "2.6.0",
               "port": 8129,
-              "results": "object"
+              "mcp_tools": 9
           }
       },
       "quickstart": [
-          "cyber-turtle-studio --help",
-          "cyber-turtle-studio --json",
-          "cyber-turtle-studio-tui --status",
+          "cyber-turtle-studio --status --json",
+          "cyber-turtle-studio serve --port 8129",
+          "cyber-turtle-studio mcp",
+          "cyber-turtle-studio-tui --once",
           "# Open standalone workstation at http://127.0.0.1:8129 or Studio route /tools/cyber-turtle-studio"
       ],
       "features": [
-          "Zero Runtime Dependencies \u2014 100% Pure Python standard library implementation compatible with Python 3.9 through 3.13 on Linux, macOS, Windows, and Termux.",
-          "Multi-Format Exporters \u2014 ",
-          "High-Resolution Terminal Braille \u2014 2x4 subpixel Unicode Braille matrix rendering (U+2800..U+28FF) with 24-bit TrueColor ANSI styling.",
-          "Movement \u2014 fd <dist>, bk <dist>, goto <x> <y>",
-          "Rotation \u2014 rt <angle_deg>, lt <angle_deg>, setheading <deg>"
+          "Zero Runtime Dependencies — 100% Pure Python standard library backend (Python 3.9–3.13) with full deterministic JS client parity and zero external network egress.",
+          "Multi-Format Exporters — Sanitized Static & Animated SVG (XSS-escaped color allowlist), Auto-Fit 200mm-Bed CNC G-Code (strict G0 pen-up rapid vs G1 draw), High-Res PNG, and 2x4 Unicode U+2800 Braille.",
+          "2-Opt TSP Air-Travel Optimizer — Chains contiguous strokes into polylines and runs Nearest-Neighbor + 2-Opt local search with live dashed rapid-travel overlay and measured mm savings.",
+          "Bounded Logo DSL & 28 Presets — Full Logo interpreter (fd, bk, lt, rt, pu, pd, circle, make/:var, to..end, if/ifelse/stop) plus 28 L-System fractals, Truchet tiles, BFS-solved Mazes, and Spirographs.",
+          "9 Real MCP Stdio Tools — Exposes turtle_execute_logo, turtle_generate_lsystem, turtle_export_svg, turtle_export_gcode, turtle_presets, turtle_diagnostics, turtle_optimize_toolpath, turtle_generate_truchet, and turtle_generate_maze with sandboxed export paths."
       ]
   },
   "datamosh-glitch-studio": {

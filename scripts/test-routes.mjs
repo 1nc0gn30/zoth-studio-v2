@@ -84,6 +84,7 @@ const SAMPLE_ROUTES = [
   '/tools/creatorplaybooks',
   '/tools/cron-rhythm-studio',
   '/tools/cwv-speed-engine',
+  '/tools/cyber-turtle-studio',
   '/workstations/mission-control',
   '/docs/math/stdp',
 ];
@@ -577,6 +578,28 @@ async function main() {
         });
         if (!cwvCheck.hasTitle || !cwvCheck.hasH1 || !cwvCheck.hasSoftwareApp || !cwvCheck.hasFaq || cwvCheck.hasPhantomDocs) {
           failureReason = `cwv-speed-engine invariants failed: ${JSON.stringify(cwvCheck)}`;
+        }
+      } else if (route === '/tools/cyber-turtle-studio') {
+        const ctCheck = await page.evaluate(() => {
+          const ld = Array.from(document.querySelectorAll('script[type="application/ld+json"]'))
+            .map((s) => { try { return JSON.parse(s.textContent || '{}'); } catch { return null; } })
+            .filter(Boolean);
+          const types = ld.flatMap((d) => (Array.isArray(d['@graph']) ? d['@graph'] : [d])).flatMap((n) => (Array.isArray(n?.['@type']) ? n['@type'] : [n?.['@type']]));
+          const h1Text = (document.querySelector('h1')?.textContent || '').trim();
+          const bodyText = document.body?.innerText || '';
+          return {
+            hasTitle: document.title.includes('Cyber Turtle Studio'),
+            hasH1: h1Text.includes('Cyber Turtle Studio'),
+            hasSoftwareApp: types.includes('SoftwareApplication'),
+            hasFaq: types.includes('FAQPage'),
+            hasPhantomDocs:
+              bodyText.includes('cyber_turtle_studio_execute') ||
+              bodyText.includes('Multi-Format Exporters —\n') ||
+              bodyText.includes('WEBGL // SHADER'),
+          };
+        });
+        if (!ctCheck.hasTitle || !ctCheck.hasH1 || !ctCheck.hasSoftwareApp || !ctCheck.hasFaq || ctCheck.hasPhantomDocs) {
+          failureReason = `cyber-turtle-studio invariants failed: ${JSON.stringify(ctCheck)}`;
         }
       } else if (route === '/tools/creatorplaybooks') {
         await page.waitForSelector('[data-testid="creatorplaybooks-godmode-workstation"]', { timeout: 4000 }).catch(() => {});

@@ -744,6 +744,38 @@ export function generateSchemaGraph(path = '/') {
           ...(tool.liveUrl ? { 'url': tool.liveUrl } : {}),
         }
       });
+      if (tool.id === 'cyber-turtle-studio') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What geometry engines and CNC exports does Cyber Turtle Studio v2.6.0 include?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Cyber Turtle Studio v2.6.0 provides 28 L-System fractal presets (including Pythagoras Tree), a bounded Logo DSL interpreter (with circle, variables, procedures, and if/stop), Truchet tiling, BFS-solved Mazes, Spirographs, Nearest-Neighbor + 2-Opt TSP air-travel optimization, auto-fit 200mm-bed CNC G-Code (G0 pen-up rapid vs G1 draw), XSS-sanitized SVG, and 2x4 Unicode Braille.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Which MCP tools and local API endpoints does Cyber Turtle Studio expose?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Cyber Turtle Studio exposes 9 real stdio MCP tools (turtle_execute_logo, turtle_generate_lsystem, turtle_export_svg, turtle_export_gcode, turtle_presets, turtle_diagnostics, turtle_optimize_toolpath, turtle_generate_truchet, turtle_generate_maze) alongside a hardened loopback HTTP API on 127.0.0.1:8129 with strict Host/CORS/CSP enforcement and sandboxed export writes.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is Cyber Turtle Studio free and zero-egress?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Every mode, preset, optimizer, exporter, and MCP tool is 100% free and open-access with zero paywalls and zero external network egress. Optional community support is accepted via Buy Us a Coffee and Solana.'
+              }
+            }
+          ]
+        });
+      }
       if (tool.id === 'cwv-speed-engine') {
         graph.push({
           '@type': 'FAQPage',

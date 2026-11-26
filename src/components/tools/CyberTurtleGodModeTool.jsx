@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useMemo } from 'react';
 import { isLocalRuntime } from '../../utils/sovereignRuntime';
 import {
   Box,
@@ -12,446 +12,586 @@ import {
   Unstable_Grid2 as Grid,
   Tabs,
   Tab,
-  IconButton,
-  Tooltip
+  Alert,
+  Switch,
+  FormControlLabel,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import PolylineIcon from '@mui/icons-material/Polyline';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DownloadIcon from '@mui/icons-material/Download';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import BoltIcon from '@mui/icons-material/Bolt';
-import CheckIcon from '@mui/icons-material/Check';
-import CodeIcon from '@mui/icons-material/Code';
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
+import RouteIcon from '@mui/icons-material/Route';
+import CodeIcon from '@mui/icons-material/Code';
+import PolylineIcon from '@mui/icons-material/Polyline';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow } from '../sovereign/typography.jsx';
+import {
+  LSYSTEM_PRESETS,
+  LOGO_SAMPLES,
+  expandLSystem,
+  interpretLSystem,
+  executeLogoDsl,
+  optimizeToolpath2Opt,
+  exportAutoFitGCode,
+  exportThemeAwareSvg,
+  rasterizeBraille,
+} from '../../utils/cyberTurtleEngine.js';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
-
-const LSYSTEM_PRESETS = [
-  { id: 'koch', name: 'Koch Snowflake', axiom: 'F--F--F', angle: 60, iter: 4, rules: { F: 'F+F--F+F' } },
-  { id: 'sierpinski', name: 'Sierpinski Arrowhead', axiom: 'A', angle: 60, iter: 6, rules: { A: 'B-A-B', B: 'A+B+A' } },
-  { id: 'dragon', name: 'Dragon Curve', axiom: 'FX', angle: 90, iter: 10, rules: { X: 'X+YF+', Y: '-FX-Y' } },
-  { id: 'plant', name: 'Fractal Plant', axiom: 'X', angle: 25, iter: 5, rules: { X: 'F+[[X]-X]-F[-FX]+X', F: 'FF' } },
-  { id: 'hilbert', name: 'Hilbert Space-Filling', axiom: 'L', angle: 90, iter: 5, rules: { L: '+RF-LFL-FR+', R: '-LF+RFR+FL-' } },
-  { id: 'gosper', name: 'Gosper Flowsnake', axiom: 'A', angle: 60, iter: 4, rules: { A: 'A-B--B+A++AA+B-', B: '+A-BB--B-A++A+B' } }
-];
 
 export default function CyberTurtleGodModeTool() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
-  const gold = isDark ? '#D4AF37' : '#B8860B';
-  const emerald = '#10B981';
-  const emeraldSoft = 'rgba(16, 185, 129, 0.12)';
-  const cyan = '#00F0FF';
+  // High-contrast WCAG AA (>= 4.5:1) palette tokens for both Dark and Light modes
+  const emerald = isDark ? '#34D399' : '#047857';
+  const emeraldBg = isDark ? 'rgba(16, 185, 129, 0.14)' : '#ECFDF5';
+  const emeraldInk = isDark ? '#04120B' : '#FFFFFF';
+  const gold = isDark ? '#FACC15' : '#854D0E';
+  const goldBg = isDark ? 'rgba(212, 175, 55, 0.14)' : '#FEF9C3';
+  const sky = isDark ? '#38BDF8' : '#0369A1';
+  const amber = isDark ? '#F59E0B' : '#B45309';
+  const surface = isDark ? '#0C0D12' : '#FFFFFF';
+  const surfaceAlt = isDark ? '#08080C' : '#F8FAFC';
+  const borderCol = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(15,23,42,0.16)';
+  const inkPrimary = isDark ? '#F8FAFC' : '#0F172A';
+  const inkMuted = isDark ? '#CBD5E1' : '#334155';
 
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(0); // 0=L-System, 1=Logo DSL, 2=2-Opt TSP & Exports
   const [selectedPreset, setSelectedPreset] = useState(LSYSTEM_PRESETS[0]);
   const [axiom, setAxiom] = useState(LSYSTEM_PRESETS[0].axiom);
   const [angle, setAngle] = useState(LSYSTEM_PRESETS[0].angle);
   const [iterations, setIterations] = useState(LSYSTEM_PRESETS[0].iter);
   const [ruleStr, setRuleStr] = useState('F:F+F--F+F');
-  const [logoCode, setLogoCode] = useState('repeat 36 [ repeat 4 [ fd 80 rt 90 ] rt 10 ]');
+  const [selectedLogoSample, setSelectedLogoSample] = useState(LOGO_SAMPLES[0].id);
+  const [logoCode, setLogoCode] = useState(LOGO_SAMPLES[0].code);
+  const [sourceMode, setSourceMode] = useState('lsystem'); // 'lsystem' | 'logo'
+  const [useTsp, setUseTsp] = useState(false);
+  const [showAirOverlay, setShowAirOverlay] = useState(true);
   const [copiedKey, setCopiedKey] = useState(null);
-  const [svgPathData, setSvgPathData] = useState('');
-  const [viewBox, setViewBox] = useState('-200 -200 400 400');
-  const [stats, setStats] = useState({ segments: 0, drawDistance: 0, rapidTravel: 0 });
-  const [isSynthesizing, setIsSynthesizing] = useState(false);
-
-  const canvasRef = useRef(null);
-  const segmentsRef = useRef([]);
-
-  // Generate expanded L-system string
-  const expandLSystem = (ax, rulesObj, iters) => {
-    let current = ax;
-    for (let i = 0; i < iters; i++) {
-      let next = '';
-      for (let ch of current) {
-        next += rulesObj[ch] || ch;
-      }
-      current = next;
-      if (current.length > 80000) break; // guard limit
-    }
-    return current;
-  };
-
-  // Interpret Turtle string to 2D path
-  const interpretTurtle = (instructions, turnAngle) => {
-    let x = 0;
-    let y = 0;
-    let curAngle = -90; // start pointing upwards
-    const rad = (deg) => (deg * Math.PI) / 180;
-    const step = 10;
-    const stack = [];
-    const segments = [];
-    let minX = 0, maxX = 0, minY = 0, maxY = 0;
-
-    let totalDraw = 0;
-    let totalRapid = 0;
-    let lastX = 0;
-    let lastY = 0;
-
-    for (let ch of instructions) {
-      if (ch === 'F' || ch === 'G' || ch === 'A' || ch === 'B') {
-        const nx = x + Math.cos(rad(curAngle)) * step;
-        const ny = y + Math.sin(rad(curAngle)) * step;
-        segments.push({ x1: x, y1: y, x2: nx, y2: ny });
-        totalDraw += step;
-        x = nx;
-        y = ny;
-        minX = Math.min(minX, x);
-        maxX = Math.max(maxX, x);
-        minY = Math.min(minY, y);
-        maxY = Math.max(maxY, y);
-      } else if (ch === '+') {
-        curAngle += turnAngle;
-      } else if (ch === '-') {
-        curAngle -= turnAngle;
-      } else if (ch === '[') {
-        stack.push({ x, y, curAngle });
-      } else if (ch === ']') {
-        if (stack.length > 0) {
-          const state = stack.pop();
-          totalRapid += Math.hypot(x - state.x, y - state.y);
-          x = state.x;
-          y = state.y;
-          curAngle = state.curAngle;
-        }
-      }
-    }
-
-    const pad = 20;
-    const width = Math.max(10, maxX - minX + pad * 2);
-    const height = Math.max(10, maxY - minY + pad * 2);
-    const vb = `${minX - pad} ${minY - pad} ${width} ${height}`;
-
-    let pathD = '';
-    for (let s of segments) {
-      pathD += `M ${s.x1.toFixed(2)} ${s.y1.toFixed(2)} L ${s.x2.toFixed(2)} ${s.y2.toFixed(2)} `;
-    }
-
-    return { segments, pathD, vb, stats: { segments: segments.length, drawDistance: Math.round(totalDraw), rapidTravel: Math.round(totalRapid) } };
-  };
 
   const handleSelectPreset = (p) => {
     setSelectedPreset(p);
     setAxiom(p.axiom);
     setAngle(p.angle);
     setIterations(p.iter);
-    const rPairs = Object.entries(p.rules).map(([k, v]) => `${k}:${v}`).join(',');
-    setRuleStr(rPairs);
+    setRuleStr(Object.entries(p.rules).map(([k, v]) => `${k}:${v}`).join(','));
+    setSourceMode('lsystem');
   };
 
-  const renderCurrentGeometry = () => {
-    setIsSynthesizing(true);
-    setTimeout(() => {
-      try {
+  const handleSelectLogoSample = (sample) => {
+    setSelectedLogoSample(sample.id);
+    setLogoCode(sample.code);
+    setSourceMode('logo');
+  };
+
+  // Synchronous deterministic geometry + real 2-Opt TSP computation (zero setTimeout)
+  const synthesis = useMemo(() => {
+    try {
+      let baseGeo;
+      let activeTitle;
+      if (sourceMode === 'logo') {
+        baseGeo = executeLogoDsl(logoCode);
+        const sObj = LOGO_SAMPLES.find((x) => x.id === selectedLogoSample);
+        activeTitle = `Logo DSL: ${sObj ? sObj.name : 'Custom Script'}`;
+      } else {
         const rulesObj = {};
-        ruleStr.split(',').forEach((pair) => {
-          const [k, v] = pair.split(':');
-          if (k && v) rulesObj[k.trim()] = v.trim();
+        ruleStr.split(/[,\n;]+/).forEach((pair) => {
+          const sep = pair.includes('->') ? '->' : (pair.includes('=') ? '=' : ':');
+          const idx = pair.indexOf(sep);
+          if (idx > 0) {
+            const k = pair.slice(0, idx).trim();
+            const v = pair.slice(idx + sep.length).trim();
+            if (k && v) rulesObj[k] = v;
+          }
         });
         const expanded = expandLSystem(axiom, rulesObj, iterations);
-        const { segments, pathD, vb, stats: s } = interpretTurtle(expanded, angle);
-        segmentsRef.current = segments;
-        setSvgPathData(pathD);
-        setViewBox(vb);
-        setStats(s);
-      } catch (e) {
-        console.error('Turtle synthesis error:', e);
-      } finally {
-        setIsSynthesizing(false);
+        baseGeo = interpretLSystem(expanded, angle, 10);
+        activeTitle = `${selectedPreset.name} (${angle}°)`;
       }
-    }, 10);
-  };
 
-  useEffect(() => {
-    renderCurrentGeometry();
-  }, [axiom, angle, iterations, ruleStr]);
+      const tsp = optimizeToolpath2Opt(baseGeo.segments);
+      const activeSegments = useTsp ? tsp.segments : baseGeo.segments;
+      const activeAirMoves = useTsp ? tsp.airMovesAfter : tsp.airMovesBefore;
+      const gcode = exportAutoFitGCode(activeSegments, {
+        bedWidth: 200,
+        bedHeight: 200,
+        title: activeTitle,
+      });
+      const braille = rasterizeBraille(activeSegments, 46, 15);
+
+      return {
+        error: null,
+        geometry: baseGeo,
+        activeSegments,
+        activeAirMoves,
+        tsp,
+        gcode,
+        braille,
+        activeTitle,
+      };
+    } catch (err) {
+      return {
+        error: err.message || String(err),
+        geometry: {
+          segments: [],
+          pathD: '',
+          viewBox: '-100 -100 200 200',
+          stats: { segments: 0, drawDistance: 0, rapidTravel: 0 },
+        },
+        activeSegments: [],
+        activeAirMoves: [],
+        tsp: {
+          initialAirTravel: 0,
+          optimizedAirTravel: 0,
+          savedMm: 0,
+          reductionPercent: 0,
+          polylines: 0,
+        },
+        gcode: '; Error during geometry synthesis',
+        braille: '[Synthesis Error]',
+        activeTitle: 'Error',
+      };
+    }
+  }, [sourceMode, axiom, ruleStr, iterations, angle, selectedPreset, logoCode, selectedLogoSample, useTsp]);
 
   const handleCopy = (text, key) => {
     if (navigator?.clipboard?.writeText) {
-      navigator.clipboard?.writeText(text)?.catch?.(() => {});
+      navigator.clipboard.writeText(text).catch(() => {});
       setCopiedKey(key);
-      setTimeout(() => setCopiedKey(null), 2000);
+      setTimeout(() => setCopiedKey(null), 1800);
     }
   };
 
   const handleDownloadSvg = () => {
-    const fullSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" width="800" height="800">
-  <rect width="100%" height="100%" fill="#08080B"/>
-  <path d="${svgPathData}" fill="none" stroke="${gold}" stroke-width="1.5" stroke-linecap="round"/>
-</svg>`;
-    const blob = new Blob([fullSvg], { type: 'image/svg+xml' });
+    const svg = exportThemeAwareSvg(synthesis.geometry, {
+      isDark,
+      title: synthesis.activeTitle,
+      stroke: isDark ? '#FACC15' : '#047857',
+      airMoves: showAirOverlay ? synthesis.activeAirMoves : [],
+    });
+    const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `cyberturtle_${selectedPreset.id}_${Date.now()}.svg`;
+    link.download = `cyberturtle_${sourceMode}_${Date.now()}.svg`;
     link.click();
     URL.revokeObjectURL(url);
   };
 
   const handleDownloadGCode = () => {
-    const segs = segmentsRef.current || [];
-    let gcode = `( ========================================================= )\n`;
-    gcode += `( Cyber Turtle Studio — Real-Time CNC Plotter G-Code        )\n`;
-    gcode += `( Preset: ${selectedPreset.name} | Total Segments: ${segs.length} )\n`;
-    gcode += `( ========================================================= )\n`;
-    gcode += `G21 (All units in mm)\n`;
-    gcode += `G90 (Absolute coordinates)\n`;
-    gcode += `G17 (XY plane)\n`;
-    gcode += `G0 Z5.000 F3000 (Pen up / safe rapid)\n`;
-
-    let penDown = false;
-    let lastX = null;
-    let lastY = null;
-
-    for (let s of segs) {
-      if (lastX === null || Math.hypot(s.x1 - lastX, s.y1 - lastY) > 0.05) {
-        if (penDown) {
-          gcode += `G0 Z5.000 (Pen up)\n`;
-          penDown = false;
-        }
-        gcode += `G0 X${s.x1.toFixed(3)} Y${s.y1.toFixed(3)} F3000 (Rapid to start)\n`;
-      }
-      if (!penDown) {
-        gcode += `G1 Z0.000 F600 (Pen down)\n`;
-        penDown = true;
-      }
-      gcode += `G1 X${s.x2.toFixed(3)} Y${s.y2.toFixed(3)} F1200\n`;
-      lastX = s.x2;
-      lastY = s.y2;
-    }
-
-    if (penDown) {
-      gcode += `G0 Z5.000 (Pen up)\n`;
-    }
-    gcode += `G0 X0.000 Y0.000 (Return to origin)\n`;
-    gcode += `M2 (Program End)\n`;
-
-    const blob = new Blob([gcode], { type: 'text/x-gcode;charset=utf-8' });
+    const blob = new Blob([synthesis.gcode], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `cyberturtle_${selectedPreset.id}.gcode`;
+    link.download = `cyberturtle_${sourceMode}_200mm.gcode`;
     link.click();
     URL.revokeObjectURL(url);
   };
 
+  const airOverlayPathD = useMemo(() => {
+    if (!showAirOverlay || !synthesis.activeAirMoves.length) return '';
+    return synthesis.activeAirMoves
+      .map((m) => `M ${m.x1.toFixed(2)} ${(-m.y1).toFixed(2)} L ${m.x2.toFixed(2)} ${(-m.y2).toFixed(2)}`)
+      .join(' ');
+  }, [showAirOverlay, synthesis.activeAirMoves]);
+
   return (
-    <Box sx={{ mt: 1 }}>
-      {/* Sovereign Header Support Bar */}
+    <Box sx={{ mt: 1 }} data-testid="cyber-turtle-godmode-workstation">
+      {/* Workstation Header Banner (No duplicate Coffee CTA — Studio shell carries the single support strip) */}
       <Paper
         sx={{
           p: 2,
           mb: 3,
           background: isDark
-            ? 'linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(8,8,11,0.92) 100%)'
-            : 'linear-gradient(135deg, #F0FDF4 0%, #E8F5E9 100%)',
+            ? 'linear-gradient(135deg, rgba(16,185,129,0.14) 0%, rgba(8,8,11,0.94) 100%)'
+            : 'linear-gradient(135deg, #ECFDF5 0%, #FAF8F3 100%)',
           border: `1px solid ${emerald}`,
           borderRadius: 2,
           display: 'flex',
           flexDirection: { xs: 'column', md: 'row' },
-          alignItems: 'center',
+          alignItems: { xs: 'flex-start', md: 'center' },
           justifyContent: 'space-between',
-          gap: 2
+          gap: 2,
         }}
       >
-        <Stack direction="row" spacing={2} alignItems="center">
+        <Stack direction="row" spacing={1.5} alignItems="center">
           <Box
             sx={{
-              p: 1.2,
+              p: 1.1,
               borderRadius: 2,
-              bgcolor: emeraldSoft,
+              bgcolor: emeraldBg,
               color: emerald,
+              border: `1px solid ${emerald}`,
               display: 'flex',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
-            <PrecisionManufacturingIcon sx={{ fontSize: 28 }} />
+            <PrecisionManufacturingIcon sx={{ fontSize: 26 }} />
           </Box>
           <Box>
-            <Stack direction="row" spacing={1} alignItems="center">
+            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
               <Typography variant="subtitle1" sx={{ fontWeight: 800, color: emerald }}>
-                Cyber Turtle Algorithmic Geometry & CNC Plotter Studio
+                Cyber Turtle Studio v2.6.0 — Vector &amp; CNC Plotter Deck
               </Typography>
               <Chip
                 size="small"
-                label="✦ 100% FREE & OPEN ACCESS"
+                label="100% FREE & OPEN ACCESS"
                 sx={{
-                  bgcolor: emeraldSoft,
+                  bgcolor: emeraldBg,
                   color: emerald,
+                  border: `1px solid ${emerald}`,
                   fontWeight: 800,
                   fontSize: '0.72rem',
-                  fontFamily: mono
+                  fontFamily: mono,
                 }}
               />
             </Stack>
-            <Typography variant="caption" color="text.secondary">
-              100% client-side L-System fractal synthesizer, 2-Opt TSP air-travel optimizer, and CNC G-Code / SVG exporter.
+            <Typography variant="caption" sx={{ color: inkMuted, display: 'block', mt: 0.3 }}>
+              Deterministic L-System synthesizer, bounded Logo DSL interpreter, Nearest-Neighbor + 2-Opt TSP air-travel optimizer, auto-fit 200mm CNC G-Code, and 2×4 Braille.
             </Typography>
           </Box>
         </Stack>
 
-        <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
+        {isLocalRuntime() && (
           <Button
-            variant="contained"
             size="small"
-            href="https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X"
-            target="_blank"
-            rel="noopener noreferrer"
-            startIcon={<BoltIcon />}
-            sx={{
-              bgcolor: gold,
-              color: '#08080B',
-              fontWeight: 800,
-              fontSize: '0.8rem',
-              '&:hover': { bgcolor: '#B8860B' }
-            }}
-          >
-            ☕ Buy Us a Coffee
-          </Button>
-          <Button
             variant="outlined"
-            size="small"
-            href="solana:GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK"
+            href="http://127.0.0.1:8129"
             target="_blank"
             rel="noopener noreferrer"
             sx={{
-              borderColor: 'rgba(20,241,149,0.45)',
-              color: '#14F195',
-              bgcolor: 'rgba(20,241,149,0.08)',
+              fontFamily: mono,
+              fontSize: '0.76rem',
               fontWeight: 800,
-              fontSize: '0.8rem',
-              '&:hover': { borderColor: '#14F195', bgcolor: 'rgba(20,241,149,0.16)' }
+              minHeight: 44,
+              borderColor: sky,
+              color: sky,
+              whiteSpace: 'nowrap',
             }}
           >
-            ◎ Solana Tip
+            Open Local :8129 Workstation ↗
           </Button>
-        </Stack>
+        )}
       </Paper>
 
-      {/* Sovereign Visualisation Band */}
-      <SovereignEyebrow accent="#10B981" right="Zoth Studio">
-        {"cyber-turtle-geometry-engine"}
+      <SovereignEyebrow accent={emerald} right="Zoth Studio">
+        {'cyber-turtle-geometry-engine'}
       </SovereignEyebrow>
       <SovereignBand
-        seed={"cyber-turtle-geometry-engine"}
-        eyebrow={"Zoth Studio"}
-        caption={"Cyber Turtle"}
-        label={"Cyber Turtle — Zoth sovereign visualisation"}
+        seed={'cyber-turtle-geometry-engine'}
+        eyebrow={'Zoth Studio'}
+        caption={'Cyber Turtle v2.6.0'}
+        label={'Cyber Turtle — Zoth sovereign visualisation'}
       />
 
-      {/* Main Interactive Studio Grid */}
-      <Grid container spacing={3} sx={{ mt: 1 }}>
-        {/* Left Column: Generator Controls */}
+      {/* Mode Selector Tabs */}
+      <Paper sx={{ mt: 2, mb: 2, bgcolor: surface, border: `1px solid ${borderCol}`, borderRadius: 2 }}>
+        <Tabs
+          value={activeTab}
+          onChange={(_, val) => {
+            setActiveTab(val);
+            if (val === 0) setSourceMode('lsystem');
+            if (val === 1) setSourceMode('logo');
+          }}
+          variant="scrollable"
+          scrollButtons="auto"
+          aria-label="Cyber Turtle Studio Modes"
+          sx={{
+            '& .MuiTab-root': {
+              fontFamily: mono,
+              fontWeight: 700,
+              fontSize: '0.78rem',
+              minHeight: 48,
+              color: inkMuted,
+            },
+            '& .Mui-selected': { color: `${emerald} !important` },
+            '& .MuiTabs-indicator': { bgcolor: emerald },
+          }}
+        >
+          <Tab icon={<PolylineIcon fontSize="small" />} iconPosition="start" label="L-System Fractals" />
+          <Tab icon={<CodeIcon fontSize="small" />} iconPosition="start" label="Logo DSL" />
+          <Tab icon={<RouteIcon fontSize="small" />} iconPosition="start" label="2-Opt TSP / G-Code / Braille" />
+        </Tabs>
+      </Paper>
+
+      {synthesis.error && (
+        <Alert severity="error" sx={{ mb: 2, fontFamily: mono }}>
+          {synthesis.error}
+        </Alert>
+      )}
+
+      <Grid container spacing={3}>
+        {/* Left Column: Active Mode Controls + Real 2-Opt TSP Telemetry */}
         <Grid xs={12} lg={5}>
           <Paper
             sx={{
               p: 2.5,
-              bgcolor: isDark ? '#0C0D12' : '#FFFFFF',
-              border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.1)'}`,
-              borderRadius: 2
+              bgcolor: surface,
+              border: `1px solid ${borderCol}`,
+              borderRadius: 2,
             }}
           >
-            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: emerald }}>
-              L-System Fractal Catalog Presets
-            </Typography>
-            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 2.5 }}>
-              {LSYSTEM_PRESETS.map((p) => (
-                <Chip
-                  key={p.id}
-                  label={p.name}
-                  onClick={() => handleSelectPreset(p)}
-                  color={selectedPreset.id === p.id ? 'success' : 'default'}
-                  variant={selectedPreset.id === p.id ? 'filled' : 'outlined'}
-                  size="small"
-                  sx={{ fontFamily: mono, fontWeight: 700, fontSize: '0.75rem', cursor: 'pointer' }}
-                />
-              ))}
-            </Stack>
-
-            <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 700, textTransform: 'uppercase' }}>
-              Grammar Parameters
-            </Typography>
-            <Stack spacing={2} sx={{ mt: 1.5 }}>
-              <TextField
-                label="Axiom String"
-                size="small"
-                fullWidth
-                value={axiom}
-                onChange={(e) => setAxiom(e.target.value)}
-                InputProps={{ sx: { fontFamily: mono, fontSize: '0.85rem' } }}
-              />
-              <TextField
-                label="Production Rules (Key:Val,Key:Val)"
-                size="small"
-                fullWidth
-                value={ruleStr}
-                onChange={(e) => setRuleStr(e.target.value)}
-                InputProps={{ sx: { fontFamily: mono, fontSize: '0.85rem' } }}
-              />
-              <Box>
-                <Typography variant="caption" sx={{ fontFamily: mono, color: gold }}>
-                  Turn Angle: {angle}°
+            {activeTab === 0 && (
+              <>
+                <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: emerald }}>
+                  L-System Fractal Presets (Incl. Pythagoras Tree)
                 </Typography>
-                <Slider
-                  value={angle}
-                  min={10}
-                  max={180}
-                  step={1}
-                  onChange={(_, val) => setAngle(val)}
-                  sx={{ color: gold }}
-                />
-              </Box>
-              <Box>
-                <Typography variant="caption" sx={{ fontFamily: mono, color: emerald }}>
-                  Recursion Iterations: {iterations}
-                </Typography>
-                <Slider
-                  value={iterations}
-                  min={1}
-                  max={selectedPreset.id === 'dragon' ? 12 : 7}
-                  step={1}
-                  onChange={(_, val) => setIterations(val)}
-                  sx={{ color: emerald }}
-                />
-              </Box>
-            </Stack>
+                <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 2.5 }}>
+                  {LSYSTEM_PRESETS.map((p) => {
+                    const active = selectedPreset.id === p.id && sourceMode === 'lsystem';
+                    return (
+                      <Button
+                        key={p.id}
+                        size="small"
+                        variant={active ? 'contained' : 'outlined'}
+                        onClick={() => handleSelectPreset(p)}
+                        sx={{
+                          fontFamily: mono,
+                          fontWeight: 700,
+                          fontSize: '0.74rem',
+                          minHeight: 44,
+                          px: 1.4,
+                          bgcolor: active ? emerald : 'transparent',
+                          color: active ? emeraldInk : inkPrimary,
+                          borderColor: active ? emerald : borderCol,
+                          '&:hover': { bgcolor: active ? emerald : emeraldBg, borderColor: emerald },
+                        }}
+                      >
+                        {p.name}
+                      </Button>
+                    );
+                  })}
+                </Stack>
 
-            {/* Geometry Telemetry Card */}
+                <Stack spacing={2}>
+                  <TextField
+                    label="Axiom String"
+                    size="small"
+                    fullWidth
+                    value={axiom}
+                    onChange={(e) => { setAxiom(e.target.value); setSourceMode('lsystem'); }}
+                    InputProps={{ sx: { fontFamily: mono, fontSize: '0.85rem' } }}
+                  />
+                  <TextField
+                    label="Production Rules (Key:Val,Key:Val)"
+                    size="small"
+                    fullWidth
+                    value={ruleStr}
+                    onChange={(e) => { setRuleStr(e.target.value); setSourceMode('lsystem'); }}
+                    InputProps={{ sx: { fontFamily: mono, fontSize: '0.85rem' } }}
+                  />
+                  <Box>
+                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: gold }}>
+                      Turn Angle θ: {angle}°
+                    </Typography>
+                    <Slider
+                      aria-label="Turn Angle in Degrees"
+                      value={angle}
+                      min={10}
+                      max={180}
+                      step={1}
+                      onChange={(_, val) => { setAngle(val); setSourceMode('lsystem'); }}
+                      sx={{ color: gold }}
+                    />
+                  </Box>
+                  <Box>
+                    <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 700, color: emerald }}>
+                      Recursion Iterations: {iterations}
+                    </Typography>
+                    <Slider
+                      aria-label="Recursion Iterations"
+                      value={iterations}
+                      min={1}
+                      max={selectedPreset.id === 'dragon' ? 12 : 7}
+                      step={1}
+                      onChange={(_, val) => { setIterations(val); setSourceMode('lsystem'); }}
+                      sx={{ color: emerald }}
+                    />
+                  </Box>
+                </Stack>
+              </>
+            )}
+
+            {activeTab === 1 && (
+              <>
+                <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1.5, color: emerald }}>
+                  Bounded Logo DSL Samples
+                </Typography>
+                <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 2 }}>
+                  {LOGO_SAMPLES.map((s) => {
+                    const active = selectedLogoSample === s.id && sourceMode === 'logo';
+                    return (
+                      <Button
+                        key={s.id}
+                        size="small"
+                        variant={active ? 'contained' : 'outlined'}
+                        onClick={() => handleSelectLogoSample(s)}
+                        sx={{
+                          fontFamily: mono,
+                          fontWeight: 700,
+                          fontSize: '0.73rem',
+                          minHeight: 44,
+                          bgcolor: active ? emerald : 'transparent',
+                          color: active ? emeraldInk : inkPrimary,
+                          borderColor: active ? emerald : borderCol,
+                          '&:hover': { bgcolor: active ? emerald : emeraldBg, borderColor: emerald },
+                        }}
+                      >
+                        {s.name}
+                      </Button>
+                    );
+                  })}
+                </Stack>
+                <TextField
+                  label="Logo DSL Script (fd, bk, lt, rt, pu, pd, circle, make, to..end, if)"
+                  multiline
+                  minRows={7}
+                  fullWidth
+                  value={logoCode}
+                  onChange={(e) => { setLogoCode(e.target.value); setSourceMode('logo'); }}
+                  InputProps={{ sx: { fontFamily: mono, fontSize: '0.82rem' } }}
+                />
+              </>
+            )}
+
+            {activeTab === 2 && (
+              <>
+                <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 1, color: emerald }}>
+                  2-Opt TSP Optimizer &amp; Machine Output
+                </Typography>
+                <Stack spacing={1} sx={{ mb: 2 }}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={useTsp}
+                        onChange={(e) => setUseTsp(e.target.checked)}
+                        inputProps={{ 'aria-label': 'Enable 2-Opt TSP Air-Travel Optimization' }}
+                      />
+                    }
+                    label={
+                      <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, color: inkPrimary }}>
+                        Apply 2-Opt TSP Reordering ({synthesis.tsp.polylines} polylines)
+                      </Typography>
+                    }
+                  />
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={showAirOverlay}
+                        onChange={(e) => setShowAirOverlay(e.target.checked)}
+                        inputProps={{ 'aria-label': 'Show Dashed Air-Travel Overlay' }}
+                      />
+                    }
+                    label={
+                      <Typography variant="body2" sx={{ fontFamily: mono, fontWeight: 700, color: inkPrimary }}>
+                        Show Dashed Pen-Up Air-Travel Overlay
+                      </Typography>
+                    }
+                  />
+                </Stack>
+
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: gold, display: 'block', mb: 0.5 }}>
+                  2×4 UNICODE BRAILLE RASTER (U+2800)
+                </Typography>
+                <Box
+                  component="pre"
+                  sx={{
+                    m: 0,
+                    mb: 2,
+                    p: 1.2,
+                    borderRadius: 1.5,
+                    bgcolor: surfaceAlt,
+                    border: `1px solid ${borderCol}`,
+                    fontFamily: mono,
+                    fontSize: '0.62rem',
+                    lineHeight: 1.05,
+                    color: emerald,
+                    overflow: 'auto',
+                    maxHeight: 170,
+                  }}
+                >
+                  {synthesis.braille}
+                </Box>
+
+                <Typography variant="caption" sx={{ fontFamily: mono, fontWeight: 800, color: sky, display: 'block', mb: 0.5 }}>
+                  AUTO-FIT 200MM BED G-CODE PREVIEW
+                </Typography>
+                <Box
+                  component="pre"
+                  sx={{
+                    m: 0,
+                    p: 1.2,
+                    borderRadius: 1.5,
+                    bgcolor: surfaceAlt,
+                    border: `1px solid ${borderCol}`,
+                    fontFamily: mono,
+                    fontSize: '0.68rem',
+                    lineHeight: 1.3,
+                    color: inkPrimary,
+                    overflow: 'auto',
+                    maxHeight: 150,
+                  }}
+                >
+                  {synthesis.gcode.split('\n').slice(0, 32).join('\n')}
+                </Box>
+              </>
+            )}
+
+            {/* Measured 2-Opt TSP Telemetry Card (WCAG AA compliant in Light & Dark) */}
             <Paper
               sx={{
                 p: 2,
-                mt: 3,
-                bgcolor: isDark ? '#08080C' : '#F9FAFB',
-                border: `1px solid ${isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)'}`,
-                borderRadius: 1.5
+                mt: 2.5,
+                bgcolor: surfaceAlt,
+                border: `1px solid ${borderCol}`,
+                borderRadius: 1.5,
               }}
             >
-              <Typography variant="caption" sx={{ fontWeight: 800, color: 'text.secondary', textTransform: 'uppercase' }}>
-                Toolpath Optimization Metrics (2-Opt TSP)
-              </Typography>
-              <Grid container spacing={1} sx={{ mt: 0.5 }}>
-                <Grid xs={4}>
-                  <Typography variant="caption" color="text.secondary">Segments</Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 800, fontFamily: mono, color: cyan }}>
-                    {stats.segments.toLocaleString()}
+              <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+                <Typography variant="caption" sx={{ fontWeight: 800, color: inkMuted, textTransform: 'uppercase' }}>
+                  2-Opt TSP Toolpath Telemetry
+                </Typography>
+                <Button
+                  size="small"
+                  variant={useTsp ? 'contained' : 'outlined'}
+                  onClick={() => setUseTsp((v) => !v)}
+                  sx={{
+                    fontFamily: mono,
+                    fontWeight: 800,
+                    fontSize: '0.72rem',
+                    minHeight: 44,
+                    bgcolor: useTsp ? emerald : 'transparent',
+                    color: useTsp ? emeraldInk : emerald,
+                    borderColor: emerald,
+                  }}
+                >
+                  {useTsp ? '2-Opt TSP: ACTIVE' : 'Optimize 2-Opt TSP'}
+                </Button>
+              </Stack>
+              <Grid container spacing={1.2}>
+                <Grid xs={6}>
+                  <Typography variant="caption" sx={{ color: inkMuted, fontWeight: 700 }}>Segments</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 800, fontFamily: mono, color: sky }}>
+                    {synthesis.geometry.stats.segments.toLocaleString()}
                   </Typography>
                 </Grid>
-                <Grid xs={4}>
-                  <Typography variant="caption" color="text.secondary">Draw Path</Typography>
+                <Grid xs={6}>
+                  <Typography variant="caption" sx={{ color: inkMuted, fontWeight: 700 }}>Draw Path</Typography>
                   <Typography variant="body2" sx={{ fontWeight: 800, fontFamily: mono, color: emerald }}>
-                    {stats.drawDistance} mm
+                    {synthesis.geometry.stats.drawDistance} mm
                   </Typography>
                 </Grid>
-                <Grid xs={4}>
-                  <Typography variant="caption" color="text.secondary">Air Travel</Typography>
+                <Grid xs={6}>
+                  <Typography variant="caption" sx={{ color: inkMuted, fontWeight: 700 }}>Air Travel (Before → After)</Typography>
                   <Typography variant="body2" sx={{ fontWeight: 800, fontFamily: mono, color: gold }}>
-                    {stats.rapidTravel} mm
+                    {synthesis.tsp.initialAirTravel} → {useTsp ? synthesis.tsp.optimizedAirTravel : synthesis.tsp.initialAirTravel} mm
+                  </Typography>
+                </Grid>
+                <Grid xs={6}>
+                  <Typography variant="caption" sx={{ color: inkMuted, fontWeight: 700 }}>Measured Savings</Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 800, fontFamily: mono, color: emerald }}>
+                    {synthesis.tsp.savedMm} mm ({synthesis.tsp.reductionPercent}%)
                   </Typography>
                 </Grid>
               </Grid>
@@ -459,27 +599,27 @@ export default function CyberTurtleGodModeTool() {
           </Paper>
         </Grid>
 
-        {/* Right Column: Live Vector SVG Canvas & Machine Export */}
+        {/* Right Column: Live Vector SVG Stage & Exports */}
         <Grid xs={12} lg={7}>
           <Paper
             sx={{
               p: 2.5,
-              bgcolor: isDark ? '#0C0D12' : '#FFFFFF',
-              border: `1px solid ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.1)'}`,
-              borderRadius: 2
+              bgcolor: surface,
+              border: `1px solid ${borderCol}`,
+              borderRadius: 2,
             }}
           >
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 1 }}>
               <Typography variant="subtitle2" sx={{ fontWeight: 800, color: gold }}>
                 Interactive Vector Stage
               </Typography>
-              <Stack direction="row" spacing={1}>
+              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
                 <Button
                   size="small"
                   variant="contained"
                   startIcon={<DownloadIcon />}
                   onClick={handleDownloadSvg}
-                  sx={{ bgcolor: emerald, color: '#000', fontWeight: 700, fontSize: '0.75rem' }}
+                  sx={{ bgcolor: emerald, color: emeraldInk, fontWeight: 800, fontSize: '0.76rem', minHeight: 44 }}
                 >
                   Download SVG
                 </Button>
@@ -488,37 +628,48 @@ export default function CyberTurtleGodModeTool() {
                   variant="outlined"
                   startIcon={<PrecisionManufacturingIcon />}
                   onClick={handleDownloadGCode}
-                  sx={{ borderColor: gold, color: gold, fontWeight: 700, fontSize: '0.75rem' }}
+                  sx={{ borderColor: gold, color: gold, bgcolor: goldBg, fontWeight: 800, fontSize: '0.76rem', minHeight: 44 }}
                 >
                   Export G-Code
                 </Button>
               </Stack>
             </Box>
 
-            {/* SVG Canvas Box */}
             <Box
               sx={{
                 width: '100%',
-                height: 420,
-                bgcolor: isDark ? '#05060A' : '#FAFAFA',
-                border: `1px solid ${isDark ? 'rgba(212,175,55,0.2)' : 'rgba(0,0,0,0.12)'}`,
+                height: 430,
+                bgcolor: isDark ? '#05060A' : '#FAF8F3',
+                border: `1px solid ${borderCol}`,
                 borderRadius: 2,
                 overflow: 'hidden',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                position: 'relative'
+                position: 'relative',
               }}
             >
               <svg
-                viewBox={viewBox}
-                style={{ width: '100%', height: '100%', maxHeight: '420px', transition: 'all 0.2s ease' }}
+                viewBox={synthesis.geometry.viewBox}
+                role="img"
+                aria-label={`Vector geometry stage showing ${synthesis.activeTitle}`}
+                style={{ width: '100%', height: '100%', maxHeight: '430px' }}
               >
+                {airOverlayPathD && (
+                  <path
+                    d={airOverlayPathD}
+                    fill="none"
+                    stroke={amber}
+                    strokeWidth="1.0"
+                    strokeDasharray="4 4"
+                    strokeOpacity="0.72"
+                  />
+                )}
                 <path
-                  d={svgPathData}
+                  d={synthesis.geometry.pathD}
                   fill="none"
-                  stroke={isDark ? gold : '#1E293B'}
-                  strokeWidth="1.2"
+                  stroke={isDark ? '#FACC15' : '#047857'}
+                  strokeWidth="1.25"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
@@ -526,44 +677,56 @@ export default function CyberTurtleGodModeTool() {
               <Box
                 sx={{
                   position: 'absolute',
-                  bottom: 12,
-                  right: 12,
-                  bgcolor: 'rgba(0,0,0,0.65)',
+                  bottom: 10,
+                  right: 10,
+                  bgcolor: isDark ? 'rgba(8,8,11,0.88)' : 'rgba(255,255,255,0.94)',
+                  border: `1px solid ${borderCol}`,
                   px: 1.5,
-                  py: 0.5,
+                  py: 0.6,
                   borderRadius: 1,
                   fontFamily: mono,
-                  fontSize: '0.7rem',
-                  color: '#A1A1AA'
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  color: inkPrimary,
                 }}
               >
-                Preset: {selectedPreset.name} · {angle}°
+                {synthesis.activeTitle} · {useTsp ? '2-Opt TSP' : 'Raw Order'}
               </Box>
             </Box>
 
-            {/* Action Bar */}
-            <Stack direction="row" spacing={1.5} sx={{ mt: 2 }} justifyContent="flex-end">
+            <Stack direction="row" spacing={1.5} sx={{ mt: 2 }} justifyContent="flex-end" flexWrap="wrap" useFlexGap>
               <Button
                 size="small"
-                variant="text"
+                variant="outlined"
                 startIcon={<ContentCopyIcon />}
-                onClick={() => handleCopy(svgPathData, 'path')}
-                sx={{ fontFamily: mono, fontSize: '0.75rem', color: copiedKey === 'path' ? emerald : 'text.secondary' }}
+                onClick={() => handleCopy(synthesis.braille, 'braille')}
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  minHeight: 44,
+                  color: copiedKey === 'braille' ? emerald : inkPrimary,
+                  borderColor: borderCol,
+                }}
               >
-                {copiedKey === 'path' ? 'Copied Path!' : 'Copy SVG Path'}
+                {copiedKey === 'braille' ? 'Copied Braille!' : 'Copy 2×4 Braille'}
               </Button>
-              {isLocalRuntime() && (
               <Button
                 size="small"
-                variant="text"
-                href="http://127.0.0.1:8129"
-                target="_blank"
-                rel="noopener"
-                sx={{ fontFamily: mono, fontSize: '0.75rem', color: cyan }}
+                variant="outlined"
+                startIcon={<ContentCopyIcon />}
+                onClick={() => handleCopy(synthesis.gcode, 'gcode')}
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  minHeight: 44,
+                  color: copiedKey === 'gcode' ? emerald : inkPrimary,
+                  borderColor: borderCol,
+                }}
               >
-                Open Local :8129 Workstation ↗
+                {copiedKey === 'gcode' ? 'Copied G-Code!' : 'Copy G-Code'}
               </Button>
-              )}
             </Stack>
           </Paper>
         </Grid>

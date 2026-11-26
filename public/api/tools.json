@@ -1107,13 +1107,13 @@
     {
       "id": "cyber-turtle-studio",
       "name": "Cyber Turtle Studio",
-      "description": "100% in-browser L-System fractal synthesizer, turtle geometry studio, and physical CNC pen-plotter G-Code and SVG vector exporter. Free to use; tips optional.",
+      "description": "Zero-egress L-System fractal synthesizer (28 presets), bounded Logo DSL interpreter, Truchet/BFS Maze generator, 2-Opt TSP air-travel optimizer, and CNC G-Code / SVG / 2x4 Braille workstation on :8129 with 9 MCP tools.",
       "category": "Media & 3D",
       "github": "https://github.com/1nc0gn30/cyber-turtle-studio",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/cyber-turtle-studio/",
-      "version": "2.5.0",
-      "pull": "git clone https://github.com/1nc0gn30/cyber-turtle-studio.git && cd cyber-turtle-studio && python3 -m cyber_turtle_studio.cli serve --port 8129  # or: cyber-turtle-studio --status",
+      "version": "2.6.0",
+      "pull": "git clone https://github.com/1nc0gn30/cyber-turtle-studio.git && cd cyber-turtle-studio && python3 server.py --port 8129  # or: cyber-turtle-studio --status",
       "execution_type": "browser",
       "runtimes": [
         "browser",

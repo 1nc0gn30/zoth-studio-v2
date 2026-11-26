@@ -91,6 +91,27 @@
         "cwv_generate_speculation_rules",
         "cwv_audit_performance_budget"
       ]
+    },
+    {
+      "id": "cyber-turtle-studio",
+      "name": "Cyber Turtle Studio",
+      "version": "2.6.0",
+      "transport": "stdio",
+      "command": "cyber-turtle-studio",
+      "args": ["mcp"],
+      "localApi": "http://127.0.0.1:8129/api/mcp/config",
+      "toolCount": 9,
+      "tools": [
+        "turtle_execute_logo",
+        "turtle_generate_lsystem",
+        "turtle_export_svg",
+        "turtle_export_gcode",
+        "turtle_presets",
+        "turtle_diagnostics",
+        "turtle_optimize_toolpath",
+        "turtle_generate_truchet",
+        "turtle_generate_maze"
+      ]
     }
   ]
 }
