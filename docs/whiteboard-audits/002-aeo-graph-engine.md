@@ -82,8 +82,8 @@
      - [godmode_deck_light.jpg](file:///tmp/whiteboard-audit-002/interactive/godmode_deck_light.jpg)
      - [godmode_deck_dark.jpg](file:///tmp/whiteboard-audit-002/interactive/godmode_deck_dark.jpg)
    - Static Brand Media Inspected:
-     - [og-card.png](file:///home/zoth/NullAITech/aeo-graph-engine/public/assets/og-card.png) (`1200×630` PNG, HTTP `200`, clean layout; right-side node cluster overlaps)
-     - [og-banner.jpg](file:///home/zoth/NullAITech/aeo-graph-engine/public/og-banner.jpg) (`1200×624` PNG data misnamed `.jpg`, abstract 3D violin artifact with no text/branding)
+     - [og-card.png](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/assets/og-card.png) (`1200×630` PNG, HTTP `200`, clean layout; right-side node cluster overlaps)
+     - [og-banner.jpg](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/og-banner.jpg) (`1200×624` PNG data misnamed `.jpg`, abstract 3D violin artifact with no text/branding)
 
 ---
 
@@ -91,33 +91,33 @@
 
 ### Level 1 — System Level (`5.5 / 10`)
 1. **[P0] Unmitigated SSRF Across 6 Live-Fetch Endpoints**
-   - **Location**: [scanner.py](file:///home/zoth/NullAITech/aeo-graph-engine/src/aeo_graph_engine/scanner.py#L68-L108), [ui_server.py](file:///home/zoth/NullAITech/aeo-graph-engine/src/aeo_graph_engine/ui_server.py#L2489-L2606)
+   - **Location**: [scanner.py](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/src/aeo_graph_engine/scanner.py#L68-L108), [ui_server.py](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/src/aeo_graph_engine/ui_server.py#L2489-L2606)
    - **Evidence**: `LiveAEOScanner._fetch_url()` performs raw `urllib.request.urlopen()` with zero scheme allowlist (it prepends `https://` to `file:///etc/passwd`) and zero IP validation (loopback `127.0.0.0/8`, `::1`, private RFC1918, link-local/cloud IMDS `169.254.0.0/16`). `POST /api/scan` scanned `127.0.0.1:8127/health` (`HTTP 200`), attempted `127.0.0.1:3000`, and dialed `169.254.169.254`. Same risk applies to `/api/crawl-sitemap`, `/api/bot-audit`, `/api/compare`, `/api/remediate`, `/api/simulate-citation`.
 2. **[P0] Wildcard CORS (`Access-Control-Allow-Origin: *`) & `OPTIONS 200`**
-   - **Location**: [ui_server.py](file:///home/zoth/NullAITech/aeo-graph-engine/src/aeo_graph_engine/ui_server.py#L2287-L2316) & [ui_server.py](file:///home/zoth/NullAITech/aeo-graph-engine/src/aeo_graph_engine/ui_server.py#L2437)
+   - **Location**: [ui_server.py](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/src/aeo_graph_engine/ui_server.py#L2287-L2316) & [ui_server.py](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/src/aeo_graph_engine/ui_server.py#L2437)
    - **Evidence**: Unconditionally emits `Access-Control-Allow-Origin: *` for all origins (`https://evil.example.com`, `http://127.0.0.1:8127.evil.com`), and `do_OPTIONS` returns `200 OK` instead of `204 No Content` (loopback only) / `403 Forbidden` (non-loopback). Combined with SSRF + `POST /api/ai/settings`, any malicious tab in the user's browser can scan localhost services and overwrite `aeo_ai_config.json`.
 3. **[P0] Unhandled Crash on Valid Multi-Type JSON-LD (`@type` as Array)**
-   - **Location**: [validator.py](file:///home/zoth/NullAITech/aeo-graph-engine/src/aeo_graph_engine/validator.py#L76-L83)
+   - **Location**: [validator.py](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/src/aeo_graph_engine/validator.py#L76-L83)
    - **Evidence**: `found_types.add(etype)` raised `TypeError: unhashable type: 'list'` when scanning `http://127.0.0.1:3000`, crashing the HTTP request thread and dropping the TCP connection (`curl (52)`). JSON-LD 1.1 explicitly permits `"@type": ["SoftwareApplication", "WebApplication"]`.
 4. **[P1] REST Contract Defects (`/api/export-zip`, `/api/validate`, `/api/generate`)**
-   - **Location**: [ui_server.py](file:///home/zoth/NullAITech/aeo-graph-engine/src/aeo_graph_engine/ui_server.py#L2352-L2379), [ui_server.py](file:///home/zoth/NullAITech/aeo-graph-engine/src/aeo_graph_engine/ui_server.py#L2515-L2545)
-   - **Evidence**: `POST /api/export-zip` returns `404` despite [README.md](file:///home/zoth/NullAITech/aeo-graph-engine/README.md#L142) documenting `POST /api/export-zip`; `POST /api/validate` silently ignores malformed JSON or missing `schema` keys and returns `HTTP 200 {"score": 100.0, "status": "EXCELLENT"}`; `POST /api/generate` hardcodes `"score": 100.0`.
+   - **Location**: [ui_server.py](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/src/aeo_graph_engine/ui_server.py#L2352-L2379), [ui_server.py](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/src/aeo_graph_engine/ui_server.py#L2515-L2545)
+   - **Evidence**: `POST /api/export-zip` returns `404` despite [README.md](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/README.md#L142) documenting `POST /api/export-zip`; `POST /api/validate` silently ignores malformed JSON or missing `schema` keys and returns `HTTP 200 {"score": 100.0, "status": "EXCELLENT"}`; `POST /api/generate` hardcodes `"score": 100.0`.
 5. **[P1] Static Path Containment Prefix Bug**
-   - **Location**: [ui_server.py](file:///home/zoth/NullAITech/aeo-graph-engine/src/aeo_graph_engine/ui_server.py#L2427-L2428)
+   - **Location**: [ui_server.py](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/src/aeo_graph_engine/ui_server.py#L2427-L2428)
    - **Evidence**: `str(static_file).startswith(str(candidate_root.resolve()))` lacks `os.sep` or `Path.is_relative_to()`, allowing sibling prefix matches (e.g., `public_secrets/`). Traversal to `/etc/passwd` returned `404` (`339 B`), matching nonexistent paths.
 6. **[P1] CLI & Asset Hygiene Gaps**
-   - **Location**: [/usr/local/bin/aeo-graph-engine](file:///usr/local/bin/aeo-graph-engine#L86-L114), [/usr/local/bin/aeo-graph-engine-tui](file:///usr/local/bin/aeo-graph-engine-tui#L204-L255), [og-banner.jpg](file:///home/zoth/NullAITech/aeo-graph-engine/public/og-banner.jpg), [sitemap.xml](file:///home/zoth/NullAITech/aeo-graph-engine/public/sitemap.xml)
+   - **Location**: [/usr/local/bin/aeo-graph-engine](file:///usr/local/bin/aeo-graph-engine#L86-L114), [/usr/local/bin/aeo-graph-engine-tui](file:///usr/local/bin/aeo-graph-engine-tui#L204-L255), [og-banner.jpg](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/og-banner.jpg), [sitemap.xml](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/sitemap.xml)
    - **Evidence**: `--status` hardcodes `"status": "READY"` without probing `:8127`; `--ui` prints generic banner; `aeo-graph-engine-tui` is a boilerplate `math.sin()` stub with `"Sovereign Aeo Graph Engine engine"` typo and unrelated `-14.0 LUFS` / `canvasui-html-effects` metadata; `aeo-graph` is not on `$PATH`; `public/og-banner.jpg` is a `1200×624` PNG with `.jpg` extension; `sitemap.xml` `<lastmod>` is stale (`2026-10-08`).
 
 ### Level 2 — User Level (`5.2 / 10`)
 1. **[P0] Broken Header Action (`◆ Audit Report` throws `ReferenceError`)**
-   - **Location**: [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L3551-L3569)
+   - **Location**: [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L3551-L3569)
    - **Evidence**: `exportFullAuditReportModal()` reads nonexistent `#inpScannerUrl` (real ID: `#inpScanUrl`) and undefined `currentScanResults` (real var: `lastScanData`). Verified live via CDP: clicking it triggers `ALERT: Could not generate report: currentScanResults is not defined`.
 2. **[P0] Plaintext API Key Storage in `localStorage` & World-Readable Config File**
-   - **Location**: [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L3200-L3245), [ai_gateway.py](file:///home/zoth/NullAITech/aeo-graph-engine/src/aeo_graph_engine/ai_gateway.py#L58), [ai_gateway.py](file:///home/zoth/NullAITech/aeo-graph-engine/src/aeo_graph_engine/ai_gateway.py#L127)
+   - **Location**: [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L3200-L3245), [ai_gateway.py](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/src/aeo_graph_engine/ai_gateway.py#L58), [ai_gateway.py](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/src/aeo_graph_engine/ai_gateway.py#L127)
    - **Evidence**: Cloud keys (`openai`, `anthropic`, `perplexity`, `groq`, `openrouter`, `deepseek`) are saved in plaintext in `localStorage['aeo_ai_gateway_settings']` and written via `atomic_write_text()` to `./aeo_ai_config.json` in CWD (risking accidental git commits and `0644` exposure).
 3. **[P0] Canned / Non-Functional AI Simulation & Client Fallbacks**
-   - **Location**: [ai_gateway.py](file:///home/zoth/NullAITech/aeo-graph-engine/src/aeo_graph_engine/ai_gateway.py#L389-L426), [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L2345-L2378), [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L2855-L2905), [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L3681-L3712), [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L2688-L2719)
+   - **Location**: [ai_gateway.py](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/src/aeo_graph_engine/ai_gateway.py#L389-L426), [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L2345-L2378), [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L2855-L2905), [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L3681-L3712), [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L2688-L2719)
    - **Evidence**:
      - `simulate_answer_engine_perception()` never calls any LLM — returns hardcoded `"98.5%"` even for `nonexistent.invalid`.
      - `executeLiveScan()` catch block fabricates a fake `78/100` audit (`robots_txt: true`, `word_count: 850`) whenever `/api/scan` fails.
@@ -125,66 +125,66 @@
      - `loadEntityVisualizer()` renders 4 hardcoded nodes (`AEO Graph Engine`, `1nc0gn30`) and is never refreshed by `selectPreset()` / `regenerateAll()`.
      - `selectMcpClient()` outputs broken configs (`npx -y aeo-graph-engine mcp-server`, `node bin/aeo.js mcp`, `https://${domain}/api/mcp/sse`, `aeo_schema_lookup`).
 4. **[P1] Missing Sovereign Multi-Provider AI Connections**
-   - **Location**: [ai_gateway.py](file:///home/zoth/NullAITech/aeo-graph-engine/src/aeo_graph_engine/ai_gateway.py#L23-L48), [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L1530-L1540)
+   - **Location**: [ai_gateway.py](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/src/aeo_graph_engine/ai_gateway.py#L23-L48), [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L1530-L1540)
    - **Evidence**: Missing **AGY Bridge (`:18000`)**, **AGY CLI**, **Hermes CLI**, **Codex CLI**, **Claude Code CLI**, **Grok CLI**, **AZOTH (`:8136`)**, **Google Gemini**, **xAI Grok**, **Ollama Cloud**, and **Custom OpenAI-Compatible**. `hermes_zoth` is listed in `endpoints` (`:8788`, mismatched against `:8094` in `index.html:2354`) yet fails `POST /api/ai/test` with `"Unknown provider"`.
 5. **[P1] Wrong Launch Command & Disconnected Studio God-Mode Deck**
-   - **Location**: [toolsData.js](file:///home/zoth/NullAITech/zoth-studio-v2/src/data/toolsData.js#L334), [tools.json](file:///home/zoth/NullAITech/zoth-studio-v2/public/api/tools.json#L355), [AeoGraphEngineGodModeTool.jsx](file:///home/zoth/NullAITech/zoth-studio-v2/src/components/tools/AeoGraphEngineGodModeTool.jsx#L191), [AeoGraphEngineGodModeTool.jsx](file:///home/zoth/NullAITech/zoth-studio-v2/src/components/tools/AeoGraphEngineGodModeTool.jsx#L244-L268)
+   - **Location**: [toolsData.js](https://github.com/1nc0gn30/zoth-studio-v2/blob/main/src/data/toolsData.js#L334), [tools.json](https://github.com/1nc0gn30/zoth-studio-v2/blob/main/public/api/tools.json#L355), [AeoGraphEngineGodModeTool.jsx](https://github.com/1nc0gn30/zoth-studio-v2/blob/main/src/components/tools/AeoGraphEngineGodModeTool.jsx#L191), [AeoGraphEngineGodModeTool.jsx](https://github.com/1nc0gn30/zoth-studio-v2/blob/main/src/components/tools/AeoGraphEngineGodModeTool.jsx#L244-L268)
    - **Evidence**: `pull` instructs `python3 -m http.server 8127 --directory public` (wipes out all `/api/*` endpoints). `AeoGraphEngineGodModeTool.jsx` does not connect to `:8127`, lacks `llms.txt`/`ai.txt`/`robots.txt` tabs, has a hardcoded `'19.00'` fallback offer price, `+1-555-555-0199` placeholder phone, minimum score floor of `60/100` on blank input, and a hardcoded `Math.max(88, score - 1)` floor for ClaudeBot.
 
 ### Level 3 — Engineer Level (`6.0 / 10`)
 1. **[P0] 10+ Unescaped `innerHTML` XSS Sinks in `public/index.html`**
-   - **Location**: [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L2947-L3062), [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L3639-L3665), [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L3735-L3742), [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L3841-L3876)
+   - **Location**: [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L2947-L3062), [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L3639-L3665), [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L3735-L3742), [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L3841-L3876)
    - **Evidence**: Untrusted crawled HTML metadata (`p.title`, `p.url`, `p.h1`, `item.issue`, `q.quote`, `ent.name`) is interpolated directly into `innerHTML`. Scanning a malicious page executes JS in `http://127.0.0.1:8127` and can steal plaintext API keys from `localStorage`.
 2. **[P1] 47 MB Unused Asset Bloat in `public/assets/`**
    - **Location**: `~/NullAITech/aeo-graph-engine/public/assets/` (79 files, `47M`)
    - **Evidence**: Contains 57 unreferenced `gpu-blender-v1.glb`..`gpu-blender-v57.glb` files (~22 MB) plus `gpu-showreel-sfx.wav` (5.7 MB), `gpu-ad-15s.mp4` (4.8 MB), `gpu-showreel-30s.mp4` (4.8 MB), `gpu-ad-vertical-9x16.mp4` (3.9 MB).
 3. **[P1] 183 KB Monolith + Stale 90 KB Duplicate Template + External CDN Egress**
-   - **Location**: [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L128-L132), [ui_server.py](file:///home/zoth/NullAITech/aeo-graph-engine/src/aeo_graph_engine/ui_server.py#L49-L2278)
+   - **Location**: [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L128-L132), [ui_server.py](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/src/aeo_graph_engine/ui_server.py#L49-L2278)
    - **Evidence**: `public/index.html` loads Google Fonts + `https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js` (breaking zero-egress claims), while `ui_server.py` embeds a diverged 2,230-line `STUDIO_HTML_TEMPLATE`.
 4. **[P1] 3-Way Version Drift & `netlify-ax` Alias Ambiguity**
-   - **Location**: [pyproject.toml](file:///home/zoth/NullAITech/aeo-graph-engine/pyproject.toml#L7) (`1.0.0`), [__init__.py](file:///home/zoth/NullAITech/aeo-graph-engine/src/aeo_graph_engine/__init__.py#L8) (`1.0.0`), [toolsData.js](file:///home/zoth/NullAITech/zoth-studio-v2/src/data/toolsData.js#L333) (`1.4.0`), [package.json](file:///home/zoth/NullAITech/aeo-graph-engine/package.json#L3) (`2.0.0`), [RealToolWorkspacePage.jsx](file:///home/zoth/NullAITech/zoth-studio-v2/src/pages/RealToolWorkspacePage.jsx#L260), [workstations.js](file:///home/zoth/NullAITech/zoth-studio-v2/src/data/workstations.js#L141-L148)
+   - **Location**: [pyproject.toml](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/pyproject.toml#L7) (`1.0.0`), [__init__.py](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/src/aeo_graph_engine/__init__.py#L8) (`1.0.0`), [toolsData.js](https://github.com/1nc0gn30/zoth-studio-v2/blob/main/src/data/toolsData.js#L333) (`1.4.0`), [package.json](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/package.json#L3) (`2.0.0`), [RealToolWorkspacePage.jsx](https://github.com/1nc0gn30/zoth-studio-v2/blob/main/src/pages/RealToolWorkspacePage.jsx#L260), [workstations.js](https://github.com/1nc0gn30/zoth-studio-v2/blob/main/src/data/workstations.js#L141-L148)
    - **Evidence**: Three conflicting versions across Python, Studio, and npm. `RealToolWorkspacePage.jsx:260` aliases `'netlify-ax'` (described in `workstations.js` as *Zoth Netlify AX & Serverless Edge Console*) to `AeoGraphEngineGodModeTool`, which is intentional cross-routing for AX/AEO (`public/api/netlify-ax.json` lives in `aeo-graph-engine`) but lacks any Netlify AX edge panel inside `AeoGraphEngineGodModeTool`.
 5. **[P2] Preset Default Leakage & 0-Entity 100% Score**
-   - **Location**: [core.py](file:///home/zoth/NullAITech/aeo-graph-engine/src/aeo_graph_engine/core.py), [knowledge_graph.py](file:///home/zoth/NullAITech/aeo-graph-engine/src/aeo_graph_engine/knowledge_graph.py)
+   - **Location**: [core.py](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/src/aeo_graph_engine/core.py), [knowledge_graph.py](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/src/aeo_graph_engine/knowledge_graph.py)
    - **Evidence**: `POST /api/generate` for `audit.example.com` leaked `"name": "NullAI"`, `"logo": "https://aeo.nullai.tech/assets/logo.svg"`; `aeo-graph-engine knowledge-graph public/index.html --format json` returned `entities_count: 0` with `entity_coverage_score: 100.0`.
    - *Clean checks*: `electron/main.cjs:88-91` properly sets `nodeIntegration: false, contextIsolation: true`; `.coverage` is listed in `.gitignore:41` and NOT git-tracked.
 
 ### Level 4 — UI Level (`4.8 / 10`)
 1. **[P0] Schizophrenic Dark/Light Theme Collision on `:8127`**
-   - **Location**: [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L2), [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L134-L155), [zoth-theme.css](file:///home/zoth/NullAITech/aeo-graph-engine/public/zoth-theme.css#L112-L126)
+   - **Location**: [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L2), [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L134-L155), [zoth-theme.css](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/zoth-theme.css#L112-L126)
    - **Evidence** (visually verified in [home_desktop.jpg](file:///tmp/whiteboard-audit-002/standalone/home_desktop.jpg) & [standalone_aigateway_desktop.jpg](file:///tmp/whiteboard-audit-002/interactive/standalone_aigateway_desktop.jpg)): `zoth-theme.css` overrides `--google-blue` to gold `#D4AF37` and injects dark top bars while leaving `--surface-bg: #ffffff` and `--canvas-bg: #f8f9fa` white, creating:
      - Pale-gold text on pastel lavender/white (`Synthesize`, `DeFi`/`AI SaaS`/`Plumbing`, `Audit Report`, active tab underline).
      - White text on metallic gold `#D4AF37` (`Download .zip`, `Scan Website`, `Test Connection`, `Refresh Graph`) — fails WCAG AA.
      - Nearly invisible `0.3` temperature readout (`#EDEFF2` on `#FFFFFF`).
      - Google 4-color dots next to Zoth Studio gold branding.
 2. **[P0] Triple Stacked Header, Nested Studio Chrome & Mobile Tap-Target Deficit**
-   - **Location**: [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L953-L999), [RealToolWorkspacePage.jsx](file:///home/zoth/NullAITech/zoth-studio-v2/src/pages/RealToolWorkspacePage.jsx)
+   - **Location**: [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L953-L999), [RealToolWorkspacePage.jsx](https://github.com/1nc0gn30/zoth-studio-v2/blob/main/src/pages/RealToolWorkspacePage.jsx)
    - **Evidence**: Verified in [home_mobile.jpg](file:///tmp/whiteboard-audit-002/standalone/home_mobile.jpg), [home_tablet.jpg](file:///tmp/whiteboard-audit-002/standalone/home_tablet.jpg), [studio_mode2_scrolled_desktop.jpg](file:///tmp/whiteboard-audit-002/interactive/studio_mode2_scrolled_desktop.jpg):
      - `28 / 47` mobile interactive elements on `:8127` (`22–37 px` height) and `48 / 68` on Studio (`25–38 px`) fail the `>= 44px` tap-target minimum.
      - Tablet header squishes `AEO Studio`, `100 / 100`, `Audit Report`, `Download .zip` onto awkward 2-line pills; mobile hides `AI Keys & Ports` (`display: none !important` at `index.html:958`) and stacks the entire sidebar before the workspace tabs.
      - Studio's `:8127` iframe renders a second "Zoth Studio" top bar inside Zoth Studio.
 3. **[P1] Hardcoded Dark Cards in Studio Light Mode**
-   - **Location**: [AeoGraphEngineGodModeTool.jsx](file:///home/zoth/NullAITech/zoth-studio-v2/src/components/tools/AeoGraphEngineGodModeTool.jsx#L643), [AeoGraphEngineGodModeTool.jsx](file:///home/zoth/NullAITech/zoth-studio-v2/src/components/tools/AeoGraphEngineGodModeTool.jsx#L711), [AeoGraphEngineGodModeTool.jsx](file:///home/zoth/NullAITech/zoth-studio-v2/src/components/tools/AeoGraphEngineGodModeTool.jsx#L698)
+   - **Location**: [AeoGraphEngineGodModeTool.jsx](https://github.com/1nc0gn30/zoth-studio-v2/blob/main/src/components/tools/AeoGraphEngineGodModeTool.jsx#L643), [AeoGraphEngineGodModeTool.jsx](https://github.com/1nc0gn30/zoth-studio-v2/blob/main/src/components/tools/AeoGraphEngineGodModeTool.jsx#L711), [AeoGraphEngineGodModeTool.jsx](https://github.com/1nc0gn30/zoth-studio-v2/blob/main/src/components/tools/AeoGraphEngineGodModeTool.jsx#L698)
    - **Evidence** (visually verified in [godmode_deck_light.jpg](file:///tmp/whiteboard-audit-002/interactive/godmode_deck_light.jpg)): Pitch-black `#06080E` Entity Graph canvas box and `#05060A` JSON-LD code box clash starkly with Editorial Ivory Light Mode (`#FAF8F3`); `LinearProgress` track (`rgba(255,255,255,0.08)`) is invisible on light backgrounds.
 4. **[P1] Raw OS Scrollbars & Corner Clipping**
-   - **Location**: [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L366-L373) (`tabs-bar`), [tools_aeo-graph-engine_desktop.jpg](file:///tmp/whiteboard-audit-002/studio/tools_aeo-graph-engine_desktop.jpg), [studio_mode2_docs_desktop.jpg](file:///tmp/whiteboard-audit-002/interactive/studio_mode2_docs_desktop.jpg)
+   - **Location**: [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L366-L373) (`tabs-bar`), [tools_aeo-graph-engine_desktop.jpg](file:///tmp/whiteboard-audit-002/studio/tools_aeo-graph-engine_desktop.jpg), [studio_mode2_docs_desktop.jpg](file:///tmp/whiteboard-audit-002/interactive/studio_mode2_docs_desktop.jpg)
    - **Evidence**: Unstyled OS horizontal scrollbars bisect the 18-tab bar on `:8127` and the CLI command pill on Studio; `Tool Motion Showcase` top eyebrow clips slightly at rounded top-left/top-right corners.
 
 ### Level 5 — Readability Level (`4.5 / 10`)
 1. **[P0] Fabricated Studio Documentation Entry (`toolsDocumentation.js`)**
-   - **Location**: [toolsDocumentation.js](file:///home/zoth/NullAITech/zoth-studio-v2/src/data/toolsDocumentation.js#L710-L744)
+   - **Location**: [toolsDocumentation.js](https://github.com/1nc0gn30/zoth-studio-v2/blob/main/src/data/toolsDocumentation.js#L710-L744)
    - **Evidence**:
      - Line 713: falsely states `TypeScript / Node.js compiler` (actual: pure Python 3.9+ stdlib).
      - Line 715: documents phantom MCP tool `generate_aeo_graph` (does not exist; real server exposes 12 `aeo_*` tools: `aeo_scan_site`, `aeo_synthesize_prompt`, `aeo_generate_bundle`, `aeo_inject_html`, `aeo_validate`, `aeo_get_framework_snippets`, `aeo_simulate_citation`, `aeo_visualize_schema`, `aeo_crawl_sitemap`, `aeo_extract_knowledge_graph`, `aeo_analyze_claims`, `aeo_generate_claim_matrix`).
      - Line 717: documents phantom CLI command `aeo-graph build --config ./site.config.js --out public/schema.jsonld`.
      - Lines 733–735: uses `NullAITech` org clone URL and `npm install && npm test` instead of `1nc0gn30` + `pip install -e .` + `python3 server.py --port 8127` + `PYTHONPATH=src python3 -m pytest -q`.
 2. **[P0] Accessibility & Landmark Failures**
-   - **Location**: [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L1020-L1620), [AeoGraphEngineGodModeTool.jsx](file:///home/zoth/NullAITech/zoth-studio-v2/src/components/tools/AeoGraphEngineGodModeTool.jsx#L612-L619)
+   - **Location**: [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L1020-L1620), [AeoGraphEngineGodModeTool.jsx](https://github.com/1nc0gn30/zoth-studio-v2/blob/main/src/components/tools/AeoGraphEngineGodModeTool.jsx#L612-L619)
    - **Evidence** (measured via CDP):
      - `:8127` has **`0` `<h1>` headings** (`h1Count: 0`), **`21 / 22` `<label>`s without `for="..."`**, and **`7` unlabelled icon buttons** (6× `◉` password toggles + `✕` modal close).
      - Studio `AeoGraphEngineGodModeTool.jsx` has **`3` unlabelled delete-FAQ icon buttons**.
 3. **[P1] Typography, Raw Markdown & Copy Hygiene**
-   - **Location**: [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L1113), [public/index.html](file:///home/zoth/NullAITech/aeo-graph-engine/public/index.html#L1574), [AeoGraphEngineGodModeTool.jsx](file:///home/zoth/NullAITech/zoth-studio-v2/src/components/tools/AeoGraphEngineGodModeTool.jsx#L434), [README.md](file:///home/zoth/NullAITech/aeo-graph-engine/README.md#L62-L67)
+   - **Location**: [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L1113), [public/index.html](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/index.html#L1574), [AeoGraphEngineGodModeTool.jsx](https://github.com/1nc0gn30/zoth-studio-v2/blob/main/src/components/tools/AeoGraphEngineGodModeTool.jsx#L434), [README.md](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/README.md#L62-L67)
    - **Evidence**:
      - Raw backticks `` `.env` `` rendered literally in UI (`index.html:1574`, visible in [standalone_aigateway_desktop.jpg](file:///tmp/whiteboard-audit-002/interactive/standalone_aigateway_desktop.jpg)).
      - `Celtic Garamond` renders `Deterministic Schema.org @graph` with illegible `r`/`i` glyph confusion (`godmode_deck_light.jpg`).
@@ -274,8 +274,8 @@
   - [studio_godmode_light.jpg](file:///tmp/whiteboard-audit-002-after/interactive/studio_godmode_light.jpg)
   - [studio_godmode_dark.jpg](file:///tmp/whiteboard-audit-002-after/interactive/studio_godmode_dark.jpg)
 - Regenerated Brand Assets (`1200×630`):
-  - [og-card.png](file:///home/zoth/NullAITech/aeo-graph-engine/public/assets/og-card.png)
-  - [og-banner.jpg](file:///home/zoth/NullAITech/aeo-graph-engine/public/og-banner.jpg)
+  - [og-card.png](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/assets/og-card.png)
+  - [og-banner.jpg](https://github.com/1nc0gn30/aeo-graph-engine/blob/main/public/og-banner.jpg)
 
 ### Updated AGY Perspective (`v2`)
 - **What Changed**: Closed the entire browser-to-localhost exploit chain (SSRF + wildcard CORS + `innerHTML` XSS + plaintext `localStorage` keys), fixed the JSON-LD array `@type` crash, replaced canned `"98.5%"` AI output with a live 15+ provider gateway verified against `agy_bridge` (`gemini-3.8-flash-high`) and `ollama_local`, cut `47 MB` of unused asset bloat down to `60 KB`, unified `v2.1.0` across all 3 repos, and visually caught & fixed an `X-Frame-Options: SAMEORIGIN` iframe block via loopback-scoped `CSP: frame-ancestors`.
