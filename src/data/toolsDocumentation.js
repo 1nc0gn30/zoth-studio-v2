@@ -1181,44 +1181,70 @@ export const toolsDocumentation = {
   },
 
   'agent-flight-recorder': {
-    whyUse: 'Autonomous black box flight recorder and time-scrubbing forensics hub for AI agents. Record, inspect, and replay multi-agent execution timelines second-by-second with full state snapshot reproduction.',
-    problemSolved: 'Demystifies black box autonomous agent failures, infinite tool loops, and rogue API calls by providing high-precision forensic replays and incident post-mortems.',
-    architecture: 'Python 3.10+ daemon on port 8104 with SQLite persistence. Ingests millisecond-timestamped telemetry from Sentinel, Firewall, Mock Twin, and Neuro-Memory, serving a dynamic time-scrubber cockpit and standalone HTML bundle exporter.',
+    whyUse: 'Local Python 3.10+ black box flight recorder and time-scrubbing forensics hub on 127.0.0.1:8104. Captures agent command streams, egress, capsule runs, file mutations, prompt scans, and engrams into WAL-mode SQLite with an append-only SHA-256 hash chain.',
+    problemSolved: 'Eliminates opaque AI agent failures and untraceable tool loops by storing tamper-evident, millisecond-scrubbable execution timelines locally with zero cloud telemetry.',
+    architecture: 'Zero-dependency Python 3.10+ daemon bound to 127.0.0.1:8104 (v2.6.0). Persists sessions and timeline_events in SQLite WAL mode with PRAGMA foreign_keys=ON and an append-only SHA-256 hash chain (event_hash = sha256(canonical_json({session_id, seq, offset_ms, event_type, payload, prev_hash}))), verifiable via GET /api/verify/<session_id>, CLI verify, or MCP flight_recorder_verify. Auto-creates parent sessions on cross-daemon POST /api/ingest (e.g. capsule-jail-audit from :8105), enforces strict loopback Host and Origin validation with Vary: Origin and 1 MiB body cap, streams live updates over /api/stream and /api/events/stream, and exports XSS-escaped HTML bundles, JSON, formula-safe CSV, and Markdown reports. Engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform.',
     aiAgentProtocol: {
+      server: 'agent-flight-recorder mcp  # stdio JSON-RPC 2.0',
       mcpTool: 'flight_recorder_scrub',
-      description: 'Scrub and reconstruct the agent execution state at a specific millisecond offset.',
-      cliExample: './bin/agent-flight record -- python3 -m agent_core',
+      description: 'Scrub and reconstruct the agent execution state (terminal output, egress nodes, engrams, threats, capsule executions, and SHA-256 chain status) at a specific millisecond offset.',
+      cliExample: 'agent-flight-recorder record -- python3 -m agent_core',
       inputSchema: {
         type: 'object',
         properties: {
           session_id: { type: 'string', description: 'Flight session ID' },
-          offset_ms: { type: 'number', description: 'Millisecond offset along the timeline' }
+          offset_ms: { type: 'number', minimum: 0, description: 'Millisecond offset along the timeline' }
         },
         required: ['session_id']
       },
       outputSchema: {
-        snapshot: {
-          timestamp_ms: 'number',
-          terminal_lines: 'array',
-          network_nodes: 'array',
-          active_threat: 'object',
-          memory_engrams: 'array'
-        },
+        session_id: 'string',
+        scrub_offset_ms: 'number | null',
+        events_count: 'integer',
+        terminal_text: 'string',
+        network_nodes: 'array',
+        synaptic_engrams: 'array',
+        max_threat_score: 'number',
+        capsule_executions: 'array',
+        chain_valid: 'boolean',
+        head_hash: 'string (64 hex)',
         duration_ms: 'number'
-      }
+      },
+      tools: [
+        {
+          name: 'flight_recorder_scrub',
+          input: '{ session_id, offset_ms? }',
+          output: '{ session_id, events_count, terminal_text, network_nodes, synaptic_engrams, max_threat_score, capsule_executions, chain_valid, head_hash, duration_ms }'
+        },
+        {
+          name: 'flight_recorder_sessions',
+          input: '{ limit? }',
+          output: '{ sessions, stats, version }'
+        },
+        {
+          name: 'flight_recorder_ingest',
+          input: '{ session_id?, event_type, payload, severity?, offset_ms? }',
+          output: '{ status, event_id, session_id, head_hash, chain_valid }'
+        },
+        {
+          name: 'flight_recorder_verify',
+          input: '{ session_id }',
+          output: '{ session_id, valid, event_count, head_hash, broken_at_event_id }'
+        }
+      ]
     },
     quickstart: [
       'git clone https://github.com/1nc0gn30/agent-flight-recorder.git',
-      'cd agent-flight-recorder && chmod +x bin/agent-flight',
-      './bin/agent-flight serve --port 8104'
+      'cd agent-flight-recorder && python3 server.py --host 127.0.0.1 --port 8104',
+      'agent-flight-recorder verify --json  # or: agent-flight-recorder mcp'
     ],
     features: [
-      'Interactive time-scrubbing cockpit with millisecond-precision playback (1x, 2x, 4x)',
-      'Synchronized terminal output, network topology, threat radar, and synaptic memories',
-      'Multi-source telemetry ingestion from Firewall (:8098), Sentinel (:8095), Mock Twin (:8097), and Memory (:8094)',
-      'Kokoro Voice Engine integration (:9394) for synthesized spoken mission debriefs',
-      'Standalone single-file HTML replay bundle export (100% offline viewable)',
-      'Zero external dependencies (100% Python standard library)'
+      'SQLite WAL storage with genuine append-only SHA-256 hash chain & tamper detection (/api/verify/<id>)',
+      'Live SSE cockpit (/api/stream & /api/events/stream) with millisecond playback (1x, 2x, 4x) and Raw Event Inspector',
+      'Cross-daemon telemetry ingestion (/api/ingest) auto-creating sessions for Capsule Jail (:8105), Firewall (:8098), and Sentinel (:8095)',
+      'Zero-dependency stdio JSON-RPC 2.0 MCP server (flight_recorder_scrub, sessions, ingest, verify)',
+      'Multi-format exports: XSS-escaped offline HTML bundle, JSON, formula-safe CSV, and Markdown',
+      'Dual-theme Editorial Ivory Light + Obsidian Dark UI and live terminal TUI (agent-flight-recorder-tui)'
     ]
   },
 

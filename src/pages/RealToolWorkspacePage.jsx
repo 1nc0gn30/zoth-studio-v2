@@ -1216,7 +1216,7 @@ export default function RealToolWorkspacePage() {
                 src={
                   tool.id === 'agent-budget-sentinel'
                     ? `${tool.localUrl || `http://127.0.0.1:${tool.localPort}`}?theme=${isDark ? 'dark' : 'light'}&embed=1`
-                    : tool.id === 'agent-capsule-jail' || tool.id === 'agent-egress-sentinel'
+                    : tool.id === 'agent-capsule-jail' || tool.id === 'agent-egress-sentinel' || tool.id === 'agent-flight-recorder'
                     ? `${tool.localUrl || `http://127.0.0.1:${tool.localPort}`}/?embed=1&theme=${isDark ? 'dark' : 'light'}`
                     : (tool.localUrl || `http://127.0.0.1:${tool.localPort}`)
                 }

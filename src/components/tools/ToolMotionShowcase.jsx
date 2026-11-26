@@ -84,6 +84,17 @@ export const TOOL_MOTION_OVERRIDES = {
     execLabel: '127.0.0.1:8095 RADAR · 127.0.0.1:8195 EGRESS PROXY',
     telemetrySub: 'Pre-relay TLS ClientHello SNI · RFC1918/169.254 SSRF Guard · 3 Stdio MCP Tools · v2.6.0.',
   },
+  'agent-flight-recorder': {
+    accent: '#38BDF8',
+    secondary: '#D4AF37',
+    archetype: 'timeline',
+    anchorName: 'Chrono-Prism Oscilloscope & SHA-256 Chain',
+    formula: 'H_i = SHA256(canonical_json(session, seq_i, offset_ms, type, payload, H_{i-1}))',
+    badge: 'SHA-256 BLACK BOX',
+    clip: 'tools',
+    execLabel: '127.0.0.1:8104 LOCAL DAEMON · WAL SQLITE + SSE',
+    telemetrySub: 'Append-Only SHA-256 Hash Chain · Live SSE Scrubber · 4 Stdio MCP Tools · v2.6.0.',
+  },
 };
 
 export function getToolMotionMeta(tool) {

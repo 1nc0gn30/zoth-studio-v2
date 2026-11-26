@@ -223,13 +223,13 @@ export const workstations = [
   {
     id: "agent-flight-recorder",
     name: "Agent Flight Recorder // Black Box Forensics",
-    path: "/studio/agent-flight.html",
+    path: "/tools/agent-flight-recorder",
     band: "Observe",
     type: "integrated_tool",
-    description: "Black box flight recorder & time-scrubbing telemetry forensics hub for AI agents.",
+    description: "Local Python daemon (127.0.0.1:8104) with SHA-256 hash-chained SQLite WAL storage, live SSE time-scrubbing cockpit, 4-tool stdio MCP server, and offline HTML/JSON/CSV/Markdown exports.",
     alsoInApp: "/tools/agent-flight-recorder",
     toolRepoId: "agent-flight-recorder",
-    pullCommand: "./bin/agent-flight serve --port 8104"
+    pullCommand: "agent-flight-recorder serve --port 8104"
   },
   {
     id: "agent-capsule-jail",
