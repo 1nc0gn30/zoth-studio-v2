@@ -199,7 +199,7 @@ export default function Navbar({ onToggleTheme }) {
                   display: { xs: 'none', sm: 'block' },
                 }}
               >
-                {`${microTools.length} OPEN-ACCESS TOOLS · v2.2`}
+                {`${microTools.length} OPEN-ACCESS TOOLS · v2.3.0`}
               </Typography>
             </Box>
           </Box>

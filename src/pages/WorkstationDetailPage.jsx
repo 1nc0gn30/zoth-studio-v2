@@ -45,6 +45,7 @@ import ZothAIAssistant from '../components/ZothAIAssistant';
 import SovereignFunnel from '../components/SovereignFunnel';
 import { useReality } from '../context/RealityContext';
 import AgentComposerGodModeTool from '../components/tools/AgentComposerGodModeTool';
+import BrandAssetsForgeGodModeTool from '../components/tools/BrandAssetsForgeGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 
@@ -58,112 +59,10 @@ function AgentComposerWorkstation() {
 
 /* ==========================================================================
    WORKSTATION 2: Brand & Alchemical Seals Kit
+   Delegates directly to BrandAssetsForgeGodModeTool (v2.3.0).
    ========================================================================== */
 function BrandWorkstation() {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === 'dark';
-  const [copiedColor, setCopiedColor] = useState('');
-
-  const tokens = [
-    { name: 'Void Core', hex: '#08080B', role: 'Primary Dark Background' },
-    { name: 'Imperial Gold', hex: '#D4AF37', role: 'Primary Accent & Sigil Foil' },
-    { name: 'Soft Gold Foil', hex: '#F5E6AB', role: 'Typography Highlight & Subhead' },
-    { name: 'Deep Carbon', hex: '#12121A', role: 'Elevated Surface & Card Foil' },
-    { name: 'Quantum Cyan', hex: '#00F0FF', role: 'Zero-Egress & Bridge Status' },
-    { name: 'Oracle Pink', hex: '#F472B6', role: 'Lucy Netrunner Neural Link' },
-  ];
-
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
-    setCopiedColor(text);
-    setTimeout(() => setCopiedColor(''), 1500);
-  };
-
-  return (
-    <Box>
-      <Grid container spacing={3}>
-        <Grid xs={12} md={7}>
-          <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, mb: 3 }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1 }}>Alchemical Seals & Vector Emblems</Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              High-resolution sovereign seals, vector geometry, and transparent SVG brandmarks ready for deployment.
-            </Typography>
-
-            <Grid container spacing={2}>
-              <Grid xs={6} sm={4}>
-                <Paper sx={{ p: 2.5, textAlign: 'center', bgcolor: isDark ? '#0B0B12' : '#F8FAFC', border: isDark ? '1px solid rgba(212,175,55,0.3)' : '1px solid #EAECF0', borderRadius: 2 }}>
-                  <Box component="img" src="/brand/ghostbyte-dark.png" alt="Ghostbyte Seal" sx={{ width: 64, height: 64, objectFit: 'contain', mb: 1.5, mx: 'auto' }} />
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>GhostByte</Typography>
-                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>Primary Brand Seal</Typography>
-                </Paper>
-              </Grid>
-              <Grid xs={6} sm={4}>
-                <Paper sx={{ p: 2.5, textAlign: 'center', bgcolor: isDark ? '#0B0B12' : '#F8FAFC', border: isDark ? '1px solid rgba(212,175,55,0.3)' : '1px solid #EAECF0', borderRadius: 2 }}>
-                  <Box component="img" src="/mascot/antigravity.jpg" alt="Antigravity Mascot" sx={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', mb: 1.5, mx: 'auto' }} />
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>Antigravity</Typography>
-                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>Architect Mascot</Typography>
-                </Paper>
-              </Grid>
-              <Grid xs={6} sm={4}>
-                <Paper sx={{ p: 2.5, textAlign: 'center', bgcolor: isDark ? '#0B0B12' : '#F8FAFC', border: isDark ? '1px solid rgba(212,175,55,0.3)' : '1px solid #EAECF0', borderRadius: 2 }}>
-                  <Box component="img" src="/assets/lucy.png" alt="Lucy Netrunner" sx={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover', mb: 1.5, mx: 'auto', border: '2px solid #F472B6' }} />
-                  <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>Lucy Oracle</Typography>
-                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>Netrunner Sigil</Typography>
-                </Paper>
-              </Grid>
-            </Grid>
-          </Paper>
-        </Grid>
-
-        <Grid xs={12} md={5}>
-          <Paper sx={{ p: 3, border: `1px solid ${theme.palette.divider}`, borderRadius: 2, bgcolor: theme.palette.background.paper, height: '100%' }}>
-            <Typography variant="h6" sx={{ fontWeight: 800, mb: 1 }}>Zoth Studio Color Tokens</Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Official CSS variables and hex codes for the Zoth Studio v2 gold-on-void design system.
-            </Typography>
-
-            <Stack spacing={1.5}>
-              {tokens.map((token) => (
-                <Box
-                  key={token.name}
-                  onClick={() => copyToClipboard(token.hex)}
-                  sx={{
-                    p: 1.5,
-                    borderRadius: 1.5,
-                    border: `1px solid ${theme.palette.divider}`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    cursor: 'pointer',
-                    '&:hover': { borderColor: isDark ? '#D4AF37' : '#B8860B' },
-                  }}
-                >
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                    <Box sx={{ width: 28, height: 28, borderRadius: 1, bgcolor: token.hex, border: isDark ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0,0,0,0.12)' }} />
-                    <Box>
-                      <Typography variant="body2" sx={{ fontWeight: 750 }}>{token.name}</Typography>
-                      <Typography variant="caption" color="text.secondary">{token.role}</Typography>
-                    </Box>
-                  </Box>
-                  <Chip
-                    label={copiedColor === token.hex ? 'Copied!' : token.hex}
-                    size="small"
-                    sx={{
-                      fontFamily: mono,
-                      fontWeight: 750,
-                      bgcolor: copiedColor === token.hex ? (isDark ? 'rgba(52,211,153,0.2)' : '#ECFDF3') : (isDark ? '#14141E' : '#F3F4F6'),
-                      color: copiedColor === token.hex ? (isDark ? '#34D399' : '#047857') : theme.palette.text.primary,
-                      border: `1px solid ${copiedColor === token.hex ? (isDark ? 'rgba(52,211,153,0.4)' : '#A7F3D0') : theme.palette.divider}`,
-                    }}
-                  />
-                </Box>
-              ))}
-            </Stack>
-          </Paper>
-        </Grid>
-      </Grid>
-    </Box>
-  );
+  return <BrandAssetsForgeGodModeTool />;
 }
 
 /* ==========================================================================

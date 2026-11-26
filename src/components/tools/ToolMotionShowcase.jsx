@@ -115,7 +115,18 @@ export const TOOL_MOTION_OVERRIDES = {
     badge: 'AX CONTRACT STUDIO',
     clip: 'ax',
     execLabel: 'HYBRID BROWSER ENGINE + /api/studio/ax/{audit,validate}',
-    telemetrySub: '10 Live Manifest Probes · 6-Spec Validator · 6-File Bundle Compiler · 85 Tools / 44 Workstations · v2.3.0.',
+    telemetrySub: '10 Live Manifest Probes · 6-Spec Validator · 6-File Bundle Compiler · 85 Tools / 45 Workstations · v2.3.0.',
+  },
+  'brand': {
+    accent: '#D4AF37',
+    secondary: '#38BDF8',
+    archetype: 'geometry',
+    anchorName: 'Parametric Alchemical Seal & Dual-Theme Token Lattice',
+    formula: 'CR(L1, L2) = (max(L1, L2) + 0.05) / (min(L1, L2) + 0.05) ≥ 4.5 · XML-Escaped SVG',
+    badge: 'BRAND ASSETS & SEALS KIT',
+    clip: 'tools',
+    execLabel: '100% CLIENT-SIDE SVG/PNG FORGE + /api/studio/brand/tokens',
+    telemetrySub: '6 Parametric SVG Seals · Editorial Ivory + Obsidian Gold Tokens · WCAG 2.1 Matrix · v2.3.0.',
   },
 };
 

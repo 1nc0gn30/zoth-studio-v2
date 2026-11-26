@@ -35,6 +35,7 @@ import { useSovereignRuntime } from '../utils/sovereignRuntime';
 import { useReality } from '../context/RealityContext';
 import AgentComposerGodModeTool from '../components/tools/AgentComposerGodModeTool';
 import AxPowerhouseGodModeTool from '../components/tools/AxPowerhouseGodModeTool';
+import BrandAssetsForgeGodModeTool from '../components/tools/BrandAssetsForgeGodModeTool';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
@@ -255,7 +256,7 @@ const ENCLAVE_TOOL_COMPONENTS = {
   'cyberpunk-hud': AttackSurfaceSentinelGodModeTool,
   'chronicle': ChronicleVaultGodModeTool,
   'notes-reviewer': NeuroMemoryGodModeTool,
-  'brand': RealityShaderForgeGodModeTool,
+  'brand': BrandAssetsForgeGodModeTool,
   'vision-link': VisionKinematicsGodModeTool,
   'web3-hub': SovereignBridgeGodModeTool,
   'github-tool': PolyglotStudioGodModeTool,
@@ -1439,14 +1440,14 @@ export default function RealToolWorkspacePage() {
 
               <Divider sx={{ my: 2.5, borderColor: borderCol }} />
 
-              <Typography variant="subtitle2" sx={{ fontWeight: 800, color: primaryText, mb: 0.75 }}>
+              <Typography component="h3" variant="subtitle2" sx={{ fontWeight: 800, color: primaryText, mb: 0.75 }}>
                 Problem Solved
               </Typography>
               <Typography variant="body2" sx={{ color: secondaryText, lineHeight: 1.7, mb: 3 }}>
                 {docs.problemSolved}
               </Typography>
 
-              <Typography variant="subtitle2" sx={{ fontWeight: 800, color: primaryText, mb: 0.75 }}>
+              <Typography component="h3" variant="subtitle2" sx={{ fontWeight: 800, color: primaryText, mb: 0.75 }}>
                 Local Runtime Architecture
               </Typography>
               <Typography variant="body2" sx={{ color: secondaryText, lineHeight: 1.7 }}>
@@ -1639,13 +1640,18 @@ export default function RealToolWorkspacePage() {
         </Paper>
       </RevealOnScroll>
 
-      {/* Unified Repository Funnel (100% Open Access + Optional Buy Us a Coffee / Solana Tip) */}
+      {/* Unified Repository Funnel (100% Open Access; Coffee / Solana support bar lives once in Footer below) */}
       <SovereignFunnel
         toolTitle={`Option 1: ${tool.name}`}
-        toolTag="STANDALONE REPO"
-        toolDescription={`Clone ${tool.repo || tool.id} directly to run its local CLI binary, daemon, and test suite on your machine.`}
+        toolTag={wsEntry ? 'STUDIO WORKSTATION' : 'STANDALONE REPO'}
+        toolDescription={
+          wsEntry
+            ? `Run ${tool.name} directly in-browser or clone zoth-studio-v2 to launch the local loopback workstation and test suite.`
+            : `Clone ${tool.repo || tool.id} directly to run its local CLI binary, daemon, and test suite on your machine.`
+        }
         toolRepo={repoUrl}
         toolCommand={cloneCommand}
+        showSupportStrip={false}
       />
     </Container>
   );

@@ -44,6 +44,10 @@ try {
   check('Static /api/tools.json 200 JSON (85 tools)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"tool_count":\s*85/.test(r.body), `${r.status}`);
   r = await req('/api/index.json');
   check('Static /api/index.json 200 JSON', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"openAccess":\s*true/.test(r.body), `${r.status}`);
+  r = await req('/api/workstations.json');
+  check('Static /api/workstations.json 200 JSON (45 workstations)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"workstation_count":\s*45/.test(r.body), `${r.status}`);
+  r = await req('/api/studio/brand/tokens');
+  check('Brand tokens API 200 JSON (6 seals + dual-theme)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"ghostbyte-sanctum"/.test(r.body) && /"#FAF8F3"/.test(r.body), `${r.status}`);
   r = await req('/api/studio/ax/audit');
   check('AX audit API 200 JSON (driftCount 0)', r.status === 200 && /application\/json/.test(String(r.headers['content-type'] || '')) && /"driftCount":0/.test(r.body), `${r.status} ${r.body.slice(0, 180)}`);
   r = await req('/api/studio/ax/validate', { method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/json' }, body: '{"spec":"robots.txt","content":"User-agent: *\\nAllow: /"}' });
@@ -55,7 +59,11 @@ try {
   r = await req('/api/studio/launch', { method: 'POST', headers: { Origin: 'https://evil.example', 'Content-Type': 'application/json' }, body: '{"tool":"terminal"}' });
   check('cross-origin launch blocked (403)', r.status === 403, r.status);
   r = await req('/', { method: 'DELETE' }); check('non-GET static 405', r.status === 405, r.status);
-  r = await req('/'); check('nosniff header', r.headers['x-content-type-options'] === 'nosniff');
+  r = await req('/');
+  check('nosniff header', r.headers['x-content-type-options'] === 'nosniff');
+  check('X-Frame-Options SAMEORIGIN', r.headers['x-frame-options'] === 'SAMEORIGIN', r.headers['x-frame-options']);
+  check('Referrer-Policy strict-origin-when-cross-origin', r.headers['referrer-policy'] === 'strict-origin-when-cross-origin', r.headers['referrer-policy']);
+  check('Loopback CSP header present', /frame-src 'self' http:\/\/127\.0\.0\.1:\*/.test(String(r.headers['content-security-policy'] || '')), r.headers['content-security-policy']);
 
   const rt = spawn(process.execPath, [path.join(root, 'scripts/test-routes.mjs')], { stdio: 'inherit', env: { ...process.env, TEST_URL: base } });
   const code = await new Promise((res) => rt.on('exit', res));

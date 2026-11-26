@@ -447,7 +447,8 @@ $ npx @nullaitech/zoth pull &lt;repo&gt;   # git clones a public tool into ./too
 
 // ── 1. PRERENDER ALL STATIC ROUTES ──
 for (const [routePath, meta] of routeEntries) {
-  const fullUrl = `${siteConfig.url}${routePath === '/' ? '' : routePath}`;
+  const canonicalPath = meta.canonicalPath || routePath;
+  const fullUrl = `${siteConfig.url}${canonicalPath === '/' ? '' : canonicalPath}`;
   const schemaJson = JSON.stringify(generateSchemaGraph(routePath), null, 2);
 
   let html = template;
@@ -578,4 +579,33 @@ fs.writeFileSync(publicSitemapPath, sitemapXml, 'utf8');
 fs.writeFileSync(distSitemapPath, sitemapXml, 'utf8');
 
 console.log(`✔ Generated sitemap.xml with ${routeEntries.length} routes in public/ and dist/.`);
+
+// ── 3. SYNCHRONIZE WORKSTATIONS MANIFEST (public/api/workstations.json + dist/api/workstations.json) ──
+const workstationsManifest = {
+  schemaVersion: '2.3.0',
+  generatedAt: today,
+  workstation_count: workstations.length,
+  openAccess: true,
+  workstations: workstations.map((w) => ({
+    id: w.id,
+    name: w.name,
+    band: w.band,
+    type: w.type || 'cockpit',
+    executionType: w.executionType || 'browser',
+    version: w.version || '2.3.0',
+    route: w.alsoInApp || `/workstations/${w.id}`,
+    path: w.path,
+    pullCommand: w.pullCommand || `zoth open ${w.id}`,
+    description: w.description,
+    url: `${siteConfig.url}${w.alsoInApp || `/workstations/${w.id}`}`,
+  })),
+};
+const workstationsJson = JSON.stringify(workstationsManifest, null, 2) + '\n';
+const publicApiDir = path.join(rootDir, 'public', 'api');
+const distApiDir = path.join(distDir, 'api');
+fs.mkdirSync(publicApiDir, { recursive: true });
+fs.mkdirSync(distApiDir, { recursive: true });
+fs.writeFileSync(path.join(publicApiDir, 'workstations.json'), workstationsJson, 'utf8');
+fs.writeFileSync(path.join(distApiDir, 'workstations.json'), workstationsJson, 'utf8');
+console.log(`✔ Synchronized /api/workstations.json with ${workstations.length} workstations in public/ and dist/.`);
 console.log(`\n🎉 Prerendering complete: All ${generatedCount} static routes and sitemaps are production-ready!`);

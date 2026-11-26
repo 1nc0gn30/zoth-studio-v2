@@ -31,6 +31,7 @@ export default function SovereignFunnel({
   toolCommand,
   studioRepo = 'https://github.com/NullAITech/zoth-studio-v2',
   osRepo = 'https://github.com/NullAITech/zoth-os',
+  showSupportStrip = true,
   sx = {},
 }) {
   const theme = useTheme();
@@ -384,65 +385,67 @@ export default function SovereignFunnel({
       </Grid>
 
       {/* Subtle Open-Access & Optional Support Strip */}
-      <Box
-        sx={{
-          mt: 3,
-          pt: 2.5,
-          borderTop: `1px solid ${borderCol}`,
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 1.5,
-        }}
-      >
-        <Typography variant="caption" sx={{ color: textSecondary, fontSize: '0.8rem' }}>
-          100% open-access repositories with zero paywalls or license gates. Optional community support:
-        </Typography>
-        <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
-          <Button
-            size="small"
-            variant="outlined"
-            href={STRIPE_COFFEE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            sx={{
-              minHeight: 44,
-              fontFamily: mono,
-              fontWeight: 700,
-              fontSize: '0.72rem',
-              textTransform: 'none',
-              borderColor: borderCol,
-              color: textPrimary,
-              bgcolor: cardBg,
-              '&:hover': { borderColor: gold },
-            }}
-          >
-            ☕ Buy Us a Coffee
-          </Button>
-          <Button
-            size="small"
-            variant="outlined"
-            onClick={() => handleCopy(SOLANA_WALLET, 'Solana tip address')}
-            sx={{
-              minHeight: 44,
-              fontFamily: mono,
-              fontWeight: 700,
-              fontSize: '0.72rem',
-              textTransform: 'none',
-              borderColor: isDark ? 'rgba(52,211,153,0.35)' : '#A7F3D0',
-              color: isDark ? '#34D399' : '#047857',
-              bgcolor: isDark ? 'rgba(16,185,129,0.06)' : '#ECFDF5',
-              '&:hover': {
-                borderColor: isDark ? '#34D399' : '#059669',
-                bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#D1FAE5',
-              },
-            }}
-          >
-            Solana Tip: GG2eQb…dXoK (Copy)
-          </Button>
+      {showSupportStrip && (
+        <Box
+          sx={{
+            mt: 3,
+            pt: 2.5,
+            borderTop: `1px solid ${borderCol}`,
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 1.5,
+          }}
+        >
+          <Typography variant="caption" sx={{ color: textSecondary, fontSize: '0.8rem' }}>
+            100% open-access repositories with zero paywalls or license gates. Optional community support:
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', alignItems: 'center' }}>
+            <Button
+              size="small"
+              variant="outlined"
+              href={STRIPE_COFFEE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              sx={{
+                minHeight: 44,
+                fontFamily: mono,
+                fontWeight: 700,
+                fontSize: '0.72rem',
+                textTransform: 'none',
+                borderColor: borderCol,
+                color: textPrimary,
+                bgcolor: cardBg,
+                '&:hover': { borderColor: gold },
+              }}
+            >
+              ☕ Buy Us a Coffee
+            </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => handleCopy(SOLANA_WALLET, 'Solana tip address')}
+              sx={{
+                minHeight: 44,
+                fontFamily: mono,
+                fontWeight: 700,
+                fontSize: '0.72rem',
+                textTransform: 'none',
+                borderColor: isDark ? 'rgba(52,211,153,0.35)' : '#A7F3D0',
+                color: isDark ? '#34D399' : '#047857',
+                bgcolor: isDark ? 'rgba(16,185,129,0.06)' : '#ECFDF5',
+                '&:hover': {
+                  borderColor: isDark ? '#34D399' : '#059669',
+                  bgcolor: isDark ? 'rgba(16,185,129,0.12)' : '#D1FAE5',
+                },
+              }}
+            >
+              Solana Tip: GG2eQb…dXoK (Copy)
+            </Button>
+          </Box>
         </Box>
-      </Box>
+      )}
 
       <Snackbar
         open={snackbarOpen}

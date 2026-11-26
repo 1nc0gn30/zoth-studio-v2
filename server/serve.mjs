@@ -35,10 +35,27 @@ function resolveFile(urlPath) {
   return undefined;                                                        // not found
 }
 
+const LOOPBACK_CSP = [
+  "default-src 'self' http://127.0.0.1:* http://localhost:*",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: http://127.0.0.1:* http://localhost:*",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: http://127.0.0.1:* http://localhost:*",
+  "font-src 'self' data:",
+  "media-src 'self' data: blob:",
+  "worker-src 'self' blob:",
+  "frame-src 'self' http://127.0.0.1:* http://localhost:*",
+  "frame-ancestors 'self' https://zoth.nullai.tech https://*.nullai.tech http://127.0.0.1:* http://localhost:*",
+  "connect-src 'self' http://127.0.0.1:* http://localhost:* ws://127.0.0.1:* ws://localhost:*",
+  "object-src 'none'",
+  "base-uri 'self'",
+].join('; ');
+
 const api = studioMiddleware();
 const server = http.createServer((req, res) => {
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('Referrer-Policy', 'same-origin');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Content-Security-Policy', LOOPBACK_CSP);
   boltProxyMiddleware(req, res, () => api(req, res, () => {
     const cleanPath = (req.url || '/').split('?')[0];
     if (cleanPath.startsWith('/api/')) {

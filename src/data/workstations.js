@@ -101,10 +101,13 @@ export const workstations = [
   {
     id: "brand",
     name: "Zoth Studio Brand Assets & Alchemical Seals Kit",
-    path: "/studio/brand.html",
+    path: "/workstations/brand",
     band: "Studio",
     type: "cockpit",
-    description: "Alchemical seal vector forge, cyber-sigils, and dark-theme design token system.",
+    executionType: "browser",
+    version: "2.3.0",
+    pullCommand: "zoth open brand",
+    description: "Parametric alchemical seal vector forge, cyber-sigils, official studio emblems, and Editorial Ivory + Obsidian Gold dual-theme design token system.",
     alsoInApp: "/workstations/brand"
   },
   {

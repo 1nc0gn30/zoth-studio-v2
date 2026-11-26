@@ -68,6 +68,8 @@ const SAMPLE_ROUTES = [
   '/tools/agent-composer',
   '/workstations/ax-powerhouse',
   '/tools/ax-powerhouse',
+  '/workstations/brand',
+  '/tools/brand',
   '/workstations/mission-control',
   '/docs/math/stdp',
 ];

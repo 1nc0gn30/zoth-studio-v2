@@ -24,12 +24,14 @@ import { ZothBotCharacterCanvas, RealityThemeIcon } from '../RealityZothBotHUD';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow, titleBaseSx, ledeSx } from '../sovereign/typography.jsx';
 
+import { sanitizeHex, sanitizeText } from '../../utils/brandAssetEngine';
+
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Syne", "Space Grotesk", system-ui, sans-serif';
 
 function hexToRgbTuple(hex) {
-  const clean = (hex || '#D4AF37').replace('#', '');
-  const num = parseInt(clean.length === 3 ? clean.split('').map((c) => c + c).join('') : clean, 16) || 0xd4af37;
+  const clean = sanitizeHex(hex, '#D4AF37').replace('#', '');
+  const num = parseInt(clean, 16) || 0xd4af37;
   return `${(num >> 16) & 255},${(num >> 8) & 255},${num & 255}`;
 }
 
@@ -57,6 +59,14 @@ export default function RealityShaderForgeGodModeTool() {
     setCornerRadius(parseInt(activeTheme.borderRadius, 10) || 12);
   }, [activeTheme]);
 
+  const safePrimaryHex = useMemo(() => sanitizeHex(primaryHex, activeTheme.primary || '#D4AF37'), [primaryHex, activeTheme.primary]);
+  const safeSecondaryHex = useMemo(() => sanitizeHex(secondaryHex, activeTheme.secondary || '#38BDF8'), [secondaryHex, activeTheme.secondary]);
+  const safeBgVoidHex = useMemo(() => sanitizeHex(bgVoidHex, activeTheme.bgVoid || '#050608'), [bgVoidHex, activeTheme.bgVoid]);
+  const safeThemeName = useMemo(
+    () => sanitizeText(themeName, 40).replace(/["\\]/g, '') || 'Sovereign Gold',
+    [themeName]
+  );
+
   // 60fps Custom Shader Preview Canvas
   useEffect(() => {
     const canvas = shaderCanvasRef.current;
@@ -77,11 +87,11 @@ export default function RealityShaderForgeGodModeTool() {
       const w = canvas.width;
       const h = canvas.height;
 
-      ctx.fillStyle = bgVoidHex || '#050608';
+      ctx.fillStyle = safeBgVoidHex;
       ctx.fillRect(0, 0, w, h);
 
       // Subtle grid
-      ctx.strokeStyle = `${primaryHex}1A`;
+      ctx.strokeStyle = `${safePrimaryHex}1A`;
       ctx.lineWidth = 1;
       for (let x = 0; x < w; x += 36) {
         ctx.beginPath();
@@ -109,7 +119,7 @@ export default function RealityShaderForgeGodModeTool() {
           const dy = p.y - q.y;
           const dist = Math.hypot(dx, dy);
           if (dist < 110) {
-            ctx.strokeStyle = `${ idx % 2 === 0 ? primaryHex : secondaryHex }44`;
+            ctx.strokeStyle = `${idx % 2 === 0 ? safePrimaryHex : safeSecondaryHex}44`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
@@ -118,7 +128,7 @@ export default function RealityShaderForgeGodModeTool() {
           }
         }
 
-        ctx.fillStyle = idx % 3 === 0 ? secondaryHex : primaryHex;
+        ctx.fillStyle = idx % 3 === 0 ? safeSecondaryHex : safePrimaryHex;
         ctx.beginPath();
         ctx.arc(p.x, p.y, idx % 4 === 0 ? 3.5 : 2.2, 0, Math.PI * 2);
         ctx.fill();
@@ -128,11 +138,11 @@ export default function RealityShaderForgeGodModeTool() {
       ctx.save();
       ctx.translate(w / 2, h / 2);
       ctx.rotate(t * 0.4);
-      ctx.strokeStyle = `${primaryHex}88`;
+      ctx.strokeStyle = `${safePrimaryHex}88`;
       ctx.lineWidth = 1.6;
       ctx.strokeRect(-34, -34, 68, 68);
       ctx.rotate(-t * 0.8);
-      ctx.strokeStyle = `${secondaryHex}88`;
+      ctx.strokeStyle = `${safeSecondaryHex}88`;
       ctx.strokeRect(-22, -22, 44, 44);
       ctx.restore();
 
@@ -141,10 +151,10 @@ export default function RealityShaderForgeGodModeTool() {
 
     animId = requestAnimationFrame(render);
     return () => cancelAnimationFrame(animId);
-  }, [primaryHex, secondaryHex, bgVoidHex, particleSpeed, nodeDensity]);
+  }, [safePrimaryHex, safeSecondaryHex, safeBgVoidHex, particleSpeed, nodeDensity]);
 
   const kdeColorsFile = useMemo(() => {
-    const slug = themeName.replace(/[^a-zA-Z0-9]/g, '');
+    const slug = safeThemeName.replace(/[^a-zA-Z0-9]/g, '');
     return `[ColorEffects:Disabled]
 Color=56,56,56
 ColorAmount=0
@@ -157,37 +167,37 @@ IntensityEffect=2
 [Colors:Button]
 BackgroundAlternate=14,18,26
 BackgroundNormal=10,12,18
-DecorationFocus=${hexToRgbTuple(primaryHex)}
-DecorationHover=${hexToRgbTuple(secondaryHex)}
-ForegroundActive=${hexToRgbTuple(primaryHex)}
+DecorationFocus=${hexToRgbTuple(safePrimaryHex)}
+DecorationHover=${hexToRgbTuple(safeSecondaryHex)}
+ForegroundActive=${hexToRgbTuple(safePrimaryHex)}
 ForegroundInactive=138,148,166
-ForegroundLink=${hexToRgbTuple(primaryHex)}
+ForegroundLink=${hexToRgbTuple(safePrimaryHex)}
 ForegroundNormal=245,240,232
 
 [Colors:Window]
 BackgroundAlternate=8,10,15
-BackgroundNormal=${hexToRgbTuple(bgVoidHex)}
-DecorationFocus=${hexToRgbTuple(primaryHex)}
-DecorationHover=${hexToRgbTuple(secondaryHex)}
-ForegroundActive=${hexToRgbTuple(primaryHex)}
+BackgroundNormal=${hexToRgbTuple(safeBgVoidHex)}
+DecorationFocus=${hexToRgbTuple(safePrimaryHex)}
+DecorationHover=${hexToRgbTuple(safeSecondaryHex)}
+ForegroundActive=${hexToRgbTuple(safePrimaryHex)}
 ForegroundInactive=148,163,184
 ForegroundNormal=245,240,232
 
 [General]
 ColorScheme=Zoth${slug}
-Name=ZothOS ${themeName}
+Name=ZothOS ${safeThemeName}
 shadeSortColumn=true
 
 [WM]
-activeBackground=${hexToRgbTuple(bgVoidHex)}
-activeBlend=${hexToRgbTuple(primaryHex)}
+activeBackground=${hexToRgbTuple(safeBgVoidHex)}
+activeBlend=${hexToRgbTuple(safePrimaryHex)}
 activeForeground=245,240,232
 inactiveBackground=8,10,15
 inactiveForeground=120,130,145`;
-  }, [themeName, primaryHex, secondaryHex, bgVoidHex]);
+  }, [safeThemeName, safePrimaryHex, safeSecondaryHex, safeBgVoidHex]);
 
   const alacrittyToml = useMemo(() => {
-    return `# ZothOS v3.4.0 Alacritty Reality Profile — ${themeName}
+    return `# ZothOS v3.4.0 Alacritty Reality Profile — ${safeThemeName}
 # Companion Zoth Bot: ${activeTheme.botName} (${activeTheme.botTitle})
 
 [window]
@@ -201,37 +211,37 @@ normal = { family = "JetBrains Mono", style = "Regular" }
 bold = { family = "JetBrains Mono", style = "Bold" }
 
 [colors.primary]
-background = "${bgVoidHex}"
+background = "${safeBgVoidHex}"
 foreground = "#F5F0E8"
 
 [colors.cursor]
-text = "${bgVoidHex}"
-cursor = "${primaryHex}"
+text = "${safeBgVoidHex}"
+cursor = "${safePrimaryHex}"
 
 [colors.normal]
-black   = "${bgVoidHex}"
+black   = "${safeBgVoidHex}"
 red     = "#F43F5E"
 green   = "#10B981"
-yellow  = "${primaryHex}"
+yellow  = "${safePrimaryHex}"
 blue    = "#38BDF8"
-magenta = "${secondaryHex}"
+magenta = "${safeSecondaryHex}"
 cyan    = "#00F0FF"
 white   = "#F5F0E8"`;
-  }, [themeName, activeTheme.botName, activeTheme.botTitle, bgVoidHex, primaryHex, secondaryHex]);
+  }, [safeThemeName, activeTheme.botName, activeTheme.botTitle, safeBgVoidHex, safePrimaryHex, safeSecondaryHex]);
 
   const cssVariablesExport = useMemo(() => {
     return `:root[data-zoth-reality="${realityId}"] {
   --zoth-reality-id: "${realityId}";
-  --zoth-reality-name: "${themeName}";
-  --zoth-reality-primary: ${primaryHex};
-  --zoth-reality-secondary: ${secondaryHex};
-  --zoth-reality-void: ${bgVoidHex};
+  --zoth-reality-name: "${safeThemeName}";
+  --zoth-reality-primary: ${safePrimaryHex};
+  --zoth-reality-secondary: ${safeSecondaryHex};
+  --zoth-reality-void: ${safeBgVoidHex};
   --zoth-reality-radius: ${cornerRadius}px;
   --zoth-reality-particle-speed: ${particleSpeed};
   --zoth-reality-node-density: ${nodeDensity};
   --zoth-bot-companion: "${activeTheme.botName}";
 }`;
-  }, [realityId, themeName, primaryHex, secondaryHex, bgVoidHex, cornerRadius, particleSpeed, nodeDensity, activeTheme.botName]);
+  }, [realityId, safeThemeName, safePrimaryHex, safeSecondaryHex, safeBgVoidHex, cornerRadius, particleSpeed, nodeDensity, activeTheme.botName]);
 
   const glslFragExport = useMemo(() => {
     const rgbP = hexToRgbTuple(primaryHex).split(',').map(n => (parseInt(n,10)/255).toFixed(4));
@@ -606,7 +616,7 @@ void main() {
 
           <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1, flexWrap: 'wrap', gap: 1 }}>
             <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', color: '#94A3B8' }}>
-              Compiled Artifact (`zoth-{realityId}-theme.{activeExportExt}`)
+              Compiled Artifact (zoth-{realityId}-theme.{activeExportExt})
             </Typography>
             <Stack direction="row" spacing={1}>
               <Button

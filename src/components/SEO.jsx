@@ -13,7 +13,8 @@ export default function SEO({ title: customTitle, description: customDescription
 
   const pageTitle = customTitle || routeMeta.title;
   const pageDescription = customDescription || routeMeta.description;
-  const canonicalUrl = `${siteConfig.url}${currentPath === '/' ? '' : currentPath}`;
+  const canonicalPath = routeMeta.canonicalPath || currentPath;
+  const canonicalUrl = `${siteConfig.url}${canonicalPath === '/' ? '' : canonicalPath}`;
 
   useEffect(() => {
     // 1. Update Document Title

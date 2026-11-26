@@ -3664,6 +3664,57 @@ export const toolsDocumentation = {
           "Synchronized 6-File Bundle Compiler — Synthesizes downloadable, open-access AX contract bundles with one-click Sync from Live Zoth Studio Catalog (/api/tools.json) and localStorage persistence.",
           "Dual-Theme Editorial Ivory & Obsidian UI — WCAG AA contrast across light/dark surfaces with 44px touch targets and zero paywalls."
       ]
+  },
+  "brand": {
+      "whyUse": "Provides a self-contained, zero-egress brand asset forge and dual-theme design token workbench directly inside Zoth Studio v2. Generate XML-escaped parametric SVG alchemical seals and 1024px PNG exports, download verified Light and Dark Studio emblems, audit WCAG 2.1 contrast ratios across Editorial Ivory and Obsidian Gold tokens, and export production CSS, W3C JSON, Tailwind, and attribution bundles.",
+      "problemSolved": "Eliminates broken external font CDNs, mismatched image encodings, dark-only token drift, and unsanitized SVG/CSS template strings by unifying vector seal synthesis, official Studio media, and dual-theme WCAG verification in one pure client-side engine (src/utils/brandAssetEngine.js).",
+      "architecture": "Studio-native browser workstation powered by zero-dependency src/utils/brandAssetEngine.js (mirrored at server/brand-asset-engine.mjs for GET /api/studio/brand/tokens). Strict hex validation (/^#[0-9A-Fa-f]{6}$/) and XML entity escaping guarantee zero XSS or markup injection across all 6 parametric SVG seal templates and token exporters.",
+      "aiAgentProtocol": {
+          "server": "Zoth Studio Loopback API (:3000) & Client Brand Engine",
+          "cliExample": "zoth open brand --json",
+          "tools": [
+              {
+                  "name": "GET /api/studio/brand/tokens",
+                  "description": "Returns canonical Editorial Ivory Light + Obsidian Gold Dark design tokens, typography stack, 5 official Studio assets, 6 parametric seal templates, and pre-evaluated WCAG 2.1 contrast matrix."
+              },
+              {
+                  "name": "GET /api/workstations.json",
+                  "description": "Returns the synchronized machine-readable registry of all 45 Zoth Studio workstations including canonical routes, bands, versions, and execution types."
+              }
+          ],
+          "inputSchema": {
+              "type": "object",
+              "properties": {
+                  "templateId": {
+                      "type": "string",
+                      "enum": ["ghostbyte-sanctum", "ouroboros-ring", "metatron-hex", "azoth-archon", "zoth-monogram", "cyber-sigil"]
+                  },
+                  "title": { "type": "string", "maxLength": 36 },
+                  "subtitle": { "type": "string", "maxLength": 48 },
+                  "primaryHex": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+                  "secondaryHex": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" }
+              }
+          },
+          "outputSchema": {
+              "svg": "Standalone XML-escaped SVG 1.1 document (512x512 viewBox)",
+              "pngDataUrl": "Client-rasterized 1024x1024 PNG data URL",
+              "exports": "CSS custom properties, W3C Design Tokens JSON, Tailwind config, Attribution snippets"
+          }
+      },
+      "quickstart": [
+          "zoth open brand",
+          "zoth open brand --json",
+          "curl -sS http://127.0.0.1:3000/api/studio/brand/tokens | jq '{schemaVersion, templates: (.templates | length), lightTokens: (.tokens.light | length), darkTokens: (.tokens.dark | length)}'"
+      ],
+      "cliCommands": [
+          "node --test scripts/test-brand-engine.mjs  # verify SVG XML escaping, dual-theme token parity, and WCAG 2.1 contrast math"
+      ],
+      "features": [
+          "6 Parametric SVG Alchemical Seals & Cyber-Sigils — GhostByte Sanctum, Ouroboros Ring, Metatron Hex, Azoth Archon, Zoth Monogram, and NullAI Cyber-Sigil with strict XML escaping and 1024px PNG rasterization.",
+          "Official Dual-Theme Studio Asset Gallery — Direct downloads for verified Light & Dark GhostByte emblems (512×512 PNG), Antigravity Mascot (1024×1024 JPEG), Lucy Oracle (600×800 PNG), and OpenGraph banner (1200×624 JPEG).",
+          "Editorial Ivory + Obsidian Gold Token Matrix & WCAG 2.1 Checker — Interactive click-to-copy swatches synced to src/theme.js, self-hosted typography specimens (Celtic Garamond, Inter, JetBrains Mono), and live contrast ratio auditing.",
+          "Multi-Format Production Bundle Exporter — One-click CSS custom properties, W3C Design Tokens JSON, Tailwind preset, and compliant Neal Frazier Tech (@1nc0gn30) • NullAI Platform attribution snippets."
+      ]
   }
 };
 

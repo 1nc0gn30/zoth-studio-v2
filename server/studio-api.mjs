@@ -6,6 +6,7 @@ import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { exec, execFile, spawn } from 'node:child_process';
 import { validateAxSpec, gradeFromScore, AX_SPEC_IDS } from './ax-contract-engine.mjs';
+import { getBrandApiManifest } from './brand-asset-engine.mjs';
 
 const STUDIO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HOME_DIR = process.env.ZOTH_HOME || os.homedir();
@@ -968,14 +969,29 @@ export function studioMiddleware() {
         return;
       }
 
+      if (req.method === 'GET' && (url.pathname === '/api/studio/brand/tokens' || url.pathname === '/api/studio/brand')) {
+        send(res, 200, getBrandApiManifest());
+        return;
+      }
+
       if (req.method === 'POST' && url.pathname === '/api/studio/reality') {
         const body = await readBody(req);
         let requested = String(body.mode || '').toLowerCase().trim();
         if (requested === 'win11' || requested === 'windows') requested = 'incognito';
         if (requested === 'default' || requested === 'sanctum') requested = 'gold';
         if (requested === 'stealth' || requested === 'amnesic') requested = 'ghost';
+        if (requested === 'cyan' || requested === 'quantum') {
+          send(res, 200, {
+            success: true,
+            mode: 'cyan',
+            hostApplied: false,
+            allowedHostModes: ['gold', 'ghost', 'matrix', 'incognito'],
+            message: 'Quantum Cyan preview acknowledged (browser-only palette; host zoth-mode untouched).',
+          });
+          return;
+        }
         if (!['gold', 'ghost', 'matrix', 'incognito'].includes(requested)) {
-          send(res, 400, { error: 'Invalid mode. Allowed: gold, ghost, matrix, incognito' });
+          send(res, 400, { error: 'Invalid mode. Allowed: gold, ghost, matrix, incognito, cyan' });
           return;
         }
 

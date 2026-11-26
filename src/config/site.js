@@ -13,7 +13,7 @@ export const siteConfig = {
   legalName: 'Neal Frazier Tech • NullAI Platform',
   url: 'https://zoth.nullai.tech',
   tagline: '85 Free Open-Access Sovereign Tools, Pantheon Matrix & Local AI Studio',
-  description: `Zoth Studio v2 is a local-first, zero-egress AI engineering studio unifying 85 free open-access developer, security, AEO, and AI tools (56 in-browser/WebGPU + 29 local CLI/daemon across 82 public GitHub repositories), ${workstations.length} Studio workstations, ZothOS v3.4.0 (23 daemons, Debian 13 KDE Plasma 6), ZothOS-Lite v1.2 (Amnesic Monotone Live USB/ISO, 56 curated models across 8 providers, toram), and Zoth Civilization v3.0 (23 Pantheon Agents, 22-Key Sanctuary, DeepSeek Flash × Hermes BYOK).`,
+  description: `Zoth Studio v2 is a local-first, zero-egress AI engineering studio unifying 85 free open-access developer, security, AEO, and AI tools (44 in-browser/WebGPU + 41 local CLI/daemon across 84 public GitHub repositories), ${workstations.length} Studio workstations, ZothOS v3.4.0 (23 daemons, Debian 13 KDE Plasma 6), ZothOS-Lite v1.2 (Amnesic Monotone Live USB/ISO, 56 curated models across 8 providers, toram), and Zoth Civilization v3.0 (23 Pantheon Agents, 22-Key Sanctuary, DeepSeek Flash × Hermes BYOK).`,
   author: 'Neal Frazier Tech (@1nc0gn30) • NullAI Platform',
   twitterHandle: '@1nc0gn30',
   githubUrl: 'https://github.com/NullAITech/zoth-studio-v2',
@@ -60,15 +60,15 @@ export const siteConfig = {
       type: 'article',
     },
     '/arsenal': {
-      title: 'The Sovereign Arsenal // 85 Free Open-Access Tools, 82 GitHub Repos & 43 Workstations',
-      description: `Unified master directory of 85 free open-access developer, security, AEO & AI tools (56 in-browser/WebGPU + 29 local CLI/daemon across 82 public GitHub repositories) and ${workstations.length} Studio workstations.`,
-      keywords: 'sovereign arsenal, 85 open-access tools, 82 GitHub repositories, developer cockpits, ZothOS, Zoth Studio',
+      title: `The Sovereign Arsenal // ${microTools.length} Free Open-Access Tools, 84 GitHub Repos & ${workstations.length} Workstations`,
+      description: `Unified master directory of ${microTools.length} free open-access developer, security, AEO & AI tools (44 in-browser/WebGPU + 41 local CLI/daemon across 84 public GitHub repositories) and ${workstations.length} Studio workstations.`,
+      keywords: 'sovereign arsenal, 85 open-access tools, 84 GitHub repositories, 45 Studio workstations, developer cockpits, ZothOS, Zoth Studio',
       type: 'article',
     },
     '/tools': {
-      title: 'Sovereign Tool Repositories // 85 Free Open-Access Tools (56 In-Browser + 29 CLI)',
-      description: 'Explore 85 free open-access, schema-validated developer tools (56 in-browser/WebGPU + 29 local CLI/daemon across 82 public GitHub repositories) and interactive God-Mode workstations.',
-      keywords: 'developer tools, zoth webgen, 85 open-access tools, 82 public repos, offline-capable tools',
+      title: `Sovereign Tool Repositories // ${microTools.length} Free Open-Access Tools (44 In-Browser + 41 CLI)`,
+      description: `Explore ${microTools.length} free open-access, schema-validated developer tools (44 in-browser/WebGPU + 41 local CLI/daemon across 84 public GitHub repositories) and interactive God-Mode workstations.`,
+      keywords: 'developer tools, zoth webgen, 85 open-access tools, 84 public repos, offline-capable tools',
       type: 'article',
     },
     '/workstations': {
@@ -196,11 +196,14 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, Agent Experience, AX contract compiler, llms.txt validator, ai.txt, mcp.json, agent.json, Schema.org JSON-LD, Zoth Studio workstation`
         : station.id === 'agent-composer'
         ? `${station.name}, ${station.band}, multi-agent DAG composer, local Ollama pipeline, Zoth Studio workstation`
+        : station.id === 'brand'
+        ? `${station.name}, alchemical seals, parametric SVG seal generator, cyber-sigils, Editorial Ivory Light, Obsidian Gold Dark, WCAG 2.1 contrast checker, W3C design tokens, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
         description: `${station.description} Interactive local-first workstation (${station.band}) inside Zoth Studio v2.`,
         keywords: stationKeywords,
+        canonicalPath: `/workstations/${station.id}`,
         type: 'article'
       };
     }
@@ -215,6 +218,8 @@ export function getRouteMeta(path = '/') {
         ? `${station.name}, Agent Experience, AX contract compiler, llms.txt validator, ai.txt, mcp.json, agent.json, Schema.org JSON-LD, Zoth Studio workstation`
         : station.id === 'agent-composer'
         ? `${station.name}, ${station.band}, multi-agent DAG composer, local Ollama pipeline, Zoth Studio workstation`
+        : station.id === 'brand'
+        ? `${station.name}, alchemical seals, parametric SVG seal generator, cyber-sigils, Editorial Ivory Light, Obsidian Gold Dark, WCAG 2.1 contrast checker, W3C design tokens, Zoth Studio`
         : `${station.name}, ${station.band}, ${station.id}, local-first developer cockpit, Zoth Studio workstation`;
       return {
         title: `${station.name} // Zoth Studio`,
@@ -260,6 +265,7 @@ export function getAllStaticRoutes() {
   });
   routes['/tools/agent-composer'] = getRouteMeta('/tools/agent-composer');
   routes['/tools/ax-powerhouse'] = getRouteMeta('/tools/ax-powerhouse');
+  routes['/tools/brand'] = getRouteMeta('/tools/brand');
 
   // Add all math pillars
   mathPillars.forEach((pillar) => {
@@ -279,10 +285,10 @@ export function generateSchemaGraph(path = '/') {
   const coreFaqEntities = [
     {
       '@type': 'Question',
-      'name': 'Are all 83 Zoth Studio tools, ZothOS v3.4.0, and ZothOS-Lite v1.2 100% free and open-access?',
+      'name': `Are all ${microTools.length} Zoth Studio tools, ZothOS v3.4.0, and ZothOS-Lite v1.2 100% free and open-access?`,
       'acceptedAnswer': {
         '@type': 'Answer',
-        'text': 'Yes. All 85 Zoth Studio tools (56 in-browser/WebGPU + 29 local CLI/daemon across 82 public GitHub repositories), 43 Studio workstations, ZothOS v3.4.0 (https://zothos.nullai.tech), ZothOS-Lite v1.2 (https://zothos-lite.nullai.tech), Zoth Civilization v3.0 (https://zoth-civilization.netlify.app), ZothNet (https://zothnet.nullai.tech), and FieldKit (https://nullai.tech/fieldkit) are 100% free and unlocked by default with zero paywalls, zero license modals, and optional Buy Us a Coffee or Solana community tips.'
+        'text': `Yes. All ${microTools.length} Zoth Studio tools (44 in-browser/WebGPU + 41 local CLI/daemon across 84 public GitHub repositories), ${workstations.length} Studio workstations, ZothOS v3.4.0 (https://zothos.nullai.tech), ZothOS-Lite v1.2 (https://zothos-lite.nullai.tech), Zoth Civilization v3.0 (https://zoth-civilization.netlify.app), ZothNet (https://zothnet.nullai.tech), and FieldKit (https://nullai.tech/fieldkit) are 100% free and unlocked by default with zero paywalls, zero license modals, and optional Buy Us a Coffee or Solana community tips.`
       }
     },
     {
@@ -715,7 +721,7 @@ export function generateSchemaGraph(path = '/') {
         'name': station.name,
         'applicationCategory': 'DeveloperApplication',
         'operatingSystem': 'Web, Linux, macOS, Windows, ZothOS',
-        'softwareVersion': station.version || '2.2.0',
+        'softwareVersion': station.version || '2.3.0',
         'description': station.description || `Interactive workstation for ${station.name} (${station.band}) inside Zoth Studio v2.`,
         'author': { '@id': 'https://nullai.tech/#person' },
         'creator': { '@id': 'https://nullai.tech/#person' },
@@ -786,6 +792,39 @@ export function generateSchemaGraph(path = '/') {
               'acceptedAnswer': {
                 '@type': 'Answer',
                 'text': 'Yes. Multi-Agent DAG Composer & Pipeline Foundry is 100% free and open-access with zero paywalls, zero license keys, and optional community support via Buy Us a Coffee or Solana tips.'
+              }
+            }
+          ]
+        });
+      }
+
+      if (station.id === 'brand') {
+        graph.push({
+          '@type': 'FAQPage',
+          '@id': `${fullUrl}#faq`,
+          'mainEntity': [
+            {
+              '@type': 'Question',
+              'name': 'What vector seals, studio emblems, and token formats can I export from the Zoth Brand Assets Kit?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'You can customize and download 6 parametric XML-escaped SVG alchemical seals and cyber-sigils (plus 1024px PNG raster exports), download verified Light and Dark GhostByte emblems and OpenGraph artwork, audit Editorial Ivory and Obsidian Gold WCAG 2.1 contrast ratios, and export CSS custom properties, W3C Design Tokens JSON, Tailwind presets, and attribution snippets.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Does the Brand Assets & Alchemical Seals Forge run offline with zero external requests?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. All SVG synthesis, hex validation, XML escaping, WCAG 2.1 contrast math, and 1024px PNG canvas rasterization run 100% client-side in your browser via src/utils/brandAssetEngine.js with self-hosted WOFF2 typography and zero external font or API egress.'
+              }
+            },
+            {
+              '@type': 'Question',
+              'name': 'Is the Zoth Studio Brand Assets & Alchemical Seals Kit 100% free and open-access?',
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': 'Yes. Every SVG seal, 1024px PNG export, studio emblem download, and design-token bundle is 100% free and unlocked by default with zero paywalls or license gates, supported optionally by Buy Us a Coffee (Stripe) or Solana community tips.'
               }
             }
           ]

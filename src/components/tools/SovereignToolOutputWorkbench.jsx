@@ -447,7 +447,11 @@ ${JSON.stringify(
     ]);
   };
 
-  const accent = isDark ? reality?.accent || '#D4AF37' : reality?.accentLightMode || '#8A6508';
+  const accent = isDark ? reality?.accent || '#D4AF37' : '#7A5808';
+  const cyanInk = isDark ? '#38BDF8' : '#0369A1';
+  const emeraldInk = isDark ? '#10B981' : '#047857';
+  const crimsonInk = isDark ? '#F43F5E' : '#B42318';
+  const onAccentInk = isDark ? '#08080B' : '#FFFFFF';
 
   return (
     <Paper
@@ -490,9 +494,9 @@ ${JSON.stringify(
                 fontFamily: mono,
                 fontWeight: 800,
                 fontSize: '0.66rem',
-                bgcolor: 'rgba(16,185,129,0.14)',
-                color: '#10B981',
-                border: '1px solid rgba(16,185,129,0.35)',
+                bgcolor: isDark ? 'rgba(16,185,129,0.14)' : '#ECFDF5',
+                color: emeraldInk,
+                border: `1px solid ${isDark ? 'rgba(16,185,129,0.35)' : '#A7F3D0'}`,
               }}
             />
             <Chip
@@ -503,11 +507,11 @@ ${JSON.stringify(
                 fontWeight: 700,
                 fontSize: '0.65rem',
                 bgcolor: isDark ? 'rgba(56,189,248,0.12)' : '#E0F2FE',
-                color: isDark ? '#38BDF8' : '#0369A1',
+                color: cyanInk,
               }}
             />
           </Stack>
-          <Typography variant="subtitle1" sx={{ fontFamily: display, fontWeight: 700, fontSize: '1.15rem' }}>
+          <Typography component="h3" variant="subtitle1" sx={{ fontFamily: display, fontWeight: 700, fontSize: '1.15rem' }}>
             Custom Payload Inspector, Multi-Format Output Generator & Export Deck
           </Typography>
         </Box>
@@ -526,7 +530,7 @@ ${JSON.stringify(
                 fontWeight: 700,
                 textTransform: 'none',
                 bgcolor: inputText === p.input ? accent : 'transparent',
-                color: inputText === p.input ? '#08080B' : theme.palette.text.primary,
+                color: inputText === p.input ? onAccentInk : theme.palette.text.primary,
                 borderColor: `${accent}55`,
               }}
             >
@@ -544,8 +548,8 @@ ${JSON.stringify(
               fontSize: '0.67rem',
               fontWeight: 700,
               textTransform: 'none',
-              color: '#38BDF8',
-              borderColor: 'rgba(56,189,248,0.45)',
+              color: cyanInk,
+              borderColor: isDark ? 'rgba(56,189,248,0.45)' : 'rgba(3,105,161,0.45)',
             }}
           >
             Load File
@@ -554,7 +558,7 @@ ${JSON.stringify(
         </Stack>
       </Stack>
 
-      <SovereignEyebrow accent="#38BDF8" right="Zoth Studio">
+      <SovereignEyebrow accent={cyanInk} right="Zoth Studio">
         {"sovereign-tool-output-workbench"}
       </SovereignEyebrow>
       <SovereignBand
@@ -597,7 +601,7 @@ ${JSON.stringify(
                 <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: accent, fontWeight: 800 }}>
                   U+2800 SUB-PIXEL ENTROPY SPARKLINE
                 </Typography>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#10B981', fontWeight: 800 }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: emeraldInk, fontWeight: 800 }}>
                   {diagnostics.entropy} bits/B
                 </Typography>
               </Stack>
@@ -606,7 +610,7 @@ ${JSON.stringify(
                   fontFamily: mono,
                   fontSize: '0.95rem',
                   letterSpacing: '0.08em',
-                  color: isDark ? '#F5E6AB' : '#92400E',
+                  color: isDark ? '#F5E6AB' : '#7A5808',
                   bgcolor: isDark ? 'rgba(212,175,55,0.06)' : '#FEF9E7',
                   px: 1.2,
                   py: 0.5,
@@ -633,13 +637,13 @@ ${JSON.stringify(
                 </Grid>
                 <Grid xs={3}>
                   <Typography sx={{ fontFamily: mono, fontSize: '0.62rem', color: 'text.secondary' }}>EST TOKENS</Typography>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: '#38BDF8' }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: cyanInk }}>
                     {diagnostics.estTokens}
                   </Typography>
                 </Grid>
                 <Grid xs={3}>
                   <Typography sx={{ fontFamily: mono, fontSize: '0.62rem', color: 'text.secondary' }}>DENSITY</Typography>
-                  <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: '#10B981' }}>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.78rem', fontWeight: 800, color: emeraldInk }}>
                     {realityParams?.density || 50}%
                   </Typography>
                 </Grid>
@@ -656,7 +660,7 @@ ${JSON.stringify(
                 sx={{
                   minHeight: { xs: 44, sm: 36 },
                   bgcolor: accent,
-                  color: '#08080B',
+                  color: onAccentInk,
                   fontFamily: mono,
                   fontWeight: 800,
                   fontSize: '0.72rem',
@@ -742,7 +746,7 @@ ${JSON.stringify(
                 variant="outlined"
                 startIcon={<DownloadIcon sx={{ fontSize: 13 }} />}
                 onClick={() => handleDownloadFile(structuredArtifactJson, 'json', 'application/json')}
-                sx={{ minHeight: { xs: 44, sm: 34 }, fontFamily: mono, fontSize: '0.67rem', textTransform: 'none', py: 0.25, color: '#10B981', borderColor: 'rgba(16,185,129,0.4)' }}
+                sx={{ minHeight: { xs: 44, sm: 34 }, fontFamily: mono, fontSize: '0.67rem', textTransform: 'none', py: 0.25, color: emeraldInk, borderColor: isDark ? 'rgba(16,185,129,0.4)' : 'rgba(4,120,87,0.45)' }}
               >
                 .JSON
               </Button>
@@ -785,8 +789,8 @@ ${JSON.stringify(
                         fontFamily: mono,
                         fontSize: '0.62rem',
                         fontWeight: 800,
-                        bgcolor: chk.status === 'ACTION REQUIRED' ? 'rgba(244,63,94,0.15)' : 'rgba(16,185,129,0.15)',
-                        color: chk.status === 'ACTION REQUIRED' ? '#F43F5E' : '#10B981',
+                        bgcolor: chk.status === 'ACTION REQUIRED' ? (isDark ? 'rgba(244,63,94,0.15)' : '#FEF2F2') : (isDark ? 'rgba(16,185,129,0.15)' : '#ECFDF5'),
+                        color: chk.status === 'ACTION REQUIRED' ? crimsonInk : emeraldInk,
                       }}
                     />
                   </Stack>

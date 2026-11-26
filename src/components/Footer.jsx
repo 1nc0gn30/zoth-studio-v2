@@ -44,7 +44,7 @@ export default function Footer() {
     { label: 'NullAI Platform', href: 'https://nullai.tech' },
     { label: 'FieldKit Utilities', href: 'https://nullai.tech/fieldkit' },
     { label: '1nc0gn30 Hub', href: 'https://1nc0gn30.si' },
-    { label: '82 Public GitHub Repos', href: 'https://github.com/1nc0gn30' },
+    { label: '84 Public GitHub Repos', href: 'https://github.com/1nc0gn30' },
   ];
 
   const theoryAndDocs = [
@@ -144,7 +144,7 @@ export default function Footer() {
               <Link href="https://1nc0gn30.si" target="_blank" rel="noopener noreferrer" sx={{ color: gold, fontWeight: 700 }}>
                 1nc0gn30
               </Link>
-              . 56 in-browser/WebGPU utilities, 29 local CLI/daemon packages, 82 public GitHub repos, and 43 Studio workstations running with zero cloud telemetry.
+              . 44 in-browser/WebGPU utilities, 41 local CLI/daemon packages, 84 public GitHub repos, and {workstations.length} Studio workstations running with zero cloud telemetry.
             </Typography>
 
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', flexWrap: 'wrap' }}>

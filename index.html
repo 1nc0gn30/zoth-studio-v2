@@ -6,7 +6,7 @@
     <title>Zoth Studio // 85 Sovereign Open-Access Tools, Pantheon Matrix &amp; Local AI Studio</title>
     
     <!-- Primary Meta Tags -->
-    <meta name="description" content="Local-first, zero-egress AI engineering studio unifying 85 free open-access tools (56 in-browser/WebGPU + 29 local CLI/daemon, 82 public GitHub repos), 43 workstations, ZothOS v3.4.0, ZothOS-Lite v1.2, and Zoth Civilization v3.0." />
+    <meta name="description" content="Local-first, zero-egress AI engineering studio unifying 85 free open-access tools (44 in-browser/WebGPU + 41 local CLI/daemon, 84 public GitHub repos), 45 workstations, ZothOS v3.4.0, ZothOS-Lite v1.2, and Zoth Civilization v3.0." />
     <meta name="keywords" content="sovereign AI agents, zero egress studio, 85 open-access developer tools, ZothOS v3.4.0, ZothOS-Lite v1.2, Zoth Civilization v3.0, ZothNet, FieldKit, NullAI, 1nc0gn30, Neal Frazier Tech, STDP memory, Zoth Studio" />
     <meta name="author" content="Neal Frazier Tech (@1nc0gn30) • NullAI Platform" />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
@@ -16,6 +16,7 @@
     <link rel="alternate" type="application/json" href="/api/index.json" title="AI Agent Discovery API" />
     <link rel="alternate" type="application/json" href="/api/services.json" title="Services & Checkout API" />
     <link rel="alternate" type="application/json" href="/api/tools.json" title="Tools Catalog API" />
+    <link rel="alternate" type="application/json" href="/api/workstations.json" title="Workstations Catalog API" />
     <link rel="alternate" type="application/json" href="/api/faq.json" title="FAQ Knowledge Base API" />
     <link rel="alternate" type="application/ld+json" href="/api/graph.json" title="Schema.org Entity Graph" />
     <link rel="icon" type="image/png" href="/brand/ghostbyte-dark.png" />
@@ -23,8 +24,8 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://zoth.nullai.tech" />
-    <meta property="og:title" content="Zoth Studio // 83 Free Open-Access Tools, ZothOS v3.4.0 &amp; Local AI Studio" />
-    <meta property="og:description" content="Local-first AI development studio unifying 83 free open-access tools (56 in-browser/WebGPU + 27 CLI/daemon, 79 public GitHub repositories), 43 Studio workstations, ZothOS v3.4.0, ZothOS-Lite v1.2, and Zoth Civilization v3.0." />
+    <meta property="og:title" content="Zoth Studio // 85 Free Open-Access Tools, ZothOS v3.4.0 &amp; Local AI Studio" />
+    <meta property="og:description" content="Local-first AI development studio unifying 85 free open-access tools (44 in-browser/WebGPU + 41 CLI/daemon, 84 public GitHub repositories), 45 Studio workstations, ZothOS v3.4.0, ZothOS-Lite v1.2, and Zoth Civilization v3.0." />
     <meta property="og:image" content="https://zoth.nullai.tech/og-banner.jpg" />
     <meta property="og:site_name" content="Zoth Studio" />
 
@@ -32,19 +33,79 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@1nc0gn30" />
     <meta name="twitter:creator" content="@1nc0gn30" />
-    <meta name="twitter:title" content="Zoth Studio // 83 Free Open-Access Tools &amp; Local AI Studio" />
-    <meta name="twitter:description" content="83 free open-access developer, security, AEO &amp; AI tools (56 in-browser/WebGPU + 27 CLI/daemon, 79 public GitHub repos) engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform." />
+    <meta name="twitter:title" content="Zoth Studio // 85 Free Open-Access Tools &amp; Local AI Studio" />
+    <meta name="twitter:description" content="85 free open-access developer, security, AEO &amp; AI tools (44 in-browser/WebGPU + 41 CLI/daemon, 84 public GitHub repos) engineered by Neal Frazier Tech (@1nc0gn30) • NullAI Platform." />
     <meta name="twitter:image" content="https://zoth.nullai.tech/og-banner.jpg" />
 
-    <!-- Fonts & Preconnect -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Self-Hosted Zero-Egress Fonts (Zero External CDN Requests) -->
     <style>
       @font-face {
         font-family: "Celtic Garamond";
         src: url("/fonts/CelticGaramond.ttf") format("truetype");
         font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "Inter";
+        src: url("/fonts/Inter-Variable.woff2") format("woff2");
+        font-weight: 400 800;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url("/fonts/JetBrainsMono-Regular.woff2") format("woff2");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url("/fonts/JetBrainsMono-Medium.woff2") format("woff2");
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url("/fonts/JetBrainsMono-SemiBold.woff2") format("woff2");
+        font-weight: 600;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url("/fonts/JetBrainsMono-Bold.woff2") format("woff2");
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "JetBrains Mono";
+        src: url("/fonts/JetBrainsMono-ExtraBold.woff2") format("woff2");
+        font-weight: 800;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        src: url("/fonts/IBMPlexMono-400.woff2") format("woff2");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        src: url("/fonts/IBMPlexMono-500.woff2") format("woff2");
+        font-weight: 500;
+        font-style: normal;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "IBM Plex Mono";
+        src: url("/fonts/IBMPlexMono-600.woff2") format("woff2");
+        font-weight: 600;
         font-style: normal;
         font-display: swap;
       }
@@ -206,7 +267,7 @@
           "@id": "https://zoth.nullai.tech/#website",
           "url": "https://zoth.nullai.tech",
           "name": "Zoth Studio",
-          "description": "Zero-egress AI engineering studio unifying 83 free open-access developer, security, AEO, and AI tools (56 in-browser/WebGPU + 27 CLI/daemon, 79 public GitHub repositories) and 43 Studio workstations.",
+          "description": "Zero-egress AI engineering studio unifying 85 free open-access developer, security, AEO, and AI tools (44 in-browser/WebGPU + 41 CLI/daemon, 84 public GitHub repositories) and 45 Studio workstations.",
           "publisher": {
             "@id": "https://zoth.nullai.tech/#organization"
           }
@@ -237,7 +298,7 @@
         {
           "@type": ["WebApplication", "SoftwareApplication"],
           "@id": "https://zoth.nullai.tech/#application",
-          "name": "Zoth Studio v2 • 83 Free Open-Access Tools, ZothOS v3.4.0 & ZothOS-Lite v1.2",
+          "name": "Zoth Studio v2 • 85 Free Open-Access Tools, ZothOS v3.4.0 & ZothOS-Lite v1.2",
           "url": "https://zoth.nullai.tech",
           "applicationCategory": "DeveloperApplication",
           "operatingSystem": "ZothOS v3.4.0, ZothOS-Lite v1.2, All Modern Browsers, Linux, macOS, Windows",
@@ -247,9 +308,9 @@
             "price": "0",
             "priceCurrency": "USD",
             "url": "https://github.com/NullAITech/zoth-studio-v2",
-            "description": "100% Free & Open-Access Sovereign Developer Tools (83 Tools: 56 In-Browser/WebGPU + 27 CLI/Daemon, 79 Public GitHub Repositories), ZothOS v3.4.0, ZothOS-Lite v1.2 & Zoth Civilization v3.0."
+            "description": "100% Free & Open-Access Sovereign Developer Tools (85 Tools: 44 In-Browser/WebGPU + 41 CLI/Daemon, 84 Public GitHub Repositories), 45 Studio Workstations, ZothOS v3.4.0, ZothOS-Lite v1.2 & Zoth Civilization v3.0."
           },
-          "description": "Local-first, zero-egress AI development studio unifying 83 free open-access tools (56 in-browser/WebGPU + 27 CLI/daemon across 79 public GitHub repositories), 43 workstations, ZothOS v3.4.0 (23 daemons, Debian 13 KDE Plasma 6), ZothOS-Lite v1.2 (Amnesic Monotone Live USB/ISO, 56 curated models across 8 providers, toram), Zoth Civilization v3.0 (23 Pantheon Agents, 22-Key Sanctuary, DeepSeek Flash × Hermes BYOK), ZothNet, and FieldKit."
+          "description": "Local-first, zero-egress AI development studio unifying 85 free open-access tools (44 in-browser/WebGPU + 41 CLI/daemon across 84 public GitHub repositories), 45 workstations, ZothOS v3.4.0 (23 daemons, Debian 13 KDE Plasma 6), ZothOS-Lite v1.2 (Amnesic Monotone Live USB/ISO, 56 curated models across 8 providers, toram), Zoth Civilization v3.0 (23 Pantheon Agents, 22-Key Sanctuary, DeepSeek Flash × Hermes BYOK), ZothNet, and FieldKit."
         },
         {
           "@type": "FAQPage",
@@ -257,10 +318,10 @@
           "mainEntity": [
             {
               "@type": "Question",
-              "name": "Are all 83 Zoth Studio tools, ZothOS v3.4.0, and ZothOS-Lite v1.2 100% free and open-access?",
+              "name": "Are all 85 Zoth Studio tools, ZothOS v3.4.0, and ZothOS-Lite v1.2 100% free and open-access?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes. All 83 Zoth Studio tools (56 in-browser/WebGPU + 27 CLI/daemon across 79 public GitHub repositories), 43 Studio workstations, ZothOS v3.4.0 (zothos.nullai.tech), ZothOS-Lite v1.2 (zothos-lite.nullai.tech), Zoth Civilization v3.0 (zoth-civilization.netlify.app), ZothNet (zothnet.nullai.tech), and FieldKit (nullai.tech/fieldkit) are 100% free, open-access, and unlocked by default with zero paywalls, zero license modals, and optional Buy Us a Coffee (https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X) or Solana (GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK) community tips."
+                "text": "Yes. All 85 Zoth Studio tools (44 in-browser/WebGPU + 41 CLI/daemon across 84 public GitHub repositories), 45 Studio workstations, ZothOS v3.4.0 (zothos.nullai.tech), ZothOS-Lite v1.2 (zothos-lite.nullai.tech), Zoth Civilization v3.0 (zoth-civilization.netlify.app), ZothNet (zothnet.nullai.tech), and FieldKit (nullai.tech/fieldkit) are 100% free, open-access, and unlocked by default with zero paywalls, zero license modals, and optional Buy Us a Coffee (https://buy.stripe.com/3cIfZg27PdKo2D64Ocfw40X) or Solana (GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK) community tips."
               }
             },
             {
