@@ -24,7 +24,7 @@ const ROUTE_INDEX = [
   { path: '/ax', introKey: 'ax', desc: 'Agent Experience (AX) manifests, /.well-known/mcp.json, and /llms.txt.' },
   { path: '/consensus', introKey: 'consensus', desc: 'Byzantine N >= 3f + 1 multi-model quorum and ground-truth verification.' },
   { path: '/bridges', introKey: 'bridges', desc: 'Loopback-bound MCP stdio/SSE bridges and encrypted WireGuard/Tailscale mesh.' },
-  { path: '/voice', introKey: 'voice', desc: 'Local Whisper STT and Kokoro/Piper neural TTS voice pipeline (:8114).' },
+  { path: '/voice', introKey: 'voice', desc: 'Local-first Python voice station (:8114) with Kokoro/Piper/espeak-ng TTS, Ollama dialogue, and 4-tool stdio MCP.' },
   { path: '/agora', introKey: 'agora', desc: 'Structured adversarial multi-agent debate and Socratic design verification.' },
   { path: '/vaelor', introKey: 'vaelor', desc: 'Feeless local DAG ledger specification for cryptographic agent task receipts.' },
   { path: '/docs', introKey: 'docs', desc: 'Master architectural codex, CLI cheat sheets, and security invariants.' },

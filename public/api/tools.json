@@ -984,18 +984,18 @@
     {
       "id": "agent-voice-call",
       "name": "Agent Voice Call",
-      "description": "Autonomous sovereign real-time voice cockpit, live audio WebSocket streaming, multi-persona voice synthesizer, and zero-telemetry call protocol.",
+      "description": "Zero-dependency Python 3.9+ local-first voice calling daemon (:8114) with Kokoro/Piper/espeak-ng TTS, 6 personas, local Ollama dialogue, 0600 persisted debriefs, and 4-tool stdio MCP.",
       "category": "Voice & Real-Time",
       "github": "https://github.com/1nc0gn30/agent-voice-call",
       "published": true,
       "studio_url": "https://zoth.nullai.tech/tools/agent-voice-call/",
-      "version": "2.5.0",
+      "version": "2.6.0",
       "pull": "git clone https://github.com/1nc0gn30/agent-voice-call.git && cd agent-voice-call && python3 server.py --port 8114  # or: agent-voice-call status",
-      "execution_type": "browser",
+      "execution_type": "local-daemon",
       "runtimes": [
-        "browser",
-        "webgpu",
+        "local-daemon",
         "cli",
+        "mcp-stdio",
         "zero-egress"
       ],
       "port": 8114,

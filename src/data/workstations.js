@@ -323,11 +323,11 @@ export const workstations = [
   },
   {
     id: "agent-voice-call",
-    name: "Agent Voice Station // Full-Duplex Calling Cockpit",
-    path: "/studio/voice-station.html",
+    name: "Agent Voice Call // Local-First Voice Station (:8114)",
+    path: "/tools/agent-voice-call",
     band: "Studio",
     type: "integrated_tool",
-    description: "Sovereign full-duplex live audio calling station, 60fps Golden Orb visualizer, and 6-agent voice persona pantheon.",
+    description: "Zero-dependency Python 3.9+ local-first voice calling daemon (:8114), 6 personas, 0600 persisted debriefs, and 4-tool stdio MCP server.",
     alsoInApp: "/voice",
     toolRepoId: "agent-voice-call",
     pullCommand: "./bin/agent-voice-call serve --port 8114"

@@ -2103,53 +2103,61 @@ export const toolsDocumentation = {
       ]
   },
   "agent-voice-call": {
-      "whyUse": "Autonomous sovereign real-time voice cockpit, live audio WebSocket streaming, multi-persona voice synthesizer, and zero-telemetry call protocol. Built for human operators and autonomous AI agents requiring zero-egress voice & real-time execution without cloud SaaS lock-in.",
-      "problemSolved": "Eliminates third-party telemetry, rate limits, and cloud data exposure for Agent Voice Call workflows by running 100% locally on ZothOS and in the browser.",
-      "architecture": "100% client-side in-browser execution engine (Voice & Real-Time) with standalone loopback workstation on 127.0.0.1:8114 and ZothOS CLI wrapper (/usr/local/bin/agent-voice-call).",
+      "whyUse": "Zero-dependency Python 3.9+ local-first voice calling workstation (:8114) with Kokoro/Piper/espeak-ng TTS, 6 personas, local Ollama (:11434) dialogue, 0600 persisted call debriefs, and a 4-tool JSON-RPC 2.0 stdio MCP server.",
+      "problemSolved": "Eliminates default cloud TTS egress and volatile voice transcripts by prioritizing local synthesis (Kokoro :9394 -> offline Piper / espeak-ng -> pure-Python PCM WAV) and persisting debriefs locally on 127.0.0.1:8114.",
+      "architecture": "Local Python 3.9+ stdlib loopback daemon (127.0.0.1:8114) with strict Host/Origin guards, dual-theme Web Speech API / Web Audio API cockpit, live TUI (agent-voice-call-tui), ZothOS CLI wrapper (/usr/local/bin/agent-voice-call), and stdio MCP server (agent-voice-call mcp).",
       "aiAgentProtocol": {
-          "mcpTool": "agent_voice_call_execute",
-          "description": "Execute Agent Voice Call operations via JSON-RPC / MCP or ZothOS CLI.",
-          "cliExample": "agent-voice-call --help && agent-voice-call --json",
+          "mcpTool": "agent_voice_call_status, agent_voice_call_voices, agent_voice_call_speak, agent_voice_call_debriefs",
+          "description": "4 real JSON-RPC 2.0 stdio MCP tools served via `agent-voice-call mcp` (zero external dependencies).",
+          "cliExample": "agent-voice-call --version && agent-voice-call status --json && agent-voice-call mcp",
           "inputSchema": {
               "type": "object",
               "properties": {
-                  "action": {
+                  "text": {
+                      "type": "string",
+                      "description": "Spoken prompt for agent_voice_call_speak"
+                  },
+                  "voice": {
                       "type": "string",
                       "enum": [
-                          "status",
-                          "run",
-                          "audit",
-                          "export"
+                          "azoth",
+                          "ghostbyte",
+                          "athena",
+                          "mercury",
+                          "kitsune",
+                          "chronos"
                       ],
-                      "description": "Operation to run on Agent Voice Call"
+                      "description": "Persona voice identifier"
                   },
-                  "target": {
-                      "type": "string",
-                      "description": "Primary target payload or parameter"
+                  "persist": {
+                      "type": "boolean",
+                      "description": "Persist debrief locally to ~/.local/share/zoth/voice_calls/debriefs.jsonl"
                   }
               },
               "required": [
-                  "action"
+                  "text"
               ]
           },
           "outputSchema": {
-              "status": "ONLINE | SUCCESS",
-              "tool": "agent-voice-call",
-              "port": 8114,
-              "results": "object"
+              "session_id": "call_<hex>",
+              "voice": "azoth",
+              "reply_text": "string",
+              "tts_engine": "kokoro | piper | espeak-ng | pcm-synth",
+              "wav_bytes": "integer",
+              "persisted": "boolean"
           }
       },
       "quickstart": [
-          "agent-voice-call --help",
-          "agent-voice-call --json",
+          "python3 server.py --port 8114",
+          "agent-voice-call status --port 8114 --json",
           "agent-voice-call-tui --status",
-          "# Open standalone workstation at http://127.0.0.1:8114 or Studio route /tools/agent-voice-call"
+          "agent-voice-call mcp"
       ],
       "features": [
-          "Kokoro TTS Engine Integration \u2014 Hardware-accelerated local text-to-speech synthesis running on port 9394 with natural speech rhythm and zero cloud telemetry.",
-          "WebSocket Audio Streaming \u2014 High-fidelity chunked audio streaming with live waveform spectrums and real-time STT transcripts.",
-          "1-Click Call Link Dispatcher \u2014 Generates instant secure calling links compatible with Signal, SimpleX, or standalone web browsers.",
-          "100% Free & Open-Access \u2014 Zero paywalls, zero license locks, zero telemetry leaks."
+          "Strict Local-First TTS Pipeline \u2014 Synthesizes locally via Kokoro (:9394), offline Piper/espeak-ng, or pure-Python PCM WAV (cloud edge-tts disabled unless ZOTH_ALLOW_CLOUD_TTS=1).",
+          "Hardened Loopback HTTP API (:8114) \u2014 Strict Origin & Host allowlists, 1 MiB body cap, bounded active sessions, and 0600 local debrief persistence.",
+          "4-Tool JSON-RPC 2.0 Stdio MCP \u2014 Exposes agent_voice_call_status, agent_voice_call_voices, agent_voice_call_speak, and agent_voice_call_debriefs.",
+          "100% Free & Open-Access \u2014 Zero paywalls, zero license locks, dual-theme Editorial Ivory Light + Obsidian Dark UI."
       ]
   },
   "pod-smart-router": {

@@ -250,6 +250,7 @@ export default function LocalSystemDossier({
                 onClick={() => handleCopy(cloneCommand, 'Clone command')}
                 startIcon={copiedKey === 'Clone command' ? <CheckIcon sx={{ fontSize: 15 }} /> : <ContentCopyIcon sx={{ fontSize: 15 }} />}
                 sx={{
+                  minHeight: 44,
                   fontFamily: mono,
                   fontSize: '0.74rem',
                   fontWeight: 700,

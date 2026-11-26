@@ -2203,23 +2203,23 @@
       "id": "agent-voice-call",
       "name": "Agent Voice Call",
       "category": "Voice & Real-Time",
-      "execution_type": "browser",
-      "version": "2.5.0",
+      "execution_type": "local-daemon",
+      "version": "2.6.0",
       "studio_url": "https://zoth.nullai.tech/tools/agent-voice-call/",
       "local_url": "http://127.0.0.1:8114",
       "port": 8114,
       "github": "https://github.com/1nc0gn30/agent-voice-call",
       "duration_s": 75,
-      "hook": "A voice agent that keeps zero telemetry.",
+      "hook": "A local-first Python voice station with zero cloud egress by default.",
       "beats": [
-        "Open the sovereign voice cockpit",
-        "Stream live audio over WebSocket",
-        "Swap persona mid-call"
+        "Start the local Python daemon on 127.0.0.1:8114",
+        "Speak or type across 6 personas using local Kokoro/Piper/espeak-ng TTS",
+        "Inspect 0600 persisted debriefs via REST or 4-tool stdio MCP"
       ],
-      "why": "Real-time voice agents without handing raw audio to a cloud vendor.",
+      "why": "Local-first voice calls with AI agents without sending audio to cloud TTS vendors by default.",
       "audience": "AI builders & privacy",
-      "capture_route": "record in-browser studio",
-      "x_copy": "A voice agent that keeps zero telemetry.\n\nReal-time voice agents without handing raw audio to a cloud vendor.\n\nhttps://zoth.nullai.tech/tools/agent-voice-call/\n100% local, zero telemetry, free.\n#VoiceAI #ZothStudio #ZothPills"
+      "capture_route": "record local daemon cockpit (:8114)",
+      "x_copy": "A local-first Python voice station with zero cloud egress by default.\n\nLocal Kokoro/Piper/espeak-ng synthesis, Ollama dialogue, 0600 debriefs, and 4-tool stdio MCP.\n\nhttps://zoth.nullai.tech/tools/agent-voice-call/\n100% local, zero telemetry, free.\n#VoiceAI #ZothStudio #ZothPills"
     },
     {
       "episode": 85,
