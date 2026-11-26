@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import {
   Box,
   Paper,
@@ -9,61 +9,68 @@ import {
   TextField,
   Switch,
   FormControlLabel,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Alert,
   Unstable_Grid2 as Grid,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import ShieldIcon from '@mui/icons-material/Shield';
 import BlockIcon from '@mui/icons-material/Block';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import SovereignBand from '../sovereign/SovereignBand.jsx';
 import { SovereignEyebrow, titleBaseSx } from '../sovereign/typography.jsx';
 
 const mono = '"JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace';
 const display = '"Celtic Garamond", Georgia, "Times New Roman", serif';
+const DAEMON_BASE = 'http://127.0.0.1:8095';
+const SOLANA_TIP = 'GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK';
 
-const INITIAL_PACKETS = [
+const OFFLINE_PREVIEW_EVENTS = [
   {
-    id: 'pkt-01',
-    dest: '127.0.0.1:8094 (zoth-conductor)',
-    proto: 'HTTP/LOOPBACK',
-    bytes: 1420,
-    verdict: 'ALLOWED',
-    reason: 'RFC1918 / Loopback Sovereign Enclave Whitelist',
+    id: 'preview-01',
+    domain: 'api.openai.com',
+    remote_port: 443,
+    protocol: 'HTTPS',
+    method: 'CONNECT',
+    bytes_sent: 1840,
+    bytes_recv: 12400,
+    status_code: 200,
+    quarantined: false,
+    category: 'llm_api',
+    notes: 'Offline preview sample (daemon idle)',
   },
   {
-    id: 'pkt-02',
-    dest: 'api.github.com:443',
-    proto: 'TLS 1.3',
-    bytes: 4096,
-    verdict: 'ALLOWED',
-    reason: 'Verified Git Repository Sync Allowlist',
+    id: 'preview-02',
+    domain: 'api.segment.io',
+    remote_port: 443,
+    protocol: 'HTTPS',
+    method: 'CONNECT',
+    bytes_sent: 0,
+    bytes_recv: 0,
+    status_code: 403,
+    quarantined: true,
+    category: 'telemetry_tracker',
+    notes: 'Blocked by pre-relay TLS SNI telemetry policy (preview)',
   },
   {
-    id: 'pkt-03',
-    dest: 'telemetry.analytics-collector.io:443',
-    proto: 'HTTPS/POST',
-    bytes: 18432,
-    verdict: 'BLOCKED',
-    reason: 'Zero-Egress Policy: Unverified 3rd-Party Telemetry Sink',
-  },
-  {
-    id: 'pkt-04',
-    dest: '89a7f3c2.exfil-dns-tunnel.xyz:53',
-    proto: 'UDP/DNS-TXT',
-    bytes: 960,
-    verdict: 'BLOCKED',
-    reason: 'High Shannon Entropy (4.82 bits/byte) Base64 DNS Tunneling Signature',
-  },
-  {
-    id: 'pkt-05',
-    dest: '169.254.169.254:80',
-    proto: 'HTTP/GET',
-    bytes: 512,
-    verdict: 'BLOCKED',
-    reason: 'SSRF Cloud Metadata Instance Credential Probe',
+    id: 'preview-03',
+    domain: '169.254.169.254',
+    remote_port: 80,
+    protocol: 'HTTP',
+    method: 'GET',
+    bytes_sent: 0,
+    bytes_recv: 0,
+    status_code: 403,
+    quarantined: true,
+    category: 'private_network',
+    notes: 'Blocked by RFC1918 / Cloud Metadata SSRF guard (preview)',
   },
 ];
 
@@ -71,90 +78,166 @@ export default function AgentEgressSentinelGodModeTool() {
   const theme = useTheme();
   const isDark = theme.palette.mode === 'dark';
 
-  const [strictLoopbackOnly, setStrictLoopbackOnly] = useState(false);
-  const [blockDnsTunneling, setBlockDnsTunneling] = useState(true);
-  const [blockMetadataSsrf, setBlockMetadataSsrf] = useState(true);
-  const [testHost, setTestHost] = useState('webhook.unknown-collector.net:443');
-  const [testPayload, setTestPayload] = useState('{"agent_id":"subagent-04","env_dump":"REDACTED"}');
-  const [packets, setPackets] = useState(INITIAL_PACKETS);
-  const [copied, setCopied] = useState(false);
+  // Dual-theme Editorial Ivory Light + Obsidian Dark tokens
+  const surfaceBg = isDark ? 'rgba(12,10,16,0.92)' : '#FFFFFF';
+  const subtleBg = isDark ? 'rgba(255,255,255,0.03)' : '#F3EFE6';
+  const radarBg = isDark ? '#0A0B10' : '#FAF7F0';
+  const codeBg = isDark ? '#090A0F' : '#F3EFE6';
+  const inkPrimary = isDark ? '#F1F5F9' : '#1C1917';
+  const inkSecondary = isDark ? '#94A3B8' : '#57534E';
+  const goldInk = isDark ? '#D4AF37' : '#9A7209';
+  const emeraldInk = isDark ? '#34D399' : '#047857';
+  const crimsonInk = isDark ? '#EF4444' : '#BE123C';
+  const skyInk = isDark ? '#38BDF8' : '#0369A1';
+  const borderSubtle = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(28,25,23,0.14)';
+  const borderAccent = isDark ? 'rgba(212,175,55,0.34)' : 'rgba(154,114,9,0.38)';
+
+  const [daemonOnline, setDaemonOnline] = useState(false);
+  const [probing, setProbing] = useState(true);
+  const [offlinePreview, setOfflinePreview] = useState(false);
+  const [proxyPort, setProxyPort] = useState(8195);
+  const [quarantineMode, setQuarantineMode] = useState('block_telemetry');
+  const [stats, setStats] = useState({ total_requests: 0, total_domains: 0, total_quarantined: 0 });
+  const [domains, setDomains] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [allowedDomains, setAllowedDomains] = useState([]);
+  const [blockedDomains, setBlockedDomains] = useState([]);
+  const [protectedPorts, setProtectedPorts] = useState([8095, 8195]);
+  const [ruleDomainInput, setRuleDomainInput] = useState('');
+  const [statusMessage, setStatusMessage] = useState('');
+  const [copiedKey, setCopiedKey] = useState(null);
 
   const canvasRef = useRef(null);
 
-  const shannonEntropy = useMemo(() => {
-    const s = testPayload || '';
-    if (!s.length) return 0;
-    const freq = {};
-    for (let i = 0; i < s.length; i++) {
-      const ch = s[i];
-      freq[ch] = (freq[ch] || 0) + 1;
+  const syncFromDaemon = useCallback(async () => {
+    try {
+      const healthRes = await fetch(`${DAEMON_BASE}/api/health`, { cache: 'no-store' });
+      if (!healthRes.ok) throw new Error('offline');
+      const health = await healthRes.json();
+      if (!health || health.status !== 'ok') throw new Error('unhealthy');
+
+      setDaemonOnline(true);
+      setProbing(false);
+      setProxyPort(health.proxy_port || 8195);
+      if (health.quarantine_mode) setQuarantineMode(health.quarantine_mode);
+      if (Array.isArray(health.protected_ports)) setProtectedPorts(health.protected_ports);
+
+      const [statsRes, domRes, trRes, rulesRes] = await Promise.all([
+        fetch(`${DAEMON_BASE}/api/stats`, { cache: 'no-store' }),
+        fetch(`${DAEMON_BASE}/api/domains`, { cache: 'no-store' }),
+        fetch(`${DAEMON_BASE}/api/traffic?limit=25`, { cache: 'no-store' }),
+        fetch(`${DAEMON_BASE}/api/rules`, { cache: 'no-store' }),
+      ]);
+
+      if (statsRes.ok) setStats(await statsRes.json());
+      if (domRes.ok) {
+        const dJson = await domRes.json();
+        setDomains(dJson.domains || []);
+      }
+      if (trRes.ok) {
+        const tJson = await trRes.json();
+        setEvents(tJson.events || []);
+      }
+      if (rulesRes.ok) {
+        const rJson = await rulesRes.json();
+        if (rJson.quarantine_mode) setQuarantineMode(rJson.quarantine_mode);
+        setAllowedDomains(rJson.allowed_domains || []);
+        setBlockedDomains(rJson.blocked_domains || []);
+        if (Array.isArray(rJson.protected_ports)) setProtectedPorts(rJson.protected_ports);
+      }
+    } catch (_err) {
+      setDaemonOnline(false);
+      setProbing(false);
     }
-    let ent = 0;
-    const len = s.length;
-    Object.values(freq).forEach((c) => {
-      const p = c / len;
-      ent -= p * Math.log2(p);
-    });
-    return Number(ent.toFixed(2));
-  }, [testPayload]);
+  }, []);
 
-  const handleSimulatePacket = () => {
-    const host = testHost.trim();
-    if (!host) return;
-    const isLoopback = host.startsWith('127.0.0.1') || host.startsWith('localhost');
-    const isMetadata = host.includes('169.254.169.254') || host.includes('metadata.google');
-    const isAllowedDomain =
-      !strictLoopbackOnly &&
-      (host.includes('github.com') || host.includes('nullai.tech') || host.includes('nullai.tech'));
+  useEffect(() => {
+    syncFromDaemon();
+    const timer = setInterval(syncFromDaemon, 5000);
+    return () => clearInterval(timer);
+  }, [syncFromDaemon]);
 
-    let verdict = 'ALLOWED';
-    let reason = 'Matched verified domain allowlist & payload entropy < 4.6 bits/byte';
+  const displayedEvents = useMemo(() => {
+    if (daemonOnline) return events;
+    return offlinePreview ? OFFLINE_PREVIEW_EVENTS : [];
+  }, [daemonOnline, events, offlinePreview]);
 
-    if (isMetadata && blockMetadataSsrf) {
-      verdict = 'BLOCKED';
-      reason = 'SSRF Metadata Endpoint Protection Rule #01';
-    } else if (strictLoopbackOnly && !isLoopback) {
-      verdict = 'BLOCKED';
-      reason = 'Strict Air-Gap Mode: Non-loopback socket egress denied';
-    } else if (blockDnsTunneling && shannonEntropy > 4.6) {
-      verdict = 'BLOCKED';
-      reason = `Payload Shannon Entropy (${shannonEntropy} bits/byte) exceeds exfiltration threshold`;
-    } else if (!isLoopback && !isAllowedDomain) {
-      verdict = 'BLOCKED';
-      reason = 'Default-Deny Zero-Trust Egress Policy (Unlisted Destination)';
+  const handleQuarantineChange = async (nextMode) => {
+    setQuarantineMode(nextMode);
+    if (!daemonOnline) {
+      setStatusMessage('Daemon offline — start local daemon to enforce quarantine mode live.');
+      return;
     }
-
-    setPackets((prev) => [
-      {
-        id: `pkt-0${prev.length + 1}`,
-        dest: host,
-        proto: 'TLS 1.3 / INSPECTED',
-        bytes: new TextEncoder().encode(testPayload).length,
-        verdict,
-        reason,
-      },
-      ...prev.slice(0, 7),
-    ]);
+    try {
+      const res = await fetch(`${DAEMON_BASE}/api/quarantine`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: nextMode }),
+      });
+      if (res.ok) {
+        setStatusMessage(`Live daemon policy updated to ${nextMode.toUpperCase()}.`);
+        syncFromDaemon();
+      } else {
+        setStatusMessage('Daemon rejected policy update.');
+      }
+    } catch (_err) {
+      setStatusMessage('Could not reach 127.0.0.1:8095.');
+    }
   };
 
-  const nftablesPolicy = useMemo(
-    () => `#!/usr/sbin/nft -f
-# ZothOS Agent Egress Sentinel — Deterministic nftables Air-Gap Policy
-table inet zoth_agent_egress {
-  chain output {
-    type filter hook output priority 0; policy drop;
-    oifname "lo" accept comment "Allow 127.0.0.1 Sovereign Conductor Loopback"
-    ct state established,related accept
-    ${blockMetadataSsrf ? 'ip daddr 169.254.169.254 drop comment "Block Cloud Metadata SSRF"' : ''}
-    ${blockDnsTunneling ? 'udp dport 53 length > 512 drop comment "Block Oversized DNS Exfiltration"' : ''}
-    ${strictLoopbackOnly ? '# Strict Air-Gap Active: All external WAN egress dropped' : 'tcp dport 443 ip daddr { 140.82.112.0/20 } accept comment "Allow GitHub Sync"'}
-    log prefix "[ZOTH-EGRESS-DROP] " flags all counter drop
-  }
-}`,
-    [strictLoopbackOnly, blockDnsTunneling, blockMetadataSsrf]
+  const handleRuleMutation = async (listKind, action, domainVal) => {
+    const clean = (domainVal || '').trim();
+    if (!clean) return;
+    if (!daemonOnline) {
+      setStatusMessage('Local daemon offline — start agent-egress-sentinel serve to edit live rules.');
+      return;
+    }
+    const endpoint = listKind === 'allow' ? '/api/rules/allow' : '/api/rules/block';
+    try {
+      const res =
+        action === 'add'
+          ? await fetch(`${DAEMON_BASE}${endpoint}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ domain: clean }),
+            })
+          : await fetch(`${DAEMON_BASE}${endpoint}?domain=${encodeURIComponent(clean)}`, {
+              method: 'DELETE',
+            });
+      if (res.ok) {
+        setRuleDomainInput('');
+        setStatusMessage(
+          action === 'add'
+            ? `Added '${clean}' to live ${listKind}list.`
+            : `Removed '${clean}' from live ${listKind}list.`
+        );
+        syncFromDaemon();
+      }
+    } catch (_err) {
+      setStatusMessage('Failed to update live daemon rules.');
+    }
+  };
+
+  const cliSnippet = useMemo(
+    () =>
+      `# Start live web radar (:8095) + userspace proxy (:${proxyPort})
+agent-egress-sentinel serve --web-port 8095 --proxy-port ${proxyPort} --quarantine ${quarantineMode}
+
+# Route any AI agent process through Sentinel
+HTTP_PROXY=http://127.0.0.1:${proxyPort} HTTPS_PROXY=http://127.0.0.1:${proxyPort} python3 my_agent.py
+
+# Start stdio MCP server (3 tools: egress_audit_status, egress_set_quarantine, egress_manage_rules)
+agent-egress-sentinel mcp --port 8095`,
+    [proxyPort, quarantineMode]
   );
 
-  // 60fps Egress Perimeter Radar Canvas
+  const handleCopyText = (key, text) => {
+    navigator.clipboard?.writeText(text).catch(() => {});
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 2000);
+  };
+
+  // Dual-Theme Kinetic Radar Canvas
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -163,13 +246,13 @@ table inet zoth_agent_egress {
     let angle = 0;
 
     const render = () => {
-      angle = (angle + 0.032) % (Math.PI * 2);
+      angle = (angle + 0.025) % (Math.PI * 2);
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const w = canvas.clientWidth || 460;
       const h = canvas.clientHeight || 190;
-      if (canvas.width !== w * dpr || canvas.height !== h * dpr) {
-        canvas.width = w * dpr;
-        canvas.height = h * dpr;
+      if (canvas.width !== Math.floor(w * dpr) || canvas.height !== Math.floor(h * dpr)) {
+        canvas.width = Math.floor(w * dpr);
+        canvas.height = Math.floor(h * dpr);
       }
       ctx.save();
       ctx.scale(dpr, dpr);
@@ -179,43 +262,53 @@ table inet zoth_agent_egress {
       const cy = h * 0.5;
       const maxR = Math.min(w, h) * 0.42;
 
-      // Concentric firewall rings
       [0.35, 0.68, 1.0].forEach((rFrac, idx) => {
         ctx.beginPath();
         ctx.arc(cx, cy, maxR * rFrac, 0, Math.PI * 2);
-        ctx.strokeStyle = idx === 2 ? 'rgba(239,68,68,0.4)' : 'rgba(52,211,153,0.22)';
-        ctx.lineWidth = idx === 2 ? 1.8 : 1;
+        if (idx === 2) {
+          ctx.strokeStyle = isDark ? 'rgba(212,175,55,0.45)' : 'rgba(154,114,9,0.45)';
+          ctx.lineWidth = 1.6;
+        } else {
+          ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(28,25,23,0.14)';
+          ctx.lineWidth = 1;
+        }
         ctx.stroke();
       });
 
-      // Sweep beam
       ctx.beginPath();
       ctx.moveTo(cx, cy);
       ctx.arc(cx, cy, maxR, angle - 0.35, angle);
       ctx.closePath();
-      ctx.fillStyle = 'rgba(239,68,68,0.16)';
+      ctx.fillStyle = isDark ? 'rgba(212,175,55,0.2)' : 'rgba(154,114,9,0.18)';
       ctx.fill();
 
-      // Plot packet vectors
-      packets.slice(0, 6).forEach((p, i) => {
-        const a = (i / 6) * Math.PI * 2 + 0.4;
-        const blocked = p.verdict === 'BLOCKED';
-        const dist = blocked ? maxR * 0.98 : maxR * 0.52;
+      const plotSource = displayedEvents.slice(0, 8);
+      plotSource.forEach((ev, i) => {
+        const a = (i / Math.max(plotSource.length, 1)) * Math.PI * 2 + 0.4;
+        const blocked = Boolean(ev.quarantined);
+        const dist = blocked ? maxR * 0.92 : maxR * 0.54;
         const px = cx + Math.cos(a) * dist;
         const py = cy + Math.sin(a) * dist;
 
         ctx.beginPath();
         ctx.moveTo(cx, cy);
         ctx.lineTo(px, py);
-        ctx.strokeStyle = blocked ? 'rgba(239,68,68,0.5)' : 'rgba(52,211,153,0.5)';
+        ctx.strokeStyle = blocked
+          ? (isDark ? 'rgba(239,68,68,0.55)' : 'rgba(190,18,60,0.48)')
+          : (isDark ? 'rgba(52,211,153,0.55)' : 'rgba(4,120,87,0.48)');
         ctx.lineWidth = 1.4;
         ctx.stroke();
 
         ctx.beginPath();
         ctx.arc(px, py, 5, 0, Math.PI * 2);
-        ctx.fillStyle = blocked ? '#EF4444' : '#34D399';
+        ctx.fillStyle = blocked ? crimsonInk : emeraldInk;
         ctx.fill();
       });
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, 7, 0, Math.PI * 2);
+      ctx.fillStyle = goldInk;
+      ctx.fill();
 
       ctx.restore();
       raf = requestAnimationFrame(render);
@@ -223,56 +316,51 @@ table inet zoth_agent_egress {
 
     raf = requestAnimationFrame(render);
     return () => cancelAnimationFrame(raf);
-  }, [packets]);
-
-  const handleCopy = () => {
-    navigator.clipboard?.writeText(nftablesPolicy);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+  }, [displayedEvents, isDark, crimsonInk, emeraldInk, goldInk]);
 
   return (
     <Box sx={{ width: '100%' }}>
-      <SovereignEyebrow accent="#EF4444" right="Security & Network">
-        {"agent-egress-sentinel"}
+      <SovereignEyebrow accent={crimsonInk} right="Security & Network">
+        {'agent-egress-sentinel'}
       </SovereignEyebrow>
       <SovereignBand
-        seed={"agent-egress-sentinel"}
-        eyebrow={"Security & Network"}
-        caption={"Agent Egress Sentinel // TLS SNI Sniffer & Kinetic Radar"}
-        label={"Agent Egress Sentinel — Zoth sovereign visualisation"}
+        seed={'agent-egress-sentinel'}
+        eyebrow={'Security & Network · v2.6.0'}
+        caption={'Agent Egress Sentinel // Userspace Proxy (:8195), Pre-Relay TLS SNI & SSRF Guard'}
+        label={'Agent Egress Sentinel — Zoth sovereign visualisation'}
       />
-      {/* Sovereign Support & Tip Bar */}
+
+      {/* Single Dual-Theme Open-Access Support Strip */}
       <Stack
         direction={{ xs: 'column', sm: 'row' }}
         alignItems="center"
         justifyContent="space-between"
-        spacing={2}
+        spacing={1.5}
         sx={{
           p: 1.5,
           mb: 2.5,
           borderRadius: 2,
-          bgcolor: 'rgba(239, 68, 68, 0.08)',
-          border: '1px solid rgba(212, 175, 55, 0.3)',
+          bgcolor: isDark ? 'rgba(16, 185, 129, 0.08)' : '#F3EFE6',
+          border: `1px solid ${borderAccent}`,
         }}
       >
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap>
           <Chip
             label="✦ 100% FREE & OPEN ACCESS"
             size="small"
             sx={{
-              bgcolor: '#10B981',
-              color: '#05070B',
+              bgcolor: emeraldInk,
+              color: '#FFFFFF',
               fontWeight: 800,
               fontFamily: mono,
               fontSize: '0.68rem',
             }}
           />
-          <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: '#D4AF37' }}>
-            Zero Paywalls · Autonomous Network Interceptor & Kernel Quarantine
+          <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: goldInk, fontWeight: 700 }}>
+            Zero Paywalls · Python Stdlib Egress Proxy (:8195) &amp; Live Radar (:8095)
           </Typography>
         </Stack>
-        <Stack direction="row" spacing={1}>
+        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
           <Button
             size="small"
             variant="contained"
@@ -280,12 +368,13 @@ table inet zoth_agent_egress {
             target="_blank"
             rel="noopener noreferrer"
             sx={{
-              bgcolor: '#D4AF37',
-              color: '#05070B',
+              minHeight: { xs: 44, sm: 34 },
+              bgcolor: goldInk,
+              color: isDark ? '#08080B' : '#FFFFFF',
               fontFamily: mono,
               fontSize: '0.72rem',
               fontWeight: 800,
-              '&:hover': { bgcolor: '#F5E6AB' },
+              '&:hover': { bgcolor: isDark ? '#F5E6AB' : '#7D5B06' },
             }}
           >
             ☕ Buy Us a Coffee
@@ -293,20 +382,17 @@ table inet zoth_agent_egress {
           <Button
             size="small"
             variant="outlined"
-            onClick={() => {
-              const sol = 'GG2eQbVh8ut1BK6j1A2tz7pSySdLpD38BgyEhGcxdXoK';
-              navigator.clipboard?.writeText(sol);
-              alert('Solana Tip Address copied: ' + sol);
-            }}
+            onClick={() => handleCopyText('solana', SOLANA_TIP)}
             sx={{
-              borderColor: '#10B981',
-              color: '#10B981',
+              minHeight: { xs: 44, sm: 34 },
+              borderColor: emeraldInk,
+              color: emeraldInk,
               fontFamily: mono,
               fontSize: '0.72rem',
               fontWeight: 800,
             }}
           >
-            Solana Tip ⚡
+            {copiedKey === 'solana' ? '✓ Copied Solana Tip' : '◎ Solana Tip'}
           </Button>
         </Stack>
       </Stack>
@@ -314,266 +400,386 @@ table inet zoth_agent_egress {
       <Paper
         elevation={0}
         sx={{
-          p: { xs: 2.5, md: 3.5 },
+          p: { xs: 2, md: 3 },
           mb: 4,
           borderRadius: 3,
-          bgcolor: isDark ? 'rgba(12,10,14,0.92)' : '#FFFFFF',
-          border: `1px solid ${isDark ? 'rgba(239,68,68,0.35)' : 'rgba(220,38,38,0.28)'}`,
-          boxShadow: isDark ? '0 24px 60px rgba(0,0,0,0.65)' : '0 12px 32px rgba(15,23,42,0.06)',
+          bgcolor: surfaceBg,
+          border: `1px solid ${borderAccent}`,
+          boxShadow: isDark ? '0 20px 48px rgba(0,0,0,0.55)' : '0 10px 28px rgba(28,25,23,0.06)',
         }}
       >
-      <Stack
-        direction={{ xs: 'column', md: 'row' }}
-        justifyContent="space-between"
-        alignItems={{ xs: 'flex-start', md: 'center' }}
-        spacing={2}
-        sx={{ mb: 3 }}
-      >
-        <Box>
-          <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.75 }}>
-            <Chip
-              icon={<ShieldIcon sx={{ fontSize: '0.95rem !important', color: '#EF4444 !important' }} />}
-              label="AGENT EGRESS SENTINEL · ZERO-TRUST PERIMETER"
-              size="small"
-              sx={{
-                fontFamily: mono,
-                fontWeight: 800,
-                fontSize: '0.68rem',
-                bgcolor: 'rgba(239,68,68,0.14)',
-                color: '#EF4444',
-                border: '1px solid rgba(239,68,68,0.35)',
-              }}
-            />
-            <Chip
-              label={`SHANNON ENTROPY: ${shannonEntropy} BITS/BYTE`}
-              size="small"
-              sx={{
-                fontFamily: mono,
-                fontWeight: 800,
-                fontSize: '0.68rem',
-                bgcolor: 'rgba(56,189,248,0.14)',
-                color: '#38BDF8',
-                border: '1px solid rgba(56,189,248,0.35)',
-              }}
-            />
-          </Stack>
-          <Typography variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 400 }}>
-            Autonomous Socket Interceptor & <span style={{ color: '#EF4444' }}>Exfiltration Firewall</span>
-          </Typography>
-        </Box>
-      </Stack>
-
-      <SovereignEyebrow accent="#38BDF8" right="Security & Network">
-        {"agent-egress-sentinel"}
-      </SovereignEyebrow>
-      <SovereignBand
-        seed={"agent-egress-sentinel"}
-        eyebrow={"Security & Network"}
-        caption={"Agent Egress Sentinel"}
-        label={"Agent Egress Sentinel — Zoth sovereign visualisation"}
-      />
-      <Grid container spacing={3}>
-        <Grid xs={12} md={6}>
-          <Stack spacing={2}>
-            <Box
-              sx={{
-                p: 1.75,
-                borderRadius: 2,
-                bgcolor: isDark ? 'rgba(255,255,255,0.025)' : '#F8FAFC',
-                border: '1px solid rgba(239,68,68,0.24)',
-              }}
-            >
-              <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: '#EF4444', mb: 1 }}>
-                EGRESS INTERCEPTOR INVARIANTS
-              </Typography>
-              <Stack spacing={0.5}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={strictLoopbackOnly}
-                      onChange={(e) => setStrictLoopbackOnly(e.target.checked)}
-                      color="error"
-                    />
-                  }
-                  label={<Typography sx={{ fontFamily: mono, fontSize: '0.74rem' }}>Strict 127.0.0.1 Loopback Air-Gap</Typography>}
-                />
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={blockDnsTunneling}
-                      onChange={(e) => setBlockDnsTunneling(e.target.checked)}
-                      color="error"
-                    />
-                  }
-                  label={<Typography sx={{ fontFamily: mono, fontSize: '0.74rem' }}>Block High-Entropy DNS/Payload Exfiltration (&gt;4.6b)</Typography>}
-                />
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={blockMetadataSsrf}
-                      onChange={(e) => setBlockMetadataSsrf(e.target.checked)}
-                      color="error"
-                    />
-                  }
-                  label={<Typography sx={{ fontFamily: mono, fontSize: '0.74rem' }}>Block 169.254.169.254 Cloud Metadata SSRF</Typography>}
-                />
-              </Stack>
-            </Box>
-
-            <TextField
-              fullWidth
-              size="small"
-              label="Simulated Outbound Socket Destination (Host:Port)"
-              value={testHost}
-              onChange={(e) => setTestHost(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              multiline
-              rows={2}
-              size="small"
-              label="Outbound Packet Payload (Inspected for Secret Leaks & Entropy)"
-              value={testPayload}
-              onChange={(e) => setTestPayload(e.target.value)}
-            />
-            <Button
-              variant="contained"
-              startIcon={<PlayArrowIcon />}
-              onClick={handleSimulatePacket}
-              sx={{
-                bgcolor: '#EF4444',
-                color: '#FFFFFF',
-                fontFamily: mono,
-                fontWeight: 800,
-                fontSize: '0.75rem',
-                '&:hover': { bgcolor: '#DC2626' },
-              }}
-            >
-              Test Outbound Socket Frame Against Firewall
-            </Button>
-
-            <Box
-              sx={{
-                borderRadius: 2,
-                bgcolor: '#05060A',
-                border: '1px solid rgba(212,175,55,0.28)',
-                overflow: 'hidden',
-              }}
-            >
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-                sx={{ px: 1.5, py: 0.75, bgcolor: 'rgba(212,175,55,0.08)' }}
-              >
-                <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#F5E6AB', fontWeight: 700 }}>
-                  COMPILED NFTABLES KERNEL FIREWALL POLICY
-                </Typography>
-                <Button
-                  size="small"
-                  startIcon={copied ? <CheckIcon /> : <ContentCopyIcon />}
-                  onClick={handleCopy}
-                  sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#D4AF37' }}
-                >
-                  {copied ? 'Copied' : 'Copy nftables'}
-                </Button>
-              </Stack>
-              <Box
-                component="pre"
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          justifyContent="space-between"
+          alignItems={{ xs: 'flex-start', md: 'center' }}
+          spacing={1.5}
+          sx={{ mb: 2.5 }}
+        >
+          <Box>
+            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap sx={{ mb: 0.75 }}>
+              <Chip
+                icon={<ShieldIcon sx={{ fontSize: '0.95rem !important', color: `${daemonOnline ? emeraldInk : crimsonInk} !important` }} />}
+                label={
+                  probing
+                    ? 'PROBING 127.0.0.1:8095...'
+                    : daemonOnline
+                    ? `LIVE DAEMON ONLINE (:8095 / PROXY :${proxyPort})`
+                    : 'LOCAL DAEMON OFFLINE (:8095)'
+                }
+                size="small"
                 sx={{
-                  m: 0,
-                  p: 1.5,
                   fontFamily: mono,
-                  fontSize: '0.7rem',
-                  color: '#E2E8F0',
-                  overflowX: 'auto',
+                  fontWeight: 800,
+                  fontSize: '0.68rem',
+                  bgcolor: daemonOnline
+                    ? (isDark ? 'rgba(52,211,153,0.14)' : 'rgba(4,120,87,0.1)')
+                    : (isDark ? 'rgba(239,68,68,0.14)' : 'rgba(190,18,60,0.1)'),
+                  color: daemonOnline ? emeraldInk : crimsonInk,
+                  border: `1px solid ${daemonOnline ? emeraldInk : crimsonInk}`,
                 }}
-              >
-                {nftablesPolicy}
-              </Box>
-            </Box>
-          </Stack>
-        </Grid>
-
-        <Grid xs={12} md={6}>
-          <Stack spacing={2}>
-            <Box
-              sx={{
-                borderRadius: 2.5,
-                overflow: 'hidden',
-                border: '1px solid rgba(239,68,68,0.3)',
-                bgcolor: '#07060A',
-              }}
-            >
-              <Box
+              />
+              <Chip
+                label={`REQS: ${stats.total_requests || 0} · DOMAINS: ${stats.total_domains || 0} · BLOCKED: ${stats.total_quarantined || 0}`}
+                size="small"
                 sx={{
-                  px: 1.5,
-                  py: 0.75,
-                  borderBottom: '1px solid rgba(239,68,68,0.18)',
-                  bgcolor: 'rgba(239,68,68,0.08)',
-                  display: 'flex',
-                  justifyContent: 'space-between',
+                  fontFamily: mono,
+                  fontWeight: 700,
+                  fontSize: '0.68rem',
+                  bgcolor: subtleBg,
+                  color: inkPrimary,
+                  border: `1px solid ${borderSubtle}`,
                 }}
-              >
-                <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: '#EF4444', fontWeight: 700 }}>
-                  PERIMETER EGRESS RADAR (GREEN=LOOPBACK/ALLOW · RED=DROPPED)
-                </Typography>
-                <Typography sx={{ fontFamily: mono, fontSize: '0.66rem', color: '#94A3B8' }}>
-                  60 FPS SWEEP
-                </Typography>
-              </Box>
-              <Box component="canvas" ref={canvasRef} sx={{ width: '100%', height: 185, display: 'block' }} />
-            </Box>
+              />
+            </Stack>
+            <Typography component="h2" variant="h5" sx={{ ...titleBaseSx, fontFamily: display, fontWeight: 400, color: inkPrimary }}>
+              Userspace Egress Proxy &amp; <span style={{ color: crimsonInk }}>SNI / SSRF Sentinel</span>
+            </Typography>
+          </Box>
 
-            <Stack spacing={1} sx={{ maxHeight: 310, overflowY: 'auto' }}>
-              {packets.map((p) => {
-                const blocked = p.verdict === 'BLOCKED';
-                return (
-                  <Box
-                    key={p.id}
+          <Button
+            size="small"
+            variant="outlined"
+            startIcon={<RefreshIcon />}
+            onClick={syncFromDaemon}
+            sx={{
+              minHeight: { xs: 44, sm: 36 },
+              fontFamily: mono,
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              borderColor: borderAccent,
+              color: goldInk,
+            }}
+          >
+            Refresh :8095
+          </Button>
+        </Stack>
+
+        {!daemonOnline && !probing && (
+          <Alert
+            severity="warning"
+            sx={{
+              mb: 2.5,
+              borderRadius: 2,
+              bgcolor: isDark ? 'rgba(245,158,11,0.1)' : '#FEF3C7',
+              color: isDark ? '#FDE68A' : '#78350F',
+              border: `1px solid ${isDark ? 'rgba(245,158,11,0.35)' : 'rgba(180,83,9,0.35)'}`,
+              '& .MuiAlert-icon': { color: isDark ? '#F59E0B' : '#B45309' },
+            }}
+            action={
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={offlinePreview}
+                    onChange={(e) => setOfflinePreview(e.target.checked)}
+                    size="small"
+                  />
+                }
+                label={
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', fontWeight: 700 }}>
+                    Offline Preview
+                  </Typography>
+                }
+              />
+            }
+          >
+            <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 700 }}>
+              Local Daemon Offline — Run <code>agent-egress-sentinel serve --web-port 8095 --proxy-port 8195</code> for live proxy telemetry.
+            </Typography>
+          </Alert>
+        )}
+
+        {statusMessage && (
+          <Alert
+            severity="info"
+            onClose={() => setStatusMessage('')}
+            sx={{ mb: 2, borderRadius: 2, fontFamily: mono, fontSize: '0.74rem' }}
+          >
+            {statusMessage}
+          </Alert>
+        )}
+
+        <Grid container spacing={3}>
+          <Grid xs={12} md={6}>
+            <Stack spacing={2}>
+              {/* Live Policy Control */}
+              <Box sx={{ p: 2, borderRadius: 2, bgcolor: subtleBg, border: `1px solid ${borderSubtle}` }}>
+                <Typography sx={{ fontFamily: mono, fontSize: '0.72rem', fontWeight: 800, color: goldInk, mb: 1.25 }}>
+                  LIVE QUARANTINE POLICY &amp; RULE EDITOR ({daemonOnline ? 'CONNECTED :8095' : 'DAEMON IDLE'})
+                </Typography>
+                <FormControl fullWidth size="small" sx={{ mb: 1.5 }}>
+                  <InputLabel id="studio-egress-policy-label">Quarantine Mode</InputLabel>
+                  <Select
+                    labelId="studio-egress-policy-label"
+                    label="Quarantine Mode"
+                    value={quarantineMode}
+                    onChange={(e) => handleQuarantineChange(e.target.value)}
+                    sx={{ minHeight: { xs: 44, sm: 38 }, fontFamily: mono, fontSize: '0.76rem' }}
+                  >
+                    <MenuItem value="allow_all">ALLOW ALL (Monitor + SSRF Guard)</MenuItem>
+                    <MenuItem value="block_telemetry">BLOCK TELEMETRY (Defend)</MenuItem>
+                    <MenuItem value="zero_egress">ZERO EGRESS (Loopback Only)</MenuItem>
+                    <MenuItem value="allowlist_only">ALLOWLIST ONLY (Strict)</MenuItem>
+                  </Select>
+                </FormControl>
+
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} sx={{ mb: 1.5 }}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="Domain or Wildcard Rule"
+                    placeholder="api.segment.io or *.tracker.net"
+                    value={ruleDomainInput}
+                    onChange={(e) => setRuleDomainInput(e.target.value)}
+                    InputProps={{ sx: { minHeight: { xs: 44, sm: 38 }, fontFamily: mono, fontSize: '0.76rem' } }}
+                  />
+                  <Button
+                    variant="contained"
+                    onClick={() => handleRuleMutation('allow', 'add', ruleDomainInput)}
                     sx={{
-                      p: 1.35,
-                      borderRadius: 2,
-                      bgcolor: isDark ? 'rgba(255,255,255,0.025)' : '#F8FAFC',
-                      borderLeft: `3px solid ${blocked ? '#EF4444' : '#34D399'}`,
-                      border: `1px solid ${blocked ? 'rgba(239,68,68,0.28)' : 'rgba(52,211,153,0.28)'}`,
+                      minHeight: { xs: 44, sm: 38 },
+                      whiteSpace: 'nowrap',
+                      bgcolor: emeraldInk,
+                      color: '#FFFFFF',
+                      fontFamily: mono,
+                      fontWeight: 800,
+                      fontSize: '0.7rem',
                     }}
                   >
-                    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 0.4 }}>
-                      <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', fontWeight: 800 }}>
-                        {p.dest}
-                      </Typography>
-                      <Chip
-                        icon={
-                          blocked ? (
-                            <BlockIcon sx={{ fontSize: '0.85rem !important', color: '#EF4444 !important' }} />
-                          ) : (
-                            <CheckCircleIcon sx={{ fontSize: '0.85rem !important', color: '#34D399 !important' }} />
-                          )
-                        }
-                        label={p.verdict}
-                        size="small"
-                        sx={{
-                          height: 20,
-                          fontFamily: mono,
-                          fontSize: '0.64rem',
-                          fontWeight: 800,
-                          color: blocked ? '#EF4444' : '#34D399',
-                          bgcolor: blocked ? 'rgba(239,68,68,0.12)' : 'rgba(52,211,153,0.12)',
-                        }}
-                      />
+                    + Allow
+                  </Button>
+                  <Button
+                    variant="contained"
+                    onClick={() => handleRuleMutation('block', 'add', ruleDomainInput)}
+                    sx={{
+                      minHeight: { xs: 44, sm: 38 },
+                      whiteSpace: 'nowrap',
+                      bgcolor: crimsonInk,
+                      color: '#FFFFFF',
+                      fontFamily: mono,
+                      fontWeight: 800,
+                      fontSize: '0.7rem',
+                    }}
+                  >
+                    + Block
+                  </Button>
+                </Stack>
+
+                <Stack spacing={1}>
+                  <Box>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 700, color: emeraldInk, mb: 0.5 }}>
+                      ALLOWLIST ({allowedDomains.length})
+                    </Typography>
+                    <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
+                      {allowedDomains.length === 0 ? (
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: inkSecondary }}>None configured</Typography>
+                      ) : (
+                        allowedDomains.map((d) => (
+                          <Chip
+                            key={d}
+                            label={d}
+                            size="small"
+                            onDelete={() => handleRuleMutation('allow', 'remove', d)}
+                            deleteIcon={<DeleteOutlineIcon />}
+                            sx={{ fontFamily: mono, fontSize: '0.7rem', color: inkPrimary }}
+                          />
+                        ))
+                      )}
                     </Stack>
-                    <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: 'text.secondary' }}>
-                      {p.proto} · {p.bytes}B — {p.reason}
+                  </Box>
+
+                  <Box>
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', fontWeight: 700, color: crimsonInk, mb: 0.5 }}>
+                      BLOCKLIST ({blockedDomains.length})
+                    </Typography>
+                    <Stack direction="row" spacing={0.75} flexWrap="wrap" useFlexGap>
+                      {blockedDomains.length === 0 ? (
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.7rem', color: inkSecondary }}>None configured</Typography>
+                      ) : (
+                        blockedDomains.map((d) => (
+                          <Chip
+                            key={d}
+                            label={d}
+                            size="small"
+                            onDelete={() => handleRuleMutation('block', 'remove', d)}
+                            deleteIcon={<DeleteOutlineIcon />}
+                            sx={{ fontFamily: mono, fontSize: '0.7rem', color: inkPrimary }}
+                          />
+                        ))
+                      )}
+                    </Stack>
+                  </Box>
+                </Stack>
+
+                <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: inkSecondary, mt: 1.25 }}>
+                  Protected Self-Control Ports: <strong>{protectedPorts.join(', ')}</strong> · SSRF Guard: RFC1918 + 169.254.0.0/16 + IPv6 ULA
+                </Typography>
+              </Box>
+
+              {/* CLI & MCP Invocation Reference */}
+              <Box sx={{ borderRadius: 2, bgcolor: codeBg, border: `1px solid ${borderAccent}`, overflow: 'hidden' }}>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ px: 1.5, py: 0.75, borderBottom: `1px solid ${borderSubtle}` }}
+                >
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: goldInk, fontWeight: 800 }}>
+                    LOCAL DAEMON &amp; STDIO MCP COMMANDS
+                  </Typography>
+                  <Button
+                    size="small"
+                    startIcon={copiedKey === 'cli' ? <CheckIcon /> : <ContentCopyIcon />}
+                    onClick={() => handleCopyText('cli', cliSnippet)}
+                    sx={{ minHeight: { xs: 44, sm: 32 }, fontFamily: mono, fontSize: '0.68rem', color: goldInk }}
+                  >
+                    {copiedKey === 'cli' ? 'Copied' : 'Copy CLI'}
+                  </Button>
+                </Stack>
+                <Box
+                  component="pre"
+                  sx={{
+                    m: 0,
+                    p: 1.5,
+                    fontFamily: mono,
+                    fontSize: '0.72rem',
+                    color: inkPrimary,
+                    overflowX: 'auto',
+                  }}
+                >
+                  {cliSnippet}
+                </Box>
+              </Box>
+            </Stack>
+          </Grid>
+
+          <Grid xs={12} md={6}>
+            <Stack spacing={2}>
+              {/* Dual-Theme Radar Viewport */}
+              <Box
+                sx={{
+                  borderRadius: 2.5,
+                  overflow: 'hidden',
+                  border: `1px solid ${borderAccent}`,
+                  bgcolor: radarBg,
+                }}
+              >
+                <Box
+                  sx={{
+                    px: 1.5,
+                    py: 0.85,
+                    borderBottom: `1px solid ${borderSubtle}`,
+                    bgcolor: subtleBg,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: 1,
+                  }}
+                >
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: goldInk, fontWeight: 800 }}>
+                    EGRESS RADAR ({daemonOnline ? 'LIVE :8095 STREAM' : offlinePreview ? 'OFFLINE PREVIEW' : 'IDLE'})
+                  </Typography>
+                  <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: skyInk, fontWeight: 700 }}>
+                    PROXY 127.0.0.1:{proxyPort}
+                  </Typography>
+                </Box>
+                <Box
+                  component="canvas"
+                  ref={canvasRef}
+                  aria-label="Live egress perimeter radar"
+                  sx={{ width: '100%', height: 185, display: 'block' }}
+                />
+              </Box>
+
+              {/* Live Captured Events (or honest empty/offline notice) */}
+              <Stack spacing={1} sx={{ maxHeight: 320, overflowY: 'auto' }}>
+                {displayedEvents.length === 0 ? (
+                  <Box
+                    sx={{
+                      p: 2.5,
+                      borderRadius: 2,
+                      bgcolor: subtleBg,
+                      border: `1px dashed ${borderSubtle}`,
+                      textAlign: 'center',
+                    }}
+                  >
+                    <Typography sx={{ fontFamily: mono, fontSize: '0.74rem', color: inkSecondary }}>
+                      {daemonOnline
+                        ? `Connected to :8095 (${domains.length} observed domains). No captured events yet — route traffic via HTTP_PROXY=http://127.0.0.1:${proxyPort}.`
+                        : 'Daemon offline. Start agent-egress-sentinel serve or toggle Offline Preview above to inspect sample frames.'}
                     </Typography>
                   </Box>
-                );
-              })}
+                ) : (
+                  displayedEvents.slice(0, 10).map((ev) => {
+                    const blocked = Boolean(ev.quarantined);
+                    return (
+                      <Box
+                        key={ev.id}
+                        sx={{
+                          p: 1.35,
+                          borderRadius: 2,
+                          bgcolor: subtleBg,
+                          border: `1px solid ${blocked ? (isDark ? 'rgba(239,68,68,0.32)' : 'rgba(190,18,60,0.3)') : (isDark ? 'rgba(52,211,153,0.32)' : 'rgba(4,120,87,0.3)')}`,
+                          borderLeft: `3px solid ${blocked ? crimsonInk : emeraldInk}`,
+                        }}
+                      >
+                        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 0.4 }}>
+                          <Typography sx={{ fontFamily: mono, fontSize: '0.75rem', fontWeight: 800, color: inkPrimary }}>
+                            {ev.domain}:{ev.remote_port || 443}
+                          </Typography>
+                          <Chip
+                            icon={
+                              blocked ? (
+                                <BlockIcon sx={{ fontSize: '0.85rem !important', color: `${crimsonInk} !important` }} />
+                              ) : (
+                                <CheckCircleIcon sx={{ fontSize: '0.85rem !important', color: `${emeraldInk} !important` }} />
+                              )
+                            }
+                            label={blocked ? 'QUARANTINED' : `${ev.method || 'OK'} ${ev.status_code || 200}`}
+                            size="small"
+                            sx={{
+                              height: 22,
+                              fontFamily: mono,
+                              fontSize: '0.64rem',
+                              fontWeight: 800,
+                              color: blocked ? crimsonInk : emeraldInk,
+                              bgcolor: blocked
+                                ? (isDark ? 'rgba(239,68,68,0.14)' : 'rgba(190,18,60,0.1)')
+                                : (isDark ? 'rgba(52,211,153,0.14)' : 'rgba(4,120,87,0.1)'),
+                            }}
+                          />
+                        </Stack>
+                        <Typography sx={{ fontFamily: mono, fontSize: '0.68rem', color: inkSecondary }}>
+                          {ev.protocol || 'HTTPS'} · {(ev.bytes_sent || 0) + (ev.bytes_recv || 0)}B · {ev.category || 'unknown'} — {ev.notes || 'Captured via :8195 proxy'}
+                        </Typography>
+                      </Box>
+                    );
+                  })
+                )}
+              </Stack>
             </Stack>
-          </Stack>
+          </Grid>
         </Grid>
-      </Grid>
-    </Paper>
+      </Paper>
     </Box>
   );
 }

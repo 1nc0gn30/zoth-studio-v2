@@ -1063,37 +1063,45 @@ export const toolsDocumentation = {
   },
 
   'agent-egress-sentinel': {
-    whyUse: 'Autonomous zero-dependency network interceptor, TLS SNI sniffer, and kinetic egress radar for AI agents and LLM runtimes. Audits, maps, and quarantines silent background network egress without installing intrusive root CA certificates.',
-    problemSolved: 'Eliminates silent agent exfiltration, unannounced telemetry leaks (Segment, PostHog, Sentry), and uninspected external connections during autonomous prompt loops.',
-    architecture: '100% Python standard library daemon running at 127.0.0.1:8095 (web radar UI) and 127.0.0.1:8096 (HTTP/HTTPS proxy). Extracts SNI from TLS ClientHello packets and maps destinations to orbital radar rings.',
+    whyUse: 'Zero-dependency Python userspace HTTP/HTTPS egress proxy (:8195), pre-relay TLS ClientHello SNI inspector, SSRF/private-network guard, stdio MCP server, and dual-theme domain radar (:8095) for AI agents and LLM runtimes.',
+    problemSolved: 'Prevents silent agent data exfiltration, telemetry leaks (Segment, PostHog, Sentry), SNI fronting, and RFC1918/cloud-metadata (169.254.169.254) SSRF probes without requiring root CA certificates.',
+    architecture: '100% Python 3.9+ standard library daemon bound to 127.0.0.1:8095 (Web Radar, REST API, SSE stream) and 127.0.0.1:8195 (userspace HTTP/HTTPS CONNECT proxy with DNS pinning, SSRF blocking, and pre-relay TLS SNI policy re-evaluation) backed by thread-local SQLite WAL.',
     aiAgentProtocol: {
       mcpTool: 'egress_audit_status',
-      description: 'Audit live network egress telemetry, domain classifications, and quarantine enforcement.',
-      cliExample: 'agent-egress serve --web-port 8095 --proxy-port 8096',
+      tools: [
+        { name: 'egress_audit_status', description: 'Audit live egress telemetry, domain counts, and quarantine state.' },
+        { name: 'egress_set_quarantine', description: 'Switch quarantine policy (allow_all, block_telemetry, zero_egress, allowlist_only).' },
+        { name: 'egress_manage_rules', description: 'List, add, or remove domains in the allowlist or blocklist.' },
+      ],
+      description: 'Stdio JSON-RPC 2.0 MCP server (`agent-egress-sentinel mcp`) exposing egress_audit_status, egress_set_quarantine, and egress_manage_rules against live :8095 telemetry.',
+      cliExample: 'agent-egress-sentinel serve --web-port 8095 --proxy-port 8195  # MCP: agent-egress-sentinel mcp',
       inputSchema: {
         type: 'object',
         properties: {
           quarantine: { type: 'string', enum: ['allow_all', 'block_telemetry', 'zero_egress', 'allowlist_only'] },
-          filterDomain: { type: 'string', description: 'Target domain filter' }
+          filterDomain: { type: 'string', description: 'Optional substring filter on observed domains' }
         }
       },
       outputSchema: {
+        daemonOnline: 'boolean',
+        proxyPort: 'number',
+        quarantineMode: 'string',
         activeEgressRequests: 'number',
         quarantinedCount: 'number',
-        domains: [{ name: 'string', category: 'string', bytesSent: 'number' }]
+        domains: [{ name: 'string', category: 'string', bytesSent: 'number', bytesRecv: 'number' }]
       }
     },
     quickstart: [
-      'git clone https://github.com/1nc0gn30/agent-egress-sentinel.git',
-      'cd agent-egress-sentinel && pip install -e .',
-      'agent-egress serve --web-port 8095 --proxy-port 8096'
+      'git clone https://github.com/1nc0gn30/agent-egress-sentinel.git && cd agent-egress-sentinel',
+      'agent-egress-sentinel serve --web-port 8095 --proxy-port 8195 --quarantine block_telemetry',
+      'agent-egress-sentinel mcp --port 8095  # or live terminal radar: agent-egress-sentinel-tui --once'
     ],
     features: [
-      'In-memory TLS ClientHello SNI extractor with zero root CA installation',
-      'Kinetic domain vector radar with 5 concentric orbital rings',
-      'Autonomous quarantine policies (ALLOW_ALL, BLOCK_TELEMETRY, ZERO_EGRESS)',
-      'Standard HAR 1.2 export compatible with Chrome DevTools and Wireshark',
-      'Zero external pip dependencies (100% Python standard library)'
+      'Userspace HTTP/HTTPS CONNECT proxy (:8195) with pre-relay TLS ClientHello SNI policy check',
+      'Built-in SSRF guard blocking RFC1918, 169.254.0.0/16 cloud metadata, IPv6 ULA, and self-control ports (:8095/:8195)',
+      'Live Allowlist/Blocklist rule editor (POST/DELETE /api/rules/*) and 4 quarantine modes',
+      'Real stdio JSON-RPC 2.0 MCP server (egress_audit_status, egress_set_quarantine, egress_manage_rules)',
+      'Token-gated POST /api/run, Host/Origin CSRF enforcement, and HAR 1.2 / OpenAPI 3.0 export'
     ]
   },
 

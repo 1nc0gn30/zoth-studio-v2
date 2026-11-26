@@ -73,6 +73,17 @@ export const TOOL_MOTION_OVERRIDES = {
     execLabel: 'HYBRID BROWSER DAG + 127.0.0.1 LOOPBACK PROVIDERS',
     telemetrySub: 'Ollama :11434 · AGY-Hermes :18000 · Azoth :8136 · Neuro-Memory :8094 · Deterministic JS Transforms.',
   },
+  'agent-egress-sentinel': {
+    accent: '#EF4444',
+    secondary: '#D4AF37',
+    archetype: 'radar',
+    anchorName: 'Userspace Egress Proxy & SNI Radar',
+    formula: 'SNI(ClientHello) ∧ CIDR(RFC1918 ∪ 169.254/16) → ALLOW | 403 QUARANTINE',
+    badge: 'USERSPACE EGRESS PROXY',
+    clip: 'hexstrike',
+    execLabel: '127.0.0.1:8095 RADAR · 127.0.0.1:8195 EGRESS PROXY',
+    telemetrySub: 'Pre-relay TLS ClientHello SNI · RFC1918/169.254 SSRF Guard · 3 Stdio MCP Tools · v2.6.0.',
+  },
 };
 
 export function getToolMotionMeta(tool) {

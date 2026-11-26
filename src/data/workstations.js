@@ -189,13 +189,14 @@ export const workstations = [
   {
     id: "agent-egress-sentinel",
     name: "Agent Egress Sentinel // Kinetic Network Radar",
-    path: "/studio/egress-sentinel.html",
+    path: "/tools/agent-egress-sentinel",
     band: "Security",
     type: "integrated_tool",
-    description: "Autonomous zero-dependency network interceptor, TLS SNI sniffer, and kinetic egress radar.",
+    executionType: "local-daemon",
+    description: "Zero-dependency Python userspace HTTP/HTTPS egress proxy (:8195), pre-relay TLS SNI inspector, SSRF guard, and live domain radar (:8095).",
     alsoInApp: "/tools/agent-egress-sentinel",
     toolRepoId: "agent-egress-sentinel",
-    pullCommand: "agent-egress serve --web-port 8095 --proxy-port 8096"
+    pullCommand: "agent-egress-sentinel serve --web-port 8095 --proxy-port 8195"
   },
   {
     id: "agent-mock-twin",
